@@ -1,72 +1,104 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 10 Apr 2021 12:05:54 +0200
-Subject: [Buildroot] [PATCH 2/2] package/sdl_mixer: fix static build with
- tremor
-In-Reply-To: <20210410100554.3947392-1-fontaine.fabrice@gmail.com>
-References: <20210410100554.3947392-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210410100554.3947392-2-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 10 Apr 2021 12:15:43 +0200
+Subject: [Buildroot] [PATCHv6 4/5] package/bpftrace: new package
+In-Reply-To: <20210406115445.iueiqqgxhc7qz3yq@e107158-lin>
+References: <20201220151203.2206747-1-romain.naour@gmail.com>
+ <20201220151203.2206747-4-romain.naour@gmail.com>
+ <20201221134549.nk4eu6qpto36ahpq@e107158-lin>
+ <20210123194408.3omcypashiq44le5@e107158-lin>
+ <20210225101849.nt6rnloszarwrgm3@e107158-lin>
+ <CANLo3JhERRWK_kJCa0phxXVybPJuPM76PEEstN9tRUek04e+gQ@mail.gmail.com>
+ <20210406115445.iueiqqgxhc7qz3yq@e107158-lin>
+Message-ID: <17334481-d69f-3705-c298-51a87a7d3a12@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Static build with tremor raises a build failure since bump to latest git
-tree in commit c8e27f3baa90351a417ff6e172d214c4a72e7314. However, it
-should be noted that before this bump, tremor was always disabled in
-static builds because vorbisidec detection was broken until
-https://github.com/libsdl-org/SDL_mixer/commit/565a9a27cc8c184ad0203f004b834880ffd45d32
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.org/results/9634adc433da0e25732eb98675c59d0f96ac93b2
+Le 06/04/2021 ? 13:54, Qais Yousef a ?crit?:
+> On 02/25/21 12:01, Romain Naour wrote:
+>> Hello Quais, All,
+>>
+>> Le jeu. 25 f?vr. 2021 ? 11:18, Qais Yousef <qais.yousef@arm.com> a ?crit :
+>>
+>>     On 01/23/21 19:44, Qais Yousef wrote:
+>>     > On 12/21/20 13:45, Qais Yousef wrote:
+>>     > > On 12/20/20 16:12, Romain Naour wrote:
+>>     > > > From: Qais Yousef <qais.yousef@arm.com>
+>>     > > >
+>>     > > > bpftrace is a high-level tracing language for Linux enhanced Berkeley
+>>     > > > Packet Filter (eBPF) available in recent Linux kernels (4.x).
+>>     > > >
+>>     > > > Only tested on x86_64 and aarch64. The package doesn't support i386
+>>     and
+>>     > > > aarch32.
+>>     > > >
+>>     > > > The libbpf dependency allow to enable the BTF support:
+>>     > > >  # bpftrace --info
+>>     > > >  System
+>>     > > >    OS: Linux 5.4.58 #1 SMP Sun Dec 20 15:56:56 CET 2020
+>>     > > >    Arch: aarch64
+>>     > > >
+>>     > > >  Build
+>>     > > >    version: 2020.11-328-g019a9
+>>     > > >    LLVM: 9.0.1
+>>     > > >    foreach_sym: yes
+>>     > > >    unsafe uprobe: no
+>>     > > >    bfd: yes
+>>     > > >    bpf_attach_kfunc: yes
+>>     > > >    bcc_usdt_addsem: yes
+>>     > > >    bcc bpf_attach_uprobe refcount: yes
+>>     > > >    libbpf: yes
+>>     > > >    libbpf btf dump: yes
+>>     > > >    libbpf btf dump type decl: yes
+>>     > > >
+>>     > > > bfptrace doesn't use the libbpf_bcc library provided by bcc package.
+>>     > > >
+>>     > > > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+>>     > > > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>>     > > > Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+>>     > > > ---
+>>     > > > v6: Update DEVELOPERS file
+>>     > >
+>>     > > LGTM.
+>>     >
+>>     > Ping.
+>>     >
+>>     > I had issues with building patch 5, but the rest of the series is in good
+>>     shape
+>>     > IMO and can be merged independently at least.
+>>     >
+>>     > Is there anything more needs to be done to help get this support merged?
+>>
+>>     Ping again. It'd be great to finally have these merged.
+>>
+>>
+>> Maintainers are currently busy at the release 2021.02 version of Buildroot.
+>>
+>> But yes, this work has been reviewed and reworked by Quais and me.
+>>
+>> I guess It's good to go.
+> 
+> Another gentle ping. Hopefully the release is done now for this to be
+> considered.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...re.ac-fix-static-linking-with-tremor.patch | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/sdl_mixer/0003-configure.ac-fix-static-linking-with-tremor.patch
+Gentle ping too.
 
-diff --git a/package/sdl_mixer/0003-configure.ac-fix-static-linking-with-tremor.patch b/package/sdl_mixer/0003-configure.ac-fix-static-linking-with-tremor.patch
-new file mode 100644
-index 0000000000..7bad2bd932
---- /dev/null
-+++ b/package/sdl_mixer/0003-configure.ac-fix-static-linking-with-tremor.patch
-@@ -0,0 +1,36 @@
-+From c4814d9ef2b569c5fccbf72e1555b6147392a2f3 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 10 Apr 2021 11:50:17 +0200
-+Subject: [PATCH] configure.ac: fix static linking with tremor
-+
-+Fix the following build failure when building statically with
-+--enable-music-ogg-tremor:
-+
-+libtool: link: /tmp/instance-0/output-1/host/bin/arm-linux-gcc -o build/playwave build/playwave.o -I/tmp/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -static  -L/tmp/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib build/.libs/libSDL_mixer.a -L/tmp/instance-0/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib /tmp/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libSDL.a /tmp/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libasound.a -lrt -ldl /tmp/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libts.a -lpthread /tmp/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libvorbisidec.a /tmp/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libogg.a -lvorbis /tmp/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmad.a -lm
-+/tmp/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lvorbis
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/9634adc433da0e25732eb98675c59d0f96ac93b2
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/libsdl-org/SDL_mixer/pull/312]
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index b5be494..8350b7b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -530,7 +530,7 @@ if test x$enable_music_ogg = xyes; then
-+                 echo "-- dynamic libvorbisidec -> $ogg_lib"
-+                 EXTRA_CFLAGS="$EXTRA_CFLAGS -DOGG_DYNAMIC=\\\"$ogg_lib\\\""
-+             else
-+-                EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lvorbisidec -lvorbis"
-++                EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lvorbisidec"
-+             fi
-+         else
-+             AC_MSG_WARN([*** Unable to find Ogg Vorbis Tremor library (http://www.xiph.org/)])
-+-- 
-+2.30.2
-+
--- 
-2.30.2
+The patch series is here:
+http://patchwork.ozlabs.org/project/buildroot/list/?series=221413
+
+I didn't work on it since then, only the patch 5/5 needs to be reworked.
+
+Best regards,
+Romain
+
+
+> 
+> Thanks
+> 
+> --
+> Qais Yousef
+> 
