@@ -1,62 +1,176 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Apr 2021 18:39:56 +0200
-Subject: [Buildroot] [git commit] package/clamav: security bump to version
- 0.103.2
-Message-ID: <20210410161423.0124481842@busybox.osuosl.org>
+Date: Sat, 10 Apr 2021 18:40:21 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/tar: add upstream
+ security fix for CVE-2021-20193
+Message-ID: <20210410161442.7A4C28188E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7aee27c2b9f4da87b50d8b330d086c695d900147
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=09714c8d52ee1ab003870daa10c66a0e84a82110
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes the following security issues:
+Fixes the following security issue:
 
-- CVE-2021-1386: Fix for UnRAR DLL load privilege escalation.  Affects
-  0.103.1 and prior on Windows only.
-
-- CVE-2021-1252: Fix for Excel XLM parser infinite loop.  Affects 0.103.0
-  and 0.103.1 only.
-
-- CVE-2021-1404: Fix for PDF parser buffer over-read; possible crash.
-  Affects 0.103.0 and 0.103.1 only.
-
-- CVE-2021-1405: Fix for mail parser NULL-dereference crash.  Affects
-  0.103.1 and prior.
-
-- CVE-2021-27506: The ClamAV Engine (Version 0.103.1 and below) embedded in
-  Storsmshield Network Security (1.0 to 4.1.5) is subject to DoS in case of
-  parsing of malformed png files.
+- CVE-2021-20193: A flaw was found in the src/list.c of tar 1.33 and
+  earlier.  This flaw allows an attacker who can submit a crafted input file
+  to tar to cause uncontrolled consumption of memory.  The highest threat
+  from this vulnerability is to system availability
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../tar/0001-Fix-memory-leak-in-read_header.patch  | 129 +++++++++++++++++++++
+ package/tar/tar.mk                                 |   3 +
+ 2 files changed, 132 insertions(+)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 1b2325870d..679240985b 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  7308c47b89b268af3b9f36140528927a49ff3e633a9c9c0aac2712d81056e257  clamav-0.103.1.tar.gz
-+sha256  d4b5d0ac666262e423a326fb54778caa7c69624d6c3f9542895feb8478271bd2  clamav-0.103.2.tar.gz
- sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 4cd13fb827..6ab473ab88 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/tar/0001-Fix-memory-leak-in-read_header.patch b/package/tar/0001-Fix-memory-leak-in-read_header.patch
+new file mode 100644
+index 0000000000..874b27df38
+--- /dev/null
++++ b/package/tar/0001-Fix-memory-leak-in-read_header.patch
+@@ -0,0 +1,129 @@
++From d9d4435692150fa8ff68e1b1a473d187cc3fd777 Mon Sep 17 00:00:00 2001
++From: Sergey Poznyakoff <gray@gnu.org>
++Date: Sun, 17 Jan 2021 20:41:11 +0200
++Subject: [PATCH] Fix memory leak in read_header
++
++Bug reported in https://savannah.gnu.org/bugs/?59897
++
++* src/list.c (read_header): Don't return directly from the loop.
++Instead set the status and break.  Return the status.  Free
++next_long_name and next_long_link before returning.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/list.c | 40 ++++++++++++++++++++++++++++------------
++ 1 file changed, 28 insertions(+), 12 deletions(-)
++
++diff --git a/src/list.c b/src/list.c
++index e40a5c8..d7ef441 100644
++--- a/src/list.c
+++++ b/src/list.c
++@@ -408,26 +408,27 @@ read_header (union block **return_block, struct tar_stat_info *info,
++ 	     enum read_header_mode mode)
++ {
++   union block *header;
++-  union block *header_copy;
++   char *bp;
++   union block *data_block;
++   size_t size, written;
++-  union block *next_long_name = 0;
++-  union block *next_long_link = 0;
+++  union block *next_long_name = NULL;
+++  union block *next_long_link = NULL;
++   size_t next_long_name_blocks = 0;
++   size_t next_long_link_blocks = 0;
++-
+++  enum read_header status = HEADER_SUCCESS;
+++  
++   while (1)
++     {
++-      enum read_header status;
++-
++       header = find_next_block ();
++       *return_block = header;
++       if (!header)
++-	return HEADER_END_OF_FILE;
+++	{
+++	  status = HEADER_END_OF_FILE;
+++	  break;
+++	}
++ 
++       if ((status = tar_checksum (header, false)) != HEADER_SUCCESS)
++-	return status;
+++	break;
++ 
++       /* Good block.  Decode file size and return.  */
++ 
++@@ -437,7 +438,10 @@ read_header (union block **return_block, struct tar_stat_info *info,
++ 	{
++ 	  info->stat.st_size = OFF_FROM_HEADER (header->header.size);
++ 	  if (info->stat.st_size < 0)
++-	    return HEADER_FAILURE;
+++	    {
+++	      status = HEADER_FAILURE;
+++	      break;
+++	    }
++ 	}
++ 
++       if (header->header.typeflag == GNUTYPE_LONGNAME
++@@ -447,10 +451,14 @@ read_header (union block **return_block, struct tar_stat_info *info,
++ 	  || header->header.typeflag == SOLARIS_XHDTYPE)
++ 	{
++ 	  if (mode == read_header_x_raw)
++-	    return HEADER_SUCCESS_EXTENDED;
+++	    {
+++	      status = HEADER_SUCCESS_EXTENDED;
+++	      break;
+++	    }
++ 	  else if (header->header.typeflag == GNUTYPE_LONGNAME
++ 		   || header->header.typeflag == GNUTYPE_LONGLINK)
++ 	    {
+++	      union block *header_copy;
++ 	      size_t name_size = info->stat.st_size;
++ 	      size_t n = name_size % BLOCKSIZE;
++ 	      size = name_size + BLOCKSIZE;
++@@ -517,7 +525,10 @@ read_header (union block **return_block, struct tar_stat_info *info,
++ 	      xheader_decode_global (&xhdr);
++ 	      xheader_destroy (&xhdr);
++ 	      if (mode == read_header_x_global)
++-		return HEADER_SUCCESS_EXTENDED;
+++		{
+++		  status = HEADER_SUCCESS_EXTENDED;
+++		  break;
+++		}
++ 	    }
++ 
++ 	  /* Loop!  */
++@@ -536,6 +547,7 @@ read_header (union block **return_block, struct tar_stat_info *info,
++ 	      name = next_long_name->buffer + BLOCKSIZE;
++ 	      recent_long_name = next_long_name;
++ 	      recent_long_name_blocks = next_long_name_blocks;
+++	      next_long_name = NULL;
++ 	    }
++ 	  else
++ 	    {
++@@ -567,6 +579,7 @@ read_header (union block **return_block, struct tar_stat_info *info,
++ 	      name = next_long_link->buffer + BLOCKSIZE;
++ 	      recent_long_link = next_long_link;
++ 	      recent_long_link_blocks = next_long_link_blocks;
+++	      next_long_link = NULL;
++ 	    }
++ 	  else
++ 	    {
++@@ -578,9 +591,12 @@ read_header (union block **return_block, struct tar_stat_info *info,
++ 	    }
++ 	  assign_string (&info->link_name, name);
++ 
++-	  return HEADER_SUCCESS;
+++	  break;
++ 	}
++     }
+++  free (next_long_name);
+++  free (next_long_link);
+++  return status;
++ }
++ 
++ #define ISOCTAL(c) ((c)>='0'&&(c)<='7')
++-- 
++2.20.1
++
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 2da731f80a..1a8e4369de 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -14,6 +14,9 @@ TAR_LICENSE = GPL-3.0+
+ TAR_LICENSE_FILES = COPYING
+ TAR_CPE_ID_VENDOR = gnu
  
--CLAMAV_VERSION = 0.103.1
-+CLAMAV_VERSION = 0.103.2
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
++# 0001-Fix-memory-leak-in-read_header.patch
++TAR_IGNORE_CVES += CVE-2021-20193
++
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ TAR_DEPENDENCIES += acl
+ TAR_CONF_OPTS += --with-posix-acls
