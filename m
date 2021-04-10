@@ -1,80 +1,66 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sat, 10 Apr 2021 09:35:58 -0300
-Subject: [Buildroot] [PATCH] package/tio: disable for sparc and sparc64
- architectures
-In-Reply-To: <20201025163457.30460-1-sergio.prado@e-labworks.com>
-References: <20201025163457.30460-1-sergio.prado@e-labworks.com>
-Message-ID: <CANu7NGubYQi=Apk5deRwGU7PGf3uvmiTyF=EEJeYvBvgBR1ysA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 10 Apr 2021 14:40:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-packaging: bump to version
+ 20.9
+Message-ID: <20210410124049.81580-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+python-six is not a dependency since version 20.5 and
+https://github.com/pypa/packaging/commit/39a70cce69d9b08cc4d02b225114d556d5b59ada
 
-Any changes to merge this one? I keep receiving e-mails about autobuild
-failures in the tio package, and I think the best approach here is just to
-disable it for sparc.
+https://github.com/pypa/packaging/blob/20.9/CHANGELOG.rst
 
-Best regards,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-packaging/Config.in             | 1 -
+ package/python-packaging/python-packaging.hash | 4 ++--
+ package/python-packaging/python-packaging.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-Sergio Prado
-Embedded Labworks
-
-Em dom., 25 de out. de 2020 ?s 13:35, Sergio Prado <
-sergio.prado@e-labworks.com> escreveu:
-
-> tio fails to build on sparc and sparc64 architectures with a
-> redefinition of 'struct termio' error, with no proper fix or workaround
-> for now. See discussions in [1] and [2] and picocom source code in [3].
->
-> [1]
-> http://patchwork.ozlabs.org/project/buildroot/patch/20191227204520.1500501-1-fontaine.fabrice at gmail.com/
-> [2]
-> http://patchwork.ozlabs.org/project/buildroot/patch/20200511142602.46170-1-vadim4j at gmail.com/
-> [3] https://github.com/npat-efault/picocom/blob/master/termbits2.h#L37
->
-> So let's disable it for now on sparc and sparc64 architectures.
->
-> Fixes:
->
-> http://autobuild.buildroot.org/results/e041dde522e2a774f528d4377f67ca0a8a99461c
->
-> http://autobuild.buildroot.org/results/6e1f9fe47e8b2cfdf5effcb7bbc697189f54ff2c
->
-> http://autobuild.buildroot.org/results/49708fe6f404fea6761f102af854e98d6a1d43c1
-> Many more...
->
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
->  package/tio/Config.in | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/package/tio/Config.in b/package/tio/Config.in
-> index 6c748c5d12a1..d5d619100eb3 100644
-> --- a/package/tio/Config.in
-> +++ b/package/tio/Config.in
-> @@ -1,8 +1,15 @@
->  config BR2_PACKAGE_TIO
->         bool "tio"
-> +       depends on !BR2_sparc64 && !BR2_sparc
->         help
->           "tio" is a simple TTY terminal application which features a
->           straightforward commandline interface to easily connect to
->           TTY devices for basic input/output.
->
->           https://tio.github.io/
-> +
-> +# tio is disabled for sparc and sparc64 architectures because it fails
-> +# to build with a redefinition of 'struct termio' error, with no proper
-> +# fix or workaround for now
-> +comment "tio is disabled for sparc and sparc64 architectures"
-> +       depends on BR2_sparc64 || BR2_sparc
-> --
-> 2.17.1
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210410/7e5e900d/attachment.html>
+diff --git a/package/python-packaging/Config.in b/package/python-packaging/Config.in
+index 5a8135cd57..12170df84e 100644
+--- a/package/python-packaging/Config.in
++++ b/package/python-packaging/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PACKAGING
+ 	bool "python-packaging"
+ 	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+ 	  Core utilities for Python packages.
+ 
+diff --git a/package/python-packaging/python-packaging.hash b/package/python-packaging/python-packaging.hash
+index aafb16c1b0..b3145dfee6 100644
+--- a/package/python-packaging/python-packaging.hash
++++ b/package/python-packaging/python-packaging.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/packaging/json
+-md5  3208229da731c5d8e29d4d8941e75005  packaging-20.4.tar.gz
+-sha256  4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8  packaging-20.4.tar.gz
++md5  5377308b3ba89f2d78c05e7f485be65d  packaging-20.9.tar.gz
++sha256  5b327ac1320dc863dca72f4514ecc086f31186744b84a230374cc1fd776feae5  packaging-20.9.tar.gz
+ # Locally computed sha256 checksums
+ sha256  cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48  LICENSE
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.APACHE
+diff --git a/package/python-packaging/python-packaging.mk b/package/python-packaging/python-packaging.mk
+index 62a9d68cbb..5fdf7616cc 100644
+--- a/package/python-packaging/python-packaging.mk
++++ b/package/python-packaging/python-packaging.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PACKAGING_VERSION = 20.4
++PYTHON_PACKAGING_VERSION = 20.9
+ PYTHON_PACKAGING_SOURCE = packaging-$(PYTHON_PACKAGING_VERSION).tar.gz
+-PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/55/fd/fc1aca9cf51ed2f2c11748fa797370027babd82f87829c7a8e6dbe720145
++PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/86/3c/bcd09ec5df7123abcf695009221a52f90438d877a2f1499453c6938f5728
+ PYTHON_PACKAGING_SETUP_TYPE = setuptools
+ PYTHON_PACKAGING_LICENSE = Apache-2.0 or BSD-2-Clause
+ PYTHON_PACKAGING_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-- 
+2.30.2
