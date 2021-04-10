@@ -1,66 +1,85 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 10 Apr 2021 14:40:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-packaging: bump to version
- 20.9
-Message-ID: <20210410124049.81580-1-fontaine.fabrice@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sat, 10 Apr 2021 17:29:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iproute2: Bump version to 5.11.0
+In-Reply-To: <YGoG2Tqk6SVPHNpJ@pevik>
+References: <20210323181004.25172-1-petr.vorel@gmail.com>
+ <20210404155259.196253ae@windsurf.home> <YGoG2Tqk6SVPHNpJ@pevik>
+Message-ID: <CAEyMn7bO9DFK6RRVXYDEFQNKXX-W5G_ZuwkFhLxcwWcpRoXHmA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python-six is not a dependency since version 20.5 and
-https://github.com/pypa/packaging/commit/39a70cce69d9b08cc4d02b225114d556d5b59ada
+Hi Petr, Hi Thomas,
 
-https://github.com/pypa/packaging/blob/20.9/CHANGELOG.rst
+Am So., 4. Apr. 2021 um 20:35 Uhr schrieb Petr Vorel <petr.vorel@gmail.com>:
+>
+> Hi Thomas,
+> > Hello Petr,
+>
+> > On Tue, 23 Mar 2021 19:10:04 +0100
+> > Petr Vorel <petr.vorel@gmail.com> wrote:
+>
+> > > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> > > ---
+> > > Hi,
+>
+> > > NOTE: this should not be applied until uclibc based toolchains are
+> > > regenerated. But posted for people who don't use uclibc and would like
+> > > to have iproute2 sync with kernel version.
+>
+> > I think they have all been updated now. However, your patch doesn't
+> > apply: it assumes that Buildroot master has iproute2 5.8.0, but we have
+> > 5.7.0. And the patch we have in package/iproute2/ doesn't apply to
+> > 5.11.0. Could you have a look and respin?
+>
+> Sure, I'll send fixed version, sorry for error.
+>
+> But I tried to build on updated package and it looks like error still exists.
+> What do I do wrong?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-packaging/Config.in             | 1 -
- package/python-packaging/python-packaging.hash | 4 ++--
- package/python-packaging/python-packaging.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+I just tried to test the version bump of iproute2 to v5.11 and I see
+the same/similar error on utils/pkg-test for
+bootlin-armv5-uclibcbootlin-armv5-uclibc.
 
-diff --git a/package/python-packaging/Config.in b/package/python-packaging/Config.in
-index 5a8135cd57..12170df84e 100644
---- a/package/python-packaging/Config.in
-+++ b/package/python-packaging/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PYTHON_PACKAGING
- 	bool "python-packaging"
- 	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
--	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
- 	  Core utilities for Python packages.
- 
-diff --git a/package/python-packaging/python-packaging.hash b/package/python-packaging/python-packaging.hash
-index aafb16c1b0..b3145dfee6 100644
---- a/package/python-packaging/python-packaging.hash
-+++ b/package/python-packaging/python-packaging.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/packaging/json
--md5  3208229da731c5d8e29d4d8941e75005  packaging-20.4.tar.gz
--sha256  4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8  packaging-20.4.tar.gz
-+md5  5377308b3ba89f2d78c05e7f485be65d  packaging-20.9.tar.gz
-+sha256  5b327ac1320dc863dca72f4514ecc086f31186744b84a230374cc1fd776feae5  packaging-20.9.tar.gz
- # Locally computed sha256 checksums
- sha256  cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48  LICENSE
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.APACHE
-diff --git a/package/python-packaging/python-packaging.mk b/package/python-packaging/python-packaging.mk
-index 62a9d68cbb..5fdf7616cc 100644
---- a/package/python-packaging/python-packaging.mk
-+++ b/package/python-packaging/python-packaging.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PACKAGING_VERSION = 20.4
-+PYTHON_PACKAGING_VERSION = 20.9
- PYTHON_PACKAGING_SOURCE = packaging-$(PYTHON_PACKAGING_VERSION).tar.gz
--PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/55/fd/fc1aca9cf51ed2f2c11748fa797370027babd82f87829c7a8e6dbe720145
-+PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/86/3c/bcd09ec5df7123abcf695009221a52f90438d877a2f1499453c6938f5728
- PYTHON_PACKAGING_SETUP_TYPE = setuptools
- PYTHON_PACKAGING_LICENSE = Apache-2.0 or BSD-2-Clause
- PYTHON_PACKAGING_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+  109 |  char fh_buf[sizeof(struct file_handle) + sizeof(__u64)] = { 0 };
+      |                     ^~~~~~
+fs.c:124:5: error: dereferencing pointer to incomplete type ?struct file_handle?
+  124 |  fhp->handle_bytes = sizeof(__u64);
+      |     ^~
+fs.c:125:6: warning: implicit declaration of function
+?name_to_handle_at? [-Wimplicit-function-declaration]
+  125 |  if (name_to_handle_at(AT_FDCWD, path, fhp, &mnt_id, 0) < 0) {
+      |      ^~~~~~~~~~~~~~~~~
+fs.c:109:7: warning: unused variable ?fh_buf? [-Wunused-variable]
+  109 |  char fh_buf[sizeof(struct file_handle) + sizeof(__u64)] = { 0 };
+      |       ^~~~~~
+fs.c: In function ?get_cgroup2_path?:
+fs.c:172:21: error: invalid application of ?sizeof? to incomplete type
+?struct file_handle?
+  172 |  char fh_buf[sizeof(struct file_handle) + sizeof(__u64)] = { 0 };
+      |                     ^~~~~~
+fs.c:200:5: error: dereferencing pointer to incomplete type ?struct file_handle?
+  200 |  fhp->handle_bytes = sizeof(__u64);
+      |     ^~
+fs.c:204:7: warning: implicit declaration of function
+?open_by_handle_at? [-Wimplicit-function-declaration]
+  204 |  fd = open_by_handle_at(mnt_fd, fhp, 0);
+      |       ^~~~~~~~~~~~~~~~~
+fs.c:172:7: warning: unused variable ?fh_buf? [-Wunused-variable]
+  172 |  char fh_buf[sizeof(struct file_handle) + sizeof(__u64)] = { 0 };
+
+Looks like your patch in uclibc [1] is not in the used version of the
+bootlin toolchain [2]. As far as I can see the toolchain uses uclibc
+v1.0.34.
+
+[1] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=8bc41f131b8d70c84c300f14cd64abd448126b43
+[2] https://toolchains.bootlin.com/releases_armv5-eabi.html
+
+I think we have to wait until the toolchains will be updated to
+include uclibc version 1.0.36 or greater.
+
+Thank you
 -- 
-2.30.2
+Heiko
