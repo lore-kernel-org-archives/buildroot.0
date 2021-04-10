@@ -1,263 +1,51 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sat, 10 Apr 2021 09:23:57 -0300
-Subject: [Buildroot] [PATCH v2 2/2] oci: add new filesystem type
-In-Reply-To: <20210410122357.12641-1-sergio.prado@e-labworks.com>
-References: <20210410122357.12641-1-sergio.prado@e-labworks.com>
-Message-ID: <20210410122357.12641-3-sergio.prado@e-labworks.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 10 Apr 2021 14:26:18 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python-mbstrdecoder: bump to
+ version 1.0.1
+In-Reply-To: <20210410122618.79085-1-fontaine.fabrice@gmail.com>
+References: <20210410122618.79085-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210410122618.79085-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support to generate OCI (Open Container Initiative) images.
+https://github.com/thombashi/mbstrdecoder/releases/tag/v1.0.1
 
-An OCI image consists of a manifest, an image index (optional), a set of
-filesystem layers, and a configuration. The complete specification is
-available in the link below:
-
-https://github.com/opencontainers/image-spec/blob/master/spec.md
-
-The image is generated with the host tool sloci-image, and config
-options can be used to configure image parameters.
-
-By default, the image is generated in a directory called rootfs-oci:
-
-$ cd output/images
-$ ls rootfs-oci/
-blobs  index.json  oci-layout
-
-Optionally, the image can be packed into a tar archive.
-
-The image can be pushed to a registry using containers tools like
-skopeo:
-
-$ skopeo copy --dest-creds <user>:<pass> oci:rootfs-oci:<tag> \
-	docker://<user>/<image>[:tag]
-
-And then we can pull/run the container image with tools like docker:
-
-$ docker run -it <user>/<image>[:tag]
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- fs/Config.in     |  1 +
- fs/oci/Config.in | 88 ++++++++++++++++++++++++++++++++++++++++++
- fs/oci/oci.mk    | 99 ++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 188 insertions(+)
- create mode 100644 fs/oci/Config.in
- create mode 100644 fs/oci/oci.mk
+ package/python-mbstrdecoder/python-mbstrdecoder.hash | 4 ++--
+ package/python-mbstrdecoder/python-mbstrdecoder.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/fs/Config.in b/fs/Config.in
-index 37a2aa21f8ac..eee5e26bb2b3 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -11,6 +11,7 @@ source "fs/f2fs/Config.in"
- source "fs/initramfs/Config.in"
- source "fs/iso9660/Config.in"
- source "fs/jffs2/Config.in"
-+source "fs/oci/Config.in"
- source "fs/romfs/Config.in"
- source "fs/squashfs/Config.in"
- source "fs/tar/Config.in"
-diff --git a/fs/oci/Config.in b/fs/oci/Config.in
-new file mode 100644
-index 000000000000..dd7112ea8a1e
---- /dev/null
-+++ b/fs/oci/Config.in
-@@ -0,0 +1,88 @@
-+config BR2_TARGET_ROOTFS_OCI
-+	bool "oci image"
-+	help
-+	  Build an OCI (Open Container Initiative) image.
-+
-+	  By default, the image is generated in a directory called
-+	  rootfs-oci:
-+
-+	  $ cd output/images
-+	  $ ls rootfs-oci/
-+	  blobs  index.json  oci-layout
-+
-+	  You can push the image to a registry. Example using skopeo:
-+
-+	  $ skopeo copy --dest-creds <user>:<pass> \
-+	           oci:rootfs-oci:<tag> docker://<user>/<image>[:tag]
-+
-+	  And pull/run it with docker:
-+
-+	  $ docker run -it <user>/<image>[:tag]
-+
-+if BR2_TARGET_ROOTFS_OCI
-+
-+config BR2_TARGET_ROOTFS_OCI_AUTHOR
-+	string "author name and/or email address"
-+	default "Buildroot"
-+	help
-+	  Name and/or email address of the person which created the
-+	  image.
-+
-+config BR2_TARGET_ROOTFS_OCI_TAG
-+	string "image tag"
-+	default "latest"
-+	help
-+	  Tag to be used in the container image. If empty, 'latest' will
-+	  be used by default.
-+
-+config BR2_TARGET_ROOTFS_OCI_ENTRYPOINT
-+	string "entrypoint"
-+	default "sh"
-+	help
-+	  Command to execute when the container starts.
-+
-+config BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS
-+	string "entrypoint arguments"
-+	help
-+	  Default arguments to the entrypoint of the container.
-+
-+config BR2_TARGET_ROOTFS_OCI_WORKDIR
-+	string "working directory"
-+	help
-+	  Working directory of the entrypoint process in the
-+	  container.
-+
-+config BR2_TARGET_ROOTFS_OCI_UID
-+	string "username or UID"
-+	default "0"
-+	help
-+	  The username or UID of user the process run as.
-+
-+config BR2_TARGET_ROOTFS_OCI_ENV_VARS
-+	string "environment variables"
-+	help
-+	  Default environment variables for the container.
-+
-+config BR2_TARGET_ROOTFS_OCI_PORTS
-+	string "ports"
-+	help
-+	  Default set of ports to expose from a container running
-+	  this image in the following format:
-+
-+	  <port>/tcp, <port>/udp, <port> (same as <port>/tcp).
-+
-+config BR2_TARGET_ROOTFS_OCI_LABELS
-+	string "labels"
-+	help
-+	  Metadata in the format KEY=VALUE for the container compliant
-+	  with OCI annotation rules. If KEY starts with a dot, it will
-+	  be prefixed with "org.opencontainers.image"
-+	  (e.g. .url -> org.opencontainers.image.url).
-+
-+config BR2_TARGET_ROOTFS_OCI_ARCHIVE
-+	bool "pack oci image into a tar archive"
-+	default n
-+	help
-+	  Select whether the image should be packed into a TAR archive.
-+
-+endif
-diff --git a/fs/oci/oci.mk b/fs/oci/oci.mk
-new file mode 100644
-index 000000000000..09c3e88069ca
---- /dev/null
-+++ b/fs/oci/oci.mk
-@@ -0,0 +1,99 @@
-+################################################################################
-+#
-+# Build the oci image
-+#
-+################################################################################
-+
-+ROOTFS_OCI_IMAGE_NAME = rootfs-oci
-+
-+ROOTFS_OCI_DEPENDENCIES = host-sloci-image
-+
-+# architecture
-+OCI_SLOCI_IMAGE_OPTS = --arch $(BR2_ARCH)
-+
-+# architecture variant (typically used only for arm)
-+ifeq ($(BR2_ARM_CPU_HAS_ARM),y)
-+ifeq ($(BR2_ARM_CPU_ARMV5),y)
-+OCI_SLOCI_IMAGE_OPTS += --arch-variant v5
-+else ifeq ($(BR2_ARM_CPU_ARMV6),y)
-+OCI_SLOCI_IMAGE_OPTS += --arch-variant v6
-+else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
-+OCI_SLOCI_IMAGE_OPTS += --arch-variant v7
-+else ifeq ($(BR2_ARM_CPU_ARMV8A),y)
-+OCI_SLOCI_IMAGE_OPTS += --arch-variant v8
-+endif
-+endif
-+
-+# entrypoint
-+OCI_ENTRYPOINT = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT))
-+ifneq ($(OCI_ENTRYPOINT),)
-+OCI_SLOCI_IMAGE_OPTS += --entrypoint $(OCI_ENTRYPOINT)
-+endif
-+
-+# entrypoint arguments
-+OCI_ENTRYPOINT_ARGS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS))
-+ifneq ($(OCI_ENTRYPOINT_ARGS),)
-+OCI_SLOCI_IMAGE_OPTS += --cmd "$(OCI_ENTRYPOINT_ARGS)"
-+endif
-+
-+# author
-+OCI_AUTHOR = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_AUTHOR))
-+ifneq ($(OCI_AUTHOR),)
-+OCI_SLOCI_IMAGE_OPTS += --author "$(OCI_AUTHOR)"
-+endif
-+
-+# username or UID
-+OCI_UID = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_UID))
-+ifneq ($(OCI_UID),)
-+OCI_SLOCI_IMAGE_OPTS += --user $(OCI_UID)
-+endif
-+
-+# labels
-+OCI_LABELS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_LABELS))
-+ifneq ($(OCI_LABELS),)
-+OCI_SLOCI_IMAGE_OPTS += \
-+	$(foreach label,$(OCI_LABELS),--label $(label))
-+endif
-+
-+# environment variables
-+OCI_ENV_VARS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENV_VARS))
-+ifneq ($(OCI_ENV_VARS),)
-+OCI_SLOCI_IMAGE_OPTS += \
-+	$(foreach var,$(OCI_ENV_VARS),--env $(var))
-+endif
-+
-+# working directory
-+OCI_WORKDIR = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_WORKDIR))
-+ifneq ($(OCI_WORKDIR),)
-+OCI_SLOCI_IMAGE_OPTS += --working-dir $(OCI_WORKDIR)
-+endif
-+
-+# ports
-+OCI_PORTS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_PORTS))
-+ifneq ($(OCI_PORTS),)
-+OCI_SLOCI_IMAGE_OPTS += \
-+	$(foreach port,$(OCI_PORTS),--port $(port))
-+endif
-+
-+# tag
-+OCI_TAG = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_TAG))
-+ifeq ($(OCI_TAG),)
-+# we need a tag, so if it is empty, it is safe to override here
-+# check-package OverriddenVariable
-+OCI_TAG = latest
-+endif
-+
-+# enable tar archive
-+ifeq ($(BR2_TARGET_ROOTFS_OCI_ARCHIVE),y)
-+OCI_SLOCI_IMAGE_OPTS += --tar
-+endif
-+
-+define ROOTFS_OCI_CMD
-+	(cd $(BINARIES_DIR); \
-+		rm -rf $(ROOTFS_OCI_IMAGE_NAME)*
-+		$(HOST_DIR)/bin/sloci-image $(OCI_SLOCI_IMAGE_OPTS) $(TARGET_DIR) \
-+			$(ROOTFS_OCI_IMAGE_NAME):$(OCI_TAG)
-+	)
-+endef
-+
-+$(eval $(rootfs))
+diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.hash b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+index f8103b0add..296930f607 100644
+--- a/package/python-mbstrdecoder/python-mbstrdecoder.hash
++++ b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/mbstrdecoder/json
+-md5  3ab822b853bfd2f08e35ba85c1ac2e2e  mbstrdecoder-1.0.0.tar.gz
+-sha256  9df7778c0c051c98f6b5a848909202e5cd423c9692665b20d1a9bd0f771b8235  mbstrdecoder-1.0.0.tar.gz
++md5  aa377cfa117318583dffa1fd96123bdf  mbstrdecoder-1.0.1.tar.gz
++sha256  f895e1fb97496855ab5e43de99588787169c01f782c71625142d1a62729e9f9d  mbstrdecoder-1.0.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
+diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.mk b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+index 4a768ef695..6474324b78 100644
+--- a/package/python-mbstrdecoder/python-mbstrdecoder.mk
++++ b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MBSTRDECODER_VERSION = 1.0.0
++PYTHON_MBSTRDECODER_VERSION = 1.0.1
+ PYTHON_MBSTRDECODER_SOURCE = mbstrdecoder-$(PYTHON_MBSTRDECODER_VERSION).tar.gz
+-PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/5e/05/7dd1704e3e1522757708f59e727b540a6e5032ba6bb20e73851da7111b11
++PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/b7/3b/2524dd4771dfca572269036fb08356715cb78a1c1c2a4dae3a810a86b777
+ PYTHON_MBSTRDECODER_SETUP_TYPE = setuptools
+ PYTHON_MBSTRDECODER_LICENSE = MIT
+ PYTHON_MBSTRDECODER_LICENSE_FILES = LICENSE
 -- 
-2.17.1
+2.30.2
