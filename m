@@ -1,36 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Apr 2021 10:30:09 +0200
-Subject: [Buildroot] [git commit] package/python-httplib2: add CPE variables
-Message-ID: <20210410080609.DBC0E821F7@busybox.osuosl.org>
+Date: Sat, 10 Apr 2021 10:28:41 +0200
+Subject: [Buildroot] [git commit] package/sysdig: add SYSDIG_CPE_ID_VENDOR
+Message-ID: <20210410080609.B28888184C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44deddbf82c52b61ed39487a08f811374161aaa1
+commit: https://git.buildroot.net/buildroot/commit/?id=16770c8cb9df395038de05156ff8ac7a21270a66
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:httplib2_project:httplib2 is a valid CPE identifier for this
-package:
+cpe:2.3:a:sysdig:sysdig is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ahttplib2_project%3Ahttplib2
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asysdig%3Asysdig
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-httplib2/python-httplib2.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/sysdig/sysdig.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
-index 7b9b400241..a259c33c73 100644
---- a/package/python-httplib2/python-httplib2.mk
-+++ b/package/python-httplib2/python-httplib2.mk
-@@ -10,5 +10,7 @@ PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/ed/cd/533a1e9e046
- PYTHON_HTTPLIB2_SETUP_TYPE = setuptools
- PYTHON_HTTPLIB2_LICENSE = MIT
- PYTHON_HTTPLIB2_LICENSE_FILES = LICENSE
-+PYTHON_HTTPLIB2_CPE_ID_VENDOR = httplib2_project
-+PYTHON_HTTPLIB2_CPE_ID_PRODUCT = httplib2
+diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+index bcbb5ce01e..08d93750ae 100644
+--- a/package/sysdig/sysdig.mk
++++ b/package/sysdig/sysdig.mk
+@@ -8,6 +8,7 @@ SYSDIG_VERSION = 0.23.1
+ SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
+ SYSDIG_LICENSE = GPL-2.0
+ SYSDIG_LICENSE_FILES = COPYING
++SYSDIG_CPE_ID_VENDOR = sysdig
+ SYSDIG_CONF_OPTS = -DENABLE_DKMS=OFF -DUSE_BUNDLED_DEPS=OFF
+ SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
  
- $(eval $(python-package))
