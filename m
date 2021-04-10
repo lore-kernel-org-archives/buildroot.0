@@ -1,104 +1,47 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 10 Apr 2021 12:15:43 +0200
-Subject: [Buildroot] [PATCHv6 4/5] package/bpftrace: new package
-In-Reply-To: <20210406115445.iueiqqgxhc7qz3yq@e107158-lin>
-References: <20201220151203.2206747-1-romain.naour@gmail.com>
- <20201220151203.2206747-4-romain.naour@gmail.com>
- <20201221134549.nk4eu6qpto36ahpq@e107158-lin>
- <20210123194408.3omcypashiq44le5@e107158-lin>
- <20210225101849.nt6rnloszarwrgm3@e107158-lin>
- <CANLo3JhERRWK_kJCa0phxXVybPJuPM76PEEstN9tRUek04e+gQ@mail.gmail.com>
- <20210406115445.iueiqqgxhc7qz3yq@e107158-lin>
-Message-ID: <17334481-d69f-3705-c298-51a87a7d3a12@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 10 Apr 2021 13:53:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-aioconsole: bump to version
+ 0.3.1
+Message-ID: <20210410115357.47406-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://github.com/vxgmichel/aioconsole/releases/tag/v0.3.1
 
-Le 06/04/2021 ? 13:54, Qais Yousef a ?crit?:
-> On 02/25/21 12:01, Romain Naour wrote:
->> Hello Quais, All,
->>
->> Le jeu. 25 f?vr. 2021 ? 11:18, Qais Yousef <qais.yousef@arm.com> a ?crit :
->>
->>     On 01/23/21 19:44, Qais Yousef wrote:
->>     > On 12/21/20 13:45, Qais Yousef wrote:
->>     > > On 12/20/20 16:12, Romain Naour wrote:
->>     > > > From: Qais Yousef <qais.yousef@arm.com>
->>     > > >
->>     > > > bpftrace is a high-level tracing language for Linux enhanced Berkeley
->>     > > > Packet Filter (eBPF) available in recent Linux kernels (4.x).
->>     > > >
->>     > > > Only tested on x86_64 and aarch64. The package doesn't support i386
->>     and
->>     > > > aarch32.
->>     > > >
->>     > > > The libbpf dependency allow to enable the BTF support:
->>     > > >  # bpftrace --info
->>     > > >  System
->>     > > >    OS: Linux 5.4.58 #1 SMP Sun Dec 20 15:56:56 CET 2020
->>     > > >    Arch: aarch64
->>     > > >
->>     > > >  Build
->>     > > >    version: 2020.11-328-g019a9
->>     > > >    LLVM: 9.0.1
->>     > > >    foreach_sym: yes
->>     > > >    unsafe uprobe: no
->>     > > >    bfd: yes
->>     > > >    bpf_attach_kfunc: yes
->>     > > >    bcc_usdt_addsem: yes
->>     > > >    bcc bpf_attach_uprobe refcount: yes
->>     > > >    libbpf: yes
->>     > > >    libbpf btf dump: yes
->>     > > >    libbpf btf dump type decl: yes
->>     > > >
->>     > > > bfptrace doesn't use the libbpf_bcc library provided by bcc package.
->>     > > >
->>     > > > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
->>     > > > Signed-off-by: Romain Naour <romain.naour@gmail.com>
->>     > > > Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
->>     > > > ---
->>     > > > v6: Update DEVELOPERS file
->>     > >
->>     > > LGTM.
->>     >
->>     > Ping.
->>     >
->>     > I had issues with building patch 5, but the rest of the series is in good
->>     shape
->>     > IMO and can be merged independently at least.
->>     >
->>     > Is there anything more needs to be done to help get this support merged?
->>
->>     Ping again. It'd be great to finally have these merged.
->>
->>
->> Maintainers are currently busy at the release 2021.02 version of Buildroot.
->>
->> But yes, this work has been reviewed and reworked by Quais and me.
->>
->> I guess It's good to go.
-> 
-> Another gentle ping. Hopefully the release is done now for this to be
-> considered.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-aioconsole/python-aioconsole.hash | 4 ++--
+ package/python-aioconsole/python-aioconsole.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Gentle ping too.
-
-The patch series is here:
-http://patchwork.ozlabs.org/project/buildroot/list/?series=221413
-
-I didn't work on it since then, only the patch 5/5 needs to be reworked.
-
-Best regards,
-Romain
-
-
-> 
-> Thanks
-> 
-> --
-> Qais Yousef
-> 
+diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
+index 0aa9a7882c..dea2216fcf 100644
+--- a/package/python-aioconsole/python-aioconsole.hash
++++ b/package/python-aioconsole/python-aioconsole.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/aioconsole/json
+-md5  a8b0640a1e2a3869baf4efcbb1182fbe  aioconsole-0.3.0.tar.gz
+-sha256  b84724e6b93d1306a909974864df377236cf4bab8e0594096fed7936207205c5  aioconsole-0.3.0.tar.gz
++md5  66d4b05e3bc75267daf0f773d839f62b  aioconsole-0.3.1.tar.gz
++sha256  7c038bb40b7690bf5be6b17154830b7bff25e7be1c02d8420a346c3efbd5d8e5  aioconsole-0.3.1.tar.gz
+diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
+index 5c26d863c0..b32d2bea0f 100644
+--- a/package/python-aioconsole/python-aioconsole.mk
++++ b/package/python-aioconsole/python-aioconsole.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOCONSOLE_VERSION = 0.3.0
++PYTHON_AIOCONSOLE_VERSION = 0.3.1
+ PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
+-PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/d1/bc/2e52bd41293e63d95fcb6c5de406d43ccbb91255a48feaa22c1b8e2e4a40
++PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/5a/12/fce04ddc0a8ebd6482e5ec293d8bda47c9e05c82826b061f7b73523b8601
+ PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
+ PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
+ 
+-- 
+2.30.2
