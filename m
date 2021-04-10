@@ -1,54 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Apr 2021 10:29:10 +0200
-Subject: [Buildroot] [git commit] package/python-zeroconf: bump to version
- 0.29.0
-Message-ID: <20210410080609.C38468164D@busybox.osuosl.org>
+Date: Sat, 10 Apr 2021 10:31:27 +0200
+Subject: [Buildroot] [git commit] package/isl: bump to version 0.23
+Message-ID: <20210410080609.E77FF829FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b27d514c7df746738b7528bb8e237bed02027e1a
+commit: https://git.buildroot.net/buildroot/commit/?id=68c7be9c284779429dd7d2de5055b626ea6bb212
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Update indentation in hash file (two spaces)
 
-https://github.com/jstasiak/python-zeroconf/tree/0.29.0#changelog
+https://repo.or.cz/isl.git/blob/8cec80451ea4f2f225629527b99ee2dc54ac2cad:/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-zeroconf/python-zeroconf.hash | 6 +++---
- package/python-zeroconf/python-zeroconf.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/isl/isl.hash | 4 ++--
+ package/isl/isl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-zeroconf/python-zeroconf.hash b/package/python-zeroconf/python-zeroconf.hash
-index a4239b6780..be91b59048 100644
---- a/package/python-zeroconf/python-zeroconf.hash
-+++ b/package/python-zeroconf/python-zeroconf.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/zeroconf/json
--md5	1094639f8688f2c5b1938029877eb4f2  zeroconf-0.23.0.tar.gz
--sha256	e0c333b967c48f8b2e5cc94a1d4d28893023fb06dfd797ee384a94cdd1d0eef5  zeroconf-0.23.0.tar.gz
-+md5  98e683a247fe9915a5d4845c38b37ff3  zeroconf-0.29.0.tar.gz
-+sha256  7aefbb658b452b1fd7e51124364f938c6f5e42d6ea893fa2557bea8c06c540af  zeroconf-0.29.0.tar.gz
- # Locally computed sha256 checksums
--sha256	bb117c0fbd7f57f64170b690285d7df07c2371b578e3b3cd3aa2e1155ef461a0  COPYING
-+sha256  bb117c0fbd7f57f64170b690285d7df07c2371b578e3b3cd3aa2e1155ef461a0  COPYING
-diff --git a/package/python-zeroconf/python-zeroconf.mk b/package/python-zeroconf/python-zeroconf.mk
-index 55da292b46..67bfa72e03 100644
---- a/package/python-zeroconf/python-zeroconf.mk
-+++ b/package/python-zeroconf/python-zeroconf.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/isl/isl.hash b/package/isl/isl.hash
+index 40d04dca80..3df331b143 100644
+--- a/package/isl/isl.hash
++++ b/package/isl/isl.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256	6c8bc56c477affecba9c59e2c9f026967ac8bad01b51bdd07916db40a517b9fa	isl-0.22.tar.xz
+-sha256	3a2c398103f6bca0f50a9a9465deca9230b370b0212af5fdf31ed88a36215c30	LICENSE
++sha256  5efc53efaef151301f4e7dde3856b66812d8153dede24fab17673f801c8698f2  isl-0.23.tar.xz
++sha256  3a2c398103f6bca0f50a9a9465deca9230b370b0212af5fdf31ed88a36215c30  LICENSE
+diff --git a/package/isl/isl.mk b/package/isl/isl.mk
+index a1a597d038..3abd6640cb 100644
+--- a/package/isl/isl.mk
++++ b/package/isl/isl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_ZEROCONF_VERSION = 0.23.0
-+PYTHON_ZEROCONF_VERSION = 0.29.0
- PYTHON_ZEROCONF_SOURCE = zeroconf-$(PYTHON_ZEROCONF_VERSION).tar.gz
--PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/d7/25/8bbdd4857820e0cdc380c7e0c3543dc01a55247a1d831c712571783e74ec
-+PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/ca/77/eb6137997adc60811c6c46b28b00abac5c16daf14383f61d8a0180326b38
- PYTHON_ZEROCONF_SETUP_TYPE = setuptools
- PYTHON_ZEROCONF_LICENSE = LGPL-2.1+
- PYTHON_ZEROCONF_LICENSE_FILES = COPYING
+-ISL_VERSION = 0.22
++ISL_VERSION = 0.23
+ ISL_SOURCE = isl-$(ISL_VERSION).tar.xz
+ ISL_SITE = http://isl.gforge.inria.fr
+ ISL_LICENSE = MIT
