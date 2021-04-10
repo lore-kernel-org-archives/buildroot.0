@@ -1,35 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Apr 2021 10:28:41 +0200
-Subject: [Buildroot] [git commit] package/sysdig: add SYSDIG_CPE_ID_VENDOR
-Message-ID: <20210410080609.B28888184C@busybox.osuosl.org>
+Date: Sat, 10 Apr 2021 10:29:10 +0200
+Subject: [Buildroot] [git commit] package/python-zeroconf: bump to version
+ 0.29.0
+Message-ID: <20210410080609.C38468164D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16770c8cb9df395038de05156ff8ac7a21270a66
+commit: https://git.buildroot.net/buildroot/commit/?id=b27d514c7df746738b7528bb8e237bed02027e1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:sysdig:sysdig is a valid CPE identifier for this package:
+Update indentation in hash file (two spaces)
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asysdig%3Asysdig
+https://github.com/jstasiak/python-zeroconf/tree/0.29.0#changelog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sysdig/sysdig.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-zeroconf/python-zeroconf.hash | 6 +++---
+ package/python-zeroconf/python-zeroconf.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-index bcbb5ce01e..08d93750ae 100644
---- a/package/sysdig/sysdig.mk
-+++ b/package/sysdig/sysdig.mk
-@@ -8,6 +8,7 @@ SYSDIG_VERSION = 0.23.1
- SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
- SYSDIG_LICENSE = GPL-2.0
- SYSDIG_LICENSE_FILES = COPYING
-+SYSDIG_CPE_ID_VENDOR = sysdig
- SYSDIG_CONF_OPTS = -DENABLE_DKMS=OFF -DUSE_BUNDLED_DEPS=OFF
- SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
+diff --git a/package/python-zeroconf/python-zeroconf.hash b/package/python-zeroconf/python-zeroconf.hash
+index a4239b6780..be91b59048 100644
+--- a/package/python-zeroconf/python-zeroconf.hash
++++ b/package/python-zeroconf/python-zeroconf.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/zeroconf/json
+-md5	1094639f8688f2c5b1938029877eb4f2  zeroconf-0.23.0.tar.gz
+-sha256	e0c333b967c48f8b2e5cc94a1d4d28893023fb06dfd797ee384a94cdd1d0eef5  zeroconf-0.23.0.tar.gz
++md5  98e683a247fe9915a5d4845c38b37ff3  zeroconf-0.29.0.tar.gz
++sha256  7aefbb658b452b1fd7e51124364f938c6f5e42d6ea893fa2557bea8c06c540af  zeroconf-0.29.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	bb117c0fbd7f57f64170b690285d7df07c2371b578e3b3cd3aa2e1155ef461a0  COPYING
++sha256  bb117c0fbd7f57f64170b690285d7df07c2371b578e3b3cd3aa2e1155ef461a0  COPYING
+diff --git a/package/python-zeroconf/python-zeroconf.mk b/package/python-zeroconf/python-zeroconf.mk
+index 55da292b46..67bfa72e03 100644
+--- a/package/python-zeroconf/python-zeroconf.mk
++++ b/package/python-zeroconf/python-zeroconf.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
+-PYTHON_ZEROCONF_VERSION = 0.23.0
++PYTHON_ZEROCONF_VERSION = 0.29.0
+ PYTHON_ZEROCONF_SOURCE = zeroconf-$(PYTHON_ZEROCONF_VERSION).tar.gz
+-PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/d7/25/8bbdd4857820e0cdc380c7e0c3543dc01a55247a1d831c712571783e74ec
++PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/ca/77/eb6137997adc60811c6c46b28b00abac5c16daf14383f61d8a0180326b38
+ PYTHON_ZEROCONF_SETUP_TYPE = setuptools
+ PYTHON_ZEROCONF_LICENSE = LGPL-2.1+
+ PYTHON_ZEROCONF_LICENSE_FILES = COPYING
