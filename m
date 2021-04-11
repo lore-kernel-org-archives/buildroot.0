@@ -1,46 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Apr 2021 20:21:07 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/kodi-inputstream-adaptive: bump
- version to 2.6.13
-Message-ID: <20210411182107.1614873-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 11 Apr 2021 20:04:11 +0200
+Subject: [Buildroot] [git commit] package/readline: add Signed-off-by and
+ renumber patch
+Message-ID: <20210411180008.6FEC87FC0F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
+commit: https://git.buildroot.net/buildroot/commit/?id=575c60ff9aaaa03662555ae9353ad4e441e7fc6f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Add Signed-off-by and while at it, renumber it
+
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=13731
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-v2: squashed with private patch (Peter)
+ package/readline/{0000-curses-link.patch => 0001-curses-link.patch} | 2 ++
+ 1 file changed, 2 insertions(+)
 
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 5be6bad3cb..d789e04721 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6407a95140b728b959321512d5bdc8512b01d60030415459cf861ddae193e3e9  kodi-inputstream-adaptive-2.6.8-Matrix.tar.gz
-+sha256  83ffa1f5047782e049b54b94e7e9615638147f751980533bf4616140901129c9  kodi-inputstream-adaptive-2.6.13-Matrix.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 193ea66245..8c79b13d8e 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/readline/0000-curses-link.patch b/package/readline/0001-curses-link.patch
+similarity index 85%
+rename from package/readline/0000-curses-link.patch
+rename to package/readline/0001-curses-link.patch
+index 56b4770220..6afc5ba078 100644
+--- a/package/readline/0000-curses-link.patch
++++ b/package/readline/0001-curses-link.patch
+@@ -3,6 +3,8 @@ link readline directly to ncurses since it needs symbols from it
+ upstream readline does this on purpose (no direct linking), but
+ it doesn't make much sense in a Linux world
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.8-Matrix
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.13-Matrix
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
--- 
-2.29.2
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
+ --- a/support/shobj-conf
+ +++ b/support/shobj-conf
+ @@ -42,7 +42,7 @@
