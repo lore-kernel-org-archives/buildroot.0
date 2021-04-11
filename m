@@ -1,98 +1,81 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 11 Apr 2021 08:41:06 +0300
-Subject: [Buildroot] [PATCH] package/i2c-tools: add upstream post-4.2
- i2ctransfer fix
-In-Reply-To: <20210410081252.17180-1-peter@korsgaard.com>
-References: <20210410081252.17180-1-peter@korsgaard.com>
-Message-ID: <87pmz18jkd.fsf@tarshish>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 11 Apr 2021 10:15:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bridge-utils: fix build on musl
+Message-ID: <20210411081528.189137-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Build on musl is broken since bump to version 1.7.1 in commit
+5f2d38df4f85f7999cf6d00da089991cba93fee6
 
-On Sat, Apr 10 2021, Peter Korsgaard wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/0f080ff6913595ee2732b93206e5001c837c1bcc
 
-> i2c-tools 4.2 contained an invalid check, leading to verbose false-positive
-> warning messages when the variable length ({r,w}?) option is used:
->
-> https://www.spinics.net/lists/linux-i2c/msg50032.html
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../bridge-utils/0001-fix-build-on-musl.patch | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/bridge-utils/0001-fix-build-on-musl.patch
 
-Maybe also add a link to Jean's response:
-
-  https://www.spinics.net/lists/linux-i2c/msg50253.html
-
-> Unfortunately upstream does not make bugfix releases, instead opting to list
-> such bugfixes on the wiki:
->
-> https://i2c.wiki.kernel.org/index.php/I2C_Tools
->
-> So add the patch here.
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Acked-by: Baruch Siach <baruch@tkos.co.il>
-
-Thanks,
-baruch
-
-> ---
->  ...transfer-add-check-for-returned-leng.patch | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 package/i2c-tools/0001-Revert-tools-i2ctransfer-add-check-for-returned-leng.patch
->
-> diff --git a/package/i2c-tools/0001-Revert-tools-i2ctransfer-add-check-for-returned-leng.patch b/package/i2c-tools/0001-Revert-tools-i2ctransfer-add-check-for-returned-leng.patch
-> new file mode 100644
-> index 0000000000..7173efe219
-> --- /dev/null
-> +++ b/package/i2c-tools/0001-Revert-tools-i2ctransfer-add-check-for-returned-leng.patch
-> @@ -0,0 +1,41 @@
-> +From 06a1909ae1e8ae1edc70dc48dd22a32ba5eceecb Mon Sep 17 00:00:00 2001
-> +From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> +Date: Tue, 9 Feb 2021 12:05:56 +0100
-> +Subject: [PATCH] Revert "tools: i2ctransfer: add check for returned length
-> + from driver"
-> +
-> +This reverts commit 34806fc4e7090b34e32fa1110d546ab5ce01a6a0. It was
-> +developed against an experimental kernel. The regular kernel does not
-> +update the new message length to userspace, so the check is always false
-> +positive. We can't change the kernel behaviour because it would break
-> +the ABI. So revert this commit.
-> +
-> +Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> +Signed-off-by: Wolfram Sang <wsa@kernel.org>
-> +[Peter: drop CHANGES update]
-> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> +---
-> + tools/i2ctransfer.c | 7 +------
-> + 1 file changed, 1 insertions(+), 6 deletions(-)
-> +
-> +diff --git a/tools/i2ctransfer.c b/tools/i2ctransfer.c
-> +index f2a4df8..b0e8d43 100644
-> +--- a/tools/i2ctransfer.c
-> ++++ b/tools/i2ctransfer.c
-> +@@ -88,12 +88,7 @@ static void print_msgs(struct i2c_msg *msgs, __u32 nmsgs, unsigned flags)
-> + 		int recv_len = msgs[i].flags & I2C_M_RECV_LEN;
-> + 		int print_buf = (read && (flags & PRINT_READ_BUF)) ||
-> + 				(!read && (flags & PRINT_WRITE_BUF));
-> +-		__u16 len = msgs[i].len;
-> +-
-> +-		if (recv_len && print_buf && len != msgs[i].buf[0] + 1) {
-> +-			fprintf(stderr, "Correcting wrong msg length after recv_len! Please fix the I2C driver and/or report.\n");
-> +-			len = msgs[i].buf[0] + 1;
-> +-		}
-> ++		__u16 len = recv_len ? msgs[i].buf[0] + 1 : msgs[i].len;
-> + 
-> + 		if (flags & PRINT_HEADER) {
-> + 			fprintf(output, "msg %u: addr 0x%02x, %s, len ",
-> +-- 
-> +2.20.1
-> +
-
-
+diff --git a/package/bridge-utils/0001-fix-build-on-musl.patch b/package/bridge-utils/0001-fix-build-on-musl.patch
+new file mode 100644
+index 0000000000..1a5d1eb23b
+--- /dev/null
++++ b/package/bridge-utils/0001-fix-build-on-musl.patch
+@@ -0,0 +1,51 @@
++From 1d5a2e0f88e0c53fede03632fa92ffade5e79ac5 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 11 Apr 2021 10:04:59 +0200
++Subject: [PATCH] fix build on musl
++
++Build on musl is broken since version 1.7.1 and commit
++a1f20223cfcf7b9eae8c9e7e7a07e7bf1377f65b:
++
++libbridge_devif.c: In function 'fpopen':
++libbridge_devif.c:33:12: error: 'PATH_MAX' undeclared (first use in this function); did you mean 'AF_MAX'?
++   33 |  char path[PATH_MAX];
++      |            ^~~~~~~~
++      |            AF_MAX
++
++Fixes:
++ - http://autobuild.buildroot.org/results/0f080ff6913595ee2732b93206e5001c837c1bcc
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to Stephen Hemminger <sthemmin@microsoft.com>]
++---
++ libbridge/libbridge_devif.c | 1 +
++ libbridge/libbridge_init.c  | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/libbridge/libbridge_devif.c b/libbridge/libbridge_devif.c
++index 8b7d954..6c679f6 100644
++--- a/libbridge/libbridge_devif.c
+++++ b/libbridge/libbridge_devif.c
++@@ -21,6 +21,7 @@
++ #include <stdlib.h>
++ #include <unistd.h>
++ #include <errno.h>
+++#include <limits.h>
++ #include <string.h>
++ #include <dirent.h>
++ #include <fcntl.h>
++diff --git a/libbridge/libbridge_init.c b/libbridge/libbridge_init.c
++index c914971..83a97cd 100644
++--- a/libbridge/libbridge_init.c
+++++ b/libbridge/libbridge_init.c
++@@ -20,6 +20,7 @@
++ #include <stdlib.h>
++ #include <unistd.h>
++ #include <errno.h>
+++#include <limits.h>
++ #include <string.h>
++ #include <dirent.h>
++ #include <sys/types.h>
++-- 
++2.30.2
++
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.30.2
