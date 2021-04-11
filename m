@@ -1,23 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Apr 2021 20:03:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-vuplus: bump version
- to 7.4.3-Matrix
-In-Reply-To: <20210411162052.547935-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 11 Apr 2021 18:20:52 +0200")
-References: <20210411162052.547935-1-bernd.kuhls@t-online.de>
-Message-ID: <874kgc4s2a.fsf@dell.be.48ers.dk>
+Date: Sun, 11 Apr 2021 20:04:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/readline: add Signed-off-by and
+ renumber patch
+In-Reply-To: <20210411153622.262852-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 11 Apr 2021 17:36:22 +0200")
+References: <20210411153622.262852-1-fontaine.fabrice@gmail.com>
+Message-ID: <87zgy43dgf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Changelog:
- > https://github.com/kodi-pvr/pvr.vuplus/blob/Matrix/pvr.vuplus/changelog.txt
+ > Add Signed-off-by and while at it, renumber it
+ > Fixes:
+ >  - https://bugs.buildroot.org/show_bug.cgi?id=13731
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
