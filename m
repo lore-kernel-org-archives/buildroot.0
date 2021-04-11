@@ -1,82 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Apr 2021 20:04:41 +0200
-Subject: [Buildroot] [git commit] package/bridge-utils: fix build on musl
-Message-ID: <20210411180008.7C72F83707@busybox.osuosl.org>
+Date: Sun, 11 Apr 2021 20:03:19 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-vuplus: bump version to
+ 7.4.3-Matrix
+Message-ID: <20210411180008.65906814BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa75b053baef70c9dd5e598c7593bdf50a0c4396
+commit: https://git.buildroot.net/buildroot/commit/?id=4eceaa242b95a73232cf633597e88960e2342b59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Build on musl is broken since bump to version 1.7.1 in commit
-5f2d38df4f85f7999cf6d00da089991cba93fee6
+Changelog:
+https://github.com/kodi-pvr/pvr.vuplus/blob/Matrix/pvr.vuplus/changelog.txt
 
-Fixes:
- - http://autobuild.buildroot.org/results/0f080ff6913595ee2732b93206e5001c837c1bcc
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bridge-utils/0001-fix-build-on-musl.patch | 51 +++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 2 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bridge-utils/0001-fix-build-on-musl.patch b/package/bridge-utils/0001-fix-build-on-musl.patch
-new file mode 100644
-index 0000000000..1a5d1eb23b
---- /dev/null
-+++ b/package/bridge-utils/0001-fix-build-on-musl.patch
-@@ -0,0 +1,51 @@
-+From 1d5a2e0f88e0c53fede03632fa92ffade5e79ac5 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 11 Apr 2021 10:04:59 +0200
-+Subject: [PATCH] fix build on musl
-+
-+Build on musl is broken since version 1.7.1 and commit
-+a1f20223cfcf7b9eae8c9e7e7a07e7bf1377f65b:
-+
-+libbridge_devif.c: In function 'fpopen':
-+libbridge_devif.c:33:12: error: 'PATH_MAX' undeclared (first use in this function); did you mean 'AF_MAX'?
-+   33 |  char path[PATH_MAX];
-+      |            ^~~~~~~~
-+      |            AF_MAX
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0f080ff6913595ee2732b93206e5001c837c1bcc
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to Stephen Hemminger <sthemmin@microsoft.com>]
-+---
-+ libbridge/libbridge_devif.c | 1 +
-+ libbridge/libbridge_init.c  | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/libbridge/libbridge_devif.c b/libbridge/libbridge_devif.c
-+index 8b7d954..6c679f6 100644
-+--- a/libbridge/libbridge_devif.c
-++++ b/libbridge/libbridge_devif.c
-+@@ -21,6 +21,7 @@
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+ #include <errno.h>
-++#include <limits.h>
-+ #include <string.h>
-+ #include <dirent.h>
-+ #include <fcntl.h>
-+diff --git a/libbridge/libbridge_init.c b/libbridge/libbridge_init.c
-+index c914971..83a97cd 100644
-+--- a/libbridge/libbridge_init.c
-++++ b/libbridge/libbridge_init.c
-+@@ -20,6 +20,7 @@
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+ #include <errno.h>
-++#include <limits.h>
-+ #include <string.h>
-+ #include <dirent.h>
-+ #include <sys/types.h>
-+-- 
-+2.30.2
-+
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+index 2439e2619d..cc49237402 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  fcd77d5b12def3b6c95928d699460b1dd6b316216f2bd348735261c639113554  kodi-pvr-vuplus-7.4.2-Matrix.tar.gz
++sha256  0845aeb136395cad979d9d4c687a8a2bd0b30e361ac9569368d564ec88316a5e  kodi-pvr-vuplus-7.4.3-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+index cce260c519..1f0b91317d 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_VUPLUS_VERSION = 7.4.2-Matrix
++KODI_PVR_VUPLUS_VERSION = 7.4.3-Matrix
+ KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
+ KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
+ KODI_PVR_VUPLUS_LICENSE_FILES = LICENSE.md
