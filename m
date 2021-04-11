@@ -1,55 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Apr 2021 21:17:02 +0200
-Subject: [Buildroot] [git commit] package/igmpproxy: bump to version 0.3
-Message-ID: <20210411185152.C82E383797@busybox.osuosl.org>
+Date: Sun, 11 Apr 2021 21:21:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-packaging: bump to
+ version 20.9
+In-Reply-To: <20210410124049.81580-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 10 Apr 2021 14:40:49 +0200")
+References: <20210410124049.81580-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tuoc1vbh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cd04b401c9ecad6f0db5515fe7d2881b1fadf1a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-- Update indention in hash file (two spaces)
-- Use official tarball
+ > python-six is not a dependency since version 20.5 and
+ > https://github.com/pypa/packaging/commit/39a70cce69d9b08cc4d02b225114d556d5b59ada
 
-https://github.com/pali/igmpproxy/releases/tag/0.3
+ > https://github.com/pypa/packaging/blob/20.9/CHANGELOG.rst
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/igmpproxy/igmpproxy.hash | 8 ++++----
- package/igmpproxy/igmpproxy.mk   | 5 +++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/igmpproxy/igmpproxy.hash b/package/igmpproxy/igmpproxy.hash
-index 2566987a7f..238de67e88 100644
---- a/package/igmpproxy/igmpproxy.hash
-+++ b/package/igmpproxy/igmpproxy.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256 6faa1f42ba323f60a9eb4958550e25b2e7e9c645da32c52ba12db0c9bdfce1ba  igmpproxy-0.2.1.tar.gz
--sha256 be3d05af93dbbc4650f8d641d8e1bec220af4a729e07ba71e949c25b93a1b4f6  COPYING
--sha256 c4f65d5d396ad518a37d30b83fe33897661858dc174ff64a15d0461630ce64e4  GPL.txt
--sha256 4328a21f0822caa9976356623118bcdcc9970c7a0f9a3deeba23c779b7cfb5d1  Stanford.txt
-+sha256  d1fc244cb2fbbf99f720bda3e841fe59ece9b6919073790b4b892739b1b844eb  igmpproxy-0.3.tar.gz
-+sha256  be3d05af93dbbc4650f8d641d8e1bec220af4a729e07ba71e949c25b93a1b4f6  COPYING
-+sha256  c4f65d5d396ad518a37d30b83fe33897661858dc174ff64a15d0461630ce64e4  GPL.txt
-+sha256  4328a21f0822caa9976356623118bcdcc9970c7a0f9a3deeba23c779b7cfb5d1  Stanford.txt
-diff --git a/package/igmpproxy/igmpproxy.mk b/package/igmpproxy/igmpproxy.mk
-index fe4614fd13..6a6b56afa0 100644
---- a/package/igmpproxy/igmpproxy.mk
-+++ b/package/igmpproxy/igmpproxy.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--IGMPPROXY_VERSION = 0.2.1
--IGMPPROXY_SITE = $(call github,pali,igmpproxy,$(IGMPPROXY_VERSION))
-+IGMPPROXY_VERSION = 0.3
-+IGMPPROXY_SITE = \
-+	https://github.com/pali/igmpproxy/releases/download/$(IGMPPROXY_VERSION)
- IGMPPROXY_AUTORECONF = YES
- IGMPPROXY_LICENSE = GPL-2.0+, BSD-3-Clause (mrouted)
- IGMPPROXY_LICENSE_FILES = COPYING GPL.txt Stanford.txt
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
