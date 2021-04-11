@@ -1,58 +1,49 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 11 Apr 2021 11:47:37 +0200
-Subject: [Buildroot] [PATCH 2/3] package/mpfr: bump to version 4.1.0
+Date: Sun, 11 Apr 2021 11:47:38 +0200
+Subject: [Buildroot] [PATCH 3/3] package/mpc: bump to version 1.2.1
 In-Reply-To: <20210411094738.455891-1-romain.naour@gmail.com>
 References: <20210411094738.455891-1-romain.naour@gmail.com>
-Message-ID: <20210411094738.455891-2-romain.naour@gmail.com>
+Message-ID: <20210411094738.455891-3-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See: https://www.mpfr.org/mpfr-4.1.0/
+Since version 1.2.0, mpc requires mpfr mpfr 4.1.0.
+
+See https://gitlab.inria.fr/mpc/mpc/-/commit/bc3541daa63fb6f53a5ca422766ef420e3663f6a
 
 Update indentation in hash file (two spaces).
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
-The mpfr mailing is not curently public, I can't get the hash from the announce mail.
+ package/mpc/mpc.hash | 4 ++--
+ package/mpc/mpc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-https://sympa.inria.fr/sympa/arc/mpfr-announce
-
-At least my hash is the same as the one used for archlinux mpfr package:
-
-https://github.com/archlinux/svntogit-packages/commit/6aa73da19b299ca2a98cf4aa294d53ae0d8084b7
----
- package/mpfr/mpfr.hash | 6 +++---
- package/mpfr/mpfr.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/mpfr/mpfr.hash b/package/mpfr/mpfr.hash
-index ea44b8c20a..35056f626a 100644
---- a/package/mpfr/mpfr.hash
-+++ b/package/mpfr/mpfr.hash
-@@ -1,5 +1,5 @@
--# From http://lists.gnu.org/archive/html/info-gnu/2019-01/msg00019.html
--sha256 1d3be708604eae0e42d578ba93b390c2a145f17743a744d8f3f8c2ad5855a38a  mpfr-4.0.2.tar.xz
-+# Locally calculated
-+sha256  0c98a3f1732ff6ca4ea690552079da9c597872d30e96ec28414ee23c95558a7f  mpfr-4.1.0.tar.xz
- 
- # Hash for license file
--sha256 e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  COPYING.LESSER
-+sha256  e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  COPYING.LESSER
-diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
-index 837aff3aa5..cd558dae0e 100644
---- a/package/mpfr/mpfr.mk
-+++ b/package/mpfr/mpfr.mk
+diff --git a/package/mpc/mpc.hash b/package/mpc/mpc.hash
+index fa98f673d5..0520a7b9b4 100644
+--- a/package/mpc/mpc.hash
++++ b/package/mpc/mpc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e	mpc-1.1.0.tar.gz
+-sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LESSER
++sha256  17503d2c395dfcf106b622dc142683c1199431d095367c6aacba6eec30340459  mpc-1.2.1.tar.gz
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSER
+diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk
+index 0e84bc2770..364e4c3c85 100644
+--- a/package/mpc/mpc.mk
++++ b/package/mpc/mpc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPFR_VERSION = 4.0.2
-+MPFR_VERSION = 4.1.0
- MPFR_SITE = http://www.mpfr.org/mpfr-$(MPFR_VERSION)
- MPFR_SOURCE = mpfr-$(MPFR_VERSION).tar.xz
- MPFR_LICENSE = LGPL-3.0+
+-MPC_VERSION = 1.1.0
++MPC_VERSION = 1.2.1
+ MPC_SITE = $(BR2_GNU_MIRROR)/mpc
+ MPC_LICENSE = LGPL-3.0+
+ MPC_LICENSE_FILES = COPYING.LESSER
 -- 
 2.30.2
