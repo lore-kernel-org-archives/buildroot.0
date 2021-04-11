@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Apr 2021 20:04:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/readline: add Signed-off-by and
- renumber patch
-In-Reply-To: <20210411153622.262852-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 11 Apr 2021 17:36:22 +0200")
-References: <20210411153622.262852-1-fontaine.fabrice@gmail.com>
-Message-ID: <87zgy43dgf.fsf@dell.be.48ers.dk>
+Date: Sun, 11 Apr 2021 20:04:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bridge-utils: fix build on musl
+In-Reply-To: <20210411081528.189137-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 11 Apr 2021 10:15:28 +0200")
+References: <20210411081528.189137-1-fontaine.fabrice@gmail.com>
+Message-ID: <87v98s3dfk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,9 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Add Signed-off-by and while at it, renumber it
+ > Build on musl is broken since bump to version 1.7.1 in commit
+ > 5f2d38df4f85f7999cf6d00da089991cba93fee6
+
  > Fixes:
- >  - https://bugs.buildroot.org/show_bug.cgi?id=13731
+ >  - http://autobuild.buildroot.org/results/0f080ff6913595ee2732b93206e5001c837c1bcc
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
