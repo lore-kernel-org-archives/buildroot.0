@@ -1,36 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Apr 2021 21:38:33 +0200
-Subject: [Buildroot] [git commit] package/docker-engine: add CPE variables
-Message-ID: <20210411191302.6C6A7803E2@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 11 Apr 2021 21:46:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: fix /etc/resolv.conf link
+ on per-package build
+Message-ID: <20210411194602.994785-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b59ebb66f35ed79dcd07068dd5bd101c44ad6248
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=13271
 
-cpe:2.3:a:docker:docker is a valid CPE identifier for this package:
-
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adocker%3Adocker
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/docker-engine/docker-engine.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/systemd/systemd.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index d3f4d81572..767818ebba 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -13,6 +13,9 @@ DOCKER_ENGINE_LICENSE_FILES = LICENSE
- DOCKER_ENGINE_DEPENDENCIES = host-pkgconf
- DOCKER_ENGINE_GOMOD = github.com/docker/docker
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 41332f207a..74c561e67e 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -523,8 +523,7 @@ endef
  
-+DOCKER_ENGINE_CPE_ID_VENDOR = docker
-+DOCKER_ENGINE_CPE_ID_PRODUCT = docker
-+
- DOCKER_ENGINE_LDFLAGS = \
- 	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.BuildTime="" \
- 	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.GitCommit="buildroot" \
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_INIT_HOOK \
+-	SYSTEMD_INSTALL_MACHINEID_HOOK \
+-	SYSTEMD_INSTALL_RESOLVCONF_HOOK
++	SYSTEMD_INSTALL_MACHINEID_HOOK
+ 
+ define SYSTEMD_INSTALL_IMAGES_CMDS
+ 	$(SYSTEMD_INSTALL_BOOT_FILES)
+@@ -556,7 +555,9 @@ define SYSTEMD_INSTALL_NSSCONFIG_HOOK
+ 		$(TARGET_DIR)/etc/nsswitch.conf
+ endef
+ 
+-SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_INSTALL_NSSCONFIG_HOOK
++SYSTEMD_TARGET_FINALIZE_HOOKS += \
++	SYSTEMD_INSTALL_NSSCONFIG_HOOK \
++	SYSTEMD_INSTALL_RESOLVCONF_HOOK
+ 
+ ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
+ # systemd provides multiple units to autospawn getty as neede
+-- 
+2.30.2
