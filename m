@@ -1,46 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 11 Apr 2021 21:46:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix /etc/resolv.conf link
- on per-package build
-Message-ID: <20210411194602.994785-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 11 Apr 2021 21:35:37 +0000
+Subject: [Buildroot] [Bug 13741] New: genext2fs does not allow to set perms
+ of root node
+Message-ID: <bug-13741-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=13271
+https://bugs.busybox.net/show_bug.cgi?id=13741
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/systemd/systemd.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+            Bug ID: 13741
+           Summary: genext2fs does not allow to set perms of root node
+           Product: buildroot
+           Version: 2021.02.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: stsp2 at yandex.ru
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 41332f207a..74c561e67e 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -523,8 +523,7 @@ endef
- 
- SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
- 	SYSTEMD_INSTALL_INIT_HOOK \
--	SYSTEMD_INSTALL_MACHINEID_HOOK \
--	SYSTEMD_INSTALL_RESOLVCONF_HOOK
-+	SYSTEMD_INSTALL_MACHINEID_HOOK
- 
- define SYSTEMD_INSTALL_IMAGES_CMDS
- 	$(SYSTEMD_INSTALL_BOOT_FILES)
-@@ -556,7 +555,9 @@ define SYSTEMD_INSTALL_NSSCONFIG_HOOK
- 		$(TARGET_DIR)/etc/nsswitch.conf
- endef
- 
--SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_INSTALL_NSSCONFIG_HOOK
-+SYSTEMD_TARGET_FINALIZE_HOOKS += \
-+	SYSTEMD_INSTALL_NSSCONFIG_HOOK \
-+	SYSTEMD_INSTALL_RESOLVCONF_HOOK
- 
- ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
- # systemd provides multiple units to autospawn getty as neede
+genext2fs included in buildroot,
+misses this patch:
+https://github.com/bestouff/genext2fs/pull/14/commits/8e4b9ae6f051454953a80b8e64443bcea6c9cc46
+
+Without this patch you can't set
+the proper permissions for the root
+node, which makes genext2fs quite
+useless in scenarios that need a
+non-default root node perms.
+
 -- 
-2.30.2
+You are receiving this mail because:
+You are on the CC list for the bug.
