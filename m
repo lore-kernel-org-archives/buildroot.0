@@ -1,49 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Apr 2021 21:14:43 +0200
-Subject: [Buildroot] [git commit] package/python-aioconsole: bump to version
- 0.3.1
-Message-ID: <20210411185152.B104981571@busybox.osuosl.org>
+Date: Sun, 11 Apr 2021 21:17:02 +0200
+Subject: [Buildroot] [git commit] package/igmpproxy: bump to version 0.3
+Message-ID: <20210411185152.C82E383797@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bc4a7ea6d0f51fae96a5c0b6925be86d8bbdf7a
+commit: https://git.buildroot.net/buildroot/commit/?id=4cd04b401c9ecad6f0db5515fe7d2881b1fadf1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/vxgmichel/aioconsole/releases/tag/v0.3.1
+- Update indention in hash file (two spaces)
+- Use official tarball
+
+https://github.com/pali/igmpproxy/releases/tag/0.3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-aioconsole/python-aioconsole.hash | 4 ++--
- package/python-aioconsole/python-aioconsole.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/igmpproxy/igmpproxy.hash | 8 ++++----
+ package/igmpproxy/igmpproxy.mk   | 5 +++--
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
-index 0aa9a7882c..dea2216fcf 100644
---- a/package/python-aioconsole/python-aioconsole.hash
-+++ b/package/python-aioconsole/python-aioconsole.hash
-@@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/aioconsole/json
--md5  a8b0640a1e2a3869baf4efcbb1182fbe  aioconsole-0.3.0.tar.gz
--sha256  b84724e6b93d1306a909974864df377236cf4bab8e0594096fed7936207205c5  aioconsole-0.3.0.tar.gz
-+md5  66d4b05e3bc75267daf0f773d839f62b  aioconsole-0.3.1.tar.gz
-+sha256  7c038bb40b7690bf5be6b17154830b7bff25e7be1c02d8420a346c3efbd5d8e5  aioconsole-0.3.1.tar.gz
-diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
-index 5c26d863c0..b32d2bea0f 100644
---- a/package/python-aioconsole/python-aioconsole.mk
-+++ b/package/python-aioconsole/python-aioconsole.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/igmpproxy/igmpproxy.hash b/package/igmpproxy/igmpproxy.hash
+index 2566987a7f..238de67e88 100644
+--- a/package/igmpproxy/igmpproxy.hash
++++ b/package/igmpproxy/igmpproxy.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 6faa1f42ba323f60a9eb4958550e25b2e7e9c645da32c52ba12db0c9bdfce1ba  igmpproxy-0.2.1.tar.gz
+-sha256 be3d05af93dbbc4650f8d641d8e1bec220af4a729e07ba71e949c25b93a1b4f6  COPYING
+-sha256 c4f65d5d396ad518a37d30b83fe33897661858dc174ff64a15d0461630ce64e4  GPL.txt
+-sha256 4328a21f0822caa9976356623118bcdcc9970c7a0f9a3deeba23c779b7cfb5d1  Stanford.txt
++sha256  d1fc244cb2fbbf99f720bda3e841fe59ece9b6919073790b4b892739b1b844eb  igmpproxy-0.3.tar.gz
++sha256  be3d05af93dbbc4650f8d641d8e1bec220af4a729e07ba71e949c25b93a1b4f6  COPYING
++sha256  c4f65d5d396ad518a37d30b83fe33897661858dc174ff64a15d0461630ce64e4  GPL.txt
++sha256  4328a21f0822caa9976356623118bcdcc9970c7a0f9a3deeba23c779b7cfb5d1  Stanford.txt
+diff --git a/package/igmpproxy/igmpproxy.mk b/package/igmpproxy/igmpproxy.mk
+index fe4614fd13..6a6b56afa0 100644
+--- a/package/igmpproxy/igmpproxy.mk
++++ b/package/igmpproxy/igmpproxy.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOCONSOLE_VERSION = 0.3.0
-+PYTHON_AIOCONSOLE_VERSION = 0.3.1
- PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
--PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/d1/bc/2e52bd41293e63d95fcb6c5de406d43ccbb91255a48feaa22c1b8e2e4a40
-+PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/5a/12/fce04ddc0a8ebd6482e5ec293d8bda47c9e05c82826b061f7b73523b8601
- PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
- PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
- 
+-IGMPPROXY_VERSION = 0.2.1
+-IGMPPROXY_SITE = $(call github,pali,igmpproxy,$(IGMPPROXY_VERSION))
++IGMPPROXY_VERSION = 0.3
++IGMPPROXY_SITE = \
++	https://github.com/pali/igmpproxy/releases/download/$(IGMPPROXY_VERSION)
+ IGMPPROXY_AUTORECONF = YES
+ IGMPPROXY_LICENSE = GPL-2.0+, BSD-3-Clause (mrouted)
+ IGMPPROXY_LICENSE_FILES = COPYING GPL.txt Stanford.txt
