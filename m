@@ -1,27 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Apr 2021 20:04:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bridge-utils: fix build on musl
-In-Reply-To: <20210411081528.189137-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 11 Apr 2021 10:15:28 +0200")
-References: <20210411081528.189137-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v98s3dfk.fsf@dell.be.48ers.dk>
+Date: Sun, 11 Apr 2021 20:06:50 +0200
+Subject: [Buildroot] [PATCH 1/2] package/kodi-inputstream-adaptive: bump
+ version to 2.6.13
+In-Reply-To: <20210410190341.2319895-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 10 Apr 2021 21:03:40 +0200")
+References: <20210410190341.2319895-1-bernd.kuhls@t-online.de>
+Message-ID: <87r1jg3dc5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Build on musl is broken since bump to version 1.7.1 in commit
- > 5f2d38df4f85f7999cf6d00da089991cba93fee6
+ > Changelog:
+ > https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/0f080ff6913595ee2732b93206e5001c837c1bcc
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Doesn't apply, local patch?
 
-Committed, thanks.
+git Applying patch #1464687 using 'git am -3 -s'
+Description: [1/2] package/kodi-inputstream-adaptive: bump version to 2.6.13
+shoApplying: package/kodi-inputstream-adaptive: bump version to 2.6.13
+error: sha1 information is lacking or useless (package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash).
+error: could not build fake ancestor
+Patch failed at 0001 package/kodi-inputstream-adaptive: bump version to 2.6.13
 
 -- 
 Bye, Peter Korsgaard
