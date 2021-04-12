@@ -1,45 +1,72 @@
-From: Alexander Egorenkov <egorenar-dev@posteo.net>
-Date: Mon, 12 Apr 2021 11:03:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: bump to version
- 0.8.6
-Message-ID: <20210412090337.2923-1-egorenar-dev@posteo.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 12 Apr 2021 09:23:15 +0000
+Subject: [Buildroot] [Bug 13751] New: libopenssl (static): huge drop in
+ performance in newer versions of buildroot
+Message-ID: <bug-13751-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/opensvc/multipath-tools/releases/tag/0.8.6
+https://bugs.busybox.net/show_bug.cgi?id=13751
 
-Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
----
- package/multipath-tools/multipath-tools.hash | 2 +-
- package/multipath-tools/multipath-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+            Bug ID: 13751
+           Summary: libopenssl (static): huge drop in performance in newer
+                    versions of buildroot
+           Product: buildroot
+           Version: 2021.02.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: maksis33 at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
-index fc94b3f724..d83741cf08 100644
---- a/package/multipath-tools/multipath-tools.hash
-+++ b/package/multipath-tools/multipath-tools.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  0549ebe39fd3950ec49c16304da408c2bfe1b18d386d8e6647b5bcb60363c8aa  multipath-tools-0.8.5.tar.gz
-+sha256  ba781d981bd6e8efa5f9f3af6727f85520af6395958e852c1907f59f6124f08e  multipath-tools-0.8.6.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
-diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
-index 877ed672c5..e9db802258 100644
---- a/package/multipath-tools/multipath-tools.mk
-+++ b/package/multipath-tools/multipath-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MULTIPATH_TOOLS_VERSION = 0.8.5
-+MULTIPATH_TOOLS_VERSION = 0.8.6
- MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
- 
- MULTIPATH_TOOLS_LICENSE = \
+I've done some benchmarking with different TLS 1.3 ciphers with an Intel
+Celeron N3150 CPU that has support for the AES-NI instruction set. I used
+static builds of AirDC++ Web Client (http://airdcpp-web.github.io) that were
+built with different versions of buildroot. Target architecture is x86_64
+(nocona). Transfer speeds are limited by the CPU (one core is maxed out).
+
+
+Encrypted download speeds (Buildroot 2021.02.1):
+
+TLS_AES_128_GCM_SHA256: 27 MB/s
+TLS_AES_256_GCM_SHA384: 24 MB/s
+TLS_CHACHA20_POLY1305_SHA256: 41 MB/s
+
+
+Encrypted download speeds (Buildroot 2019.02):
+
+TLS_AES_128_GCM_SHA256: 62 MB/s
+TLS_AES_256_GCM_SHA384: 59 MB/s
+TLS_CHACHA20_POLY1305_SHA256: 54 MB/s
+
+
+Note that those are actual network file transfers with additional overhead, so
+the plain decrypt speed difference should be much bigger than that ("openssl
+speed -evp aes-128-cbc" is about 5x faster than "openssl speed aes-128-cbc" on
+the same system).
+
+I'd assume that the issue has something to do with
+http://lists.busybox.net/pipermail/buildroot/2019-October/263030.html as the
+OpenSSL target arch is "gcc no-asm" in Buildroot 2021.02.1 while 2019.02
+targets "linux-x86_64" and also has various *_ASM flags present in the
+Makefile. I also confirmed with objdump that the binary built with 2021.02.1 is
+missing all references to aesenc/aesdec/other AES-NI instructions while those
+instructions are present in the binary built with 2019.02.
+
+I read
+https://github.com/openssl/openssl/commit/87bea6550ae0dda7c40937cff2e86cc2b0b09491
+and https://github.com/openssl/openssl/issues/9839 but I don't fully understand
+why the target architecture was changed. I'd say that ASM support is a must for
+applications similar to AirDC++.
+
 -- 
-2.31.1
+You are receiving this mail because:
+You are on the CC list for the bug.
