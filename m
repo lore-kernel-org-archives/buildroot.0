@@ -1,140 +1,76 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Apr 2021 22:22:36 +0200
-Subject: [Buildroot] Missing .pyc files in target filesystem
-In-Reply-To: <007101d72fd5$a67676c0$f3636440$@gmail.com>
-References: <003801d72fcf$28780910$79681b30$@gmail.com>
- <c7681c66-e513-380e-cba3-8b9b2f6b98fa@mind.be>
- <007101d72fd5$a67676c0$f3636440$@gmail.com>
-Message-ID: <de925ef6-7c7f-94ef-2c6f-57d40dcec656@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 12 Apr 2021 22:25:13 +0200
+Subject: [Buildroot] [git commit] package/python-hiredis: fix build with gcc
+ 4.8
+Message-ID: <20210412200033.976378156E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=079e5582a3385f9568d65299632db3c2c0ae0a74
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Build fails with gcc 4.8 since bump to version 2.0.0 in commit
+69405d89596988b5b7d25886b7f9c07efad70741
 
-On 12/04/2021 21:54, swirsky at gmail.com wrote:
-> Thanks, Arnout.  We were in fact using the symbols
-> 
-> BR2_PACKAGE_PYTHON3_PYC_ONLY
-> BR2_PACKAGE_PYTHON3_PY_PYC
+Fixes:
+ -  http://autobuild.buildroot.org/results/04cbcddf6d83ebad8c98400754f9445375e9e489
 
- Ah, too bad :-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .../0001-setup.py-fix-build-with-gcc-4.8.patch     | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-
-> 
-> When I typed it into my email, I left off the 3. I checked my config. The
-> last build I tried had
-> 
-> BR2_PACKAGE_PYTHON3_PYC_ONLY
-> 
-> And we got .py files in the target filesystem
-
- The code that generates the pyc files is the following:
-
-define PYTHON3_CREATE_PYC_FILES
-        $(PYTHON3_FIX_TIME)
-        PYTHONPATH="$(PYTHON3_PATH)" \
-        $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) \
-                $(TOPDIR)/support/scripts/pycompile.py \
-                $(if $(VERBOSE),--verbose) \
-                --strip-root $(TARGET_DIR) \
-                $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
-endef
-
- So apparently pycompile doesn't find the .py files?
-
- You can try building with "make V=1" and see if pycompile reports anything.
-
- I've just tried the BR2_PACKAGE_PYTHON3_PYC_ONLY locally and I got only .pyc
-(and .whl) files.
-
- It's really surprising you have .py files at all, because the following is also
-there:
-
-ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
-define PYTHON3_REMOVE_PY_FILES
-        find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' \
-                $(if $(strip $(KEEP_PYTHON_PY_FILES)),-not \( $(call
-finddirclauses,$(TARGET_DIR),$(KEEP_PYTHON_PY_FILES)) \) ) \
-                -print0 | \
-                xargs -0 --no-run-if-empty rm -f
-endef
-PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
-endif
-
-
- Regards,
- Arnout
-
-
-> 
-> 
-> -----Original Message-----
-> From: Arnout Vandecappelle <arnout@mind.be> 
-> Sent: Monday, April 12, 2021 12:50 PM
-> To: swirsky at gmail.com; buildroot at busybox.net
-> Subject: Re: [Buildroot] Missing .pyc files in target filesystem
-> 
-> 
-> 
-> On 12/04/2021 21:08, swirsky at gmail.com wrote:
->> We?re not getting python .pyc files for the Python packages in the 
->> target filesystem /usr/lib/python3.8/ and I can?t figure out why, 
->> despite several days of looking at this.
->>
->> ?
->>
->> We?re on Buildroot 2020.02.03 and I?ve tried both
->>
->> ?
->>
->> ??????? BR2_PACKAGE_PYTHON_PYC_ONLY=y
->>
->> ?
->>
->> ??????? BR2_PACKAGE_PYTHON_PY_PYC=y
->>
-> 
->  How did you generate this config? The symbols are
-> 
-> BR2_PACKAGE_PYTHON3_PYC_ONLY
-> BR2_PACKAGE_PYTHON3_PY_PYC
-> 
-> when you're using python3. Setting the python2 configuration will not affect
-> python3 - and in fact, those python2 symbols should be removed when any
-> kconfig target is run.
-> 
-> 
->  Regards,
->  Arnout
-> 
->> ?
->>
->> in the config. I only see .py files.
->>
->> ?
->>
->> Any ideas on how to debug this? What?s the thing in buildroot that 
->> creates the .pyc files?
->>
->> ?
->>
->> Thanks!
->>
->> ?
->>
->> ?
->>
->> ?
->>
->> ?
->>
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
-> 
+diff --git a/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch b/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
+new file mode 100644
+index 0000000000..93f9440a74
+--- /dev/null
++++ b/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,43 @@
++From 204898e28c7650089bf664eea8adfc16a22ba4f4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 6 Apr 2021 10:37:49 +0200
++Subject: [PATCH] setup.py: fix build with gcc 4.8
++
++Fix the following build failure on gcc 4.8 which is raised since version
++2.0.0 and
++https://github.com/redis/hiredis-py/commit/9084152f624e8e593b4e86ddf8bd13329fdfc043:
++
++vendor/hiredis/read.c: In function 'redisReaderFree':
++vendor/hiredis/read.c:646:9: error: 'for' loop initial declarations are only allowed in C99 mode
++         for (int i = 0; i < r->tasks; i++) {
++         ^
++vendor/hiredis/read.c:646:9: note: use option -std=c99 or -std=gnu99 to compile your code
++
++This build failure is raised because hiredis source code is built
++without C99:
++https://github.com/redis/hiredis/commit/13a35bdb64615e381c5e1151cdd4e78bba71a6db
++
++Fixes:
++ - http://autobuild.buildroot.org/results/04cbcddf6d83ebad8c98400754f9445375e9e489
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/redis/hiredis-py/pull/110]
++---
++ setup.py | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/setup.py b/setup.py
++index d83153b..1f623c9 100755
++--- a/setup.py
+++++ b/setup.py
++@@ -13,6 +13,7 @@ def version():
++ ext = Extension("hiredis.hiredis",
++   sources=sorted(glob.glob("src/*.c") +
++                  ["vendor/hiredis/%s.c" % src for src in ("alloc", "read", "sds")]),
+++  extra_compile_args=["-std=c99"],
++   include_dirs=["vendor"])
++ 
++ setup(
++-- 
++2.30.2
++
