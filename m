@@ -1,84 +1,145 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Apr 2021 22:26:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-hiredis: fix build with
- gcc 4.8
-In-Reply-To: <20210406203808.1339872-1-fontaine.fabrice@gmail.com>
-References: <20210406203808.1339872-1-fontaine.fabrice@gmail.com>
-Message-ID: <e79771e0-e069-9f8d-a1c6-693c5ce05191@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 12 Apr 2021 22:30:20 +0200
+Subject: [Buildroot] [PATCH] package/ace: new package
+In-Reply-To: <20210412165524.17793-1-matthew.weber@rockwellcollins.com>
+References: <20210412165524.17793-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20210412223020.7c1ffc76@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Matt,
 
+Thanks for this submission. Please see below some comments.
 
-On 06/04/2021 22:38, Fabrice Fontaine wrote:
-> Build fails with gcc 4.8 since bump to version 2.0.0 in commit
-> 69405d89596988b5b7d25886b7f9c07efad70741
-> 
-> Fixes:
->  -  http://autobuild.buildroot.org/results/04cbcddf6d83ebad8c98400754f9445375e9e489
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Mon, 12 Apr 2021 11:55:24 -0500
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
- Applied to master, thanks.
-
- Regards,
- Arnout
-
-> ---
->  ...0001-setup.py-fix-build-with-gcc-4.8.patch | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
-> 
-> diff --git a/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch b/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
+> diff --git a/package/ace/Config.in b/package/ace/Config.in
 > new file mode 100644
-> index 0000000000..93f9440a74
+> index 0000000000..7755327b21
 > --- /dev/null
-> +++ b/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
-> @@ -0,0 +1,43 @@
-> +From 204898e28c7650089bf664eea8adfc16a22ba4f4 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Tue, 6 Apr 2021 10:37:49 +0200
-> +Subject: [PATCH] setup.py: fix build with gcc 4.8
+> +++ b/package/ace/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_ACE
+> +	bool "ace"
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	depends on !BR2_STATIC_LIBS
+
+These means a Config.in comment is needed.
+
+> +	select BR2_PACKAGE_OPENSSL
+> +	help
+> +	  The ADAPTIVE Communication Environment (ACE(TM))
+> +	  An OO Network Programming Toolkit in C++.
 > +
-> +Fix the following build failure on gcc 4.8 which is raised since version
-> +2.0.0 and
-> +https://github.com/redis/hiredis-py/commit/9084152f624e8e593b4e86ddf8bd13329fdfc043:
+> +	  See http://www.dre.vanderbilt.edu/~schmidt/ACE.html
+
+Drop the "See " at the beginning, we want the last thing in the help
+text to be just the URL of upstream project home page.
+
+> diff --git a/package/ace/ace.mk b/package/ace/ace.mk
+> new file mode 100644
+> index 0000000000..80d50665d9
+> --- /dev/null
+> +++ b/package/ace/ace.mk
+> @@ -0,0 +1,63 @@
+> +################################################################################
+> +#
+> +# ace
+> +#
+> +################################################################################
 > +
-> +vendor/hiredis/read.c: In function 'redisReaderFree':
-> +vendor/hiredis/read.c:646:9: error: 'for' loop initial declarations are only allowed in C99 mode
-> +         for (int i = 0; i < r->tasks; i++) {
-> +         ^
-> +vendor/hiredis/read.c:646:9: note: use option -std=c99 or -std=gnu99 to compile your code
+> +ACE_VERSION=7.0.1
+> +ACE_SOURCE=ACE-$(ACE_VERSION).tar.gz
+> +ACE_SITE=http://download.dre.vanderbilt.edu/previous_versions
+> +ACE_DEPENDENCIES=openssl
+
+Spaces around = sign. I think this is reported by "make check-package".
+
+> +ACE_LICENSE = DOC
+
+I checked, this is indeed a valid SPDX identifier. Interesting special
+license...
+
+> +ACE_LICENSE_FILES = COPYING
+> +ACE_INSTALL_STAGING=YES
+
+Spaces around =.
+
+> +ACE_CPE_ID_VENDOR = vanderbilt
+> +ACE_CPE_ID_PRODUCT = adaptive_communication_environment
 > +
-> +This build failure is raised because hiredis source code is built
-> +without C99:
-> +https://github.com/redis/hiredis/commit/13a35bdb64615e381c5e1151cdd4e78bba71a6db
+> +# configure the target build
+> +# refer: http://www.dre.vanderbilt.edu/~schmidt/DOC_ROOT/ACE/ACE-INSTALL.html#unix
+> +define ACE_CONFIGURE_CMDS
+> +	# create a config file
+> +	echo ' #include "ace/config-linux.h" ' > $(@D)/ace/config.h
+> +	# fix link error with ARM EABI tools
+> +	# http://list.isis.vanderbilt.edu/pipermail/ace-users/2008-January/002742.html
+> +	echo 'no_hidden_visibility = 1' > $(@D)/include/makeinclude/platform_macros.GNU
+> +	# create a platform macros file
+> +	echo 'include $(@D)/include/makeinclude/platform_linux.GNU' \
+> +		>> $(@D)/include/makeinclude/platform_macros.GNU
+> +	# enable ssl
+> +	echo 'ssl = 1' >> $(@D)/include/makeinclude/platform_macros.GNU
+
+Does that mean OpenSSL is an optional dependency ? :-)
+
+> +	# disable RPATH
+> +	echo 'install_rpath = 0' >> $(@D)/include/makeinclude/platform_macros.GNU
+> +	# set the installation prefix
+> +	echo 'INSTALL_PREFIX = /usr' >> $(@D)/include/makeinclude/platform_macros.GNU
+
+Why not just provide platform_macros.GNU in package/ace/ instead ? All
+values are hardcoded at least as it is now.
+
+The EABI stuff from 2008 is odd though...
+
+> +endef
 > +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/04cbcddf6d83ebad8c98400754f9445375e9e489
+> +# Note: We are excluding examples, apps and tests
+> +# Only compiling ACE libraries (no TAO)
+> +ACE_LIBARIES = ace ace/SSL ACEXML Kokyu netsvcs protocols/ace
 > +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/redis/hiredis-py/pull/110]
-> +---
-> + setup.py | 1 +
-> + 1 file changed, 1 insertion(+)
+> +# compile ace,ACEXML, Kokyu, netsvcs & protocols/ace
+> +define ACE_BUILD_CMDS
+> +	for dir in $(ACE_LIBARIES) ; do \
+> +		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$${dir} ACE_ROOT="$(@D)" all || exit 1 ; \
+> +	done
+
+Use a make $(foreach ...) loop.
+
+> +endef
 > +
-> +diff --git a/setup.py b/setup.py
-> +index d83153b..1f623c9 100755
-> +--- a/setup.py
-> ++++ b/setup.py
-> +@@ -13,6 +13,7 @@ def version():
-> + ext = Extension("hiredis.hiredis",
-> +   sources=sorted(glob.glob("src/*.c") +
-> +                  ["vendor/hiredis/%s.c" % src for src in ("alloc", "read", "sds")]),
-> ++  extra_compile_args=["-std=c99"],
-> +   include_dirs=["vendor"])
-> + 
-> + setup(
-> +-- 
-> +2.30.2
+> +define  ACE_INSTALL_STAGING_CMDS
+> +	# create below folder required by ACE makefiles during install
+> +	mkdir -p $(STAGING_DIR)/usr/share/ace
+> +	for dir in $(ACE_LIBARIES) ; do \
+> +		$(MAKE) -C $(@D)/$${dir} ACE_ROOT="$(@D)" DESTDIR=$(STAGING_DIR) install || exit 1 ; \
+> +	done
+
+Same a make $(foreach ...) loop. Will avoid the need for the || exit 1
+
+> +endef
 > +
-> 
+> +define  ACE_INSTALL_TARGET_CMDS
+> +	# create below folder required by ACE makefiles during install
+> +	mkdir -p $(TARGET_DIR)/usr/share/ace
+> +	for dir in $(ACE_LIBARIES) ; do \
+> +		$(MAKE) -C $(@D)/$${dir} ACE_ROOT="$(@D)" DESTDIR=$(TARGET_DIR) install || exit 1 ; \
+> +	done
+
+Well, same.
+
+Other than that, looks pretty straightforward.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
