@@ -1,40 +1,45 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 12 Apr 2021 20:37:46 +1200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2021-04-11
-In-Reply-To: <6073d64f.1c69fb81.9d11e.7f35SMTPIN_ADDED_MISSING@mx.google.com>
-References: <6073d64f.1c69fb81.9d11e.7f35SMTPIN_ADDED_MISSING@mx.google.com>
-Message-ID: <CAFOYHZC23wcnW0-y=fyiP2x6M2B5CEyFEzJDeWJq_Pw5BuRbkg@mail.gmail.com>
+From: Alexander Egorenkov <egorenar-dev@posteo.net>
+Date: Mon, 12 Apr 2021 11:03:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: bump to version
+ 0.8.6
+Message-ID: <20210412090337.2923-1-egorenar-dev@posteo.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 12, 2021 at 5:10 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> Packages having CVEs
-> ====================
->
-> This is the list of packages for which a known CVE is affecting them,
-> which means a security vulnerability exists for those packages.
->
-> CVEs for the 'master' branch
-> ----------------------------
->
->              name              |       CVE        |                             link
-> -------------------------------+------------------+--------------------------------------------------------------
->                      syslog-ng | CVE-2008-5110    | https://security-tracker.debian.org/tracker/CVE-2008-5110
->
+https://github.com/opensvc/multipath-tools/releases/tag/0.8.6
 
-I've managed to get the CVE updated to say "This flaw affects
-syslog-ng versions prior to and including 2.0.9"[1] but I'm still
-getting these notifications. Is there something else that needs to
-happen now? Actually nist[2] seems to know it's been modified so it
-may be a case of hurry up and wait.
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+---
+ package/multipath-tools/multipath-tools.hash | 2 +-
+ package/multipath-tools/multipath-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-[1] - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-5110
-[2] - https://nvd.nist.gov/vuln/detail/CVE-2008-5110
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+index fc94b3f724..d83741cf08 100644
+--- a/package/multipath-tools/multipath-tools.hash
++++ b/package/multipath-tools/multipath-tools.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  0549ebe39fd3950ec49c16304da408c2bfe1b18d386d8e6647b5bcb60363c8aa  multipath-tools-0.8.5.tar.gz
++sha256  ba781d981bd6e8efa5f9f3af6727f85520af6395958e852c1907f59f6124f08e  multipath-tools-0.8.6.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+index 877ed672c5..e9db802258 100644
+--- a/package/multipath-tools/multipath-tools.mk
++++ b/package/multipath-tools/multipath-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MULTIPATH_TOOLS_VERSION = 0.8.5
++MULTIPATH_TOOLS_VERSION = 0.8.6
+ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
+ 
+ MULTIPATH_TOOLS_LICENSE = \
+-- 
+2.31.1
