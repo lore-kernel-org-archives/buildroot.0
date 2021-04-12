@@ -1,46 +1,50 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 12 Apr 2021 22:34:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.105
-In-Reply-To: <2j28khxt0i.ln2@ID-313208.user.individual.net>
-References: <20210407144830.373018-1-bernd.kuhls@t-online.de>
- <87fszz6tzi.fsf@dell.be.48ers.dk> <20210410001230.622d8998@gmx.net>
- <2j28khxt0i.ln2@ID-313208.user.individual.net>
-Message-ID: <20210412223431.063e8416@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 12 Apr 2021 22:39:11 +0200
+Subject: [Buildroot] [PATCH] package/python-flup: update dependency to
+ python3
+In-Reply-To: <20210412164405.16890-1-matthew.weber@rockwellcollins.com>
+References: <20210412164405.16890-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20210412223911.1989281d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd, Peter,
+On Mon, 12 Apr 2021 11:44:05 -0500
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-On Sat, 10 Apr 2021 10:01:06 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> From: Jared Bents <jared.bents@rockwellcollins.com>
+> 
+> Dependency incorrectly calls out python, should be python3
+> 
+> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/python-flup/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/python-flup/Config.in b/package/python-flup/Config.in
+> index 2c21323515..f40f250163 100644
+> --- a/package/python-flup/Config.in
+> +++ b/package/python-flup/Config.in
+> @@ -1,6 +1,6 @@
+>  config BR2_PACKAGE_PYTHON_FLUP
+>  	bool "python-flup"
+> -	depends on BR2_PACKAGE_PYTHON
+> +	depends on BR2_PACKAGE_PYTHON3
 
-> Am Sat, 10 Apr 2021 00:12:30 +0200 schrieb Peter Seiderer:
->
-> > Then the answer is: Do not know...., needs to be tested ;-)
->
-> Hi,
->
-> the patch is still needed, building
->
-> https://git.buildroot.net/buildroot/tree/support/config-fragments/
-> autobuild/bootlin-armv7m-uclibc.config
->
-> still fails the same way.
+Do we know since when this is the case? This package was introduced in
+2014 as version 1.0.3.dev-20110405, and back then the commit log said
+"Tested with ARM and Python 2.7.6". Then it was bumped to
+1.0.3.dev20161029 by Adam in 2017, and again to 1.0.3 in 2019. Is it
+this latest update that brought the python3 requirement ?
 
-Thanks for re-testing! Did re-send the upstream merge request for
-the patch, see [1]...
+Thanks!
 
-Regards,
-Peter
-
-[1] https://gitlab.freedesktop.org/mesa/drm/-/merge_requests/154
-
->
-> Regards, Bernd
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
