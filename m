@@ -1,7 +1,7 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 12 Apr 2021 09:29:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpd: bump to version 0.22.6
-Message-ID: <20210412072958.4805-1-joerg.krause@embedded.rocks>
+Date: Mon, 12 Apr 2021 10:04:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libnpupnp: bump to version 4.1.3
+Message-ID: <20210412080402.75059-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
+ package/libnpupnp/libnpupnp.hash | 2 +-
+ package/libnpupnp/libnpupnp.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 866c61d15f..4c3b49823b 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  338012037b5e67730529187c555a54cc567a85b15a7e8ddb3a807b1971566ccf  mpd-0.22.3.tar.xz
-+sha256  2be149a4895c3cb613477f8cf1193593e3d8a1d38a75ffa7d32da8c8316a4d5e  mpd-0.22.6.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 5dfb5b42a4..06dc7e15d7 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libnpupnp/libnpupnp.hash b/package/libnpupnp/libnpupnp.hash
+index 62c6959384..d5053915f1 100644
+--- a/package/libnpupnp/libnpupnp.hash
++++ b/package/libnpupnp/libnpupnp.hash
+@@ -1,5 +1,5 @@
+ # Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.1.1.tar.gz.sha256
+-sha256  7e41d3933b956073b33c6ac6e61c81e83b428015ee871fd16d18b198bf3be960  libnpupnp-4.1.1.tar.gz
++sha256  74703d49be52d29b52f59342ec7359178b127568399551d9d3f56bb7950fcc02  libnpupnp-4.1.3.tar.gz
+ 
+ # Hash for license file:
+ sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libnpupnp/libnpupnp.mk b/package/libnpupnp/libnpupnp.mk
+index fa7181ff98..0efddbf67f 100644
+--- a/package/libnpupnp/libnpupnp.mk
++++ b/package/libnpupnp/libnpupnp.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.22
--MPD_VERSION = $(MPD_VERSION_MAJOR).3
-+MPD_VERSION = $(MPD_VERSION_MAJOR).6
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+-LIBNPUPNP_VERSION = 4.1.1
++LIBNPUPNP_VERSION = 4.1.3
+ LIBNPUPNP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBNPUPNP_LICENSE = BSD-3-Clause
+ LIBNPUPNP_LICENSE_FILES = COPYING
 -- 
 2.31.1
