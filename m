@@ -1,42 +1,40 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 12 Apr 2021 10:04:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnpupnp: bump to version 4.1.3
-Message-ID: <20210412080402.75059-1-joerg.krause@embedded.rocks>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Mon, 12 Apr 2021 20:37:46 +1200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2021-04-11
+In-Reply-To: <6073d64f.1c69fb81.9d11e.7f35SMTPIN_ADDED_MISSING@mx.google.com>
+References: <6073d64f.1c69fb81.9d11e.7f35SMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <CAFOYHZC23wcnW0-y=fyiP2x6M2B5CEyFEzJDeWJq_Pw5BuRbkg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/libnpupnp/libnpupnp.hash | 2 +-
- package/libnpupnp/libnpupnp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, Apr 12, 2021 at 5:10 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Packages having CVEs
+> ====================
+>
+> This is the list of packages for which a known CVE is affecting them,
+> which means a security vulnerability exists for those packages.
+>
+> CVEs for the 'master' branch
+> ----------------------------
+>
+>              name              |       CVE        |                             link
+> -------------------------------+------------------+--------------------------------------------------------------
+>                      syslog-ng | CVE-2008-5110    | https://security-tracker.debian.org/tracker/CVE-2008-5110
+>
 
-diff --git a/package/libnpupnp/libnpupnp.hash b/package/libnpupnp/libnpupnp.hash
-index 62c6959384..d5053915f1 100644
---- a/package/libnpupnp/libnpupnp.hash
-+++ b/package/libnpupnp/libnpupnp.hash
-@@ -1,5 +1,5 @@
- # Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.1.1.tar.gz.sha256
--sha256  7e41d3933b956073b33c6ac6e61c81e83b428015ee871fd16d18b198bf3be960  libnpupnp-4.1.1.tar.gz
-+sha256  74703d49be52d29b52f59342ec7359178b127568399551d9d3f56bb7950fcc02  libnpupnp-4.1.3.tar.gz
- 
- # Hash for license file:
- sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libnpupnp/libnpupnp.mk b/package/libnpupnp/libnpupnp.mk
-index fa7181ff98..0efddbf67f 100644
---- a/package/libnpupnp/libnpupnp.mk
-+++ b/package/libnpupnp/libnpupnp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNPUPNP_VERSION = 4.1.1
-+LIBNPUPNP_VERSION = 4.1.3
- LIBNPUPNP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- LIBNPUPNP_LICENSE = BSD-3-Clause
- LIBNPUPNP_LICENSE_FILES = COPYING
--- 
-2.31.1
+I've managed to get the CVE updated to say "This flaw affects
+syslog-ng versions prior to and including 2.0.9"[1] but I'm still
+getting these notifications. Is there something else that needs to
+happen now? Actually nist[2] seems to know it's been modified so it
+may be a case of hurry up and wait.
+
+[1] - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-5110
+[2] - https://nvd.nist.gov/vuln/detail/CVE-2008-5110
