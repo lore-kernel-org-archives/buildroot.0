@@ -1,50 +1,45 @@
-From: swirsky at gmail.com <swirsky@gmail.com>
-Date: Mon, 12 Apr 2021 12:08:00 -0700
-Subject: [Buildroot] Missing .pyc files in target filesystem
-Message-ID: <003801d72fcf$28780910$79681b30$@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 12 Apr 2021 21:32:28 +0200
+Subject: [Buildroot] [PATCH v1] package/sane-backends: poppler-glib needs
+ cairo
+Message-ID: <20210412193228.13226-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We're not getting python .pyc files for the Python packages in the target
-filesystem /usr/lib/python3.8/ and I can't figure out why, despite several
-days of looking at this.
+- poppler-glib depends on cairo (see poppler-0.84.0/CMakeLists.txt):
 
+  185 else()
+  186   set(CAIRO_FEATURE "#undef POPPLER_HAS_CAIRO")
+  187   set(ENABLE_GLIB OFF)
+  188 endif()
+
+Fixes:
+
+  - http://autobuild.buildroot.net/results/9a345f82c7a010f6b2a3361f25b14caefa9dcbef
+
+  checking for POPPLER_GLIB... no
+  configure: error: poppler-glib requested but not found
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/sane-backends/sane-backends.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+index 697aa3252b..a8f7466f70 100644
+--- a/package/sane-backends/sane-backends.mk
++++ b/package/sane-backends/sane-backends.mk
+@@ -61,7 +61,7 @@ else
+ SANE_BACKENDS_CONF_OPTS += --without-libcurl
+ endif
  
-
-We're on Buildroot 2020.02.03 and I've tried both
-
- 
-
-        BR2_PACKAGE_PYTHON_PYC_ONLY=y
-
- 
-
-        BR2_PACKAGE_PYTHON_PY_PYC=y
-
- 
-
-in the config. I only see .py files.
-
- 
-
-Any ideas on how to debug this? What's the thing in buildroot that creates
-the .pyc files?
-
- 
-
-Thanks!
-
- 
-
- 
-
- 
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210412/f739d2a2/attachment.html>
+-ifeq ($(BR2_PACKAGE_POPPLER)$(BR2_PACKAGE_LIBGLIB2),yy)
++ifeq ($(BR2_PACKAGE_POPPLER)$(BR2_PACKAGE_CAIRO)$(BR2_PACKAGE_LIBGLIB2),yyy)
+ SANE_BACKENDS_DEPENDENCIES += poppler libglib2
+ SANE_BACKENDS_CONF_OPTS += --with-poppler-glib
+ else
+-- 
+2.31.1
