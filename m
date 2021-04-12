@@ -1,92 +1,37 @@
-From: swirsky at gmail.com <swirsky@gmail.com>
-Date: Mon, 12 Apr 2021 12:54:28 -0700
-Subject: [Buildroot] Missing .pyc files in target filesystem
-In-Reply-To: <c7681c66-e513-380e-cba3-8b9b2f6b98fa@mind.be>
-References: <003801d72fcf$28780910$79681b30$@gmail.com>
- <c7681c66-e513-380e-cba3-8b9b2f6b98fa@mind.be>
-Message-ID: <007101d72fd5$a67676c0$f3636440$@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 12 Apr 2021 21:55:26 +0200
+Subject: [Buildroot] [PATCH v1 2/3] package/libtomcrypt: compile with -fPIC
+ to enable linking to dynamic libraries/exectuables
+In-Reply-To: <20210412195527.9282-1-ps.report@gmx.net>
+References: <20210412195527.9282-1-ps.report@gmx.net>
+Message-ID: <20210412195527.9282-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks, Arnout.  We were in fact using the symbols
+Fixes:
 
-BR2_PACKAGE_PYTHON3_PYC_ONLY
-BR2_PACKAGE_PYTHON3_PY_PYC
+  .../x86_64-buildroot-linux-gnu/bin/ld: .../host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libtomcrypt.a(md5.o): relocation R_X86_64_32 against `.rodata.str1.1' can not be used when making a shared object; recompile with -fPIC
 
-When I typed it into my email, I left off the 3. I checked my config. The
-last build I tried had
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libtomcrypt/libtomcrypt.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-BR2_PACKAGE_PYTHON3_PYC_ONLY
-
-And we got .py files in the target filesystem
-
-
------Original Message-----
-From: Arnout Vandecappelle <arnout@mind.be> 
-Sent: Monday, April 12, 2021 12:50 PM
-To: swirsky at gmail.com; buildroot at busybox.net
-Subject: Re: [Buildroot] Missing .pyc files in target filesystem
-
-
-
-On 12/04/2021 21:08, swirsky at gmail.com wrote:
-> We?re not getting python .pyc files for the Python packages in the 
-> target filesystem /usr/lib/python3.8/ and I can?t figure out why, 
-> despite several days of looking at this.
-> 
-> ?
-> 
-> We?re on Buildroot 2020.02.03 and I?ve tried both
-> 
-> ?
-> 
-> ??????? BR2_PACKAGE_PYTHON_PYC_ONLY=y
-> 
-> ?
-> 
-> ??????? BR2_PACKAGE_PYTHON_PY_PYC=y
-> 
-
- How did you generate this config? The symbols are
-
-BR2_PACKAGE_PYTHON3_PYC_ONLY
-BR2_PACKAGE_PYTHON3_PY_PYC
-
-when you're using python3. Setting the python2 configuration will not affect
-python3 - and in fact, those python2 symbols should be removed when any
-kconfig target is run.
-
-
- Regards,
- Arnout
-
-> ?
-> 
-> in the config. I only see .py files.
-> 
-> ?
-> 
-> Any ideas on how to debug this? What?s the thing in buildroot that 
-> creates the .pyc files?
-> 
-> ?
-> 
-> Thanks!
-> 
-> ?
-> 
-> ?
-> 
-> ?
-> 
-> ?
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
+index fa6dde64cd..b6ad77daec 100644
+--- a/package/libtomcrypt/libtomcrypt.mk
++++ b/package/libtomcrypt/libtomcrypt.mk
+@@ -17,7 +17,7 @@ LIBTOMCRYPT_DEPENDENCIES = libtommath
+ # 0001-fix-CVE-2019-17362.patch
+ LIBTOMCRYPT_IGNORE_CVES += CVE-2019-17362
+ 
+-LIBTOMCRYPT_CFLAGS = -I./src/headers $(TARGET_CFLAGS) -DLTC_SOURCE -DLTM_DESC
++LIBTOMCRYPT_CFLAGS = -I./src/headers $(TARGET_CFLAGS) -fPIC -DLTC_SOURCE -DLTM_DESC
+ 
+ define LIBTOMCRYPT_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(LIBTOMCRYPT_CFLAGS)"
+-- 
+2.31.1
