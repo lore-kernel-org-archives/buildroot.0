@@ -1,50 +1,61 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 12 Apr 2021 21:55:25 +0200
-Subject: [Buildroot] [PATCH v1 1/3] package/libtomcrypt: add pkgconfig
- support
-Message-ID: <20210412195527.9282-1-ps.report@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 12 Apr 2021 20:07:52 +0000
+Subject: [Buildroot] [Bug 13751] libopenssl (static): huge drop in
+ performance in newer versions of buildroot
+In-Reply-To: <bug-13751-163@https.bugs.busybox.net/>
+References: <bug-13751-163@https.bugs.busybox.net/>
+Message-ID: <bug-13751-163-Y2XLIhYcNf@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/libtomcrypt/libtomcrypt.mk    |  3 +++
- package/libtomcrypt/libtomcrypt.pc.in | 10 ++++++++++
- 2 files changed, 13 insertions(+)
- create mode 100644 package/libtomcrypt/libtomcrypt.pc.in
+https://bugs.busybox.net/show_bug.cgi?id=13751
 
-diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
-index fccd4b051c..fa6dde64cd 100644
---- a/package/libtomcrypt/libtomcrypt.mk
-+++ b/package/libtomcrypt/libtomcrypt.mk
-@@ -27,6 +27,9 @@ define LIBTOMCRYPT_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" \
- 		PREFIX=/usr NODOCS=1 INSTALL_USER=$(shell id -u) \
- 		INSTALL_GROUP=$(shell id -g) install
-+	$(INSTALL) -D -m 0644 package/libtomcrypt/libtomcrypt.pc.in \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/libtomcrypt.pc
-+	$(SED) "s/@PACKAGE_VERSION@/${LIBTOMCRYPT_VERSION}/" $(STAGING_DIR)/usr/lib/pkgconfig/libtomcrypt.pc
- endef
- 
- $(eval $(generic-package))
-diff --git a/package/libtomcrypt/libtomcrypt.pc.in b/package/libtomcrypt/libtomcrypt.pc.in
-new file mode 100644
-index 0000000000..14a010e216
---- /dev/null
-+++ b/package/libtomcrypt/libtomcrypt.pc.in
-@@ -0,0 +1,10 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: LibTomCrypt
-+Description: public domain open source cryptographic toolkit
-+Version: @PACKAGE_VERSION@
-+Libs: -L${libdir} -ltomcrypt
-+Cflags: -I${includedir}
+--- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
+(In reply to maksis33 from comment #0)
+> I'd assume that the issue has something to do with
+> http://lists.busybox.net/pipermail/buildroot/2019-October/263030.html
+> as the OpenSSL target arch is "gcc no-asm" in Buildroot 2021.02.1 while 2019.02
+> targets "linux-x86_64" and also has various *_ASM flags present in the Makefile.
+
+The culprit is actually the following commit:
+
+commit 8c2c959b028d44f5518d4445f864aedae3d90406
+Author: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date:   Fri May 31 15:39:28 2019
+
+    package/libopenssl: fix static build
+
+    no-dso option has been removed with
+   
+https://github.com/openssl/openssl/commit/31b6ed76dfd53529b74e79830c81372d0b756929
+
+    To fix this error, use "gcc" target in static builds. This target is
+    very minimalistic, we need to manually pass -lpthread and
+    -DOPENSSL_THREADS however we can also remove libdl workarounds
+
+    Fixes:
+     -
+http://autobuild.buildroot.org/results/96d6b89d20980e8f7fa450b832474a81d492b315
+
+    Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+
+The problem is that in a static build, you don't have shared libraries so also
+no DSO (the shared library provided by the kernel).
+
+
+The upstream commit also adds a preprocessor symbol DSO_NONE (which is not set
+by anything). So you could try reverting buildroot commit
+8c2c959b028d44f5518d4445f864aedae3d90406 and add -DDSO_NONE to
+LIBOPENSSL_CFLAGS.
+
+Of course the revert is not entirely trivial, because the code was refactored
+and has moved to Config.in...
+
 -- 
-2.31.1
+You are receiving this mail because:
+You are on the CC list for the bug.
