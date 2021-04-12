@@ -1,97 +1,91 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Mon, 12 Apr 2021 14:05:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-vpu-hantro: fix
- build with gcc 10
-Message-ID: <20210412120533.8930-1-sebastien.szymanski@armadeus.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 12 Apr 2021 09:37:08 -0500
+Subject: [Buildroot] [PATCH] package/bridge-utils: fix missing PATH_MAX
+ include
+Message-ID: <20210412143708.45721-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-imx-vpu-hantro build with gcc 10 fails with the following errors:
+Fixes:
+http://autobuild.buildroot.net/results/3ec818e676827c03f08c264c6c7a53b025b7ba1d/
 
-decoder_sw/software/linux/dwl/dwl_linux_hw.o:(.bss+0x44): multiple
-definition of `DWLInitParam';
-decoder_sw/software/linux/dwl/dwl_linux.o:(.bss+0x1200): first defined
-here
-
-decoder_sw/software/linux/dwl/dwl_linux_hw.o:(.bss+0x48): multiple
-definition of `DecPicCodingType';
-decoder_sw/software/linux/dwl/dwl_linux.o:(.bss+0x1204): first defined
-here
-
-Add a patch found at https://github.com/Freescale/meta-freescale to fix
-this issue.
-
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- ...solve-compilation-error-with-fcommon.patch | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 package/freescale-imx/imx-vpu-hantro/0003-decoder_sw-resolve-compilation-error-with-fcommon.patch
+ ...1-Include-header-for-use-of-PATH_MAX.patch | 63 +++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 package/bridge-utils/0001-Include-header-for-use-of-PATH_MAX.patch
 
-diff --git a/package/freescale-imx/imx-vpu-hantro/0003-decoder_sw-resolve-compilation-error-with-fcommon.patch b/package/freescale-imx/imx-vpu-hantro/0003-decoder_sw-resolve-compilation-error-with-fcommon.patch
+diff --git a/package/bridge-utils/0001-Include-header-for-use-of-PATH_MAX.patch b/package/bridge-utils/0001-Include-header-for-use-of-PATH_MAX.patch
 new file mode 100644
-index 0000000000..8ae9b7c5ee
+index 0000000000..759b772519
 --- /dev/null
-+++ b/package/freescale-imx/imx-vpu-hantro/0003-decoder_sw-resolve-compilation-error-with-fcommon.patch
-@@ -0,0 +1,57 @@
-+From 5bfb24738c47003fd04a86bfd5a49f8c6354ed23 Mon Sep 17 00:00:00 2001
-+From: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
-+Date: Fri, 28 Aug 2020 07:46:35 +0000
-+Subject: [PATCH] decoder_sw: resolve compilation error with -fcommon
++++ b/package/bridge-utils/0001-Include-header-for-use-of-PATH_MAX.patch
+@@ -0,0 +1,63 @@
++From 19694aaf08b7ef2f2a1bd549915b133bfbcd422e Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Mon, 12 Apr 2021 09:25:16 -0500
++Subject: [PATCH] Include header for use of PATH_MAX
 +
-+-fcommon is enabled by default in gcc10 compiler, which results in
-+following build errors:
++Since a1f20223cfcf7b9eae8c9e7e7a07e7bf1377f65b in some build
++configurations PATH_MAX is undefined.
 +
-+decoder_sw/software/source/inc/decapicommon.h:272: multiple definition
-+of `DecPicCodingType'; decoder_sw/software/linux/dwl/dwl_linux.o:
-+decoder_sw/software/source/inc/decapicommon.h:272: first defined here
++Build log from Buildroot testing failure:
++http://autobuild.buildroot.net/results/3ec818e676827c03f08c264c6c7a53b025b7ba1d/build-end.log
 +
-+decoder_sw/software/source/inc/dwl.h:94: multiple definition of
-+`DWLInitParam'; decoder_sw/software/linux/dwl/dwl_linux.o:
-+decoder_sw/software/source/inc/dwl.h:94: first defined here
++...
++/home/giuliobenetti/autobuild/run/instance-0/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/giuliobenetti/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-musleabihf/sysroot/usr/include  -c libbridge_misc.c
++libbridge_init.c: In function 'isbridge':
++libbridge_init.c:49:12: error: 'PATH_MAX' undeclared (first use in this function); did you mean 'AF_MAX'?
++   49 |  char path[PATH_MAX];
++      |            ^~~~~~~~
++      |            AF_MAX
++libbridge_init.c:49:12: note: each undeclared identifier is reported only once for each function it appears in
++libbridge_init.c:49:7: warning: unused variable 'path' [-Wunused-variable]
++   49 |  char path[PATH_MAX];
++      |       ^~~~
++make[2]: *** [Makefile:37: libbridge_init.o] Error 1
++make[2]: *** Waiting for unfinished jobs....
++libbridge_devif.c: In function 'fpopen':
++libbridge_devif.c:33:12: error: 'PATH_MAX' undeclared (first use in this function); did you mean 'AF_MAX'?
++   33 |  char path[PATH_MAX];
++      |            ^~~~~~~~
++      |            AF_MAX
 +
-+Drop multiple enum name definitions, which solves above compilation
-+issues.
-+
-+Signed-off-by: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
-+
-+Fetch from: https://github.com/Freescale/meta-freescale/blob/master/recipes-bsp/imx-vpu-hantro/imx-vpu-hantro/0001-decoder_sw-resolve-compilation-error-with-fcommon.patch
-+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 +---
-+ decoder_sw/software/source/inc/decapicommon.h | 2 +-
-+ decoder_sw/software/source/inc/dwl.h          | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
++ libbridge/libbridge_devif.c | 1 +
++ libbridge/libbridge_init.c  | 1 +
++ 2 files changed, 2 insertions(+)
 +
-+diff --git a/decoder_sw/software/source/inc/decapicommon.h b/decoder_sw/software/source/inc/decapicommon.h
-+index 0f02092..fc8cccf 100755
-+--- a/decoder_sw/software/source/inc/decapicommon.h
-++++ b/decoder_sw/software/source/inc/decapicommon.h
-+@@ -269,7 +269,7 @@ enum DecPicCodingType {
-+   DEC_PIC_TYPE_D           = 3,
-+   DEC_PIC_TYPE_FI          = 4,
-+   DEC_PIC_TYPE_BI          = 5
-+-} DecPicCodingType;
-++};
++diff --git a/libbridge/libbridge_devif.c b/libbridge/libbridge_devif.c
++index 8b7d954..95f7769 100644
++--- a/libbridge/libbridge_devif.c
+++++ b/libbridge/libbridge_devif.c
++@@ -24,6 +24,7 @@
++ #include <string.h>
++ #include <dirent.h>
++ #include <fcntl.h>
+++#include <linux/limits.h>
 + 
-+ /* Output picture pixel format types for raster scan or down scale output */
-+ enum DecPicturePixelFormat {
-+diff --git a/decoder_sw/software/source/inc/dwl.h b/decoder_sw/software/source/inc/dwl.h
-+index 6991f03..fd357b3 100755
-+--- a/decoder_sw/software/source/inc/dwl.h
-++++ b/decoder_sw/software/source/inc/dwl.h
-+@@ -91,7 +91,7 @@ struct DWLLinearMem {
-+ /* DWLInitParam is used to pass parameters when initializing the DWL */
-+ struct DWLInitParam {
-+   u32 client_type;
-+-} DWLInitParam;
-++};
++ #include "libbridge.h"
++ #include "libbridge_private.h"
++diff --git a/libbridge/libbridge_init.c b/libbridge/libbridge_init.c
++index c914971..645dda6 100644
++--- a/libbridge/libbridge_init.c
+++++ b/libbridge/libbridge_init.c
++@@ -24,6 +24,7 @@
++ #include <dirent.h>
++ #include <sys/types.h>
++ #include <sys/stat.h>
+++#include <linux/limits.h>
 + 
-+ /* Hardware configuration description, same as in top API */
-+ typedef struct DecHwConfig DWLHwConfig;
++ #include "libbridge.h"
++ #include "libbridge_private.h"
 +-- 
 +2.17.1
 +
 -- 
-2.26.3
+2.17.1
