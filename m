@@ -1,40 +1,32 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 13 Apr 2021 10:35:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/spdlog: bump to version 1.8.5
-Message-ID: <20210413083524.1473561-1-joerg.krause@embedded.rocks>
+From: Henri Roosen <henriroosen@gmail.com>
+Date: Tue, 13 Apr 2021 11:51:58 +0200
+Subject: [Buildroot] xserver: KDrive / TinyX configuration invalid
+Message-ID: <CANKLDmttZENvhVd99Qwt+w8dhxQJmV+VpGe+zHx5aL=+62srOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/spdlog/spdlog.hash | 2 +-
- package/spdlog/spdlog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
-index da1e0c27a0..5d1ff2f520 100644
---- a/package/spdlog/spdlog.hash
-+++ b/package/spdlog/spdlog.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e20e6bd8f57e866eaf25a5417f0a38a116e537f1a77ac7b5409ca2b180cec0d5  spdlog-1.8.2.tar.gz
-+sha256  944d0bd7c763ac721398dca2bb0f3b5ed16f67cef36810ede5061f35a543b4b8  spdlog-1.8.5.tar.gz
- sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
-diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
-index caf30be6d0..ee875ae560 100644
---- a/package/spdlog/spdlog.mk
-+++ b/package/spdlog/spdlog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SPDLOG_VERSION = 1.8.2
-+SPDLOG_VERSION = 1.8.5
- SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
- SPDLOG_LICENSE = MIT
- SPDLOG_LICENSE_FILES = LICENSE
--- 
-2.31.1
+I've been using an older version of xserver (1.17.x) and configured to use
+the "KDrive / TinyX" server type. Since switching to Buildroot 2021.02.x,
+only a recent version of the xserver is available. It seems that "KDrive /
+TinyX" does not build Xfbdev anymore and Buildroot installs a dangling link
+/usr/bin/X to Xfbdev.
+
+Xfbdev seems to be removed since [1] from the upstream code-base.
+
+Should the Buildroot options to build KDrive / TinyX and it's input drivers
+be removed, leaving only "Modular X.org", or is there a good alternative
+for a tiny X server for embedded?
+
+Thanks!
+Henri
+
+[1]
+https://cgit.freedesktop.org/xorg/xserver/commit/?id=feed7e3f982a7ac14f6fe85ed2e1ec4a83700841
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210413/bf037aec/attachment.html>
