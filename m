@@ -1,94 +1,44 @@
-From: Gleb Mazovetskiy <glex.spb@gmail.com>
-Date: Tue, 13 Apr 2021 07:09:42 +0100
-Subject: [Buildroot] [PATCH 1/1] Fix -latomic for CMake packages
-Message-ID: <20210413060942.2530596-1-glex.spb@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 13 Apr 2021 08:16:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-ffmpegdirect: bump
+ version to 1.21.1-Matrix
+Message-ID: <20210413061623.3625-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The poppler package failed to build for me with errors such as this one:
+Changelog:
+https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/inputstream.ffmpegdirect/changelog.txt
 
-    host/aarch64-buildroot-linux-gnu/include/c++/10.3.0/cstdlib:75:15: fatal error: stdlib.h: No such file or directory
-       75 | #include_next <stdlib.h>
-          |               ^~~~~~~~~~
-
-Changing the CMake option to a link-specific one fixes the issue.
-
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/cutelyst/cutelyst.mk                           | 2 +-
- package/gerbera/gerbera.mk                             | 2 +-
- package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk | 2 +-
- package/poppler/poppler.mk                             | 2 +-
- package/wampcc/wampcc.mk                               | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ .../kodi-inputstream-ffmpegdirect.hash                          | 2 +-
+ .../kodi-inputstream-ffmpegdirect.mk                            | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
-index 9520922454..5313b003ad 100644
---- a/package/cutelyst/cutelyst.mk
-+++ b/package/cutelyst/cutelyst.mk
-@@ -18,7 +18,7 @@ CUTELYST_CONF_OPTS += \
+diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
+index 2ca1dc2f8b..1375013d13 100644
+--- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
++++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6fe20c67556f6dc3bdd0e0cb64db2c78b377bbbbda00dfbac2f0e6835f61c90f  kodi-inputstream-ffmpegdirect-1.21.0-Matrix.tar.gz
++sha256  69aa62596633da3bc884b0a056761260d21a772eed988f4e1c629bb07c6e178f  kodi-inputstream-ffmpegdirect-1.21.1-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
+index 57e9c60ce5..a2483a2dd5 100644
+--- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
++++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Qt 5.8 needs atomics, which on various architectures are in -latomic
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--CUTELYST_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-+CUTELYST_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBPWQUALITY),y)
-diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
-index ccb3b2eeb5..f75595a46d 100644
---- a/package/gerbera/gerbera.mk
-+++ b/package/gerbera/gerbera.mk
-@@ -20,7 +20,7 @@ GERBERA_CONF_OPTS = -DWITH_DEBUG=OFF
- 
- # Uses __atomic_fetch_add_4
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--GERBERA_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-+GERBERA_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
- endif
- 
- ifeq ($(BR2_PACKAGE_DUKTAPE),y)
-diff --git a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-index 2a782b35e1..81617492c0 100644
---- a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-+++ b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-@@ -15,7 +15,7 @@ KF5_MODEMMANAGER_QT_INSTALL_STAGING = YES
- 
- # Uses __atomic_fetch_add_4
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--KF5_MODEMMANAGER_QT_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-+KF5_MODEMMANAGER_QT_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
- endif
- 
- $(eval $(cmake-package))
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 44ad04bf7c..a5a97d974b 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -21,7 +21,7 @@ POPPLER_CONF_OPTS = \
- 	-DENABLE_GTK_DOC=OFF
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-+POPPLER_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
- endif
- 
- ifeq ($(BR2_PACKAGE_BOOST),y)
-diff --git a/package/wampcc/wampcc.mk b/package/wampcc/wampcc.mk
-index 5e7ee03651..11bb1f90b5 100644
---- a/package/wampcc/wampcc.mk
-+++ b/package/wampcc/wampcc.mk
-@@ -13,7 +13,7 @@ WAMPCC_LICENSE_FILES = LICENSE
- 
- # Uses __atomic_fetch_add_8
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--WAMPCC_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-+WAMPCC_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
- endif
- 
- $(eval $(cmake-package))
+-KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.21.0-Matrix
++KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.21.1-Matrix
+ KODI_INPUTSTREAM_FFMPEGDIRECT_SITE = $(call github,xbmc,inputstream.ffmpegdirect,$(KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION))
+ KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE_FILES = LICENSE.md
 -- 
-2.27.0
+2.29.2
