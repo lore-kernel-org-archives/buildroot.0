@@ -1,43 +1,64 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 14 Apr 2021 07:16:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/luv: bump to version 1.40.0-0
-Message-ID: <20210414051607.47386-1-joerg.krause@embedded.rocks>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 14 Apr 2021 09:35:27 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/osm2pgsql: new package
+In-Reply-To: <208ae79f-afe7-5ce9-68c1-53ba53fb51a4@inbox.ru>
+References: <20210413135120.3724605-1-fido_max@inbox.ru>
+ <c734c656-6f02-a1f7-fbb3-82cd9c4538f0@mind.be>
+ <208ae79f-afe7-5ce9-68c1-53ba53fb51a4@inbox.ru>
+Message-ID: <98d06122-e99f-0a16-232b-b40be3de6139@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also fix spacing to use 2 spaces in the hash file.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/luv/luv.hash | 4 ++--
- package/luv/luv.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/luv/luv.hash b/package/luv/luv.hash
-index 7e902bd081..58385cf4f4 100644
---- a/package/luv/luv.hash
-+++ b/package/luv/luv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 f2e7eb372574f25c6978c1dc74280d22efdcd7df2dda4a286c7fe7dceda26445  luv-1.36.0-0.tar.gz
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-+sha256  24473a081c3928eec2a352369cbafda97059574f4a4276861274473e7c7d17a0  luv-1.40.0-0.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/luv/luv.mk b/package/luv/luv.mk
-index a63baf3228..08968c3f90 100644
---- a/package/luv/luv.mk
-+++ b/package/luv/luv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUV_VERSION = 1.36.0-0
-+LUV_VERSION = 1.40.0-0
- LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
- LUV_LICENSE = Apache-2.0
- LUV_LICENSE_FILES = LICENSE.txt
--- 
-2.31.1
+On 14/04/2021 06:28, Maxim Kochetkov wrote:
+> 
+> 
+> 13.04.2021 21:37, Arnout Vandecappelle ?????:
+>> ? Hi Maxim,
+>>
+>> ? Did my merging of postgis trigger this? :-)
+>>
+>> On 13/04/2021 15:51, Maxim Kochetkov via buildroot wrote:
+
+[snip]
+>>> +config BR2_PACKAGE_OSM2PGSQL
+>>> +??? bool "osm2pgsql"
+>>> +??? depends on BR2_PACKAGE_POSTGRESQL
+>>> +??? depends on BR2_INSTALL_LIBSTDCPP # boost
+>>> +??? depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+>>> +??? depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+>>> +??? depends on BR2_USE_WCHAR # boost
+>>> +??? select BR2_PACKAGE_BOOST
+>>> +??? select BR2_PACKAGE_BOOST_SYSTEM
+>>> +??? select BR2_PACKAGE_BOOST_FILESYSTEM
+>>> +??? select BR2_PACKAGE_BZIP2
+>>> +??? select BR2_PACKAGE_EXPAT
+>>> +??? select BR2_PACKAGE_ZLIB
+>>> +??? help
+>>> +????? osm2pgsql is a tool for loading OpenStreetMap data into a
+>>> +????? PostgreSQL / PostGIS database suitable for applications like
+>>> +????? rendering into a map, geocoding with Nominatim,
+>>> +????? or general analysis.
+>>> +
+>>> +????? https://osm2pgsql.org
+>>
+>> ? You again don't have the comment that indicates what's missing in the
+>> toolchain.
+> 
+> Do you mean microblazeel with the bootlin toolchain?
+
+ No, I mean a comment like:
+
+comment "osm2pgsql needs a toolchain w/ C++, threads, wchar, gcc >= 4.7"
+        depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
+                !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+
+ Regards,
+ Arnout
+
+
+[snip]
