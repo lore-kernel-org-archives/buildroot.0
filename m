@@ -1,124 +1,82 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 14 Apr 2021 19:49:20 +0200
-Subject: [Buildroot] [PATCH v2 1/1] Fix -latomic for CMake packages
-In-Reply-To: <20210413062615.2808309-1-glex.spb@gmail.com>
-References: <20210413060942.2530596-1-glex.spb@gmail.com>
- <20210413062615.2808309-1-glex.spb@gmail.com>
-Message-ID: <20210414194920.318e938d@gmx.net>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Wed, 14 Apr 2021 21:27:49 +0300
+Subject: [Buildroot] [PATCH] configs/solidrun_macchiatobin_defconfig:
+ include for Singleshot DTS
+In-Reply-To: <20210414155944.GA13866@plvision.eu>
+References: <20210408073349.16629-1-vadym.kochan@plvision.eu>
+ <YG68WisliSerKFtr@curiosity> <20210409124556.GA8110@plvision.eu>
+ <YHCinVc5pCs57i1N@curiosity> <20210409185844.GA23498@plvision.eu>
+ <20210414155944.GA13866@plvision.eu>
+Message-ID: <YHc0JbHzCrOw40g2@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gleb,
+Hello Vadym,
 
-On Tue, 13 Apr 2021 07:26:14 +0100, Gleb Mazovetskiy <glex.spb@gmail.com> wrote:
+> > > > > > Single- & Double shot boards have many in common except additional
+> > > > > > RJ45 tranceivers near by each of 10G SFP and a bit different CPU freq.
+> > > > > > 
+> > > > > > Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> > > > > > ---
+> > > > > >  configs/solidrun_macchiatobin_defconfig | 2 +-
+> > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > > 
+> > > > > > diff --git a/configs/solidrun_macchiatobin_defconfig b/configs/solidrun_macchiatobin_defconfig
+> > > > > > index 7d06313b03db..34094a833b66 100644
+> > > > > > --- a/configs/solidrun_macchiatobin_defconfig
+> > > > > > +++ b/configs/solidrun_macchiatobin_defconfig
+> > > > > > @@ -30,7 +30,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > > > > >  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.5"
+> > > > > >  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> > > > > >  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > > > > > -BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
+> > > > > > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin marvell/armada-8040-mcbin-singleshot"
+> > > > > >  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/macchiatobin/linux-extras.config"
+> > > > > >  BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> > > > > >  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> > > > > 
+> > > > > I do not have access to MacchiatoBin hardware anymore, but I have been using
+> > > > > current defconfig with DoubleShot boards. If this defconfig does not work
+> > > > > well for SingleShot boards, then it makes sense to add a separate defconfig
+> > > > > for such boards rather then remove DoubleShot support completely. Probably
+> > > > > linux-extras.config in board/solidrun/macchiatobin worth another look to
+> > > > > make sure that features for both boards are included.
+> > > > > 
+> > > > > Regards,
+> > > > > Sergey
+> > > > 
+> > > > If comparing Single- and DoubleShot Linux DTS files they have difference
+> > > > only in SFP config and +1 heartbeat LED. Do you think it is worth to duplicate
+> > > > current defconfig for SingleShot board even if SFP will not work by
+> > > > using DualShot DTS instead of just append _INTREE_DTS_NAME with
+> > > > -singleshot version ?
+> > > 
+> > > I think any option will do if it does not break existing use-cases.
+> > > Could you please confirm that DoubleShot image does not work
+> > > properly on SingleShot board ?
+> > > 
+> > > BTW, I thought that support for autodetect of copper vs fiber with
+> > > some prioritization has been already implemented in Linux for
+> > > mcbin hardware. Do you know if this is true or not ?
+> > > 
+> > > Regards,
+> > > Sergey
+> > > 
+> > 
+> > I will check SFP modules in Monday with DoubleShot DTS.
+> > 
+> > Thanks,
+> 
+> 
+> Looks like there is no much reason to add particular SingleShot DTS
+> but only if someone really need the heartbeat LED is blinking which
+> works only with SingleShot DTS)
 
-> The poppler package failed to build for me with errors such as this one:
->
->     host/aarch64-buildroot-linux-gnu/include/c++/10.3.0/cstdlib:75:15: fatal error: stdlib.h: No such file or directory
->        75 | #include_next <stdlib.h>
->           |               ^~~~~~~~~~
->
-> Changing the CMake option to a link-specific one fixes the issue.
-
-Out of interest (as this is a compile not link failure), what is the actual
-change in the compile parameter set?
-
-Can you provide a (failing) defconfig?
+Do you mean that network interfaces on SingleShot board are working
+properly with current buildroot mcbin image ?
 
 Regards,
-Peter
-
->
-> ---
-> Changes v1 -> v2
->   - Also fix kodi
-> ---
->  package/cutelyst/cutelyst.mk                           | 2 +-
->  package/gerbera/gerbera.mk                             | 2 +-
->  package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk | 2 +-
->  package/kodi/kodi.mk                                   | 2 +-
->  package/poppler/poppler.mk                             | 2 +-
->  package/wampcc/wampcc.mk                               | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
-> index 9520922454..5313b003ad 100644
-> --- a/package/cutelyst/cutelyst.mk
-> +++ b/package/cutelyst/cutelyst.mk
-> @@ -18,7 +18,7 @@ CUTELYST_CONF_OPTS += \
->
->  # Qt 5.8 needs atomics, which on various architectures are in -latomic
->  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> -CUTELYST_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-> +CUTELYST_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
->  endif
->
->  ifeq ($(BR2_PACKAGE_LIBPWQUALITY),y)
-> diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
-> index ccb3b2eeb5..f75595a46d 100644
-> --- a/package/gerbera/gerbera.mk
-> +++ b/package/gerbera/gerbera.mk
-> @@ -20,7 +20,7 @@ GERBERA_CONF_OPTS = -DWITH_DEBUG=OFF
->
->  # Uses __atomic_fetch_add_4
->  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> -GERBERA_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-> +GERBERA_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
->  endif
->
->  ifeq ($(BR2_PACKAGE_DUKTAPE),y)
-> diff --git a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-> index 2a782b35e1..81617492c0 100644
-> --- a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-> +++ b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-> @@ -15,7 +15,7 @@ KF5_MODEMMANAGER_QT_INSTALL_STAGING = YES
->
->  # Uses __atomic_fetch_add_4
->  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> -KF5_MODEMMANAGER_QT_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-> +KF5_MODEMMANAGER_QT_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
->  endif
->
->  $(eval $(cmake-package))
-> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> index 6edb0b7fca..28fe4a6a92 100644
-> --- a/package/kodi/kodi.mk
-> +++ b/package/kodi/kodi.mk
-> @@ -184,7 +184,7 @@ endif
->
->  # mips: uses __atomic_load_8
->  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> -KODI_CXX_FLAGS += -latomic
-> +KODI_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
->  endif
->
->  ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),)
-> diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-> index 44ad04bf7c..a5a97d974b 100644
-> --- a/package/poppler/poppler.mk
-> +++ b/package/poppler/poppler.mk
-> @@ -21,7 +21,7 @@ POPPLER_CONF_OPTS = \
->  	-DENABLE_GTK_DOC=OFF
->
->  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> -POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-> +POPPLER_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
->  endif
->
->  ifeq ($(BR2_PACKAGE_BOOST),y)
-> diff --git a/package/wampcc/wampcc.mk b/package/wampcc/wampcc.mk
-> index 5e7ee03651..11bb1f90b5 100644
-> --- a/package/wampcc/wampcc.mk
-> +++ b/package/wampcc/wampcc.mk
-> @@ -13,7 +13,7 @@ WAMPCC_LICENSE_FILES = LICENSE
->
->  # Uses __atomic_fetch_add_8
->  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> -WAMPCC_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-> +WAMPCC_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
->  endif
->
->  $(eval $(cmake-package))
+Sergey
