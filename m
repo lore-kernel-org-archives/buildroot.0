@@ -1,49 +1,68 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 14 Apr 2021 23:08:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/oniguruma: bump to version 6.9.7
-Message-ID: <20210414210839.1376139-1-fontaine.fabrice@gmail.com>
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Wed, 14 Apr 2021 16:09:27 -0500
+Subject: [Buildroot] [PATCH] package/rsyslog: install default service file
+Message-ID: <20210414210927.1826-1-sam.voss@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update hash of COPYING (update in year:
-https://github.com/kkos/oniguruma/commit/56255e8b3e209453938b62cb2a5045d29e3c3ff9)
+As of v8.2008 rsyslog no longer provides a default service file, and now
+suggests using the platform suggested defaults. For Buildroot, install
+the Debian service file which has been added in the same version,
+however is not included in the official release.
 
-https://github.com/kkos/oniguruma/releases/tag/v6.9.7
-https://github.com/kkos/oniguruma/blob/v6.9.7/HISTORY
+Upstream commit which adds this service file:
+https://github.com/rsyslog/rsyslog/commit/cfd07503ba055100a84d75d1a78a5c6cceb9fdab
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
 ---
- package/oniguruma/oniguruma.hash | 7 ++++---
- package/oniguruma/oniguruma.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/rsyslog/rsyslog.mk      |  5 +++++
+ package/rsyslog/rsyslog.service | 19 +++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 package/rsyslog/rsyslog.service
 
-diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
-index 668f21d37f..5f8c004ce6 100644
---- a/package/oniguruma/oniguruma.hash
-+++ b/package/oniguruma/oniguruma.hash
-@@ -1,3 +1,4 @@
--# Locally calculated
--sha256  bd0faeb887f748193282848d01ec2dad8943b5dfcb8dc03ed52dcc963549e819  onig-6.9.6.tar.gz
--sha256  6c7038393e8f30fee16257e713f77e383712f1465d6d25929596746b10b42bd3  COPYING
-+# From https://github.com/kkos/oniguruma/releases/download/v6.9.7/onig-6.9.7.tar.gz.sha256
-+sha256  34274cd4d11b26413f99c212cf88d8782c4f699c8aba0a4a4772cc9b28043c7b  onig-6.9.7.tar.gz
-+# Hash for license file
-+sha256  70ba5469ea0bab6e18a32d7009068f996503168d27be57747e08da34337ff26f  COPYING
-diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
-index 6ea5e1e691..280e649f2d 100644
---- a/package/oniguruma/oniguruma.mk
-+++ b/package/oniguruma/oniguruma.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index d20a13dbdd..62ef756f9d 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -89,6 +89,11 @@ RSYSLOG_CONF_OPTS += \
+ 	--disable-omjournal
+ endif
  
--ONIGURUMA_VERSION = 6.9.6
-+ONIGURUMA_VERSION = 6.9.7
- ONIGURUMA_SITE = \
- 	https://github.com/kkos/oniguruma/releases/download/v$(ONIGURUMA_VERSION)
- ONIGURUMA_SOURCE = onig-$(ONIGURUMA_VERSION).tar.gz
++define RSYSLOG_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -m 0755 -D package/rsyslog/rsyslog.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/rsyslog.service
++endef
++
+ define RSYSLOG_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/rsyslog/S01rsyslogd \
+ 		$(TARGET_DIR)/etc/init.d/S01rsyslogd
+diff --git a/package/rsyslog/rsyslog.service b/package/rsyslog/rsyslog.service
+new file mode 100644
+index 0000000000..40c7c2202d
+--- /dev/null
++++ b/package/rsyslog/rsyslog.service
+@@ -0,0 +1,19 @@
++[Unit]
++Description=System Logging Service
++Requires=syslog.socket
++Documentation=man:rsyslogd(8)
++Documentation=https://www.rsyslog.com/doc/
++
++[Service]
++Type=notify
++ExecStart=/usr/sbin/rsyslogd -n -iNONE
++StandardOutput=null
++Restart=on-failure
++
++# Increase the default a bit in order to allow many simultaneous
++# files to be monitored, we might need a lot of fds.
++LimitNOFILE=16384
++
++[Install]
++WantedBy=multi-user.target
++Alias=syslog.service
 -- 
-2.30.2
+2.17.1
