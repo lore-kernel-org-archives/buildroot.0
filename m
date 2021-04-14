@@ -1,68 +1,44 @@
-From: Sam Voss <sam.voss@rockwellcollins.com>
-Date: Wed, 14 Apr 2021 16:09:27 -0500
-Subject: [Buildroot] [PATCH] package/rsyslog: install default service file
-Message-ID: <20210414210927.1826-1-sam.voss@rockwellcollins.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 14 Apr 2021 23:26:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/quickjs: disable on nios2
+Message-ID: <20210414212608.1376653-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As of v8.2008 rsyslog no longer provides a default service file, and now
-suggests using the platform suggested defaults. For Buildroot, install
-the Debian service file which has been added in the same version,
-however is not included in the official release.
+quickjs unconditionally uses FE_{DOWN,UP}WARD and so fails to build on
+nios2 since its addition in commit
+5d50793659acb95050c110d5fc05399df20ce30b
 
-Upstream commit which adds this service file:
-https://github.com/rsyslog/rsyslog/commit/cfd07503ba055100a84d75d1a78a5c6cceb9fdab
+Fixes:
+ - http://autobuild.buildroot.org/results/69e280a7f478d1b16be989c7bd559f766053134b
+ - http://autobuild.buildroot.org/results/f2c3ef7e3bbe30ac24710288336adabebd8b83a6
 
-Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/rsyslog/rsyslog.mk      |  5 +++++
- package/rsyslog/rsyslog.service | 19 +++++++++++++++++++
- 2 files changed, 24 insertions(+)
- create mode 100644 package/rsyslog/rsyslog.service
+ package/quickjs/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index d20a13dbdd..62ef756f9d 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -89,6 +89,11 @@ RSYSLOG_CONF_OPTS += \
- 	--disable-omjournal
- endif
+diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
+index 5c3b068c3a..dc466241ba 100644
+--- a/package/quickjs/Config.in
++++ b/package/quickjs/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_QUICKJS
+ 	bool "quickjs"
++	depends on !BR2_nios2 # fenv.h lacks FE_{DOWN,UP}WARD on nios2
+ 	depends on !BR2_STATIC_LIBS
+ 	# No way to check for fenv support.
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+@@ -14,6 +15,7 @@ config BR2_PACKAGE_QUICKJS
+ 	  https://bellard.org/quickjs/
  
-+define RSYSLOG_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -m 0755 -D package/rsyslog/rsyslog.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/rsyslog.service
-+endef
-+
- define RSYSLOG_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/rsyslog/S01rsyslogd \
- 		$(TARGET_DIR)/etc/init.d/S01rsyslogd
-diff --git a/package/rsyslog/rsyslog.service b/package/rsyslog/rsyslog.service
-new file mode 100644
-index 0000000000..40c7c2202d
---- /dev/null
-+++ b/package/rsyslog/rsyslog.service
-@@ -0,0 +1,19 @@
-+[Unit]
-+Description=System Logging Service
-+Requires=syslog.socket
-+Documentation=man:rsyslogd(8)
-+Documentation=https://www.rsyslog.com/doc/
-+
-+[Service]
-+Type=notify
-+ExecStart=/usr/sbin/rsyslogd -n -iNONE
-+StandardOutput=null
-+Restart=on-failure
-+
-+# Increase the default a bit in order to allow many simultaneous
-+# files to be monitored, we might need a lot of fds.
-+LimitNOFILE=16384
-+
-+[Install]
-+WantedBy=multi-user.target
-+Alias=syslog.service
+ comment "quickjs needs a glibc or musl toolchain w/ gcc >= 4.9, host gcc >= 4.9, dynamic library"
++	depends on !BR2_nios2
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_HOST_GCC_AT_LEAST_4_9
 -- 
-2.17.1
+2.30.2
