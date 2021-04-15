@@ -1,37 +1,42 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Thu, 15 Apr 2021 11:34:01 +0200
-Subject: [Buildroot] 
- =?utf-8?q?=5BPATCH_1/1=5D_package/avahi=3A__allow_di?=
- =?utf-8?q?sabling_default_services?=
-In-Reply-To: <20201204174507.8483-1-fl@n621.de>
-Message-ID: <101e-60780880-3-3d17a340@6714720>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 15 Apr 2021 12:52:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-vpu-hantro:
+ fix build with gcc 10
+In-Reply-To: <20210412120533.8930-1-sebastien.szymanski@armadeus.com>
+References: <20210412120533.8930-1-sebastien.szymanski@armadeus.com>
+Message-ID: <YHga/xaUQhThmbHG@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Florian, All
+Hi S?bastien,
 
-On Friday, December 04, 2020 18:45 CET, Florian Larysch <fl@n621.de> wrote: 
- 
-> By default, Avahi installs service definitions for SSH and SFTP, but
-> those might not be present on all systems. Add an option for disabling
-> them.
+Thanks for your contribution.
+
+On Mon, Apr 12, 2021 at 02:05:33PM +0200, S?bastien Szymanski wrote:
+> imx-vpu-hantro build with gcc 10 fails with the following errors:
 > 
+> decoder_sw/software/linux/dwl/dwl_linux_hw.o:(.bss+0x44): multiple
+> definition of `DWLInitParam';
+> decoder_sw/software/linux/dwl/dwl_linux.o:(.bss+0x1200): first defined
+> here
+> 
+> decoder_sw/software/linux/dwl/dwl_linux_hw.o:(.bss+0x48): multiple
+> definition of `DecPicCodingType';
+> decoder_sw/software/linux/dwl/dwl_linux.o:(.bss+0x1204): first defined
+> here
+> 
+> Add a patch found at https://github.com/Freescale/meta-freescale to fix
+> this issue.
 
-I have this removal in all my post-build scripts. So it would be great to have it as an option.
-I would even suggest to always remove the .service files and make it optional. I think an embedded system should
-explicitly enable services.
-
->  
-> +config BR2_PACKAGE_AVAHI_DEFAULT_SERVICES
-> +	bool "install default service definitions"
-> +	depends on BR2_PACKAGE_AVAHI_DAEMON
-> +	default y
-
-If kept as an Option: default this to n?
-
+However in the latest release from NXP those issues have been fixed.
+Would you mind offering another patch that bumps to latest version [1]
+instead? Making sure your app still works but the new version also
+includes several buffer checks that could be useful anyway.
 
 Regards,
-Michael
+Gary
+
+[1] https://source.codeaurora.org/external/imx/meta-imx/tree/meta-bsp/recipes-bsp/imx-vpu-hantro?h=gatesgarth-5.10.9-1.0.0
