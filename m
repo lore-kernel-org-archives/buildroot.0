@@ -1,219 +1,86 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 15 Apr 2021 21:44:48 +0200
-Subject: [Buildroot] [PATCH v2 1/1] Fix -latomic for CMake packages
-In-Reply-To: <CADjhFRDs7oHBoAhbr96z9oHSEcfQnejec8LCE+_haOs5cwjXow@mail.gmail.com>
-References: <20210413060942.2530596-1-glex.spb@gmail.com>
- <20210413062615.2808309-1-glex.spb@gmail.com>
- <20210414194920.318e938d@gmx.net>
- <CADjhFRDs7oHBoAhbr96z9oHSEcfQnejec8LCE+_haOs5cwjXow@mail.gmail.com>
-Message-ID: <20210415214448.669b3826@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 15 Apr 2021 21:47:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/avahi: allow disabling default
+ services
+In-Reply-To: <64232bf4-4811-35ef-f9fa-d44f662a003a@mind.be>
+References: <101e-60780880-3-3d17a340@6714720>
+ <64232bf4-4811-35ef-f9fa-d44f662a003a@mind.be>
+Message-ID: <20210415194721.GG359705@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gleb,
+Arnout, All,
 
-On Thu, 15 Apr 2021 04:49:29 +0100, Gleb Mazovetskiy <glex.spb@gmail.com> wrote:
+On 2021-04-15 21:02 +0200, Arnout Vandecappelle spake thusly:
+> On 15/04/2021 11:34, Michael Nosthoff via buildroot wrote:
+> > On Friday, December 04, 2020 18:45 CET, Florian Larysch <fl@n621.de> wrote: 
+> >> By default, Avahi installs service definitions for SSH and SFTP, but
+> >> those might not be present on all systems. Add an option for disabling
+> >> them.
+[--SNIP--]
+> >> +config BR2_PACKAGE_AVAHI_DEFAULT_SERVICES
+> >> +	bool "install default service definitions"
+> >> +	depends on BR2_PACKAGE_AVAHI_DAEMON
+> >> +	default y
+> > If kept as an Option: default this to n?
+> 
+>  To make it easy to upgrade Buildroot, we want as much as possible to make sure
+> that existing configurations still work. If you have an existing configuration
+> that actually relies on these services to be installed, then it would be very
+> annoying if they just disappear under your feet... So in general, we want the
+> default to reflect the old situation. That means that adding an option that
+> removes something will generally have to default y.
 
-> Hi Peter,
->
-> The failing defconfig is here (it's specific to this buildroot):
-> https://github.com/batocera-linux/batocera.linux/blob/8d8038a6ddaae03f0150fd28a2d23c371156ebf2/configs/batocera-odroidgoa_defconfig
+An option that defaults to 'y' will have to do so forever and ever...
 
-Thanks for providing the defconfig, as far as I can see nothing special (and no
-poppler enabled?), normal buildroot-glibc-gcc-10.x toolchain..., and I am not
-able to reproduce your problem (did only test without ccache)...
+>  This policy is far from ideal, because it means people will often have to
+> explicitly unset this option. In many cases, even for existing configs,
+> unsetting it is in fact the right thing to do.
 
->
-> Here is the compiler command without this change:
->
-> /usr/bin/ccache
-> /home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/host/bin/aarch64-buildroot-linux-gnu-g++
-> --sysroot=/home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/host/aarch64-buildroot-linux-gnu/sysroot
-> -Dpoppler_EXPORTS
-> -I/home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/build/poppler-0.84.0
-> -I/home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/build/poppler-0.84.0/fofi
-> -I/home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/build/poppler-0.84.0/goo
-> -I/home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/build/poppler-0.84.0/poppler
-> *-isystem
-> /home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/host/aarch64-buildroot-linux-gnu/sysroot/usr/include*
-> -isystem
-> /home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/freetype2
-> -isystem
-> /home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/nss
-> -isystem
-> /home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/nspr
-> -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wcast-align
-> -Wformat-security -Wframe-larger-than=65536 -Wlogical-op
-> -Wmissing-format-attribute -Wnon-virtual-dtor -Woverloaded-virtual
-> -Wmissing-declarations -Wundef -Wzero-as-null-pointer-constant -Wshadow
-> -Wsuggest-override -fno-exceptions -fno-check-new -fno-common
-> -D_DEFAULT_SOURCE -O2 -DNDEBUG -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64 * -O3   -latomic -fPIC *-pthread -std=c++14 -MD -MT
-> CMakeFiles/poppler.dir/goo/gbase64.cc.o -MF
-> CMakeFiles/poppler.dir/goo/gbase64.cc.o.d -o
-> CMakeFiles/poppler.dir/goo/gbase64.cc.o -c
-> /home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/build/poppler-0.84.0/goo/gbase64.cc
->
-> With this change:
->
-> /usr/bin/ccache
-> /home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/host/bin/aarch64-buildroot-linux-gnu-g++
-> --sysroot=/home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/host/aarch64-buildroot-linux-gnu/sysroot
-> -Dpoppler_EXPORTS
-> -I/home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/build/poppler-0.84.0
-> -I/home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/build/poppler-0.84.0/fofi
-> -I/home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/build/poppler-0.84.0/goo
-> -I/home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/build/poppler-0.84.0/poppler
-> -isystem
-> /home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/freetype2
-> -isystem
-> /home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/nss
-> -isystem
-> /home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/nspr
-> -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wcast-align
-> -Wformat-security -Wframe-larger-than=65536 -Wlogical-op
-> -Wmissing-format-attribute -Wnon-virtual-dtor -Woverloaded-virtual
-> -Wmissing-declarations -Wundef -Wzero-as-null-pointer-constant -Wshadow
-> -Wsuggest-override -fno-exceptions -fno-check-new -fno-common
-> -D_DEFAULT_SOURCE -O2 -DNDEBUG -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64 *-O3 -fPIC* -pthread -std=c++14 -MD -MT
-> CMakeFiles/poppler.dir/goo/gbase64.cc.o -MF
-> CMakeFiles/poppler.dir/goo/gbase64.cc.o.d -o
-> CMakeFiles/poppler.dir/goo/gbase64.cc.o -c
-> /home/gleb/repos/glebm/batocera.linux/output/batocera-odroidgoa/build/poppler-0.84.0/goo/gbase64.cc
->
-> Notice that the first command has an extra include statement
+And for new, from-scratch configurations, this is not nice either,
+because most options default to 'n', while only a bunch default to 'y',
+and this is not very consistent...
 
-Here no unexpected difference in compile flags, only the expected -latomic
-difference (and both times only one -isystem for freetype2)....
+>  So maybe we should consider changing this policy.
 
-Still +1 for the patch (as the CMAKE_EXE_LINKER_FLAGS usage is smarter than
-the '$(TARGET_CXXFLAGS) -latomic' dance...., but can not follow your
-reasoning/commit log...
+I would very well be in favour of dropping the policy to be
+backward-compatible in such a situation.
+
+>  I think we should only do that if we also add a prominent file in the root,
+
+Did you mean: s/root/top-directory of the Buildroot tree/ ?
+
+> e.g. UPGRADING, that makes explicit note of such changes. Some time ago, I tried
+> to keep something like that going by editing CHANGES, but it didn't amount to
+> much, and that file is so full that it's hard to find the relevant bits.
+
+This is going to bit-rot eventually... :-/
+
+>  I've added a bunch of random people in Cc whom I think might have a relevant
+> opinion about this. I hope nobody will feel offended because I didn't include
+> them :-)
+> 
+>  If this idea gains traction, I volunteer to write a skeleton UPGRADING file,
+> and refer to it from the manual. I've been thinking for a long time already that
+> I really should add a section to the manual about what to do when you upgrade
+> Buildroot, and this would be the ideal push for me.
+
+What about the existing section, then:
+    https://buildroot.org/downloads/manual/manual.html#migrating-from-ol-versions
+
+(notice the typo in the anchor, giving away who wrote it ;-] And even
+then, that typo is still fitting my ol' little me... ;-] )
 
 Regards,
-Peter
+Yann E. MORIN.
 
->
-> On Wed, Apr 14, 2021 at 6:49 PM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > Hello Gleb,
-> >
-> > On Tue, 13 Apr 2021 07:26:14 +0100, Gleb Mazovetskiy <glex.spb@gmail.com>
-> > wrote:
-> >
-> > > The poppler package failed to build for me with errors such as this one:
-> > >
-> > >     host/aarch64-buildroot-linux-gnu/include/c++/10.3.0/cstdlib:75:15:
-> > fatal error: stdlib.h: No such file or directory
-> > >        75 | #include_next <stdlib.h>
-> > >           |               ^~~~~~~~~~
-> > >
-> > > Changing the CMake option to a link-specific one fixes the issue.
-> >
-> > Out of interest (as this is a compile not link failure), what is the actual
-> > change in the compile parameter set?
-> >
-> > Can you provide a (failing) defconfig?
-> >
-> > Regards,
-> > Peter
-> >
-> > >
-> > > ---
-> > > Changes v1 -> v2
-> > >   - Also fix kodi
-> > > ---
-> > >  package/cutelyst/cutelyst.mk                           | 2 +-
-> > >  package/gerbera/gerbera.mk                             | 2 +-
-> > >  package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk | 2 +-
-> > >  package/kodi/kodi.mk                                   | 2 +-
-> > >  package/poppler/poppler.mk                             | 2 +-
-> > >  package/wampcc/wampcc.mk                               | 2 +-
-> > >  6 files changed, 6 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
-> > > index 9520922454..5313b003ad 100644
-> > > --- a/package/cutelyst/cutelyst.mk
-> > > +++ b/package/cutelyst/cutelyst.mk
-> > > @@ -18,7 +18,7 @@ CUTELYST_CONF_OPTS += \
-> > >
-> > >  # Qt 5.8 needs atomics, which on various architectures are in -latomic
-> > >  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> > > -CUTELYST_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-> > > +CUTELYST_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-> > >  endif
-> > >
-> > >  ifeq ($(BR2_PACKAGE_LIBPWQUALITY),y)
-> > > diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
-> > > index ccb3b2eeb5..f75595a46d 100644
-> > > --- a/package/gerbera/gerbera.mk
-> > > +++ b/package/gerbera/gerbera.mk
-> > > @@ -20,7 +20,7 @@ GERBERA_CONF_OPTS = -DWITH_DEBUG=OFF
-> > >
-> > >  # Uses __atomic_fetch_add_4
-> > >  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> > > -GERBERA_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-> > > +GERBERA_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-> > >  endif
-> > >
-> > >  ifeq ($(BR2_PACKAGE_DUKTAPE),y)
-> > > diff --git a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-> > b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-> > > index 2a782b35e1..81617492c0 100644
-> > > --- a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-> > > +++ b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-> > > @@ -15,7 +15,7 @@ KF5_MODEMMANAGER_QT_INSTALL_STAGING = YES
-> > >
-> > >  # Uses __atomic_fetch_add_4
-> > >  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> > > -KF5_MODEMMANAGER_QT_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS)
-> > -latomic"
-> > > +KF5_MODEMMANAGER_QT_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-> > >  endif
-> > >
-> > >  $(eval $(cmake-package))
-> > > diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> > > index 6edb0b7fca..28fe4a6a92 100644
-> > > --- a/package/kodi/kodi.mk
-> > > +++ b/package/kodi/kodi.mk
-> > > @@ -184,7 +184,7 @@ endif
-> > >
-> > >  # mips: uses __atomic_load_8
-> > >  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> > > -KODI_CXX_FLAGS += -latomic
-> > > +KODI_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-> > >  endif
-> > >
-> > >  ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),)
-> > > diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-> > > index 44ad04bf7c..a5a97d974b 100644
-> > > --- a/package/poppler/poppler.mk
-> > > +++ b/package/poppler/poppler.mk
-> > > @@ -21,7 +21,7 @@ POPPLER_CONF_OPTS = \
-> > >       -DENABLE_GTK_DOC=OFF
-> > >
-> > >  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> > > -POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-> > > +POPPLER_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-> > >  endif
-> > >
-> > >  ifeq ($(BR2_PACKAGE_BOOST),y)
-> > > diff --git a/package/wampcc/wampcc.mk b/package/wampcc/wampcc.mk
-> > > index 5e7ee03651..11bb1f90b5 100644
-> > > --- a/package/wampcc/wampcc.mk
-> > > +++ b/package/wampcc/wampcc.mk
-> > > @@ -13,7 +13,7 @@ WAMPCC_LICENSE_FILES = LICENSE
-> > >
-> > >  # Uses __atomic_fetch_add_8
-> > >  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> > > -WAMPCC_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-> > > +WAMPCC_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-> > >  endif
-> > >
-> > >  $(eval $(cmake-package))
-> >
-> >
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
