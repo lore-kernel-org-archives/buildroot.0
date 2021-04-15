@@ -1,93 +1,40 @@
-From: =?UTF-8?Q?Einar_J=C3=B3n?= <tolvupostur@gmail.com>
-Date: Thu, 15 Apr 2021 13:26:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/yavta: bump to latest version
-In-Reply-To: <20210415112056.27521-1-tolvupostur@gmail.com>
-References: <20210415112056.27521-1-tolvupostur@gmail.com>
-Message-ID: <CABhNV20-hebPCF4i79Xd96jawZKE_wiAnp=+CL698VinVGwo1A@mail.gmail.com>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Thu, 15 Apr 2021 13:41:37 +0200
+Subject: [Buildroot] [PATCH] package/grpc: bump to version 1.37.0
+Message-ID: <20210415114138.103999-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Not much to add to this.
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ package/grpc/grpc.hash | 2 +-
+ package/grpc/grpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Yavta hasn't been updated for many years.
-There are no tags in the repo, so the latest hash is used.
-
-Only tested on iMX.6, but builds fine on beaglebone as well.
-
-  --
-Regards
-Einar J?n
-
-
-On Thu, 15 Apr 2021 at 13:21, Einar Jon Gunnarsson <tolvupostur@gmail.com>
-wrote:
-
-> Add hash file
-> Convert to meson build
-> Use https instead of http
->
-> Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
-> ---
->  package/yavta/Config.in  |  2 +-
->  package/yavta/yavta.hash |  3 +++
->  package/yavta/yavta.mk   | 13 +++----------
->  3 files changed, 7 insertions(+), 11 deletions(-)
->  create mode 100644 package/yavta/yavta.hash
->
-> diff --git a/package/yavta/Config.in b/package/yavta/Config.in
-> index 6a42a944d6..8119133c33 100644
-> --- a/package/yavta/Config.in
-> +++ b/package/yavta/Config.in
-> @@ -3,4 +3,4 @@ config BR2_PACKAGE_YAVTA
->         help
->           Yet Another V4L2 Test Application
->
-> -         http://git.ideasonboard.org/yavta.git
-> +         https://git.ideasonboard.org/yavta.git
-> diff --git a/package/yavta/yavta.hash b/package/yavta/yavta.hash
-> new file mode 100644
-> index 0000000000..aa74284d89
-> --- /dev/null
-> +++ b/package/yavta/yavta.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed
-> +sha256  108a0ceec862b56a3fbcb3ad28a8744d9800555ccb3e11bdd94c8cd4614296d5
-> yavta-583bedefc2a247d2cfd32d1b4a0abbe3e2015c70-br1.tar.gz
-> +sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6
-> COPYING.GPL
-> diff --git a/package/yavta/yavta.mk b/package/yavta/yavta.mk
-> index 4e3d76e3de..073ec2510c 100644
-> --- a/package/yavta/yavta.mk
-> +++ b/package/yavta/yavta.mk
-> @@ -4,17 +4,10 @@
->  #
->
->  ################################################################################
->
-> -YAVTA_VERSION = 82ff2efdb9787737b9f21b6f4759f077c827b238
-> +YAVTA_VERSION = 583bedefc2a247d2cfd32d1b4a0abbe3e2015c70
->  YAVTA_SITE = git://git.ideasonboard.org/yavta.git
-> +YAVTA_SITE_METHOD = git
->  YAVTA_LICENSE = GPL-2.0+
->  YAVTA_LICENSE_FILES = COPYING.GPL
->
-> -define YAVTA_BUILD_CMDS
-> -       $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> -endef
-> -
-> -define YAVTA_INSTALL_TARGET_CMDS
-> -       $(INSTALL) -m 0755 -D $(@D)/yavta $(TARGET_DIR)/usr/bin/yavta
-> -endef
-> -
-> -$(eval $(generic-package))
-> +$(eval $(meson-package))
-> --
-> 2.17.1
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210415/87617519/attachment.html>
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index cfeb7eaa29..8189f738b5 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  51403542b19e9ed5d3b6551ce4a828e17883a1593d4ca408b098f04b0767d202  grpc-1.36.2.tar.gz
++sha256  c2dc8e876ea12052d6dd16704492fd8921df8c6d38c70c4708da332cf116df22  grpc-1.37.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 8a04435654..320c287bd1 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GRPC_VERSION = 1.36.2
++GRPC_VERSION = 1.37.0
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0
+ GRPC_LICENSE_FILES = LICENSE
+-- 
+2.25.1
