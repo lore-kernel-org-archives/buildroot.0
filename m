@@ -1,40 +1,44 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Thu, 15 Apr 2021 13:41:37 +0200
-Subject: [Buildroot] [PATCH] package/grpc: bump to version 1.37.0
-Message-ID: <20210415114138.103999-1-buildroot@heine.tech>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 15 Apr 2021 13:44:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/meson: bump version to 0.57.2
+Message-ID: <20210415114449.462262-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/grpc/grpc.hash | 2 +-
- package/grpc/grpc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Release notes: https://groups.google.com/g/mesonbuild/c/3YR_iOkh7co
 
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index cfeb7eaa29..8189f738b5 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  51403542b19e9ed5d3b6551ce4a828e17883a1593d4ca408b098f04b0767d202  grpc-1.36.2.tar.gz
-+sha256  c2dc8e876ea12052d6dd16704492fd8921df8c6d38c70c4708da332cf116df22  grpc-1.37.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 8a04435654..320c287bd1 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index d13a605e80..252e56ba34 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.57.1/meson-0.57.1.tar.gz.asc
+-sha256  72e1c782ba9bda204f4a1ed57f98d027d7b6eb9414c723eebbd6ec7f1955c8a6  meson-0.57.1.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.57.2/meson-0.57.2.tar.gz.asc
++sha256  3a83e7b1c5de94fa991ec34d9b198d94f38ed699d3524cb0fdf3b99fd23d4cc5  meson-0.57.2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index eea5aedc51..4b0f4fdeff 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GRPC_VERSION = 1.36.2
-+GRPC_VERSION = 1.37.0
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0
- GRPC_LICENSE_FILES = LICENSE
+-MESON_VERSION = 0.57.1
++MESON_VERSION = 0.57.2
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 -- 
-2.25.1
+2.29.2
