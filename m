@@ -1,41 +1,72 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Thu, 15 Apr 2021 14:08:11 +0200
-Subject: [Buildroot] [PATCH] package/libgpiod: bump to version 1.6.3
-Message-ID: <20210415120810.147466-1-buildroot@heine.tech>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Thu, 15 Apr 2021 14:58:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: add
+ introspection option
+In-Reply-To: <20210415111957.27459-1-tolvupostur@gmail.com>
+References: <20210415111957.27459-1-tolvupostur@gmail.com>
+Message-ID: <CAAP7uc+D1guDjxWzThzL1PMGB8eDgnu=L=fBr=-OLkanfVXWGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/libgpiod/libgpiod.hash | 2 +-
- package/libgpiod/libgpiod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu, Apr 15, 2021 at 1:20 PM Einar Jon Gunnarsson
+<tolvupostur@gmail.com> wrote:
+>
+> Add a flag to enable gobject-introspection
+>
+> Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
 
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index 7b691aaf5e..f0803cab36 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256  c601e71846f5ab140c83bc757fdd62a4fda24a9cee39cc5e99c96ec2bf1b06a9  libgpiod-1.6.2.tar.xz
-+sha256  841be9d788f00bab08ef22c4be5c39866f0e46cb100a3ae49ed816ac9c5dddc7  libgpiod-1.6.3.tar.xz
- # Hash for license file
- sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index 201b697c72..35d003fa33 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
-@@ -6,7 +6,7 @@
- 
- # Be careful when bumping versions.
- # Dependency on kernel header versions may change.
--LIBGPIOD_VERSION = 1.6.2
-+LIBGPIOD_VERSION = 1.6.3
- LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
- LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD_LICENSE = LGPL-2.1+
+Nice!
+Acked-by: Aleksander Morgado <aleksander@aleksander.es>
+
+> ---
+>  package/modem-manager/Config.in        | 7 +++++++
+>  package/modem-manager/modem-manager.mk | 7 +++++++
+>  2 files changed, 14 insertions(+)
+>
+> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
+> index c4c723776d..67c4bf167c 100644
+> --- a/package/modem-manager/Config.in
+> +++ b/package/modem-manager/Config.in
+> @@ -25,6 +25,13 @@ config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
+>         select BR2_PACKAGE_LIBQMI
+>         help
+>           This option enables support for QMI protocol
+> +
+> +config BR2_PACKAGE_MODEM_MANAGER_INTROSPECTION
+> +       bool "introspection support"
+> +       depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+> +       select BR2_PACKAGE_GOBJECT_INTROSPECTION
+> +       help
+> +         This option enables support for GObject introspection
+>  endif
+>
+>  comment "modemmanager needs a toolchain w/ wchar, threads"
+> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+> index 2cc45d266b..cc8c49625f 100644
+> --- a/package/modem-manager/modem-manager.mk
+> +++ b/package/modem-manager/modem-manager.mk
+> @@ -34,6 +34,13 @@ else
+>  MODEM_MANAGER_CONF_OPTS += --without-mbim
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_MODEM_MANAGER_INTROSPECTION),y)
+> +MODEM_MANAGER_DEPENDENCIES += gobject-introspection
+> +MODEM_MANAGER_CONF_OPTS += --enable-introspection
+> +else
+> +MODEM_MANAGER_CONF_OPTS += --disable-introspection
+> +endif
+> +
+>  define MODEM_MANAGER_INSTALL_INIT_SYSV
+>         $(INSTALL) -m 0755 -D package/modem-manager/S44modem-manager \
+>                 $(TARGET_DIR)/etc/init.d/S44modem-manager
+> --
+> 2.17.1
+>
+
+
 -- 
-2.25.1
+Aleksander
+https://aleksander.es
