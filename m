@@ -1,82 +1,94 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Apr 2021 23:09:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/modem-manager: add
- introspection option
-In-Reply-To: <20210415111957.27459-1-tolvupostur@gmail.com>
-References: <20210415111957.27459-1-tolvupostur@gmail.com>
-Message-ID: <20210415210935.GI359705@scaer>
+Date: Thu, 15 Apr 2021 23:34:32 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: remove
+ non-evdev input drivers for kdrive
+Message-ID: <20210415211733.8A88183B61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Einar, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=eea0da855bb146cca1ed85da03115953cd0219f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-15 13:19 +0200, Einar Jon Gunnarsson spake thusly:
-> Add a flag to enable gobject-introspection
-> 
-> Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+Upstream removed support for non-evdev input drivers for kdrive:
+https://cgit.freedesktop.org/xorg/xserver/commit/configure.ac?h=server-1.20-branch&id=e7b8b7b131d8283c96ed0aff4593ab41441b5d3b
 
-I've dropped the config option, to instead directly rely on the GOI
-package to be enabled, and applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Config.in.legacy                                         | 12 ++++++++++++
+ package/x11r7/xserver_xorg-server/Config.in              | 12 ------------
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 12 ------------
+ 3 files changed, 12 insertions(+), 24 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/modem-manager/Config.in        | 7 +++++++
->  package/modem-manager/modem-manager.mk | 7 +++++++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
-> index c4c723776d..67c4bf167c 100644
-> --- a/package/modem-manager/Config.in
-> +++ b/package/modem-manager/Config.in
-> @@ -25,6 +25,13 @@ config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
->  	select BR2_PACKAGE_LIBQMI
->  	help
->  	  This option enables support for QMI protocol
-> +
-> +config BR2_PACKAGE_MODEM_MANAGER_INTROSPECTION
-> +	bool "introspection support"
-> +	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
-> +	select BR2_PACKAGE_GOBJECT_INTROSPECTION
-> +	help
-> +	  This option enables support for GObject introspection
->  endif
->  
->  comment "modemmanager needs a toolchain w/ wchar, threads"
-> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-> index 2cc45d266b..cc8c49625f 100644
-> --- a/package/modem-manager/modem-manager.mk
-> +++ b/package/modem-manager/modem-manager.mk
-> @@ -34,6 +34,13 @@ else
->  MODEM_MANAGER_CONF_OPTS += --without-mbim
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_MODEM_MANAGER_INTROSPECTION),y)
-> +MODEM_MANAGER_DEPENDENCIES += gobject-introspection
-> +MODEM_MANAGER_CONF_OPTS += --enable-introspection
-> +else
-> +MODEM_MANAGER_CONF_OPTS += --disable-introspection
-> +endif
-> +
->  define MODEM_MANAGER_INSTALL_INIT_SYSV
->  	$(INSTALL) -m 0755 -D package/modem-manager/S44modem-manager \
->  		$(TARGET_DIR)/etc/init.d/S44modem-manager
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 1f62348f9b..d22dca9a53 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,18 @@ endif
+ 
+ comment "Legacy options removed in 2021.05"
+ 
++config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_KBD
++	bool "KDrive/TinyX kbd input driver removed"
++	select BR2_LEGACY
++	help
++	  The kbd input driver in KDrive was removed.
++
++config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_MOUSE
++	bool "KDrive/TinyX mouse input driver removed"
++	select BR2_LEGACY
++	help
++	  The mouse input driver in KDrive was removed.
++
+ config BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
+ 	bool "mesa OSMesa (classic) option removed"
+ 	select BR2_LEGACY
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index 3bf5af89be..1b9adadb5c 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -90,18 +90,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV
+ 	  Xfbdev -keybd evdev,,device=/dev/input/eventX
+ 	         -mouse evdev,,device=/dev/input/eventY
+ 
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_KBD
+-	bool "Enable KDrive/TinyX kbd input driver"
+-	help
+-	  Enable kbd input driver in KDrive. It uses the console
+-	  keyboard as input device.
+-
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_MOUSE
+-	bool "Enable KDrive/TinyX mouse input driver"
+-	help
+-	  Enable mouse input driver in KDrive. It supports PS/2 mice
+-	  and serial port mice.
+-
+ endif
+ 
+ comment "Optional Servers"
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 3fa77cd4f0..03f36f1b28 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -105,18 +105,6 @@ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-evdev
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_KBD),y)
+-XSERVER_XORG_SERVER_CONF_OPTS += --enable-kdrive-kbd
+-else
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-kbd
+-endif
+-
+-ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_MOUSE),y)
+-XSERVER_XORG_SERVER_CONF_OPTS += --enable-kdrive-mouse
+-else
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-mouse
+-endif
+-
+ else # modular
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
+ endif
