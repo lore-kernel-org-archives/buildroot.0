@@ -1,86 +1,132 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Apr 2021 21:47:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/avahi: allow disabling default
- services
-In-Reply-To: <64232bf4-4811-35ef-f9fa-d44f662a003a@mind.be>
-References: <101e-60780880-3-3d17a340@6714720>
- <64232bf4-4811-35ef-f9fa-d44f662a003a@mind.be>
-Message-ID: <20210415194721.GG359705@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 15 Apr 2021 22:07:24 +0200
+Subject: [Buildroot] [PATCH v3 1/3] package/protozero: new package
+In-Reply-To: <20210415150356.775904-1-fido_max@inbox.ru>
+References: <20210415150356.775904-1-fido_max@inbox.ru>
+Message-ID: <5dba2629-ae65-91c1-4f58-e2edda5c1608@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
 
-On 2021-04-15 21:02 +0200, Arnout Vandecappelle spake thusly:
-> On 15/04/2021 11:34, Michael Nosthoff via buildroot wrote:
-> > On Friday, December 04, 2020 18:45 CET, Florian Larysch <fl@n621.de> wrote: 
-> >> By default, Avahi installs service definitions for SSH and SFTP, but
-> >> those might not be present on all systems. Add an option for disabling
-> >> them.
-[--SNIP--]
-> >> +config BR2_PACKAGE_AVAHI_DEFAULT_SERVICES
-> >> +	bool "install default service definitions"
-> >> +	depends on BR2_PACKAGE_AVAHI_DAEMON
-> >> +	default y
-> > If kept as an Option: default this to n?
+
+On 15/04/2021 17:03, Maxim Kochetkov wrote:
+> Minimalistic protocol buffer decoder and encoder in C++.
+> Designed for high performance. Suitable for writing zero copy
+> parsers and encoders with minimal need for run-time allocation
+> of memory.
 > 
->  To make it easy to upgrade Buildroot, we want as much as possible to make sure
-> that existing configurations still work. If you have an existing configuration
-> that actually relies on these services to be installed, then it would be very
-> annoying if they just disappear under your feet... So in general, we want the
-> default to reflect the old situation. That means that adding an option that
-> removes something will generally have to default y.
-
-An option that defaults to 'y' will have to do so forever and ever...
-
->  This policy is far from ideal, because it means people will often have to
-> explicitly unset this option. In many cases, even for existing configs,
-> unsetting it is in fact the right thing to do.
-
-And for new, from-scratch configurations, this is not nice either,
-because most options default to 'n', while only a bunch default to 'y',
-and this is not very consistent...
-
->  So maybe we should consider changing this policy.
-
-I would very well be in favour of dropping the policy to be
-backward-compatible in such a situation.
-
->  I think we should only do that if we also add a prominent file in the root,
-
-Did you mean: s/root/top-directory of the Buildroot tree/ ?
-
-> e.g. UPGRADING, that makes explicit note of such changes. Some time ago, I tried
-> to keep something like that going by editing CHANGES, but it didn't amount to
-> much, and that file is so full that it's hard to find the relevant bits.
-
-This is going to bit-rot eventually... :-/
-
->  I've added a bunch of random people in Cc whom I think might have a relevant
-> opinion about this. I hope nobody will feel offended because I didn't include
-> them :-)
+> Low-level: this is designed to be a building block for writing
+> a very customized decoder for a stable protobuf schema. If your
+> protobuf schema is changing frequently or lazy decoding is not
+> critical for your application then this approach offers
+> no value: just use the C++ API that can be generated with
+> the Google Protobufs protoc program.
 > 
->  If this idea gains traction, I volunteer to write a skeleton UPGRADING file,
-> and refer to it from the manual. I've been thinking for a long time already that
-> I really should add a section to the manual about what to do when you upgrade
-> Buildroot, and this would be the ideal push for me.
+> https://github.com/mapbox/protozero
+> 
+> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 
-What about the existing section, then:
-    https://buildroot.org/downloads/manual/manual.html#migrating-from-ol-versions
+ Applied to master, thanks. However, I did have to make a few formatting fixups.
+Please run utils/check-package on the patch before sending.
 
-(notice the typo in the anchor, giving away who wrote it ;-] And even
-then, that typo is still fitting my ol' little me... ;-] )
+ Regards,
+ Arnout
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> ---
+>  DEVELOPERS                       |  1 +
+>  package/Config.in                |  1 +
+>  package/protozero/Config.in      | 20 ++++++++++++++++++++
+>  package/protozero/protozero.hash |  4 ++++
+>  package/protozero/protozero.mk   | 17 +++++++++++++++++
+>  5 files changed, 43 insertions(+)
+>  create mode 100644 package/protozero/Config.in
+>  create mode 100644 package/protozero/protozero.hash
+>  create mode 100644 package/protozero/protozero.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 1348b8eb91..9390daa2fa 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1840,6 +1840,7 @@ N:	Max Filippov <jcmvbkbc@gmail.com>
+>  F:	arch/Config.in.xtensa
+>  
+>  N:	Maxim Kochetkov <fido_max@inbox.ru>
+> +F:	package/protozero/
+>  F:	package/timescaledb/
+>  
+>  N:	Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> diff --git a/package/Config.in b/package/Config.in
+> index ea0e9edc3e..c5014faba1 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1966,6 +1966,7 @@ endif
+>  	source "package/poco/Config.in"
+>  	source "package/protobuf/Config.in"
+>  	source "package/protobuf-c/Config.in"
+> +	source "package/protozero/Config.in"
+>  	source "package/qhull/Config.in"
+>  	source "package/qlibc/Config.in"
+>  	source "package/riemann-c-client/Config.in"
+> diff --git a/package/protozero/Config.in b/package/protozero/Config.in
+> new file mode 100644
+> index 0000000000..f187840565
+> --- /dev/null
+> +++ b/package/protozero/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_PROTOZERO
+> +	bool "protozero"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+> +	help
+> +	  Minimalistic protocol buffer decoder and encoder in C++.
+> +	  Designed for high performance. Suitable for writing zero copy
+> +	  parsers and encoders with minimal need for run-time allocation
+> +	  of memory.
+> +	  Low-level: this is designed to be a building block for writing
+> +	  a very customized decoder for a stable protobuf schema. If your
+> +	  protobuf schema is changing frequently or lazy decoding is not
+> +	  critical for your application then this approach offers
+> +	  no value: just use the C++ API that can be generated with
+> +	  the Google Protobufs protoc program.
+> +
+> +	  https://github.com/mapbox/protozero
+> +
+> +comment "protozero needs a toolchain w/ C++,  gcc >= 4.7"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+> diff --git a/package/protozero/protozero.hash b/package/protozero/protozero.hash
+> new file mode 100644
+> index 0000000000..5453e01ecf
+> --- /dev/null
+> +++ b/package/protozero/protozero.hash
+> @@ -0,0 +1,4 @@
+> +# Locally calculated
+> +sha256  beffbdfab060854fd770178a8db9c028b5b6ee4a059a2fed82c46390a85f3f31  protozero-1.7.0.tar.gz
+> +sha256  1f4d477e3c2d74d8706c8f05437bd86804abe46853b1f233ce1549a4de76fa49  LICENSE.md
+> +sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.from_folly
+> diff --git a/package/protozero/protozero.mk b/package/protozero/protozero.mk
+> new file mode 100644
+> index 0000000000..e4ce1a4730
+> --- /dev/null
+> +++ b/package/protozero/protozero.mk
+> @@ -0,0 +1,17 @@
+> +################################################################################
+> +#
+> +# protozero
+> +#
+> +################################################################################
+> +
+> +PROTOZERO_VERSION = 1.7.0
+> +PROTOZERO_SITE = $(call github,mapbox,protozero,v$(PROTOZERO_VERSION))
+> +PROTOZERO_LICENSE = BSD-2-Clause, Apache-2.0
+> +PROTOZERO_LICENSE_FILES = LICENSE.md LICENSE.from_folly
+> +PROTOZERO_INSTALL_STAGING = YES
+> +
+> +ifeq ($(BR2_PACKAGE_PROTOBUF),y)
+> +PROTOZERO_DEPENDENCIES += protobuf
+> +endif
+> +
+> +$(eval $(cmake-package))
+> 
