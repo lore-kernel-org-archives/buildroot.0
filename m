@@ -1,12 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 15 Apr 2021 22:41:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/avahi: allow disabling default
- services
-In-Reply-To: <20210415194721.GG359705@scaer>
-References: <101e-60780880-3-3d17a340@6714720>
- <64232bf4-4811-35ef-f9fa-d44f662a003a@mind.be>
- <20210415194721.GG359705@scaer>
-Message-ID: <05615764-3ea6-fefe-eb5d-711c8e21e1d7@mind.be>
+Date: Thu, 15 Apr 2021 22:46:41 +0200
+Subject: [Buildroot] [PATCH v2 1/1] Fix -latomic for CMake packages
+In-Reply-To: <20210415214448.669b3826@gmx.net>
+References: <20210413060942.2530596-1-glex.spb@gmail.com>
+ <20210413062615.2808309-1-glex.spb@gmail.com>
+ <20210414194920.318e938d@gmx.net>
+ <CADjhFRDs7oHBoAhbr96z9oHSEcfQnejec8LCE+_haOs5cwjXow@mail.gmail.com>
+ <20210415214448.669b3826@gmx.net>
+Message-ID: <8f6e2b20-c101-effa-9584-e9bd6a697721@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,50 +16,25 @@ To: buildroot@busybox.net
 
 
 
-On 15/04/2021 21:47, Yann E. MORIN wrote:
-> Arnout, All,
+On 15/04/2021 21:44, Peter Seiderer wrote:
+> Hello Gleb,
 > 
-> On 2021-04-15 21:02 +0200, Arnout Vandecappelle spake thusly:
-[snip]
->> e.g. UPGRADING, that makes explicit note of such changes. Some time ago, I tried
->> to keep something like that going by editing CHANGES, but it didn't amount to
->> much, and that file is so full that it's hard to find the relevant bits.
+> On Thu, 15 Apr 2021 04:49:29 +0100, Gleb Mazovetskiy <glex.spb@gmail.com> wrote:
 > 
-> This is going to bit-rot eventually... :-/
-
- It's similar to Config.in.legacy, for all the things that can't be expressed in
-Kconfig. So how is it going to bitrot?
-
- It could also be put in the manual directly, but I actually think it's harder
-to find there.
-
-
-> 
->>  I've added a bunch of random people in Cc whom I think might have a relevant
->> opinion about this. I hope nobody will feel offended because I didn't include
->> them :-)
+>> Hi Peter,
 >>
->>  If this idea gains traction, I volunteer to write a skeleton UPGRADING file,
->> and refer to it from the manual. I've been thinking for a long time already that
->> I really should add a section to the manual about what to do when you upgrade
->> Buildroot, and this would be the ideal push for me.
+>> The failing defconfig is here (it's specific to this buildroot):
+>> https://github.com/batocera-linux/batocera.linux/blob/8d8038a6ddaae03f0150fd28a2d23c371156ebf2/configs/batocera-odroidgoa_defconfig
 > 
-> What about the existing section, then:
->     https://buildroot.org/downloads/manual/manual.html#migrating-from-ol-versions
+> Thanks for providing the defconfig, as far as I can see nothing special (and no
+> poppler enabled?), normal buildroot-glibc-gcc-10.x toolchain..., and I am not
+> able to reproduce your problem (did only test without ccache)...
 
- Heh, I searched for variations of upgrade and update, not for migrate :-)
-
- Goes to show that it's not very discoverable!
-
+ CMake is known to do weird things with -isystem, and this can change over cmake
+versions, and we use the host cmake if sufficiently recent. So that could make a
+difference.
 
  Regards,
  Arnout
 
-
-> 
-> (notice the typo in the anchor, giving away who wrote it ;-] And even
-> then, that typo is still fitting my ol' little me... ;-] )
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+[snip]
