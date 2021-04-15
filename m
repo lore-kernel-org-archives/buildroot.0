@@ -1,42 +1,82 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Apr 2021 23:07:01 +0200
-Subject: [Buildroot] [git commit] package/modem-manager: add support for
- introspection
-Message-ID: <20210415204220.A54EA814DE@busybox.osuosl.org>
+Date: Thu, 15 Apr 2021 23:09:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: add
+ introspection option
+In-Reply-To: <20210415111957.27459-1-tolvupostur@gmail.com>
+References: <20210415111957.27459-1-tolvupostur@gmail.com>
+Message-ID: <20210415210935.GI359705@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c45accd2956c491a7f8a26f6087ad99203899842
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Einar, All,
 
-Enable introspection when GObject Introspection is enabled.
+On 2021-04-15 13:19 +0200, Einar Jon Gunnarsson spake thusly:
+> Add a flag to enable gobject-introspection
+> 
+> Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
 
-Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
-Acked-by: Aleksander Morgado <aleksander@aleksander.es>
-[yann.morin.1998 at free.fr: drop config option, rely on GOI package]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/modem-manager/modem-manager.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+I've dropped the config option, to instead directly rely on the GOI
+package to be enabled, and applied to master, thanks.
 
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 2cc45d266b..792a37b8db 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -34,6 +34,13 @@ else
- MODEM_MANAGER_CONF_OPTS += --without-mbim
- endif
- 
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+MODEM_MANAGER_DEPENDENCIES += gobject-introspection
-+MODEM_MANAGER_CONF_OPTS += --enable-introspection
-+else
-+MODEM_MANAGER_CONF_OPTS += --disable-introspection
-+endif
-+
- define MODEM_MANAGER_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/modem-manager/S44modem-manager \
- 		$(TARGET_DIR)/etc/init.d/S44modem-manager
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/modem-manager/Config.in        | 7 +++++++
+>  package/modem-manager/modem-manager.mk | 7 +++++++
+>  2 files changed, 14 insertions(+)
+> 
+> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
+> index c4c723776d..67c4bf167c 100644
+> --- a/package/modem-manager/Config.in
+> +++ b/package/modem-manager/Config.in
+> @@ -25,6 +25,13 @@ config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
+>  	select BR2_PACKAGE_LIBQMI
+>  	help
+>  	  This option enables support for QMI protocol
+> +
+> +config BR2_PACKAGE_MODEM_MANAGER_INTROSPECTION
+> +	bool "introspection support"
+> +	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+> +	select BR2_PACKAGE_GOBJECT_INTROSPECTION
+> +	help
+> +	  This option enables support for GObject introspection
+>  endif
+>  
+>  comment "modemmanager needs a toolchain w/ wchar, threads"
+> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+> index 2cc45d266b..cc8c49625f 100644
+> --- a/package/modem-manager/modem-manager.mk
+> +++ b/package/modem-manager/modem-manager.mk
+> @@ -34,6 +34,13 @@ else
+>  MODEM_MANAGER_CONF_OPTS += --without-mbim
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_MODEM_MANAGER_INTROSPECTION),y)
+> +MODEM_MANAGER_DEPENDENCIES += gobject-introspection
+> +MODEM_MANAGER_CONF_OPTS += --enable-introspection
+> +else
+> +MODEM_MANAGER_CONF_OPTS += --disable-introspection
+> +endif
+> +
+>  define MODEM_MANAGER_INSTALL_INIT_SYSV
+>  	$(INSTALL) -m 0755 -D package/modem-manager/S44modem-manager \
+>  		$(TARGET_DIR)/etc/init.d/S44modem-manager
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
