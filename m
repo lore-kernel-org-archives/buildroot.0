@@ -1,57 +1,68 @@
 From: Einar Jon Gunnarsson <tolvupostur@gmail.com>
-Date: Thu, 15 Apr 2021 13:19:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/modem-manager: add introspection
- option
-Message-ID: <20210415111957.27459-1-tolvupostur@gmail.com>
+Date: Thu, 15 Apr 2021 13:20:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/yavta: bump to latest version
+Message-ID: <20210415112056.27521-1-tolvupostur@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a flag to enable gobject-introspection
+Add hash file
+Convert to meson build
+Use https instead of http
 
 Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
 ---
- package/modem-manager/Config.in        | 7 +++++++
- package/modem-manager/modem-manager.mk | 7 +++++++
- 2 files changed, 14 insertions(+)
+ package/yavta/Config.in  |  2 +-
+ package/yavta/yavta.hash |  3 +++
+ package/yavta/yavta.mk   | 13 +++----------
+ 3 files changed, 7 insertions(+), 11 deletions(-)
+ create mode 100644 package/yavta/yavta.hash
 
-diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
-index c4c723776d..67c4bf167c 100644
---- a/package/modem-manager/Config.in
-+++ b/package/modem-manager/Config.in
-@@ -25,6 +25,13 @@ config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
- 	select BR2_PACKAGE_LIBQMI
+diff --git a/package/yavta/Config.in b/package/yavta/Config.in
+index 6a42a944d6..8119133c33 100644
+--- a/package/yavta/Config.in
++++ b/package/yavta/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_YAVTA
  	help
- 	  This option enables support for QMI protocol
-+
-+config BR2_PACKAGE_MODEM_MANAGER_INTROSPECTION
-+	bool "introspection support"
-+	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
-+	select BR2_PACKAGE_GOBJECT_INTROSPECTION
-+	help
-+	  This option enables support for GObject introspection
- endif
+ 	  Yet Another V4L2 Test Application
  
- comment "modemmanager needs a toolchain w/ wchar, threads"
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 2cc45d266b..cc8c49625f 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -34,6 +34,13 @@ else
- MODEM_MANAGER_CONF_OPTS += --without-mbim
- endif
+-	  http://git.ideasonboard.org/yavta.git
++	  https://git.ideasonboard.org/yavta.git
+diff --git a/package/yavta/yavta.hash b/package/yavta/yavta.hash
+new file mode 100644
+index 0000000000..aa74284d89
+--- /dev/null
++++ b/package/yavta/yavta.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  108a0ceec862b56a3fbcb3ad28a8744d9800555ccb3e11bdd94c8cd4614296d5  yavta-583bedefc2a247d2cfd32d1b4a0abbe3e2015c70-br1.tar.gz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.GPL
+diff --git a/package/yavta/yavta.mk b/package/yavta/yavta.mk
+index 4e3d76e3de..073ec2510c 100644
+--- a/package/yavta/yavta.mk
++++ b/package/yavta/yavta.mk
+@@ -4,17 +4,10 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_MODEM_MANAGER_INTROSPECTION),y)
-+MODEM_MANAGER_DEPENDENCIES += gobject-introspection
-+MODEM_MANAGER_CONF_OPTS += --enable-introspection
-+else
-+MODEM_MANAGER_CONF_OPTS += --disable-introspection
-+endif
-+
- define MODEM_MANAGER_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/modem-manager/S44modem-manager \
- 		$(TARGET_DIR)/etc/init.d/S44modem-manager
+-YAVTA_VERSION = 82ff2efdb9787737b9f21b6f4759f077c827b238
++YAVTA_VERSION = 583bedefc2a247d2cfd32d1b4a0abbe3e2015c70
+ YAVTA_SITE = git://git.ideasonboard.org/yavta.git
++YAVTA_SITE_METHOD = git
+ YAVTA_LICENSE = GPL-2.0+
+ YAVTA_LICENSE_FILES = COPYING.GPL
+ 
+-define YAVTA_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+-endef
+-
+-define YAVTA_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/yavta $(TARGET_DIR)/usr/bin/yavta
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(meson-package))
 -- 
 2.17.1
