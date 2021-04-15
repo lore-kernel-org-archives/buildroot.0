@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 15 Apr 2021 21:02:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/avahi: allow disabling default
- services
-In-Reply-To: <101e-60780880-3-3d17a340@6714720>
-References: <101e-60780880-3-3d17a340@6714720>
-Message-ID: <64232bf4-4811-35ef-f9fa-d44f662a003a@mind.be>
+Date: Thu, 15 Apr 2021 21:17:03 +0200
+Subject: [Buildroot] [PATCH v1 1/3] package/postgis: disable protobuf
+ support
+In-Reply-To: <20210414201042.3685-1-ps.report@gmx.net>
+References: <20210414201042.3685-1-ps.report@gmx.net>
+Message-ID: <cf7d3e11-c1ee-4ff1-2a15-52b4216ebd97@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +13,80 @@ To: buildroot@busybox.net
 
 
 
-On 15/04/2021 11:34, Michael Nosthoff via buildroot wrote:
-> Florian, All
-> 
-> On Friday, December 04, 2020 18:45 CET, Florian Larysch <fl@n621.de> wrote: 
->  
->> By default, Avahi installs service definitions for SSH and SFTP, but
->> those might not be present on all systems. Add an option for disabling
->> them.
->>
-> 
-> I have this removal in all my post-build scripts. So it would be great to have it as an option.
-> I would even suggest to always remove the .service files and make it optional. I think an embedded system should
-> explicitly enable services.
-> 
->>  
->> +config BR2_PACKAGE_AVAHI_DEFAULT_SERVICES
->> +	bool "install default service definitions"
->> +	depends on BR2_PACKAGE_AVAHI_DAEMON
->> +	default y
-> 
-> If kept as an Option: default this to n?
+On 14/04/2021 22:10, Peter Seiderer wrote:
+> - needs protobuf-c (not protobuf)
+> - protobuf-c configure tests are not cross-compile capable, even with
 
- To make it easy to upgrade Buildroot, we want as much as possible to make sure
-that existing configurations still work. If you have an existing configuration
-that actually relies on these services to be installed, then it would be very
-annoying if they just disappear under your feet... So in general, we want the
-default to reflect the old situation. That means that adding an option that
-removes something will generally have to default y.
+ It's a pity to disable it rather than fix it, but I guess it should be fixed by
+someone who cares.
 
- This policy is far from ideal, because it means people will often have to
-explicitly unset this option. In many cases, even for existing configs,
-unsetting it is in fact the right thing to do.
-
- So maybe we should consider changing this policy.
-
- I think we should only do that if we also add a prominent file in the root,
-e.g. UPGRADING, that makes explicit note of such changes. Some time ago, I tried
-to keep something like that going by editing CHANGES, but it didn't amount to
-much, and that file is so full that it's hard to find the relevant bits.
-
-
- I've added a bunch of random people in Cc whom I think might have a relevant
-opinion about this. I hope nobody will feel offended because I didn't include
-them :-)
-
- If this idea gains traction, I volunteer to write a skeleton UPGRADING file,
-and refer to it from the manual. I've been thinking for a long time already that
-I really should add a section to the manual about what to do when you upgrade
-Buildroot, and this would be the ideal push for me.
-
+ Series applied to master, thanks.
 
  Regards,
  Arnout
+
+> 
+>   ifeq ($(BR2_PACKAGE_PROTOBUF_C),y)
+>   POSTGIS_DEPENDENCIES += protobuf-c
+>   POSTGIS_CONF_OPTS += --with-protobuf
+>   POSTGIS_CONF_ENV += \
+>   	ac_cv_lib_protobuf_c_protobuf_c_message_init=yes \
+>   	ac_cv_lib_protobuf_c_protobuf_c_version=yes
+>   else
+>   POSTGIS_CONF_OPTS += --without-protobuf
+>   endif
+> 
+>   configure aborts with:
+> 
+>   checking for PROTOBUFC... yes
+>   checking protobuf-c/protobuf-c.h usability... yes
+>   checking protobuf-c/protobuf-c.h presence... yes
+>   checking for protobuf-c/protobuf-c.h... yes
+>   checking for protobuf_c_message_init in -lprotobuf-c... (cached) yes
+>   checking for protobuf_c_version in -lprotobuf-c... (cached) yes
+>   checking protobuf-c version... configure: error: in `.../build/postgis-3.1.1':
+>   configure: error: cannot run test program while cross compiling
+> 
+> Fixes:
+> 
+>   - http://autobuild.buildroot.net/results/8b95086b5e0876d0a4e41330446e767e4abd3729
+> 
+>   checking for PROTOBUFC... no
+>   libprotobuf-c not found in pkg-config
+>   checking protobuf-c/protobuf-c.h usability... no
+>   checking protobuf-c/protobuf-c.h presence... no
+>   checking for protobuf-c/protobuf-c.h... no
+>   configure: error: unable to find protobuf-c/protobuf-c.h using CPPFLAGS. You can disable MVT and Geobuf support using --without-protobuf
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/postgis/postgis.mk | 10 ++--------
+>  1 file changed, 2 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
+> index 1661f48ff2..92a9968993 100644
+> --- a/package/postgis/postgis.mk
+> +++ b/package/postgis/postgis.mk
+> @@ -18,7 +18,8 @@ POSTGIS_DEPENDENCIES = postgresql libgeos proj libxml2
+>  POSTGIS_CONF_OPTS += \
+>  	--with-pgconfig=$(STAGING_DIR)/usr/bin/pg_config \
+>  	--with-geosconfig=$(STAGING_DIR)/usr/bin/geos-config \
+> -	--with-xml2config=$(STAGING_DIR)/usr/bin/xml2-config
+> +	--with-xml2config=$(STAGING_DIR)/usr/bin/xml2-config \
+> +	--without-protobuf
+>  
+>  ifeq ($(BR2_PACKAGE_LIBGDAL),y)
+>  POSTGIS_DEPENDENCIES += libgdal
+> @@ -27,11 +28,4 @@ else
+>  POSTGIS_CONF_OPTS += --without-raster
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_PROTOBUF),y)
+> -POSTGIS_DEPENDENCIES += protobuf
+> -POSTGIS_CONF_OPTS += --with-protobuf
+> -else
+> -POSTGIS_CONF_OPTS += --without-protobuf
+> -endif
+> -
+>  $(eval $(autotools-package))
+> 
