@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 15 Apr 2021 22:07:24 +0200
-Subject: [Buildroot] [PATCH v3 1/3] package/protozero: new package
-In-Reply-To: <20210415150356.775904-1-fido_max@inbox.ru>
+Date: Thu, 15 Apr 2021 22:24:41 +0200
+Subject: [Buildroot] [PATCH v3 2/3] package/libosmium: new package
+In-Reply-To: <20210415150356.775904-2-fido_max@inbox.ru>
 References: <20210415150356.775904-1-fido_max@inbox.ru>
-Message-ID: <5dba2629-ae65-91c1-4f58-e2edda5c1608@mind.be>
+ <20210415150356.775904-2-fido_max@inbox.ru>
+Message-ID: <a735cf9d-33d9-cf32-19e7-a5e2df0f53a2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,120 +14,120 @@ To: buildroot@busybox.net
 
 
 On 15/04/2021 17:03, Maxim Kochetkov wrote:
-> Minimalistic protocol buffer decoder and encoder in C++.
-> Designed for high performance. Suitable for writing zero copy
-> parsers and encoders with minimal need for run-time allocation
-> of memory.
+> A fast and flexible C++ library for working with OpenStreetMap data.
+> Libosmium works on Linux, macOS and Windows.
 > 
-> Low-level: this is designed to be a building block for writing
-> a very customized decoder for a stable protobuf schema. If your
-> protobuf schema is changing frequently or lazy decoding is not
-> critical for your application then this approach offers
-> no value: just use the C++ API that can be generated with
-> the Google Protobufs protoc program.
-> 
-> https://github.com/mapbox/protozero
+> https://osmcode.org/libosmium/
 > 
 > Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 
- Applied to master, thanks. However, I did have to make a few formatting fixups.
-Please run utils/check-package on the patch before sending.
+ I wanted to apply, however, it fails to build in a very basic config for me:
 
- Regards,
- Arnout
+CMake Error at cmake/FindProtozero.cmake:47 (file):
+  file STRINGS file
+
+"/home/arnout/src/buildroot/output/build/libosmium-2.16.0/PROTOZERO_INCLUDE_DIR-NOTFOUND/protozero/version.hpp"
+  cannot be read.
+Call Stack (most recent call first):
+  cmake/FindOsmium.cmake:118 (find_package)
+  CMakeLists.txt:170 (find_package)
+
+
+-- Could NOT find Protozero: Found unsuitable version "unknown", but required is
+at least "1.6.3" (found PROTOZERO_INCLUDE_DIR-NOTFOUND)
+CMake Warning at cmake/FindOsmium.cmake:138 (message):
+  Osmium: Can not find some libraries for PBF input/output, please install
+  them or configure the paths.
+Call Stack (most recent call first):
+  CMakeLists.txt:170 (find_package)
+
+
+-- Found EXPAT:
+/home/arnout/src/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libexpat.so
+(found version "2.3.0")
+-- Found BZip2:
+/home/arnout/src/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libbz2.so
+(found version "1.0.8")
+-- Looking for BZ2_bzCompressInit
+-- Looking for BZ2_bzCompressInit - found
+CMake Warning at cmake/FindOsmium.cmake:190 (message):
+  Osmium: GEOS library is required but not found, please install it or
+  configure the paths.
+Call Stack (most recent call first):
+  CMakeLists.txt:170 (find_package)
+
+
+-- Could NOT find GDAL (missing: GDAL_LIBRARY GDAL_INCLUDE_DIR) (found version
+"GDAL_VERSION-NOTFOUND")
+CMake Warning at cmake/FindOsmium.cmake:204 (message):
+  Osmium: GDAL library is required but not found, please install it or
+  configure the paths.
+Call Stack (most recent call first):
+  CMakeLists.txt:170 (find_package)
+
+
+CMake Warning at cmake/FindOsmium.cmake:220 (message):
+  Osmium: PROJ.4 library is required but not found, please install it or
+  configure the paths.
+Call Stack (most recent call first):
+  CMakeLists.txt:170 (find_package)
+
+
+CMake Warning at cmake/FindOsmium.cmake:254 (message):
+  Osmium: Google SparseHash library is required but not found, please install
+  it or configure the paths.
+Call Stack (most recent call first):
+  CMakeLists.txt:170 (find_package)
+
+
+-- Could NOT find Osmium (missing: PROTOZERO_INCLUDE_DIR GEOS_INCLUDE_DIR
+GEOS_LIBRARY GDAL_FOUND PROJ_INCLUDE_DIR PROJ_LIBRARY SPARSEHASH_INCLUDE_DIR)
+
+
+ So it seems that the dependencies on protozero, gdal, geos, proj and sparsehash
+are not optional. And in fact, the bzip2, zlib, expat dependencies are also not
+optional, if I read cmake/FindOsmium.cmake correctly.
+
+ Also I can't find sparsehash in buildroot, so how did you manage to build this?
+
 
 > ---
 >  DEVELOPERS                       |  1 +
 >  package/Config.in                |  1 +
->  package/protozero/Config.in      | 20 ++++++++++++++++++++
->  package/protozero/protozero.hash |  4 ++++
->  package/protozero/protozero.mk   | 17 +++++++++++++++++
->  5 files changed, 43 insertions(+)
->  create mode 100644 package/protozero/Config.in
->  create mode 100644 package/protozero/protozero.hash
->  create mode 100644 package/protozero/protozero.mk
+>  package/libosmium/Config.in      | 17 +++++++++++++++++
+>  package/libosmium/libosmium.hash |  3 +++
+>  package/libosmium/libosmium.mk   | 30 ++++++++++++++++++++++++++++++
+>  5 files changed, 52 insertions(+)
+>  create mode 100644 package/libosmium/Config.in
+>  create mode 100644 package/libosmium/libosmium.hash
+>  create mode 100644 package/libosmium/libosmium.mk
 > 
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 1348b8eb91..9390daa2fa 100644
+> index 9390daa2fa..ceb7428e95 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
 > @@ -1840,6 +1840,7 @@ N:	Max Filippov <jcmvbkbc@gmail.com>
 >  F:	arch/Config.in.xtensa
 >  
 >  N:	Maxim Kochetkov <fido_max@inbox.ru>
-> +F:	package/protozero/
+> +F:	package/libosmium/
+>  F:	package/protozero/
 >  F:	package/timescaledb/
 >  
->  N:	Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > diff --git a/package/Config.in b/package/Config.in
-> index ea0e9edc3e..c5014faba1 100644
+> index c5014faba1..61c67e5ce1 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -1966,6 +1966,7 @@ endif
->  	source "package/poco/Config.in"
->  	source "package/protobuf/Config.in"
->  	source "package/protobuf-c/Config.in"
-> +	source "package/protozero/Config.in"
->  	source "package/qhull/Config.in"
->  	source "package/qlibc/Config.in"
->  	source "package/riemann-c-client/Config.in"
-> diff --git a/package/protozero/Config.in b/package/protozero/Config.in
-> new file mode 100644
-> index 0000000000..f187840565
-> --- /dev/null
-> +++ b/package/protozero/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_PROTOZERO
-> +	bool "protozero"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-> +	help
-> +	  Minimalistic protocol buffer decoder and encoder in C++.
-> +	  Designed for high performance. Suitable for writing zero copy
-> +	  parsers and encoders with minimal need for run-time allocation
-> +	  of memory.
-> +	  Low-level: this is designed to be a building block for writing
-> +	  a very customized decoder for a stable protobuf schema. If your
-> +	  protobuf schema is changing frequently or lazy decoding is not
-> +	  critical for your application then this approach offers
-> +	  no value: just use the C++ API that can be generated with
-> +	  the Google Protobufs protoc program.
-> +
-> +	  https://github.com/mapbox/protozero
-> +
-> +comment "protozero needs a toolchain w/ C++,  gcc >= 4.7"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-> diff --git a/package/protozero/protozero.hash b/package/protozero/protozero.hash
-> new file mode 100644
-> index 0000000000..5453e01ecf
-> --- /dev/null
-> +++ b/package/protozero/protozero.hash
-> @@ -0,0 +1,4 @@
-> +# Locally calculated
-> +sha256  beffbdfab060854fd770178a8db9c028b5b6ee4a059a2fed82c46390a85f3f31  protozero-1.7.0.tar.gz
-> +sha256  1f4d477e3c2d74d8706c8f05437bd86804abe46853b1f233ce1549a4de76fa49  LICENSE.md
-> +sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.from_folly
-> diff --git a/package/protozero/protozero.mk b/package/protozero/protozero.mk
-> new file mode 100644
-> index 0000000000..e4ce1a4730
-> --- /dev/null
-> +++ b/package/protozero/protozero.mk
-> @@ -0,0 +1,17 @@
-> +################################################################################
-> +#
-> +# protozero
-> +#
-> +################################################################################
-> +
-> +PROTOZERO_VERSION = 1.7.0
-> +PROTOZERO_SITE = $(call github,mapbox,protozero,v$(PROTOZERO_VERSION))
-> +PROTOZERO_LICENSE = BSD-2-Clause, Apache-2.0
-> +PROTOZERO_LICENSE_FILES = LICENSE.md LICENSE.from_folly
-> +PROTOZERO_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_PACKAGE_PROTOBUF),y)
-> +PROTOZERO_DEPENDENCIES += protobuf
-> +endif
-> +
-> +$(eval $(cmake-package))
-> 
+> @@ -1936,6 +1936,7 @@ menu "Other"
+>  	source "package/libtasn1/Config.in"
+>  	source "package/libtommath/Config.in"
+>  	source "package/libtpl/Config.in"
+> +	source "package/libosmium/Config.in"
+
+ Alphabetical ordering (as reported by check-package).
+
+
+ Regards,
+ Arnout
+
+[snip]
