@@ -1,44 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 15 Apr 2021 13:44:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump version to 0.57.2
-Message-ID: <20210415114449.462262-1-bernd.kuhls@t-online.de>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Thu, 15 Apr 2021 14:08:11 +0200
+Subject: [Buildroot] [PATCH] package/libgpiod: bump to version 1.6.3
+Message-ID: <20210415120810.147466-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://groups.google.com/g/mesonbuild/c/3YR_iOkh7co
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index d13a605e80..252e56ba34 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 7b691aaf5e..f0803cab36 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
 @@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.57.1/meson-0.57.1.tar.gz.asc
--sha256  72e1c782ba9bda204f4a1ed57f98d027d7b6eb9414c723eebbd6ec7f1955c8a6  meson-0.57.1.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.57.2/meson-0.57.2.tar.gz.asc
-+sha256  3a83e7b1c5de94fa991ec34d9b198d94f38ed699d3524cb0fdf3b99fd23d4cc5  meson-0.57.2.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index eea5aedc51..4b0f4fdeff 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256  c601e71846f5ab140c83bc757fdd62a4fda24a9cee39cc5e99c96ec2bf1b06a9  libgpiod-1.6.2.tar.xz
++sha256  841be9d788f00bab08ef22c4be5c39866f0e46cb100a3ae49ed816ac9c5dddc7  libgpiod-1.6.3.tar.xz
+ # Hash for license file
+ sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 201b697c72..35d003fa33 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -6,7 +6,7 @@
  
--MESON_VERSION = 0.57.1
-+MESON_VERSION = 0.57.2
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+ # Be careful when bumping versions.
+ # Dependency on kernel header versions may change.
+-LIBGPIOD_VERSION = 1.6.2
++LIBGPIOD_VERSION = 1.6.3
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
 -- 
-2.29.2
+2.25.1
