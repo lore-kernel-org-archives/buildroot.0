@@ -1,54 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Apr 2021 23:34:31 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server:
- security bump version to 1.20.11
-Message-ID: <20210415211733.7AE6783B5B@busybox.osuosl.org>
+Date: Thu, 15 Apr 2021 23:34:33 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: remove
+ xfbdev
+Message-ID: <20210415211733.9945783B5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d12c8c43fd9fa8ab276d2c2e4e2ca13ce80c6fd4
+commit: https://git.buildroot.net/buildroot/commit/?id=2779de195f63df89b16d53460d22aec20b495ce1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2021-3472:
-https://lists.x.org/archives/xorg-announce/2021-April/003080.html
-
-Release notes:
-https://lists.x.org/archives/xorg-announce/2021-April/003081.html
+Upstream removed the kdrive framebuffer device server:
+https://cgit.freedesktop.org/xorg/xserver/commit/configure.ac?h=server-1.20-branch&id=feed7e3f982a7ac14f6fe85ed2e1ec4a83700841
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index d6b3c92e08..9876255c8e 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2020-December/003067.html
--sha256  977420c082450dc808de301ef56af4856d653eea71519a973c3490a780cb7c99  xorg-server-1.20.10.tar.bz2
--sha512  a07bee380bb72f2117fe6f831a6e4aded19bea1f2b36e42a019a30348e98d6fe65c0617cf819be9c6b405502f88cafb829df30aab32393774b71f1418a4cefae  xorg-server-1.20.10.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-April/003081.html
-+sha256  914c796e3ffabe1af48071d40ccc85e92117c97a9082ed1df29e4d64e3c34c49  xorg-server-1.20.11.tar.bz2
-+sha512  1017015b9fd5d53788abe3641d877e6df8609841fa5c1847c0a5e133ddcc1b758a5d695304ebd36828099ec201a85b6b70b46f5ea4f81c5bd3a16fa6e175e3c2  xorg-server-1.20.11.tar.bz2
- 
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
 diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index fa8ae13b8c..3fa77cd4f0 100644
+index 03f36f1b28..aaf3584772 100644
 --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
 +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -90,14 +90,9 @@ endif
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += \
+ 	--enable-kdrive \
+-	--enable-xfbdev \
+ 	--disable-glx \
+ 	--disable-dri \
+ 	--disable-xsdl
+-define XSERVER_CREATE_X_SYMLINK
+-	ln -f -s Xfbdev $(TARGET_DIR)/usr/bin/X
+-endef
+-XSERVER_XORG_SERVER_POST_INSTALL_TARGET_HOOKS += XSERVER_CREATE_X_SYMLINK
  
--XSERVER_XORG_SERVER_VERSION = 1.20.10
-+XSERVER_XORG_SERVER_VERSION = 1.20.11
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-kdrive-evdev
+@@ -106,7 +101,7 @@ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-evdev
+ endif
+ 
+ else # modular
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
