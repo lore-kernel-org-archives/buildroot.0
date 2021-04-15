@@ -1,73 +1,71 @@
-From: Gleb Mazovetskiy <glex.spb@gmail.com>
-Date: Thu, 15 Apr 2021 22:02:13 +0100
-Subject: [Buildroot] [PATCH v2 1/1] Fix -latomic for CMake packages
-In-Reply-To: <CADjhFRC87F8i4_7JfwRFb9pkH8E3buWXF4wO+-D6n=Koo2Df8Q@mail.gmail.com>
-References: <20210413060942.2530596-1-glex.spb@gmail.com>
- <20210413062615.2808309-1-glex.spb@gmail.com>
- <20210414194920.318e938d@gmx.net>
- <CADjhFRDs7oHBoAhbr96z9oHSEcfQnejec8LCE+_haOs5cwjXow@mail.gmail.com>
- <20210415214448.669b3826@gmx.net>
- <8f6e2b20-c101-effa-9584-e9bd6a697721@mind.be>
- <CADjhFRC87F8i4_7JfwRFb9pkH8E3buWXF4wO+-D6n=Koo2Df8Q@mail.gmail.com>
-Message-ID: <CADjhFRCWeu9Z39_aVEBLY79y9dBEkBKHdwn-kx-yy+gEs1xZ3Q@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 15 Apr 2021 23:01:50 +0200
+Subject: [Buildroot] [git commit] package/yavta: bump to latest version
+Message-ID: <20210415203615.74FEA814B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Thanks for providing the defconfig, as far as I can see nothing special
-(and no poppler enabled?),
+commit: https://git.buildroot.net/buildroot/commit/?id=87ba7be02fdd185668f86a59539343c70e1108e0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Poppler is a transitive dependency of another package (
-https://github.com/batocera-linux/batocera.linux/blob/95f96803e04027b7996c73ae05b40a891dad0ca9/package/batocera/emulationstation/batocera-emulationstation/Config.in
-)
+Add hash file
+Convert to meson build
+Use https instead of http and git
 
-On Thu, Apr 15, 2021 at 10:00 PM Gleb Mazovetskiy <glex.spb@gmail.com>
-wrote:
+Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+[yann.morin.1998 at free.fr: also switch repo to https]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/yavta/Config.in  |  2 +-
+ package/yavta/yavta.hash |  3 +++
+ package/yavta/yavta.mk   | 15 ++++-----------
+ 3 files changed, 8 insertions(+), 12 deletions(-)
 
-> My host cmake is 3.20.0 from Ubuntu 20.10
-> It must be some environment / host cmake difference but I can't pinpoint
-> it either, thus my vague commit message
->
-> If I run this in a Docker container with an older Ubuntu I can't reproduce
-> it either
->
-> On Thu, Apr 15, 2021 at 9:46 PM Arnout Vandecappelle <arnout@mind.be>
-> wrote:
->
->>
->>
->> On 15/04/2021 21:44, Peter Seiderer wrote:
->> > Hello Gleb,
->> >
->> > On Thu, 15 Apr 2021 04:49:29 +0100, Gleb Mazovetskiy <
->> glex.spb at gmail.com> wrote:
->> >
->> >> Hi Peter,
->> >>
->> >> The failing defconfig is here (it's specific to this buildroot):
->> >>
->> https://github.com/batocera-linux/batocera.linux/blob/8d8038a6ddaae03f0150fd28a2d23c371156ebf2/configs/batocera-odroidgoa_defconfig
->> >
->> > Thanks for providing the defconfig, as far as I can see nothing special
->> (and no
->> > poppler enabled?), normal buildroot-glibc-gcc-10.x toolchain..., and I
->> am not
->> > able to reproduce your problem (did only test without ccache)...
->>
->>  CMake is known to do weird things with -isystem, and this can change
->> over cmake
->> versions, and we use the host cmake if sufficiently recent. So that could
->> make a
->> difference.
->>
->>  Regards,
->>  Arnout
->>
->> [snip]
->>
->>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210415/8ccb86e7/attachment.html>
+diff --git a/package/yavta/Config.in b/package/yavta/Config.in
+index 6a42a944d6..8119133c33 100644
+--- a/package/yavta/Config.in
++++ b/package/yavta/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_YAVTA
+ 	help
+ 	  Yet Another V4L2 Test Application
+ 
+-	  http://git.ideasonboard.org/yavta.git
++	  https://git.ideasonboard.org/yavta.git
+diff --git a/package/yavta/yavta.hash b/package/yavta/yavta.hash
+new file mode 100644
+index 0000000000..aa74284d89
+--- /dev/null
++++ b/package/yavta/yavta.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  108a0ceec862b56a3fbcb3ad28a8744d9800555ccb3e11bdd94c8cd4614296d5  yavta-583bedefc2a247d2cfd32d1b4a0abbe3e2015c70-br1.tar.gz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.GPL
+diff --git a/package/yavta/yavta.mk b/package/yavta/yavta.mk
+index 4e3d76e3de..984d0ff5e2 100644
+--- a/package/yavta/yavta.mk
++++ b/package/yavta/yavta.mk
+@@ -4,17 +4,10 @@
+ #
+ ################################################################################
+ 
+-YAVTA_VERSION = 82ff2efdb9787737b9f21b6f4759f077c827b238
+-YAVTA_SITE = git://git.ideasonboard.org/yavta.git
++YAVTA_VERSION = 583bedefc2a247d2cfd32d1b4a0abbe3e2015c70
++YAVTA_SITE = https://git.ideasonboard.org/git/yavta.git
++YAVTA_SITE_METHOD = git
+ YAVTA_LICENSE = GPL-2.0+
+ YAVTA_LICENSE_FILES = COPYING.GPL
+ 
+-define YAVTA_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+-endef
+-
+-define YAVTA_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/yavta $(TARGET_DIR)/usr/bin/yavta
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(meson-package))
