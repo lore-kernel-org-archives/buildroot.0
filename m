@@ -1,53 +1,41 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 15 Apr 2021 22:27:47 +0200
-Subject: [Buildroot] [git commit] package/Config.in: change postgresql
- condition
-Message-ID: <20210415200613.2929683B85@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 15 Apr 2021 22:34:14 +0200
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: Add myself for postgis
+In-Reply-To: <20210414043545.18250-1-fido_max@inbox.ru>
+References: <20210414043545.18250-1-fido_max@inbox.ru>
+Message-ID: <0b5f652f-55e1-d2c8-0a20-6babb6908321@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=148e8c92b94aecb603f178746289e9f240ef763b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The condition around postgis was added to make a sort of submenu of the
-postgresql extensions under postgresql itself. However, such a condition
-should be on BR2_PACKAGE_POSTGRESQL, not on its suboption
-BR2_PACKAGE_POSTGRESQL_FULL.
 
-Change the condition in package/Config.in to BR2_PACKAGE_POSTGRESQL, and
-move the BR2_PACKAGE_POSTGRESQL_FULL condition to
-package/postgis/Config.in.
+On 14/04/2021 06:35, Maxim Kochetkov via buildroot wrote:
+> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> ---
+>  DEVELOPERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 1348b8eb91..1077c2390b 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1841,6 +1841,7 @@ F:	arch/Config.in.xtensa
+>  
+>  N:	Maxim Kochetkov <fido_max@inbox.ru>
+>  F:	package/timescaledb/
+> +F:	package/postgis/
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/Config.in         | 2 +-
- package/postgis/Config.in | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ Alphabetical order.
 
-diff --git a/package/Config.in b/package/Config.in
-index c5014faba1..0d7cb0f446 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1407,7 +1407,7 @@ menu "Database"
- 	source "package/mongodb/Config.in"
- 	source "package/mysql/Config.in"
- 	source "package/postgresql/Config.in"
--if BR2_PACKAGE_POSTGRESQL_FULL
-+if BR2_PACKAGE_POSTGRESQL
- 	source "package/postgis/Config.in"
- endif
- 	source "package/redis/Config.in"
-diff --git a/package/postgis/Config.in b/package/postgis/Config.in
-index 12d8899a2b..d73ece17a6 100644
---- a/package/postgis/Config.in
-+++ b/package/postgis/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_POSTGIS
- 	bool "postgis"
-+	depends on BR2_PACKAGE_POSTGRESQL_FULL
- 	depends on !BR2_microblazeel && !BR2_microblazebe # ICE
- 	depends on BR2_INSTALL_LIBSTDCPP # proj
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, proj
+ Applied to master with that fixed, thanks.
+
+ Regards,
+ Arnout
+
+>  
+>  N:	Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>  F:	package/babeld/
+> 
