@@ -1,28 +1,37 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 15 Apr 2021 21:08:17 +0200
-Subject: [Buildroot] [git commit] package/genext2fs: bump to version 1.5.0
-Message-ID: <20210415185143.6AB89804AD@busybox.osuosl.org>
+Date: Thu, 15 Apr 2021 21:03:48 +0200
+Subject: [Buildroot] [git commit] package/postgis: add optional json-c
+ dependency
+Message-ID: <20210415185143.30793804AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51d55fc132372213c458372d226e6b562d2a6c5f
+commit: https://git.buildroot.net/buildroot/commit/?id=b4e7fd305ae25f205aff19b0318f57b6fdb75cba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Retrieve latest version from github
-- Drop patch (already in version)
-
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=13741
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../0001-update-genext2fs.c-to-rev-1.118.patch     | 2971 --------------------
- package/genext2fs/genext2fs.hash                   |    2 +-
- package/genext2fs/genext2fs.mk                     |    6 +-
- 3 files changed, 5 insertions(+), 2974 deletions(-)
+ package/postgis/postgis.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Patch is too large, so refusing to show it
+diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
+index 92a9968993..5a2987b182 100644
+--- a/package/postgis/postgis.mk
++++ b/package/postgis/postgis.mk
+@@ -28,4 +28,11 @@ else
+ POSTGIS_CONF_OPTS += --without-raster
+ endif
+ 
++ifeq ($(BR2_PACKAGE_JSON_C),y)
++POSTGIS_DEPENDENCIES += json-c
++POSTGIS_CONF_OPTS += --with-json
++else
++POSTGIS_CONF_OPTS += --without-json
++endif
++
+ $(eval $(autotools-package))
