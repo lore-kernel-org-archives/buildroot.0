@@ -1,51 +1,37 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 15 Apr 2021 08:52:43 +0200
-Subject: [Buildroot] [PATCH 2/5] package/x11r7/xserver_xorg-server: remove
- xfbdev
-In-Reply-To: <20210415065246.276882-1-bernd.kuhls@t-online.de>
-References: <20210415065246.276882-1-bernd.kuhls@t-online.de>
-Message-ID: <20210415065246.276882-2-bernd.kuhls@t-online.de>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Thu, 15 Apr 2021 11:34:01 +0200
+Subject: [Buildroot] 
+ =?utf-8?q?=5BPATCH_1/1=5D_package/avahi=3A__allow_di?=
+ =?utf-8?q?sabling_default_services?=
+In-Reply-To: <20201204174507.8483-1-fl@n621.de>
+Message-ID: <101e-60780880-3-3d17a340@6714720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream removed the kdrive framebuffer device server:
-https://cgit.freedesktop.org/xorg/xserver/commit/configure.ac?h=server-1.20-branch&id=feed7e3f982a7ac14f6fe85ed2e1ec4a83700841
+Florian, All
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+On Friday, December 04, 2020 18:45 CET, Florian Larysch <fl@n621.de> wrote: 
+ 
+> By default, Avahi installs service definitions for SSH and SFTP, but
+> those might not be present on all systems. Add an option for disabling
+> them.
+> 
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 03f36f1b28..aaf3584772 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -90,14 +90,9 @@ endif
- ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE),y)
- XSERVER_XORG_SERVER_CONF_OPTS += \
- 	--enable-kdrive \
--	--enable-xfbdev \
- 	--disable-glx \
- 	--disable-dri \
- 	--disable-xsdl
--define XSERVER_CREATE_X_SYMLINK
--	ln -f -s Xfbdev $(TARGET_DIR)/usr/bin/X
--endef
--XSERVER_XORG_SERVER_POST_INSTALL_TARGET_HOOKS += XSERVER_CREATE_X_SYMLINK
- 
- ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV),y)
- XSERVER_XORG_SERVER_CONF_OPTS += --enable-kdrive-evdev
-@@ -106,7 +101,7 @@ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-evdev
- endif
- 
- else # modular
--XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
-+XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive
- endif
- 
- ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
--- 
-2.29.2
+I have this removal in all my post-build scripts. So it would be great to have it as an option.
+I would even suggest to always remove the .service files and make it optional. I think an embedded system should
+explicitly enable services.
+
+>  
+> +config BR2_PACKAGE_AVAHI_DEFAULT_SERVICES
+> +	bool "install default service definitions"
+> +	depends on BR2_PACKAGE_AVAHI_DAEMON
+> +	default y
+
+If kept as an Option: default this to n?
+
+
+Regards,
+Michael
