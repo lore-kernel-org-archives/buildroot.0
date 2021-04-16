@@ -1,39 +1,63 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Fri, 16 Apr 2021 09:29:54 +0200
-Subject: [Buildroot] [PATCH RESEND] package/systemd: fix homed dependency
- warning
-Message-ID: <20210416072956.151549-1-buildroot@heine.tech>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 16 Apr 2021 09:33:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/genext2fs: bump to version 1.5.0
+In-Reply-To: <b37de2fb-72ef-f5c0-b714-8fae2b4956e0@yandex.ru>
+References: <20210414214439.1381969-1-fontaine.fabrice@gmail.com>
+ <016dd397-3ae8-d6af-c3f8-8a88d72bedb0@mind.be>
+ <b37de2fb-72ef-f5c0-b714-8fae2b4956e0@yandex.ru>
+Message-ID: <70d40419-5b26-453a-e806-ab47d9f22e1b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
 
-showing "enable home daemon"
-and "homed support needs a toolchain w/ threads, dynamic library, kernel headers >= 4.12"
-when BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
 
-introduced by fa62b5165ca41e4800e00a84af9026bfa5fb9155
+On 16/04/2021 00:32, stsp wrote:
+> 15.04.2021 22:20, Arnout Vandecappelle ?????:
+>> On 14/04/2021 23:44, Fabrice Fontaine wrote:
+>>> - Retrieve latest version from github
+>>> - Drop patch (already in version)
+>>>
+>>> Fixes:
+>>> ? - https://bugs.buildroot.org/show_bug.cgi?id=13741
+>>>
+>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>
+>> ? Applied to master, thanks.
+>>
+>> ? I guess for stable, the patch [1] should be backported rather than bumping. But
+>> is it worth spending effort on that for a borderline package like genext2fs?
+> I tried really hard (before
+> reporting the above bug)
+> to find the equivalent
+> functionality in mkfs.ext[24],
+> and I think its simply not there.
+> I think only genext2fs allows
+> to set the perms for the root
+> node, so I am not sure why it
+> is borderline.
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/systemd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Because on the target, you can generally simply do an mkfs directly of the
+partition, then mount it, then set permissions and/or populate it as needed.
+Even the mkfs from busybox is usually sufficient on target.
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index fbe1a4081b..d658308213 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -233,7 +233,7 @@ comment "homed support needs a toolchain w/ threads, dynamic library, kernel hea
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS || BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
- 
- config BR2_PACKAGE_SYSTEMD_HOSTNAMED
- 	bool "enable hostname daemon"
--- 
-2.25.1
+ Of course, Buildroot lives for borderline cases :-). But specifically for the
+stable branches, I don't think it's very cost-effective to spend time on making
+them work, unless there's a user who does the effort (because they actually need
+it).
+
+ Regards,
+ Arnout
+
+> Are there any alternatives?
+> Buildroot currently creates
+> only the rootfs image, and
+> for that the default root node
+> perms are fine. But once you
+> want to create the user partition,
+> I think genext2fs is the only
+> solution.
+> Please let me know if this is
+> wrong.
