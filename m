@@ -1,225 +1,195 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 16 Apr 2021 23:26:02 +0200
-Subject: [Buildroot] issue with timer_create and openblas after update
- buildroot from 2019_02 to 2021_02
-In-Reply-To: <20210413215239.390cba1e@gmx.net>
-References: <CAGpqJgqZBG5qMZDaS59syis2y1rm53f1KMWYzJKiwepHcJbadA@mail.gmail.com>
- <20210409005919.56690265@gmx.net>
- <CAGpqJgrWmKs+XvNOa4qo6TukXfrDe1+aqs+M4R0wUuToNfVvLg@mail.gmail.com>
- <20210409211810.55eb6a22@gmx.net> <20210413215239.390cba1e@gmx.net>
-Message-ID: <20210416232602.78306d1f@gmx.net>
+Date: Sat, 17 Apr 2021 00:02:57 +0200
+Subject: [Buildroot] sshd reports error in libcrypto while trying to
+ read host key
+In-Reply-To: <DM6PR08MB442526A0F6C1B531DC2480B7AE4C9@DM6PR08MB4425.namprd08.prod.outlook.com>
+References: <DM6PR08MB4425422C1100F44BFF129275AE7C9@DM6PR08MB4425.namprd08.prod.outlook.com>
+ <20210408235226.153250d5@gmx.net>
+ <DM6PR08MB442526A0F6C1B531DC2480B7AE4C9@DM6PR08MB4425.namprd08.prod.outlook.com>
+Message-ID: <20210417000257.1fef7f4e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 13 Apr 2021 21:52:39 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+Hello Michael,
 
-> Hello Arthur, Waldemar,
->
-> On Fri, 9 Apr 2021 21:18:10 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > Hello Arthur,
-> >
-> > On Fri, 9 Apr 2021 09:53:23 +0200, Arthur Lambert <lambertarthur22@gmail.com> wrote:
-> >
-> > > I was able to fix the issue by checking the Openblas history commits. But I
-> > > don't really understand the issue...
-> > >
-> > > The issue is coming from here:
-> > > https://github.com/buildroot/buildroot/commit/6f29cdeee40e556d26b791fabaff84a09e1a2d5d#diff-0995e357753caee10bbc553c2e7aa033d1df05c0c9799916729d4881d7735d26
-> > >
-> > > By default, the multithreading setting is enabled on Openblas. This setting
-> > > is really confusing me. For me, I have to enable the multithreading setting
-> > > to use Openblas
-> > > in a multithreading context (this is my case !). But it is the opposite!
-> > > There is this information in the Openblas USAGE file :
-> > >
-> > > >> #### How can I use OpenBLAS in multi-threaded applications?
-> > > >>
-> > > >> If your application is already multi-threaded, it will conflict with
-> > > OpenBLAS
-> > > >> multi-threading. Thus, you must set OpenBLAS to use single thread in any
-> > > of the
-> > > >> following ways:
-> > > >>
-> > > >> * `export OPENBLAS_NUM_THREADS=1` in the environment variables.
-> > > >> * Call `openblas_set_num_threads(1)` in the application on runtime.
-> > > >> * Build OpenBLAS single thread version, e.g. `make USE_THREAD=0`
-> > >
-> > > So I have to add this in my defconfig to build Openblas with
-> > > singlethread support to fix the problem:
-> > >
-> > > iff --git a/configs/xxxx_defconfig b/configs/dxxxxxx_defconfig
-> > > index 4714080d7e..a760627e2c 100644
-> > > --- a/configs/xxxxx_defconfig
-> > > +++ b/configs/xxxx_defconfig
-> > > @@ -45,6 +45,7 @@ BR2_PACKAGE_PAHO_MQTT_C=y
-> > >  BR2_PACKAGE_ELFUTILS=y
-> > >  BR2_PACKAGE_LIBUNWIND=y
-> > >  BR2_PACKAGE_OPENBLAS=y
-> > > +# BR2_PACKAGE_OPENBLAS_USE_THREAD is not set
-> > >  BR2_PACKAGE_PROTOBUF=y
-> > >  BR2_PACKAGE_PROTOBUF_C=y
-> > >  BR2_PACKAGE_HAVEGED=y
-> > >
-> > > How this "conflict" can cause an error on the timer_create feature from
-> > > uclibc?
-> >
-> > This commit gives you only the chance to disable openblas threading support
-> > (and circumvent the problem for you), but is not the decisive change
-> > between buildroot 2019.02 and 2021.02 regarding uclibc/openblas, because
-> > already the old/2019.02 version should have threading enabled (only without
-> > an buildroot option to disable it)...
-> >
-> > The version change from 2019.02 to 2021.02 are:
-> >
-> > - openblas from 0.2.20 to 0.3.9
-> > - uclibc from 1.0.31 to 1.0.38
-> > - gcc/binutils/etc (did not yet check yet)?
-> >
-> > But I did some debugging, with openblas linking the timer_create() call
-> > fails because of a failing pthread_create() because of a stack-size
-> > check in allocate_stack()...
-> >
-> >
-> > Without openblas (o.k - one call via timer_create()/pthread_create()):
-> >
-> > Breakpoint 1, allocate_stack (attr=0x7fed1079c8, pdp=0x7fed107920, stack=0x7fed107928)
-> >     at libpthread/nptl/allocatestack.c:472
-> > 472	      pd = get_cached_stack (&size, &mem);
-> > (gdb) p *attr
-> > $1 = {schedparam = {__sched_priority = 0}, schedpolicy = 0, flags = 0, guardsize = 4096,
-> >   stackaddr = 0x0, stacksize = 16384, cpuset = 0x0, cpusetsize = 0}
-> > (gdb) p size
-> > $2 = 16384
-> > (gdb) p __static_tls_size
-> > $3 = 1712
-> >
-> >
-> > With openblas (failure - three time o.k call from openblas, one failing call from timer_create()):
-> >
-> > Breakpoint 1, allocate_stack (attr=0x7fa286de48 <default_attr>, pdp=0x7febf5fd80, stack=0x7febf5fd88)
-> >     at libpthread/nptl/allocatestack.c:472
-> > 472	      pd = get_cached_stack (&size, &mem);
-> > (gdb) p *attr
-> > $1 = {schedparam = {__sched_priority = 0}, schedpolicy = 0, flags = 0, guardsize = 1, stackaddr = 0x0,
-> >   stacksize = 0, cpuset = 0x0, cpusetsize = 0}
-> > (gdb) p size
-> > $2 = 2097152
-> > (gdb) p __static_tls_size
-> > $3 = 63152
-> >
-> > [...]
-> >
-> > Thread 1 "test_timer_crea" hit Breakpoint 2, allocate_stack (attr=0x7febf61068, pdp=0x7febf60fc0,
-> >     stack=0x7febf60fc8) at libpthread/nptl/allocatestack.c:468
-> > 468		return EINVAL;
-> > (gdb) p *attr
-> > $4 = {schedparam = {__sched_priority = 0}, schedpolicy = 0, flags = 0, guardsize = 4096,
-> >   stackaddr = 0x0, stacksize = 16384, cpuset = 0x0, cpusetsize = 0}
-> > (gdb) p size
-> > $5 = 16384
-> > (gdb) p __static_tls_size
-> > $6 = 63152
-> >
-> >
-> > - with openblas linking the thread-local-storage (__static_tls_size) is
-> >   increased from 1712 to 63152
-> >
-> > - the openblas threads are created with default pthread_attr_t/nullptr,
-> >   the stack size size is calculated to 2097152 the check succeeds
-> >
-> > - the timer_create pthread_create is called with pthread_attr_t created
-> >   via
-> >
-> > 	66	  (void) pthread_attr_init (&attr);
-> > 	167	  (void) pthread_attr_setstacksize (&attr, PTHREAD_STACK_MIN);
-> >
-> >   so stacksize is given as 16384, the check against the increased thread-local-
-> >   storage (63152 + guadsize + MINIMAL_REST_STACK + padding) fails...
-> >
-> > Maybe a uclibc bug/defect...., or an expert question: is the pthread_create/
-> > pthread_attr_t stacksize inclusive or exclusive the reserved size for
-> > thread-local-storage usage (my judgment would be exclusive as the thread-local
-> > storage size is dependents on external parameters/library linking etc.)?
->
-> I think uclibc-ng needs something as implemented for glibc (see [1]), using
->
-> 	__static_tls_size + PTHREAD_STACK_MIN
->
-> as stack size for timer_create thread (take the thread local storage stack
-> part into account)..., draft patch like the following works for the openblas/
-> timer_create example:
->
-> diff --git a/libpthread/nptl/init.c b/libpthread/nptl/init.c
-> index 4959d5ed8..fefdda1a5 100644
-> --- a/libpthread/nptl/init.c
-> +++ b/libpthread/nptl/init.c
-> @@ -337,3 +337,9 @@ __pthread_initialize_minimal_internal (void)
->  }
->  strong_alias (__pthread_initialize_minimal_internal,
->  	      __pthread_initialize_minimal)
-> +
-> +size_t
-> +__pthread_get_minstack (const pthread_attr_t *attr)
-> +{
-> +  return  __static_tls_size + PTHREAD_STACK_MIN;
-> +}
-> diff --git a/libpthread/nptl/pthreadP.h b/libpthread/nptl/pthreadP.h
-> index 13205512a..c686a4ca5 100644
-> --- a/libpthread/nptl/pthreadP.h
-> +++ b/libpthread/nptl/pthreadP.h
-> @@ -377,6 +377,7 @@ weak_function;
->
->  extern void __pthread_init_static_tls (struct link_map *) attribute_hidden;
->
-> +extern size_t __pthread_get_minstack (const pthread_attr_t *attr);
->
->  /* Namespace save aliases.  */
->  extern int __pthread_getschedparam (pthread_t thread_id, int *policy,
-> diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/timer_routines.c b/libpthread/nptl/sysdeps/unix/sysv/linux/timer_routines.c
-> index 514913317..60f2a724c 100644
-> --- a/libpthread/nptl/sysdeps/unix/sysv/linux/timer_routines.c
-> +++ b/libpthread/nptl/sysdeps/unix/sysv/linux/timer_routines.c
-> @@ -164,7 +164,7 @@ __start_helper_thread (void)
->       and should go away automatically when canceled.  */
->    pthread_attr_t attr;
->    (void) pthread_attr_init (&attr);
-> -  (void) pthread_attr_setstacksize (&attr, PTHREAD_STACK_MIN);
-> +  (void) pthread_attr_setstacksize (&attr, __pthread_get_minstack (&attr));
->
->    /* Block all signals in the helper thread but SIGSETXID.  To do this
->       thoroughly we temporarily have to block all signals here.  The
->
+On Fri, 16 Apr 2021 20:07:21 +0000, Michael John <MJohn@midmark.com> wrote:
 
-Patch suggested upstream, see:
+> Hello Peter,
+> 
+> >Hello Michael,
+> >
+> >On Wed, 31 Mar 2021 14:12:15 +0000, Michael John <MJohn@midmark.com> wrote:
+> >  
+> >> Hello,
+> >>
+> >> I?ve built openssh and I?m having some issues running it on my board. While running sshd it reports an error in libcrypto while trying to read the host key. The host keys are generated under /etc/ssh.
+> >>  
+> >> ~> ls /etc/ssh  
+> >> moduli                                 ssh_host_ecdsa_key                    ssh_host_rsa_key
+> >> ssh_config                           ssh_host_ecdsa_key.pub           ssh_host_rsa_key.pub
+> >> ssh_host_dsa_key             ssh_host_ed25519_key              sshd_config
+> >> ssh_host_dsa_key.pub     ssh_host_ed25519_key.pub
+> >>  
+> >> ~> systemctl status sshd  
+> >> ? sshd.service - OpenSSH server daemon
+> >>      Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; vendor preset: enabled)
+> >>      Active: failed (Result: exit-code) since Wed 2021-03-31 13:21:02 UTC; 11s ago
+> >>     Process: 315 ExecStartPre=/usr/bin/ssh-keygen -A (code=exited, status=0/SUCCESS)
+> >>     Process: 341 ExecStart=/usr/sbin/sshd -D -e (code=exited, status=1/FAILURE)
+> >>    Main PID: 341 (code=exited, status=1/FAILURE)
+> >>
+> >> Mar 31 13:20:51 cm1sd systemd[1]: Starting OpenSSH server daemon...
+> >> Mar 31 13:20:54 cm1sd systemd[1]: Started OpenSSH server daemon.
+> >> Mar 31 13:21:02 cm1sd sshd[341]: Unable to load host key
+> >> "/etc/ssh/ssh_host_rsa_key": error in libcrypto Mar 31 13:21:02 cm1sd
+> >> sshd[341]: Unable to load host key: /etc/ssh/ssh_host_rsa_key Mar 31 13:21:02 cm1sd sshd[341]: sshd: no hostkeys available -- exiting.
+> >> Mar 31 13:21:02 cm1sd systemd[1]: sshd.service: Main process exited,
+> >> code=exited, status=1/FAILURE Mar 31 13:21:02 cm1sd systemd[1]: sshd.service: Failed with result 'exit-code'.
+> >>
+> >> I?m using:
+> >> openssh version 8.5p1
+> >> openssl version 1.1.1k
+> >> crpytodev-linux fabe5989a3d
+> >>
+> >> Is there an issue using this combination of packages? These are the lastest versions in buildroot.
+> >>
+> >> My config file (sshd_config) is only trying to load the host key for RSA, but I get the same error about libcrypto for ecdsa and ed25519.
+> >>
+> >> Anyone see this issue as well? Any help is appreciated.  
+> >
+> > You can try to run sshd with strace to get a clue about the failing syscall (in case this is the reason) in libcrypto....
+> >
+> > Which hardware and which (hardware) crypto device?
+> >
+> > Regards,
+> > Peter
+> >  
+> >>
+> >> Thanks.
+> >> -Michael
+> >>  
+> 
+> Here is the tail of the strace output:
+> 
+> mmap2(0xb6b2f000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x8000) = 0xb6b2f000
+> mmap2(0xb6b31000, 21260, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0xb6b31000
+> close(3)                                = 0
+> mprotect(0xb6b2f000, 4096, PROT_READ)   = 0
+> openat(AT_FDCWD, "/etc/passwd", O_RDONLY|O_CLOEXEC) = 3
+> _llseek(3, 0, [0], SEEK_CUR)            = 0
+> fstat64(3, {st_mode=S_IFREG|0644, st_size=826, ...}) = 0
+> read(3, "root:x:0:0:root:/root:/usr/bin/e"..., 1024) = 826
+> close(3)                                = 0
+> openat(AT_FDCWD, "/etc/ssh/ssh_host_rsa_key", O_RDONLY|O_LARGEFILE) = 3
+> fstat64(3, {st_mode=S_IFREG|0600, st_size=2590, ...}) = 0
+> getuid32()                              = 0
+> fstat64(3, {st_mode=S_IFREG|0600, st_size=2590, ...}) = 0
+> read(3, "-----BEGIN OPENSSH PRIVATE KEY--"..., 4096) = 2590
+> read(3, "", 1506)                       = 0
+> read(3, "", 4096)                       = 0
+> getpid()                                = 719
+> ioctl(4, _IOC(_IOC_READ|_IOC_WRITE, 0x63, 0x66, 0x1c), 0x23e8798) = -1 EBADF (Bad file descriptor)
+> ioctl(4, _IOC(_IOC_WRITE, 0x63, 0x67, 0x4), 0x23e1ca8) = -1 EBADF (Bad file descriptor)
+> ioctl(4, _IOC(_IOC_WRITE, 0x63, 0x67, 0x4), 0x23e2080) = -1 EBADF (Bad file descriptor)
+> ioctl(4, _IOC(_IOC_WRITE, 0x63, 0x67, 0x4), 0x23e87b0) = -1 EBADF (Bad file descriptor)
 
-	https://mailman.uclibc-ng.org/pipermail/devel/2021-April/002064.html
+Can you search for the corresponding 'open(...) = 4' which file the file descriptor
+belongs (or belonged) to? Would suspect your crypto hardware device '/dev/...' file...
+
+Wait a moment, I get the same failure here (RPi0w), according to
+build/cryptodev-linux-fabe5989a3dc9fba0cd0a40b612247cdde351c01/README you
+can enable cryptodev logging via
+
+	$ sysctl ioctl.cryptodev_verbosity=3
+
+and another (failing) run of sshd gives
+
+	$ dmesg
+[   26.069137] cryptodev: loading out-of-tree module taints kernel.
+[   26.082646] cryptodev: driver 1.11 loaded.
+[  293.113559] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 3d0bde58
+[  293.113597] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 0c134c14
+[  293.113620] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 7617e45f
+[  293.113640] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 76de8bfe
+[  293.113660] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at d82d7450
+[  293.113679] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 305fca08
+[  293.113701] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 413b2286
+[  293.113727] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 2d346c3e
+[  293.113749] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 04de1c1b
+[  293.113769] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 6407ed5b
+[  293.113788] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 514f4dcd
+[  293.113810] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 0c09d977
+[  293.113830] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 55c5f1b5
+[  293.113850] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 6bff11bf
+[  293.113870] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 87f9d9e6
+[  293.113890] cryptodev: sshd[345] (cryptodev_open:525): allocated new item at 1726e6b9
+[  293.113909] cryptodev: sshd[345] (cryptodev_open:529): Cryptodev handle initialised, 16 elements in queue
+[  293.120614] cryptodev: sshd[345] (crypto_create_session:300): got alignmask 0
+[  293.120649] cryptodev: sshd[345] (crypto_create_session:303): preallocating for 32 user pages
+[  293.121243] cryptodev: sshd[345] (crypto_destroy_session:358): Removed session 0x58F7EA46
+[  293.121282] cryptodev: sshd[345] (crypto_destroy_session:361): freeing space for 32 user pages
+[  293.121883] cryptodev: sshd[345] (crypto_create_session:300): got alignmask 0
+[  293.121911] cryptodev: sshd[345] (crypto_create_session:303): preallocating for 32 user pages
+[  293.122471] cryptodev: sshd[345] (crypto_destroy_session:358): Removed session 0xFF3B568E
+[  293.122509] cryptodev: sshd[345] (crypto_destroy_session:361): freeing space for 32 user pages
+[  293.714449] cryptodev: sshd[345] (cryptodev_cipher_init:156): Failed to load cipher cbc(blowfish)
+[  293.714488] cryptodev: sshd[345] (crypto_create_session:264): Failed to load cipher for cbc(blowfish)
+
+[...]
+
+[  294.328797] cryptodev: sshd[345] (cryptodev_cipher_init:156): Failed to load cipher cbc(camellia)
+[  294.328835] cryptodev: sshd[345] (crypto_create_session:264): Failed to load cipher for cbc(camellia)
+[  294.919951] cryptodev: sshd[345] (cryptodev_cipher_init:156): Failed to load cipher cbc(camellia)
+[  294.919988] cryptodev: sshd[345] (crypto_create_session:264): Failed to load cipher for cbc(camellia)
+[  295.510857] cryptodev: sshd[345] (cryptodev_cipher_init:156): Failed to load cipher cbc(camellia)
+[  295.510896] cryptodev: sshd[345] (crypto_create_session:264): Failed to load cipher for cbc(camellia)
+
+[...]
+
+[  295.816778] cryptodev: sshd[345] (cryptodev_hash_init:360): Failed to load transform for rmd160
+[  295.816815] cryptodev: sshd[345] (crypto_create_session:287): Failed to load hash for rmd160
+
+[...]
+
+[  295.944596] cryptodev: sshd[345] (cryptodev_release:585): Cryptodev handle deinitialised, 16 elements freed
+
+And here
+
+	$ grep BLOWFISH build/linux-custom/.config
+# CONFIG_CRYPTO_BLOWFISH is not set
+	$ grep CAMELLIA build/linux-custom/.config
+# CONFIG_CRYPTO_CAMELLIA is not set
+
+Seems the kernel module cryptodev.ko needs some more kernel options enabled...
 
 Regards,
 Peter
 
->
-> Regards,
-> Peter
->
-> [1] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=2c1094bd700e63a8d7f547b3f5495bedb55c0a08;hp=3b8dfc621bfd320c924a3cd597086d3473da1cf4
->
-> >
-> > > Is my change correct?
-> >
-> > If it works for you yes ;-), but does not fix the underlying/generally problem...
-> >
-> > Regards,
-> > Peter
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+> close(3)                                = 0
+> write(2, "Unable to load host key \"/etc/ss"..., 73Unable to load host key "/etc/ssh/ssh_host_rsa_key": error in libcrypto
+> ) = 73
+> openat(AT_FDCWD, "/etc/ssh/ssh_host_rsa_key", O_RDONLY|O_LARGEFILE) = 3
+> fstat64(3, {st_mode=S_IFREG|0600, st_size=2590, ...}) = 0
+> read(3, "-----BEGIN OPENSSH PRIVATE KEY--"..., 1024) = 1024
+> close(3)                                = 0
+> openat(AT_FDCWD, "/etc/ssh/ssh_host_rsa_key.pub", O_RDONLY|O_LARGEFILE) = 3
+> fstat64(3, {st_mode=S_IFREG|0644, st_size=564, ...}) = 0
+> read(3, "ssh-rsa AAAAB3NzaC1yc2EAAAADAQAB"..., 1024) = 564
+> close(3)                                = 0
+> write(2, "Unable to load host key: /etc/ss"..., 52Unable to load host key: /etc/ssh/ssh_host_rsa_key
+> ) = 52
+> ioctl(4, _IOC(_IOC_READ|_IOC_WRITE, 0x63, 0x66, 0x1c), 0x23e6d78) = -1 EBADF (Bad file descriptor)
+> ioctl(4, _IOC(_IOC_WRITE, 0x63, 0x67, 0x4), 0x23e6d90) = -1 EBADF (Bad file descriptor)
+> write(2, "accumulate_host_timing_secret: s"..., 49accumulate_host_timing_secret: ssh_digest_start
+> ) = 49
+> exit_group(255)                         = ?
+> +++ exited with 255 +++
+> 
+> Thanks,
+> -Michael
+> 
+> CONFIDENTIALITY NOTICE: This message, including any attachments, contains confidential information intended for a specific individual and purpose. If you are not the intended recipient, you should delete this message and any disclosure, copying, or distribution of this message, or the taking of any action based on it, by you is strictly prohibited.
