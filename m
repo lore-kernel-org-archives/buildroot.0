@@ -1,28 +1,48 @@
-From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Fri, 16 Apr 2021 09:41:54 +0300
-Subject: [Buildroot] [PATCH v3 3/3] package/osm2pgsql: new package
-In-Reply-To: <4434f6fa-e05e-7a26-bf65-c82fd37210ad@mind.be>
-References: <20210415150356.775904-1-fido_max@inbox.ru>
- <20210415150356.775904-3-fido_max@inbox.ru>
- <4434f6fa-e05e-7a26-bf65-c82fd37210ad@mind.be>
-Message-ID: <16cfad7c-ac96-0b96-6cf2-424cb151408a@inbox.ru>
+From: Ivan Castell <icastell@circontrol.com>
+Date: Fri, 16 Apr 2021 06:58:05 +0000
+Subject: [Buildroot] Unable to apply a patch for the buildroot makedevs tool
+Message-ID: <AM6PR05MB5928D4AD5D2311ACA772CCA5A34C9@AM6PR05MB5928.eurprd05.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Strange situation:
+Hello! I did a patch for the makedevs tool that provides a new 'x' option that allows setting permissions for directories recursively without modifiying permissions for regular files. The patch is named 'makedevs-0001-custom-opts-exclude-regular-files.patch' (see below), and is located inside package/makedevs/ directory. When I try to re-build the framework, I get this error:
 
-./utils/check-package package/osm2pgsql/*
-65 lines processed
-0 warnings generated
+# make all
+>>> host-makedevs  Patching
+
+Applying makedevs-0001-custom-opts-exclude-regular-files.patch using patch:
+can't find file to patch at input line 4
+Perhaps you used the wrong -p or --strip option?
+The text leading up to this was:
+--------------------------
+|diff -purN makedevs.orig/makedevs.c makedevs/makedevs.c
+|--- makedevs.orig/makedevs.c 2021-04-15 14:40:03.439990661 +0000
+|+++ makedevs/makedevs.c 2021-04-15 14:40:46.128006533 +0000
+--------------------------
+No file to patch.  Skipping patch.
+3 out of 3 hunks ignored
+package/pkg-generic.mk:187: recipe for target '/usr/local/share/buildroot/output/build/host-makedevs/.stamp_patched' failed
+make: *** [/usr/local/share/buildroot/output/build/host-makedevs/.stamp_patched] Error 1
+
+I was able to apply other patches properly that run on the target, but this tool is compiled to run on the host, and makedevs.mk rules compiles the makedevs.c source file without deploying it on output/build, and I think that's the main issue, but I am not completely sure.
+
+Can you explain why is this patch not aplying properly and what should be the proper way to apply a patch for this makedevs tool, located inside the buildroot framework?
+
+Thanks!
 
 
-15.04.2021 23:32, Arnout Vandecappelle ?????:
->> +	select BR2_PACKAGE_ZLIB
->> +	help
->> +	  osm2pgsql is a tool for loading OpenStreetMap data into a
->> +	  PostgreSQL / PostGIS database suitable for applications like
->   Line too long, as reported by check-package.
-> 
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210416/ab61fdd1/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: makedevs-0001-custom-opts-exclude-regular-files.patch
+Type: text/x-patch
+Size: 2103 bytes
+Desc: makedevs-0001-custom-opts-exclude-regular-files.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210416/ab61fdd1/attachment.bin>
