@@ -1,58 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Apr 2021 09:08:13 +0200
-Subject: [Buildroot] [PATCH RESEND] package/systemd: fix homed
- dependency warning
-In-Reply-To: <20210416072956.151549-1-buildroot@heine.tech>
-References: <20210416072956.151549-1-buildroot@heine.tech>
-Message-ID: <20210417070813.GN359705@scaer>
+Date: Sat, 17 Apr 2021 09:13:17 +0200
+Subject: [Buildroot] Unable to apply a patch for the buildroot makedevs
+ tool
+In-Reply-To: <AM6PR05MB5928D4AD5D2311ACA772CCA5A34C9@AM6PR05MB5928.eurprd05.prod.outlook.com>
+References: <AM6PR05MB5928D4AD5D2311ACA772CCA5A34C9@AM6PR05MB5928.eurprd05.prod.outlook.com>
+Message-ID: <20210417071317.GO359705@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael, All,
+Ivan, All,
 
-On 2021-04-16 09:29 +0200, Michael Nosthoff via buildroot spake thusly:
-> Fixes:
-> 
-> showing "enable home daemon"
-> and "homed support needs a toolchain w/ threads, dynamic library, kernel headers >= 4.12"
-> when BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-> 
-> introduced by fa62b5165ca41e4800e00a84af9026bfa5fb9155
-> 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+On 2021-04-16 06:58 +0000, Ivan Castell spake thusly:
+> Hello! I did a patch for the makedevs tool that provides a new 'x' option
+> that allows setting permissions for directories recursively without
+> modifiying permissions for regular files.
 
-Applied to master, thanks.
+As Peter said, makedev is directly compiled from its single source file
+in Buildroot's tree, so no way to patch it with the standard package
+infrastructure.
+
+However, your patch looks like it would provide an interesting feature
+that we want in Buildroot.
+
+Would you mind officially contributing your patch so we can apply it?
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/systemd/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index fbe1a4081b..d658308213 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -233,7 +233,7 @@ comment "homed support needs a toolchain w/ threads, dynamic library, kernel hea
->  	depends on BR2_USE_MMU
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-> -		BR2_STATIC_LIBS || BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-> +		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
->  
->  config BR2_PACKAGE_SYSTEMD_HOSTNAMED
->  	bool "enable hostname daemon"
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
