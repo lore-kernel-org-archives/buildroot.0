@@ -1,82 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Apr 2021 09:19:59 +0200
-Subject: [Buildroot] [PATCH] support/scripts/cve.py: use fast ijson
- backend if available on old ijson versions
-In-Reply-To: <20210409110112.20087-1-peter@korsgaard.com>
-References: <20210409110112.20087-1-peter@korsgaard.com>
-Message-ID: <20210417071959.GP359705@scaer>
+Date: Sat, 17 Apr 2021 09:32:32 +0200
+Subject: [Buildroot] [git commit] package/tio: disable for sparc and sparc64
+ architectures
+Message-ID: <20210417070625.562C18154C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=5e3799213236881b6960325f014c2266064de391
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-09 13:01 +0200, Peter Korsgaard spake thusly:
-> ijson < 2.5 (as available in Debian 10) use the slow python backend by
-> default instead of the most efficient one available like modern ijson
-> versions, significantly slowing down cve checking. E.G.:
-> 
-> time ./support/scripts/pkg-stats --nvd-path ~/.nvd -p avahi --html foobar.html
-> 
-> Goes from
-> 174,44s user 2,11s system 99% cpu 2:58,04 total
-> 
-> To
-> 93,53s user 2,00s system 98% cpu 1:36,65 total
-> 
-> E.G. almost 2x as fast.
-> 
-> As a workaround, detect when the python backend is used and try to use a
-> more efficient one instead.  Use the yajl2_cffi backend as recommended by
-> upstream, as it is most likely to work, and print a warning (and continue)
-> if we fail to load it.
-> 
-> The detection is slightly complicated by the fact that ijson.backends used
-> to be a reference to a backend module, but is nowadays a string (without the
-> ijson.backends prefix).
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+tio fails to build on sparc and sparc64 architectures with a
+redefinition of 'struct termio' error, with no proper fix or workaround
+for now. See discussions in [1] and [2] and picocom source code in [3].
 
-Applied to master, thanks.
+[1] http://patchwork.ozlabs.org/project/buildroot/patch/20191227204520.1500501-1-fontaine.fabrice at gmail.com/
+[2] http://patchwork.ozlabs.org/project/buildroot/patch/20200511142602.46170-1-vadim4j at gmail.com/
+[3] https://github.com/npat-efault/picocom/blob/master/termbits2.h#L37
 
-Regards,
-Yann E. MORIN.
+So let's disable it for now on sparc and sparc64 architectures.
 
-> ---
->  support/scripts/cve.py | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-> index 6e97ea193f..965fc2a466 100755
-> --- a/support/scripts/cve.py
-> +++ b/support/scripts/cve.py
-> @@ -28,6 +28,12 @@ import operator
->  
->  try:
->      import ijson
-> +    # backend is a module in < 2.5, a string in >= 2.5
-> +    if 'python' in getattr(ijson.backend, '__name__', ijson.backend):
-> +        try:
-> +            import ijson.backends.yajl2_cffi as ijson
-> +        except ImportError:
-> +            sys.stderr.write('Warning: Using slow ijson python backend\n')
->  except ImportError:
->      sys.stderr.write("You need ijson to parse NVD for CVE check\n")
->      exit(1)
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes:
+http://autobuild.buildroot.org/results/e041dde522e2a774f528d4377f67ca0a8a99461c
+http://autobuild.buildroot.org/results/6e1f9fe47e8b2cfdf5effcb7bbc697189f54ff2c
+http://autobuild.buildroot.org/results/49708fe6f404fea6761f102af854e98d6a1d43c1
+Many more...
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/tio/Config.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/tio/Config.in b/package/tio/Config.in
+index 6c748c5d12..d5d619100e 100644
+--- a/package/tio/Config.in
++++ b/package/tio/Config.in
+@@ -1,8 +1,15 @@
+ config BR2_PACKAGE_TIO
+ 	bool "tio"
++	depends on !BR2_sparc64 && !BR2_sparc
+ 	help
+ 	  "tio" is a simple TTY terminal application which features a
+ 	  straightforward commandline interface to easily connect to
+ 	  TTY devices for basic input/output.
+ 
+ 	  https://tio.github.io/
++
++# tio is disabled for sparc and sparc64 architectures because it fails
++# to build with a redefinition of 'struct termio' error, with no proper
++# fix or workaround for now
++comment "tio is disabled for sparc and sparc64 architectures"
++	depends on BR2_sparc64 || BR2_sparc
