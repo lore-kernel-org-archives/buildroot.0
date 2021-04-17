@@ -1,58 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Apr 2021 09:06:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix -Dman-pages=false
- syntax
-In-Reply-To: <20210416072740.574979-1-james.hilliard1@gmail.com>
-References: <20210416072740.574979-1-james.hilliard1@gmail.com>
-Message-ID: <20210417070622.GM359705@scaer>
+Date: Sat, 17 Apr 2021 09:07:26 +0200
+Subject: [Buildroot] [git commit] package/systemd: fix homed dependency
+ warning
+Message-ID: <20210417064118.1F45A83991@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=5d4dc98c58bb80c121a3d6c7ff3f89a00f192213
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-16 01:27 -0600, James Hilliard spake thusly:
-> The current -Dmanpages=false syntax is invalid.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Fixes:
 
-Applied to master, after rewording the commit log as per Peter's
-suggestions, thanks.
+showing "enable home daemon"
+and "homed support needs a toolchain w/ threads, dynamic library, kernel headers >= 4.12"
+when BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
 
-Regards,
-Yann E. MORIN.
+introduced by fa62b5165ca41e4800e00a84af9026bfa5fb9155
 
-> ---
->  package/libdrm/libdrm.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-> index 98e1ac079d..f5b205bb00 100644
-> --- a/package/libdrm/libdrm.mk
-> +++ b/package/libdrm/libdrm.mk
-> @@ -17,7 +17,7 @@ LIBDRM_DEPENDENCIES = \
->  
->  LIBDRM_CONF_OPTS = \
->  	-Dcairo-tests=false \
-> -	-Dmanpages=false
-> +	-Dman-pages=false
->  
->  ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
->  LIBDRM_DEPENDENCIES += libatomic_ops
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/systemd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index fbe1a4081b..d658308213 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -233,7 +233,7 @@ comment "homed support needs a toolchain w/ threads, dynamic library, kernel hea
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS || BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+ 
+ config BR2_PACKAGE_SYSTEMD_HOSTNAMED
+ 	bool "enable hostname daemon"
