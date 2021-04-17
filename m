@@ -1,78 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Apr 2021 09:33:22 +0200
-Subject: [Buildroot] [PATCH] package/tio: disable for sparc and sparc64
- architectures
-In-Reply-To: <20201025163457.30460-1-sergio.prado@e-labworks.com>
-References: <20201025163457.30460-1-sergio.prado@e-labworks.com>
-Message-ID: <20210417073322.GQ359705@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 17 Apr 2021 12:42:45 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/oniguruma: bump to version 6.9.7.1
+Message-ID: <20210417104245.1851865-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergio, All,
+Update hash of COPYING (update in year:
+https://github.com/kkos/oniguruma/commit/56255e8b3e209453938b62cb2a5045d29e3c3ff9)
 
-On 2020-10-25 13:34 -0300, Sergio Prado spake thusly:
-> tio fails to build on sparc and sparc64 architectures with a
-> redefinition of 'struct termio' error, with no proper fix or workaround
-> for now. See discussions in [1] and [2] and picocom source code in [3].
-> 
-> [1] http://patchwork.ozlabs.org/project/buildroot/patch/20191227204520.1500501-1-fontaine.fabrice at gmail.com/
-> [2] http://patchwork.ozlabs.org/project/buildroot/patch/20200511142602.46170-1-vadim4j at gmail.com/
-> [3] https://github.com/npat-efault/picocom/blob/master/termbits2.h#L37
-> 
-> So let's disable it for now on sparc and sparc64 architectures.
-> 
-> Fixes:
-> http://autobuild.buildroot.org/results/e041dde522e2a774f528d4377f67ca0a8a99461c
-> http://autobuild.buildroot.org/results/6e1f9fe47e8b2cfdf5effcb7bbc697189f54ff2c
-> http://autobuild.buildroot.org/results/49708fe6f404fea6761f102af854e98d6a1d43c1
-> Many more...
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+https://github.com/kkos/oniguruma/blob/v6.9.7.1/HISTORY
 
-Eventually applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Update to 6.9.7.1
 
-Regards,
-Yann E. MORIN.
+ package/oniguruma/oniguruma.hash | 7 ++++---
+ package/oniguruma/oniguruma.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-> ---
->  package/tio/Config.in | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/tio/Config.in b/package/tio/Config.in
-> index 6c748c5d12a1..d5d619100eb3 100644
-> --- a/package/tio/Config.in
-> +++ b/package/tio/Config.in
-> @@ -1,8 +1,15 @@
->  config BR2_PACKAGE_TIO
->  	bool "tio"
-> +	depends on !BR2_sparc64 && !BR2_sparc
->  	help
->  	  "tio" is a simple TTY terminal application which features a
->  	  straightforward commandline interface to easily connect to
->  	  TTY devices for basic input/output.
->  
->  	  https://tio.github.io/
-> +
-> +# tio is disabled for sparc and sparc64 architectures because it fails
-> +# to build with a redefinition of 'struct termio' error, with no proper
-> +# fix or workaround for now
-> +comment "tio is disabled for sparc and sparc64 architectures"
-> +	depends on BR2_sparc64 || BR2_sparc
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
+index 668f21d37f..3a6112e832 100644
+--- a/package/oniguruma/oniguruma.hash
++++ b/package/oniguruma/oniguruma.hash
+@@ -1,3 +1,4 @@
+-# Locally calculated
+-sha256  bd0faeb887f748193282848d01ec2dad8943b5dfcb8dc03ed52dcc963549e819  onig-6.9.6.tar.gz
+-sha256  6c7038393e8f30fee16257e713f77e383712f1465d6d25929596746b10b42bd3  COPYING
++# From https://github.com/kkos/oniguruma/releases/download/v6.9.7/onig-6.9.7.1.tar.gz.sha256
++sha256  6444204b9c34e6eb6c0b23021ce89a0370dad2b2f5c00cd44c342753e0b204d9  onig-6.9.7.1.tar.gz
++# Hash for license file
++sha256  70ba5469ea0bab6e18a32d7009068f996503168d27be57747e08da34337ff26f  COPYING
+diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
+index 6ea5e1e691..31c8d8e512 100644
+--- a/package/oniguruma/oniguruma.mk
++++ b/package/oniguruma/oniguruma.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ONIGURUMA_VERSION = 6.9.6
++ONIGURUMA_VERSION = 6.9.7.1
+ ONIGURUMA_SITE = \
+ 	https://github.com/kkos/oniguruma/releases/download/v$(ONIGURUMA_VERSION)
+ ONIGURUMA_SOURCE = onig-$(ONIGURUMA_VERSION).tar.gz
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
