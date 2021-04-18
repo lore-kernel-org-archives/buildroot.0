@@ -1,54 +1,72 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 18 Apr 2021 22:26:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-sortedcontainers: bump to
- version 2.3.0
-Message-ID: <20210418202637.3479601-1-fontaine.fabrice@gmail.com>
+Date: Sun, 18 Apr 2021 22:38:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-pytrie: bump to version 0.4.0
+Message-ID: <20210418203858.3481110-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- python 2 support has been dropped since
+  https://github.com/gsakkis/pytrie/commit/a60a601d85a660976f4aaab4cb0efcb15b91263b
+- Use LICENSE instead of PKG-INFO which is available in the official
+  tarball since
+  https://github.com/gsakkis/pytrie/commit/1ba5d547dfbf0d384dd16cf78a2cce91ef69fce8
 - Update indentation in hash file (two spaces)
-- Update hash of LICENSE file (update in year:
-  https://github.com/grantjenks/python-sortedcontainers/commit/d127cdde5f77804fe51f355fdad469a0ac7caede)
 
-https://github.com/grantjenks/python-sortedcontainers/blob/v2.3.0/HISTORY.rst
+https://github.com/gsakkis/pytrie/blob/0.4.0/README.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../python-sortedcontainers/python-sortedcontainers.hash    | 6 +++---
- package/python-sortedcontainers/python-sortedcontainers.mk  | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pytrie/Config.in          | 1 +
+ package/python-pytrie/python-pytrie.hash | 8 ++++----
+ package/python-pytrie/python-pytrie.mk   | 6 +++---
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-sortedcontainers/python-sortedcontainers.hash b/package/python-sortedcontainers/python-sortedcontainers.hash
-index 311bb77e17..d97687dd19 100644
---- a/package/python-sortedcontainers/python-sortedcontainers.hash
-+++ b/package/python-sortedcontainers/python-sortedcontainers.hash
+diff --git a/package/python-pytrie/Config.in b/package/python-pytrie/Config.in
+index 156638476c..722d263d7e 100644
+--- a/package/python-pytrie/Config.in
++++ b/package/python-pytrie/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYTRIE
+ 	bool "python-pytrie"
++	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_SORTEDCONTAINERS # runtime
+ 	help
+ 	  A pure Python implementation of the trie data structure.
+diff --git a/package/python-pytrie/python-pytrie.hash b/package/python-pytrie/python-pytrie.hash
+index 3bc1f6e9a7..ead479ee1a 100644
+--- a/package/python-pytrie/python-pytrie.hash
++++ b/package/python-pytrie/python-pytrie.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sortedcontainers/json
--md5	41a4a1eaf7b85e6b3beb14cfb160bc27  sortedcontainers-2.1.0.tar.gz
--sha256	974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a  sortedcontainers-2.1.0.tar.gz
-+md5  660260df593a3769c7b5854f13d574c0  sortedcontainers-2.3.0.tar.gz
-+sha256  59cc937650cf60d677c16775597c89a960658a09cf7c1a668f86e1e4464b10a1  sortedcontainers-2.3.0.tar.gz
- # Locally computed sha256 checksums
--sha256	7dcf4a5137118a925727b8a1690bc6ea70b156ee6739dbb51fd4d386718d6ce5  LICENSE
-+sha256  1db7cae7fce6452e2e608e401a0f953e0133e4c2d75db69fb8ae851d2086f5b6  LICENSE
-diff --git a/package/python-sortedcontainers/python-sortedcontainers.mk b/package/python-sortedcontainers/python-sortedcontainers.mk
-index 43f662a89f..31cab76fd7 100644
---- a/package/python-sortedcontainers/python-sortedcontainers.mk
-+++ b/package/python-sortedcontainers/python-sortedcontainers.mk
-@@ -4,9 +4,9 @@
+ # md5, sha256 from https://pypi.org/pypi/pytrie/json
+-md5	f7c7184124013abcc18a3e3b638d32ae  PyTrie-0.3.1.tar.gz
+-sha256	3bb7d122a549d8006c9cba2feecac20bceda9f8c0e2a3fa99a5584cfe0dec523  PyTrie-0.3.1.tar.gz
+-# Locally computed sha256
+-sha256	153931d44112319a1e1653752c881fb7ef092f636db31f4c36b252666e95efbd  PKG-INFO
++md5  0cbe20db2361dcc99bdcba7acacd34e6  PyTrie-0.4.0.tar.gz
++sha256  8f4488f402d3465993fb6b6efa09866849ed8cda7903b50647b7d0342b805379  PyTrie-0.4.0.tar.gz
++# Locally computed sha256 checksums
++sha256  97f85c2ba0d856cf5f7e5db587af7299233db2e502980eb655ace28343541d50  LICENSE
+diff --git a/package/python-pytrie/python-pytrie.mk b/package/python-pytrie/python-pytrie.mk
+index b8264fa2be..7e55579d2d 100644
+--- a/package/python-pytrie/python-pytrie.mk
++++ b/package/python-pytrie/python-pytrie.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_SORTEDCONTAINERS_VERSION = 2.1.0
-+PYTHON_SORTEDCONTAINERS_VERSION = 2.3.0
- PYTHON_SORTEDCONTAINERS_SOURCE = sortedcontainers-$(PYTHON_SORTEDCONTAINERS_VERSION).tar.gz
--PYTHON_SORTEDCONTAINERS_SITE = https://files.pythonhosted.org/packages/29/e0/135df2e733790a3d3bcda970fd080617be8cea3bd98f411e76e6847c17ef
-+PYTHON_SORTEDCONTAINERS_SITE = https://files.pythonhosted.org/packages/14/10/6a9481890bae97da9edd6e737c9c3dec6aea3fc2fa53b0934037b35c89ea
- PYTHON_SORTEDCONTAINERS_SETUP_TYPE = setuptools
- PYTHON_SORTEDCONTAINERS_LICENSE = Apache-2.0
- PYTHON_SORTEDCONTAINERS_LICENSE_FILES = LICENSE
+-PYTHON_PYTRIE_VERSION = 0.3.1
++PYTHON_PYTRIE_VERSION = 0.4.0
+ PYTHON_PYTRIE_SOURCE = PyTrie-$(PYTHON_PYTRIE_VERSION).tar.gz
+ PYTHON_PYTRIE_LICENSE = BSD-3-Clause
+-PYTHON_PYTRIE_LICENSE_FILES = PKG-INFO
+-PYTHON_PYTRIE_SITE = https://files.pythonhosted.org/packages/e1/eb/ae1f098969c9e9b81e821fb8e916cbf720b900ec1c0f3359e47a427395ec
++PYTHON_PYTRIE_LICENSE_FILES = LICENSE
++PYTHON_PYTRIE_SITE = https://files.pythonhosted.org/packages/d3/19/15ec77ab9c85f7c36eb590d6ab7dd529f8c8516c0e2219f1a77a99d7ee77
+ PYTHON_PYTRIE_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
 -- 
 2.30.2
