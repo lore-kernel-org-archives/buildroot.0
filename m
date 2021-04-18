@@ -1,144 +1,136 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 18 Apr 2021 13:42:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/m4: fix build with glibc 2.34
-Message-ID: <20210418114253.2068962-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 18 Apr 2021 18:23:58 +0200
+Subject: [Buildroot] [PATCH] package/numactl: make available on all
+ architectures
+Message-ID: <20210418162359.3462571-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m4 fails to build with glibc 2.34 because SIGSTKSZ is now a run-time
-variable since
-https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=6c57d320484988e87e446e2e60ce42816bf51d53
+Since its introduction in commit
+b05e74ff92b6728369e1540fc0a2bd60025f2146 in 2013, numactl has had an
+explicit list of architectures that it supports. Interestingly, this
+list does not include ARM, and now that rt-tests unconditionally needs
+numactl, it meant the rt-tests package was no longer available on ARM.
 
-So backport an upstream patch from gnulib, see:
-https://lists.gnu.org/archive/html/bug-m4/2021-03/msg00015.html
+Further investigation revealed that there is nothing in recent
+versions of numactl that appears to be architecture-specific. It does
+build with all of Buildroot toolchains currently used in the
+autobuilders.
 
-An other option would have been to apply patch from
-https://lists.gnu.org/archive/html/bug-m4/2021-03/msg00024.html
-but no feedback was received on this patch
+The only necessary changes are:
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=13721
+ * Exclude no-MMU architectures, as madvise() is used in the code
+   base, and this is not available on no-MMU architectures.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ * Make sure to use -latomic when needed, as some atomic operations
+   are used.
+
+ * Backport a patch that fixes the .symver usage, which only affects
+   really old gcc versions: only the old ARM Sourcery toolchain was
+   affected by this. Newer gcc versions support the gcc "symver"
+   attribute, so that the code that directly emits the assembly
+   .symver directive is not invoked.
+
+With these changes, numactl builds successfully on all our supported
+toolchains.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../m4/0003-c-stack-stop-using-SIGSTKSZ.patch | 106 ++++++++++++++++++
- 1 file changed, 106 insertions(+)
- create mode 100644 package/m4/0003-c-stack-stop-using-SIGSTKSZ.patch
+ ...0001-Do-not-stringify-SYMVER-symbols.patch | 25 +++++++++++++++++++
+ package/numactl/Config.in                     | 11 +-------
+ package/numactl/numactl.mk                    |  4 +++
+ package/rt-tests/Config.in                    |  4 +--
+ 4 files changed, 31 insertions(+), 13 deletions(-)
+ create mode 100644 package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
 
-diff --git a/package/m4/0003-c-stack-stop-using-SIGSTKSZ.patch b/package/m4/0003-c-stack-stop-using-SIGSTKSZ.patch
+diff --git a/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch b/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
 new file mode 100644
-index 0000000000..f262fc818e
+index 0000000000..c6981aaf73
 --- /dev/null
-+++ b/package/m4/0003-c-stack-stop-using-SIGSTKSZ.patch
-@@ -0,0 +1,106 @@
-+c-stack: stop using SIGSTKSZ
++++ b/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
+@@ -0,0 +1,25 @@
++From f96c96af7fbf2779b15f66f03b10315a24fb4f5a Mon Sep 17 00:00:00 2001
++From: Scott McMillan <smcmillan@nvidia.com>
++Date: Fri, 9 Oct 2020 08:56:52 -0500
++Subject: [PATCH] Do not stringify SYMVER symbols
 +
-+It?s been proposed to stop making SIGSTKSZ an integer constant:
-+https://sourceware.org/pipermail/libc-alpha/2020-September/118028.html
-+Also, using SIGSTKSZ in #if did not conform to current POSIX.
-+Also, avoiding SIGSTKSZ makes the code simpler and easier to grok.
-+* lib/c-stack.c (SIGSTKSZ): Remove.
-+(alternate_signal_stack): Now a 64 KiB array, for simplicity.
-+All uses changed.
++Upstream: f96c96af7fbf2779b15f66f03b10315a24fb4f5a
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ util.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+[Retrieved (and backported) from:
-+https://git.savannah.gnu.org/cgit/gnulib.git/patch/?id=f9e2b20a12a230efa30f1d479563ae07d276a94b]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+diff -Nura m4-1.4.18.orig/lib/c-stack.c m4-1.4.18/lib/c-stack.c
-+--- m4-1.4.18.orig/lib/c-stack.c	2021-04-11 19:12:14.086494029 +0200
-++++ m4-1.4.18/lib/c-stack.c	2021-04-11 19:48:46.316862760 +0200
-+@@ -50,15 +50,16 @@
-+ #if ! HAVE_STACK_T && ! defined stack_t
-+ typedef struct sigaltstack stack_t;
++diff --git a/util.h b/util.h
++index 99ada33..f2a20ac 100644
++--- a/util.h
+++++ b/util.h
++@@ -22,5 +22,5 @@ extern char *policy_name(int policy);
++ #if HAVE_ATTRIBUTE_SYMVER
++ #define SYMVER(a,b) __attribute__ ((symver (b)))
++ #else
++-#define SYMVER(a,b) __asm__ (".symver " #a "," #b);
+++#define SYMVER(a,b) __asm__ (".symver " a "," b);
 + #endif
-+-#ifndef SIGSTKSZ
-+-# define SIGSTKSZ 16384
-+-#elif HAVE_LIBSIGSEGV && SIGSTKSZ < 16384
-+-/* libsigsegv 2.6 through 2.8 have a bug where some architectures use
-+-   more than the Linux default of an 8k alternate stack when deciding
-+-   if a fault was caused by stack overflow.  */
-+-# undef SIGSTKSZ
-+-# define SIGSTKSZ 16384
-+-#endif
-++
-++/* Storage for the alternate signal stack.
-++   64 KiB is not too large for Gnulib-using apps, and is large enough
-++   for all known platforms.  Smaller sizes may run into trouble.
-++   For example, libsigsegv 2.6 through 2.8 have a bug where some
-++   architectures use more than the Linux default of an 8 KiB alternate
-++   stack when deciding if a fault was caused by stack overflow.  */
-++static max_align_t alternate_signal_stack[(64 * 1024
-++                                           + sizeof (max_align_t) - 1)
-++                                          / sizeof (max_align_t)];
-+ 
-+ #include <stdlib.h>
-+ #include <string.h>
-+@@ -128,19 +129,6 @@
-+ #if (HAVE_SIGALTSTACK && HAVE_DECL_SIGALTSTACK \
-+      && HAVE_STACK_OVERFLOW_HANDLING) || HAVE_LIBSIGSEGV
-+ 
-+-/* Storage for the alternate signal stack.  */
-+-static union
-+-{
-+-  char buffer[SIGSTKSZ];
-+-
-+-  /* These other members are for proper alignment.  There's no
-+-     standard way to guarantee stack alignment, but this seems enough
-+-     in practice.  */
-+-  long double ld;
-+-  long l;
-+-  void *p;
-+-} alternate_signal_stack;
-+-
-+ static void
-+ null_action (int signo __attribute__ ((unused)))
-+ {
-+@@ -205,8 +193,8 @@
-+ 
-+   /* Always install the overflow handler.  */
-+   if (stackoverflow_install_handler (overflow_handler,
-+-                                     alternate_signal_stack.buffer,
-+-                                     sizeof alternate_signal_stack.buffer))
-++                                     alternate_signal_stack,
-++                                     sizeof alternate_signal_stack))
-+     {
-+       errno = ENOTSUP;
-+       return -1;
-+@@ -279,14 +267,14 @@
-+   stack_t st;
-+   struct sigaction act;
-+   st.ss_flags = 0;
-++  st.ss_sp = alternate_signal_stack;
-++  st.ss_size = sizeof alternate_signal_stack;
-+ # if SIGALTSTACK_SS_REVERSED
-+   /* Irix mistakenly treats ss_sp as the upper bound, rather than
-+      lower bound, of the alternate stack.  */
-+-  st.ss_sp = alternate_signal_stack.buffer + SIGSTKSZ - sizeof (void *);
-+-  st.ss_size = sizeof alternate_signal_stack.buffer - sizeof (void *);
-+-# else
-+-  st.ss_sp = alternate_signal_stack.buffer;
-+-  st.ss_size = sizeof alternate_signal_stack.buffer;
-++  st.ss_size -= sizeof (void *);
-++  char *ss_sp = st.ss_sp;
-++  st.ss_sp = ss_sp + st.ss_size;
-+ # endif
-+   r = sigaltstack (&st, NULL);
-+   if (r != 0)
-+diff -Nura m4-1.4.18.orig/lib/c-stack.h m4-1.4.18/lib/c-stack.h
-+--- m4-1.4.18.orig/lib/c-stack.h	2021-04-11 19:12:14.098494042 +0200
-++++ m4-1.4.18/lib/c-stack.h	2021-04-11 19:17:42.138848378 +0200
-+@@ -34,7 +34,7 @@
-+    A null ACTION acts like an action that does nothing.
-+ 
-+    ACTION must be async-signal-safe.  ACTION together with its callees
-+-   must not require more than SIGSTKSZ bytes of stack space.  Also,
-++   must not require more than 64 KiB bytes of stack space.  Also,
-+    ACTION should not call longjmp, because this implementation does
-+    not guarantee that it is safe to return to the original stack.
-+ 
++-- 
++2.30.2
++
+diff --git a/package/numactl/Config.in b/package/numactl/Config.in
+index cd47f2f9a9..23cf7facb0 100644
+--- a/package/numactl/Config.in
++++ b/package/numactl/Config.in
+@@ -1,15 +1,6 @@
+-config BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
+-	bool
+-	# numactl uses some system calls that are not available on all
+-	# architectures.
+-	default y if BR2_aarch64
+-	default y if BR2_i386 || BR2_x86_64
+-	default y if BR2_mips || BR2_mipsel ||  BR2_mips64 || BR2_mips64el
+-	default y if BR2_powerpc
+-
+ config BR2_PACKAGE_NUMACTL
+ 	bool "numactl"
+-	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
++	depends on BR2_USE_MMU # madvise()
+ 	help
+ 	  numactl allows you to run your application on specific cpus
+ 	  and memory nodes. It does this by supplying a NUMA memory
+diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
+index cf9c759693..3364f6c5c3 100644
+--- a/package/numactl/numactl.mk
++++ b/package/numactl/numactl.mk
+@@ -12,4 +12,8 @@ NUMACTL_INSTALL_STAGING = YES
+ NUMACTL_AUTORECONF = YES
+ NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++NUMACTL_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
++endif
++
+ $(eval $(autotools-package))
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index cc9b14dccb..477fa288d7 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -2,10 +2,9 @@ config BR2_PACKAGE_RT_TESTS
+ 	bool "rt-tests"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14 # deadline scheduler syscall
+-	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_MMU # fork(), numactl
+ 	depends on !BR2_STATIC_LIBS # dlopen
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # cyclictest
+-	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_NUMACTL
+ 	help
+ 	  Set of utilities for testing the real-time behaviour of a
+@@ -34,4 +33,3 @@ comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 3.14, dy
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+ 		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+ 	depends on BR2_USE_MMU
+-	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
 -- 
 2.30.2
