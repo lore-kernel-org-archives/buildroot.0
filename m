@@ -1,35 +1,50 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 18 Apr 2021 22:07:30 +0200
-Subject: [Buildroot] [PATCH 2/2] package/domoticz: drop boost date-time
- dependency
-In-Reply-To: <20210418200730.3474374-1-fontaine.fabrice@gmail.com>
-References: <20210418200730.3474374-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210418200730.3474374-2-fontaine.fabrice@gmail.com>
+Date: Sun, 18 Apr 2021 22:18:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/usb_modeswitch: bump to version
+ 2.6.1
+Message-ID: <20210418201848.3478206-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-boost date-time is not a dependency since version 4.9700 and
-https://github.com/domoticz/domoticz/commit/a3eacbc987b59dd4aa73ada24a0a6e9a0d27b740
+Update indentation in hash file (two spaces)
+
+https://www.draisberghof.de/usb_modeswitch/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/domoticz/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/usb_modeswitch/usb_modeswitch.hash | 8 ++++----
+ package/usb_modeswitch/usb_modeswitch.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index 88de232642..4d1a7f9289 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -11,7 +11,6 @@ config BR2_PACKAGE_DOMOTICZ
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
- 	select BR2_PACKAGE_BOOST
--	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
- 	select BR2_PACKAGE_JSONCPP
+diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
+index 4cbd5dbea2..765a2438c2 100644
+--- a/package/usb_modeswitch/usb_modeswitch.hash
++++ b/package/usb_modeswitch/usb_modeswitch.hash
+@@ -1,5 +1,5 @@
+-# From http://www.draisberghof.de/usb_modeswitch/
+-md5	 be73dcc84025794081a1d4d4e5a75e4c  usb-modeswitch-2.6.0.tar.bz2
++# From https://www.draisberghof.de/usb_modeswitch/usb-modeswitch-versions.xml
++md5  69d00d6ed7097b97d972a159d14cfba1  usb-modeswitch-2.6.1.tar.bz2
+ # Locally calculated
+-sha256	c215236e6bada6e659fc195a31d611ea298a4bdb4d57a0d68c553b56585f8ba3  usb-modeswitch-2.6.0.tar.bz2
+-sha256	6195429209313925c0eba6c0da4ee7a6cb4277b99e35c886913f80f91ec20b94  COPYING
++sha256  5195d9e136e52f658f19e9f93e4f982b1b67bffac197d0a455cd8c2cd245fa34  usb-modeswitch-2.6.1.tar.bz2
++sha256  6195429209313925c0eba6c0da4ee7a6cb4277b99e35c886913f80f91ec20b94  COPYING
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index 064e1960b0..f2ee004b42 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USB_MODESWITCH_VERSION = 2.6.0
++USB_MODESWITCH_VERSION = 2.6.1
+ USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DEPENDENCIES = libusb
 -- 
 2.30.2
