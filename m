@@ -1,59 +1,33 @@
-From: Gleb Mazovetskiy <glex.spb@gmail.com>
-Date: Sun, 18 Apr 2021 19:36:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/valgrind: Add a setting for LTO
- build
-Message-ID: <20210418183658.1675843-1-glex.spb@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 18 Apr 2021 20:38:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fmt: add FMT_CPE_ID_VENDOR
+Message-ID: <20210418183847.2981328-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Valgrind LTO build takes over an hour on my Ryzen 3950x.
+cpe:2.3:a:fmt:fmt is a valid CPE identifier for this package:
 
-This is not always worth it for the ~10% size reduction and a small
-performance improvement it offers (see https://www.valgrind.org/docs/manual/dist.news.html)
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afmt%3Afmt
 
-Adds a new `BR2_VALGRIND_ENABLE_LTO` setting to control LTO enablement
-for Valgrind separately from the global BR2_GCC_ENABLE_LTO setting.
-
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/valgrind/Config.in   | 10 ++++++++++
- package/valgrind/valgrind.mk |  2 +-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/fmt/fmt.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
-index 56e4af21fa..eff54e7949 100644
---- a/package/valgrind/Config.in
-+++ b/package/valgrind/Config.in
-@@ -84,4 +84,14 @@ config BR2_PACKAGE_VALGRIND_NULGRIND
- 	help
- 	  This option allows to install the Nulgrind tool
+diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
+index 000bacfd7b..7ea7b9d69c 100644
+--- a/package/fmt/fmt.mk
++++ b/package/fmt/fmt.mk
+@@ -9,6 +9,7 @@ FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
+ FMT_SOURCE = fmt-$(FMT_VERSION).zip
+ FMT_LICENSE = MIT with exception
+ FMT_LICENSE_FILES = LICENSE.rst
++FMT_CPE_ID_VENDOR  = fmt
+ FMT_INSTALL_STAGING = YES
  
-+if BR2_GCC_ENABLE_LTO
-+
-+config BR2_VALGRIND_ENABLE_LTO
-+	bool "Build Valgrind with link-time optimization"
-+	help
-+	  This produces a faster / smaller valgrind (up to 10%) at the cost
-+	  of massively increased build time (can be over an hour).
-+
-+endif
-+
- endif
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index b87e1e518f..07fb1f7d42 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -50,7 +50,7 @@ VALGRIND_CONF_OPTS += \
- 	--host=$(patsubst arm-%,armv7-%,$(GNU_TARGET_NAME))
- endif
- 
--ifeq ($(BR2_GCC_ENABLE_LTO),y)
-+ifeq ($(BR2_VALGRIND_ENABLE_LTO),y)
- VALGRIND_CONF_OPTS += --enable-lto
- else
- VALGRIND_CONF_OPTS += --disable-lto
+ FMT_CONF_OPTS = \
 -- 
-2.27.0
+2.30.2
