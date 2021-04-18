@@ -1,136 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Apr 2021 18:23:58 +0200
-Subject: [Buildroot] [PATCH] package/numactl: make available on all
- architectures
-Message-ID: <20210418162359.3462571-1-thomas.petazzoni@bootlin.com>
+From: Gleb Mazovetskiy <glex.spb@gmail.com>
+Date: Sun, 18 Apr 2021 19:36:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/valgrind: Add a setting for LTO
+ build
+Message-ID: <20210418183658.1675843-1-glex.spb@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since its introduction in commit
-b05e74ff92b6728369e1540fc0a2bd60025f2146 in 2013, numactl has had an
-explicit list of architectures that it supports. Interestingly, this
-list does not include ARM, and now that rt-tests unconditionally needs
-numactl, it meant the rt-tests package was no longer available on ARM.
+Valgrind LTO build takes over an hour on my Ryzen 3950x.
 
-Further investigation revealed that there is nothing in recent
-versions of numactl that appears to be architecture-specific. It does
-build with all of Buildroot toolchains currently used in the
-autobuilders.
+This is not always worth it for the ~10% size reduction and a small
+performance improvement it offers (see https://www.valgrind.org/docs/manual/dist.news.html)
 
-The only necessary changes are:
+Adds a new `BR2_VALGRIND_ENABLE_LTO` setting to control LTO enablement
+for Valgrind separately from the global BR2_GCC_ENABLE_LTO setting.
 
- * Exclude no-MMU architectures, as madvise() is used in the code
-   base, and this is not available on no-MMU architectures.
-
- * Make sure to use -latomic when needed, as some atomic operations
-   are used.
-
- * Backport a patch that fixes the .symver usage, which only affects
-   really old gcc versions: only the old ARM Sourcery toolchain was
-   affected by this. Newer gcc versions support the gcc "symver"
-   attribute, so that the code that directly emits the assembly
-   .symver directive is not invoked.
-
-With these changes, numactl builds successfully on all our supported
-toolchains.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
 ---
- ...0001-Do-not-stringify-SYMVER-symbols.patch | 25 +++++++++++++++++++
- package/numactl/Config.in                     | 11 +-------
- package/numactl/numactl.mk                    |  4 +++
- package/rt-tests/Config.in                    |  4 +--
- 4 files changed, 31 insertions(+), 13 deletions(-)
- create mode 100644 package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
+ package/valgrind/Config.in   | 10 ++++++++++
+ package/valgrind/valgrind.mk |  2 +-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch b/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
-new file mode 100644
-index 0000000000..c6981aaf73
---- /dev/null
-+++ b/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
-@@ -0,0 +1,25 @@
-+From f96c96af7fbf2779b15f66f03b10315a24fb4f5a Mon Sep 17 00:00:00 2001
-+From: Scott McMillan <smcmillan@nvidia.com>
-+Date: Fri, 9 Oct 2020 08:56:52 -0500
-+Subject: [PATCH] Do not stringify SYMVER symbols
-+
-+Upstream: f96c96af7fbf2779b15f66f03b10315a24fb4f5a
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ util.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/util.h b/util.h
-+index 99ada33..f2a20ac 100644
-+--- a/util.h
-++++ b/util.h
-+@@ -22,5 +22,5 @@ extern char *policy_name(int policy);
-+ #if HAVE_ATTRIBUTE_SYMVER
-+ #define SYMVER(a,b) __attribute__ ((symver (b)))
-+ #else
-+-#define SYMVER(a,b) __asm__ (".symver " #a "," #b);
-++#define SYMVER(a,b) __asm__ (".symver " a "," b);
-+ #endif
-+-- 
-+2.30.2
-+
-diff --git a/package/numactl/Config.in b/package/numactl/Config.in
-index cd47f2f9a9..23cf7facb0 100644
---- a/package/numactl/Config.in
-+++ b/package/numactl/Config.in
-@@ -1,15 +1,6 @@
--config BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
--	bool
--	# numactl uses some system calls that are not available on all
--	# architectures.
--	default y if BR2_aarch64
--	default y if BR2_i386 || BR2_x86_64
--	default y if BR2_mips || BR2_mipsel ||  BR2_mips64 || BR2_mips64el
--	default y if BR2_powerpc
--
- config BR2_PACKAGE_NUMACTL
- 	bool "numactl"
--	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU # madvise()
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index 56e4af21fa..eff54e7949 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -84,4 +84,14 @@ config BR2_PACKAGE_VALGRIND_NULGRIND
  	help
- 	  numactl allows you to run your application on specific cpus
- 	  and memory nodes. It does this by supplying a NUMA memory
-diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-index cf9c759693..3364f6c5c3 100644
---- a/package/numactl/numactl.mk
-+++ b/package/numactl/numactl.mk
-@@ -12,4 +12,8 @@ NUMACTL_INSTALL_STAGING = YES
- NUMACTL_AUTORECONF = YES
- NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
+ 	  This option allows to install the Nulgrind tool
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+NUMACTL_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
++if BR2_GCC_ENABLE_LTO
++
++config BR2_VALGRIND_ENABLE_LTO
++	bool "Build Valgrind with link-time optimization"
++	help
++	  This produces a faster / smaller valgrind (up to 10%) at the cost
++	  of massively increased build time (can be over an hour).
++
 +endif
 +
- $(eval $(autotools-package))
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index cc9b14dccb..477fa288d7 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -2,10 +2,9 @@ config BR2_PACKAGE_RT_TESTS
- 	bool "rt-tests"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14 # deadline scheduler syscall
--	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_MMU # fork(), numactl
- 	depends on !BR2_STATIC_LIBS # dlopen
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # cyclictest
--	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
- 	select BR2_PACKAGE_NUMACTL
- 	help
- 	  Set of utilities for testing the real-time behaviour of a
-@@ -34,4 +33,3 @@ comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 3.14, dy
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
- 		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
+ endif
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index b87e1e518f..07fb1f7d42 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -50,7 +50,7 @@ VALGRIND_CONF_OPTS += \
+ 	--host=$(patsubst arm-%,armv7-%,$(GNU_TARGET_NAME))
+ endif
+ 
+-ifeq ($(BR2_GCC_ENABLE_LTO),y)
++ifeq ($(BR2_VALGRIND_ENABLE_LTO),y)
+ VALGRIND_CONF_OPTS += --enable-lto
+ else
+ VALGRIND_CONF_OPTS += --disable-lto
 -- 
-2.30.2
+2.27.0
