@@ -1,45 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 18 Apr 2021 22:50:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libp11: bump to version 0.4.11
-Message-ID: <20210418205042.3487006-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 18 Apr 2021 23:13:11 +0200
+Subject: [Buildroot] [PATCH v1] package/protozero: disable test wchar support
+Message-ID: <20210418211311.8038-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
+No option to disable test compile available, but catch wchar support
+can be disabled with CATCH_CONFIG_NO_WCHAR define.
 
-https://github.com/OpenSC/libp11/releases/tag/libp11-0.4.11
+Fixes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  - http://autobuild.buildroot.net/results/1cd24b757d87b963c70bc7ff927c6d983d0b142a
+
+  .../build/protozero-1.7.0/test/catch/catch.hpp:1691:29: error: 'wstring' is not a member of 'std'
+   1691 |     struct StringMaker<std::wstring> {
+        |                             ^~~~~~~
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/libp11/libp11.hash | 4 ++--
- package/libp11/libp11.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/protozero/protozero.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libp11/libp11.hash b/package/libp11/libp11.hash
-index bba5c770a2..52d73d4206 100644
---- a/package/libp11/libp11.hash
-+++ b/package/libp11/libp11.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 639ea43c3341e267214b712e1e5e12397fd2d350899e673dd1220f3c6b8e3db4  libp11-0.4.10.tar.gz
--sha256 d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
-+sha256  57d47a12a76fd92664ae30032cf969284ebac1dfc25bf824999d74b016d51366  libp11-0.4.11.tar.gz
-+sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
-diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
-index 90c582571e..45a718ee99 100644
---- a/package/libp11/libp11.mk
-+++ b/package/libp11/libp11.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/protozero/protozero.mk b/package/protozero/protozero.mk
+index e4ce1a4730..48ce04ffe0 100644
+--- a/package/protozero/protozero.mk
++++ b/package/protozero/protozero.mk
+@@ -10,6 +10,9 @@ PROTOZERO_LICENSE = BSD-2-Clause, Apache-2.0
+ PROTOZERO_LICENSE_FILES = LICENSE.md LICENSE.from_folly
+ PROTOZERO_INSTALL_STAGING = YES
  
--LIBP11_VERSION = 0.4.10
-+LIBP11_VERSION = 0.4.11
- LIBP11_SITE = https://github.com/OpenSC/libp11/releases/download/libp11-$(LIBP11_VERSION)
- LIBP11_DEPENDENCIES = openssl host-pkgconf
- LIBP11_INSTALL_STAGING = YES
++PROTOZERO_CONF_OPTS += \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DCATCH_CONFIG_NO_WCHAR=1"
++
+ ifeq ($(BR2_PACKAGE_PROTOBUF),y)
+ PROTOZERO_DEPENDENCIES += protobuf
+ endif
 -- 
-2.30.2
+2.31.1
