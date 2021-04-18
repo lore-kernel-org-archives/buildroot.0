@@ -1,49 +1,144 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Sun, 18 Apr 2021 09:20:40 +0200
-Subject: [Buildroot] [PATCH] package/dnsmasq: security bump to 2.85
-Message-ID: <20210418072040.14527-1-post@lespocky.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 18 Apr 2021 13:42:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/m4: fix build with glibc 2.34
+Message-ID: <20210418114253.2068962-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2021-3448 applies.  See announcement for details.
+m4 fails to build with glibc 2.34 because SIGSTKSZ is now a run-time
+variable since
+https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=6c57d320484988e87e446e2e60ce42816bf51d53
 
-Link: https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2021q2/014962.html
-Signed-off-by: Alexander Dahl <post@lespocky.de>
+So backport an upstream patch from gnulib, see:
+https://lists.gnu.org/archive/html/bug-m4/2021-03/msg00015.html
+
+An other option would have been to apply patch from
+https://lists.gnu.org/archive/html/bug-m4/2021-03/msg00024.html
+but no feedback was received on this patch
+
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=13721
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dnsmasq/dnsmasq.hash | 4 ++--
- package/dnsmasq/dnsmasq.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../m4/0003-c-stack-stop-using-SIGSTKSZ.patch | 106 ++++++++++++++++++
+ 1 file changed, 106 insertions(+)
+ create mode 100644 package/m4/0003-c-stack-stop-using-SIGSTKSZ.patch
 
-diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
-index d141fb0c83..2a7cda4a04 100644
---- a/package/dnsmasq/dnsmasq.hash
-+++ b/package/dnsmasq/dnsmasq.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.83.tar.xz.asc
--sha256  603195c64b73137609b07e1024ae0b37f652b2f5fe467dce66985b3d1850050c  dnsmasq-2.84.tar.xz
-+# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.85.tar.xz.asc
-+sha256  ad98d3803df687e5b938080f3d25c628fe41c878752d03fbc6199787fee312fa  dnsmasq-2.85.tar.xz
- # Locally calculated
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 76b48f952a..2006757590 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DNSMASQ_VERSION = 2.84
-+DNSMASQ_VERSION = 2.85
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
-
-base-commit: 5e3799213236881b6960325f014c2266064de391
+diff --git a/package/m4/0003-c-stack-stop-using-SIGSTKSZ.patch b/package/m4/0003-c-stack-stop-using-SIGSTKSZ.patch
+new file mode 100644
+index 0000000000..f262fc818e
+--- /dev/null
++++ b/package/m4/0003-c-stack-stop-using-SIGSTKSZ.patch
+@@ -0,0 +1,106 @@
++c-stack: stop using SIGSTKSZ
++
++It?s been proposed to stop making SIGSTKSZ an integer constant:
++https://sourceware.org/pipermail/libc-alpha/2020-September/118028.html
++Also, using SIGSTKSZ in #if did not conform to current POSIX.
++Also, avoiding SIGSTKSZ makes the code simpler and easier to grok.
++* lib/c-stack.c (SIGSTKSZ): Remove.
++(alternate_signal_stack): Now a 64 KiB array, for simplicity.
++All uses changed.
++
++[Retrieved (and backported) from:
++https://git.savannah.gnu.org/cgit/gnulib.git/patch/?id=f9e2b20a12a230efa30f1d479563ae07d276a94b]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff -Nura m4-1.4.18.orig/lib/c-stack.c m4-1.4.18/lib/c-stack.c
++--- m4-1.4.18.orig/lib/c-stack.c	2021-04-11 19:12:14.086494029 +0200
+++++ m4-1.4.18/lib/c-stack.c	2021-04-11 19:48:46.316862760 +0200
++@@ -50,15 +50,16 @@
++ #if ! HAVE_STACK_T && ! defined stack_t
++ typedef struct sigaltstack stack_t;
++ #endif
++-#ifndef SIGSTKSZ
++-# define SIGSTKSZ 16384
++-#elif HAVE_LIBSIGSEGV && SIGSTKSZ < 16384
++-/* libsigsegv 2.6 through 2.8 have a bug where some architectures use
++-   more than the Linux default of an 8k alternate stack when deciding
++-   if a fault was caused by stack overflow.  */
++-# undef SIGSTKSZ
++-# define SIGSTKSZ 16384
++-#endif
+++
+++/* Storage for the alternate signal stack.
+++   64 KiB is not too large for Gnulib-using apps, and is large enough
+++   for all known platforms.  Smaller sizes may run into trouble.
+++   For example, libsigsegv 2.6 through 2.8 have a bug where some
+++   architectures use more than the Linux default of an 8 KiB alternate
+++   stack when deciding if a fault was caused by stack overflow.  */
+++static max_align_t alternate_signal_stack[(64 * 1024
+++                                           + sizeof (max_align_t) - 1)
+++                                          / sizeof (max_align_t)];
++ 
++ #include <stdlib.h>
++ #include <string.h>
++@@ -128,19 +129,6 @@
++ #if (HAVE_SIGALTSTACK && HAVE_DECL_SIGALTSTACK \
++      && HAVE_STACK_OVERFLOW_HANDLING) || HAVE_LIBSIGSEGV
++ 
++-/* Storage for the alternate signal stack.  */
++-static union
++-{
++-  char buffer[SIGSTKSZ];
++-
++-  /* These other members are for proper alignment.  There's no
++-     standard way to guarantee stack alignment, but this seems enough
++-     in practice.  */
++-  long double ld;
++-  long l;
++-  void *p;
++-} alternate_signal_stack;
++-
++ static void
++ null_action (int signo __attribute__ ((unused)))
++ {
++@@ -205,8 +193,8 @@
++ 
++   /* Always install the overflow handler.  */
++   if (stackoverflow_install_handler (overflow_handler,
++-                                     alternate_signal_stack.buffer,
++-                                     sizeof alternate_signal_stack.buffer))
+++                                     alternate_signal_stack,
+++                                     sizeof alternate_signal_stack))
++     {
++       errno = ENOTSUP;
++       return -1;
++@@ -279,14 +267,14 @@
++   stack_t st;
++   struct sigaction act;
++   st.ss_flags = 0;
+++  st.ss_sp = alternate_signal_stack;
+++  st.ss_size = sizeof alternate_signal_stack;
++ # if SIGALTSTACK_SS_REVERSED
++   /* Irix mistakenly treats ss_sp as the upper bound, rather than
++      lower bound, of the alternate stack.  */
++-  st.ss_sp = alternate_signal_stack.buffer + SIGSTKSZ - sizeof (void *);
++-  st.ss_size = sizeof alternate_signal_stack.buffer - sizeof (void *);
++-# else
++-  st.ss_sp = alternate_signal_stack.buffer;
++-  st.ss_size = sizeof alternate_signal_stack.buffer;
+++  st.ss_size -= sizeof (void *);
+++  char *ss_sp = st.ss_sp;
+++  st.ss_sp = ss_sp + st.ss_size;
++ # endif
++   r = sigaltstack (&st, NULL);
++   if (r != 0)
++diff -Nura m4-1.4.18.orig/lib/c-stack.h m4-1.4.18/lib/c-stack.h
++--- m4-1.4.18.orig/lib/c-stack.h	2021-04-11 19:12:14.098494042 +0200
+++++ m4-1.4.18/lib/c-stack.h	2021-04-11 19:17:42.138848378 +0200
++@@ -34,7 +34,7 @@
++    A null ACTION acts like an action that does nothing.
++ 
++    ACTION must be async-signal-safe.  ACTION together with its callees
++-   must not require more than SIGSTKSZ bytes of stack space.  Also,
+++   must not require more than 64 KiB bytes of stack space.  Also,
++    ACTION should not call longjmp, because this implementation does
++    not guarantee that it is safe to return to the original stack.
++ 
 -- 
-2.20.1
+2.30.2
