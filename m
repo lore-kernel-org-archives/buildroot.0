@@ -1,42 +1,86 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 18 Apr 2021 23:13:11 +0200
-Subject: [Buildroot] [PATCH v1] package/protozero: disable test wchar support
-Message-ID: <20210418211311.8038-1-ps.report@gmx.net>
+Date: Sun, 18 Apr 2021 23:59:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/valgrind: Add a setting for LTO
+ build
+In-Reply-To: <20210418183658.1675843-1-glex.spb@gmail.com>
+References: <20210418183658.1675843-1-glex.spb@gmail.com>
+Message-ID: <20210418235913.142664da@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No option to disable test compile available, but catch wchar support
-can be disabled with CATCH_CONFIG_NO_WCHAR define.
+Hello Gleb,
+On Sun, 18 Apr 2021 19:36:58 +0100, Gleb Mazovetskiy <glex.spb@gmail.com> wrote:
 
-Fixes:
+> Valgrind LTO build takes over an hour on my Ryzen 3950x.
+>
 
-  - http://autobuild.buildroot.net/results/1cd24b757d87b963c70bc7ff927c6d983d0b142a
+Can confirm a build time increase (AMD Ryzen 7 1800X):
 
-  .../build/protozero-1.7.0/test/catch/catch.hpp:1691:29: error: 'wstring' is not a member of 'std'
-   1691 |     struct StringMaker<std::wstring> {
-        |                             ^~~~~~~
+- without LTO:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/protozero/protozero.mk | 3 +++
- 1 file changed, 3 insertions(+)
+real	0m54,741s
+user	3m29,941s
+sys	0m10,949s
 
-diff --git a/package/protozero/protozero.mk b/package/protozero/protozero.mk
-index e4ce1a4730..48ce04ffe0 100644
---- a/package/protozero/protozero.mk
-+++ b/package/protozero/protozero.mk
-@@ -10,6 +10,9 @@ PROTOZERO_LICENSE = BSD-2-Clause, Apache-2.0
- PROTOZERO_LICENSE_FILES = LICENSE.md LICENSE.from_folly
- PROTOZERO_INSTALL_STAGING = YES
- 
-+PROTOZERO_CONF_OPTS += \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DCATCH_CONFIG_NO_WCHAR=1"
-+
- ifeq ($(BR2_PACKAGE_PROTOBUF),y)
- PROTOZERO_DEPENDENCIES += protobuf
- endif
--- 
-2.31.1
+- with LTO:
+
+real	5m48,009s
+user	6m23,040s
+sys	0m13,197s
+
+> This is not always worth it for the ~10% size reduction and a small
+> performance improvement it offers (see https://www.valgrind.org/docs/manual/dist.news.html)
+>
+> Adds a new `BR2_VALGRIND_ENABLE_LTO` setting to control LTO enablement
+> for Valgrind separately from the global BR2_GCC_ENABLE_LTO setting.
+>
+> Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+> ---
+>  package/valgrind/Config.in   | 10 ++++++++++
+>  package/valgrind/valgrind.mk |  2 +-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+> index 56e4af21fa..eff54e7949 100644
+> --- a/package/valgrind/Config.in
+> +++ b/package/valgrind/Config.in
+> @@ -84,4 +84,14 @@ config BR2_PACKAGE_VALGRIND_NULGRIND
+>  	help
+>  	  This option allows to install the Nulgrind tool
+>
+> +if BR2_GCC_ENABLE_LTO
+> +
+> +config BR2_VALGRIND_ENABLE_LTO
+> +	bool "Build Valgrind with link-time optimization"
+> +	help
+> +	  This produces a faster / smaller valgrind (up to 10%) at the cost
+> +	  of massively increased build time (can be over an hour).
+
+Be careful with absolute times, depends strongly on the used hardware...
+(out of interest, what is your baseline compile time?)...
+
+Would move this section up-to/before the tools selection section...
+
+Regards,
+Peter
+
+> +
+> +endif
+> +
+>  endif
+> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+> index b87e1e518f..07fb1f7d42 100644
+> --- a/package/valgrind/valgrind.mk
+> +++ b/package/valgrind/valgrind.mk
+> @@ -50,7 +50,7 @@ VALGRIND_CONF_OPTS += \
+>  	--host=$(patsubst arm-%,armv7-%,$(GNU_TARGET_NAME))
+>  endif
+>
+> -ifeq ($(BR2_GCC_ENABLE_LTO),y)
+> +ifeq ($(BR2_VALGRIND_ENABLE_LTO),y)
+>  VALGRIND_CONF_OPTS += --enable-lto
+>  else
+>  VALGRIND_CONF_OPTS += --disable-lto
