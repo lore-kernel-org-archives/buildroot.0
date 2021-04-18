@@ -1,33 +1,56 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 18 Apr 2021 20:38:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fmt: add FMT_CPE_ID_VENDOR
-Message-ID: <20210418183847.2981328-1-fontaine.fabrice@gmail.com>
+Date: Sun, 18 Apr 2021 20:51:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nettle: security bump to version
+ 3.7.2
+Message-ID: <20210418185114.3306357-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:fmt:fmt is a valid CPE identifier for this package:
+Fix CVE-2021-20305: A flaw was found in Nettle in versions before 3.7.2,
+where several Nettle signature verification functions (GOST DSA, EDDSA &
+ECDSA) result in the Elliptic Curve Cryptography point (ECC) multiply
+function being called with out-of-range scalers, possibly resulting in
+incorrect results. This flaw allows an attacker to force an invalid
+signature, causing an assertion failure or possible validation. The
+highest threat to this vulnerability is to confidentiality, integrity,
+as well as system availability.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afmt%3Afmt
+https://git.lysator.liu.se/nettle/nettle/-/blob/nettle_3.7.2_release_20210321/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/fmt/fmt.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/nettle/nettle.hash | 4 ++--
+ package/nettle/nettle.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index 000bacfd7b..7ea7b9d69c 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -9,6 +9,7 @@ FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
- FMT_LICENSE_FILES = LICENSE.rst
-+FMT_CPE_ID_VENDOR  = fmt
- FMT_INSTALL_STAGING = YES
+diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
+index 5fd69200bf..09652dcc8b 100644
+--- a/package/nettle/nettle.hash
++++ b/package/nettle/nettle.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/nettle/nettle-3.7.1.tar.gz.sig
+-sha256  156621427c7b00a75ff9b34b770b95d34f80ef7a55c3407de94b16cbf436c42e  nettle-3.7.1.tar.gz
++# https://ftp.gnu.org/gnu/nettle/nettle-3.7.2.tar.gz.sig
++sha256  8d2a604ef1cde4cd5fb77e422531ea25ad064679ff0adf956e78b3352e0ef162  nettle-3.7.2.tar.gz
+ # Locally calculated
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSERv3
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index dc76fc21ff..bf833eb27e 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- FMT_CONF_OPTS = \
+-NETTLE_VERSION = 3.7.1
++NETTLE_VERSION = 3.7.2
+ NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
+ NETTLE_DEPENDENCIES = gmp
+ NETTLE_INSTALL_STAGING = YES
 -- 
 2.30.2
