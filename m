@@ -1,28 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Apr 2021 23:20:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/spdlog: bump to version 1.8.5
-In-Reply-To: <20210413083524.1473561-1-joerg.krause@embedded.rocks>
-References: <20210413083524.1473561-1-joerg.krause@embedded.rocks>
-Message-ID: <20210419232019.4c274d1b@windsurf.home>
+Date: Mon, 19 Apr 2021 23:21:04 +0200
+Subject: [Buildroot] [git commit] package/rsyslog: install default service
+ file
+Message-ID: <20210419205432.9AB548189C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 13 Apr 2021 10:35:24 +0200
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4732b78221145ea9fd738d5959ac29cae5a30c0b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/spdlog/spdlog.hash | 2 +-
->  package/spdlog/spdlog.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+As of v8.2008 rsyslog no longer provides a default service file, and now
+suggests using the platform suggested defaults. For Buildroot, install
+the Debian service file which has been added in the same version,
+however is not included in the official release.
 
-Applied to master, thanks.
+Upstream commit which adds this service file:
+https://github.com/rsyslog/rsyslog/commit/cfd07503ba055100a84d75d1a78a5c6cceb9fdab
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rsyslog/rsyslog.mk      |  5 +++++
+ package/rsyslog/rsyslog.service | 19 +++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 99e80ae268..1aa81b8eac 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -101,6 +101,11 @@ RSYSLOG_CONF_OPTS += \
+ 	--disable-omjournal
+ endif
+ 
++define RSYSLOG_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -m 0755 -D package/rsyslog/rsyslog.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/rsyslog.service
++endef
++
+ define RSYSLOG_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/rsyslog/S01rsyslogd \
+ 		$(TARGET_DIR)/etc/init.d/S01rsyslogd
+diff --git a/package/rsyslog/rsyslog.service b/package/rsyslog/rsyslog.service
+new file mode 100644
+index 0000000000..40c7c2202d
+--- /dev/null
++++ b/package/rsyslog/rsyslog.service
+@@ -0,0 +1,19 @@
++[Unit]
++Description=System Logging Service
++Requires=syslog.socket
++Documentation=man:rsyslogd(8)
++Documentation=https://www.rsyslog.com/doc/
++
++[Service]
++Type=notify
++ExecStart=/usr/sbin/rsyslogd -n -iNONE
++StandardOutput=null
++Restart=on-failure
++
++# Increase the default a bit in order to allow many simultaneous
++# files to be monitored, we might need a lot of fds.
++LimitNOFILE=16384
++
++[Install]
++WantedBy=multi-user.target
++Alias=syslog.service
