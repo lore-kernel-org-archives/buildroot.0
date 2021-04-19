@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Apr 2021 22:33:55 +0200
-Subject: [Buildroot] [git commit] package/domoticz: drop boost date-time
- dependency
-Message-ID: <20210419200724.167A77FDD4@busybox.osuosl.org>
+Date: Mon, 19 Apr 2021 22:34:09 +0200
+Subject: [Buildroot] [PATCH 1/2] package/domoticz: drop first patch
+In-Reply-To: <20210418200730.3474374-1-fontaine.fabrice@gmail.com>
+References: <20210418200730.3474374-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210419223409.06425d6f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b4d98e2c5165c3121e670192970fc909cae6d8a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 18 Apr 2021 22:07:29 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-boost date-time is not a dependency since version 4.9700 and
-https://github.com/domoticz/domoticz/commit/a3eacbc987b59dd4aa73ada24a0a6e9a0d27b740
+> Patch not needed since commit 37f197f8634352750f169b6a287588a09b82e00e
+> which bumped host-cmake dependency from 3.10 to 3.15
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...nd-placeholders-in-global-namespace.patch} |  0
+>  ...CMake-configuration-file-to-use-vers.patch | 55 -------------------
+>  ... 0002-Build-failure-with-python-3-9.patch} |  0
+>  ...=> 0003-Load-python-3-9-shared-libs.patch} |  0  
+>  4 files changed, 55 deletions(-)
+>  rename package/domoticz/{0002-Avoid-deprecated-bind-placeholders-in-global-namespace.patch => 0001-Avoid-deprecated-bind-placeholders-in-global-namespace.patch} (100%)
+>  delete mode 100644 package/domoticz/0001-Revert-Updating-CMake-configuration-file-to-use-vers.patch
+>  rename package/domoticz/{0003-Build-failure-with-python-3-9.patch => 0002-Build-failure-with-python-3-9.patch} (100%)
+>  rename package/domoticz/{0004-Load-python-3-9-shared-libs.patch => 0003-Load-python-3-9-shared-libs.patch} (100%)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/domoticz/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index 88de232642..4d1a7f9289 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -11,7 +11,6 @@ config BR2_PACKAGE_DOMOTICZ
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
- 	select BR2_PACKAGE_BOOST
--	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
- 	select BR2_PACKAGE_JSONCPP
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
