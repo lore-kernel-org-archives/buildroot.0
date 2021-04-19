@@ -1,30 +1,98 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 19 Apr 2021 20:31:25 +0000
-Subject: [Buildroot] [Bug 13721] c-stack.c:55:26: error: missing binary
- operator before token "("
-In-Reply-To: <bug-13721-163@https.bugs.busybox.net/>
-References: <bug-13721-163@https.bugs.busybox.net/>
-Message-ID: <bug-13721-163-mjQL9ph0at@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Apr 2021 22:33:34 +0200
+Subject: [Buildroot] [git commit] package/domoticz: drop first patch
+Message-ID: <20210419200723.EFE8B82941@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13721
+commit: https://git.buildroot.net/buildroot/commit/?id=8a46b41b4a5d1c2f5ebefd7fc23fec7e8ba0598c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
+Patch not needed since commit 37f197f8634352750f169b6a287588a09b82e00e
+which bumped host-cmake dependency from 3.10 to 3.15
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ed-bind-placeholders-in-global-namespace.patch} |  0
+ ...ting-CMake-configuration-file-to-use-vers.patch | 55 ----------------------
+ ...ch => 0002-Build-failure-with-python-3-9.patch} |  0
+ ...atch => 0003-Load-python-3-9-shared-libs.patch} |  0
+ 4 files changed, 55 deletions(-)
 
---- Comment #9 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=5a9504831f3fa1ef3be334036c93da30150fde55.
-Thanks!
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/domoticz/0002-Avoid-deprecated-bind-placeholders-in-global-namespace.patch b/package/domoticz/0001-Avoid-deprecated-bind-placeholders-in-global-namespace.patch
+similarity index 100%
+rename from package/domoticz/0002-Avoid-deprecated-bind-placeholders-in-global-namespace.patch
+rename to package/domoticz/0001-Avoid-deprecated-bind-placeholders-in-global-namespace.patch
+diff --git a/package/domoticz/0001-Revert-Updating-CMake-configuration-file-to-use-vers.patch b/package/domoticz/0001-Revert-Updating-CMake-configuration-file-to-use-vers.patch
+deleted file mode 100644
+index 5393b0caf0..0000000000
+--- a/package/domoticz/0001-Revert-Updating-CMake-configuration-file-to-use-vers.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From 2cd95289939b4a7c2576176c7f6268028aa093b2 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 24 May 2019 21:50:16 +0200
+-Subject: [PATCH] Revert "Updating CMake configuration file to use
+- version 3.14 as minimum and added boost dependency targets"
+-
+-This reverts commit 4e4ee999c4b323514c0ba81ab1ff3afb10d2f1cd to avoid
+-bumping host-cmake requirement version from 3.8 to 3.14 in buildroot.
+-
+-[Fabrice: Updated for 2020.1]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- CMakeLists.txt | 8 +++-----
+- 1 file changed, 3 insertions(+), 5 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index c5b7832ff..a21f5b87b 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,5 +1,5 @@
+--#set to minimum version that supports clean build
+--cmake_minimum_required(VERSION 3.14.0)
+-+#set to minimum version that supports clean build on cygwin
+-+cmake_minimum_required(VERSION 2.8.4)
+- 
+- project(domoticz)
+- 
+-@@ -583,6 +583,7 @@ set(Boost_USE_STATIC_LIBS ${USE_STATIC_BOOST})
+- set(Boost_USE_MULTITHREADED ON)
+- unset(Boost_INCLUDE_DIR CACHE)
+- unset(Boost_LIBRARY_DIRS CACHE)
+-+find_package(Boost REQUIRED COMPONENTS thread system)
+- 
+- if(USE_STATIC_BOOST)
+-    message(STATUS "Linking against boost static libraries")
+-@@ -590,16 +591,6 @@ else(USE_STATIC_BOOST)
+-    message(STATUS "Linking against boost dynamic libraries")
+- endif(USE_STATIC_BOOST)
+- 
+--find_package(Boost REQUIRED COMPONENTS thread system)
+--if(Boost_FOUND)
+--    MESSAGE(STATUS "BOOST libraries found at: ${Boost_LIBRARY_DIRS}")
+--    MESSAGE(STATUS "Boost includes found at: ${Boost_INCLUDE_DIR}")
+--else(Boost_FOUND)
+--    MESSAGE(FATAL_ERROR "Boost thread/system library not found on your system, try to get this installed.")
+--endif(Boost_FOUND)
+--
+--target_link_libraries(domoticz Boost::thread Boost::system)
+--
+- # compare found vs required libBoost version
+- if(Boost_VERSION VERSION_LESS DOMO_MIN_LIBBOOST_VERSION)
+-    message(FATAL_ERROR "Found libBoost version ${Boost_VERSION}, ${DOMO_MIN_LIBBOOST_VERSION} or newer required")
+--- 
+-2.20.1
+-
+diff --git a/package/domoticz/0003-Build-failure-with-python-3-9.patch b/package/domoticz/0002-Build-failure-with-python-3-9.patch
+similarity index 100%
+rename from package/domoticz/0003-Build-failure-with-python-3-9.patch
+rename to package/domoticz/0002-Build-failure-with-python-3-9.patch
+diff --git a/package/domoticz/0004-Load-python-3-9-shared-libs.patch b/package/domoticz/0003-Load-python-3-9-shared-libs.patch
+similarity index 100%
+rename from package/domoticz/0004-Load-python-3-9-shared-libs.patch
+rename to package/domoticz/0003-Load-python-3-9-shared-libs.patch
