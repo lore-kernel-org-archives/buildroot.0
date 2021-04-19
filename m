@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Apr 2021 22:44:57 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: Add myself for postgis
-In-Reply-To: <20210414043545.18250-1-fido_max@inbox.ru>
-References: <20210414043545.18250-1-fido_max@inbox.ru>
-Message-ID: <20210419224457.7ece1c60@windsurf.home>
+Date: Mon, 19 Apr 2021 22:45:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/luv: bump to version 1.40.0-0
+In-Reply-To: <20210414051607.47386-1-joerg.krause@embedded.rocks>
+References: <20210414051607.47386-1-joerg.krause@embedded.rocks>
+Message-ID: <20210419224513.2a233c62@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 14 Apr 2021 07:35:45 +0300
-Maxim Kochetkov via buildroot <buildroot@busybox.net> wrote:
+On Wed, 14 Apr 2021 07:16:07 +0200
+J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> Also fix spacing to use 2 spaces in the hash file.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
+>  package/luv/luv.hash | 4 ++--
+>  package/luv/luv.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-I have really applied to master, since Arnout said he applied, but the
-commit was not in master. I've also fixed alphabetic ordering.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
