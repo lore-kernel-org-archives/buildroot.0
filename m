@@ -1,42 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Apr 2021 23:45:02 +0200
-Subject: [Buildroot] [git commit] package/mpd: bump to version 0.22.6
-Message-ID: <20210419211909.8A5C783AD0@busybox.osuosl.org>
+Date: Mon, 19 Apr 2021 23:45:12 +0200
+Subject: [Buildroot] [git commit] package/multipath-tools: bump to version
+ 0.8.6
+Message-ID: <20210419211909.AB7E083AD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec15f89be9a32cbcc565ca57cf240a68d9f69eb3
+commit: https://git.buildroot.net/buildroot/commit/?id=55a7382564e415dfcd29ebcf0b05577a6625d8ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+https://github.com/opensvc/multipath-tools/releases/tag/0.8.6
+
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
+ package/multipath-tools/multipath-tools.hash | 2 +-
+ package/multipath-tools/multipath-tools.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 866c61d15f..4c3b49823b 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  338012037b5e67730529187c555a54cc567a85b15a7e8ddb3a807b1971566ccf  mpd-0.22.3.tar.xz
-+sha256  2be149a4895c3cb613477f8cf1193593e3d8a1d38a75ffa7d32da8c8316a4d5e  mpd-0.22.6.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 5dfb5b42a4..06dc7e15d7 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+index fc94b3f724..d83741cf08 100644
+--- a/package/multipath-tools/multipath-tools.hash
++++ b/package/multipath-tools/multipath-tools.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  0549ebe39fd3950ec49c16304da408c2bfe1b18d386d8e6647b5bcb60363c8aa  multipath-tools-0.8.5.tar.gz
++sha256  ba781d981bd6e8efa5f9f3af6727f85520af6395958e852c1907f59f6124f08e  multipath-tools-0.8.6.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+index 877ed672c5..e9db802258 100644
+--- a/package/multipath-tools/multipath-tools.mk
++++ b/package/multipath-tools/multipath-tools.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.22
--MPD_VERSION = $(MPD_VERSION_MAJOR).3
-+MPD_VERSION = $(MPD_VERSION_MAJOR).6
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+-MULTIPATH_TOOLS_VERSION = 0.8.5
++MULTIPATH_TOOLS_VERSION = 0.8.6
+ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
+ 
+ MULTIPATH_TOOLS_LICENSE = \
