@@ -1,32 +1,48 @@
-From: Anton Leontiev <scileont@gmail.com>
-Date: Mon, 19 Apr 2021 19:03:46 +0300
-Subject: [Buildroot] [PATCH] docs/manual: document KBUILD_VERBOSE
- environment variable
-Message-ID: <20210419160346.6393-1-scileont@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 19 Apr 2021 19:04:31 +0200
+Subject: [Buildroot] Unable to apply a patch for the buildroot makedevs
+ tool
+In-Reply-To: <AM6PR05MB59287FC07838F6A013DC9C9DA3499@AM6PR05MB5928.eurprd05.prod.outlook.com>
+References: <AM6PR05MB5928D4AD5D2311ACA772CCA5A34C9@AM6PR05MB5928.eurprd05.prod.outlook.com>
+ <20210417071317.GO359705@scaer>
+ <AM6PR05MB59287FC07838F6A013DC9C9DA3499@AM6PR05MB5928.eurprd05.prod.outlook.com>
+Message-ID: <20210419170431.GA298901@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Anton Leontiev <scileont@gmail.com>
----
- docs/manual/common-usage.txt | 3 +++
- 1 file changed, 3 insertions(+)
+Ivan, All,
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 9ba87a8339..699a20fe40 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -69,6 +69,9 @@ to +make+ or set in the environment:
- 
- * +HOSTCXX+, the host C++ compiler to use
- * +HOSTCC+, the host C compiler to use
-+* +KBUILD_VERBOSE+, KBuild verbosity; it is essentially the same as specifying
-+  +V=1+ in make arguments. If set, exports itself and +VERBOSE=1+ to all
-+  subprocesses.
- * +UCLIBC_CONFIG_FILE=<path/to/.config>+, path to
-   the uClibc configuration file, used to compile uClibc, if an
-   internal toolchain is being built.
+On 2021-04-19 05:58 +0000, Ivan Castell spake thusly:
+> Please, proceed applying the patch, of course!
+
+Can you please send the patch with:
+  - a proper commit title
+  - a proper commit log
+  - your signed-off-by line
+
+And then use 'git send-email' to actually send the patch.
+
+See the manual for extensive explanations on how to send a patch:
+    https://buildroot.org/downloads/manual/manual.html#submitting-patches
+
+See also the actual 'git log' for examples pertaining to makedevs:
+
+    git log package/makedevs/makedevs.c
+
+Commit bdbbc72934bc7 (makedevs: support optional files) is a good
+example: it also adds a new feature to makedevs, so you can model your
+commit log after that one for example.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.31.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
