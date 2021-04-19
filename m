@@ -1,48 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Apr 2021 19:04:31 +0200
-Subject: [Buildroot] Unable to apply a patch for the buildroot makedevs
- tool
-In-Reply-To: <AM6PR05MB59287FC07838F6A013DC9C9DA3499@AM6PR05MB5928.eurprd05.prod.outlook.com>
-References: <AM6PR05MB5928D4AD5D2311ACA772CCA5A34C9@AM6PR05MB5928.eurprd05.prod.outlook.com>
- <20210417071317.GO359705@scaer>
- <AM6PR05MB59287FC07838F6A013DC9C9DA3499@AM6PR05MB5928.eurprd05.prod.outlook.com>
-Message-ID: <20210419170431.GA298901@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 19 Apr 2021 21:23:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/genext2fs: bump to version 1.5.0
+In-Reply-To: <70d40419-5b26-453a-e806-ab47d9f22e1b@mind.be> (Arnout
+ Vandecappelle's message of "Fri, 16 Apr 2021 09:33:15 +0200")
+References: <20210414214439.1381969-1-fontaine.fabrice@gmail.com>
+ <016dd397-3ae8-d6af-c3f8-8a88d72bedb0@mind.be>
+ <b37de2fb-72ef-f5c0-b714-8fae2b4956e0@yandex.ru>
+ <70d40419-5b26-453a-e806-ab47d9f22e1b@mind.be>
+Message-ID: <87wnsyxen2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ivan, All,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On 2021-04-19 05:58 +0000, Ivan Castell spake thusly:
-> Please, proceed applying the patch, of course!
+Hi,
 
-Can you please send the patch with:
-  - a proper commit title
-  - a proper commit log
-  - your signed-off-by line
+ >>> ? I guess for stable, the patch [1] should be backported rather than bumping. But
+ >>> is it worth spending effort on that for a borderline package like genext2fs?
+ >> I tried really hard (before
+ >> reporting the above bug)
+ >> to find the equivalent
+ >> functionality in mkfs.ext[24],
+ >> and I think its simply not there.
+ >> I think only genext2fs allows
+ >> to set the perms for the root
+ >> node, so I am not sure why it
+ >> is borderline.
 
-And then use 'git send-email' to actually send the patch.
+ >  Because on the target, you can generally simply do an mkfs directly of the
+ > partition, then mount it, then set permissions and/or populate it as needed.
+ > Even the mkfs from busybox is usually sufficient on target.
 
-See the manual for extensive explanations on how to send a patch:
-    https://buildroot.org/downloads/manual/manual.html#submitting-patches
+ >  Of course, Buildroot lives for borderline cases :-). But specifically for the
+ > stable branches, I don't think it's very cost-effective to spend time on making
+ > them work, unless there's a user who does the effort (because they actually need
+ > it).
 
-See also the actual 'git log' for examples pertaining to makedevs:
-
-    git log package/makedevs/makedevs.c
-
-Commit bdbbc72934bc7 (makedevs: support optional files) is a good
-example: it also adds a new feature to makedevs, so you can model your
-commit log after that one for example.
-
-Regards,
-Yann E. MORIN.
+So in case the above is unclear, could you please do a backport of the
+patch (and verify that it works) and send a patch for the LTS branch
+(2021.02.x)?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
