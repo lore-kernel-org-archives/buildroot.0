@@ -1,71 +1,47 @@
-From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
-Date: Mon, 19 Apr 2021 20:34:48 +0000
-Subject: [Buildroot] [PATCH 2/5] package/freescale-imx/firmware-imx:
- bump version to 8.11
-In-Reply-To: <20210419071654.8148-2-sebastien.szymanski@armadeus.com>
-References: <20210419071654.8148-1-sebastien.szymanski@armadeus.com>,
- <20210419071654.8148-2-sebastien.szymanski@armadeus.com>
-Message-ID: <AM0PR04MB69466DA71E13860E1B07F0AFA7499@AM0PR04MB6946.eurprd04.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Apr 2021 22:34:39 +0200
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.64
+Message-ID: <20210419200832.DFC8983982@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi S?bastien, 
+commit: https://git.buildroot.net/buildroot/commit/?id=59fedf02df8e2f5684ef23a5083a3af0fe2a7350
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for submitting this patch series.
+Release Notes:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.64_release_notes
 
-I do have a couple of comments in this patch and the imx-seco one:
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
->
->- Same version as NXP release 5.10.9_1.0.0
->- EULA/COPYING: update to LA_OPT_NXP_Software_License v19
->
->Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
->---
-> package/freescale-imx/firmware-imx/firmware-imx.hash | 6 +++---
-> package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
-> 2 files changed, 4 insertions(+), 4 deletions(-)
->
->diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
->index 0a717d40f5..f68107ea2d 100644
->--- a/package/freescale-imx/firmware-imx/firmware-imx.hash
->+++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
->@@ -1,4 +1,4 @@
-> # Locally calculated
->-sha256  2b70f169d4065b2a7ac7a676afe24636128bd2dacc9f5230346758c3b146b2be  firmware-imx-8.10.bin
->-sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
->-sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
->+sha256  1a7aaab69cd8c48d10ffb0118c938f4b3daf4c7fd86f0342f4d352906f8e0ecb  firmware-imx-8.11.bin
->+sha256  4f3cc2dcbe3b7369bd4a51df749f432b69d8189fc2bde88f9fadbec73c686683  COPYING
-
-Please remove the trailing space to avoid this error when executing 'make check-package':
-
-  package/freescale-imx/firmware-imx/firmware-imx.hash:3: line contains trailing whitespace
-
-Thanks, 
-Stephane.
-
->+sha256  a07e8df685161553d7e0b78b8b93ebe9086d95bb8635abff0ed3247992181e85  EULA
->diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
->index 6d82ea2077..1076cf85f1 100644
->--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
->+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
->@@ -4,7 +4,7 @@
-> #
-> ################################################################################
->
->-FIRMWARE_IMX_VERSION = 8.10
->+FIRMWARE_IMX_VERSION = 8.11
-> FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
-> FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
->
->--
->2.26.3
->
->_______________________________________________
->buildroot mailing list
->buildroot at busybox.net
->http://lists.busybox.net/mailman/listinfo/buildroot
->
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index b3e7a2935d..92e9936d0d 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_63_RTM/src/SHA256SUMS
+-sha256  182d2fef629102ae9423aabf2c192242b565cf5098e82c5a26cf70c5e4ea2221  nss-3.63.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_64_RTM/src/SHA256SUMS
++sha256  d3175427172e9c3a6f1ebc74452cb791590f28191c6a1a443dbc0d87c9df1126  nss-3.64.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 9296bdcc18..88cc13accf 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.63
++LIBNSS_VERSION = 3.64
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
