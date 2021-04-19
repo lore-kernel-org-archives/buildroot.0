@@ -1,47 +1,145 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Apr 2021 21:23:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/genext2fs: bump to version 1.5.0
-In-Reply-To: <70d40419-5b26-453a-e806-ab47d9f22e1b@mind.be> (Arnout
- Vandecappelle's message of "Fri, 16 Apr 2021 09:33:15 +0200")
-References: <20210414214439.1381969-1-fontaine.fabrice@gmail.com>
- <016dd397-3ae8-d6af-c3f8-8a88d72bedb0@mind.be>
- <b37de2fb-72ef-f5c0-b714-8fae2b4956e0@yandex.ru>
- <70d40419-5b26-453a-e806-ab47d9f22e1b@mind.be>
-Message-ID: <87wnsyxen2.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Apr 2021 22:18:27 +0200
+Subject: [Buildroot] [git commit] package/m4: fix build with glibc 2.34
+Message-ID: <20210419195159.33221800A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5a9504831f3fa1ef3be334036c93da30150fde55
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+m4 fails to build with glibc 2.34 because SIGSTKSZ is now a run-time
+variable since
+https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=6c57d320484988e87e446e2e60ce42816bf51d53
 
- >>> ? I guess for stable, the patch [1] should be backported rather than bumping. But
- >>> is it worth spending effort on that for a borderline package like genext2fs?
- >> I tried really hard (before
- >> reporting the above bug)
- >> to find the equivalent
- >> functionality in mkfs.ext[24],
- >> and I think its simply not there.
- >> I think only genext2fs allows
- >> to set the perms for the root
- >> node, so I am not sure why it
- >> is borderline.
+So backport an upstream patch from gnulib, see:
+https://lists.gnu.org/archive/html/bug-m4/2021-03/msg00015.html
 
- >  Because on the target, you can generally simply do an mkfs directly of the
- > partition, then mount it, then set permissions and/or populate it as needed.
- > Even the mkfs from busybox is usually sufficient on target.
+An other option would have been to apply patch from
+https://lists.gnu.org/archive/html/bug-m4/2021-03/msg00024.html
+but no feedback was received on this patch
 
- >  Of course, Buildroot lives for borderline cases :-). But specifically for the
- > stable branches, I don't think it's very cost-effective to spend time on making
- > them work, unless there's a user who does the effort (because they actually need
- > it).
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=13721
 
-So in case the above is unclear, could you please do a backport of the
-patch (and verify that it works) and send a patch for the LTS branch
-(2021.02.x)?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/m4/0003-c-stack-stop-using-SIGSTKSZ.patch | 106 ++++++++++++++++++++++
+ 1 file changed, 106 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/m4/0003-c-stack-stop-using-SIGSTKSZ.patch b/package/m4/0003-c-stack-stop-using-SIGSTKSZ.patch
+new file mode 100644
+index 0000000000..f262fc818e
+--- /dev/null
++++ b/package/m4/0003-c-stack-stop-using-SIGSTKSZ.patch
+@@ -0,0 +1,106 @@
++c-stack: stop using SIGSTKSZ
++
++It???s been proposed to stop making SIGSTKSZ an integer constant:
++https://sourceware.org/pipermail/libc-alpha/2020-September/118028.html
++Also, using SIGSTKSZ in #if did not conform to current POSIX.
++Also, avoiding SIGSTKSZ makes the code simpler and easier to grok.
++* lib/c-stack.c (SIGSTKSZ): Remove.
++(alternate_signal_stack): Now a 64 KiB array, for simplicity.
++All uses changed.
++
++[Retrieved (and backported) from:
++https://git.savannah.gnu.org/cgit/gnulib.git/patch/?id=f9e2b20a12a230efa30f1d479563ae07d276a94b]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff -Nura m4-1.4.18.orig/lib/c-stack.c m4-1.4.18/lib/c-stack.c
++--- m4-1.4.18.orig/lib/c-stack.c	2021-04-11 19:12:14.086494029 +0200
+++++ m4-1.4.18/lib/c-stack.c	2021-04-11 19:48:46.316862760 +0200
++@@ -50,15 +50,16 @@
++ #if ! HAVE_STACK_T && ! defined stack_t
++ typedef struct sigaltstack stack_t;
++ #endif
++-#ifndef SIGSTKSZ
++-# define SIGSTKSZ 16384
++-#elif HAVE_LIBSIGSEGV && SIGSTKSZ < 16384
++-/* libsigsegv 2.6 through 2.8 have a bug where some architectures use
++-   more than the Linux default of an 8k alternate stack when deciding
++-   if a fault was caused by stack overflow.  */
++-# undef SIGSTKSZ
++-# define SIGSTKSZ 16384
++-#endif
+++
+++/* Storage for the alternate signal stack.
+++   64 KiB is not too large for Gnulib-using apps, and is large enough
+++   for all known platforms.  Smaller sizes may run into trouble.
+++   For example, libsigsegv 2.6 through 2.8 have a bug where some
+++   architectures use more than the Linux default of an 8 KiB alternate
+++   stack when deciding if a fault was caused by stack overflow.  */
+++static max_align_t alternate_signal_stack[(64 * 1024
+++                                           + sizeof (max_align_t) - 1)
+++                                          / sizeof (max_align_t)];
++ 
++ #include <stdlib.h>
++ #include <string.h>
++@@ -128,19 +129,6 @@
++ #if (HAVE_SIGALTSTACK && HAVE_DECL_SIGALTSTACK \
++      && HAVE_STACK_OVERFLOW_HANDLING) || HAVE_LIBSIGSEGV
++ 
++-/* Storage for the alternate signal stack.  */
++-static union
++-{
++-  char buffer[SIGSTKSZ];
++-
++-  /* These other members are for proper alignment.  There's no
++-     standard way to guarantee stack alignment, but this seems enough
++-     in practice.  */
++-  long double ld;
++-  long l;
++-  void *p;
++-} alternate_signal_stack;
++-
++ static void
++ null_action (int signo __attribute__ ((unused)))
++ {
++@@ -205,8 +193,8 @@
++ 
++   /* Always install the overflow handler.  */
++   if (stackoverflow_install_handler (overflow_handler,
++-                                     alternate_signal_stack.buffer,
++-                                     sizeof alternate_signal_stack.buffer))
+++                                     alternate_signal_stack,
+++                                     sizeof alternate_signal_stack))
++     {
++       errno = ENOTSUP;
++       return -1;
++@@ -279,14 +267,14 @@
++   stack_t st;
++   struct sigaction act;
++   st.ss_flags = 0;
+++  st.ss_sp = alternate_signal_stack;
+++  st.ss_size = sizeof alternate_signal_stack;
++ # if SIGALTSTACK_SS_REVERSED
++   /* Irix mistakenly treats ss_sp as the upper bound, rather than
++      lower bound, of the alternate stack.  */
++-  st.ss_sp = alternate_signal_stack.buffer + SIGSTKSZ - sizeof (void *);
++-  st.ss_size = sizeof alternate_signal_stack.buffer - sizeof (void *);
++-# else
++-  st.ss_sp = alternate_signal_stack.buffer;
++-  st.ss_size = sizeof alternate_signal_stack.buffer;
+++  st.ss_size -= sizeof (void *);
+++  char *ss_sp = st.ss_sp;
+++  st.ss_sp = ss_sp + st.ss_size;
++ # endif
++   r = sigaltstack (&st, NULL);
++   if (r != 0)
++diff -Nura m4-1.4.18.orig/lib/c-stack.h m4-1.4.18/lib/c-stack.h
++--- m4-1.4.18.orig/lib/c-stack.h	2021-04-11 19:12:14.098494042 +0200
+++++ m4-1.4.18/lib/c-stack.h	2021-04-11 19:17:42.138848378 +0200
++@@ -34,7 +34,7 @@
++    A null ACTION acts like an action that does nothing.
++ 
++    ACTION must be async-signal-safe.  ACTION together with its callees
++-   must not require more than SIGSTKSZ bytes of stack space.  Also,
+++   must not require more than 64 KiB bytes of stack space.  Also,
++    ACTION should not call longjmp, because this implementation does
++    not guarantee that it is safe to return to the original stack.
++ 
