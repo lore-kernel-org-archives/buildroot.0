@@ -1,31 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Apr 2021 22:44:11 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: add Maxim Kochetkov for postgis
-Message-ID: <20210419201749.40234825CA@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 19 Apr 2021 22:44:39 +0200
+Subject: [Buildroot] [PATCH 2/2] package/domoticz: drop boost date-time
+ dependency
+In-Reply-To: <20210419223424.274df115@windsurf.home>
+References: <20210418200730.3474374-1-fontaine.fabrice@gmail.com>
+ <20210418200730.3474374-2-fontaine.fabrice@gmail.com>
+ <20210419223424.274df115@windsurf.home>
+Message-ID: <CAPi7W83EoFQ57YxLranycWgji6rQP4MQ9=_GCAZAKFhE5NJ-tg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75d1a5a046b85b02792f289402e7c6751d49809c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+Le lun. 19 avr. 2021 ? 22:34, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> On Sun, 18 Apr 2021 22:07:30 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > boost date-time is not a dependency since version 4.9700 and
+> > https://github.com/domoticz/domoticz/commit/a3eacbc987b59dd4aa73ada24a0a6e9a0d27b740
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/domoticz/Config.in | 1 -
+> >  1 file changed, 1 deletion(-)
+>
+> Applied to master, thanks. I'm curious: how do you notice this kind of
+> change?
+I was working on bumping domoticz to latest version and I noticed this
+change when going through CMakeLists.txt.
+Unfortunately, I should have noticed it sooner (back in 2018) but this
+kind of changes can easily be missed.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9390daa2fa..678c1825ad 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1840,6 +1840,7 @@ N:	Max Filippov <jcmvbkbc@gmail.com>
- F:	arch/Config.in.xtensa
- 
- N:	Maxim Kochetkov <fido_max@inbox.ru>
-+F:	package/postgis/
- F:	package/protozero/
- F:	package/timescaledb/
- 
+Fabrice
