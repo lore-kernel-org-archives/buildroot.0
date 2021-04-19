@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Apr 2021 22:39:15 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/oniguruma: bump to version 6.9.7.1
-In-Reply-To: <20210417104245.1851865-1-fontaine.fabrice@gmail.com>
-References: <20210417104245.1851865-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210419223915.65602fa6@windsurf.home>
+Date: Mon, 19 Apr 2021 22:44:11 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Maxim Kochetkov for postgis
+Message-ID: <20210419201749.40234825CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 17 Apr 2021 12:42:45 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=75d1a5a046b85b02792f289402e7c6751d49809c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Update hash of COPYING (update in year:
-> https://github.com/kkos/oniguruma/commit/56255e8b3e209453938b62cb2a5045d29e3c3ff9)
-> 
-> https://github.com/kkos/oniguruma/blob/v6.9.7.1/HISTORY
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2:
->  - Update to 6.9.7.1
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9390daa2fa..678c1825ad 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1840,6 +1840,7 @@ N:	Max Filippov <jcmvbkbc@gmail.com>
+ F:	arch/Config.in.xtensa
+ 
+ N:	Maxim Kochetkov <fido_max@inbox.ru>
++F:	package/postgis/
+ F:	package/protozero/
+ F:	package/timescaledb/
+ 
