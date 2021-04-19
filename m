@@ -1,47 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Apr 2021 22:34:39 +0200
-Subject: [Buildroot] [git commit] package/libnss: bump version to 3.64
-Message-ID: <20210419200832.DFC8983982@busybox.osuosl.org>
+From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
+Date: Mon, 19 Apr 2021 20:35:14 +0000
+Subject: [Buildroot] [PATCH 5/5] package/freescale-imx/imx-seco: bump to
+ version 3.7.5
+In-Reply-To: <20210419071654.8148-5-sebastien.szymanski@armadeus.com>
+References: <20210419071654.8148-1-sebastien.szymanski@armadeus.com>,
+ <20210419071654.8148-5-sebastien.szymanski@armadeus.com>
+Message-ID: <AM0PR04MB69465595F74C28F963032EB3A7499@AM0PR04MB6946.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59fedf02df8e2f5684ef23a5083a3af0fe2a7350
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi S?bastien, 
 
-Release Notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.64_release_notes
+>
+>- Same version as NXP release 5.10.9_1.0.0
+>
+>Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+>---
+> package/freescale-imx/imx-seco/imx-seco.hash | 2 +-
+> package/freescale-imx/imx-seco/imx-seco.mk   | 2 +-
+> 2 files changed, 2 insertions(+), 2 deletions(-)
+>
+>diff --git a/package/freescale-imx/imx-seco/imx-seco.hash b/package/freescale-imx/imx-seco/imx-seco.hash
+>index 2e111c64d7..378c24bc54 100644
+>--- a/package/freescale-imx/imx-seco/imx-seco.hash
+>+++ b/package/freescale-imx/imx-seco/imx-seco.hash
+>@@ -1,4 +1,4 @@
+> # Locally calculated
+>-sha256  2ed8177e48c8e33f742b3a642805be56a5ef56df78b1b29e10518552154da2bc  imx-seco-3.7.4.bin
+>+sha256  08cf25a4be6841ca7264a50b29c311b386eae1c02fced8a3b55fd04213acb4bc  imx-seco-3.7.5.bin
+> sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
+> sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
+>diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
+>index f7aaca7e4b..245c3e3311 100644
+>--- a/package/freescale-imx/imx-seco/imx-seco.mk
+>+++ b/package/freescale-imx/imx-seco/imx-seco.mk
+>@@ -4,7 +4,7 @@
+> #
+> ################################################################################
+>
+>-IMX_SECO_VERSION = 3.7.4
+>+IMX_SECO_VERSION = 3.7.5
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+It is usually safer to keep "imx-seco" in sync with "imx-sc-firmware" ; can you please bump the latter to v1.8.0 [1]?
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index b3e7a2935d..92e9936d0d 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_63_RTM/src/SHA256SUMS
--sha256  182d2fef629102ae9423aabf2c192242b565cf5098e82c5a26cf70c5e4ea2221  nss-3.63.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_64_RTM/src/SHA256SUMS
-+sha256  d3175427172e9c3a6f1ebc74452cb791590f28191c6a1a443dbc0d87c9df1126  nss-3.64.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 9296bdcc18..88cc13accf 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.63
-+LIBNSS_VERSION = 3.64
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+[1] https://source.codeaurora.org/external/imx/meta-imx/tree/meta-bsp/recipes-bsp/imx-sc-firmware?h=gatesgarth-5.10.9-1.0.0
+
+BR,
+Stephane.
+
+> IMX_SECO_SITE = $(FREESCALE_IMX_SITE)
+> IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION).bin
+>
+>--
+>2.26.3
+>
+>_______________________________________________
+>buildroot mailing list
+>buildroot at busybox.net
+>http://lists.busybox.net/mailman/listinfo/buildroot
+>
