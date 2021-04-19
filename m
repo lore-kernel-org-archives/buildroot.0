@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Apr 2021 18:20:27 +0200
-Subject: [Buildroot] [git commit] support/scripts/cve.py: use proper CPE ID
- version when available
-Message-ID: <20210419195159.29D6C83ADC@busybox.osuosl.org>
+Date: Mon, 19 Apr 2021 22:18:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/m4: fix build with glibc 2.34
+In-Reply-To: <20210418114253.2068962-1-fontaine.fabrice@gmail.com>
+References: <20210418114253.2068962-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210419221841.113dfa12@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d06bf960977a95df9e6da9523ffbbd93fa7f920c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 18 Apr 2021 13:42:53 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/cve.py | 5 +++++
- 1 file changed, 5 insertions(+)
+> m4 fails to build with glibc 2.34 because SIGSTKSZ is now a run-time
+> variable since
+> https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=6c57d320484988e87e446e2e60ce42816bf51d53
+> 
+> So backport an upstream patch from gnulib, see:
+> https://lists.gnu.org/archive/html/bug-m4/2021-03/msg00015.html
+> 
+> An other option would have been to apply patch from
+> https://lists.gnu.org/archive/html/bug-m4/2021-03/msg00024.html
+> but no feedback was received on this patch
+> 
+> Fixes:
+>  - https://bugs.buildroot.org/show_bug.cgi?id=13721
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../m4/0003-c-stack-stop-using-SIGSTKSZ.patch | 106 ++++++++++++++++++
+>  1 file changed, 106 insertions(+)
+>  create mode 100644 package/m4/0003-c-stack-stop-using-SIGSTKSZ.patch
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 965fc2a466..13c29fabe0 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -229,6 +229,11 @@ class CVE:
-         # if we don't have a cpeid, build one based on name and version
-         if not cpeid:
-             cpeid = "cpe:2.3:*:*:%s:%s:*:*:*:*:*:*:*" % (name, version)
-+        # if we have a cpeid, use its version instead of the package
-+        # version, as they might be different due to
-+        # <pkg>_CPE_ID_VERSION
-+        else:
-+            pkg_version = distutils.version.LooseVersion(cpe_version(cpeid))
- 
-         for cpe in self.each_cpe():
-             if not cpe_matches(cpe['id'], cpeid):
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
