@@ -1,35 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Apr 2021 23:23:30 +0200
-Subject: [Buildroot] [PATCH] package/linux-serial-test: bump version
-In-Reply-To: <20210413204840.25514-1-michael@walle.cc>
-References: <20210413204840.25514-1-michael@walle.cc>
-Message-ID: <20210419232330.60c03183@windsurf.home>
+Date: Mon, 19 Apr 2021 23:28:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix dbus system
+ socket location
+In-Reply-To: <20210415144226.2354048-1-jpcartal@free.fr>
+References: <20210415144226.2354048-1-jpcartal@free.fr>
+Message-ID: <20210419232810.4ceef826@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 13 Apr 2021 22:48:40 +0200
-Michael Walle <michael@walle.cc> wrote:
+Hello Jean-Pierre,
 
-> Give this package some love and update to the newest version. There are
-> no released versions, though. Therefore, use the latest commit.
++Norbert in Cc, since he changed the DBus socket location in commit
+6b9a75a5bd1b1a559b7352003588d1461de8c4d1.
+
+On Thu, 15 Apr 2021 16:42:26 +0200
+Jean-pierre Cartal <jpcartal@free.fr> wrote:
+
+> Fix dbus system socket location moved from
+> /var/run/dbus/system_bus_socket to /run/dbus/system_bus_socket
 > 
-> Notable changes:
->  - RS485 support fixes and features
->  - internal loopback support
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+> Signed-off-by: Jean-pierre Cartal <jpcartal@free.fr>
 > ---
->  package/linux-serial-test/linux-serial-test.hash | 2 +-
->  package/linux-serial-test/linux-serial-test.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/libglib2/0005-dbus-system-socket-path.patch | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>  create mode 100644 package/libglib2/0005-dbus-system-socket-path.patch
+> 
+> diff --git a/package/libglib2/0005-dbus-system-socket-path.patch b/package/libglib2/0005-dbus-system-socket-path.patch
+> new file mode 100644
+> index 0000000000..bb2ec33dc6
+> --- /dev/null
+> +++ b/package/libglib2/0005-dbus-system-socket-path.patch
+> @@ -0,0 +1,11 @@
+> +diff -Naur libglib2-2.66.8.orig/gio/gdbusaddress.c libglib2-2.66.8/gio/gdbusaddress.c
+> +--- libglib2-2.66.8.orig/gio/gdbusaddress.c     2021-03-18 14:47:48.256693000 +0100
+> ++++ libglib2-2.66.8/gio/gdbusaddress.c  2021-04-15 16:14:28.519296584 +0200
+> +@@ -1331,7 +1331,7 @@
+> +
+> +       if (ret == NULL)
+> +         {
+> +-          ret = g_strdup ("unix:path=/var/run/dbus/system_bus_socket");
+> ++          ret = g_strdup ("unix:path=/run/dbus/system_bus_socket");
+> +         }
+> +       break;
 
-Applied to master, thanks.
+On the form, all patches in Buildroot need to have a proper commit
+description and Signed-off-by line.
+
+But on the actual content, I am wondering if this is the right
+direction to take. Do we want to keep this non-upstreamable patch
+around forever ?
+
+According to commit 6b9a75a5bd1b1a559b7352003588d1461de8c4d1, /var/run
+is supposed to be a symlink to /run, so your patch should be a no-op.
+Both our systemd and sysv skeletons ensure this symlink exist.
+
+Could you provide more details about the issue ?
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
+Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
