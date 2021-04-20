@@ -1,57 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 20 Apr 2021 21:30:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fmt: add FMT_CPE_ID_VENDOR
-In-Reply-To: <20210418183847.2981328-1-fontaine.fabrice@gmail.com>
-References: <20210418183847.2981328-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210420193038.GB298901@scaer>
+Date: Tue, 20 Apr 2021 21:29:41 +0200
+Subject: [Buildroot] [git commit] package/python-botocore: drop docutils
+ dependency
+Message-ID: <20210420190414.5CDEB83D02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=34764dcfac4a319c4a0812496b31f922570f41c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-18 20:38 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:fmt:fmt is a valid CPE identifier for this package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afmt%3Afmt
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+docutils is not a dependency since version 1.18.0 and
+https://github.com/boto/botocore/commit/dd24dd1b2ee8654ae0cf6aebce4a2f50ea7d75f5
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/python-botocore/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/fmt/fmt.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-> index 000bacfd7b..7ea7b9d69c 100644
-> --- a/package/fmt/fmt.mk
-> +++ b/package/fmt/fmt.mk
-> @@ -9,6 +9,7 @@ FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
->  FMT_SOURCE = fmt-$(FMT_VERSION).zip
->  FMT_LICENSE = MIT with exception
->  FMT_LICENSE_FILES = LICENSE.rst
-> +FMT_CPE_ID_VENDOR  = fmt
->  FMT_INSTALL_STAGING = YES
->  
->  FMT_CONF_OPTS = \
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/python-botocore/Config.in b/package/python-botocore/Config.in
+index a552900b6c..f34d774f95 100644
+--- a/package/python-botocore/Config.in
++++ b/package/python-botocore/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_PYTHON_BOTOCORE
+ 	bool "python-botocore"
+ 	select BR2_PACKAGE_PYTHON_JMESPATH # runtime
+-	select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
+ 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
+ 	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
+ 	help
