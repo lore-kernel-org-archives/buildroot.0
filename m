@@ -1,93 +1,93 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 19 Apr 2021 16:58:28 -0700
-Subject: [Buildroot] [PATCH] package/mender-artifact: bump version to 3.5.1
-In-Reply-To: <20210419235828.1226997-1-aduskett@gmail.com>
-References: <20210419235828.1226997-1-aduskett@gmail.com>
-Message-ID: <20210419235828.1226997-2-aduskett@gmail.com>
+From: jean-pierre cartal <jpcartal@free.fr>
+Date: Tue, 20 Apr 2021 09:09:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix dbus system
+ socket location
+In-Reply-To: <0C16DA8B-D53E-41B6-B76A-9BE0B8955F72@free.fr>
+References: <20210415144226.2354048-1-jpcartal@free.fr>
+ <20210419232810.4ceef826@windsurf.home>
+ <0C16DA8B-D53E-41B6-B76A-9BE0B8955F72@free.fr>
+Message-ID: <ceb7b06a-03c3-df2d-45c4-8fe4b6f0ec55@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also update various license hashes
+Hello Thomas,
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/mender-artifact/mender-artifact.hash | 14 +++++++-------
- package/mender-artifact/mender-artifact.mk   |  8 ++++----
- 2 files changed, 11 insertions(+), 11 deletions(-)
+After further checking, I realized that because of historical reasons 
+we've been mounting a tmpfs directory on top on /var as part of the boot 
+process, hence loosing the /var/run -> /run link in the process.
 
-diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
-index a3af951997..175865bb67 100644
---- a/package/mender-artifact/mender-artifact.hash
-+++ b/package/mender-artifact/mender-artifact.hash
-@@ -1,6 +1,6 @@
- # Locally computed:
--sha256  5a3c204fb68bdc793e7e11cd631a4463b2fa6f325a2b9b8b795ef4f3160e6e36  mender-artifact-3.4.1.tar.gz
--sha256  cb0d00827fd4fc3329c9ec0aa510a811b375cb17537c0f46a94852cc7aa199f6  LIC_FILES_CHKSUM.sha256
-+sha256  8f5b69a6598dc071e6a0f2102dbd38a003e7db6be5794116d701531d6a740a46  mender-artifact-3.5.1.tar.gz
-+sha256  0afbd1092d57f70da125041350363c3761802e807be80c7f1dfc005fea962b25  LIC_FILES_CHKSUM.sha256
- 
- # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
- # following command:
-@@ -9,9 +9,8 @@ sha256  cb0d00827fd4fc3329c9ec0aa510a811b375cb17537c0f46a94852cc7aa199f6  LIC_FI
- 
- # Apache 2.0 licenses.
- sha256  b4acfcfa2a0ba1a8c82ec3965fbcee886cff8394ca4214e0ddac0a36beb1e05a  LICENSE
--sha256  32714818ad6f98ee0185a52e23a475d89122e3efd2b2c26c733781c28e798c99  vendor/github.com/mendersoftware/mendertesting/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/minio/sha256-simd/LICENSE
--sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  vendor/gopkg.in/yaml.v2/LICENSE
-+sha256  f4a394d9345ba64dd2796dc552c31af99c4b686a46c0eeda6538038732f771a9  vendor/github.com/mendersoftware/progressbar/LICENSE
- #
- # BSD 2 Clause licenses.
- sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
-@@ -28,10 +27,11 @@ sha256  75e1ca97a84a9da6051dee0114333388216f2c4a5a028296b882ff3d57274735  vendor
- sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
- #
- # MIT licenses.
--sha256  dad2b0b2cc2dbdbf95ad5d800ef7588956e74dc2479014829d42be295125c25d  vendor/github.com/stretchr/testify/LICENSE
-+sha256  f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor/github.com/stretchr/testify/LICENSE
- sha256  da277af11b85227490377fbcac6afccc68be560c4fff36ac05ca62de55345fd7  vendor/github.com/urfave/cli/LICENSE
- sha256  51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/sirupsen/logrus/LICENSE
--sha256  7709cc030f078b17809884f92f33a2016944e1180312dc3f1371b02313d313ed  vendor/github.com/klauspost/pgzip/LICENSE
-+sha256  6d2de1cde19c4d2bd8bcd9aaa1d581f4cfa3db9cf71896140330eaa2f2687685  vendor/github.com/klauspost/pgzip/LICENSE
- sha256  a55959c4e3e8917bfa857359bb641115336276a6cc97408fd8197e079fb18470  vendor/github.com/cpuguy83/go-md2man/v2/LICENSE.md
- sha256  c8024e31c1de453fea90f22a221968835cc7af9d520274a2576c9ec9976055b0  vendor/github.com/shurcooL/sanitized_anchor_name/LICENSE
--sha256  a94710b55e03b5285f77d048c5ba61bb9d6ee04a06c0eb90e68821e11b0c707a  vendor/gopkg.in/yaml.v2/LICENSE.libyaml
-+sha256  d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b  vendor/gopkg.in/yaml.v3/LICENSE
-+sha256  08eab1118c80885fa1fa6a6dd7303f65a379fcb3733e063d20d1bbc2c76e6fa1  vendor/github.com/mattn/go-isatty/LICENSE
-diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index 162f57eee3..8a77e67b8c 100644
---- a/package/mender-artifact/mender-artifact.mk
-+++ b/package/mender-artifact/mender-artifact.mk
-@@ -4,15 +4,14 @@
- #
- ################################################################################
- 
--HOST_MENDER_ARTIFACT_VERSION = 3.4.1
-+HOST_MENDER_ARTIFACT_VERSION = 3.5.1
- HOST_MENDER_ARTIFACT_SITE = $(call github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
- HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
- HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	LICENSE \
- 	LIC_FILES_CHKSUM.sha256 \
--	vendor/github.com/mendersoftware/mendertesting/LICENSE \
- 	vendor/github.com/minio/sha256-simd/LICENSE \
--	vendor/gopkg.in/yaml.v2/LICENSE \
-+	vendor/github.com/mendersoftware/progressbar/LICENSE \
- 	vendor/github.com/pkg/errors/LICENSE \
- 	vendor/github.com/pmezard/go-difflib/LICENSE \
- 	vendor/golang.org/x/sys/LICENSE \
-@@ -27,7 +26,8 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	vendor/github.com/klauspost/pgzip/LICENSE \
- 	vendor/github.com/cpuguy83/go-md2man/v2/LICENSE.md \
- 	vendor/github.com/shurcooL/sanitized_anchor_name/LICENSE \
--	vendor/gopkg.in/yaml.v2/LICENSE.libyaml
-+	vendor/gopkg.in/yaml.v3/LICENSE \
-+	vendor/github.com/mattn/go-isatty/LICENSE
- 
- HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
- 
--- 
-2.31.1
+Sorry for the erroneous patch.
+
+Regards
+Le 19/04/2021 ? 23:43, Jean-pierre Cartal a ?crit?:
+> Hello Thomas,
+>
+> We recently moved to the new 2021.02.x LTS version from previous 
+> 2020.02.x LTS version.
+>
+> While testing this new branch we discovered that we could not connect 
+> to dbus anymore when using libglib2 because the dbus socket location 
+> changed from /var/run to /run.
+>
+> I'll double check tomorrow but I'm quite sure that those are 2 
+> distinct directories and not a symlink in our builds.
+>
+> Regards
+>
+> Le 19 avril 2021 23:28:10 GMT+02:00, Thomas Petazzoni 
+> <thomas.petazzoni@bootlin.com> a ?crit :
+>
+>     Hello Jean-Pierre,
+>
+>     +Norbert in Cc, since he changed the DBus socket location in commit
+>     6b9a75a5bd1b1a559b7352003588d1461de8c4d1.
+>
+>     On Thu, 15 Apr 2021 16:42:26 +0200
+>     Jean-pierre Cartal <jpcartal@free.fr> wrote:
+>
+>         Fix dbus system socket location moved from
+>         /var/run/dbus/system_bus_socket to /run/dbus/system_bus_socket
+>         Signed-off-by: Jean-pierre Cartal <jpcartal@free.fr>
+>         ------------------------------------------------------------------------
+>         package/libglib2/0005-dbus-system-socket-path.patch | 11
+>         +++++++++++ 1 file changed, 11 insertions(+) create mode
+>         100644 package/libglib2/0005-dbus-system-socket-path.patch
+>         diff --git
+>         a/package/libglib2/0005-dbus-system-socket-path.patch
+>         b/package/libglib2/0005-dbus-system-socket-path.patch new file
+>         mode 100644 index 0000000000..bb2ec33dc6 --- /dev/null +++
+>         b/package/libglib2/0005-dbus-system-socket-path.patch @@ -0,0
+>         +1,11 @@ +diff -Naur libglib2-2.66.8.orig/gio/gdbusaddress.c
+>         libglib2-2.66.8/gio/gdbusaddress.c +---
+>         libglib2-2.66.8.orig/gio/gdbusaddress.c 2021-03-18
+>         14:47:48.256693000 +0100 ++++
+>         libglib2-2.66.8/gio/gdbusaddress.c 2021-04-15
+>         16:14:28.519296584 +0200 +@@ -1331,7 +1331,7 @@ + + if (ret ==
+>         NULL) + { +- ret = g_strdup
+>         ("unix:path=/var/run/dbus/system_bus_socket"); ++ ret =
+>         g_strdup ("unix:path=/run/dbus/system_bus_socket"); + } + break; 
+>
+>
+>     On the form, all patches in Buildroot need to have a proper commit
+>     description and Signed-off-by line.
+>
+>     But on the actual content, I am wondering if this is the right
+>     direction to take. Do we want to keep this non-upstreamable patch
+>     around forever ?
+>
+>     According to commit 6b9a75a5bd1b1a559b7352003588d1461de8c4d1, /var/run
+>     is supposed to be a symlink to /run, so your patch should be a no-op.
+>     Both our systemd and sysv skeletons ensure this symlink exist.
+>
+>     Could you provide more details about the issue ?
+>
+>     Thomas
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
