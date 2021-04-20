@@ -1,37 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Tue, 20 Apr 2021 23:22:29 +0200
-Subject: [Buildroot] [git commit] package/gperf: add _CPE_ID_VENDOR and
- _CPE_ID_PRODUCT
-Message-ID: <20210420205902.ED53B7F93D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iproute2: add _CPE_ID_VENDOR
+Message-ID: <20210420205903.0371B815BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3712e1dee7626b0c3262c054b5b9c2769fd2a61e
+commit: https://git.buildroot.net/buildroot/commit/?id=9cf7caa186c1fd47a42b3c33d423c57e0bf1199a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:gperftools_project:gperftools:* is a valid CPE identifier for this package:
+cpe:2.3:a:iproute2_project:iproute2:* is a valid CPE identifier for this package:
 
- https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:gperftools_project:gperftools
+ https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:iproute2_project:iproute2
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gperf/gperf.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/iproute2/iproute2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
-index 4b928a0ebd..c2f042c464 100644
---- a/package/gperf/gperf.mk
-+++ b/package/gperf/gperf.mk
-@@ -8,6 +8,8 @@ GPERF_VERSION = 3.1
- GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
- GPERF_LICENSE = GPL-3.0+
- GPERF_LICENSE_FILES = COPYING
-+GPERF_CPE_ID_VENDOR = gperftools_project
-+GPERF_CPE_ID_PRODUCT = gperftools
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 1b71f5c06a..3460c5c3b3 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -11,6 +11,7 @@ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBMNL),libmnl)
+ IPROUTE2_LICENSE = GPL-2.0+
+ IPROUTE2_LICENSE_FILES = COPYING
++IPROUTE2_CPE_ID_VENDOR = iproute2_project
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ IPROUTE2_DEPENDENCIES += elfutils
