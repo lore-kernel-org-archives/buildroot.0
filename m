@@ -1,26 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Apr 2021 22:33:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exfatprogs: bump to version
- 1.1.0
-In-Reply-To: <20210418195336.3473664-1-fontaine.fabrice@gmail.com>
-References: <20210418195336.3473664-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210420223336.3c32d94e@windsurf.home>
+Date: Tue, 20 Apr 2021 22:33:57 +0200
+Subject: [Buildroot] [PATCH v1] package/gst1-interpipe: bump version to
+ 1.1.4
+In-Reply-To: <20210412194206.2919-1-ps.report@gmx.net>
+References: <20210412194206.2919-1-ps.report@gmx.net>
+Message-ID: <20210420223357.7bfcb2c1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 18 Apr 2021 21:53:36 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 12 Apr 2021 21:42:06 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> https://github.com/exfatprogs/exfatprogs/releases/tag/1.1.0
+> Changelog:
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>   - fix for memory leak in set of listen-to property
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/exfatprogs/exfatprogs.hash | 6 ++++--
->  package/exfatprogs/exfatprogs.mk   | 3 ++-
->  2 files changed, 6 insertions(+), 3 deletions(-)
+>  package/gstreamer1/gst1-interpipe/gst1-interpipe.hash | 2 +-
+>  package/gstreamer1/gst1-interpipe/gst1-interpipe.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
