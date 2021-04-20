@@ -1,115 +1,35 @@
-From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Tue, 20 Apr 2021 15:10:05 +0200
-Subject: [Buildroot] [PATCH 5/5] package/freescale-imx/imx-seco: bump to
- version 3.7.5
-In-Reply-To: <AM0PR04MB694665CBC26E9C5EC1C2C209A7489@AM0PR04MB6946.eurprd04.prod.outlook.com>
-References: <20210419071654.8148-1-sebastien.szymanski@armadeus.com>
- <20210419071654.8148-5-sebastien.szymanski@armadeus.com>
- <AM0PR04MB69465595F74C28F963032EB3A7499@AM0PR04MB6946.eurprd04.prod.outlook.com>
- <e5a0479e-806e-fe86-bff3-eeb3e16578c5@armadeus.com>
- <AM0PR04MB694665CBC26E9C5EC1C2C209A7489@AM0PR04MB6946.eurprd04.prod.outlook.com>
-Message-ID: <8d734832-9cfa-3ef2-ed8b-af61c0c24be1@armadeus.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 20 Apr 2021 21:24:58 +0200
+Subject: [Buildroot] [git commit] package/fmt: add FMT_CPE_ID_VENDOR
+Message-ID: <20210420185858.3B0DF81964@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 4/20/21 2:18 PM, Stephane Viau (OSS) wrote:
-> 
-> Hi S?bastien, 
-> 
->>
->> Hi Stephane,
->>
->> On 4/19/21 10:35 PM, Stephane Viau (OSS) wrote:
->>> Hi S?bastien,
->>>
->>>>
->>>> - Same version as NXP release 5.10.9_1.0.0
->>>>
->>>> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
->>>> ---
->>>> package/freescale-imx/imx-seco/imx-seco.hash | 2 +-
->>>> package/freescale-imx/imx-seco/imx-seco.mk   | 2 +-
->>>> 2 files changed, 2 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/package/freescale-imx/imx-seco/imx-seco.hash b/package/freescale-imx/imx-seco/imx-seco.hash
->>>> index 2e111c64d7..378c24bc54 100644
->>>> --- a/package/freescale-imx/imx-seco/imx-seco.hash
->>>> +++ b/package/freescale-imx/imx-seco/imx-seco.hash
->>>> @@ -1,4 +1,4 @@
->>>> # Locally calculated
->>>> -sha256  2ed8177e48c8e33f742b3a642805be56a5ef56df78b1b29e10518552154da2bc  imx-seco-3.7.4.bin
->>>> +sha256  08cf25a4be6841ca7264a50b29c311b386eae1c02fced8a3b55fd04213acb4bc  imx-seco-3.7.5.bin
->>>> sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
->>>> sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
->>>> diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
->>>> index f7aaca7e4b..245c3e3311 100644
->>>> --- a/package/freescale-imx/imx-seco/imx-seco.mk
->>>> +++ b/package/freescale-imx/imx-seco/imx-seco.mk
->>>> @@ -4,7 +4,7 @@
->>>> #
->>>> ################################################################################
->>>>
->>>> -IMX_SECO_VERSION = 3.7.4
->>>> +IMX_SECO_VERSION = 3.7.5
->>>
->>> It is usually safer to keep "imx-seco" in sync with "imx-sc-firmware" ; can you please bump the latter to v1.8.0 [1]?
->>>
->>> [1] https://source.codeaurora.org/external/imx/meta-imx/tree/meta-bsp/recipes-bsp/imx-sc-firmware?h=gatesgarth-5.10.9-1.0.0
->>
->> Sure. I'll send a v2.
-> 
-> Thank you for the quick feedback... 
-> 
-> Any idea why I do not see the [PATCH v2 6/6] ("package/freescale-imx/imx-sc-firmware: bump to version 1.8.0") 
-> in the patchwork? [1]
+commit: https://git.buildroot.net/buildroot/commit/?id=32c10f256bbc3dd09a72d45107682afb4448f07b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It looks like this patch has not reached the mailing list... yet ?.
+cpe:2.3:a:fmt:fmt is a valid CPE identifier for this package:
 
-> 
-> {BTW, you may want to mark your previous series [2] as superseeded)
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afmt%3Afmt
 
-Done.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/fmt/fmt.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-
-> 
-> BR, 
-> Stephane.
-> 
-> [1] https://patchwork.ozlabs.org/project/buildroot/list/?series=239935
-> [2] https://patchwork.ozlabs.org/project/buildroot/list/?series=239764
-> 
->>
->> Regards,
->>
->>>
->>> BR,
->>> Stephane.
->>>
->>>> IMX_SECO_SITE = $(FREESCALE_IMX_SITE)
->>>> IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION).bin
->>>>
->>>> --
->>>> 2.26.3
->>>>
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at busybox.net
->>>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>>
->>>
->>
->>
->> --
->> S?bastien Szymanski, Armadeus Systems
->> Software engineer
->>
-> 
-
-
--- 
-S?bastien Szymanski, Armadeus Systems
-Software engineer
+diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
+index 000bacfd7b..7ea7b9d69c 100644
+--- a/package/fmt/fmt.mk
++++ b/package/fmt/fmt.mk
+@@ -9,6 +9,7 @@ FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
+ FMT_SOURCE = fmt-$(FMT_VERSION).zip
+ FMT_LICENSE = MIT with exception
+ FMT_LICENSE_FILES = LICENSE.rst
++FMT_CPE_ID_VENDOR  = fmt
+ FMT_INSTALL_STAGING = YES
+ 
+ FMT_CONF_OPTS = \
