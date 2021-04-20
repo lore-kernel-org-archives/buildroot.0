@@ -1,48 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Apr 2021 22:18:54 +0200
-Subject: [Buildroot] [git commit] package/exfatprogs: bump to version 1.1.0
-Message-ID: <20210420195218.8604D83D46@busybox.osuosl.org>
+Date: Tue, 20 Apr 2021 22:19:58 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-interpipe: bump
+ version to 1.1.4
+Message-ID: <20210420195326.60D1883D5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e55af2ff9efc0104abb10fcd542351cd782de8db
+commit: https://git.buildroot.net/buildroot/commit/?id=99362e8d17cfba6e827933e3486d7465e5d10066
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/exfatprogs/exfatprogs/releases/tag/1.1.0
+Changelog:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  - fix for memory leak in set of listen-to property
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/exfatprogs/exfatprogs.hash | 6 ++++--
- package/exfatprogs/exfatprogs.mk   | 3 ++-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/gstreamer1/gst1-interpipe/gst1-interpipe.hash | 2 +-
+ package/gstreamer1/gst1-interpipe/gst1-interpipe.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/exfatprogs/exfatprogs.hash b/package/exfatprogs/exfatprogs.hash
-index d251bce5e6..4dc18cd4b6 100644
---- a/package/exfatprogs/exfatprogs.hash
-+++ b/package/exfatprogs/exfatprogs.hash
-@@ -1,3 +1,5 @@
--# Locally calculated
--sha256  982883f208a694962dff0654f4421a1a726d7d71068a0c84b93a10688179a186  exfatprogs-1.0.4.tar.gz
-+# From https://github.com/exfatprogs/exfatprogs/releases/download/1.1.0/exfatprogs-1.1.0.tar.xz.sha256
-+sha256  69e2cf6430fc1d083c6ae0aea5eb80bf1b8e9775ed833bcd8331aef0fcacaf85  exfatprogs-1.1.0.tar.xz
-+
-+# Hash for license file
- sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/exfatprogs/exfatprogs.mk b/package/exfatprogs/exfatprogs.mk
-index 56db82cd8a..e10acc9e5f 100644
---- a/package/exfatprogs/exfatprogs.mk
-+++ b/package/exfatprogs/exfatprogs.mk
-@@ -4,7 +4,8 @@
+diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
+index 32a24dc2a5..124a2e4073 100644
+--- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
++++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
+@@ -1,5 +1,5 @@
+ # locally computed hash
+-sha256  48ad146a57f3543b8c32985b042558bf1fe67abeac9532105ebde0b441564cba  gst1-interpipe-v1.1.3-br1.tar.gz
++sha256  2fd86aebfe03849a19e9d02db3a8f97bf6f77de835d36ae84282d6f734df323c  gst1-interpipe-1.1.4-br1.tar.gz
+ 
+ # Hashes for license files:
+ sha256  16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5  COPYING
+diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+index cc4bc6e948..eb1e6dd533 100644
+--- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
++++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXFATPROGS_VERSION = 1.0.4
-+EXFATPROGS_VERSION = 1.1.0
-+EXFATPROGS_SOURCE = exfatprogs-$(EXFATPROGS_VERSION).tar.xz
- EXFATPROGS_SITE = https://github.com/exfatprogs/exfatprogs/releases/download/$(EXFATPROGS_VERSION)
- EXFATPROGS_LICENSE = GPL-2.0+
- EXFATPROGS_LICENSE_FILES = COPYING
+-GST1_INTERPIPE_VERSION = v1.1.3
++GST1_INTERPIPE_VERSION = 1.1.4
+ GST1_INTERPIPE_SITE = https://github.com/RidgeRun/gst-interpipe
+ GST1_INTERPIPE_SITE_METHOD = git
+ # fetch gst-interpipe/common sub module
