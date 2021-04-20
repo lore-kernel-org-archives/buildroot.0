@@ -1,51 +1,99 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Tue, 20 Apr 2021 10:20:59 +0200
-Subject: [Buildroot] [PATCH v2 1/6] package/freescale-imx/imx-vpu-hantro:
- bump version to 1.21.0
-Message-ID: <20210420082104.11514-1-sebastien.szymanski@armadeus.com>
+From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
+Date: Tue, 20 Apr 2021 12:18:53 +0000
+Subject: [Buildroot] [PATCH 5/5] package/freescale-imx/imx-seco: bump to
+ version 3.7.5
+In-Reply-To: <e5a0479e-806e-fe86-bff3-eeb3e16578c5@armadeus.com>
+References: <20210419071654.8148-1-sebastien.szymanski@armadeus.com>
+ <20210419071654.8148-5-sebastien.szymanski@armadeus.com>
+ <AM0PR04MB69465595F74C28F963032EB3A7499@AM0PR04MB6946.eurprd04.prod.outlook.com>,
+ <e5a0479e-806e-fe86-bff3-eeb3e16578c5@armadeus.com>
+Message-ID: <AM0PR04MB694665CBC26E9C5EC1C2C209A7489@AM0PR04MB6946.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Same version as NXP release 5.10.9_1.0.0
-- EULA/COPYING: update to LA_OPT_NXP_Software_License v19
 
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
----
+Hi S?bastien, 
 
-Changes for v2
- - none
+>
+>Hi Stephane,
+>
+>On 4/19/21 10:35 PM, Stephane Viau (OSS) wrote:
+>> Hi S?bastien,
+>>
+>>>
+>>> - Same version as NXP release 5.10.9_1.0.0
+>>>
+>>> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+>>> ---
+>>> package/freescale-imx/imx-seco/imx-seco.hash | 2 +-
+>>> package/freescale-imx/imx-seco/imx-seco.mk   | 2 +-
+>>> 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/package/freescale-imx/imx-seco/imx-seco.hash b/package/freescale-imx/imx-seco/imx-seco.hash
+>>> index 2e111c64d7..378c24bc54 100644
+>>> --- a/package/freescale-imx/imx-seco/imx-seco.hash
+>>> +++ b/package/freescale-imx/imx-seco/imx-seco.hash
+>>> @@ -1,4 +1,4 @@
+>>> # Locally calculated
+>>> -sha256  2ed8177e48c8e33f742b3a642805be56a5ef56df78b1b29e10518552154da2bc  imx-seco-3.7.4.bin
+>>> +sha256  08cf25a4be6841ca7264a50b29c311b386eae1c02fced8a3b55fd04213acb4bc  imx-seco-3.7.5.bin
+>>> sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
+>>> sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
+>>> diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
+>>> index f7aaca7e4b..245c3e3311 100644
+>>> --- a/package/freescale-imx/imx-seco/imx-seco.mk
+>>> +++ b/package/freescale-imx/imx-seco/imx-seco.mk
+>>> @@ -4,7 +4,7 @@
+>>> #
+>>> ################################################################################
+>>>
+>>> -IMX_SECO_VERSION = 3.7.4
+>>> +IMX_SECO_VERSION = 3.7.5
+>>
+>> It is usually safer to keep "imx-seco" in sync with "imx-sc-firmware" ; can you please bump the latter to v1.8.0 [1]?
+>>
+>> [1] https://source.codeaurora.org/external/imx/meta-imx/tree/meta-bsp/recipes-bsp/imx-sc-firmware?h=gatesgarth-5.10.9-1.0.0
+>
+>Sure. I'll send a v2.
 
- package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash | 7 ++++---
- package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Thank you for the quick feedback... 
 
-diff --git a/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash b/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash
-index df9916e418..e9df63bfca 100644
---- a/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash
-+++ b/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash
-@@ -1,3 +1,4 @@
--sha256  261cab83954bd66e95b1650a737cb36261a2098597d904e517da638097ed4fd2  imx-vpu-hantro-1.19.0.bin
--sha256  69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
--sha256  a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
-+# Locally computed:
-+sha256  419725f0c09f5939c88cd234b729c3943cbd37e53db7352b02c8d6cc05b939b9  imx-vpu-hantro-1.21.0.bin
-+sha256  4f3cc2dcbe3b7369bd4a51df749f432b69d8189fc2bde88f9fadbec73c686683  COPYING
-+sha256  a07e8df685161553d7e0b78b8b93ebe9086d95bb8635abff0ed3247992181e85  EULA
-diff --git a/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk b/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk
-index 1d21449c20..0d075c49c0 100644
---- a/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk
-+++ b/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMX_VPU_HANTRO_VERSION = 1.19.0
-+IMX_VPU_HANTRO_VERSION = 1.21.0
- IMX_VPU_HANTRO_SITE = $(FREESCALE_IMX_SITE)
- IMX_VPU_HANTRO_SOURCE = imx-vpu-hantro-$(IMX_VPU_HANTRO_VERSION).bin
- IMX_VPU_HANTRO_DEPENDENCIES = linux
--- 
-2.26.3
+Any idea why I do not see the [PATCH v2 6/6] ("package/freescale-imx/imx-sc-firmware: bump to version 1.8.0") 
+in the patchwork? [1]
+
+{BTW, you may want to mark your previous series [2] as superseeded)
+
+BR, 
+Stephane.
+
+[1] https://patchwork.ozlabs.org/project/buildroot/list/?series=239935
+[2] https://patchwork.ozlabs.org/project/buildroot/list/?series=239764
+
+>
+>Regards,
+>
+>>
+>> BR,
+>> Stephane.
+>>
+>>> IMX_SECO_SITE = $(FREESCALE_IMX_SITE)
+>>> IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION).bin
+>>>
+>>> --
+>>> 2.26.3
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>>
+>
+>
+>--
+>S?bastien Szymanski, Armadeus Systems
+>Software engineer
+>
