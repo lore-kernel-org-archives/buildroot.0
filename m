@@ -1,48 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Apr 2021 23:16:50 +0200
-Subject: [Buildroot] [PATCH] configs/solidrun_macchiatobin_defconfig:
- include for Singleshot DTS
-In-Reply-To: <YG68WisliSerKFtr@curiosity>
-References: <20210408073349.16629-1-vadym.kochan@plvision.eu>
- <YG68WisliSerKFtr@curiosity>
-Message-ID: <20210420231650.0d34ce07@windsurf.home>
+From: Stephane Viau <stephane.viau@oss.nxp.com>
+Date: Tue, 20 Apr 2021 23:18:17 +0200
+Subject: [Buildroot] [PATCH 0/4] Update all NXP reference board defconfigs
+ to 5.10.y 1.0.0 BSP components
+Message-ID: <20210420211821.31616-1-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 8 Apr 2021 11:18:34 +0300
-Sergey Matyukevich <geomatsi@gmail.com> wrote:
+Hi all, 
 
-> >  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.5"
-> >  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> >  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> > -BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
-> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin marvell/armada-8040-mcbin-singleshot"
-> >  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/macchiatobin/linux-extras.config"
-> >  BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> >  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y  
-> 
-> I do not have access to MacchiatoBin hardware anymore, but I have been using
-> current defconfig with DoubleShot boards. If this defconfig does not work
-> well for SingleShot boards, then it makes sense to add a separate defconfig
-> for such boards rather then remove DoubleShot support completely. Probably
-> linux-extras.config in board/solidrun/macchiatobin worth another look to
-> make sure that features for both boards are included.
+Let me take advantage of the ongoing imx package update [1] (thank you, Sebastien!)
+to also update the NXP reference board defconfig files.
 
-I am confused: the only change proposed here is to build two DTBs
-instead of one, leaving up to the user to use one or the other
-depending on the board variant. Why would two defconfigs be needed here?
+BR, 
+Stephane.
 
-However, one thing is needed: an update to
-board/solidrun/macchiatobin/readme.txt to indicate when to use which
-DTB.
+[1] https://patchwork.ozlabs.org/project/buildroot/list/?series=239935
 
-Best regards,
+Stephane Viau (4):
+  configs/freescale_imx6*: bump BSP components to lf-5.10.y-1.0.0
+  configs/freescale_imx7dsabresd: bump BSP components to lf-5.10.y-1.0.0
+  configs/freescale_imx8m*: bump BSP components to lf-5.10.y-1.0.0
+  configs/freescale_imx8*: bump BSP components to lf-5.10.y-1.0.0
 
-Thomas
+ configs/freescale_imx6dlsabreauto_defconfig | 8 ++++----
+ configs/freescale_imx6dlsabresd_defconfig   | 8 ++++----
+ configs/freescale_imx6qsabreauto_defconfig  | 8 ++++----
+ configs/freescale_imx6qsabresd_defconfig    | 8 ++++----
+ configs/freescale_imx6sxsabresd_defconfig   | 8 ++++----
+ configs/freescale_imx6ullevk_defconfig      | 6 +++---
+ configs/freescale_imx7dsabresd_defconfig    | 8 ++++----
+ configs/freescale_imx8mmevk_defconfig       | 8 ++++----
+ configs/freescale_imx8mnevk_defconfig       | 8 ++++----
+ configs/freescale_imx8mpevk_defconfig       | 8 ++++----
+ configs/freescale_imx8mqevk_defconfig       | 8 ++++----
+ configs/freescale_imx8qmmek_defconfig       | 8 ++++----
+ configs/freescale_imx8qxpmek_defconfig      | 8 ++++----
+ 13 files changed, 51 insertions(+), 51 deletions(-)
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.31.0
