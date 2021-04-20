@@ -1,90 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 20 Apr 2021 22:58:59 +0200
-Subject: [Buildroot] [PATCH 20/25] package/python3-decorator: add
- _CPE_ID_VENDOR and _CPE_ID_PRODUCT
-In-Reply-To: <20210420205629.GH298901@scaer>
-References: <20210420201146.42858-1-matthew.weber@rockwellcollins.com>
- <20210420201146.42858-20-matthew.weber@rockwellcollins.com>
- <20210420205629.GH298901@scaer>
-Message-ID: <20210420205859.GI298901@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 20 Apr 2021 23:00:55 +0200
+Subject: [Buildroot] [git commit] boot/at91bootstrap: add legal information
+Message-ID: <20210420203608.D801C80FFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3887e8c095106762173b13127deb9c7da68c0625
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-20 22:56 +0200, Yann E. MORIN spake thusly:
-> On 2021-04-20 15:11 -0500, Matt Weber spake thusly:
-> > cpe:2.3:a:python:decorator:* is a valid CPE identifier for this package:
-> > 
-> >  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:python:decorator
-> > 
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> > ---
-> >  package/python3-decorator/python3-decorator.mk | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/package/python3-decorator/python3-decorator.mk b/package/python3-decorator/python3-decorator.mk
-> > index c14f10fbf4..e6f940a95c 100644
-> > --- a/package/python3-decorator/python3-decorator.mk
-> > +++ b/package/python3-decorator/python3-decorator.mk
-> > @@ -11,6 +11,8 @@ PYTHON3_DECORATOR_SOURCE = decorator-$(PYTHON3_DECORATOR_VERSION).tar.gz
-> >  PYTHON3_DECORATOR_LICENSE = BSD-2-Clause
-> >  PYTHON3_DECORATOR_LICENSE_FILES = LICENSE.txt
-> >  PYTHON3_DECORATOR_SETUP_TYPE = setuptools
-> > +PYTHON3_DECORATOR_CPE_ID_VENDOR = python
-> > +PYTHON3_DECORATOR_CPE_ID_PRODUCT = decorator
-> 
-> At the top of the file, there's a comment:
-> 
->     # Please keep in sync with package/python-decorator/python-decorator.mk
-> 
-> So, could you respin this one with both packages changed at once,
-> please?
+The old at91bootstrap version (1.x) uses a strange variant of the BSD
+license, called "BSD Source Code Attribution" and referenced by SPDX
+as BSD-Source-Code.
 
-Forget it, it's already there...
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/at91bootstrap/at91bootstrap.hash | 1 +
+ boot/at91bootstrap/at91bootstrap.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-/me rubs his eyes...
-
-Yes, it's already there. 
-
-Sorry for the noise (but the commit could have stated that ;-) )...
-
-Regards,
-Yann E. MORIN.
-
-> Regards,
-> Yann E. MORIN.
-> 
-> >  HOST_PYTHON3_DECORATOR_NEEDS_HOST_PYTHON = python3
-> >  
-> >  $(eval $(host-python-package))
-> > -- 
-> > 2.17.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/boot/at91bootstrap/at91bootstrap.hash b/boot/at91bootstrap/at91bootstrap.hash
+index b1f963b825..d9f8db8897 100644
+--- a/boot/at91bootstrap/at91bootstrap.hash
++++ b/boot/at91bootstrap/at91bootstrap.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+ sha256  d66192a274247f4baa39fa932eadf903d7add55641d89d30402f967c4f2282a5  AT91Bootstrap1.16.zip
++sha256  6a3ac5dfcf19e6bac1b1109d30d72818768a3855e2594b84fe2b012b5fe0e77b  include/sdramc.h
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index c68b56b6ec..1a084756fd 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -7,6 +7,8 @@
+ AT91BOOTSTRAP_VERSION = 1.16
+ AT91BOOTSTRAP_SITE = ftp://www.at91.com/pub/at91bootstrap
+ AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
++AT91BOOTSTRAP_LICENSE = BSD-Source-Code
++AT91BOOTSTRAP_LICENSE_FILES = include/sdramc.h
+ 
+ AT91BOOTSTRAP_BOARD = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
+ AT91BOOTSTRAP_MEMORY = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
