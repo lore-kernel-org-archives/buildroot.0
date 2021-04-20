@@ -1,49 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Apr 2021 22:19:58 +0200
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-interpipe: bump
- version to 1.1.4
-Message-ID: <20210420195326.60D1883D5C@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 20 Apr 2021 22:28:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-vpu: fix
+ {EULA, COPYING} file hashes
+In-Reply-To: <20210420082953.12107-1-sebastien.szymanski@armadeus.com>
+References: <20210420082953.12107-1-sebastien.szymanski@armadeus.com>
+Message-ID: <20210420202840.GF298901@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99362e8d17cfba6e827933e3486d7465e5d10066
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+S?bastien, All,
 
-Changelog:
++Stephane, who provided tha last bump
 
-  - fix for memory leak in set of listen-to property
+On 2021-04-20 10:29 +0200, S?bastien Szymanski spake thusly:
+> make legal-info fails on imx-vpu package:
+> 
+> >>> imx-vpu 5.4.39.3 Collecting legal info
+> ERROR: EULA has wrong sha256 hash:
+> ERROR: expected: a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc
+> ERROR: got     : 7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0
+> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+> 
+> ERROR: COPYING has wrong sha256 hash:
+> ERROR: expected: 69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2
+> ERROR: got     : 2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d
+> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gstreamer1/gst1-interpipe/gst1-interpipe.hash | 2 +-
- package/gstreamer1/gst1-interpipe/gst1-interpipe.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This is weird, beause the hashes were indeed updated by Stephane when he
+send the last bump:
 
-diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-index 32a24dc2a5..124a2e4073 100644
---- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-+++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-@@ -1,5 +1,5 @@
- # locally computed hash
--sha256  48ad146a57f3543b8c32985b042558bf1fe67abeac9532105ebde0b441564cba  gst1-interpipe-v1.1.3-br1.tar.gz
-+sha256  2fd86aebfe03849a19e9d02db3a8f97bf6f77de835d36ae84282d6f734df323c  gst1-interpipe-1.1.4-br1.tar.gz
- 
- # Hashes for license files:
- sha256  16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5  COPYING
-diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
-index cc4bc6e948..eb1e6dd533 100644
---- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
-+++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_INTERPIPE_VERSION = v1.1.3
-+GST1_INTERPIPE_VERSION = 1.1.4
- GST1_INTERPIPE_SITE = https://github.com/RidgeRun/gst-interpipe
- GST1_INTERPIPE_SITE_METHOD = git
- # fetch gst-interpipe/common sub module
+    commit a646cd27b112500ef74764979190972aaa73811c
+    Author: Stephane Viau <stephane.viau@oss.nxp.com>
+    Date:   Thu Dec 24 07:59:44 2020 +0100
+
+        package/freescale-imx/imx-vpu: bump version to 5.4.39.3
+
+        This version is aligned with 5.4.47_2.2.0 NXP Linux BSP.
+
+        Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+        Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+     package/freescale-imx/imx-vpu/imx-vpu.hash | 6 +++---
+     package/freescale-imx/imx-vpu/imx-vpu.mk   | 2 +-
+     2 files changed, 4 insertions(+), 4 deletions(-)
+
+So why have the hashes changed since? Stephane, any idea?
+
+This is doubly weird, because now the EULA and COPYING are almost
+identical, except for a trailing empty line.
+
+So two questions:
+
+ 1. is that the case for all other imx-related packages, that EULA and
+    COPYING are the same but for an empty trailing line?
+
+ 2. if so, can we just drop the EULA now?
+
+Any feedback, anyone?
+
+Regards,
+Yann E. MORIN.
+
+> Fix the hashes of these two files.
+> 
+> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+> ---
+>  package/freescale-imx/imx-vpu/imx-vpu.hash | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash b/package/freescale-imx/imx-vpu/imx-vpu.hash
+> index 6ab67510b0..e3a53e3fb6 100644
+> --- a/package/freescale-imx/imx-vpu/imx-vpu.hash
+> +++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed
+>  sha256  87cb799a57df654db29403cb74a75ca5185a1517022d3a4a16b8d69056c36127  imx-vpu-5.4.39.3.bin
+> -sha256  69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
+> -sha256  a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
+> +sha256  2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d  COPYING
+> +sha256  7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0  EULA
+> -- 
+> 2.26.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
