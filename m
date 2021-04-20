@@ -1,99 +1,53 @@
-From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
-Date: Tue, 20 Apr 2021 12:18:53 +0000
-Subject: [Buildroot] [PATCH 5/5] package/freescale-imx/imx-seco: bump to
- version 3.7.5
-In-Reply-To: <e5a0479e-806e-fe86-bff3-eeb3e16578c5@armadeus.com>
-References: <20210419071654.8148-1-sebastien.szymanski@armadeus.com>
- <20210419071654.8148-5-sebastien.szymanski@armadeus.com>
- <AM0PR04MB69465595F74C28F963032EB3A7499@AM0PR04MB6946.eurprd04.prod.outlook.com>,
- <e5a0479e-806e-fe86-bff3-eeb3e16578c5@armadeus.com>
-Message-ID: <AM0PR04MB694665CBC26E9C5EC1C2C209A7489@AM0PR04MB6946.eurprd04.prod.outlook.com>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Tue, 20 Apr 2021 10:21:04 +0200
+Subject: [Buildroot] [PATCH v2 6/6] package/freescale-imx/imx-sc-firmware:
+ bump to version 1.8.0
+In-Reply-To: <20210420082104.11514-1-sebastien.szymanski@armadeus.com>
+References: <20210420082104.11514-1-sebastien.szymanski@armadeus.com>
+Message-ID: <20210420082104.11514-6-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- Same version as NXP release 5.10.9_1.0.0
+- EULA/COPYING: update to LA_OPT_NXP_Software_License v19
 
-Hi S?bastien, 
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+---
 
->
->Hi Stephane,
->
->On 4/19/21 10:35 PM, Stephane Viau (OSS) wrote:
->> Hi S?bastien,
->>
->>>
->>> - Same version as NXP release 5.10.9_1.0.0
->>>
->>> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
->>> ---
->>> package/freescale-imx/imx-seco/imx-seco.hash | 2 +-
->>> package/freescale-imx/imx-seco/imx-seco.mk   | 2 +-
->>> 2 files changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/package/freescale-imx/imx-seco/imx-seco.hash b/package/freescale-imx/imx-seco/imx-seco.hash
->>> index 2e111c64d7..378c24bc54 100644
->>> --- a/package/freescale-imx/imx-seco/imx-seco.hash
->>> +++ b/package/freescale-imx/imx-seco/imx-seco.hash
->>> @@ -1,4 +1,4 @@
->>> # Locally calculated
->>> -sha256  2ed8177e48c8e33f742b3a642805be56a5ef56df78b1b29e10518552154da2bc  imx-seco-3.7.4.bin
->>> +sha256  08cf25a4be6841ca7264a50b29c311b386eae1c02fced8a3b55fd04213acb4bc  imx-seco-3.7.5.bin
->>> sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
->>> sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
->>> diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
->>> index f7aaca7e4b..245c3e3311 100644
->>> --- a/package/freescale-imx/imx-seco/imx-seco.mk
->>> +++ b/package/freescale-imx/imx-seco/imx-seco.mk
->>> @@ -4,7 +4,7 @@
->>> #
->>> ################################################################################
->>>
->>> -IMX_SECO_VERSION = 3.7.4
->>> +IMX_SECO_VERSION = 3.7.5
->>
->> It is usually safer to keep "imx-seco" in sync with "imx-sc-firmware" ; can you please bump the latter to v1.8.0 [1]?
->>
->> [1] https://source.codeaurora.org/external/imx/meta-imx/tree/meta-bsp/recipes-bsp/imx-sc-firmware?h=gatesgarth-5.10.9-1.0.0
->
->Sure. I'll send a v2.
+Changes for v2:
+ - update this package too as advised by Stephane Viau.
 
-Thank you for the quick feedback... 
+ package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash | 6 +++---
+ package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Any idea why I do not see the [PATCH v2 6/6] ("package/freescale-imx/imx-sc-firmware: bump to version 1.8.0") 
-in the patchwork? [1]
-
-{BTW, you may want to mark your previous series [2] as superseeded)
-
-BR, 
-Stephane.
-
-[1] https://patchwork.ozlabs.org/project/buildroot/list/?series=239935
-[2] https://patchwork.ozlabs.org/project/buildroot/list/?series=239764
-
->
->Regards,
->
->>
->> BR,
->> Stephane.
->>
->>> IMX_SECO_SITE = $(FREESCALE_IMX_SITE)
->>> IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION).bin
->>>
->>> --
->>> 2.26.3
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>
->>
->
->
->--
->S?bastien Szymanski, Armadeus Systems
->Software engineer
->
+diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
+index 661a77de1a..ed83e757af 100644
+--- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
++++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  db4c414d405aea6f013946d109db198798f40f71bf0810b9b50c027ca252b4b7  imx-sc-firmware-1.7.0.bin
+-sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
+-sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
++sha256  24a647237c0077ce0172563d67fcbc5e8f231bad7cf55a2436848c89579c5a06  imx-sc-firmware-1.8.0.bin
++sha256  a07e8df685161553d7e0b78b8b93ebe9086d95bb8635abff0ed3247992181e85  EULA
++sha256  4f3cc2dcbe3b7369bd4a51df749f432b69d8189fc2bde88f9fadbec73c686683  COPYING
+diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+index b05ca3c724..bbb7310306 100644
+--- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
++++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMX_SC_FIRMWARE_VERSION = 1.7.0
++IMX_SC_FIRMWARE_VERSION = 1.8.0
+ IMX_SC_FIRMWARE_SITE = $(FREESCALE_IMX_SITE)
+ IMX_SC_FIRMWARE_SOURCE = imx-sc-firmware-$(IMX_SC_FIRMWARE_VERSION).bin
+ 
+-- 
+2.26.3
