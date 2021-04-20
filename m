@@ -1,68 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Apr 2021 22:47:42 +0200
-Subject: [Buildroot] [git commit] package/python-falcon: bump to version
- 3.0.0
-Message-ID: <20210420202134.080AE83DE0@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 20 Apr 2021 22:49:04 +0200
+Subject: [Buildroot] [PATCH 13/25] package/libtool: add _CPE_ID_VENDOR
+In-Reply-To: <20210420201146.42858-13-matthew.weber@rockwellcollins.com>
+References: <20210420201146.42858-1-matthew.weber@rockwellcollins.com>
+ <20210420201146.42858-13-matthew.weber@rockwellcollins.com>
+Message-ID: <20210420204904.GG298901@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85d912cb9d87e410c007519f2991ee887bab28b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Matthew, All,
 
-Depends on BR2_PACKAGE_PYTHON3
+On 2021-04-20 15:11 -0500, Matt Weber spake thusly:
+> cpe:2.3:a:gnu:libtool:2.4.6:* is a valid CPE identifier for this package:
+> 
+>  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:gnu:libtool:2.4.6
 
-The hash of the license file has changed because a short license file
-was replaced by the complete text of the Apache 2.0 license. The
-license itself remains the same.
+    There are 0 matching records.
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-falcon/Config.in          | 1 +
- package/python-falcon/python-falcon.hash | 6 +++---
- package/python-falcon/python-falcon.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+However, there are resilts with:
+    https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:gnu:libtool
 
-diff --git a/package/python-falcon/Config.in b/package/python-falcon/Config.in
-index 1bf93064bb..f90ef55b30 100644
---- a/package/python-falcon/Config.in
-+++ b/package/python-falcon/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_FALCON
- 	bool "python-falcon"
-+	depends on BR2_PACKAGE_PYTHON3
- 	help
- 	  An unladen web framework for building APIs and app
- 	  backends.
-diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
-index 68b8d4cb2c..80b2aed54f 100644
---- a/package/python-falcon/python-falcon.hash
-+++ b/package/python-falcon/python-falcon.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/falcon/json
--md5	77c52c144dd284e6259d257c6f008072  falcon-2.0.0.tar.gz
--sha256	eea593cf466b9c126ce667f6d30503624ef24459f118c75594a69353b6c3d5fc  falcon-2.0.0.tar.gz
-+md5  0ebd5316cd7f59b9be4ea13650ea3a0d  falcon-3.0.0.tar.gz
-+sha256  8d7c3d52ae4590ddfa0b3d9c75d44ab573340a5e78d72ee687712e757ac53929  falcon-3.0.0.tar.gz
- # Locally computed sha256 checksums
--sha256	e9e7f1a7ba764f042e56afce6f3563c2be9c4fffbb1404b20f8050ae051f577c  LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
-index 1d7c869d6d..5b73b23277 100644
---- a/package/python-falcon/python-falcon.mk
-+++ b/package/python-falcon/python-falcon.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_FALCON_VERSION = 2.0.0
-+PYTHON_FALCON_VERSION = 3.0.0
- PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
--PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/19/30/edff5a1fea7a8e9876c8391e170263e1bb207875b6a65cd619818487b27b
-+PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/f1/59/2748d63922a46e040be06cd175a6242a33ade7839aac37f441544bb6d651
- PYTHON_FALCON_SETUP_TYPE = setuptools
- PYTHON_FALCON_LICENSE = Apache-2.0
- PYTHON_FALCON_LICENSE_FILES = LICENSE
+Quid?
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/libtool/libtool.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+> index 10af8cf715..6342e70a39 100644
+> --- a/package/libtool/libtool.mk
+> +++ b/package/libtool/libtool.mk
+> @@ -7,6 +7,7 @@
+>  LIBTOOL_VERSION = 2.4.6
+>  LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.xz
+>  LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
+> +LIBTOOL_CPE_ID_VENDOR = gnu
+>  
+>  # For the target variant, we only want to build/install libltdl
+>  LIBTOOL_SUBDIR = libltdl
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
