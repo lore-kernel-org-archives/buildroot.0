@@ -1,63 +1,58 @@
-From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
-Date: Tue, 20 Apr 2021 20:16:24 +0000
-Subject: [Buildroot] [PATCH v2 6/6]
- package/freescale-imx/imx-sc-firmware: bump to version 1.8.0
-In-Reply-To: <20210420082104.11514-6-sebastien.szymanski@armadeus.com>
-References: <20210420082104.11514-1-sebastien.szymanski@armadeus.com>,
- <20210420082104.11514-6-sebastien.szymanski@armadeus.com>
-Message-ID: <AM7PR04MB6949FA6491EA7C748579C910A7489@AM7PR04MB6949.eurprd04.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 20 Apr 2021 22:18:20 +0200
+Subject: [Buildroot] [git commit] package/nettle: security bump to version
+ 3.7.2
+Message-ID: <20210420195144.964E583649@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ed653df5731eb4d0273fc23842d8fbaebcb5b893
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->
->- Same version as NXP release 5.10.9_1.0.0
->- EULA/COPYING: update to LA_OPT_NXP_Software_License v19
->
->Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Fix CVE-2021-20305: A flaw was found in Nettle in versions before 3.7.2,
+where several Nettle signature verification functions (GOST DSA, EDDSA &
+ECDSA) result in the Elliptic Curve Cryptography point (ECC) multiply
+function being called with out-of-range scalers, possibly resulting in
+incorrect results. This flaw allows an attacker to force an invalid
+signature, causing an assertion failure or possible validation. The
+highest threat to this vulnerability is to confidentiality, integrity,
+as well as system availability.
 
-Reviewed-by: Stephane Viau <stephane.viau@oss.nxp.com>
-[Stephane: tested on i.MX8MQXP-B0]
-Tested-by: Stephane Viau <stephane.viau@oss.nxp.com>
+https://git.lysator.liu.se/nettle/nettle/-/blob/nettle_3.7.2_release_20210321/NEWS
 
->---
->
->Changes for v2:
-> - update this package too as advised by Stephane Viau.
->
-> package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash | 6 +++---
-> package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk   | 2 +-
-> 2 files changed, 4 insertions(+), 4 deletions(-)
->
->diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
->index 661a77de1a..ed83e757af 100644
->--- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
->+++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
->@@ -1,4 +1,4 @@
-> # Locally calculated
->-sha256  db4c414d405aea6f013946d109db198798f40f71bf0810b9b50c027ca252b4b7  imx-sc-firmware-1.7.0.bin
->-sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
->-sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
->+sha256  24a647237c0077ce0172563d67fcbc5e8f231bad7cf55a2436848c89579c5a06  imx-sc-firmware-1.8.0.bin
->+sha256  a07e8df685161553d7e0b78b8b93ebe9086d95bb8635abff0ed3247992181e85  EULA
->+sha256  4f3cc2dcbe3b7369bd4a51df749f432b69d8189fc2bde88f9fadbec73c686683  COPYING
->diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
->index b05ca3c724..bbb7310306 100644
->--- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
->+++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
->@@ -4,7 +4,7 @@
-> #
-> ################################################################################
->
->-IMX_SC_FIRMWARE_VERSION = 1.7.0
->+IMX_SC_FIRMWARE_VERSION = 1.8.0
-> IMX_SC_FIRMWARE_SITE = $(FREESCALE_IMX_SITE)
-> IMX_SC_FIRMWARE_SOURCE = imx-sc-firmware-$(IMX_SC_FIRMWARE_VERSION).bin
->
->--
->2.26.3
->
->
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/nettle/nettle.hash | 4 ++--
+ package/nettle/nettle.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
+index 5fd69200bf..09652dcc8b 100644
+--- a/package/nettle/nettle.hash
++++ b/package/nettle/nettle.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/nettle/nettle-3.7.1.tar.gz.sig
+-sha256  156621427c7b00a75ff9b34b770b95d34f80ef7a55c3407de94b16cbf436c42e  nettle-3.7.1.tar.gz
++# https://ftp.gnu.org/gnu/nettle/nettle-3.7.2.tar.gz.sig
++sha256  8d2a604ef1cde4cd5fb77e422531ea25ad064679ff0adf956e78b3352e0ef162  nettle-3.7.2.tar.gz
+ # Locally calculated
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSERv3
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index dc76fc21ff..bf833eb27e 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NETTLE_VERSION = 3.7.1
++NETTLE_VERSION = 3.7.2
+ NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
+ NETTLE_DEPENDENCIES = gmp
+ NETTLE_INSTALL_STAGING = YES
