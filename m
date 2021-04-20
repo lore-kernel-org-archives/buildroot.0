@@ -1,69 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 20 Apr 2021 23:32:08 +0200
-Subject: [Buildroot] [PATCH 01/25] package/automake: add _CPE_ID_VENDOR
-In-Reply-To: <20210420201146.42858-1-matthew.weber@rockwellcollins.com>
-References: <20210420201146.42858-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20210420213208.GL298901@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 20 Apr 2021 23:42:43 +0200
+Subject: [Buildroot] [git commit] package/ell: use official tarball
+Message-ID: <20210420211840.0891783FA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f02033033efbd97668a7155428ae4686f3ababd4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-20 15:11 -0500, Matt Weber spake thusly:
-> cpe:2.3:a:gnu:automake:* is a valid CPE identifier for this package:
-> 
->  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Aautomake
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ell/ell.hash |  4 ++--
+ package/ell/ell.mk   | 12 ++----------
+ 2 files changed, 4 insertions(+), 12 deletions(-)
 
-In this series of 25, I've applied all patches, except the libqmi one,
-which is missing your SoB line.
-
-Otherwise, I did a few changes here and there;
-
-  - for the two python3 packages, I've added short hashes for the
-    correspnding commits for the python(2) variants
-
-  - in a few patches, I've moved the definitions right fter the license
-
-  - I've updated the libtool commit as per your feedback
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/automake/automake.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-> index 89dcaa1293..ad8f0f474d 100644
-> --- a/package/automake/automake.mk
-> +++ b/package/automake/automake.mk
-> @@ -9,6 +9,7 @@ AUTOMAKE_SOURCE = automake-$(AUTOMAKE_VERSION).tar.xz
->  AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
->  AUTOMAKE_LICENSE = GPL-2.0+
->  AUTOMAKE_LICENSE_FILES = COPYING
-> +AUTOMAKE_CPE_ID_VENDOR = gnu
->  
->  HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
->  
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index a795b1aa0d..5f1cc7ddcb 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+-# Locally computed
+-sha256  deacff70541b2b0aa61758d7e4eafbabd8c603eeea0207a8a2f5f42118c2f49d  ell-0.39-br1.tar.gz
++# From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
++sha256  653e2e139e23ed31e03c56c05f15321a9e818e2dca00a315c18d2c7b72f15d08  ell-0.39.tar.xz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index c83063feda..bd291c60db 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
+@@ -5,19 +5,11 @@
+ ################################################################################
+ 
+ ELL_VERSION = 0.39
+-ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
+-ELL_SITE_METHOD = git
++ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
++ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
+ ELL_LICENSE = LGPL-2.1+
+ ELL_LICENSE_FILES = COPYING
+ ELL_INSTALL_STAGING = YES
+-# sources from git, no configure script provided
+-ELL_AUTORECONF = YES
+-
+-# autoreconf requires an existing build-aux directory
+-define ELL_MKDIR_BUILD_AUX
+-	mkdir -p $(@D)/build-aux
+-endef
+-ELL_POST_PATCH_HOOKS += ELL_MKDIR_BUILD_AUX
+ 
+ ELL_DEPENDENCIES = host-pkgconf
+ 
