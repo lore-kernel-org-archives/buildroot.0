@@ -1,90 +1,53 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Tue, 20 Apr 2021 10:19:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix dbus system
- socket location
-In-Reply-To: <20210419232810.4ceef826@windsurf.home>
-References: <20210415144226.2354048-1-jpcartal@free.fr>
- <20210419232810.4ceef826@windsurf.home>
-Message-ID: <CADYdroPo=C9766obODNYLTfGy6+=2zgBFFOcgGH2s0DAuS58rg@mail.gmail.com>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Tue, 20 Apr 2021 10:21:00 +0200
+Subject: [Buildroot] [PATCH v2 2/6] package/freescale-imx/firmware-imx: bump
+ version to 8.11
+In-Reply-To: <20210420082104.11514-1-sebastien.szymanski@armadeus.com>
+References: <20210420082104.11514-1-sebastien.szymanski@armadeus.com>
+Message-ID: <20210420082104.11514-2-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mo., 19. Apr. 2021 um 23:28 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> Hello Jean-Pierre,
->
-> +Norbert in Cc, since he changed the DBus socket location in commit
-> 6b9a75a5bd1b1a559b7352003588d1461de8c4d1.
->
-> On Thu, 15 Apr 2021 16:42:26 +0200
-> Jean-pierre Cartal <jpcartal@free.fr> wrote:
->
-> > Fix dbus system socket location moved from
-> > /var/run/dbus/system_bus_socket to /run/dbus/system_bus_socket
-> >
-> > Signed-off-by: Jean-pierre Cartal <jpcartal@free.fr>
-> > ---
-> >  package/libglib2/0005-dbus-system-socket-path.patch | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> >  create mode 100644 package/libglib2/0005-dbus-system-socket-path.patch
-> >
-> > diff --git a/package/libglib2/0005-dbus-system-socket-path.patch b/package/libglib2/0005-dbus-system-socket-path.patch
-> > new file mode 100644
-> > index 0000000000..bb2ec33dc6
-> > --- /dev/null
-> > +++ b/package/libglib2/0005-dbus-system-socket-path.patch
-> > @@ -0,0 +1,11 @@
-> > +diff -Naur libglib2-2.66.8.orig/gio/gdbusaddress.c libglib2-2.66.8/gio/gdbusaddress.c
-> > +--- libglib2-2.66.8.orig/gio/gdbusaddress.c     2021-03-18 14:47:48.256693000 +0100
-> > ++++ libglib2-2.66.8/gio/gdbusaddress.c  2021-04-15 16:14:28.519296584 +0200
-> > +@@ -1331,7 +1331,7 @@
-> > +
-> > +       if (ret == NULL)
-> > +         {
-> > +-          ret = g_strdup ("unix:path=/var/run/dbus/system_bus_socket");
-> > ++          ret = g_strdup ("unix:path=/run/dbus/system_bus_socket");
-> > +         }
-> > +       break;
->
-> On the form, all patches in Buildroot need to have a proper commit
-> description and Signed-off-by line.
->
-> But on the actual content, I am wondering if this is the right
-> direction to take. Do we want to keep this non-upstreamable patch
-> around forever ?
+- Same version as NXP release 5.10.9_1.0.0
+- EULA/COPYING: update to LA_OPT_NXP_Software_License v19
 
-why non-upstreamable?
-All the modern build systems like CMake [1] and Autotools [2] have a
-"runstatedir", would
-be good practice to use it. Dont see why this shouldn't be fixed upstream.
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+---
 
-(Might be a good idea if buildroot could set the runstatedir for CMake
-and Autotools, but its a bit of a hassle to check if the later
-supports the argument)
+Changes for v2:
+ - remove trailing space
 
-> According to commit 6b9a75a5bd1b1a559b7352003588d1461de8c4d1, /var/run
-> is supposed to be a symlink to /run, so your patch should be a no-op.
-> Both our systemd and sysv skeletons ensure this symlink exist.
->
-> Could you provide more details about the issue ?
+ package/freescale-imx/firmware-imx/firmware-imx.hash | 6 +++---
+ package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-To quote FHS 3.15:
-"The purposes of this directory were once served by /var/run. In
-general, programs may continue to use /var/run to fulfill the
-requirements set out for /run for the purposes of backwards
-compatibility. Programs which have migrated to use /run should cease
-their usage of /var/run, except as noted in the section on /var/run."
-
-if you use /run you should do so consistently, /var/run symlink is a
-bandaid. if you want a technical reason, think of / being a tmpfs and
-/var being a NFS mount,
-you don't want to traverse /var if you dont have to.
-
-Norbert
-
-[1] - https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html
-[2] - https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+index 0a717d40f5..c434ce7ebd 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.hash
++++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  2b70f169d4065b2a7ac7a676afe24636128bd2dacc9f5230346758c3b146b2be  firmware-imx-8.10.bin
+-sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
+-sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
++sha256  1a7aaab69cd8c48d10ffb0118c938f4b3daf4c7fd86f0342f4d352906f8e0ecb  firmware-imx-8.11.bin
++sha256  4f3cc2dcbe3b7369bd4a51df749f432b69d8189fc2bde88f9fadbec73c686683  COPYING
++sha256  a07e8df685161553d7e0b78b8b93ebe9086d95bb8635abff0ed3247992181e85  EULA
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 6d82ea2077..1076cf85f1 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FIRMWARE_IMX_VERSION = 8.10
++FIRMWARE_IMX_VERSION = 8.11
+ FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
+ 
+-- 
+2.26.3
