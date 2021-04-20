@@ -1,37 +1,37 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 20 Apr 2021 15:11:41 -0500
-Subject: [Buildroot] [PATCH 20/25] package/python3-decorator: add
- _CPE_ID_VENDOR and _CPE_ID_PRODUCT
+Date: Tue, 20 Apr 2021 15:11:26 -0500
+Subject: [Buildroot] [PATCH 05/25] package/gperf: add _CPE_ID_VENDOR and
+ _CPE_ID_PRODUCT
 In-Reply-To: <20210420201146.42858-1-matthew.weber@rockwellcollins.com>
 References: <20210420201146.42858-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20210420201146.42858-20-matthew.weber@rockwellcollins.com>
+Message-ID: <20210420201146.42858-5-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:python:decorator:* is a valid CPE identifier for this package:
+cpe:2.3:a:gperftools_project:gperftools:* is a valid CPE identifier for this package:
 
- https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:python:decorator
+ https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:gperftools_project:gperftools
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/python3-decorator/python3-decorator.mk | 2 ++
+ package/gperf/gperf.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/python3-decorator/python3-decorator.mk b/package/python3-decorator/python3-decorator.mk
-index c14f10fbf4..e6f940a95c 100644
---- a/package/python3-decorator/python3-decorator.mk
-+++ b/package/python3-decorator/python3-decorator.mk
-@@ -11,6 +11,8 @@ PYTHON3_DECORATOR_SOURCE = decorator-$(PYTHON3_DECORATOR_VERSION).tar.gz
- PYTHON3_DECORATOR_LICENSE = BSD-2-Clause
- PYTHON3_DECORATOR_LICENSE_FILES = LICENSE.txt
- PYTHON3_DECORATOR_SETUP_TYPE = setuptools
-+PYTHON3_DECORATOR_CPE_ID_VENDOR = python
-+PYTHON3_DECORATOR_CPE_ID_PRODUCT = decorator
- HOST_PYTHON3_DECORATOR_NEEDS_HOST_PYTHON = python3
+diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
+index 4b928a0ebd..c2f042c464 100644
+--- a/package/gperf/gperf.mk
++++ b/package/gperf/gperf.mk
+@@ -8,6 +8,8 @@ GPERF_VERSION = 3.1
+ GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
+ GPERF_LICENSE = GPL-3.0+
+ GPERF_LICENSE_FILES = COPYING
++GPERF_CPE_ID_VENDOR = gperftools_project
++GPERF_CPE_ID_PRODUCT = gperftools
  
- $(eval $(host-python-package))
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.17.1
