@@ -1,44 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Apr 2021 23:13:34 +0200
-Subject: [Buildroot] [git commit] package/timescaledb: bump version to 2.1.1
-Message-ID: <20210420204659.5205D835FF@busybox.osuosl.org>
+Date: Tue, 20 Apr 2021 23:16:50 +0200
+Subject: [Buildroot] [PATCH] configs/solidrun_macchiatobin_defconfig:
+ include for Singleshot DTS
+In-Reply-To: <YG68WisliSerKFtr@curiosity>
+References: <20210408073349.16629-1-vadym.kochan@plvision.eu>
+ <YG68WisliSerKFtr@curiosity>
+Message-ID: <20210420231650.0d34ce07@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=990b14768cd36663245b8a583aab0d8d6adac636
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 8 Apr 2021 11:18:34 +0300
+Sergey Matyukevich <geomatsi@gmail.com> wrote:
 
-Release notes: https://github.com/timescale/timescaledb/releases/tag/2.1.1
+> >  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.5"
+> >  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> >  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > -BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
+> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin marvell/armada-8040-mcbin-singleshot"
+> >  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/macchiatobin/linux-extras.config"
+> >  BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> >  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y  
+> 
+> I do not have access to MacchiatoBin hardware anymore, but I have been using
+> current defconfig with DoubleShot boards. If this defconfig does not work
+> well for SingleShot boards, then it makes sense to add a separate defconfig
+> for such boards rather then remove DoubleShot support completely. Probably
+> linux-extras.config in board/solidrun/macchiatobin worth another look to
+> make sure that features for both boards are included.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I am confused: the only change proposed here is to build two DTBs
+instead of one, leaving up to the user to use one or the other
+depending on the board variant. Why would two defconfigs be needed here?
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index f84bd04cc0..98f966ee3d 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6de2af2ecfd7bff9b3634b6c5c29b209b25e147858d460469e8eb88e6d198692  timescaledb-2.1.0.tar.gz
-+sha256  e928c939803706d0d5b11d6751d4f0d0514e540ceffc74a46a9732f9a111d313  timescaledb-2.1.1.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index 783017636b..d2a48a0f63 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TIMESCALEDB_VERSION = 2.1.0
-+TIMESCALEDB_VERSION = 2.1.1
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+However, one thing is needed: an update to
+board/solidrun/macchiatobin/readme.txt to indicate when to use which
+DTB.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
