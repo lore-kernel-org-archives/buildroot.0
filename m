@@ -1,73 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 20 Apr 2021 21:32:57 +0200
-Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2021.04
-In-Reply-To: <20210420132922.1742124-1-festevam@gmail.com>
-References: <20210420132922.1742124-1-festevam@gmail.com>
-Message-ID: <20210420193257.GD298901@scaer>
+Date: Tue, 20 Apr 2021 21:33:31 +0200
+Subject: [Buildroot] [git commit] configs/imx6-sabresd: bump U-Boot and
+ kernel versions
+Message-ID: <20210420194152.2A77B8419A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=769d053f65e011c4d4d4aee565b1be4a75ccb14b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-20 10:29 -0300, Fabio Estevam spake thusly:
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Bump to U-Boot 2021.04 and kernel 5.10.25 versions.
 
-Applied to master, thanks.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/imx6-sabresd_defconfig     | 4 ++--
+ configs/imx6-sabresd_qt5_defconfig | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  boot/uboot/Config.in  | 4 ++--
->  boot/uboot/uboot.hash | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index d43c85cce706..00c667412006 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -41,7 +41,7 @@ choice
->  	  Select the specific U-Boot version you want to use
->  
->  config BR2_TARGET_UBOOT_LATEST_VERSION
-> -	bool "2021.01"
-> +	bool "2021.04"
->  
->  config BR2_TARGET_UBOOT_CUSTOM_VERSION
->  	bool "Custom version"
-> @@ -85,7 +85,7 @@ endif
->  
->  config BR2_TARGET_UBOOT_VERSION
->  	string
-> -	default "2021.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
-> +	default "2021.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
->  	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
->  		if BR2_TARGET_UBOOT_CUSTOM_VERSION
->  	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-> diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-> index 7cbd785541ee..9a0b0cb6b0c1 100644
-> --- a/boot/uboot/uboot.hash
-> +++ b/boot/uboot/uboot.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256  b407e1510a74e863b8b5cb42a24625344f0e0c2fc7582d8c866bd899367d0454  u-boot-2021.01.tar.bz2
-> +sha256  0d438b1bb5cceb57a18ea2de4a0d51f7be5b05b98717df05938636e0aadfe11a  u-boot-2021.04.tar.bz2
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
+index c0dce1ce62..5a39f333d1 100644
+--- a/configs/imx6-sabresd_defconfig
++++ b/configs/imx6-sabresd_defconfig
+@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.25"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index b23dd90192..8cdc0e2544 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -30,7 +30,7 @@ BR2_ROOTFS_OVERLAY="board/freescale/imx6-sabresd/rootfs_overlay"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.25"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
