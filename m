@@ -1,33 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Apr 2021 23:24:56 +0200
-Subject: [Buildroot] [PATCH] package/python-iwlib: add python-iwlib
-In-Reply-To: <20210412152032.7053-1-matthew.weber@rockwellcollins.com>
-References: <20210412152032.7053-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20210421232456.3bc964ef@windsurf>
+Date: Wed, 21 Apr 2021 23:25:40 +0200
+Subject: [Buildroot] [git commit] package/python-flup: update dependency to
+ python3
+Message-ID: <20210421210050.D7F9483AF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 12 Apr 2021 10:20:32 -0500
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1d1c0925422de43348c4c0124c5405b631d7c65f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Jared Bents <jared.bents@rockwellcollins.com>
-> 
-> Update to add python-iwlib. A package for interfacing with
-> iwlib, providing an implementation to the wireless tools in
-> Linux.
-> 
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> Signed-off-by: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
+Since version flup-1.0.3.dev20151210, flup needs Python 3. This was
+apparently missed in Buildroot commit
+ff0f53c04db8cc6eb5ce2eb92b7e7d1fe17297ae, which bumped flup from
+1.0.3.dev-20110405 to 1.0.3.dev20161029.
 
-Applied to master, thanks!
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-flup/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-flup/Config.in b/package/python-flup/Config.in
+index 2c21323515..f40f250163 100644
+--- a/package/python-flup/Config.in
++++ b/package/python-flup/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PYTHON_FLUP
+ 	bool "python-flup"
+-	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON3
+ 	help
+ 	  flup provides of a collection of WSGI modules for Python.
+ 	  It allows a webserver to use scgi-mod and fastcgi-mod
