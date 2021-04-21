@@ -1,43 +1,39 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 21 Apr 2021 15:42:25 -0500
-Subject: [Buildroot] [PATCH 00/10] Misc CVE ignores
-Message-ID: <20210421204235.5956-1-matthew.weber@rockwellcollins.com>
+Date: Wed, 21 Apr 2021 15:42:32 -0500
+Subject: [Buildroot] [PATCH 07/10] package/wpa_supplicant: ignore
+ CVE-2021-30004 when using openssl
+In-Reply-To: <20210421204235.5956-1-matthew.weber@rockwellcollins.com>
+References: <20210421204235.5956-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20210421204235.5956-8-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- * I'm working on upstream NVD fixes for some of these.
+The CVE can be ignored when the internal TLS impl isn't used.
 
- * There are roughly half of the ignore cases that are a bit of a
-   challenge to identify where the fix was clearly tracked into
-   a specific version. I tried to document in each commit as much
-   as a could by linking to conversations clarifying the details.
+https://security-tracker.debian.org/tracker/CVE-2021-30004
+ "Issue only affects the "internal" TLS implementation
+ (CONFIG_TLS=internal)"
 
-Matt Weber (10):
-  package/bind: ignore CVE-2017-3139
-  package/coreutils: ignore CVE-2013-0221, CVE-2013-0222, CVE-2013-0223
-  package/bind: ignore CVE-2019-6470
-  package/cmake: ignore CVE-2016-10642
-  package/flex: ignore CVE-2019-6293
-  package/hostapd: ignore CVE-2021-30004 when using openssl
-  package/wpa_supplicant: ignore CVE-2021-30004 when using openssl
-  package/ncurses: ignore CVE-2018-10754, CVE-2018-19211,
-    CVE-2018-19217, CVE-2019-17594, CVE-2019-17595
-  package/rsyslog: ignore CVE-2015-3243
-  package/tar: ignore CVE-2007-4476
-
- package/bind/bind.mk                     | 4 ++++
- package/cmake/cmake.mk                   | 2 ++
- package/coreutils/coreutils.mk           | 4 ++++
- package/flex/flex.mk                     | 3 +++
- package/hostapd/hostapd.mk               | 2 ++
- package/ncurses/ncurses.mk               | 6 ++++++
- package/rsyslog/rsyslog.mk               | 4 ++++
- package/tar/tar.mk                       | 2 ++
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
  package/wpa_supplicant/wpa_supplicant.mk | 2 ++
- 9 files changed, 29 insertions(+)
+ 1 file changed, 2 insertions(+)
 
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 356ea91828..f59832645f 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -132,6 +132,8 @@ ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+ WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf libopenssl
+ WPA_SUPPLICANT_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
++# Issue only affects the "internal" TLS implementation
++WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-30004
+ else
+ WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
+ WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
 -- 
 2.17.1
