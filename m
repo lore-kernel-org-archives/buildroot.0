@@ -1,44 +1,35 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 21 Apr 2021 15:42:34 -0500
-Subject: [Buildroot] [PATCH 09/10] package/rsyslog: ignore CVE-2015-3243
-In-Reply-To: <20210421204235.5956-1-matthew.weber@rockwellcollins.com>
-References: <20210421204235.5956-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20210421204235.5956-10-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 21 Apr 2021 22:43:21 +0200
+Subject: [Buildroot] [git commit] package/python-mbstrdecoder: add
+ python-chardet dependency
+Message-ID: <20210421201643.EB8DE83C17@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://security-tracker.debian.org/tracker/CVE-2015-3243
- "Rsyslog uses weak permissions for generating log files."
+commit: https://git.buildroot.net/buildroot/commit/?id=8a74eaaaa992b65fd4c03042a859c500123a57a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Ignoring this CVE for Buildroot as normally there are not local
-users and a build could customize the rsyslog.conf to be more
-restrictive ($FileCreateMode 0640).
+chardet is a mandatory runtime dependency since version 0.8.2 and
+https://github.com/thombashi/mbstrdecoder/commit/e9344a0916f65d143c51e0680c30db4ae7690ccf
 
-Example fix from Alpino Linux
- https://github.com/libTorrentUser/alpino-linux-aports/commit/3cb5210cdac46fb8805d4028df16f5889f393a09
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rsyslog/rsyslog.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/python-mbstrdecoder/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 1aa81b8eac..6cf53ccb82 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -9,6 +9,10 @@ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
- RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
- RSYSLOG_CPE_ID_VENDOR = rsyslog
-+# rsyslog uses weak permissions for generating log files.
-+# Ignoring this CVE as Buildroot normally doesn't have local users and a build
-+# could customize the rsyslog.conf to be more restrictive ($FileCreateMode 0640)
-+RSYSLOG_IGNORE_CVES += CVE-2015-3243
- RSYSLOG_DEPENDENCIES = zlib libestr liblogging libfastjson host-pkgconf
- RSYSLOG_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
- RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
--- 
-2.17.1
+diff --git a/package/python-mbstrdecoder/Config.in b/package/python-mbstrdecoder/Config.in
+index 8982814cea..5ba3a19cc4 100644
+--- a/package/python-mbstrdecoder/Config.in
++++ b/package/python-mbstrdecoder/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_MBSTRDECODER
+ 	bool "python-mbstrdecoder"
+ 	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_CHARDET # runtime
+ 	help
+ 	  multi-byte character string decoder.
+ 
