@@ -1,39 +1,47 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 21 Apr 2021 15:42:31 -0500
-Subject: [Buildroot] [PATCH 06/10] package/hostapd: ignore CVE-2021-30004
- when using openssl
+Date: Wed, 21 Apr 2021 15:42:30 -0500
+Subject: [Buildroot] [PATCH 05/10] package/flex: ignore CVE-2019-6293
 In-Reply-To: <20210421204235.5956-1-matthew.weber@rockwellcollins.com>
 References: <20210421204235.5956-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20210421204235.5956-7-matthew.weber@rockwellcollins.com>
+Message-ID: <20210421204235.5956-6-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The CVE can be ignored when the internal TLS impl isn't used.
+https://security-tracker.debian.org/tracker/CVE-2019-6293
 
-https://security-tracker.debian.org/tracker/CVE-2021-30004
- "Issue only affects the "internal" TLS implementation
- (CONFIG_TLS=internal)"
+https://github.com/NixOS/nixpkgs/issues/55386#issuecomment-683792976
+ "But this bug does not cause stack overflows in the generated code.
+ The function and file referred to in the bug (mark_beginning_as_normal
+ in nfa.c) are part of the flex code generator, not part of the
+ generated code. If flex crashes before generating any code, that
+ can hardly be a vulnerability. If flex does not crash, the generated
+ code is fine (or perhaps subject to other unreported bugs, who knows,
+ but the NFA has been generated correctly)."
+
+Upstream has chosen to not provide a fix
+ https://github.com/microsoft/CBL-Mariner/pull/312
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/hostapd/hostapd.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/flex/flex.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index efeefd8b35..2995545d18 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -38,6 +38,8 @@ ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- HOSTAPD_DEPENDENCIES += host-pkgconf libopenssl
- HOSTAPD_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
-+# Issue only affects the "internal" TLS implementation
-+HOSTAPD_IGNORE_CVES += CVE-2021-30004
- else
- HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
- HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index 2d00969662..85da5ddae8 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -10,6 +10,9 @@ FLEX_INSTALL_STAGING = YES
+ FLEX_LICENSE = FLEX
+ FLEX_LICENSE_FILES = COPYING
+ FLEX_CPE_ID_VENDOR = flex_project
++# bug does not cause stack overflows in the generated code and has been
++# noted upstream as a bug in the code generator
++FLEX_IGNORE_CVES = CVE-2019-6293
+ FLEX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-m4
+ HOST_FLEX_DEPENDENCIES = host-m4
+ 
 -- 
 2.17.1
