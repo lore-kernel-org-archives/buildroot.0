@@ -1,35 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Apr 2021 22:51:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/librsync: bump to version 2.3.2
-In-Reply-To: <20210412161700.1151306-1-fontaine.fabrice@gmail.com>
-References: <20210412161700.1151306-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210421225129.4b44f91d@windsurf>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Wed, 21 Apr 2021 16:09:55 -0500
+Subject: [Buildroot] [PATCH v2 2/2] support/scripts/pkg-stats: add CPE
+ searching links
+In-Reply-To: <20210421012009.4494-2-matthew.weber@rockwellcollins.com>
+References: <20210421012009.4494-1-matthew.weber@rockwellcollins.com>
+ <20210421012009.4494-2-matthew.weber@rockwellcollins.com>
+Message-ID: <CANQCQpZnVJ3Jj8Fp2k0xHqT0daPTettE7W5VU0rs4oBs7VCGtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 12 Apr 2021 18:17:00 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> This is a patch release that fixes some minor bugs, tidies the code for
-> many compiler warnings, and improves windows compatibility. Upgrading
-> from v2.3.1 is recommended for most people, and essential for people
-> using platforms experiencing bugs #214 or #207.
-> 
-> https://github.com/librsync/librsync/releases/tag/v2.3.2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Tue, Apr 20, 2021 at 8:20 PM Matt Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> For cases of a CPE having a unknown version or when there hasn't
+> been a CPE verified, proposed a search criteria to help the
+> user research an update.
+>
+> (libcurl has NIST dict entries but not this version)
+>   cpe:2.3:a:haxx:libcurl:7.76.1:*:*:*:*:*:*:*
+>   CPE identifier unknown in CPE database (Search)
+>
+> (jitterentropy-library package doesn't have any NIST dict entries)
+>   no verified CPE identifier (Search)
+>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 > ---
->  package/librsync/librsync.hash | 2 +-
->  package/librsync/librsync.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> v2 - new patch
+> ---
+>  support/scripts/pkg-stats | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+> index 6f3ddc561f..bc83ca5888 100755
+> --- a/support/scripts/pkg-stats
+> +++ b/support/scripts/pkg-stats
+> @@ -921,7 +921,13 @@ def dump_html_pkg(f, pkg):
+>      if pkg.cpeid:
+>          f.write("  <code>%s</code>\n" % pkg.cpeid)
+>      if not pkg.is_status_ok("cpe"):
+> -        f.write("  %s%s\n" % ("<br/>" if pkg.cpeid else "", pkg.status['cpe'][1]))
+> +        if pkg.cpeid:
+> +            f.write("  <br/>%s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" % \
+> +                (pkg.status['cpe'][1], ":".join(pkg.cpeid.split(":")[0:4])))
 
-Applied to master, thanks.
+Got a bug. this should be 0:5 not 0:4
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Matt
