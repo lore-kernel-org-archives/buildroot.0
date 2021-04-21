@@ -1,47 +1,100 @@
-From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Wed, 21 Apr 2021 13:04:11 +0300
-Subject: [Buildroot] [PATCH v1] package/protozero: disable test wchar
- support
-In-Reply-To: <20210418211311.8038-1-ps.report@gmx.net>
-References: <20210418211311.8038-1-ps.report@gmx.net>
-Message-ID: <d64bf1fc-58bb-dba2-70e7-bb61e2b08cdb@inbox.ru>
+From: Ivan Castell <icastell@circontrol.com>
+Date: Wed, 21 Apr 2021 10:16:21 +0000
+Subject: [Buildroot] Default makefile rule when the packages are disabled in
+ buildroot configuration
+Message-ID: <AM6PR05MB5928D117A458385E6FFCCA97A3479@AM6PR05MB5928.eurprd05.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+Hello all! Suppose we have two different .mk buildroot makefiles, pkgname1.mk and pkgname2.mk, with this particular content:
 
-19.04.2021 00:13, Peter Seiderer ?????:
-> No option to disable test compile available, but catch wchar support
-> can be disabled with CATCH_CONFIG_NO_WCHAR define.
-> 
-> Fixes:
-> 
->    - http://autobuild.buildroot.net/results/1cd24b757d87b963c70bc7ff927c6d983d0b142a
-> 
->    .../build/protozero-1.7.0/test/catch/catch.hpp:1691:29: error: 'wstring' is not a member of 'std'
->     1691 |     struct StringMaker<std::wstring> {
->          |                             ^~~~~~~
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->   package/protozero/protozero.mk | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/protozero/protozero.mk b/package/protozero/protozero.mk
-> index e4ce1a4730..48ce04ffe0 100644
-> --- a/package/protozero/protozero.mk
-> +++ b/package/protozero/protozero.mk
-> @@ -10,6 +10,9 @@ PROTOZERO_LICENSE = BSD-2-Clause, Apache-2.0
->   PROTOZERO_LICENSE_FILES = LICENSE.md LICENSE.from_folly
->   PROTOZERO_INSTALL_STAGING = YES
->   
-> +PROTOZERO_CONF_OPTS += \
-> +	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DCATCH_CONFIG_NO_WCHAR=1"
-> +
->   ifeq ($(BR2_PACKAGE_PROTOBUF),y)
->   PROTOZERO_DEPENDENCIES += protobuf
->   endif
-> 
+$ cat pkgname1.mk
+FOO1_PKG_NAME = pkgname1
+
+ifeq ($(BR2_PACKAGE_FOO1),y)
+
+$(FOO1_PKG_NAME)-clean:
+    $(MAKE) -C $(FOO_BUILD_DIR) clean
+$(FOO1_PKG_NAME)-all:
+    $(MAKE) -C $(FOO1_BUILD_DIR) all
+$(eval $(generic-package))
+
+endif
+
+$ cat pkgname2.mk
+FOO2_PKG_NAME = pkgname2
+
+ifeq ($(BR2_PACKAGE_FOO2),y)
+
+$(FOO2_PKG_NAME)-clean:
+    $(MAKE) -C $(FOO_BUILD_DIR) clean
+$(FOO2_PKG_NAME)-all:
+    $(MAKE) -C $(FOO2_BUILD_DIR) all
+$(eval $(generic-package))
+
+endif
+
+As you can see, the idea is not allowing the user to call the internal targets of the package if this package is disabled in the buildroot configuration (.config)
+
+When pkgname1 and pkgname2 are enabled in buildroot .config (BR2_PACKAGE_FOO1 and BR2_PACKAGE_FOO2 are set to 'y') the rules can be executed and work as expected:
+
+$ make pkgmane1-all
+$ make pkgmane1-clean
+$ make pkgmane2-all
+$ make pkgmane2-clean
+
+However, if we try to make a target when the related variable BR2_PACKAGE_FOO1 or BR2_PACKAGE_FOO2 is disabled in buildroot .config, you get this error:
+
+$ make pkgname1-clean
+make: *** No rule to make target 'pkgname1-clean'.  Stop.
+
+We added a .DEFAULT rule in case BR2_PACKAGE_FOO1 or BR2_PACKAGE_FOO2 is disabled in buildroot .config, to avoid the issue:
+
+$ cat pkgname1.mk
+FOO1_PKG_NAME = pkgname1
+
+ifeq ($(BR2_PACKAGE_FOO1),y)
+
+$(FOO1_PKG_NAME)-clean:
+    $(MAKE) -C $(FOO_BUILD_DIR) clean
+$(FOO1_PKG_NAME)-all:
+    $(MAKE) -C $(FOO1_BUILD_DIR) all
+$(eval $(generic-package))
+
+else
+.DEFAULT:
+    $(info BR2_PACKAGE_FOO1 is disabled)
+endif
+
+$ cat pkgname2.mk
+FOO2_PKG_NAME = pkgname2
+
+ifeq ($(BR2_PACKAGE_FOO2),y)
+
+$(FOO2_PKG_NAME)-clean:
+    $(MAKE) -C $(FOO_BUILD_DIR) clean
+$(FOO2_PKG_NAME)-all:
+    $(MAKE) -C $(FOO2_BUILD_DIR) all
+$(eval $(generic-package))
+
+else
+.DEFAULT:
+    $(info BR2_PACKAGE_FOO2 is disabled)
+endif
+
+Problem appears when both pkgname1 and pkgname2 are disabled in buildroot .config, as we get this warning:
+
+package/pkgname1/pkgname1.mk: warning: overriding recipe for target '.DEFAULT'
+package/pkgname2/pkgname2.mk: warning: ignoring old recipe for target '.DEFAULT'
+
+That happens because make tool finds two different .DEFAULT rules defined. Yes, this issue is close related with make tool, but also with buildroot as it is related with the way builroot organizes makefiles for the .mk packages.
+
+In this particular case, can you suggest the proper / most convenient way to set a (different) .DEFAULT rule for every single buildroot makefile .mk (package)?
+Thanks!
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210421/bca952bf/attachment.html>
