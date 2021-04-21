@@ -1,152 +1,100 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Wed, 21 Apr 2021 15:17:23 +0200
-Subject: [Buildroot] [PATCH] package/bluez5_utils: Clean up descriptions
-Message-ID: <20210421131724.471288-1-buildroot@heine.tech>
+From: dusan.ivanco at gmail.com <dusan.ivanco@gmail.com>
+Date: Wed, 21 Apr 2021 15:57:27 +0200
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_1/2=5D_Signed-off-by=3A_Du=C5=A1a?=
+ =?utf-8?q?n_Ivan=C4=8Do_=3Cdusan=2Eivanco=40gmail=2Ecom=3E?=
+Message-ID: <20210421135727.9637-1-dusan.ivanco@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The descriptions in this package have grown pretty confusing over time.
-Try to make this a bit more consistent and up-to-date.
+From: Du?an Ivan?o <dusan.ivanco@gmail.com>
 
-* drop references to old kernel versions not supported by BR anymore
-* Remove "Bluez 5.x" string from options
-* consistently use the term "plugin" (plugins implement profiles)
-* make mentioned profile appreviations upper-case
-* make descriptions closer to the ones in BlueZ Readme [0]
-* make clear that "tests" refers to the python test scripts
-
-[0] https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/README?h=5.58
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+New package: raspi2fb
 ---
- package/bluez5_utils/Config.in | 45 ++++++++++++++++------------------
- 1 file changed, 21 insertions(+), 24 deletions(-)
+ package/Config.in                                 |  1 +
+ package/raspi2fb/0001-vchostif-library-link.patch | 11 +++++++++++
+ package/raspi2fb/Config.in                        |  9 +++++++++
+ package/raspi2fb/raspi2fb.hash                    |  3 +++
+ package/raspi2fb/raspi2fb.mk                      | 13 +++++++++++++
+ 5 files changed, 37 insertions(+)
+ create mode 100644 package/raspi2fb/0001-vchostif-library-link.patch
+ create mode 100644 package/raspi2fb/Config.in
+ create mode 100644 package/raspi2fb/raspi2fb.hash
+ create mode 100644 package/raspi2fb/raspi2fb.mk
 
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index 016a16c4c5..f79155997a 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -11,13 +11,8 @@ config BR2_PACKAGE_BLUEZ5_UTILS
- 	help
- 	  bluez utils version 5.x
- 
--	  With this release BlueZ only supports the new Bluetooth
--	  Management kernel interface (introduced in Linux 3.4).
--
--	  For Low Energy support at least kernel version 3.5 is
--	  needed.
--
--	  The API is not backward compatible with BlueZ 4.
-+	  Provides Stack, Library and Tooling for Bluetooth Classic
-+	  and Bluetooth LE.
- 
- 	  Bluez utils will use systemd and/or udev if enabled.
- 
-@@ -31,7 +26,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS_OBEX
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBICAL
- 	help
--	  Enable the OBEX support in Bluez 5.x.
-+	  Enable OBEX support.
- 
- comment "OBEX support needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-@@ -40,75 +35,77 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
- 	bool "build CLI client"
- 	select BR2_PACKAGE_READLINE
- 	help
--	  Enable the Bluez 5.x command line client.
-+	  Build the command line client "bluetoothctl".
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
--	bool "install deprecated tool"
-+	bool "install deprecated tools"
- 	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
- 	help
--	  Build BlueZ 5.x deprecated tools. These currently include:
-+	  Build deprecated tools. These currently include:
- 	  hciattach, hciconfig, hcitool, hcidump, rfcomm, sdptool,
- 	  ciptool, gatttool.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
--	bool "build experimental obexd plugin"
-+	bool "build experimental tools"
- 	help
--	  Build BlueZ 5.x experimental Nokia OBEX PC Suite plugin
-+	  Build experimental tools. This is currently only the
-+	  "Nokia OBEX PC Suite tool". So, only if OBEX support is
-+	  enabled this option has an effect.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
- 	bool "build health plugin"
- 	help
--	  Build BlueZ 5.x health plugin
-+	  Build plugin for health profiles.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH
--	bool "build mesh profile"
-+	bool "build mesh plugin"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
- 	select BR2_PACKAGE_ELL
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_READLINE
- 	help
--	  Build BlueZ 5.x mesh plugin
-+	  Build plugin for Mesh support.
- 
- comment "mesh profile needs a toolchain w/ headers >= 4.12"
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI
--	bool "build midi profile"
-+	bool "build midi plugin"
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_ALSA_LIB_SEQ
- 	help
--	  Build BlueZ 5.x midi plugin
-+	  Build MIDI support via ALSA sequencer.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NFC
- 	bool "build nfc plugin"
- 	help
--	  Build BlueZ 5.x nfc plugin
-+	  Build plugin for NFC pairing.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SAP
- 	bool "build sap plugin"
- 	help
--	  Build BlueZ 5.x sap plugin
-+	  Build plugin for SAP profile.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SIXAXIS
- 	bool "build sixaxis plugin"
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	help
--	  Build BlueZ 5.x sixaxis plugin (support Sony Dualshock
-+	  Build sixaxis plugin (support Sony Dualshock
- 	  controller)
- 
- comment "sixaxis plugin needs udev /dev management"
- 	depends on !BR2_PACKAGE_HAS_UDEV
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_TEST
--	bool "build tests"
-+	bool "install test scripts"
- 	help
--	  Build BlueZ 5.x tests
-+	  Install the python test scripts from the "test" directory.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_TOOLS_HID2HCI
- 	bool "build hid2hci tool"
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	help
--	  Build BlueZ 5.x hid2hci tool
-+	  Build hid2hci tool
- 
- comment "hid2hci tool needs udev /dev management"
- 	depends on !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/Config.in b/package/Config.in
+index 0d7cb0f446..22dd64f639 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -535,6 +535,7 @@ endmenu
+ 	source "package/pru-software-support/Config.in"
+ 	source "package/pulseview/Config.in"
+ 	source "package/raspi-gpio/Config.in"
++	source "package/raspi2fb/Config.in"
+ 	source "package/read-edid/Config.in"
+ 	source "package/rng-tools/Config.in"
+ 	source "package/rpi-userland/Config.in"
+diff --git a/package/raspi2fb/0001-vchostif-library-link.patch b/package/raspi2fb/0001-vchostif-library-link.patch
+new file mode 100644
+index 0000000000..7dc13534e2
+--- /dev/null
++++ b/package/raspi2fb/0001-vchostif-library-link.patch
+@@ -0,0 +1,11 @@
++--- a/CMakeLists.txt	2020-01-01 00:00:00.000000000 +0000
+++++ b/CMakeLists.txt	2020-01-01 00:00:00.000000000 +0000
++@@ -6,7 +6,7 @@
++ 
++ set(BCM_HOST_INCLUDE_DIRS /opt/vc/include)
++ set(BCM_HOST_LIBRARY_DIRS /opt/vc/lib)
++-set(BCM_HOST_LIBRARIES bcm_host)
+++set(BCM_HOST_LIBRARIES bcm_host vchostif)
++ 
++ find_package(PkgConfig)
++ pkg_check_modules(LIBBSD libbsd)
+diff --git a/package/raspi2fb/Config.in b/package/raspi2fb/Config.in
+new file mode 100644
+index 0000000000..ab144c2d1a
+--- /dev/null
++++ b/package/raspi2fb/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_RASPI2FB
++	bool "raspi2fb"
++	select BR2_PACKAGE_LIBBSD
++	select BR2_PACKAGE_RPI_USERLAND
++	help
++	  Program to copy the Raspberry Pi display
++	  to a secondary framebuffer.
++
++	  https://github.com/AndrewFromMelbourne/raspi2fb
+diff --git a/package/raspi2fb/raspi2fb.hash b/package/raspi2fb/raspi2fb.hash
+new file mode 100644
+index 0000000000..6e14c2f5d1
+--- /dev/null
++++ b/package/raspi2fb/raspi2fb.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 713a73e99268ad4557b522513ddaef8de3431aee9f7eb338f3cbff5a036d776f  raspi2fb-7e1bae71c5af88240f7eb89a924161c7ee0b00f5.tar.gz
++sha256 afbc87568aa5a3108fc85b60015dd9346108dd77f588cd5c62d3385577519c4c  LICENSE
+diff --git a/package/raspi2fb/raspi2fb.mk b/package/raspi2fb/raspi2fb.mk
+new file mode 100644
+index 0000000000..b9732e9a51
+--- /dev/null
++++ b/package/raspi2fb/raspi2fb.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# raspi2fb
++#
++################################################################################
++
++RASPI2FB_VERSION = 7e1bae71c5af88240f7eb89a924161c7ee0b00f5
++RASPI2FB_SITE = $(call github,AndrewFromMelbourne,raspi2fb,$(RASPI2FB_VERSION))
++RASPI2FB_LICENSE = MIT
++RASPI2FB_LICENSE_FILES = LICENSE
++RASPI2FB_DEPENDENCIES = libbsd rpi-userland
++
++$(eval $(cmake-package))
 -- 
-2.25.1
+2.21.1 (Apple Git-122.3)
