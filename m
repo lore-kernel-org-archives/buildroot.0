@@ -1,44 +1,40 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 21 Apr 2021 15:42:35 -0500
-Subject: [Buildroot] [PATCH 10/10] package/tar: ignore CVE-2007-4476
+Date: Wed, 21 Apr 2021 15:42:33 -0500
+Subject: [Buildroot] [PATCH 08/10] package/ncurses: ignore CVE-2018-10754,
+ CVE-2018-19211, CVE-2018-19217, CVE-2019-17594, CVE-2019-17595
 In-Reply-To: <20210421204235.5956-1-matthew.weber@rockwellcollins.com>
 References: <20210421204235.5956-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20210421204235.5956-11-matthew.weber@rockwellcollins.com>
+Message-ID: <20210421204235.5956-9-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://security-tracker.debian.org/tracker/CVE-2007-4476
-
-Currently NVD has this incorrectly tagged for all versions.
-The bug trackers on different distros show it was generally
-fixed in versions >= 1.16 but because the impacted source
-code is in the GNU paxutils, it is hard to follow in what
-cases tar has been fixed around that 1.16 version.
-
-https://bugs.gentoo.org/196978
-
-https://www.itsecdb.com/oval/definition/oval/org.mitre.oval/def/9336/Buffer-overflow-in-the-safer-name-suffix-function-in-GNU-tar.html
+Commit 4b21273d71d09 added upstream (security) patches up to 20200118
+and in the commit description it outlines these CVEs were patched.
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/tar/tar.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/ncurses/ncurses.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index 690a5952ba..80d7495b00 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -13,6 +13,8 @@ TAR_CONF_OPTS = --exec-prefix=/
- TAR_LICENSE = GPL-3.0+
- TAR_LICENSE_FILES = COPYING
- TAR_CPE_ID_VENDOR = gnu
-+# only tar <= 1.16
-+TAR_IGNORE_CVES += CVE-2007-4476
- 
- ifeq ($(BR2_PACKAGE_ACL),y)
- TAR_DEPENDENCIES += acl
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 97e3e2c321..5d9c6bb0dd 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -11,6 +11,12 @@ NCURSES_DEPENDENCIES = host-ncurses
+ NCURSES_LICENSE = MIT with advertising clause
+ NCURSES_LICENSE_FILES = COPYING
+ NCURSES_CPE_ID_VENDOR = gnu
++# Commit 4b21273d71d09 added upstream (security) patches up to 20200118
++NCURSES_IGNORE_CVES += CVE-2018-10754
++NCURSES_IGNORE_CVES += CVE-2018-19211
++NCURSES_IGNORE_CVES += CVE-2018-19217
++NCURSES_IGNORE_CVES += CVE-2019-17594
++NCURSES_IGNORE_CVES += CVE-2019-17595
+ NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)6-config
+ NCURSES_PATCH = \
+ 	$(addprefix https://invisible-mirror.net/archives/ncurses/$(NCURSES_VERSION)/, \
 -- 
 2.17.1
