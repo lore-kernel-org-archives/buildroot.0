@@ -1,75 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 22 Apr 2021 22:51:49 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/uftrace: new package
-In-Reply-To: <20210408194631.313188-1-asafka7@gmail.com>
-References: <20210408194631.313188-1-asafka7@gmail.com>
-Message-ID: <20210422225149.25af3320@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 22 Apr 2021 22:52:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gerbera: needs dynamic library
+Message-ID: <20210422205256.707037-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Asaf,
+Disable gerbera with static builds as it raises build failures since
+bump to version 1.8.0 in commit 8974596836945eada8e162844fb87f88adec9100
+and upstream does not seem to care or test static builds:
+https://github.com/gerbera/gerbera/issues/1221
 
-On Thu,  8 Apr 2021 22:46:31 +0300
-Asaf Kahlon <asafka7@gmail.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/9c59ef912d09bb3c0647b98aa8e9eca7fccbe08f
 
-> diff --git a/package/uftrace/uftrace.mk b/package/uftrace/uftrace.mk
-> new file mode 100644
-> index 0000000000..20425a9c48
-> --- /dev/null
-> +++ b/package/uftrace/uftrace.mk
-> @@ -0,0 +1,26 @@
-> +################################################################################
-> +#
-> +# uftrace
-> +#
-> +################################################################################
-> +
-> +UFTRACE_VERSION = 0.9.4
-> +UFTRACE_SITE = $(call github,namhyung,uftrace,v$(UFTRACE_VERSION))
-> +UFTRACE_LICENSE = GPL-2.0
-> +UFTRACE_LICENSE_FILES = COPYING
-> +
-> +# uftrace always compiles a small test program to check if elfutils exists, so
-> +# there's no special flag for it, we just need to make sure it's installed.
-> +ifeq ($(BR2_PACKAGE_ELFUTILS),y)
-> +UFTRACE_DEPENDENCIES += elfutils
-> +endif
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gerbera/Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-> +
-> +define UFTRACE_BUILD_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) ARCH=$(BR2_ARCH) $(MAKE) -C $(@D)
-> +endef
-
-Why don't you use the configure script? It is not autotools-based, but
-the official build instructions suggest to use it:
-
-    $ ./configure
-    $ make
-    $ sudo make install
-
-The configure script allows to explicit disable unused feature, using
---without-<foo> options.
-
-Could you have a look at this?
-
-Also, the manual says that on ARM, only ARM >= v6 is supported. So this
-probably means that:
-
-config BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
-        bool
-        default y if BR2_arm
-
-should instead be:
-
-	default y if BR2_ARM_CPU_ARMV6 || BR2_ARM_CPU_ARMV7A
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/gerbera/Config.in b/package/gerbera/Config.in
+index 33a9705bea..46a163ec78 100644
+--- a/package/gerbera/Config.in
++++ b/package/gerbera/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_GERBERA
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_WCHAR # fmt
+ 	select BR2_PACKAGE_FMT
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+@@ -25,8 +26,9 @@ config BR2_PACKAGE_GERBERA
+ 
+ 	  https://gerbera.io
+ 
+-comment "gerbera needs a toolchain w/ C++, threads, wchar, gcc >= 8"
++comment "gerbera needs a toolchain w/ C++, dynamic library, threads, wchar, gcc >= 8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.2
