@@ -1,50 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 22 Apr 2021 22:52:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gerbera: needs dynamic library
-Message-ID: <20210422205256.707037-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 22 Apr 2021 22:55:24 +0200
+Subject: [Buildroot] [PATCH] linux: allow firmware to be included in
+ kernel
+In-Reply-To: <20210422202452.41704-1-sam.voss@rockwellcollins.com>
+References: <20210422202452.41704-1-sam.voss@rockwellcollins.com>
+Message-ID: <20210422225524.78b04dc8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable gerbera with static builds as it raises build failures since
-bump to version 1.8.0 in commit 8974596836945eada8e162844fb87f88adec9100
-and upstream does not seem to care or test static builds:
-https://github.com/gerbera/gerbera/issues/1221
+Hello Sam,
 
-Fixes:
- - http://autobuild.buildroot.org/results/9c59ef912d09bb3c0647b98aa8e9eca7fccbe08f
+On Thu, 22 Apr 2021 15:24:52 -0500
+Sam Voss <sam.voss@rockwellcollins.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gerbera/Config.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+> Add functionality to use the kernel's built-in options to allow binary
+> blobs to be included with the kernel. This is equivalent to the blobs
+> existing in /lib/firmware, however are available earlier in the boot
+> process. This may be useful in situations where a device probes before
+> the rootfs is fully available (such as a squashfs not being loaded
+> before a usb device probing).
+> 
+> Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
 
-diff --git a/package/gerbera/Config.in b/package/gerbera/Config.in
-index 33a9705bea..46a163ec78 100644
---- a/package/gerbera/Config.in
-+++ b/package/gerbera/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_GERBERA
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_WCHAR # fmt
- 	select BR2_PACKAGE_FMT
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-@@ -25,8 +26,9 @@ config BR2_PACKAGE_GERBERA
- 
- 	  https://gerbera.io
- 
--comment "gerbera needs a toolchain w/ C++, threads, wchar, gcc >= 8"
-+comment "gerbera needs a toolchain w/ C++, dynamic library, threads, wchar, gcc >= 8"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+Including firmware in the kernel itself has some serious licensing
+implications: it only works for firmware files that have a license that
+is compatible with the GPL. If their license is not GPL-compatible,
+then you cannot redistribute your kernel image.
+
+Here is the help text of the corresponding option in the Linux kernel:
+
+          WARNING: If you include additional firmware files into your binary
+          kernel image that are not available under the terms of the GPL,
+          then it may be a violation of the GPL to distribute the resulting
+          image since it combines both GPL and non-GPL work. You should
+          consult a lawyer of your own before distributing such an image.
+
+I am not a lawyer, but I think the wording is a bit unfortunate: I
+think if the firmware is under a license that is compatible with the
+GPL, it is fine. But if it has a non GPL-compatible license, it's a
+no-go.
+
+So I would be OK to include this, but with the appropriate warning in
+the Buildroot options.
+
+Best regards,
+
+Thomas
 -- 
-2.30.2
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
