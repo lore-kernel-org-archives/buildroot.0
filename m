@@ -1,99 +1,63 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 22 Apr 2021 20:24:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/protozero: disable tests
-Message-ID: <20210422182443.654635-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 22 Apr 2021 20:25:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 21.0.3
+Message-ID: <20210422182538.9384-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to disable tests through the standard BUILD_TESTING variable
-which is already passed by cmake-package.
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2021-April/000627.html
 
-While at it, drop protobuf dependency which is only needed for tests
-
-This will fix a build failure on toolchains without wchar, toolchains
-for sh4 (ICE) or toolchains where gcc is affected by bug 64735.
-
-Upstream thinks that this is unecessary but no additional feedback was
-received on how we should handle those build failures
-
-Fixes:
- - http://autobuild.buildroot.org/results/1cd24b757d87b963c70bc7ff927c6d983d0b142a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...CMakeLists.txt-respect-BUILD_TESTING.patch | 47 +++++++++++++++++++
- package/protozero/protozero.mk                |  4 --
- 2 files changed, 47 insertions(+), 4 deletions(-)
- create mode 100644 package/protozero/0001-CMakeLists.txt-respect-BUILD_TESTING.patch
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/protozero/0001-CMakeLists.txt-respect-BUILD_TESTING.patch b/package/protozero/0001-CMakeLists.txt-respect-BUILD_TESTING.patch
-new file mode 100644
-index 0000000000..d0267e3283
---- /dev/null
-+++ b/package/protozero/0001-CMakeLists.txt-respect-BUILD_TESTING.patch
-@@ -0,0 +1,47 @@
-+From 03daae49c8fa94513b508bd12f1597e8e5e086f2 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 17 Apr 2021 13:06:44 +0200
-+Subject: [PATCH] CMakeLists.txt: respect BUILD_TESTING
-+
-+Don't build tests if the standard cmake BUILD_TESTING variable is set to
-+OFF.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/mapbox/protozero/pull/105]
-+---
-+ CMakeLists.txt | 9 +++++----
-+ 1 file changed, 5 insertions(+), 4 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index f9702d6..7a40212 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -23,6 +23,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-+ 
-+ #-----------------------------------------------------------------------------
-+ 
-++option(BUILD_TESTING "Build tests" ON)
-+ option(WERROR "Add -Werror flag to build (turns warnings into errors)" ON)
-+ 
-+ if(MSVC)
-+@@ -134,13 +135,13 @@ install(DIRECTORY include/protozero DESTINATION include)
-+ 
-+ #-----------------------------------------------------------------------------
-+ 
-+-enable_testing()
-+-
-+ add_subdirectory(doc)
-+ 
-+ add_subdirectory(tools)
-+ 
-+-add_subdirectory(test)
-+-
-++if(BUILD_TESTING)
-++    enable_testing()
-++    add_subdirectory(test)
-++endif()
-+ 
-+ #-----------------------------------------------------------------------------
-+-- 
-+2.30.2
-+
-diff --git a/package/protozero/protozero.mk b/package/protozero/protozero.mk
-index e4ce1a4730..80d16192e3 100644
---- a/package/protozero/protozero.mk
-+++ b/package/protozero/protozero.mk
-@@ -10,8 +10,4 @@ PROTOZERO_LICENSE = BSD-2-Clause, Apache-2.0
- PROTOZERO_LICENSE_FILES = LICENSE.md LICENSE.from_folly
- PROTOZERO_INSTALL_STAGING = YES
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index cac50e5b92..9c0079c3f9 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
--ifeq ($(BR2_PACKAGE_PROTOBUF),y)
--PROTOZERO_DEPENDENCIES += protobuf
--endif
--
- $(eval $(cmake-package))
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 21.0.2
++MESA3D_HEADERS_VERSION = 21.0.3
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index f171d97a68..6a70e8a1b2 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2021-April/000625.html
+-sha256  46c1dc5bb54a372dee43ec3c067229c299187d5bdadf1402756bbf66a6df5b88  mesa-21.0.2.tar.xz
+-sha512  c3d7969b56e1c31ee642e3b7143d565c4233173dab7cc5576b686c873c27134dc8292a9f2caa0a0dd3c54d0c89d27d6030f36a2c84f85dcedee7ae80b19e5c3b  mesa-21.0.2.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2021-April/000627.html
++sha256  565c6f4bd2d5747b919454fc1d439963024fc78ca56fd05158c3b2cde2f6912b  mesa-21.0.3.tar.xz
++sha512  4a8aee48a8ea7f32e8aa3bbbd91db26c6053b9a43e62ff88256929e6bc147884f0fef988726b5a3d59d7008663f017c746a0352fd3fcc1c476b8190af4a2531f  mesa-21.0.3.tar.xz
+ 
+ # License
+ sha256  1361129baa4519b6ed27a1bf4aeee33a58b060bf7bb9b6ea415ecede04e35e46  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 697be8d9d5..a278d3dbdb 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 21.0.2
++MESA3D_VERSION = 21.0.3
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.30.2
+2.29.2
