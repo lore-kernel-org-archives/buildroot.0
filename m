@@ -1,63 +1,94 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 22 Apr 2021 20:25:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 21.0.3
-Message-ID: <20210422182538.9384-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 22 Apr 2021 20:26:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/postgis: add optional protobuf-c
+ dependency
+Message-ID: <20210422182641.654969-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2021-April/000627.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ ...ix-cross-compilation-with-protobuf-c.patch | 42 +++++++++++++++++++
+ package/postgis/postgis.mk                    | 10 ++++-
+ 2 files changed, 50 insertions(+), 2 deletions(-)
+ create mode 100644 package/postgis/0005-configure.ac-fix-cross-compilation-with-protobuf-c.patch
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index cac50e5b92..9c0079c3f9 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/postgis/0005-configure.ac-fix-cross-compilation-with-protobuf-c.patch b/package/postgis/0005-configure.ac-fix-cross-compilation-with-protobuf-c.patch
+new file mode 100644
+index 0000000000..b415edf0b8
+--- /dev/null
++++ b/package/postgis/0005-configure.ac-fix-cross-compilation-with-protobuf-c.patch
+@@ -0,0 +1,42 @@
++From 8b80c4bd848ff3d71b998dc8a4bd42627ed72581 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 17 Apr 2021 11:58:19 +0200
++Subject: [PATCH] configure.ac: fix cross-compilation with protobuf-c
++
++Try to retrieve the version from pkg-config to avoid the following
++error:
++
++checking protobuf-c version... configure: error: in `/home/fabrice/buildroot/output/build/postgis-3.1.1':
++configure: error: cannot run test program while cross compiling
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/postgis/postgis/commit/8b80c4bd848ff3d71b998dc8a4bd42627ed72581]
++---
++ configure.ac | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 48ba070a40..df75fe6601 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1004,6 +1004,7 @@ if test "$CHECK_PROTOBUF" != "no"; then
++ 		PKG_CHECK_MODULES([PROTOBUFC], [libprotobuf-c >= 1.1.0], [
++ 				PROTOBUF_CPPFLAGS="$PROTOBUFC_CFLAGS";
++ 				PROTOBUF_LDFLAGS="$PROTOBUFC_LIBS";
+++				PROTOC_VERSION=`$PKG_CONFIG libprotobuf-c --modversion | sed 's/\([[0-9]]\).*\([[0-9]]\).*\([[0-9]]\)/\100\200\3/'`
++ 			], [
++ 				AC_MSG_RESULT([libprotobuf-c not found in pkg-config])
++ 			])
++@@ -1054,7 +1055,10 @@ if test "$CHECK_PROTOBUF" != "no"; then
++ 		[])
++ 
++ 	AC_MSG_CHECKING([protobuf-c version])
++-	AC_PROTOBUFC_VERSION([PROTOC_VERSION])
+++	dnl Return the protobuf-c version number if not detected by pkg-config
+++	if test "x$PROTOC_VERSION" = "x"; then
+++		AC_PROTOBUFC_VERSION([PROTOC_VERSION])
+++	fi
++         if test ! "$PROTOC_VERSION" -ge 1001000; then
++                 AC_MSG_ERROR("Old protobuf-c release found but 1.1.0 is required. You can disable MVT and Geobuf support using --without-protobuf")
++         fi
+diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
+index aa370b96ac..df44cf4d7a 100644
+--- a/package/postgis/postgis.mk
++++ b/package/postgis/postgis.mk
+@@ -27,8 +27,7 @@ POSTGIS_CONF_ENV += CFLAGS="$(POSTGIS_CFLAGS)"
+ POSTGIS_CONF_OPTS += \
+ 	--with-pgconfig=$(STAGING_DIR)/usr/bin/pg_config \
+ 	--with-geosconfig=$(STAGING_DIR)/usr/bin/geos-config \
+-	--with-xml2config=$(STAGING_DIR)/usr/bin/xml2-config \
+-	--without-protobuf
++	--with-xml2config=$(STAGING_DIR)/usr/bin/xml2-config
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 21.0.2
-+MESA3D_HEADERS_VERSION = 21.0.3
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index f171d97a68..6a70e8a1b2 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2021-April/000625.html
--sha256  46c1dc5bb54a372dee43ec3c067229c299187d5bdadf1402756bbf66a6df5b88  mesa-21.0.2.tar.xz
--sha512  c3d7969b56e1c31ee642e3b7143d565c4233173dab7cc5576b686c873c27134dc8292a9f2caa0a0dd3c54d0c89d27d6030f36a2c84f85dcedee7ae80b19e5c3b  mesa-21.0.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2021-April/000627.html
-+sha256  565c6f4bd2d5747b919454fc1d439963024fc78ca56fd05158c3b2cde2f6912b  mesa-21.0.3.tar.xz
-+sha512  4a8aee48a8ea7f32e8aa3bbbd91db26c6053b9a43e62ff88256929e6bc147884f0fef988726b5a3d59d7008663f017c746a0352fd3fcc1c476b8190af4a2531f  mesa-21.0.3.tar.xz
+ ifeq ($(BR2_PACKAGE_LIBGDAL),y)
+ POSTGIS_DEPENDENCIES += libgdal
+@@ -48,4 +47,11 @@ ifeq ($(BR2_PACKAGE_PCRE),y)
+ POSTGIS_DEPENDENCIES += pcre
+ endif
  
- # License
- sha256  1361129baa4519b6ed27a1bf4aeee33a58b060bf7bb9b6ea415ecede04e35e46  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 697be8d9d5..a278d3dbdb 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 21.0.2
-+MESA3D_VERSION = 21.0.3
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
++ifeq ($(BR2_PACKAGE_PROTOBUF_C),y)
++POSTGIS_DEPENDENCIES += protobuf-c
++POSTGIS_CONF_OPTS += --with-protobuf
++else
++POSTGIS_CONF_OPTS += --without-protobuf
++endif
++
+ $(eval $(autotools-package))
 -- 
-2.29.2
+2.30.2
