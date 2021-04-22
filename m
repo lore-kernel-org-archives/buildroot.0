@@ -1,46 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 22 Apr 2021 23:49:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/s390-tools: fix build error due
- to undefined KMS_PLUGIN_LOCATION
-In-Reply-To: <20210324090001.179735-1-egorenar@linux.ibm.com>
-References: <20210324090001.179735-1-egorenar@linux.ibm.com>
-Message-ID: <20210422234920.0054edd4@windsurf>
+Date: Thu, 22 Apr 2021 23:49:30 +0200
+Subject: [Buildroot] [git commit] package/rcw-smarc-sal28: bump to version 11
+Message-ID: <20210422212253.F1D2882ABC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alexander,
+commit: https://git.buildroot.net/buildroot/commit/?id=1054aa9707dc96e273ea595c3788d717ab4fddb4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 24 Mar 2021 10:00:01 +0100
-Alexander Egorenkov <egorenar@linux.ibm.com> wrote:
+From the changelog:
+* Enable SATA RX lane swap
+* Add workaround for A-010554 (Improve SATA hard drive detection)
+* Add workaround for A-009531 (Wrong IDO bit value for PCIe completion
+  packets)
 
-> Fixes the following build error:
-> kms.c:44:2: error: #error KMS_PLUGIN_LOCATION must be defined
->    44 | #error KMS_PLUGIN_LOCATION must be defined
->       |  ^~~~~
-> /usr/bin/make -C ../..//libutil/ libutil.a
-> kms.c: In function ?load_kms_plugin?:
-> kms.c:274:5: error: ?KMS_PLUGIN_LOCATION? undeclared (first use in this function)
->   274 |     KMS_PLUGIN_LOCATION, so_name);
->       |     ^~~~~~~~~~~~~~~~~~~
-> kms.c:274:5: note: each undeclared identifier is reported only once for each
-> function it appears in
-> 
-> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-> ---
->  ...rror-when-the-compiler-flags-are-ove.patch | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 package/s390-tools/0002-zkey-Fix-build-error-when-the-compiler-flags-are-ove.patch
+Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rcw-smarc-sal28/rcw-smarc-sal28.hash | 2 +-
+ package/rcw-smarc-sal28/rcw-smarc-sal28.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for the patch. However, another patch doing exactly the same
-thing had been posted 2 days before, and has been applied on March 30.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/rcw-smarc-sal28/rcw-smarc-sal28.hash b/package/rcw-smarc-sal28/rcw-smarc-sal28.hash
+index 1f9b42c0ba..6ca5df77cd 100644
+--- a/package/rcw-smarc-sal28/rcw-smarc-sal28.hash
++++ b/package/rcw-smarc-sal28/rcw-smarc-sal28.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256	8e53dfceeb7f15d9e890dd4f69db505727276185f7438a5034616d392ff8f223  rcw-smarc-sal28-10.tar.gz
++sha256	8c1c3e26407141ee8d8bd16a43c16c0459b01a60e6e25ca47e22c7499b3e4e65  rcw-smarc-sal28-11.tar.gz
+ sha256	803c65088eed36a6697ca9f03f4379bbad24e276dc8da7fef5eb4dc4008415a1  COPYING
+diff --git a/package/rcw-smarc-sal28/rcw-smarc-sal28.mk b/package/rcw-smarc-sal28/rcw-smarc-sal28.mk
+index 0dce543811..4928f1a7f8 100644
+--- a/package/rcw-smarc-sal28/rcw-smarc-sal28.mk
++++ b/package/rcw-smarc-sal28/rcw-smarc-sal28.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RCW_SMARC_SAL28_VERSION = 10
++RCW_SMARC_SAL28_VERSION = 11
+ RCW_SMARC_SAL28_SITE = $(call github,kontron,rcw-smarc-sal28,v$(RCW_SMARC_SAL28_VERSION))
+ RCW_SMARC_SAL28_LICENSE = BSD-2-Clause
+ RCW_SMARC_SAL28_LICENSE_FILES = COPYING
