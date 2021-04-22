@@ -1,37 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 22 Apr 2021 21:52:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python3-regex: bump to version
- 2021.4.4
-In-Reply-To: <20210409090056.6368-1-leon.anavi@konsulko.com>
-References: <20210409090056.6368-1-leon.anavi@konsulko.com>
-Message-ID: <20210422215252.20e8c774@windsurf>
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Thu, 22 Apr 2021 15:24:52 -0500
+Subject: [Buildroot] [PATCH] linux: allow firmware to be included in kernel
+Message-ID: <20210422202452.41704-1-sam.voss@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  9 Apr 2021 12:00:56 +0300
-Leon Anavi <leon.anavi@konsulko.com> wrote:
+Add functionality to use the kernel's built-in options to allow binary
+blobs to be included with the kernel. This is equivalent to the blobs
+existing in /lib/firmware, however are available earlier in the boot
+process. This may be useful in situations where a device probes before
+the rootfs is fully available (such as a squashfs not being loaded
+before a usb device probing).
 
-> Upgrade to release 2021.4.4 with the following bug fixes:
-> 
-> - regex fails with a quantified backreference but succeeds with
->   repeated backref
-> - API is not a drop-in replacement for python's re when it comes
->   to typing
-> 
-> Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
-> ---
->  package/python-regex/python-regex.hash | 4 ++--
->  package/python-regex/python-regex.mk   | 4 ++--
->  package/python3-regex/python3-regex.mk | 4 ++--
->  3 files changed, 6 insertions(+), 6 deletions(-)
+Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+---
+ linux/Config.in | 13 +++++++++++++
+ linux/linux.mk  |  7 ++++++-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index 2460c3f124..ef0d9f79ea 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -479,6 +479,19 @@ config BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF
+ 	  CONFIG_UNWINDER_ORC=y, please install libelf-dev,
+ 	  libelf-devel or elfutils-libelf-devel".
+ 
++config BR2_LINUX_KERNEL_EXTRA_FIRMWARE
++	bool "Build firmware binaries into the kernel"
++	help
++	  Include the firmware from linux-firmware into the kernel
++	  using the CONFIG_EXTRA_FIRMWARE option.
++
++config BR2_LINUX_KERNEL_EXTRA_FIRMWARE_BINARIES
++	string "External firmware blobs to build into the kernel binary"
++	depends on BR2_LINUX_KERNEL_EXTRA_FIRMWARE
++	help
++	  Space delimited list of firmware to be built into the kernel.
++	  These files must exist in the target's /lib/firmware.
++
+ # Linux extensions
+ source "linux/Config.ext.in"
+ 
+diff --git a/linux/linux.mk b/linux/linux.mk
+index b67f739ca0..d581dd7f5d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -78,7 +78,8 @@ LINUX_MAKE_ENV = \
+ 
+ LINUX_INSTALL_IMAGES = YES
+ LINUX_DEPENDENCIES += host-kmod \
+-	$(if $(BR2_PACKAGE_INTEL_MICROCODE),intel-microcode)
++	$(if $(BR2_PACKAGE_INTEL_MICROCODE),intel-microcode) \
++	$(if $(BR2_LINUX_KERNEL_EXTRA_FIRMWARE),linux-firmware)
+ 
+ # Starting with 4.16, the generated kconfig paser code is no longer
+ # shipped with the kernel sources, so we need flex and bison, but
+@@ -384,6 +385,10 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_FB)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
++	$(if $(BR2_LINUX_KERNEL_EXTRA_FIRMWARE),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_FIRMWARE_IN_KERNEL)
++		$(call KCONFIG_SET_OPT,CONFIG_EXTRA_FIRMWARE,$(BR2_LINUX_KERNEL_EXTRA_FIRMWARE_BINARIES))
++		$(call KCONFIG_SET_OPT,CONFIG_EXTRA_FIRMWARE_DIR,"$(TARGET_DIR)/lib/firmware"))
+ 	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
+ 	$(PACKAGES_LINUX_CONFIG_FIXUPS)
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
