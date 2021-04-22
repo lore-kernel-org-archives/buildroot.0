@@ -1,40 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 22 Apr 2021 21:32:48 +0200
-Subject: [Buildroot] [PATCH 2/2] package/sdl_mixer: fix static build
- with tremor
-In-Reply-To: <20210410100554.3947392-2-fontaine.fabrice@gmail.com>
-References: <20210410100554.3947392-1-fontaine.fabrice@gmail.com>
- <20210410100554.3947392-2-fontaine.fabrice@gmail.com>
-Message-ID: <20210422213248.6beeafa7@windsurf>
+Date: Thu, 22 Apr 2021 21:34:49 +0200
+Subject: [Buildroot] [git commit] package/python-gpiozero: bump version to
+ 1.6.2
+Message-ID: <20210422190820.596C781217@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 10 Apr 2021 12:05:54 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bfee0a7e9be73939fd36cb2cd8c11c231b4d309b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Static build with tremor raises a build failure since bump to latest git
-> tree in commit c8e27f3baa90351a417ff6e172d214c4a72e7314. However, it
-> should be noted that before this bump, tremor was always disabled in
-> static builds because vorbisidec detection was broken until
-> https://github.com/libsdl-org/SDL_mixer/commit/565a9a27cc8c184ad0203f004b834880ffd45d32
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/9634adc433da0e25732eb98675c59d0f96ac93b2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...re.ac-fix-static-linking-with-tremor.patch | 36 +++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 package/sdl_mixer/0003-configure.ac-fix-static-linking-with-tremor.patch
+- update license file hash:
+  @@ -1,3 +1,5 @@
+  +SPDX-License-Identifier: BSD-3-Clause
+  +
 
-Your patch did not apply properly. But since it was applied upstream,
-I've taken the upstreamed patch. Thanks a lot!
+- add setuptools runtime dependency, fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+	$ pinout -r a020d3 -m
+	Traceback (most recent call last):
+	  File "/usr/bin/pinout", line 6, in <module>
+	    from pkg_resources import load_entry_point
+	ModuleNotFoundError: No module named 'pkg_resources'
+
+For details see [1].
+
+[1] https://gpiozero.readthedocs.io/en/stable/changelog.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-gpiozero/Config.in            | 1 +
+ package/python-gpiozero/python-gpiozero.hash | 4 ++--
+ package/python-gpiozero/python-gpiozero.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/python-gpiozero/Config.in b/package/python-gpiozero/Config.in
+index 4d60855bfe..13506ae45f 100644
+--- a/package/python-gpiozero/Config.in
++++ b/package/python-gpiozero/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_GPIOZERO
+ 	depends on BR2_PACKAGE_PYTHON3 # python-colorzero
+ 	select BR2_PACKAGE_PYTHON_COLORZERO # runtime
+ 	select BR2_PACKAGE_PYTHON_RPI_GPIO # runtime
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	help
+ 	  A simple interface to GPIO devices with Raspberry Pi.
+ 
+diff --git a/package/python-gpiozero/python-gpiozero.hash b/package/python-gpiozero/python-gpiozero.hash
+index 2302003561..7359f6405e 100644
+--- a/package/python-gpiozero/python-gpiozero.hash
++++ b/package/python-gpiozero/python-gpiozero.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  8cb9824fe1b08e7935de03899455e20ce2c242e4cebb0c954c274c48059f6ea5  python-gpiozero-1.5.1.tar.gz
++sha256  7e6da923774437e24edc0c056e486415bace8c4ba4123c22ac4214147854ea6d  python-gpiozero-1.6.2.tar.gz
+ # Locally computed
+-sha256  b6e26763b79d7904d6eaa66f7f53ae374cf30431bb6ba8bcb0d9d5ff56dc69e3  LICENSE.rst
++sha256  b6fdd587f3dc3a9b8cc5adae00918e3ffa909b1092bd4decf7e8b1b08fa5d0fb  LICENSE.rst
+diff --git a/package/python-gpiozero/python-gpiozero.mk b/package/python-gpiozero/python-gpiozero.mk
+index 67e8067a8b..a68c39db1f 100644
+--- a/package/python-gpiozero/python-gpiozero.mk
++++ b/package/python-gpiozero/python-gpiozero.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_GPIOZERO_VERSION = 1.5.1
++PYTHON_GPIOZERO_VERSION = 1.6.2
+ PYTHON_GPIOZERO_SITE = $(call github,gpiozero,gpiozero,v$(PYTHON_GPIOZERO_VERSION))
+ PYTHON_GPIOZERO_LICENSE = BSD-3-Clause
+ PYTHON_GPIOZERO_LICENSE_FILES = LICENSE.rst
