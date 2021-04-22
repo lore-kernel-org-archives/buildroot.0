@@ -1,94 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 22 Apr 2021 20:26:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/postgis: add optional protobuf-c
- dependency
-Message-ID: <20210422182641.654969-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 22 Apr 2021 20:26:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive: bump
+ version to 2.6.14-Matrix
+Message-ID: <20210422182637.9618-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ix-cross-compilation-with-protobuf-c.patch | 42 +++++++++++++++++++
- package/postgis/postgis.mk                    | 10 ++++-
- 2 files changed, 50 insertions(+), 2 deletions(-)
- create mode 100644 package/postgis/0005-configure.ac-fix-cross-compilation-with-protobuf-c.patch
+Changelog:
+https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
 
-diff --git a/package/postgis/0005-configure.ac-fix-cross-compilation-with-protobuf-c.patch b/package/postgis/0005-configure.ac-fix-cross-compilation-with-protobuf-c.patch
-new file mode 100644
-index 0000000000..b415edf0b8
---- /dev/null
-+++ b/package/postgis/0005-configure.ac-fix-cross-compilation-with-protobuf-c.patch
-@@ -0,0 +1,42 @@
-+From 8b80c4bd848ff3d71b998dc8a4bd42627ed72581 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 17 Apr 2021 11:58:19 +0200
-+Subject: [PATCH] configure.ac: fix cross-compilation with protobuf-c
-+
-+Try to retrieve the version from pkg-config to avoid the following
-+error:
-+
-+checking protobuf-c version... configure: error: in `/home/fabrice/buildroot/output/build/postgis-3.1.1':
-+configure: error: cannot run test program while cross compiling
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/postgis/postgis/commit/8b80c4bd848ff3d71b998dc8a4bd42627ed72581]
-+---
-+ configure.ac | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 48ba070a40..df75fe6601 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1004,6 +1004,7 @@ if test "$CHECK_PROTOBUF" != "no"; then
-+ 		PKG_CHECK_MODULES([PROTOBUFC], [libprotobuf-c >= 1.1.0], [
-+ 				PROTOBUF_CPPFLAGS="$PROTOBUFC_CFLAGS";
-+ 				PROTOBUF_LDFLAGS="$PROTOBUFC_LIBS";
-++				PROTOC_VERSION=`$PKG_CONFIG libprotobuf-c --modversion | sed 's/\([[0-9]]\).*\([[0-9]]\).*\([[0-9]]\)/\100\200\3/'`
-+ 			], [
-+ 				AC_MSG_RESULT([libprotobuf-c not found in pkg-config])
-+ 			])
-+@@ -1054,7 +1055,10 @@ if test "$CHECK_PROTOBUF" != "no"; then
-+ 		[])
-+ 
-+ 	AC_MSG_CHECKING([protobuf-c version])
-+-	AC_PROTOBUFC_VERSION([PROTOC_VERSION])
-++	dnl Return the protobuf-c version number if not detected by pkg-config
-++	if test "x$PROTOC_VERSION" = "x"; then
-++		AC_PROTOBUFC_VERSION([PROTOC_VERSION])
-++	fi
-+         if test ! "$PROTOC_VERSION" -ge 1001000; then
-+                 AC_MSG_ERROR("Old protobuf-c release found but 1.1.0 is required. You can disable MVT and Geobuf support using --without-protobuf")
-+         fi
-diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
-index aa370b96ac..df44cf4d7a 100644
---- a/package/postgis/postgis.mk
-+++ b/package/postgis/postgis.mk
-@@ -27,8 +27,7 @@ POSTGIS_CONF_ENV += CFLAGS="$(POSTGIS_CFLAGS)"
- POSTGIS_CONF_OPTS += \
- 	--with-pgconfig=$(STAGING_DIR)/usr/bin/pg_config \
- 	--with-geosconfig=$(STAGING_DIR)/usr/bin/geos-config \
--	--with-xml2config=$(STAGING_DIR)/usr/bin/xml2-config \
--	--without-protobuf
-+	--with-xml2config=$(STAGING_DIR)/usr/bin/xml2-config
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index d789e04721..2626968f1b 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  83ffa1f5047782e049b54b94e7e9615638147f751980533bf4616140901129c9  kodi-inputstream-adaptive-2.6.13-Matrix.tar.gz
++sha256  f1756932e8cc602ce66c5db3bc1d44a442c01197c193561ca9248a405bd8bd86  kodi-inputstream-adaptive-2.6.14-Matrix.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 8c79b13d8e..b72241ab39 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBGDAL),y)
- POSTGIS_DEPENDENCIES += libgdal
-@@ -48,4 +47,11 @@ ifeq ($(BR2_PACKAGE_PCRE),y)
- POSTGIS_DEPENDENCIES += pcre
- endif
- 
-+ifeq ($(BR2_PACKAGE_PROTOBUF_C),y)
-+POSTGIS_DEPENDENCIES += protobuf-c
-+POSTGIS_CONF_OPTS += --with-protobuf
-+else
-+POSTGIS_CONF_OPTS += --without-protobuf
-+endif
-+
- $(eval $(autotools-package))
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.13-Matrix
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.14-Matrix
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
 -- 
-2.30.2
+2.29.2
