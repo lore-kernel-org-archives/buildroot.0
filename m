@@ -1,66 +1,51 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 22 Apr 2021 14:45:57 -0500
-Subject: [Buildroot] [PATCH v3 2/2] support/scripts/pkg-stats: add column
- reporting ignored CVEs
-In-Reply-To: <20210422194557.17499-1-matthew.weber@rockwellcollins.com>
-References: <20210422194557.17499-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20210422194557.17499-2-matthew.weber@rockwellcollins.com>
+Date: Thu, 22 Apr 2021 14:45:56 -0500
+Subject: [Buildroot] [PATCH v3 1/2] support/scripts/pkg-stats: add CPE
+ searching links
+Message-ID: <20210422194557.17499-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When doing analysis it is helpful to be able to view what CVE have
-been patched / diagnosed to not apply to Buildroot. This exposes
-that list to the reporting and prevents a step where you have to
-dig into the .mk's of a pkg to check for sure what has been
-ignored.
+For cases of a CPE having a unknown version or when there hasn't
+been a CPE verified, proposed a search criteria to help the
+user research an update.
+
+(libcurl has NIST dict entries but not this version)
+  cpe:2.3:a:haxx:libcurl:7.76.1:*:*:*:*:*:*:*
+  CPE identifier unknown in CPE database (Search)
+
+(jitterentropy-library package doesn't have any NIST dict entries)
+  no verified CPE identifier (Search)
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
-v3 - New
+v3 - Fixed pkg.cpeid.split() to include PRODUCT field
+v2 - New
 ---
- support/scripts/pkg-stats | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ support/scripts/pkg-stats | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 5b7fd1e0aa..0f90c16116 100755
+index 6f3ddc561f..5b7fd1e0aa 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -735,6 +735,10 @@ td.cve-unknown {
-  background: #ffd870;
- }
- 
-+td.cve_ignored {
-+ background: #ccc;
-+}
+@@ -921,7 +921,13 @@ def dump_html_pkg(f, pkg):
+     if pkg.cpeid:
+         f.write("  <code>%s</code>\n" % pkg.cpeid)
+     if not pkg.is_status_ok("cpe"):
+-        f.write("  %s%s\n" % ("<br/>" if pkg.cpeid else "", pkg.status['cpe'][1]))
++        if pkg.cpeid:
++            f.write("  <br/>%s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" % \
++                (pkg.status['cpe'][1], ":".join(pkg.cpeid.split(":")[0:5])))
++        else:
++            f.write("  %s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" % \
++                (pkg.status['cpe'][1], pkg.name))
 +
- </style>
- <title>Statistics of Buildroot packages</title>
- </head>
-@@ -909,6 +913,14 @@ def dump_html_pkg(f, pkg):
-         f.write("    N/A\n")
      f.write("  </td>\n")
  
-+    # CVEs Ignored
-+    td_class = ["centered"]
-+    td_class.append("cve_ignored")
-+    f.write("  <td class=\"%s\">\n" % " ".join(td_class))
-+    for ignored_cve in pkg.ignored_cves:
-+        f.write("    <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (ignored_cve, ignored_cve))
-+    f.write("  </td>\n")
-+
-     # CPE ID
-     td_class = ["left"]
-     if pkg.is_status_ok("cpe"):
-@@ -948,6 +960,7 @@ def dump_html_all_pkgs(f, packages):
- <td class=\"centered\">Warnings</td>
- <td class=\"centered\">Upstream URL</td>
- <td class=\"centered\">CVEs</td>
-+<td class=\"centered\">CVEs Ignored</td>
- <td class=\"centered\">CPE ID</td>
- </tr>
- """)
+     f.write(" </tr>\n")
 -- 
 2.17.1
