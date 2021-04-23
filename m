@@ -1,59 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Apr 2021 23:14:13 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/uftrace: new package
-In-Reply-To: <20210423172601.127205-1-asafka7@gmail.com>
-References: <20210423172601.127205-1-asafka7@gmail.com>
-Message-ID: <20210423231413.69bd2a16@windsurf>
+Date: Fri, 23 Apr 2021 23:14:46 +0200
+Subject: [Buildroot] [git commit] package/gerbera: needs dynamic library
+Message-ID: <20210423204755.061A7840EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Asaf,
+commit: https://git.buildroot.net/buildroot/commit/?id=cec14fc66d72a6da84bf8cfc3527ba3b587d7663
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 23 Apr 2021 20:26:01 +0300
-Asaf Kahlon <asafka7@gmail.com> wrote:
+Disable gerbera with static builds as it raises build failures since
+bump to version 1.8.0 in commit 8974596836945eada8e162844fb87f88adec9100
+and upstream does not seem to care or test static builds:
+https://github.com/gerbera/gerbera/issues/1221
 
-> The uftrace tool is to trace and analyze execution of a
-> program written in C/C++.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> --
-> v3->v4:
-> * define unsupported options exlicitly
-> * Use TARGET_MAKE_ENV instead of TARGET_CONFIGURE_OPTS
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  DEVELOPERS                   |  1 +
->  package/Config.in            |  1 +
->  package/uftrace/Config.in    | 19 ++++++++++++++++
->  package/uftrace/uftrace.hash |  3 +++
->  package/uftrace/uftrace.mk   | 43 ++++++++++++++++++++++++++++++++++++
->  5 files changed, 67 insertions(+)
->  create mode 100644 package/uftrace/Config.in
->  create mode 100644 package/uftrace/uftrace.hash
->  create mode 100644 package/uftrace/uftrace.mk
+Fixes:
+ - http://autobuild.buildroot.org/results/9c59ef912d09bb3c0647b98aa8e9eca7fccbe08f
 
-So I've applied, but there were a number of issues left:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gerbera/Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
- - It didn't build with uClibc or musl, due to the use of argp, which
-   is a glibc-only feature. I had to add a dependency on
-   argp-standalone and pass -largp in the linker flags on musl ||
-   uclibc configurations.
-
- - On uClibc, it still wasn't building due to a <personality.h> value
-   missing, and another <elf.h> value missing.
-
- - The --without-libstdc++ was not really appropriate, as we do have
-   C++ support in Buildroot obviously.
-
-Do not hesitate to check the final commit to make sure I didn't mess up
-anything. Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gerbera/Config.in b/package/gerbera/Config.in
+index 33a9705bea..46a163ec78 100644
+--- a/package/gerbera/Config.in
++++ b/package/gerbera/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_GERBERA
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_WCHAR # fmt
+ 	select BR2_PACKAGE_FMT
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+@@ -25,8 +26,9 @@ config BR2_PACKAGE_GERBERA
+ 
+ 	  https://gerbera.io
+ 
+-comment "gerbera needs a toolchain w/ C++, threads, wchar, gcc >= 8"
++comment "gerbera needs a toolchain w/ C++, dynamic library, threads, wchar, gcc >= 8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
