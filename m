@@ -1,204 +1,52 @@
-From: Eugen Hristev <eugen.hristev@microchip.com>
-Date: Fri, 23 Apr 2021 14:45:12 +0300
-Subject: [Buildroot] [PATCH] configs/microchip_sama5d2_icp: new defconfigs
-Message-ID: <20210423114512.1360778-1-eugen.hristev@microchip.com>
+From: Titouan Christophe <titouanchristophe@gmail.com>
+Date: Fri, 23 Apr 2021 13:46:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/redis: bump to v6.2.2
+Message-ID: <20210423114603.198731-1-titouanchristophe@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the new SAMA5D2 ICP (Industrial Connectivity Board)
-with linux4sam_2020.10 components.
-Update README file with new defconfigs.
+From the release notes:
+================================================================================
+Redis 6.2.2 Released Mon April 19 19:00:00 IST 2021
+================================================================================
 
-https://www.linux4sam.org/bin/view/Linux4SAM/Sama5d2IcpMainPage
+Upgrade urgency: HIGH, if you're using ACL and pub/sub, CONFIG REWRITE, or
+suffering from performance regression.
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+See https://github.com/redis/redis/blob/6.2.2/00-RELEASENOTES
+
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 ---
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Hi,
-
-This patch requires patch
-[PATCH] boot: introduce at91bootstrap4
-
-Eugen
-
-
- board/atmel/readme.txt                        |  2 +
- board/microchip/sama5d2_icp/genimage.cfg      | 31 ++++++++
- configs/microchip_sama5d2_icp_mmc_defconfig   | 33 +++++++++
- .../microchip_sama5d2_icp_mmc_dev_defconfig   | 71 +++++++++++++++++++
- 4 files changed, 137 insertions(+)
- create mode 100644 board/microchip/sama5d2_icp/genimage.cfg
- create mode 100644 configs/microchip_sama5d2_icp_mmc_defconfig
- create mode 100644 configs/microchip_sama5d2_icp_mmc_dev_defconfig
-
-diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
-index 1f21dd15e4..a29d027214 100644
---- a/board/atmel/readme.txt
-+++ b/board/atmel/readme.txt
-@@ -23,6 +23,8 @@ This guide covers the following configurations:
-  - microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
-  - microchip_sam9x60ek_mmc_defconfig
-  - microchip_sam9x60ek_mmc_dev_defconfig
-+ - microchip_sama5d2_icp_mmc_defconfig
-+ - microchip_sama5d2_icp_mmc_dev_defconfig
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 13c35195a6..a5d3c6b1da 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  cd222505012cce20b25682fca931ec93bd21ae92cb4abfe742cf7b76aa907520  redis-6.2.1.tar.gz
++sha256  7a260bb74860f1b88c3d5942bf8ba60ca59f121c6dce42d3017bed6add0b9535  redis-6.2.2.tar.gz
  
- These configurations will use AT91Bootstrap, u-boot and a linux kernel from
- the git trees maintained by Atmel.
-diff --git a/board/microchip/sama5d2_icp/genimage.cfg b/board/microchip/sama5d2_icp/genimage.cfg
-new file mode 100644
-index 0000000000..854751713f
---- /dev/null
-+++ b/board/microchip/sama5d2_icp/genimage.cfg
-@@ -0,0 +1,31 @@
-+# Image for SD card boot on Microchip SAMA5D2 ICP (Industrial Connectivity Platform)
-+#
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"at91-sama5d2_icp.dtb",
-+			"boot.bin",
-+			"u-boot.bin"
-+		}
-+	}
-+	size = 16M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+		offset = 1M
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/configs/microchip_sama5d2_icp_mmc_defconfig b/configs/microchip_sama5d2_icp_mmc_defconfig
-new file mode 100644
-index 0000000000..07c07fd1e6
---- /dev/null
-+++ b/configs/microchip_sama5d2_icp_mmc_defconfig
-@@ -0,0 +1,33 @@
-+BR2_arm=y
-+BR2_cortex_a5=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_INSTRUCTIONS_THUMB2=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_PTHREAD_DEBUG=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama5d2_icp/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.10)/linux-linux4sam-2020.10.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_icp"
-+BR2_PACKAGE_LINUX_TOOLS_IIO=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_TARGET_AT91BOOTSTRAP4=y
-+BR2_TARGET_AT91BOOTSTRAP4_DEFCONFIG="sama5d2_icpsd_uboot"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2020.10)/u-boot-at91-linux4sam-2020.10.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_icp_mmc"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/microchip_sama5d2_icp_mmc_dev_defconfig b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-new file mode 100644
-index 0000000000..24a707db9b
---- /dev/null
-+++ b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-@@ -0,0 +1,71 @@
-+BR2_arm=y
-+BR2_cortex_a5=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_INSTRUCTIONS_THUMB2=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_PTHREAD_DEBUG=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama5d2_icp/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.10)/linux-linux4sam-2020.10.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_icp"
-+BR2_PACKAGE_LINUX_TOOLS_IIO=y
-+BR2_PACKAGE_BZIP2=y
-+BR2_PACKAGE_XZ=y
-+BR2_PACKAGE_ZIP=y
-+BR2_PACKAGE_GDB=y
-+BR2_PACKAGE_LMBENCH=y
-+BR2_PACKAGE_STRACE=y
-+BR2_PACKAGE_TREE=y
-+BR2_PACKAGE_DOSFSTOOLS=y
-+BR2_PACKAGE_DOSFSTOOLS_FATLABEL=y
-+BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
-+BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
-+BR2_PACKAGE_MMC_UTILS=y
-+BR2_PACKAGE_MTD=y
-+BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_EVTEST=y
-+BR2_PACKAGE_SETSERIAL=y
-+BR2_PACKAGE_SPI_TOOLS=y
-+BR2_PACKAGE_USBUTILS=y
-+BR2_PACKAGE_LIBSYSFS=y
-+BR2_PACKAGE_LIBDRM=y
-+BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
-+BR2_PACKAGE_DTC=y
-+BR2_PACKAGE_DTC_PROGRAMS=y
-+BR2_PACKAGE_ARGP_STANDALONE=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
-+BR2_PACKAGE_BRIDGE_UTILS=y
-+BR2_PACKAGE_CAN_UTILS=y
-+BR2_PACKAGE_ETHTOOL=y
-+BR2_PACKAGE_IPERF=y
-+BR2_PACKAGE_IPROUTE2=y
-+BR2_PACKAGE_IPTABLES=y
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_LRZSZ=y
-+BR2_PACKAGE_MII_DIAG=y
-+BR2_PACKAGE_OPENSSH=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_HTOP=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_TARGET_AT91BOOTSTRAP4=y
-+BR2_TARGET_AT91BOOTSTRAP4_DEFCONFIG="sama5d2_icpsd_uboot"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2020.10)/u-boot-at91-linux4sam-2020.10.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_icp_mmc"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 074773c3e1..3bc3436039 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 6.2.1
++REDIS_VERSION = 6.2.2
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
-2.25.1
+2.25.3
