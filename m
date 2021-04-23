@@ -1,16 +1,18 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 23 Apr 2021 20:24:49 +0300
-Subject: [Buildroot] [PATCH v4 1/1] The uftrace tool is to trace and analyze
- execution of a program written in C/C++.
-Message-ID: <20210423172449.126847-1-asafka7@gmail.com>
+Date: Fri, 23 Apr 2021 20:26:01 +0300
+Subject: [Buildroot] [PATCH v4 1/1] package/uftrace: new package
+Message-ID: <20210423172601.127205-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The uftrace tool is to trace and analyze execution of a
+program written in C/C++.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
+--
 v3->v4:
 * define unsupported options exlicitly
 * Use TARGET_MAKE_ENV instead of TARGET_CONFIGURE_OPTS
