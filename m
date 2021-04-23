@@ -1,48 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Apr 2021 22:22:56 +0200
-Subject: [Buildroot] host-uboot-tools 2021.04 Building
-In-Reply-To: <BY3PR08MB70263DC18FF3A4DD50161A67CC459@BY3PR08MB7026.namprd08.prod.outlook.com>
-References: <BY3PR08MB70263DC18FF3A4DD50161A67CC459@BY3PR08MB7026.namprd08.prod.outlook.com>
-Message-ID: <20210423222256.29765511@windsurf>
+Date: Fri, 23 Apr 2021 22:23:53 +0200
+Subject: [Buildroot] [PATCH 1/3] package/bash: use --bindir instead of
+ exec_prefix=
+Message-ID: <20210423202356.37681-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+We want bash to be installed as /bin/bash. For ages, Buildroot has
+been doing this by overriding exec_prefix at install time. First of
+all, it would be preferred to do this at configure time. But also,
+overriding exec_prefix not only changes where "bash" goes, but also
+where the pkgconfig file goes. Due to this, bash.pc goes into
+/lib/pkgconfig/, and doesn't get removed by target-finalize.
 
-Adding Fabrice in Cc since he is the author of the 2021.04 bump.
+Since all we want is to have 'bash' as /bin/bash, simply pass
+--bindir=/bin at configure time. This allows to use the default target
+installation logic for autotools-package. We keep a post-install
+target hook to remove /bin/bashbug.
 
-On Thu, 22 Apr 2021 23:03:31 -0400
-Enoch <ixew@hotmail.com> wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
+ package/bash/bash.mk | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-> This is a failed attempt to buildroot latest 1054aa9707 master origin/master
-> 
-> I guess it is a result of this commit, but I may be wrong:
-> 
-> 
-> a4c38ae470 * package/uboot-tools: security bump to version 2021.04
-> 
-> 
-> TIA, Enoch.
-> 
-> 
-> ? HOSTCC? tools/common/image-fit.o
-> In file included from ./tools/../common/image-fit.c:33,
-> ???????????????? from tools/common/image-fit.c:1:
-> include/linux/kconfig.h:4:10: fatal error: generated/autoconf.h: No such file or directory
-> ??? 4 | #include <generated/autoconf.h>
-> ????? |????????? ^~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-
-I can confirm that many of the defconfigs failed to build today in
-Gitlab CI because of this issue.
-
-Best regards,
-
-Thomas
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index efe7cbbe59..996c6a6097 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -7,11 +7,16 @@
+ BASH_VERSION = 5.1
+ BASH_SITE = $(BR2_GNU_MIRROR)/bash
+ BASH_DEPENDENCIES = ncurses readline host-bison
+-BASH_CONF_OPTS = --with-installed-readline --without-bash-malloc
+ BASH_LICENSE = GPL-3.0+
+ BASH_LICENSE_FILES = COPYING
+ BASH_CPE_ID_VENDOR = gnu
+ 
++# We want the bash binary in /bin
++BASH_CONF_OPTS = \
++	--bindir=/bin \
++	--with-installed-readline \
++	--without-bash-malloc
++
+ BASH_CONF_ENV += \
+ 	ac_cv_rl_prefix="$(STAGING_DIR)" \
+ 	ac_cv_rl_version="$(READLINE_VERSION)" \
+@@ -38,11 +43,10 @@ BASH_CONF_ENV += bash_cv_getenv_redef=yes
+ endif
+ endif
+ 
+-define BASH_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
++define BASH_REMOVE_UNUSED_FILES
+ 	rm -f $(TARGET_DIR)/bin/bashbug
+ endef
++BASH_POST_INSTALL_TARGET_HOOKS += BASH_REMOVE_UNUSED_FILES
+ 
+ # Add /bin/bash to /etc/shells otherwise some login tools like dropbear
+ # can reject the user connection. See man shells.
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.2
