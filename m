@@ -1,48 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Apr 2021 22:35:59 +0200
-Subject: [Buildroot] [git commit] package/cgilua: bump to version 6.0.2
-Message-ID: <20210423200938.9C8C383D55@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 23 Apr 2021 22:51:42 +0200
+Subject: [Buildroot] host-uboot-tools 2021.04 Building
+In-Reply-To: <20210423222256.29765511@windsurf>
+References: <BY3PR08MB70263DC18FF3A4DD50161A67CC459@BY3PR08MB7026.namprd08.prod.outlook.com>
+ <20210423222256.29765511@windsurf>
+Message-ID: <CAPi7W83FQr69KLwqfNSmd4pjO8Fuz5_GkG=f0gApyAvpwMVJ5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3176c9657ee5d728950f72735ce07094f0a21d6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The hash of the HTML license file has changed due to changes in the
-HTML menu and other parts of the page that don't change the license
-text itself.
+Le ven. 23 avr. 2021 ? 22:22, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello,
+>
+> Adding Fabrice in Cc since he is the author of the 2021.04 bump.
+>
+> On Thu, 22 Apr 2021 23:03:31 -0400
+> Enoch <ixew@hotmail.com> wrote:
+>
+> > This is a failed attempt to buildroot latest 1054aa9707 master origin/master
+> >
+> > I guess it is a result of this commit, but I may be wrong:
+> >
+> >
+> > a4c38ae470 * package/uboot-tools: security bump to version 2021.04
+> >
+> >
+> > TIA, Enoch.
+> >
+> >
+> >   HOSTCC  tools/common/image-fit.o
+> > In file included from ./tools/../common/image-fit.c:33,
+> >                  from tools/common/image-fit.c:1:
+> > include/linux/kconfig.h:4:10: fatal error: generated/autoconf.h: No such file or directory
+> >     4 | #include <generated/autoconf.h>
+> >       |          ^~~~~~~~~~~~~~~~~~~~~~
+> > compilation terminated.
+>
+> I can confirm that many of the defconfigs failed to build today in
+> Gitlab CI because of this issue.
+I sent a patch yesterday that should fix this issue:
+https://patchwork.ozlabs.org/project/buildroot/patch/20210422210559.707845-1-fontaine.fabrice at gmail.com/
+If you can review it, it would be helpful.
+Moreover, I'm not sure than it is upstreamable as it reverts an
+upstream commit ...
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/cgilua/cgilua.hash | 4 ++--
- package/cgilua/cgilua.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/package/cgilua/cgilua.hash b/package/cgilua/cgilua.hash
-index 8bdb1d18f1..385382b9d5 100644
---- a/package/cgilua/cgilua.hash
-+++ b/package/cgilua/cgilua.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 7d4883e6a89b3463a1d35b8084a6e2afbbb584af7aca1169380e92af0f848413  cgilua-5.2.1-1.src.rock
--sha256 0cf6f0858b0fd90bb5705c8ace77a8afd11e8fce1427fe0a48156937222b8c28  cgilua-5.2.1/doc/us/license.html
-+sha256 7bfb88c483136bca9b814316d7f9ff581a805d68d144c1eebdfda3e8dfb5eb3a  cgilua-6.0.2-0.src.rock
-+sha256 b82f9b13f9b1a1387f53203a625612914630b520377731b0aab7ce93ad2b18c4  cgilua/doc/us/license.html
-diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
-index cd78841fdb..7471be3da0 100644
---- a/package/cgilua/cgilua.mk
-+++ b/package/cgilua/cgilua.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
- 
--CGILUA_VERSION = 5.2.1-1
-+CGILUA_VERSION = 6.0.2-0
-+CGILUA_SUBDIR = cgilua
- CGILUA_LICENSE = MIT
- CGILUA_LICENSE_FILES = $(CGILUA_SUBDIR)/doc/us/license.html
- 
+Fabrice
