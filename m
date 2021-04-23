@@ -1,34 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Apr 2021 23:21:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnpupnp: security bump to
- version 4.1.4
-In-Reply-To: <20210422075016.91908-1-joerg.krause@embedded.rocks>
-References: <20210422075016.91908-1-joerg.krause@embedded.rocks>
-Message-ID: <20210423232106.64bc5875@windsurf>
+Date: Fri, 23 Apr 2021 23:21:19 +0200
+Subject: [Buildroot] [git commit] package/libupnp: security bump to version
+ 1.14.6
+Message-ID: <20210423205428.2681E815ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 22 Apr 2021 07:50:16 +0000
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0f23267bc21e6b60d044226e55cb6ee87bc729db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix vulnerability to DNS-rebind attacks.
-> 
-> This security fix addresses the same vulnerability isue which was reported
-> for libupnp (which libnpupnp is derived from) in CVE-2021-29462.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/libnpupnp/libnpupnp.hash | 4 ++--
->  package/libnpupnp/libnpupnp.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+The server part of pupnp (libupnp) appears to be vulnerable to DNS-rebinding
+attacks because it does not check the value of the `Host` header.
 
-Applied to master, thanks.
+Fixes CVE-2021-29462
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+https://github.com/pupnp/pupnp/security/advisories/GHSA-6hqq-w3jq-9fhg
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libupnp/libupnp.hash | 2 +-
+ package/libupnp/libupnp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
+index 8923d46f5f..e4858fdc8a 100644
+--- a/package/libupnp/libupnp.hash
++++ b/package/libupnp/libupnp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  227ffa407be6b91d4e42abee1dd27e4b8d7e5ba8d3d45394cca4e1eadc65149a  libupnp-1.14.5.tar.bz2
++sha256  3168f676352e2a6e45afd6ea063721ed674c99f555394903fbd23f7f54f0a503  libupnp-1.14.6.tar.bz2
+ sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
+index f79d169dc8..e8ece46542 100644
+--- a/package/libupnp/libupnp.mk
++++ b/package/libupnp/libupnp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUPNP_VERSION = 1.14.5
++LIBUPNP_VERSION = 1.14.6
+ LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
+ LIBUPNP_SITE = \
+ 	http://downloads.sourceforge.net/project/pupnp/release-$(LIBUPNP_VERSION)
