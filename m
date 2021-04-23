@@ -1,43 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Apr 2021 23:20:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/protozero: disable tests
-In-Reply-To: <20210422182443.654635-1-fontaine.fabrice@gmail.com>
-References: <20210422182443.654635-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210423232043.5527f583@windsurf>
+Date: Fri, 23 Apr 2021 23:20:56 +0200
+Subject: [Buildroot] [git commit] package/libnpupnp: security bump to
+ version 4.1.4
+Message-ID: <20210423205404.74F5081571@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 22 Apr 2021 20:24:43 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=adea5b316e27ae7d7e6ec09fa33a204754cc4de6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Add a patch to disable tests through the standard BUILD_TESTING variable
-> which is already passed by cmake-package.
-> 
-> While at it, drop protobuf dependency which is only needed for tests
-> 
-> This will fix a build failure on toolchains without wchar, toolchains
-> for sh4 (ICE) or toolchains where gcc is affected by bug 64735.
-> 
-> Upstream thinks that this is unecessary but no additional feedback was
-> received on how we should handle those build failures
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1cd24b757d87b963c70bc7ff927c6d983d0b142a
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...CMakeLists.txt-respect-BUILD_TESTING.patch | 47 +++++++++++++++++++
->  package/protozero/protozero.mk                |  4 --
->  2 files changed, 47 insertions(+), 4 deletions(-)
->  create mode 100644 package/protozero/0001-CMakeLists.txt-respect-BUILD_TESTING.patch
+Fix vulnerability to DNS-rebind attacks.
 
-Applied to master, thanks.
+This security fix addresses the same vulnerability isue which was reported
+for libupnp (which libnpupnp is derived from) in CVE-2021-29462.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libnpupnp/libnpupnp.hash | 4 ++--
+ package/libnpupnp/libnpupnp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libnpupnp/libnpupnp.hash b/package/libnpupnp/libnpupnp.hash
+index d5053915f1..8451812eb7 100644
+--- a/package/libnpupnp/libnpupnp.hash
++++ b/package/libnpupnp/libnpupnp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.1.1.tar.gz.sha256
+-sha256  74703d49be52d29b52f59342ec7359178b127568399551d9d3f56bb7950fcc02  libnpupnp-4.1.3.tar.gz
++# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.1.4.tar.gz.sha256
++sha256  03506f02546e3b3d31b389e046c4691f020b82d315426ce79f1e2b1eb7958656  libnpupnp-4.1.4.tar.gz
+ 
+ # Hash for license file:
+ sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libnpupnp/libnpupnp.mk b/package/libnpupnp/libnpupnp.mk
+index 0efddbf67f..6c6fa2f149 100644
+--- a/package/libnpupnp/libnpupnp.mk
++++ b/package/libnpupnp/libnpupnp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNPUPNP_VERSION = 4.1.3
++LIBNPUPNP_VERSION = 4.1.4
+ LIBNPUPNP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBNPUPNP_LICENSE = BSD-3-Clause
+ LIBNPUPNP_LICENSE_FILES = COPYING
