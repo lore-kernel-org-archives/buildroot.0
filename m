@@ -1,44 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Apr 2021 22:23:55 +0200
-Subject: [Buildroot] [PATCH 3/3] package/bash: drop SHOBJ_STATUS from
- BASH_CONF_ENV
-In-Reply-To: <20210423202356.37681-1-thomas.petazzoni@bootlin.com>
-References: <20210423202356.37681-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210423202356.37681-3-thomas.petazzoni@bootlin.com>
+Date: Fri, 23 Apr 2021 22:34:17 +0200
+Subject: [Buildroot] [git commit] package/redis: bump to v6.2.2
+Message-ID: <20210423200726.5CCAF845D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-SHOBJ_STATUS=unsupported was added in commit
-4a2af11cba83ef176672609dd7321712fa7f6a28 to work around a limitation
-of the configure script that forgot to set this variable in
-static-linking configurations.
+commit: https://git.buildroot.net/buildroot/commit/?id=c8d13baa7b252df82c7f0c6c04d1a272aa08d733
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It turns out that this issue has been fixed upstream as of bash 5.0:
+From the release notes:
+================================================================================
+Redis 6.2.2 Released Mon April 19 19:00:00 IST 2021
+================================================================================
 
-  https://git.savannah.gnu.org/cgit/bash.git/diff/configure.ac?id=d233b485e83c3a784b803fb894280773f16f2deb
+Upgrade urgency: HIGH, if you're using ACL and pub/sub, CONFIG REWRITE, or
+suffering from performance regression.
 
-  (see hunk @@ -1151,6 +1179,9 @@)
+See https://github.com/redis/redis/blob/6.2.2/00-RELEASENOTES
 
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
 ---
- package/bash/bash.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 6913ccafd8..7b853ece08 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -29,7 +29,6 @@ BASH_CONF_ENV += \
- # The static build needs some trickery
- ifeq ($(BR2_STATIC_LIBS),y)
- BASH_CONF_OPTS += --enable-static-link
--BASH_CONF_ENV += SHOBJ_STATUS=unsupported
- # bash wants to redefine the getenv() function. To check whether this is
- # possible, AC_TRY_RUN is used which is not possible in
- # cross-compilation.
--- 
-2.30.2
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 13c35195a6..a5d3c6b1da 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  cd222505012cce20b25682fca931ec93bd21ae92cb4abfe742cf7b76aa907520  redis-6.2.1.tar.gz
++sha256  7a260bb74860f1b88c3d5942bf8ba60ca59f121c6dce42d3017bed6add0b9535  redis-6.2.2.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 074773c3e1..3bc3436039 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 6.2.1
++REDIS_VERSION = 6.2.2
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
