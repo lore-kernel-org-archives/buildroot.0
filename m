@@ -1,31 +1,22 @@
 From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Fri, 23 Apr 2021 10:53:33 +0300
-Subject: [Buildroot] [PATCH 1/1] package/protozero: disable tests
-In-Reply-To: <20210422182443.654635-1-fontaine.fabrice@gmail.com>
-References: <20210422182443.654635-1-fontaine.fabrice@gmail.com>
-Message-ID: <792aebd5-8e2f-f273-6ad3-7b1387dd8393@inbox.ru>
+Date: Fri, 23 Apr 2021 11:01:18 +0300
+Subject: [Buildroot] [PATCH 1/1] package/postgis: add optional
+ protobuf-c dependency
+In-Reply-To: <20210422182641.654969-1-fontaine.fabrice@gmail.com>
+References: <20210422182641.654969-1-fontaine.fabrice@gmail.com>
+Message-ID: <1ea52ed9-bf28-4c81-1555-02e6f65a3950@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-22.04.2021 21:24, Fabrice Fontaine wrote:
-> Add a patch to disable tests through the standard BUILD_TESTING variable
-> which is already passed by cmake-package.
-> 
-> While at it, drop protobuf dependency which is only needed for tests
-> 
-> This will fix a build failure on toolchains without wchar, toolchains
-> for sh4 (ICE) or toolchains where gcc is affected by bug 64735.
-> 
-> Upstream thinks that this is unecessary but no additional feedback was
-> received on how we should handle those build failures
-> 
-> Fixes:
->   -http://autobuild.buildroot.org/results/1cd24b757d87b963c70bc7ff927c6d983d0b142a
-> 
+22.04.2021 21:26, Fabrice Fontaine wrote:
 > Signed-off-by: Fabrice Fontaine<fontaine.fabrice@gmail.com>
-
+> ---
+>   ...ix-cross-compilation-with-protobuf-c.patch | 42 +++++++++++++++++++
+>   package/postgis/postgis.mk                    | 10 ++++-
+>   2 files changed, 50 insertions(+), 2 deletions(-)
+>   create mode 100644 package/postgis/0005-configure.ac-fix-cross-compilation-with-protobuf-c.patch
 
 Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
