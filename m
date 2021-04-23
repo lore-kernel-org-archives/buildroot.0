@@ -1,46 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Apr 2021 23:19:48 +0200
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
- version to 2.6.14-Matrix
-Message-ID: <20210423205345.296CE84823@busybox.osuosl.org>
+Date: Fri, 23 Apr 2021 23:20:36 +0200
+Subject: [Buildroot] [git commit] package/protozero: disable tests
+Message-ID: <20210423205345.381FE84EA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bb1d96a52a1081bdd43ce9533674dbfbca93016
+commit: https://git.buildroot.net/buildroot/commit/?id=be4869f393561aa5c297b631efc62dfd5e1c3f3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
+Add a patch to disable tests through the standard BUILD_TESTING variable
+which is already passed by cmake-package.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+While at it, drop protobuf dependency which is only needed for tests
+
+This will fix a build failure on toolchains without wchar, toolchains
+for sh4 (ICE) or toolchains where gcc is affected by bug 64735.
+
+Upstream thinks that this is unecessary but no additional feedback was
+received on how we should handle those build failures
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1cd24b757d87b963c70bc7ff927c6d983d0b142a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...0001-CMakeLists.txt-respect-BUILD_TESTING.patch | 47 ++++++++++++++++++++++
+ package/protozero/protozero.mk                     |  4 --
+ 2 files changed, 47 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index d789e04721..2626968f1b 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  83ffa1f5047782e049b54b94e7e9615638147f751980533bf4616140901129c9  kodi-inputstream-adaptive-2.6.13-Matrix.tar.gz
-+sha256  f1756932e8cc602ce66c5db3bc1d44a442c01197c193561ca9248a405bd8bd86  kodi-inputstream-adaptive-2.6.14-Matrix.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 8c79b13d8e..b72241ab39 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/protozero/0001-CMakeLists.txt-respect-BUILD_TESTING.patch b/package/protozero/0001-CMakeLists.txt-respect-BUILD_TESTING.patch
+new file mode 100644
+index 0000000000..d0267e3283
+--- /dev/null
++++ b/package/protozero/0001-CMakeLists.txt-respect-BUILD_TESTING.patch
+@@ -0,0 +1,47 @@
++From 03daae49c8fa94513b508bd12f1597e8e5e086f2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 17 Apr 2021 13:06:44 +0200
++Subject: [PATCH] CMakeLists.txt: respect BUILD_TESTING
++
++Don't build tests if the standard cmake BUILD_TESTING variable is set to
++OFF.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/mapbox/protozero/pull/105]
++---
++ CMakeLists.txt | 9 +++++----
++ 1 file changed, 5 insertions(+), 4 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index f9702d6..7a40212 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -23,6 +23,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
++ 
++ #-----------------------------------------------------------------------------
++ 
+++option(BUILD_TESTING "Build tests" ON)
++ option(WERROR "Add -Werror flag to build (turns warnings into errors)" ON)
++ 
++ if(MSVC)
++@@ -134,13 +135,13 @@ install(DIRECTORY include/protozero DESTINATION include)
++ 
++ #-----------------------------------------------------------------------------
++ 
++-enable_testing()
++-
++ add_subdirectory(doc)
++ 
++ add_subdirectory(tools)
++ 
++-add_subdirectory(test)
++-
+++if(BUILD_TESTING)
+++    enable_testing()
+++    add_subdirectory(test)
+++endif()
++ 
++ #-----------------------------------------------------------------------------
++-- 
++2.30.2
++
+diff --git a/package/protozero/protozero.mk b/package/protozero/protozero.mk
+index e4ce1a4730..80d16192e3 100644
+--- a/package/protozero/protozero.mk
++++ b/package/protozero/protozero.mk
+@@ -10,8 +10,4 @@ PROTOZERO_LICENSE = BSD-2-Clause, Apache-2.0
+ PROTOZERO_LICENSE_FILES = LICENSE.md LICENSE.from_folly
+ PROTOZERO_INSTALL_STAGING = YES
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.13-Matrix
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.14-Matrix
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+-ifeq ($(BR2_PACKAGE_PROTOBUF),y)
+-PROTOZERO_DEPENDENCIES += protobuf
+-endif
+-
+ $(eval $(cmake-package))
