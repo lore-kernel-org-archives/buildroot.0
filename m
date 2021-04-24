@@ -1,55 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 24 Apr 2021 14:55:45 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/x11r7/xlib_libXaw: bump version to 1.0.14
-Message-ID: <20210424124716.DDFB1807E9@busybox.osuosl.org>
+Date: Sat, 24 Apr 2021 15:02:56 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/openldap: bump to
+ version 2.4.58
+Message-ID: <20210424124717.14CB6801D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18ddd90fd90e47072003b5a0197e99da7b2b075b
+commit: https://git.buildroot.net/buildroot/commit/?id=0dfa15802100c5d478cf0789f06d73a39dbd3250
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2021-March/003077.html
+Drop fifth patch (already in version)
 
-Reformatted hashes.
+https://git.openldap.org/openldap/openldap/-/blob/OPENLDAP_REL_ENG_2_4_58/CHANGES
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ad259f06cc6f2a3d38c4e00da20ddf85c7587f81)
+(cherry picked from commit 1feedcd84579c8aa95033f152788930114e3088b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXaw/xlib_libXaw.hash | 8 +++++---
- package/x11r7/xlib_libXaw/xlib_libXaw.mk   | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ ...005-ITS-9454-fix-issuerAndThisUpdateCheck.patch | 26 ----------------------
+ package/openldap/openldap.hash                     | 10 ++++-----
+ package/openldap/openldap.mk                       |  5 +----
+ 3 files changed, 6 insertions(+), 35 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.hash b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
-index 159e007bc3..f289e66153 100644
---- a/package/x11r7/xlib_libXaw/xlib_libXaw.hash
-+++ b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
-@@ -1,4 +1,6 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002591.html
--sha256	8ef8067312571292ccc2bbe94c41109dcf022ea5a4ec71656a83d8cce9edb0cd	libXaw-1.0.13.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-March/003077.html
-+sha256  76aef98ea3df92615faec28004b5ce4e5c6855e716fa16de40c32030722a6f8e  libXaw-1.0.14.tar.bz2
-+sha512  29d1c151369523ae6cb418e636b0b7b39ccccc35462a0b394dbeb46d5b6d780badd2eb872a55d9fbba1ee1af034e76c0463f40f8d8a7be2c336d08b3b1bf81d4  libXaw-1.0.14.tar.bz2
-+
- # Locally calculated
--sha256 9f5adb26952f93b3e4650285b94ec6c61a27aab5a21088bfb6694001be1b360d COPYING
-+sha256  9f5adb26952f93b3e4650285b94ec6c61a27aab5a21088bfb6694001be1b360d  COPYING
-diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.mk b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-index 17d51a9570..6b615a8de5 100644
---- a/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-+++ b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+diff --git a/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch b/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
+deleted file mode 100644
+index a611b9ff59..0000000000
+--- a/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 9badb73425a67768c09bcaed1a9c26c684af6c30 Mon Sep 17 00:00:00 2001
+-From: Howard Chu <hyc@openldap.org>
+-Date: Sat, 6 Feb 2021 20:52:06 +0000
+-Subject: [PATCH] ITS#9454 fix issuerAndThisUpdateCheck
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- servers/slapd/schema_init.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/servers/slapd/schema_init.c b/servers/slapd/schema_init.c
+-index 31be1154e..8b1e25539 100644
+---- a/servers/slapd/schema_init.c
+-+++ b/servers/slapd/schema_init.c
+-@@ -3900,6 +3900,8 @@ issuerAndThisUpdateCheck(
+- 					break;
+- 				}
+- 			}
+-+			if ( tu->bv_len < STRLENOF("YYYYmmddHHmmssZ") ) return LDAP_INVALID_SYNTAX;
+-+
+- 			x.bv_val += tu->bv_len + 1;
+- 			x.bv_len -= tu->bv_len + 1;
+- 
+--- 
+-2.20.1
+-
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index f2ffdf53bc..8ce50d6133 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,7 +1,7 @@
+-# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.57.md5
+-md5  e3349456c3a66e5e6155be7ddc3f042c  openldap-2.4.57.tgz
+-# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.57.sha1
+-sha1  1cffa70a3ea8545948041fd113f8f53bc24d6d87  openldap-2.4.57.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.58.md5
++md5  c203d735ba69976e5b28dc39006f29b5  openldap-2.4.58.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.58.sha1
++sha1  875416827be3ad63f20004510a354db0aaceb2ed  openldap-2.4.58.tgz
+ # Locally computed
+-sha256  c7ba47e1e6ecb5b436f3d43281df57abeffa99262141aec822628bc220f6b45a  openldap-2.4.57.tgz
++sha256  57b59254be15d0bf6a9ab3d514c1c05777b02123291533134a87c94468f8f47b  openldap-2.4.58.tgz
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index ec11e4fa7d..3b35b4daa3 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXAW_VERSION = 1.0.13
-+XLIB_LIBXAW_VERSION = 1.0.14
- XLIB_LIBXAW_SOURCE = libXaw-$(XLIB_LIBXAW_VERSION).tar.bz2
- XLIB_LIBXAW_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXAW_LICENSE = MIT
+-OPENLDAP_VERSION = 2.4.57
++OPENLDAP_VERSION = 2.4.58
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
+@@ -13,9 +13,6 @@ OPENLDAP_CPE_ID_VENDOR = openldap
+ OPENLDAP_INSTALL_STAGING = YES
+ OPENLDAP_DEPENDENCIES = host-pkgconf
+ 
+-# 0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
+-OPENLDAP_IGNORE_CVES += CVE-2021-27212
+-
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OPENLDAP_TLS = openssl
+ OPENLDAP_DEPENDENCIES += openssl
