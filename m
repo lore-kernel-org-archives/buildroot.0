@@ -1,42 +1,30 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 24 Apr 2021 14:19:50 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 24 Apr 2021 14:53:06 +0200
 Subject: [Buildroot] [PATCH v2,
- 2/2] support/dependencies: set cmake version min to 3.16
-In-Reply-To: <20210424121950.1474629-1-fontaine.fabrice@gmail.com>
-References: <20210424121950.1474629-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210424121950.1474629-2-fontaine.fabrice@gmail.com>
+ 1/1] package/python-markdown2: add PYTHON_MARKDOWN2_CPE_ID_VENDOR
+In-Reply-To: <20210405102550.3566334-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 5 Apr 2021 12:25:50 +0200")
+References: <20210405102550.3566334-1-fontaine.fabrice@gmail.com>
+Message-ID: <87im4bvo7h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-domoticz requires cmake 3.16 since version 2020.2 and
-https://github.com/domoticz/domoticz/commit/275effddf0921698197dbc38bde199c48d4956f9
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/0caec85c70341036a039dbc337ad99196b6005a9
+ > cpe:2.3:a:python-markdown2_project:python-markdown2 is a valid CPE
+ > identifier for this package:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- support/dependencies/check-host-cmake.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython-markdown2_project%3Apython-markdown2
 
-diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-index e1bbcd62c8..dfc252e919 100644
---- a/support/dependencies/check-host-cmake.mk
-+++ b/support/dependencies/check-host-cmake.mk
-@@ -1,9 +1,9 @@
--# Set this to either 3.15 or higher, depending on the highest minimum
-+# Set this to either 3.16 or higher, depending on the highest minimum
- # version required by any of the packages bundled in Buildroot. If a
- # package is bumped or a new one added, and it requires a higher
- # version, our cmake infra will catch it and build its own.
- #
--BR2_CMAKE_VERSION_MIN = 3.15
-+BR2_CMAKE_VERSION_MIN = 3.16
- 
- BR2_CMAKE_CANDIDATES ?= cmake cmake3
- BR2_CMAKE ?= $(call suitable-host-package,cmake,\
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2:
+ >  - Drop PYTHON_MARKDOWN2_CPE_ID_PRODUCT
+
+Committed to 2021.02.x, thanks.
+
 -- 
-2.30.2
+Bye, Peter Korsgaard
