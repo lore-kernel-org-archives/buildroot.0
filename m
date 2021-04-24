@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 24 Apr 2021 21:20:22 +0200
-Subject: [Buildroot] [PATCH 2/9] package/perl-io-socket-ssl: bump to version
- 2.070
+Date: Sat, 24 Apr 2021 21:20:23 +0200
+Subject: [Buildroot] [PATCH 3/9] package/perl-libwww-perl: bump to version
+ 6.53
 In-Reply-To: <20210424192029.595977-1-francois.perrad@gadz.org>
 References: <20210424192029.595977-1-francois.perrad@gadz.org>
-Message-ID: <20210424192029.595977-2-francois.perrad@gadz.org>
+Message-ID: <20210424192029.595977-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,61 +13,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-io-socket-ssl/Config.in                     | 1 +
- package/perl-io-socket-ssl/perl-io-socket-ssl.hash       | 4 ++--
- package/perl-io-socket-ssl/perl-io-socket-ssl.mk         | 2 +-
- support/testing/tests/package/test_perl_io_socket_ssl.py | 1 +
- 4 files changed, 5 insertions(+), 3 deletions(-)
+ package/perl-libwww-perl/Config.in                     | 1 -
+ package/perl-libwww-perl/perl-libwww-perl.hash         | 4 ++--
+ package/perl-libwww-perl/perl-libwww-perl.mk           | 2 +-
+ support/testing/tests/package/test_perl_libwww_perl.py | 2 --
+ 4 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl-io-socket-ssl/Config.in b/package/perl-io-socket-ssl/Config.in
-index a7b94a392..2797a1155 100644
---- a/package/perl-io-socket-ssl/Config.in
-+++ b/package/perl-io-socket-ssl/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PERL_IO_SOCKET_SSL
- 	bool "perl-io-socket-ssl"
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_PERL_MOZILLA_CA # runtime
- 	select BR2_PACKAGE_PERL_NET_SSLEAY # runtime
- 	help
- 	  Nearly transparent SSL encapsulation for IO::Socket::INET.
-diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
-index 2180b6be3..076e145ac 100644
---- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
-+++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+diff --git a/package/perl-libwww-perl/Config.in b/package/perl-libwww-perl/Config.in
+index 6e191dd52..3967d3570 100644
+--- a/package/perl-libwww-perl/Config.in
++++ b/package/perl-libwww-perl/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_PERL_LIBWWW_PERL
+ 	select BR2_PACKAGE_PERL_FILE_LISTING # runtime
+ 	select BR2_PACKAGE_PERL_HTML_PARSER # runtime
+ 	select BR2_PACKAGE_PERL_HTTP_COOKIES # runtime
+-	select BR2_PACKAGE_PERL_HTTP_DAEMON # runtime
+ 	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
+ 	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
+ 	select BR2_PACKAGE_PERL_HTTP_NEGOTIATE # runtime
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
+index 453463798..8081e127f 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.hash
++++ b/package/perl-libwww-perl/perl-libwww-perl.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  4230c829c8875889848093b2b46a7284  IO-Socket-SSL-2.068.tar.gz
--sha256  4420fc0056f1827b4dd1245eacca0da56e2182b4ef6fc078f107dc43c3fb8ff9  IO-Socket-SSL-2.068.tar.gz
-+md5  3c8df96b5249c02025e2eb48596c213b  IO-Socket-SSL-2.070.tar.gz
-+sha256  876fe09763e7a474519431aff248cb1f1abaf070d6bdc791f60bf9abe781cd3b  IO-Socket-SSL-2.070.tar.gz
+-md5  7b5959aff7b11509bd87fa1de753f127  libwww-perl-6.52.tar.gz
+-sha256  b63f67647b7cfb0bace19ada32e4feb2c2e8e0f4204546c62ce6247fa59d778d  libwww-perl-6.52.tar.gz
++md5  33fdb6415018b8bf94242cace1b06479  libwww-perl-6.53.tar.gz
++sha256  9cbb7c688416a20c1aba9a32568504af1143ced58b572c502a1b2fb8a500f535  libwww-perl-6.53.tar.gz
  
  # computed by scancpan
- sha256  090aff5421fd55a9dceeaf6c612c36360402e8d29c1284aef88c87be565ce032  README
-diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-index b6c0ceb37..1751bef0e 100644
---- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-+++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+ sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENSE
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
+index d121dea91..d96035e42 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.mk
++++ b/package/perl-libwww-perl/perl-libwww-perl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_IO_SOCKET_SSL_VERSION = 2.068
-+PERL_IO_SOCKET_SSL_VERSION = 2.070
- PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
- PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
- PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPL-1.0+
-diff --git a/support/testing/tests/package/test_perl_io_socket_ssl.py b/support/testing/tests/package/test_perl_io_socket_ssl.py
-index 51663e837..80835fdcc 100644
---- a/support/testing/tests/package/test_perl_io_socket_ssl.py
-+++ b/support/testing/tests/package/test_perl_io_socket_ssl.py
-@@ -6,6 +6,7 @@ class TestPerlIOSocketSSL(TestPerlBase):
-     package:
-         IO-Socket-SSL
-     direct dependencies:
-+        Mozilla-CA
-         Net-SSLeay   XS
-     """
- 
+-PERL_LIBWWW_PERL_VERSION = 6.52
++PERL_LIBWWW_PERL_VERSION = 6.53
+ PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
+ PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
+diff --git a/support/testing/tests/package/test_perl_libwww_perl.py b/support/testing/tests/package/test_perl_libwww_perl.py
+index 7b30e4b94..4dcfa06f1 100644
+--- a/support/testing/tests/package/test_perl_libwww_perl.py
++++ b/support/testing/tests/package/test_perl_libwww_perl.py
+@@ -10,7 +10,6 @@ class TestPerllibwwwperl(TestPerlBase):
+         File-Listing
+         HTML-Parser   XS
+         HTTP-Cookies
+-        HTTP-Daemon
+         HTTP-Date
+         HTTP-Message
+         HTTP-Negotiate
+@@ -38,5 +37,4 @@ class TestPerllibwwwperl(TestPerlBase):
+         self.module_test("LWP::Authen::Digest")
+         self.module_test("HTML::Parser")
+         self.module_test("HTTP::Message")
+-        self.module_test("HTTP::Daemon")
+         self.module_test("WWW::RobotRules")
 -- 
 2.27.0
