@@ -1,48 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Apr 2021 11:25:33 +0200
-Subject: [Buildroot] [git commit] package/flex: ignore CVE-2019-6293
-Message-ID: <20210424090312.AD1ED7FD62@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 24 Apr 2021 14:03:12 +0200
+Subject: [Buildroot] [PATCH 1/1] support/dependencies: set cmake version min
+ to 3.16
+Message-ID: <20210424120312.1459212-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=120d1241d8301089ed05f865f03b4915c843e936
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+domoticz requires cmake 3.16 since version 2020.2 and
+https://github.com/domoticz/domoticz/commit/275effddf0921698197dbc38bde199c48d4956f9
 
-https://security-tracker.debian.org/tracker/CVE-2019-6293
+Fixes:
+ - http://autobuild.buildroot.org/results/0caec85c70341036a039dbc337ad99196b6005a9
 
-https://github.com/NixOS/nixpkgs/issues/55386#issuecomment-683792976
- "But this bug does not cause stack overflows in the generated code.
- The function and file referred to in the bug (mark_beginning_as_normal
- in nfa.c) are part of the flex code generator, not part of the
- generated code. If flex crashes before generating any code, that
- can hardly be a vulnerability. If flex does not crash, the generated
- code is fine (or perhaps subject to other unreported bugs, who knows,
- but the NFA has been generated correctly)."
-
-Upstream has chosen to not provide a fix
- https://github.com/westes/flex/issues/414
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[yann.morin.1998 at free.fr: use actual upstream URL]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/flex/flex.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ support/dependencies/check-host-cmake.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index 2d00969662..85da5ddae8 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -10,6 +10,9 @@ FLEX_INSTALL_STAGING = YES
- FLEX_LICENSE = FLEX
- FLEX_LICENSE_FILES = COPYING
- FLEX_CPE_ID_VENDOR = flex_project
-+# bug does not cause stack overflows in the generated code and has been
-+# noted upstream as a bug in the code generator
-+FLEX_IGNORE_CVES = CVE-2019-6293
- FLEX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-m4
- HOST_FLEX_DEPENDENCIES = host-m4
+diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+index e1bbcd62c8..dfc252e919 100644
+--- a/support/dependencies/check-host-cmake.mk
++++ b/support/dependencies/check-host-cmake.mk
+@@ -1,9 +1,9 @@
+-# Set this to either 3.15 or higher, depending on the highest minimum
++# Set this to either 3.16 or higher, depending on the highest minimum
+ # version required by any of the packages bundled in Buildroot. If a
+ # package is bumped or a new one added, and it requires a higher
+ # version, our cmake infra will catch it and build its own.
+ #
+-BR2_CMAKE_VERSION_MIN = 3.15
++BR2_CMAKE_VERSION_MIN = 3.16
  
+ BR2_CMAKE_CANDIDATES ?= cmake cmake3
+ BR2_CMAKE ?= $(call suitable-host-package,cmake,\
+-- 
+2.30.2
