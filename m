@@ -1,65 +1,101 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Apr 2021 23:15:00 +0200
-Subject: [Buildroot] [PATCH v2,
- 2/2] support/dependencies: set cmake version min to 3.16
-In-Reply-To: <20210424121950.1474629-2-fontaine.fabrice@gmail.com>
-References: <20210424121950.1474629-1-fontaine.fabrice@gmail.com>
- <20210424121950.1474629-2-fontaine.fabrice@gmail.com>
-Message-ID: <20210424211500.GX298901@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 25 Apr 2021 00:31:10 +0200
+Subject: [Buildroot] [PATCH v2, 1/1] package/uboot-tools: fix build with FIT
+Message-ID: <20210424223110.2300999-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Build with FIT is broken since bump to version 2021.04 in commit
+a4c38ae470e6c472f0e0cdfbfb8e2e76f1e8047c
 
-On 2021-04-24 14:19 +0200, Fabrice Fontaine spake thusly:
-> domoticz requires cmake 3.16 since version 2020.2 and
-> https://github.com/domoticz/domoticz/commit/275effddf0921698197dbc38bde199c48d4956f9
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/0caec85c70341036a039dbc337ad99196b6005a9
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fake a generated/autoconf.h with just the needed stuff as suggested by
+Yann E. Morin in
+https://patchwork.ozlabs.org/project/buildroot/patch/20210422210559.707845-1-fontaine.fabrice at gmail.com
 
-Applied to master, thanks.
+It seems that an empty file is enough as make options are still
+interpreted
 
-Regards,
-Yann E. MORIN.
+As a side-effect, drop third patch
 
-> ---
->  support/dependencies/check-host-cmake.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-> index e1bbcd62c8..dfc252e919 100644
-> --- a/support/dependencies/check-host-cmake.mk
-> +++ b/support/dependencies/check-host-cmake.mk
-> @@ -1,9 +1,9 @@
-> -# Set this to either 3.15 or higher, depending on the highest minimum
-> +# Set this to either 3.16 or higher, depending on the highest minimum
->  # version required by any of the packages bundled in Buildroot. If a
->  # package is bumped or a new one added, and it requires a higher
->  # version, our cmake infra will catch it and build its own.
->  #
-> -BR2_CMAKE_VERSION_MIN = 3.15
-> +BR2_CMAKE_VERSION_MIN = 3.16
->  
->  BR2_CMAKE_CANDIDATES ?= cmake cmake3
->  BR2_CMAKE ?= $(call suitable-host-package,cmake,\
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes:
+ - http://autobuild.buildroot.org/results/5771a7413c98ec202c9623672787a1eee74da5e0
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Drop patch and fake a generated/autoconf.h
+
+ .../0003-drop-autoconf.h-from-tools.patch     | 36 -------------------
+ package/uboot-tools/uboot-tools.mk            |  4 +++
+ 2 files changed, 4 insertions(+), 36 deletions(-)
+ delete mode 100644 package/uboot-tools/0003-drop-autoconf.h-from-tools.patch
+
+diff --git a/package/uboot-tools/0003-drop-autoconf.h-from-tools.patch b/package/uboot-tools/0003-drop-autoconf.h-from-tools.patch
+deleted file mode 100644
+index 09ee40bec0..0000000000
+--- a/package/uboot-tools/0003-drop-autoconf.h-from-tools.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 0552a8ffdfbb9807fcef4498011907caa5de2ace Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Thu, 9 Jan 2020 15:11:32 +0100
+-Subject: [PATCH] drop autoconf.h from tools
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-We need to build u-boot tools without a board configuration for the target.
+-
+-imximage uses the DCD address from Kconfig to display this information
+-to the user. The default value for all i.MX platforms is 0x00910000,
+-except for i.MX7ULP, which has a DCD address of 0x2f010000.
+-
+-The default value printed before version 2020.01 was 0x00910000.
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- tools/imximage.c | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/tools/imximage.c b/tools/imximage.c
+-index d7edd3c52f..f8d21fa06a 100644
+---- a/tools/imximage.c
+-+++ b/tools/imximage.c
+-@@ -11,7 +11,6 @@
+- #include "imagetool.h"
+- #include <image.h>
+- #include "imximage.h"
+--#include <generated/autoconf.h>
+- 
+- #define UNDEFINED 0xFFFFFFFF
+- 
+--- 
+-2.25.0
+-
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 179e39f9c0..8963d6182e 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -20,6 +20,8 @@ HOST_UBOOT_TOOLS_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
+ define UBOOT_TOOLS_CONFIGURE_CMDS
+ 	mkdir -p $(@D)/include/config
+ 	touch $(@D)/include/config/auto.conf
++	mkdir -p $(@D)/include/generated
++	touch $(@D)/include/generated/autoconf.h
+ endef
+ 
+ UBOOT_TOOLS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)" \
+@@ -94,6 +96,8 @@ endef
+ define HOST_UBOOT_TOOLS_CONFIGURE_CMDS
+ 	mkdir -p $(@D)/include/config
+ 	touch $(@D)/include/config/auto.conf
++	mkdir -p $(@D)/include/generated
++	touch $(@D)/include/generated/autoconf.h
+ endef
+ 
+ HOST_UBOOT_TOOLS_MAKE_OPTS = HOSTCC="$(HOSTCC)" \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
