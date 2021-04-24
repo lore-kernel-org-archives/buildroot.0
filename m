@@ -1,33 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Apr 2021 23:23:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cups: bump to version 2.3.3op2
-In-Reply-To: <20210421115442.432372-1-james.hilliard1@gmail.com>
-References: <20210421115442.432372-1-james.hilliard1@gmail.com>
-Message-ID: <20210423232302.759a8940@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 24 Apr 2021 09:46:07 +0200
+Subject: [Buildroot] [PATCH 1/3] package/bash: use --bindir instead of
+ exec_prefix=
+In-Reply-To: <20210423202356.37681-1-thomas.petazzoni@bootlin.com>
+References: <20210423202356.37681-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20210424074607.GM298901@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 21 Apr 2021 05:54:42 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Thomas, All,
 
-> Switch to new OpenPrinting upstream repository.
+On 2021-04-23 22:23 +0200, Thomas Petazzoni spake thusly:
+> We want bash to be installed as /bin/bash. For ages, Buildroot has
+> been doing this by overriding exec_prefix at install time. First of
+> all, it would be preferred to do this at configure time. But also,
+> overriding exec_prefix not only changes where "bash" goes, but also
+> where the pkgconfig file goes. Due to this, bash.pc goes into
+> /lib/pkgconfig/, and doesn't get removed by target-finalize.
 > 
-> NOTICE hash change due to date+copyright holder update in:
-> https://github.com/OpenPrinting/cups/commit/1bc199354e592f73b9d17215953b9965849b3124
+> Since all we want is to have 'bash' as /bin/bash, simply pass
+> --bindir=/bin at configure time. This allows to use the default target
+> installation logic for autotools-package. We keep a post-install
+> target hook to remove /bin/bashbug.
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/cups/cups.hash | 6 +++---
->  package/cups/cups.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 
 Applied to master, thanks.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/bash/bash.mk | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+> index efe7cbbe59..996c6a6097 100644
+> --- a/package/bash/bash.mk
+> +++ b/package/bash/bash.mk
+> @@ -7,11 +7,16 @@
+>  BASH_VERSION = 5.1
+>  BASH_SITE = $(BR2_GNU_MIRROR)/bash
+>  BASH_DEPENDENCIES = ncurses readline host-bison
+> -BASH_CONF_OPTS = --with-installed-readline --without-bash-malloc
+>  BASH_LICENSE = GPL-3.0+
+>  BASH_LICENSE_FILES = COPYING
+>  BASH_CPE_ID_VENDOR = gnu
+>  
+> +# We want the bash binary in /bin
+> +BASH_CONF_OPTS = \
+> +	--bindir=/bin \
+> +	--with-installed-readline \
+> +	--without-bash-malloc
+> +
+>  BASH_CONF_ENV += \
+>  	ac_cv_rl_prefix="$(STAGING_DIR)" \
+>  	ac_cv_rl_version="$(READLINE_VERSION)" \
+> @@ -38,11 +43,10 @@ BASH_CONF_ENV += bash_cv_getenv_redef=yes
+>  endif
+>  endif
+>  
+> -define BASH_INSTALL_TARGET_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> -		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
+> +define BASH_REMOVE_UNUSED_FILES
+>  	rm -f $(TARGET_DIR)/bin/bashbug
+>  endef
+> +BASH_POST_INSTALL_TARGET_HOOKS += BASH_REMOVE_UNUSED_FILES
+>  
+>  # Add /bin/bash to /etc/shells otherwise some login tools like dropbear
+>  # can reject the user connection. See man shells.
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
