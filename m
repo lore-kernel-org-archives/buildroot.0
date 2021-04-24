@@ -1,44 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Apr 2021 11:28:05 +0200
-Subject: [Buildroot] [git commit] package/rsyslog: ignore CVE-2015-3243
-Message-ID: <20210424090312.EE03E8039D@busybox.osuosl.org>
+Date: Sat, 24 Apr 2021 11:25:28 +0200
+Subject: [Buildroot] [git commit] package/coreutils: ignore CVE-2013-0221,
+ CVE-2013-0222, CVE-2013-0223
+Message-ID: <20210424090312.78DD08039D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb4402b51693e8d191bb568622ed9cf9315493fd
+commit: https://git.buildroot.net/buildroot/commit/?id=8ae9156d8b730689484927fba2ec2fa6c1dc0433
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://security-tracker.debian.org/tracker/CVE-2015-3243
- "Rsyslog uses weak permissions for generating log files."
+This CVE is only relevant to a build when the SUSE coreutils-i18n.patch
+is included. The upstream codebase does not include this patch, nor
+does Buildroot.
 
-Ignoring this CVE for Buildroot as normally there are not local
-users and a build could customize the rsyslog.conf to be more
-restrictive ($FileCreateMode 0640).
-
-Example fix from Alpino Linux
- https://github.com/libTorrentUser/alpino-linux-aports/commit/3cb5210cdac46fb8805d4028df16f5889f393a09
+https://security-tracker.debian.org/tracker/CVE-2013-0221
+https://security-tracker.debian.org/tracker/CVE-2013-0222
+https://security-tracker.debian.org/tracker/CVE-2013-0223
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/rsyslog/rsyslog.mk | 4 ++++
+ package/coreutils/coreutils.mk | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 1aa81b8eac..6cf53ccb82 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -9,6 +9,10 @@ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
- RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
- RSYSLOG_CPE_ID_VENDOR = rsyslog
-+# rsyslog uses weak permissions for generating log files.
-+# Ignoring this CVE as Buildroot normally doesn't have local users and a build
-+# could customize the rsyslog.conf to be more restrictive ($FileCreateMode 0640)
-+RSYSLOG_IGNORE_CVES += CVE-2015-3243
- RSYSLOG_DEPENDENCIES = zlib libestr liblogging libfastjson host-pkgconf
- RSYSLOG_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
- RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 0e75cdfcda..65234a113e 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -10,6 +10,10 @@ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
+ COREUTILS_LICENSE = GPL-3.0+
+ COREUTILS_LICENSE_FILES = COPYING
+ COREUTILS_CPE_ID_VENDOR = gnu
++# Only when including SUSE coreutils-i18n.patch
++COREUTILS_IGNORE_CVES = CVE-2013-0221
++COREUTILS_IGNORE_CVES += CVE-2013-0222
++COREUTILS_IGNORE_CVES += CVE-2013-0223
+ # We're patching m4/pthread-cond.m4
+ COREUTILS_AUTORECONF = YES
+ 
