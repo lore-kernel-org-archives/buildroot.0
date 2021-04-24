@@ -1,73 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Apr 2021 22:46:43 +0200
-Subject: [Buildroot] [git commit] package/perl-io-socket-ssl: bump to
- version 2.070
-Message-ID: <20210424202051.E467D80257@busybox.osuosl.org>
+Date: Sat, 24 Apr 2021 22:46:48 +0200
+Subject: [Buildroot] [git commit] package/perl-moo: bump to version 2.005004
+Message-ID: <20210424202052.2128F80257@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9962e3020c1c46e8b5a70b9ac2eaf8722b8ab062
+commit: https://git.buildroot.net/buildroot/commit/?id=f40bd476029eb1c325c373e2afa737ba5321d89a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+diff LICENSE:
+-This software is Copyright (c) 2020 by mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>.
++This software is Copyright (c) 2021 by mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-io-socket-ssl/Config.in                     | 1 +
- package/perl-io-socket-ssl/perl-io-socket-ssl.hash       | 4 ++--
- package/perl-io-socket-ssl/perl-io-socket-ssl.mk         | 2 +-
- support/testing/tests/package/test_perl_io_socket_ssl.py | 1 +
- 4 files changed, 5 insertions(+), 3 deletions(-)
+ package/perl-moo/perl-moo.hash | 6 +++---
+ package/perl-moo/perl-moo.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-io-socket-ssl/Config.in b/package/perl-io-socket-ssl/Config.in
-index a7b94a3925..2797a11557 100644
---- a/package/perl-io-socket-ssl/Config.in
-+++ b/package/perl-io-socket-ssl/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PERL_IO_SOCKET_SSL
- 	bool "perl-io-socket-ssl"
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_PERL_MOZILLA_CA # runtime
- 	select BR2_PACKAGE_PERL_NET_SSLEAY # runtime
- 	help
- 	  Nearly transparent SSL encapsulation for IO::Socket::INET.
-diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
-index 2180b6be35..076e145acd 100644
---- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
-+++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+diff --git a/package/perl-moo/perl-moo.hash b/package/perl-moo/perl-moo.hash
+index af0dd2e926..9b67e7a65c 100644
+--- a/package/perl-moo/perl-moo.hash
++++ b/package/perl-moo/perl-moo.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  4230c829c8875889848093b2b46a7284  IO-Socket-SSL-2.068.tar.gz
--sha256  4420fc0056f1827b4dd1245eacca0da56e2182b4ef6fc078f107dc43c3fb8ff9  IO-Socket-SSL-2.068.tar.gz
-+md5  3c8df96b5249c02025e2eb48596c213b  IO-Socket-SSL-2.070.tar.gz
-+sha256  876fe09763e7a474519431aff248cb1f1abaf070d6bdc791f60bf9abe781cd3b  IO-Socket-SSL-2.070.tar.gz
+-md5  51f3732e043a1e856ab6cdc260d2814c  Moo-2.004004.tar.gz
+-sha256  714b77b115788708c6d8ab6f18eea173f8109d397aecd34e32cc71a0ffcf2246  Moo-2.004004.tar.gz
++md5  49ecf491b49b9b200e8a5dfd1a42b480  Moo-2.005004.tar.gz
++sha256  e3030b80bd554a66f6b3c27fd53b1b5909d12af05c4c11ece9a58f8d1e478928  Moo-2.005004.tar.gz
  
  # computed by scancpan
- sha256  090aff5421fd55a9dceeaf6c612c36360402e8d29c1284aef88c87be565ce032  README
-diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-index b6c0ceb37f..1751bef0e4 100644
---- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-+++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+-sha256  0f2d6b537f7a735c981511875d832bc8ff767bf97d62848cf0bada964e40aadd  LICENSE
++sha256  a8a1595c2347f7d10e896809d4f3dea85ccc10ac5644b8073111233cd120b14a  LICENSE
+diff --git a/package/perl-moo/perl-moo.mk b/package/perl-moo/perl-moo.mk
+index 77c6c1e356..6c484ba9e3 100644
+--- a/package/perl-moo/perl-moo.mk
++++ b/package/perl-moo/perl-moo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_IO_SOCKET_SSL_VERSION = 2.068
-+PERL_IO_SOCKET_SSL_VERSION = 2.070
- PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
- PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
- PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPL-1.0+
-diff --git a/support/testing/tests/package/test_perl_io_socket_ssl.py b/support/testing/tests/package/test_perl_io_socket_ssl.py
-index 51663e837c..80835fdcc1 100644
---- a/support/testing/tests/package/test_perl_io_socket_ssl.py
-+++ b/support/testing/tests/package/test_perl_io_socket_ssl.py
-@@ -6,6 +6,7 @@ class TestPerlIOSocketSSL(TestPerlBase):
-     package:
-         IO-Socket-SSL
-     direct dependencies:
-+        Mozilla-CA
-         Net-SSLeay   XS
-     """
- 
+-PERL_MOO_VERSION = 2.004004
++PERL_MOO_VERSION = 2.005004
+ PERL_MOO_SOURCE = Moo-$(PERL_MOO_VERSION).tar.gz
+ PERL_MOO_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
+ PERL_MOO_LICENSE = Artistic or GPL-1.0+
