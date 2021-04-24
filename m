@@ -1,100 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 24 Apr 2021 15:02:56 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/openldap: bump to
- version 2.4.58
-Message-ID: <20210424124717.14CB6801D9@busybox.osuosl.org>
+Date: Sat, 24 Apr 2021 15:01:11 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/bridge-utils: fix
+ build on musl
+Message-ID: <20210424124717.049E685F07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0dfa15802100c5d478cf0789f06d73a39dbd3250
+commit: https://git.buildroot.net/buildroot/commit/?id=7cb626a62214dbdfd3a9128016b0ba2c04cbd3e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Drop fifth patch (already in version)
+Build on musl is broken since bump to version 1.7.1 in commit
+5f2d38df4f85f7999cf6d00da089991cba93fee6
 
-https://git.openldap.org/openldap/openldap/-/blob/OPENLDAP_REL_ENG_2_4_58/CHANGES
+Fixes:
+ - http://autobuild.buildroot.org/results/0f080ff6913595ee2732b93206e5001c837c1bcc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1feedcd84579c8aa95033f152788930114e3088b)
+(cherry picked from commit aa75b053baef70c9dd5e598c7593bdf50a0c4396)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...005-ITS-9454-fix-issuerAndThisUpdateCheck.patch | 26 ----------------------
- package/openldap/openldap.hash                     | 10 ++++-----
- package/openldap/openldap.mk                       |  5 +----
- 3 files changed, 6 insertions(+), 35 deletions(-)
+ package/bridge-utils/0001-fix-build-on-musl.patch | 51 +++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch b/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
-deleted file mode 100644
-index a611b9ff59..0000000000
---- a/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 9badb73425a67768c09bcaed1a9c26c684af6c30 Mon Sep 17 00:00:00 2001
--From: Howard Chu <hyc@openldap.org>
--Date: Sat, 6 Feb 2021 20:52:06 +0000
--Subject: [PATCH] ITS#9454 fix issuerAndThisUpdateCheck
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- servers/slapd/schema_init.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/servers/slapd/schema_init.c b/servers/slapd/schema_init.c
--index 31be1154e..8b1e25539 100644
----- a/servers/slapd/schema_init.c
--+++ b/servers/slapd/schema_init.c
--@@ -3900,6 +3900,8 @@ issuerAndThisUpdateCheck(
-- 					break;
-- 				}
-- 			}
--+			if ( tu->bv_len < STRLENOF("YYYYmmddHHmmssZ") ) return LDAP_INVALID_SYNTAX;
--+
-- 			x.bv_val += tu->bv_len + 1;
-- 			x.bv_len -= tu->bv_len + 1;
-- 
---- 
--2.20.1
--
-diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
-index f2ffdf53bc..8ce50d6133 100644
---- a/package/openldap/openldap.hash
-+++ b/package/openldap/openldap.hash
-@@ -1,7 +1,7 @@
--# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.57.md5
--md5  e3349456c3a66e5e6155be7ddc3f042c  openldap-2.4.57.tgz
--# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.57.sha1
--sha1  1cffa70a3ea8545948041fd113f8f53bc24d6d87  openldap-2.4.57.tgz
-+# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.58.md5
-+md5  c203d735ba69976e5b28dc39006f29b5  openldap-2.4.58.tgz
-+# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.58.sha1
-+sha1  875416827be3ad63f20004510a354db0aaceb2ed  openldap-2.4.58.tgz
- # Locally computed
--sha256  c7ba47e1e6ecb5b436f3d43281df57abeffa99262141aec822628bc220f6b45a  openldap-2.4.57.tgz
-+sha256  57b59254be15d0bf6a9ab3d514c1c05777b02123291533134a87c94468f8f47b  openldap-2.4.58.tgz
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index ec11e4fa7d..3b35b4daa3 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENLDAP_VERSION = 2.4.57
-+OPENLDAP_VERSION = 2.4.58
- OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
- OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
- OPENLDAP_LICENSE = OpenLDAP Public License
-@@ -13,9 +13,6 @@ OPENLDAP_CPE_ID_VENDOR = openldap
- OPENLDAP_INSTALL_STAGING = YES
- OPENLDAP_DEPENDENCIES = host-pkgconf
- 
--# 0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
--OPENLDAP_IGNORE_CVES += CVE-2021-27212
--
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- OPENLDAP_TLS = openssl
- OPENLDAP_DEPENDENCIES += openssl
+diff --git a/package/bridge-utils/0001-fix-build-on-musl.patch b/package/bridge-utils/0001-fix-build-on-musl.patch
+new file mode 100644
+index 0000000000..1a5d1eb23b
+--- /dev/null
++++ b/package/bridge-utils/0001-fix-build-on-musl.patch
+@@ -0,0 +1,51 @@
++From 1d5a2e0f88e0c53fede03632fa92ffade5e79ac5 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 11 Apr 2021 10:04:59 +0200
++Subject: [PATCH] fix build on musl
++
++Build on musl is broken since version 1.7.1 and commit
++a1f20223cfcf7b9eae8c9e7e7a07e7bf1377f65b:
++
++libbridge_devif.c: In function 'fpopen':
++libbridge_devif.c:33:12: error: 'PATH_MAX' undeclared (first use in this function); did you mean 'AF_MAX'?
++   33 |  char path[PATH_MAX];
++      |            ^~~~~~~~
++      |            AF_MAX
++
++Fixes:
++ - http://autobuild.buildroot.org/results/0f080ff6913595ee2732b93206e5001c837c1bcc
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to Stephen Hemminger <sthemmin@microsoft.com>]
++---
++ libbridge/libbridge_devif.c | 1 +
++ libbridge/libbridge_init.c  | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/libbridge/libbridge_devif.c b/libbridge/libbridge_devif.c
++index 8b7d954..6c679f6 100644
++--- a/libbridge/libbridge_devif.c
+++++ b/libbridge/libbridge_devif.c
++@@ -21,6 +21,7 @@
++ #include <stdlib.h>
++ #include <unistd.h>
++ #include <errno.h>
+++#include <limits.h>
++ #include <string.h>
++ #include <dirent.h>
++ #include <fcntl.h>
++diff --git a/libbridge/libbridge_init.c b/libbridge/libbridge_init.c
++index c914971..83a97cd 100644
++--- a/libbridge/libbridge_init.c
+++++ b/libbridge/libbridge_init.c
++@@ -20,6 +20,7 @@
++ #include <stdlib.h>
++ #include <unistd.h>
++ #include <errno.h>
+++#include <limits.h>
++ #include <string.h>
++ #include <dirent.h>
++ #include <sys/types.h>
++-- 
++2.30.2
++
