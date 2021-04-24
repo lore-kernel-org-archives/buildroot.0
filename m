@@ -1,47 +1,137 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 24 Apr 2021 21:20:29 +0200
-Subject: [Buildroot] [PATCH 9/9] package/perl-role-tiny: bump to version
- 2.002004
-In-Reply-To: <20210424192029.595977-1-francois.perrad@gadz.org>
-References: <20210424192029.595977-1-francois.perrad@gadz.org>
-Message-ID: <20210424192029.595977-9-francois.perrad@gadz.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 24 Apr 2021 22:07:45 +0200
+Subject: [Buildroot] [git commit] package/numactl: make available on all
+ architectures
+Message-ID: <20210424194112.4AD7083704@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl-role-tiny/perl-role-tiny.hash | 4 ++--
- package/perl-role-tiny/perl-role-tiny.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=4ed540ddf59bec4b389be44d7f42820d2466904f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/perl-role-tiny/perl-role-tiny.hash b/package/perl-role-tiny/perl-role-tiny.hash
-index 9de786800..33de6a53f 100644
---- a/package/perl-role-tiny/perl-role-tiny.hash
-+++ b/package/perl-role-tiny/perl-role-tiny.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  065e459cdc3c6e163c6e8359baf69f45  Role-Tiny-2.002003.tar.gz
--sha256  6981e5f2d0beded157840199d678da462b22a9a3753333cab322ab6efb0fbb89  Role-Tiny-2.002003.tar.gz
-+md5  9ee45591befa3d0b1094ac75d282b6ba  Role-Tiny-2.002004.tar.gz
-+sha256  d7bdee9e138a4f83aa52d0a981625644bda87ff16642dfa845dcb44d9a242b45  Role-Tiny-2.002004.tar.gz
+Since its introduction in commit
+b05e74ff92b6728369e1540fc0a2bd60025f2146 in 2013, numactl has had an
+explicit list of architectures that it supports. Interestingly, this
+list does not include ARM, and now that rt-tests unconditionally needs
+numactl, it meant the rt-tests package was no longer available on ARM.
+
+Further investigation revealed that there is nothing in recent
+versions of numactl that appears to be architecture-specific. It does
+build with all of Buildroot toolchains currently used in the
+autobuilders.
+
+The only necessary changes are:
+
+ * Exclude no-MMU architectures, as madvise() is used in the code
+   base, and this is not available on no-MMU architectures.
+
+ * Make sure to use -latomic when needed, as some atomic operations
+   are used.
+
+ * Backport a patch that fixes the .symver usage, which only affects
+   really old gcc versions: only the old ARM Sourcery toolchain was
+   affected by this. Newer gcc versions support the gcc "symver"
+   attribute, so that the code that directly emits the assembly
+   .symver directive is not invoked.
+
+With these changes, numactl builds successfully on all our supported
+toolchains.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0001-Do-not-stringify-SYMVER-symbols.patch     | 25 ++++++++++++++++++++++
+ package/numactl/Config.in                          | 11 +---------
+ package/numactl/numactl.mk                         |  4 ++++
+ package/rt-tests/Config.in                         |  4 +---
+ 4 files changed, 31 insertions(+), 13 deletions(-)
+
+diff --git a/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch b/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
+new file mode 100644
+index 0000000000..c6981aaf73
+--- /dev/null
++++ b/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
+@@ -0,0 +1,25 @@
++From f96c96af7fbf2779b15f66f03b10315a24fb4f5a Mon Sep 17 00:00:00 2001
++From: Scott McMillan <smcmillan@nvidia.com>
++Date: Fri, 9 Oct 2020 08:56:52 -0500
++Subject: [PATCH] Do not stringify SYMVER symbols
++
++Upstream: f96c96af7fbf2779b15f66f03b10315a24fb4f5a
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ util.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/util.h b/util.h
++index 99ada33..f2a20ac 100644
++--- a/util.h
+++++ b/util.h
++@@ -22,5 +22,5 @@ extern char *policy_name(int policy);
++ #if HAVE_ATTRIBUTE_SYMVER
++ #define SYMVER(a,b) __attribute__ ((symver (b)))
++ #else
++-#define SYMVER(a,b) __asm__ (".symver " #a "," #b);
+++#define SYMVER(a,b) __asm__ (".symver " a "," b);
++ #endif
++-- 
++2.30.2
++
+diff --git a/package/numactl/Config.in b/package/numactl/Config.in
+index cd47f2f9a9..23cf7facb0 100644
+--- a/package/numactl/Config.in
++++ b/package/numactl/Config.in
+@@ -1,15 +1,6 @@
+-config BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
+-	bool
+-	# numactl uses some system calls that are not available on all
+-	# architectures.
+-	default y if BR2_aarch64
+-	default y if BR2_i386 || BR2_x86_64
+-	default y if BR2_mips || BR2_mipsel ||  BR2_mips64 || BR2_mips64el
+-	default y if BR2_powerpc
+-
+ config BR2_PACKAGE_NUMACTL
+ 	bool "numactl"
+-	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
++	depends on BR2_USE_MMU # madvise()
+ 	help
+ 	  numactl allows you to run your application on specific cpus
+ 	  and memory nodes. It does this by supplying a NUMA memory
+diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
+index cf9c759693..3364f6c5c3 100644
+--- a/package/numactl/numactl.mk
++++ b/package/numactl/numactl.mk
+@@ -12,4 +12,8 @@ NUMACTL_INSTALL_STAGING = YES
+ NUMACTL_AUTORECONF = YES
+ NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
  
- # computed by scancpan
- sha256  a8a1595c2347f7d10e896809d4f3dea85ccc10ac5644b8073111233cd120b14a  LICENSE
-diff --git a/package/perl-role-tiny/perl-role-tiny.mk b/package/perl-role-tiny/perl-role-tiny.mk
-index 5a6477f94..64d5085fa 100644
---- a/package/perl-role-tiny/perl-role-tiny.mk
-+++ b/package/perl-role-tiny/perl-role-tiny.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_ROLE_TINY_VERSION = 2.002003
-+PERL_ROLE_TINY_VERSION = 2.002004
- PERL_ROLE_TINY_SOURCE = Role-Tiny-$(PERL_ROLE_TINY_VERSION).tar.gz
- PERL_ROLE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
- PERL_ROLE_TINY_LICENSE = Artistic or GPL-1.0+
--- 
-2.27.0
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++NUMACTL_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
++endif
++
+ $(eval $(autotools-package))
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index cc9b14dccb..477fa288d7 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -2,10 +2,9 @@ config BR2_PACKAGE_RT_TESTS
+ 	bool "rt-tests"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14 # deadline scheduler syscall
+-	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_MMU # fork(), numactl
+ 	depends on !BR2_STATIC_LIBS # dlopen
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # cyclictest
+-	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_NUMACTL
+ 	help
+ 	  Set of utilities for testing the real-time behaviour of a
+@@ -34,4 +33,3 @@ comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 3.14, dy
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+ 		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+ 	depends on BR2_USE_MMU
+-	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
