@@ -1,30 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 24 Apr 2021 14:53:06 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/python-markdown2: add PYTHON_MARKDOWN2_CPE_ID_VENDOR
-In-Reply-To: <20210405102550.3566334-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 5 Apr 2021 12:25:50 +0200")
-References: <20210405102550.3566334-1-fontaine.fabrice@gmail.com>
-Message-ID: <87im4bvo7h.fsf@dell.be.48ers.dk>
+Date: Sat, 24 Apr 2021 14:55:58 +0200
+Subject: [Buildroot] [PATCH 3/3] package/x11r7/xlib_libXaw: bump version
+ to 1.0.14
+In-Reply-To: <20210406160343.1106797-3-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 6 Apr 2021 18:03:43 +0200")
+References: <20210406160343.1106797-1-bernd.kuhls@t-online.de>
+ <20210406160343.1106797-3-bernd.kuhls@t-online.de>
+Message-ID: <87eeezvo2p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > cpe:2.3:a:python-markdown2_project:python-markdown2 is a valid CPE
- > identifier for this package:
+ > Release notes:
+ > https://lists.x.org/archives/xorg-announce/2021-March/003077.html
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython-markdown2_project%3Apython-markdown2
+ > Reformatted hashes.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2:
- >  - Drop PYTHON_MARKDOWN2_CPE_ID_PRODUCT
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Committed to 2021.02.x, thanks.
+Committed to 2021.02.x given the crash fixes, thanks.
 
 -- 
 Bye, Peter Korsgaard
