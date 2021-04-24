@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Apr 2021 09:46:07 +0200
-Subject: [Buildroot] [PATCH 1/3] package/bash: use --bindir instead of
- exec_prefix=
-In-Reply-To: <20210423202356.37681-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 24 Apr 2021 09:46:23 +0200
+Subject: [Buildroot] [PATCH 3/3] package/bash: drop SHOBJ_STATUS from
+ BASH_CONF_ENV
+In-Reply-To: <20210423202356.37681-3-thomas.petazzoni@bootlin.com>
 References: <20210423202356.37681-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210424074607.GM298901@scaer>
+ <20210423202356.37681-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20210424074623.GN298901@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +15,19 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2021-04-23 22:23 +0200, Thomas Petazzoni spake thusly:
-> We want bash to be installed as /bin/bash. For ages, Buildroot has
-> been doing this by overriding exec_prefix at install time. First of
-> all, it would be preferred to do this at configure time. But also,
-> overriding exec_prefix not only changes where "bash" goes, but also
-> where the pkgconfig file goes. Due to this, bash.pc goes into
-> /lib/pkgconfig/, and doesn't get removed by target-finalize.
+> SHOBJ_STATUS=unsupported was added in commit
+> 4a2af11cba83ef176672609dd7321712fa7f6a28 to work around a limitation
+> of the configure script that forgot to set this variable in
+> static-linking configurations.
 > 
-> Since all we want is to have 'bash' as /bin/bash, simply pass
-> --bindir=/bin at configure time. This allows to use the default target
-> installation logic for autotools-package. We keep a post-install
-> target hook to remove /bin/bashbug.
+> It turns out that this issue has been fixed upstream as of bash 5.0:
+> 
+>   https://git.savannah.gnu.org/cgit/bash.git/diff/configure.ac?id=d233b485e83c3a784b803fb894280773f16f2deb
+> 
+>   (see hunk @@ -1151,6 +1179,9 @@)
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> Cc: Baruch Siach <baruch@tkos.co.il>
 
 Applied to master, thanks.
 
@@ -35,45 +35,21 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/bash/bash.mk | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+>  package/bash/bash.mk | 1 -
+>  1 file changed, 1 deletion(-)
 > 
 > diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-> index efe7cbbe59..996c6a6097 100644
+> index 6913ccafd8..7b853ece08 100644
 > --- a/package/bash/bash.mk
 > +++ b/package/bash/bash.mk
-> @@ -7,11 +7,16 @@
->  BASH_VERSION = 5.1
->  BASH_SITE = $(BR2_GNU_MIRROR)/bash
->  BASH_DEPENDENCIES = ncurses readline host-bison
-> -BASH_CONF_OPTS = --with-installed-readline --without-bash-malloc
->  BASH_LICENSE = GPL-3.0+
->  BASH_LICENSE_FILES = COPYING
->  BASH_CPE_ID_VENDOR = gnu
->  
-> +# We want the bash binary in /bin
-> +BASH_CONF_OPTS = \
-> +	--bindir=/bin \
-> +	--with-installed-readline \
-> +	--without-bash-malloc
-> +
->  BASH_CONF_ENV += \
->  	ac_cv_rl_prefix="$(STAGING_DIR)" \
->  	ac_cv_rl_version="$(READLINE_VERSION)" \
-> @@ -38,11 +43,10 @@ BASH_CONF_ENV += bash_cv_getenv_redef=yes
->  endif
->  endif
->  
-> -define BASH_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> -		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
-> +define BASH_REMOVE_UNUSED_FILES
->  	rm -f $(TARGET_DIR)/bin/bashbug
->  endef
-> +BASH_POST_INSTALL_TARGET_HOOKS += BASH_REMOVE_UNUSED_FILES
->  
->  # Add /bin/bash to /etc/shells otherwise some login tools like dropbear
->  # can reject the user connection. See man shells.
+> @@ -29,7 +29,6 @@ BASH_CONF_ENV += \
+>  # The static build needs some trickery
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  BASH_CONF_OPTS += --enable-static-link
+> -BASH_CONF_ENV += SHOBJ_STATUS=unsupported
+>  # bash wants to redefine the getenv() function. To check whether this is
+>  # possible, AC_TRY_RUN is used which is not possible in
+>  # cross-compilation.
 > -- 
 > 2.30.2
 > 
