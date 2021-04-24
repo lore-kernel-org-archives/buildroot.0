@@ -1,160 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Apr 2021 22:08:42 +0200
-Subject: [Buildroot] [PATCH] package/numactl: make available on all
- architectures
-In-Reply-To: <20210418162359.3462571-1-thomas.petazzoni@bootlin.com>
-References: <20210418162359.3462571-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210424200842.GV298901@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 24 Apr 2021 22:46:46 +0200
+Subject: [Buildroot] [git commit] package/perl-mojolicious: bump to version
+ 9.17
+Message-ID: <20210424202052.07DDE80257@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=0c2a7ff2a963c6df99c25f62711e794bb2aa24bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-18 18:23 +0200, Thomas Petazzoni spake thusly:
-> Since its introduction in commit
-> b05e74ff92b6728369e1540fc0a2bd60025f2146 in 2013, numactl has had an
-> explicit list of architectures that it supports. Interestingly, this
-> list does not include ARM, and now that rt-tests unconditionally needs
-> numactl, it meant the rt-tests package was no longer available on ARM.
-> 
-> Further investigation revealed that there is nothing in recent
-> versions of numactl that appears to be architecture-specific. It does
-> build with all of Buildroot toolchains currently used in the
-> autobuilders.
-> 
-> The only necessary changes are:
-> 
->  * Exclude no-MMU architectures, as madvise() is used in the code
->    base, and this is not available on no-MMU architectures.
-> 
->  * Make sure to use -latomic when needed, as some atomic operations
->    are used.
-> 
->  * Backport a patch that fixes the .symver usage, which only affects
->    really old gcc versions: only the old ARM Sourcery toolchain was
->    affected by this. Newer gcc versions support the gcc "symver"
->    attribute, so that the code that directly emits the assembly
->    .symver directive is not invoked.
-> 
-> With these changes, numactl builds successfully on all our supported
-> toolchains.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
+ package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...0001-Do-not-stringify-SYMVER-symbols.patch | 25 +++++++++++++++++++
->  package/numactl/Config.in                     | 11 +-------
->  package/numactl/numactl.mk                    |  4 +++
->  package/rt-tests/Config.in                    |  4 +--
->  4 files changed, 31 insertions(+), 13 deletions(-)
->  create mode 100644 package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
-> 
-> diff --git a/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch b/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
-> new file mode 100644
-> index 0000000000..c6981aaf73
-> --- /dev/null
-> +++ b/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
-> @@ -0,0 +1,25 @@
-> +From f96c96af7fbf2779b15f66f03b10315a24fb4f5a Mon Sep 17 00:00:00 2001
-> +From: Scott McMillan <smcmillan@nvidia.com>
-> +Date: Fri, 9 Oct 2020 08:56:52 -0500
-> +Subject: [PATCH] Do not stringify SYMVER symbols
-> +
-> +Upstream: f96c96af7fbf2779b15f66f03b10315a24fb4f5a
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +---
-> + util.h | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/util.h b/util.h
-> +index 99ada33..f2a20ac 100644
-> +--- a/util.h
-> ++++ b/util.h
-> +@@ -22,5 +22,5 @@ extern char *policy_name(int policy);
-> + #if HAVE_ATTRIBUTE_SYMVER
-> + #define SYMVER(a,b) __attribute__ ((symver (b)))
-> + #else
-> +-#define SYMVER(a,b) __asm__ (".symver " #a "," #b);
-> ++#define SYMVER(a,b) __asm__ (".symver " a "," b);
-> + #endif
-> +-- 
-> +2.30.2
-> +
-> diff --git a/package/numactl/Config.in b/package/numactl/Config.in
-> index cd47f2f9a9..23cf7facb0 100644
-> --- a/package/numactl/Config.in
-> +++ b/package/numactl/Config.in
-> @@ -1,15 +1,6 @@
-> -config BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
-> -	bool
-> -	# numactl uses some system calls that are not available on all
-> -	# architectures.
-> -	default y if BR2_aarch64
-> -	default y if BR2_i386 || BR2_x86_64
-> -	default y if BR2_mips || BR2_mipsel ||  BR2_mips64 || BR2_mips64el
-> -	default y if BR2_powerpc
-> -
->  config BR2_PACKAGE_NUMACTL
->  	bool "numactl"
-> -	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
-> +	depends on BR2_USE_MMU # madvise()
->  	help
->  	  numactl allows you to run your application on specific cpus
->  	  and memory nodes. It does this by supplying a NUMA memory
-> diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-> index cf9c759693..3364f6c5c3 100644
-> --- a/package/numactl/numactl.mk
-> +++ b/package/numactl/numactl.mk
-> @@ -12,4 +12,8 @@ NUMACTL_INSTALL_STAGING = YES
->  NUMACTL_AUTORECONF = YES
->  NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
->  
-> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> +NUMACTL_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
-> +endif
-> +
->  $(eval $(autotools-package))
-> diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-> index cc9b14dccb..477fa288d7 100644
-> --- a/package/rt-tests/Config.in
-> +++ b/package/rt-tests/Config.in
-> @@ -2,10 +2,9 @@ config BR2_PACKAGE_RT_TESTS
->  	bool "rt-tests"
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14 # deadline scheduler syscall
-> -	depends on BR2_USE_MMU # fork()
-> +	depends on BR2_USE_MMU # fork(), numactl
->  	depends on !BR2_STATIC_LIBS # dlopen
->  	depends on !BR2_TOOLCHAIN_USES_MUSL # cyclictest
-> -	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
->  	select BR2_PACKAGE_NUMACTL
->  	help
->  	  Set of utilities for testing the real-time behaviour of a
-> @@ -34,4 +33,3 @@ comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 3.14, dy
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
->  		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
->  	depends on BR2_USE_MMU
-> -	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
+index a94c57abce..ee70e1d997 100644
+--- a/package/perl-mojolicious/perl-mojolicious.hash
++++ b/package/perl-mojolicious/perl-mojolicious.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  f93e56c64cad7002bd7bc1f8091ed05b  Mojolicious-8.71.tar.gz
+-sha256  155bfdcd1d49f4f10be71ec8eeb93de1873b9ab810f3d6d521d3ec10f0ef6e0d  Mojolicious-8.71.tar.gz
++md5  fe7be8d6cf24a860987f72d441bec547  Mojolicious-9.17.tar.gz
++sha256  0da6e60701bdb8ac063d69616c925ff2ecc6a31c6bf5b58a0b10b6013294bd8d  Mojolicious-9.17.tar.gz
+ 
+ # computed by scancpan
+ sha256  19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a  LICENSE
+diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
+index eed097d907..54b5c018fa 100644
+--- a/package/perl-mojolicious/perl-mojolicious.mk
++++ b/package/perl-mojolicious/perl-mojolicious.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_MOJOLICIOUS_VERSION = 8.71
++PERL_MOJOLICIOUS_VERSION = 9.17
+ PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
+ PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
+ PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
