@@ -1,51 +1,54 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 24 Apr 2021 21:20:26 +0200
-Subject: [Buildroot] [PATCH 6/9] package/perl-moo: bump to version 2.005004
+Date: Sat, 24 Apr 2021 21:20:27 +0200
+Subject: [Buildroot] [PATCH 7/9] package/perl-net-ssh2: bump to version 0.72
 In-Reply-To: <20210424192029.595977-1-francois.perrad@gadz.org>
 References: <20210424192029.595977-1-francois.perrad@gadz.org>
-Message-ID: <20210424192029.595977-6-francois.perrad@gadz.org>
+Message-ID: <20210424192029.595977-7-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-diff LICENSE:
--This software is Copyright (c) 2020 by mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>.
-+This software is Copyright (c) 2021 by mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>.
+diff README.pod:
+-Copyright (C) 2011 - 2019 by Salvador FandiE<ntilde>o (salva at cpan.org).
++Copyright (C) 2011 - 2020 by Salvador FandiE<ntilde>o (salva at cpan.org).
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-moo/perl-moo.hash | 6 +++---
- package/perl-moo/perl-moo.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-net-ssh2/perl-net-ssh2.hash | 6 +++---
+ package/perl-net-ssh2/perl-net-ssh2.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-moo/perl-moo.hash b/package/perl-moo/perl-moo.hash
-index af0dd2e92..9b67e7a65 100644
---- a/package/perl-moo/perl-moo.hash
-+++ b/package/perl-moo/perl-moo.hash
+diff --git a/package/perl-net-ssh2/perl-net-ssh2.hash b/package/perl-net-ssh2/perl-net-ssh2.hash
+index d65b6f36b..b2e8b2d48 100644
+--- a/package/perl-net-ssh2/perl-net-ssh2.hash
++++ b/package/perl-net-ssh2/perl-net-ssh2.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  51f3732e043a1e856ab6cdc260d2814c  Moo-2.004004.tar.gz
--sha256  714b77b115788708c6d8ab6f18eea173f8109d397aecd34e32cc71a0ffcf2246  Moo-2.004004.tar.gz
-+md5  49ecf491b49b9b200e8a5dfd1a42b480  Moo-2.005004.tar.gz
-+sha256  e3030b80bd554a66f6b3c27fd53b1b5909d12af05c4c11ece9a58f8d1e478928  Moo-2.005004.tar.gz
+-md5  baa1b19fec9ca37ecfc12a22ba0c9122  Net-SSH2-0.71.tar.gz
+-sha256  ee411ec263c900c441fd1c490e9d52fc56b0bb32e1ed98869229501b200f8fa2  Net-SSH2-0.71.tar.gz
++md5  57aa0f6e2be4020f75888a7195ad5cba  Net-SSH2-0.72.tar.gz
++sha256  867d83070fac6436b9f0971918243002072fbf8d2724a87c254b34250dce0222  Net-SSH2-0.72.tar.gz
  
  # computed by scancpan
--sha256  0f2d6b537f7a735c981511875d832bc8ff767bf97d62848cf0bada964e40aadd  LICENSE
-+sha256  a8a1595c2347f7d10e896809d4f3dea85ccc10ac5644b8073111233cd120b14a  LICENSE
-diff --git a/package/perl-moo/perl-moo.mk b/package/perl-moo/perl-moo.mk
-index 77c6c1e35..6c484ba9e 100644
---- a/package/perl-moo/perl-moo.mk
-+++ b/package/perl-moo/perl-moo.mk
-@@ -4,7 +4,7 @@
+-sha256  b9fe64368dd41bb5b9405b23f95ee0deb970427895ab0119eb3cd4d221764c1d  README.pod
++sha256  268afaee7aa88a41959c93cd91853e8124bdbe64a74480d36ff1130e01a1c0ca  README.pod
+diff --git a/package/perl-net-ssh2/perl-net-ssh2.mk b/package/perl-net-ssh2/perl-net-ssh2.mk
+index 10657c39c..5572e2325 100644
+--- a/package/perl-net-ssh2/perl-net-ssh2.mk
++++ b/package/perl-net-ssh2/perl-net-ssh2.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_MOO_VERSION = 2.004004
-+PERL_MOO_VERSION = 2.005004
- PERL_MOO_SOURCE = Moo-$(PERL_MOO_VERSION).tar.gz
- PERL_MOO_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
- PERL_MOO_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_SSH2_VERSION = 0.71
++PERL_NET_SSH2_VERSION = 0.72
+ PERL_NET_SSH2_SOURCE = Net-SSH2-$(PERL_NET_SSH2_VERSION).tar.gz
+-PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RK/RKITOVER
++PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SA/SALVA
+ PERL_NET_SSH2_LICENSE = Artistic or GPL-1.0+
+ PERL_NET_SSH2_LICENSE_FILES = README.pod
+ PERL_NET_SSH2_DEPENDENCIES = libssh2 zlib
 -- 
 2.27.0
