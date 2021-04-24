@@ -1,94 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Apr 2021 18:14:28 +0200
-Subject: [Buildroot] [git commit] package/mender-artifact: bump version to
- 3.5.1
-Message-ID: <20210424154733.AE61580E37@busybox.osuosl.org>
+Date: Sat, 24 Apr 2021 18:14:10 +0200
+Subject: [Buildroot] [git commit] package/mender: bump version to 2.6.0
+Message-ID: <20210424154733.A0A1B85F45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2711944ae0badb424d92cc9c665455b1387afe81
+commit: https://git.buildroot.net/buildroot/commit/?id=b32f95290f5ab976451711c6ace2ab1c0d040e4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also update various license hashes
+Also update the progressbarlicense hash due to a year bump
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mender-artifact/mender-artifact.hash | 14 +++++++-------
- package/mender-artifact/mender-artifact.mk   |  8 ++++----
- 2 files changed, 11 insertions(+), 11 deletions(-)
+ package/mender/mender.hash | 6 +++---
+ package/mender/mender.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
-index a3af951997..175865bb67 100644
---- a/package/mender-artifact/mender-artifact.hash
-+++ b/package/mender-artifact/mender-artifact.hash
-@@ -1,6 +1,6 @@
+diff --git a/package/mender/mender.hash b/package/mender/mender.hash
+index 52e321f7e7..c2bbbe5fc1 100644
+--- a/package/mender/mender.hash
++++ b/package/mender/mender.hash
+@@ -1,5 +1,5 @@
  # Locally computed:
--sha256  5a3c204fb68bdc793e7e11cd631a4463b2fa6f325a2b9b8b795ef4f3160e6e36  mender-artifact-3.4.1.tar.gz
--sha256  cb0d00827fd4fc3329c9ec0aa510a811b375cb17537c0f46a94852cc7aa199f6  LIC_FILES_CHKSUM.sha256
-+sha256  8f5b69a6598dc071e6a0f2102dbd38a003e7db6be5794116d701531d6a740a46  mender-artifact-3.5.1.tar.gz
-+sha256  0afbd1092d57f70da125041350363c3761802e807be80c7f1dfc005fea962b25  LIC_FILES_CHKSUM.sha256
+-sha256  339bf97b3680315baf93143745b14b8638c5402094f94a4cc5a6ea63a2568da8  2.5.0.tar.gz
++sha256  d68839eb493175a05371eec8e6ec8691ccc22c999614b9954923a0b5ebe56840  2.6.0.tar.gz
  
- # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
- # following command:
-@@ -9,9 +9,8 @@ sha256  cb0d00827fd4fc3329c9ec0aa510a811b375cb17537c0f46a94852cc7aa199f6  LIC_FI
- 
- # Apache 2.0 licenses.
- sha256  b4acfcfa2a0ba1a8c82ec3965fbcee886cff8394ca4214e0ddac0a36beb1e05a  LICENSE
--sha256  32714818ad6f98ee0185a52e23a475d89122e3efd2b2c26c733781c28e798c99  vendor/github.com/mendersoftware/mendertesting/LICENSE
+ # Vendor licenses
+ # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
+@@ -9,7 +9,7 @@ sha256  b4acfcfa2a0ba1a8c82ec3965fbcee886cff8394ca4214e0ddac0a36beb1e05a  LICENS
+ sha256  32714818ad6f98ee0185a52e23a475d89122e3efd2b2c26c733781c28e798c99  vendor/github.com/mendersoftware/mender-artifact/LICENSE
+ sha256  73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/github.com/mendersoftware/openssl/LICENSE
  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/minio/sha256-simd/LICENSE
--sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  vendor/gopkg.in/yaml.v2/LICENSE
-+sha256  f4a394d9345ba64dd2796dc552c31af99c4b686a46c0eeda6538038732f771a9  vendor/github.com/mendersoftware/progressbar/LICENSE
+-sha256  f4a394d9345ba64dd2796dc552c31af99c4b686a46c0eeda6538038732f771a9  vendor/github.com/mendersoftware/progressbar/LICENSE
++sha256  8f5d89b47d7a05a199b77b7e0f362dad391d451ebda4ef48ba11c50c071564c7  vendor/github.com/mendersoftware/progressbar/LICENSE
  #
- # BSD 2 Clause licenses.
+ # BSD 2 Clause license.
  sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
-@@ -28,10 +27,11 @@ sha256  75e1ca97a84a9da6051dee0114333388216f2c4a5a028296b882ff3d57274735  vendor
- sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
- #
- # MIT licenses.
--sha256  dad2b0b2cc2dbdbf95ad5d800ef7588956e74dc2479014829d42be295125c25d  vendor/github.com/stretchr/testify/LICENSE
-+sha256  f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor/github.com/stretchr/testify/LICENSE
- sha256  da277af11b85227490377fbcac6afccc68be560c4fff36ac05ca62de55345fd7  vendor/github.com/urfave/cli/LICENSE
- sha256  51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/sirupsen/logrus/LICENSE
--sha256  7709cc030f078b17809884f92f33a2016944e1180312dc3f1371b02313d313ed  vendor/github.com/klauspost/pgzip/LICENSE
-+sha256  6d2de1cde19c4d2bd8bcd9aaa1d581f4cfa3db9cf71896140330eaa2f2687685  vendor/github.com/klauspost/pgzip/LICENSE
- sha256  a55959c4e3e8917bfa857359bb641115336276a6cc97408fd8197e079fb18470  vendor/github.com/cpuguy83/go-md2man/v2/LICENSE.md
- sha256  c8024e31c1de453fea90f22a221968835cc7af9d520274a2576c9ec9976055b0  vendor/github.com/shurcooL/sanitized_anchor_name/LICENSE
--sha256  a94710b55e03b5285f77d048c5ba61bb9d6ee04a06c0eb90e68821e11b0c707a  vendor/gopkg.in/yaml.v2/LICENSE.libyaml
-+sha256  d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b  vendor/gopkg.in/yaml.v3/LICENSE
-+sha256  08eab1118c80885fa1fa6a6dd7303f65a379fcb3733e063d20d1bbc2c76e6fa1  vendor/github.com/mattn/go-isatty/LICENSE
-diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index 162f57eee3..8a77e67b8c 100644
---- a/package/mender-artifact/mender-artifact.mk
-+++ b/package/mender-artifact/mender-artifact.mk
-@@ -4,15 +4,14 @@
+@@ -41,4 +41,4 @@ sha256  08eab1118c80885fa1fa6a6dd7303f65a379fcb3733e063d20d1bbc2c76e6fa1  vendor
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
+ 
+ # sha256 of all the vendor licenses combined
+-sha256  76417c090c1a53d6fb1409998346e59e43f13139732a46dfc8732e0b4aebba2b  LIC_FILES_CHKSUM.sha256
++sha256  4f3541ea69b9b6e3959679576c146b42ba9a840a9dc4e593bff43e5e3a313d24  LIC_FILES_CHKSUM.sha256
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index c2bee71d93..b4c5761151 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HOST_MENDER_ARTIFACT_VERSION = 3.4.1
-+HOST_MENDER_ARTIFACT_VERSION = 3.5.1
- HOST_MENDER_ARTIFACT_SITE = $(call github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
- HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
- HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	LICENSE \
- 	LIC_FILES_CHKSUM.sha256 \
--	vendor/github.com/mendersoftware/mendertesting/LICENSE \
- 	vendor/github.com/minio/sha256-simd/LICENSE \
--	vendor/gopkg.in/yaml.v2/LICENSE \
-+	vendor/github.com/mendersoftware/progressbar/LICENSE \
- 	vendor/github.com/pkg/errors/LICENSE \
- 	vendor/github.com/pmezard/go-difflib/LICENSE \
- 	vendor/golang.org/x/sys/LICENSE \
-@@ -27,7 +26,8 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	vendor/github.com/klauspost/pgzip/LICENSE \
- 	vendor/github.com/cpuguy83/go-md2man/v2/LICENSE.md \
- 	vendor/github.com/shurcooL/sanitized_anchor_name/LICENSE \
--	vendor/gopkg.in/yaml.v2/LICENSE.libyaml
-+	vendor/gopkg.in/yaml.v3/LICENSE \
-+	vendor/github.com/mattn/go-isatty/LICENSE
- 
- HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
- 
+-MENDER_VERSION = 2.5.0
++MENDER_VERSION = 2.6.0
+ MENDER_SITE = https://github.com/mendersoftware/mender/archive
+ MENDER_SOURCE = $(MENDER_VERSION).tar.gz
+ MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
