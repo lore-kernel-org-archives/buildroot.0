@@ -1,69 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Apr 2021 18:00:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-vpu: fix
- {EULA, COPYING} file hashes
-In-Reply-To: <20210420082953.12107-1-sebastien.szymanski@armadeus.com>
-References: <20210420082953.12107-1-sebastien.szymanski@armadeus.com>
-Message-ID: <20210424160039.GU298901@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 24 Apr 2021 18:09:55 +0200
+Subject: [Buildroot] [git commit] package/uftrace: fix build on i386
+Message-ID: <20210424154303.CBD7B813CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-S?bastien, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=5e15bebd0837a943f98e4dda18cf0c86d259ecbf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-20 10:29 +0200, S?bastien Szymanski spake thusly:
-> make legal-info fails on imx-vpu package:
-> 
-> >>> imx-vpu 5.4.39.3 Collecting legal info
-> ERROR: EULA has wrong sha256 hash:
-> ERROR: expected: a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc
-> ERROR: got     : 7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0
-> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-> 
-> ERROR: COPYING has wrong sha256 hash:
-> ERROR: expected: 69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2
-> ERROR: got     : 2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d
-> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-> 
-> Fix the hashes of these two files.
-> 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+The --arch value on i386 must be "i386", and not i486, i586 or i686,
+so let's have a special case for BR2_i386, and use $(BR2_ARCH) for the
+other supported CPU architectures.
 
-Applied to master,a fter adding an explanation that he hashes are those
-for imx-vpu-hnatro. Thanks!
+Fixes:
 
-Regards,
-Yann E. MORIN.
+  http://autobuild.buildroot.net/results/01a28789bcec9af66137cbce5a8fda2d606de99f/
 
-> ---
->  package/freescale-imx/imx-vpu/imx-vpu.hash | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash b/package/freescale-imx/imx-vpu/imx-vpu.hash
-> index 6ab67510b0..e3a53e3fb6 100644
-> --- a/package/freescale-imx/imx-vpu/imx-vpu.hash
-> +++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed
->  sha256  87cb799a57df654db29403cb74a75ca5185a1517022d3a4a16b8d69056c36127  imx-vpu-5.4.39.3.bin
-> -sha256  69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
-> -sha256  a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
-> +sha256  2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d  COPYING
-> +sha256  7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0  EULA
-> -- 
-> 2.26.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uftrace/uftrace.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/uftrace/uftrace.mk b/package/uftrace/uftrace.mk
+index f42bbbddaa..7c9b9b1992 100644
+--- a/package/uftrace/uftrace.mk
++++ b/package/uftrace/uftrace.mk
+@@ -15,6 +15,12 @@ UFTRACE_CONFIGURE_OPTS = \
+ 	--without-libncurses \
+ 	--without-capstone
+ 
++ifeq ($(BR2_i386),y)
++UFTRACE_ARCH = i386
++else
++UFTRACE_ARCH = $(BR2_ARCH)
++endif
++
+ # Only --without-<foo> options are supported.
+ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ UFTRACE_DEPENDENCIES += elfutils
+@@ -37,7 +43,7 @@ define UFTRACE_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) \
+ 		LDFLAGS="$(UFTRACE_LDFLAGS)" \
+ 		./configure \
+-		--arch=$(BR2_ARCH) \
++		--arch=$(UFTRACE_ARCH) \
+ 		--prefix=/usr \
+ 		$(UFTRACE_CONFIGURE_OPTS) \
+ 		-o $(@D)/.config)
