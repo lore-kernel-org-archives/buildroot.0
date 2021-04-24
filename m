@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Apr 2021 23:14:29 +0200
+Date: Sat, 24 Apr 2021 23:15:00 +0200
 Subject: [Buildroot] [PATCH v2,
- 1/2] package/cmake: bump to version 3.16.9
-In-Reply-To: <20210424121950.1474629-1-fontaine.fabrice@gmail.com>
+ 2/2] support/dependencies: set cmake version min to 3.16
+In-Reply-To: <20210424121950.1474629-2-fontaine.fabrice@gmail.com>
 References: <20210424121950.1474629-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210424211429.GW298901@scaer>
+ <20210424121950.1474629-2-fontaine.fabrice@gmail.com>
+Message-ID: <20210424211500.GX298901@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,7 +15,11 @@ To: buildroot@busybox.net
 Fabrice, All,
 
 On 2021-04-24 14:19 +0200, Fabrice Fontaine spake thusly:
-> Update indentation in hash file (two spaces)
+> domoticz requires cmake 3.16 since version 2020.2 and
+> https://github.com/domoticz/domoticz/commit/275effddf0921698197dbc38bde199c48d4956f9
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/0caec85c70341036a039dbc337ad99196b6005a9
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -24,41 +29,25 @@ Regards,
 Yann E. MORIN.
 
 > ---
-> Changes v1 -> v2:
->  - Add patch to bump cmake from 3.15.5 to 3.16.9
+>  support/dependencies/check-host-cmake.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->  package/cmake/cmake.hash | 6 +++---
->  package/cmake/cmake.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-> index 983c292983..97e83a274c 100644
-> --- a/package/cmake/cmake.hash
-> +++ b/package/cmake/cmake.hash
-> @@ -1,5 +1,5 @@
-> -# From https://cmake.org/files/v3.15/cmake-3.15.5-SHA-256.txt
-> -sha256 fbdd7cef15c0ced06bb13024bfda0ecc0dedbcaaaa6b8a5d368c75255243beb4  cmake-3.15.5.tar.gz
-> +# From https://cmake.org/files/v3.16/cmake-3.16.9-SHA-256.txt
-> +sha256  1708361827a5a0de37d55f5c9698004c035abb1de6120a376d5d59a81630191f  cmake-3.16.9.tar.gz
->  
->  # Locally calculated
-> -sha256 dc628fb936a5d229296d42083f9a8218aa32204c016919e784404c9ec58776e9  Copyright.txt
-> +sha256  dc628fb936a5d229296d42083f9a8218aa32204c016919e784404c9ec58776e9  Copyright.txt
-> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-> index 90fe868fa5..b1b214982e 100644
-> --- a/package/cmake/cmake.mk
-> +++ b/package/cmake/cmake.mk
-> @@ -4,8 +4,8 @@
+> diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+> index e1bbcd62c8..dfc252e919 100644
+> --- a/support/dependencies/check-host-cmake.mk
+> +++ b/support/dependencies/check-host-cmake.mk
+> @@ -1,9 +1,9 @@
+> -# Set this to either 3.15 or higher, depending on the highest minimum
+> +# Set this to either 3.16 or higher, depending on the highest minimum
+>  # version required by any of the packages bundled in Buildroot. If a
+>  # package is bumped or a new one added, and it requires a higher
+>  # version, our cmake infra will catch it and build its own.
 >  #
->  ################################################################################
+> -BR2_CMAKE_VERSION_MIN = 3.15
+> +BR2_CMAKE_VERSION_MIN = 3.16
 >  
-> -CMAKE_VERSION_MAJOR = 3.15
-> -CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).5
-> +CMAKE_VERSION_MAJOR = 3.16
-> +CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).9
->  CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
->  CMAKE_LICENSE = BSD-3-Clause
->  CMAKE_LICENSE_FILES = Copyright.txt
+>  BR2_CMAKE_CANDIDATES ?= cmake cmake3
+>  BR2_CMAKE ?= $(call suitable-host-package,cmake,\
 > -- 
 > 2.30.2
 > 
