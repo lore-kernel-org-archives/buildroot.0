@@ -1,52 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Apr 2021 18:15:04 +0200
-Subject: [Buildroot] [git commit] package/usb_modeswitch: bump to version
- 2.6.1
-Message-ID: <20210424154859.4798983991@busybox.osuosl.org>
+Date: Sat, 24 Apr 2021 18:15:16 +0200
+Subject: [Buildroot] [git commit] package/python-sortedcontainers: bump to
+ version 2.3.0
+Message-ID: <20210424154859.629BD83991@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9192f465ea0ae420f9a89927f7f9a80028d9b379
+commit: https://git.buildroot.net/buildroot/commit/?id=ee87422f97f14229c8b954b1c9133f4bebe8a319
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+- Update indentation in hash file (two spaces)
+- Update hash of LICENSE file (update in year:
+  https://github.com/grantjenks/python-sortedcontainers/commit/d127cdde5f77804fe51f355fdad469a0ac7caede)
 
-https://www.draisberghof.de/usb_modeswitch/ChangeLog
+https://github.com/grantjenks/python-sortedcontainers/blob/v2.3.0/HISTORY.rst
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/usb_modeswitch/usb_modeswitch.hash | 8 ++++----
- package/usb_modeswitch/usb_modeswitch.mk   | 2 +-
+ package/python-sortedcontainers/python-sortedcontainers.hash | 6 +++---
+ package/python-sortedcontainers/python-sortedcontainers.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
-index 4cbd5dbea2..765a2438c2 100644
---- a/package/usb_modeswitch/usb_modeswitch.hash
-+++ b/package/usb_modeswitch/usb_modeswitch.hash
+diff --git a/package/python-sortedcontainers/python-sortedcontainers.hash b/package/python-sortedcontainers/python-sortedcontainers.hash
+index 311bb77e17..d97687dd19 100644
+--- a/package/python-sortedcontainers/python-sortedcontainers.hash
++++ b/package/python-sortedcontainers/python-sortedcontainers.hash
 @@ -1,5 +1,5 @@
--# From http://www.draisberghof.de/usb_modeswitch/
--md5	 be73dcc84025794081a1d4d4e5a75e4c  usb-modeswitch-2.6.0.tar.bz2
-+# From https://www.draisberghof.de/usb_modeswitch/usb-modeswitch-versions.xml
-+md5  69d00d6ed7097b97d972a159d14cfba1  usb-modeswitch-2.6.1.tar.bz2
- # Locally calculated
--sha256	c215236e6bada6e659fc195a31d611ea298a4bdb4d57a0d68c553b56585f8ba3  usb-modeswitch-2.6.0.tar.bz2
--sha256	6195429209313925c0eba6c0da4ee7a6cb4277b99e35c886913f80f91ec20b94  COPYING
-+sha256  5195d9e136e52f658f19e9f93e4f982b1b67bffac197d0a455cd8c2cd245fa34  usb-modeswitch-2.6.1.tar.bz2
-+sha256  6195429209313925c0eba6c0da4ee7a6cb4277b99e35c886913f80f91ec20b94  COPYING
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index 064e1960b0..f2ee004b42 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/sortedcontainers/json
+-md5	41a4a1eaf7b85e6b3beb14cfb160bc27  sortedcontainers-2.1.0.tar.gz
+-sha256	974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a  sortedcontainers-2.1.0.tar.gz
++md5  660260df593a3769c7b5854f13d574c0  sortedcontainers-2.3.0.tar.gz
++sha256  59cc937650cf60d677c16775597c89a960658a09cf7c1a668f86e1e4464b10a1  sortedcontainers-2.3.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	7dcf4a5137118a925727b8a1690bc6ea70b156ee6739dbb51fd4d386718d6ce5  LICENSE
++sha256  1db7cae7fce6452e2e608e401a0f953e0133e4c2d75db69fb8ae851d2086f5b6  LICENSE
+diff --git a/package/python-sortedcontainers/python-sortedcontainers.mk b/package/python-sortedcontainers/python-sortedcontainers.mk
+index 43f662a89f..31cab76fd7 100644
+--- a/package/python-sortedcontainers/python-sortedcontainers.mk
++++ b/package/python-sortedcontainers/python-sortedcontainers.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--USB_MODESWITCH_VERSION = 2.6.0
-+USB_MODESWITCH_VERSION = 2.6.1
- USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
- USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DEPENDENCIES = libusb
+-PYTHON_SORTEDCONTAINERS_VERSION = 2.1.0
++PYTHON_SORTEDCONTAINERS_VERSION = 2.3.0
+ PYTHON_SORTEDCONTAINERS_SOURCE = sortedcontainers-$(PYTHON_SORTEDCONTAINERS_VERSION).tar.gz
+-PYTHON_SORTEDCONTAINERS_SITE = https://files.pythonhosted.org/packages/29/e0/135df2e733790a3d3bcda970fd080617be8cea3bd98f411e76e6847c17ef
++PYTHON_SORTEDCONTAINERS_SITE = https://files.pythonhosted.org/packages/14/10/6a9481890bae97da9edd6e737c9c3dec6aea3fc2fa53b0934037b35c89ea
+ PYTHON_SORTEDCONTAINERS_SETUP_TYPE = setuptools
+ PYTHON_SORTEDCONTAINERS_LICENSE = Apache-2.0
+ PYTHON_SORTEDCONTAINERS_LICENSE_FILES = LICENSE
