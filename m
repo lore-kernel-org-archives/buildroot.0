@@ -1,128 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Apr 2021 10:50:16 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/uboot-tools: fix build with FIT
-In-Reply-To: <20210424223110.2300999-1-fontaine.fabrice@gmail.com>
-References: <20210424223110.2300999-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210425085016.GY298901@scaer>
+Date: Sun, 25 Apr 2021 10:51:51 +0200
+Subject: [Buildroot] [git commit] package/multipath-tools: fix legal-info
+Message-ID: <20210425082454.6B5D485F2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=75fa35e1ea787094fed53b9f6f89b11116b32408
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-25 00:31 +0200, Fabrice Fontaine spake thusly:
-> Build with FIT is broken since bump to version 2021.04 in commit
-> a4c38ae470e6c472f0e0cdfbfb8e2e76f1e8047c
-> 
-> Fake a generated/autoconf.h with just the needed stuff as suggested by
-> Yann E. Morin in
-> https://patchwork.ozlabs.org/project/buildroot/patch/20210422210559.707845-1-fontaine.fabrice at gmail.com
-> 
-> It seems that an empty file is enough as make options are still
-> interpreted
-> 
-> As a side-effect, drop third patch
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/5771a7413c98ec202c9623672787a1eee74da5e0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Commit 55a7382564e415dfcd29ebcf0b05577a6625d8ba forgot to update hash of
+REAMDE.md (changes are not related to license:
+https://github.com/opensvc/multipath-tools/commit/021c2df40f367559e5fa1cf3fe3734e4ec5854ae
+https://github.com/opensvc/multipath-tools/commit/748d4453734937f372a930cfed3445f9903a9934)
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/9aa925b1a3fe8f0e38bef742c42304101b89b6b2
 
-Let's see how the defconfigs now behave in the pipelines...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/multipath-tools/multipath-tools.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2 (after review of Yann E. Morin):
->  - Drop patch and fake a generated/autoconf.h
-> 
->  .../0003-drop-autoconf.h-from-tools.patch     | 36 -------------------
->  package/uboot-tools/uboot-tools.mk            |  4 +++
->  2 files changed, 4 insertions(+), 36 deletions(-)
->  delete mode 100644 package/uboot-tools/0003-drop-autoconf.h-from-tools.patch
-> 
-> diff --git a/package/uboot-tools/0003-drop-autoconf.h-from-tools.patch b/package/uboot-tools/0003-drop-autoconf.h-from-tools.patch
-> deleted file mode 100644
-> index 09ee40bec0..0000000000
-> --- a/package/uboot-tools/0003-drop-autoconf.h-from-tools.patch
-> +++ /dev/null
-> @@ -1,36 +0,0 @@
-> -From 0552a8ffdfbb9807fcef4498011907caa5de2ace Mon Sep 17 00:00:00 2001
-> -From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-> -Date: Thu, 9 Jan 2020 15:11:32 +0100
-> -Subject: [PATCH] drop autoconf.h from tools
-> -MIME-Version: 1.0
-> -Content-Type: text/plain; charset=UTF-8
-> -Content-Transfer-Encoding: 8bit
-> -
-> -We need to build u-boot tools without a board configuration for the target.
-> -
-> -imximage uses the DCD address from Kconfig to display this information
-> -to the user. The default value for all i.MX platforms is 0x00910000,
-> -except for i.MX7ULP, which has a DCD address of 0x2f010000.
-> -
-> -The default value printed before version 2020.01 was 0x00910000.
-> -
-> -Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ----
-> - tools/imximage.c | 1 -
-> - 1 file changed, 1 deletion(-)
-> -
-> -diff --git a/tools/imximage.c b/tools/imximage.c
-> -index d7edd3c52f..f8d21fa06a 100644
-> ---- a/tools/imximage.c
-> -+++ b/tools/imximage.c
-> -@@ -11,7 +11,6 @@
-> - #include "imagetool.h"
-> - #include <image.h>
-> - #include "imximage.h"
-> --#include <generated/autoconf.h>
-> - 
-> - #define UNDEFINED 0xFFFFFFFF
-> - 
-> --- 
-> -2.25.0
-> -
-> diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-> index 179e39f9c0..8963d6182e 100644
-> --- a/package/uboot-tools/uboot-tools.mk
-> +++ b/package/uboot-tools/uboot-tools.mk
-> @@ -20,6 +20,8 @@ HOST_UBOOT_TOOLS_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
->  define UBOOT_TOOLS_CONFIGURE_CMDS
->  	mkdir -p $(@D)/include/config
->  	touch $(@D)/include/config/auto.conf
-> +	mkdir -p $(@D)/include/generated
-> +	touch $(@D)/include/generated/autoconf.h
->  endef
->  
->  UBOOT_TOOLS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)" \
-> @@ -94,6 +96,8 @@ endef
->  define HOST_UBOOT_TOOLS_CONFIGURE_CMDS
->  	mkdir -p $(@D)/include/config
->  	touch $(@D)/include/config/auto.conf
-> +	mkdir -p $(@D)/include/generated
-> +	touch $(@D)/include/generated/autoconf.h
->  endef
->  
->  HOST_UBOOT_TOOLS_MAKE_OPTS = HOSTCC="$(HOSTCC)" \
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+index d83741cf08..7b8cfe98f6 100644
+--- a/package/multipath-tools/multipath-tools.hash
++++ b/package/multipath-tools/multipath-tools.hash
+@@ -4,4 +4,4 @@ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENS
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
+-sha256  afa9db94ff46f8d011251273f547ba958da6a0150a2b797b10fa8c8cfa74bbda  README.md
++sha256  b1bd70cc61ab014cc2e744af6b117db481ef4fa5d59cb3a21d86059935c666df  README.md
