@@ -1,63 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Apr 2021 08:45:16 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/network-manager:
- bump to version 1.22.16
-Message-ID: <20210425065503.B730781539@busybox.osuosl.org>
+Date: Sun, 25 Apr 2021 09:00:33 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/docker-cli: add
+ CPE variables
+Message-ID: <20210425065504.2E28E81539@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6e09cf9a2dd02ef3a2a98759a367f0ca7777ae0
+commit: https://git.buildroot.net/buildroot/commit/?id=bac683c71d6c4f116bc983800442e1f7357d8177
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Notice: This fixes a security issue, but in code not used in Buildroot:
+cpe:2.3:a:docker:docker is a valid CPE identifier for this package:
 
-ifcfg-rh: handle "802-1x.{,phase2-}ca-path". Otherwise setting this
-property silently fails and a profile might accidentally not perform
-any authentication (CVE-2020-10754).
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adocker%3Adocker
 
-Update indentation in hash file (two spaces)
-
-https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/1.22.16/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Peter: Clarify that security issue isn't applicable to Buildroot]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6db751e1e129e62fde0b9c3d7de69f21f639e8b3)
+(cherry picked from commit b0b37310b782523a3ca97348a0ff6b0dc4830aa5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/network-manager/network-manager.hash | 10 +++++-----
- package/network-manager/network-manager.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/docker-cli/docker-cli.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index 93a9b5017e..aef06dde2c 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -1,6 +1,6 @@
--# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.22.10.sha256sum
--sha256 2b29ccc1531ba7ebba95a97f40c22b963838e8b6833745efe8e6fb71fd8fca77  NetworkManager-1.22.10.tar.xz
-+# From https://download.gnome.org/sources/NetworkManager/1.22/NetworkManager-1.22.16.sha256sum
-+sha256  377aa053752eaa304b72c9906f9efcd9fbd5f7f6cb4cd4ad72425a68982cffc6  NetworkManager-1.22.16.tar.xz
- # Locally computed
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
--sha256 f0543c137bc0eece552d42642d1bab31707ca3b3663d9c7a81ac3b270a4780e7  CONTRIBUTING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-+sha256  f0543c137bc0eece552d42642d1bab31707ca3b3663d9c7a81ac3b270a4780e7  CONTRIBUTING
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 9402564cb4..607c2b402b 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index d710bb2fee..39b4d09c76 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -12,6 +12,9 @@ DOCKER_CLI_LICENSE_FILES = LICENSE
  
- NETWORK_MANAGER_VERSION_MAJOR = 1.22
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).16
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
+ DOCKER_CLI_DEPENDENCIES = host-pkgconf
+ 
++DOCKER_CLI_CPE_ID_VENDOR = docker
++DOCKER_CLI_CPE_ID_PRODUCT = docker
++
+ DOCKER_CLI_TAGS = autogen
+ DOCKER_CLI_BUILD_TARGETS = cmd/docker
+ DOCKER_CLI_GOMOD = github.com/docker/cli
