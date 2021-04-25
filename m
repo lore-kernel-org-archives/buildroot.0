@@ -1,22 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 25 Apr 2021 07:45:59 +0000
-Subject: [Buildroot] [Bug 13741] genext2fs does not allow to set perms of
- root node
-In-Reply-To: <bug-13741-163@https.bugs.busybox.net/>
-References: <bug-13741-163@https.bugs.busybox.net/>
-Message-ID: <bug-13741-163-jME7LsZf9q@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 25 Apr 2021 09:47:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server:
+ security bump version to 1.20.11
+In-Reply-To: <20210415062258.10838-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 15 Apr 2021 08:22:58 +0200")
+References: <20210415062258.10838-1-bernd.kuhls@t-online.de>
+Message-ID: <87eeeyrekq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13741
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
-Fixed for 2021.02.x in:
-https://git.buildroot.net/buildroot/commit/?h=2021.02.x&id=a4822f31ca985192595cf04246e4d6c1f88f168f
+ > Fixes CVE-2021-3472:
+ > https://lists.x.org/archives/xorg-announce/2021-April/003080.html
+
+ > Release notes:
+ > https://lists.x.org/archives/xorg-announce/2021-April/003081.html
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed to 2021.02.x, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
