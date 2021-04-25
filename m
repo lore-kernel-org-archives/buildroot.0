@@ -1,51 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Apr 2021 08:55:19 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/python-aioconsole: bump to version 0.3.1
-Message-ID: <20210425065504.1851781539@busybox.osuosl.org>
+Date: Sun, 25 Apr 2021 08:51:52 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/clamav: security
+ bump to version 0.103.2
+Message-ID: <20210425065503.DF5ED860ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25931d53c7248b20cb40e877457493d2230af7ca
+commit: https://git.buildroot.net/buildroot/commit/?id=58055d171a7206bb7b584aa5896c497f12419758
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-https://github.com/vxgmichel/aioconsole/releases/tag/v0.3.1
+Fixes the following security issues:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- CVE-2021-1386: Fix for UnRAR DLL load privilege escalation.  Affects
+  0.103.1 and prior on Windows only.
+
+- CVE-2021-1252: Fix for Excel XLM parser infinite loop.  Affects 0.103.0
+  and 0.103.1 only.
+
+- CVE-2021-1404: Fix for PDF parser buffer over-read; possible crash.
+  Affects 0.103.0 and 0.103.1 only.
+
+- CVE-2021-1405: Fix for mail parser NULL-dereference crash.  Affects
+  0.103.1 and prior.
+
+- CVE-2021-27506: The ClamAV Engine (Version 0.103.1 and below) embedded in
+  Storsmshield Network Security (1.0 to 4.1.5) is subject to DoS in case of
+  parsing of malformed png files.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0bc4a7ea6d0f51fae96a5c0b6925be86d8bbdf7a)
+(cherry picked from commit 7aee27c2b9f4da87b50d8b330d086c695d900147)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-aioconsole/python-aioconsole.hash | 4 ++--
- package/python-aioconsole/python-aioconsole.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
-index 0aa9a7882c..dea2216fcf 100644
---- a/package/python-aioconsole/python-aioconsole.hash
-+++ b/package/python-aioconsole/python-aioconsole.hash
-@@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/aioconsole/json
--md5  a8b0640a1e2a3869baf4efcbb1182fbe  aioconsole-0.3.0.tar.gz
--sha256  b84724e6b93d1306a909974864df377236cf4bab8e0594096fed7936207205c5  aioconsole-0.3.0.tar.gz
-+md5  66d4b05e3bc75267daf0f773d839f62b  aioconsole-0.3.1.tar.gz
-+sha256  7c038bb40b7690bf5be6b17154830b7bff25e7be1c02d8420a346c3efbd5d8e5  aioconsole-0.3.1.tar.gz
-diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
-index 5c26d863c0..b32d2bea0f 100644
---- a/package/python-aioconsole/python-aioconsole.mk
-+++ b/package/python-aioconsole/python-aioconsole.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 1b2325870d..679240985b 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  7308c47b89b268af3b9f36140528927a49ff3e633a9c9c0aac2712d81056e257  clamav-0.103.1.tar.gz
++sha256  d4b5d0ac666262e423a326fb54778caa7c69624d6c3f9542895feb8478271bd2  clamav-0.103.2.tar.gz
+ sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 4cd13fb827..6ab473ab88 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_AIOCONSOLE_VERSION = 0.3.0
-+PYTHON_AIOCONSOLE_VERSION = 0.3.1
- PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
--PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/d1/bc/2e52bd41293e63d95fcb6c5de406d43ccbb91255a48feaa22c1b8e2e4a40
-+PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/5a/12/fce04ddc0a8ebd6482e5ec293d8bda47c9e05c82826b061f7b73523b8601
- PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
- PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
- 
+-CLAMAV_VERSION = 0.103.1
++CLAMAV_VERSION = 0.103.2
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
