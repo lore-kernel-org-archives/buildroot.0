@@ -1,56 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Apr 2021 09:46:43 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/x11r7/xserver_xorg-server: security bump version to 1.20.11
-Message-ID: <20210425072013.7AC8F860DF@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 25 Apr 2021 10:36:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: fix legal-info
+Message-ID: <20210425083610.2307333-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7d613f470860ab333f131c85b9e251c9f662618
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+Commit 55a7382564e415dfcd29ebcf0b05577a6625d8ba forgot to update hash of
+REAMDE.md (changes are not related to license:
+https://github.com/opensvc/multipath-tools/commit/021c2df40f367559e5fa1cf3fe3734e4ec5854ae
+https://github.com/opensvc/multipath-tools/commit/748d4453734937f372a930cfed3445f9903a9934)
 
-Fixes CVE-2021-3472:
-https://lists.x.org/archives/xorg-announce/2021-April/003080.html
+Fixes:
+ - http://autobuild.buildroot.org/results/9aa925b1a3fe8f0e38bef742c42304101b89b6b2
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2021-April/003081.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d12c8c43fd9fa8ab276d2c2e4e2ca13ce80c6fd4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/multipath-tools/multipath-tools.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index d6b3c92e08..9876255c8e 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2020-December/003067.html
--sha256  977420c082450dc808de301ef56af4856d653eea71519a973c3490a780cb7c99  xorg-server-1.20.10.tar.bz2
--sha512  a07bee380bb72f2117fe6f831a6e4aded19bea1f2b36e42a019a30348e98d6fe65c0617cf819be9c6b405502f88cafb829df30aab32393774b71f1418a4cefae  xorg-server-1.20.10.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-April/003081.html
-+sha256  914c796e3ffabe1af48071d40ccc85e92117c97a9082ed1df29e4d64e3c34c49  xorg-server-1.20.11.tar.bz2
-+sha512  1017015b9fd5d53788abe3641d877e6df8609841fa5c1847c0a5e133ddcc1b758a5d695304ebd36828099ec201a85b6b70b46f5ea4f81c5bd3a16fa6e175e3c2  xorg-server-1.20.11.tar.bz2
- 
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index fa8ae13b8c..3fa77cd4f0 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 1.20.10
-+XSERVER_XORG_SERVER_VERSION = 1.20.11
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+index d83741cf08..7b8cfe98f6 100644
+--- a/package/multipath-tools/multipath-tools.hash
++++ b/package/multipath-tools/multipath-tools.hash
+@@ -4,4 +4,4 @@ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENS
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
+-sha256  afa9db94ff46f8d011251273f547ba958da6a0150a2b797b10fa8c8cfa74bbda  README.md
++sha256  b1bd70cc61ab014cc2e744af6b117db481ef4fa5d59cb3a21d86059935c666df  README.md
+-- 
+2.30.2
