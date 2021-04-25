@@ -1,71 +1,128 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 25 Apr 2021 10:49:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-typepy: bump to version 1.1.5
-Message-ID: <20210425084913.2382865-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Apr 2021 10:50:16 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/uboot-tools: fix build with FIT
+In-Reply-To: <20210424223110.2300999-1-fontaine.fabrice@gmail.com>
+References: <20210424223110.2300999-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210425085016.GY298901@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- python-dateutil and python-pytz are optional since version 0.0.20 and
-  https://github.com/thombashi/typepy/commit/a54dc97598d9d69e5f6092cf918d7889b9a31f61
-- python 2 and python-six dependency have been dropped in version 1.0.0 and
-  https://github.com/thombashi/typepy/commit/764812d01d831d149b19a871a695ae3a9e39485b
-- Update indentation in hash file (two spaces)
+Fabrice, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-typepy/Config.in          | 5 +----
- package/python-typepy/python-typepy.hash | 8 ++++----
- package/python-typepy/python-typepy.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 10 deletions(-)
+On 2021-04-25 00:31 +0200, Fabrice Fontaine spake thusly:
+> Build with FIT is broken since bump to version 2021.04 in commit
+> a4c38ae470e6c472f0e0cdfbfb8e2e76f1e8047c
+> 
+> Fake a generated/autoconf.h with just the needed stuff as suggested by
+> Yann E. Morin in
+> https://patchwork.ozlabs.org/project/buildroot/patch/20210422210559.707845-1-fontaine.fabrice at gmail.com
+> 
+> It seems that an empty file is enough as make options are still
+> interpreted
+> 
+> As a side-effect, drop third patch
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/5771a7413c98ec202c9623672787a1eee74da5e0
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/python-typepy/Config.in b/package/python-typepy/Config.in
-index 0d58efb341..fd3b983186 100644
---- a/package/python-typepy/Config.in
-+++ b/package/python-typepy/Config.in
-@@ -1,10 +1,7 @@
- config BR2_PACKAGE_PYTHON_TYPEPY
- 	bool "python-typepy"
--	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder
--	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
-+	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
--	select BR2_PACKAGE_PYTHON_PYTZ # runtime
--	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
- 	  A Python library for variable type
- 	  checker/validator/converter at a run time.
-diff --git a/package/python-typepy/python-typepy.hash b/package/python-typepy/python-typepy.hash
-index 03f7aef2e5..e4d84e9bfc 100644
---- a/package/python-typepy/python-typepy.hash
-+++ b/package/python-typepy/python-typepy.hash
-@@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/typepy/json
--md5	b9abd4d661dabe512e95ca69ddb65d55  typepy-0.0.20.tar.gz
--# Locally computed
--sha256	a1a5b9438670d4a5d9f882b7499ea85d06dc384577bb7636cb29d903288bca8c  typepy-0.0.20.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/typepy/json
-+md5  cc9ceef1f04a8ff4b979dc23b96f2e80  typepy-1.1.5.tar.gz
-+sha256  1bbe790bb8d1b43b4541b235678974d5aee2357e1948cdf17cb4c14cbe4a2a82  typepy-1.1.5.tar.gz
-+# Locally computed sha256 checksums
- sha256  bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
-diff --git a/package/python-typepy/python-typepy.mk b/package/python-typepy/python-typepy.mk
-index 33d8091998..6d8433e136 100644
---- a/package/python-typepy/python-typepy.mk
-+++ b/package/python-typepy/python-typepy.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_TYPEPY_VERSION = 0.0.20
-+PYTHON_TYPEPY_VERSION = 1.1.5
- PYTHON_TYPEPY_SOURCE = typepy-$(PYTHON_TYPEPY_VERSION).tar.gz
--PYTHON_TYPEPY_SITE = https://pypi.python.org/packages/88/98/c79a19ae571d713fa0b10bc7e0fe611e53c542720b5a9dd2691ca15b3dd8
-+PYTHON_TYPEPY_SITE = https://files.pythonhosted.org/packages/08/c8/ebfa4381563f1946a7cd2b03fab14df641c3a9acf8e6ca5f5787dd1f735a
- PYTHON_TYPEPY_SETUP_TYPE = setuptools
- PYTHON_TYPEPY_LICENSE = MIT
- PYTHON_TYPEPY_LICENSE_FILES = LICENSE
+Applied to master, thanks.
+
+Let's see how the defconfigs now behave in the pipelines...
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> Changes v1 -> v2 (after review of Yann E. Morin):
+>  - Drop patch and fake a generated/autoconf.h
+> 
+>  .../0003-drop-autoconf.h-from-tools.patch     | 36 -------------------
+>  package/uboot-tools/uboot-tools.mk            |  4 +++
+>  2 files changed, 4 insertions(+), 36 deletions(-)
+>  delete mode 100644 package/uboot-tools/0003-drop-autoconf.h-from-tools.patch
+> 
+> diff --git a/package/uboot-tools/0003-drop-autoconf.h-from-tools.patch b/package/uboot-tools/0003-drop-autoconf.h-from-tools.patch
+> deleted file mode 100644
+> index 09ee40bec0..0000000000
+> --- a/package/uboot-tools/0003-drop-autoconf.h-from-tools.patch
+> +++ /dev/null
+> @@ -1,36 +0,0 @@
+> -From 0552a8ffdfbb9807fcef4498011907caa5de2ace Mon Sep 17 00:00:00 2001
+> -From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+> -Date: Thu, 9 Jan 2020 15:11:32 +0100
+> -Subject: [PATCH] drop autoconf.h from tools
+> -MIME-Version: 1.0
+> -Content-Type: text/plain; charset=UTF-8
+> -Content-Transfer-Encoding: 8bit
+> -
+> -We need to build u-boot tools without a board configuration for the target.
+> -
+> -imximage uses the DCD address from Kconfig to display this information
+> -to the user. The default value for all i.MX platforms is 0x00910000,
+> -except for i.MX7ULP, which has a DCD address of 0x2f010000.
+> -
+> -The default value printed before version 2020.01 was 0x00910000.
+> -
+> -Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ----
+> - tools/imximage.c | 1 -
+> - 1 file changed, 1 deletion(-)
+> -
+> -diff --git a/tools/imximage.c b/tools/imximage.c
+> -index d7edd3c52f..f8d21fa06a 100644
+> ---- a/tools/imximage.c
+> -+++ b/tools/imximage.c
+> -@@ -11,7 +11,6 @@
+> - #include "imagetool.h"
+> - #include <image.h>
+> - #include "imximage.h"
+> --#include <generated/autoconf.h>
+> - 
+> - #define UNDEFINED 0xFFFFFFFF
+> - 
+> --- 
+> -2.25.0
+> -
+> diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+> index 179e39f9c0..8963d6182e 100644
+> --- a/package/uboot-tools/uboot-tools.mk
+> +++ b/package/uboot-tools/uboot-tools.mk
+> @@ -20,6 +20,8 @@ HOST_UBOOT_TOOLS_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
+>  define UBOOT_TOOLS_CONFIGURE_CMDS
+>  	mkdir -p $(@D)/include/config
+>  	touch $(@D)/include/config/auto.conf
+> +	mkdir -p $(@D)/include/generated
+> +	touch $(@D)/include/generated/autoconf.h
+>  endef
+>  
+>  UBOOT_TOOLS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)" \
+> @@ -94,6 +96,8 @@ endef
+>  define HOST_UBOOT_TOOLS_CONFIGURE_CMDS
+>  	mkdir -p $(@D)/include/config
+>  	touch $(@D)/include/config/auto.conf
+> +	mkdir -p $(@D)/include/generated
+> +	touch $(@D)/include/generated/autoconf.h
+>  endef
+>  
+>  HOST_UBOOT_TOOLS_MAKE_OPTS = HOSTCC="$(HOSTCC)" \
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.30.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
