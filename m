@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Apr 2021 08:52:13 +0200
-Subject: [Buildroot] [git commit] package/clamav: security bump to
- version 0.103.2
-In-Reply-To: <20210410161423.0124481842@busybox.osuosl.org> (Peter Korsgaard's
- message of "Sat, 10 Apr 2021 18:39:56 +0200")
-References: <20210410161423.0124481842@busybox.osuosl.org>
-Message-ID: <8735veua8y.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Apr 2021 08:52:32 +0200
+Subject: [Buildroot] [PATCH] package/i2c-tools: add upstream post-4.2
+ i2ctransfer fix
+In-Reply-To: <87czv140wk.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sun, 11 Apr 2021 11:37:47 +0200")
+References: <20210410081252.17180-1-peter@korsgaard.com>
+ <87pmz18jkd.fsf@tarshish> <87czv140wk.fsf@dell.be.48ers.dk>
+Message-ID: <87y2d6svnz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +15,20 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=7aee27c2b9f4da87b50d8b330d086c695d900147
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+ >> Hi Peter,
+ >> On Sat, Apr 10 2021, Peter Korsgaard wrote:
 
- > Fixes the following security issues:
+ >>> i2c-tools 4.2 contained an invalid check, leading to verbose false-positive
+ >>> warning messages when the variable length ({r,w}?) option is used:
+ >>> 
+ >>> https://www.spinics.net/lists/linux-i2c/msg50032.html
 
- > - CVE-2021-1386: Fix for UnRAR DLL load privilege escalation.  Affects
- >   0.103.1 and prior on Windows only.
+ >> Maybe also add a link to Jean's response:
 
- > - CVE-2021-1252: Fix for Excel XLM parser infinite loop.  Affects 0.103.0
- >   and 0.103.1 only.
+ >> https://www.spinics.net/lists/linux-i2c/msg50253.html
 
- > - CVE-2021-1404: Fix for PDF parser buffer over-read; possible crash.
- >   Affects 0.103.0 and 0.103.1 only.
-
- > - CVE-2021-1405: Fix for mail parser NULL-dereference crash.  Affects
- >   0.103.1 and prior.
-
- > - CVE-2021-27506: The ClamAV Engine (Version 0.103.1 and below) embedded in
- >   Storsmshield Network Security (1.0 to 4.1.5) is subject to DoS in case of
- >   parsing of malformed png files.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Committed with the link added, thanks.
 
 Committed to 2021.02.x, thanks.
 
