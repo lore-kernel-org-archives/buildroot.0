@@ -1,67 +1,105 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 25 Apr 2021 14:41:56 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] Config.in: enable FORTIFY_SOURCE,
- PIC/PIE, RELRO, SSP by default
-Message-ID: <20210425124156.2394741-1-fontaine.fabrice@gmail.com>
+Date: Sun, 25 Apr 2021 15:38:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: fix performance issue
+ in static build
+Message-ID: <20210425133845.2459496-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enhance security by enabling FORTIFY_SOURCE, PIC/PIE, RELRO and SSP by
-default.
+Revert commit 8c2c959b028d44f5518d4445f864aedae3d90406 as no-dso has
+been added back to openssl since version 1.1.1e and
+https://github.com/openssl/openssl/commit/8dcd57461972dceaaf014b71d173d0a8758e7054
+and because gcc no-asm has performance issue
 
-This could help making IoT more secure and fight against the assumption
-that buildroot does not support binary hardening (see
-https://cyber-itl.org/2019/08/26/iot-data-writeup.html)
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=13751
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Use RELRO_PARTIAL if toolchain does not support PIE
- - Enable BR2_FORTIFY_SOURCE_2 by default
+ package/libopenssl/Config.in     |  4 ----
+ package/libopenssl/libopenssl.mk | 25 ++++++++++++++++++++-----
+ 2 files changed, 20 insertions(+), 9 deletions(-)
 
- Config.in | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/Config.in b/Config.in
-index e35a78fb71..db6d4f01b4 100644
---- a/Config.in
-+++ b/Config.in
-@@ -715,6 +715,7 @@ comment "Security Hardening Options"
+diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
+index 8909e36b9e..723fd282a4 100644
+--- a/package/libopenssl/Config.in
++++ b/package/libopenssl/Config.in
+@@ -14,10 +14,6 @@ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC
  
- config BR2_PIC_PIE
- 	bool "Build code with PIC/PIE"
-+	default y
- 	depends on BR2_SHARED_LIBS
- 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
- 	help
-@@ -727,7 +728,7 @@ comment "PIC/PIE needs a toolchain w/ PIE"
+ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH
+ 	string
+-	# Use "gcc" minimalistic target to disable DSO
+-	# no-asm is needed with generic architectures such as gcc, see
+-	# https://github.com/openssl/openssl/issues/9839
+-	default "gcc no-asm"			if BR2_STATIC_LIBS
+ 	# Doesn't work for thumb-only (Cortex-M?)
+ 	default "linux-armv4"			if BR2_ARM_CPU_HAS_ARM
+ 	default "linux-aarch64"			if BR2_aarch64
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index a10b64c8fd..487fe554c1 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -25,10 +25,6 @@ LIBOPENSSL_CFLAGS += -mxgot
+ LIBOPENSSL_CFLAGS += -DOPENSSL_SMALL_FOOTPRINT
+ endif
  
- choice
- 	bool "Stack Smashing Protection"
--	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
-+	default BR2_SSP_ALL
- 	depends on BR2_TOOLCHAIN_HAS_SSP
- 	help
- 	  Enable stack smashing protection support using GCC's
-@@ -789,6 +790,8 @@ comment "Stack Smashing Protection needs a toolchain w/ SSP"
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-LIBOPENSSL_CFLAGS += -DOPENSSL_THREADS
+-endif
+-
+ ifeq ($(BR2_USE_MMU),)
+ LIBOPENSSL_CFLAGS += -DHAVE_FORK=0 -DOPENSSL_NO_MADVISE
+ endif
+@@ -79,7 +75,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
+ 			--prefix=/usr \
+ 			--openssldir=/etc/ssl \
+ 			$(if $(BR2_TOOLCHAIN_HAS_LIBATOMIC),-latomic) \
+-			$(if $(BR2_TOOLCHAIN_HAS_THREADS),-lpthread threads, no-threads) \
++			$(if $(BR2_TOOLCHAIN_HAS_THREADS),threads,no-threads) \
+ 			$(if $(BR2_STATIC_LIBS),no-shared,shared) \
+ 			$(if $(BR2_PACKAGE_HAS_CRYPTODEV),enable-devcryptoeng) \
+ 			no-rc5 \
+@@ -89,12 +85,21 @@ define LIBOPENSSL_CONFIGURE_CMDS
+ 			no-fuzz-libfuzzer \
+ 			no-fuzz-afl \
+ 			$(if $(BR2_STATIC_LIBS),zlib,zlib-dynamic) \
++			$(if $(BR2_STATIC_LIBS),no-dso) \
+ 	)
+ 	$(SED) "s#-march=[-a-z0-9] ##" -e "s#-mcpu=[-a-z0-9] ##g" $(@D)/Makefile
+ 	$(SED) "s#-O[0-9sg]#$(LIBOPENSSL_CFLAGS)#" $(@D)/Makefile
+ 	$(SED) "s# build_tests##" $(@D)/Makefile
+ endef
  
- choice
- 	bool "RELRO Protection"
-+	default BR2_RELRO_FULL if BR2_TOOLCHAIN_SUPPORTS_PIE
-+	default BR2_RELRO_PARTIAL if !BR2_TOOLCHAIN_SUPPORTS_PIE
- 	depends on BR2_SHARED_LIBS
- 	help
- 	  Enable a link-time protection know as RELRO (RELocation Read
-@@ -825,6 +828,7 @@ comment "RELocation Read Only (RELRO) needs shared libraries"
++# libdl is not available in a static build, and this is not implied by no-dso
++ifeq ($(BR2_STATIC_LIBS),y)
++define LIBOPENSSL_FIXUP_STATIC_MAKEFILE
++	$(SED) 's#-ldl##g' $(@D)/Makefile
++endef
++LIBOPENSSL_POST_CONFIGURE_HOOKS += LIBOPENSSL_FIXUP_STATIC_MAKEFILE
++endif
++
+ define HOST_LIBOPENSSL_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
+@@ -117,6 +122,16 @@ define LIBOPENSSL_INSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/c_rehash
+ endef
  
- choice
- 	bool "Buffer-overflow Detection (FORTIFY_SOURCE)"
-+	default BR2_FORTIFY_SOURCE_2
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on !BR2_OPTIMIZE_0
- 	help
++# libdl has no business in a static build
++ifeq ($(BR2_STATIC_LIBS),y)
++define LIBOPENSSL_FIXUP_STATIC_PKGCONFIG
++	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libcrypto.pc
++	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libssl.pc
++	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/openssl.pc
++endef
++LIBOPENSSL_POST_INSTALL_STAGING_HOOKS += LIBOPENSSL_FIXUP_STATIC_PKGCONFIG
++endif
++
+ ifeq ($(BR2_PACKAGE_PERL),)
+ define LIBOPENSSL_REMOVE_PERL_SCRIPTS
+ 	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.pl,tsget}
 -- 
 2.30.2
