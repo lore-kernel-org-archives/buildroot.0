@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Apr 2021 09:00:53 +0200
-Subject: [Buildroot] [PATCH 1/2] package/docker-cli: add CPE variables
-In-Reply-To: <878s5o1uik.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sun, 11 Apr 2021 21:38:43 +0200")
+Date: Sun, 25 Apr 2021 09:01:01 +0200
+Subject: [Buildroot] [PATCH 2/2] package/docker-engine: add CPE variables
+In-Reply-To: <874kgc1uig.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sun, 11 Apr 2021 21:38:47 +0200")
 References: <20210409210921.17774-1-peter@korsgaard.com>
- <878s5o1uik.fsf@dell.be.48ers.dk>
-Message-ID: <878s56sva2.fsf@dell.be.48ers.dk>
+ <20210409210921.17774-2-peter@korsgaard.com>
+ <874kgc1uig.fsf@dell.be.48ers.dk>
+Message-ID: <874kfusv9u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
