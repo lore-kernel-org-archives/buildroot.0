@@ -1,24 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 25 Apr 2021 18:12:26 +0000
-Subject: [Buildroot] [Bug 13771] package htop has undeclared dependency on
- host python
-In-Reply-To: <bug-13771-163@https.bugs.busybox.net/>
-References: <bug-13771-163@https.bugs.busybox.net/>
-Message-ID: <bug-13771-163-M4tqhZns0t@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Apr 2021 21:30:11 +0200
+Subject: [Buildroot] [git commit] package/libfreefare: drop threads
+ dependency
+Message-ID: <20210425190324.DA7A682B5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13771
+commit: https://git.buildroot.net/buildroot/commit/?id=b92c7a85271b85ed1ace4de92d7f3716214283d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Anders F Bj?rklund <anders.f.bjorklund@gmail.com> changed:
+This dependency should have dropped by commit
+1a49188a69416542087acd1246b17c0139ff0054 which removed threads
+dependency from libnfc
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-            Version|2021.02                     |2020.02.12
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libfreefare/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/libfreefare/Config.in b/package/libfreefare/Config.in
+index 2bb0c93ddf..b330b2256a 100644
+--- a/package/libfreefare/Config.in
++++ b/package/libfreefare/Config.in
+@@ -1,12 +1,8 @@
+ config BR2_PACKAGE_LIBFREEFARE
+ 	bool "libfreefare"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LIBNFC
+ 	help
+ 	  Library for high level manipulation of MIFARE cards.
+ 
+ 	  http://nfc-tools.org/index.php?title=Libfreefare
+-
+-comment "libfreefare needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
