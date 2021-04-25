@@ -1,81 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Apr 2021 21:46:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: needs headers >= 3.18
-In-Reply-To: <20210425193742.3094686-1-fontaine.fabrice@gmail.com>
-References: <20210425193742.3094686-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210425194608.GB298901@scaer>
+Date: Sun, 25 Apr 2021 21:52:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: bump to version 0.3.6
+In-Reply-To: <CADvTj4oiaTvOJOF9HVmmfPieG_+LAQ3z2R_K+vtP_wiPtAjwEQ@mail.gmail.com>
+References: <20200706010444.537633-1-james.hilliard1@gmail.com>
+ <20200827234830.534955b4@windsurf.home>
+ <CADvTj4oiaTvOJOF9HVmmfPieG_+LAQ3z2R_K+vtP_wiPtAjwEQ@mail.gmail.com>
+Message-ID: <20210425195257.GC298901@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+James, All,
 
-On 2021-04-25 21:37 +0200, Fabrice Fontaine spake thusly:
-> v4l2 plugin needs headers >= 3.18 since
-> https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/4cb90f3b868e5169cb9bfe2200f3b079d3f0db7b
-> (so since its addition to buildroot in commit
-> 75c86f90c73c42ee35559610aec28a02190b65b7) because of
-> V4L2_PIX_FMT_ARGB555X which is only available since
-> https://github.com/torvalds/linux/commit/fcc0d3db28922f9ba21ea6c7b23ea10ffb5d3521
-> 
-> v4l2 plugin can't be disabled until
-> https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/8d71d2dab831b77cadb74f2e4630f549acc94ac4
+Sorry to come back so late on that one...
 
-We still have an old version of pipewire... :-(
+On 2020-10-15 23:50 -0600, James Hilliard spake thusly:
+> On Thu, Aug 27, 2020 at 3:48 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> > On Sun,  5 Jul 2020 19:04:44 -0600
+> > James Hilliard <james.hilliard1@gmail.com> wrote:
+> > > Add pipewire optional dependencies/configurations.
+> > >
+> > > Remove BR2_PACKAGE_PIPEWIRE_GSTREAMER config option and enable
+> > > automatically based on dependencies to avoid recursive dependency
+> > > error caused by the gobject-introspection python3 dependency.
+> > Could you give more details about this recursive dependency ?
+[--SNIP--]
+> > > diff --git a/Config.in.legacy b/Config.in.legacy
+> > > index 7a5435188b..4541acc979 100644
+> > > --- a/Config.in.legacy
+> > > +++ b/Config.in.legacy
+> > > @@ -146,6 +146,16 @@ endif
+> > >
+> > >  comment "Legacy options removed in 2020.08"
+> > >
+> > > +config BR2_PACKAGE_PIPEWIRE_GSTREAMER
+> > > +     bool "pipewire gstreamer option removed"
+> > > +     select BR2_LEGACY
+> > > +     select BR2_PACKAGE_GOBJECT_INTROSPECTION
+> > > +     select BR2_PACKAGE_GSTREAMER1
+> > > +     select BR2_PACKAGE_GST1_PLUGINS_BASE
+> >
+> > But isn't that going to cause that circular dependency you're trying to
+> > prevent, since you're selecting BR2_PACKAGE_GOBJECT_INTROSPECTION here ?
+> Looks to be related to a conflict involving these:
+> https://github.com/buildroot/buildroot/blob/master/package/python-gobject/Config.in
+> https://github.com/buildroot/buildroot/blob/master/package/gstreamer1/gst1-python/Config.in
 
-James provided a bumnp awhile ago, but the patch had some comments, and
-I'm afraid the reply was not entirely satisfactory:
+Sorry, but this answer is too terse to try and understand the issue... :-(
+In the meantime, pipewire has had new releases.
 
-    https://patchwork.ozlabs.org/project/buildroot/patch/20200706010444.537633-1-james.hilliard1 at gmail.com/
+To ease acceptance, could you split the patch in a small series:
 
-So, even though I do understand this is an old patch, I think we should
-still try and update to a more recent pipewire.
+ 1. a first patch that drops the option and relies on pacjages being
+    enabled
 
-In the meantime, applied to master, thanks.
+ 2. a bump still keeping v4l2 mandatory, and disabling all new features
+    that have dependencies
+
+ 3. a new option for enabling v4l2 support
+
+ 4. as many patches as needed to add new options for new optional
+    features that have dependencies
+
+This should make for simpler patches, easier to review.
 
 Regards,
 Yann E. MORIN.
-
-> Fixes:
->  - http://autobuild.buildroot.org/results/b887b6ccd2c22bb3214c07d1281ad486438fb58e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/pipewire/Config.in | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
-> index 57e70d65f8..9c6b6eb881 100644
-> --- a/package/pipewire/Config.in
-> +++ b/package/pipewire/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_PIPEWIRE
->  	bool "pipewire"
->  	depends on BR2_PACKAGE_HAS_UDEV # libudev
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
->  	depends on BR2_USE_MMU # dbus
->  	select BR2_PACKAGE_ALSA_LIB
->  	select BR2_PACKAGE_DBUS
-> @@ -30,6 +31,8 @@ comment "pipewire gstreamer support needs a toolchain w/ wchar, threads"
->  
->  endif
->  
-> -comment "pipewire needs udev and a toolchain w/ threads"
-> +comment "pipewire needs udev and a toolchain w/ threads, headers >= 3.18"
->  	depends on BR2_USE_MMU
-> -	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_PACKAGE_HAS_UDEV || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
