@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Apr 2021 08:47:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/network-manager: security bump
- to version 1.22.16
-In-Reply-To: <20210409164319.3326427-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 9 Apr 2021 18:43:19 +0200")
-References: <20210409164319.3326427-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k0oquahc.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Apr 2021 08:47:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sysdig: add SYSDIG_CPE_ID_VENDOR
+In-Reply-To: <20210409222922.3865874-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 10 Apr 2021 00:29:22 +0200")
+References: <20210409222922.3865874-1-fontaine.fabrice@gmail.com>
+Message-ID: <87fszeuagu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > ifcfg-rh: handle "802-1x.{,phase2-}ca-path". Otherwise setting this
- > property silently fails and a profile might accidentally not perform
- > any authentication (CVE-2020-10754).
-
- > Update indentation in hash file (two spaces)
-
- > https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/1.22.16/NEWS
+ > cpe:2.3:a:sysdig:sysdig is a valid CPE identifier for this package:
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asysdig%3Asysdig
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2021.02.x given the fixes, thanks.
+Committed to 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
