@@ -1,55 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Apr 2021 08:54:18 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/snort: bump
- version to 2.9.17.1
-Message-ID: <20210425065504.0D7EF81539@busybox.osuosl.org>
+Date: Sun, 25 Apr 2021 08:55:19 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ package/python-aioconsole: bump to version 0.3.1
+Message-ID: <20210425065504.1851781539@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=996b8ecd1b68db356c749ff2d2d5db256d11c11e
+commit: https://git.buildroot.net/buildroot/commit/?id=25931d53c7248b20cb40e877457493d2230af7ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-This is a bug fix release:
+https://github.com/vxgmichel/aioconsole/releases/tag/v0.3.1
 
-https://www.snort.org/downloads/snort/release_notes_2.9.17.1.txt
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8453641c8cc934dad189fcd08cd8f4974da89b5b)
+(cherry picked from commit 0bc4a7ea6d0f51fae96a5c0b6925be86d8bbdf7a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/snort/snort.hash | 4 ++--
- package/snort/snort.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-aioconsole/python-aioconsole.hash | 4 ++--
+ package/python-aioconsole/python-aioconsole.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/snort/snort.hash b/package/snort/snort.hash
-index 1103152ead..115a8398dd 100644
---- a/package/snort/snort.hash
-+++ b/package/snort/snort.hash
-@@ -1,8 +1,8 @@
- # From https://www.snort.org/downloads/snort/md5s
--md5  3fe89f22def4e9ffda01f07f816e666d  snort-2.9.17.tar.gz
-+md5  006d6b0d71c6c7bd23eac74670f5b4e6  snort-2.9.17.1.tar.gz
- 
- # Locally computed:
--sha256  c3b234c3922a09b0368b847ddb8d1fa371b741f032f42aa9ab53d67b428dc648  snort-2.9.17.tar.gz
-+sha256  303d3d5dc5affecfeaad3a331d3163f901d48d960fdd6598cb55c6d1591eed82  snort-2.9.17.1.tar.gz
- 
- # Hash for license files:
- sha256  f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
-diff --git a/package/snort/snort.mk b/package/snort/snort.mk
-index 412c69f838..3df2941179 100644
---- a/package/snort/snort.mk
-+++ b/package/snort/snort.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
+index 0aa9a7882c..dea2216fcf 100644
+--- a/package/python-aioconsole/python-aioconsole.hash
++++ b/package/python-aioconsole/python-aioconsole.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/aioconsole/json
+-md5  a8b0640a1e2a3869baf4efcbb1182fbe  aioconsole-0.3.0.tar.gz
+-sha256  b84724e6b93d1306a909974864df377236cf4bab8e0594096fed7936207205c5  aioconsole-0.3.0.tar.gz
++md5  66d4b05e3bc75267daf0f773d839f62b  aioconsole-0.3.1.tar.gz
++sha256  7c038bb40b7690bf5be6b17154830b7bff25e7be1c02d8420a346c3efbd5d8e5  aioconsole-0.3.1.tar.gz
+diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
+index 5c26d863c0..b32d2bea0f 100644
+--- a/package/python-aioconsole/python-aioconsole.mk
++++ b/package/python-aioconsole/python-aioconsole.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SNORT_VERSION = 2.9.17
-+SNORT_VERSION = 2.9.17.1
- SNORT_SITE = https://www.snort.org/downloads/snort
- SNORT_LICENSE = GPL-2.0
- SNORT_LICENSE_FILES = LICENSE COPYING
+-PYTHON_AIOCONSOLE_VERSION = 0.3.0
++PYTHON_AIOCONSOLE_VERSION = 0.3.1
+ PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
+-PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/d1/bc/2e52bd41293e63d95fcb6c5de406d43ccbb91255a48feaa22c1b8e2e4a40
++PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/5a/12/fce04ddc0a8ebd6482e5ec293d8bda47c9e05c82826b061f7b73523b8601
+ PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
+ PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
+ 
