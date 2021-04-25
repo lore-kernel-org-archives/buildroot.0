@@ -1,29 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Apr 2021 09:21:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/quickjs: disable on nios2
-In-Reply-To: <20210414212608.1376653-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 14 Apr 2021 23:26:08 +0200")
-References: <20210414212608.1376653-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r1iyrfru.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Apr 2021 08:47:22 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/sysdig: add
+ SYSDIG_CPE_ID_VENDOR
+Message-ID: <20210425065503.BDA9180140@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=792a56ddee9e7700ec5e7a2e43a6e18dc3ab24e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > quickjs unconditionally uses FE_{DOWN,UP}WARD and so fails to build on
- > nios2 since its addition in commit
- > 5d50793659acb95050c110d5fc05399df20ce30b
+cpe:2.3:a:sysdig:sysdig is a valid CPE identifier for this package:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/69e280a7f478d1b16be989c7bd559f766053134b
- >  - http://autobuild.buildroot.org/results/f2c3ef7e3bbe30ac24710288336adabebd8b83a6
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asysdig%3Asysdig
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 16770c8cb9df395038de05156ff8ac7a21270a66)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sysdig/sysdig.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed to 2021.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+index bcbb5ce01e..08d93750ae 100644
+--- a/package/sysdig/sysdig.mk
++++ b/package/sysdig/sysdig.mk
+@@ -8,6 +8,7 @@ SYSDIG_VERSION = 0.23.1
+ SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
+ SYSDIG_LICENSE = GPL-2.0
+ SYSDIG_LICENSE_FILES = COPYING
++SYSDIG_CPE_ID_VENDOR = sysdig
+ SYSDIG_CONF_OPTS = -DENABLE_DKMS=OFF -DUSE_BUNDLED_DEPS=OFF
+ SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
