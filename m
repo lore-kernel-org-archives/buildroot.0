@@ -1,63 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Apr 2021 21:30:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libfreefare: drop threads
- dependency
-In-Reply-To: <20210425135454.2460266-1-fontaine.fabrice@gmail.com>
-References: <20210425135454.2460266-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210425193048.GA298901@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 25 Apr 2021 21:37:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: needs headers >= 3.18
+Message-ID: <20210425193742.3094686-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+v4l2 plugin needs headers >= 3.18 since
+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/4cb90f3b868e5169cb9bfe2200f3b079d3f0db7b
+(so since its addition to buildroot in commit
+75c86f90c73c42ee35559610aec28a02190b65b7) because of
+V4L2_PIX_FMT_ARGB555X which is only available since
+https://github.com/torvalds/linux/commit/fcc0d3db28922f9ba21ea6c7b23ea10ffb5d3521
 
-On 2021-04-25 15:54 +0200, Fabrice Fontaine spake thusly:
-> This dependency should have dropped by commit
-> 1a49188a69416542087acd1246b17c0139ff0054 which removed threads
-> dependency from libnfc
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+v4l2 plugin can't be disabled until
+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/8d71d2dab831b77cadb74f2e4630f549acc94ac4
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/b887b6ccd2c22bb3214c07d1281ad486438fb58e
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/pipewire/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-> ---
->  package/libfreefare/Config.in | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/package/libfreefare/Config.in b/package/libfreefare/Config.in
-> index 2bb0c93ddf..b330b2256a 100644
-> --- a/package/libfreefare/Config.in
-> +++ b/package/libfreefare/Config.in
-> @@ -1,12 +1,8 @@
->  config BR2_PACKAGE_LIBFREEFARE
->  	bool "libfreefare"
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
->  	select BR2_PACKAGE_OPENSSL
->  	select BR2_PACKAGE_LIBNFC
->  	help
->  	  Library for high level manipulation of MIFARE cards.
->  
->  	  http://nfc-tools.org/index.php?title=Libfreefare
-> -
-> -comment "libfreefare needs a toolchain w/ threads"
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
+index 57e70d65f8..9c6b6eb881 100644
+--- a/package/pipewire/Config.in
++++ b/package/pipewire/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PIPEWIRE
+ 	bool "pipewire"
+ 	depends on BR2_PACKAGE_HAS_UDEV # libudev
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+ 	depends on BR2_USE_MMU # dbus
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_DBUS
+@@ -30,6 +31,8 @@ comment "pipewire gstreamer support needs a toolchain w/ wchar, threads"
+ 
+ endif
+ 
+-comment "pipewire needs udev and a toolchain w/ threads"
++comment "pipewire needs udev and a toolchain w/ threads, headers >= 3.18"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PACKAGE_HAS_UDEV || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
