@@ -1,27 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Apr 2021 09:01:01 +0200
-Subject: [Buildroot] [PATCH 2/2] package/docker-engine: add CPE variables
-In-Reply-To: <874kgc1uig.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sun, 11 Apr 2021 21:38:47 +0200")
-References: <20210409210921.17774-1-peter@korsgaard.com>
- <20210409210921.17774-2-peter@korsgaard.com>
- <874kgc1uig.fsf@dell.be.48ers.dk>
-Message-ID: <874kfusv9u.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Apr 2021 09:05:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: fix /etc/resolv.conf
+ link on per-package build
+In-Reply-To: <20210411194602.994785-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 11 Apr 2021 21:46:02 +0200")
+References: <20210411194602.994785-1-fontaine.fabrice@gmail.com>
+Message-ID: <87zgxmrgi6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
- >> cpe:2.3:a:docker:docker is a valid CPE identifier for this package:
- >> https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adocker%3Adocker
+ > Fixes:
+ >  - https://bugs.buildroot.org/show_bug.cgi?id=13271
 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
- > Committed, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2021.02.x, thanks.
 
