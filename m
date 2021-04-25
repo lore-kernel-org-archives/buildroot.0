@@ -1,39 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Apr 2021 09:00:38 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/docker-engine:
- add CPE variables
-Message-ID: <20210425065504.38A30860DF@busybox.osuosl.org>
+Date: Sun, 25 Apr 2021 08:53:05 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/readline: add
+ Signed-off-by and renumber patch
+Message-ID: <20210425065504.02D94860DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c5d4b7131f779201616c925e6f9f3926d4e0646
+commit: https://git.buildroot.net/buildroot/commit/?id=292eb944f324a8066aae063279eabf2bafacb073
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:docker:docker is a valid CPE identifier for this package:
+Add Signed-off-by and while at it, renumber it
 
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adocker%3Adocker
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=13731
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b59ebb66f35ed79dcd07068dd5bd101c44ad6248)
+(cherry picked from commit 575c60ff9aaaa03662555ae9353ad4e441e7fc6f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/readline/{0000-curses-link.patch => 0001-curses-link.patch} | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index d3f4d81572..767818ebba 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -13,6 +13,9 @@ DOCKER_ENGINE_LICENSE_FILES = LICENSE
- DOCKER_ENGINE_DEPENDENCIES = host-pkgconf
- DOCKER_ENGINE_GOMOD = github.com/docker/docker
+diff --git a/package/readline/0000-curses-link.patch b/package/readline/0001-curses-link.patch
+similarity index 85%
+rename from package/readline/0000-curses-link.patch
+rename to package/readline/0001-curses-link.patch
+index 56b4770220..6afc5ba078 100644
+--- a/package/readline/0000-curses-link.patch
++++ b/package/readline/0001-curses-link.patch
+@@ -3,6 +3,8 @@ link readline directly to ncurses since it needs symbols from it
+ upstream readline does this on purpose (no direct linking), but
+ it doesn't make much sense in a Linux world
  
-+DOCKER_ENGINE_CPE_ID_VENDOR = docker
-+DOCKER_ENGINE_CPE_ID_PRODUCT = docker
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
- DOCKER_ENGINE_LDFLAGS = \
- 	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.BuildTime="" \
- 	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.GitCommit="buildroot" \
+ --- a/support/shobj-conf
+ +++ b/support/shobj-conf
+ @@ -42,7 +42,7 @@
