@@ -1,8 +1,9 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 25 Apr 2021 23:24:59 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/2] package/weston: add patch to support pipewire 0.3 API
-Message-ID: <20210425212500.3228943-1-fontaine.fabrice@gmail.com>
+Date: Sun, 25 Apr 2021 23:25:00 +0200
+Subject: [Buildroot] [PATCH v2, 2/2] package/pipewire: bump to version 0.3.26
+In-Reply-To: <20210425212500.3228943-1-fontaine.fabrice@gmail.com>
+References: <20210425212500.3228943-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210425212500.3228943-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,451 +12,243 @@ To: buildroot@busybox.net
 
 From: James Hilliard <james.hilliard1@gmail.com>
 
-This is required when building weston against the latest pipewire
-release.
+Add pipewire optional dependencies/configurations.
+
+This bump will fix a build failure with bluez plugin and gcc 10
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ab2edff9ae6b67d17bee2a11098b046ad754eee1
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Yann E. Morin)
- - Add second upstream patch
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Keep gstreamer option
+ - Use enabled/disabled instead of true/false:
+   https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/485bae5eb00c0f5d3d91bd8bf1b302896571f4ed
+ - Add v4l2 option
+ - pulseaudio dependency has been dropped since
+   https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/91b0d3bb39bdb43d667ed156bdfb798afd0098e7
+ - Use udev option, available since
+   https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/7aabd50d1e3c8ff8777f04e86be55dca2d1d56c7
+ - Use sdl2 and sndfile options, available since
+   https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b17fe4aba450f48e0da498cc8de9ec766055591e
+ - ncurses is an optional dependency since
+   https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/403f27c5310b327fef6dbbbf26b423ebf33fedcc
+ - Drop valgrind dependency
 
- ...003-pipewire-add-support-for-0.3-API.patch | 391 ++++++++++++++++++
- ...4-pipewire-fix-null-deref-in-0-3-API.patch |  28 ++
- 2 files changed, 419 insertions(+)
- create mode 100644 package/weston/0003-pipewire-add-support-for-0.3-API.patch
- create mode 100644 package/weston/0004-pipewire-fix-null-deref-in-0-3-API.patch
+ package/pipewire/Config.in       |  22 +++---
+ package/pipewire/pipewire.hash   |   6 +-
+ package/pipewire/pipewire.mk     | 115 +++++++++++++++++++++++++------
+ package/pulseaudio/pulseaudio.mk |   1 +
+ 4 files changed, 111 insertions(+), 33 deletions(-)
 
-diff --git a/package/weston/0003-pipewire-add-support-for-0.3-API.patch b/package/weston/0003-pipewire-add-support-for-0.3-API.patch
-new file mode 100644
-index 0000000000..b486b3de5c
---- /dev/null
-+++ b/package/weston/0003-pipewire-add-support-for-0.3-API.patch
-@@ -0,0 +1,391 @@
-+From cc08737e3fd174ec3c4c208ea4f2a3a6a9e8af3e Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Mon, 6 Jul 2020 00:58:02 -0600
-+Subject: [PATCH] pipewire: add support for 0.3 API
+diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
+index 9c6b6eb881..ff26e4e361 100644
+--- a/package/pipewire/Config.in
++++ b/package/pipewire/Config.in
+@@ -1,10 +1,7 @@
+ config BR2_PACKAGE_PIPEWIRE
+ 	bool "pipewire"
+-	depends on BR2_PACKAGE_HAS_UDEV # libudev
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_USE_MMU # dbus
+-	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_DBUS
+ 	help
+ 	  PipeWire is a server and user space API to deal with
+@@ -29,10 +26,19 @@ comment "pipewire gstreamer support needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+-endif
++config BR2_PACKAGE_PIPEWIRE_V4L2
++	bool "pipewire v4l2 plugin"
++	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
++	help
++	  Build v4l2 plugin
+ 
+-comment "pipewire needs udev and a toolchain w/ threads, headers >= 3.18"
+-	depends on BR2_USE_MMU
++comment "pipewire v4l2 support needs udev and a toolchain w/ headers >= 3.18"
+ 	depends on !BR2_PACKAGE_HAS_UDEV || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
 +
-+Fixes: #369
++endif
 +
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1 at gmail.com: backport from upstream commit
-+80b585f8d2a31e780b4de41fbd187a742bea7e1a]
-+---
-+ .gitlab-ci.yml               |   2 +-
-+ .gitlab-ci/debian-install.sh |  16 ++++-
-+ pipewire/meson.build         |  28 ++++++---
-+ pipewire/pipewire-plugin.c   | 118 ++++++++++++++++++++++++++++++++++-
-+ 4 files changed, 151 insertions(+), 13 deletions(-)
++comment "pipewire needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index 81c53867e2..4d2548e3ab 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 bfaa0f6ae6c0791e2e0b59234d399753bf24f1b33dbf587682363a8463dd8df1  pipewire-0.2.7.tar.gz
+-sha256 88c0ca786c735a11e0eb508196d3aa1389fbaacb8d5de9adb5ccb15bcd4009d9  LICENSE
+-sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LGPL
++sha256  05cc9d25de45290c025da5da1b94fc705bddacd93cf3690d0b2988c1ac501ee1  pipewire-0.3.26.tar.gz
++sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
++sha256  7db6138b0385e260ae8f09f050ea66c4e4fe775a11060d7f6ca2beb47f192d6f  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index df159c5ef4..23bfcdb9ec 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -4,45 +4,116 @@
+ #
+ ################################################################################
+ 
+-PIPEWIRE_VERSION = 0.2.7
++PIPEWIRE_VERSION = 0.3.26
+ PIPEWIRE_SITE = $(call github,PipeWire,pipewire,$(PIPEWIRE_VERSION))
+-PIPEWIRE_LICENSE = LGPL-2.1+
+-PIPEWIRE_LICENSE_FILES = LICENSE LGPL
++PIPEWIRE_LICENSE = MIT
++PIPEWIRE_LICENSE_FILES = COPYING LICENSE
+ PIPEWIRE_INSTALL_STAGING = YES
+-PIPEWIRE_DEPENDENCIES = host-pkgconf alsa-lib dbus udev
++PIPEWIRE_DEPENDENCIES = host-pkgconf dbus
+ 
+-ifeq ($(BR2_PACKAGE_FFMPEG),y)
+-PIPEWIRE_DEPENDENCIES += ffmpeg
++PIPEWIRE_CONF_OPTS += \
++	-Ddocs=disabled \
++	-Dexamples=disabled \
++	-Dman=disabled \
++	-Dtests=disabled \
++	-Dspa-plugins=enabled \
++	-Daudiomixer=enabled \
++	-Daudioconvert=enabled \
++	-Dcontrol=enabled \
++	-Daudiotestsrc=enabled \
++	-Dsupport=enabled \
++	-Devl=disabled \
++	-Dtest=disabled \
++	-Dvideoconvert=enabled \
++	-Dvideotestsrc=enabled \
++	-Dvolume=enabled
 +
-+diff --git a/pipewire/meson.build b/pipewire/meson.build
-+index 3d3374b8..e30a0b62 100644
-+--- a/pipewire/meson.build
-++++ b/pipewire/meson.build
-+@@ -5,17 +5,25 @@ if get_option('pipewire')
-+ 		error('Attempting to build the pipewire plugin without the required DRM backend. ' + user_hint)
-+ 	endif
-+ 
-+-	depnames = [
-+-		'libpipewire-0.2', 'libspa-0.1'
-+-	]
-+ 	deps_pipewire = [ dep_libweston_private ]
-+-	foreach depname : depnames
-+-		dep = dependency(depname, required: false)
-+-		if not dep.found()
-+-			error('Pipewire plugin requires @0@ which was not found. '.format(depname) + user_hint)
-+-		endif
-+-		deps_pipewire += dep
-+-	endforeach
-++
-++	dep_libpipewire = dependency('libpipewire-0.3', required: false)
-++	if not dep_libpipewire.found()
-++		dep_libpipewire = dependency('libpipewire-0.2', required: false)
-++	endif
-++	if not dep_libpipewire.found()
-++		error('Pipewire plugin requires libpipewire which was not found. ' + user_hint)
-++	endif
-++	deps_pipewire += dep_libpipewire
-++
-++	dep_libspa = dependency('libspa-0.2', required: false)
-++	if not dep_libspa.found()
-++		dep_libspa = dependency('libspa-0.1', required: false)
-++	endif
-++	if not dep_libspa.found()
-++		error('Pipewire plugin requires libspa which was not found. ' + user_hint)
-++	endif
-++	deps_pipewire += dep_libspa
-+ 
-+ 	plugin_pipewire = shared_library(
-+ 		'pipewire-plugin',
-+diff --git a/pipewire/pipewire-plugin.c b/pipewire/pipewire-plugin.c
-+index 6f892574..ce70ea63 100644
-+--- a/pipewire/pipewire-plugin.c
-++++ b/pipewire/pipewire-plugin.c
-+@@ -34,20 +34,27 @@
-+ #include <errno.h>
-+ #include <unistd.h>
-+ 
-++#include <pipewire/pipewire.h>
-++
-+ #include <spa/param/format-utils.h>
-+ #include <spa/param/video/format-utils.h>
-+ #include <spa/utils/defs.h>
-+ 
-+-#include <pipewire/pipewire.h>
-++#if PW_CHECK_VERSION(0, 2, 90)
-++#include <spa/buffer/meta.h>
-++#include <spa/utils/result.h>
-++#endif
-+ 
-+ #define PROP_RANGE(min, max) 2, (min), (max)
-+ 
-++#if !PW_CHECK_VERSION(0, 2, 90)
-+ struct type {
-+ 	struct spa_type_media_type media_type;
-+ 	struct spa_type_media_subtype media_subtype;
-+ 	struct spa_type_format_video format_video;
-+ 	struct spa_type_video_format video_format;
-+ };
-++#endif
-+ 
-+ struct weston_pipewire {
-+ 	struct weston_compositor *compositor;
-+@@ -60,12 +67,19 @@ struct weston_pipewire {
-+ 	struct pw_loop *loop;
-+ 	struct wl_event_source *loop_source;
-+ 
-++#if PW_CHECK_VERSION(0, 2, 90)
-++	struct pw_context *context;
-++#endif
-+ 	struct pw_core *core;
-+ 	struct pw_type *t;
-++#if PW_CHECK_VERSION(0, 2, 90)
-++	struct spa_hook core_listener;
-++#else
-+ 	struct type type;
-+ 
-+ 	struct pw_remote *remote;
-+ 	struct spa_hook remote_listener;
-++#endif
-+ };
-+ 
-+ struct pipewire_output {
-+@@ -100,6 +114,7 @@ struct pipewire_frame_data {
-+ 	struct wl_event_source *fence_sync_event_source;
-+ };
-+ 
-++#if !PW_CHECK_VERSION(0, 2, 90)
-+ static inline void init_type(struct type *type, struct spa_type_map *map)
-+ {
-+ 	spa_type_media_type_map(map, &type->media_type);
-+@@ -107,6 +122,7 @@ static inline void init_type(struct type *type, struct spa_type_map *map)
-+ 	spa_type_format_video_map(map, &type->format_video);
-+ 	spa_type_video_format_map(map, &type->video_format);
-+ }
-++#endif
-+ 
-+ static void
-+ pipewire_debug_impl(struct weston_pipewire *pipewire,
-+@@ -141,6 +157,7 @@ pipewire_debug_impl(struct weston_pipewire *pipewire,
-+ 	free(logstr);
-+ }
-+ 
-++#if !PW_CHECK_VERSION(0, 2, 90)
-+ static void
-+ pipewire_debug(struct weston_pipewire *pipewire, const char *fmt, ...)
-+ {
-+@@ -150,6 +167,7 @@ pipewire_debug(struct weston_pipewire *pipewire, const char *fmt, ...)
-+ 	pipewire_debug_impl(pipewire, NULL, fmt, ap);
-+ 	va_end(ap);
-+ }
-++#endif
-+ 
-+ static void
-+ pipewire_output_debug(struct pipewire_output *output, const char *fmt, ...)
-+@@ -185,7 +203,9 @@ pipewire_output_handle_frame(struct pipewire_output *output, int fd,
-+ 	const struct weston_drm_virtual_output_api *api =
-+ 		output->pipewire->virtual_output_api;
-+ 	size_t size = output->output->height * stride;
-++#if !PW_CHECK_VERSION(0, 2, 90)
-+ 	struct pw_type *t = output->pipewire->t;
-++#endif
-+ 	struct pw_buffer *buffer;
-+ 	struct spa_buffer *spa_buffer;
-+ 	struct spa_meta_header *h;
-+@@ -203,7 +223,12 @@ pipewire_output_handle_frame(struct pipewire_output *output, int fd,
-+ 
-+ 	spa_buffer = buffer->buffer;
-+ 
-++#if PW_CHECK_VERSION(0, 2, 90)
-++	if ((h = spa_buffer_find_meta_data(spa_buffer, SPA_META_Header,
-++				     sizeof(struct spa_meta_header)))) {
-++#else
-+ 	if ((h = spa_buffer_find_meta(spa_buffer, t->meta.Header))) {
-++#endif
-+ 		h->pts = -1;
-+ 		h->flags = 0;
-+ 		h->seq = output->seq++;
-+@@ -375,18 +400,40 @@ pipewire_set_dpms(struct weston_output *base_output, enum dpms_enum level)
-+ static int
-+ pipewire_output_connect(struct pipewire_output *output)
-+ {
-++#if !PW_CHECK_VERSION(0, 2, 90)
-+ 	struct weston_pipewire *pipewire = output->pipewire;
-+ 	struct type *type = &pipewire->type;
-++#endif
-+ 	uint8_t buffer[1024];
-+ 	struct spa_pod_builder builder =
-+ 		SPA_POD_BUILDER_INIT(buffer, sizeof(buffer));
-+ 	const struct spa_pod *params[1];
-++#if !PW_CHECK_VERSION(0, 2, 90)
-+ 	struct pw_type *t = pipewire->t;
-++#endif
-+ 	int frame_rate = output->output->current_mode->refresh / 1000;
-+ 	int width = output->output->width;
-+ 	int height = output->output->height;
-+ 	int ret;
-+ 
-++#if PW_CHECK_VERSION(0, 2, 90)
-++	params[0] = spa_pod_builder_add_object(&builder,
-++		SPA_TYPE_OBJECT_Format, SPA_PARAM_EnumFormat,
-++		SPA_FORMAT_mediaType, SPA_POD_Id(SPA_MEDIA_TYPE_video),
-++		SPA_FORMAT_mediaSubtype, SPA_POD_Id(SPA_MEDIA_SUBTYPE_raw),
-++		SPA_FORMAT_VIDEO_format, SPA_POD_Id(SPA_VIDEO_FORMAT_BGRx),
-++		SPA_FORMAT_VIDEO_size, SPA_POD_Rectangle(&SPA_RECTANGLE(width, height)),
-++		SPA_FORMAT_VIDEO_framerate, SPA_POD_Fraction(&SPA_FRACTION (0, 1)),
-++		SPA_FORMAT_VIDEO_maxFramerate,
-++		SPA_POD_CHOICE_RANGE_Fraction(&SPA_FRACTION(frame_rate, 1),
-++			&SPA_FRACTION(1, 1),
-++			&SPA_FRACTION(frame_rate, 1)));
-++
-++	ret = pw_stream_connect(output->stream, PW_DIRECTION_OUTPUT, SPA_ID_INVALID,
-++				(PW_STREAM_FLAG_DRIVER |
-++				 PW_STREAM_FLAG_MAP_BUFFERS),
-++				params, 1);
-++#else
-+ 	params[0] = spa_pod_builder_object(&builder,
-+ 		t->param.idEnumFormat, t->spa_format,
-+ 		"I", type->media_type.video,
-+@@ -406,6 +453,7 @@ pipewire_output_connect(struct pipewire_output *output)
-+ 				(PW_STREAM_FLAG_DRIVER |
-+ 				 PW_STREAM_FLAG_MAP_BUFFERS),
-+ 				params, 1);
-++#endif
-+ 	if (ret != 0) {
-+ 		weston_log("Failed to connect pipewire stream: %s",
-+ 			   spa_strerror(ret));
-+@@ -482,26 +530,42 @@ pipewire_output_stream_state_changed(void *data, enum pw_stream_state old,
-+ }
-+ 
-+ static void
-++#if PW_CHECK_VERSION(0, 2, 90)
-++pipewire_output_stream_param_changed(void *data, uint32_t id, const struct spa_pod *format)
-++#else
-+ pipewire_output_stream_format_changed(void *data, const struct spa_pod *format)
-++#endif
-+ {
-+ 	struct pipewire_output *output = data;
-++#if !PW_CHECK_VERSION(0, 2, 90)
-+ 	struct weston_pipewire *pipewire = output->pipewire;
-++#endif
-+ 	uint8_t buffer[1024];
-+ 	struct spa_pod_builder builder =
-+ 		SPA_POD_BUILDER_INIT(buffer, sizeof(buffer));
-+ 	const struct spa_pod *params[2];
-++#if !PW_CHECK_VERSION(0, 2, 90)
-+ 	struct pw_type *t = pipewire->t;
-++#endif
-+ 	int32_t width, height, stride, size;
-+ 	const int bpp = 4;
-+ 
-+ 	if (!format) {
-+ 		pipewire_output_debug(output, "format = None");
-++#if PW_CHECK_VERSION(0, 2, 90)
-++		pw_stream_update_params(output->stream, NULL, 0);
-++#else
-+ 		pw_stream_finish_format(output->stream, 0, NULL, 0);
-++#endif
-+ 		return;
-+ 	}
-+ 
-++#if PW_CHECK_VERSION(0, 2, 90)
-++	spa_format_video_raw_parse(format, &output->video_format);
-++#else
-+ 	spa_format_video_raw_parse(format, &output->video_format,
-+ 				   &pipewire->type.format_video);
-++#endif
-+ 
-+ 	width = output->video_format.size.width;
-+ 	height = output->video_format.size.height;
-+@@ -510,6 +574,21 @@ pipewire_output_stream_format_changed(void *data, const struct spa_pod *format)
-+ 
-+ 	pipewire_output_debug(output, "format = %dx%d", width, height);
-+ 
-++#if PW_CHECK_VERSION(0, 2, 90)
-++	params[0] = spa_pod_builder_add_object(&builder,
-++		SPA_TYPE_OBJECT_ParamBuffers, SPA_PARAM_Buffers,
-++		SPA_PARAM_BUFFERS_size, SPA_POD_Int(size),
-++		SPA_PARAM_BUFFERS_stride, SPA_POD_Int(stride),
-++		SPA_PARAM_BUFFERS_buffers, SPA_POD_CHOICE_RANGE_Int(4, 2, 8),
-++		SPA_PARAM_BUFFERS_align, SPA_POD_Int(16));
-++
-++	params[1] = spa_pod_builder_add_object(&builder,
-++		SPA_TYPE_OBJECT_ParamMeta, SPA_PARAM_Meta,
-++		SPA_PARAM_META_type, SPA_POD_Id(SPA_META_Header),
-++		SPA_PARAM_META_size, SPA_POD_Int(sizeof(struct spa_meta_header)));
-++
-++	pw_stream_update_params(output->stream, params, 2);
-++#else
-+ 	params[0] = spa_pod_builder_object(&builder,
-+ 		t->param.idBuffers, t->param_buffers.Buffers,
-+ 		":", t->param_buffers.size,
-+@@ -527,12 +606,17 @@ pipewire_output_stream_format_changed(void *data, const struct spa_pod *format)
-+ 		":", t->param_meta.size, "i", sizeof(struct spa_meta_header));
-+ 
-+ 	pw_stream_finish_format(output->stream, 0, params, 2);
-++#endif
-+ }
-+ 
-+ static const struct pw_stream_events stream_events = {
-+ 	PW_VERSION_STREAM_EVENTS,
-+ 	.state_changed = pipewire_output_stream_state_changed,
-++#if PW_CHECK_VERSION(0, 2, 90)
-++	.param_changed = pipewire_output_stream_param_changed,
-++#else
-+ 	.format_changed = pipewire_output_stream_format_changed,
-++#endif
-+ };
-+ 
-+ static struct weston_output *
-+@@ -560,7 +644,11 @@ pipewire_output_create(struct weston_compositor *c, char *name)
-+ 	if (!head)
-+ 		goto err;
-+ 
-++#if PW_CHECK_VERSION(0, 2, 90)
-++	output->stream = pw_stream_new(pipewire->core, name, NULL);
-++#else
-+ 	output->stream = pw_stream_new(pipewire->remote, name, NULL);
-++#endif
-+ 	if (!output->stream) {
-+ 		weston_log("Cannot initialize pipewire stream\n");
-+ 		goto err;
-+@@ -704,6 +792,14 @@ weston_pipewire_loop_handler(int fd, uint32_t mask, void *data)
-+ 	return 0;
-+ }
-+ 
-++#if PW_CHECK_VERSION(0, 2, 90)
-++static void
-++weston_pipewire_error(void *data, uint32_t id, int seq, int res,
-++			      const char *error)
-++{
-++	weston_log("pipewire remote error: %s\n", error);
-++}
-++#else
-+ static void
-+ weston_pipewire_state_changed(void *data, enum pw_remote_state old,
-+ 			      enum pw_remote_state state, const char *error)
-+@@ -725,12 +821,20 @@ weston_pipewire_state_changed(void *data, enum pw_remote_state old,
-+ 		break;
-+ 	}
-+ }
-++#endif
-+ 
-+ 
-++#if PW_CHECK_VERSION(0, 2, 90)
-++static const struct pw_core_events core_events = {
-++	PW_VERSION_CORE_EVENTS,
-++	.error = weston_pipewire_error,
-++};
-++#else
-+ static const struct pw_remote_events remote_events = {
-+ 	PW_VERSION_REMOTE_EVENTS,
-+ 	.state_changed = weston_pipewire_state_changed,
-+ };
-++#endif
-+ 
-+ static int
-+ weston_pipewire_init(struct weston_pipewire *pipewire)
-+@@ -745,10 +849,19 @@ weston_pipewire_init(struct weston_pipewire *pipewire)
-+ 
-+ 	pw_loop_enter(pipewire->loop);
-+ 
-++#if PW_CHECK_VERSION(0, 2, 90)
-++	pipewire->context = pw_context_new(pipewire->loop, NULL, 0);
-++#else
-+ 	pipewire->core = pw_core_new(pipewire->loop, NULL);
-+ 	pipewire->t = pw_core_get_type(pipewire->core);
-+ 	init_type(&pipewire->type, pipewire->t->map);
-++#endif
-+ 
-++#if PW_CHECK_VERSION(0, 2, 90)
-++	pw_core_add_listener(pipewire->core,
-++			       &pipewire->core_listener,
-++			       &core_events, pipewire);
-++#else
-+ 	pipewire->remote = pw_remote_new(pipewire->core, NULL, 0);
-+ 	pw_remote_add_listener(pipewire->remote,
-+ 			       &pipewire->remote_listener,
-+@@ -777,6 +890,7 @@ weston_pipewire_init(struct weston_pipewire *pipewire)
-+ 			goto err;
-+ 		}
-+ 	}
-++#endif
-+ 
-+ 	loop = wl_display_get_event_loop(pipewire->compositor->wl_display);
-+ 	pipewire->loop_source =
-+@@ -786,12 +900,14 @@ weston_pipewire_init(struct weston_pipewire *pipewire)
-+ 				     pipewire);
-+ 
-+ 	return 0;
-++#if !PW_CHECK_VERSION(0, 2, 90)
-+ err:
-+ 	if (pipewire->remote)
-+ 		pw_remote_destroy(pipewire->remote);
-+ 	pw_loop_leave(pipewire->loop);
-+ 	pw_loop_destroy(pipewire->loop);
-+ 	return -1;
-++#endif
-+ }
-+ 
-+ static const struct weston_pipewire_api pipewire_api = {
-+-- 
-+2.25.1
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++PIPEWIRE_CONF_OPTS += -Dudev=enabled
++PIPEWIRE_DEPENDENCIES += udev
++else
++PIPEWIRE_CONF_OPTS += -Dudev=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBVA),y)
+-PIPEWIRE_DEPENDENCIES += libva
++ifeq ($(BR2_PACKAGE_PIPEWIRE_GSTREAMER),y)
++PIPEWIRE_CONF_OPTS += -Dgstreamer=enabled
++PIPEWIRE_DEPENDENCIES += libglib2 gstreamer1 gst1-plugins-base
++else
++PIPEWIRE_CONF_OPTS += -Dgstreamer=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SBC),y)
+-PIPEWIRE_DEPENDENCIES += sbc
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++PIPEWIRE_CONF_OPTS += -Dsystemd=enabled
++PIPEWIRE_DEPENDENCIES += systemd
++else
++PIPEWIRE_CONF_OPTS += -Dsystemd=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SDL2),y)
+-PIPEWIRE_DEPENDENCIES += sdl2
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++PIPEWIRE_CONF_OPTS += -Dpipewire-alsa=enabled
++PIPEWIRE_DEPENDENCIES += alsa-lib
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++PIPEWIRE_CONF_OPTS += -Dalsa=enabled
++else
++PIPEWIRE_CONF_OPTS += -Dalsa=disabled
++endif
++else
++PIPEWIRE_CONF_OPTS += -Dalsa=disabled -Dpipewire-alsa=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+-PIPEWIRE_DEPENDENCIES += xlib_libX11
++ifeq ($(BR2_PACKAGE_JACK2),y)
++PIPEWIRE_CONF_OPTS += -Dpipewire-jack=enabled -Djack=enabled
++PIPEWIRE_DEPENDENCIES += jack2
++else
++PIPEWIRE_CONF_OPTS += -Dpipewire-jack=disabled -Djack=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_PIPEWIRE_GSTREAMER),y)
+-PIPEWIRE_CONF_OPTS += -Dgstreamer=enabled
+-PIPEWIRE_DEPENDENCIES += libglib2 gstreamer1 gst1-plugins-base
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS)$(BR2_PACKAGE_SBC),yy)
++PIPEWIRE_CONF_OPTS += -Dbluez5=enabled
++PIPEWIRE_DEPENDENCIES += bluez5_utils sbc
+ else
+-PIPEWIRE_CONF_OPTS += -Dgstreamer=disabled
++PIPEWIRE_CONF_OPTS += -Dbluez5=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+-PIPEWIRE_CONF_OPTS += -Dsystemd=true
+-PIPEWIRE_DEPENDENCIES += systemd
++ifeq ($(BR2_PACKAGE_FFMPEG),y)
++PIPEWIRE_CONF_OPTS += -Dffmpeg=enabled
++PIPEWIRE_DEPENDENCIES += ffmpeg
++else
++PIPEWIRE_CONF_OPTS += -Dffmpeg=disabled
++endif
 +
-diff --git a/package/weston/0004-pipewire-fix-null-deref-in-0-3-API.patch b/package/weston/0004-pipewire-fix-null-deref-in-0-3-API.patch
-new file mode 100644
-index 0000000000..f65348e166
---- /dev/null
-+++ b/package/weston/0004-pipewire-fix-null-deref-in-0-3-API.patch
-@@ -0,0 +1,28 @@
-+From a67393c353e0f25b142910a817be5a7754d436c3 Mon Sep 17 00:00:00 2001
-+From: Ambareesh Balaji <ambareeshbalaji@gmail.com>
-+Date: Sat, 5 Dec 2020 20:49:55 -0500
-+Subject: [PATCH] pipewire: fix null deref in 0.3 API
++ifeq ($(BR2_PACKAGE_PIPEWIRE_V4L2),y)
++PIPEWIRE_CONF_OPTS += -Dv4l2=enabled
++else
++PIPEWIRE_CONF_OPTS += -Dv4l2=disabled
++endif
 +
-+Signed-off-by: Ambareesh Balaji <ambareeshbalaji@gmail.com>
-+[Retrieved from:
-+https://gitlab.freedesktop.org/wayland/weston/-/commit/a67393c353e0f25b142910a817be5a7754d436c3]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ pipewire/pipewire-plugin.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ifeq ($(BR2_PACKAGE_LIBCAMERA)$(BR2_PACKAGE_HAS_UDEV),yy)
++PIPEWIRE_CONF_OPTS += -Dlibcamera=enabled
++PIPEWIRE_DEPENDENCIES += libcamera
++else
++PIPEWIRE_CONF_OPTS += -Dlibcamera=disabled
++endif
 +
-+diff --git a/pipewire/pipewire-plugin.c b/pipewire/pipewire-plugin.c
-+index ca5cbfec1..55705acfc 100644
-+--- a/pipewire/pipewire-plugin.c
-++++ b/pipewire/pipewire-plugin.c
-+@@ -856,6 +856,7 @@ weston_pipewire_init(struct weston_pipewire *pipewire)
-+ 
-+ #if PW_CHECK_VERSION(0, 2, 90)
-+ 	pipewire->context = pw_context_new(pipewire->loop, NULL, 0);
-++	pipewire->core = pw_context_connect(pipewire->context, NULL, 0);
-+ #else
-+ 	pipewire->core = pw_core_new(pipewire->loop, NULL);
-+ 	pipewire->t = pw_core_get_type(pipewire->core);
-+-- 
-+GitLab
++ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),y)
++PIPEWIRE_CONF_OPTS += -Dvulkan=enabled
++PIPEWIRE_DEPENDENCIES += mesa3d
++else
++PIPEWIRE_CONF_OPTS += -Dvulkan=disabled
++endif
 +
++ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
++PIPEWIRE_CONF_OPTS += -Dpw-cat=enabled -Dsndfile=enabled
++PIPEWIRE_DEPENDENCIES += libsndfile
++else
++PIPEWIRE_CONF_OPTS += -Dpw-cat=disabled -Dsndfile=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_SDL2),y)
++PIPEWIRE_DEPENDENCIES += sdl2
++PIPEWIRE_CONF_OPTS += -Dsdl2=enabled
+ else
+-PIPEWIRE_CONF_OPTS += -Dsystemd=false
++PIPEWIRE_CONF_OPTS += -Dsdl2=disabled
+ endif
+ 
+ $(eval $(meson-package))
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index ad1710c6f7..6dfb1f8647 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -22,6 +22,7 @@ PULSEAUDIO_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
+ 	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
+ 	$(if $(BR2_PACKAGE_DBUS),dbus) \
++	$(if $(BR2_PACKAGE_NCURSES),ncurses) \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+ 	$(if $(BR2_PACKAGE_FFTW_SINGLE),fftw-single) \
+ 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
 -- 
 2.30.2
