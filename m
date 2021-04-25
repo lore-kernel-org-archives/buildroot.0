@@ -1,83 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Apr 2021 08:52:47 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/i2c-tools: add
- upstream post-4.2 i2ctransfer fix
-Message-ID: <20210425065503.EABCA81539@busybox.osuosl.org>
+Date: Sun, 25 Apr 2021 08:45:16 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/network-manager:
+ bump to version 1.22.16
+Message-ID: <20210425065503.B730781539@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fa2da0382029545c0d0098058028f2e6b835800
+commit: https://git.buildroot.net/buildroot/commit/?id=d6e09cf9a2dd02ef3a2a98759a367f0ca7777ae0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-i2c-tools 4.2 contained an invalid check, leading to verbose false-positive
-warning messages when the variable length ({r,w}?) option is used:
+Notice: This fixes a security issue, but in code not used in Buildroot:
 
-https://www.spinics.net/lists/linux-i2c/msg50032.html
-https://www.spinics.net/lists/linux-i2c/msg50253.html
+ifcfg-rh: handle "802-1x.{,phase2-}ca-path". Otherwise setting this
+property silently fails and a profile might accidentally not perform
+any authentication (CVE-2020-10754).
 
-Unfortunately upstream does not make bugfix releases, instead opting to list
-such bugfixes on the wiki:
+Update indentation in hash file (two spaces)
 
-https://i2c.wiki.kernel.org/index.php/I2C_Tools
+https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/1.22.16/NEWS
 
-So add the patch here.
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Peter: Clarify that security issue isn't applicable to Buildroot]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 535c65594c852132ad9f0d48ef4ed0d81389c5d0)
+(cherry picked from commit 6db751e1e129e62fde0b9c3d7de69f21f639e8b3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...s-i2ctransfer-add-check-for-returned-leng.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ package/network-manager/network-manager.hash | 10 +++++-----
+ package/network-manager/network-manager.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/i2c-tools/0001-Revert-tools-i2ctransfer-add-check-for-returned-leng.patch b/package/i2c-tools/0001-Revert-tools-i2ctransfer-add-check-for-returned-leng.patch
-new file mode 100644
-index 0000000000..7173efe219
---- /dev/null
-+++ b/package/i2c-tools/0001-Revert-tools-i2ctransfer-add-check-for-returned-leng.patch
-@@ -0,0 +1,41 @@
-+From 06a1909ae1e8ae1edc70dc48dd22a32ba5eceecb Mon Sep 17 00:00:00 2001
-+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-+Date: Tue, 9 Feb 2021 12:05:56 +0100
-+Subject: [PATCH] Revert "tools: i2ctransfer: add check for returned length
-+ from driver"
-+
-+This reverts commit 34806fc4e7090b34e32fa1110d546ab5ce01a6a0. It was
-+developed against an experimental kernel. The regular kernel does not
-+update the new message length to userspace, so the check is always false
-+positive. We can't change the kernel behaviour because it would break
-+the ABI. So revert this commit.
-+
-+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-+Signed-off-by: Wolfram Sang <wsa@kernel.org>
-+[Peter: drop CHANGES update]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ tools/i2ctransfer.c | 7 +------
-+ 1 file changed, 1 insertions(+), 6 deletions(-)
-+
-+diff --git a/tools/i2ctransfer.c b/tools/i2ctransfer.c
-+index f2a4df8..b0e8d43 100644
-+--- a/tools/i2ctransfer.c
-++++ b/tools/i2ctransfer.c
-+@@ -88,12 +88,7 @@ static void print_msgs(struct i2c_msg *msgs, __u32 nmsgs, unsigned flags)
-+ 		int recv_len = msgs[i].flags & I2C_M_RECV_LEN;
-+ 		int print_buf = (read && (flags & PRINT_READ_BUF)) ||
-+ 				(!read && (flags & PRINT_WRITE_BUF));
-+-		__u16 len = msgs[i].len;
-+-
-+-		if (recv_len && print_buf && len != msgs[i].buf[0] + 1) {
-+-			fprintf(stderr, "Correcting wrong msg length after recv_len! Please fix the I2C driver and/or report.\n");
-+-			len = msgs[i].buf[0] + 1;
-+-		}
-++		__u16 len = recv_len ? msgs[i].buf[0] + 1 : msgs[i].len;
-+ 
-+ 		if (flags & PRINT_HEADER) {
-+ 			fprintf(output, "msg %u: addr 0x%02x, %s, len ",
-+-- 
-+2.20.1
-+
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 93a9b5017e..aef06dde2c 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,6 +1,6 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.22.10.sha256sum
+-sha256 2b29ccc1531ba7ebba95a97f40c22b963838e8b6833745efe8e6fb71fd8fca77  NetworkManager-1.22.10.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.22/NetworkManager-1.22.16.sha256sum
++sha256  377aa053752eaa304b72c9906f9efcd9fbd5f7f6cb4cd4ad72425a68982cffc6  NetworkManager-1.22.16.tar.xz
+ # Locally computed
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+-sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+-sha256 f0543c137bc0eece552d42642d1bab31707ca3b3663d9c7a81ac3b270a4780e7  CONTRIBUTING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
++sha256  f0543c137bc0eece552d42642d1bab31707ca3b3663d9c7a81ac3b270a4780e7  CONTRIBUTING
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 9402564cb4..607c2b402b 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NETWORK_MANAGER_VERSION_MAJOR = 1.22
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).16
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
