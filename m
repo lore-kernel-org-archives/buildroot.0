@@ -1,26 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Apr 2021 08:51:11 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python-httplib2: add CPE
- variables
-In-Reply-To: <20210409222445.3865584-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 10 Apr 2021 00:24:45 +0200")
-References: <20210409222445.3865584-1-fontaine.fabrice@gmail.com>
- <20210409222445.3865584-2-fontaine.fabrice@gmail.com>
-Message-ID: <877dkquaao.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Apr 2021 08:52:13 +0200
+Subject: [Buildroot] [git commit] package/clamav: security bump to
+ version 0.103.2
+In-Reply-To: <20210410161423.0124481842@busybox.osuosl.org> (Peter Korsgaard's
+ message of "Sat, 10 Apr 2021 18:39:56 +0200")
+References: <20210410161423.0124481842@busybox.osuosl.org>
+Message-ID: <8735veua8y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > cpe:2.3:a:httplib2_project:httplib2 is a valid CPE identifier for this
- > package:
+ > commit: https://git.buildroot.net/buildroot/commit/?id=7aee27c2b9f4da87b50d8b330d086c695d900147
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ahttplib2_project%3Ahttplib2
+ > Fixes the following security issues:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > - CVE-2021-1386: Fix for UnRAR DLL load privilege escalation.  Affects
+ >   0.103.1 and prior on Windows only.
+
+ > - CVE-2021-1252: Fix for Excel XLM parser infinite loop.  Affects 0.103.0
+ >   and 0.103.1 only.
+
+ > - CVE-2021-1404: Fix for PDF parser buffer over-read; possible crash.
+ >   Affects 0.103.0 and 0.103.1 only.
+
+ > - CVE-2021-1405: Fix for mail parser NULL-dereference crash.  Affects
+ >   0.103.1 and prior.
+
+ > - CVE-2021-27506: The ClamAV Engine (Version 0.103.1 and below) embedded in
+ >   Storsmshield Network Security (1.0 to 4.1.5) is subject to DoS in case of
+ >   parsing of malformed png files.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2021.02.x, thanks.
 
