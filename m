@@ -1,55 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Apr 2021 22:02:41 +0200
-Subject: [Buildroot] [git commit] package/pipewire: needs headers >= 3.18
-Message-ID: <20210425193545.2B8A68006D@busybox.osuosl.org>
+Date: Sun, 25 Apr 2021 22:34:00 +0200
+Subject: [Buildroot] [git commit] package/libqmi: add _CPE_ID_VENDOR
+Message-ID: <20210425200702.5B3E3861BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=996942710a91289c238843dc53389d289ed6c31c
+commit: https://git.buildroot.net/buildroot/commit/?id=5793a9e7fd83f9cfa035b3ce97591a92d308efc9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-v4l2 plugin needs headers >= 3.18 since
-https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/4cb90f3b868e5169cb9bfe2200f3b079d3f0db7b
-(so since its addition to buildroot in commit
-75c86f90c73c42ee35559610aec28a02190b65b7) because of
-V4L2_PIX_FMT_ARGB555X which is only available since
-https://github.com/torvalds/linux/commit/fcc0d3db28922f9ba21ea6c7b23ea10ffb5d3521
+cpe:2.3:a:libqmi_project:libqmi:* is a valid CPE identifier for this package:
 
-v4l2 plugin can't be disabled until
-https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/8d71d2dab831b77cadb74f2e4630f549acc94ac4
+ https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:libqmi_project:libqmi
 
-Fixes:
- - http://autobuild.buildroot.org/results/b887b6ccd2c22bb3214c07d1281ad486438fb58e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pipewire/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/libqmi/libqmi.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
-index 57e70d65f8..9c6b6eb881 100644
---- a/package/pipewire/Config.in
-+++ b/package/pipewire/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PIPEWIRE
- 	bool "pipewire"
- 	depends on BR2_PACKAGE_HAS_UDEV # libudev
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
- 	depends on BR2_USE_MMU # dbus
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_DBUS
-@@ -30,6 +31,8 @@ comment "pipewire gstreamer support needs a toolchain w/ wchar, threads"
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 4b430d11f8..6fc6d4a50d 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -9,6 +9,7 @@ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+ LIBQMI_LICENSE_FILES = COPYING COPYING.LIB
++LIBQMI_CPE_ID_VENDOR = libqmi_project
+ LIBQMI_INSTALL_STAGING = YES
  
- endif
- 
--comment "pipewire needs udev and a toolchain w/ threads"
-+comment "pipewire needs udev and a toolchain w/ threads, headers >= 3.18"
- 	depends on BR2_USE_MMU
--	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_PACKAGE_HAS_UDEV || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+ LIBQMI_DEPENDENCIES = libglib2
