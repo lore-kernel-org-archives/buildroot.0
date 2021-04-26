@@ -1,173 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 23:55:53 +0200
-Subject: [Buildroot] [PATCH 2/2] package/wpa_supplicant: add upstream patch
- to fix CVE-2021-30004
-In-Reply-To: <20210426215553.11099-1-peter@korsgaard.com>
-References: <20210426215553.11099-1-peter@korsgaard.com>
-Message-ID: <20210426215553.11099-2-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 26 Apr 2021 23:53:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/monkey: bump to latest git commit
+Message-ID: <20210426215358.519314-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue for the internal TLS backend:
+This will fix a build failure with gcc 10
 
-- CVE-2021-30004: In wpa_supplicant and hostapd 2.9, forging attacks may
-  occur because AlgorithmIdentifier parameters are mishandled in tls/pkcs1.c
-  and tls/x509v3.c.
+- Update indentation in hash file (two spaces)
+- Drop INSTALL_SYSCONFDIR, INSTALL_WEBROOTDIR and WITH_SYSTEM_MALLOC
+  (not available since
+  https://github.com/monkey/monkey/commit/df145932e33fca0d4a1dcd9d7675f996c8e6a73b)
+- Set WITHOUT_HEADERS to ON because headers are not needed and to avoid
+  the following build failure:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+CMake Error at include/cmake_install.cmake:46 (file):
+  file INSTALL cannot find
+  "/home/fabrice/buildroot/output/build/monkey-f54856ce250c4e25735434dc75717a4b7fbfc45b/include/mk_core.h":
+  No such file or directory.
+Call Stack (most recent call first):
+  cmake_install.cmake:69 (include)
+
+Upstream is aware than the lack of release is an issue but no comments
+since 2018: https://github.com/monkey/monkey/issues/276
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0b723937ca048228082d040100f6e6324ac8300b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...DigestAlgorithmIdentifier-parameters.patch | 116 ++++++++++++++++++
- package/wpa_supplicant/wpa_supplicant.mk      |   5 +-
- 2 files changed, 119 insertions(+), 2 deletions(-)
- create mode 100644 package/wpa_supplicant/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
+ package/monkey/monkey.hash |  7 +++----
+ package/monkey/monkey.mk   | 18 ++++++++----------
+ 2 files changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/package/wpa_supplicant/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch b/package/wpa_supplicant/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
-new file mode 100644
-index 0000000000..5dcfed9406
---- /dev/null
-+++ b/package/wpa_supplicant/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
-@@ -0,0 +1,116 @@
-+From a0541334a6394f8237a4393b7372693cd7e96f15 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Sat, 13 Mar 2021 18:19:31 +0200
-+Subject: [PATCH] ASN.1: Validate DigestAlgorithmIdentifier parameters
-+
-+The supported hash algorithms do not use AlgorithmIdentifier parameters.
-+However, there are implementations that include NULL parameters in
-+addition to ones that omit the parameters. Previous implementation did
-+not check the parameters value at all which supported both these cases,
-+but did not reject any other unexpected information.
-+
-+Use strict validation of digest algorithm parameters and reject any
-+unexpected value when validating a signature. This is needed to prevent
-+potential forging attacks.
-+
-+Signed-off-by: Jouni Malinen <j@w1.fi>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/tls/pkcs1.c  | 21 +++++++++++++++++++++
-+ src/tls/x509v3.c | 20 ++++++++++++++++++++
-+ 2 files changed, 41 insertions(+)
-+
-+diff --git a/src/tls/pkcs1.c b/src/tls/pkcs1.c
-+index bbdb0d72d..5761dfed0 100644
-+--- a/src/tls/pkcs1.c
-++++ b/src/tls/pkcs1.c
-+@@ -244,6 +244,8 @@ int pkcs1_v15_sig_ver(struct crypto_public_key *pk,
-+ 		os_free(decrypted);
-+ 		return -1;
-+ 	}
-++	wpa_hexdump(MSG_MSGDUMP, "PKCS #1: DigestInfo",
-++		    hdr.payload, hdr.length);
-+ 
-+ 	pos = hdr.payload;
-+ 	end = pos + hdr.length;
-+@@ -265,6 +267,8 @@ int pkcs1_v15_sig_ver(struct crypto_public_key *pk,
-+ 		os_free(decrypted);
-+ 		return -1;
-+ 	}
-++	wpa_hexdump(MSG_MSGDUMP, "PKCS #1: DigestAlgorithmIdentifier",
-++		    hdr.payload, hdr.length);
-+ 	da_end = hdr.payload + hdr.length;
-+ 
-+ 	if (asn1_get_oid(hdr.payload, hdr.length, &oid, &next)) {
-+@@ -273,6 +277,23 @@ int pkcs1_v15_sig_ver(struct crypto_public_key *pk,
-+ 		os_free(decrypted);
-+ 		return -1;
-+ 	}
-++	wpa_hexdump(MSG_MSGDUMP, "PKCS #1: Digest algorithm parameters",
-++		    next, da_end - next);
-++
-++	/*
-++	 * RFC 5754: The correct encoding for the SHA2 algorithms would be to
-++	 * omit the parameters, but there are implementation that encode these
-++	 * as a NULL element. Allow these two cases and reject anything else.
-++	 */
-++	if (da_end > next &&
-++	    (asn1_get_next(next, da_end - next, &hdr) < 0 ||
-++	     !asn1_is_null(&hdr) ||
-++	     hdr.payload + hdr.length != da_end)) {
-++		wpa_printf(MSG_DEBUG,
-++			   "PKCS #1: Unexpected digest algorithm parameters");
-++		os_free(decrypted);
-++		return -1;
-++	}
-+ 
-+ 	if (!asn1_oid_equal(&oid, hash_alg)) {
-+ 		char txt[100], txt2[100];
-+diff --git a/src/tls/x509v3.c b/src/tls/x509v3.c
-+index a8944dd2f..df337ec4d 100644
-+--- a/src/tls/x509v3.c
-++++ b/src/tls/x509v3.c
-+@@ -1964,6 +1964,7 @@ int x509_check_signature(struct x509_certificate *issuer,
-+ 		os_free(data);
-+ 		return -1;
-+ 	}
-++	wpa_hexdump(MSG_MSGDUMP, "X509: DigestInfo", hdr.payload, hdr.length);
-+ 
-+ 	pos = hdr.payload;
-+ 	end = pos + hdr.length;
-+@@ -1985,6 +1986,8 @@ int x509_check_signature(struct x509_certificate *issuer,
-+ 		os_free(data);
-+ 		return -1;
-+ 	}
-++	wpa_hexdump(MSG_MSGDUMP, "X509: DigestAlgorithmIdentifier",
-++		    hdr.payload, hdr.length);
-+ 	da_end = hdr.payload + hdr.length;
-+ 
-+ 	if (asn1_get_oid(hdr.payload, hdr.length, &oid, &next)) {
-+@@ -1992,6 +1995,23 @@ int x509_check_signature(struct x509_certificate *issuer,
-+ 		os_free(data);
-+ 		return -1;
-+ 	}
-++	wpa_hexdump(MSG_MSGDUMP, "X509: Digest algorithm parameters",
-++		    next, da_end - next);
-++
-++	/*
-++	 * RFC 5754: The correct encoding for the SHA2 algorithms would be to
-++	 * omit the parameters, but there are implementation that encode these
-++	 * as a NULL element. Allow these two cases and reject anything else.
-++	 */
-++	if (da_end > next &&
-++	    (asn1_get_next(next, da_end - next, &hdr) < 0 ||
-++	     !asn1_is_null(&hdr) ||
-++	     hdr.payload + hdr.length != da_end)) {
-++		wpa_printf(MSG_DEBUG,
-++			   "X509: Unexpected digest algorithm parameters");
-++		os_free(data);
-++		return -1;
-++	}
-+ 
-+ 	if (x509_sha1_oid(&oid)) {
-+ 		if (signature->oid.oid[6] != 5 /* sha-1WithRSAEncryption */) {
-+-- 
-+2.20.1
-+
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index f59832645f..e9078b9f89 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -25,6 +25,9 @@ WPA_SUPPLICANT_IGNORE_CVES += CVE-2019-16275
- # 0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
- WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-27803
+diff --git a/package/monkey/monkey.hash b/package/monkey/monkey.hash
+index 83fc0def60..27ff806442 100644
+--- a/package/monkey/monkey.hash
++++ b/package/monkey/monkey.hash
+@@ -1,4 +1,3 @@
+-# md5 from http://monkey-project.com/releases/1.6/monkey-1.6.9.tar.gz.md5, sha256 locally computed:
+-md5    c401734985a936ee07dbff5eca7d176a 				monkey-1.6.9.tar.gz
+-sha256 f1122e89cda627123286542b0a18fcaa131cbe9d4f5dd897d9455157289148fb	monkey-1.6.9.tar.gz
+-sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594	LICENSE
++# Locally computed:
++sha256  c988d9f4f577a789aa244e5a0f99ebfd46ebddc328656f319acf64edc9fd5199  monkey-f54856ce250c4e25735434dc75717a4b7fbfc45b.tar.gz
++sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
+index 5264713120..2cb1a5f298 100644
+--- a/package/monkey/monkey.mk
++++ b/package/monkey/monkey.mk
+@@ -4,31 +4,29 @@
+ #
+ ################################################################################
  
-+# 0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
-+WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-30004
-+
- # install the wpa_client library
- WPA_SUPPLICANT_INSTALL_STAGING = YES
+-MONKEY_VERSION_MAJOR = 1.6
+-MONKEY_VERSION = $(MONKEY_VERSION_MAJOR).9
+-MONKEY_SITE = http://monkey-project.com/releases/$(MONKEY_VERSION_MAJOR)
++MONKEY_VERSION = f54856ce250c4e25735434dc75717a4b7fbfc45b
++MONKEY_SITE = $(call github,monkey,monkey,$(MONKEY_VERSION))
+ MONKEY_LICENSE = Apache-2.0
+ MONKEY_LICENSE_FILES = LICENSE
  
-@@ -132,8 +135,6 @@ ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf libopenssl
- WPA_SUPPLICANT_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
--# Issue only affects the "internal" TLS implementation
--WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-30004
- else
- WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
- WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+ MONKEY_CONF_OPTS = \
+-	-DINSTALL_SYSCONFDIR=/etc/monkey \
+-	-DINSTALL_WEBROOTDIR=/var/www \
+-	-DWITH_SYSTEM_MALLOC=1
++	-DMK_PATH_WWW=/var/www \
++	-DWITHOUT_HEADERS=ON
+ 
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+-MONKEY_CONF_OPTS += -DWITH_UCLIB=1 -DWITH_BACKTRACE=0
++MONKEY_CONF_OPTS += -DMK_UCLIB=ON -DMK_BACKTRACE=OFF
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-MONKEY_CONF_OPTS += -DWITH_MUSL=1 -DWITH_BACKTRACE=0
++MONKEY_CONF_OPTS += -DMK_MUSL=ON -DMK_BACKTRACE=OFF
+ endif
+ 
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+-MONKEY_CONF_OPTS += -DWITH_DEBUG=1
++MONKEY_CONF_OPTS += -DMK_DEBUG=ON
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MONKEY_SSL),y)
+-MONKEY_CONF_OPTS += -DWITH_PLUGINS=tls -DWITH_MBEDTLS_SHARED=1
++MONKEY_CONF_OPTS += -DMK_PLUGIN_TLS=ON -DMK_MBEDTLS_SHARED=ON
+ MONKEY_DEPENDENCIES += mbedtls
+ endif
+ 
 -- 
-2.20.1
+2.30.2
