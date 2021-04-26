@@ -1,45 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 21:09:46 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/coreutils: ignore
- CVE-2013-0221, CVE-2013-0222, CVE-2013-0223
-Message-ID: <20210426203328.3B33A85F4B@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 22:38:24 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libp11: bump to
+ version 0.4.11
+Message-ID: <20210426203328.C2A0F83D66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2fd0c8d540c408de07fe119d342c4d99753a08f
+commit: https://git.buildroot.net/buildroot/commit/?id=2cf05f6fa44438b65539e80d6e18fab08d7b4d8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-This CVE is only relevant to a build when the SUSE coreutils-i18n.patch
-is included. The upstream codebase does not include this patch, nor
-does Buildroot.
+Update indentation in hash file (two spaces)
 
-https://security-tracker.debian.org/tracker/CVE-2013-0221
-https://security-tracker.debian.org/tracker/CVE-2013-0222
-https://security-tracker.debian.org/tracker/CVE-2013-0223
+https://github.com/OpenSC/libp11/releases/tag/libp11-0.4.11
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8ae9156d8b730689484927fba2ec2fa6c1dc0433)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 281b11105a55bf7da043b6cf3528a19ed736300b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/coreutils/coreutils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libp11/libp11.hash | 4 ++--
+ package/libp11/libp11.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 0e75cdfcda..65234a113e 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -10,6 +10,10 @@ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
- COREUTILS_LICENSE = GPL-3.0+
- COREUTILS_LICENSE_FILES = COPYING
- COREUTILS_CPE_ID_VENDOR = gnu
-+# Only when including SUSE coreutils-i18n.patch
-+COREUTILS_IGNORE_CVES = CVE-2013-0221
-+COREUTILS_IGNORE_CVES += CVE-2013-0222
-+COREUTILS_IGNORE_CVES += CVE-2013-0223
- # We're patching m4/pthread-cond.m4
- COREUTILS_AUTORECONF = YES
+diff --git a/package/libp11/libp11.hash b/package/libp11/libp11.hash
+index bba5c770a2..52d73d4206 100644
+--- a/package/libp11/libp11.hash
++++ b/package/libp11/libp11.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 639ea43c3341e267214b712e1e5e12397fd2d350899e673dd1220f3c6b8e3db4  libp11-0.4.10.tar.gz
+-sha256 d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
++sha256  57d47a12a76fd92664ae30032cf969284ebac1dfc25bf824999d74b016d51366  libp11-0.4.11.tar.gz
++sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
+diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
+index 90c582571e..45a718ee99 100644
+--- a/package/libp11/libp11.mk
++++ b/package/libp11/libp11.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-LIBP11_VERSION = 0.4.10
++LIBP11_VERSION = 0.4.11
+ LIBP11_SITE = https://github.com/OpenSC/libp11/releases/download/libp11-$(LIBP11_VERSION)
+ LIBP11_DEPENDENCIES = openssl host-pkgconf
+ LIBP11_INSTALL_STAGING = YES
