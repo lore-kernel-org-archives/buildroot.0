@@ -1,41 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 23:06:01 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] Revert "package/domoticz:
- drop boost date-time dependency"
-Message-ID: <20210426205011.A7B3F864E7@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 23:06:51 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/domoticz: select
+ boost atomic
+Message-ID: <20210426205011.B2E4A85AFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=312818c6d0a3744b78426034d10711f9d348c7f9
+commit: https://git.buildroot.net/buildroot/commit/?id=01d92cac8982213d4bcb578d1bb3e26290bbf7b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-This reverts commit 4b4d98e2c5165c3121e670192970fc909cae6d8a as
-Boost::date_time is still used by domoticz (in pmain/Scheduler.cpp and
-push/BasePush.cpp)
+domoticz does not use Boost::atomic but cmake is so "smart" that it
+(wrongly) assumes that Boost::thread depends on Boost:date_time and
+Boost::atomic since boost version 1.54:
+
+set(_Boost_THREAD_DEPENDENCIES chrono date_time atomic)
+
+Extracted from:
+ - https://gitlab.kitware.com/cmake/cmake/-/blob/master/Modules/FindBoost.cmake#L1113
+
+As we can't patch every cmake on the field, just select boost atomic
+
+It should be noted that build failures are only raised since commit
+8a46b41b4a5d1c2f5ebefd7fc23fec7e8ba0598c as this commit drop the patch
+that was decreasing cmake version but also removing:
+
+target_link_libraries(domoticz Boost::thread Boost::system)
 
 Fixes:
- - http://autobuild.buildroot.org/results/493a2e93fe6121f118293a268f986ee51009b7e8
+ - http://autobuild.buildroot.org/results/4306c0a725ed9a34bd55550df428866db6e4f052
+ - http://autobuild.buildroot.org/results/2478e7a2ec1c63dcc2b36d29a39004468b230211
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 49b6578f8857340b38cefd14d77fbe621557a57b)
+(cherry picked from commit 52ad97d00d428b3fdb257e7be8364df52157fc0a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/domoticz/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index 4d1a7f9289..88de232642 100644
+index 88de232642..547ef9f05d 100644
 --- a/package/domoticz/Config.in
 +++ b/package/domoticz/Config.in
 @@ -11,6 +11,7 @@ config BR2_PACKAGE_DOMOTICZ
  	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
  	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_DATE_TIME
++	select BR2_PACKAGE_BOOST_ATOMIC
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
  	select BR2_PACKAGE_BOOST_SYSTEM
  	select BR2_PACKAGE_BOOST_THREAD
- 	select BR2_PACKAGE_JSONCPP
