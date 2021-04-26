@@ -1,43 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 21:55:17 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/ncurses: ignore
- CVE-2018-10754, CVE-2018-19211, CVE-2018-19217, CVE-2019-17594,
- CVE-2019-17595
-Message-ID: <20210426203328.8782583D66@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 22:46:35 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libfreefare: drop
+ threads dependency
+Message-ID: <20210426203328.CE3F4815DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bf84c7ce0bd8c2f5ede440c4b30a5bf6ae6b791
+commit: https://git.buildroot.net/buildroot/commit/?id=02078da3633deaa57da1727b867e1a1fdad91ca4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Commit 4b21273d71d09 added upstream (security) patches up to 20200118
-and in the commit description it outlines these CVEs were patched.
+This dependency should have dropped by commit
+1a49188a69416542087acd1246b17c0139ff0054 which removed threads
+dependency from libnfc
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 675769791bd43de18b6bbeec2b4b48772a541a7a)
+(cherry picked from commit b92c7a85271b85ed1ace4de92d7f3716214283d1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncurses/ncurses.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/libfreefare/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 97e3e2c321..5d9c6bb0dd 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -11,6 +11,12 @@ NCURSES_DEPENDENCIES = host-ncurses
- NCURSES_LICENSE = MIT with advertising clause
- NCURSES_LICENSE_FILES = COPYING
- NCURSES_CPE_ID_VENDOR = gnu
-+# Commit 4b21273d71d09 added upstream (security) patches up to 20200118
-+NCURSES_IGNORE_CVES += CVE-2018-10754
-+NCURSES_IGNORE_CVES += CVE-2018-19211
-+NCURSES_IGNORE_CVES += CVE-2018-19217
-+NCURSES_IGNORE_CVES += CVE-2019-17594
-+NCURSES_IGNORE_CVES += CVE-2019-17595
- NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)6-config
- NCURSES_PATCH = \
- 	$(addprefix https://invisible-mirror.net/archives/ncurses/$(NCURSES_VERSION)/, \
+diff --git a/package/libfreefare/Config.in b/package/libfreefare/Config.in
+index 2bb0c93ddf..b330b2256a 100644
+--- a/package/libfreefare/Config.in
++++ b/package/libfreefare/Config.in
+@@ -1,12 +1,8 @@
+ config BR2_PACKAGE_LIBFREEFARE
+ 	bool "libfreefare"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LIBNFC
+ 	help
+ 	  Library for high level manipulation of MIFARE cards.
+ 
+ 	  http://nfc-tools.org/index.php?title=Libfreefare
+-
+-comment "libfreefare needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
