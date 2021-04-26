@@ -1,90 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 08:49:49 +0200
+Date: Mon, 26 Apr 2021 08:45:03 +0200
 Subject: [Buildroot] [git commit branch/2021.02.x]
- package/x11r7/xserver_xorg-server: remove evdev input drivers for kdrive
-Message-ID: <20210426063224.4225F861F7@busybox.osuosl.org>
+ package/x11r7/xserver_xorg-server: remove non-evdev input drivers for
+ kdrive
+Message-ID: <20210426063224.29FB484180@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f6d61c0ff10ad8fe7403dd1ba60364cec3f1047
+commit: https://git.buildroot.net/buildroot/commit/?id=711b6961bf8dd0fe254d9c87931db64295bbfaeb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Upstream removed the evdev driver for kdrive:
-https://cgit.freedesktop.org/xorg/xserver/commit/configure.ac?h=server-1.20-branch&id=27819950e4158326e0f83a30f2e8968b932625ef
+Upstream removed support for non-evdev input drivers for kdrive:
+https://cgit.freedesktop.org/xorg/xserver/commit/configure.ac?h=server-1.20-branch&id=e7b8b7b131d8283c96ed0aff4593ab41441b5d3b
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 553a12352634023a77ba6742b3786f01359bd189)
+(cherry picked from commit eea0da855bb146cca1ed85da03115953cd0219f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                                       |  6 ++++++
- package/x11r7/xserver_xorg-server/Config.in            | 18 ------------------
- .../x11r7/xserver_xorg-server/xserver_xorg-server.mk   |  6 ------
- 3 files changed, 6 insertions(+), 24 deletions(-)
+ Config.in.legacy                                         | 12 ++++++++++++
+ package/x11r7/xserver_xorg-server/Config.in              | 12 ------------
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 12 ------------
+ 3 files changed, 12 insertions(+), 24 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 59bd528da0..937aed7399 100644
+index 9deb67b31f..59bd528da0 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
+@@ -146,6 +146,18 @@ endif
  
  comment "Legacy options removed in 2021.02"
  
-+config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV
-+	bool "KDrive/TinyX evdev input driver removed"
++config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_KBD
++	bool "KDrive/TinyX kbd input driver removed"
 +	select BR2_LEGACY
 +	help
-+	  The evdev input driver in KDrive was removed.
++	  The kbd input driver in KDrive was removed.
 +
- config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_KBD
- 	bool "KDrive/TinyX kbd input driver removed"
++config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_MOUSE
++	bool "KDrive/TinyX mouse input driver removed"
++	select BR2_LEGACY
++	help
++	  The mouse input driver in KDrive was removed.
++
+ config BR2_PACKAGE_MPD_AUDIOFILE
+ 	bool "mpd audiofile support removed"
  	select BR2_LEGACY
 diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 1b9adadb5c..fcd3d0ae00 100644
+index 3bf5af89be..1b9adadb5c 100644
 --- a/package/x11r7/xserver_xorg-server/Config.in
 +++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -74,24 +74,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
+@@ -90,18 +90,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV
+ 	  Xfbdev -keybd evdev,,device=/dev/input/eventX
+ 	         -mouse evdev,,device=/dev/input/eventY
  
- endchoice
- 
--if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
--
--config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV
--	bool "Enable KDrive/TinyX evdev input driver"
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_KBD
+-	bool "Enable KDrive/TinyX kbd input driver"
 -	help
--	  Enable evdev input driver in KDrive. This allows KDrive to
--	  use input devices that are integrated in the Linux input
--	  subsystem, i.e have a /dev/input/eventX device file. This is
--	  most likely the input driver you want to use.
+-	  Enable kbd input driver in KDrive. It uses the console
+-	  keyboard as input device.
 -
--	  This driver can then be enabled by running the X server
--	  using:
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_MOUSE
+-	bool "Enable KDrive/TinyX mouse input driver"
+-	help
+-	  Enable mouse input driver in KDrive. It supports PS/2 mice
+-	  and serial port mice.
 -
--	  Xfbdev -keybd evdev,,device=/dev/input/eventX
--	         -mouse evdev,,device=/dev/input/eventY
--
--endif
--
- comment "Optional Servers"
+ endif
  
- config BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB
+ comment "Optional Servers"
 diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index aaf3584772..8bd92b7ab6 100644
+index 3fa77cd4f0..03f36f1b28 100644
 --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
 +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -94,12 +94,6 @@ XSERVER_XORG_SERVER_CONF_OPTS += \
- 	--disable-dri \
- 	--disable-xsdl
+@@ -105,18 +105,6 @@ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-evdev
+ endif
  
--ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV),y)
--XSERVER_XORG_SERVER_CONF_OPTS += --enable-kdrive-evdev
+-ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_KBD),y)
+-XSERVER_XORG_SERVER_CONF_OPTS += --enable-kdrive-kbd
 -else
--XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-evdev
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-kbd
+-endif
+-
+-ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_MOUSE),y)
+-XSERVER_XORG_SERVER_CONF_OPTS += --enable-kdrive-mouse
+-else
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-mouse
 -endif
 -
  else # modular
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
  endif
