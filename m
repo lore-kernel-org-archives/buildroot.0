@@ -1,34 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 22:48:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: needs headers >= 3.18
-In-Reply-To: <20210425193742.3094686-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 25 Apr 2021 21:37:42 +0200")
-References: <20210425193742.3094686-1-fontaine.fabrice@gmail.com>
-Message-ID: <87o8e0g4ce.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Apr 2021 22:56:30 +0200
+Subject: [Buildroot] boot/grub2: grub-core-build-fixes-for-i386
+ (grub-2.04 + binutils-2.35.2 + pseudo-op .code64)
+In-Reply-To: <CANTg=Qj3vMern005jEMmUs2dWvi0oJ9Y3aoS4ocsrD91KoXW5Q@mail.gmail.com>
+References: <CANTg=Qj3vMern005jEMmUs2dWvi0oJ9Y3aoS4ocsrD91KoXW5Q@mail.gmail.com>
+Message-ID: <20210426225630.113ee3d7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hello Mikhail,
 
- > v4l2 plugin needs headers >= 3.18 since
- > https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/4cb90f3b868e5169cb9bfe2200f3b079d3f0db7b
- > (so since its addition to buildroot in commit
- > 75c86f90c73c42ee35559610aec28a02190b65b7) because of
- > V4L2_PIX_FMT_ARGB555X which is only available since
- > https://github.com/torvalds/linux/commit/fcc0d3db28922f9ba21ea6c7b23ea10ffb5d3521
+On Tue, 20 Apr 2021 12:35:16 +0300
+"Mikhail B. WproxyM" <w.proxy.m@gmail.com> wrote:
 
- > v4l2 plugin can't be disabled until
- > https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/8d71d2dab831b77cadb74f2e4630f549acc94ac4
+> We are using binutils-2.35.2+ (later then 2.29.1), grub-2.04,
+> cross-compiling on recent buildroot under i386/i686 and getting error:
+> 
+> > lib/i386/relocator64.S:66: Error: unknown pseudo-op: `.code64'  
+> 
+> So, the working patch is attached. Please add it to buildroot.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/b887b6ccd2c22bb3214c07d1281ad486438fb58e
+Do you have some details on the conditions to reproduce this issue?
+Indeed, I just tried to build grub2, with the following configuration:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+BR2_x86_core2=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_TARGET_GRUB2=y
+BR2_TARGET_GRUB2_I386_EFI=y
 
-Committed to 2021.02.x, thanks.
+So it's using a i686 target system, with a toolchain that uses binutils
+2.34 (i.e later than the 2.29 you're pointing). And it builds fine,
+including relocator64.S, which gets built as part of the build process.
 
+Note: I am building *from* an x86-64 system. But how can that matter,
+as relocator64.S is built using the cross-compiler?
+
+Also, why isn't this patch in upstream Grub ?
+
+Thanks a lot for the additional details you could provide.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
