@@ -1,51 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 22:29:59 +0200
-Subject: [Buildroot] [PATCH 00/10] Misc CVE ignores
-In-Reply-To: <20210424092952.GS298901@scaer> (Yann E. MORIN's message of "Sat, 
- 24 Apr 2021 11:29:52 +0200")
-References: <20210421204235.5956-1-matthew.weber@rockwellcollins.com>
- <20210424092952.GS298901@scaer>
-Message-ID: <87a6pkhjqw.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Apr 2021 22:32:53 +0200
+Subject: [Buildroot] [PATCH] package/links: graphics mode does not
+ depend on DirectFB or X11
+In-Reply-To: <20210423112118.3938670-1-urjaman@gmail.com>
+References: <20210423112118.3938670-1-urjaman@gmail.com>
+Message-ID: <20210426223253.424b4fcb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello Urja,
 
- > Matt, All,
- > On 2021-04-21 15:42 -0500, Matt Weber spake thusly:
- >> * I'm working on upstream NVD fixes for some of these.
- >> 
- >> * There are roughly half of the ignore cases that are a bit of a
- >> challenge to identify where the fix was clearly tracked into
- >> a specific version. I tried to document in each commit as much
- >> as a could by linking to conversations clarifying the details.
- >> 
- >> Matt Weber (10):
- >> package/bind: ignore CVE-2017-3139
- >> package/coreutils: ignore CVE-2013-0221, CVE-2013-0222, CVE-2013-0223
- >> package/bind: ignore CVE-2019-6470
- >> package/cmake: ignore CVE-2016-10642
- >> package/flex: ignore CVE-2019-6293
+On Fri, 23 Apr 2021 14:21:18 +0300
+Urja Rannikko <urjaman@gmail.com> wrote:
 
- > For this one, I've switched to using the actual upstream URL, rather
- > that of a downstream consumer:
- >     https://github.com/westes/flex/issues/414
+> The "fb" framebuffer driver does not have any special dependencies.
+> 
+> Signed-off-by: Urja Rannikko <urjaman@gmail.com>
 
- >> package/hostapd: ignore CVE-2021-30004 when using openssl
- >> package/wpa_supplicant: ignore CVE-2021-30004 when using openssl
- >> package/ncurses: ignore CVE-2018-10754, CVE-2018-19211,
- >> CVE-2018-19217, CVE-2019-17594, CVE-2019-17595
- >> package/rsyslog: ignore CVE-2015-3243
- >> package/tar: ignore CVE-2007-4476
+Thanks a lot for your contribution, but unfortunately, with the patch
+you posted, links doesn't build anymore:
 
- > Series applied to master, thanks.
+configure: error: No graphics drivers found.
+make: *** [package/pkg-generic.mk:240: /home/thomas/projets/buildroot/output/build/links-2.21/.stamp_configured] Error 1
 
-I am not so happy with the hostapd/wpa_supplicant/rsyslog ignores, but I
-have applied the series to 2021.02.x anyway and will send followup
-patches to master (and 2021.02.x) to improve those packages later.
+Tested configuration:
 
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_ENABLE_VFP=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_LINKS=y
+BR2_PACKAGE_LINKS_GRAPHICS=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+Could you have a look ?
+
+Thanks,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
