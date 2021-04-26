@@ -1,77 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 14:35:57 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/nettle: bump to
- version 3.7.1
-Message-ID: <20210426125912.2CACD8044A@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 14:59:22 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/cmake: add
+ _CPE_ID_VENDOR
+Message-ID: <20210426125912.922CB7FC74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9321ee24879af76689c527bd1a73fe4d6a301505
+commit: https://git.buildroot.net/buildroot/commit/?id=d8504c61e469bb60103c08739b5bc3eb643f4229
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a3e0c045e498afce4b11325710945ab0e1b610f4)
+cpe:2.3:a:cmake_project:cmake:* is a valid CPE identifier for this package:
+
+ https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:cmake_project:cmake
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 12bd42734015226701d001f2575edc8b843ea35f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nettle/0001-disable-testsuite-examples.patch | 4 ++--
- package/nettle/Config.in                             | 2 +-
- package/nettle/nettle.hash                           | 4 ++--
- package/nettle/nettle.mk                             | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ package/cmake/cmake.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/nettle/0001-disable-testsuite-examples.patch b/package/nettle/0001-disable-testsuite-examples.patch
-index 82d97d5d21..aa37bcf8f3 100644
---- a/package/nettle/0001-disable-testsuite-examples.patch
-+++ b/package/nettle/0001-disable-testsuite-examples.patch
-@@ -9,9 +9,9 @@ Signed-off-by:  "Yann E. MORIN" <yann.morin.1998@free.fr>
- diff -durN nettle-2.7.1.orig/Makefile.in nettle-2.7.1/Makefile.in
- --- nettle-2.7.1.orig/Makefile.in	2013-05-28 16:21:54.000000000 +0200
- +++ nettle-2.7.1/Makefile.in	2014-12-12 19:57:12.499805574 +0100
--@@ -16,7 +16,7 @@
-+@@ -19,7 +19,7 @@
-  
-- OPT_ASM_SOURCES = @OPT_ASM_SOURCES@
-+ FAT_TEST_LIST = @FAT_TEST_LIST@
-  
- -SUBDIRS = tools testsuite examples
- +SUBDIRS = tools
-diff --git a/package/nettle/Config.in b/package/nettle/Config.in
-index 4890970120..cf4803c7bb 100644
---- a/package/nettle/Config.in
-+++ b/package/nettle/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_NETTLE
- 	  object-oriented languages, in applications like LSH or
- 	  GNUPG, or even in kernel space
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 1f30736023..a3015fabfd 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -9,6 +9,7 @@ CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).5
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3-Clause
+ CMAKE_LICENSE_FILES = Copyright.txt
++CMAKE_CPE_ID_VENDOR = cmake_project
  
--	  http://www.lysator.liu.se/~nisse/nettle/
-+	  https://www.lysator.liu.se/~nisse/nettle/
-diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
-index 1bbc1c6d22..5fd69200bf 100644
---- a/package/nettle/nettle.hash
-+++ b/package/nettle/nettle.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/nettle/nettle-3.6.tar.gz.sig
--sha256  d24c0d0f2abffbc8f4f34dcf114b0f131ec3774895f3555922fe2f40f3d5e3f1  nettle-3.6.tar.gz
-+# https://ftp.gnu.org/gnu/nettle/nettle-3.7.1.tar.gz.sig
-+sha256  156621427c7b00a75ff9b34b770b95d34f80ef7a55c3407de94b16cbf436c42e  nettle-3.7.1.tar.gz
- # Locally calculated
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSERv3
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-index fef68375db..dc76fc21ff 100644
---- a/package/nettle/nettle.mk
-+++ b/package/nettle/nettle.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NETTLE_VERSION = 3.6
-+NETTLE_VERSION = 3.7.1
- NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
- NETTLE_DEPENDENCIES = gmp
- NETTLE_INSTALL_STAGING = YES
+ # CMake is a particular package:
+ # * CMake can be built using the generic infrastructure or the cmake one.
