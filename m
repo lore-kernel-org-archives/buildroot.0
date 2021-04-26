@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 14:36:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nettle: security bump to
- version 3.7.2
-In-Reply-To: <20210418185114.3306357-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 18 Apr 2021 20:51:14 +0200")
-References: <20210418185114.3306357-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r1ixkyt8.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Apr 2021 14:37:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: security bump to
+ version 2021.04
+In-Reply-To: <20210418194332.3464292-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 18 Apr 2021 21:43:32 +0200")
+References: <20210418194332.3464292-1-fontaine.fabrice@gmail.com>
+Message-ID: <87mttlkyr6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix CVE-2021-20305: A flaw was found in Nettle in versions before 3.7.2,
- > where several Nettle signature verification functions (GOST DSA, EDDSA &
- > ECDSA) result in the Elliptic Curve Cryptography point (ECC) multiply
- > function being called with out-of-range scalers, possibly resulting in
- > incorrect results. This flaw allows an attacker to force an invalid
- > signature, causing an assertion failure or possible validation. The
- > highest threat to this vulnerability is to confidentiality, integrity,
- > as well as system availability.
+ > - Fix CVE-2021-27097: The boot loader in Das U-Boot before 2021.04-rc2
+ >   mishandles a modified FIT.
+ > - Fix CVE-2021-27138: The boot loader in Das U-Boot before 2021.04-rc2
+ >   mishandles use of unit addresses in a FIT.
 
- > https://git.lysator.liu.se/nettle/nettle/-/blob/nettle_3.7.2_release_20210321/NEWS
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2021.02.x, thanks.
+Are these really bugs in uboot-tools, E.G. the (host-side) tools and not
+in u-boot itself?
 
 -- 
 Bye, Peter Korsgaard
