@@ -1,62 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 26 Apr 2021 21:51:30 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libgeos: use specific bug
- instead of BR2_nios2 to disable package
-In-Reply-To: <20210317163459.1916948-2-giulio.benetti@benettiengineering.com>
-References: <20210314233231.351fce1c@windsurf.home>
- <20210317163459.1916948-1-giulio.benetti@benettiengineering.com>
- <20210317163459.1916948-2-giulio.benetti@benettiengineering.com>
-Message-ID: <1e867adb-5f08-de1e-f187-cc04a2f28d12@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Apr 2021 21:52:20 +0200
+Subject: [Buildroot] [git commit]
+ package/freescale-imx/kernel-module-imx-gpu-viv: bump to version 6.4.3.p1.2
+Message-ID: <20210426192521.AE42186387@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=92843bf352118dbda1e5018ebbc0d31aeaa568f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+- Same version as NXP release 5.10.9-1.0.0
+- No changelog provided by NXP
+- Tested on Nitrogen8M device with Weston (DRM backend) as follows:
+ # cd /usr/share/examples/viv_samples/vdk/
+ # ./tutorial7
 
-On 17/03/2021 17:34, Giulio Benetti wrote:
-> Let's use the _BUG_ form for disabling this package instead of BR2_nios2
-> architecture as we already use it for other packages.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash            | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Applied to master, thanks. I made the following changes:
-
-     - put 27597 after 21464 instead of before it;
-     - propagate dependency to postgis;
-     - mention the bugs in the comments.
-
-postgis didn't exist yet at the time so that's no surpise... The rest is nitpicking.
-
-
- Regards,
- Arnout
-
-> ---
->  package/libgeos/Config.in | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
-> index bbcafe7740..8759d2011e 100644
-> --- a/package/libgeos/Config.in
-> +++ b/package/libgeos/Config.in
-> @@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBGEOS
->  	bool "libgeos"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_USE_WCHAR
-> -	depends on !BR2_nios2
-> +	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
->  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
->  	help
->  	  GEOS (Geometry Engine - Open Source) is a C++ port of the
-> @@ -14,5 +14,6 @@ config BR2_PACKAGE_LIBGEOS
->  	  https://trac.osgeo.org/geos
->  
->  comment "libgeos needs a toolchain w/ C++, wchar"
-> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-> -	depends on !BR2_nios2 || !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-> +		   !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597 || \
-> +		   !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
-> 
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index 0fd8e04f21..ab021b6849 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  ee9227d8b3f6da84a4b0be59cdc9a4c67db5c941c719ab44a29e09fe73019cac  kernel-module-imx-gpu-viv-5c8eb7b0576dc2348fb206945ce13e41d0837cf1.tar.gz
++sha256  fbf400adbeaa52af0be234a5dcd96059615db4535cda2bd101d65d468e49e288  kernel-module-imx-gpu-viv-3588f2f6e64082153baae116dd393aa15061473d.tar.gz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index 4a2fb3032b..3afcc9d228 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = 5c8eb7b0576dc2348fb206945ce13e41d0837cf1
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = 3588f2f6e64082153baae116dd393aa15061473d
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
