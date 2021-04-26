@@ -1,55 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Apr 2021 22:56:30 +0200
-Subject: [Buildroot] boot/grub2: grub-core-build-fixes-for-i386
- (grub-2.04 + binutils-2.35.2 + pseudo-op .code64)
-In-Reply-To: <CANTg=Qj3vMern005jEMmUs2dWvi0oJ9Y3aoS4ocsrD91KoXW5Q@mail.gmail.com>
-References: <CANTg=Qj3vMern005jEMmUs2dWvi0oJ9Y3aoS4ocsrD91KoXW5Q@mail.gmail.com>
-Message-ID: <20210426225630.113ee3d7@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Apr 2021 22:59:53 +0200
+Subject: [Buildroot] [PATCH] package/numactl: make available on all
+ architectures
+In-Reply-To: <20210418162359.3462571-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sun, 18 Apr 2021 18:23:58 +0200")
+References: <20210418162359.3462571-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87k0oog3sm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mikhail,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Tue, 20 Apr 2021 12:35:16 +0300
-"Mikhail B. WproxyM" <w.proxy.m@gmail.com> wrote:
+ > Since its introduction in commit
+ > b05e74ff92b6728369e1540fc0a2bd60025f2146 in 2013, numactl has had an
+ > explicit list of architectures that it supports. Interestingly, this
+ > list does not include ARM, and now that rt-tests unconditionally needs
+ > numactl, it meant the rt-tests package was no longer available on ARM.
 
-> We are using binutils-2.35.2+ (later then 2.29.1), grub-2.04,
-> cross-compiling on recent buildroot under i386/i686 and getting error:
-> 
-> > lib/i386/relocator64.S:66: Error: unknown pseudo-op: `.code64'  
-> 
-> So, the working patch is attached. Please add it to buildroot.
+ > Further investigation revealed that there is nothing in recent
+ > versions of numactl that appears to be architecture-specific. It does
+ > build with all of Buildroot toolchains currently used in the
+ > autobuilders.
 
-Do you have some details on the conditions to reproduce this issue?
-Indeed, I just tried to build grub2, with the following configuration:
+ > The only necessary changes are:
 
-BR2_x86_core2=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_GRUB2=y
-BR2_TARGET_GRUB2_I386_EFI=y
+ >  * Exclude no-MMU architectures, as madvise() is used in the code
+ >    base, and this is not available on no-MMU architectures.
 
-So it's using a i686 target system, with a toolchain that uses binutils
-2.34 (i.e later than the 2.29 you're pointing). And it builds fine,
-including relocator64.S, which gets built as part of the build process.
+ >  * Make sure to use -latomic when needed, as some atomic operations
+ >    are used.
 
-Note: I am building *from* an x86-64 system. But how can that matter,
-as relocator64.S is built using the cross-compiler?
+ >  * Backport a patch that fixes the .symver usage, which only affects
+ >    really old gcc versions: only the old ARM Sourcery toolchain was
+ >    affected by this. Newer gcc versions support the gcc "symver"
+ >    attribute, so that the code that directly emits the assembly
+ >    .symver directive is not invoked.
 
-Also, why isn't this patch in upstream Grub ?
+ > With these changes, numactl builds successfully on all our supported
+ > toolchains.
 
-Thanks a lot for the additional details you could provide.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Best regards,
+I hesitated a bit as this is kind of a feature patch, but you can also
+argue that the removal of rt-tests on E.G. ARM in 2021.02 is a
+regression, so committed to 2021.02.x, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
