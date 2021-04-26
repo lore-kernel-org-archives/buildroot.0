@@ -1,35 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 21:02:38 +0200
-Subject: [Buildroot] [PATCH 1/3] package/bash: use --bindir instead of
- exec_prefix=
-In-Reply-To: <20210423202356.37681-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Fri, 23 Apr 2021 22:23:53 +0200")
-References: <20210423202356.37681-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87v988hnsh.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 26 Apr 2021 21:00:37 +0200
+Subject: [Buildroot] [PATCH 1/2] Revert "package/domoticz: drop boost
+ date-time dependency"
+Message-ID: <20210426190038.512101-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+This reverts commit 4b4d98e2c5165c3121e670192970fc909cae6d8a as
+Boost::date_time is still used by domoticz (in pmain/Scheduler.cpp and
+push/BasePush.cpp)
 
- > We want bash to be installed as /bin/bash. For ages, Buildroot has
- > been doing this by overriding exec_prefix at install time. First of
- > all, it would be preferred to do this at configure time. But also,
- > overriding exec_prefix not only changes where "bash" goes, but also
- > where the pkgconfig file goes. Due to this, bash.pc goes into
- > /lib/pkgconfig/, and doesn't get removed by target-finalize.
+Fixes:
+ - http://autobuild.buildroot.org/results/493a2e93fe6121f118293a268f986ee51009b7e8
 
- > Since all we want is to have 'bash' as /bin/bash, simply pass
- > --bindir=/bin at configure time. This allows to use the default target
- > installation logic for autotools-package. We keep a post-install
- > target hook to remove /bin/bashbug.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/domoticz/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-
-Committed to 2021.02.x, thanks.
-
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+index f9672056ee..83ae2035b2 100644
+--- a/package/domoticz/Config.in
++++ b/package/domoticz/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_DOMOTICZ
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_DATE_TIME
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+ 	select BR2_PACKAGE_CEREAL
 -- 
-Bye, Peter Korsgaard
+2.30.2
