@@ -1,39 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 15:18:15 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libtool: add
+Date: Mon, 26 Apr 2021 15:18:09 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/sysvinit: add
  _CPE_ID_VENDOR
-Message-ID: <20210426125913.968E4817A8@busybox.osuosl.org>
+Message-ID: <20210426125913.8BCE38138F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2960953b0ab6de277fa6f06aedb15b2e82f4f92b
+commit: https://git.buildroot.net/buildroot/commit/?id=1784aa80ebe80a2c3d81e94f2181f3189c253c4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:gnu:libtool:2.4.6:* is a valid CPE identifier for this package:
+cpe:2.3:a:sysvinit_project:sysvinit:* is a valid CPE identifier for this package:
 
- https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:gnu:libtool
+ https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:sysvinit_project:sysvinit
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[yann.morin.1998 at free.fr: drop version from reference URL]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8c9724026c90aafcebe2b3152b323e733eeeb86f)
+(cherry picked from commit 281f0d90cb7bea94cdcc60990983a76b81e8b5bf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libtool/libtool.mk | 1 +
+ package/sysvinit/sysvinit.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
-index 10af8cf715..6342e70a39 100644
---- a/package/libtool/libtool.mk
-+++ b/package/libtool/libtool.mk
-@@ -7,6 +7,7 @@
- LIBTOOL_VERSION = 2.4.6
- LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.xz
- LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
-+LIBTOOL_CPE_ID_VENDOR = gnu
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index c7ddf67c2f..7deec96974 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -9,6 +9,7 @@ SYSVINIT_SOURCE = sysvinit-$(SYSVINIT_VERSION).tar.xz
+ SYSVINIT_SITE = http://download.savannah.nongnu.org/releases/sysvinit
+ SYSVINIT_LICENSE = GPL-2.0+
+ SYSVINIT_LICENSE_FILES = COPYING
++SYSVINIT_CPE_ID_VENDOR = sysvinit_project
  
- # For the target variant, we only want to build/install libltdl
- LIBTOOL_SUBDIR = libltdl
+ SYSVINIT_MAKE_OPTS = SYSROOT=$(STAGING_DIR)
+ 
