@@ -1,46 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 26 Apr 2021 19:57:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: security bump to
- version 2021.04
-In-Reply-To: <87y2d5hqvm.fsf@dell.be.48ers.dk>
-References: <20210418194332.3464292-1-fontaine.fabrice@gmail.com>
- <87mttlkyr6.fsf@dell.be.48ers.dk>
- <CAPi7W80hoZtMnQytcOJbs5B3twa_CUyp1gXQBjDY_Fs8YNS5xw@mail.gmail.com>
- <87y2d5hqvm.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W837kHX_xCngT_nDpaXAj9+ixYyymndNK=2e54ZnTTZ=Jw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Apr 2021 20:03:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-dnspython: enable host
+ build
+In-Reply-To: <20210426165557.18477-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Mon, 26 Apr 2021 18:55:57 +0200")
+References: <20210426165557.18477-1-bernd.kuhls@t-online.de>
+Message-ID: <87tunsj52w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lun. 26 avr. 2021 ? 19:56, Peter Korsgaard <peter@korsgaard.com> a ?crit :
->
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
->  > Le lun. 26 avr. 2021 ? 14:37, Peter Korsgaard <peter@korsgaard.com> a ?crit :
->  >>
->  >> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->  >>
->  >> > - Fix CVE-2021-27097: The boot loader in Das U-Boot before 2021.04-rc2
->  >> >   mishandles a modified FIT.
->  >> > - Fix CVE-2021-27138: The boot loader in Das U-Boot before 2021.04-rc2
->  >> >   mishandles use of unit addresses in a FIT.
->  >>
->  >> Are these really bugs in uboot-tools, E.G. the (host-side) tools and not
->  >> in u-boot itself?
->  > Indeed, these CVEs are affecting uboot and not uboot-tools.
->
-> Ok, thanks.
->
-> I BTW noticed quite some build errors in uboot-tools since the bump:
->
-> http://autobuild.buildroot.net/?reason=host-uboot-tools-2021.04
-Indeed, should be fixed by
-https://git.buildroot.net/buildroot/commit/?id=a8eef7d2e62aba92fbab3906862c6422410c8677
->
-> --
-> Bye, Peter Korsgaard
-Best Regards,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Fabrice
+ > Needed for Samba 4.14.x:
+ > https://gitlab.com/samba-team/samba/-/commit/2420b7c6d2038aca33759ca3a7d41240c5f19bf7#bc16f0673dfbb473658dfd16961cdbf12f02ea5a_8_15
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/7dc/7dc7e304cb4e9afb157326dd5e4ae38711e91cad/
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ > Forgot to send this patch while sending:
+ > http://patchwork.ozlabs.org/project/buildroot/patch/20210404165823.954492-1-bernd.kuhls at t-online.de/
+
+ >  package/python-dnspython/python-dnspython.mk | 7 +++++++
+ >  1 file changed, 7 insertions(+)
+
+ > diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
+ > index 18d98efd72..ed11687291 100644
+ > --- a/package/python-dnspython/python-dnspython.mk
+ > +++ b/package/python-dnspython/python-dnspython.mk
+ > @@ -17,4 +17,11 @@ define PYTHON_DNSPYTHON_EXTRACT_CMDS
+ >  	$(RM) -r $(@D)/dnspython-$(PYTHON_DNSPYTHON_VERSION)
+ >  endef
+ 
+ > +define HOST_PYTHON_DNSPYTHON_EXTRACT_CMDS
+ > +	$(UNZIP) -d $(@D) $(HOST_PYTHON_DNSPYTHON_DL_DIR)/$(HOST_PYTHON_DNSPYTHON_SOURCE)
+ > +	mv $(@D)/dnspython-$(HOST_PYTHON_DNSPYTHON_VERSION)/* $(@D)
+ > +	$(RM) -r $(@D)/dnspython-$(HOST_PYTHON_DNSPYTHON_VERSION)
+ > +endef
+
+Ideally we probably would should change pkg-generic so the host variant
+inherits the extract commands from the target variant if set, but OK.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
