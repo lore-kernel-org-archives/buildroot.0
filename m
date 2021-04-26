@@ -1,45 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 23:07:34 +0200
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/domoticz: select boost atomic
-In-Reply-To: <20210426191113.512637-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 26 Apr 2021 21:11:13 +0200")
-References: <20210426191113.512637-1-fontaine.fabrice@gmail.com>
- <20210426191113.512637-2-fontaine.fabrice@gmail.com>
-Message-ID: <8735vcg3ft.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Apr 2021 23:14:12 +0200
+Subject: [Buildroot] [git commit] package/libcamera: disable package
+ affected by binutils bug 27597
+In-Reply-To: <20210426192739.8A79A7FE79@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Mon, 26 Apr 2021 21:54:21 +0200")
+References: <20210426192739.8A79A7FE79@busybox.osuosl.org>
+Message-ID: <87y2d4eokb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > domoticz does not use Boost::atomic but cmake is so "smart" that it
- > (wrongly) assumes that Boost::thread depends on Boost:date_time and
- > Boost::atomic since boost version 1.54:
+ > commit: https://git.buildroot.net/buildroot/commit/?id=479b09366cca3d4d697d221c5e347e5ab470ebcd
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > set(_Boost_THREAD_DEPENDENCIES chrono date_time atomic)
-
- > Extracted from:
- >  - https://gitlab.kitware.com/cmake/cmake/-/blob/master/Modules/FindBoost.cmake#L1113
-
- > As we can't patch every cmake on the field, just select boost atomic
-
- > It should be noted that build failures are only raised since commit
- > 8a46b41b4a5d1c2f5ebefd7fc23fec7e8ba0598c as this commit drop the patch
- > that was decreasing cmake version but also removing:
-
- > target_link_libraries(domoticz Boost::thread Boost::system)
+ > This package is affected by binutils bug 27597 and no work around has
+ > been found, so let's disable it if
+ > BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597=y.
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/4306c0a725ed9a34bd55550df428866db6e4f052
- >  - http://autobuild.buildroot.org/results/2478e7a2ec1c63dcc2b36d29a39004468b230211
+ > http://autobuild.buildroot.net/results/8ac/8ac599392f773eecff4773393ef0d0232a22f372/
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2:
- >  - Fix patch title
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Committed to 2021.02.x, thanks.
 
