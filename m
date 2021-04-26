@@ -1,13 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 23:14:38 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain: introduce
- BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
-In-Reply-To: <4650b5d9-1aa5-56e8-072d-df9af792d02b@mind.be> (Arnout
- Vandecappelle's message of "Mon, 26 Apr 2021 21:50:24 +0200")
+Date: Mon, 26 Apr 2021 23:14:55 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libgeos: use specific bug
+ instead of BR2_nios2 to disable package
+In-Reply-To: <1e867adb-5f08-de1e-f187-cc04a2f28d12@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 26 Apr 2021 21:51:30 +0200")
 References: <20210314233231.351fce1c@windsurf.home>
  <20210317163459.1916948-1-giulio.benetti@benettiengineering.com>
- <4650b5d9-1aa5-56e8-072d-df9af792d02b@mind.be>
-Message-ID: <87pmygeojl.fsf@dell.be.48ers.dk>
+ <20210317163459.1916948-2-giulio.benetti@benettiengineering.com>
+ <1e867adb-5f08-de1e-f187-cc04a2f28d12@mind.be>
+Message-ID: <87lf94eoj4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,16 +18,20 @@ To: buildroot@busybox.net
 >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
  > On 17/03/2021 17:34, Giulio Benetti wrote:
- >> On Nios II binutils it still present ld bug 27597 leading to a package
- >> libgeos to fail building:
- >> http://autobuild.buildroot.net/results/a05fdf1958f93a206c5c66c7f636b6650683626d/http://autobuild.buildroot.net/results/c05/c053b9e191b31f0b1f8f8c902b602e187f714dc0/
- >> 
- >> The bug was already reported and it's been updated:
- >> https://sourceware.org/bugzilla/show_bug.cgi?id=27597
+ >> Let's use the _BUG_ form for disabling this package instead of BR2_nios2
+ >> architecture as we already use it for other packages.
  >> 
  >> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Committed to 2021.02.x, thanks.
+ >  Applied to master, thanks. I made the following changes:
+
+ >      - put 27597 after 21464 instead of before it;
+ >      - propagate dependency to postgis;
+ >      - mention the bugs in the comments.
+
+ > postgis didn't exist yet at the time so that's no surpise... The rest is nitpicking.
+
+Committed to 2021.02.x (without the postgis hunk), thanks.
 
 -- 
 Bye, Peter Korsgaard
