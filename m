@@ -1,43 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 09:09:34 +0200
-Subject: [Buildroot] [PATCH] support/scripts/cve.py: use fast ijson
- backend if available on old ijson versions
-In-Reply-To: <20210409110112.20087-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 9 Apr 2021 13:01:12 +0200")
-References: <20210409110112.20087-1-peter@korsgaard.com>
-Message-ID: <87pmyho72p.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Apr 2021 09:10:41 +0200
+Subject: [Buildroot] [PATCH] package/tio: disable for sparc and sparc64
+ architectures
+In-Reply-To: <20210417073322.GQ359705@scaer> (Yann E. MORIN's message of "Sat, 
+ 17 Apr 2021 09:33:22 +0200")
+References: <20201025163457.30460-1-sergio.prado@e-labworks.com>
+ <20210417073322.GQ359705@scaer>
+Message-ID: <87lf95o70u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > ijson < 2.5 (as available in Debian 10) use the slow python backend by
- > default instead of the most efficient one available like modern ijson
- > versions, significantly slowing down cve checking. E.G.:
+ > Sergio, All,
+ > On 2020-10-25 13:34 -0300, Sergio Prado spake thusly:
+ >> tio fails to build on sparc and sparc64 architectures with a
+ >> redefinition of 'struct termio' error, with no proper fix or workaround
+ >> for now. See discussions in [1] and [2] and picocom source code in [3].
+ >> 
+ >> [1] http://patchwork.ozlabs.org/project/buildroot/patch/20191227204520.1500501-1-fontaine.fabrice at gmail.com/
+ >> [2] http://patchwork.ozlabs.org/project/buildroot/patch/20200511142602.46170-1-vadim4j at gmail.com/
+ >> [3] https://github.com/npat-efault/picocom/blob/master/termbits2.h#L37
+ >> 
+ >> So let's disable it for now on sparc and sparc64 architectures.
+ >> 
+ >> Fixes:
+ >> http://autobuild.buildroot.org/results/e041dde522e2a774f528d4377f67ca0a8a99461c
+ >> http://autobuild.buildroot.org/results/6e1f9fe47e8b2cfdf5effcb7bbc697189f54ff2c
+ >> http://autobuild.buildroot.org/results/49708fe6f404fea6761f102af854e98d6a1d43c1
+ >> Many more...
+ >> 
+ >> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 
- > time ./support/scripts/pkg-stats --nvd-path ~/.nvd -p avahi --html foobar.html
-
- > Goes from
- > 174,44s user 2,11s system 99% cpu 2:58,04 total
-
- > To
- > 93,53s user 2,00s system 98% cpu 1:36,65 total
-
- > E.G. almost 2x as fast.
-
- > As a workaround, detect when the python backend is used and try to use a
- > more efficient one instead.  Use the yajl2_cffi backend as recommended by
- > upstream, as it is most likely to work, and print a warning (and continue)
- > if we fail to load it.
-
- > The detection is slightly complicated by the fact that ijson.backends used
- > to be a reference to a backend module, but is nowadays a string (without the
- > ijson.backends prefix).
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Eventually applied to master, thanks.
 
 Committed to 2021.02.x, thanks.
 
