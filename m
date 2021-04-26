@@ -1,47 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 14:39:57 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] boot/at91bootstrap: add
- legal information
-Message-ID: <20210426125912.52D07817A8@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 15:18:15 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libtool: add
+ _CPE_ID_VENDOR
+Message-ID: <20210426125913.968E4817A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6b330014419a1f90328715eebd0a1b1eba9ac03
+commit: https://git.buildroot.net/buildroot/commit/?id=2960953b0ab6de277fa6f06aedb15b2e82f4f92b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-The old at91bootstrap version (1.x) uses a strange variant of the BSD
-license, called "BSD Source Code Attribution" and referenced by SPDX
-as BSD-Source-Code.
+cpe:2.3:a:gnu:libtool:2.4.6:* is a valid CPE identifier for this package:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3887e8c095106762173b13127deb9c7da68c0625)
+ https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:gnu:libtool
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[yann.morin.1998 at free.fr: drop version from reference URL]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 8c9724026c90aafcebe2b3152b323e733eeeb86f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/at91bootstrap/at91bootstrap.hash | 1 +
- boot/at91bootstrap/at91bootstrap.mk   | 2 ++
- 2 files changed, 3 insertions(+)
+ package/libtool/libtool.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/boot/at91bootstrap/at91bootstrap.hash b/boot/at91bootstrap/at91bootstrap.hash
-index b1f963b825..d9f8db8897 100644
---- a/boot/at91bootstrap/at91bootstrap.hash
-+++ b/boot/at91bootstrap/at91bootstrap.hash
-@@ -1,2 +1,3 @@
- # locally computed
- sha256  d66192a274247f4baa39fa932eadf903d7add55641d89d30402f967c4f2282a5  AT91Bootstrap1.16.zip
-+sha256  6a3ac5dfcf19e6bac1b1109d30d72818768a3855e2594b84fe2b012b5fe0e77b  include/sdramc.h
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index c68b56b6ec..1a084756fd 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -7,6 +7,8 @@
- AT91BOOTSTRAP_VERSION = 1.16
- AT91BOOTSTRAP_SITE = ftp://www.at91.com/pub/at91bootstrap
- AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
-+AT91BOOTSTRAP_LICENSE = BSD-Source-Code
-+AT91BOOTSTRAP_LICENSE_FILES = include/sdramc.h
+diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+index 10af8cf715..6342e70a39 100644
+--- a/package/libtool/libtool.mk
++++ b/package/libtool/libtool.mk
+@@ -7,6 +7,7 @@
+ LIBTOOL_VERSION = 2.4.6
+ LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.xz
+ LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
++LIBTOOL_CPE_ID_VENDOR = gnu
  
- AT91BOOTSTRAP_BOARD = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
- AT91BOOTSTRAP_MEMORY = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
+ # For the target variant, we only want to build/install libltdl
+ LIBTOOL_SUBDIR = libltdl
