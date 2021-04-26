@@ -1,47 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 22:27:19 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/rsyslog: ignore
- CVE-2015-3243
-Message-ID: <20210426203328.933B1815DC@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 22:37:03 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/usb_modeswitch:
+ bump to version 2.6.1
+Message-ID: <20210426203328.B5FD4815DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea5323f16a2729350d4e47d986735ccc8660c8b1
+commit: https://git.buildroot.net/buildroot/commit/?id=14dfd8eb179b2cd520192b82a3dcff73a2b8be03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-https://security-tracker.debian.org/tracker/CVE-2015-3243
- "Rsyslog uses weak permissions for generating log files."
+Update indentation in hash file (two spaces)
 
-Ignoring this CVE for Buildroot as normally there are not local
-users and a build could customize the rsyslog.conf to be more
-restrictive ($FileCreateMode 0640).
+https://www.draisberghof.de/usb_modeswitch/ChangeLog
 
-Example fix from Alpino Linux
- https://github.com/libTorrentUser/alpino-linux-aports/commit/3cb5210cdac46fb8805d4028df16f5889f393a09
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit fb4402b51693e8d191bb568622ed9cf9315493fd)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 9192f465ea0ae420f9a89927f7f9a80028d9b379)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsyslog/rsyslog.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/usb_modeswitch/usb_modeswitch.hash | 8 ++++----
+ package/usb_modeswitch/usb_modeswitch.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 62ef756f9d..36766e8b7b 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -9,6 +9,10 @@ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
- RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
- RSYSLOG_CPE_ID_VENDOR = rsyslog
-+# rsyslog uses weak permissions for generating log files.
-+# Ignoring this CVE as Buildroot normally doesn't have local users and a build
-+# could customize the rsyslog.conf to be more restrictive ($FileCreateMode 0640)
-+RSYSLOG_IGNORE_CVES += CVE-2015-3243
- RSYSLOG_DEPENDENCIES = zlib libestr liblogging libfastjson host-pkgconf
- RSYSLOG_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
- RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
+diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
+index 4cbd5dbea2..765a2438c2 100644
+--- a/package/usb_modeswitch/usb_modeswitch.hash
++++ b/package/usb_modeswitch/usb_modeswitch.hash
+@@ -1,5 +1,5 @@
+-# From http://www.draisberghof.de/usb_modeswitch/
+-md5	 be73dcc84025794081a1d4d4e5a75e4c  usb-modeswitch-2.6.0.tar.bz2
++# From https://www.draisberghof.de/usb_modeswitch/usb-modeswitch-versions.xml
++md5  69d00d6ed7097b97d972a159d14cfba1  usb-modeswitch-2.6.1.tar.bz2
+ # Locally calculated
+-sha256	c215236e6bada6e659fc195a31d611ea298a4bdb4d57a0d68c553b56585f8ba3  usb-modeswitch-2.6.0.tar.bz2
+-sha256	6195429209313925c0eba6c0da4ee7a6cb4277b99e35c886913f80f91ec20b94  COPYING
++sha256  5195d9e136e52f658f19e9f93e4f982b1b67bffac197d0a455cd8c2cd245fa34  usb-modeswitch-2.6.1.tar.bz2
++sha256  6195429209313925c0eba6c0da4ee7a6cb4277b99e35c886913f80f91ec20b94  COPYING
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index 064e1960b0..f2ee004b42 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USB_MODESWITCH_VERSION = 2.6.0
++USB_MODESWITCH_VERSION = 2.6.1
+ USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DEPENDENCIES = libusb
