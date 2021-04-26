@@ -1,51 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 21:26:32 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/flex: ignore
- CVE-2019-6293
-Message-ID: <20210426203328.630CC83D66@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 21:25:39 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/cmake: ignore
+ CVE-2016-10642
+Message-ID: <20210426203328.562C8815DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d8f5a47129d02ed5408da78f52a24557784e596
+commit: https://git.buildroot.net/buildroot/commit/?id=b88162d890c901db761f4b8ca0f80dca24304e51
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-https://security-tracker.debian.org/tracker/CVE-2019-6293
+This is specific to the npm package that installs cmake, so isn't
+relevant to Buildroot.
+https://github.com/openembedded/openembedded-core/blob/14241ed09f9ed317045cf75a6d08416d3579bb8d/meta/recipes-devtools/cmake/cmake.inc
 
-https://github.com/NixOS/nixpkgs/issues/55386#issuecomment-683792976
- "But this bug does not cause stack overflows in the generated code.
- The function and file referred to in the bug (mark_beginning_as_normal
- in nfa.c) are part of the flex code generator, not part of the
- generated code. If flex crashes before generating any code, that
- can hardly be a vulnerability. If flex does not crash, the generated
- code is fine (or perhaps subject to other unreported bugs, who knows,
- but the NFA has been generated correctly)."
-
-Upstream has chosen to not provide a fix
- https://github.com/westes/flex/issues/414
+https://nvd.nist.gov/vuln/detail/CVE-2016-10642#vulnCurrentDescriptionTitle
+ "cmake installs the cmake x86 linux binaries. cmake downloads
+ binary resources over HTTP, which leaves it vulnerable to
+ MITM attacks. It may be possible to cause remote code
+ execution (RCE) by swapping out the requested binary with
+ an attacker controlled binary if the attacker is on the
+ network or positioned in between the user and the remote server."
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[yann.morin.1998 at free.fr: use actual upstream URL]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 120d1241d8301089ed05f865f03b4915c843e936)
+(cherry picked from commit 5ce1e773b94642a034ccb48f22f05b5933b907e5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flex/flex.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/cmake/cmake.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index 2d00969662..85da5ddae8 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -10,6 +10,9 @@ FLEX_INSTALL_STAGING = YES
- FLEX_LICENSE = FLEX
- FLEX_LICENSE_FILES = COPYING
- FLEX_CPE_ID_VENDOR = flex_project
-+# bug does not cause stack overflows in the generated code and has been
-+# noted upstream as a bug in the code generator
-+FLEX_IGNORE_CVES = CVE-2019-6293
- FLEX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-m4
- HOST_FLEX_DEPENDENCIES = host-m4
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index a3015fabfd..90fe868fa5 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -10,6 +10,8 @@ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3-Clause
+ CMAKE_LICENSE_FILES = Copyright.txt
+ CMAKE_CPE_ID_VENDOR = cmake_project
++# Tool download MITM attack warning if using npm package to install cmake
++CMAKE_IGNORE_CVES = CVE-2016-10642
  
+ # CMake is a particular package:
+ # * CMake can be built using the generic infrastructure or the cmake one.
