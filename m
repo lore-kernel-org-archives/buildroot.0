@@ -1,38 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 23:00:07 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libqmi: add
- _CPE_ID_VENDOR
-Message-ID: <20210426203328.F1F1480E5D@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 22:27:19 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/rsyslog: ignore
+ CVE-2015-3243
+Message-ID: <20210426203328.933B1815DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf131eb7b0e5b26738cb1da3b0cb73bbbc7d21f5
+commit: https://git.buildroot.net/buildroot/commit/?id=ea5323f16a2729350d4e47d986735ccc8660c8b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:libqmi_project:libqmi:* is a valid CPE identifier for this package:
+https://security-tracker.debian.org/tracker/CVE-2015-3243
+ "Rsyslog uses weak permissions for generating log files."
 
- https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:libqmi_project:libqmi
+Ignoring this CVE for Buildroot as normally there are not local
+users and a build could customize the rsyslog.conf to be more
+restrictive ($FileCreateMode 0640).
+
+Example fix from Alpino Linux
+ https://github.com/libTorrentUser/alpino-linux-aports/commit/3cb5210cdac46fb8805d4028df16f5889f393a09
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5793a9e7fd83f9cfa035b3ce97591a92d308efc9)
+(cherry picked from commit fb4402b51693e8d191bb568622ed9cf9315493fd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libqmi/libqmi.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/rsyslog/rsyslog.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 5bd2aa1ed4..a49b8615d3 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -9,6 +9,7 @@ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
- LIBQMI_LICENSE_FILES = COPYING COPYING.LIB
-+LIBQMI_CPE_ID_VENDOR = libqmi_project
- LIBQMI_INSTALL_STAGING = YES
- 
- LIBQMI_DEPENDENCIES = libglib2
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 62ef756f9d..36766e8b7b 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -9,6 +9,10 @@ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
+ RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
+ RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
+ RSYSLOG_CPE_ID_VENDOR = rsyslog
++# rsyslog uses weak permissions for generating log files.
++# Ignoring this CVE as Buildroot normally doesn't have local users and a build
++# could customize the rsyslog.conf to be more restrictive ($FileCreateMode 0640)
++RSYSLOG_IGNORE_CVES += CVE-2015-3243
+ RSYSLOG_DEPENDENCIES = zlib libestr liblogging libfastjson host-pkgconf
+ RSYSLOG_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
+ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
