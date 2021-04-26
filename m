@@ -1,97 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 08:45:03 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/x11r7/xserver_xorg-server: remove non-evdev input drivers for
- kdrive
-Message-ID: <20210426063224.29FB484180@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 08:59:24 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libcgroup: add
+ LIBCGROUP_CPE_ID_VENDOR
+Message-ID: <20210426063224.723EE861F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=711b6961bf8dd0fe254d9c87931db64295bbfaeb
+commit: https://git.buildroot.net/buildroot/commit/?id=92b2bac9692ef7caf554bc6d6ee7a441b9a1dade
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Upstream removed support for non-evdev input drivers for kdrive:
-https://cgit.freedesktop.org/xorg/xserver/commit/configure.ac?h=server-1.20-branch&id=e7b8b7b131d8283c96ed0aff4593ab41441b5d3b
+cpe:2.3:a:libcgroup_project:libcgroup is a valid CPE identifier for this
+package:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibcgroup_project%3Alibcgroup
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit eea0da855bb146cca1ed85da03115953cd0219f0)
+(cherry picked from commit 6333d5d1dcbe6d8a40ab371c7eff596bf3ac44f5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                                         | 12 ++++++++++++
- package/x11r7/xserver_xorg-server/Config.in              | 12 ------------
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 12 ------------
- 3 files changed, 12 insertions(+), 24 deletions(-)
+ package/libcgroup/libcgroup.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 9deb67b31f..59bd528da0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,18 @@ endif
+diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
+index a26d5f2ddf..e2a936eefd 100644
+--- a/package/libcgroup/libcgroup.mk
++++ b/package/libcgroup/libcgroup.mk
+@@ -9,6 +9,7 @@ LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
+ LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v$(LIBCGROUP_VERSION)
+ LIBCGROUP_LICENSE = LGPL-2.1
+ LIBCGROUP_LICENSE_FILES = COPYING
++LIBCGROUP_CPE_ID_VENDOR = libcgroup_project
+ LIBCGROUP_DEPENDENCIES = host-bison host-flex
+ LIBCGROUP_INSTALL_STAGING = YES
  
- comment "Legacy options removed in 2021.02"
- 
-+config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_KBD
-+	bool "KDrive/TinyX kbd input driver removed"
-+	select BR2_LEGACY
-+	help
-+	  The kbd input driver in KDrive was removed.
-+
-+config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_MOUSE
-+	bool "KDrive/TinyX mouse input driver removed"
-+	select BR2_LEGACY
-+	help
-+	  The mouse input driver in KDrive was removed.
-+
- config BR2_PACKAGE_MPD_AUDIOFILE
- 	bool "mpd audiofile support removed"
- 	select BR2_LEGACY
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 3bf5af89be..1b9adadb5c 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -90,18 +90,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV
- 	  Xfbdev -keybd evdev,,device=/dev/input/eventX
- 	         -mouse evdev,,device=/dev/input/eventY
- 
--config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_KBD
--	bool "Enable KDrive/TinyX kbd input driver"
--	help
--	  Enable kbd input driver in KDrive. It uses the console
--	  keyboard as input device.
--
--config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_MOUSE
--	bool "Enable KDrive/TinyX mouse input driver"
--	help
--	  Enable mouse input driver in KDrive. It supports PS/2 mice
--	  and serial port mice.
--
- endif
- 
- comment "Optional Servers"
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 3fa77cd4f0..03f36f1b28 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -105,18 +105,6 @@ else
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-evdev
- endif
- 
--ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_KBD),y)
--XSERVER_XORG_SERVER_CONF_OPTS += --enable-kdrive-kbd
--else
--XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-kbd
--endif
--
--ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_MOUSE),y)
--XSERVER_XORG_SERVER_CONF_OPTS += --enable-kdrive-mouse
--else
--XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-mouse
--endif
--
- else # modular
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
- endif
