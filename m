@@ -1,89 +1,42 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 26 Apr 2021 17:30:19 +0200
-Subject: [Buildroot] [PATCH 4/4] configs/nitrogen8mp: new defconfig
-In-Reply-To: <20210426153019.1431844-1-gary.bisson@boundarydevices.com>
-References: <20210426153019.1431844-1-gary.bisson@boundarydevices.com>
-Message-ID: <20210426153019.1431844-5-gary.bisson@boundarydevices.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 26 Apr 2021 18:55:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-dnspython: enable host build
+Message-ID: <20210426165557.18477-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NXP i.MX 8M Plus based SOM with 2GB of LPDDR4 and 16GB eMMC.
+Needed for Samba 4.14.x:
+https://gitlab.com/samba-team/samba/-/commit/2420b7c6d2038aca33759ca3a7d41240c5f19bf7#bc16f0673dfbb473658dfd16961cdbf12f02ea5a_8_15
 
-More details on the platform here:
-https://boundarydevices.com/product/nitrogen8m-plus-som/
+Fixes:
+http://autobuild.buildroot.net/results/7dc/7dc7e304cb4e9afb157326dd5e4ae38711e91cad/
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- configs/nitrogen8mp_defconfig | 58 +++++++++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 configs/nitrogen8mp_defconfig
+Forgot to send this patch while sending:
+http://patchwork.ozlabs.org/project/buildroot/patch/20210404165823.954492-1-bernd.kuhls at t-online.de/
 
-diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
-new file mode 100644
-index 0000000000..14bd26724d
---- /dev/null
-+++ b/configs/nitrogen8mp_defconfig
-@@ -0,0 +1,58 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_cortex_a53=y
+ package/python-dnspython/python-dnspython.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
+index 18d98efd72..ed11687291 100644
+--- a/package/python-dnspython/python-dnspython.mk
++++ b/package/python-dnspython/python-dnspython.mk
+@@ -17,4 +17,11 @@ define PYTHON_DNSPYTHON_EXTRACT_CMDS
+ 	$(RM) -r $(@D)/dnspython-$(PYTHON_DNSPYTHON_VERSION)
+ endef
+ 
++define HOST_PYTHON_DNSPYTHON_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) $(HOST_PYTHON_DNSPYTHON_DL_DIR)/$(HOST_PYTHON_DNSPYTHON_SOURCE)
++	mv $(@D)/dnspython-$(HOST_PYTHON_DNSPYTHON_VERSION)/* $(@D)
++	$(RM) -r $(@D)/dnspython-$(HOST_PYTHON_DNSPYTHON_VERSION)
++endef
 +
-+# System
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/boundarydevices/common/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mp-nitrogen8mp.dtb"
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_IMX_MKIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+
-+# DDR training binaries
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
-+
-+# ARM Trusted Firmware
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-+# Latest revision of branch boundary-imx_5.4.70_2.3.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/9f6114fd.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mp"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mp_2gr0"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+# Latest revision of branch boundary-imx_v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_SPL=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+# Latest revision  of branch boundary-imx_5.4.x_2.3.0
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8961f5c1.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="boundary"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mp-nitrogen8mp freescale/imx8mp-a0-nitrogen8mp"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
-2.30.2
+2.29.2
