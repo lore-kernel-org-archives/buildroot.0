@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 26 Apr 2021 21:18:17 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/2] package/weston: add patch to support pipewire 0.3 API
-In-Reply-To: <20210425212500.3228943-1-fontaine.fabrice@gmail.com>
-References: <20210425212500.3228943-1-fontaine.fabrice@gmail.com>
-Message-ID: <2b7e14c3-b808-ca1e-2016-cb33a0efdeed@mind.be>
+Date: Mon, 26 Apr 2021 21:24:08 +0200
+Subject: [Buildroot] [PATCH 1/2] {linux, linux-headers}: add version 5.12
+In-Reply-To: <20210426114518.12145-1-michael@walle.cc>
+References: <20210426114518.12145-1-michael@walle.cc>
+Message-ID: <94ae2122-3fc1-9323-680c-1747fb6c307d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +12,8 @@ To: buildroot@busybox.net
 
 
 
-On 25/04/2021 23:24, Fabrice Fontaine wrote:
-> From: James Hilliard <james.hilliard1@gmail.com>
-> 
-> This is required when building weston against the latest pipewire
-> release.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 26/04/2021 13:45, Michael Walle wrote:
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
  Both applied to master, thanks.
 
@@ -28,444 +21,141 @@ On 25/04/2021 23:24, Fabrice Fontaine wrote:
  Arnout
 
 > ---
-> Changes v1 -> v2 (after review of Yann E. Morin)
->  - Add second upstream patch
 > 
->  ...003-pipewire-add-support-for-0.3-API.patch | 391 ++++++++++++++++++
->  ...4-pipewire-fix-null-deref-in-0-3-API.patch |  28 ++
->  2 files changed, 419 insertions(+)
->  create mode 100644 package/weston/0003-pipewire-add-support-for-0.3-API.patch
->  create mode 100644 package/weston/0004-pipewire-fix-null-deref-in-0-3-API.patch
+> Hi,
 > 
-> diff --git a/package/weston/0003-pipewire-add-support-for-0.3-API.patch b/package/weston/0003-pipewire-add-support-for-0.3-API.patch
-> new file mode 100644
-> index 0000000000..b486b3de5c
-> --- /dev/null
-> +++ b/package/weston/0003-pipewire-add-support-for-0.3-API.patch
-> @@ -0,0 +1,391 @@
-> +From cc08737e3fd174ec3c4c208ea4f2a3a6a9e8af3e Mon Sep 17 00:00:00 2001
-> +From: James Hilliard <james.hilliard1@gmail.com>
-> +Date: Mon, 6 Jul 2020 00:58:02 -0600
-> +Subject: [PATCH] pipewire: add support for 0.3 API
+> c6x was removed in 5.12. But that architecture was never supported
+> in buildroot.
+> 
+> See also:
+> https://kernelnewbies.org/Linux_5.12
+> 
+> -michael
+> 
+>  linux/Config.in                                     |  4 ++--
+>  linux/linux.hash                                    |  1 +
+>  package/linux-headers/Config.in.host                | 13 +++++++++++--
+>  toolchain/Config.in                                 |  5 +++++
+>  .../toolchain-external-custom/Config.in.options     |  6 +++++-
+>  5 files changed, 24 insertions(+), 5 deletions(-)
+> 
+> diff --git a/linux/Config.in b/linux/Config.in
+> index cf790963dd..7f1d9e3342 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -28,7 +28,7 @@ choice
+>  	prompt "Kernel version"
+>  
+>  config BR2_LINUX_KERNEL_LATEST_VERSION
+> -	bool "Latest version (5.11)"
+> +	bool "Latest version (5.12)"
+>  
+>  config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+>  	bool "Latest CIP SLTS version (4.19.182-cip45)"
+> @@ -125,7 +125,7 @@ endif
+>  
+>  config BR2_LINUX_KERNEL_VERSION
+>  	string
+> -	default "5.11.8" if BR2_LINUX_KERNEL_LATEST_VERSION
+> +	default "5.12" if BR2_LINUX_KERNEL_LATEST_VERSION
+>  	default "4.19.182-cip45" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+>  	default "4.19.165-cip41-rt18" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+>  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+> diff --git a/linux/linux.hash b/linux/linux.hash
+> index 992ae22d11..eedda7e007 100644
+> --- a/linux/linux.hash
+> +++ b/linux/linux.hash
+> @@ -1,4 +1,5 @@
+>  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+> +sha256  7d0df6f2bf2384d68d0bd8e1fe3e071d64364dcdc6002e7b5c87c92d48fac366  linux-5.12.tar.xz
+>  sha256  91f939263a350da676b274e3ec84ad5b57f27ffdf4bd6b74cd002ce21fc0c89f  linux-5.11.8.tar.xz
+>  sha256  930ae76b9a3b64b98802849aca332d17a706f20595de21e1ae729b55ee461add  linux-5.10.25.tar.xz
+>  sha256  1c3cef545f366b56332c11c28d074c9d9148c28059a970ec8710826652237560  linux-5.4.107.tar.xz
+> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+> index 6d83ecf952..52b67f31df 100644
+> --- a/package/linux-headers/Config.in.host
+> +++ b/package/linux-headers/Config.in.host
+> @@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+>  choice
+>  	prompt "Kernel Headers"
+>  	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+> -	default BR2_KERNEL_HEADERS_5_11
+> +	default BR2_KERNEL_HEADERS_5_12
+>  	help
+>  	  Select the kernel version to get headers from.
+>  
+> @@ -61,6 +61,10 @@ config BR2_KERNEL_HEADERS_5_10
+>  config BR2_KERNEL_HEADERS_5_11
+>  	bool "Linux 5.11.x kernel headers"
+>  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
 > +
-> +Fixes: #369
+> +config BR2_KERNEL_HEADERS_5_12
+> +	bool "Linux 5.12.x kernel headers"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
+>  	select BR2_KERNEL_HEADERS_LATEST
+>  
+>  config BR2_KERNEL_HEADERS_VERSION
+> @@ -135,8 +139,12 @@ choice
+>  	  If your kernel headers are more recent than the latest version
+>  	  in the choice, then select the latest version.
+>  
+> +config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12
+> +	bool "5.12.x or later"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
 > +
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +[james.hilliard1 at gmail.com: backport from upstream commit
-> +80b585f8d2a31e780b4de41fbd187a742bea7e1a]
-> +---
-> + .gitlab-ci.yml               |   2 +-
-> + .gitlab-ci/debian-install.sh |  16 ++++-
-> + pipewire/meson.build         |  28 ++++++---
-> + pipewire/pipewire-plugin.c   | 118 ++++++++++++++++++++++++++++++++++-
-> + 4 files changed, 151 insertions(+), 13 deletions(-)
+>  config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_11
+> -	bool "5.11.x or later"
+> +	bool "5.11.x"
+>  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
+>  
+>  config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10
+> @@ -361,6 +369,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+>  	default "5.4.107"	if BR2_KERNEL_HEADERS_5_4
+>  	default "5.10.25"	if BR2_KERNEL_HEADERS_5_10
+>  	default "5.11.8"	if BR2_KERNEL_HEADERS_5_11
+> +	default "5.12"		if BR2_KERNEL_HEADERS_5_12
+>  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+>  	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+>  	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index dc1e710603..c4df5f1274 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -500,6 +500,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
+>  config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
+>  	bool
+>  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
 > +
-> +diff --git a/pipewire/meson.build b/pipewire/meson.build
-> +index 3d3374b8..e30a0b62 100644
-> +--- a/pipewire/meson.build
-> ++++ b/pipewire/meson.build
-> +@@ -5,17 +5,25 @@ if get_option('pipewire')
-> + 		error('Attempting to build the pipewire plugin without the required DRM backend. ' + user_hint)
-> + 	endif
-> + 
-> +-	depnames = [
-> +-		'libpipewire-0.2', 'libspa-0.1'
-> +-	]
-> + 	deps_pipewire = [ dep_libweston_private ]
-> +-	foreach depname : depnames
-> +-		dep = dependency(depname, required: false)
-> +-		if not dep.found()
-> +-			error('Pipewire plugin requires @0@ which was not found. '.format(depname) + user_hint)
-> +-		endif
-> +-		deps_pipewire += dep
-> +-	endforeach
-> ++
-> ++	dep_libpipewire = dependency('libpipewire-0.3', required: false)
-> ++	if not dep_libpipewire.found()
-> ++		dep_libpipewire = dependency('libpipewire-0.2', required: false)
-> ++	endif
-> ++	if not dep_libpipewire.found()
-> ++		error('Pipewire plugin requires libpipewire which was not found. ' + user_hint)
-> ++	endif
-> ++	deps_pipewire += dep_libpipewire
-> ++
-> ++	dep_libspa = dependency('libspa-0.2', required: false)
-> ++	if not dep_libspa.found()
-> ++		dep_libspa = dependency('libspa-0.1', required: false)
-> ++	endif
-> ++	if not dep_libspa.found()
-> ++		error('Pipewire plugin requires libspa which was not found. ' + user_hint)
-> ++	endif
-> ++	deps_pipewire += dep_libspa
-> + 
-> + 	plugin_pipewire = shared_library(
-> + 		'pipewire-plugin',
-> +diff --git a/pipewire/pipewire-plugin.c b/pipewire/pipewire-plugin.c
-> +index 6f892574..ce70ea63 100644
-> +--- a/pipewire/pipewire-plugin.c
-> ++++ b/pipewire/pipewire-plugin.c
-> +@@ -34,20 +34,27 @@
-> + #include <errno.h>
-> + #include <unistd.h>
-> + 
-> ++#include <pipewire/pipewire.h>
-> ++
-> + #include <spa/param/format-utils.h>
-> + #include <spa/param/video/format-utils.h>
-> + #include <spa/utils/defs.h>
-> + 
-> +-#include <pipewire/pipewire.h>
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++#include <spa/buffer/meta.h>
-> ++#include <spa/utils/result.h>
-> ++#endif
-> + 
-> + #define PROP_RANGE(min, max) 2, (min), (max)
-> + 
-> ++#if !PW_CHECK_VERSION(0, 2, 90)
-> + struct type {
-> + 	struct spa_type_media_type media_type;
-> + 	struct spa_type_media_subtype media_subtype;
-> + 	struct spa_type_format_video format_video;
-> + 	struct spa_type_video_format video_format;
-> + };
-> ++#endif
-> + 
-> + struct weston_pipewire {
-> + 	struct weston_compositor *compositor;
-> +@@ -60,12 +67,19 @@ struct weston_pipewire {
-> + 	struct pw_loop *loop;
-> + 	struct wl_event_source *loop_source;
-> + 
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++	struct pw_context *context;
-> ++#endif
-> + 	struct pw_core *core;
-> + 	struct pw_type *t;
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++	struct spa_hook core_listener;
-> ++#else
-> + 	struct type type;
-> + 
-> + 	struct pw_remote *remote;
-> + 	struct spa_hook remote_listener;
-> ++#endif
-> + };
-> + 
-> + struct pipewire_output {
-> +@@ -100,6 +114,7 @@ struct pipewire_frame_data {
-> + 	struct wl_event_source *fence_sync_event_source;
-> + };
-> + 
-> ++#if !PW_CHECK_VERSION(0, 2, 90)
-> + static inline void init_type(struct type *type, struct spa_type_map *map)
-> + {
-> + 	spa_type_media_type_map(map, &type->media_type);
-> +@@ -107,6 +122,7 @@ static inline void init_type(struct type *type, struct spa_type_map *map)
-> + 	spa_type_format_video_map(map, &type->format_video);
-> + 	spa_type_video_format_map(map, &type->video_format);
-> + }
-> ++#endif
-> + 
-> + static void
-> + pipewire_debug_impl(struct weston_pipewire *pipewire,
-> +@@ -141,6 +157,7 @@ pipewire_debug_impl(struct weston_pipewire *pipewire,
-> + 	free(logstr);
-> + }
-> + 
-> ++#if !PW_CHECK_VERSION(0, 2, 90)
-> + static void
-> + pipewire_debug(struct weston_pipewire *pipewire, const char *fmt, ...)
-> + {
-> +@@ -150,6 +167,7 @@ pipewire_debug(struct weston_pipewire *pipewire, const char *fmt, ...)
-> + 	pipewire_debug_impl(pipewire, NULL, fmt, ap);
-> + 	va_end(ap);
-> + }
-> ++#endif
-> + 
-> + static void
-> + pipewire_output_debug(struct pipewire_output *output, const char *fmt, ...)
-> +@@ -185,7 +203,9 @@ pipewire_output_handle_frame(struct pipewire_output *output, int fd,
-> + 	const struct weston_drm_virtual_output_api *api =
-> + 		output->pipewire->virtual_output_api;
-> + 	size_t size = output->output->height * stride;
-> ++#if !PW_CHECK_VERSION(0, 2, 90)
-> + 	struct pw_type *t = output->pipewire->t;
-> ++#endif
-> + 	struct pw_buffer *buffer;
-> + 	struct spa_buffer *spa_buffer;
-> + 	struct spa_meta_header *h;
-> +@@ -203,7 +223,12 @@ pipewire_output_handle_frame(struct pipewire_output *output, int fd,
-> + 
-> + 	spa_buffer = buffer->buffer;
-> + 
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++	if ((h = spa_buffer_find_meta_data(spa_buffer, SPA_META_Header,
-> ++				     sizeof(struct spa_meta_header)))) {
-> ++#else
-> + 	if ((h = spa_buffer_find_meta(spa_buffer, t->meta.Header))) {
-> ++#endif
-> + 		h->pts = -1;
-> + 		h->flags = 0;
-> + 		h->seq = output->seq++;
-> +@@ -375,18 +400,40 @@ pipewire_set_dpms(struct weston_output *base_output, enum dpms_enum level)
-> + static int
-> + pipewire_output_connect(struct pipewire_output *output)
-> + {
-> ++#if !PW_CHECK_VERSION(0, 2, 90)
-> + 	struct weston_pipewire *pipewire = output->pipewire;
-> + 	struct type *type = &pipewire->type;
-> ++#endif
-> + 	uint8_t buffer[1024];
-> + 	struct spa_pod_builder builder =
-> + 		SPA_POD_BUILDER_INIT(buffer, sizeof(buffer));
-> + 	const struct spa_pod *params[1];
-> ++#if !PW_CHECK_VERSION(0, 2, 90)
-> + 	struct pw_type *t = pipewire->t;
-> ++#endif
-> + 	int frame_rate = output->output->current_mode->refresh / 1000;
-> + 	int width = output->output->width;
-> + 	int height = output->output->height;
-> + 	int ret;
-> + 
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++	params[0] = spa_pod_builder_add_object(&builder,
-> ++		SPA_TYPE_OBJECT_Format, SPA_PARAM_EnumFormat,
-> ++		SPA_FORMAT_mediaType, SPA_POD_Id(SPA_MEDIA_TYPE_video),
-> ++		SPA_FORMAT_mediaSubtype, SPA_POD_Id(SPA_MEDIA_SUBTYPE_raw),
-> ++		SPA_FORMAT_VIDEO_format, SPA_POD_Id(SPA_VIDEO_FORMAT_BGRx),
-> ++		SPA_FORMAT_VIDEO_size, SPA_POD_Rectangle(&SPA_RECTANGLE(width, height)),
-> ++		SPA_FORMAT_VIDEO_framerate, SPA_POD_Fraction(&SPA_FRACTION (0, 1)),
-> ++		SPA_FORMAT_VIDEO_maxFramerate,
-> ++		SPA_POD_CHOICE_RANGE_Fraction(&SPA_FRACTION(frame_rate, 1),
-> ++			&SPA_FRACTION(1, 1),
-> ++			&SPA_FRACTION(frame_rate, 1)));
-> ++
-> ++	ret = pw_stream_connect(output->stream, PW_DIRECTION_OUTPUT, SPA_ID_INVALID,
-> ++				(PW_STREAM_FLAG_DRIVER |
-> ++				 PW_STREAM_FLAG_MAP_BUFFERS),
-> ++				params, 1);
-> ++#else
-> + 	params[0] = spa_pod_builder_object(&builder,
-> + 		t->param.idEnumFormat, t->spa_format,
-> + 		"I", type->media_type.video,
-> +@@ -406,6 +453,7 @@ pipewire_output_connect(struct pipewire_output *output)
-> + 				(PW_STREAM_FLAG_DRIVER |
-> + 				 PW_STREAM_FLAG_MAP_BUFFERS),
-> + 				params, 1);
-> ++#endif
-> + 	if (ret != 0) {
-> + 		weston_log("Failed to connect pipewire stream: %s",
-> + 			   spa_strerror(ret));
-> +@@ -482,26 +530,42 @@ pipewire_output_stream_state_changed(void *data, enum pw_stream_state old,
-> + }
-> + 
-> + static void
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++pipewire_output_stream_param_changed(void *data, uint32_t id, const struct spa_pod *format)
-> ++#else
-> + pipewire_output_stream_format_changed(void *data, const struct spa_pod *format)
-> ++#endif
-> + {
-> + 	struct pipewire_output *output = data;
-> ++#if !PW_CHECK_VERSION(0, 2, 90)
-> + 	struct weston_pipewire *pipewire = output->pipewire;
-> ++#endif
-> + 	uint8_t buffer[1024];
-> + 	struct spa_pod_builder builder =
-> + 		SPA_POD_BUILDER_INIT(buffer, sizeof(buffer));
-> + 	const struct spa_pod *params[2];
-> ++#if !PW_CHECK_VERSION(0, 2, 90)
-> + 	struct pw_type *t = pipewire->t;
-> ++#endif
-> + 	int32_t width, height, stride, size;
-> + 	const int bpp = 4;
-> + 
-> + 	if (!format) {
-> + 		pipewire_output_debug(output, "format = None");
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++		pw_stream_update_params(output->stream, NULL, 0);
-> ++#else
-> + 		pw_stream_finish_format(output->stream, 0, NULL, 0);
-> ++#endif
-> + 		return;
-> + 	}
-> + 
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++	spa_format_video_raw_parse(format, &output->video_format);
-> ++#else
-> + 	spa_format_video_raw_parse(format, &output->video_format,
-> + 				   &pipewire->type.format_video);
-> ++#endif
-> + 
-> + 	width = output->video_format.size.width;
-> + 	height = output->video_format.size.height;
-> +@@ -510,6 +574,21 @@ pipewire_output_stream_format_changed(void *data, const struct spa_pod *format)
-> + 
-> + 	pipewire_output_debug(output, "format = %dx%d", width, height);
-> + 
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++	params[0] = spa_pod_builder_add_object(&builder,
-> ++		SPA_TYPE_OBJECT_ParamBuffers, SPA_PARAM_Buffers,
-> ++		SPA_PARAM_BUFFERS_size, SPA_POD_Int(size),
-> ++		SPA_PARAM_BUFFERS_stride, SPA_POD_Int(stride),
-> ++		SPA_PARAM_BUFFERS_buffers, SPA_POD_CHOICE_RANGE_Int(4, 2, 8),
-> ++		SPA_PARAM_BUFFERS_align, SPA_POD_Int(16));
-> ++
-> ++	params[1] = spa_pod_builder_add_object(&builder,
-> ++		SPA_TYPE_OBJECT_ParamMeta, SPA_PARAM_Meta,
-> ++		SPA_PARAM_META_type, SPA_POD_Id(SPA_META_Header),
-> ++		SPA_PARAM_META_size, SPA_POD_Int(sizeof(struct spa_meta_header)));
-> ++
-> ++	pw_stream_update_params(output->stream, params, 2);
-> ++#else
-> + 	params[0] = spa_pod_builder_object(&builder,
-> + 		t->param.idBuffers, t->param_buffers.Buffers,
-> + 		":", t->param_buffers.size,
-> +@@ -527,12 +606,17 @@ pipewire_output_stream_format_changed(void *data, const struct spa_pod *format)
-> + 		":", t->param_meta.size, "i", sizeof(struct spa_meta_header));
-> + 
-> + 	pw_stream_finish_format(output->stream, 0, params, 2);
-> ++#endif
-> + }
-> + 
-> + static const struct pw_stream_events stream_events = {
-> + 	PW_VERSION_STREAM_EVENTS,
-> + 	.state_changed = pipewire_output_stream_state_changed,
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++	.param_changed = pipewire_output_stream_param_changed,
-> ++#else
-> + 	.format_changed = pipewire_output_stream_format_changed,
-> ++#endif
-> + };
-> + 
-> + static struct weston_output *
-> +@@ -560,7 +644,11 @@ pipewire_output_create(struct weston_compositor *c, char *name)
-> + 	if (!head)
-> + 		goto err;
-> + 
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++	output->stream = pw_stream_new(pipewire->core, name, NULL);
-> ++#else
-> + 	output->stream = pw_stream_new(pipewire->remote, name, NULL);
-> ++#endif
-> + 	if (!output->stream) {
-> + 		weston_log("Cannot initialize pipewire stream\n");
-> + 		goto err;
-> +@@ -704,6 +792,14 @@ weston_pipewire_loop_handler(int fd, uint32_t mask, void *data)
-> + 	return 0;
-> + }
-> + 
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++static void
-> ++weston_pipewire_error(void *data, uint32_t id, int seq, int res,
-> ++			      const char *error)
-> ++{
-> ++	weston_log("pipewire remote error: %s\n", error);
-> ++}
-> ++#else
-> + static void
-> + weston_pipewire_state_changed(void *data, enum pw_remote_state old,
-> + 			      enum pw_remote_state state, const char *error)
-> +@@ -725,12 +821,20 @@ weston_pipewire_state_changed(void *data, enum pw_remote_state old,
-> + 		break;
-> + 	}
-> + }
-> ++#endif
-> + 
-> + 
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++static const struct pw_core_events core_events = {
-> ++	PW_VERSION_CORE_EVENTS,
-> ++	.error = weston_pipewire_error,
-> ++};
-> ++#else
-> + static const struct pw_remote_events remote_events = {
-> + 	PW_VERSION_REMOTE_EVENTS,
-> + 	.state_changed = weston_pipewire_state_changed,
-> + };
-> ++#endif
-> + 
-> + static int
-> + weston_pipewire_init(struct weston_pipewire *pipewire)
-> +@@ -745,10 +849,19 @@ weston_pipewire_init(struct weston_pipewire *pipewire)
-> + 
-> + 	pw_loop_enter(pipewire->loop);
-> + 
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++	pipewire->context = pw_context_new(pipewire->loop, NULL, 0);
-> ++#else
-> + 	pipewire->core = pw_core_new(pipewire->loop, NULL);
-> + 	pipewire->t = pw_core_get_type(pipewire->core);
-> + 	init_type(&pipewire->type, pipewire->t->map);
-> ++#endif
-> + 
-> ++#if PW_CHECK_VERSION(0, 2, 90)
-> ++	pw_core_add_listener(pipewire->core,
-> ++			       &pipewire->core_listener,
-> ++			       &core_events, pipewire);
-> ++#else
-> + 	pipewire->remote = pw_remote_new(pipewire->core, NULL, 0);
-> + 	pw_remote_add_listener(pipewire->remote,
-> + 			       &pipewire->remote_listener,
-> +@@ -777,6 +890,7 @@ weston_pipewire_init(struct weston_pipewire *pipewire)
-> + 			goto err;
-> + 		}
-> + 	}
-> ++#endif
-> + 
-> + 	loop = wl_display_get_event_loop(pipewire->compositor->wl_display);
-> + 	pipewire->loop_source =
-> +@@ -786,12 +900,14 @@ weston_pipewire_init(struct weston_pipewire *pipewire)
-> + 				     pipewire);
-> + 
-> + 	return 0;
-> ++#if !PW_CHECK_VERSION(0, 2, 90)
-> + err:
-> + 	if (pipewire->remote)
-> + 		pw_remote_destroy(pipewire->remote);
-> + 	pw_loop_leave(pipewire->loop);
-> + 	pw_loop_destroy(pipewire->loop);
-> + 	return -1;
-> ++#endif
-> + }
-> + 
-> + static const struct weston_pipewire_api pipewire_api = {
-> +-- 
-> +2.25.1
+> +config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
+> +	bool
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
+>  	select BR2_TOOLCHAIN_HEADERS_LATEST
+>  
+>  # This should be selected by the latest version, above, to indicate that
+> @@ -513,6 +517,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
+>  # stops affecting a value on the first matching default.
+>  config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+>  	string
+> +	default "5.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
+>  	default "5.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
+>  	default "5.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
+>  	default "5.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
+> diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> index 4331c2528a..ba9aeb29ad 100644
+> --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> @@ -119,8 +119,12 @@ choice
+>  	  If your toolchain uses headers newer than the latest version
+>  	  in the choice, then select the latest version.
+>  
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_12
+> +	bool "5.12.x or later"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
 > +
-> diff --git a/package/weston/0004-pipewire-fix-null-deref-in-0-3-API.patch b/package/weston/0004-pipewire-fix-null-deref-in-0-3-API.patch
-> new file mode 100644
-> index 0000000000..f65348e166
-> --- /dev/null
-> +++ b/package/weston/0004-pipewire-fix-null-deref-in-0-3-API.patch
-> @@ -0,0 +1,28 @@
-> +From a67393c353e0f25b142910a817be5a7754d436c3 Mon Sep 17 00:00:00 2001
-> +From: Ambareesh Balaji <ambareeshbalaji@gmail.com>
-> +Date: Sat, 5 Dec 2020 20:49:55 -0500
-> +Subject: [PATCH] pipewire: fix null deref in 0.3 API
-> +
-> +Signed-off-by: Ambareesh Balaji <ambareeshbalaji@gmail.com>
-> +[Retrieved from:
-> +https://gitlab.freedesktop.org/wayland/weston/-/commit/a67393c353e0f25b142910a817be5a7754d436c3]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + pipewire/pipewire-plugin.c | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/pipewire/pipewire-plugin.c b/pipewire/pipewire-plugin.c
-> +index ca5cbfec1..55705acfc 100644
-> +--- a/pipewire/pipewire-plugin.c
-> ++++ b/pipewire/pipewire-plugin.c
-> +@@ -856,6 +856,7 @@ weston_pipewire_init(struct weston_pipewire *pipewire)
-> + 
-> + #if PW_CHECK_VERSION(0, 2, 90)
-> + 	pipewire->context = pw_context_new(pipewire->loop, NULL, 0);
-> ++	pipewire->core = pw_context_connect(pipewire->context, NULL, 0);
-> + #else
-> + 	pipewire->core = pw_core_new(pipewire->loop, NULL);
-> + 	pipewire->t = pw_core_get_type(pipewire->core);
-> +-- 
-> +GitLab
-> +
+>  config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_11
+> -	bool "5.11.x or later"
+> +	bool "5.11"
+>  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
+>  
+>  config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_10
 > 
