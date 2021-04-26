@@ -1,72 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 12:02:25 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/rsyslog: install
- default service file
-Message-ID: <20210426093832.A7F5A860F7@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 26 Apr 2021 12:10:20 +0200
+Subject: [Buildroot] [PATCH 1/2] package/localedef: bump to version 2.32-23
+Message-ID: <20210426101021.2418145-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b870cfab061b060bac60f112c4d30ce66b711bfc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+resync the version with glibc package.
 
-As of v8.2008 rsyslog no longer provides a default service file, and now
-suggests using the platform suggested defaults. For Buildroot, install
-the Debian service file which has been added in the same version,
-however is not included in the official release.
-
-Upstream commit which adds this service file:
-https://github.com/rsyslog/rsyslog/commit/cfd07503ba055100a84d75d1a78a5c6cceb9fdab
-
-Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4732b78221145ea9fd738d5959ac29cae5a30c0b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/rsyslog/rsyslog.mk      |  5 +++++
- package/rsyslog/rsyslog.service | 19 +++++++++++++++++++
- 2 files changed, 24 insertions(+)
+ .../0001-HACK-only-build-and-install-localedef.patch            | 0
+ ...02-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch | 0
+ .../localedef.hash                                              | 2 +-
+ package/localedef/localedef.mk                                  | 2 +-
+ 4 files changed, 2 insertions(+), 2 deletions(-)
+ rename package/localedef/{2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2 => 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2}/0001-HACK-only-build-and-install-localedef.patch (100%)
+ rename package/localedef/{2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2 => 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2}/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch (100%)
+ rename package/localedef/{2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2 => 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2}/localedef.hash (72%)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index d20a13dbdd..62ef756f9d 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -89,6 +89,11 @@ RSYSLOG_CONF_OPTS += \
- 	--disable-omjournal
- endif
+diff --git a/package/localedef/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0001-HACK-only-build-and-install-localedef.patch
+similarity index 100%
+rename from package/localedef/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/0001-HACK-only-build-and-install-localedef.patch
+rename to package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0001-HACK-only-build-and-install-localedef.patch
+diff --git a/package/localedef/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+similarity index 100%
+rename from package/localedef/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+rename to package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+diff --git a/package/localedef/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/localedef.hash b/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/localedef.hash
+similarity index 72%
+rename from package/localedef/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/localedef.hash
+rename to package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/localedef.hash
+index 45ecc2895f..b1d5243fcc 100644
+--- a/package/localedef/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/localedef.hash
++++ b/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/localedef.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  04946bb7cbaf4062bf5e727e0d6784e105b07611587d71f00d25ea896753c26d  glibc-2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2.tar.gz
++sha256  f4710e9a435a7b83e1d23dd75434f0d36b898eba9b4249c946c32b467d852fd4  glibc-2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2.tar.gz
  
-+define RSYSLOG_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -m 0755 -D package/rsyslog/rsyslog.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/rsyslog.service
-+endef
-+
- define RSYSLOG_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/rsyslog/S01rsyslogd \
- 		$(TARGET_DIR)/etc/init.d/S01rsyslogd
-diff --git a/package/rsyslog/rsyslog.service b/package/rsyslog/rsyslog.service
-new file mode 100644
-index 0000000000..40c7c2202d
---- /dev/null
-+++ b/package/rsyslog/rsyslog.service
-@@ -0,0 +1,19 @@
-+[Unit]
-+Description=System Logging Service
-+Requires=syslog.socket
-+Documentation=man:rsyslogd(8)
-+Documentation=https://www.rsyslog.com/doc/
-+
-+[Service]
-+Type=notify
-+ExecStart=/usr/sbin/rsyslogd -n -iNONE
-+StandardOutput=null
-+Restart=on-failure
-+
-+# Increase the default a bit in order to allow many simultaneous
-+# files to be monitored, we might need a lot of fds.
-+LimitNOFILE=16384
-+
-+[Install]
-+WantedBy=multi-user.target
-+Alias=syslog.service
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index d75702d847..57ab5a3458 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2
++LOCALEDEF_VERSION = 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
+-- 
+2.30.2
