@@ -1,53 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 08:47:37 +0200
+Date: Mon, 26 Apr 2021 08:54:20 +0200
 Subject: [Buildroot] [git commit branch/2021.02.x]
- package/x11r7/xserver_xorg-server: remove xfbdev
-Message-ID: <20210426063224.335B27FD9C@busybox.osuosl.org>
+ package/x11r7/xserver_xorg-server: remove optional support for tslib
+Message-ID: <20210426063224.52417861FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92027e79d04d39e67eae3ded283d4804faab0501
+commit: https://git.buildroot.net/buildroot/commit/?id=299908a0583cd6b9b09d222febcd201a8890d3e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Upstream removed the kdrive framebuffer device server:
-https://cgit.freedesktop.org/xorg/xserver/commit/configure.ac?h=server-1.20-branch&id=feed7e3f982a7ac14f6fe85ed2e1ec4a83700841
+Upstream removed support for tslib:
+https://cgit.freedesktop.org/xorg/xserver/commit/configure.ac?h=server-1.20-branch&id=5c7ed785e3bdb9f0fbf8fbfdc93b5fdd2b2c7dbf
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2779de195f63df89b16d53460d22aec20b495ce1)
+(cherry picked from commit 974448aed3e54b048aa527482cfa935bbe0daeae)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
 diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 03f36f1b28..aaf3584772 100644
+index 8bd92b7ab6..0ac34a63b5 100644
 --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
 +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -90,14 +90,9 @@ endif
- ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE),y)
- XSERVER_XORG_SERVER_CONF_OPTS += \
- 	--enable-kdrive \
--	--enable-xfbdev \
- 	--disable-glx \
- 	--disable-dri \
- 	--disable-xsdl
--define XSERVER_CREATE_X_SYMLINK
--	ln -f -s Xfbdev $(TARGET_DIR)/usr/bin/X
--endef
--XSERVER_XORG_SERVER_POST_INSTALL_TARGET_HOOKS += XSERVER_CREATE_X_SYMLINK
- 
- ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV),y)
- XSERVER_XORG_SERVER_CONF_OPTS += --enable-kdrive-evdev
-@@ -106,7 +101,7 @@ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-evdev
+@@ -106,11 +106,6 @@ XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
  endif
  
- else # modular
--XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
-+XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive
- endif
- 
- ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+ # Optional packages
+-ifeq ($(BR2_PACKAGE_TSLIB),y)
+-XSERVER_XORG_SERVER_DEPENDENCIES += tslib
+-XSERVER_XORG_SERVER_CONF_OPTS += --enable-tslib LDFLAGS="-lts"
+-endif
+-
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += udev
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev
