@@ -1,88 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Apr 2021 21:50:11 +0200
-Subject: [Buildroot] [git commit] configs/nitrogen8mp: new defconfig
-Message-ID: <20210426192305.C373286387@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 26 Apr 2021 21:50:24 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
+In-Reply-To: <20210317163459.1916948-1-giulio.benetti@benettiengineering.com>
+References: <20210314233231.351fce1c@windsurf.home>
+ <20210317163459.1916948-1-giulio.benetti@benettiengineering.com>
+Message-ID: <4650b5d9-1aa5-56e8-072d-df9af792d02b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbfa1aeb419711c4edaf1b4a7401051f48298c78
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-NXP i.MX 8M Plus based SOM with 2GB of LPDDR4 and 16GB eMMC.
 
-More details on the platform here:
-https://boundarydevices.com/product/nitrogen8m-plus-som/
+On 17/03/2021 17:34, Giulio Benetti wrote:
+> On Nios II binutils it still present ld bug 27597 leading to a package
+> libgeos to fail building:
+> http://autobuild.buildroot.net/results/a05fdf1958f93a206c5c66c7f636b6650683626d/http://autobuild.buildroot.net/results/c05/c053b9e191b31f0b1f8f8c902b602e187f714dc0/
+> 
+> The bug was already reported and it's been updated:
+> https://sourceware.org/bugzilla/show_bug.cgi?id=27597
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/nitrogen8mp_defconfig | 58 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ Applied to master, thanks.
 
-diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
-new file mode 100644
-index 0000000000..14bd26724d
---- /dev/null
-+++ b/configs/nitrogen8mp_defconfig
-@@ -0,0 +1,58 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_cortex_a53=y
-+
-+# System
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/boundarydevices/common/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mp-nitrogen8mp.dtb"
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_IMX_MKIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+
-+# DDR training binaries
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
-+
-+# ARM Trusted Firmware
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-+# Latest revision of branch boundary-imx_5.4.70_2.3.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/9f6114fd.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mp"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mp_2gr0"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+# Latest revision of branch boundary-imx_v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_SPL=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+# Latest revision  of branch boundary-imx_5.4.x_2.3.0
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8961f5c1.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="boundary"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mp-nitrogen8mp freescale/imx8mp-a0-nitrogen8mp"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ Regards,
+ Arnout
+
+> ---
+>  toolchain/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index 5c76bdf4ea..87f4d486a3 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -83,6 +83,12 @@ config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
+>  	bool
+>  	default y if BR2_or1k && !BR2_BINUTILS_VERSION_2_36_X
+>  
+> +# https://sourceware.org/bugzilla/show_bug.cgi?id=27597
+> +# Affect toolchains built with binutils 2.36.1, still not fixed.
+> +config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
+> +	bool
+> +	default y if BR2_nios2
+> +
+>  # Atomic types can be:
+>  #  - never lock-free
+>  #  - sometimes lock-free
+> 
