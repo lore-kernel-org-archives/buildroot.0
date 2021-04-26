@@ -1,45 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 14:29:39 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/mpd: bump to
- version 0.22.6
-Message-ID: <20210426125912.005F1817A8@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 15:11:25 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ package/json-for-modern-cpp: add _CPE_ID_VENDOR
+Message-ID: <20210426125912.C10F686340@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab51a28fe3b30ad16355c02d284a5a426f4a5b4a
+commit: https://git.buildroot.net/buildroot/commit/?id=e52089addf852cad68e57d43f92296b2842bceb7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ec15f89be9a32cbcc565ca57cf240a68d9f69eb3)
+cpe:2.3:a:json-for-modern-cpp_project:json-for-modern-cpp:* is a valid CPE identifier for this package:
+
+ https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:json-for-modern-cpp_project:json-for-modern-cpp
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[yann.morin.1998 at free.fr:move up, right after license]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit c24fc9042a8b52e0749cd957c6f91f2bdf1d3eaf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/json-for-modern-cpp/json-for-modern-cpp.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 866c61d15f..4c3b49823b 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  338012037b5e67730529187c555a54cc567a85b15a7e8ddb3a807b1971566ccf  mpd-0.22.3.tar.xz
-+sha256  2be149a4895c3cb613477f8cf1193593e3d8a1d38a75ffa7d32da8c8316a4d5e  mpd-0.22.6.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 5dfb5b42a4..06dc7e15d7 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.22
--MPD_VERSION = $(MPD_VERSION_MAJOR).3
-+MPD_VERSION = $(MPD_VERSION_MAJOR).6
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+index 6e21723fd4..ffc419e6d1 100644
+--- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
++++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+@@ -9,6 +9,8 @@ JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
+ JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
+ JSON_FOR_MODERN_CPP_LICENSE = MIT
+ JSON_FOR_MODERN_CPP_LICENSE_FILES = LICENSE.MIT
++JSON_FOR_MODERN_CPP_CPE_ID_VENDOR = json-for-modern-cpp_project
++
+ JSON_FOR_MODERN_CPP_INSTALL_STAGING = YES
+ # header only library
+ JSON_FOR_MODERN_CPP_INSTALL_TARGET = NO
