@@ -1,32 +1,28 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 26 Apr 2021 14:43:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: security bump to
- version 2021.04
-In-Reply-To: <87mttlkyr6.fsf@dell.be.48ers.dk>
-References: <20210418194332.3464292-1-fontaine.fabrice@gmail.com>
- <87mttlkyr6.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W80hoZtMnQytcOJbs5B3twa_CUyp1gXQBjDY_Fs8YNS5xw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Apr 2021 14:58:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/timescaledb: bump version to
+ 2.1.1
+In-Reply-To: <20210408050246.570397-1-fido_max@inbox.ru> (Maxim Kochetkov via
+ buildroot's message of "Thu, 8 Apr 2021 08:02:46 +0300")
+References: <20210408050246.570397-1-fido_max@inbox.ru>
+Message-ID: <87a6plkxs7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lun. 26 avr. 2021 ? 14:37, Peter Korsgaard <peter@korsgaard.com> a ?crit :
->
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
->  > - Fix CVE-2021-27097: The boot loader in Das U-Boot before 2021.04-rc2
->  >   mishandles a modified FIT.
->  > - Fix CVE-2021-27138: The boot loader in Das U-Boot before 2021.04-rc2
->  >   mishandles use of unit addresses in a FIT.
->
-> Are these really bugs in uboot-tools, E.G. the (host-side) tools and not
-> in u-boot itself?
-Indeed, these CVEs are affecting uboot and not uboot-tools.
->
-> --
-> Bye, Peter Korsgaard
-Best Regards,
+>>>>> "Maxim" == Maxim Kochetkov via buildroot <buildroot@busybox.net> writes:
 
-Fabrice
+ > Release notes: https://github.com/timescale/timescaledb/releases/tag/2.1.1
+ > Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+
+For 2021.02.x I have instead bumped to version 2.0.2, which states:
+
+This maintenance release contains bugfixes since the 2.0.1 release. We
+deem it high priority for upgrading.
+
+https://github.com/timescale/timescaledb/releases/tag/2.0.2
+
+-- 
+Bye, Peter Korsgaard
