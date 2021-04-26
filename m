@@ -1,52 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 12:04:29 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/dnsmasq: security
- bump to 2.85
-Message-ID: <20210426093832.B64E2812C8@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 12:02:25 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/rsyslog: install
+ default service file
+Message-ID: <20210426093832.A7F5A860F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11e0fa9a9b315fb05ae224a7e7ba9dc8ff59d88c
+commit: https://git.buildroot.net/buildroot/commit/?id=b870cfab061b060bac60f112c4d30ce66b711bfc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-CVE-2021-3448 applies.  See announcement for details.
+As of v8.2008 rsyslog no longer provides a default service file, and now
+suggests using the platform suggested defaults. For Buildroot, install
+the Debian service file which has been added in the same version,
+however is not included in the official release.
 
-Link: https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2021q2/014962.html
-Signed-off-by: Alexander Dahl <post@lespocky.de>
+Upstream commit which adds this service file:
+https://github.com/rsyslog/rsyslog/commit/cfd07503ba055100a84d75d1a78a5c6cceb9fdab
+
+Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3ce7afbe50602f76c2d81bba28ed03227ecfc509)
+(cherry picked from commit 4732b78221145ea9fd738d5959ac29cae5a30c0b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dnsmasq/dnsmasq.hash | 4 ++--
- package/dnsmasq/dnsmasq.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/rsyslog/rsyslog.mk      |  5 +++++
+ package/rsyslog/rsyslog.service | 19 +++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
-index d141fb0c83..2a7cda4a04 100644
---- a/package/dnsmasq/dnsmasq.hash
-+++ b/package/dnsmasq/dnsmasq.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.83.tar.xz.asc
--sha256  603195c64b73137609b07e1024ae0b37f652b2f5fe467dce66985b3d1850050c  dnsmasq-2.84.tar.xz
-+# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.85.tar.xz.asc
-+sha256  ad98d3803df687e5b938080f3d25c628fe41c878752d03fbc6199787fee312fa  dnsmasq-2.85.tar.xz
- # Locally calculated
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 76b48f952a..2006757590 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index d20a13dbdd..62ef756f9d 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -89,6 +89,11 @@ RSYSLOG_CONF_OPTS += \
+ 	--disable-omjournal
+ endif
  
--DNSMASQ_VERSION = 2.84
-+DNSMASQ_VERSION = 2.85
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
++define RSYSLOG_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -m 0755 -D package/rsyslog/rsyslog.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/rsyslog.service
++endef
++
+ define RSYSLOG_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/rsyslog/S01rsyslogd \
+ 		$(TARGET_DIR)/etc/init.d/S01rsyslogd
+diff --git a/package/rsyslog/rsyslog.service b/package/rsyslog/rsyslog.service
+new file mode 100644
+index 0000000000..40c7c2202d
+--- /dev/null
++++ b/package/rsyslog/rsyslog.service
+@@ -0,0 +1,19 @@
++[Unit]
++Description=System Logging Service
++Requires=syslog.socket
++Documentation=man:rsyslogd(8)
++Documentation=https://www.rsyslog.com/doc/
++
++[Service]
++Type=notify
++ExecStart=/usr/sbin/rsyslogd -n -iNONE
++StandardOutput=null
++Restart=on-failure
++
++# Increase the default a bit in order to allow many simultaneous
++# files to be monitored, we might need a lot of fds.
++LimitNOFILE=16384
++
++[Install]
++WantedBy=multi-user.target
++Alias=syslog.service
