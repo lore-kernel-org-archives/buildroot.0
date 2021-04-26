@@ -1,35 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 21:08:01 +0200
-Subject: [Buildroot] [PATCH 3/3] package/bash: drop SHOBJ_STATUS from
- BASH_CONF_ENV
-In-Reply-To: <20210423202356.37681-3-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Fri, 23 Apr 2021 22:23:55 +0200")
-References: <20210423202356.37681-1-thomas.petazzoni@bootlin.com>
- <20210423202356.37681-3-thomas.petazzoni@bootlin.com>
-Message-ID: <87r1iwhnji.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 26 Apr 2021 21:11:12 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/2] Revert "package/domoticz: drop boost date-time dependency"
+Message-ID: <20210426191113.512637-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+This reverts commit 4b4d98e2c5165c3121e670192970fc909cae6d8a as
+Boost::date_time is still used by domoticz (in pmain/Scheduler.cpp and
+push/BasePush.cpp)
 
- > SHOBJ_STATUS=unsupported was added in commit
- > 4a2af11cba83ef176672609dd7321712fa7f6a28 to work around a limitation
- > of the configure script that forgot to set this variable in
- > static-linking configurations.
+Fixes:
+ - http://autobuild.buildroot.org/results/493a2e93fe6121f118293a268f986ee51009b7e8
 
- > It turns out that this issue has been fixed upstream as of bash 5.0:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/domoticz/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- >   https://git.savannah.gnu.org/cgit/bash.git/diff/configure.ac?id=d233b485e83c3a784b803fb894280773f16f2deb
-
- >   (see hunk @@ -1151,6 +1179,9 @@)
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Baruch Siach <baruch@tkos.co.il>
-
-Committed to 2021.02.x, thanks.
-
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+index f9672056ee..83ae2035b2 100644
+--- a/package/domoticz/Config.in
++++ b/package/domoticz/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_DOMOTICZ
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_DATE_TIME
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+ 	select BR2_PACKAGE_CEREAL
 -- 
-Bye, Peter Korsgaard
+2.30.2
