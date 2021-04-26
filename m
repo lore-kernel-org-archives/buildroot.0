@@ -1,39 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 08:59:24 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libcgroup: add
- LIBCGROUP_CPE_ID_VENDOR
-Message-ID: <20210426063224.723EE861F0@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 08:47:37 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ package/x11r7/xserver_xorg-server: remove xfbdev
+Message-ID: <20210426063224.335B27FD9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92b2bac9692ef7caf554bc6d6ee7a441b9a1dade
+commit: https://git.buildroot.net/buildroot/commit/?id=92027e79d04d39e67eae3ded283d4804faab0501
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:libcgroup_project:libcgroup is a valid CPE identifier for this
-package:
+Upstream removed the kdrive framebuffer device server:
+https://cgit.freedesktop.org/xorg/xserver/commit/configure.ac?h=server-1.20-branch&id=feed7e3f982a7ac14f6fe85ed2e1ec4a83700841
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibcgroup_project%3Alibcgroup
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6333d5d1dcbe6d8a40ab371c7eff596bf3ac44f5)
+(cherry picked from commit 2779de195f63df89b16d53460d22aec20b495ce1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcgroup/libcgroup.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
-index a26d5f2ddf..e2a936eefd 100644
---- a/package/libcgroup/libcgroup.mk
-+++ b/package/libcgroup/libcgroup.mk
-@@ -9,6 +9,7 @@ LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
- LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v$(LIBCGROUP_VERSION)
- LIBCGROUP_LICENSE = LGPL-2.1
- LIBCGROUP_LICENSE_FILES = COPYING
-+LIBCGROUP_CPE_ID_VENDOR = libcgroup_project
- LIBCGROUP_DEPENDENCIES = host-bison host-flex
- LIBCGROUP_INSTALL_STAGING = YES
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 03f36f1b28..aaf3584772 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -90,14 +90,9 @@ endif
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += \
+ 	--enable-kdrive \
+-	--enable-xfbdev \
+ 	--disable-glx \
+ 	--disable-dri \
+ 	--disable-xsdl
+-define XSERVER_CREATE_X_SYMLINK
+-	ln -f -s Xfbdev $(TARGET_DIR)/usr/bin/X
+-endef
+-XSERVER_XORG_SERVER_POST_INSTALL_TARGET_HOOKS += XSERVER_CREATE_X_SYMLINK
  
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-kdrive-evdev
+@@ -106,7 +101,7 @@ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive-evdev
+ endif
+ 
+ else # modular
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
