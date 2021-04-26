@@ -1,62 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 09:09:04 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] support/scripts/cve.py:
- use fast ijson backend if available on old ijson versions
-Message-ID: <20210426064403.B0A89861EF@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 09:10:03 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/tio: disable for
+ sparc and sparc64 architectures
+Message-ID: <20210426064403.BC0A5861F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19cd3886c8e42a4a6594070b50f589924a001dd4
+commit: https://git.buildroot.net/buildroot/commit/?id=534c912f3cc64ecf255cc6da42781af1ca70b927
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-ijson < 2.5 (as available in Debian 10) use the slow python backend by
-default instead of the most efficient one available like modern ijson
-versions, significantly slowing down cve checking. E.G.:
+tio fails to build on sparc and sparc64 architectures with a
+redefinition of 'struct termio' error, with no proper fix or workaround
+for now. See discussions in [1] and [2] and picocom source code in [3].
 
-time ./support/scripts/pkg-stats --nvd-path ~/.nvd -p avahi --html foobar.html
+[1] http://patchwork.ozlabs.org/project/buildroot/patch/20191227204520.1500501-1-fontaine.fabrice at gmail.com/
+[2] http://patchwork.ozlabs.org/project/buildroot/patch/20200511142602.46170-1-vadim4j at gmail.com/
+[3] https://github.com/npat-efault/picocom/blob/master/termbits2.h#L37
 
-Goes from
-174,44s user 2,11s system 99% cpu 2:58,04 total
+So let's disable it for now on sparc and sparc64 architectures.
 
-To
-93,53s user 2,00s system 98% cpu 1:36,65 total
+Fixes:
+http://autobuild.buildroot.org/results/e041dde522e2a774f528d4377f67ca0a8a99461c
+http://autobuild.buildroot.org/results/6e1f9fe47e8b2cfdf5effcb7bbc697189f54ff2c
+http://autobuild.buildroot.org/results/49708fe6f404fea6761f102af854e98d6a1d43c1
+Many more...
 
-E.G. almost 2x as fast.
-
-As a workaround, detect when the python backend is used and try to use a
-more efficient one instead.  Use the yajl2_cffi backend as recommended by
-upstream, as it is most likely to work, and print a warning (and continue)
-if we fail to load it.
-
-The detection is slightly complicated by the fact that ijson.backends used
-to be a reference to a backend module, but is nowadays a string (without the
-ijson.backends prefix).
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f31227e628a560887b93fea838f766d76388f256)
+(cherry picked from commit 5e3799213236881b6960325f014c2266064de391)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/cve.py | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/tio/Config.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 6e97ea193f..965fc2a466 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -28,6 +28,12 @@ import operator
+diff --git a/package/tio/Config.in b/package/tio/Config.in
+index 6c748c5d12..d5d619100e 100644
+--- a/package/tio/Config.in
++++ b/package/tio/Config.in
+@@ -1,8 +1,15 @@
+ config BR2_PACKAGE_TIO
+ 	bool "tio"
++	depends on !BR2_sparc64 && !BR2_sparc
+ 	help
+ 	  "tio" is a simple TTY terminal application which features a
+ 	  straightforward commandline interface to easily connect to
+ 	  TTY devices for basic input/output.
  
- try:
-     import ijson
-+    # backend is a module in < 2.5, a string in >= 2.5
-+    if 'python' in getattr(ijson.backend, '__name__', ijson.backend):
-+        try:
-+            import ijson.backends.yajl2_cffi as ijson
-+        except ImportError:
-+            sys.stderr.write('Warning: Using slow ijson python backend\n')
- except ImportError:
-     sys.stderr.write("You need ijson to parse NVD for CVE check\n")
-     exit(1)
+ 	  https://tio.github.io/
++
++# tio is disabled for sparc and sparc64 architectures because it fails
++# to build with a redefinition of 'struct termio' error, with no proper
++# fix or workaround for now
++comment "tio is disabled for sparc and sparc64 architectures"
++	depends on BR2_sparc64 || BR2_sparc
