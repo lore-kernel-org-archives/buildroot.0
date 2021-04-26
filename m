@@ -1,62 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 22:26:05 +0200
-Subject: [Buildroot] [PATCH 09/10] package/rsyslog: ignore CVE-2015-3243
-In-Reply-To: <20210421204235.5956-10-matthew.weber@rockwellcollins.com> (Matt
- Weber's message of "Wed, 21 Apr 2021 15:42:34 -0500")
+Date: Mon, 26 Apr 2021 22:29:59 +0200
+Subject: [Buildroot] [PATCH 00/10] Misc CVE ignores
+In-Reply-To: <20210424092952.GS298901@scaer> (Yann E. MORIN's message of "Sat, 
+ 24 Apr 2021 11:29:52 +0200")
 References: <20210421204235.5956-1-matthew.weber@rockwellcollins.com>
- <20210421204235.5956-10-matthew.weber@rockwellcollins.com>
-Message-ID: <87eeewhjxe.fsf@dell.be.48ers.dk>
+ <20210424092952.GS298901@scaer>
+Message-ID: <87a6pkhjqw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > https://security-tracker.debian.org/tracker/CVE-2015-3243
- >  "Rsyslog uses weak permissions for generating log files."
+ > Matt, All,
+ > On 2021-04-21 15:42 -0500, Matt Weber spake thusly:
+ >> * I'm working on upstream NVD fixes for some of these.
+ >> 
+ >> * There are roughly half of the ignore cases that are a bit of a
+ >> challenge to identify where the fix was clearly tracked into
+ >> a specific version. I tried to document in each commit as much
+ >> as a could by linking to conversations clarifying the details.
+ >> 
+ >> Matt Weber (10):
+ >> package/bind: ignore CVE-2017-3139
+ >> package/coreutils: ignore CVE-2013-0221, CVE-2013-0222, CVE-2013-0223
+ >> package/bind: ignore CVE-2019-6470
+ >> package/cmake: ignore CVE-2016-10642
+ >> package/flex: ignore CVE-2019-6293
 
- > Ignoring this CVE for Buildroot as normally there are not local
- > users and a build could customize the rsyslog.conf to be more
- > restrictive ($FileCreateMode 0640).
+ > For this one, I've switched to using the actual upstream URL, rather
+ > that of a downstream consumer:
+ >     https://github.com/westes/flex/issues/414
 
- > Example fix from Alpino Linux
- >  https://github.com/libTorrentUser/alpino-linux-aports/commit/3cb5210cdac46fb8805d4028df16f5889f393a09
+ >> package/hostapd: ignore CVE-2021-30004 when using openssl
+ >> package/wpa_supplicant: ignore CVE-2021-30004 when using openssl
+ >> package/ncurses: ignore CVE-2018-10754, CVE-2018-19211,
+ >> CVE-2018-19217, CVE-2019-17594, CVE-2019-17595
+ >> package/rsyslog: ignore CVE-2015-3243
+ >> package/tar: ignore CVE-2007-4476
 
-Here as well, I don't like ignoring the issue just because you COULD
-work around it by doing customization outside Buildroot.
+ > Series applied to master, thanks.
 
-How about combining this with a patch to platform/redhat/rsyslog.conf to
-set sensible permissions just like it is done for Alpino?
-
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
- > ---
- >  package/rsyslog/rsyslog.mk | 4 ++++
- >  1 file changed, 4 insertions(+)
-
- > diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
- > index 1aa81b8eac..6cf53ccb82 100644
- > --- a/package/rsyslog/rsyslog.mk
- > +++ b/package/rsyslog/rsyslog.mk
- > @@ -9,6 +9,10 @@ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
- >  RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
- >  RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
- >  RSYSLOG_CPE_ID_VENDOR = rsyslog
- > +# rsyslog uses weak permissions for generating log files.
- > +# Ignoring this CVE as Buildroot normally doesn't have local users and a build
- > +# could customize the rsyslog.conf to be more restrictive ($FileCreateMode 0640)
- > +RSYSLOG_IGNORE_CVES += CVE-2015-3243
- >  RSYSLOG_DEPENDENCIES = zlib libestr liblogging libfastjson host-pkgconf
- >  RSYSLOG_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
- >  RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
- > -- 
- > 2.17.1
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+I am not so happy with the hostapd/wpa_supplicant/rsyslog ignores, but I
+have applied the series to 2021.02.x anyway and will send followup
+patches to master (and 2021.02.x) to improve those packages later.
 
 -- 
 Bye, Peter Korsgaard
