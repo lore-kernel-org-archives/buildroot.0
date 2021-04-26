@@ -1,30 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 08:55:38 +0200
-Subject: [Buildroot] [PATCH 5/5] package/x11r7/xserver_xorg-server:
- remove unused configure option --disable-xsdl
-In-Reply-To: <87fszdpmb9.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 26 Apr 2021 08:55:06 +0200")
-References: <20210415065246.276882-1-bernd.kuhls@t-online.de>
- <20210415065246.276882-5-bernd.kuhls@t-online.de>
- <87fszdpmb9.fsf@dell.be.48ers.dk>
-Message-ID: <877dkppmad.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Apr 2021 08:59:14 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libcgroup: add
+ LIBCGROUP_CPE_ID_VENDOR
+In-Reply-To: <20210416203413.1603113-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 16 Apr 2021 22:34:13 +0200")
+References: <20210416203413.1603113-1-fontaine.fabrice@gmail.com>
+ <20210416203413.1603113-2-fontaine.fabrice@gmail.com>
+Message-ID: <8735vdpm4d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
- >> Upstream removed this configure option:
- >> https://cgit.freedesktop.org/xorg/xserver/commit/configure.ac?h=server-1.20-branch&id=52bc6d944946e66ea2cc685feaeea40bb496ea83
+ > cpe:2.3:a:libcgroup_project:libcgroup is a valid CPE identifier for this
+ > package:
 
- >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibcgroup_project%3Alibcgroup
 
- > Committed, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-(for 2021.02.x, naturally)
+Committed to 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
