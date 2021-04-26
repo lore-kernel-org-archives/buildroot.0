@@ -1,42 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 16:33:25 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/kismet: fix
- static build with uclibc
-Message-ID: <20210426141046.2F7AA81327@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 16:03:45 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ package/python-mbstrdecoder: bump to version 1.0.1
+Message-ID: <20210426141046.028648110B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91d3e2ae45cdd5cba2af60329d90fb34525ddcc2
+commit: https://git.buildroot.net/buildroot/commit/?id=e4f23b5dbc88d5041426abf03e66c15fa2ad524c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix static build with uclibc which is raised since bump to version
-2020-12-R3 in commit 14522a8f9d272204763c49a21ebce5653430c612
-
-Fixes:
- - http://autobuild.buildroot.org/results/69dcb7ac99e63fca342e4d52d9311d1ee1931911
+https://github.com/thombashi/mbstrdecoder/releases/tag/v1.0.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 72bb0380dac9ebb904c5c038a73d7a05d5582c17)
+(cherry picked from commit d07dc9660d6a4216cd59ab01ab0007fcbb5f5425)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kismet/kismet.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/python-mbstrdecoder/python-mbstrdecoder.hash | 4 ++--
+ package/python-mbstrdecoder/python-mbstrdecoder.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index 5445db0b1f..3a171af7b2 100644
---- a/package/kismet/kismet.mk
-+++ b/package/kismet/kismet.mk
-@@ -18,6 +18,9 @@ KISMET_DEPENDENCIES = \
- KISMET_LICENSE = GPL-2.0+
- KISMET_LICENSE_FILES = LICENSE
- KISMET_SELINUX_MODULES = kismet
-+# Needed because tarball configure has not been rebuilt after
-+# https://github.com/kismetwireless/kismet/commit/e70968bcbca86dd448d619c40cdeaae8b7dcee98
-+KISMET_AUTORECONF = YES
+diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.hash b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+index f8103b0add..296930f607 100644
+--- a/package/python-mbstrdecoder/python-mbstrdecoder.hash
++++ b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/mbstrdecoder/json
+-md5  3ab822b853bfd2f08e35ba85c1ac2e2e  mbstrdecoder-1.0.0.tar.gz
+-sha256  9df7778c0c051c98f6b5a848909202e5cd423c9692665b20d1a9bd0f771b8235  mbstrdecoder-1.0.0.tar.gz
++md5  aa377cfa117318583dffa1fd96123bdf  mbstrdecoder-1.0.1.tar.gz
++sha256  f895e1fb97496855ab5e43de99588787169c01f782c71625142d1a62729e9f9d  mbstrdecoder-1.0.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
+diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.mk b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+index 4a768ef695..6474324b78 100644
+--- a/package/python-mbstrdecoder/python-mbstrdecoder.mk
++++ b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- KISMET_CONF_OPTS = --disable-debuglibs
- 
+-PYTHON_MBSTRDECODER_VERSION = 1.0.0
++PYTHON_MBSTRDECODER_VERSION = 1.0.1
+ PYTHON_MBSTRDECODER_SOURCE = mbstrdecoder-$(PYTHON_MBSTRDECODER_VERSION).tar.gz
+-PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/5e/05/7dd1704e3e1522757708f59e727b540a6e5032ba6bb20e73851da7111b11
++PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/b7/3b/2524dd4771dfca572269036fb08356715cb78a1c1c2a4dae3a810a86b777
+ PYTHON_MBSTRDECODER_SETUP_TYPE = setuptools
+ PYTHON_MBSTRDECODER_LICENSE = MIT
+ PYTHON_MBSTRDECODER_LICENSE_FILES = LICENSE
