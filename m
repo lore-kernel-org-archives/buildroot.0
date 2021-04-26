@@ -1,14 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 23:14:55 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libgeos: use specific bug
- instead of BR2_nios2 to disable package
-In-Reply-To: <1e867adb-5f08-de1e-f187-cc04a2f28d12@mind.be> (Arnout
- Vandecappelle's message of "Mon, 26 Apr 2021 21:51:30 +0200")
-References: <20210314233231.351fce1c@windsurf.home>
- <20210317163459.1916948-1-giulio.benetti@benettiengineering.com>
- <20210317163459.1916948-2-giulio.benetti@benettiengineering.com>
- <1e867adb-5f08-de1e-f187-cc04a2f28d12@mind.be>
-Message-ID: <87lf94eoj4.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Apr 2021 23:16:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sconeserver: disable image
+In-Reply-To: <5c432d3e-e72a-0835-a090-7991a03eb357@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 26 Apr 2021 22:05:04 +0200")
+References: <20210321114712.1072879-1-fontaine.fabrice@gmail.com>
+ <5c432d3e-e72a-0835-a090-7991a03eb357@mind.be>
+Message-ID: <87h7jseogc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,21 +14,26 @@ To: buildroot@busybox.net
 
 >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > On 17/03/2021 17:34, Giulio Benetti wrote:
- >> Let's use the _BUG_ form for disabling this package instead of BR2_nios2
- >> architecture as we already use it for other packages.
+ > On 21/03/2021 12:47, Fabrice Fontaine wrote:
+ >> Build of http::sconesite::image module was silently broken until commit
+ >> d3b818c3cf0990117a8b59fcfc6c212f310ae6ec
  >> 
- >> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ >> However, sconeserver fails to build with ImageMagick because:
+ >> - it checks for ImageMagick++.pc instead of ImageMagick.pc
+ >> - it uses the transform function which has been removed from the public
+ >> API since version 7.0.1-0 and
+ >> https://github.com/ImageMagick/ImageMagick/commit/06f590165f0505d42005264893fe14a9e8a79986
+ >> 
+ >> As sconeserver does not seem to be maintained anymore, drop
+ >> BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE and don't had a
+ >> Config.in.legacy entry because the option was silently broken since a
+ >> long time
 
- >  Applied to master, thanks. I made the following changes:
+ >  I did add a legacy entry after all. It costs us exactly nothing, and if someone
+ > actually had that selected, they know what's going on. I'm a bit sensitive about
+ > legacy handling :-)
 
- >      - put 27597 after 21464 instead of before it;
- >      - propagate dependency to postgis;
- >      - mention the bugs in the comments.
-
- > postgis didn't exist yet at the time so that's no surpise... The rest is nitpicking.
-
-Committed to 2021.02.x (without the postgis hunk), thanks.
+Committed to 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
