@@ -1,141 +1,89 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 26 Apr 2021 17:30:18 +0200
-Subject: [Buildroot] [PATCH 3/4] configs/nitrogen*: bump u-boot revision
+Date: Mon, 26 Apr 2021 17:30:19 +0200
+Subject: [Buildroot] [PATCH 4/4] configs/nitrogen8mp: new defconfig
 In-Reply-To: <20210426153019.1431844-1-gary.bisson@boundarydevices.com>
 References: <20210426153019.1431844-1-gary.bisson@boundarydevices.com>
-Message-ID: <20210426153019.1431844-4-gary.bisson@boundarydevices.com>
+Message-ID: <20210426153019.1431844-5-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- To latest v2020.10 rev (e05b6d68)
-  -> added 8MP A1 silicon support
-  -> fixed 8MP HAB support
-  -> added display support for all 8M platforms
-- Bump ATF to boundary-imx_5.4.70_2.3.0
+NXP i.MX 8M Plus based SOM with 2GB of LPDDR4 and 16GB eMMC.
+
+More details on the platform here:
+https://boundarydevices.com/product/nitrogen8m-plus-som/
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- configs/nitrogen6sx_defconfig | 2 +-
- configs/nitrogen6x_defconfig  | 2 +-
- configs/nitrogen7_defconfig   | 2 +-
- configs/nitrogen8m_defconfig  | 6 +++---
- configs/nitrogen8mm_defconfig | 6 +++---
- configs/nitrogen8mn_defconfig | 6 +++---
- 6 files changed, 12 insertions(+), 12 deletions(-)
+ configs/nitrogen8mp_defconfig | 58 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 configs/nitrogen8mp_defconfig
 
-diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index 27a6059549..73dfe2caff 100644
---- a/configs/nitrogen6sx_defconfig
-+++ b/configs/nitrogen6sx_defconfig
-@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Last version of branch boundary-v2020.10
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6sx"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index aa8910adad..8e4b268356 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Last version of branch boundary-v2020.10
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6q"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index c5e099867b..8b152d931b 100644
---- a/configs/nitrogen7_defconfig
-+++ b/configs/nitrogen7_defconfig
-@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Last version of branch boundary-v2020.10
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen7"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
-index a90b9355c5..438a0bc29e 100644
---- a/configs/nitrogen8m_defconfig
-+++ b/configs/nitrogen8m_defconfig
-@@ -28,8 +28,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
- # ARM Trusted Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_5.4.47_2.2.0
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/515fb041.tar.gz"
+diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
+new file mode 100644
+index 0000000000..14bd26724d
+--- /dev/null
++++ b/configs/nitrogen8mp_defconfig
+@@ -0,0 +1,58 @@
++# Architecture
++BR2_aarch64=y
++BR2_cortex_a53=y
++
++# System
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/boundarydevices/common/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mp-nitrogen8mp.dtb"
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_IMX_MKIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++
++# DDR training binaries
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP=y
++BR2_PACKAGE_FIRMWARE_IMX=y
++
++# ARM Trusted Firmware
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
 +# Latest revision of branch boundary-imx_5.4.70_2.3.0
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/9f6114fd.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- 
-@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8m"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-imx_v2020.10
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mp"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mp_2gr0"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++# Latest revision of branch boundary-imx_v2020.10
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
-index c787f572ea..567636ee4c 100644
---- a/configs/nitrogen8mm_defconfig
-+++ b/configs/nitrogen8mm_defconfig
-@@ -28,8 +28,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
- # ARM Trusted Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_5.4.47_2.2.0
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/515fb041.tar.gz"
-+# Latest revision of branch boundary-imx_5.4.70_2.3.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/9f6114fd.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- 
-@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mm_2g"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-imx_v2020.10
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
-index 8f50a32b6c..71fb0e7914 100644
---- a/configs/nitrogen8mn_defconfig
-+++ b/configs/nitrogen8mn_defconfig
-@@ -28,8 +28,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
- # ARM Trusted Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_5.4.47_2.2.0
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/515fb041.tar.gz"
-+# Latest revision of branch boundary-imx_5.4.70_2.3.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/9f6114fd.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- 
-@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8_nano_8mn1gr0"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-imx_v2020.10
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_SPL=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++# Latest revision  of branch boundary-imx_5.4.x_2.3.0
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8961f5c1.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="boundary"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mp-nitrogen8mp freescale/imx8mp-a0-nitrogen8mp"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -- 
 2.30.2
