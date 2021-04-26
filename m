@@ -1,27 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 26 Apr 2021 18:57:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: add required python
- deps for AD DC support
-References: <20210404165823.954492-1-bernd.kuhls@t-online.de>
- <87zgxljhxy.fsf@dell.be.48ers.dk>
-Message-ID: <b18jlhxfh3.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Apr 2021 19:55:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: security bump to
+ version 2021.04
+In-Reply-To: <CAPi7W80hoZtMnQytcOJbs5B3twa_CUyp1gXQBjDY_Fs8YNS5xw@mail.gmail.com>
+ (Fabrice Fontaine's message of "Mon, 26 Apr 2021 14:43:20 +0200")
+References: <20210418194332.3464292-1-fontaine.fabrice@gmail.com>
+ <87mttlkyr6.fsf@dell.be.48ers.dk>
+ <CAPi7W80hoZtMnQytcOJbs5B3twa_CUyp1gXQBjDY_Fs8YNS5xw@mail.gmail.com>
+Message-ID: <87y2d5hqvm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 26 Apr 2021 15:26:01 +0200 schrieb Peter Korsgaard:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> How can this work? We don't currently have a host-python-dnspython
-> package.
+ > Le lun. 26 avr. 2021 ? 14:37, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+ >> 
+ >> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+ >> 
+ >> > - Fix CVE-2021-27097: The boot loader in Das U-Boot before 2021.04-rc2
+ >> >   mishandles a modified FIT.
+ >> > - Fix CVE-2021-27138: The boot loader in Das U-Boot before 2021.04-rc2
+ >> >   mishandles use of unit addresses in a FIT.
+ >> 
+ >> Are these really bugs in uboot-tools, E.G. the (host-side) tools and not
+ >> in u-boot itself?
+ > Indeed, these CVEs are affecting uboot and not uboot-tools.
 
-Hi Peter,
+Ok, thanks.
 
-it could not work because I forgot to send the patch adding host-python-
-dnspython:
+I BTW noticed quite some build errors in uboot-tools since the bump:
 
-http://patchwork.ozlabs.org/project/buildroot/patch/
-20210426165557.18477-1-bernd.kuhls at t-online.de/
+http://autobuild.buildroot.net/?reason=host-uboot-tools-2021.04
 
-Regards, Bernd
+-- 
+Bye, Peter Korsgaard
