@@ -1,53 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 26 Apr 2021 21:50:24 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain: introduce
- BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
-In-Reply-To: <20210317163459.1916948-1-giulio.benetti@benettiengineering.com>
-References: <20210314233231.351fce1c@windsurf.home>
- <20210317163459.1916948-1-giulio.benetti@benettiengineering.com>
-Message-ID: <4650b5d9-1aa5-56e8-072d-df9af792d02b@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 26 Apr 2021 21:50:32 +0200
+Subject: [Buildroot] [PATCH v2,
+ 2/2] package/domoticz: select boost atomic
+In-Reply-To: <20210426191113.512637-2-fontaine.fabrice@gmail.com>
+References: <20210426191113.512637-1-fontaine.fabrice@gmail.com>
+ <20210426191113.512637-2-fontaine.fabrice@gmail.com>
+Message-ID: <20210426195032.GN298901@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fabrice, All,
 
-
-On 17/03/2021 17:34, Giulio Benetti wrote:
-> On Nios II binutils it still present ld bug 27597 leading to a package
-> libgeos to fail building:
-> http://autobuild.buildroot.net/results/a05fdf1958f93a206c5c66c7f636b6650683626d/http://autobuild.buildroot.net/results/c05/c053b9e191b31f0b1f8f8c902b602e187f714dc0/
+On 2021-04-26 21:11 +0200, Fabrice Fontaine spake thusly:
+> domoticz does not use Boost::atomic but cmake is so "smart" that it
+> (wrongly) assumes that Boost::thread depends on Boost:date_time and
+> Boost::atomic since boost version 1.54:
 > 
-> The bug was already reported and it's been updated:
-> https://sourceware.org/bugzilla/show_bug.cgi?id=27597
+> set(_Boost_THREAD_DEPENDENCIES chrono date_time atomic)
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Extracted from:
+>  - https://gitlab.kitware.com/cmake/cmake/-/blob/master/Modules/FindBoost.cmake#L1113
+> 
+> As we can't patch every cmake on the field, just select boost atomic
+> 
+> It should be noted that build failures are only raised since commit
+> 8a46b41b4a5d1c2f5ebefd7fc23fec7e8ba0598c as this commit drop the patch
+> that was decreasing cmake version but also removing:
+> 
+> target_link_libraries(domoticz Boost::thread Boost::system)
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/4306c0a725ed9a34bd55550df428866db6e4f052
+>  - http://autobuild.buildroot.org/results/2478e7a2ec1c63dcc2b36d29a39004468b230211
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- Applied to master, thanks.
+Applied to master, thanks.
 
- Regards,
- Arnout
+Regards,
+Yann E. MORIN.
 
 > ---
->  toolchain/Config.in | 6 ++++++
->  1 file changed, 6 insertions(+)
+> Changes v1 -> v2:
+>  - Fix patch title
 > 
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index 5c76bdf4ea..87f4d486a3 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -83,6 +83,12 @@ config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
->  	bool
->  	default y if BR2_or1k && !BR2_BINUTILS_VERSION_2_36_X
->  
-> +# https://sourceware.org/bugzilla/show_bug.cgi?id=27597
-> +# Affect toolchains built with binutils 2.36.1, still not fixed.
-> +config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
-> +	bool
-> +	default y if BR2_nios2
-> +
->  # Atomic types can be:
->  #  - never lock-free
->  #  - sometimes lock-free
+>  package/domoticz/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 > 
+> diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+> index 83ae2035b2..26e79c18b7 100644
+> --- a/package/domoticz/Config.in
+> +++ b/package/domoticz/Config.in
+> @@ -11,6 +11,7 @@ config BR2_PACKAGE_DOMOTICZ
+>  	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+>  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+>  	select BR2_PACKAGE_BOOST
+> +	select BR2_PACKAGE_BOOST_ATOMIC
+>  	select BR2_PACKAGE_BOOST_DATE_TIME
+>  	select BR2_PACKAGE_BOOST_SYSTEM
+>  	select BR2_PACKAGE_BOOST_THREAD
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
