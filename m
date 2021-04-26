@@ -1,139 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 22:52:50 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/numactl: make
- available on all architectures
-Message-ID: <20210426203328.E6E1B83D66@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 23:05:09 +0200
+Subject: [Buildroot] [PATCH 1/2] package/localedef: bump to version
+ 2.32-23
+In-Reply-To: <20210426101021.2418145-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Mon, 26 Apr 2021 12:10:20 +0200")
+References: <20210426101021.2418145-1-romain.naour@gmail.com>
+Message-ID: <87bla0g3ju.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a5074be8f8ab67a786ce29d81ab876dd73c123b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Since its introduction in commit
-b05e74ff92b6728369e1540fc0a2bd60025f2146 in 2013, numactl has had an
-explicit list of architectures that it supports. Interestingly, this
-list does not include ARM, and now that rt-tests unconditionally needs
-numactl, it meant the rt-tests package was no longer available on ARM.
+ > resync the version with glibc package.
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-Further investigation revealed that there is nothing in recent
-versions of numactl that appears to be architecture-specific. It does
-build with all of Buildroot toolchains currently used in the
-autobuilders.
+NIT: subject says -23, but the patch correctly changes to -37.
 
-The only necessary changes are:
+Fixed that and committed to 2021.02.x, thanks.
 
- * Exclude no-MMU architectures, as madvise() is used in the code
-   base, and this is not available on no-MMU architectures.
-
- * Make sure to use -latomic when needed, as some atomic operations
-   are used.
-
- * Backport a patch that fixes the .symver usage, which only affects
-   really old gcc versions: only the old ARM Sourcery toolchain was
-   affected by this. Newer gcc versions support the gcc "symver"
-   attribute, so that the code that directly emits the assembly
-   .symver directive is not invoked.
-
-With these changes, numactl builds successfully on all our supported
-toolchains.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4ed540ddf59bec4b389be44d7f42820d2466904f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-Do-not-stringify-SYMVER-symbols.patch     | 25 ++++++++++++++++++++++
- package/numactl/Config.in                          | 11 +---------
- package/numactl/numactl.mk                         |  4 ++++
- package/rt-tests/Config.in                         |  4 +---
- 4 files changed, 31 insertions(+), 13 deletions(-)
-
-diff --git a/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch b/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
-new file mode 100644
-index 0000000000..c6981aaf73
---- /dev/null
-+++ b/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
-@@ -0,0 +1,25 @@
-+From f96c96af7fbf2779b15f66f03b10315a24fb4f5a Mon Sep 17 00:00:00 2001
-+From: Scott McMillan <smcmillan@nvidia.com>
-+Date: Fri, 9 Oct 2020 08:56:52 -0500
-+Subject: [PATCH] Do not stringify SYMVER symbols
-+
-+Upstream: f96c96af7fbf2779b15f66f03b10315a24fb4f5a
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ util.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/util.h b/util.h
-+index 99ada33..f2a20ac 100644
-+--- a/util.h
-++++ b/util.h
-+@@ -22,5 +22,5 @@ extern char *policy_name(int policy);
-+ #if HAVE_ATTRIBUTE_SYMVER
-+ #define SYMVER(a,b) __attribute__ ((symver (b)))
-+ #else
-+-#define SYMVER(a,b) __asm__ (".symver " #a "," #b);
-++#define SYMVER(a,b) __asm__ (".symver " a "," b);
-+ #endif
-+-- 
-+2.30.2
-+
-diff --git a/package/numactl/Config.in b/package/numactl/Config.in
-index cd47f2f9a9..23cf7facb0 100644
---- a/package/numactl/Config.in
-+++ b/package/numactl/Config.in
-@@ -1,15 +1,6 @@
--config BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
--	bool
--	# numactl uses some system calls that are not available on all
--	# architectures.
--	default y if BR2_aarch64
--	default y if BR2_i386 || BR2_x86_64
--	default y if BR2_mips || BR2_mipsel ||  BR2_mips64 || BR2_mips64el
--	default y if BR2_powerpc
--
- config BR2_PACKAGE_NUMACTL
- 	bool "numactl"
--	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU # madvise()
- 	help
- 	  numactl allows you to run your application on specific cpus
- 	  and memory nodes. It does this by supplying a NUMA memory
-diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-index cf9c759693..3364f6c5c3 100644
---- a/package/numactl/numactl.mk
-+++ b/package/numactl/numactl.mk
-@@ -12,4 +12,8 @@ NUMACTL_INSTALL_STAGING = YES
- NUMACTL_AUTORECONF = YES
- NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+NUMACTL_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
-+endif
-+
- $(eval $(autotools-package))
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index cc9b14dccb..477fa288d7 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -2,10 +2,9 @@ config BR2_PACKAGE_RT_TESTS
- 	bool "rt-tests"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14 # deadline scheduler syscall
--	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_MMU # fork(), numactl
- 	depends on !BR2_STATIC_LIBS # dlopen
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # cyclictest
--	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
- 	select BR2_PACKAGE_NUMACTL
- 	help
- 	  Set of utilities for testing the real-time behaviour of a
-@@ -34,4 +33,3 @@ comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 3.14, dy
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
- 		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
+-- 
+Bye, Peter Korsgaard
