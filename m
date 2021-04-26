@@ -1,46 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 21:07:48 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/bash: drop
- SHOBJ_STATUS from BASH_CONF_ENV
-Message-ID: <20210426203328.1C696815DC@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 22:47:31 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/pipewire: needs
+ headers >= 3.18
+Message-ID: <20210426203328.DC20480E5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a88fb030792edeb3e76412675c3db47a947bfb7
+commit: https://git.buildroot.net/buildroot/commit/?id=eff6ef2aea7dba1297d711310501bf4f8dfc3b24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-SHOBJ_STATUS=unsupported was added in commit
-4a2af11cba83ef176672609dd7321712fa7f6a28 to work around a limitation
-of the configure script that forgot to set this variable in
-static-linking configurations.
+v4l2 plugin needs headers >= 3.18 since
+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/4cb90f3b868e5169cb9bfe2200f3b079d3f0db7b
+(so since its addition to buildroot in commit
+75c86f90c73c42ee35559610aec28a02190b65b7) because of
+V4L2_PIX_FMT_ARGB555X which is only available since
+https://github.com/torvalds/linux/commit/fcc0d3db28922f9ba21ea6c7b23ea10ffb5d3521
 
-It turns out that this issue has been fixed upstream as of bash 5.0:
+v4l2 plugin can't be disabled until
+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/8d71d2dab831b77cadb74f2e4630f549acc94ac4
 
-  https://git.savannah.gnu.org/cgit/bash.git/diff/configure.ac?id=d233b485e83c3a784b803fb894280773f16f2deb
+Fixes:
+ - http://autobuild.buildroot.org/results/b887b6ccd2c22bb3214c07d1281ad486438fb58e
 
-  (see hunk @@ -1151,6 +1179,9 @@)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 24656c23f9302a032de1d3b6527a221614102636)
+(cherry picked from commit 996942710a91289c238843dc53389d289ed6c31c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bash/bash.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/pipewire/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 169fe9f469..2e163bb558 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -29,7 +29,6 @@ BASH_CONF_ENV += \
- # The static build needs some trickery
- ifeq ($(BR2_STATIC_LIBS),y)
- BASH_CONF_OPTS += --enable-static-link
--BASH_CONF_ENV += SHOBJ_STATUS=unsupported
- # bash wants to redefine the getenv() function. To check whether this is
- # possible, AC_TRY_RUN is used which is not possible in
- # cross-compilation.
+diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
+index 57e70d65f8..9c6b6eb881 100644
+--- a/package/pipewire/Config.in
++++ b/package/pipewire/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PIPEWIRE
+ 	bool "pipewire"
+ 	depends on BR2_PACKAGE_HAS_UDEV # libudev
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+ 	depends on BR2_USE_MMU # dbus
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_DBUS
+@@ -30,6 +31,8 @@ comment "pipewire gstreamer support needs a toolchain w/ wchar, threads"
+ 
+ endif
+ 
+-comment "pipewire needs udev and a toolchain w/ threads"
++comment "pipewire needs udev and a toolchain w/ threads, headers >= 3.18"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PACKAGE_HAS_UDEV || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
