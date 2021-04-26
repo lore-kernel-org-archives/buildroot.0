@@ -1,43 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 09:08:26 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/systemd: fix
- homed dependency warning
-Message-ID: <20210426064148.1470185F3F@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 09:09:34 +0200
+Subject: [Buildroot] [PATCH] support/scripts/cve.py: use fast ijson
+ backend if available on old ijson versions
+In-Reply-To: <20210409110112.20087-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 9 Apr 2021 13:01:12 +0200")
+References: <20210409110112.20087-1-peter@korsgaard.com>
+Message-ID: <87pmyho72p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa649c0f961c0bb6207f3db7ab9802ef0dabf136
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fixes:
+ > ijson < 2.5 (as available in Debian 10) use the slow python backend by
+ > default instead of the most efficient one available like modern ijson
+ > versions, significantly slowing down cve checking. E.G.:
 
-showing "enable home daemon"
-and "homed support needs a toolchain w/ threads, dynamic library, kernel headers >= 4.12"
-when BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+ > time ./support/scripts/pkg-stats --nvd-path ~/.nvd -p avahi --html foobar.html
 
-introduced by fa62b5165ca41e4800e00a84af9026bfa5fb9155
+ > Goes from
+ > 174,44s user 2,11s system 99% cpu 2:58,04 total
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5d4dc98c58bb80c121a3d6c7ff3f89a00f192213)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/systemd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > To
+ > 93,53s user 2,00s system 98% cpu 1:36,65 total
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index fbe1a4081b..d658308213 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -233,7 +233,7 @@ comment "homed support needs a toolchain w/ threads, dynamic library, kernel hea
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS || BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
- 
- config BR2_PACKAGE_SYSTEMD_HOSTNAMED
- 	bool "enable hostname daemon"
+ > E.G. almost 2x as fast.
+
+ > As a workaround, detect when the python backend is used and try to use a
+ > more efficient one instead.  Use the yajl2_cffi backend as recommended by
+ > upstream, as it is most likely to work, and print a warning (and continue)
+ > if we fail to load it.
+
+ > The detection is slightly complicated by the fact that ijson.backends used
+ > to be a reference to a backend module, but is nowadays a string (without the
+ > ijson.backends prefix).
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2021.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
