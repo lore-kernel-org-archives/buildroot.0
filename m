@@ -1,45 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 15:13:12 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/python3-setuptools: add _CPE_ID_VENDOR and_CPE_ID_PRODUCT
-Message-ID: <20210426125913.5808A817A8@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 14:39:57 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] boot/at91bootstrap: add
+ legal information
+Message-ID: <20210426125912.52D07817A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f24a371d9241c30d6cad85e2fd42e79cf13de450
+commit: https://git.buildroot.net/buildroot/commit/?id=f6b330014419a1f90328715eebd0a1b1eba9ac03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:python:setuptools:* is a valid CPE identifier for this package:
+The old at91bootstrap version (1.x) uses a strange variant of the BSD
+license, called "BSD Source Code Attribution" and referenced by SPDX
+as BSD-Source-Code.
 
- https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:python:setuptools
-
-Note: 63332c33aa already added those for the python(2) variant.
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[yann.morin.1998 at free.fr:
-  - add reference to 63332c33aa
-  - move up, right after license
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c819d208349d90bd7cbe70bf2f50a9cd0b7c78f5)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3887e8c095106762173b13127deb9c7da68c0625)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3-setuptools/python3-setuptools.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ boot/at91bootstrap/at91bootstrap.hash | 1 +
+ boot/at91bootstrap/at91bootstrap.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/python3-setuptools/python3-setuptools.mk b/package/python3-setuptools/python3-setuptools.mk
-index 3f4f1100fe..34d5993120 100644
---- a/package/python3-setuptools/python3-setuptools.mk
-+++ b/package/python3-setuptools/python3-setuptools.mk
-@@ -11,6 +11,8 @@ PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).zip
- PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
- PYTHON3_SETUPTOOLS_LICENSE = MIT
- PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
-+PYTHON3_SETUPTOOLS_CPE_ID_VENDOR = python
-+PYTHON3_SETUPTOOLS_CPE_ID_PRODUCT = setuptools
- PYTHON3_SETUPTOOLS_SETUP_TYPE = setuptools
- HOST_PYTHON3_SETUPTOOLS_DL_SUBDIR = python-setuptools
- HOST_PYTHON3_SETUPTOOLS_NEEDS_HOST_PYTHON = python3
+diff --git a/boot/at91bootstrap/at91bootstrap.hash b/boot/at91bootstrap/at91bootstrap.hash
+index b1f963b825..d9f8db8897 100644
+--- a/boot/at91bootstrap/at91bootstrap.hash
++++ b/boot/at91bootstrap/at91bootstrap.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+ sha256  d66192a274247f4baa39fa932eadf903d7add55641d89d30402f967c4f2282a5  AT91Bootstrap1.16.zip
++sha256  6a3ac5dfcf19e6bac1b1109d30d72818768a3855e2594b84fe2b012b5fe0e77b  include/sdramc.h
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index c68b56b6ec..1a084756fd 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -7,6 +7,8 @@
+ AT91BOOTSTRAP_VERSION = 1.16
+ AT91BOOTSTRAP_SITE = ftp://www.at91.com/pub/at91bootstrap
+ AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
++AT91BOOTSTRAP_LICENSE = BSD-Source-Code
++AT91BOOTSTRAP_LICENSE_FILES = include/sdramc.h
+ 
+ AT91BOOTSTRAP_BOARD = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
+ AT91BOOTSTRAP_MEMORY = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
