@@ -1,53 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 16:03:45 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/python-mbstrdecoder: bump to version 1.0.1
-Message-ID: <20210426141046.028648110B@busybox.osuosl.org>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 26 Apr 2021 16:48:24 +0200
+Subject: [Buildroot] [PATCH]
+ package/freescale-imx/kernel-module-imx-gpu-viv: bump to version 6.4.3.p1.2
+Message-ID: <20210426144824.1412614-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4f23b5dbc88d5041426abf03e66c15fa2ad524c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+- Same version as NXP release 5.10.9-1.0.0
+- No changelog provided by NXP
+- Tested on Nitrogen8M device with Weston (DRM backend) as follows:
+ # cd /usr/share/examples/viv_samples/vdk/
+ # ./tutorial7
 
-https://github.com/thombashi/mbstrdecoder/releases/tag/v1.0.1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d07dc9660d6a4216cd59ab01ab0007fcbb5f5425)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/python-mbstrdecoder/python-mbstrdecoder.hash | 4 ++--
- package/python-mbstrdecoder/python-mbstrdecoder.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Needed in order to match the new version of the imx-gpu-viv libraries
+that have been pused recently [1].
 
-diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.hash b/package/python-mbstrdecoder/python-mbstrdecoder.hash
-index f8103b0add..296930f607 100644
---- a/package/python-mbstrdecoder/python-mbstrdecoder.hash
-+++ b/package/python-mbstrdecoder/python-mbstrdecoder.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mbstrdecoder/json
--md5  3ab822b853bfd2f08e35ba85c1ac2e2e  mbstrdecoder-1.0.0.tar.gz
--sha256  9df7778c0c051c98f6b5a848909202e5cd423c9692665b20d1a9bd0f771b8235  mbstrdecoder-1.0.0.tar.gz
-+md5  aa377cfa117318583dffa1fd96123bdf  mbstrdecoder-1.0.1.tar.gz
-+sha256  f895e1fb97496855ab5e43de99588787169c01f782c71625142d1a62729e9f9d  mbstrdecoder-1.0.1.tar.gz
- # Locally computed sha256 checksums
- sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
-diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.mk b/package/python-mbstrdecoder/python-mbstrdecoder.mk
-index 4a768ef695..6474324b78 100644
---- a/package/python-mbstrdecoder/python-mbstrdecoder.mk
-+++ b/package/python-mbstrdecoder/python-mbstrdecoder.mk
-@@ -4,9 +4,9 @@
+Regards,
+Gary
+
+[1] http://patchwork.ozlabs.org/project/buildroot/patch/20210420082104.11514-3-sebastien.szymanski at armadeus.com/ 
+---
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash    | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index 0fd8e04f21..ab021b6849 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  ee9227d8b3f6da84a4b0be59cdc9a4c67db5c941c719ab44a29e09fe73019cac  kernel-module-imx-gpu-viv-5c8eb7b0576dc2348fb206945ce13e41d0837cf1.tar.gz
++sha256  fbf400adbeaa52af0be234a5dcd96059615db4535cda2bd101d65d468e49e288  kernel-module-imx-gpu-viv-3588f2f6e64082153baae116dd393aa15061473d.tar.gz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index 4a2fb3032b..3afcc9d228 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_MBSTRDECODER_VERSION = 1.0.0
-+PYTHON_MBSTRDECODER_VERSION = 1.0.1
- PYTHON_MBSTRDECODER_SOURCE = mbstrdecoder-$(PYTHON_MBSTRDECODER_VERSION).tar.gz
--PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/5e/05/7dd1704e3e1522757708f59e727b540a6e5032ba6bb20e73851da7111b11
-+PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/b7/3b/2524dd4771dfca572269036fb08356715cb78a1c1c2a4dae3a810a86b777
- PYTHON_MBSTRDECODER_SETUP_TYPE = setuptools
- PYTHON_MBSTRDECODER_LICENSE = MIT
- PYTHON_MBSTRDECODER_LICENSE_FILES = LICENSE
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = 5c8eb7b0576dc2348fb206945ce13e41d0837cf1
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = 3588f2f6e64082153baae116dd393aa15061473d
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
+-- 
+2.30.2
