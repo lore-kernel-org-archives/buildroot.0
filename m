@@ -1,51 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Apr 2021 22:32:53 +0200
-Subject: [Buildroot] [PATCH] package/links: graphics mode does not
- depend on DirectFB or X11
-In-Reply-To: <20210423112118.3938670-1-urjaman@gmail.com>
-References: <20210423112118.3938670-1-urjaman@gmail.com>
-Message-ID: <20210426223253.424b4fcb@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Apr 2021 22:33:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-vpu: fix
+ {EULA, COPYING} file hashes
+In-Reply-To: <20210420082953.12107-1-sebastien.szymanski@armadeus.com>
+ (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Tue, 20 Apr 2021
+ 10:29:53 +0200")
+References: <20210420082953.12107-1-sebastien.szymanski@armadeus.com>
+Message-ID: <875z08hjl2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Urja,
+>>>>> "S?bastien" == S?bastien Szymanski <sebastien.szymanski@armadeus.com> writes:
 
-On Fri, 23 Apr 2021 14:21:18 +0300
-Urja Rannikko <urjaman@gmail.com> wrote:
+ > make legal-info fails on imx-vpu package:
+ >>>> imx-vpu 5.4.39.3 Collecting legal info
+ > ERROR: EULA has wrong sha256 hash:
+ > ERROR: expected: a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc
+ > ERROR: got     : 7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0
+ > ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
-> The "fb" framebuffer driver does not have any special dependencies.
-> 
-> Signed-off-by: Urja Rannikko <urjaman@gmail.com>
+ > ERROR: COPYING has wrong sha256 hash:
+ > ERROR: expected: 69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2
+ > ERROR: got     : 2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d
+ > ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
-Thanks a lot for your contribution, but unfortunately, with the patch
-you posted, links doesn't build anymore:
+ > Fix the hashes of these two files.
 
-configure: error: No graphics drivers found.
-make: *** [package/pkg-generic.mk:240: /home/thomas/projets/buildroot/output/build/links-2.21/.stamp_configured] Error 1
+ > Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 
-Tested configuration:
+Committed to 2021.02.x, thanks.
 
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_VFP=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_LINKS=y
-BR2_PACKAGE_LINKS_GRAPHICS=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-Could you have a look ?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
