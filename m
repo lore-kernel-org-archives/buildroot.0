@@ -1,46 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 Apr 2021 21:43:29 +0200
-Subject: [Buildroot] [PATCH 2/2] package/{glibc,
- localedef}: bump to version
- 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c
-In-Reply-To: <e539cd7b-3775-024e-1f9f-67658e38a10b@mind.be>
-References: <20210426101021.2418145-1-romain.naour@gmail.com>
- <20210426101021.2418145-2-romain.naour@gmail.com>
- <e539cd7b-3775-024e-1f9f-67658e38a10b@mind.be>
-Message-ID: <20210426194329.GL298901@scaer>
+Date: Mon, 26 Apr 2021 21:48:44 +0200
+Subject: [Buildroot] [git commit] package/domoticz: select boost atomic
+Message-ID: <20210426192147.46CFF86387@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Romain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=52ad97d00d428b3fdb257e7be8364df52157fc0a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-26 21:36 +0200, Arnout Vandecappelle spake thusly:
-> On 26/04/2021 12:10, Romain Naour wrote:
-> [snip]
-> >  rename package/glibc/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c}/glibc.hash (70%)
-> >  rename package/localedef/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c}/0001-HACK-only-build-and-install-localedef.patch (100%)
-> >  rename package/localedef/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c}/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch (100%)
-> >  rename package/localedef/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c}/localedef.hash (70%)
-> 
->  Now you're messing with these packages, maybe you can take the opportunity to
-> get rid of the versioned subdirectory. That's a leftover from when we had
-> version selection for glibc.
+domoticz does not use Boost::atomic but cmake is so "smart" that it
+(wrongly) assumes that Boost::thread depends on Boost:date_time and
+Boost::atomic since boost version 1.54:
 
-We stil have a version choice for glibc; it's just not exposed to the
-user: indeed we use different version for csky, riscv32, and the rest.
+set(_Boost_THREAD_DEPENDENCIES chrono date_time atomic)
 
-So, we still do not want to apply the "generic" patches to the csky
-fork, or to the riscv32 version...
+Extracted from:
+ - https://gitlab.kitware.com/cmake/cmake/-/blob/master/Modules/FindBoost.cmake#L1113
 
-Regards,
-Yann E. MORIN.
+As we can't patch every cmake on the field, just select boost atomic
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+It should be noted that build failures are only raised since commit
+8a46b41b4a5d1c2f5ebefd7fc23fec7e8ba0598c as this commit drop the patch
+that was decreasing cmake version but also removing:
+
+target_link_libraries(domoticz Boost::thread Boost::system)
+
+Fixes:
+ - http://autobuild.buildroot.org/results/4306c0a725ed9a34bd55550df428866db6e4f052
+ - http://autobuild.buildroot.org/results/2478e7a2ec1c63dcc2b36d29a39004468b230211
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/domoticz/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+index 83ae2035b2..26e79c18b7 100644
+--- a/package/domoticz/Config.in
++++ b/package/domoticz/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_DOMOTICZ
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_ATOMIC
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
