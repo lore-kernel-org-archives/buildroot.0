@@ -1,42 +1,30 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 26 Apr 2021 20:42:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uftrace: needs threads
-Message-ID: <20210426184255.500745-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Apr 2021 20:58:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libupnp: security bump to
+ version 1.14.6
+In-Reply-To: <20210422072922.63604-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Thu, 22 Apr 2021 07:29:22 +0000")
+References: <20210422072922.63604-1-joerg.krause@embedded.rocks>
+Message-ID: <874kfsj2jb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uftrace needs threads since its addition to buildroot in commit
-09c97972d9f90b69cfc36f9ffe9e22c13daf9307
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/d27c34a2f773aeb3c806d56dd2468d17caf2fbc6
+ > The server part of pupnp (libupnp) appears to be vulnerable to DNS-rebinding
+ > attacks because it does not check the value of the `Host` header.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/uftrace/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ > Fixes CVE-2021-29462
 
-diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
-index 7aa74c9aa9..9af7ee8c28 100644
---- a/package/uftrace/Config.in
-+++ b/package/uftrace/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
- config BR2_PACKAGE_UFTRACE
- 	bool "uftrace"
- 	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_ARGP_STANDALONE if \
- 	       BR2_TOOLCHAIN_USES_UCLIBC || \
- 	       BR2_TOOLCHAIN_USES_MUSL
-@@ -20,3 +21,6 @@ config BR2_PACKAGE_UFTRACE
- 	  analysis of the program execution and performance.
- 
- 	  https://github.com/namhyung/uftrace
-+
-+comment "uftrace needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ > https://github.com/pupnp/pupnp/security/advisories/GHSA-6hqq-w3jq-9fhg
+
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+
+Committed to 2021.02.x, thanks.
+
 -- 
-2.30.2
+Bye, Peter Korsgaard
