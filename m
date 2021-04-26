@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 23:13:48 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/kf5-kcoreaddons:
+Date: Mon, 26 Apr 2021 23:13:54 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libcamera:
  disable package affected by binutils bug 27597
-Message-ID: <20210426205011.DFB1A7FB0D@busybox.osuosl.org>
+Message-ID: <20210426205011.F063D85AFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60b51e749be586a440147301e41440de1622a9f4
+commit: https://git.buildroot.net/buildroot/commit/?id=bb654efb07c77a047ba08586a1e7ab076f536be6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 This package is affected by binutils bug 27597 and no work around has
@@ -17,24 +17,25 @@ been found, so let's disable it if
 BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597=y.
 
 Fixes:
-http://autobuild.buildroot.net/results/0c1/0c1e7e094b0990970f28cda2be0e3fe7d82ce6a2/
+http://autobuild.buildroot.net/results/8ac/8ac599392f773eecff4773393ef0d0232a22f372/
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 73745ef03bcc729121cc5447d466d04cb948c80a)
+(cherry picked from commit 479b09366cca3d4d697d221c5e347e5ab470ebcd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kf5/kf5-kcoreaddons/Config.in | 1 +
+ package/libcamera/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/kf5/kf5-kcoreaddons/Config.in b/package/kf5/kf5-kcoreaddons/Config.in
-index 88fda03ee0..02bd38e395 100644
---- a/package/kf5/kf5-kcoreaddons/Config.in
-+++ b/package/kf5/kf5-kcoreaddons/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KF5_KCOREADDONS
- 	bool "kf5-kcoreaddons"
+diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
+index b9c243084e..92c17df849 100644
+--- a/package/libcamera/Config.in
++++ b/package/libcamera/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+ 	default y
+ 	# Invalid packing size of ControlValue struct on m68k
+ 	depends on !BR2_m68k
 +	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
- 	select BR2_PACKAGE_KF5_EXTRA_CMAKE_MODULES
- 	select BR2_PACKAGE_QT5TOOLS
- 	select BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
+ 
+ menuconfig BR2_PACKAGE_LIBCAMERA
+ 	bool "libcamera"
