@@ -1,42 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 15:20:07 +0200
-Subject: [Buildroot] [PATCH 01/25] package/automake: add _CPE_ID_VENDOR
-In-Reply-To: <20210420213208.GL298901@scaer> (Yann E. MORIN's message of "Tue, 
- 20 Apr 2021 23:32:08 +0200")
-References: <20210420201146.42858-1-matthew.weber@rockwellcollins.com>
- <20210420213208.GL298901@scaer>
-Message-ID: <875z09kws8.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Apr 2021 15:26:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: add required python
+ deps for AD DC support
+In-Reply-To: <20210404165823.954492-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 4 Apr 2021 18:58:23 +0200")
+References: <20210404165823.954492-1-bernd.kuhls@t-online.de>
+Message-ID: <87zgxljhxy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Matthew, All,
- > On 2021-04-20 15:11 -0500, Matt Weber spake thusly:
- >> cpe:2.3:a:gnu:automake:* is a valid CPE identifier for this package:
- >> 
- >> https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Aautomake
- >> 
- >> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > Needed due to upstream commit:
+ > https://gitlab.com/samba-team/samba/-/commit/2420b7c6d2038aca33759ca3a7d41240c5f19bf7
 
- > In this series of 25, I've applied all patches, except the libqmi one,
- > which is missing your SoB line.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/12a/12a74665a2349eacb28c3035bb36a4dce1d740d1/
 
- > Otherwise, I did a few changes here and there;
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/samba4/Config.in | 2 ++
+ >  package/samba4/samba4.mk | 7 ++++++-
+ >  2 files changed, 8 insertions(+), 1 deletion(-)
 
- >   - for the two python3 packages, I've added short hashes for the
- >     correspnding commits for the python(2) variants
+ > diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+ > index a34eaa8088..e890313b71 100644
+ > --- a/package/samba4/Config.in
+ > +++ b/package/samba4/Config.in
+ > @@ -32,6 +32,8 @@ config BR2_PACKAGE_SAMBA4_AD_DC
+ >  	bool "AD DC"
+ >  	depends on BR2_PACKAGE_PYTHON3
+ >  	select BR2_PACKAGE_JANSSON
+ > +	select BR2_PACKAGE_PYTHON_DNSPYTHON
+ > +	select BR2_PACKAGE_PYTHON_MARKDOWN
+ >  	help
+ >  	  Enable Active Directory Domain Controller functionality.
+ 
+ > diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+ > index 99c8af9ab2..ed38af020c 100644
+ > --- a/package/samba4/samba4.mk
+ > +++ b/package/samba4/samba4.mk
+ > @@ -149,7 +149,12 @@ define SAMBA4_INSTALL_TARGET_CMDS
+ >  endef
+ 
+ >  ifeq ($(BR2_PACKAGE_SAMBA4_AD_DC),y)
+ > -SAMBA4_DEPENDENCIES += jansson
+ > +SAMBA4_DEPENDENCIES += \
+ > +	jansson \
+ > +	host-python-dnspython \
 
- >   - in a few patches, I've moved the definitions right fter the license
-
- >   - I've updated the libtool commit as per your feedback
-
- > Thanks!
-
-Committed the same 24 patches to 2021.02.x, thanks.
+How can this work? We don't currently have a host-python-dnspython
+package.
 
 -- 
 Bye, Peter Korsgaard
