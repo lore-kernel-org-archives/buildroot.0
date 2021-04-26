@@ -1,30 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 20:45:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: security bump to
- version 2021.04
-In-Reply-To: <CAPi7W837kHX_xCngT_nDpaXAj9+ixYyymndNK=2e54ZnTTZ=Jw@mail.gmail.com>
- (Fabrice Fontaine's message of "Mon, 26 Apr 2021 19:57:47 +0200")
-References: <20210418194332.3464292-1-fontaine.fabrice@gmail.com>
- <87mttlkyr6.fsf@dell.be.48ers.dk>
- <CAPi7W80hoZtMnQytcOJbs5B3twa_CUyp1gXQBjDY_Fs8YNS5xw@mail.gmail.com>
- <87y2d5hqvm.fsf@dell.be.48ers.dk>
- <CAPi7W837kHX_xCngT_nDpaXAj9+ixYyymndNK=2e54ZnTTZ=Jw@mail.gmail.com>
-Message-ID: <878s54j365.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 26 Apr 2021 20:42:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uftrace: needs threads
+Message-ID: <20210426184255.500745-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+uftrace needs threads since its addition to buildroot in commit
+09c97972d9f90b69cfc36f9ffe9e22c13daf9307
 
- >> I BTW noticed quite some build errors in uboot-tools since the bump:
- >> 
- >> http://autobuild.buildroot.net/?reason=host-uboot-tools-2021.04
- > Indeed, should be fixed by
- > https://git.buildroot.net/buildroot/commit/?id=a8eef7d2e62aba92fbab3906862c6422410c8677
+Fixes:
+ - http://autobuild.buildroot.org/results/d27c34a2f773aeb3c806d56dd2468d17caf2fbc6
 
-Ahh, indeed - Sorry for the noise.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/uftrace/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
+index 7aa74c9aa9..9af7ee8c28 100644
+--- a/package/uftrace/Config.in
++++ b/package/uftrace/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
+ config BR2_PACKAGE_UFTRACE
+ 	bool "uftrace"
+ 	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_ARGP_STANDALONE if \
+ 	       BR2_TOOLCHAIN_USES_UCLIBC || \
+ 	       BR2_TOOLCHAIN_USES_MUSL
+@@ -20,3 +21,6 @@ config BR2_PACKAGE_UFTRACE
+ 	  analysis of the program execution and performance.
+ 
+ 	  https://github.com/namhyung/uftrace
++
++comment "uftrace needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Bye, Peter Korsgaard
+2.30.2
