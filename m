@@ -1,26 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 14:37:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: security bump to
- version 2021.04
-In-Reply-To: <20210418194332.3464292-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 18 Apr 2021 21:43:32 +0200")
-References: <20210418194332.3464292-1-fontaine.fabrice@gmail.com>
-Message-ID: <87mttlkyr6.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Apr 2021 14:39:18 +0200
+Subject: [Buildroot] [PATCH v1] package/gst1-interpipe: bump version to
+ 1.1.4
+In-Reply-To: <20210412194206.2919-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Mon, 12 Apr 2021 21:42:06 +0200")
+References: <20210412194206.2919-1-ps.report@gmx.net>
+Message-ID: <87im49kyo9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > - Fix CVE-2021-27097: The boot loader in Das U-Boot before 2021.04-rc2
- >   mishandles a modified FIT.
- > - Fix CVE-2021-27138: The boot loader in Das U-Boot before 2021.04-rc2
- >   mishandles use of unit addresses in a FIT.
+ > Changelog:
+ >   - fix for memory leak in set of listen-to property
 
-Are these really bugs in uboot-tools, E.G. the (host-side) tools and not
-in u-boot itself?
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed to 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
