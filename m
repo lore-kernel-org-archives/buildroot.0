@@ -1,63 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 20:06:01 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/samba4: add
- required python deps for AD DC support
-Message-ID: <20210426173954.5710186360@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 20:06:15 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/samba4: bump
+ version to 4.14.3
+Message-ID: <20210426173954.6A56E809DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a26f6b8f90f16697273f9a429d64aaeda78b0650
+commit: https://git.buildroot.net/buildroot/commit/?id=d05f101e0faa3d1e0785b21ec463621269c196f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Needed due to upstream commit:
-https://gitlab.com/samba-team/samba/-/commit/2420b7c6d2038aca33759ca3a7d41240c5f19bf7
-
-Fixes:
-http://autobuild.buildroot.net/results/12a/12a74665a2349eacb28c3035bb36a4dce1d740d1/
+Release notes: https://www.samba.org/samba/history/samba-4.14.3.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0025d931f3ac5abc738c8ba5cb5177ff2b367cab)
+(cherry picked from commit 7df2611e9e93f9c3efea39bf0b5c217564618a28)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/Config.in |  2 ++
- package/samba4/samba4.mk | 10 +++++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index 552afe90cd..e114a7e13f 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -32,6 +32,8 @@ config BR2_PACKAGE_SAMBA4_AD_DC
- 	bool "AD DC"
- 	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_JANSSON
-+	select BR2_PACKAGE_PYTHON_DNSPYTHON
-+	select BR2_PACKAGE_PYTHON_MARKDOWN
- 	select BR2_PACKAGE_SAMBA4_ADS
- 	help
- 	  Enable Active Directory Domain Controller functionality.
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 4d808c5fe3..e8814348c5 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.14.2.tar.asc
+-sha256  95651da478743f7cb407aec81287536c096e3e18bb4981dbe47ca70bf6181f96  samba-4.14.2.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.14.3.tar.asc
++sha256  efc24ccf277055891f830719bd155b6a6dd9341d71961ee79e0ef75dc1aeb598  samba-4.14.3.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
 diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 99c8af9ab2..ce41208981 100644
+index ce41208981..643b228bbf 100644
 --- a/package/samba4/samba4.mk
 +++ b/package/samba4/samba4.mk
-@@ -149,7 +149,15 @@ define SAMBA4_INSTALL_TARGET_CMDS
- endef
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_SAMBA4_AD_DC),y)
--SAMBA4_DEPENDENCIES += jansson
-+# host-python-dnspython and host-python-markdown are not strictly
-+# needed on the host, but on the target. however, samba's configure
-+# tests for their availability on the host.
-+SAMBA4_DEPENDENCIES += \
-+	jansson \
-+	host-python-dnspython \
-+	host-python-markdown \
-+	python-dnspython \
-+	python-markdown
- else
- SAMBA4_CONF_OPTS += --without-ad-dc --without-json
- endif
+-SAMBA4_VERSION = 4.14.2
++SAMBA4_VERSION = 4.14.3
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
