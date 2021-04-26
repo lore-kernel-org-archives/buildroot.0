@@ -1,36 +1,25 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 26 Apr 2021 16:44:15 +0300
-Subject: [Buildroot] [PATCH 1/1] package/libnpupnp: bump to version 4.1.3
-In-Reply-To: <874kftmdm0.fsf@dell.be.48ers.dk>
-References: <20210412080402.75059-1-joerg.krause@embedded.rocks>
- <874kftmdm0.fsf@dell.be.48ers.dk>
-Message-ID: <87czuhcg9c.fsf@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Apr 2021 16:04:45 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-mbstrdecoder: add
+ python-chardet dependency
+In-Reply-To: <20210410122618.79085-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 10 Apr 2021 14:26:17 +0200")
+References: <20210410122618.79085-1-fontaine.fabrice@gmail.com>
+Message-ID: <87v989jg5e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Mon, Apr 26 2021, Peter Korsgaard wrote:
+ > chardet is a mandatory runtime dependency since version 0.8.2 and
+ > https://github.com/thombashi/mbstrdecoder/commit/e9344a0916f65d143c51e0680c30db4ae7690ccf
 
->>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
->
->  > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
->
-> Committed to 2021.02.x, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Not in 2021.02.x as of commit 2960953b0ab6de.
-
-What is the reason to commit to 2021.02.x?
-
-Master branch commit adea5b316e27a is the 4.1.4 bump which includes a
-security fix.
-
-baruch
+Committed to 2021.02.x, thanks.
 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
