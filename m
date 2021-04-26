@@ -1,52 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 22:32:37 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/freescale-imx/imx-vpu: fix {EULA, COPYING} file hashes
-Message-ID: <20210426203328.A8EB883D66@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 21:55:17 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/ncurses: ignore
+ CVE-2018-10754, CVE-2018-19211, CVE-2018-19217, CVE-2019-17594,
+ CVE-2019-17595
+Message-ID: <20210426203328.8782583D66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc501be68b5ac4e835fbe3b12c073b1e0a86c01e
+commit: https://git.buildroot.net/buildroot/commit/?id=3bf84c7ce0bd8c2f5ede440c4b30a5bf6ae6b791
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Commit a646cd27b112 (package/freescale-imx/imx-vpu: bump version to
-5.4.39.3) somehow messed up when updating the hashes of the licene
-files:
+Commit 4b21273d71d09 added upstream (security) patches up to 20200118
+and in the commit description it outlines these CVEs were patched.
 
-    >>> imx-vpu 5.4.39.3 Collecting legal info
-    ERROR: EULA has wrong sha256 hash:
-    ERROR: expected: a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc
-    ERROR: got     : 7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0
-    ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-
-    ERROR: COPYING has wrong sha256 hash:
-    ERROR: expected: 69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2
-    ERROR: got     : 2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d
-    ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-
-The most probable cause is some confusion with imx-vpu-hantro, as the
-faulty hashes reported above are those found in imx-vpu-hantro.
-
-Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
-[yann.morin.1998 at free.fr: rewrite commit log with a probably reason]
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 96142a5426b127a55038cd5cd84134452b9905ab)
+(cherry picked from commit 675769791bd43de18b6bbeec2b4b48772a541a7a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/imx-vpu/imx-vpu.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/ncurses/ncurses.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash b/package/freescale-imx/imx-vpu/imx-vpu.hash
-index 6ab67510b0..e3a53e3fb6 100644
---- a/package/freescale-imx/imx-vpu/imx-vpu.hash
-+++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
-@@ -1,4 +1,4 @@
- # Locally computed
- sha256  87cb799a57df654db29403cb74a75ca5185a1517022d3a4a16b8d69056c36127  imx-vpu-5.4.39.3.bin
--sha256  69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
--sha256  a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
-+sha256  2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d  COPYING
-+sha256  7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0  EULA
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 97e3e2c321..5d9c6bb0dd 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -11,6 +11,12 @@ NCURSES_DEPENDENCIES = host-ncurses
+ NCURSES_LICENSE = MIT with advertising clause
+ NCURSES_LICENSE_FILES = COPYING
+ NCURSES_CPE_ID_VENDOR = gnu
++# Commit 4b21273d71d09 added upstream (security) patches up to 20200118
++NCURSES_IGNORE_CVES += CVE-2018-10754
++NCURSES_IGNORE_CVES += CVE-2018-19211
++NCURSES_IGNORE_CVES += CVE-2018-19217
++NCURSES_IGNORE_CVES += CVE-2019-17594
++NCURSES_IGNORE_CVES += CVE-2019-17595
+ NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)6-config
+ NCURSES_PATCH = \
+ 	$(addprefix https://invisible-mirror.net/archives/ncurses/$(NCURSES_VERSION)/, \
