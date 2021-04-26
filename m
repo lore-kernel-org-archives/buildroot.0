@@ -1,37 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 14:34:42 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python-botocore:
- drop docutils dependency
-Message-ID: <20210426125912.1E172817A8@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 15:11:44 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libdaemon: add
+ _CPE_ID_VENDOR
+Message-ID: <20210426125912.DC4238419A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e6f3c18bcc5930edd4d0a62cbf4173f559d912f
+commit: https://git.buildroot.net/buildroot/commit/?id=bdae98634d8bfa64bb6b256d04ffd845349a4da7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-docutils is not a dependency since version 1.18.0 and
-https://github.com/boto/botocore/commit/dd24dd1b2ee8654ae0cf6aebce4a2f50ea7d75f5
+cpe:2.3:a:libdaemon_project:libdaemon:* is a valid CPE identifier for this package:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:libdaemon_project:libdaemon
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[yann.morin.1998 at free.fr: move up, right after license]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 34764dcfac4a319c4a0812496b31f922570f41c2)
+(cherry picked from commit 4baccb9c5b830dea85ec94e74fee05c38005f679)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-botocore/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/libdaemon/libdaemon.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/python-botocore/Config.in b/package/python-botocore/Config.in
-index a552900b6c..f34d774f95 100644
---- a/package/python-botocore/Config.in
-+++ b/package/python-botocore/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PYTHON_BOTOCORE
- 	bool "python-botocore"
- 	select BR2_PACKAGE_PYTHON_JMESPATH # runtime
--	select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
- 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
- 	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
- 	help
+diff --git a/package/libdaemon/libdaemon.mk b/package/libdaemon/libdaemon.mk
+index a8f75108bc..cdf0819e68 100644
+--- a/package/libdaemon/libdaemon.mk
++++ b/package/libdaemon/libdaemon.mk
+@@ -8,6 +8,8 @@ LIBDAEMON_VERSION = 0.14
+ LIBDAEMON_SITE = http://0pointer.de/lennart/projects/libdaemon
+ LIBDAEMON_LICENSE = LGPL-2.1+
+ LIBDAEMON_LICENSE_FILES = LICENSE
++LIBDAEMON_CPE_ID_VENDOR = libdaemon_project
++
+ LIBDAEMON_INSTALL_STAGING = YES
+ LIBDAEMON_CONF_ENV = ac_cv_func_setpgrp_void=no
+ LIBDAEMON_CONF_OPTS = --disable-lynx
