@@ -1,39 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 14:59:28 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/gperf: add
- _CPE_ID_VENDOR and _CPE_ID_PRODUCT
-Message-ID: <20210426125912.9D2147FC74@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 14:58:59 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/c-periphery: add
+ _CPE_ID_VENDOR
+Message-ID: <20210426125912.76D007FC74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8cffab9daac06b61e3c6d1017413608967074127
+commit: https://git.buildroot.net/buildroot/commit/?id=8184b0f4691628a5951eb305b307a99d823b6c34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:gperftools_project:gperftools:* is a valid CPE identifier for this package:
+cpe:2.3:a:c-periphery_project:c-periphery:* is a valid CPE identifier for this package:
 
- https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:gperftools_project:gperftools
+ https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:c-periphery_project:c-periphery
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3712e1dee7626b0c3262c054b5b9c2769fd2a61e)
+(cherry picked from commit fc6a829abe4c167bfb7f66465da6255e3938af13)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gperf/gperf.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/c-periphery/c-periphery.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
-index 4b928a0ebd..c2f042c464 100644
---- a/package/gperf/gperf.mk
-+++ b/package/gperf/gperf.mk
-@@ -8,6 +8,8 @@ GPERF_VERSION = 3.1
- GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
- GPERF_LICENSE = GPL-3.0+
- GPERF_LICENSE_FILES = COPYING
-+GPERF_CPE_ID_VENDOR = gperftools_project
-+GPERF_CPE_ID_PRODUCT = gperftools
+diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
+index dcc82f19c0..722679f9f8 100644
+--- a/package/c-periphery/c-periphery.mk
++++ b/package/c-periphery/c-periphery.mk
+@@ -9,5 +9,6 @@ C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,v$(C_PERIPHERY_VERSION))
+ C_PERIPHERY_INSTALL_STAGING = YES
+ C_PERIPHERY_LICENSE = MIT
+ C_PERIPHERY_LICENSE_FILES = LICENSE
++C_PERIPHERY_CPE_ID_VENDOR = c-periphery_project
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ $(eval $(cmake-package))
