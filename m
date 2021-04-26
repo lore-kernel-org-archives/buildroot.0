@@ -1,68 +1,102 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Apr 2021 22:03:43 +0200
-Subject: [Buildroot] [PATCH] boot: introduce at91bootstrap4
-In-Reply-To: <20210423070822.1351638-1-eugen.hristev@microchip.com>
-References: <20210423070822.1351638-1-eugen.hristev@microchip.com>
-Message-ID: <20210426220343.003df308@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 26 Apr 2021 22:05:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sconeserver: disable image
+In-Reply-To: <20210321114712.1072879-1-fontaine.fabrice@gmail.com>
+References: <20210321114712.1072879-1-fontaine.fabrice@gmail.com>
+Message-ID: <5c432d3e-e72a-0835-a090-7991a03eb357@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Eugen,
 
-On Fri, 23 Apr 2021 10:08:22 +0300
-Eugen Hristev via buildroot <buildroot@busybox.net> wrote:
 
-> Introduce new bootloader package for the next generation
-> of at91bootstrap, at91bootstrap4
+On 21/03/2021 12:47, Fabrice Fontaine wrote:
+> Build of http::sconesite::image module was silently broken until commit
+> d3b818c3cf0990117a8b59fcfc6c212f310ae6ec
 > 
-> AT91Bootstrap4 only supports devices: sam9x60, sama5d2, sama5d3,
-> sama5d4, sama7g5.
+> However, sconeserver fails to build with ImageMagick because:
+> - it checks for ImageMagick++.pc instead of ImageMagick.pc
+> - it uses the transform function which has been removed from the public
+>   API since version 7.0.1-0 and
+>   https://github.com/ImageMagick/ImageMagick/commit/06f590165f0505d42005264893fe14a9e8a79986
 > 
-> Based on at91bootstrap3 recipes.
+> As sconeserver does not seem to be maintained anymore, drop
+> BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE and don't had a
+> Config.in.legacy entry because the option was silently broken since a
+> long time
+
+ I did add a legacy entry after all. It costs us exactly nothing, and if someone
+actually had that selected, they know what's going on. I'm a bit sensitive about
+legacy handling :-)
+
+ Regards,
+ Arnout
+
 > 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-
-Why would we need a new package for this? It still like just a new
-version of at91bootstrap. I just had a look a the differences between
-at91bootstrap3/ and at91bootstrap4/ and here are the only meaningful
-differences:
-
-+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3),y)
-+AT91BOOTSTRAP3_DEPENDENCIES += host-python3
-+endif
-
--AT91BOOTSTRAP3_LICENSE = Atmel License
-+AT91BOOTSTRAP3_LICENSE = Microchip License
-
- (this one perhaps applies to at91bootstrap3 as well, in fact)
-
- define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
--	cp $(@D)/binaries/*.bin $(BINARIES_DIR)
-+	cp $(@D)/build/binaries/*.bin $(BINARIES_DIR)
- endef
-
-So, shouldn't we instead have a single package covering both? Perhaps
-with a sub-option to select "latest 3.x version" and "latest 4.x
-version" ?
-
-I know it would be annoying for this package to be named
-"at91boostrap3". Perhaps we should, for once, do a bit of renaming
-dance and change at91bootstrap to at91bootstrap1 or at91bootstrap-old,
-and keep "at91bootstrap" for the "new" 3.x/4.x version? It is not great
-in terms of backward compatibility for old configs, though.
-
-(Side note: I find it somewhat annoying that such vendor-provided
-solutions tend to drop support for older platforms... It seems that
-open-source communities do a better job at maintaining long-term
-support for older platforms. What would you say if you had to use a
-decade old Buildroot or Yocto to build a system for an AT91SAM9263
-processor ?)
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Fixes:
+>  - http://autobuild.buildroot.org/results/895ab582d1140f7677fc1c6934fa2e0c47c49f20
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/sconeserver/Config.in      |  8 --------
+>  package/sconeserver/sconeserver.mk | 15 +++++++--------
+>  2 files changed, 7 insertions(+), 16 deletions(-)
+> 
+> diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+> index 429ac81fe1..d46ba85fbc 100644
+> --- a/package/sconeserver/Config.in
+> +++ b/package/sconeserver/Config.in
+> @@ -26,14 +26,6 @@ config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
+>  	help
+>  	  http::sconesite module for Sconeserver
+>  
+> -config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
+> -	bool "http::sconesite::image"
+> -	depends on BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
+> -	depends on BR2_USE_MMU # imagemagick
+> -	select BR2_PACKAGE_IMAGEMAGICK
+> -	help
+> -	  http::sconesite::image module for Sconeserver
+> -
+>  config BR2_PACKAGE_SCONESERVER_MYSQL
+>  	bool "mysql"
+>  	depends on BR2_USE_MMU # mysql
+> diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+> index 62cc128d77..17407c29f5 100644
+> --- a/package/sconeserver/sconeserver.mk
+> +++ b/package/sconeserver/sconeserver.mk
+> @@ -14,10 +14,16 @@ SCONESERVER_DEPENDENCIES = \
+>  	host-pkgconf \
+>  	$(if $(BR2_PACKAGE_PCRE),pcre) \
+>  	zlib
+> +# disable image as it fails to build with ImageMagick
+>  # disable markdown module because its git submodule cmark
+>  # https://github.com/sconemad/sconeserver/tree/master/markdown
+>  # has no cross-compile support provided by the sconeserver build system
+> -SCONESERVER_CONF_OPTS += --with-ip --with-local --with-ip6 --without-markdown
+> +SCONESERVER_CONF_OPTS += \
+> +	--with-ip \
+> +	--with-local \
+> +	--with-ip6 \
+> +	--without-image \
+> +	--without-markdown
+>  
+>  # Sconeserver configure script fails to find the libxml2 headers.
+>  ifeq ($(BR2_PACKAGE_LIBXML2),y)
+> @@ -45,13 +51,6 @@ else
+>  SCONESERVER_CONF_OPTS += --without-sconesite
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE),y)
+> -SCONESERVER_DEPENDENCIES += imagemagick
+> -SCONESERVER_CONF_OPTS += --with-image
+> -else
+> -SCONESERVER_CONF_OPTS += --without-image
+> -endif
+> -
+>  ifeq ($(BR2_PACKAGE_SCONESERVER_MYSQL),y)
+>  SCONESERVER_DEPENDENCIES += mysql
+>  SCONESERVER_CONF_OPTS += \
+> 
