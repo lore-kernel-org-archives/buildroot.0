@@ -1,54 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 16:07:19 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/librsync: bump to
- version 2.3.2
-Message-ID: <20210426141046.1132881327@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 16:37:20 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/openvpn: security
+ bump version to 2.5.2
+Message-ID: <20210426141046.4012881327@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c85ceccaa3ad6d98efe7e672ea54e365effc9e2
+commit: https://git.buildroot.net/buildroot/commit/?id=95ae35a114868ae44f2ebc3f3b316d1dcc1c04e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-This is a patch release that fixes some minor bugs, tidies the code for
-many compiler warnings, and improves windows compatibility. Upgrading
-from v2.3.1 is recommended for most people, and essential for people
-using platforms experiencing bugs #214 or #207.
+Fixes CVE-2020-15078:
+https://forums.openvpn.net/viewtopic.php?f=20&t=32179
 
-https://github.com/librsync/librsync/releases/tag/v2.3.2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1ab117d35a0fec4e397590881408172e83117866)
+(cherry picked from commit 258b372c3ef324c50f4a1cacea5f517b816a8926)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/librsync/librsync.hash | 2 +-
- package/librsync/librsync.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/librsync/librsync.hash b/package/librsync/librsync.hash
-index 1b2130b1a4..c8ca61e516 100644
---- a/package/librsync/librsync.hash
-+++ b/package/librsync/librsync.hash
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index d008b3496d..36f90ff111 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  dbd7eb643665691bdf4009174461463737b19b4814b789baad62914cabfe4569  librsync-2.3.1.tar.gz
-+sha256  ef8ce23df38d5076d25510baa2cabedffbe0af460d887d86c2413a1c2b0c676f  librsync-2.3.2.tar.gz
- sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
-diff --git a/package/librsync/librsync.mk b/package/librsync/librsync.mk
-index bb36cb657c..97f5c607b0 100644
---- a/package/librsync/librsync.mk
-+++ b/package/librsync/librsync.mk
-@@ -4,8 +4,8 @@
+ # Locally calculated after checking signature
+-sha256  40930489c837c05f6153f38e1ebaec244431ef1a034e4846ff732d71d59ff194  openvpn-2.5.1.tar.xz
++sha256  b12743836901f365efaf82ab2493967e1b21c21eb43ce9a8da1002a17c9c1dc8  openvpn-2.5.2.tar.xz
+ sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index e4066a405a..9b3802fd80 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBRSYNC_VERSION = 2.3.1
--LIBRSYNC_SITE = $(call github,librsync,librsync,v$(LIBRSYNC_VERSION))
-+LIBRSYNC_VERSION = 2.3.2
-+LIBRSYNC_SITE = https://github.com/librsync/librsync/releases/download/v$(LIBRSYNC_VERSION)
- LIBRSYNC_LICENSE = LGPL-2.1+
- LIBRSYNC_LICENSE_FILES = COPYING
- LIBRSYNC_CPE_ID_VENDOR = librsync_project
+-OPENVPN_VERSION = 2.5.1
++OPENVPN_VERSION = 2.5.2
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf
