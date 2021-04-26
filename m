@@ -1,41 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 21:29:17 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/hostapd: ignore
- CVE-2021-30004 when using openssl
-Message-ID: <20210426203328.6D75D815DC@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 22:32:37 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ package/freescale-imx/imx-vpu: fix {EULA, COPYING} file hashes
+Message-ID: <20210426203328.A8EB883D66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ad89a34716525f82ed59f1bb6fad3c6b01a8abb
+commit: https://git.buildroot.net/buildroot/commit/?id=dc501be68b5ac4e835fbe3b12c073b1e0a86c01e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-The CVE can be ignored when the internal TLS impl isn't used.
+Commit a646cd27b112 (package/freescale-imx/imx-vpu: bump version to
+5.4.39.3) somehow messed up when updating the hashes of the licene
+files:
 
-https://security-tracker.debian.org/tracker/CVE-2021-30004
- "Issue only affects the "internal" TLS implementation
- (CONFIG_TLS=internal)"
+    >>> imx-vpu 5.4.39.3 Collecting legal info
+    ERROR: EULA has wrong sha256 hash:
+    ERROR: expected: a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc
+    ERROR: got     : 7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0
+    ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+    ERROR: COPYING has wrong sha256 hash:
+    ERROR: expected: 69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2
+    ERROR: got     : 2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d
+    ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+
+The most probable cause is some confusion with imx-vpu-hantro, as the
+faulty hashes reported above are those found in imx-vpu-hantro.
+
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+[yann.morin.1998 at free.fr: rewrite commit log with a probably reason]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3d3348fd032f00695432582d748b87f91609bb9d)
+(cherry picked from commit 96142a5426b127a55038cd5cd84134452b9905ab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hostapd/hostapd.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/freescale-imx/imx-vpu/imx-vpu.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index efeefd8b35..2995545d18 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -38,6 +38,8 @@ ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- HOSTAPD_DEPENDENCIES += host-pkgconf libopenssl
- HOSTAPD_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
-+# Issue only affects the "internal" TLS implementation
-+HOSTAPD_IGNORE_CVES += CVE-2021-30004
- else
- HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
- HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash b/package/freescale-imx/imx-vpu/imx-vpu.hash
+index 6ab67510b0..e3a53e3fb6 100644
+--- a/package/freescale-imx/imx-vpu/imx-vpu.hash
++++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+ sha256  87cb799a57df654db29403cb74a75ca5185a1517022d3a4a16b8d69056c36127  imx-vpu-5.4.39.3.bin
+-sha256  69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
+-sha256  a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
++sha256  2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d  COPYING
++sha256  7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0  EULA
