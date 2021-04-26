@@ -1,40 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 15:12:35 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/popt: add
- _CPE_ID_VENDOR
-Message-ID: <20210426125913.310F58419A@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 15:13:12 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ package/python3-setuptools: add _CPE_ID_VENDOR and_CPE_ID_PRODUCT
+Message-ID: <20210426125913.5808A817A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4d8d0d64d2dcb61505ac0c4a5b36a3f0900d330
+commit: https://git.buildroot.net/buildroot/commit/?id=f24a371d9241c30d6cad85e2fd42e79cf13de450
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:popt_project:popt:* is a valid CPE identifier for this package:
+cpe:2.3:a:python:setuptools:* is a valid CPE identifier for this package:
 
- https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:popt_project:popt
+ https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:python:setuptools
+
+Note: 63332c33aa already added those for the python(2) variant.
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[yann.morin.1998 at free.fr: move up, right after license]
+[yann.morin.1998 at free.fr:
+  - add reference to 63332c33aa
+  - move up, right after license
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ba18dc36a467d504ed2d9affd0cf6b41c7deb997)
+(cherry picked from commit c819d208349d90bd7cbe70bf2f50a9cd0b7c78f5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/popt/popt.mk | 2 ++
+ package/python3-setuptools/python3-setuptools.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/popt/popt.mk b/package/popt/popt.mk
-index 5c4863ce40..f00bf115ee 100644
---- a/package/popt/popt.mk
-+++ b/package/popt/popt.mk
-@@ -9,6 +9,8 @@ POPT_SITE = http://ftp.rpm.org/popt/releases/popt-1.x
- POPT_INSTALL_STAGING = YES
- POPT_LICENSE = MIT
- POPT_LICENSE_FILES = COPYING
-+POPT_CPE_ID_VENDOR = popt_project
-+
- POPT_GETTEXTIZE = YES
- POPT_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- # We're patching configure.ac
+diff --git a/package/python3-setuptools/python3-setuptools.mk b/package/python3-setuptools/python3-setuptools.mk
+index 3f4f1100fe..34d5993120 100644
+--- a/package/python3-setuptools/python3-setuptools.mk
++++ b/package/python3-setuptools/python3-setuptools.mk
+@@ -11,6 +11,8 @@ PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).zip
+ PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
+ PYTHON3_SETUPTOOLS_LICENSE = MIT
+ PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
++PYTHON3_SETUPTOOLS_CPE_ID_VENDOR = python
++PYTHON3_SETUPTOOLS_CPE_ID_PRODUCT = setuptools
+ PYTHON3_SETUPTOOLS_SETUP_TYPE = setuptools
+ HOST_PYTHON3_SETUPTOOLS_DL_SUBDIR = python-setuptools
+ HOST_PYTHON3_SETUPTOOLS_NEEDS_HOST_PYTHON = python3
