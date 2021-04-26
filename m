@@ -1,50 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 23:46:28 +0200
-Subject: [Buildroot] [PATCH 3/3] package/mkpimage: define extract step to
- allow patching
-In-Reply-To: <20210426214628.20941-1-peter@korsgaard.com>
-References: <20210426214628.20941-1-peter@korsgaard.com>
-Message-ID: <20210426214628.20941-3-peter@korsgaard.com>
+Date: Mon, 26 Apr 2021 23:48:31 +0200
+Subject: [Buildroot] Unable to apply a patch for the buildroot makedevs
+ tool
+In-Reply-To: <20210417071317.GO359705@scaer> (Yann E. MORIN's message of "Sat, 
+ 17 Apr 2021 09:13:17 +0200")
+References: <AM6PR05MB5928D4AD5D2311ACA772CCA5A34C9@AM6PR05MB5928.eurprd05.prod.outlook.com>
+ <20210417071317.GO359705@scaer>
+Message-ID: <87czugemz4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As recently discussed on the list:
-http://lists.busybox.net/pipermail/buildroot/2021-April/308373.html
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Packages like mkpimage where the source code is included in the Buildroot
-tree, currently doesn't use an extract step (which also skips the patch
-step), so they cannot be patched by a patch in BR2_GLOBAL_PATCH_DIR (or the
-pkgdir), which is a bit confusing.
+ > Ivan, All,
+ > On 2021-04-16 06:58 +0000, Ivan Castell spake thusly:
+ >> Hello! I did a patch for the makedevs tool that provides a new 'x' option
+ >> that allows setting permissions for directories recursively without
+ >> modifiying permissions for regular files.
 
-As a fix, add a simple extract step that copies the source file to the build
-directory, so the patch step gets run as well.
+ > As Peter said, makedev is directly compiled from its single source file
+ > in Buildroot's tree, so no way to patch it with the standard package
+ > infrastructure.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mkpimage/mkpimage.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+With that said, there is no specific reason why this is done like that -
+And E.G. mcookie does copy its .c file to the build directory so the
+patch step works - So it IMHO makes sense to fix makedevs to also do it
+so the normal infrastructure works as expected.
 
-diff --git a/package/mkpimage/mkpimage.mk b/package/mkpimage/mkpimage.mk
-index 8e08013f91..71500f00f3 100644
---- a/package/mkpimage/mkpimage.mk
-+++ b/package/mkpimage/mkpimage.mk
-@@ -9,9 +9,13 @@ HOST_MKPIMAGE_LICENSE = GPL-2.0
- # source included in the package
- # came from barebox's repository:
- # https://git.pengutronix.de/cgit/barebox/tree/scripts/socfpga_mkimage.c?id=55d29525146dcd280987dfd565bfd34f08858fb3
-+define HOST_MKPIMAGE_EXTRACT_CMDS
-+	cp $(HOST_MKPIMAGE_PKGDIR)/mkpimage.c $(@D)
-+endef
-+
- define HOST_MKPIMAGE_BUILD_CMDS
- 	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
--		package/mkpimage/mkpimage.c -o $(@D)/mkpimage
-+		$(@D)/mkpimage.c -o $(@D)/mkpimage
- endef
- 
- define HOST_MKPIMAGE_INSTALL_CMDS
+I've sent a series to do that:
+
+https://patchwork.ozlabs.org/project/buildroot/list/?series=240851
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
