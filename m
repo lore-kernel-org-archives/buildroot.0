@@ -1,37 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 11:51:05 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/domoticz: drop
- boost date-time dependency
-Message-ID: <20210426093055.865937FB00@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 11:49:25 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libgpiod: bump to
+ version 1.6.3
+Message-ID: <20210426093055.6CFE57FB00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7686940301f7d2e2792dcc79c3cb8e11a73ca398
+commit: https://git.buildroot.net/buildroot/commit/?id=ab35658b2c9a3196911f4011f8f936e09d4c2903
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-boost date-time is not a dependency since version 4.9700 and
-https://github.com/domoticz/domoticz/commit/a3eacbc987b59dd4aa73ada24a0a6e9a0d27b740
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4b4d98e2c5165c3121e670192970fc909cae6d8a)
+(cherry picked from commit 8d51ee7c79f437ecb7e661f3bf2623ab786fcac5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/domoticz/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index 88de232642..4d1a7f9289 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -11,7 +11,6 @@ config BR2_PACKAGE_DOMOTICZ
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
- 	select BR2_PACKAGE_BOOST
--	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
- 	select BR2_PACKAGE_JSONCPP
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 7b691aaf5e..f0803cab36 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256  c601e71846f5ab140c83bc757fdd62a4fda24a9cee39cc5e99c96ec2bf1b06a9  libgpiod-1.6.2.tar.xz
++sha256  841be9d788f00bab08ef22c4be5c39866f0e46cb100a3ae49ed816ac9c5dddc7  libgpiod-1.6.3.tar.xz
+ # Hash for license file
+ sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 201b697c72..35d003fa33 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -6,7 +6,7 @@
+ 
+ # Be careful when bumping versions.
+ # Dependency on kernel header versions may change.
+-LIBGPIOD_VERSION = 1.6.2
++LIBGPIOD_VERSION = 1.6.3
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
