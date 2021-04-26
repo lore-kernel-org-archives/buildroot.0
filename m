@@ -1,55 +1,45 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 26 Apr 2021 16:48:24 +0200
-Subject: [Buildroot] [PATCH]
- package/freescale-imx/kernel-module-imx-gpu-viv: bump to version 6.4.3.p1.2
-Message-ID: <20210426144824.1412614-1-gary.bisson@boundarydevices.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Apr 2021 16:56:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libnpupnp: bump to version 4.1.3
+In-Reply-To: <87czuhcg9c.fsf@tarshish> (Baruch Siach's message of "Mon, 26 Apr
+ 2021 16:44:15 +0300")
+References: <20210412080402.75059-1-joerg.krause@embedded.rocks>
+ <874kftmdm0.fsf@dell.be.48ers.dk> <87czuhcg9c.fsf@tarshish>
+Message-ID: <8735vdjdr4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Same version as NXP release 5.10.9-1.0.0
-- No changelog provided by NXP
-- Tested on Nitrogen8M device with Weston (DRM backend) as follows:
- # cd /usr/share/examples/viv_samples/vdk/
- # ./tutorial7
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
-Needed in order to match the new version of the imx-gpu-viv libraries
-that have been pused recently [1].
+ > Hi Peter,
+ > On Mon, Apr 26 2021, Peter Korsgaard wrote:
 
-Regards,
-Gary
+ >>>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+ >> 
+ >> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ >> 
+ >> Committed to 2021.02.x, thanks.
 
-[1] http://patchwork.ozlabs.org/project/buildroot/patch/20210420082104.11514-3-sebastien.szymanski at armadeus.com/ 
----
- .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash    | 2 +-
- .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Not in 2021.02.x as of commit 2960953b0ab6de.
 
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-index 0fd8e04f21..ab021b6849 100644
---- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  ee9227d8b3f6da84a4b0be59cdc9a4c67db5c941c719ab44a29e09fe73019cac  kernel-module-imx-gpu-viv-5c8eb7b0576dc2348fb206945ce13e41d0837cf1.tar.gz
-+sha256  fbf400adbeaa52af0be234a5dcd96059615db4535cda2bd101d65d468e49e288  kernel-module-imx-gpu-viv-3588f2f6e64082153baae116dd393aa15061473d.tar.gz
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-index 4a2fb3032b..3afcc9d228 100644
---- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KERNEL_MODULE_IMX_GPU_VIV_VERSION = 5c8eb7b0576dc2348fb206945ce13e41d0837cf1
-+KERNEL_MODULE_IMX_GPU_VIV_VERSION = 3588f2f6e64082153baae116dd393aa15061473d
- KERNEL_MODULE_IMX_GPU_VIV_SITE = \
- 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
- KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
+No indeed, I sent the mail too soon. I misremembered what version we
+have in 2021.02.x.
+
+ > What is the reason to commit to 2021.02.x?
+
+ > Master branch commit adea5b316e27a is the 4.1.4 bump which includes a
+ > security fix.
+
+Exactly because of the 4.1.4 security fix. The changelog is very light
+on detail about what got fixed and what versions are affected, but it is
+presumably this commit:
+
+https://framagit.org/medoc92/npupnp/-/commit/90a4ab27dcec97d85168204ac8aed98f9f50e184
+
+I'll take a closer look tonight and then update 2021.02.x to 4.1.4.
+
 -- 
-2.30.2
+Bye, Peter Korsgaard
