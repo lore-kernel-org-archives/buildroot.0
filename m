@@ -1,54 +1,139 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 22:37:03 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/usb_modeswitch:
- bump to version 2.6.1
-Message-ID: <20210426203328.B5FD4815DC@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 22:52:50 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/numactl: make
+ available on all architectures
+Message-ID: <20210426203328.E6E1B83D66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14dfd8eb179b2cd520192b82a3dcff73a2b8be03
+commit: https://git.buildroot.net/buildroot/commit/?id=7a5074be8f8ab67a786ce29d81ab876dd73c123b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Update indentation in hash file (two spaces)
+Since its introduction in commit
+b05e74ff92b6728369e1540fc0a2bd60025f2146 in 2013, numactl has had an
+explicit list of architectures that it supports. Interestingly, this
+list does not include ARM, and now that rt-tests unconditionally needs
+numactl, it meant the rt-tests package was no longer available on ARM.
 
-https://www.draisberghof.de/usb_modeswitch/ChangeLog
+Further investigation revealed that there is nothing in recent
+versions of numactl that appears to be architecture-specific. It does
+build with all of Buildroot toolchains currently used in the
+autobuilders.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The only necessary changes are:
+
+ * Exclude no-MMU architectures, as madvise() is used in the code
+   base, and this is not available on no-MMU architectures.
+
+ * Make sure to use -latomic when needed, as some atomic operations
+   are used.
+
+ * Backport a patch that fixes the .symver usage, which only affects
+   really old gcc versions: only the old ARM Sourcery toolchain was
+   affected by this. Newer gcc versions support the gcc "symver"
+   attribute, so that the code that directly emits the assembly
+   .symver directive is not invoked.
+
+With these changes, numactl builds successfully on all our supported
+toolchains.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9192f465ea0ae420f9a89927f7f9a80028d9b379)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 4ed540ddf59bec4b389be44d7f42820d2466904f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/usb_modeswitch/usb_modeswitch.hash | 8 ++++----
- package/usb_modeswitch/usb_modeswitch.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../0001-Do-not-stringify-SYMVER-symbols.patch     | 25 ++++++++++++++++++++++
+ package/numactl/Config.in                          | 11 +---------
+ package/numactl/numactl.mk                         |  4 ++++
+ package/rt-tests/Config.in                         |  4 +---
+ 4 files changed, 31 insertions(+), 13 deletions(-)
 
-diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
-index 4cbd5dbea2..765a2438c2 100644
---- a/package/usb_modeswitch/usb_modeswitch.hash
-+++ b/package/usb_modeswitch/usb_modeswitch.hash
-@@ -1,5 +1,5 @@
--# From http://www.draisberghof.de/usb_modeswitch/
--md5	 be73dcc84025794081a1d4d4e5a75e4c  usb-modeswitch-2.6.0.tar.bz2
-+# From https://www.draisberghof.de/usb_modeswitch/usb-modeswitch-versions.xml
-+md5  69d00d6ed7097b97d972a159d14cfba1  usb-modeswitch-2.6.1.tar.bz2
- # Locally calculated
--sha256	c215236e6bada6e659fc195a31d611ea298a4bdb4d57a0d68c553b56585f8ba3  usb-modeswitch-2.6.0.tar.bz2
--sha256	6195429209313925c0eba6c0da4ee7a6cb4277b99e35c886913f80f91ec20b94  COPYING
-+sha256  5195d9e136e52f658f19e9f93e4f982b1b67bffac197d0a455cd8c2cd245fa34  usb-modeswitch-2.6.1.tar.bz2
-+sha256  6195429209313925c0eba6c0da4ee7a6cb4277b99e35c886913f80f91ec20b94  COPYING
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index 064e1960b0..f2ee004b42 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch b/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
+new file mode 100644
+index 0000000000..c6981aaf73
+--- /dev/null
++++ b/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
+@@ -0,0 +1,25 @@
++From f96c96af7fbf2779b15f66f03b10315a24fb4f5a Mon Sep 17 00:00:00 2001
++From: Scott McMillan <smcmillan@nvidia.com>
++Date: Fri, 9 Oct 2020 08:56:52 -0500
++Subject: [PATCH] Do not stringify SYMVER symbols
++
++Upstream: f96c96af7fbf2779b15f66f03b10315a24fb4f5a
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ util.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/util.h b/util.h
++index 99ada33..f2a20ac 100644
++--- a/util.h
+++++ b/util.h
++@@ -22,5 +22,5 @@ extern char *policy_name(int policy);
++ #if HAVE_ATTRIBUTE_SYMVER
++ #define SYMVER(a,b) __attribute__ ((symver (b)))
++ #else
++-#define SYMVER(a,b) __asm__ (".symver " #a "," #b);
+++#define SYMVER(a,b) __asm__ (".symver " a "," b);
++ #endif
++-- 
++2.30.2
++
+diff --git a/package/numactl/Config.in b/package/numactl/Config.in
+index cd47f2f9a9..23cf7facb0 100644
+--- a/package/numactl/Config.in
++++ b/package/numactl/Config.in
+@@ -1,15 +1,6 @@
+-config BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
+-	bool
+-	# numactl uses some system calls that are not available on all
+-	# architectures.
+-	default y if BR2_aarch64
+-	default y if BR2_i386 || BR2_x86_64
+-	default y if BR2_mips || BR2_mipsel ||  BR2_mips64 || BR2_mips64el
+-	default y if BR2_powerpc
+-
+ config BR2_PACKAGE_NUMACTL
+ 	bool "numactl"
+-	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
++	depends on BR2_USE_MMU # madvise()
+ 	help
+ 	  numactl allows you to run your application on specific cpus
+ 	  and memory nodes. It does this by supplying a NUMA memory
+diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
+index cf9c759693..3364f6c5c3 100644
+--- a/package/numactl/numactl.mk
++++ b/package/numactl/numactl.mk
+@@ -12,4 +12,8 @@ NUMACTL_INSTALL_STAGING = YES
+ NUMACTL_AUTORECONF = YES
+ NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
  
--USB_MODESWITCH_VERSION = 2.6.0
-+USB_MODESWITCH_VERSION = 2.6.1
- USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
- USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DEPENDENCIES = libusb
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++NUMACTL_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
++endif
++
+ $(eval $(autotools-package))
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index cc9b14dccb..477fa288d7 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -2,10 +2,9 @@ config BR2_PACKAGE_RT_TESTS
+ 	bool "rt-tests"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14 # deadline scheduler syscall
+-	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_MMU # fork(), numactl
+ 	depends on !BR2_STATIC_LIBS # dlopen
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # cyclictest
+-	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_NUMACTL
+ 	help
+ 	  Set of utilities for testing the real-time behaviour of a
+@@ -34,4 +33,3 @@ comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 3.14, dy
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+ 		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+ 	depends on BR2_USE_MMU
+-	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
