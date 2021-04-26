@@ -1,97 +1,151 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 26 Apr 2021 12:10:21 +0200
-Subject: [Buildroot] [PATCH 2/2] package/{glibc, localedef}: bump to version
- 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c
-In-Reply-To: <20210426101021.2418145-1-romain.naour@gmail.com>
-References: <20210426101021.2418145-1-romain.naour@gmail.com>
-Message-ID: <20210426101021.2418145-2-romain.naour@gmail.com>
+From: Michael Walle <michael@walle.cc>
+Date: Mon, 26 Apr 2021 13:45:17 +0200
+Subject: [Buildroot] [PATCH 1/2] {linux, linux-headers}: add version 5.12
+Message-ID: <20210426114518.12145-1-michael@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See:
-https://sourceware.org/pipermail/libc-alpha/2021-February/122207.html
-https://sourceware.org/glibc/wiki/Release/2.33
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Michael Walle <michael@walle.cc>
 ---
-Tested with all Qemu defconfigs.
----
- .../glibc.hash                                                  | 2 +-
- package/glibc/glibc.mk                                          | 2 +-
- .../0001-HACK-only-build-and-install-localedef.patch            | 0
- ...02-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch | 0
- .../localedef.hash                                              | 2 +-
- package/localedef/localedef.mk                                  | 2 +-
- 6 files changed, 4 insertions(+), 4 deletions(-)
- rename package/glibc/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c}/glibc.hash (70%)
- rename package/localedef/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c}/0001-HACK-only-build-and-install-localedef.patch (100%)
- rename package/localedef/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c}/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch (100%)
- rename package/localedef/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c}/localedef.hash (70%)
 
-diff --git a/package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash b/package/glibc/2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c/glibc.hash
-similarity index 70%
-rename from package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
-rename to package/glibc/2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c/glibc.hash
-index b1d5243fcc..3f3598c31a 100644
---- a/package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
-+++ b/package/glibc/2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  f4710e9a435a7b83e1d23dd75434f0d36b898eba9b4249c946c32b467d852fd4  glibc-2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2.tar.gz
-+sha256  ec2d7b91c8bbe7887b0bb34ab2df9007b2b45c17b502fc333efca28eb7546df6  glibc-2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c.tar.gz
+Hi,
+
+c6x was removed in 5.12. But that architecture was never supported
+in buildroot.
+
+See also:
+https://kernelnewbies.org/Linux_5.12
+
+-michael
+
+ linux/Config.in                                     |  4 ++--
+ linux/linux.hash                                    |  1 +
+ package/linux-headers/Config.in.host                | 13 +++++++++++--
+ toolchain/Config.in                                 |  5 +++++
+ .../toolchain-external-custom/Config.in.options     |  6 +++++-
+ 5 files changed, 24 insertions(+), 5 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index cf790963dd..7f1d9e3342 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -28,7 +28,7 @@ choice
+ 	prompt "Kernel version"
  
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index f84f670fc0..e94df73bfe 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -16,7 +16,7 @@ ifeq ($(BR2_RISCV_32),y)
- # Until 2.33 is released, just use master
- GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
- else
--GLIBC_VERSION = 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2
-+GLIBC_VERSION = 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c
- endif
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
-diff --git a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c/0001-HACK-only-build-and-install-localedef.patch
-similarity index 100%
-rename from package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0001-HACK-only-build-and-install-localedef.patch
-rename to package/localedef/2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c/0001-HACK-only-build-and-install-localedef.patch
-diff --git a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-similarity index 100%
-rename from package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-rename to package/localedef/2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-diff --git a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/localedef.hash b/package/localedef/2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c/localedef.hash
-similarity index 70%
-rename from package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/localedef.hash
-rename to package/localedef/2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c/localedef.hash
-index b1d5243fcc..3f3598c31a 100644
---- a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/localedef.hash
-+++ b/package/localedef/2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c/localedef.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  f4710e9a435a7b83e1d23dd75434f0d36b898eba9b4249c946c32b467d852fd4  glibc-2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2.tar.gz
-+sha256  ec2d7b91c8bbe7887b0bb34ab2df9007b2b45c17b502fc333efca28eb7546df6  glibc-2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c.tar.gz
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (5.11)"
++	bool "Latest version (5.12)"
  
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 57ab5a3458..a633855baf 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2
-+LOCALEDEF_VERSION = 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
- HOST_LOCALEDEF_DL_SUBDIR = glibc
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (4.19.182-cip45)"
+@@ -125,7 +125,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.11.8" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.12" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.182-cip45" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.165-cip41-rt18" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 992ae22d11..eedda7e007 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,4 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
++sha256  7d0df6f2bf2384d68d0bd8e1fe3e071d64364dcdc6002e7b5c87c92d48fac366  linux-5.12.tar.xz
+ sha256  91f939263a350da676b274e3ec84ad5b57f27ffdf4bd6b74cd002ce21fc0c89f  linux-5.11.8.tar.xz
+ sha256  930ae76b9a3b64b98802849aca332d17a706f20595de21e1ae729b55ee461add  linux-5.10.25.tar.xz
+ sha256  1c3cef545f366b56332c11c28d074c9d9148c28059a970ec8710826652237560  linux-5.4.107.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 6d83ecf952..52b67f31df 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_5_11
++	default BR2_KERNEL_HEADERS_5_12
+ 	help
+ 	  Select the kernel version to get headers from.
+ 
+@@ -61,6 +61,10 @@ config BR2_KERNEL_HEADERS_5_10
+ config BR2_KERNEL_HEADERS_5_11
+ 	bool "Linux 5.11.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
++
++config BR2_KERNEL_HEADERS_5_12
++	bool "Linux 5.12.x kernel headers"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
+ 	select BR2_KERNEL_HEADERS_LATEST
+ 
+ config BR2_KERNEL_HEADERS_VERSION
+@@ -135,8 +139,12 @@ choice
+ 	  If your kernel headers are more recent than the latest version
+ 	  in the choice, then select the latest version.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12
++	bool "5.12.x or later"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_11
+-	bool "5.11.x or later"
++	bool "5.11.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
+ 
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10
+@@ -361,6 +369,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.4.107"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.25"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.11.8"	if BR2_KERNEL_HEADERS_5_11
++	default "5.12"		if BR2_KERNEL_HEADERS_5_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index dc1e710603..c4df5f1274 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -500,6 +500,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
++
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
+ 	select BR2_TOOLCHAIN_HEADERS_LATEST
+ 
+ # This should be selected by the latest version, above, to indicate that
+@@ -513,6 +517,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "5.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
+ 	default "5.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
+ 	default "5.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
+ 	default "5.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 4331c2528a..ba9aeb29ad 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -119,8 +119,12 @@ choice
+ 	  If your toolchain uses headers newer than the latest version
+ 	  in the choice, then select the latest version.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_12
++	bool "5.12.x or later"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_11
+-	bool "5.11.x or later"
++	bool "5.11"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_10
 -- 
-2.30.2
+2.20.1
