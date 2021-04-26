@@ -1,40 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 15:17:50 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/rp-pppoe: add
+Date: Mon, 26 Apr 2021 14:59:33 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/iproute2: add
  _CPE_ID_VENDOR
-Message-ID: <20210426125913.6CE148419A@busybox.osuosl.org>
+Message-ID: <20210426125912.A9E20817A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1e49b0b779dc7499a1f2bc55fd4cc3fe461a53a
+commit: https://git.buildroot.net/buildroot/commit/?id=bff2a3f67e67990eca9f9940e6f930255b5fe8e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:rp-pppoe_project:rp-pppoe:* is a valid CPE identifier for this package:
+cpe:2.3:a:iproute2_project:iproute2:* is a valid CPE identifier for this package:
 
- https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:rp-pppoe_project:rp-pppoe
+ https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:iproute2_project:iproute2
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[yann.morin.1998 at free.fr: move up, right after license]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 912342f8336cd9079df78f44ae016f0b40961331)
+(cherry picked from commit 9cf7caa186c1fd47a42b3c33d423c57e0bf1199a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rp-pppoe/rp-pppoe.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/iproute2/iproute2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
-index 2f0073b6c0..ce85da11e4 100644
---- a/package/rp-pppoe/rp-pppoe.mk
-+++ b/package/rp-pppoe/rp-pppoe.mk
-@@ -8,6 +8,8 @@ RP_PPPOE_VERSION = 3.14
- RP_PPPOE_SITE = https://dianne.skoll.ca/projects/rp-pppoe/download
- RP_PPPOE_LICENSE = GPL-2.0
- RP_PPPOE_LICENSE_FILES = doc/LICENSE
-+RP_PPPOE_CPE_ID_VENDOR = rp-pppoe_project
-+
- RP_PPPOE_DEPENDENCIES = pppd
- RP_PPPOE_SUBDIR = src
- RP_PPPOE_TARGET_FILES = pppoe pppoe-server pppoe-relay pppoe-sniff
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 1b71f5c06a..3460c5c3b3 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -11,6 +11,7 @@ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBMNL),libmnl)
+ IPROUTE2_LICENSE = GPL-2.0+
+ IPROUTE2_LICENSE_FILES = COPYING
++IPROUTE2_CPE_ID_VENDOR = iproute2_project
+ 
+ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ IPROUTE2_DEPENDENCIES += elfutils
