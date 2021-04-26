@@ -1,47 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 21:25:39 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/cmake: ignore
- CVE-2016-10642
-Message-ID: <20210426203328.562C8815DC@busybox.osuosl.org>
+Date: Mon, 26 Apr 2021 21:10:53 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/bind: ignore
+ CVE-2019-6470
+Message-ID: <20210426203328.48A9583898@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b88162d890c901db761f4b8ca0f80dca24304e51
+commit: https://git.buildroot.net/buildroot/commit/?id=a5130ce356d49cdd6e583bf2c7183395a51b521d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-This is specific to the npm package that installs cmake, so isn't
-relevant to Buildroot.
-https://github.com/openembedded/openembedded-core/blob/14241ed09f9ed317045cf75a6d08416d3579bb8d/meta/recipes-devtools/cmake/cmake.inc
+There had existed in one of the ISC BIND libraries a bug in a
+function that was used by dhcpd when operating in DHCPv6 mode.
+There was also a bug in dhcpd relating to the use of this function
+per its documentation, but the bug in the library function
+prevented this from causing any harm. All releases of dhcpd from
+ISC contain copies of this, and other, BIND libraries in
+combinations that have been tested prior to release and are known
+to not present issues like this.
 
-https://nvd.nist.gov/vuln/detail/CVE-2016-10642#vulnCurrentDescriptionTitle
- "cmake installs the cmake x86 linux binaries. cmake downloads
- binary resources over HTTP, which leaves it vulnerable to
- MITM attacks. It may be possible to cause remote code
- execution (RCE) by swapping out the requested binary with
- an attacker controlled binary if the attacker is on the
- network or positioned in between the user and the remote server."
+Affects: Builds of dhcpd versions prior to version 4.4.1 when
+using BIND versions 9.11.2 or later.
+
+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-6470
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5ce1e773b94642a034ccb48f22f05b5933b907e5)
+(cherry picked from commit 23fb8dd2d007118aa3544e58080f79052f5c6d5b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cmake/cmake.mk | 2 ++
+ package/bind/bind.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index a3015fabfd..90fe868fa5 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -10,6 +10,8 @@ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3-Clause
- CMAKE_LICENSE_FILES = Copyright.txt
- CMAKE_CPE_ID_VENDOR = cmake_project
-+# Tool download MITM attack warning if using npm package to install cmake
-+CMAKE_IGNORE_CVES = CVE-2016-10642
- 
- # CMake is a particular package:
- # * CMake can be built using the generic infrastructure or the cmake one.
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index d1a992b66e..39c30dab6b 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -15,6 +15,8 @@ BIND_LICENSE_FILES = COPYRIGHT
+ BIND_CPE_ID_VENDOR = isc
+ # Only applies to RHEL6.x with DNSSEC validation on
+ BIND_IGNORE_CVES = CVE-2017-3139
++# Library CVE and not used by bind but used by ISC DHCP
++BIND_IGNORE_CVES += CVE-2019-6470
+ BIND_TARGET_SERVER_SBIN = arpaname ddns-confgen dnssec-checkds dnssec-coverage
+ BIND_TARGET_SERVER_SBIN += dnssec-importkey dnssec-keygen dnssec-revoke
+ BIND_TARGET_SERVER_SBIN += dnssec-settime dnssec-verify genrandom
