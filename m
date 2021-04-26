@@ -1,55 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 26 Apr 2021 21:11:13 +0200
-Subject: [Buildroot] [PATCH v2,2/2] package/domoticz: select boost atomic
-In-Reply-To: <20210426191113.512637-1-fontaine.fabrice@gmail.com>
-References: <20210426191113.512637-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210426191113.512637-2-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Apr 2021 21:15:13 +0200
+Subject: [Buildroot] [PATCH 02/10] package/coreutils: ignore
+ CVE-2013-0221, CVE-2013-0222, CVE-2013-0223
+In-Reply-To: <20210421204235.5956-3-matthew.weber@rockwellcollins.com> (Matt
+ Weber's message of "Wed, 21 Apr 2021 15:42:27 -0500")
+References: <20210421204235.5956-1-matthew.weber@rockwellcollins.com>
+ <20210421204235.5956-3-matthew.weber@rockwellcollins.com>
+Message-ID: <87mttkhn7i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-domoticz does not use Boost::atomic but cmake is so "smart" that it
-(wrongly) assumes that Boost::thread depends on Boost:date_time and
-Boost::atomic since boost version 1.54:
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
-set(_Boost_THREAD_DEPENDENCIES chrono date_time atomic)
+ > This CVE is only relevant to a build when the SUSE coreutils-i18n.patch
+ > is included. The upstream codebase does not include this patch, nor
+ > does Buildroot.
 
-Extracted from:
- - https://gitlab.kitware.com/cmake/cmake/-/blob/master/Modules/FindBoost.cmake#L1113
+ > https://security-tracker.debian.org/tracker/CVE-2013-0221
+ > https://security-tracker.debian.org/tracker/CVE-2013-0222
+ > https://security-tracker.debian.org/tracker/CVE-2013-0223
 
-As we can't patch every cmake on the field, just select boost atomic
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > ---
+ >  package/coreutils/coreutils.mk | 4 ++++
+ >  1 file changed, 4 insertions(+)
 
-It should be noted that build failures are only raised since commit
-8a46b41b4a5d1c2f5ebefd7fc23fec7e8ba0598c as this commit drop the patch
-that was decreasing cmake version but also removing:
+ > diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+ > index 0e75cdfcda..65234a113e 100644
+ > --- a/package/coreutils/coreutils.mk
+ > +++ b/package/coreutils/coreutils.mk
+ > @@ -10,6 +10,10 @@ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
+ >  COREUTILS_LICENSE = GPL-3.0+
+ >  COREUTILS_LICENSE_FILES = COPYING
+ >  COREUTILS_CPE_ID_VENDOR = gnu
+ > +# Only when including SUSE coreutils-i18n.patch
+ > +COREUTILS_IGNORE_CVES = CVE-2013-0221
+ > +COREUTILS_IGNORE_CVES += CVE-2013-0222
+ > +COREUTILS_IGNORE_CVES += CVE-2013-0223
 
-target_link_libraries(domoticz Boost::thread Boost::system)
+NIT: There is no problem having multiple CVE's on the same line:
 
-Fixes:
- - http://autobuild.buildroot.org/results/4306c0a725ed9a34bd55550df428866db6e4f052
- - http://autobuild.buildroot.org/results/2478e7a2ec1c63dcc2b36d29a39004468b230211
+COREUTILS_IGORE_CVES += CVE-2013-0221 CVE-2013-0222 CVE-2013-0223
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Fix patch title
-
- package/domoticz/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index 83ae2035b2..26e79c18b7 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_DOMOTICZ
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
- 	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_ATOMIC
- 	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
 -- 
-2.30.2
+Bye, Peter Korsgaard
