@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Apr 2021 21:53:42 +0200
-Subject: [Buildroot] [PATCH]
- package/freescale-imx/kernel-module-imx-gpu-viv: bump to version 6.4.3.p1.2
-In-Reply-To: <20210426144824.1412614-1-gary.bisson@boundarydevices.com>
-References: <20210426144824.1412614-1-gary.bisson@boundarydevices.com>
-Message-ID: <20210426215342.162c235d@windsurf>
+Date: Mon, 26 Apr 2021 21:53:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uftrace: needs threads
+In-Reply-To: <20210426184255.500745-1-fontaine.fabrice@gmail.com>
+References: <20210426184255.500745-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210426215351.21f29f42@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 26 Apr 2021 16:48:24 +0200
-Gary Bisson <gary.bisson@boundarydevices.com> wrote:
+On Mon, 26 Apr 2021 20:42:55 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> - Same version as NXP release 5.10.9-1.0.0
-> - No changelog provided by NXP
-> - Tested on Nitrogen8M device with Weston (DRM backend) as follows:
->  # cd /usr/share/examples/viv_samples/vdk/
->  # ./tutorial7
+> uftrace needs threads since its addition to buildroot in commit
+> 09c97972d9f90b69cfc36f9ffe9e22c13daf9307
 > 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/d27c34a2f773aeb3c806d56dd2468d17caf2fbc6
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Needed in order to match the new version of the imx-gpu-viv libraries
-> that have been pused recently [1].
+>  package/uftrace/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 
 Applied to master, thanks.
 
