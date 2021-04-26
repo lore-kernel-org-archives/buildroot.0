@@ -1,40 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Apr 2021 15:17:32 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/rng-tools: add
+Date: Mon, 26 Apr 2021 15:12:43 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/pugixml: add
  _CPE_ID_VENDOR
-Message-ID: <20210426125913.62907817A8@busybox.osuosl.org>
+Message-ID: <20210426125913.40446817A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b41ed4b42b4ee65cc2d4c27cc8e49b93bdda9ea7
+commit: https://git.buildroot.net/buildroot/commit/?id=c5e0da8f042860e4cc87e9e28bfd6781bd23d04b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:rng-tools_project:rng-tools:* is a valid CPE identifier for this package:
+cpe:2.3:a:pugixml_project:pugixml:* is a valid CPE identifier for this package:
 
- https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:rng-tools_project:rng-tools
+ https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:pugixml_project:pugixml
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 [yann.morin.1998 at free.fr: move up, right after license]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c44be545f654cfa7fd9c1a2f95cccf85d998c04c)
+(cherry picked from commit 12e88b0d602cc709279053dd93608597a8948fdc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rng-tools/rng-tools.mk | 2 ++
+ package/pugixml/pugixml.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index ae20d96362..dbb7353b8c 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -8,6 +8,8 @@ RNG_TOOLS_VERSION = 6.11
- RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),V$(RNG_TOOLS_VERSION))
- RNG_TOOLS_LICENSE = GPL-2.0
- RNG_TOOLS_LICENSE_FILES = COPYING
-+RNG_TOOLS_CPE_ID_VENDOR = rng-tools_project
+diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
+index 5d7fc63017..ddda5a3ccc 100644
+--- a/package/pugixml/pugixml.mk
++++ b/package/pugixml/pugixml.mk
+@@ -8,6 +8,8 @@ PUGIXML_VERSION = 1.11.4
+ PUGIXML_SITE = http://github.com/zeux/pugixml/releases/download/v$(PUGIXML_VERSION)
+ PUGIXML_LICENSE = MIT
+ PUGIXML_LICENSE_FILES = LICENSE.md
++PUGIXML_CPE_ID_VENDOR = pugixml_project
 +
- RNG_TOOLS_DEPENDENCIES = libsysfs host-pkgconf openssl
- # From git
- RNG_TOOLS_AUTORECONF = YES
+ PUGIXML_INSTALL_STAGING = YES
+ 
+ # Pugixml will automatically enable 'long long' support on C++11 compilers,
