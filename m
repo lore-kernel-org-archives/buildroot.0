@@ -1,34 +1,53 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 27 Apr 2021 09:21:09 +0200
-Subject: [Buildroot] [PATCH 0/4] imx: add i.MX 8M Plus Nitrogen support
-In-Reply-To: <20210426215102.532bb6cb@windsurf>
-References: <20210426153019.1431844-1-gary.bisson@boundarydevices.com>
- <20210426215102.532bb6cb@windsurf>
-Message-ID: <YIe7ZcWRD5Xm/NtE@p1g2>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 27 Apr 2021 09:25:27 +0200
+Subject: [Buildroot] [PATCH 2/2] package/{glibc,
+ localedef}: bump to version
+ 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c
+In-Reply-To: <20210426194329.GL298901@scaer>
+References: <20210426101021.2418145-1-romain.naour@gmail.com>
+ <20210426101021.2418145-2-romain.naour@gmail.com>
+ <e539cd7b-3775-024e-1f9f-67658e38a10b@mind.be>
+ <20210426194329.GL298901@scaer>
+Message-ID: <ad394a6c-1ec6-0659-51b6-c7704110c71a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
 
-On Mon, Apr 26, 2021 at 09:51:02PM +0200, Thomas Petazzoni wrote:
-> On Mon, 26 Apr 2021 17:30:15 +0200
-> Gary Bisson <gary.bisson@boundarydevices.com> wrote:
+
+On 26/04/2021 21:43, Yann E. MORIN wrote:
+> Arnout, Romain, All,
 > 
-> > Gary Bisson (4):
-> >   board/boundarydevices: update boot scripts
-> >   configs/nitrogen*: update kernel to 5.4.x_2.3.0
-> >   configs/nitrogen*: bump u-boot revision
-> >   configs/nitrogen8mp: new defconfig
+> On 2021-04-26 21:36 +0200, Arnout Vandecappelle spake thusly:
+>> On 26/04/2021 12:10, Romain Naour wrote:
+>> [snip]
+>>>  rename package/glibc/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c}/glibc.hash (70%)
+>>>  rename package/localedef/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c}/0001-HACK-only-build-and-install-localedef.patch (100%)
+>>>  rename package/localedef/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c}/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch (100%)
+>>>  rename package/localedef/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.33-37-g162df872f0dfc2b124a18e1a8c33be63f70d9a1c}/localedef.hash (70%)
+>>
+>>  Now you're messing with these packages, maybe you can take the opportunity to
+>> get rid of the versioned subdirectory. That's a leftover from when we had
+>> version selection for glibc.
 > 
-> Thanks, series applied. Could you send a follow-up patch to PATCH 4/4
-> that extends board/boundarydevices/common/readme.txt to mention to
-> which board the new defconfig applies?
+> We stil have a version choice for glibc; it's just not exposed to the
+> user: indeed we use different version for csky, riscv32, and the rest.
+> 
+> So, we still do not want to apply the "generic" patches to the csky
+> fork, or to the riscv32 version...
 
-Will do.
+ Ah, I missed the csky fork... The riscv32 one should be gone, so I thought that
+was it.
 
-Thanks!
+ Regardless, for localedef, we don't have a version choice so we don't need the
+subdirectory there.
 
-Gary
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
