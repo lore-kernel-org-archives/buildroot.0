@@ -1,46 +1,43 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Tue, 27 Apr 2021 22:42:55 +0000
-Subject: [Buildroot] [PATCH 08/10] package/s6-networking: bump to version
- 2.4.1.1
-Message-ID: <upa7YwPN68RnIbprSUB4pGfPUejakVIJUcp6KhzNYc@cp3-web-033.plabs.ch>
+Date: Tue, 27 Apr 2021 22:43:02 +0000
+Subject: [Buildroot] [PATCH 09/10] package/s6-linux-init: bump to version
+ 1.0.6.3
+Message-ID: <KwHwmdPU1BFSeSg5pNDoCZSGZ4WeWpCljSS66RDEHfs@cp4-web-014.plabs.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change hash file indentation to 2 spaces.
-
 https://www.mail-archive.com/skaware at list.skarnet.org/msg01579.html
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
 ---
- package/s6-networking/s6-networking.hash | 4 ++--
- package/s6-networking/s6-networking.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/s6-linux-init/s6-linux-init.hash | 2 +-
+ package/s6-linux-init/s6-linux-init.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/s6-networking/s6-networking.hash b/package/s6-networking/s6-networking.hash
-index 9eda72130e..9e333866d3 100644
---- a/package/s6-networking/s6-networking.hash
-+++ b/package/s6-networking/s6-networking.hash
+diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
+index 5f3a8d41b8..23f02d5359 100644
+--- a/package/s6-linux-init/s6-linux-init.hash
++++ b/package/s6-linux-init/s6-linux-init.hash
 @@ -1,3 +1,3 @@
  # Locally generated
--sha256 cc1f80eec0ce8227bf058a1371978e4e78274b3c1b0fa82d9dadbdb0bdb27c08  s6-networking-2.4.1.0.tar.gz
--sha256 adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
-+sha256  a3fbca789dc5c82b3055fdbd2f55110902198f3136447617ce8f8b79fa8aa554  s6-networking-2.4.1.1.tar.gz
-+sha256  adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
-diff --git a/package/s6-networking/s6-networking.mk b/package/s6-networking/s6-networking.mk
-index d687c567cd..24bb2b770f 100644
---- a/package/s6-networking/s6-networking.mk
-+++ b/package/s6-networking/s6-networking.mk
+-sha256  16f6c84f3c4825ca8b244b89693569d8f69db98c485bd958301a079586f2086b  s6-linux-init-1.0.6.1.tar.gz
++sha256  29e368516b1a3c61a6d1f8680645cc122a2e02127debec91738f170a3b93b8c5  s6-linux-init-1.0.6.3.tar.gz
+ sha256  4a5e44a69d649f0c37b29d7f6e5df1bb292b09898247be07f0c97814dac4b15d  COPYING
+diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
+index efd4984085..2030ca7820 100644
+--- a/package/s6-linux-init/s6-linux-init.mk
++++ b/package/s6-linux-init/s6-linux-init.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--S6_NETWORKING_VERSION = 2.4.1.0
-+S6_NETWORKING_VERSION = 2.4.1.1
- S6_NETWORKING_SITE = http://skarnet.org/software/s6-networking
- S6_NETWORKING_LICENSE = ISC
- S6_NETWORKING_LICENSE_FILES = COPYING
+-S6_LINUX_INIT_VERSION = 1.0.6.1
++S6_LINUX_INIT_VERSION = 1.0.6.3
+ S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
+ S6_LINUX_INIT_LICENSE = ISC
+ S6_LINUX_INIT_LICENSE_FILES = COPYING
 -- 
 2.30.2
