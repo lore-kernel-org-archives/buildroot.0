@@ -1,85 +1,207 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Apr 2021 14:59:02 +0200
-Subject: [Buildroot] [PATCH] package/openjdk{,
- -bin}: security bump to version 11.0.11_9
-Message-ID: <20210427125903.31573-1-peter@korsgaard.com>
+From: Eugen Hristev <eugen.hristev@microchip.com>
+Date: Tue, 27 Apr 2021 15:56:57 +0300
+Subject: [Buildroot] [PATCH v3 2/2] configs/microchip_sama5d2_icp: new
+ defconfigs
+In-Reply-To: <20210427125657.1449953-1-eugen.hristev@microchip.com>
+References: <20210427125657.1449953-1-eugen.hristev@microchip.com>
+Message-ID: <20210427125657.1449953-2-eugen.hristev@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Add the new SAMA5D2 ICP (Industrial Connectivity Board)
+with linux4sam_2020.10 components.
+Update README file with new defconfigs.
 
-CVE-2020-14779, CVE-2020-14781, CVE-2020-14782, CVE-2020-14792,
-CVE-2020-14796, CVE-2020-14797, CVE-2020-14798, CVE-2020-14803,
-CVE-2021-2161, CVE-2021-2163
+https://www.linux4sam.org/bin/view/Linux4SAM/Sama5d2IcpMainPage
 
-For details. see the advisories:
-https://openjdk.java.net/groups/vulnerability/advisories/2020-10-20
-https://openjdk.java.net/groups/vulnerability/advisories/2021-01-19
-https://openjdk.java.net/groups/vulnerability/advisories/2021-04-20
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 ---
- package/openjdk-bin/openjdk-bin.hash | 2 +-
- package/openjdk-bin/openjdk-bin.mk   | 4 ++--
- package/openjdk/openjdk.hash         | 2 +-
- package/openjdk/openjdk.mk           | 4 ++--
- 4 files changed, 6 insertions(+), 6 deletions(-)
+Changes in v3:
+- none
+Changes in v2:
+- removed unwanted configs
+- adapted to use bootstrap3 4.x series.
 
-diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-index 4828048029..a08aa16d47 100644
---- a/package/openjdk-bin/openjdk-bin.hash
-+++ b/package/openjdk-bin/openjdk-bin.hash
-@@ -2,7 +2,7 @@
- sha256  7d5ee7e06909b8a99c0d029f512f67b092597aa5b0e78c109bd59405bbfa74fe  OpenJDK14U-jdk_x64_linux_hotspot_14.0.2_12.tar.gz
+ board/atmel/readme.txt                        |  2 +
+ board/microchip/sama5d2_icp/genimage.cfg      | 31 ++++++++
+ configs/microchip_sama5d2_icp_mmc_defconfig   | 32 ++++++++
+ .../microchip_sama5d2_icp_mmc_dev_defconfig   | 75 +++++++++++++++++++
+ 4 files changed, 140 insertions(+)
+ create mode 100644 board/microchip/sama5d2_icp/genimage.cfg
+ create mode 100644 configs/microchip_sama5d2_icp_mmc_defconfig
+ create mode 100644 configs/microchip_sama5d2_icp_mmc_dev_defconfig
+
+diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
+index 1f21dd15e4..a29d027214 100644
+--- a/board/atmel/readme.txt
++++ b/board/atmel/readme.txt
+@@ -23,6 +23,8 @@ This guide covers the following configurations:
+  - microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
+  - microchip_sam9x60ek_mmc_defconfig
+  - microchip_sam9x60ek_mmc_dev_defconfig
++ - microchip_sama5d2_icp_mmc_defconfig
++ - microchip_sama5d2_icp_mmc_dev_defconfig
  
- # From https://github.com/AdoptOpenJDK/openjdk11-binaries/releases
--sha256  6e4cead158037cb7747ca47416474d4f408c9126be5b96f9befd532e0a762b47  OpenJDK11U-jdk_x64_linux_hotspot_11.0.8_10.tar.gz
-+sha256  e99b98f851541202ab64401594901e583b764e368814320eba442095251e78cb  OpenJDK11U-jdk_x64_linux_hotspot_11.0.11_9.tar.gz
- 
- # Locally calculated
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index dd5b87fd9e..61e7ecac4c 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -11,8 +11,8 @@ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_
- HOST_OPENJDK_BIN_SOURCE = OpenJDK14U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
- HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
- else
--HOST_OPENJDK_BIN_VERSION_MAJOR = 11.0.8
--HOST_OPENJDK_BIN_VERSION_MINOR = 10
-+HOST_OPENJDK_BIN_VERSION_MAJOR = 11.0.11
-+HOST_OPENJDK_BIN_VERSION_MINOR = 9
- HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
- HOST_OPENJDK_BIN_SOURCE = OpenJDK11U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
- HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 6acfa22435..05a0c12c45 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,4 +1,4 @@
- # Locally computed
- sha256  dfb3607f1b675458f29a185a40f1dbbf896439cf33b3aa0f3d89df297e604935  jdk-14.0.2+12.tar.gz
--sha256  7fc124b5e20428cd5df42d78b001abc663558b0881e66a5def0892b98265b6e9  jdk-11.0.8+10.tar.gz
-+sha256  c8b9d92028f6e46d94bde65ebce3b593fdcc0d1ca1fa00482f38815ed37c92a1  jdk-11.0.11+9.tar.gz
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 80e1fc1aac..6ed5085fdb 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -11,8 +11,8 @@ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
- OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
- OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk14u/archive
- else
--OPENJDK_VERSION_MAJOR = 11.0.8
--OPENJDK_VERSION_MINOR = 10
-+OPENJDK_VERSION_MAJOR = 11.0.11
-+OPENJDK_VERSION_MINOR = 9
- OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
- OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
- OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk11u/archive
+ These configurations will use AT91Bootstrap, u-boot and a linux kernel from
+ the git trees maintained by Atmel.
+diff --git a/board/microchip/sama5d2_icp/genimage.cfg b/board/microchip/sama5d2_icp/genimage.cfg
+new file mode 100644
+index 0000000000..854751713f
+--- /dev/null
++++ b/board/microchip/sama5d2_icp/genimage.cfg
+@@ -0,0 +1,31 @@
++# Image for SD card boot on Microchip SAMA5D2 ICP (Industrial Connectivity Platform)
++#
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"at91-sama5d2_icp.dtb",
++			"boot.bin",
++			"u-boot.bin"
++		}
++	}
++	size = 16M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++		offset = 1M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/configs/microchip_sama5d2_icp_mmc_defconfig b/configs/microchip_sama5d2_icp_mmc_defconfig
+new file mode 100644
+index 0000000000..f1d11a25b0
+--- /dev/null
++++ b/configs/microchip_sama5d2_icp_mmc_defconfig
+@@ -0,0 +1,32 @@
++BR2_arm=y
++BR2_cortex_a5=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++BR2_ARM_INSTRUCTIONS_THUMB2=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama5d2_icp/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.10)/linux-linux4sam-2020.10.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="sama5"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_icp"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_4SERIES=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0-rc1)/at91bootstrap-v4.0.0-rc1.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_icpsd_uboot"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2020.10)/u-boot-at91-linux4sam-2020.10.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_icp_mmc"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/configs/microchip_sama5d2_icp_mmc_dev_defconfig b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
+new file mode 100644
+index 0000000000..31c9055446
+--- /dev/null
++++ b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
+@@ -0,0 +1,75 @@
++BR2_arm=y
++BR2_cortex_a5=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++BR2_ARM_INSTRUCTIONS_THUMB2=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_PTHREAD_DEBUG=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama5d2_icp/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.10)/linux-linux4sam-2020.10.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="sama5"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_icp"
++BR2_PACKAGE_LINUX_TOOLS_IIO=y
++BR2_PACKAGE_BZIP2=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_ZIP=y
++BR2_PACKAGE_GDB=y
++BR2_PACKAGE_LMBENCH=y
++BR2_PACKAGE_STRACE=y
++BR2_PACKAGE_TREE=y
++BR2_PACKAGE_DOSFSTOOLS=y
++BR2_PACKAGE_DOSFSTOOLS_FATLABEL=y
++BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
++BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
++BR2_PACKAGE_MMC_UTILS=y
++BR2_PACKAGE_MTD=y
++BR2_PACKAGE_WILC1000_FIRMWARE=y
++BR2_PACKAGE_EVTEST=y
++BR2_PACKAGE_SETSERIAL=y
++BR2_PACKAGE_SPI_TOOLS=y
++BR2_PACKAGE_USBUTILS=y
++BR2_PACKAGE_LIBSYSFS=y
++BR2_PACKAGE_LIBDRM=y
++BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
++BR2_PACKAGE_DTC=y
++BR2_PACKAGE_DTC_PROGRAMS=y
++BR2_PACKAGE_ARGP_STANDALONE=y
++BR2_PACKAGE_BLUEZ5_UTILS=y
++BR2_PACKAGE_BRIDGE_UTILS=y
++BR2_PACKAGE_CAN_UTILS=y
++BR2_PACKAGE_ETHTOOL=y
++BR2_PACKAGE_IPERF=y
++BR2_PACKAGE_IPROUTE2=y
++BR2_PACKAGE_IPTABLES=y
++BR2_PACKAGE_IW=y
++BR2_PACKAGE_LRZSZ=y
++BR2_PACKAGE_MII_DIAG=y
++BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_WIRELESS_TOOLS=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_PACKAGE_HTOP=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_4SERIES=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0-rc1)/at91bootstrap-v4.0.0-rc1.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_icpsd_uboot"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2020.10)/u-boot-at91-linux4sam-2020.10.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_icp_mmc"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
-2.20.1
+2.25.1
