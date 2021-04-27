@@ -1,66 +1,48 @@
-From: Charles Hardin <ckhardin@gmail.com>
-Date: Mon, 26 Apr 2021 16:39:54 -0700
-Subject: [Buildroot] [PATCH 1/1] package/imx-uuc: bump version and enable
- for i.MX8 architecture
-Message-ID: <20210426233954.19401-1-charles.hardin@chargepoint.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 27 Apr 2021 07:54:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 4.0.6
+Message-ID: <20210427055402.1079630-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Charles Hardin <ckhardin@gmail.com>
+"The LXC 4.0 branch is supported until June 2025. Only bugfixes and
+securitiy issues get included into the stable bugfix releases, so it's
+always safe and recommended to keep up and run the latest bugfix
+release."
 
-The imx-uuc package was only selectable on 32-bit arm targets; this
-patch allows aarch64 targets such as i.MX8 to select the package
-and use the ufb for fastboot support against the mfgtools "uuu".
+https://discuss.linuxcontainers.org/t/lxc-4-0-6-lts-has-been-released/9926
 
-Also bumping to latest upstream commit from
-    https://github.com/NXPmicro/imx-uuc
-
-Tested on i.MX8QXP.
-
-Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/freescale-imx/imx-uuc/Config.in    | 2 +-
- package/freescale-imx/imx-uuc/imx-uuc.hash | 2 +-
- package/freescale-imx/imx-uuc/imx-uuc.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/lxc/lxc.hash | 2 +-
+ package/lxc/lxc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/imx-uuc/Config.in b/package/freescale-imx/imx-uuc/Config.in
-index 0e257bde17..6c3d4a6361 100644
---- a/package/freescale-imx/imx-uuc/Config.in
-+++ b/package/freescale-imx/imx-uuc/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_IMX_UUC
- 	bool "imx-uuc"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_arm # Only relevant for i.MX
-+	depends on BR2_arm || BR2_aarch64 # Only relevant for i.MX
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # usb_functionfs_descs_head_v2
- 	select BR2_PACKAGE_HOST_DOSFSTOOLS
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.hash b/package/freescale-imx/imx-uuc/imx-uuc.hash
-index 57a5098597..5d95463903 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.hash
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 2784e0826074335893fdad20e9a4faaedced2f206565c383043fbd169e9273a4  imx-uuc-fc48b497fe961d601b4bcced807f562090854ec9.tar.gz
-+sha256 7f4d4838d4bf489932ef4a242677db30ad8d9ffd76065e07f4ddee3e6c35db82  imx-uuc-d6afb27e55d73d7ad08cd2dd51c784d8ec9694dc.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.mk b/package/freescale-imx/imx-uuc/imx-uuc.mk
-index 2ed910cb84..4e065c19ea 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.mk
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.mk
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 4cecf6b0f7..85cdecceb2 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  af2cd616d5ab689e5d2305361c6571b5e632afd7eaab1754cca1670446a2e6a4  lxc-4.0.5.tar.gz
++sha256  9165dabc0bb6ef7f2fda2009aee90b20fbefe77ed8008347e9f06048eba1e463  lxc-4.0.6.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 576036e246..24a1f3c588 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMX_UUC_VERSION = fc48b497fe961d601b4bcced807f562090854ec9
-+IMX_UUC_VERSION = d6afb27e55d73d7ad08cd2dd51c784d8ec9694dc
- IMX_UUC_SITE = $(call github,NXPmicro,imx-uuc,$(IMX_UUC_VERSION))
- IMX_UUC_LICENSE = GPL-2.0+
- IMX_UUC_LICENSE_FILES = COPYING
+-LXC_VERSION = 4.0.5
++LXC_VERSION = 4.0.6
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
+ LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
 -- 
-2.21.1 (Apple Git-122.3)
+2.30.2
