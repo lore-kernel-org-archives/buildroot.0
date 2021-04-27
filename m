@@ -1,45 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 27 Apr 2021 20:53:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gd: fix addition of -liconv in
- gdlib.pc.in
-Message-ID: <20210427185347.158518-1-fontaine.fabrice@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 27 Apr 2021 21:45:44 +0200
+Subject: [Buildroot] [PATCH] support/download/hg: fix broken method
+Message-ID: <20210427194544.15861-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Static build of gnuplot with gd and libiconv is broken since bump to
-version 2.3.1 in commit 970b2ca3cc3f927f679c871eeadb22ec110b0ed5:
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/9.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/lib/libgd.a(gdkanji.o): in function `do_convert':
-gdkanji.c:(.text+0x148): undefined reference to `libiconv_open'
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/9.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: gdkanji.c:(.text+0x1d0): undefined reference to `libiconv'
+Commit 54d3d94b6e3846447b5796ef8587b08b537cd348 broke the 'hg' download
+method, in a similar way as it broke the 'git' download method (later fixed
+with commit b70ce5665126246bd6b6bf804c6d9eea1fc599cf), by introducing extra
+output on stdout in a case where the output is redirected.
 
-This build failure is raised because LIBS has been replaced by
-LIBS_PRIVATES in gdlib.pc.in since
-https://github.com/libgd/libgd/commit/28ecfe77c817aff8ce56422d3e4e8533a281bc76
+In the case of 'hg', the 'hg archive' step uses shell redirection rather
+than directly letting hg write the output file, since commit
+76b51f90c0e393349dd0c71d7e6cf82fbc094282.
 
-Fixes:
- - http://autobuild.buildroot.org/results/5ab5f4744adfd8d8be483204a9c7f59e34ce26c6
+As a result, the extra print added by the _hg function is prepended to the
+actual archive, causing an invalid archive.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fix by using the _plain_hg function instead. The disadvantage is that the
+command for 'hg archive' is no longer printed.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/gd/gd.mk | 2 +-
+ support/download/hg | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 97a1a143ec..2df81e6d37 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -36,7 +36,7 @@ endif
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- GD_DEPENDENCIES += libiconv
- # not strictly needed for gd, but ensures -liconv ends up in gdlib.pc
--GD_CONF_ENV += LIBS="-liconv"
-+GD_CONF_ENV += LIBS_PRIVATES="-liconv"
- endif
+diff --git a/support/download/hg b/support/download/hg
+index a7542e5c84..768a27e06f 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -45,6 +45,6 @@ _plain_hg() {
  
- ifeq ($(BR2_PACKAGE_JPEG),y)
+ _hg clone ${quiet} "${@}" --noupdate "'${uri}'" "'${basename}'"
+ 
+-_hg archive ${quiet} --repository "'${basename}'" --type tgz \
++_plain_hg archive ${quiet} --repository "'${basename}'" --type tgz \
+             --prefix "'${basename}'" --rev "'${cset}'" \
+             - >"${output}"
 -- 
-2.30.2
+2.26.3
