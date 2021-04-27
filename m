@@ -1,53 +1,88 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 27 Apr 2021 08:52:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: needs gcc >= 5
-Message-ID: <20210427065201.1162637-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 27 Apr 2021 08:58:50 +0200
+Subject: [Buildroot] [PATCH] boot: introduce at91bootstrap4
+In-Reply-To: <3dba2a91-26d5-12fa-ec05-adc6395f5e59@microchip.com>
+References: <20210423070822.1351638-1-eugen.hristev@microchip.com>
+ <20210426220343.003df308@windsurf>
+ <3dba2a91-26d5-12fa-ec05-adc6395f5e59@microchip.com>
+Message-ID: <20210427085850.5ee8f336@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-spa (i.e. plugins which can be disabled but also tools which can't be
-disabled) fails to build on gcc 4.8 since bump to version 0.3.26 in
-commit a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9:
+Hello,
 
-In file included from ../spa/include/spa/pod/builder.h:34:0,
-                 from ../spa/include/spa/param/audio/format-utils.h:34,
-                 from ../spa/plugins/audioconvert/test-audioadapter.c:36:
-../spa/include/spa/utils/hook.h:57:50: error: initializer element is not constant
- #define SPA_CALLBACKS_INIT(_funcs,_data) (struct spa_callbacks){ _funcs, _data, }
-                                                  ^
+On Tue, 27 Apr 2021 06:07:22 +0000
+<Eugen.Hristev@microchip.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/e7a36ec7166a287667572e5140685e6371a9f107
+> > Why would we need a new package for this? It still like just a new
+> > version of at91bootstrap. I just had a look a the differences between
+> > at91bootstrap3/ and at91bootstrap4/ and here are the only meaningful
+> > differences:  
+> 
+> One big reason for this is the fact that some MPUs are no longer 
+> supported. We have to keep the 3.x series available for MPUs like 9x5, 
+> 9260, etc, which are not supported in bootstrap4.
+> 
+> Bootstrap4 only supports sama5d2, sama5d3, sama5d4, sam9x60 and sama7g5.
+> For these variants only, the user could possibly use either 
+> at91bootstrap3 or at91bootstrap4.
+> But all the older boards still need bootstrap3.
+> 
+> How would you manage this ?
+> I thought the easiest way is to have two separate packages, rather than 
+> trying to obtain two pretty much different versions of bootstrap in the 
+> same recipe.
+> And buildroot does not really have the 'machine concept' like yocto 
+> project does. So you don't really know for which machine you are 
+> building a package, inside that package's recipe. And probably in 
+> buildroot you don't even want to know and you don't care.
+> 
+> So, what do you think ?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/pipewire/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Well, I think what I suggested in my previous e-mail: to have a single
+package, which allows to chose between the 3.x series and the 4.x
+series.
 
-diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
-index ff26e4e361..851312a1a1 100644
---- a/package/pipewire/Config.in
-+++ b/package/pipewire/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PIPEWIRE
- 	bool "pipewire"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
- 	depends on BR2_USE_MMU # dbus
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	select BR2_PACKAGE_DBUS
- 	help
- 	  PipeWire is a server and user space API to deal with
-@@ -39,6 +40,7 @@ comment "pipewire v4l2 support needs udev and a toolchain w/ headers >= 3.18"
- 
- endif
- 
--comment "pipewire needs a toolchain w/ threads"
-+comment "pipewire needs a toolchain w/ threads, gcc >= 5"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> > So, shouldn't we instead have a single package covering both? Perhaps
+> > with a sub-option to select "latest 3.x version" and "latest 4.x
+> > version" ?  
+> 
+> 3.x versions series will be phased out. I mean, no longer updated . And 
+> not in long term, but , very soon.
+
+No longer updated by Microchip maybe. But no longer used by Buildroot
+users, certainly not. There are plenty of people that still have AT91
+platforms around, in production, and that continue to update them.
+
+> > (Side note: I find it somewhat annoying that such vendor-provided
+> > solutions tend to drop support for older platforms... It seems that
+> > open-source communities do a better job at maintaining long-term
+> > support for older platforms. What would you say if you had to use a
+> > decade old Buildroot or Yocto to build a system for an AT91SAM9263
+> > processor ?)  
+> 
+> Well. This happens with everything. Even in open source. Some old 
+> architectures are being removed. You cannot use kernel 5.12 for 
+> computers with floppy disks anymore. Such is life... things get 
+> obsoleted. There are still buildroot and yocto available for older 
+> processors, just not the latest versions.
+
+Well, it depends on the speed at which things get phased out, and
+whether they are still used in production. Linux 5.12 still has support
+for AT91RM9200, and all ARMv5 AT91 processors, for example. And so has
+the latest U-Boot release. For your own product line, Linux, U-Boot,
+Buildroot, in their latest versions all continue to have support for
+your oldest products, and AT91Bootstrap is the first component to phase
+out support for these platforms, and ironically, it's the
+vendor-provided software component.
+
+Best regards,
+
+Thomas Petazzoni
 -- 
-2.30.2
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
