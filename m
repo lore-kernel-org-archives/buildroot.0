@@ -1,7 +1,8 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Tue, 27 Apr 2021 22:42:29 +0000
-Subject: [Buildroot] [PATCH 04/10] package/s6-rc: bump to version 0.5.2.2
-Message-ID: <Bmt4O1Mv7ZEb3BgSpWQKcRCyww9TcSOrNZddR8uats@cp4-web-037.plabs.ch>
+Date: Tue, 27 Apr 2021 22:42:35 +0000
+Subject: [Buildroot] [PATCH 05/10] package/s6-portable-utils: bump to
+ version 2.2.3.2
+Message-ID: <48rFRp4QICthMnQpoCCARdPC2KLPRCiFWL75t6KEJVg@cp3-web-012.plabs.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +15,32 @@ https://www.mail-archive.com/skaware at list.skarnet.org/msg01579.html
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
 ---
- package/s6-rc/s6-rc.hash | 4 ++--
- package/s6-rc/s6-rc.mk   | 2 +-
+ package/s6-portable-utils/s6-portable-utils.hash | 4 ++--
+ package/s6-portable-utils/s6-portable-utils.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/s6-rc/s6-rc.hash b/package/s6-rc/s6-rc.hash
-index 3648bec20a..8978d68ba6 100644
---- a/package/s6-rc/s6-rc.hash
-+++ b/package/s6-rc/s6-rc.hash
+diff --git a/package/s6-portable-utils/s6-portable-utils.hash b/package/s6-portable-utils/s6-portable-utils.hash
+index 0e594d8b02..dd9f7df4bd 100644
+--- a/package/s6-portable-utils/s6-portable-utils.hash
++++ b/package/s6-portable-utils/s6-portable-utils.hash
 @@ -1,3 +1,3 @@
  # Locally generated
--sha256 2842fa55e2bddb65573d78d2c475c4a2f2b26b9258a18b457f8a0342e2fafa0a  s6-rc-0.5.2.1.tar.gz
--sha256 4a5e44a69d649f0c37b29d7f6e5df1bb292b09898247be07f0c97814dac4b15d  COPYING
-+sha256  2a8d1cd455c05c8502b34517cfe79841aa46d08ad969076b37a15d3910617f89  s6-rc-0.5.2.2.tar.gz
-+sha256  4a5e44a69d649f0c37b29d7f6e5df1bb292b09898247be07f0c97814dac4b15d  COPYING
-diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
-index 4e0ef57d7a..f85c8ac5e4 100644
---- a/package/s6-rc/s6-rc.mk
-+++ b/package/s6-rc/s6-rc.mk
+-sha256 43e68a9abec873b337baeee92075a1c2e22cdfffd595cb91475fdcb10b6441cf  s6-portable-utils-2.2.3.1.tar.gz
+-sha256 adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
++sha256  6627a2d3ea263539e83512a36f10a587fa0dd5e899bc3612187e9e3b9faf769c  s6-portable-utils-2.2.3.2.tar.gz
++sha256  adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
+diff --git a/package/s6-portable-utils/s6-portable-utils.mk b/package/s6-portable-utils/s6-portable-utils.mk
+index 9da165b49b..b4bed5212d 100644
+--- a/package/s6-portable-utils/s6-portable-utils.mk
++++ b/package/s6-portable-utils/s6-portable-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--S6_RC_VERSION = 0.5.2.1
-+S6_RC_VERSION = 0.5.2.2
- S6_RC_SITE = http://skarnet.org/software/s6-rc
- S6_RC_LICENSE = ISC
- S6_RC_LICENSE_FILES = COPYING
+-S6_PORTABLE_UTILS_VERSION = 2.2.3.1
++S6_PORTABLE_UTILS_VERSION = 2.2.3.2
+ S6_PORTABLE_UTILS_SITE = http://skarnet.org/software/s6-portable-utils
+ S6_PORTABLE_UTILS_LICENSE = ISC
+ S6_PORTABLE_UTILS_LICENSE_FILES = COPYING
 -- 
 2.30.2
