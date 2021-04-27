@@ -1,207 +1,41 @@
-From: Eugen Hristev <eugen.hristev@microchip.com>
-Date: Tue, 27 Apr 2021 15:56:57 +0300
-Subject: [Buildroot] [PATCH v3 2/2] configs/microchip_sama5d2_icp: new
- defconfigs
-In-Reply-To: <20210427125657.1449953-1-eugen.hristev@microchip.com>
-References: <20210427125657.1449953-1-eugen.hristev@microchip.com>
-Message-ID: <20210427125657.1449953-2-eugen.hristev@microchip.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 27 Apr 2021 15:25:03 +0200
+Subject: [Buildroot] [PATCH] package/freescale-imx/imx-gpu-viv: force
+ wayland backend for all i.MX8
+In-Reply-To: <0fb11be5-801a-0125-1146-71746246038e@armadeus.com>
+References: <20210427120438.1192346-1-gary.bisson@boundarydevices.com>
+ <0fb11be5-801a-0125-1146-71746246038e@armadeus.com>
+Message-ID: <YIgQr8MhzXxMwg7Q@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the new SAMA5D2 ICP (Industrial Connectivity Board)
-with linux4sam_2020.10 components.
-Update README file with new defconfigs.
+Hi,
 
-https://www.linux4sam.org/bin/view/Linux4SAM/Sama5d2IcpMainPage
+On Tue, Apr 27, 2021 at 03:04:46PM +0200, S?bastien Szymanski wrote:
+> Hello Gary,
+> 
+> On 4/27/21 2:04 PM, Gary Bisson wrote:
+> > - As Vivante blobs only support Wayland for all i.MX 8
+> 
+> Are you sure about that ? The examples (vv_launcher, tiger and
+> cover_flow) are working fine on my i.MX8MM platform with the Framebuffer
+> output.
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
----
-Changes in v3:
-- none
-Changes in v2:
-- removed unwanted configs
-- adapted to use bootstrap3 4.x series.
+Well the thing is the package doesn't include a framebuffer backend, so
+you really use the libraries meant for Wayland.
 
- board/atmel/readme.txt                        |  2 +
- board/microchip/sama5d2_icp/genimage.cfg      | 31 ++++++++
- configs/microchip_sama5d2_icp_mmc_defconfig   | 32 ++++++++
- .../microchip_sama5d2_icp_mmc_dev_defconfig   | 75 +++++++++++++++++++
- 4 files changed, 140 insertions(+)
- create mode 100644 board/microchip/sama5d2_icp/genimage.cfg
- create mode 100644 configs/microchip_sama5d2_icp_mmc_defconfig
- create mode 100644 configs/microchip_sama5d2_icp_mmc_dev_defconfig
+> The libraries need libdrm, though. I will send a patch to fix the
+> missing dependency here.
 
-diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
-index 1f21dd15e4..a29d027214 100644
---- a/board/atmel/readme.txt
-+++ b/board/atmel/readme.txt
-@@ -23,6 +23,8 @@ This guide covers the following configurations:
-  - microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
-  - microchip_sam9x60ek_mmc_defconfig
-  - microchip_sam9x60ek_mmc_dev_defconfig
-+ - microchip_sama5d2_icp_mmc_defconfig
-+ - microchip_sama5d2_icp_mmc_dev_defconfig
- 
- These configurations will use AT91Bootstrap, u-boot and a linux kernel from
- the git trees maintained by Atmel.
-diff --git a/board/microchip/sama5d2_icp/genimage.cfg b/board/microchip/sama5d2_icp/genimage.cfg
-new file mode 100644
-index 0000000000..854751713f
---- /dev/null
-+++ b/board/microchip/sama5d2_icp/genimage.cfg
-@@ -0,0 +1,31 @@
-+# Image for SD card boot on Microchip SAMA5D2 ICP (Industrial Connectivity Platform)
-+#
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"at91-sama5d2_icp.dtb",
-+			"boot.bin",
-+			"u-boot.bin"
-+		}
-+	}
-+	size = 16M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+		offset = 1M
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/configs/microchip_sama5d2_icp_mmc_defconfig b/configs/microchip_sama5d2_icp_mmc_defconfig
-new file mode 100644
-index 0000000000..f1d11a25b0
---- /dev/null
-+++ b/configs/microchip_sama5d2_icp_mmc_defconfig
-@@ -0,0 +1,32 @@
-+BR2_arm=y
-+BR2_cortex_a5=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_INSTRUCTIONS_THUMB2=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama5d2_icp/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.10)/linux-linux4sam-2020.10.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_icp"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_4SERIES=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0-rc1)/at91bootstrap-v4.0.0-rc1.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_icpsd_uboot"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2020.10)/u-boot-at91-linux4sam-2020.10.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_icp_mmc"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/microchip_sama5d2_icp_mmc_dev_defconfig b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-new file mode 100644
-index 0000000000..31c9055446
---- /dev/null
-+++ b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-@@ -0,0 +1,75 @@
-+BR2_arm=y
-+BR2_cortex_a5=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_INSTRUCTIONS_THUMB2=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_PTHREAD_DEBUG=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama5d2_icp/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.10)/linux-linux4sam-2020.10.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_icp"
-+BR2_PACKAGE_LINUX_TOOLS_IIO=y
-+BR2_PACKAGE_BZIP2=y
-+BR2_PACKAGE_XZ=y
-+BR2_PACKAGE_ZIP=y
-+BR2_PACKAGE_GDB=y
-+BR2_PACKAGE_LMBENCH=y
-+BR2_PACKAGE_STRACE=y
-+BR2_PACKAGE_TREE=y
-+BR2_PACKAGE_DOSFSTOOLS=y
-+BR2_PACKAGE_DOSFSTOOLS_FATLABEL=y
-+BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
-+BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
-+BR2_PACKAGE_MMC_UTILS=y
-+BR2_PACKAGE_MTD=y
-+BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_EVTEST=y
-+BR2_PACKAGE_SETSERIAL=y
-+BR2_PACKAGE_SPI_TOOLS=y
-+BR2_PACKAGE_USBUTILS=y
-+BR2_PACKAGE_LIBSYSFS=y
-+BR2_PACKAGE_LIBDRM=y
-+BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
-+BR2_PACKAGE_DTC=y
-+BR2_PACKAGE_DTC_PROGRAMS=y
-+BR2_PACKAGE_ARGP_STANDALONE=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
-+BR2_PACKAGE_BRIDGE_UTILS=y
-+BR2_PACKAGE_CAN_UTILS=y
-+BR2_PACKAGE_ETHTOOL=y
-+BR2_PACKAGE_IPERF=y
-+BR2_PACKAGE_IPROUTE2=y
-+BR2_PACKAGE_IPTABLES=y
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_LRZSZ=y
-+BR2_PACKAGE_MII_DIAG=y
-+BR2_PACKAGE_OPENSSH=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_HTOP=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_4SERIES=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0-rc1)/at91bootstrap-v4.0.0-rc1.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_icpsd_uboot"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2020.10)/u-boot-at91-linux4sam-2020.10.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_icp_mmc"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
--- 
-2.25.1
+Yes, the Wayland libraries can be used with with libgbm without a
+Wayland compositor (what Qt does), but the libraries are still for
+"Wayland" backend.
+
+Please review the ARM32 package and compare with ARM64, you'll see the
+difference.
+
+Regards,
+Gary
