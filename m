@@ -1,34 +1,45 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Tue, 27 Apr 2021 20:19:32 +0200
-Subject: [Buildroot] [PATCH] package/fmt: get rid of extra space
-Message-ID: <20210427181932.5284-1-b.bilas@grinn-global.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 27 Apr 2021 20:53:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gd: fix addition of -liconv in
+ gdlib.pc.in
+Message-ID: <20210427185347.158518-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 32c10f256bbc3dd09a72d45107682afb4448f07b
-introduced extra space so let's remove that in
-order to be consistent with other variables.
+Static build of gnuplot with gd and libiconv is broken since bump to
+version 2.3.1 in commit 970b2ca3cc3f927f679c871eeadb22ec110b0ed5:
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/9.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/lib/libgd.a(gdkanji.o): in function `do_convert':
+gdkanji.c:(.text+0x148): undefined reference to `libiconv_open'
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/9.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: gdkanji.c:(.text+0x1d0): undefined reference to `libiconv'
+
+This build failure is raised because LIBS has been replaced by
+LIBS_PRIVATES in gdlib.pc.in since
+https://github.com/libgd/libgd/commit/28ecfe77c817aff8ce56422d3e4e8533a281bc76
+
+Fixes:
+ - http://autobuild.buildroot.org/results/5ab5f4744adfd8d8be483204a9c7f59e34ce26c6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/fmt/fmt.mk | 2 +-
+ package/gd/gd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index 7ea7b9d69c..332957982f 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -9,7 +9,7 @@ FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
- FMT_LICENSE_FILES = LICENSE.rst
--FMT_CPE_ID_VENDOR  = fmt
-+FMT_CPE_ID_VENDOR = fmt
- FMT_INSTALL_STAGING = YES
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index 97a1a143ec..2df81e6d37 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -36,7 +36,7 @@ endif
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ GD_DEPENDENCIES += libiconv
+ # not strictly needed for gd, but ensures -liconv ends up in gdlib.pc
+-GD_CONF_ENV += LIBS="-liconv"
++GD_CONF_ENV += LIBS_PRIVATES="-liconv"
+ endif
  
- FMT_CONF_OPTS = \
+ ifeq ($(BR2_PACKAGE_JPEG),y)
 -- 
-2.31.1
+2.30.2
