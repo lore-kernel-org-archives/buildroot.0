@@ -1,126 +1,85 @@
-From: Eugen Hristev <eugen.hristev@microchip.com>
-Date: Tue, 27 Apr 2021 15:56:56 +0300
-Subject: [Buildroot] [PATCH v3 1/2] boot/at91bootstrap3: add support for
- at91bootstrap 4.x series
-Message-ID: <20210427125657.1449953-1-eugen.hristev@microchip.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Apr 2021 14:59:02 +0200
+Subject: [Buildroot] [PATCH] package/openjdk{,
+ -bin}: security bump to version 11.0.11_9
+Message-ID: <20210427125903.31573-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce support for the next generation of at91bootstrap,
-at91bootstrap 4.x series.
+Fixes the following security issues:
 
-AT91Bootstrap 4.x only supports devices: sam9x60, sama5d2, sama5d3,
-sama5d4, sama7g5.
+CVE-2020-14779, CVE-2020-14781, CVE-2020-14782, CVE-2020-14792,
+CVE-2020-14796, CVE-2020-14797, CVE-2020-14798, CVE-2020-14803,
+CVE-2021-2161, CVE-2021-2163
 
-User can select 4.x series as a bool, and if so, the latest 4.x
-version is automatically selected.
-If the user deselects this option, only 3.x latest version can be
-picked.
+For details. see the advisories:
+https://openjdk.java.net/groups/vulnerability/advisories/2020-10-20
+https://openjdk.java.net/groups/vulnerability/advisories/2021-01-19
+https://openjdk.java.net/groups/vulnerability/advisories/2021-04-20
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes in v3:
-- s/BR2_TARGET_AT91BOOTSTRAP4_NEEDS_PYTHON3/BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3
-missed that.
+ package/openjdk-bin/openjdk-bin.hash | 2 +-
+ package/openjdk-bin/openjdk-bin.mk   | 4 ++--
+ package/openjdk/openjdk.hash         | 2 +-
+ package/openjdk/openjdk.mk           | 4 ++--
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-Changes in v2:
-- adapt both 3.x and 4.x series in the same package
-
- boot/at91bootstrap3/Config.in         | 20 ++++++++++++++++++--
- boot/at91bootstrap3/at91bootstrap3.mk | 12 +++++++++++-
- 2 files changed, 29 insertions(+), 3 deletions(-)
-
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index 25ab30489f..18f027639c 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -14,13 +14,23 @@ config BR2_TARGET_AT91BOOTSTRAP3
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 4828048029..a08aa16d47 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -2,7 +2,7 @@
+ sha256  7d5ee7e06909b8a99c0d029f512f67b092597aa5b0e78c109bd59405bbfa74fe  OpenJDK14U-jdk_x64_linux_hotspot_14.0.2_12.tar.gz
  
- if BR2_TARGET_AT91BOOTSTRAP3
+ # From https://github.com/AdoptOpenJDK/openjdk11-binaries/releases
+-sha256  6e4cead158037cb7747ca47416474d4f408c9126be5b96f9befd532e0a762b47  OpenJDK11U-jdk_x64_linux_hotspot_11.0.8_10.tar.gz
++sha256  e99b98f851541202ab64401594901e583b764e368814320eba442095251e78cb  OpenJDK11U-jdk_x64_linux_hotspot_11.0.11_9.tar.gz
  
-+config BR2_TARGET_AT91BOOTSTRAP3_4SERIES
-+	bool "AT91Bootstrap3 4.x series"
-+	help
-+	  AT91Bootstrap3 4.x series version
-+
- choice
- 
- 	prompt "AT91 Bootstrap 3 version"
- 
--config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
-+	depends on !BR2_TARGET_AT91BOOTSTRAP3_4SERIES
- 	bool "3.9.3"
- 
-+config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_4X
-+	depends on BR2_TARGET_AT91BOOTSTRAP3_4SERIES
-+	bool "4.0.0-rc1"
-+
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	bool "Custom Git repository"
- 	help
-@@ -51,7 +61,8 @@ endif
- 
- config BR2_TARGET_AT91BOOTSTRAP3_VERSION
- 	string
--	default "v3.9.3" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	default "v3.9.3" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
-+	default "v4.0.0-rc1" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_4X
- 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
- 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
-@@ -96,4 +107,9 @@ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE
- 	help
- 	  Path to the at91bootstrap3 configuration file
- 
-+config BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3
-+	bool "AT91Bootstrap3 requires host Python 3.x for NAND/PMECC scripts"
-+	help
-+	  Host Python 3.x needs to be installed to use the NAND/PMECC python scripts
-+
- endif # BR2_TARGET_AT91BOOTSTRAP3
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index a942afcdc9..7f11eb1dbb 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -6,6 +6,10 @@
- 
- AT91BOOTSTRAP3_VERSION = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_VERSION))
- 
-+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3),y)
-+AT91BOOTSTRAP3_DEPENDENCIES += host-python3
-+endif
-+
- ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL),y)
- AT91BOOTSTRAP3_TARBALL = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION))
- AT91BOOTSTRAP3_SITE = $(patsubst %/,%,$(dir $(AT91BOOTSTRAP3_TARBALL)))
-@@ -19,7 +23,7 @@ else
- AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
- endif
- 
--AT91BOOTSTRAP3_LICENSE = Atmel License
-+AT91BOOTSTRAP3_LICENSE = Microchip License
- ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION),y)
- AT91BOOTSTRAP3_LICENSE_FILES = main.c
- endif
-@@ -47,9 +51,15 @@ define AT91BOOTSTRAP3_BUILD_CMDS
- 	$(MAKE) $(AT91BOOTSTRAP3_MAKE_OPTS) -C $(@D)
- endef
- 
-+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_4SERIES),y)
-+define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
-+	cp $(@D)/build/binaries/*.bin $(BINARIES_DIR)
-+endef
-+else
- define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
- 	cp $(@D)/binaries/*.bin $(BINARIES_DIR)
- endef
-+endif
- 
- ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
- AT91BOOTSTRAP3_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG))_defconfig
+ # Locally calculated
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index dd5b87fd9e..61e7ecac4c 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -11,8 +11,8 @@ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_
+ HOST_OPENJDK_BIN_SOURCE = OpenJDK14U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+ HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ else
+-HOST_OPENJDK_BIN_VERSION_MAJOR = 11.0.8
+-HOST_OPENJDK_BIN_VERSION_MINOR = 10
++HOST_OPENJDK_BIN_VERSION_MAJOR = 11.0.11
++HOST_OPENJDK_BIN_VERSION_MINOR = 9
+ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ HOST_OPENJDK_BIN_SOURCE = OpenJDK11U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+ HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index 6acfa22435..05a0c12c45 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+ sha256  dfb3607f1b675458f29a185a40f1dbbf896439cf33b3aa0f3d89df297e604935  jdk-14.0.2+12.tar.gz
+-sha256  7fc124b5e20428cd5df42d78b001abc663558b0881e66a5def0892b98265b6e9  jdk-11.0.8+10.tar.gz
++sha256  c8b9d92028f6e46d94bde65ebce3b593fdcc0d1ca1fa00482f38815ed37c92a1  jdk-11.0.11+9.tar.gz
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index 80e1fc1aac..6ed5085fdb 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -11,8 +11,8 @@ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
+ OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk14u/archive
+ else
+-OPENJDK_VERSION_MAJOR = 11.0.8
+-OPENJDK_VERSION_MINOR = 10
++OPENJDK_VERSION_MAJOR = 11.0.11
++OPENJDK_VERSION_MINOR = 9
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
+ OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk11u/archive
 -- 
-2.25.1
+2.20.1
