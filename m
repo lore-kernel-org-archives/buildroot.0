@@ -1,42 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Apr 2021 13:44:09 +0200
+From: Mikhail B. WproxyM <w.proxy.m@gmail.com>
+Date: Wed, 28 Apr 2021 16:23:21 +0300
 Subject: [Buildroot] boot/grub2: grub-core-build-fixes-for-i386
  (grub-2.04 + binutils-2.35.2 + pseudo-op .code64)
-In-Reply-To: <CANTg=Qig12wrSU2WUBPmXFkjSpmmTo1gfEn1x6rgDR8vTM-82g@mail.gmail.com>
+In-Reply-To: <20210428134409.24999483@windsurf>
 References: <CANTg=Qj3vMern005jEMmUs2dWvi0oJ9Y3aoS4ocsrD91KoXW5Q@mail.gmail.com>
  <20210426225630.113ee3d7@windsurf>
  <CANTg=Qig12wrSU2WUBPmXFkjSpmmTo1gfEn1x6rgDR8vTM-82g@mail.gmail.com>
-Message-ID: <20210428134409.24999483@windsurf>
+ <20210428134409.24999483@windsurf>
+Message-ID: <CANTg=QhD4HgGRwiBf7YgSojeyV3ZgFQbiKVeih5zXYUbFC-ryw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mikhail,
+>What about having this patch submitted to upstream Grub ?
 
-On Wed, 28 Apr 2021 11:07:13 +0300
-"Mikhail B. WproxyM" <w.proxy.m@gmail.com> wrote:
+Idea is nice, but I am not sure that it will work.
+The patch was already ignored some time before by grub2 developers,
+because it is not included in upstream. I will try.
 
-> I have the build error, when building *from i686* to i686.
-> 
-> You do not have the build error, when building *from x86-64* to i686.
-> Looks like it is the reason.
-> 
-> Grub2 developers do not run build tests under i386/i686. Even you do
-> not run build tests under i686.
+--
+Best regards, Mikhail B.
 
-I was worried the issue would be related from the difference of the
-build machine architecture. In theory it shouldn't matter, as the file
-being built is built with the cross-compiler, but it seems like there
-is an actual difference.
-
-What about having this patch submitted to upstream Grub ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+??, 28 ???. 2021 ?. ? 14:44, Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+>
+> Hello Mikhail,
+>
+> On Wed, 28 Apr 2021 11:07:13 +0300
+> "Mikhail B. WproxyM" <w.proxy.m@gmail.com> wrote:
+>
+> > I have the build error, when building *from i686* to i686.
+> >
+> > You do not have the build error, when building *from x86-64* to i686.
+> > Looks like it is the reason.
+> >
+> > Grub2 developers do not run build tests under i386/i686. Even you do
+> > not run build tests under i686.
+>
+> I was worried the issue would be related from the difference of the
+> build machine architecture. In theory it shouldn't matter, as the file
+> being built is built with the cross-compiler, but it seems like there
+> is an actual difference.
+>
+> What about having this patch submitted to upstream Grub ?
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
