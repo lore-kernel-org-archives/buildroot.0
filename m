@@ -1,34 +1,44 @@
-From: Anton Leontiev <scileont@gmail.com>
-Date: Wed, 28 Apr 2021 07:39:10 +0300
-Subject: [Buildroot] [PATCH] docs/manual: document KBUILD_VERBOSE
- environment variable
-In-Reply-To: <20210427195118.GA2137340@scaer>
-References: <20210419160346.6393-1-scileont@gmail.com>
- <20210427195118.GA2137340@scaer>
-Message-ID: <CAPbbKZbyv=myTw1huROwV9MnGB4gSuKuq5NBS6tv4M+oT09oJQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 28 Apr 2021 07:48:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-nextpvr: bump version to
+ 8.2.2-Matrix
+Message-ID: <20210428054850.29497-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann E. MORIN <yann.morin.1998@free.fr>:
+Changelog:
+https://github.com/kodi-pvr/pvr.nextpvr/blob/Matrix/pvr.nextpvr/changelog.txt
 
-> The naming of the KBUILD_VERBOSE variable is just an implementation
-> detail. That it has a similar purpose as a variable of the same name in
-> Kbuild (the linux kernel buildsystem) is just happenstance.
->
-> Buildroot is not using Kbuild, nor is it even remotely based on Kbuild.
->
-> After discussing among maintainers, we decided that we did not want to
-> officially expose that variable.
->
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Then maybe it's better to rename this variable into something like
-BR2_VERBOSE?
-
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+index f8d9e6c853..1171c81bb2 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ebe2b1f96b49c08c5960a6f75da6cb3cfc0cc30d6fafe43b77d2f2249915b752  kodi-pvr-nextpvr-8.2.1-Matrix.tar.gz
++sha256  67d292877da7a017d2915ec4921a0ac7beb378411c08087f8885dd32a42eefdf  kodi-pvr-nextpvr-8.2.2-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+index bed6097c8a..2cb493fa62 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_NEXTPVR_VERSION = 8.2.1-Matrix
++KODI_PVR_NEXTPVR_VERSION = 8.2.2-Matrix
+ KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
+ KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
+ KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
 -- 
-Anton Leontiev
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210428/4144b0bc/attachment.html>
+2.29.2
