@@ -1,34 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Apr 2021 23:45:04 +0200
-Subject: [Buildroot] [PATCH 2/3] package/mkpaswd: define extract step to
+Date: Wed, 28 Apr 2021 23:44:27 +0200
+Subject: [Buildroot] [git commit] package/makedevs: define extract step to
  allow patching
-In-Reply-To: <20210426214628.20941-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 26 Apr 2021 23:46:27 +0200")
-References: <20210426214628.20941-1-peter@korsgaard.com>
- <20210426214628.20941-2-peter@korsgaard.com>
-Message-ID: <87o8dy9j8f.fsf@dell.be.48ers.dk>
+Message-ID: <20210428211800.251BF861B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c3355e31d2c70b19386ae9ed535a4bca68e669f6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > As recently discussed on the list:
- > http://lists.busybox.net/pipermail/buildroot/2021-April/308373.html
+As recently discussed on the list:
+http://lists.busybox.net/pipermail/buildroot/2021-April/308373.html
 
- > Packages like mkpasswd where the source code is included in the Buildroot
- > tree, currently doesn't use an extract step (which also skips the patch
- > step), so they cannot be patched by a patch in BR2_GLOBAL_PATCH_DIR (or the
- > pkgdir), which is a bit confusing.
+Packages like makedevs where the source code is included in the Buildroot
+tree, currently doesn't use an extract step (which also skips the patch
+step), so they cannot be patched by a patch in BR2_GLOBAL_PATCH_DIR (or the
+pkgdir), which is a bit confusing.
 
- > As a fix, add a simple extract step that copies the source files to the
- > build directory, so the patch step gets run as well.
+As a fix, add a simple extract step that copies the source file to the build
+directory, so the patch step gets run as well.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/makedevs/makedevs.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/makedevs/makedevs.mk b/package/makedevs/makedevs.mk
+index 36837a191e..9b0f44610c 100644
+--- a/package/makedevs/makedevs.mk
++++ b/package/makedevs/makedevs.mk
+@@ -15,8 +15,12 @@ HOST_MAKEDEVS_CFLAGS += -DEXTENDED_ATTRIBUTES
+ HOST_MAKEDEVS_LDFLAGS += -lcap
+ endif
+ 
++define HOST_MAKEDEVS_EXTRACT_CMDS
++	cp $(HOST_MAKEDEVS_PKGDIR)/makedevs.c $(@D)
++endef
++
+ define HOST_MAKEDEVS_BUILD_CMDS
+-	$(HOSTCC) $(HOST_MAKEDEVS_CFLAGS) package/makedevs/makedevs.c \
++	$(HOSTCC) $(HOST_MAKEDEVS_CFLAGS) $(@D)/makedevs.c \
+ 		-o $(@D)/makedevs $(HOST_MAKEDEVS_LDFLAGS)
+ endef
+ 
