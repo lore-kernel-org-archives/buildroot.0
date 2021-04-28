@@ -1,74 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Apr 2021 23:38:17 +0200
-Subject: [Buildroot] [git commit] package/python-typepy: bump to version
- 1.1.5
-Message-ID: <20210428211428.8BB2081206@busybox.osuosl.org>
+Date: Wed, 28 Apr 2021 23:40:21 +0200
+Subject: [Buildroot] [git commit] package/moarvm: bump to version 2021.04
+Message-ID: <20210428211428.9DDDF7FCBD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9335fe2708310f3051d89ecf27a523c758f7561
+commit: https://git.buildroot.net/buildroot/commit/?id=94a4dbceaaddf9e7b6cb2cb757b189401a2a616c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- python-dateutil and python-pytz are optional since version 0.0.20 and
-  https://github.com/thombashi/typepy/commit/a54dc97598d9d69e5f6092cf918d7889b9a31f61
-- python 2 and python-six dependency have been dropped in version 1.0.0 and
-  https://github.com/thombashi/typepy/commit/764812d01d831d149b19a871a695ae3a9e39485b
-- Update indentation in hash file (two spaces)
+zstd is a new dependency (since 2021.03)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-typepy/Config.in          | 5 +----
- package/python-typepy/python-typepy.hash | 8 ++++----
- package/python-typepy/python-typepy.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 10 deletions(-)
+ package/moarvm/Config.in   | 1 +
+ package/moarvm/moarvm.hash | 2 +-
+ package/moarvm/moarvm.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-typepy/Config.in b/package/python-typepy/Config.in
-index 0d58efb341..fd3b983186 100644
---- a/package/python-typepy/Config.in
-+++ b/package/python-typepy/Config.in
-@@ -1,10 +1,7 @@
- config BR2_PACKAGE_PYTHON_TYPEPY
- 	bool "python-typepy"
--	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder
--	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
-+	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
--	select BR2_PACKAGE_PYTHON_PYTZ # runtime
--	select BR2_PACKAGE_PYTHON_SIX # runtime
+diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
+index c370a0f229..acef8f5d61 100644
+--- a/package/moarvm/Config.in
++++ b/package/moarvm/Config.in
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_MOARVM
+ 	# See: https://github.com/MoarVM/MoarVM/issues/222
+ 	# dyncall does not work also on powerpc64 and powerpc64le
+ 	select BR2_PACKAGE_LIBFFI if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_powerpc64 || BR2_powerpc64le
++	select BR2_PACKAGE_ZSTD
  	help
- 	  A Python library for variable type
- 	  checker/validator/converter at a run time.
-diff --git a/package/python-typepy/python-typepy.hash b/package/python-typepy/python-typepy.hash
-index 03f7aef2e5..e4d84e9bfc 100644
---- a/package/python-typepy/python-typepy.hash
-+++ b/package/python-typepy/python-typepy.hash
-@@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/typepy/json
--md5	b9abd4d661dabe512e95ca69ddb65d55  typepy-0.0.20.tar.gz
--# Locally computed
--sha256	a1a5b9438670d4a5d9f882b7499ea85d06dc384577bb7636cb29d903288bca8c  typepy-0.0.20.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/typepy/json
-+md5  cc9ceef1f04a8ff4b979dc23b96f2e80  typepy-1.1.5.tar.gz
-+sha256  1bbe790bb8d1b43b4541b235678974d5aee2357e1948cdf17cb4c14cbe4a2a82  typepy-1.1.5.tar.gz
-+# Locally computed sha256 checksums
- sha256  bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
-diff --git a/package/python-typepy/python-typepy.mk b/package/python-typepy/python-typepy.mk
-index 33d8091998..6d8433e136 100644
---- a/package/python-typepy/python-typepy.mk
-+++ b/package/python-typepy/python-typepy.mk
-@@ -4,9 +4,9 @@
+ 	  Short for "Metamodel On A Runtime", MoarVM is a virtual
+ 	  machine built especially for Rakudo Perl 6 and the NQP
+diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
+index abe96c3d4b..5464c4e120 100644
+--- a/package/moarvm/moarvm.hash
++++ b/package/moarvm/moarvm.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  08914f1c464151ebc678cf0d360c9e479a036178fa7c9ddfd34aa4d556d03ea2  MoarVM-2020.12.tar.gz
++sha256  e094728536da421dc9a3e8651160ab6a5e8d0eafa834e8953feecf33285a11e7  MoarVM-2021.04.tar.gz
+ sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index 1f41404415..b6b9b69084 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
+@@ -4,13 +4,13 @@
  #
  ################################################################################
  
--PYTHON_TYPEPY_VERSION = 0.0.20
-+PYTHON_TYPEPY_VERSION = 1.1.5
- PYTHON_TYPEPY_SOURCE = typepy-$(PYTHON_TYPEPY_VERSION).tar.gz
--PYTHON_TYPEPY_SITE = https://pypi.python.org/packages/88/98/c79a19ae571d713fa0b10bc7e0fe611e53c542720b5a9dd2691ca15b3dd8
-+PYTHON_TYPEPY_SITE = https://files.pythonhosted.org/packages/08/c8/ebfa4381563f1946a7cd2b03fab14df641c3a9acf8e6ca5f5787dd1f735a
- PYTHON_TYPEPY_SETUP_TYPE = setuptools
- PYTHON_TYPEPY_LICENSE = MIT
- PYTHON_TYPEPY_LICENSE_FILES = LICENSE
+-MOARVM_VERSION = 2020.12
++MOARVM_VERSION = 2021.04
+ MOARVM_SITE = http://moarvm.com/releases
+ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
+ MOARVM_LICENSE_FILES = Artistic2.txt
+ MOARVM_INSTALL_STAGING = YES
+-MOARVM_DEPENDENCIES = host-pkgconf libuv libtommath libatomic_ops
++MOARVM_DEPENDENCIES = host-pkgconf libuv libtommath libatomic_ops zstd
+ 
+ MOARVM_CONF_OPTS = \
+ 	--build=$(GNU_HOST_NAME) \
