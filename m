@@ -1,36 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Apr 2021 23:40:44 +0200
-Subject: [Buildroot] [git commit] package/fmt: get rid of extra space
-Message-ID: <20210428211428.AE5A881206@busybox.osuosl.org>
+Date: Wed, 28 Apr 2021 23:38:17 +0200
+Subject: [Buildroot] [git commit] package/python-typepy: bump to version
+ 1.1.5
+Message-ID: <20210428211428.8BB2081206@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64dfbb0795123f6835d803c4804b0a2453ab396e
+commit: https://git.buildroot.net/buildroot/commit/?id=f9335fe2708310f3051d89ecf27a523c758f7561
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 32c10f256bbc3dd09a72d45107682afb4448f07b
-introduced extra space so let's remove that in
-order to be consistent with other variables.
+- python-dateutil and python-pytz are optional since version 0.0.20 and
+  https://github.com/thombashi/typepy/commit/a54dc97598d9d69e5f6092cf918d7889b9a31f61
+- python 2 and python-six dependency have been dropped in version 1.0.0 and
+  https://github.com/thombashi/typepy/commit/764812d01d831d149b19a871a695ae3a9e39485b
+- Update indentation in hash file (two spaces)
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fmt/fmt.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-typepy/Config.in          | 5 +----
+ package/python-typepy/python-typepy.hash | 8 ++++----
+ package/python-typepy/python-typepy.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index 7ea7b9d69c..332957982f 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -9,7 +9,7 @@ FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
- FMT_LICENSE_FILES = LICENSE.rst
--FMT_CPE_ID_VENDOR  = fmt
-+FMT_CPE_ID_VENDOR = fmt
- FMT_INSTALL_STAGING = YES
+diff --git a/package/python-typepy/Config.in b/package/python-typepy/Config.in
+index 0d58efb341..fd3b983186 100644
+--- a/package/python-typepy/Config.in
++++ b/package/python-typepy/Config.in
+@@ -1,10 +1,7 @@
+ config BR2_PACKAGE_PYTHON_TYPEPY
+ 	bool "python-typepy"
+-	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder
+-	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
++	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
+-	select BR2_PACKAGE_PYTHON_PYTZ # runtime
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+ 	  A Python library for variable type
+ 	  checker/validator/converter at a run time.
+diff --git a/package/python-typepy/python-typepy.hash b/package/python-typepy/python-typepy.hash
+index 03f7aef2e5..e4d84e9bfc 100644
+--- a/package/python-typepy/python-typepy.hash
++++ b/package/python-typepy/python-typepy.hash
+@@ -1,5 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/typepy/json
+-md5	b9abd4d661dabe512e95ca69ddb65d55  typepy-0.0.20.tar.gz
+-# Locally computed
+-sha256	a1a5b9438670d4a5d9f882b7499ea85d06dc384577bb7636cb29d903288bca8c  typepy-0.0.20.tar.gz
++# md5, sha256 from https://pypi.org/pypi/typepy/json
++md5  cc9ceef1f04a8ff4b979dc23b96f2e80  typepy-1.1.5.tar.gz
++sha256  1bbe790bb8d1b43b4541b235678974d5aee2357e1948cdf17cb4c14cbe4a2a82  typepy-1.1.5.tar.gz
++# Locally computed sha256 checksums
+ sha256  bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
+diff --git a/package/python-typepy/python-typepy.mk b/package/python-typepy/python-typepy.mk
+index 33d8091998..6d8433e136 100644
+--- a/package/python-typepy/python-typepy.mk
++++ b/package/python-typepy/python-typepy.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- FMT_CONF_OPTS = \
+-PYTHON_TYPEPY_VERSION = 0.0.20
++PYTHON_TYPEPY_VERSION = 1.1.5
+ PYTHON_TYPEPY_SOURCE = typepy-$(PYTHON_TYPEPY_VERSION).tar.gz
+-PYTHON_TYPEPY_SITE = https://pypi.python.org/packages/88/98/c79a19ae571d713fa0b10bc7e0fe611e53c542720b5a9dd2691ca15b3dd8
++PYTHON_TYPEPY_SITE = https://files.pythonhosted.org/packages/08/c8/ebfa4381563f1946a7cd2b03fab14df641c3a9acf8e6ca5f5787dd1f735a
+ PYTHON_TYPEPY_SETUP_TYPE = setuptools
+ PYTHON_TYPEPY_LICENSE = MIT
+ PYTHON_TYPEPY_LICENSE_FILES = LICENSE
