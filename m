@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Apr 2021 12:11:51 +0200
-Subject: [Buildroot] [git commit] package/wpa_supplicant: add upstream patch
- to fix CVE-2021-30004
-Message-ID: <20210428094628.69E877FA7F@busybox.osuosl.org>
+Date: Wed, 28 Apr 2021 12:11:43 +0200
+Subject: [Buildroot] [git commit] package/hostapd: add upstream patch to fix
+ CVE-2021-30004
+Message-ID: <20210428094628.5819681594@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8fbe67b9b165c3bd6cad98b8eed10dade3c4e9d
+commit: https://git.buildroot.net/buildroot/commit/?id=d65586f45a22ad999b6d14d6fdfbd6e6ddbf70b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes the following security issue for the internal TLS backend:
@@ -21,14 +21,14 @@ Fixes the following security issue for the internal TLS backend:
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  ...date-DigestAlgorithmIdentifier-parameters.patch | 116 +++++++++++++++++++++
- package/wpa_supplicant/wpa_supplicant.mk           |   5 +-
+ package/hostapd/hostapd.mk                         |   5 +-
  2 files changed, 119 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpa_supplicant/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch b/package/wpa_supplicant/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
+diff --git a/package/hostapd/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch b/package/hostapd/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
 new file mode 100644
 index 0000000000..5dcfed9406
 --- /dev/null
-+++ b/package/wpa_supplicant/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
++++ b/package/hostapd/0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
 @@ -0,0 +1,116 @@
 +From a0541334a6394f8237a4393b7372693cd7e96f15 Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <j@w1.fi>
@@ -146,26 +146,26 @@ index 0000000000..5dcfed9406
 +-- 
 +2.20.1
 +
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index f59832645f..e9078b9f89 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -25,6 +25,9 @@ WPA_SUPPLICANT_IGNORE_CVES += CVE-2019-16275
- # 0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
- WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-27803
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 2995545d18..8eff92eb1e 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -23,6 +23,9 @@ HOSTAPD_IGNORE_CVES += CVE-2019-16275
+ # 0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch
+ HOSTAPD_IGNORE_CVES += CVE-2020-12695
  
 +# 0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
-+WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-30004
++HOSTAPD_IGNORE_CVES += CVE-2021-30004
 +
- # install the wpa_client library
- WPA_SUPPLICANT_INSTALL_STAGING = YES
+ HOSTAPD_CPE_ID_VENDOR = w1.fi
+ HOSTAPD_CONFIG_SET =
  
-@@ -132,8 +135,6 @@ ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf libopenssl
- WPA_SUPPLICANT_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
+@@ -38,8 +41,6 @@ ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+ HOSTAPD_DEPENDENCIES += host-pkgconf libopenssl
+ HOSTAPD_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
 -# Issue only affects the "internal" TLS implementation
--WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-30004
+-HOSTAPD_IGNORE_CVES += CVE-2021-30004
  else
- WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
- WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+ HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
+ HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
