@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Apr 2021 23:44:59 +0200
-Subject: [Buildroot] [PATCH 3/3] package/mkpimage: define extract step
- to allow patching
-In-Reply-To: <20210426214628.20941-3-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 26 Apr 2021 23:46:28 +0200")
+Date: Wed, 28 Apr 2021 23:45:04 +0200
+Subject: [Buildroot] [PATCH 2/3] package/mkpaswd: define extract step to
+ allow patching
+In-Reply-To: <20210426214628.20941-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 26 Apr 2021 23:46:27 +0200")
 References: <20210426214628.20941-1-peter@korsgaard.com>
- <20210426214628.20941-3-peter@korsgaard.com>
-Message-ID: <87sg3a9j8k.fsf@dell.be.48ers.dk>
+ <20210426214628.20941-2-peter@korsgaard.com>
+Message-ID: <87o8dy9j8f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,13 +18,13 @@ To: buildroot@busybox.net
  > As recently discussed on the list:
  > http://lists.busybox.net/pipermail/buildroot/2021-April/308373.html
 
- > Packages like mkpimage where the source code is included in the Buildroot
+ > Packages like mkpasswd where the source code is included in the Buildroot
  > tree, currently doesn't use an extract step (which also skips the patch
  > step), so they cannot be patched by a patch in BR2_GLOBAL_PATCH_DIR (or the
  > pkgdir), which is a bit confusing.
 
- > As a fix, add a simple extract step that copies the source file to the build
- > directory, so the patch step gets run as well.
+ > As a fix, add a simple extract step that copies the source files to the
+ > build directory, so the patch step gets run as well.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
