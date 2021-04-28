@@ -1,42 +1,39 @@
-From: Dick Olsson <hi@senzilla.io>
-Date: Tue, 27 Apr 2021 22:43:09 +0000
-Subject: [Buildroot] [PATCH 10/10] package/mdevd: bump to version 0.1.4.0
-Message-ID: <MxHmgmtJweVEL6QOHCJPRrIxAorNJXO0jYWAXYqk@cp4-web-040.plabs.ch>
+From: Charles Hardin <ckhardin@gmail.com>
+Date: Tue, 27 Apr 2021 20:40:36 -0700
+Subject: [Buildroot] [PATCH 1/1] package/imx-seco: use the c0 revision for
+ the imx8qxp ahab image
+Message-ID: <20210428034036.15461-1-charles.hardin@chargepoint.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://www.mail-archive.com/skaware at list.skarnet.org/msg01579.html
+From: Charles Hardin <ckhardin@gmail.com>
 
-Signed-off-by: Dick Olsson <hi@senzilla.io>
+The silicon revision for the imx8 is C0 and this is the release
+candidate for the new update images. It also seems to work on
+some B0 early silicon in addition, so change the ahab container
+to use mx8qxc0-ahab-container.img
+
+Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+Signed-off-by: Charles Hardin <charles.hardin@chargepoint.com>
 ---
- package/mdevd/mdevd.hash | 2 +-
- package/mdevd/mdevd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/imx-seco/imx-seco.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mdevd/mdevd.hash b/package/mdevd/mdevd.hash
-index c3b8fcc921..93950304be 100644
---- a/package/mdevd/mdevd.hash
-+++ b/package/mdevd/mdevd.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  be89ab072c4de822a06e26579dcca10e85ae5fd5be23ba903415b4de8fe0fb6a  mdevd-0.1.3.0.tar.gz
-+sha256  ffd3b223b4cf0e51253b4a8f09cb88d70bf22693228ab0818af174a3f099dcd2  mdevd-0.1.4.0.tar.gz
- sha256  31b60c66aba1fa0a7f8847339ac35c28638e25ff96da700d995533ad810e3995  COPYING
-diff --git a/package/mdevd/mdevd.mk b/package/mdevd/mdevd.mk
-index e2924009f5..89199be801 100644
---- a/package/mdevd/mdevd.mk
-+++ b/package/mdevd/mdevd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MDEVD_VERSION = 0.1.3.0
-+MDEVD_VERSION = 0.1.4.0
- MDEVD_SITE = http://skarnet.org/software/mdevd
- MDEVD_LICENSE = ISC
- MDEVD_LICENSE_FILES = COPYING
+diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
+index 245c3e3311..711315ea93 100644
+--- a/package/freescale-imx/imx-seco/imx-seco.mk
++++ b/package/freescale-imx/imx-seco/imx-seco.mk
+@@ -22,7 +22,7 @@ IMX_SECO_INSTALL_IMAGES = YES
+ # is done in post-image script.
+ ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+ define IMX_SECO_INSTALL_IMAGES_CMDS
+-	cp $(@D)/firmware/seco/mx8qxb0-ahab-container.img \
++	cp $(@D)/firmware/seco/mx8qxc0-ahab-container.img \
+ 		$(BINARIES_DIR)/ahab-container.img
+ endef
+ else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
 -- 
-2.30.2
+2.21.1 (Apple Git-122.3)
