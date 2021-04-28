@@ -1,48 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Apr 2021 23:44:27 +0200
-Subject: [Buildroot] [git commit] package/makedevs: define extract step to
+Date: Wed, 28 Apr 2021 23:44:33 +0200
+Subject: [Buildroot] [git commit] package/mkpaswd: define extract step to
  allow patching
-Message-ID: <20210428211800.251BF861B7@busybox.osuosl.org>
+Message-ID: <20210428211800.34E887FACB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3355e31d2c70b19386ae9ed535a4bca68e669f6
+commit: https://git.buildroot.net/buildroot/commit/?id=a052e6e88342faa71b67ca3aff32c655d96e8ef4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 As recently discussed on the list:
 http://lists.busybox.net/pipermail/buildroot/2021-April/308373.html
 
-Packages like makedevs where the source code is included in the Buildroot
+Packages like mkpasswd where the source code is included in the Buildroot
 tree, currently doesn't use an extract step (which also skips the patch
 step), so they cannot be patched by a patch in BR2_GLOBAL_PATCH_DIR (or the
 pkgdir), which is a bit confusing.
 
-As a fix, add a simple extract step that copies the source file to the build
-directory, so the patch step gets run as well.
+As a fix, add a simple extract step that copies the source files to the
+build directory, so the patch step gets run as well.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/makedevs/makedevs.mk | 6 +++++-
+ package/mkpasswd/mkpasswd.mk | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/makedevs/makedevs.mk b/package/makedevs/makedevs.mk
-index 36837a191e..9b0f44610c 100644
---- a/package/makedevs/makedevs.mk
-+++ b/package/makedevs/makedevs.mk
-@@ -15,8 +15,12 @@ HOST_MAKEDEVS_CFLAGS += -DEXTENDED_ATTRIBUTES
- HOST_MAKEDEVS_LDFLAGS += -lcap
- endif
+diff --git a/package/mkpasswd/mkpasswd.mk b/package/mkpasswd/mkpasswd.mk
+index b013390572..c1117ef65c 100644
+--- a/package/mkpasswd/mkpasswd.mk
++++ b/package/mkpasswd/mkpasswd.mk
+@@ -9,9 +9,13 @@
+ # at revision 5a0f08500fa51608b6d3b73ee338be38c692eadb
+ HOST_MKPASSWD_LICENSE = GPL-2.0+
  
-+define HOST_MAKEDEVS_EXTRACT_CMDS
-+	cp $(HOST_MAKEDEVS_PKGDIR)/makedevs.c $(@D)
++define HOST_MKPASSWD_EXTRACT_CMDS
++	cp $(HOST_MKPASSWD_PKGDIR)/*.c $(HOST_MKPASSWD_PKGDIR)/*.h $(@D)
 +endef
 +
- define HOST_MAKEDEVS_BUILD_CMDS
--	$(HOSTCC) $(HOST_MAKEDEVS_CFLAGS) package/makedevs/makedevs.c \
-+	$(HOSTCC) $(HOST_MAKEDEVS_CFLAGS) $(@D)/makedevs.c \
- 		-o $(@D)/makedevs $(HOST_MAKEDEVS_LDFLAGS)
+ define HOST_MKPASSWD_BUILD_CMDS
+ 	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
+-		package/mkpasswd/mkpasswd.c package/mkpasswd/utils.c \
++		$(@D)/mkpasswd.c $(@D)/utils.c \
+ 		-o $(@D)/mkpasswd -lcrypt
  endef
  
