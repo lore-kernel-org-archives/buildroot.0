@@ -1,28 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Apr 2021 12:13:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 4.0.6
-In-Reply-To: <20210427055402.1079630-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 27 Apr 2021 07:54:02 +0200")
-References: <20210427055402.1079630-1-fontaine.fabrice@gmail.com>
-Message-ID: <871raud8eq.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Apr 2021 12:11:58 +0200
+Subject: [Buildroot] [git commit] package/uftrace: add missing dependency to
+ comment
+Message-ID: <20210428094628.77C7D81594@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=74a8e8670a96f281c4348fee2903a295a304f3d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > "The LXC 4.0 branch is supported until June 2025. Only bugfixes and
- > securitiy issues get included into the stable bugfix releases, so it's
- > always safe and recommended to keep up and run the latest bugfix
- > release."
+Commit f06d79255fbf0607200f1cc50a5dd87839295be3 forgot to add
+BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS dependency to threads comment
 
- > https://discuss.linuxcontainers.org/t/lxc-4-0-6-lts-has-been-released/9926
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/uftrace/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
+index 9af7ee8c28..6de9b840ba 100644
+--- a/package/uftrace/Config.in
++++ b/package/uftrace/Config.in
+@@ -23,4 +23,5 @@ config BR2_PACKAGE_UFTRACE
+ 	  https://github.com/namhyung/uftrace
+ 
+ comment "uftrace needs a toolchain w/ threads"
++	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
