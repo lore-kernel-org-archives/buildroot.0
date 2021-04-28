@@ -1,26 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Apr 2021 12:12:19 +0200
-Subject: [Buildroot] [PATCH 2/2] package/wpa_supplicant: add upstream
- patch to fix CVE-2021-30004
-In-Reply-To: <20210426215553.11099-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 26 Apr 2021 23:55:53 +0200")
-References: <20210426215553.11099-1-peter@korsgaard.com>
- <20210426215553.11099-2-peter@korsgaard.com>
-Message-ID: <87a6pid8fw.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Apr 2021 12:12:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uftrace: add missing dependency
+ to comment
+In-Reply-To: <20210426220815.521759-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 27 Apr 2021 00:08:15 +0200")
+References: <20210426220815.521759-1-fontaine.fabrice@gmail.com>
+Message-ID: <875z06d8fg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes the following security issue for the internal TLS backend:
- > - CVE-2021-30004: In wpa_supplicant and hostapd 2.9, forging attacks may
- >   occur because AlgorithmIdentifier parameters are mishandled in tls/pkcs1.c
- >   and tls/x509v3.c.
+ > Commit f06d79255fbf0607200f1cc50a5dd87839295be3 forgot to add
+ > BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS dependency to threads comment
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
