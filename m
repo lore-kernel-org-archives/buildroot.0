@@ -1,39 +1,130 @@
-From: Charles Hardin <ckhardin@gmail.com>
-Date: Tue, 27 Apr 2021 20:40:36 -0700
-Subject: [Buildroot] [PATCH 1/1] package/imx-seco: use the c0 revision for
- the imx8qxp ahab image
-Message-ID: <20210428034036.15461-1-charles.hardin@chargepoint.com>
+From: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Wed, 28 Apr 2021 07:12:14 +0300
+Subject: [Buildroot] [PATCH v5 1/2] package/libosmium: new package
+Message-ID: <20210428041216.22955-1-fido_max@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Charles Hardin <ckhardin@gmail.com>
+A fast and flexible C++ library for working with OpenStreetMap data.
+Libosmium works on Linux, macOS and Windows.
 
-The silicon revision for the imx8 is C0 and this is the release
-candidate for the new update images. It also seems to work on
-some B0 early silicon in addition, so change the ahab container
-to use mx8qxc0-ahab-container.img
+https://osmcode.org/libosmium/
 
-Signed-off-by: Charles Hardin <ckhardin@gmail.com>
-Signed-off-by: Charles Hardin <charles.hardin@chargepoint.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- package/freescale-imx/imx-seco/imx-seco.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v4 -> v5:
+ - Rebased on master
+ - Use version 2.17
 
-diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
-index 245c3e3311..711315ea93 100644
---- a/package/freescale-imx/imx-seco/imx-seco.mk
-+++ b/package/freescale-imx/imx-seco/imx-seco.mk
-@@ -22,7 +22,7 @@ IMX_SECO_INSTALL_IMAGES = YES
- # is done in post-image script.
- ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
- define IMX_SECO_INSTALL_IMAGES_CMDS
--	cp $(@D)/firmware/seco/mx8qxb0-ahab-container.img \
-+	cp $(@D)/firmware/seco/mx8qxc0-ahab-container.img \
- 		$(BINARIES_DIR)/ahab-container.img
- endef
- else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
+Changes v3 -> v4:
+ - Some minor cleanup
+ - Add protozero dependency
+
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/libosmium/Config.in      | 18 ++++++++++++++++++
+ package/libosmium/libosmium.hash |  3 +++
+ package/libosmium/libosmium.mk   | 30 ++++++++++++++++++++++++++++++
+ 5 files changed, 53 insertions(+)
+ create mode 100644 package/libosmium/Config.in
+ create mode 100644 package/libosmium/libosmium.hash
+ create mode 100644 package/libosmium/libosmium.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 573d8d84de..c334c2c093 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1842,6 +1842,7 @@ N:	Max Filippov <jcmvbkbc@gmail.com>
+ F:	arch/Config.in.xtensa
+ 
+ N:	Maxim Kochetkov <fido_max@inbox.ru>
++F:	package/libosmium/
+ F:	package/postgis/
+ F:	package/protozero/
+ F:	package/timescaledb/
+diff --git a/package/Config.in b/package/Config.in
+index 6181aaac2c..001beaa0cf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1925,6 +1925,7 @@ menu "Other"
+ 	source "package/libloki/Config.in"
+ 	source "package/libnpth/Config.in"
+ 	source "package/libnspr/Config.in"
++	source "package/libosmium/Config.in"
+ 	source "package/libpfm4/Config.in"
+ 	source "package/libplatform/Config.in"
+ 	source "package/libplist/Config.in"
+diff --git a/package/libosmium/Config.in b/package/libosmium/Config.in
+new file mode 100644
+index 0000000000..2b4f683be2
+--- /dev/null
++++ b/package/libosmium/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LIBOSMIUM
++	bool "libosmium"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
++	depends on BR2_USE_WCHAR # boost
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_PROTOZERO
++
++	help
++	  A fast and flexible C++ library for working with OpenStreetMap
++	  data. Libosmium works on Linux, macOS and Windows.
++
++	  https://osmcode.org/libosmium/
++
++comment "libosmium needs a toolchain w/ C++,  wchar, threads, gcc >= 4.7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libosmium/libosmium.hash b/package/libosmium/libosmium.hash
+new file mode 100644
+index 0000000000..05d898bc7f
+--- /dev/null
++++ b/package/libosmium/libosmium.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  4a7672d7caf4da3bc68619912b298462370c423c697871a0be6273c6686e10d6  libosmium-2.17.0.tar.gz
++sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE
+diff --git a/package/libosmium/libosmium.mk b/package/libosmium/libosmium.mk
+new file mode 100644
+index 0000000000..4601a22bf9
+--- /dev/null
++++ b/package/libosmium/libosmium.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# libosmium
++#
++################################################################################
++
++LIBOSMIUM_VERSION = 2.17.0
++LIBOSMIUM_SITE = $(call github,osmcode,libosmium,v$(LIBOSMIUM_VERSION))
++LIBOSMIUM_LICENSE = BSL-1.0
++LIBOSMIUM_LICENSE_FILES = LICENSE
++LIBOSMIUM_INSTALL_STAGING = YES
++LIBOSMIUM_DEPENDENCIES = boost protozero
++
++ifeq ($(BR2_PACKAGE_BZIP2),y)
++LIBOSMIUM_DEPENDENCIES += bzip2
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGEOS),y)
++LIBOSMIUM_DEPENDENCIES += libgeos
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGDAL),y)
++LIBOSMIUM_DEPENDENCIES += libgdal
++endif
++
++ifeq ($(BR2_PACKAGE_PROJ),y)
++LIBOSMIUM_DEPENDENCIES += proj
++endif
++
++$(eval $(cmake-package))
 -- 
-2.21.1 (Apple Git-122.3)
+2.30.2
