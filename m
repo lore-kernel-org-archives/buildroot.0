@@ -1,46 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Apr 2021 11:13:22 +0200
-Subject: [Buildroot] [git commit] package/solarus: bump to version 1.6.5
-Message-ID: <20210429084946.6001684197@busybox.osuosl.org>
+Date: Thu, 29 Apr 2021 11:14:04 +0200
+Subject: [Buildroot] [git commit] package/efl: bump to version 1.25.1
+Message-ID: <20210429084946.6A5B781038@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=696d2dbcda26c8411ddaf7811b0b2890fe4ce431
+commit: https://git.buildroot.net/buildroot/commit/?id=2814c077f814d3459225c865fb6c6320dd8216c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 See:
-https://www.solarus-games.org/en/news/2021-04-06-solarus-1-6-5-bugfix-release
+https://www.enlightenment.org/news/efl-1.25.1
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/solarus/solarus.hash | 2 +-
- package/solarus/solarus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/efl/efl.hash | 4 ++--
+ package/efl/efl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/solarus/solarus.hash b/package/solarus/solarus.hash
-index 8400bfd135..6e1200b19c 100644
---- a/package/solarus/solarus.hash
-+++ b/package/solarus/solarus.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  b2e00a7df8953903ba022a8f392038e86f675cee714da19cf9a5f8535c42f349  solarus-v1.6.4.tar.bz2
-+sha256  4b4ac59df8ab63ee2e305cbf48118d6be0cf9665968eb0b06dd1acdf4346516f  solarus-v1.6.5.tar.bz2
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index 11e69633b9..69008cde23 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,5 +1,5 @@
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.25.0.tar.xz.sha256sum
+-sha256  53941f910daf5d1b5162bfdb0dc66f1a04e55a0f2dd7760da0ad63713370956e  efl-1.25.0.tar.xz
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.25.1.tar.xz.sha256sum
++sha256  351ca0211ca000234527a503585f039f985607ec9439e34b49d8b8bbf35a7e6b  efl-1.25.1.tar.xz
  
- sha256  309875d925041d909bc705473d6c4b7905272aea15c1c2389088c26c161bae1f  license.txt
-diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
-index 92e849ef02..90cbf3e784 100644
---- a/package/solarus/solarus.mk
-+++ b/package/solarus/solarus.mk
+ sha256  d666b6b2df9f5b791f85c299c65516cb55528b02a807603de246f65f4918ae22  COMPLIANCE
+ sha256  5bceb52d65debe420bc520f2992807740dc928b7fdc3c2e9a74b5889177ddf4c  COPYING
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index d77cb3092b..cdb05aa551 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SOLARUS_VERSION = 1.6.4
-+SOLARUS_VERSION = 1.6.5
- SOLARUS_SITE = \
- 	https://gitlab.com/solarus-games/solarus/-/archive/v$(SOLARUS_VERSION)
- SOLARUS_SOURCE = solarus-v$(SOLARUS_VERSION).tar.bz2
+-EFL_VERSION = 1.25.0
++EFL_VERSION = 1.25.1
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+, FTL, MIT
