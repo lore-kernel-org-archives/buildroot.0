@@ -1,64 +1,85 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Thu, 29 Apr 2021 16:55:40 +0200
-Subject: [Buildroot] [PATCH 0/4] Support for the Beagle-V platform
-In-Reply-To: <20210429162631.22bb7084@windsurf>
-References: <20210429074636.724046-1-thomas.petazzoni@bootlin.com>
- <CAK4VdL2T=a7ffUweZC2dV5LTD2JNmP=UxU+2BfJ-L+bVB7Vp=Q@mail.gmail.com>
- <20210429150143.276e4aec@windsurf>
- <CAK4VdL0qsvVUYsJr1S9OsnPG-Lc_Whn6zRzpWCsLaTfJzxsH0A@mail.gmail.com>
- <20210429154834.5b70c1a1@windsurf>
- <CAK4VdL1_uAau=+hziWjipgMvWkLA5gfYaFBnA77eHTxPx7rq=g@mail.gmail.com>
- <20210429162631.22bb7084@windsurf>
-Message-ID: <CAK4VdL3Kuv7fU+m8WkQjZ2bX+mZrmrQDnyiDuLcCT0AaUp5EqQ@mail.gmail.com>
+From: Charles Hardin <ckhardin@gmail.com>
+Date: Thu, 29 Apr 2021 08:05:57 -0700
+Subject: [Buildroot] [PATCH 1/1] package/imx-seco: use the c0 revision
+ for the imx8qxp ahab image
+In-Reply-To: <AM0PR04MB69469D00A286B8447B4D49DFA75F9@AM0PR04MB6946.eurprd04.prod.outlook.com>
+References: <20210428034036.15461-1-charles.hardin@chargepoint.com>
+ <AM0PR04MB69469D00A286B8447B4D49DFA75F9@AM0PR04MB6946.eurprd04.prod.outlook.com>
+Message-ID: <CAN=fXj2O14E_PGo++gDjMW=7NWtEf_dxSqZq-n62Nx09kPwrjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 29, 2021 at 4:26 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Thu, 29 Apr 2021 15:52:14 +0200
-> Erico Nunes <nunes.erico@gmail.com> wrote:
->
-> > > > Ok, thanks, I will give it a try anyway.
-> > > > I noticed that the manual build instructions in
-> > > > https://wiki.seeedstudio.com/BeagleV-Make-File-System-Compile-uboot-Kernal/#compile-u-boot
-> > > > suggest a CONFIG_SYS_TEXT_BASE=0x80020000 change and as far as I see
-> > > > this is not in the build here, so maybe that could be related too.
-> > >
-> > > The kernel is relocated to 80020000 by U-Boot before booting, in the
-> > > configuration I'm providing. See the boot log in the cover letter:
-> > >
-> > > """
-> > > Moving Image from 0x84000000 to 0x80200000, end=80f1b000
-> > > """
+On Thu, Apr 29, 2021 at 1:20 AM Stephane Viau (OSS) <
+stephane.viau@oss.nxp.com> wrote:
+
 > >
-> > This is 0x80200000, not 0x80020000.
+> >The silicon revision for the imx8 is C0 and this is the release
+> >candidate for the new update images. It also seems to work on
+> >some B0 early silicon in addition, so change the ahab container
+> >to use mx8qxc0-ahab-container.img
 >
-> Ah, you're right (of course). The U-Boot configuration I'm using from
-> the U-Boot defconfig provided by Starfive indeed has
-> CONFIG_SYS_TEXT_BASE=0x80200000 and not the 0x80020000 you're
-> mentioning. I'll give it a try.
+> The C0 firmware cannot be executed along with the B0 ROM for a couple
+> of reasons (different function address map and lacking features).
 >
-> But I just checked, and the image that was already flashed on my
-> Beagle-V was using 0x80200000 to load the kernel.
+> Warning:
+> Once we make the switch to mx8qxc0-ahab-container, all boards based
+> on a B0 silicon version won't boot anymore!
+>
+>
+That's how I found this - I had a C0 ROM and that doesn't boot with the b0
+ahab,
+so it needs to be setup to go one way or the other. I think C0 is the
+production
+GA release from NXP, so this is out there for people as needed that have
+that
+problem.
 
-With the original u-boot and Fedora image I also got "Moving Image
-from 0x84000000 to 0x80200000, end=81aff000", but that address shows
-in "Domain0 Next Address : 0x0000000080020000" which is different than
-with the Buildroot u-boot which currently shows "Domain0 Next Address
-: 0x0000000080200000".
-Anyway I don't know where this will make a difference, I just
-mentioned it because the only manual change explicitly mentioned in
-the wiki page is change 0x80200000 -> 0x80020000.
+This was from the u-boot
 
-For the original question, this bootloader from Buildroot with your
-patch also boots the reference Fedora image.
-The Buildroot image also works well for me.
-So either way, thanks for this work and for getting it here so quickly.
 
-Erico
+    CPU:   Freescale i.MX8QXP revC A35 at 1200 MHz at 34C
+
+
+> >
+> >Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+>
+>
+> [Stephane: tested on i.MX8 QXP EVK Rev C]
+> Tested-by: Stephane Viau <stephane.viau@oss.nxp.com>
+>
+> BR,
+> Stephane.
+>
+> >---
+> > package/freescale-imx/imx-seco/imx-seco.mk | 2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> >diff --git a/package/freescale-imx/imx-seco/imx-seco.mk
+> b/package/freescale-imx/imx-seco/imx-seco.mk
+> >index 245c3e3311..711315ea93 100644
+> >--- a/package/freescale-imx/imx-seco/imx-seco.mk
+> >+++ b/package/freescale-imx/imx-seco/imx-seco.mk
+> >@@ -22,7 +22,7 @@ IMX_SECO_INSTALL_IMAGES = YES
+> > # is done in post-image script.
+> > ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+> > define IMX_SECO_INSTALL_IMAGES_CMDS
+> >-       cp $(@D)/firmware/seco/mx8qxb0-ahab-container.img \
+> >+       cp $(@D)/firmware/seco/mx8qxc0-ahab-container.img \
+> >                 $(BINARIES_DIR)/ahab-container.img
+> > endef
+> > else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
+> >--
+> >2.21.1 (Apple Git-122.3)
+> >
+> >_______________________________________________
+> >buildroot mailing list
+> >buildroot at busybox.net
+> >http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> >
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210429/52024a6d/attachment.html>
