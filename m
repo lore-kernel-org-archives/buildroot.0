@@ -1,128 +1,280 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Apr 2021 09:46:32 +0200
-Subject: [Buildroot] [PATCH 1/4] boot/opensbi: add support for version
- configuration
+Date: Thu, 29 Apr 2021 09:46:35 +0200
+Subject: [Buildroot] [PATCH 4/4] configs/beaglev_defconfig: new defconfig
 In-Reply-To: <20210429074636.724046-1-thomas.petazzoni@bootlin.com>
 References: <20210429074636.724046-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210429074636.724046-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20210429074636.724046-5-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OpenSBI contains platform-specific code, so very much like Linux,
-U-Boot or other bootloaders, using the upstream version of OpenSBI
-will very often not be sufficient.
-
-This commit therefore adds the possibility of specifying a custom
-version of OpenSBI, either custom from upstream, custom tarball, or
-custom from Git. Support for other version control systems has not
-been implemented for now, but could be added later if needed.
+This commit introduces support for the RISC-V based Beagle-V platform,
+which uses a Starfive VIC-7100.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/opensbi/Config.in  | 51 +++++++++++++++++++++++++++++++++++++++++
- boot/opensbi/opensbi.mk | 19 ++++++++++++++-
- 2 files changed, 69 insertions(+), 1 deletion(-)
+ DEVELOPERS                                    |  2 +
+ board/beaglev/extlinux.conf                   |  4 +
+ board/beaglev/genimage.cfg                    | 12 +++
+ ...s-starfive-vic7100-adjust-fdt_addr_r.patch | 39 +++++++++
+ board/beaglev/post-build.sh                   | 17 ++++
+ board/beaglev/readme.txt                      | 86 +++++++++++++++++++
+ configs/beaglev_defconfig                     | 35 ++++++++
+ 7 files changed, 195 insertions(+)
+ create mode 100644 board/beaglev/extlinux.conf
+ create mode 100644 board/beaglev/genimage.cfg
+ create mode 100644 board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
+ create mode 100755 board/beaglev/post-build.sh
+ create mode 100644 board/beaglev/readme.txt
+ create mode 100644 configs/beaglev_defconfig
 
-diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-index b9b0ace8af..83f40f04fa 100644
---- a/boot/opensbi/Config.in
-+++ b/boot/opensbi/Config.in
-@@ -13,6 +13,57 @@ config BR2_TARGET_OPENSBI
- 	  https://github.com/riscv/opensbi.git
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 573d8d84de..cec63a3715 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2602,10 +2602,12 @@ F:	package/xorcurses/
  
- if BR2_TARGET_OPENSBI
-+choice
-+	prompt "OpenSBI Version"
-+	help
-+	  Select the specific OpenSBI version you want to use
+ N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ F:	arch/Config.in.arm
++F:	board/beaglev/
+ F:	board/stmicroelectronics/stm32mp157c-dk2/
+ F:	boot/boot-wrapper-aarch64/
+ F:	boot/grub2/
+ F:	boot/gummiboot/
++F:	configs/beaglev_defconfig
+ F:	configs/stm32mp157c_dk2_defconfig
+ F:	package/android-tools/
+ F:	package/b43-firmware/
+diff --git a/board/beaglev/extlinux.conf b/board/beaglev/extlinux.conf
+new file mode 100644
+index 0000000000..c5444d094c
+--- /dev/null
++++ b/board/beaglev/extlinux.conf
+@@ -0,0 +1,4 @@
++label linux
++  kernel /boot/Image
++  devicetree /boot/starfive_vic7100_beagle_v.dtb
++  append console=ttyS0,115200 earlyprintk root=PARTUUID=0fef845a-c6e1-45bc-82f7-002fa720f958 rootwait
+diff --git a/board/beaglev/genimage.cfg b/board/beaglev/genimage.cfg
+new file mode 100644
+index 0000000000..f38bb7f86c
+--- /dev/null
++++ b/board/beaglev/genimage.cfg
+@@ -0,0 +1,12 @@
++image sdcard.img {
++  hdimage {
++    gpt = true
++  }
 +
-+config BR2_TARGET_OPENSBI_LATEST_VERSION
-+	bool "0.8"
++  partition rootfs {
++    partition-type-uuid = 72ec70a6-cf74-40e6-bd49-4bda08e8f224
++    partition-uuid = 0fef845a-c6e1-45bc-82f7-002fa720f958
++    bootable = "true"
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch b/board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
+new file mode 100644
+index 0000000000..74d70f2721
+--- /dev/null
++++ b/board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
+@@ -0,0 +1,39 @@
++From 2c4c813940c577590f3352cef0c49a8def17905d Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Wed, 28 Apr 2021 22:58:45 +0200
++Subject: [PATCH] include/configs/starfive-vic7100: adjust fdt_addr_r
 +
-+config BR2_TARGET_OPENSBI_CUSTOM_VERSION
-+	bool "Custom version"
-+	help
-+	  This option allows to use a specific official versions
++The default fdt_addr_r of 0x88000000 doesn't work, the kernel never
++boots. Using 0x90000000 works fine.
 +
-+config BR2_TARGET_OPENSBI_CUSTOM_TARBALL
-+	bool "Custom tarball"
++Since it would overlap with the kernel_comp_addr_r area, this one is
++moved 16 MB further, at 0x91000000.
 +
-+config BR2_TARGET_OPENSBI_CUSTOM_GIT
-+	bool "Custom Git repository"
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ include/configs/starfive-vic7100.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+endchoice
++diff --git a/include/configs/starfive-vic7100.h b/include/configs/starfive-vic7100.h
++index 8c5915a73c..7150a23873 100644
++--- a/include/configs/starfive-vic7100.h
+++++ b/include/configs/starfive-vic7100.h
++@@ -111,13 +111,13 @@
++ 	"fdt_high=0xffffffffffffffff\0" \
++ 	"initrd_high=0xffffffffffffffff\0" \
++ 	"kernel_addr_r=0x84000000\0" \
++-	"fdt_addr_r=0x88000000\0" \
+++	"fdt_addr_r=0x90000000\0" \
++ 	"scriptaddr=0x88100000\0" \
++ 	"script_offset_f=0x1fff000\0" \
++ 	"script_size_f=0x1000\0" \
++ 	"pxefile_addr_r=0x88200000\0" \
++ 	"ramdisk_addr_r=0x88300000\0" \
++-	"kernel_comp_addr_r=0x90000000\0" \
+++	"kernel_comp_addr_r=0x91000000\0" \
++ 	"kernel_comp_size=0x10000000\0" \
++ 	"type_guid_gpt_loader1=" TYPE_GUID_LOADER1 "\0" \
++ 	"type_guid_gpt_loader2=" TYPE_GUID_LOADER2 "\0" \
++-- 
++2.30.2
 +
-+config BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE
-+	string "OpenSBI version"
-+	depends on BR2_TARGET_OPENSBI_CUSTOM_VERSION
+diff --git a/board/beaglev/post-build.sh b/board/beaglev/post-build.sh
+new file mode 100755
+index 0000000000..0e7337c96d
+--- /dev/null
++++ b/board/beaglev/post-build.sh
+@@ -0,0 +1,17 @@
++#!/bin/sh
++BOARD_DIR=$(dirname $0)
 +
-+config BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION
-+	string "URL of custom OpenSBI tarball"
-+	depends on BR2_TARGET_OPENSBI_CUSTOM_TARBALL
++# The DTB to use is provided within the U-Boot source tree, so we grab
++# it from there, and install it to TARGET_DIR/boot/.
++UBOOT_DIR=$(make --no-print-directory VARS=UBOOT_DIR printvars | cut -f2 -d'=')
++install -D -m0644 ${UBOOT_DIR}/arch/riscv/dts/starfive_vic7100_beagle_v.dtb \
++	${TARGET_DIR}/boot/starfive_vic7100_beagle_v.dtb
 +
-+if BR2_TARGET_OPENSBI_CUSTOM_GIT
++# Bring the extlinux.conf file in.
++install -D -m 0644 ${BOARD_DIR}/extlinux.conf \
++	${TARGET_DIR}/boot/extlinux/extlinux.conf
 +
-+config BR2_TARGET_OPENSBI_CUSTOM_REPO_URL
-+	string "URL of custom repository"
++# To be reflashed through Xmodem, the bootloader needs to be prepended
++# with a 4-byte header that contains the total size of the file.
++perl -e 'print pack("l", (stat @ARGV[0])[7])' ${BINARIES_DIR}/fw_payload.bin > ${BINARIES_DIR}/fw_payload.bin.flash
++cat ${BINARIES_DIR}/fw_payload.bin >> ${BINARIES_DIR}/fw_payload.bin.flash
+diff --git a/board/beaglev/readme.txt b/board/beaglev/readme.txt
+new file mode 100644
+index 0000000000..903dd7975e
+--- /dev/null
++++ b/board/beaglev/readme.txt
+@@ -0,0 +1,86 @@
++Beagle-V
++========
 +
-+config BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION
-+	string "Custom repository version"
-+	help
-+	  Revision to use in the typical format used by Git. E.G. a
-+	  sha id, a tag, branch, ..
++Beagle-V is a low-cost RISC-V 64-bit based platform, powered by a
++Starfive VIC-7100 processor.
 +
-+endif
++How to build
++============
 +
-+config BR2_TARGET_OPENSBI_VERSION
-+	string
-+	default "0.8"	if BR2_TARGET_OPENSBI_LATEST_VERSION
-+	default BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE \
-+		if BR2_TARGET_OPENSBI_CUSTOM_VERSION
-+	default "custom"	if BR2_TARGET_OPENSBI_CUSTOM_TARBALL
-+	default BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION \
-+		if BR2_TARGET_OPENSBI_CUSTOM_GIT
++$ make beaglev_defconfig
++$ make
 +
- config BR2_TARGET_OPENSBI_PLAT
- 	string "OpenSBI Platform"
- 	default ""
-diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-index 60b87c268d..250a6078af 100644
---- a/boot/opensbi/opensbi.mk
-+++ b/boot/opensbi/opensbi.mk
-@@ -4,13 +4,30 @@
- #
- ################################################################################
- 
--OPENSBI_VERSION = 0.8
-+OPENSBI_VERSION = $(call qstrip,$(BR2_TARGET_OPENSBI_VERSION))
++Build results
++=============
 +
-+ifeq ($(OPENSBI_VERSION),custom)
-+# Handle custom OpenSBI tarballs as specified by the configuration
-+OPENSBI_TARBALL = $(call qstrip,$(BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION))
-+OPENSBI_SITE = $(patsubst %/,%,$(dir $(OPENSBI_TARBALL)))
-+OPENSBI_SOURCE = $(notdir $(OPENSBI_TARBALL))
-+else ifeq ($(BR2_TARGET_OPENSBI_CUSTOM_GIT),y)
-+OPENSBI_SITE = $(call qstrip,$(BR2_TARGET_OPENSBI_CUSTOM_REPO_URL))
-+OPENSBI_SITE_METHOD = git
-+else
-+# Handle official OpenSBI versions
- OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
-+endif
++After building, output/images contains:
 +
- OPENSBI_LICENSE = BSD-2-Clause
- OPENSBI_LICENSE_FILES = COPYING.BSD
- OPENSBI_INSTALL_TARGET = NO
- OPENSBI_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_TARGET_OPENSBI)$(BR2_TARGET_OPENSBI_LATEST_VERSION),y)
-+BR_NO_CHECK_HASH_FOR += $(OPENSBI_SOURCE)
-+endif
+++ Image
+++ fw_payload.bin
+++ fw_payload.bin.flash
+++ fw_payload.elf
+++ rootfs.ext2
+++ rootfs.ext4
+++ sdcard.img
+++ u-boot.bin
 +
- OPENSBI_MAKE_ENV = \
- 	CROSS_COMPILE=$(TARGET_CROSS)
- 
++The two important files are:
++
++ - fw_payload.bin.flash, which is the bootloader image, containing
++   both OpenSBI and U-Boot.
++
++ - sdcard.img, the SD card image, which contains the root filesystem,
++   kernel image and Device Tree.
++
++Flashing the SD card image
++==========================
++
++$ sudo dd if=output/images/sdcard.img of=/dev/sdX
++
++Preparing the board
++===================
++
++Connect the Beagle-V fan to the 5V supply (pin 2 or 4 of the GPIO
++connector) and GND (pin 6 of the GPIO connector).
++
++Connect a TTL UART cable to pin 8 (TX), 10 (RX) and 14 (GND).
++
++Insert your SD card.
++
++Power-up the board using an USB-C cable.
++
++Flashing the bootloader
++=======================
++
++The bootloader pre-flashed on the Beagle-V has a non-working
++fdt_addr_r environment variable value, so it won't work
++as-is. Reflashing the bootloader with the bootloader image produced by
++Buildroot is necessary.
++
++When the board starts up, a pre-loader shows a count down of 2
++seconds, interrupt by pressing any key. You should reach a menu like
++this:
++
++--------8<----------
++
++bootloader version:210209-4547a8d
++ddr 0x00000000, 1M test
++ddr 0x00100000, 2M test
++DDR clk 2133M,Version: 210302-5aea32f
++0
++***************************************************
++*************** FLASH PROGRAMMING *****************
++***************************************************
++
++0:update uboot
++1:quit
++select the function:
++
++--------8<----------
++
++Press 0 and Enter. You will now see "C" characters being
++displayed. Ask your serial port communication program to send
++fw_payload.bin.flash using the Xmodem protocol.
++
++After reflashing is complete, restart the board, it will automatically
++start the system from the SD card, and reach the login prompt.
+diff --git a/configs/beaglev_defconfig b/configs/beaglev_defconfig
+new file mode 100644
+index 0000000000..097d4c5302
+--- /dev/null
++++ b/configs/beaglev_defconfig
+@@ -0,0 +1,35 @@
++BR2_riscv=y
++BR2_riscv_custom=y
++BR2_RISCV_ISA_CUSTOM_RVM=y
++BR2_RISCV_ISA_CUSTOM_RVF=y
++BR2_RISCV_ISA_CUSTOM_RVD=y
++BR2_RISCV_ISA_CUSTOM_RVC=y
++BR2_GLOBAL_PATCH_DIR="board/beaglev/patches/"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/beaglev/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglev/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++# HEAD of the Fedora branch
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,beagle_kernel_5.10,710cf052d6abda73584481d920b4b6befc7240ea)/linux-710cf052d6abda73584481d920b4b6befc7240ea.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="starfive_vic7100_evb_sd_net"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_OPENSBI=y
++BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
++# HEAD of the Fedora branch
++BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,beagle_opensbi,2524b0ecd8684b42bc7a4c69794f40f11cbbe2a5)/opensbi-2524b0ecd8684b42bc7a4c69794f40f11cbbe2a5.tar.gz"
++BR2_TARGET_OPENSBI_PLAT="starfive/vic7100"
++# BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
++# BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG is not set
++BR2_TARGET_OPENSBI_UBOOT_PAYLOAD=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++# HEAD of the Fedora branch
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,beagle_uboot-opensbi,3f3ac01a29ad1cd5fa519d86f81daead2447f1d4)/uboot-3f3ac01a29ad1cd5fa519d86f81daead2447f1d4.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="starfive_vic7100_beagle_v_smode"
++BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
 2.30.2
