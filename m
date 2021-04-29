@@ -1,31 +1,128 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Thu, 29 Apr 2021 14:39:16 +0200
-Subject: [Buildroot] [PATCH 0/4] Support for the Beagle-V platform
-In-Reply-To: <20210429074636.724046-1-thomas.petazzoni@bootlin.com>
+From: Bin Meng <bmeng.cn@gmail.com>
+Date: Thu, 29 Apr 2021 20:39:20 +0800
+Subject: [Buildroot] [PATCH 3/4] boot/opensbi: add options to
+ enable/disable image installation
+In-Reply-To: <20210429074636.724046-4-thomas.petazzoni@bootlin.com>
 References: <20210429074636.724046-1-thomas.petazzoni@bootlin.com>
-Message-ID: <CAK4VdL2T=a7ffUweZC2dV5LTD2JNmP=UxU+2BfJ-L+bVB7Vp=Q@mail.gmail.com>
+ <20210429074636.724046-4-thomas.petazzoni@bootlin.com>
+Message-ID: <CAEUhbmXCXDNXaLFNa99iabceV2Lddrrt7duWMHrGXRi2bs-sFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 29, 2021 at 9:47 AM Thomas Petazzoni
+On Thu, Apr 29, 2021 at 3:48 PM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
-> slight annoyance is that the bootloader
-> pre-flashed on the board doesn't work as-is, just due to an incorrect
-> fdt_addr_r environment variable value. So reflashing the bootloader
-> with what has been built by Buildroot is necessary (but is trivial to
-> do using Xmodem).
+>
+> Until now, whenever a BR2_TARGET_OPENSBI_PLAT value was specified,
+> opensbi.mk was assuming that both fw_jump and fw_dynamic would be
+> produced. However, this is not the case: the OpenSBI per-platform
+> config.mk can decide which image to build.
+>
+> As an example, the config.mk for VIC7100-based BeagleV only enables
+> producing the fw_payload image.
+>
+> This commit adds three options to enable the installation of images:
+> one for fw_jump, one for fw_dynamic, one for fw_payload.
+>
+> The options for fw_jump and fw_dynamic are "default y" when
+> BR2_TARGET_OPENSBI_PLAT is not empty, to preserve existing behavior.
+>
+> The option for fw_payload is forcefully selected when either Linux or
+> U-Boot are selected as payloads.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  boot/opensbi/Config.in  | 20 ++++++++++++++++++++
+>  boot/opensbi/opensbi.mk | 16 ++++++++++------
+>  2 files changed, 30 insertions(+), 6 deletions(-)
+>
+> diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+> index 236bf74a90..fb7c86d398 100644
+> --- a/boot/opensbi/Config.in
+> +++ b/boot/opensbi/Config.in
+> @@ -74,11 +74,30 @@ config BR2_TARGET_OPENSBI_PLAT
+>           the platform specific static library libplatsbi.a and firmware
+>           examples are built.
+>
+> +config BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG
+> +       bool "Install jump image"
 
-I would like to try this but I have some questions:
-Are you able to still boot the reference Fedora image after flashing
-the custom bootloader?
-Also, if it is just a matter of updating fdt_addr_r, could it just be
-updated in the u-boot environment instead?
-And finally, should that be reported as an issue in the starfive
-u-boot so maybe they can release another build with that fixed?
+s/jump/fw_jump
 
-Thanks
+> +       default y if BR2_TARGET_OPENSBI_PLAT != ""
+> +       help
+> +         This installs the fw_jump image.
+> +
+> +config BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG
 
-Erico
+nits: I would list this config option before the JUMP one, to follow
+alphabetical order
+
+> +       bool "Install fw_dynamic image"
+> +       default y if BR2_TARGET_OPENSBI_PLAT != ""
+> +       help
+> +         This installs the fw_dynamic image.
+> +
+> +config BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
+> +       bool "Install fw_payload image"
+> +       help
+> +         This option enables the installation of the fw_paylaod
+> +         image.
+> +
+>  config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
+>         bool "Include Linux as OpenSBI Payload"
+>         depends on BR2_TARGET_OPENSBI_PLAT != ""
+>         depends on BR2_LINUX_KERNEL
+>         depends on BR2_LINUX_KERNEL_IMAGE
+> +       select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
+>         help
+>           Build OpenSBI with the Linux kernel as a Payload.
+>
+> @@ -86,6 +105,7 @@ config BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
+>         bool "Include U-Boot as OpenSBI Payload"
+>         depends on BR2_TARGET_OPENSBI_PLAT != ""
+>         depends on BR2_TARGET_UBOOT
+> +       select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
+>         help
+>           Build OpenSBI with the U-Boot as a Payload.
+>
+> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+> index 8ebe4566fd..ee562dff53 100644
+> --- a/boot/opensbi/opensbi.mk
+> +++ b/boot/opensbi/opensbi.mk
+> @@ -50,15 +50,19 @@ define OPENSBI_BUILD_CMDS
+>         $(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
+>  endef
+>
+> -ifneq ($(OPENSBI_PLAT),)
+> +ifeq ($(BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG),y)
+>  OPENSBI_INSTALL_IMAGES = YES
+> -OPENSBI_FW_IMAGES += jump dynamic
+> -ifeq ($(BR2_TARGET_OPENSBI_LINUX_PAYLOAD),y)
+> -OPENSBI_FW_IMAGES += payload
+> +OPENSBI_FW_IMAGES += jump
+>  endif
+> -ifeq ($(BR2_TARGET_OPENSBI_UBOOT_PAYLOAD),y)
+> -OPENSBI_FW_IMAGES = payload
+> +
+> +ifeq ($(BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG),y)
+
+ditto
+
+> +OPENSBI_INSTALL_IMAGES = YES
+> +OPENSBI_FW_IMAGES += dynamic
+>  endif
+> +
+> +ifeq ($(BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG),y)
+> +OPENSBI_INSTALL_IMAGES = YES
+> +OPENSBI_FW_IMAGES += payload
+>  endif
+>
+>  define OPENSBI_INSTALL_IMAGES_CMDS
+> --
+> 2.30.2
+
+Regards,
+Bin
