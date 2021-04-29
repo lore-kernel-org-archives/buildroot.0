@@ -1,111 +1,128 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Apr 2021 09:46:34 +0200
-Subject: [Buildroot] [PATCH 3/4] boot/opensbi: add options to enable/disable
- image installation
+Date: Thu, 29 Apr 2021 09:46:32 +0200
+Subject: [Buildroot] [PATCH 1/4] boot/opensbi: add support for version
+ configuration
 In-Reply-To: <20210429074636.724046-1-thomas.petazzoni@bootlin.com>
 References: <20210429074636.724046-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210429074636.724046-4-thomas.petazzoni@bootlin.com>
+Message-ID: <20210429074636.724046-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, whenever a BR2_TARGET_OPENSBI_PLAT value was specified,
-opensbi.mk was assuming that both fw_jump and fw_dynamic would be
-produced. However, this is not the case: the OpenSBI per-platform
-config.mk can decide which image to build.
+OpenSBI contains platform-specific code, so very much like Linux,
+U-Boot or other bootloaders, using the upstream version of OpenSBI
+will very often not be sufficient.
 
-As an example, the config.mk for VIC7100-based BeagleV only enables
-producing the fw_payload image.
-
-This commit adds three options to enable the installation of images:
-one for fw_jump, one for fw_dynamic, one for fw_payload.
-
-The options for fw_jump and fw_dynamic are "default y" when
-BR2_TARGET_OPENSBI_PLAT is not empty, to preserve existing behavior.
-
-The option for fw_payload is forcefully selected when either Linux or
-U-Boot are selected as payloads.
+This commit therefore adds the possibility of specifying a custom
+version of OpenSBI, either custom from upstream, custom tarball, or
+custom from Git. Support for other version control systems has not
+been implemented for now, but could be added later if needed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/opensbi/Config.in  | 20 ++++++++++++++++++++
- boot/opensbi/opensbi.mk | 16 ++++++++++------
- 2 files changed, 30 insertions(+), 6 deletions(-)
+ boot/opensbi/Config.in  | 51 +++++++++++++++++++++++++++++++++++++++++
+ boot/opensbi/opensbi.mk | 19 ++++++++++++++-
+ 2 files changed, 69 insertions(+), 1 deletion(-)
 
 diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-index 236bf74a90..fb7c86d398 100644
+index b9b0ace8af..83f40f04fa 100644
 --- a/boot/opensbi/Config.in
 +++ b/boot/opensbi/Config.in
-@@ -74,11 +74,30 @@ config BR2_TARGET_OPENSBI_PLAT
- 	  the platform specific static library libplatsbi.a and firmware
- 	  examples are built.
+@@ -13,6 +13,57 @@ config BR2_TARGET_OPENSBI
+ 	  https://github.com/riscv/opensbi.git
  
-+config BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG
-+	bool "Install jump image"
-+	default y if BR2_TARGET_OPENSBI_PLAT != ""
+ if BR2_TARGET_OPENSBI
++choice
++	prompt "OpenSBI Version"
 +	help
-+	  This installs the fw_jump image.
++	  Select the specific OpenSBI version you want to use
 +
-+config BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG
-+	bool "Install fw_dynamic image"
-+	default y if BR2_TARGET_OPENSBI_PLAT != ""
++config BR2_TARGET_OPENSBI_LATEST_VERSION
++	bool "0.8"
++
++config BR2_TARGET_OPENSBI_CUSTOM_VERSION
++	bool "Custom version"
 +	help
-+	  This installs the fw_dynamic image.
++	  This option allows to use a specific official versions
 +
-+config BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
-+	bool "Install fw_payload image"
++config BR2_TARGET_OPENSBI_CUSTOM_TARBALL
++	bool "Custom tarball"
++
++config BR2_TARGET_OPENSBI_CUSTOM_GIT
++	bool "Custom Git repository"
++
++endchoice
++
++config BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE
++	string "OpenSBI version"
++	depends on BR2_TARGET_OPENSBI_CUSTOM_VERSION
++
++config BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION
++	string "URL of custom OpenSBI tarball"
++	depends on BR2_TARGET_OPENSBI_CUSTOM_TARBALL
++
++if BR2_TARGET_OPENSBI_CUSTOM_GIT
++
++config BR2_TARGET_OPENSBI_CUSTOM_REPO_URL
++	string "URL of custom repository"
++
++config BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION
++	string "Custom repository version"
 +	help
-+	  This option enables the installation of the fw_paylaod
-+	  image.
++	  Revision to use in the typical format used by Git. E.G. a
++	  sha id, a tag, branch, ..
 +
- config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
- 	bool "Include Linux as OpenSBI Payload"
- 	depends on BR2_TARGET_OPENSBI_PLAT != ""
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_LINUX_KERNEL_IMAGE
-+	select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
- 	help
- 	  Build OpenSBI with the Linux kernel as a Payload.
- 
-@@ -86,6 +105,7 @@ config BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
- 	bool "Include U-Boot as OpenSBI Payload"
- 	depends on BR2_TARGET_OPENSBI_PLAT != ""
- 	depends on BR2_TARGET_UBOOT
-+	select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
- 	help
- 	  Build OpenSBI with the U-Boot as a Payload.
- 
++endif
++
++config BR2_TARGET_OPENSBI_VERSION
++	string
++	default "0.8"	if BR2_TARGET_OPENSBI_LATEST_VERSION
++	default BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE \
++		if BR2_TARGET_OPENSBI_CUSTOM_VERSION
++	default "custom"	if BR2_TARGET_OPENSBI_CUSTOM_TARBALL
++	default BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION \
++		if BR2_TARGET_OPENSBI_CUSTOM_GIT
++
+ config BR2_TARGET_OPENSBI_PLAT
+ 	string "OpenSBI Platform"
+ 	default ""
 diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-index 8ebe4566fd..ee562dff53 100644
+index 60b87c268d..250a6078af 100644
 --- a/boot/opensbi/opensbi.mk
 +++ b/boot/opensbi/opensbi.mk
-@@ -50,15 +50,19 @@ define OPENSBI_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
- endef
+@@ -4,13 +4,30 @@
+ #
+ ################################################################################
  
--ifneq ($(OPENSBI_PLAT),)
-+ifeq ($(BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG),y)
- OPENSBI_INSTALL_IMAGES = YES
--OPENSBI_FW_IMAGES += jump dynamic
--ifeq ($(BR2_TARGET_OPENSBI_LINUX_PAYLOAD),y)
--OPENSBI_FW_IMAGES += payload
-+OPENSBI_FW_IMAGES += jump
- endif
--ifeq ($(BR2_TARGET_OPENSBI_UBOOT_PAYLOAD),y)
--OPENSBI_FW_IMAGES = payload
+-OPENSBI_VERSION = 0.8
++OPENSBI_VERSION = $(call qstrip,$(BR2_TARGET_OPENSBI_VERSION))
 +
-+ifeq ($(BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG),y)
-+OPENSBI_INSTALL_IMAGES = YES
-+OPENSBI_FW_IMAGES += dynamic
- endif
++ifeq ($(OPENSBI_VERSION),custom)
++# Handle custom OpenSBI tarballs as specified by the configuration
++OPENSBI_TARBALL = $(call qstrip,$(BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION))
++OPENSBI_SITE = $(patsubst %/,%,$(dir $(OPENSBI_TARBALL)))
++OPENSBI_SOURCE = $(notdir $(OPENSBI_TARBALL))
++else ifeq ($(BR2_TARGET_OPENSBI_CUSTOM_GIT),y)
++OPENSBI_SITE = $(call qstrip,$(BR2_TARGET_OPENSBI_CUSTOM_REPO_URL))
++OPENSBI_SITE_METHOD = git
++else
++# Handle official OpenSBI versions
+ OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
++endif
 +
-+ifeq ($(BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG),y)
-+OPENSBI_INSTALL_IMAGES = YES
-+OPENSBI_FW_IMAGES += payload
- endif
+ OPENSBI_LICENSE = BSD-2-Clause
+ OPENSBI_LICENSE_FILES = COPYING.BSD
+ OPENSBI_INSTALL_TARGET = NO
+ OPENSBI_INSTALL_STAGING = YES
  
- define OPENSBI_INSTALL_IMAGES_CMDS
++ifeq ($(BR2_TARGET_OPENSBI)$(BR2_TARGET_OPENSBI_LATEST_VERSION),y)
++BR_NO_CHECK_HASH_FOR += $(OPENSBI_SOURCE)
++endif
++
+ OPENSBI_MAKE_ENV = \
+ 	CROSS_COMPILE=$(TARGET_CROSS)
+ 
 -- 
 2.30.2
