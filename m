@@ -1,85 +1,68 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 29 Apr 2021 21:32:38 +0200
-Subject: [Buildroot] [RFC PATCH 1/1] package/iproute2: bump version to
- 5.12.0
-In-Reply-To: <20210429192541.8530-1-petr.vorel@gmail.com>
-References: <20210429192541.8530-1-petr.vorel@gmail.com>
-Message-ID: <YIsJ1pdaSw1U7RHY@pevik>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 29 Apr 2021 21:53:24 +0200
+Subject: [Buildroot] [PATCH] package/opentyrian: switch ot using github
+Message-ID: <20210429195324.2463255-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Backport from upstream mailing list patch from Heiko Thiery which fixes
-> missing {name_to,open_by}_handle_at() on uclibc-ng < 1.0.35.
+OpenTyrian was previously managed in a Mercurial repository hosted on
+Bitbucket. Mid-2020, Bitbucket shut off all its Mercurial repositories:
+    https://bitbucket.org/blog/sunsetting-mercurial-support-in-bitbucket
 
-> Drop patch from v5.8.0.
+Since then, OpenTyrian's source code is inacessible, but we have had no
+build failure associated as there is an old archive hosted on s.b.o, so
+that all builds fallback to downloading that:
+    http://sources.buildroot.net/opentyrian/opentyrian-9c9f0ec3532b.tar.gz
 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Hi,
+However, the project has been revived (kinda) on github:
+    https://github.com/opentyrian/opentyrian
 
-> could you also have look on the patch implementing missing
-> {name_to,open_by}_handle ?
+Git commit cf5dbeb69eebd9ef9afc4473088d9469b79589eb has been found to
+be the closest, both in content and date, to the Mercuail reference
+9c9f0ec3532b we were using. The only deltas are in Mercurial-specific
+files:
 
-I tested a build, but not the functionality (checked the configure and syscall
-related code LGTM).
+ b/.hg_archival.txt |    5     0     5     0 -----
+ b/.hgtags          |    2     1     1     0 +-
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
+While at it, add a hash file.
 
-Kind regards,
-Petr
-                             andes-nds32 [ 1/45]: OK
-                             arm-aarch64 [ 2/45]: OK
-                   bootlin-aarch64-glibc [ 3/45]: OK
-               bootlin-arcle-hs38-uclibc [ 4/45]: OK
-                    bootlin-armv5-uclibc [ 5/45]: OK
-                     bootlin-armv7-glibc [ 6/45]: OK
-                   bootlin-armv7m-uclibc [ 7/45]: SKIPPED
-                      bootlin-armv7-musl [ 8/45]: OK
-             bootlin-microblazeel-uclibc [ 9/45]: OK
-                   bootlin-mipsel-uclibc [10/45]: OK
-                bootlin-mipsel32r6-glibc [11/45]: OK
-                bootlin-m68k-5208-uclibc [12/45]: SKIPPED
-               bootlin-m68k-68040-uclibc [13/45]: OK
-                     bootlin-nios2-glibc [14/45]: OK
-                 bootlin-openrisc-uclibc [15/45]: OK
-           bootlin-powerpc-e500mc-uclibc [16/45]: OK
-        bootlin-powerpc64le-power8-glibc [17/45]: OK
-                   bootlin-riscv32-glibc [18/45]: OK
-                   bootlin-riscv64-glibc [19/45]: OK
-                    bootlin-riscv64-musl [20/45]: OK
-                      bootlin-sh4-uclibc [21/45]: OK
-                    bootlin-sparc-uclibc [22/45]: OK
-                   bootlin-sparc64-glibc [23/45]: OK
-                   bootlin-xtensa-uclibc [24/45]: OK
-                    bootlin-x86-64-glibc [25/45]: OK
-                     bootlin-x86-64-musl [26/45]: OK
-                   bootlin-x86-64-uclibc [27/45]: OK
-                            br-arm-basic [28/45]: OK
-                    br-arm-full-nothread [29/45]: OK
-                      br-arm-full-static [30/45]: OK
-                br-i386-pentium-mmx-musl [31/45]: OK
-                   br-i386-pentium4-full [32/45]: OK
-                      br-mips64-n64-full [33/45]: OK
-                 br-mips64r6-el-hf-glibc [34/45]: OK
-               br-powerpc-603e-basic-cpp [35/45]: OK
-               br-powerpc64-power7-glibc [36/45]: OK
-                       linaro-aarch64-be [37/45]: OK
-                          linaro-aarch64 [38/45]: OK
-                              linaro-arm [39/45]: OK
-                     sourcery-arm-armv4t [40/45]: OK
-                            sourcery-arm [41/45]: OK
-                     sourcery-arm-thumb2 [42/45]: OK
-                           sourcery-mips [43/45]: OK
-                         sourcery-mips64 [44/45]: OK
-                          sourcery-nios2 [45/45]: OK
-45 builds, 2 skipped, 0 build failed, 0 legal-info failed
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ package/opentyrian/opentyrian.hash | 3 +++
+ package/opentyrian/opentyrian.mk   | 5 ++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+ create mode 100644 package/opentyrian/opentyrian.hash
 
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed
+diff --git a/package/opentyrian/opentyrian.hash b/package/opentyrian/opentyrian.hash
+new file mode 100644
+index 0000000000..0d1f4927ee
+--- /dev/null
++++ b/package/opentyrian/opentyrian.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  2b0db65c735cc099279ea3da6d9b76f791633897cd0f5b67528f70de0758a944  opentyrian-cf5dbeb69eebd9ef9afc4473088d9469b79589eb.tar.gz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/opentyrian/opentyrian.mk b/package/opentyrian/opentyrian.mk
+index 12e41ad998..690323334e 100644
+--- a/package/opentyrian/opentyrian.mk
++++ b/package/opentyrian/opentyrian.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-OPENTYRIAN_VERSION = 9c9f0ec3532b
+-OPENTYRIAN_SITE = https://bitbucket.org/opentyrian/opentyrian
+-OPENTYRIAN_SITE_METHOD = hg
++OPENTYRIAN_VERSION = cf5dbeb69eebd9ef9afc4473088d9469b79589eb
++OPENTYRIAN_SITE = $(call github,opentyrian,opentyrian,$(OPENTYRIAN_VERSION))
+ OPENTYRIAN_LICENSE = GPL-2.0+
+ OPENTYRIAN_LICENSE_FILES = COPYING
+ 
+-- 
+2.25.1
