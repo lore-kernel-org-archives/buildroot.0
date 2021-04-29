@@ -1,48 +1,69 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 29 Apr 2021 22:19:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version to
- 4.14.4
-Message-ID: <20210429201952.1090896-1-bernd.kuhls@t-online.de>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Thu, 29 Apr 2021 20:51:38 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/freescale-imx/imx-gpu-viv:
+ select libdrm
+Message-ID: <20210429185138.4460-1-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2021-20254:
-https://www.samba.org/samba/security/CVE-2021-20254.html
+Some libraries (libGL.so, vivante_dri.so, libEGL.so, libgbm_viv.so) are
+linked against libdrm so select libdrm package.
 
-Release notes: https://www.samba.org/samba/history/samba-4.14.4.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes: 8283e838f040 ("package/freescale-imx/imx-gpu-viv: bump to version 6.4.3.p1.2")
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index e8814348c5..905ec14ce0 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.14.3.tar.asc
--sha256  efc24ccf277055891f830719bd155b6a6dd9341d71961ee79e0ef75dc1aeb598  samba-4.14.3.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.14.4.tar.asc
-+sha256  89af092a0b00f5354ed287f0aa37b8c2cf9ba2ce67ea6464192e2c18528f89b9  samba-4.14.4.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 643b228bbf..409e2c7a18 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Changes for v2:
+ - libdrm is not needed on ARM with framebuffer output.
+
+ package/freescale-imx/imx-gpu-viv/Config.in      | 5 +++--
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 7 ++++++-
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index cca2689905..6668ee8bb5 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -12,6 +12,9 @@ config BR2_PACKAGE_IMX_GPU_VIV
+ 	depends on (BR2_arm && BR2_ARM_EABIHF) || BR2_aarch64
+ 	# Library binaries are linked against libc.so.6
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
++	# Library binaries are linked against libdrm.so.2, except framebuffer
++	# output on ARM
++	select BR2_PACKAGE_LIBDRM if !(BR2_arm && BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB)
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_HAS_LIBOPENCL
+@@ -56,8 +59,6 @@ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
  
--SAMBA4_VERSION = 4.14.3
-+SAMBA4_VERSION = 4.14.4
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
+ 	bool "Wayland"
+-	# libdrm needed by gbm_viv.so
+-	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+ 
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index 802ac26c1c..103c0341e3 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -29,8 +29,13 @@ ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
+ IMX_GPU_VIV_DEPENDENCIES += xlib_libXdamage xlib_libXext xlib_libXfixes
+ endif
+ 
++# Libraries are linked against libdrm, except framebuffer output on ARM
++ifneq ($(IMX_GPU_VIV_LIB_TARGET)$(BR2_arm),fby)
++IMX_GPU_VIV_DEPENDENCIES += libdrm
++endif
++
+ ifeq ($(IMX_GPU_VIV_LIB_TARGET),wayland)
+-IMX_GPU_VIV_DEPENDENCIES += libdrm wayland
++IMX_GPU_VIV_DEPENDENCIES += wayland
+ endif
+ 
+ define IMX_GPU_VIV_EXTRACT_CMDS
 -- 
-2.29.2
+2.26.3
