@@ -1,30 +1,54 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 29 Apr 2021 11:26:51 +0200
-Subject: [Buildroot] [PATCH] package/efl: bump to version 1.25.1
-In-Reply-To: <87bl9xa1w7.fsf@dell.be.48ers.dk>
-References: <20210428225253.3948537-1-romain.naour@gmail.com>
- <87bl9xa1w7.fsf@dell.be.48ers.dk>
-Message-ID: <2d2c35d4-bee6-6a3e-1e03-d9c863ed9c5e@gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 29 Apr 2021 12:29:18 +0200
+Subject: [Buildroot] [PATCH] package/python-pysmb: bump to version 1.2.6
+Message-ID: <20210429102918.14930-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Le 29/04/2021 ? 11:14, Peter Korsgaard a ?crit?:
->>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
-> 
->  > See:
->  > https://www.enlightenment.org/news/efl-1.25.1
-> 
->  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> 
-> Committed, thanks. I take it that this is also 2021.02.x material?
-> 
+Change download location to the project's page so that
+we still can get *.tar.gz file instead of *.zip.
 
-Yes please.
+The LICENSE file has changed the copyright year from 2015
+to 2020.
 
-Best regards,
-Romain
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-pysmb/python-pysmb.hash | 6 ++----
+ package/python-pysmb/python-pysmb.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/package/python-pysmb/python-pysmb.hash b/package/python-pysmb/python-pysmb.hash
+index 94ff33ea31..c2d7a49ceb 100644
+--- a/package/python-pysmb/python-pysmb.hash
++++ b/package/python-pysmb/python-pysmb.hash
+@@ -1,5 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/pysmb/json
+-md5 e6f9ce0032db528aae060f7019bd409c pysmb-1.1.19.tar.gz
+ # Locally computed
+-sha256  fa4e6b4a4f2afbfbd71e9179c491f8c77bc2ad19e0bc866d7c6cbfa9ae272602  pysmb-1.1.19.tar.gz
+-sha256  2b1a0a56543c1bda07f5583dddaf544442c139d3f46747d4700c7031ef354c14  LICENSE
++sha256  f204c34a4b9a03e6959ba3b12c65b9d9111555944b1568d4fcc0e74998b528a3  pysmb-1.2.6.tar.gz
++sha256  8c487d5c10f024e44a9cf1df21d1fd28a80bd2dfddd9f1dcd109a47d721f497f  LICENSE
+diff --git a/package/python-pysmb/python-pysmb.mk b/package/python-pysmb/python-pysmb.mk
+index 1b4c18797a..eb0ef5400f 100644
+--- a/package/python-pysmb/python-pysmb.mk
++++ b/package/python-pysmb/python-pysmb.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYSMB_VERSION = 1.1.19
++PYTHON_PYSMB_VERSION = 1.2.6
+ PYTHON_PYSMB_SOURCE = pysmb-$(PYTHON_PYSMB_VERSION).tar.gz
+-PYTHON_PYSMB_SITE = https://pypi.python.org/packages/f9/e7/1fd7faaa946cc6b43ce85bb7a177b75a4718d9c5e291201fec00112b497c
++PYTHON_PYSMB_SITE = https://miketeo.net/files/Projects/pysmb
+ PYTHON_PYSMB_LICENSE = Libpng
+ PYTHON_PYSMB_LICENSE_FILES = LICENSE
+ PYTHON_PYSMB_SETUP_TYPE = setuptools
+-- 
+2.17.0
