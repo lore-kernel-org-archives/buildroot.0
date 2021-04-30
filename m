@@ -1,129 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Apr 2021 09:46:21 +0200
-Subject: [Buildroot] [git commit] boot/opensbi: add support for version
- configuration
-Message-ID: <20210430072514.E15C0807B5@busybox.osuosl.org>
+Date: Fri, 30 Apr 2021 09:45:17 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-nextpvr: bump version to
+ 8.2.2-Matrix
+Message-ID: <20210430072514.D3E6D86738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c7166d387bbae63456f9820e0fd0658c503f07b
+commit: https://git.buildroot.net/buildroot/commit/?id=bad244ea457c5892dbb3773a70aa33b836f143e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-OpenSBI contains platform-specific code, so very much like Linux,
-U-Boot or other bootloaders, using the upstream version of OpenSBI
-will very often not be sufficient.
+Changelog:
+https://github.com/kodi-pvr/pvr.nextpvr/blob/Matrix/pvr.nextpvr/changelog.txt
 
-This commit therefore adds the possibility of specifying a custom
-version of OpenSBI, either custom from upstream, custom tarball, or
-custom from Git. Support for other version control systems has not
-been implemented for now, but could be added later if needed.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/opensbi/Config.in  | 51 +++++++++++++++++++++++++++++++++++++++++++++++++
- boot/opensbi/opensbi.mk | 19 +++++++++++++++++-
- 2 files changed, 69 insertions(+), 1 deletion(-)
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-index b9b0ace8af..83f40f04fa 100644
---- a/boot/opensbi/Config.in
-+++ b/boot/opensbi/Config.in
-@@ -13,6 +13,57 @@ config BR2_TARGET_OPENSBI
- 	  https://github.com/riscv/opensbi.git
- 
- if BR2_TARGET_OPENSBI
-+choice
-+	prompt "OpenSBI Version"
-+	help
-+	  Select the specific OpenSBI version you want to use
-+
-+config BR2_TARGET_OPENSBI_LATEST_VERSION
-+	bool "0.8"
-+
-+config BR2_TARGET_OPENSBI_CUSTOM_VERSION
-+	bool "Custom version"
-+	help
-+	  This option allows to use a specific official versions
-+
-+config BR2_TARGET_OPENSBI_CUSTOM_TARBALL
-+	bool "Custom tarball"
-+
-+config BR2_TARGET_OPENSBI_CUSTOM_GIT
-+	bool "Custom Git repository"
-+
-+endchoice
-+
-+config BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE
-+	string "OpenSBI version"
-+	depends on BR2_TARGET_OPENSBI_CUSTOM_VERSION
-+
-+config BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION
-+	string "URL of custom OpenSBI tarball"
-+	depends on BR2_TARGET_OPENSBI_CUSTOM_TARBALL
-+
-+if BR2_TARGET_OPENSBI_CUSTOM_GIT
-+
-+config BR2_TARGET_OPENSBI_CUSTOM_REPO_URL
-+	string "URL of custom repository"
-+
-+config BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION
-+	string "Custom repository version"
-+	help
-+	  Revision to use in the typical format used by Git. E.G. a
-+	  sha id, a tag, branch, ..
-+
-+endif
-+
-+config BR2_TARGET_OPENSBI_VERSION
-+	string
-+	default "0.8"	if BR2_TARGET_OPENSBI_LATEST_VERSION
-+	default BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE \
-+		if BR2_TARGET_OPENSBI_CUSTOM_VERSION
-+	default "custom"	if BR2_TARGET_OPENSBI_CUSTOM_TARBALL
-+	default BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION \
-+		if BR2_TARGET_OPENSBI_CUSTOM_GIT
-+
- config BR2_TARGET_OPENSBI_PLAT
- 	string "OpenSBI Platform"
- 	default ""
-diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-index 60b87c268d..250a6078af 100644
---- a/boot/opensbi/opensbi.mk
-+++ b/boot/opensbi/opensbi.mk
-@@ -4,13 +4,30 @@
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+index f8d9e6c853..1171c81bb2 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ebe2b1f96b49c08c5960a6f75da6cb3cfc0cc30d6fafe43b77d2f2249915b752  kodi-pvr-nextpvr-8.2.1-Matrix.tar.gz
++sha256  67d292877da7a017d2915ec4921a0ac7beb378411c08087f8885dd32a42eefdf  kodi-pvr-nextpvr-8.2.2-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+index bed6097c8a..2cb493fa62 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSBI_VERSION = 0.8
-+OPENSBI_VERSION = $(call qstrip,$(BR2_TARGET_OPENSBI_VERSION))
-+
-+ifeq ($(OPENSBI_VERSION),custom)
-+# Handle custom OpenSBI tarballs as specified by the configuration
-+OPENSBI_TARBALL = $(call qstrip,$(BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION))
-+OPENSBI_SITE = $(patsubst %/,%,$(dir $(OPENSBI_TARBALL)))
-+OPENSBI_SOURCE = $(notdir $(OPENSBI_TARBALL))
-+else ifeq ($(BR2_TARGET_OPENSBI_CUSTOM_GIT),y)
-+OPENSBI_SITE = $(call qstrip,$(BR2_TARGET_OPENSBI_CUSTOM_REPO_URL))
-+OPENSBI_SITE_METHOD = git
-+else
-+# Handle official OpenSBI versions
- OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
-+endif
-+
- OPENSBI_LICENSE = BSD-2-Clause
- OPENSBI_LICENSE_FILES = COPYING.BSD
- OPENSBI_INSTALL_TARGET = NO
- OPENSBI_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_TARGET_OPENSBI)$(BR2_TARGET_OPENSBI_LATEST_VERSION),y)
-+BR_NO_CHECK_HASH_FOR += $(OPENSBI_SOURCE)
-+endif
-+
- OPENSBI_MAKE_ENV = \
- 	CROSS_COMPILE=$(TARGET_CROSS)
- 
+-KODI_PVR_NEXTPVR_VERSION = 8.2.1-Matrix
++KODI_PVR_NEXTPVR_VERSION = 8.2.2-Matrix
+ KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
+ KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
+ KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
