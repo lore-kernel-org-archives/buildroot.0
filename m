@@ -1,54 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Apr 2021 14:53:16 +0200
-Subject: [Buildroot] [git commit] package/fetchmail: bump version to 6.4.19
-Message-ID: <20210430122803.73A988677D@busybox.osuosl.org>
+From: Andy Bergh <allmyaddmin@gmail.com>
+Date: Fri, 30 Apr 2021 15:02:50 +0200
+Subject: [Buildroot] eMMC image not booting (uboot related issue)
+Message-ID: <CAAmck7XUFQ+Jb=tRKTXPvzQWPfNvF9VXC70J9R-wZgDc6p+BMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fea6712f5df2e5fe4255f7a6b297aa972bebfc0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Updated license hash due to upstream typo fix:
-https://sourceforge.net/p/fetchmail/git/ci/2409d4f0baa90c6303d1e600772e500fc397a561/
+I have made an image for my Beaglebone Black using buildroot, great
+project, thanks. The sdcard.img boots fine, but I can not get it to boot
+from power up from the eMMC.
 
-Release notes:
-https://sourceforge.net/p/fetchmail/mailman/message/37267719/
+What I have done:
+1) Build an image using buildroot (with beaglebone_defconfig).
+The sdcard.img boots just fine.
+2) Boot from the SDCard and configure the eMMC using fdisk. I followed the
+instructions shown here
+<https://e2e.ti.com/support/processors/f/processors-forum/344528/u-boot-write-mlo-uboot-uimage-rootfs-on-to-emmc-mnand-of-am335x-evm-j5-echo-based-custom-board/1204926#1204926>
+.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fetchmail/fetchmail.hash | 8 ++++----
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Once the eMMC is configured I perform a power cycle at which point the boot
+fails. I end up at the uboot prompt (UART port), if I then type "boot" the
+OS boots correctly.
+What I have noticed is that the variable mmcdev is set to 0 at startup.
+After it has failed if I do another printenv mmcdev and then it is set to 1.
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 698d83c88b..8f092a3f80 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/37249830/
--sha256  302dc9bcdc6927dedf375d2baaead2347557faa70d98b1da83f2409fa6fb259f  fetchmail-6.4.18.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/37267719/
-+sha256  cd8d11a3d103e50caa2ec64bcda6307eb3d0783a4d4dfd88e668b81aaf9d6b5f  fetchmail-6.4.19.tar.xz
- # From https://sourceforge.net/projects/fetchmail/files/branch_6.4/
--sha1  1fd3e4f30bd9ba7bdcaed5edfca080dc6f66377e  fetchmail-6.4.18.tar.xz
-+sha1  bb6959f0cf1f6d689c2ba3834c5bba72e4f9ec07  fetchmail-6.4.19.tar.xz
- # Locally computed:
--sha256  8e3ec4863456a26fcd1cf84fadd4146efcb2fd8515bcec482e0f2b7060108895  COPYING
-+sha256  6346b5aa04e258fa4326272ea92372d796b4382aa963535ae98a3bb5f8cd5aeb  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index 6fe9b5b3d7..7233da98a5 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- FETCHMAIL_VERSION_MAJOR = 6.4
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).18
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).19
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+I suspect this is the reason it does not boot successfully at power up, but
+I may be very wrong!
+
+How can I set the env var mccdev to be 1 as default at startup? Is this
+possible, perhaps with uboot-menuconfig? Is that the correct way to solve
+this problem?
+
+Any information would be much appreciated.
+
+Thank you
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210430/e2a7b390/attachment.html>
