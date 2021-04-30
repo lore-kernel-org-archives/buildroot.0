@@ -1,45 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 30 Apr 2021 10:56:52 +0200
-Subject: [Buildroot] [PATCH 1/4] boot/opensbi: add support for version
- configuration
-In-Reply-To: <20210430085114.GA183461@x1>
-References: <20210429074636.724046-1-thomas.petazzoni@bootlin.com>
- <20210429074636.724046-2-thomas.petazzoni@bootlin.com>
- <20210430085114.GA183461@x1>
-Message-ID: <20210430105652.24fba877@windsurf>
+From: Tian Yuanhao <tianyuanhao@aliyun.com>
+Date: Fri, 30 Apr 2021 17:16:27 +0800
+Subject: [Buildroot] [PATCH v3 1/1] package/e2fsprogs: disable e2scrub
+ conditionally
+In-Reply-To: <1600656534.31411.3.camel@aliyun.com>
+References: <1600656534.31411.3.camel@aliyun.com>
+Message-ID: <20210430091627.3414609-1-tianyuanhao@aliyun.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Drew,
+e2scrub_all depends on coreutils' readlink. If you use busybox's
+readlink, you will see the following error:
 
-On Fri, 30 Apr 2021 01:51:14 -0700
-Drew Fustini <drew@beagleboard.org> wrote:
+  readlink: invalid option -- 'e'
 
-> > +config BR2_TARGET_OPENSBI_LATEST_VERSION
-> > +	bool "0.8"  
-> 
-> I believe the latest version of OpenSBI is v0.9 [1].
+Disable e2scrub if its dependencies are not met.
 
-Absolutely. The opensbi package should be upgraded to the latest
-opensbi version if possible, but that's a separate matter from the
-BeagleV support.
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 
-> Note that we currently have a bit of a confusing situation for the
-> BeagleV Starlight board. There are two repositories:
-> 
->   * starfive-tech/sft-riscv-opensbi [2]
->   * starfive-tech/beagle_opensbi [3]
+---
+Changes v2 -> v3:
+  - check dependencies (suggested by James)
 
-Yes, this is (now) clear to me, and I've used the
-starfive-tech/beagle_* repos in this defconfig (see PATCH 4/4).
+Changes v1 -> v2:
+  - use make flags instead of configure options (suggested by Yann)
+---
+ package/e2fsprogs/e2fsprogs.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Thanks a lot for your feedback!
-
-Thomas
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 4420d16aff..db4b849143 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -74,6 +74,16 @@ E2FSPROGS_INSTALL_STAGING_OPTS = \
+ 	DESTDIR=$(STAGING_DIR) \
+ 	install-libs
+ 
++# e2scrub support needs bash, coreutils, lvm2 and util-linux
++ifneq ($(BR2_PACKAGE_BASH)$(BR2_PACKAGE_COREUTILS)$(BR2_PACKAGE_LVM2)$(BR2_PACKAGE_UTIL_LINUX),yyyy)
++E2FSPROGS_MAKE_OPTS += E2SCRUB_DIR=
++endif
++
++E2FSPROGS_INSTALL_TARGET_OPTS = \
++	$(E2FSPROGS_MAKE_OPTS) \
++	DESTDIR=$(TARGET_DIR) \
++	install
++
+ # Package does not build in parallel due to improper make rules
+ define HOST_E2FSPROGS_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) install install-libs
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
