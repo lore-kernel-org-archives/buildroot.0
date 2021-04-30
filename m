@@ -1,64 +1,128 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 30 Apr 2021 07:46:33 +0000
-Subject: [Buildroot] [Bug 13781] New: isc dhcp-server package don't create
- file /usr/bin/dhcpd
-Message-ID: <bug-13781-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 30 Apr 2021 09:48:56 +0200
+Subject: [Buildroot] [PATCH 1/4] boot/opensbi: add support for version
+ configuration
+In-Reply-To: <20210429074636.724046-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 29 Apr 2021 09:46:32 +0200")
+References: <20210429074636.724046-1-thomas.petazzoni@bootlin.com>
+ <20210429074636.724046-2-thomas.petazzoni@bootlin.com>
+Message-ID: <87a6pg8b6f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13781
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-            Bug ID: 13781
-           Summary: isc dhcp-server package don't create file
-                    /usr/bin/dhcpd
-           Product: buildroot
-           Version: 2021.02
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: kay.jeschonneck at airbus.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+ > OpenSBI contains platform-specific code, so very much like Linux,
+ > U-Boot or other bootloaders, using the upstream version of OpenSBI
+ > will very often not be sufficient.
 
-Overview: 
+ > This commit therefore adds the possibility of specifying a custom
+ > version of OpenSBI, either custom from upstream, custom tarball, or
+ > custom from Git. Support for other version control systems has not
+ > been implemented for now, but could be added later if needed.
 
-After activate the isc dhcp-server package, configure the dhcpd.conf, build the
-system and flash it on the target i expect the dhcp-server start, but i doesn't
-start. After some investigate i found that the /etc/init.d/S80dhcp-server file
-check with this command "test -f /usr/sbin/dhcpd" if the file dhcpd exist but
-it doesn't exist.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > ---
+ >  boot/opensbi/Config.in  | 51 +++++++++++++++++++++++++++++++++++++++++
+ >  boot/opensbi/opensbi.mk | 19 ++++++++++++++-
+ >  2 files changed, 69 insertions(+), 1 deletion(-)
 
-Steps to Reproduce:
-  1. create enviroment
-(https://github.com/kontron/buildroot-external-smarc-sal28)
-  2. select "Target Packages/show packages that are also provided by busybox"
-  3. select "Target Packages/Networking applications/dhcp (isc)" and "Target
-Packages/Networking applications/dhcp (isc)/dhcp-server"
-  4. build system
+ > diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+ > index b9b0ace8af..83f40f04fa 100644
+ > --- a/boot/opensbi/Config.in
+ > +++ b/boot/opensbi/Config.in
+ > @@ -13,6 +13,57 @@ config BR2_TARGET_OPENSBI
+ >  	  https://github.com/riscv/opensbi.git
+ 
+ >  if BR2_TARGET_OPENSBI
+ > +choice
+ > +	prompt "OpenSBI Version"
+ > +	help
+ > +	  Select the specific OpenSBI version you want to use
+ > +
+ > +config BR2_TARGET_OPENSBI_LATEST_VERSION
+ > +	bool "0.8"
+ > +
+ > +config BR2_TARGET_OPENSBI_CUSTOM_VERSION
+ > +	bool "Custom version"
+ > +	help
+ > +	  This option allows to use a specific official versions
+ > +
+ > +config BR2_TARGET_OPENSBI_CUSTOM_TARBALL
+ > +	bool "Custom tarball"
+ > +
+ > +config BR2_TARGET_OPENSBI_CUSTOM_GIT
+ > +	bool "Custom Git repository"
+ > +
+ > +endchoice
+ > +
+ > +config BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE
+ > +	string "OpenSBI version"
+ > +	depends on BR2_TARGET_OPENSBI_CUSTOM_VERSION
+ > +
+ > +config BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION
+ > +	string "URL of custom OpenSBI tarball"
+ > +	depends on BR2_TARGET_OPENSBI_CUSTOM_TARBALL
+ > +
+ > +if BR2_TARGET_OPENSBI_CUSTOM_GIT
+ > +
+ > +config BR2_TARGET_OPENSBI_CUSTOM_REPO_URL
+ > +	string "URL of custom repository"
+ > +
+ > +config BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION
+ > +	string "Custom repository version"
+ > +	help
+ > +	  Revision to use in the typical format used by Git. E.G. a
+ > +	  sha id, a tag, branch, ..
+ > +
+ > +endif
+ > +
+ > +config BR2_TARGET_OPENSBI_VERSION
+ > +	string
+ > +	default "0.8"	if BR2_TARGET_OPENSBI_LATEST_VERSION
+ > +	default BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE \
+ > +		if BR2_TARGET_OPENSBI_CUSTOM_VERSION
+ > +	default "custom"	if BR2_TARGET_OPENSBI_CUSTOM_TARBALL
+ > +	default BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION \
+ > +		if BR2_TARGET_OPENSBI_CUSTOM_GIT
+ > +
+ >  config BR2_TARGET_OPENSBI_PLAT
+ >  	string "OpenSBI Platform"
+ >  	default ""
+ > diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+ > index 60b87c268d..250a6078af 100644
+ > --- a/boot/opensbi/opensbi.mk
+ > +++ b/boot/opensbi/opensbi.mk
+ > @@ -4,13 +4,30 @@
+ >  #
+ >  ################################################################################
+ 
+ > -OPENSBI_VERSION = 0.8
+ > +OPENSBI_VERSION = $(call qstrip,$(BR2_TARGET_OPENSBI_VERSION))
+ > +
+ > +ifeq ($(OPENSBI_VERSION),custom)
+ > +# Handle custom OpenSBI tarballs as specified by the configuration
+ > +OPENSBI_TARBALL = $(call qstrip,$(BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION))
+ > +OPENSBI_SITE = $(patsubst %/,%,$(dir $(OPENSBI_TARBALL)))
+ > +OPENSBI_SOURCE = $(notdir $(OPENSBI_TARBALL))
+ > +else ifeq ($(BR2_TARGET_OPENSBI_CUSTOM_GIT),y)
+ > +OPENSBI_SITE = $(call qstrip,$(BR2_TARGET_OPENSBI_CUSTOM_REPO_URL))
+ > +OPENSBI_SITE_METHOD = git
+ > +else
+ > +# Handle official OpenSBI versions
+ >  OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
+ > +endif
+ > +
+ >  OPENSBI_LICENSE = BSD-2-Clause
+ >  OPENSBI_LICENSE_FILES = COPYING.BSD
 
-Actual Results:
-  file "build/target/usr/sbin/dhcpd2", "./usr/sbin/dhcpd2" in
-"build/images/rootfs.tar" not exist
+Maybe this should be inside the _LATEST_VERSION conditional in case the
+license file ever changes, like we have done for the linux kernel?
 
-Expected Results:
-  file "build/target/usr/sbin/dhcpd2", "./usr/sbin/dhcpd2" in
-"build/images/rootfs.tar" exist
-
-
-Build Date & Hardware
-  Build 30.04.2021 on Ubuntu 18.04.5 LTS
-  Intel NUC, Intel Core i7-10710U
-
-Additional Builds and Platforms:
-  Kontron SMARC-sAL28 module
+But OK, that can be done later. Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
