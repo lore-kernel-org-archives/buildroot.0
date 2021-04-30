@@ -1,69 +1,37 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Thu, 29 Apr 2021 20:51:38 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/freescale-imx/imx-gpu-viv:
- select libdrm
-Message-ID: <20210429185138.4460-1-sebastien.szymanski@armadeus.com>
+From: Drew Fustini <drew@beagleboard.org>
+Date: Thu, 29 Apr 2021 17:35:27 -0700
+Subject: [Buildroot] [PATCH 0/4] Support for the Beagle-V platform
+In-Reply-To: <CAK4VdL2T=a7ffUweZC2dV5LTD2JNmP=UxU+2BfJ-L+bVB7Vp=Q@mail.gmail.com>
+References: <20210429074636.724046-1-thomas.petazzoni@bootlin.com>
+ <CAK4VdL2T=a7ffUweZC2dV5LTD2JNmP=UxU+2BfJ-L+bVB7Vp=Q@mail.gmail.com>
+Message-ID: <20210430003527.GA132765@x1>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some libraries (libGL.so, vivante_dri.so, libEGL.so, libgbm_viv.so) are
-linked against libdrm so select libdrm package.
+On Thu, Apr 29, 2021 at 02:39:16PM +0200, Erico Nunes wrote:
+> On Thu, Apr 29, 2021 at 9:47 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> > slight annoyance is that the bootloader
+> > pre-flashed on the board doesn't work as-is, just due to an incorrect
+> > fdt_addr_r environment variable value. So reflashing the bootloader
+> > with what has been built by Buildroot is necessary (but is trivial to
+> > do using Xmodem).
+> 
+> I would like to try this but I have some questions:
+> Are you able to still boot the reference Fedora image after flashing
+> the custom bootloader?
+> Also, if it is just a matter of updating fdt_addr_r, could it just be
+> updated in the u-boot environment instead?
+> And finally, should that be reported as an issue in the starfive
+> u-boot so maybe they can release another build with that fixed?
 
-Fixes: 8283e838f040 ("package/freescale-imx/imx-gpu-viv: bump to version 6.4.3.p1.2")
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
----
+I think that is a good idea so I have opened an issue to track resolving
+this in future production of BeagleV Starlight boards.
 
-Changes for v2:
- - libdrm is not needed on ARM with framebuffer output.
+Thanks,
+Drew
 
- package/freescale-imx/imx-gpu-viv/Config.in      | 5 +++--
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 7 ++++++-
- 2 files changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-index cca2689905..6668ee8bb5 100644
---- a/package/freescale-imx/imx-gpu-viv/Config.in
-+++ b/package/freescale-imx/imx-gpu-viv/Config.in
-@@ -12,6 +12,9 @@ config BR2_PACKAGE_IMX_GPU_VIV
- 	depends on (BR2_arm && BR2_ARM_EABIHF) || BR2_aarch64
- 	# Library binaries are linked against libc.so.6
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	# Library binaries are linked against libdrm.so.2, except framebuffer
-+	# output on ARM
-+	select BR2_PACKAGE_LIBDRM if !(BR2_arm && BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB)
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_HAS_LIBOPENCL
-@@ -56,8 +59,6 @@ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
- 
- config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
- 	bool "Wayland"
--	# libdrm needed by gbm_viv.so
--	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_WAYLAND
- 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
- 
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index 802ac26c1c..103c0341e3 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -29,8 +29,13 @@ ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
- IMX_GPU_VIV_DEPENDENCIES += xlib_libXdamage xlib_libXext xlib_libXfixes
- endif
- 
-+# Libraries are linked against libdrm, except framebuffer output on ARM
-+ifneq ($(IMX_GPU_VIV_LIB_TARGET)$(BR2_arm),fby)
-+IMX_GPU_VIV_DEPENDENCIES += libdrm
-+endif
-+
- ifeq ($(IMX_GPU_VIV_LIB_TARGET),wayland)
--IMX_GPU_VIV_DEPENDENCIES += libdrm wayland
-+IMX_GPU_VIV_DEPENDENCIES += wayland
- endif
- 
- define IMX_GPU_VIV_EXTRACT_CMDS
--- 
-2.26.3
+[1] https://github.com/starfive-tech/freelight-u-sdk/issues/18
