@@ -1,46 +1,63 @@
 From: Drew Fustini <drew@beagleboard.org>
-Date: Fri, 30 Apr 2021 01:27:03 -0700
-Subject: [Buildroot] [PATCH 0/4] Support for the Beagle-V platform
-In-Reply-To: <20210429074636.724046-1-thomas.petazzoni@bootlin.com>
+Date: Fri, 30 Apr 2021 01:51:14 -0700
+Subject: [Buildroot] [PATCH 1/4] boot/opensbi: add support for version
+ configuration
+In-Reply-To: <20210429074636.724046-2-thomas.petazzoni@bootlin.com>
 References: <20210429074636.724046-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210430082703.GA139460@x1>
+ <20210429074636.724046-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20210430085114.GA183461@x1>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 29, 2021 at 09:46:31AM +0200, Thomas Petazzoni wrote:
-> Hello,
+On Thu, Apr 29, 2021 at 09:46:32AM +0200, Thomas Petazzoni wrote:
+> OpenSBI contains platform-specific code, so very much like Linux,
+> U-Boot or other bootloaders, using the upstream version of OpenSBI
+> will very often not be sufficient.
 > 
-> The beta version of the Beagle-V RISC-V 64-bit platform has been
-> showing up at the front door of a few lucky people around the world in
-> the past days.
+> This commit therefore adds the possibility of specifying a custom
+> version of OpenSBI, either custom from upstream, custom tarball, or
+> custom from Git. Support for other version control systems has not
+> been implemented for now, but could be added later if needed.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  boot/opensbi/Config.in  | 51 +++++++++++++++++++++++++++++++++++++++++
+>  boot/opensbi/opensbi.mk | 19 ++++++++++++++-
+>  2 files changed, 69 insertions(+), 1 deletion(-)
+> 
+> diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+> index b9b0ace8af..83f40f04fa 100644
+> --- a/boot/opensbi/Config.in
+> +++ b/boot/opensbi/Config.in
+> @@ -13,6 +13,57 @@ config BR2_TARGET_OPENSBI
+>  	  https://github.com/riscv/opensbi.git
+>  
+>  if BR2_TARGET_OPENSBI
+> +choice
+> +	prompt "OpenSBI Version"
+> +	help
+> +	  Select the specific OpenSBI version you want to use
+> +
+> +config BR2_TARGET_OPENSBI_LATEST_VERSION
+> +	bool "0.8"
 
-Thank you for getting this posted so fast! The primary goal of our beta
-developer program for the BeagleV Starlight is to get the upstream
-process going so we are in a good position when the production board
-launches with distributors in September [1]. Anyone interested can join
-our public BeagleV forum to stay updated [2].
+I believe the latest version of OpenSBI is v0.9 [1].
 
-This is the first upstream patch series for BeagleV Starlight which
-made me realize I need to provide some clarification on naming guidance
-for the boards and SoCs. I have added a new section to the README [3].
+Note that we currently have a bit of a confusing situation for the
+BeagleV Starlight board. There are two repositories:
 
-Small nit for this cover letter is that it should be BeagleV instead of
-Beagle-V.  But more importantly I want to make everyone aware that there
-there will eventually be two different BeagleV Starlight boards:
+  * starfive-tech/sft-riscv-opensbi [2]
+  * starfive-tech/beagle_opensbi [3]
 
-- BeagleV Starlight board with StarFive JH7100 SoC (2x SiFive U74)
-- BeagleV Starlight board with StarFive JH7110 SoC (4x U74, PCIe, GPU)
+Wei Fu is going to sort this out and declare which is the official repo
+to use going forward.
 
-The board that a limited number of beta developers like Thomas have just
-received is the JH7100 version.
+Thanks,
+Drew
 
-Thank you,
-Drew Fustini
-BeagleBoard.org Foundation
-
-[1] https://github.com/beagleboard/beaglev-starlight
-[2] https://forum.beagleboard.org/c/beaglev
-[3] https://github.com/beagleboard/beaglev-starlight#guidance-on-naming-conventions
+[1] https://github.com/riscv/opensbi/releases/tag/v0.9
+[2] https://github.com/starfive-tech/sft-riscv-opensbi
+[3] https://github.com/starfive-tech/beagle_opensbi
