@@ -1,49 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Apr 2021 14:55:14 +0200
-Subject: [Buildroot] [git commit] package/php: security bump version to
- 7.4.18
-Message-ID: <20210430122803.8C6E7867CA@busybox.osuosl.org>
+Date: Fri, 30 Apr 2021 14:54:55 +0200
+Subject: [Buildroot] [git commit] package/feh: bump version to 3.6.3
+Message-ID: <20210430122803.7E88E86358@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac3234acd872678abba11217a258e3037c4ab2a8
+commit: https://git.buildroot.net/buildroot/commit/?id=a7dd48babcacb53b56c386454ae1cacb1e26c778
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.18
-
-Release notes: https://www.php.net/releases/7_4_18.php
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
+ package/feh/feh.hash | 2 +-
+ package/feh/feh.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 14576cf506..ecb290bab2 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  1c16cefaf88ded4c92eed6a8a41eb682bb2ef42429deb55f1c4ba159053fb98b  php-7.4.16.tar.xz
-+sha256  ab97f22b128d21dcbc009b50a37aaea0051b2721cbcd122d9e00e6ffc3c4b7e1  php-7.4.18.tar.xz
- 
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 4987f6f3bb..89437c5206 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/feh/feh.hash b/package/feh/feh.hash
+index 806bca08ce..3a2296ac23 100644
+--- a/package/feh/feh.hash
++++ b/package/feh/feh.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256 388f9dcc8284031023364355e23a82c276e79ca614f2dcd64d2f927857a4531e  feh-3.5.tar.bz2
++sha256 437420f37f11614e008d066e2a3bdefcfc78144c8212998b2bacdd5d21ea23b4  feh-3.6.3.tar.bz2
+ sha256 2c3a31327dc3cc3331aa6e759d378e4f66d0ece7174a0d5aa137f3cba4bf0509  COPYING
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index c1dae9db88..df59e67d52 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.4.16
-+PHP_VERSION = 7.4.18
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-FEH_VERSION = 3.5
++FEH_VERSION = 3.6.3
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org
+ FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
