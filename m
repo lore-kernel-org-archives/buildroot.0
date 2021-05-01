@@ -1,57 +1,139 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 May 2021 21:48:15 +0200
-Subject: [Buildroot] [PATCH 1/1] Config.in.legacy: fix
- BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
-In-Reply-To: <20210501165037.1570879-1-fontaine.fabrice@gmail.com>
-References: <20210501165037.1570879-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210501194815.GG2137340@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  1 May 2021 21:51:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iostat: drop package
+Message-ID: <20210501195126.1835388-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+This package is not maintained anymore and even upstream site is dead.
+As iostat can also be provided by sysstat, just drop the package.
 
-On 2021-05-01 18:50 +0200, Fabrice Fontaine spake thusly:
-> Commit fdb6fc2b4a5be747e7695f594cbbb1a941ceb05b forgot to select
-> BR2_LEGACY
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ Config.in.legacy                 |  6 ++++++
+ package/Config.in                |  1 -
+ package/iostat/0001-cpunum.patch | 27 ---------------------------
+ package/iostat/Config.in         |  6 ------
+ package/iostat/iostat.hash       |  3 ---
+ package/iostat/iostat.mk         | 21 ---------------------
+ 6 files changed, 6 insertions(+), 58 deletions(-)
+ delete mode 100644 package/iostat/0001-cpunum.patch
+ delete mode 100644 package/iostat/Config.in
+ delete mode 100644 package/iostat/iostat.hash
+ delete mode 100644 package/iostat/iostat.mk
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  Config.in.legacy | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 0387967311..629d02dbf2 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -148,6 +148,7 @@ comment "Legacy options removed in 2021.05"
->  
->  config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
->  	bool "sconeserver http::sconesite::image removed"
-> +	select BR2_LEGACY
->  	help
->  	  Sconeserver cannot be built with ImageMagick - it uses the
->  	  "transofrm" function which is removed from public API.
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 629d02dbf2..05b0e0d0da 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2021.05"
+ 
++config BR2_PACKAGE_IOSTAT
++	bool "iostat removed"
++	select BR2_LEGACY
++	help
++	  This package has been removed, use sysstat instead.
++
+ config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
+ 	bool "sconeserver http::sconesite::image removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index c3379b2376..b748b72790 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -483,7 +483,6 @@ endmenu
+ 	source "package/i7z/Config.in"
+ 	source "package/input-event-daemon/Config.in"
+ 	source "package/intel-microcode/Config.in"
+-	source "package/iostat/Config.in"
+ 	source "package/ipmitool/Config.in"
+ 	source "package/ipmiutil/Config.in"
+ 	source "package/irda-utils/Config.in"
+diff --git a/package/iostat/0001-cpunum.patch b/package/iostat/0001-cpunum.patch
+deleted file mode 100644
+index 0e75dbf71a..0000000000
+--- a/package/iostat/0001-cpunum.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From bf646965f75cdad77a45fa3b0046e093b202b2ce Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Thu, 22 Jul 2010 12:42:10 -0300
+-Subject: [PATCH] Make cpu number counter more reliable
+-
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- iostat.c |    2 +-
+- 1 files changed, 1 insertions(+), 1 deletions(-)
+-
+-diff --git a/iostat.c b/iostat.c
+-index 13e2af7..5d74085 100644
+---- a/iostat.c
+-+++ b/iostat.c
+-@@ -140,7 +140,7 @@ void get_number_of_cpus()
+- 
+- 	handle_error("Can't open /proc/cpuinfo", !ncpufp);
+- 	while (fgets(buffer, sizeof(buffer), ncpufp)) {
+--		if (!strncmp(buffer, "processor\t:", 11))
+-+		if (!strncasecmp(buffer, "processor\t", 10))
+- 			ncpu++;
+- 	}
+- 	fclose(ncpufp);
+--- 
+-1.7.1
+-
+diff --git a/package/iostat/Config.in b/package/iostat/Config.in
+deleted file mode 100644
+index 1aa1464581..0000000000
+--- a/package/iostat/Config.in
++++ /dev/null
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_IOSTAT
+-	bool "iostat"
+-	help
+-	  An I/O performance monitoring utility.
+-
+-	  http://www.linuxinsight.com/iostat_utility.html
+diff --git a/package/iostat/iostat.hash b/package/iostat/iostat.hash
+deleted file mode 100644
+index 0f58bbf793..0000000000
+--- a/package/iostat/iostat.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256	edc5aa73f43bd6c7d49f2c1d5906a0a68c0b28bc4dfdaf1f2aa5ae4a2449c58e	iostat-2.2.tar.gz
+-sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	LICENSE
+diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
+deleted file mode 100644
+index 4953c73ec4..0000000000
+--- a/package/iostat/iostat.mk
++++ /dev/null
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# iostat
+-#
+-################################################################################
+-
+-IOSTAT_VERSION = 2.2
+-IOSTAT_SITE = http://linuxinsight.com/sites/default/files
+-IOSTAT_LICENSE = GPL
+-IOSTAT_LICENSE_FILES = LICENSE
+-
+-define IOSTAT_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) -DHZ=100"
+-endef
+-
+-define IOSTAT_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(IOSTAT_DIR)/iostat $(TARGET_DIR)/usr/bin/iostat
+-endef
+-
+-$(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
