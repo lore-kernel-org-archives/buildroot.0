@@ -1,157 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 1 May 2021 14:21:40 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/openjdk: drop
- patch left over after last bump
-Message-ID: <20210501115435.0BE3C86732@busybox.osuosl.org>
+Date: Sat, 1 May 2021 13:14:43 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] {linux,
+ linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 10, 11}.x series
+Message-ID: <20210501115434.1BA79865D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cfcb0da91eaf38056acc1838b5a340620e684ea
+commit: https://git.buildroot.net/buildroot/commit/?id=c63cec39008803c5bfc287c0ba5e033e5e875c9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Commit 5871e278f873 (package/openjdk{, -bin}: security bump to version
-11.0.11_9) forgot to account for the openjdk patch in the versioned
-directory.
-
-That patch was a collection of backports from upstream ,that are now all
-present in 11.0.11+9, so drop that patch.
-
-Fixes: 5871e278f873
-Reported-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bc2e555eb1accec91bdcfbd8a78058513e8599d8)
+(cherry picked from commit bcf5fba0863befcf0e4da152acdbcefeed5c9e80)
+[Peter: drop 5.11.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../11.0.8+10/0001-fix-gcc-10-support.patch        | 119 ---------------------
- 1 file changed, 119 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/package/openjdk/11.0.8+10/0001-fix-gcc-10-support.patch b/package/openjdk/11.0.8+10/0001-fix-gcc-10-support.patch
-deleted file mode 100644
-index 9941d0151f..0000000000
---- a/package/openjdk/11.0.8+10/0001-fix-gcc-10-support.patch
-+++ /dev/null
-@@ -1,119 +0,0 @@
--From 58911e9de888aece29f491995a8b8a31f7d6b424 Mon Sep 17 00:00:00 2001
--From: Patrick Zhang <patrick.zhang@amperecomputing.com>
--Date: Wed, 05 Feb 2020 17:14:15 -0700
--Subject: [PATCH] fix gcc 10 support
--
--This patch fixes the "multiple definition" link errors with GCC10 due to
--GCC10 setting -fno-common by default.
--
--This is a combination of the following upstream commits:
--  - https://hg.openjdk.java.net/jdk/jdk/rev/8e6fa89397ca
--  - https://hg.openjdk.java.net/jdk/jdk/rev/6925fca95959
--  - https://hg.openjdk.java.net/jdk/jdk/rev/9e54ea7d9cd9
--
--Signed-off-by: Patrick Zhang <patrick.zhang@amperecomputing.com>
--Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-----
-- src/java.base/unix/native/libjava/childproc.c        |  1 +
-- src/java.base/unix/native/libjava/childproc.h        |  2 +-
-- .../share/native/libj2gss/NativeFunc.c               |  3 +++
-- .../share/native/libj2gss/NativeFunc.h               |  2 +-
-- src/jdk.sctp/unix/native/libsctp/Sctp.h              | 12 ++++++------
-- src/jdk.sctp/unix/native/libsctp/SctpNet.c           |  7 +++++++
-- 6 files changed, 19 insertions(+), 8 deletions(-)
--
--diff --git a/src/java.base/unix/native/libjava/childproc.c b/src/java.base/unix/native/libjava/childproc.c
--index 811aaeac5..16480bfbf 100644
----- a/src/java.base/unix/native/libjava/childproc.c
--+++ b/src/java.base/unix/native/libjava/childproc.c
--@@ -33,6 +33,7 @@
-- 
-- #include "childproc.h"
-- 
--+const char * const *parentPathv;
-- 
-- ssize_t
-- restartableWrite(int fd, const void *buf, size_t count)
--diff --git a/src/java.base/unix/native/libjava/childproc.h b/src/java.base/unix/native/libjava/childproc.h
--index 091150930..d57e44b6e 100644
----- a/src/java.base/unix/native/libjava/childproc.h
--+++ b/src/java.base/unix/native/libjava/childproc.h
--@@ -118,7 +118,7 @@ typedef struct _SpawnInfo {
--  * The cached and split version of the JDK's effective PATH.
--  * (We don't support putenv("PATH=...") in native code)
--  */
---const char * const *parentPathv;
--+extern const char * const *parentPathv;
-- 
-- ssize_t restartableWrite(int fd, const void *buf, size_t count);
-- int restartableDup2(int fd_from, int fd_to);
--diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
--index da7bc0445..5941f7b5a 100644
----- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
--+++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
--@@ -27,6 +27,9 @@
-- #include <stdlib.h>
-- #include "NativeFunc.h"
-- 
--+/* global GSS function table */
--+GSS_FUNCTION_TABLE_PTR ftab;
--+
-- /* standard GSS method names (ordering is from mapfile) */
-- static const char RELEASE_NAME[]                = "gss_release_name";
-- static const char IMPORT_NAME[]                 = "gss_import_name";
--diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
--index 82914387c..e4a4981a3 100644
----- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
--+++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
--@@ -277,6 +277,6 @@ typedef struct GSS_FUNCTION_TABLE {
-- typedef GSS_FUNCTION_TABLE *GSS_FUNCTION_TABLE_PTR;
-- 
-- /* global GSS function table */
---GSS_FUNCTION_TABLE_PTR ftab;
--+extern GSS_FUNCTION_TABLE_PTR ftab;
-- 
-- #endif
--diff --git a/src/jdk.sctp/unix/native/libsctp/Sctp.h b/src/jdk.sctp/unix/native/libsctp/Sctp.h
--index cc1367f78..46b07db0a 100644
----- a/src/jdk.sctp/unix/native/libsctp/Sctp.h
--+++ b/src/jdk.sctp/unix/native/libsctp/Sctp.h
--@@ -322,12 +322,12 @@ typedef int sctp_peeloff_func(int sock, sctp_assoc_t id);
-- 
-- #endif /* __linux__ */
-- 
---sctp_getladdrs_func* nio_sctp_getladdrs;
---sctp_freeladdrs_func* nio_sctp_freeladdrs;
---sctp_getpaddrs_func* nio_sctp_getpaddrs;
---sctp_freepaddrs_func* nio_sctp_freepaddrs;
---sctp_bindx_func* nio_sctp_bindx;
---sctp_peeloff_func* nio_sctp_peeloff;
--+extern sctp_getladdrs_func* nio_sctp_getladdrs;
--+extern sctp_freeladdrs_func* nio_sctp_freeladdrs;
--+extern sctp_getpaddrs_func* nio_sctp_getpaddrs;
--+extern sctp_freepaddrs_func* nio_sctp_freepaddrs;
--+extern sctp_bindx_func* nio_sctp_bindx;
--+extern sctp_peeloff_func* nio_sctp_peeloff;
-- 
-- jboolean loadSocketExtensionFuncs(JNIEnv* env);
-- 
--diff --git a/src/jdk.sctp/unix/native/libsctp/SctpNet.c b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
--index d40c15aa3..ab9b6e093 100644
----- a/src/jdk.sctp/unix/native/libsctp/SctpNet.c
--+++ b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
--@@ -43,6 +43,13 @@ static jmethodID isaCtrID = 0;
-- static const char* nativeSctpLib = "libsctp.so.1";
-- static jboolean funcsLoaded = JNI_FALSE;
-- 
--+sctp_getladdrs_func* nio_sctp_getladdrs;
--+sctp_freeladdrs_func* nio_sctp_freeladdrs;
--+sctp_getpaddrs_func* nio_sctp_getpaddrs;
--+sctp_freepaddrs_func* nio_sctp_freepaddrs;
--+sctp_bindx_func* nio_sctp_bindx;
--+sctp_peeloff_func* nio_sctp_peeloff;
--+
-- JNIEXPORT jint JNICALL DEF_JNI_OnLoad
--   (JavaVM *vm, void *reserved) {
--     return JNI_VERSION_1_2;
---- 
--2.26.2
--
+diff --git a/linux/Config.in b/linux/Config.in
+index fdfd22889e..2ee5b700d3 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -125,7 +125,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.10.25" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.10.32" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.182-cip45" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.165-cip41-rt18" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 0d2db68882..86078b9ea7 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,11 +1,11 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  930ae76b9a3b64b98802849aca332d17a706f20595de21e1ae729b55ee461add  linux-5.10.25.tar.xz
+-sha256  1c3cef545f366b56332c11c28d074c9d9148c28059a970ec8710826652237560  linux-5.4.107.tar.xz
++sha256  644f8e326e4cb8eac65f0874774c09ccf91cbe0b55eb8438c1e8711d3d07d7ba  linux-5.10.32.tar.xz
++sha256  be98f087cb58f23bc5edb8ee80a4794a569d48049d75b1a8eaef9f80fede9557  linux-5.4.114.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  d270c529910aefa70f7eeaafe313588b9949cfde33a5553bd4cd1a1249c4e97b  linux-4.4.262.tar.xz
+-sha256  b22e764095362d9e63d76375db838d9372474ba5cbe6132c9a8b07f7533f07ff  linux-4.9.262.tar.xz
+-sha256  7adc041af81424ff8d68affe3005fa9e5babc4e84e0b07e4effdf54225ba9426  linux-4.14.226.tar.xz
+-sha256  05db750ba01ad557bef50835c253894fad9fb0db2224f0e803b25e2ff7ab2365  linux-4.19.182.tar.xz
++sha256  44f3b35848cc07bba91e845b8d232af4ed48dc8855751820c8f405aa5d1266e2  linux-4.4.267.tar.xz
++sha256  983b9afe69df31de8984d40a88afec38d617322d6521ef714db36b3e56220a60  linux-4.9.267.tar.xz
++sha256  573b79adee3490a8dd82f663bb187218288c99cd2613fd9f69edf915f91e6682  linux-4.14.231.tar.xz
++sha256  b09cf1f026b1260bae6480d98c471958eff3ad64b65e59e64a6852f678050077  linux-4.19.188.tar.xz
+ # Locally computed
+ sha256  9f1de83c5c2bb582a33bd4ee892d45671901cd06af9dc159f0f499f1b5265b20  linux-cip-4.19.182-cip45.tar.gz
+ sha256  0eeba6d6ecc45cf8f16458842b64d22e7064b9de9c31c11d1c395b08a47e3855  linux-cip-4.19.165-cip41-rt18.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index caf8af67a8..8c01b32179 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -346,12 +346,12 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.262"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.262"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.226"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.182"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.107"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.25"	if BR2_KERNEL_HEADERS_5_10
++	default "4.4.267"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.267"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.231"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.188"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.114"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.32"	if BR2_KERNEL_HEADERS_5_10
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
