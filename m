@@ -1,26 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 01 May 2021 14:14:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 4.0.6
-In-Reply-To: <20210427055402.1079630-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 27 Apr 2021 07:54:02 +0200")
-References: <20210427055402.1079630-1-fontaine.fabrice@gmail.com>
-Message-ID: <871raq7isi.fsf@dell.be.48ers.dk>
+Date: Sat, 01 May 2021 14:16:24 +0200
+Subject: [Buildroot] [PATCH] package/fmt: get rid of extra space
+In-Reply-To: <20210427181932.5284-1-b.bilas@grinn-global.com> (Bartosz Bilas's
+ message of "Tue, 27 Apr 2021 20:19:32 +0200")
+References: <20210427181932.5284-1-b.bilas@grinn-global.com>
+Message-ID: <87wnsi644n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bartosz" == Bartosz Bilas <b.bilas@grinn-global.com> writes:
 
- > "The LXC 4.0 branch is supported until June 2025. Only bugfixes and
- > securitiy issues get included into the stable bugfix releases, so it's
- > always safe and recommended to keep up and run the latest bugfix
- > release."
+ > Commit 32c10f256bbc3dd09a72d45107682afb4448f07b
+ > introduced extra space so let's remove that in
+ > order to be consistent with other variables.
 
- > https://discuss.linuxcontainers.org/t/lxc-4-0-6-lts-has-been-released/9926
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 
 Committed to 2021.02.x, thanks.
 
