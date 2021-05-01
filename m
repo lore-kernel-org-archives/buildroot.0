@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 01 May 2021 14:16:40 +0200
-Subject: [Buildroot] [PATCH] package/openjdk{,
- -bin}: security bump to version 11.0.11_9
-In-Reply-To: <20210427125903.31573-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 27 Apr 2021 14:59:02 +0200")
-References: <20210427125903.31573-1-peter@korsgaard.com>
-Message-ID: <87sg366447.fsf@dell.be.48ers.dk>
+Date: Sat, 01 May 2021 14:17:41 +0200
+Subject: [Buildroot] [PATCH 1/3] package/makedevs: define extract step
+ to allow patching
+In-Reply-To: <20210426214628.20941-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 26 Apr 2021 23:46:26 +0200")
+References: <20210426214628.20941-1-peter@korsgaard.com>
+Message-ID: <87o8du642i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +14,16 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security issues:
- > CVE-2020-14779, CVE-2020-14781, CVE-2020-14782, CVE-2020-14792,
- > CVE-2020-14796, CVE-2020-14797, CVE-2020-14798, CVE-2020-14803,
- > CVE-2021-2161, CVE-2021-2163
+ > As recently discussed on the list:
+ > http://lists.busybox.net/pipermail/buildroot/2021-April/308373.html
 
- > For details. see the advisories:
- > https://openjdk.java.net/groups/vulnerability/advisories/2020-10-20
- > https://openjdk.java.net/groups/vulnerability/advisories/2021-01-19
- > https://openjdk.java.net/groups/vulnerability/advisories/2021-04-20
+ > Packages like makedevs where the source code is included in the Buildroot
+ > tree, currently doesn't use an extract step (which also skips the patch
+ > step), so they cannot be patched by a patch in BR2_GLOBAL_PATCH_DIR (or the
+ > pkgdir), which is a bit confusing.
+
+ > As a fix, add a simple extract step that copies the source file to the build
+ > directory, so the patch step gets run as well.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
