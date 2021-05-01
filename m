@@ -1,32 +1,42 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 1 May 2021 15:16:44 +0200
-Subject: [Buildroot] [git commit] package/libtomcrypt: update home page URL
- to https
-Message-ID: <20210501124944.1A24E8655B@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 1 May 2021 15:18:42 +0200
+Subject: [Buildroot] [PATCH v1 1/3] package/libtomcrypt: add pkgconfig
+ support
+In-Reply-To: <20210412231516.6cbc09f2@gmx.net>
+References: <20210412195527.9282-1-ps.report@gmx.net>
+ <20210412221453.5195d4b5@windsurf.home> <20210412231516.6cbc09f2@gmx.net>
+Message-ID: <45c379f0-8ca0-6891-1b1e-b166600da9ca@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27b30ee74253abafb6ea083fcee065e4a957224a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- update home page URL to https
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/libtomcrypt/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 12/04/2021 23:15, Peter Seiderer wrote:
+> Hello Thomas,
+> 
+> On Mon, 12 Apr 2021 22:14:53 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+>> On Mon, 12 Apr 2021 21:55:25 +0200
+>> Peter Seiderer <ps.report@gmx.net> wrote:
+>>
+>>> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>>
+>> Is there any specific motivation? Does this had a chance of going
+>> upstream ?
+> 
+> For an custom project, previously developed on with cmake on ubuntu (which
+> provides the pkgconfig file)....
+> 
+> Can try to suggest upstream...
 
-diff --git a/package/libtomcrypt/Config.in b/package/libtomcrypt/Config.in
-index a7c5f50015..2459cd21e8 100644
---- a/package/libtomcrypt/Config.in
-+++ b/package/libtomcrypt/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_LIBTOMCRYPT
- 	  functions, chaining modes, pseudo-random number generators,
- 	  public key cryptography and a plethora of other routines.
- 
--	  http://www.libtom.net
-+	  https://www.libtom.net
+ Adding a .pc file in Buildroot usually doesn't make much sense, because no
+package that depends on it is going to use it. So yes, please organise this
+upstream.
+
+ Therefore, I've marked this patch as Rejected.
+
+ Regards,
+ Arnout
