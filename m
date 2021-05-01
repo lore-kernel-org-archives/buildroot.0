@@ -1,83 +1,55 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 1 May 2021 14:41:11 +0200
-Subject: [Buildroot] [git commit] package/python-rpi-ws281w: fix build with
- gcc 4.8
-Message-ID: <20210501121603.33D148650B@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 1 May 2021 14:47:10 +0200
+Subject: [Buildroot] [PATCH v1] package/sane-backends: poppler-glib
+ needs cairo
+In-Reply-To: <20210412193228.13226-1-ps.report@gmx.net>
+References: <20210412193228.13226-1-ps.report@gmx.net>
+Message-ID: <153b0687-cd0f-ad87-0263-1e1c687f527d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73d0da2dd66295e6c5503181a34bb96046e7250d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix build failure with gcc 4.8 which is raised since bump to version
-4.2.6 in commit f21d46bf99e2c3a86a86586bc3e82b214104cd30
 
-Fixes:
- - http://autobuild.buildroot.org/results/3d037922484bfc45d0f985f87b38f20c5a4ab064
+On 12/04/2021 21:32, Peter Seiderer wrote:
+> - poppler-glib depends on cairo (see poppler-0.84.0/CMakeLists.txt):
+> 
+>   185 else()
+>   186   set(CAIRO_FEATURE "#undef POPPLER_HAS_CAIRO")
+>   187   set(ENABLE_GLIB OFF)
+>   188 endif()
+> 
+> Fixes:
+> 
+>   - http://autobuild.buildroot.net/results/9a345f82c7a010f6b2a3361f25b14caefa9dcbef
+> 
+>   checking for POPPLER_GLIB... no
+>   configure: error: poppler-glib requested but not found
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .../0001-ws2811.c-fix-build-with-gcc-4.8.patch     | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ Applied to master, thanks.
 
-diff --git a/package/python-rpi-ws281x/0001-ws2811.c-fix-build-with-gcc-4.8.patch b/package/python-rpi-ws281x/0001-ws2811.c-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..9b534ac67a
---- /dev/null
-+++ b/package/python-rpi-ws281x/0001-ws2811.c-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,51 @@
-+From 8faa5c2fb2b04b4fb062255aa807abafc50bff66 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 3 Apr 2021 10:27:20 +0200
-+Subject: [PATCH] ws2811.c: fix build with gcc 4.8
-+
-+Fix the following build failure with gcc 4.8 (which has been added by
-+commit 391f6e856d28510bd9ae4efd3a166da7f73613ab):
-+
-+lib/ws2811.c: In function 'ws2811_set_custom_gamma_factor':
-+lib/ws2811.c:1289:5: error: 'for' loop initial declarations are only allowed in C99 mode
-+     for (int chan = 0; chan < RPI_PWM_CHANNELS; chan++)
-+     ^
-+lib/ws2811.c:1289:5: note: use option -std=c99 or -std=gnu99 to compile your code
-+lib/ws2811.c:1295:11: error: 'for' loop initial declarations are only allowed in C99 mode
-+           for(int counter = 0; counter < 256; counter++)
-+           ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/3d037922484bfc45d0f985f87b38f20c5a4ab064
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/jgarff/rpi_ws281x/commit/0814bae544f0184ab1600bc2660486874eef5970]
-+---
-+ ws2811.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/ws2811.c b/ws2811.c
-+index f5cdebd..6482796 100644
-+--- a/lib/ws2811.c
-++++ b/lib/ws2811.c
-+@@ -1286,13 +1286,14 @@ const char * ws2811_get_return_t_str(const ws2811_return_t state)
-+ 
-+ void ws2811_set_custom_gamma_factor(ws2811_t *ws2811, double gamma_factor)
-+ {
-+-    for (int chan = 0; chan < RPI_PWM_CHANNELS; chan++)
-++    int chan, counter;
-++    for (chan = 0; chan < RPI_PWM_CHANNELS; chan++)
-+     {
-+         ws2811_channel_t *channel = &ws2811->channel[chan];
-+ 
-+         if (channel->gamma)
-+         {
-+-          for(int counter = 0; counter < 256; counter++)
-++          for(counter = 0; counter < 256; counter++)
-+           {
-+ 
-+              channel->gamma[counter] = (gamma_factor > 0)? (int)(pow((float)counter / (float)255.00, gamma_factor) * 255.00 + 0.5) : counter;
-+-- 
-+2.30.2
-+
+ Regards,
+ Arnout
+
+> ---
+>  package/sane-backends/sane-backends.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+> index 697aa3252b..a8f7466f70 100644
+> --- a/package/sane-backends/sane-backends.mk
+> +++ b/package/sane-backends/sane-backends.mk
+> @@ -61,7 +61,7 @@ else
+>  SANE_BACKENDS_CONF_OPTS += --without-libcurl
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_POPPLER)$(BR2_PACKAGE_LIBGLIB2),yy)
+> +ifeq ($(BR2_PACKAGE_POPPLER)$(BR2_PACKAGE_CAIRO)$(BR2_PACKAGE_LIBGLIB2),yyy)
+>  SANE_BACKENDS_DEPENDENCIES += poppler libglib2
+>  SANE_BACKENDS_CONF_OPTS += --with-poppler-glib
+>  else
+> 
