@@ -1,139 +1,229 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  1 May 2021 21:51:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iostat: drop package
-Message-ID: <20210501195126.1835388-1-fontaine.fabrice@gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sat,  1 May 2021 12:56:18 -0700
+Subject: [Buildroot] [PATCH 1/3] package/libglib2: bump to version 2.68.1
+Message-ID: <20210501195620.910716-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package is not maintained anymore and even upstream site is dead.
-As iostat can also be provided by sysstat, just drop the package.
+Other changes:
+  - Drop 0002-allow-explicit-disabling-of-tests.patch as this patch has been
+    upstreamed and the option is now simply "tests."
+  - Add -Dglib_debug=disabled and -Dlibelf=disabled as defaults to both
+    HOST_LIBGLIB2_CONF_OPTS and LIBGLIB2_CONF_OPTS
+  - Refactor existing patches to apply to 2.68.1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Tested with test-pkg -p libglib2 -a.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- Config.in.legacy                 |  6 ++++++
- package/Config.in                |  1 -
- package/iostat/0001-cpunum.patch | 27 ---------------------------
- package/iostat/Config.in         |  6 ------
- package/iostat/iostat.hash       |  3 ---
- package/iostat/iostat.mk         | 21 ---------------------
- 6 files changed, 6 insertions(+), 58 deletions(-)
- delete mode 100644 package/iostat/0001-cpunum.patch
- delete mode 100644 package/iostat/Config.in
- delete mode 100644 package/iostat/iostat.hash
- delete mode 100644 package/iostat/iostat.mk
+ ...01-fix-compile-time-atomic-detection.patch | 12 +++---
+ ...02-allow-explicit-disabling-of-tests.patch | 37 -------------------
+ ...atch => 0002-remove-cpp-requirement.patch} |  6 +--
+ ...at-nonliteral-to-compiler-arguments.patch} |  7 ++--
+ package/libglib2/libglib2.hash                |  4 +-
+ package/libglib2/libglib2.mk                  | 12 ++++--
+ 6 files changed, 24 insertions(+), 54 deletions(-)
+ delete mode 100644 package/libglib2/0002-allow-explicit-disabling-of-tests.patch
+ rename package/libglib2/{0003-remove-cpp-requirement.patch => 0002-remove-cpp-requirement.patch} (95%)
+ rename package/libglib2/{0004-Add-Wno-format-nonliteral-to-compiler-arguments.patch => 0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch} (84%)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 629d02dbf2..05b0e0d0da 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
+diff --git a/package/libglib2/0001-fix-compile-time-atomic-detection.patch b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+index d84a1ab460..aae505f8e5 100644
+--- a/package/libglib2/0001-fix-compile-time-atomic-detection.patch
++++ b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+@@ -10,19 +10,21 @@ See : https://gitlab.gnome.org/GNOME/glib/issues/1063
  
- comment "Legacy options removed in 2021.05"
+ Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
++Refresh for 2.68.1
+ ---
+- glib/gthread-posix.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
++ glib/gthread-posix.c | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
  
-+config BR2_PACKAGE_IOSTAT
-+	bool "iostat removed"
-+	select BR2_LEGACY
-+	help
-+	  This package has been removed, use sysstat instead.
-+
- config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
- 	bool "sconeserver http::sconesite::image removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index c3379b2376..b748b72790 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -483,7 +483,6 @@ endmenu
- 	source "package/i7z/Config.in"
- 	source "package/input-event-daemon/Config.in"
- 	source "package/intel-microcode/Config.in"
--	source "package/iostat/Config.in"
- 	source "package/ipmitool/Config.in"
- 	source "package/ipmiutil/Config.in"
- 	source "package/irda-utils/Config.in"
-diff --git a/package/iostat/0001-cpunum.patch b/package/iostat/0001-cpunum.patch
+ diff --git a/glib/gthread-posix.c b/glib/gthread-posix.c
+ index 71a6b7b..d09d029 100644
+ --- a/glib/gthread-posix.c
+ +++ b/glib/gthread-posix.c
+-@@ -73,7 +73,7 @@
++@@ -72,8 +72,7 @@
++ #include <sys/syscall.h>
+  #endif
+  
+- /* clang defines __ATOMIC_SEQ_CST but doesn't support the GCC extension */
+--#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) && !defined(__clang__)
++-#if defined(HAVE_FUTEX) && \
++-    (defined(HAVE_STDATOMIC_H) || defined(__ATOMIC_SEQ_CST))
+ +#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) && defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4) && !defined(__clang__)
+  #define USE_NATIVE_MUTEX
+  #endif
+diff --git a/package/libglib2/0002-allow-explicit-disabling-of-tests.patch b/package/libglib2/0002-allow-explicit-disabling-of-tests.patch
 deleted file mode 100644
-index 0e75dbf71a..0000000000
---- a/package/iostat/0001-cpunum.patch
+index c865c04e03..0000000000
+--- a/package/libglib2/0002-allow-explicit-disabling-of-tests.patch
 +++ /dev/null
-@@ -1,27 +0,0 @@
--From bf646965f75cdad77a45fa3b0046e093b202b2ce Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Thu, 22 Jul 2010 12:42:10 -0300
--Subject: [PATCH] Make cpu number counter more reliable
+@@ -1,37 +0,0 @@
+-From cdccbc6ec36243463613cb32d7058c26c3c51e16 Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <Aduskett@gmail.com>
+-Date: Wed, 18 Sep 2019 09:50:00 -0700
+-Subject: [PATCH] allow explicit disabling of tests
 -
+-Upstream won't build tests when cross-compiling. However; this means still
+-building the tests during a host build. Building the tests causes build
+-failures on older distributions such as CentOS 6 and Debian 7 because the
+-command `objcopy --add-symbol` is used when building the test
+-"test_resources2," which is not available with the older version of objcopy
+-provided by the distributions.
 -
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Instead, remove the conditional checks which set build_tests and only check if
+-installed_tests_enabled is passed.
+-
+-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+-Refresh for 2.62.2
 ----
-- iostat.c |    2 +-
-- 1 files changed, 1 insertions(+), 1 deletions(-)
+- meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/iostat.c b/iostat.c
--index 13e2af7..5d74085 100644
----- a/iostat.c
--+++ b/iostat.c
--@@ -140,7 +140,7 @@ void get_number_of_cpus()
+-diff --git a/meson.build b/meson.build
+-index 99806d0..3206603 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -84,7 +84,7 @@ installed_tests_template = files('template.test.in')
+- installed_tests_template_tap = files('template-tap.test.in')
 - 
-- 	handle_error("Can't open /proc/cpuinfo", !ncpufp);
-- 	while (fgets(buffer, sizeof(buffer), ncpufp)) {
---		if (!strncmp(buffer, "processor\t:", 11))
--+		if (!strncasecmp(buffer, "processor\t", 10))
-- 			ncpu++;
-- 	}
-- 	fclose(ncpufp);
+- # Don?t build the tests unless we can run them (either natively, in an exe wrapper, or by installing them for later use)
+--build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper()) or installed_tests_enabled
+-+build_tests = installed_tests_enabled
+- 
+- add_project_arguments('-D_GNU_SOURCE', language: 'c')
+- 
 --- 
--1.7.1
+-2.23.0
 -
-diff --git a/package/iostat/Config.in b/package/iostat/Config.in
-deleted file mode 100644
-index 1aa1464581..0000000000
---- a/package/iostat/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_IOSTAT
--	bool "iostat"
--	help
--	  An I/O performance monitoring utility.
--
--	  http://www.linuxinsight.com/iostat_utility.html
-diff --git a/package/iostat/iostat.hash b/package/iostat/iostat.hash
-deleted file mode 100644
-index 0f58bbf793..0000000000
---- a/package/iostat/iostat.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256	edc5aa73f43bd6c7d49f2c1d5906a0a68c0b28bc4dfdaf1f2aa5ae4a2449c58e	iostat-2.2.tar.gz
--sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	LICENSE
-diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
-deleted file mode 100644
-index 4953c73ec4..0000000000
---- a/package/iostat/iostat.mk
-+++ /dev/null
-@@ -1,21 +0,0 @@
--################################################################################
--#
--# iostat
--#
--################################################################################
--
--IOSTAT_VERSION = 2.2
--IOSTAT_SITE = http://linuxinsight.com/sites/default/files
--IOSTAT_LICENSE = GPL
--IOSTAT_LICENSE_FILES = LICENSE
--
--define IOSTAT_BUILD_CMDS
--	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TARGET_CFLAGS) -DHZ=100"
--endef
--
--define IOSTAT_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(IOSTAT_DIR)/iostat $(TARGET_DIR)/usr/bin/iostat
--endef
--
--$(eval $(generic-package))
+diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0002-remove-cpp-requirement.patch
+similarity index 95%
+rename from package/libglib2/0003-remove-cpp-requirement.patch
+rename to package/libglib2/0002-remove-cpp-requirement.patch
+index 11978e9755..35d46e161b 100644
+--- a/package/libglib2/0003-remove-cpp-requirement.patch
++++ b/package/libglib2/0002-remove-cpp-requirement.patch
+@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
+ @@ -1,4 +1,4 @@
+ -project('glib', 'c', 'cpp',
+ +project('glib', 'c',
+-   version : '2.66.8',
++   version : '2.68.1',
+    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+    meson_version : '>= 0.49.2',
+ @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+@@ -46,7 +46,7 @@ index 4bbf4c2..ac59f4e 100644
+  
+  cc_can_run = not meson.is_cross_build() or meson.has_exe_wrapper()
+  
+-@@ -1548,20 +1547,6 @@ if g_have_iso_c_varargs
++@@ -1679,20 +1678,6 @@ if g_have_iso_c_varargs
+  #endif''')
+  endif
+  
+@@ -67,7 +67,7 @@ index 4bbf4c2..ac59f4e 100644
+  g_have_gnuc_varargs = cc.compiles('''
+    void some_func (void) {
+      int a(int p1, int p2, int p3);
+-@@ -2167,7 +2152,6 @@ subdir('gobject')
++@@ -2330,7 +2315,6 @@ subdir('gobject')
+  subdir('gthread')
+  subdir('gmodule')
+  subdir('gio')
+diff --git a/package/libglib2/0004-Add-Wno-format-nonliteral-to-compiler-arguments.patch b/package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch
+similarity index 84%
+rename from package/libglib2/0004-Add-Wno-format-nonliteral-to-compiler-arguments.patch
+rename to package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch
+index f792ceba3f..67aea7982e 100644
+--- a/package/libglib2/0004-Add-Wno-format-nonliteral-to-compiler-arguments.patch
++++ b/package/libglib2/0003-Add-Wno-format-nonliteral-to-compiler-arguments.patch
+@@ -7,6 +7,7 @@ This warning is a false positive on older versions of gcc.
+ See https://gitlab.gnome.org/GNOME/glib/issues/1744 for more details.
+ 
+ Signed-off-by: Adam Duskett <Aduskett@gmail.com>
++Refresh for 2.68.1
+ ---
+  meson.build | 1 +
+  1 file changed, 1 insertion(+)
+@@ -15,14 +16,14 @@ diff --git a/meson.build b/meson.build
+ index 3c615b7..7cae4e8 100644
+ --- a/meson.build
+ +++ b/meson.build
+-@@ -372,6 +372,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
++@@ -431,6 +431,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
++     # building with -Wbad-function-cast.
++     '-Wno-bad-function-cast',
+      '-Wno-cast-function-type',
+ +    '-Wno-format-nonliteral',
+      # Due to function casts through (void*) we cannot support -Wpedantic:
+      # https://wiki.gnome.org/Projects/GLib/CompilerRequirements#Function_pointer_conversions.
+      '-Wno-pedantic',
+-     '-Werror=declaration-after-statement',
+-     '-Werror=format=2',
+ -- 
+ 2.20.1
+ 
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 4f69f1cc48..e3a3aa7561 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.66/glib-2.66.8.sha256sum
+-sha256  97bc87dd91365589af5cbbfea2574833aea7a1b71840fd365ecd2852c76b9c8b  glib-2.66.8.tar.xz
++# https://download.gnome.org/sources/glib/2.68/glib-2.68.1.sha256sum
++sha256  241654b96bd36b88aaa12814efc4843b578e55d47440103727959ac346944333  glib-2.68.1.tar.xz
+ # License files, locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 9ce40d91ff..b5554d6b56 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBGLIB2_VERSION_MAJOR = 2.66
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).8
++LIBGLIB2_VERSION_MAJOR = 2.68
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
+@@ -25,11 +25,13 @@ endif
+ HOST_LIBGLIB2_CONF_OPTS = \
+ 	-Ddtrace=false \
+ 	-Dfam=false \
++	-Dglib_debug=disabled \
++	-Dlibelf=disabled \
+ 	-Dselinux=disabled \
+ 	-Dsystemtap=false \
+ 	-Dxattr=false \
+ 	-Dinternal_pcre=false \
+-	-Dinstalled_tests=false \
++	-Dtests=false \
+ 	-Doss_fuzz=disabled
+ 
+ LIBGLIB2_DEPENDENCIES = \
+@@ -49,9 +51,11 @@ HOST_LIBGLIB2_DEPENDENCIES = \
+ # ${libdir} would be prefixed by the sysroot by pkg-config, causing a
+ # bogus installation path once combined with $(DESTDIR).
+ LIBGLIB2_CONF_OPTS = \
++	-Dglib_debug=disabled \
+ 	-Dinternal_pcre=false \
++	-Dlibelf=disabled \
+ 	-Dgio_module_dir=/usr/lib/gio/modules \
+-	-Dinstalled_tests=false \
++	-Dtests=false \
+ 	-Doss_fuzz=disabled
+ 
+ LIBGLIB2_MESON_EXTRA_PROPERTIES = \
 -- 
-2.30.2
+2.31.1
