@@ -1,32 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 01 May 2021 14:17:51 +0200
-Subject: [Buildroot] [PATCH 2/3] package/mkpaswd: define extract step to
- allow patching
-In-Reply-To: <20210426214628.20941-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 26 Apr 2021 23:46:27 +0200")
-References: <20210426214628.20941-1-peter@korsgaard.com>
- <20210426214628.20941-2-peter@korsgaard.com>
-Message-ID: <87fsz66428.fsf@dell.be.48ers.dk>
+Date: Sat, 01 May 2021 14:18:01 +0200
+Subject: [Buildroot] [PATCH] package/efl: bump to version 1.25.1
+In-Reply-To: <2d2c35d4-bee6-6a3e-1e03-d9c863ed9c5e@gmail.com> (Romain Naour's
+ message of "Thu, 29 Apr 2021 11:26:51 +0200")
+References: <20210428225253.3948537-1-romain.naour@gmail.com>
+ <87bl9xa1w7.fsf@dell.be.48ers.dk>
+ <2d2c35d4-bee6-6a3e-1e03-d9c863ed9c5e@gmail.com>
+Message-ID: <87bl9u641y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > As recently discussed on the list:
- > http://lists.busybox.net/pipermail/buildroot/2021-April/308373.html
+ > Hello Peter,
+ > Le 29/04/2021 ? 11:14, Peter Korsgaard a ?crit?:
+ >>>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+ >> 
+ >> > See:
+ >> > https://www.enlightenment.org/news/efl-1.25.1
+ >> 
+ >> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ >> 
+ >> Committed, thanks. I take it that this is also 2021.02.x material?
+ >> 
 
- > Packages like mkpasswd where the source code is included in the Buildroot
- > tree, currently doesn't use an extract step (which also skips the patch
- > step), so they cannot be patched by a patch in BR2_GLOBAL_PATCH_DIR (or the
- > pkgdir), which is a bit confusing.
-
- > As a fix, add a simple extract step that copies the source files to the
- > build directory, so the patch step gets run as well.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Yes please.
 
 Committed to 2021.02.x, thanks.
 
