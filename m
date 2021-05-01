@@ -1,68 +1,62 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 1 May 2021 15:23:09 +0200
-Subject: [Buildroot] [git commit] package/imx-uuc: bump version and enable
- for i.MX8 architecture
-Message-ID: <20210501141613.9FAA1865D7@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 1 May 2021 16:51:21 +0200
+Subject: [Buildroot] [PATCH 00/10] Bump all skarnet packages
+In-Reply-To: <EpyK3vbVbggszRoDfscZyQtYcRE7XwDFYOl5AAGibU@cp4-web-031.plabs.ch>
+References: <EpyK3vbVbggszRoDfscZyQtYcRE7XwDFYOl5AAGibU@cp4-web-031.plabs.ch>
+Message-ID: <ff179344-3f64-2946-d7bb-fc3b5286abc0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=421bcc84707d67ed5d4680e2bf8f7023afc70c1b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The imx-uuc package was only selectable on 32-bit arm targets; this
-patch allows aarch64 targets such as i.MX8 to select the package
-and use the ufb for fastboot support against the mfgtools "uuu".
 
-Also bumping to latest upstream commit before uuc is removed from the
-standard build, from
-    https://github.com/NXPmicro/imx-uuc
+On 28/04/2021 00:41, Dick Olsson via buildroot wrote:
+> Quick bump of the latest releases on skarnet.org.
+> 
+> This patchset also adjusts hash file indentations on the packages
+> that were not fixed already.
 
-Tested on i.MX8QXP.
+ Series applied to master, thanks.
 
-Signed-off-by: Charles Hardin <ckhardin@gmail.com>
-Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/freescale-imx/imx-uuc/Config.in    | 2 +-
- package/freescale-imx/imx-uuc/imx-uuc.hash | 2 +-
- package/freescale-imx/imx-uuc/imx-uuc.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/package/freescale-imx/imx-uuc/Config.in b/package/freescale-imx/imx-uuc/Config.in
-index 0e257bde17..6c3d4a6361 100644
---- a/package/freescale-imx/imx-uuc/Config.in
-+++ b/package/freescale-imx/imx-uuc/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_IMX_UUC
- 	bool "imx-uuc"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_arm # Only relevant for i.MX
-+	depends on BR2_arm || BR2_aarch64 # Only relevant for i.MX
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # usb_functionfs_descs_head_v2
- 	select BR2_PACKAGE_HOST_DOSFSTOOLS
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.hash b/package/freescale-imx/imx-uuc/imx-uuc.hash
-index 57a5098597..5d95463903 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.hash
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 2784e0826074335893fdad20e9a4faaedced2f206565c383043fbd169e9273a4  imx-uuc-fc48b497fe961d601b4bcced807f562090854ec9.tar.gz
-+sha256 7f4d4838d4bf489932ef4a242677db30ad8d9ffd76065e07f4ddee3e6c35db82  imx-uuc-d6afb27e55d73d7ad08cd2dd51c784d8ec9694dc.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.mk b/package/freescale-imx/imx-uuc/imx-uuc.mk
-index 2ed910cb84..4e065c19ea 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.mk
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMX_UUC_VERSION = fc48b497fe961d601b4bcced807f562090854ec9
-+IMX_UUC_VERSION = d6afb27e55d73d7ad08cd2dd51c784d8ec9694dc
- IMX_UUC_SITE = $(call github,NXPmicro,imx-uuc,$(IMX_UUC_VERSION))
- IMX_UUC_LICENSE = GPL-2.0+
- IMX_UUC_LICENSE_FILES = COPYING
+> 
+> Dick Olsson (10):
+>   package/skalibs: bump to version 2.10.0.3
+>   package/execline: bump to version 2.8.0.1
+>   package/s6: bump to version 2.10.0.3
+>   package/s6-rc: bump to version 0.5.2.2
+>   package/s6-portable-utils: bump to version 2.2.3.2
+>   package/s6-linux-utils: bump to version 2.5.1.5
+>   package/s6-dns: bump to version 2.3.5.1
+>   package/s6-networking: bump to version 2.4.1.1
+>   package/s6-linux-init: bump to version 1.0.6.3
+>   package/mdevd: bump to version 0.1.4.0
+> 
+>  package/execline/execline.hash                |   2 +-
+>  package/execline/execline.mk                  |   2 +-
+>  package/mdevd/mdevd.hash                      |   2 +-
+>  package/mdevd/mdevd.mk                        |   2 +-
+>  package/s6-dns/s6-dns.hash                    |   4 +-
+>  package/s6-dns/s6-dns.mk                      |   2 +-
+>  package/s6-linux-init/s6-linux-init.hash      |   2 +-
+>  package/s6-linux-init/s6-linux-init.mk        |   2 +-
+>  package/s6-linux-utils/s6-linux-utils.hash    |   4 +-
+>  package/s6-linux-utils/s6-linux-utils.mk      |   2 +-
+>  package/s6-networking/s6-networking.hash      |   4 +-
+>  package/s6-networking/s6-networking.mk        |   2 +-
+>  .../s6-portable-utils/s6-portable-utils.hash  |   4 +-
+>  .../s6-portable-utils/s6-portable-utils.mk    |   2 +-
+>  package/s6-rc/s6-rc.hash                      |   4 +-
+>  package/s6-rc/s6-rc.mk                        |   2 +-
+>  package/s6/s6.hash                            |   4 +-
+>  package/s6/s6.mk                              |   2 +-
+>  .../0001-Do-not-ld-into-dev-null.patch        | 115 ------------------
+>  package/skalibs/skalibs.hash                  |   4 +-
+>  package/skalibs/skalibs.mk                    |   2 +-
+>  21 files changed, 27 insertions(+), 142 deletions(-)
+>  delete mode 100644 package/skalibs/0001-Do-not-ld-into-dev-null.patch
+> 
