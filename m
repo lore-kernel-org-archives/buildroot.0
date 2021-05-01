@@ -1,51 +1,157 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 1 May 2021 14:21:23 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/php: security
- bump version to 7.4.18
-Message-ID: <20210501115434.F38AD86732@busybox.osuosl.org>
+Date: Sat, 1 May 2021 14:21:40 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/openjdk: drop
+ patch left over after last bump
+Message-ID: <20210501115435.0BE3C86732@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1d492f17f451abceee38da1729771452ea304a8
+commit: https://git.buildroot.net/buildroot/commit/?id=0cfcb0da91eaf38056acc1838b5a340620e684ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.18
+Commit 5871e278f873 (package/openjdk{, -bin}: security bump to version
+11.0.11_9) forgot to account for the openjdk patch in the versioned
+directory.
 
-Release notes: https://www.php.net/releases/7_4_18.php
+That patch was a collection of backports from upstream ,that are now all
+present in 11.0.11+9, so drop that patch.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes: 5871e278f873
+Reported-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ac3234acd872678abba11217a258e3037c4ab2a8)
+(cherry picked from commit bc2e555eb1accec91bdcfbd8a78058513e8599d8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../11.0.8+10/0001-fix-gcc-10-support.patch        | 119 ---------------------
+ 1 file changed, 119 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 14576cf506..ecb290bab2 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  1c16cefaf88ded4c92eed6a8a41eb682bb2ef42429deb55f1c4ba159053fb98b  php-7.4.16.tar.xz
-+sha256  ab97f22b128d21dcbc009b50a37aaea0051b2721cbcd122d9e00e6ffc3c4b7e1  php-7.4.18.tar.xz
- 
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 4987f6f3bb..89437c5206 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.4.16
-+PHP_VERSION = 7.4.18
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+diff --git a/package/openjdk/11.0.8+10/0001-fix-gcc-10-support.patch b/package/openjdk/11.0.8+10/0001-fix-gcc-10-support.patch
+deleted file mode 100644
+index 9941d0151f..0000000000
+--- a/package/openjdk/11.0.8+10/0001-fix-gcc-10-support.patch
++++ /dev/null
+@@ -1,119 +0,0 @@
+-From 58911e9de888aece29f491995a8b8a31f7d6b424 Mon Sep 17 00:00:00 2001
+-From: Patrick Zhang <patrick.zhang@amperecomputing.com>
+-Date: Wed, 05 Feb 2020 17:14:15 -0700
+-Subject: [PATCH] fix gcc 10 support
+-
+-This patch fixes the "multiple definition" link errors with GCC10 due to
+-GCC10 setting -fno-common by default.
+-
+-This is a combination of the following upstream commits:
+-  - https://hg.openjdk.java.net/jdk/jdk/rev/8e6fa89397ca
+-  - https://hg.openjdk.java.net/jdk/jdk/rev/6925fca95959
+-  - https://hg.openjdk.java.net/jdk/jdk/rev/9e54ea7d9cd9
+-
+-Signed-off-by: Patrick Zhang <patrick.zhang@amperecomputing.com>
+-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+----
+- src/java.base/unix/native/libjava/childproc.c        |  1 +
+- src/java.base/unix/native/libjava/childproc.h        |  2 +-
+- .../share/native/libj2gss/NativeFunc.c               |  3 +++
+- .../share/native/libj2gss/NativeFunc.h               |  2 +-
+- src/jdk.sctp/unix/native/libsctp/Sctp.h              | 12 ++++++------
+- src/jdk.sctp/unix/native/libsctp/SctpNet.c           |  7 +++++++
+- 6 files changed, 19 insertions(+), 8 deletions(-)
+-
+-diff --git a/src/java.base/unix/native/libjava/childproc.c b/src/java.base/unix/native/libjava/childproc.c
+-index 811aaeac5..16480bfbf 100644
+---- a/src/java.base/unix/native/libjava/childproc.c
+-+++ b/src/java.base/unix/native/libjava/childproc.c
+-@@ -33,6 +33,7 @@
+- 
+- #include "childproc.h"
+- 
+-+const char * const *parentPathv;
+- 
+- ssize_t
+- restartableWrite(int fd, const void *buf, size_t count)
+-diff --git a/src/java.base/unix/native/libjava/childproc.h b/src/java.base/unix/native/libjava/childproc.h
+-index 091150930..d57e44b6e 100644
+---- a/src/java.base/unix/native/libjava/childproc.h
+-+++ b/src/java.base/unix/native/libjava/childproc.h
+-@@ -118,7 +118,7 @@ typedef struct _SpawnInfo {
+-  * The cached and split version of the JDK's effective PATH.
+-  * (We don't support putenv("PATH=...") in native code)
+-  */
+--const char * const *parentPathv;
+-+extern const char * const *parentPathv;
+- 
+- ssize_t restartableWrite(int fd, const void *buf, size_t count);
+- int restartableDup2(int fd_from, int fd_to);
+-diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
+-index da7bc0445..5941f7b5a 100644
+---- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
+-+++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
+-@@ -27,6 +27,9 @@
+- #include <stdlib.h>
+- #include "NativeFunc.h"
+- 
+-+/* global GSS function table */
+-+GSS_FUNCTION_TABLE_PTR ftab;
+-+
+- /* standard GSS method names (ordering is from mapfile) */
+- static const char RELEASE_NAME[]                = "gss_release_name";
+- static const char IMPORT_NAME[]                 = "gss_import_name";
+-diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
+-index 82914387c..e4a4981a3 100644
+---- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
+-+++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
+-@@ -277,6 +277,6 @@ typedef struct GSS_FUNCTION_TABLE {
+- typedef GSS_FUNCTION_TABLE *GSS_FUNCTION_TABLE_PTR;
+- 
+- /* global GSS function table */
+--GSS_FUNCTION_TABLE_PTR ftab;
+-+extern GSS_FUNCTION_TABLE_PTR ftab;
+- 
+- #endif
+-diff --git a/src/jdk.sctp/unix/native/libsctp/Sctp.h b/src/jdk.sctp/unix/native/libsctp/Sctp.h
+-index cc1367f78..46b07db0a 100644
+---- a/src/jdk.sctp/unix/native/libsctp/Sctp.h
+-+++ b/src/jdk.sctp/unix/native/libsctp/Sctp.h
+-@@ -322,12 +322,12 @@ typedef int sctp_peeloff_func(int sock, sctp_assoc_t id);
+- 
+- #endif /* __linux__ */
+- 
+--sctp_getladdrs_func* nio_sctp_getladdrs;
+--sctp_freeladdrs_func* nio_sctp_freeladdrs;
+--sctp_getpaddrs_func* nio_sctp_getpaddrs;
+--sctp_freepaddrs_func* nio_sctp_freepaddrs;
+--sctp_bindx_func* nio_sctp_bindx;
+--sctp_peeloff_func* nio_sctp_peeloff;
+-+extern sctp_getladdrs_func* nio_sctp_getladdrs;
+-+extern sctp_freeladdrs_func* nio_sctp_freeladdrs;
+-+extern sctp_getpaddrs_func* nio_sctp_getpaddrs;
+-+extern sctp_freepaddrs_func* nio_sctp_freepaddrs;
+-+extern sctp_bindx_func* nio_sctp_bindx;
+-+extern sctp_peeloff_func* nio_sctp_peeloff;
+- 
+- jboolean loadSocketExtensionFuncs(JNIEnv* env);
+- 
+-diff --git a/src/jdk.sctp/unix/native/libsctp/SctpNet.c b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
+-index d40c15aa3..ab9b6e093 100644
+---- a/src/jdk.sctp/unix/native/libsctp/SctpNet.c
+-+++ b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
+-@@ -43,6 +43,13 @@ static jmethodID isaCtrID = 0;
+- static const char* nativeSctpLib = "libsctp.so.1";
+- static jboolean funcsLoaded = JNI_FALSE;
+- 
+-+sctp_getladdrs_func* nio_sctp_getladdrs;
+-+sctp_freeladdrs_func* nio_sctp_freeladdrs;
+-+sctp_getpaddrs_func* nio_sctp_getpaddrs;
+-+sctp_freepaddrs_func* nio_sctp_freepaddrs;
+-+sctp_bindx_func* nio_sctp_bindx;
+-+sctp_peeloff_func* nio_sctp_peeloff;
+-+
+- JNIEXPORT jint JNICALL DEF_JNI_OnLoad
+-   (JavaVM *vm, void *reserved) {
+-     return JNI_VERSION_1_2;
+--- 
+-2.26.2
+-
