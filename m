@@ -1,52 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 1 May 2021 14:20:34 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/samba4: security
- bump version to 4.14.4
-Message-ID: <20210501115434.E737E86842@busybox.osuosl.org>
+Date: Sat, 1 May 2021 14:17:05 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mkpimage: define
+ extract step to allow patching
+Message-ID: <20210501115434.B7DC28654B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8da10f17e5388b90692969daf165a2ebb985613
+commit: https://git.buildroot.net/buildroot/commit/?id=d8396da40d4fd6dc81a70a52454f0320e66f15dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes CVE-2021-20254:
-https://www.samba.org/samba/security/CVE-2021-20254.html
+As recently discussed on the list:
+http://lists.busybox.net/pipermail/buildroot/2021-April/308373.html
 
-Release notes: https://www.samba.org/samba/history/samba-4.14.4.html
+Packages like mkpimage where the source code is included in the Buildroot
+tree, currently doesn't use an extract step (which also skips the patch
+step), so they cannot be patched by a patch in BR2_GLOBAL_PATCH_DIR (or the
+pkgdir), which is a bit confusing.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+As a fix, add a simple extract step that copies the source file to the build
+directory, so the patch step gets run as well.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f3513d4c56f46e3c720e51e44477be317573a48f)
+(cherry picked from commit 89d4e1ccdbef234b227a2fa33666e0d89e508a82)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mkpimage/mkpimage.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index e8814348c5..905ec14ce0 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.14.3.tar.asc
--sha256  efc24ccf277055891f830719bd155b6a6dd9341d71961ee79e0ef75dc1aeb598  samba-4.14.3.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.14.4.tar.asc
-+sha256  89af092a0b00f5354ed287f0aa37b8c2cf9ba2ce67ea6464192e2c18528f89b9  samba-4.14.4.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 643b228bbf..409e2c7a18 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mkpimage/mkpimage.mk b/package/mkpimage/mkpimage.mk
+index 8e08013f91..71500f00f3 100644
+--- a/package/mkpimage/mkpimage.mk
++++ b/package/mkpimage/mkpimage.mk
+@@ -9,9 +9,13 @@ HOST_MKPIMAGE_LICENSE = GPL-2.0
+ # source included in the package
+ # came from barebox's repository:
+ # https://git.pengutronix.de/cgit/barebox/tree/scripts/socfpga_mkimage.c?id=55d29525146dcd280987dfd565bfd34f08858fb3
++define HOST_MKPIMAGE_EXTRACT_CMDS
++	cp $(HOST_MKPIMAGE_PKGDIR)/mkpimage.c $(@D)
++endef
++
+ define HOST_MKPIMAGE_BUILD_CMDS
+ 	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
+-		package/mkpimage/mkpimage.c -o $(@D)/mkpimage
++		$(@D)/mkpimage.c -o $(@D)/mkpimage
+ endef
  
--SAMBA4_VERSION = 4.14.3
-+SAMBA4_VERSION = 4.14.4
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ define HOST_MKPIMAGE_INSTALL_CMDS
