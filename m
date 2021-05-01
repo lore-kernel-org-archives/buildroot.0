@@ -1,48 +1,58 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 1 May 2021 16:49:31 +0200
-Subject: [Buildroot] [git commit] package/s6-networking: bump to version
- 2.4.1.1
-Message-ID: <20210501144021.7DE2A868FD@busybox.osuosl.org>
+From: D. Olsson <hi@senzilla.io>
+Date: Sat, 01 May 2021 15:27:23 +0000
+Subject: [Buildroot] [PATCH 1/4] package/{skalibs, execline, s6,
+ s6-dns}: change prefix and shared options
+In-Reply-To: <20210407202353.GA359705@scaer>
+References: <HbmuNdRmOn2PdMjzu0i70kXEVtJ7gzFTC74uRm0Le50@cp3-web-012.plabs.ch>
+ <df3d4c00-dd75-73f5-ed4a-74d53b9e3467@mind.be>
+ <20210407202353.GA359705@scaer>
+Message-ID: <V2Ta0gsqMCjUcsTA-XuRTEjzp_GOtz46kcF5U061p0eH5ThNeL4uTB_fKgjV86fi4BbDfNiPgpfjy3RoFej7tsDhEO1BUkN6hA2b3N8X3nc=@senzilla.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db807a14527b25c0e39a53b7d3b44b559e91bdfb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann, Arnout,
 
-Change hash file indentation to 2 spaces.
+On Wednesday, April 7th, 2021 at 8:23 PM, Yann E. MORIN wrote:
 
-https://www.mail-archive.com/skaware at list.skarnet.org/msg01579.html
+> Since one may use s6 as an init system. and now that we have had the s6
+> family of packages for a while, would it make sense to promote them to
+> an init system supported by Buildroot?
+>
+> There was some discussion about that in the past, but I am not sure I
+> remember the rationale for not making s6 a full-fledged init system,
+> like we have for busybox, system V, openrc, or systemd.
 
-Signed-off-by: Dick Olsson <hi@senzilla.io>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/s6-networking/s6-networking.hash | 4 ++--
- package/s6-networking/s6-networking.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Yes, it definitely makes sense. I haven't read up on the past
+conversations but I can imagine it was not done because there a are
+quite a few steps involved in doing it. But I'm already working on
+a patchset for it! Stay tuned :)
 
-diff --git a/package/s6-networking/s6-networking.hash b/package/s6-networking/s6-networking.hash
-index 9eda72130e..9e333866d3 100644
---- a/package/s6-networking/s6-networking.hash
-+++ b/package/s6-networking/s6-networking.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256 cc1f80eec0ce8227bf058a1371978e4e78274b3c1b0fa82d9dadbdb0bdb27c08  s6-networking-2.4.1.0.tar.gz
--sha256 adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
-+sha256  a3fbca789dc5c82b3055fdbd2f55110902198f3136447617ce8f8b79fa8aa554  s6-networking-2.4.1.1.tar.gz
-+sha256  adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
-diff --git a/package/s6-networking/s6-networking.mk b/package/s6-networking/s6-networking.mk
-index 8869186669..96095d104f 100644
---- a/package/s6-networking/s6-networking.mk
-+++ b/package/s6-networking/s6-networking.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--S6_NETWORKING_VERSION = 2.4.1.0
-+S6_NETWORKING_VERSION = 2.4.1.1
- S6_NETWORKING_SITE = http://skarnet.org/software/s6-networking
- S6_NETWORKING_LICENSE = ISC
- S6_NETWORKING_LICENSE_FILES = COPYING
+> In the state, I too am not too fond of it. However...
+> ... if the ska-related packages would really benefit from having
+> shared variables, then we could look at it like we look at qt5, or as
+> Arnout mentions, like freescale stuff.
+
+I do believe there would be beneficial for a few reasons...
+
+> > I'm not really sure about all this, so I put the other maintainers in Cc of
+> > this mail.
+>
+> Neither am I; that's only 4 packages impacted, i.e. the library plus
+> three packages. I am not sure this-few packages deserve shared variables.
+
+... there are 5-6 other ska-related packages that I want to package.
+After I have submitted patchset for those additional packages we are looking at
+around 10 packages in total that all share build system. Being able easily keep
+them all aligned would be good.
+
+So in essence, I do think that something similar to qt5/freescale makes sense.
+I'll eventually get those patchsets in, then we can review and discuss further!
+
+
+Cheers
+
+D. Olsson
+PGP: 8204A8CD
