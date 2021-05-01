@@ -1,87 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 May 2021 14:58:18 +0200
-Subject: [Buildroot] [PATCH] package/bind: security bump to version
- 9.11.31
-In-Reply-To: <20210501110300.22647-1-peter@korsgaard.com>
-References: <20210501110300.22647-1-peter@korsgaard.com>
-Message-ID: <20210501125818.GF2137340@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 1 May 2021 15:02:43 +0200
+Subject: [Buildroot] [PATCH v2 1/1] Fix -latomic for CMake packages
+In-Reply-To: <20210413062615.2808309-1-glex.spb@gmail.com>
+References: <20210413060942.2530596-1-glex.spb@gmail.com>
+ <20210413062615.2808309-1-glex.spb@gmail.com>
+Message-ID: <de634e81-64a4-285d-7e25-247ca3903e15@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
 
-On 2021-05-01 13:02 +0200, Peter Korsgaard spake thusly:
-> Fixes the following security issues:
-> 
-> - A malformed incoming IXFR transfer could trigger an assertion failure in
->   named, causing it to quit abnormally.  (CVE-2021-25214)
-> 
-> - named crashed when a DNAME record placed in the ANSWER section during
->   DNAME chasing turned out to be the final answer to a client query.
->   (CVE-2021-25215)
-> 
-> - When a server's configuration set the tkey-gssapi-keytab or
->   tkey-gssapi-credential option, a specially crafted GSS-TSIG query could
->   cause a buffer overflow in the ISC implementation of SPNEGO (a protocol
->   enabling negotiation of the security mechanism used for GSSAPI
->   authentication).  This flaw could be exploited to crash named binaries
->   compiled for 64-bit platforms, and could enable remote code execution when
->   named was compiled for 32-bit platforms.  (CVE-2021-25216)
-> 
-> For more details, see the release notes:
-> https://downloads.isc.org/isc/bind9/9.11.31/RELEASE-NOTES-bind-9.11.31.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/bind/bind.hash | 4 ++--
->  package/bind/bind.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+On 13/04/2021 08:26, Gleb Mazovetskiy wrote:
+> The poppler package failed to build for me with errors such as this one:
 > 
-> diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-> index 369d2f5fb5..9311d82d6d 100644
-> --- a/package/bind/bind.hash
-> +++ b/package/bind/bind.hash
-> @@ -1,4 +1,4 @@
-> -# Verified from https://ftp.isc.org/isc/bind9/9.11.28/bind-9.11.28.tar.gz.asc
-> +# Verified from https://ftp.isc.org/isc/bind9/9.11.31/bind-9.11.31.tar.gz.asc
->  # with key 2455774D42FDFE6B9C383EB8FE1002BC5970811F
-> -sha256  1090cbe6caba37c404d1075887da7e5282ae9a2bc6172d722df15cd480975e74  bind-9.11.28.tar.gz
-> +sha256  f5f24457f42b2e86870d887596e47500e4d40521a098dcb96f3a06f18adfa36a  bind-9.11.31.tar.gz
->  sha256  cad49daa42654bc241762cd998630168a2542c8fd6fad3881e2eac1510bb6fcd  COPYRIGHT
-> diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-> index 39c30dab6b..d01a557609 100644
-> --- a/package/bind/bind.mk
-> +++ b/package/bind/bind.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+>     host/aarch64-buildroot-linux-gnu/include/c++/10.3.0/cstdlib:75:15: fatal error: stdlib.h: No such file or directory
+>        75 | #include_next <stdlib.h>
+>           |               ^~~~~~~~~~
+> 
+> Changing the CMake option to a link-specific one fixes the issue.
+
+ Applied to master, thanks.
+
+ Your SoB was missing here, but it was on v1 so I re-added it.
+
+ Normally we expect to have one patch per package. This makes it easier to:
+- port to the stable branch (only the packages that apply to the stable branch);
+- partially revert.
+
+ In this case, I couldn't be bothered to change it though. Just for the future,
+know that that's the preferred way. It also helps increase your ranking in the
+contribution statistics :-)
+
+ There are a few other packages that do something similar: bctoolbox with
+-liconv, kf5-kcoreaddons with -latomic, libcpprestsdk with -latomic, mariadb
+with -latomic, ogre with -latomic, opencv3 with -latomic. Could you change (and
+test) those ones as well?
+
+[snip]
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index 6edb0b7fca..28fe4a6a92 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -184,7 +184,7 @@ endif
 >  
-> -BIND_VERSION = 9.11.28
-> +BIND_VERSION = 9.11.31
->  BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
->  # bind does not support parallel builds.
->  BIND_MAKE = $(MAKE1)
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  # mips: uses __atomic_load_8
+>  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> -KODI_CXX_FLAGS += -latomic
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ KODI_CXX_FLAGS is no longer set after this change, so I removed its use as well.
+
+
+ Regards,
+ Arnout
+
+> +KODI_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+>  endif
+>  
+>  ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),)
+> diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+> index 44ad04bf7c..a5a97d974b 100644
+> --- a/package/poppler/poppler.mk
+> +++ b/package/poppler/poppler.mk
+> @@ -21,7 +21,7 @@ POPPLER_CONF_OPTS = \
+>  	-DENABLE_GTK_DOC=OFF
+>  
+>  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> -POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
+> +POPPLER_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_BOOST),y)
+> diff --git a/package/wampcc/wampcc.mk b/package/wampcc/wampcc.mk
+> index 5e7ee03651..11bb1f90b5 100644
+> --- a/package/wampcc/wampcc.mk
+> +++ b/package/wampcc/wampcc.mk
+> @@ -13,7 +13,7 @@ WAMPCC_LICENSE_FILES = LICENSE
+>  
+>  # Uses __atomic_fetch_add_8
+>  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> -WAMPCC_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
+> +WAMPCC_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+>  endif
+>  
+>  $(eval $(cmake-package))
+> 
