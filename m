@@ -1,243 +1,144 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 May 2021 17:43:56 +0200
-Subject: [Buildroot] [PATCH] package/pybind11: new package
-In-Reply-To: <20210227100959.28281-1-guillaume.bressaix@gmail.com>
-References: <20210227100959.28281-1-guillaume.bressaix@gmail.com>
-Message-ID: <d5246e4f-57be-f80e-674f-544519627684@mind.be>
+Date: Sat, 1 May 2021 17:51:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-pybind: use official
+ tarball
+In-Reply-To: <CAJe0E3d3hPaNj=FkDLpQU94c22eNAAgP2QUQggT_A1F8vbS22w@mail.gmail.com>
+References: <20210306140202.2251697-1-fontaine.fabrice@gmail.com>
+ <CAJe0E3d3hPaNj=FkDLpQU94c22eNAAgP2QUQggT_A1F8vbS22w@mail.gmail.com>
+Message-ID: <0bf8ad1b-f2a4-4871-5b3c-79e6b28fc892@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Guillaume,
 
-On 27/02/2021 11:09, guillaume.bressaix at gmail.com wrote:
-> From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+
+On 06/03/2021 16:28, Guillaume Bres wrote:
+> Fabrice,
 > 
-> Pybind11 is a lightweight header-only library that exposes C++
-> types in Python and vice versa, mainly to create Python
-> bindings of existing C++ code.
-
- It helps a lot if you add Fixes: lines with the autobuilder failures. Since we
-have a backlog of 400+ patches, new packages get ignored pretty easily.
-
-
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> ---
+> indeed pybind is a problem since 2.6.0 and "python setup.py" requires a minimal
+> cmake build prior itself.
 > 
-> Warning!!: this new package and its internal
-> BR2_PACKAGE_PYBIND11_WITH_PYTHON option
-> intends to replace package/python-pybind which is totally broken
-> since upgrade to v2.6.1 in ->next.
+> I initiated a couple discussions that explained this, a couple of weeks a go,
+> but it went unnoticed.
+> I proposed a solution for this package, a week ago, that also went unnoticed?
+> https://patchwork.ozlabs.org/project/buildroot/patch/20210227100959.28281-1-guillaume.bressaix at gmail.com/
+> <https://patchwork.ozlabs.org/project/buildroot/patch/20210227100959.28281-1-guillaume.bressaix@gmail.com/> 
 
- It would be good to also add a patch that removes python-pybind then. For that
-patch, don't forget to add a conversion in Config.in.legacy.
+ I went back to that patch and commented on it. It indeed looks like a better
+approach than this patch, so I've marked this patch as Rejected.
 
+> In the attached commit message you will find a link to the discussions and my
+> explanations.
+> This contribution would allow both pybind?+ python-pybind.
 > 
-> The python build now requires a previous cmake build:
-> 	+ python-pybind only is not possible and will not build
-> 	by itself
-> 
-> 	+ python setup.py requires cmake to install
+> Anyway, I would say I never?get answers to my contributions, and?its?been like
+> this for years now.
+> Its become very complicated to contribute to buildroot .
 
- I see that on the first version of this package, you got feedback to not use
-cmake. That was clearly a mistake :-)
-
-> 	within $(@D) a couple files (in $(@D)/pybind11 exactly)
-> 	to properly work. See my message in BR digest 17/02:
-> 	<CAJe0E3eQxAZHAe2DN4Qp9k_0czYGsR639+=bSUaEdyaKm0Keuw@mail.gmail.com>
-> 	cc to Thomas, Gwen & Peter, entitled:
-> 	"Python-pybind we need to discuss this package"
-> 
-> 	=> If this package is merged, package/python-pybind is deprecated
-> 
-> 	=> package/python-pybind v2.6.1+ in ->next must be removed,
-> 	python-build by itself cannot work anymore
-
- I guess we can keep it in 2021.02 right? It still builds there?
-
-> 
-> Pybind11 is a host only package
-
- I don't get it... This is supposed to replace python-pybind, which is a target
-package. How is that ever going to work?
-
-> 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> ---
->  DEVELOPERS                     |  1 +
->  package/pybind11/Config.in     | 25 ++++++++++++++++++++
->  package/pybind11/pybind11.hash |  3 +++
->  package/pybind11/pybind11.mk   | 42 ++++++++++++++++++++++++++++++++++
->  4 files changed, 71 insertions(+)
->  create mode 100644 package/pybind11/Config.in
->  create mode 100644 package/pybind11/pybind11.hash
->  create mode 100644 package/pybind11/pybind11.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index b019fe04d5..98e8b329ed 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1057,6 +1057,7 @@ N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
->  F:	package/libnids/
->  F:	package/liquid-dsp/
->  F:	package/pixiewps/
-> +F:	package/pybind11/
->  F:	package/python-pybind/
->  F:	package/reaver/
->  
-> diff --git a/package/pybind11/Config.in b/package/pybind11/Config.in
-> new file mode 100644
-> index 0000000000..883bf8cc09
-> --- /dev/null
-> +++ b/package/pybind11/Config.in
-> @@ -0,0 +1,25 @@
-> +comment "pybind11 needs a toolchain w/ C++, wchar"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-> +
-> +config BR2_PACKAGE_PYBIND11
-
- Host packages should be called BR2_PACKAGE_HOST_PYBIND11. But I think you
-actually meant to have a target package... Anyway for a host package we normally
-don't even want a Config.in symbol, and it should only exist if it is a
-dependency of some other package. We only want Config.in symbols for host
-packages that you might want to use in a post-build script (like genimage).
-
- But again, I think you actually meant to have a target package.
-
-> +	bool "pybind11"
-> +	depends on BR2_INSTALL_LIBSTDCPP # boost
-
- The # boost comment is not needed, since this package is a C++ package itself.
-
-> +	depends on BR2_USE_WCHAR # boost
-> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
-> +	select BR2_PACKAGE_BOOST
-
- The README pretty explicitly says that the goal of the project is to avoid a
-dependency on Boost. Are you sure this dependency is needed?
-
- On the other hand, the package is intended to create python-C++ bindings, so I
-think there should be a dependency on python.
-
- The README also says that it depends on C++11 features, so you'll need
-
-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-
-(+ comment)
-
-> +	help
-> +	  Pybind11 is a lightweight header-only library that exposes C++
-> +	  types in Python and vice versa, mainly to create Python
-> +	  bindings of existing C++ code.
-> +
-> +	  http://pybind11.readthedocs.org/en/master
-> +
-> +if BR2_PACKAGE_PYBIND11
-> +
-> +config BR2_PACKAGE_PYBIND11_WITH_PYTHON
-> +	bool "pybind11-python"
-> +	depends on BR2_PACKAGE_PYTHON3
-> +	help
-> +	  Activate support for python-pybind
-
- I suppose the idea is to choose between "expose python objects in C++" and
-"expose C++ objects in python". The help text doesn't really tell me which of
-the two this option enables... Can you clarify that? I think the main package
-help text should explain that only the headers are installed unless _WITH_PYTHON
-is enabled.
-
-> +
-> +endif
-> diff --git a/package/pybind11/pybind11.hash b/package/pybind11/pybind11.hash
-> new file mode 100644
-> index 0000000000..e703519a22
-> --- /dev/null
-> +++ b/package/pybind11/pybind11.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256 8ff2fff22df038f5cd02cea8af56622bc67f5b64534f1b83b9f133b8366acff2  pybind11-2.6.2.tar.gz
-> +sha256 83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb  LICENSE
-> diff --git a/package/pybind11/pybind11.mk b/package/pybind11/pybind11.mk
-> new file mode 100644
-> index 0000000000..c8d69e1dd4
-> --- /dev/null
-> +++ b/package/pybind11/pybind11.mk
-> @@ -0,0 +1,42 @@
-> +################################################################################
-> +#
-> +# pybind11
-> +#
-> +################################################################################
-> +
-> +PYBIND11_VERSION = 2.6.2
-> +PYBIND11_SITE = $(call github,pybind,pybind11,v$(PYBIND11_VERSION))
-> +PYBIND11_LICENSE = BSD-3-Clause
-> +PYBIND11_LICENSE_FILES = LICENSE
-> +PYBIND11_INSTALL_STAGING = YES
-> +PYBIND11_SUPPORTS_IN_SOURCE_BUILD = YES
-
- This is the default, it only needs to be set to NO for packages that don't
-support in-source build.
-
-> +
-> +HOST_PYBIND11_CONF_OPTS = \
-> +	-DBUILD_DOCS=OFF \
-> +	-DDOWNLOAD_EIGEN=OFF \
-
- This sounds like there should also be a (perhaps optional) dependency on eigen?
-Ah, no, it's only used for tests - better mention that in the commit message.
-
-> +	-DPYTHON=$(TARGET_DIR)/usr/bin/python \
-
- This means you *definitely* need a dependency on python. However, I think it is
-only needed if we actually create the python bindings, i.e. if
-BR2_PACKAGE_PYBIND11_WITH_PYTHON is turned on.
-
- However, I don't see this used anywhere in the cmake code. I *do* see
-PYTHON_EXECUTABLE - isn't that what you meant? Hm, no, that can't be, because it
-is used to actually execute some python code, so it shouldn't point to the
-target python. In fact, it never makes sense to point to the target python - if
-it is actually used for something on the target, the $(TARGET_DIR) part should
-not be there at all...
-
- Also, this should probably be python3 and not plain python.
-
-
-> +	-DPYTHON_PREFIX=$(STAGING_DIR)/usr
-> +
-> +# pybind11-python support activation
-> +# this requires the cmake build installed within $(@D)
-> +ifeq ($(BR2_PACKAGE_PYBIND11_WITH_PYTHON),y)
-> +
-> +HOST_PYBIND11_DEPENDENCIES += host-python3
-> +
-> +HOST_PYBIND11_CONF_OPTS += -DCMAKE_INSTALL_PREFIX=$(@D)/pybind11
-> +
-> +define PYBIND11_PYTHON_BUILD
-> +	cd $(@D) && $(HOST_DIR)/bin/python setup.py install
-
- You really want to use the full cross-build environment here, like is done in a
-python package. We also want to split the build and the install step. Look at
-jailhouse for an example.
+ I hear what you're saying. We're really struggling to improve the situation,
+but with the huge backlog of patches we have, we're barely keeping afloat with
+just the easy security updates and build fixes. There are not many "difficult"
+patches that get our time (it took me more than an hour to review the pybind11
+patch).
 
 
  Regards,
  Arnout
 
-
-> +endef
-> +
-> +HOST_PYBIND11_POST_INSTALL_HOOKS += PYBIND11_PYTHON_BUILD
-> +
-> +else
-> +
-> +HOST_PYBIND11_CONF_OPTS += \
-> +	-DPYBIND_FINDPYTHON=OFF \
-> +	-DPYBIND11_NOPYTHON=ON
-> +
-> +endif
-> +
-> +$(eval $(host-cmake-package))
+> Pybind was only the 1st part of a patch serie that is now totally forgotten.?
+> These days I also have patches pending (for about a month) that would unlock a
+> very interesting patch serie?for the community, but stuck and soon forgotten.
+> 
+> Guillaume W. Bres
+> Software engineer
+> <guillaume.bressaix at gmail.com <mailto:guillaume.bressaix@gmail.com>>
+> 
+> 
+> Le?sam. 6 mars 2021 ??15:04, Fabrice Fontaine <fontaine.fabrice@gmail.com
+> <mailto:fontaine.fabrice@gmail.com>> a ?crit?:
+> 
+>     Use official tarball provided by pypi to avoid the following build
+>     failures:
+> 
+>     FileNotFoundError: [Errno 2] No such file or directory: 'cmake'
+> 
+>     or
+> 
+>     OSError: [Errno 2] No such file or directory: 'pybind11/include'
+> 
+>     These failures are raised since version 2.60 and
+>     https://github.com/pybind/pybind11/commit/fd61f5038eac57a96f0d2dbcf2a4f125bc91f1ca
+>     <https://github.com/pybind/pybind11/commit/fd61f5038eac57a96f0d2dbcf2a4f125bc91f1ca>
+> 
+>     Here is an extract of
+>     https://github.com/pybind/pybind11/blob/master/.github/CONTRIBUTING.md
+>     <https://github.com/pybind/pybind11/blob/master/.github/CONTRIBUTING.md>:
+> 
+>     "If you want to use the classic "direct" usage of python setup.py, you
+>     will need CMake 3.15+ and either make or ninja preinstalled (possibly
+>     via pip install cmake ninja), since directly running Python on setup.py
+>     cannot pick up and install pyproject.toml requirements. As long as you
+>     have those two things, though, everything works the way you would
+>     expect:"
+> 
+>     Fixes:
+>     ?-
+>     http://autobuild.buildroot.org/results/ee1ca23f082550a64dc3e169d95cda0f251c6fc1
+>     <http://autobuild.buildroot.org/results/ee1ca23f082550a64dc3e169d95cda0f251c6fc1>
+>     ?-
+>     http://autobuild.buildroot.org/results/07f4db8eaaae0e37edc8aa73635a4fa218bc1fa2
+>     <http://autobuild.buildroot.org/results/07f4db8eaaae0e37edc8aa73635a4fa218bc1fa2>
+> 
+>     Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com
+>     <mailto:fontaine.fabrice@gmail.com>>
+>     ---
+>     ?package/python-pybind/python-pybind.hash | 5 +++--
+>     ?package/python-pybind/python-pybind.mk <http://python-pybind.mk>? ?| 3 ++-
+>     ?2 files changed, 5 insertions(+), 3 deletions(-)
+> 
+>     diff --git a/package/python-pybind/python-pybind.hash
+>     b/package/python-pybind/python-pybind.hash
+>     index a68ac846e2..4f3fc9a4a1 100644
+>     --- a/package/python-pybind/python-pybind.hash
+>     +++ b/package/python-pybind/python-pybind.hash
+>     @@ -1,4 +1,5 @@
+>     -# Locally calculated
+>     -sha256? cdbe326d357f18b83d10322ba202d69f11b2f49e2d87ade0dc2be0c5c34f8e2a?
+>     python-pybind-2.6.1.tar.gz
+>     +# md5, sha256 from https://pypi.org/pypi/pybind11/json
+>     <https://pypi.org/pypi/pybind11/json>
+>     +md5? c87d54e1ca1d0982ad54af888c682d93? pybind11-2.6.1.tar.gz
+>     +sha256? ab7e60a520fe6ae25eca939191bb2ac416cd58478ce754740238a8bf1af18934?
+>     pybind11-2.6.1.tar.gz
+>     ?# License files, locally calculated
+>     ?sha256? 83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb?
+>     LICENSE
+>     diff --git a/package/python-pybind/python-pybind.mk
+>     <http://python-pybind.mk> b/package/python-pybind/python-pybind.mk
+>     <http://python-pybind.mk>
+>     index a6a1bdb976..97dd80ffc7 100644
+>     --- a/package/python-pybind/python-pybind.mk <http://python-pybind.mk>
+>     +++ b/package/python-pybind/python-pybind.mk <http://python-pybind.mk>
+>     @@ -5,7 +5,8 @@
+>     ?################################################################################
+> 
+>     ?PYTHON_PYBIND_VERSION = 2.6.1
+>     -PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
+>     +PYTHON_PYBIND_SOURCE = pybind11-$(PYTHON_PYBIND_VERSION).tar.gz
+>     +PYTHON_PYBIND_SITE =
+>     https://files.pythonhosted.org/packages/d8/47/2eb4be23fa8cc1a08c855c012c1aa4348d06ab1a5527f876515bbf689644
+>     <https://files.pythonhosted.org/packages/d8/47/2eb4be23fa8cc1a08c855c012c1aa4348d06ab1a5527f876515bbf689644>
+>     ?PYTHON_PYBIND_LICENSE = BSD-3-Clause
+>     ?PYTHON_PYBIND_LICENSE_FILES = LICENSE
+>     ?PYTHON_PYBIND_SETUP_TYPE = setuptools
+>     -- 
+>     2.30.0
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
