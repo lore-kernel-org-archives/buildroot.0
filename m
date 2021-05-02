@@ -1,35 +1,35 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Sun, 02 May 2021 08:17:26 +0000
-Subject: [Buildroot] [PATCH 4/5] support/testing: add s6-rc tests
-Message-ID: <eklGLqvwAZz2GFEBv6g4AUTFKQ9L2o4qfKvN9ZnNw@cp7-web-043.plabs.ch>
+Date: Sun, 02 May 2021 08:17:32 +0000
+Subject: [Buildroot] [PATCH 5/5] support/testing: add s6-networking tests
+Message-ID: <V2TNjX0qltwA0640z5rMA5K205FnnBlqvPL9ZrCks@cp3-web-033.plabs.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Test that s6-rc service database compilation is working.
+Test that the TAICLOCK and TCP servers are working.
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
 ---
- support/testing/tests/package/test_s6_rc.py | 46 +++++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 support/testing/tests/package/test_s6_rc.py
+ .../tests/package/test_s6_networking.py       | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 support/testing/tests/package/test_s6_networking.py
 
-diff --git a/support/testing/tests/package/test_s6_rc.py b/support/testing/tests/package/test_s6_rc.py
+diff --git a/support/testing/tests/package/test_s6_networking.py b/support/testing/tests/package/test_s6_networking.py
 new file mode 100644
-index 0000000000..299f982cd0
+index 0000000000..ae008f7a4b
 --- /dev/null
-+++ b/support/testing/tests/package/test_s6_rc.py
-@@ -0,0 +1,46 @@
++++ b/support/testing/tests/package/test_s6_networking.py
+@@ -0,0 +1,35 @@
 +import os
 +
 +import infra.basetest
 +
 +
-+class TestS6Rc(infra.basetest.BRTest):
++class TestS6Networking(infra.basetest.BRTest):
 +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + """
-+    BR2_PACKAGE_S6_RC=y
++    BR2_PACKAGE_S6_NETWORKING=y
 +    BR2_TARGET_ROOTFS_CPIO=y
 +    # BR2_TARGET_ROOTFS_TAR is not set
 +    """
@@ -41,32 +41,21 @@ index 0000000000..299f982cd0
 +                           options=["-initrd", img])
 +        self.emulator.login()
 +
-+        _, exit_code = self.emulator.run("s6-svscan -h")
-+        self.assertEqual(exit_code, 100)
-+
-+        # Set up two service directories with a dependency
-+        self.emulator.run("mkdir -p source/testsv1")
-+        self.emulator.run("mkdir -p source/testsv2")
-+        self.emulator.run("echo oneshot > source/testsv1/type")
-+        self.emulator.run("echo oneshot > source/testsv2/type")
-+        self.emulator.run("echo 'echo foo' > source/testsv1/up")
-+        self.emulator.run("echo 'echo bar' > source/testsv2/up")
-+        self.emulator.run("echo testsv1 > source/testsv2/dependencies")
-+        self.emulator.run("chmod +x source/testsv1/up")
-+        self.emulator.run("chmod +x source/testsv2/up")
-+
-+        # Compile the service database
-+        _, exit_code = self.emulator.run("s6-rc-compile compiled source")
-+        self.assertEqual(exit_code, 0)
-+
-+        # Inspect dependencies
-+        cmd = "s6-rc-db -c compiled -d dependencies testsv1"
++        # Test the TAICLOCK server and client
++        _, exit_code = self.emulator.run("s6-taiclockd &")
++        self.emulator.run("sleep 2")
++        cmd = "s6-taiclock 127.0.0.1 | s6-clockview"
 +        output, exit_code = self.emulator.run(cmd)
 +        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], "testsv2")
-+        cmd = "s6-rc-db -c compiled dependencies testsv2"
++        self.assertEqual(output[0][0:6], "before")
++        self.assertEqual(output[1][0:5], "after")
++
++        # Test the TCP server and client
++        _, exit_code = self.emulator.run("s6-tcpserver4 127.0.0.1 1024 cat &")
++        self.emulator.run("sleep 2")
++        cmd = "echo foobar | s6-tcpclient 127.0.0.1 1024 s6-ioconnect -67"
 +        output, exit_code = self.emulator.run(cmd)
 +        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], "testsv1")
++        self.assertEqual(output[0], "foobar")
 -- 
 2.30.2
