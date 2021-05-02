@@ -1,10 +1,10 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 1 May 2021 18:39:07 -0700
-Subject: [Buildroot] [PATCH 1/1] package/docker-cli: bump version to
+Date: Sat, 1 May 2021 18:39:24 -0700
+Subject: [Buildroot] [PATCH 1/1] package/docker-engine: bump version to
  20.10.6
-In-Reply-To: <20210419102855.1444837-1-mario.fink@record-evolution.de>
-References: <20210419102855.1444837-1-mario.fink@record-evolution.de>
-Message-ID: <CA+h8R2o-v3kFzhMkSqKBMjJp2UM9gCUP7E-sYuqRUAwXbTRUDg@mail.gmail.com>
+In-Reply-To: <20210419104751.1446056-1-knif.oiram@gmail.com>
+References: <20210419104751.1446056-1-knif.oiram@gmail.com>
+Message-ID: <CA+h8R2rmKLBGuc_By_xJS4iPb6occrFCaRbRb+=4QXjZXj0+_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,40 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Mon, Apr 19, 2021 at 3:29 AM Mario Fink
+On Mon, Apr 19, 2021 at 3:48 AM Mario Fink
 <mario.fink@record-evolution.de> wrote:
 >
-> [1] https://docs.docker.com/engine/release-notes/#20106
->
-> Signed-off-by: Mario Fink <mario.fink@record-evolution.de>
+> Signed-off-by: Mario Fink <knif.oiram@gmail.com>
 > ---
-> diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-> index f4787062bb..bb3444c270 100644
-> --- a/package/docker-cli/docker-cli.hash
-> +++ b/package/docker-cli/docker-cli.hash
+>  package/docker-engine/docker-engine.hash | 2 +-
+>  package/docker-engine/docker-engine.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+> index 7e3ce6a5cf..6c55b9a9b9 100644
+> --- a/package/docker-engine/docker-engine.hash
+> +++ b/package/docker-engine/docker-engine.hash
 > @@ -1,3 +1,3 @@
 >  # Locally calculated
-> -sha256  4ba845f8c7e2e0a2ca1ec6589847159ca8d0d37b609f0e6f78def7a893b9b342  docker-cli-20.10.5.tar.gz
-> +sha256  eda53b96ab83a59502df2e5e00ab7ee867243259407ef454be55e695303c1113  docker-cli-20.10.6.tar.gz
->  sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-> diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-> index 39b4d09c76..9c3690e4c3 100644
-> --- a/package/docker-cli/docker-cli.mk
-> +++ b/package/docker-cli/docker-cli.mk
+> -sha256  bcf651d75e5c80421e8cd3b0d47f3425e01047cf67aef0eda83b68776905a583  docker-engine-20.10.5.tar.gz
+> +sha256  fd7f5571b1f64f26b5ca520a3e1fefb33c190f3732b931051c23a76bdba5000e  docker-engine-20.10.6.tar.gz
+>  sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+> index 767818ebba..10ecbf603a 100644
+> --- a/package/docker-engine/docker-engine.mk
+> +++ b/package/docker-engine/docker-engine.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >
-> -DOCKER_CLI_VERSION = 20.10.5
-> +DOCKER_CLI_VERSION = 20.10.6
+> -DOCKER_ENGINE_VERSION = 20.10.5
+> +DOCKER_ENGINE_VERSION = 20.10.6
+>  DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+>
+>  DOCKER_ENGINE_LICENSE = Apache-2.0
+> --
+> 2.25.1
+>
 
 Recommended for 2021.02.x
 
