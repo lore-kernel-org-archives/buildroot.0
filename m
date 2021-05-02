@@ -1,27 +1,44 @@
 From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sun, 2 May 2021 12:42:22 +0200
-Subject: [Buildroot] [PATCH v4 05/10] configs/pc_x86_64_defconfig: build
- the EDK2 firmware from source
-In-Reply-To: <TrwcjmViIZjJee2Ux7F7hOpZAqH0hQE0hjMKK4sRI@cp3-web-016.plabs.ch>
-References: <TrwcjmViIZjJee2Ux7F7hOpZAqH0hQE0hjMKK4sRI@cp3-web-016.plabs.ch>
-Message-ID: <CAK4VdL1kChSD=ss0bLWxR7tC4B9dPkw7EdaL0LPV1snmc23CNw@mail.gmail.com>
+Date: Sun, 2 May 2021 12:43:02 +0200
+Subject: [Buildroot] [PATCH v4 06/10]
+ configs/qemu_aarch64_sbsa_defconfig: new config for QEMU sbsa-ref
+In-Reply-To: <Z9iNUXrUAMThOadKFwRuahfxRG9iic9FRPGkCxl3PE@cp3-web-016.plabs.ch>
+References: <Z9iNUXrUAMThOadKFwRuahfxRG9iic9FRPGkCxl3PE@cp3-web-016.plabs.ch>
+Message-ID: <CAK4VdL02XD79E_RFONL=vJW1AN53j_HunCCUiYhzR-P_qDF2ww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 18, 2021 at 4:43 PM Dick Olsson <hi@senzilla.io> wrote:
+On Thu, Mar 18, 2021 at 4:52 PM Dick Olsson via buildroot
+<buildroot@busybox.net> wrote:
 >
-> Prior to this, you had to manually download a pre-built EDK2 flash
-> device image (OVMF_CODE.fd) in order to boot this configuration with
-> QEMU. Now, the configuration is building EDK2 from source.
->
-> Signed-off-by: Dick Olsson <hi@senzilla.io>
-> ---
->  board/pc/readme.txt             | 9 ++++-----
->  configs/pc_x86_64_efi_defconfig | 2 ++
->  2 files changed, 6 insertions(+), 5 deletions(-)
+> This introduces a configuration for the SBSA reference machine under
+> QEMU that is intended for developing and testing firmware. It consists
+> of ATF that load EDK2 as BL33 which in turn will load the kernel in EFI
+> stub mode with ACPI.
 
-I think the commit summary should be "configs/pc_x86_64_efi_defconfig"
-(with _efi).
+It confuses me a bit that there are so many defconfigs for qemu now.
+This one seems like a good addition if it is maintianed as a reference
+machine that follows SBSA, but if we have it, do we still really need
+qemu_aarch64_virt_efi_defconfig in Buildroot?
+
+> +Emulation
+> +=========
+> +
+> +Run the emulation with:
+> +
+> +  output/host/bin/qemu-system-aarch64 \
+> +    -M sbsa-ref \
+> +    -cpu cortex-a57 \
+> +    -smp 4 \
+> +    -m 1024 \
+> +    -nographic \
+> +    -pflash output/images/SBSA_FLASH0.fd \
+> +    -pflash output/images/SBSA_FLASH1.fd \
+> +    -hda output/images/disk.img
+
+It looks like all readme.txt reference qemu-system-* without the
+output/host/bin/ path, so I think that the new ones in this patchset
+should do that too at least for consistency.
