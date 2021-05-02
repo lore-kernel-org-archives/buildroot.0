@@ -1,45 +1,48 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Sun, 02 May 2021 08:16:59 +0000
-Subject: [Buildroot] [PATCH 0/5] Runtime tests for skaware packages
-Message-ID: <hg0byCTnzKxhwKnnMblHN21zFaD13IslpvSAl1kvXt8@cp3-web-016.plabs.ch>
+Date: Sun, 02 May 2021 08:17:06 +0000
+Subject: [Buildroot] [PATCH 1/5] support/testing: add execline tests
+Message-ID: <eo7CYV0YZ4qRmxaeQZRmJU36KSSNGDWQmeGLr5Wzeo@cp3-web-033.plabs.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Test that the interpreter can run a basic command.
 
-First, please note that there is a shebang line in test_s6.py that
-depends on this to be applied first:
-
-http://patchwork.ozlabs.org/project/buildroot/patch/QGtdA2cPWOwJPXUQeX3ZDbP2xoZ08eKz92Kd7zoEJqQ at cp7-web-039.plabs.ch/
-
-This series introduce a few basic but solid runtime tests for the
-most important skaware packages. These will be good to have before
-packaging the s6 init system as discussed here:
-
-http://lists.busybox.net/pipermail/buildroot/2021-May/309383.html
-
-
-Dick Olsson (5):
-  support/testing: add execline tests
-  support/testing: add s6 tests
-  support/testing: add s6-portable-utils tests
-  support/testing: add s6-rc tests
-  support/testing: add s6-networking tests
-
- .../testing/tests/package/test_execline.py    | 22 ++++++++
- support/testing/tests/package/test_s6.py      | 54 +++++++++++++++++++
- .../tests/package/test_s6_networking.py       | 35 ++++++++++++
- .../tests/package/test_s6_portable_utils.py   | 31 +++++++++++
- support/testing/tests/package/test_s6_rc.py   | 46 ++++++++++++++++
- 5 files changed, 188 insertions(+)
+Signed-off-by: Dick Olsson <hi@senzilla.io>
+---
+ .../testing/tests/package/test_execline.py    | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
  create mode 100644 support/testing/tests/package/test_execline.py
- create mode 100644 support/testing/tests/package/test_s6.py
- create mode 100644 support/testing/tests/package/test_s6_networking.py
- create mode 100644 support/testing/tests/package/test_s6_portable_utils.py
- create mode 100644 support/testing/tests/package/test_s6_rc.py
 
+diff --git a/support/testing/tests/package/test_execline.py b/support/testing/tests/package/test_execline.py
+new file mode 100644
+index 0000000000..e655b501ea
+--- /dev/null
++++ b/support/testing/tests/package/test_execline.py
+@@ -0,0 +1,22 @@
++import os
++
++import infra.basetest
++
++
++class TestExecline(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + """
++    BR2_PACKAGE_EXECLINE=y
++    BR2_TARGET_ROOTFS_CPIO=y
++    # BR2_TARGET_ROOTFS_TAR is not set
++    """
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", img])
++        self.emulator.login()
++
++        output, exit_code = self.emulator.run("execlineb -c 'echo hello world'")
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output[0].strip(), "hello world")
 -- 
 2.30.2
