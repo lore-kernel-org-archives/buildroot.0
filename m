@@ -1,90 +1,89 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  2 May 2021 23:00:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: fix build with NLS
-Message-ID: <20210502210001.2703609-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun,  2 May 2021 23:21:28 +0200
+Subject: [Buildroot] [PATCH v2 0/6] Support for the BeagleV platform
+Message-ID: <20210502212141.934384-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build failure with NLS which is raised since bump to version 0.3.26
-in commit a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.org/results/4ed680dc91519c02db4fbfb396d75c5f74207d9b
+Here is a new version of the patch series adding support for the
+BeagleV in Buildroot.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...0001-meson-prefer-libintl-on-FreeBSD.patch | 46 +++++++++++++++++++
- package/pipewire/pipewire.mk                  |  2 +-
- 2 files changed, 47 insertions(+), 1 deletion(-)
- create mode 100644 package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch
+Here are the changes compared the first version:
 
-diff --git a/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch b/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch
-new file mode 100644
-index 0000000000..b19715b2e8
---- /dev/null
-+++ b/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch
-@@ -0,0 +1,46 @@
-+From 4d064a37183a0bf8198914dd68b063b2c9def17e Mon Sep 17 00:00:00 2001
-+From: Evgeniy Khramtsov <evgeniy@khramtsov.org>
-+Date: Fri, 23 Apr 2021 22:57:51 +0300
-+Subject: [PATCH] meson: prefer libintl on FreeBSD
-+
-+FreeBSD does not have gettext in libc.
-+It is implemented in the third-party library.
-+
-+[Retrieved from:
-+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/4d064a37183a0bf8198914dd68b063b2c9def17e]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ meson.build              | 3 +++
-+ src/pipewire/meson.build | 2 +-
-+ 2 files changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 99a4b2d1c..0a9963fbb 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -351,6 +351,9 @@ libinotify_dep = (build_machine.system() == 'freebsd'
-+     ? dependency('libinotify', required: true)
-+     : dependency('', required: false))
-+ 
-++# On FreeBSD, libintl library is required for gettext
-++libintl_dep = cc.find_library('intl', required: false)
-++
-+ alsa_dep = dependency('alsa', version : '>=1.1.7', required: get_option('pipewire-alsa'))
-+ 
-+ installed_tests_metadir = pipewire_datadir / 'installed-tests' / pipewire_name
-+diff --git a/src/pipewire/meson.build b/src/pipewire/meson.build
-+index 7f2d42a7a..d4c271373 100644
-+--- a/src/pipewire/meson.build
-++++ b/src/pipewire/meson.build
-+@@ -101,7 +101,7 @@ libpipewire = shared_library(pipewire_name, pipewire_sources,
-+   c_args : libpipewire_c_args,
-+   include_directories : [pipewire_inc, configinc, spa_inc],
-+   install : true,
-+-  dependencies : [dl_lib, mathlib, pthread_lib, ],
-++  dependencies : [dl_lib, mathlib, pthread_lib, libintl_dep, ],
-+ )
-+ 
-+ pipewire_dep = declare_dependency(link_with : libpipewire,
-+-- 
-+GitLab
-+
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index 23bfcdb9ec..e5185aeb8c 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -9,7 +9,7 @@ PIPEWIRE_SITE = $(call github,PipeWire,pipewire,$(PIPEWIRE_VERSION))
- PIPEWIRE_LICENSE = MIT
- PIPEWIRE_LICENSE_FILES = COPYING LICENSE
- PIPEWIRE_INSTALL_STAGING = YES
--PIPEWIRE_DEPENDENCIES = host-pkgconf dbus
-+PIPEWIRE_DEPENDENCIES = host-pkgconf dbus $(TARGET_NLS_DEPENDENCIES)
- 
- PIPEWIRE_CONF_OPTS += \
- 	-Ddocs=disabled \
+ - Dropped the first two patches, as they have been merged upstream.
+
+ - In the OpenSBI patch adding options to enable/disable image
+   installation, take into account the reviews from Bin Meng how the
+   ordering of options + a typo in the fw_jump option prompt.
+
+ - In the beaglev_defconfig patch itself, use .out instead of .flash
+   for the ready-to-be-flashed OpenSBI/U-Boot image, to be consistent
+   with the extension documented by upstream, and also used by other
+   firmware files for this platform.
+
+ - In the beaglev_defconfig patch itself, fix the post-build script to
+   work in out-of-tree situation, as pointed out by Frank Hunleth.
+
+ - Fix the naming of the platform to BeagleV and the naming of the SoC
+   to JH7100.
+
+ - Add support for building the other firmware files that are used in
+   the boot process of the BeagleV: secondboot and ddrinit. To keep
+   the patch series easier to merge, this is done as a separate step
+   from the main defconfig addition. Building those two firmware files
+   requires a bare-metal RISC-V 64-bit toolchain, so a host package is
+   created for that.
+
+The branch at:
+
+  https://github.com/tpetazzoni/buildroot/commits/beaglev
+
+has been updated accordingly.
+
+Best regards,
+
+Thomas Petazzoni
+
+Thomas Petazzoni (6):
+  boot/opensbi: add options to enable/disable image installation
+  configs/beaglev_defconfig: new defconfig
+  package/riscv64-elf-toolchain: new package
+  boot/beaglev-ddrinit: new package
+  boot/beaglev-secondboot: new package
+  configs/beaglev: enable building of low-level firmware
+
+ DEVELOPERS                                    |   5 +
+ board/beaglev/extlinux.conf                   |   4 +
+ board/beaglev/genimage.cfg                    |  12 ++
+ ...s-starfive-vic7100-adjust-fdt_addr_r.patch |  39 ++++++
+ board/beaglev/post-build.sh                   |  17 +++
+ board/beaglev/readme.txt                      | 122 ++++++++++++++++++
+ boot/Config.in                                |   2 +
+ boot/beaglev-ddrinit/Config.in                |   9 ++
+ boot/beaglev-ddrinit/beaglev-ddrinit.mk       |  29 +++++
+ boot/beaglev-secondboot/Config.in             |   9 ++
+ boot/beaglev-secondboot/beaglev-secondboot.mk |  29 +++++
+ boot/opensbi/Config.in                        |  20 +++
+ boot/opensbi/opensbi.mk                       |  16 ++-
+ configs/beaglev_defconfig                     |  37 ++++++
+ .../riscv64-elf-toolchain.mk                  |  25 ++++
+ 15 files changed, 369 insertions(+), 6 deletions(-)
+ create mode 100644 board/beaglev/extlinux.conf
+ create mode 100644 board/beaglev/genimage.cfg
+ create mode 100644 board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
+ create mode 100755 board/beaglev/post-build.sh
+ create mode 100644 board/beaglev/readme.txt
+ create mode 100644 boot/beaglev-ddrinit/Config.in
+ create mode 100644 boot/beaglev-ddrinit/beaglev-ddrinit.mk
+ create mode 100644 boot/beaglev-secondboot/Config.in
+ create mode 100644 boot/beaglev-secondboot/beaglev-secondboot.mk
+ create mode 100644 configs/beaglev_defconfig
+ create mode 100644 package/riscv64-elf-toolchain/riscv64-elf-toolchain.mk
+
 -- 
 2.30.2
