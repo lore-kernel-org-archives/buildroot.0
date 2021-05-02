@@ -1,54 +1,66 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  2 May 2021 23:49:14 +0200
-Subject: [Buildroot] [PATCH 0/5] poke: new package
-Message-ID: <20210502214919.1826571-1-romain.naour@gmail.com>
+Date: Sun,  2 May 2021 23:49:15 +0200
+Subject: [Buildroot] [PATCH 1/5] package/bdwgc: Fix 'undefined reference to
+ __data_start' linker error on RISC-V
+In-Reply-To: <20210502214919.1826571-1-romain.naour@gmail.com>
+References: <20210502214919.1826571-1-romain.naour@gmail.com>
+Message-ID: <20210502214919.1826571-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series add poke package into Buildroot.
+Backport an upstream patch fixing a link issue with libgc.so on RISC-V
 
-In order to build poke on riscv, this series enable riscv support in libatomic_ops
-along with a bdwgc fix for riscv64.
+riscv64-buildroot-linux-musl/sysroot/usr/lib/libgc.so: undefined reference to `__data_start'
 
-The uClibc-ng support has been difficult to add due to issues
-with gnulib similar we have with gdb package.
-With the workaround applied, poke is working at runtime.
-This will be reported to gnulib project.
+https://gitlab.com/kubu93/buildroot/-/jobs/1229888983
 
-More info about poke:
-https://www.youtube.com/watch?v=92Sykut06N8
-
-Qemu testing:
-https://asciinema.org/a/mtFjz7pcN1QuVbxdZhBUfBQTs
-
-Romain Naour (5):
-  package/bdwgc: Fix 'undefined reference to __data_start' linker error
-    on RISC-V
-  package/libatomic_ops: enable for riscv32 and riscv64
-  package/poke: new package
-  package/poke: add optional json-c dependency
-  package/poke: enable uClibc-ng support
-
- package/Config.in                             |  1 +
- ...ference-to-__data_start-linker-error.patch | 33 ++++++++++++
- package/libatomic_ops/Config.in               |  2 +-
- ...ck-for-Tcl-Tk-if-disable-gui-is-spec.patch | 43 +++++++++++++++
- ...nfig.in-avoit-host-poisoning-while-c.patch | 45 ++++++++++++++++
- ...P2MAN-replace-by-true-when-cross-com.patch | 34 ++++++++++++
- package/poke/Config.in                        | 27 ++++++++++
- package/poke/poke.hash                        |  3 ++
- package/poke/poke.mk                          | 54 +++++++++++++++++++
- 9 files changed, 241 insertions(+), 1 deletion(-)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ ...ference-to-__data_start-linker-error.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
  create mode 100644 package/bdwgc/0001-Fix-undefined-reference-to-__data_start-linker-error.patch
- create mode 100644 package/poke/0001-build-do-not-check-for-Tcl-Tk-if-disable-gui-is-spec.patch
- create mode 100644 package/poke/0002-jitter-jitter-config.in-avoit-host-poisoning-while-c.patch
- create mode 100644 package/poke/0003-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch
- create mode 100644 package/poke/Config.in
- create mode 100644 package/poke/poke.hash
- create mode 100644 package/poke/poke.mk
 
+diff --git a/package/bdwgc/0001-Fix-undefined-reference-to-__data_start-linker-error.patch b/package/bdwgc/0001-Fix-undefined-reference-to-__data_start-linker-error.patch
+new file mode 100644
+index 0000000000..81221c9f66
+--- /dev/null
++++ b/package/bdwgc/0001-Fix-undefined-reference-to-__data_start-linker-error.patch
+@@ -0,0 +1,33 @@
++From 301ef15aefa6764466c374d07efb511b1c3862cc Mon Sep 17 00:00:00 2001
++From: Nikita Ermakov <coffe92@gmail.com>
++Date: Wed, 20 May 2020 17:57:17 +0300
++Subject: [PATCH] Fix 'undefined reference to __data_start' linker error on
++ RISC-V
++
++Issue #294 (bdwgc).
++
++* include/private/gcconfig.h [RISCV && LINUX] (__data_start): Add
++attribute(weak).
++
++(cherry picked from commit 538562ad01b181f4cc3913da1ac06a77945cd9b9)
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ include/private/gcconfig.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/private/gcconfig.h b/include/private/gcconfig.h
++index d9d45da1..d6cefa6f 100644
++--- a/include/private/gcconfig.h
+++++ b/include/private/gcconfig.h
++@@ -2943,7 +2943,7 @@ EXTERN_C_BEGIN
++ #   define ALIGNMENT (CPP_WORDSZ/8)
++ #   ifdef LINUX
++ #     define OS_TYPE "LINUX"
++-      extern int __data_start[];
+++      extern int __data_start[] __attribute__((__weak__));
++ #     define DATASTART ((ptr_t)__data_start)
++ #     define LINUX_STACKBOTTOM
++ #     define DYNAMIC_LOADING
++-- 
++2.30.2
++
 -- 
 2.30.2
