@@ -1,56 +1,197 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 1 May 2021 18:39:24 -0700
-Subject: [Buildroot] [PATCH 1/1] package/docker-engine: bump version to
- 20.10.6
-In-Reply-To: <20210419104751.1446056-1-knif.oiram@gmail.com>
-References: <20210419104751.1446056-1-knif.oiram@gmail.com>
-Message-ID: <CA+h8R2rmKLBGuc_By_xJS4iPb6occrFCaRbRb+=4QXjZXj0+_A@mail.gmail.com>
+From: Andy Bergh <allmyaddmin@gmail.com>
+Date: Sun, 2 May 2021 09:47:34 +0200
+Subject: [Buildroot] eMMC image not booting (uboot related issue)
+In-Reply-To: <9785f41c-df26-d5fe-41df-33189b5a37ed@gmail.com>
+References: <CAAmck7XUFQ+Jb=tRKTXPvzQWPfNvF9VXC70J9R-wZgDc6p+BMw@mail.gmail.com>
+ <CAAmck7WGrCjY803E5tzOwTFT3bAP3Ov-zeZ4dJwUJpzq0q3fPQ@mail.gmail.com>
+ <9785f41c-df26-d5fe-41df-33189b5a37ed@gmail.com>
+Message-ID: <CAAmck7Vx939kxovmTenT1-0d4kY1q8GtspsoBcm=O5CWUGio7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Marko,
 
-On Mon, Apr 19, 2021 at 3:48 AM Mario Fink
-<mario.fink@record-evolution.de> wrote:
+*Maybe a hint for you:*
 >
-> Signed-off-by: Mario Fink <knif.oiram@gmail.com>
-> ---
->  package/docker-engine/docker-engine.hash | 2 +-
->  package/docker-engine/docker-engine.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> *- I think "mccdev" could be the wrong variable, the correct is "mmcdev"*
 >
-> diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-> index 7e3ce6a5cf..6c55b9a9b9 100644
-> --- a/package/docker-engine/docker-engine.hash
-> +++ b/package/docker-engine/docker-engine.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  bcf651d75e5c80421e8cd3b0d47f3425e01047cf67aef0eda83b68776905a583  docker-engine-20.10.5.tar.gz
-> +sha256  fd7f5571b1f64f26b5ca520a3e1fefb33c190f3732b931051c23a76bdba5000e  docker-engine-20.10.6.tar.gz
->  sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-> index 767818ebba..10ecbf603a 100644
-> --- a/package/docker-engine/docker-engine.mk
-> +++ b/package/docker-engine/docker-engine.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
 >
-> -DOCKER_ENGINE_VERSION = 20.10.5
-> +DOCKER_ENGINE_VERSION = 20.10.6
->  DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
->
->  DOCKER_ENGINE_LICENSE = Apache-2.0
-> --
-> 2.25.1
->
+>  You are 100% correct. This was a typo I made. When I corrected it the OS
+booted successfully.
 
-Recommended for 2021.02.x
+Thank you very much!
 
-Tested-by: Christian Stewart <christian@paral.in>
+On Fri, Apr 30, 2021 at 5:39 PM Marko Stanisic <sankerspace@gmail.com>
+wrote:
 
-Best regards,
-Christian
+>
+> Hi Andy,
+>
+> Maybe a hint for you:
+>
+> - I think "mccdev" could be the wrong variable, the correct is "mmcdev"
+>
+>
+> - In your output i saw following:
+> On a working boot:
+>
+>
+>
+> *Hit any key to stop autoboot:  0 switch to partitions #0, OK mmc0 is
+> current device SD/MMC found on device 0*
+>
+> Are you sure that mmcdev=1?
+>
+> Check it with following command :
+>
+>     => mmc list
+>
+> if it show something like:
+>
+>     FSL_SDHC: 0 (eMMC)
+>
+> than the correct setting can be changed with:
+>
+>     *=> setenv mmcdev 0*
+>
+> otherwise
+>
+>
+> *=> setenv mmcdev 1 *
+>
+>
+>
+> - Regarding 2)  Boot from the SDCard and configure the eMMC using fdisk.
+>
+> these are two different device using the same bus, because they are both
+> mmc devices, do you
+>
+> explicitly use the emmc of the beaglebone and you dont want the sd-card,
+> could be confusing to understand.
+>
+> In case of the emmc:
+>
+> First, How about the fuse settings of the emmc?  Second, sdcard and emmc
+> are bot mmc devices, maybe
+>
+> mmcdev=1 indicates the sd card. I dont have a beaglebone, but i would
+> recommend to study the
+>
+> cpu documentation and beaglebone, these should give a solid hit how
+> perfoirm a change between
+>
+> sdcard and emmc.
+>
+> You should also Overview the boot settings, maybe they are specialized to
+> the sd-card case.
+>
+>
+> Whish happy coding :)
+>
+>
+> On 30.04.21 16:38, Andy Bergh wrote:
+>
+> Hi,
+>
+> Sorry to spam. I managed to set the mccdev var to 1 before booting but it
+> still fails (using the preboot option in uboot-menuconfig). So that was not
+> the issue. The output and error:
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+> *Hit any key to stop autoboot:  0 => printenv mccdev mccdev=1 => boot
+> switch to partitions #0, OK mmc1(part 0) is current device Scanning mmc
+> 1:1... 40817 bytes read in 4 ms (9.7 MiB/s) switch to partitions #0, OK
+> mmc1(part 0) is current device SD/MMC found on device 1 ## Error:
+> "bootcmd_nand0" not defined starting USB... Bus usb at 47401800: Port not
+> available. link up on port 0, speed 100, full duplex BOOTP broadcast 1
+> BOOTP broadcast 2*
+>
+> On a working boot:
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+> *Hit any key to stop autoboot:  0 switch to partitions #0, OK mmc0 is
+> current device SD/MMC found on device 0 591 bytes read in 2 ms (288.1
+> KiB/s) Loaded env from uEnv.txt Importing environment from mmc0 ... Running
+> uenvcmd ... 6090656 bytes read in 392 ms (14.8 MiB/s) 40817 bytes read in 5
+> ms (7.8 MiB/s) bootargs=console=ttyS0,115200n8 root=/dev/mmcblk0p2 rw
+> rootfstype=ext4 rootwait ## Flattened Device Tree blob at 88000000
+>  Booting using the fdt blob at 0x88000000    Loading Device Tree to
+> 8fff3000, end 8fffff70 ... OK *
+> *Starting kernel ...*
+>
+> I truly am stuck here. Any advice would be appreciated.
+>
+> Thank you
+>
+>
+> On Fri, Apr 30, 2021 at 3:02 PM Andy Bergh <allmyaddmin@gmail.com> wrote:
+>
+>> Hi,
+>>
+>> I have made an image for my Beaglebone Black using buildroot, great
+>> project, thanks. The sdcard.img boots fine, but I can not get it to boot
+>> from power up from the eMMC.
+>>
+>> What I have done:
+>> 1) Build an image using buildroot (with beaglebone_defconfig).
+>> The sdcard.img boots just fine.
+>> 2) Boot from the SDCard and configure the eMMC using fdisk. I followed
+>> the instructions shown here
+>> <https://e2e.ti.com/support/processors/f/processors-forum/344528/u-boot-write-mlo-uboot-uimage-rootfs-on-to-emmc-mnand-of-am335x-evm-j5-echo-based-custom-board/1204926#1204926>
+>> .
+>>
+>> Once the eMMC is configured I perform a power cycle at which point the
+>> boot fails. I end up at the uboot prompt (UART port), if I then type "boot"
+>> the OS boots correctly.
+>> What I have noticed is that the variable mmcdev is set to 0 at startup.
+>> After it has failed if I do another printenv mmcdev and then it is set to 1.
+>>
+>> I suspect this is the reason it does not boot successfully at power up,
+>> but I may be very wrong!
+>>
+>> How can I set the env var mccdev to be 1 as default at startup? Is this
+>> possible, perhaps with uboot-menuconfig? Is that the correct way to solve
+>> this problem?
+>>
+>> Any information would be much appreciated.
+>>
+>> Thank you
+>>
+>
+> _______________________________________________
+> buildroot mailing listbuildroot at busybox.nethttp://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210502/ad41335c/attachment-0001.html>
