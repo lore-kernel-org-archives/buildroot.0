@@ -1,111 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun,  2 May 2021 23:21:36 +0200
-Subject: [Buildroot] [PATCH v2 1/6] boot/opensbi: add options to
- enable/disable image installation
+Date: Sun,  2 May 2021 23:21:35 +0200
+Subject: [Buildroot] [PATCH v2 0/6] Support for the BeagleV platform
 In-Reply-To: <20210502212141.934384-1-thomas.petazzoni@bootlin.com>
 References: <20210502212141.934384-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210502212141.934384-9-thomas.petazzoni@bootlin.com>
+Message-ID: <20210502212141.934384-8-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, whenever a BR2_TARGET_OPENSBI_PLAT value was specified,
-opensbi.mk was assuming that both fw_jump and fw_dynamic would be
-produced. However, this is not the case: the OpenSBI per-platform
-config.mk can decide which image to build.
+Hello,
 
-As an example, the config.mk for VIC7100-based BeagleV only enables
-producing the fw_payload image.
+Here is a new version of the patch series adding support for the
+BeagleV in Buildroot.
 
-This commit adds three options to enable the installation of images:
-one for fw_jump, one for fw_dynamic, one for fw_payload.
+Here are the changes compared the first version:
 
-The options for fw_jump and fw_dynamic are "default y" when
-BR2_TARGET_OPENSBI_PLAT is not empty, to preserve existing behavior.
+ - Dropped the first two patches, as they have been merged upstream.
 
-The option for fw_payload is forcefully selected when either Linux or
-U-Boot are selected as payloads.
+ - In the OpenSBI patch adding options to enable/disable image
+   installation, take into account the reviews from Bin Meng how the
+   ordering of options + a typo in the fw_jump option prompt.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/opensbi/Config.in  | 20 ++++++++++++++++++++
- boot/opensbi/opensbi.mk | 16 ++++++++++------
- 2 files changed, 30 insertions(+), 6 deletions(-)
+ - In the beaglev_defconfig patch itself, use .out instead of .flash
+   for the ready-to-be-flashed OpenSBI/U-Boot image, to be consistent
+   with the extension documented by upstream, and also used by other
+   firmware files for this platform.
 
-diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-index 236bf74a90..55a644506f 100644
---- a/boot/opensbi/Config.in
-+++ b/boot/opensbi/Config.in
-@@ -74,11 +74,30 @@ config BR2_TARGET_OPENSBI_PLAT
- 	  the platform specific static library libplatsbi.a and firmware
- 	  examples are built.
- 
-+config BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG
-+	bool "Install fw_dynamic image"
-+	default y if BR2_TARGET_OPENSBI_PLAT != ""
-+	help
-+	  This installs the fw_dynamic image.
-+
-+config BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG
-+	bool "Install fw_jump image"
-+	default y if BR2_TARGET_OPENSBI_PLAT != ""
-+	help
-+	  This installs the fw_jump image.
-+
-+config BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
-+	bool "Install fw_payload image"
-+	help
-+	  This option enables the installation of the fw_paylaod
-+	  image.
-+
- config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
- 	bool "Include Linux as OpenSBI Payload"
- 	depends on BR2_TARGET_OPENSBI_PLAT != ""
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_LINUX_KERNEL_IMAGE
-+	select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
- 	help
- 	  Build OpenSBI with the Linux kernel as a Payload.
- 
-@@ -86,6 +105,7 @@ config BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
- 	bool "Include U-Boot as OpenSBI Payload"
- 	depends on BR2_TARGET_OPENSBI_PLAT != ""
- 	depends on BR2_TARGET_UBOOT
-+	select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
- 	help
- 	  Build OpenSBI with the U-Boot as a Payload.
- 
-diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-index 8ebe4566fd..f8cbbb8fcc 100644
---- a/boot/opensbi/opensbi.mk
-+++ b/boot/opensbi/opensbi.mk
-@@ -50,15 +50,19 @@ define OPENSBI_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
- endef
- 
--ifneq ($(OPENSBI_PLAT),)
-+ifeq ($(BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG),y)
- OPENSBI_INSTALL_IMAGES = YES
--OPENSBI_FW_IMAGES += jump dynamic
--ifeq ($(BR2_TARGET_OPENSBI_LINUX_PAYLOAD),y)
--OPENSBI_FW_IMAGES += payload
-+OPENSBI_FW_IMAGES += dynamic
- endif
--ifeq ($(BR2_TARGET_OPENSBI_UBOOT_PAYLOAD),y)
--OPENSBI_FW_IMAGES = payload
-+
-+ifeq ($(BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG),y)
-+OPENSBI_INSTALL_IMAGES = YES
-+OPENSBI_FW_IMAGES += jump
- endif
-+
-+ifeq ($(BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG),y)
-+OPENSBI_INSTALL_IMAGES = YES
-+OPENSBI_FW_IMAGES += payload
- endif
- 
- define OPENSBI_INSTALL_IMAGES_CMDS
+ - In the beaglev_defconfig patch itself, fix the post-build script to
+   work in out-of-tree situation, as pointed out by Frank Hunleth.
+
+ - Fix the naming of the platform to BeagleV and the naming of the SoC
+   to JH7100.
+
+ - Add support for building the other firmware files that are used in
+   the boot process of the BeagleV: secondboot and ddrinit. To keep
+   the patch series easier to merge, this is done as a separate step
+   from the main defconfig addition. Building those two firmware files
+   requires a bare-metal RISC-V 64-bit toolchain, so a host package is
+   created for that.
+
+The branch at:
+
+  https://github.com/tpetazzoni/buildroot/commits/beaglev
+
+has been updated accordingly.
+
+Best regards,
+
+Thomas Petazzoni
+
+Thomas Petazzoni (6):
+  boot/opensbi: add options to enable/disable image installation
+  configs/beaglev_defconfig: new defconfig
+  package/riscv64-elf-toolchain: new package
+  boot/beaglev-ddrinit: new package
+  boot/beaglev-secondboot: new package
+  configs/beaglev: enable building of low-level firmware
+
+ DEVELOPERS                                    |   5 +
+ board/beaglev/extlinux.conf                   |   4 +
+ board/beaglev/genimage.cfg                    |  12 ++
+ ...s-starfive-vic7100-adjust-fdt_addr_r.patch |  39 ++++++
+ board/beaglev/post-build.sh                   |  17 +++
+ board/beaglev/readme.txt                      | 122 ++++++++++++++++++
+ boot/Config.in                                |   2 +
+ boot/beaglev-ddrinit/Config.in                |   9 ++
+ boot/beaglev-ddrinit/beaglev-ddrinit.mk       |  29 +++++
+ boot/beaglev-secondboot/Config.in             |   9 ++
+ boot/beaglev-secondboot/beaglev-secondboot.mk |  29 +++++
+ boot/opensbi/Config.in                        |  20 +++
+ boot/opensbi/opensbi.mk                       |  16 ++-
+ configs/beaglev_defconfig                     |  37 ++++++
+ .../riscv64-elf-toolchain.mk                  |  25 ++++
+ 15 files changed, 369 insertions(+), 6 deletions(-)
+ create mode 100644 board/beaglev/extlinux.conf
+ create mode 100644 board/beaglev/genimage.cfg
+ create mode 100644 board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
+ create mode 100755 board/beaglev/post-build.sh
+ create mode 100644 board/beaglev/readme.txt
+ create mode 100644 boot/beaglev-ddrinit/Config.in
+ create mode 100644 boot/beaglev-ddrinit/beaglev-ddrinit.mk
+ create mode 100644 boot/beaglev-secondboot/Config.in
+ create mode 100644 boot/beaglev-secondboot/beaglev-secondboot.mk
+ create mode 100644 configs/beaglev_defconfig
+ create mode 100644 package/riscv64-elf-toolchain/riscv64-elf-toolchain.mk
+
 -- 
 2.30.2
