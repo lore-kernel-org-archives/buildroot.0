@@ -1,91 +1,48 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 1 May 2021 15:10:11 -0700
-Subject: [Buildroot] [PATCH 1/3] package/refpolicy: Add patches pending
- the next release
-In-Reply-To: <20210108105918.177d00b3@bootlin.com>
-References: <20210107135307.1762186-1-maxime.chevallier@bootlin.com>
- <20210107135307.1762186-2-maxime.chevallier@bootlin.com>
- <20210107175543.2fb51ec6@windsurf.home>
- <20210108105918.177d00b3@bootlin.com>
-Message-ID: <CAFSsvmrzFeTBPD18_r=zC598X1i2iSi0O5i2kY5LSwk3Bb7ZcA@mail.gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Sat, 1 May 2021 18:39:07 -0700
+Subject: [Buildroot] [PATCH 1/1] package/docker-cli: bump version to
+ 20.10.6
+In-Reply-To: <20210419102855.1444837-1-mario.fink@record-evolution.de>
+References: <20210419102855.1444837-1-mario.fink@record-evolution.de>
+Message-ID: <CA+h8R2o-v3kFzhMkSqKBMjJp2UM9gCUP7E-sYuqRUAwXbTRUDg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Not sure if this patch is abandoned or not. Just wanted to say that
-with the bump to 20210203,
-the only patches that apply are:
- - 0005-getty-utilize-auth_use_nsswitch.patch
- - 0006-systemd-tmpfiles-utilize-auth_use_nsswitch.patch
- - 0008-pending-upstreaming-Fixes-for-Buildroot-to-boot-in-e.patch
+Hi,
 
-It might be worth making another patch series with just those three
-patches and the buildroot module.
+On Mon, Apr 19, 2021 at 3:29 AM Mario Fink
+<mario.fink@record-evolution.de> wrote:
+>
+> [1] https://docs.docker.com/engine/release-notes/#20106
+>
+> Signed-off-by: Mario Fink <mario.fink@record-evolution.de>
+> ---
+> diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+> index f4787062bb..bb3444c270 100644
+> --- a/package/docker-cli/docker-cli.hash
+> +++ b/package/docker-cli/docker-cli.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  4ba845f8c7e2e0a2ca1ec6589847159ca8d0d37b609f0e6f78def7a893b9b342  docker-cli-20.10.5.tar.gz
+> +sha256  eda53b96ab83a59502df2e5e00ab7ee867243259407ef454be55e695303c1113  docker-cli-20.10.6.tar.gz
+>  sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+> diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+> index 39b4d09c76..9c3690e4c3 100644
+> --- a/package/docker-cli/docker-cli.mk
+> +++ b/package/docker-cli/docker-cli.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -DOCKER_CLI_VERSION = 20.10.5
+> +DOCKER_CLI_VERSION = 20.10.6
 
-Adam
+Recommended for 2021.02.x
 
-On Fri, Jan 8, 2021 at 1:59 AM Maxime Chevallier
-<maxime.chevallier@bootlin.com> wrote:
->
-> Hi Thomas,
->
-> On Thu, 7 Jan 2021 17:55:43 +0100
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->
-> >Hello,
-> >
-> >On Thu,  7 Jan 2021 14:53:05 +0100
-> >Maxime Chevallier <maxime.chevallier@bootlin.com> wrote:
-> >
-> >> diff --git a/package/refpolicy/0001-pending-next-release.patch b/package/refpolicy/0001-pending-next-release.patch
-> >> new file mode 100644
-> >> index 0000000000..e049845638
-> >> --- /dev/null
-> >> +++ b/package/refpolicy/0001-pending-next-release.patch
-> >> @@ -0,0 +1,673 @@
-> >> +From 2566e2dac2c759392e0b9f3d442b8489b726cb10 Mon Sep 17 00:00:00 2001
-> >> +From: Antoine Tenart <antoine.tenart@bootlin.com>
-> >> +Date: Mon, 31 Aug 2020 15:38:13 +0200
-> >> +Subject: [PATCH 1/8] [pending next release]
-> >
-> >Could you generate patches for packages with git format-patch -N to
-> >avoid the numbering PATCH X/Y ? This is normally caught by "make
-> >check-package".
->
-> OK I'll do that.
->
-> >Also, this particular patch is apparently a huge aggregation of several
-> >individual upstream commits. We do want to have each individual commit
-> >as a separate patch in Buildroot, with a reference to the upstream
-> >commit, a bit like this:
-> >
-> >Signed-off-by: Antoine T?nart ...
-> >Upstream: link to upstream commit, or at least commit hash
-> >Signed-off-by: You
->
-> OK I'll resubmit with individual patches. I wanted to ease the task by
-> grouping patches that could be removed all at once in the next release.
->
-> I hope that having a large number of patches bundled with the refpolicy
-> package will be acceptable.
->
-> Thanks,
->
-> Maxime
->
-> >Thanks!
-> >
-> >Thomas
->
->
->
-> --
-> Maxime Chevallier, Bootlin
-> Embedded Linux and kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Tested-by: Christian Stewart <christian@paral.in>
+
+Best regards,
+Christian
