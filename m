@@ -1,88 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 May 2021 22:32:12 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/nginx: add
- libxcrypt optional dependency
-Message-ID: <20210502200602.DE85081132@busybox.osuosl.org>
+Date: Sun, 2 May 2021 22:28:21 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/sox: fix static
+ build with magic and bzip2
+Message-ID: <20210502200602.D2E0681674@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8efa1a303f0b36e990cb1240f7ddeaf410360aea
+commit: https://git.buildroot.net/buildroot/commit/?id=07e75980da960e7e9740001819f21ff80b7a648e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix build failure on uclibc with libxcrypt which has been added in
-commit 464bbe26ff5fb9e5bfe26a26ea65c700b90598f5
+Update patch added by commit 183d583fb5f19eb11637873d73e13fe14536efa6 to
+use pkg-config instead of linking with zlib to fix the following static
+build failure with a bzip2-enabled libmagic:
+
+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arc-buildroot-linux-uclibc/9.3.1/../../../../arc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arc-buildroot-linux-uclibc/sysroot/usr/lib/libmagic.a(compress.o): in function `uncompressbuf':
+compress.c:(.text+0x422): undefined reference to `BZ2_bzDecompressInit'
+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arc-buildroot-linux-uclibc/9.3.1/../../../../arc-buildroot-linux-uclibc/bin/ld: compress.c:(.text+0x422): undefined reference to `BZ2_bzDecompressInit'
 
 Fixes:
- - http://autobuild.buildroot.org/results/79a51b0d348e756517b5c9ce815a67f5c657e7e6
+ - http://autobuild.buildroot.org/results/4c511c02e4c63b35ecf77a2658f88e8a0d9dbb4d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit d4f166d9513187066a04a294e7adc324ea04af90)
+(cherry picked from commit c5f3c6ff1ab8a03aafe304756f8b418c964f4819)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...09-auto-os-linux-fix-build-with-libxcrypt.patch | 38 ++++++++++++++++++++++
- package/nginx/nginx.mk                             |  4 ++-
- 2 files changed, 41 insertions(+), 1 deletion(-)
+ ...04-configure.ac-fix-static-linking-with-magic.patch | 18 +++++++++---------
+ package/sox/sox.mk                                     |  4 ++--
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch b/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
-new file mode 100644
-index 0000000000..7e430ffc37
---- /dev/null
-+++ b/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
-@@ -0,0 +1,38 @@
-+From 79f1fe5251afc4e22a138b0c8f44fc9c94093b8b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 2 Apr 2021 09:18:26 +0200
-+Subject: [PATCH] auto/os/linux: fix build with libxcrypt
-+
-+If crypt_r is found in libcrypt, add -lcrypt to CORE_LIBS to avoid the
-+following build failure with libxcrypt:
-+
-+objs/ngx_modules.o \
-+-lpcre -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lssl -lcrypto -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lxslt -lxml2 -lGeoIP \
-+-Wl,-E
-+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: objs/src/os/unix/ngx_user.o:/home/giuliobenetti/autobuild/run/instance-3/output-1/build/nginx-1.18.0/src/os/unix/ngx_user.c:18: undefined reference to `crypt_r'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/79a51b0d348e756517b5c9ce815a67f5c657e7e6
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ auto/os/linux | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/auto/os/linux b/auto/os/linux
-+index 5e280eca..04682812 100644
-+--- a/auto/os/linux
-++++ b/auto/os/linux
-+@@ -203,6 +203,9 @@ ngx_feature_test="struct crypt_data  cd;
-+                   crypt_r(\"key\", \"salt\", &cd);"
-+ . auto/feature
-+ 
-++if [ $ngx_found = yes ]; then
-++    CORE_LIBS="$CORE_LIBS $ngx_feature_libs"
-++fi
-+ 
-+ ngx_include="sys/vfs.h";     . auto/include
-+ 
-+-- 
-+2.30.2
-+
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 9c32546835..8a371a2cc8 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -9,7 +9,9 @@ NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
- NGINX_CPE_ID_VENDOR = nginx
--NGINX_DEPENDENCIES = host-pkgconf
-+NGINX_DEPENDENCIES = \
-+	host-pkgconf \
-+	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt)
+diff --git a/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch b/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
+index 2fbb8ff8a4..7d2e390df1 100644
+--- a/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
++++ b/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
+@@ -1,11 +1,12 @@
+-From d591a38d934b2a6750f16c7bd46a9ad12233301c Mon Sep 17 00:00:00 2001
++From 4630e574e6c0269b94fd910e7c72b8ad1ee62ce7 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Wed, 3 Mar 2021 16:48:57 +0100
+ Subject: [PATCH] configure.ac: fix static linking with magic
  
- NGINX_CONF_OPTS = \
- 	--crossbuild=Linux::$(BR2_ARCH) \
+-Put back -lz (i.e. ZLIB_LIBS) when searching for magic which was
+-wrongly removed by commit 6ff0e9322f9891f5a6ac6c9b3bceffbfca16bec3. This
+-will fix the following static build failure:
++Use SOX_FMT_PKG to retrieve magic dependencies (e.g. bzip2 or zlib)
++indeed -lz (i.e. ZLIB_LIBS) was wrongly removed by commit
++6ff0e9322f9891f5a6ac6c9b3bceffbfca16bec3. This will fix the following
++static build failure:
+ 
+ configure:11677: checking for magic_open in -lmagic
+ configure:11702: /srv/storage/autobuild/run/instance-0/output-1/host/bin/arm-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -Wall -Wmissing-prototypes -Wstrict-prototypes  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -Wl,--as-needed conftest.c -lmagic    >&5
+@@ -30,19 +31,18 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index 896714f5..ca7bccaa 100644
++index 896714f5..8ae3202c 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -80,8 +80,8 @@ SOX_REPORT([other], [LADSPA effect plugins], [$HAVE_LADSPA])
++@@ -80,7 +80,7 @@ SOX_REPORT([other], [LADSPA effect plugins], [$HAVE_LADSPA])
+  
+  dnl Various libraries
+  
+ -SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open])
+++SOX_FMT_PKG([magic], [libmagic])
+  SOX_CHECK_LIB([ZLIB], [zlib.h], [z], [uncompress])
+-+SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open], [], [], [], [$ZLIB_LIBS])
+  SOX_WITH_LIB([png], [png.h], [png], [png_set_rows], [], [], [], [$ZLIB_LIBS])
+  SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open], [], [], [], [$ZLIB_LIBS])
+- SOX_WITH_LIB([libgsm], [gsm/gsm.h gsm.h], [gsm], [gsm_create])
+ -- 
+-2.30.0
++2.30.1
+ 
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index 99ba20ac9c..dcc1a670b4 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -34,9 +34,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_FILE),y)
+ SOX_DEPENDENCIES += file
+-SOX_CONF_OPTS += --with-magic
++SOX_CONF_OPTS += --enable-magic
+ else
+-SOX_CONF_OPTS += --without-magic
++SOX_CONF_OPTS += --disable-magic
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_FLAC),y)
