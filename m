@@ -1,10 +1,7 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun,  2 May 2021 11:48:28 +0200
-Subject: [Buildroot] [PATCH v1 4/5] package/rpi-bt-firmware: bump version to
- 4c47758
-In-Reply-To: <20210502094829.8292-1-ps.report@gmx.net>
-References: <20210502094829.8292-1-ps.report@gmx.net>
-Message-ID: <20210502094829.8292-4-ps.report@gmx.net>
+Date: Sun,  2 May 2021 11:54:18 +0200
+Subject: [Buildroot] [PATCH v1] package/libcamera: bump version to 3a1f67a
+Message-ID: <20210502095418.9547-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +10,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/rpi-bt-firmware/rpi-bt-firmware.hash | 2 +-
- package/rpi-bt-firmware/rpi-bt-firmware.mk   | 2 +-
+ package/libcamera/libcamera.hash | 2 +-
+ package/libcamera/libcamera.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.hash b/package/rpi-bt-firmware/rpi-bt-firmware.hash
-index 543c737480..2520c91cff 100644
---- a/package/rpi-bt-firmware/rpi-bt-firmware.hash
-+++ b/package/rpi-bt-firmware/rpi-bt-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  cf806f6bdba0f803b90bc210f524a6ac37bac7ad19306c61474bb2dc59875e87  rpi-bt-firmware-9c0ffe9a7f0753b36ed88f7981905a989d940ea9.tar.gz
-+sha256  ae665baa465a09dddf7f4bdec67e108a74b2a3787550cc9ee53c2bea9651f327  rpi-bt-firmware-4c47758bed7cd547dff3618a1739dcf64b5a52a7.tar.gz
- sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
-diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-index 02754c0b46..f63564de99 100644
---- a/package/rpi-bt-firmware/rpi-bt-firmware.mk
-+++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index e2131f01ea..78197b9aeb 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,4 +1,4 @@
+-sha256  e9c02a370a15188163f247210cdcba4427d5bcf7b681c7fea5cb1dde23f71a15  libcamera-ab72e6641c56e876f91edee57a8969982a3ab9b7-br1.tar.gz
++sha256  fa9efe38397392a338c0ed9d0bf3ac1480d4d1c96b0597e422f8b9fb36f43398  libcamera-3a1f67a8031ac5ad96a11d5dc8b2e8976290497b-br1.tar.gz
+ 
+ # license files
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 391dea7564..11a6961da5 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--RPI_BT_FIRMWARE_VERSION = 9c0ffe9a7f0753b36ed88f7981905a989d940ea9
-+RPI_BT_FIRMWARE_VERSION = 4c47758bed7cd547dff3618a1739dcf64b5a52a7
- RPI_BT_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_BT_FIRMWARE_VERSION))
- RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
- RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = ab72e6641c56e876f91edee57a8969982a3ab9b7
++LIBCAMERA_VERSION = 3a1f67a8031ac5ad96a11d5dc8b2e8976290497b
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
 -- 
 2.31.1
