@@ -1,66 +1,36 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  2 May 2021 23:49:15 +0200
-Subject: [Buildroot] [PATCH 1/5] package/bdwgc: Fix 'undefined reference to
- __data_start' linker error on RISC-V
+Date: Sun,  2 May 2021 23:49:16 +0200
+Subject: [Buildroot] [PATCH 2/5] package/libatomic_ops: enable for riscv32
+ and riscv64
 In-Reply-To: <20210502214919.1826571-1-romain.naour@gmail.com>
 References: <20210502214919.1826571-1-romain.naour@gmail.com>
-Message-ID: <20210502214919.1826571-2-romain.naour@gmail.com>
+Message-ID: <20210502214919.1826571-3-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport an upstream patch fixing a link issue with libgc.so on RISC-V
+The riscv support has been added since v7.6.4 release.
 
-riscv64-buildroot-linux-musl/sysroot/usr/lib/libgc.so: undefined reference to `__data_start'
-
-https://gitlab.com/kubu93/buildroot/-/jobs/1229888983
+https://github.com/ivmai/libatomic_ops/commit/137643f1417ded071c56e05401ca6a3c16492d96
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...ference-to-__data_start-linker-error.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/bdwgc/0001-Fix-undefined-reference-to-__data_start-linker-error.patch
+ package/libatomic_ops/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bdwgc/0001-Fix-undefined-reference-to-__data_start-linker-error.patch b/package/bdwgc/0001-Fix-undefined-reference-to-__data_start-linker-error.patch
-new file mode 100644
-index 0000000000..81221c9f66
---- /dev/null
-+++ b/package/bdwgc/0001-Fix-undefined-reference-to-__data_start-linker-error.patch
-@@ -0,0 +1,33 @@
-+From 301ef15aefa6764466c374d07efb511b1c3862cc Mon Sep 17 00:00:00 2001
-+From: Nikita Ermakov <coffe92@gmail.com>
-+Date: Wed, 20 May 2020 17:57:17 +0300
-+Subject: [PATCH] Fix 'undefined reference to __data_start' linker error on
-+ RISC-V
-+
-+Issue #294 (bdwgc).
-+
-+* include/private/gcconfig.h [RISCV && LINUX] (__data_start): Add
-+attribute(weak).
-+
-+(cherry picked from commit 538562ad01b181f4cc3913da1ac06a77945cd9b9)
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ include/private/gcconfig.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/private/gcconfig.h b/include/private/gcconfig.h
-+index d9d45da1..d6cefa6f 100644
-+--- a/include/private/gcconfig.h
-++++ b/include/private/gcconfig.h
-+@@ -2943,7 +2943,7 @@ EXTERN_C_BEGIN
-+ #   define ALIGNMENT (CPP_WORDSZ/8)
-+ #   ifdef LINUX
-+ #     define OS_TYPE "LINUX"
-+-      extern int __data_start[];
-++      extern int __data_start[] __attribute__((__weak__));
-+ #     define DATASTART ((ptr_t)__data_start)
-+ #     define LINUX_STACKBOTTOM
-+ #     define DYNAMIC_LOADING
-+-- 
-+2.30.2
-+
+diff --git a/package/libatomic_ops/Config.in b/package/libatomic_ops/Config.in
+index e9206f3395..6de5979aeb 100644
+--- a/package/libatomic_ops/Config.in
++++ b/package/libatomic_ops/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_sparc || BR2_sparc64 || BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	default y if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_sparc || BR2_sparc64 || BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_riscv
+ 	# Unsupported for MIPS R6
+ 	depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
+ 
 -- 
 2.30.2
