@@ -1,104 +1,111 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun,  2 May 2021 23:21:34 +0200
-Subject: [Buildroot] [PATCH v2 6/6] configs/beaglev: enable building of
- low-level firmware
+Date: Sun,  2 May 2021 23:21:36 +0200
+Subject: [Buildroot] [PATCH v2 1/6] boot/opensbi: add options to
+ enable/disable image installation
 In-Reply-To: <20210502212141.934384-1-thomas.petazzoni@bootlin.com>
 References: <20210502212141.934384-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210502212141.934384-7-thomas.petazzoni@bootlin.com>
+Message-ID: <20210502212141.934384-9-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit extends the beaglev_defconfig and its documentation to
-build the low-level firmware, and explain how to reflash it.
+Until now, whenever a BR2_TARGET_OPENSBI_PLAT value was specified,
+opensbi.mk was assuming that both fw_jump and fw_dynamic would be
+produced. However, this is not the case: the OpenSBI per-platform
+config.mk can decide which image to build.
+
+As an example, the config.mk for VIC7100-based BeagleV only enables
+producing the fw_payload image.
+
+This commit adds three options to enable the installation of images:
+one for fw_jump, one for fw_dynamic, one for fw_payload.
+
+The options for fw_jump and fw_dynamic are "default y" when
+BR2_TARGET_OPENSBI_PLAT is not empty, to preserve existing behavior.
+
+The option for fw_payload is forcefully selected when either Linux or
+U-Boot are selected as payloads.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/beaglev/readme.txt  | 38 ++++++++++++++++++++++++++++++++++++--
- configs/beaglev_defconfig |  2 ++
- 2 files changed, 38 insertions(+), 2 deletions(-)
+ boot/opensbi/Config.in  | 20 ++++++++++++++++++++
+ boot/opensbi/opensbi.mk | 16 ++++++++++------
+ 2 files changed, 30 insertions(+), 6 deletions(-)
 
-diff --git a/board/beaglev/readme.txt b/board/beaglev/readme.txt
-index d8511d3fd1..a3adaba3ae 100644
---- a/board/beaglev/readme.txt
-+++ b/board/beaglev/readme.txt
-@@ -17,6 +17,8 @@ Build results
+diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+index 236bf74a90..55a644506f 100644
+--- a/boot/opensbi/Config.in
++++ b/boot/opensbi/Config.in
+@@ -74,11 +74,30 @@ config BR2_TARGET_OPENSBI_PLAT
+ 	  the platform specific static library libplatsbi.a and firmware
+ 	  examples are built.
  
- After building, output/images contains:
++config BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG
++	bool "Install fw_dynamic image"
++	default y if BR2_TARGET_OPENSBI_PLAT != ""
++	help
++	  This installs the fw_dynamic image.
++
++config BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG
++	bool "Install fw_jump image"
++	default y if BR2_TARGET_OPENSBI_PLAT != ""
++	help
++	  This installs the fw_jump image.
++
++config BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
++	bool "Install fw_payload image"
++	help
++	  This option enables the installation of the fw_paylaod
++	  image.
++
+ config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
+ 	bool "Include Linux as OpenSBI Payload"
+ 	depends on BR2_TARGET_OPENSBI_PLAT != ""
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_LINUX_KERNEL_IMAGE
++	select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
+ 	help
+ 	  Build OpenSBI with the Linux kernel as a Payload.
  
-++ bootloader-BEAGLEV-buildroot.bin.out
-++ ddrinit-2133-buildroot.bin.out
- + Image
- + fw_payload.bin
- + fw_payload.bin.out
-@@ -26,7 +28,11 @@ After building, output/images contains:
- + sdcard.img
- + u-boot.bin
+@@ -86,6 +105,7 @@ config BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
+ 	bool "Include U-Boot as OpenSBI Payload"
+ 	depends on BR2_TARGET_OPENSBI_PLAT != ""
+ 	depends on BR2_TARGET_UBOOT
++	select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
+ 	help
+ 	  Build OpenSBI with the U-Boot as a Payload.
  
--The two important files are:
-+The four important files are:
-+
-+ - bootloader-BEAGLEV-buildroot.bin.out, the first stage bootloader
-+
-+ - ddrinit-2133-buildroot.bin.out, the DDR initialization firmware
+diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+index 8ebe4566fd..f8cbbb8fcc 100644
+--- a/boot/opensbi/opensbi.mk
++++ b/boot/opensbi/opensbi.mk
+@@ -50,15 +50,19 @@ define OPENSBI_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
  
-  - fw_payload.bin.out, which is the bootloader image, containing
-    both OpenSBI and U-Boot.
-@@ -51,7 +57,7 @@ Insert your SD card.
+-ifneq ($(OPENSBI_PLAT),)
++ifeq ($(BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG),y)
+ OPENSBI_INSTALL_IMAGES = YES
+-OPENSBI_FW_IMAGES += jump dynamic
+-ifeq ($(BR2_TARGET_OPENSBI_LINUX_PAYLOAD),y)
+-OPENSBI_FW_IMAGES += payload
++OPENSBI_FW_IMAGES += dynamic
+ endif
+-ifeq ($(BR2_TARGET_OPENSBI_UBOOT_PAYLOAD),y)
+-OPENSBI_FW_IMAGES = payload
++
++ifeq ($(BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG),y)
++OPENSBI_INSTALL_IMAGES = YES
++OPENSBI_FW_IMAGES += jump
+ endif
++
++ifeq ($(BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG),y)
++OPENSBI_INSTALL_IMAGES = YES
++OPENSBI_FW_IMAGES += payload
+ endif
  
- Power-up the board using an USB-C cable.
- 
--Flashing the bootloader
-+Flashing OpenSBI/U-Boot
- =======================
- 
- The bootloader pre-flashed on the Beagle-V has a non-working
-@@ -86,3 +92,31 @@ fw_payload.bin.out using the Xmodem protocol.
- 
- After reflashing is complete, restart the board, it will automatically
- start the system from the SD card, and reach the login prompt.
-+
-+Flashing low-level bootloaders
-+==============================
-+
-+The BeagleV comes pre-flashed with functional low-level bootloaders
-+(called "secondboot" and "ddrinit"). Re-flashing them is not necessary
-+to use this Buildroot defconfig. However, for the sake of
-+completeness, Buildroot builds and provides those low-level bootloader
-+images.
-+
-+You can flash them as follows:
-+
-+ - In the same "pre-loader" menu as the one used above, instead of
-+   entering 0 or 1, enter the magic "root at s5t" string. This enters the
-+   "expert" features.
-+
-+ - Then, press 0 and send over X-modem the
-+   bootloader-BEAGLEV-buildroot.bin.out file.
-+
-+ - Then, press 1 and send over X-modem the
-+   ddrinit-2133-buildroot.bin.out.
-+
-+Note that the reflashing mechanism itself relies on those low-level
-+bootloaders, so if you flash non-working versions, you'll have to go
-+through a recovery process. This requires wiring up to a separate
-+debug UART, whose pins are located near the HDMI connector. See
-+https://wiki.seeedstudio.com/BeagleV-Update-bootloader-ddr-init-boot-uboot-Recover-bootloader/
-+section "Recover the bootloader" for more details.
-diff --git a/configs/beaglev_defconfig b/configs/beaglev_defconfig
-index 2320e2ca83..3efcab8d61 100644
---- a/configs/beaglev_defconfig
-+++ b/configs/beaglev_defconfig
-@@ -18,6 +18,8 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_BEAGLEV_DDRINIT=y
-+BR2_TARGET_BEAGLEV_SECONDBOOT=y
- BR2_TARGET_OPENSBI=y
- BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
- # HEAD of the Fedora branch
+ define OPENSBI_INSTALL_IMAGES_CMDS
 -- 
 2.30.2
