@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 May 2021 22:29:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sox: fix static build with
- magic and bzip2
-In-Reply-To: <20210323065050.2172418-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 23 Mar 2021 07:50:50 +0100")
-References: <20210323065050.2172418-1-fontaine.fabrice@gmail.com>
-Message-ID: <8735v4517w.fsf@dell.be.48ers.dk>
+Date: Sun, 02 May 2021 22:32:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nginx: add libxcrypt optional
+ dependency
+In-Reply-To: <20210402163517.1254749-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 2 Apr 2021 18:35:17 +0200")
+References: <20210402163517.1254749-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2cw3mi5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +14,11 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Update patch added by commit 183d583fb5f19eb11637873d73e13fe14536efa6 to
- > use pkg-config instead of linking with zlib to fix the following static
- > build failure with a bzip2-enabled libmagic:
-
- > /home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arc-buildroot-linux-uclibc/9.3.1/../../../../arc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arc-buildroot-linux-uclibc/sysroot/usr/lib/libmagic.a(compress.o): in function `uncompressbuf':
- > compress.c:(.text+0x422): undefined reference to `BZ2_bzDecompressInit'
- > /home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arc-buildroot-linux-uclibc/9.3.1/../../../../arc-buildroot-linux-uclibc/bin/ld: compress.c:(.text+0x422): undefined reference to `BZ2_bzDecompressInit'
+ > Fix build failure on uclibc with libxcrypt which has been added in
+ > commit 464bbe26ff5fb9e5bfe26a26ea65c700b90598f5
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/4c511c02e4c63b35ecf77a2658f88e8a0d9dbb4d
+ >  - http://autobuild.buildroot.org/results/79a51b0d348e756517b5c9ce815a67f5c657e7e6
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
