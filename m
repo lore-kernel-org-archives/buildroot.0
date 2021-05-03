@@ -1,57 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 May 2021 09:32:33 +0200
-Subject: [Buildroot] [PATCH v2 6/6] configs/beaglev: enable building of
- low-level firmware
-In-Reply-To: <20210503071832.GA367228@x1>
-References: <20210502212141.934384-1-thomas.petazzoni@bootlin.com>
- <20210502212141.934384-14-thomas.petazzoni@bootlin.com>
- <20210503071832.GA367228@x1>
-Message-ID: <20210503093233.3db3de87@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 3 May 2021 09:58:26 +0200
+Subject: [Buildroot] [PATCH v1 1/3] package/libtomcrypt: add pkgconfig
+ support
+In-Reply-To: <20210502122746.7988707d@gmx.net>
+References: <20210412195527.9282-1-ps.report@gmx.net>
+ <20210412221453.5195d4b5@windsurf.home> <20210412231516.6cbc09f2@gmx.net>
+ <45c379f0-8ca0-6891-1b1e-b166600da9ca@mind.be>
+ <20210502122746.7988707d@gmx.net>
+Message-ID: <fce7cdf2-d2de-03e8-712e-dc6b98c892f7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Drew,
 
-On Mon, 3 May 2021 00:18:32 -0700
-Drew Fustini <drew@beagleboard.org> wrote:
 
-> > +Note that the reflashing mechanism itself relies on those low-level
-> > +bootloaders, so if you flash non-working versions, you'll have to go
-> > +through a recovery process. This requires wiring up to a separate
-> > +debug UART, whose pins are located near the HDMI connector. See
-> > +https://wiki.seeedstudio.com/BeagleV-Update-bootloader-ddr-init-boot-uboot-Recover-bootloader/
-> > +section "Recover the bootloader" for more details.  
+On 02/05/2021 12:27, Peter Seiderer wrote:
+> Hello Arnout,
 > 
-> This is not something that needs to be noted in the patch, but I wanted
-> to make people aware that the instructions currently recommed using
-> SecureCRT as the terminal emulator.  I know many including myself would
-> not want to use a trial version of commercial software.  
+> On Sat, 1 May 2021 15:18:42 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
 > 
-> The author of the guide, Lakshantha, told me that he could not transfer
-> the vic_second_boot.boot.bin using xmodem in minicom when connected via
-> the debug header.  After he uploaded the file using minicom, he would
-> type "do 0x18000000", but there would be no response. It did however
-> work ok in SecureCRT.
+>> On 12/04/2021 23:15, Peter Seiderer wrote:
+>>> Hello Thomas,
+>>>
+>>> On Mon, 12 Apr 2021 22:14:53 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>>>
+>>>> On Mon, 12 Apr 2021 21:55:25 +0200
+>>>> Peter Seiderer <ps.report@gmx.net> wrote:
+>>>>
+>>>>> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>>>>
+>>>> Is there any specific motivation? Does this had a chance of going
+>>>> upstream ?
+>>>
+>>> For an custom project, previously developed on with cmake on ubuntu (which
+>>> provides the pkgconfig file)....
+>>>
+>>> Can try to suggest upstream...
+>>
+>>  Adding a .pc file in Buildroot usually doesn't make much sense, because no
+>> package that depends on it is going to use it. So yes, please organise this
+>> upstream.
 > 
-> Lakshantha will be back on May 6 but in the meantime I would welcome any
-> suggestions. I figure there must be some difference in the default
-> behavior of securecrt vs minicom.
+> But a buildroot provided library should be usable for buildroot packages AND
+> out-of-tree/custom packages?
 
-Thanks for the additional detail. I indeed missed that the recovery
-mechanism seems to not work with terminal emulator others than this
-commercial software.
+ What I mean is the following. A .pc file is useless unless a package that uses
+libtomcrypt actually uses pkg-config to configure it. If the .pc file is not
+provided by libtomcrypt itself, but only by buildroot, then no package that
+depends on libtomcrypt is going to use pkg-config, because they "think" there is
+no .pc file for libtomcrypt. So we would have to patch each and every user of
+libtomcrypt to use pkg-config instead of whatever discovery mechanism they have.
+And none of these patches are upstreamable, because there is no .pc file outside
+of buildroot.
 
-I have been lucky that for me the secondBoot and ddrInit just worked,
-so I was able to reflash them using the normal flashing solution (from
-the standard UART).
 
-Best regards,
+> Nevertheless, did take a second look at the libtomcrypt sources, already
+> providing a libtomcrypt.pc.in template (but only used/installed in case
+> of 'makefile.shared'/'makefile.unix' and the buildroot compile uses the
+> default 'makefile' one)...
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ That of course changes the story completely.
+
+ Do you know if there is a reason for us not to use makefile.unix, so we don't
+need to sed the .pc file ourselves?
+
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> Peter
+> 
+>>
+>>  Therefore, I've marked this patch as Rejected.
+>>
+>>  Regards,
+>>  Arnout
+> 
