@@ -1,39 +1,43 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon,  3 May 2021 13:13:47 +0200
-Subject: [Buildroot] [PATCH 6/9] toolchain: remove binutils bug 21464
+Date: Mon,  3 May 2021 13:13:49 +0200
+Subject: [Buildroot] [PATCH 8/9] package/postgis: remove libgeos binutils
+ bug 21464 inheritance
 In-Reply-To: <20210503111350.2933319-1-giulio.benetti@benettiengineering.com>
 References: <20210503111350.2933319-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210503111350.2933319-7-giulio.benetti@benettiengineering.com>
+Message-ID: <20210503111350.2933319-9-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bug has been fixed upstream and backported to buildroot binutils
-package. So let's remove it.
-
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- toolchain/Config.in | 6 ------
- 1 file changed, 6 deletions(-)
+ package/postgis/Config.in | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 78444f6130..06c338ee7d 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -71,12 +71,6 @@ source "package/gdb/Config.in.host"
+diff --git a/package/postgis/Config.in b/package/postgis/Config.in
+index 49887b61c0..553c89d9dd 100644
+--- a/package/postgis/Config.in
++++ b/package/postgis/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_POSTGIS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, proj
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # proj
+ 	depends on BR2_USE_WCHAR # libgeos, proj
+-	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 # libgeos
+ 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597 # libgeos
+ 	select BR2_PACKAGE_LIBGEOS
+ 	select BR2_PACKAGE_PROJ
+@@ -20,9 +19,8 @@ config BR2_PACKAGE_POSTGIS
  
- comment "Toolchain Generic Options"
+ 	  https://postgis.net/
  
--# https://sourceware.org/bugzilla/show_bug.cgi?id=21464
--# Affect toolchains built with binutils 2.31.1, still not fixed.
--config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
--	bool
--	default y if BR2_or1k
--
- # https://sourceware.org/bugzilla/show_bug.cgi?id=27100
- # Affect toolchains built with binutils 2.33.1 (fixed in binutils 2.36)
- config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
+-comment "postgis needs a toolchain w/ C++, threads, wchar, gcc >= 4.7, not binutils bug 21464, 27597"
++comment "postgis needs a toolchain w/ C++, threads, wchar, gcc >= 4.7, not binutils bug 27597"
+ 	depends on !BR2_microblazeel && !BR2_microblazebe # ICE
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
+ 		!BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
 -- 
 2.25.1
