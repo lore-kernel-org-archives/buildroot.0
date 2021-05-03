@@ -1,11 +1,10 @@
 From: Bin Meng <bmeng.cn@gmail.com>
-Date: Mon, 3 May 2021 19:26:31 +0800
-Subject: [Buildroot] [PATCH v2 1/6] boot/opensbi: add options to
- enable/disable image installation
-In-Reply-To: <20210502212141.934384-2-thomas.petazzoni@bootlin.com>
+Date: Mon, 3 May 2021 19:30:13 +0800
+Subject: [Buildroot] [PATCH v2 4/6] boot/beaglev-ddrinit: new package
+In-Reply-To: <20210502212141.934384-5-thomas.petazzoni@bootlin.com>
 References: <20210502212141.934384-1-thomas.petazzoni@bootlin.com>
- <20210502212141.934384-2-thomas.petazzoni@bootlin.com>
-Message-ID: <CAEUhbmW2aVw1MXvOMj_SBCbvEYhN4ZsZZwnGX-yCQU9Ed4g0KQ@mail.gmail.com>
+ <20210502212141.934384-5-thomas.petazzoni@bootlin.com>
+Message-ID: <CAEUhbmU0SRMbRt4Cb-i=WLCyNFsi+o-nKGkaxaJCxiFv4wVBjw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,106 +14,24 @@ To: buildroot@busybox.net
 On Mon, May 3, 2021 at 5:21 AM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
-> Until now, whenever a BR2_TARGET_OPENSBI_PLAT value was specified,
-> opensbi.mk was assuming that both fw_jump and fw_dynamic would be
-> produced. However, this is not the case: the OpenSBI per-platform
-> config.mk can decide which image to build.
->
-> As an example, the config.mk for VIC7100-based BeagleV only enables
-> producing the fw_payload image.
->
-> This commit adds three options to enable the installation of images:
-> one for fw_jump, one for fw_dynamic, one for fw_payload.
->
-> The options for fw_jump and fw_dynamic are "default y" when
-> BR2_TARGET_OPENSBI_PLAT is not empty, to preserve existing behavior.
->
-> The option for fw_payload is forcefully selected when either Linux or
-> U-Boot are selected as payloads.
+> This commit adds a package for the DDR initialization code used on the
+> BeagleV platform.
 >
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  boot/opensbi/Config.in  | 20 ++++++++++++++++++++
->  boot/opensbi/opensbi.mk | 16 ++++++++++------
->  2 files changed, 30 insertions(+), 6 deletions(-)
+>  DEVELOPERS                              |  1 +
+>  boot/Config.in                          |  1 +
+>  boot/beaglev-ddrinit/Config.in          |  9 ++++++++
+>  boot/beaglev-ddrinit/beaglev-ddrinit.mk | 29 +++++++++++++++++++++++++
+>  4 files changed, 40 insertions(+)
+>  create mode 100644 boot/beaglev-ddrinit/Config.in
+>  create mode 100644 boot/beaglev-ddrinit/beaglev-ddrinit.mk
 >
-> diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-> index 236bf74a90..55a644506f 100644
-> --- a/boot/opensbi/Config.in
-> +++ b/boot/opensbi/Config.in
-> @@ -74,11 +74,30 @@ config BR2_TARGET_OPENSBI_PLAT
->           the platform specific static library libplatsbi.a and firmware
->           examples are built.
->
-> +config BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG
-> +       bool "Install fw_dynamic image"
-> +       default y if BR2_TARGET_OPENSBI_PLAT != ""
-> +       help
-> +         This installs the fw_dynamic image.
-> +
-> +config BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG
-> +       bool "Install fw_jump image"
-> +       default y if BR2_TARGET_OPENSBI_PLAT != ""
-> +       help
-> +         This installs the fw_jump image.
-> +
-> +config BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
-> +       bool "Install fw_payload image"
-> +       help
-> +         This option enables the installation of the fw_paylaod
-> +         image.
 
-nits: this help message should be in consistent with the other 2
+nits: please put secondBoot first in this patch series
 
-> +
->  config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
->         bool "Include Linux as OpenSBI Payload"
->         depends on BR2_TARGET_OPENSBI_PLAT != ""
->         depends on BR2_LINUX_KERNEL
->         depends on BR2_LINUX_KERNEL_IMAGE
-> +       select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
->         help
->           Build OpenSBI with the Linux kernel as a Payload.
->
-> @@ -86,6 +105,7 @@ config BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
->         bool "Include U-Boot as OpenSBI Payload"
->         depends on BR2_TARGET_OPENSBI_PLAT != ""
->         depends on BR2_TARGET_UBOOT
-> +       select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
->         help
->           Build OpenSBI with the U-Boot as a Payload.
->
-> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-> index 8ebe4566fd..f8cbbb8fcc 100644
-> --- a/boot/opensbi/opensbi.mk
-> +++ b/boot/opensbi/opensbi.mk
-> @@ -50,15 +50,19 @@ define OPENSBI_BUILD_CMDS
->         $(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
->  endef
->
-> -ifneq ($(OPENSBI_PLAT),)
-> +ifeq ($(BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG),y)
->  OPENSBI_INSTALL_IMAGES = YES
-> -OPENSBI_FW_IMAGES += jump dynamic
-> -ifeq ($(BR2_TARGET_OPENSBI_LINUX_PAYLOAD),y)
-> -OPENSBI_FW_IMAGES += payload
-> +OPENSBI_FW_IMAGES += dynamic
->  endif
-> -ifeq ($(BR2_TARGET_OPENSBI_UBOOT_PAYLOAD),y)
-> -OPENSBI_FW_IMAGES = payload
-> +
-> +ifeq ($(BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG),y)
-> +OPENSBI_INSTALL_IMAGES = YES
-> +OPENSBI_FW_IMAGES += jump
->  endif
-> +
-> +ifeq ($(BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG),y)
-> +OPENSBI_INSTALL_IMAGES = YES
-> +OPENSBI_FW_IMAGES += payload
->  endif
->
->  define OPENSBI_INSTALL_IMAGES_CMDS
-> --
+I expect the ddrInit firmware is no longer necessary when upstream
+U-Boot supports SPL for this target. For the time being, this patch
+looks good.
 
-Otherwise LGTM:
 Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
