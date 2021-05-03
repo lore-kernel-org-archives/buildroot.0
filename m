@@ -1,100 +1,99 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 May 2021 21:29:20 +0200
-Subject: [Buildroot] [PATCH] support/download/hg: fix broken method
-In-Reply-To: <CAAXf6LVr_TxvnLLz4q82=yHLOJcG8ZuZ+m482VTLwWk-kOBMBg@mail.gmail.com>
-References: <20210427194544.15861-1-patrickdepinguin@gmail.com>
- <20210428195122.GB2137340@scaer>
- <CAAXf6LVr_TxvnLLz4q82=yHLOJcG8ZuZ+m482VTLwWk-kOBMBg@mail.gmail.com>
-Message-ID: <20210503192920.GI2137340@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 3 May 2021 21:38:52 +0200
+Subject: [Buildroot] [PATCH v1 1/3] package/libtomcrypt: add pkgconfig
+ support
+In-Reply-To: <fce7cdf2-d2de-03e8-712e-dc6b98c892f7@mind.be>
+References: <20210412195527.9282-1-ps.report@gmx.net>
+ <20210412221453.5195d4b5@windsurf.home>
+ <20210412231516.6cbc09f2@gmx.net>
+ <45c379f0-8ca0-6891-1b1e-b166600da9ca@mind.be>
+ <20210502122746.7988707d@gmx.net>
+ <fce7cdf2-d2de-03e8-712e-dc6b98c892f7@mind.be>
+Message-ID: <20210503213852.3e9e23f3@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello Arnout,
 
-On 2021-05-03 20:40 +0200, Thomas De Schampheleire spake thusly:
-> El mi?, 28 abr 2021 a las 21:51, Yann E. MORIN
-> (<yann.morin.1998@free.fr>) escribi?:
-> > On 2021-04-27 21:45 +0200, Thomas De Schampheleire spake thusly:
-> > > Commit 54d3d94b6e3846447b5796ef8587b08b537cd348 broke the 'hg' download
-[--SNIP--]
-> > > Fix by using the _plain_hg function instead. The disadvantage is that the
-> > > command for 'hg archive' is no longer printed.
-[--SNIP--]
-> > All in all, we have only 4 packages that are downloaded from Hg:
-> >   - canfestival: does not have a hash, but fails to extract, nad we have
-> >     a few autobuild failures:
-> >         http://autobuild.buildroot.org/results/3fd/3fd118fb87299099e47026161c1d8c948eb9a5c1/build-end.log
-> >         http://autobuild.buildroot.org/results/bf4/bf42580e4c03015004975e03736d6d6a3a87b04d/build-end.log
+On Mon, 3 May 2021 09:58:26 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+
+> On 02/05/2021 12:27, Peter Seiderer wrote:
+> > Hello Arnout,
 > >
-> >   - dvb-apps: has a hash, thus fails to download from upstream, and
-> >     falls back to downloading an old archive from s.b.o
+> > On Sat, 1 May 2021 15:18:42 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
 > >
-> >   - opentyrian: does not have a hash, but upstream is dead, so falls
-> >     back to downloading an old archive from s.b.o:
-> >         hg clone --noupdate 'https://bitbucket.org/opentyrian/opentyrian' 'opentyrian-9c9f0ec3532b'
-> >         abort: HTTP Error 404: Not Found
+> >> On 12/04/2021 23:15, Peter Seiderer wrote:
+> >>> Hello Thomas,
+> >>>
+> >>> On Mon, 12 Apr 2021 22:14:53 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> >>>
+> >>>> On Mon, 12 Apr 2021 21:55:25 +0200
+> >>>> Peter Seiderer <ps.report@gmx.net> wrote:
+> >>>>
+> >>>>> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> >>>>
+> >>>> Is there any specific motivation? Does this had a chance of going
+> >>>> upstream ?
+> >>>
+> >>> For an custom project, previously developed on with cmake on ubuntu (which
+> >>> provides the pkgconfig file)....
+> >>>
+> >>> Can try to suggest upstream...
+> >>
+> >>  Adding a .pc file in Buildroot usually doesn't make much sense, because no
+> >> package that depends on it is going to use it. So yes, please organise this
+> >> upstream.
 > >
-> >   - python-pygame: has a hash *and* upstream is dead, so fails to
-> >     download from upstream, and falls back to downloading an old archive
-> >     from s.b.o.
-> >         hg clone --noupdate 'https://bitbucket.org/pygame/pygame' 'python-pygame-d61ea8eabd56'
-> >         abort: HTTP Error 404: Not Found
-> >
-[--SNIP--]
-> - dvb-apps: only problem is that the hash file does not match the
-> archive generated. It's not clear to me why.
-> From your analysis, even the original hg download helper should
-> generate reproducible archives, right? When I try it several times
-> tonight, I observe following retrieved hash:
-> 
-> ERROR: dvb-apps-3d43b280298c39a67d1d889e01e173f52c12da35.tar.gz has
-> wrong sha256 hash:
-> ERROR: expected:
-> 926208b7e711b4bab1a909ff9bf4e6ae54acdd30a46f5d5bd700ecb088fe1f57
-> ERROR: got     :
-> 71cab442377987425aa05770d6e5724bcbcdd3ea144e54c63883be8fcebf5644
+> > But a buildroot provided library should be usable for buildroot packages AND
+> > out-of-tree/custom packages?
+>
+>  What I mean is the following. A .pc file is useless unless a package that uses
+> libtomcrypt actually uses pkg-config to configure it. If the .pc file is not
+> provided by libtomcrypt itself, but only by buildroot, then no package that
+> depends on libtomcrypt is going to use pkg-config, because they "think" there is
+> no .pc file for libtomcrypt. So we would have to patch each and every user of
+> libtomcrypt to use pkg-config instead of whatever discovery mechanism they have.
+> And none of these patches are upstreamable, because there is no .pc file outside
+> of buildroot.
+>
+>
+> > Nevertheless, did take a second look at the libtomcrypt sources, already
+> > providing a libtomcrypt.pc.in template (but only used/installed in case
+> > of 'makefile.shared'/'makefile.unix' and the buildroot compile uses the
+> > default 'makefile' one)...
+>
+>  That of course changes the story completely.
+>
+>  Do you know if there is a reason for us not to use makefile.unix, so we don't
+> need to sed the .pc file ourselves?
 
-Weird, it works here...
+No..., it is used since the introduction of libtomcrypt (2016), maybe because it
+is the default or because it uses less/no predefined compile vars which needs
+to be patched/overwritten...
 
-    $ hg --version
-    Mercurial Distributed SCM (version 5.3.1)
-
-> If there is still a problem with reproducibility for the hg helper, we
-> are back to fixing that, with the -br1 suffix.
-
-So, if that's the case, then we should use our mk-tar_gz() helper, and
-not rely on the archive generated from hg.
-
-> - opentyrian: upstream is dead due to Bitbucket no longer supporting
-> hg. There seems to be a new (git) upstream:
-> https://github.com/opentyrian/opentyrian . Perhaps **Julien
-> Boibessot** is interested in fixing this?
-
-I've already sent a patch:
-    https://patchwork.ozlabs.org/project/buildroot/patch/20210429195324.2463255-1-yann.morin.1998 at free.fr/
-
-> - python-pygame: likewise, new upstream:
-> https://github.com/pygame/pygame . Also something that Julien could
-> look at?
-
-> > If you ever reconsider, feel free to poke me about the archive format
-> > version stuff. ;-)
-> Yes, I think we would better handle it at some point, but now is not a
-> good time for me.
-
-If we can't solve this reproducibility issue, then we'll have no choice
-but to leap.
+By the way, libtomcrypt depends on libtommath which used -fPIC unconditionally...
 
 Regards,
-Yann E. MORIN.
+Peter
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+>  Regards,
+>  Arnout
+>
+> >
+> > Regards,
+> > Peter
+> >
+> >>
+> >>  Therefore, I've marked this patch as Rejected.
+> >>
+> >>  Regards,
+> >>  Arnout
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
