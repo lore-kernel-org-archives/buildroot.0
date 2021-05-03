@@ -1,49 +1,125 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  2 May 2021 23:49:18 +0200
-Subject: [Buildroot] [PATCH 4/5] package/poke: add optional json-c dependency
-In-Reply-To: <20210502214919.1826571-1-romain.naour@gmail.com>
-References: <20210502214919.1826571-1-romain.naour@gmail.com>
-Message-ID: <20210502214919.1826571-5-romain.naour@gmail.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Mon, 3 May 2021 10:08:53 +1000
+Subject: [Buildroot] [PATCH v2 1/6] boot/opensbi: add options to
+ enable/disable image installation
+In-Reply-To: <20210502212141.934384-2-thomas.petazzoni@bootlin.com>
+References: <20210502212141.934384-1-thomas.petazzoni@bootlin.com>
+ <20210502212141.934384-2-thomas.petazzoni@bootlin.com>
+Message-ID: <CAKmqyKNwQvLzMQcwR1M8e4ccefxjv5OxNFqD2KYp428fveih+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From [1]:
-"The poke machine-interface uses a protocol to communicate with
-clients, which is based on JSON.  poke uses the json-c library to
-parse and build JSON strings.
-If this library is not found, poke will build without machine-interface
-support."
+On Mon, May 3, 2021 at 7:23 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Until now, whenever a BR2_TARGET_OPENSBI_PLAT value was specified,
+> opensbi.mk was assuming that both fw_jump and fw_dynamic would be
+> produced. However, this is not the case: the OpenSBI per-platform
+> config.mk can decide which image to build.
+>
+> As an example, the config.mk for VIC7100-based BeagleV only enables
+> producing the fw_payload image.
+>
+> This commit adds three options to enable the installation of images:
+> one for fw_jump, one for fw_dynamic, one for fw_payload.
+>
+> The options for fw_jump and fw_dynamic are "default y" when
+> BR2_TARGET_OPENSBI_PLAT is not empty, to preserve existing behavior.
+>
+> The option for fw_payload is forcefully selected when either Linux or
+> U-Boot are selected as payloads.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-[1] https://git.savannah.nongnu.org/cgit/poke.git/tree/DEPENDENCIES?h=releases/poke-1.2#n55
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Jose E. Marchesi <jemarch@gnu.org>
-Cc: Luca Saiu <positron@gnu.org>
----
- package/poke/poke.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Alistair
 
-diff --git a/package/poke/poke.mk b/package/poke/poke.mk
-index ecf2221acd..268b9598d7 100644
---- a/package/poke/poke.mk
-+++ b/package/poke/poke.mk
-@@ -17,7 +17,13 @@ POKE_DEPENDENCIES = host-flex host-bison host-pkgconf bdwgc readline
- 
- POKE_CONF_OPTS = --disable-gui \
- 	--disable-libnbd \
--	--disable-mi \
- 	--with-libreadline-prefix=$(STAGING_DIR)
- 
-+ifeq ($(BR2_PACKAGE_JSON_C),y)
-+POKE_DEPENDENCIES += json-c
-+POKE_CONF_OPTS += --enable-mi
-+else
-+POKE_CONF_OPTS += --disable-mi
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.30.2
+> ---
+>  boot/opensbi/Config.in  | 20 ++++++++++++++++++++
+>  boot/opensbi/opensbi.mk | 16 ++++++++++------
+>  2 files changed, 30 insertions(+), 6 deletions(-)
+>
+> diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+> index 236bf74a90..55a644506f 100644
+> --- a/boot/opensbi/Config.in
+> +++ b/boot/opensbi/Config.in
+> @@ -74,11 +74,30 @@ config BR2_TARGET_OPENSBI_PLAT
+>           the platform specific static library libplatsbi.a and firmware
+>           examples are built.
+>
+> +config BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG
+> +       bool "Install fw_dynamic image"
+> +       default y if BR2_TARGET_OPENSBI_PLAT != ""
+> +       help
+> +         This installs the fw_dynamic image.
+> +
+> +config BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG
+> +       bool "Install fw_jump image"
+> +       default y if BR2_TARGET_OPENSBI_PLAT != ""
+> +       help
+> +         This installs the fw_jump image.
+> +
+> +config BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
+> +       bool "Install fw_payload image"
+> +       help
+> +         This option enables the installation of the fw_paylaod
+> +         image.
+> +
+>  config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
+>         bool "Include Linux as OpenSBI Payload"
+>         depends on BR2_TARGET_OPENSBI_PLAT != ""
+>         depends on BR2_LINUX_KERNEL
+>         depends on BR2_LINUX_KERNEL_IMAGE
+> +       select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
+>         help
+>           Build OpenSBI with the Linux kernel as a Payload.
+>
+> @@ -86,6 +105,7 @@ config BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
+>         bool "Include U-Boot as OpenSBI Payload"
+>         depends on BR2_TARGET_OPENSBI_PLAT != ""
+>         depends on BR2_TARGET_UBOOT
+> +       select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
+>         help
+>           Build OpenSBI with the U-Boot as a Payload.
+>
+> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+> index 8ebe4566fd..f8cbbb8fcc 100644
+> --- a/boot/opensbi/opensbi.mk
+> +++ b/boot/opensbi/opensbi.mk
+> @@ -50,15 +50,19 @@ define OPENSBI_BUILD_CMDS
+>         $(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
+>  endef
+>
+> -ifneq ($(OPENSBI_PLAT),)
+> +ifeq ($(BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG),y)
+>  OPENSBI_INSTALL_IMAGES = YES
+> -OPENSBI_FW_IMAGES += jump dynamic
+> -ifeq ($(BR2_TARGET_OPENSBI_LINUX_PAYLOAD),y)
+> -OPENSBI_FW_IMAGES += payload
+> +OPENSBI_FW_IMAGES += dynamic
+>  endif
+> -ifeq ($(BR2_TARGET_OPENSBI_UBOOT_PAYLOAD),y)
+> -OPENSBI_FW_IMAGES = payload
+> +
+> +ifeq ($(BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG),y)
+> +OPENSBI_INSTALL_IMAGES = YES
+> +OPENSBI_FW_IMAGES += jump
+>  endif
+> +
+> +ifeq ($(BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG),y)
+> +OPENSBI_INSTALL_IMAGES = YES
+> +OPENSBI_FW_IMAGES += payload
+>  endif
+>
+>  define OPENSBI_INSTALL_IMAGES_CMDS
+> --
+> 2.30.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
