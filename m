@@ -1,28 +1,35 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Mon, 3 May 2021 09:06:11 -0500
-Subject: [Buildroot] [PATCH v1 2/2] package/docker-engine:
- docker-containerd was renamed to containerd
-In-Reply-To: <20210503031251.200043-2-christian@paral.in>
-References: <20210503031251.200043-1-christian@paral.in>
- <20210503031251.200043-2-christian@paral.in>
-Message-ID: <CANQCQpaiT5NxcMvYNP1Ej5JBcWwc4kxs8BvLmD4mS+P5-72y0g@mail.gmail.com>
+From: =?UTF-8?Q?Roberto_Alejandro_Esp=C3=AD_Mu=C3=B1oz?= <teratux@gmail.com>
+Date: Mon, 3 May 2021 11:18:06 -0400
+Subject: [Buildroot] problems building a system for Rpi4
+Message-ID: <CAG-SZaJqi-sMUtj2R0HRwvpST1WRdQSF7eA3iDi6n=g-gEB=XQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian,
+Hello, I'm having some trouble getting my build to boot on a RPi4.  I
+initially tried building the default config version for 64 bits
+(raspberrypi4_64_defconfig) and it builds and boots ok with no problem.  I
+need to change the system to use glibc but whenever I manage to build the
+system and boot it I get a kernel panic error: Attempted to kill init with
+exitcode=0x00007f00.  The only change I'm making is switching over to a
+glibc toolchain and so far no progress.
 
-On Sun, May 2, 2021 at 10:14 PM Christian Stewart <christian@paral.in> wrote:
->
-> Signed-off-by: Christian Stewart <christian@paral.in>
+I'm using buildroot buildroot-2020.11.3 and I attached my current config.
 
-I think this is a good transition to drop Docker from the package
-name.  Especially with the community push to separate the runtimes
-from other tools/features Docker traditionally packages together.
-(Good example of when the naming change makes things clearer is when a
-user solely needs the Containerd runtime (maybe an edge Kubernetes use
-case).  Selecting something tagged with "Docker" could be confusing.)
+Thanks in advance
 
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+-- 
+teratux
+------------
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210503/d766f99a/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 104288 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210503/d766f99a/attachment.obj>
