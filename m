@@ -1,42 +1,34 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Mon,  3 May 2021 15:30:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boost: update upstream URL
-Message-ID: <20210503133001.22665-1-nicolas.cavallari@green-communications.fr>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Mon, 3 May 2021 08:49:27 -0500
+Subject: [Buildroot] [PATCH v1 1/2] package/docker-containerd: rename
+ package to containerd
+In-Reply-To: <20210503031251.200043-1-christian@paral.in>
+References: <20210503031251.200043-1-christian@paral.in>
+Message-ID: <CANQCQpZyRHZE6fyH-2ZnbEjNrcHhPDiLAi16VkW3Rc83h+uSDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The old URL does not work anymore and the package relies on
-sources.buildroot.net.  As indicated by boost's website:
-https://www.boost.org/users/news/boost_has_moved_downloads_to_jfr.html
+Christian,
 
-"The service that Boost uses to serve up its releases, Bintray.com is
-being retired by JFrog on the 1st of May. Fortunately for Boost, they
-have a new service, called JFrog.Arifactory, which we have transitioned
-to.
 
-For the users of Boost, the only difference is that there is a new URL
-to download releases and snapshots."
+On Sun, May 2, 2021 at 10:13 PM Christian Stewart <christian@paral.in> wrote:
+>
+> containerd is now an independent project from Docker.
+>
+> This commit renames the Buildroot package from docker-containerd to containerd,
+> adding a entry in Config.in.legacy accordingly.
+>
+> containerd is an industry-standard container runtime with an emphasis on
+> simplicity, robustness and portability. It is available as a daemon for Linux
+> and Windows, which can manage the complete container lifecycle of its host
+> system: image transfer and storage, container execution and supervision,
+> low-level storage and network attachments, etc.
+>
+> https://containerd.io
+>
+> Signed-off-by: Christian Stewart <christian@paral.in>
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
----
- package/boost/boost.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index b8f90bb836..8d745ecc72 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -6,7 +6,7 @@
- 
- BOOST_VERSION = 1.75.0
- BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
--BOOST_SITE = https://dl.bintray.com/boostorg/release/$(BOOST_VERSION)/source
-+BOOST_SITE = https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source
- BOOST_INSTALL_STAGING = YES
- BOOST_LICENSE = BSL-1.0
- BOOST_LICENSE_FILES = LICENSE_1_0.txt
--- 
-2.31.1
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
