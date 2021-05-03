@@ -1,43 +1,91 @@
-From: Federico Pellegrin <fede@evolware.org>
-Date: Mon,  3 May 2021 10:22:52 +0200
-Subject: [Buildroot] [PATCH] package/kexec: bump to version 2.0.22
-Message-ID: <20210503082252.2934537-1-fede@evolware.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon,  3 May 2021 13:13:41 +0200
+Subject: [Buildroot] [PATCH 0/9] Fix binutils bug 21464 and remove it
+Message-ID: <20210503111350.2933319-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://www.spinics.net/lists/kexec/msg26864.html
+This patchset fixes binutils bug 21464 and fixes libgeos build failure
+by introducing the gcc option flag -mcmodel. This is done by adding
+upstreamed binutils and gcc patches. Note tha this way buildroot
+toolchains can be considered bug binutils 21464 free and the only other
+OpenRisc toolchain supported is the external Bootlin one. So this
+patchset has to be considered valid once Bootlin updates its OpenRisc
+by adding binutils and gcc patches that are added with patches in this
+patchset.
 
-Signed-off-by: Federico Pellegrin <fede@evolware.org>
----
- package/kexec/kexec.hash | 2 +-
- package/kexec/kexec.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Giulio Benetti (9):
+  package/binutils: update or1k patches for plt link version with
+    upstream
+  package/binutils: add upstream backported patches to support
+    -mcmodel=large gcc option
+  package/gcc: add upstream patches that introduce -mcmodel=large option
+    for or1k
+  package/libgeos: fix build failure due to missing -mcmodel=large
+  package/protobuf: fix build failure due to missing -mcmodel=large
+  toolchain: remove binutils bug 21464
+  package/libgeos: remove binutils bug 21464 dependency
+  package/postgis: remove libgeos binutils bug 21464 inheritance
+  package/protobuf: remove binutils bug 21464 dependency
 
-diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
-index e8eb932a65..c0a62f3e82 100644
---- a/package/kexec/kexec.hash
-+++ b/package/kexec/kexec.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
--sha256 e113142dee891638ad96e0f72cf9277b244477619470b30c41999d312e8e8702 kexec-tools-2.0.21.tar.xz
-+sha256 96c97f49ed86049f8b72722cb53e7fe3693e5a4f31e78a3a6249e3d18dac49c2 kexec-tools-2.0.22.tar.xz
- # locally calculated
- sha256 fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7 COPYING
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index 280fe42d30..13b852c8ed 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KEXEC_VERSION = 2.0.21
-+KEXEC_VERSION = 2.0.22
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPL-2.0
+ .../0010-bfd-elf32-or1k-fix-ld-assert.patch   |  35 --
+ ...ith-plt-link-failure-for-local-calls.patch |  59 +++
+ ...elocation-R_OR1K_GOT_AHI16-for-gotha.patch | 256 +++++++++
+ ...K_GOT16-overflow-failures-in-presenc.patch |  61 +++
+ ...ge-plt_relocs-when-generating-plt-en.patch | 500 ++++++++++++++++++
+ .../0003-bfd-elf32-or1k-fix-ld-assert.patch   |  35 --
+ ...ith-plt-link-failure-for-local-calls.patch |  59 +++
+ ...elocation-R_OR1K_GOT_AHI16-for-gotha.patch | 256 +++++++++
+ ...K_GOT16-overflow-failures-in-presenc.patch |  61 +++
+ ...ge-plt_relocs-when-generating-plt-en.patch | 500 ++++++++++++++++++
+ .../0003-bfd-elf32-or1k-fix-ld-assert.patch   |  35 --
+ ...ith-plt-link-failure-for-local-calls.patch |  59 +++
+ ...elocation-R_OR1K_GOT_AHI16-for-gotha.patch | 256 +++++++++
+ ...K_GOT16-overflow-failures-in-presenc.patch |  61 +++
+ ...ge-plt_relocs-when-generating-plt-en.patch | 500 ++++++++++++++++++
+ .../0003-bfd-elf32-or1k-fix-ld-assert.patch   |  35 --
+ ...ith-plt-link-failure-for-local-calls.patch |  59 +++
+ ...elocation-R_OR1K_GOT_AHI16-for-gotha.patch | 256 +++++++++
+ ...K_GOT16-overflow-failures-in-presenc.patch |  61 +++
+ ...ge-plt_relocs-when-generating-plt-en.patch | 500 ++++++++++++++++++
+ ...-mcmodel-option-to-handle-large-GOTs.patch | 200 +++++++
+ ...-cmodel-large-when-building-crtstuff.patch |  60 +++
+ ...-mcmodel-option-to-handle-large-GOTs.patch | 201 +++++++
+ ...-cmodel-large-when-building-crtstuff.patch |  60 +++
+ package/libgeos/Config.in                     |   4 +-
+ package/libgeos/libgeos.mk                    |   4 +
+ package/postgis/Config.in                     |   4 +-
+ package/protobuf/Config.in                    |   1 -
+ package/protobuf/protobuf.mk                  |   4 +
+ toolchain/Config.in                           |   6 -
+ 30 files changed, 4035 insertions(+), 153 deletions(-)
+ delete mode 100644 package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
+ create mode 100644 package/binutils/2.32/0010-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+ create mode 100644 package/binutils/2.32/0011-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+ create mode 100644 package/binutils/2.32/0012-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+ create mode 100644 package/binutils/2.32/0013-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+ delete mode 100644 package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
+ create mode 100644 package/binutils/2.34/0003-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+ create mode 100644 package/binutils/2.34/0004-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+ create mode 100644 package/binutils/2.34/0005-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+ create mode 100644 package/binutils/2.34/0006-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+ delete mode 100644 package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
+ create mode 100644 package/binutils/2.35.2/0003-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+ create mode 100644 package/binutils/2.35.2/0004-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+ create mode 100644 package/binutils/2.35.2/0005-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+ create mode 100644 package/binutils/2.35.2/0006-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+ delete mode 100644 package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
+ create mode 100644 package/binutils/2.36.1/0003-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+ create mode 100644 package/binutils/2.36.1/0004-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+ create mode 100644 package/binutils/2.36.1/0005-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+ create mode 100644 package/binutils/2.36.1/0006-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+ create mode 100644 package/gcc/10.3.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
+ create mode 100644 package/gcc/10.3.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
+ create mode 100644 package/gcc/9.3.0/0006-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
+ create mode 100644 package/gcc/9.3.0/0007-or1k-Use-cmodel-large-when-building-crtstuff.patch
+
 -- 
-2.30.2
+2.25.1
