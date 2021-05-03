@@ -1,36 +1,47 @@
-From: Marko Stanisic <sankerspace@gmail.com>
-Date: Tue, 4 May 2021 00:21:14 +0200
-Subject: [Buildroot] cramfs: unsupported filesystem features - ERROR
-Message-ID: <dae15c1c-dc72-16dc-cfbf-9608763496a2@gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 3 May 2021 15:34:53 -0700
+Subject: [Buildroot] [PATCH] package/openjdk: drop patch left over after
+ last bump
+In-Reply-To: <87im436ivt.fsf@dell.be.48ers.dk>
+References: <20210430203635.2605171-1-yann.morin.1998@free.fr>
+ <87im436ivt.fsf@dell.be.48ers.dk>
+Message-ID: <CAFSsvmpe+yu9Ncd9sheF9Ohw5FfZPGkQUOFWuC+YC1SWO9AArw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have created an emmc.img in Buildroot 2020.11 and flashed an emmc 
-modul with that image.
+Hey Peter;
 
-The emmc.img file has two partitions with cramfs filesystem.(but i only 
-have to load one) I tried to load the cramfs partition from the emmc 
-into the RAM with the *cramfsls* - command and Iam very sure that i 
-correctly loaded the cramfs partition with *mmc read* into the RAM.
+Your wish is granted!
 
-I checked the RAM content with md.b - command and compared the first 
-512byte visually with the hexdump of the rootfs.cramfs image (created by 
-the genimage tool - called by buildroot).
+https://patchwork.ozlabs.org/project/buildroot/patch/20210501210613.1678989-1-aduskett at gmail.com/
 
-But the problem ist that I get that weird error message *cramfs: 
-unsupported filesystem features* in u-boot 2016.03 and i have no idea 
-why. Normal gzip compression was used and XIP was turned off in the 
-buildroot menuconfig.
+Adam
 
-Has anyone an idea, about the error message?
-
-Note: I defined the "cramfsaddr" environment variable with an address 
-location in the ram. That should be set to define an RAM address 
-location inside the RAM to laod the cramfs partition.
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210504/426f8d0e/attachment.html>
+On Fri, Apr 30, 2021 at 11:57 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>
+>  > Commit 5871e278f873 (package/openjdk{, -bin}: security bump to version
+>  > 11.0.11_9) forgot to account for the openjdk patch in the versioned
+>  > directory.
+>
+>  > That patch was a collection of backports from upstream ,that are now all
+>  > present in 11.0.11+9, so drop that patch.
+>
+>  > Fixes: 5871e278f873
+>  > Reported-by: Adam Duskett <aduskett@gmail.com>
+>  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+>  > Cc: Peter Korsgaard <peter@korsgaard.com>
+>
+> Ups - Committed, thanks.
+>
+> Adam: I see that java 14 is EOL. It would be great if you could bump
+> OPENJDK_VERSION_LATEST to the 16.x series:
+>
+> https://adoptopenjdk.net/support.html
+>
+> --
+> Bye, Peter Korsgaard
