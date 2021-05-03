@@ -1,25 +1,36 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  3 May 2021 23:29:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: renumber patch
-Message-ID: <20210503212911.42562-1-fontaine.fabrice@gmail.com>
+From: Marko Stanisic <sankerspace@gmail.com>
+Date: Tue, 4 May 2021 00:21:14 +0200
+Subject: [Buildroot] cramfs: unsupported filesystem features - ERROR
+Message-ID: <dae15c1c-dc72-16dc-cfbf-9608763496a2@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 84968aa4954b308ed67adde305e0fc5c801edc9e forgot to renumber
-remaining patch
+I have created an emmc.img in Buildroot 2020.11 and flashed an emmc 
+modul with that image.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ... => 0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename package/ltp-testsuite/{0002-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch => 0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch} (100%)
+The emmc.img file has two partitions with cramfs filesystem.(but i only 
+have to load one) I tried to load the cramfs partition from the emmc 
+into the RAM with the *cramfsls* - command and Iam very sure that i 
+correctly loaded the cramfs partition with *mmc read* into the RAM.
 
-diff --git a/package/ltp-testsuite/0002-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch b/package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-similarity index 100%
-rename from package/ltp-testsuite/0002-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-rename to package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
--- 
-2.30.2
+I checked the RAM content with md.b - command and compared the first 
+512byte visually with the hexdump of the rootfs.cramfs image (created by 
+the genimage tool - called by buildroot).
+
+But the problem ist that I get that weird error message *cramfs: 
+unsupported filesystem features* in u-boot 2016.03 and i have no idea 
+why. Normal gzip compression was used and XIP was turned off in the 
+buildroot menuconfig.
+
+Has anyone an idea, about the error message?
+
+Note: I defined the "cramfsaddr" environment variable with an address 
+location in the ram. That should be set to define an RAM address 
+location inside the RAM to laod the cramfs partition.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210504/426f8d0e/attachment.html>
