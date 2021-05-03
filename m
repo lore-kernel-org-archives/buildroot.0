@@ -1,38 +1,41 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon,  3 May 2021 13:13:46 +0200
-Subject: [Buildroot] [PATCH 5/9] package/protobuf: fix build failure due to
- missing -mcmodel=large
+Date: Mon,  3 May 2021 13:13:48 +0200
+Subject: [Buildroot] [PATCH 7/9] package/libgeos: remove binutils bug 21464
+ dependency
 In-Reply-To: <20210503111350.2933319-1-giulio.benetti@benettiengineering.com>
 References: <20210503111350.2933319-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210503111350.2933319-6-giulio.benetti@benettiengineering.com>
+Message-ID: <20210503111350.2933319-8-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building protobuf for or1k -mcmodel=large is needed to link, so let's
-add that gcc option in case we're building for or1k.
-
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/protobuf/protobuf.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libgeos/Config.in | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index ea75480038..d6b3557020 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -24,6 +24,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
- PROTOBUF_CXXFLAGS += -O0
- endif
+diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
+index ebe40bd1ff..b659c98460 100644
+--- a/package/libgeos/Config.in
++++ b/package/libgeos/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_LIBGEOS
+ 	bool "libgeos"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+-	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+ 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
+ 	help
+ 	  GEOS (Geometry Engine - Open Source) is a C++ port of the
+@@ -13,7 +12,6 @@ config BR2_PACKAGE_LIBGEOS
  
-+ifeq ($(BR2_or1k),y)
-+PROTOBUF_CXXFLAGS += -mcmodel=large
-+endif
-+
- PROTOBUF_CONF_ENV = CXXFLAGS="$(PROTOBUF_CXXFLAGS)"
+ 	  https://trac.osgeo.org/geos
  
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-comment "libgeos needs a toolchain w/ C++, wchar, not binutils bug 21464, 27597"
++comment "libgeos needs a toolchain w/ C++, wchar, not binutils bug 27597"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		   !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
+ 		   !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
 -- 
 2.25.1
