@@ -1,99 +1,83 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 3 May 2021 21:38:52 +0200
-Subject: [Buildroot] [PATCH v1 1/3] package/libtomcrypt: add pkgconfig
- support
-In-Reply-To: <fce7cdf2-d2de-03e8-712e-dc6b98c892f7@mind.be>
-References: <20210412195527.9282-1-ps.report@gmx.net>
- <20210412221453.5195d4b5@windsurf.home>
- <20210412231516.6cbc09f2@gmx.net>
- <45c379f0-8ca0-6891-1b1e-b166600da9ca@mind.be>
- <20210502122746.7988707d@gmx.net>
- <fce7cdf2-d2de-03e8-712e-dc6b98c892f7@mind.be>
-Message-ID: <20210503213852.3e9e23f3@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 May 2021 22:23:11 +0200
+Subject: [Buildroot] [git commit] Config.in: enable FORTIFY_SOURCE, PIC/PIE,
+ RELRO, SSP by default
+Message-ID: <20210503200404.01E4B869CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+commit: https://git.buildroot.net/buildroot/commit/?id=810ba387bec3c5b6904e8893fb4cb6f9d3717466
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 3 May 2021 09:58:26 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+Enhance security by enabling FORTIFY_SOURCE, PIC/PIE, RELRO and SSP by
+default.
 
-> On 02/05/2021 12:27, Peter Seiderer wrote:
-> > Hello Arnout,
-> >
-> > On Sat, 1 May 2021 15:18:42 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >
-> >> On 12/04/2021 23:15, Peter Seiderer wrote:
-> >>> Hello Thomas,
-> >>>
-> >>> On Mon, 12 Apr 2021 22:14:53 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> >>>
-> >>>> On Mon, 12 Apr 2021 21:55:25 +0200
-> >>>> Peter Seiderer <ps.report@gmx.net> wrote:
-> >>>>
-> >>>>> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> >>>>
-> >>>> Is there any specific motivation? Does this had a chance of going
-> >>>> upstream ?
-> >>>
-> >>> For an custom project, previously developed on with cmake on ubuntu (which
-> >>> provides the pkgconfig file)....
-> >>>
-> >>> Can try to suggest upstream...
-> >>
-> >>  Adding a .pc file in Buildroot usually doesn't make much sense, because no
-> >> package that depends on it is going to use it. So yes, please organise this
-> >> upstream.
-> >
-> > But a buildroot provided library should be usable for buildroot packages AND
-> > out-of-tree/custom packages?
->
->  What I mean is the following. A .pc file is useless unless a package that uses
-> libtomcrypt actually uses pkg-config to configure it. If the .pc file is not
-> provided by libtomcrypt itself, but only by buildroot, then no package that
-> depends on libtomcrypt is going to use pkg-config, because they "think" there is
-> no .pc file for libtomcrypt. So we would have to patch each and every user of
-> libtomcrypt to use pkg-config instead of whatever discovery mechanism they have.
-> And none of these patches are upstreamable, because there is no .pc file outside
-> of buildroot.
->
->
-> > Nevertheless, did take a second look at the libtomcrypt sources, already
-> > providing a libtomcrypt.pc.in template (but only used/installed in case
-> > of 'makefile.shared'/'makefile.unix' and the buildroot compile uses the
-> > default 'makefile' one)...
->
->  That of course changes the story completely.
->
->  Do you know if there is a reason for us not to use makefile.unix, so we don't
-> need to sed the .pc file ourselves?
+For SSP, SSP-all can have a significant impact on performance, so we do
+not want to enable that unconditionally; instead we use SSP-strong if
+available (since gcc-4.9), and resort to SSP-regular otherwise. People
+who really, like really-really want to use SSP-all will still have to
+enable it explicitly.
 
-No..., it is used since the introduction of libtomcrypt (2016), maybe because it
-is the default or because it uses less/no predefined compile vars which needs
-to be patched/overwritten...
+For FORTIFY, level 2 may change the behaviour of some glibc functions,
+so may crash conforming programs, so may have adverse effects. As such,
+we choose level 1 as the default, as it does not change the behaviour
+of any function.
 
-By the way, libtomcrypt depends on libtommath which used -fPIC unconditionally...
+This could help making IoT more secure and fight against the assumption
+that buildroot does not support binary hardening (see
+https://cyber-itl.org/2019/08/26/iot-data-writeup.html)
 
-Regards,
-Peter
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr:
+  - relax SSP to strong when available, regular otherwise
+  - extend commit log to explain why SSP-all is not used
+  - extend commit log to explain why FORTIFY level 2 is not used
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Config.in | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
->
->  Regards,
->  Arnout
->
-> >
-> > Regards,
-> > Peter
-> >
-> >>
-> >>  Therefore, I've marked this patch as Rejected.
-> >>
-> >>  Regards,
-> >>  Arnout
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/Config.in b/Config.in
+index e35a78fb71..51fd9dfcd7 100644
+--- a/Config.in
++++ b/Config.in
+@@ -715,6 +715,7 @@ comment "Security Hardening Options"
+ 
+ config BR2_PIC_PIE
+ 	bool "Build code with PIC/PIE"
++	default y
+ 	depends on BR2_SHARED_LIBS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	help
+@@ -727,7 +728,9 @@ comment "PIC/PIE needs a toolchain w/ PIE"
+ 
+ choice
+ 	bool "Stack Smashing Protection"
+-	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
++	default BR2_SSP_ALL if BR2_ENABLE_SSP
++	default BR2_SSP_STRONG if BR2_TOOLCHAIN_HAS_SSP_STRONG
++	default BR2_SSP_REGULAR
+ 	depends on BR2_TOOLCHAIN_HAS_SSP
+ 	help
+ 	  Enable stack smashing protection support using GCC's
+@@ -789,6 +792,8 @@ comment "Stack Smashing Protection needs a toolchain w/ SSP"
+ 
+ choice
+ 	bool "RELRO Protection"
++	default BR2_RELRO_FULL if BR2_TOOLCHAIN_SUPPORTS_PIE
++	default BR2_RELRO_PARTIAL
+ 	depends on BR2_SHARED_LIBS
+ 	help
+ 	  Enable a link-time protection know as RELRO (RELocation Read
+@@ -825,6 +830,7 @@ comment "RELocation Read Only (RELRO) needs shared libraries"
+ 
+ choice
+ 	bool "Buffer-overflow Detection (FORTIFY_SOURCE)"
++	default BR2_FORTIFY_SOURCE_1
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on !BR2_OPTIMIZE_0
+ 	help
