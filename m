@@ -1,28 +1,38 @@
-From: Bin Meng <bmeng.cn@gmail.com>
-Date: Mon, 3 May 2021 19:33:06 +0800
-Subject: [Buildroot] [PATCH v2 6/6] configs/beaglev: enable building of
- low-level firmware
-In-Reply-To: <20210502212141.934384-7-thomas.petazzoni@bootlin.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 3 May 2021 13:53:52 +0200
+Subject: [Buildroot] [PATCH v2 4/6] boot/beaglev-ddrinit: new package
+In-Reply-To: <CAEUhbmU0SRMbRt4Cb-i=WLCyNFsi+o-nKGkaxaJCxiFv4wVBjw@mail.gmail.com>
 References: <20210502212141.934384-1-thomas.petazzoni@bootlin.com>
- <20210502212141.934384-7-thomas.petazzoni@bootlin.com>
-Message-ID: <CAEUhbmU4Jn_J-0RFt1kCOhSvENRNguLmyzmf47i5gGApNLgyVQ@mail.gmail.com>
+ <20210502212141.934384-5-thomas.petazzoni@bootlin.com>
+ <CAEUhbmU0SRMbRt4Cb-i=WLCyNFsi+o-nKGkaxaJCxiFv4wVBjw@mail.gmail.com>
+Message-ID: <20210503135352.354748ae@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 3, 2021 at 5:21 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> This commit extends the beaglev_defconfig and its documentation to
-> build the low-level firmware, and explain how to reflash it.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  board/beaglev/readme.txt  | 38 ++++++++++++++++++++++++++++++++++++--
->  configs/beaglev_defconfig |  2 ++
->  2 files changed, 38 insertions(+), 2 deletions(-)
->
+Hello,
 
-Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
+On Mon, 3 May 2021 19:30:13 +0800
+Bin Meng <bmeng.cn@gmail.com> wrote:
+
+> nits: please put secondBoot first in this patch series
+
+The only reason why beaglev-ddrinit appears before beaglev-secondboot
+in this series is because beaglev-ddrinit sorts before
+beaglev-secondboot by alphabetic ordering.
+
+> I expect the ddrInit firmware is no longer necessary when upstream
+> U-Boot supports SPL for this target. For the time being, this patch
+> looks good.
+
+Yes, indeed.
+
+Thanks for the review!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
