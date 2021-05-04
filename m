@@ -1,77 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  4 May 2021 22:21:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exim: security bump version to
- 4.94.2
-Message-ID: <20210504202159.740520-1-bernd.kuhls@t-online.de>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 4 May 2021 13:25:06 -0700
+Subject: [Buildroot] [PATCH v1 2/3] package/fuse-overlayfs: enable
+ building as host package
+In-Reply-To: <20210504202054.GQ2137340@scaer>
+References: <20210503023305.161122-1-christian@paral.in>
+ <20210503023305.161122-2-christian@paral.in>
+ <20210504202054.GQ2137340@scaer>
+Message-ID: <CA+h8R2prp0WkxC3OGdv4D8E-oJE=N9b9bmfX+q8dqJcvS9rVJw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release announcement:
-https://lists.exim.org/lurker/message/20210421.123632.08bb711a.en.html
+Hi Yann,
 
-According to
-http://www.exim.org/static/doc/security/CVE-2020-qualys/21nails.txt
-this version bump fixes
+On Tue, May 4, 2021 at 1:21 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Be carefull that your editor properly terminates files with a \n
+>
+> Vim is a good editor that generates properly formatted text files! ;-]
+>
+> Regards,
+> Yann E. MORIN.
 
-Local vulnerabilities
-- CVE-2020-28007: Link attack in Exim's log directory
-- CVE-2020-28008: Assorted attacks in Exim's spool directory
-- CVE-2020-28014: Arbitrary file creation and clobbering
-- CVE-2021-27216: Arbitrary file deletion
-- CVE-2020-28011: Heap buffer overflow in queue_run()
-- CVE-2020-28010: Heap out-of-bounds write in main()
-- CVE-2020-28013: Heap buffer overflow in parse_fix_phrase()
-- CVE-2020-28016: Heap out-of-bounds write in parse_fix_phrase()
-- CVE-2020-28015: New-line injection into spool header file (local)
-- CVE-2020-28012: Missing close-on-exec flag for privileged pipe
-- CVE-2020-28009: Integer overflow in get_stdinput()
+I regret to inform you that I switched over to emacs somewhere around 2016.
 
-Remote vulnerabilities
-- CVE-2020-28017: Integer overflow in receive_add_recipient()
-- CVE-2020-28020: Integer overflow in receive_msg()
-- CVE-2020-28023: Out-of-bounds read in smtp_setup_msg()
-- CVE-2020-28021: New-line injection into spool header file (remote)
-- CVE-2020-28022: Heap out-of-bounds read and write in extract_option()
-- CVE-2020-28026: Line truncation and injection in spool_read_header()
-- CVE-2020-28019: Failure to reset function pointer after BDAT error
-- CVE-2020-28024: Heap buffer underflow in smtp_ungetc()
-- CVE-2020-28018: Use-after-free in tls-openssl.c
-- CVE-2020-28025: Heap out-of-bounds read in pdkim_finish_bodyhash()
+... but using vim bindings with "evil" mode and spacemacs and
+Buildroot/Gentoo + exwm :)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/exim/exim.hash | 4 ++--
- package/exim/exim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index 265a95c6f5..201f09ebd6 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,6 +1,6 @@
- # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
--sha256  f77ee8faf04f5db793243c3ae81c1f4e452cd6ad7dd515a80edf755c4b144bdb  exim-4.94.tar.xz
-+sha256  051861fc89f06205162f12129fb7ebfe473383bb6194bf8642952bfd50329274  exim-4.94.2.tar.xz
- # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
--sha512  3bf95ade30902327403e7308089a3e423761da5b0745397dace7c7fd15ba3838d93e0ee418f1fed57606f79e57b793c7c7407e5c0d526146f0036126d5d95316  exim-4.94.tar.xz
-+sha512  5334c236221ed4e03dbc33e6a79d939b06037fa2f4b71971607a360b67af5c85a89681ee13a5eeaf0184382c55a160cf2e89ed7afb2949f025a54f1e88f9e3fc  exim-4.94.2.tar.xz
- # Locally calculated
- sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 53185c4bb8..dd39208469 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXIM_VERSION = 4.94
-+EXIM_VERSION = 4.94.2
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
--- 
-2.29.2
+Best regards,
+Christian
