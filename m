@@ -1,107 +1,129 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 May 2021 21:22:52 +0200
-Subject: [Buildroot] [git commit] package/libopenssl: fix performance issue
- in static build
-Message-ID: <20210504185519.97854881C4@busybox.osuosl.org>
+Date: Tue, 4 May 2021 21:23:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: fix performance
+ issue in static build
+In-Reply-To: <20210425133845.2459496-1-fontaine.fabrice@gmail.com>
+References: <20210425133845.2459496-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210504192342.GM2137340@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67d19f601470aa205e2f948f883791f48e23cc92
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-Revert commit 8c2c959b028d44f5518d4445f864aedae3d90406 as no-dso has
-been added back to openssl since version 1.1.1e and
-https://github.com/openssl/openssl/commit/8dcd57461972dceaaf014b71d173d0a8758e7054
-and because gcc no-asm has performance issue
+On 2021-04-25 15:38 +0200, Fabrice Fontaine spake thusly:
+> Revert commit 8c2c959b028d44f5518d4445f864aedae3d90406 as no-dso has
+> been added back to openssl since version 1.1.1e and
+> https://github.com/openssl/openssl/commit/8dcd57461972dceaaf014b71d173d0a8758e7054
+> and because gcc no-asm has performance issue
+> 
+> Fixes:
+>  - https://bugs.buildroot.org/show_bug.cgi?id=13751
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=13751
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libopenssl/Config.in     |  4 ----
- package/libopenssl/libopenssl.mk | 25 ++++++++++++++++++++-----
- 2 files changed, 20 insertions(+), 9 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-index 8909e36b9e..723fd282a4 100644
---- a/package/libopenssl/Config.in
-+++ b/package/libopenssl/Config.in
-@@ -14,10 +14,6 @@ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC
- 
- config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH
- 	string
--	# Use "gcc" minimalistic target to disable DSO
--	# no-asm is needed with generic architectures such as gcc, see
--	# https://github.com/openssl/openssl/issues/9839
--	default "gcc no-asm"			if BR2_STATIC_LIBS
- 	# Doesn't work for thumb-only (Cortex-M?)
- 	default "linux-armv4"			if BR2_ARM_CPU_HAS_ARM
- 	default "linux-aarch64"			if BR2_aarch64
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index a10b64c8fd..487fe554c1 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -25,10 +25,6 @@ LIBOPENSSL_CFLAGS += -mxgot
- LIBOPENSSL_CFLAGS += -DOPENSSL_SMALL_FOOTPRINT
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--LIBOPENSSL_CFLAGS += -DOPENSSL_THREADS
--endif
--
- ifeq ($(BR2_USE_MMU),)
- LIBOPENSSL_CFLAGS += -DHAVE_FORK=0 -DOPENSSL_NO_MADVISE
- endif
-@@ -79,7 +75,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
- 			--prefix=/usr \
- 			--openssldir=/etc/ssl \
- 			$(if $(BR2_TOOLCHAIN_HAS_LIBATOMIC),-latomic) \
--			$(if $(BR2_TOOLCHAIN_HAS_THREADS),-lpthread threads, no-threads) \
-+			$(if $(BR2_TOOLCHAIN_HAS_THREADS),threads,no-threads) \
- 			$(if $(BR2_STATIC_LIBS),no-shared,shared) \
- 			$(if $(BR2_PACKAGE_HAS_CRYPTODEV),enable-devcryptoeng) \
- 			no-rc5 \
-@@ -89,12 +85,21 @@ define LIBOPENSSL_CONFIGURE_CMDS
- 			no-fuzz-libfuzzer \
- 			no-fuzz-afl \
- 			$(if $(BR2_STATIC_LIBS),zlib,zlib-dynamic) \
-+			$(if $(BR2_STATIC_LIBS),no-dso) \
- 	)
- 	$(SED) "s#-march=[-a-z0-9] ##" -e "s#-mcpu=[-a-z0-9] ##g" $(@D)/Makefile
- 	$(SED) "s#-O[0-9sg]#$(LIBOPENSSL_CFLAGS)#" $(@D)/Makefile
- 	$(SED) "s# build_tests##" $(@D)/Makefile
- endef
- 
-+# libdl is not available in a static build, and this is not implied by no-dso
-+ifeq ($(BR2_STATIC_LIBS),y)
-+define LIBOPENSSL_FIXUP_STATIC_MAKEFILE
-+	$(SED) 's#-ldl##g' $(@D)/Makefile
-+endef
-+LIBOPENSSL_POST_CONFIGURE_HOOKS += LIBOPENSSL_FIXUP_STATIC_MAKEFILE
-+endif
-+
- define HOST_LIBOPENSSL_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
- endef
-@@ -117,6 +122,16 @@ define LIBOPENSSL_INSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/bin/c_rehash
- endef
- 
-+# libdl has no business in a static build
-+ifeq ($(BR2_STATIC_LIBS),y)
-+define LIBOPENSSL_FIXUP_STATIC_PKGCONFIG
-+	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libcrypto.pc
-+	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libssl.pc
-+	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/openssl.pc
-+endef
-+LIBOPENSSL_POST_INSTALL_STAGING_HOOKS += LIBOPENSSL_FIXUP_STATIC_PKGCONFIG
-+endif
-+
- ifeq ($(BR2_PACKAGE_PERL),)
- define LIBOPENSSL_REMOVE_PERL_SCRIPTS
- 	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.pl,tsget}
+> ---
+>  package/libopenssl/Config.in     |  4 ----
+>  package/libopenssl/libopenssl.mk | 25 ++++++++++++++++++++-----
+>  2 files changed, 20 insertions(+), 9 deletions(-)
+> 
+> diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
+> index 8909e36b9e..723fd282a4 100644
+> --- a/package/libopenssl/Config.in
+> +++ b/package/libopenssl/Config.in
+> @@ -14,10 +14,6 @@ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC
+>  
+>  config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH
+>  	string
+> -	# Use "gcc" minimalistic target to disable DSO
+> -	# no-asm is needed with generic architectures such as gcc, see
+> -	# https://github.com/openssl/openssl/issues/9839
+> -	default "gcc no-asm"			if BR2_STATIC_LIBS
+>  	# Doesn't work for thumb-only (Cortex-M?)
+>  	default "linux-armv4"			if BR2_ARM_CPU_HAS_ARM
+>  	default "linux-aarch64"			if BR2_aarch64
+> diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+> index a10b64c8fd..487fe554c1 100644
+> --- a/package/libopenssl/libopenssl.mk
+> +++ b/package/libopenssl/libopenssl.mk
+> @@ -25,10 +25,6 @@ LIBOPENSSL_CFLAGS += -mxgot
+>  LIBOPENSSL_CFLAGS += -DOPENSSL_SMALL_FOOTPRINT
+>  endif
+>  
+> -ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> -LIBOPENSSL_CFLAGS += -DOPENSSL_THREADS
+> -endif
+> -
+>  ifeq ($(BR2_USE_MMU),)
+>  LIBOPENSSL_CFLAGS += -DHAVE_FORK=0 -DOPENSSL_NO_MADVISE
+>  endif
+> @@ -79,7 +75,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
+>  			--prefix=/usr \
+>  			--openssldir=/etc/ssl \
+>  			$(if $(BR2_TOOLCHAIN_HAS_LIBATOMIC),-latomic) \
+> -			$(if $(BR2_TOOLCHAIN_HAS_THREADS),-lpthread threads, no-threads) \
+> +			$(if $(BR2_TOOLCHAIN_HAS_THREADS),threads,no-threads) \
+>  			$(if $(BR2_STATIC_LIBS),no-shared,shared) \
+>  			$(if $(BR2_PACKAGE_HAS_CRYPTODEV),enable-devcryptoeng) \
+>  			no-rc5 \
+> @@ -89,12 +85,21 @@ define LIBOPENSSL_CONFIGURE_CMDS
+>  			no-fuzz-libfuzzer \
+>  			no-fuzz-afl \
+>  			$(if $(BR2_STATIC_LIBS),zlib,zlib-dynamic) \
+> +			$(if $(BR2_STATIC_LIBS),no-dso) \
+>  	)
+>  	$(SED) "s#-march=[-a-z0-9] ##" -e "s#-mcpu=[-a-z0-9] ##g" $(@D)/Makefile
+>  	$(SED) "s#-O[0-9sg]#$(LIBOPENSSL_CFLAGS)#" $(@D)/Makefile
+>  	$(SED) "s# build_tests##" $(@D)/Makefile
+>  endef
+>  
+> +# libdl is not available in a static build, and this is not implied by no-dso
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +define LIBOPENSSL_FIXUP_STATIC_MAKEFILE
+> +	$(SED) 's#-ldl##g' $(@D)/Makefile
+> +endef
+> +LIBOPENSSL_POST_CONFIGURE_HOOKS += LIBOPENSSL_FIXUP_STATIC_MAKEFILE
+> +endif
+> +
+>  define HOST_LIBOPENSSL_BUILD_CMDS
+>  	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+>  endef
+> @@ -117,6 +122,16 @@ define LIBOPENSSL_INSTALL_TARGET_CMDS
+>  	rm -f $(TARGET_DIR)/usr/bin/c_rehash
+>  endef
+>  
+> +# libdl has no business in a static build
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +define LIBOPENSSL_FIXUP_STATIC_PKGCONFIG
+> +	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libcrypto.pc
+> +	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libssl.pc
+> +	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/openssl.pc
+> +endef
+> +LIBOPENSSL_POST_INSTALL_STAGING_HOOKS += LIBOPENSSL_FIXUP_STATIC_PKGCONFIG
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_PERL),)
+>  define LIBOPENSSL_REMOVE_PERL_SCRIPTS
+>  	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.pl,tsget}
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
