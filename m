@@ -1,64 +1,76 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 May 2021 22:07:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libfuse3: bump version to 3.10.3
-In-Reply-To: <20210503022955.160567-1-christian@paral.in>
-References: <20210503022955.160567-1-christian@paral.in>
-Message-ID: <20210504200758.GO2137340@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 4 May 2021 22:06:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bullet: fix build
+In-Reply-To: <ef6dff3c-fbbe-a622-02b7-b765248ab231@grinn-global.com>
+References: <20210430060545.1243461-1-fontaine.fabrice@gmail.com>
+ <ef6dff3c-fbbe-a622-02b7-b765248ab231@grinn-global.com>
+Message-ID: <CAPi7W81H2ywfBPpbEp=iZaTwzxgW2efTPU_kyc700EdBuY_R0A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, All,
+Hello,
 
-On 2021-05-02 19:29 -0700, Christian Stewart spake thusly:
-> Signed-off-by: Christian Stewart <christian@paral.in>
+Le mar. 4 mai 2021 ? 20:32, Bartosz Bilas <b.bilas@grinn-global.com> a ?crit :
+>
+> Hello Fabrice,
+>
+> On 30.04.2021 08:05, Fabrice Fontaine wrote:
+> > Since bump to version 3.09 in commit
+> > 28b4947ed8f53c4edfbf8fef9304dc76480c01ca, build fails on:
+> >
+> > [100%] Linking CXX shared library libBulletRoboticsGUI.so
+> > /home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc64-buildroot-linux-gnu/9.3.0/../../../../sparc64-buildroot-linux-gnu/bin/ld: cannot find -lBulletExampleBrowserLib
+> >
+> > Upstream is aware of this issue and recommends to avoid changing any
+> > options: https://github.com/bulletphysics/bullet3/issues/3143
+> What about this [1] patch? Have you tried that?
+Nope, I didn't tried it, there is 4 issues opened in upstream github
+related to -lBulletExampleBrowserLib and all of them are closed with
+the above answer.
+I missed the PR but I assume that upstream will not commit as it is
+opened for nearly 4 months.
+But feel free to send a v2 of this patch.
+>
+> [1] https://github.com/bulletphysics/bullet3/pull/3216
+>
+>
+> Best
+> Bartek
+> >
+> > So enable bullet3 and demos apps ...
+> >
+> > Fixes:
+> >   - http://autobuild.buildroot.org/results/1721df8b0859656f7420b0b166d1ca635e5ddc74
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >   package/bullet/bullet.mk | 9 +++++----
+> >   1 file changed, 5 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/package/bullet/bullet.mk b/package/bullet/bullet.mk
+> > index 6ed4da859f..de51402ab6 100644
+> > --- a/package/bullet/bullet.mk
+> > +++ b/package/bullet/bullet.mk
+> > @@ -10,11 +10,12 @@ BULLET_INSTALL_STAGING = YES
+> >   BULLET_LICENSE = Zlib
+> >   BULLET_LICENSE_FILES = LICENSE.txt
+> >
+> > -# Disable demos apps and unit tests.
+> > -# Disable Bullet3 library.
+> > +# Disable unit tests.
+> > +# Don't disable demos apps and Bullet3 library to avoid a build failure:
+> > +# https://github.com/bulletphysics/bullet3/issues/3143
+> >   BULLET_CONF_OPTS = -DBUILD_UNIT_TESTS=OFF \
+> > -     -DBUILD_BULLET2_DEMOS=OFF \
+> > -     -DBUILD_BULLET3=OFF
+> > +     -DBUILD_BULLET2_DEMOS=ON \
+> > +     -DBUILD_BULLET3=ON
+> >
+> >   # extras needs dlfcn.h and NPTL (pthread_barrier_init)
+> >   ifeq ($(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_HAS_THREADS_NPTL),:y)
+Best Regards,
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libfuse3/libfuse3.hash | 2 +-
->  package/libfuse3/libfuse3.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-> index 9b2f8cc144..49c71f402f 100644
-> --- a/package/libfuse3/libfuse3.hash
-> +++ b/package/libfuse3/libfuse3.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated sha256 checksums
-> -sha256  a16f93cc083264afd0d2958a0dc88f24c6c5d40a9f3842c645b1909e13edb75f  libfuse3-3.10.2.tar.gz
-> +sha256  c32527782cef620df58b162aa29901d1fb13253b029375d5860a2253a810344e  libfuse3-3.10.3.tar.gz
->  sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-> diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-> index f805eda506..d61e313391 100644
-> --- a/package/libfuse3/libfuse3.mk
-> +++ b/package/libfuse3/libfuse3.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBFUSE3_VERSION = 3.10.2
-> +LIBFUSE3_VERSION = 3.10.3
->  LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
->  LIBFUSE3_LICENSE = LGPL-2.1
->  LIBFUSE3_LICENSE_FILES = LICENSE
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Fabrice
