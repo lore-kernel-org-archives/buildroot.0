@@ -1,48 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 May 2021 22:18:53 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/libtomcrypt: add pkgconfig
- support
-In-Reply-To: <20210502105038.19483-1-ps.report@gmx.net>
-References: <20210502105038.19483-1-ps.report@gmx.net>
-Message-ID: <02a2bf67-f5a4-611b-6cc8-289675ce26e5@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 4 May 2021 22:14:37 +0200
+Subject: [Buildroot] [git commit] package/libtomcrypt: compile with -fPIC to
+ enable linking to dynamic libraries/exectuables
+Message-ID: <20210504195116.6CB7A81773@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ec2ee79ec18f945e15ca45471dc06c78a9cc1da1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes:
 
-On 02/05/2021 12:50, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - use libtomcrypt provided libtomcrypt.pc.in template file
-> ---
->  package/libtomcrypt/libtomcrypt.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
-> index fccd4b051c..3d166a6854 100644
-> --- a/package/libtomcrypt/libtomcrypt.mk
-> +++ b/package/libtomcrypt/libtomcrypt.mk
-> @@ -27,6 +27,10 @@ define LIBTOMCRYPT_INSTALL_STAGING_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" \
->  		PREFIX=/usr NODOCS=1 INSTALL_USER=$(shell id -u) \
->  		INSTALL_GROUP=$(shell id -g) install
-> +	sed -e 's,^prefix=.*,prefix=/usr,' \
-> +		-e 's,^Version:.*,Version: $(LIBTOMCRYPT_VERSION),' \
-> +		$(@D)/libtomcrypt.pc.in \
-> +		> $(STAGING_DIR)/usr/lib/pkgconfig/libtomcrypt.pc
+  .../x86_64-buildroot-linux-gnu/bin/ld: .../host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libtomcrypt.a(md5.o): relocation R_X86_64_32 against `.rodata.str1.1' can not be used when making a shared object; recompile with -fPIC
 
- What about the option of using makefile.unix so we don't have to do this ourselves?
+when building a shared library that links with libtomcrypt. Our only
+internal user dropbear doesn't do this, so there are no autobuilder
+failures.
 
- I've kept the patch as New in patchwork in case you don't see that as feasible.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/libtomcrypt/libtomcrypt.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- Regards,
- Arnout
-
->  endef
->  
->  $(eval $(generic-package))
-> 
+diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
+index fccd4b051c..35886057d4 100644
+--- a/package/libtomcrypt/libtomcrypt.mk
++++ b/package/libtomcrypt/libtomcrypt.mk
+@@ -19,6 +19,10 @@ LIBTOMCRYPT_IGNORE_CVES += CVE-2019-17362
+ 
+ LIBTOMCRYPT_CFLAGS = -I./src/headers $(TARGET_CFLAGS) -DLTC_SOURCE -DLTM_DESC
+ 
++ifeq ($(BR2_STATIC_LIBS),)
++LIBTOMCRYPT_CFLAGS += -fPIC
++endif
++
+ define LIBTOMCRYPT_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(LIBTOMCRYPT_CFLAGS)"
+ endef
