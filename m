@@ -1,81 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue,  4 May 2021 22:51:31 +0200
-Subject: [Buildroot] [PATCH v3 0/7] Support for the BeagleV platform
-Message-ID: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
+Date: Tue,  4 May 2021 22:51:32 +0200
+Subject: [Buildroot] [PATCH v3 1/7] package/Makefile.in: expose CONFIG_DIR
+ to post-build/post-image scripts
+In-Reply-To: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
+References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20210504205139.1055360-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Sometimes, post-build or post-image scripts need to reinvoke
+Buildroot's make, for example to execute "make printvars".
 
-Here is a third iteration of the BeagleV patch series, which brings a
-few fixes:
+However, so far none of the variables exposed to post-build/post-image
+scripts allowed to do that in a way that worked for both in-tree and
+out-of-tree builds. Indeed:
 
- * The post-build script of v1 calling "make printvars" was working
-   only for in-tree builds. Following a comment from Frank Hunleth on
-   the v1, it was changed in v2 to use "make -C ${O} printvars", which
-   made out-of-tree builds work, but broke in-tree builds. So in this
-   new version, we introduced a preliminary patch that exposes
-   $(CONFIG_DIR) to post-build/post-image scripts, to make such "make
-   printvars" invocations possible.
+ * "make printvars" would work for in-tree builds, but not out of tree
+   builds
 
- * The beaglev_defconfig is updated to take into account the rename of
-   the Git repositories by Starfive for Linux, U-Boot and OpenSBI.
+ * "make -C ${O} printvars" would work for out-of-tree builds, but not
+   in-tree builds
 
- * Reviewed-by tags from Bin Meng are added on beaglev-ddrinit,
-   beaglev-secondboot and the corresponding beaglev_defconfig
-   update. Thanks Bin!
+In order to solve this, this commit exposes $(CONFIG_DIR) to
+post-build/post-image scripts, through the EXTRA_ENV variable.
 
-As usual, the whole thing is also available at:
+The documentation is updated accordingly.
 
-  https://github.com/tpetazzoni/buildroot/commits/beaglev
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/customize-post-image.txt | 3 ++-
+ docs/manual/customize-rootfs.txt     | 3 +++
+ package/Makefile.in                  | 1 +
+ 3 files changed, 6 insertions(+), 1 deletion(-)
 
-Best regards,
-
-Thomas Petazzoni
-
-Thomas Petazzoni (7):
-  package/Makefile.in: expose CONFIG_DIR to post-build/post-image
-    scripts
-  boot/opensbi: add options to enable/disable image installation
-  configs/beaglev_defconfig: new defconfig
-  package/riscv64-elf-toolchain: new package
-  boot/beaglev-ddrinit: new package
-  boot/beaglev-secondboot: new package
-  configs/beaglev: enable building of low-level firmware
-
- DEVELOPERS                                    |   5 +
- board/beaglev/extlinux.conf                   |   4 +
- board/beaglev/genimage.cfg                    |  12 ++
- ...s-starfive-vic7100-adjust-fdt_addr_r.patch |  39 ++++++
- board/beaglev/post-build.sh                   |  17 +++
- board/beaglev/readme.txt                      | 122 ++++++++++++++++++
- boot/Config.in                                |   2 +
- boot/beaglev-ddrinit/Config.in                |   9 ++
- boot/beaglev-ddrinit/beaglev-ddrinit.mk       |  29 +++++
- boot/beaglev-secondboot/Config.in             |   9 ++
- boot/beaglev-secondboot/beaglev-secondboot.mk |  29 +++++
- boot/opensbi/Config.in                        |  20 +++
- boot/opensbi/opensbi.mk                       |  16 ++-
- configs/beaglev_defconfig                     |  37 ++++++
- docs/manual/customize-post-image.txt          |   3 +-
- docs/manual/customize-rootfs.txt              |   3 +
- package/Makefile.in                           |   1 +
- .../riscv64-elf-toolchain.mk                  |  25 ++++
- 18 files changed, 375 insertions(+), 7 deletions(-)
- create mode 100644 board/beaglev/extlinux.conf
- create mode 100644 board/beaglev/genimage.cfg
- create mode 100644 board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
- create mode 100755 board/beaglev/post-build.sh
- create mode 100644 board/beaglev/readme.txt
- create mode 100644 boot/beaglev-ddrinit/Config.in
- create mode 100644 boot/beaglev-ddrinit/beaglev-ddrinit.mk
- create mode 100644 boot/beaglev-secondboot/Config.in
- create mode 100644 boot/beaglev-secondboot/beaglev-secondboot.mk
- create mode 100644 configs/beaglev_defconfig
- create mode 100644 package/riscv64-elf-toolchain/riscv64-elf-toolchain.mk
-
+diff --git a/docs/manual/customize-post-image.txt b/docs/manual/customize-post-image.txt
+index 90ea2b9328..5308093d06 100644
+--- a/docs/manual/customize-post-image.txt
++++ b/docs/manual/customize-post-image.txt
+@@ -28,7 +28,8 @@ different sets of arguments to each script.
+ 
+ Again just like for the post-build scripts, the scripts have access to
+ the environment variables +BR2_CONFIG+, +HOST_DIR+, +STAGING_DIR+,
+-+TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
+++TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+, +CONFIG_DIR+ and
+++BASE_DIR+.
+ 
+ The post-image scripts will be executed as the user that executes
+ Buildroot, which should normally _not_ be the root user. Therefore, any
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index e1dbadda5b..8b361f8621 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -65,6 +65,9 @@ In addition, you may also use these environment variables:
+   - +BUILD_DIR+: the directory where packages are extracted and built
+   - +BINARIES_DIR+: the place where all binary files (aka images) are
+     stored
++  - +CONFIG_DIR+: the directory containing the .config file, and
++    therefore the top-level Buildroot Makefile to use (which is
++    correct for both in-tree and out-of-tree builds)
+   - +BASE_DIR+: the base output directory
+ 
+ Below three more methods of customizing the target filesystem are
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 51f5cbce4f..f4028bc67c 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -318,6 +318,7 @@ EXTRA_ENV = \
+ 	PATH=$(BR_PATH) \
+ 	BR2_DL_DIR=$(BR2_DL_DIR) \
+ 	BUILD_DIR=$(BUILD_DIR) \
++	CONFIG_DIR=$(CONFIG_DIR) \
+ 	O=$(CANONICAL_O)
+ 
+ ################################################################################
 -- 
 2.30.2
