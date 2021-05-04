@@ -1,80 +1,111 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue,  4 May 2021 22:51:32 +0200
-Subject: [Buildroot] [PATCH v3 1/7] package/Makefile.in: expose CONFIG_DIR
- to post-build/post-image scripts
+Date: Tue,  4 May 2021 22:51:33 +0200
+Subject: [Buildroot] [PATCH v3 2/7] boot/opensbi: add options to
+ enable/disable image installation
 In-Reply-To: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
 References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210504205139.1055360-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20210504205139.1055360-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sometimes, post-build or post-image scripts need to reinvoke
-Buildroot's make, for example to execute "make printvars".
+Until now, whenever a BR2_TARGET_OPENSBI_PLAT value was specified,
+opensbi.mk was assuming that both fw_jump and fw_dynamic would be
+produced. However, this is not the case: the OpenSBI per-platform
+config.mk can decide which image to build.
 
-However, so far none of the variables exposed to post-build/post-image
-scripts allowed to do that in a way that worked for both in-tree and
-out-of-tree builds. Indeed:
+As an example, the config.mk for VIC7100-based BeagleV only enables
+producing the fw_payload image.
 
- * "make printvars" would work for in-tree builds, but not out of tree
-   builds
+This commit adds three options to enable the installation of images:
+one for fw_jump, one for fw_dynamic, one for fw_payload.
 
- * "make -C ${O} printvars" would work for out-of-tree builds, but not
-   in-tree builds
+The options for fw_jump and fw_dynamic are "default y" when
+BR2_TARGET_OPENSBI_PLAT is not empty, to preserve existing behavior.
 
-In order to solve this, this commit exposes $(CONFIG_DIR) to
-post-build/post-image scripts, through the EXTRA_ENV variable.
-
-The documentation is updated accordingly.
+The option for fw_payload is forcefully selected when either Linux or
+U-Boot are selected as payloads.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/customize-post-image.txt | 3 ++-
- docs/manual/customize-rootfs.txt     | 3 +++
- package/Makefile.in                  | 1 +
- 3 files changed, 6 insertions(+), 1 deletion(-)
+ boot/opensbi/Config.in  | 20 ++++++++++++++++++++
+ boot/opensbi/opensbi.mk | 16 ++++++++++------
+ 2 files changed, 30 insertions(+), 6 deletions(-)
 
-diff --git a/docs/manual/customize-post-image.txt b/docs/manual/customize-post-image.txt
-index 90ea2b9328..5308093d06 100644
---- a/docs/manual/customize-post-image.txt
-+++ b/docs/manual/customize-post-image.txt
-@@ -28,7 +28,8 @@ different sets of arguments to each script.
+diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+index 236bf74a90..55a644506f 100644
+--- a/boot/opensbi/Config.in
++++ b/boot/opensbi/Config.in
+@@ -74,11 +74,30 @@ config BR2_TARGET_OPENSBI_PLAT
+ 	  the platform specific static library libplatsbi.a and firmware
+ 	  examples are built.
  
- Again just like for the post-build scripts, the scripts have access to
- the environment variables +BR2_CONFIG+, +HOST_DIR+, +STAGING_DIR+,
--+TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
-++TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+, +CONFIG_DIR+ and
-++BASE_DIR+.
++config BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG
++	bool "Install fw_dynamic image"
++	default y if BR2_TARGET_OPENSBI_PLAT != ""
++	help
++	  This installs the fw_dynamic image.
++
++config BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG
++	bool "Install fw_jump image"
++	default y if BR2_TARGET_OPENSBI_PLAT != ""
++	help
++	  This installs the fw_jump image.
++
++config BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
++	bool "Install fw_payload image"
++	help
++	  This option enables the installation of the fw_paylaod
++	  image.
++
+ config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
+ 	bool "Include Linux as OpenSBI Payload"
+ 	depends on BR2_TARGET_OPENSBI_PLAT != ""
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_LINUX_KERNEL_IMAGE
++	select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
+ 	help
+ 	  Build OpenSBI with the Linux kernel as a Payload.
  
- The post-image scripts will be executed as the user that executes
- Buildroot, which should normally _not_ be the root user. Therefore, any
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index e1dbadda5b..8b361f8621 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -65,6 +65,9 @@ In addition, you may also use these environment variables:
-   - +BUILD_DIR+: the directory where packages are extracted and built
-   - +BINARIES_DIR+: the place where all binary files (aka images) are
-     stored
-+  - +CONFIG_DIR+: the directory containing the .config file, and
-+    therefore the top-level Buildroot Makefile to use (which is
-+    correct for both in-tree and out-of-tree builds)
-   - +BASE_DIR+: the base output directory
+@@ -86,6 +105,7 @@ config BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
+ 	bool "Include U-Boot as OpenSBI Payload"
+ 	depends on BR2_TARGET_OPENSBI_PLAT != ""
+ 	depends on BR2_TARGET_UBOOT
++	select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
+ 	help
+ 	  Build OpenSBI with the U-Boot as a Payload.
  
- Below three more methods of customizing the target filesystem are
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 51f5cbce4f..f4028bc67c 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -318,6 +318,7 @@ EXTRA_ENV = \
- 	PATH=$(BR_PATH) \
- 	BR2_DL_DIR=$(BR2_DL_DIR) \
- 	BUILD_DIR=$(BUILD_DIR) \
-+	CONFIG_DIR=$(CONFIG_DIR) \
- 	O=$(CANONICAL_O)
+diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+index 8ebe4566fd..f8cbbb8fcc 100644
+--- a/boot/opensbi/opensbi.mk
++++ b/boot/opensbi/opensbi.mk
+@@ -50,15 +50,19 @@ define OPENSBI_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
  
- ################################################################################
+-ifneq ($(OPENSBI_PLAT),)
++ifeq ($(BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG),y)
+ OPENSBI_INSTALL_IMAGES = YES
+-OPENSBI_FW_IMAGES += jump dynamic
+-ifeq ($(BR2_TARGET_OPENSBI_LINUX_PAYLOAD),y)
+-OPENSBI_FW_IMAGES += payload
++OPENSBI_FW_IMAGES += dynamic
+ endif
+-ifeq ($(BR2_TARGET_OPENSBI_UBOOT_PAYLOAD),y)
+-OPENSBI_FW_IMAGES = payload
++
++ifeq ($(BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG),y)
++OPENSBI_INSTALL_IMAGES = YES
++OPENSBI_FW_IMAGES += jump
+ endif
++
++ifeq ($(BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG),y)
++OPENSBI_INSTALL_IMAGES = YES
++OPENSBI_FW_IMAGES += payload
+ endif
+ 
+ define OPENSBI_INSTALL_IMAGES_CMDS
 -- 
 2.30.2
