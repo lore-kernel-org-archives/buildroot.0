@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 May 2021 22:34:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bullet: fix build
-In-Reply-To: <20210430060545.1243461-1-fontaine.fabrice@gmail.com>
-References: <20210430060545.1243461-1-fontaine.fabrice@gmail.com>
-Message-ID: <8139af8c-f00e-493c-0755-8d852fb1ba38@mind.be>
+Date: Tue, 4 May 2021 22:35:11 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/freescale-imx/imx-gpu-viv:
+ select libdrm
+In-Reply-To: <YJFERG3iJa1m2VyV@p1g2>
+References: <20210429185138.4460-1-sebastien.szymanski@armadeus.com>
+ <YJFERG3iJa1m2VyV@p1g2>
+Message-ID: <47a8563f-8bf3-d448-ea95-3e7d810aec38@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,55 +14,36 @@ To: buildroot@busybox.net
 
 
 
-On 30/04/2021 08:05, Fabrice Fontaine wrote:
-> Since bump to version 3.09 in commit
-> 28b4947ed8f53c4edfbf8fef9304dc76480c01ca, build fails on:
+On 04/05/2021 14:55, Gary Bisson wrote:
+> Hi S?bastien,
 > 
-> [100%] Linking CXX shared library libBulletRoboticsGUI.so
-> /home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc64-buildroot-linux-gnu/9.3.0/../../../../sparc64-buildroot-linux-gnu/bin/ld: cannot find -lBulletExampleBrowserLib
-> 
-> Upstream is aware of this issue and recommends to avoid changing any
-> options: https://github.com/bulletphysics/bullet3/issues/3143
-> 
-> So enable bullet3 and demos apps ...
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1721df8b0859656f7420b0b166d1ca635e5ddc74
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/bullet/bullet.mk | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/bullet/bullet.mk b/package/bullet/bullet.mk
-> index 6ed4da859f..de51402ab6 100644
-> --- a/package/bullet/bullet.mk
-> +++ b/package/bullet/bullet.mk
-> @@ -10,11 +10,12 @@ BULLET_INSTALL_STAGING = YES
->  BULLET_LICENSE = Zlib
->  BULLET_LICENSE_FILES = LICENSE.txt
->  
-> -# Disable demos apps and unit tests.
-> -# Disable Bullet3 library.
-> +# Disable unit tests.
-> +# Don't disable demos apps and Bullet3 library to avoid a build failure:
-> +# https://github.com/bulletphysics/bullet3/issues/3143
->  BULLET_CONF_OPTS = -DBUILD_UNIT_TESTS=OFF \
-> -	-DBUILD_BULLET2_DEMOS=OFF \
-> -	-DBUILD_BULLET3=OFF
-> +	-DBUILD_BULLET2_DEMOS=ON \
-> +	-DBUILD_BULLET3=ON
+> On Thu, Apr 29, 2021 at 08:51:38PM +0200, S?bastien Szymanski wrote:
+>> Some libraries (libGL.so, vivante_dri.so, libEGL.so, libgbm_viv.so) are
+>> linked against libdrm so select libdrm package.
+>>
+>> Fixes: 8283e838f040 ("package/freescale-imx/imx-gpu-viv: bump to version 6.4.3.p1.2")
+>> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 
- Since these are the defaults and we don't actually want them, I've removed the
-options instead of setting them explicitly. That way, after a version bump, we
-have a better chance that it keeps working.
+ Applied to master, thanks.
 
- Applied to master with that change.
+
+> 
+> Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> 
+> Tested on Nitrogen8MP + fb backend, confirm that Vivante examples run
+> fine! Thanks for pointing it out!
+
+ Thanks for testing!
 
  Regards,
  Arnout
 
->  
->  # extras needs dlfcn.h and NPTL (pthread_barrier_init)
->  ifeq ($(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_HAS_THREADS_NPTL),:y)
+> 
+> Regards,
+> Gary
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
