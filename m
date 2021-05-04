@@ -1,75 +1,42 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 4 May 2021 21:56:49 +0200
-Subject: [Buildroot] [git commit] support/testing: add s6-rc tests
-Message-ID: <20210504193400.0B10788071@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 May 2021 22:06:44 +0200
+Subject: [Buildroot] [git commit] package/libfuse3: bump version to 3.10.3
+Message-ID: <20210504193923.EB9CE80298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50c6e932dcb80528f50964958202dfc1627d4e9b
+commit: https://git.buildroot.net/buildroot/commit/?id=0b09d6feaaba83c8f980e9582c5d2b4a89c31b2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Test that s6-rc service database compilation is working.
-
-Signed-off-by: Dick Olsson <hi@senzilla.io>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Arnout: indent config lines more]
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/tests/package/test_s6_rc.py | 47 +++++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ package/libfuse3/libfuse3.hash | 2 +-
+ package/libfuse3/libfuse3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_s6_rc.py b/support/testing/tests/package/test_s6_rc.py
-new file mode 100644
-index 0000000000..8d375efe88
---- /dev/null
-+++ b/support/testing/tests/package/test_s6_rc.py
-@@ -0,0 +1,47 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestS6Rc(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_S6_RC=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", img])
-+        self.emulator.login()
-+
-+        _, exit_code = self.emulator.run("s6-svscan -h")
-+        self.assertEqual(exit_code, 100)
-+
-+        # Set up two service directories with a dependency
-+        self.emulator.run("mkdir -p source/testsv1")
-+        self.emulator.run("mkdir -p source/testsv2")
-+        self.emulator.run("echo oneshot > source/testsv1/type")
-+        self.emulator.run("echo oneshot > source/testsv2/type")
-+        self.emulator.run("echo 'echo foo' > source/testsv1/up")
-+        self.emulator.run("echo 'echo bar' > source/testsv2/up")
-+        self.emulator.run("echo testsv1 > source/testsv2/dependencies")
-+        self.emulator.run("chmod +x source/testsv1/up")
-+        self.emulator.run("chmod +x source/testsv2/up")
-+
-+        # Compile the service database
-+        _, exit_code = self.emulator.run("s6-rc-compile compiled source")
-+        self.assertEqual(exit_code, 0)
-+
-+        # Inspect dependencies
-+        cmd = "s6-rc-db -c compiled -d dependencies testsv1"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], "testsv2")
-+        cmd = "s6-rc-db -c compiled dependencies testsv2"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], "testsv1")
+diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
+index 9b2f8cc144..49c71f402f 100644
+--- a/package/libfuse3/libfuse3.hash
++++ b/package/libfuse3/libfuse3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  a16f93cc083264afd0d2958a0dc88f24c6c5d40a9f3842c645b1909e13edb75f  libfuse3-3.10.2.tar.gz
++sha256  c32527782cef620df58b162aa29901d1fb13253b029375d5860a2253a810344e  libfuse3-3.10.3.tar.gz
+ sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
+diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
+index f805eda506..d61e313391 100644
+--- a/package/libfuse3/libfuse3.mk
++++ b/package/libfuse3/libfuse3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFUSE3_VERSION = 3.10.2
++LIBFUSE3_VERSION = 3.10.3
+ LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
+ LIBFUSE3_LICENSE = LGPL-2.1
+ LIBFUSE3_LICENSE_FILES = LICENSE
