@@ -1,27 +1,22 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 May 2021 10:04:51 +0200
-Subject: [Buildroot] [PATCH] package/openjdk: drop patch left over after
- last bump
-In-Reply-To: <CAFSsvmpe+yu9Ncd9sheF9Ohw5FfZPGkQUOFWuC+YC1SWO9AArw@mail.gmail.com>
- (Adam Duskett's message of "Mon, 3 May 2021 15:34:53 -0700")
-References: <20210430203635.2605171-1-yann.morin.1998@free.fr>
- <87im436ivt.fsf@dell.be.48ers.dk>
- <CAFSsvmpe+yu9Ncd9sheF9Ohw5FfZPGkQUOFWuC+YC1SWO9AArw@mail.gmail.com>
-Message-ID: <87im3y3ows.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 04 May 2021 08:54:27 +0000
+Subject: [Buildroot] [Bug 13751] libopenssl (static): huge drop in
+ performance in newer versions of buildroot
+In-Reply-To: <bug-13751-163@https.bugs.busybox.net/>
+References: <bug-13751-163@https.bugs.busybox.net/>
+Message-ID: <bug-13751-163-SEEM7c2B3A@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=13751
 
- > Hey Peter;
- > Your wish is granted!
-
- > https://patchwork.ozlabs.org/project/buildroot/patch/20210501210613.1678989-1-aduskett at gmail.com/
-
-Great, thanks!
+--- Comment #3 from maksis33 at gmail.com ---
+I tested the patch and it seems to fix the issue. Performance is now similar to
+Buildroot 2019.02.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
