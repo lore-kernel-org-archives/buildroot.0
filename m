@@ -1,37 +1,27 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 May 2021 09:28:35 +0200
-Subject: [Buildroot] [PATCH v1 1/3] package/libtomcrypt: add pkgconfig
- support
-In-Reply-To: <20210503213852.3e9e23f3@gmx.net>
-References: <20210412195527.9282-1-ps.report@gmx.net>
- <20210412221453.5195d4b5@windsurf.home> <20210412231516.6cbc09f2@gmx.net>
- <45c379f0-8ca0-6891-1b1e-b166600da9ca@mind.be>
- <20210502122746.7988707d@gmx.net>
- <fce7cdf2-d2de-03e8-712e-dc6b98c892f7@mind.be>
- <20210503213852.3e9e23f3@gmx.net>
-Message-ID: <703dae4e-e296-79ad-5ba7-5d3efe724272@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 04 May 2021 10:04:51 +0200
+Subject: [Buildroot] [PATCH] package/openjdk: drop patch left over after
+ last bump
+In-Reply-To: <CAFSsvmpe+yu9Ncd9sheF9Ohw5FfZPGkQUOFWuC+YC1SWO9AArw@mail.gmail.com>
+ (Adam Duskett's message of "Mon, 3 May 2021 15:34:53 -0700")
+References: <20210430203635.2605171-1-yann.morin.1998@free.fr>
+ <87im436ivt.fsf@dell.be.48ers.dk>
+ <CAFSsvmpe+yu9Ncd9sheF9Ohw5FfZPGkQUOFWuC+YC1SWO9AArw@mail.gmail.com>
+Message-ID: <87im3y3ows.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
+ > Hey Peter;
+ > Your wish is granted!
 
-On 03/05/2021 21:38, Peter Seiderer wrote:
-> By the way, libtomcrypt depends on libtommath which used -fPIC unconditionally...
+ > https://patchwork.ozlabs.org/project/buildroot/patch/20210501210613.1678989-1-aduskett at gmail.com/
 
- So, apparently I'm just full of s**t when I say -fPIC sometimes fails in static
-builds... Weird, I really *do* remember that...
+Great, thanks!
 
- Ah, here I have it: [1] It doesn't lead to build failures, it's just less
-performant and useless in static builds. It turns out, however, that we
-unconditionally pass -fPIC in dozens of packages. So one more doesn't really
-hurt I guess.
-
- Regards,
- Arnout
-
-
-[1]
-https://patchwork.ozlabs.org/project/buildroot/patch/20210209104726.20132-1-kremneva at synopsys.com/
+-- 
+Bye, Peter Korsgaard
