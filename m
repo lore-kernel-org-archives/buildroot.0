@@ -1,90 +1,103 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 May 2021 21:45:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kexec: fix build on pre 4.4
- kernels
-In-Reply-To: <20210203100939.17390-1-fede@evolware.org>
-References: <20210203100939.17390-1-fede@evolware.org>
-Message-ID: <20210504194540.GN2137340@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 4 May 2021 21:50:29 +0200
+Subject: [Buildroot] [PATCH 2/5] support/testing: add s6 tests
+In-Reply-To: <VwWJsppMN7KalptbUD3cY22Vr9WusoGGsG2irkxRE@cp3-web-033.plabs.ch>
+References: <VwWJsppMN7KalptbUD3cY22Vr9WusoGGsG2irkxRE@cp3-web-033.plabs.ch>
+Message-ID: <86359163-8956-bea4-0f01-faa961ad66e6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Federico, All,
 
-On 2021-02-03 11:09 +0100, Federico Pellegrin spake thusly:
-> kexec build will fail on older kernels (pre 4.4) as the define VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
+
+On 02/05/2021 10:17, Dick Olsson via buildroot wrote:
+> Test that directory scanning and supervision is working.
 > 
-> This patch adds it, as per linux/include/uapi/linux/screen_info.h, if not present.
-> 
-> Signed-off-by: Federico Pellegrin <fede@evolware.org>
-
-This patch is no longer needed now that we updated kexec to 2.0.21, then
-2.0.22.
-
-Sorry it took so long to handle that... :-/
-
-Regards,
-Yann E. MORIN.
-
+> Signed-off-by: Dick Olsson <hi@senzilla.io>
 > ---
->  ...c-tools-fix-build-on-pre-4.4-kernels.patch | 34 +++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
+>  support/testing/tests/package/test_s6.py | 54 ++++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_s6.py
 > 
-> diff --git a/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch b/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
+> diff --git a/support/testing/tests/package/test_s6.py b/support/testing/tests/package/test_s6.py
 > new file mode 100644
-> index 0000000000..fcac604dfd
+> index 0000000000..4c6f3c0976
 > --- /dev/null
-> +++ b/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
-> @@ -0,0 +1,34 @@
-> +From cbbe4c47cb2acae04083c510dbe0efc5f48f5bb6 Mon Sep 17 00:00:00 2001
-> +From: Federico Pellegrin <fede@evolware.org>
-> +Date: Wed, 3 Feb 2021 11:00:17 +0100
-> +Subject: [PATCH] kexec-tools: fix build on pre 4.4 kernels
+> +++ b/support/testing/tests/package/test_s6.py
+> @@ -0,0 +1,54 @@
+> +import os
 > +
-> +kexec build will fail on older kernels (pre 4.4) as the define
-> +VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
+> +import infra.basetest
 > +
-> +This patch adds it, as per linux/include/uapi/linux/screen_info.h,
-> +if not present.
 > +
-> +Signed-off-by: Federico Pellegrin <fede@evolware.org>
-> +---
-> + kexec/arch/i386/x86-linux-setup.c | 4 ++++
-> + 1 file changed, 4 insertions(+)
-> +
-> +diff --git a/kexec/arch/i386/x86-linux-setup.c b/kexec/arch/i386/x86-linux-setup.c
-> +index 76e1185..ab54a4a 100644
-> +--- a/kexec/arch/i386/x86-linux-setup.c
-> ++++ b/kexec/arch/i386/x86-linux-setup.c
-> +@@ -37,6 +37,10 @@
-> + #include "x86-linux-setup.h"
-> + #include "../../kexec/kexec-syscall.h"
-> + 
-> ++#ifndef VIDEO_CAPABILITY_64BIT_BASE
-> ++#define VIDEO_CAPABILITY_64BIT_BASE (1 << 1)	/* Frame buffer base is 64-bit */
-> ++#endif
-> ++
-> + void init_linux_parameters(struct x86_linux_param_header *real_mode)
-> + {
-> + 	/* Fill in the values that are usually provided by the kernel. */
-> +-- 
-> +2.26.2
-> +
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +class TestS6(infra.basetest.BRTest):
+> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + """
+> +    BR2_PACKAGE_S6=y
+> +    BR2_TARGET_ROOTFS_CPIO=y
+> +    # BR2_TARGET_ROOTFS_TAR is not set
+> +    """
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ We use the following type of indentation for these:
+
+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+        """
+        BR2_PACKAGE_S6=y
+        BR2_TARGET_ROOTFS_CPIO=y
+        # BR2_TARGET_ROOTFS_TAR is not set
+        """
+
+> +
+> +    def test_run(self):
+> +        img = os.path.join(self.builddir, "images", "rootfs.cpio")
+> +        self.emulator.boot(arch="armv5",
+> +                           kernel="builtin",
+> +                           options=["-initrd", img])
+> +        self.emulator.login()
+> +
+> +        _, exit_code = self.emulator.run("s6-svscan -h")
+> +        self.assertEqual(exit_code, 100)
+> +
+> +        script = """
+> +#!/bin/execlineb -P
+> +s6-ipcserver-socketbinder /tmp/socket
+> +s6-ipcserverd
+> +cat
+> +"""
+
+ Lack of indentation here is icky. I properly indented it and used
+textwrap.dedent to remove indentation again.
+
+> +
+> +        # Set up scanning and service directories
+> +        self.emulator.run("mkdir -p source/testsv")
+> +        self.emulator.run("cat > source/testsv/run <<EOF" + script + "EOF")
+> +        self.emulator.run("chmod +x source/testsv/run")
+> +        _, exit_code = self.emulator.run("s6-svok source/testsv")
+> +        self.assertEqual(exit_code, 1)
+> +
+> +        # Run a scan and start all services
+> +        self.emulator.run("s6-svscan source &")
+> +        self.emulator.run("sleep 2")
+> +        _, exit_code = self.emulator.run("s6-svok source/testsv")
+> +        self.assertEqual(exit_code, 0)
+> +
+> +        # Test a running service
+> +        cmd = "echo foobar | s6-ipcclient /tmp/socket s6-ioconnect -67"
+> +        output, exit_code = self.emulator.run(cmd)
+> +        self.assertEqual(exit_code, 0)
+> +        self.assertEqual(output[0], "foobar")
+> +
+> +        # Terminate all services
+> +        _, exit_code = self.emulator.run("s6-svscanctl -t source")
+> +        self.assertEqual(exit_code, 0)
+> +        self.emulator.run("sleep 2")
+> +        _, exit_code = self.emulator.run("s6-svok source/testsv")
+> +        self.assertEqual(exit_code, 1)
+
+ I can't say I really understand what's going on here, but it looks OK so
+applied to master, thanks.
+
+ Regards,
+ Arnout
