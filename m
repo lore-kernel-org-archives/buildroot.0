@@ -1,70 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 4 May 2021 21:43:06 +0200
-Subject: [Buildroot] sudo: error while loading shared libraries
-In-Reply-To: <AM0PR06MB5923A441CD0C1EF1952FC031C05A9@AM0PR06MB5923.eurprd06.prod.outlook.com>
-References: <AM0PR06MB5923A441CD0C1EF1952FC031C05A9@AM0PR06MB5923.eurprd06.prod.outlook.com>
-Message-ID: <20210504214306.378dbbaf@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 May 2021 21:45:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kexec: fix build on pre 4.4
+ kernels
+In-Reply-To: <20210203100939.17390-1-fede@evolware.org>
+References: <20210203100939.17390-1-fede@evolware.org>
+Message-ID: <20210504194540.GN2137340@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Uwe,
+Federico, All,
 
-On Tue, 4 May 2021 11:18:59 +0000
-Uwe Fechner <uwe.fechner@nl.abb.com> wrote:
-
-> Hello,
+On 2021-02-03 11:09 +0100, Federico Pellegrin spake thusly:
+> kexec build will fail on older kernels (pre 4.4) as the define VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
 > 
-> we are using buildroot on i.mx6 since a long time.
+> This patch adds it, as per linux/include/uapi/linux/screen_info.h, if not present.
 > 
-> Since yesterday I get the following error with the sudo package:
+> Signed-off-by: Federico Pellegrin <fede@evolware.org>
+
+This patch is no longer needed now that we updated kexec to 2.0.21, then
+2.0.22.
+
+Sorry it took so long to handle that... :-/
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...c-tools-fix-build-on-pre-4.4-kernels.patch | 34 +++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>  create mode 100644 package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
 > 
-> sudo dmesg
-> sudo: error while loading shared libraries: libsudo_util.so.0: cannot open shared object file: No such file or directory
+> diff --git a/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch b/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
+> new file mode 100644
+> index 0000000000..fcac604dfd
+> --- /dev/null
+> +++ b/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
+> @@ -0,0 +1,34 @@
+> +From cbbe4c47cb2acae04083c510dbe0efc5f48f5bb6 Mon Sep 17 00:00:00 2001
+> +From: Federico Pellegrin <fede@evolware.org>
+> +Date: Wed, 3 Feb 2021 11:00:17 +0100
+> +Subject: [PATCH] kexec-tools: fix build on pre 4.4 kernels
+> +
+> +kexec build will fail on older kernels (pre 4.4) as the define
+> +VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
+> +
+> +This patch adds it, as per linux/include/uapi/linux/screen_info.h,
+> +if not present.
+> +
+> +Signed-off-by: Federico Pellegrin <fede@evolware.org>
+> +---
+> + kexec/arch/i386/x86-linux-setup.c | 4 ++++
+> + 1 file changed, 4 insertions(+)
+> +
+> +diff --git a/kexec/arch/i386/x86-linux-setup.c b/kexec/arch/i386/x86-linux-setup.c
+> +index 76e1185..ab54a4a 100644
+> +--- a/kexec/arch/i386/x86-linux-setup.c
+> ++++ b/kexec/arch/i386/x86-linux-setup.c
+> +@@ -37,6 +37,10 @@
+> + #include "x86-linux-setup.h"
+> + #include "../../kexec/kexec-syscall.h"
+> + 
+> ++#ifndef VIDEO_CAPABILITY_64BIT_BASE
+> ++#define VIDEO_CAPABILITY_64BIT_BASE (1 << 1)	/* Frame buffer base is 64-bit */
+> ++#endif
+> ++
+> + void init_linux_parameters(struct x86_linux_param_header *real_mode)
+> + {
+> + 	/* Fill in the values that are usually provided by the kernel. */
+> +-- 
+> +2.26.2
+> +
+> -- 
+> 2.26.2
 > 
-> We are using sudo-1.9.5p2 .
-> 
-> The library exists and the permissions seem to be correct:
-> 
-> 
-> ls -la /usr/libexec/sudo
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Based on the error message, it seems like the library is not dlopen()ed
-but directly linked into sudo. Hwoever, /usr/libexec/sudo is not in the
-default search path for libraries, and therefore unless the sudo binary
-has a RPATH/RUNPATH pointing to /usr/libexec/sudo, I believe what
-you're seeing is expected.
-
-To verify this, you can try:
-
-LD_LIBRARY_PATH=/usr/libexec/sudo sudo dmesg
-
-Really, I think libsudo_util.so has no business in /usr/libexec/sudo,
-it should be in /usr/lib. Based on the names of the other .so files,
-they look like dlopen()ed libraries, which can stay in
-/usr/libexec/sudo.
-
-> total 588
-> drwxr-xr-x  2 root root   4096 May  3 19:31 .
-> drwxr-xr-x 11 root root   4096 May  3 19:31 ..
-> -rw-r--r--  1 root root  17716 May  3 19:31 audit_json.so
-> -rw-r--r--  1 root root   9380 May  3 19:31 group_file.so
-> lrwxrwxrwx  1 root root     21 May  3 19:31 libsudo_util.so -> libsudo_util.so.0.0.0
-> lrwxrwxrwx  1 root root     21 May  3 19:31 libsudo_util.so.0 -> libsudo_util.so.0.0.0
-> -rwxr-xr-x  1 root root 112412 May  3 19:31 libsudo_util.so.0.0.0
-> -rw-r--r--  1 root root   5284 May  3 19:31 sample_approval.so
-> -rw-r--r--  1 root root 420184 May  3 19:31 sudoers.so
-> -rw-r--r--  1 root root   5260 May  3 19:31 sudo_noexec.so
-> -rw-r--r--  1 root root   5276 May  3 19:31 system_group.so
-> 
-> Any idea?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
