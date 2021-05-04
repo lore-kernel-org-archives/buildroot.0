@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 May 2021 22:17:53 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/libtomcrypt: compile with
- -fPIC to enable linking to dynamic libraries/exectuables
-In-Reply-To: <20210502105038.19483-2-ps.report@gmx.net>
+Date: Tue, 4 May 2021 22:18:53 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/libtomcrypt: add pkgconfig
+ support
+In-Reply-To: <20210502105038.19483-1-ps.report@gmx.net>
 References: <20210502105038.19483-1-ps.report@gmx.net>
- <20210502105038.19483-2-ps.report@gmx.net>
-Message-ID: <cbed0866-be3f-394e-d0ea-13810023be13@mind.be>
+Message-ID: <02a2bf67-f5a4-611b-6cc8-289675ce26e5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,37 +14,35 @@ To: buildroot@busybox.net
 
 
 On 02/05/2021 12:50, Peter Seiderer wrote:
-> Fixes:
-> 
->   .../x86_64-buildroot-linux-gnu/bin/ld: .../host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libtomcrypt.a(md5.o): relocation R_X86_64_32 against `.rodata.str1.1' can not be used when making a shared object; recompile with -fPIC
-> 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
- Applied to master, thanks.
-
- Regards,
- Arnout
-
 > ---
 > Changes v1 -> v2:
->   - add -fPIC only for non static builds (suggested by Arnout Vandecappelle)
+>   - use libtomcrypt provided libtomcrypt.pc.in template file
 > ---
 >  package/libtomcrypt/libtomcrypt.mk | 4 ++++
 >  1 file changed, 4 insertions(+)
 > 
 > diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
-> index 3d166a6854..d1cf552abd 100644
+> index fccd4b051c..3d166a6854 100644
 > --- a/package/libtomcrypt/libtomcrypt.mk
 > +++ b/package/libtomcrypt/libtomcrypt.mk
-> @@ -19,6 +19,10 @@ LIBTOMCRYPT_IGNORE_CVES += CVE-2019-17362
->  
->  LIBTOMCRYPT_CFLAGS = -I./src/headers $(TARGET_CFLAGS) -DLTC_SOURCE -DLTM_DESC
->  
-> +ifeq ($(BR2_STATIC_LIBS),)
-> +LIBTOMCRYPT_CFLAGS += -fPIC
-> +endif
-> +
->  define LIBTOMCRYPT_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(LIBTOMCRYPT_CFLAGS)"
+> @@ -27,6 +27,10 @@ define LIBTOMCRYPT_INSTALL_STAGING_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" \
+>  		PREFIX=/usr NODOCS=1 INSTALL_USER=$(shell id -u) \
+>  		INSTALL_GROUP=$(shell id -g) install
+> +	sed -e 's,^prefix=.*,prefix=/usr,' \
+> +		-e 's,^Version:.*,Version: $(LIBTOMCRYPT_VERSION),' \
+> +		$(@D)/libtomcrypt.pc.in \
+> +		> $(STAGING_DIR)/usr/lib/pkgconfig/libtomcrypt.pc
+
+ What about the option of using makefile.unix so we don't have to do this ourselves?
+
+ I've kept the patch as New in patchwork in case you don't see that as feasible.
+
+ Regards,
+ Arnout
+
 >  endef
+>  
+>  $(eval $(generic-package))
 > 
