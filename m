@@ -1,69 +1,54 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 4 May 2021 22:32:46 +0200
-Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-viv: select
- libdrm
-Message-ID: <20210504200618.550BB8391C@busybox.osuosl.org>
+Date: Tue, 4 May 2021 22:30:14 +0200
+Subject: [Buildroot] [git commit] package/bullet: fix build
+Message-ID: <20210504200618.4A3B083982@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34b893a6d7abb6381080a66e1aa4cee57cdf0bbc
+commit: https://git.buildroot.net/buildroot/commit/?id=5f154799b6ed772a0c028072996e110fac131508
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some libraries (libGL.so, vivante_dri.so, libEGL.so, libgbm_viv.so) are
-linked against libdrm so select libdrm package.
+Since bump to version 3.09 in commit
+28b4947ed8f53c4edfbf8fef9304dc76480c01ca, build fails on:
 
-Fixes: 8283e838f040 ("package/freescale-imx/imx-gpu-viv: bump to version 6.4.3.p1.2")
-Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
-Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
+[100%] Linking CXX shared library libBulletRoboticsGUI.so
+/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc64-buildroot-linux-gnu/9.3.0/../../../../sparc64-buildroot-linux-gnu/bin/ld: cannot find -lBulletExampleBrowserLib
+
+Upstream is aware of this issue and recommends to avoid changing any
+options: https://github.com/bulletphysics/bullet3/issues/3143
+
+So don't disable bullet3 and demos apps ...
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1721df8b0859656f7420b0b166d1ca635e5ddc74
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Arnout: remove the options instead of setting to ON]
 ---
- package/freescale-imx/imx-gpu-viv/Config.in      | 5 +++--
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 7 ++++++-
- 2 files changed, 9 insertions(+), 3 deletions(-)
+ package/bullet/bullet.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-index cca2689905..6668ee8bb5 100644
---- a/package/freescale-imx/imx-gpu-viv/Config.in
-+++ b/package/freescale-imx/imx-gpu-viv/Config.in
-@@ -12,6 +12,9 @@ config BR2_PACKAGE_IMX_GPU_VIV
- 	depends on (BR2_arm && BR2_ARM_EABIHF) || BR2_aarch64
- 	# Library binaries are linked against libc.so.6
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	# Library binaries are linked against libdrm.so.2, except framebuffer
-+	# output on ARM
-+	select BR2_PACKAGE_LIBDRM if !(BR2_arm && BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB)
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_HAS_LIBOPENCL
-@@ -56,8 +59,6 @@ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
+diff --git a/package/bullet/bullet.mk b/package/bullet/bullet.mk
+index 6ed4da859f..01931b58a8 100644
+--- a/package/bullet/bullet.mk
++++ b/package/bullet/bullet.mk
+@@ -10,11 +10,10 @@ BULLET_INSTALL_STAGING = YES
+ BULLET_LICENSE = Zlib
+ BULLET_LICENSE_FILES = LICENSE.txt
  
- config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
- 	bool "Wayland"
--	# libdrm needed by gbm_viv.so
--	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_WAYLAND
- 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+-# Disable demos apps and unit tests.
+-# Disable Bullet3 library.
+-BULLET_CONF_OPTS = -DBUILD_UNIT_TESTS=OFF \
+-	-DBUILD_BULLET2_DEMOS=OFF \
+-	-DBUILD_BULLET3=OFF
++# Disable unit tests.
++# Don't disable demos apps and Bullet3 library to avoid a build failure:
++# https://github.com/bulletphysics/bullet3/issues/3143
++BULLET_CONF_OPTS = -DBUILD_UNIT_TESTS=OFF
  
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index 802ac26c1c..103c0341e3 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -29,8 +29,13 @@ ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
- IMX_GPU_VIV_DEPENDENCIES += xlib_libXdamage xlib_libXext xlib_libXfixes
- endif
- 
-+# Libraries are linked against libdrm, except framebuffer output on ARM
-+ifneq ($(IMX_GPU_VIV_LIB_TARGET)$(BR2_arm),fby)
-+IMX_GPU_VIV_DEPENDENCIES += libdrm
-+endif
-+
- ifeq ($(IMX_GPU_VIV_LIB_TARGET),wayland)
--IMX_GPU_VIV_DEPENDENCIES += libdrm wayland
-+IMX_GPU_VIV_DEPENDENCIES += wayland
- endif
- 
- define IMX_GPU_VIV_EXTRACT_CMDS
+ # extras needs dlfcn.h and NPTL (pthread_barrier_init)
+ ifeq ($(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_HAS_THREADS_NPTL),:y)
