@@ -1,140 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 May 2021 22:18:50 +0200
-Subject: [Buildroot] [PATCH v1 1/3] package/libfuse3: allow building as
- a host package
-In-Reply-To: <20210503023305.161122-1-christian@paral.in>
-References: <20210503023305.161122-1-christian@paral.in>
-Message-ID: <20210504201850.GP2137340@scaer>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 4 May 2021 22:19:21 +0200
+Subject: [Buildroot] [git commit] package/pipewire: fix build with NLS
+Message-ID: <20210504195223.8F3B988205@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=41bdc460b629ecfbb54206d93832a701df7b9f41
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-02 19:33 -0700, Christian Stewart spake thusly:
-> Adds 1 patch to fix an install error when building as a host package.
-> 
-> Patch was submitted upstream:
-> https://github.com/libfuse/libfuse/pull/598
+Fix build failure with NLS which is raised since bump to version 0.3.26
+in commit a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9
 
-Upstream is basically rejecting this patch.
+Fixes:
+ - http://autobuild.buildroot.org/results/4ed680dc91519c02db4fbfb396d75c5f74207d9b
 
-I have no idea what woiuld be the best course of action, but for our
-short-sighted goal might be to just patch-out the installation of the
-init script altogether. And maybe send a patch upstream with an option
-to disable it altogether.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .../0001-meson-prefer-libintl-on-FreeBSD.patch     | 46 ++++++++++++++++++++++
+ package/pipewire/pipewire.mk                       |  2 +-
+ 2 files changed, 47 insertions(+), 1 deletion(-)
 
-In the meantime, I've marked this series as chamnges requested (I'll
-comment on the other patches, though).
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  ...er-fix-sysconf-dir-for-init.d-script.patch | 51 +++++++++++++++++++
->  package/libfuse3/libfuse3.mk                  |  7 +++
->  2 files changed, 58 insertions(+)
->  create mode 100644 package/libfuse3/0001-install_helper-fix-sysconf-dir-for-init.d-script.patch
-> 
-> diff --git a/package/libfuse3/0001-install_helper-fix-sysconf-dir-for-init.d-script.patch b/package/libfuse3/0001-install_helper-fix-sysconf-dir-for-init.d-script.patch
-> new file mode 100644
-> index 0000000000..4599c55e78
-> --- /dev/null
-> +++ b/package/libfuse3/0001-install_helper-fix-sysconf-dir-for-init.d-script.patch
-> @@ -0,0 +1,51 @@
-> +From cac00c154be5c8941d40b972bdcc0eb8bf209b93 Mon Sep 17 00:00:00 2001
-> +From: Christian Stewart <christian@paral.in>
-> +Date: Sun, 2 May 2021 19:04:50 -0700
-> +Subject: [PATCH] install_helper: fix sysconf dir for init.d script
-> +
-> +Fixes the following build error in Buildroot as a host package:
-> +
-> +Running custom install script 'install_helper.sh /host/etc /host/bin /host/lib/udev/rules.d false
-> ++ sysconfdir=/host/etc
-> ++ bindir=/host/bin
-> ++ udevrulesdir=/host/lib/udev/rules.d
-> ++ useroot=false
-> ++ '[' -z '' ']'
-> ++ DESTDIR=
-> ++ install -D -m 644 /build/host-libfuse3-3.10.3/util/fuse.conf /host/etc/fuse.conf
-> ++ false
-> ++ install -D -m 644 /build/host-libfuse3-3.10.3/util/udev.rules /host/lib/udev/rules.d/99-fuse3.rules
-> ++ install -D -m 755 /build/host-libfuse3-3.10.3/util/init_script /etc/init.d/fuse3
-> +install: cannot create regular file '/etc/init.d/fuse3': Permission denied
-> +FAILED: install script 'install_helper.sh /host/etc /host/bin /host/lib/udev/rules.d false' exit code 1, stopped
-> +FAILED: meson-install
-> +
-> +Signed-off-by: Christian Stewart <christian@paral.in>
-> +---
-> + util/install_helper.sh | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/util/install_helper.sh b/util/install_helper.sh
-> +index cb649a7..f4a6163 100755
-> +--- a/util/install_helper.sh
-> ++++ b/util/install_helper.sh
-> +@@ -40,14 +40,14 @@ install -D -m 644 "${MESON_SOURCE_ROOT}/util/udev.rules" \
-> +         "${DESTDIR}${udevrulesdir}/99-fuse3.rules"
-> + 
-> + install -D -m 755 "${MESON_SOURCE_ROOT}/util/init_script" \
-> +-        "${DESTDIR}/etc/init.d/fuse3"
-> ++        "${DESTDIR}${sysconfdir}/init.d/fuse3"
-> + 
-> + 
-> + if test -x /usr/sbin/update-rc.d && test -z "${DESTDIR}"; then
-> +     /usr/sbin/update-rc.d fuse3 start 34 S . start 41 0 6 . || /bin/true
-> + else
-> +     echo "== FURTHER ACTION REQUIRED =="
-> +-    echo "Make sure that your init system will start the ${DESTDIR}/etc/init.d/fuse3 init script"
-> ++    echo "Make sure that your init system will start the ${DESTDIR}${sysconfdir}/init.d/fuse3 init script"
-> + fi
-> + 
-> + 
-> +-- 
-> +2.31.1
-> +
-> diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-> index f805eda506..d4522fd063 100644
-> --- a/package/libfuse3/libfuse3.mk
-> +++ b/package/libfuse3/libfuse3.mk
-> @@ -10,11 +10,17 @@ LIBFUSE3_LICENSE = LGPL-2.1
->  LIBFUSE3_LICENSE_FILES = LICENSE
->  LIBFUSE3_INSTALL_STAGING = YES
->  LIBFUSE3_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> +
->  LIBFUSE3_CONF_OPTS = \
->  	-Dexamples=false \
->  	-Dudevrulesdir=/lib/udev/rules.d \
->  	-Duseroot=false
->  
-> +HOST_LIBFUSE3_CONF_OPTS = \
-> +	-Dexamples=false \
-> +	-Dudevrulesdir=$(HOST_DIR)/lib/udev/rules.d \
-> +	-Duseroot=false
-> +
->  define LIBFUSE3_DEVICES
->  	/dev/fuse  c  666  0  0  10  229  0  0  -
->  endef
-> @@ -28,3 +34,4 @@ define LIBFUSE3_LINUX_CONFIG_FIXUPS
->  endef
->  
->  $(eval $(meson-package))
-> +$(eval $(host-meson-package))
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch b/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch
+new file mode 100644
+index 0000000000..b19715b2e8
+--- /dev/null
++++ b/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch
+@@ -0,0 +1,46 @@
++From 4d064a37183a0bf8198914dd68b063b2c9def17e Mon Sep 17 00:00:00 2001
++From: Evgeniy Khramtsov <evgeniy@khramtsov.org>
++Date: Fri, 23 Apr 2021 22:57:51 +0300
++Subject: [PATCH] meson: prefer libintl on FreeBSD
++
++FreeBSD does not have gettext in libc.
++It is implemented in the third-party library.
++
++[Retrieved from:
++https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/4d064a37183a0bf8198914dd68b063b2c9def17e]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ meson.build              | 3 +++
++ src/pipewire/meson.build | 2 +-
++ 2 files changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 99a4b2d1c..0a9963fbb 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -351,6 +351,9 @@ libinotify_dep = (build_machine.system() == 'freebsd'
++     ? dependency('libinotify', required: true)
++     : dependency('', required: false))
++ 
+++# On FreeBSD, libintl library is required for gettext
+++libintl_dep = cc.find_library('intl', required: false)
+++
++ alsa_dep = dependency('alsa', version : '>=1.1.7', required: get_option('pipewire-alsa'))
++ 
++ installed_tests_metadir = pipewire_datadir / 'installed-tests' / pipewire_name
++diff --git a/src/pipewire/meson.build b/src/pipewire/meson.build
++index 7f2d42a7a..d4c271373 100644
++--- a/src/pipewire/meson.build
+++++ b/src/pipewire/meson.build
++@@ -101,7 +101,7 @@ libpipewire = shared_library(pipewire_name, pipewire_sources,
++   c_args : libpipewire_c_args,
++   include_directories : [pipewire_inc, configinc, spa_inc],
++   install : true,
++-  dependencies : [dl_lib, mathlib, pthread_lib, ],
+++  dependencies : [dl_lib, mathlib, pthread_lib, libintl_dep, ],
++ )
++ 
++ pipewire_dep = declare_dependency(link_with : libpipewire,
++-- 
++GitLab
++
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index 23bfcdb9ec..e5185aeb8c 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -9,7 +9,7 @@ PIPEWIRE_SITE = $(call github,PipeWire,pipewire,$(PIPEWIRE_VERSION))
+ PIPEWIRE_LICENSE = MIT
+ PIPEWIRE_LICENSE_FILES = COPYING LICENSE
+ PIPEWIRE_INSTALL_STAGING = YES
+-PIPEWIRE_DEPENDENCIES = host-pkgconf dbus
++PIPEWIRE_DEPENDENCIES = host-pkgconf dbus $(TARGET_NLS_DEPENDENCIES)
+ 
+ PIPEWIRE_CONF_OPTS += \
+ 	-Ddocs=disabled \
