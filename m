@@ -1,101 +1,81 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 May 2021 22:37:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exim: security bump version to
- 4.94.2
-In-Reply-To: <20210504202159.740520-1-bernd.kuhls@t-online.de>
-References: <20210504202159.740520-1-bernd.kuhls@t-online.de>
-Message-ID: <20210504203724.GT2137340@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue,  4 May 2021 22:51:31 +0200
+Subject: [Buildroot] [PATCH v3 0/7] Support for the BeagleV platform
+Message-ID: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Hello,
 
-On 2021-05-04 22:21 +0200, Bernd Kuhls spake thusly:
-> Release announcement:
-> https://lists.exim.org/lurker/message/20210421.123632.08bb711a.en.html
-> 
-> According to
-> http://www.exim.org/static/doc/security/CVE-2020-qualys/21nails.txt
-> this version bump fixes
-> 
-> Local vulnerabilities
-> - CVE-2020-28007: Link attack in Exim's log directory
-> - CVE-2020-28008: Assorted attacks in Exim's spool directory
-> - CVE-2020-28014: Arbitrary file creation and clobbering
-> - CVE-2021-27216: Arbitrary file deletion
-> - CVE-2020-28011: Heap buffer overflow in queue_run()
-> - CVE-2020-28010: Heap out-of-bounds write in main()
-> - CVE-2020-28013: Heap buffer overflow in parse_fix_phrase()
-> - CVE-2020-28016: Heap out-of-bounds write in parse_fix_phrase()
-> - CVE-2020-28015: New-line injection into spool header file (local)
-> - CVE-2020-28012: Missing close-on-exec flag for privileged pipe
-> - CVE-2020-28009: Integer overflow in get_stdinput()
-> 
-> Remote vulnerabilities
-> - CVE-2020-28017: Integer overflow in receive_add_recipient()
-> - CVE-2020-28020: Integer overflow in receive_msg()
-> - CVE-2020-28023: Out-of-bounds read in smtp_setup_msg()
-> - CVE-2020-28021: New-line injection into spool header file (remote)
-> - CVE-2020-28022: Heap out-of-bounds read and write in extract_option()
-> - CVE-2020-28026: Line truncation and injection in spool_read_header()
-> - CVE-2020-28019: Failure to reset function pointer after BDAT error
-> - CVE-2020-28024: Heap buffer underflow in smtp_ungetc()
-> - CVE-2020-28018: Use-after-free in tls-openssl.c
-> - CVE-2020-28025: Heap out-of-bounds read in pdkim_finish_bodyhash()
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Here is a third iteration of the BeagleV patch series, which brings a
+few fixes:
 
-Applied to master, thanks.
+ * The post-build script of v1 calling "make printvars" was working
+   only for in-tree builds. Following a comment from Frank Hunleth on
+   the v1, it was changed in v2 to use "make -C ${O} printvars", which
+   made out-of-tree builds work, but broke in-tree builds. So in this
+   new version, we introduced a preliminary patch that exposes
+   $(CONFIG_DIR) to post-build/post-image scripts, to make such "make
+   printvars" invocations possible.
 
-Regards,
-Yann E. MORIN.
+ * The beaglev_defconfig is updated to take into account the rename of
+   the Git repositories by Starfive for Linux, U-Boot and OpenSBI.
 
-> ---
->  package/exim/exim.hash | 4 ++--
->  package/exim/exim.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-> index 265a95c6f5..201f09ebd6 100644
-> --- a/package/exim/exim.hash
-> +++ b/package/exim/exim.hash
-> @@ -1,6 +1,6 @@
->  # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
-> -sha256  f77ee8faf04f5db793243c3ae81c1f4e452cd6ad7dd515a80edf755c4b144bdb  exim-4.94.tar.xz
-> +sha256  051861fc89f06205162f12129fb7ebfe473383bb6194bf8642952bfd50329274  exim-4.94.2.tar.xz
->  # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
-> -sha512  3bf95ade30902327403e7308089a3e423761da5b0745397dace7c7fd15ba3838d93e0ee418f1fed57606f79e57b793c7c7407e5c0d526146f0036126d5d95316  exim-4.94.tar.xz
-> +sha512  5334c236221ed4e03dbc33e6a79d939b06037fa2f4b71971607a360b67af5c85a89681ee13a5eeaf0184382c55a160cf2e89ed7afb2949f025a54f1e88f9e3fc  exim-4.94.2.tar.xz
->  # Locally calculated
->  sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
-> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-> index 53185c4bb8..dd39208469 100644
-> --- a/package/exim/exim.mk
-> +++ b/package/exim/exim.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -EXIM_VERSION = 4.94
-> +EXIM_VERSION = 4.94.2
->  EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
->  EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
->  EXIM_LICENSE = GPL-2.0+
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ * Reviewed-by tags from Bin Meng are added on beaglev-ddrinit,
+   beaglev-secondboot and the corresponding beaglev_defconfig
+   update. Thanks Bin!
+
+As usual, the whole thing is also available at:
+
+  https://github.com/tpetazzoni/buildroot/commits/beaglev
+
+Best regards,
+
+Thomas Petazzoni
+
+Thomas Petazzoni (7):
+  package/Makefile.in: expose CONFIG_DIR to post-build/post-image
+    scripts
+  boot/opensbi: add options to enable/disable image installation
+  configs/beaglev_defconfig: new defconfig
+  package/riscv64-elf-toolchain: new package
+  boot/beaglev-ddrinit: new package
+  boot/beaglev-secondboot: new package
+  configs/beaglev: enable building of low-level firmware
+
+ DEVELOPERS                                    |   5 +
+ board/beaglev/extlinux.conf                   |   4 +
+ board/beaglev/genimage.cfg                    |  12 ++
+ ...s-starfive-vic7100-adjust-fdt_addr_r.patch |  39 ++++++
+ board/beaglev/post-build.sh                   |  17 +++
+ board/beaglev/readme.txt                      | 122 ++++++++++++++++++
+ boot/Config.in                                |   2 +
+ boot/beaglev-ddrinit/Config.in                |   9 ++
+ boot/beaglev-ddrinit/beaglev-ddrinit.mk       |  29 +++++
+ boot/beaglev-secondboot/Config.in             |   9 ++
+ boot/beaglev-secondboot/beaglev-secondboot.mk |  29 +++++
+ boot/opensbi/Config.in                        |  20 +++
+ boot/opensbi/opensbi.mk                       |  16 ++-
+ configs/beaglev_defconfig                     |  37 ++++++
+ docs/manual/customize-post-image.txt          |   3 +-
+ docs/manual/customize-rootfs.txt              |   3 +
+ package/Makefile.in                           |   1 +
+ .../riscv64-elf-toolchain.mk                  |  25 ++++
+ 18 files changed, 375 insertions(+), 7 deletions(-)
+ create mode 100644 board/beaglev/extlinux.conf
+ create mode 100644 board/beaglev/genimage.cfg
+ create mode 100644 board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
+ create mode 100755 board/beaglev/post-build.sh
+ create mode 100644 board/beaglev/readme.txt
+ create mode 100644 boot/beaglev-ddrinit/Config.in
+ create mode 100644 boot/beaglev-ddrinit/beaglev-ddrinit.mk
+ create mode 100644 boot/beaglev-secondboot/Config.in
+ create mode 100644 boot/beaglev-secondboot/beaglev-secondboot.mk
+ create mode 100644 configs/beaglev_defconfig
+ create mode 100644 package/riscv64-elf-toolchain/riscv64-elf-toolchain.mk
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
