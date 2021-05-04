@@ -1,29 +1,87 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 May 2021 22:20:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: fix build with NLS
-In-Reply-To: <20210502210001.2703609-1-fontaine.fabrice@gmail.com>
-References: <20210502210001.2703609-1-fontaine.fabrice@gmail.com>
-Message-ID: <a093c4b3-45ff-7b6d-f4cd-f2e558aa9083@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 May 2021 22:20:54 +0200
+Subject: [Buildroot] [PATCH v1 2/3] package/fuse-overlayfs: enable
+ building as host package
+In-Reply-To: <20210503023305.161122-2-christian@paral.in>
+References: <20210503023305.161122-1-christian@paral.in>
+ <20210503023305.161122-2-christian@paral.in>
+Message-ID: <20210504202054.GQ2137340@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Christian, All,
 
-
-On 02/05/2021 23:00, Fabrice Fontaine wrote:
-> Fix build failure with NLS which is raised since bump to version 0.3.26
-> in commit a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9
+On 2021-05-02 19:33 -0700, Christian Stewart spake thusly:
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  package/Config.in.host                   | 1 +
+>  package/fuse-overlayfs/Config.in.host    | 7 +++++++
+>  package/fuse-overlayfs/fuse-overlayfs.mk | 4 ++++
+>  3 files changed, 12 insertions(+)
+>  create mode 100644 package/fuse-overlayfs/Config.in.host
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/4ed680dc91519c02db4fbfb396d75c5f74207d9b
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index ba6a68c728..0dbf63f2c8 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -27,6 +27,7 @@ menu "Host utilities"
+>  	source "package/f2fs-tools/Config.in.host"
+>  	source "package/faketime/Config.in.host"
+>  	source "package/fatcat/Config.in.host"
+> +	source "package/fuse-overlayfs/Config.in.host"
+>  	source "package/fwup/Config.in.host"
+>  	source "package/genext2fs/Config.in.host"
+>  	source "package/genimage/Config.in.host"
+> diff --git a/package/fuse-overlayfs/Config.in.host b/package/fuse-overlayfs/Config.in.host
+> new file mode 100644
+> index 0000000000..cf459a4a2a
+> --- /dev/null
+> +++ b/package/fuse-overlayfs/Config.in.host
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_HOST_FUSE_OVERLAYFS
+> +	bool "host fuse-overlayfs"
+> +	help
+> +	  FUSE-overlayfs is an implementation of overlay+shiftfs in
+> +	  FUSE, intended to be used for rootless containers.
+> +
+> +	  http://github.com/containers/fuse-overlayfs
+> \ No newline at end of file
+
+Be carefull that your editor properly terminates files with a \n
+
+Vim is a good editor that generates properly formatted text files! ;-]
+
+Regards,
+Yann E. MORIN.
+
+> diff --git a/package/fuse-overlayfs/fuse-overlayfs.mk b/package/fuse-overlayfs/fuse-overlayfs.mk
+> index 707cacce03..36cbfc91fd 100644
+> --- a/package/fuse-overlayfs/fuse-overlayfs.mk
+> +++ b/package/fuse-overlayfs/fuse-overlayfs.mk
+> @@ -12,4 +12,8 @@ FUSE_OVERLAYFS_LICENSE_FILES = COPYING
+>  FUSE_OVERLAYFS_AUTORECONF = YES
+>  FUSE_OVERLAYFS_DEPENDENCIES = libfuse3 host-pkgconf
+>  
+> +HOST_FUSE_OVERLAYFS_AUTORECONF = YES
+> +HOST_FUSE_OVERLAYFS_DEPENDENCIES = host-libfuse3 host-pkgconf
+> +
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> -- 
+> 2.31.1
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
- Applied to master, thanks.
-
- Regards,
- Arnout
-
-[snip]
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
