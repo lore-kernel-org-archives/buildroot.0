@@ -1,87 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 May 2021 22:20:54 +0200
-Subject: [Buildroot] [PATCH v1 2/3] package/fuse-overlayfs: enable
- building as host package
-In-Reply-To: <20210503023305.161122-2-christian@paral.in>
-References: <20210503023305.161122-1-christian@paral.in>
- <20210503023305.161122-2-christian@paral.in>
-Message-ID: <20210504202054.GQ2137340@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  4 May 2021 22:21:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/exim: security bump version to
+ 4.94.2
+Message-ID: <20210504202159.740520-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, All,
+Release announcement:
+https://lists.exim.org/lurker/message/20210421.123632.08bb711a.en.html
 
-On 2021-05-02 19:33 -0700, Christian Stewart spake thusly:
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/Config.in.host                   | 1 +
->  package/fuse-overlayfs/Config.in.host    | 7 +++++++
->  package/fuse-overlayfs/fuse-overlayfs.mk | 4 ++++
->  3 files changed, 12 insertions(+)
->  create mode 100644 package/fuse-overlayfs/Config.in.host
-> 
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index ba6a68c728..0dbf63f2c8 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -27,6 +27,7 @@ menu "Host utilities"
->  	source "package/f2fs-tools/Config.in.host"
->  	source "package/faketime/Config.in.host"
->  	source "package/fatcat/Config.in.host"
-> +	source "package/fuse-overlayfs/Config.in.host"
->  	source "package/fwup/Config.in.host"
->  	source "package/genext2fs/Config.in.host"
->  	source "package/genimage/Config.in.host"
-> diff --git a/package/fuse-overlayfs/Config.in.host b/package/fuse-overlayfs/Config.in.host
-> new file mode 100644
-> index 0000000000..cf459a4a2a
-> --- /dev/null
-> +++ b/package/fuse-overlayfs/Config.in.host
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_HOST_FUSE_OVERLAYFS
-> +	bool "host fuse-overlayfs"
-> +	help
-> +	  FUSE-overlayfs is an implementation of overlay+shiftfs in
-> +	  FUSE, intended to be used for rootless containers.
-> +
-> +	  http://github.com/containers/fuse-overlayfs
-> \ No newline at end of file
+According to
+http://www.exim.org/static/doc/security/CVE-2020-qualys/21nails.txt
+this version bump fixes
 
-Be carefull that your editor properly terminates files with a \n
+Local vulnerabilities
+- CVE-2020-28007: Link attack in Exim's log directory
+- CVE-2020-28008: Assorted attacks in Exim's spool directory
+- CVE-2020-28014: Arbitrary file creation and clobbering
+- CVE-2021-27216: Arbitrary file deletion
+- CVE-2020-28011: Heap buffer overflow in queue_run()
+- CVE-2020-28010: Heap out-of-bounds write in main()
+- CVE-2020-28013: Heap buffer overflow in parse_fix_phrase()
+- CVE-2020-28016: Heap out-of-bounds write in parse_fix_phrase()
+- CVE-2020-28015: New-line injection into spool header file (local)
+- CVE-2020-28012: Missing close-on-exec flag for privileged pipe
+- CVE-2020-28009: Integer overflow in get_stdinput()
 
-Vim is a good editor that generates properly formatted text files! ;-]
+Remote vulnerabilities
+- CVE-2020-28017: Integer overflow in receive_add_recipient()
+- CVE-2020-28020: Integer overflow in receive_msg()
+- CVE-2020-28023: Out-of-bounds read in smtp_setup_msg()
+- CVE-2020-28021: New-line injection into spool header file (remote)
+- CVE-2020-28022: Heap out-of-bounds read and write in extract_option()
+- CVE-2020-28026: Line truncation and injection in spool_read_header()
+- CVE-2020-28019: Failure to reset function pointer after BDAT error
+- CVE-2020-28024: Heap buffer underflow in smtp_ungetc()
+- CVE-2020-28018: Use-after-free in tls-openssl.c
+- CVE-2020-28025: Heap out-of-bounds read in pdkim_finish_bodyhash()
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/exim/exim.hash | 4 ++--
+ package/exim/exim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> diff --git a/package/fuse-overlayfs/fuse-overlayfs.mk b/package/fuse-overlayfs/fuse-overlayfs.mk
-> index 707cacce03..36cbfc91fd 100644
-> --- a/package/fuse-overlayfs/fuse-overlayfs.mk
-> +++ b/package/fuse-overlayfs/fuse-overlayfs.mk
-> @@ -12,4 +12,8 @@ FUSE_OVERLAYFS_LICENSE_FILES = COPYING
->  FUSE_OVERLAYFS_AUTORECONF = YES
->  FUSE_OVERLAYFS_DEPENDENCIES = libfuse3 host-pkgconf
->  
-> +HOST_FUSE_OVERLAYFS_AUTORECONF = YES
-> +HOST_FUSE_OVERLAYFS_DEPENDENCIES = host-libfuse3 host-pkgconf
-> +
->  $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index 265a95c6f5..201f09ebd6 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
+-sha256  f77ee8faf04f5db793243c3ae81c1f4e452cd6ad7dd515a80edf755c4b144bdb  exim-4.94.tar.xz
++sha256  051861fc89f06205162f12129fb7ebfe473383bb6194bf8642952bfd50329274  exim-4.94.2.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
+-sha512  3bf95ade30902327403e7308089a3e423761da5b0745397dace7c7fd15ba3838d93e0ee418f1fed57606f79e57b793c7c7407e5c0d526146f0036126d5d95316  exim-4.94.tar.xz
++sha512  5334c236221ed4e03dbc33e6a79d939b06037fa2f4b71971607a360b67af5c85a89681ee13a5eeaf0184382c55a160cf2e89ed7afb2949f025a54f1e88f9e3fc  exim-4.94.2.tar.xz
+ # Locally calculated
+ sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 53185c4bb8..dd39208469 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXIM_VERSION = 4.94
++EXIM_VERSION = 4.94.2
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPL-2.0+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
