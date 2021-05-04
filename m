@@ -1,76 +1,85 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 4 May 2021 22:06:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bullet: fix build
-In-Reply-To: <ef6dff3c-fbbe-a622-02b7-b765248ab231@grinn-global.com>
-References: <20210430060545.1243461-1-fontaine.fabrice@gmail.com>
- <ef6dff3c-fbbe-a622-02b7-b765248ab231@grinn-global.com>
-Message-ID: <CAPi7W81H2ywfBPpbEp=iZaTwzxgW2efTPU_kyc700EdBuY_R0A@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 4 May 2021 22:12:25 +0200
+Subject: [Buildroot] [PATCH] configs/aarch64_efi: bump kernel version
+ and update
+In-Reply-To: <20210423082833.17674-1-vincent.stehle@arm.com>
+References: <20210423082833.17674-1-vincent.stehle@arm.com>
+Message-ID: <8a2fa551-2130-6def-64b7-94f202127f8e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-Le mar. 4 mai 2021 ? 20:32, Bartosz Bilas <b.bilas@grinn-global.com> a ?crit :
->
-> Hello Fabrice,
->
-> On 30.04.2021 08:05, Fabrice Fontaine wrote:
-> > Since bump to version 3.09 in commit
-> > 28b4947ed8f53c4edfbf8fef9304dc76480c01ca, build fails on:
-> >
-> > [100%] Linking CXX shared library libBulletRoboticsGUI.so
-> > /home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc64-buildroot-linux-gnu/9.3.0/../../../../sparc64-buildroot-linux-gnu/bin/ld: cannot find -lBulletExampleBrowserLib
-> >
-> > Upstream is aware of this issue and recommends to avoid changing any
-> > options: https://github.com/bulletphysics/bullet3/issues/3143
-> What about this [1] patch? Have you tried that?
-Nope, I didn't tried it, there is 4 issues opened in upstream github
-related to -lBulletExampleBrowserLib and all of them are closed with
-the above answer.
-I missed the PR but I assume that upstream will not commit as it is
-opened for nearly 4 months.
-But feel free to send a v2 of this patch.
->
-> [1] https://github.com/bulletphysics/bullet3/pull/3216
->
->
-> Best
-> Bartek
-> >
-> > So enable bullet3 and demos apps ...
-> >
-> > Fixes:
-> >   - http://autobuild.buildroot.org/results/1721df8b0859656f7420b0b166d1ca635e5ddc74
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >   package/bullet/bullet.mk | 9 +++++----
-> >   1 file changed, 5 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/package/bullet/bullet.mk b/package/bullet/bullet.mk
-> > index 6ed4da859f..de51402ab6 100644
-> > --- a/package/bullet/bullet.mk
-> > +++ b/package/bullet/bullet.mk
-> > @@ -10,11 +10,12 @@ BULLET_INSTALL_STAGING = YES
-> >   BULLET_LICENSE = Zlib
-> >   BULLET_LICENSE_FILES = LICENSE.txt
-> >
-> > -# Disable demos apps and unit tests.
-> > -# Disable Bullet3 library.
-> > +# Disable unit tests.
-> > +# Don't disable demos apps and Bullet3 library to avoid a build failure:
-> > +# https://github.com/bulletphysics/bullet3/issues/3143
-> >   BULLET_CONF_OPTS = -DBUILD_UNIT_TESTS=OFF \
-> > -     -DBUILD_BULLET2_DEMOS=OFF \
-> > -     -DBUILD_BULLET3=OFF
-> > +     -DBUILD_BULLET2_DEMOS=ON \
-> > +     -DBUILD_BULLET3=ON
-> >
-> >   # extras needs dlfcn.h and NPTL (pthread_barrier_init)
-> >   ifeq ($(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_HAS_THREADS_NPTL),:y)
-Best Regards,
 
-Fabrice
+On 23/04/2021 10:28, Vincent Stehl? wrote:
+> - Bump kernel to version 5.11.16.
+> 
+> We remove the hardcoded ttyAMA0 and rely on the firmware to discover our
+> console. This enables serial console on systems, which do not have an Arm
+> pl011 UART.
+> 
+> We switch to GPT disklabel and discover our root filesystem using its
+> PARTLABEL. This enables booting from more media, such as HDD, SD card or
+> USB.
+> 
+> We update the readme, which hinted that ACPI was mandatory. This is not
+> strictly the case as we can also boot with a dtb and/or a U-Boot based
+> firmware, with no ACPI. While at it, mention EBBR, SystemReady and explain
+> how to build and use a U-Boot-based qemu firmware.
+> 
+> Signed-off-by: Vincent Stehl? <vincent.stehle@arm.com>
+> Cc: Erico Nunes <nunes.erico@gmail.com>
+> ---
+> 
+> 
+> Hi,
+> 
+> The aarch64_efi_defconfig by Erico working on Qemu is a good starting point for
+> Arm 64b UEFI systems; thank you Erico for that.
+> 
+> I would like to propose a few updates to this defconfig, to make it the
+> reference buildroot defconfig for all Arm 64b SystemReady[1] platforms.
+> Feedbacks are welcome.
+
+ Very nice!
+
+[snip]
+> diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
+> index 99600575edf..da9ee45defc 100644
+> --- a/configs/aarch64_efi_defconfig
+> +++ b/configs/aarch64_efi_defconfig
+> @@ -5,7 +5,7 @@ BR2_aarch64=y
+>  BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+>  
+>  # System
+> -BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+> +BR2_TARGET_GENERIC_GETTY_PORT="console"
+
+ This is the default, so I just removed that line.
+
+ Regards,
+ Arnout
+
+>  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+>  
+>  ## Required tools to create bootable media
+> @@ -23,13 +23,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/aarch64-efi/post-image.sh support/scripts/genimage.sh"
+>  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/aarch64-efi/genimage-efi.cfg"
+>  
+> -# Linux headers same as kernel, a 5.9 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
+> +# Linux headers same as kernel, a 5.11 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_11=y
+>  
+>  # Kernel
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9.11"
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.11.16"
+>  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+>  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>  
+> 
