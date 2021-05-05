@@ -1,46 +1,36 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  5 May 2021 17:58:18 +0200
-Subject: [Buildroot] [PATCH 2/2] package/kodi-inputstream-ffmpegdirect: bump
- version to 1.21.2-Matrix
-In-Reply-To: <20210505155818.77839-1-bernd.kuhls@t-online.de>
-References: <20210505155818.77839-1-bernd.kuhls@t-online.de>
-Message-ID: <20210505155818.77839-2-bernd.kuhls@t-online.de>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Wed,  5 May 2021 20:10:12 +0200
+Subject: [Buildroot] [PATCH] package/log4qt: link with latomic if needed
+Message-ID: <20210505181012.477189-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/inputstream.ffmpegdirect/changelog.txt
+Fixes:
+ - http://autobuild.buildroot.net/results/fb5/fb52f5366a25230606149f44dc46f86f0273a680/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- .../kodi-inputstream-ffmpegdirect.hash                          | 2 +-
- .../kodi-inputstream-ffmpegdirect.mk                            | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/log4qt/log4qt.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-index 2ca1dc2f8b..546b9fa490 100644
---- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-+++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6fe20c67556f6dc3bdd0e0cb64db2c78b377bbbbda00dfbac2f0e6835f61c90f  kodi-inputstream-ffmpegdirect-1.21.0-Matrix.tar.gz
-+sha256  b1a6131f5bdf849a4de8db84144e554e1a196d9132970c720febb90198edec01  kodi-inputstream-ffmpegdirect-1.21.2-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-index 57e9c60ce5..aeb72f048d 100644
---- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-+++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/log4qt/log4qt.mk b/package/log4qt/log4qt.mk
+index b01d9c6611..0594427cf7 100644
+--- a/package/log4qt/log4qt.mk
++++ b/package/log4qt/log4qt.mk
+@@ -11,6 +11,11 @@ LOG4QT_LICENSE = Apache-2.0
+ LOG4QT_LICENSE_FILES = LICENSE
+ LOG4QT_INSTALL_STAGING = YES
  
--KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.21.0-Matrix
-+KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.21.2-Matrix
- KODI_INPUTSTREAM_FFMPEGDIRECT_SITE = $(call github,xbmc,inputstream.ffmpegdirect,$(KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION))
- KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE_FILES = LICENSE.md
++# Uses __atomic_fetch_add_4
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++LOG4QT_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
++endif
++
+ ifeq ($(BR2_PACKAGE_QT5BASE_SQLITE_QT)$(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),y)
+ LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=ON
+ else
 -- 
-2.29.2
+2.31.1
