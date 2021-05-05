@@ -1,67 +1,34 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed,  5 May 2021 21:13:44 +0200
-Subject: [Buildroot] [PATCH] support/testing: add sudo package test
-Message-ID: <20210505191344.2108832-1-arnout@mind.be>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Wed,  5 May 2021 21:22:10 +0200
+Subject: [Buildroot] [PATCH] package/log4qt: add telnet optional logging
+Message-ID: <20210505192210.1354164-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Create a new user 'sudotest' to validate that sudo really works (i.e.
-properly has setuid).
+Telnet logging is an optional feature that's disabled by default.
 
-Creating the user and adding it to sudoers is done at runtime, otherwise
-we'd need to add extra files to the config which complicates things a
-little bit.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- support/testing/tests/package/test_sudo.py | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 support/testing/tests/package/test_sudo.py
+ package/log4qt/log4qt.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/support/testing/tests/package/test_sudo.py b/support/testing/tests/package/test_sudo.py
-new file mode 100644
-index 0000000000..f9d0a6f301
---- /dev/null
-+++ b/support/testing/tests/package/test_sudo.py
-@@ -0,0 +1,36 @@
-+import os
+diff --git a/package/log4qt/log4qt.mk b/package/log4qt/log4qt.mk
+index b01d9c6611..29b533503b 100644
+--- a/package/log4qt/log4qt.mk
++++ b/package/log4qt/log4qt.mk
+@@ -17,4 +17,10 @@ else
+ LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT5BASE_NETWORK),y)
++LOG4QT_CONF_OPTS += -DBUILD_WITH_TELNET_LOGGING=ON
++else
++LOG4QT_CONF_OPTS += -DBUILD_WITH_TELNET_LOGGING=OFF
++endif
 +
-+import infra.basetest
-+
-+
-+class TestSudo(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_SUDO=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", img])
-+        self.emulator.login()
-+
-+        # -D    don't set a password
-+        # -h    set home directory
-+        # -H    don't create home directory
-+        # -s    set shell
-+        _, exit_code = self.emulator.run("adduser -D -h /tmp -H -s /bin/sh sudotest")
-+        self.assertEqual(exit_code, 0)
-+
-+        _, exit_code = self.emulator.run("echo 'sudotest ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers")
-+        self.assertEqual(exit_code, 0)
-+
-+        output, exit_code = self.emulator.run("su - sudotest -c 'echo hello world'")
-+        self.assertEqual(output, ["hello world"])
-+
-+        output, exit_code = self.emulator.run("su - sudotest -c 'sudo echo hello world'")
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output, ["hello world"])
+ $(eval $(cmake-package))
 -- 
-2.30.2
+2.31.1
