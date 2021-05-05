@@ -1,48 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 May 2021 20:52:40 +0200
-Subject: [Buildroot] sudo: error while loading shared libraries
-In-Reply-To: <AM0PR06MB5923BCE07863B47DBF9AAC02C0599@AM0PR06MB5923.eurprd06.prod.outlook.com>
-References: <AM0PR06MB5923A441CD0C1EF1952FC031C05A9@AM0PR06MB5923.eurprd06.prod.outlook.com>
- <20210504214306.378dbbaf@windsurf>
- <AM0PR06MB5923BCE07863B47DBF9AAC02C0599@AM0PR06MB5923.eurprd06.prod.outlook.com>
-Message-ID: <dad56610-a708-4d74-ab12-bb2134fb515c@mind.be>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Wed, 5 May 2021 21:02:23 +0200
+Subject: [Buildroot] [PATCH 2/2] package/cegui: add libfribidi optional
+ dependency
+In-Reply-To: <20200510085217.3626176-2-fontaine.fabrice@gmail.com>
+References: <20200510085217.3626176-1-fontaine.fabrice@gmail.com>
+ <20200510085217.3626176-2-fontaine.fabrice@gmail.com>
+Message-ID: <75c15639-a433-1fa5-1f6f-c2b48f2f17b6@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Fabrice,
 
+On 10.05.2020 10:52, Fabrice Fontaine wrote:
+> libfribidi is an optional dependency (enabled by default) since version
+> 0.8.0 and
+> https://github.com/cegui/cegui/commit/17974582e6b6a7d8f5853b0272433f130f82e52a
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   package/cegui/cegui.mk | 7 +++++++
+>   1 file changed, 7 insertions(+)
+>
+> diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+> index 6158ef129c..73d0c22ce5 100644
+> --- a/package/cegui/cegui.mk
+> +++ b/package/cegui/cegui.mk
+> @@ -62,6 +62,13 @@ else
+>   CEGUI_CONF_OPTS += -DCEGUI_HAS_FREETYPE=OFF
+>   endif
+>   
+> +ifeq ($(BR2_PACKAGE_LIBFRIBIDI),y)
+> +CEGUI_DEPENDENCIES += libfribidi
+> +CEGUI_CONF_OPTS += -DCEGUI_USE_FRIBIDI=ON
+> +else
+> +CEGUI_CONF_OPTS += -DCEGUI_USE_FRIBIDI=OFF
+> +endif
+> +
+>   ifeq ($(BR2_PACKAGE_LIBXML2),y)
+>   CEGUI_DEPENDENCIES += libxml2
+>   CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_LIBXML2=ON
 
-On 05/05/2021 13:14, Uwe Fechner wrote:
-> Dear Thomas,
-> 
-> Thanks for looking into this issue, but your suggestion did not help:
-> 
-> $ LD_LIBRARY_PATH=/usr/libexec/sudo sudo dmesg
-> sudo: error while loading shared libraries: libsudo_util.so.0: cannot open
-> shared object file: No such file or directory
+Tested-by: Bartosz Bilas<b.bilas@grinn-global.com>
+Reviewed-by: Bartosz Bilas<b.bilas@grinn-global.com>
 
- You can also run readelf -d on the binary (on your build machine) to find out
-which RUNPATH it uses, and which library it tries to open. If you don't see
-libsudo_util.so.0 in there, then it's a dlopen()ed library after all.
-
- I've done a build locally, and indeed sudo is built with a RUNPATH pointing to
-/usr/libexec/sudo.
-
- I've just created a runtime test for sudo (which I'll post soon) and I can't
-reproduce the problem.
-
-> Any other idea?
-
- I'd run it with strace to find out exactly where it goes wrong.
-
-strace sudo dmesg
-
-(you obviously have to add the strace package to your build first.)
-
- Note that it's possible that under strace it suddenly does work. That's because
-strace drops the setuid bit, and that may be interfering for whatever reason.
-
- Regards,
- Arnout
+Best
+Bartek
