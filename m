@@ -1,45 +1,125 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 4 May 2021 15:03:31 -0700
-Subject: [Buildroot] [PATCH v1 3/3] package/genuinetools-img: new host
- and target package
-In-Reply-To: <20210504203105.GR2137340@scaer>
-References: <20210503023305.161122-1-christian@paral.in>
- <20210503023305.161122-3-christian@paral.in>
- <CA+h8R2oJ8b48NdAOMLtKhAyV-KUp4uvHuyZ1eF8jDX_rw=WNrw@mail.gmail.com>
- <20210504203105.GR2137340@scaer>
-Message-ID: <CA+h8R2pgbLNd7yWnnPCrTGhs0fqwj6yvhndH6p4Nwy9sSaTWbw@mail.gmail.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Wed, 5 May 2021 11:03:39 +1000
+Subject: [Buildroot] [PATCH v3 2/7] boot/opensbi: add options to
+ enable/disable image installation
+In-Reply-To: <20210504205139.1055360-3-thomas.petazzoni@bootlin.com>
+References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
+ <20210504205139.1055360-3-thomas.petazzoni@bootlin.com>
+Message-ID: <CAKmqyKO9Xn37_6ZctizGUd1pw45oah4S2K3zNaWkqwynRiJMGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
-
-On Tue, May 4, 2021 at 1:31 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote
-> Im not usre I understood that, but basically one would write:
+On Wed, May 5, 2021 at 6:52 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
->     HELLO_WORLD_VERSION = 1.2.3
->     HELLO_WORLD_SOURCE = hello-world:1.2.3
->     HELLO_WORLD_SITE = dockerhub.com/u/hello
+> Until now, whenever a BR2_TARGET_OPENSBI_PLAT value was specified,
+> opensbi.mk was assuming that both fw_jump and fw_dynamic would be
+> produced. However, this is not the case: the OpenSBI per-platform
+> config.mk can decide which image to build.
 >
->     $(eval $(oci-image-package))
+> As an example, the config.mk for VIC7100-based BeagleV only enables
+> producing the fw_payload image.
 >
-> And that would download the hello-world:1.2.3 image from dockerhub and
-> install that as a OCI image in the target filesystem, so that at runtime
-> one could do (on the CLI, in an init script, in a systemd unit, etc...):
->     docker run hello-world:1.2.3 /bin/hello-world
+> This commit adds three options to enable the installation of images:
+> one for fw_jump, one for fw_dynamic, one for fw_payload.
 >
-> Something like that?
+> The options for fw_jump and fw_dynamic are "default y" when
+> BR2_TARGET_OPENSBI_PLAT is not empty, to preserve existing behavior.
+>
+> The option for fw_payload is forcefully selected when either Linux or
+> U-Boot are selected as payloads.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Yes, the "download" step would use host "img pull" to download the OCI
-image, and then "img save" to store it as a .tar.gz, (which we can
-then hash as a downloaded tar.gz file).
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 
-The .tar.gz can be loaded into Docker with "docker load < the-image.tar.gz"
+Alistair
 
-The image-package helper could just download the image + save it (to
-images dir, optionally).
-
-Best,
-Christian
+> ---
+>  boot/opensbi/Config.in  | 20 ++++++++++++++++++++
+>  boot/opensbi/opensbi.mk | 16 ++++++++++------
+>  2 files changed, 30 insertions(+), 6 deletions(-)
+>
+> diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+> index 236bf74a90..55a644506f 100644
+> --- a/boot/opensbi/Config.in
+> +++ b/boot/opensbi/Config.in
+> @@ -74,11 +74,30 @@ config BR2_TARGET_OPENSBI_PLAT
+>           the platform specific static library libplatsbi.a and firmware
+>           examples are built.
+>
+> +config BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG
+> +       bool "Install fw_dynamic image"
+> +       default y if BR2_TARGET_OPENSBI_PLAT != ""
+> +       help
+> +         This installs the fw_dynamic image.
+> +
+> +config BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG
+> +       bool "Install fw_jump image"
+> +       default y if BR2_TARGET_OPENSBI_PLAT != ""
+> +       help
+> +         This installs the fw_jump image.
+> +
+> +config BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
+> +       bool "Install fw_payload image"
+> +       help
+> +         This option enables the installation of the fw_paylaod
+> +         image.
+> +
+>  config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
+>         bool "Include Linux as OpenSBI Payload"
+>         depends on BR2_TARGET_OPENSBI_PLAT != ""
+>         depends on BR2_LINUX_KERNEL
+>         depends on BR2_LINUX_KERNEL_IMAGE
+> +       select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
+>         help
+>           Build OpenSBI with the Linux kernel as a Payload.
+>
+> @@ -86,6 +105,7 @@ config BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
+>         bool "Include U-Boot as OpenSBI Payload"
+>         depends on BR2_TARGET_OPENSBI_PLAT != ""
+>         depends on BR2_TARGET_UBOOT
+> +       select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
+>         help
+>           Build OpenSBI with the U-Boot as a Payload.
+>
+> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+> index 8ebe4566fd..f8cbbb8fcc 100644
+> --- a/boot/opensbi/opensbi.mk
+> +++ b/boot/opensbi/opensbi.mk
+> @@ -50,15 +50,19 @@ define OPENSBI_BUILD_CMDS
+>         $(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
+>  endef
+>
+> -ifneq ($(OPENSBI_PLAT),)
+> +ifeq ($(BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG),y)
+>  OPENSBI_INSTALL_IMAGES = YES
+> -OPENSBI_FW_IMAGES += jump dynamic
+> -ifeq ($(BR2_TARGET_OPENSBI_LINUX_PAYLOAD),y)
+> -OPENSBI_FW_IMAGES += payload
+> +OPENSBI_FW_IMAGES += dynamic
+>  endif
+> -ifeq ($(BR2_TARGET_OPENSBI_UBOOT_PAYLOAD),y)
+> -OPENSBI_FW_IMAGES = payload
+> +
+> +ifeq ($(BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG),y)
+> +OPENSBI_INSTALL_IMAGES = YES
+> +OPENSBI_FW_IMAGES += jump
+>  endif
+> +
+> +ifeq ($(BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG),y)
+> +OPENSBI_INSTALL_IMAGES = YES
+> +OPENSBI_FW_IMAGES += payload
+>  endif
+>
+>  define OPENSBI_INSTALL_IMAGES_CMDS
+> --
+> 2.30.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
