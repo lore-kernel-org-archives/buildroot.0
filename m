@@ -1,51 +1,28 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 May 2021 22:10:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/coremark-pro: disable parallel
- build
-In-Reply-To: <20210408165406.2586801-1-fontaine.fabrice@gmail.com>
-References: <20210408165406.2586801-1-fontaine.fabrice@gmail.com>
-Message-ID: <dc1876ee-47ed-88ac-9942-82ab68c5e64f@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 05 May 2021 20:16:45 +0000
+Subject: [Buildroot] [Bug 13791] The QEMU compiled by Buildroot does not
+ support alsa or pulseaudio drivers for soundcard forwarding
+In-Reply-To: <bug-13791-163@https.bugs.busybox.net/>
+References: <bug-13791-163@https.bugs.busybox.net/>
+Message-ID: <bug-13791-163-547c5C3pdS@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=13791
 
+--- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
+You have to add host-alsa-lib and host-pulseaudio to the QEMU_DEPENDENCIES for
+this to work. Buildroot does not want to depend on anything pre-installed on
+the host (if you're OK with stuff that is pre-installed on the host, you can
+just as well install qemu-system-arm, right?)
 
-On 08/04/2021 18:54, Fabrice Fontaine wrote:
-> Disable parallel build as it seems to be totally broken:
-> 
-> /bin/bash: line 0: cd: /home/buildroot/autobuild/instance-2/output-1/build/coremark-pro-1.1.2743/builds/linux64/gcc64/obj/bench/core: No such file or directory
-> 
-> /bin/sh: 1: cd: can't cd to /home/buildroot/autobuild/instance-1/output-1/build/coremark-pro-1.1.2743/builds/linux/gcc/obj/bench/fp/loops/SP
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/7ba5e209772af7037fc735ea174d3fc3eaf46f4b
->  - http://autobuild.buildroot.org/results/32b51bb9eda7899b6cc331f10a860644bd6004fa
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Of course, currently there is no host package for alsa-lib or pulseaudio, so
+you'll have to add them first. And pulsaudio has dependencies for which no host
+package exits either, so this will take a bit of work...
 
- Applied to master, thanks.
-
- Regards,
- Arnout
-
-> ---
->  package/coremark-pro/coremark-pro.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/coremark-pro/coremark-pro.mk b/package/coremark-pro/coremark-pro.mk
-> index 515b8eafbd..e797f66840 100644
-> --- a/package/coremark-pro/coremark-pro.mk
-> +++ b/package/coremark-pro/coremark-pro.mk
-> @@ -40,7 +40,7 @@ COREMARK_PRO_MAKE_OPTS += \
->  	EXE=
->  
->  define COREMARK_PRO_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C $(@D) \
-> +	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C $(@D) \
->  		$(COREMARK_PRO_MAKE_OPTS) build
->  endef
->  
-> 
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
