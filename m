@@ -1,34 +1,30 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Wed,  5 May 2021 21:22:10 +0200
-Subject: [Buildroot] [PATCH] package/log4qt: add telnet optional logging
-Message-ID: <20210505192210.1354164-1-b.bilas@grinn-global.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 05 May 2021 19:23:40 +0000
+Subject: [Buildroot] [Bug 13781] isc dhcp-server package don't create file
+ /usr/bin/dhcpd
+In-Reply-To: <bug-13781-163@https.bugs.busybox.net/>
+References: <bug-13781-163@https.bugs.busybox.net/>
+Message-ID: <bug-13781-163-mfxL5h4jph@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Telnet logging is an optional feature that's disabled by default.
+https://bugs.busybox.net/show_bug.cgi?id=13781
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- package/log4qt/log4qt.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+--- Comment #4 from Arnout Vandecappelle <arnout@mind.be> ---
+> Now i can't find the dhcpd-file in "build/target/usr/sbin/" or in the rootfs.tar. 
+> In "build/build/dhcp-4.4.2/server" i found the file dhcpd
 
-diff --git a/package/log4qt/log4qt.mk b/package/log4qt/log4qt.mk
-index b01d9c6611..29b533503b 100644
---- a/package/log4qt/log4qt.mk
-+++ b/package/log4qt/log4qt.mk
-@@ -17,4 +17,10 @@ else
- LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT5BASE_NETWORK),y)
-+LOG4QT_CONF_OPTS += -DBUILD_WITH_TELNET_LOGGING=ON
-+else
-+LOG4QT_CONF_OPTS += -DBUILD_WITH_TELNET_LOGGING=OFF
-+endif
-+
- $(eval $(cmake-package))
+You did enable BR2_PACKAGE_DHCP_SERVER, right?
+
+Which buildroot version are you using? There was a problem with installation
+between Sat Apr 20 16:30:31 2019 and Thu Aug 1 18:26:09 2019 - if you happen to
+use 2019.05 or 2019.05.1, you would have this problem.
+
+I can't reproduce the issue here with your config file.
+
 -- 
-2.31.1
+You are receiving this mail because:
+You are on the CC list for the bug.
