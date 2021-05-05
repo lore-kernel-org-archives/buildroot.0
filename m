@@ -1,297 +1,94 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Wed, 5 May 2021 11:05:14 +1000
-Subject: [Buildroot] [PATCH v3 3/7] configs/beaglev_defconfig: new
- defconfig
-In-Reply-To: <20210504205139.1055360-4-thomas.petazzoni@bootlin.com>
-References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
- <20210504205139.1055360-4-thomas.petazzoni@bootlin.com>
-Message-ID: <CAKmqyKNOAcwQ7cbfE3KM1_fHr7_dhOyRXM8u-Xb3j-_A7VFzYg@mail.gmail.com>
+From: Uwe Fechner <uwe.fechner@nl.abb.com>
+Date: Wed, 5 May 2021 11:14:38 +0000
+Subject: [Buildroot] sudo: error while loading shared libraries
+In-Reply-To: <20210504214306.378dbbaf@windsurf>
+References: <AM0PR06MB5923A441CD0C1EF1952FC031C05A9@AM0PR06MB5923.eurprd06.prod.outlook.com>,
+ <20210504214306.378dbbaf@windsurf>
+Message-ID: <AM0PR06MB5923BCE07863B47DBF9AAC02C0599@AM0PR06MB5923.eurprd06.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 5, 2021 at 6:52 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> This commit introduces support for the RISC-V based BeagleV platform,
-> which uses a Starfive JH7100.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Dear Thomas,
 
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+Thanks for looking into this issue, but your suggestion did not help:
 
-Alistair
+$ LD_LIBRARY_PATH=/usr/libexec/sudo sudo dmesg
+sudo: error while loading shared libraries: libsudo_util.so.0: cannot open shared object file: No such file or directory
 
-> ---
->  DEVELOPERS                                    |  2 +
->  board/beaglev/extlinux.conf                   |  4 +
->  board/beaglev/genimage.cfg                    | 12 +++
->  ...s-starfive-vic7100-adjust-fdt_addr_r.patch | 39 ++++++++
->  board/beaglev/post-build.sh                   | 17 ++++
->  board/beaglev/readme.txt                      | 88 +++++++++++++++++++
->  configs/beaglev_defconfig                     | 35 ++++++++
->  7 files changed, 197 insertions(+)
->  create mode 100644 board/beaglev/extlinux.conf
->  create mode 100644 board/beaglev/genimage.cfg
->  create mode 100644 board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
->  create mode 100755 board/beaglev/post-build.sh
->  create mode 100644 board/beaglev/readme.txt
->  create mode 100644 configs/beaglev_defconfig
+Any other idea?
+
+Uwe
+________________________________
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Sent: Tuesday, May 4, 2021 9:43 PM
+To: Uwe Fechner <uwe.fechner@nl.abb.com>
+Cc: buildroot at busybox.net <buildroot@busybox.net>
+Subject: Re: [Buildroot] sudo: error while loading shared libraries
+
+This email originated from outside of your organization. Please do not click on links or open attachments unless you recognize the sender and know the content is safe.
+
+
+Hello Uwe,
+
+On Tue, 4 May 2021 11:18:59 +0000
+Uwe Fechner <uwe.fechner@nl.abb.com> wrote:
+
+> Hello,
 >
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 573d8d84de..cec63a3715 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2602,10 +2602,12 @@ F:      package/xorcurses/
+> we are using buildroot on i.mx6 since a long time.
 >
->  N:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->  F:     arch/Config.in.arm
-> +F:     board/beaglev/
->  F:     board/stmicroelectronics/stm32mp157c-dk2/
->  F:     boot/boot-wrapper-aarch64/
->  F:     boot/grub2/
->  F:     boot/gummiboot/
-> +F:     configs/beaglev_defconfig
->  F:     configs/stm32mp157c_dk2_defconfig
->  F:     package/android-tools/
->  F:     package/b43-firmware/
-> diff --git a/board/beaglev/extlinux.conf b/board/beaglev/extlinux.conf
-> new file mode 100644
-> index 0000000000..c5444d094c
-> --- /dev/null
-> +++ b/board/beaglev/extlinux.conf
-> @@ -0,0 +1,4 @@
-> +label linux
-> +  kernel /boot/Image
-> +  devicetree /boot/starfive_vic7100_beagle_v.dtb
-> +  append console=ttyS0,115200 earlyprintk root=PARTUUID=0fef845a-c6e1-45bc-82f7-002fa720f958 rootwait
-> diff --git a/board/beaglev/genimage.cfg b/board/beaglev/genimage.cfg
-> new file mode 100644
-> index 0000000000..f38bb7f86c
-> --- /dev/null
-> +++ b/board/beaglev/genimage.cfg
-> @@ -0,0 +1,12 @@
-> +image sdcard.img {
-> +  hdimage {
-> +    gpt = true
-> +  }
-> +
-> +  partition rootfs {
-> +    partition-type-uuid = 72ec70a6-cf74-40e6-bd49-4bda08e8f224
-> +    partition-uuid = 0fef845a-c6e1-45bc-82f7-002fa720f958
-> +    bootable = "true"
-> +    image = "rootfs.ext4"
-> +  }
-> +}
-> diff --git a/board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch b/board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
-> new file mode 100644
-> index 0000000000..74d70f2721
-> --- /dev/null
-> +++ b/board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
-> @@ -0,0 +1,39 @@
-> +From 2c4c813940c577590f3352cef0c49a8def17905d Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +Date: Wed, 28 Apr 2021 22:58:45 +0200
-> +Subject: [PATCH] include/configs/starfive-vic7100: adjust fdt_addr_r
-> +
-> +The default fdt_addr_r of 0x88000000 doesn't work, the kernel never
-> +boots. Using 0x90000000 works fine.
-> +
-> +Since it would overlap with the kernel_comp_addr_r area, this one is
-> +moved 16 MB further, at 0x91000000.
-> +
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +---
-> + include/configs/starfive-vic7100.h | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/include/configs/starfive-vic7100.h b/include/configs/starfive-vic7100.h
-> +index 8c5915a73c..7150a23873 100644
-> +--- a/include/configs/starfive-vic7100.h
-> ++++ b/include/configs/starfive-vic7100.h
-> +@@ -111,13 +111,13 @@
-> +       "fdt_high=0xffffffffffffffff\0" \
-> +       "initrd_high=0xffffffffffffffff\0" \
-> +       "kernel_addr_r=0x84000000\0" \
-> +-      "fdt_addr_r=0x88000000\0" \
-> ++      "fdt_addr_r=0x90000000\0" \
-> +       "scriptaddr=0x88100000\0" \
-> +       "script_offset_f=0x1fff000\0" \
-> +       "script_size_f=0x1000\0" \
-> +       "pxefile_addr_r=0x88200000\0" \
-> +       "ramdisk_addr_r=0x88300000\0" \
-> +-      "kernel_comp_addr_r=0x90000000\0" \
-> ++      "kernel_comp_addr_r=0x91000000\0" \
-> +       "kernel_comp_size=0x10000000\0" \
-> +       "type_guid_gpt_loader1=" TYPE_GUID_LOADER1 "\0" \
-> +       "type_guid_gpt_loader2=" TYPE_GUID_LOADER2 "\0" \
-> +--
-> +2.30.2
-> +
-> diff --git a/board/beaglev/post-build.sh b/board/beaglev/post-build.sh
-> new file mode 100755
-> index 0000000000..e303d4b8d9
-> --- /dev/null
-> +++ b/board/beaglev/post-build.sh
-> @@ -0,0 +1,17 @@
-> +#!/bin/sh
-> +BOARD_DIR=$(dirname $0)
-> +
-> +# The DTB to use is provided within the U-Boot source tree, so we grab
-> +# it from there, and install it to TARGET_DIR/boot/.
-> +UBOOT_DIR=$(make -C ${CONFIG_DIR} --no-print-directory VARS=UBOOT_DIR printvars | cut -f2 -d'=')
-> +install -D -m0644 ${UBOOT_DIR}/arch/riscv/dts/starfive_vic7100_beagle_v.dtb \
-> +       ${TARGET_DIR}/boot/starfive_vic7100_beagle_v.dtb
-> +
-> +# Bring the extlinux.conf file in.
-> +install -D -m 0644 ${BOARD_DIR}/extlinux.conf \
-> +       ${TARGET_DIR}/boot/extlinux/extlinux.conf
-> +
-> +# To be reflashed through Xmodem, the bootloader needs to be prepended
-> +# with a 4-byte header that contains the total size of the file.
-> +perl -e 'print pack("l", (stat @ARGV[0])[7])' ${BINARIES_DIR}/fw_payload.bin > ${BINARIES_DIR}/fw_payload.bin.out
-> +cat ${BINARIES_DIR}/fw_payload.bin >> ${BINARIES_DIR}/fw_payload.bin.out
-> diff --git a/board/beaglev/readme.txt b/board/beaglev/readme.txt
-> new file mode 100644
-> index 0000000000..d8511d3fd1
-> --- /dev/null
-> +++ b/board/beaglev/readme.txt
-> @@ -0,0 +1,88 @@
-> +BeagleV
-> +=======
-> +
-> +BeagleV is a low-cost RISC-V 64-bit based platform, powered by a
-> +Starfive JH7100 processor. The current defconfig in Buildroot has been
-> +tested with the JH7100 chip used on the beta version of the BeagleV
-> +board.
-> +
-> +How to build
-> +============
-> +
-> +$ make beaglev_defconfig
-> +$ make
-> +
-> +Build results
-> +=============
-> +
-> +After building, output/images contains:
-> +
-> ++ Image
-> ++ fw_payload.bin
-> ++ fw_payload.bin.out
-> ++ fw_payload.elf
-> ++ rootfs.ext2
-> ++ rootfs.ext4
-> ++ sdcard.img
-> ++ u-boot.bin
-> +
-> +The two important files are:
-> +
-> + - fw_payload.bin.out, which is the bootloader image, containing
-> +   both OpenSBI and U-Boot.
-> +
-> + - sdcard.img, the SD card image, which contains the root filesystem,
-> +   kernel image and Device Tree.
-> +
-> +Flashing the SD card image
-> +==========================
-> +
-> +$ sudo dd if=output/images/sdcard.img of=/dev/sdX
-> +
-> +Preparing the board
-> +===================
-> +
-> +Connect the Beagle-V fan to the 5V supply (pin 2 or 4 of the GPIO
-> +connector) and GND (pin 6 of the GPIO connector).
-> +
-> +Connect a TTL UART cable to pin 8 (TX), 10 (RX) and 14 (GND).
-> +
-> +Insert your SD card.
-> +
-> +Power-up the board using an USB-C cable.
-> +
-> +Flashing the bootloader
-> +=======================
-> +
-> +The bootloader pre-flashed on the Beagle-V has a non-working
-> +fdt_addr_r environment variable value, so it won't work
-> +as-is. Reflashing the bootloader with the bootloader image produced by
-> +Buildroot is necessary.
-> +
-> +When the board starts up, a pre-loader shows a count down of 2
-> +seconds, interrupt by pressing any key. You should reach a menu like
-> +this:
-> +
-> +--------8<----------
-> +
-> +bootloader version:210209-4547a8d
-> +ddr 0x00000000, 1M test
-> +ddr 0x00100000, 2M test
-> +DDR clk 2133M,Version: 210302-5aea32f
-> +0
-> +***************************************************
-> +*************** FLASH PROGRAMMING *****************
-> +***************************************************
-> +
-> +0:update uboot
-> +1:quit
-> +select the function:
-> +
-> +--------8<----------
-> +
-> +Press 0 and Enter. You will now see "C" characters being
-> +displayed. Ask your serial port communication program to send
-> +fw_payload.bin.out using the Xmodem protocol.
-> +
-> +After reflashing is complete, restart the board, it will automatically
-> +start the system from the SD card, and reach the login prompt.
-> diff --git a/configs/beaglev_defconfig b/configs/beaglev_defconfig
-> new file mode 100644
-> index 0000000000..e94c4ab639
-> --- /dev/null
-> +++ b/configs/beaglev_defconfig
-> @@ -0,0 +1,35 @@
-> +BR2_riscv=y
-> +BR2_riscv_custom=y
-> +BR2_RISCV_ISA_CUSTOM_RVM=y
-> +BR2_RISCV_ISA_CUSTOM_RVF=y
-> +BR2_RISCV_ISA_CUSTOM_RVD=y
-> +BR2_RISCV_ISA_CUSTOM_RVC=y
-> +BR2_GLOBAL_PATCH_DIR="board/beaglev/patches/"
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/beaglev/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglev/genimage.cfg"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> +# HEAD of the Fedora branch
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,linux,710cf052d6abda73584481d920b4b6befc7240ea)/linux-710cf052d6abda73584481d920b4b6befc7240ea.tar.gz"
-> +BR2_LINUX_KERNEL_DEFCONFIG="starfive_vic7100_evb_sd_net"
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +# BR2_TARGET_ROOTFS_TAR is not set
-> +BR2_TARGET_OPENSBI=y
-> +BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
-> +# HEAD of the Fedora branch
-> +BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,opensbi,2524b0ecd8684b42bc7a4c69794f40f11cbbe2a5)/opensbi-2524b0ecd8684b42bc7a4c69794f40f11cbbe2a5.tar.gz"
-> +BR2_TARGET_OPENSBI_PLAT="starfive/vic7100"
-> +# BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG is not set
-> +# BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
-> +BR2_TARGET_OPENSBI_UBOOT_PAYLOAD=y
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +# HEAD of the Fedora branch
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,u-boot,3f3ac01a29ad1cd5fa519d86f81daead2447f1d4)/uboot-3f3ac01a29ad1cd5fa519d86f81daead2447f1d4.tar.gz"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="starfive_vic7100_beagle_v_smode"
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> --
-> 2.30.2
+> Since yesterday I get the following error with the sudo package:
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> sudo dmesg
+> sudo: error while loading shared libraries: libsudo_util.so.0: cannot open shared object file: No such file or directory
+>
+> We are using sudo-1.9.5p2 .
+>
+> The library exists and the permissions seem to be correct:
+>
+>
+> ls -la /usr/libexec/sudo
+
+Based on the error message, it seems like the library is not dlopen()ed
+but directly linked into sudo. Hwoever, /usr/libexec/sudo is not in the
+default search path for libraries, and therefore unless the sudo binary
+has a RPATH/RUNPATH pointing to /usr/libexec/sudo, I believe what
+you're seeing is expected.
+
+To verify this, you can try:
+
+LD_LIBRARY_PATH=/usr/libexec/sudo sudo dmesg
+
+Really, I think libsudo_util.so has no business in /usr/libexec/sudo,
+it should be in /usr/lib. Based on the names of the other .so files,
+they look like dlopen()ed libraries, which can stay in
+/usr/libexec/sudo.
+
+> total 588
+> drwxr-xr-x  2 root root   4096 May  3 19:31 .
+> drwxr-xr-x 11 root root   4096 May  3 19:31 ..
+> -rw-r--r--  1 root root  17716 May  3 19:31 audit_json.so
+> -rw-r--r--  1 root root   9380 May  3 19:31 group_file.so
+> lrwxrwxrwx  1 root root     21 May  3 19:31 libsudo_util.so -> libsudo_util.so.0.0.0
+> lrwxrwxrwx  1 root root     21 May  3 19:31 libsudo_util.so.0 -> libsudo_util.so.0.0.0
+> -rwxr-xr-x  1 root root 112412 May  3 19:31 libsudo_util.so.0.0.0
+> -rw-r--r--  1 root root   5284 May  3 19:31 sample_approval.so
+> -rw-r--r--  1 root root 420184 May  3 19:31 sudoers.so
+> -rw-r--r--  1 root root   5260 May  3 19:31 sudo_noexec.so
+> -rw-r--r--  1 root root   5276 May  3 19:31 system_group.so
+>
+> Any idea?
+
+Best regards,
+
+Thomas
+--
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://eur03.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbootlin.com%2F&amp;data=04%7C01%7Cuwe.fechner%40nl.abb.com%7Ce7e4cd3c187e43ca459c08d90f34d801%7C372ee9e09ce04033a64ac07073a91ecd%7C0%7C0%7C637557541905702900%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=xTDZlOO1mFKWSYRVNADflI0hh2%2F9CTbkVBOKIYIztHg%3D&amp;reserved=0
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210505/34ffd530/attachment.html>
