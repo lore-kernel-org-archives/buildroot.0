@@ -1,45 +1,63 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 05 May 2021 11:53:28 +0000
-Subject: [Buildroot] [Bug 13781] isc dhcp-server package don't create file
- /usr/bin/dhcpd
-In-Reply-To: <bug-13781-163@https.bugs.busybox.net/>
-References: <bug-13781-163@https.bugs.busybox.net/>
-Message-ID: <bug-13781-163-gASTtYtEj4@https.bugs.busybox.net/>
+From: Nathaniel Husted <nathaniel.husted@outlook.com>
+Date: Wed,  5 May 2021 11:53:46 -0400
+Subject: [Buildroot] [PATCHv2 1/1] package/rustc: add musl as an available
+ Rust libc
+Message-ID: <SJ0PR18MB3898AC687557A2CD4FA0340995599@SJ0PR18MB3898.namprd18.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13781
+The current rustc package only supports gnu libc and hardcodes this
+requirement. This patch adds musl to the available libc options for
+Rust packages. Musl is now a Tier 2 supported environment for Rust.
+Tier 2 means the platforms are "guaranteed to build" and official
+binary releases are available. The changes in rustc.mk will also
+support adding uclibc when that environment reaches Tier 2 support
+but does not allow for uclibc currently as it is still a Tier 3
+supported environment.
 
---- Comment #3 from Kay Jeschonneck <kay.jeschonneck@airbus.com> ---
-(In reply to Arnout Vandecappelle from comment #2)
+This patch includes corrections from the prior version submitted
+in March, 2021.
 
-> The file is dhcpd, not dhcpd2.
-its right, prescribed
+Signed-off-by: Nathaniel Husted <nathaniel.husted@outlook.com>
+---
+ package/rustc/Config.in.host | 2 +-
+ package/rustc/rustc.mk       | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-
-To test if i have some issue with the os-enviroment i had reinstall Ubuntu
-18.04.5 LTS, followed the kontron github manual, activated the ccache and only
-activated the isc dhcp service packages. 
-Now i can't find the dhcpd-file in "build/target/usr/sbin/" or in the
-rootfs.tar. 
-In "build/build/dhcp-4.4.2/server" i found the file dhcpd, so the system
-generate it. If i copy this file manuel in the folder "build/target/usr/sbin/"
-and restart the make process, everything is fine and the dhcp-server start.
-
-
-> Perhaps your post-build script removes it? Or one of your custom packages?
-
-In the kontron buildlayer i can't find something what delete the dhcpd file, 
-i searched per 'grep -rnw "./" -e "pattern"', pettern is dhcpd or sbin.
-
-For this test i don't use any custom packages.
-
-
-Have you some other Ideas?
-
+diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
+index 1df25ae326..4ab9086446 100644
+--- a/package/rustc/Config.in.host
++++ b/package/rustc/Config.in.host
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	default y if (BR2_mips || BR2_mipsel) && !BR2_MIPS_CPU_MIPS32R6
+ 	default y if (BR2_mips64 || BR2_mips64el) && !BR2_MIPS_CPU_MIPS64R6 \
+ 		&& BR2_MIPS_NABI64
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_HOST_RUSTC_ARCH
+diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
+index 35ffc36106..c5a42f0c1d 100644
+--- a/package/rustc/rustc.mk
++++ b/package/rustc/rustc.mk
+@@ -4,11 +4,13 @@
+ #
+ ################################################################################
+ 
++
++
+ RUSTC_ARCH = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ARCH))
+ RUSTC_ABI = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ABI))
+ 
+ ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
+-RUSTC_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-gnu$(RUSTC_ABI)
++RUSTC_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-$(LIBC)$(RUSTC_ABI)
+ endif
+ 
+ ifeq ($(HOSTARCH),x86)
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.27.0
