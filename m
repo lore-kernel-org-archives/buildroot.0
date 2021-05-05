@@ -1,36 +1,48 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Wed,  5 May 2021 20:10:12 +0200
-Subject: [Buildroot] [PATCH] package/log4qt: link with latomic if needed
-Message-ID: <20210505181012.477189-1-b.bilas@grinn-global.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 5 May 2021 20:52:40 +0200
+Subject: [Buildroot] sudo: error while loading shared libraries
+In-Reply-To: <AM0PR06MB5923BCE07863B47DBF9AAC02C0599@AM0PR06MB5923.eurprd06.prod.outlook.com>
+References: <AM0PR06MB5923A441CD0C1EF1952FC031C05A9@AM0PR06MB5923.eurprd06.prod.outlook.com>
+ <20210504214306.378dbbaf@windsurf>
+ <AM0PR06MB5923BCE07863B47DBF9AAC02C0599@AM0PR06MB5923.eurprd06.prod.outlook.com>
+Message-ID: <dad56610-a708-4d74-ab12-bb2134fb515c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.net/results/fb5/fb52f5366a25230606149f44dc46f86f0273a680/
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- package/log4qt/log4qt.mk | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/package/log4qt/log4qt.mk b/package/log4qt/log4qt.mk
-index b01d9c6611..0594427cf7 100644
---- a/package/log4qt/log4qt.mk
-+++ b/package/log4qt/log4qt.mk
-@@ -11,6 +11,11 @@ LOG4QT_LICENSE = Apache-2.0
- LOG4QT_LICENSE_FILES = LICENSE
- LOG4QT_INSTALL_STAGING = YES
- 
-+# Uses __atomic_fetch_add_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LOG4QT_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT5BASE_SQLITE_QT)$(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),y)
- LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=ON
- else
--- 
-2.31.1
+On 05/05/2021 13:14, Uwe Fechner wrote:
+> Dear Thomas,
+> 
+> Thanks for looking into this issue, but your suggestion did not help:
+> 
+> $ LD_LIBRARY_PATH=/usr/libexec/sudo sudo dmesg
+> sudo: error while loading shared libraries: libsudo_util.so.0: cannot open
+> shared object file: No such file or directory
+
+ You can also run readelf -d on the binary (on your build machine) to find out
+which RUNPATH it uses, and which library it tries to open. If you don't see
+libsudo_util.so.0 in there, then it's a dlopen()ed library after all.
+
+ I've done a build locally, and indeed sudo is built with a RUNPATH pointing to
+/usr/libexec/sudo.
+
+ I've just created a runtime test for sudo (which I'll post soon) and I can't
+reproduce the problem.
+
+> Any other idea?
+
+ I'd run it with strace to find out exactly where it goes wrong.
+
+strace sudo dmesg
+
+(you obviously have to add the strace package to your build first.)
+
+ Note that it's possible that under strace it suddenly does work. That's because
+strace drops the setuid bit, and that may be interfering for whatever reason.
+
+ Regards,
+ Arnout
