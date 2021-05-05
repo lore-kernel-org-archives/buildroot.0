@@ -1,71 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 May 2021 22:08:39 +0200
-Subject: [Buildroot] [PATCH] package/links: enable building graphics
- mode with only fb driver
-In-Reply-To: <20210427091325.1488138-1-urjaman@gmail.com>
-References: <20210427091325.1488138-1-urjaman@gmail.com>
-Message-ID: <01b9f8cb-e83e-5e1f-228c-0e887c93915b@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 5 May 2021 22:10:10 +0200
+Subject: [Buildroot] [git commit] package/coremark-pro: disable parallel
+ build
+Message-ID: <20210505194227.9C60E881AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Urja,
+commit: https://git.buildroot.net/buildroot/commit/?id=eec72d3a943ff74c9cb0194ad5d0c72f4f6cce95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 27/04/2021 11:13, Urja Rannikko wrote:
-> The "fb" framebuffer driver needs GPM (mouse support) to compile,
-> but not DirectFB or Xorg.
-> 
-> Also added a Kconfig comment for easier discovery of the GPM
-> requirement.
-> 
-> Signed-off-by: Urja Rannikko <urjaman@gmail.com>
-> ---
->  package/links/Config.in | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/links/Config.in b/package/links/Config.in
-> index 713f53da4e..cc2389c9f1 100644
-> --- a/package/links/Config.in
-> +++ b/package/links/Config.in
-> @@ -10,11 +10,15 @@ if BR2_PACKAGE_LINKS
->  
->  config BR2_PACKAGE_LINKS_GRAPHICS
->  	bool "use graphics"
-> -	depends on BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_XORG7
-> +	depends on BR2_PACKAGE_GPM || BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_XORG7
+Disable parallel build as it seems to be totally broken:
 
- Still not good enough, I'm afraid :-) You also need to depend on gpm in the .mk
-file.
+/bin/bash: line 0: cd: /home/buildroot/autobuild/instance-2/output-1/build/coremark-pro-1.1.2743/builds/linux64/gcc64/obj/bench/core: No such file or directory
 
- Also, I'm thinking: maybe we can turn this around and automatically select gpm?
+/bin/sh: 1: cd: can't cd to /home/buildroot/autobuild/instance-1/output-1/build/coremark-pro-1.1.2743/builds/linux/gcc/obj/bench/fp/loops/SP
 
-	select BR2_PACKAGE_GPM if !BR2_PACKAGE_DIRECTFB && !BR2_PACKAGE_XORG7
+Fixes:
+ - http://autobuild.buildroot.org/results/7ba5e209772af7037fc735ea174d3fc3eaf46f4b
+ - http://autobuild.buildroot.org/results/32b51bb9eda7899b6cc331f10a860644bd6004fa
 
- That way you don't need the comment either. Well, you still do because gpm
-depends on static:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/coremark-pro/coremark-pro.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	depends on !BR2_STATIC_LIBS if !BR2_PACKAGE_DIRECTFB && !BR2_PACKAGE_XORG7 # gpm
-
-so the comment would become:
-
-comment "links graphics needs dynamic libs, DirectFB or X11"
-	depends on BR2_STATIC_LIBS && !BR2_PACKAGE_DIRECTFB && !BR2_PACKAGE_XORG7
-
- Regards,
- Arnout
-
->  	select BR2_PACKAGE_XLIB_LIBXT if BR2_PACKAGE_XORG7
->  	select BR2_PACKAGE_LIBPNG
->  	help
-> -	  Enable graphics output for DirectFB or X11.
-> +	  Enable graphics output for framebuffer, DirectFB or X11.
-> +	  Framebuffer output requires GPM (console mouse).
->  	  Otherwise links will be text-mode only.
->  
-> +comment "links graphics needs GPM, DirectFB or X11"
-> +	depends on !BR2_PACKAGE_GPM && !BR2_PACKAGE_DIRECTFB && !BR2_PACKAGE_XORG7
-> +
->  endif
-> 
+diff --git a/package/coremark-pro/coremark-pro.mk b/package/coremark-pro/coremark-pro.mk
+index 515b8eafbd..e797f66840 100644
+--- a/package/coremark-pro/coremark-pro.mk
++++ b/package/coremark-pro/coremark-pro.mk
+@@ -40,7 +40,7 @@ COREMARK_PRO_MAKE_OPTS += \
+ 	EXE=
+ 
+ define COREMARK_PRO_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C $(@D) \
++	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C $(@D) \
+ 		$(COREMARK_PRO_MAKE_OPTS) build
+ endef
+ 
