@@ -1,63 +1,44 @@
-From: Nathaniel Husted <nathaniel.husted@outlook.com>
-Date: Wed,  5 May 2021 11:53:46 -0400
-Subject: [Buildroot] [PATCHv2 1/1] package/rustc: add musl as an available
- Rust libc
-Message-ID: <SJ0PR18MB3898AC687557A2CD4FA0340995599@SJ0PR18MB3898.namprd18.prod.outlook.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  5 May 2021 17:58:17 +0200
+Subject: [Buildroot] [PATCH 1/2] package/kodi-pvr-iptvsimple: bump version
+ to 7.6.2-Matrix
+Message-ID: <20210505155818.77839-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current rustc package only supports gnu libc and hardcodes this
-requirement. This patch adds musl to the available libc options for
-Rust packages. Musl is now a Tier 2 supported environment for Rust.
-Tier 2 means the platforms are "guaranteed to build" and official
-binary releases are available. The changes in rustc.mk will also
-support adding uclibc when that environment reaches Tier 2 support
-but does not allow for uclibc currently as it is still a Tier 3
-supported environment.
+Changelog:
+https://github.com/kodi-pvr/pvr.iptvsimple/blob/Matrix/pvr.iptvsimple/changelog.txt
 
-This patch includes corrections from the prior version submitted
-in March, 2021.
-
-Signed-off-by: Nathaniel Husted <nathaniel.husted@outlook.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/rustc/Config.in.host | 2 +-
- package/rustc/rustc.mk       | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-index 1df25ae326..4ab9086446 100644
---- a/package/rustc/Config.in.host
-+++ b/package/rustc/Config.in.host
-@@ -17,7 +17,7 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	default y if (BR2_mips || BR2_mipsel) && !BR2_MIPS_CPU_MIPS32R6
- 	default y if (BR2_mips64 || BR2_mips64el) && !BR2_MIPS_CPU_MIPS64R6 \
- 		&& BR2_MIPS_NABI64
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_HOST_RUSTC_ARCH
-diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
-index 35ffc36106..c5a42f0c1d 100644
---- a/package/rustc/rustc.mk
-+++ b/package/rustc/rustc.mk
-@@ -4,11 +4,13 @@
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 767f77cca8..33ffc6431a 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0bffd09eba7cf758a818607562b4dec53f4a20acb7a8b43dd0a1499e92cb3057  kodi-pvr-iptvsimple-7.6.1-Matrix.tar.gz
++sha256  59347c41dfd0dfa45f3d85deed0430346ef2898eb7276d5793244b877519f385  kodi-pvr-iptvsimple-7.6.2-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index cf8d755766..3a40dac951 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
-+
-+
- RUSTC_ARCH = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ARCH))
- RUSTC_ABI = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ABI))
- 
- ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
--RUSTC_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-gnu$(RUSTC_ABI)
-+RUSTC_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-$(LIBC)$(RUSTC_ABI)
- endif
- 
- ifeq ($(HOSTARCH),x86)
+-KODI_PVR_IPTVSIMPLE_VERSION = 7.6.1-Matrix
++KODI_PVR_IPTVSIMPLE_VERSION = 7.6.2-Matrix
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
 -- 
-2.27.0
+2.29.2
