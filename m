@@ -1,37 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 May 2021 21:36:38 +0200
-Subject: [Buildroot] [PATCH v1 1/2] package/docker-containerd: rename
- package to containerd
-In-Reply-To: <20210503031251.200043-1-christian@paral.in>
-References: <20210503031251.200043-1-christian@paral.in>
-Message-ID: <61901dbf-3f9d-f0c3-e027-1bb831531c06@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 5 May 2021 21:37:21 +0200
+Subject: [Buildroot] [git commit] testing/tests/package/test_openjdk.py:
+ bump kernel version to 5.10.34
+Message-ID: <20210505190936.85E8A88317@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ab2d472cde20c75cde9e48a0158c66afa102d190
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Kernel 4.16.7 is old enough to produce the "multiple definition of `yylloc'"
+error which is fixed in newer versions.
 
-On 03/05/2021 05:12, Christian Stewart wrote:
-> containerd is now an independent project from Docker.
-> 
-> This commit renames the Buildroot package from docker-containerd to containerd,
-> adding a entry in Config.in.legacy accordingly.
-> 
-> containerd is an industry-standard container runtime with an emphasis on
-> simplicity, robustness and portability. It is available as a daemon for Linux
-> and Windows, which can manage the complete container lifecycle of its host
-> system: image transfer and storage, container execution and supervision,
-> low-level storage and network attachments, etc.
-> 
-> https://containerd.io
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+Bump the test kernel version from 4.16.7 to 5.10.34 to prevent this error wwhen
+building the test image.
 
- Applied to master, thanks. I squashed in the second patch since they really go
-together. I also fixed the alphabetical ordering in package/Config.in (thank you
-check-package) and I updated DEVELOPERS (thank you grep).
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/testing/tests/package/test_openjdk.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Regards,
- Arnout
+diff --git a/support/testing/tests/package/test_openjdk.py b/support/testing/tests/package/test_openjdk.py
+index 3a1d1a9b09..26b7f9ee92 100644
+--- a/support/testing/tests/package/test_openjdk.py
++++ b/support/testing/tests/package/test_openjdk.py
+@@ -12,7 +12,7 @@ class TestOpenJdk(infra.basetest.BRTest):
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.34"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
