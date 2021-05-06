@@ -1,26 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 6 May 2021 08:53:21 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package/openjdk: Change URL to Github
-In-Reply-To: <20210505203837.GV2137340@scaer>
-References: <20210504210026.1916260-1-aduskett@gmail.com>
- <20210504210026.1916260-2-aduskett@gmail.com>
- <20210505203837.GV2137340@scaer>
-Message-ID: <cfde71bd-a3e5-3d3a-d150-8c8cd3e7cc7c@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 06 May 2021 08:22:31 +0000
+Subject: [Buildroot] [Bug 13781] isc dhcp-server package don't create file
+ /usr/bin/dhcpd
+In-Reply-To: <bug-13781-163@https.bugs.busybox.net/>
+References: <bug-13781-163@https.bugs.busybox.net/>
+Message-ID: <bug-13781-163-XpZmNql0Qz@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=13781
+
+--- Comment #5 from Heiko Thiery <heiko.thiery@gmail.com> ---
+Hi, just tried to reproduce your issue. Setup the environment with using the
+latest buildroot from master. With that I see the expected files in the target
+directory.
+
+# find build/target/ -name "*dhcp*" 
+build/target/sbin/udhcpc
+build/target/etc/init.d/S80dhcp-server
+build/target/etc/init.d/S80dhcp-relay
+build/target/etc/dhcp
+build/target/etc/dhcp/dhcpd.conf
+build/target/usr/sbin/dhcpd
+build/target/usr/share/udhcpc
+build/target/usr/lib/libdhcp.so
+build/target/usr/lib/libdhcpctl.so
+build/target/usr/lib/libdhcp.so.0.0.0
+build/target/usr/lib/libdhcp.so.0
+build/target/usr/lib/libdhcpctl.so.0
+build/target/usr/lib/libdhcpctl.la
+build/target/usr/lib/libdhcp.la
+build/target/usr/lib/libdhcpctl.so.0.0.0
+build/target/var/lib/dhcp
 
 
-On 05/05/2021 22:38, Yann E. MORIN wrote:
-> So, this is not good, because that means the archives we have on s.b.o
-> would not longer match what we want to download, so s.b.o can't be used
-> as a fallback for master anymore.
+As Arnout also asked, which buildroot version are you using?
 
- There's a trivial workaround: drop OPENJDK_SOURCE = .... That way, the tarball
-name becomes openjdk-... instead of jdk-... and it's a different file.
-
- Regards,
- Arnout
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
