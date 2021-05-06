@@ -1,10 +1,10 @@
 From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Date: Wed,  5 May 2021 17:39:55 -0700
-Subject: [Buildroot] [PATCH 1/3] ARC: config: explicit'ify -mcpu for cpu
- selection
+Date: Wed,  5 May 2021 17:39:56 -0700
+Subject: [Buildroot] [PATCH 2/3] lmbench: increase memsize delay for slow
+ FPGAs
 In-Reply-To: <20210506003957.2994235-1-vgupta@synopsys.com>
 References: <20210506003957.2994235-1-vgupta@synopsys.com>
-Message-ID: <20210506003957.2994235-2-vgupta@synopsys.com>
+Message-ID: <20210506003957.2994235-3-vgupta@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,47 +13,43 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
 ---
- arch/Config.in.arc | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ ...c-to-prevent-memsize-from-timingout-.patch | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch
 
-diff --git a/arch/Config.in.arc b/arch/Config.in.arc
-index f7a6d920b50d..f84dfab38ae9 100644
---- a/arch/Config.in.arc
-+++ b/arch/Config.in.arc
-@@ -12,14 +12,14 @@ config BR2_arc770d
- 	bool "ARC 770D"
- 
- config BR2_archs38
--	bool "ARC HS38"
-+	bool "ARC HS38 (-mcpu=archs)"
- 	help
- 	  Generic ARC HS capable of running Linux, i.e. with MMU,
- 	  caches and 32-bit multiplier. Also it corresponds to the
- 	  default configuration in older GNU toolchain versions.
- 
- config BR2_archs38_64mpy
--	bool "ARC HS38 with 64-bit mpy"
-+	bool "ARC HS38 with 64-bit mpy (-mcpu=hs38)"
- 	help
- 	  Fully featured ARC HS capable of running Linux, i.e. with
- 	  MMU, caches and 64-bit multiplier.
-@@ -28,7 +28,7 @@ config BR2_archs38_64mpy
- 	  for use this one.
- 
- config BR2_archs38_full
--	bool "ARC HS38 with Quad MAC & FPU"
-+	bool "ARC HS38 with Quad MAC & FPU (-mcpu=hs38_linux)"
- 	help
- 	  Fully featured ARC HS with additional support for
- 	   - Dual- and quad multiply and MC oprations
-@@ -43,7 +43,7 @@ config BR2_archs4x_rel31
- 	   Build for HS48 release 3.1
- 
- config BR2_archs4x
--	bool "ARC HS48"
-+	bool "ARC HS48 (-mcpu=hs4x)"
- 	help
- 	   Latest release of HS48 processor
- 	   - Dual and Quad multiply and MAC operations
+diff --git a/package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch b/package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch
+new file mode 100644
+index 000000000000..6c3e7370e11b
+--- /dev/null
++++ b/package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch
+@@ -0,0 +1,28 @@
++From d85b61666aa2728f68b69d02bfb162c432df709f Mon Sep 17 00:00:00 2001
++From: vgupta <vgupta@4eed8e25-bc12-0410-818a-f70ee6866280>
++Date: Sat, 3 Mar 2012 10:02:24 +0000
++Subject: [PATCH] TOO_LONG 100 usec to prevent memsize from timingout @80Mhz
++
++git-svn-id: http://sjvm-subversion02.internal.synopsys.com/svn/OSS/ARC_Linux/tests/lmbench-3.0-a9 at 157318 4eed8e25-bc12-0410-818a-f70ee6866280
++
++Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
++---
++ src/memsize.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/memsize.c b/src/memsize.c
++index eb25a0924872..b333cf8cbd32 100644
++--- a/src/memsize.c
+++++ b/src/memsize.c
++@@ -15,7 +15,7 @@ char	*id = "$Id$\n";
++ #define	CHK(x)	if ((x) == -1) { perror("x"); exit(1); }
++ 
++ #ifndef	TOO_LONG
++-#define	TOO_LONG	10	/* usecs */
+++#define	TOO_LONG	100	/* usecs */
++ #endif
++ 
++ int	alarm_triggered = 0;
++-- 
++2.25.1
++
 -- 
 2.25.1
