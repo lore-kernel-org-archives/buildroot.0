@@ -1,81 +1,103 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 6 May 2021 22:12:13 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: transition rockwellcollins.com
+Date: Thu, 6 May 2021 22:12:56 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: transition rockwellcollins.com
  to collins.com
-Message-ID: <20210506194436.68B3586AE6@busybox.osuosl.org>
+In-Reply-To: <20210506162923.51949-1-matthew.weber@collins.com>
+References: <20210506162923.51949-1-matthew.weber@collins.com>
+Message-ID: <20210506201256.GX2137340@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c8f375badfe1dbfbbfeb449a74753dbad3c5fa4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Matthew, All,
 
-Email addresses are all live and some of us will start contributing
-with the new collins.com domain.
+On 2021-05-06 11:29 -0500, Matthew Weber via buildroot spake thusly:
+> Email addresses are all live and some of us will start contributing
+> with the new collins.com domain.
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@collins.com>
 
-Signed-off-by: Matthew Weber <matthew.weber@collins.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Applied to master, thanks.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1e3eec93aa..235828241e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -471,7 +471,7 @@ N:	Bogdan Radulescu <bogdan@nimblex.net>
- F:	package/iftop/
- F:	package/ncdu/
- 
--N:	Brandon Maier <brandon.maier@rockwellcollins.com>
-+N:	Brandon Maier <brandon.maier@collins.com>
- F:	package/vmtouch/
- 
- N:	Brock Williams <brock@cottonwoodcomputer.com>
-@@ -572,7 +572,7 @@ F:	package/perl-sys-mmap/
- F:	package/perl-time-parsedate/
- F:	package/perl-x10/
- 
--N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+N:	Clayton Shotwell <clayton.shotwell@collins.com>
- F:	package/audit/
- F:	package/checkpolicy/
- F:	package/cpio/
-@@ -1225,7 +1225,7 @@ F:	package/python-sockjs/
- F:	package/python-terminaltables/
- F:	package/python-yarl/
- 
--N:	James Knight <james.knight@rockwellcollins.com>
-+N:	James Knight <james.knight@collins.com>
- F:	package/atkmm/
- F:	package/cairomm/
- F:	package/google-material-design-icons/
-@@ -1718,7 +1718,7 @@ F:	board/technologic/ts4900/
- F:	configs/ts4900_defconfig
- F:	package/ts4900-fpga/
- 
--N:	Matt Weber <matthew.weber@rockwellcollins.com>
-+N:	Matt Weber <matthew.weber@collins.com>
- F:	board/freescale/p*
- F:	board/freescale/t*
- F:	board/qemu/ppc64-e5500/
-@@ -2336,7 +2336,7 @@ F:	toolchain/
- N:	Roman Gorbenkov <roman.gorbenkov@ens2m.org>
- F:	package/davfs2/
- 
--N:	Ryan Barnett <ryan.barnett@rockwellcollins.com>
-+N:	Ryan Barnett <ryan.barnett@collins.com>
- F:	package/atftp/
- F:	package/c-periphery/
- F:	package/miraclecast/
-@@ -2373,7 +2373,7 @@ F:	support/misc/toolchainfile.cmake.in
- N:	Sam Voss <sam.voss@gmail.com>
- F:	package/ripgrep/
- 
--N:	Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
-+N:	Santosh Multhalli <santosh.multhalli@collins.com>
- F:	package/valijson/
- 
- N:	S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+Regards,
+Yann E. MORIN.
+
+> ---
+>  DEVELOPERS | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 573d8d84de..7c230955fc 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -471,7 +471,7 @@ N:	Bogdan Radulescu <bogdan@nimblex.net>
+>  F:	package/iftop/
+>  F:	package/ncdu/
+>  
+> -N:	Brandon Maier <brandon.maier@rockwellcollins.com>
+> +N:	Brandon Maier <brandon.maier@collins.com>
+>  F:	package/vmtouch/
+>  
+>  N:	Brock Williams <brock@cottonwoodcomputer.com>
+> @@ -572,7 +572,7 @@ F:	package/perl-sys-mmap/
+>  F:	package/perl-time-parsedate/
+>  F:	package/perl-x10/
+>  
+> -N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> +N:	Clayton Shotwell <clayton.shotwell@collins.com>
+>  F:	package/audit/
+>  F:	package/checkpolicy/
+>  F:	package/cpio/
+> @@ -1225,7 +1225,7 @@ F:	package/python-sockjs/
+>  F:	package/python-terminaltables/
+>  F:	package/python-yarl/
+>  
+> -N:	James Knight <james.knight@rockwellcollins.com>
+> +N:	James Knight <james.knight@collins.com>
+>  F:	package/atkmm/
+>  F:	package/cairomm/
+>  F:	package/google-material-design-icons/
+> @@ -1718,7 +1718,7 @@ F:	board/technologic/ts4900/
+>  F:	configs/ts4900_defconfig
+>  F:	package/ts4900-fpga/
+>  
+> -N:	Matt Weber <matthew.weber@rockwellcollins.com>
+> +N:	Matt Weber <matthew.weber@collins.com>
+>  F:	board/freescale/p*
+>  F:	board/freescale/t*
+>  F:	board/qemu/ppc64-e5500/
+> @@ -2336,7 +2336,7 @@ F:	toolchain/
+>  N:	Roman Gorbenkov <roman.gorbenkov@ens2m.org>
+>  F:	package/davfs2/
+>  
+> -N:	Ryan Barnett <ryan.barnett@rockwellcollins.com>
+> +N:	Ryan Barnett <ryan.barnett@collins.com>
+>  F:	package/atftp/
+>  F:	package/c-periphery/
+>  F:	package/miraclecast/
+> @@ -2373,7 +2373,7 @@ F:	support/misc/toolchainfile.cmake.in
+>  N:	Sam Voss <sam.voss@gmail.com>
+>  F:	package/ripgrep/
+>  
+> -N:	Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
+> +N:	Santosh Multhalli <santosh.multhalli@collins.com>
+>  F:	package/valijson/
+>  
+>  N:	S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
