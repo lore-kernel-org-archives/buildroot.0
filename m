@@ -1,52 +1,88 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  6 May 2021 22:52:29 +0200
-Subject: [Buildroot] [PATCH v3] package/libtomcrypt: use makefile.unix
- (gains pkgconfig support)
-Message-ID: <20210506205229.3228-1-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 6 May 2021 22:58:54 +0200
+Subject: [Buildroot] [git commit] package/Makefile.in: expose CONFIG_DIR to
+ post-build/post-image scripts
+Message-ID: <20210506203206.019DA83D50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change from makefile to makefile.unix:
-  - gains pkgconfig support (libtomcrypt.pc will be installed)
-  - remove NODOCS (legacy, not used anymore)
-  - remove INSTALL_USER/INSTALL_GROUP (not needed for makefile.unix)
+commit: https://git.buildroot.net/buildroot/commit/?id=efdcd651bf8fe8e9a291932397eca8731483d17c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Sometimes, post-build or post-image scripts need to reinvoke
+Buildroot's make, for example to execute "make printvars".
+
+However, so far post-build/image/fakeroot can't trivially run printvars
+in a way that worked for both in-tree and out-of-tree builds. Indeed:
+
+ * "make printvars" would work for in-tree builds, but not out of tree
+   builds
+
+ * "make -C ${O} printvars" would work for out-of-tree builds, but not
+   in-tree builds
+
+ * "make -C ${BR2_CONFIG%/*} printvars" works in both cases, but it is
+   a bit cryptic, and two maintainers did not even immediately think of
+   it
+
+In order to solve this, this commit exposes $(CONFIG_DIR) to
+post-build/image/fakeroot scripts, through the EXTRA_ENV variable.
+
+The documentation is updated accordingly.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998 at free.fr:
+  - reference BR2_CONFIG as an exemple
+  - slightly reword the commit log accordingly
+  - move the doc for CONFIG_DIR next to that of BR2_CONFIG
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Changes v2 -> v3:
-  - change from custom libtomcrypt.pc install/sed to makefile.unix
-    (suggested by Arnout Vandecappelle)
-  - no need for GIT_VERSION define (only used by - not compiled - tests)
+ docs/manual/customize-post-image.txt | 3 ++-
+ docs/manual/customize-rootfs.txt     | 3 +++
+ package/Makefile.in                  | 1 +
+ 3 files changed, 6 insertions(+), 1 deletion(-)
 
-Changes v1 -> v2:
-  - use libtomcrypt provided libtomcrypt.pc.in template file
----
- package/libtomcrypt/libtomcrypt.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
-index 35886057d4..fa2a585047 100644
---- a/package/libtomcrypt/libtomcrypt.mk
-+++ b/package/libtomcrypt/libtomcrypt.mk
-@@ -24,13 +24,12 @@ LIBTOMCRYPT_CFLAGS += -fPIC
- endif
+diff --git a/docs/manual/customize-post-image.txt b/docs/manual/customize-post-image.txt
+index 90ea2b9328..5308093d06 100644
+--- a/docs/manual/customize-post-image.txt
++++ b/docs/manual/customize-post-image.txt
+@@ -28,7 +28,8 @@ different sets of arguments to each script.
  
- define LIBTOMCRYPT_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(LIBTOMCRYPT_CFLAGS)"
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) -f makefile.unix $(TARGET_CONFIGURE_OPTS) CFLAGS="$(LIBTOMCRYPT_CFLAGS)"
- endef
+ Again just like for the post-build scripts, the scripts have access to
+ the environment variables +BR2_CONFIG+, +HOST_DIR+, +STAGING_DIR+,
+-+TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
+++TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+, +CONFIG_DIR+ and
+++BASE_DIR+.
  
- define LIBTOMCRYPT_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" \
--		PREFIX=/usr NODOCS=1 INSTALL_USER=$(shell id -u) \
--		INSTALL_GROUP=$(shell id -g) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) -f makefile.unix \
-+		DESTDIR="$(STAGING_DIR)" PREFIX=/usr install
- endef
+ The post-image scripts will be executed as the user that executes
+ Buildroot, which should normally _not_ be the root user. Therefore, any
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index e1dbadda5b..e46306fd2a 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -60,6 +60,9 @@ The post-build scripts are run with the main Buildroot tree as current
+ In addition, you may also use these environment variables:
  
- $(eval $(generic-package))
--- 
-2.31.1
+   - +BR2_CONFIG+: the path to the Buildroot .config file
++  - +CONFIG_DIR+: the directory containing the .config file, and
++    therefore the top-level Buildroot Makefile to use (which is
++    correct for both in-tree and out-of-tree builds)
+   - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
+     xref:generic-package-reference[]
+   - +BUILD_DIR+: the directory where packages are extracted and built
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 51f5cbce4f..f4028bc67c 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -318,6 +318,7 @@ EXTRA_ENV = \
+ 	PATH=$(BR_PATH) \
+ 	BR2_DL_DIR=$(BR2_DL_DIR) \
+ 	BUILD_DIR=$(BUILD_DIR) \
++	CONFIG_DIR=$(CONFIG_DIR) \
+ 	O=$(CANONICAL_O)
+ 
+ ################################################################################
