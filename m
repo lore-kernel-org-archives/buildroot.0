@@ -1,42 +1,52 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  6 May 2021 22:50:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bullet: needs dynamic library
-Message-ID: <20210506205048.2081535-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu,  6 May 2021 22:52:29 +0200
+Subject: [Buildroot] [PATCH v3] package/libtomcrypt: use makefile.unix
+ (gains pkgconfig support)
+Message-ID: <20210506205229.3228-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build without dlfcn.h fails because bullet3 is not disabled since
-commit 5f154799b6ed772a0c028072996e110fac131508
+Change from makefile to makefile.unix:
+  - gains pkgconfig support (libtomcrypt.pc will be installed)
+  - remove NODOCS (legacy, not used anymore)
+  - remove INSTALL_USER/INSTALL_GROUP (not needed for makefile.unix)
 
-Fixes:
- - http://autobuild.buildroot.org/results/ab2efdd1eac64474adf00d8e60b42110c6e89143
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/bullet/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Changes v2 -> v3:
+  - change from custom libtomcrypt.pc install/sed to makefile.unix
+    (suggested by Arnout Vandecappelle)
+  - no need for GIT_VERSION define (only used by - not compiled - tests)
 
-diff --git a/package/bullet/Config.in b/package/bullet/Config.in
-index fc285ab33a..5d8a57aa47 100644
---- a/package/bullet/Config.in
-+++ b/package/bullet/Config.in
-@@ -1,11 +1,12 @@
- config BR2_PACKAGE_BULLET
- 	bool "bullet"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	help
- 	  Bullet is a Collision Detection and Rigid Body Dynamics
- 	  Library.
+Changes v1 -> v2:
+  - use libtomcrypt provided libtomcrypt.pc.in template file
+---
+ package/libtomcrypt/libtomcrypt.mk | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
+index 35886057d4..fa2a585047 100644
+--- a/package/libtomcrypt/libtomcrypt.mk
++++ b/package/libtomcrypt/libtomcrypt.mk
+@@ -24,13 +24,12 @@ LIBTOMCRYPT_CFLAGS += -fPIC
+ endif
  
- 	  http://bulletphysics.org
+ define LIBTOMCRYPT_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(LIBTOMCRYPT_CFLAGS)"
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) -f makefile.unix $(TARGET_CONFIGURE_OPTS) CFLAGS="$(LIBTOMCRYPT_CFLAGS)"
+ endef
  
--comment "bullet needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "bullet needs a toolchain w/ C++, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+ define LIBTOMCRYPT_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" \
+-		PREFIX=/usr NODOCS=1 INSTALL_USER=$(shell id -u) \
+-		INSTALL_GROUP=$(shell id -g) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) -f makefile.unix \
++		DESTDIR="$(STAGING_DIR)" PREFIX=/usr install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-2.30.2
+2.31.1
