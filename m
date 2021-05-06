@@ -1,103 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 6 May 2021 22:12:56 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: transition rockwellcollins.com
- to collins.com
-In-Reply-To: <20210506162923.51949-1-matthew.weber@collins.com>
-References: <20210506162923.51949-1-matthew.weber@collins.com>
-Message-ID: <20210506201256.GX2137340@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 6 May 2021 22:16:15 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/libtomcrypt: add pkgconfig
+ support
+In-Reply-To: <02a2bf67-f5a4-611b-6cc8-289675ce26e5@mind.be>
+References: <20210502105038.19483-1-ps.report@gmx.net>
+ <02a2bf67-f5a4-611b-6cc8-289675ce26e5@mind.be>
+Message-ID: <20210506221615.748aafa0@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew, All,
+Hello Arnout,
 
-On 2021-05-06 11:29 -0500, Matthew Weber via buildroot spake thusly:
-> Email addresses are all live and some of us will start contributing
-> with the new collins.com domain.
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@collins.com>
+On Tue, 4 May 2021 22:18:53 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Applied to master, thanks.
+> On 02/05/2021 12:50, Peter Seiderer wrote:
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Changes v1 -> v2:
+> >   - use libtomcrypt provided libtomcrypt.pc.in template file
+> > ---
+> >  package/libtomcrypt/libtomcrypt.mk | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
+> > index fccd4b051c..3d166a6854 100644
+> > --- a/package/libtomcrypt/libtomcrypt.mk
+> > +++ b/package/libtomcrypt/libtomcrypt.mk
+> > @@ -27,6 +27,10 @@ define LIBTOMCRYPT_INSTALL_STAGING_CMDS
+> >  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" \
+> >  		PREFIX=/usr NODOCS=1 INSTALL_USER=$(shell id -u) \
+> >  		INSTALL_GROUP=$(shell id -g) install
+> > +	sed -e 's,^prefix=.*,prefix=/usr,' \
+> > +		-e 's,^Version:.*,Version: $(LIBTOMCRYPT_VERSION),' \
+> > +		$(@D)/libtomcrypt.pc.in \
+> > +		> $(STAGING_DIR)/usr/lib/pkgconfig/libtomcrypt.pc
+>
+>  What about the option of using makefile.unix so we don't have to do this ourselves?
+>
+
+Quick compare (with additional line breaks):
+
+- makefile:
+
+.../host/bin/x86_64-buildroot-linux-gnu-gcc
+	-I./src/headers/
+	-Wall -Wsign-compare -Wshadow
+	-DLTC_SOURCE
+	-Wextra -Wsystem-headers -Wbad-function-cast -Wcast-align -Wstrict-prototypes
+	-Wpointer-arith -Wdeclaration-after-statement -Wwrite-strings -Wno-type-limits
+	-O3 -funroll-loops -fomit-frame-pointer -DGIT_VERSION=\"1.18.2\"
+	-I./src/headers -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+	-Os -g2  -DLTC_SOURCE -DLTM_DESC -fPIC -c src/ciphers/aes/aes.c -o src/ciphers/aes/aes.o
+
+
+- makefile.unix:
+
+.../host/bin/x86_64-buildroot-linux-gnu-gcc
+	-Isrc/headers -Itests -DLTC_SOURCE
+	-I./src/headers -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+	-Os -g2  -DLTC_SOURCE -DLTM_DESC -fPIC -c src/ciphers/aes/aes.c -o src/ciphers/aes/aes.o
+
+Seems to cut down a lot of warning flags (and an overwritten optimize flag), but
+seems to miss the version define...
+
+>  I've kept the patch as New in patchwork in case you don't see that as feasible.
+
+Will give the makefile.unix a try (and see if the install works as expected)...
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> ---
->  DEVELOPERS | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 573d8d84de..7c230955fc 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -471,7 +471,7 @@ N:	Bogdan Radulescu <bogdan@nimblex.net>
->  F:	package/iftop/
->  F:	package/ncdu/
->  
-> -N:	Brandon Maier <brandon.maier@rockwellcollins.com>
-> +N:	Brandon Maier <brandon.maier@collins.com>
->  F:	package/vmtouch/
->  
->  N:	Brock Williams <brock@cottonwoodcomputer.com>
-> @@ -572,7 +572,7 @@ F:	package/perl-sys-mmap/
->  F:	package/perl-time-parsedate/
->  F:	package/perl-x10/
->  
-> -N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> +N:	Clayton Shotwell <clayton.shotwell@collins.com>
->  F:	package/audit/
->  F:	package/checkpolicy/
->  F:	package/cpio/
-> @@ -1225,7 +1225,7 @@ F:	package/python-sockjs/
->  F:	package/python-terminaltables/
->  F:	package/python-yarl/
->  
-> -N:	James Knight <james.knight@rockwellcollins.com>
-> +N:	James Knight <james.knight@collins.com>
->  F:	package/atkmm/
->  F:	package/cairomm/
->  F:	package/google-material-design-icons/
-> @@ -1718,7 +1718,7 @@ F:	board/technologic/ts4900/
->  F:	configs/ts4900_defconfig
->  F:	package/ts4900-fpga/
->  
-> -N:	Matt Weber <matthew.weber@rockwellcollins.com>
-> +N:	Matt Weber <matthew.weber@collins.com>
->  F:	board/freescale/p*
->  F:	board/freescale/t*
->  F:	board/qemu/ppc64-e5500/
-> @@ -2336,7 +2336,7 @@ F:	toolchain/
->  N:	Roman Gorbenkov <roman.gorbenkov@ens2m.org>
->  F:	package/davfs2/
->  
-> -N:	Ryan Barnett <ryan.barnett@rockwellcollins.com>
-> +N:	Ryan Barnett <ryan.barnett@collins.com>
->  F:	package/atftp/
->  F:	package/c-periphery/
->  F:	package/miraclecast/
-> @@ -2373,7 +2373,7 @@ F:	support/misc/toolchainfile.cmake.in
->  N:	Sam Voss <sam.voss@gmail.com>
->  F:	package/ripgrep/
->  
-> -N:	Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
-> +N:	Santosh Multhalli <santosh.multhalli@collins.com>
->  F:	package/valijson/
->  
->  N:	S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> -- 
-> 2.17.1
-> 
+>
+>  Regards,
+>  Arnout
+>
+> >  endef
+> >
+> >  $(eval $(generic-package))
+> >
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
