@@ -1,53 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 6 May 2021 21:45:09 +0200
-Subject: [Buildroot] [PATCH v1 1/3] package/libtomcrypt: add pkgconfig
- support
-In-Reply-To: <703dae4e-e296-79ad-5ba7-5d3efe724272@mind.be>
-References: <20210412195527.9282-1-ps.report@gmx.net>
- <20210412221453.5195d4b5@windsurf.home>
- <20210412231516.6cbc09f2@gmx.net>
- <45c379f0-8ca0-6891-1b1e-b166600da9ca@mind.be>
- <20210502122746.7988707d@gmx.net>
- <fce7cdf2-d2de-03e8-712e-dc6b98c892f7@mind.be>
- <20210503213852.3e9e23f3@gmx.net>
- <703dae4e-e296-79ad-5ba7-5d3efe724272@mind.be>
-Message-ID: <20210506214509.182a1a46@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 6 May 2021 21:46:26 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package/openjdk: Change URL to Github
+In-Reply-To: <cfde71bd-a3e5-3d3a-d150-8c8cd3e7cc7c@mind.be>
+References: <20210504210026.1916260-1-aduskett@gmail.com>
+ <20210504210026.1916260-2-aduskett@gmail.com>
+ <20210505203837.GV2137340@scaer>
+ <cfde71bd-a3e5-3d3a-d150-8c8cd3e7cc7c@mind.be>
+Message-ID: <20210506194626.GW2137340@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Arnout, All,
 
-On Tue, 4 May 2021 09:28:35 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+On 2021-05-06 08:53 +0200, Arnout Vandecappelle spake thusly:
+> On 05/05/2021 22:38, Yann E. MORIN wrote:
+> > So, this is not good, because that means the archives we have on s.b.o
+> > would not longer match what we want to download, so s.b.o can't be used
+> > as a fallback for master anymore.
+>  There's a trivial workaround: drop OPENJDK_SOURCE = .... That way, the tarball
+> name becomes openjdk-... instead of jdk-... and it's a different file.
 
-> On 03/05/2021 21:38, Peter Seiderer wrote:
-> > By the way, libtomcrypt depends on libtommath which used -fPIC unconditionally...
->
->  So, apparently I'm just full of s**t when I say -fPIC sometimes fails in static
-> builds... Weird, I really *do* remember that...
->
->  Ah, here I have it: [1] It doesn't lead to build failures, it's just less
-> performant and useless in static builds. It turns out, however, that we
-> unconditionally pass -fPIC in dozens of packages. So one more doesn't really
-> hurt I guess.
+That was my initial proposal, but Adam reinstated the _SOURCE variable,
+and I have no idea why I did not further challenge that before
+applying...
 
-Thanks for insight, can send (at least) a patch for libtommath to change the
--fPIC usage only for the non static case...
+Indeed, it works (patch pending...) Thanks!
 
 Regards,
-Peter
+Yann E. MORIN.
 
->
->  Regards,
->  Arnout
->
->
-> [1]
-> https://patchwork.ozlabs.org/project/buildroot/patch/20210209104726.20132-1-kremneva at synopsys.com/
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
