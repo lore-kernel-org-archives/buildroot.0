@@ -1,113 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 6 May 2021 23:03:13 +0200
-Subject: [Buildroot] [PATCH v3 1/7] package/Makefile.in: expose
- CONFIG_DIR to post-build/post-image scripts
-In-Reply-To: <20210504205139.1055360-2-thomas.petazzoni@bootlin.com>
-References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
- <20210504205139.1055360-2-thomas.petazzoni@bootlin.com>
-Message-ID: <20210506210313.GY2137340@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  6 May 2021 23:25:39 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-asgiref: bump version to
+ 3.3.4
+Message-ID: <20210506212540.17671-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Needed by django 3.2.x
 
-On 2021-05-04 22:51 +0200, Thomas Petazzoni spake thusly:
-> Sometimes, post-build or post-image scripts need to reinvoke
-> Buildroot's make, for example to execute "make printvars".
-> 
-> However, so far none of the variables exposed to post-build/post-image
-> scripts allowed to do that in a way that worked for both in-tree and
-> out-of-tree builds. Indeed:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-asgiref/python-asgiref.hash | 4 ++--
+ package/python-asgiref/python-asgiref.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-As we discussed on IRC, there is in fact one possibility to do that:
-
-    make -C ${BR2_CONFIG%/*} printvars
-
-Indeed, BR2_CONFIG points to the full path of the .config file, so by
-removing the last path component of BR2_CONFIG, we end up with the
-directory that is CONFIG_DIR.
-
-However, it is not ver convenient to extract info from Br2_CONFIG, so
-exposing CONFIG_DIR is a godd adition.
-
-Applied to master, after referencing BR2_CONFIG, thanks.
-
-Regards,
-Yann E. MORIN.
-
->  * "make printvars" would work for in-tree builds, but not out of tree
->    builds
-> 
->  * "make -C ${O} printvars" would work for out-of-tree builds, but not
->    in-tree builds
-> 
-> In order to solve this, this commit exposes $(CONFIG_DIR) to
-> post-build/post-image scripts, through the EXTRA_ENV variable.
-> 
-> The documentation is updated accordingly.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  docs/manual/customize-post-image.txt | 3 ++-
->  docs/manual/customize-rootfs.txt     | 3 +++
->  package/Makefile.in                  | 1 +
->  3 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/customize-post-image.txt b/docs/manual/customize-post-image.txt
-> index 90ea2b9328..5308093d06 100644
-> --- a/docs/manual/customize-post-image.txt
-> +++ b/docs/manual/customize-post-image.txt
-> @@ -28,7 +28,8 @@ different sets of arguments to each script.
->  
->  Again just like for the post-build scripts, the scripts have access to
->  the environment variables +BR2_CONFIG+, +HOST_DIR+, +STAGING_DIR+,
-> -+TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
-> ++TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+, +CONFIG_DIR+ and
-> ++BASE_DIR+.
->  
->  The post-image scripts will be executed as the user that executes
->  Buildroot, which should normally _not_ be the root user. Therefore, any
-> diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-> index e1dbadda5b..8b361f8621 100644
-> --- a/docs/manual/customize-rootfs.txt
-> +++ b/docs/manual/customize-rootfs.txt
-> @@ -65,6 +65,9 @@ In addition, you may also use these environment variables:
->    - +BUILD_DIR+: the directory where packages are extracted and built
->    - +BINARIES_DIR+: the place where all binary files (aka images) are
->      stored
-> +  - +CONFIG_DIR+: the directory containing the .config file, and
-> +    therefore the top-level Buildroot Makefile to use (which is
-> +    correct for both in-tree and out-of-tree builds)
->    - +BASE_DIR+: the base output directory
->  
->  Below three more methods of customizing the target filesystem are
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 51f5cbce4f..f4028bc67c 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -318,6 +318,7 @@ EXTRA_ENV = \
->  	PATH=$(BR_PATH) \
->  	BR2_DL_DIR=$(BR2_DL_DIR) \
->  	BUILD_DIR=$(BUILD_DIR) \
-> +	CONFIG_DIR=$(CONFIG_DIR) \
->  	O=$(CANONICAL_O)
->  
->  ################################################################################
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/python-asgiref/python-asgiref.hash b/package/python-asgiref/python-asgiref.hash
+index 782a13fe5c..c349ad5a44 100644
+--- a/package/python-asgiref/python-asgiref.hash
++++ b/package/python-asgiref/python-asgiref.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/asgiref/json
+-md5	39218c10eee0bf66a3d893491d835e86  asgiref-3.2.3.tar.gz
+-sha256	7e06d934a7718bf3975acbf87780ba678957b87c7adc056f13b6215d610695a0  asgiref-3.2.3.tar.gz
++md5	5afe03ecc39ae94950ff95e80166d945  asgiref-3.3.4.tar.gz
++sha256	d1216dfbdfb63826470995d31caed36225dcaf34f182e0fa257a4dd9e86f1b78  asgiref-3.3.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-asgiref/python-asgiref.mk b/package/python-asgiref/python-asgiref.mk
+index b29903509e..0353f5d5a0 100644
+--- a/package/python-asgiref/python-asgiref.mk
++++ b/package/python-asgiref/python-asgiref.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ASGIREF_VERSION = 3.2.3
++PYTHON_ASGIREF_VERSION = 3.3.4
+ PYTHON_ASGIREF_SOURCE = asgiref-$(PYTHON_ASGIREF_VERSION).tar.gz
+-PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/80/c4/83a01607f2d10024c172097126264c8e00c6a4827b35d631ece9625e6ba2
++PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/d8/3f/ef696a6d8254f182b1a089aeffb638d2eb83055e603146d3a40605c5b7da
+ PYTHON_ASGIREF_SETUP_TYPE = setuptools
+ PYTHON_ASGIREF_LICENSE = BSD-3-Clause
+ PYTHON_ASGIREF_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
