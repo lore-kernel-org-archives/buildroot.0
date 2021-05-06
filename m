@@ -1,25 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 05 May 2021 23:20:14 +0000
-Subject: [Buildroot] [Bug 13791] The QEMU compiled by Buildroot does not
- support alsa or pulseaudio drivers for soundcard forwarding
-In-Reply-To: <bug-13791-163@https.bugs.busybox.net/>
-References: <bug-13791-163@https.bugs.busybox.net/>
-Message-ID: <bug-13791-163-lW4x9xMUx4@https.bugs.busybox.net/>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Wed,  5 May 2021 17:39:57 -0700
+Subject: [Buildroot] [PATCH 3/3] lmbench: emulate --prefix to avoid
+ scattering binaries all over
+In-Reply-To: <20210506003957.2994235-1-vgupta@synopsys.com>
+References: <20210506003957.2994235-1-vgupta@synopsys.com>
+Message-ID: <20210506003957.2994235-4-vgupta@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13791
+ - moves all lmbench binaries to <target>/lmbench/bin/<ARCH>
+ - scripts copied to <target>/lmbench/scripts
+ - scripts/os overwritten to setup "OS" as expected by LMBench runtime scripts
 
---- Comment #6 from WZab <wzab01@gmail.com> ---
-The temporary workaround is also available in the BR_Internet_Radio:
+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+---
+ package/lmbench/lmbench.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-https://github.com/wzab/BR_Internet_Radio/commit/bdf7afed292ec0408fe908df42a4bc298031141a
-
-https://github.com/wzab/BR_Internet_Radio/commit/2117504dc040cdc679e379eee87cde3c498c694d
-
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index 2f3b19b5f820..be6b3170099a 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -36,7 +36,14 @@ define LMBENCH_BUILD_CMDS
+ endef
+ 
+ define LMBENCH_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CFLAGS="$(TARGET_CFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" BASE=$(TARGET_DIR)/usr -C $(@D)/src install
++	mkdir -p $(TARGET_DIR)/lmbench/tmp
++	mkdir -p $(TARGET_DIR)/lmbench/scripts
++	$(TARGET_MAKE_ENV) $(MAKE) CFLAGS="$(TARGET_CFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" BASE=$(TARGET_DIR)/lmbench/tmp -C $(@D)/src install
++	mkdir -p $(TARGET_DIR)/lmbench/bin/$(ARCH)
++	mv $(TARGET_DIR)/lmbench/tmp/bin/* $(TARGET_DIR)/lmbench/bin/$(ARCH)
++	rm -rf $(TARGET_DIR)/lmbench/tmp/
++	cp -rfd $(@D)/scripts/ $(TARGET_DIR)/lmbench/.
++	echo "export OS=${ARCH}" >  $(TARGET_DIR)/lmbench/scripts/os
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.25.1
