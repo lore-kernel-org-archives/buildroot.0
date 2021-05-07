@@ -1,46 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 May 2021 09:36:44 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/docker-cli: bump
- version to 20.10.6
-Message-ID: <20210507071030.0D21581290@busybox.osuosl.org>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Fri, 7 May 2021 17:41:32 +1000
+Subject: [Buildroot] [PATCH] package/xen: bump version to 4.14.2
+In-Reply-To: <20210507070615.19796-1-peter@korsgaard.com>
+References: <20210507070615.19796-1-peter@korsgaard.com>
+Message-ID: <CAKmqyKOMrE-NN9umyPZs2HdDTs0sHoWmgjaYHefxeYS9UNvtXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b388cbb17ab5439a6ae72d0d3ded7df4b6baa0d3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+On Fri, May 7, 2021 at 5:06 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> Includes a number of bugfixes and the security fixes up to 368, so drop
+> those.
+>
+> For details, see the release notes:
+> https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-2/
+>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Mario Fink <mario.fink@record-evolution.de>
-Tested-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 02fcc814be2228a5457cba6393f8571630747d6e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index f4787062bb..bb3444c270 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4ba845f8c7e2e0a2ca1ec6589847159ca8d0d37b609f0e6f78def7a893b9b342  docker-cli-20.10.5.tar.gz
-+sha256  eda53b96ab83a59502df2e5e00ab7ee867243259407ef454be55e695303c1113  docker-cli-20.10.6.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 39b4d09c76..9c3690e4c3 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_CLI_VERSION = 20.10.5
-+DOCKER_CLI_VERSION = 20.10.6
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- 
- DOCKER_CLI_LICENSE = Apache-2.0
+Alistair
+
+> ---
+>  package/xen/xen.hash |  8 +-------
+>  package/xen/xen.mk   | 15 +--------------
+>  2 files changed, 2 insertions(+), 21 deletions(-)
+>
+> diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+> index 6893414313..fd0310c921 100644
+> --- a/package/xen/xen.hash
+> +++ b/package/xen/xen.hash
+> @@ -1,9 +1,3 @@
+>  # Locally computed
+> -sha256  cf0d7316ad674491f49b7ef0518cb1d906a2e3bfad639deef0ef2343b119ac0c  xen-4.14.1.tar.gz
+> +sha256  e35099a963070e3c9f425d1e36cbb1c40b7874ef449bfafd6688343783cb25ad  xen-4.14.2.tar.gz
+>  sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
+> -# https://xenbits.xenproject.org/xsa/advisory-360.html
+> -sha256  809515011efb781a2a8742e9acfd76412d3920c2d4142bb187588cd36f77383e  xsa360-4.14.patch
+> -# https://xenbits.xenproject.org/xsa/advisory-364.html
+> -sha256  dc313c70bb07b4096bbc4612cbbc180589923277411dede2fda37f04ecc846d6  xsa364.patch
+> -# https://xenbits.xenproject.org/xsa/advisory-368.html
+> -sha256  55bbe59c75b69f493e364dfcf6cdbc7db4acd32dbf0b4d2466815b7c1f1823ce  xsa368-4.14.patch
+> diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+> index 533882e05b..b84214ed16 100644
+> --- a/package/xen/xen.mk
+> +++ b/package/xen/xen.mk
+> @@ -4,26 +4,13 @@
+>  #
+>  ################################################################################
+>
+> -XEN_VERSION = 4.14.1
+> +XEN_VERSION = 4.14.2
+>  XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+>  XEN_LICENSE = GPL-2.0
+>  XEN_LICENSE_FILES = COPYING
+>  XEN_CPE_ID_VENDOR = xen
+>  XEN_CPE_ID_PREFIX = cpe:2.3:o
+>  XEN_DEPENDENCIES = host-acpica host-python3
+> -XEN_PATCH = \
+> -       https://xenbits.xenproject.org/xsa/xsa360-4.14.patch \
+> -       https://xenbits.xenproject.org/xsa/xsa364.patch \
+> -       https://xenbits.xenproject.org/xsa/xsa368-4.14.patch
+> -
+> -# xsa360-4.14.patch
+> -XEN_IGNORE_CVES += CVE-2021-3308
+> -
+> -# xsa364.patch
+> -XEN_IGNORE_CVES += CVE-2021-26933
+> -
+> -# xsa368-4.14.patch
+> -XEN_IGNORE_CVES += CVE-2021-28687
+>
+>  # Calculate XEN_ARCH
+>  ifeq ($(ARCH),aarch64)
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
