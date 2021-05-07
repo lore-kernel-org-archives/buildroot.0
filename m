@@ -1,39 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 07 May 2021 09:23:08 +0200
-Subject: [Buildroot] [PATCH] package/bind: security bump to version
- 9.11.31
-In-Reply-To: <20210501110300.22647-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 1 May 2021 13:02:59 +0200")
-References: <20210501110300.22647-1-peter@korsgaard.com>
-Message-ID: <87wnsb0zz7.fsf@dell.be.48ers.dk>
+Date: Fri, 07 May 2021 09:28:56 +0200
+Subject: [Buildroot] [PATCH v2 1/1] Fix -latomic for CMake packages
+In-Reply-To: <de634e81-64a4-285d-7e25-247ca3903e15@mind.be> (Arnout
+ Vandecappelle's message of "Sat, 1 May 2021 15:02:43 +0200")
+References: <20210413060942.2530596-1-glex.spb@gmail.com>
+ <20210413062615.2808309-1-glex.spb@gmail.com>
+ <de634e81-64a4-285d-7e25-247ca3903e15@mind.be>
+Message-ID: <87sg2z0zpj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > Fixes the following security issues:
- > - A malformed incoming IXFR transfer could trigger an assertion failure in
- >   named, causing it to quit abnormally.  (CVE-2021-25214)
+ > On 13/04/2021 08:26, Gleb Mazovetskiy wrote:
+ >> The poppler package failed to build for me with errors such as this one:
+ >> 
+ >> host/aarch64-buildroot-linux-gnu/include/c++/10.3.0/cstdlib:75:15: fatal error: stdlib.h: No such file or directory
+ >> 75 | #include_next <stdlib.h>
+ >> |               ^~~~~~~~~~
+ >> 
+ >> Changing the CMake option to a link-specific one fixes the issue.
 
- > - named crashed when a DNAME record placed in the ANSWER section during
- >   DNAME chasing turned out to be the final answer to a client query.
- >   (CVE-2021-25215)
+ >  Applied to master, thanks.
 
- > - When a server's configuration set the tkey-gssapi-keytab or
- >   tkey-gssapi-credential option, a specially crafted GSS-TSIG query could
- >   cause a buffer overflow in the ISC implementation of SPNEGO (a protocol
- >   enabling negotiation of the security mechanism used for GSSAPI
- >   authentication).  This flaw could be exploited to crash named binaries
- >   compiled for 64-bit platforms, and could enable remote code execution when
- >   named was compiled for 32-bit platforms.  (CVE-2021-25216)
+ >  Your SoB was missing here, but it was on v1 so I re-added it.
 
- > For more details, see the release notes:
- > https://downloads.isc.org/isc/bind9/9.11.31/RELEASE-NOTES-bind-9.11.31.html
+ >  Normally we expect to have one patch per package. This makes it easier to:
+ > - port to the stable branch (only the packages that apply to the stable branch);
+ > - partially revert.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >  In this case, I couldn't be bothered to change it though. Just for the future,
+ > know that that's the preferred way. It also helps increase your ranking in the
+ > contribution statistics :-)
+
+ >  There are a few other packages that do something similar: bctoolbox with
+ > -liconv, kf5-kcoreaddons with -latomic, libcpprestsdk with -latomic, mariadb
+ > with -latomic, ogre with -latomic, opencv3 with -latomic. Could you change (and
+ > test) those ones as well?
 
 Committed to 2021.02.x, thanks.
 
