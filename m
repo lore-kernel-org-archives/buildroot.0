@@ -1,75 +1,106 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 May 2021 22:48:23 +0200
-Subject: [Buildroot] [git commit] package/riscv64-elf-toolchain: new package
-Message-ID: <20210507212959.A516688392@busybox.osuosl.org>
+Date: Fri, 7 May 2021 23:40:07 +0200
+Subject: [Buildroot] [git commit] configs/beaglev: enable building of
+ low-level firmware
+Message-ID: <20210507212959.CCEE6880B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58d7c712d7d1ef5b439ead455a4ed2ca659b60fb
+commit: https://git.buildroot.net/buildroot/commit/?id=671423d33e301c1c6e9186926a22980bb7597440
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a new package for a prebuilt bare-metal toolchain for
-RISC-V 64-bit. Indeed, some bootloader/firmware for the BeagleV (and
-potentially later for other platforms?) do not build with a
-Linux-capable toolchain.
-
-This uses a pre-built toolchain from SiFive, precompiled for x86-64,
-so all packages using this toolchain must have the appropriate
-BR2_HOSTARCH dependency.
-
-This package is modeled after package/arm-gnu-a-toolchain/, which
-package a pre-built ARM32 bare-metal toolchain.
+This commit extends the beaglev_defconfig and its documentation to
+build the low-level firmware, and to explain how to reflash it.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
+[yann.morin.1998 at free.fr: use typoed-name for beaglev-ddrlnit]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                         |  1 +
- .../riscv64-elf-toolchain/riscv64-elf-toolchain.mk | 25 ++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+ board/beaglev/readme.txt  | 38 ++++++++++++++++++++++++++++++++++++--
+ configs/beaglev_defconfig |  2 ++
+ 2 files changed, 38 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c5f9f36578..bcf42dc9cb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2651,6 +2651,7 @@ F:	package/python3/
- F:	package/python-mad/
- F:	package/python-serial/
- F:	package/qextserialport/
-+F:	package/riscv64-elf-toolchain/
- F:	package/rpcbind/
- F:	package/rt-tests/
- F:	package/rtc-tools/
-diff --git a/package/riscv64-elf-toolchain/riscv64-elf-toolchain.mk b/package/riscv64-elf-toolchain/riscv64-elf-toolchain.mk
-new file mode 100644
-index 0000000000..9b08ee0fec
---- /dev/null
-+++ b/package/riscv64-elf-toolchain/riscv64-elf-toolchain.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# riscv64-elf-toolchain
-+#
-+################################################################################
+diff --git a/board/beaglev/readme.txt b/board/beaglev/readme.txt
+index d8511d3fd1..bbdb9b12ef 100644
+--- a/board/beaglev/readme.txt
++++ b/board/beaglev/readme.txt
+@@ -17,6 +17,8 @@ Build results
+ 
+ After building, output/images contains:
+ 
+++ bootloader-BEAGLEV-buildroot.bin.out
+++ ddrinit-2133-buildroot.bin.out
+ + Image
+ + fw_payload.bin
+ + fw_payload.bin.out
+@@ -26,7 +28,11 @@ After building, output/images contains:
+ + sdcard.img
+ + u-boot.bin
+ 
+-The two important files are:
++The four important files are:
 +
-+RISCV64_ELF_TOOLCHAIN_VERSION = 2020.12.8
-+RISCV64_ELF_TOOLCHAIN_SITE = https://static.dev.sifive.com/dev-tools/freedom-tools/v2020.12
-+RISCV64_ELF_TOOLCHAIN_SOURCE = riscv64-unknown-elf-toolchain-10.2.0-$(RISCV64_ELF_TOOLCHAIN_VERSION)-x86_64-linux-centos6.tar.gz
++ - bootloader-BEAGLEV-buildroot.bin.out, the first stage bootloader
 +
-+HOST_RISCV64_ELF_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/riscv64-elf
++ - ddrinit-2133-buildroot.bin.out, the DDR initialization firmware
+ 
+  - fw_payload.bin.out, which is the bootloader image, containing
+    both OpenSBI and U-Boot.
+@@ -51,7 +57,7 @@ Insert your SD card.
+ 
+ Power-up the board using an USB-C cable.
+ 
+-Flashing the bootloader
++Flashing OpenSBI/U-Boot
+ =======================
+ 
+ The bootloader pre-flashed on the Beagle-V has a non-working
+@@ -86,3 +92,31 @@ fw_payload.bin.out using the Xmodem protocol.
+ 
+ After reflashing is complete, restart the board, it will automatically
+ start the system from the SD card, and reach the login prompt.
 +
-+define HOST_RISCV64_ELF_TOOLCHAIN_INSTALL_CMDS
-+	rm -rf $(HOST_RISCV64_ELF_TOOLCHAIN_INSTALL_DIR)
-+	mkdir -p $(HOST_RISCV64_ELF_TOOLCHAIN_INSTALL_DIR)
-+	cp -rf $(@D)/* $(HOST_RISCV64_ELF_TOOLCHAIN_INSTALL_DIR)/
++Flashing low-level bootloaders
++==============================
 +
-+	mkdir -p $(HOST_DIR)/bin
-+	cd $(HOST_DIR)/bin && \
-+	for i in ../opt/riscv64-elf/bin/*; do \
-+		ln -sf $$i; \
-+	done
-+endef
++The BeagleV comes pre-flashed with functional low-level bootloaders
++(called "secondboot" and "ddrinit"). Re-flashing them is not necessary
++to use this Buildroot defconfig. However, for the sake of
++completeness, Buildroot builds and provides those low-level bootloader
++images.
 +
-+$(eval $(host-generic-package))
++You can flash them as follows:
++
++ - In the same "pre-loader" menu as the one used above, instead of
++   entering 0 or 1, enter the magic "root at s5t" string. This enters the
++   "expert" features.
++
++ - Then, press 0 and send over X-modem the
++   bootloader-BEAGLEV-buildroot.bin.out file.
++
++ - Then, press 1 and send over X-modem the
++   ddrinit-2133-buildroot.bin.out.
++
++Note that the reflashing mechanism itself relies on those low-level
++bootloaders, so if you flash non-working versions, you'll have to go
++through a recovery process. This requires wiring up to a separate
++debug UART, which pins are located near the HDMI connector. See
++https://wiki.seeedstudio.com/BeagleV-Update-bootloader-ddr-init-boot-uboot-Recover-bootloader/
++section "Recover the bootloader" for more details.
+diff --git a/configs/beaglev_defconfig b/configs/beaglev_defconfig
+index e94c4ab639..59051e7a6d 100644
+--- a/configs/beaglev_defconfig
++++ b/configs/beaglev_defconfig
+@@ -18,6 +18,8 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_BEAGLEV_DDRLNIT=y
++BR2_TARGET_BEAGLEV_SECONDBOOT=y
+ BR2_TARGET_OPENSBI=y
+ BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
+ # HEAD of the Fedora branch
