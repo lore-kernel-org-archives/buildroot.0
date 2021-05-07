@@ -1,26 +1,25 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 8 May 2021 00:07:53 +0200
-Subject: [Buildroot] [PATCH v3 6/7] boot/beaglev-secondboot: new package
-In-Reply-To: <20210504205139.1055360-7-thomas.petazzoni@bootlin.com>
+Date: Sat, 8 May 2021 00:08:52 +0200
+Subject: [Buildroot] [PATCH v3 7/7] configs/beaglev: enable building of
+ low-level firmware
+In-Reply-To: <20210504205139.1055360-8-thomas.petazzoni@bootlin.com>
 References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
- <20210504205139.1055360-7-thomas.petazzoni@bootlin.com>
-Message-ID: <20210507220753.GG2137340@scaer>
+ <20210504205139.1055360-8-thomas.petazzoni@bootlin.com>
+Message-ID: <20210507220852.GH2137340@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, All,
+
 On 2021-05-04 22:51 +0200, Thomas Petazzoni spake thusly:
-> This packages allows to build the first stage bootloader used on the
-> BeagleV, which is used even before the DDR initialization and
-> OpenSBI/U-Boot. Yes, "secondboot" is strange for what is the first
-> stage bootloader, but that's the upstream name.
+> This commit extends the beaglev_defconfig and its documentation to
+> build the low-level firmware, and explain how to reflash it.
 
-I've added a hash file.
-
-I also changed the comment to not mention 'HEAD' since this will no
-longer be the case when upstream pushes a new commit.
+I just had to adapt thedefconfig to use the real beagle_ddrlnit package
+name, since I renamed it.
 
 Applied to master, thanks.
 
@@ -30,88 +29,90 @@ Yann E. MORIN.
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
 > ---
->  DEVELOPERS                                    |  1 +
->  boot/Config.in                                |  1 +
->  boot/beaglev-secondboot/Config.in             |  9 ++++++
->  boot/beaglev-secondboot/beaglev-secondboot.mk | 29 +++++++++++++++++++
->  4 files changed, 40 insertions(+)
->  create mode 100644 boot/beaglev-secondboot/Config.in
->  create mode 100644 boot/beaglev-secondboot/beaglev-secondboot.mk
+>  board/beaglev/readme.txt  | 38 ++++++++++++++++++++++++++++++++++++--
+>  configs/beaglev_defconfig |  2 ++
+>  2 files changed, 38 insertions(+), 2 deletions(-)
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 39bc71ea34..1d786b6ffa 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2605,6 +2605,7 @@ F:	arch/Config.in.arm
->  F:	board/beaglev/
->  F:	board/stmicroelectronics/stm32mp157c-dk2/
->  F:	boot/beaglev-ddrinit/
-> +F:	boot/beaglev-secondboot/
->  F:	boot/boot-wrapper-aarch64/
->  F:	boot/grub2/
->  F:	boot/gummiboot/
-> diff --git a/boot/Config.in b/boot/Config.in
-> index f581205c6c..08d9ac06b2 100644
-> --- a/boot/Config.in
-> +++ b/boot/Config.in
-> @@ -7,6 +7,7 @@ source "boot/at91dataflashboot/Config.in"
->  source "boot/arm-trusted-firmware/Config.in"
->  source "boot/barebox/Config.in"
->  source "boot/beaglev-ddrinit/Config.in"
-> +source "boot/beaglev-secondboot/Config.in"
->  source "boot/binaries-marvell/Config.in"
->  source "boot/boot-wrapper-aarch64/Config.in"
->  source "boot/grub2/Config.in"
-> diff --git a/boot/beaglev-secondboot/Config.in b/boot/beaglev-secondboot/Config.in
-> new file mode 100644
-> index 0000000000..a9695fc138
-> --- /dev/null
-> +++ b/boot/beaglev-secondboot/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_TARGET_BEAGLEV_SECONDBOOT
-> +	bool "beaglev-secondboot"
-> +	depends on BR2_riscv
-> +	depends on BR2_HOSTARCH = "x86_64" # host-riscv64-elf-toolchain
-> +	help
-> +	  This package builds the SecondBoot firmware used on the
-> +	  BeagleV platform.
+> diff --git a/board/beaglev/readme.txt b/board/beaglev/readme.txt
+> index d8511d3fd1..a3adaba3ae 100644
+> --- a/board/beaglev/readme.txt
+> +++ b/board/beaglev/readme.txt
+> @@ -17,6 +17,8 @@ Build results
+>  
+>  After building, output/images contains:
+>  
+> ++ bootloader-BEAGLEV-buildroot.bin.out
+> ++ ddrinit-2133-buildroot.bin.out
+>  + Image
+>  + fw_payload.bin
+>  + fw_payload.bin.out
+> @@ -26,7 +28,11 @@ After building, output/images contains:
+>  + sdcard.img
+>  + u-boot.bin
+>  
+> -The two important files are:
+> +The four important files are:
 > +
-> +	  https://github.com/starfive-tech/beagle_secondBoot
-> diff --git a/boot/beaglev-secondboot/beaglev-secondboot.mk b/boot/beaglev-secondboot/beaglev-secondboot.mk
-> new file mode 100644
-> index 0000000000..f3b255fb0c
-> --- /dev/null
-> +++ b/boot/beaglev-secondboot/beaglev-secondboot.mk
-> @@ -0,0 +1,29 @@
-> +################################################################################
-> +#
-> +# beaglev-secondboot
-> +#
-> +################################################################################
+> + - bootloader-BEAGLEV-buildroot.bin.out, the first stage bootloader
 > +
-> +# HEAD of the starfive branch
-> +BEAGLEV_SECONDBOOT_VERSION = a4f0b4307f877890f998b3216cffcc9f27a5f993
-> +BEAGLEV_SECONDBOOT_SITE = $(call github,starfive-tech,beagle_secondBoot,$(BEAGLEV_SECONDBOOT_VERSION))
-> +BEAGLEV_SECONDBOOT_INSTALL_TARGET = NO
-> +BEAGLEV_SECONDBOOT_INSTALL_IMAGES = YES
-> +BEAGLEV_SECONDBOOT_DEPENDENCIES = host-riscv64-elf-toolchain
-> +# unfortunately, no real license file, but several sources files are
-> +# under GPL-2.0+, making the whole work GPL-2.0+
-> +BEAGLEV_SECONDBOOT_LICENSE = GPL-2.0+
+> + - ddrinit-2133-buildroot.bin.out, the DDR initialization firmware
+>  
+>   - fw_payload.bin.out, which is the bootloader image, containing
+>     both OpenSBI and U-Boot.
+> @@ -51,7 +57,7 @@ Insert your SD card.
+>  
+>  Power-up the board using an USB-C cable.
+>  
+> -Flashing the bootloader
+> +Flashing OpenSBI/U-Boot
+>  =======================
+>  
+>  The bootloader pre-flashed on the Beagle-V has a non-working
+> @@ -86,3 +92,31 @@ fw_payload.bin.out using the Xmodem protocol.
+>  
+>  After reflashing is complete, restart the board, it will automatically
+>  start the system from the SD card, and reach the login prompt.
 > +
-> +define BEAGLEV_SECONDBOOT_BUILD_CMDS
-> +	$(MAKE) -C $(@D)/build \
-> +		CROSSCOMPILE=$(HOST_DIR)/bin/riscv64-unknown-elf- \
-> +		SUFFIX=buildroot \
-> +		GIT_VERSION=$(BEAGLEV_SECONDBOOT_VERSION)
-> +endef
+> +Flashing low-level bootloaders
+> +==============================
 > +
-> +define BEAGLEV_SECONDBOOT_INSTALL_IMAGES_CMDS
-> +	$(INSTALL) -D -m 0644 $(@D)/build/bootloader-BEAGLEV-buildroot.bin.out \
-> +		$(BINARIES_DIR)/bootloader-BEAGLEV-buildroot.bin.out
-> +endef
+> +The BeagleV comes pre-flashed with functional low-level bootloaders
+> +(called "secondboot" and "ddrinit"). Re-flashing them is not necessary
+> +to use this Buildroot defconfig. However, for the sake of
+> +completeness, Buildroot builds and provides those low-level bootloader
+> +images.
 > +
-> +$(eval $(generic-package))
+> +You can flash them as follows:
+> +
+> + - In the same "pre-loader" menu as the one used above, instead of
+> +   entering 0 or 1, enter the magic "root at s5t" string. This enters the
+> +   "expert" features.
+> +
+> + - Then, press 0 and send over X-modem the
+> +   bootloader-BEAGLEV-buildroot.bin.out file.
+> +
+> + - Then, press 1 and send over X-modem the
+> +   ddrinit-2133-buildroot.bin.out.
+> +
+> +Note that the reflashing mechanism itself relies on those low-level
+> +bootloaders, so if you flash non-working versions, you'll have to go
+> +through a recovery process. This requires wiring up to a separate
+> +debug UART, whose pins are located near the HDMI connector. See
+> +https://wiki.seeedstudio.com/BeagleV-Update-bootloader-ddr-init-boot-uboot-Recover-bootloader/
+> +section "Recover the bootloader" for more details.
+> diff --git a/configs/beaglev_defconfig b/configs/beaglev_defconfig
+> index e94c4ab639..8943ce9c34 100644
+> --- a/configs/beaglev_defconfig
+> +++ b/configs/beaglev_defconfig
+> @@ -18,6 +18,8 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+>  BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+>  # BR2_TARGET_ROOTFS_TAR is not set
+> +BR2_TARGET_BEAGLEV_DDRINIT=y
+> +BR2_TARGET_BEAGLEV_SECONDBOOT=y
+>  BR2_TARGET_OPENSBI=y
+>  BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
+>  # HEAD of the Fedora branch
 > -- 
 > 2.30.2
 > 
