@@ -1,95 +1,60 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  7 May 2021 19:07:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/numactl: add -latomic to numa.pc
-Message-ID: <20210507170701.2301276-1-fontaine.fabrice@gmail.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Fri,  7 May 2021 19:42:29 +0200
+Subject: [Buildroot] [PATCH] package/python-bleak: bump to version 0.11.0
+Message-ID: <20210507174229.1545379-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of passing -latomic through LDFLAGS as done in commit
-4ed540ddf59bec4b389be44d7f42820d2466904f, properly check for it in
-configure.ac and add it to numa.pc or numactl users won't be able to get
-it
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- .../0002-link-with-latomic-if-needed.patch    | 52 +++++++++++++++++++
- package/numactl/numactl.mk                    |  4 --
- 2 files changed, 52 insertions(+), 4 deletions(-)
- create mode 100644 package/numactl/0002-link-with-latomic-if-needed.patch
+ package/python-bleak/Config.in         | 2 +-
+ package/python-bleak/python-bleak.hash | 4 ++--
+ package/python-bleak/python-bleak.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/numactl/0002-link-with-latomic-if-needed.patch b/package/numactl/0002-link-with-latomic-if-needed.patch
-new file mode 100644
-index 0000000000..6dff0cb233
---- /dev/null
-+++ b/package/numactl/0002-link-with-latomic-if-needed.patch
-@@ -0,0 +1,52 @@
-+From e0de0d9e981ddb53bdeb4a4b9dc43046c9ff4ff9 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 6 May 2021 23:08:36 +0200
-+Subject: [PATCH] link with -latomic if needed
-+
-+numactl unconditionally uses __atomic_fetch_and but some architectures
-+(e.g. sparc) needs to link with -latomic to be able to use it. So check
-+if -latomic is needed and update numa.pc accordingly
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/numactl/numactl/commit/e0de0d9e981ddb53bdeb4a4b9dc43046c9ff4ff9]
-+---
-+ Makefile.am  | 1 +
-+ configure.ac | 2 ++
-+ numa.pc.in   | 1 +
-+ 3 files changed, 4 insertions(+)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 44d0d76..34f6815 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -151,6 +151,7 @@ SED_PROCESS = \
-+         -e 's, at exec_prefix\@,$(exec_prefix),g' \
-+         -e 's, at libdir\@,$(libdir),g' \
-+         -e 's, at includedir\@,$(includedir),g' \
-++        -e 's, at LIBS\@,$(LIBS),g' \
-+         < $< > $@ || rm $@
-+ 
-+ %.pc: %.pc.in Makefile
-+diff --git a/configure.ac b/configure.ac
-+index 659a765..e3b0eb3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -24,6 +24,8 @@ AM_CONDITIONAL([HAVE_TREE_VECTORIZE], [test x"${tree_vectorize}" = x"true"])
-+ 
-+ AC_CONFIG_FILES([Makefile])
-+ 
-++AC_SEARCH_LIBS([__atomic_fetch_and_1], [atomic])
-++
-+ # GCC tries to be "helpful" and only issue a warning for unrecognized
-+ # attributes.  So we compile the test with Werror, so that if the
-+ # attribute is not recognized the compilation fails
-+diff --git a/numa.pc.in b/numa.pc.in
-+index 8a0f202..cc04d50 100644
-+--- a/numa.pc.in
-++++ b/numa.pc.in
-+@@ -8,3 +8,4 @@ Description: NUMA policy library
-+ Version: @VERSION@
-+ Cflags: -I${includedir}
-+ Libs: -L${libdir} -lnuma
-++Libs.Private: @LIBS@
-diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-index 3364f6c5c3..cf9c759693 100644
---- a/package/numactl/numactl.mk
-+++ b/package/numactl/numactl.mk
-@@ -12,8 +12,4 @@ NUMACTL_INSTALL_STAGING = YES
- NUMACTL_AUTORECONF = YES
- NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
+diff --git a/package/python-bleak/Config.in b/package/python-bleak/Config.in
+index 6015361899..43ed65d752 100644
+--- a/package/python-bleak/Config.in
++++ b/package/python-bleak/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_BLEAK
+ 	bool "python-bleak"
+ 	depends on BR2_PACKAGE_PYTHON3
+-	select BR2_PACKAGE_PYTHON_TXDBUS # runtime
++	select BR2_PACKAGE_PYTHON_DBUS_NEXT # runtime
+ 	help
+ 	  Bluetooth Low Energy platform Agnostic Klient.
  
--ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--NUMACTL_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
--endif
--
- $(eval $(autotools-package))
+diff --git a/package/python-bleak/python-bleak.hash b/package/python-bleak/python-bleak.hash
+index 9506822c1b..9931bce202 100644
+--- a/package/python-bleak/python-bleak.hash
++++ b/package/python-bleak/python-bleak.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/bleak/json
+-md5  e891b33804b69f0247eb770ca27fa0d5  bleak-0.10.0.tar.gz
+-sha256  5c3a873965f2910865895e572e7a4f10533d6e150e6ba17936397426bf8d1eee  bleak-0.10.0.tar.gz
++md5  f15b43e4a6380eadb96b4235385c2ba1  bleak-0.11.0.tar.gz
++sha256  7796a6188547cf77f668406e6513d5d23316c508ca929882ed429d90c7a745ff  bleak-0.11.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c4029a2b63b3824ab68be841f414addbdde20cb79cdbe272fa80c0b2abe65374  LICENSE
+diff --git a/package/python-bleak/python-bleak.mk b/package/python-bleak/python-bleak.mk
+index 040d64ed41..870bfce10f 100644
+--- a/package/python-bleak/python-bleak.mk
++++ b/package/python-bleak/python-bleak.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_BLEAK_VERSION = 0.10.0
++PYTHON_BLEAK_VERSION = 0.11.0
+ PYTHON_BLEAK_SOURCE = bleak-$(PYTHON_BLEAK_VERSION).tar.gz
+-PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/80/37/c8c88709e4f1ca4636bf11c96d1ec046d7426cd02670ae80a3542280558b
++PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/7c/f3/817132098d57f5717f7f7dc46357e4ca2647c9addaf8e571382d12a28546
+ PYTHON_BLEAK_SETUP_TYPE = setuptools
+ PYTHON_BLEAK_LICENSE = MIT
+ PYTHON_BLEAK_LICENSE_FILES = LICENSE
 -- 
-2.30.2
+2.31.1
