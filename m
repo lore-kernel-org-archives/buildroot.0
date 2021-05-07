@@ -1,131 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 May 2021 04:48:29 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-05-06
-Message-ID: <20210507044834.F25C6607FD@smtp3.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri,  7 May 2021 08:15:35 +0200
+Subject: [Buildroot] [PATCH] package/python3: security bump to version 3.9.5
+Message-ID: <20210507061536.2819-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes the following security issues:
 
-Autobuild statistics for 2021-05-06
-===================================
+- bpo-43434: Creating a sqlite3.Connection object now also produces a
+  sqlite3.connect auditing event.  Previously this event was only produced
+  by sqlite3.connect() calls.  Patch by Erlend E.  Aasland.
 
-      branch |  OK | NOK | TIM | TOT |
-  2021.02.x  | 23  |  1  |  0  | 24  |
-    master   | 113 | 32  |  0  | 145 |
+- bpo-43882: The presence of newline or tab characters in parts of a URL
+  could allow some forms of attacks.
+  Following the controlling specification for URLs defined by WHATWG
+  urllib.parse() now removes ASCII newlines and tabs from URLs, preventing
+  such attacks.
 
-Classification of failures by reason for master
------------------------------------------------
+- bpo-43472: Ensures interpreter-level audit hooks receive the
+  cpython.PyInterpreterState_New event when called through the
+  _xxsubinterpreters module.
 
-                 gerbera-1.8.0 | 5 
-               capnproto-0.8.0 | 3 
-                    ffmpeg-4.4 | 2 
-        host-sentry-cli-1.57.0 | 2 
-               pipewire-0.3.26 | 2 
-                   bullet-3.09 | 1 
-                directfb-1.7.7 | 1 
-               domoticz-2021.1 | 1 
-                   eigen-3.3.7 | 1 
-                 hwloc-1.11.13 | 1 
-             libopenh264-2.1.1 | 1 
-monkey-f54856ce250c4e257354... | 1 
-                mono-6.12.0.90 | 1 
-                    mpd-0.22.6 | 1 
-       python-matplotlib-3.0.3 | 1 
-                rocksdb-6.13.3 | 1 
-           spidermonkey-60.5.2 | 1 
-                   strace-5.11 | 1 
-                suricata-6.0.2 | 1 
-                       unknown | 1 
-                    unscd-0.54 | 1 
-                    vlc-3.0.12 | 1 
-                  zeromq-4.3.4 | 1 
+- bpo-36384: ipaddress module no longer accepts any leading zeros in IPv4
+  address strings.  Leading zeros are ambiguous and interpreted as octal
+  notation by some libraries.  For example the legacy function
+  socket.inet_aton() treats leading zeros as octal notatation.  glibc
+  implementation of modern inet_pton() does not accept any leading zeros.
+  For a while the ipaddress module used to accept ambiguous leading zeros.
 
+- bpo-43075: Fix Regular Expression Denial of Service (ReDoS) vulnerability
+  in urllib.request.AbstractBasicAuthHandler.  The ReDoS-vulnerable regex
+  has quadratic worst-case complexity and it allows cause a denial of
+  service when identifying crafted invalid RFCs.  This ReDoS issue is on the
+  client side and needs remote attackers to control the HTTP server.
 
-Detail of failures for master
------------------------------
+- bpo-42800: Audit hooks are now fired for frame.f_code, traceback.tb_frame,
+  and generator code/frame attribute access.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |          bullet-3.09           | NOK | http://autobuild.buildroot.net/results/ab2efdd1eac64474adf00d8e60b42110c6e89143 |     
-  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/dc4e5ca3aa3c6b25a860e383571c4fbea3f3aa9e |     
-  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/196cf0800084e5dccf2b43957d91d868d0d9009a |     
-  riscv32    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/910905a96ca45e648065ed1e0cf581a19d8cc3d7 |     
-  riscv32    |         directfb-1.7.7         | NOK | http://autobuild.buildroot.net/results/de5c2cbecb26916cc4748e15208eb1f83a6c8f2c | ORPH
-  mips64el   |        domoticz-2021.1         | NOK | http://autobuild.buildroot.net/results/d26ddfa9a69c4d6eef05b5110fca0fb37290910c |     
-    arm      |          eigen-3.3.7           | NOK | http://autobuild.buildroot.net/results/ff87da172fd355133f9c64b3ffd94ee5ac10ba42 |     
-   mipsel    |           ffmpeg-4.4           | NOK | http://autobuild.buildroot.net/results/530d2a255258a2c37382070544bf3e5f4d2050e5 |     
-   mipsel    |           ffmpeg-4.4           | NOK | http://autobuild.buildroot.net/results/9cc08aef3528c5089cce445d600192a513af7f2f |     
-    arm      |         gerbera-1.8.0          | NOK | http://autobuild.buildroot.net/results/639ccc1e984d960361c6530550fa531e0ee7025e |     
-    arc      |         gerbera-1.8.0          | NOK | http://autobuild.buildroot.net/results/d66f9efde9638f7ef6108e425a020dc54a3ec1ff |     
-   x86_64    |         gerbera-1.8.0          | NOK | http://autobuild.buildroot.net/results/b8a60f3c2611156a559f54768d85c42c077855b4 |     
-  aarch64    |         gerbera-1.8.0          | NOK | http://autobuild.buildroot.net/results/66147cc0a8eaaa087746ed336a13ad39b90ecb09 |     
-    arc      |         gerbera-1.8.0          | NOK | http://autobuild.buildroot.net/results/d0dd904ef5614f0fde88d19d342c8d98368928ea |     
-  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/02decf21c82e9a96571536343ae1686766078239 |     
-   mipsel    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/7fd81ac3c8891a139395a0038c3a65a7ab2eb482 |     
-   sparc     |         hwloc-1.11.13          | NOK | http://autobuild.buildroot.net/results/5f9394d3bab4e83edbea9bc607c3e135adfdabbc |     
-   mipsel    |       libopenh264-2.1.1        | NOK | http://autobuild.buildroot.net/results/265eb4e5ac2a3cbd21eab320ed16ee10fc5e656a |     
-   xtensa    | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/da87d2c9bf5afe52400f921d62c0ec777c9fe0a2 | ORPH
-    arm      |         mono-6.12.0.90         | NOK | http://autobuild.buildroot.net/results/92ca2387f4e17d005b2ece301f43bf7084bb6a63 |     
-  aarch64    |           mpd-0.22.6           | NOK | http://autobuild.buildroot.net/results/058ff45b97d9e313b240c9cd01b4dd64bc051a65 |     
-    arm      |        pipewire-0.3.26         | NOK | http://autobuild.buildroot.net/results/6ce2fe6de49b0287f62a7e6c55ac6c40a2415132 |     
-   sparc     |        pipewire-0.3.26         | NOK | http://autobuild.buildroot.net/results/4ee1667416340667b49a67465b2513045de01ff1 |     
-   x86_64    |    python-matplotlib-3.0.3     | NOK | http://autobuild.buildroot.net/results/0c5e0abbcc9e6881ea717f344622c460b6db2608 |     
-    arm      |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/f007412f29ab2e03a6904e2f548e77654abde6de |     
-   x86_64    |      spidermonkey-60.5.2       | NOK | http://autobuild.buildroot.net/results/bad62ac16cf855ebbb03147c346da497c0cab662 | ORPH
-   xtensa    |          strace-5.11           | NOK | http://autobuild.buildroot.net/results/62c4b7bdbe9e05eed6416d075eb0f19af3bba8ba |     
-   x86_64    |         suricata-6.0.2         | NOK | http://autobuild.buildroot.net/results/34b0a0fd7e5ffb5a8c025a1274f6c61183f5e22d |     
-    arc      |            unknown             | NOK | http://autobuild.buildroot.net/results/014575308eac191c70eeac6defb49a1bd9acd62c |     
-  riscv32    |           unscd-0.54           | NOK | http://autobuild.buildroot.net/results/8cd72f8a78f05989ce9645a008aa5ea40ad3db62 |     
-  sparc64    |           vlc-3.0.12           | NOK | http://autobuild.buildroot.net/results/0f386d594b830c5023dbaf90577a49589455d356 |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/8a59c16016c7b9975b4122ffed70fee8d4439abf |     
+https://www.python.org/downloads/release/python-395/
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python3/python3.hash | 6 +++---
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Classification of failures by reason for 2021.02.x
---------------------------------------------------
-
-                       unknown | 1 
-
-
-Detail of failures for 2021.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    or1k     |            unknown             | NOK | http://autobuild.buildroot.net/results/70f18470ae6ef9a7637ff791ba1d9f935a4e59d6 |     
-
-
-Gitlab CI results for 2021-05-06
-================================
-
-Detail of defconfig failures for master
----------------------------------------
-
-                        defconfig |                        link to the job                        | orph?
-----------------------------------+---------------------------------------------------------------+------
-       acmesystems_acqua_a5_256mb | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157423  | ORPH 
-       acmesystems_acqua_a5_512mb | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157424  | ORPH 
-             amarula_vyasa_rk3288 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157431  |      
-                        imx8mqevk | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157536  |      
-              kontron_smarc_sal28 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157537  |      
-                          lafrite | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157538  |      
-      microchip_sam9x60ek_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157543  |      
-        minnowboard_max-graphical | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157546  |      
-        olimex_a20_olinuxino_lime | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157577  |      
-       olimex_a20_olinuxino_lime2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157576  |      
-       olimex_a20_olinuxino_micro | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157578  |      
-                 qemu_nios2_10m50 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157632  |      
-                  qemu_ppc_e500mc | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157637  | ORPH 
-                 qemu_ppc_g3beige | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157638  |      
-                   qemu_ppc_mac99 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157639  |      
-                qemu_riscv32_virt | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157641  |      
-                       qemu_s390x | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157644  |      
-               raspberrypi3_qt5we | https://gitlab.com/buildroot.org/buildroot/-/jobs/1240157661  |      
-
-
-
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 2a0ba6ab4f..78571b5e0b 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,5 @@
+-# From https://www.python.org/downloads/release/python-394/
+-md5  2a3dba5fc75b695c45cf1806156e1a97  Python-3.9.4.tar.xz
++# From https://www.python.org/downloads/release/python-395/
++md5  71f7ada6bec9cdbf4538adc326120cfd  Python-3.9.5.tar.xz
+ # Locally computed
+-sha256  4b0e6644a76f8df864ae24ac500a51bbf68bd098f6a173e27d3b61cdca9aa134  Python-3.9.4.tar.xz
++sha256  0c5a140665436ec3dbfbb79e2dfb6d192655f26ef4a29aeffcb6d1820d716d83  Python-3.9.5.tar.xz
+ sha256  599826df92bfdcd2702eac691072498bb096c55af04ee984cf90f70ed77b5a70  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 345c6a8699..b492e09154 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PYTHON3_VERSION_MAJOR = 3.9
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
 -- 
-http://autobuild.buildroot.net
+2.20.1
