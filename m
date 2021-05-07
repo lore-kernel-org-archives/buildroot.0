@@ -1,46 +1,88 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Fri,  7 May 2021 19:43:55 +0200
-Subject: [Buildroot] [PATCH] package/python-pytest: bump to version 6.2.4
-Message-ID: <20210507174355.1546239-1-m.niestroj@grinn-global.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  7 May 2021 20:30:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/hwloc: bump to version 2.4.1
+Message-ID: <20210507183009.2584138-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/python-pytest/python-pytest.hash | 4 ++--
- package/python-pytest/python-pytest.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+- Add ac_cv_prog_cc_c99 to avoid a build failure due to
+  https://github.com/open-mpi/hwloc/commit/f2226f76e104923a76c5d09328284104abad6b01
+- Update hash of COPYING, copyrights added with
+  https://github.com/open-mpi/hwloc/commit/ebaa3595e2ddc6e0e94e8ea5b1472f1a21969c80
+- Update indentation in hash file (two spaces)
 
-diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
-index 8c2a85c922..667493a5dc 100644
---- a/package/python-pytest/python-pytest.hash
-+++ b/package/python-pytest/python-pytest.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytest/json
--md5	91a421ffffe3310096b4273b2fa13819  pytest-6.1.2.tar.gz
--sha256	c0a7e94a8cdbc5422a51ccdad8e6f1024795939cc89159a0ae7f0b316ad3823e  pytest-6.1.2.tar.gz
-+md5	78d75c37901f5df462afc86acaa443cd  pytest-6.2.4.tar.gz
-+sha256	50bcad0a0b9c5a72c8e4e7c9855a3ad496ca6a881a3641b4260605450772c54b  pytest-6.2.4.tar.gz
- # Locally computer sha256
- sha256	7898b9b164d4f93fd9a562fd0f592935518b48c4745303964110eb7f7fe64faf  LICENSE
-diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
-index d47ec0f430..6463b23687 100644
---- a/package/python-pytest/python-pytest.mk
-+++ b/package/python-pytest/python-pytest.mk
-@@ -4,9 +4,9 @@
+As a side effect, this will remove numactl dependency (which raises a
+build failure with sparc v8 since commit
+4ed540ddf59bec4b389be44d7f42820d2466904f) thanks to:
+https://github.com/open-mpi/hwloc/commit/e6a53bbf65458fd5fe4d45d5a83027b530566591
+
+https://github.com/open-mpi/hwloc/blob/hwloc-2.4.1/NEWS
+
+Fixes:
+ - http://autobuild.buildroot.org/results/5f9394d3bab4e83edbea9bc607c3e135adfdabbc
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/hwloc/hwloc.hash |  8 +++-----
+ package/hwloc/hwloc.mk   | 17 +++++++----------
+ 2 files changed, 10 insertions(+), 15 deletions(-)
+
+diff --git a/package/hwloc/hwloc.hash b/package/hwloc/hwloc.hash
+index 9637ba1325..e207a6bb1a 100644
+--- a/package/hwloc/hwloc.hash
++++ b/package/hwloc/hwloc.hash
+@@ -1,6 +1,4 @@
+-# From https://www.open-mpi.org/software/hwloc/v1.11/
+-md5 3c792e23c209e9e1bafe9bdbc613d401  hwloc-1.11.13.tar.bz2
+-sha1 c3ae96a845ff3800f28b28fdb48146f971589653  hwloc-1.11.13.tar.bz2
++# From https://www.open-mpi.org/software/hwloc/v2.4/
++sha256  392421e69f26120c8ab95d151fe989f2b4b69dab3c7735741c4e0a6d7de5de63  hwloc-2.4.1.tar.bz2
+ # Locally computed
+-sha256 a4494b7765f517c0990d1c7f09d98cb87755bb6b841e4e2cbfebca1b14bac9c8  hwloc-1.11.13.tar.bz2
+-sha256 c1816ed2da6aea779c4f27352f807c8bbaf545c2843d7b2ae818e1d529028821  COPYING
++sha256  d79a936a42f3c6cb7c8375a023d43f4435f4664d3a5a2ea6b4623cff83c7fc06  COPYING
+diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
+index 9ec94f818d..77a25a1775 100644
+--- a/package/hwloc/hwloc.mk
++++ b/package/hwloc/hwloc.mk
+@@ -4,16 +4,20 @@
  #
  ################################################################################
  
--PYTHON_PYTEST_VERSION = 6.1.2
-+PYTHON_PYTEST_VERSION = 6.2.4
- PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
--PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/d4/df/bd7c25c4fe809a17315b3fc9878edf48d31dde7b431b6836848b063c0428
-+PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/5b/98/92bbda5f83ed995ef8953349ef30c77c934abcc251c42ab3d7787a40c49c
- PYTHON_PYTEST_SETUP_TYPE = setuptools
- PYTHON_PYTEST_LICENSE = MIT
- PYTHON_PYTEST_LICENSE_FILES = LICENSE
+-HWLOC_VERSION_MAJOR = 1.11
+-HWLOC_VERSION = $(HWLOC_VERSION_MAJOR).13
++HWLOC_VERSION_MAJOR = 2.4
++HWLOC_VERSION = $(HWLOC_VERSION_MAJOR).1
+ HWLOC_SOURCE = hwloc-$(HWLOC_VERSION).tar.bz2
+-HWLOC_SITE = http://www.open-mpi.org/software/hwloc/v$(HWLOC_VERSION_MAJOR)/downloads
++HWLOC_SITE = https://download.open-mpi.org/release/hwloc/v$(HWLOC_VERSION_MAJOR)
+ HWLOC_LICENSE = BSD-3-Clause
+ HWLOC_LICENSE_FILES = COPYING
+ HWLOC_DEPENDENCIES = host-pkgconf
+ HWLOC_INSTALL_STAGING = YES
+ HWLOC_SELINUX_MODULES = hwloc
+ 
++# ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
++# provided by autoconf relies on wchar_t.
++HWLOC_CONF_ENV = ac_cv_prog_cc_c99=-std=gnu99
++
+ HWLOC_CONF_OPTS = \
+ 	--disable-opencl \
+ 	--disable-cuda \
+@@ -30,11 +34,4 @@ else
+ HWLOC_CONF_OPTS += --disable-pci
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_NUMACTL),y)
+-HWLOC_CONF_OPTS += --enable-libnuma
+-HWLOC_DEPENDENCIES += numactl
+-else
+-HWLOC_CONF_OPTS += --disable-libnuma
+-endif
+-
+ $(eval $(autotools-package))
 -- 
-2.31.1
+2.30.2
