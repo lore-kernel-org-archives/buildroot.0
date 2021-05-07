@@ -1,117 +1,106 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 May 2021 23:10:37 +0200
-Subject: [Buildroot] [git commit] boot/beaglev-ddrlnit: new package
-Message-ID: <20210507212959.B4F99880B7@busybox.osuosl.org>
+Date: Sat, 8 May 2021 00:00:05 +0200
+Subject: [Buildroot] [PATCH v3 0/7] Support for the BeagleV platform
+In-Reply-To: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
+References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20210507220005.GC2137340@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3dd9ebae0f6768041ac08c4c3828b6dac55c970
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-This commit adds a package for the DDR initialization code used on the
-BeagleV platform.
+On 2021-05-04 22:51 +0200, Thomas Petazzoni spake thusly:
+> Hello,
+> 
+> Here is a third iteration of the BeagleV patch series, which brings a
+> few fixes:
+> 
+>  * The post-build script of v1 calling "make printvars" was working
+>    only for in-tree builds. Following a comment from Frank Hunleth on
+>    the v1, it was changed in v2 to use "make -C ${O} printvars", which
+>    made out-of-tree builds work, but broke in-tree builds. So in this
+>    new version, we introduced a preliminary patch that exposes
+>    $(CONFIG_DIR) to post-build/post-image scripts, to make such "make
+>    printvars" invocations possible.
+> 
+>  * The beaglev_defconfig is updated to take into account the rename of
+>    the Git repositories by Starfive for Linux, U-Boot and OpenSBI.
+> 
+>  * Reviewed-by tags from Bin Meng are added on beaglev-ddrinit,
+>    beaglev-secondboot and the corresponding beaglev_defconfig
+>    update. Thanks Bin!
 
-The typo in the package name is upstream's typo, and we just keep it.
+Series applied to master, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
-[yann.morin.1998 at free.fr:
-  - upstream name is beaglev_ddrlnit, not *init (keep their typo)
-  - rename package and variables accordingly
-  - the referenced commit is no longer the HEAD of said branch
-  - add a hash file
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS                                |  1 +
- boot/Config.in                            |  1 +
- boot/beaglev-ddrlnit/Config.in            |  9 +++++++++
- boot/beaglev-ddrlnit/beaglev-ddrlnit.hash |  2 ++
- boot/beaglev-ddrlnit/beaglev-ddrlnit.mk   | 29 +++++++++++++++++++++++++++++
- 5 files changed, 42 insertions(+)
+I'll reply to each individual patches where I did some changes.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index bcf42dc9cb..0c3a3e3134 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2604,6 +2604,7 @@ N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- F:	arch/Config.in.arm
- F:	board/beaglev/
- F:	board/stmicroelectronics/stm32mp157c-dk2/
-+F:	boot/beaglev-ddrlnit/
- F:	boot/boot-wrapper-aarch64/
- F:	boot/grub2/
- F:	boot/gummiboot/
-diff --git a/boot/Config.in b/boot/Config.in
-index b3adbfc8bc..4f89f0dad1 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -6,6 +6,7 @@ source "boot/at91bootstrap3/Config.in"
- source "boot/at91dataflashboot/Config.in"
- source "boot/arm-trusted-firmware/Config.in"
- source "boot/barebox/Config.in"
-+source "boot/beaglev-ddrlnit/Config.in"
- source "boot/binaries-marvell/Config.in"
- source "boot/boot-wrapper-aarch64/Config.in"
- source "boot/grub2/Config.in"
-diff --git a/boot/beaglev-ddrlnit/Config.in b/boot/beaglev-ddrlnit/Config.in
-new file mode 100644
-index 0000000000..e9d6e08ab9
---- /dev/null
-+++ b/boot/beaglev-ddrlnit/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_TARGET_BEAGLEV_DDRLNIT
-+	bool "beaglev-ddrlnit"
-+	depends on BR2_riscv
-+	depends on BR2_HOSTARCH = "x86_64" # host-riscv64-elf-toolchain
-+	help
-+	  This package builds the DDRinit firmware used on the BeagleV
-+	  platform.
-+
-+	  https://github.com/starfive-tech/beagle_ddrlnit
-diff --git a/boot/beaglev-ddrlnit/beaglev-ddrlnit.hash b/boot/beaglev-ddrlnit/beaglev-ddrlnit.hash
-new file mode 100644
-index 0000000000..fe699b038d
---- /dev/null
-+++ b/boot/beaglev-ddrlnit/beaglev-ddrlnit.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  dee7f8003ee02d7799d07b598dd5823e10b42f50fae6135b2320a8d7e1fa77bf  beaglev-ddrlnit-15b80de81263996affb2a29332aa681925709983.tar.gz
-diff --git a/boot/beaglev-ddrlnit/beaglev-ddrlnit.mk b/boot/beaglev-ddrlnit/beaglev-ddrlnit.mk
-new file mode 100644
-index 0000000000..042878f1c2
---- /dev/null
-+++ b/boot/beaglev-ddrlnit/beaglev-ddrlnit.mk
-@@ -0,0 +1,29 @@
-+################################################################################
-+#
-+# beaglev-ddrlnit
-+#
-+################################################################################
-+
-+# Commit on the 'starfive' branch
-+BEAGLEV_DDRLNIT_VERSION = 15b80de81263996affb2a29332aa681925709983
-+BEAGLEV_DDRLNIT_SITE = $(call github,starfive-tech,beagle_ddrlnit,$(BEAGLEV_DDRLNIT_VERSION))
-+BEAGLEV_DDRLNIT_INSTALL_TARGET = NO
-+BEAGLEV_DDRLNIT_INSTALL_IMAGES = YES
-+BEAGLEV_DDRLNIT_DEPENDENCIES = host-riscv64-elf-toolchain
-+# unfortunately, no real license file, but several sources files are
-+# under GPL-2.0+, making the whole work GPL-2.0+
-+BEAGLEV_DDRLNIT_LICENSE = GPL-2.0+
-+
-+define BEAGLEV_DDRLNIT_BUILD_CMDS
-+	$(MAKE) -C $(@D)/build \
-+		CROSSCOMPILE=$(HOST_DIR)/bin/riscv64-unknown-elf- \
-+		SUFFIX=buildroot \
-+		GIT_VERSION=$(BEAGLEV_DDRLNIT_VERSION)
-+endef
-+
-+define BEAGLEV_DDRLNIT_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/build/ddrinit-2133-buildroot.bin.out \
-+		$(BINARIES_DIR)/ddrinit-2133-buildroot.bin.out
-+endef
-+
-+$(eval $(generic-package))
+Regards,
+Yann E. MORIN.
+
+> As usual, the whole thing is also available at:
+> 
+>   https://github.com/tpetazzoni/buildroot/commits/beaglev
+> 
+> Best regards,
+> 
+> Thomas Petazzoni
+> 
+> Thomas Petazzoni (7):
+>   package/Makefile.in: expose CONFIG_DIR to post-build/post-image
+>     scripts
+>   boot/opensbi: add options to enable/disable image installation
+>   configs/beaglev_defconfig: new defconfig
+>   package/riscv64-elf-toolchain: new package
+>   boot/beaglev-ddrinit: new package
+>   boot/beaglev-secondboot: new package
+>   configs/beaglev: enable building of low-level firmware
+> 
+>  DEVELOPERS                                    |   5 +
+>  board/beaglev/extlinux.conf                   |   4 +
+>  board/beaglev/genimage.cfg                    |  12 ++
+>  ...s-starfive-vic7100-adjust-fdt_addr_r.patch |  39 ++++++
+>  board/beaglev/post-build.sh                   |  17 +++
+>  board/beaglev/readme.txt                      | 122 ++++++++++++++++++
+>  boot/Config.in                                |   2 +
+>  boot/beaglev-ddrinit/Config.in                |   9 ++
+>  boot/beaglev-ddrinit/beaglev-ddrinit.mk       |  29 +++++
+>  boot/beaglev-secondboot/Config.in             |   9 ++
+>  boot/beaglev-secondboot/beaglev-secondboot.mk |  29 +++++
+>  boot/opensbi/Config.in                        |  20 +++
+>  boot/opensbi/opensbi.mk                       |  16 ++-
+>  configs/beaglev_defconfig                     |  37 ++++++
+>  docs/manual/customize-post-image.txt          |   3 +-
+>  docs/manual/customize-rootfs.txt              |   3 +
+>  package/Makefile.in                           |   1 +
+>  .../riscv64-elf-toolchain.mk                  |  25 ++++
+>  18 files changed, 375 insertions(+), 7 deletions(-)
+>  create mode 100644 board/beaglev/extlinux.conf
+>  create mode 100644 board/beaglev/genimage.cfg
+>  create mode 100644 board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
+>  create mode 100755 board/beaglev/post-build.sh
+>  create mode 100644 board/beaglev/readme.txt
+>  create mode 100644 boot/beaglev-ddrinit/Config.in
+>  create mode 100644 boot/beaglev-ddrinit/beaglev-ddrinit.mk
+>  create mode 100644 boot/beaglev-secondboot/Config.in
+>  create mode 100644 boot/beaglev-secondboot/beaglev-secondboot.mk
+>  create mode 100644 configs/beaglev_defconfig
+>  create mode 100644 package/riscv64-elf-toolchain/riscv64-elf-toolchain.mk
+> 
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
