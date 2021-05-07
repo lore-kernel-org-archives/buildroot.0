@@ -1,109 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 May 2021 10:38:50 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libopenssl: fix
- performance issue in static build
-Message-ID: <20210507081607.53ABC8156F@busybox.osuosl.org>
+Date: Fri, 7 May 2021 10:34:46 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/kexec: fix build
+ on pre 4.4 kernels
+Message-ID: <20210507081607.47A0886283@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6be12789dcb0c68a398599892bab3036a1327ca5
+commit: https://git.buildroot.net/buildroot/commit/?id=5bbaaa6b474641b2620e388d7144deff2e347e34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Revert commit 8c2c959b028d44f5518d4445f864aedae3d90406 as no-dso has
-been added back to openssl since version 1.1.1e and
-https://github.com/openssl/openssl/commit/8dcd57461972dceaaf014b71d173d0a8758e7054
-and because gcc no-asm has performance issue
+kexec build will fail on older kernels (pre 4.4) as the define VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=13751
+This patch adds it, as per linux/include/uapi/linux/screen_info.h, if not present.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 67d19f601470aa205e2f948f883791f48e23cc92)
+Signed-off-by: Federico Pellegrin <fede@evolware.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenssl/Config.in     |  4 ----
- package/libopenssl/libopenssl.mk | 25 ++++++++++++++++++++-----
- 2 files changed, 20 insertions(+), 9 deletions(-)
+ ...-kexec-tools-fix-build-on-pre-4.4-kernels.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-index 8909e36b9e..723fd282a4 100644
---- a/package/libopenssl/Config.in
-+++ b/package/libopenssl/Config.in
-@@ -14,10 +14,6 @@ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC
- 
- config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH
- 	string
--	# Use "gcc" minimalistic target to disable DSO
--	# no-asm is needed with generic architectures such as gcc, see
--	# https://github.com/openssl/openssl/issues/9839
--	default "gcc no-asm"			if BR2_STATIC_LIBS
- 	# Doesn't work for thumb-only (Cortex-M?)
- 	default "linux-armv4"			if BR2_ARM_CPU_HAS_ARM
- 	default "linux-aarch64"			if BR2_aarch64
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index a10b64c8fd..487fe554c1 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -25,10 +25,6 @@ LIBOPENSSL_CFLAGS += -mxgot
- LIBOPENSSL_CFLAGS += -DOPENSSL_SMALL_FOOTPRINT
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--LIBOPENSSL_CFLAGS += -DOPENSSL_THREADS
--endif
--
- ifeq ($(BR2_USE_MMU),)
- LIBOPENSSL_CFLAGS += -DHAVE_FORK=0 -DOPENSSL_NO_MADVISE
- endif
-@@ -79,7 +75,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
- 			--prefix=/usr \
- 			--openssldir=/etc/ssl \
- 			$(if $(BR2_TOOLCHAIN_HAS_LIBATOMIC),-latomic) \
--			$(if $(BR2_TOOLCHAIN_HAS_THREADS),-lpthread threads, no-threads) \
-+			$(if $(BR2_TOOLCHAIN_HAS_THREADS),threads,no-threads) \
- 			$(if $(BR2_STATIC_LIBS),no-shared,shared) \
- 			$(if $(BR2_PACKAGE_HAS_CRYPTODEV),enable-devcryptoeng) \
- 			no-rc5 \
-@@ -89,12 +85,21 @@ define LIBOPENSSL_CONFIGURE_CMDS
- 			no-fuzz-libfuzzer \
- 			no-fuzz-afl \
- 			$(if $(BR2_STATIC_LIBS),zlib,zlib-dynamic) \
-+			$(if $(BR2_STATIC_LIBS),no-dso) \
- 	)
- 	$(SED) "s#-march=[-a-z0-9] ##" -e "s#-mcpu=[-a-z0-9] ##g" $(@D)/Makefile
- 	$(SED) "s#-O[0-9sg]#$(LIBOPENSSL_CFLAGS)#" $(@D)/Makefile
- 	$(SED) "s# build_tests##" $(@D)/Makefile
- endef
- 
-+# libdl is not available in a static build, and this is not implied by no-dso
-+ifeq ($(BR2_STATIC_LIBS),y)
-+define LIBOPENSSL_FIXUP_STATIC_MAKEFILE
-+	$(SED) 's#-ldl##g' $(@D)/Makefile
-+endef
-+LIBOPENSSL_POST_CONFIGURE_HOOKS += LIBOPENSSL_FIXUP_STATIC_MAKEFILE
-+endif
+diff --git a/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch b/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
+new file mode 100644
+index 0000000000..fcac604dfd
+--- /dev/null
++++ b/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
+@@ -0,0 +1,34 @@
++From cbbe4c47cb2acae04083c510dbe0efc5f48f5bb6 Mon Sep 17 00:00:00 2001
++From: Federico Pellegrin <fede@evolware.org>
++Date: Wed, 3 Feb 2021 11:00:17 +0100
++Subject: [PATCH] kexec-tools: fix build on pre 4.4 kernels
 +
- define HOST_LIBOPENSSL_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
- endef
-@@ -117,6 +122,16 @@ define LIBOPENSSL_INSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/bin/c_rehash
- endef
- 
-+# libdl has no business in a static build
-+ifeq ($(BR2_STATIC_LIBS),y)
-+define LIBOPENSSL_FIXUP_STATIC_PKGCONFIG
-+	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libcrypto.pc
-+	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libssl.pc
-+	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/openssl.pc
-+endef
-+LIBOPENSSL_POST_INSTALL_STAGING_HOOKS += LIBOPENSSL_FIXUP_STATIC_PKGCONFIG
-+endif
++kexec build will fail on older kernels (pre 4.4) as the define
++VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
 +
- ifeq ($(BR2_PACKAGE_PERL),)
- define LIBOPENSSL_REMOVE_PERL_SCRIPTS
- 	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.pl,tsget}
++This patch adds it, as per linux/include/uapi/linux/screen_info.h,
++if not present.
++
++Signed-off-by: Federico Pellegrin <fede@evolware.org>
++---
++ kexec/arch/i386/x86-linux-setup.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/kexec/arch/i386/x86-linux-setup.c b/kexec/arch/i386/x86-linux-setup.c
++index 76e1185..ab54a4a 100644
++--- a/kexec/arch/i386/x86-linux-setup.c
+++++ b/kexec/arch/i386/x86-linux-setup.c
++@@ -37,6 +37,10 @@
++ #include "x86-linux-setup.h"
++ #include "../../kexec/kexec-syscall.h"
++ 
+++#ifndef VIDEO_CAPABILITY_64BIT_BASE
+++#define VIDEO_CAPABILITY_64BIT_BASE (1 << 1)	/* Frame buffer base is 64-bit */
+++#endif
+++
++ void init_linux_parameters(struct x86_linux_param_header *real_mode)
++ {
++ 	/* Fill in the values that are usually provided by the kernel. */
++-- 
++2.26.2
++
