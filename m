@@ -1,45 +1,109 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 May 2021 10:42:32 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libfuse3: bump
- version to 3.10.3
-Message-ID: <20210507081607.62DD586283@busybox.osuosl.org>
+Date: Fri, 7 May 2021 10:38:50 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libopenssl: fix
+ performance issue in static build
+Message-ID: <20210507081607.53ABC8156F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d66c6bf5e56883cb5bf8512b3f5a2528fe5b1b7c
+commit: https://git.buildroot.net/buildroot/commit/?id=6be12789dcb0c68a398599892bab3036a1327ca5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Revert commit 8c2c959b028d44f5518d4445f864aedae3d90406 as no-dso has
+been added back to openssl since version 1.1.1e and
+https://github.com/openssl/openssl/commit/8dcd57461972dceaaf014b71d173d0a8758e7054
+and because gcc no-asm has performance issue
+
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=13751
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0b09d6feaaba83c8f980e9582c5d2b4a89c31b2f)
+(cherry picked from commit 67d19f601470aa205e2f948f883791f48e23cc92)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libfuse3/libfuse3.hash | 2 +-
- package/libfuse3/libfuse3.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libopenssl/Config.in     |  4 ----
+ package/libopenssl/libopenssl.mk | 25 ++++++++++++++++++++-----
+ 2 files changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-index 9b2f8cc144..49c71f402f 100644
---- a/package/libfuse3/libfuse3.hash
-+++ b/package/libfuse3/libfuse3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  a16f93cc083264afd0d2958a0dc88f24c6c5d40a9f3842c645b1909e13edb75f  libfuse3-3.10.2.tar.gz
-+sha256  c32527782cef620df58b162aa29901d1fb13253b029375d5860a2253a810344e  libfuse3-3.10.3.tar.gz
- sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-index f805eda506..d61e313391 100644
---- a/package/libfuse3/libfuse3.mk
-+++ b/package/libfuse3/libfuse3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
+index 8909e36b9e..723fd282a4 100644
+--- a/package/libopenssl/Config.in
++++ b/package/libopenssl/Config.in
+@@ -14,10 +14,6 @@ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC
  
--LIBFUSE3_VERSION = 3.10.2
-+LIBFUSE3_VERSION = 3.10.3
- LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
- LIBFUSE3_LICENSE = LGPL-2.1
- LIBFUSE3_LICENSE_FILES = LICENSE
+ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH
+ 	string
+-	# Use "gcc" minimalistic target to disable DSO
+-	# no-asm is needed with generic architectures such as gcc, see
+-	# https://github.com/openssl/openssl/issues/9839
+-	default "gcc no-asm"			if BR2_STATIC_LIBS
+ 	# Doesn't work for thumb-only (Cortex-M?)
+ 	default "linux-armv4"			if BR2_ARM_CPU_HAS_ARM
+ 	default "linux-aarch64"			if BR2_aarch64
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index a10b64c8fd..487fe554c1 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -25,10 +25,6 @@ LIBOPENSSL_CFLAGS += -mxgot
+ LIBOPENSSL_CFLAGS += -DOPENSSL_SMALL_FOOTPRINT
+ endif
+ 
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-LIBOPENSSL_CFLAGS += -DOPENSSL_THREADS
+-endif
+-
+ ifeq ($(BR2_USE_MMU),)
+ LIBOPENSSL_CFLAGS += -DHAVE_FORK=0 -DOPENSSL_NO_MADVISE
+ endif
+@@ -79,7 +75,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
+ 			--prefix=/usr \
+ 			--openssldir=/etc/ssl \
+ 			$(if $(BR2_TOOLCHAIN_HAS_LIBATOMIC),-latomic) \
+-			$(if $(BR2_TOOLCHAIN_HAS_THREADS),-lpthread threads, no-threads) \
++			$(if $(BR2_TOOLCHAIN_HAS_THREADS),threads,no-threads) \
+ 			$(if $(BR2_STATIC_LIBS),no-shared,shared) \
+ 			$(if $(BR2_PACKAGE_HAS_CRYPTODEV),enable-devcryptoeng) \
+ 			no-rc5 \
+@@ -89,12 +85,21 @@ define LIBOPENSSL_CONFIGURE_CMDS
+ 			no-fuzz-libfuzzer \
+ 			no-fuzz-afl \
+ 			$(if $(BR2_STATIC_LIBS),zlib,zlib-dynamic) \
++			$(if $(BR2_STATIC_LIBS),no-dso) \
+ 	)
+ 	$(SED) "s#-march=[-a-z0-9] ##" -e "s#-mcpu=[-a-z0-9] ##g" $(@D)/Makefile
+ 	$(SED) "s#-O[0-9sg]#$(LIBOPENSSL_CFLAGS)#" $(@D)/Makefile
+ 	$(SED) "s# build_tests##" $(@D)/Makefile
+ endef
+ 
++# libdl is not available in a static build, and this is not implied by no-dso
++ifeq ($(BR2_STATIC_LIBS),y)
++define LIBOPENSSL_FIXUP_STATIC_MAKEFILE
++	$(SED) 's#-ldl##g' $(@D)/Makefile
++endef
++LIBOPENSSL_POST_CONFIGURE_HOOKS += LIBOPENSSL_FIXUP_STATIC_MAKEFILE
++endif
++
+ define HOST_LIBOPENSSL_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
+@@ -117,6 +122,16 @@ define LIBOPENSSL_INSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/c_rehash
+ endef
+ 
++# libdl has no business in a static build
++ifeq ($(BR2_STATIC_LIBS),y)
++define LIBOPENSSL_FIXUP_STATIC_PKGCONFIG
++	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libcrypto.pc
++	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libssl.pc
++	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/openssl.pc
++endef
++LIBOPENSSL_POST_INSTALL_STAGING_HOOKS += LIBOPENSSL_FIXUP_STATIC_PKGCONFIG
++endif
++
+ ifeq ($(BR2_PACKAGE_PERL),)
+ define LIBOPENSSL_REMOVE_PERL_SCRIPTS
+ 	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.pl,tsget}
