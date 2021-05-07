@@ -1,7 +1,7 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  7 May 2021 08:15:35 +0200
-Subject: [Buildroot] [PATCH] package/python3: security bump to version 3.9.5
-Message-ID: <20210507061536.2819-1-peter@korsgaard.com>
+Date: Fri,  7 May 2021 08:28:21 +0200
+Subject: [Buildroot] [PATCH] package/go: security bump to version 1.16.4
+Message-ID: <20210507062821.32119-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,69 +10,43 @@ To: buildroot@busybox.net
 
 Fixes the following security issues:
 
-- bpo-43434: Creating a sqlite3.Connection object now also produces a
-  sqlite3.connect auditing event.  Previously this event was only produced
-  by sqlite3.connect() calls.  Patch by Erlend E.  Aasland.
+- CVE-2021-31525: ReadRequest and ReadResponse in net/http can hit an
+  unrecoverable panic when reading a very large header (over 7MB on 64-bit
+  architectures, or over 4MB on 32-bit ones).  Transport and Client are
+  vulnerable and the program can be made to crash by a malicious server.
+  Server is not vulnerable by default, but can be if the default max header
+  of 1MB is overridden by setting Server.MaxHeaderBytes to a higher value,
+  in which case the program can be made to crash by a malicious client.
 
-- bpo-43882: The presence of newline or tab characters in parts of a URL
-  could allow some forms of attacks.
-  Following the controlling specification for URLs defined by WHATWG
-  urllib.parse() now removes ASCII newlines and tabs from URLs, preventing
-  such attacks.
-
-- bpo-43472: Ensures interpreter-level audit hooks receive the
-  cpython.PyInterpreterState_New event when called through the
-  _xxsubinterpreters module.
-
-- bpo-36384: ipaddress module no longer accepts any leading zeros in IPv4
-  address strings.  Leading zeros are ambiguous and interpreted as octal
-  notation by some libraries.  For example the legacy function
-  socket.inet_aton() treats leading zeros as octal notatation.  glibc
-  implementation of modern inet_pton() does not accept any leading zeros.
-  For a while the ipaddress module used to accept ambiguous leading zeros.
-
-- bpo-43075: Fix Regular Expression Denial of Service (ReDoS) vulnerability
-  in urllib.request.AbstractBasicAuthHandler.  The ReDoS-vulnerable regex
-  has quadratic worst-case complexity and it allows cause a denial of
-  service when identifying crafted invalid RFCs.  This ReDoS issue is on the
-  client side and needs remote attackers to control the HTTP server.
-
-- bpo-42800: Audit hooks are now fired for frame.f_code, traceback.tb_frame,
-  and generator code/frame attribute access.
-
-https://www.python.org/downloads/release/python-395/
+  https://github.com/golang/go/issues/45710
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 2a0ba6ab4f..78571b5e0b 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-394/
--md5  2a3dba5fc75b695c45cf1806156e1a97  Python-3.9.4.tar.xz
-+# From https://www.python.org/downloads/release/python-395/
-+md5  71f7ada6bec9cdbf4538adc326120cfd  Python-3.9.5.tar.xz
- # Locally computed
--sha256  4b0e6644a76f8df864ae24ac500a51bbf68bd098f6a173e27d3b61cdca9aa134  Python-3.9.4.tar.xz
-+sha256  0c5a140665436ec3dbfbb79e2dfb6d192655f26ef4a29aeffcb6d1820d716d83  Python-3.9.5.tar.xz
- sha256  599826df92bfdcd2702eac691072498bb096c55af04ee984cf90f70ed77b5a70  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 345c6a8699..b492e09154 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 6d8759f97f..a6676bc160 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  b298d29de9236ca47a023e382313bcc2d2eed31dfa706b60a04103ce83a71a25  go1.16.3.src.tar.gz
++sha256  ae4f6b6e2a1677d31817984655a762074b5356da50fb58722b99104870d43503  go1.16.4.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 138b1cbd34..5b87915824 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PYTHON3_VERSION_MAJOR = 3.9
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+-GO_VERSION = 1.16.3
++GO_VERSION = 1.16.4
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
 2.20.1
