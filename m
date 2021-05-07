@@ -1,112 +1,75 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 May 2021 22:29:02 +0200
-Subject: [Buildroot] [git commit] boot/opensbi: add options to
- enable/disable image installation
-Message-ID: <20210507212959.86DC688392@busybox.osuosl.org>
+Date: Fri, 7 May 2021 22:48:23 +0200
+Subject: [Buildroot] [git commit] package/riscv64-elf-toolchain: new package
+Message-ID: <20210507212959.A516688392@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24010550be1ef4ea0e4fafffc6c58361b9a6730c
+commit: https://git.buildroot.net/buildroot/commit/?id=58d7c712d7d1ef5b439ead455a4ed2ca659b60fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Until now, whenever a BR2_TARGET_OPENSBI_PLAT value was specified,
-opensbi.mk was assuming that both fw_jump and fw_dynamic would be
-produced. However, this is not the case: the OpenSBI per-platform
-config.mk can decide which image to build.
+This commit adds a new package for a prebuilt bare-metal toolchain for
+RISC-V 64-bit. Indeed, some bootloader/firmware for the BeagleV (and
+potentially later for other platforms?) do not build with a
+Linux-capable toolchain.
 
-As an example, the config.mk for VIC7100-based BeagleV only enables
-producing the fw_payload image.
+This uses a pre-built toolchain from SiFive, precompiled for x86-64,
+so all packages using this toolchain must have the appropriate
+BR2_HOSTARCH dependency.
 
-This commit adds three options to enable the installation of images:
-one for fw_jump, one for fw_dynamic, one for fw_payload.
-
-The options for fw_jump and fw_dynamic are "default y" when
-BR2_TARGET_OPENSBI_PLAT is not empty, to preserve existing behavior.
-
-The option for fw_payload is forcefully selected when either Linux or
-U-Boot are selected as payloads.
+This package is modeled after package/arm-gnu-a-toolchain/, which
+package a pre-built ARM32 bare-metal toolchain.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- boot/opensbi/Config.in  | 20 ++++++++++++++++++++
- boot/opensbi/opensbi.mk | 16 ++++++++++------
- 2 files changed, 30 insertions(+), 6 deletions(-)
+ DEVELOPERS                                         |  1 +
+ .../riscv64-elf-toolchain/riscv64-elf-toolchain.mk | 25 ++++++++++++++++++++++
+ 2 files changed, 26 insertions(+)
 
-diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-index 236bf74a90..55a644506f 100644
---- a/boot/opensbi/Config.in
-+++ b/boot/opensbi/Config.in
-@@ -74,11 +74,30 @@ config BR2_TARGET_OPENSBI_PLAT
- 	  the platform specific static library libplatsbi.a and firmware
- 	  examples are built.
- 
-+config BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG
-+	bool "Install fw_dynamic image"
-+	default y if BR2_TARGET_OPENSBI_PLAT != ""
-+	help
-+	  This installs the fw_dynamic image.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c5f9f36578..bcf42dc9cb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2651,6 +2651,7 @@ F:	package/python3/
+ F:	package/python-mad/
+ F:	package/python-serial/
+ F:	package/qextserialport/
++F:	package/riscv64-elf-toolchain/
+ F:	package/rpcbind/
+ F:	package/rt-tests/
+ F:	package/rtc-tools/
+diff --git a/package/riscv64-elf-toolchain/riscv64-elf-toolchain.mk b/package/riscv64-elf-toolchain/riscv64-elf-toolchain.mk
+new file mode 100644
+index 0000000000..9b08ee0fec
+--- /dev/null
++++ b/package/riscv64-elf-toolchain/riscv64-elf-toolchain.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# riscv64-elf-toolchain
++#
++################################################################################
 +
-+config BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG
-+	bool "Install fw_jump image"
-+	default y if BR2_TARGET_OPENSBI_PLAT != ""
-+	help
-+	  This installs the fw_jump image.
++RISCV64_ELF_TOOLCHAIN_VERSION = 2020.12.8
++RISCV64_ELF_TOOLCHAIN_SITE = https://static.dev.sifive.com/dev-tools/freedom-tools/v2020.12
++RISCV64_ELF_TOOLCHAIN_SOURCE = riscv64-unknown-elf-toolchain-10.2.0-$(RISCV64_ELF_TOOLCHAIN_VERSION)-x86_64-linux-centos6.tar.gz
 +
-+config BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
-+	bool "Install fw_payload image"
-+	help
-+	  This option enables the installation of the fw_paylaod
-+	  image.
++HOST_RISCV64_ELF_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/riscv64-elf
 +
- config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
- 	bool "Include Linux as OpenSBI Payload"
- 	depends on BR2_TARGET_OPENSBI_PLAT != ""
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_LINUX_KERNEL_IMAGE
-+	select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
- 	help
- 	  Build OpenSBI with the Linux kernel as a Payload.
- 
-@@ -86,6 +105,7 @@ config BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
- 	bool "Include U-Boot as OpenSBI Payload"
- 	depends on BR2_TARGET_OPENSBI_PLAT != ""
- 	depends on BR2_TARGET_UBOOT
-+	select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
- 	help
- 	  Build OpenSBI with the U-Boot as a Payload.
- 
-diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-index 8ebe4566fd..f8cbbb8fcc 100644
---- a/boot/opensbi/opensbi.mk
-+++ b/boot/opensbi/opensbi.mk
-@@ -50,15 +50,19 @@ define OPENSBI_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
- endef
- 
--ifneq ($(OPENSBI_PLAT),)
-+ifeq ($(BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG),y)
- OPENSBI_INSTALL_IMAGES = YES
--OPENSBI_FW_IMAGES += jump dynamic
--ifeq ($(BR2_TARGET_OPENSBI_LINUX_PAYLOAD),y)
--OPENSBI_FW_IMAGES += payload
-+OPENSBI_FW_IMAGES += dynamic
- endif
--ifeq ($(BR2_TARGET_OPENSBI_UBOOT_PAYLOAD),y)
--OPENSBI_FW_IMAGES = payload
++define HOST_RISCV64_ELF_TOOLCHAIN_INSTALL_CMDS
++	rm -rf $(HOST_RISCV64_ELF_TOOLCHAIN_INSTALL_DIR)
++	mkdir -p $(HOST_RISCV64_ELF_TOOLCHAIN_INSTALL_DIR)
++	cp -rf $(@D)/* $(HOST_RISCV64_ELF_TOOLCHAIN_INSTALL_DIR)/
 +
-+ifeq ($(BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG),y)
-+OPENSBI_INSTALL_IMAGES = YES
-+OPENSBI_FW_IMAGES += jump
- endif
++	mkdir -p $(HOST_DIR)/bin
++	cd $(HOST_DIR)/bin && \
++	for i in ../opt/riscv64-elf/bin/*; do \
++		ln -sf $$i; \
++	done
++endef
 +
-+ifeq ($(BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG),y)
-+OPENSBI_INSTALL_IMAGES = YES
-+OPENSBI_FW_IMAGES += payload
- endif
- 
- define OPENSBI_INSTALL_IMAGES_CMDS
++$(eval $(host-generic-package))
