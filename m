@@ -1,71 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  7 May 2021 09:06:14 +0200
-Subject: [Buildroot] [PATCH] package/xen: bump version to 4.14.2
-Message-ID: <20210507070615.19796-1-peter@korsgaard.com>
+Date: Fri, 07 May 2021 09:23:08 +0200
+Subject: [Buildroot] [PATCH] package/bind: security bump to version
+ 9.11.31
+In-Reply-To: <20210501110300.22647-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 1 May 2021 13:02:59 +0200")
+References: <20210501110300.22647-1-peter@korsgaard.com>
+Message-ID: <87wnsb0zz7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Includes a number of bugfixes and the security fixes up to 368, so drop
-those.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-For details, see the release notes:
-https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-2/
+ > Fixes the following security issues:
+ > - A malformed incoming IXFR transfer could trigger an assertion failure in
+ >   named, causing it to quit abnormally.  (CVE-2021-25214)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xen/xen.hash |  8 +-------
- package/xen/xen.mk   | 15 +--------------
- 2 files changed, 2 insertions(+), 21 deletions(-)
+ > - named crashed when a DNAME record placed in the ANSWER section during
+ >   DNAME chasing turned out to be the final answer to a client query.
+ >   (CVE-2021-25215)
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index 6893414313..fd0310c921 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,9 +1,3 @@
- # Locally computed
--sha256  cf0d7316ad674491f49b7ef0518cb1d906a2e3bfad639deef0ef2343b119ac0c  xen-4.14.1.tar.gz
-+sha256  e35099a963070e3c9f425d1e36cbb1c40b7874ef449bfafd6688343783cb25ad  xen-4.14.2.tar.gz
- sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
--# https://xenbits.xenproject.org/xsa/advisory-360.html
--sha256  809515011efb781a2a8742e9acfd76412d3920c2d4142bb187588cd36f77383e  xsa360-4.14.patch
--# https://xenbits.xenproject.org/xsa/advisory-364.html
--sha256  dc313c70bb07b4096bbc4612cbbc180589923277411dede2fda37f04ecc846d6  xsa364.patch
--# https://xenbits.xenproject.org/xsa/advisory-368.html
--sha256  55bbe59c75b69f493e364dfcf6cdbc7db4acd32dbf0b4d2466815b7c1f1823ce  xsa368-4.14.patch
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 533882e05b..b84214ed16 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -4,26 +4,13 @@
- #
- ################################################################################
- 
--XEN_VERSION = 4.14.1
-+XEN_VERSION = 4.14.2
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
- XEN_CPE_ID_VENDOR = xen
- XEN_CPE_ID_PREFIX = cpe:2.3:o
- XEN_DEPENDENCIES = host-acpica host-python3
--XEN_PATCH = \
--	https://xenbits.xenproject.org/xsa/xsa360-4.14.patch \
--	https://xenbits.xenproject.org/xsa/xsa364.patch \
--	https://xenbits.xenproject.org/xsa/xsa368-4.14.patch
--
--# xsa360-4.14.patch
--XEN_IGNORE_CVES += CVE-2021-3308
--
--# xsa364.patch
--XEN_IGNORE_CVES += CVE-2021-26933
--
--# xsa368-4.14.patch
--XEN_IGNORE_CVES += CVE-2021-28687
- 
- # Calculate XEN_ARCH
- ifeq ($(ARCH),aarch64)
+ > - When a server's configuration set the tkey-gssapi-keytab or
+ >   tkey-gssapi-credential option, a specially crafted GSS-TSIG query could
+ >   cause a buffer overflow in the ISC implementation of SPNEGO (a protocol
+ >   enabling negotiation of the security mechanism used for GSSAPI
+ >   authentication).  This flaw could be exploited to crash named binaries
+ >   compiled for 64-bit platforms, and could enable remote code execution when
+ >   named was compiled for 32-bit platforms.  (CVE-2021-25216)
+
+ > For more details, see the release notes:
+ > https://downloads.isc.org/isc/bind9/9.11.31/RELEASE-NOTES-bind-9.11.31.html
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2021.02.x, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
