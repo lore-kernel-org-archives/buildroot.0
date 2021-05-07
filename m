@@ -1,23 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 07 May 2021 09:36:06 +0200
-Subject: [Buildroot] [PATCH 1/1] Config.in.legacy: fix
- BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
-In-Reply-To: <20210501165037.1570879-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 1 May 2021 18:50:37 +0200")
-References: <20210501165037.1570879-1-fontaine.fabrice@gmail.com>
-Message-ID: <87fsyz0zdl.fsf@dell.be.48ers.dk>
+Date: Fri, 07 May 2021 09:37:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/docker-engine: bump version to
+ 20.10.6
+In-Reply-To: <20210419104751.1446056-1-knif.oiram@gmail.com> (Mario Fink's
+ message of "Mon, 19 Apr 2021 12:47:51 +0200")
+References: <20210419104751.1446056-1-knif.oiram@gmail.com>
+Message-ID: <87bl9n0zbx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Mario" == Mario Fink <mario.fink@record-evolution.de> writes:
 
- > Commit fdb6fc2b4a5be747e7695f594cbbb1a941ceb05b forgot to select
- > BR2_LEGACY
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Mario Fink <knif.oiram@gmail.com>
 
 Committed to 2021.02.x, thanks.
 
