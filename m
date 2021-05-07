@@ -1,39 +1,95 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri,  7 May 2021 10:01:02 -0700
-Subject: [Buildroot] [PATCH 2/2] package/gobject-introspection/Config.in:
- Allow RISCV_32 builds
-In-Reply-To: <20210507170102.1896972-1-aduskett@rivian.com>
-References: <20210507170102.1896972-1-aduskett@rivian.com>
-Message-ID: <20210507170102.1896972-2-aduskett@rivian.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  7 May 2021 19:07:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/numactl: add -latomic to numa.pc
+Message-ID: <20210507170701.2301276-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <aduskett@gmail.com>
+Instead of passing -latomic through LDFLAGS as done in commit
+4ed540ddf59bec4b389be44d7f42820d2466904f, properly check for it in
+configure.ac and add it to numa.pc or numactl users won't be able to get
+it
 
-Qemu 6.0.0 no longer segfaults when running qemu-riscv32. As such, it's now
-possible to allow riscv32 to compile gobject-introspection.
-
-Fixes:
-http://autobuild.buildroot.org/results/668397b1df42297505e6fc8353c4752290a5628d
-Signed-off-by: Adam Duskett <aduskett@rivian.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gobject-introspection/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ .../0002-link-with-latomic-if-needed.patch    | 52 +++++++++++++++++++
+ package/numactl/numactl.mk                    |  4 --
+ 2 files changed, 52 insertions(+), 4 deletions(-)
+ create mode 100644 package/numactl/0002-link-with-latomic-if-needed.patch
 
-diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
-index 57c569704e..bacf44363c 100644
---- a/package/gobject-introspection/Config.in
-+++ b/package/gobject-introspection/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
- 	bool
- 	default y
- 	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
--	depends on !BR2_RISCV_32 # qemu-riscv32 segfaults in qemu-5.0.0
+diff --git a/package/numactl/0002-link-with-latomic-if-needed.patch b/package/numactl/0002-link-with-latomic-if-needed.patch
+new file mode 100644
+index 0000000000..6dff0cb233
+--- /dev/null
++++ b/package/numactl/0002-link-with-latomic-if-needed.patch
+@@ -0,0 +1,52 @@
++From e0de0d9e981ddb53bdeb4a4b9dc43046c9ff4ff9 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 6 May 2021 23:08:36 +0200
++Subject: [PATCH] link with -latomic if needed
++
++numactl unconditionally uses __atomic_fetch_and but some architectures
++(e.g. sparc) needs to link with -latomic to be able to use it. So check
++if -latomic is needed and update numa.pc accordingly
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/numactl/numactl/commit/e0de0d9e981ddb53bdeb4a4b9dc43046c9ff4ff9]
++---
++ Makefile.am  | 1 +
++ configure.ac | 2 ++
++ numa.pc.in   | 1 +
++ 3 files changed, 4 insertions(+)
++
++diff --git a/Makefile.am b/Makefile.am
++index 44d0d76..34f6815 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -151,6 +151,7 @@ SED_PROCESS = \
++         -e 's, at exec_prefix\@,$(exec_prefix),g' \
++         -e 's, at libdir\@,$(libdir),g' \
++         -e 's, at includedir\@,$(includedir),g' \
+++        -e 's, at LIBS\@,$(LIBS),g' \
++         < $< > $@ || rm $@
++ 
++ %.pc: %.pc.in Makefile
++diff --git a/configure.ac b/configure.ac
++index 659a765..e3b0eb3 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -24,6 +24,8 @@ AM_CONDITIONAL([HAVE_TREE_VECTORIZE], [test x"${tree_vectorize}" = x"true"])
++ 
++ AC_CONFIG_FILES([Makefile])
++ 
+++AC_SEARCH_LIBS([__atomic_fetch_and_1], [atomic])
+++
++ # GCC tries to be "helpful" and only issue a warning for unrecognized
++ # attributes.  So we compile the test with Werror, so that if the
++ # attribute is not recognized the compilation fails
++diff --git a/numa.pc.in b/numa.pc.in
++index 8a0f202..cc04d50 100644
++--- a/numa.pc.in
+++++ b/numa.pc.in
++@@ -8,3 +8,4 @@ Description: NUMA policy library
++ Version: @VERSION@
++ Cflags: -I${includedir}
++ Libs: -L${libdir} -lnuma
+++Libs.Private: @LIBS@
+diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
+index 3364f6c5c3..cf9c759693 100644
+--- a/package/numactl/numactl.mk
++++ b/package/numactl/numactl.mk
+@@ -12,8 +12,4 @@ NUMACTL_INSTALL_STAGING = YES
+ NUMACTL_AUTORECONF = YES
+ NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
  
- config BR2_PACKAGE_GOBJECT_INTROSPECTION
- 	bool "gobject-introspection"
+-ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-NUMACTL_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
+-endif
+-
+ $(eval $(autotools-package))
 -- 
-2.31.1
+2.30.2
