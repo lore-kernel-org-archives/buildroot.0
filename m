@@ -1,9 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 8 May 2021 00:00:05 +0200
-Subject: [Buildroot] [PATCH v3 0/7] Support for the BeagleV platform
-In-Reply-To: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 8 May 2021 00:02:32 +0200
+Subject: [Buildroot] [PATCH v3 3/7] configs/beaglev_defconfig: new
+ defconfig
+In-Reply-To: <20210504205139.1055360-4-thomas.petazzoni@bootlin.com>
 References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210507220005.GC2137340@scaer>
+ <20210504205139.1055360-4-thomas.petazzoni@bootlin.com>
+Message-ID: <20210507220232.GD2137340@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,89 +15,53 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2021-05-04 22:51 +0200, Thomas Petazzoni spake thusly:
-> Hello,
+> This commit introduces support for the RISC-V based BeagleV platform,
+> which uses a Starfive JH7100.
 > 
-> Here is a third iteration of the BeagleV patch series, which brings a
-> few fixes:
-> 
->  * The post-build script of v1 calling "make printvars" was working
->    only for in-tree builds. Following a comment from Frank Hunleth on
->    the v1, it was changed in v2 to use "make -C ${O} printvars", which
->    made out-of-tree builds work, but broke in-tree builds. So in this
->    new version, we introduced a preliminary patch that exposes
->    $(CONFIG_DIR) to post-build/post-image scripts, to make such "make
->    printvars" invocations possible.
-> 
->  * The beaglev_defconfig is updated to take into account the rename of
->    the Git repositories by Starfive for Linux, U-Boot and OpenSBI.
-> 
->  * Reviewed-by tags from Bin Meng are added on beaglev-ddrinit,
->    beaglev-secondboot and the corresponding beaglev_defconfig
->    update. Thanks Bin!
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+[--SNIP--]
+> diff --git a/board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch b/board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
+> new file mode 100644
+> index 0000000000..74d70f2721
+> --- /dev/null
+> +++ b/board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
+> @@ -0,0 +1,39 @@
+> +From 2c4c813940c577590f3352cef0c49a8def17905d Mon Sep 17 00:00:00 2001
+> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> +Date: Wed, 28 Apr 2021 22:58:45 +0200
+> +Subject: [PATCH] include/configs/starfive-vic7100: adjust fdt_addr_r
+> +
+> +The default fdt_addr_r of 0x88000000 doesn't work, the kernel never
+> +boots. Using 0x90000000 works fine.
+> +
+> +Since it would overlap with the kernel_comp_addr_r area, this one is
+> +moved 16 MB further, at 0x91000000.
 
-Series applied to master, thanks.
+Is this something that is so board specific that we can't upstream it?
 
-I'll reply to each individual patches where I did some changes.
+[--SNIP--]
+> diff --git a/board/beaglev/post-build.sh b/board/beaglev/post-build.sh
+> new file mode 100755
+> index 0000000000..e303d4b8d9
+> --- /dev/null
+> +++ b/board/beaglev/post-build.sh
+> @@ -0,0 +1,17 @@
+> +#!/bin/sh
+> +BOARD_DIR=$(dirname $0)
+> +
+> +# The DTB to use is provided within the U-Boot source tree, so we grab
+> +# it from there, and install it to TARGET_DIR/boot/.
+> +UBOOT_DIR=$(make -C ${CONFIG_DIR} --no-print-directory VARS=UBOOT_DIR printvars | cut -f2 -d'=')
+
+Here, I've used eval, as suggested in the manual:
+
+    eval $(make -C ${CONFIG_DIR} --no-print-directory QUOTED_VARS=YES VARS=UBOOT_DIR printvars)
+
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
-
-> As usual, the whole thing is also available at:
-> 
->   https://github.com/tpetazzoni/buildroot/commits/beaglev
-> 
-> Best regards,
-> 
-> Thomas Petazzoni
-> 
-> Thomas Petazzoni (7):
->   package/Makefile.in: expose CONFIG_DIR to post-build/post-image
->     scripts
->   boot/opensbi: add options to enable/disable image installation
->   configs/beaglev_defconfig: new defconfig
->   package/riscv64-elf-toolchain: new package
->   boot/beaglev-ddrinit: new package
->   boot/beaglev-secondboot: new package
->   configs/beaglev: enable building of low-level firmware
-> 
->  DEVELOPERS                                    |   5 +
->  board/beaglev/extlinux.conf                   |   4 +
->  board/beaglev/genimage.cfg                    |  12 ++
->  ...s-starfive-vic7100-adjust-fdt_addr_r.patch |  39 ++++++
->  board/beaglev/post-build.sh                   |  17 +++
->  board/beaglev/readme.txt                      | 122 ++++++++++++++++++
->  boot/Config.in                                |   2 +
->  boot/beaglev-ddrinit/Config.in                |   9 ++
->  boot/beaglev-ddrinit/beaglev-ddrinit.mk       |  29 +++++
->  boot/beaglev-secondboot/Config.in             |   9 ++
->  boot/beaglev-secondboot/beaglev-secondboot.mk |  29 +++++
->  boot/opensbi/Config.in                        |  20 +++
->  boot/opensbi/opensbi.mk                       |  16 ++-
->  configs/beaglev_defconfig                     |  37 ++++++
->  docs/manual/customize-post-image.txt          |   3 +-
->  docs/manual/customize-rootfs.txt              |   3 +
->  package/Makefile.in                           |   1 +
->  .../riscv64-elf-toolchain.mk                  |  25 ++++
->  18 files changed, 375 insertions(+), 7 deletions(-)
->  create mode 100644 board/beaglev/extlinux.conf
->  create mode 100644 board/beaglev/genimage.cfg
->  create mode 100644 board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
->  create mode 100755 board/beaglev/post-build.sh
->  create mode 100644 board/beaglev/readme.txt
->  create mode 100644 boot/beaglev-ddrinit/Config.in
->  create mode 100644 boot/beaglev-ddrinit/beaglev-ddrinit.mk
->  create mode 100644 boot/beaglev-secondboot/Config.in
->  create mode 100644 boot/beaglev-secondboot/beaglev-secondboot.mk
->  create mode 100644 configs/beaglev_defconfig
->  create mode 100644 package/riscv64-elf-toolchain/riscv64-elf-toolchain.mk
-> 
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
