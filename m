@@ -1,106 +1,278 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 May 2021 23:40:07 +0200
-Subject: [Buildroot] [git commit] configs/beaglev: enable building of
- low-level firmware
-Message-ID: <20210507212959.CCEE6880B7@busybox.osuosl.org>
+Date: Fri, 7 May 2021 22:40:18 +0200
+Subject: [Buildroot] [git commit] configs/beaglev_defconfig: new defconfig
+Message-ID: <20210507212959.944BC8796D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=671423d33e301c1c6e9186926a22980bb7597440
+commit: https://git.buildroot.net/buildroot/commit/?id=839f00a81150a1dddf52a5ec211f8beb9e46f266
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit extends the beaglev_defconfig and its documentation to
-build the low-level firmware, and to explain how to reflash it.
+This commit introduces support for the RISC-V based BeagleV platform,
+which uses a Starfive JH7100.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
-[yann.morin.1998 at free.fr: use typoed-name for beaglev-ddrlnit]
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+[yann.morin.1998 at free.fr: use:  eval $(make printvars)]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/beaglev/readme.txt  | 38 ++++++++++++++++++++++++++++++++++++--
- configs/beaglev_defconfig |  2 ++
- 2 files changed, 38 insertions(+), 2 deletions(-)
+ DEVELOPERS                                         |  2 +
+ board/beaglev/extlinux.conf                        |  4 +
+ board/beaglev/genimage.cfg                         | 12 +++
+ ...onfigs-starfive-vic7100-adjust-fdt_addr_r.patch | 39 ++++++++++
+ board/beaglev/post-build.sh                        | 17 +++++
+ board/beaglev/readme.txt                           | 88 ++++++++++++++++++++++
+ configs/beaglev_defconfig                          | 35 +++++++++
+ 7 files changed, 197 insertions(+)
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 235828241e..c5f9f36578 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2602,10 +2602,12 @@ F:	package/xorcurses/
+ 
+ N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ F:	arch/Config.in.arm
++F:	board/beaglev/
+ F:	board/stmicroelectronics/stm32mp157c-dk2/
+ F:	boot/boot-wrapper-aarch64/
+ F:	boot/grub2/
+ F:	boot/gummiboot/
++F:	configs/beaglev_defconfig
+ F:	configs/stm32mp157c_dk2_defconfig
+ F:	package/android-tools/
+ F:	package/b43-firmware/
+diff --git a/board/beaglev/extlinux.conf b/board/beaglev/extlinux.conf
+new file mode 100644
+index 0000000000..c5444d094c
+--- /dev/null
++++ b/board/beaglev/extlinux.conf
+@@ -0,0 +1,4 @@
++label linux
++  kernel /boot/Image
++  devicetree /boot/starfive_vic7100_beagle_v.dtb
++  append console=ttyS0,115200 earlyprintk root=PARTUUID=0fef845a-c6e1-45bc-82f7-002fa720f958 rootwait
+diff --git a/board/beaglev/genimage.cfg b/board/beaglev/genimage.cfg
+new file mode 100644
+index 0000000000..f38bb7f86c
+--- /dev/null
++++ b/board/beaglev/genimage.cfg
+@@ -0,0 +1,12 @@
++image sdcard.img {
++  hdimage {
++    gpt = true
++  }
++
++  partition rootfs {
++    partition-type-uuid = 72ec70a6-cf74-40e6-bd49-4bda08e8f224
++    partition-uuid = 0fef845a-c6e1-45bc-82f7-002fa720f958
++    bootable = "true"
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch b/board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
+new file mode 100644
+index 0000000000..74d70f2721
+--- /dev/null
++++ b/board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
+@@ -0,0 +1,39 @@
++From 2c4c813940c577590f3352cef0c49a8def17905d Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Wed, 28 Apr 2021 22:58:45 +0200
++Subject: [PATCH] include/configs/starfive-vic7100: adjust fdt_addr_r
++
++The default fdt_addr_r of 0x88000000 doesn't work, the kernel never
++boots. Using 0x90000000 works fine.
++
++Since it would overlap with the kernel_comp_addr_r area, this one is
++moved 16 MB further, at 0x91000000.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ include/configs/starfive-vic7100.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/include/configs/starfive-vic7100.h b/include/configs/starfive-vic7100.h
++index 8c5915a73c..7150a23873 100644
++--- a/include/configs/starfive-vic7100.h
+++++ b/include/configs/starfive-vic7100.h
++@@ -111,13 +111,13 @@
++ 	"fdt_high=0xffffffffffffffff\0" \
++ 	"initrd_high=0xffffffffffffffff\0" \
++ 	"kernel_addr_r=0x84000000\0" \
++-	"fdt_addr_r=0x88000000\0" \
+++	"fdt_addr_r=0x90000000\0" \
++ 	"scriptaddr=0x88100000\0" \
++ 	"script_offset_f=0x1fff000\0" \
++ 	"script_size_f=0x1000\0" \
++ 	"pxefile_addr_r=0x88200000\0" \
++ 	"ramdisk_addr_r=0x88300000\0" \
++-	"kernel_comp_addr_r=0x90000000\0" \
+++	"kernel_comp_addr_r=0x91000000\0" \
++ 	"kernel_comp_size=0x10000000\0" \
++ 	"type_guid_gpt_loader1=" TYPE_GUID_LOADER1 "\0" \
++ 	"type_guid_gpt_loader2=" TYPE_GUID_LOADER2 "\0" \
++-- 
++2.30.2
++
+diff --git a/board/beaglev/post-build.sh b/board/beaglev/post-build.sh
+new file mode 100755
+index 0000000000..b19b9bf6d0
+--- /dev/null
++++ b/board/beaglev/post-build.sh
+@@ -0,0 +1,17 @@
++#!/bin/sh
++BOARD_DIR=$(dirname $0)
++
++# The DTB to use is provided within the U-Boot source tree, so we grab
++# it from there, and install it to TARGET_DIR/boot/.
++eval $(make -C ${CONFIG_DIR} --no-print-directory QUOTED_VARS=YES VARS=UBOOT_DIR printvars)
++install -D -m0644 ${UBOOT_DIR}/arch/riscv/dts/starfive_vic7100_beagle_v.dtb \
++	${TARGET_DIR}/boot/starfive_vic7100_beagle_v.dtb
++
++# Bring the extlinux.conf file in.
++install -D -m 0644 ${BOARD_DIR}/extlinux.conf \
++	${TARGET_DIR}/boot/extlinux/extlinux.conf
++
++# To be reflashed through Xmodem, the bootloader needs to be prepended
++# with a 4-byte header that contains the total size of the file.
++perl -e 'print pack("l", (stat @ARGV[0])[7])' ${BINARIES_DIR}/fw_payload.bin > ${BINARIES_DIR}/fw_payload.bin.out
++cat ${BINARIES_DIR}/fw_payload.bin >> ${BINARIES_DIR}/fw_payload.bin.out
 diff --git a/board/beaglev/readme.txt b/board/beaglev/readme.txt
-index d8511d3fd1..bbdb9b12ef 100644
---- a/board/beaglev/readme.txt
+new file mode 100644
+index 0000000000..d8511d3fd1
+--- /dev/null
 +++ b/board/beaglev/readme.txt
-@@ -17,6 +17,8 @@ Build results
- 
- After building, output/images contains:
- 
-++ bootloader-BEAGLEV-buildroot.bin.out
-++ ddrinit-2133-buildroot.bin.out
- + Image
- + fw_payload.bin
- + fw_payload.bin.out
-@@ -26,7 +28,11 @@ After building, output/images contains:
- + sdcard.img
- + u-boot.bin
- 
--The two important files are:
-+The four important files are:
+@@ -0,0 +1,88 @@
++BeagleV
++=======
 +
-+ - bootloader-BEAGLEV-buildroot.bin.out, the first stage bootloader
++BeagleV is a low-cost RISC-V 64-bit based platform, powered by a
++Starfive JH7100 processor. The current defconfig in Buildroot has been
++tested with the JH7100 chip used on the beta version of the BeagleV
++board.
 +
-+ - ddrinit-2133-buildroot.bin.out, the DDR initialization firmware
- 
-  - fw_payload.bin.out, which is the bootloader image, containing
-    both OpenSBI and U-Boot.
-@@ -51,7 +57,7 @@ Insert your SD card.
- 
- Power-up the board using an USB-C cable.
- 
--Flashing the bootloader
-+Flashing OpenSBI/U-Boot
- =======================
- 
- The bootloader pre-flashed on the Beagle-V has a non-working
-@@ -86,3 +92,31 @@ fw_payload.bin.out using the Xmodem protocol.
- 
- After reflashing is complete, restart the board, it will automatically
- start the system from the SD card, and reach the login prompt.
++How to build
++============
 +
-+Flashing low-level bootloaders
-+==============================
++$ make beaglev_defconfig
++$ make
 +
-+The BeagleV comes pre-flashed with functional low-level bootloaders
-+(called "secondboot" and "ddrinit"). Re-flashing them is not necessary
-+to use this Buildroot defconfig. However, for the sake of
-+completeness, Buildroot builds and provides those low-level bootloader
-+images.
++Build results
++=============
 +
-+You can flash them as follows:
++After building, output/images contains:
 +
-+ - In the same "pre-loader" menu as the one used above, instead of
-+   entering 0 or 1, enter the magic "root at s5t" string. This enters the
-+   "expert" features.
+++ Image
+++ fw_payload.bin
+++ fw_payload.bin.out
+++ fw_payload.elf
+++ rootfs.ext2
+++ rootfs.ext4
+++ sdcard.img
+++ u-boot.bin
 +
-+ - Then, press 0 and send over X-modem the
-+   bootloader-BEAGLEV-buildroot.bin.out file.
++The two important files are:
 +
-+ - Then, press 1 and send over X-modem the
-+   ddrinit-2133-buildroot.bin.out.
++ - fw_payload.bin.out, which is the bootloader image, containing
++   both OpenSBI and U-Boot.
 +
-+Note that the reflashing mechanism itself relies on those low-level
-+bootloaders, so if you flash non-working versions, you'll have to go
-+through a recovery process. This requires wiring up to a separate
-+debug UART, which pins are located near the HDMI connector. See
-+https://wiki.seeedstudio.com/BeagleV-Update-bootloader-ddr-init-boot-uboot-Recover-bootloader/
-+section "Recover the bootloader" for more details.
++ - sdcard.img, the SD card image, which contains the root filesystem,
++   kernel image and Device Tree.
++
++Flashing the SD card image
++==========================
++
++$ sudo dd if=output/images/sdcard.img of=/dev/sdX
++
++Preparing the board
++===================
++
++Connect the Beagle-V fan to the 5V supply (pin 2 or 4 of the GPIO
++connector) and GND (pin 6 of the GPIO connector).
++
++Connect a TTL UART cable to pin 8 (TX), 10 (RX) and 14 (GND).
++
++Insert your SD card.
++
++Power-up the board using an USB-C cable.
++
++Flashing the bootloader
++=======================
++
++The bootloader pre-flashed on the Beagle-V has a non-working
++fdt_addr_r environment variable value, so it won't work
++as-is. Reflashing the bootloader with the bootloader image produced by
++Buildroot is necessary.
++
++When the board starts up, a pre-loader shows a count down of 2
++seconds, interrupt by pressing any key. You should reach a menu like
++this:
++
++--------8<----------
++
++bootloader version:210209-4547a8d
++ddr 0x00000000, 1M test
++ddr 0x00100000, 2M test
++DDR clk 2133M,Version: 210302-5aea32f
++0
++***************************************************
++*************** FLASH PROGRAMMING *****************
++***************************************************
++
++0:update uboot
++1:quit
++select the function:
++
++--------8<----------
++
++Press 0 and Enter. You will now see "C" characters being
++displayed. Ask your serial port communication program to send
++fw_payload.bin.out using the Xmodem protocol.
++
++After reflashing is complete, restart the board, it will automatically
++start the system from the SD card, and reach the login prompt.
 diff --git a/configs/beaglev_defconfig b/configs/beaglev_defconfig
-index e94c4ab639..59051e7a6d 100644
---- a/configs/beaglev_defconfig
+new file mode 100644
+index 0000000000..e94c4ab639
+--- /dev/null
 +++ b/configs/beaglev_defconfig
-@@ -18,6 +18,8 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_BEAGLEV_DDRLNIT=y
-+BR2_TARGET_BEAGLEV_SECONDBOOT=y
- BR2_TARGET_OPENSBI=y
- BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
- # HEAD of the Fedora branch
+@@ -0,0 +1,35 @@
++BR2_riscv=y
++BR2_riscv_custom=y
++BR2_RISCV_ISA_CUSTOM_RVM=y
++BR2_RISCV_ISA_CUSTOM_RVF=y
++BR2_RISCV_ISA_CUSTOM_RVD=y
++BR2_RISCV_ISA_CUSTOM_RVC=y
++BR2_GLOBAL_PATCH_DIR="board/beaglev/patches/"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/beaglev/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglev/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++# HEAD of the Fedora branch
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,linux,710cf052d6abda73584481d920b4b6befc7240ea)/linux-710cf052d6abda73584481d920b4b6befc7240ea.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="starfive_vic7100_evb_sd_net"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_OPENSBI=y
++BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
++# HEAD of the Fedora branch
++BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,opensbi,2524b0ecd8684b42bc7a4c69794f40f11cbbe2a5)/opensbi-2524b0ecd8684b42bc7a4c69794f40f11cbbe2a5.tar.gz"
++BR2_TARGET_OPENSBI_PLAT="starfive/vic7100"
++# BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG is not set
++# BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
++BR2_TARGET_OPENSBI_UBOOT_PAYLOAD=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++# HEAD of the Fedora branch
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,u-boot,3f3ac01a29ad1cd5fa519d86f81daead2447f1d4)/uboot-3f3ac01a29ad1cd5fa519d86f81daead2447f1d4.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="starfive_vic7100_beagle_v_smode"
++BR2_PACKAGE_HOST_GENIMAGE=y
