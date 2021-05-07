@@ -1,98 +1,50 @@
-From: dusan.ivanco at gmail.com <dusan.ivanco@gmail.com>
-Date: Fri,  7 May 2021 21:29:56 +0200
-Subject: [Buildroot] [PATCH 2/2] package/raspi2fb: new package
-Message-ID: <20210507193004.29928-2-dusan.ivanco@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  7 May 2021 21:39:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cifs-utils: security bump to
+ version 6.13
+Message-ID: <20210507193929.2591251-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Du?an Ivan?o <dusan.ivanco@gmail.com>
+Fix CVE-2021-20208: A flaw was found in cifs-utils in versions before
+6.13. A user when mounting a krb5 CIFS file system from within a
+container can use Kerberos credentials of the host. The highest threat
+from this vulnerability is to data confidentiality and integrity.
 
+https://lists.samba.org/archive/samba-technical/2021-April/136467.html
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/Config.in                                 |  1 +
- package/raspi2fb/0001-vchostif-library-link.patch | 11 +++++++++++
- package/raspi2fb/Config.in                        |  9 +++++++++
- package/raspi2fb/raspi2fb.hash                    |  3 +++
- package/raspi2fb/raspi2fb.mk                      | 13 +++++++++++++
- 5 files changed, 37 insertions(+)
- create mode 100644 package/raspi2fb/0001-vchostif-library-link.patch
- create mode 100644 package/raspi2fb/Config.in
- create mode 100644 package/raspi2fb/raspi2fb.hash
- create mode 100644 package/raspi2fb/raspi2fb.mk
+ package/cifs-utils/cifs-utils.hash | 2 +-
+ package/cifs-utils/cifs-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index bbb31a66dc..df43a234cb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -536,6 +536,7 @@ endmenu
- 	source "package/pru-software-support/Config.in"
- 	source "package/pulseview/Config.in"
- 	source "package/raspi-gpio/Config.in"
-+	source "package/raspi2fb/Config.in"
- 	source "package/read-edid/Config.in"
- 	source "package/rng-tools/Config.in"
- 	source "package/rpi-userland/Config.in"
-diff --git a/package/raspi2fb/0001-vchostif-library-link.patch b/package/raspi2fb/0001-vchostif-library-link.patch
-new file mode 100644
-index 0000000000..7dc13534e2
---- /dev/null
-+++ b/package/raspi2fb/0001-vchostif-library-link.patch
-@@ -0,0 +1,11 @@
-+--- a/CMakeLists.txt	2020-01-01 00:00:00.000000000 +0000
-++++ b/CMakeLists.txt	2020-01-01 00:00:00.000000000 +0000
-+@@ -6,7 +6,7 @@
-+ 
-+ set(BCM_HOST_INCLUDE_DIRS /opt/vc/include)
-+ set(BCM_HOST_LIBRARY_DIRS /opt/vc/lib)
-+-set(BCM_HOST_LIBRARIES bcm_host)
-++set(BCM_HOST_LIBRARIES bcm_host vchostif)
-+ 
-+ find_package(PkgConfig)
-+ pkg_check_modules(LIBBSD libbsd)
-diff --git a/package/raspi2fb/Config.in b/package/raspi2fb/Config.in
-new file mode 100644
-index 0000000000..ab144c2d1a
---- /dev/null
-+++ b/package/raspi2fb/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_RASPI2FB
-+	bool "raspi2fb"
-+	select BR2_PACKAGE_LIBBSD
-+	select BR2_PACKAGE_RPI_USERLAND
-+	help
-+	  Program to copy the Raspberry Pi display
-+	  to a secondary framebuffer.
-+
-+	  https://github.com/AndrewFromMelbourne/raspi2fb
-diff --git a/package/raspi2fb/raspi2fb.hash b/package/raspi2fb/raspi2fb.hash
-new file mode 100644
-index 0000000000..6e14c2f5d1
---- /dev/null
-+++ b/package/raspi2fb/raspi2fb.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 713a73e99268ad4557b522513ddaef8de3431aee9f7eb338f3cbff5a036d776f  raspi2fb-7e1bae71c5af88240f7eb89a924161c7ee0b00f5.tar.gz
-+sha256 afbc87568aa5a3108fc85b60015dd9346108dd77f588cd5c62d3385577519c4c  LICENSE
-diff --git a/package/raspi2fb/raspi2fb.mk b/package/raspi2fb/raspi2fb.mk
-new file mode 100644
-index 0000000000..b9732e9a51
---- /dev/null
-+++ b/package/raspi2fb/raspi2fb.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# raspi2fb
-+#
-+################################################################################
-+
-+RASPI2FB_VERSION = 7e1bae71c5af88240f7eb89a924161c7ee0b00f5
-+RASPI2FB_SITE = $(call github,AndrewFromMelbourne,raspi2fb,$(RASPI2FB_VERSION))
-+RASPI2FB_LICENSE = MIT
-+RASPI2FB_LICENSE_FILES = LICENSE
-+RASPI2FB_DEPENDENCIES = libbsd rpi-userland
-+
-+$(eval $(cmake-package))
+diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
+index cd7a9bba62..566a5c4bf4 100644
+--- a/package/cifs-utils/cifs-utils.hash
++++ b/package/cifs-utils/cifs-utils.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  922ddcc3059922e80789312c386b9c569991b4350d3ae3099de3e4b82f3885ef  cifs-utils-6.12.tar.bz2
++sha256  43d8786c8613caccfa84913081c1d62bc2409575854cf895b05b48af0863d056  cifs-utils-6.13.tar.bz2
+ 
+ # Hash for license file:
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index 473e8a2c28..b29557cbe8 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CIFS_UTILS_VERSION = 6.12
++CIFS_UTILS_VERSION = 6.13
+ CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPL-3.0+
 -- 
-2.21.1 (Apple Git-122.3)
+2.30.2
