@@ -1,20 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 07 May 2021 09:37:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/docker-engine: bump version to
+Date: Fri, 07 May 2021 09:38:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/docker-cli: bump version to
  20.10.6
-In-Reply-To: <20210419104751.1446056-1-knif.oiram@gmail.com> (Mario Fink's
- message of "Mon, 19 Apr 2021 12:47:51 +0200")
-References: <20210419104751.1446056-1-knif.oiram@gmail.com>
-Message-ID: <87bl9n0zbx.fsf@dell.be.48ers.dk>
+In-Reply-To: <87bl9t3p8y.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sun, 02 May 2021 21:33:01 +0200")
+References: <20210419102855.1444837-1-mario.fink@record-evolution.de>
+ <CA+h8R2o-v3kFzhMkSqKBMjJp2UM9gCUP7E-sYuqRUAwXbTRUDg@mail.gmail.com>
+ <87bl9t3p8y.fsf@dell.be.48ers.dk>
+Message-ID: <877dkb0z9t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mario" == Mario Fink <mario.fink@record-evolution.de> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Signed-off-by: Mario Fink <knif.oiram@gmail.com>
+ >>> -DOCKER_CLI_VERSION = 20.10.5
+ >>> +DOCKER_CLI_VERSION = 20.10.6
+
+ >> Recommended for 2021.02.x
+
+ >> Tested-by: Christian Stewart <christian@paral.in>
+
+ > Strange, I didn't receive this patch and I also don't see it in
+ > patchwork or the mailing list archive.
+
+ > I've recreated the patch and committed, thanks.
 
 Committed to 2021.02.x, thanks.
 
