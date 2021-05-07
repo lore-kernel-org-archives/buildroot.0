@@ -1,40 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 07 May 2021 13:12:26 +0000
-Subject: [Buildroot] [Bug 13796] New: Problems compiling package
- gst-plugins-good
-Message-ID: <bug-13796-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 07 May 2021 16:48:40 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-asgiref: bump version to
+ 3.3.4
+In-Reply-To: <20210506212540.17671-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 6 May 2021 23:25:39 +0200")
+References: <20210506212540.17671-1-peter@korsgaard.com>
+Message-ID: <87pmy2zjjr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13796
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-            Bug ID: 13796
-           Summary: Problems compiling package gst-plugins-good
-           Product: buildroot
-           Version: 2021.02.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: alfredo.pons at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+ > Needed by django 3.2.x
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Created attachment 8936
-  --> https://bugs.busybox.net/attachment.cgi?id=8936&action=edit
-Configuration file and logs
-
-With my configuration for Raspberry Pi 1, the compilation of gst-plugins-good
-fails. I attach configuration file and compilation logs (extract).
-
-To reproduce the compilation error, just load my configuration and run: 'make'
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
