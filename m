@@ -1,32 +1,44 @@
 From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Date: Thu,  6 May 2021 17:43:41 -0700
-Subject: [Buildroot] [PATCH v2 0/3] Buildroot updates for ARC, LMBench
-Message-ID: <20210507004344.3166099-1-vgupta@synopsys.com>
+Date: Thu,  6 May 2021 17:43:44 -0700
+Subject: [Buildroot] [PATCH v2 3/3] lmbench: emulate --prefix to avoid
+ scattering binaries all over
+In-Reply-To: <20210507004344.3166099-1-vgupta@synopsys.com>
+References: <20210507004344.3166099-1-vgupta@synopsys.com>
+Message-ID: <20210507004344.3166099-4-vgupta@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+ - moves all lmbench binaries to <target>/lmbench/bin/<ARCH>
+ - scripts copied to <target>/lmbench/scripts
+ - scripts/os overwritten to setup "OS" as expected by LMBench runtime scripts
 
-Please apply the assorted fixes.
+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+---
+ package/lmbench/lmbench.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-patch 3/3 had a snafu with scripts/os update.
-
-Thx,
--Vineet
-
-Vineet Gupta (3):
-  ARC: config: explicit'ify -mcpu for cpu selection
-  lmbench: increase memsize delay for slow FPGAs
-  lmbench: emulate --prefix to avoid scattering binaries all over
-
- arch/Config.in.arc                            |  8 +++---
- ...c-to-prevent-memsize-from-timingout-.patch | 28 +++++++++++++++++++
- package/lmbench/lmbench.mk                    |  9 +++++-
- 3 files changed, 40 insertions(+), 5 deletions(-)
- create mode 100644 package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch
-
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index 2f3b19b5f820..ed075d20dafe 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -36,7 +36,14 @@ define LMBENCH_BUILD_CMDS
+ endef
+ 
+ define LMBENCH_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CFLAGS="$(TARGET_CFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" BASE=$(TARGET_DIR)/usr -C $(@D)/src install
++	mkdir -p $(TARGET_DIR)/lmbench/tmp
++	mkdir -p $(TARGET_DIR)/lmbench/scripts
++	$(TARGET_MAKE_ENV) $(MAKE) CFLAGS="$(TARGET_CFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" BASE=$(TARGET_DIR)/lmbench/tmp -C $(@D)/src install
++	mkdir -p $(TARGET_DIR)/lmbench/bin/$(ARCH)
++	mv $(TARGET_DIR)/lmbench/tmp/bin/* $(TARGET_DIR)/lmbench/bin/$(ARCH)
++	rm -rf $(TARGET_DIR)/lmbench/tmp/
++	cp -rfd $(@D)/scripts/ $(TARGET_DIR)/lmbench/.
++	echo "echo ${ARCH}" >  $(TARGET_DIR)/lmbench/scripts/os
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.25.1
