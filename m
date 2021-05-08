@@ -1,44 +1,31 @@
-From: Drew Fustini <drew@beagleboard.org>
-Date: Fri, 7 May 2021 16:30:04 -0700
-Subject: [Buildroot] [PATCH v3 5/7] boot/beaglev-ddrinit: new package
-In-Reply-To: <20210507220401.GE2137340@scaer>
-References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
- <20210504205139.1055360-6-thomas.petazzoni@bootlin.com>
- <20210507220401.GE2137340@scaer>
-Message-ID: <CAPgEAj6=TkK79B32P-JRL+T1KPYQd1djsVbYc2ah3zx7xno6cg@mail.gmail.com>
+From: Enoch <ixew@hotmail.com>
+Date: Fri, 07 May 2021 22:09:30 -0400
+Subject: [Buildroot] PocketBeagle: U-Boot 2021.04 is broken
+Message-ID: <BY3PR08MB702664FF8B8A0CDA104F1562CC569@BY3PR08MB7026.namprd08.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, May 7, 2021, 15:04 Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+Hello buildroot-ers:
 
-> On 2021-05-04 22:51 +0200, Thomas Petazzoni spake thusly:
-> > This commit adds a package for the DDR initialization code used on the
-> > BeagleV platform.
->
-> The upstream package name is beaglev-ddrlnit, yes, with an 'l' instead
-> of an 'i'. I've renamed the package to match upstream name, so that
-> users that look for it can actually find it.
->
-> Applied to master, thanks.
->
-> Regards,
-> Yann E. MORIN.
+A working defconfig fails with the latest U-Boot version selected. Is it
+working for anyone using TI's AM335X SOC?
+
+Thanks, Enoch.
+
+----------------------------------------------------------------------
+
+U-Boot SPL 2021.04 (May 07 2021 - 18:30:29 -0400)
+Trying to boot from MMC1
 
 
-Would it be helpful if I get StarFive to fix the typo and rename it to
-ddrinit?
+U-Boot 2021.04 (May 07 2021 - 18:30:29 -0400)
 
- I am thinking that would probably be good to have happen before other
-projects start pointing to it.  Thomas was so fast with the buildroot
-patches I think it is the first to notice this.
-
-Thank you,
-Drew
-
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210507/84b66ae4/attachment.html>
+CPU  : AM335X-GP rev 2.1
+Model: TI AM335x PocketBeagle
+DRAM:  512 MiB
+WDT:   Started with servicing (60s timeout)
+Could not initialize timer (err -19)
+Could not initialize timer (err -19)
