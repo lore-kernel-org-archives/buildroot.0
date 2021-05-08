@@ -1,49 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 May 2021 18:21:15 +0200
-Subject: [Buildroot] [git commit] package/python-pytest: bump to version
- 6.2.4
-Message-ID: <20210508155612.0185B7FC37@busybox.osuosl.org>
+Date: Sat, 8 May 2021 18:17:57 +0200
+Subject: [Buildroot] [git commit] package/ruby: security bump to version
+ 3.0.1
+Message-ID: <20210508155611.DDC40866AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f70e6474e543cb35f8f73286ba8d1f58b5df9854
+commit: https://git.buildroot.net/buildroot/commit/?id=be9783951d1d4460a789ab3f1e45b643f84794ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+This release includes security fixes:
+- CVE-2021-28965: XML round-trip vulnerability in REXML
+- CVE-2021-28966: Path traversal in Tempfile on Windows
+
+https://www.ruby-lang.org/en/news/2021/04/05/ruby-3-0-1-released/
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pytest/python-pytest.hash | 4 ++--
- package/python-pytest/python-pytest.mk   | 4 ++--
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
-index 8c2a85c922..667493a5dc 100644
---- a/package/python-pytest/python-pytest.hash
-+++ b/package/python-pytest/python-pytest.hash
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index ec9492aa5e..b79596e57a 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytest/json
--md5	91a421ffffe3310096b4273b2fa13819  pytest-6.1.2.tar.gz
--sha256	c0a7e94a8cdbc5422a51ccdad8e6f1024795939cc89159a0ae7f0b316ad3823e  pytest-6.1.2.tar.gz
-+md5	78d75c37901f5df462afc86acaa443cd  pytest-6.2.4.tar.gz
-+sha256	50bcad0a0b9c5a72c8e4e7c9855a3ad496ca6a881a3641b4260605450772c54b  pytest-6.2.4.tar.gz
- # Locally computer sha256
- sha256	7898b9b164d4f93fd9a562fd0f592935518b48c4745303964110eb7f7fe64faf  LICENSE
-diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
-index d47ec0f430..6463b23687 100644
---- a/package/python-pytest/python-pytest.mk
-+++ b/package/python-pytest/python-pytest.mk
-@@ -4,9 +4,9 @@
- #
+-# https://www.ruby-lang.org/en/news/2020/12/25/ruby-3-0-0-released/
+-sha256  68bfaeef027b6ccd0032504a68ae69721a70e97d921ff328c0c8836c798f6cb1  ruby-3.0.0.tar.xz
++# https://www.ruby-lang.org/en/news/2021/04/05/ruby-3-0-1-released/
++sha512  97d2e883656060846b304368d9d836e2f3ef39859c36171c9398a0573818e4ed75bfd7460f901a9553f7f53518c505327a66e74f83704a881469f5ac61fe13d7  ruby-3.0.1.tar.xz
+ # License files, Locally calculated
+ sha256  274f8d7983052448e7fd691c81043465c92ee6fb7bd8ab3f20a7997862f2778e  LEGAL
+ sha256  967586d538a28955ec2541910cf63c5ac345fcdea94bfb1f1705a1f6eb36bcbb  COPYING
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index c30ad691d1..fded7acebc 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,8 +5,8 @@
  ################################################################################
  
--PYTHON_PYTEST_VERSION = 6.1.2
-+PYTHON_PYTEST_VERSION = 6.2.4
- PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
--PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/d4/df/bd7c25c4fe809a17315b3fc9878edf48d31dde7b431b6836848b063c0428
-+PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/5b/98/92bbda5f83ed995ef8953349ef30c77c934abcc251c42ab3d7787a40c49c
- PYTHON_PYTEST_SETUP_TYPE = setuptools
- PYTHON_PYTEST_LICENSE = MIT
- PYTHON_PYTEST_LICENSE_FILES = LICENSE
+ RUBY_VERSION_MAJOR = 3.0
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).0
+-RUBY_VERSION_EXT = 3.0.0
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
++RUBY_VERSION_EXT = 3.0.1
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
