@@ -1,74 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 May 2021 10:58:45 +0200
-Subject: [Buildroot] [git commit] package/xen: bump version to 4.14.2
-Message-ID: <20210508083725.1489486AE6@busybox.osuosl.org>
+Date: Sat, 8 May 2021 10:58:36 +0200
+Subject: [Buildroot] [git commit] package/python3: security bump to version
+ 3.9.5
+Message-ID: <20210508083725.0045486B12@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc5d9c98355f8c82192fe2cff1c8c9bfcea5b03d
+commit: https://git.buildroot.net/buildroot/commit/?id=f02c0ee1b035ca3b035caa55e3452f56d76e5230
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Includes a number of bugfixes and the security fixes up to 368, so drop
-those.
+Fixes the following security issues:
 
-For details, see the release notes:
-https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-2/
+- bpo-43434: Creating a sqlite3.Connection object now also produces a
+  sqlite3.connect auditing event.  Previously this event was only produced
+  by sqlite3.connect() calls.  Patch by Erlend E.  Aasland.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+- bpo-43882: The presence of newline or tab characters in parts of a URL
+  could allow some forms of attacks.
+  Following the controlling specification for URLs defined by WHATWG
+  urllib.parse() now removes ASCII newlines and tabs from URLs, preventing
+  such attacks.
+
+- bpo-43472: Ensures interpreter-level audit hooks receive the
+  cpython.PyInterpreterState_New event when called through the
+  _xxsubinterpreters module.
+
+- bpo-36384: ipaddress module no longer accepts any leading zeros in IPv4
+  address strings.  Leading zeros are ambiguous and interpreted as octal
+  notation by some libraries.  For example the legacy function
+  socket.inet_aton() treats leading zeros as octal notatation.  glibc
+  implementation of modern inet_pton() does not accept any leading zeros.
+  For a while the ipaddress module used to accept ambiguous leading zeros.
+
+- bpo-43075: Fix Regular Expression Denial of Service (ReDoS) vulnerability
+  in urllib.request.AbstractBasicAuthHandler.  The ReDoS-vulnerable regex
+  has quadratic worst-case complexity and it allows cause a denial of
+  service when identifying crafted invalid RFCs.  This ReDoS issue is on the
+  client side and needs remote attackers to control the HTTP server.
+
+- bpo-42800: Audit hooks are now fired for frame.f_code, traceback.tb_frame,
+  and generator code/frame attribute access.
+
+https://www.python.org/downloads/release/python-395/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xen/xen.hash |  8 +-------
- package/xen/xen.mk   | 15 +--------------
- 2 files changed, 2 insertions(+), 21 deletions(-)
+ package/python3/python3.hash | 6 +++---
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index 6893414313..fd0310c921 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,9 +1,3 @@
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 2a0ba6ab4f..78571b5e0b 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,5 @@
+-# From https://www.python.org/downloads/release/python-394/
+-md5  2a3dba5fc75b695c45cf1806156e1a97  Python-3.9.4.tar.xz
++# From https://www.python.org/downloads/release/python-395/
++md5  71f7ada6bec9cdbf4538adc326120cfd  Python-3.9.5.tar.xz
  # Locally computed
--sha256  cf0d7316ad674491f49b7ef0518cb1d906a2e3bfad639deef0ef2343b119ac0c  xen-4.14.1.tar.gz
-+sha256  e35099a963070e3c9f425d1e36cbb1c40b7874ef449bfafd6688343783cb25ad  xen-4.14.2.tar.gz
- sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
--# https://xenbits.xenproject.org/xsa/advisory-360.html
--sha256  809515011efb781a2a8742e9acfd76412d3920c2d4142bb187588cd36f77383e  xsa360-4.14.patch
--# https://xenbits.xenproject.org/xsa/advisory-364.html
--sha256  dc313c70bb07b4096bbc4612cbbc180589923277411dede2fda37f04ecc846d6  xsa364.patch
--# https://xenbits.xenproject.org/xsa/advisory-368.html
--sha256  55bbe59c75b69f493e364dfcf6cdbc7db4acd32dbf0b4d2466815b7c1f1823ce  xsa368-4.14.patch
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 533882e05b..b84214ed16 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -4,26 +4,13 @@
- #
+-sha256  4b0e6644a76f8df864ae24ac500a51bbf68bd098f6a173e27d3b61cdca9aa134  Python-3.9.4.tar.xz
++sha256  0c5a140665436ec3dbfbb79e2dfb6d192655f26ef4a29aeffcb6d1820d716d83  Python-3.9.5.tar.xz
+ sha256  599826df92bfdcd2702eac691072498bb096c55af04ee984cf90f70ed77b5a70  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 345c6a8699..b492e09154 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XEN_VERSION = 4.14.1
-+XEN_VERSION = 4.14.2
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
- XEN_CPE_ID_VENDOR = xen
- XEN_CPE_ID_PREFIX = cpe:2.3:o
- XEN_DEPENDENCIES = host-acpica host-python3
--XEN_PATCH = \
--	https://xenbits.xenproject.org/xsa/xsa360-4.14.patch \
--	https://xenbits.xenproject.org/xsa/xsa364.patch \
--	https://xenbits.xenproject.org/xsa/xsa368-4.14.patch
--
--# xsa360-4.14.patch
--XEN_IGNORE_CVES += CVE-2021-3308
--
--# xsa364.patch
--XEN_IGNORE_CVES += CVE-2021-26933
--
--# xsa368-4.14.patch
--XEN_IGNORE_CVES += CVE-2021-28687
- 
- # Calculate XEN_ARCH
- ifeq ($(ARCH),aarch64)
+ PYTHON3_VERSION_MAJOR = 3.9
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
