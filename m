@@ -1,64 +1,159 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Sat,  8 May 2021 21:53:42 +0200
-Subject: [Buildroot] [PATCH] package/putty: bump to version 0.75
-Message-ID: <20210508195342.18415-1-post@lespocky.de>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Sat,  8 May 2021 22:16:14 +0200
+Subject: [Buildroot] [PATCH] configs/bananapi_m2_zero: bump versions and add
+ WiFi support
+Message-ID: <20210508201614.16041-1-vincent.stehle@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream does not set -Werror in its build files anymore.  License file
-just changed copyright years and holders.  PGP signatures of source
-tarball and hashes were checked.
+- Bump kernel to version 5.12.2.
+- Bump U-Boot to version 2021.04.
 
-Link: https://www.chiark.greenend.org.uk/~sgtatham/putty/releases/0.75.html
-Link: https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
-Signed-off-by: Alexander Dahl <post@lespocky.de>
+Also, adapt the SD card name in the boot script to follow Linux naming.
+While at it, add comments to make the defconfig more readable.
+
+The Banana Pi M2 Zero comprises an AMPAK AP6212 module with a Broadcom
+bcm43438/a1 WiFi chip. Add the necessary firmware and tools to support it
+and update documentation. We switch to mdev for /dev management, so that
+the WiFi driver get auto-loaded.
+
+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
 ---
- package/putty/putty.hash | 12 ++++++------
- package/putty/putty.mk   |  3 +--
- 2 files changed, 7 insertions(+), 8 deletions(-)
+ board/bananapi/bananapi-m2-zero/boot.cmd      |  2 +-
+ .../bananapi-m2-zero/firmware-links.sh        |  9 ++++++
+ .../bananapi-m2-zero/linux-extras.config      |  9 ++++++
+ board/bananapi/bananapi-m2-zero/readme.txt    | 14 +++++++++
+ configs/bananapi_m2_zero_defconfig            | 30 +++++++++++++++++--
+ 5 files changed, 60 insertions(+), 4 deletions(-)
+ create mode 100755 board/bananapi/bananapi-m2-zero/firmware-links.sh
+ create mode 100644 board/bananapi/bananapi-m2-zero/linux-extras.config
 
-diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index 3885cef9b8..8974aaac5e 100644
---- a/package/putty/putty.hash
-+++ b/package/putty/putty.hash
-@@ -1,8 +1,8 @@
--# Hashes from: http://the.earth.li/~sgtatham/putty/0.74/{md5,sha1,sha256,sha512}sums
--md5  dbfa58f22a91b22b7489173e9dd09e30  putty-0.74.tar.gz
--sha1  17b160e9720f67f9af9399d7d185b913b81f18fe  putty-0.74.tar.gz
--sha256  ddd5d388e51dd9e6e294005b30037f6ae802239a44c9dc9808c779e6d11b847d  putty-0.74.tar.gz
--sha512  0da86849ea764cd88643bd2c1984ac7211ae72dd7c41232307b1960a29ca9518044b022d87c60272d6db71a3357026862a112bedb90ee732b41494fca3acde9b  putty-0.74.tar.gz
-+# Hashes from: http://the.earth.li/~sgtatham/putty/0.75/{md5,sha1,sha256,sha512}sums
-+md5  fae57a9ab209f303cc9e9f83eecaa27c  putty-0.75.tar.gz
-+sha1  cdb976811a35eed67c5a2c588908b08edf6e3e1d  putty-0.75.tar.gz
-+sha256  d3173b037eddbe9349abe978101277b4ba9f9959e25dedd44f87e7b85cc8f9f5  putty-0.75.tar.gz
-+sha512  3dbc15485008a98daf60236061253e66b94a6e5da123fc84c5f0ac006c84e17c70fe748987677775e3b54a12297eb826cccf70a4fc039b633bc2d512938b3028  putty-0.75.tar.gz
+diff --git a/board/bananapi/bananapi-m2-zero/boot.cmd b/board/bananapi/bananapi-m2-zero/boot.cmd
+index 081450935b..70ccdf7045 100644
+--- a/board/bananapi/bananapi-m2-zero/boot.cmd
++++ b/board/bananapi/bananapi-m2-zero/boot.cmd
+@@ -1,4 +1,4 @@
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk1p2 rootwait
  
- # Locally calculated
--sha256  92028b6d56212bd3e4ce6a36bd2e2454851dca7e8ffe4c6ab51385ca214ca322  LICENCE
-+sha256  3f3e870dd3d0867d79370b1d433602c60bb91b59de04e5d8f2a149b788530d53  LICENCE
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index c40cac9dc5..1e5a89ea9f 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
+ mmc dev 0
+ fatload mmc 0 $kernel_addr_r zImage
+diff --git a/board/bananapi/bananapi-m2-zero/firmware-links.sh b/board/bananapi/bananapi-m2-zero/firmware-links.sh
+new file mode 100755
+index 0000000000..7f320fb1a5
+--- /dev/null
++++ b/board/bananapi/bananapi-m2-zero/firmware-links.sh
+@@ -0,0 +1,9 @@
++#!/bin/sh
++# Create the necessary WiFi firmware symbolic links for the brcmfmac driver
++set -eu
++
++cd "$1/lib/firmware"
++[ -d brcm ] || mkdir -v brcm
++cd brcm
++ln -svf ../ap6212/nvram.txt brcmfmac43430-sdio.sinovoip,bpi-m2-zero.txt
++ln -svf ../ap6212/fw_bcm43438a1_apsta.bin brcmfmac43430-sdio.bin
+diff --git a/board/bananapi/bananapi-m2-zero/linux-extras.config b/board/bananapi/bananapi-m2-zero/linux-extras.config
+new file mode 100644
+index 0000000000..b9d3b143c8
+--- /dev/null
++++ b/board/bananapi/bananapi-m2-zero/linux-extras.config
+@@ -0,0 +1,9 @@
++# wireless core
++CONFIG_WIRELESS=y
++CONFIG_CFG80211=m
++CONFIG_CFG80211_WEXT=y
++
++# wireless drivers
++CONFIG_WLAN=y
++CONFIG_WLAN_VENDOR_BROADCOM=y
++CONFIG_BRCMFMAC=m
+diff --git a/board/bananapi/bananapi-m2-zero/readme.txt b/board/bananapi/bananapi-m2-zero/readme.txt
+index 9edd477f11..a48c514c14 100644
+--- a/board/bananapi/bananapi-m2-zero/readme.txt
++++ b/board/bananapi/bananapi-m2-zero/readme.txt
+@@ -32,3 +32,17 @@ Copy the bootable "sdcard.img" onto an SD card with "dd":
  
--PUTTY_VERSION = 0.74
-+PUTTY_VERSION = 0.75
- PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
- PUTTY_LICENSE = MIT
- PUTTY_LICENSE_FILES = LICENCE
- PUTTY_CPE_ID_VENDOR = putty
- PUTTY_CONF_OPTS = --disable-gtktest
--PUTTY_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-error"
- 
- ifeq ($(BR2_PACKAGE_LIBGTK2),y)
- PUTTY_CONF_OPTS += --with-gtk=2
-
-base-commit: dc5d9c98355f8c82192fe2cff1c8c9bfcea5b03d
+ Insert the micro SDcard in your Bananapi M2 Zero and power it up. The console
+ is on the Debug UART on the CON3 header, with serial settings 115200 8N1.
++
++Using Wifi
++==========
++
++  # iwconfig wlan0 essid ACCESSPOINTNAME
++  # wpa_passphrase ACCESSPOINTNAME > /etc/wpa.conf
++
++(enter the wifi password and press enter)
++
++  # wpa_supplicant -i wlan0 -c /etc/wpa.conf &
++  # udhcpc -i wlan0
++  # ping buildroot.org
++
++Enjoy!
+diff --git a/configs/bananapi_m2_zero_defconfig b/configs/bananapi_m2_zero_defconfig
+index e5c89fce40..9e6760d196 100644
+--- a/configs/bananapi_m2_zero_defconfig
++++ b/configs/bananapi_m2_zero_defconfig
+@@ -1,23 +1,45 @@
++# Architecture
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
++
++# Linux headers same as kernel, a 5.12 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
++
++# System
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Bananapi M2 Zero"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/bananapi/bananapi-m2-zero/firmware-links.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m2-zero/genimage.cfg"
++
++# Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9.11"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/bananapi/bananapi-m2-zero/linux-extras.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-bananapi-m2-zero"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# WiFi
++BR2_PACKAGE_ARMBIAN_FIRMWARE=y
++BR2_PACKAGE_ARMBIAN_FIRMWARE_AP6212=y
++BR2_PACKAGE_WIRELESS_TOOLS=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
++
++# Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
++
++# Bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="bananapi_m2_zero"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+@@ -26,6 +48,8 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m2-zero/boot.cmd"
++
++# Required tools to create the SD image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
 -- 
-2.20.1
+2.30.2
