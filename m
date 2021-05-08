@@ -1,64 +1,143 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 May 2021 23:17:01 +0200
-Subject: [Buildroot] [git commit] package/putty: bump to version 0.75
-Message-ID: <20210508204927.B022381124@busybox.osuosl.org>
+Date: Sat, 8 May 2021 23:16:45 +0200
+Subject: [Buildroot] [git commit] package/monkey: drop package
+Message-ID: <20210508204927.AAC5781F02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d562009f7b9701cb20bc4b1d389d19f9a647cc3b
+commit: https://git.buildroot.net/buildroot/commit/?id=ac0cb2788ec7222af45d7a8fd3aba21ef681f794
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream does not set -Werror in its build files anymore.  License file
-just changed copyright years and holders.  PGP signatures of source
-tarball and hashes were checked.
+As stated in commit 26a7d912f4a44bce558ee24bbadb5d10527f68c1, upstream
+is aware than the lack of release is an issue but no comments since
+2018: https://github.com/monkey/monkey/issues/276
 
-Link: https://www.chiark.greenend.org.uk/~sgtatham/putty/releases/0.75.html
-Link: https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
-Signed-off-by: Alexander Dahl <post@lespocky.de>
+Moreover, TLS support is broken since 2016 but again upstream does not
+seem to care about it: https://github.com/monkey/monkey/issues/336
+
+So just drop monkey
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0626ebab4f084d9b97d6696c7d4ebf7760d776a3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/putty/putty.hash | 12 ++++++------
- package/putty/putty.mk   |  3 +--
- 2 files changed, 7 insertions(+), 8 deletions(-)
+ Config.in.legacy           |  7 +++++++
+ package/Config.in          |  1 -
+ package/monkey/Config.in   | 24 ------------------------
+ package/monkey/monkey.hash |  3 ---
+ package/monkey/monkey.mk   | 33 ---------------------------------
+ 5 files changed, 7 insertions(+), 61 deletions(-)
 
-diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index 3885cef9b8..8974aaac5e 100644
---- a/package/putty/putty.hash
-+++ b/package/putty/putty.hash
-@@ -1,8 +1,8 @@
--# Hashes from: http://the.earth.li/~sgtatham/putty/0.74/{md5,sha1,sha256,sha512}sums
--md5  dbfa58f22a91b22b7489173e9dd09e30  putty-0.74.tar.gz
--sha1  17b160e9720f67f9af9399d7d185b913b81f18fe  putty-0.74.tar.gz
--sha256  ddd5d388e51dd9e6e294005b30037f6ae802239a44c9dc9808c779e6d11b847d  putty-0.74.tar.gz
--sha512  0da86849ea764cd88643bd2c1984ac7211ae72dd7c41232307b1960a29ca9518044b022d87c60272d6db71a3357026862a112bedb90ee732b41494fca3acde9b  putty-0.74.tar.gz
-+# Hashes from: http://the.earth.li/~sgtatham/putty/0.75/{md5,sha1,sha256,sha512}sums
-+md5  fae57a9ab209f303cc9e9f83eecaa27c  putty-0.75.tar.gz
-+sha1  cdb976811a35eed67c5a2c588908b08edf6e3e1d  putty-0.75.tar.gz
-+sha256  d3173b037eddbe9349abe978101277b4ba9f9959e25dedd44f87e7b85cc8f9f5  putty-0.75.tar.gz
-+sha512  3dbc15485008a98daf60236061253e66b94a6e5da123fc84c5f0ac006c84e17c70fe748987677775e3b54a12297eb826cccf70a4fc039b633bc2d512938b3028  putty-0.75.tar.gz
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d583f3b603..ce6aeed87d 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
- # Locally calculated
--sha256  92028b6d56212bd3e4ce6a36bd2e2454851dca7e8ffe4c6ab51385ca214ca322  LICENCE
-+sha256  3f3e870dd3d0867d79370b1d433602c60bb91b59de04e5d8f2a149b788530d53  LICENCE
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index c40cac9dc5..1e5a89ea9f 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
+ comment "Legacy options removed in 2021.05"
  
--PUTTY_VERSION = 0.74
-+PUTTY_VERSION = 0.75
- PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
- PUTTY_LICENSE = MIT
- PUTTY_LICENSE_FILES = LICENCE
- PUTTY_CPE_ID_VENDOR = putty
- PUTTY_CONF_OPTS = --disable-gtktest
--PUTTY_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-error"
- 
- ifeq ($(BR2_PACKAGE_LIBGTK2),y)
- PUTTY_CONF_OPTS += --with-gtk=2
++config BR2_PACKAGE_MONKEY
++	bool "monkey package removed"
++	select BR2_LEGACY
++	help
++	  This package has been removed as it has not seen any release
++	  since 2016 and because TLS is broken on master.
++
+ config BR2_PACKAGE_DOCKER_CONTAINERD
+ 	bool "docker-containerd package was renamed to containerd"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 6888e824a0..82b28d2835 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2186,7 +2186,6 @@ menu "Networking applications"
+ 	source "package/mjpg-streamer/Config.in"
+ 	source "package/modem-manager/Config.in"
+ 	source "package/mongrel2/Config.in"
+-	source "package/monkey/Config.in"
+ 	source "package/mosh/Config.in"
+ 	source "package/mosquitto/Config.in"
+ 	source "package/mrouted/Config.in"
+diff --git a/package/monkey/Config.in b/package/monkey/Config.in
+deleted file mode 100644
+index 32a95ee623..0000000000
+--- a/package/monkey/Config.in
++++ /dev/null
+@@ -1,24 +0,0 @@
+-config BR2_PACKAGE_MONKEY
+-	bool "monkey"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_STATIC_LIBS # dlopen()
+-	depends on BR2_USE_MMU # fork()
+-	help
+-	  Monkey Server is a fast and lightweight web server for Linux
+-	  platforms.
+-
+-	  http://monkey-project.com/
+-
+-if BR2_PACKAGE_MONKEY
+-
+-config BR2_PACKAGE_MONKEY_SSL
+-	bool "enable SSL/TLS"
+-	select BR2_PACKAGE_MBEDTLS
+-	help
+-	  Enable build of the SSL/TLS plugin.
+-
+-endif
+-
+-comment "monkey needs an toolchain w/ threads, dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/monkey/monkey.hash b/package/monkey/monkey.hash
+deleted file mode 100644
+index 27ff806442..0000000000
+--- a/package/monkey/monkey.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed:
+-sha256  c988d9f4f577a789aa244e5a0f99ebfd46ebddc328656f319acf64edc9fd5199  monkey-f54856ce250c4e25735434dc75717a4b7fbfc45b.tar.gz
+-sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
+deleted file mode 100644
+index 2cb1a5f298..0000000000
+--- a/package/monkey/monkey.mk
++++ /dev/null
+@@ -1,33 +0,0 @@
+-################################################################################
+-#
+-# monkey
+-#
+-################################################################################
+-
+-MONKEY_VERSION = f54856ce250c4e25735434dc75717a4b7fbfc45b
+-MONKEY_SITE = $(call github,monkey,monkey,$(MONKEY_VERSION))
+-MONKEY_LICENSE = Apache-2.0
+-MONKEY_LICENSE_FILES = LICENSE
+-
+-MONKEY_CONF_OPTS = \
+-	-DMK_PATH_WWW=/var/www \
+-	-DWITHOUT_HEADERS=ON
+-
+-ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+-MONKEY_CONF_OPTS += -DMK_UCLIB=ON -DMK_BACKTRACE=OFF
+-endif
+-
+-ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-MONKEY_CONF_OPTS += -DMK_MUSL=ON -DMK_BACKTRACE=OFF
+-endif
+-
+-ifeq ($(BR2_ENABLE_DEBUG),y)
+-MONKEY_CONF_OPTS += -DMK_DEBUG=ON
+-endif
+-
+-ifeq ($(BR2_PACKAGE_MONKEY_SSL),y)
+-MONKEY_CONF_OPTS += -DMK_PLUGIN_TLS=ON -DMK_MBEDTLS_SHARED=ON
+-MONKEY_DEPENDENCIES += mbedtls
+-endif
+-
+-$(eval $(cmake-package))
