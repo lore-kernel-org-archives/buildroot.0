@@ -1,20 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 May 2021 18:20:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.2.14
-In-Reply-To: <20210508073944.2998533-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 8 May 2021 09:39:44 +0200")
-References: <20210508073944.2998533-1-fontaine.fabrice@gmail.com>
-Message-ID: <874kfdw631.fsf@dell.be.48ers.dk>
+Date: Sat, 08 May 2021 18:21:19 +0200
+Subject: [Buildroot] [PATCH] package/python-pytest: bump to version 6.2.4
+In-Reply-To: <20210507174355.1546239-1-m.niestroj@grinn-global.com> (Marcin
+ Niestroj's message of "Fri, 7 May 2021 19:43:55 +0200")
+References: <20210507174355.1546239-1-m.niestroj@grinn-global.com>
+Message-ID: <87zgx5urgg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Marcin" == Marcin Niestroj <m.niestroj@grinn-global.com> writes:
 
- > http://www.haproxy.org/download/2.2/src/CHANGELOG
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 
 Committed, thanks.
 
