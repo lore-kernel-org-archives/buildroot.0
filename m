@@ -1,31 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 May 2021 23:17:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/monkey: drop package
-In-Reply-To: <20210508184416.3391369-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 8 May 2021 20:44:16 +0200")
-References: <20210508184416.3391369-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r1ihudrf.fsf@dell.be.48ers.dk>
+Date: Sat, 08 May 2021 23:17:22 +0200
+Subject: [Buildroot] [PATCH] package/putty: bump to version 0.75
+In-Reply-To: <20210508195342.18415-1-post@lespocky.de> (Alexander Dahl's
+ message of "Sat, 8 May 2021 21:53:42 +0200")
+References: <20210508195342.18415-1-post@lespocky.de>
+Message-ID: <87mtt5udr1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
 
- > As stated in commit 26a7d912f4a44bce558ee24bbadb5d10527f68c1, upstream
- > is aware than the lack of release is an issue but no comments since
- > 2018: https://github.com/monkey/monkey/issues/276
+ > Upstream does not set -Werror in its build files anymore.  License file
+ > just changed copyright years and holders.  PGP signatures of source
+ > tarball and hashes were checked.
 
- > Moreover, TLS support is broken since 2016 but again upstream does not
- > seem to care about it: https://github.com/monkey/monkey/issues/336
-
- > So just drop monkey
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/0626ebab4f084d9b97d6696c7d4ebf7760d776a3
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Link: https://www.chiark.greenend.org.uk/~sgtatham/putty/releases/0.75.html
+ > Link: https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
+ > Signed-off-by: Alexander Dahl <post@lespocky.de>
 
 Committed, thanks.
 
