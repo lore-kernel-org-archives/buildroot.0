@@ -1,67 +1,64 @@
-From: Drew Fustini <drew@beagleboard.org>
-Date: Sat, 8 May 2021 12:54:55 -0700
-Subject: [Buildroot] [PATCH v3 5/7] boot/beaglev-ddrinit: new package
-In-Reply-To: <20210508182048.GJ2137340@scaer>
-References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
- <20210504205139.1055360-6-thomas.petazzoni@bootlin.com>
- <20210507220401.GE2137340@scaer>
- <CAPgEAj6=TkK79B32P-JRL+T1KPYQd1djsVbYc2ah3zx7xno6cg@mail.gmail.com>
- <20210508073718.GI2137340@scaer>
- <CAPgEAj4C5tjW_Wne18cWqcL2ub7wAZ61UFBr=non5U23sXS97A@mail.gmail.com>
- <CAMKF1srq7i5qzkOhEcEPsc7n-t4sKaT2m961xMH68kvLzeUUKA@mail.gmail.com>
- <20210508182048.GJ2137340@scaer>
-Message-ID: <CAPgEAj551UyFRp9PtWVu_pDD+5mReskhCJ4HR8NzipaUMGgXyQ@mail.gmail.com>
+From: Alexander Dahl <post@lespocky.de>
+Date: Sat,  8 May 2021 21:53:42 +0200
+Subject: [Buildroot] [PATCH] package/putty: bump to version 0.75
+Message-ID: <20210508195342.18415-1-post@lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, May 8, 2021 at 11:21 AM Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
->
-> Khem, All,
->
-> On 2021-05-08 09:01 -0700, Khem Raj spake thusly:
-> > On Sat, May 8, 2021 at 12:48 AM Drew Fustini <drew@beagleboard.org>
-wrote:
-> > > On Sat, May 8, 2021 at 12:37 AM Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
-> > > > On 2021-05-07 16:30 -0700, Drew Fustini spake thusly:
-> > > > > On Fri, May 7, 2021, 15:04 Yann E. MORIN < [1]
-yann.morin.1998@free.fr> wrote:
-> > > > >   The upstream package name is beaglev-ddrlnit, yes, with an 'l'
-instead
-> > > > >   of an 'i'. [...]
-> > > > > Would it be helpful if I get StarFive to fix the typo and rename
-it to ddrinit?
-> > > > It is not so important that the upstream name gets fixed; [...]
-> > Is there general consensus on what it should be called ?
-> > I am happy to remove references to SOC name, if we have clear naming
-> > convention and strategy to also name future iterations of beagleV based
-on RISCV
->
-> Khem: note that we were speaking about a typo in one of the upstream
-> repositories: beaglev-ddrlnit (dee-dee-are-ell-hen-eye-tee) instead of
-> ddrinit (dee-dee-are-eye-hen-eye-tee).
->
-> But Drew said this should be a short-term repository, which will
-> eventually get phased out in favour of uboot spl.
+Upstream does not set -Werror in its build files anymore.  License file
+just changed copyright years and holders.  PGP signatures of source
+tarball and hashes were checked.
 
-Bin Meng is trying to get u-boot SPL working on the StarFive JH7100 SoC and
-that could replace ddrinit.  Although I am not sure exactly when that goal
-will be accomplished.
+Link: https://www.chiark.greenend.org.uk/~sgtatham/putty/releases/0.75.html
+Link: https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+---
+ package/putty/putty.hash | 12 ++++++------
+ package/putty/putty.mk   |  3 +--
+ 2 files changed, 7 insertions(+), 8 deletions(-)
 
-StarFive will fix the 'l' typo in the ddrinit repo if I ask them to, but
-they probably would not get that done until Monday or Tuesday.  It seemed
-like from your previous email it would be best to avoid that churn of
-renaming the repository as the patch already went into buildroot.
+diff --git a/package/putty/putty.hash b/package/putty/putty.hash
+index 3885cef9b8..8974aaac5e 100644
+--- a/package/putty/putty.hash
++++ b/package/putty/putty.hash
+@@ -1,8 +1,8 @@
+-# Hashes from: http://the.earth.li/~sgtatham/putty/0.74/{md5,sha1,sha256,sha512}sums
+-md5  dbfa58f22a91b22b7489173e9dd09e30  putty-0.74.tar.gz
+-sha1  17b160e9720f67f9af9399d7d185b913b81f18fe  putty-0.74.tar.gz
+-sha256  ddd5d388e51dd9e6e294005b30037f6ae802239a44c9dc9808c779e6d11b847d  putty-0.74.tar.gz
+-sha512  0da86849ea764cd88643bd2c1984ac7211ae72dd7c41232307b1960a29ca9518044b022d87c60272d6db71a3357026862a112bedb90ee732b41494fca3acde9b  putty-0.74.tar.gz
++# Hashes from: http://the.earth.li/~sgtatham/putty/0.75/{md5,sha1,sha256,sha512}sums
++md5  fae57a9ab209f303cc9e9f83eecaa27c  putty-0.75.tar.gz
++sha1  cdb976811a35eed67c5a2c588908b08edf6e3e1d  putty-0.75.tar.gz
++sha256  d3173b037eddbe9349abe978101277b4ba9f9959e25dedd44f87e7b85cc8f9f5  putty-0.75.tar.gz
++sha512  3dbc15485008a98daf60236061253e66b94a6e5da123fc84c5f0ac006c84e17c70fe748987677775e3b54a12297eb826cccf70a4fc039b633bc2d512938b3028  putty-0.75.tar.gz
+ 
+ # Locally calculated
+-sha256  92028b6d56212bd3e4ce6a36bd2e2454851dca7e8ffe4c6ab51385ca214ca322  LICENCE
++sha256  3f3e870dd3d0867d79370b1d433602c60bb91b59de04e5d8f2a149b788530d53  LICENCE
+diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+index c40cac9dc5..1e5a89ea9f 100644
+--- a/package/putty/putty.mk
++++ b/package/putty/putty.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
+ 
+-PUTTY_VERSION = 0.74
++PUTTY_VERSION = 0.75
+ PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
+ PUTTY_LICENSE = MIT
+ PUTTY_LICENSE_FILES = LICENCE
+ PUTTY_CPE_ID_VENDOR = putty
+ PUTTY_CONF_OPTS = --disable-gtktest
+-PUTTY_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-error"
+ 
+ ifeq ($(BR2_PACKAGE_LIBGTK2),y)
+ PUTTY_CONF_OPTS += --with-gtk=2
 
-I am happy to do whatever is best for buildroot and also Khem's meta-riscv
-OE layer.
-
-Thank you,
-Drew
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210508/f4ea970a/attachment.html>
+base-commit: dc5d9c98355f8c82192fe2cff1c8c9bfcea5b03d
+-- 
+2.20.1
