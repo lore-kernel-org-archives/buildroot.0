@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 May 2021 16:39:45 +0200
-Subject: [Buildroot] [PATCH] package/python3: security bump to version
- 3.9.5
-In-Reply-To: <20210507061536.2819-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 7 May 2021 08:15:35 +0200")
-References: <20210507061536.2819-1-peter@korsgaard.com>
-Message-ID: <87mtt5waq6.fsf@dell.be.48ers.dk>
+Date: Sat, 08 May 2021 16:48:39 +0200
+Subject: [Buildroot] [PATCH] package/go: security bump to version 1.16.4
+In-Reply-To: <20210507062821.32119-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 7 May 2021 08:28:21 +0200")
+References: <20210507062821.32119-1-peter@korsgaard.com>
+Message-ID: <87im3twabc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,41 +14,20 @@ To: buildroot@busybox.net
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
  > Fixes the following security issues:
- > - bpo-43434: Creating a sqlite3.Connection object now also produces a
- >   sqlite3.connect auditing event.  Previously this event was only produced
- >   by sqlite3.connect() calls.  Patch by Erlend E.  Aasland.
+ > - CVE-2021-31525: ReadRequest and ReadResponse in net/http can hit an
+ >   unrecoverable panic when reading a very large header (over 7MB on 64-bit
+ >   architectures, or over 4MB on 32-bit ones).  Transport and Client are
+ >   vulnerable and the program can be made to crash by a malicious server.
+ >   Server is not vulnerable by default, but can be if the default max header
+ >   of 1MB is overridden by setting Server.MaxHeaderBytes to a higher value,
+ >   in which case the program can be made to crash by a malicious client.
 
- > - bpo-43882: The presence of newline or tab characters in parts of a URL
- >   could allow some forms of attacks.
- >   Following the controlling specification for URLs defined by WHATWG
- >   urllib.parse() now removes ASCII newlines and tabs from URLs, preventing
- >   such attacks.
-
- > - bpo-43472: Ensures interpreter-level audit hooks receive the
- >   cpython.PyInterpreterState_New event when called through the
- >   _xxsubinterpreters module.
-
- > - bpo-36384: ipaddress module no longer accepts any leading zeros in IPv4
- >   address strings.  Leading zeros are ambiguous and interpreted as octal
- >   notation by some libraries.  For example the legacy function
- >   socket.inet_aton() treats leading zeros as octal notatation.  glibc
- >   implementation of modern inet_pton() does not accept any leading zeros.
- >   For a while the ipaddress module used to accept ambiguous leading zeros.
-
- > - bpo-43075: Fix Regular Expression Denial of Service (ReDoS) vulnerability
- >   in urllib.request.AbstractBasicAuthHandler.  The ReDoS-vulnerable regex
- >   has quadratic worst-case complexity and it allows cause a denial of
- >   service when identifying crafted invalid RFCs.  This ReDoS issue is on the
- >   client side and needs remote attackers to control the HTTP server.
-
- > - bpo-42800: Audit hooks are now fired for frame.f_code, traceback.tb_frame,
- >   and generator code/frame attribute access.
-
- > https://www.python.org/downloads/release/python-395/
+ >   https://github.com/golang/go/issues/45710
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Committed to 2021.02.x, thanks.
+For 2021.02.x I have instead bumped to 1.5.12, which includes the same
+security fix.
 
 -- 
 Bye, Peter Korsgaard
