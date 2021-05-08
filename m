@@ -1,56 +1,55 @@
-From: Drew Fustini <drew@beagleboard.org>
-Date: Sat, 8 May 2021 00:48:04 -0700
-Subject: [Buildroot] [PATCH v3 5/7] boot/beaglev-ddrinit: new package
-In-Reply-To: <20210508073718.GI2137340@scaer>
-References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
- <20210504205139.1055360-6-thomas.petazzoni@bootlin.com>
- <20210507220401.GE2137340@scaer>
- <CAPgEAj6=TkK79B32P-JRL+T1KPYQd1djsVbYc2ah3zx7xno6cg@mail.gmail.com>
- <20210508073718.GI2137340@scaer>
-Message-ID: <CAPgEAj4C5tjW_Wne18cWqcL2ub7wAZ61UFBr=non5U23sXS97A@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 08 May 2021 10:58:55 +0200
+Subject: [Buildroot] [PATCH] package/python3: security bump to version
+ 3.9.5
+In-Reply-To: <20210507061536.2819-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 7 May 2021 08:15:35 +0200")
+References: <20210507061536.2819-1-peter@korsgaard.com>
+Message-ID: <87fsyxzjn4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, May 8, 2021 at 12:37 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Drew, All,
->
-> On 2021-05-07 16:30 -0700, Drew Fustini spake thusly:
-> > On Fri, May 7, 2021, 15:04 Yann E. MORIN < [1]yann.morin.1998@free.fr> wrote:
-> >   On 2021-05-04 22:51 +0200, Thomas Petazzoni spake thusly:
-> >   > This commit adds a package for the DDR initialization code used on the
-> >   > BeagleV platform.
-> >
-> >   The upstream package name is beaglev-ddrlnit, yes, with an 'l' instead
-> >   of an 'i'. I've renamed the package to match upstream name, so that
-> >   users that look for it can actually find it.
-> > Would it be helpful if I get StarFive to fix the typo and rename it to ddrinit?
-> > I am thinking that would probably be good to have happen before other projects
-> > start pointing to it. Thomas was so fast with the buildroot patches I think it
-> > is the first to notice this.
->
-> It is not so important that the upstream name gets fixed; in fact quite
-> the opposite: we are now already referencing it. Granted, it's brand
-> new, and we can fix it quick before the release. But note that our
-> 2021.05-rc1 is due this WE, for example; we can still fix this kind of
-> thing post rc1, of course, but we can't fix a release...
->
-> But as you mention, once other projects start referencing it, it will be
-> too late. For example, Khem Raj already has started such support:
->
->     https://github.com/riscv/meta-riscv/blob/master/beaglev.yml
->     https://github.com/YoeDistro/yoe-distro/blob/master/beaglev-starlight-jh7100-envsetup.sh
->
-> So even if it is still very early, I think it is already too late to
-> rename the repository...
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Ok, thank you for the insights.  I agree more important to have the
-release go forward and not risk breaking references.   My goal is that
-ddrinit will eventually be replaced with u-boot SPL anyways.  Bin Meng
-is actively looking into this right now.
+ > Fixes the following security issues:
+ > - bpo-43434: Creating a sqlite3.Connection object now also produces a
+ >   sqlite3.connect auditing event.  Previously this event was only produced
+ >   by sqlite3.connect() calls.  Patch by Erlend E.  Aasland.
 
-Thank you,
-Drew
+ > - bpo-43882: The presence of newline or tab characters in parts of a URL
+ >   could allow some forms of attacks.
+ >   Following the controlling specification for URLs defined by WHATWG
+ >   urllib.parse() now removes ASCII newlines and tabs from URLs, preventing
+ >   such attacks.
+
+ > - bpo-43472: Ensures interpreter-level audit hooks receive the
+ >   cpython.PyInterpreterState_New event when called through the
+ >   _xxsubinterpreters module.
+
+ > - bpo-36384: ipaddress module no longer accepts any leading zeros in IPv4
+ >   address strings.  Leading zeros are ambiguous and interpreted as octal
+ >   notation by some libraries.  For example the legacy function
+ >   socket.inet_aton() treats leading zeros as octal notatation.  glibc
+ >   implementation of modern inet_pton() does not accept any leading zeros.
+ >   For a while the ipaddress module used to accept ambiguous leading zeros.
+
+ > - bpo-43075: Fix Regular Expression Denial of Service (ReDoS) vulnerability
+ >   in urllib.request.AbstractBasicAuthHandler.  The ReDoS-vulnerable regex
+ >   has quadratic worst-case complexity and it allows cause a denial of
+ >   service when identifying crafted invalid RFCs.  This ReDoS issue is on the
+ >   client side and needs remote attackers to control the HTTP server.
+
+ > - bpo-42800: Audit hooks are now fired for frame.f_code, traceback.tb_frame,
+ >   and generator code/frame attribute access.
+
+ > https://www.python.org/downloads/release/python-395/
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
