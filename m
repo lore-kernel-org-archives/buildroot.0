@@ -1,45 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 May 2021 11:32:36 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libtomcrypt:
- compile with -fPIC to enable linking to dynamic libraries/exectuables
-Message-ID: <20210508090838.C1C8C86B12@busybox.osuosl.org>
+Date: Sat, 08 May 2021 11:38:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/exim: security bump version to
+ 4.94.2
+In-Reply-To: <20210504202159.740520-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 4 May 2021 22:21:59 +0200")
+References: <20210504202159.740520-1-bernd.kuhls@t-online.de>
+Message-ID: <87y2cpy38p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8addf4b71eafc55e5f5c4c8828ad892799444169
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Fixes:
+ > Release announcement:
+ > https://lists.exim.org/lurker/message/20210421.123632.08bb711a.en.html
 
-  .../x86_64-buildroot-linux-gnu/bin/ld: .../host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libtomcrypt.a(md5.o): relocation R_X86_64_32 against `.rodata.str1.1' can not be used when making a shared object; recompile with -fPIC
+ > According to
+ > http://www.exim.org/static/doc/security/CVE-2020-qualys/21nails.txt
+ > this version bump fixes
 
-when building a shared library that links with libtomcrypt. Our only
-internal user dropbear doesn't do this, so there are no autobuilder
-failures.
+ > Local vulnerabilities
+ > - CVE-2020-28007: Link attack in Exim's log directory
+ > - CVE-2020-28008: Assorted attacks in Exim's spool directory
+ > - CVE-2020-28014: Arbitrary file creation and clobbering
+ > - CVE-2021-27216: Arbitrary file deletion
+ > - CVE-2020-28011: Heap buffer overflow in queue_run()
+ > - CVE-2020-28010: Heap out-of-bounds write in main()
+ > - CVE-2020-28013: Heap buffer overflow in parse_fix_phrase()
+ > - CVE-2020-28016: Heap out-of-bounds write in parse_fix_phrase()
+ > - CVE-2020-28015: New-line injection into spool header file (local)
+ > - CVE-2020-28012: Missing close-on-exec flag for privileged pipe
+ > - CVE-2020-28009: Integer overflow in get_stdinput()
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit ec2ee79ec18f945e15ca45471dc06c78a9cc1da1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libtomcrypt/libtomcrypt.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > Remote vulnerabilities
+ > - CVE-2020-28017: Integer overflow in receive_add_recipient()
+ > - CVE-2020-28020: Integer overflow in receive_msg()
+ > - CVE-2020-28023: Out-of-bounds read in smtp_setup_msg()
+ > - CVE-2020-28021: New-line injection into spool header file (remote)
+ > - CVE-2020-28022: Heap out-of-bounds read and write in extract_option()
+ > - CVE-2020-28026: Line truncation and injection in spool_read_header()
+ > - CVE-2020-28019: Failure to reset function pointer after BDAT error
+ > - CVE-2020-28024: Heap buffer underflow in smtp_ungetc()
+ > - CVE-2020-28018: Use-after-free in tls-openssl.c
+ > - CVE-2020-28025: Heap out-of-bounds read in pdkim_finish_bodyhash()
 
-diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
-index fccd4b051c..35886057d4 100644
---- a/package/libtomcrypt/libtomcrypt.mk
-+++ b/package/libtomcrypt/libtomcrypt.mk
-@@ -19,6 +19,10 @@ LIBTOMCRYPT_IGNORE_CVES += CVE-2019-17362
- 
- LIBTOMCRYPT_CFLAGS = -I./src/headers $(TARGET_CFLAGS) -DLTC_SOURCE -DLTM_DESC
- 
-+ifeq ($(BR2_STATIC_LIBS),)
-+LIBTOMCRYPT_CFLAGS += -fPIC
-+endif
-+
- define LIBTOMCRYPT_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(LIBTOMCRYPT_CFLAGS)"
- endef
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed to 2021.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
