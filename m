@@ -1,21 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 May 2021 18:21:19 +0200
-Subject: [Buildroot] [PATCH] package/python-pytest: bump to version 6.2.4
-In-Reply-To: <20210507174355.1546239-1-m.niestroj@grinn-global.com> (Marcin
- Niestroj's message of "Fri, 7 May 2021 19:43:55 +0200")
-References: <20210507174355.1546239-1-m.niestroj@grinn-global.com>
-Message-ID: <87zgx5urgg.fsf@dell.be.48ers.dk>
+Date: Sat, 08 May 2021 18:23:48 +0200
+Subject: [Buildroot] [PATCH] package/cryptsetup: disable tmpfiles.d for
+ host build
+In-Reply-To: <20210507152159.542208-1-john@metanate.com> (John Keeping's
+ message of "Fri, 7 May 2021 16:21:59 +0100")
+References: <20210507152159.542208-1-john@metanate.com>
+Message-ID: <87v97turcb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marcin" == Marcin Niestroj <m.niestroj@grinn-global.com> writes:
+>>>>> "John" == John Keeping <john@metanate.com> writes:
 
- > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+ > When building host-cryptsetup, if tmpfiles.d support is enabled then the
+ > install step tries to install /usr/lib/tmpfiles.d/cryptsetup.conf
+ > globally on the host system.
+
+ > Even if the tmpfiles.d config were installed correctly in the host
+ > directory, nothing would ever run these rules, so disable this feature
+ > via configure.
+
+ > Signed-off-by: John Keeping <john@metanate.com>
 
 Committed, thanks.
+
+I see we also don't pass that configure flag for the target variant?
 
 -- 
 Bye, Peter Korsgaard
