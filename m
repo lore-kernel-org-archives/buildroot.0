@@ -1,52 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 May 2021 16:34:00 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python-asgiref:
- bump version to 3.3.4
-Message-ID: <20210508142103.6ABF1861E8@busybox.osuosl.org>
+Date: Sat, 8 May 2021 16:39:20 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python3: security
+ bump to version 3.9.5
+Message-ID: <20210508142103.CDFF181038@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c5e17f41b3ee4907995cb13c7548bb95162593a
+commit: https://git.buildroot.net/buildroot/commit/?id=5e17a5c71677c3d3dc1afa5e35c1861193e3a2fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Needed by django 3.2.x
+Fixes the following security issues:
+
+- bpo-43434: Creating a sqlite3.Connection object now also produces a
+  sqlite3.connect auditing event.  Previously this event was only produced
+  by sqlite3.connect() calls.  Patch by Erlend E.  Aasland.
+
+- bpo-43882: The presence of newline or tab characters in parts of a URL
+  could allow some forms of attacks.
+  Following the controlling specification for URLs defined by WHATWG
+  urllib.parse() now removes ASCII newlines and tabs from URLs, preventing
+  such attacks.
+
+- bpo-43472: Ensures interpreter-level audit hooks receive the
+  cpython.PyInterpreterState_New event when called through the
+  _xxsubinterpreters module.
+
+- bpo-36384: ipaddress module no longer accepts any leading zeros in IPv4
+  address strings.  Leading zeros are ambiguous and interpreted as octal
+  notation by some libraries.  For example the legacy function
+  socket.inet_aton() treats leading zeros as octal notatation.  glibc
+  implementation of modern inet_pton() does not accept any leading zeros.
+  For a while the ipaddress module used to accept ambiguous leading zeros.
+
+- bpo-43075: Fix Regular Expression Denial of Service (ReDoS) vulnerability
+  in urllib.request.AbstractBasicAuthHandler.  The ReDoS-vulnerable regex
+  has quadratic worst-case complexity and it allows cause a denial of
+  service when identifying crafted invalid RFCs.  This ReDoS issue is on the
+  client side and needs remote attackers to control the HTTP server.
+
+- bpo-42800: Audit hooks are now fired for frame.f_code, traceback.tb_frame,
+  and generator code/frame attribute access.
+
+https://www.python.org/downloads/release/python-395/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8cccb01bbdc6d4ba99f131ea41576eae0fb710bd)
+(cherry picked from commit f02c0ee1b035ca3b035caa55e3452f56d76e5230)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-asgiref/python-asgiref.hash | 4 ++--
- package/python-asgiref/python-asgiref.mk   | 4 ++--
+ package/python3/python3.hash | 6 +++---
+ package/python3/python3.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-asgiref/python-asgiref.hash b/package/python-asgiref/python-asgiref.hash
-index 782a13fe5c..c349ad5a44 100644
---- a/package/python-asgiref/python-asgiref.hash
-+++ b/package/python-asgiref/python-asgiref.hash
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 2a0ba6ab4f..78571b5e0b 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asgiref/json
--md5	39218c10eee0bf66a3d893491d835e86  asgiref-3.2.3.tar.gz
--sha256	7e06d934a7718bf3975acbf87780ba678957b87c7adc056f13b6215d610695a0  asgiref-3.2.3.tar.gz
-+md5	5afe03ecc39ae94950ff95e80166d945  asgiref-3.3.4.tar.gz
-+sha256	d1216dfbdfb63826470995d31caed36225dcaf34f182e0fa257a4dd9e86f1b78  asgiref-3.3.4.tar.gz
- # Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-asgiref/python-asgiref.mk b/package/python-asgiref/python-asgiref.mk
-index b29903509e..0353f5d5a0 100644
---- a/package/python-asgiref/python-asgiref.mk
-+++ b/package/python-asgiref/python-asgiref.mk
-@@ -4,9 +4,9 @@
- #
+-# From https://www.python.org/downloads/release/python-394/
+-md5  2a3dba5fc75b695c45cf1806156e1a97  Python-3.9.4.tar.xz
++# From https://www.python.org/downloads/release/python-395/
++md5  71f7ada6bec9cdbf4538adc326120cfd  Python-3.9.5.tar.xz
+ # Locally computed
+-sha256  4b0e6644a76f8df864ae24ac500a51bbf68bd098f6a173e27d3b61cdca9aa134  Python-3.9.4.tar.xz
++sha256  0c5a140665436ec3dbfbb79e2dfb6d192655f26ef4a29aeffcb6d1820d716d83  Python-3.9.5.tar.xz
+ sha256  599826df92bfdcd2702eac691072498bb096c55af04ee984cf90f70ed77b5a70  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 345c6a8699..b492e09154 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_ASGIREF_VERSION = 3.2.3
-+PYTHON_ASGIREF_VERSION = 3.3.4
- PYTHON_ASGIREF_SOURCE = asgiref-$(PYTHON_ASGIREF_VERSION).tar.gz
--PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/80/c4/83a01607f2d10024c172097126264c8e00c6a4827b35d631ece9625e6ba2
-+PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/d8/3f/ef696a6d8254f182b1a089aeffb638d2eb83055e603146d3a40605c5b7da
- PYTHON_ASGIREF_SETUP_TYPE = setuptools
- PYTHON_ASGIREF_LICENSE = BSD-3-Clause
- PYTHON_ASGIREF_LICENSE_FILES = LICENSE
+ PYTHON3_VERSION_MAJOR = 3.9
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
