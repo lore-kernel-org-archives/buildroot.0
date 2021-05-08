@@ -1,159 +1,77 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
-Date: Sat,  8 May 2021 22:16:14 +0200
-Subject: [Buildroot] [PATCH] configs/bananapi_m2_zero: bump versions and add
- WiFi support
-Message-ID: <20210508201614.16041-1-vincent.stehle@laposte.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat,  8 May 2021 23:07:02 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.19.x / 5.{4, 10,
+ 11, 12}.x series
+Message-ID: <20210508210702.24898-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump kernel to version 5.12.2.
-- Bump U-Boot to version 2021.04.
-
-Also, adapt the SD card name in the boot script to follow Linux naming.
-While at it, add comments to make the defconfig more readable.
-
-The Banana Pi M2 Zero comprises an AMPAK AP6212 module with a Broadcom
-bcm43438/a1 WiFi chip. Add the necessary firmware and tools to support it
-and update documentation. We switch to mdev for /dev management, so that
-the WiFi driver get auto-loaded.
-
-Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/bananapi/bananapi-m2-zero/boot.cmd      |  2 +-
- .../bananapi-m2-zero/firmware-links.sh        |  9 ++++++
- .../bananapi-m2-zero/linux-extras.config      |  9 ++++++
- board/bananapi/bananapi-m2-zero/readme.txt    | 14 +++++++++
- configs/bananapi_m2_zero_defconfig            | 30 +++++++++++++++++--
- 5 files changed, 60 insertions(+), 4 deletions(-)
- create mode 100755 board/bananapi/bananapi-m2-zero/firmware-links.sh
- create mode 100644 board/bananapi/bananapi-m2-zero/linux-extras.config
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/board/bananapi/bananapi-m2-zero/boot.cmd b/board/bananapi/bananapi-m2-zero/boot.cmd
-index 081450935b..70ccdf7045 100644
---- a/board/bananapi/bananapi-m2-zero/boot.cmd
-+++ b/board/bananapi/bananapi-m2-zero/boot.cmd
-@@ -1,4 +1,4 @@
--setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-+setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk1p2 rootwait
+diff --git a/linux/Config.in b/linux/Config.in
+index 7f1d9e3342..02c6ba0400 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -125,7 +125,7 @@ endif
  
- mmc dev 0
- fatload mmc 0 $kernel_addr_r zImage
-diff --git a/board/bananapi/bananapi-m2-zero/firmware-links.sh b/board/bananapi/bananapi-m2-zero/firmware-links.sh
-new file mode 100755
-index 0000000000..7f320fb1a5
---- /dev/null
-+++ b/board/bananapi/bananapi-m2-zero/firmware-links.sh
-@@ -0,0 +1,9 @@
-+#!/bin/sh
-+# Create the necessary WiFi firmware symbolic links for the brcmfmac driver
-+set -eu
-+
-+cd "$1/lib/firmware"
-+[ -d brcm ] || mkdir -v brcm
-+cd brcm
-+ln -svf ../ap6212/nvram.txt brcmfmac43430-sdio.sinovoip,bpi-m2-zero.txt
-+ln -svf ../ap6212/fw_bcm43438a1_apsta.bin brcmfmac43430-sdio.bin
-diff --git a/board/bananapi/bananapi-m2-zero/linux-extras.config b/board/bananapi/bananapi-m2-zero/linux-extras.config
-new file mode 100644
-index 0000000000..b9d3b143c8
---- /dev/null
-+++ b/board/bananapi/bananapi-m2-zero/linux-extras.config
-@@ -0,0 +1,9 @@
-+# wireless core
-+CONFIG_WIRELESS=y
-+CONFIG_CFG80211=m
-+CONFIG_CFG80211_WEXT=y
-+
-+# wireless drivers
-+CONFIG_WLAN=y
-+CONFIG_WLAN_VENDOR_BROADCOM=y
-+CONFIG_BRCMFMAC=m
-diff --git a/board/bananapi/bananapi-m2-zero/readme.txt b/board/bananapi/bananapi-m2-zero/readme.txt
-index 9edd477f11..a48c514c14 100644
---- a/board/bananapi/bananapi-m2-zero/readme.txt
-+++ b/board/bananapi/bananapi-m2-zero/readme.txt
-@@ -32,3 +32,17 @@ Copy the bootable "sdcard.img" onto an SD card with "dd":
- 
- Insert the micro SDcard in your Bananapi M2 Zero and power it up. The console
- is on the Debug UART on the CON3 header, with serial settings 115200 8N1.
-+
-+Using Wifi
-+==========
-+
-+  # iwconfig wlan0 essid ACCESSPOINTNAME
-+  # wpa_passphrase ACCESSPOINTNAME > /etc/wpa.conf
-+
-+(enter the wifi password and press enter)
-+
-+  # wpa_supplicant -i wlan0 -c /etc/wpa.conf &
-+  # udhcpc -i wlan0
-+  # ping buildroot.org
-+
-+Enjoy!
-diff --git a/configs/bananapi_m2_zero_defconfig b/configs/bananapi_m2_zero_defconfig
-index e5c89fce40..9e6760d196 100644
---- a/configs/bananapi_m2_zero_defconfig
-+++ b/configs/bananapi_m2_zero_defconfig
-@@ -1,23 +1,45 @@
-+# Architecture
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
-+
-+# Linux headers same as kernel, a 5.12 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
-+
-+# System
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Bananapi M2 Zero"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/bananapi/bananapi-m2-zero/firmware-links.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m2-zero/genimage.cfg"
-+
-+# Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9.11"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/bananapi/bananapi-m2-zero/linux-extras.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-bananapi-m2-zero"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# WiFi
-+BR2_PACKAGE_ARMBIAN_FIRMWARE=y
-+BR2_PACKAGE_ARMBIAN_FIRMWARE_AP6212=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
-+
-+# Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="bananapi_m2_zero"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-@@ -26,6 +48,8 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m2-zero/boot.cmd"
-+
-+# Required tools to create the SD image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.12" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.12.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.182-cip45" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.165-cip41-rt18" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 517cdf4c9b..e24e02b30e 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  7d0df6f2bf2384d68d0bd8e1fe3e071d64364dcdc6002e7b5c87c92d48fac366  linux-5.12.tar.xz
+-sha256  41dd9e533e0387e41e9d17244e3b4f3fe6fdff2f82b4198ee363552f0b6ad4a3  linux-5.11.17.tar.xz
+-sha256  933fdbc36371c0f830b7a6a957a559fca2dad1cc0eaa852ef42fb168185b4315  linux-5.10.33.tar.xz
+-sha256  5b4724748527a622a886232b5da1471619eb3aa3bb38a11851275eba09989dd2  linux-5.4.115.tar.xz
++sha256  8c98b9996d15fdb779a866c6a4c7c9b9e63374cb7105a5a59e9bcf8df02ef70d  linux-5.12.2.tar.xz
++sha256  5aee19ad466b5bbbde642077f42bfaafff4e612296bdd7946faa01d917472b4b  linux-5.11.19.tar.xz
++sha256  ac37a19d45b77a87e58e3aae8b127a6e7eb85ed7467fc8e58474b387bfd498fd  linux-5.10.35.tar.xz
++sha256  4e989b5775830092e5c76b5cca65ebff862ad0c87d0b58c3a20d415c3d4ec770  linux-5.4.117.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256  6817ad26e1621bfad48d08b638f66c5933e89c7c8c00d43195b2e0ae260233eb  linux-4.4.268.tar.xz
+ sha256  5b66f6ce0137fb8d81004bcf2f1e3cbe01c38aab74268656c4ba015c1ccd762a  linux-4.9.268.tar.xz
+ sha256  1dc19361f6970bc94cc62be066702483db9cbd3d63f3089a8c90dabfced74369  linux-4.14.232.tar.xz
+-sha256  717b0e5df07ebbc0575d834e0c15c0e45060e771baa15b705e391ba38bc54389  linux-4.19.189.tar.xz
++sha256  6f9c2aee8553129d2bdbab646bbf7e88c2a5c38c0b1450f2e728831681bfc85d  linux-4.19.190.tar.xz
+ # Locally computed
+ sha256  9f1de83c5c2bb582a33bd4ee892d45671901cd06af9dc159f0f499f1b5265b20  linux-cip-4.19.182-cip45.tar.gz
+ sha256  0eeba6d6ecc45cf8f16458842b64d22e7064b9de9c31c11d1c395b08a47e3855  linux-cip-4.19.165-cip41-rt18.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index e4ddeee346..3d8fb1ab5b 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -365,11 +365,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.4.268"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.268"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.14.232"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.189"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.115"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.33"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.11.17"	if BR2_KERNEL_HEADERS_5_11
+-	default "5.12"		if BR2_KERNEL_HEADERS_5_12
++	default "4.19.190"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.117"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.35"	if BR2_KERNEL_HEADERS_5_10
++	default "5.11.19"	if BR2_KERNEL_HEADERS_5_11
++	default "5.12.2"	if BR2_KERNEL_HEADERS_5_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.30.2
+2.20.1
