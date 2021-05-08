@@ -1,41 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 May 2021 16:14:25 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x]
- testing/tests/package/test_openjdk.py: bump kernel version to 5.10.34
-Message-ID: <20210508140507.219F386BE5@busybox.osuosl.org>
+Date: Sat, 8 May 2021 16:17:27 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/monkey: bump to
+ latest git commit
+Message-ID: <20210508140507.299A8814AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a523755bfb6665c92965bf792875d43a5c85cd11
+commit: https://git.buildroot.net/buildroot/commit/?id=e43db1180f5a296b32b67a778fd33576cb2670ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Kernel 4.16.7 is old enough to produce the "multiple definition of `yylloc'"
-error which is fixed in newer versions.
+This will fix a build failure with gcc 10
 
-Bump the test kernel version from 4.16.7 to 5.10.34 to prevent this error wwhen
-building the test image.
+- Update indentation in hash file (two spaces)
+- Drop INSTALL_SYSCONFDIR, INSTALL_WEBROOTDIR and WITH_SYSTEM_MALLOC
+  (not available since
+  https://github.com/monkey/monkey/commit/df145932e33fca0d4a1dcd9d7675f996c8e6a73b)
+- Set WITHOUT_HEADERS to ON because headers are not needed and to avoid
+  the following build failure:
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ab2d472cde20c75cde9e48a0158c66afa102d190)
+CMake Error at include/cmake_install.cmake:46 (file):
+  file INSTALL cannot find
+  "/home/fabrice/buildroot/output/build/monkey-f54856ce250c4e25735434dc75717a4b7fbfc45b/include/mk_core.h":
+  No such file or directory.
+Call Stack (most recent call first):
+  cmake_install.cmake:69 (include)
+
+Upstream is aware than the lack of release is an issue but no comments
+since 2018: https://github.com/monkey/monkey/issues/276
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0b723937ca048228082d040100f6e6324ac8300b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 26a7d912f4a44bce558ee24bbadb5d10527f68c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_openjdk.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/monkey/monkey.hash |  7 +++----
+ package/monkey/monkey.mk   | 18 ++++++++----------
+ 2 files changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/support/testing/tests/package/test_openjdk.py b/support/testing/tests/package/test_openjdk.py
-index 3a1d1a9b09..26b7f9ee92 100644
---- a/support/testing/tests/package/test_openjdk.py
-+++ b/support/testing/tests/package/test_openjdk.py
-@@ -12,7 +12,7 @@ class TestOpenJdk(infra.basetest.BRTest):
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.34"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/package/monkey/monkey.hash b/package/monkey/monkey.hash
+index 83fc0def60..27ff806442 100644
+--- a/package/monkey/monkey.hash
++++ b/package/monkey/monkey.hash
+@@ -1,4 +1,3 @@
+-# md5 from http://monkey-project.com/releases/1.6/monkey-1.6.9.tar.gz.md5, sha256 locally computed:
+-md5    c401734985a936ee07dbff5eca7d176a 				monkey-1.6.9.tar.gz
+-sha256 f1122e89cda627123286542b0a18fcaa131cbe9d4f5dd897d9455157289148fb	monkey-1.6.9.tar.gz
+-sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594	LICENSE
++# Locally computed:
++sha256  c988d9f4f577a789aa244e5a0f99ebfd46ebddc328656f319acf64edc9fd5199  monkey-f54856ce250c4e25735434dc75717a4b7fbfc45b.tar.gz
++sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
+index 5264713120..2cb1a5f298 100644
+--- a/package/monkey/monkey.mk
++++ b/package/monkey/monkey.mk
+@@ -4,31 +4,29 @@
+ #
+ ################################################################################
+ 
+-MONKEY_VERSION_MAJOR = 1.6
+-MONKEY_VERSION = $(MONKEY_VERSION_MAJOR).9
+-MONKEY_SITE = http://monkey-project.com/releases/$(MONKEY_VERSION_MAJOR)
++MONKEY_VERSION = f54856ce250c4e25735434dc75717a4b7fbfc45b
++MONKEY_SITE = $(call github,monkey,monkey,$(MONKEY_VERSION))
+ MONKEY_LICENSE = Apache-2.0
+ MONKEY_LICENSE_FILES = LICENSE
+ 
+ MONKEY_CONF_OPTS = \
+-	-DINSTALL_SYSCONFDIR=/etc/monkey \
+-	-DINSTALL_WEBROOTDIR=/var/www \
+-	-DWITH_SYSTEM_MALLOC=1
++	-DMK_PATH_WWW=/var/www \
++	-DWITHOUT_HEADERS=ON
+ 
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+-MONKEY_CONF_OPTS += -DWITH_UCLIB=1 -DWITH_BACKTRACE=0
++MONKEY_CONF_OPTS += -DMK_UCLIB=ON -DMK_BACKTRACE=OFF
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-MONKEY_CONF_OPTS += -DWITH_MUSL=1 -DWITH_BACKTRACE=0
++MONKEY_CONF_OPTS += -DMK_MUSL=ON -DMK_BACKTRACE=OFF
+ endif
+ 
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+-MONKEY_CONF_OPTS += -DWITH_DEBUG=1
++MONKEY_CONF_OPTS += -DMK_DEBUG=ON
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MONKEY_SSL),y)
+-MONKEY_CONF_OPTS += -DWITH_PLUGINS=tls -DWITH_MBEDTLS_SHARED=1
++MONKEY_CONF_OPTS += -DMK_PLUGIN_TLS=ON -DMK_MBEDTLS_SHARED=ON
+ MONKEY_DEPENDENCIES += mbedtls
+ endif
+ 
