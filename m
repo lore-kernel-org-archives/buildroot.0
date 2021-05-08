@@ -1,54 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 May 2021 16:41:19 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/go: security bump
- to version 1.15.12
-Message-ID: <20210508142103.DC6FE861E8@busybox.osuosl.org>
+Date: Sat, 8 May 2021 16:49:02 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/xen: bump version
+ to 4.14.2
+Message-ID: <20210508142103.E98EB81038@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91eb510511ed82663987c0de45ad1f03fe526c50
+commit: https://git.buildroot.net/buildroot/commit/?id=4c9459e305cb904ae4c124c32c57e78d6c18fed3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes the following security issues:
+Includes a number of bugfixes and the security fixes up to 368, so drop
+those.
 
-- CVE-2021-31525: ReadRequest and ReadResponse in net/http can hit an
-  unrecoverable panic when reading a very large header (over 7MB on 64-bit
-  architectures, or over 4MB on 32-bit ones).  Transport and Client are
-  vulnerable and the program can be made to crash by a malicious server.
-  Server is not vulnerable by default, but can be if the default max header
-  of 1MB is overridden by setting Server.MaxHeaderBytes to a higher value,
-  in which case the program can be made to crash by a malicious client.
-
-  https://github.com/golang/go/issues/45710
+For details, see the release notes:
+https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-2/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit dc5d9c98355f8c82192fe2cff1c8c9bfcea5b03d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xen/xen.hash |  8 +-------
+ package/xen/xen.mk   | 15 +--------------
+ 2 files changed, 2 insertions(+), 21 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 871ac026e1..500ae02cc2 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  f25b2441d4c76cf63cde94d59bab237cc33e8a2a139040d904c8630f46d061e5  go1.15.11.src.tar.gz
-+sha256  1c6911937df4a277fa74e7b7efc3d08594498c4c4adc0b6c4ae3566137528091  go1.15.12.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index d3462e308a..639fc401b6 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index 6893414313..fd0310c921 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,9 +1,3 @@
+ # Locally computed
+-sha256  cf0d7316ad674491f49b7ef0518cb1d906a2e3bfad639deef0ef2343b119ac0c  xen-4.14.1.tar.gz
++sha256  e35099a963070e3c9f425d1e36cbb1c40b7874ef449bfafd6688343783cb25ad  xen-4.14.2.tar.gz
+ sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
+-# https://xenbits.xenproject.org/xsa/advisory-360.html
+-sha256  809515011efb781a2a8742e9acfd76412d3920c2d4142bb187588cd36f77383e  xsa360-4.14.patch
+-# https://xenbits.xenproject.org/xsa/advisory-364.html
+-sha256  dc313c70bb07b4096bbc4612cbbc180589923277411dede2fda37f04ecc846d6  xsa364.patch
+-# https://xenbits.xenproject.org/xsa/advisory-368.html
+-sha256  55bbe59c75b69f493e364dfcf6cdbc7db4acd32dbf0b4d2466815b7c1f1823ce  xsa368-4.14.patch
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 533882e05b..b84214ed16 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -4,26 +4,13 @@
  #
  ################################################################################
  
--GO_VERSION = 1.15.11
-+GO_VERSION = 1.15.12
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
+-XEN_VERSION = 4.14.1
++XEN_VERSION = 4.14.2
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
+ XEN_CPE_ID_VENDOR = xen
+ XEN_CPE_ID_PREFIX = cpe:2.3:o
+ XEN_DEPENDENCIES = host-acpica host-python3
+-XEN_PATCH = \
+-	https://xenbits.xenproject.org/xsa/xsa360-4.14.patch \
+-	https://xenbits.xenproject.org/xsa/xsa364.patch \
+-	https://xenbits.xenproject.org/xsa/xsa368-4.14.patch
+-
+-# xsa360-4.14.patch
+-XEN_IGNORE_CVES += CVE-2021-3308
+-
+-# xsa364.patch
+-XEN_IGNORE_CVES += CVE-2021-26933
+-
+-# xsa368-4.14.patch
+-XEN_IGNORE_CVES += CVE-2021-28687
  
+ # Calculate XEN_ARCH
+ ifeq ($(ARCH),aarch64)
