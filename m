@@ -1,27 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 May 2021 16:36:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cifs-utils: security bump to
- version 6.13
-In-Reply-To: <20210507193929.2591251-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 7 May 2021 21:39:29 +0200")
-References: <20210507193929.2591251-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v97twaux.fsf@dell.be.48ers.dk>
+Date: Sat, 08 May 2021 16:38:22 +0200
+Subject: [Buildroot] [PATCH 2/2] package/cegui: add libfribidi optional
+ dependency
+In-Reply-To: <20210507201303.GB2137340@scaer> (Yann E. MORIN's message of
+ "Fri, 7 May 2021 22:13:03 +0200")
+References: <20200510085217.3626176-1-fontaine.fabrice@gmail.com>
+ <20200510085217.3626176-2-fontaine.fabrice@gmail.com>
+ <20210507201303.GB2137340@scaer>
+Message-ID: <87r1ihwash.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fix CVE-2021-20208: A flaw was found in cifs-utils in versions before
- > 6.13. A user when mounting a krb5 CIFS file system from within a
- > container can use Kerberos credentials of the host. The highest threat
- > from this vulnerability is to data confidentiality and integrity.
+ > Fabrice, All,
+ > On 2020-05-10 10:52 +0200, Fabrice Fontaine spake thusly:
+ >> libfribidi is an optional dependency (enabled by default) since version
+ >> 0.8.0 and
+ >> https://github.com/cegui/cegui/commit/17974582e6b6a7d8f5853b0272433f130f82e52a
+ >> 
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > https://lists.samba.org/archive/samba-technical/2021-April/136467.html
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Applied to master, thanks.
 
 Committed to 2021.02.x, thanks.
 
