@@ -1,90 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 May 2021 16:30:31 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/Makefile.in:
- expose CONFIG_DIR to post-build/post-image scripts
-Message-ID: <20210508140507.4A90086BF7@busybox.osuosl.org>
+Date: Sat, 8 May 2021 16:14:25 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ testing/tests/package/test_openjdk.py: bump kernel version to 5.10.34
+Message-ID: <20210508140507.219F386BE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8650a3c05ee8b753fae91238202d22d7d3c02911
+commit: https://git.buildroot.net/buildroot/commit/?id=a523755bfb6665c92965bf792875d43a5c85cd11
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Sometimes, post-build or post-image scripts need to reinvoke
-Buildroot's make, for example to execute "make printvars".
+Kernel 4.16.7 is old enough to produce the "multiple definition of `yylloc'"
+error which is fixed in newer versions.
 
-However, so far post-build/image/fakeroot can't trivially run printvars
-in a way that worked for both in-tree and out-of-tree builds. Indeed:
+Bump the test kernel version from 4.16.7 to 5.10.34 to prevent this error wwhen
+building the test image.
 
- * "make printvars" would work for in-tree builds, but not out of tree
-   builds
-
- * "make -C ${O} printvars" would work for out-of-tree builds, but not
-   in-tree builds
-
- * "make -C ${BR2_CONFIG%/*} printvars" works in both cases, but it is
-   a bit cryptic, and two maintainers did not even immediately think of
-   it
-
-In order to solve this, this commit exposes $(CONFIG_DIR) to
-post-build/image/fakeroot scripts, through the EXTRA_ENV variable.
-
-The documentation is updated accordingly.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998 at free.fr:
-  - reference BR2_CONFIG as an exemple
-  - slightly reword the commit log accordingly
-  - move the doc for CONFIG_DIR next to that of BR2_CONFIG
-]
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit efdcd651bf8fe8e9a291932397eca8731483d17c)
+(cherry picked from commit ab2d472cde20c75cde9e48a0158c66afa102d190)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/customize-post-image.txt | 3 ++-
- docs/manual/customize-rootfs.txt     | 3 +++
- package/Makefile.in                  | 1 +
- 3 files changed, 6 insertions(+), 1 deletion(-)
+ support/testing/tests/package/test_openjdk.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/customize-post-image.txt b/docs/manual/customize-post-image.txt
-index 90ea2b9328..5308093d06 100644
---- a/docs/manual/customize-post-image.txt
-+++ b/docs/manual/customize-post-image.txt
-@@ -28,7 +28,8 @@ different sets of arguments to each script.
- 
- Again just like for the post-build scripts, the scripts have access to
- the environment variables +BR2_CONFIG+, +HOST_DIR+, +STAGING_DIR+,
--+TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
-++TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+, +CONFIG_DIR+ and
-++BASE_DIR+.
- 
- The post-image scripts will be executed as the user that executes
- Buildroot, which should normally _not_ be the root user. Therefore, any
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index e1dbadda5b..e46306fd2a 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -60,6 +60,9 @@ The post-build scripts are run with the main Buildroot tree as current
- In addition, you may also use these environment variables:
- 
-   - +BR2_CONFIG+: the path to the Buildroot .config file
-+  - +CONFIG_DIR+: the directory containing the .config file, and
-+    therefore the top-level Buildroot Makefile to use (which is
-+    correct for both in-tree and out-of-tree builds)
-   - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
-     xref:generic-package-reference[]
-   - +BUILD_DIR+: the directory where packages are extracted and built
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 51f5cbce4f..f4028bc67c 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -318,6 +318,7 @@ EXTRA_ENV = \
- 	PATH=$(BR_PATH) \
- 	BR2_DL_DIR=$(BR2_DL_DIR) \
- 	BUILD_DIR=$(BUILD_DIR) \
-+	CONFIG_DIR=$(CONFIG_DIR) \
- 	O=$(CANONICAL_O)
- 
- ################################################################################
+diff --git a/support/testing/tests/package/test_openjdk.py b/support/testing/tests/package/test_openjdk.py
+index 3a1d1a9b09..26b7f9ee92 100644
+--- a/support/testing/tests/package/test_openjdk.py
++++ b/support/testing/tests/package/test_openjdk.py
+@@ -12,7 +12,7 @@ class TestOpenJdk(infra.basetest.BRTest):
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.34"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
