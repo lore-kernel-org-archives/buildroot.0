@@ -1,56 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 8 May 2021 09:37:18 +0200
-Subject: [Buildroot] [PATCH v3 5/7] boot/beaglev-ddrinit: new package
-In-Reply-To: <CAPgEAj6=TkK79B32P-JRL+T1KPYQd1djsVbYc2ah3zx7xno6cg@mail.gmail.com>
-References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
- <20210504205139.1055360-6-thomas.petazzoni@bootlin.com>
- <20210507220401.GE2137340@scaer>
- <CAPgEAj6=TkK79B32P-JRL+T1KPYQd1djsVbYc2ah3zx7xno6cg@mail.gmail.com>
-Message-ID: <20210508073718.GI2137340@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  8 May 2021 09:39:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.2.14
+Message-ID: <20210508073944.2998533-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drew, All,
+http://www.haproxy.org/download/2.2/src/CHANGELOG
 
-On 2021-05-07 16:30 -0700, Drew Fustini spake thusly:
-> On Fri, May 7, 2021, 15:04 Yann E. MORIN < [1]yann.morin.1998@free.fr> wrote:
->   On 2021-05-04 22:51 +0200, Thomas Petazzoni spake thusly:
->   > This commit adds a package for the DDR initialization code used on the
->   > BeagleV platform.
-> 
->   The upstream package name is beaglev-ddrlnit, yes, with an 'l' instead
->   of an 'i'. I've renamed the package to match upstream name, so that
->   users that look for it can actually find it.
-> Would it be helpful if I get StarFive to fix the typo and rename it to ddrinit?
-> I am thinking that would probably be good to have happen before other projects
-> start pointing to it. Thomas was so fast with the buildroot patches I think it
-> is the first to notice this.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-It is not so important that the upstream name gets fixed; in fact quite
-the opposite: we are now already referencing it. Granted, it's brand
-new, and we can fix it quick before the release. But note that our
-2021.05-rc1 is due this WE, for example; we can still fix this kind of
-thing post rc1, of course, but we can't fix a release...
-
-But as you mention, once other projects start referencing it, it will be
-too late. For example, Khem Raj already has started such support:
-
-    https://github.com/riscv/meta-riscv/blob/master/beaglev.yml
-    https://github.com/YoeDistro/yoe-distro/blob/master/beaglev-starlight-jh7100-envsetup.sh
-
-So even if it is still very early, I think it is already too late to
-rename the repository...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index bea7c4bb2a..66a6f40bda 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.13.tar.gz.sha256
+-sha256  9e3e51441c70bedfb494fc9d4b4d3389a71be9a3c915ba3d6f7e8fd9a57ce160  haproxy-2.2.13.tar.gz
++# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.14.tar.gz.sha256
++sha256  6a9b702f04b07786f3e5878de8172a727acfdfdbc1cefe1c7a438df372f2fb61  haproxy-2.2.14.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 8502ab8a11..6254819a9b 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ HAPROXY_VERSION_MAJOR = 2.2
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).13
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).14
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
