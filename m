@@ -1,85 +1,67 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  8 May 2021 21:41:55 +0200
-Subject: [Buildroot] [PATCH 2/2] boot/opensbi: unconditionally disable SSP
-In-Reply-To: <20210508194155.3678473-1-fontaine.fabrice@gmail.com>
-References: <20210508194155.3678473-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210508194155.3678473-2-fontaine.fabrice@gmail.com>
+From: Drew Fustini <drew@beagleboard.org>
+Date: Sat, 8 May 2021 12:54:55 -0700
+Subject: [Buildroot] [PATCH v3 5/7] boot/beaglev-ddrinit: new package
+In-Reply-To: <20210508182048.GJ2137340@scaer>
+References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
+ <20210504205139.1055360-6-thomas.petazzoni@bootlin.com>
+ <20210507220401.GE2137340@scaer>
+ <CAPgEAj6=TkK79B32P-JRL+T1KPYQd1djsVbYc2ah3zx7xno6cg@mail.gmail.com>
+ <20210508073718.GI2137340@scaer>
+ <CAPgEAj4C5tjW_Wne18cWqcL2ub7wAZ61UFBr=non5U23sXS97A@mail.gmail.com>
+ <CAMKF1srq7i5qzkOhEcEPsc7n-t4sKaT2m961xMH68kvLzeUUKA@mail.gmail.com>
+ <20210508182048.GJ2137340@scaer>
+Message-ID: <CAPgEAj551UyFRp9PtWVu_pDD+5mReskhCJ4HR8NzipaUMGgXyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build failure raised since commit
-810ba387bec3c5b6904e8893fb4cb6f9d3717466
+On Sat, May 8, 2021 at 11:21 AM Yann E. MORIN <yann.morin.1998@free.fr>
+wrote:
+>
+> Khem, All,
+>
+> On 2021-05-08 09:01 -0700, Khem Raj spake thusly:
+> > On Sat, May 8, 2021 at 12:48 AM Drew Fustini <drew@beagleboard.org>
+wrote:
+> > > On Sat, May 8, 2021 at 12:37 AM Yann E. MORIN <yann.morin.1998@free.fr>
+wrote:
+> > > > On 2021-05-07 16:30 -0700, Drew Fustini spake thusly:
+> > > > > On Fri, May 7, 2021, 15:04 Yann E. MORIN < [1]
+yann.morin.1998@free.fr> wrote:
+> > > > >   The upstream package name is beaglev-ddrlnit, yes, with an 'l'
+instead
+> > > > >   of an 'i'. [...]
+> > > > > Would it be helpful if I get StarFive to fix the typo and rename
+it to ddrinit?
+> > > > It is not so important that the upstream name gets fixed; [...]
+> > Is there general consensus on what it should be called ?
+> > I am happy to remove references to SOC name, if we have clear naming
+> > convention and strategy to also name future iterations of beagleV based
+on RISCV
+>
+> Khem: note that we were speaking about a typo in one of the upstream
+> repositories: beaglev-ddrlnit (dee-dee-are-ell-hen-eye-tee) instead of
+> ddrinit (dee-dee-are-eye-hen-eye-tee).
+>
+> But Drew said this should be a short-term repository, which will
+> eventually get phased out in favour of uboot spl.
 
-Fixes:
- - https://gitlab.com/kubu93/buildroot/-/jobs/1247043359
+Bin Meng is trying to get u-boot SPL working on the StarFive JH7100 SoC and
+that could replace ddrinit.  Although I am not sure exactly when that goal
+will be accomplished.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...Makefile-unconditionally-disable-SSP.patch | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch
+StarFive will fix the 'l' typo in the ddrinit repo if I ask them to, but
+they probably would not get that done until Monday or Tuesday.  It seemed
+like from your previous email it would be best to avoid that churn of
+renaming the repository as the patch already went into buildroot.
 
-diff --git a/boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch b/boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch
-new file mode 100644
-index 0000000000..c4edd37f1a
---- /dev/null
-+++ b/boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch
-@@ -0,0 +1,53 @@
-+From e389d5fbc296e496db15368b2b621e0f178f7f34 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 8 May 2021 21:28:10 +0200
-+Subject: [PATCH] Makefile: unconditionally disable SSP
-+
-+Though -nostdlib is passed in {C,+AS,DTSCPP}FLAGS, -fno-stack-protector
-+must also be passed to avoid linking errors related to undefined
-+references to '__stack_chk_guard' and '__stack_chk_fail' if toolchain
-+enforces -fstack-protector.
-+
-+Fixes:
-+ - https://gitlab.com/kubu93/buildroot/-/jobs/1247043359
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/riscv/opensbi/pull/211]
-+---
-+ Makefile | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index eeffe6b..1419360 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -203,7 +203,7 @@ GENFLAGS	+=	$(libsbiutils-genflags-y)
-+ GENFLAGS	+=	$(platform-genflags-y)
-+ GENFLAGS	+=	$(firmware-genflags-y)
-+ 
-+-CFLAGS		=	-g -Wall -Werror -ffreestanding -nostdlib -fno-strict-aliasing -O2
-++CFLAGS		=	-g -Wall -Werror -ffreestanding -nostdlib -fno-stack-protector -fno-strict-aliasing -O2
-+ CFLAGS		+=	-fno-omit-frame-pointer -fno-optimize-sibling-calls
-+ CFLAGS		+=	-mno-save-restore -mstrict-align
-+ CFLAGS		+=	-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
-+@@ -217,7 +217,7 @@ CPPFLAGS	+=	$(GENFLAGS)
-+ CPPFLAGS	+=	$(platform-cppflags-y)
-+ CPPFLAGS	+=	$(firmware-cppflags-y)
-+ 
-+-ASFLAGS		=	-g -Wall -nostdlib -D__ASSEMBLY__
-++ASFLAGS		=	-g -Wall -nostdlib -fno-stack-protector -D__ASSEMBLY__
-+ ASFLAGS		+=	-fno-omit-frame-pointer -fno-optimize-sibling-calls
-+ ASFLAGS		+=	-mno-save-restore -mstrict-align
-+ ASFLAGS		+=	-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
-+@@ -236,7 +236,7 @@ MERGEFLAGS	+=	-r
-+ MERGEFLAGS	+=	-b elf$(PLATFORM_RISCV_XLEN)-littleriscv
-+ MERGEFLAGS	+=	-m elf$(PLATFORM_RISCV_XLEN)lriscv
-+ 
-+-DTSCPPFLAGS	=	$(CPPFLAGS) -nostdinc -nostdlib -fno-builtin -D__DTS__ -x assembler-with-cpp
-++DTSCPPFLAGS	=	$(CPPFLAGS) -nostdinc -nostdlib -fno-stack-protector -fno-builtin -D__DTS__ -x assembler-with-cpp
-+ 
-+ # Setup functions for compilation
-+ define dynamic_flags
-+-- 
-+2.30.2
-+
--- 
-2.30.2
+I am happy to do whatever is best for buildroot and also Khem's meta-riscv
+OE layer.
+
+Thank you,
+Drew
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210508/f4ea970a/attachment.html>
