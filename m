@@ -1,121 +1,256 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  8 May 2021 18:38:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi: bump version to 19.1
-Message-ID: <20210508163822.65699-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  8 May 2021 18:48:15 +0200
+Subject: [Buildroot] [RFC] utils/test-pkg: add gitlab-ci support
+Message-ID: <20210508164815.765195-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch 0002 which was applied upstream:
-https://github.com/xbmc/xbmc/commit/c9cf94d3108d742e50ea73b5553125ef5e405c73
+The gitlab-ci support in test-pkg allow to parallelize the test-pkg
+work into several gitlab jobs. It's much faster than local serialized
+testing.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The new --gitlab-ci option create a commit in a new branch. This
+commit contains all test-pkg's generated defconfig (all skipped
+configuration are not commited). The commit can be pushed to any
+gitlab Buildroot fork where runners (free or private) are available.
+
+example:
+./utils/test-pkg -c defconfig -p nano -g
+
+The current generate-gitlab-ci-yml script is updated to detect any
+branches using a suffix "*-test-pkg" to generate a gitlab-ci pipeline
+using the newly introcuded .test_pkg job template.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../kodi-jsonschemabuilder.mk                 |  4 +--
- .../kodi-texturepacker/kodi-texturepacker.mk  |  4 +--
- ...ux-fix-drm-object-build-with-gcc-4.9.patch | 34 -------------------
- package/kodi/kodi.hash                        |  2 +-
- package/kodi/kodi.mk                          |  4 +--
- 5 files changed, 7 insertions(+), 41 deletions(-)
- delete mode 100644 package/kodi/0002-linux-fix-drm-object-build-with-gcc-4.9.patch
+ support/misc/gitlab-ci.yml.in          | 25 +++++++++++
+ support/scripts/generate-gitlab-ci-yml | 14 +++++-
+ utils/test-pkg                         | 59 ++++++++++++++++++++++++--
+ 3 files changed, 92 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-index 57062c3c8c..46090aee90 100644
---- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-+++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-@@ -6,8 +6,8 @@
+diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+index fcfff5c6aa..7dc93f5f72 100644
+--- a/support/misc/gitlab-ci.yml.in
++++ b/support/misc/gitlab-ci.yml.in
+@@ -76,3 +76,28 @@
+             - test-output/*/.config
+             - test-output/*/images/*
  
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_JSONSCHEMABUILDER_VERSION = 19.0-Matrix
--KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
-+KODI_JSONSCHEMABUILDER_VERSION = 19.1
-+KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,v$(KODI_JSONSCHEMABUILDER_VERSION))
- KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
- KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
- KODI_JSONSCHEMABUILDER_LICENSE = GPL-2.0
-diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
-index fd43566379..1e5f2aad66 100644
---- a/package/kodi-texturepacker/kodi-texturepacker.mk
-+++ b/package/kodi-texturepacker/kodi-texturepacker.mk
-@@ -6,8 +6,8 @@
++.test_pkg:
++    before_script:
++        - TOOLCHAIN_NAME=${CI_JOB_NAME}
++    script:
++        - echo "Configure Buildroot for ${TOOLCHAIN_NAME}"
++        - make O=br-test-pkg/${TOOLCHAIN_NAME} defconfig BR2_DEFCONFIG=br-test-pkg/${TOOLCHAIN_NAME}/defconfig
++        - make O=br-test-pkg/${TOOLCHAIN_NAME}
++        - echo 'Build buildroot'
++        - |
++            make O=br-test-pkg/${TOOLCHAIN_NAME} > >(tee build.log |grep '>>>') 2>&1 || {
++                echo 'Failed build last output'
++                tail -200 build.log
++                exit 1
++            }
++    artifacts:
++        when: always
++        expire_in: 2 weeks
++        paths:
++            - build.log
++            - br-test-pkg/*/.config
++            - br-test-pkg/*/defconfig
++            - br-test-pkg/*/images/
++            - br-test-pkg/*/build/build-time.log
++            - br-test-pkg/*/build/packages-file-list.txt
++            - br-test-pkg/*/build/*/.config
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index 3f498e08fd..9881431551 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -22,8 +22,8 @@ _EOF_
+ }
  
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_TEXTUREPACKER_VERSION = 19.0-Matrix
--KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
-+KODI_TEXTUREPACKER_VERSION = 19.1
-+KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,v$(KODI_TEXTUREPACKER_VERSION))
- KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
- KODI_TEXTUREPACKER_DL_SUBDIR = kodi
- KODI_TEXTUREPACKER_LICENSE = GPL-2.0
-diff --git a/package/kodi/0002-linux-fix-drm-object-build-with-gcc-4.9.patch b/package/kodi/0002-linux-fix-drm-object-build-with-gcc-4.9.patch
-deleted file mode 100644
-index b9a0efd336..0000000000
---- a/package/kodi/0002-linux-fix-drm-object-build-with-gcc-4.9.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 4f3b35c58ffb755cd7371faa44e2914fd7be3f0a Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Mon, 4 Jan 2021 22:32:28 +0100
--Subject: [PATCH] [linux] fix drm object build with gcc-4.9
--
--Fixes build error introduced by PR18858:
--
--kodi/xbmc/windowing/gbm/drm/DRMObject.cpp: In member function 'std::tuple<bool, long unsigned int> KODI::WINDOWING::GBM::CDRMObject::GetPropertyValue(const string&, const string&) const':
--kodi/xbmc/windowing/gbm/drm/DRMObject.cpp:103:39: error: converting to 'std::tuple<bool, long unsigned int>' from initializer list would use explicit constructor 'constexpr std::tuple<_T1, _T2>::tuple(_U1&&, _U2&&) [with _U1 = bool; _U2 = long long unsigned int&; <template-parameter-2-3> = void; _T1 = bool; _T2 = long unsigned int]'
--     return {true, prop->enums[j].value};
--
--Patch sent upstream: https://github.com/xbmc/xbmc/pull/19020
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- xbmc/windowing/gbm/drm/DRMObject.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/xbmc/windowing/gbm/drm/DRMObject.cpp b/xbmc/windowing/gbm/drm/DRMObject.cpp
--index 7d27c6f059..f93f014f7d 100644
----- a/xbmc/windowing/gbm/drm/DRMObject.cpp
--+++ b/xbmc/windowing/gbm/drm/DRMObject.cpp
--@@ -100,7 +100,7 @@ std::tuple<bool, uint64_t> CDRMObject::GetPropertyValue(const std::string& name,
--     if (prop->enums[j].name != valueName)
--       continue;
-- 
---    return {true, prop->enums[j].value};
--+    return std::make_tuple(true, prop->enums[j].value);
--   }
-- 
--   return std::make_tuple(false, 0);
---- 
--2.29.2
--
-diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-index 17bbc33714..7999f312c8 100644
---- a/package/kodi/kodi.hash
-+++ b/package/kodi/kodi.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  f7ef8a6f45862ae3b7ebfce4950d74f534be3cb4a0e67ce640963746b3f668f2  kodi-19.0-Matrix.tar.gz
-+sha256  b8ded0d32328e85e8f8ab7747289d647ddb910f476f5ce1ae53582c7842fc852  kodi-19.1.tar.gz
- sha256  38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
- sha256  071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
- sha256  a30b6aa0aad0f2c505bc77948af2d5531a80b6e68112addb4c123fca24d5d3bf  kodi-libdvdread-6.0.0-Leia-Alpha-3.tar.gz
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index d633dd841d..7e9d9f5f47 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -6,8 +6,8 @@
+ gen_tests() {
+-    local -a basics defconfigs runtimes
+-    local do_basics do_defconfigs do_runtime
++    local -a basics defconfigs runtimes toolchains
++    local do_basics do_defconfigs do_runtime do_testpkg
+     local defconfigs_ext cfg tst
  
- # When updating the version, please also update kodi-jsonschemabuilder
- # and kodi-texturepacker
--KODI_VERSION = 19.0-Matrix
--KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
-+KODI_VERSION = 19.1
-+KODI_SITE = $(call github,xbmc,xbmc,v$(KODI_VERSION))
- KODI_LICENSE = GPL-2.0
- KODI_LICENSE_FILES = LICENSE.md
- # needed for binary addons
+     basics=( DEVELOPERS flake8 package )
+@@ -74,12 +74,16 @@ gen_tests() {
+             runtimes=( "${CI_COMMIT_REF_NAME##*-}" )
+             do_runtime=true
+             ;;
++          (*-test-pkg)
++            toolchains=( $(cd br-test-pkg; LC_ALL=C ls -1) )
++            do_testpkg=yes
+         esac
+     fi
+ 
+     # If nothing else, at least do the basics to generate a valid pipeline
+     if [    -z "${do_defconfigs}" \
+          -a -z "${do_runtime}" \
++         -a -z "${do_testpkg}" \
+        ]
+     then
+         do_basics=true
+@@ -101,6 +105,12 @@ gen_tests() {
+     if ${do_runtime:-false}; then
+         printf '%s: { extends: .runtime_test_base }\n' "${runtimes[@]}"
+     fi
++
++    if [ -n "${do_testpkg}" ]; then
++        for cfg in "${toolchains[@]}"; do
++            printf '%s: { extends: .test_pkg }\n' "${cfg}"
++        done
++    fi
+ }
+ 
+ main "${@}"
+diff --git a/utils/test-pkg b/utils/test-pkg
+index a317d8c17a..ff502ec538 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -3,22 +3,25 @@ set -e
+ 
+ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
+ TEMP_CONF=""
++GIT_BUILD_BRANCH="$(date +%Y-%m-%d--%H-%M-%S)-test-pkg"
++GIT_CURRENT_BRANCH=$(git symbolic-ref -q --short HEAD)
+ 
+ do_clean() {
+     if [ ! -z "${TEMP_CONF}" ]; then
+         rm -f "${TEMP_CONF}"
+     fi
++    git checkout $GIT_CURRENT_BRANCH >/dev/null 2>&1
+ }
+ 
+ main() {
+     local o O opts
+-    local cfg dir pkg random toolchains_csv toolchain all number mode
++    local cfg dir pkg random toolchains_csv toolchain all number mode gitlab_ci
+     local ret nb nb_skip nb_fail nb_legal nb_tc build_dir keep
+     local -a toolchains
+     local pkg_br_name
+ 
+-    o='hakc:d:n:p:r:t:'
+-    O='help,all,keep,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
++    o='hakgc:d:n:p:r:t:'
++    O='help,all,keep,gitlab-ci,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
+     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+     eval set -- "${opts}"
+ 
+@@ -27,6 +30,7 @@ main() {
+     keep=0
+     number=0
+     mode=0
++    gitlab_ci=0
+     toolchains_csv="${TOOLCHAINS_CSV}"
+     while [ ${#} -gt 0 ]; do
+         case "${1}" in
+@@ -39,6 +43,9 @@ main() {
+         (-k|--keep)
+             keep=1; shift 1
+             ;;
++        (-g|--gitlab-ci)
++            gitlab_ci=1; shift 1
++            ;;
+         (-c|--config-snippet)
+             cfg="${2}"; shift 2
+             ;;
+@@ -118,6 +125,19 @@ main() {
+         printf "error: no toolchain found (networking issue?)\n" >&2; exit 1
+     fi
+ 
++    if [ ${gitlab_ci} -eq 1  ]; then
++        # We need to create a commit, so check if Buildroot git repository is available
++        # and if it's clean.
++        git diff-index --quiet HEAD 2> /dev/null && ret=0 || ret=${?}
++        if [ ${ret} -ne 0 ]; then
++            printf "error: A clean git repository is required.\n" >&2; exit 1
++        fi
++
++        # We have to hard code the directory name since it's reused to generate the pipeline jobs.
++        # ${dir} must be located in the git repository
++        dir="br-test-pkg"
++    fi
++
+     nb=0
+     nb_skip=0
+     nb_fail=0
+@@ -127,18 +147,36 @@ main() {
+         toolchain="$(basename "${toolchainconfig}" .config)"
+         build_dir="${dir}/${toolchain}"
+         printf "%40s [%*d/%d]: " "${toolchain}" ${#nb_tc} ${nb} ${nb_tc}
+-        build_one "${build_dir}" "${toolchainconfig}" "${cfg}" "${pkg}" && ret=0 || ret=${?}
++        build_one "${build_dir}" "${toolchainconfig}" "${cfg}" "${pkg}" "${gitlab_ci}" && ret=0 || ret=${?}
+         case ${ret} in
+         (0) printf "OK\n";;
+         (1) : $((nb_skip++)); printf "SKIPPED\n";;
+         (2) : $((nb_fail++)); printf "FAILED\n";;
+         (3) : $((nb_legal++)); printf "FAILED\n";;
++        (4) printf "GITLAB CI\n";;
+         esac
+     done
+ 
+     printf "%d builds, %d skipped, %d build failed, %d legal-info failed\n" \
+         ${nb} ${nb_skip} ${nb_fail} ${nb_legal}
+ 
++    # Prepare the build commit
++    if [ ${gitlab_ci} -eq 1  ]; then
++        # Customize the build branch name with the name of the package if provided.
++        if [ -n "${pkg}" ]; then
++            GIT_BUILD_BRANCH="${pkg}-${GIT_BUILD_BRANCH}"
++        fi
++
++        git branch -D ${GIT_BUILD_BRANCH} 2> /dev/null || true
++        git checkout -b ${GIT_BUILD_BRANCH} || exit 1
++
++        git add -f ${dir}/*/defconfig
++        git commit -m "Build bot: trigger new builds" ${dir}/*/defconfig
++
++        # Let the user to push the build branch to its Buildroot gitlab fork.
++        printf "The branch ${GIT_BUILD_BRANCH} is ready and can now be pushed to gitlab.\n"
++    fi
++
+     return $((nb_fail + nb_legal))
+ }
+ 
+@@ -147,6 +185,7 @@ build_one() {
+     local toolchainconfig="${2}"
+     local cfg="${3}"
+     local pkg="${4}"
++    local gitlab_ci="${5}"
+ 
+     mkdir -p "${dir}"
+ 
+@@ -166,6 +205,12 @@ build_one() {
+     # Remove file, it's empty anyway.
+     rm -f "${dir}/missing.config"
+ 
++    # Differ to gitlab pipeline
++    if [ ${gitlab_ci} -eq 1  ]; then
++        make O="${dir}" savedefconfig >> "${dir}/logfile" 2>&1
++        return 4
++    fi
++
+     if [ -n "${pkg}" ]; then
+         if ! make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
+             return 2
+@@ -253,6 +298,12 @@ Options:
+         Note: the logfile and configuration is always retained, even without
+         this option.
+ 
++    -g, --gitlab-ci
++        Create a commit in a new branch to use gitlab-ci. This commit contains
++        all test-pkg's generated defconfig (all skipped configuration are not
++        commited). The commit can be pushed to any gitlab user account where
++        runners (free or private) are available.
++
+ Example:
+ 
+     Testing libcec would require a config snippet that contains:
 -- 
-2.29.2
+2.30.2
