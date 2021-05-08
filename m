@@ -1,32 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 May 2021 18:23:48 +0200
-Subject: [Buildroot] [PATCH] package/cryptsetup: disable tmpfiles.d for
- host build
-In-Reply-To: <20210507152159.542208-1-john@metanate.com> (John Keeping's
- message of "Fri, 7 May 2021 16:21:59 +0100")
-References: <20210507152159.542208-1-john@metanate.com>
-Message-ID: <87v97turcb.fsf@dell.be.48ers.dk>
+Date: Sat, 8 May 2021 18:19:53 +0200
+Subject: [Buildroot] [git commit] package/haproxy: bump to version 2.2.14
+Message-ID: <20210508155611.E5DE0865D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "John" == John Keeping <john@metanate.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5fe4fcdb6439775661e2ff3af66b0b7a43d3c5fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > When building host-cryptsetup, if tmpfiles.d support is enabled then the
- > install step tries to install /usr/lib/tmpfiles.d/cryptsetup.conf
- > globally on the host system.
+http://www.haproxy.org/download/2.2/src/CHANGELOG
 
- > Even if the tmpfiles.d config were installed correctly in the host
- > directory, nothing would ever run these rules, so disable this feature
- > via configure.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Signed-off-by: John Keeping <john@metanate.com>
-
-Committed, thanks.
-
-I see we also don't pass that configure flag for the target variant?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index bea7c4bb2a..66a6f40bda 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.13.tar.gz.sha256
+-sha256  9e3e51441c70bedfb494fc9d4b4d3389a71be9a3c915ba3d6f7e8fd9a57ce160  haproxy-2.2.13.tar.gz
++# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.14.tar.gz.sha256
++sha256  6a9b702f04b07786f3e5878de8172a727acfdfdbc1cefe1c7a438df372f2fb61  haproxy-2.2.14.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 8502ab8a11..6254819a9b 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ HAPROXY_VERSION_MAJOR = 2.2
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).13
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).14
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
