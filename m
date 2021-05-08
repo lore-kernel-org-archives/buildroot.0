@@ -1,51 +1,85 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  8 May 2021 21:41:54 +0200
-Subject: [Buildroot] [PATCH 1/2] boot/opensbi: bump to version 0.9
-Message-ID: <20210508194155.3678473-1-fontaine.fabrice@gmail.com>
+Date: Sat,  8 May 2021 21:41:55 +0200
+Subject: [Buildroot] [PATCH 2/2] boot/opensbi: unconditionally disable SSP
+In-Reply-To: <20210508194155.3678473-1-fontaine.fabrice@gmail.com>
+References: <20210508194155.3678473-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210508194155.3678473-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/riscv/opensbi/releases/tag/v0.9
+Fix build failure raised since commit
+810ba387bec3c5b6904e8893fb4cb6f9d3717466
+
+Fixes:
+ - https://gitlab.com/kubu93/buildroot/-/jobs/1247043359
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- boot/opensbi/Config.in    | 4 ++--
- boot/opensbi/opensbi.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...Makefile-unconditionally-disable-SSP.patch | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch
 
-diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-index 55a644506f..632eeec88d 100644
---- a/boot/opensbi/Config.in
-+++ b/boot/opensbi/Config.in
-@@ -19,7 +19,7 @@ choice
- 	  Select the specific OpenSBI version you want to use
- 
- config BR2_TARGET_OPENSBI_LATEST_VERSION
--	bool "0.8"
-+	bool "0.9"
- 
- config BR2_TARGET_OPENSBI_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -57,7 +57,7 @@ endif
- 
- config BR2_TARGET_OPENSBI_VERSION
- 	string
--	default "0.8"	if BR2_TARGET_OPENSBI_LATEST_VERSION
-+	default "0.9"	if BR2_TARGET_OPENSBI_LATEST_VERSION
- 	default BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_OPENSBI_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_OPENSBI_CUSTOM_TARBALL
-diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
-index f7280b890b..3b6d97c42d 100644
---- a/boot/opensbi/opensbi.hash
-+++ b/boot/opensbi/opensbi.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  17e048ac765e92e15f7436b604452614cf88dc2bcbbaab18cdc024f3fdd4c575  opensbi-0.8.tar.gz
-+sha256  60f995cb3cd03e3cf5e649194d3395d0fe67499fd960a36cf7058a4efde686f0  opensbi-0.9.tar.gz
- sha256  82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21  COPYING.BSD
+diff --git a/boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch b/boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch
+new file mode 100644
+index 0000000000..c4edd37f1a
+--- /dev/null
++++ b/boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch
+@@ -0,0 +1,53 @@
++From e389d5fbc296e496db15368b2b621e0f178f7f34 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 8 May 2021 21:28:10 +0200
++Subject: [PATCH] Makefile: unconditionally disable SSP
++
++Though -nostdlib is passed in {C,+AS,DTSCPP}FLAGS, -fno-stack-protector
++must also be passed to avoid linking errors related to undefined
++references to '__stack_chk_guard' and '__stack_chk_fail' if toolchain
++enforces -fstack-protector.
++
++Fixes:
++ - https://gitlab.com/kubu93/buildroot/-/jobs/1247043359
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/riscv/opensbi/pull/211]
++---
++ Makefile | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index eeffe6b..1419360 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -203,7 +203,7 @@ GENFLAGS	+=	$(libsbiutils-genflags-y)
++ GENFLAGS	+=	$(platform-genflags-y)
++ GENFLAGS	+=	$(firmware-genflags-y)
++ 
++-CFLAGS		=	-g -Wall -Werror -ffreestanding -nostdlib -fno-strict-aliasing -O2
+++CFLAGS		=	-g -Wall -Werror -ffreestanding -nostdlib -fno-stack-protector -fno-strict-aliasing -O2
++ CFLAGS		+=	-fno-omit-frame-pointer -fno-optimize-sibling-calls
++ CFLAGS		+=	-mno-save-restore -mstrict-align
++ CFLAGS		+=	-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
++@@ -217,7 +217,7 @@ CPPFLAGS	+=	$(GENFLAGS)
++ CPPFLAGS	+=	$(platform-cppflags-y)
++ CPPFLAGS	+=	$(firmware-cppflags-y)
++ 
++-ASFLAGS		=	-g -Wall -nostdlib -D__ASSEMBLY__
+++ASFLAGS		=	-g -Wall -nostdlib -fno-stack-protector -D__ASSEMBLY__
++ ASFLAGS		+=	-fno-omit-frame-pointer -fno-optimize-sibling-calls
++ ASFLAGS		+=	-mno-save-restore -mstrict-align
++ ASFLAGS		+=	-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
++@@ -236,7 +236,7 @@ MERGEFLAGS	+=	-r
++ MERGEFLAGS	+=	-b elf$(PLATFORM_RISCV_XLEN)-littleriscv
++ MERGEFLAGS	+=	-m elf$(PLATFORM_RISCV_XLEN)lriscv
++ 
++-DTSCPPFLAGS	=	$(CPPFLAGS) -nostdinc -nostdlib -fno-builtin -D__DTS__ -x assembler-with-cpp
+++DTSCPPFLAGS	=	$(CPPFLAGS) -nostdinc -nostdlib -fno-stack-protector -fno-builtin -D__DTS__ -x assembler-with-cpp
++ 
++ # Setup functions for compilation
++ define dynamic_flags
++-- 
++2.30.2
++
 -- 
 2.30.2
