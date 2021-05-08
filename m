@@ -1,45 +1,83 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 May 2021 16:24:15 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/coremark-pro:
- disable parallel build
-Message-ID: <20210508140507.310B586B17@busybox.osuosl.org>
+Date: Sat, 8 May 2021 16:29:10 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] DEVELOPERS: transition
+ rockwellcollins.com to collins.com
+Message-ID: <20210508140507.3B1D586BF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd84c189b5c2047a2be4c1816710af751ba98521
+commit: https://git.buildroot.net/buildroot/commit/?id=61c39d7a4566cf5ddaf4e1018c0240fe6d610871
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Disable parallel build as it seems to be totally broken:
+Email addresses are all live and some of us will start contributing
+with the new collins.com domain.
 
-/bin/bash: line 0: cd: /home/buildroot/autobuild/instance-2/output-1/build/coremark-pro-1.1.2743/builds/linux64/gcc64/obj/bench/core: No such file or directory
-
-/bin/sh: 1: cd: can't cd to /home/buildroot/autobuild/instance-1/output-1/build/coremark-pro-1.1.2743/builds/linux/gcc/obj/bench/fp/loops/SP
-
-Fixes:
- - http://autobuild.buildroot.org/results/7ba5e209772af7037fc735ea174d3fc3eaf46f4b
- - http://autobuild.buildroot.org/results/32b51bb9eda7899b6cc331f10a860644bd6004fa
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit eec72d3a943ff74c9cb0194ad5d0c72f4f6cce95)
+Signed-off-by: Matthew Weber <matthew.weber@collins.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 8c8f375badfe1dbfbbfeb449a74753dbad3c5fa4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/coremark-pro/coremark-pro.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/coremark-pro/coremark-pro.mk b/package/coremark-pro/coremark-pro.mk
-index 515b8eafbd..e797f66840 100644
---- a/package/coremark-pro/coremark-pro.mk
-+++ b/package/coremark-pro/coremark-pro.mk
-@@ -40,7 +40,7 @@ COREMARK_PRO_MAKE_OPTS += \
- 	EXE=
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ea07462303..52dabb9d1e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -468,7 +468,7 @@ N:	Bogdan Radulescu <bogdan@nimblex.net>
+ F:	package/iftop/
+ F:	package/ncdu/
  
- define COREMARK_PRO_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C $(@D) \
- 		$(COREMARK_PRO_MAKE_OPTS) build
- endef
+-N:	Brandon Maier <brandon.maier@rockwellcollins.com>
++N:	Brandon Maier <brandon.maier@collins.com>
+ F:	package/vmtouch/
  
+ N:	Brock Williams <brock@cottonwoodcomputer.com>
+@@ -569,7 +569,7 @@ F:	package/perl-sys-mmap/
+ F:	package/perl-time-parsedate/
+ F:	package/perl-x10/
+ 
+-N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
++N:	Clayton Shotwell <clayton.shotwell@collins.com>
+ F:	package/audit/
+ F:	package/checkpolicy/
+ F:	package/cpio/
+@@ -1214,7 +1214,7 @@ F:	package/python-sockjs/
+ F:	package/python-terminaltables/
+ F:	package/python-yarl/
+ 
+-N:	James Knight <james.knight@rockwellcollins.com>
++N:	James Knight <james.knight@collins.com>
+ F:	package/atkmm/
+ F:	package/cairomm/
+ F:	package/google-material-design-icons/
+@@ -1703,7 +1703,7 @@ F:	board/technologic/ts4900/
+ F:	configs/ts4900_defconfig
+ F:	package/ts4900-fpga/
+ 
+-N:	Matt Weber <matthew.weber@rockwellcollins.com>
++N:	Matt Weber <matthew.weber@collins.com>
+ F:	board/freescale/p*
+ F:	board/freescale/t*
+ F:	board/qemu/ppc64-e5500/
+@@ -2316,7 +2316,7 @@ F:	toolchain/
+ N:	Roman Gorbenkov <roman.gorbenkov@ens2m.org>
+ F:	package/davfs2/
+ 
+-N:	Ryan Barnett <ryan.barnett@rockwellcollins.com>
++N:	Ryan Barnett <ryan.barnett@collins.com>
+ F:	package/atftp/
+ F:	package/c-periphery/
+ F:	package/miraclecast/
+@@ -2353,7 +2353,7 @@ F:	support/misc/toolchainfile.cmake.in
+ N:	Sam Voss <sam.voss@gmail.com>
+ F:	package/ripgrep/
+ 
+-N:	Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
++N:	Santosh Multhalli <santosh.multhalli@collins.com>
+ F:	package/valijson/
+ 
+ N:	S??bastien Szymanski <sebastien.szymanski@armadeus.com>
