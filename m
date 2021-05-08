@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 May 2021 10:59:00 +0200
-Subject: [Buildroot] [PATCH] package/go: security bump to version 1.16.4
-In-Reply-To: <20210507062821.32119-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 7 May 2021 08:28:21 +0200")
-References: <20210507062821.32119-1-peter@korsgaard.com>
-Message-ID: <87bl9lzjmz.fsf@dell.be.48ers.dk>
+Date: Sat, 08 May 2021 10:59:05 +0200
+Subject: [Buildroot] [PATCH] package/xen: bump version to 4.14.2
+In-Reply-To: <20210507070615.19796-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 7 May 2021 09:06:14 +0200")
+References: <20210507070615.19796-1-peter@korsgaard.com>
+Message-ID: <877dk9zjmu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security issues:
- > - CVE-2021-31525: ReadRequest and ReadResponse in net/http can hit an
- >   unrecoverable panic when reading a very large header (over 7MB on 64-bit
- >   architectures, or over 4MB on 32-bit ones).  Transport and Client are
- >   vulnerable and the program can be made to crash by a malicious server.
- >   Server is not vulnerable by default, but can be if the default max header
- >   of 1MB is overridden by setting Server.MaxHeaderBytes to a higher value,
- >   in which case the program can be made to crash by a malicious client.
+ > Includes a number of bugfixes and the security fixes up to 368, so drop
+ > those.
 
- >   https://github.com/golang/go/issues/45710
+ > For details, see the release notes:
+ > https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-2/
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
