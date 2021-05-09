@@ -1,111 +1,97 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 9 May 2021 11:54:33 +0200
-Subject: [Buildroot] [PATCH 1/1] linux: disable SSP on s390 when needed
-In-Reply-To: <20210509091800.708933-1-fontaine.fabrice@gmail.com>
-References: <20210509091800.708933-1-fontaine.fabrice@gmail.com>
-Message-ID: <51418832-f995-ce29-33c5-8e71962c8aa1@gmail.com>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Sun,  9 May 2021 12:01:41 +0200
+Subject: [Buildroot] [PATCH] configs/wandboard: bump kernel and U-Boot
+ versions
+Message-ID: <20210509100141.22063-1-vincent.stehle@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+- Bump kernel to version 5.12.2.
+- Bump U-Boot to version 2021.04.
 
-For s390 arch you can add Alexander Egorenkov <egorenar@linux.ibm.com> in Cc.
+While at it, switch U-Boot to the Kconfig build system and add some more
+comments to the defconfig.
 
-Le 09/05/2021 ? 11:18, Fabrice Fontaine a ?crit?:
-> Fix build failure raised since commit
-> 810ba387bec3c5b6904e8893fb4cb6f9d3717466 by disabling SSP when needed
-> 
-> Fixes:
->  - https://gitlab.com/kubu93/buildroot/-/jobs/1247043361
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...02-arch-s390-disable-SSP-when-needed.patch | 47 +++++++++++++++++++
->  linux/linux.mk                                |  7 +++
->  2 files changed, 54 insertions(+)
->  create mode 100644 linux/0002-arch-s390-disable-SSP-when-needed.patch
-> 
-> diff --git a/linux/0002-arch-s390-disable-SSP-when-needed.patch b/linux/0002-arch-s390-disable-SSP-when-needed.patch
-> new file mode 100644
-> index 0000000000..c8199d4fd6
-> --- /dev/null
-> +++ b/linux/0002-arch-s390-disable-SSP-when-needed.patch
-> @@ -0,0 +1,47 @@
-> +From 8a054081678ed0b0e56f829bac0a4656e3a198b9 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sat, 8 May 2021 22:03:11 +0200
-> +Subject: [PATCH] arch/s390: disable SSP when needed
-> +
-> +Though -nostdlib is passed in PURGATORY_LDFLAGS and -ffreestanding in
-> +KBUILD_CFLAGS_DECOMPRESSOR, -fno-stack-protector must also be passed to
-> +avoid linking errors related to undefined references to
-> +'__stack_chk_guard' and '__stack_chk_fail' if toolchain enforces
-> +-fstack-protector.
-> +
-> +Fixes:
-> + - https://gitlab.com/kubu93/buildroot/-/jobs/1247043361
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + arch/s390/Makefile           | 1 +
-> + arch/s390/purgatory/Makefile | 1 +
-> + 2 files changed, 2 insertions(+)
-> +
-> +diff --git a/arch/s390/Makefile b/arch/s390/Makefile
-> +index e443ed9947bd..098abe3a56f3 100644
-> +--- a/arch/s390/Makefile
-> ++++ b/arch/s390/Makefile
-> +@@ -28,6 +28,7 @@ KBUILD_CFLAGS_DECOMPRESSOR += -DDISABLE_BRANCH_PROFILING -D__NO_FORTIFY
-> + KBUILD_CFLAGS_DECOMPRESSOR += -fno-delete-null-pointer-checks -msoft-float -mbackchain
-> + KBUILD_CFLAGS_DECOMPRESSOR += -fno-asynchronous-unwind-tables
-> + KBUILD_CFLAGS_DECOMPRESSOR += -ffreestanding
-> ++KBUILD_CFLAGS_DECOMPRESSOR += -fno-stack-protector
-> + KBUILD_CFLAGS_DECOMPRESSOR += $(call cc-disable-warning, address-of-packed-member)
-> + KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO),-g)
-> + KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO_DWARF4), $(call cc-option, -gdwarf-4,))
-> +diff --git a/arch/s390/purgatory/Makefile b/arch/s390/purgatory/Makefile
-> +index c57f8c40e992..21c4ebe29b9a 100644
-> +--- a/arch/s390/purgatory/Makefile
-> ++++ b/arch/s390/purgatory/Makefile
-> +@@ -24,6 +24,7 @@ KBUILD_CFLAGS := -fno-strict-aliasing -Wall -Wstrict-prototypes
-> + KBUILD_CFLAGS += -Wno-pointer-sign -Wno-sign-compare
-> + KBUILD_CFLAGS += -fno-zero-initialized-in-bss -fno-builtin -ffreestanding
-> + KBUILD_CFLAGS += -c -MD -Os -m64 -msoft-float -fno-common
-> ++KBUILD_CFLAGS += -fno-stack-protector
-> + KBUILD_CFLAGS += $(CLANG_FLAGS)
-> + KBUILD_CFLAGS += $(call cc-option,-fno-PIE)
-> + KBUILD_AFLAGS := $(filter-out -DCC_USING_EXPOLINE,$(KBUILD_AFLAGS))
-> +-- 
-> +2.30.2
-> +
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 1457228eb9..338e79d23d 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -274,6 +274,13 @@ define LINUX_TRY_PATCH_TIMECONST
->  endef
->  LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
->  
-> +define LINUX_TRY_PATCH_ARCH_S390_SSP
-> +	@if patch -p1 --dry-run -f -s -d $(@D) <$(LINUX_PKGDIR)/0002-arch-s390-disable-SSP-when-needed.patch.conditional >/dev/null ; then \
-> +		$(APPLY_PATCHES) $(@D) $(LINUX_PKGDIR) 0002-arch-s390-disable-SSP-when-needed.patch.conditional ; \
-> +	fi
-> +endef
-> +LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_ARCH_S390_SSP
+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+Cc: Fabio Estevam <festevam@gmail.com>
+---
 
-I'm not sure if we should fix this in linux.mk
-Instead put the patch to board/qemu/s390x/patches/linux/ (as for other kernel
-patches for qemu defconfig).
+
+Hi,
+
+UART, SD card(s), USB, ethernet and HDMI work for me. More testers for e.g.
+SATA and audio are welcome!
+
+Fabio, if you do not like the additional comments in the defconfig please let
+me know and I can re-submit without those.
 
 Best regards,
-Romain
+
+Vincent.
 
 
-> +
->  LINUX_KERNEL_CUSTOM_LOGO_PATH = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH))
->  ifneq ($(LINUX_KERNEL_CUSTOM_LOGO_PATH),)
->  LINUX_DEPENDENCIES += host-imagemagick
-> 
+ configs/wandboard_defconfig | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
+
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index 8f9e30a1a9..7915248cf1 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -1,32 +1,46 @@
++# Architecture
+ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++
++# Linux headers same as kernel, a 5.12 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
++
++# System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++
++# Image
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/wandboard/genimage.cfg"
++
++# Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Bootloader
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="wandboard"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="wandboard"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
++
++# Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-# required tools to create the SD card image
++
++# Required tools to create the SD image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+-- 
+2.30.2
