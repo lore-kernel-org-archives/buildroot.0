@@ -1,122 +1,139 @@
-From: Drew Fustini <drew@beagleboard.org>
-Date: Sun, 9 May 2021 13:34:56 -0700
-Subject: [Buildroot] [PATCH v3 5/7] boot/beaglev-ddrinit: new package
-In-Reply-To: <CAMKF1soHPX9QkLhcTupSKNAthWtjs_tr3V8JqKXuiNaEncMQJQ@mail.gmail.com>
-References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
- <20210504205139.1055360-6-thomas.petazzoni@bootlin.com>
- <20210507220401.GE2137340@scaer>
- <CAPgEAj6=TkK79B32P-JRL+T1KPYQd1djsVbYc2ah3zx7xno6cg@mail.gmail.com>
- <20210508073718.GI2137340@scaer>
- <CAPgEAj4C5tjW_Wne18cWqcL2ub7wAZ61UFBr=non5U23sXS97A@mail.gmail.com>
- <CAMKF1srq7i5qzkOhEcEPsc7n-t4sKaT2m961xMH68kvLzeUUKA@mail.gmail.com>
- <CAPgEAj5DVHPyqELP-QgxOTzP=-m3sYB1h=Y7akECRTUsXsa_Tg@mail.gmail.com>
- <CAMKF1sqbMJEu=hrafFAbqp-ySjER6Zm392FsoX3dNBGqveva8Q@mail.gmail.com>
- <CAPgEAj5h2cWnCRo97NGvw=_cjsp3OaifThh_MzQE=c=q-1RsOg@mail.gmail.com>
- <CAMKF1soHPX9QkLhcTupSKNAthWtjs_tr3V8JqKXuiNaEncMQJQ@mail.gmail.com>
-Message-ID: <CAPgEAj4xBA5MxymcDmqqpi3vi4qJrBxX=f8644a1ktOnZnz+Ew@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 9 May 2021 23:16:26 +0200
+Subject: [Buildroot] [PATCH 1/1] linux: disable SSP on s390 when needed
+In-Reply-To: <CAPi7W81C6dVUgZ+rq=ZkBa3A1cVcqcC_qJM6AUQi8bxBSHHHsQ@mail.gmail.com>
+References: <20210509091800.708933-1-fontaine.fabrice@gmail.com>
+ <51418832-f995-ce29-33c5-8e71962c8aa1@gmail.com>
+ <CAPi7W81C6dVUgZ+rq=ZkBa3A1cVcqcC_qJM6AUQi8bxBSHHHsQ@mail.gmail.com>
+Message-ID: <72eae3cb-ffbe-f8e7-f77e-8f3a3dde69e4@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, May 9, 2021 at 1:27 PM Khem Raj <raj.khem@gmail.com> wrote:
->
-> On Sun, May 9, 2021 at 1:23 PM Drew Fustini <drew@beagleboard.org> wrote:
-> >
-> > On Sat, May 8, 2021, 15:10 Khem Raj <raj.khem@gmail.com> wrote:
-> > >
-> > > Hi Drew
-> > >
-> > > On Sat, May 8, 2021 at 2:10 PM Drew Fustini <drew@beagleboard.org> wrote:
-> > > >
-> > > > On Sat, May 8, 2021 at 9:02 AM Khem Raj <raj.khem@gmail.com> wrote:
-> > > > >
-> > > > > On Sat, May 8, 2021 at 12:48 AM Drew Fustini <drew@beagleboard.org> wrote:
-> > > > > >
-> > > > > > On Sat, May 8, 2021 at 12:37 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > > > > >
-> > > > > > > Drew, All,
-> > > > > > >
-> > > > > > > On 2021-05-07 16:30 -0700, Drew Fustini spake thusly:
-> > > > > > > > On Fri, May 7, 2021, 15:04 Yann E. MORIN < [1]yann.morin.1998@free.fr> wrote:
-> > > > > > > >   On 2021-05-04 22:51 +0200, Thomas Petazzoni spake thusly:
-> > > > > > > >   > This commit adds a package for the DDR initialization code used on the
-> > > > > > > >   > BeagleV platform.
-> > > > > > > >
-> > > > > > > >   The upstream package name is beaglev-ddrlnit, yes, with an 'l' instead
-> > > > > > > >   of an 'i'. I've renamed the package to match upstream name, so that
-> > > > > > > >   users that look for it can actually find it.
-> > > > > > > > Would it be helpful if I get StarFive to fix the typo and rename it to ddrinit?
-> > > > > > > > I am thinking that would probably be good to have happen before other projects
-> > > > > > > > start pointing to it. Thomas was so fast with the buildroot patches I think it
-> > > > > > > > is the first to notice this.
-> > > > > > >
-> > > > > > > It is not so important that the upstream name gets fixed; in fact quite
-> > > > > > > the opposite: we are now already referencing it. Granted, it's brand
-> > > > > > > new, and we can fix it quick before the release. But note that our
-> > > > > > > 2021.05-rc1 is due this WE, for example; we can still fix this kind of
-> > > > > > > thing post rc1, of course, but we can't fix a release...
-> > > > > > >
-> > > > > > > But as you mention, once other projects start referencing it, it will be
-> > > > > > > too late. For example, Khem Raj already has started such support:
-> > > > > > >
-> > > > > > >     https://github.com/riscv/meta-riscv/blob/master/beaglev.yml
-> > > > > > >     https://github.com/YoeDistro/yoe-distro/blob/master/beaglev-starlight-jh7100-envsetup.sh
-> > > > > > >
-> > > > > > > So even if it is still very early, I think it is already too late to
-> > > > > > > rename the repository...
-> > > > >
-> > > > > Is there general consensus on what it should be called ?
-> > > > > I am happy to remove references to SOC name, if we have clear naming
-> > > > > convention and strategy to also name future iterations of beagleV based on RISCV
-> > > >
-> > > > The board that Thomas and you received is the beta prototype version
-> > > > of BeagleV Starlight board with the StarFive JH7100 SoC, which is a
-> > > > low quantity test SoC.  BeagleV is BeagleBoard.org Foundation's name
-> > > > for RISC-V boards.  BeagleV Starlight is a BeagleBoard.org board with
-> > > > a StarFive RISC-V SoC.
-> > > >
-> > > > The production BeagleV Starlight will have the StarFive JH7110, the
-> > > > mass production SoC.  Due to the different SoC models, BeagleV
-> > > > Starlight JH7100 would refer to the beta prototype, and BeagleV
-> > > > Starlight JH7110 would be the product that will be launched later this
-> > > > year.
-> > > >
-> > > > That README is the best public URL to reference in documentation and
-> > > > patches and it includes guidance on naming conventions:
-> > > > https://github.com/beagleboard/beaglev-starlight#guidance-on-naming-conventions
-> > >
-> > > So perhaps we could call this machine as beaglev-beta ? and the final
-> > > one beaglev in Yocto machine names ?
-> > > I am not sure adding SOC info adds some meaningful information, unless
-> > > you plan to have other SOCs also in
-> > > beagleV boards variants
-> >
-> > BeagleV is a name that will exist for long into the future for any
-> > BeagleBoard.org board with a RISC-V processor.  Therefore I think
-> > beaglev-starlight-beta would be a good machine name which would
-> > represent the beta version of BeagleV Starlight with StarFive JH7100
-> > SoC.  Machine beagle-starlight could then represent the production
-> > BeagleV Starlight with StarFive JH7110 SoC.
->
-> OK, but I was also thinking that tomorrow there might be a different
-> starlight soc
-> in beagleV next version in future so perhal
-> beaglev-<SOC-Vendor>-<SOC-name> might be future proof
+Hello Fabrice,
 
-yes, this is a good idea.  thus we would have:
+Le 09/05/2021 ? 14:10, Fabrice Fontaine a ?crit?:
+> Hello Romain,
+> 
+> Le dim. 9 mai 2021 ? 11:54, Romain Naour <romain.naour@gmail.com> a ?crit :
+>>
+>> Hello Fabrice,
+>>
+>> For s390 arch you can add Alexander Egorenkov <egorenar@linux.ibm.com> in Cc.
+>>
+>> Le 09/05/2021 ? 11:18, Fabrice Fontaine a ?crit :
+>>> Fix build failure raised since commit
+>>> 810ba387bec3c5b6904e8893fb4cb6f9d3717466 by disabling SSP when needed
+>>>
+>>> Fixes:
+>>>  - https://gitlab.com/kubu93/buildroot/-/jobs/1247043361
+>>>
+>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>> ---
+>>>  ...02-arch-s390-disable-SSP-when-needed.patch | 47 +++++++++++++++++++
+>>>  linux/linux.mk                                |  7 +++
+>>>  2 files changed, 54 insertions(+)
+>>>  create mode 100644 linux/0002-arch-s390-disable-SSP-when-needed.patch
+>>>
+>>> diff --git a/linux/0002-arch-s390-disable-SSP-when-needed.patch b/linux/0002-arch-s390-disable-SSP-when-needed.patch
+>>> new file mode 100644
+>>> index 0000000000..c8199d4fd6
+>>> --- /dev/null
+>>> +++ b/linux/0002-arch-s390-disable-SSP-when-needed.patch
+>>> @@ -0,0 +1,47 @@
+>>> +From 8a054081678ed0b0e56f829bac0a4656e3a198b9 Mon Sep 17 00:00:00 2001
+>>> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>> +Date: Sat, 8 May 2021 22:03:11 +0200
+>>> +Subject: [PATCH] arch/s390: disable SSP when needed
+>>> +
+>>> +Though -nostdlib is passed in PURGATORY_LDFLAGS and -ffreestanding in
+>>> +KBUILD_CFLAGS_DECOMPRESSOR, -fno-stack-protector must also be passed to
+>>> +avoid linking errors related to undefined references to
+>>> +'__stack_chk_guard' and '__stack_chk_fail' if toolchain enforces
+>>> +-fstack-protector.
+>>> +
+>>> +Fixes:
+>>> + - https://gitlab.com/kubu93/buildroot/-/jobs/1247043361
+>>> +
+>>> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>> +---
+>>> + arch/s390/Makefile           | 1 +
+>>> + arch/s390/purgatory/Makefile | 1 +
+>>> + 2 files changed, 2 insertions(+)
+>>> +
+>>> +diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+>>> +index e443ed9947bd..098abe3a56f3 100644
+>>> +--- a/arch/s390/Makefile
+>>> ++++ b/arch/s390/Makefile
+>>> +@@ -28,6 +28,7 @@ KBUILD_CFLAGS_DECOMPRESSOR += -DDISABLE_BRANCH_PROFILING -D__NO_FORTIFY
+>>> + KBUILD_CFLAGS_DECOMPRESSOR += -fno-delete-null-pointer-checks -msoft-float -mbackchain
+>>> + KBUILD_CFLAGS_DECOMPRESSOR += -fno-asynchronous-unwind-tables
+>>> + KBUILD_CFLAGS_DECOMPRESSOR += -ffreestanding
+>>> ++KBUILD_CFLAGS_DECOMPRESSOR += -fno-stack-protector
+>>> + KBUILD_CFLAGS_DECOMPRESSOR += $(call cc-disable-warning, address-of-packed-member)
+>>> + KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO),-g)
+>>> + KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO_DWARF4), $(call cc-option, -gdwarf-4,))
+>>> +diff --git a/arch/s390/purgatory/Makefile b/arch/s390/purgatory/Makefile
+>>> +index c57f8c40e992..21c4ebe29b9a 100644
+>>> +--- a/arch/s390/purgatory/Makefile
+>>> ++++ b/arch/s390/purgatory/Makefile
+>>> +@@ -24,6 +24,7 @@ KBUILD_CFLAGS := -fno-strict-aliasing -Wall -Wstrict-prototypes
+>>> + KBUILD_CFLAGS += -Wno-pointer-sign -Wno-sign-compare
+>>> + KBUILD_CFLAGS += -fno-zero-initialized-in-bss -fno-builtin -ffreestanding
+>>> + KBUILD_CFLAGS += -c -MD -Os -m64 -msoft-float -fno-common
+>>> ++KBUILD_CFLAGS += -fno-stack-protector
+>>> + KBUILD_CFLAGS += $(CLANG_FLAGS)
+>>> + KBUILD_CFLAGS += $(call cc-option,-fno-PIE)
+>>> + KBUILD_AFLAGS := $(filter-out -DCC_USING_EXPOLINE,$(KBUILD_AFLAGS))
+>>> +--
+>>> +2.30.2
+>>> +
+>>> diff --git a/linux/linux.mk b/linux/linux.mk
+>>> index 1457228eb9..338e79d23d 100644
+>>> --- a/linux/linux.mk
+>>> +++ b/linux/linux.mk
+>>> @@ -274,6 +274,13 @@ define LINUX_TRY_PATCH_TIMECONST
+>>>  endef
+>>>  LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
+>>>
+>>> +define LINUX_TRY_PATCH_ARCH_S390_SSP
+>>> +     @if patch -p1 --dry-run -f -s -d $(@D) <$(LINUX_PKGDIR)/0002-arch-s390-disable-SSP-when-needed.patch.conditional >/dev/null ; then \
+>>> +             $(APPLY_PATCHES) $(@D) $(LINUX_PKGDIR) 0002-arch-s390-disable-SSP-when-needed.patch.conditional ; \
+>>> +     fi
+>>> +endef
+>>> +LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_ARCH_S390_SSP
+>>
+>> I'm not sure if we should fix this in linux.mk
+>> Instead put the patch to board/qemu/s390x/patches/linux/ (as for other kernel
+>> patches for qemu defconfig).
+> Thanks for your review, I'm not used to linux patching. I'll send a v2.
+> I assume that this patch should be upstreamable but again, I'm a total
+> newbie to linux contribution so my success rate is probably low...
+To contribute to the kernel you have to send your patch to the mailing-list
+where you can reach the maintainer of the code you're are working on.
 
-beaglev-starfive-jh7100: beta BeagleV Starlight board with StarFive JH7100 SoC
-beaglev-starfive-jh7110: production BeagleV Starlight board with
-StarFive JH7110 SoC
+Here you can use the s390 mailing-list: linux-s390 at vger.kernel.org
 
-I do like using the SoC model instead of words like beta and
-production.  The name 'Starlight' in the context of the BeagleV
-Starlight board is the result of StarFive believing it would have a
-positive meaning in Chinese.  Starlight does not really mean anything
-in a technical sense so I think that "starfive" is more useful to have
-in the machine name such as 'beaglev-starfive-jh7100'.
+See:
+http://vger.kernel.org/vger-lists.html#linux-s390
 
-thanks,
-drew
+Best regards,
+Romain
+
+>>
+>> Best regards,
+>> Romain
+>>
+>>
+>>> +
+>>>  LINUX_KERNEL_CUSTOM_LOGO_PATH = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH))
+>>>  ifneq ($(LINUX_KERNEL_CUSTOM_LOGO_PATH),)
+>>>  LINUX_DEPENDENCIES += host-imagemagick
+>>>
+>>
+> Best Regards,
+> 
+> Fabrice
+> 
