@@ -1,42 +1,44 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sat,  8 May 2021 18:24:19 -0400
-Subject: [Buildroot] [PATCH 1/1] erlang: support builds when gcc __atomic_*
- exist
-Message-ID: <20210508222419.586915-1-fhunleth@troodon-software.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  9 May 2021 08:54:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-nextpvr: bump version to
+ 8.2.3-Matrix
+Message-ID: <20210509065410.28603-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While Erlang will use it's own atomic operations, it can also use gcc
-__atomic_* builtins. This is now listed in Erlang's HOWTO/INSTALL.md.
+Changelog:
+https://github.com/kodi-pvr/pvr.nextpvr/blob/Matrix/pvr.nextpvr/changelog.txt
 
-This change was necessary on RISC-V, since Erlang didn't have a built-in
-implementation, but it was able to use gcc's __atomic_* functions.
-
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/erlang/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang/Config.in b/package/erlang/Config.in
-index ab87eab6ff..b6b100f38b 100644
---- a/package/erlang/Config.in
-+++ b/package/erlang/Config.in
-@@ -6,9 +6,11 @@ config BR2_PACKAGE_HOST_ERLANG_ARCH_SUPPORTS
- config BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
- 	bool
- 	# see HOWTO/INSTALL.md for Erlang's supported platforms
--	# when using its native atomic ops implementation
-+	# when using its native atomic ops implementation or gcc's
-+	# __atomic_* builtins
- 	default y if BR2_i386 || BR2_x86_64 || BR2_powerpc || \
--		BR2_sparc_v9 || BR2_arm || BR2_aarch64 || BR2_mipsel
-+		BR2_sparc_v9 || BR2_arm || BR2_aarch64 || BR2_mipsel || \
-+		BR2_TOOLCHAIN_HAS_ATOMIC
- 	# erlang needs host-erlang
- 	depends on BR2_PACKAGE_HOST_ERLANG_ARCH_SUPPORTS
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+index 1171c81bb2..a6710948ce 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  67d292877da7a017d2915ec4921a0ac7beb378411c08087f8885dd32a42eefdf  kodi-pvr-nextpvr-8.2.2-Matrix.tar.gz
++sha256  f5f36c2da5c74af3af5be5f50ce1dccd3b3026ddfbf68cbb2962cc721874668d  kodi-pvr-nextpvr-8.2.3-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+index 2cb493fa62..1446f932e6 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-KODI_PVR_NEXTPVR_VERSION = 8.2.2-Matrix
++KODI_PVR_NEXTPVR_VERSION = 8.2.3-Matrix
+ KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
+ KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
+ KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
 -- 
-2.25.1
+2.29.2
