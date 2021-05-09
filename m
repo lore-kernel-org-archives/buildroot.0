@@ -1,117 +1,111 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 9 May 2021 11:44:12 +0200
-Subject: [Buildroot] [PATCH v3, 1/1] Config.in: enable FORTIFY_SOURCE,
- PIC/PIE, RELRO, SSP by default
-In-Reply-To: <CAPi7W80hOGjSnan3hWSugr-H6SYb587YaAa6Zy7rBx3oBK=ORw@mail.gmail.com>
-References: <20210503182241.38713-1-fontaine.fabrice@gmail.com>
- <20210503204151.GJ2137340@scaer>
- <f534b723-70bd-50ef-9611-a0bf734e1e43@gmail.com>
- <CAPi7W80hOGjSnan3hWSugr-H6SYb587YaAa6Zy7rBx3oBK=ORw@mail.gmail.com>
-Message-ID: <d04f8645-96f6-3dcc-a2c3-64795104999c@gmail.com>
+Date: Sun, 9 May 2021 11:54:33 +0200
+Subject: [Buildroot] [PATCH 1/1] linux: disable SSP on s390 when needed
+In-Reply-To: <20210509091800.708933-1-fontaine.fabrice@gmail.com>
+References: <20210509091800.708933-1-fontaine.fabrice@gmail.com>
+Message-ID: <51418832-f995-ce29-33c5-8e71962c8aa1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Hello Fabrice,
 
-Le 09/05/2021 ? 11:22, Fabrice Fontaine a ?crit?:
-> Hi Romain,
+For s390 arch you can add Alexander Egorenkov <egorenar@linux.ibm.com> in Cc.
+
+Le 09/05/2021 ? 11:18, Fabrice Fontaine a ?crit?:
+> Fix build failure raised since commit
+> 810ba387bec3c5b6904e8893fb4cb6f9d3717466 by disabling SSP when needed
 > 
-> Thanks for warning me about these failures.
-
-You're welcome.
-
+> Fixes:
+>  - https://gitlab.com/kubu93/buildroot/-/jobs/1247043361
 > 
-> Le sam. 8 mai 2021 ? 17:37, Romain Naour <romain.naour@gmail.com> a ?crit :
->>
->> Le 03/05/2021 ? 22:41, Yann E. MORIN a ?crit :
->>> Fabrice, All,
->>>
->>> On 2021-05-03 20:22 +0200, Fabrice Fontaine spake thusly:
->>>> Enhance security by enabling FORTIFY_SOURCE, PIC/PIE, RELRO and SSP by
->>>> default.
->>>>
->>>> This could help making IoT more secure and fight against the assumption
->>>> that buildroot does not support binary hardening (see
->>>> https://cyber-itl.org/2019/08/26/iot-data-writeup.html)
->>>>
->>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->>>> ---
->> [...]
->>>> diff --git a/Config.in b/Config.in
->>>> index e35a78fb71..6d954e1e0f 100644
->>>> --- a/Config.in
->>>> +++ b/Config.in
->>>> @@ -715,6 +715,7 @@ comment "Security Hardening Options"
->>>>
->>>>  config BR2_PIC_PIE
->>>>      bool "Build code with PIC/PIE"
->>>> +    default y
->>>>      depends on BR2_SHARED_LIBS
->>>>      depends on BR2_TOOLCHAIN_SUPPORTS_PIE
->>>>      help
->>>> @@ -727,7 +728,7 @@ comment "PIC/PIE needs a toolchain w/ PIE"
->>>>
->>>>  choice
->>>>      bool "Stack Smashing Protection"
->>>> -    default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
->>>> +    default BR2_SSP_ALL
->>>
->>> While discussing this with Matt on IRC, we noticed that SSP-all can have
->>> quite a significant impact on performance, and that SSP-strong (when
->>> available) would be a better default (resorting to SSP-regular
->>> otherwise).
->>>
->>> Yes, this decreases the security level Buildroot wil use by default. But
->>> security is always to be balanced against performance, and this is always
->>> a tricky choice to make; I believe relaxing SSP was striking a good
->>> balance (especially since, today, most gcc versions should have
->>> SSP-strong available).
->>>
->>> Applied to master, thank you!
->>>
->>
->> It seems that some defconfigs are failing to build with this option by default:
->> https://gitlab.com/kubu93/buildroot/-/pipelines/299584088
->>
->> At least:
->> qemu_riscv32_virt_defconfig
->> https://gitlab.com/kubu93/buildroot/-/jobs/1247043359
-> This one should be fixed by
-> https://patchwork.ozlabs.org/project/buildroot/patch/20210508194155.3678473-2-fontaine.fabrice at gmail.com/
->>
->> qemu_s390x_defconfig
->> https://gitlab.com/kubu93/buildroot/-/jobs/1247043361
-> This one should be fixed by
-> https://patchwork.ozlabs.org/project/buildroot/patch/20210509091800.708933-1-fontaine.fabrice at gmail.com/
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...02-arch-s390-disable-SSP-when-needed.patch | 47 +++++++++++++++++++
+>  linux/linux.mk                                |  7 +++
+>  2 files changed, 54 insertions(+)
+>  create mode 100644 linux/0002-arch-s390-disable-SSP-when-needed.patch
 > 
-> Do you think there are other failures that are related to the activation of SSP?
+> diff --git a/linux/0002-arch-s390-disable-SSP-when-needed.patch b/linux/0002-arch-s390-disable-SSP-when-needed.patch
+> new file mode 100644
+> index 0000000000..c8199d4fd6
+> --- /dev/null
+> +++ b/linux/0002-arch-s390-disable-SSP-when-needed.patch
+> @@ -0,0 +1,47 @@
+> +From 8a054081678ed0b0e56f829bac0a4656e3a198b9 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sat, 8 May 2021 22:03:11 +0200
+> +Subject: [PATCH] arch/s390: disable SSP when needed
+> +
+> +Though -nostdlib is passed in PURGATORY_LDFLAGS and -ffreestanding in
+> +KBUILD_CFLAGS_DECOMPRESSOR, -fno-stack-protector must also be passed to
+> +avoid linking errors related to undefined references to
+> +'__stack_chk_guard' and '__stack_chk_fail' if toolchain enforces
+> +-fstack-protector.
+> +
+> +Fixes:
+> + - https://gitlab.com/kubu93/buildroot/-/jobs/1247043361
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + arch/s390/Makefile           | 1 +
+> + arch/s390/purgatory/Makefile | 1 +
+> + 2 files changed, 2 insertions(+)
+> +
+> +diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+> +index e443ed9947bd..098abe3a56f3 100644
+> +--- a/arch/s390/Makefile
+> ++++ b/arch/s390/Makefile
+> +@@ -28,6 +28,7 @@ KBUILD_CFLAGS_DECOMPRESSOR += -DDISABLE_BRANCH_PROFILING -D__NO_FORTIFY
+> + KBUILD_CFLAGS_DECOMPRESSOR += -fno-delete-null-pointer-checks -msoft-float -mbackchain
+> + KBUILD_CFLAGS_DECOMPRESSOR += -fno-asynchronous-unwind-tables
+> + KBUILD_CFLAGS_DECOMPRESSOR += -ffreestanding
+> ++KBUILD_CFLAGS_DECOMPRESSOR += -fno-stack-protector
+> + KBUILD_CFLAGS_DECOMPRESSOR += $(call cc-disable-warning, address-of-packed-member)
+> + KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO),-g)
+> + KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO_DWARF4), $(call cc-option, -gdwarf-4,))
+> +diff --git a/arch/s390/purgatory/Makefile b/arch/s390/purgatory/Makefile
+> +index c57f8c40e992..21c4ebe29b9a 100644
+> +--- a/arch/s390/purgatory/Makefile
+> ++++ b/arch/s390/purgatory/Makefile
+> +@@ -24,6 +24,7 @@ KBUILD_CFLAGS := -fno-strict-aliasing -Wall -Wstrict-prototypes
+> + KBUILD_CFLAGS += -Wno-pointer-sign -Wno-sign-compare
+> + KBUILD_CFLAGS += -fno-zero-initialized-in-bss -fno-builtin -ffreestanding
+> + KBUILD_CFLAGS += -c -MD -Os -m64 -msoft-float -fno-common
+> ++KBUILD_CFLAGS += -fno-stack-protector
+> + KBUILD_CFLAGS += $(CLANG_FLAGS)
+> + KBUILD_CFLAGS += $(call cc-option,-fno-PIE)
+> + KBUILD_AFLAGS := $(filter-out -DCC_USING_EXPOLINE,$(KBUILD_AFLAGS))
+> +-- 
+> +2.30.2
+> +
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 1457228eb9..338e79d23d 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -274,6 +274,13 @@ define LINUX_TRY_PATCH_TIMECONST
+>  endef
+>  LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
+>  
+> +define LINUX_TRY_PATCH_ARCH_S390_SSP
+> +	@if patch -p1 --dry-run -f -s -d $(@D) <$(LINUX_PKGDIR)/0002-arch-s390-disable-SSP-when-needed.patch.conditional >/dev/null ; then \
+> +		$(APPLY_PATCHES) $(@D) $(LINUX_PKGDIR) 0002-arch-s390-disable-SSP-when-needed.patch.conditional ; \
+> +	fi
+> +endef
+> +LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_ARCH_S390_SSP
 
-I did another test with master branch and there are the same issues:
-https://gitlab.com/kubu93/buildroot/-/pipelines/299615886
-
-For nios2, the system doesn't boot as soon as BR2_PIC_PIE is set.
-
-I started to look at ppc e500mc if the issue is also related to BR2_PIC_PIE
-option but I need time to investigate.
+I'm not sure if we should fix this in linux.mk
+Instead put the patch to board/qemu/s390x/patches/linux/ (as for other kernel
+patches for qemu defconfig).
 
 Best regards,
 Romain
 
 
->>
->> (I was testing the new qemu 6.0.0)
->>
->> Best regards,
->> Romain
->>
->>
->>> Regards,
->>> Yann E. MORIN.
->>>
-> Best Regards,
-> 
-> Fabrice
+> +
+>  LINUX_KERNEL_CUSTOM_LOGO_PATH = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH))
+>  ifneq ($(LINUX_KERNEL_CUSTOM_LOGO_PATH),)
+>  LINUX_DEPENDENCIES += host-imagemagick
 > 
