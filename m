@@ -1,105 +1,275 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 9 May 2021 23:22:25 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] board/qemu/s390x: disable SSP when needed
-In-Reply-To: <20210509130634.1105988-1-fontaine.fabrice@gmail.com>
-References: <20210509130634.1105988-1-fontaine.fabrice@gmail.com>
-Message-ID: <2ec7e185-2e85-2096-bc61-3e72624da24a@gmail.com>
+Date: Mon, 10 May 2021 00:00:47 +0200
+Subject: [Buildroot] [RFC] utils/test-pkg: add gitlab-ci support
+In-Reply-To: <4c072a9e-b6c1-0fcc-ec8a-e170bb204c30@mind.be>
+References: <20210508164815.765195-1-romain.naour@gmail.com>
+ <4c072a9e-b6c1-0fcc-ec8a-e170bb204c30@mind.be>
+Message-ID: <570453d7-61a6-41c1-315e-36d743a7cfa5@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hi Arnout,
 
-Le 09/05/2021 ? 15:06, Fabrice Fontaine a ?crit?:
-> Fix build failure raised since commit
-> 810ba387bec3c5b6904e8893fb4cb6f9d3717466 by disabling SSP when needed
+Le 09/05/2021 ? 13:38, Arnout Vandecappelle a ?crit?:
+>  Hi Romain,
 > 
-> Fixes:
->  - https://gitlab.com/kubu93/buildroot/-/jobs/1247043361
+> On 08/05/2021 18:48, Romain Naour wrote:
+>> The gitlab-ci support in test-pkg allow to parallelize the test-pkg
+>> work into several gitlab jobs. It's much faster than local serialized
+>> testing.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>  Excellent idea! I've had something similar in my head for some time now...
+> 
+> 
+>> The new --gitlab-ci option create a commit in a new branch. This
+>> commit contains all test-pkg's generated defconfig (all skipped
+>> configuration are not commited). The commit can be pushed to any
+>> gitlab Buildroot fork where runners (free or private) are available.
+> 
+>  What I have been thinking about however is (IMHO) even more powerful. In gitlab
+> CI, you can access the last commit's message with CI_COMMIT_DESCRIPTION. You can
+> use this to embed the config fragment in the top commit message of the branch,
+> and extract it from there in generate-gitlab-ci.yml. So no call to test-pkg
+> needed, and you can include the config that was used in the patch that is sent
+> upstream for easy reproducibility.
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Good to know for CI_COMMIT_DESCRIPTION :)
+
+Indeed the call to test-pkg script is really slow since we call the Buildroot
+main Makefile for each toolchains configuration (especially if you use -a
+option). If we can avoid it... :)
+
+> 
+> So something like:
+> 
+> ----8<-----8<-----
+> package/foo: new package
+> 
+> Signed-off-by: The Best Contributor <best@contributor.org>
+> ---
+> test-pkg config:
+> BR2_PACKAGE_FOO=y
+> 
+> https://gitlab.com/contributor/buildroot/-/pipelines?ref=add-package-foo
+> ----8<-----8<-----
+> 
+> In generate-gitlab-ci-yml ou can extract the interesting part with
+> 
+> echo "$CI_COMMIT_DESCRIPTION" \
+> 	| sed -n '/^test-pkg config:$/,/^$/p' \
+> 	> test.config
+> 
+> 
+> The above is an example of a patch that is meant to go upstream, but you can
+> just as well use it for a local test:
+> 
+> ----8<-----8<-----
+> Quick test of foo and bar combination
+> 
+> test-pkg config:
+> BR2_PACKAGE_FOO=y
+> BR2_PACKAGE_BAR=y
+> ----8<-----8<-----
+
+ok
+
+> 
+>>
+>> example:
+>> ./utils/test-pkg -c defconfig -p nano -g
+>>
+>> The current generate-gitlab-ci-yml script is updated to detect any
+>> branches using a suffix "*-test-pkg" to generate a gitlab-ci pipeline
+>> using the newly introcuded .test_pkg job template.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> ---
+>>  support/misc/gitlab-ci.yml.in          | 25 +++++++++++
+>>  support/scripts/generate-gitlab-ci-yml | 14 +++++-
+>>  utils/test-pkg                         | 59 ++++++++++++++++++++++++--
+>>  3 files changed, 92 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+>> index fcfff5c6aa..7dc93f5f72 100644
+>> --- a/support/misc/gitlab-ci.yml.in
+>> +++ b/support/misc/gitlab-ci.yml.in
+>> @@ -76,3 +76,28 @@
+>>              - test-output/*/.config
+>>              - test-output/*/images/*
+>>  
+>> +.test_pkg:
+>> +    before_script:
+>> +        - TOOLCHAIN_NAME=${CI_JOB_NAME}
+>> +    script:
+>> +        - echo "Configure Buildroot for ${TOOLCHAIN_NAME}"
+>> +        - make O=br-test-pkg/${TOOLCHAIN_NAME} defconfig BR2_DEFCONFIG=br-test-pkg/${TOOLCHAIN_NAME}/defconfig
+> 
+>  With my proposal, you wouldn't have this because br-test-pkg has already
+> created a partial .config file. Instead, you'd do a `make olddefconfig' here,
+> followed by 'make savedefconfig'.
+
+How the br-test-pkg directory created from the job using generate-gitlab-ci-yml
+is provided to the child-pipeline's jobs ?
+
+I guess we have to add generated .config files to artifacts.
+
+Also, we have to skip .config file from invalid configuration (where the
+requested fragment is missing).
+Something similar to the first part of build_one() of test-pkg script.
+
+> 
+>> +        - make O=br-test-pkg/${TOOLCHAIN_NAME}
+>> +        - echo 'Build buildroot'
+>> +        - |
+>> +            make O=br-test-pkg/${TOOLCHAIN_NAME} > >(tee build.log |grep '>>>') 2>&1 || {
+>> +                echo 'Failed build last output'
+>> +                tail -200 build.log
+>> +                exit 1
+>> +            }
+>> +    artifacts:
+>> +        when: always
+>> +        expire_in: 2 weeks
+>> +        paths:
+>> +            - build.log
+>> +            - br-test-pkg/*/.config
+>> +            - br-test-pkg/*/defconfig
+>> +            - br-test-pkg/*/images/
+>> +            - br-test-pkg/*/build/build-time.log
+>> +            - br-test-pkg/*/build/packages-file-list.txt
+>> +            - br-test-pkg/*/build/*/.config
+> 
+>  I don't think we're interesting in the images or the kernel config in this
+> case. Both of them are likely non-existent anyway.
+
+Ok
+
+> 
+>  It could be useful, on the other hand, to capture config.log like we do in the
+> autobuilders. However, for that you'll need to put the scriptlet that gathers
+> them in an after-script. But something like that can be added later.
+
+Ok
+
+> 
+>> diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+>> index 3f498e08fd..9881431551 100755
+>> --- a/support/scripts/generate-gitlab-ci-yml
+>> +++ b/support/scripts/generate-gitlab-ci-yml
+>> @@ -22,8 +22,8 @@ _EOF_
+>>  }
+>>  
+>>  gen_tests() {
+>> -    local -a basics defconfigs runtimes
+>> -    local do_basics do_defconfigs do_runtime
+>> +    local -a basics defconfigs runtimes toolchains
+>> +    local do_basics do_defconfigs do_runtime do_testpkg
+>>      local defconfigs_ext cfg tst
+>>  
+>>      basics=( DEVELOPERS flake8 package )
+>> @@ -74,12 +74,16 @@ gen_tests() {
+>>              runtimes=( "${CI_COMMIT_REF_NAME##*-}" )
+>>              do_runtime=true
+>>              ;;
+>> +          (*-test-pkg)
+>> +            toolchains=( $(cd br-test-pkg; LC_ALL=C ls -1) )
+>> +            do_testpkg=yes
+> 
+>  With my proposal instead of relying on the toolchains here, you'd just generate
+> the br-test-pkg directory if the config fragment generated with the sed command
+> above is non-empty.
+
+The toolchains list contain all the toolchain where the package under testing
+can be selected.
+
+> 
+>>          esac
+>>      fi
+>>  
+>>      # If nothing else, at least do the basics to generate a valid pipeline
+>>      if [    -z "${do_defconfigs}" \
+>>           -a -z "${do_runtime}" \
+>> +         -a -z "${do_testpkg}" \
+>>         ]
+>>      then
+>>          do_basics=true
+>> @@ -101,6 +105,12 @@ gen_tests() {
+>>      if ${do_runtime:-false}; then
+>>          printf '%s: { extends: .runtime_test_base }\n' "${runtimes[@]}"
+>>      fi
+>> +
+>> +    if [ -n "${do_testpkg}" ]; then
+>> +        for cfg in "${toolchains[@]}"; do
+>> +            printf '%s: { extends: .test_pkg }\n' "${cfg}"
+> 
+>  Instead of calling the job simply by the toolchain, I would include the
+> `br-test-pkg` part in it. So the job would be e.g. `br-test-pkg/linaro-arm'.
+> Almost all instances of TOOLCHAIN_NAME anyway have br-test-pkg/ in front of it,
+> and that way you avoid any possible confusion with a defconfig test or a runtime
+> test.
+
+Ok
+
+> 
+>> +        done
+>> +    fi
+>>  }
+>>  
+>>  main "${@}"
+>> diff --git a/utils/test-pkg b/utils/test-pkg
+>> index a317d8c17a..ff502ec538 100755
+>> --- a/utils/test-pkg
+>> +++ b/utils/test-pkg
+>> @@ -3,22 +3,25 @@ set -e
+>>  
+>>  TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
+>>  TEMP_CONF=""
+>> +GIT_BUILD_BRANCH="$(date +%Y-%m-%d--%H-%M-%S)-test-pkg"
+>> +GIT_CURRENT_BRANCH=$(git symbolic-ref -q --short HEAD)
+>>  
+>>  do_clean() {
+>>      if [ ! -z "${TEMP_CONF}" ]; then
+>>          rm -f "${TEMP_CONF}"
+>>      fi
+>> +    git checkout $GIT_CURRENT_BRANCH >/dev/null 2>&1
+>>  }
+>>  
+>>  main() {
+>>      local o O opts
+>> -    local cfg dir pkg random toolchains_csv toolchain all number mode
+>> +    local cfg dir pkg random toolchains_csv toolchain all number mode gitlab_ci
+>>      local ret nb nb_skip nb_fail nb_legal nb_tc build_dir keep
+>>      local -a toolchains
+>>      local pkg_br_name
+>>  
+>> -    o='hakc:d:n:p:r:t:'
+>> -    O='help,all,keep,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
+>> +    o='hakgc:d:n:p:r:t:'
+>> +    O='help,all,keep,gitlab-ci,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
+> 
+>  With my proposal, we wouldn't add a gitlab-ci option, but only an option to
+> stop after generating the .config files. This option would obviously imply
+> --keep as well.
+
+Actually if we can avoid generating files on the user's host it can be great :)
+Maybe call test-pkg from generate-gitlab-ci.yml script?
+
+> 
+>  With my proposal, the rest of the changes to this script are no longer
+> relevant, so I haven't reviewed them.
+
+Thanks for the review!
 
 Best regards,
 Romain
 
 
-> ---
-> Changes v1 -> v2 (after review of Romain Naour):
->  - Move patch from linux to board/qemu/s390x
 > 
->  ...01-arch-s390-disable-SSP-when-needed.patch | 47 +++++++++++++++++++
->  configs/qemu_s390x_defconfig                  |  1 +
->  2 files changed, 48 insertions(+)
->  create mode 100644 board/qemu/s390x/patches/linux/0001-arch-s390-disable-SSP-when-needed.patch
+>  Regards,
+>  Arnout
 > 
-> diff --git a/board/qemu/s390x/patches/linux/0001-arch-s390-disable-SSP-when-needed.patch b/board/qemu/s390x/patches/linux/0001-arch-s390-disable-SSP-when-needed.patch
-> new file mode 100644
-> index 0000000000..c8199d4fd6
-> --- /dev/null
-> +++ b/board/qemu/s390x/patches/linux/0001-arch-s390-disable-SSP-when-needed.patch
-> @@ -0,0 +1,47 @@
-> +From 8a054081678ed0b0e56f829bac0a4656e3a198b9 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sat, 8 May 2021 22:03:11 +0200
-> +Subject: [PATCH] arch/s390: disable SSP when needed
-> +
-> +Though -nostdlib is passed in PURGATORY_LDFLAGS and -ffreestanding in
-> +KBUILD_CFLAGS_DECOMPRESSOR, -fno-stack-protector must also be passed to
-> +avoid linking errors related to undefined references to
-> +'__stack_chk_guard' and '__stack_chk_fail' if toolchain enforces
-> +-fstack-protector.
-> +
-> +Fixes:
-> + - https://gitlab.com/kubu93/buildroot/-/jobs/1247043361
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + arch/s390/Makefile           | 1 +
-> + arch/s390/purgatory/Makefile | 1 +
-> + 2 files changed, 2 insertions(+)
-> +
-> +diff --git a/arch/s390/Makefile b/arch/s390/Makefile
-> +index e443ed9947bd..098abe3a56f3 100644
-> +--- a/arch/s390/Makefile
-> ++++ b/arch/s390/Makefile
-> +@@ -28,6 +28,7 @@ KBUILD_CFLAGS_DECOMPRESSOR += -DDISABLE_BRANCH_PROFILING -D__NO_FORTIFY
-> + KBUILD_CFLAGS_DECOMPRESSOR += -fno-delete-null-pointer-checks -msoft-float -mbackchain
-> + KBUILD_CFLAGS_DECOMPRESSOR += -fno-asynchronous-unwind-tables
-> + KBUILD_CFLAGS_DECOMPRESSOR += -ffreestanding
-> ++KBUILD_CFLAGS_DECOMPRESSOR += -fno-stack-protector
-> + KBUILD_CFLAGS_DECOMPRESSOR += $(call cc-disable-warning, address-of-packed-member)
-> + KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO),-g)
-> + KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO_DWARF4), $(call cc-option, -gdwarf-4,))
-> +diff --git a/arch/s390/purgatory/Makefile b/arch/s390/purgatory/Makefile
-> +index c57f8c40e992..21c4ebe29b9a 100644
-> +--- a/arch/s390/purgatory/Makefile
-> ++++ b/arch/s390/purgatory/Makefile
-> +@@ -24,6 +24,7 @@ KBUILD_CFLAGS := -fno-strict-aliasing -Wall -Wstrict-prototypes
-> + KBUILD_CFLAGS += -Wno-pointer-sign -Wno-sign-compare
-> + KBUILD_CFLAGS += -fno-zero-initialized-in-bss -fno-builtin -ffreestanding
-> + KBUILD_CFLAGS += -c -MD -Os -m64 -msoft-float -fno-common
-> ++KBUILD_CFLAGS += -fno-stack-protector
-> + KBUILD_CFLAGS += $(CLANG_FLAGS)
-> + KBUILD_CFLAGS += $(call cc-option,-fno-PIE)
-> + KBUILD_AFLAGS := $(filter-out -DCC_USING_EXPOLINE,$(KBUILD_AFLAGS))
-> +-- 
-> +2.30.2
-> +
-> diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
-> index 9b3821f043..4aed9d9ae5 100644
-> --- a/configs/qemu_s390x_defconfig
-> +++ b/configs/qemu_s390x_defconfig
-> @@ -20,6 +20,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.7"
->  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
->  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +BR2_GLOBAL_PATCH_DIR="board/qemu/s390x/patches"
->  
->  # host-qemu for gitlab testing
->  BR2_PACKAGE_HOST_QEMU=y
+> 
+> [snip]
 > 
