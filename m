@@ -1,45 +1,50 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Mon, 10 May 2021 11:27:25 +0200
-Subject: [Buildroot] [PATCH 1/2] package/lvm2: use http instead of ftp
-In-Reply-To: <20210510092726.1479608-1-m.niestroj@grinn-global.com>
-References: <20210510092726.1479608-1-m.niestroj@grinn-global.com>
-Message-ID: <20210510092726.1479608-2-m.niestroj@grinn-global.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 10 May 2021 11:23:37 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/haproxy: bump to
+ version 2.2.14
+Message-ID: <20210510085930.D74A986D85@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ftp links do not seem to be accessible anymore. Replace them with http.
+commit: https://git.buildroot.net/buildroot/commit/?id=3f164d1273a65cab6b0c7473754b028f888f0bb6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+http://www.haproxy.org/download/2.2/src/CHANGELOG
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5fe4fcdb6439775661e2ff3af66b0b7a43d3c5fb)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 3d560c4be3..9a581527e0 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,4 +1,4 @@
--# From ftp://sources.redhat.com/pub/lvm2/sha512.sum
-+# From http://sources.redhat.com/pub/lvm2/sha512.sum
- sha512 f421505551aec2a09bc862f2fcc1ee825bc4d94c53a01d13265631e99308d60fbca40112be5bc7824cce3ef223c0775d2f6c345f6a3f227229a0566c903841bf  LVM2.2.02.185.tgz
- # Locally computed sha256 checksums
- sha256 e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 76f800a15b..653e72c72f 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index bea7c4bb2a..66a6f40bda 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.13.tar.gz.sha256
+-sha256  9e3e51441c70bedfb494fc9d4b4d3389a71be9a3c915ba3d6f7e8fd9a57ce160  haproxy-2.2.13.tar.gz
++# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.14.tar.gz.sha256
++sha256  6a9b702f04b07786f3e5878de8172a727acfdfdbc1cefe1c7a438df372f2fb61  haproxy-2.2.14.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 8502ab8a11..6254819a9b 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- LVM2_VERSION = 2.02.185
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
--LVM2_SITE = ftp://sources.redhat.com/pub/lvm2
-+LVM2_SITE = http://sources.redhat.com/pub/lvm2
- LVM2_INSTALL_STAGING = YES
- LVM2_LICENSE = GPL-2.0, LGPL-2.1
- LVM2_LICENSE_FILES = COPYING COPYING.LIB
--- 
-2.31.1
+ HAPROXY_VERSION_MAJOR = 2.2
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).13
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).14
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
