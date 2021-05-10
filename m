@@ -1,50 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 May 2021 11:23:37 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/haproxy: bump to
- version 2.2.14
-Message-ID: <20210510085930.D74A986D85@busybox.osuosl.org>
+Date: Mon, 10 May 2021 11:25:19 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/cryptsetup:
+ disable tmpfiles.d for host build
+Message-ID: <20210510085930.ECAB786D86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f164d1273a65cab6b0c7473754b028f888f0bb6
+commit: https://git.buildroot.net/buildroot/commit/?id=2ca165f46b4621d299ee73f778ab1749872ad1f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-http://www.haproxy.org/download/2.2/src/CHANGELOG
+When building host-cryptsetup, if tmpfiles.d support is enabled then the
+install step tries to install /usr/lib/tmpfiles.d/cryptsetup.conf
+globally on the host system.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Even if the tmpfiles.d config were installed correctly in the host
+directory, nothing would ever run these rules, so disable this feature
+via configure.
+
+Signed-off-by: John Keeping <john@metanate.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5fe4fcdb6439775661e2ff3af66b0b7a43d3c5fb)
+(cherry picked from commit b2e82f9fa5fc7ab60ad2965edb404362b37673dd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cryptsetup/cryptsetup.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index bea7c4bb2a..66a6f40bda 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.13.tar.gz.sha256
--sha256  9e3e51441c70bedfb494fc9d4b4d3389a71be9a3c915ba3d6f7e8fd9a57ce160  haproxy-2.2.13.tar.gz
-+# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.14.tar.gz.sha256
-+sha256  6a9b702f04b07786f3e5878de8172a727acfdfdbc1cefe1c7a438df372f2fb61  haproxy-2.2.14.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 8502ab8a11..6254819a9b 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 719885b59c..cd5883d0b4 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -43,7 +43,8 @@ HOST_CRYPTSETUP_DEPENDENCIES = \
  
- HAPROXY_VERSION_MAJOR = 2.2
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).13
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).14
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+ HOST_CRYPTSETUP_CONF_OPTS = --with-crypto_backend=openssl \
+ 	--disable-kernel_crypto \
+-	--enable-blkid
++	--enable-blkid \
++	--with-tmpfilesdir=no
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
