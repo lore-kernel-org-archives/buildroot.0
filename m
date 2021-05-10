@@ -1,27 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 May 2021 11:28:26 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.19.x / 5.{4,
- 10, 11, 12}.x series
-In-Reply-To: <20210508210702.24898-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 8 May 2021 23:07:02 +0200")
-References: <20210508210702.24898-1-peter@korsgaard.com>
-Message-ID: <87sg2vrl8l.fsf@dell.be.48ers.dk>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Mon, 10 May 2021 11:28:52 +0200
+Subject: [Buildroot] [PATCH] package/dt-utils: bump version to 2021.03.0
+Message-ID: <20210510092853.1481441-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+ package/dt-utils/dt-utils.hash | 2 +-
+ package/dt-utils/dt-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > ---
- >  linux/Config.in                      |  2 +-
- >  linux/linux.hash                     | 10 +++++-----
- >  package/linux-headers/Config.in.host | 10 +++++-----
- >  3 files changed, 11 insertions(+), 11 deletions(-)
-
-Committed to 2021.02.x (except for the 5.11.x/5.12.x bumps), thanks.
-
+diff --git a/package/dt-utils/dt-utils.hash b/package/dt-utils/dt-utils.hash
+index e42e82578d..74819158bb 100644
+--- a/package/dt-utils/dt-utils.hash
++++ b/package/dt-utils/dt-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  737313719d7c04d7b9576fdc572d838c81ea22ea41a44c7646467018e67a0b97  dt-utils-v2019.01.0-br1.tar.gz
++sha256  8b29d3a8799170afdb1b077e655528bf4e6afe0c789107b1eec8fff9d4482771  dt-utils-v2021.03.0-br1.tar.gz
+ sha256  a45932c79317d15116eadbf1c9c6fc59117ec3c4621db3a876066defa723963b  COPYING
+diff --git a/package/dt-utils/dt-utils.mk b/package/dt-utils/dt-utils.mk
+index 25c287d434..bc7fd90631 100644
+--- a/package/dt-utils/dt-utils.mk
++++ b/package/dt-utils/dt-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DT_UTILS_VERSION = v2019.01.0
++DT_UTILS_VERSION = v2021.03.0
+ DT_UTILS_SITE = https://git.pengutronix.de/git/tools/dt-utils
+ DT_UTILS_SITE_METHOD = git
+ DT_UTILS_LICENSE = GPL-2.0
 -- 
-Bye, Peter Korsgaard
+2.31.1
