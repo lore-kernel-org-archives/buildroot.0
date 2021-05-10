@@ -1,85 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 May 2021 09:45:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gdb: fix gdbserver build with
- m68k and uclibc
-In-Reply-To: <20210506055924.1846541-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 6 May 2021 07:59:24 +0200")
-References: <20210506055924.1846541-1-fontaine.fabrice@gmail.com>
-Message-ID: <87eeeft4kk.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Mon, 10 May 2021 10:18:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/boost: fix broken BOOST_SITE URL
+Message-ID: <20210510081832.32157-1-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Current URL returns 403 error:
 
- > Allow to build gdbserver with m68k and uclibc. This patch is not needed
- > for version above 9.2 because build_gdbserver as been
- > moved to its own file since
- > https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=919adfe8409211c726c1d05b47ca59890ee648f1
+--2021-05-10 10:04:12--  https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2
+Resolving dl.bintray.com... 18.193.131.58, 3.66.199.110
+Connecting to dl.bintray.com|18.193.131.58|:443... connected.
+HTTP request sent, awaiting response... 403 Forbidden
+2021-05-10 10:04:12 ERROR 403: Forbidden.
 
- > This new file (gdbserver/configure.srv) does not seem to be affected by
- > this issue
+Update the URL to fix this issue.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/f4d6d9d8418c0da48a3db4ad5a82e19bd16eae34
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+---
+ package/boost/boost.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- >  ...t-build-gdbserver-with-m68k-and-ucli.patch | 34 +++++++++++++++++++
- >  1 file changed, 34 insertions(+)
- >  create mode 100644 package/gdb/9.2/0007-gdb-configure.tgt-build-gdbserver-with-m68k-and-ucli.patch
-
- > diff --git
- > a/package/gdb/9.2/0007-gdb-configure.tgt-build-gdbserver-with-m68k-and-ucli.patch
- > b/package/gdb/9.2/0007-gdb-configure.tgt-build-gdbserver-with-m68k-and-ucli.patch
- > new file mode 100644
- > index 0000000000..1ac71ac2cf
- > --- /dev/null
- > +++ b/package/gdb/9.2/0007-gdb-configure.tgt-build-gdbserver-with-m68k-and-ucli.patch
- > @@ -0,0 +1,34 @@
- > +From 113bd123514265b867f50a956398a85f1d75215e Mon Sep 17 00:00:00 2001
- > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > +Date: Thu, 6 May 2021 07:45:00 +0200
- > +Subject: [PATCH] gdb/configure.tgt: build gdbserver with m68k and
- > + uclibc
- > +
- > +Allow to build gdbserver with m68k and uclibc:
- > +
- > +checking whether gdbserver is supported on this host... no
- > +configure: error: Automatic gdbserver build is not supported for this configuration
- > +
- > +Fixes:
- > + - http://autobuild.buildroot.org/results/f4d6d9d8418c0da48a3db4ad5a82e19bd16eae34
- > +
- > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > +---
- > + gdb/configure.tgt | 1 +
- > + 1 file changed, 1 insertion(+)
- > +
- > +diff --git a/gdb/configure.tgt b/gdb/configure.tgt
- > +index caa42be1c01..56d205fe24b 100644
- > +--- a/gdb/configure.tgt
- > ++++ b/gdb/configure.tgt
- > +@@ -376,6 +376,7 @@ m68*-*-aout* | m68*-*-coff* | m68*-*-elf* | m68*-*-rtems* | m68*-*-uclinux* | \
- > + fido-*-elf*)
- > + 	# Target: Motorola m68k embedded
- > + 	gdb_target_obs="m68k-tdep.o"
- > ++	build_gdbserver=yes
- > + 	;;
- > + m68*-*-linux*)
- > + 	# Target: Motorola m68k with a.out and ELF
-
-Hmm, shouldn't we handle m68*-*-uclinux* like m68*-*-linux* instead, so
-it also includes the extra object files?
-
-	# Target: Motorola m68k with a.out and ELF
-	gdb_target_obs="m68k-tdep.o m68k-linux-tdep.o solib-svr4.o \
-			linux-tdep.o glibc-tdep.o symfile-mem.o"
-
-E.G drop it from the embedded variant and add an asterisk before linux
-in the second?
-
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index b8f90bb836..8d745ecc72 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -6,7 +6,7 @@
+ 
+ BOOST_VERSION = 1.75.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+-BOOST_SITE = https://dl.bintray.com/boostorg/release/$(BOOST_VERSION)/source
++BOOST_SITE = https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source
+ BOOST_INSTALL_STAGING = YES
+ BOOST_LICENSE = BSL-1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
 -- 
-Bye, Peter Korsgaard
+2.26.3
