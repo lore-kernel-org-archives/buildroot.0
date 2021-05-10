@@ -1,45 +1,39 @@
-From: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Date: Mon, 10 May 2021 16:18:34 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/acmesystems_acqua_a5_{256,
- 512}mb: add openssl host dependency
-Message-ID: <4cc9d7e5-a1c8-de1d-7a36-ac33920805cb@grenoble.cnrs.fr>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Mon, 10 May 2021 11:00:44 -0700
+Subject: [Buildroot] [PATCH v3 0/4] Updates for ARC, LMBench
+Message-ID: <20210510180049.61421-1-vgupta@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
----
- configs/acmesystems_acqua_a5_256mb_defconfig | 1 +
- configs/acmesystems_acqua_a5_512mb_defconfig | 1 +
- 2 files changed, 2 insertions(+)
+Hi,
 
-Thanks to Baruch Siach for the tip.
+There'a cosmetic fix for ARC to show the -mcpu in config.
+And there's a bunch of histtoric patches in out github repo to get
+LMBench running.
 
-diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
-index 37c7dcd83f..810c3c9782 100644
---- a/configs/acmesystems_acqua_a5_256mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_256mb_defconfig
-@@ -12,6 +12,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.107"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/acmesystems/acqua-a5/at91-sama5d3_acqua.dts"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
-index 1809575727..11a7e795e0 100644
---- a/configs/acmesystems_acqua_a5_512mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_512mb_defconfig
-@@ -12,6 +12,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.107"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/acmesystems/acqua-a5/at91-sama5d3_acqua.dts"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
+Changes since v2
+ - Added another LMBench fix (to lat_rpc)
+ - Added -mcpu for all ARC CPUs as suggested by Peter
+
+Thx,
+-Vineet
+
+Vineet Gupta (4):
+  ARC: config: explicit'ify -mcpu for cpu selection
+  lmbench: memsize: increase delay for slow FPGAs
+  lmbench: emulate --prefix to avoid scattering binaries all over
+  lmbench: lat_rpc: fix stray pointer
+
+ arch/Config.in.arc                            | 14 +++++-----
+ ...c-to-prevent-memsize-from-timingout-.patch | 28 +++++++++++++++++++
+ ...bage-pointer-for-lat_rpc-S-localhost.patch | 25 +++++++++++++++++
+ package/lmbench/lmbench.mk                    |  9 +++++-
+ 4 files changed, 68 insertions(+), 8 deletions(-)
+ create mode 100644 package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch
+ create mode 100644 package/lmbench/0004-Fix-garbage-pointer-for-lat_rpc-S-localhost.patch
+
 -- 
 2.25.1
