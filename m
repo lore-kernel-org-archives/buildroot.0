@@ -1,46 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 May 2021 22:05:19 +0200
-Subject: [Buildroot] [git commit] package/kodi-pvr-iptvsimple: bump version
- to 7.6.2-Matrix
-Message-ID: <20210510194729.D3FC683643@busybox.osuosl.org>
+Date: Mon, 10 May 2021 22:08:15 +0200
+Subject: [Buildroot] [git commit] support/testing: add sudo package test
+Message-ID: <20210510194729.EC26786EB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef2d521c84da9f9af22c626af227a81bd61186c9
+commit: https://git.buildroot.net/buildroot/commit/?id=74bae64dc5955bc9d14e8c6ac8c6b189e82ccc47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/kodi-pvr/pvr.iptvsimple/blob/Matrix/pvr.iptvsimple/changelog.txt
+Create a new user 'sudotest' to validate that sudo really works (i.e.
+properly has setuid).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Creating the user and adding it to sudoers is done at runtime, otherwise
+we'd need to add extra files to the config which complicates things a
+little bit.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/testing/tests/package/test_sudo.py | 36 ++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-index 767f77cca8..33ffc6431a 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  0bffd09eba7cf758a818607562b4dec53f4a20acb7a8b43dd0a1499e92cb3057  kodi-pvr-iptvsimple-7.6.1-Matrix.tar.gz
-+sha256  59347c41dfd0dfa45f3d85deed0430346ef2898eb7276d5793244b877519f385  kodi-pvr-iptvsimple-7.6.2-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-index cf8d755766..3a40dac951 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_IPTVSIMPLE_VERSION = 7.6.1-Matrix
-+KODI_PVR_IPTVSIMPLE_VERSION = 7.6.2-Matrix
- KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
- KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
- KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
+diff --git a/support/testing/tests/package/test_sudo.py b/support/testing/tests/package/test_sudo.py
+new file mode 100644
+index 0000000000..f9d0a6f301
+--- /dev/null
++++ b/support/testing/tests/package/test_sudo.py
+@@ -0,0 +1,36 @@
++import os
++
++import infra.basetest
++
++
++class TestSudo(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_SUDO=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", img])
++        self.emulator.login()
++
++        # -D    don't set a password
++        # -h    set home directory
++        # -H    don't create home directory
++        # -s    set shell
++        _, exit_code = self.emulator.run("adduser -D -h /tmp -H -s /bin/sh sudotest")
++        self.assertEqual(exit_code, 0)
++
++        _, exit_code = self.emulator.run("echo 'sudotest ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers")
++        self.assertEqual(exit_code, 0)
++
++        output, exit_code = self.emulator.run("su - sudotest -c 'echo hello world'")
++        self.assertEqual(output, ["hello world"])
++
++        output, exit_code = self.emulator.run("su - sudotest -c 'sudo echo hello world'")
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output, ["hello world"])
