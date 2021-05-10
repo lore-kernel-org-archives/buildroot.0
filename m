@@ -1,38 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 May 2021 09:17:42 +0200
-Subject: [Buildroot] [PATCH v2 1/3] ARC: config: explicit'ify -mcpu for
- cpu selection
-In-Reply-To: <20210507004344.3166099-2-vgupta@synopsys.com> (Vineet Gupta via
- buildroot's message of "Thu, 6 May 2021 17:43:42 -0700")
-References: <20210507004344.3166099-1-vgupta@synopsys.com>
- <20210507004344.3166099-2-vgupta@synopsys.com>
-Message-ID: <87im3rt5ux.fsf@dell.be.48ers.dk>
+Date: Mon, 10 May 2021 09:45:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdb: fix gdbserver build with
+ m68k and uclibc
+In-Reply-To: <20210506055924.1846541-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 6 May 2021 07:59:24 +0200")
+References: <20210506055924.1846541-1-fontaine.fabrice@gmail.com>
+Message-ID: <87eeeft4kk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vineet" == Vineet Gupta via buildroot <buildroot@busybox.net> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+ > Allow to build gdbserver with m68k and uclibc. This patch is not needed
+ > for version above 9.2 because build_gdbserver as been
+ > moved to its own file since
+ > https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=919adfe8409211c726c1d05b47ca59890ee648f1
+
+ > This new file (gdbserver/configure.srv) does not seem to be affected by
+ > this issue
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/f4d6d9d8418c0da48a3db4ad5a82e19bd16eae34
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  > ---
- >  arch/Config.in.arc | 8 ++++----
- >  1 file changed, 4 insertions(+), 4 deletions(-)
+ >  ...t-build-gdbserver-with-m68k-and-ucli.patch | 34 +++++++++++++++++++
+ >  1 file changed, 34 insertions(+)
+ >  create mode 100644 package/gdb/9.2/0007-gdb-configure.tgt-build-gdbserver-with-m68k-and-ucli.patch
 
- > diff --git a/arch/Config.in.arc b/arch/Config.in.arc
- > index f7a6d920b50d..f84dfab38ae9 100644
- > --- a/arch/Config.in.arc
- > +++ b/arch/Config.in.arc
- > @@ -12,14 +12,14 @@ config BR2_arc770d
- >  	bool "ARC 770D"
- 
- >  config BR2_archs38
- > -	bool "ARC HS38"
- > +	bool "ARC HS38 (-mcpu=archs)"
+ > diff --git
+ > a/package/gdb/9.2/0007-gdb-configure.tgt-build-gdbserver-with-m68k-and-ucli.patch
+ > b/package/gdb/9.2/0007-gdb-configure.tgt-build-gdbserver-with-m68k-and-ucli.patch
+ > new file mode 100644
+ > index 0000000000..1ac71ac2cf
+ > --- /dev/null
+ > +++ b/package/gdb/9.2/0007-gdb-configure.tgt-build-gdbserver-with-m68k-and-ucli.patch
+ > @@ -0,0 +1,34 @@
+ > +From 113bd123514265b867f50a956398a85f1d75215e Mon Sep 17 00:00:00 2001
+ > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > +Date: Thu, 6 May 2021 07:45:00 +0200
+ > +Subject: [PATCH] gdb/configure.tgt: build gdbserver with m68k and
+ > + uclibc
+ > +
+ > +Allow to build gdbserver with m68k and uclibc:
+ > +
+ > +checking whether gdbserver is supported on this host... no
+ > +configure: error: Automatic gdbserver build is not supported for this configuration
+ > +
+ > +Fixes:
+ > + - http://autobuild.buildroot.org/results/f4d6d9d8418c0da48a3db4ad5a82e19bd16eae34
+ > +
+ > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > +---
+ > + gdb/configure.tgt | 1 +
+ > + 1 file changed, 1 insertion(+)
+ > +
+ > +diff --git a/gdb/configure.tgt b/gdb/configure.tgt
+ > +index caa42be1c01..56d205fe24b 100644
+ > +--- a/gdb/configure.tgt
+ > ++++ b/gdb/configure.tgt
+ > +@@ -376,6 +376,7 @@ m68*-*-aout* | m68*-*-coff* | m68*-*-elf* | m68*-*-rtems* | m68*-*-uclinux* | \
+ > + fido-*-elf*)
+ > + 	# Target: Motorola m68k embedded
+ > + 	gdb_target_obs="m68k-tdep.o"
+ > ++	build_gdbserver=yes
+ > + 	;;
+ > + m68*-*-linux*)
+ > + 	# Target: Motorola m68k with a.out and ELF
 
-I guess this could be handy for some users, but why are you not doing it
-for all variants?
+Hmm, shouldn't we handle m68*-*-uclinux* like m68*-*-linux* instead, so
+it also includes the extra object files?
+
+	# Target: Motorola m68k with a.out and ELF
+	gdb_target_obs="m68k-tdep.o m68k-linux-tdep.o solib-svr4.o \
+			linux-tdep.o glibc-tdep.o symfile-mem.o"
+
+E.G drop it from the embedded variant and add an asterisk before linux
+in the second?
 
 -- 
 Bye, Peter Korsgaard
