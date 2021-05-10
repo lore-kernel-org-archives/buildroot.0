@@ -1,72 +1,101 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 May 2021 09:03:12 +0200
-Subject: [Buildroot] [git commit] package/putty: fix build on uclibc
-Message-ID: <20210510063808.1E06B84355@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 10 May 2021 09:11:37 +0200
+Subject: [Buildroot] [RFC] utils/test-pkg: add gitlab-ci support
+In-Reply-To: <570453d7-61a6-41c1-315e-36d743a7cfa5@gmail.com>
+References: <20210508164815.765195-1-romain.naour@gmail.com>
+ <4c072a9e-b6c1-0fcc-ec8a-e170bb204c30@mind.be>
+ <570453d7-61a6-41c1-315e-36d743a7cfa5@gmail.com>
+Message-ID: <69ac9d6f-aaca-2e6a-0fde-602080a3a80b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aea9376acce527f3d897339290935e75b2ab5bcc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix build failure on uclibc raised since bump to version 0.75 in commit
-d562009f7b9701cb20bc4b1d389d19f9a647cc3b
 
-Fixes:
- - http://autobuild.buildroot.org/results/726f7c5ce13e78ed91e827b872e9d7ccfa13f298
+On 10/05/2021 00:00, Romain Naour wrote:
+> Hi Arnout,
+> 
+> Le 09/05/2021 ? 13:38, Arnout Vandecappelle a ?crit?:
+>>  Hi Romain,
+>>
+>> On 08/05/2021 18:48, Romain Naour wrote:
+[snip]
+>>> +.test_pkg:
+>>> +    before_script:
+>>> +        - TOOLCHAIN_NAME=${CI_JOB_NAME}
+>>> +    script:
+>>> +        - echo "Configure Buildroot for ${TOOLCHAIN_NAME}"
+>>> +        - make O=br-test-pkg/${TOOLCHAIN_NAME} defconfig BR2_DEFCONFIG=br-test-pkg/${TOOLCHAIN_NAME}/defconfig
+>>
+>>  With my proposal, you wouldn't have this because br-test-pkg has already
+>> created a partial .config file. Instead, you'd do a `make olddefconfig' here,
+>> followed by 'make savedefconfig'.
+> 
+> How the br-test-pkg directory created from the job using generate-gitlab-ci-yml
+> is provided to the child-pipeline's jobs ?
+> 
+> I guess we have to add generated .config files to artifacts.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-unix-uxutils.h-fix-build-on-uclibc.patch  | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ Indeed. Just make the entire br-test-pkg an artifact of the generate stage.
 
-diff --git a/package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch b/package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch
-new file mode 100644
-index 0000000000..78cef8b908
---- /dev/null
-+++ b/package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch
-@@ -0,0 +1,41 @@
-+From 3f30f3a7e3f07f5ca3cef0f405b02e22a018c6e4 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 9 May 2021 15:22:29 +0200
-+Subject: [PATCH] unix/uxutils.h: fix build on uclibc
-+
-+Build on uclibc is broken since version 0.75 and commit
-+65383082bf0c49cec63f4b36001a40bd9b13edf6 because AT_HWCAP2 is used
-+even if <sys/auxv.h> is not available:
-+
-+unix/uxutils.c: In function 'platform_aes_hw_available':
-+unix/uxutils.c:13:22: error: 'AT_HWCAP2' undeclared (first use in this function)
-+   13 |     return getauxval(AT_HWCAP2) & HWCAP2_AES;
-+      |                      ^~~~~~~~~
-+
-+To fix this build failure, include <elf.h>
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/726f7c5ce13e78ed91e827b872e9d7ccfa13f298
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to Simon Tatham <anakin@pobox.com>]
-+---
-+ unix/uxutils.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/unix/uxutils.h b/unix/uxutils.h
-+index c9acff53..b80bf972 100644
-+--- a/unix/uxutils.h
-++++ b/unix/uxutils.h
-+@@ -18,6 +18,8 @@
-+ 
-+ #if defined __arm__ || defined __aarch64__
-+ 
-++#include <elf.h>
-++
-+ #ifdef HAVE_SYS_TYPES_H
-+ #include <sys/types.h>
-+ #endif
-+-- 
-+2.30.2
-+
+
+> Also, we have to skip .config file from invalid configuration (where the
+> requested fragment is missing).
+> Something similar to the first part of build_one() of test-pkg script.
+
+ Argh, I didn't think of that! You can actually do this from the 'make'
+invocation in gitlab-ci.yml, by doing an 'exit 0' in cast the toolchain
+defconfig isn't found. But that's actually fairly complicated :-( Also, it makes
+it more difficult to see which toolchains were skipped.
+
+[snip]
+>>> -    o='hakc:d:n:p:r:t:'
+>>> -    O='help,all,keep,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
+>>> +    o='hakgc:d:n:p:r:t:'
+>>> +    O='help,all,keep,gitlab-ci,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
+>>
+>>  With my proposal, we wouldn't add a gitlab-ci option, but only an option to
+>> stop after generating the .config files. This option would obviously imply
+>> --keep as well.
+> 
+> Actually if we can avoid generating files on the user's host it can be great :)
+> Maybe call test-pkg from generate-gitlab-ci.yml script?
+
+ Yeah, that might be a solution to the skipping problem. So we'd call test-pkg
+twice: once in the generate-gitlab-ci.yml job to generate the .config files and
+jobs, and a second time in each job to continue with the rest of the flow.
+
+ You still can't easily see which toolchains are skipped, but I guess it's
+better than nothing.
+
+ Another possibility would be to run the 'make olddefconfig' step as well during
+generate-gitlab-ci.yml, so that we only create the jobs for toolchains that are
+not excluded. However, as you mentioned, that dramatically slows down the
+generate-gitlab-ci.yml step, because it has to call 'make olddefconfig' a bunch
+of times and that is notoriously slow... Still, this extra latency only happens
+when you explicitly asked for the test-pkg invocation, so I guess it's acceptable.
+
+ Regards,
+ Arnout
+
+> 
+>>
+>>  With my proposal, the rest of the changes to this script are no longer
+>> relevant, so I haven't reviewed them.
+> 
+> Thanks for the review!
+> 
+> Best regards,
+> Romain
+> 
+> 
+>>
+>>  Regards,
+>>  Arnout
+>>
+>>
+>> [snip]
+>>
+> 
