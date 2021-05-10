@@ -1,54 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 May 2021 09:00:33 +0200
-Subject: [Buildroot] [git commit] boot/opensbi: bump to version 0.9
-Message-ID: <20210510063321.82F7C82B72@busybox.osuosl.org>
+From: Drew Fustini <drew@beagleboard.org>
+Date: Mon, 10 May 2021 00:02:51 -0700
+Subject: [Buildroot] [PATCH v3 5/7] boot/beaglev-ddrinit: new package
+In-Reply-To: <CAPgEAj6u4P_z=Pdq2wTMuWiNmE8LeDRmwuojFsgXQZWsOWhV8g@mail.gmail.com>
+References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
+ <20210504205139.1055360-6-thomas.petazzoni@bootlin.com>
+ <20210507220401.GE2137340@scaer>
+ <0125b6ea-1e62-a893-0a0a-454dee7e0142@mind.be>
+ <1ad5fb0c-a6e3-1ff2-f9f1-90a53084f968@mind.be>
+ <CAPgEAj6u4P_z=Pdq2wTMuWiNmE8LeDRmwuojFsgXQZWsOWhV8g@mail.gmail.com>
+Message-ID: <CAPgEAj73gNoUiQvBceXwMw16K61ojoj7g-hAQ2MZueGQPjDnHg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a8e568c65259f2c8030324ed2c45c12bdf4384a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, May 9, 2021 at 1:29 PM Drew Fustini <drew@beagleboard.org> wrote:
+>
+> On Sun, May 9, 2021 at 4:04 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+> >
+> >
+> >
+> > On 09/05/2021 13:03, Arnout Vandecappelle wrote:
+> > >
+> > >
+> > > On 08/05/2021 00:04, Yann E. MORIN wrote:
+> > >> On 2021-05-04 22:51 +0200, Thomas Petazzoni spake thusly:
+> > >>> This commit adds a package for the DDR initialization code used on the
+> > >>> BeagleV platform.
+> > >>
+> > >> The upstream package name is beaglev-ddrlnit, yes, with an 'l' instead
+> > >> of an 'i'. I've renamed the package to match upstream name, so that
+> > >> users that look for it can actually find it.
+> > >
+> > >  What's done is done of course, but in this case, I think we should have stuck
+> > > to ddrinit with an eye. That name makes much more sense, and in fact when people
+> > > search for it (with / in menuconfig) they're IMHO much more likely to search for
+> > > it with an eye than with an el. The el you'd probably only use when you copy and
+> > > paste the name from github, but who does that?
+> > >
+> > >
+> > >  @Drew/Bing, on github, when you rename a repository, the old name will still
+> > > redirect to the new one (at least until you create a new repo with that name).
+> > > So I'd go ahead and to the rename to ddrinit, it should break anything.
+> >
+> >  I forgot the reference:
+> >
+> > https://docs.github.com/en/github/administering-a-repository/renaming-a-repository
+>
+> Thank you.  I knew that the redirect worked on the website, but this
+> clarifies that it also works for git clone as well.  Therefore, it
+> seems like I should ask starfive to fix the typo as the old repo url
+> with the typo will still work.
 
-https://github.com/riscv/opensbi/releases/tag/v0.9
+The typo has now been fixed by Michael Zhu at StarFive:
+https://github.com/starfive-tech/beagle_ddrinit/issues/6
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/opensbi/Config.in    | 4 ++--
- boot/opensbi/opensbi.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The typo name (with "l") does still work:
+https://github.com/starfive-tech/beagle_ddrlnit
 
-diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-index 55a644506f..632eeec88d 100644
---- a/boot/opensbi/Config.in
-+++ b/boot/opensbi/Config.in
-@@ -19,7 +19,7 @@ choice
- 	  Select the specific OpenSBI version you want to use
- 
- config BR2_TARGET_OPENSBI_LATEST_VERSION
--	bool "0.8"
-+	bool "0.9"
- 
- config BR2_TARGET_OPENSBI_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -57,7 +57,7 @@ endif
- 
- config BR2_TARGET_OPENSBI_VERSION
- 	string
--	default "0.8"	if BR2_TARGET_OPENSBI_LATEST_VERSION
-+	default "0.9"	if BR2_TARGET_OPENSBI_LATEST_VERSION
- 	default BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_OPENSBI_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_OPENSBI_CUSTOM_TARBALL
-diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
-index f7280b890b..3b6d97c42d 100644
---- a/boot/opensbi/opensbi.hash
-+++ b/boot/opensbi/opensbi.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  17e048ac765e92e15f7436b604452614cf88dc2bcbbaab18cdc024f3fdd4c575  opensbi-0.8.tar.gz
-+sha256  60f995cb3cd03e3cf5e649194d3395d0fe67499fd960a36cf7058a4efde686f0  opensbi-0.9.tar.gz
- sha256  82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21  COPYING.BSD
+but it will redirect to the correct name (with "i"):
+https://github.com/starfive-tech/beagle_ddrinit
+
+thank you,
+drew
