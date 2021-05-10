@@ -1,40 +1,35 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Mon, 10 May 2021 11:28:52 +0200
-Subject: [Buildroot] [PATCH] package/dt-utils: bump version to 2021.03.0
-Message-ID: <20210510092853.1481441-1-m.niestroj@grinn-global.com>
+From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
+Date: Mon, 10 May 2021 11:51:45 +0200
+Subject: [Buildroot] [PATCH] package/dt-utils: add patch to fix
+ barebox-state lock file
+In-Reply-To: <20210217185609.1120677-1-b.bilas@grinn-global.com>
+References: <20210217185609.1120677-1-b.bilas@grinn-global.com>
+Message-ID: <87lf8m6hn2.fsf@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/dt-utils/dt-utils.hash | 2 +-
- package/dt-utils/dt-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/package/dt-utils/dt-utils.hash b/package/dt-utils/dt-utils.hash
-index e42e82578d..74819158bb 100644
---- a/package/dt-utils/dt-utils.hash
-+++ b/package/dt-utils/dt-utils.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  737313719d7c04d7b9576fdc572d838c81ea22ea41a44c7646467018e67a0b97  dt-utils-v2019.01.0-br1.tar.gz
-+sha256  8b29d3a8799170afdb1b077e655528bf4e6afe0c789107b1eec8fff9d4482771  dt-utils-v2021.03.0-br1.tar.gz
- sha256  a45932c79317d15116eadbf1c9c6fc59117ec3c4621db3a876066defa723963b  COPYING
-diff --git a/package/dt-utils/dt-utils.mk b/package/dt-utils/dt-utils.mk
-index 25c287d434..bc7fd90631 100644
---- a/package/dt-utils/dt-utils.mk
-+++ b/package/dt-utils/dt-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DT_UTILS_VERSION = v2019.01.0
-+DT_UTILS_VERSION = v2021.03.0
- DT_UTILS_SITE = https://git.pengutronix.de/git/tools/dt-utils
- DT_UTILS_SITE_METHOD = git
- DT_UTILS_LICENSE = GPL-2.0
--- 
-2.31.1
+Bartosz Bilas <b.bilas@grinn-global.com> writes:
+
+> Add patch from the upstream mailing list [1] that fixes
+> the following error when we try to execute barebox-state 
+> command:
+>
+> # barebox-state
+> Failed to open lock-file /var/lock/barebox-state
+>
+> [1] 
+> https://www.mail-archive.com/oss-tools at pengutronix.de/msg00063.html
+>
+
+Mentioned patch is now part of 2021.03.0 release. I've sent patch 
+updating dt-utils to this version in 
+https://patchwork.ozlabs.org/project/buildroot/patch/20210510092853.1481441-1-m.niestroj at grinn-global.com/.
+
+--
+Regards,
+Marcin
