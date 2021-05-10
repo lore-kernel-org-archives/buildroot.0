@@ -1,54 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 May 2021 22:14:45 +0200
-Subject: [Buildroot] [PATCH] support/testing: add sudo package test
-In-Reply-To: <20210505191344.2108832-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Wed, 5 May 2021 21:13:44 +0200")
-References: <20210505191344.2108832-1-arnout@mind.be>
-Message-ID: <875yzqs5vu.fsf@dell.be.48ers.dk>
+Date: Mon, 10 May 2021 22:05:19 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-iptvsimple: bump version
+ to 7.6.2-Matrix
+Message-ID: <20210510194729.D3FC683643@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ef2d521c84da9f9af22c626af227a81bd61186c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Create a new user 'sudotest' to validate that sudo really works (i.e.
- > properly has setuid).
+Changelog:
+https://github.com/kodi-pvr/pvr.iptvsimple/blob/Matrix/pvr.iptvsimple/changelog.txt
 
- > Creating the user and adding it to sudoers is done at runtime, otherwise
- > we'd need to add extra files to the config which complicates things a
- > little bit.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > ---
- >  support/testing/tests/package/test_sudo.py | 36 ++++++++++++++++++++++
- >  1 file changed, 36 insertions(+)
- >  create mode 100644 support/testing/tests/package/test_sudo.py
-
- > diff --git a/support/testing/tests/package/test_sudo.py b/support/testing/tests/package/test_sudo.py
- > new file mode 100644
- > index 0000000000..f9d0a6f301
- > --- /dev/null
- > +++ b/support/testing/tests/package/test_sudo.py
- > @@ -0,0 +1,36 @@
- > +import os
- > +
- > +import infra.basetest
- > +
- > +
- > +class TestSudo(infra.basetest.BRTest):
- > +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
- > +        """
- > +        BR2_PACKAGE_SUDO=y
- > +        BR2_TARGET_ROOTFS_CPIO=y
- > +        # BR2_TARGET_ROOTFS_TAR is not set
- > +        """
-
-initrd, so that implies writable rootfs - So we don't really need those
-special adduser flags, but OK.
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 767f77cca8..33ffc6431a 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0bffd09eba7cf758a818607562b4dec53f4a20acb7a8b43dd0a1499e92cb3057  kodi-pvr-iptvsimple-7.6.1-Matrix.tar.gz
++sha256  59347c41dfd0dfa45f3d85deed0430346ef2898eb7276d5793244b877519f385  kodi-pvr-iptvsimple-7.6.2-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index cf8d755766..3a40dac951 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_IPTVSIMPLE_VERSION = 7.6.1-Matrix
++KODI_PVR_IPTVSIMPLE_VERSION = 7.6.2-Matrix
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
