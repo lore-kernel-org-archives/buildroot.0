@@ -1,97 +1,78 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Mon, 10 May 2021 20:22:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/putty: fix build on uclibc
-In-Reply-To: <20210509133412.1116330-1-fontaine.fabrice@gmail.com>
-References: <20210509133412.1116330-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210510182221.urhfgkjbv7a4o3lb@falbala.internal.home.lespocky.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 10 May 2021 20:37:12 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] CHANGES: update with
+ recent changes
+Message-ID: <20210510180902.3A8DC86B06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=442ec6253f93f4de9e95c2c3d44c3222f053a4d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-On Sun, May 09, 2021 at 03:34:12PM +0200, Fabrice Fontaine wrote:
-> Fix build failure on uclibc raised since bump to version 0.75 in commit
-> d562009f7b9701cb20bc4b1d389d19f9a647cc3b
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES | 51 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-I used configs/qemu_x86_64_defconfig for testing which also uses
-uclibc and it built just fine. So it seems no general uclibc problem.
-
-> Fixes:
->  - http://autobuild.buildroot.org/results/726f7c5ce13e78ed91e827b872e9d7ccfa13f298
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...1-unix-uxutils.h-fix-build-on-uclibc.patch | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch
-> 
-> diff --git a/package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch b/package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch
-> new file mode 100644
-> index 0000000000..78cef8b908
-> --- /dev/null
-> +++ b/package/putty/0001-unix-uxutils.h-fix-build-on-uclibc.patch
-> @@ -0,0 +1,41 @@
-> +From 3f30f3a7e3f07f5ca3cef0f405b02e22a018c6e4 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 9 May 2021 15:22:29 +0200
-> +Subject: [PATCH] unix/uxutils.h: fix build on uclibc
-> +
-> +Build on uclibc is broken since version 0.75 and commit
-> +65383082bf0c49cec63f4b36001a40bd9b13edf6 because AT_HWCAP2 is used
-> +even if <sys/auxv.h> is not available:
-> +
-> +unix/uxutils.c: In function 'platform_aes_hw_available':
-> +unix/uxutils.c:13:22: error: 'AT_HWCAP2' undeclared (first use in this function)
-> +   13 |     return getauxval(AT_HWCAP2) & HWCAP2_AES;
-> +      |                      ^~~~~~~~~
-> +
-> +To fix this build failure, include <elf.h>
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/726f7c5ce13e78ed91e827b872e9d7ccfa13f298
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: sent to Simon Tatham <anakin@pobox.com>]
-> +---
-> + unix/uxutils.h | 2 ++
-> + 1 file changed, 2 insertions(+)
-> +
-> +diff --git a/unix/uxutils.h b/unix/uxutils.h
-> +index c9acff53..b80bf972 100644
-> +--- a/unix/uxutils.h
-> ++++ b/unix/uxutils.h
-> +@@ -18,6 +18,8 @@
-> + 
-> + #if defined __arm__ || defined __aarch64__
-> + 
-> ++#include <elf.h>
-> ++
-> + #ifdef HAVE_SYS_TYPES_H
-> + #include <sys/types.h>
-> + #endif
-> +-- 
-> +2.30.2
-> +
-> -- 
-> 2.30.2
-
-Looks like an arm specific issue. Nevertheless, thanks for taking care
-of the fix.
-
-Alex
-
--- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210510/8debb3df/attachment.asc>
+diff --git a/CHANGES b/CHANGES
+index 9afcc4ab78..38b8e5b033 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,54 @@
++2021.02.2, not yet released
++
++	Important / security related fixes.
++
++	Toolchain: Add logic to mark toolchains affected by binutils
++	bug 27597 (Nios II).
++
++	support/scripts/cve.py: Use the (significantly) faster yajl2
++	ijson backend for older (< 2.5) ijson versions rather than the
++	slow python default, speeding up pkg-stats by ~2x.
++
++	CMake infrastructure: Use CMAKE_EXE_LINKERFLAGS rather than
++	CMAKE_CXX_FLAGS to link with libatomic to fix an compatibility
++	issue with poppler.
++
++	Infrastructure: Expose CONFIG_DIR to post-build/post-image
++	scripts, so they can call the Buildroot Makefile in the
++	correct directory for both in-tree / out-of-tree builds.
++
++	Updated/fixed packages: at91bootstrap, avahi, bash, bind,
++	bridge-utils, cegui, cifs-utils, clamav, cmake, coremark-pro,
++	coreutils, cryptsetup, dmalloc, dnsmasq, docker-cli,
++	docker-engine, domoticz, efl, exim, ffmpeg, flex, gcc,
++	genext2fs, go, gst1-interpipe, haproxy, hostapd, i2c-tools,
++	imx-vpu, kexec, kf5-kcoreaddons, kismet, libcamera, libcurl,
++	libdrm, libfreefare, libfuse3, libgeos, libgpiod, libnpupnp,
++	libopenssl, libp11, librsync, libtomcrypt, libupnp, localedef,
++	lxc, m4, makedevs, mender, mesa3d, mesa3d-headers, mkpasswd,
++	mkpimage, modem-manager, monkey, mpd, ncurses, nettle,
++	network-manager, nginx, numactl, openjdk, openjdk-bin,
++	openldap, openvpn, php, pipewire, python-aioconsole,
++	python-asgiref, python-botocore, python-django,
++	python-dnspython, python-flup, python-httplib2,
++	python-markdown2, python-mbrstrdecoder, python3, quickjs,
++	readline, rsyslog, ruby, samba4, sconeserver, snort, sox,
++	systemd, tar, timescaledb, tio, tor, usb_modeswitch,
++	wpa_supplicant, xdriver_xf86-video-ati, xen, xlib_libXaw,
++	xserver_xorg-server
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#13271: systemd-resolved: /etc/resolv.conf link broken on per-pa..
++	#13551: 2021.02.rc2: Unicode not work on qt 5.15.2
++	#13651: pkg-golang cannot build when main.go is in the root
++	#13661: host-python2 build fails on aarch64
++	#13721: c-stack.c:55:26: error: missing binary operator before ..
++	#13731: Readline Patch is missing Author Information
++	#13741: genext2fs does not allow to set perms of root node
++	#13751: libopenssl (static): huge drop in performance in newer ..
++	#13771: package htop has undeclared dependency on host python
++
+ 2021.02.1, released April 7, 2021
+ 
+ 	Important / security related fixes.
