@@ -1,38 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 May 2021 11:07:55 +0200
-Subject: [Buildroot] [PATCH v3 5/7] boot/beaglev-ddrinit: new package
-In-Reply-To: <CAPgEAj73gNoUiQvBceXwMw16K61ojoj7g-hAQ2MZueGQPjDnHg@mail.gmail.com>
- (Drew Fustini's message of "Mon, 10 May 2021 00:02:51 -0700")
-References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
- <20210504205139.1055360-6-thomas.petazzoni@bootlin.com>
- <20210507220401.GE2137340@scaer>
- <0125b6ea-1e62-a893-0a0a-454dee7e0142@mind.be>
- <1ad5fb0c-a6e3-1ff2-f9f1-90a53084f968@mind.be>
- <CAPgEAj6u4P_z=Pdq2wTMuWiNmE8LeDRmwuojFsgXQZWsOWhV8g@mail.gmail.com>
- <CAPgEAj73gNoUiQvBceXwMw16K61ojoj7g-hAQ2MZueGQPjDnHg@mail.gmail.com>
-Message-ID: <87a6p3t0r8.fsf@dell.be.48ers.dk>
+Date: Mon, 10 May 2021 11:21:57 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/ruby: security
+ bump to version 2.7.3
+Message-ID: <20210510085418.AF01886D88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Drew" == Drew Fustini <drew@beagleboard.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=337331bfc4502cc844901aacd050115f8341fd9c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Hi,
+This release includes security fixes:
+- CVE-2021-28965: XML round-trip vulnerability in REXML
+- CVE-2021-28966: Path traversal in Tempfile on Windows
 
- > The typo has now been fixed by Michael Zhu at StarFive:
- > https://github.com/starfive-tech/beagle_ddrinit/issues/6
+https://www.ruby-lang.org/en/news/2021/04/05/ruby-2-7-3-released/
 
- > The typo name (with "l") does still work:
- > https://github.com/starfive-tech/beagle_ddrlnit
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > but it will redirect to the correct name (with "i"):
- > https://github.com/starfive-tech/beagle_ddrinit
-
-Great, thanks. I've sent a patch to rename the corresponding package:
-
-https://patchwork.ozlabs.org/project/buildroot/patch/20210510090658.24276-1-peter at korsgaard.com/
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 80ffb00c0f..58a3b54d79 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,5 +1,5 @@
+-# https://www.ruby-lang.org/en/news/2020/10/02/ruby-2-7-2-released/
+-sha256  1b95ab193cc8f5b5e59d2686cb3d5dcf1ddf2a86cb6950e0b4bdaae5040ec0d6  ruby-2.7.2.tar.xz
++# https://www.ruby-lang.org/en/news/2021/04/05/ruby-2-7-3-released/
++sha256  5e91d1650857d43cd6852e05ac54683351e9c301811ee0bef43a67c4605e7db1  ruby-2.7.3.tar.xz
+ # License files, Locally calculated
+ sha256  b09ca195d2de08f0aacfa8793d0af62d7681c304b3ef714b75813721823295a6  LEGAL
+ sha256  967586d538a28955ec2541910cf63c5ac345fcdea94bfb1f1705a1f6eb36bcbb  COPYING
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 4ab6ea78c1..aee173cb67 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RUBY_VERSION_MAJOR = 2.7
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
+ RUBY_VERSION_EXT = 2.7.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
