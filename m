@@ -1,66 +1,27 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 10 May 2021 09:14:49 +1000
-Subject: [Buildroot] [PATCH 1/2] boot/opensbi: bump to version 0.9
-In-Reply-To: <20210508194155.3678473-1-fontaine.fabrice@gmail.com>
-References: <20210508194155.3678473-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAKmqyKP8V8jW3+LU72a5hnJONdjUg3faq_i1Ga7UGfazh6fk5A@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 10 May 2021 08:32:18 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.19.x / 5.{4,
+ 10, 11, 12}.x series
+In-Reply-To: <20210508210702.24898-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 8 May 2021 23:07:02 +0200")
+References: <20210508210702.24898-1-peter@korsgaard.com>
+Message-ID: <87im3rumj1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, May 9, 2021 at 5:42 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> https://github.com/riscv/opensbi/releases/tag/v0.9
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ >  linux/Config.in                      |  2 +-
+ >  linux/linux.hash                     | 10 +++++-----
+ >  package/linux-headers/Config.in.host | 10 +++++-----
+ >  3 files changed, 11 insertions(+), 11 deletions(-)
 
-Alistair
+Committed, thanks.
 
-> ---
->  boot/opensbi/Config.in    | 4 ++--
->  boot/opensbi/opensbi.hash | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-> index 55a644506f..632eeec88d 100644
-> --- a/boot/opensbi/Config.in
-> +++ b/boot/opensbi/Config.in
-> @@ -19,7 +19,7 @@ choice
->           Select the specific OpenSBI version you want to use
->
->  config BR2_TARGET_OPENSBI_LATEST_VERSION
-> -       bool "0.8"
-> +       bool "0.9"
->
->  config BR2_TARGET_OPENSBI_CUSTOM_VERSION
->         bool "Custom version"
-> @@ -57,7 +57,7 @@ endif
->
->  config BR2_TARGET_OPENSBI_VERSION
->         string
-> -       default "0.8"   if BR2_TARGET_OPENSBI_LATEST_VERSION
-> +       default "0.9"   if BR2_TARGET_OPENSBI_LATEST_VERSION
->         default BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE \
->                 if BR2_TARGET_OPENSBI_CUSTOM_VERSION
->         default "custom"        if BR2_TARGET_OPENSBI_CUSTOM_TARBALL
-> diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
-> index f7280b890b..3b6d97c42d 100644
-> --- a/boot/opensbi/opensbi.hash
-> +++ b/boot/opensbi/opensbi.hash
-> @@ -1,3 +1,3 @@
->  # locally computed
-> -sha256  17e048ac765e92e15f7436b604452614cf88dc2bcbbaab18cdc024f3fdd4c575  opensbi-0.8.tar.gz
-> +sha256  60f995cb3cd03e3cf5e649194d3395d0fe67499fd960a36cf7058a4efde686f0  opensbi-0.9.tar.gz
->  sha256  82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21  COPYING.BSD
-> --
-> 2.30.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Bye, Peter Korsgaard
