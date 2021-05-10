@@ -1,83 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 May 2021 08:33:36 +0200
-Subject: [Buildroot] [git commit] configs/pandaboard: bump kernel and U-Boot
- versions
-Message-ID: <20210510060834.4C9B480764@busybox.osuosl.org>
+Date: Mon, 10 May 2021 08:31:58 +0200
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.19.x / 5.{4,
+ 10, 11, 12}.x series
+Message-ID: <20210510060834.3F37381233@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13e1097004dbb8494ef4fa20825d58f013df5fc1
+commit: https://git.buildroot.net/buildroot/commit/?id=b50cc77a094b26344aead7e1b23672884155b3d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump kernel to version 5.12.2.
-- Bump U-Boot to version 2021.04.
-
-While at it, enable VFPv3 with 32 registers (instead of 16) and add a few
-comments to the defconfig.
-
-Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
-Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/pandaboard_defconfig | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
-index 408bced9c0..376ecfe504 100644
---- a/configs/pandaboard_defconfig
-+++ b/configs/pandaboard_defconfig
-@@ -1,32 +1,48 @@
-+# Architecture
- BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+BR2_ARM_FPU_VFPV3=y
-+
-+# Linux headers same as kernel, a 5.12 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
-+
-+# System
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS2"
- BR2_SYSTEM_DHCP="eth0"
-+
-+# Image
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pandaboard/genimage.cfg"
-+
-+# Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.62"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es omap4-panda omap4-panda-a4"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="omap4_panda"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="MLO"
-+
-+# Required tools to create the SD card image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/linux/Config.in b/linux/Config.in
+index 7f1d9e3342..02c6ba0400 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -125,7 +125,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.12" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.12.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.182-cip45" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.165-cip41-rt18" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 517cdf4c9b..e24e02b30e 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  7d0df6f2bf2384d68d0bd8e1fe3e071d64364dcdc6002e7b5c87c92d48fac366  linux-5.12.tar.xz
+-sha256  41dd9e533e0387e41e9d17244e3b4f3fe6fdff2f82b4198ee363552f0b6ad4a3  linux-5.11.17.tar.xz
+-sha256  933fdbc36371c0f830b7a6a957a559fca2dad1cc0eaa852ef42fb168185b4315  linux-5.10.33.tar.xz
+-sha256  5b4724748527a622a886232b5da1471619eb3aa3bb38a11851275eba09989dd2  linux-5.4.115.tar.xz
++sha256  8c98b9996d15fdb779a866c6a4c7c9b9e63374cb7105a5a59e9bcf8df02ef70d  linux-5.12.2.tar.xz
++sha256  5aee19ad466b5bbbde642077f42bfaafff4e612296bdd7946faa01d917472b4b  linux-5.11.19.tar.xz
++sha256  ac37a19d45b77a87e58e3aae8b127a6e7eb85ed7467fc8e58474b387bfd498fd  linux-5.10.35.tar.xz
++sha256  4e989b5775830092e5c76b5cca65ebff862ad0c87d0b58c3a20d415c3d4ec770  linux-5.4.117.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256  6817ad26e1621bfad48d08b638f66c5933e89c7c8c00d43195b2e0ae260233eb  linux-4.4.268.tar.xz
+ sha256  5b66f6ce0137fb8d81004bcf2f1e3cbe01c38aab74268656c4ba015c1ccd762a  linux-4.9.268.tar.xz
+ sha256  1dc19361f6970bc94cc62be066702483db9cbd3d63f3089a8c90dabfced74369  linux-4.14.232.tar.xz
+-sha256  717b0e5df07ebbc0575d834e0c15c0e45060e771baa15b705e391ba38bc54389  linux-4.19.189.tar.xz
++sha256  6f9c2aee8553129d2bdbab646bbf7e88c2a5c38c0b1450f2e728831681bfc85d  linux-4.19.190.tar.xz
+ # Locally computed
+ sha256  9f1de83c5c2bb582a33bd4ee892d45671901cd06af9dc159f0f499f1b5265b20  linux-cip-4.19.182-cip45.tar.gz
+ sha256  0eeba6d6ecc45cf8f16458842b64d22e7064b9de9c31c11d1c395b08a47e3855  linux-cip-4.19.165-cip41-rt18.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index e4ddeee346..3d8fb1ab5b 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -365,11 +365,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.4.268"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.268"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.14.232"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.189"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.115"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.33"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.11.17"	if BR2_KERNEL_HEADERS_5_11
+-	default "5.12"		if BR2_KERNEL_HEADERS_5_12
++	default "4.19.190"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.117"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.35"	if BR2_KERNEL_HEADERS_5_10
++	default "5.11.19"	if BR2_KERNEL_HEADERS_5_11
++	default "5.12.2"	if BR2_KERNEL_HEADERS_5_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
