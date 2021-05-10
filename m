@@ -1,45 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 May 2021 22:17:14 +0200
-Subject: [Buildroot] [git commit] package/boost: fix broken BOOST_SITE URL
-Message-ID: <20210510195332.3D8E6863E6@busybox.osuosl.org>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Mon, 10 May 2021 20:22:15 +0000
+Subject: [Buildroot] [PATCH v3 3/4] lmbench: emulate --prefix to avoid
+ scattering binaries all over
+In-Reply-To: <20210510220931.1dc78bde@windsurf>
+References: <20210510180049.61421-1-vgupta@synopsys.com>
+ <20210510180049.61421-5-vgupta@synopsys.com>
+ <20210510220931.1dc78bde@windsurf>
+Message-ID: <e39b28e8-79c9-df44-5113-82af630ebdfb@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=345bb230500e91ff547dd56f71580243c075139d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 5/10/21 1:09 PM, Thomas Petazzoni wrote:
+> On Mon, 10 May 2021 11:00:48 -0700
+> Vineet Gupta via buildroot <buildroot@busybox.net> wrote:
+>
+>>   - moves all lmbench binaries to <target>/lmbench/bin/<ARCH>
+>>   - scripts copied to <target>/lmbench/scripts
+>>   - scripts/os overwritten to setup "OS" as expected by LMBench runtime scripts
+>>
+>> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+> Where are lmbench binaries currently installed? Because /lmbench/ looks
+> really really odd as an installation location.
 
-Current URL returns 403 error:
+They are currently scattered over in /usr/sbin I think.
+Indeed /lmbench is non LSB etc, but it is one stop shop if one wanted to 
+remove everything lmbench specific from target rootfs.
+I guess one could do /usr/sbin/lmbench/{bin,scripts}
 
---2021-05-10 10:04:12--  https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2
-Resolving dl.bintray.com... 18.193.131.58, 3.66.199.110
-Connecting to dl.bintray.com|18.193.131.58|:443... connected.
-HTTP request sent, awaiting response... 403 Forbidden
-2021-05-10 10:04:12 ERROR 403: Forbidden.
-
-Bintray has been sunset on May 1st:
-https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/
-
-Update the URL to the new upstream location to fix this issue.
-
-Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/boost/boost.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index b8f90bb836..8d745ecc72 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -6,7 +6,7 @@
- 
- BOOST_VERSION = 1.75.0
- BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
--BOOST_SITE = https://dl.bintray.com/boostorg/release/$(BOOST_VERSION)/source
-+BOOST_SITE = https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source
- BOOST_INSTALL_STAGING = YES
- BOOST_LICENSE = BSL-1.0
- BOOST_LICENSE_FILES = LICENSE_1_0.txt
+-Vineet
