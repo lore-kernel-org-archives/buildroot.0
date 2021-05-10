@@ -1,45 +1,22 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 10 May 2021 22:51:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/elfutils: bump to version 0.184
-Message-ID: <20210510205122.1604309-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 10 May 2021 23:13:39 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/acmesystems_acqua_a5_{256,
+ 512}mb: add openssl host dependency
+In-Reply-To: <4cc9d7e5-a1c8-de1d-7a36-ac33920805cb@grenoble.cnrs.fr> (Edgar
+ Bonet's message of "Mon, 10 May 2021 16:18:34 +0200")
+References: <4cc9d7e5-a1c8-de1d-7a36-ac33920805cb@grenoble.cnrs.fr>
+Message-ID: <87wns6qol8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://sourceware.org/pipermail/elfutils-devel/2021q2/003797.html
+>>>>> "Edgar" == Edgar Bonet <bonet@grenoble.cnrs.fr> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/elfutils/elfutils.hash | 4 ++--
- package/elfutils/elfutils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
 
-diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
-index c14a86e31f..9148758e29 100644
---- a/package/elfutils/elfutils.hash
-+++ b/package/elfutils/elfutils.hash
-@@ -1,5 +1,5 @@
--# From https://sourceware.org/elfutils/ftp/0.183/sha512.sum
--sha512  bdafdd738a33cebe4f87849e5e6f1133881e77ef71b27faa0f0234ff80e9674f506957898326c2a55fd8438cbd189f7930597d0b4b9ca6c77921cc0cbd83b6b7  elfutils-0.183.tar.bz2
-+# From https://sourceware.org/elfutils/ftp/0.184/sha512.sum
-+sha512  5920c354edd6b28bb7e713d674bf6f2221e8ee91b90d582de39b1f45446aea1e7e3d4b6671024c391675b5e7530fe952c1320d730bb625c02d4c647ceb938bc8  elfutils-0.184.tar.bz2
- # Locally calculated
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 942949547a..c64224a90f 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ELFUTILS_VERSION = 0.183
-+ELFUTILS_VERSION = 0.184
- ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
- ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
- ELFUTILS_INSTALL_STAGING = YES
+Committed, thanks.
+
 -- 
-2.30.2
+Bye, Peter Korsgaard
