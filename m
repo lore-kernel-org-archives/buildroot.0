@@ -1,44 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 May 2021 09:12:56 +0200
-Subject: [Buildroot] [git commit] package/bullet: needs dynamic library
-Message-ID: <20210510083900.82E3B86D8B@busybox.osuosl.org>
+Date: Mon, 10 May 2021 11:07:55 +0200
+Subject: [Buildroot] [PATCH v3 5/7] boot/beaglev-ddrinit: new package
+In-Reply-To: <CAPgEAj73gNoUiQvBceXwMw16K61ojoj7g-hAQ2MZueGQPjDnHg@mail.gmail.com>
+ (Drew Fustini's message of "Mon, 10 May 2021 00:02:51 -0700")
+References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
+ <20210504205139.1055360-6-thomas.petazzoni@bootlin.com>
+ <20210507220401.GE2137340@scaer>
+ <0125b6ea-1e62-a893-0a0a-454dee7e0142@mind.be>
+ <1ad5fb0c-a6e3-1ff2-f9f1-90a53084f968@mind.be>
+ <CAPgEAj6u4P_z=Pdq2wTMuWiNmE8LeDRmwuojFsgXQZWsOWhV8g@mail.gmail.com>
+ <CAPgEAj73gNoUiQvBceXwMw16K61ojoj7g-hAQ2MZueGQPjDnHg@mail.gmail.com>
+Message-ID: <87a6p3t0r8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffe28bf101c581c43b3ec41d5297f3edb7b15c9e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Drew" == Drew Fustini <drew@beagleboard.org> writes:
 
-Build without dlfcn.h fails because bullet3 is not disabled since
-commit 5f154799b6ed772a0c028072996e110fac131508
+Hi,
 
-Fixes:
- - http://autobuild.buildroot.org/results/ab2efdd1eac64474adf00d8e60b42110c6e89143
+ > The typo has now been fixed by Michael Zhu at StarFive:
+ > https://github.com/starfive-tech/beagle_ddrinit/issues/6
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bullet/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ > The typo name (with "l") does still work:
+ > https://github.com/starfive-tech/beagle_ddrlnit
 
-diff --git a/package/bullet/Config.in b/package/bullet/Config.in
-index fc285ab33a..5d8a57aa47 100644
---- a/package/bullet/Config.in
-+++ b/package/bullet/Config.in
-@@ -1,11 +1,12 @@
- config BR2_PACKAGE_BULLET
- 	bool "bullet"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	help
- 	  Bullet is a Collision Detection and Rigid Body Dynamics
- 	  Library.
- 
- 	  http://bulletphysics.org
- 
--comment "bullet needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "bullet needs a toolchain w/ C++, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+ > but it will redirect to the correct name (with "i"):
+ > https://github.com/starfive-tech/beagle_ddrinit
+
+Great, thanks. I've sent a patch to rename the corresponding package:
+
+https://patchwork.ozlabs.org/project/buildroot/patch/20210510090658.24276-1-peter at korsgaard.com/
+
+-- 
+Bye, Peter Korsgaard
