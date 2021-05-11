@@ -1,38 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 May 2021 13:20:57 +0200
-Subject: [Buildroot] [git commit] package/log4qt: link with latomic if needed
-Message-ID: <20210511105529.0F17986F48@busybox.osuosl.org>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Tue, 11 May 2021 13:30:00 +0200
+Subject: [Buildroot] [PATCH] package/dt-utils: add patch to fix
+ barebox-state lock file
+In-Reply-To: <87lf8m6hn2.fsf@grinn-global.com>
+References: <20210217185609.1120677-1-b.bilas@grinn-global.com>
+ <87lf8m6hn2.fsf@grinn-global.com>
+Message-ID: <c0ee5c25-3ee1-ab43-76fd-aadc9d162502@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=029840438640d67f06613777b7561a4a52570df6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.net/results/fb5/fb52f5366a25230606149f44dc46f86f0273a680/
+On 10.05.2021 11:51, Marcin Niestr?j wrote:
+> Hi,
+>
+> Bartosz Bilas <b.bilas@grinn-global.com> writes:
+>
+>> Add patch from the upstream mailing list [1] that fixes
+>> the following error when we try to execute barebox-state command:
+>>
+>> # barebox-state
+>> Failed to open lock-file /var/lock/barebox-state
+>>
+>> [1] https://www.mail-archive.com/oss-tools at pengutronix.de/msg00063.html
+>>
+>
+> Mentioned patch is now part of 2021.03.0 release. I've sent patch 
+> updating dt-utils to this version in 
+> https://patchwork.ozlabs.org/project/buildroot/patch/20210510092853.1481441-1-m.niestroj at grinn-global.com/.
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/log4qt/log4qt.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+In that case we can drop this. I will test your patch as soon as I get 
+some device that can run barebox on it.
 
-diff --git a/package/log4qt/log4qt.mk b/package/log4qt/log4qt.mk
-index b01d9c6611..0594427cf7 100644
---- a/package/log4qt/log4qt.mk
-+++ b/package/log4qt/log4qt.mk
-@@ -11,6 +11,11 @@ LOG4QT_LICENSE = Apache-2.0
- LOG4QT_LICENSE_FILES = LICENSE
- LOG4QT_INSTALL_STAGING = YES
- 
-+# Uses __atomic_fetch_add_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LOG4QT_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT5BASE_SQLITE_QT)$(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),y)
- LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=ON
- else
+Best
+Bartek
+>
+> -- 
+> Regards,
+> Marcin
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210511/25e3e8fa/attachment.html>
