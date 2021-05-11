@@ -1,45 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 May 2021 09:48:45 +0200
-Subject: [Buildroot] [git commit] package/lvm2: use http instead of ftp
-Message-ID: <20210511072500.C49A086DB0@busybox.osuosl.org>
+Date: Tue, 11 May 2021 09:52:15 +0200
+Subject: [Buildroot] [git commit] package/gerbera: bump to version 1.8.1
+Message-ID: <20210511072501.2775386F3C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92378c6063020405fd12052b97d1be9d31ad7dae
+commit: https://git.buildroot.net/buildroot/commit/?id=1b881d3689b577f76d7d39430d347d6b11f91c93
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ftp links do not seem to be accessible anymore. Replace them with http.
+https://github.com/gerbera/gerbera/releases/tag/v1.8.1
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
+ package/gerbera/gerbera.hash | 2 +-
+ package/gerbera/gerbera.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 3d560c4be3..9a581527e0 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,4 +1,4 @@
--# From ftp://sources.redhat.com/pub/lvm2/sha512.sum
-+# From http://sources.redhat.com/pub/lvm2/sha512.sum
- sha512 f421505551aec2a09bc862f2fcc1ee825bc4d94c53a01d13265631e99308d60fbca40112be5bc7824cce3ef223c0775d2f6c345f6a3f227229a0566c903841bf  LVM2.2.02.185.tgz
- # Locally computed sha256 checksums
- sha256 e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 76f800a15b..653e72c72f 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
+index cdd1fbff60..ab3dda917c 100644
+--- a/package/gerbera/gerbera.hash
++++ b/package/gerbera/gerbera.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  02044abd1363c5f5604c5830e560b102ac456179afbf3be60e65847f47f4c599  gerbera-1.8.0.tar.gz
++sha256  66f49ee30e53c36e08ce56a724f84bde8350001d3b9309f8e62a34f38446b619  gerbera-1.8.1.tar.gz
+ sha256  cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6  LICENSE.md
+diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
+index b88fe8cc34..73917c7721 100644
+--- a/package/gerbera/gerbera.mk
++++ b/package/gerbera/gerbera.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- LVM2_VERSION = 2.02.185
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
--LVM2_SITE = ftp://sources.redhat.com/pub/lvm2
-+LVM2_SITE = http://sources.redhat.com/pub/lvm2
- LVM2_INSTALL_STAGING = YES
- LVM2_LICENSE = GPL-2.0, LGPL-2.1
- LVM2_LICENSE_FILES = COPYING COPYING.LIB
+-GERBERA_VERSION = 1.8.0
++GERBERA_VERSION = 1.8.1
+ GERBERA_SITE = $(call github,gerbera,gerbera,v$(GERBERA_VERSION))
+ GERBERA_LICENSE = GPL-2.0
+ GERBERA_LICENSE_FILES = LICENSE.md
