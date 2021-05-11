@@ -1,42 +1,85 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 11 May 2021 17:58:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.5.8
-Message-ID: <20210511155829.950887-1-bernd.kuhls@t-online.de>
+From: Martin Elshuber <martin.elshuber@theobroma-systems.com>
+Date: Tue, 11 May 2021 17:40:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/weston: add configuration options
+ for weston shells
+Message-ID: <20210511154006.630376-1-martin.elshuber@theobroma-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://blog.torproject.org/node/2031
+Enable selection of used weston shells. By default all available
+shells are enabled to keep the old behavior. The new configuration
+options enable the user to select them individually.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Martin Elshuber <martin.elshuber@theobroma-systems.com>
 ---
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/weston/Config.in | 16 ++++++++++++++++
+ package/weston/weston.mk | 24 ++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index e46335f79c..dd20bbc92e 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  447fcaaa133e2ef22427e98098a60a9c495edf9ff3e0dd13f484b9ad0185f074  tor-0.4.5.7.tar.gz
-+sha256  57ded091e8bcdcebb0013fe7ef4a4439827cb169358c7874fd05fa00d813e227  tor-0.4.5.8.tar.gz
- sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 6eed5e4a47..4a16967d42 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index d07eba4c9d..60351ff09d 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -119,6 +119,22 @@ config BR2_PACKAGE_WESTON_XWAYLAND
+ comment "XWayland support needs libepoxy and X.org enabled"
+ 	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
  
--TOR_VERSION = 0.4.5.7
-+TOR_VERSION = 0.4.5.8
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
++config BR2_PACKAGE_WESTON_SHELL_DESKTOP
++	bool "desktop shell"
++	default y
++
++config BR2_PACKAGE_WESTON_SHELL_FULLSCREEN
++	bool "fullscreen shell"
++	default y
++
++config BR2_PACKAGE_WESTON_SHELL_IVI
++	bool "ivi shell"
++	default y
++
++config BR2_PACKAGE_WESTON_SHELL_KIOSK
++	bool "kiosk shell"
++	default y
++
+ config BR2_PACKAGE_WESTON_DEMO_CLIENTS
+ 	bool "demo clients"
+ 	depends on BR2_USE_MMU # pango
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index f59963bf2e..6953132c57 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -132,6 +132,30 @@ else
+ WESTON_CONF_OPTS += -Dtest-junit-xml=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WESTON_SHELL_DESKTOP),y)
++WESTON_CONF_OPTS += -Dshell-desktop=true
++else
++WESTON_CONF_OPTS += -Dshell-desktop=false
++endif
++
++ifeq ($(BR2_PACKAGE_WESTON_SHELL_FULLSCREEN),y)
++WESTON_CONF_OPTS += -Dshell-fullscreen=true
++else
++WESTON_CONF_OPTS += -Dshell-fullscreen=false
++endif
++
++ifeq ($(BR2_PACKAGE_WESTON_SHELL_IVI),y)
++WESTON_CONF_OPTS += -Dshell-ivi=true
++else
++WESTON_CONF_OPTS += -Dshell-ivi=false
++endif
++
++ifeq ($(BR2_PACKAGE_WESTON_SHELL_KIOSK),y)
++WESTON_CONF_OPTS += -Dshell-kiosk=true
++else
++WESTON_CONF_OPTS += -Dshell-kiosk=false
++endif
++
+ ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
+ WESTON_CONF_OPTS += -Ddemo-clients=true
+ WESTON_DEPENDENCIES += pango
 -- 
-2.29.2
+2.30.2
