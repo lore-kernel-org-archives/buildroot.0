@@ -1,25 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 May 2021 22:14:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rust: security bump to version
- 1.52.0
-In-Reply-To: <20210507205844.2911883-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 7 May 2021 22:58:44 +0200")
-References: <20210507205844.2911883-1-fontaine.fabrice@gmail.com>
-Message-ID: <87zgx1koz0.fsf@dell.be.48ers.dk>
+Date: Tue, 11 May 2021 22:14:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/boost: fix broken BOOST_SITE URL
+In-Reply-To: <20210510081832.32157-1-sebastien.szymanski@armadeus.com>
+ (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Mon, 10 May 2021
+ 10:18:32 +0200")
+References: <20210510081832.32157-1-sebastien.szymanski@armadeus.com>
+Message-ID: <87v97pkoyr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "S?bastien" == S?bastien Szymanski <sebastien.szymanski@armadeus.com> writes:
 
- > Fix CVE-2020-36317, CVE-2020-36318, CVE-2020-36323, CVE-2021-28877,
- > CVE-2021-28875, CVE-2021-28876, CVE-2021-28878 and CVE-2021-28879
+ > Current URL returns 403 error:
+ > --2021-05-10 10:04:12--  https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2
+ > Resolving dl.bintray.com... 18.193.131.58, 3.66.199.110
+ > Connecting to dl.bintray.com|18.193.131.58|:443... connected.
+ > HTTP request sent, awaiting response... 403 Forbidden
+ > 2021-05-10 10:04:12 ERROR 403: Forbidden.
 
- > https://github.com/rust-lang/rust/blob/1.52.0/RELEASES.md
+ > Update the URL to fix this issue.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 
 Committed to 2021.02.x, thanks.
 
