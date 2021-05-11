@@ -1,42 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 May 2021 09:50:09 +0200
-Subject: [Buildroot] [git commit] package/ruby: links with atomic if needed
-Message-ID: <20210511072500.F26D886DB0@busybox.osuosl.org>
+Date: Tue, 11 May 2021 09:48:45 +0200
+Subject: [Buildroot] [git commit] package/lvm2: use http instead of ftp
+Message-ID: <20210511072500.C49A086DB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3334118ebe63eb07ca2d77fc76a0e6db252bd0b0
+commit: https://git.buildroot.net/buildroot/commit/?id=92378c6063020405fd12052b97d1be9d31ad7dae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Build fails since bump to version 3.0.0 in commit
-af5226f2fd1292a26f2dfda32f41cbbad7aa4cc because ruby needs atomic
-operation support since
-https://github.com/ruby/ruby/commit/6ed6b85ece8733518a7da0c3ec714f20d1102bf5
+ftp links do not seem to be accessible anymore. Replace them with http.
 
-Fixes:
- - http://autobuild.buildroot.org/results/84ee5f4688be994a5440c3a61bddabee72ca3b3c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ruby/ruby.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index fded7acebc..a71ca3a8a2 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -23,6 +23,10 @@ RUBY_CPE_ID_VENDOR = ruby-lang
- # 0001-fix-default-coroutine-selection.patch
- RUBY_AUTORECONF = YES
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 3d560c4be3..9a581527e0 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,4 +1,4 @@
+-# From ftp://sources.redhat.com/pub/lvm2/sha512.sum
++# From http://sources.redhat.com/pub/lvm2/sha512.sum
+ sha512 f421505551aec2a09bc862f2fcc1ee825bc4d94c53a01d13265631e99308d60fbca40112be5bc7824cce3ef223c0775d2f6c345f6a3f227229a0566c903841bf  LVM2.2.02.185.tgz
+ # Locally computed sha256 checksums
+ sha256 e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 76f800a15b..653e72c72f 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -6,7 +6,7 @@
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+RUBY_CONF_ENV += LIBS=-latomic
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- # On uClibc, finite, isinf and isnan are not directly implemented as
- # functions.  Instead math.h #define's these to __finite, __isinf and
+ LVM2_VERSION = 2.02.185
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+-LVM2_SITE = ftp://sources.redhat.com/pub/lvm2
++LVM2_SITE = http://sources.redhat.com/pub/lvm2
+ LVM2_INSTALL_STAGING = YES
+ LVM2_LICENSE = GPL-2.0, LGPL-2.1
+ LVM2_LICENSE_FILES = COPYING COPYING.LIB
