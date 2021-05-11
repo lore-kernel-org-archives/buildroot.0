@@ -1,51 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 May 2021 18:42:40 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-libinput:
- bump version to 1.0.1
-Message-ID: <20210511161447.A22807F87A@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 11 May 2021 19:49:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.4.19
+Message-ID: <20210511174921.1443896-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=484bfc1cacaa7c1559d773a80f1754cfd36d7e4b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes:
-https://lists.x.org/archives/xorg-announce/2021-April/003083.html
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.19
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash    | 6 +++---
- .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk      | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-index daeb8d593a..2c4dafc8c7 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2021-April/003079.html
--sha256  ef55c2f66ae65da476c400205692ff77c9192bdc16fb3a285ea252267cf28a74  xf86-input-libinput-1.0.0.tar.bz2
--sha512  8135afcdfd1d1bc8196c42680b2f3b3089ee25509776c52db4bdab0afca74d6ca1689a14b5e30a24834293d0377689138bd3ea4b249c9310d5ec5777ff3ebeb8  xf86-input-libinput-1.0.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-April/003083.html
-+sha256  fddec49c115591918475155bf16aaf23017d7f814cee7823a0c11f867aca245b  xf86-input-libinput-1.0.1.tar.bz2
-+sha512  bb3cc4e9507d5ff6e430aabb5c87e412e8bbc5fd18b85fa4826123cb6be2f8f41078863fda09304f9dbd1264bbf1c3c7d6c11700ede0a5db733fbd1a03ec915b  xf86-input-libinput-1.0.1.tar.bz2
+diff --git a/package/php/php.hash b/package/php/php.hash
+index ecb290bab2..3fb0d09d32 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  ab97f22b128d21dcbc009b50a37aaea0051b2721cbcd122d9e00e6ffc3c4b7e1  php-7.4.18.tar.xz
++sha256  6c17172c4a411ccb694d9752de899bb63c72a0a3ebe5089116bc13658a1467b2  php-7.4.19.tar.xz
  
- # Locally computed
- sha256  4114220b281561e80f3422f0e7ae8d3e1fc85131ffc2e3b6265119e66f1adb27  COPYING
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-index 4283f16b25..b949b54819 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+ # License file
+ sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 89437c5206..73553e0395 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 1.0.0
-+XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 1.0.1
- XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+-PHP_VERSION = 7.4.18
++PHP_VERSION = 7.4.19
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
+-- 
+2.29.2
