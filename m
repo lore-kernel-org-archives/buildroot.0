@@ -1,48 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 May 2021 22:14:37 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/lvm2: use http
- instead of ftp
-Message-ID: <20210511194642.B4614872F8@busybox.osuosl.org>
+Date: Tue, 11 May 2021 22:13:28 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/boost: fix broken
+ BOOST_SITE URL
+Message-ID: <20210511194642.A360386BE1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fe2e0ab077f4f3e8f04386c5e92cc13095e01d2
+commit: https://git.buildroot.net/buildroot/commit/?id=d277ca3305f815c652aa2f039785a87bfc8e571c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-ftp links do not seem to be accessible anymore. Replace them with http.
+Current URL returns 403 error:
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+--2021-05-10 10:04:12--  https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2
+Resolving dl.bintray.com... 18.193.131.58, 3.66.199.110
+Connecting to dl.bintray.com|18.193.131.58|:443... connected.
+HTTP request sent, awaiting response... 403 Forbidden
+2021-05-10 10:04:12 ERROR 403: Forbidden.
+
+Bintray has been sunset on May 1st:
+https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/
+
+Update the URL to the new upstream location to fix this issue.
+
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 92378c6063020405fd12052b97d1be9d31ad7dae)
+(cherry picked from commit 345bb230500e91ff547dd56f71580243c075139d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/boost/boost.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 3d560c4be3..9a581527e0 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,4 +1,4 @@
--# From ftp://sources.redhat.com/pub/lvm2/sha512.sum
-+# From http://sources.redhat.com/pub/lvm2/sha512.sum
- sha512 f421505551aec2a09bc862f2fcc1ee825bc4d94c53a01d13265631e99308d60fbca40112be5bc7824cce3ef223c0775d2f6c345f6a3f227229a0566c903841bf  LVM2.2.02.185.tgz
- # Locally computed sha256 checksums
- sha256 e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 76f800a15b..653e72c72f 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index b8f90bb836..8d745ecc72 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
 @@ -6,7 +6,7 @@
  
- LVM2_VERSION = 2.02.185
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
--LVM2_SITE = ftp://sources.redhat.com/pub/lvm2
-+LVM2_SITE = http://sources.redhat.com/pub/lvm2
- LVM2_INSTALL_STAGING = YES
- LVM2_LICENSE = GPL-2.0, LGPL-2.1
- LVM2_LICENSE_FILES = COPYING COPYING.LIB
+ BOOST_VERSION = 1.75.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+-BOOST_SITE = https://dl.bintray.com/boostorg/release/$(BOOST_VERSION)/source
++BOOST_SITE = https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source
+ BOOST_INSTALL_STAGING = YES
+ BOOST_LICENSE = BSL-1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
