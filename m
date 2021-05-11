@@ -1,36 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 May 2021 13:23:28 +0200
-Subject: [Buildroot] [git commit] package/log4qt: add telnet optional logging
-Message-ID: <20210511105529.1990E81076@busybox.osuosl.org>
+Date: Tue, 11 May 2021 13:20:57 +0200
+Subject: [Buildroot] [git commit] package/log4qt: link with latomic if needed
+Message-ID: <20210511105529.0F17986F48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=863378ed27ef83d3254249bb22ba45dac88cb5ba
+commit: https://git.buildroot.net/buildroot/commit/?id=029840438640d67f06613777b7561a4a52570df6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Telnet logging is an optional feature that's disabled by default.
+Fixes:
+ - http://autobuild.buildroot.net/results/fb5/fb52f5366a25230606149f44dc46f86f0273a680/
 
 Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/log4qt/log4qt.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/log4qt/log4qt.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/log4qt/log4qt.mk b/package/log4qt/log4qt.mk
-index 0594427cf7..7144d33e33 100644
+index b01d9c6611..0594427cf7 100644
 --- a/package/log4qt/log4qt.mk
 +++ b/package/log4qt/log4qt.mk
-@@ -22,4 +22,10 @@ else
- LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=OFF
- endif
+@@ -11,6 +11,11 @@ LOG4QT_LICENSE = Apache-2.0
+ LOG4QT_LICENSE_FILES = LICENSE
+ LOG4QT_INSTALL_STAGING = YES
  
-+ifeq ($(BR2_PACKAGE_QT5BASE_NETWORK),y)
-+LOG4QT_CONF_OPTS += -DBUILD_WITH_TELNET_LOGGING=ON
-+else
-+LOG4QT_CONF_OPTS += -DBUILD_WITH_TELNET_LOGGING=OFF
++# Uses __atomic_fetch_add_4
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++LOG4QT_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
 +endif
 +
- $(eval $(cmake-package))
+ ifeq ($(BR2_PACKAGE_QT5BASE_SQLITE_QT)$(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),y)
+ LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=ON
+ else
