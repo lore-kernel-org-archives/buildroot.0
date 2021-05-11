@@ -1,66 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 May 2021 22:02:40 +0200
-Subject: [Buildroot] [git commit] package/luv: bump to version 1.41.0-0
-Message-ID: <20210511193512.7AAC2861F4@busybox.osuosl.org>
+Date: Tue, 11 May 2021 22:02:34 +0200
+Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 1.5.12
+Message-ID: <20210511193512.697977FB93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f20b7c01147c6baedfe29842b5757fd1046a2c2c
+commit: https://git.buildroot.net/buildroot/commit/?id=aded85d38105d682b0bbf84187b40ee275b7ed30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Enable Lua 5.4 support which is fixed now.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luv/Config.in | 5 ++---
- package/luv/luv.hash  | 2 +-
- package/luv/luv.mk    | 2 +-
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/luv/Config.in b/package/luv/Config.in
-index 3be204cab3..434cb3b459 100644
---- a/package/luv/Config.in
-+++ b/package/luv/Config.in
-@@ -4,14 +4,13 @@ config BR2_PACKAGE_LUV
- 	depends on BR2_USE_MMU # libuv
- 	depends on !BR2_STATIC_LIBS # libuv
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
--	depends on !BR2_PACKAGE_LUA_5_4
- 	select BR2_PACKAGE_LIBUV
- 	help
- 	  libuv bindings for LuaJIT and Lua.
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index 20166e44e3..f585a73d7f 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,5 +1,5 @@
+-# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.5.11.tar.gz.sha256:
+-sha256  7c8c6ab866114699405223c60457448dcce35fc13e1e374f68b60eefc55f4f04  upmpdcli-1.5.11.tar.gz
++# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.5.12.tar.gz.sha256:
++sha256  1d7b6ab360c2549a7e3eff4f261471761dd837e18327a3ca29de1981c090ff3b  upmpdcli-1.5.12.tar.gz
  
- 	  https://github.com/luvit/luv
- 
--comment "luv needs a toolchain w/ NPTL, dynamic library, Lua <= 5.3"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || BR2_PACKAGE_LUA_5_4
-+comment "luv needs a toolchain w/ NPTL, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/luv/luv.hash b/package/luv/luv.hash
-index 58385cf4f4..a619db2c76 100644
---- a/package/luv/luv.hash
-+++ b/package/luv/luv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  24473a081c3928eec2a352369cbafda97059574f4a4276861274473e7c7d17a0  luv-1.40.0-0.tar.gz
-+sha256  4018f293d71c2d75757b64fcdacf982729c9dc8b0bf8eda4015a8818a5a29321  luv-1.41.0-0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/luv/luv.mk b/package/luv/luv.mk
-index 08968c3f90..1a24a33bb2 100644
---- a/package/luv/luv.mk
-+++ b/package/luv/luv.mk
+ # Hash for license file:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 9d3e41881f..d1c0aef912 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUV_VERSION = 1.40.0-0
-+LUV_VERSION = 1.41.0-0
- LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
- LUV_LICENSE = Apache-2.0
- LUV_LICENSE_FILES = LICENSE.txt
+-UPMPDCLI_VERSION = 1.5.11
++UPMPDCLI_VERSION = 1.5.12
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = LGPL-2.1+
+ UPMPDCLI_LICENSE_FILES = COPYING
