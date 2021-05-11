@@ -1,48 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 May 2021 18:33:11 +0200
-Subject: [Buildroot] [git commit] package/python-pyjwt: Bump to version 2.1.0
-Message-ID: <20210511161118.34584870DF@busybox.osuosl.org>
+Date: Tue, 11 May 2021 18:34:03 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-iptvsimple: bump version
+ to 7.6.4-Matrix
+Message-ID: <20210511161118.473B686FF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2494289300b6f6961d36d6a01f8820587608e0c
+commit: https://git.buildroot.net/buildroot/commit/?id=6e1a2fb65bc5cc615024a933199bab67d423d6ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Changelog:
+https://github.com/kodi-pvr/pvr.iptvsimple/blob/Matrix/pvr.iptvsimple/changelog.txt
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyjwt/python-pyjwt.hash | 4 ++--
- package/python-pyjwt/python-pyjwt.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pyjwt/python-pyjwt.hash b/package/python-pyjwt/python-pyjwt.hash
-index 10875510f0..f3bc5d4814 100644
---- a/package/python-pyjwt/python-pyjwt.hash
-+++ b/package/python-pyjwt/python-pyjwt.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/PyJWT/json
--md5  7a1b1c8bfeb67c31ee4fdadefe5ff4b8  PyJWT-2.0.0.tar.gz
--sha256  7a2b271c6dac2fda9e0c33d176c4253faba2c6c6b3a99c7f28a32c3c97522779  PyJWT-2.0.0.tar.gz
-+md5  34c235e02746683bfc81a61f9ec4dc85  PyJWT-2.1.0.tar.gz
-+sha256  fba44e7898bbca160a2b2b501f492824fc8382485d3a6f11ba5d0c1937ce6130  PyJWT-2.1.0.tar.gz
- # Locally computed sha256 checksums
- sha256  ec82af815b5f9da8685afb300cc5beb7949e1c22b79b6c1c054796cefdf6cac6  LICENSE
-diff --git a/package/python-pyjwt/python-pyjwt.mk b/package/python-pyjwt/python-pyjwt.mk
-index 942499ea49..5600459c65 100644
---- a/package/python-pyjwt/python-pyjwt.mk
-+++ b/package/python-pyjwt/python-pyjwt.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 33ffc6431a..f467c7d40b 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  59347c41dfd0dfa45f3d85deed0430346ef2898eb7276d5793244b877519f385  kodi-pvr-iptvsimple-7.6.2-Matrix.tar.gz
++sha256  1310806ac4fd8c6e72020042e62bde8c9175e65015c4fddb82312cf32c53bf63  kodi-pvr-iptvsimple-7.6.4-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index 3a40dac951..60e51a038b 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYJWT_VERSION = 2.0.0
-+PYTHON_PYJWT_VERSION = 2.1.0
- PYTHON_PYJWT_SOURCE = PyJWT-$(PYTHON_PYJWT_VERSION).tar.gz
--PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/14/6d/096dc269d105ba374d6bfd3ecb22b516795ca0572499820dadc8178d9ae1
-+PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/0c/c6/3cdc7cb1289b35186fd7fd61836b6d83632ca0f7eee552516777361667b1
- PYTHON_PYJWT_SETUP_TYPE = setuptools
- PYTHON_PYJWT_LICENSE = MIT
- PYTHON_PYJWT_LICENSE_FILES = LICENSE
+-KODI_PVR_IPTVSIMPLE_VERSION = 7.6.2-Matrix
++KODI_PVR_IPTVSIMPLE_VERSION = 7.6.4-Matrix
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
