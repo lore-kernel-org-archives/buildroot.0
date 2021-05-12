@@ -1,56 +1,109 @@
-From: Robert Nelson <robertcnelson@gmail.com>
-Date: Wed, 12 May 2021 14:29:38 -0500
-Subject: [Buildroot] [git commit] boot/opensbi: unconditionally disable
- SSP
-In-Reply-To: <87o8dfkcjf.fsf@dell.be.48ers.dk>
-References: <20210512081101.8F1A286DD7@busybox.osuosl.org>
- <CAOCHtYhAabRzQMEfLpY=mMOuazHeP-b6WmmXTcTLLnG+5KeqMw@mail.gmail.com>
- <87o8dfkcjf.fsf@dell.be.48ers.dk>
-Message-ID: <CAOCHtYjRzPPduopHqBZ5W9V+FWCeq5_5oY3CfRrZ1_-=jM4_7w@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 12 May 2021 22:42:51 +0200
+Subject: [Buildroot] [PATCH v1 2/2] package/pipewire: fix uclibc compile
+ (getrandom related)
+In-Reply-To: <20210512204251.28928-1-ps.report@gmx.net>
+References: <20210512204251.28928-1-ps.report@gmx.net>
+Message-ID: <20210512204251.28928-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->  >>>> opensbi custom Patching
->
->  > Applying 0001-Makefile-Don-t-specify-mabi-or-march.patch using patch:
->  > patching file Makefile
->  > Hunk #1 succeeded at 206 with fuzz 1 (offset 61 lines).
->  > Hunk #2 succeeded at 219 with fuzz 1 (offset 62 lines).
->
->  > Applying 0002-Makefile-unconditionally-disable-SSP.patch using patch:
->  > patching file Makefile
->  > Hunk #1 succeeded at 203 with fuzz 1.
->  > Hunk #2 FAILED at 217.
->  > Hunk #3 succeeded at 234 (offset -2 lines).
->  > 1 out of 3 hunks FAILED -- saving rejects to file Makefile.rej
->  > make: *** [package/pkg-generic.mk:209:
->
-> Ahh, that was what I was afraid of. I've sent a series to fix it:
->
-> https://patchwork.ozlabs.org/project/buildroot/list/?series=243398
->
-> In fact I did test beaglev_defconfig after adding
-> 0002-Makefile-unconditionally-disable-SSP.patch using patch, but looking
-> back in my shell history I see I tested in a tree where the above series
-> is applied.
->
-> I'll get it fixed.
+The getrandom() detection from meson.build failes with the following error
+message:
 
-Awesome Peter!  Sorry i missed that on the mailing list:
+  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name 'size_t'
+     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
+        |                                   ^~~~~~
+  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
 
-Everything looks good after that commit
+Fix it by adding stddef.h include to the meson getrandom() detection.
 
-Build Log
-http://gfnd.rcn-ee.org:8080/view/BeagleBoard/job/buildroot_beaglev_defconfig/8/consoleText
+Fixes:
 
-Build branch:
-https://github.com/beagleboard/buildroot/tree/fixes-243398-opensbi
+  - http://autobuild.buildroot.net/results/7e131bec458bf5c263ee1858d38ed5dc3cf704a6
 
-Regards,
+  ../src/pipewire/impl-core.c:54:9: error: conflicting types for ?getrandom?
+     54 | ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
+        |         ^~~~~~~~~
+  In file included from ../src/pipewire/impl-core.c:34:
+  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:12: note: previous declaration of ?getrandom? was here
+     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
+        |            ^~~~~~~~~
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Notes:
+  - maybe this failure is more a uclibc defect (missing include in
+    sys/random.h) and should be fixed there?
+
+  - fix for same/similare failure was suggested already here [1] (by
+    adding -D_GNU_SOURCE), and suggestd patch is accepted/merged upstream
+    and is already present in the 0.3.27 source code, but did not fix
+    the failure...
+
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20210504211016.1216759-1-fontaine.fabrice at gmail.com/
+---
+ ...n-fix-getrandom-detection-for-uclibc.patch | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
+
+diff --git a/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch b/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
+new file mode 100644
+index 0000000000..e902869ce9
+--- /dev/null
++++ b/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
+@@ -0,0 +1,49 @@
++From a36bc959768e100d2d72e027746e3a9d95cf29af Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Wed, 12 May 2021 22:08:39 +0200
++Subject: [PATCH] meson: fix getrandom detection for uclibc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The getrandom() detection from meson.build failes with the following error
++message:
++
++  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name 'size_t'
++     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
++        |                                   ^~~~~~
++  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
++
++Fix it by adding stddef.h include to the meson getrandom() detection.
++
++Fixes:
++
++  ../src/pipewire/impl-core.c:54:9: error: conflicting types for ?getrandom?
++     54 | ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
++        |         ^~~~~~~~~
++  In file included from ../src/pipewire/impl-core.c:34:
++  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:12: note: previous declaration of ?getrandom? was here
++     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
++        |            ^~~~~~~~~
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 03a9d174..01b4c7c8 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -274,7 +274,7 @@ if cc.has_function('memfd_create', prefix : '#include <sys/mman.h>', args : [ '-
++   cdata.set('HAVE_MEMFD_CREATE', 1)
++ endif
++ 
++-if cc.has_function('getrandom', prefix : '#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
+++if cc.has_function('getrandom', prefix : '#include <stddef.h>\n#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
++   cdata.set('HAVE_GETRANDOM', 1)
++ endif
++ 
++-- 
++2.31.1
++
 -- 
-Robert Nelson
-https://rcn-ee.com/
+2.31.1
