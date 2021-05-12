@@ -1,42 +1,53 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 12 May 2021 22:53:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnuchess: bump to version 6.2.8
-Message-ID: <20210512205300.249958-1-fontaine.fabrice@gmail.com>
+From: Chan, Donald <hoiho@lab126.com>
+Date: Wed, 12 May 2021 20:59:09 +0000
+Subject: [Buildroot] [PATCH 1/1] package/python3-six: add python3 variant
+Message-ID: <1620853148995.76548@lab126.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://lists.gnu.org/archive/html/info-gnu-chess/2021-05/msg00000.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Donald Chan <hoiho@lab126.com>
 ---
- package/gnuchess/gnuchess.hash | 2 +-
- package/gnuchess/gnuchess.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python3-six/python3-six.hash |  1 +
+ package/python3-six/python3-six.mk   | 18 ++++++++++++++++++
+ 2 files changed, 19 insertions(+)
+ create mode 120000 package/python3-six/python3-six.hash
+ create mode 100644 package/python3-six/python3-six.mk
 
-diff --git a/package/gnuchess/gnuchess.hash b/package/gnuchess/gnuchess.hash
-index 1641a7d8f9..b68eb6e0ee 100644
---- a/package/gnuchess/gnuchess.hash
-+++ b/package/gnuchess/gnuchess.hash
-@@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256  e536675a61abe82e61b919f6b786755441d9fcd4c21e1c82fb9e5340dd229846  gnuchess-6.2.7.tar.gz
-+sha256  d50446cda8012240321da39cddbb4df4d08458a8d538a4738882814139583847  gnuchess-6.2.8.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/gnuchess/gnuchess.mk b/package/gnuchess/gnuchess.mk
-index 60327dfe06..29d3590849 100644
---- a/package/gnuchess/gnuchess.mk
-+++ b/package/gnuchess/gnuchess.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUCHESS_VERSION = 6.2.7
-+GNUCHESS_VERSION = 6.2.8
- GNUCHESS_SITE = $(BR2_GNU_MIRROR)/chess
- GNUCHESS_LICENSE = GPL-3.0+
- GNUCHESS_LICENSE_FILES = COPYING
--- 
-2.30.2
+diff --git a/package/python3-six/python3-six.hash b/package/python3-six/python3-six.hash
+new file mode 120000
+index 0000000..ed8cb89
+--- /dev/null
++++ b/package/python3-six/python3-six.hash
+@@ -0,0 +1 @@
++../python-six/python-six.hash
+\ No newline at end of file
+diff --git a/package/python3-six/python3-six.mk b/package/python3-six/python3-six.mk
+new file mode 100644
+index 0000000..be64fce
+--- /dev/null
++++ b/package/python3-six/python3-six.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# python3-six
++#
++################################################################################
++
++# Please keep in sync with package/python-six/python-six.mk
++PYTHON3_SIX_VERSION = 1.15.0
++PYTHON3_SIX_SOURCE = six-$(PYTHON3_SIX_VERSION).tar.gz
++PYTHON3_SIX_SITE = https://files.pythonhosted.org/packages/6b/34/415834bfdafca3c5f451532e8a8d9ba89a21c9743a0c59fbd0205c7f9426
++PYTHON3_SIX_SETUP_TYPE = setuptools
++PYTHON3_SIX_LICENSE = MIT
++PYTHON3_SIX_LICENSE_FILES = LICENSE
++HOST_PYTHON3_SIX_DL_SUBDIR = python-six
++HOST_PYTHON3_SIX_NEEDS_HOST_PYTHON = python3
++
++$(eval $(python-package))
++$(eval $(host-python-package))
+--
+2.17.1
