@@ -1,49 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 May 2021 08:05:29 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/php: bump version
- to 7.4.19
-Message-ID: <20210512053807.510117FED3@busybox.osuosl.org>
+Date: Wed, 12 May 2021 08:05:20 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/tor: bump version
+ to 0.4.5.8
+Message-ID: <20210512053807.43506873AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2a1768d2aa63660817573fa547e660b3597e3b0
+commit: https://git.buildroot.net/buildroot/commit/?id=89688a2d2409866e1b1c76ebe460047fa19f27b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.19
+Release notes: https://blog.torproject.org/node/2031
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f4d019168929a494fe840321d6adb8a6f9115bf0)
+(cherry picked from commit 294e939a5136684a84a0dff728f5e4a7f014509e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index ecb290bab2..3fb0d09d32 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  ab97f22b128d21dcbc009b50a37aaea0051b2721cbcd122d9e00e6ffc3c4b7e1  php-7.4.18.tar.xz
-+sha256  6c17172c4a411ccb694d9752de899bb63c72a0a3ebe5089116bc13658a1467b2  php-7.4.19.tar.xz
- 
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 89437c5206..73553e0395 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index e46335f79c..dd20bbc92e 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  447fcaaa133e2ef22427e98098a60a9c495edf9ff3e0dd13f484b9ad0185f074  tor-0.4.5.7.tar.gz
++sha256  57ded091e8bcdcebb0013fe7ef4a4439827cb169358c7874fd05fa00d813e227  tor-0.4.5.8.tar.gz
+ sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 6eed5e4a47..4a16967d42 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.4.18
-+PHP_VERSION = 7.4.19
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-TOR_VERSION = 0.4.5.7
++TOR_VERSION = 0.4.5.8
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
