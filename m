@@ -1,125 +1,219 @@
-From: Robert Nelson <robertcnelson@gmail.com>
-Date: Wed, 12 May 2021 07:45:17 -0500
-Subject: [Buildroot] [git commit] boot/opensbi: unconditionally disable
- SSP
-In-Reply-To: <20210512081101.8F1A286DD7@busybox.osuosl.org>
-References: <20210512081101.8F1A286DD7@busybox.osuosl.org>
-Message-ID: <CAOCHtYhAabRzQMEfLpY=mMOuazHeP-b6WmmXTcTLLnG+5KeqMw@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 12 May 2021 19:17:30 +0200
+Subject: [Buildroot] sudo: error while loading shared libraries
+In-Reply-To: <AM0PR06MB5923BBCDE75371734EDAA309C0549@AM0PR06MB5923.eurprd06.prod.outlook.com>
+References: <AM0PR06MB5923A441CD0C1EF1952FC031C05A9@AM0PR06MB5923.eurprd06.prod.outlook.com>
+ <20210504214306.378dbbaf@windsurf>
+ <AM0PR06MB5923BCE07863B47DBF9AAC02C0599@AM0PR06MB5923.eurprd06.prod.outlook.com>
+ <AM0PR06MB5923358E8BAADC4FAA9F5542C0589@AM0PR06MB5923.eurprd06.prod.outlook.com>
+ <20210506213744.3c03ca12@gmx.net>
+ <AM0PR06MB5923BBCDE75371734EDAA309C0549@AM0PR06MB5923.eurprd06.prod.outlook.com>
+Message-ID: <20210512191730.0a16ca32@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 12, 2021 at 3:39 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> commit: https://git.buildroot.net/buildroot/commit/?id=2f7582538fa5cbf67bc15ec1ce14d1b898f2e81e
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Fix build failure raised since commit
-> 810ba387bec3c5b6904e8893fb4cb6f9d3717466
->
-> Fixes:
->  - https://gitlab.com/kubu93/buildroot/-/jobs/1247043359
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...0002-Makefile-unconditionally-disable-SSP.patch | 53 ++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
->
-> diff --git a/boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch b/boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch
-> new file mode 100644
-> index 0000000000..c4edd37f1a
-> --- /dev/null
-> +++ b/boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch
-> @@ -0,0 +1,53 @@
-> +From e389d5fbc296e496db15368b2b621e0f178f7f34 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sat, 8 May 2021 21:28:10 +0200
-> +Subject: [PATCH] Makefile: unconditionally disable SSP
-> +
-> +Though -nostdlib is passed in {C,+AS,DTSCPP}FLAGS, -fno-stack-protector
-> +must also be passed to avoid linking errors related to undefined
-> +references to '__stack_chk_guard' and '__stack_chk_fail' if toolchain
-> +enforces -fstack-protector.
-> +
-> +Fixes:
-> + - https://gitlab.com/kubu93/buildroot/-/jobs/1247043359
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/riscv/opensbi/pull/211]
-> +---
-> + Makefile | 6 +++---
-> + 1 file changed, 3 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index eeffe6b..1419360 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -203,7 +203,7 @@ GENFLAGS   +=      $(libsbiutils-genflags-y)
-> + GENFLAGS      +=      $(platform-genflags-y)
-> + GENFLAGS      +=      $(firmware-genflags-y)
-> +
-> +-CFLAGS                =       -g -Wall -Werror -ffreestanding -nostdlib -fno-strict-aliasing -O2
-> ++CFLAGS                =       -g -Wall -Werror -ffreestanding -nostdlib -fno-stack-protector -fno-strict-aliasing -O2
-> + CFLAGS                +=      -fno-omit-frame-pointer -fno-optimize-sibling-calls
-> + CFLAGS                +=      -mno-save-restore -mstrict-align
-> + CFLAGS                +=      -mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
-> +@@ -217,7 +217,7 @@ CPPFLAGS   +=      $(GENFLAGS)
-> + CPPFLAGS      +=      $(platform-cppflags-y)
-> + CPPFLAGS      +=      $(firmware-cppflags-y)
-> +
-> +-ASFLAGS               =       -g -Wall -nostdlib -D__ASSEMBLY__
-> ++ASFLAGS               =       -g -Wall -nostdlib -fno-stack-protector -D__ASSEMBLY__
-> + ASFLAGS               +=      -fno-omit-frame-pointer -fno-optimize-sibling-calls
-> + ASFLAGS               +=      -mno-save-restore -mstrict-align
-> + ASFLAGS               +=      -mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
-> +@@ -236,7 +236,7 @@ MERGEFLAGS +=      -r
-> + MERGEFLAGS    +=      -b elf$(PLATFORM_RISCV_XLEN)-littleriscv
-> + MERGEFLAGS    +=      -m elf$(PLATFORM_RISCV_XLEN)lriscv
-> +
-> +-DTSCPPFLAGS   =       $(CPPFLAGS) -nostdinc -nostdlib -fno-builtin -D__DTS__ -x assembler-with-cpp
-> ++DTSCPPFLAGS   =       $(CPPFLAGS) -nostdinc -nostdlib -fno-stack-protector -fno-builtin -D__DTS__ -x assembler-with-cpp
-> +
-> + # Setup functions for compilation
-> + define dynamic_flags
-> +--
-> +2.30.2
-> +
+Hello Uwe,
 
-Just a heads up, our BeagleBoard.org CI triggered a build failure
-after this commit last night..
+On Mon, 10 May 2021 13:10:31 +0000, Uwe Fechner <uwe.fechner@nl.abb.com> wrote:
 
-```
-make distclean
-make beaglev_defconfig
-make -j8
-```
+> Dear Peter,
+>
+> I executed the steps that you suggested. My results:
+>
+> ufechner at builder:~/repos/armxl-buildroot$ cat build_rootfs.log | grep rpath | grep libtool | tail -1
+> libtool: link: /mnt/data/repos/armxl-buildroot/output_imx6_rootfs/host/bin/arm-buildroot-linux-gnueabihf-gcc -o sudo conversation.o copy_file.o edit_open.o env_hooks.o exec.o exec_common.o exec_monitor.o exec_nopty.o exec_pty.o get_pty.o hooks.o limits.o load_plugins.o net_ifs.o parse_args.o preserve_fds.o signal.o sudo.o sudo_edit.o tcsetpgrp_nobg.o tgetpass.o ttyname.o utmp.o -Wl,--enable-new-dtags -Wl,-z -Wl,relro -fstack-protector-strong  -lutil ../lib/util/.libs/libsudo_util.so -lpthread -ldl -Wl,-rpath -Wl,/mnt/data/repos/armxl-buildroot/output_imx6_rootfs/build/sudo-1.9.5p2/lib/util/.libs -Wl,-rpath -Wl,/usr/libexec/sudo
 
-/mnt/storage/var/lib/jenkins/workspace/buildroot_beaglev_defconfig/output/build/opensbi-custom
-  -xf -
->>> opensbi custom Patching
+This one looks good...
 
-Applying 0001-Makefile-Don-t-specify-mabi-or-march.patch using patch:
-patching file Makefile
-Hunk #1 succeeded at 206 with fuzz 1 (offset 61 lines).
-Hunk #2 succeeded at 219 with fuzz 1 (offset 62 lines).
+>
+> ufechner at builder:~/repos/armxl-buildroot/output_imx6_rootfs$ readelf -d ./target/usr/bin/sudo | grep RUNPATH
+>  0x0000001d (RUNPATH)                    Library runpath: [libexec/sudo]
 
-Applying 0002-Makefile-unconditionally-disable-SSP.patch using patch:
-patching file Makefile
-Hunk #1 succeeded at 203 with fuzz 1.
-Hunk #2 FAILED at 217.
-Hunk #3 succeeded at 234 (offset -2 lines).
-1 out of 3 hunks FAILED -- saving rejects to file Makefile.rej
-make: *** [package/pkg-generic.mk:209:
-/mnt/storage/var/lib/jenkins/workspace/buildroot_beaglev_defconfig/output/build/opensbi-custom/.stamp_patched]
-Error 1
-Build step 'Execute shell' marked build as failure
-Finished: FAILURE
+This one is definitely wrong/unexpected...
+
+>
+> ufechner at builder:~/repos/armxl-buildroot/output_imx6_rootfs$ make > /dev/null 2>&1
+> ufechner at builder:~/repos/armxl-buildroot/output_imx6_rootfs$ readelf -d ./target/usr/bin/sudo | grep RUNPATH
+>  0x0000001d (RUNPATH)                    Library runpath: []
+
+Follow-up failure, only the correct/absolute path '/usr/libexec/sudo' would be kept...
+
+>
+> So the runpath is wrong after the first build and empty after the second build.
+>
+> Any idea why this can happen?
+
+Can you try to execute the link step on command line?
+
+	$ cd build/sudo-1.9.5p2/src
+	$ /mnt/data/repos/armxl-buildroot/output_imx6_rootfs/host/bin/arm-buildroot-linux-gnueabihf-gcc -o sudo ...
+	$ readelf -d sudo
+
+Do you have ccache enabled (in case try to build without)?
 
 Regards,
+Peter
 
--- 
-Robert Nelson
-https://rcn-ee.com/
+>
+> Uwe
+> ________________________________
+> From: Peter Seiderer <ps.report@gmx.net>
+> Sent: Thursday, May 6, 2021 9:37 PM
+> To: Uwe Fechner <uwe.fechner@nl.abb.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>; buildroot at busybox.net <buildroot@busybox.net>
+> Subject: Re: [Buildroot] sudo: error while loading shared libraries
+>
+> This email originated from outside of your organization. Please do not click on links or open attachments unless you recognize the sender and know the content is safe.
+>
+>
+> Hello Uwe,
+>
+> On Thu, 6 May 2021 11:34:13 +0000, Uwe Fechner <uwe.fechner@nl.abb.com> wrote:
+>
+> > Dear all,
+> >
+> > I fixed the problem with sudo by adding the following symlink:
+> >
+> > [/lib]$ ls -la libsudo_util.so.0
+> > lrwxrwxrwx 1 root root 35 May  5 18:28 libsudo_util.so.0 -> /usr/libexec/sudo/libsudo_util.so.0
+> >
+> > But this is more a workaround.
+> >
+> > readelf -d sudo
+> > has the following output:
+> >
+> > Dynamic section at offset 0x20b14 contains 34 entries:
+> >   Tag        Type                         Name/Value
+> >  0x00000001 (NEEDED)                     Shared library: [libutil.so.1]
+> >  0x00000001 (NEEDED)                     Shared library: [libsudo_util.so.0]
+> >  0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
+> >  0x00000001 (NEEDED)                     Shared library: [libdl.so.2]
+> >  0x00000001 (NEEDED)                     Shared library: [libc.so.6]
+> >  0x00000001 (NEEDED)                     Shared library: [ld-linux-armhf.so.3]
+> >  0x0000001d (RUNPATH)                    Library runpath: [libexec/sudo]
+> >  0x0000000c (INIT)                       0x2f1c
+> >
+> > The library runpath is wrong, it should be /usr/libexec/sudo .
+> >
+> > Or the package sudo should install libsudo_util.so.0 in the folder /lib.
+> >
+> > My conclusion is that there is a bug in the package sudo, version 1.9.5p2 .
+> >
+> > Any comments?
+>
+> Please provide the output of the following commands (example output given):
+>
+>         $ rm -rf build/sudo-1.9.5p2
+>
+>         $ make sudo 2>&1 | grep rpath | tail -1
+> libtool: link: <your_build_path>/host/bin/aarch64-buildroot-linux-gnu-gcc -o sudo conversation.o copy_file.o edit_open.o env_hooks.o exec.o exec_common.o exec_monitor.o exec_nopty.o exec_pty.o get_pty.o hooks.o limits.o load_plugins.o net_ifs.o parse_args.o preserve_fds.o signal.o sudo.o sudo_edit.o tcsetpgrp_nobg.o tgetpass.o ttyname.o utmp.o -Wl,--enable-new-dtags -Wl,-z -Wl,relro -fstack-protector-strong  -lutil ../lib/util/.libs/libsudo_util.so -lpthread -ldl -Wl,-rpath -Wl,<your_build_path>/build/sudo-1.9.5p2/lib/util/.libs -Wl,-rpath -Wl,/usr/libexec/sudo
+>
+>         $ readelf -d ./target/usr/bin/sudo | grep RUNPATH
+>  0x000000000000001d (RUNPATH)            Library runpath: [<your_build_path>/build/sudo-1.9.5p2/lib/util/.libs:/usr/libexec/sudo]
+>
+>         $ make > /dev/null 2>&1
+>
+>         $ readelf -d ./target/usr/bin/sudo | grep RUNPATH
+>  0x000000000000001d (RUNPATH)            Library runpath: [/usr/libexec/sudo]
+>
+>
+> Just to check if the rpath is corrupted from start/compile on or if it is
+> a problem of the buildroot sanitizing rpath step (or some funny problem
+> with your local build path)...
+>
+> Regards,
+> Peter
+>
+> >
+> > Uwe
+> > ________________________________
+> > From: buildroot <buildroot-bounces@busybox.net> on behalf of Uwe Fechner <uwe.fechner@nl.abb.com>
+> > Sent: Wednesday, May 5, 2021 1:14 PM
+> > To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Cc: buildroot at busybox.net <buildroot@busybox.net>
+> > Subject: Re: [Buildroot] sudo: error while loading shared libraries
+> >
+> > This email originated from outside of your organization. Please do not click on links or open attachments unless you recognize the sender and know the content is safe.
+> >
+> > Dear Thomas,
+> >
+> > Thanks for looking into this issue, but your suggestion did not help:
+> >
+> > $ LD_LIBRARY_PATH=/usr/libexec/sudo sudo dmesg
+> > sudo: error while loading shared libraries: libsudo_util.so.0: cannot open shared object file: No such file or directory
+> >
+> > Any other idea?
+> >
+> > Uwe
+> > ________________________________
+> > From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Sent: Tuesday, May 4, 2021 9:43 PM
+> > To: Uwe Fechner <uwe.fechner@nl.abb.com>
+> > Cc: buildroot at busybox.net <buildroot@busybox.net>
+> > Subject: Re: [Buildroot] sudo: error while loading shared libraries
+> >
+> > This email originated from outside of your organization. Please do not click on links or open attachments unless you recognize the sender and know the content is safe.
+> >
+> >
+> > Hello Uwe,
+> >
+> > On Tue, 4 May 2021 11:18:59 +0000
+> > Uwe Fechner <uwe.fechner@nl.abb.com> wrote:
+> >
+> > > Hello,
+> > >
+> > > we are using buildroot on i.mx6 since a long time.
+> > >
+> > > Since yesterday I get the following error with the sudo package:
+> > >
+> > > sudo dmesg
+> > > sudo: error while loading shared libraries: libsudo_util.so.0: cannot open shared object file: No such file or directory
+> > >
+> > > We are using sudo-1.9.5p2 .
+> > >
+> > > The library exists and the permissions seem to be correct:
+> > >
+> > >
+> > > ls -la /usr/libexec/sudo
+> >
+> > Based on the error message, it seems like the library is not dlopen()ed
+> > but directly linked into sudo. Hwoever, /usr/libexec/sudo is not in the
+> > default search path for libraries, and therefore unless the sudo binary
+> > has a RPATH/RUNPATH pointing to /usr/libexec/sudo, I believe what
+> > you're seeing is expected.
+> >
+> > To verify this, you can try:
+> >
+> > LD_LIBRARY_PATH=/usr/libexec/sudo sudo dmesg
+> >
+> > Really, I think libsudo_util.so has no business in /usr/libexec/sudo,
+> > it should be in /usr/lib. Based on the names of the other .so files,
+> > they look like dlopen()ed libraries, which can stay in
+> > /usr/libexec/sudo.
+> >
+> > > total 588
+> > > drwxr-xr-x  2 root root   4096 May  3 19:31 .
+> > > drwxr-xr-x 11 root root   4096 May  3 19:31 ..
+> > > -rw-r--r--  1 root root  17716 May  3 19:31 audit_json.so
+> > > -rw-r--r--  1 root root   9380 May  3 19:31 group_file.so
+> > > lrwxrwxrwx  1 root root     21 May  3 19:31 libsudo_util.so -> libsudo_util.so.0.0.0
+> > > lrwxrwxrwx  1 root root     21 May  3 19:31 libsudo_util.so.0 -> libsudo_util.so.0.0.0
+> > > -rwxr-xr-x  1 root root 112412 May  3 19:31 libsudo_util.so.0.0.0
+> > > -rw-r--r--  1 root root   5284 May  3 19:31 sample_approval.so
+> > > -rw-r--r--  1 root root 420184 May  3 19:31 sudoers.so
+> > > -rw-r--r--  1 root root   5260 May  3 19:31 sudo_noexec.so
+> > > -rw-r--r--  1 root root   5276 May  3 19:31 system_group.so
+> > >
+> > > Any idea?
+> >
+> > Best regards,
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, co-owner and CEO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://eur03.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbootlin.com%2F&amp;data=04%7C01%7Cuwe.fechner%40nl.abb.com%7Ce0d8778cc32d405444e608d910c671b9%7C372ee9e09ce04033a64ac07073a91ecd%7C0%7C0%7C637559266760586100%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=sPNAosKwE5yE%2BWuSNtWaMwStdoE2QHzgRG1z7wdXul8%3D&amp;reserved=0<https://eur03.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbootlin.com%2F&amp;data=04%7C01%7Cuwe.fechner%40nl.abb.com%7Ce0d8778cc32d405444e608d910c671b9%7C372ee9e09ce04033a64ac07073a91ecd%7C0%7C0%7C637559266760586100%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=sPNAosKwE5yE%2BWuSNtWaMwStdoE2QHzgRG1z7wdXul8%3D&amp;reserved=0>
+>
