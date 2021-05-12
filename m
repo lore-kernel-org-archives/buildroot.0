@@ -1,47 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 May 2021 08:31:03 +0200
-Subject: [Buildroot] [git commit] package/sysklogd: bump to version 2.2.3
-Message-ID: <20210512060257.8C31E815DB@busybox.osuosl.org>
+Date: Wed, 12 May 2021 09:41:04 +0200
+Subject: [Buildroot] [PATCH] package/rt-tests: add patch to fix
+ compatibility with make 3.81
+Message-ID: <20210512074104.14180-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8036c23d5964cf924d8857cf1a8f711404458950
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+http://autobuild.buildroot.net/results/cf7c4f360f5464c700788cc8299fd086544c80e8/build-end.log
 
-https://github.com/troglobit/sysklogd/releases/tag/v2.2.3
+Older GNU make versions don't like the explicit undefine.  It isn't really
+needed as ifdef handles undefined and defined-to-the-empty-string the same
+way, so just drop the undefine logic.
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sysklogd/sysklogd.hash | 5 ++++-
- package/sysklogd/sysklogd.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ ...plicit-undefine-PYLIB-for-compatibil.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
 
-diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
-index 0ef5e17116..6d3ba8f960 100644
---- a/package/sysklogd/sysklogd.hash
-+++ b/package/sysklogd/sysklogd.hash
-@@ -1,3 +1,6 @@
-+# Upstream .md5 and .sha256 from GitHub
-+md5 2c6749c49f52b8c5dad18e9a9315e7dd  sysklogd-2.2.3.tar.gz
-+sha256 e7ea09c15511a63c430e84f65ce3bf55a0386ee419ab52e9341c4a9fabae59ad  sysklogd-2.2.3.tar.gz
+diff --git a/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch b/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
+new file mode 100644
+index 0000000000..f71ba09a79
+--- /dev/null
++++ b/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
+@@ -0,0 +1,48 @@
++From 84fea5d784e010f84c860b34e55ea2c855c17b3b Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Wed, 12 May 2021 09:18:33 +0200
++Subject: [PATCH] Makefile: drop explicit undefine PYLIB for compatibility with
++ make 3.81
 +
- # Locally calculated
--sha256  2752a693a2486f7e532b6b028296c8ac0a97def8a4848f1e915f3e583fd0b4b6  sysklogd-2.2.2.tar.gz
- sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index 0110974069..7c5de95743 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSKLOGD_VERSION = 2.2.2
-+SYSKLOGD_VERSION = 2.2.3
- SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
- SYSKLOGD_LICENSE = BSD-3-Clause
- SYSKLOGD_LICENSE_FILES = LICENSE
++GNU make 3.81 does not like the explicit tab-indented undefine:
++
++Makefile:41: *** commands commence before first target.  Stop.
++
++Dropping the indentation also doesn't work:
++
++Makefile:41: *** missing separator.  Stop.
++
++So simply drop the undefine logic.  As explained in the GNU make manual,
++undefine is not commonly needed as E.G. ifdef checks for a non-zero string:
++
++https://www.gnu.org/software/make/manual/html_node/Undefine-Directive.html
++https://www.gnu.org/software/make/manual/html_node/Conditional-Syntax.html
++
++Fixes:
++http://autobuild.buildroot.net/results/cf7c4f360f5464c700788cc8299fd086544c80e8/build-end.log
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++[Upstream: https://marc.info/?l=linux-rt-users&m=162080462211139&w=2]
++---
++ Makefile | 5 -----
++ 1 file changed, 5 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index b17ac09..ec85ac8 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -36,11 +36,6 @@ LDFLAGS ?=
++ 
++ PYLIB  ?= $(shell python3 -c 'import distutils.sysconfig;  print (distutils.sysconfig.get_python_lib())')
++ 
++-# Check for errors, such as python3 not available
++-ifeq (${PYLIB},)
++-	undefine PYLIB
++-endif
++-
++ MANPAGES = src/cyclictest/cyclictest.8 \
++ 	   src/pi_tests/pi_stress.8 \
++ 	   src/ptsematest/ptsematest.8 \
++-- 
++2.20.1
++
+-- 
+2.20.1
