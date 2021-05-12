@@ -1,80 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 May 2021 09:41:04 +0200
-Subject: [Buildroot] [PATCH] package/rt-tests: add patch to fix
- compatibility with make 3.81
-Message-ID: <20210512074104.14180-1-peter@korsgaard.com>
+Date: Wed, 12 May 2021 09:43:18 +0200
+Subject: [Buildroot] [git commit] boot/opensbi: unconditionally disable SSP
+Message-ID: <20210512081101.8F1A286DD7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=2f7582538fa5cbf67bc15ec1ce14d1b898f2e81e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fix build failure raised since commit
+810ba387bec3c5b6904e8893fb4cb6f9d3717466
+
 Fixes:
-http://autobuild.buildroot.net/results/cf7c4f360f5464c700788cc8299fd086544c80e8/build-end.log
+ - https://gitlab.com/kubu93/buildroot/-/jobs/1247043359
 
-Older GNU make versions don't like the explicit undefine.  It isn't really
-needed as ifdef handles undefined and defined-to-the-empty-string the same
-way, so just drop the undefine logic.
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...plicit-undefine-PYLIB-for-compatibil.patch | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
+ ...0002-Makefile-unconditionally-disable-SSP.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch b/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
+diff --git a/boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch b/boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch
 new file mode 100644
-index 0000000000..f71ba09a79
+index 0000000000..c4edd37f1a
 --- /dev/null
-+++ b/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
-@@ -0,0 +1,48 @@
-+From 84fea5d784e010f84c860b34e55ea2c855c17b3b Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Wed, 12 May 2021 09:18:33 +0200
-+Subject: [PATCH] Makefile: drop explicit undefine PYLIB for compatibility with
-+ make 3.81
++++ b/boot/opensbi/0002-Makefile-unconditionally-disable-SSP.patch
+@@ -0,0 +1,53 @@
++From e389d5fbc296e496db15368b2b621e0f178f7f34 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 8 May 2021 21:28:10 +0200
++Subject: [PATCH] Makefile: unconditionally disable SSP
 +
-+GNU make 3.81 does not like the explicit tab-indented undefine:
-+
-+Makefile:41: *** commands commence before first target.  Stop.
-+
-+Dropping the indentation also doesn't work:
-+
-+Makefile:41: *** missing separator.  Stop.
-+
-+So simply drop the undefine logic.  As explained in the GNU make manual,
-+undefine is not commonly needed as E.G. ifdef checks for a non-zero string:
-+
-+https://www.gnu.org/software/make/manual/html_node/Undefine-Directive.html
-+https://www.gnu.org/software/make/manual/html_node/Conditional-Syntax.html
++Though -nostdlib is passed in {C,+AS,DTSCPP}FLAGS, -fno-stack-protector
++must also be passed to avoid linking errors related to undefined
++references to '__stack_chk_guard' and '__stack_chk_fail' if toolchain
++enforces -fstack-protector.
 +
 +Fixes:
-+http://autobuild.buildroot.net/results/cf7c4f360f5464c700788cc8299fd086544c80e8/build-end.log
++ - https://gitlab.com/kubu93/buildroot/-/jobs/1247043359
 +
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+[Upstream: https://marc.info/?l=linux-rt-users&m=162080462211139&w=2]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/riscv/opensbi/pull/211]
 +---
-+ Makefile | 5 -----
-+ 1 file changed, 5 deletions(-)
++ Makefile | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
 +
 +diff --git a/Makefile b/Makefile
-+index b17ac09..ec85ac8 100644
++index eeffe6b..1419360 100644
 +--- a/Makefile
 ++++ b/Makefile
-+@@ -36,11 +36,6 @@ LDFLAGS ?=
++@@ -203,7 +203,7 @@ GENFLAGS	+=	$(libsbiutils-genflags-y)
++ GENFLAGS	+=	$(platform-genflags-y)
++ GENFLAGS	+=	$(firmware-genflags-y)
 + 
-+ PYLIB  ?= $(shell python3 -c 'import distutils.sysconfig;  print (distutils.sysconfig.get_python_lib())')
++-CFLAGS		=	-g -Wall -Werror -ffreestanding -nostdlib -fno-strict-aliasing -O2
+++CFLAGS		=	-g -Wall -Werror -ffreestanding -nostdlib -fno-stack-protector -fno-strict-aliasing -O2
++ CFLAGS		+=	-fno-omit-frame-pointer -fno-optimize-sibling-calls
++ CFLAGS		+=	-mno-save-restore -mstrict-align
++ CFLAGS		+=	-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
++@@ -217,7 +217,7 @@ CPPFLAGS	+=	$(GENFLAGS)
++ CPPFLAGS	+=	$(platform-cppflags-y)
++ CPPFLAGS	+=	$(firmware-cppflags-y)
 + 
-+-# Check for errors, such as python3 not available
-+-ifeq (${PYLIB},)
-+-	undefine PYLIB
-+-endif
-+-
-+ MANPAGES = src/cyclictest/cyclictest.8 \
-+ 	   src/pi_tests/pi_stress.8 \
-+ 	   src/ptsematest/ptsematest.8 \
++-ASFLAGS		=	-g -Wall -nostdlib -D__ASSEMBLY__
+++ASFLAGS		=	-g -Wall -nostdlib -fno-stack-protector -D__ASSEMBLY__
++ ASFLAGS		+=	-fno-omit-frame-pointer -fno-optimize-sibling-calls
++ ASFLAGS		+=	-mno-save-restore -mstrict-align
++ ASFLAGS		+=	-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
++@@ -236,7 +236,7 @@ MERGEFLAGS	+=	-r
++ MERGEFLAGS	+=	-b elf$(PLATFORM_RISCV_XLEN)-littleriscv
++ MERGEFLAGS	+=	-m elf$(PLATFORM_RISCV_XLEN)lriscv
++ 
++-DTSCPPFLAGS	=	$(CPPFLAGS) -nostdinc -nostdlib -fno-builtin -D__DTS__ -x assembler-with-cpp
+++DTSCPPFLAGS	=	$(CPPFLAGS) -nostdinc -nostdlib -fno-stack-protector -fno-builtin -D__DTS__ -x assembler-with-cpp
++ 
++ # Setup functions for compilation
++ define dynamic_flags
 +-- 
-+2.20.1
++2.30.2
 +
--- 
-2.20.1
