@@ -1,109 +1,116 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Wed, 12 May 2021 18:36:01 +0000
-Subject: [Buildroot] [PATCH v5 00/10] Introduce EDK2 firmware package
-Message-ID: <p9VS7hxOeVbmgXCpzw2M5AgR6LaCg2UWWsxGYZA@cp7-web-044.plabs.ch>
+Date: Wed, 12 May 2021 18:36:08 +0000
+Subject: [Buildroot] [PATCH v5 01/10] package/edk2-platforms: new package
+Message-ID: <buGUzSnm6tM6CssMCskxGQMGXna4RCOMCb9cIxDgMg@cp3-web-024.plabs.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+EDK2 firmware is usually built from two sources; the core EDK2
+environment, and additional platform description files maintained
+separately. This package adds the latter set of description files to
+staging so that the core EDK2 package can build with these for certain
+platforms during the building process.
 
-This latest revision addresses feedback from multiple people (see the
-revision log on each patch) as well as simplifies the series itself:
+Signed-off-by: Dick Olsson <hi@senzilla.io>
 
- * Do not introduce a new qemu_aarch64_virt_efi_defconfig
- * Instead, modify the existing qemu_aarch64_virt_defconfig [1]
- * Merge the boot/edk2 and boot/arm-trusted-firmware patches
- * Simplify various defconfigs and scripts by relying GRUB2 for booting
+---
 
-I also bumped the edk2 packages to the latest stable version and
-introduced a runtime test for the whole boot chain.
+Revision 5:
 
-[1]: See discussion in
-http://patchwork.ozlabs.org/project/buildroot/patch/20200712163422.1162187-3-romain.naour at gmail.com/
+ * check-package fixes
+ * Bumped to the latest stable version
 
-Dick Olsson (10):
-  package/edk2-platforms: new package
-  boot/edk2: new package
-  configs/aarch64_efi_defconfig: build the EDK2 firmware from source
-  configs/pc_x86_64_efi_defconfig: build the EDK2 firmware from source
-  configs/qemu_aarch64_virt_defconfig: build with EDK2 firmware
-  configs/qemu_aarch64_sbsa_defconfig: new config for QEMU sbsa-ref
-  configs/socionext_developerbox_defconfig: new config for Developerbox
-  configs/solidrun_macchiatobin_efi_defconfig: EFI config for
-    MacchiatoBin
-  support/testing: new boot test for EDK2
-  DEVELOPERS: add files related to EDK2 for Dick Olsson
+Revision 4:
 
- DEVELOPERS                                    |  16 ++
- board/aarch64-efi/post-image.sh               |   4 +
- board/aarch64-efi/readme.txt                  |   9 +-
- board/pc/readme.txt                           |   9 +-
- board/qemu/aarch64-sbsa/assemble-flash-images |  11 ++
- board/qemu/aarch64-sbsa/genimage.cfg          |  30 ++++
- board/qemu/aarch64-sbsa/grub.cfg              |   6 +
- board/qemu/aarch64-sbsa/linux.config          |  68 ++++++++
- board/qemu/aarch64-sbsa/readme.txt            |  32 ++++
- board/qemu/aarch64-virt/assemble-flash-images |  12 ++
- board/qemu/aarch64-virt/genimage.cfg          |  30 ++++
- board/qemu/aarch64-virt/grub.cfg              |   6 +
- board/qemu/aarch64-virt/readme.txt            |   2 +-
- .../developerbox/assemble-flash-images        |   7 +
- board/socionext/developerbox/genimage.cfg     |  30 ++++
- board/socionext/developerbox/grub.cfg         |   6 +
- board/socionext/developerbox/readme.txt       |  16 ++
- .../macchiatobin-efi/assemble-flash-images    |   7 +
- board/solidrun/macchiatobin-efi/genimage.cfg  |  30 ++++
- board/solidrun/macchiatobin-efi/grub.cfg      |   6 +
- .../solidrun/macchiatobin-efi/linux.fragment  |   3 +
- board/solidrun/macchiatobin-efi/readme.txt    |  90 +++++++++++
- boot/Config.in                                |   1 +
- boot/arm-trusted-firmware/Config.in           |  15 +-
- .../arm-trusted-firmware.mk                   |   9 ++
- boot/edk2/Config.in                           | 110 +++++++++++++
- boot/edk2/edk2.hash                           |   3 +
- boot/edk2/edk2.mk                             | 150 ++++++++++++++++++
- configs/aarch64_efi_defconfig                 |   2 +
- configs/pc_x86_64_efi_defconfig               |   2 +
- configs/qemu_aarch64_sbsa_defconfig           |  49 ++++++
- configs/qemu_aarch64_virt_defconfig           |  25 ++-
- configs/socionext_developerbox_defconfig      |  24 +++
- configs/solidrun_macchiatobin_efi_defconfig   |  28 ++++
- package/Config.in                             |   1 +
- package/edk2-platforms/Config.in              |   8 +
- package/edk2-platforms/edk2-platforms.hash    |   3 +
- package/edk2-platforms/edk2-platforms.mk      |  22 +++
- support/testing/tests/boot/test_edk2.py       |  45 ++++++
- 39 files changed, 913 insertions(+), 14 deletions(-)
- create mode 100755 board/qemu/aarch64-sbsa/assemble-flash-images
- create mode 100644 board/qemu/aarch64-sbsa/genimage.cfg
- create mode 100644 board/qemu/aarch64-sbsa/grub.cfg
- create mode 100644 board/qemu/aarch64-sbsa/linux.config
- create mode 100644 board/qemu/aarch64-sbsa/readme.txt
- create mode 100755 board/qemu/aarch64-virt/assemble-flash-images
- create mode 100644 board/qemu/aarch64-virt/genimage.cfg
- create mode 100644 board/qemu/aarch64-virt/grub.cfg
- create mode 100755 board/socionext/developerbox/assemble-flash-images
- create mode 100644 board/socionext/developerbox/genimage.cfg
- create mode 100644 board/socionext/developerbox/grub.cfg
- create mode 100644 board/socionext/developerbox/readme.txt
- create mode 100755 board/solidrun/macchiatobin-efi/assemble-flash-images
- create mode 100644 board/solidrun/macchiatobin-efi/genimage.cfg
- create mode 100644 board/solidrun/macchiatobin-efi/grub.cfg
- create mode 100644 board/solidrun/macchiatobin-efi/linux.fragment
- create mode 100644 board/solidrun/macchiatobin-efi/readme.txt
- create mode 100644 boot/edk2/Config.in
- create mode 100644 boot/edk2/edk2.hash
- create mode 100644 boot/edk2/edk2.mk
- create mode 100644 configs/qemu_aarch64_sbsa_defconfig
- create mode 100644 configs/socionext_developerbox_defconfig
- create mode 100644 configs/solidrun_macchiatobin_efi_defconfig
+ * Addressed review items from Yann Morin
+ * Install description files to the staging dir instead of the host dir
+ * Updated to HEAD as of 7 Jan, 2021
+
+Revision 3:
+
+ * Added standard comment header
+ * Added sha256 of the license file
+ * Updated to hash matching edk2 202008
+
+Revision 2:
+
+ * Now installs all description files into HOST_DIR so other packages do not
+   have to compile from its BUILD_DIR (suggested by Thomas Petazzoni)
+---
+ package/Config.in                          |  1 +
+ package/edk2-platforms/Config.in           |  8 ++++++++
+ package/edk2-platforms/edk2-platforms.hash |  3 +++
+ package/edk2-platforms/edk2-platforms.mk   | 22 ++++++++++++++++++++++
+ 4 files changed, 34 insertions(+)
  create mode 100644 package/edk2-platforms/Config.in
  create mode 100644 package/edk2-platforms/edk2-platforms.hash
  create mode 100644 package/edk2-platforms/edk2-platforms.mk
- create mode 100644 support/testing/tests/boot/test_edk2.py
 
+diff --git a/package/Config.in b/package/Config.in
+index 6181aaac2c..bfb8d5a78b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -460,6 +460,7 @@ endmenu
+ 	source "package/dvb-apps/Config.in"
+ 	source "package/dvbsnoop/Config.in"
+ 	source "package/edid-decode/Config.in"
++	source "package/edk2-platforms/Config.in"
+ 	source "package/eudev/Config.in"
+ 	source "package/ev3dev-linux-drivers/Config.in"
+ 	source "package/evemu/Config.in"
+diff --git a/package/edk2-platforms/Config.in b/package/edk2-platforms/Config.in
+new file mode 100644
+index 0000000000..17633c0fdd
+--- /dev/null
++++ b/package/edk2-platforms/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_EDK2_PLATFORMS
++	bool
++	help
++	  EDK2 description files for all supported platforms.
++	  The main EDK2 bootloader package will depend on these
++	  description files while building firmware for some platforms.
++
++	  https://github.com/tianocore/edk2-platforms
+diff --git a/package/edk2-platforms/edk2-platforms.hash b/package/edk2-platforms/edk2-platforms.hash
+new file mode 100644
+index 0000000000..30ae235078
+--- /dev/null
++++ b/package/edk2-platforms/edk2-platforms.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  dfdc34fea86e5037a3a6cbd2a83b1f655f16b4c9ab4f5ff9da91e45a358c9a14  edk2-platforms-db922e1253cb6f1fc456805bc42fb7d401eed5c2.tar.gz
++sha256  50ce20c9cfdb0e19ee34fe0a51fc0afe961f743697b068359ab2f862b494df80  License.txt
+diff --git a/package/edk2-platforms/edk2-platforms.mk b/package/edk2-platforms/edk2-platforms.mk
+new file mode 100644
+index 0000000000..47e6b1c51d
+--- /dev/null
++++ b/package/edk2-platforms/edk2-platforms.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# edk2-platforms
++#
++################################################################################
++
++# Keep in sync with latest commit as of the release date for boot/edk2
++EDK2_PLATFORMS_VERSION = db922e1253cb6f1fc456805bc42fb7d401eed5c2
++EDK2_PLATFORMS_SITE = $(call github,tianocore,edk2-platforms,$(EDK2_PLATFORMS_VERSION))
++EDK2_PLATFORMS_LICENSE = BSD-2-Clause
++EDK2_PLATFORMS_LICENSE_FILE = License.txt
++EDK2_PLATFORMS_INSTALL_TARGET = NO
++EDK2_PLATFORMS_INSTALL_STAGING = YES
++
++# There is nothing to build for edk2-platforms. All we need to do is to copy
++# all description files to staging, for other packages to build with.
++define EDK2_PLATFORMS_INSTALL_STAGING_CMDS
++	rm -rf $(STAGING_DIR)/usr/share/edk2-platforms
++	cp -rf $(@D) $(STAGING_DIR)/usr/share/edk2-platforms
++endef
++
++$(eval $(generic-package))
 -- 
 2.30.2
