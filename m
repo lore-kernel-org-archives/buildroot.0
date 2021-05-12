@@ -1,39 +1,58 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 12 May 2021 21:48:20 +0300
-Subject: [Buildroot] [PATCH v5 08/10]
- configs/solidrun_macchiatobin_efi_defconfig: EFI config for MacchiatoBin
-In-Reply-To: <YK98cdG9XvJlBwgNgb6z06q0X0AviluWVY7cQ4nJH7c@cp4-web-027.plabs.ch>
-References: <YK98cdG9XvJlBwgNgb6z06q0X0AviluWVY7cQ4nJH7c@cp4-web-027.plabs.ch>
-Message-ID: <875yznwzyj.fsf@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 12 May 2021 20:55:00 +0200
+Subject: [Buildroot] [git commit] boot/opensbi: unconditionally disable
+ SSP
+In-Reply-To: <CAOCHtYhAabRzQMEfLpY=mMOuazHeP-b6WmmXTcTLLnG+5KeqMw@mail.gmail.com>
+ (Robert Nelson's message of "Wed, 12 May 2021 07:45:17 -0500")
+References: <20210512081101.8F1A286DD7@busybox.osuosl.org>
+ <CAOCHtYhAabRzQMEfLpY=mMOuazHeP-b6WmmXTcTLLnG+5KeqMw@mail.gmail.com>
+Message-ID: <87o8dfkcjf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Dick,
+>>>>> "Robert" == Robert Nelson <robertcnelson@gmail.com> writes:
 
-On Wed, May 12 2021, Dick Olsson via buildroot wrote:
-> This introduces an alternative board build for the MacchiatoBin based on
-> EDK2 (UEFI) firmware loaded as BL33 by ARM Trusted Firmware.
->
-> Signed-off-by: Dick Olsson <hi@senzilla.io>
->
-> ---
+Hi,
 
-...
+ > Just a heads up, our BeagleBoard.org CI triggered a build failure
+ > after this commit last night..
 
-> +Second, attach to the serial console[1], ...
-> +
-> +[1]: http://wiki.espressobin.net/tiki-index.php?page=Quick+User+Guide
+ > ```
+ > make distclean
+ > make beaglev_defconfig
+ > make -j8
+ > ```
 
-That is not the right URL. Use this instead:
+ > /mnt/storage/var/lib/jenkins/workspace/buildroot_beaglev_defconfig/output/build/opensbi-custom
+ >   -xf -
+ >>>> opensbi custom Patching
 
-  http://wiki.macchiatobin.net/tiki-index.php?page=Quick+Start+Guide
+ > Applying 0001-Makefile-Don-t-specify-mabi-or-march.patch using patch:
+ > patching file Makefile
+ > Hunk #1 succeeded at 206 with fuzz 1 (offset 61 lines).
+ > Hunk #2 succeeded at 219 with fuzz 1 (offset 62 lines).
 
-baruch
+ > Applying 0002-Makefile-unconditionally-disable-SSP.patch using patch:
+ > patching file Makefile
+ > Hunk #1 succeeded at 203 with fuzz 1.
+ > Hunk #2 FAILED at 217.
+ > Hunk #3 succeeded at 234 (offset -2 lines).
+ > 1 out of 3 hunks FAILED -- saving rejects to file Makefile.rej
+ > make: *** [package/pkg-generic.mk:209:
+
+Ahh, that was what I was afraid of. I've sent a series to fix it:
+
+https://patchwork.ozlabs.org/project/buildroot/list/?series=243398
+
+In fact I did test beaglev_defconfig after adding
+0002-Makefile-unconditionally-disable-SSP.patch using patch, but looking
+back in my shell history I see I tested in a tree where the above series
+is applied.
+
+I'll get it fixed.
 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
