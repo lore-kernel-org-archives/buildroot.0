@@ -1,53 +1,49 @@
-From: Chan, Donald <hoiho@lab126.com>
-Date: Wed, 12 May 2021 20:59:09 +0000
-Subject: [Buildroot] [PATCH 1/1] package/python3-six: add python3 variant
-Message-ID: <1620853148995.76548@lab126.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 12 May 2021 23:21:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bitcoin: security bump to version
+ 0.21.1
+Message-ID: <20210512212120.647405-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Tag as a security bump as having an up to date bitcoin is important:
+https://patchwork.ozlabs.org/project/buildroot/patch/20200202085526.35742-1-james.hilliard1 at gmail.com
 
-Signed-off-by: Donald Chan <hoiho@lab126.com>
+https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.21.1.md
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python3-six/python3-six.hash |  1 +
- package/python3-six/python3-six.mk   | 18 ++++++++++++++++++
- 2 files changed, 19 insertions(+)
- create mode 120000 package/python3-six/python3-six.hash
- create mode 100644 package/python3-six/python3-six.mk
+ package/bitcoin/bitcoin.hash | 4 ++--
+ package/bitcoin/bitcoin.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python3-six/python3-six.hash b/package/python3-six/python3-six.hash
-new file mode 120000
-index 0000000..ed8cb89
---- /dev/null
-+++ b/package/python3-six/python3-six.hash
-@@ -0,0 +1 @@
-+../python-six/python-six.hash
-\ No newline at end of file
-diff --git a/package/python3-six/python3-six.mk b/package/python3-six/python3-six.mk
-new file mode 100644
-index 0000000..be64fce
---- /dev/null
-+++ b/package/python3-six/python3-six.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# python3-six
-+#
-+################################################################################
-+
-+# Please keep in sync with package/python-six/python-six.mk
-+PYTHON3_SIX_VERSION = 1.15.0
-+PYTHON3_SIX_SOURCE = six-$(PYTHON3_SIX_VERSION).tar.gz
-+PYTHON3_SIX_SITE = https://files.pythonhosted.org/packages/6b/34/415834bfdafca3c5f451532e8a8d9ba89a21c9743a0c59fbd0205c7f9426
-+PYTHON3_SIX_SETUP_TYPE = setuptools
-+PYTHON3_SIX_LICENSE = MIT
-+PYTHON3_SIX_LICENSE_FILES = LICENSE
-+HOST_PYTHON3_SIX_DL_SUBDIR = python-six
-+HOST_PYTHON3_SIX_NEEDS_HOST_PYTHON = python3
-+
-+$(eval $(python-package))
-+$(eval $(host-python-package))
---
-2.17.1
+diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
+index 3c65c3d730..6ea3398037 100644
+--- a/package/bitcoin/bitcoin.hash
++++ b/package/bitcoin/bitcoin.hash
+@@ -1,5 +1,5 @@
+-# From https://bitcoincore.org/bin/bitcoin-core-0.21.0/SHA256SUMS.asc
+-sha256  1a91202c62ee49fb64d57a52b8d6d01cd392fffcbef257b573800f9289655f37  bitcoin-0.21.0.tar.gz
++# From https://bitcoincore.org/bin/bitcoin-core-0.21.1/SHA256SUMS.asc
++sha256  caff23449220cf45753f312cefede53a9eac64000bb300797916526236b6a1e0  bitcoin-0.21.1.tar.gz
+ 
+ # Hash for license file
+ sha256  96fe807030b21f88305adc32af62f9aa19915f2783509fd6f52aea02cf83f644  COPYING
+diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
+index 5f1684879c..142521835c 100644
+--- a/package/bitcoin/bitcoin.mk
++++ b/package/bitcoin/bitcoin.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BITCOIN_VERSION = 0.21.0
++BITCOIN_VERSION = 0.21.1
+ BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
+ BITCOIN_AUTORECONF = YES
+ BITCOIN_LICENSE = MIT
+-- 
+2.30.2
