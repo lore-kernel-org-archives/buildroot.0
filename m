@@ -1,40 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 May 2021 10:41:03 +0200
-Subject: [Buildroot] [PATCH 2/2] boot/opensbi: only check/reference
- COPYING.BSD when _LATEST_VERSION is used
-In-Reply-To: <20210512084104.26689-1-peter@korsgaard.com>
-References: <20210512084104.26689-1-peter@korsgaard.com>
-Message-ID: <20210512084104.26689-2-peter@korsgaard.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 12 May 2021 08:41:59 +0000
+Subject: [Buildroot] [Bug 13801] New: toolchainfile.cmake hardcodes
+ CMAKE_BUILD_TYPE
+Message-ID: <bug-13801-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the addition of support for custom opensbi version in commit
-5c7166d387b (boot/opensbi: add support for version configuration), we can no
-longer be sure that the license file name / hash will be correct in all
-cases, so only specify COPYING.BSD when _LATEST_VERSION is used, similar to
-how we do it for the Linux kernel.
+https://bugs.busybox.net/show_bug.cgi?id=13801
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/opensbi/opensbi.mk | 2 ++
- 1 file changed, 2 insertions(+)
+            Bug ID: 13801
+           Summary: toolchainfile.cmake hardcodes CMAKE_BUILD_TYPE
+           Product: buildroot
+           Version: 2021.02.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: christian.morales.vega at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-index f8cbbb8fcc..a525b8aea3 100644
---- a/boot/opensbi/opensbi.mk
-+++ b/boot/opensbi/opensbi.mk
-@@ -20,7 +20,9 @@ OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
- endif
- 
- OPENSBI_LICENSE = BSD-2-Clause
-+ifeq ($(BR2_TARGET_OPENSBI_LATEST_VERSION),y)
- OPENSBI_LICENSE_FILES = COPYING.BSD
-+endif
- OPENSBI_INSTALL_TARGET = NO
- OPENSBI_INSTALL_STAGING = YES
- 
+The toolchainfile.cmake file created by Buildroot says things like "# This
+toolchain file can be used both inside and outside Buildroot.". But it's not
+really friendly to outside Buildroot users since it hardcodes CMAKE_BUILD_TYPE.
+
+cmake -B build -DCMAKE_BUILD_TYPE=MinSizeRel
+-DCMAKE_TOOLCHAIN_FILE=toolchainfile.cmake should use MinSizeRel, not Debug or
+Release. Maybe I want to debug my software and want to build it with Debug
+CMAKE_BUILD_TYPE even if the rest of Buildroot has been built with Release.
+
+
+I'm not even sure how much sense it makes to make it Debug or Release based on
+BR2_ENABLE_DEBUG
+(https://git.busybox.net/buildroot/tree/package/pkg-cmake.mk?id=8036c23d5964cf924d8857cf1a8f711404458950#n269).
+BR2_ENABLE_DEBUG is described as "Build packages with debugging symbols
+enabled", i.e. it's only effect is supposed to be to add "-g". But by using the
+Debug CMAKE_BUILD_TYPE God knows what a specific package will do: it may enable
+extra logging, use a way slower algorithm to do some task...
+
+In any case I would argue
+https://git.busybox.net/buildroot/tree/package/pkg-cmake.mk?id=8036c23d5964cf924d8857cf1a8f711404458950#n94
+is a better place to set a __default__ CMAKE_BUILD_TYPE. Outside Buildroot user
+should not be seeing it.
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
