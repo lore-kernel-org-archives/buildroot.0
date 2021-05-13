@@ -1,25 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 May 2021 09:47:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bitcoin: security bump to
- version 0.21.1
-In-Reply-To: <20210512212120.647405-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 12 May 2021 23:21:20 +0200")
-References: <20210512212120.647405-1-fontaine.fabrice@gmail.com>
-Message-ID: <87eeebjcs2.fsf@dell.be.48ers.dk>
+Date: Thu, 13 May 2021 09:48:09 +0200
+Subject: [Buildroot] [PATCH] package/rt-tests: add patch to fix
+ compatibility with make 3.81
+In-Reply-To: <20210512074104.14180-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 12 May 2021 09:41:04 +0200")
+References: <20210512074104.14180-1-peter@korsgaard.com>
+Message-ID: <87a6ozjcqu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Tag as a security bump as having an up to date bitcoin is important:
- > https://patchwork.ozlabs.org/project/buildroot/patch/20200202085526.35742-1-james.hilliard1 at gmail.com
+ > Fixes:
+ > http://autobuild.buildroot.net/results/cf7c4f360f5464c700788cc8299fd086544c80e8/build-end.log
 
- > https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.21.1.md
+ > Older GNU make versions don't like the explicit undefine.  It isn't really
+ > needed as ifdef handles undefined and defined-to-the-empty-string the same
+ > way, so just drop the undefine logic.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
