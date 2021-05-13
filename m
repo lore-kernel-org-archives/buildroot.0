@@ -1,32 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 May 2021 09:46:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: security bump version to
- 3.0.14
-In-Reply-To: <20210513070431.1020998-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 13 May 2021 09:04:31 +0200")
-References: <20210513070431.1020998-1-bernd.kuhls@t-online.de>
-Message-ID: <87im3njcsu.fsf@dell.be.48ers.dk>
+Date: Thu, 13 May 2021 09:47:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bitcoin: security bump to
+ version 0.21.1
+In-Reply-To: <20210512212120.647405-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 12 May 2021 23:21:20 +0200")
+References: <20210512212120.647405-1-fontaine.fabrice@gmail.com>
+Message-ID: <87eeebjcs2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Removed patch 0002 which was applied upstream:
- > https://code.videolan.org/videolan/vlc/-/commit/41caaa08cde60c4fec4bf2e5f9610e2a1b9e6a23
+ > Tag as a security bump as having an up to date bitcoin is important:
+ > https://patchwork.ozlabs.org/project/buildroot/patch/20200202085526.35742-1-james.hilliard1 at gmail.com
 
- > Renumbered remaining patches.
+ > https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.21.1.md
 
- > Release notes:
- > https://www.videolan.org/vlc/releases/3.0.13.html
- > https://www.videolan.org/vlc/releases/3.0.12-update.html
-
- > Version 3.0.13 fixes VideoLAN-SB-VLC-3013:
- > https://www.videolan.org/security/sb-vlc3013.html
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
