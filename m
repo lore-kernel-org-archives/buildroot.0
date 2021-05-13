@@ -1,150 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 May 2021 09:45:45 +0200
-Subject: [Buildroot] [git commit] package/vlc: security bump version to
- 3.0.14
-Message-ID: <20210513072035.B52D8873AB@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 13 May 2021 13:46:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix build with -Os and gcc
+ 9 or 10
+Message-ID: <20210513114633.1926431-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a075914849457d0c52e6bb3235faa9f3fcdbefb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+For an unknown reason, gerbera fails to build with -Os and gcc 9 or 10
+since bump to version 1.8.0 in commit 8974596836945eada8e162844fb87f88adec9100:
 
-Removed patch 0002 which was applied upstream:
-https://code.videolan.org/videolan/vlc/-/commit/41caaa08cde60c4fec4bf2e5f9610e2a1b9e6a23
+[100%] Linking CXX executable gerbera
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/10.2.0/../../../../x86_64-buildroot-linux-gnu/bin/ld: liblibgerbera.a(content_manager.cc.o): in function `ContentManager::_rescanDirectory(std::shared_ptr<AutoscanDirectory>&, int, std::shared_ptr<GenericTask> const&)':
+content_manager.cc:(.text+0xb53b): undefined reference to `std::__shared_ptr<std::filesystem::__cxx11::_Dir, (__gnu_cxx::_Lock_policy)2>::swap(std::__shared_ptr<std::filesystem::__cxx11::_Dir, (__gnu_cxx::_Lock_policy)2>&)'
+collect2: error: ld returned 1 exit status
 
-Renumbered remaining patches.
+A similar build failure has been reported as gcc bug 91067:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91067
 
-Release notes:
-https://www.videolan.org/vlc/releases/3.0.13.html
-https://www.videolan.org/vlc/releases/3.0.12-update.html
+But this bug has been fixed since gcc 9.3 and 10.1 and build failures
+are raised with gcc 10.2
 
-Version 3.0.13 fixes VideoLAN-SB-VLC-3013:
-https://www.videolan.org/security/sb-vlc3013.html
+To fix this build failure, set optimisation to -O2 if needed
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/a4ee8ad7ff93939716673b611c7cc3f68dafa3d0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ... 0002-automake-add-subdir-objects-option.patch} |  0
- ...LUA_COMPAT_APIINTCASTS-for-Lua-5.3.0-comp.patch | 41 ----------------------
- ...-build-use-pkg-config-to-get-tremor-libs.patch} |  0
- ...error-using-uClibc-by-adding-sys-types.h.patch} |  0
- ...005-Don-t-assume-strerror_l-is-available.patch} |  0
- ...-ancient-run-time-fallback-to-real-time-.patch} |  0
- ...2.patch => 0007-Add-support-for-freerdp2.patch} |  0
- ...-also-use-AC_PATH_PROG-to-check-for-wayl.patch} |  0
- ...o_filter-opencv_example.cpp-fix-build-wi.patch} |  0
- package/vlc/vlc.hash                               |  8 ++---
- package/vlc/vlc.mk                                 |  2 +-
- 11 files changed, 5 insertions(+), 46 deletions(-)
+ package/gerbera/gerbera.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/vlc/0003-automake-add-subdir-objects-option.patch b/package/vlc/0002-automake-add-subdir-objects-option.patch
-similarity index 100%
-rename from package/vlc/0003-automake-add-subdir-objects-option.patch
-rename to package/vlc/0002-automake-add-subdir-objects-option.patch
-diff --git a/package/vlc/0002-lua-Define-LUA_COMPAT_APIINTCASTS-for-Lua-5.3.0-comp.patch b/package/vlc/0002-lua-Define-LUA_COMPAT_APIINTCASTS-for-Lua-5.3.0-comp.patch
-deleted file mode 100644
-index 11eaaf3b20..0000000000
---- a/package/vlc/0002-lua-Define-LUA_COMPAT_APIINTCASTS-for-Lua-5.3.0-comp.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 00135e21bec84a2fe5920d02fa0982ceb9f89a35 Mon Sep 17 00:00:00 2001
--From: Vinson Lee <vlee@freedesktop.org>
--Date: Thu, 5 Feb 2015 14:48:53 -0800
--Subject: [PATCH] lua: Define LUA_COMPAT_APIINTCASTS for Lua >= 5.3.0
-- compatibility.
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--In Lua 5.3.0, luaL_checkint was deprecated.
--
--This patch fixes this build error with Lua 5.3.0.
--
--lua/demux.c: In function ???vlclua_demux_peek???:
--lua/demux.c:55:5: error: implicit declaration of function ???luaL_checkint??? [-Werror=implicit-function-declaration]
--     int n = luaL_checkint( L, 1 );
--     ^
--
--Signed-off-by: Vinson Lee <vlee@freedesktop.org>
--Signed-off-by: Jean-Baptiste Kempf <jb@videolan.org>
--[Backport upstream commit 41caaa08cde60c4fec4bf2e5f9610e2a1b9e6a23]
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- modules/lua/vlc.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/modules/lua/vlc.h b/modules/lua/vlc.h
--index 71f381d334..b46b5f67a1 100644
----- a/modules/lua/vlc.h
--+++ b/modules/lua/vlc.h
--@@ -38,6 +38,7 @@
-- #include <vlc_stream.h>
-- #include <vlc_demux.h>
-- 
--+#define LUA_COMPAT_APIINTCASTS
-- #define LUA_COMPAT_MODULE
-- #include <lua.h>        /* Low level lua C API */
-- #include <lauxlib.h>    /* Higher level C API */
---- 
--2.14.4
--
-diff --git a/package/vlc/0004-build-use-pkg-config-to-get-tremor-libs.patch b/package/vlc/0003-build-use-pkg-config-to-get-tremor-libs.patch
-similarity index 100%
-rename from package/vlc/0004-build-use-pkg-config-to-get-tremor-libs.patch
-rename to package/vlc/0003-build-use-pkg-config-to-get-tremor-libs.patch
-diff --git a/package/vlc/0005-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch b/package/vlc/0004-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch
-similarity index 100%
-rename from package/vlc/0005-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch
-rename to package/vlc/0004-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch
-diff --git a/package/vlc/0006-Don-t-assume-strerror_l-is-available.patch b/package/vlc/0005-Don-t-assume-strerror_l-is-available.patch
-similarity index 100%
-rename from package/vlc/0006-Don-t-assume-strerror_l-is-available.patch
-rename to package/vlc/0005-Don-t-assume-strerror_l-is-available.patch
-diff --git a/package/vlc/0007-posix-remove-ancient-run-time-fallback-to-real-time-.patch b/package/vlc/0006-posix-remove-ancient-run-time-fallback-to-real-time-.patch
-similarity index 100%
-rename from package/vlc/0007-posix-remove-ancient-run-time-fallback-to-real-time-.patch
-rename to package/vlc/0006-posix-remove-ancient-run-time-fallback-to-real-time-.patch
-diff --git a/package/vlc/0008-Add-support-for-freerdp2.patch b/package/vlc/0007-Add-support-for-freerdp2.patch
-similarity index 100%
-rename from package/vlc/0008-Add-support-for-freerdp2.patch
-rename to package/vlc/0007-Add-support-for-freerdp2.patch
-diff --git a/package/vlc/0009-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch b/package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-similarity index 100%
-rename from package/vlc/0009-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-rename to package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-diff --git a/package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch b/package/vlc/0009-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
-similarity index 100%
-rename from package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
-rename to package/vlc/0009-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index f404cbf335..396c3a2ab1 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,7 +1,7 @@
--# From https://get.videolan.org/vlc/3.0.12/vlc-3.0.12.tar.xz.sha256
--sha256  eff458f38a92126094f44f2263c2bf2c7cdef271b48192d0fe7b1726388cf879  vlc-3.0.12.tar.xz
--# From https://get.videolan.org/vlc/3.0.12/vlc-3.0.12.tar.xz.sha1
--sha1  39ef414a07202ec6569acda4c5d91e8576d453bf  vlc-3.0.12.tar.xz
-+# From https://get.videolan.org/vlc/3.0.14/vlc-3.0.14.tar.xz.sha256
-+sha256  49b93e5b33deaa37060e6b24a98200cad70c407947f14eb2a8b6a0c64d8535a6  vlc-3.0.14.tar.xz
-+# From https://get.videolan.org/vlc/3.0.14/vlc-3.0.14.tar.xz.sha1
-+sha1  8a8613f16a9053668d7a7dcfa1e6d8be93af3e89  vlc-3.0.14.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 020c37aa5d..c1e190099e 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
+index 73917c7721..9627209d60 100644
+--- a/package/gerbera/gerbera.mk
++++ b/package/gerbera/gerbera.mk
+@@ -18,6 +18,10 @@ GERBERA_DEPENDENCIES = \
+ 	zlib
+ GERBERA_CONF_OPTS = -DWITH_DEBUG=OFF
  
--VLC_VERSION = 3.0.12
-+VLC_VERSION = 3.0.14
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_9)$(BR2_OPTIMIZE_S),yy)
++GERBERA_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -O2"
++endif
++
+ # Uses __atomic_fetch_add_4
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ GERBERA_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+-- 
+2.30.2
