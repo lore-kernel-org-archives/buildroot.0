@@ -1,51 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 May 2021 09:47:13 +0200
-Subject: [Buildroot] [git commit] package/bitcoin: security bump to version
- 0.21.1
-Message-ID: <20210513072035.C379C7FC4D@busybox.osuosl.org>
+Date: Thu, 13 May 2021 09:48:32 +0200
+Subject: [Buildroot] [git commit] boot/opensbi: only check/reference
+ COPYING.BSD when _LATEST_VERSION is used
+Message-ID: <20210513072035.DF4478749B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7a58df5f0de618360c8b4e39ec5f5f6b2da0975
+commit: https://git.buildroot.net/buildroot/commit/?id=448910b017e5e10728dcd4e9e2048abcefc44422
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tag as a security bump as having an up to date bitcoin is important:
-https://patchwork.ozlabs.org/project/buildroot/patch/20200202085526.35742-1-james.hilliard1 at gmail.com
+With the addition of support for custom opensbi version in commit
+5c7166d387b (boot/opensbi: add support for version configuration), we can no
+longer be sure that the license file name / hash will be correct in all
+cases, so only specify COPYING.BSD when _LATEST_VERSION is used, similar to
+how we do it for the Linux kernel.
 
-https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.21.1.md
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bitcoin/bitcoin.hash | 4 ++--
- package/bitcoin/bitcoin.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ boot/opensbi/opensbi.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
-index 3c65c3d730..6ea3398037 100644
---- a/package/bitcoin/bitcoin.hash
-+++ b/package/bitcoin/bitcoin.hash
-@@ -1,5 +1,5 @@
--# From https://bitcoincore.org/bin/bitcoin-core-0.21.0/SHA256SUMS.asc
--sha256  1a91202c62ee49fb64d57a52b8d6d01cd392fffcbef257b573800f9289655f37  bitcoin-0.21.0.tar.gz
-+# From https://bitcoincore.org/bin/bitcoin-core-0.21.1/SHA256SUMS.asc
-+sha256  caff23449220cf45753f312cefede53a9eac64000bb300797916526236b6a1e0  bitcoin-0.21.1.tar.gz
+diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+index f8cbbb8fcc..a525b8aea3 100644
+--- a/boot/opensbi/opensbi.mk
++++ b/boot/opensbi/opensbi.mk
+@@ -20,7 +20,9 @@ OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
+ endif
  
- # Hash for license file
- sha256  96fe807030b21f88305adc32af62f9aa19915f2783509fd6f52aea02cf83f644  COPYING
-diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
-index 5f1684879c..142521835c 100644
---- a/package/bitcoin/bitcoin.mk
-+++ b/package/bitcoin/bitcoin.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ OPENSBI_LICENSE = BSD-2-Clause
++ifeq ($(BR2_TARGET_OPENSBI_LATEST_VERSION),y)
+ OPENSBI_LICENSE_FILES = COPYING.BSD
++endif
+ OPENSBI_INSTALL_TARGET = NO
+ OPENSBI_INSTALL_STAGING = YES
  
--BITCOIN_VERSION = 0.21.0
-+BITCOIN_VERSION = 0.21.1
- BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
- BITCOIN_AUTORECONF = YES
- BITCOIN_LICENSE = MIT
