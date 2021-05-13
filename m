@@ -1,87 +1,60 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 13 May 2021 19:33:23 +0300
-Subject: [Buildroot] [PATCH 4/6] package/seatd: install init scripts
+Date: Thu, 13 May 2021 19:33:25 +0300
+Subject: [Buildroot] [PATCH 6/6] package/cage: bump to version 0.1.3
 In-Reply-To: <20210513163325.1775639-1-aperez@igalia.com>
 References: <20210513163325.1775639-1-aperez@igalia.com>
-Message-ID: <20210513163325.1775639-5-aperez@igalia.com>
+Message-ID: <20210513163325.1775639-7-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add commands to the seatd package to install the systemd unit included
-in the source tarball and a SysV init script.
+Update to version 0.1.3, which is a matenance release which does not
+add any new features but can be built against wlroots 0.13.0. A new
+build option to toggle man pages is set to always disabled.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/seatd/S70seatd | 38 ++++++++++++++++++++++++++++++++++++++
- package/seatd/seatd.mk | 10 ++++++++++
- 2 files changed, 48 insertions(+)
- create mode 100755 package/seatd/S70seatd
+ package/cage/cage.hash | 2 +-
+ package/cage/cage.mk   | 7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/seatd/S70seatd b/package/seatd/S70seatd
-new file mode 100755
-index 0000000000..a91302c6c1
---- /dev/null
-+++ b/package/seatd/S70seatd
-@@ -0,0 +1,38 @@
-+#! /bin/sh
-+#
-+# Starts seatd
-+#
-+
-+DAEMON=/usr/bin/seatd
-+PIDFILE=/run/seatd.pid
-+
-+case "$1" in
-+	start)
-+		printf 'Starting seatd: '
-+		if start-stop-daemon -S -x "$DAEMON" -p "$PIDFILE" -m -b -- -g video
-+		then
-+			echo OK
-+		else
-+			echo FAIL
-+		fi
-+		;;
-+	stop)
-+		if start-stop-daemon -K -x "$DAEMON" -p "$PIDFILE"
-+		then
-+			echo OK
-+		else
-+			echo FAIL
-+		fi
-+		;;
-+	restart)
-+		"$0" stop || true
-+		sleep 1
-+		"$0" start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		exit 1
-+		;;
-+esac
-+
-+exit 0
-diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
-index 45da53904f..abb7cb888f 100644
---- a/package/seatd/seatd.mk
-+++ b/package/seatd/seatd.mk
-@@ -39,4 +39,14 @@ else
- SEATD_CONF_OPTS += -Dserver=disabled
+diff --git a/package/cage/cage.hash b/package/cage/cage.hash
+index 5cae952d72..6e312bbf5f 100644
+--- a/package/cage/cage.hash
++++ b/package/cage/cage.hash
+@@ -1,5 +1,5 @@
+ # Generated locally
+-sha256 38a3e3968f00cc58fe1d9448e972cfac7d1efa30c48699f09032f264101a55ac  cage-0.1.2.1.tar.gz
++sha256 c28aa8230f937c89b564967748451c1eb15d8633a71a1ed6e22d532afa15462e  cage-0.1.3.tar.gz
+ 
+ # Hashes for license files:
+ sha256 e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
+diff --git a/package/cage/cage.mk b/package/cage/cage.mk
+index 9fc01d36c1..0950c70474 100644
+--- a/package/cage/cage.mk
++++ b/package/cage/cage.mk
+@@ -4,16 +4,17 @@
+ #
+ ################################################################################
+ 
+-CAGE_VERSION = 0.1.2.1
++CAGE_VERSION = 0.1.3
+ CAGE_SITE = https://github.com/Hjdskes/cage/releases/download/v$(CAGE_VERSION)
+ CAGE_LICENSE = MIT
+ CAGE_LICENSE_FILES = LICENSE
+ CAGE_DEPENDENCIES = host-pkgconf wlroots
++CAGE_CONF_OPTS = -Dman-pages=disabled
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+-CAGE_CONF_OPTS = -Dxwayland=true
++CAGE_CONF_OPTS += -Dxwayland=true
+ else
+-CAGE_CONF_OPTS = -Dxwayland=false
++CAGE_CONF_OPTS += -Dxwayland=false
  endif
  
-+define SEATD_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D $(SEATD_PKGDIR)/S70seatd \
-+		$(TARGET_DIR)/etc/init.d/S70seatd
-+endef
-+
-+define SEATD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -m 0644 -D $(@D)/contrib/systemd/seatd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/seatd.service
-+endef
-+
  $(eval $(meson-package))
 -- 
 2.31.1
