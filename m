@@ -1,48 +1,50 @@
-From: Ryota Kinukawa <pojiro.jp@gmail.com>
-Date: Thu, 13 May 2021 08:27:05 +0900
-Subject: [Buildroot] Suggestion to "support/scripts/apply-patches.sh: do not
- apply patches with renames"
-Message-ID: <CAALxPJ0qprnhxWtHGg7oeY=Ws4+w3Wt-_hdM1WvbL6B42jQO5g@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 12 May 2021 19:00:52 -0700
+Subject: [Buildroot] [PATCH] package/mender-grubenv: fix installing on
+ non-efi platforms
+Message-ID: <20210513020052.2528223-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi. Thank you for your great work, Buildroot team.
-I'm writing this email for suggestions to support/scripts/apply-patches.sh.
+Currently, mender-grubenv unconditionally installs files from the
+$(TARGET_DIR)/boot/EFI directory to the $(BINARIES_DIR)/efi-part.
+This fails on systems that are not building grub against EFI.
 
-Recently, I was working with buildroot to apply patches-4.14.164-rt73.
-It included a patch((patches-4.14.164-rt73/0462-..)) which renames a file.
-This caused the build to terminate with an error.
+Add a check in mender-grubenv.mk to ensure the files are copied to the correct
+location if EFI is not selected.
 
-The reason for this is that apply-patches.sh exits when it finds a patch
-that contains a rename.
-This feature is kind for users who use legacy `patch` commands,
-but not kind for current users.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/mender-grubenv/mender-grubenv.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-So I'd like to suggest adding a kind of this line
-  `grep -q "^BR2_*_LEGACY_PATCH_CMD=y" "$BR2_CONFIG" && \`
-to below if statement.
-
-```
-if ${uncomp} "${path}/$patch" | grep -q "^rename from" && \
-   ${uncomp} "${path}/$patch" | grep -q "^rename to" ; then
-```
-
-Parsing the results of the `patch` is dependent on the implementation of it,
-so I think it would be better to get them who use `legacy patch` to set it
-explicitly.
-(For considering backward compatibility,
-(it might be better if the environment variable had the opposite meaning.
-
-How about this idea?
-
-In making this suggestion I have read the following two threads.
-- http://lists.busybox.net/pipermail/buildroot/2017-May/191794.html
-- http://lists.busybox.net/pipermail/buildroot/2017-June/195335.html
-
-Thank you.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210513/2cfdb0db/attachment.html>
+diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
+index ade0f4c0ed..f06dbbe35c 100644
+--- a/package/mender-grubenv/mender-grubenv.mk
++++ b/package/mender-grubenv/mender-grubenv.mk
+@@ -55,11 +55,20 @@ define MENDER_GRUBENV_INSTALL_TARGET_CMDS
+ endef
+ 
+ # Overwrite the default grub2 config files with the ones in this package.
++ifeq ($(BR2_TARGET_GRUB2_I386_PC)$(BR2_TARGET_GRUB2_ARM_UBOOT),y)
++define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
++	mkdir -p $(BINARIES_DIR)/boot-part/grub
++	cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
++		$(TARGET_DIR)/boot/grub/mender_grubenv* \
++		$(BINARIES_DIR)/boot-part/grub
++endef
++else
+ define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
+ 	mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
+ 	cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
+ 		$(TARGET_DIR)/boot/EFI/BOOT/mender_grubenv* \
+ 		$(BINARIES_DIR)/efi-part/EFI/BOOT
+ endef
++endif
+ 
+ $(eval $(generic-package))
+-- 
+2.31.1
