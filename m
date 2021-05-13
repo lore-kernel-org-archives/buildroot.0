@@ -1,52 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 13 May 2021 13:46:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix build with -Os and gcc
- 9 or 10
-Message-ID: <20210513114633.1926431-1-fontaine.fabrice@gmail.com>
+From: Andrey Krasheninnikov <akrashenin@gmail.com>
+Date: Thu, 13 May 2021 15:05:45 +0300
+Subject: [Buildroot] Building buildroot-2014.08
+Message-ID: <CAAtAE2SyKGrskeFEWhwH0E7GNRVGU=TGk2AuFrv4haxqaJHGGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For an unknown reason, gerbera fails to build with -Os and gcc 9 or 10
-since bump to version 1.8.0 in commit 8974596836945eada8e162844fb87f88adec9100:
-
-[100%] Linking CXX executable gerbera
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/10.2.0/../../../../x86_64-buildroot-linux-gnu/bin/ld: liblibgerbera.a(content_manager.cc.o): in function `ContentManager::_rescanDirectory(std::shared_ptr<AutoscanDirectory>&, int, std::shared_ptr<GenericTask> const&)':
-content_manager.cc:(.text+0xb53b): undefined reference to `std::__shared_ptr<std::filesystem::__cxx11::_Dir, (__gnu_cxx::_Lock_policy)2>::swap(std::__shared_ptr<std::filesystem::__cxx11::_Dir, (__gnu_cxx::_Lock_policy)2>&)'
-collect2: error: ld returned 1 exit status
-
-A similar build failure has been reported as gcc bug 91067:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91067
-
-But this bug has been fixed since gcc 9.3 and 10.1 and build failures
-are raised with gcc 10.2
-
-To fix this build failure, set optimisation to -O2 if needed
-
-Fixes:
- - http://autobuild.buildroot.org/results/a4ee8ad7ff93939716673b611c7cc3f68dafa3d0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gerbera/gerbera.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
-index 73917c7721..9627209d60 100644
---- a/package/gerbera/gerbera.mk
-+++ b/package/gerbera/gerbera.mk
-@@ -18,6 +18,10 @@ GERBERA_DEPENDENCIES = \
- 	zlib
- GERBERA_CONF_OPTS = -DWITH_DEBUG=OFF
- 
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_9)$(BR2_OPTIMIZE_S),yy)
-+GERBERA_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -O2"
-+endif
-+
- # Uses __atomic_fetch_add_4
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- GERBERA_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
--- 
-2.30.2
+Hello!
+I have buildroot-2014.08.
+My linux is ubuntu-16.4.
+Kernel 4.9.14. glibc-2.18.
+I built zImage and dtb-file.
+I need to build rootfs.
+Compilation was broken for package ncurses-5.0.
+Error:
+-------
+PATH="/home/akrashenin/buildroot/buildroot-2014.08/output/host/bin:/home/akrashenin/buildroot/buildroot-2014.08/output/host/sbin:/home/akrashenin/buildroot/buildroot-2014.08/output/host/usr/bin:/home/akrashenin/buildroot/buildroot-2014.08/output/host/usr/sbin:/home/akrashenin/bin:/home/akrashenin/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+ /usr/bin/make -j5
+DESTDIR=/home/akrashenin/buildroot/buildroot-2014.08/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot
+install -C
+/home/akrashenin/buildroot/buildroot-2014.08/output/build/ncurses-5.0/
+make[1]: ???? ? ???????
+?/home/akrashenin/buildroot/buildroot-2014.08/output/build/ncurses-5.0?
+cd man && /usr/bin/make INSTALL_PREFIX="" install
+make[2]: ???? ? ???????
+?/home/akrashenin/buildroot/buildroot-2014.08/output/build/ncurses-5.0/man?
+./../mkinstalldirs /usr/man
+mkdir /usr/man
+mkdir: ?????????? ??????? ???????(impossible to create dir) ?/usr/man?:
+???????? ? ???????(permission denied)
+Makefile:56: ?????? ?????????? ??????? ??? ???? ?/usr/man?
+make[2]: *** [/usr/man] ?????? 1
+make[2]: ????? ?? ????????
+?/home/akrashenin/buildroot/buildroot-2014.08/output/build/ncurses-5.0/man?
+Makefile:94: ?????? ?????????? ??????? ??? ???? ?install? (install error)
+make[1]: *** [install] ?????? 2
+make[1]: ????? ?? ????????
+?/home/akrashenin/buildroot/buildroot-2014.08/output/build/ncurses-5.0?
+package/pkg-generic.mk:197: ?????? ?????????? ??????? ??? ????
+?/home/akrashenin/buildroot/buildroot-2014.08/output/build/ncurses-5.0/.stamp_staging_installed?
+make: ***
+[/home/akrashenin/buildroot/buildroot-2014.08/output/build/ncurses-5.0/.stamp_staging_installed]
+?????? 2
+-------
+What Can I do for fixing this bug?
+Can I remove this package from assembly?
+How can I remove this package from assembly?
+-------
+?????? ?????????????
+???. +7(926) 24 7777 2
+WhatsApp
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210513/474db5ed/attachment.html>
