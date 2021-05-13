@@ -1,68 +1,44 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 13 May 2021 16:11:49 +0200
-Subject: [Buildroot] [PATCH 2/2] support/testing: test_glxinfo load X11
- modules in the right order
-In-Reply-To: <20210513141149.3154510-1-romain.naour@gmail.com>
-References: <20210513141149.3154510-1-romain.naour@gmail.com>
-Message-ID: <20210513141149.3154510-2-romain.naour@gmail.com>
+Date: Thu, 13 May 2021 16:34:31 +0200
+Subject: [Buildroot] [PATCH] support/testing: remove TestPythonPy2Gpiozero
+Message-ID: <20210513143431.3155885-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From [1]
-"Xorg does not implement real dynamic linking and requires that its
-modules get loaded in the right order."
+The python2 support has been removed since the python-colorzero bump version to 2.0.
 
-From /var/log/Xorg.0.0.log:
- (II) LoadModule: "modesetting"
- (II) Loading /usr/lib/xorg/modules/drivers/modesetting_drv.so
- (EE) Failed to load /usr/lib/xorg/modules/drivers/modesetting_drv.so: /usr/lib/xorg/modules/drivers/modesetting_drv.so: undefined symbol: shadowRemove
+Remove the gpiozero test with python2
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661899
-
-[1] https://forums.gentoo.org/viewtopic-p-8245578.html#8245578
+[1] 73bf3292e16b9419c5c88d10e9755d7208ca3623
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
 ---
- support/testing/tests/package/test_glxinfo.py         |  4 +++-
- .../etc/X11/xorg.conf.d/01-modules.conf               | 11 +++++++++++
- 2 files changed, 14 insertions(+), 1 deletion(-)
- create mode 100644 support/testing/tests/package/test_glxinfo/rootfs-overlay/etc/X11/xorg.conf.d/01-modules.conf
+ support/testing/tests/package/test_python_gpiozero.py | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/support/testing/tests/package/test_glxinfo.py b/support/testing/tests/package/test_glxinfo.py
-index 44ac92347a..3417e48612 100644
---- a/support/testing/tests/package/test_glxinfo.py
-+++ b/support/testing/tests/package/test_glxinfo.py
-@@ -32,7 +32,9 @@ class TestGlxinfo(infra.basetest.BRTest):
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-         BR2_TARGET_ROOTFS_EXT2=y
-         # BR2_TARGET_ROOTFS_TAR is not set
--        """
-+        BR2_ROOTFS_OVERLAY="{}"
-+        """.format(
-+          infra.filepath("tests/package/test_glxinfo/rootfs-overlay"))
+diff --git a/support/testing/tests/package/test_python_gpiozero.py b/support/testing/tests/package/test_python_gpiozero.py
+index 2498a55514..4fe155e6ce 100644
+--- a/support/testing/tests/package/test_python_gpiozero.py
++++ b/support/testing/tests/package/test_python_gpiozero.py
+@@ -14,15 +14,6 @@ class TestPythonGpiozero(TestPythonPackageBase):
+         self.assertRunOk(cmd)
  
-     def wait_for_xserver(self):
-         # xserver takes some time to start up
-diff --git a/support/testing/tests/package/test_glxinfo/rootfs-overlay/etc/X11/xorg.conf.d/01-modules.conf b/support/testing/tests/package/test_glxinfo/rootfs-overlay/etc/X11/xorg.conf.d/01-modules.conf
-new file mode 100644
-index 0000000000..c693c213f5
---- /dev/null
-+++ b/support/testing/tests/package/test_glxinfo/rootfs-overlay/etc/X11/xorg.conf.d/01-modules.conf
-@@ -0,0 +1,11 @@
-+
-+# Xorg does not implement real dynamic linking and requires that its
-+# modules get loaded in the right order.
-+# https://forums.gentoo.org/viewtopic-p-8245578.html#8245578
-+Section "Module"
-+   Load "vgahw"
-+   Load "fb"
-+   Load "shadowfb"
-+   Load "shadow"
-+   Load "glamoregl"
-+EndSection
+ 
+-class TestPythonPy2Gpiozero(TestPythonGpiozero):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_GPIOZERO=y
+-        """
+-
+-
+ class TestPythonPy3Gpiozero(TestPythonGpiozero):
+     __test__ = True
+     config = TestPythonGpiozero.config + \
 -- 
 2.31.1
