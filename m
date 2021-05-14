@@ -1,45 +1,35 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 14 May 2021 23:40:35 +0200
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.65
-Message-ID: <20210514214035.127094-1-giulio.benetti@benettiengineering.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 14 May 2021 23:41:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXinerama: add CPE
+ variables
+Message-ID: <20210514214111.2274903-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release Notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.65_release_notes
+cpe:2.3:a:x:libxinerama is a valid CPE identifier for this package:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax%3Alibxinerama
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xlib_libXinerama/xlib_libXinerama.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 92e9936d0d..02fda14eec 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_64_RTM/src/SHA256SUMS
--sha256  d3175427172e9c3a6f1ebc74452cb791590f28191c6a1a443dbc0d87c9df1126  nss-3.64.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_65_RTM/src/SHA256SUMS
-+sha256  32170f6c188212a78bf9fdacffa2eeed0d564ef8faae63fd8ae971b208e8c637  nss-3.65.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 4c66bf876a..90f30698ff 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.64
-+LIBNSS_VERSION = 3.65
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+diff --git a/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk b/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
+index 405faefa46..48e32d55e2 100644
+--- a/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
++++ b/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
+@@ -9,6 +9,8 @@ XLIB_LIBXINERAMA_SOURCE = libXinerama-$(XLIB_LIBXINERAMA_VERSION).tar.bz2
+ XLIB_LIBXINERAMA_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXINERAMA_LICENSE = MIT
+ XLIB_LIBXINERAMA_LICENSE_FILES = COPYING
++XLIB_LIBXINERAMA_CPE_ID_VENDOR = x
++XLIB_LIBXINERAMA_CPE_ID_PRODUCT = libxinerama
+ XLIB_LIBXINERAMA_INSTALL_STAGING = YES
+ XLIB_LIBXINERAMA_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
+ XLIB_LIBXINERAMA_CONF_OPTS = --disable-malloc0returnsnull
 -- 
-2.25.1
+2.30.2
