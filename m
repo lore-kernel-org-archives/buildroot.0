@@ -1,44 +1,47 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 14 May 2021 21:46:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libxslt: fix build with latest
- libxml2
-Message-ID: <20210514194639.2217578-1-fontaine.fabrice@gmail.com>
+Date: Fri, 14 May 2021 21:52:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libxml2: bump to version 2.9.12
+Message-ID: <20210514195234.2224052-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build is broken since bump of libxml2 to version 2.9.11 in commit
-a241dcec4188dbf30fbc8b65d7e6f2ece9da3d04 because libxslt calls the
-following command "${XML_CONFIG} --libs print" which will return an
-error code since
-https://github.com/GNOME/libxml2/commit/2a357ab99e6f5c9196384b11cd91dd993f93014c
+Brown-paper bag release:
+https://github.com/GNOME/libxml2/commit/b48e77cf4f6fa0792c5f4b639707a2b0675e461b
 
-To fix this build failure, drop --with-libxml-prefix to prefer
-pkg-config
-
-Fixes:
- - http://autobuild.buildroot.org/results/47ceb8c24c9ead8a450b7fea3266f760d6b77b4f
+Update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libxslt/libxslt.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/libxml2/libxml2.hash | 4 ++--
+ package/libxml2/libxml2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 3c603ad9f6..149e1d8972 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -14,8 +14,7 @@ LIBXSLT_CPE_ID_VENDOR = xmlsoft
- LIBXSLT_CONF_OPTS = \
- 	--with-gnu-ld \
- 	--without-debug \
--	--without-python \
--	--with-libxml-prefix=$(STAGING_DIR)/usr
-+	--without-python
- LIBXSLT_CONFIG_SCRIPTS = xslt-config
- LIBXSLT_DEPENDENCIES = host-pkgconf libxml2
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index 563a5f89c9..ce6c3c4825 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	886f696d5d5b45d780b2880645edf9e0c62a4fd6841b853e824ada4e02b4d331	libxml2-2.9.11.tar.gz
++sha256  c8d6681e38c56f172892c85ddc0852e1fd4b53b4209e7f4ebf17f7e2eae71d92  libxml2-2.9.12.tar.gz
+ # License files, locally calculated
+-sha256	c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd	COPYING
++sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  COPYING
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index f39e688781..5d688acae5 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-LIBXML2_VERSION = 2.9.11
++LIBXML2_VERSION = 2.9.12
+ LIBXML2_SITE = http://xmlsoft.org/sources
+ LIBXML2_INSTALL_STAGING = YES
+ LIBXML2_LICENSE = MIT
 -- 
 2.30.2
