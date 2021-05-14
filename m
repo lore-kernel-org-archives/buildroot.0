@@ -1,95 +1,100 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 May 2021 23:01:19 +0200
-Subject: [Buildroot] [git commit] package/prosody: security bump to version
- 0.11.9
-Message-ID: <20210514203259.943838672C@busybox.osuosl.org>
+From: Drew Fustini <drew@beagleboard.org>
+Date: Fri, 14 May 2021 14:06:18 -0700
+Subject: [Buildroot] [PATCH v3 0/7] Support for the BeagleV platform
+In-Reply-To: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
+References: <20210504205139.1055360-1-thomas.petazzoni@bootlin.com>
+Message-ID: <CAPgEAj6S8bdYi529XmoGv4H3BomqntZp4gKmjhpxZxmVOg5f_w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c108afab81b675eddc1f71cc496b47d9077bdb1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, May 4, 2021 at 1:51 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Here is a third iteration of the BeagleV patch series, which brings a
+> few fixes:
+>
+>  * The post-build script of v1 calling "make printvars" was working
+>    only for in-tree builds. Following a comment from Frank Hunleth on
+>    the v1, it was changed in v2 to use "make -C ${O} printvars", which
+>    made out-of-tree builds work, but broke in-tree builds. So in this
+>    new version, we introduced a preliminary patch that exposes
+>    $(CONFIG_DIR) to post-build/post-image scripts, to make such "make
+>    printvars" invocations possible.
+>
+>  * The beaglev_defconfig is updated to take into account the rename of
+>    the Git repositories by Starfive for Linux, U-Boot and OpenSBI.
+>
+>  * Reviewed-by tags from Bin Meng are added on beaglev-ddrinit,
+>    beaglev-secondboot and the corresponding beaglev_defconfig
+>    update. Thanks Bin!
+>
+> As usual, the whole thing is also available at:
+>
+>   https://github.com/tpetazzoni/buildroot/commits/beaglev
+>
+> Best regards,
+>
+> Thomas Petazzoni
+>
+> Thomas Petazzoni (7):
+>   package/Makefile.in: expose CONFIG_DIR to post-build/post-image
+>     scripts
+>   boot/opensbi: add options to enable/disable image installation
+>   configs/beaglev_defconfig: new defconfig
+>   package/riscv64-elf-toolchain: new package
+>   boot/beaglev-ddrinit: new package
+>   boot/beaglev-secondboot: new package
+>   configs/beaglev: enable building of low-level firmware
+>
+>  DEVELOPERS                                    |   5 +
+>  board/beaglev/extlinux.conf                   |   4 +
+>  board/beaglev/genimage.cfg                    |  12 ++
+>  ...s-starfive-vic7100-adjust-fdt_addr_r.patch |  39 ++++++
+>  board/beaglev/post-build.sh                   |  17 +++
+>  board/beaglev/readme.txt                      | 122 ++++++++++++++++++
+>  boot/Config.in                                |   2 +
+>  boot/beaglev-ddrinit/Config.in                |   9 ++
+>  boot/beaglev-ddrinit/beaglev-ddrinit.mk       |  29 +++++
+>  boot/beaglev-secondboot/Config.in             |   9 ++
+>  boot/beaglev-secondboot/beaglev-secondboot.mk |  29 +++++
+>  boot/opensbi/Config.in                        |  20 +++
+>  boot/opensbi/opensbi.mk                       |  16 ++-
+>  configs/beaglev_defconfig                     |  37 ++++++
+>  docs/manual/customize-post-image.txt          |   3 +-
+>  docs/manual/customize-rootfs.txt              |   3 +
+>  package/Makefile.in                           |   1 +
+>  .../riscv64-elf-toolchain.mk                  |  25 ++++
+>  18 files changed, 375 insertions(+), 7 deletions(-)
+>  create mode 100644 board/beaglev/extlinux.conf
+>  create mode 100644 board/beaglev/genimage.cfg
+>  create mode 100644 board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
+>  create mode 100755 board/beaglev/post-build.sh
+>  create mode 100644 board/beaglev/readme.txt
+>  create mode 100644 boot/beaglev-ddrinit/Config.in
+>  create mode 100644 boot/beaglev-ddrinit/beaglev-ddrinit.mk
+>  create mode 100644 boot/beaglev-secondboot/Config.in
+>  create mode 100644 boot/beaglev-secondboot/beaglev-secondboot.mk
+>  create mode 100644 configs/beaglev_defconfig
+>  create mode 100644 package/riscv64-elf-toolchain/riscv64-elf-toolchain.mk
+>
+> --
+> 2.30.2
+>
 
-Fixes the following security issues:
+Thank you so much again for getting support added to buildroot.
 
-- CVE-2021-32918: DoS via insufficient memory consumption controls
+I wanted to note that Kali Prasad (cc'd) has developed a very helpful
+bootloader recovery tool [1] that is a simple C program and would
+probably be useful to include in the beaglev buildroot config.  This
+works around the problem that the BootROM in the StarFive JH7100 has a
+buggy xmodem crc implementation that did not work with any of the
+existing open source terminal emulators.
 
-  It was discovered that default settings leave Prosody susceptible to
-  remote unauthenticated denial-of-service (DoS) attacks via memory
-  exhaustion when running under Lua 5.2 or Lua 5.3.  Lua 5.2 is the default
-  and recommended Lua version for Prosody 0.11.x series.
+-Drew
 
-- CVE-2021-32920: DoS via repeated TLS renegotiation causing excessive CPU
-  consumption
-
-  It was discovered that Prosody does not disable SSL/TLS renegotiation,
-  even though this is not used in XMPP.  A malicious client may flood a
-  connection with renegotiation requests to consume excessive CPU resources
-  on the server.
-
-- CVE-2021-32921: Use of timing-dependent string comparison with sensitive
-  values
-
-  It was discovered that Prosody does not use a constant-time algorithm for
-  comparing certain secret strings when running under Lua 5.2 or later.
-  This can potentially be used in a timing attack to reveal the contents of
-  secret strings to an attacker.
-
-- CVE-2021-32917: Use of mod_proxy65 is unrestricted in default
-  configuration
-
-  mod_proxy65 is a file transfer proxy provided with Prosody to facilitate
-  the transfer of files and other data between XMPP clients.
-
-  It was discovered that the proxy65 component of Prosody allows open access
-  by default, even if neither of the users have an XMPP account on the local
-  server, allowing unrestricted use of the server???s bandwidth.
-
-- CVE-2021-32919: Undocumented dialback-without-dialback option insecure
-
-  The undocumented option ???dialback_without_dialback??? enabled an
-  experimental feature for server-to-server authentication.  A flaw in this
-  feature meant it did not correctly authenticate remote servers, allowing a
-  remote server to impersonate another server when this option is enabled.
-
-For more details, see the advisory:
-https://prosody.im/security/advisory_20210512/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/prosody/prosody.hash | 8 ++++----
- package/prosody/prosody.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
-index 309ae0181f..50d5964712 100644
---- a/package/prosody/prosody.hash
-+++ b/package/prosody/prosody.hash
-@@ -1,8 +1,8 @@
- # Locally computed:
--md5  24cd3c1f7ab16a6b3726423d2fff802d  prosody-0.11.8.tar.gz
--sha1  f1f030c75abde6e3c7232fedbe8371f5cb913245  prosody-0.11.8.tar.gz
--sha256  830f183b98d5742d81e908d2d8e3258f1b538dad7411f06fda5b2cc5c75068f8  prosody-0.11.8.tar.gz
--sha512  b0b7e1d3e41f47f0f88ad5b76444e4959b20f4c7a937f3cc605ba6ed5d92e713a3054dcb61ee6629063883a8f9ff1a03952893de4a0d840dcec4e5e42079eb57  prosody-0.11.8.tar.gz
-+md5  be7e1c66c06b0eb4bdce37b67bcc6b51  prosody-0.11.9.tar.gz
-+sha1  632c2dd7794d344d4edbcea18fc1b5f623da5ca4  prosody-0.11.9.tar.gz
-+sha256  ccc032aea49d858635fb93644db276de6812be83073a8d80e9b4508095deff09  prosody-0.11.9.tar.gz
-+sha512  fabbbbb1acb3de4ff01e3e8c6e9e4dc37cb161259f1649683a1f9d925ed9f1709e052bfc831cba3f1861a9cca599f2b725ee739bfcb57164d6f50ac07011b52a  prosody-0.11.9.tar.gz
- 
- # Hash for license file:
- sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
-diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
-index a4482ad3c5..92c812ebfa 100644
---- a/package/prosody/prosody.mk
-+++ b/package/prosody/prosody.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROSODY_VERSION = 0.11.8
-+PROSODY_VERSION = 0.11.9
- PROSODY_SITE = https://prosody.im/downloads/source
- PROSODY_LICENSE = MIT
- PROSODY_LICENSE_FILES = COPYING
+[1] https://github.com/kprasadvnsi/JH71xx-tools
