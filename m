@@ -1,59 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 May 2021 22:59:58 +0200
-Subject: [Buildroot] [git commit] test_docker_compose.py: Test the port
- publish feature
-Message-ID: <20210514203237.602E98756D@busybox.osuosl.org>
+Date: Fri, 14 May 2021 23:01:25 +0200
+Subject: [Buildroot] [PATCH] package/prosody: security bump to version
+ 0.11.9
+In-Reply-To: <20210514094309.18354-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 14 May 2021 11:43:09 +0200")
+References: <20210514094309.18354-1-peter@korsgaard.com>
+Message-ID: <87r1i9owre.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4915b692c84711aa9b7b2d5ea436e4b53d7215bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Extend docker_test() to expose a random (8888) port to verify that doesn't
-fail, and extend the docker-compose test to run the busybox httpd in the
-background, expose that as port 80 and verify that /etc/resolv.conf could be
-fetched by wget.
+ > Fixes the following security issues:
+ > - CVE-2021-32918: DoS via insufficient memory consumption controls
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/testing/conf/docker-compose.yml              | 3 +++
- support/testing/tests/package/test_docker_compose.py | 8 +++++---
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ >   It was discovered that default settings leave Prosody susceptible to
+ >   remote unauthenticated denial-of-service (DoS) attacks via memory
+ >   exhaustion when running under Lua 5.2 or Lua 5.3.  Lua 5.2 is the default
+ >   and recommended Lua version for Prosody 0.11.x series.
 
-diff --git a/support/testing/conf/docker-compose.yml b/support/testing/conf/docker-compose.yml
-index 49ff2677da..de33251dfd 100644
---- a/support/testing/conf/docker-compose.yml
-+++ b/support/testing/conf/docker-compose.yml
-@@ -2,3 +2,6 @@ version: '3'
- services:
-   busybox:
-     image: "busybox:latest"
-+    command: httpd -f -h /etc/
-+    ports:
-+      - "80:80"
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 67ee795f21..364f75b5b0 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -37,13 +37,15 @@ class TestDockerCompose(infra.basetest.BRTest):
- 
-     def docker_test(self):
-         # will download container if not available, which may take some time
--        _, exit_code = self.emulator.run('docker run --rm busybox:latest /bin/true', 120)
-+        _, exit_code = self.emulator.run('docker run --rm -p 8888:8888 busybox:latest /bin/true', 120)
-         self.assertEqual(exit_code, 0)
- 
-     def docker_compose_test(self):
-         # will download container if not available, which may take some time
--        _, exit_code = self.emulator.run('docker-compose up', 120)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk('docker-compose up -d', 120)
-+        # container may take some time to start
-+        self.assertRunOk('while ! docker inspect root_busybox_1 2>&1 >/dev/null; do sleep 1; done', 120)
-+        self.assertRunOk('wget http://127.0.0.1/resolv.conf', 120)
- 
-     def test_run(self):
-         kernel = os.path.join(self.builddir, "images", "bzImage")
+ > - CVE-2021-32920: DoS via repeated TLS renegotiation causing excessive CPU
+ >   consumption
+
+ >   It was discovered that Prosody does not disable SSL/TLS renegotiation,
+ >   even though this is not used in XMPP.  A malicious client may flood a
+ >   connection with renegotiation requests to consume excessive CPU resources
+ >   on the server.
+
+ > - CVE-2021-32921: Use of timing-dependent string comparison with sensitive
+ >   values
+
+ >   It was discovered that Prosody does not use a constant-time algorithm for
+ >   comparing certain secret strings when running under Lua 5.2 or later.
+ >   This can potentially be used in a timing attack to reveal the contents of
+ >   secret strings to an attacker.
+
+ > - CVE-2021-32917: Use of mod_proxy65 is unrestricted in default
+ >   configuration
+
+ >   mod_proxy65 is a file transfer proxy provided with Prosody to facilitate
+ >   the transfer of files and other data between XMPP clients.
+
+ >   It was discovered that the proxy65 component of Prosody allows open access
+ >   by default, even if neither of the users have an XMPP account on the local
+ >   server, allowing unrestricted use of the server?s bandwidth.
+
+ > - CVE-2021-32919: Undocumented dialback-without-dialback option insecure
+
+ >   The undocumented option ?dialback_without_dialback? enabled an
+ >   experimental feature for server-to-server authentication.  A flaw in this
+ >   feature meant it did not correctly authenticate remote servers, allowing a
+ >   remote server to impersonate another server when this option is enabled.
+
+ > For more details, see the advisory:
+ > https://prosody.im/security/advisory_20210512/
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
