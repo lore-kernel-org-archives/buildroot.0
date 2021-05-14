@@ -1,152 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 May 2021 19:21:19 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/vlc: security
- bump version to 3.0.14
-Message-ID: <20210514165532.10ACB874F1@busybox.osuosl.org>
+Date: Fri, 14 May 2021 19:22:03 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/rt-tests: add
+ patch to fix compatibility with make 3.81
+Message-ID: <20210514165532.1ED1286DD7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef91c329b21245a00681ecac4b18a880962e66b1
+commit: https://git.buildroot.net/buildroot/commit/?id=cbc530bfa67a6d27dbd4d6e2eb49444e4daf7343
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Removed patch 0002 which was applied upstream:
-https://code.videolan.org/videolan/vlc/-/commit/41caaa08cde60c4fec4bf2e5f9610e2a1b9e6a23
+Fixes:
+http://autobuild.buildroot.net/results/cf7c4f360f5464c700788cc8299fd086544c80e8/build-end.log
 
-Renumbered remaining patches.
+Older GNU make versions don't like the explicit undefine.  It isn't really
+needed as ifdef handles undefined and defined-to-the-empty-string the same
+way, so just drop the undefine logic.
 
-Release notes:
-https://www.videolan.org/vlc/releases/3.0.13.html
-https://www.videolan.org/vlc/releases/3.0.12-update.html
-
-Version 3.0.13 fixes VideoLAN-SB-VLC-3013:
-https://www.videolan.org/security/sb-vlc3013.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6a075914849457d0c52e6bb3235faa9f3fcdbefb)
+(cherry picked from commit b8a1301e81b56e81b8abca6c00e5dccb6e3ff661)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ... 0002-automake-add-subdir-objects-option.patch} |  0
- ...LUA_COMPAT_APIINTCASTS-for-Lua-5.3.0-comp.patch | 41 ----------------------
- ...-build-use-pkg-config-to-get-tremor-libs.patch} |  0
- ...error-using-uClibc-by-adding-sys-types.h.patch} |  0
- ...005-Don-t-assume-strerror_l-is-available.patch} |  0
- ...-ancient-run-time-fallback-to-real-time-.patch} |  0
- ...2.patch => 0007-Add-support-for-freerdp2.patch} |  0
- ...-also-use-AC_PATH_PROG-to-check-for-wayl.patch} |  0
- ...o_filter-opencv_example.cpp-fix-build-wi.patch} |  0
- package/vlc/vlc.hash                               |  8 ++---
- package/vlc/vlc.mk                                 |  2 +-
- 11 files changed, 5 insertions(+), 46 deletions(-)
+ ...op-explicit-undefine-PYLIB-for-compatibil.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/package/vlc/0003-automake-add-subdir-objects-option.patch b/package/vlc/0002-automake-add-subdir-objects-option.patch
-similarity index 100%
-rename from package/vlc/0003-automake-add-subdir-objects-option.patch
-rename to package/vlc/0002-automake-add-subdir-objects-option.patch
-diff --git a/package/vlc/0002-lua-Define-LUA_COMPAT_APIINTCASTS-for-Lua-5.3.0-comp.patch b/package/vlc/0002-lua-Define-LUA_COMPAT_APIINTCASTS-for-Lua-5.3.0-comp.patch
-deleted file mode 100644
-index 11eaaf3b20..0000000000
---- a/package/vlc/0002-lua-Define-LUA_COMPAT_APIINTCASTS-for-Lua-5.3.0-comp.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 00135e21bec84a2fe5920d02fa0982ceb9f89a35 Mon Sep 17 00:00:00 2001
--From: Vinson Lee <vlee@freedesktop.org>
--Date: Thu, 5 Feb 2015 14:48:53 -0800
--Subject: [PATCH] lua: Define LUA_COMPAT_APIINTCASTS for Lua >= 5.3.0
-- compatibility.
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--In Lua 5.3.0, luaL_checkint was deprecated.
--
--This patch fixes this build error with Lua 5.3.0.
--
--lua/demux.c: In function ???vlclua_demux_peek???:
--lua/demux.c:55:5: error: implicit declaration of function ???luaL_checkint??? [-Werror=implicit-function-declaration]
--     int n = luaL_checkint( L, 1 );
--     ^
--
--Signed-off-by: Vinson Lee <vlee@freedesktop.org>
--Signed-off-by: Jean-Baptiste Kempf <jb@videolan.org>
--[Backport upstream commit 41caaa08cde60c4fec4bf2e5f9610e2a1b9e6a23]
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- modules/lua/vlc.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/modules/lua/vlc.h b/modules/lua/vlc.h
--index 71f381d334..b46b5f67a1 100644
----- a/modules/lua/vlc.h
--+++ b/modules/lua/vlc.h
--@@ -38,6 +38,7 @@
-- #include <vlc_stream.h>
-- #include <vlc_demux.h>
-- 
--+#define LUA_COMPAT_APIINTCASTS
-- #define LUA_COMPAT_MODULE
-- #include <lua.h>        /* Low level lua C API */
-- #include <lauxlib.h>    /* Higher level C API */
---- 
--2.14.4
--
-diff --git a/package/vlc/0004-build-use-pkg-config-to-get-tremor-libs.patch b/package/vlc/0003-build-use-pkg-config-to-get-tremor-libs.patch
-similarity index 100%
-rename from package/vlc/0004-build-use-pkg-config-to-get-tremor-libs.patch
-rename to package/vlc/0003-build-use-pkg-config-to-get-tremor-libs.patch
-diff --git a/package/vlc/0005-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch b/package/vlc/0004-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch
-similarity index 100%
-rename from package/vlc/0005-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch
-rename to package/vlc/0004-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch
-diff --git a/package/vlc/0006-Don-t-assume-strerror_l-is-available.patch b/package/vlc/0005-Don-t-assume-strerror_l-is-available.patch
-similarity index 100%
-rename from package/vlc/0006-Don-t-assume-strerror_l-is-available.patch
-rename to package/vlc/0005-Don-t-assume-strerror_l-is-available.patch
-diff --git a/package/vlc/0007-posix-remove-ancient-run-time-fallback-to-real-time-.patch b/package/vlc/0006-posix-remove-ancient-run-time-fallback-to-real-time-.patch
-similarity index 100%
-rename from package/vlc/0007-posix-remove-ancient-run-time-fallback-to-real-time-.patch
-rename to package/vlc/0006-posix-remove-ancient-run-time-fallback-to-real-time-.patch
-diff --git a/package/vlc/0008-Add-support-for-freerdp2.patch b/package/vlc/0007-Add-support-for-freerdp2.patch
-similarity index 100%
-rename from package/vlc/0008-Add-support-for-freerdp2.patch
-rename to package/vlc/0007-Add-support-for-freerdp2.patch
-diff --git a/package/vlc/0009-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch b/package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-similarity index 100%
-rename from package/vlc/0009-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-rename to package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-diff --git a/package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch b/package/vlc/0009-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
-similarity index 100%
-rename from package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
-rename to package/vlc/0009-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index f404cbf335..396c3a2ab1 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,7 +1,7 @@
--# From https://get.videolan.org/vlc/3.0.12/vlc-3.0.12.tar.xz.sha256
--sha256  eff458f38a92126094f44f2263c2bf2c7cdef271b48192d0fe7b1726388cf879  vlc-3.0.12.tar.xz
--# From https://get.videolan.org/vlc/3.0.12/vlc-3.0.12.tar.xz.sha1
--sha1  39ef414a07202ec6569acda4c5d91e8576d453bf  vlc-3.0.12.tar.xz
-+# From https://get.videolan.org/vlc/3.0.14/vlc-3.0.14.tar.xz.sha256
-+sha256  49b93e5b33deaa37060e6b24a98200cad70c407947f14eb2a8b6a0c64d8535a6  vlc-3.0.14.tar.xz
-+# From https://get.videolan.org/vlc/3.0.14/vlc-3.0.14.tar.xz.sha1
-+sha1  8a8613f16a9053668d7a7dcfa1e6d8be93af3e89  vlc-3.0.14.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 020c37aa5d..c1e190099e 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VLC_VERSION = 3.0.12
-+VLC_VERSION = 3.0.14
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+diff --git a/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch b/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
+new file mode 100644
+index 0000000000..f71ba09a79
+--- /dev/null
++++ b/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
+@@ -0,0 +1,48 @@
++From 84fea5d784e010f84c860b34e55ea2c855c17b3b Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Wed, 12 May 2021 09:18:33 +0200
++Subject: [PATCH] Makefile: drop explicit undefine PYLIB for compatibility with
++ make 3.81
++
++GNU make 3.81 does not like the explicit tab-indented undefine:
++
++Makefile:41: *** commands commence before first target.  Stop.
++
++Dropping the indentation also doesn't work:
++
++Makefile:41: *** missing separator.  Stop.
++
++So simply drop the undefine logic.  As explained in the GNU make manual,
++undefine is not commonly needed as E.G. ifdef checks for a non-zero string:
++
++https://www.gnu.org/software/make/manual/html_node/Undefine-Directive.html
++https://www.gnu.org/software/make/manual/html_node/Conditional-Syntax.html
++
++Fixes:
++http://autobuild.buildroot.net/results/cf7c4f360f5464c700788cc8299fd086544c80e8/build-end.log
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++[Upstream: https://marc.info/?l=linux-rt-users&m=162080462211139&w=2]
++---
++ Makefile | 5 -----
++ 1 file changed, 5 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index b17ac09..ec85ac8 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -36,11 +36,6 @@ LDFLAGS ?=
++ 
++ PYLIB  ?= $(shell python3 -c 'import distutils.sysconfig;  print (distutils.sysconfig.get_python_lib())')
++ 
++-# Check for errors, such as python3 not available
++-ifeq (${PYLIB},)
++-	undefine PYLIB
++-endif
++-
++ MANPAGES = src/cyclictest/cyclictest.8 \
++ 	   src/pi_tests/pi_stress.8 \
++ 	   src/ptsematest/ptsematest.8 \
++-- 
++2.20.1
++
