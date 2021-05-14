@@ -1,24 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 14 May 2021 10:21:31 +0000
-Subject: [Buildroot] [Bug 13806] Building host-localedef fails on fedora
- 34/gcc 11
-In-Reply-To: <bug-13806-163@https.bugs.busybox.net/>
-References: <bug-13806-163@https.bugs.busybox.net/>
-Message-ID: <bug-13806-163-zE5pVjhpW0@https.bugs.busybox.net/>
+From: Dick Olsson <hi@senzilla.io>
+Date: Fri, 14 May 2021 12:55:21 +0000
+Subject: [Buildroot] [PATCH v1 1/1] DEVELOPERS: add package/bitcoin for Dick
+ Olsson
+Message-ID: <tZTfqW4ZOEL1VwysLJubFD17GUJkKX6A52qDuYme48@cp4-web-031.plabs.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13806
+Signed-off-by: Dick Olsson <hi@senzilla.io>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Dr I J Ormshaw <ian_ormshaw@waters.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-            Version|2021.02                     |2021.02.2
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b688c8a8c1..b80d7c4a7c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -676,6 +676,7 @@ F:	package/ipcalc/
+ 
+ N:	Dick Olsson <hi@senzilla.io>
+ F:	package/bearssl/
++F:	package/bitcoin/
+ F:	package/execline/
+ F:	package/mdevd/
+ F:	package/s6-dns/
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.30.2
