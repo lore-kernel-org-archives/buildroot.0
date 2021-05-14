@@ -1,29 +1,25 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 14 May 2021 09:51:30 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for bitcoin
-Message-ID: <20210514075130.1895092-1-bernd.kuhls@t-online.de>
+From: David Laight <david.laight@aculab.com>
+Date: Fri, 14 May 2021 04:11:02 -0500 (CDT)
+Subject: [Buildroot] BR2_PACKAGE_BUSYBOX_CONFIG ignored
+Message-ID: <1620983462705-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+AFAICT the filename passed in BR2_PACKAGE_BUSYBOX_CONFIG is ignored and the
+.config file in output/build/busybox-1.33.0 is always read and then
+rewritten.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b688c8a8c1..42d33015ff 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -312,6 +312,7 @@ F:	package/apache/
- F:	package/apr/
- F:	package/apr-util/
- F:	package/bcg729/
-+F:	package/bitcoin/
- F:	package/bluez-tools/
- F:	package/boinc/
- F:	package/clamav/
--- 
-2.29.2
+There is a lot of makefile 'goop' to read through, so I'm not sure how it is
+expected to get passed through.
+A quick look at the busybox config sources seemed to imply that NULL was
+passed in as the old config file name - so it always looked for a default
+(.config or /dev/null).
+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
