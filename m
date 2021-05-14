@@ -1,51 +1,64 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 14 May 2021 22:08:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/live555: security bump to version
- 2021.05.03
-Message-ID: <20210514200826.2237923-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 14 May 2021 22:11:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libxslt: fix build with latest
+ libxml2
+In-Reply-To: <20210514194639.2217578-1-fontaine.fabrice@gmail.com>
+References: <20210514194639.2217578-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210514221110.41f0e60f@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2021-28899: Vulnerability in the
-AC3AudioFileServerMediaSubsession, ADTSAudioFileServerMediaSubsession,
-and AMRAudioFileServerMediaSubsessionLive OnDemandServerMediaSubsession
-subclasses in Networks LIVE555 Streaming Media before 2021.3.16.
+Hello Fabrice,
 
-http://live555.com/liveMedia/public/changelog.txt
+On Fri, 14 May 2021 21:46:39 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/live555/live555.hash | 4 ++--
- package/live555/live555.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Build is broken since bump of libxml2 to version 2.9.11 in commit
+> a241dcec4188dbf30fbc8b65d7e6f2ece9da3d04 because libxslt calls the
+> following command "${XML_CONFIG} --libs print" which will return an
+> error code since
+> https://github.com/GNOME/libxml2/commit/2a357ab99e6f5c9196384b11cd91dd993f93014c
+>
+> To fix this build failure, drop --with-libxml-prefix to prefer
+> pkg-config
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/47ceb8c24c9ead8a450b7fea3266f760d6b77b4f
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libxslt/libxslt.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+> index 3c603ad9f6..149e1d8972 100644
+> --- a/package/libxslt/libxslt.mk
+> +++ b/package/libxslt/libxslt.mk
+> @@ -14,8 +14,7 @@ LIBXSLT_CPE_ID_VENDOR = xmlsoft
+>  LIBXSLT_CONF_OPTS = \
+>  	--with-gnu-ld \
+>  	--without-debug \
+> -	--without-python \
+> -	--with-libxml-prefix=$(STAGING_DIR)/usr
 
-diff --git a/package/live555/live555.hash b/package/live555/live555.hash
-index 5e65cacd7b..d4fa93d029 100644
---- a/package/live555/live555.hash
-+++ b/package/live555/live555.hash
-@@ -1,5 +1,5 @@
- # From http://www.live555.com/liveMedia/public/live555-latest-md5.txt
--md5  4645d2a0c865505c85b48af5317bcb4a  live.2020.08.19.tar.gz
-+md5  3c1992b0e9b871bcad7491a3da541781  live.2021.05.03.tar.gz
- # Locally generated
--sha256  af3af7f2510b0b45f38892c232abca2cee2ab36a62503e7085b47ed2c3c2c537  live.2020.08.19.tar.gz
-+sha256  ae73241f9cc4ab740d60737c0438d62a7635af3822de5d84acf275793de42029  live.2021.05.03.tar.gz
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSER
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index 9a5c1c7c0d..effd4517cf 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIVE555_VERSION = 2020.08.19
-+LIVE555_VERSION = 2021.05.03
- LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
- LIVE555_SITE = http://www.live555.com/liveMedia/public
- # There is a COPYING file with the GPL-3.0 license text, but none of
--- 
-2.30.2
+This line was introduced with commit f8f8ff33472 ([1]):
+
+    libxslt: point to the correct xml2-config location
+
+    Currently libxslt configure finds native /usr/bin/xml2-config.
+
+Are you sure libxslt configure does not use (wrong) native/local
+xml2-config again without this line?
+
+Regards,
+Peter
+
+
+[1] https://git.buildroot.net/buildroot/commit/?id=f8f8ff33472641f9192a5e1ca65ebc614821665a
+
+> +	--without-python
+>  LIBXSLT_CONFIG_SCRIPTS = xslt-config
+>  LIBXSLT_DEPENDENCIES = host-pkgconf libxml2
+>
