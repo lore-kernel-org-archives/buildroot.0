@@ -1,36 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 14 May 2021 17:59:13 +0000
-Subject: [Buildroot] [Bug 13806] Building host-localedef fails on fedora
- 34/gcc 11
-In-Reply-To: <bug-13806-163@https.bugs.busybox.net/>
-References: <bug-13806-163@https.bugs.busybox.net/>
-Message-ID: <bug-13806-163-F04F1AK3eQ@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 May 2021 20:39:02 +0200
+Subject: [Buildroot] [PATCH v1 1/2] package/libgeos: fix comment
+ dependencies (binutils-bug-12464, binutils-bug-27597)
+In-Reply-To: <20210502144048.1212-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 2 May 2021 16:40:47 +0200")
+References: <20210502144048.1212-1-ps.report@gmx.net>
+Message-ID: <877dk1rwhl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13806
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
---- Comment #2 from Peter Seiderer <ps.report@gmx.net> ---
-Seems the problem is fixed upstream with the following two patches:
+ > The comment dependencies need to be the inverse of the package
+ > dependencies (fixes comment shown in menuconfig even if the package
+ > is available).
 
-- Fix GCC 11 -Warray-parameter warning for __sigsetjmp (bug 26647) [1]
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-- Avoid -Wstringop-overflow warning in pthread_cleanup_push macros [2]
-
-Can you test the following buildroot patch (backporting thr two commits for the
-localedef package)?
-
-https://patchwork.ozlabs.org/project/buildroot/patch/20210514175429.20552-1-ps.report at gmx.net/
-
-[1]
-https://github.com/bminor/glibc/commit/19302b27bdacfe87e861ff46fc0fbad60dd6602d
-
-[2]
-https://github.com/bminor/glibc/commit/548f467fa14ffe7d955beeb31b30e2aeae4467e0
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
