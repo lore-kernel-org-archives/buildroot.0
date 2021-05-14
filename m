@@ -1,29 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 May 2021 09:40:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libxml2: security bump to
- version 2.9.11
-In-Reply-To: <20210513151850.1705707-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Thu, 13 May 2021 18:18:50 +0300")
-References: <20210513151850.1705707-1-aperez@igalia.com>
-Message-ID: <87o8ddu5jn.fsf@dell.be.48ers.dk>
+Date: Fri, 14 May 2021 09:46:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bitcoin: security bump to
+ version 0.21.1
+In-Reply-To: <60g1nhxjm8.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
+ message of "Fri, 14 May 2021 07:55:50 +0200")
+References: <20210512212120.647405-1-fontaine.fabrice@gmail.com>
+ <20210513173417.erlj7433mbnchkbk@falbala.internal.home.lespocky.de>
+ <CAPi7W801eKBnSXFQGpTuTO8SRYdA6qaWXN-x2OQL8u6JT93nyw@mail.gmail.com>
+ <eytwv42FO5pGji2PxfnTUbUa0h4V0R3xp_fuGWNQ-Q2cyZ1xZ4Sd205XXExHiyR9Hl5NEafVCjLLGFNU0BP8UQ7hihG_nIgy0TTFEi97OjM=@senzilla.io>
+ <60g1nhxjm8.ln2@ID-313208.user.individual.net>
+Message-ID: <87k0o1u59j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Update libxml2 to version 2.9.11, which incorporates all the patches
- > carried by Buildroot (which are hence removed), and includes fixes for
- > CVE-2020-7595, CVE-2019-20388, CVE-2020-24977, and CVE-2021-3541 (at
- > least), as per
+ > Am Thu, 13 May 2021 19:46:23 +0000 schrieb D. Olsson via buildroot:
+ >>> > I don't think it's ethically justifiable to support proof-of-work
+ >>> > stuff like this.
+ >>> 
+ >>> I've nothing against dropping this package.
+ >> 
+ >> I understand that Bitcoin is a dividing topic. Everyone have the right
+ >> to their own opinions and can decide for themselves if they want use (or
+ >> not use) a certain package.
+ >> 
+ >> But I don't see a technical reason for why it should be removed.
+ >> The package is important to Bitcoin users of Buildroot.
 
- >   https://gitlab.gnome.org/GNOME/libxml2/-/issues/186#note_1104945
+ > Hi,
 
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ > being aware that I will enter a shit-storm area I agree with you that 
+ > buildroot should not suppress legally available packages for whatever 
+ > reason.
 
-Committed, thanks.
+I agree. In this particular case I am more worried that the original
+submitter (and the person listed in DEVELOPERS) has not done anything to
+keep it uptodate since it was submitted 2.5 years ago.
+
+Given how important security fixes are for this package and how we have
+limited resources for security support, I would also prefer to remove
+the package unless someone steps up to maintain it.
 
 -- 
 Bye, Peter Korsgaard
