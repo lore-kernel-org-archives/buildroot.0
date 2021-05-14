@@ -1,34 +1,102 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 May 2021 00:02:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXt: add CPE variables
-Message-ID: <20210514220212.2276191-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 15 May 2021 00:03:15 +0200
+Subject: [Buildroot] [PATCH 1/2] package/jh71xx-tools: new package
+In-Reply-To: <20210514220316.1942381-1-thomas.petazzoni@bootlin.com>
+References: <20210514220316.1942381-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20210514220316.1942381-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:x:libxt is a valid CPE identifier for this package:
+Add jh71xx-tools as a new host package, it includes a tool that allows
+to recover the bootloader of JH71xx-based platforms, such as the
+BeagleV.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax%3Alibxt
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libXt/xlib_libXt.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ DEVELOPERS                             |  1 +
+ package/Config.in.host                 |  1 +
+ package/jh71xx-tools/Config.in.host    |  7 +++++++
+ package/jh71xx-tools/jh71xx-tools.hash |  3 +++
+ package/jh71xx-tools/jh71xx-tools.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 32 insertions(+)
+ create mode 100644 package/jh71xx-tools/Config.in.host
+ create mode 100644 package/jh71xx-tools/jh71xx-tools.hash
+ create mode 100644 package/jh71xx-tools/jh71xx-tools.mk
 
-diff --git a/package/x11r7/xlib_libXt/xlib_libXt.mk b/package/x11r7/xlib_libXt/xlib_libXt.mk
-index 289cb5ac54..9530262cf5 100644
---- a/package/x11r7/xlib_libXt/xlib_libXt.mk
-+++ b/package/x11r7/xlib_libXt/xlib_libXt.mk
-@@ -10,6 +10,8 @@ XLIB_LIBXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXT_LICENSE = MIT
- XLIB_LIBXT_LICENSE_FILES = COPYING
- XLIB_LIBXT_INSTALL_STAGING = YES
-+XLIB_LIBXT_CPE_ID_VENDOR = x
-+XLIB_LIBXT_CPE_ID_PRODUCT = libxt
- XLIB_LIBXT_DEPENDENCIES = xlib_libSM xlib_libX11 xorgproto xcb-proto libxcb host-xorgproto
- XLIB_LIBXT_CONF_OPTS = --disable-malloc0returnsnull
- 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ed86dc82ba..a90ad1c354 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2633,6 +2633,7 @@ F:	package/heirloom-mailx/
+ F:	package/hiawatha/
+ F:	package/igh-ethercat/
+ F:	package/intltool/
++F:	package/jh71xx-tools/
+ F:	package/libcap/
+ F:	package/libffi/
+ F:	package/libsha1/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index ba6a68c728..cef36cebc1 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -40,6 +40,7 @@ menu "Host utilities"
+ 	source "package/imx-mkimage/Config.in.host"
+ 	source "package/imx-usb-loader/Config.in.host"
+ 	source "package/jq/Config.in.host"
++	source "package/jh71xx-tools/Config.in.host"
+ 	source "package/jsmin/Config.in.host"
+ 	source "package/kmod/Config.in.host"
+ 	source "package/libp11/Config.in.host"
+diff --git a/package/jh71xx-tools/Config.in.host b/package/jh71xx-tools/Config.in.host
+new file mode 100644
+index 0000000000..08872f295c
+--- /dev/null
++++ b/package/jh71xx-tools/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_JH71XX_TOOLS
++	bool "host jh71xx-tools"
++	depends on BR2_riscv
++	help
++	  Bootloader recovery and updater tool for StarFive JH7100 SoCs.
++
++	  https://github.com/kprasadvnsi/JH71xx-tools
+diff --git a/package/jh71xx-tools/jh71xx-tools.hash b/package/jh71xx-tools/jh71xx-tools.hash
+new file mode 100644
+index 0000000000..d8a88dcb22
+--- /dev/null
++++ b/package/jh71xx-tools/jh71xx-tools.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  0f16ea896164f6e8bfe0a03bbbd95ff14d474445ba6f045f9377d01282c9364f  jh71xx-tools-7a29f4b9d2355aa39afa8680680909bb74e4991d.tar.gz
++sha256  3ef425421620cd815709f3ede736bb83dbfc47201897b66731606dc699e98460  jh7100-recover.c
+diff --git a/package/jh71xx-tools/jh71xx-tools.mk b/package/jh71xx-tools/jh71xx-tools.mk
+new file mode 100644
+index 0000000000..b9f3974931
+--- /dev/null
++++ b/package/jh71xx-tools/jh71xx-tools.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# jh71xx-tools
++#
++################################################################################
++
++JH71XX_TOOLS_VERSION = 7a29f4b9d2355aa39afa8680680909bb74e4991d
++JH71XX_TOOLS_SITE = $(call github,kprasadvnsi,JH71xx-tools,$(JH71XX_TOOLS_VERSION))
++JH71XX_TOOLS_LICENSE = MIT
++JH71XX_TOOLS_LICENSE_FILES = jh7100-recover.c
++
++define HOST_JH71XX_TOOLS_BUILD_CMDS
++	$(HOSTCC) -o $(@D)/jh7100-recover $(@D)/jh7100-recover.c
++endef
++
++define HOST_JH71XX_TOOLS_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/jh7100-recover $(HOST_DIR)/bin/jh7100-recover
++endef
++
++$(eval $(host-generic-package))
 -- 
-2.30.2
+2.31.1
