@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1767C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:10:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FCD1C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:11:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A59C560F02
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:10:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A59C560F02
+	by mail.kernel.org (Postfix) with ESMTPS id 4DA0F60F22
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:11:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4DA0F60F22
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CBB160860;
-	Tue,  3 Aug 2021 21:10:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 230FE40518;
+	Tue,  3 Aug 2021 21:11:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0Sw2Ji_Xi2-2; Tue,  3 Aug 2021 21:10:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7NB85e0Ok0Za; Tue,  3 Aug 2021 21:11:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB3D06067E;
-	Tue,  3 Aug 2021 21:10:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 95E861BF9C1
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CCC840435;
+	Tue,  3 Aug 2021 21:11:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 13D4A1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 863096063A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D1B64046D
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DP9gwP5aQA5g for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mN7Qa15GiUUk for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:09:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 97AAA605E0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 85DD4401FA
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E197187BB7; Tue,  3 Aug 2021 21:09:35 +0000 (UTC)
+ id CF3B08B43C; Tue,  3 Aug 2021 21:09:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 May 2021 20:38:39 +0200
+Date: Fri, 14 May 2021 19:24:24 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f5ea09e2a853392b5b379093a43221a6cda71edf
-X-Git-Newrev: 03a8d70f524270512e1435b6046b74f399b01798
+X-Git-Oldrev: a241dcec4188dbf30fbc8b65d7e6f2ece9da3d04
+X-Git-Newrev: 92177081223ec229fd50de50e8d76448ee80e5db
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210935.E197187BB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libgeos: fix comment
- dependencies (binutils-bug-12464, binutils-bug-27597)
+Message-Id: <20210803210935.CF3B08B43C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/testing: remove
+ TestPythonPy2Gpiozero
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,31 +70,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03a8d70f524270512e1435b6046b74f399b01798
+commit: https://git.buildroot.net/buildroot/commit/?id=92177081223ec229fd50de50e8d76448ee80e5db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The comment dependencies need to be the inverse of the package
-dependencies (fixes comment shown in menuconfig even if the package
-is available).
+The python2 support has been removed since the python-colorzero bump version to 2.0.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Remove the gpiozero test with python2
+
+[1] 73bf3292e16b9419c5c88d10e9755d7208ca3623
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgeos/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ support/testing/tests/package/test_python_gpiozero.py | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
-index ebe40bd1ff..86a1cddcf3 100644
---- a/package/libgeos/Config.in
-+++ b/package/libgeos/Config.in
-@@ -15,5 +15,5 @@ config BR2_PACKAGE_LIBGEOS
+diff --git a/support/testing/tests/package/test_python_gpiozero.py b/support/testing/tests/package/test_python_gpiozero.py
+index 2498a55514..4fe155e6ce 100644
+--- a/support/testing/tests/package/test_python_gpiozero.py
++++ b/support/testing/tests/package/test_python_gpiozero.py
+@@ -14,15 +14,6 @@ class TestPythonGpiozero(TestPythonPackageBase):
+         self.assertRunOk(cmd)
  
- comment "libgeos needs a toolchain w/ C++, wchar, not binutils bug 21464, 27597"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		   !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
--		   !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
-+		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
-+		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
+ 
+-class TestPythonPy2Gpiozero(TestPythonGpiozero):
+-    __test__ = True
+-    config = TestPythonPackageBase.config + \
+-        """
+-        BR2_PACKAGE_PYTHON=y
+-        BR2_PACKAGE_PYTHON_GPIOZERO=y
+-        """
+-
+-
+ class TestPythonPy3Gpiozero(TestPythonGpiozero):
+     __test__ = True
+     config = TestPythonGpiozero.config + \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
