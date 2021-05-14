@@ -1,76 +1,42 @@
-From: Robert Nelson <robertcnelson@gmail.com>
-Date: Fri, 14 May 2021 08:48:53 -0500
-Subject: [Buildroot] Use the CAN0 device on beaglebone black
-In-Reply-To: <CAAmck7WMah=unSWHSy0+gxv6VtcWETTnAJWRLR0ZwAOWQX4Miw@mail.gmail.com>
-References: <CAAmck7WMah=unSWHSy0+gxv6VtcWETTnAJWRLR0ZwAOWQX4Miw@mail.gmail.com>
-Message-ID: <CAOCHtYjGcGMGaxzHTUL_9BtifGbXG0CHCTZAB3swPyzhsGpNQw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 May 2021 16:59:50 +0200
+Subject: [Buildroot] BR2_PACKAGE_BUSYBOX_CONFIG ignored
+In-Reply-To: <1620983462705-0.post@n4.nabble.com> (David Laight's message of
+ "Fri, 14 May 2021 04:11:02 -0500 (CDT)")
+References: <1620983462705-0.post@n4.nabble.com>
+Message-ID: <87a6oxtl7d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, May 14, 2021 at 2:37 AM Andy Bergh <allmyaddmin@gmail.com> wrote:
->
-> Hi,
->
-> How can I use the CAN0 device with a Buildroot image?
->
-> I have a Beaglebone black rev C and have built an image using Buildroot. I used the standard beaglebone_defconfig and installed can-utils as well as iproute2.
->
-> My understanding is that the i2c2 pins should be reconfigured to be able to use the CAN0 device. In order to keep things simple (and avoid overlays) I edit the "am335x-bone-common.dtsi" file in two ways.
->
-> 1) Comment out the i2c2 and insert the CAN0 pin setup:
->
-> //    i2c2_pins: pinmux_i2c2_pins {
-> //        pinctrl-single,pins = <
-> //            0x178 (PIN_INPUT_PULLUP | MUX_MODE3)    /* uart1_ctsn.i2c2_sda */
-> //            0x17c (PIN_INPUT_PULLUP | MUX_MODE3)    /* uart1_rtsn.i2c2_scl */
-> //        >;
-> //    };
->
-> dcan0_pins: pinmux_dcan0_pins {
->         pinctrl-single,pins = <
->             0x178 (PIN_OUTPUT_PULLUP | MUX_MODE2)  /* P9.20 (0x178), ddcan0_tx */
->             0x17c (PIN_INPUT_PULLUP | MUX_MODE2)   /* P9.19 (0x17c), ddcan0_rx */
->         >;
->     };
->
-> 2) Replace i2c2 with
-> &dcan0 {
->     #address-cells = <1>;
->     #size-cells = <1>;
->     status = "okay";
->     pinctrl-names = "default";
->     pinctrl-0 = <&dcan0_pins>;
->
-> };
->
-> Once I log in I can not get any CAN device going anywhere:
-> # ifup can0
-> Cannot find device "can0"
-> # ifconfig can0 up
-> ifconfig: SIOCGIFFLAGS: No such device
->
-> And looking at the available networks
->
-> # ls -al /sys/class/net/
-> total 0
-> drwxr-xr-x    2 root     root             0 Jan  1 00:00 .
-> drwxr-xr-x   43 root     root             0 Jan  1 00:00 ..
-> lrwxrwxrwx    1 root     root             0 Jan  1 00:00 eth0 -> ../../devices/platform/ocp/4a100000.ethernet/net/eth0
-> lrwxrwxrwx    1 root     root             0 Jan  1 00:00 lo -> ../../devices/virtual/net/lo
-> lrwxrwxrwx    1 root     root             0 Jan  1 00:02 sit0 -> ../../devices/virtual/net/sit0
->
-> I have exhausted all resources and am truly stuck. Any information which may help will be greatly appreciated.
+>>>>> "David" == David Laight <david.laight@aculab.com> writes:
 
-Double check your kernel config:
+ > AFAICT the filename passed in BR2_PACKAGE_BUSYBOX_CONFIG is ignored and the
+ > .config file in output/build/busybox-1.33.0 is always read and then
+ > rewritten.
 
-CONFIG_CAN_C_CAN=y
-CONFIG_CAN_C_CAN_PLATFORM=y
+ > There is a lot of makefile 'goop' to read through, so I'm not sure how it is
+ > expected to get passed through.
+ > A quick look at the busybox config sources seemed to imply that NULL was
+ > passed in as the old config file name - so it always looked for a default
+ > (.config or /dev/null).
 
-Regards,
+What makes you think it doesn't work?
+
+make BR2_PACKAGE_BUSYBOX_CONFIG=/tmp/no-such-file busybox-configure
+for f in /tmp/no-such-file ; do if [ ! -f "${f}" ]; then printf "Kconfig file or fragment '%s' for '%s' does not exist\n" "${f}" "busybox"; exit 1; fi; done
+Kconfig file or fragment '/tmp/no-such-file' for 'busybox' does not exist
+make[1]: *** [package/busybox/busybox.mk:409: /tmp/no-such-file] Error 1
+
+echo -e 'CONFIG_BRCTL=y\n# CONFIG_HTTPD is not set' > /tmp/config
+make BR2_PACKAGE_BUSYBOX_CONFIG=/tmp/config busybox-configure
+..
+make busybox-menuconfig
+..
+[*] brctl (4.7 kb)
+[ ] httpd (32 kb)
 
 -- 
-Robert Nelson
-https://rcn-ee.com/
+Bye, Peter Korsgaard
