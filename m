@@ -1,45 +1,94 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 14 May 2021 23:26:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dmalloc: unconditionally set -fPIC
-Message-ID: <20210514212602.2274195-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 14 May 2021 23:30:44 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libxslt: fix build with latest libxml2
+In-Reply-To: <20210514202838.2260096-1-fontaine.fabrice@gmail.com>
+References: <20210514202838.2260096-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210514233044.69727132@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Unconditionally set -fPIC to avoid the following build failure which is
-raised since commit 19ec872f169a851b48ba04d22432b7c0939847d4:
+Hello Fabrice,
 
-/home/giuliobenetti/autobuild/run/instance-2/output-1/host/bin/or1k-linux-ld -shared --whole-archive -soname libdmallocxx.so -o libdmallocxx.so.t libdmallocxx.a
-/home/giuliobenetti/autobuild/run/instance-2/output-1/host/bin/or1k-linux-ld: libdmallocxx.a(arg_check.o): non-pic relocation against symbol _dmalloc_flags
-/home/giuliobenetti/autobuild/run/instance-2/output-1/host/bin/or1k-linux-ld: libdmallocxx.a(arg_check.o): non-pic relocation against symbol _dmalloc_flags
-/home/giuliobenetti/autobuild/run/instance-2/output-1/host/bin/or1k-linux-ld: libdmallocxx.a(arg_check.o): pc-relative relocation against dynamic symbol dmalloc_verify_pnt
+On Fri, 14 May 2021 22:28:38 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/62c9c6aebca60649bd6f635125507bf10d63fc05
+> Build is broken since bump of libxml2 to version 2.9.11 in commit
+> a241dcec4188dbf30fbc8b65d7e6f2ece9da3d04 because libxslt calls the
+> following command "${XML_CONFIG} --libs print" which will return an
+> error code since
+> https://github.com/GNOME/libxml2/commit/2a357ab99e6f5c9196384b11cd91dd993f93014c
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/47ceb8c24c9ead8a450b7fea3266f760d6b77b4f
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2 (after review of Peter Seiderer):
+>  - Use upstream patch instead of dropping --with-libxml-prefix
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/dmalloc/dmalloc.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+Thanks for searching (and finding) the right upstream commit ;-)
 
-diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
-index 638fe0fcda..8300cc7f19 100644
---- a/package/dmalloc/dmalloc.mk
-+++ b/package/dmalloc/dmalloc.mk
-@@ -14,11 +14,7 @@ DMALLOC_LICENSE_FILES = dmalloc.h.1
- 
- DMALLOC_INSTALL_STAGING = YES
- DMALLOC_CONF_OPTS = --enable-shlib
--DMALLOC_CFLAGS = $(TARGET_CFLAGS)
--
--ifeq ($(BR2_STATIC_LIBS),)
--DMALLOC_CFLAGS += -fPIC
--endif
-+DMALLOC_CFLAGS = $(TARGET_CFLAGS) -fPIC
- 
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- DMALLOC_CONF_OPTS += --enable-cxx
--- 
-2.30.2
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
+
+>
+>  ...ml2-config-check-in-configure-script.patch | 31 +++++++++++++++++++
+>  package/libxslt/libxslt.mk                    |  2 ++
+>  2 files changed, 33 insertions(+)
+>  create mode 100644 package/libxslt/0001-Fix-xml2-config-check-in-configure-script.patch
+>
+> diff --git a/package/libxslt/0001-Fix-xml2-config-check-in-configure-script.patch b/package/libxslt/0001-Fix-xml2-config-check-in-configure-script.patch
+> new file mode 100644
+> index 0000000000..3848dcb235
+> --- /dev/null
+> +++ b/package/libxslt/0001-Fix-xml2-config-check-in-configure-script.patch
+> @@ -0,0 +1,31 @@
+> +From 90c34c8bb90e095a8a8fe8b2ce368bd9ff1837cc Mon Sep 17 00:00:00 2001
+> +From: Nick Wellnhofer <wellnhofer@aevum.de>
+> +Date: Fri, 15 Nov 2019 11:53:11 +0100
+> +Subject: [PATCH] Fix xml2-config check in configure script
+> +
+> +A 'print' option has never been supported. After a recent change to
+> +libxml2, invalid options cause xml2-config to fail.
+> +
+> +[Retrieved from:
+> +https://gitlab.gnome.org/GNOME/libxslt/-/commit/90c34c8bb90e095a8a8fe8b2ce368bd9ff1837cc]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + configure.ac | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 3da57b18..585b9d7c 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -548,7 +548,7 @@ dnl make sure xml2-config is executable,
+> + dnl test version and init our variables
+> + dnl
+> +
+> +-if test "x$LIBXML_LIBS" = "x" && ${XML_CONFIG} --libs print > /dev/null 2>&1
+> ++if test "x$LIBXML_LIBS" = "x" && ${XML_CONFIG} --libs > /dev/null 2>&1
+> + then
+> +     AC_MSG_CHECKING(for libxml libraries >= $LIBXML_REQUIRED_VERSION)
+> +     XMLVERS=`$XML_CONFIG --version`
+> +--
+> +GitLab
+> +
+> diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+> index 3c603ad9f6..d0f79d2521 100644
+> --- a/package/libxslt/libxslt.mk
+> +++ b/package/libxslt/libxslt.mk
+> @@ -10,6 +10,8 @@ LIBXSLT_INSTALL_STAGING = YES
+>  LIBXSLT_LICENSE = MIT
+>  LIBXSLT_LICENSE_FILES = COPYING
+>  LIBXSLT_CPE_ID_VENDOR = xmlsoft
+> +# We're patching configure.ac
+> +LIBXSLT_AUTORECONF = YES
+>
+>  LIBXSLT_CONF_OPTS = \
+>  	--with-gnu-ld \
