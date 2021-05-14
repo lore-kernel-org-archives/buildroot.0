@@ -1,49 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 May 2021 09:46:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bitcoin: security bump to
- version 0.21.1
-In-Reply-To: <60g1nhxjm8.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
- message of "Fri, 14 May 2021 07:55:50 +0200")
-References: <20210512212120.647405-1-fontaine.fabrice@gmail.com>
- <20210513173417.erlj7433mbnchkbk@falbala.internal.home.lespocky.de>
- <CAPi7W801eKBnSXFQGpTuTO8SRYdA6qaWXN-x2OQL8u6JT93nyw@mail.gmail.com>
- <eytwv42FO5pGji2PxfnTUbUa0h4V0R3xp_fuGWNQ-Q2cyZ1xZ4Sd205XXExHiyR9Hl5NEafVCjLLGFNU0BP8UQ7hihG_nIgy0TTFEi97OjM=@senzilla.io>
- <60g1nhxjm8.ln2@ID-313208.user.individual.net>
-Message-ID: <87k0o1u59j.fsf@dell.be.48ers.dk>
+Date: Fri, 14 May 2021 09:39:22 +0200
+Subject: [Buildroot] [git commit] package/postgresql: security bump version
+ to 13.3
+Message-ID: <20210514071815.2355D83704@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b544587806d9a17f0b27335bbb1a1b4ca347bc5a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Am Thu, 13 May 2021 19:46:23 +0000 schrieb D. Olsson via buildroot:
- >>> > I don't think it's ethically justifiable to support proof-of-work
- >>> > stuff like this.
- >>> 
- >>> I've nothing against dropping this package.
- >> 
- >> I understand that Bitcoin is a dividing topic. Everyone have the right
- >> to their own opinions and can decide for themselves if they want use (or
- >> not use) a certain package.
- >> 
- >> But I don't see a technical reason for why it should be removed.
- >> The package is important to Bitcoin users of Buildroot.
+Fixes CVE-2021-32027, CVE-2021-32028 & CVE-2021-32029:
+https://www.postgresql.org/about/news/postgresql-133-127-1112-1017-and-9622-released-2210/
 
- > Hi,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > being aware that I will enter a shit-storm area I agree with you that 
- > buildroot should not suppress legally available packages for whatever 
- > reason.
-
-I agree. In this particular case I am more worried that the original
-submitter (and the person listed in DEVELOPERS) has not done anything to
-keep it uptodate since it was submitted 2.5 years ago.
-
-Given how important security fixes are for this package and how we have
-limited resources for security support, I would also prefer to remove
-the package unless someone steps up to maintain it.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 7dfe194837..caa8a1f5e7 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v13.2/postgresql-13.2.tar.bz2.sha256
+-sha256  5fd7fcd08db86f5b2aed28fcfaf9ae0aca8e9428561ac547764c2a2b0f41adfc  postgresql-13.2.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v13.3/postgresql-13.3.tar.bz2.sha256
++sha256  3cd9454fa8c7a6255b6743b767700925ead1b9ab0d7a0f9dcb1151010f8eb4a1  postgresql-13.3.tar.bz2
+ 
+ # License file, Locally calculated
+ sha256  31ccadc0a70e8e0e8a35c5833567b64388dfe34987d962e1911554e271294105  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 9206c62462..cab5553805 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 13.2
++POSTGRESQL_VERSION = 13.3
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
