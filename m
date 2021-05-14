@@ -1,45 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 May 2021 20:40:57 +0200
-Subject: [Buildroot] [PATCH] package/opentyrian: switch ot using github
-In-Reply-To: <20210429195324.2463255-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Thu, 29 Apr 2021 21:53:24 +0200")
-References: <20210429195324.2463255-1-yann.morin.1998@free.fr>
-Message-ID: <87y2chqhty.fsf@dell.be.48ers.dk>
+Date: Fri, 14 May 2021 20:38:39 +0200
+Subject: [Buildroot] [git commit] package/libgeos: fix comment dependencies
+ (binutils-bug-12464, binutils-bug-27597)
+Message-ID: <20210514181233.9764787499@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=03a8d70f524270512e1435b6046b74f399b01798
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > OpenTyrian was previously managed in a Mercurial repository hosted on
- > Bitbucket. Mid-2020, Bitbucket shut off all its Mercurial repositories:
- >     https://bitbucket.org/blog/sunsetting-mercurial-support-in-bitbucket
+The comment dependencies need to be the inverse of the package
+dependencies (fixes comment shown in menuconfig even if the package
+is available).
 
- > Since then, OpenTyrian's source code is inacessible, but we have had no
- > build failure associated as there is an old archive hosted on s.b.o, so
- > that all builds fallback to downloading that:
- >     http://sources.buildroot.net/opentyrian/opentyrian-9c9f0ec3532b.tar.gz
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgeos/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > However, the project has been revived (kinda) on github:
- >     https://github.com/opentyrian/opentyrian
-
- > Git commit cf5dbeb69eebd9ef9afc4473088d9469b79589eb has been found to
- > be the closest, both in content and date, to the Mercuail reference
- > 9c9f0ec3532b we were using. The only deltas are in Mercurial-specific
- > files:
-
- >  b/.hg_archival.txt |    5     0     5     0 -----
- >  b/.hgtags          |    2     1     1     0 +-
- >  2 files changed, 1 insertion(+), 6 deletions(-)
-
- > While at it, add a hash file.
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Julien Boibessot <julien.boibessot@armadeus.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
+index ebe40bd1ff..86a1cddcf3 100644
+--- a/package/libgeos/Config.in
++++ b/package/libgeos/Config.in
+@@ -15,5 +15,5 @@ config BR2_PACKAGE_LIBGEOS
+ 
+ comment "libgeos needs a toolchain w/ C++, wchar, not binutils bug 21464, 27597"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		   !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
+-		   !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
++		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
++		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
