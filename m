@@ -1,49 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 May 2021 22:59:09 +0200
-Subject: [Buildroot] [git commit] package/libxml2: bump to version 2.9.12
-Message-ID: <20210514203237.332287FBDE@busybox.osuosl.org>
+Date: Fri, 14 May 2021 22:59:58 +0200
+Subject: [Buildroot] [git commit] test_docker_compose.py: Test the port
+ publish feature
+Message-ID: <20210514203237.602E98756D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b304a458bd0bd823454b1d303e5ae4520ec679d2
+commit: https://git.buildroot.net/buildroot/commit/?id=4915b692c84711aa9b7b2d5ea436e4b53d7215bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Brown-paper bag release:
-https://github.com/GNOME/libxml2/commit/b48e77cf4f6fa0792c5f4b639707a2b0675e461b
+Extend docker_test() to expose a random (8888) port to verify that doesn't
+fail, and extend the docker-compose test to run the busybox httpd in the
+background, expose that as port 80 and verify that /etc/resolv.conf could be
+fetched by wget.
 
-Update indentation in hash file (two spaces)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxml2/libxml2.hash | 4 ++--
- package/libxml2/libxml2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/testing/conf/docker-compose.yml              | 3 +++
+ support/testing/tests/package/test_docker_compose.py | 8 +++++---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index 563a5f89c9..ce6c3c4825 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	886f696d5d5b45d780b2880645edf9e0c62a4fd6841b853e824ada4e02b4d331	libxml2-2.9.11.tar.gz
-+sha256  c8d6681e38c56f172892c85ddc0852e1fd4b53b4209e7f4ebf17f7e2eae71d92  libxml2-2.9.12.tar.gz
- # License files, locally calculated
--sha256	c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd	COPYING
-+sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  COPYING
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index f39e688781..5d688acae5 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/conf/docker-compose.yml b/support/testing/conf/docker-compose.yml
+index 49ff2677da..de33251dfd 100644
+--- a/support/testing/conf/docker-compose.yml
++++ b/support/testing/conf/docker-compose.yml
+@@ -2,3 +2,6 @@ version: '3'
+ services:
+   busybox:
+     image: "busybox:latest"
++    command: httpd -f -h /etc/
++    ports:
++      - "80:80"
+diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
+index 67ee795f21..364f75b5b0 100644
+--- a/support/testing/tests/package/test_docker_compose.py
++++ b/support/testing/tests/package/test_docker_compose.py
+@@ -37,13 +37,15 @@ class TestDockerCompose(infra.basetest.BRTest):
  
--LIBXML2_VERSION = 2.9.11
-+LIBXML2_VERSION = 2.9.12
- LIBXML2_SITE = http://xmlsoft.org/sources
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_LICENSE = MIT
+     def docker_test(self):
+         # will download container if not available, which may take some time
+-        _, exit_code = self.emulator.run('docker run --rm busybox:latest /bin/true', 120)
++        _, exit_code = self.emulator.run('docker run --rm -p 8888:8888 busybox:latest /bin/true', 120)
+         self.assertEqual(exit_code, 0)
+ 
+     def docker_compose_test(self):
+         # will download container if not available, which may take some time
+-        _, exit_code = self.emulator.run('docker-compose up', 120)
+-        self.assertEqual(exit_code, 0)
++        self.assertRunOk('docker-compose up -d', 120)
++        # container may take some time to start
++        self.assertRunOk('while ! docker inspect root_busybox_1 2>&1 >/dev/null; do sleep 1; done', 120)
++        self.assertRunOk('wget http://127.0.0.1/resolv.conf', 120)
+ 
+     def test_run(self):
+         kernel = os.path.join(self.builddir, "images", "bzImage")
