@@ -1,36 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 May 2021 20:38:56 +0200
-Subject: [Buildroot] [git commit] package/postgis: fix comment dependencies
- (binutils-bug-21464, binutils-bug-27597)
-Message-ID: <20210514181233.A8CDB815EA@busybox.osuosl.org>
+Date: Fri, 14 May 2021 20:44:08 +0200
+Subject: [Buildroot] [PATCH 1/1] ipackage/modem-manager: bump version to
+ 1.16.4
+In-Reply-To: <20210429190820.5404-1-petr.vorel@gmail.com> (Petr Vorel's
+ message of "Thu, 29 Apr 2021 21:08:20 +0200")
+References: <20210429190820.5404-1-petr.vorel@gmail.com>
+Message-ID: <87tun5qhon.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d5b397202225f7ca1702f62342df3b97056c531
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
-The comment dependencies need to be the inverse of the package
-dependencies (fixes comment shown in menuconfig even if the package
-is available).
+ > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+ > ---
+ > Hi,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/postgis/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > tested:
+ >                     bootlin-armv5-uclibc [1/6]: OK
+ >                      bootlin-armv7-glibc [2/6]: OK
+ >                    bootlin-armv7m-uclibc [3/6]: SKIPPED
+ >                      bootlin-x86-64-musl [4/6]: OK
+ >                       br-arm-full-static [5/6]: OK
+ >                             sourcery-arm [6/6]: OK
+ > 6 builds, 1 skipped, 0 build failed, 0 legal-info failed
 
-diff --git a/package/postgis/Config.in b/package/postgis/Config.in
-index 49887b61c0..04705f7e16 100644
---- a/package/postgis/Config.in
-+++ b/package/postgis/Config.in
-@@ -24,5 +24,5 @@ comment "postgis needs a toolchain w/ C++, threads, wchar, gcc >= 4.7, not binut
- 	depends on !BR2_microblazeel && !BR2_microblazebe # ICE
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
--		!BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
-+		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
-+		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
+Committed to master given the fixes:
+
+https://github.com/freedesktop/ModemManager/commit/0325cd530c35e0854b3f2a6624c7fdc4cad69995
+
+-- 
+Bye, Peter Korsgaard
