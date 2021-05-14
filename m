@@ -1,19 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 May 2021 22:57:42 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for bitcoin
-In-Reply-To: <20210514075130.1895092-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Fri, 14 May 2021 09:51:30 +0200")
-References: <20210514075130.1895092-1-bernd.kuhls@t-online.de>
-Message-ID: <87lf8hqbi1.fsf@dell.be.48ers.dk>
+Date: Fri, 14 May 2021 22:57:52 +0200
+Subject: [Buildroot] [PATCH v1 1/1] DEVELOPERS: add package/bitcoin for
+ Dick Olsson
+In-Reply-To: <tZTfqW4ZOEL1VwysLJubFD17GUJkKX6A52qDuYme48@cp4-web-031.plabs.ch>
+ (Dick Olsson via buildroot's message of "Fri, 14 May 2021 12:55:21
+ +0000")
+References: <tZTfqW4ZOEL1VwysLJubFD17GUJkKX6A52qDuYme48@cp4-web-031.plabs.ch>
+Message-ID: <87h7j5qbhr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Dick" == Dick Olsson via buildroot <buildroot@busybox.net> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Dick Olsson <hi@senzilla.io>
 
 Committed, thanks.
 
