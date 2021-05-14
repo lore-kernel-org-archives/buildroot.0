@@ -1,63 +1,67 @@
-From: David Laight <David.Laight@ACULAB.COM>
-Date: Fri, 14 May 2021 15:29:15 +0000
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 May 2021 18:18:49 +0200
 Subject: [Buildroot] BR2_PACKAGE_BUSYBOX_CONFIG ignored
-In-Reply-To: <87a6oxtl7d.fsf@dell.be.48ers.dk>
+In-Reply-To: <b68fa0a4d3734a67bef3497336d7620b@AcuMS.aculab.com> (David
+ Laight's message of "Fri, 14 May 2021 15:29:15 +0000")
 References: <1620983462705-0.post@n4.nabble.com>
  <87a6oxtl7d.fsf@dell.be.48ers.dk>
-Message-ID: <b68fa0a4d3734a67bef3497336d7620b@AcuMS.aculab.com>
+ <b68fa0a4d3734a67bef3497336d7620b@AcuMS.aculab.com>
+Message-ID: <875yzlthjq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Peter Korsgaard
-> Sent: 14 May 2021 16:00
-> 
-> >>>>> "David" == David Laight <david.laight@aculab.com> writes:
-> 
->  > AFAICT the filename passed in BR2_PACKAGE_BUSYBOX_CONFIG is ignored and the
->  > .config file in output/build/busybox-1.33.0 is always read and then
->  > rewritten.
-> 
->  > There is a lot of makefile 'goop' to read through, so I'm not sure how it is
->  > expected to get passed through.
->  > A quick look at the busybox config sources seemed to imply that NULL was
->  > passed in as the old config file name - so it always looked for a default
->  > (.config or /dev/null).
-> 
-> What makes you think it doesn't work?
-> 
-> make BR2_PACKAGE_BUSYBOX_CONFIG=/tmp/no-such-file busybox-configure
-> for f in /tmp/no-such-file ; do if [ ! -f "${f}" ]; then printf "Kconfig file or fragment '%s' for
-> '%s' does not exist\n" "${f}" "busybox"; exit 1; fi; done
-> Kconfig file or fragment '/tmp/no-such-file' for 'busybox' does not exist
-> make[1]: *** [package/busybox/busybox.mk:409: /tmp/no-such-file] Error 1
-> 
-> echo -e 'CONFIG_BRCTL=y\n# CONFIG_HTTPD is not set' > /tmp/config
-> make BR2_PACKAGE_BUSYBOX_CONFIG=/tmp/config busybox-configure
-> ..
-> make busybox-menuconfig
+>>>>> "David" == David Laight <David.Laight@ACULAB.COM> writes:
 
-I think it must go wrong after those checks.
+Hi,
 
-I've a local copy of busybox.config referenced from my buildroot config file.
-There is also the default busybox.config inside buildroot.
-And finally a .config file inside the busybox tree.
+ > I think it must go wrong after those checks.
 
-When I run 'make busybox-menuconfig' it only reads and updates the latter.
-Even if I copy the .config to my busybox.config to ensure it is valid.
+ > I've a local copy of busybox.config referenced from my buildroot config file.
+ > There is also the default busybox.config inside buildroot.
+ > And finally a .config file inside the busybox tree.
 
-I think this used to work (about three years ago) because our own scripts
-recover the updated file so it can be saved under source control.
-(Not that I actually remember doing that.)
+ > When I run 'make busybox-menuconfig' it only reads and updates the latter.
+ > Even if I copy the .config to my busybox.config to ensure it is valid.
 
-I've just run: strace -oz -f make busybox-menuconfig
-There is only one reference to busybox.config about 14% of the way through.
-It's existence is checked for between .stamp_dotconfig and .stamp_patched.
+Just to make sure I follow you, you are doing this from a clean tree,
+right? The config file is only copied to output/build/busybox-*/.config
+once (unless you run make busybox-clean-kconfig-for-reconfigure).
 
-	David
+It works here:
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+make savedefconfig
+
+cat defconfig
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+BR2_PACKAGE_BUSYBOX_CONFIG="/tmp/config"
+# BR2_TARGET_ROOTFS_TAR is not set
+
+cat /tmp/config
+CONFIG_BRCTL=y
+# CONFIG_HTTPD is not set
+
+make busybox-dirclean && make busybox-menuconfig
+..
+[*] brctl (4.7 kb)
+[ ] httpd (32 kb)
+
+What Buildroot version are you using?
+
+ > I think this used to work (about three years ago) because our own scripts
+ > recover the updated file so it can be saved under source control.
+ > (Not that I actually remember doing that.)
+
+We already have 'make busybox-update-config' for that:
+
+make busybox-update-config
+cp -f /home/peko/source/buildroot/output-busybox/build/busybox-1.33.0/.config /tmp/config
+
+-- 
+Bye, Peter Korsgaard
