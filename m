@@ -1,53 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 May 2021 23:03:53 +0200
-Subject: [Buildroot] [PATCH 3/3] test_docker_compose.py: Test the volume
- mount feature
-In-Reply-To: <20210513210353.11335-1-peter@korsgaard.com>
-References: <20210513210353.11335-1-peter@korsgaard.com>
-Message-ID: <20210513210353.11335-3-peter@korsgaard.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 14 May 2021 07:55:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bitcoin: security bump to
+ version 0.21.1
+References: <20210512212120.647405-1-fontaine.fabrice@gmail.com>
+ <20210513173417.erlj7433mbnchkbk@falbala.internal.home.lespocky.de>
+ <CAPi7W801eKBnSXFQGpTuTO8SRYdA6qaWXN-x2OQL8u6JT93nyw@mail.gmail.com>
+ <eytwv42FO5pGji2PxfnTUbUa0h4V0R3xp_fuGWNQ-Q2cyZ1xZ4Sd205XXExHiyR9Hl5NEafVCjLLGFNU0BP8UQ7hihG_nIgy0TTFEi97OjM=@senzilla.io>
+Message-ID: <60g1nhxjm8.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extend docker_compose_test() to expose /bin on the host to the container
-through a volume mount and verify that /bin/busybox can be downloaded and
-contains the right data.
+Am Thu, 13 May 2021 19:46:23 +0000 schrieb D. Olsson via buildroot:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/testing/conf/docker-compose.yml              | 4 +++-
- support/testing/tests/package/test_docker_compose.py | 3 ++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+>> > I don't think it's ethically justifiable to support proof-of-work
+>> > stuff like this.
+>>
+>> I've nothing against dropping this package.
+> 
+> I understand that Bitcoin is a dividing topic. Everyone have the right
+> to their own opinions and can decide for themselves if they want use (or
+> not use) a certain package.
+> 
+> But I don't see a technical reason for why it should be removed.
+> The package is important to Bitcoin users of Buildroot.
 
-diff --git a/support/testing/conf/docker-compose.yml b/support/testing/conf/docker-compose.yml
-index de33251dfd..ce89d79b59 100644
---- a/support/testing/conf/docker-compose.yml
-+++ b/support/testing/conf/docker-compose.yml
-@@ -2,6 +2,8 @@ version: '3'
- services:
-   busybox:
-     image: "busybox:latest"
--    command: httpd -f -h /etc/
-+    command: httpd -f -h /www/
-     ports:
-       - "80:80"
-+    volumes:
-+      - "/bin:/www"
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 364f75b5b0..737dbf393c 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -45,7 +45,8 @@ class TestDockerCompose(infra.basetest.BRTest):
-         self.assertRunOk('docker-compose up -d', 120)
-         # container may take some time to start
-         self.assertRunOk('while ! docker inspect root_busybox_1 2>&1 >/dev/null; do sleep 1; done', 120)
--        self.assertRunOk('wget http://127.0.0.1/resolv.conf', 120)
-+        self.assertRunOk('wget -O /tmp/busybox http://127.0.0.1/busybox', 120)
-+        self.assertRunOk('cmp /bin/busybox /tmp/busybox', 120)
- 
-     def test_run(self):
-         kernel = os.path.join(self.builddir, "images", "bzImage")
--- 
-2.20.1
+Hi,
+
+being aware that I will enter a shit-storm area I agree with you that 
+buildroot should not suppress legally available packages for whatever 
+reason.
+
+Regards, Bernd
