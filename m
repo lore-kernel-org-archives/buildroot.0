@@ -1,35 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 14 May 2021 23:35:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXfont2: add CPE
- variables
-Message-ID: <20210514213513.2274629-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri, 14 May 2021 23:40:35 +0200
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.65
+Message-ID: <20210514214035.127094-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:x:libxfont is a valid CPE identifier for this package:
+Release Notes:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.65_release_notes
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax%3Alibxfont
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/x11r7/xlib_libXfont2/xlib_libXfont2.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-index 611b8af548..d2ff4ca7f3 100644
---- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-+++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-@@ -9,6 +9,8 @@ XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.bz2
- XLIB_LIBXFONT2_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXFONT2_LICENSE = MIT
- XLIB_LIBXFONT2_LICENSE_FILES = COPYING
-+XLIB_LIBXFONT2_CPE_ID_VENDOR = x
-+XLIB_LIBXFONT2_CPE_ID_PRODUCT = libxfont
- XLIB_LIBXFONT2_INSTALL_STAGING = YES
- # 0001-configure-define-HAVE_LIBBSD-when-libbsd-was-found.patch
- XLIB_LIBXFONT2_AUTORECONF = YES
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 92e9936d0d..02fda14eec 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_64_RTM/src/SHA256SUMS
+-sha256  d3175427172e9c3a6f1ebc74452cb791590f28191c6a1a443dbc0d87c9df1126  nss-3.64.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_65_RTM/src/SHA256SUMS
++sha256  32170f6c188212a78bf9fdacffa2eeed0d564ef8faae63fd8ae971b208e8c637  nss-3.65.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 4c66bf876a..90f30698ff 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.64
++LIBNSS_VERSION = 3.65
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-2.30.2
+2.25.1
