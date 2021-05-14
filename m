@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 May 2021 20:39:02 +0200
-Subject: [Buildroot] [PATCH v1 1/2] package/libgeos: fix comment
- dependencies (binutils-bug-12464, binutils-bug-27597)
-In-Reply-To: <20210502144048.1212-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Sun, 2 May 2021 16:40:47 +0200")
+Date: Fri, 14 May 2021 20:39:06 +0200
+Subject: [Buildroot] [PATCH v1 2/2] package/postgis: fix comment
+ dependencies (binutils-bug-21464, binutils-bug-27597)
+In-Reply-To: <20210502144048.1212-2-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 2 May 2021 16:40:48 +0200")
 References: <20210502144048.1212-1-ps.report@gmx.net>
-Message-ID: <877dk1rwhl.fsf@dell.be.48ers.dk>
+ <20210502144048.1212-2-ps.report@gmx.net>
+Message-ID: <8735uprwhh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
