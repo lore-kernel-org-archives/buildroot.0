@@ -1,49 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 May 2021 14:19:42 +0200
-Subject: [Buildroot] [git commit] package/python-requests: add CPE variables
-Message-ID: <20210515115244.DF38C86B15@busybox.osuosl.org>
+Date: Sat, 15 May 2021 14:21:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/udisks: add UDISKS_CPE_ID_VENDOR
+In-Reply-To: <20210515085438.2363053-1-fontaine.fabrice@gmail.com>
+References: <20210515085438.2363053-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210515122154.GH2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c5cf3788054c078e1650d5c06f0ab36c3438c9b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-cpe:2.3:a:python:requests is a valid CPE identifier for this package:
+On 2021-05-15 10:54 +0200, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:freedesktop:udisks is a valid CPE identifier for this package:
+> 
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afreedesktop%3Audisks
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython%3Arequests
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-requests/python-requests.mk   | 2 ++
- package/python3-requests/python3-requests.mk | 2 ++
- 2 files changed, 4 insertions(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index 2b543c0f9a..5d0f545ffb 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
-@@ -11,5 +11,7 @@ PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/6b/47/c14abc08432
- PYTHON_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
-+PYTHON_REQUESTS_CPE_ID_VENDOR = python
-+PYTHON_REQUESTS_CPE_ID_PRODUCT = requests
- 
- $(eval $(python-package))
-diff --git a/package/python3-requests/python3-requests.mk b/package/python3-requests/python3-requests.mk
-index b67d71a18b..dbb3f21490 100644
---- a/package/python3-requests/python3-requests.mk
-+++ b/package/python3-requests/python3-requests.mk
-@@ -11,6 +11,8 @@ PYTHON3_REQUESTS_SITE = https://files.pythonhosted.org/packages/6b/47/c14abc0843
- PYTHON3_REQUESTS_SETUP_TYPE = setuptools
- PYTHON3_REQUESTS_LICENSE = Apache-2.0
- PYTHON3_REQUESTS_LICENSE_FILES = LICENSE
-+PYTHON3_REQUESTS_CPE_ID_VENDOR = python
-+PYTHON3_REQUESTS_CPE_ID_PRODUCT = requests
- HOST_PYTHON3_REQUESTS_DL_SUBDIR = python-requests
- HOST_PYTHON3_REQUESTS_NEEDS_HOST_PYTHON = python3
- 
+> ---
+>  package/udisks/udisks.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
+> index c6119a8b80..af25c2b8e2 100644
+> --- a/package/udisks/udisks.mk
+> +++ b/package/udisks/udisks.mk
+> @@ -8,6 +8,7 @@ UDISKS_VERSION = 1.0.5
+>  UDISKS_SITE = http://hal.freedesktop.org/releases
+>  UDISKS_LICENSE = GPL-2.0+
+>  UDISKS_LICENSE_FILES = COPYING
+> +UDISKS_CPE_ID_VENDOR = freedesktop
+>  # For 0002-Fix-systemd-service-file.patch
+>  UDISKS_AUTORECONF = YES
+>  
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
