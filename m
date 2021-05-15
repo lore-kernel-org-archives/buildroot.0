@@ -1,104 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 May 2021 14:11:22 +0200
-Subject: [Buildroot] [git commit] package/jh71xx-tools: new package
-Message-ID: <20210515114453.9143886B14@busybox.osuosl.org>
+Date: Sat, 15 May 2021 14:12:17 +0200
+Subject: [Buildroot] [git commit] configs/beaglev: enable host jh71xx-tools
+Message-ID: <20210515114453.A0AFD874E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98a74d81a8c26ce0d0692bbb5235579f81afba36
+commit: https://git.buildroot.net/buildroot/commit/?id=4cf819f80e23b97f737bc5ad6f0f78586383a843
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add jh71xx-tools as a new host package, it includes a tool that allows
-to recover the bootloader of JH71xx-based platforms, such as the
-BeagleV.
+This host utility is useful to recover the bootloader.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
-[yann.morin.1998 at free.fr:
-  - fix alphabetical order, spotted by Bin
-  - use LICENSE as license file, update license hash accordingly
-]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                             |  1 +
- package/Config.in.host                 |  1 +
- package/jh71xx-tools/Config.in.host    |  7 +++++++
- package/jh71xx-tools/jh71xx-tools.hash |  3 +++
- package/jh71xx-tools/jh71xx-tools.mk   | 20 ++++++++++++++++++++
- 5 files changed, 32 insertions(+)
+ board/beaglev/readme.txt  | 4 +++-
+ configs/beaglev_defconfig | 1 +
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ed86dc82ba..a90ad1c354 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2633,6 +2633,7 @@ F:	package/heirloom-mailx/
- F:	package/hiawatha/
- F:	package/igh-ethercat/
- F:	package/intltool/
-+F:	package/jh71xx-tools/
- F:	package/libcap/
- F:	package/libffi/
- F:	package/libsha1/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index ba6a68c728..064c98af3d 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -39,6 +39,7 @@ menu "Host utilities"
- 	source "package/imagemagick/Config.in.host"
- 	source "package/imx-mkimage/Config.in.host"
- 	source "package/imx-usb-loader/Config.in.host"
-+	source "package/jh71xx-tools/Config.in.host"
- 	source "package/jq/Config.in.host"
- 	source "package/jsmin/Config.in.host"
- 	source "package/kmod/Config.in.host"
-diff --git a/package/jh71xx-tools/Config.in.host b/package/jh71xx-tools/Config.in.host
-new file mode 100644
-index 0000000000..08872f295c
---- /dev/null
-+++ b/package/jh71xx-tools/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_JH71XX_TOOLS
-+	bool "host jh71xx-tools"
-+	depends on BR2_riscv
-+	help
-+	  Bootloader recovery and updater tool for StarFive JH7100 SoCs.
-+
-+	  https://github.com/kprasadvnsi/JH71xx-tools
-diff --git a/package/jh71xx-tools/jh71xx-tools.hash b/package/jh71xx-tools/jh71xx-tools.hash
-new file mode 100644
-index 0000000000..6bc7abe9d0
---- /dev/null
-+++ b/package/jh71xx-tools/jh71xx-tools.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  0f16ea896164f6e8bfe0a03bbbd95ff14d474445ba6f045f9377d01282c9364f  jh71xx-tools-7a29f4b9d2355aa39afa8680680909bb74e4991d.tar.gz
-+sha256  cf03c59b41f6d8a5046f7bff4bbe3576075314299a4d0828d7855bf60af81001  LICENSE
-diff --git a/package/jh71xx-tools/jh71xx-tools.mk b/package/jh71xx-tools/jh71xx-tools.mk
-new file mode 100644
-index 0000000000..f082e2a453
---- /dev/null
-+++ b/package/jh71xx-tools/jh71xx-tools.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# jh71xx-tools
-+#
-+################################################################################
-+
-+JH71XX_TOOLS_VERSION = 7a29f4b9d2355aa39afa8680680909bb74e4991d
-+JH71XX_TOOLS_SITE = $(call github,kprasadvnsi,JH71xx-tools,$(JH71XX_TOOLS_VERSION))
-+JH71XX_TOOLS_LICENSE = MIT
-+JH71XX_TOOLS_LICENSE_FILES = LICENSE
-+
-+define HOST_JH71XX_TOOLS_BUILD_CMDS
-+	$(HOSTCC) -o $(@D)/jh7100-recover $(@D)/jh7100-recover.c
-+endef
-+
-+define HOST_JH71XX_TOOLS_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/jh7100-recover $(HOST_DIR)/bin/jh7100-recover
-+endef
-+
-+$(eval $(host-generic-package))
+diff --git a/board/beaglev/readme.txt b/board/beaglev/readme.txt
+index bbdb9b12ef..60678059e1 100644
+--- a/board/beaglev/readme.txt
++++ b/board/beaglev/readme.txt
+@@ -119,4 +119,6 @@ bootloaders, so if you flash non-working versions, you'll have to go
+ through a recovery process. This requires wiring up to a separate
+ debug UART, which pins are located near the HDMI connector. See
+ https://wiki.seeedstudio.com/BeagleV-Update-bootloader-ddr-init-boot-uboot-Recover-bootloader/
+-section "Recover the bootloader" for more details.
++section "Recover the bootloader" for more details. The instructions
++make use of a jh7100-recover tool, which Buildroot has built as part
++of this defconfig: it is available as output/host/bin/jh7100-recover.
+diff --git a/configs/beaglev_defconfig b/configs/beaglev_defconfig
+index 8943ce9c34..bbb69ca268 100644
+--- a/configs/beaglev_defconfig
++++ b/configs/beaglev_defconfig
+@@ -35,3 +35,4 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,u-boot,3f3ac01a29ad1cd5fa519d86f81daead2447f1d4)/uboot-3f3ac01a29ad1cd5fa519d86f81daead2447f1d4.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="starfive_vic7100_beagle_v_smode"
+ BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_JH71XX_TOOLS=y
