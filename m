@@ -1,44 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 May 2021 17:15:30 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] board/qemu/s390x: disable SSP when needed
-In-Reply-To: <CAPi7W81urRrU69TH+g1jtG5oE6-bHHKOKjefQdS4wO=tnM8sog@mail.gmail.com>
-References: <20210509130634.1105988-1-fontaine.fabrice@gmail.com>
- <20210515145614.GM2506@scaer> <87mtswdoob.fsf@oc8242746057.ibm.com>
- <CAPi7W81urRrU69TH+g1jtG5oE6-bHHKOKjefQdS4wO=tnM8sog@mail.gmail.com>
-Message-ID: <20210515151530.GP2506@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 15 May 2021 17:17:30 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/dmalloc: fix static build
+Message-ID: <20210515151730.3167044-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander, Fabrice, All,
+Build of dmalloc is broken since commit
+19ec872f169a851b48ba04d22432b7c0939847d4 because --enable-shlib is
+unconditionally set
 
-On 2021-05-15 17:09 +0200, Fabrice Fontaine spake thusly:
-> Le sam. 15 mai 2021 ? 17:03, Alexander Egorenkov
-> <egorenar@linux.ibm.com> a ?crit :
-> > "Yann E. MORIN" <yann.morin.1998@free.fr> writes:
-> > > On 2021-05-09 15:06 +0200, Fabrice Fontaine spake thusly:
-> > >> Fix build failure raised since commit
-> > >> 810ba387bec3c5b6904e8893fb4cb6f9d3717466 by disabling SSP when needed
-> > > Alexander, is this something we can expect to land in mainline?
-> > yes, i'm already looking into it.
+Fixes:
+ - http://autobuild.buildroot.org/results/62c9c6aebca60649bd6f635125507bf10d63fc05
 
-Awesome; thanks! :-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Don't unconditionally set --enable-shlib
 
-> If it can helps, I sent the patch on the mailing list as suggested by
-> Romain: https://marc.info/?l=linux-s390&m=162062472219221&w=2
+ package/dmalloc/dmalloc.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Awesome too; thanks too! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index 638fe0fcda..749c35359c 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -13,10 +13,12 @@ DMALLOC_LICENSE = MIT-like
+ DMALLOC_LICENSE_FILES = dmalloc.h.1
+ 
+ DMALLOC_INSTALL_STAGING = YES
+-DMALLOC_CONF_OPTS = --enable-shlib
+ DMALLOC_CFLAGS = $(TARGET_CFLAGS)
+ 
+-ifeq ($(BR2_STATIC_LIBS),)
++ifeq ($(BR2_STATIC_LIBS),y)
++DMALLOC_CONF_OPTS += --disable-shlib
++else
++DMALLOC_CONF_OPTS += --enable-shlib
+ DMALLOC_CFLAGS += -fPIC
+ endif
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
