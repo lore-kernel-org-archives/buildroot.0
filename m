@@ -1,74 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 May 2021 14:54:38 +0200
-Subject: [Buildroot] [PATCH] package/mender-grubenv: fix installing on
- non-efi platforms
-In-Reply-To: <20210513020052.2528223-1-aduskett@gmail.com>
-References: <20210513020052.2528223-1-aduskett@gmail.com>
-Message-ID: <20210515125438.GL2506@scaer>
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
+Date: Sat, 15 May 2021 15:58:18 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] board/qemu/s390x: disable SSP when needed
+In-Reply-To: <20210509130634.1105988-1-fontaine.fabrice@gmail.com>
+References: <20210509130634.1105988-1-fontaine.fabrice@gmail.com>
+Message-ID: <87pmxsdrph.fsf@oc8242746057.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On 2021-05-12 19:00 -0700, Adam Duskett spake thusly:
-> Currently, mender-grubenv unconditionally installs files from the
-> $(TARGET_DIR)/boot/EFI directory to the $(BINARIES_DIR)/efi-part.
-> This fails on systems that are not building grub against EFI.
-> 
-> Add a check in mender-grubenv.mk to ensure the files are copied to the correct
-> location if EFI is not selected.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
+> Fix build failure raised since commit
+> 810ba387bec3c5b6904e8893fb4cb6f9d3717466 by disabling SSP when needed
+>
+> Fixes:
+>  - https://gitlab.com/kubu93/buildroot/-/jobs/1247043361
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/mender-grubenv/mender-grubenv.mk | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
-> index ade0f4c0ed..f06dbbe35c 100644
-> --- a/package/mender-grubenv/mender-grubenv.mk
-> +++ b/package/mender-grubenv/mender-grubenv.mk
-> @@ -55,11 +55,20 @@ define MENDER_GRUBENV_INSTALL_TARGET_CMDS
->  endef
+> Changes v1 -> v2 (after review of Romain Naour):
+>  - Move patch from linux to board/qemu/s390x
+>
+>  ...01-arch-s390-disable-SSP-when-needed.patch | 47 +++++++++++++++++++
+>  configs/qemu_s390x_defconfig                  |  1 +
+>  2 files changed, 48 insertions(+)
+>  create mode 100644 board/qemu/s390x/patches/linux/0001-arch-s390-disable-SSP-when-needed.patch
+>
+> diff --git a/board/qemu/s390x/patches/linux/0001-arch-s390-disable-SSP-when-needed.patch b/board/qemu/s390x/patches/linux/0001-arch-s390-disable-SSP-when-needed.patch
+> new file mode 100644
+> index 0000000000..c8199d4fd6
+> --- /dev/null
+> +++ b/board/qemu/s390x/patches/linux/0001-arch-s390-disable-SSP-when-needed.patch
+> @@ -0,0 +1,47 @@
+> +From 8a054081678ed0b0e56f829bac0a4656e3a198b9 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sat, 8 May 2021 22:03:11 +0200
+> +Subject: [PATCH] arch/s390: disable SSP when needed
+> +
+> +Though -nostdlib is passed in PURGATORY_LDFLAGS and -ffreestanding in
+> +KBUILD_CFLAGS_DECOMPRESSOR, -fno-stack-protector must also be passed to
+> +avoid linking errors related to undefined references to
+> +'__stack_chk_guard' and '__stack_chk_fail' if toolchain enforces
+> +-fstack-protector.
+> +
+> +Fixes:
+> + - https://gitlab.com/kubu93/buildroot/-/jobs/1247043361
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + arch/s390/Makefile           | 1 +
+> + arch/s390/purgatory/Makefile | 1 +
+> + 2 files changed, 2 insertions(+)
+> +
+> +diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+> +index e443ed9947bd..098abe3a56f3 100644
+> +--- a/arch/s390/Makefile
+> ++++ b/arch/s390/Makefile
+> +@@ -28,6 +28,7 @@ KBUILD_CFLAGS_DECOMPRESSOR += -DDISABLE_BRANCH_PROFILING -D__NO_FORTIFY
+> + KBUILD_CFLAGS_DECOMPRESSOR += -fno-delete-null-pointer-checks -msoft-float -mbackchain
+> + KBUILD_CFLAGS_DECOMPRESSOR += -fno-asynchronous-unwind-tables
+> + KBUILD_CFLAGS_DECOMPRESSOR += -ffreestanding
+> ++KBUILD_CFLAGS_DECOMPRESSOR += -fno-stack-protector
+> + KBUILD_CFLAGS_DECOMPRESSOR += $(call cc-disable-warning, address-of-packed-member)
+> + KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO),-g)
+> + KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO_DWARF4), $(call cc-option, -gdwarf-4,))
+> +diff --git a/arch/s390/purgatory/Makefile b/arch/s390/purgatory/Makefile
+> +index c57f8c40e992..21c4ebe29b9a 100644
+> +--- a/arch/s390/purgatory/Makefile
+> ++++ b/arch/s390/purgatory/Makefile
+> +@@ -24,6 +24,7 @@ KBUILD_CFLAGS := -fno-strict-aliasing -Wall -Wstrict-prototypes
+> + KBUILD_CFLAGS += -Wno-pointer-sign -Wno-sign-compare
+> + KBUILD_CFLAGS += -fno-zero-initialized-in-bss -fno-builtin -ffreestanding
+> + KBUILD_CFLAGS += -c -MD -Os -m64 -msoft-float -fno-common
+> ++KBUILD_CFLAGS += -fno-stack-protector
+> + KBUILD_CFLAGS += $(CLANG_FLAGS)
+> + KBUILD_CFLAGS += $(call cc-option,-fno-PIE)
+> + KBUILD_AFLAGS := $(filter-out -DCC_USING_EXPOLINE,$(KBUILD_AFLAGS))
+> +-- 
+> +2.30.2
+> +
+> diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
+> index 9b3821f043..4aed9d9ae5 100644
+> --- a/configs/qemu_s390x_defconfig
+> +++ b/configs/qemu_s390x_defconfig
+> @@ -20,6 +20,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.7"
+>  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+>  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +BR2_GLOBAL_PATCH_DIR="board/qemu/s390x/patches"
 >  
->  # Overwrite the default grub2 config files with the ones in this package.
-> +ifeq ($(BR2_TARGET_GRUB2_I386_PC)$(BR2_TARGET_GRUB2_ARM_UBOOT),y)
-> +define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
-> +	mkdir -p $(BINARIES_DIR)/boot-part/grub
-> +	cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
-> +		$(TARGET_DIR)/boot/grub/mender_grubenv* \
-> +		$(BINARIES_DIR)/boot-part/grub
-> +endef
-> +else
->  define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
->  	mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
->  	cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
->  		$(TARGET_DIR)/boot/EFI/BOOT/mender_grubenv* \
->  		$(BINARIES_DIR)/efi-part/EFI/BOOT
->  endef
-> +endif
->  
->  $(eval $(generic-package))
+>  # host-qemu for gitlab testing
+>  BR2_PACKAGE_HOST_QEMU=y
 > -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 2.30.2
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thank you for the fix. Looks good to me.
+
+Reviewed-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+
+Regards
+Alex
