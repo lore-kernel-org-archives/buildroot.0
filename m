@@ -1,32 +1,35 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 15 May 2021 08:56:33 +0200
-Subject: [Buildroot] [PATCH/next 2/2] package/libbluray: bump version to
- 1.3.0
-References: <20210513070536.1021065-1-bernd.kuhls@t-online.de>
- <20210513070536.1021065-2-bernd.kuhls@t-online.de>
- <87y2cgo5h5.fsf__41823.9680862584$1621061469$gmane$org@dell.be.48ers.dk>
-Message-ID: <1u74nhxc5a.ln2@ID-313208.user.individual.net>
+Date: Sat, 15 May 2021 09:01:41 +0200
+Subject: [Buildroot] [PATCH/next v2 1/1] package/libbluray: add optional
+ support for libudfread
+Message-ID: <20210515070141.396977-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 15 May 2021 08:50:46 +0200 schrieb Peter Korsgaard:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: rebased, removed patch which is included in current upstream release
 
->  >  package/libbluray/0001-libudfread.patch | 32
->  >  -------------------------
-> 
-> We don't have this patch in git, so the patch does not apply as is. I've
-> fixed that up and applied (to next).
+ package/libbluray/libbluray.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Hi Peter,
-
-not yet ;)
-
-http://patchwork.ozlabs.org/project/buildroot/patch/
-20210221172307.289368-1-bernd.kuhls at t-online.de/
-
-Will sent v2 for this patch.
-
-Regards, Bernd
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index 5c5f603dd8..233797f38d 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
+@@ -19,6 +19,10 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ LIBBLURAY_DEPENDENCIES += libiconv
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBUDFREAD),y)
++LIBBLURAY_DEPENDENCIES += libudfread
++endif
++
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ LIBBLURAY_DEPENDENCIES += freetype
+ LIBBLURAY_CONF_OPTS += --with-freetype
+-- 
+2.29.2
