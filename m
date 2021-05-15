@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 140C5C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:26:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55F09C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:26:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CB25B60EBB
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:26:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CB25B60EBB
+	by mail.kernel.org (Postfix) with ESMTPS id 2150260F45
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:26:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2150260F45
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A06CE83566;
-	Tue,  3 Aug 2021 21:26:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jv1KrNO1UZZy; Tue,  3 Aug 2021 21:26:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8C928399E;
-	Tue,  3 Aug 2021 21:26:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8859F1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A191B40473
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F13C540353;
+	Tue,  3 Aug 2021 21:26:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hwzzsMXWmJtW for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p-SSFWnjJTfh; Tue,  3 Aug 2021 21:26:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BF56402E3;
+	Tue,  3 Aug 2021 21:26:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 02D821BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F2A21404EF
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2wvNJ2nRw24P for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07F8E40249
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7219A4044C
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 5267285F62; Tue,  3 Aug 2021 21:09:42 +0000 (UTC)
+ id BC74087BB7; Tue,  3 Aug 2021 21:09:36 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 20 May 2021 21:41:08 +0200
+Date: Sat, 15 May 2021 13:32:46 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5b8d0ea147949dd51d8a1f1d6089fdaea1c780b4
-X-Git-Newrev: 06a0b113304df2d276b7d3f2f2871b0943a56741
+X-Git-Oldrev: 355849345489a3d2c0dc1b177e819f6bf5c91aa3
+X-Git-Newrev: d3a25a98d460cafe4a95d3e5842918b2f7c7f746
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210942.5267285F62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libfuse: add
- LIBFUSE_CPE_ID_VENDOR
+Message-Id: <20210803210936.BC74087BB7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXcursor:
+ add CPE variables
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,33 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06a0b113304df2d276b7d3f2f2871b0943a56741
+commit: https://git.buildroot.net/buildroot/commit/?id=d3a25a98d460cafe4a95d3e5842918b2f7c7f746
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:libfuse_project:libfuse is a valid CPE identifier for this
-package:
+cpe:2.3:a:x:libxcursor is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibfuse_project%3Alibfuse
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax%3Alibxcursor
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr: fix URL]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libfuse/libfuse.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/x11r7/xlib_libXcursor/xlib_libXcursor.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index 074dc59886..2677e46853 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
-@@ -9,6 +9,7 @@ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse-$(LIBFUSE_VERSION)
- LIBFUSE_LICENSE = GPL-2.0, LGPL-2.1
- LIBFUSE_LICENSE_FILES = COPYING COPYING.LIB
-+LIBFUSE_CPE_ID_VENDOR = libfuse_project
- LIBFUSE_INSTALL_STAGING = YES
- LIBFUSE_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- LIBFUSE_CONF_OPTS = \
+diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+index 9bbd460c9d..79d9904010 100644
+--- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
++++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+@@ -10,6 +10,8 @@ XLIB_LIBXCURSOR_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXCURSOR_LICENSE = MIT
+ XLIB_LIBXCURSOR_LICENSE_FILES = COPYING
+ XLIB_LIBXCURSOR_INSTALL_STAGING = YES
++XLIB_LIBXCURSOR_CPE_ID_VENDOR = x
++XLIB_LIBXCURSOR_CPE_ID_PRODUCT = libxcursor
+ XLIB_LIBXCURSOR_DEPENDENCIES = xlib_libX11 xlib_libXfixes xlib_libXrender xorgproto
+ HOST_XLIB_LIBXCURSOR_DEPENDENCIES = \
+ 	host-xlib_libX11 host-xlib_libXfixes host-xlib_libXrender \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
