@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CC92C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:34:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3410C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:34:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0528A60F9C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:34:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0528A60F9C
+	by mail.kernel.org (Postfix) with ESMTPS id A821F604AC
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:34:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A821F604AC
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3B884049A;
-	Tue,  3 Aug 2021 21:34:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 74671401FD;
+	Tue,  3 Aug 2021 21:34:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eEGMO57ZPJpd; Tue,  3 Aug 2021 21:34:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 49hPZht-b2DD; Tue,  3 Aug 2021 21:34:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E1504022A;
-	Tue,  3 Aug 2021 21:34:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 13E5A1BF9AA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B1DF4010B;
+	Tue,  3 Aug 2021 21:34:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 15CFE1BF9C1
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A980A40508
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94B7640001
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TGuD_PcTfyoW for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mpHIWWooxibB for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12553404D4
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1C0040458
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 5B29B864A8; Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
+ id E62D18B43C; Tue,  3 Aug 2021 21:09:36 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 29 May 2021 11:10:00 +0200
+Date: Sat, 15 May 2021 13:32:51 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4fce8cd4ae87001c499064b021b32fef65c0c045
-X-Git-Newrev: a8a147f6046f9d11d4685ddfa5c2a6a01f4d7219
+X-Git-Oldrev: 3b4980677b3aa89656d4a26644cb58e81a79865d
+X-Git-Newrev: 9784dcb385291e45d1bd83e200243a91febb9969
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210946.5B29B864A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pkg-meson: handle b_pie
+Message-Id: <20210803210936.E62D18B43C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libFS: add
+ CPE variables
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,38 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8a147f6046f9d11d4685ddfa5c2a6a01f4d7219
+commit: https://git.buildroot.net/buildroot/commit/?id=9784dcb385291e45d1bd83e200243a91febb9969
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-pipewire unconditionally enables b_pie since version 0.3.20 and
-https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/abe73c9146cd223b40b22581b1fd58bc044c671e
-which will raise the following build failure on m68k since commit
-a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9:
+cpe:2.3:a:x:libfs is a valid CPE identifier for this package:
 
-/srv/storage/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/9.3.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-1/output-1/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/Scrt1.o: in function `lib_main':
-(.text+0x4): undefined reference to `__shared_flat_add_library'
-
-Fixes:
- - http://autobuild.buildroot.org/results/c258a2736661af8ea73abeda2503d8682e65f1e2
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax%3Alibfs
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-meson.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/x11r7/xlib_libFS/xlib_libFS.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index a57820d4d2..a55063d58e 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -91,6 +91,7 @@ define $(2)_CONFIGURE_CMDS
- 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
- 		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
- 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
-+		-Db_pie=$(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),true,false) \
- 		-Dstrip=false \
- 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
- 		$$($$(PKG)_CONF_OPTS) \
+diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
+index 9cc93e0fe1..9d9aecb74f 100644
+--- a/package/x11r7/xlib_libFS/xlib_libFS.mk
++++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
+@@ -9,6 +9,8 @@ XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.bz2
+ XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBFS_LICENSE = MIT
+ XLIB_LIBFS_LICENSE_FILES = COPYING
++XLIB_LIBFS_CPE_ID_VENDOR = x
++XLIB_LIBFS_CPE_ID_PRODUCT = libfs
+ XLIB_LIBFS_INSTALL_STAGING = YES
+ XLIB_LIBFS_DEPENDENCIES = xlib_xtrans xorgproto host-pkgconf
+ XLIB_LIBFS_CONF_OPTS = --disable-malloc0returnsnull
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
