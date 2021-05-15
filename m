@@ -1,67 +1,60 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 15 May 2021 13:46:18 +0200
-Subject: [Buildroot] Suggestion to "support/scripts/apply-patches.sh: do
- not apply patches with renames"
-In-Reply-To: <20210515111946.GB2506@scaer>
-References: <CAALxPJ0qprnhxWtHGg7oeY=Ws4+w3Wt-_hdM1WvbL6B42jQO5g@mail.gmail.com>
- <87fsyopkcr.fsf@dell.be.48ers.dk> <20210515094010.GA2506@scaer>
- <a6e13bf6-0cad-41d7-396e-0b9a31d225fd@gmail.com>
- <20210515111946.GB2506@scaer>
-Message-ID: <fecfc535-58b5-4059-c1d2-9e3d05524dc2@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 15 May 2021 13:47:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXfont2: add CPE
+ variables
+In-Reply-To: <20210514213513.2274629-1-fontaine.fabrice@gmail.com>
+References: <20210514213513.2274629-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210515114754.GD2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Fabrice, All,
 
-Le 15/05/2021 ? 13:19, Yann E. MORIN a ?crit?:
-> Romain, All,
+On 2021-05-14 23:35 +0200, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:x:libxfont is a valid CPE identifier for this package:
 > 
-> On 2021-05-15 12:57 +0200, Romain Naour spake thusly:
->> Le 15/05/2021 ? 11:40, Yann E. MORIN a ?crit?:
->>> On the Ubuntu side (as another data point), the odest LTS is Trusty,
->>> 14.04, and it has patch 2.7.1.
->> Based on the host gcc requirement on gcc 4.9 (released the 22 April 2014), we
->> already don't support such old distro. Ubuntu LTS Trusty provide gcc 4.8.
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax%3Alibxfont
 > 
-> Ah, I don't thinks so. We still only require gcc >= 4.8:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-It seems the BR2_HOST_GCC_AT_LEAST_4_8 symbol has been removed with commit
-55fc80260b packages: host gcc >= 4.8 is now guaranteed.
+Applied, as well as the many other X11R7 related CPE varaibles, to
+master. Thanks!
 
-I just noticed it while looking at this discussion...
+Regards,
+Yann E. MORIN.
 
+> ---
+>  package/x11r7/xlib_libXfont2/xlib_libXfont2.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
->   - the manual still references gcc 4.8, even the nightly snapshots:
->         http://nightly.buildroot.org/#requirement
+> diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+> index 611b8af548..d2ff4ca7f3 100644
+> --- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+> +++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+> @@ -9,6 +9,8 @@ XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.bz2
+>  XLIB_LIBXFONT2_SITE = http://xorg.freedesktop.org/releases/individual/lib
+>  XLIB_LIBXFONT2_LICENSE = MIT
+>  XLIB_LIBXFONT2_LICENSE_FILES = COPYING
+> +XLIB_LIBXFONT2_CPE_ID_VENDOR = x
+> +XLIB_LIBXFONT2_CPE_ID_PRODUCT = libxfont
+>  XLIB_LIBXFONT2_INSTALL_STAGING = YES
+>  # 0001-configure-define-HAVE_LIBBSD-when-libbsd-was-found.patch
+>  XLIB_LIBXFONT2_AUTORECONF = YES
+> -- 
+> 2.30.2
 > 
->         2.1. Mandatory packages
->         ...
->         * gcc (version 4.8 or any later)
->         * g++ (version 4.8 or any later) 
-> 
->   - support/dependencies/dependencies.sh still only checks for gcc >=
->     4.8:
->         if [ $COMPILER_MAJOR -lt 4 -o $COMPILER_MAJOR -eq 4 -a $COMPILER_MINOR -lt 8 ] ; then
-> 
-> The last time (that I remember of) when we bumped our host gcc
-> requirement, was with those commits, dated October 2020:
-> 
->   * 5ee815ab6a docs/manual: bump our gcc/g++ requirements to 4.8
->   * 55fc80260b packages: host gcc >= 4.8 is now guaranteed
-> 
-> I could not find a reference to requiring host gcc >= 4.9 in the commit
-> logs...
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Otherwise, agree gcc 4.8 should be the minimal supported version.
-
-Best regards,
-Romain
-
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
