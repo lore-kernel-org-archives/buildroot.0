@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 May 2021 14:15:34 +0200
-Subject: [Buildroot] [PATCH 1/2] package/jh71xx-tools: new package
-In-Reply-To: <20210514220316.1942381-2-thomas.petazzoni@bootlin.com>
+Date: Sat, 15 May 2021 14:16:47 +0200
+Subject: [Buildroot] [PATCH 2/2] configs/beaglev: enable host
+ jh71xx-tools
+In-Reply-To: <20210514220316.1942381-3-thomas.petazzoni@bootlin.com>
 References: <20210514220316.1942381-1-thomas.petazzoni@bootlin.com>
- <20210514220316.1942381-2-thomas.petazzoni@bootlin.com>
-Message-ID: <20210515121534.GF2506@scaer>
+ <20210514220316.1942381-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20210515121647.GG2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,61 +15,41 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2021-05-15 00:03 +0200, Thomas Petazzoni spake thusly:
-> Add jh71xx-tools as a new host package, it includes a tool that allows
-> to recover the bootloader of JH71xx-based platforms, such as the
-> BeagleV.
+> This host utility is useful to recover the bootloader.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Applied to master, thanks. But see below...
-
-[--SNIP--]
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index ba6a68c728..cef36cebc1 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -40,6 +40,7 @@ menu "Host utilities"
->  	source "package/imx-mkimage/Config.in.host"
->  	source "package/imx-usb-loader/Config.in.host"
->  	source "package/jq/Config.in.host"
-> +	source "package/jh71xx-tools/Config.in.host"
-
-Alphabetical order fixed, as spotted by Bin.
-
-[--SNIP--]
-> diff --git a/package/jh71xx-tools/jh71xx-tools.mk b/package/jh71xx-tools/jh71xx-tools.mk
-> new file mode 100644
-> index 0000000000..b9f3974931
-> --- /dev/null
-> +++ b/package/jh71xx-tools/jh71xx-tools.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# jh71xx-tools
-> +#
-> +################################################################################
-> +
-> +JH71XX_TOOLS_VERSION = 7a29f4b9d2355aa39afa8680680909bb74e4991d
-> +JH71XX_TOOLS_SITE = $(call github,kprasadvnsi,JH71xx-tools,$(JH71XX_TOOLS_VERSION))
-> +JH71XX_TOOLS_LICENSE = MIT
-> +JH71XX_TOOLS_LICENSE_FILES = jh7100-recover.c
-
-Not sure why you choose to use the source file as license file, when
-there is an actual LICENSE file in the tree. So I've switched to using
-that.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> +define HOST_JH71XX_TOOLS_BUILD_CMDS
-> +	$(HOSTCC) -o $(@D)/jh7100-recover $(@D)/jh7100-recover.c
-> +endef
-> +
-> +define HOST_JH71XX_TOOLS_INSTALL_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/jh7100-recover $(HOST_DIR)/bin/jh7100-recover
-> +endef
-> +
-> +$(eval $(host-generic-package))
+> ---
+>  board/beaglev/readme.txt  | 4 +++-
+>  configs/beaglev_defconfig | 1 +
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/board/beaglev/readme.txt b/board/beaglev/readme.txt
+> index bbdb9b12ef..60678059e1 100644
+> --- a/board/beaglev/readme.txt
+> +++ b/board/beaglev/readme.txt
+> @@ -119,4 +119,6 @@ bootloaders, so if you flash non-working versions, you'll have to go
+>  through a recovery process. This requires wiring up to a separate
+>  debug UART, which pins are located near the HDMI connector. See
+>  https://wiki.seeedstudio.com/BeagleV-Update-bootloader-ddr-init-boot-uboot-Recover-bootloader/
+> -section "Recover the bootloader" for more details.
+> +section "Recover the bootloader" for more details. The instructions
+> +make use of a jh7100-recover tool, which Buildroot has built as part
+> +of this defconfig: it is available as output/host/bin/jh7100-recover.
+> diff --git a/configs/beaglev_defconfig b/configs/beaglev_defconfig
+> index 8943ce9c34..bbb69ca268 100644
+> --- a/configs/beaglev_defconfig
+> +++ b/configs/beaglev_defconfig
+> @@ -35,3 +35,4 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+>  BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,u-boot,3f3ac01a29ad1cd5fa519d86f81daead2447f1d4)/uboot-3f3ac01a29ad1cd5fa519d86f81daead2447f1d4.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="starfive_vic7100_beagle_v_smode"
+>  BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_JH71XX_TOOLS=y
 > -- 
 > 2.31.1
 > 
