@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3DD0C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:23:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4402CC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:23:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AD67A60F45
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:23:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AD67A60F45
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 09D0560F45
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:23:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 09D0560F45
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7FA06608A1;
-	Tue,  3 Aug 2021 21:23:04 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yvSfr6fLMrim; Tue,  3 Aug 2021 21:23:03 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D09486067E;
-	Tue,  3 Aug 2021 21:23:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 06C221BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 388DA40261
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D77EA40502;
+	Tue,  3 Aug 2021 21:23:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m6mLO9gXYX47 for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id prwQ7e1LEz6a; Tue,  3 Aug 2021 21:23:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2558340356;
+	Tue,  3 Aug 2021 21:23:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F3021BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6748340442
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nUzGt32TsKjJ for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 894314044B
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D09940451
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id CE61C8399D; Tue,  3 Aug 2021 21:09:40 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id B2E5787BB7; Tue,  3 Aug 2021 21:09:36 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 18 May 2021 22:17:28 +0200
+Date: Sat, 15 May 2021 13:32:45 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 45a13be315f2e3dd9caa29dae8c84280975d4807
-X-Git-Newrev: 576beb7c0afc46e2b711a84358977e1ecca4cd6f
+X-Git-Oldrev: b1336915b6f72ebc489d2d7990c7d01bd3e0bd41
+X-Git-Newrev: 355849345489a3d2c0dc1b177e819f6bf5c91aa3
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210940.CE61C8399D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/xterm: security bump
- version to 367
+Message-Id: <20210803210936.B2E5787BB7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXdmcp:
+ add CPE variables
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,42 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=576beb7c0afc46e2b711a84358977e1ecca4cd6f
+commit: https://git.buildroot.net/buildroot/commit/?id=355849345489a3d2c0dc1b177e819f6bf5c91aa3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes CVE-2021-27135:
-https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-27135
+cpe:2.3:a:x.org:libxdmcp is a valid CPE identifier for this package:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax.org%3Alibxdmcp
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/xterm/xterm.hash | 2 +-
- package/xterm/xterm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index 588b7fca51..d6d80ad977 100644
---- a/package/xterm/xterm.hash
-+++ b/package/xterm/xterm.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  858b2885963fe97e712739066aadc1baeba2b33a0016303a7fec7d38bc73bf6e  xterm-366.tgz
-+sha256  27f1a8b1c756e269fd5684e60802b545f0be9b36b8b5d6bdbc840c6b000dc51f  xterm-367.tgz
- # Locally calculated
- sha256  dfb668cc977e24649500f3cc54de3e2b793928d210715a445ab1227930b07ba6  COPYING
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 6f142a0b56..e09d350a7d 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XTERM_VERSION = 366
-+XTERM_VERSION = 367
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = http://invisible-mirror.net/archives/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
+index 1182903e87..51db9908e5 100644
+--- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
++++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
+@@ -9,6 +9,8 @@ XLIB_LIBXDMCP_SOURCE = libXdmcp-$(XLIB_LIBXDMCP_VERSION).tar.bz2
+ XLIB_LIBXDMCP_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXDMCP_LICENSE = MIT
+ XLIB_LIBXDMCP_LICENSE_FILES = COPYING
++XLIB_LIBXDMCP_CPE_ID_VENDOR = x.org
++XLIB_LIBXDMCP_CPE_ID_PRODUCT = libxdmcp
+ XLIB_LIBXDMCP_INSTALL_STAGING = YES
+ XLIB_LIBXDMCP_DEPENDENCIES = xutil_util-macros xorgproto host-pkgconf
+ HOST_XLIB_LIBXDMCP_DEPENDENCIES = host-xutil_util-macros host-xorgproto host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
