@@ -1,69 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 May 2021 14:09:22 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 5.{4, 10, 11,
- 12}.x series
-Message-ID: <20210515120923.13393-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 15 May 2021 14:10:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openssh: security bump to version
+ 8.6p1
+Message-ID: <20210515121035.2395250-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+Security
+========
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 02c6ba0400..c893c8dc82 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -125,7 +125,7 @@ endif
+ * sshd(8): OpenSSH 8.5 introduced the LogVerbose keyword. When this
+   option was enabled with a set of patterns that activated logging
+   in code that runs in the low-privilege sandboxed sshd process, the
+   log messages were constructed in such a way that printf(3) format
+   strings could effectively be specified the low-privilege code.
+
+   An attacker who had sucessfully exploited the low-privilege
+   process could use this to escape OpenSSH's sandboxing and attack
+   the high-privilege process. Exploitation of this weakness is
+   highly unlikely in practice as the LogVerbose option is not
+   enabled by default and is typically only used for debugging. No
+   vulnerabilities in the low-privilege process are currently known
+   to exist.
+
+https://www.openssh.com/txt/release-8.6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/openssh/openssh.hash | 4 ++--
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index c50a49896c..0dcd725de5 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssh.com/txt/release-8.5 (base64 encoded)
+-sha256  f52f3f41d429aa9918e38cf200af225ccdd8e66f052da572870c89737646ec25  openssh-8.5p1.tar.gz
++# From https://www.openssh.com/txt/release-8.6 (base64 encoded)
++sha256  c3e6e4da1621762c850d03b47eed1e48dff4cc9608ddeb547202a234df8ed7ae  openssh-8.6p1.tar.gz
+ # Locally calculated
+ sha256  432abf7480fb31473a6706627212913fc70032e3fb71b90fecb28ae26a2d741d  LICENCE
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 055c024cab..61b2c97cf4 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.12.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.12.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.182-cip45" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.165-cip41-rt18" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index e24e02b30e..6a103e31a9 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  8c98b9996d15fdb779a866c6a4c7c9b9e63374cb7105a5a59e9bcf8df02ef70d  linux-5.12.2.tar.xz
--sha256  5aee19ad466b5bbbde642077f42bfaafff4e612296bdd7946faa01d917472b4b  linux-5.11.19.tar.xz
--sha256  ac37a19d45b77a87e58e3aae8b127a6e7eb85ed7467fc8e58474b387bfd498fd  linux-5.10.35.tar.xz
--sha256  4e989b5775830092e5c76b5cca65ebff862ad0c87d0b58c3a20d415c3d4ec770  linux-5.4.117.tar.xz
-+sha256  5a60feee8492732a6aa8c46b9412563959945b4d7b0d27223f15ede2f84b6873  linux-5.12.4.tar.xz
-+sha256  366ba5bb00be28b604aac630c4f64301063892f27353b299177c396af0ad877f  linux-5.11.21.tar.xz
-+sha256  a8d5e3309dafc484eb70f94747a6efffa29a79bae651ae126333e913c00be077  linux-5.10.37.tar.xz
-+sha256  71e7decf1e8149a8aed88d30df4f2a62a6c6b168111de6b261685ac7c0ecb2a0  linux-5.4.119.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256  6817ad26e1621bfad48d08b638f66c5933e89c7c8c00d43195b2e0ae260233eb  linux-4.4.268.tar.xz
- sha256  5b66f6ce0137fb8d81004bcf2f1e3cbe01c38aab74268656c4ba015c1ccd762a  linux-4.9.268.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3d8fb1ab5b..b68567deeb 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -366,10 +366,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.9.268"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.14.232"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.19.190"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.117"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.35"	if BR2_KERNEL_HEADERS_5_10
--	default "5.11.19"	if BR2_KERNEL_HEADERS_5_11
--	default "5.12.2"	if BR2_KERNEL_HEADERS_5_12
-+	default "5.4.119"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.37"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.11.21"	if BR2_KERNEL_HEADERS_5_11
-+	default "5.12.4"	if BR2_KERNEL_HEADERS_5_12
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-OPENSSH_VERSION_MAJOR = 8.5
++OPENSSH_VERSION_MAJOR = 8.6
+ OPENSSH_VERSION_MINOR = p1
+ OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
+ OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
 -- 
-2.20.1
+2.30.2
