@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 May 2021 14:23:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-keyring: add CPE
- variables
-In-Reply-To: <20210515100848.2365418-1-fontaine.fabrice@gmail.com>
-References: <20210515100848.2365418-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210515122309.GJ2506@scaer>
+Date: Sat, 15 May 2021 14:23:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/refpolicy: fix
+ REFPOLICY_CPE_ID_VENDOR
+In-Reply-To: <20210515112527.2367702-1-fontaine.fabrice@gmail.com>
+References: <20210515112527.2367702-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210515122327.GK2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,44 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-05-15 12:08 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:python:keyring is a valid CPE identifier for this package:
+On 2021-05-15 13:25 +0200, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:selinuxproject:refpolicy is a valid CPE identifier for this
+> package:
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython%3Akeyring
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aselinuxproject%3Arefpolicy
+> 
+> Indeed, cpe:2.3:a:tresys:refpolicy has been deprecated since April 21th:
+> 
+>   <cpe-item name="cpe:/a:tresys:refpolicy:2.20180701" deprecated="true" deprecation_date="2021-04-21T16:55:43.710Z">
+>     <title xml:lang="en-US">Tresys refpolicy 2.20180701</title>
+>       <reference href="https://github.com/TresysTechnology/refpolicy">Product</reference>
+>     <cpe-23:cpe23-item name="cpe:2.3:a:tresys:refpolicy:2.20180701:*:*:*:*:*:*:*">
+>         <cpe-23:deprecated-by name="cpe:2.3:a:selinuxproject:refpolicy:2.20180701:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-The 5 python related patches: applied to master, thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/python-keyring/python-keyring.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/refpolicy/refpolicy.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/python-keyring/python-keyring.mk b/package/python-keyring/python-keyring.mk
-> index 2f6ee8497f..0e05738605 100644
-> --- a/package/python-keyring/python-keyring.mk
-> +++ b/package/python-keyring/python-keyring.mk
-> @@ -10,6 +10,8 @@ PYTHON_KEYRING_SITE = https://files.pythonhosted.org/packages/ee/46/77fdb7cd2b0f
->  PYTHON_KEYRING_SETUP_TYPE = setuptools
->  PYTHON_KEYRING_LICENSE = MIT
->  PYTHON_KEYRING_LICENSE_FILES = LICENSE
-> +PYTHON_KEYRING_CPE_ID_VENDOR = python
-> +PYTHON_KEYRING_CPE_ID_PRODUCT = keyring
->  PYTHON_KEYRING_DEPENDENCIES = host-python-setuptools-scm
+> diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+> index 0e7dfd86f8..a42483dba2 100644
+> --- a/package/refpolicy/refpolicy.mk
+> +++ b/package/refpolicy/refpolicy.mk
+> @@ -6,7 +6,7 @@
 >  
->  $(eval $(python-package))
+>  REFPOLICY_LICENSE = GPL-2.0
+>  REFPOLICY_LICENSE_FILES = COPYING
+> -REFPOLICY_CPE_ID_VENDOR = tresys
+> +REFPOLICY_CPE_ID_VENDOR = selinuxproject
+>  REFPOLICY_INSTALL_STAGING = YES
+>  REFPOLICY_DEPENDENCIES = \
+>  	host-m4 \
 > -- 
 > 2.30.2
 > 
