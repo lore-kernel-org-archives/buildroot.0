@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89D57C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:40:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47E63C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:41:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 31C556103C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:40:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 31C556103C
+	by mail.kernel.org (Postfix) with ESMTPS id F405260F70
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:41:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F405260F70
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 058A84044C;
-	Tue,  3 Aug 2021 21:40:53 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sJ1tqI_uSORd; Tue,  3 Aug 2021 21:40:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2040B4022E;
-	Tue,  3 Aug 2021 21:40:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9E7F71BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 24A08837DA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3B248399E;
+	Tue,  3 Aug 2021 21:41:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4-SOcMQrxVRn for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R5LRH201DWyR; Tue,  3 Aug 2021 21:41:05 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3973183976;
+	Tue,  3 Aug 2021 21:41:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EA831BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7B6C740503
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GnwtsPXI4WjZ for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 73B7683A9F
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A8DA64048D
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id BDEE18827E; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
+ id 075FE8B43C; Tue,  3 Aug 2021 21:09:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 25 Jun 2021 13:59:58 +0200
+Date: Sat, 15 May 2021 18:14:28 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 047a9d9eaa254616a44ae9edebf611ab16453922
-X-Git-Newrev: 3cf2782906d5cc05a3966c25518d2ce01f11afc8
+X-Git-Oldrev: ab6dbf1c9f0f01684030fd7272179b126ba43e8c
+X-Git-Newrev: 7aa9b9041d29547114d29f963d567fe421cccb1b
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210955.BDEE18827E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- support/testing/infra/emulator.py: update pre-built kernels
+Message-Id: <20210803210938.075FE8B43C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libbluray: add
+ optional support for libudfread
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,47 +70,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cf2782906d5cc05a3966c25518d2ce01f11afc8
+commit: https://git.buildroot.net/buildroot/commit/?id=7aa9b9041d29547114d29f963d567fe421cccb1b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The pre-built vexpress kernel used by the testing infrastructure is a
-4.0.0 kernel, which is getting old to be used with reasonably recent
-toolchains.
-
-This commit updates the pre-built kernels for both the versatile and
-vexpress machines to 5.10.7 (they have already been put online).
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/infra/emulator.py | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/libbluray/libbluray.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 5611ec96e8..0a77eb80fc 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -54,16 +54,16 @@ class Emulator(object):
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index 36f59190b1..835e8edd83 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
+@@ -19,6 +19,10 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ LIBBLURAY_DEPENDENCIES += libiconv
+ endif
  
-                 if arch == "armv7":
-                     kernel = infra.download(self.downloaddir,
--                                            "kernel-vexpress")
-+                                            "kernel-vexpress-5.10.7")
-                     dtb = infra.download(self.downloaddir,
--                                         "vexpress-v2p-ca9.dtb")
-+                                         "vexpress-v2p-ca9-5.10.7.dtb")
-                     qemu_cmd += ["-dtb", dtb]
-                     qemu_cmd += ["-M", "vexpress-a9"]
-                 elif arch == "armv5":
-                     kernel = infra.download(self.downloaddir,
--                                            "kernel-versatile-4.19")
-+                                            "kernel-versatile-5.10.7")
-                     dtb = infra.download(self.downloaddir,
--                                         "versatile-pb-4.19.dtb")
-+                                         "versatile-pb-5.10.7.dtb")
-                     qemu_cmd += ["-dtb", dtb]
-                     qemu_cmd += ["-M", "versatilepb"]
-                     qemu_cmd += ["-device", "virtio-rng-pci"]
++ifeq ($(BR2_PACKAGE_LIBUDFREAD),y)
++LIBBLURAY_DEPENDENCIES += libudfread
++endif
++
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ LIBBLURAY_DEPENDENCIES += freetype
+ LIBBLURAY_CONF_OPTS += --with-freetype
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
