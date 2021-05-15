@@ -1,41 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 May 2021 08:50:46 +0200
-Subject: [Buildroot] [PATCH/next 2/2] package/libbluray: bump version to
- 1.3.0
-In-Reply-To: <20210513070536.1021065-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 13 May 2021 09:05:36 +0200")
-References: <20210513070536.1021065-1-bernd.kuhls@t-online.de>
- <20210513070536.1021065-2-bernd.kuhls@t-online.de>
-Message-ID: <87y2cgo5h5.fsf@dell.be.48ers.dk>
+Date: Sat, 15 May 2021 08:45:44 +0200
+Subject: [Buildroot] [git commit branch/next] package/libudfread: bump
+ version to 1.1.2
+Message-ID: <20210515062241.35BDD8189C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f75975b995a004b188d215a7f4306e4ba4818479
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Removed backported patch.
- > Changelog:
- > https://code.videolan.org/videolan/libbluray/-/blob/master/ChangeLog
+Changelog:
+https://code.videolan.org/videolan/libudfread/-/blob/master/ChangeLog
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- >  package/libbluray/0001-libudfread.patch | 32 -------------------------
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libudfread/libudfread.hash | 2 +-
+ package/libudfread/libudfread.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-We don't have this patch in git, so the patch does not apply as is. I've
-fixed that up and applied (to next).
-
- > @@ -12,8 +12,6 @@ LIBBLURAY_LICENSE = LGPL-2.1+
- >  LIBBLURAY_LICENSE_FILES = COPYING
- >  LIBBLURAY_CPE_ID_VENDOR = videolan
- >  LIBBLURAY_DEPENDENCIES = host-pkgconf
- > -# 0001-libudfread.patch
- > -LIBBLURAY_AUTORECONF = YES
+diff --git a/package/libudfread/libudfread.hash b/package/libudfread/libudfread.hash
+index 14d24b5dbc..332b472d59 100644
+--- a/package/libudfread/libudfread.hash
++++ b/package/libudfread/libudfread.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  529ffa189a6b9fbe08c77430bd18201007b9b20b3153ad92ebd5e1cc515e7151  libudfread-1.1.1.tar.bz2
++sha256  cd062016d78902da53a34c4d536479dbb70b2a05116354d46ead4d0c498ed375  libudfread-1.1.2.tar.bz2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libudfread/libudfread.mk b/package/libudfread/libudfread.mk
+index 6803a918d0..55d4fb8e47 100644
+--- a/package/libudfread/libudfread.mk
++++ b/package/libudfread/libudfread.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- >  LIBBLURAY_CONF_OPTS = --disable-bdjava-jar
-
-I've naturally also dropped this hunk.
-
--- 
-Bye, Peter Korsgaard
+-LIBUDFREAD_VERSION = 1.1.1
++LIBUDFREAD_VERSION = 1.1.2
+ LIBUDFREAD_SOURCE = libudfread-$(LIBUDFREAD_VERSION).tar.bz2
+ LIBUDFREAD_SITE = https://code.videolan.org/videolan/libudfread/-/archive/$(LIBUDFREAD_VERSION)
+ LIBUDFREAD_AUTORECONF = YES
