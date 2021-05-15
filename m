@@ -1,34 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 May 2021 10:29:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libdmx: add CPE variables
-Message-ID: <20210515082943.2362156-1-fontaine.fabrice@gmail.com>
+Date: Sat, 15 May 2021 10:34:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/libxcb: add
+ LIBXCB_CPE_ID_VENDOR
+Message-ID: <20210515083453.2362388-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:x:libdmx is a valid CPE identifier for this package:
+cpe:2.3:a:x:libxcb is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax%3Alibdmx
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax%3Alibxcb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/x11r7/xlib_libdmx/xlib_libdmx.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/x11r7/libxcb/libxcb.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x11r7/xlib_libdmx/xlib_libdmx.mk b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-index c67593e9a4..429595b5d7 100644
---- a/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-+++ b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-@@ -9,6 +9,8 @@ XLIB_LIBDMX_SOURCE = libdmx-$(XLIB_LIBDMX_VERSION).tar.bz2
- XLIB_LIBDMX_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBDMX_LICENSE = MIT
- XLIB_LIBDMX_LICENSE_FILES = COPYING
-+XLIB_LIBDMX_CPE_ID_VENDOR = x
-+XLIB_LIBDMX_CPE_ID_PRODUCT = libdmx
- XLIB_LIBDMX_INSTALL_STAGING = YES
- XLIB_LIBDMX_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
- XLIB_LIBDMX_CONF_OPTS = --disable-malloc0returnsnull
+diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
+index 9a35a72995..4cbd9cf62f 100644
+--- a/package/x11r7/libxcb/libxcb.mk
++++ b/package/x11r7/libxcb/libxcb.mk
+@@ -9,6 +9,7 @@ LIBXCB_SOURCE = libxcb-$(LIBXCB_VERSION).tar.xz
+ LIBXCB_SITE = http://xcb.freedesktop.org/dist
+ LIBXCB_LICENSE = MIT
+ LIBXCB_LICENSE_FILES = COPYING
++LIBXCB_CPE_ID_VENDOR = x
+ 
+ LIBXCB_INSTALL_STAGING = YES
+ 
 -- 
 2.30.2
