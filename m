@@ -1,36 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 May 2021 14:20:48 +0200
-Subject: [Buildroot] [git commit] package/python-autobahn: add CPE variables
-Message-ID: <20210515115245.1114086B15@busybox.osuosl.org>
+Date: Sat, 15 May 2021 14:19:42 +0200
+Subject: [Buildroot] [git commit] package/python-requests: add CPE variables
+Message-ID: <20210515115244.DF38C86B15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28b19ccb487316353e01ce4248978d5ef3aade66
+commit: https://git.buildroot.net/buildroot/commit/?id=6c5cf3788054c078e1650d5c06f0ab36c3438c9b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:crossbar:autobahn is a valid CPE identifier for this package:
+cpe:2.3:a:python:requests is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Acrossbar%3Aautobahn
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython%3Arequests
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-autobahn/python-autobahn.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-requests/python-requests.mk   | 2 ++
+ package/python3-requests/python3-requests.mk | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index 37b3d33534..81e2b7a4ca 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
-@@ -9,6 +9,8 @@ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
- PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/cb/16/38d27874ef827974f44acb6dd64a92a9248b624734c0e84b91083c2d9350
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
-+PYTHON_AUTOBAHN_CPE_ID_VENDOR = crossbar
-+PYTHON_AUTOBAHN_CPE_ID_PRODUCT = autobahn
- PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 2b543c0f9a..5d0f545ffb 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
+@@ -11,5 +11,7 @@ PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/6b/47/c14abc08432
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
++PYTHON_REQUESTS_CPE_ID_VENDOR = python
++PYTHON_REQUESTS_CPE_ID_PRODUCT = requests
  
  $(eval $(python-package))
+diff --git a/package/python3-requests/python3-requests.mk b/package/python3-requests/python3-requests.mk
+index b67d71a18b..dbb3f21490 100644
+--- a/package/python3-requests/python3-requests.mk
++++ b/package/python3-requests/python3-requests.mk
+@@ -11,6 +11,8 @@ PYTHON3_REQUESTS_SITE = https://files.pythonhosted.org/packages/6b/47/c14abc0843
+ PYTHON3_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON3_REQUESTS_LICENSE = Apache-2.0
+ PYTHON3_REQUESTS_LICENSE_FILES = LICENSE
++PYTHON3_REQUESTS_CPE_ID_VENDOR = python
++PYTHON3_REQUESTS_CPE_ID_PRODUCT = requests
+ HOST_PYTHON3_REQUESTS_DL_SUBDIR = python-requests
+ HOST_PYTHON3_REQUESTS_NEEDS_HOST_PYTHON = python3
+ 
