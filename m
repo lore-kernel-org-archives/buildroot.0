@@ -1,38 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 May 2021 14:18:18 +0200
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-bad: add
- CPE variables
-Message-ID: <20210515115244.74A5686B14@busybox.osuosl.org>
+Date: Sat, 15 May 2021 14:18:21 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gstreamer1: add CPE
+ variables
+Message-ID: <20210515115244.A448F814AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13c22420340d7e31f48ca955882ec2edc731961c
+commit: https://git.buildroot.net/buildroot/commit/?id=38fb1ad2a00d7584e2a7fdc1b966e9fa7e844e11
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:freedesktop:gst-plugins-bad is a valid CPE identifier for
-this package:
+cpe:2.3:a:gstreamer_project:gstreamer is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afreedesktop%3Agst-plugins-bad
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agstreamer_project%3Agstreamer
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 ++
+ package/gstreamer1/gstreamer1/gstreamer1.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index f1be9cd961..f4cf0d534f 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -12,6 +12,8 @@ GST1_PLUGINS_BAD_INSTALL_STAGING = YES
- # GST1_PLUGINS_BAD_LICENSE_FILES if enabled.
- GST1_PLUGINS_BAD_LICENSE_FILES = COPYING
- GST1_PLUGINS_BAD_LICENSE = LGPL-2.0+
-+GST1_PLUGINS_BAD_CPE_ID_VENDOR = freedesktop
-+GST1_PLUGINS_BAD_CPE_ID_PRODUCT = gst-plugins-bad
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 99846c1be5..171ea2b8e3 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -10,6 +10,8 @@ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
+ GSTREAMER1_LICENSE_FILES = COPYING
+ GSTREAMER1_LICENSE = LGPL-2.0+, LGPL-2.1+
++GSTREAMER1_CPE_ID_VENDOR = gstreamer_project
++GSTREAMER1_CPE_ID_PRODUCT = gstreamer
  
- GST1_PLUGINS_BAD_CFLAGS = $(TARGET_CFLAGS) -std=c99 -D_GNU_SOURCE
- GST1_PLUGINS_BAD_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ GSTREAMER1_CONF_OPTS = \
+ 	-Dexamples=disabled \
