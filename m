@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ED09C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:40:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 145B1C432BE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:40:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4A2E560F8F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:40:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4A2E560F8F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id D983261040
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:40:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D983261040
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 18BE940357;
-	Tue,  3 Aug 2021 21:40:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B3D2D83366;
+	Tue,  3 Aug 2021 21:40:15 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ac7PITIgQsas; Tue,  3 Aug 2021 21:40:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0D0A82F32;
+	Tue,  3 Aug 2021 21:40:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A7CD1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 63D8B4048C
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o7L2EMEw-TOC; Tue,  3 Aug 2021 21:40:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ABF8B4036B;
-	Tue,  3 Aug 2021 21:40:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 82EB01BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB92B40535
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VQt9nk6VTNrt for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4xA7DEq-mknr for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 21D8740544
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 18EAB40435
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 6C32A864A8; Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id 70DA685E09; Tue,  3 Aug 2021 21:09:36 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 2 Jun 2021 19:35:49 +0200
+Date: Sat, 15 May 2021 08:30:26 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7cf8adc03999a39a9b80a4612b5f14baae73ce5c
-X-Git-Newrev: cb3b89e4cdabb2046b2cb1b2cacdf3feac98b777
+X-Git-Oldrev: 9c108afab81b675eddc1f71cc496b47d9077bdb1
+X-Git-Newrev: 7320e5dd6269149869b542aa9d0db62bae31709b
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210947.6C32A864A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libraw: add
- Libs.private to libraw.pc
+Message-Id: <20210803210936.70DA685E09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libxslt: fix build
+ with latest libxml2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,98 +70,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb3b89e4cdabb2046b2cb1b2cacdf3feac98b777
+commit: https://git.buildroot.net/buildroot/commit/?id=7320e5dd6269149869b542aa9d0db62bae31709b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add Libs.private to libraw.pc to fix the following static build failure
-with imagemagick which is raised since commit
-2f47cfade4b298350d056f6d9a7525b837e2ba23:
-
-/home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libjasper.a(jpg_enc.c.o): in function `jpg_encode':
-jpg_enc.c:(.text+0x1f4): undefined reference to `jpeg_stdio_dest'
+Build is broken since bump of libxml2 to version 2.9.11 in commit
+a241dcec4188dbf30fbc8b65d7e6f2ece9da3d04 because libxslt calls the
+following command "${XML_CONFIG} --libs print" which will return an
+error code since
+https://github.com/GNOME/libxml2/commit/2a357ab99e6f5c9196384b11cd91dd993f93014c
 
 Fixes:
- - http://autobuild.buildroot.org/results/88e43a1ea2059a684e50b0f5f2af407e8c6df2e1
+ - http://autobuild.buildroot.org/results/47ceb8c24c9ead8a450b7fea3266f760d6b77b4f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Add-Libs.private-to-libraw.pc.patch       | 67 ++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ ...Fix-xml2-config-check-in-configure-script.patch | 31 ++++++++++++++++++++++
+ package/libxslt/libxslt.mk                         |  2 ++
+ 2 files changed, 33 insertions(+)
 
-diff --git a/package/libraw/0001-Add-Libs.private-to-libraw.pc.patch b/package/libraw/0001-Add-Libs.private-to-libraw.pc.patch
+diff --git a/package/libxslt/0001-Fix-xml2-config-check-in-configure-script.patch b/package/libxslt/0001-Fix-xml2-config-check-in-configure-script.patch
 new file mode 100644
-index 0000000000..a90af23178
+index 0000000000..3848dcb235
 --- /dev/null
-+++ b/package/libraw/0001-Add-Libs.private-to-libraw.pc.patch
-@@ -0,0 +1,67 @@
-+From ad911cbc3c16397cf9d326c30571a4d1edaaa03f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 2 Jun 2021 07:45:40 +0200
-+Subject: [PATCH] Add Libs.private to libraw.pc
++++ b/package/libxslt/0001-Fix-xml2-config-check-in-configure-script.patch
+@@ -0,0 +1,31 @@
++From 90c34c8bb90e095a8a8fe8b2ce368bd9ff1837cc Mon Sep 17 00:00:00 2001
++From: Nick Wellnhofer <wellnhofer@aevum.de>
++Date: Fri, 15 Nov 2019 11:53:11 +0100
++Subject: [PATCH] Fix xml2-config check in configure script
 +
-+Add Libs.private to libraw.pc to avoid the following static build
-+failure when enabling libraw with jasper support in imagemagick:
++A 'print' option has never been supported. After a recent change to
++libxml2, invalid options cause xml2-config to fail.
 +
-+/home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libjasper.a(jpg_enc.c.o): in function `jpg_encode':
-+jpg_enc.c:(.text+0x1f4): undefined reference to `jpeg_stdio_dest'
-+
-+-ljpeg must be added after -ljasper because jasper depends on jpeg
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/88e43a1ea2059a684e50b0f5f2af407e8c6df2e1
-+
++[Retrieved from:
++https://gitlab.gnome.org/GNOME/libxslt/-/commit/90c34c8bb90e095a8a8fe8b2ce368bd9ff1837cc]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/LibRaw/LibRaw/pull/406]
 +---
-+ configure.ac   | 2 ++
-+ libraw.pc.in   | 1 +
-+ libraw_r.pc.in | 1 +
-+ 3 files changed, 4 insertions(+)
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/configure.ac b/configure.ac
-+index 4ab2f313..7bf5fdfd 100644
++index 3da57b18..585b9d7c 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -57,6 +57,7 @@ if test x$jpeg = xtrue; then
-+                         AC_CHECK_HEADERS([jpeglib.h], [
-+                                 CPPFLAGS="$CPPFLAGS -DUSE_JPEG -DUSE_JPEG8"
-+                                 LIBS="$LIBS -ljpeg"
-++                                AC_SUBST([PACKAGE_LIBS_PRIVATE],"-ljpeg $PACKAGE_LIBS_PRIVATE")
-+                         ], AC_MSG_WARN([no jpeg headers found]))
-+                 ],
-+                 AC_MSG_WARN([libjpeg not found])
-+@@ -78,6 +79,7 @@ if test x$jasper = xtrue; then
-+                         AC_CHECK_HEADERS([jasper/jasper.h], [
-+                                 CPPFLAGS="$CPPFLAGS -DUSE_JASPER"
-+                                 LIBS="$LIBS -ljasper"
-++                                AC_SUBST([PACKAGE_LIBS_PRIVATE],"-ljasper $PACKAGE_LIBS_PRIVATE")
-+                         ], AC_MSG_WARN([no jasper headers found]))
-+                 ],
-+                 AC_MSG_WARN([libjasper not found])
-+diff --git a/libraw.pc.in b/libraw.pc.in
-+index 1bab18b8..c95fbc48 100644
-+--- a/libraw.pc.in
-++++ b/libraw.pc.in
-+@@ -8,4 +8,5 @@ Description: Raw image decoder library (non-thread-safe)
-+ Requires: @PACKAGE_REQUIRES@
-+ Version: @PACKAGE_VERSION@
-+ Libs: -L${libdir} -lraw -lstdc++@PC_OPENMP@
-++Libs.private: @PACKAGE_LIBS_PRIVATE@
-+ Cflags: -I${includedir}/libraw -I${includedir}
-+diff --git a/libraw_r.pc.in b/libraw_r.pc.in
-+index e8427271..92bbbffa 100644
-+--- a/libraw_r.pc.in
-++++ b/libraw_r.pc.in
-+@@ -8,4 +8,5 @@ Description: Raw image decoder library (thread-safe)
-+ Requires: @PACKAGE_REQUIRES@
-+ Version: @PACKAGE_VERSION@
-+ Libs: -L${libdir} -lraw_r -lstdc++@PC_OPENMP@
-++Libs.private: @PACKAGE_LIBS_PRIVATE@
-+ Cflags: -I${includedir}/libraw -I${includedir}
++@@ -548,7 +548,7 @@ dnl make sure xml2-config is executable,
++ dnl test version and init our variables
++ dnl
++ 
++-if test "x$LIBXML_LIBS" = "x" && ${XML_CONFIG} --libs print > /dev/null 2>&1
+++if test "x$LIBXML_LIBS" = "x" && ${XML_CONFIG} --libs > /dev/null 2>&1
++ then
++     AC_MSG_CHECKING(for libxml libraries >= $LIBXML_REQUIRED_VERSION)
++     XMLVERS=`$XML_CONFIG --version`
 +-- 
-+2.30.2
++GitLab
 +
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 3c603ad9f6..d0f79d2521 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -10,6 +10,8 @@ LIBXSLT_INSTALL_STAGING = YES
+ LIBXSLT_LICENSE = MIT
+ LIBXSLT_LICENSE_FILES = COPYING
+ LIBXSLT_CPE_ID_VENDOR = xmlsoft
++# We're patching configure.ac
++LIBXSLT_AUTORECONF = YES
+ 
+ LIBXSLT_CONF_OPTS = \
+ 	--with-gnu-ld \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
