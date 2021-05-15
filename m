@@ -1,37 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 May 2021 13:32:57 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libdmx: add CPE
- variables
-Message-ID: <20210515111142.2B66481488@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 15 May 2021 13:46:18 +0200
+Subject: [Buildroot] Suggestion to "support/scripts/apply-patches.sh: do
+ not apply patches with renames"
+In-Reply-To: <20210515111946.GB2506@scaer>
+References: <CAALxPJ0qprnhxWtHGg7oeY=Ws4+w3Wt-_hdM1WvbL6B42jQO5g@mail.gmail.com>
+ <87fsyopkcr.fsf@dell.be.48ers.dk> <20210515094010.GA2506@scaer>
+ <a6e13bf6-0cad-41d7-396e-0b9a31d225fd@gmail.com>
+ <20210515111946.GB2506@scaer>
+Message-ID: <fecfc535-58b5-4059-c1d2-9e3d05524dc2@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2f0a2147a794681879b67c35d2979ac1b5a7378
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yann, All,
 
-cpe:2.3:a:x:libdmx is a valid CPE identifier for this package:
+Le 15/05/2021 ? 13:19, Yann E. MORIN a ?crit?:
+> Romain, All,
+> 
+> On 2021-05-15 12:57 +0200, Romain Naour spake thusly:
+>> Le 15/05/2021 ? 11:40, Yann E. MORIN a ?crit?:
+>>> On the Ubuntu side (as another data point), the odest LTS is Trusty,
+>>> 14.04, and it has patch 2.7.1.
+>> Based on the host gcc requirement on gcc 4.9 (released the 22 April 2014), we
+>> already don't support such old distro. Ubuntu LTS Trusty provide gcc 4.8.
+> 
+> Ah, I don't thinks so. We still only require gcc >= 4.8:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax%3Alibdmx
+It seems the BR2_HOST_GCC_AT_LEAST_4_8 symbol has been removed with commit
+55fc80260b packages: host gcc >= 4.8 is now guaranteed.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/x11r7/xlib_libdmx/xlib_libdmx.mk | 2 ++
- 1 file changed, 2 insertions(+)
+I just noticed it while looking at this discussion...
 
-diff --git a/package/x11r7/xlib_libdmx/xlib_libdmx.mk b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-index c67593e9a4..429595b5d7 100644
---- a/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-+++ b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-@@ -9,6 +9,8 @@ XLIB_LIBDMX_SOURCE = libdmx-$(XLIB_LIBDMX_VERSION).tar.bz2
- XLIB_LIBDMX_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBDMX_LICENSE = MIT
- XLIB_LIBDMX_LICENSE_FILES = COPYING
-+XLIB_LIBDMX_CPE_ID_VENDOR = x
-+XLIB_LIBDMX_CPE_ID_PRODUCT = libdmx
- XLIB_LIBDMX_INSTALL_STAGING = YES
- XLIB_LIBDMX_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
- XLIB_LIBDMX_CONF_OPTS = --disable-malloc0returnsnull
+> 
+>   - the manual still references gcc 4.8, even the nightly snapshots:
+>         http://nightly.buildroot.org/#requirement
+> 
+>         2.1. Mandatory packages
+>         ...
+>         * gcc (version 4.8 or any later)
+>         * g++ (version 4.8 or any later) 
+> 
+>   - support/dependencies/dependencies.sh still only checks for gcc >=
+>     4.8:
+>         if [ $COMPILER_MAJOR -lt 4 -o $COMPILER_MAJOR -eq 4 -a $COMPILER_MINOR -lt 8 ] ; then
+> 
+> The last time (that I remember of) when we bumped our host gcc
+> requirement, was with those commits, dated October 2020:
+> 
+>   * 5ee815ab6a docs/manual: bump our gcc/g++ requirements to 4.8
+>   * 55fc80260b packages: host gcc >= 4.8 is now guaranteed
+> 
+> I could not find a reference to requiring host gcc >= 4.9 in the commit
+> logs...
+
+Otherwise, agree gcc 4.8 should be the minimal supported version.
+
+Best regards,
+Romain
+
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
