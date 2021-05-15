@@ -1,68 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 May 2021 14:23:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/refpolicy: fix
- REFPOLICY_CPE_ID_VENDOR
-In-Reply-To: <20210515112527.2367702-1-fontaine.fabrice@gmail.com>
-References: <20210515112527.2367702-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210515122327.GK2506@scaer>
+Date: Sat, 15 May 2021 14:53:09 +0200
+Subject: [Buildroot] [git commit] package/mender-grubenv: fix installing on
+ non-efi platforms
+Message-ID: <20210515122502.7AAA0815A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=bcff1166d43a4cfef135edd91992558eb1044d37
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-15 13:25 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:selinuxproject:refpolicy is a valid CPE identifier for this
-> package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aselinuxproject%3Arefpolicy
-> 
-> Indeed, cpe:2.3:a:tresys:refpolicy has been deprecated since April 21th:
-> 
->   <cpe-item name="cpe:/a:tresys:refpolicy:2.20180701" deprecated="true" deprecation_date="2021-04-21T16:55:43.710Z">
->     <title xml:lang="en-US">Tresys refpolicy 2.20180701</title>
->       <reference href="https://github.com/TresysTechnology/refpolicy">Product</reference>
->     <cpe-23:cpe23-item name="cpe:2.3:a:tresys:refpolicy:2.20180701:*:*:*:*:*:*:*">
->         <cpe-23:deprecated-by name="cpe:2.3:a:selinuxproject:refpolicy:2.20180701:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Currently, mender-grubenv unconditionally installs files from the
+$(TARGET_DIR)/boot/EFI directory to the $(BINARIES_DIR)/efi-part.
+This fails on systems that are not building grub against EFI.
 
-Applied to master, thanks.
+Add a check in mender-grubenv.mk to ensure the files are copied to the correct
+location if EFI is not selected.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/mender-grubenv/mender-grubenv.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-> ---
->  package/refpolicy/refpolicy.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-> index 0e7dfd86f8..a42483dba2 100644
-> --- a/package/refpolicy/refpolicy.mk
-> +++ b/package/refpolicy/refpolicy.mk
-> @@ -6,7 +6,7 @@
->  
->  REFPOLICY_LICENSE = GPL-2.0
->  REFPOLICY_LICENSE_FILES = COPYING
-> -REFPOLICY_CPE_ID_VENDOR = tresys
-> +REFPOLICY_CPE_ID_VENDOR = selinuxproject
->  REFPOLICY_INSTALL_STAGING = YES
->  REFPOLICY_DEPENDENCIES = \
->  	host-m4 \
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
+index ade0f4c0ed..f06dbbe35c 100644
+--- a/package/mender-grubenv/mender-grubenv.mk
++++ b/package/mender-grubenv/mender-grubenv.mk
+@@ -55,11 +55,20 @@ define MENDER_GRUBENV_INSTALL_TARGET_CMDS
+ endef
+ 
+ # Overwrite the default grub2 config files with the ones in this package.
++ifeq ($(BR2_TARGET_GRUB2_I386_PC)$(BR2_TARGET_GRUB2_ARM_UBOOT),y)
++define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
++	mkdir -p $(BINARIES_DIR)/boot-part/grub
++	cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
++		$(TARGET_DIR)/boot/grub/mender_grubenv* \
++		$(BINARIES_DIR)/boot-part/grub
++endef
++else
+ define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
+ 	mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
+ 	cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
+ 		$(TARGET_DIR)/boot/EFI/BOOT/mender_grubenv* \
+ 		$(BINARIES_DIR)/efi-part/EFI/BOOT
+ endef
++endif
+ 
+ $(eval $(generic-package))
