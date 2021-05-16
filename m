@@ -1,35 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 May 2021 19:28:12 +0200
-Subject: [Buildroot] [git commit] package/libuv: add LIBUV_CPE_ID_VENDOR
-Message-ID: <20210516171207.44B9F81FCB@busybox.osuosl.org>
+Date: Sun, 16 May 2021 19:42:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libmms: add LIBMMS_CPE_ID_VENDOR
+In-Reply-To: <20210516170655.3786-1-fontaine.fabrice@gmail.com>
+References: <20210516170655.3786-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210516174204.GQ2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=442b21f8cbda99576e9e77475bfdcbdc64283dff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-cpe:2.3:a:libuv:libuv is a valid CPE identifier for this package:
+On 2021-05-16 19:06 +0200, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:libmms_project:libmms is a valid CPE identifier for this
+> package:
+> 
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibmms_project%3Alibmms
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibuv%3Alibuv
+Those 9 new CPE entries applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libuv/libuv.mk | 1 +
- 1 file changed, 1 insertion(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 5876ab8935..403a049037 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -13,6 +13,7 @@ LIBUV_INSTALL_STAGING = YES
- LIBUV_AUTORECONF = YES
- LIBUV_LICENSE = BSD-2-Clause, BSD-3-Clause, ISC, MIT
- LIBUV_LICENSE_FILES = LICENSE
-+LIBUV_CPE_ID_VENDOR = libuv
- 
- # Upstream needs tests to be run sequentially. This is the default in
- # automake 1.11 and before, but not starting in 1.12. To maintain
+> ---
+>  package/libmms/libmms.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libmms/libmms.mk b/package/libmms/libmms.mk
+> index 236fe1376e..a4c40ad60a 100644
+> --- a/package/libmms/libmms.mk
+> +++ b/package/libmms/libmms.mk
+> @@ -10,5 +10,6 @@ LIBMMS_INSTALL_STAGING = YES
+>  LIBMMS_DEPENDENCIES = host-pkgconf libglib2
+>  LIBMMS_LICENSE = LGPL-2.1+
+>  LIBMMS_LICENSE_FILES = COPYING.LIB
+> +LIBMMS_CPE_ID_VENDOR = libmms_project
+>  
+>  $(eval $(autotools-package))
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
