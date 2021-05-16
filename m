@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 609CDC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:16:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 616CFC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:17:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2A32A60F41
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:16:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2A32A60F41
+	by mail.kernel.org (Postfix) with ESMTPS id 2CD0A60C3F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:17:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2CD0A60C3F
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04E6A838ED;
-	Tue,  3 Aug 2021 21:16:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED17F405A5;
+	Tue,  3 Aug 2021 21:16:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DrltJu75ZdgA; Tue,  3 Aug 2021 21:16:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id K2hQdzZvlbxT; Tue,  3 Aug 2021 21:16:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 440CD834BB;
-	Tue,  3 Aug 2021 21:16:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3EE101BF9C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id ECFB840597;
+	Tue,  3 Aug 2021 21:16:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4681C1BF9C2
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A79C640275
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8CF4C606DC
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t3oqNSQgCy-g for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c4szxlN4s4Yv for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 16A5140291
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA67D60662
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 60DC487BB7; Tue,  3 Aug 2021 21:09:38 +0000 (UTC)
+ id 2059A87BB7; Tue,  3 Aug 2021 21:09:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 16 May 2021 18:22:58 +0200
+Date: Sun, 16 May 2021 13:36:45 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c5aa3c5883aec704050c15c97adde920e58856bb
-X-Git-Newrev: f3b07e2dedef5f02936f66c9d2d69f09bd2dd0ee
+X-Git-Oldrev: 9d60b443e7a95a2217fae669e2e8661ced4a925f
+X-Git-Newrev: 97be782fd4dec3c75d5d4857914e91f91270fbfa
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210938.60DC487BB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats: add
- column reporting ignored CVEs
+Message-Id: <20210803210938.2059A87BB7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bullet: needs wchar
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,61 +69,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3b07e2dedef5f02936f66c9d2d69f09bd2dd0ee
+commit: https://git.buildroot.net/buildroot/commit/?id=97be782fd4dec3c75d5d4857914e91f91270fbfa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When doing analysis it is helpful to be able to view what CVE have
-been patched / diagnosed to not apply to Buildroot. This exposes
-that list to the reporting and prevents a step where you have to
-dig into the .mk's of a pkg to check for sure what has been
-ignored.
+bullet needs wchar since bump to version 3.09 in commit
+28b4947ed8f53c4edfbf8fef9304dc76480c01ca:
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[yann.morin.1998@free.fr: only set background if there are ignored CVEs]
+/home/giuliobenetti/autobuild/run/instance-0/output-1/build/bullet-3.09/examples/ThirdPartyLibs/Gwen/Structures.h:42:14: error: 'wstring' in namespace 'std' does not name a type
+   42 | typedef std::wstring UnicodeString;
+      |              ^~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/2b1158970fc45e9ebd4be4d726352166ed417a1f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/scripts/pkg-stats | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ package/bullet/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 76bc88b0ba..c7e30dfd2b 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -735,6 +735,10 @@ td.cve-unknown {
-  background: #ffd870;
- }
+diff --git a/package/bullet/Config.in b/package/bullet/Config.in
+index 5d8a57aa47..1f632b8931 100644
+--- a/package/bullet/Config.in
++++ b/package/bullet/Config.in
+@@ -2,11 +2,13 @@ config BR2_PACKAGE_BULLET
+ 	bool "bullet"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  Bullet is a Collision Detection and Rigid Body Dynamics
+ 	  Library.
  
-+td.cve_ignored {
-+ background: #ccc;
-+}
-+
- </style>
- <title>Statistics of Buildroot packages</title>
- </head>
-@@ -909,6 +913,15 @@ def dump_html_pkg(f, pkg):
-         f.write("    N/A\n")
-     f.write("  </td>\n")
+ 	  http://bulletphysics.org
  
-+    # CVEs Ignored
-+    td_class = ["centered"]
-+    if pkg.ignored_cves:
-+        td_class.append("cve_ignored")
-+    f.write("  <td class=\"%s\">\n" % " ".join(td_class))
-+    for ignored_cve in pkg.ignored_cves:
-+        f.write("    <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (ignored_cve, ignored_cve))
-+    f.write("  </td>\n")
-+
-     # CPE ID
-     td_class = ["left"]
-     if pkg.is_status_ok("cpe"):
-@@ -948,6 +961,7 @@ def dump_html_all_pkgs(f, packages):
- <td class=\"centered\">Warnings</td>
- <td class=\"centered\">Upstream URL</td>
- <td class=\"centered\">CVEs</td>
-+<td class=\"centered\">CVEs Ignored</td>
- <td class=\"centered\">CPE ID</td>
- </tr>
- """)
+-comment "bullet needs a toolchain w/ C++, dynamic library"
+-	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
++comment "bullet needs a toolchain w/ C++, dynamic library, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_USE_WCHAR
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
