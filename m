@@ -1,139 +1,98 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 May 2021 14:08:39 +0200
+Date: Sun, 16 May 2021 14:13:55 +0200
 Subject: [Buildroot] [PATCH v2 5/7] support/scripts/gen-missing-cpe: add
  new script
-In-Reply-To: <20210131133819.1818537-6-thomas.petazzoni@bootlin.com>
+In-Reply-To: <159f1b0c-07cd-e6b4-dc7f-1cbea516efb7@mind.be>
 References: <20210131133819.1818537-1-thomas.petazzoni@bootlin.com>
  <20210131133819.1818537-6-thomas.petazzoni@bootlin.com>
-Message-ID: <20210516120839.GC2506@scaer>
+ <159f1b0c-07cd-e6b4-dc7f-1cbea516efb7@mind.be>
+Message-ID: <20210516121355.GD2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Arnout, All,
 
-On 2021-01-31 14:38 +0100, Thomas Petazzoni spake thusly:
-> From: Matt Weber <matthew.weber@rockwellcollins.com>
-> 
-> This script queries the list of CPE IDs for the packages of the
-> current configuration (based on the "make show-info" output), and:
-> 
->  - for CPE IDs that do not have any matching entry in the CPE
->    database, it emits a warning
-> 
->  - for CPE IDs that do have a matching entry, but not with the same
->    version, it generates a snippet of XML that can be used to propose
->    an updated version to NIST.
-> 
-> Ref: NIST has a group email (cpe_dictionary at nist.gov) used to
-> recieve these version update and new entry xml files.  They do
-> process the XML and provide feedback. In some cases they will
-> propose back something different where the vendor or version is
-> slightly different.
-> 
-> Limitations
->  - Currently any use of non-number version identifiers isn't
->    supported by NIST as they use ranges to determine impact
->    of a CVE
->  - Any Linux version from a non-upstream is also not supported
->    without manually adjusting the information as the custom
->    kernel will more then likely not match the upstream version
->    used in the dictionary
-> 
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+On 2021-02-02 22:29 +0100, Arnout Vandecappelle spake thusly:
+> On 31/01/2021 14:38, Thomas Petazzoni wrote:
+> > From: Matt Weber <matthew.weber@rockwellcollins.com>
+> > 
+> > This script queries the list of CPE IDs for the packages of the
+> > current configuration (based on the "make show-info" output), and:
+> > 
+> >  - for CPE IDs that do not have any matching entry in the CPE
+> >    database, it emits a warning
+>  Maybe there should also be a warning for packages which don't have cpeid set at
+> all...
 
-Applied to master, with most of the changes pointed out by Arnout,
-thanks. I'll further reply to Arnout's comment...
+I haven't done anything to do so; I though it was better to have at
+least this script in its current state, rather than nothing at all.
+
+[--SNIP--]
+> > +def gen_update_xml_reports(cpes, cpedb, output):
+>  cpes should be cpeids (I first thought it was a list of CPE objects from cpedb).
+
+Done.
+
+[--SNIP--]
+> > +        fp = open(os.path.join(output, fname), 'w+')
+> > +        fp.write(xml)
+> > +        fp.close()
+>  This should be
+>         with open(...) as fp:
+>             fp.write(xml)
+
+Done.
+
+[--SNIP--]
+> > +def resolvepath(path):
+> > +    return os.path.abspath(os.path.expanduser(path))
+> 
+>  I don't understand this...
+> 
+> - expanduser should already have been done by the shell. If you call the script as
+> 
+> gen-missing-cpe --output \~/some-path
+> 
+> then I want the output to be in a directory called ~ in the current directory.
+> That's what the rest of the world does. (Yes, I get it, you want to be able to
+> do --output=~/some-path but that's just wrong.)
+> 
+> - abspath shouldn't be needed for anything, we're not doing any changedir or
+> anything like that.
+> 
+> In addition, this script is supposed to be called from `make missing-cpe` which
+> has already done those expansions.
+
+It was not obvious to me either that resolvepath() was needed, and as]
+you said, the usage we have in Buildroot does not need expansion.
+However, getting rid of it seemed too much, so I left it as-is.
+
+Again, I thought it was better that we have this script rather than
+nothing.
+
+[--SNIP--]
+> > +__main__()
+> Usually it would be
+> if __name__ == '__main__':
+>     __main__()
+
+Done.
+
+>  Nothing important here, but I want to give you the chance to rework if you
+> think it's worth it, so just
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+This was sitting in the backlog for quite a while, and we really needed
+to push a bit on our CPE (and CVE) tooling, so I applied this to master
+now.
+
+Thanks!
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  support/scripts/gen-missing-cpe | 65 +++++++++++++++++++++++++++++++++
->  1 file changed, 65 insertions(+)
->  create mode 100755 support/scripts/gen-missing-cpe
-> 
-> diff --git a/support/scripts/gen-missing-cpe b/support/scripts/gen-missing-cpe
-> new file mode 100755
-> index 0000000000..ed7747295a
-> --- /dev/null
-> +++ b/support/scripts/gen-missing-cpe
-> @@ -0,0 +1,65 @@
-> +#!/usr/bin/env python3
-> +
-> +import argparse
-> +import sys
-> +import json
-> +import subprocess
-> +import os
-> +from cpedb import CPEDB, CPE
-> +
-> +
-> +def gen_update_xml_reports(cpes, cpedb, output):
-> +    cpe_need_update = []
-> +
-> +    for cpe in cpes:
-> +        result = cpedb.find(cpe)
-> +        if not result:
-> +            result = cpedb.find_partial(CPE.no_version(cpe))
-> +            if result:
-> +                cpe_need_update.append(cpe)
-> +            else:
-> +                print("WARNING: no match found for '%s'" % cpe)
-> +
-> +    for cpe in cpe_need_update:
-> +        xml = cpedb.gen_update_xml(cpe)
-> +        fname = CPE.product(cpe) + '-' + CPE.version(cpe) + '.xml'
-> +        print("Generating %s" % fname)
-> +        fp = open(os.path.join(output, fname), 'w+')
-> +        fp.write(xml)
-> +        fp.close()
-> +
-> +    print("Generated %d update files out of %d CPEs" % (len(cpe_need_update), len(cpes)))
-> +
-> +
-> +def get_cpe_ids():
-> +    print("Getting list of CPE for enabled packages")
-> +    cmd = ["make", "--no-print-directory", "show-info"]
-> +    js = json.loads(subprocess.check_output(cmd).decode("utf-8"))
-> +    return set([v["cpe-id"] for k, v in js.items() if "cpe-id" in v])
-> +
-> +
-> +def resolvepath(path):
-> +    return os.path.abspath(os.path.expanduser(path))
-> +
-> +
-> +def parse_args():
-> +    parser = argparse.ArgumentParser()
-> +    parser.add_argument('--output', dest='output',
-> +                        help='Path to the output CPE update files', type=resolvepath, required=True)
-> +    parser.add_argument('--nvd-path', dest='nvd_path',
-> +                        help='Path to the local NVD database', type=resolvepath, required=True)
-> +    return parser.parse_args()
-> +
-> +
-> +def __main__():
-> +    args = parse_args()
-> +    if not os.path.isdir(args.output):
-> +        print("ERROR: output directory %s does not exist" % args.output)
-> +        sys.exit(1)
-> +    cpedb = CPEDB(args.nvd_path)
-> +    cpedb.get_xml_dict()
-> +    cpes = get_cpe_ids()
-> +    gen_update_xml_reports(cpes, cpedb, args.output)
-> +
-> +
-> +__main__()
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
