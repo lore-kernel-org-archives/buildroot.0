@@ -1,65 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 May 2021 14:42:37 +0200
-Subject: [Buildroot] [PATCH] Makefile: remove cpe-updates on clean
-Message-ID: <20210516124237.489609-1-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 16 May 2021 15:19:49 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-iptvsimple: bump
+ version to 7.6.5-Matrix
+Message-ID: <20210516131949.1889386-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit fd7312940aef (Makefile: add new missing-cpe target) added the
-rule to generate a set of files to update the NVD.
+Changelog:
+https://github.com/kodi-pvr/pvr.iptvsimple/blob/Matrix/pvr.iptvsimple/changelog.txt
 
-For an in-tree build, 'make clean' remove the output directory, so
-those files are removed. But for an out-of-tree build, the output
-directory is not removed, so those files still linger around after a
-clean.
-
-Explicitly remove them on clean, to cater for both cases.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Makefile | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 75ef7f5eb5..c3305f46e9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -229,6 +229,8 @@ LEGAL_MANIFEST_CSV_HOST = $(LEGAL_INFO_DIR)/host-manifest.csv
- LEGAL_WARNINGS = $(LEGAL_INFO_DIR)/.warnings
- LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index f467c7d40b..495565ef46 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  1310806ac4fd8c6e72020042e62bde8c9175e65015c4fddb82312cf32c53bf63  kodi-pvr-iptvsimple-7.6.4-Matrix.tar.gz
++sha256  2b46ab509e26fb4a60759e78f9f13808f5bb2c67a03a62c58ebcadb31c26e6e1  kodi-pvr-iptvsimple-7.6.5-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index 60e51a038b..03b96a1a7d 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+CPE_UPDATES_DIR = $(BASE_DIR)/cpe-updates
-+
- BR2_CONFIG = $(CONFIG_DIR)/.config
- 
- # Pull in the user's configuration file
-@@ -947,11 +949,11 @@ pkg-stats:
- 
- .PHONY: missing-cpe
- missing-cpe:
--	$(Q)mkdir -p $(O)/cpe-updates
-+	$(Q)mkdir -p $(CPE_UPDATES_DIR)
- 	$(Q)cd "$(CONFIG_DIR)" ; \
- 	$(TOPDIR)/support/scripts/gen-missing-cpe \
- 		--nvd-path $(DL_DIR)/buildroot-nvd \
--		--output $(O)/cpe-updates
-+		--output $(CPE_UPDATES_DIR)
- 
- else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
-@@ -1087,7 +1089,7 @@ printvars:
- clean:
- 	rm -rf $(BASE_TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
- 		$(BUILD_DIR) $(BASE_DIR)/staging \
--		$(LEGAL_INFO_DIR) $(GRAPHS_DIR) $(PER_PACKAGE_DIR)
-+		$(LEGAL_INFO_DIR) $(GRAPHS_DIR) $(PER_PACKAGE_DIR) $(CPE_UPDATES_DIR)
- 
- .PHONY: distclean
- distclean: clean
+-KODI_PVR_IPTVSIMPLE_VERSION = 7.6.4-Matrix
++KODI_PVR_IPTVSIMPLE_VERSION = 7.6.5-Matrix
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
 -- 
-2.25.1
+2.29.2
