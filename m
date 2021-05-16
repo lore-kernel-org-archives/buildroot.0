@@ -1,53 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 May 2021 13:38:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bullet: needs wchar
-In-Reply-To: <CAPi7W80Q9pBVCdGLmv61Pyh6wfToUQAHfLL5zLM4f+kSxgfWrw@mail.gmail.com>
-References: <20210514211801.2261810-1-fontaine.fabrice@gmail.com>
- <20210515171550.GV2506@scaer> <20210515171657.GW2506@scaer>
- <CAPi7W80Q9pBVCdGLmv61Pyh6wfToUQAHfLL5zLM4f+kSxgfWrw@mail.gmail.com>
-Message-ID: <20210516113854.GA2506@scaer>
+Date: Sun, 16 May 2021 13:47:45 +0200
+Subject: [Buildroot] [git commit] package/jquery-validation: security bump
+ to version 1.19.3
+Message-ID: <20210516111917.8B138866AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ae79f0f4033e2c8c250aacc888f5f44a26aa4c86
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-15 19:31 +0200, Fabrice Fontaine spake thusly:
-> Le sam. 15 mai 2021 ? 19:17, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
-> > On 2021-05-15 19:15 +0200, Yann E. MORIN spake thusly:
-> > > On 2021-05-14 23:18 +0200, Fabrice Fontaine spake thusly:
-> > > > bullet needs wchar since bump to version 3.09 in commit
-> > > > 28b4947ed8f53c4edfbf8fef9304dc76480c01ca:
-> > > >
-> > > > /home/giuliobenetti/autobuild/run/instance-0/output-1/build/bullet-3.09/examples/ThirdPartyLibs/Gwen/Structures.h:42:14: error: 'wstring' in namespace 'std' does not name a type
-> > > >    42 | typedef std::wstring UnicodeString;
-> > > >       |              ^~~~~~~
-> > > wstring is only ever used in tests and examples, and it seems we can
-> > > disable both. Tests are already disabled, and it should be possible to
-> > > disable exampels as well with -DBUILD_BULLET2_DEMOS=OFF
-> > I mean, of course, if other wchar related stuff are not used in the
-> > core...
-> We're enabling demos since commit 5f154799b6ed772a0c028072996e110fac131508
-> because upstream recommends to avoid changing any options, see:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20210430060545.1243461-1-fontaine.fabrice at gmail.com/
+Fix CVE-2021-21252: The jQuery Validation Plugin provides drop-in
+validation for your existing forms. It is published as an npm package
+"jquery-validation". jquery-validation before version 1.19.3 contains
+one or more regular expressions that are vulnerable to ReDoS (Regular
+Expression Denial of Service).
 
-That's weord that upstream provides options to enable/disable parts of
-the tree, but recomends not using them (because doing so breaks the
-build)...
+Update hash of README.md due to changes not related to license
 
-Oh well...
+https://github.com/jquery-validation/jquery-validation/releases/tag/1.19.3
 
-Thanks for the feedback! :-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/jquery-validation/jquery-validation.hash | 4 ++--
+ package/jquery-validation/jquery-validation.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/jquery-validation/jquery-validation.hash b/package/jquery-validation/jquery-validation.hash
+index af451a6c1a..4dbe07e218 100644
+--- a/package/jquery-validation/jquery-validation.hash
++++ b/package/jquery-validation/jquery-validation.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  14efe6f1784ef6e97116b15c77b04b7e8f47ec07b1479bcd6fa0b081faa19440  jquery-validation-1.14.0.zip
+-sha256  c2f9aa180de990ff16ca7e756c9af52ecc1b3536e3fb32649d7b2c510bccf9d0  README.md
++sha256  01ad2ef0a7f9cd413aeb51081651293916da47d20e5c0a59ec62587e58b03564  jquery-validation-1.19.3.zip
++sha256  3e5a99460077c16bf75f6821a30cdac9baa339119ebf63b2a6c49f4f50421ca4  README.md
+diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
+index 43e57a9fc9..920ed1cece 100644
+--- a/package/jquery-validation/jquery-validation.mk
++++ b/package/jquery-validation/jquery-validation.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-JQUERY_VALIDATION_VERSION = 1.14.0
+-JQUERY_VALIDATION_SITE = http://jqueryvalidation.org/files
++JQUERY_VALIDATION_VERSION = 1.19.3
++JQUERY_VALIDATION_SITE = https://github.com/jquery-validation/jquery-validation/releases/download/$(JQUERY_VALIDATION_VERSION)
+ JQUERY_VALIDATION_SOURCE = jquery-validation-$(JQUERY_VALIDATION_VERSION).zip
+ JQUERY_VALIDATION_LICENSE = MIT
+ JQUERY_VALIDATION_LICENSE_FILES = README.md
