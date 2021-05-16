@@ -1,35 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 16 May 2021 19:11:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tpm2-tss: add CPE variables
-Message-ID: <20210516171101.4497-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 May 2021 19:28:04 +0200
+Subject: [Buildroot] [git commit] package/libmms: add LIBMMS_CPE_ID_VENDOR
+Message-ID: <20210516171206.D5F8F86F3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:tpm2_software_stack_project:tpm2_software_stack is a valid CPE
-identifier for this package:
+commit: https://git.buildroot.net/buildroot/commit/?id=c91b3c3ce2c54a1cec8d4d417f2b535c2595a719
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atpm2_software_stack_project%3Atpm2_software_stack
+cpe:2.3:a:libmms_project:libmms is a valid CPE identifier for this
+package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibmms_project%3Alibmms
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/tpm2-tss/tpm2-tss.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libmms/libmms.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index bde6b352bf..9ffbef2f07 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -8,6 +8,8 @@ TPM2_TSS_VERSION = 3.0.3
- TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
- TPM2_TSS_LICENSE = BSD-2-Clause
- TPM2_TSS_LICENSE_FILES = LICENSE
-+TPM2_TSS_CPE_ID_VENDOR = tpm2_software_stack_project
-+TPM2_TSS_CPE_ID_PRODUCT = tpm2_software_stack
- TPM2_TSS_INSTALL_STAGING = YES
- TPM2_TSS_DEPENDENCIES = liburiparser openssl host-pkgconf
- TPM2_TSS_CONF_OPTS = --with-crypto=ossl --disable-doxygen-doc --disable-defaultflags
--- 
-2.30.2
+diff --git a/package/libmms/libmms.mk b/package/libmms/libmms.mk
+index 236fe1376e..a4c40ad60a 100644
+--- a/package/libmms/libmms.mk
++++ b/package/libmms/libmms.mk
+@@ -10,5 +10,6 @@ LIBMMS_INSTALL_STAGING = YES
+ LIBMMS_DEPENDENCIES = host-pkgconf libglib2
+ LIBMMS_LICENSE = LGPL-2.1+
+ LIBMMS_LICENSE_FILES = COPYING.LIB
++LIBMMS_CPE_ID_VENDOR = libmms_project
+ 
+ $(eval $(autotools-package))
