@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 May 2021 15:54:51 +0200
-Subject: [Buildroot] [PATCH 3/6] package/seatd: new package
-In-Reply-To: <20210513163325.1775639-4-aperez@igalia.com>
+Date: Sun, 16 May 2021 16:00:36 +0200
+Subject: [Buildroot] [PATCH 4/6] package/seatd: install init scripts
+In-Reply-To: <20210513163325.1775639-5-aperez@igalia.com>
 References: <20210513163325.1775639-1-aperez@igalia.com>
- <20210513163325.1775639-4-aperez@igalia.com>
-Message-ID: <20210516135451.GF2506@scaer>
+ <20210513163325.1775639-5-aperez@igalia.com>
+Message-ID: <20210516140036.GG2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,167 +14,94 @@ To: buildroot@busybox.net
 Adrian, All,
 
 On 2021-05-13 19:33 +0300, Adrian Perez de Castro spake thusly:
-> Introduce a seatd package, which can be used by wlroots 0.12.0 and
-> newer. The package includes both a library (always built) and an
-> optional seat management daemon.
-> 
-> The library can use systemd-logind, the seatd daemon, or a simple
-> builtin in-process mode. Build options are introduced for each of them.
-> At least one backend needs to be built; if both logind and seatd are
-> disabled the builtin backend will be enabled unconditionally.
+> Add commands to the seatd package to install the systemd unit included
+> in the source tarball and a SysV init script.
 > 
 > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-[--SNIP--]
-> diff --git a/package/seatd/Config.in b/package/seatd/Config.in
-> new file mode 100644
-> index 0000000000..a921e0e01c
+> ---
+>  package/seatd/S70seatd | 38 ++++++++++++++++++++++++++++++++++++++
+>  package/seatd/seatd.mk | 10 ++++++++++
+>  2 files changed, 48 insertions(+)
+>  create mode 100755 package/seatd/S70seatd
+> 
+> diff --git a/package/seatd/S70seatd b/package/seatd/S70seatd
+> new file mode 100755
+> index 0000000000..a91302c6c1
 > --- /dev/null
-> +++ b/package/seatd/Config.in
-> @@ -0,0 +1,48 @@
-> +menuconfig BR2_PACKAGE_SEATD
-> +	bool "seatd"
-> +	select BR2_PACKAGE_SEATD_LIBSEAT
-> +	help
-> +	  Seat management daemon and support library.
+> +++ b/package/seatd/S70seatd
+> @@ -0,0 +1,38 @@
+> +#! /bin/sh
+> +#
+> +# Starts seatd
+> +#
 > +
-> +	  https://git.sr.ht/~kennylevinsen/seatd
+> +DAEMON=/usr/bin/seatd
+> +PIDFILE=/run/seatd.pid
 > +
-> +if BR2_PACKAGE_SEATD
-> +
-> +config BR2_PACKAGE_SEATD_LIBSEAT
+> +case "$1" in
+> +	start)
+> +		printf 'Starting seatd: '
+> +		if start-stop-daemon -S -x "$DAEMON" -p "$PIDFILE" -m -b -- -g video
 
-Why do you need a separate option BR2_PACKAGE_SEATD_LIBSEAT? If the
-package is not enabled, that option is not visible; if the package is
-enabled, that option is forcibly set... So, I fail to see a reason for
-it...
+I guess this means using the 'video' group, right?
 
-> +	bool "libseat"
-> +	select BR2_PACKAGE_SEATD_LIBSEAT_BUILTIN \
-> +		if !BR2_PACKAGE_SEATD_LIBSEAT_LOGIND && !BR2_PACKAGE_SEATD_LIBSEAT_SEATD
+Currently, we do define the video group in the default skeleton, but I
+wonder if we should not ensure the group does exist:
 
-... and the select it does can be moved to the main symbol without any
-issue, AFAICS...
+    define SEATD_USERS
+        - - video -1 - - - - -
+    endef
 
-> +if BR2_PACKAGE_SEATD_LIBSEAT
-> +
-> +config BR2_PACKAGE_SEATD_LIBSEAT_LOGIND
-> +	bool "logind backend"
-> +	default y
-
-We usually do not default y, unless there is a very good reason for it.
-In this case, I would even drop the option completely, and just enable
-the logind support in the makefile:
-
-    ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
-    SEATD_CONF_OPTS += -Dlogind=enabled
-    else
-    SEATD_CONF_OPTS += -Dlogind=disabled
-    endif
-
-Also, don't you need a "SEATD_DPENDENCIES += systemd" in that case?
-
-> +	depends on BR2_PACKAGE_SYSTEMD_LOGIND
-> +	help
-> +	  Support using logind for seat management.
-> +
-> +comment "logind backend needs systemd-logind"
-> +	depends on !BR2_PACKAGE_SYSTEMD_LOGIND
-> +
-> +config BR2_PACKAGE_SEATD_LIBSEAT_SEATD
-> +	bool "seatd backend"
-> +	default y
-> +	depends on BR2_PACKAGE_SEATD_SEATD
-> +	help
-> +	  Support using seatd for seat management.
-
-Ditto: I would also drop the option and enable the seatd backend if the
-daemon is enabled.
-
-> +comment "seatd backend needs seatd daemon"
-> +	depends on !BR2_PACKAGE_SEATD_SEATD
-> +
-> +config BR2_PACKAGE_SEATD_LIBSEAT_BUILTIN
-> +	bool "builtin backend"
-> +	help
-> +	  Builtin in-process seatd implementation.
-
-And thus, we'd just have this one option, which gets forcibly selected
-when neither systemd-logind nor the seatd daemone are enabled;
-
-    config BR2_PACKAGE_SEATD
-        bool "seatd"
-        select BR2_PACKAGE_SEATD_LIBSEAT_BUILTIN \
-            if !BR2_PACKAGE_SYSTEMD_LOGIND \
-            && !BR2_PACKAGE_SEATD_SEATD
+I have no strong feeling about it, though..
 
 Regards,
 Yann E. MORIN.
 
-> +endif
+> +		then
+> +			echo OK
+> +		else
+> +			echo FAIL
+> +		fi
+> +		;;
+> +	stop)
+> +		if start-stop-daemon -K -x "$DAEMON" -p "$PIDFILE"
+> +		then
+> +			echo OK
+> +		else
+> +			echo FAIL
+> +		fi
+> +		;;
+> +	restart)
+> +		"$0" stop || true
+> +		sleep 1
+> +		"$0" start
+> +		;;
+> +	*)
+> +		echo "Usage: $0 {start|stop|restart}"
+> +		exit 1
+> +		;;
+> +esac
 > +
-> +config BR2_PACKAGE_SEATD_SEATD
-> +	bool "seatd daemon"
-> +
-> +endif
-> diff --git a/package/seatd/seatd.hash b/package/seatd/seatd.hash
-> new file mode 100644
-> index 0000000000..342079e958
-> --- /dev/null
-> +++ b/package/seatd/seatd.hash
-> @@ -0,0 +1,5 @@
-> +# Calculated locally
-> +sha256  274b56324fc81ca6002bc1cdd387668dee34a6e1063e5f3896805c3770948988  0.5.0.tar.gz
-> +
-> +# License files
-> +sha256  282a494803d666616bd726e0279636b5f6a31387ae19a707459074050f2600d3  LICENSE
+> +exit 0
 > diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
-> new file mode 100644
-> index 0000000000..45da53904f
-> --- /dev/null
+> index 45da53904f..abb7cb888f 100644
+> --- a/package/seatd/seatd.mk
 > +++ b/package/seatd/seatd.mk
-> @@ -0,0 +1,42 @@
-> +################################################################################
-> +#
-> +# seatd
-> +#
-> +################################################################################
+> @@ -39,4 +39,14 @@ else
+>  SEATD_CONF_OPTS += -Dserver=disabled
+>  endif
+>  
+> +define SEATD_INSTALL_INIT_SYSV
+> +	$(INSTALL) -m 0755 -D $(SEATD_PKGDIR)/S70seatd \
+> +		$(TARGET_DIR)/etc/init.d/S70seatd
+> +endef
 > +
-> +SEATD_VERSION = 0.5.0
-> +SEATD_SOURCE = $(SEATD_VERSION).tar.gz
-> +SEATD_SITE = https://git.sr.ht/~kennylevinsen/seatd/archive
-> +SEATD_LICENSE = MIT
-> +SEATD_LICENSE_FILES = LICENSE
-> +SEATD_INSTALL_STAGING = YES
+> +define SEATD_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -m 0644 -D $(@D)/contrib/systemd/seatd.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/seatd.service
+> +endef
 > +
-> +SEATD_CONF_OPTS += \
-> +	-Dman-pages=disabled \
-> +	-Dexamples=disabled
-> +
-> +ifeq ($(BR2_PACKAGE_SEATD_LIBSEAT_LOGIND),y)
-> +SEATD_CONF_OPTS += -Dlogind=enabled
-> +else
-> +SEATD_CONF_OPTS += -Dlogind=disabled
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SEATD_LIBSEAT_SEATD),y)
-> +SEATD_CONF_OPTS += -Dseatd=enabled
-> +else
-> +SEATD_CONF_OPTS += -Dseatd=disabled
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SEATD_LIBSEAT_BUILTIN),y)
-> +SEATD_CONF_OPTS += -Dbuiltin=enabled
-> +else
-> +SEATD_CONF_OPTS += -Dbuiltin=disabled
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SEATD_SEATD),y)
-> +SEATD_CONF_OPTS += -Dserver=enabled
-> +else
-> +SEATD_CONF_OPTS += -Dserver=disabled
-> +endif
-> +
-> +$(eval $(meson-package))
+>  $(eval $(meson-package))
 > -- 
 > 2.31.1
 > 
