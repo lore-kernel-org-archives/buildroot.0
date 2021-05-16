@@ -1,59 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 May 2021 11:24:06 +0200
-Subject: [Buildroot] [PATCH/next v2 1/1] package/libbluray: add optional
- support for libudfread
-In-Reply-To: <20210515070141.396977-1-bernd.kuhls@t-online.de>
-References: <20210515070141.396977-1-bernd.kuhls@t-online.de>
-Message-ID: <20210516092406.GY2506@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 16 May 2021 11:34:21 +0200
+Subject: [Buildroot] [PATCH 1/2] package/jquery-validation: add CPE variables
+Message-ID: <20210516093422.3768746-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+cpe:2.3:a:jqueryvalidation:jquery_validation is a valid CPE identifier
+for this package:
 
-On 2021-05-15 09:01 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ajqueryvalidation%3Ajquery_validation
 
-Applied to next, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/jquery-validation/jquery-validation.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> v2: rebased, removed patch which is included in current upstream release
-> 
->  package/libbluray/libbluray.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
-> index 5c5f603dd8..233797f38d 100644
-> --- a/package/libbluray/libbluray.mk
-> +++ b/package/libbluray/libbluray.mk
-> @@ -19,6 +19,10 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
->  LIBBLURAY_DEPENDENCIES += libiconv
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBUDFREAD),y)
-> +LIBBLURAY_DEPENDENCIES += libudfread
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_FREETYPE),y)
->  LIBBLURAY_DEPENDENCIES += freetype
->  LIBBLURAY_CONF_OPTS += --with-freetype
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
+index a8c2897983..43e57a9fc9 100644
+--- a/package/jquery-validation/jquery-validation.mk
++++ b/package/jquery-validation/jquery-validation.mk
+@@ -9,6 +9,8 @@ JQUERY_VALIDATION_SITE = http://jqueryvalidation.org/files
+ JQUERY_VALIDATION_SOURCE = jquery-validation-$(JQUERY_VALIDATION_VERSION).zip
+ JQUERY_VALIDATION_LICENSE = MIT
+ JQUERY_VALIDATION_LICENSE_FILES = README.md
++JQUERY_VALIDATION_CPE_ID_VENDOR = jqueryvalidation
++JQUERY_VALIDATION_CPE_ID_PRODUCT = jquery_validation
+ 
+ define JQUERY_VALIDATION_EXTRACT_CMDS
+ 	$(UNZIP) -d $(@D) $(JQUERY_VALIDATION_DL_DIR)/$(JQUERY_VALIDATION_SOURCE)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
