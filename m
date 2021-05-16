@@ -1,35 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Sun, 16 May 2021 18:30:45 +0200
-Subject: [Buildroot] [git commit] package/libidn2: add LIBIDN2_CPE_ID_VENDOR
-Message-ID: <20210516161236.08BA987939@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tinyproxy: add
+ TINYPROXY_CPE_ID_VENDOR
+Message-ID: <20210516161235.F2E8A86BDF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=981850b35303d3bace4a6c0d7366b1f6e3682935
+commit: https://git.buildroot.net/buildroot/commit/?id=ba91be05c2582236f0073e0a4994111c1525e9fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:gnu:libidn2 is a valid CPE identifier for this package:
+cpe:2.3:a:tinyproxy_project:tinyproxy is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Alibidn2
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atinyproxy_project%3Atinyproxy
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libidn2/libidn2.mk | 1 +
+ package/tinyproxy/tinyproxy.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-index 3f87b9bb8c..4db302dbf4 100644
---- a/package/libidn2/libidn2.mk
-+++ b/package/libidn2/libidn2.mk
-@@ -8,6 +8,7 @@ LIBIDN2_VERSION = 2.3.0
- LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
- LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
-+LIBIDN2_CPE_ID_VENDOR = gnu
- LIBIDN2_DEPENDENCIES = \
- 	host-pkgconf \
- 	$(TARGET_NLS_DEPENDENCIES) \
+diff --git a/package/tinyproxy/tinyproxy.mk b/package/tinyproxy/tinyproxy.mk
+index 6120d183cc..326bfa8b88 100644
+--- a/package/tinyproxy/tinyproxy.mk
++++ b/package/tinyproxy/tinyproxy.mk
+@@ -9,6 +9,7 @@ TINYPROXY_SITE = https://github.com/tinyproxy/tinyproxy/releases/download/$(TINY
+ TINYPROXY_SOURCE = tinyproxy-$(TINYPROXY_VERSION).tar.bz2
+ TINYPROXY_LICENSE = GPL-2.0+
+ TINYPROXY_LICENSE_FILES = COPYING
++TINYPROXY_CPE_ID_VENDOR = tinyproxy_project
+ TINYPROXY_CONF_ENV = ac_cv_path_A2X=no
+ 
+ $(eval $(autotools-package))
