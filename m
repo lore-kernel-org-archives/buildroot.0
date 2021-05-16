@@ -1,49 +1,51 @@
-From: Mircea GLIGA <mgliga@bitdefender.com>
-Date: Sun, 16 May 2021 17:19:49 +0300
-Subject: [Buildroot] [PATCH 1/1] package/environment-setup: Fix incorrect
- order of the `sed` expressions
-Message-ID: <20210516141949.1271867-1-mgliga@bitdefender.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 May 2021 17:54:25 +0200
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: add CPE
+ searching links
+Message-ID: <20210516152852.AC66786B08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Order of the `sed` expressions is important; when this was commited
-to master, the order of the expressions from the original patch [1] was
-changed, rendering the second expression to noop.
+commit: https://git.buildroot.net/buildroot/commit/?id=c5aa3c5883aec704050c15c97adde920e58856bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This made all the environment variables from the script to contain
-absolute paths: long absolute paths makes verbose builds difficult
-to read/follow.
-We can take advantage of the fact that the PATH is updated and we
-don't have to use absolute paths.
+For cases of a CPE having a unknown version or when there hasn't
+been a CPE verified, proposed a search criteria to help the
+user research an update.
 
-Fixed by reordering the `sed` expresions:
-* first update the path of the binaries: e.g. 's%$(HOST_DIR)/bin/%%g'
-* only then update remaining paths: e.g. 's%$(HOST_DIR)%\$$SDK_PATH%g'
+(libcurl has NIST dict entries but not this version)
+  cpe:2.3:a:haxx:libcurl:7.76.1:*:*:*:*:*:*:*
+  CPE identifier unknown in CPE database (Search)
 
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20201027140140.47982-1-matthew.weber at rockwellcollins.com/
+(jitterentropy-library package doesn't have any NIST dict entries)
+  no verified CPE identifier (Search)
 
-Signed-off-by: Mircea GLIGA <mgliga@bitdefender.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[yann.morin.1998 at free.fr: fix flake8 issues]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/environment-setup/environment-setup.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-index fcad013f0d..f4c52921f7 100644
---- a/package/environment-setup/environment-setup.mk
-+++ b/package/environment-setup/environment-setup.mk
-@@ -26,8 +26,8 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
- 	printf "alias cmake=\"cmake \
- 		-DCMAKE_TOOLCHAIN_FILE=$(HOST_DIR)/share/buildroot/toolchainfile.cmake \
- 		-DCMAKE_INSTALL_PREFIX=/usr\"\n" >> $(ENVIRONMENT_SETUP_FILE)
--	$(SED) 's%$(HOST_DIR)%\$$SDK_PATH%g' \
--		-e 's%$(HOST_DIR)/bin/%%g' \
-+	$(SED) 's%$(HOST_DIR)/bin/%%g' \
-+		-e 's%$(HOST_DIR)%\$$SDK_PATH%g' \
- 		-e '/^export "PATH=/c\' \
- 		$(ENVIRONMENT_SETUP_FILE)
- 	printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
--- 
-2.31.1
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 6f3ddc561f..76bc88b0ba 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -921,7 +921,13 @@ def dump_html_pkg(f, pkg):
+     if pkg.cpeid:
+         f.write("  <code>%s</code>\n" % pkg.cpeid)
+     if not pkg.is_status_ok("cpe"):
+-        f.write("  %s%s\n" % ("<br/>" if pkg.cpeid else "", pkg.status['cpe'][1]))
++        if pkg.cpeid:
++            f.write("  <br/>%s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
++                    (pkg.status['cpe'][1], ":".join(pkg.cpeid.split(":")[0:5])))
++        else:
++            f.write("  %s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %
++                    (pkg.status['cpe'][1], pkg.name))
++
+     f.write("  </td>\n")
+ 
+     f.write(" </tr>\n")
