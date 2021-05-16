@@ -1,45 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 May 2021 18:41:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: add CPE variables
-In-Reply-To: <20210515214142.3668498-1-fontaine.fabrice@gmail.com>
-References: <20210515214142.3668498-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210516164158.GL2506@scaer>
+Date: Sun, 16 May 2021 18:42:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lvm2: add LVM2_CPE_ID_VENDOR
+In-Reply-To: <20210515213606.3668135-1-fontaine.fabrice@gmail.com>
+References: <20210515213606.3668135-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210516164230.GM2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2021-05-15 23:41 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:mesa3d:mesa is a valid CPE identifier for this package:
+Fabrice, All,
+
+On 2021-05-15 23:36 +0200, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:redhat:lvm2 is a valid CPE identifier for this package:
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amesa3d%3Amesa
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aredhat%3Alvm2
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mesa3d/mesa3d.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index b18faeb2ce..ca44a66e54 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -10,6 +10,8 @@ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
->  MESA3D_SITE = https://mesa.freedesktop.org/archive
->  MESA3D_LICENSE = MIT, SGI, Khronos
->  MESA3D_LICENSE_FILES = docs/license.rst
-> +MESA3D_CPE_ID_VENDOR = mesa3d
-> +MESA3D_CPE_ID_PRODUCT = mesa
 
-I've also added those for mesa3d-headers while at it.
-
-Applied to master, thanks.
+This one, and the 20 following patches: applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
->  MESA3D_INSTALL_STAGING = YES
+> ---
+>  package/lvm2/lvm2.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+> index dc4e938697..1194044537 100644
+> --- a/package/lvm2/lvm2.mk
+> +++ b/package/lvm2/lvm2.mk
+> @@ -10,6 +10,7 @@ LVM2_SITE = http://sources.redhat.com/pub/lvm2
+>  LVM2_INSTALL_STAGING = YES
+>  LVM2_LICENSE = GPL-2.0, LGPL-2.1
+>  LVM2_LICENSE_FILES = COPYING COPYING.LIB
+> +LVM2_CPE_ID_PRODUCT = redhat
 >  
+>  # Make sure that binaries and libraries are installed with write
+>  # permissions for the owner. We disable NLS because it's broken, and
 > -- 
 > 2.30.2
 > 
