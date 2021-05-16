@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AAF3C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:59:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69A45C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:59:12 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C164560F9C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:58:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C164560F9C
+	by mail.kernel.org (Postfix) with ESMTPS id 243AF60724
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:59:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 243AF60724
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9BC8283C0D;
-	Tue,  3 Aug 2021 21:58:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F273683C26;
+	Tue,  3 Aug 2021 21:59:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7gPsESzI_cGB; Tue,  3 Aug 2021 21:58:58 +0000 (UTC)
+	with ESMTP id YHmWflXC5j2r; Tue,  3 Aug 2021 21:59:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 03F1783BE5;
-	Tue,  3 Aug 2021 21:58:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 756201BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2ABF883C2E;
+	Tue,  3 Aug 2021 21:59:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 284F01BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2410460653
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D8DA404E0
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Uj3Mnf1zeO7m for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Etmy-rB94ULZ for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 76817608B5
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DECD44046C
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C05F4873E2; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
+ id 404078B43C; Tue,  3 Aug 2021 21:09:39 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 14 Jun 2021 21:55:34 +0200
+Date: Sun, 16 May 2021 18:30:45 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 07ec544a17ad808bcdb86504bc7b7bd6ef55083d
-X-Git-Newrev: 368c74f7e134435244ebcb959639840960645710
+X-Git-Oldrev: c5e9b02251990589a278a54737f2ca691707905c
+X-Git-Newrev: c2bc364c083407c598cb3a40de125cc079c28a60
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210951.C05F4873E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/perl-libwww-perl: bump
- to version 6.54
+Message-Id: <20210803210939.404078B43C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libldns: add CPE
+ variables
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,42 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=368c74f7e134435244ebcb959639840960645710
+commit: https://git.buildroot.net/buildroot/commit/?id=c2bc364c083407c598cb3a40de125cc079c28a60
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+cpe:2.3:a:nlnetlabs:ldns is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anlnetlabs%3Aldns
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
- package/perl-libwww-perl/perl-libwww-perl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libldns/libldns.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
-index 8081e127f8..d04fb96999 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.hash
-+++ b/package/perl-libwww-perl/perl-libwww-perl.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  33fdb6415018b8bf94242cace1b06479  libwww-perl-6.53.tar.gz
--sha256  9cbb7c688416a20c1aba9a32568504af1143ced58b572c502a1b2fb8a500f535  libwww-perl-6.53.tar.gz
-+md5  aea3e2a207b128371db0ef0f86229667  libwww-perl-6.54.tar.gz
-+sha256  76917708bd91fbb15eb5eece25ddd2ed1fa65a5b6b05a3ab2a7facce17dfc81d  libwww-perl-6.54.tar.gz
- 
- # computed by scancpan
- sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENSE
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
-index d96035e42f..877ab9b365 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.mk
-+++ b/package/perl-libwww-perl/perl-libwww-perl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_LIBWWW_PERL_VERSION = 6.53
-+PERL_LIBWWW_PERL_VERSION = 6.54
- PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
- PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
+diff --git a/package/libldns/libldns.mk b/package/libldns/libldns.mk
+index 75159389de..9c248bbc19 100644
+--- a/package/libldns/libldns.mk
++++ b/package/libldns/libldns.mk
+@@ -9,6 +9,8 @@ LIBLDNS_SOURCE = ldns-$(LIBLDNS_VERSION).tar.gz
+ LIBLDNS_SITE = http://www.nlnetlabs.nl/downloads/ldns
+ LIBLDNS_LICENSE = BSD-3-Clause
+ LIBLDNS_LICENSE_FILES = LICENSE
++LIBLDNS_CPE_ID_VENDOR = nlnetlabs
++LIBLDNS_CPE_ID_PRODUCT = ldns
+ LIBLDNS_INSTALL_STAGING = YES
+ LIBLDNS_DEPENDENCIES = openssl
+ # --disable-dane-verify can be removed after openssl bump to 1.1.x
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
