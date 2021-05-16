@@ -1,114 +1,62 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 15 May 2021 18:05:19 -0700
-Subject: [Buildroot] [PATCH v2 1/3] package/libfuse3: allow building as a
- host package
-Message-ID: <20210516010521.1375959-1-christian@paral.in>
+Date: Sat, 15 May 2021 18:05:20 -0700
+Subject: [Buildroot] [PATCH v2 2/3] package/fuse-overlayfs: enable building
+ as host package
+In-Reply-To: <20210516010521.1375959-1-christian@paral.in>
+References: <20210516010521.1375959-1-christian@paral.in>
+Message-ID: <20210516010521.1375959-2-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds 1 patch to fix an install error when building as a host package.
-
-Patch was submitted upstream:
-https://github.com/libfuse/libfuse/pull/598
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-
----
-
-v1 -> v2:
-
- - adjusted patch to completely remove init.d script install
-
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- ...remove-installation-of-init.d-script.patch | 48 +++++++++++++++++++
- package/libfuse3/libfuse3.mk                  |  7 +++
- 2 files changed, 55 insertions(+)
- create mode 100644 package/libfuse3/0001-install_helper-remove-installation-of-init.d-script.patch
+ package/Config.in.host                   | 1 +
+ package/fuse-overlayfs/Config.in.host    | 7 +++++++
+ package/fuse-overlayfs/fuse-overlayfs.mk | 4 ++++
+ 3 files changed, 12 insertions(+)
+ create mode 100644 package/fuse-overlayfs/Config.in.host
 
-diff --git a/package/libfuse3/0001-install_helper-remove-installation-of-init.d-script.patch b/package/libfuse3/0001-install_helper-remove-installation-of-init.d-script.patch
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 064c98af3d..90a6afdf4f 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -27,6 +27,7 @@ menu "Host utilities"
+ 	source "package/f2fs-tools/Config.in.host"
+ 	source "package/faketime/Config.in.host"
+ 	source "package/fatcat/Config.in.host"
++	source "package/fuse-overlayfs/Config.in.host"
+ 	source "package/fwup/Config.in.host"
+ 	source "package/genext2fs/Config.in.host"
+ 	source "package/genimage/Config.in.host"
+diff --git a/package/fuse-overlayfs/Config.in.host b/package/fuse-overlayfs/Config.in.host
 new file mode 100644
-index 0000000000..5df6f3690c
+index 0000000000..cf459a4a2a
 --- /dev/null
-+++ b/package/libfuse3/0001-install_helper-remove-installation-of-init.d-script.patch
-@@ -0,0 +1,48 @@
-+From b3d28b5aa5887162847a85738450e8c719ee8523 Mon Sep 17 00:00:00 2001
-+From: Christian Stewart <christian@paral.in>
-+Date: Sun, 2 May 2021 19:04:50 -0700
-+Subject: [PATCH] install_helper: remove installation of init.d script
++++ b/package/fuse-overlayfs/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_FUSE_OVERLAYFS
++	bool "host fuse-overlayfs"
++	help
++	  FUSE-overlayfs is an implementation of overlay+shiftfs in
++	  FUSE, intended to be used for rootless containers.
 +
-+Fixes the following build error in Buildroot as a host package:
-+
-+Running custom install script 'install_helper.sh /host/etc /host/bin /host/lib/udev/rules.d false
-++ sysconfdir=/host/etc
-++ bindir=/host/bin
-++ udevrulesdir=/host/lib/udev/rules.d
-++ useroot=false
-++ '[' -z '' ']'
-++ DESTDIR=
-++ install -D -m 644 /build/host-libfuse3-3.10.3/util/fuse.conf /host/etc/fuse.conf
-++ false
-++ install -D -m 644 /build/host-libfuse3-3.10.3/util/udev.rules /host/lib/udev/rules.d/99-fuse3.rules
-++ install -D -m 755 /build/host-libfuse3-3.10.3/util/init_script /etc/init.d/fuse3
-+install: cannot create regular file '/etc/init.d/fuse3': Permission denied
-+FAILED: install script 'install_helper.sh /host/etc /host/bin /host/lib/udev/rules.d false' exit code 1, stopped
-+FAILED: meson-install
-+
-+Signed-off-by: Christian Stewart <christian@paral.in>
-+
-+diff --git a/util/install_helper.sh b/util/install_helper.sh
-+index cb649a7..f2fa146 100755
-+--- a/util/install_helper.sh
-++++ b/util/install_helper.sh
-+@@ -38,16 +38,3 @@ fi
-+ 
-+ install -D -m 644 "${MESON_SOURCE_ROOT}/util/udev.rules" \
-+         "${DESTDIR}${udevrulesdir}/99-fuse3.rules"
-+-
-+-install -D -m 755 "${MESON_SOURCE_ROOT}/util/init_script" \
-+-        "${DESTDIR}/etc/init.d/fuse3"
-+-
-+-
-+-if test -x /usr/sbin/update-rc.d && test -z "${DESTDIR}"; then
-+-    /usr/sbin/update-rc.d fuse3 start 34 S . start 41 0 6 . || /bin/true
-+-else
-+-    echo "== FURTHER ACTION REQUIRED =="
-+-    echo "Make sure that your init system will start the ${DESTDIR}/etc/init.d/fuse3 init script"
-+-fi
-+-
-+-
-+-- 
-+2.31.1
-+
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-index d61e313391..b29780dc09 100644
---- a/package/libfuse3/libfuse3.mk
-+++ b/package/libfuse3/libfuse3.mk
-@@ -10,11 +10,17 @@ LIBFUSE3_LICENSE = LGPL-2.1
- LIBFUSE3_LICENSE_FILES = LICENSE
- LIBFUSE3_INSTALL_STAGING = YES
- LIBFUSE3_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+
- LIBFUSE3_CONF_OPTS = \
- 	-Dexamples=false \
- 	-Dudevrulesdir=/lib/udev/rules.d \
- 	-Duseroot=false
++	  http://github.com/containers/fuse-overlayfs
+\ No newline at end of file
+diff --git a/package/fuse-overlayfs/fuse-overlayfs.mk b/package/fuse-overlayfs/fuse-overlayfs.mk
+index 707cacce03..36cbfc91fd 100644
+--- a/package/fuse-overlayfs/fuse-overlayfs.mk
++++ b/package/fuse-overlayfs/fuse-overlayfs.mk
+@@ -12,4 +12,8 @@ FUSE_OVERLAYFS_LICENSE_FILES = COPYING
+ FUSE_OVERLAYFS_AUTORECONF = YES
+ FUSE_OVERLAYFS_DEPENDENCIES = libfuse3 host-pkgconf
  
-+HOST_LIBFUSE3_CONF_OPTS = \
-+	-Dexamples=false \
-+	-Dudevrulesdir=$(HOST_DIR)/lib/udev/rules.d \
-+	-Duseroot=false
++HOST_FUSE_OVERLAYFS_AUTORECONF = YES
++HOST_FUSE_OVERLAYFS_DEPENDENCIES = host-libfuse3 host-pkgconf
 +
- define LIBFUSE3_DEVICES
- 	/dev/fuse  c  666  0  0  10  229  0  0  -
- endef
-@@ -28,3 +34,4 @@ define LIBFUSE3_LINUX_CONFIG_FIXUPS
- endef
- 
- $(eval $(meson-package))
-+$(eval $(host-meson-package))
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.31.1
