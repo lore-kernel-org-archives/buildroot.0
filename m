@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88EE2C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:49:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4D1BC432BE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:49:26 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4B5926103C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:49:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4B5926103C
+	by mail.kernel.org (Postfix) with ESMTPS id 9A93561040
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:49:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A93561040
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2765460662;
-	Tue,  3 Aug 2021 21:49:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 65A1060875;
+	Tue,  3 Aug 2021 21:49:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QbeBg0QinvSO; Tue,  3 Aug 2021 21:49:13 +0000 (UTC)
+	with ESMTP id biYoLK6QFkTG; Tue,  3 Aug 2021 21:49:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8FD1E605A6;
-	Tue,  3 Aug 2021 21:49:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D87D61BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AACF7600BA;
+	Tue,  3 Aug 2021 21:49:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 049871BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F13C6608B7
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D70254051D
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mMFPQVGn_ALy for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2yx75uwrI9LR for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5B1C16089E
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2379F4025C
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A541B85F62; Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+ id 755F387BB7; Tue,  3 Aug 2021 21:09:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 12 Jun 2021 14:31:37 +0200
+Date: Sun, 16 May 2021 18:29:55 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 18b4b23a45550e50b60cc53504909e2788812f8e
-X-Git-Newrev: 26fe934fd27de5fa1ce6b482cbfe4cfcebbb0972
+X-Git-Oldrev: d70da0be78779699a296e21532665ee149a2a3b8
+X-Git-Newrev: 7fa481437e71484aa7064398e69aa63cdabb86b2
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210949.A541B85F62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/vtun: requires
- blowfish support in openssl
+Message-Id: <20210803210938.755F387BB7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mesa3d{,
+ -headers}: add CPE variables
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,33 +70,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26fe934fd27de5fa1ce6b482cbfe4cfcebbb0972
+commit: https://git.buildroot.net/buildroot/commit/?id=7fa481437e71484aa7064398e69aa63cdabb86b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Enable blowfish in openssl to fix build failure raised since commit
-a83d41867c8d69a77d5cd0a665aa216af5340359
+cpe:2.3:a:mesa3d:mesa is a valid CPE identifier for this package:
 
-Fixes:
- - http://autobuild.buildroot.org/results/38f6b92ead5861c2e15ca768acea9742ad4e0fec
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amesa3d%3Amesa
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: add to mesa3d-headers too]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/vtun/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/mesa3d-headers/mesa3d-headers.mk | 3 +++
+ package/mesa3d/mesa3d.mk                 | 2 ++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/package/vtun/Config.in b/package/vtun/Config.in
-index d63e7c76ef..eca6f67946 100644
---- a/package/vtun/Config.in
-+++ b/package/vtun/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_VTUN
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Tool for easily creating Virtual Tunnels over TCP/IP networks
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 9c0079c3f9..d86ad929f8 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -18,6 +18,9 @@ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+ MESA3D_HEADERS_LICENSE_FILES = docs/license.rst
++MESA3D_HEADERS_CPE_ID_VENDOR = mesa3d
++MESA3D_HEADERS_CPE_ID_PRODUCT = mesa
++
+ 
+ # Only installs header files
+ MESA3D_HEADERS_INSTALL_STAGING = YES
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index b18faeb2ce..ca44a66e54 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -10,6 +10,8 @@ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+ MESA3D_LICENSE_FILES = docs/license.rst
++MESA3D_CPE_ID_VENDOR = mesa3d
++MESA3D_CPE_ID_PRODUCT = mesa
+ 
+ MESA3D_INSTALL_STAGING = YES
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
