@@ -1,37 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Sun, 16 May 2021 18:30:45 +0200
-Subject: [Buildroot] [git commit] package/keepalived: add
- KEEPALIVED_CPE_ID_VENDOR
-Message-ID: <20210516161236.726BD87939@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/frr: add CPE variables
+Message-ID: <20210516161236.5D1248793E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00cb0f00fa6c5e992097c6cb6188da4606bac7a9
+commit: https://git.buildroot.net/buildroot/commit/?id=c4c11c2e1a9df5f9c674186a4595c469c563ef98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:keepalived:keepalived is a valid CPE identifier for this
-package:
+cpe:2.3:a:linuxfoundation:free_range_routing is a valid CPE identifier
+for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akeepalived%3Akeepalived
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alinuxfoundation%3Afree_range_routing
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/keepalived/keepalived.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/frr/frr.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
-index 1a42d0c880..5d42cab741 100644
---- a/package/keepalived/keepalived.mk
-+++ b/package/keepalived/keepalived.mk
-@@ -9,6 +9,7 @@ KEEPALIVED_SITE = http://www.keepalived.org/software
- KEEPALIVED_DEPENDENCIES = host-pkgconf openssl
- KEEPALIVED_LICENSE = GPL-2.0+
- KEEPALIVED_LICENSE_FILES = COPYING
-+KEEPALIVED_CPE_ID_VENDOR = keepalived
- KEEPALIVED_CONF_OPTS = --disable-hardening
+diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+index 0907c0ad97..d1ca6e0b18 100644
+--- a/package/frr/frr.mk
++++ b/package/frr/frr.mk
+@@ -8,6 +8,8 @@ FRR_VERSION = 7.5.1
+ FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
+ FRR_LICENSE = GPL-2.0
+ FRR_LICENSE_FILES = COPYING
++FRR_CPE_ID_VENDOR = linuxfoundation
++FRR_CPE_ID_PRODUCT = free_range_routing
+ FRR_AUTORECONF = YES
  
- ifeq ($(BR2_PACKAGE_JSON_C),y)
+ FRR_DEPENDENCIES = host-frr readline json-c \
