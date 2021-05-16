@@ -1,33 +1,34 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 16 May 2021 00:05:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/taglib: add TAGLIB_CPE_ID_VENDOR
-Message-ID: <20210515220510.3670122-1-fontaine.fabrice@gmail.com>
+From: Ryota Kinukawa <pojiro.jp@gmail.com>
+Date: Sun, 16 May 2021 09:51:23 +0900
+Subject: [Buildroot] Suggestion to "support/scripts/apply-patches.sh: do
+ not apply patches with renames"
+In-Reply-To: <20210515094010.GA2506@scaer>
+References: <CAALxPJ0qprnhxWtHGg7oeY=Ws4+w3Wt-_hdM1WvbL6B42jQO5g@mail.gmail.com>
+ <87fsyopkcr.fsf@dell.be.48ers.dk> <20210515094010.GA2506@scaer>
+Message-ID: <CAALxPJ35mhfqgK0aVoz4k+6u0vpw6GBcUCj6TJ_xs62zJE7Eew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:taglib:taglib is a valid CPE identifier for this package:
+Yann-san
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ataglib%3Ataglib
+> So, lets do it that way;
+>  1. add a check in support/dependencies/dependencies.sh that patch >=
+>     2.7 (just after/before the check for --no-backup-if-mismatch)
+>  2. drop the test for renames in support/scripts/apply-patches.sh
+> Ryota, would you care to work on that and send the patches to the list,
+> please?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/taglib/taglib.mk | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index 738be35756..f31f1046a5 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
-@@ -9,6 +9,7 @@ TAGLIB_SITE = http://taglib.github.io/releases
- TAGLIB_INSTALL_STAGING = YES
- TAGLIB_LICENSE = LGPL-2.1 or MPL-1.1
- TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
-+TAGLIB_CPE_ID_VENDOR = taglib
- 
- # 0002-Don-t-assume-TDRC-is-an-instance-of-TextIdentificationFrame.patch
- TAGLIB_IGNORE_CVES += CVE-2017-12678
--- 
-2.30.2
+Thank you for the opportunity to contribute buildroot.
+This is my first time to contribute to buildroot,
+so it may take me a while to learn how to do it. But I'd like to, please
+let me try.
+
+Regards,
+Ryota Kinukawa
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210516/abefbef2/attachment.html>
