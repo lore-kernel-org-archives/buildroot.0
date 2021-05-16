@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F71FC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:48:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 982DBC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:48:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 30F7761037
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:48:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 30F7761037
+	by mail.kernel.org (Postfix) with ESMTPS id 6210160F9C
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:48:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6210160F9C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB880401FD;
-	Tue,  3 Aug 2021 21:48:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A913600BA;
+	Tue,  3 Aug 2021 21:48:35 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WJ3Hg2Zdmh0t; Tue,  3 Aug 2021 21:48:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9191860870;
+	Tue,  3 Aug 2021 21:48:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 09E3E1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4F63404D1
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UsYYuR5anvV1; Tue,  3 Aug 2021 21:48:21 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1B843400E7;
-	Tue,  3 Aug 2021 21:48:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5305F1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 57D4F835C9
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2mU9VjVuheLP for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:07 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0wio0-lxXcLJ for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C201D83A9F
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E74E403E9
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 1878787F55; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
+ id B41478B43C; Tue,  3 Aug 2021 21:09:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 4 Jul 2021 21:38:25 +0200
+Date: Sun, 16 May 2021 18:30:45 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9273b0df81e09e4ee02488cb65c34fc1e0ede4e9
-X-Git-Newrev: a1c7cff1a081765c082c196bd9e6c1e72ceee797
+X-Git-Oldrev: 5b074ef1f32c16fd3433f54a822527032b71b1a0
+X-Git-Newrev: c00a99c292ed3cceace2f7d21821ae7bb969159d
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211000.1878787F55@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Revert "core: enable 'NDEBUG'
- unless BR2_ENABLE_RUNTIME_DEBUG is set"
+Message-Id: <20210803210938.B41478B43C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/tinyxml2: add
+ TINYXML2_CPE_ID_VENDOR
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,38 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1c7cff1a081765c082c196bd9e6c1e72ceee797
+commit: https://git.buildroot.net/buildroot/commit/?id=c00a99c292ed3cceace2f7d21821ae7bb969159d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Enabling -DNEBUG, although correct on the paper, causes a lot of
-packages to fail to build because they explicitly require not building
-with NDEBUG; they use assert() to check actual runtime errors and expect
-it to not be elidded away (sometimes with side effects in the arguments
-passed to assert().
+cpe:2.3:a:tinyxml2_project:tinyxml2 is a valid CPE identifier for this
+package:
 
-This reverts commit 5a8c50fe05afacc3cbe8e7347e238da9f242fab0, as
-discussed on the list:
-    http://lists.busybox.net/pipermail/buildroot/2021-July/313646.html
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atinyxml2_project%3Atinyxml2
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/Makefile.in | 3 ---
- 1 file changed, 3 deletions(-)
+ package/tinyxml2/tinyxml2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 955e6a8e8c..86db62ba5b 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -148,9 +148,6 @@ endif
- ifeq ($(BR2_DEBUG_3),y)
- TARGET_DEBUGGING = -g3
- endif
--ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),)
--TARGET_DEBUGGING += -DNDEBUG
--endif
+diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
+index b06d849b21..d760d54a2f 100644
+--- a/package/tinyxml2/tinyxml2.mk
++++ b/package/tinyxml2/tinyxml2.mk
+@@ -9,6 +9,7 @@ TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
+ TINYXML2_LICENSE = Zlib
+ TINYXML2_LICENSE_FILES = LICENSE.txt
+ TINYXML2_INSTALL_STAGING = YES
++TINYXML2_CPE_ID_VENDOR = tinyxml2_project
  
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ TINYXML2_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
