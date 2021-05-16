@@ -1,92 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 May 2021 18:24:51 +0200
-Subject: [Buildroot] [PATCH v3 2/2] support/scripts/pkg-stats: add
- column reporting ignored CVEs
-In-Reply-To: <20210422194557.17499-2-matthew.weber@rockwellcollins.com>
-References: <20210422194557.17499-1-matthew.weber@rockwellcollins.com>
- <20210422194557.17499-2-matthew.weber@rockwellcollins.com>
-Message-ID: <20210516162451.GK2506@scaer>
+Date: Sun, 16 May 2021 18:28:01 +0200
+Subject: [Buildroot] [git commit] package/lvm2: add LVM2_CPE_ID_VENDOR
+Message-ID: <20210516161235.918CD86BDF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matt, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d70da0be78779699a296e21532665ee149a2a3b8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-22 14:45 -0500, Matt Weber spake thusly:
-> When doing analysis it is helpful to be able to view what CVE have
-> been patched / diagnosed to not apply to Buildroot. This exposes
-> that list to the reporting and prevents a step where you have to
-> dig into the .mk's of a pkg to check for sure what has been
-> ignored.
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+cpe:2.3:a:redhat:lvm2 is a valid CPE identifier for this package:
 
-Applied to master, thanks.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aredhat%3Alvm2
 
-I just did a small change: only set background if there are ignored
-CVEs.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/lvm2/lvm2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> v3 - New
-> ---
->  support/scripts/pkg-stats | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index 5b7fd1e0aa..0f90c16116 100755
-> --- a/support/scripts/pkg-stats
-> +++ b/support/scripts/pkg-stats
-> @@ -735,6 +735,10 @@ td.cve-unknown {
->   background: #ffd870;
->  }
->  
-> +td.cve_ignored {
-> + background: #ccc;
-> +}
-> +
->  </style>
->  <title>Statistics of Buildroot packages</title>
->  </head>
-> @@ -909,6 +913,14 @@ def dump_html_pkg(f, pkg):
->          f.write("    N/A\n")
->      f.write("  </td>\n")
->  
-> +    # CVEs Ignored
-> +    td_class = ["centered"]
-> +    td_class.append("cve_ignored")
-> +    f.write("  <td class=\"%s\">\n" % " ".join(td_class))
-> +    for ignored_cve in pkg.ignored_cves:
-> +        f.write("    <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (ignored_cve, ignored_cve))
-> +    f.write("  </td>\n")
-> +
->      # CPE ID
->      td_class = ["left"]
->      if pkg.is_status_ok("cpe"):
-> @@ -948,6 +960,7 @@ def dump_html_all_pkgs(f, packages):
->  <td class=\"centered\">Warnings</td>
->  <td class=\"centered\">Upstream URL</td>
->  <td class=\"centered\">CVEs</td>
-> +<td class=\"centered\">CVEs Ignored</td>
->  <td class=\"centered\">CPE ID</td>
->  </tr>
->  """)
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index dc4e938697..1194044537 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -10,6 +10,7 @@ LVM2_SITE = http://sources.redhat.com/pub/lvm2
+ LVM2_INSTALL_STAGING = YES
+ LVM2_LICENSE = GPL-2.0, LGPL-2.1
+ LVM2_LICENSE_FILES = COPYING COPYING.LIB
++LVM2_CPE_ID_PRODUCT = redhat
+ 
+ # Make sure that binaries and libraries are installed with write
+ # permissions for the owner. We disable NLS because it's broken, and
