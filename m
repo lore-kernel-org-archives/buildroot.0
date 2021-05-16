@@ -1,34 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 16 May 2021 10:20:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tclap: add TCLAP_CPE_ID_VENDOR
-Message-ID: <20210516082022.3754681-1-fontaine.fabrice@gmail.com>
+Date: Sun, 16 May 2021 10:32:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tini: add TINI_CPE_ID_VENDOR
+Message-ID: <20210516083257.3759144-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:tclap_project:tclap is a valid CPE identifier for this
-package:
+cpe:2.3:a:tini_project:tini is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atclap_project%3Atclap
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atini_project%3Atini
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/tclap/tclap.mk | 1 +
+ package/tini/tini.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/tclap/tclap.mk b/package/tclap/tclap.mk
-index 63dea67ac4..e1856420f3 100644
---- a/package/tclap/tclap.mk
-+++ b/package/tclap/tclap.mk
-@@ -9,6 +9,7 @@ TCLAP_SITE = http://downloads.sourceforge.net/project/tclap
- TCLAP_LICENSE = MIT
- TCLAP_LICENSE_FILES = COPYING
- TCLAP_INSTALL_STAGING = YES
-+TCLAP_CPE_ID_VENDOR = tclap_project
+diff --git a/package/tini/tini.mk b/package/tini/tini.mk
+index af4a3bcb5e..9da54f8a25 100644
+--- a/package/tini/tini.mk
++++ b/package/tini/tini.mk
+@@ -8,6 +8,7 @@ TINI_VERSION = 0.19.0
+ TINI_SITE = $(call github,krallin,tini,v$(TINI_VERSION))
+ TINI_LICENSE = MIT
+ TINI_LICENSE_FILES = LICENSE
++TINI_CPE_ID_VENDOR = tini_project
  
- # This package is a pure C++ template library, only made of headers.
- TCLAP_INSTALL_TARGET = NO
+ TINI_CFLAGS = $(TARGET_CFLAGS) \
+ 	-static \
 -- 
 2.30.2
