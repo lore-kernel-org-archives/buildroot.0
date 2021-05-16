@@ -1,56 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 May 2021 13:47:45 +0200
-Subject: [Buildroot] [git commit] package/jquery-validation: security bump
- to version 1.19.3
-Message-ID: <20210516111917.8B138866AC@busybox.osuosl.org>
+Date: Sun, 16 May 2021 13:47:44 +0200
+Subject: [Buildroot] [git commit] package/jquery-validation: add CPE
+ variables
+Message-ID: <20210516111917.7D86F86D84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae79f0f4033e2c8c250aacc888f5f44a26aa4c86
+commit: https://git.buildroot.net/buildroot/commit/?id=a5ff2a28285e8d003466d5f00be058130a02bbf2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2021-21252: The jQuery Validation Plugin provides drop-in
-validation for your existing forms. It is published as an npm package
-"jquery-validation". jquery-validation before version 1.19.3 contains
-one or more regular expressions that are vulnerable to ReDoS (Regular
-Expression Denial of Service).
+cpe:2.3:a:jqueryvalidation:jquery_validation is a valid CPE identifier
+for this package:
 
-Update hash of README.md due to changes not related to license
-
-https://github.com/jquery-validation/jquery-validation/releases/tag/1.19.3
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ajqueryvalidation%3Ajquery_validation
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/jquery-validation/jquery-validation.hash | 4 ++--
- package/jquery-validation/jquery-validation.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/jquery-validation/jquery-validation.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/jquery-validation/jquery-validation.hash b/package/jquery-validation/jquery-validation.hash
-index af451a6c1a..4dbe07e218 100644
---- a/package/jquery-validation/jquery-validation.hash
-+++ b/package/jquery-validation/jquery-validation.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  14efe6f1784ef6e97116b15c77b04b7e8f47ec07b1479bcd6fa0b081faa19440  jquery-validation-1.14.0.zip
--sha256  c2f9aa180de990ff16ca7e756c9af52ecc1b3536e3fb32649d7b2c510bccf9d0  README.md
-+sha256  01ad2ef0a7f9cd413aeb51081651293916da47d20e5c0a59ec62587e58b03564  jquery-validation-1.19.3.zip
-+sha256  3e5a99460077c16bf75f6821a30cdac9baa339119ebf63b2a6c49f4f50421ca4  README.md
 diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
-index 43e57a9fc9..920ed1cece 100644
+index a8c2897983..43e57a9fc9 100644
 --- a/package/jquery-validation/jquery-validation.mk
 +++ b/package/jquery-validation/jquery-validation.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--JQUERY_VALIDATION_VERSION = 1.14.0
--JQUERY_VALIDATION_SITE = http://jqueryvalidation.org/files
-+JQUERY_VALIDATION_VERSION = 1.19.3
-+JQUERY_VALIDATION_SITE = https://github.com/jquery-validation/jquery-validation/releases/download/$(JQUERY_VALIDATION_VERSION)
+@@ -9,6 +9,8 @@ JQUERY_VALIDATION_SITE = http://jqueryvalidation.org/files
  JQUERY_VALIDATION_SOURCE = jquery-validation-$(JQUERY_VALIDATION_VERSION).zip
  JQUERY_VALIDATION_LICENSE = MIT
  JQUERY_VALIDATION_LICENSE_FILES = README.md
++JQUERY_VALIDATION_CPE_ID_VENDOR = jqueryvalidation
++JQUERY_VALIDATION_CPE_ID_PRODUCT = jquery_validation
+ 
+ define JQUERY_VALIDATION_EXTRACT_CMDS
+ 	$(UNZIP) -d $(@D) $(JQUERY_VALIDATION_DL_DIR)/$(JQUERY_VALIDATION_SOURCE)
