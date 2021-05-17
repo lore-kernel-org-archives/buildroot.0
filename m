@@ -1,79 +1,39 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 17 May 2021 12:39:59 +0200
-Subject: [Buildroot] [PATCH] package/libubootenv: bump to version 0.3.2
-Message-ID: <20210517103959.1924729-1-francois.perrad@gadz.org>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Mon, 17 May 2021 13:58:46 +0300
+Subject: [Buildroot] BUG: Buildroot build environment is messing up with
+ host Python scripts
+Message-ID: <YKJMZtZU0kyfknpZ@smile.fi.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- ...eLists.txt-do-not-force-the-build-of-a-share.patch | 11 ++++++-----
- package/libubootenv/libubootenv.hash                  |  2 +-
- package/libubootenv/libubootenv.mk                    |  4 ++--
- 3 files changed, 9 insertions(+), 8 deletions(-)
+Hi!
 
-diff --git a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-index 2a234af78..9040e1267 100644
---- a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-+++ b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-@@ -26,10 +26,10 @@ Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-  1 file changed, 2 insertions(+), 4 deletions(-)
- 
- diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index a04dd11..3a2115d 100644
-+index 4b71bc5..0b515f4 100644
- --- a/src/CMakeLists.txt
- +++ b/src/CMakeLists.txt
--@@ -12,17 +12,15 @@ SET(include_HEADERS
-+@@ -12,18 +12,16 @@ SET(include_HEADERS
-  
-  include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
-  
-@@ -41,8 +41,9 @@ index a04dd11..3a2115d 100644
- -SET_TARGET_PROPERTIES(ubootenv_static PROPERTIES OUTPUT_NAME ubootenv)
-  add_executable(fw_printenv fw_printenv.c)
-  add_executable(fw_setenv fw_setenv.c)
-- target_link_libraries(fw_printenv ubootenv z)
-- target_link_libraries(fw_setenv ubootenv z)
-+ target_link_libraries(ubootenv z)
-+ target_link_libraries(fw_printenv ubootenv)
-+ target_link_libraries(fw_setenv ubootenv)
-  
- -install (TARGETS ubootenv ubootenv_static DESTINATION ${CMAKE_INSTALL_LIBDIR})
- +install (TARGETS ubootenv DESTINATION ${CMAKE_INSTALL_LIBDIR})
-@@ -50,5 +51,5 @@ index a04dd11..3a2115d 100644
-  install (TARGETS fw_printenv DESTINATION ${CMAKE_INSTALL_BINDIR})
-  install (TARGETS fw_setenv DESTINATION ${CMAKE_INSTALL_BINDIR})
- -- 
--2.25.1
-+2.30.2
- 
-diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
-index 0b5320b36..d6de61461 100644
---- a/package/libubootenv/libubootenv.hash
-+++ b/package/libubootenv/libubootenv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e25adf81dd2d4a083cb2cf032843a1ee2bb1fab54aa7a0202bd2295186bfe1b7  libubootenv-e663439e3d39a4cdbddb7e818245a99c485fa965.tar.gz
-+sha256  662ef1efe058e2d5a07498f7b63aff7b2a521c0f6f199c499fb3ae84b54121bd  libubootenv-0.3.2.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
-diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
-index 7a98f5324..295226b9a 100644
---- a/package/libubootenv/libubootenv.mk
-+++ b/package/libubootenv/libubootenv.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBUBOOTENV_VERSION = e663439e3d39a4cdbddb7e818245a99c485fa965
--LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
-+LIBUBOOTENV_VERSION = 0.3.2
-+LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
- LIBUBOOTENV_LICENSE = LGPL-2.1
- LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
- LIBUBOOTENV_INSTALL_STAGING = YES
+I have a very long time ago established a script that makes adaptive proxy for
+Git and SSH. This script is written in Python and has the following shebang:
+
+	#!/usr/bin/env python3
+
+When Buildroot tries to download sources from a Git repository, the above
+mentioned script is being called to determine if proxy is needed and what its
+configuration. Unfortunately it seems that Buildroot build environment somehow
+messed up with host (!) one and necessary modules for that script to work can't
+be found. Note, the same script is working nicely with host tools (Git, SSH),
+hence there is no issues on the host side.
+
+Changing shebang to be
+
+	#!/usr/bin/python3
+
+works around the problem, but the root cause is somewhere in the Buildroot.
+We must not require to change everything user have on the host (!) side to
+build the Buildroot. It's kinds show stopper to me. Any suggestion how to fix
+this  quite annoying bug?
+
+Buildroot source code tag: 2021.02.1
+
 -- 
-2.30.2
+With Best Regards,
+Andy Shevchenko
