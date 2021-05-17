@@ -1,48 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 May 2021 17:29:16 +0200
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: add files related
- to EDK2 for Dick Olsson
-Message-ID: <20210517153259.86E56861F4@busybox.osuosl.org>
+Date: Mon, 17 May 2021 17:26:37 +0200
+Subject: [Buildroot] [git commit branch/next] support/testing: new boot test
+ for EDK2
+Message-ID: <20210517153259.7BF8087A49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=823c173639971b491440b9ec7cf93e3c166e43da
+commit: https://git.buildroot.net/buildroot/commit/?id=6131efc62c4543e9a998305cc62f4ef3b200ad1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Boot a QEMU sbsa-ref machine with ATF, EDK2, GRUB2 and a minimal
+kernel. This is a simple but effective test of a compliant setup.
+
 Signed-off-by: Dick Olsson <hi@senzilla.io>
-[yann.morin.1998 at free.fr: drop files from patches not applied]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ support/testing/tests/boot/test_edk2.py | 45 +++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b688c8a8c1..2d5c692062 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -675,7 +675,14 @@ N:	Derrick Lyndon Pallas <derrick@meter.com>
- F:	package/ipcalc/
- 
- N:	Dick Olsson <hi@senzilla.io>
-+F:	board/aarch64-efi/
-+F:	board/pc/
-+F:	board/qemu/aarch64-sbsa/
-+F:	boot/arm-trusted-firmware/
-+F:	boot/edk2/
-+F:	configs/qemu_aarch64_sbsa_defconfig
- F:	package/bearssl/
-+F:	package/edk2-platforms/
- F:	package/execline/
- F:	package/mdevd/
- F:	package/s6-dns/
-@@ -686,6 +693,7 @@ F:	package/s6-portable-utils/
- F:	package/s6-rc/
- F:	package/s6/
- F:	package/skalibs/
-+F:	support/testing/tests/boot/test_edk2.py
- 
- N:	Dimitrios Siganos <dimitris@siganos.org>
- F:	package/wireless-regdb/
+diff --git a/support/testing/tests/boot/test_edk2.py b/support/testing/tests/boot/test_edk2.py
+new file mode 100644
+index 0000000000..c1be8fad95
+--- /dev/null
++++ b/support/testing/tests/boot/test_edk2.py
+@@ -0,0 +1,45 @@
++import os
++
++import infra.basetest
++
++
++class TestEdk2(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_4=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/aarch64-sbsa/assemble-flash-images support/scripts/genimage.sh"
++        BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/qemu/aarch64-sbsa/genimage.cfg"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.34"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-sbsa/linux.config"
++        BR2_TARGET_EDK2=y
++        BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA=y
++        BR2_TARGET_GRUB2=y
++        BR2_TARGET_GRUB2_ARM64_EFI=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu_sbsa"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++        BR2_PACKAGE_HOST_GENIMAGE=y
++        BR2_PACKAGE_HOST_DOSFSTOOLS=y
++        BR2_PACKAGE_HOST_MTOOLS=y
++        """
++
++    def test_run(self):
++        hda = os.path.join(self.builddir, "images", "disk.img")
++        flash0 = os.path.join(self.builddir, "images", "SBSA_FLASH0.fd")
++        flash1 = os.path.join(self.builddir, "images", "SBSA_FLASH1.fd")
++        self.emulator.boot(arch="aarch64",
++                           options=["-M", "sbsa-ref",
++                                    "-cpu", "cortex-a57",
++                                    "-m", "512M",
++                                    "-pflash", flash0,
++                                    "-pflash", flash1,
++                                    "-hda", hda])
++        self.emulator.login()
