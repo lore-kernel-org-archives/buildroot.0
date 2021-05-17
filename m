@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	TVD_SPACE_RATIO autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36373C432BE
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:04:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9541C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:04:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0732860ED6
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:04:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0732860ED6
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 8E24360FA0
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:04:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8E24360FA0
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D63B5401E7;
-	Tue,  3 Aug 2021 22:04:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54E2B4045E;
+	Tue,  3 Aug 2021 22:04:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JAstj72O3Y0m; Tue,  3 Aug 2021 22:04:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ksEzNXJXmJW0; Tue,  3 Aug 2021 22:04:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 328A4400C6;
-	Tue,  3 Aug 2021 22:04:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B1C6B1BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D3B540357;
+	Tue,  3 Aug 2021 22:04:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D5311BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04CF640571
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 430A5404F2
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t4ao7UOP-riH for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eq8hrhQ2h4Fr for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A45040569
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AC82140458
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A4A8286A84; Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 0318A8399D; Tue,  3 Aug 2021 21:09:40 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 17 Jul 2021 10:07:55 +0200
+Date: Mon, 17 May 2021 22:00:03 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2c6b0359c3b819fadb4437b2d780e95c32fdab21
-X-Git-Newrev: aade2fd293fc8a13bc5665fa70a4002ddac9aae6
+X-Git-Oldrev: dfb045af5b4fc4c55a5674945b90d670c5fee68c
+X-Git-Newrev: 2f6d7b6333367582eef14073af0a490bc87d79f3
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211005.A4A8286A84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libnice: add
- gobject-introspection optional dependency
+Message-Id: <20210803210940.0318A8399D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] lmbench: memsize: increase
+ delay for slow FPGAs
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,40 +70,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aade2fd293fc8a13bc5665fa70a4002ddac9aae6
+commit: https://git.buildroot.net/buildroot/commit/?id=2f6d7b6333367582eef14073af0a490bc87d79f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-gobject-introspection is an optional dependency which is enabled by
-default since version 0.1.8 and
-https://github.com/libnice/libnice/commit/0388646bdba5f91bb6bb509f5a1c6e9e3f068555
+otherwise memsize bails out and erroneously reports 1 MB
 
-Fixes:
- - http://autobuild.buildroot.org/results/1cba7aa233e19472a69ffc2d8f7324d363a22deb
+NOK
+----
+| />/lmbench/bin/arc/memsize 16
+|
+| 1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+OK
+----
+| />/lmbench/bin/arc/memsize 16
+| 2MB OK3MB OK4MB OK5MB OK6MB OK7MB OK8MB OK9MB OK10MB OK11MB OK12MB OK13MB OK14MB OK15MB OK16MB OK
+| 16
+
+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libnice/libnice.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ ...0-usec-to-prevent-memsize-from-timingout-.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
-index 8cbf003529..8292250938 100644
---- a/package/libnice/libnice.mk
-+++ b/package/libnice/libnice.mk
-@@ -22,6 +22,13 @@ LIBNICE_CONF_OPTS += \
- LIBNICE_DEPENDENCIES += openssl
- endif
- 
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+LIBNICE_CONF_OPTS += --enable-introspection
-+LIBNICE_DEPENDENCIES += gobject-introspection
-+else
-+LIBNICE_CONF_OPTS += --disable-introspection
-+endif
+diff --git a/package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch b/package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch
+new file mode 100644
+index 0000000000..6c3e7370e1
+--- /dev/null
++++ b/package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch
+@@ -0,0 +1,28 @@
++From d85b61666aa2728f68b69d02bfb162c432df709f Mon Sep 17 00:00:00 2001
++From: vgupta <vgupta@4eed8e25-bc12-0410-818a-f70ee6866280>
++Date: Sat, 3 Mar 2012 10:02:24 +0000
++Subject: [PATCH] TOO_LONG 100 usec to prevent memsize from timingout @80Mhz
 +
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
- LIBNICE_CONF_OPTS += --with-gstreamer
- LIBNICE_DEPENDENCIES += gst1-plugins-base
++git-svn-id: http://sjvm-subversion02.internal.synopsys.com/svn/OSS/ARC_Linux/tests/lmbench-3.0-a9@157318 4eed8e25-bc12-0410-818a-f70ee6866280
++
++Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
++---
++ src/memsize.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/memsize.c b/src/memsize.c
++index eb25a0924872..b333cf8cbd32 100644
++--- a/src/memsize.c
+++++ b/src/memsize.c
++@@ -15,7 +15,7 @@ char	*id = "$Id$\n";
++ #define	CHK(x)	if ((x) == -1) { perror("x"); exit(1); }
++ 
++ #ifndef	TOO_LONG
++-#define	TOO_LONG	10	/* usecs */
+++#define	TOO_LONG	100	/* usecs */
++ #endif
++ 
++ int	alarm_triggered = 0;
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
