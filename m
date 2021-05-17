@@ -1,52 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 17 May 2021 18:29:06 +0000
-Subject: [Buildroot] [Bug 13806] Building host-localedef fails on fedora
- 34/gcc 11
-In-Reply-To: <bug-13806-163@https.bugs.busybox.net/>
-References: <bug-13806-163@https.bugs.busybox.net/>
-Message-ID: <bug-13806-163-zIw5yHUTyE@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 17 May 2021 20:33:55 +0200
+Subject: [Buildroot] [PATCH] package/intel-microcode: security bump to
+ version 20210216
+In-Reply-To: <20210517175125.GC2506@scaer> (Yann E. MORIN's message of "Mon,
+ 17 May 2021 19:51:25 +0200")
+References: <20210517173830.25189-1-peter@korsgaard.com>
+ <20210517175125.GC2506@scaer>
+Message-ID: <87eee5nrak.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13806
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
---- Comment #8 from Peter Seiderer <ps.report@gmx.net> ---
-(In reply to Dr I J Ormshaw from comment #7)
+Hi,
 
-> Applying 0003-v1-package-localedef-fix-host-gcc-11.x-compile.patch using patch: 
-> patching file package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0003-Fix-GCC-11-Warray-parameter-warning-for-__sigsetjmp-.patch
-> patching file package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0004-Avoid-Wstringop-overflow-warning-in-pthread_cleanup_.patch
+ >> +++ b/package/intel-microcode/intel-microcode.hash
+ >> @@ -1,3 +1,3 @@
+ >> # Locally computed
+ >> -sha256  e42a264b7b86e80d013d6d00062467352c1f37e0aaea10fe5b51e4d8687921ab  intel-microcode-20201118.tar.gz
+ >> -sha256  d9e989e1a7747f3ce93cb749aceca67a430d36c9bebc6e3205e0b3af3ca6304b  license
+ >> +sha256  b855c81f78705f35341248a0603aa1a6e199ca7f59cd425e061b579329aa9eaa  intel-microcode-20210216.tar.gz
+ >> +sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
 
-This looks wrong...., your patch is patching the buildroot sources and not the
-host-localedef ones...., the output should look like the following:
+ > We like to have a quick explanation about why the hash of a license file
+ > changes. In this case, I've explained that's because the year changed.
 
-[...]
-Applying 0003-Fix-GCC-11-Warray-parameter-warning-for-__sigsetjmp-.patch using
-patch:
-patching file include/bits/types/struct___jmp_buf_tag.h
-patching file setjmp/Makefile
-patching file setjmp/bits/types/struct___jmp_buf_tag.h
-patching file setjmp/setjmp.h
-patching file sysdeps/nptl/pthread.h
+Ups, indeed - Forgot to add that.
 
-Applying 0004-Avoid-Wstringop-overflow-warning-in-pthread_cleanup_.patch using
-patch:
-patching file misc/sys/cdefs.h
-patching file sysdeps/nptl/pthread.h
-[...]
+ > Applied to master, thanks.
 
-Howto apply a patch from patchwork:
-
-    $ wget https://buildroot.org/downloads/buildroot-2021.02.2.tar.gz
-    $ tar -xvzf buildroot-2021.02.2.tar.gz
-    $ curl -O -J
-https://patchwork.ozlabs.org/project/buildroot/patch/20210514175429.20552-1-ps.report at gmx.net/mbox/
-    $ cd buildroot-2021.02.2
-    $ patch -p 1 < ../v1-package-localedef-fix-host-gcc-11.x-compile.patch
+Thanks!
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
