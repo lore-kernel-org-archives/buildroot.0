@@ -1,27 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 May 2021 21:23:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/live555: security bump to
- version 2021.05.03
-In-Reply-To: <20210514200826.2237923-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 14 May 2021 22:08:26 +0200")
-References: <20210514200826.2237923-1-fontaine.fabrice@gmail.com>
-Message-ID: <87mtstmafc.fsf@dell.be.48ers.dk>
+Date: Mon, 17 May 2021 21:24:48 +0200
+Subject: [Buildroot] [PATCH 1/3] package/docker-engine: fix port
+ forwarding for hosts without IPv6
+In-Reply-To: <20210513210353.11335-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 13 May 2021 23:03:51 +0200")
+References: <20210513210353.11335-1-peter@korsgaard.com>
+Message-ID: <87im3hmadb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fix CVE-2021-28899: Vulnerability in the
- > AC3AudioFileServerMediaSubsession, ADTSAudioFileServerMediaSubsession,
- > and AMRAudioFileServerMediaSubsessionLive OnDemandServerMediaSubsession
- > subclasses in Networks LIVE555 Streaming Media before 2021.3.16.
+ > docker-engine 20.10.6 broke container port forwarding for hosts without IPv6
+ > support:
 
- > http://live555.com/liveMedia/public/changelog.txt
+ > docker: Error response from daemon: driver failed programming external
+ > connectivity on endpoint naughty_moore
+ > (038e9ed4b5ea77e1c52462d6d04ad001fbad9beb185a6511aadc217c8a271608): Error
+ > starting userland proxy: listen tcp6 [::]:80: socket: address family not
+ > supported by protocol.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Add a libnetwork patch from an upstream pull request to fix this, after
+ > adjusting the patch to apply to docker-engine (which has libnetwork vendored
+ > under vendor/github.com/docker/libnetwork):
+
+ > - https://github.com/moby/libnetwork/pull/2635,
+ > - https://github.com/moby/moby/pull/42322
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2021.02.x, thanks.
 
