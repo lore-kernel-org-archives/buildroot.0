@@ -1,39 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 May 2021 23:23:19 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/x11r7/xlib_libXxf86vm: add CPE variables
-Message-ID: <20210517210058.53FF6875F2@busybox.osuosl.org>
+Date: Mon, 17 May 2021 23:27:52 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python-tqdm: add
+ CPE variables
+Message-ID: <20210517210058.C0CFD87C0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75293e8d6e4c1785b1bb7c65fe73ccff305775b2
+commit: https://git.buildroot.net/buildroot/commit/?id=73fb52956367c064781e6febf4737b6b31276469
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:x:libxxf86vm is a valid CPE identifier for this package:
+cpe:2.3:a:tqdm_project:tqdm is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax%3Alibxxf86vm
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atqdm_project%3Atqdm
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1ec75d777ec0018a1680047db0e32fef7ce5bce3)
+(cherry picked from commit ca6fab6ef9c3f878c2a54bd0babbc5b2aaa522c4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk | 2 ++
+ package/python-tqdm/python-tqdm.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
-index 2106451c74..8871bd507e 100644
---- a/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
-+++ b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
-@@ -9,6 +9,8 @@ XLIB_LIBXXF86VM_SOURCE = libXxf86vm-$(XLIB_LIBXXF86VM_VERSION).tar.bz2
- XLIB_LIBXXF86VM_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXXF86VM_LICENSE = MIT
- XLIB_LIBXXF86VM_LICENSE_FILES = COPYING
-+XLIB_LIBXXF86VM_CPE_ID_VENDOR = x
-+XLIB_LIBXXF86VM_CPE_ID_PRODUCT = libxxf86vm
- XLIB_LIBXXF86VM_INSTALL_STAGING = YES
- XLIB_LIBXXF86VM_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
- XLIB_LIBXXF86VM_CONF_OPTS = --disable-malloc0returnsnull
+diff --git a/package/python-tqdm/python-tqdm.mk b/package/python-tqdm/python-tqdm.mk
+index 4ff4696e65..5ceddde14c 100644
+--- a/package/python-tqdm/python-tqdm.mk
++++ b/package/python-tqdm/python-tqdm.mk
+@@ -10,5 +10,7 @@ PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/4c/45/830c5c4bfaba60e
+ PYTHON_TQDM_SETUP_TYPE = setuptools
+ PYTHON_TQDM_LICENSE = MPL-2.0, MIT
+ PYTHON_TQDM_LICENSE_FILES = LICENCE
++PYTHON_TQDM_CPE_ID_VENDOR = tqdm_project
++PYTHON_TQDM_CPE_ID_PRODUCT = tqdm
+ 
+ $(eval $(python-package))
