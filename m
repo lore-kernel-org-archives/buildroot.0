@@ -1,38 +1,51 @@
-From: Weber, Matthew L                            Collins <Matthew.Weber@collins.com>
-Date: Mon, 17 May 2021 15:43:46 +0000
-Subject: [Buildroot] [PATCH] Makefile: remove cpe-updates on clean
-In-Reply-To: <20210516124237.489609-1-yann.morin.1998@free.fr>
-References: <20210516124237.489609-1-yann.morin.1998@free.fr>
-Message-ID: <DM2P110MB0105B4F8077B066C87FF0F7AF22D9@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 17 May 2021 17:56:27 +0200
+Subject: [Buildroot] [PATCHv2 2/3] package/poke: add optional json-c
+ dependency
+In-Reply-To: <20210517155628.267749-1-romain.naour@gmail.com>
+References: <20210517155628.267749-1-romain.naour@gmail.com>
+Message-ID: <20210517155628.267749-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+From [1]:
+"The poke machine-interface uses a protocol to communicate with
+clients, which is based on JSON.  poke uses the json-c library to
+parse and build JSON strings.
+If this library is not found, poke will build without machine-interface
+support."
 
-> -----Original Message-----
-> From: Yann E. MORIN <yann.morin.1998@gmail.com> On Behalf Of Yann E.
-> MORIN
-> Sent: Sunday, May 16, 2021 7:43 AM
-> To: buildroot at buildroot.org
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>; Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com>; Weber, Matthew L Collins
-> <Matthew.Weber@collins.com>
-> Subject: [PATCH] Makefile: remove cpe-updates on clean
-> 
-> Commit fd7312940aef (Makefile: add new missing-cpe target) added the rule
-> to generate a set of files to update the NVD.
-> 
-> For an in-tree build, 'make clean' remove the output directory, so those files
-> are removed. But for an out-of-tree build, the output directory is not
-> removed, so those files still linger around after a clean.
-> 
-> Explicitly remove them on clean, to cater for both cases.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+[1] https://git.savannah.nongnu.org/cgit/poke.git/tree/DEPENDENCIES?h=releases/poke-1.2#n55
 
-Reviewed-by: Matthew Weber <matthew.weber@collins.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Jose E. Marchesi <jemarch@gnu.org>
+Cc: Luca Saiu <positron@gnu.org>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/poke/poke.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/poke/poke.mk b/package/poke/poke.mk
+index c0217b6fad..7c3c81d93c 100644
+--- a/package/poke/poke.mk
++++ b/package/poke/poke.mk
+@@ -19,7 +19,13 @@ POKE_DEPENDENCIES = host-flex host-bison host-pkgconf bdwgc readline
+ POKE_CONF_OPTS = \
+ 	--disable-gui \
+ 	--disable-libnbd \
+-	--disable-mi \
+ 	--with-libreadline-prefix=$(STAGING_DIR)
+ 
++ifeq ($(BR2_PACKAGE_JSON_C),y)
++POKE_DEPENDENCIES += json-c
++POKE_CONF_OPTS += --enable-mi
++else
++POKE_CONF_OPTS += --disable-mi
++endif
++
+ $(eval $(autotools-package))
+-- 
+2.31.1
