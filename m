@@ -1,54 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 May 2021 18:37:08 +0200
-Subject: [Buildroot] [git commit] package/redis: security bump to v6.2.3
-Message-ID: <20210517160832.539F181970@busybox.osuosl.org>
+Date: Mon, 17 May 2021 18:37:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/redis: security bump to v6.2.3
+In-Reply-To: <20210517130539.157605-1-titouanchristophe@gmail.com>
+References: <20210517130539.157605-1-titouanchristophe@gmail.com>
+Message-ID: <20210517163748.GA2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0ba7321f808d812268cb6b9127302cbdd6f62bf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Titouan, All,
 
-From the release notes:
-================================================================================
-Redis 6.2.3 Released Mon May 3 19:00:00 IST 2021
-================================================================================
+On 2021-05-17 15:05 +0200, Titouan Christophe spake thusly:
+> From the release notes:
+> ================================================================================
+> Redis 6.2.3 Released Mon May 3 19:00:00 IST 2021
+> ================================================================================
+> 
+> Upgrade urgency: SECURITY, Contains fixes to security issues that affect
+> authenticated client connections. LOW otherwise.
+> 
+> Read more on https://github.com/redis/redis/blob/6.2.3/00-RELEASENOTES
+> 
+> Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 
-Upgrade urgency: SECURITY, Contains fixes to security issues that affect
-authenticated client connections. LOW otherwise.
+Applied to master, thanks.
 
-Read more on https://github.com/redis/redis/blob/6.2.3/00-RELEASENOTES
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> ---
+>  package/redis/redis.hash | 2 +-
+>  package/redis/redis.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+> index a5d3c6b1da..06e6884d85 100644
+> --- a/package/redis/redis.hash
+> +++ b/package/redis/redis.hash
+> @@ -1,5 +1,5 @@
+>  # From https://github.com/redis/redis-hashes/blob/master/README
+> -sha256  7a260bb74860f1b88c3d5942bf8ba60ca59f121c6dce42d3017bed6add0b9535  redis-6.2.2.tar.gz
+> +sha256  98ed7d532b5e9671f5df0825bb71f0f37483a16546364049384c63db8764512b  redis-6.2.3.tar.gz
+>  
+>  # Locally calculated
+>  sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+> diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+> index 3bc3436039..cea2d3b237 100644
+> --- a/package/redis/redis.mk
+> +++ b/package/redis/redis.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -REDIS_VERSION = 6.2.2
+> +REDIS_VERSION = 6.2.3
+>  REDIS_SITE = http://download.redis.io/releases
+>  REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+>  REDIS_LICENSE_FILES = COPYING
+> -- 
+> 2.25.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index a5d3c6b1da..06e6884d85 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  7a260bb74860f1b88c3d5942bf8ba60ca59f121c6dce42d3017bed6add0b9535  redis-6.2.2.tar.gz
-+sha256  98ed7d532b5e9671f5df0825bb71f0f37483a16546364049384c63db8764512b  redis-6.2.3.tar.gz
- 
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 3bc3436039..cea2d3b237 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 6.2.2
-+REDIS_VERSION = 6.2.3
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
