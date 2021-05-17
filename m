@@ -1,38 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 May 2021 21:20:24 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libgeos: fix
- comment dependencies (binutils-bug-12464, binutils-bug-27597)
-Message-ID: <20210517185729.B672687A27@busybox.osuosl.org>
+Date: Mon, 17 May 2021 21:23:59 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] test_docker_compose.py:
+ Test the port publish feature
+Message-ID: <20210517185730.2A3D981124@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b3a2db21c47cdffd9d7956aa911714f23395c56
+commit: https://git.buildroot.net/buildroot/commit/?id=3adc69a086c540270a20ec822d89b9474b7572af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-The comment dependencies need to be the inverse of the package
-dependencies (fixes comment shown in menuconfig even if the package
-is available).
+Extend docker_test() to expose a random (8888) port to verify that doesn't
+fail, and extend the docker-compose test to run the busybox httpd in the
+background, expose that as port 80 and verify that /etc/resolv.conf could be
+fetched by wget.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 03a8d70f524270512e1435b6046b74f399b01798)
+(cherry picked from commit 4915b692c84711aa9b7b2d5ea436e4b53d7215bc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgeos/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ support/testing/conf/docker-compose.yml              | 3 +++
+ support/testing/tests/package/test_docker_compose.py | 8 +++++---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
-index ebe40bd1ff..86a1cddcf3 100644
---- a/package/libgeos/Config.in
-+++ b/package/libgeos/Config.in
-@@ -15,5 +15,5 @@ config BR2_PACKAGE_LIBGEOS
+diff --git a/support/testing/conf/docker-compose.yml b/support/testing/conf/docker-compose.yml
+index 49ff2677da..de33251dfd 100644
+--- a/support/testing/conf/docker-compose.yml
++++ b/support/testing/conf/docker-compose.yml
+@@ -2,3 +2,6 @@ version: '3'
+ services:
+   busybox:
+     image: "busybox:latest"
++    command: httpd -f -h /etc/
++    ports:
++      - "80:80"
+diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
+index 67ee795f21..364f75b5b0 100644
+--- a/support/testing/tests/package/test_docker_compose.py
++++ b/support/testing/tests/package/test_docker_compose.py
+@@ -37,13 +37,15 @@ class TestDockerCompose(infra.basetest.BRTest):
  
- comment "libgeos needs a toolchain w/ C++, wchar, not binutils bug 21464, 27597"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		   !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
--		   !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
-+		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
-+		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
+     def docker_test(self):
+         # will download container if not available, which may take some time
+-        _, exit_code = self.emulator.run('docker run --rm busybox:latest /bin/true', 120)
++        _, exit_code = self.emulator.run('docker run --rm -p 8888:8888 busybox:latest /bin/true', 120)
+         self.assertEqual(exit_code, 0)
+ 
+     def docker_compose_test(self):
+         # will download container if not available, which may take some time
+-        _, exit_code = self.emulator.run('docker-compose up', 120)
+-        self.assertEqual(exit_code, 0)
++        self.assertRunOk('docker-compose up -d', 120)
++        # container may take some time to start
++        self.assertRunOk('while ! docker inspect root_busybox_1 2>&1 >/dev/null; do sleep 1; done', 120)
++        self.assertRunOk('wget http://127.0.0.1/resolv.conf', 120)
+ 
+     def test_run(self):
+         kernel = os.path.join(self.builddir, "images", "bzImage")
