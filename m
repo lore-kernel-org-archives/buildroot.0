@@ -1,39 +1,69 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Mon, 17 May 2021 13:58:46 +0300
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 17 May 2021 13:52:42 +0200
 Subject: [Buildroot] BUG: Buildroot build environment is messing up with
  host Python scripts
-Message-ID: <YKJMZtZU0kyfknpZ@smile.fi.intel.com>
+In-Reply-To: <YKJMZtZU0kyfknpZ@smile.fi.intel.com>
+References: <YKJMZtZU0kyfknpZ@smile.fi.intel.com>
+Message-ID: <20210517115242.GT2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Andy, All,
 
-I have a very long time ago established a script that makes adaptive proxy for
-Git and SSH. This script is written in Python and has the following shebang:
+On 2021-05-17 13:58 +0300, Andy Shevchenko spake thusly:
+> I have a very long time ago established a script that makes adaptive proxy for
+> Git and SSH. This script is written in Python and has the following shebang:
+> 
+> 	#!/usr/bin/env python3
+> 
+> When Buildroot tries to download sources from a Git repository, the above
+> mentioned script is being called to determine if proxy is needed and what its
+> configuration. Unfortunately it seems that Buildroot build environment somehow
+> messed up with host (!) one and necessary modules for that script to work can't
+> be found. Note, the same script is working nicely with host tools (Git, SSH),
+> hence there is no issues on the host side.
+> 
+> Changing shebang to be
+> 
+> 	#!/usr/bin/python3
+> 
+> works around the problem, but the root cause is somewhere in the Buildroot.
+> We must not require to change everything user have on the host (!) side to
+> build the Buildroot. It's kinds show stopper to me. Any suggestion how to fix
+> this  quite annoying bug?
 
-	#!/usr/bin/env python3
+This is not really a bug per-se, and this behaviour has existed since at
+least July 2014, with commit 95a572282e (pkg-infra: move the git download
+helper to a script), since then the git download is done with the extra
+environment defined in EXTRA_ENV, and namely:
 
-When Buildroot tries to download sources from a Git repository, the above
-mentioned script is being called to determine if proxy is needed and what its
-configuration. Unfortunately it seems that Buildroot build environment somehow
-messed up with host (!) one and necessary modules for that script to work can't
-be found. Note, the same script is working nicely with host tools (Git, SSH),
-hence there is no issues on the host side.
+    EXTRA_ENV = PATH=$(BR_PATH) [....]
 
-Changing shebang to be
+and where:
 
-	#!/usr/bin/python3
+    BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
 
-works around the problem, but the root cause is somewhere in the Buildroot.
-We must not require to change everything user have on the host (!) side to
-build the Buildroot. It's kinds show stopper to me. Any suggestion how to fix
-this  quite annoying bug?
+So, this is not a new behaviour in 2021.02, but most probably you
+previously did not have host-python3 built as part of your
+configuraiton, and now it is. And then, it takes precendence over the
+system python3.
 
-Buildroot source code tag: 2021.02.1
+I don't see a easy way around, though...
+
+But without the actual error you are seeing, it is impossible to suggest
+further tracks of investigation: is the missing stuff a built-in module
+of python, or is it a external one?
+
+Regards,
+Yann E. MORIN.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
