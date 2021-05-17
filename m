@@ -1,15 +1,16 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 17 May 2021 23:18:56 +0200
-Subject: [Buildroot] [PATCH 1/2] Config.in.legacy: update iostat title
-Message-ID: <20210517211857.1130768-1-fontaine.fabrice@gmail.com>
+Date: Mon, 17 May 2021 23:18:57 +0200
+Subject: [Buildroot] [PATCH 2/2] Config.in.lgeacy: fix udisks lvm2 help
+In-Reply-To: <20210517211857.1130768-1-fontaine.fabrice@gmail.com>
+References: <20210517211857.1130768-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210517211857.1130768-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Specify that iostat 'package' has been removed to be consistent with
-other entries
+Remove spurious "was removed"
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
@@ -17,17 +18,17 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index bc7cb8e32a..7bd2eb1429 100644
+index 7bd2eb1429..a0c1a6898f 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -182,7 +182,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
- 	  The package was renamed to containerd accordingly.
- 
- config BR2_PACKAGE_IOSTAT
--	bool "iostat removed"
-+	bool "iostat package removed"
- 	select BR2_LEGACY
+@@ -152,7 +152,7 @@ config BR2_PACKAGE_UDISKS_LVM2
  	help
- 	  This package has been removed, use sysstat instead.
+ 	  The lvm2 support was removed because udisks < 2.7.0 still
+ 	  depends on lvm2 application library, which was removed
+-	  in was removed lvm2.
++	  in lvm2.
+ 
+ config BR2_PACKAGE_LVM2_APP_LIBRARY
+ 	bool "lvm2 application library removed"
 -- 
 2.30.2
