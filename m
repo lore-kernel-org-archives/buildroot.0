@@ -1,64 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 May 2021 21:25:21 +0200
-Subject: [Buildroot] [PATCH] package/prosody: security bump to version
- 0.11.9
-In-Reply-To: <20210514094309.18354-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 14 May 2021 11:43:09 +0200")
-References: <20210514094309.18354-1-peter@korsgaard.com>
-Message-ID: <875yzhmace.fsf@dell.be.48ers.dk>
+Date: Mon, 17 May 2021 21:26:07 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libxslt: fix build with latest libxml2
+In-Reply-To: <20210514202838.2260096-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 14 May 2021 22:28:38 +0200")
+References: <20210514202838.2260096-1-fontaine.fabrice@gmail.com>
+Message-ID: <87zgwtkvqo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes the following security issues:
- > - CVE-2021-32918: DoS via insufficient memory consumption controls
+ > Build is broken since bump of libxml2 to version 2.9.11 in commit
+ > a241dcec4188dbf30fbc8b65d7e6f2ece9da3d04 because libxslt calls the
+ > following command "${XML_CONFIG} --libs print" which will return an
+ > error code since
+ > https://github.com/GNOME/libxml2/commit/2a357ab99e6f5c9196384b11cd91dd993f93014c
 
- >   It was discovered that default settings leave Prosody susceptible to
- >   remote unauthenticated denial-of-service (DoS) attacks via memory
- >   exhaustion when running under Lua 5.2 or Lua 5.3.  Lua 5.2 is the default
- >   and recommended Lua version for Prosody 0.11.x series.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/47ceb8c24c9ead8a450b7fea3266f760d6b77b4f
 
- > - CVE-2021-32920: DoS via repeated TLS renegotiation causing excessive CPU
- >   consumption
-
- >   It was discovered that Prosody does not disable SSL/TLS renegotiation,
- >   even though this is not used in XMPP.  A malicious client may flood a
- >   connection with renegotiation requests to consume excessive CPU resources
- >   on the server.
-
- > - CVE-2021-32921: Use of timing-dependent string comparison with sensitive
- >   values
-
- >   It was discovered that Prosody does not use a constant-time algorithm for
- >   comparing certain secret strings when running under Lua 5.2 or later.
- >   This can potentially be used in a timing attack to reveal the contents of
- >   secret strings to an attacker.
-
- > - CVE-2021-32917: Use of mod_proxy65 is unrestricted in default
- >   configuration
-
- >   mod_proxy65 is a file transfer proxy provided with Prosody to facilitate
- >   the transfer of files and other data between XMPP clients.
-
- >   It was discovered that the proxy65 component of Prosody allows open access
- >   by default, even if neither of the users have an XMPP account on the local
- >   server, allowing unrestricted use of the server?s bandwidth.
-
- > - CVE-2021-32919: Undocumented dialback-without-dialback option insecure
-
- >   The undocumented option ?dialback_without_dialback? enabled an
- >   experimental feature for server-to-server authentication.  A flaw in this
- >   feature meant it did not correctly authenticate remote servers, allowing a
- >   remote server to impersonate another server when this option is enabled.
-
- > For more details, see the advisory:
- > https://prosody.im/security/advisory_20210512/
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Peter Seiderer):
+ >  - Use upstream patch instead of dropping --with-libxml-prefix
 
 Committed to 2021.02.x, thanks.
 
