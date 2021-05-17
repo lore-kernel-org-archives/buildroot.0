@@ -1,34 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 May 2021 21:26:07 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libxslt: fix build with latest libxml2
-In-Reply-To: <20210514202838.2260096-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 14 May 2021 22:28:38 +0200")
-References: <20210514202838.2260096-1-fontaine.fabrice@gmail.com>
-Message-ID: <87zgwtkvqo.fsf@dell.be.48ers.dk>
+Date: Mon, 17 May 2021 21:20:24 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libgeos: fix
+ comment dependencies (binutils-bug-12464, binutils-bug-27597)
+Message-ID: <20210517185729.B672687A27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0b3a2db21c47cdffd9d7956aa911714f23395c56
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Build is broken since bump of libxml2 to version 2.9.11 in commit
- > a241dcec4188dbf30fbc8b65d7e6f2ece9da3d04 because libxslt calls the
- > following command "${XML_CONFIG} --libs print" which will return an
- > error code since
- > https://github.com/GNOME/libxml2/commit/2a357ab99e6f5c9196384b11cd91dd993f93014c
+The comment dependencies need to be the inverse of the package
+dependencies (fixes comment shown in menuconfig even if the package
+is available).
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/47ceb8c24c9ead8a450b7fea3266f760d6b77b4f
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 03a8d70f524270512e1435b6046b74f399b01798)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgeos/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Peter Seiderer):
- >  - Use upstream patch instead of dropping --with-libxml-prefix
-
-Committed to 2021.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
+index ebe40bd1ff..86a1cddcf3 100644
+--- a/package/libgeos/Config.in
++++ b/package/libgeos/Config.in
+@@ -15,5 +15,5 @@ config BR2_PACKAGE_LIBGEOS
+ 
+ comment "libgeos needs a toolchain w/ C++, wchar, not binutils bug 21464, 27597"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		   !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
+-		   !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
++		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
++		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
