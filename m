@@ -1,55 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 17 May 2021 08:53:05 +0000
-Subject: [Buildroot] [Bug 13806] Building host-localedef fails on fedora
- 34/gcc 11
-In-Reply-To: <bug-13806-163@https.bugs.busybox.net/>
-References: <bug-13806-163@https.bugs.busybox.net/>
-Message-ID: <bug-13806-163-yGH2airzcO@https.bugs.busybox.net/>
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Mon, 17 May 2021 11:04:49 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: add espressobin ultra dts and bump
+ kernel to 5.11.21
+Message-ID: <20210517090450.2269951-1-troglobit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13806
+This patch adds support for the Globalscale EspressoBin Ultra, which is
+an evolution of the EspressoBin family.  Same SoC and switchcore, more
+Ethernet ports, including one PoE PD port.
 
---- Comment #7 from Dr I J Ormshaw <ian_ormshaw@waters.com> ---
-Looks like I got confused by the external links.  I think I now have the
-intended pathch, but still the same result:
+Tested-by: Atallah Amine <amine_atallah@outlook.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+---
+ configs/globalscale_espressobin_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Applying 0003-v1-package-localedef-fix-host-gcc-11.x-compile.patch using patch: 
-patching file
-package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0003-Fix-GCC-11-Warray-parameter-warning-for-__sigsetjmp-.patch
-patching file
-package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0004-Avoid-Wstringop-overflow-warning-in-pthread_cleanup_.patch
-
-...
-
-In file included from ../include/pthread.h:1,
-                 from ../sysdeps/nptl/thread_db.h:25,
-                 from ../nptl/descr.h:32,
-                 from ../sysdeps/x86_64/nptl/tls.h:130,
-                 from ../sysdeps/generic/libc-tsd.h:44,
-                 from ./localeinfo.h:224,
-                 from programs/ld-ctype.c:37:
-../sysdeps/nptl/pthread.h:734:47: error: argument 1 of type ?struct
-__jmp_buf_tag *? declared as a pointer [-Werror=array-parameter=]
-  734 | extern int __sigsetjmp (struct __jmp_buf_tag *__env, int __savemask)
-__THROWNL;
-      |                         ~~~~~~~~~~~~~~~~~~~~~~^~~~~
-In file included from ../include/setjmp.h:2,
-                 from ../nptl/descr.h:24,
-                 from ../sysdeps/x86_64/nptl/tls.h:130,
-                 from ../sysdeps/generic/libc-tsd.h:44,
-                 from ./localeinfo.h:224,
-                 from programs/ld-ctype.c:37:
-../setjmp/setjmp.h:54:46: note: previously declared as an array ?struct
-__jmp_buf_tag[1]?
-   54 | extern int __sigsetjmp (struct __jmp_buf_tag __env[1], int __savemask)
-__THROWNL;
-      |                         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-cc1: all warnings being treated as errors
-
+diff --git a/configs/globalscale_espressobin_defconfig b/configs/globalscale_espressobin_defconfig
+index 50cfc6b530..37d9c1859c 100644
+--- a/configs/globalscale_espressobin_defconfig
++++ b/configs/globalscale_espressobin_defconfig
+@@ -2,17 +2,17 @@ BR2_aarch64=y
+ BR2_cortex_a53=y
+ BR2_ARM_FPU_VFPV4=y
+ 
+-# Linux headers same as kernel, a 5.6 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
++# Linux headers same as kernel, a 5.11 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_11=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.11"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.11.21"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/globalscale/espressobin/linux-extras.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-3720-espressobin marvell/armada-3720-espressobin-emmc marvell/armada-3720-espressobin-v7 marvell/armada-3720-espressobin-v7-emmc"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-3720-espressobin marvell/armada-3720-espressobin-emmc marvell/armada-3720-espressobin-v7 marvell/armada-3720-espressobin-v7-emmc marvell/armada-3720-espressobin-ultra"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.25.1
