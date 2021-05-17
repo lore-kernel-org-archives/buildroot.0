@@ -1,25 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 May 2021 23:19:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXdmcp: add CPE
- variables
-In-Reply-To: <20210514215132.2275553-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 14 May 2021 23:51:32 +0200")
-References: <20210514215132.2275553-1-fontaine.fabrice@gmail.com>
-Message-ID: <875yzhkqi4.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 17 May 2021 23:18:56 +0200
+Subject: [Buildroot] [PATCH 1/2] Config.in.legacy: update iostat title
+Message-ID: <20210517211857.1130768-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Specify that iostat 'package' has been removed to be consistent with
+other entries
 
- > cpe:2.3:a:x.org:libxdmcp is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax.org%3Alibxdmcp
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ Config.in.legacy | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2021.02.x, thanks.
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index bc7cb8e32a..7bd2eb1429 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -182,7 +182,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
+ 	  The package was renamed to containerd accordingly.
+ 
+ config BR2_PACKAGE_IOSTAT
+-	bool "iostat removed"
++	bool "iostat package removed"
+ 	select BR2_LEGACY
+ 	help
+ 	  This package has been removed, use sysstat instead.
 -- 
-Bye, Peter Korsgaard
+2.30.2
