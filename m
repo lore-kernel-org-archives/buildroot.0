@@ -1,117 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 May 2021 21:23:47 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/docker-engine:
- fix port forwarding for hosts without IPv6
-Message-ID: <20210517185730.1B2127F88F@busybox.osuosl.org>
+Date: Mon, 17 May 2021 21:21:14 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/opentyrian:
+ switch to using github
+Message-ID: <20210517185729.C983D81124@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a48c70e07c3df7ed4b5dd2e26f2b10de96e2fc5
+commit: https://git.buildroot.net/buildroot/commit/?id=12d3b998b2f7d52c78adfb9a51312035f03a9a62
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-docker-engine 20.10.6 broke container port forwarding for hosts without IPv6
-support:
+OpenTyrian was previously managed in a Mercurial repository hosted on
+Bitbucket. Mid-2020, Bitbucket shut off all its Mercurial repositories:
+    https://bitbucket.org/blog/sunsetting-mercurial-support-in-bitbucket
 
-docker: Error response from daemon: driver failed programming external
-connectivity on endpoint naughty_moore
-(038e9ed4b5ea77e1c52462d6d04ad001fbad9beb185a6511aadc217c8a271608): Error
-starting userland proxy: listen tcp6 [::]:80: socket: address family not
-supported by protocol.
+Since then, OpenTyrian's source code is inacessible, but we have had no
+build failure associated as there is an old archive hosted on s.b.o, so
+that all builds fallback to downloading that:
+    http://sources.buildroot.net/opentyrian/opentyrian-9c9f0ec3532b.tar.gz
 
-Add a libnetwork patch from an upstream pull request to fix this, after
-adjusting the patch to apply to docker-engine (which has libnetwork vendored
-under vendor/github.com/docker/libnetwork):
+However, the project has been revived (kinda) on github:
+    https://github.com/opentyrian/opentyrian
 
-- https://github.com/moby/libnetwork/pull/2635,
-- https://github.com/moby/moby/pull/42322
+Git commit cf5dbeb69eebd9ef9afc4473088d9469b79589eb has been found to
+be the closest, both in content and date, to the Mercuail reference
+9c9f0ec3532b we were using. The only deltas are in Mercurial-specific
+files:
 
+ b/.hg_archival.txt |    5     0     5     0 -----
+ b/.hgtags          |    2     1     1     0 +-
+ 2 files changed, 1 insertion(+), 6 deletions(-)
+
+While at it, add a hash file.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Julien Boibessot <julien.boibessot@armadeus.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2fd33900f50f6df058263582fba0b0e7c0367996)
+(cherry picked from commit 64e7c63528906577666382a672ed8e900521595c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-fix-port-forwarding-with-ipv6.disable-1.patch | 74 ++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+ package/opentyrian/opentyrian.hash | 3 +++
+ package/opentyrian/opentyrian.mk   | 5 ++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch b/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch
+diff --git a/package/opentyrian/opentyrian.hash b/package/opentyrian/opentyrian.hash
 new file mode 100644
-index 0000000000..c5161ef0db
+index 0000000000..0d1f4927ee
 --- /dev/null
-+++ b/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch
-@@ -0,0 +1,74 @@
-+From 7b9c2905883df5171fda10a364a81b8c6176c8e2 Mon Sep 17 00:00:00 2001
-+From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
-+Date: Mon, 26 Apr 2021 15:28:40 +0900
-+Subject: [PATCH] fix port forwarding with ipv6.disable=1
-+
-+Make `docker run -p 80:80` functional again on environments with kernel boot parameter `ipv6.disable=1`.
-+
-+Fix moby/moby issue 42288
-+
-+Signed-off-by: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
-+[Upstream: https://github.com/moby/libnetwork/pull/2635,
-+           https://github.com/moby/moby/pull/42322]
-+[Rework path/drop test for docker-engine]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go | 31 +++++++++++++++++++++++++++++++
-+ 1 file changed, 35 insertions(+), 0 deletion(-)
-+
-+diff --git a/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go b/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
-+index 946130ec..17bf36f9 100644
-+--- a/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
-++++ b/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
-+@@ -5,6 +5,7 @@ import (
-+ 	"errors"
-+ 	"fmt"
-+ 	"net"
-++	"sync"
-+ 
-+ 	"github.com/docker/libnetwork/types"
-+ 	"github.com/ishidawataru/sctp"
-+@@ -50,6 +51,13 @@ func (n *bridgeNetwork) allocatePortsInternal(bindings []types.PortBinding, cont
-+ 			bs = append(bs, bIPv4)
-+ 		}
-+ 
-++		// skip adding implicit v6 addr, when the kernel was booted with `ipv6.disable=1`
-++		// https://github.com/moby/moby/issues/42288
-++		isV6Binding := c.HostIP != nil && c.HostIP.To4() == nil
-++		if !isV6Binding && !IsV6Listenable() {
-++			continue
-++		}
-++
-+ 		// Allocate IPv6 Port mappings
-+ 		// If the container has no IPv6 address, allow proxying host IPv6 traffic to it
-+ 		// by setting up the binding with the IPv4 interface if the userland proxy is enabled
-+@@ -211,3 +219,26 @@ func (n *bridgeNetwork) releasePort(bnd types.PortBinding) error {
-+ 
-+ 	return portmapper.Unmap(host)
-+ }
-++
-++var (
-++	v6ListenableCached bool
-++	v6ListenableOnce   sync.Once
-++)
-++
-++// IsV6Listenable returns true when `[::1]:0` is listenable.
-++// IsV6Listenable returns false mostly when the kernel was booted with `ipv6.disable=1` option.
-++func IsV6Listenable() bool {
-++	v6ListenableOnce.Do(func() {
-++		ln, err := net.Listen("tcp6", "[::1]:0")
-++		if err != nil {
-++			// When the kernel was booted with `ipv6.disable=1`,
-++			// we get err "listen tcp6 [::1]:0: socket: address family not supported by protocol"
-++			// https://github.com/moby/moby/issues/42288
-++			logrus.Debugf("port_mapping: v6Listenable=false (%v)", err)
-++		} else {
-++			v6ListenableCached = true
-++			ln.Close()
-++		}
-++	})
-++	return v6ListenableCached
-++}
-+-- 
-+2.20.1
-+
++++ b/package/opentyrian/opentyrian.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  2b0db65c735cc099279ea3da6d9b76f791633897cd0f5b67528f70de0758a944  opentyrian-cf5dbeb69eebd9ef9afc4473088d9469b79589eb.tar.gz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/opentyrian/opentyrian.mk b/package/opentyrian/opentyrian.mk
+index 12e41ad998..690323334e 100644
+--- a/package/opentyrian/opentyrian.mk
++++ b/package/opentyrian/opentyrian.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-OPENTYRIAN_VERSION = 9c9f0ec3532b
+-OPENTYRIAN_SITE = https://bitbucket.org/opentyrian/opentyrian
+-OPENTYRIAN_SITE_METHOD = hg
++OPENTYRIAN_VERSION = cf5dbeb69eebd9ef9afc4473088d9469b79589eb
++OPENTYRIAN_SITE = $(call github,opentyrian,opentyrian,$(OPENTYRIAN_VERSION))
+ OPENTYRIAN_LICENSE = GPL-2.0+
+ OPENTYRIAN_LICENSE_FILES = COPYING
+ 
