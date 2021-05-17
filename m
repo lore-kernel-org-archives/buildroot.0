@@ -1,39 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 May 2021 23:19:28 +0200
+Date: Mon, 17 May 2021 23:21:02 +0200
 Subject: [Buildroot] [git commit branch/2021.02.x]
- package/x11r7/xlib_libXcursor: add CPE variables
-Message-ID: <20210517210057.EF3B086BD2@busybox.osuosl.org>
+ package/x11r7/xlib_libICE: add CPE variables
+Message-ID: <20210517210058.1BDA287C0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33c5f42ea4a87cea50b744f82567b268d13c2bd0
+commit: https://git.buildroot.net/buildroot/commit/?id=49e83f6e100b7b90f0fd60a130d2abcc6a0642eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:x:libxcursor is a valid CPE identifier for this package:
+cpe:2.3:a:freedesktop:libice is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax%3Alibxcursor
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afreedesktop%3Alibice
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d3a25a98d460cafe4a95d3e5842918b2f7c7f746)
+(cherry picked from commit 3b4980677b3aa89656d4a26644cb58e81a79865d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXcursor/xlib_libXcursor.mk | 2 ++
+ package/x11r7/xlib_libICE/xlib_libICE.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-index 9bbd460c9d..79d9904010 100644
---- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-+++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-@@ -10,6 +10,8 @@ XLIB_LIBXCURSOR_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXCURSOR_LICENSE = MIT
- XLIB_LIBXCURSOR_LICENSE_FILES = COPYING
- XLIB_LIBXCURSOR_INSTALL_STAGING = YES
-+XLIB_LIBXCURSOR_CPE_ID_VENDOR = x
-+XLIB_LIBXCURSOR_CPE_ID_PRODUCT = libxcursor
- XLIB_LIBXCURSOR_DEPENDENCIES = xlib_libX11 xlib_libXfixes xlib_libXrender xorgproto
- HOST_XLIB_LIBXCURSOR_DEPENDENCIES = \
- 	host-xlib_libX11 host-xlib_libXfixes host-xlib_libXrender \
+diff --git a/package/x11r7/xlib_libICE/xlib_libICE.mk b/package/x11r7/xlib_libICE/xlib_libICE.mk
+index 0b1f8ade17..2b56aaab98 100644
+--- a/package/x11r7/xlib_libICE/xlib_libICE.mk
++++ b/package/x11r7/xlib_libICE/xlib_libICE.mk
+@@ -9,6 +9,8 @@ XLIB_LIBICE_SOURCE = libICE-$(XLIB_LIBICE_VERSION).tar.bz2
+ XLIB_LIBICE_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBICE_LICENSE = MIT
+ XLIB_LIBICE_LICENSE_FILES = COPYING
++XLIB_LIBICE_CPE_ID_VENDOR = freedesktop
++XLIB_LIBICE_CPE_ID_PRODUCT = libice
+ XLIB_LIBICE_INSTALL_STAGING = YES
+ XLIB_LIBICE_DEPENDENCIES = xlib_xtrans xorgproto host-pkgconf
+ 
