@@ -1,7 +1,7 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 17 May 2021 12:39:42 +0200
-Subject: [Buildroot] [PATCH] package/nano: bump to version 5.7
-Message-ID: <20210517103942.1924675-1-francois.perrad@gadz.org>
+Date: Mon, 17 May 2021 12:39:59 +0200
+Subject: [Buildroot] [PATCH] package/libubootenv: bump to version 0.3.2
+Message-ID: <20210517103959.1924729-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,34 +10,70 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...eLists.txt-do-not-force-the-build-of-a-share.patch | 11 ++++++-----
+ package/libubootenv/libubootenv.hash                  |  2 +-
+ package/libubootenv/libubootenv.mk                    |  4 ++--
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index cbb497722..532a68e0c 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v5/nano-5.6.1.tar.xz.asc
-+# https://www.nano-editor.org/dist/v5/nano-5.7.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256  760d7059e0881ca0ee7e2a33b09d999ec456ff7204df86bee58eb6f523ee8b09  nano-5.6.1.tar.xz
-+sha256  d4b181cc2ec11def3711b4649e34f2be7a668e70ab506860514031d069cccafa  nano-5.7.tar.xz
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 77126fd4b..39d9be12b 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
+index 2a234af78..9040e1267 100644
+--- a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
++++ b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
+@@ -26,10 +26,10 @@ Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+  1 file changed, 2 insertions(+), 4 deletions(-)
+ 
+ diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index a04dd11..3a2115d 100644
++index 4b71bc5..0b515f4 100644
+ --- a/src/CMakeLists.txt
+ +++ b/src/CMakeLists.txt
+-@@ -12,17 +12,15 @@ SET(include_HEADERS
++@@ -12,18 +12,16 @@ SET(include_HEADERS
+  
+  include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
+  
+@@ -41,8 +41,9 @@ index a04dd11..3a2115d 100644
+ -SET_TARGET_PROPERTIES(ubootenv_static PROPERTIES OUTPUT_NAME ubootenv)
+  add_executable(fw_printenv fw_printenv.c)
+  add_executable(fw_setenv fw_setenv.c)
+- target_link_libraries(fw_printenv ubootenv z)
+- target_link_libraries(fw_setenv ubootenv z)
++ target_link_libraries(ubootenv z)
++ target_link_libraries(fw_printenv ubootenv)
++ target_link_libraries(fw_setenv ubootenv)
+  
+ -install (TARGETS ubootenv ubootenv_static DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ +install (TARGETS ubootenv DESTINATION ${CMAKE_INSTALL_LIBDIR})
+@@ -50,5 +51,5 @@ index a04dd11..3a2115d 100644
+  install (TARGETS fw_printenv DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install (TARGETS fw_setenv DESTINATION ${CMAKE_INSTALL_BINDIR})
+ -- 
+-2.25.1
++2.30.2
+ 
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index 0b5320b36..d6de61461 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e25adf81dd2d4a083cb2cf032843a1ee2bb1fab54aa7a0202bd2295186bfe1b7  libubootenv-e663439e3d39a4cdbddb7e818245a99c485fa965.tar.gz
++sha256  662ef1efe058e2d5a07498f7b63aff7b2a521c0f6f199c499fb3ae84b54121bd  libubootenv-0.3.2.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index 7a98f5324..295226b9a 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- NANO_VERSION_MAJOR = 5
--NANO_VERSION = $(NANO_VERSION_MAJOR).6.1
-+NANO_VERSION = $(NANO_VERSION_MAJOR).7
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-LIBUBOOTENV_VERSION = e663439e3d39a4cdbddb7e818245a99c485fa965
+-LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
++LIBUBOOTENV_VERSION = 0.3.2
++LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
+ LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
+ LIBUBOOTENV_INSTALL_STAGING = YES
 -- 
 2.30.2
