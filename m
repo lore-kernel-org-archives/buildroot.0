@@ -1,39 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 May 2021 23:19:44 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/x11r7/xlib_libXtst: add CPE variables
-Message-ID: <20210517210058.05836875F2@busybox.osuosl.org>
+Date: Mon, 17 May 2021 23:24:08 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/x11r7/libxcb: add
+ LIBXCB_CPE_ID_VENDOR
+Message-ID: <20210517210058.6905087C0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9bd35609a836f16cc25ded2bb08a4ad9a110de7
+commit: https://git.buildroot.net/buildroot/commit/?id=4446b0353b1ecadb77a0e084126066c97de6f3ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:x:libxtst is a valid CPE identifier for this package:
+cpe:2.3:a:x:libxcb is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax%3Alibxtst
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax%3Alibxcb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 74e049a0f3cef8e43a4bc8422bb2f2ef289d5ed8)
+(cherry picked from commit 4a321afa836123c4887cff0c3309eb77caf30751)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXtst/xlib_libXtst.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/x11r7/libxcb/libxcb.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.mk b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-index e0d7e8217c..c79301e064 100644
---- a/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-+++ b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-@@ -10,6 +10,8 @@ XLIB_LIBXTST_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXTST_LICENSE = MIT
- XLIB_LIBXTST_LICENSE_FILES = COPYING
- XLIB_LIBXTST_INSTALL_STAGING = YES
-+XLIB_LIBXTST_CPE_ID_VENDOR = x
-+XLIB_LIBXTST_CPE_ID_PRODUCT = libxtst
+diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
+index 9a35a72995..4cbd9cf62f 100644
+--- a/package/x11r7/libxcb/libxcb.mk
++++ b/package/x11r7/libxcb/libxcb.mk
+@@ -9,6 +9,7 @@ LIBXCB_SOURCE = libxcb-$(LIBXCB_VERSION).tar.xz
+ LIBXCB_SITE = http://xcb.freedesktop.org/dist
+ LIBXCB_LICENSE = MIT
+ LIBXCB_LICENSE_FILES = COPYING
++LIBXCB_CPE_ID_VENDOR = x
  
- XLIB_LIBXTST_DEPENDENCIES = \
- 	xlib_libX11 \
+ LIBXCB_INSTALL_STAGING = YES
+ 
