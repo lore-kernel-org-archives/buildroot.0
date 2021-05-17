@@ -1,174 +1,149 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 May 2021 18:17:05 +0200
-Subject: [Buildroot] [PATCH v5 00/10] Introduce EDK2 firmware package
-In-Reply-To: <p9VS7hxOeVbmgXCpzw2M5AgR6LaCg2UWWsxGYZA@cp7-web-044.plabs.ch>
-References: <p9VS7hxOeVbmgXCpzw2M5AgR6LaCg2UWWsxGYZA@cp7-web-044.plabs.ch>
-Message-ID: <20210517161705.GY2506@scaer>
+Date: Mon, 17 May 2021 18:23:06 +0200
+Subject: [Buildroot] [PATCH 1/4] package/edk2-aarch64-bin: new package
+In-Reply-To: <20200712163422.1162187-1-romain.naour@gmail.com>
+References: <20200712163422.1162187-1-romain.naour@gmail.com>
+Message-ID: <20210517162306.GZ2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dick, All,
+Romain, All,
 
-On 2021-05-12 18:36 +0000, Dick Olsson via buildroot spake thusly:
-> Hi all,
-> 
-> This latest revision addresses feedback from multiple people (see the
-> revision log on each patch) as well as simplifies the series itself:
-> 
->  * Do not introduce a new qemu_aarch64_virt_efi_defconfig
->  * Instead, modify the existing qemu_aarch64_virt_defconfig [1]
->  * Merge the boot/edk2 and boot/arm-trusted-firmware patches
->  * Simplify various defconfigs and scripts by relying GRUB2 for booting
-> 
-> I also bumped the edk2 packages to the latest stable version and
-> introduced a runtime test for the whole boot chain.
-> 
-> [1]: See discussion in
-> http://patchwork.ozlabs.org/project/buildroot/patch/20200712163422.1162187-3-romain.naour at gmail.com/
-> 
-> Dick Olsson (10):
->   package/edk2-platforms: new package
->   boot/edk2: new package
+Thanks for this series.
 
-Those two applied to next, thanks.
+Since then, Dick has submitted the support needed to build edk2 from
+source, and this has just been merged into the next branch now:
+    https://git.buildroot.org/buildroot/commit/?id=1074a37e783b
 
->   configs/aarch64_efi_defconfig: build the EDK2 firmware from source
->   configs/pc_x86_64_efi_defconfig: build the EDK2 firmware from source
->   configs/qemu_aarch64_virt_defconfig: build with EDK2 firmware
-
-Those three, I've left aside, see below.
-
->   configs/qemu_aarch64_sbsa_defconfig: new config for QEMU sbsa-ref
-
-This one applied to next, thanks.
-
->   configs/socionext_developerbox_defconfig: new config for Developerbox
->   configs/solidrun_macchiatobin_efi_defconfig: EFI config for
->     MacchiatoBin
-
-Those two I also left aside, I'll look at them a bit later...
-
->   support/testing: new boot test for EDK2
->   DEVELOPERS: add files related to EDK2 for Dick Olsson
-
-Those two applied to next, thanks (in DEVELOPPERS, I trimmed out the
-files from the patches I haven't applied, of course).
-
-So, I applied edk2, and the new defconfig needed fr the runtime test.
-Thanks a lot! :-)
-
-The three defconfig I've left aside: I have not applied, because I
-have some doubts whether they are so interesting to have.
-
-My first issue, and I concur with the comment by Thomas from some time
-ago (https://patchwork.ozlabs.org/project/buildroot/patch/20200712163422.1162187-3-romain.naour at gmail.com/#2480568):
-
-    But isn't this making qemu_aarch64_virt_defconfig too similar to
-    aarch64_efi_defconfig ?
-
-    Shouldn't we keep qemu_aarch64_virt_defconfig as-is, and simply
-    add runtime testing for aarch64_efi_defconfig ?
-
-But my concern is even deeper. Why do we want to adapt the defcoinfig
-files for real hardware (e.g. pc_x86_64_efi_defconfig) so they run under
-qemu, when we already have defconfig files that are meant to run under
-qemu (e.g. qemu_x86_64_defconfig) to begin with?
-
-IMHO, the blurbs in board/pc/readme.txt about running under qemu, should
-be moved to board/qemu/x86_64/readme.txt. board/pc/readme.txt could have
-just a little blurb, like:
-
-    See qemu_x86_64_defconfig for a PC-like defconfig meant to run under
-    qemu.
-
-I.e.: the defconfig files and board readme.txt that are for real
-hardware, should not be modified/adapted to run under qemu; instead the
-qemu-based defconfig should be adapted or added as needed.
-
-In the end, I'm open for comments to reconsider, or for a respin of the
-remaining patches (wait a bit before resending, until I handle the
-socionext and macchiatobin_efi ones).
-
-Thanks again for working this complex series!
+As such, and as discussed on IRC, I believe this old patchset of yours
+is no longer required, so I marked it superseded on patchwork. Thanks
+for your initial work on this and your feedback! :-)
 
 Regards,
 Yann E. MORIN.
 
+On 2020-07-12 18:34 +0200, Romain Naour spake thusly:
+> Linaro provide pre-built versions of the binary firmware images of
+> UEFI [1] based on the TianoCore edk2 project [2].
 > 
->  DEVELOPERS                                    |  16 ++
->  board/aarch64-efi/post-image.sh               |   4 +
->  board/aarch64-efi/readme.txt                  |   9 +-
->  board/pc/readme.txt                           |   9 +-
->  board/qemu/aarch64-sbsa/assemble-flash-images |  11 ++
->  board/qemu/aarch64-sbsa/genimage.cfg          |  30 ++++
->  board/qemu/aarch64-sbsa/grub.cfg              |   6 +
->  board/qemu/aarch64-sbsa/linux.config          |  68 ++++++++
->  board/qemu/aarch64-sbsa/readme.txt            |  32 ++++
->  board/qemu/aarch64-virt/assemble-flash-images |  12 ++
->  board/qemu/aarch64-virt/genimage.cfg          |  30 ++++
->  board/qemu/aarch64-virt/grub.cfg              |   6 +
->  board/qemu/aarch64-virt/readme.txt            |   2 +-
->  .../developerbox/assemble-flash-images        |   7 +
->  board/socionext/developerbox/genimage.cfg     |  30 ++++
->  board/socionext/developerbox/grub.cfg         |   6 +
->  board/socionext/developerbox/readme.txt       |  16 ++
->  .../macchiatobin-efi/assemble-flash-images    |   7 +
->  board/solidrun/macchiatobin-efi/genimage.cfg  |  30 ++++
->  board/solidrun/macchiatobin-efi/grub.cfg      |   6 +
->  .../solidrun/macchiatobin-efi/linux.fragment  |   3 +
->  board/solidrun/macchiatobin-efi/readme.txt    |  90 +++++++++++
->  boot/Config.in                                |   1 +
->  boot/arm-trusted-firmware/Config.in           |  15 +-
->  .../arm-trusted-firmware.mk                   |   9 ++
->  boot/edk2/Config.in                           | 110 +++++++++++++
->  boot/edk2/edk2.hash                           |   3 +
->  boot/edk2/edk2.mk                             | 150 ++++++++++++++++++
->  configs/aarch64_efi_defconfig                 |   2 +
->  configs/pc_x86_64_efi_defconfig               |   2 +
->  configs/qemu_aarch64_sbsa_defconfig           |  49 ++++++
->  configs/qemu_aarch64_virt_defconfig           |  25 ++-
->  configs/socionext_developerbox_defconfig      |  24 +++
->  configs/solidrun_macchiatobin_efi_defconfig   |  28 ++++
->  package/Config.in                             |   1 +
->  package/edk2-platforms/Config.in              |   8 +
->  package/edk2-platforms/edk2-platforms.hash    |   3 +
->  package/edk2-platforms/edk2-platforms.mk      |  22 +++
->  support/testing/tests/boot/test_edk2.py       |  45 ++++++
->  39 files changed, 913 insertions(+), 14 deletions(-)
->  create mode 100755 board/qemu/aarch64-sbsa/assemble-flash-images
->  create mode 100644 board/qemu/aarch64-sbsa/genimage.cfg
->  create mode 100644 board/qemu/aarch64-sbsa/grub.cfg
->  create mode 100644 board/qemu/aarch64-sbsa/linux.config
->  create mode 100644 board/qemu/aarch64-sbsa/readme.txt
->  create mode 100755 board/qemu/aarch64-virt/assemble-flash-images
->  create mode 100644 board/qemu/aarch64-virt/genimage.cfg
->  create mode 100644 board/qemu/aarch64-virt/grub.cfg
->  create mode 100755 board/socionext/developerbox/assemble-flash-images
->  create mode 100644 board/socionext/developerbox/genimage.cfg
->  create mode 100644 board/socionext/developerbox/grub.cfg
->  create mode 100644 board/socionext/developerbox/readme.txt
->  create mode 100755 board/solidrun/macchiatobin-efi/assemble-flash-images
->  create mode 100644 board/solidrun/macchiatobin-efi/genimage.cfg
->  create mode 100644 board/solidrun/macchiatobin-efi/grub.cfg
->  create mode 100644 board/solidrun/macchiatobin-efi/linux.fragment
->  create mode 100644 board/solidrun/macchiatobin-efi/readme.txt
->  create mode 100644 boot/edk2/Config.in
->  create mode 100644 boot/edk2/edk2.hash
->  create mode 100644 boot/edk2/edk2.mk
->  create mode 100644 configs/qemu_aarch64_sbsa_defconfig
->  create mode 100644 configs/socionext_developerbox_defconfig
->  create mode 100644 configs/solidrun_macchiatobin_efi_defconfig
->  create mode 100644 package/edk2-platforms/Config.in
->  create mode 100644 package/edk2-platforms/edk2-platforms.hash
->  create mode 100644 package/edk2-platforms/edk2-platforms.mk
->  create mode 100644 support/testing/tests/boot/test_edk2.py
+> The qemu_aarch64_virt_defconfig will be updated by a follow up commit to
+> use those firmware to test Aarch64 efi system under Qemu.
 > 
+> Building edk2 firmware from source require to build edk2 package for
+> the host using a script based buildsystem. Instead we use firmware
+> provided by Linaro to avoid the maintainance burden.
+> There is a limited added value to build them just for Qemu testing
+> purpose.
+> 
+> Building edk2 firmware could be intersting for secure boot or for
+> other target than Qemu.
+> 
+> We need to package the edk2 Aarch64 and ARM firmware in two separate
+> packages since the downloaded files are using the same name
+> (QEMU_EFI.fd and QEMU_VARS.fd). The ARM firmware will be added by
+> a follow up patch.
+> 
+> [1] http://releases.linaro.org/reference-platform/enterprise/firmware/open-source/19.03/
+> [2] https://github.com/tianocore/edk2
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  DEVELOPERS                                    |  1 +
+>  package/Config.in.host                        |  1 +
+>  package/edk2-aarch64-bin/Config.in.host       | 12 ++++++++++
+>  .../edk2-aarch64-bin/edk2-aarch64-bin.hash    |  3 +++
+>  package/edk2-aarch64-bin/edk2-aarch64-bin.mk  | 24 +++++++++++++++++++
+>  5 files changed, 41 insertions(+)
+>  create mode 100644 package/edk2-aarch64-bin/Config.in.host
+>  create mode 100644 package/edk2-aarch64-bin/edk2-aarch64-bin.hash
+>  create mode 100644 package/edk2-aarch64-bin/edk2-aarch64-bin.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index ed9f1388a3..0cb76226bb 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2191,6 +2191,7 @@ F:	package/binutils/
+>  F:	package/bullet/
+>  F:	package/clang/
+>  F:	package/clinfo/
+> +F:	package/edk2-aarch64-bin/
+>  F:	package/efl/
+>  F:	package/enet/
+>  F:	package/enlightenment/
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 647fc24841..28ccc33037 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -18,6 +18,7 @@ menu "Host utilities"
+>  	source "package/dtc/Config.in.host"
+>  	source "package/e2fsprogs/Config.in.host"
+>  	source "package/e2tools/Config.in.host"
+> +	source "package/edk2-aarch64-bin/Config.in.host"
+>  	source "package/erofs-utils/Config.in.host"
+>  	source "package/eudev/Config.in.host"
+>  	source "package/exfatprogs/Config.in.host"
+> diff --git a/package/edk2-aarch64-bin/Config.in.host b/package/edk2-aarch64-bin/Config.in.host
+> new file mode 100644
+> index 0000000000..b4ec08cb48
+> --- /dev/null
+> +++ b/package/edk2-aarch64-bin/Config.in.host
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_HOST_EDK2_AARCH64_BIN
+> +	bool "host-edk2-aarch64-bin"
+> +	depends on BR2_aarch64
+> +	help
+> +	  This package will install pre-built versions of the binary
+> +	  firmware images of UEFI based on the TianoCore project.
+> +
+> +	  This image is intended to be used by host-qemu to boot UEFI
+> +	  images for Aarch64 target.
+> +
+> +	  https://github.com/tianocore/edk2
+> +	  http://releases.linaro.org/reference-platform/enterprise/firmware/open-source/19.03/
+> diff --git a/package/edk2-aarch64-bin/edk2-aarch64-bin.hash b/package/edk2-aarch64-bin/edk2-aarch64-bin.hash
+> new file mode 100644
+> index 0000000000..3166b09dae
+> --- /dev/null
+> +++ b/package/edk2-aarch64-bin/edk2-aarch64-bin.hash
+> @@ -0,0 +1,3 @@
+> +# From http://releases.linaro.org/reference-platform/enterprise/firmware/open-source/19.03/release/qemu-aarch64/SHA256SUMS
+> +sha256  43301ef5f620945a082c5f47ae933e154e0cff0976ed22a8cff66033020f6020  QEMU_EFI.fd
+> +sha256  8b634c1e6bd11607850b69111f6c4dbd1583dbbd1460dac72dbacbdc1a4a130a  QEMU_VARS.fd
+> diff --git a/package/edk2-aarch64-bin/edk2-aarch64-bin.mk b/package/edk2-aarch64-bin/edk2-aarch64-bin.mk
+> new file mode 100644
+> index 0000000000..78818cdc81
+> --- /dev/null
+> +++ b/package/edk2-aarch64-bin/edk2-aarch64-bin.mk
+> @@ -0,0 +1,24 @@
+> +################################################################################
+> +#
+> +# edk2-aarch64-bin
+> +#
+> +################################################################################
+> +
+> +EDK2_AARCH64_BIN_VERSION = 19.03
+> +EDK2_AARCH64_BIN_SITE = http://releases.linaro.org/reference-platform/enterprise/firmware/open-source/$(EDK2_AARCH64_BIN_VERSION)/release/qemu-aarch64
+> +EDK2_AARCH64_BIN_LICENSE = BSD-2-Clause (edk2), ISC (uefi-tools), BSD-3-Clause (ATF)
+> +
+> +HOST_EDK2_AARCH64_BIN_SOURCE = QEMU_EFI.fd
+> +HOST_EDK2_AARCH64_BIN_EXTRA_DOWNLOADS = $(EDK2_AARCH64_BIN_SITE)/QEMU_VARS.fd
+> +
+> +define HOST_EDK2_AARCH64_BIN_EXTRACT_CMDS
+> +	cp $(HOST_EDK2_AARCH64_BIN_DL_DIR)/QEMU_EFI.fd $(@D)/QEMU_EFI.fd
+> +	cp $(HOST_EDK2_AARCH64_BIN_DL_DIR)/QEMU_VARS.fd $(@D)/QEMU_VARS.fd
+> +endef
+> +
+> +define HOST_EDK2_AARCH64_BIN_INSTALL_CMDS
+> +	$(INSTALL) -D -m 644 $(@D)/QEMU_EFI.fd $(HOST_DIR)/usr/share/edk2/aarch64/QEMU_EFI.fd
+> +	$(INSTALL) -D -m 644 $(@D)/QEMU_VARS.fd $(HOST_DIR)/usr/share/edk2/aarch64/QEMU_VARS.fd
+> +endef
+> +
+> +$(eval $(host-generic-package))
 > -- 
-> 2.30.2
-> 
+> 2.25.4
 > 
 > _______________________________________________
 > buildroot mailing list
