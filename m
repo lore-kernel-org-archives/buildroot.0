@@ -1,52 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 May 2021 21:22:52 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libxml2: bump to
- version 2.9.12
-Message-ID: <20210517185730.00F0F87A45@busybox.osuosl.org>
+Date: Mon, 17 May 2021 21:25:13 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/prosody: security
+ bump to version 0.11.9
+Message-ID: <20210517185730.43A6A7F88F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8108c70cc6b24927a51ce01c68e4dcf471ce438f
+commit: https://git.buildroot.net/buildroot/commit/?id=aaeaac859554725ed997629a3c729bfed7adfe42
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Brown-paper bag release:
-https://github.com/GNOME/libxml2/commit/b48e77cf4f6fa0792c5f4b639707a2b0675e461b
+Fixes the following security issues:
 
-Update indentation in hash file (two spaces)
+- CVE-2021-32918: DoS via insufficient memory consumption controls
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  It was discovered that default settings leave Prosody susceptible to
+  remote unauthenticated denial-of-service (DoS) attacks via memory
+  exhaustion when running under Lua 5.2 or Lua 5.3.  Lua 5.2 is the default
+  and recommended Lua version for Prosody 0.11.x series.
+
+- CVE-2021-32920: DoS via repeated TLS renegotiation causing excessive CPU
+  consumption
+
+  It was discovered that Prosody does not disable SSL/TLS renegotiation,
+  even though this is not used in XMPP.  A malicious client may flood a
+  connection with renegotiation requests to consume excessive CPU resources
+  on the server.
+
+- CVE-2021-32921: Use of timing-dependent string comparison with sensitive
+  values
+
+  It was discovered that Prosody does not use a constant-time algorithm for
+  comparing certain secret strings when running under Lua 5.2 or later.
+  This can potentially be used in a timing attack to reveal the contents of
+  secret strings to an attacker.
+
+- CVE-2021-32917: Use of mod_proxy65 is unrestricted in default
+  configuration
+
+  mod_proxy65 is a file transfer proxy provided with Prosody to facilitate
+  the transfer of files and other data between XMPP clients.
+
+  It was discovered that the proxy65 component of Prosody allows open access
+  by default, even if neither of the users have an XMPP account on the local
+  server, allowing unrestricted use of the server???s bandwidth.
+
+- CVE-2021-32919: Undocumented dialback-without-dialback option insecure
+
+  The undocumented option ???dialback_without_dialback??? enabled an
+  experimental feature for server-to-server authentication.  A flaw in this
+  feature meant it did not correctly authenticate remote servers, allowing a
+  remote server to impersonate another server when this option is enabled.
+
+For more details, see the advisory:
+https://prosody.im/security/advisory_20210512/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b304a458bd0bd823454b1d303e5ae4520ec679d2)
+(cherry picked from commit 9c108afab81b675eddc1f71cc496b47d9077bdb1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxml2/libxml2.hash | 4 ++--
- package/libxml2/libxml2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/prosody/prosody.hash | 8 ++++----
+ package/prosody/prosody.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index 563a5f89c9..ce6c3c4825 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	886f696d5d5b45d780b2880645edf9e0c62a4fd6841b853e824ada4e02b4d331	libxml2-2.9.11.tar.gz
-+sha256  c8d6681e38c56f172892c85ddc0852e1fd4b53b4209e7f4ebf17f7e2eae71d92  libxml2-2.9.12.tar.gz
- # License files, locally calculated
--sha256	c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd	COPYING
-+sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  COPYING
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index f39e688781..5d688acae5 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
+diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
+index 309ae0181f..50d5964712 100644
+--- a/package/prosody/prosody.hash
++++ b/package/prosody/prosody.hash
+@@ -1,8 +1,8 @@
+ # Locally computed:
+-md5  24cd3c1f7ab16a6b3726423d2fff802d  prosody-0.11.8.tar.gz
+-sha1  f1f030c75abde6e3c7232fedbe8371f5cb913245  prosody-0.11.8.tar.gz
+-sha256  830f183b98d5742d81e908d2d8e3258f1b538dad7411f06fda5b2cc5c75068f8  prosody-0.11.8.tar.gz
+-sha512  b0b7e1d3e41f47f0f88ad5b76444e4959b20f4c7a937f3cc605ba6ed5d92e713a3054dcb61ee6629063883a8f9ff1a03952893de4a0d840dcec4e5e42079eb57  prosody-0.11.8.tar.gz
++md5  be7e1c66c06b0eb4bdce37b67bcc6b51  prosody-0.11.9.tar.gz
++sha1  632c2dd7794d344d4edbcea18fc1b5f623da5ca4  prosody-0.11.9.tar.gz
++sha256  ccc032aea49d858635fb93644db276de6812be83073a8d80e9b4508095deff09  prosody-0.11.9.tar.gz
++sha512  fabbbbb1acb3de4ff01e3e8c6e9e4dc37cb161259f1649683a1f9d925ed9f1709e052bfc831cba3f1861a9cca599f2b725ee739bfcb57164d6f50ac07011b52a  prosody-0.11.9.tar.gz
+ 
+ # Hash for license file:
+ sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index a4482ad3c5..92c812ebfa 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBXML2_VERSION = 2.9.11
-+LIBXML2_VERSION = 2.9.12
- LIBXML2_SITE = http://xmlsoft.org/sources
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_LICENSE = MIT
+-PROSODY_VERSION = 0.11.8
++PROSODY_VERSION = 0.11.9
+ PROSODY_SITE = https://prosody.im/downloads/source
+ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
