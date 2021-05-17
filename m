@@ -1,109 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 May 2021 09:44:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lvm2: drop
- BR2_PACKAGE_LVM2_LVMETAD
-In-Reply-To: <20210516202722.298321-1-fontaine.fabrice@gmail.com>
-References: <20210516202722.298321-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210517074459.GS2506@scaer>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 17 May 2021 10:22:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ethtool: bump to version 5.12
+Message-ID: <20210517082252.30150-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2021-05-16 22:27 +0200, Fabrice Fontaine spake thusly:
-> lvmetad has been dropped since version 2.03.00 and
-> https://github.com/lvmteam/lvm2/commit/117160b27e510dceb1ed6acf995115c040acd88d
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  Config.in.legacy       |  6 ++++++
->  package/lvm2/Config.in | 17 -----------------
->  package/lvm2/lvm2.mk   |  6 ------
->  3 files changed, 6 insertions(+), 23 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index ce6aeed87d..39a44f3026 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,12 @@ endif
->  
->  comment "Legacy options removed in 2021.05"
->  
-> +config BR2_PACKAGE_LVM2_LVMETAD
-> +	bool "lvm2 lvmetad removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  The lvm2 lvmetad was removed upstream.
-> +
->  config BR2_PACKAGE_MONKEY
->  	bool "monkey package removed"
->  	select BR2_LEGACY
-> diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
-> index a9c5c453fc..de5b972e99 100644
-> --- a/package/lvm2/Config.in
-> +++ b/package/lvm2/Config.in
-> @@ -47,23 +47,6 @@ config BR2_PACKAGE_LVM2_APP_LIBRARY
->  comment "lvm2 application library needs a glibc or uClibc toolchain"
->  	depends on BR2_TOOLCHAIN_USES_MUSL
->  
-> -config BR2_PACKAGE_LVM2_LVMETAD
-> -	bool "install lvmetad"
-> -	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2-app-library
-> -	select BR2_PACKAGE_LVM2_APP_LIBRARY
-> -	help
-> -	  Install lvmetad
-> -
-> -	  The lvmetad daemon caches LVM metadata so that LVM commands
-> -	  can read metadata from the cache rather than scanning disks.
-> -	  This can be an advantage because scanning disks is time
-> -	  consuming and may interfere with the normal work of the
-> -	  system.  lvmetad can be a disadvantage when disk event
-> -	  notifications from the system are unreliable.
-> -
-> -comment "lvmetad daemon needs a glibc or uClibc toolchain"
-> -	depends on BR2_TOOLCHAIN_USES_MUSL
-> -
->  endif
->  
->  comment "lvm2 needs a toolchain w/ threads, dynamic library"
-> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-> index 1194044537..84ec75530a 100644
-> --- a/package/lvm2/lvm2.mk
-> +++ b/package/lvm2/lvm2.mk
-> @@ -61,12 +61,6 @@ else
->  LVM2_CONF_OPTS += --disable-applib
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_LVM2_LVMETAD),y)
-> -LVM2_CONF_OPTS += --enable-lvmetad
-> -else
-> -LVM2_CONF_OPTS += --disable-lvmetad
-> -endif
-> -
->  ifeq ($(BR2_INIT_SYSTEMD),y)
->  LVM2_INSTALL_TARGET_OPTS += install_systemd_units install_systemd_generators
->  endif
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 334ff8d503..536579670f 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  817d5396a9307b4c637b435d4c558b8f5f964a1464a035ca3c0180f4cc93cfcf  ethtool-5.10.tar.xz
++sha256  f5ddfa9c75053d8011b8c8c99ec4e2d3c83cd1972f638692d62e37fa3ef36f07  ethtool-5.12.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index c9765eccff..f3e950f212 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ETHTOOL_VERSION = 5.10
++ETHTOOL_VERSION = 5.12
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.0
