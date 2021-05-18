@@ -1,58 +1,108 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 18 May 2021 16:54:18 +0300
-Subject: [Buildroot] [PATCH v2 0/5] Update Cage, wlroots, and wayland
-In-Reply-To: <20210513163325.1775639-1-aperez@igalia.com>
+Date: Tue, 18 May 2021 16:54:19 +0300
+Subject: [Buildroot] [PATCH v2 1/5] package/wlroots: bump to version 0.13.0
+In-Reply-To: <20210518135423.194507-1-aperez@igalia.com>
 References: <20210513163325.1775639-1-aperez@igalia.com>
-Message-ID: <20210518135423.194507-1-aperez@igalia.com>
+ <20210518135423.194507-1-aperez@igalia.com>
+Message-ID: <20210518135423.194507-2-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
+Update wlroots to version 0.13.0. This is a release which changes
+API/ABI, applications which use wlroots need to be rebuilt. Currently in
+Buildroot there is only cage, to be updated by a follow-up patch of the
+series.
 
-This patch set updates Cage to 0.1.3, which by itself does not have functional
-changes over the previous version, but it pulls in wlroots 0.13.0 which does
-include a good number of improvements.
+Additionally, remove usage of the xcb-icccm build option, which is no
+longer available and update the dependencies needed by the X11 support.
+Note that the dependencies neded by the X11 backend are a superset of
+the ones needed for XWayland support, so we can make toggle both Meson
+options at once.
 
-Last but not least, wlroots can now libseat to broker sessions, so three of
-the patches deal with adding a package for it, installing the daemon init
-scripts (if the daemon is enabled, as it is optional), and arranging for
-wlroots to use libseat when available. It looks like libseat is gaining
-momentum in the Wayland ecosystem and for example Weston can also use it
-since half a year ago [1].
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+Changes v1 -> v2:
+  - Add missing libxcb/xcb-util-{renderutil,wm} deps (suggested by
+    Yann).
+  - Make BR2_PACKAGE_WLROOTS_X11 enable both the X11 backend and
+    XWayland.
 
-Best regards,
--Adrian
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/wlroots/Config.in    |  3 +++
+ package/wlroots/wlroots.hash |  4 ++--
+ package/wlroots/wlroots.mk   | 22 ++++------------------
+ 3 files changed, 9 insertions(+), 20 deletions(-)
 
-[1] https://gitlab.freedesktop.org/wayland/weston/-/commit/6c4a993a999048a2054ec97e71d32839b312c642
-
-
-Adrian Perez de Castro (5):
-  package/wlroots: bump to version 0.13.0
-  package/seatd: new package
-  package/seatd: install init scripts
-  package/wlroots: use libseat when available
-  package/cage: bump to version 0.1.3
-
- package/Config.in                             |  1 +
- package/cage/cage.hash                        |  2 +-
- package/cage/cage.mk                          |  7 +--
- ...pport-building-builtin-without-seatd.patch | 37 +++++++++++++
- package/seatd/Config.in                       | 22 ++++++++
- package/seatd/S70seatd                        | 38 ++++++++++++++
- package/seatd/seatd.hash                      |  5 ++
- package/seatd/seatd.mk                        | 52 +++++++++++++++++++
- package/wlroots/Config.in                     |  3 ++
- package/wlroots/wlroots.hash                  |  4 +-
- package/wlroots/wlroots.mk                    | 25 ++++-----
- 11 files changed, 174 insertions(+), 22 deletions(-)
- create mode 100644 package/seatd/0001-meson-Support-building-builtin-without-seatd.patch
- create mode 100644 package/seatd/Config.in
- create mode 100755 package/seatd/S70seatd
- create mode 100644 package/seatd/seatd.hash
- create mode 100644 package/seatd/seatd.mk
-
+diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
+index 694aa79de4..41f8986772 100644
+--- a/package/wlroots/Config.in
++++ b/package/wlroots/Config.in
+@@ -33,6 +33,9 @@ if BR2_PACKAGE_WLROOTS
+ config BR2_PACKAGE_WLROOTS_X11
+ 	bool "X11 backend"
+ 	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBXCB
++	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL
++	select BR2_PACKAGE_XCB_UTIL_WM
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	help
+ 	  Support Wayland sessions nested inside a X11 window
+diff --git a/package/wlroots/wlroots.hash b/package/wlroots/wlroots.hash
+index 2fab9b30b4..024ea93cae 100644
+--- a/package/wlroots/wlroots.hash
++++ b/package/wlroots/wlroots.hash
+@@ -1,5 +1,5 @@
+-# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.12.0/wlroots-0.12.0.tar.gz.sig
+-sha256  c9e9f4f6d2f526d0b2886daf3ec37e64831773059aa669fb98a88522a1626bdb  wlroots-0.12.0.tar.gz
++# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.13.0/wlroots-0.13.0.tar.gz.sig
++sha256  f6bea37fd4a6f5e5f552b83d61adae8c73e64b0bcb9ae0ab464ebcd9309d3cf3  wlroots-0.13.0.tar.gz
+ 
+ # Hashes for license files:
+ sha256  ffd3737a478b83a8b51b42757d3bf909ef36694508355879722e11fc1fa6736b  LICENSE
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index 0160b1aedb..a20f6683a9 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WLROOTS_VERSION = 0.12.0
++WLROOTS_VERSION = 0.13.0
+ WLROOTS_SITE = https://github.com/swaywm/wlroots/releases/download/$(WLROOTS_VERSION)
+ WLROOTS_LICENSE = MIT
+ WLROOTS_LICENSE_FILES = LICENSE
+@@ -40,24 +40,10 @@ WLROOTS_CONF_OPTS += -Dlogind=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
+-WLROOTS_CONF_OPTS += -Dx11-backend=enabled
+-WLROOTS_DEPENDENCIES += xlib_libX11
++WLROOTS_CONF_OPTS += -Dx11-backend=enabled -Dxwayland=enabled
++WLROOTS_DEPENDENCIES += libxcb xcb-util-wm xcb-util-renderutil xlib_libX11
+ else
+-WLROOTS_CONF_OPTS += -Dx11-backend=disabled
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBXCB),y)
+-WLROOTS_CONF_OPTS += -Dxwayland=enabled
+-WLROOTS_DEPENDENCIES += libxcb
+-else
+-WLROOTS_CONF_OPTS += -Dxwayland=disabled
+-endif
+-
+-ifeq ($(BR2_PACKAGE_XCB_UTIL_WM),y)
+-WLROOTS_CONF_OPTS += -Dxcb-icccm=enabled
+-WLROOTS_DEPENDENCIES += xcb-util-wm
+-else
+-WLROOTS_CONF_OPTS += -Dxcb-icccm=disabled
++WLROOTS_CONF_OPTS += -Dx11-backend=disabled -Dxwayland=disabled
+ endif
+ 
+ $(eval $(meson-package))
 -- 
 2.31.1
