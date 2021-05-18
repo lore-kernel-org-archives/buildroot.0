@@ -1,43 +1,55 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 18 May 2021 22:15:36 +0200
-Subject: [Buildroot] [git commit] support/testing: test_hardening disable
- PIC/PIE
-Message-ID: <20210518194800.BC8ED868BF@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 May 2021 22:18:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xterm: security bump version to
+ 367
+In-Reply-To: <20210518153112.102463-1-bernd.kuhls@t-online.de>
+References: <20210518153112.102463-1-bernd.kuhls@t-online.de>
+Message-ID: <5951f254-8313-bf64-77c7-87087aaa99f3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45a13be315f2e3dd9caa29dae8c84280975d4807
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since [1], PIC/PIE is enabled by default but the TestRelroPartial
-test expect implicitely PIC/PIE being disabled.
 
-Disable PIC/PIE from the config fragment provided by
-TestRelroPartial.
+On 18/05/2021 17:31, Bernd Kuhls wrote:
+> Fixes CVE-2021-27135:
+> https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-27135
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-[1] 810ba387bec3c5b6904e8893fb4cb6f9d3717466
+ Applied to master, thanks.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661757
+ Regards,
+ Arnout
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- support/testing/tests/core/test_hardening.py | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
-index 60e14303a3..e9d30f3a38 100644
---- a/support/testing/tests/core/test_hardening.py
-+++ b/support/testing/tests/core/test_hardening.py
-@@ -52,6 +52,7 @@ class TestRelroPartial(TestHardeningBase):
-     config = TestHardeningBase.config + \
-         """
-         BR2_RELRO_PARTIAL=y
-+        # BR2_PIC_PIE is not set
-         """
- 
-     def test_run(self):
+> ---
+>  package/xterm/xterm.hash | 2 +-
+>  package/xterm/xterm.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
+> index 588b7fca51..d6d80ad977 100644
+> --- a/package/xterm/xterm.hash
+> +++ b/package/xterm/xterm.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated after checking pgp signature
+> -sha256  858b2885963fe97e712739066aadc1baeba2b33a0016303a7fec7d38bc73bf6e  xterm-366.tgz
+> +sha256  27f1a8b1c756e269fd5684e60802b545f0be9b36b8b5d6bdbc840c6b000dc51f  xterm-367.tgz
+>  # Locally calculated
+>  sha256  dfb668cc977e24649500f3cc54de3e2b793928d210715a445ab1227930b07ba6  COPYING
+> diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+> index 6f142a0b56..e09d350a7d 100644
+> --- a/package/xterm/xterm.mk
+> +++ b/package/xterm/xterm.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -XTERM_VERSION = 366
+> +XTERM_VERSION = 367
+>  XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+>  XTERM_SITE = http://invisible-mirror.net/archives/xterm
+>  XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+> 
