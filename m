@@ -1,202 +1,63 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue, 18 May 2021 09:58:03 +0200
-Subject: [Buildroot] [PATCH 2/2] package/lvm2: drop
- BR2_PACKAGE_LVM2_APP_LIBRARY
-In-Reply-To: <CAPi7W83SZL9j2iEvi8DM6EBVJfXksN5-WsGZXnSundeHfYHOYA@mail.gmail.com>
-References: <20210517170609.810302-1-fontaine.fabrice@gmail.com>
- <20210517170609.810302-2-fontaine.fabrice@gmail.com>
- <20210517204324.GH2506@scaer>
- <CAPi7W83SZL9j2iEvi8DM6EBVJfXksN5-WsGZXnSundeHfYHOYA@mail.gmail.com>
-Message-ID: <8bce0504-8c29-5868-bd66-c998ece91eae@benettiengineering.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 18 May 2021 10:05:19 +0200
+Subject: [Buildroot] [PATCH] package/openblas: install static library even
+ if BR2_STATIC_LIBS is not set
+Message-ID: <20210518080520.18514-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice, Adam, All,
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-On 5/17/21 10:51 PM, Fabrice Fontaine wrote:
-> Le lun. 17 mai 2021 ? 22:43, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
->>
->> Fabrice, All,
->>
->> +Adam for udisks and GOI... ;-]
->>
->> On 2021-05-17 19:06 +0200, Fabrice Fontaine spake thusly:
->>> The application library (liblvm2app) has been dropped since version
->>> 2.03.00 and
->>> https://github.com/lvmteam/lvm2/commit/0d22b58172808f050abeacdb5d6a7b7132b91a8c
->>>
->>> It should be noted that lvm2 support must be dropped from udisks until
->>> a bump to at least version 2.7.0 and
->>> https://github.com/storaged-project/udisks/commit/4c0709a893be49a0db5b2839e4766621e2c1bb98
->>>
->>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->>
->> Applied to master, thanks.
->>
->> I was a bit concerned that we dropped this support, but hinestly, we
->> have udisks 1.0.5, from March 2014... So, to me, it's a minor annoyance
->> if lvm2 support in udisks is dropped...
->>
->> IIRC, Adam, did some work on udisks back when he was "toying" with GOI...
->> Adam? ;-)
-> We also have a patch to bump udisks from Giulio:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20200217143030.5031-5-giulio.benetti at benettiengineering.com/
-> Perhaps, Giulio could also help us to bump udisks.
+openblas has options 'NO_STATIC' and 'NO_SHARED' to steer the installation
+of libopenblas.a and libopenblas.so. But this does not impact anything in
+the build process, other than copying the respective file to the output
+directory.
 
-I can try to re-bump since at the time I thought there were a lot of 
-dependencies while Adam(if I recall correct) told me that GOI wasn't 
-needed in libblock for example. So I'm retrying to bump with the minimum 
-dependencies. Let's see if I'm able to do this.
+As openblas is very large (e.g. 3MB on ARM) but applications may only use a
+small part of it, such applications may want to link statically with
+openblas, even though the global BR2_STATIC_LIBS is not set and not desired.
 
-Best regards
+One approach would have been to introduce options
+BR2_PACKAGE_OPENBLAS_BUILD_SHARED_LIB and
+BR2_PACKAGE_OPENBLAS_BUILD_STATIC_LIB which could be freely selected
+regardless of BR2_STATIC_LIBS / BR2_SHARED_LIBS.
+
+But since the installation of a static library does not have any negative
+impact except for some disk space on the host system (.a files are removed
+from the target in target-finalize anyway), change the installation rules to
+install the static library unconditionally.
+
+NO_SHARED is still passed for static-libs-only systems, because the
+dynamic library would unnecessarily take up target disk space for such
+systems.
+
+Users that only need the static library would still need to remove the
+shared library from a post-build script to actually save space.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ package/openblas/openblas.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index 21d05cf30d..60b9d9b15b 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -42,10 +42,10 @@ endif
+ OPENBLAS_MAKE_OPTS += USE_OPENMP=0
+ 
+ # Static-only/Shared-only toggle
++# Note: static library is always generated so that applications can link
++# statically for size reduction, even if BR2_STATIC_LIBS is not set.
+ ifeq ($(BR2_STATIC_LIBS),y)
+ OPENBLAS_MAKE_OPTS += NO_SHARED=1
+-else ifeq ($(BR2_SHARED_LIBS),y)
+-OPENBLAS_MAKE_OPTS += NO_STATIC=1
+ endif
+ 
+ # binutils version <= 2.23.2 has a bug
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
->>
->> Regards,
->> Yann E. MORIN.
->>
->>> ---
->>>   Config.in.legacy         | 13 +++++++++++++
->>>   package/lvm2/Config.in   | 11 -----------
->>>   package/lvm2/lvm2.mk     |  7 -------
->>>   package/udisks/Config.in | 15 ---------------
->>>   package/udisks/udisks.mk |  6 +-----
->>>   5 files changed, 14 insertions(+), 38 deletions(-)
->>>
->>> diff --git a/Config.in.legacy b/Config.in.legacy
->>> index 39a44f3026..8683e01490 100644
->>> --- a/Config.in.legacy
->>> +++ b/Config.in.legacy
->>> @@ -146,6 +146,19 @@ endif
->>>
->>>   comment "Legacy options removed in 2021.05"
->>>
->>> +config BR2_PACKAGE_UDISKS_LVM2
->>> +     bool "udisks lvm2 support removed"
->>> +     select BR2_LEGACY
->>> +     help
->>> +       The lvm2 support was removed because udisks < 2.7.0 still
->>> +       depends on lvm2 application library.
->>> +
->>> +config BR2_PACKAGE_LVM2_APP_LIBRARY
->>> +     bool "lvm2 application library removed"
->>> +     select BR2_LEGACY
->>> +     help
->>> +       The lvm2 application library was removed upstream.
->>> +
->>>   config BR2_PACKAGE_LVM2_LVMETAD
->>>        bool "lvm2 lvmetad removed"
->>>        select BR2_LEGACY
->>> diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
->>> index de5b972e99..f8bcdffb38 100644
->>> --- a/package/lvm2/Config.in
->>> +++ b/package/lvm2/Config.in
->>> @@ -36,17 +36,6 @@ config BR2_PACKAGE_LVM2_STANDARD_INSTALL
->>>   comment "lvm2 standard install needs a glibc or uClibc toolchain"
->>>        depends on BR2_TOOLCHAIN_USES_MUSL
->>>
->>> -config BR2_PACKAGE_LVM2_APP_LIBRARY
->>> -     bool "install application library"
->>> -     # http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
->>> -     depends on !BR2_TOOLCHAIN_USES_MUSL
->>> -     select BR2_PACKAGE_LVM2_STANDARD_INSTALL
->>> -     help
->>> -       Install application library (liblvm2app).
->>> -
->>> -comment "lvm2 application library needs a glibc or uClibc toolchain"
->>> -     depends on BR2_TOOLCHAIN_USES_MUSL
->>> -
->>>   endif
->>>
->>>   comment "lvm2 needs a toolchain w/ threads, dynamic library"
->>> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
->>> index 84ec75530a..224dbf5d54 100644
->>> --- a/package/lvm2/lvm2.mk
->>> +++ b/package/lvm2/lvm2.mk
->>> @@ -55,12 +55,6 @@ LVM2_INSTALL_STAGING_OPTS += install
->>>   LVM2_INSTALL_TARGET_OPTS += install
->>>   endif
->>>
->>> -ifeq ($(BR2_PACKAGE_LVM2_APP_LIBRARY),y)
->>> -LVM2_CONF_OPTS += --enable-applib
->>> -else
->>> -LVM2_CONF_OPTS += --disable-applib
->>> -endif
->>> -
->>>   ifeq ($(BR2_INIT_SYSTEMD),y)
->>>   LVM2_INSTALL_TARGET_OPTS += install_systemd_units install_systemd_generators
->>>   endif
->>> @@ -75,7 +69,6 @@ HOST_LVM2_CONF_OPTS = \
->>>        --enable-pkgconfig \
->>>        --disable-cmdlib \
->>>        --disable-dmeventd \
->>> -     --disable-applib \
->>>        --disable-fsadm \
->>>        --disable-readline \
->>>        --disable-selinux
->>> diff --git a/package/udisks/Config.in b/package/udisks/Config.in
->>> index efd3b619bf..9d3eb240e6 100644
->>> --- a/package/udisks/Config.in
->>> +++ b/package/udisks/Config.in
->>> @@ -31,21 +31,6 @@ config BR2_PACKAGE_UDISKS
->>>
->>>          http://www.freedesktop.org/wiki/Software/udisks
->>>
->>> -if BR2_PACKAGE_UDISKS
->>> -
->>> -config BR2_PACKAGE_UDISKS_LVM2
->>> -     bool "lvm2 support"
->>> -     # The lvm app library can't compile against musl
->>> -     depends on BR2_TOOLCHAIN_USES_GLIBC
->>> -     select BR2_PACKAGE_LVM2_APP_LIBRARY
->>> -     help
->>> -       Enable LVM2 support
->>> -
->>> -comment "lvm2 support needs a glibc toolchain"
->>> -     depends on !BR2_TOOLCHAIN_USES_GLIBC
->>> -
->>> -endif
->>> -
->>>   comment "udisks needs udev /dev management"
->>>        depends on BR2_USE_MMU
->>>        depends on !BR2_PACKAGE_HAS_UDEV
->>> diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
->>> index af25c2b8e2..9f7a02e10c 100644
->>> --- a/package/udisks/udisks.mk
->>> +++ b/package/udisks/udisks.mk
->>> @@ -24,10 +24,6 @@ UDISKS_DEPENDENCIES = \
->>>        sg3_utils \
->>>        udev
->>>
->>> -UDISKS_CONF_OPTS = --disable-remote-access --disable-man-pages
->>> -
->>> -ifeq ($(BR2_PACKAGE_UDISKS_LVM2),y)
->>> -UDISKS_CONF_OPTS += --enable-lvm2
->>> -endif
->>> +UDISKS_CONF_OPTS = --disable-remote-access --disable-man-pages --disable-lvm2
->>>
->>>   $(eval $(autotools-package))
->>> --
->>> 2.30.2
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->> --
->> .-----------------.--------------------.------------------.--------------------.
->> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->> '------------------------------^-------^------------------^--------------------'
-> Best Regards,
-> 
-> Fabrice
-> 
+2.26.3
