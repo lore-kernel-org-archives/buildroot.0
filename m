@@ -1,51 +1,40 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 18 May 2021 22:22:29 +0200
-Subject: [Buildroot] [git commit] package/environment-setup: Fix incorrect
- order of the `sed` expressions
-Message-ID: <20210518195438.C538487C13@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 May 2021 22:28:17 +0200
+Subject: [Buildroot] [PATCH] Makefile: remove pkg-stats data on clean
+Message-ID: <20210518202817.2197910-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0ed2725e9816677ab395334fdb7ec2559bce878
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Like commit 1f187371d002 for cpe-updates data, also remove pkg-stats
+data on clean.
 
-Order of the `sed` expressions is important; when this was commited
-to master, the order of the expressions from the original patch [1] was
-changed, rendering the second expression to noop.
+Unlike the rest, those are not nicely located in a directory of their
+own, and have no variable name associated with them, so we just need
+to repeat their names in the clean rule.
 
-This made all the environment variables from the script to contain
-absolute paths: long absolute paths makes verbose builds difficult
-to read/follow.
-We can take advantage of the fact that the PATH is updated and we
-don't have to use absolute paths.
-
-Fixed by reordering the `sed` expresions:
-* first update the path of the binaries: e.g. 's%$(HOST_DIR)/bin/%%g'
-* only then update remaining paths: e.g. 's%$(HOST_DIR)%\$$SDK_PATH%g'
-
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20201027140140.47982-1-matthew.weber at rockwellcollins.com/
-
-Signed-off-by: Mircea GLIGA <mgliga@bitdefender.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/environment-setup/environment-setup.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-index fcad013f0d..f4c52921f7 100644
---- a/package/environment-setup/environment-setup.mk
-+++ b/package/environment-setup/environment-setup.mk
-@@ -26,8 +26,8 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
- 	printf "alias cmake=\"cmake \
- 		-DCMAKE_TOOLCHAIN_FILE=$(HOST_DIR)/share/buildroot/toolchainfile.cmake \
- 		-DCMAKE_INSTALL_PREFIX=/usr\"\n" >> $(ENVIRONMENT_SETUP_FILE)
--	$(SED) 's%$(HOST_DIR)%\$$SDK_PATH%g' \
--		-e 's%$(HOST_DIR)/bin/%%g' \
-+	$(SED) 's%$(HOST_DIR)/bin/%%g' \
-+		-e 's%$(HOST_DIR)%\$$SDK_PATH%g' \
- 		-e '/^export "PATH=/c\' \
- 		$(ENVIRONMENT_SETUP_FILE)
- 	printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
+diff --git a/Makefile b/Makefile
+index c3305f46e9..9d2c0d8ecb 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1089,7 +1089,8 @@ printvars:
+ clean:
+ 	rm -rf $(BASE_TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
+ 		$(BUILD_DIR) $(BASE_DIR)/staging \
+-		$(LEGAL_INFO_DIR) $(GRAPHS_DIR) $(PER_PACKAGE_DIR) $(CPE_UPDATES_DIR)
++		$(LEGAL_INFO_DIR) $(GRAPHS_DIR) $(PER_PACKAGE_DIR) $(CPE_UPDATES_DIR) \
++		$(O)/pkg-stats.*
+ 
+ .PHONY: distclean
+ distclean: clean
+-- 
+2.25.1
