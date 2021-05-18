@@ -1,44 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 18 May 2021 17:31:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xterm: security bump version to 367
-Message-ID: <20210518153112.102463-1-bernd.kuhls@t-online.de>
+Date: Tue, 18 May 2021 17:36:28 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-mediaportal-tvserver:
+ bump version to 8.2.0-Matrix
+Message-ID: <20210518153628.104731-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2021-27135:
-https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-27135
+Changelog:
+https://github.com/kodi-pvr/pvr.mediaportal.tvserver/blob/Matrix/pvr.mediaportal.tvserver/changelog.txt
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xterm/xterm.hash | 2 +-
- package/xterm/xterm.mk   | 2 +-
+ .../kodi-pvr-mediaportal-tvserver.hash                          | 2 +-
+ .../kodi-pvr-mediaportal-tvserver.mk                            | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index 588b7fca51..d6d80ad977 100644
---- a/package/xterm/xterm.hash
-+++ b/package/xterm/xterm.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  858b2885963fe97e712739066aadc1baeba2b33a0016303a7fec7d38bc73bf6e  xterm-366.tgz
-+sha256  27f1a8b1c756e269fd5684e60802b545f0be9b36b8b5d6bdbc840c6b000dc51f  xterm-367.tgz
- # Locally calculated
- sha256  dfb668cc977e24649500f3cc54de3e2b793928d210715a445ab1227930b07ba6  COPYING
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 6f142a0b56..e09d350a7d 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+index 83ac680914..ca526f40a0 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  cea87ccdceee834c96d6b6887b78213ccf79890fec97436cbef17c57b9cdac15  kodi-pvr-mediaportal-tvserver-8.1.2-Matrix.tar.gz
++sha256  0109daa45d7b6450954b40d0b09dbef28818c551e9f0fea9943cfd06f0a7ec40  kodi-pvr-mediaportal-tvserver-8.2.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+index 02b24ef271..50a9147a9d 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XTERM_VERSION = 366
-+XTERM_VERSION = 367
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = http://invisible-mirror.net/archives/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+-KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 8.1.2-Matrix
++KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 8.2.0-Matrix
+ KODI_PVR_MEDIAPORTAL_TVSERVER_SITE = $(call github,kodi-pvr,pvr.mediaportal.tvserver,$(KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION))
+ KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE = GPL-2.0+
+ KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = LICENSE.md
 -- 
 2.29.2
