@@ -1,54 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 17:25:29 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libdrm: bump version to
- 2.4.106
-In-Reply-To: <hd2dnhx29h.ln2@ID-313208.user.individual.net>
-References: <20210518044626.17073-1-bernd.kuhls@t-online.de>
- <20210518120105.GB2506__49536.9530793809$1621339293$gmane$org@scaer>
- <hd2dnhx29h.ln2@ID-313208.user.individual.net>
-Message-ID: <20210518152529.GS2506@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 18 May 2021 17:26:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libX11: security bump
+ version to 1.7.1
+Message-ID: <20210518152600.101632-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Fixes CVE-2021-31535:
+https://lists.x.org/archives/xorg-announce/2021-May/003088.html
 
-On 2021-05-18 17:17 +0200, Bernd Kuhls spake thusly:
-> Am Tue, 18 May 2021 14:01:05 +0200 schrieb Yann E. MORIN:
-> > You tagged that one for next, but this is actually a minor release that
-> > fixes a regression, and adds just a bunch of tests and debug here and
-> > there....
-> > Is there a reason why that can't be applied to master?
-> maybe I am missing some informations but afaics there are no written 
-> rules which I can follow when deciding whether a patch is valid for -
-> master or -next. When in doubt, especially with a bump like this one 
-> which not only fixes bugs but also adds new code, I prefer to send a 
-> patch for -next so Thomas, Peter, Arnout or you can decide otherwise.
+Release notes:
+https://lists.x.org/archives/xorg-announce/2021-May/003089.html
 
-There are no definite rule, indeed. But when a bump ismostly about
-fixes, it should be for master.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
+ package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-In this case, upstream really seems to consider this release as only bug
-fixes;
-    https://lists.freedesktop.org/archives/dri-devel/2021-May/307025.html
-
-    Some nouveau debug, amdgpu tests, and a regression fix from 105.
-    Releasing so 105 doesn't end up being used a lot with a regression.
-
-And if you already have a doubt, state so in a post-commit note, to hint
-us so that we don't have to guess...
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
+index 5b1162f4c5..b87b2498e8 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.hash
++++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2020-November/003065.html
+-sha256  36c8f93b6595437c8cfbc9f08618bcb3041cbd303e140a0013f88e4c2977cb54  libX11-1.7.0.tar.bz2
+-sha512  f661ca90350fd8a94f054b00f12f5122cea068ebff706acfd399462236c189a296a2358d17d16166635101cf56cc19303dd407873a159932d093c9f33556f9fb  libX11-1.7.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-May/003089.html
++sha256  e64e43deaa562cbfb0d5ada64670ec09c6fac7935262dcd77bbc6d984a535d47  libX11-1.7.1.tar.bz2
++sha512  a76f0a82fce6f9b50646a7cd7ec5ee046650f225816050226068a7548fa083ef07d146d40faaf44e033c59c17b0fda5ffdee3a127dac3ab56cee02133819aa3d  libX11-1.7.1.tar.bz2
+ 
+ # Locally computed
+ sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 8fefbc492a..39d9dc2cc7 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBX11_VERSION = 1.7.0
++XLIB_LIBX11_VERSION = 1.7.1
+ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
+ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
