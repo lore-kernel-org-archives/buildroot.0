@@ -1,50 +1,66 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 18 May 2021 21:19:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/abootimg: Update to 1ebeb39,
- switch to ajs124
-In-Reply-To: <20210325191911.27127-1-petr.vorel@gmail.com>
-References: <20210325191911.27127-1-petr.vorel@gmail.com>
-Message-ID: <YKQTX+krG0jHENRy@pevik>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 May 2021 21:42:50 +0200
+Subject: [Buildroot] [PATCH] package/links: enable building graphics
+ mode with only fb driver
+In-Reply-To: <CAPCnQJ=TNmHQ+s-fhjYauZ521aC7eUdnUQSugFPJv8ayp1264w@mail.gmail.com>
+References: <20210427091325.1488138-1-urjaman@gmail.com>
+ <01b9f8cb-e83e-5e1f-228c-0e887c93915b@mind.be>
+ <CAPCnQJ=TNmHQ+s-fhjYauZ521aC7eUdnUQSugFPJv8ayp1264w@mail.gmail.com>
+Message-ID: <cd08716b-6ec5-c7b5-54c8-8ee46ac0b0de@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ping, please.
-
-> ajs124 [1] has 2 fixes over than original [2].
-
-> [1] https://gitlab.com/ajs124/abootimg
-> [2] https://github.com/ggrandou/abootimg.
-
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  package/abootimg/abootimg.hash | 2 +-
->  package/abootimg/abootimg.mk   | 5 +++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
-
-> diff --git a/package/abootimg/abootimg.hash b/package/abootimg/abootimg.hash
-> index fa5282c6c3..141db26860 100644
-> --- a/package/abootimg/abootimg.hash
-> +++ b/package/abootimg/abootimg.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256	eb8d912bc7b5454c2afd3385fd86f4917d3587c48a6f5ae45df7856d88502cab	abootimg-7e127fee6a3981f6b0a50ce9910267cd501e09d4.tar.gz
-> +sha256	f377da42a57d982cfc22fa75c5a69febdc3e4c1ef43cd0ceaec42e14067e2f37	abootimg-1ebeb393252ab5aeed62e34bc439b6728444f06e-br1.tar.gz
->  sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	LICENSE
-> diff --git a/package/abootimg/abootimg.mk b/package/abootimg/abootimg.mk
-> index ab6c709318..a07100df5a 100644
-> --- a/package/abootimg/abootimg.mk
-> +++ b/package/abootimg/abootimg.mk
-> @@ -4,8 +4,9 @@
 
 
+On 14/05/2021 11:26, Urja Rannikko wrote:
+> Hi,
+> 
+> On Wed, May 5, 2021 at 11:08 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>  Still not good enough, I'm afraid :-) You also need to depend on gpm in the .mk
+>> file.
+>>
+> It already does, atleast that's how i read this fragment in links.mk:
+> 
+> ifeq ($(BR2_PACKAGE_GPM),y)
+> LINKS_CONF_OPTS += --with-gpm
+> LINKS_DEPENDENCIES += gpm
+> else
+> LINKS_CONF_OPTS += --without-gpm
+> endif
+> 
+> And yes links can use GPM in textmode-only build too, so that seems
+> correct as-is.
 
-> -ABOOTIMG_VERSION = 7e127fee6a3981f6b0a50ce9910267cd501e09d4
-> -ABOOTIMG_SITE = $(call github,ggrandou,abootimg,$(ABOOTIMG_VERSION))
-> +ABOOTIMG_VERSION = 1ebeb393252ab5aeed62e34bc439b6728444f06e
-> +ABOOTIMG_SITE = https://gitlab.com/ajs124/abootimg.git
-> +ABOOTIMG_SITE_METHOD = git
->  ABOOTIMG_LICENSE = GPL-2.0+
->  ABOOTIMG_LICENSE_FILES = LICENSE
+ Oops, you're right, my bad.
+
+ Applied to next, thanks!
+
+ Regards,
+ Arnout
+
+> 
+>>  Also, I'm thinking: maybe we can turn this around and automatically select gpm?
+>>
+>>         select BR2_PACKAGE_GPM if !BR2_PACKAGE_DIRECTFB && !BR2_PACKAGE_XORG7
+>>
+>>  That way you don't need the comment either. Well, you still do because gpm
+>> depends on static:
+>>
+>>         depends on !BR2_STATIC_LIBS if !BR2_PACKAGE_DIRECTFB && !BR2_PACKAGE_XORG7 # gpm
+>>
+>> so the comment would become:
+>>
+>> comment "links graphics needs dynamic libs, DirectFB or X11"
+>>         depends on BR2_STATIC_LIBS && !BR2_PACKAGE_DIRECTFB && !BR2_PACKAGE_XORG7
+>>
+> 
+> I have no hard opinion on this, except that I do dislike possibly
+> non-obvious use of select
+> (and it has the dependency trouble you listed), which would leave GPM
+> selected if one
+> toggled links graphics on and off while using menuconfig.
+> 
