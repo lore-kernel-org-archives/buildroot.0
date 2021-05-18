@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 287D0C4320E
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:09:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F233BC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:10:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DD075610FB
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:09:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DD075610FB
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id BC9F0601FC
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:10:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BC9F0601FC
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA0FA60681;
-	Tue,  3 Aug 2021 22:09:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93C1B404D4;
+	Tue,  3 Aug 2021 22:10:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dg8Rb6bOIUXc; Tue,  3 Aug 2021 22:09:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t5db5c6d4IV9; Tue,  3 Aug 2021 22:10:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E783D60680;
-	Tue,  3 Aug 2021 22:09:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 106D41BF349
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB8B240375;
+	Tue,  3 Aug 2021 22:10:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 154E31BF9AA
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CEF6A83AC8
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2FE034056A
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Jnfca-GJLwEr for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FcPW6IBSm_Ow for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1CF3F8356C
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3ABE2404FC
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 64FF981278; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 916388399D; Tue,  3 Aug 2021 21:09:40 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 21 Jul 2021 09:25:51 +0200
+Date: Tue, 18 May 2021 16:50:03 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9070a7355b443c01760876bd8870a8ab7cc87286
-X-Git-Newrev: f5906644b45269b1a5fe109cb64fad837e4fbff2
+X-Git-Oldrev: 4a3639bad01a08b7bbb4ccb3090099a01799f321
+X-Git-Newrev: 8c3f281626fb3a9e7ca596ca1df2cc1d30252496
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211013.64FF981278@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bird: bump to version
- 2.0.8
+Message-Id: <20210803210940.916388399D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/rpi: fix defconfigs
+ after upstream rebased
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,136 +65,155 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6395153437747888104=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
---===============6395153437747888104==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=f5906644b45269b1a5fe109cb64fad837e4fbff2
+commit: https://git.buildroot.net/buildroot/commit/?id=8c3f281626fb3a9e7ca596ca1df2cc1d30252496
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Drop patches (already in version)
-- Update indentation in hash file (two spaces)
+Branches in the Rappberry Pi linux repository are often rebased, which
+means that commits that are not reachable from a reference (tag,branch)
+will eventually get garbage-collected.
 
-https://gitlab.nic.cz/labs/bird/-/blob/v2.0.8/NEWS
+This is probably what hapenned with the commit we are curently
+referencing in our defconfig files.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Swith to using the current HEAD of the rpi-5.10.y brnch, in lieue of the
+previous one.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0001-Nest-Fix-build-without-protocols.patch    | 28 ------------------
- package/bird/0002-Added-missing-extern.patch       | 34 ----------------------
- package/bird/bird.hash                             |  4 +--
- package/bird/bird.mk                               |  2 +-
- 4 files changed, 3 insertions(+), 65 deletions(-)
+ configs/raspberrypi0_defconfig       | 2 +-
+ configs/raspberrypi0w_defconfig      | 2 +-
+ configs/raspberrypi2_defconfig       | 2 +-
+ configs/raspberrypi3_64_defconfig    | 2 +-
+ configs/raspberrypi3_defconfig       | 2 +-
+ configs/raspberrypi3_qt5we_defconfig | 2 +-
+ configs/raspberrypi4_64_defconfig    | 2 +-
+ configs/raspberrypi4_defconfig       | 2 +-
+ configs/raspberrypi_defconfig        | 2 +-
+ 9 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/bird/0001-Nest-Fix-build-without-protocols.patch b/package/bird/0001-Nest-Fix-build-without-protocols.patch
-deleted file mode 100644
-index 48d21441ca..0000000000
---- a/package/bird/0001-Nest-Fix-build-without-protocols.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From f9eb9b4cab65b850c61738dd56632bae0e7329ca Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 19 Oct 2019 12:50:27 +0200
--Subject: [PATCH] Nest: Fix build without protocols
--
--(CHECK keyword added by commiter)
--[Retrieved from:
--https://gitlab.labs.nic.cz/labs/bird/commit/f9eb9b4cab65b850c61738dd56632bae0e7329ca]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- nest/config.Y | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/nest/config.Y b/nest/config.Y
--index c62501a3..1bc203dd 100644
----- a/nest/config.Y
--+++ b/nest/config.Y
--@@ -75,6 +75,7 @@ CF_KEYWORDS(BGP, PASSWORDS, DESCRIPTION, SORTED)
-- CF_KEYWORDS(RELOAD, IN, OUT, MRTDUMP, MESSAGES, RESTRICT, MEMORY, IGP_METRIC, CLASS, DSCP)
-- CF_KEYWORDS(TIMEFORMAT, ISO, SHORT, LONG, ROUTE, PROTOCOL, BASE, LOG, S, MS, US)
-- CF_KEYWORDS(GRACEFUL, RESTART, WAIT, MAX, FLUSH, AS)
--+CF_KEYWORDS(CHECK, LINK)
-- 
-- /* For r_args_channel */
-- CF_KEYWORDS(IPV4, IPV4_MC, IPV4_MPLS, IPV6, IPV6_MC, IPV6_MPLS, IPV6_SADR, VPN4, VPN4_MC, VPN4_MPLS, VPN6, VPN6_MC, VPN6_MPLS, ROA4, ROA6, FLOW4, FLOW6, MPLS, PRI, SEC)
---- 
--2.21.0
--
-diff --git a/package/bird/0002-Added-missing-extern.patch b/package/bird/0002-Added-missing-extern.patch
-deleted file mode 100644
-index 00aab3e92b..0000000000
---- a/package/bird/0002-Added-missing-extern.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 4bbc10614f3431c37e6352f5a6ea5c693c31021e Mon Sep 17 00:00:00 2001
--From: Maria Matejka <mq@ucw.cz>
--Date: Tue, 4 Feb 2020 10:11:16 +0100
--Subject: [PATCH] Added missing extern
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Thanks to Robert Scheck <bird@robert-scheck.de> who reported it
--and Toke Høiland-Jørgensen <toke@toke.dk> who suggested this patch.
--
--[Retrieved from:
--https://gitlab.nic.cz/labs/bird/-/commit/4bbc10614f3431c37e6352f5a6ea5c693c31021e]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- nest/route.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/nest/route.h b/nest/route.h
--index d2a07f09..b927db5f 100644
----- a/nest/route.h
--+++ b/nest/route.h
--@@ -458,7 +458,7 @@ typedef struct rta {
-- 					   protocol-specific metric is availabe */
-- 
-- 
---const char * rta_dest_names[RTD_MAX];
--+extern const char * rta_dest_names[RTD_MAX];
-- 
-- static inline const char *rta_dest_name(uint n)
-- { return (n < RTD_MAX) ? rta_dest_names[n] : "???"; }
---- 
--2.26.2
--
-diff --git a/package/bird/bird.hash b/package/bird/bird.hash
-index 303fc21205..2d20491dd6 100644
---- a/package/bird/bird.hash
-+++ b/package/bird/bird.hash
-@@ -1,2 +1,2 @@
--sha256 631d2b58aebdbd651aaa3c68c3756c02ebfe5b1e60d307771ea909eeaa5b1066  bird-2.0.7.tar.gz
--sha256 94c53c84320078920ac1f0d49c81a4e9004512f534521a58bdf145acbcbc2cd2  README
-+sha256  19d2de83ee25a307b9e5b9e58797dd68766d439bcee33e3ac617ed502370e7f6  bird-2.0.8.tar.gz
-+sha256  94c53c84320078920ac1f0d49c81a4e9004512f534521a58bdf145acbcbc2cd2  README
-diff --git a/package/bird/bird.mk b/package/bird/bird.mk
-index 4d6159b075..a8b9b18b50 100644
---- a/package/bird/bird.mk
-+++ b/package/bird/bird.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
+index 84de42c631..4cccad83f7 100644
+--- a/configs/raspberrypi0_defconfig
++++ b/configs/raspberrypi0_defconfig
+@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
  
--BIRD_VERSION = 2.0.7
-+BIRD_VERSION = 2.0.8
- BIRD_SITE = ftp://bird.network.cz/pub/bird
- BIRD_LICENSE = GPL-2.0+
- BIRD_LICENSE_FILES = README
-
---===============6395153437747888104==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ 
+ # Build the DTBs for A/B from the kernel sources: the zero is the same
+diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
+index cf2f61a301..9833571e9e 100644
+--- a/configs/raspberrypi0w_defconfig
++++ b/configs/raspberrypi0w_defconfig
+@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index dc0939b639..ca65ba5259 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index 04a2d01982..de50bdf550 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index b2db9af239..2bf96ca4c5 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
+index 5ce32bb9e6..69c02daf3d 100644
+--- a/configs/raspberrypi3_qt5we_defconfig
++++ b/configs/raspberrypi3_qt5we_defconfig
+@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
+index bd7a470cda..eeaece49eb 100644
+--- a/configs/raspberrypi4_64_defconfig
++++ b/configs/raspberrypi4_64_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
+index 35a6218a5c..85ba477d9f 100644
+--- a/configs/raspberrypi4_defconfig
++++ b/configs/raspberrypi4_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 214dc0eccb..8921faf56f 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ 
+ # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
-
---===============6395153437747888104==--
