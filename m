@@ -1,154 +1,154 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 16:21:42 +0200
-Subject: [Buildroot] [PATCHv2 1/3] package/poke: new package
-In-Reply-To: <20210517155628.267749-1-romain.naour@gmail.com>
-References: <20210517155628.267749-1-romain.naour@gmail.com>
-Message-ID: <20210518142142.GP2506@scaer>
+Date: Tue, 18 May 2021 16:50:03 +0200
+Subject: [Buildroot] [git commit] configs/rpi: fix defconfigs after upstream
+ rebased
+Message-ID: <20210518142339.5F82681547@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=8c3f281626fb3a9e7ca596ca1df2cc1d30252496
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-17 17:56 +0200, Romain Naour spake thusly:
-> Backport a patch to disable tcl/tk dependencies when gui support
-> is disabled.
-> 
-> Backport and rebase a patch to avoid host poisoning while
-> cross-compiling.
-> 
-> Add another local patch when HELP2MAN is missing.
-> 
-> Disable uClibc-ng toolchain for now due to issues with
-> bundled gnulib.
-> 
-> The license of gnulib is not easy to describe because
-> it bundle several sources files with different license [1][2].
-> Even if not SPDX compliant, use "gnulib license".
-> 
-> [1] https://git.savannah.gnu.org/cgit/gnulib.git/tree/COPYING
-> [2] https://src.fedoraproject.org/rpms/gnulib/blob/rawhide/f/gnulib.spec#_53
-> 
-> See:
-> http://www.jemarch.net/poke-1.0-relnotes.html
-> http://www.jemarch.net/poke-1.1-relnotes.html
-> http://www.jemarch.net/poke-1.2-relnotes.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Jose E. Marchesi <jemarch@gnu.org>
-> Cc: Luca Saiu <positron@gnu.org>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
-[--SNIP--]
-> diff --git a/package/poke/Config.in b/package/poke/Config.in
-> new file mode 100644
-> index 0000000000..d3334dfdd4
-> --- /dev/null
-> +++ b/package/poke/Config.in
-> @@ -0,0 +1,29 @@
-> +config BR2_PACKAGE_POKE
-> +	bool "poke"
-> +	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # bdwgc
+Branches in the Rappberry Pi linux repository are often rebased, which
+means that commits that are not reachable from a reference (tag,branch)
+will eventually get garbage-collected.
 
-You forgot to propagate that dependency to the comment...
+This is probably what hapenned with the commit we are curently
+referencing in our defconfig files.
 
-> +	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # less
+Swith to using the current HEAD of the rpi-5.10.y brnch, in lieue of the
+previous one.
 
-I've switched to selecting that, otherwise you'd have to also propagate
-it to the ocmment somehow.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/raspberrypi0_defconfig       | 2 +-
+ configs/raspberrypi0w_defconfig      | 2 +-
+ configs/raspberrypi2_defconfig       | 2 +-
+ configs/raspberrypi3_64_defconfig    | 2 +-
+ configs/raspberrypi3_defconfig       | 2 +-
+ configs/raspberrypi3_qt5we_defconfig | 2 +-
+ configs/raspberrypi4_64_defconfig    | 2 +-
+ configs/raspberrypi4_defconfig       | 2 +-
+ configs/raspberrypi_defconfig        | 2 +-
+ 9 files changed, 9 insertions(+), 9 deletions(-)
 
-> +	depends on BR2_USE_WCHAR # needs wctomb
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # gnulib
-> +	select BR2_PACKAGE_BDWGC
-> +	select BR2_PACKAGE_LESS # runtime
-> +	select BR2_PACKAGE_READLINE
-> +	help
-> +	  GNU poke is a new interactive editor for binary data. Not
-> +	  limited to editing basic entities such as bits and bytes,
-> +	  it provides a full-fledged procedural, interactive
-> +	  programming language designed to describe data structures
-> +	  and to operate on them. Once a user has defined a structure
-> +	  for binary data (usually matching some file format) she can
-> +	  search, inspect, create, shuffle and modify abstract entities
-> +	  such as ELF relocations, MP3 tags, DWARF expressions,
-> +	  partition table entries, and so on, with primitives
-> +	  resembling simple editing of bits and bytes. The program
-> +	  comes with a library of already written descriptions (or
-> +	  "pickles" in poke parlance) for many binary formats.
-> +
-> +	  https://www.gnu.org/software/poke/
-> +
-> +comment "poke needs a glibc or musl toolchain w/ NPTL, wchar"
-> +	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
-
-I think this was not correct. Indeed, if you have a glibc or a musl
-toolchain, the first dependency is not met, so the comment is hidden.
-However, if you do not have wchar, you still want to see the comment.
-
-I've fixed that, with the LIBATOMIC_OPS_ARCH_SUPPORTS.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> diff --git a/package/poke/poke.hash b/package/poke/poke.hash
-> new file mode 100644
-> index 0000000000..b3a79d90dc
-> --- /dev/null
-> +++ b/package/poke/poke.hash
-> @@ -0,0 +1,4 @@
-> +# Locally calculated
-> +sha256  f61cf8da5b64c01a1359373725aad1ca257f35c1c9269e4d50dd0664183ddf62  poke-1.2.tar.gz
-> +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-> +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  jitter/COPYING
-> diff --git a/package/poke/poke.mk b/package/poke/poke.mk
-> new file mode 100644
-> index 0000000000..c0217b6fad
-> --- /dev/null
-> +++ b/package/poke/poke.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
-> +#
-> +# poke
-> +#
-> +################################################################################
-> +
-> +POKE_VERSION = 1.2
-> +POKE_SITE = $(BR2_GNU_MIRROR)/poke
-> +# gnulib license is a mix/mess of public-domain and various GPL and LGPL versions.
-> +POKE_LICENSE = GPL-3.0+, GPL-3.0+ (jitter), gnulib license (gnulib)
-> +POKE_LICENSE_FILES = COPYING jitter/COPYING
-> +
-> +# 0001-build-do-not-check-for-Tcl-Tk-if-disable-gui-is-spec.patch
-> +# 0003-configure.ac-HELP2MAN-replace-by-false-when-cross-co.patch
-> +POKE_AUTORECONF = YES
-> +
-> +POKE_DEPENDENCIES = host-flex host-bison host-pkgconf bdwgc readline
-> +
-> +POKE_CONF_OPTS = \
-> +	--disable-gui \
-> +	--disable-libnbd \
-> +	--disable-mi \
-> +	--with-libreadline-prefix=$(STAGING_DIR)
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
+index 84de42c631..4cccad83f7 100644
+--- a/configs/raspberrypi0_defconfig
++++ b/configs/raspberrypi0_defconfig
+@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ 
+ # Build the DTBs for A/B from the kernel sources: the zero is the same
+diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
+index cf2f61a301..9833571e9e 100644
+--- a/configs/raspberrypi0w_defconfig
++++ b/configs/raspberrypi0w_defconfig
+@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index dc0939b639..ca65ba5259 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index 04a2d01982..de50bdf550 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index b2db9af239..2bf96ca4c5 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
+index 5ce32bb9e6..69c02daf3d 100644
+--- a/configs/raspberrypi3_qt5we_defconfig
++++ b/configs/raspberrypi3_qt5we_defconfig
+@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
+index bd7a470cda..eeaece49eb 100644
+--- a/configs/raspberrypi4_64_defconfig
++++ b/configs/raspberrypi4_64_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
+index 35a6218a5c..85ba477d9f 100644
+--- a/configs/raspberrypi4_defconfig
++++ b/configs/raspberrypi4_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 214dc0eccb..8921faf56f 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ 
+ # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
