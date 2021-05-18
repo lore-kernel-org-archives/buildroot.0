@@ -1,46 +1,50 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 18 May 2021 22:17:28 +0200
-Subject: [Buildroot] [git commit] package/xterm: security bump version to 367
-Message-ID: <20210518194910.09F8F88391@busybox.osuosl.org>
+Date: Tue, 18 May 2021 22:18:19 +0200
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXfixes:
+ bump version to 6.0.0
+Message-ID: <20210518195023.E2EDD86BF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=576beb7c0afc46e2b711a84358977e1ecca4cd6f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=daf7104a41d05146932efa4b6d81f4e3e4eb3277
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes CVE-2021-27135:
-https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-27135
+Release notes:
+https://lists.x.org/archives/xorg-announce/2021-May/003086.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/xterm/xterm.hash | 2 +-
- package/xterm/xterm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libXfixes/xlib_libXfixes.hash | 5 +++--
+ package/x11r7/xlib_libXfixes/xlib_libXfixes.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index 588b7fca51..d6d80ad977 100644
---- a/package/xterm/xterm.hash
-+++ b/package/xterm/xterm.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  858b2885963fe97e712739066aadc1baeba2b33a0016303a7fec7d38bc73bf6e  xterm-366.tgz
-+sha256  27f1a8b1c756e269fd5684e60802b545f0be9b36b8b5d6bdbc840c6b000dc51f  xterm-367.tgz
+diff --git a/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash b/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash
+index d655be4f71..f40c522903 100644
+--- a/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash
++++ b/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash
+@@ -1,5 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-October/002722.html
+-sha256 de1cd33aff226e08cefd0e6759341c2c8e8c9faf8ce9ac6ec38d43e287b22ad6  libXfixes-5.0.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-May/003086.html
++sha256  a7c1a24da53e0b46cac5aea79094b4b2257321c621b258729bc3139149245b4c  libXfixes-6.0.0.tar.bz2
++sha512  1985ef156f382e9a7e1cc7e044e0f626de1e4c82557a511cbcf6431994c0ac25b1f8b3a0293bd3089331593db8ce01d3a71ddec68f19b5fe6029d5082fb6885d  libXfixes-6.0.0.tar.bz2
+ 
  # Locally calculated
- sha256  dfb668cc977e24649500f3cc54de3e2b793928d210715a445ab1227930b07ba6  COPYING
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 6f142a0b56..e09d350a7d 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
+ sha256 d64e671ffeb483d4543f98c842788ab34c77427e27d83d6b082065a4438d4885  COPYING
+diff --git a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
+index f563ba34ec..a149ba9fab 100644
+--- a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
++++ b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XTERM_VERSION = 366
-+XTERM_VERSION = 367
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = http://invisible-mirror.net/archives/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+-XLIB_LIBXFIXES_VERSION = 5.0.3
++XLIB_LIBXFIXES_VERSION = 6.0.0
+ XLIB_LIBXFIXES_SOURCE = libXfixes-$(XLIB_LIBXFIXES_VERSION).tar.bz2
+ XLIB_LIBXFIXES_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXFIXES_LICENSE = MIT
