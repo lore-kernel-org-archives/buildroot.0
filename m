@@ -1,60 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 22:31:59 +0200
-Subject: [Buildroot] [PATCH] Makefile: remove pkg-stats data on clean
-In-Reply-To: <20210518202817.2197910-1-yann.morin.1998@free.fr>
-References: <20210518202817.2197910-1-yann.morin.1998@free.fr>
-Message-ID: <20210518203159.GA2506@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 May 2021 22:34:31 +0200
+Subject: [Buildroot] [PATCH 1/2] package/qemu: bump version to 6.0.0
+In-Reply-To: <20210507170102.1896972-1-aduskett@rivian.com>
+References: <20210507170102.1896972-1-aduskett@rivian.com>
+Message-ID: <5c30f5b8-04db-5994-cdde-5f16ac152f72@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
 
-On 2021-05-18 22:28 +0200, Yann E. MORIN spake thusly:
-> Like commit 1f187371d002 for cpe-updates data, also remove pkg-stats
-> data on clean.
+
+On 07/05/2021 19:01, Adam Duskett wrote:
+> From: Adam Duskett <aduskett@gmail.com>
 > 
-> Unlike the rest, those are not nicely located in a directory of their
-> own, and have no variable name associated with them, so we just need
-> to repeat their names in the clean rule.
+> Other changes:
+>   - Drop patch 0003-hw-usb-host-libusb.c-fix-build-with-kernel-5.0.patch as it
+>     is part of 6.0.0.
+>   - Rename 0004-meson-add-tests-option.patch to
+>     0003-meson-add-tests-option.patch and refresh it for 6.0.0
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Signed-off-by: Adam Duskett <aduskett@rivian.com>
 
-Applied to master, thanks.
+ Applied to next, thanks.
 
-Regards,
-Yann E. MORIN.
+ As Romain mentioned, it would be nice if you could (1) monitor the weekly tests
+for failures, and (2) follow-up with support for the new config options.
 
-> ---
->  Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index c3305f46e9..9d2c0d8ecb 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1089,7 +1089,8 @@ printvars:
->  clean:
->  	rm -rf $(BASE_TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
->  		$(BUILD_DIR) $(BASE_DIR)/staging \
-> -		$(LEGAL_INFO_DIR) $(GRAPHS_DIR) $(PER_PACKAGE_DIR) $(CPE_UPDATES_DIR)
-> +		$(LEGAL_INFO_DIR) $(GRAPHS_DIR) $(PER_PACKAGE_DIR) $(CPE_UPDATES_DIR) \
-> +		$(O)/pkg-stats.*
->  
->  .PHONY: distclean
->  distclean: clean
-> -- 
-> 2.25.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ Regards,
+ Arnout
