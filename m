@@ -1,68 +1,106 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 18:54:49 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/kodi-inputstream-adaptive:
- bump version to 2.6.15-Matrix
-In-Reply-To: <20210518153832.105159-1-bernd.kuhls@t-online.de>
-References: <20210518153832.105159-1-bernd.kuhls@t-online.de>
-Message-ID: <20210518165449.GV2506@scaer>
+Date: Tue, 18 May 2021 19:09:24 +0200
+Subject: [Buildroot] [git commit branch/next] package/seatd: install init
+ scripts
+Message-ID: <20210518164141.6ED0E87A43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=60cee128c7282353d11c538a26abad709f3d3701
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-05-18 17:38 +0200, Bernd Kuhls spake thusly:
-> Changelog:
-> https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Add commands to the seatd package to install the systemd unit included
+in the source tarball and a SysV init script, and ensure that the
+"video" group gets created.
 
-Applied to next, thanks.
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+[yann.morin.1998 at free.fr:
+  - model the init script after package/busybox/S01syslogd
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/seatd/S70seatd | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+ package/seatd/seatd.mk | 15 +++++++++++++++
+ 2 files changed, 61 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
->  package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-> index 2626968f1b..12e9f20904 100644
-> --- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-> +++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  f1756932e8cc602ce66c5db3bc1d44a442c01197c193561ca9248a405bd8bd86  kodi-inputstream-adaptive-2.6.14-Matrix.tar.gz
-> +sha256  179b337c397ff484f25a936f8c50114a112d5107f6d3cf41b4e9fb92507525fd  kodi-inputstream-adaptive-2.6.15-Matrix.tar.gz
->  sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-> diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-> index b72241ab39..6176d7bff0 100644
-> --- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-> +++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.14-Matrix
-> +KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.15-Matrix
->  KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
->  KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
->  KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/seatd/S70seatd b/package/seatd/S70seatd
+new file mode 100755
+index 0000000000..32bdc40fbb
+--- /dev/null
++++ b/package/seatd/S70seatd
+@@ -0,0 +1,46 @@
++#! /bin/sh
++
++DAEMON="seatd"
++DAEMON_EXE="/usr/bin/${DAEMON}"
++PIDFILE="/run/${DAEMON}.pid"
++
++start() {
++	printf 'Starting %s: ' "${DAEMON}"
++	start-stop-daemon -S -x "${DAEMON_EXE}" -p "${PIDFILE}" -m -b -- -g video
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo OK
++	else
++		echo FAIL
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "${DAEMON}"
++	start-stop-daemon -K -x "${DAEMON_EXE}" -p "${PIDFILE}"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo OK
++	else
++		echo FAIL
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "${1}" in
++	start|stop|restart)
++		"${1}";;
++	reload)
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++		;;
++esac
+diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
+index 2e90270555..2abcefbfaa 100644
+--- a/package/seatd/seatd.mk
++++ b/package/seatd/seatd.mk
+@@ -30,6 +30,21 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SEATD_DAEMON),y)
+ SEATD_CONF_OPTS += -Dseatd=enabled -Dserver=enabled
++
++define SEATD_USERS
++	- - video -1 - - - - -
++endef
++
++define SEATD_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D $(SEATD_PKGDIR)/S70seatd \
++		$(TARGET_DIR)/etc/init.d/S70seatd
++endef
++
++define SEATD_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -m 0644 -D $(@D)/contrib/systemd/seatd.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/seatd.service
++endef
++
+ else
+ SEATD_CONF_OPTS += -Dseatd=disabled -Dserver=disabled
+ endif
