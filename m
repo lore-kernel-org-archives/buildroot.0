@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 13:43:34 +0200
-Subject: [Buildroot] [PATCH] package/nano: bump to version 5.7
-In-Reply-To: <20210517103942.1924675-1-francois.perrad@gadz.org>
-References: <20210517103942.1924675-1-francois.perrad@gadz.org>
-Message-ID: <20210518114334.GY2506@scaer>
+Date: Tue, 18 May 2021 13:45:25 +0200
+Subject: [Buildroot] [PATCH] package/libcap: bump to version 2.49
+In-Reply-To: <20210517103929.1924621-1-francois.perrad@gadz.org>
+References: <20210517103929.1924621-1-francois.perrad@gadz.org>
+Message-ID: <20210518114525.GZ2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +13,9 @@ To: buildroot@busybox.net
 Fran?ois, All,
 
 On 2021-05-17 12:39 +0200, Francois Perrad spake thusly:
+> Release notes:
+> https://sites.google.com/site/fullycapable/release-notes-for-libcap
+> 
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Applied to next, thanks.
@@ -21,35 +24,35 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/nano/nano.hash | 4 ++--
->  package/nano/nano.mk   | 2 +-
+>  package/libcap/libcap.hash | 4 ++--
+>  package/libcap/libcap.mk   | 2 +-
 >  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-> index cbb497722..532a68e0c 100644
-> --- a/package/nano/nano.hash
-> +++ b/package/nano/nano.hash
+> diff --git a/package/libcap/libcap.hash b/package/libcap/libcap.hash
+> index 7499f2468..de9de3514 100644
+> --- a/package/libcap/libcap.hash
+> +++ b/package/libcap/libcap.hash
 > @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature
-> -# https://www.nano-editor.org/dist/v5/nano-5.6.1.tar.xz.asc
-> +# https://www.nano-editor.org/dist/v5/nano-5.7.tar.xz.asc
->  # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
-> -sha256  760d7059e0881ca0ee7e2a33b09d999ec456ff7204df86bee58eb6f523ee8b09  nano-5.6.1.tar.xz
-> +sha256  d4b181cc2ec11def3711b4649e34f2be7a668e70ab506860514031d069cccafa  nano-5.7.tar.xz
->  sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-> diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-> index 77126fd4b..39d9be12b 100644
-> --- a/package/nano/nano.mk
-> +++ b/package/nano/nano.mk
-> @@ -5,7 +5,7 @@
+>  # https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/sha256sums.asc
+> -sha256  4de9590ee09a87c282d558737ffb5b6175ccbfd26d580add10df44d0f047f6c2  libcap-2.48.tar.xz
+> +sha256  e98bc4d93645082ec787730b0fd1a712b38882465c505777de17c338831ee181  libcap-2.49.tar.xz
+>  
+>  # Hash for license file:
+> -sha256  088cabde4662b4121258d298b0b2967bc1abffa134457ed9bc4a359685ab92bc  License
+> +sha256  f58c80bcce8c929db39a23c32e924876e3311f3ffa54f66076c38056d38fa59b  License
+> diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+> index 79a130b45..34636a3a8 100644
+> --- a/package/libcap/libcap.mk
+> +++ b/package/libcap/libcap.mk
+> @@ -4,7 +4,7 @@
+>  #
 >  ################################################################################
 >  
->  NANO_VERSION_MAJOR = 5
-> -NANO_VERSION = $(NANO_VERSION_MAJOR).6.1
-> +NANO_VERSION = $(NANO_VERSION_MAJOR).7
->  NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
->  NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
->  NANO_LICENSE = GPL-3.0+
+> -LIBCAP_VERSION = 2.48
+> +LIBCAP_VERSION = 2.49
+>  LIBCAP_SITE = https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
+>  LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.xz
+>  LIBCAP_LICENSE = GPL-2.0 or BSD-3-Clause
 > -- 
 > 2.30.2
 > 
