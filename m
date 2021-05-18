@@ -1,82 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 17:00:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python3-six: add python3 variant
-In-Reply-To: <1620853148995.76548@lab126.com>
-References: <1620853148995.76548@lab126.com>
-Message-ID: <20210518150056.GQ2506@scaer>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 18 May 2021 18:14:03 +0300
+Subject: [Buildroot] [PATCH 0/4] Update WPE WebKit, Cog,
+ and their dependencies
+Message-ID: <20210518151407.264769-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chan, All,
+Hi there,
 
-On 2021-05-12 20:59 +0000, Chan, Donald via buildroot spake thusly:
-> 
-> Signed-off-by: Donald Chan <hoiho@lab126.com>
+WPE WebKit 2.32.0 was released by the end of March, but I have been waiting
+for 2.32.1 before submitting a patch set to update. The reasons are mainly
+two:
 
-Why do you need a python3-specific version of six?
+  - I knew that fixes to build WPE WebKit against Musl would land on time
+    for 2.32.1; which allows removing a patch we have been carrying in
+	Buildroot.
+  - While working on the release candidates for WPEBackend-fdo, we found
+    a number of regressions, which delayed things while trying to solve
+	all the issues found. Except for a minor issue, the rest are now all
+	solved in 1.9.92. This is still a release candidate, but very stable
+	in my experience. If there are concerns with it, I can change the
+	patch to use 1.8.4 instead, which has backports of the changes.
 
-The existing package, python-six, is already compatible with both
-python(2) and python3...
+Cheers,
+-Adrian
 
-Please, can you respin with a better commit log, that explains why you
-need to add it?
 
-Regards,
-Yann E. MORIN.
+Adrian Perez de Castro (4):
+  package/libwpe: bump to version 1.10.0
+  package/wpebackend-fdo: bump to version 1.9.92
+  package/wpewebkit: bump to version 2.32.1
+  package/cog: bump to version 0.10.0
 
-> ---
->  package/python3-six/python3-six.hash |  1 +
->  package/python3-six/python3-six.mk   | 18 ++++++++++++++++++
->  2 files changed, 19 insertions(+)
->  create mode 120000 package/python3-six/python3-six.hash
->  create mode 100644 package/python3-six/python3-six.mk
-> 
-> diff --git a/package/python3-six/python3-six.hash b/package/python3-six/python3-six.hash
-> new file mode 120000
-> index 0000000..ed8cb89
-> --- /dev/null
-> +++ b/package/python3-six/python3-six.hash
-> @@ -0,0 +1 @@
-> +../python-six/python-six.hash
-> \ No newline at end of file
-> diff --git a/package/python3-six/python3-six.mk b/package/python3-six/python3-six.mk
-> new file mode 100644
-> index 0000000..be64fce
-> --- /dev/null
-> +++ b/package/python3-six/python3-six.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# python3-six
-> +#
-> +################################################################################
-> +
-> +# Please keep in sync with package/python-six/python-six.mk
-> +PYTHON3_SIX_VERSION = 1.15.0
-> +PYTHON3_SIX_SOURCE = six-$(PYTHON3_SIX_VERSION).tar.gz
-> +PYTHON3_SIX_SITE = https://files.pythonhosted.org/packages/6b/34/415834bfdafca3c5f451532e8a8d9ba89a21c9743a0c59fbd0205c7f9426
-> +PYTHON3_SIX_SETUP_TYPE = setuptools
-> +PYTHON3_SIX_LICENSE = MIT
-> +PYTHON3_SIX_LICENSE_FILES = LICENSE
-> +HOST_PYTHON3_SIX_DL_SUBDIR = python-six
-> +HOST_PYTHON3_SIX_NEEDS_HOST_PYTHON = python3
-> +
-> +$(eval $(python-package))
-> +$(eval $(host-python-package))
-> --
-> 2.17.1
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ package/cog/cog.hash                          |  8 +-
+ package/cog/cog.mk                            |  2 +-
+ ...ial-dependency-to-pass-EGL-module-fl.patch | 45 -----------
+ package/libwpe/libwpe.hash                    |  8 +-
+ package/libwpe/libwpe.mk                      |  2 +-
+ package/wpebackend-fdo/wpebackend-fdo.hash    |  8 +-
+ package/wpebackend-fdo/wpebackend-fdo.mk      |  2 +-
+ .../wpewebkit/0001-Fix-build-with-musl.patch  | 79 -------------------
+ package/wpewebkit/wpewebkit.hash              |  8 +-
+ package/wpewebkit/wpewebkit.mk                |  2 +-
+ 10 files changed, 20 insertions(+), 144 deletions(-)
+ delete mode 100644 package/libwpe/0001-meson-Use-a-partial-dependency-to-pass-EGL-module-fl.patch
+ delete mode 100644 package/wpewebkit/0001-Fix-build-with-musl.patch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.31.1
