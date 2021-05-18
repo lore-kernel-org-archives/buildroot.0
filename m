@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60F9EC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE122C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:22:01 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 259AB60F41
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:21:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 259AB60F41
+	by mail.kernel.org (Postfix) with ESMTPS id 89A2660F41
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:22:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 89A2660F41
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01DDA40569;
-	Tue,  3 Aug 2021 21:21:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60A294057D;
+	Tue,  3 Aug 2021 21:22:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QrIM4ihfi_AN; Tue,  3 Aug 2021 21:21:48 +0000 (UTC)
+	with ESMTP id X-J3CFW6wWFl; Tue,  3 Aug 2021 21:22:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E2AB40368;
-	Tue,  3 Aug 2021 21:21:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 189181BF9AA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8696040368;
+	Tue,  3 Aug 2021 21:21:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2AB9D1BF9C2
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 106534039B
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB980607BC
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IWIZ1CiBCpmM for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uHmuV85vt6_i for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 51B8140261
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1294360673
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9CBF58399D; Tue,  3 Aug 2021 21:09:40 +0000 (UTC)
+ id 6A9AF8B43E; Tue,  3 Aug 2021 21:09:40 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 18 May 2021 17:23:18 +0200
+Date: Tue, 18 May 2021 14:54:56 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8c3f281626fb3a9e7ca596ca1df2cc1d30252496
-X-Git-Newrev: b4c92bdda32e377b8f61ec3a5cf7f6bf78e3f48e
+X-Git-Oldrev: 88007f9acc63c5b459003ee712f5ebb30b9157c3
+X-Git-Newrev: dba10b3a76c3855aee14b1df561e02ead232d7aa
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210940.9CBF58399D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libdrm: bump version
- to 2.4.106
+Message-Id: <20210803210940.6A9AF8B43E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pipewire: fix build
+ with uclibc-ng
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,43 +70,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4c92bdda32e377b8f61ec3a5cf7f6bf78e3f48e
+commit: https://git.buildroot.net/buildroot/commit/?id=dba10b3a76c3855aee14b1df561e02ead232d7aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Build fails with uclibc-ng since bump to version 0.3.26 in commit
+a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a45f0ee009d90cef867dee4b1093225610fa10df
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libdrm/libdrm.hash | 6 +++---
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...0002-meson.build-fix-build-with-uclibc-ng.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 25c3a042cb..079675824a 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2021-April/302515.html
--sha256  1d1d024b7cadc63e2b59cddaca94f78864940ab440843841113fbac6afaf2a46  libdrm-2.4.105.tar.xz
--sha512  083a04af7208e58be21b89c6ebdbe2db3ba00cd29f0d271bd38bfe97dfca741edafddaaf9b5b95c20fac2c9b700434ea5b21397de26f7073169ad6f5b090f715  libdrm-2.4.105.tar.xz
-+# From https://lists.freedesktop.org/archives/dri-devel/2021-May/307025.html
-+sha256  92d8ac54429b171e087e61c2894dc5399fe6a549b1fbba09fa6a3cb9d4e57bd4  libdrm-2.4.106.tar.xz
-+sha512  33140e579906ab54b716149056af500c628ce41cd9ae3b0c33496693d2f5903fbcfccee8a942dd1560e1591111ed240da42612d5af5e75558db6f6a85d14617d  libdrm-2.4.106.tar.xz
- 
- # Hash for license file
- sha256  a69e38953c20a88845cc739c05dd604da4c977844b872e126c91a0ca2e1385b7  xf86drm.c
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index f5b205bb00..f18df27687 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDRM_VERSION = 2.4.105
-+LIBDRM_VERSION = 2.4.106
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+diff --git a/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch b/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
+new file mode 100644
+index 0000000000..36b14d3f16
+--- /dev/null
++++ b/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
+@@ -0,0 +1,52 @@
++From 8f1de87381d270a8f4e5927187ae0466a9c9504a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 4 May 2021 22:56:54 +0200
++Subject: [PATCH] meson.build: fix build with uclibc-ng
++
++Build with uclib-ng fails since commit
++a4b0b9afe5a782a7f4a8fe153ecf51bcb0180ae3 on:
++
++FAILED: src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o
++/srv/storage/autobuild/run/instance-2/output-1/host/bin/mips64el-linux-gcc -Isrc/pipewire/libpipewire-0.3.so.0.326.0.p -Isrc/pipewire -I../src/pipewire -Isrc -I../src -I. -I.. -Ispa/include -I../spa/include -fdiagnostics-color=always -pipe -Wall -Winvalid-pch -Wextra -Wpedantic -std=gnu99 -O3 -fvisibility=hidden -Werror=suggest-attribute=format -Wsign-compare -Wpointer-arith -Wpointer-sign -Wformat -Wformat-security -Wimplicit-fallthrough -Wmissing-braces -Wtype-limits -Wvariadic-macros -Wno-missing-field-initializers -Wno-unused-parameter -Wno-pedantic -Wold-style-declaration -Wunused-result -DFASTPATH -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -pthread -DHAVE_CONFIG_H -D_GNU_SOURCE -D_POSIX_C_SOURCE -MD -MQ src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o -MF src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o.d -o src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o -c ../src/pipewire/impl-core.c
++../src/pipewire/impl-core.c:54:9: error: conflicting types for 'getrandom'
++ ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
++         ^~~~~~~~~
++In file included from ../src/pipewire/impl-core.c:34:
++/srv/storage/autobuild/run/instance-2/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:28:12: note: previous declaration of 'getrandom' was here
++ extern int getrandom(void *__buf, size_t count, unsigned int flags)
++            ^~~~~~~~~
++
++Fix this build failure by adding -D_GNU_SOURCE as getrandom is protected
++by:
++
++if defined __UCLIBC_LINUX_SPECIFIC__ && defined __USE_GNU
++
++Extracted from:
++ - https://github.com/wbx-github/uclibc-ng/blob/master/libc/sysdeps/linux/common/sys/random.h
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a45f0ee009d90cef867dee4b1093225610fa10df
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/649]
++---
++ meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 0a9963fb..11b63c08 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -274,7 +274,7 @@ if cc.has_function('memfd_create', prefix : '#include <sys/mman.h>', args : [ '-
++   cdata.set('HAVE_MEMFD_CREATE', 1)
++ endif
++ 
++-if cc.has_function('getrandom', prefix : '#include <sys/random.h>')
+++if cc.has_function('getrandom', prefix : '#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
++   cdata.set('HAVE_GETRANDOM', 1)
++ endif
++ 
++-- 
++2.30.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
