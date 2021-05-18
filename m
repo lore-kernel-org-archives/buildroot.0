@@ -1,125 +1,83 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 14:41:29 +0200
-Subject: [Buildroot] [PATCH v1 1/2] package/pipewire: bump version to
- 0.3.27
-In-Reply-To: <20210512204251.28928-1-ps.report@gmx.net>
-References: <20210512204251.28928-1-ps.report@gmx.net>
-Message-ID: <20210518124129.GI2506@scaer>
+Date: Tue, 18 May 2021 14:54:56 +0200
+Subject: [Buildroot] [git commit] package/pipewire: fix build with uclibc-ng
+Message-ID: <20210518122704.3E24587C26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=dba10b3a76c3855aee14b1df561e02ead232d7aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-12 22:42 +0200, Peter Seiderer spake thusly:
-> - remove 0001-meson-prefer-libintl-on-FreeBSD.patch
->   (from upstream [1])
-> 
-> [1] https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/4d064a37183a0bf8198914dd68b063b2c9def17e
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Build fails with uclibc-ng since bump to version 0.3.26 in commit
+a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9
 
-Applied to next, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/a45f0ee009d90cef867dee4b1093225610fa10df
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...0002-meson.build-fix-build-with-uclibc-ng.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-> ---
->  ...0001-meson-prefer-libintl-on-FreeBSD.patch | 46 -------------------
->  package/pipewire/pipewire.hash                |  2 +-
->  package/pipewire/pipewire.mk                  |  2 +-
->  3 files changed, 2 insertions(+), 48 deletions(-)
->  delete mode 100644 package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch
-> 
-> diff --git a/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch b/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch
-> deleted file mode 100644
-> index b19715b2e8..0000000000
-> --- a/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch
-> +++ /dev/null
-> @@ -1,46 +0,0 @@
-> -From 4d064a37183a0bf8198914dd68b063b2c9def17e Mon Sep 17 00:00:00 2001
-> -From: Evgeniy Khramtsov <evgeniy@khramtsov.org>
-> -Date: Fri, 23 Apr 2021 22:57:51 +0300
-> -Subject: [PATCH] meson: prefer libintl on FreeBSD
-> -
-> -FreeBSD does not have gettext in libc.
-> -It is implemented in the third-party library.
-> -
-> -[Retrieved from:
-> -https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/4d064a37183a0bf8198914dd68b063b2c9def17e]
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ----
-> - meson.build              | 3 +++
-> - src/pipewire/meson.build | 2 +-
-> - 2 files changed, 4 insertions(+), 1 deletion(-)
-> -
-> -diff --git a/meson.build b/meson.build
-> -index 99a4b2d1c..0a9963fbb 100644
-> ---- a/meson.build
-> -+++ b/meson.build
-> -@@ -351,6 +351,9 @@ libinotify_dep = (build_machine.system() == 'freebsd'
-> -     ? dependency('libinotify', required: true)
-> -     : dependency('', required: false))
-> - 
-> -+# On FreeBSD, libintl library is required for gettext
-> -+libintl_dep = cc.find_library('intl', required: false)
-> -+
-> - alsa_dep = dependency('alsa', version : '>=1.1.7', required: get_option('pipewire-alsa'))
-> - 
-> - installed_tests_metadir = pipewire_datadir / 'installed-tests' / pipewire_name
-> -diff --git a/src/pipewire/meson.build b/src/pipewire/meson.build
-> -index 7f2d42a7a..d4c271373 100644
-> ---- a/src/pipewire/meson.build
-> -+++ b/src/pipewire/meson.build
-> -@@ -101,7 +101,7 @@ libpipewire = shared_library(pipewire_name, pipewire_sources,
-> -   c_args : libpipewire_c_args,
-> -   include_directories : [pipewire_inc, configinc, spa_inc],
-> -   install : true,
-> --  dependencies : [dl_lib, mathlib, pthread_lib, ],
-> -+  dependencies : [dl_lib, mathlib, pthread_lib, libintl_dep, ],
-> - )
-> - 
-> - pipewire_dep = declare_dependency(link_with : libpipewire,
-> --- 
-> -GitLab
-> -
-> diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
-> index 4d2548e3ab..7c26e2ab29 100644
-> --- a/package/pipewire/pipewire.hash
-> +++ b/package/pipewire/pipewire.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated
-> -sha256  05cc9d25de45290c025da5da1b94fc705bddacd93cf3690d0b2988c1ac501ee1  pipewire-0.3.26.tar.gz
-> +sha256  657db1b9a29ae17a9f1d9782a45bda2ba5a893fef55e1ca26453e8f7f2d4e64e  pipewire-0.3.27.tar.gz
->  sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
->  sha256  7db6138b0385e260ae8f09f050ea66c4e4fe775a11060d7f6ca2beb47f192d6f  LICENSE
-> diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-> index e5185aeb8c..8abbfc35be 100644
-> --- a/package/pipewire/pipewire.mk
-> +++ b/package/pipewire/pipewire.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -PIPEWIRE_VERSION = 0.3.26
-> +PIPEWIRE_VERSION = 0.3.27
->  PIPEWIRE_SITE = $(call github,PipeWire,pipewire,$(PIPEWIRE_VERSION))
->  PIPEWIRE_LICENSE = MIT
->  PIPEWIRE_LICENSE_FILES = COPYING LICENSE
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch b/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
+new file mode 100644
+index 0000000000..36b14d3f16
+--- /dev/null
++++ b/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
+@@ -0,0 +1,52 @@
++From 8f1de87381d270a8f4e5927187ae0466a9c9504a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 4 May 2021 22:56:54 +0200
++Subject: [PATCH] meson.build: fix build with uclibc-ng
++
++Build with uclib-ng fails since commit
++a4b0b9afe5a782a7f4a8fe153ecf51bcb0180ae3 on:
++
++FAILED: src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o
++/srv/storage/autobuild/run/instance-2/output-1/host/bin/mips64el-linux-gcc -Isrc/pipewire/libpipewire-0.3.so.0.326.0.p -Isrc/pipewire -I../src/pipewire -Isrc -I../src -I. -I.. -Ispa/include -I../spa/include -fdiagnostics-color=always -pipe -Wall -Winvalid-pch -Wextra -Wpedantic -std=gnu99 -O3 -fvisibility=hidden -Werror=suggest-attribute=format -Wsign-compare -Wpointer-arith -Wpointer-sign -Wformat -Wformat-security -Wimplicit-fallthrough -Wmissing-braces -Wtype-limits -Wvariadic-macros -Wno-missing-field-initializers -Wno-unused-parameter -Wno-pedantic -Wold-style-declaration -Wunused-result -DFASTPATH -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -pthread -DHAVE_CONFIG_H -D_GNU_SOURCE -D_POSIX_C_SOURCE -MD -MQ src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o -MF src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o.d -o src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o -c ../src/pipewire/impl-core.c
++../src/pipewire/impl-core.c:54:9: error: conflicting types for 'getrandom'
++ ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
++         ^~~~~~~~~
++In file included from ../src/pipewire/impl-core.c:34:
++/srv/storage/autobuild/run/instance-2/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:28:12: note: previous declaration of 'getrandom' was here
++ extern int getrandom(void *__buf, size_t count, unsigned int flags)
++            ^~~~~~~~~
++
++Fix this build failure by adding -D_GNU_SOURCE as getrandom is protected
++by:
++
++if defined __UCLIBC_LINUX_SPECIFIC__ && defined __USE_GNU
++
++Extracted from:
++ - https://github.com/wbx-github/uclibc-ng/blob/master/libc/sysdeps/linux/common/sys/random.h
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a45f0ee009d90cef867dee4b1093225610fa10df
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/649]
++---
++ meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 0a9963fb..11b63c08 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -274,7 +274,7 @@ if cc.has_function('memfd_create', prefix : '#include <sys/mman.h>', args : [ '-
++   cdata.set('HAVE_MEMFD_CREATE', 1)
++ endif
++ 
++-if cc.has_function('getrandom', prefix : '#include <sys/random.h>')
+++if cc.has_function('getrandom', prefix : '#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
++   cdata.set('HAVE_GETRANDOM', 1)
++ endif
++ 
++-- 
++2.30.2
++
