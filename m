@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 18:54:33 +0200
-Subject: [Buildroot] [PATCH/next 1/1]
- package/kodi-pvr-mediaportal-tvserver: bump version to 8.2.0-Matrix
-In-Reply-To: <20210518153628.104731-1-bernd.kuhls@t-online.de>
-References: <20210518153628.104731-1-bernd.kuhls@t-online.de>
-Message-ID: <20210518165433.GU2506@scaer>
+Date: Tue, 18 May 2021 18:54:49 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/kodi-inputstream-adaptive:
+ bump version to 2.6.15-Matrix
+In-Reply-To: <20210518153832.105159-1-bernd.kuhls@t-online.de>
+References: <20210518153832.105159-1-bernd.kuhls@t-online.de>
+Message-ID: <20210518165449.GV2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,9 +13,9 @@ To: buildroot@busybox.net
 
 Bernd, All,
 
-On 2021-05-18 17:36 +0200, Bernd Kuhls spake thusly:
+On 2021-05-18 17:38 +0200, Bernd Kuhls spake thusly:
 > Changelog:
-> https://github.com/kodi-pvr/pvr.mediaportal.tvserver/blob/Matrix/pvr.mediaportal.tvserver/changelog.txt
+> https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
@@ -25,32 +25,32 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  .../kodi-pvr-mediaportal-tvserver.hash                          | 2 +-
->  .../kodi-pvr-mediaportal-tvserver.mk                            | 2 +-
+>  .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
+>  package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
-> index 83ac680914..ca526f40a0 100644
-> --- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
-> +++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+> diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+> index 2626968f1b..12e9f20904 100644
+> --- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+> +++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
 > @@ -1,3 +1,3 @@
 >  # Locally computed
-> -sha256  cea87ccdceee834c96d6b6887b78213ccf79890fec97436cbef17c57b9cdac15  kodi-pvr-mediaportal-tvserver-8.1.2-Matrix.tar.gz
-> +sha256  0109daa45d7b6450954b40d0b09dbef28818c551e9f0fea9943cfd06f0a7ec40  kodi-pvr-mediaportal-tvserver-8.2.0-Matrix.tar.gz
->  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-> diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
-> index 02b24ef271..50a9147a9d 100644
-> --- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
-> +++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+> -sha256  f1756932e8cc602ce66c5db3bc1d44a442c01197c193561ca9248a405bd8bd86  kodi-inputstream-adaptive-2.6.14-Matrix.tar.gz
+> +sha256  179b337c397ff484f25a936f8c50114a112d5107f6d3cf41b4e9fb92507525fd  kodi-inputstream-adaptive-2.6.15-Matrix.tar.gz
+>  sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+> diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+> index b72241ab39..6176d7bff0 100644
+> --- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+> +++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 8.1.2-Matrix
-> +KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 8.2.0-Matrix
->  KODI_PVR_MEDIAPORTAL_TVSERVER_SITE = $(call github,kodi-pvr,pvr.mediaportal.tvserver,$(KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION))
->  KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE = GPL-2.0+
->  KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = LICENSE.md
+> -KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.14-Matrix
+> +KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.15-Matrix
+>  KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+>  KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+>  KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
 > -- 
 > 2.29.2
 > 
