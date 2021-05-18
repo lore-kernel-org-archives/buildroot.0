@@ -1,70 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 15:39:41 +0200
-Subject: [Buildroot] [External] Re: [RFC for-next] package/gcc: enable
- secureplt for powerpc64
-In-Reply-To: <DM2P110MB0105B155ACA31AA8A810187EF22C9@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
-References: <20210517201327.755689-1-romain.naour@gmail.com>
- <20210518120543.GC2506@scaer>
- <DM2P110MB0105B155ACA31AA8A810187EF22C9@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
-Message-ID: <20210518133941.GO2506@scaer>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 18 May 2021 16:54:18 +0300
+Subject: [Buildroot] [PATCH v2 0/5] Update Cage, wlroots, and wayland
+In-Reply-To: <20210513163325.1775639-1-aperez@igalia.com>
+References: <20210513163325.1775639-1-aperez@igalia.com>
+Message-ID: <20210518135423.194507-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew, All,
+Hello!
 
-On 2021-05-18 13:20 +0000, Weber, Matthew L Collins via buildroot spake thusly:
-> > -----Original Message-----
-> > From: Yann E. MORIN <yann.morin.1998@free.fr>
-> > Sent: Tuesday, May 18, 2021 7:06 AM
-> > To: Romain Naour <romain.naour@gmail.com>
-> > Cc: buildroot at buildroot.org; Weber, Matthew L Collins
-> > <Matthew.Weber@collins.com>
-> > Subject: [External] Re: [Buildroot] [RFC for-next] package/gcc: enable
-> > secureplt for powerpc64
-> > 
-> > Romain, All,
-> > 
-> > On 2021-05-17 22:13 +0200, Romain Naour spake thusly:
-> > > GCC support enabling secureplt for powerpc64.
-> > >
-> > > From [1]
-> > > "PowerPC has two PLT models: BSS-PLT and Secure-PLT. BSS-PLT uses
-> > > runtime code generation to generate the PLT stubs. Secure-PLT was
-> > > introduced with GCC 4.1 and Binutils 2.17 (base has GCC 4.2.1 and
-> > > Binutils 2.17), and is a more secure PLT format, using a read-only
-> [snip]
-> > > linkage table, with the dynamic linker populating a non-executable
-> > > index table."
-> Interestingly, when doing SElinux policy, we didn't observe similar
-> behavior with memory execute requests on PowerPC64 vs PowerPC. Without
-> this option, we observed regular memory execute (access request)
-> audits on PowerPC, and we couldn't cleanly write policy without really
-> opening things up.
-> > > This option is always enabled by glibc testing script called
-> > > build-many-glibcs.py [1]. This script exist since glibc 2.25.
-> > >
-> > > Runtime tested with qemu_ppc64_e5500_defconfig.
-> > 
-> > Good enough for me.
-> Agree, the runtime test in QEMU should cover any lack of hardware
-> testing.  I've successfully moved kernels between emulation and
-> devkits for this arch.
-> 
-> Reviewed-by: Matt Weber <matthew.weber@collins.com>
+This patch set updates Cage to 0.1.3, which by itself does not have functional
+changes over the previous version, but it pulls in wlroots 0.13.0 which does
+include a good number of improvements.
 
-Already applied, so your rev-tag will not be recorded, sorry... But
-still, this is good to read a positive feedback nonetheless. Thanks!
+Last but not least, wlroots can now libseat to broker sessions, so three of
+the patches deal with adding a package for it, installing the daemon init
+scripts (if the daemon is enabled, as it is optional), and arranging for
+wlroots to use libseat when available. It looks like libseat is gaining
+momentum in the Wayland ecosystem and for example Weston can also use it
+since half a year ago [1].
 
-Regards,
-Yann E. MORIN.
+Best regards,
+-Adrian
+
+[1] https://gitlab.freedesktop.org/wayland/weston/-/commit/6c4a993a999048a2054ec97e71d32839b312c642
+
+
+Adrian Perez de Castro (5):
+  package/wlroots: bump to version 0.13.0
+  package/seatd: new package
+  package/seatd: install init scripts
+  package/wlroots: use libseat when available
+  package/cage: bump to version 0.1.3
+
+ package/Config.in                             |  1 +
+ package/cage/cage.hash                        |  2 +-
+ package/cage/cage.mk                          |  7 +--
+ ...pport-building-builtin-without-seatd.patch | 37 +++++++++++++
+ package/seatd/Config.in                       | 22 ++++++++
+ package/seatd/S70seatd                        | 38 ++++++++++++++
+ package/seatd/seatd.hash                      |  5 ++
+ package/seatd/seatd.mk                        | 52 +++++++++++++++++++
+ package/wlroots/Config.in                     |  3 ++
+ package/wlroots/wlroots.hash                  |  4 +-
+ package/wlroots/wlroots.mk                    | 25 ++++-----
+ 11 files changed, 174 insertions(+), 22 deletions(-)
+ create mode 100644 package/seatd/0001-meson-Support-building-builtin-without-seatd.patch
+ create mode 100644 package/seatd/Config.in
+ create mode 100755 package/seatd/S70seatd
+ create mode 100644 package/seatd/seatd.hash
+ create mode 100644 package/seatd/seatd.mk
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.31.1
