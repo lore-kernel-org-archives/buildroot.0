@@ -1,75 +1,51 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 18 May 2021 17:00:13 +0300
-Subject: [Buildroot] [PATCH v2 0/5] Update Cage, wlroots, and wayland
-In-Reply-To: <20210518135423.194507-1-aperez@igalia.com>
-References: <20210513163325.1775639-1-aperez@igalia.com>
- <20210518135423.194507-1-aperez@igalia.com>
-Message-ID: <20210518170013.GB1074179@momiji>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 May 2021 16:16:59 +0200
+Subject: [Buildroot] [git commit branch/next] package/poke: add optional
+ json-c dependency
+Message-ID: <20210518134827.02D21840EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 18 May 2021 16:54:18 +0300 Adrian Perez de Castro <aperez@igalia.com> wrote:
-> Hello!
-> 
-> This patch set updates Cage to 0.1.3, which by itself does not have functional
-> changes over the previous version, but it pulls in wlroots 0.13.0 which does
-> include a good number of improvements.
+commit: https://git.buildroot.net/buildroot/commit/?id=5ee77341114fec8d0e35bf9069898713822449e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Ah, I forgot to add in the subject line that this is for the ?next? branch;
-it should read ?[PATCH next v2 x/5]? O:-)
+From [1]:
+"The poke machine-interface uses a protocol to communicate with
+clients, which is based on JSON.  poke uses the json-c library to
+parse and build JSON strings.
+If this library is not found, poke will build without machine-interface
+support."
 
-> Last but not least, wlroots can now libseat to broker sessions, so three of
-> the patches deal with adding a package for it, installing the daemon init
-> scripts (if the daemon is enabled, as it is optional), and arranging for
-> wlroots to use libseat when available. It looks like libseat is gaining
-> momentum in the Wayland ecosystem and for example Weston can also use it
-> since half a year ago [1].
-> 
-> Best regards,
-> -Adrian
-> 
-> [1] https://gitlab.freedesktop.org/wayland/weston/-/commit/6c4a993a999048a2054ec97e71d32839b312c642
-> 
-> 
-> Adrian Perez de Castro (5):
->   package/wlroots: bump to version 0.13.0
->   package/seatd: new package
->   package/seatd: install init scripts
->   package/wlroots: use libseat when available
->   package/cage: bump to version 0.1.3
-> 
->  package/Config.in                             |  1 +
->  package/cage/cage.hash                        |  2 +-
->  package/cage/cage.mk                          |  7 +--
->  ...pport-building-builtin-without-seatd.patch | 37 +++++++++++++
->  package/seatd/Config.in                       | 22 ++++++++
->  package/seatd/S70seatd                        | 38 ++++++++++++++
->  package/seatd/seatd.hash                      |  5 ++
->  package/seatd/seatd.mk                        | 52 +++++++++++++++++++
->  package/wlroots/Config.in                     |  3 ++
->  package/wlroots/wlroots.hash                  |  4 +-
->  package/wlroots/wlroots.mk                    | 25 ++++-----
->  11 files changed, 174 insertions(+), 22 deletions(-)
->  create mode 100644 package/seatd/0001-meson-Support-building-builtin-without-seatd.patch
->  create mode 100644 package/seatd/Config.in
->  create mode 100755 package/seatd/S70seatd
->  create mode 100644 package/seatd/seatd.hash
->  create mode 100644 package/seatd/seatd.mk
-> 
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210518/79d2eb4b/attachment.asc>
+[1] https://git.savannah.nongnu.org/cgit/poke.git/tree/DEPENDENCIES?h=releases/poke-1.2#n55
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Jose E. Marchesi <jemarch@gnu.org>
+Cc: Luca Saiu <positron@gnu.org>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/poke/poke.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/poke/poke.mk b/package/poke/poke.mk
+index c0217b6fad..7c3c81d93c 100644
+--- a/package/poke/poke.mk
++++ b/package/poke/poke.mk
+@@ -19,7 +19,13 @@ POKE_DEPENDENCIES = host-flex host-bison host-pkgconf bdwgc readline
+ POKE_CONF_OPTS = \
+ 	--disable-gui \
+ 	--disable-libnbd \
+-	--disable-mi \
+ 	--with-libreadline-prefix=$(STAGING_DIR)
+ 
++ifeq ($(BR2_PACKAGE_JSON_C),y)
++POKE_DEPENDENCIES += json-c
++POKE_CONF_OPTS += --enable-mi
++else
++POKE_CONF_OPTS += --disable-mi
++endif
++
+ $(eval $(autotools-package))
