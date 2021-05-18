@@ -1,114 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 13:41:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libqmi: bump version to 1.28.4
-In-Reply-To: <20210517173844.31806-1-petr.vorel@gmail.com>
-References: <20210517173844.31806-1-petr.vorel@gmail.com>
-Message-ID: <20210518114126.GW2506@scaer>
+Date: Tue, 18 May 2021 13:41:44 +0200
+Subject: [Buildroot] [git commit branch/next] package/links: bump version to
+ 2.22
+Message-ID: <20210518111302.999AA86F34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b93930ab12b8fbd2d90e01f99ddf2aa2ce50f66e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-05-17 19:38 +0200, Petr Vorel spake thusly:
-> Drop patch backported from this release.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/links/links.hash | 2 +-
+ package/links/links.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...-when-ARPHRD_RAWIP-isn-t-defined-in-.patch | 39 -------------------
->  package/libqmi/libqmi.hash                    |  2 +-
->  package/libqmi/libqmi.mk                      |  2 +-
->  3 files changed, 2 insertions(+), 41 deletions(-)
->  delete mode 100644 package/libqmi/0001-libqmi-fix-build-when-ARPHRD_RAWIP-isn-t-defined-in-.patch
-> 
-> diff --git a/package/libqmi/0001-libqmi-fix-build-when-ARPHRD_RAWIP-isn-t-defined-in-.patch b/package/libqmi/0001-libqmi-fix-build-when-ARPHRD_RAWIP-isn-t-defined-in-.patch
-> deleted file mode 100644
-> index 1212878af4..0000000000
-> --- a/package/libqmi/0001-libqmi-fix-build-when-ARPHRD_RAWIP-isn-t-defined-in-.patch
-> +++ /dev/null
-> @@ -1,39 +0,0 @@
-> -From cdec8660427d2895415f1d84426e39d1ed145136 Mon Sep 17 00:00:00 2001
-> -From: Aleksander Morgado <aleksander@aleksander.es>
-> -Date: Tue, 30 Mar 2021 00:13:45 +0200
-> -Subject: [PATCH] libqmi: fix build when ARPHRD_RAWIP isn't defined in libc
-> -
-> -The kernel may be new enough to have rmnet support, but it could be
-> -that libc doesn't have ARPHRD_RAWIP defined yet; if so, just define it
-> -ourselves.
-> -
-> -Fixes http://autobuild.buildroot.org/results/c8853b7161bd85d46c1282c6c097e7ef4042ae68
-> -
-> -Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-> ----
-> - src/libqmi-glib/qmi-net-port-manager-rmnet.c | 7 +++++++
-> - 1 file changed, 7 insertions(+)
-> -
-> -diff --git a/src/libqmi-glib/qmi-net-port-manager-rmnet.c b/src/libqmi-glib/qmi-net-port-manager-rmnet.c
-> -index eb26129..571d4c4 100644
-> ---- a/src/libqmi-glib/qmi-net-port-manager-rmnet.c
-> -+++ b/src/libqmi-glib/qmi-net-port-manager-rmnet.c
-> -@@ -24,8 +24,15 @@
-> - #include <linux/if_link.h>
-> - #include <linux/netlink.h>
-> - #include <linux/rtnetlink.h>
-> -+
-> - #include <net/if.h>
-> - #include <net/if_arp.h>
-> -+
-> -+/* The if_arp.h from libc may not have this symbol yet */
-> -+#if !defined ARPHRD_RAWIP
-> -+#define ARPHRD_RAWIP 519
-> -+#endif
-> -+
-> - #include <sys/socket.h>
-> - #include <sys/types.h>
-> - #include <string.h>
-> --- 
-> -2.30.1
-> -
-> diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-> index 8cf25f486a..2720a8236d 100644
-> --- a/package/libqmi/libqmi.hash
-> +++ b/package/libqmi/libqmi.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed:
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> -sha256  8c8c3ee719874d2529bce9b35b028fe435b36f003979a360d3ad0938449db783  libqmi-1.28.2.tar.xz
-> +sha256  3b14cd2ab5221a7adbb39fed16ef697538ea1c79308821ad2d19b505e1daaea0  libqmi-1.28.4.tar.xz
-> diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-> index 6fc6d4a50d..278c0116be 100644
-> --- a/package/libqmi/libqmi.mk
-> +++ b/package/libqmi/libqmi.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBQMI_VERSION = 1.28.2
-> +LIBQMI_VERSION = 1.28.4
->  LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
->  LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
->  LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/links/links.hash b/package/links/links.hash
+index f941c2cd1b..156b73fb63 100644
+--- a/package/links/links.hash
++++ b/package/links/links.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  285eed8591c7781ec26213df82786665aaa1b9286782e8a7a1a7e2a6e1630d63  links-2.21.tar.bz2
++sha256  0364986b3a7f1e8e3171bea362b53f71e1dd3360a8842d66fdc65580ebc2084d  links-2.22.tar.bz2
+ sha256  92deeb70791366630095d4e0714fe37d6e2bd5db0e6ef498ebb8de328f45b253  COPYING
+diff --git a/package/links/links.mk b/package/links/links.mk
+index 5213e02bd5..015878f892 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINKS_VERSION = 2.21
++LINKS_VERSION = 2.22
+ LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
+ LINKS_SITE = http://links.twibright.com/download
+ LINKS_DEPENDENCIES = host-pkgconf
