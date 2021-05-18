@@ -1,30 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 18 May 2021 17:17:37 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libdrm: bump version to
- 2.4.106
-References: <20210518044626.17073-1-bernd.kuhls@t-online.de>
- <20210518120105.GB2506__49536.9530793809$1621339293$gmane$org@scaer>
-Message-ID: <hd2dnhx29h.ln2@ID-313208.user.individual.net>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Tue, 18 May 2021 17:14:10 +0200
+Subject: [Buildroot] [PATCH] package/python-falcon: Bump to version 3.0.1
+Message-ID: <20210518151413.4546-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 18 May 2021 14:01:05 +0200 schrieb Yann E. MORIN:
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ package/python-falcon/python-falcon.hash | 4 ++--
+ package/python-falcon/python-falcon.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> You tagged that one for next, but this is actually a minor release that
-> fixes a regression, and adds just a bunch of tests and debug here and
-> there....
-> 
-> Is there a reason why that can't be applied to master?
-
-Hi Yann,
-
-maybe I am missing some informations but afaics there are no written 
-rules which I can follow when deciding whether a patch is valid for -
-master or -next. When in doubt, especially with a bump like this one 
-which not only fixes bugs but also adds new code, I prefer to send a 
-patch for -next so Thomas, Peter, Arnout or you can decide otherwise.
-
-Regards, Bernd
+diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
+index 80b2aed54f..979419c25a 100644
+--- a/package/python-falcon/python-falcon.hash
++++ b/package/python-falcon/python-falcon.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/falcon/json
+-md5  0ebd5316cd7f59b9be4ea13650ea3a0d  falcon-3.0.0.tar.gz
+-sha256  8d7c3d52ae4590ddfa0b3d9c75d44ab573340a5e78d72ee687712e757ac53929  falcon-3.0.0.tar.gz
++md5  4a70cfeeacb453f5fd7eb791bdd3ac01  falcon-3.0.1.tar.gz
++sha256  c41d84db325881a870e8b7129d5ecfd972fa4323cf77b7119a1d2a21966ee681  falcon-3.0.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
+index 5b73b23277..1f400f9a1f 100644
+--- a/package/python-falcon/python-falcon.mk
++++ b/package/python-falcon/python-falcon.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_FALCON_VERSION = 3.0.0
++PYTHON_FALCON_VERSION = 3.0.1
+ PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
+-PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/f1/59/2748d63922a46e040be06cd175a6242a33ade7839aac37f441544bb6d651
++PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/63/22/6a9009c53ad78e65d88a44db8eccc7f39c6f54fc05fb43b1e9cbbc481d06
+ PYTHON_FALCON_SETUP_TYPE = setuptools
+ PYTHON_FALCON_LICENSE = Apache-2.0
+ PYTHON_FALCON_LICENSE_FILES = LICENSE
+-- 
+2.27.0
