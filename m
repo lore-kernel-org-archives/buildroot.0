@@ -1,56 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 May 2021 22:54:29 +0200
-Subject: [Buildroot] [PATCH 0/2] Add support for more rust platforms
-Message-ID: <20210518205432.133118-1-thomas.petazzoni@bootlin.com>
+Date: Tue, 18 May 2021 22:54:30 +0200
+Subject: [Buildroot] [PATCH 1/2] package/rustc: prepare for musl-based
+ platforms support
+In-Reply-To: <20210518205432.133118-1-thomas.petazzoni@bootlin.com>
+References: <20210518205432.133118-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20210518205432.133118-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Nathaniel Husted <nathaniel.husted@outlook.com>
 
-This (small) patch series started from the patch from Nathaniel Husted
-enabling support for musl-based platforms in our Rust packaging.
+The current rustc package only supports configurations based on glibc
+and hardcodes this requirement. This patch prepares the addition of
+support for musl-based platforms by using $(LIBC) instead of
+hardcoding "gnu" as the C library specifier when defining
+RUSTC_TARGET_NAME.
 
-Unfortunately, the patch from Nathaniel was not entirely correct:
-indeed, not all CPU architectures have musl support in Rust, so simply
-replacing "depends on glibc" by "depends on glibc || musl" was not
-sufficient.
+Signed-off-by: Nathaniel Husted <nathaniel.husted@outlook.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rustc/rustc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Instead, Rust has a classification of platforms by how well they are
-supported: Tier 1 platforms, Tier 2 platforms with host tools, Tier 2
-platforms without host tools, Tier 3 platforms.
-
-In order to make it easier to keep track of which platforms are
-supported, this patch series rewrites how package/rustc/Config.in.host
-declares which platforms are supported, to map directly with the Tier
-1, Tier 2 with host tools and Tier 2 without host tools platforms.
-
-For the sake of simplicity, Tier 3 platforms are not supported at this
-point.
-
-With this patch series, 3 new glibc-based platforms are supported, and
-13 new musl-based platforms are supported.
-
-The series is also available at:
-
-  https://github.com/tpetazzoni/buildroot/commits/rustc-arches
-
-Thanks!
-
-Thomas
-
-Nathaniel Husted (1):
-  package/rustc: prepare for musl-based platforms support
-
-Thomas Petazzoni (1):
-  package/rustc: add support for Tier 1 and Tier 2 platforms
-
- package/rust-bin/rust-bin.hash |  48 +++++++++++++++
- package/rustc/Config.in.host   | 104 +++++++++++++++++++++++++++++----
- package/rustc/rustc.mk         |   2 +-
- 3 files changed, 141 insertions(+), 13 deletions(-)
-
+diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
+index 35ffc36106..52860b7eff 100644
+--- a/package/rustc/rustc.mk
++++ b/package/rustc/rustc.mk
+@@ -8,7 +8,7 @@ RUSTC_ARCH = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ARCH))
+ RUSTC_ABI = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ABI))
+ 
+ ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
+-RUSTC_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-gnu$(RUSTC_ABI)
++RUSTC_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-$(LIBC)$(RUSTC_ABI)
+ endif
+ 
+ ifeq ($(HOSTARCH),x86)
 -- 
 2.31.1
