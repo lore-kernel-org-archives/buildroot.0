@@ -1,65 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 13:22:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump version to
- 3.11.0
-In-Reply-To: <20210518061738.1124231-1-zhaojh329@gmail.com>
-References: <20210518061738.1124231-1-zhaojh329@gmail.com>
-Message-ID: <20210518112242.GT2506@scaer>
+Date: Tue, 18 May 2021 13:23:32 +0200
+Subject: [Buildroot] [git commit branch/next] package/rtty: bump version to
+ 7.4.0
+Message-ID: <20210518105503.7F377815CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jianhui, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6b5907bf65d27ed98532e9783f92f5575f38b3d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-05-18 14:17 +0800, Jianhui Zhao spake thusly:
-> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/rtty/rtty.hash | 2 +-
+ package/rtty/rtty.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libuhttpd/libuhttpd.hash | 2 +-
->  package/libuhttpd/libuhttpd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-> index 4b0b5027c6..19a02e5be0 100644
-> --- a/package/libuhttpd/libuhttpd.hash
-> +++ b/package/libuhttpd/libuhttpd.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  6e7a9ad61e3d0ab5bd4d20b274b850542dff8057a8fcf6c36ce59eb34818f61f  libuhttpd-3.10.1.tar.gz
-> +sha256  dcd95fac7b29d43f57e942db6e9fb4c8745d4284684cd627d60c8a7f8c76cd32  libuhttpd-3.11.0.tar.gz
->  sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-> diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-> index 326c78face..61afec701e 100644
-> --- a/package/libuhttpd/libuhttpd.mk
-> +++ b/package/libuhttpd/libuhttpd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBUHTTPD_VERSION = 3.10.1
-> +LIBUHTTPD_VERSION = 3.11.0
->  LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
->  LIBUHTTPD_LICENSE = MIT
->  LIBUHTTPD_LICENSE_FILES = LICENSE
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/rtty/rtty.hash b/package/rtty/rtty.hash
+index 283a5d1da5..b2e9db2436 100644
+--- a/package/rtty/rtty.hash
++++ b/package/rtty/rtty.hash
+@@ -1,2 +1,2 @@
+-sha256  4c60eacd7a653988a1907284de2ecf360c74f55ef9e21c40b9ebd87af6570908  rtty-7.3.2.tar.gz
++sha256  9bc5d30dfa9bd664a62711b6229f47505b83adb364907f24e3a404aad52a4802  rtty-7.4.0.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
+index dc91445287..4ec220394c 100644
+--- a/package/rtty/rtty.mk
++++ b/package/rtty/rtty.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTTY_VERSION = 7.3.2
++RTTY_VERSION = 7.4.0
+ RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
+ RTTY_LICENSE = MIT
+ RTTY_LICENSE_FILES = LICENSE
