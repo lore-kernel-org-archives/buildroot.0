@@ -1,64 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 13:42:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/links: bump version to 2.22
-In-Reply-To: <20210517173359.19646-1-petr.vorel@gmail.com>
-References: <20210517173359.19646-1-petr.vorel@gmail.com>
-Message-ID: <20210518114216.GX2506@scaer>
+Date: Tue, 18 May 2021 13:42:38 +0200
+Subject: [Buildroot] [git commit branch/next] package/nano: bump to version
+ 5.7
+Message-ID: <20210518111411.BDBA786AE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=845acb9c31fd0f8f547f6cc84ea5007ae23ace8a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-05-17 19:33 +0200, Petr Vorel spake thusly:
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/links/links.hash | 2 +-
->  package/links/links.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/links/links.hash b/package/links/links.hash
-> index f941c2cd1b..156b73fb63 100644
-> --- a/package/links/links.hash
-> +++ b/package/links/links.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  285eed8591c7781ec26213df82786665aaa1b9286782e8a7a1a7e2a6e1630d63  links-2.21.tar.bz2
-> +sha256  0364986b3a7f1e8e3171bea362b53f71e1dd3360a8842d66fdc65580ebc2084d  links-2.22.tar.bz2
->  sha256  92deeb70791366630095d4e0714fe37d6e2bd5db0e6ef498ebb8de328f45b253  COPYING
-> diff --git a/package/links/links.mk b/package/links/links.mk
-> index 5213e02bd5..015878f892 100644
-> --- a/package/links/links.mk
-> +++ b/package/links/links.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LINKS_VERSION = 2.21
-> +LINKS_VERSION = 2.22
->  LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
->  LINKS_SITE = http://links.twibright.com/download
->  LINKS_DEPENDENCIES = host-pkgconf
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index cbb4977223..532a68e0c9 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v5/nano-5.6.1.tar.xz.asc
++# https://www.nano-editor.org/dist/v5/nano-5.7.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256  760d7059e0881ca0ee7e2a33b09d999ec456ff7204df86bee58eb6f523ee8b09  nano-5.6.1.tar.xz
++sha256  d4b181cc2ec11def3711b4649e34f2be7a668e70ab506860514031d069cccafa  nano-5.7.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 77126fd4b0..39d9be12ba 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NANO_VERSION_MAJOR = 5
+-NANO_VERSION = $(NANO_VERSION_MAJOR).6.1
++NANO_VERSION = $(NANO_VERSION_MAJOR).7
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
