@@ -1,63 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 13:24:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rtty: bump version to 7.4.0
-In-Reply-To: <20210518053008.1104981-1-zhaojh329@gmail.com>
-References: <20210518053008.1104981-1-zhaojh329@gmail.com>
-Message-ID: <20210518112420.GU2506@scaer>
+Date: Tue, 18 May 2021 13:25:02 +0200
+Subject: [Buildroot] [git commit branch/next] package/rpcbind: bump version
+ to 1.3.2
+Message-ID: <20210518105615.CFE6687C26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jianhiu, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d13b292cec8166c4712cf4a0defbeee827ffaf78
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-05-18 13:30 +0800, Jianhui Zhao spake thusly:
-> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Rebased yellow pages patch.
 
-Applied to next, thanks.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../rpcbind/0001-Remove-yellow-pages-support.patch | 22 +++++++---------------
+ package/rpcbind/rpcbind.mk                         |  2 +-
+ 2 files changed, 8 insertions(+), 16 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/rtty/rtty.hash | 2 +-
->  package/rtty/rtty.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/rtty/rtty.hash b/package/rtty/rtty.hash
-> index 283a5d1da5..b2e9db2436 100644
-> --- a/package/rtty/rtty.hash
-> +++ b/package/rtty/rtty.hash
-> @@ -1,2 +1,2 @@
-> -sha256  4c60eacd7a653988a1907284de2ecf360c74f55ef9e21c40b9ebd87af6570908  rtty-7.3.2.tar.gz
-> +sha256  9bc5d30dfa9bd664a62711b6229f47505b83adb364907f24e3a404aad52a4802  rtty-7.4.0.tar.gz
->  sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-> diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
-> index dc91445287..4ec220394c 100644
-> --- a/package/rtty/rtty.mk
-> +++ b/package/rtty/rtty.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -RTTY_VERSION = 7.3.2
-> +RTTY_VERSION = 7.4.0
->  RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
->  RTTY_LICENSE = MIT
->  RTTY_LICENSE_FILES = LICENSE
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/rpcbind/0001-Remove-yellow-pages-support.patch b/package/rpcbind/0001-Remove-yellow-pages-support.patch
+index 314e32e9c8..9303d71c96 100644
+--- a/package/rpcbind/0001-Remove-yellow-pages-support.patch
++++ b/package/rpcbind/0001-Remove-yellow-pages-support.patch
+@@ -8,25 +8,17 @@ available. As most Buildroot users are most likely never going to need
+ such feature, get rid of it.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[ rebased for 1.3.2 ]
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+ ---
+- src/security.c | 18 ------------------
+- 1 file changed, 18 deletions(-)
++ src/security.c | 15 ---------------
++ 1 file changed, 15 deletions(-)
+ 
+ diff --git a/src/security.c b/src/security.c
+-index 0c9453f..abc81bb 100644
++index 38967dd..0a70635 100644
+ --- a/src/security.c
+ +++ b/src/security.c
+-@@ -24,9 +24,6 @@
+- #include <rpcsvc/mount.h>
+- #include <rpcsvc/rquota.h>
+- #include <rpcsvc/nfs_prot.h>
+--#include <rpcsvc/yp.h>
+--#include <rpcsvc/ypclnt.h>
+--#include <rpcsvc/yppasswd.h>
+- #else
+- # define MOUNTPROC_MNT	1
+- # define MOUNTPROC_UMNT	3
+-@@ -325,24 +322,9 @@ check_callit(SVCXPRT *xprt, struct r_rmtcall_args *args, int versnum /*__unused*
++@@ -318,24 +318,9 @@ check_callit(SVCXPRT *xprt, struct r_rmtcall_args *args, int versnum /*__unused*
+  		    args->rmt_proc != MOUNTPROC_UMNT)
+  			break;
+  		goto deny;
+@@ -52,5 +44,5 @@ index 0c9453f..abc81bb 100644
+  		break;
+  	}
+ -- 
+-2.4.5
++2.31.1
+ 
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index 25916f0b56..fea2103794 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPCBIND_VERSION = 1.2.5
++RPCBIND_VERSION = 1.3.2
+ RPCBIND_SITE = http://downloads.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIND_VERSION)
+ RPCBIND_SOURCE = rpcbind-$(RPCBIND_VERSION).tar.bz2
+ RPCBIND_LICENSE = BSD-3-Clause
