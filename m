@@ -1,64 +1,75 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 18 May 2021 16:54:23 +0300
-Subject: [Buildroot] [PATCH v2 5/5] package/cage: bump to version 0.1.3
+Date: Tue, 18 May 2021 17:00:13 +0300
+Subject: [Buildroot] [PATCH v2 0/5] Update Cage, wlroots, and wayland
 In-Reply-To: <20210518135423.194507-1-aperez@igalia.com>
 References: <20210513163325.1775639-1-aperez@igalia.com>
  <20210518135423.194507-1-aperez@igalia.com>
-Message-ID: <20210518135423.194507-6-aperez@igalia.com>
+Message-ID: <20210518170013.GB1074179@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update to version 0.1.3, which is a matenance release which does not
-add any new features but can be built against wlroots 0.13.0. A new
-build option to toggle man pages is set to always disabled.
+On Tue, 18 May 2021 16:54:18 +0300 Adrian Perez de Castro <aperez@igalia.com> wrote:
+> Hello!
+> 
+> This patch set updates Cage to 0.1.3, which by itself does not have functional
+> changes over the previous version, but it pulls in wlroots 0.13.0 which does
+> include a good number of improvements.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
-Changes v1 -> v2:
-  - No changes
----
- package/cage/cage.hash | 2 +-
- package/cage/cage.mk   | 7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Ah, I forgot to add in the subject line that this is for the ?next? branch;
+it should read ?[PATCH next v2 x/5]? O:-)
 
-diff --git a/package/cage/cage.hash b/package/cage/cage.hash
-index 5cae952d72..6e312bbf5f 100644
---- a/package/cage/cage.hash
-+++ b/package/cage/cage.hash
-@@ -1,5 +1,5 @@
- # Generated locally
--sha256 38a3e3968f00cc58fe1d9448e972cfac7d1efa30c48699f09032f264101a55ac  cage-0.1.2.1.tar.gz
-+sha256 c28aa8230f937c89b564967748451c1eb15d8633a71a1ed6e22d532afa15462e  cage-0.1.3.tar.gz
- 
- # Hashes for license files:
- sha256 e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
-diff --git a/package/cage/cage.mk b/package/cage/cage.mk
-index 9fc01d36c1..0950c70474 100644
---- a/package/cage/cage.mk
-+++ b/package/cage/cage.mk
-@@ -4,16 +4,17 @@
- #
- ################################################################################
- 
--CAGE_VERSION = 0.1.2.1
-+CAGE_VERSION = 0.1.3
- CAGE_SITE = https://github.com/Hjdskes/cage/releases/download/v$(CAGE_VERSION)
- CAGE_LICENSE = MIT
- CAGE_LICENSE_FILES = LICENSE
- CAGE_DEPENDENCIES = host-pkgconf wlroots
-+CAGE_CONF_OPTS = -Dman-pages=disabled
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
--CAGE_CONF_OPTS = -Dxwayland=true
-+CAGE_CONF_OPTS += -Dxwayland=true
- else
--CAGE_CONF_OPTS = -Dxwayland=false
-+CAGE_CONF_OPTS += -Dxwayland=false
- endif
- 
- $(eval $(meson-package))
--- 
-2.31.1
+> Last but not least, wlroots can now libseat to broker sessions, so three of
+> the patches deal with adding a package for it, installing the daemon init
+> scripts (if the daemon is enabled, as it is optional), and arranging for
+> wlroots to use libseat when available. It looks like libseat is gaining
+> momentum in the Wayland ecosystem and for example Weston can also use it
+> since half a year ago [1].
+> 
+> Best regards,
+> -Adrian
+> 
+> [1] https://gitlab.freedesktop.org/wayland/weston/-/commit/6c4a993a999048a2054ec97e71d32839b312c642
+> 
+> 
+> Adrian Perez de Castro (5):
+>   package/wlroots: bump to version 0.13.0
+>   package/seatd: new package
+>   package/seatd: install init scripts
+>   package/wlroots: use libseat when available
+>   package/cage: bump to version 0.1.3
+> 
+>  package/Config.in                             |  1 +
+>  package/cage/cage.hash                        |  2 +-
+>  package/cage/cage.mk                          |  7 +--
+>  ...pport-building-builtin-without-seatd.patch | 37 +++++++++++++
+>  package/seatd/Config.in                       | 22 ++++++++
+>  package/seatd/S70seatd                        | 38 ++++++++++++++
+>  package/seatd/seatd.hash                      |  5 ++
+>  package/seatd/seatd.mk                        | 52 +++++++++++++++++++
+>  package/wlroots/Config.in                     |  3 ++
+>  package/wlroots/wlroots.hash                  |  4 +-
+>  package/wlroots/wlroots.mk                    | 25 ++++-----
+>  11 files changed, 174 insertions(+), 22 deletions(-)
+>  create mode 100644 package/seatd/0001-meson-Support-building-builtin-without-seatd.patch
+>  create mode 100644 package/seatd/Config.in
+>  create mode 100755 package/seatd/S70seatd
+>  create mode 100644 package/seatd/seatd.hash
+>  create mode 100644 package/seatd/seatd.mk
+> 
+> -- 
+> 2.31.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210518/79d2eb4b/attachment.asc>
