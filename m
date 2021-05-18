@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 18 May 2021 13:36:49 +0200
-Subject: [Buildroot] [PATCH 2/4] core: introduce NORMALIZED_ARCH as
- non-kernel replacement for KERNEL_ARCH
+Date: Tue, 18 May 2021 13:36:48 +0200
+Subject: [Buildroot] [PATCH 1/4] arch: move definition of KERNEL_ARCH to
+ Config.in.<arch> files
 In-Reply-To: <20210518113652.29609-1-patrickdepinguin@gmail.com>
 References: <20210518113652.29609-1-patrickdepinguin@gmail.com>
-Message-ID: <20210518113652.29609-3-patrickdepinguin@gmail.com>
+Message-ID: <20210518113652.29609-2-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,266 +13,302 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-The variable 'KERNEL_ARCH' is actually a normalized version of
-'ARCH'/'BR2_ARCH'. For example, 'arcle' and 'arceb' both become 'arc', just
-as all powerpc variants become 'powerpc'.
+Similar to other arch-specific strings, the 'KERNEL_ARCH' variable can be
+determined from Config.in.<arch> files.
 
-It is presumably called 'KERNEL_ARCH' because the Linux kernel is typically
-the first place where support for a new architecture is added, and thus is
-the entity that defines the normalized name.
-
-However, the term 'KERNEL_ARCH' can also be interpreted as 'the architecture
-used by the kernel', which need not be exactly the same as 'the normalized
-name for a certain arch'. In particular, for cases where a 64-bit
-architecture is running a 64-bit kernel but 32-bit userspace. Examples
-include:
-    * aarch64 architecture, with aarch64 kernel and 32-bit (ARM) userspace
-    * x86_64 architecture, with x86_64 kernel and 32-bit (i386) userspace
-
-In such cases, the 'architecture used by the kernel' needs to refer to the
-64-bit name (aarch64, x86_64), whereas all userspace applications need to
-refer the, potentially normalized, 32-bit name.
-
-This means that there need to be two different variables:
-
-KERNEL_ARCH:     the architecture used by the kernel
-NORMALIZED_ARCH: the normalized name for the current userspace architecture
-
-At this moment, both will actually have the same content. But a subsequent
-patch will add basic support for situations described above, in which
-KERNEL_ARCH may become overwritten to the 64-bit architecture, while
-NORMALIZED_ARCH needs to remain the same (32-bit) case.
-
-This commit replaces use of KERNEL_ARCH where actually the userspace arch is
-needed.  Places that use KERNEL_ARCH in combination with building of kernel
-modules are not touched.
-There may be cases where a package builds both a kernel module as userspace,
-in which case it may need to know about both KERNEL_ARCH and
-NORMALIZED_ARCH, for the case where they differ. But this is to be fixed on
-a per-need basis.
+Besides aligning with similar strings, this also means simplification: the
+big 'sed' covers several architectures not even supported by Buildroot.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- Makefile                                       |  1 +
- boot/barebox/barebox.mk                        | 10 +++++-----
- boot/uboot/uboot.mk                            |  6 +++---
- package/busybox/busybox.mk                     |  2 +-
- package/environment-setup/environment-setup.mk |  2 +-
- package/kvmtool/kvmtool.mk                     |  4 ++--
- package/libselinux/libselinux.mk               |  2 +-
- package/linux-tools/linux-tool-perf.mk.in      |  4 ++--
- package/linux-tools/linux-tool-selftests.mk.in |  6 +++---
- package/olsr/olsr.mk                           |  4 ++--
- package/pciutils/pciutils.mk                   |  2 +-
- package/uboot-tools/uboot-tools.mk             | 10 +++++-----
- 12 files changed, 27 insertions(+), 26 deletions(-)
+ Makefile                  | 17 +----------------
+ arch/Config.in            |  3 +++
+ arch/Config.in.arc        |  3 +++
+ arch/Config.in.arm        |  4 ++++
+ arch/Config.in.csky       |  3 +++
+ arch/Config.in.m68k       |  3 +++
+ arch/Config.in.microblaze |  3 +++
+ arch/Config.in.mips       |  3 +++
+ arch/Config.in.nds32      |  3 +++
+ arch/Config.in.nios2      |  3 +++
+ arch/Config.in.or1k       |  3 +++
+ arch/Config.in.powerpc    |  3 +++
+ arch/Config.in.riscv      |  3 +++
+ arch/Config.in.s390x      |  3 +++
+ arch/Config.in.sh         |  3 +++
+ arch/Config.in.sparc      |  4 ++++
+ arch/Config.in.x86        |  4 ++++
+ arch/Config.in.xtensa     |  3 +++
+ 18 files changed, 55 insertions(+), 16 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 7b6998fde6..c5399e9a35 100644
+index c3305f46e9..7b6998fde6 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -433,6 +433,7 @@ QUIET := $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-q)
+@@ -433,22 +433,7 @@ QUIET := $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-q)
  
  # Strip off the annoying quoting
  ARCH := $(call qstrip,$(BR2_ARCH))
-+NORMALIZED_ARCH := $(call qstrip,$(BR2_KERNEL_ARCH))
- KERNEL_ARCH := $(call qstrip,$(BR2_KERNEL_ARCH))
+-
+-KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+-	-e s/i.86/i386/ -e s/sun4u/sparc64/ \
+-	-e s/arcle/arc/ \
+-	-e s/arceb/arc/ \
+-	-e s/arm.*/arm/ -e s/sa110/arm/ \
+-	-e s/aarch64.*/arm64/ \
+-	-e s/nds32.*/nds32/ \
+-	-e s/or1k/openrisc/ \
+-	-e s/parisc64/parisc/ \
+-	-e s/powerpc64.*/powerpc/ \
+-	-e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+-	-e s/riscv.*/riscv/ \
+-	-e s/sh.*/sh/ \
+-	-e s/s390x/s390/ \
+-	-e s/microblazeel/microblaze/)
++KERNEL_ARCH := $(call qstrip,$(BR2_KERNEL_ARCH))
  
  ZCAT := $(call qstrip,$(BR2_ZCAT))
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 8f02f9f9e1..6506294d6d 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -59,16 +59,16 @@ ifneq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
- $(1)_INSTALL_TARGET = NO
- endif
+ BZCAT := $(call qstrip,$(BR2_BZCAT))
+diff --git a/arch/Config.in b/arch/Config.in
+index 155403c363..7575acf48c 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -326,6 +326,9 @@ config BR2_ARCH_NEEDS_GCC_AT_LEAST_10
+ config BR2_ARCH
+ 	string
  
--ifeq ($$(KERNEL_ARCH),i386)
-+ifeq ($$(NORMALIZED_ARCH),i386)
- $(1)_ARCH = x86
--else ifeq ($$(KERNEL_ARCH),x86_64)
-+else ifeq ($$(NORMALIZED_ARCH),x86_64)
- $(1)_ARCH = x86
--else ifeq ($$(KERNEL_ARCH),powerpc)
-+else ifeq ($$(NORMALIZED_ARCH),powerpc)
- $(1)_ARCH = ppc
--else ifeq ($$(KERNEL_ARCH),arm64)
-+else ifeq ($$(NORMALIZED_ARCH),arm64)
- $(1)_ARCH = arm
- else
--$(1)_ARCH = $$(KERNEL_ARCH)
-+$(1)_ARCH = $$(NORMALIZED_ARCH)
- endif
++config BR2_KERNEL_ARCH
++	string
++
+ config BR2_ENDIAN
+ 	string
  
- $(1)_MAKE_FLAGS = ARCH=$$($(1)_ARCH) CROSS_COMPILE="$$(TARGET_CROSS)"
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index dbe82e65b1..77df9c8bba 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -139,12 +139,12 @@ endif
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index f7a6d920b5..cc55c9e68f 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -62,6 +62,9 @@ config BR2_ARCH
+ 	default "arc"	if BR2_arcle
+ 	default "arceb"	if BR2_arceb
  
- # The kernel calls AArch64 'arm64', but U-Boot calls it just 'arm', so
- # we have to special case it. Similar for i386/x86_64 -> x86
--ifeq ($(KERNEL_ARCH),arm64)
-+ifeq ($(NORMALIZED_ARCH),arm64)
- UBOOT_ARCH = arm
--else ifneq ($(filter $(KERNEL_ARCH),i386 x86_64),)
-+else ifneq ($(filter $(NORMALIZED_ARCH),i386 x86_64),)
- UBOOT_ARCH = x86
- else
--UBOOT_ARCH = $(KERNEL_ARCH)
-+UBOOT_ARCH = $(NORMALIZED_ARCH)
- endif
++config BR2_KERNEL_ARCH
++	default "arc"
++
+ config BR2_arc
+ 	bool
+ 	default y if BR2_arcle || BR2_arceb
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 4c0910e4f8..0f50512fad 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -822,6 +822,10 @@ config BR2_ARCH
+ 	default "aarch64"	if BR2_aarch64
+ 	default "aarch64_be"	if BR2_aarch64_be
  
- UBOOT_MAKE_OPTS += \
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index e979ac4f4b..456ed04a73 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -99,7 +99,7 @@ endif
++config BR2_KERNEL_ARCH
++	default "arm"		if BR2_arm || BR2_armeb
++	default "arm64"		if BR2_aarch64 || BR2_aarch64_be
++
+ config BR2_ENDIAN
+ 	default "LITTLE" if (BR2_arm || BR2_aarch64)
+ 	default "BIG"	 if (BR2_armeb || BR2_aarch64_be)
+diff --git a/arch/Config.in.csky b/arch/Config.in.csky
+index 7e2029f759..df9e7ab75b 100644
+--- a/arch/Config.in.csky
++++ b/arch/Config.in.csky
+@@ -39,6 +39,9 @@ config BR2_GCC_TARGET_FLOAT_ABI
+ config BR2_ARCH
+ 	default "csky"
  
- BUSYBOX_MAKE_OPTS = \
- 	CC="$(TARGET_CC)" \
--	ARCH=$(KERNEL_ARCH) \
-+	ARCH=$(NORMALIZED_ARCH) \
- 	PREFIX="$(TARGET_DIR)" \
- 	EXTRA_LDFLAGS="$(BUSYBOX_LDFLAGS)" \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
-diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-index fcad013f0d..8e0fdff208 100644
---- a/package/environment-setup/environment-setup.mk
-+++ b/package/environment-setup/environment-setup.mk
-@@ -11,7 +11,7 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
- 	for var in $(TARGET_CONFIGURE_OPTS); do \
- 		printf "export \"$$var\"\n" >> $(ENVIRONMENT_SETUP_FILE); \
- 	done
--	printf "export \"ARCH=$(KERNEL_ARCH)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
-+	printf "export \"ARCH=$(NORMALIZED_ARCH)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
- 	printf "export \"CROSS_COMPILE=$(TARGET_CROSS)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
- 	printf "export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
-diff --git a/package/kvmtool/kvmtool.mk b/package/kvmtool/kvmtool.mk
-index 2984817c7e..df6ae7e0f1 100644
---- a/package/kvmtool/kvmtool.mk
-+++ b/package/kvmtool/kvmtool.mk
-@@ -25,11 +25,11 @@ KVMTOOL_MAKE_OPTS = \
- 	WERROR=0
++config BR2_KERNEL_ARCH
++	default "csky"
++
+ config BR2_ENDIAN
+ 	default "LITTLE"
  
- define KVMTOOL_BUILD_CMDS
--	$(TARGET_MAKE_ENV) ARCH=$(KERNEL_ARCH) $(MAKE) -C $(@D) $(KVMTOOL_MAKE_OPTS)
-+	$(TARGET_MAKE_ENV) ARCH=$(NORMALIZED_ARCH) $(MAKE) -C $(@D) $(KVMTOOL_MAKE_OPTS)
- endef
+diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
+index 275f47f1d3..7f3aec7232 100644
+--- a/arch/Config.in.m68k
++++ b/arch/Config.in.m68k
+@@ -1,6 +1,9 @@
+ config BR2_ARCH
+ 	default "m68k"		if BR2_m68k
  
- define KVMTOOL_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) ARCH=$(KERNEL_ARCH) $(MAKE) -C $(@D) \
-+	$(TARGET_MAKE_ENV) ARCH=$(NORMALIZED_ARCH) $(MAKE) -C $(@D) \
- 		$(KVMTOOL_MAKE_OPTS) install DESTDIR=$(TARGET_DIR) prefix=/usr
- endef
++config BR2_KERNEL_ARCH
++	default "m68k"
++
+ config BR2_ENDIAN
+ 	default "BIG"
  
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index fdd13aa942..5a62b8d829 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -18,7 +18,7 @@ LIBSELINUX_INSTALL_STAGING = YES
- # we won't have to use a relative path in 0002-revert-ln-relative.patch
- LIBSELINUX_MAKE_OPTS = \
- 	$(TARGET_CONFIGURE_OPTS) \
--	ARCH=$(KERNEL_ARCH) \
-+	ARCH=$(NORMALIZED_ARCH) \
- 	SHLIBDIR=/usr/lib
+diff --git a/arch/Config.in.microblaze b/arch/Config.in.microblaze
+index 5fe2906d40..52aa252a2c 100644
+--- a/arch/Config.in.microblaze
++++ b/arch/Config.in.microblaze
+@@ -2,6 +2,9 @@ config BR2_ARCH
+ 	default "microblazeel"  if BR2_microblazeel
+ 	default "microblaze"    if BR2_microblazebe
  
- LIBSELINUX_MAKE_INSTALL_TARGETS = install
-diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
-index efa747cf8d..4e28129f50 100644
---- a/package/linux-tools/linux-tool-perf.mk.in
-+++ b/package/linux-tools/linux-tool-perf.mk.in
-@@ -8,10 +8,10 @@ LINUX_TOOLS += perf
++config BR2_KERNEL_ARCH
++	default "microblaze"
++
+ config BR2_ENDIAN
+ 	default "LITTLE" if BR2_microblazeel
+ 	default "BIG"	 if BR2_microblazebe
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index 619456c2d5..b4923f8484 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -235,6 +235,9 @@ config BR2_ARCH
+ 	default "mips64"	if BR2_mips64
+ 	default "mips64el"	if BR2_mips64el
  
- PERF_DEPENDENCIES = host-flex host-bison
++config BR2_KERNEL_ARCH
++	default "mips"
++
+ config BR2_ENDIAN
+ 	default "LITTLE"	if BR2_mipsel || BR2_mips64el
+ 	default "BIG"		if BR2_mips || BR2_mips64
+diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
+index 322ff49f2e..61fc346260 100644
+--- a/arch/Config.in.nds32
++++ b/arch/Config.in.nds32
+@@ -1,6 +1,9 @@
+ config BR2_ARCH
+ 	default "nds32le"
  
--ifeq ($(KERNEL_ARCH),x86_64)
-+ifeq ($(NORMALIZED_ARCH),x86_64)
- PERF_ARCH=x86
- else
--PERF_ARCH=$(KERNEL_ARCH)
-+PERF_ARCH=$(NORMALIZED_ARCH)
- endif
++config BR2_KERNEL_ARCH
++	default "nds32"
++
+ config BR2_GCC_TARGET_ARCH
+ 	default "v3"
  
- PERF_MAKE_FLAGS = \
-diff --git a/package/linux-tools/linux-tool-selftests.mk.in b/package/linux-tools/linux-tool-selftests.mk.in
-index c4e5bf0fea..b824c11bd6 100644
---- a/package/linux-tools/linux-tool-selftests.mk.in
-+++ b/package/linux-tools/linux-tool-selftests.mk.in
-@@ -6,13 +6,13 @@
+diff --git a/arch/Config.in.nios2 b/arch/Config.in.nios2
+index aae435fa17..c77b1a1c59 100644
+--- a/arch/Config.in.nios2
++++ b/arch/Config.in.nios2
+@@ -1,6 +1,9 @@
+ config BR2_ARCH
+ 	default "nios2"
  
- LINUX_TOOLS += selftests
++config BR2_KERNEL_ARCH
++	default "nios2"
++
+ config BR2_ENDIAN
+ 	default "LITTLE"
  
--ifeq ($(KERNEL_ARCH),x86_64)
-+ifeq ($(NORMALIZED_ARCH),x86_64)
- SELFTESTS_ARCH=x86
- else
--ifeq ($(KERNEL_ARCH),i386)
-+ifeq ($(NORMALIZED_ARCH),i386)
- SELFTESTS_ARCH=x86
- else
--SELFTESTS_ARCH=$(KERNEL_ARCH)
-+SELFTESTS_ARCH=$(NORMALIZED_ARCH)
- endif
- endif
+diff --git a/arch/Config.in.or1k b/arch/Config.in.or1k
+index abdf498fb8..ef1bded453 100644
+--- a/arch/Config.in.or1k
++++ b/arch/Config.in.or1k
+@@ -1,6 +1,9 @@
+ config BR2_ARCH
+ 	default "or1k"
  
-diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-index b2c8e7e001..4ad88991f2 100644
---- a/package/olsr/olsr.mk
-+++ b/package/olsr/olsr.mk
-@@ -27,10 +27,10 @@ OLSR_PLUGINS += pud
- endif
++config BR2_KERNEL_ARCH
++	default "openrisc"
++
+ config BR2_ENDIAN
+ 	default "BIG"
  
- define OLSR_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) \
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(NORMALIZED_ARCH) \
- 		CFLAGS="$(OLSR_CFLAGS)" -C $(@D) olsrd
- 	$(foreach p,$(OLSR_PLUGINS), \
--		$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) \
-+		$(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(NORMALIZED_ARCH) \
- 			CFLAGS="$(OLSR_CFLAGS)" -C $(@D)/lib/$(p)
- 	)
- endef
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index 9b83b62b55..67defcc743 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
-@@ -12,7 +12,7 @@ PCIUTILS_LICENSE = GPL-2.0+
- PCIUTILS_LICENSE_FILES = COPYING
- PCIUTILS_MAKE_OPTS = \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
--	HOST="$(KERNEL_ARCH)-linux" \
-+	HOST="$(NORMALIZED_ARCH)-linux" \
- 	OPT="$(TARGET_CFLAGS)" \
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
- 	DNS=no \
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 8963d6182e..d60aaa7668 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -206,14 +206,14 @@ $(eval $(host-generic-package))
- MKIMAGE = $(HOST_DIR)/bin/mkimage
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index ba56c9c721..33b2471cf9 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -157,6 +157,9 @@ config BR2_ARCH
+ 	default "powerpc64"	if BR2_powerpc64
+ 	default "powerpc64le"	if BR2_powerpc64le
  
- # mkimage supports arm blackfin m68k microblaze mips mips64 nios2 powerpc ppc sh sparc sparc64 x86
--# KERNEL_ARCH can be arm64 arc arm blackfin m68k microblaze mips nios2 powerpc sh sparc i386 x86_64 xtensa
--# For arm64, arc, xtensa we'll just keep KERNEL_ARCH
-+# NORMALIZED_ARCH can be arm64 arc arm blackfin m68k microblaze mips nios2 powerpc sh sparc i386 x86_64 xtensa
-+# For arm64, arc, xtensa we'll just keep NORMALIZED_ARCH
- # For mips64, we'll just keep mips
- # For i386 and x86_64, we need to convert
--ifeq ($(KERNEL_ARCH),x86_64)
-+ifeq ($(NORMALIZED_ARCH),x86_64)
- MKIMAGE_ARCH = x86
--else ifeq ($(KERNEL_ARCH),i386)
-+else ifeq ($(NORMALIZED_ARCH),i386)
- MKIMAGE_ARCH = x86
- else
--MKIMAGE_ARCH = $(KERNEL_ARCH)
-+MKIMAGE_ARCH = $(NORMALIZED_ARCH)
- endif
++config BR2_KERNEL_ARCH
++	default "powerpc"
++
+ config BR2_ENDIAN
+ 	default "BIG"    if BR2_powerpc || BR2_powerpc64
+ 	default "LITTLE" if BR2_powerpc64le
+diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+index 1fc20e5de7..e8b6ddc833 100644
+--- a/arch/Config.in.riscv
++++ b/arch/Config.in.riscv
+@@ -116,6 +116,9 @@ config BR2_ARCH
+ 	default "riscv32" if !BR2_ARCH_IS_64
+ 	default "riscv64" if BR2_ARCH_IS_64
+ 
++config BR2_KERNEL_ARCH
++	default "riscv"
++
+ config BR2_ENDIAN
+ 	default "LITTLE"
+ 
+diff --git a/arch/Config.in.s390x b/arch/Config.in.s390x
+index ad866b421e..bf4b70f957 100644
+--- a/arch/Config.in.s390x
++++ b/arch/Config.in.s390x
+@@ -17,6 +17,9 @@ endchoice
+ config BR2_ARCH
+ 	default "s390x"	if BR2_s390x
+ 
++config BR2_KERNEL_ARCH
++	default "s390"
++
+ config BR2_ENDIAN
+ 	default "BIG"
+ 
+diff --git a/arch/Config.in.sh b/arch/Config.in.sh
+index b5cce18e22..fde42dfce2 100644
+--- a/arch/Config.in.sh
++++ b/arch/Config.in.sh
+@@ -24,6 +24,9 @@ config BR2_ARCH
+ 	default "sh4a"		if BR2_sh4a
+ 	default "sh4aeb"	if BR2_sh4aeb
+ 
++config BR2_KERNEL_ARCH
++	default "sh"
++
+ config BR2_ENDIAN
+ 	default "LITTLE"	if BR2_sh4 || BR2_sh4a
+ 	default "BIG"		if BR2_sh2a || BR2_sh4eb || BR2_sh4aeb
+diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
+index 4c4dc61745..b91df6892b 100644
+--- a/arch/Config.in.sparc
++++ b/arch/Config.in.sparc
+@@ -21,6 +21,10 @@ config BR2_ARCH
+ 	default "sparc"	if BR2_sparc
+ 	default "sparc64" if BR2_sparc64
+ 
++config BR2_KERNEL_ARCH
++	default "sparc"	if BR2_sparc
++	default "sparc64" if BR2_sparc64
++
+ config BR2_ENDIAN
+ 	default "BIG"
+ 
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index 7aae3cafb7..88ac9cdc44 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -266,6 +266,10 @@ config BR2_ARCH
+ 	default "i686"		if BR2_x86_athlon_4
+ 	default "x86_64"	if BR2_x86_64
+ 
++config BR2_KERNEL_ARCH
++	default "i386"		if !BR2_x86_64
++	default "x86_64"	if BR2_x86_64
++
+ config BR2_ENDIAN
+ 	default "LITTLE"
+ 
+diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+index a79d906985..acc340eca6 100644
+--- a/arch/Config.in.xtensa
++++ b/arch/Config.in.xtensa
+@@ -48,6 +48,9 @@ config BR2_ENDIAN
+ config BR2_ARCH
+ 	default "xtensa"	if BR2_xtensa
+ 
++config BR2_KERNEL_ARCH
++	default "xtensa"
++
+ config BR2_READELF_ARCH_NAME
+ 	default "Tensilica Xtensa Processor"
+ 
 -- 
 2.26.3
