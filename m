@@ -1,203 +1,140 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 May 2021 21:58:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: bump version to 21.1.0
-In-Reply-To: <20210511180442.1572077-1-bernd.kuhls@t-online.de>
-References: <20210511180442.1572077-1-bernd.kuhls@t-online.de>
-Message-ID: <b9187bd4-eee6-60a8-e009-c5a979322c49@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 May 2021 22:16:49 +0200
+Subject: [Buildroot] [PATCH 3/3] support/scripts/pkg-stats: clarify when
+ a CVE/CPE should report as N/A
+In-Reply-To: <20210518182155.47055-3-matthew.weber@collins.com>
+References: <20210518182155.47055-1-matthew.weber@collins.com>
+ <20210518182155.47055-3-matthew.weber@collins.com>
+Message-ID: <20210518201649.GY2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Matthew, All,
 
-
-On 11/05/2021 20:04, Bernd Kuhls wrote:
-> Removed kmsro-related options, these are now handled by the build
-> system:
-> https://cgit.freedesktop.org/mesa/mesa/commit/?id=70813c1c13b99cb029c8fa3537163650bdd17b6d
+On 2021-05-18 13:21 -0500, Matthew Weber via buildroot spake thusly:
+>  - If a package doesn't have any versioning, ignore and state that
+>  - If a package is virtual, CVE=ignore and CPE state virtual
+>  - For any of these NA cases, don't provide search link
 > 
-> Updated license hash due to upstream commit:
-> https://cgit.freedesktop.org/mesa/mesa/commit/?id=2f42c21221cf89f738225e3ac2aa2e85953c1dc1
-> 
-> Rebased patch 0003 due to upstream commit:
-> https://cgit.freedesktop.org/mesa/mesa/commit/?id=a9618e7c4214e29c97009870ad8904623746ffe9
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Matthew Weber <matthew.weber@collins.com>
 
- Applied to next, thanks.
+Honestly, I get quickly lost in the coe of pkg-stats...
 
- Regards,
- Arnout
+However, with this series applied, the cells for CVE and CPE for virtual
+packages are not green, suggesting this is abnormal. However, this is
+perfectly fine :the re are no CVE and no CPE for virtual packages, so
+they should be green.
+
+I managed to do that by adding the following on-top of this third patch:
+
+    diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+    index 3aaf1169cb..d06778ab05 100755
+    --- a/support/scripts/pkg-stats
+    +++ b/support/scripts/pkg-stats
+    @@ -910,6 +910,8 @@ def dump_html_pkg(f, pkg):
+         td_class = ["centered"]
+         if pkg.is_status_ok("cve"):
+             td_class.append("cve-ok")
+    +    elif pkg.is_status_na("cve") and not pkg.is_actual_package:
+    +        td_class.append("cve-ok")
+         elif pkg.is_status_error("cve"):
+             td_class.append("cve-nok")
+         else:
+    @@ -937,6 +939,8 @@ def dump_html_pkg(f, pkg):
+         td_class = ["left"]
+         if pkg.is_status_ok("cpe"):
+             td_class.append("cpe-ok")
+    +    elif pkg.is_status_na("cpe") and not pkg.is_actual_package:
+    +        td_class.append("cpe-ok")
+         elif pkg.is_status_error("cpe"):
+             td_class.append("cpe-nok")
+         else:
+
+But I am not usre this is the best solution... So, I've not applied
+patches 2 and 3 in the series. Could you please respin with the above
+(if it's OK for you, or with a better solution), please?
+
+Additionally, as a further refinement, packages that have no version,
+like urandom-scripts, makedevs, etc... are usually bundled with
+Buildroot. Do you think for those we should:
+
+ 1. declare 'buildroot' to NVD, as the 'buildroot_project' vendor and
+    the 'buildroot' product, as well as 'makedevs', 'urandom-scripts' et
+    al. as products,
+
+ 2. add "MAKEDEVS_CPE_VENDOR = buildroot_project" to each of those
+    bundled packages.
+
+Thoughts?
+
+Regards,
+Yann E. MORIN.
 
 > ---
->  package/mesa3d-headers/mesa3d-headers.mk      |  2 +-
->  ...tion-to-disable-optional-neon-suppor.patch |  6 ++---
->  package/mesa3d/Config.in                      | 23 +------------------
->  package/mesa3d/mesa3d.hash                    |  8 +++----
->  package/mesa3d/mesa3d.mk                      |  3 +--
->  5 files changed, 10 insertions(+), 32 deletions(-)
+>  support/scripts/pkg-stats | 20 +++++++++++++-------
+>  1 file changed, 13 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-> index 9c0079c3f9..308c6701ab 100644
-> --- a/package/mesa3d-headers/mesa3d-headers.mk
-> +++ b/package/mesa3d-headers/mesa3d-headers.mk
-> @@ -12,7 +12,7 @@ endif
+> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+> index ca55a301de..3aaf1169cb 100755
+> --- a/support/scripts/pkg-stats
+> +++ b/support/scripts/pkg-stats
+> @@ -229,7 +229,10 @@ class Package:
+>          """
+>          var = self.pkgvar()
+>          if not self.is_actual_package:
+> -            self.status['cpe'] = ("na", "no valid package infra")
+> +            self.status['cpe'] = ("na", "N/A - virtual pkg")
+> +            return
+> +        if not self.current_version:
+> +            self.status['cpe'] = ("na", "no version information available")
+>              return
 >  
->  # Not possible to directly refer to mesa3d variables, because of
->  # first/second expansion trickery...
-> -MESA3D_HEADERS_VERSION = 21.0.3
-> +MESA3D_HEADERS_VERSION = 21.1.0
->  MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
->  MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
->  MESA3D_HEADERS_DL_SUBDIR = mesa3d
-> diff --git a/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-> index 39e402361f..bb5ef00a9f 100644
-> --- a/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-> +++ b/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-> @@ -10,7 +10,7 @@ to force disabling it at compile time.
->  [Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114]
->  Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->  Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> -[rebased for 20.2.0 & 20.3.0]
-> +[rebased for 20.2.0, 20.3.0 & 21.1.0]
->  ---
->   meson_options.txt                    | 7 +++++++
->   src/gallium/drivers/vc4/meson.build  | 4 ++--
-> @@ -67,7 +67,7 @@ index 66767e7f1f8..7446f1c3d0c 100644
->   {
->  -#ifdef USE_ARM_ASM
->  +#ifdef VC4_TILING_LT_NEON
-> -         if (util_cpu_caps.has_neon) {
-> +         if (util_get_cpu_caps()->has_neon) {
->                   vc4_load_lt_image_neon(dst, dst_stride, src, src_stride,
->                                          cpp, box);
->  @@ -105,7 +105,7 @@ vc4_store_lt_image(void *dst, uint32_t dst_stride,
-> @@ -76,7 +76,7 @@ index 66767e7f1f8..7446f1c3d0c 100644
->   {
->  -#ifdef USE_ARM_ASM
->  +#ifdef VC4_TILING_LT_NEON
-> -         if (util_cpu_caps.has_neon) {
-> +         if (util_get_cpu_caps()->has_neon) {
->                   vc4_store_lt_image_neon(dst, dst_stride, src, src_stride,
->                                           cpp, box);
->  -- 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 0a9e95a799..d1b3af2054 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -81,11 +81,6 @@ config BR2_PACKAGE_MESA3D_DRIVER
->  config BR2_PACKAGE_MESA3D_NEEDS_XA
->  	bool
+>          if var in self.all_cpeids:
+> @@ -587,7 +590,7 @@ def check_package_cves(nvd_path, packages):
+>      cpe_product_pkgs = defaultdict(list)
+>      for pkg in packages:
+>          if not pkg.is_actual_package:
+> -            pkg.status['cve'] = ("na", "no valid package infra")
+> +            pkg.status['cve'] = ("na", "N/A")
+>              continue
+>          if not pkg.current_version:
+>              pkg.status['cve'] = ("na", "no version information available")
+> @@ -942,12 +945,15 @@ def dump_html_pkg(f, pkg):
+>      if pkg.cpeid:
+>          f.write("  <code>%s</code>\n" % pkg.cpeid)
+>      if not pkg.is_status_ok("cpe"):
+> -        if pkg.cpeid:
+> -            f.write("  <br/>%s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
+> -                    (pkg.status['cpe'][1], ":".join(pkg.cpeid.split(":")[0:5])))
+> +        if pkg.is_actual_package and pkg.current_version:
+> +            if pkg.cpeid:
+> +                f.write("  <br/>%s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
+> +                        (pkg.status['cpe'][1], ":".join(pkg.cpeid.split(":")[0:5])))
+> +            else:
+> +                f.write("  %s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
+> +                        (pkg.status['cpe'][1], pkg.name))
+>          else:
+> -            f.write("  %s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %
+> -                    (pkg.status['cpe'][1], pkg.name))
+> +            f.write("  %s\n" % pkg.status['cpe'][1])
 >  
-> -# Quote from mesa3d meson.build: "kmsro driver requires one or more
-> -# renderonly drivers (vc4, etnaviv, freedreno)".
-> -config BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-> -	bool
-> -
->  # OpenGL GLX and Gallium VDPAU both needs X11
->  config BR2_PACKAGE_MESA3D_NEEDS_X11
->  	bool
-> @@ -105,7 +100,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
->  	bool "Gallium Etnaviv driver"
->  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
->  	select BR2_PACKAGE_LIBDRM_ETNAVIV
-> -	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
->  	help
->  	  Mesa driver for Vivante GPUs.
+>      f.write("  </td>\n")
 >  
-> @@ -119,7 +113,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
->  	# for arm/aarch64.
->  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
->  	select BR2_PACKAGE_LIBDRM_FREEDRENO
-> -	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
->  	help
->  	  Mesa driver for Freedreno GPUs.
->  
-> @@ -143,20 +136,9 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
->  	help
->  	  Mesa driver for iris-based Intel GPUs.
->  
-> -config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
-> -	bool "Gallium KMSRO driver"
-> -	depends on BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-> -	help
-> -	  Support various sorts of KMS displays with the
-> -	  renderonly layer used to attach a GPU.
-> -
-> -comment "Gallium KMSRO needs one or more renderonly drivers"
-> -	depends on !BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-> -
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
->  	bool "Gallium lima driver"
->  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> -	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
->  	help
->  	  Mesa driver for ARM Mali Utgard GPUs.
->  
-> @@ -172,7 +154,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
->  	bool "Gallium panfrost driver"
->  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> -	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
->  	help
->  	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
->  
-> @@ -260,11 +241,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
->  	bool "Gallium v3d driver"
->  	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
->  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> -	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
->  	select BR2_PACKAGE_LIBDRM_VC4
->  	select BR2_PACKAGE_MESA3D_OPENGL_EGL
->  	help
-> -	  Driver for Broadcom VC6 (rpi4) GPUs (needs kmsro and vc4).
-> +	  Driver for Broadcom VC6 (rpi4) GPUs (needs vc4).
->  
->  	  It requires a kernel 4.18+ with DRM V3D support enabled:
->  
-> @@ -275,7 +255,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
->  	bool "Gallium vc4 driver"
->  	depends on BR2_arm || BR2_aarch64
->  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> -	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
->  	select BR2_PACKAGE_LIBDRM_VC4
->  	select BR2_PACKAGE_MESA3D_OPENGL_EGL
->  	help
-> diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-> index 6a70e8a1b2..b9eace0b42 100644
-> --- a/package/mesa3d/mesa3d.hash
-> +++ b/package/mesa3d/mesa3d.hash
-> @@ -1,6 +1,6 @@
-> -# From https://lists.freedesktop.org/archives/mesa-announce/2021-April/000627.html
-> -sha256  565c6f4bd2d5747b919454fc1d439963024fc78ca56fd05158c3b2cde2f6912b  mesa-21.0.3.tar.xz
-> -sha512  4a8aee48a8ea7f32e8aa3bbbd91db26c6053b9a43e62ff88256929e6bc147884f0fef988726b5a3d59d7008663f017c746a0352fd3fcc1c476b8190af4a2531f  mesa-21.0.3.tar.xz
-> +# From https://lists.freedesktop.org/archives/mesa-announce/2021-May/000630.html
-> +sha256  0128f10e22970d3aed3d1034003731f94623015cd9797c07151417649c1b1ff8  mesa-21.1.0.tar.xz
-> +sha512  9d7617a6d5dd8ec1d93fdda8fe8b2f745695c02bc381d685f1257f7e7f08d5c06f3c57ae71c5f2dfaabb1742b8a88f47294a369bd3ac553f29835f24ce5dd350  mesa-21.1.0.tar.xz
->  
->  # License
-> -sha256  1361129baa4519b6ed27a1bf4aeee33a58b060bf7bb9b6ea415ecede04e35e46  docs/license.rst
-> +sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index a278d3dbdb..3aec1df834 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  # When updating the version, please also update mesa3d-headers
-> -MESA3D_VERSION = 21.0.3
-> +MESA3D_VERSION = 21.1.0
->  MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
->  MESA3D_SITE = https://mesa.freedesktop.org/archive
->  MESA3D_LICENSE = MIT, SGI, Khronos
-> @@ -88,7 +88,6 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO) += freedreno
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915)     += i915
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS)     += iris
-> -MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST) += panfrost
+> -- 
+> 2.17.1
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
