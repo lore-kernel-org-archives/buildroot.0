@@ -1,100 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 18:55:21 +0200
-Subject: [Buildroot] [git commit branch/next] package/wlroots: bump to
- version 0.13.0
-Message-ID: <20210518164141.53D1987A43@busybox.osuosl.org>
+Date: Tue, 18 May 2021 19:09:51 +0200
+Subject: [Buildroot] [git commit branch/next] package/cage: bump to version
+ 0.1.3
+Message-ID: <20210518164141.82CA887FD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7657250808d8169af2ef3c585213645bec1c70ed
+commit: https://git.buildroot.net/buildroot/commit/?id=4dc6bcd180c892442221cc330b365da6e0efa399
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Update wlroots to version 0.13.0. This is a release which changes
-API/ABI, applications which use wlroots need to be rebuilt. Currently in
-Buildroot there is only cage, to be updated by a follow-up patch of the
-series.
-
-Additionally, remove usage of the xcb-icccm build option, which is no
-longer available and update the dependencies needed by the X11 support.
-Note that the dependencies neded by the X11 backend are a superset of
-the ones needed for XWayland support, so we can make toggle both Meson
-options at once.
+Update to version 0.1.3, which is a matenance release which does not
+add any new features but can be built against wlroots 0.13.0. A new
+build option to toggle man pages is set to always disabled.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/wlroots/Config.in    |  3 +++
- package/wlroots/wlroots.hash |  4 ++--
- package/wlroots/wlroots.mk   | 22 ++++------------------
- 3 files changed, 9 insertions(+), 20 deletions(-)
+ package/cage/cage.hash | 2 +-
+ package/cage/cage.mk   | 7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
-index 694aa79de4..41f8986772 100644
---- a/package/wlroots/Config.in
-+++ b/package/wlroots/Config.in
-@@ -33,6 +33,9 @@ if BR2_PACKAGE_WLROOTS
- config BR2_PACKAGE_WLROOTS_X11
- 	bool "X11 backend"
- 	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBXCB
-+	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL
-+	select BR2_PACKAGE_XCB_UTIL_WM
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	help
- 	  Support Wayland sessions nested inside a X11 window
-diff --git a/package/wlroots/wlroots.hash b/package/wlroots/wlroots.hash
-index 2fab9b30b4..024ea93cae 100644
---- a/package/wlroots/wlroots.hash
-+++ b/package/wlroots/wlroots.hash
+diff --git a/package/cage/cage.hash b/package/cage/cage.hash
+index 5cae952d72..6e312bbf5f 100644
+--- a/package/cage/cage.hash
++++ b/package/cage/cage.hash
 @@ -1,5 +1,5 @@
--# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.12.0/wlroots-0.12.0.tar.gz.sig
--sha256  c9e9f4f6d2f526d0b2886daf3ec37e64831773059aa669fb98a88522a1626bdb  wlroots-0.12.0.tar.gz
-+# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.13.0/wlroots-0.13.0.tar.gz.sig
-+sha256  f6bea37fd4a6f5e5f552b83d61adae8c73e64b0bcb9ae0ab464ebcd9309d3cf3  wlroots-0.13.0.tar.gz
+ # Generated locally
+-sha256 38a3e3968f00cc58fe1d9448e972cfac7d1efa30c48699f09032f264101a55ac  cage-0.1.2.1.tar.gz
++sha256 c28aa8230f937c89b564967748451c1eb15d8633a71a1ed6e22d532afa15462e  cage-0.1.3.tar.gz
  
  # Hashes for license files:
- sha256  ffd3737a478b83a8b51b42757d3bf909ef36694508355879722e11fc1fa6736b  LICENSE
-diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
-index 0160b1aedb..a20f6683a9 100644
---- a/package/wlroots/wlroots.mk
-+++ b/package/wlroots/wlroots.mk
-@@ -4,7 +4,7 @@
+ sha256 e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
+diff --git a/package/cage/cage.mk b/package/cage/cage.mk
+index 9fc01d36c1..0950c70474 100644
+--- a/package/cage/cage.mk
++++ b/package/cage/cage.mk
+@@ -4,16 +4,17 @@
  #
  ################################################################################
  
--WLROOTS_VERSION = 0.12.0
-+WLROOTS_VERSION = 0.13.0
- WLROOTS_SITE = https://github.com/swaywm/wlroots/releases/download/$(WLROOTS_VERSION)
- WLROOTS_LICENSE = MIT
- WLROOTS_LICENSE_FILES = LICENSE
-@@ -40,24 +40,10 @@ WLROOTS_CONF_OPTS += -Dlogind=disabled
- endif
+-CAGE_VERSION = 0.1.2.1
++CAGE_VERSION = 0.1.3
+ CAGE_SITE = https://github.com/Hjdskes/cage/releases/download/v$(CAGE_VERSION)
+ CAGE_LICENSE = MIT
+ CAGE_LICENSE_FILES = LICENSE
+ CAGE_DEPENDENCIES = host-pkgconf wlroots
++CAGE_CONF_OPTS = -Dman-pages=disabled
  
- ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
--WLROOTS_CONF_OPTS += -Dx11-backend=enabled
--WLROOTS_DEPENDENCIES += xlib_libX11
-+WLROOTS_CONF_OPTS += -Dx11-backend=enabled -Dxwayland=enabled
-+WLROOTS_DEPENDENCIES += libxcb xcb-util-wm xcb-util-renderutil xlib_libX11
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+-CAGE_CONF_OPTS = -Dxwayland=true
++CAGE_CONF_OPTS += -Dxwayland=true
  else
--WLROOTS_CONF_OPTS += -Dx11-backend=disabled
--endif
--
--ifeq ($(BR2_PACKAGE_LIBXCB),y)
--WLROOTS_CONF_OPTS += -Dxwayland=enabled
--WLROOTS_DEPENDENCIES += libxcb
--else
--WLROOTS_CONF_OPTS += -Dxwayland=disabled
--endif
--
--ifeq ($(BR2_PACKAGE_XCB_UTIL_WM),y)
--WLROOTS_CONF_OPTS += -Dxcb-icccm=enabled
--WLROOTS_DEPENDENCIES += xcb-util-wm
--else
--WLROOTS_CONF_OPTS += -Dxcb-icccm=disabled
-+WLROOTS_CONF_OPTS += -Dx11-backend=disabled -Dxwayland=disabled
+-CAGE_CONF_OPTS = -Dxwayland=false
++CAGE_CONF_OPTS += -Dxwayland=false
  endif
  
  $(eval $(meson-package))
