@@ -1,53 +1,85 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 18 May 2021 18:14:07 +0300
-Subject: [Buildroot] [PATCH 4/4] package/cog: bump to version 0.10.0
-In-Reply-To: <20210518151407.264769-1-aperez@igalia.com>
-References: <20210518151407.264769-1-aperez@igalia.com>
-Message-ID: <20210518151407.264769-5-aperez@igalia.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 May 2021 17:13:47 +0200
+Subject: [Buildroot] [git commit branch/next] package/poke: enable uClibc-ng
+ support
+Message-ID: <20210518144705.1615087ECA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a4dc754178b7c24ed129e7e6f8effd555249c941
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-  https://wpewebkit.org/release/cog-0.10.0.html
+poke bundle gnulib that doesn't support the case where
+host_os='linux-uclibc'. When cross-compiling, the guessed
+answers are mostly wrong and gnulib will try to replace
+snprintf with rpl_snprintf. This lead to "undefined reference
+to `rpl_snprintf'" errors.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/cog/cog.hash | 8 ++++----
- package/cog/cog.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/poke/Config.in |  6 ++----
+ package/poke/poke.mk   | 25 +++++++++++++++++++++++++
+ 2 files changed, 27 insertions(+), 4 deletions(-)
 
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index 2cafe8ca6e..566d30fa2a 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/cog-0.8.1.tar.xz.sums
--md5  21664fb04c9149dea6d68e13e6074276  cog-0.8.1.tar.xz
--sha1  baabba7f0f6009c64ef0c4f7c5f807382cffef5d  cog-0.8.1.tar.xz
--sha256  b82e917eb764943b9859c631974f8f0e748b79ae87bb7a944f46c818740e0208  cog-0.8.1.tar.xz
-+# From https://wpewebkit.org/releases/cog-0.10.0.tar.xz.sums
-+md5  1b0407b6163a3a01afdfc0fb454a7570  cog-0.10.0.tar.xz
-+sha1  911816c00a2b08f4cfd388b1d2e176835c9b4e9e  cog-0.10.0.tar.xz
-+sha256  2c72369c636ca4684370adad1344071b23c9ee2c851eb7d738fa2e1d7092031f  cog-0.10.0.tar.xz
+diff --git a/package/poke/Config.in b/package/poke/Config.in
+index eb2e33d5af..40e7a31bab 100644
+--- a/package/poke/Config.in
++++ b/package/poke/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_POKE
+ 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # bdwgc
+ 	depends on BR2_USE_WCHAR # needs wctomb
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # gnulib
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # less
+ 	select BR2_PACKAGE_BDWGC
+ 	select BR2_PACKAGE_LESS # runtime
+@@ -24,7 +23,6 @@ config BR2_PACKAGE_POKE
  
- # Hashes for license files:
- sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index 86bdf935d2..d373e6e1b6 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ 	  https://www.gnu.org/software/poke/
  
--COG_VERSION = 0.8.1
-+COG_VERSION = 0.10.0
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
--- 
-2.31.1
+-comment "poke needs a glibc or musl toolchain w/ NPTL, wchar"
++comment "poke needs a toolchain w/ NPTL, wchar"
+ 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
+-	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) \
+-		||!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
+diff --git a/package/poke/poke.mk b/package/poke/poke.mk
+index 7c3c81d93c..406acf15e0 100644
+--- a/package/poke/poke.mk
++++ b/package/poke/poke.mk
+@@ -16,6 +16,31 @@ POKE_AUTORECONF = YES
+ 
+ POKE_DEPENDENCIES = host-flex host-bison host-pkgconf bdwgc readline
+ 
++# poke bundle gnulib that doesn't support the case where
++# host_os='linux-uclibc'. When cross-compiling, the guessed
++# answers are mostly wrong and gnulib will try to replace
++# snprintf with rpl_snprintf. This lead to "undefined reference
++# to `rpl_snprintf'" errors.
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++POKE_CONF_ENV = gl_cv_func_printf_positions=yes \
++	gl_cv_func_snprintf_retval_c99=yes \
++	gl_cv_func_printf_sizes_c99=yes \
++	gl_cv_func_printf_infinite_long_double=yes \
++	gl_cv_func_snprintf_retval_c99=yes \
++	gl_cv_func_snprintf_truncation_c99=yes \
++	gl_cv_func_snprintf_usable=yes \
++	gl_cv_func_strerror_0_works=yes \
++	gl_cv_header_working_stdint_h=yes \
++	gl_cv_func_printf_infinite=yes \
++	gl_cv_func_printf_flag_zero=yes \
++	gl_cv_func_printf_enomem=yes \
++	gl_cv_func_printf_directive_f=yes \
++	gl_cv_func_printf_directive_a=yes \
++	gl_cv_func_snprintf_directive_n=yes \
++	gl_cv_func_vsnprintf_posix=yes \
++	gl_cv_func_vsnprintf_zerosize_c99=yes
++endif
++
+ POKE_CONF_OPTS = \
+ 	--disable-gui \
+ 	--disable-libnbd \
