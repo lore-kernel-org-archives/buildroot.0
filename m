@@ -1,47 +1,45 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Tue, 18 May 2021 12:53:50 +0200
-Subject: [Buildroot] [PATCH] package/python-pytest-asyncio: bump version to
- 0.15.1
-Message-ID: <20210518105351.300465-1-m.niestroj@grinn-global.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 May 2021 13:04:23 +0200
+Subject: [Buildroot] [git commit] package/libtirpc: bump version to 1.3.2
+Message-ID: <20210518103548.F2221817D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/python-pytest-asyncio/python-pytest-asyncio.hash | 4 ++--
- package/python-pytest-asyncio/python-pytest-asyncio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=6e780387b4a901f243c85b5fb1dd0d12e4f0b23b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
-index 40541f54ba..4949919ecb 100644
---- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
-+++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libtirpc/libtirpc.hash | 4 ++--
+ package/libtirpc/libtirpc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
+index 337593bbe2..56c1d9de3f 100644
+--- a/package/libtirpc/libtirpc.hash
++++ b/package/libtirpc/libtirpc.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
--md5  b63593bc08f445f6e3f14c34128a68ed  pytest-asyncio-0.14.0.tar.gz
--sha256  9882c0c6b24429449f5f969a5158b528f39bde47dc32e85b9f0403965017e700  pytest-asyncio-0.14.0.tar.gz
-+md5  8940c41c342b5bafe2ebb0d6e5c320ec  pytest-asyncio-0.15.1.tar.gz
-+sha256  2564ceb9612bbd560d19ca4b41347b54e7835c2f792c504f698e05395ed63f6f  pytest-asyncio-0.15.1.tar.gz
- # Locally computed sha256 checksums
- sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
-diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
-index 0645db3eb7..bd2e0083a9 100644
---- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
-+++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
-@@ -4,9 +4,9 @@
+ # From sourceforge's info on download page:
+-sha1  882eaf4c13f0cafb83afd96cd2855638f978d755  libtirpc-1.3.1.tar.bz2
++sha1  51d75be0e5acc094a888f40042b23e128d163cb5  libtirpc-1.3.2.tar.bz2
+ # Locally computed
+-sha256  245895caf066bec5e3d4375942c8cb4366adad184c29c618d97f724ea309ee17  libtirpc-1.3.1.tar.bz2
++sha256  e24eb88b8ce7db3b7ca6eb80115dd1284abc5ec32a8deccfed2224fc2532b9fd  libtirpc-1.3.2.tar.bz2
+ sha256  17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  COPYING
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+index 0f44aaffb6..2678c144e9 100644
+--- a/package/libtirpc/libtirpc.mk
++++ b/package/libtirpc/libtirpc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYTEST_ASYNCIO_VERSION = 0.14.0
-+PYTHON_PYTEST_ASYNCIO_VERSION = 0.15.1
- PYTHON_PYTEST_ASYNCIO_SOURCE = pytest-asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
--PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/65/09/9472d4db0625cf56d40f4e405f955faf6469be00858a273b71332f3fcd1f
-+PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/de/c1/b2b0119e30f61f7ec8b44f129f6fde46a1a7329de17110f124639aa8896b
- PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
- PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
- PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
--- 
-2.31.1
+-LIBTIRPC_VERSION = 1.3.1
++LIBTIRPC_VERSION = 1.3.2
+ LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
+ LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
+ LIBTIRPC_LICENSE = BSD-3-Clause
