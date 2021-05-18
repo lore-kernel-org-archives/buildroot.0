@@ -1,108 +1,149 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 18:47:56 +0200
-Subject: [Buildroot] [git commit branch/next] package/libwpe: bump to
- version 1.10.0
-Message-ID: <20210518162117.39AB586EAD@busybox.osuosl.org>
+Date: Tue, 18 May 2021 18:47:58 +0200
+Subject: [Buildroot] [git commit branch/next] package/wpewebkit: bump to
+ version 2.32.1
+Message-ID: <20210518162117.64C9781541@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=782d5632831c0af4b796f01e9e83ce2ea1b01629
+commit: https://git.buildroot.net/buildroot/commit/?id=d35e4a9744bf42f9549ad5b3bc2c24c0410ec99b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
+Update to a new major release which brings in improvements and a few new
+features. Release notes:
 
-  https://wpewebkit.org/release/libwpe-1.10.0.html
+  https://wpewebkit.org/release/wpewebkit-2.32.0.html
+  https://wpewebkit.org/release/wpewebkit-2.32.1.html
 
-The patch is removed, as it has been included upstream.
+None of the new features in WPE WebKit 2.32.x need additional
+dependencies.
+
+The existing patch for Musl compatibility is not needed anymore because
+a better solution has been accepted upstream and backported to be
+included in the 2.32.1 release.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...-partial-dependency-to-pass-EGL-module-fl.patch | 45 ----------------------
- package/libwpe/libwpe.hash                         |  8 ++--
- package/libwpe/libwpe.mk                           |  2 +-
- 3 files changed, 5 insertions(+), 50 deletions(-)
+ package/wpewebkit/0001-Fix-build-with-musl.patch | 79 ------------------------
+ package/wpewebkit/wpewebkit.hash                 |  8 +--
+ package/wpewebkit/wpewebkit.mk                   |  2 +-
+ 3 files changed, 5 insertions(+), 84 deletions(-)
 
-diff --git a/package/libwpe/0001-meson-Use-a-partial-dependency-to-pass-EGL-module-fl.patch b/package/libwpe/0001-meson-Use-a-partial-dependency-to-pass-EGL-module-fl.patch
+diff --git a/package/wpewebkit/0001-Fix-build-with-musl.patch b/package/wpewebkit/0001-Fix-build-with-musl.patch
 deleted file mode 100644
-index e74ebe125e..0000000000
---- a/package/libwpe/0001-meson-Use-a-partial-dependency-to-pass-EGL-module-fl.patch
+index 705c67c7f6..0000000000
+--- a/package/wpewebkit/0001-Fix-build-with-musl.patch
 +++ /dev/null
-@@ -1,45 +0,0 @@
--From 81bfedfa02fd864f3e4b295091d49c3eb20bb372 Mon Sep 17 00:00:00 2001
--From: Adrian Perez de Castro <aperez@igalia.com>
--Date: Wed, 16 Sep 2020 00:01:37 +0300
--Subject: [PATCH] meson: Use a partial dependency to pass EGL module flags
+@@ -1,79 +0,0 @@
+-From cc3c27a7e997ef157ed469127f185a7bb6eb1feb Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 27 May 2019 23:51:32 +0200
+-Subject: [PATCH] Fix build with musl
 -
--Make Meson try to always find an "egl" dependency, if found extract
--the include directories and compiler flags from ir using a partial
--dependency, otherwise check that at least EGL/eglplatform.h is
--available when the pkg-config module is not found.
--
--Fixes #70
--
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--[Upstrem status: https://github.com/WebPlatformForEmbedded/libwpe/pull/71]
--
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-[Retrieved (and slightly updated) from:
+-https://github.com/WebPlatformForEmbedded/meta-wpe/blob/master/recipes-wpe/wpewebkit/wpewebkit/0001-Fix-build-with-musl.patch]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- meson.build | 12 ++++++++++--
-- 1 file changed, 10 insertions(+), 2 deletions(-)
+- Source/JavaScriptCore/runtime/MachineContext.h | 10 +++++-----
+- Source/WTF/wtf/PlatformHave.h                  |  2 +-
+- 2 files changed, 6 insertions(+), 6 deletions(-)
 -
--diff --git a/meson.build b/meson.build
--index 5c88aed..a05f4ab 100644
----- a/meson.build
--+++ b/meson.build
--@@ -57,8 +57,16 @@ dependencies = [
-- ]
+-diff --git a/Source/JavaScriptCore/runtime/MachineContext.h b/Source/JavaScriptCore/runtime/MachineContext.h
+-index bf0bdc7a51a..78d2ec81838 100644
+---- a/Source/JavaScriptCore/runtime/MachineContext.h
+-+++ b/Source/JavaScriptCore/runtime/MachineContext.h
+-@@ -146,7 +146,7 @@ inline void*& stackPointer(mcontext_t& machineContext)
+- #error Unknown Architecture
+- #endif
+-
+--#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
+-+#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__) 
 - 
-- cc = meson.get_compiler('c')
---if not cc.has_header('EGL/eglplatform.h')
---	dependencies += dependency('egl')
--+egl_dep = dependency('egl', required: false)
--+if egl_dep.found()
--+	dependencies += egl_dep.partial_dependency(
--+		compile_args: true,
--+		includes: true,
--+	)
--+else
--+	assert(cc.has_header('EGL/eglplatform.h'),
--+		'Required heaer <EGL/eglplatform.h> not found'
--+	)
-- endif
+- #if CPU(X86)
+-     return reinterpret_cast<void*&>((uintptr_t&) machineContext.gregs[REG_ESP]);
+-@@ -251,7 +251,7 @@ inline void*& framePointer(mcontext_t& machineContext)
+- #error Unknown Architecture
+- #endif
+-
+--#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
+-+#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__) 
 - 
-- if not cc.has_function('dlopen')
+- // The following sequence depends on glibc's sys/ucontext.h.
+- #if CPU(X86)
+-@@ -354,7 +354,7 @@ inline void*& instructionPointer(mcontext_t& machineContext)
+- #error Unknown Architecture
+- #endif
+- 
+--#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
+-+#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__)
+- 
+- // The following sequence depends on glibc's sys/ucontext.h.
+- #if CPU(X86)
+-@@ -466,7 +466,7 @@ inline void*& argumentPointer<1>(mcontext_t& machineContext)
+- #error Unknown Architecture
+- #endif
+-
+--#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
+-+#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__) 
+- 
+- // The following sequence depends on glibc's sys/ucontext.h.
+- #if CPU(X86)
+-@@ -583,7 +583,7 @@ inline void*& llintInstructionPointer(mcontext_t& machineContext)
+- #error Unknown Architecture
+- #endif
+-
+--#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
+-+#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__) 
+- 
+- // The following sequence depends on glibc's sys/ucontext.h.
+- #if CPU(X86)
+-diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
+-index e2a3388993f..95fe7c593cf 100644
+---- a/Source/WTF/wtf/PlatformHave.h
+-+++ b/Source/WTF/wtf/PlatformHave.h
+-@@ -683,7 +683,7 @@
+- #define HAVE_CFNETWORK_STORAGE_PARTITIONING 1
+- #endif
+-
+--#if OS(DARWIN) || OS(FUCHSIA) || ((OS(FREEBSD) || defined(__GLIBC__) || defined(__BIONIC__)) && (CPU(X86) || CPU(X86_64) || CPU(ARM) || CPU(ARM64) || CPU(MIPS)))
+-+#if OS(DARWIN) || OS(FUCHSIA) || ((OS(FREEBSD) || OS(LINUX) || defined(__BIONIC__)) && (CPU(X86) || CPU(X86_64) || CPU(ARM) || CPU(ARM64) || CPU(MIPS))) 
+- #define HAVE_MACHINE_CONTEXT 1
+- #endif
+- 
 --- 
--2.28.0
+-2.20.1
 -
-diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
-index 36cdf56664..66fd168dc3 100644
---- a/package/libwpe/libwpe.hash
-+++ b/package/libwpe/libwpe.hash
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index c3aa8d4164..0c8c6dba6f 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
 @@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/libwpe-1.8.0.tar.xz.sums
--md5  328ea59dd8dee9107a49353536d00844  libwpe-1.8.0.tar.xz
--sha1  3c893b1e8118a06f082d98373e279a8f8e33750d  libwpe-1.8.0.tar.xz
--sha256  a6f00a7d091cbd4db57fe7ee3b4c12c6350921d654ed79812800a26c888481d2  libwpe-1.8.0.tar.xz
-+# From https://wpewebkit.org/releases/libwpe-1.10.0.tar.xz.sums
-+md5  269ecb60d4ef80a0877d25a5828c8b82  libwpe-1.10.0.tar.xz
-+sha1  b3f48a48b0401da19deb60cb8f15f193dff799c1  libwpe-1.10.0.tar.xz
-+sha256  2415e270d45e3595ed4052bc105f733744dc2d3677e12ff4a831e5029841084d  libwpe-1.10.0.tar.xz
+-# From https://wpewebkit.org/releases/wpewebkit-2.30.6.tar.xz.sums
+-md5  e35b31932ad3da6c06736d8f2d347072  wpewebkit-2.30.6.tar.xz
+-sha1  25a481e97e463df08fb2c0b0fa5d4299938670ac  wpewebkit-2.30.6.tar.xz
+-sha256  893a3098226f116bbb38a665a3053c7d30e3c5dca786b954f9aa38f8c8581468  wpewebkit-2.30.6.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.32.1.tar.xz.sums
++md5  1dd3f56b8eba16266166d757acb979fc  wpewebkit-2.32.1.tar.xz
++sha1  c5b3a48d886375a6982dd2dc5c9cc2f92f5a9690  wpewebkit-2.32.1.tar.xz
++sha256  7b6b39a12ccf3f84da4cc6ac59e02fbe328f7476eaeb9c23de9b9288c2c2f39c  wpewebkit-2.32.1.tar.xz
  
  # Hashes for license files:
- sha256  35bef295cedbbf179eaee14328002587a0e7dc08ebf3f15ea080a6f2815f0d7b  COPYING
-diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
-index 5843e84d39..43dc201f54 100644
---- a/package/libwpe/libwpe.mk
-+++ b/package/libwpe/libwpe.mk
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index b18ee2a37d..39424a26fa 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBWPE_VERSION = 1.8.0
-+LIBWPE_VERSION = 1.10.0
- LIBWPE_SITE = https://wpewebkit.org/releases
- LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
- LIBWPE_INSTALL_STAGING = YES
+-WPEWEBKIT_VERSION = 2.30.6
++WPEWEBKIT_VERSION = 2.32.1
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
