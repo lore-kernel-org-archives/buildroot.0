@@ -1,116 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 14:59:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: fix build with
- uclibc-ng
-In-Reply-To: <20210504211016.1216759-1-fontaine.fabrice@gmail.com>
-References: <20210504211016.1216759-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210518125906.GJ2506@scaer>
+Date: Tue, 18 May 2021 15:14:26 +0200
+Subject: [Buildroot] [git commit] package/gerbera: fix build with -Os and
+ gcc 9 or 10
+Message-ID: <20210518124606.F21117FA49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=c68efce50c88f6d5f2fa548b4082e423d1828991
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-04 23:10 +0200, Fabrice Fontaine spake thusly:
-> Build fails with uclibc-ng since bump to version 0.3.26 in commit
-> a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/a45f0ee009d90cef867dee4b1093225610fa10df
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+For an unknown reason, gerbera fails to build with -Os and gcc 9 or 10
+since bump to version 1.8.0 in commit 8974596836945eada8e162844fb87f88adec9100:
 
-Applied to master, thanks.
+[100%] Linking CXX executable gerbera
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/10.2.0/../../../../x86_64-buildroot-linux-gnu/bin/ld: liblibgerbera.a(content_manager.cc.o): in function `ContentManager::_rescanDirectory(std::shared_ptr<AutoscanDirectory>&, int, std::shared_ptr<GenericTask> const&)':
+content_manager.cc:(.text+0xb53b): undefined reference to `std::__shared_ptr<std::filesystem::__cxx11::_Dir, (__gnu_cxx::_Lock_policy)2>::swap(std::__shared_ptr<std::filesystem::__cxx11::_Dir, (__gnu_cxx::_Lock_policy)2>&)'
+collect2: error: ld returned 1 exit status
 
-However, we've also bumped the version in the next branch, and it
-includes this patch, but it seems that was not enough:
+A similar build failure has been reported as gcc bug 91067:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91067
 
-    https://git.busybox.net/buildroot/commit/?h=next&id=b003cb5d16de9c92baba7dea7a6626c71cefc4fb
-    http://lists.busybox.net/pipermail/buildroot/2021-May/310023.html
+But this bug has been fixed since gcc 9.3 and 10.1 and build failures
+are raised with gcc 10.2
 
-If you have some CPU cycles available, could you have a look and see
-why this is the case?
+To fix this build failure, set optimisation to -O2 if needed
 
-Regards,
-Yann E. MORIN.
+Fixes:
+ - http://autobuild.buildroot.org/results/a4ee8ad7ff93939716673b611c7cc3f68dafa3d0
 
-> ---
->  ...meson.build-fix-build-with-uclibc-ng.patch | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
-> 
-> diff --git a/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch b/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
-> new file mode 100644
-> index 0000000000..36b14d3f16
-> --- /dev/null
-> +++ b/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
-> @@ -0,0 +1,52 @@
-> +From 8f1de87381d270a8f4e5927187ae0466a9c9504a Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Tue, 4 May 2021 22:56:54 +0200
-> +Subject: [PATCH] meson.build: fix build with uclibc-ng
-> +
-> +Build with uclib-ng fails since commit
-> +a4b0b9afe5a782a7f4a8fe153ecf51bcb0180ae3 on:
-> +
-> +FAILED: src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o
-> +/srv/storage/autobuild/run/instance-2/output-1/host/bin/mips64el-linux-gcc -Isrc/pipewire/libpipewire-0.3.so.0.326.0.p -Isrc/pipewire -I../src/pipewire -Isrc -I../src -I. -I.. -Ispa/include -I../spa/include -fdiagnostics-color=always -pipe -Wall -Winvalid-pch -Wextra -Wpedantic -std=gnu99 -O3 -fvisibility=hidden -Werror=suggest-attribute=format -Wsign-compare -Wpointer-arith -Wpointer-sign -Wformat -Wformat-security -Wimplicit-fallthrough -Wmissing-braces -Wtype-limits -Wvariadic-macros -Wno-missing-field-initializers -Wno-unused-parameter -Wno-pedantic -Wold-style-declaration -Wunused-result -DFASTPATH -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -pthread -DHAVE_CONFIG_H -D_GNU_SOURCE -D_POSIX_C_SOURCE -MD -MQ src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o -MF src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o.d -o src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o -c ../src/pipewire/impl-core.c
-> +../src/pipewire/impl-core.c:54:9: error: conflicting types for 'getrandom'
-> + ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
-> +         ^~~~~~~~~
-> +In file included from ../src/pipewire/impl-core.c:34:
-> +/srv/storage/autobuild/run/instance-2/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:28:12: note: previous declaration of 'getrandom' was here
-> + extern int getrandom(void *__buf, size_t count, unsigned int flags)
-> +            ^~~~~~~~~
-> +
-> +Fix this build failure by adding -D_GNU_SOURCE as getrandom is protected
-> +by:
-> +
-> +if defined __UCLIBC_LINUX_SPECIFIC__ && defined __USE_GNU
-> +
-> +Extracted from:
-> + - https://github.com/wbx-github/uclibc-ng/blob/master/libc/sysdeps/linux/common/sys/random.h
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/a45f0ee009d90cef867dee4b1093225610fa10df
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status:
-> +https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/649]
-> +---
-> + meson.build | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index 0a9963fb..11b63c08 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -274,7 +274,7 @@ if cc.has_function('memfd_create', prefix : '#include <sys/mman.h>', args : [ '-
-> +   cdata.set('HAVE_MEMFD_CREATE', 1)
-> + endif
-> + 
-> +-if cc.has_function('getrandom', prefix : '#include <sys/random.h>')
-> ++if cc.has_function('getrandom', prefix : '#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
-> +   cdata.set('HAVE_GETRANDOM', 1)
-> + endif
-> + 
-> +-- 
-> +2.30.2
-> +
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/gerbera/gerbera.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
+index 73917c7721..9627209d60 100644
+--- a/package/gerbera/gerbera.mk
++++ b/package/gerbera/gerbera.mk
+@@ -18,6 +18,10 @@ GERBERA_DEPENDENCIES = \
+ 	zlib
+ GERBERA_CONF_OPTS = -DWITH_DEBUG=OFF
+ 
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_9)$(BR2_OPTIMIZE_S),yy)
++GERBERA_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -O2"
++endif
++
+ # Uses __atomic_fetch_add_4
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ GERBERA_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
