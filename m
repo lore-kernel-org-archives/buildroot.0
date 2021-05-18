@@ -1,47 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 17:23:18 +0200
-Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.106
-Message-ID: <20210518145543.9351F87B2F@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 18 May 2021 17:24:52 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/x11r7/xlib_libXfixes: bump
+ version to 6.0.0
+Message-ID: <20210518152452.101483-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4c92bdda32e377b8f61ec3a5cf7f6bf78e3f48e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Release notes:
+https://lists.x.org/archives/xorg-announce/2021-May/003086.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libdrm/libdrm.hash | 6 +++---
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xlib_libXfixes/xlib_libXfixes.hash | 5 +++--
+ package/x11r7/xlib_libXfixes/xlib_libXfixes.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 25c3a042cb..079675824a 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2021-April/302515.html
--sha256  1d1d024b7cadc63e2b59cddaca94f78864940ab440843841113fbac6afaf2a46  libdrm-2.4.105.tar.xz
--sha512  083a04af7208e58be21b89c6ebdbe2db3ba00cd29f0d271bd38bfe97dfca741edafddaaf9b5b95c20fac2c9b700434ea5b21397de26f7073169ad6f5b090f715  libdrm-2.4.105.tar.xz
-+# From https://lists.freedesktop.org/archives/dri-devel/2021-May/307025.html
-+sha256  92d8ac54429b171e087e61c2894dc5399fe6a549b1fbba09fa6a3cb9d4e57bd4  libdrm-2.4.106.tar.xz
-+sha512  33140e579906ab54b716149056af500c628ce41cd9ae3b0c33496693d2f5903fbcfccee8a942dd1560e1591111ed240da42612d5af5e75558db6f6a85d14617d  libdrm-2.4.106.tar.xz
+diff --git a/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash b/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash
+index d655be4f71..f40c522903 100644
+--- a/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash
++++ b/package/x11r7/xlib_libXfixes/xlib_libXfixes.hash
+@@ -1,5 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-October/002722.html
+-sha256 de1cd33aff226e08cefd0e6759341c2c8e8c9faf8ce9ac6ec38d43e287b22ad6  libXfixes-5.0.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-May/003086.html
++sha256  a7c1a24da53e0b46cac5aea79094b4b2257321c621b258729bc3139149245b4c  libXfixes-6.0.0.tar.bz2
++sha512  1985ef156f382e9a7e1cc7e044e0f626de1e4c82557a511cbcf6431994c0ac25b1f8b3a0293bd3089331593db8ce01d3a71ddec68f19b5fe6029d5082fb6885d  libXfixes-6.0.0.tar.bz2
  
- # Hash for license file
- sha256  a69e38953c20a88845cc739c05dd604da4c977844b872e126c91a0ca2e1385b7  xf86drm.c
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index f5b205bb00..f18df27687 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
+ # Locally calculated
+ sha256 d64e671ffeb483d4543f98c842788ab34c77427e27d83d6b082065a4438d4885  COPYING
+diff --git a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
+index 6674cccb64..c0229b57d2 100644
+--- a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
++++ b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDRM_VERSION = 2.4.105
-+LIBDRM_VERSION = 2.4.106
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+-XLIB_LIBXFIXES_VERSION = 5.0.3
++XLIB_LIBXFIXES_VERSION = 6.0.0
+ XLIB_LIBXFIXES_SOURCE = libXfixes-$(XLIB_LIBXFIXES_VERSION).tar.bz2
+ XLIB_LIBXFIXES_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXFIXES_LICENSE = MIT
+-- 
+2.29.2
