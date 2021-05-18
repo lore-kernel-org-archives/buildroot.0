@@ -1,185 +1,102 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 18 May 2021 16:54:20 +0300
-Subject: [Buildroot] [PATCH v2 2/5] package/seatd: new package
+Date: Tue, 18 May 2021 16:54:21 +0300
+Subject: [Buildroot] [PATCH v2 3/5] package/seatd: install init scripts
 In-Reply-To: <20210518135423.194507-1-aperez@igalia.com>
 References: <20210513163325.1775639-1-aperez@igalia.com>
  <20210518135423.194507-1-aperez@igalia.com>
-Message-ID: <20210518135423.194507-3-aperez@igalia.com>
+Message-ID: <20210518135423.194507-4-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce a seatd package, which can be used by wlroots 0.12.0 and
-newer. The package includes both a library (always built) and an
-optional seat management daemon.
-
-The library can use systemd-logind, the seatd daemon, or a simple
-builtin in-process mode. Build options are introduced for the daemon
-and the built-in mode, as to allow selecting the built-in mode as
-default when both the daemon and systemd-logind are not being built.
+Add commands to the seatd package to install the systemd unit included
+in the source tarball and a SysV init script, and ensure that the
+"video" group gets created.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
 Changes v1 -> v2:
-  - Remove unneeded BR2_PACKAGE_SEATD_LIBSEAT config option (suggested
-    by Yann).
-  - Simplify to only have config options BR2_PACKAGE_SEATD_BUILTIN and
-    BR2_PACKAGE_SEATD_DAEMON, with the support for systemd-logind
-    checked directly from BR2_PACKAGE_SYSTEMD_LOGIND (suggested by Yann)
-  - Add missing "systemd" dependency if systemd-logind support is
-    enabled (suggested by Yann)
+  - Add SEATD_USERS (suggested by Yann)
+  - Only install init scripts if BR2_PACKAGE_SEATD_DAEMON is enabled.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/Config.in                             |  1 +
- ...pport-building-builtin-without-seatd.patch | 37 +++++++++++++++++++
- package/seatd/Config.in                       | 22 +++++++++++
- package/seatd/seatd.hash                      |  5 +++
- package/seatd/seatd.mk                        | 37 +++++++++++++++++++
- 5 files changed, 102 insertions(+)
- create mode 100644 package/seatd/0001-meson-Support-building-builtin-without-seatd.patch
- create mode 100644 package/seatd/Config.in
- create mode 100644 package/seatd/seatd.hash
- create mode 100644 package/seatd/seatd.mk
+ package/seatd/S70seatd | 38 ++++++++++++++++++++++++++++++++++++++
+ package/seatd/seatd.mk | 15 +++++++++++++++
+ 2 files changed, 53 insertions(+)
+ create mode 100755 package/seatd/S70seatd
 
-diff --git a/package/Config.in b/package/Config.in
-index 45d75c71d0..1616b2f283 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2490,6 +2490,7 @@ menu "System tools"
- 	source "package/scrub/Config.in"
- 	source "package/scrypt/Config.in"
- 	source "package/sdbusplus/Config.in"
-+	source "package/seatd/Config.in"
- 	source "package/smack/Config.in"
- 	source "package/start-stop-daemon/Config.in"
- 	source "package/supervisor/Config.in"
-diff --git a/package/seatd/0001-meson-Support-building-builtin-without-seatd.patch b/package/seatd/0001-meson-Support-building-builtin-without-seatd.patch
-new file mode 100644
-index 0000000000..fcaa355dc4
+diff --git a/package/seatd/S70seatd b/package/seatd/S70seatd
+new file mode 100755
+index 0000000000..a91302c6c1
 --- /dev/null
-+++ b/package/seatd/0001-meson-Support-building-builtin-without-seatd.patch
-@@ -0,0 +1,37 @@
-+From 11bf7d5d11424749d549239540e5db06b8754bb5 Mon Sep 17 00:00:00 2001
-+From: Kenny Levinsen <kl@kl.wtf>
-+Date: Sun, 25 Apr 2021 20:16:19 +0200
-+Subject: [PATCH] meson: Support building builtin without seatd
++++ b/package/seatd/S70seatd
+@@ -0,0 +1,38 @@
++#! /bin/sh
++#
++# Starts seatd
++#
 +
-+The builtin backend relies on the seatd backend implementation. When
-+builtin was enabled without seatd, compilation would fail due to the
-+implementation not being included.
++DAEMON=/usr/bin/seatd
++PIDFILE=/run/seatd.pid
 +
-+Include the implementation if either seatd or builtin is enabled.
++case "$1" in
++	start)
++		printf 'Starting seatd: '
++		if start-stop-daemon -S -x "$DAEMON" -p "$PIDFILE" -m -b -- -g video
++		then
++			echo OK
++		else
++			echo FAIL
++		fi
++		;;
++	stop)
++		if start-stop-daemon -K -x "$DAEMON" -p "$PIDFILE"
++		then
++			echo OK
++		else
++			echo FAIL
++		fi
++		;;
++	restart)
++		"$0" stop || true
++		sleep 1
++		"$0" start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++		;;
++esac
 +
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+Upstream-Status: backport [with adaptations]
-+---
-+ meson.build | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index ff56845..8cb4fc6 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -105,8 +105,11 @@ server_files = [
-+ 	'seatd/server.c',
-+ ]
-+ 
-+-if get_option('seatd').enabled()
-++if get_option('seatd').enabled() or get_option('builtin').enabled()
-+ 	private_files += 'libseat/backend/seatd.c'
-++endif
-++
-++if get_option('seatd').enabled()
-+ 	add_project_arguments('-DSEATD_ENABLED=1', language: 'c')
-+ endif
-+ 
-+-- 
-+2.31.1
-+
-diff --git a/package/seatd/Config.in b/package/seatd/Config.in
-new file mode 100644
-index 0000000000..2c2efcb04e
---- /dev/null
-+++ b/package/seatd/Config.in
-@@ -0,0 +1,22 @@
-+menuconfig BR2_PACKAGE_SEATD
-+	bool "seatd"
-+	select BR2_PACKAGE_SEATD_BUILTIN \
-+		if !BR2_PACKAGE_SYSTEMD_LOGIND && !BR2_PACKAGE_SEATD_DAEMON
-+	help
-+	  Seat management daemon and support library.
-+
-+	  https://git.sr.ht/~kennylevinsen/seatd
-+
-+if BR2_PACKAGE_SEATD
-+
-+config BR2_PACKAGE_SEATD_BUILTIN
-+	bool "builtin backend"
-+	help
-+	  Builtin in-process seatd implementation inside libseat.
-+
-+config BR2_PACKAGE_SEATD_DAEMON
-+	bool "seatd daemon"
-+	help
-+	  Build the seatd daemon and support for it inside libseat.
-+
-+endif
-diff --git a/package/seatd/seatd.hash b/package/seatd/seatd.hash
-new file mode 100644
-index 0000000000..342079e958
---- /dev/null
-+++ b/package/seatd/seatd.hash
-@@ -0,0 +1,5 @@
-+# Calculated locally
-+sha256  274b56324fc81ca6002bc1cdd387668dee34a6e1063e5f3896805c3770948988  0.5.0.tar.gz
-+
-+# License files
-+sha256  282a494803d666616bd726e0279636b5f6a31387ae19a707459074050f2600d3  LICENSE
++exit 0
 diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
-new file mode 100644
-index 0000000000..2e90270555
---- /dev/null
+index 2e90270555..2abcefbfaa 100644
+--- a/package/seatd/seatd.mk
 +++ b/package/seatd/seatd.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# seatd
-+#
-+################################################################################
+@@ -30,6 +30,21 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SEATD_DAEMON),y)
+ SEATD_CONF_OPTS += -Dseatd=enabled -Dserver=enabled
 +
-+SEATD_VERSION = 0.5.0
-+SEATD_SOURCE = $(SEATD_VERSION).tar.gz
-+SEATD_SITE = https://git.sr.ht/~kennylevinsen/seatd/archive
-+SEATD_LICENSE = MIT
-+SEATD_LICENSE_FILES = LICENSE
-+SEATD_INSTALL_STAGING = YES
++define SEATD_USERS
++	- - video -1 - - - - -
++endef
 +
-+SEATD_CONF_OPTS += \
-+	-Dman-pages=disabled \
-+	-Dexamples=disabled
++define SEATD_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D $(SEATD_PKGDIR)/S70seatd \
++		$(TARGET_DIR)/etc/init.d/S70seatd
++endef
 +
-+ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
-+SEATD_CONF_OPTS += -Dlogind=enabled
-+SEATD_DEPENDENCIES += systemd
-+else
-+SEATD_CONF_OPTS += -Dlogind=disabled
-+endif
++define SEATD_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -m 0644 -D $(@D)/contrib/systemd/seatd.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/seatd.service
++endef
 +
-+ifeq ($(BR2_PACKAGE_SEATD_BUILTIN),y)
-+SEATD_CONF_OPTS += -Dbuiltin=enabled
-+else
-+SEATD_CONF_OPTS += -Dbuiltin=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SEATD_DAEMON),y)
-+SEATD_CONF_OPTS += -Dseatd=enabled -Dserver=enabled
-+else
-+SEATD_CONF_OPTS += -Dseatd=disabled -Dserver=disabled
-+endif
-+
-+$(eval $(meson-package))
+ else
+ SEATD_CONF_OPTS += -Dseatd=disabled -Dserver=disabled
+ endif
 -- 
 2.31.1
