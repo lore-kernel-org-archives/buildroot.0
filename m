@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 10:19:11 +0200
+Date: Tue, 18 May 2021 10:30:22 +0200
 Subject: [Buildroot] [PATCH v2 1/3] package/libfuse3: allow building as
  a host package
 In-Reply-To: <20210516010521.1375959-1-christian@paral.in>
 References: <20210516010521.1375959-1-christian@paral.in>
-Message-ID: <20210518081911.GL2506@scaer>
+Message-ID: <20210518083022.GM2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,45 +15,42 @@ Christian, All,
 
 On 2021-05-15 18:05 -0700, Christian Stewart spake thusly:
 > Adds 1 patch to fix an install error when building as a host package.
-> 
-> Patch was submitted upstream:
-> https://github.com/libfuse/libfuse/pull/598
 
-Sigh, that's sick...
+Forgot to state in my previous review: of course, this will require that
+the build machine is configured to allow the user doing the build is
+allowed to use FUSE, i.e. that it is allowed access to /dev/fuse.
 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> 
-> ---
-> v1 -> v2:
->  - adjusted patch to completely remove init.d script install
+This is not currently something we ensure, because we do not use FUSE as
+part of the build.
 
-Although I understand the reasoning for the host variant, that means the
-target variant will no longer install that init script either.
+I wonder if we should add a check and nicely inform the user, or let the
+build later fail when fuse-overlayfs (or genuinetools-img) fails to do
+the mount... Maybe just the following:
 
-That init script does two things:
+    define HOST_GENUINETOOLS_IMG_CHECK_ACCESS
+        $(Q)if [ ! -w /dev/fuse ]; then \
+            printf 'Your user is not allowed to access /dev/fuse\n' >&2; \
+            exit 1; \
+        fi
+    endef
+    HOST_GENUINETOOLS_IMG_PRE_CONFIGURE_HOOKS += HOST_GENUINETOOLS_IMG_CHECK_ACCESS
 
-  - load the fuse module if not already done: that's not a problem for
-    Buildroot, because lbfuse3.mk enfirces FUSE to be built-in to the
-    kernel,
-
-  - mount the fusectl mountpoint: this is not strictly required for most
-    usage of FUSE, but will be missing for some.
-
-But this init script is very tailored for classical distros, and does
-not fit nicely in our case. Also, there is no corresponding systemd or
-openrc unit, so that means the fusectl is not automatically mounted with
-BR2_INIT_SYSTEMD=y or BR2_INIT_OPENRC=y already...
-
-So, I think we should just carry this patch. Having an init script, an
-openrc, and a systemd unit, that do the fusectl mount, would be nice.
-
-Could you please rework this patch to at least provide the init script,
-so that there is no regression (openrc and systemd units can come
-separately since they do not currently exist)?
+Thoughts?
 
 Regards,
 Yann E. MORIN.
 
+> Patch was submitted upstream:
+> https://github.com/libfuse/libfuse/pull/598
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> 
+> ---
+> 
+> v1 -> v2:
+> 
+>  - adjusted patch to completely remove init.d script install
+> 
 > Signed-off-by: Christian Stewart <christian@paral.in>
 > ---
 >  ...remove-installation-of-init.d-script.patch | 48 +++++++++++++++++++
