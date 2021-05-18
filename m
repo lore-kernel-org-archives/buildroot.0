@@ -1,57 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 14:01:05 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libdrm: bump version to
- 2.4.106
-In-Reply-To: <20210518044626.17073-1-bernd.kuhls@t-online.de>
-References: <20210518044626.17073-1-bernd.kuhls@t-online.de>
-Message-ID: <20210518120105.GB2506@scaer>
+Date: Tue, 18 May 2021 14:04:11 +0200
+Subject: [Buildroot] [git commit branch/next] package/gcc: enable secureplt
+ for powerpc64
+Message-ID: <20210518113530.C9FDE86953@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=578de6edbfe95ee8e56c4f81df24f6bd8115d35d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-05-18 06:46 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-[--SNIP--]
-> diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-> index f5b205bb00..f18df27687 100644
-> --- a/package/libdrm/libdrm.mk
-> +++ b/package/libdrm/libdrm.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBDRM_VERSION = 2.4.105
-> +LIBDRM_VERSION = 2.4.106
+GCC support enabling secureplt for powerpc64.
 
-You tagged that one for next, but this is actually a minor release that
-fixes a regression, and adds just a bunch of tests and debug here and
-there....
+From [1]
+"PowerPC has two PLT models: BSS-PLT and Secure-PLT. BSS-PLT uses
+runtime code generation to generate the PLT stubs. Secure-PLT was
+introduced with GCC 4.1 and Binutils 2.17 (base has GCC 4.2.1 and
+Binutils 2.17), and is a more secure PLT format, using a read-only
+linkage table, with the dynamic linker populating a non-executable
+index table."
 
-Is there a reason why that can't be applied to master?
+This option is always enabled by glibc testing script
+called build-many-glibcs.py [1]. This script exist since
+glibc 2.25.
 
-Regards,
-Yann E. MORIN.
+Runtime tested with qemu_ppc64_e5500_defconfig.
 
->  LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
->  LIBDRM_SITE = https://dri.freedesktop.org/libdrm
->  LIBDRM_LICENSE = MIT
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+[1] https://reviews.freebsd.org/D20598
+[2] https://sourceware.org/git/?p=glibc.git;a=blob;f=scripts/build-many-glibcs.py;h=9c08ab7b326e6385abb835eb32dd143952a71942;hb=9826b03b747b841f5fc6de2054bf1ef3f5c4bdf3#l345
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Matt Weber <matthew.weber@collins.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/gcc/gcc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 5e419f7ede..ed9b93e50f 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -231,7 +231,7 @@ endif
+ # Set default to Secure-PLT to prevent run-time
+ # generation of PLT stubs (supports RELRO and
+ # SELinux non-exemem capabilities)
+-ifeq ($(BR2_powerpc),y)
++ifeq ($(BR2_powerpc)$(BR2_powerpc64),y)
+ HOST_GCC_COMMON_CONF_OPTS += --enable-secureplt
+ endif
+ 
