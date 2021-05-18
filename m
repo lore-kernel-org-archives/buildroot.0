@@ -1,11 +1,9 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 May 2021 22:36:20 +0200
-Subject: [Buildroot] [PATCH 2/2]
- package/gobject-introspection/Config.in: Allow RISCV_32 builds
-In-Reply-To: <20210507170102.1896972-2-aduskett@rivian.com>
-References: <20210507170102.1896972-1-aduskett@rivian.com>
- <20210507170102.1896972-2-aduskett@rivian.com>
-Message-ID: <815c66a7-8135-7c40-b5b1-5a5e23045e7a@mind.be>
+From: Chan, Donald <hoiho@lab126.com>
+Date: Tue, 18 May 2021 20:43:54 +0000
+Subject: [Buildroot] [PATCH 1/1] package/python3-six: add python3 variant
+In-Reply-To: <20210518150056.GQ2506@scaer>
+References: <1620853148995.76548@lab126.com>,<20210518150056.GQ2506@scaer>
+Message-ID: <1621370634009.93154@lab126.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,58 +12,91 @@ To: buildroot@busybox.net
 
 
 
-On 07/05/2021 19:01, Adam Duskett wrote:
-> From: Adam Duskett <aduskett@gmail.com>
-> 
-> Qemu 6.0.0 no longer segfaults when running qemu-riscv32. As such, it's now
-> possible to allow riscv32 to compile gobject-introspection.
-> 
-> Fixes:
-> http://autobuild.buildroot.org/results/668397b1df42297505e6fc8353c4752290a5628d
-> Signed-off-by: Adam Duskett <aduskett@rivian.com>
+________________________________________
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Sent: Tuesday, May 18, 2021 8:00 AM
+To: Chan, Donald
+Cc: buildroot at busybox.net
+Subject: RE: [EXTERNAL] [Buildroot] [PATCH 1/1] package/python3-six: add python3 variant
 
- Applied to next, thanks.
-
- However, this doesn't actually fix anything, so I rewrote part of the commit
-message:
-
-    package/gobject-introspection/Config.in: Allow RISCV_32 builds
-
-    Qemu 6.0.0 no longer segfaults when running qemu-riscv32. As such, it's now
-    possible to allow riscv32 to compile gobject-introspection.
-
-    This partially reverts commit c94a212390e33c122cf9db4c772caf8bf3804565.
-    The symbol BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS is kept, even
-    though it is now equivalent to BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS,
-    because it's likely that architecture dependencies will pop up again in
-    the future.
-
-    The configuration of a previously failing autobuilder [1] now passes.
-
-    [1]
-http://autobuild.buildroot.org/results/668397b1df42297505e6fc8353c4752290a5628d
-
-    Signed-off-by: Adam Duskett <aduskett@rivian.com>
-    Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
 
 
- Regards,
- Arnout
+
+Chan, All,
+
+On 2021-05-12 20:59 +0000, Chan, Donald via buildroot spake thusly:
+>>
+>> Signed-off-by: Donald Chan <hoiho@lab126.com>
+>
+>Why do you need a python3-specific version of six?
+>
+>The existing package, python-six, is already compatible with both
+>python(2) and python3...
+>
+>Please, can you respin with a better commit log, that explains why you
+>need to add it?
+
+This was for the host side Python packages - I see the same patterns for other python packages like
+
+- python3-requests/python3-requests.mk
+- python3-mako/python3-mako.mk
+
+Let me me know if this makes sense.
+
+Regards,
+Yann E. MORIN.
 
 > ---
->  package/gobject-introspection/Config.in | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
-> index 57c569704e..bacf44363c 100644
-> --- a/package/gobject-introspection/Config.in
-> +++ b/package/gobject-introspection/Config.in
-> @@ -2,7 +2,6 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
->  	bool
->  	default y
->  	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-> -	depends on !BR2_RISCV_32 # qemu-riscv32 segfaults in qemu-5.0.0
->  
->  config BR2_PACKAGE_GOBJECT_INTROSPECTION
->  	bool "gobject-introspection"
-> 
+>? package/python3-six/python3-six.hash |? 1 +
+>? package/python3-six/python3-six.mk?? | 18 ++++++++++++++++++
+>? 2 files changed, 19 insertions(+)
+>? create mode 120000 package/python3-six/python3-six.hash
+>? create mode 100644 package/python3-six/python3-six.mk
+>
+> diff --git a/package/python3-six/python3-six.hash b/package/python3-six/python3-six.hash
+> new file mode 120000
+> index 0000000..ed8cb89
+> --- /dev/null
+> +++ b/package/python3-six/python3-six.hash
+> @@ -0,0 +1 @@
+> +../python-six/python-six.hash
+> \ No newline at end of file
+> diff --git a/package/python3-six/python3-six.mk b/package/python3-six/python3-six.mk
+> new file mode 100644
+> index 0000000..be64fce
+> --- /dev/null
+> +++ b/package/python3-six/python3-six.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# python3-six
+> +#
+> +################################################################################
+> +
+> +# Please keep in sync with package/python-six/python-six.mk
+> +PYTHON3_SIX_VERSION = 1.15.0
+> +PYTHON3_SIX_SOURCE = six-$(PYTHON3_SIX_VERSION).tar.gz
+> +PYTHON3_SIX_SITE = https://files.pythonhosted.org/packages/6b/34/415834bfdafca3c5f451532e8a8d9ba89a21c9743a0c59fbd0205c7f9426
+> +PYTHON3_SIX_SETUP_TYPE = setuptools
+> +PYTHON3_SIX_LICENSE = MIT
+> +PYTHON3_SIX_LICENSE_FILES = LICENSE
+> +HOST_PYTHON3_SIX_DL_SUBDIR = python-six
+> +HOST_PYTHON3_SIX_NEEDS_HOST_PYTHON = python3
+> +
+> +$(eval $(python-package))
+> +$(eval $(host-python-package))
+> --
+> 2.17.1
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+--
+.-----------------.--------------------.------------------.--------------------.
+|? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software? Designer | \ / CAMPAIGN???? |? ___?????????????? |
+| +33 561 099 427 `------------.-------:? X? AGAINST????? |? \e/? There is no? |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL??? |?? v?? conspiracy.? |
+'------------------------------^-------^------------------^--------------------'
