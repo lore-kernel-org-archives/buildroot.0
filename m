@@ -1,156 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 10:30:22 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/libfuse3: allow building as
- a host package
-In-Reply-To: <20210516010521.1375959-1-christian@paral.in>
-References: <20210516010521.1375959-1-christian@paral.in>
-Message-ID: <20210518083022.GM2506@scaer>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue, 18 May 2021 10:34:50 +0200
+Subject: [Buildroot] [PATCH 2/2] package/lvm2: drop
+ BR2_PACKAGE_LVM2_APP_LIBRARY
+In-Reply-To: <8bce0504-8c29-5868-bd66-c998ece91eae@benettiengineering.com>
+References: <20210517170609.810302-1-fontaine.fabrice@gmail.com>
+ <20210517170609.810302-2-fontaine.fabrice@gmail.com>
+ <20210517204324.GH2506@scaer>
+ <CAPi7W83SZL9j2iEvi8DM6EBVJfXksN5-WsGZXnSundeHfYHOYA@mail.gmail.com>
+ <8bce0504-8c29-5868-bd66-c998ece91eae@benettiengineering.com>
+Message-ID: <46aee4a7-5baf-49b5-889a-aaead48f5501@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, All,
-
-On 2021-05-15 18:05 -0700, Christian Stewart spake thusly:
-> Adds 1 patch to fix an install error when building as a host package.
-
-Forgot to state in my previous review: of course, this will require that
-the build machine is configured to allow the user doing the build is
-allowed to use FUSE, i.e. that it is allowed access to /dev/fuse.
-
-This is not currently something we ensure, because we do not use FUSE as
-part of the build.
-
-I wonder if we should add a check and nicely inform the user, or let the
-build later fail when fuse-overlayfs (or genuinetools-img) fails to do
-the mount... Maybe just the following:
-
-    define HOST_GENUINETOOLS_IMG_CHECK_ACCESS
-        $(Q)if [ ! -w /dev/fuse ]; then \
-            printf 'Your user is not allowed to access /dev/fuse\n' >&2; \
-            exit 1; \
-        fi
-    endef
-    HOST_GENUINETOOLS_IMG_PRE_CONFIGURE_HOOKS += HOST_GENUINETOOLS_IMG_CHECK_ACCESS
-
-Thoughts?
-
-Regards,
-Yann E. MORIN.
-
-> Patch was submitted upstream:
-> https://github.com/libfuse/libfuse/pull/598
+On 5/18/21 9:58 AM, Giulio Benetti wrote:
+> Hi Fabrice, Adam, All,
 > 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+> On 5/17/21 10:51 PM, Fabrice Fontaine wrote:
+>> Le lun. 17 mai 2021 ? 22:43, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+>>>
+>>> Fabrice, All,
+>>>
+>>> +Adam for udisks and GOI... ;-]
+>>>
+>>> On 2021-05-17 19:06 +0200, Fabrice Fontaine spake thusly:
+>>>> The application library (liblvm2app) has been dropped since version
+>>>> 2.03.00 and
+>>>> https://github.com/lvmteam/lvm2/commit/0d22b58172808f050abeacdb5d6a7b7132b91a8c
+>>>>
+>>>> It should be noted that lvm2 support must be dropped from udisks until
+>>>> a bump to at least version 2.7.0 and
+>>>> https://github.com/storaged-project/udisks/commit/4c0709a893be49a0db5b2839e4766621e2c1bb98
+>>>>
+>>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>>
+>>> Applied to master, thanks.
+>>>
+>>> I was a bit concerned that we dropped this support, but hinestly, we
+>>> have udisks 1.0.5, from March 2014... So, to me, it's a minor annoyance
+>>> if lvm2 support in udisks is dropped...
+>>>
+>>> IIRC, Adam, did some work on udisks back when he was "toying" with GOI...
+>>> Adam? ;-)
+>> We also have a patch to bump udisks from Giulio:
+>> https://patchwork.ozlabs.org/project/buildroot/patch/20200217143030.5031-5-giulio.benetti at benettiengineering.com/
+>> Perhaps, Giulio could also help us to bump udisks.
 > 
-> ---
+> I can try to re-bump since at the time I thought there were a lot of
+> dependencies while Adam(if I recall correct) told me that GOI wasn't
+> needed in libblock for example. So I'm retrying to bump with the minimum
+> dependencies. Let's see if I'm able to do this.
 > 
-> v1 -> v2:
+> Best regards
 > 
->  - adjusted patch to completely remove init.d script install
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  ...remove-installation-of-init.d-script.patch | 48 +++++++++++++++++++
->  package/libfuse3/libfuse3.mk                  |  7 +++
->  2 files changed, 55 insertions(+)
->  create mode 100644 package/libfuse3/0001-install_helper-remove-installation-of-init.d-script.patch
-> 
-> diff --git a/package/libfuse3/0001-install_helper-remove-installation-of-init.d-script.patch b/package/libfuse3/0001-install_helper-remove-installation-of-init.d-script.patch
-> new file mode 100644
-> index 0000000000..5df6f3690c
-> --- /dev/null
-> +++ b/package/libfuse3/0001-install_helper-remove-installation-of-init.d-script.patch
-> @@ -0,0 +1,48 @@
-> +From b3d28b5aa5887162847a85738450e8c719ee8523 Mon Sep 17 00:00:00 2001
-> +From: Christian Stewart <christian@paral.in>
-> +Date: Sun, 2 May 2021 19:04:50 -0700
-> +Subject: [PATCH] install_helper: remove installation of init.d script
-> +
-> +Fixes the following build error in Buildroot as a host package:
-> +
-> +Running custom install script 'install_helper.sh /host/etc /host/bin /host/lib/udev/rules.d false
-> ++ sysconfdir=/host/etc
-> ++ bindir=/host/bin
-> ++ udevrulesdir=/host/lib/udev/rules.d
-> ++ useroot=false
-> ++ '[' -z '' ']'
-> ++ DESTDIR=
-> ++ install -D -m 644 /build/host-libfuse3-3.10.3/util/fuse.conf /host/etc/fuse.conf
-> ++ false
-> ++ install -D -m 644 /build/host-libfuse3-3.10.3/util/udev.rules /host/lib/udev/rules.d/99-fuse3.rules
-> ++ install -D -m 755 /build/host-libfuse3-3.10.3/util/init_script /etc/init.d/fuse3
-> +install: cannot create regular file '/etc/init.d/fuse3': Permission denied
-> +FAILED: install script 'install_helper.sh /host/etc /host/bin /host/lib/udev/rules.d false' exit code 1, stopped
-> +FAILED: meson-install
-> +
-> +Signed-off-by: Christian Stewart <christian@paral.in>
-> +
-> +diff --git a/util/install_helper.sh b/util/install_helper.sh
-> +index cb649a7..f2fa146 100755
-> +--- a/util/install_helper.sh
-> ++++ b/util/install_helper.sh
-> +@@ -38,16 +38,3 @@ fi
-> + 
-> + install -D -m 644 "${MESON_SOURCE_ROOT}/util/udev.rules" \
-> +         "${DESTDIR}${udevrulesdir}/99-fuse3.rules"
-> +-
-> +-install -D -m 755 "${MESON_SOURCE_ROOT}/util/init_script" \
-> +-        "${DESTDIR}/etc/init.d/fuse3"
-> +-
-> +-
-> +-if test -x /usr/sbin/update-rc.d && test -z "${DESTDIR}"; then
-> +-    /usr/sbin/update-rc.d fuse3 start 34 S . start 41 0 6 . || /bin/true
-> +-else
-> +-    echo "== FURTHER ACTION REQUIRED =="
-> +-    echo "Make sure that your init system will start the ${DESTDIR}/etc/init.d/fuse3 init script"
-> +-fi
-> +-
-> +-
-> +-- 
-> +2.31.1
-> +
-> diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-> index d61e313391..b29780dc09 100644
-> --- a/package/libfuse3/libfuse3.mk
-> +++ b/package/libfuse3/libfuse3.mk
-> @@ -10,11 +10,17 @@ LIBFUSE3_LICENSE = LGPL-2.1
->  LIBFUSE3_LICENSE_FILES = LICENSE
->  LIBFUSE3_INSTALL_STAGING = YES
->  LIBFUSE3_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> +
->  LIBFUSE3_CONF_OPTS = \
->  	-Dexamples=false \
->  	-Dudevrulesdir=/lib/udev/rules.d \
->  	-Duseroot=false
->  
-> +HOST_LIBFUSE3_CONF_OPTS = \
-> +	-Dexamples=false \
-> +	-Dudevrulesdir=$(HOST_DIR)/lib/udev/rules.d \
-> +	-Duseroot=false
-> +
->  define LIBFUSE3_DEVICES
->  	/dev/fuse  c  666  0  0  10  229  0  0  -
->  endef
-> @@ -28,3 +34,4 @@ define LIBFUSE3_LINUX_CONFIG_FIXUPS
->  endef
->  
->  $(eval $(meson-package))
-> +$(eval $(host-meson-package))
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Pardon, I've also noticed this Adam's patch to bump that has been rejected:
+https://patchwork.ozlabs.org/project/buildroot/patch/20200725230618.3640682-14-aduskett at gmail.com/
+
+But I can't find the reason why it's been rejected. I've applied it and 
+it builds after some adjustment without lvm2 for the moment, then I can 
+respin it if everything is ok with a second patch re-adding lvm2 support.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Giulio Benetti
+Benetti Engineering sas
