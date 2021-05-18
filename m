@@ -1,64 +1,88 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 14:07:34 +0200
-Subject: [Buildroot] [git commit] package/cutelyst: fix linking with -latomic
-Message-ID: <20210518113909.4DCA487C13@busybox.osuosl.org>
+Date: Tue, 18 May 2021 14:08:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cutelyst: fix linking with
+ -latomic
+In-Reply-To: <20210517194008.1128801-1-fontaine.fabrice@gmail.com>
+References: <20210517194008.1128801-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210518120821.GD2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88007f9acc63c5b459003ee712f5ebb30b9157c3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-Build is broken since commit 7333207eaf2900076185cba6641c6406d61c235e
-because upstream overrides CMAKE_EXE_LINKER_FLAGS when building with
-jemalloc:
-https://github.com/cutelyst/cutelyst/commit/7d73eba273be365f15f1ffcb3d3ee7f1d44e10fb
+On 2021-05-17 21:40 +0200, Fabrice Fontaine spake thusly:
+> Build is broken since commit 7333207eaf2900076185cba6641c6406d61c235e
+> because upstream overrides CMAKE_EXE_LINKER_FLAGS when building with
+> jemalloc:
+> https://github.com/cutelyst/cutelyst/commit/7d73eba273be365f15f1ffcb3d3ee7f1d44e10fb
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/ba9bccaae2cad487a66b6eb9851fc206c32d7c82
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/ba9bccaae2cad487a66b6eb9851fc206c32d7c82
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...eLists.txt-don-t-override-CMAKE_EXE_LINKE.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/cutelyst/0001-server-CMakeLists.txt-don-t-override-CMAKE_EXE_LINKE.patch b/package/cutelyst/0001-server-CMakeLists.txt-don-t-override-CMAKE_EXE_LINKE.patch
-new file mode 100644
-index 0000000000..45b1fcd146
---- /dev/null
-+++ b/package/cutelyst/0001-server-CMakeLists.txt-don-t-override-CMAKE_EXE_LINKE.patch
-@@ -0,0 +1,31 @@
-+From c347aeb43775109cbc2824b99cb10b1b3440c191 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 17 May 2021 21:27:11 +0200
-+Subject: [PATCH] server/CMakeLists.txt: don't override CMAKE_EXE_LINKER_FLAGS
-+
-+Don't override CMAKE_EXE_LINKER_FLAGS as this could break the build if
-+CMAKE_EXE_LINKER_FLAGS is already set by the user (for example to pass
-+-latomic)
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/cutelyst/cutelyst/pull/312]
-+---
-+ wsgi/CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/server/CMakeLists.txt b/server/CMakeLists.txt
-+index ec5689f7..1ed56859 100644
-+--- a/wsgi/CMakeLists.txt
-++++ b/wsgi/CMakeLists.txt
-+@@ -95,7 +95,7 @@ install(TARGETS Cutelyst${PROJECT_VERSION_MAJOR}Qt${QT_VERSION_MAJOR}Server
-+     cxx_generalized_initializers
-+ )
-+ if (JEMALLOC_FOUND)
-+-    set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} " -Wl,--no-as-needed")
-++    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-as-needed")
-+     target_link_libraries(cutelyst-wsgi2 PRIVATE ${JEMALLOC_LIBRARIES})
-+ endif()
-+ 
-+-- 
-+2.30.2
-+
+> ---
+>  ...s.txt-don-t-override-CMAKE_EXE_LINKE.patch | 31 +++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>  create mode 100644 package/cutelyst/0001-server-CMakeLists.txt-don-t-override-CMAKE_EXE_LINKE.patch
+> 
+> diff --git a/package/cutelyst/0001-server-CMakeLists.txt-don-t-override-CMAKE_EXE_LINKE.patch b/package/cutelyst/0001-server-CMakeLists.txt-don-t-override-CMAKE_EXE_LINKE.patch
+> new file mode 100644
+> index 0000000000..45b1fcd146
+> --- /dev/null
+> +++ b/package/cutelyst/0001-server-CMakeLists.txt-don-t-override-CMAKE_EXE_LINKE.patch
+> @@ -0,0 +1,31 @@
+> +From c347aeb43775109cbc2824b99cb10b1b3440c191 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Mon, 17 May 2021 21:27:11 +0200
+> +Subject: [PATCH] server/CMakeLists.txt: don't override CMAKE_EXE_LINKER_FLAGS
+> +
+> +Don't override CMAKE_EXE_LINKER_FLAGS as this could break the build if
+> +CMAKE_EXE_LINKER_FLAGS is already set by the user (for example to pass
+> +-latomic)
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://github.com/cutelyst/cutelyst/pull/312]
+> +---
+> + wsgi/CMakeLists.txt | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/server/CMakeLists.txt b/server/CMakeLists.txt
+> +index ec5689f7..1ed56859 100644
+> +--- a/wsgi/CMakeLists.txt
+> ++++ b/wsgi/CMakeLists.txt
+> +@@ -95,7 +95,7 @@ install(TARGETS Cutelyst${PROJECT_VERSION_MAJOR}Qt${QT_VERSION_MAJOR}Server
+> +     cxx_generalized_initializers
+> + )
+> + if (JEMALLOC_FOUND)
+> +-    set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} " -Wl,--no-as-needed")
+> ++    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-as-needed")
+> +     target_link_libraries(cutelyst-wsgi2 PRIVATE ${JEMALLOC_LIBRARIES})
+> + endif()
+> + 
+> +-- 
+> +2.30.2
+> +
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
