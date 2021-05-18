@@ -1,45 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 May 2021 17:45:44 +0200
-Subject: [Buildroot] [PATCH 1/2] package/jh71xx-tools: new package
-In-Reply-To: <20210515121534.GF2506@scaer>
-References: <20210514220316.1942381-1-thomas.petazzoni@bootlin.com>
- <20210514220316.1942381-2-thomas.petazzoni@bootlin.com>
- <20210515121534.GF2506@scaer>
-Message-ID: <20210518174544.2a48bcf5@windsurf.orange-hotspot>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 18 May 2021 18:44:13 +0200
+Subject: [Buildroot] [git commit] package/rocksdb: bump to version 6.20.3
+Message-ID: <20210518162036.06646814CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b84acf3f1d91aaa6f280bbb62cce04cb661ef0b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 15 May 2021 14:15:34 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+- Refresh first patch
+- Add BR2_PACKAGE_ROCKSDB_ARCH_SUPPORTS due to toku_time.h which has
+  been added in version 6.16.3 by
+  https://github.com/facebook/rocksdb/commit/98236fb10ecdbe6e7e8ef5cfb11e1f11dcb72f84
+  and contains the following blob:
 
-> > +	source "package/jh71xx-tools/Config.in.host"  
-> 
-> Alphabetical order fixed, as spotted by Bin.
+ #if defined(__x86_64__) || defined(__i386__)
+  uint32_t lo, hi;
+  __asm__ __volatile__("rdtsc" : "=a"(lo), "=d"(hi));
+  return (uint64_t)hi << 32 | lo;
+ #elif defined(__aarch64__)
+  uint64_t result;
+  __asm __volatile__("mrs %[rt], cntvct_el0" : [ rt ] "=r"(result));
+  return result;
+ #elif defined(__powerpc__)
+  return __ppc_get_timebase();
+ #else
+ #error No timer implementation for this platform
+ #endif
 
-Thanks! It is interesting that this was not spotted by check-package.
+- Also drop second patch and disable build on powerpc as it seems that
+  upstream is not really testing powerpc (patch not merged after more
+  than one year + build failure with uclibc/musl only fixed on ppc64:
+  https://github.com/facebook/rocksdb/commit/24b7ebee80ab282e073fd541d5b807d4a0bbbfab)
 
-> > +JH71XX_TOOLS_VERSION = 7a29f4b9d2355aa39afa8680680909bb74e4991d
-> > +JH71XX_TOOLS_SITE = $(call github,kprasadvnsi,JH71xx-tools,$(JH71XX_TOOLS_VERSION))
-> > +JH71XX_TOOLS_LICENSE = MIT
-> > +JH71XX_TOOLS_LICENSE_FILES = jh7100-recover.c  
-> 
-> Not sure why you choose to use the source file as license file, when
-> there is an actual LICENSE file in the tree. So I've switched to using
-> that.
+- Update hash of README.md (change not related to license:
+  https://github.com/facebook/rocksdb/commit/f4ade82ad29790b1e0d99188e0b26e5b805c7243)
 
-I'm not sure how I missed that, because I remember I looked at the code
-base and thought "meh, there is no license file, I should file a github
-issue about this". Anyway, you fixed it, so thanks for that!
+As a side effect, this will remove the autobuilder failures on arm,
+powerpc and m68k
 
-Best regards,
+https://github.com/facebook/rocksdb/blob/v6.20.3/HISTORY.md
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/059ebe270e6e7c23e40060c4cf0112c4cd72b0e7
+ - http://autobuild.buildroot.org/results/f007412f29ab2e03a6904e2f548e77654abde6de
+ - http://autobuild.buildroot.org/results/83505f78fcb4d925779177411d830bea127b6800
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...d_tools-build_detect_platform-fix-C-tests.patch |   96 +-
+ ...8-compatiblity-fix-CRC32-C-implementation.patch | 3787 --------------------
+ package/rocksdb/Config.in                          |   10 +
+ package/rocksdb/rocksdb.hash                       |    4 +-
+ package/rocksdb/rocksdb.mk                         |    2 +-
+ 5 files changed, 61 insertions(+), 3838 deletions(-)
+
+Patch is too large, so refusing to show it
