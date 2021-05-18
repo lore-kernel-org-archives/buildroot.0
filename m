@@ -1,97 +1,51 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 18 May 2021 22:39:45 +0200
-Subject: [Buildroot] [git commit branch/next] package/numactl: add -latomic
- to numa.pc
-Message-ID: <20210518201526.CA31F87944@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 May 2021 22:44:42 +0200
+Subject: [Buildroot] [git commit branch/next] package/imlib2: bump version
+ to 1.7.1
+Message-ID: <20210518201551.4637E875F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a699a667bd64a52ad3c30210c4756953232cc9cc
+commit: https://git.buildroot.net/buildroot/commit/?id=bf149cd90351d9e4357830c994daf7f72f6cf7ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Instead of passing -latomic through LDFLAGS as done in commit
-4ed540ddf59bec4b389be44d7f42820d2466904f, properly check for it in
-configure.ac and add it to numa.pc or numactl users won't be able to get
-it
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../numactl/0002-link-with-latomic-if-needed.patch | 52 ++++++++++++++++++++++
- package/numactl/numactl.mk                         |  4 --
- 2 files changed, 52 insertions(+), 4 deletions(-)
+ package/imlib2/imlib2.hash | 8 ++++----
+ package/imlib2/imlib2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/numactl/0002-link-with-latomic-if-needed.patch b/package/numactl/0002-link-with-latomic-if-needed.patch
-new file mode 100644
-index 0000000000..6dff0cb233
---- /dev/null
-+++ b/package/numactl/0002-link-with-latomic-if-needed.patch
-@@ -0,0 +1,52 @@
-+From e0de0d9e981ddb53bdeb4a4b9dc43046c9ff4ff9 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 6 May 2021 23:08:36 +0200
-+Subject: [PATCH] link with -latomic if needed
-+
-+numactl unconditionally uses __atomic_fetch_and but some architectures
-+(e.g. sparc) needs to link with -latomic to be able to use it. So check
-+if -latomic is needed and update numa.pc accordingly
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/numactl/numactl/commit/e0de0d9e981ddb53bdeb4a4b9dc43046c9ff4ff9]
-+---
-+ Makefile.am  | 1 +
-+ configure.ac | 2 ++
-+ numa.pc.in   | 1 +
-+ 3 files changed, 4 insertions(+)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 44d0d76..34f6815 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -151,6 +151,7 @@ SED_PROCESS = \
-+         -e 's, at exec_prefix\@,$(exec_prefix),g' \
-+         -e 's, at libdir\@,$(libdir),g' \
-+         -e 's, at includedir\@,$(includedir),g' \
-++        -e 's, at LIBS\@,$(LIBS),g' \
-+         < $< > $@ || rm $@
-+ 
-+ %.pc: %.pc.in Makefile
-+diff --git a/configure.ac b/configure.ac
-+index 659a765..e3b0eb3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -24,6 +24,8 @@ AM_CONDITIONAL([HAVE_TREE_VECTORIZE], [test x"${tree_vectorize}" = x"true"])
-+ 
-+ AC_CONFIG_FILES([Makefile])
-+ 
-++AC_SEARCH_LIBS([__atomic_fetch_and_1], [atomic])
-++
-+ # GCC tries to be "helpful" and only issue a warning for unrecognized
-+ # attributes.  So we compile the test with Werror, so that if the
-+ # attribute is not recognized the compilation fails
-+diff --git a/numa.pc.in b/numa.pc.in
-+index 8a0f202..cc04d50 100644
-+--- a/numa.pc.in
-++++ b/numa.pc.in
-+@@ -8,3 +8,4 @@ Description: NUMA policy library
-+ Version: @VERSION@
-+ Cflags: -I${includedir}
-+ Libs: -L${libdir} -lnuma
-++Libs.Private: @LIBS@
-diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-index 3364f6c5c3..cf9c759693 100644
---- a/package/numactl/numactl.mk
-+++ b/package/numactl/numactl.mk
-@@ -12,8 +12,4 @@ NUMACTL_INSTALL_STAGING = YES
- NUMACTL_AUTORECONF = YES
- NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
+diff --git a/package/imlib2/imlib2.hash b/package/imlib2/imlib2.hash
+index 68f6c91db7..3df3deffec 100644
+--- a/package/imlib2/imlib2.hash
++++ b/package/imlib2/imlib2.hash
+@@ -1,8 +1,8 @@
+-# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.6.1/
+-md5  7b3fbcb974b48822b32b326c6a47764b  imlib2-1.6.1.tar.bz2
+-sha1  3b5f850e83cbb7481e33061348fb9c7a555c8c60  imlib2-1.6.1.tar.bz2
++# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.7.1/
++md5  98569de9b10bcb6fd5d13e4d331ddd81  imlib2-1.7.1.tar.bz2
++sha1  092c66ae0180798a4036e68c68d7f316de192e36  imlib2-1.7.1.tar.bz2
  
--ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--NUMACTL_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
--endif
--
- $(eval $(autotools-package))
+ # Locally computed
+-sha256  4d393a77e13da883c8ee2da3b029da3570210fe37d000c9ac33d9fce751b166d  imlib2-1.6.1.tar.bz2
++sha256  033a6a639dcbc8e03f65ff05e57068e7346d50ee2f2fff304bb9095a1b2bc407  imlib2-1.7.1.tar.bz2
+ sha256  fb70339dd33a77b6213c7ae067fccf93d04af44ff3f937c61f8863f7970e73f6  COPYING
+ sha256  8c9a2e92ed4937e2d30c2ea95439c36ed3002fc47e34efee43455a460fee8ef5  COPYING-PLAIN
+diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
+index a88558575d..6d973827dc 100644
+--- a/package/imlib2/imlib2.mk
++++ b/package/imlib2/imlib2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMLIB2_VERSION = 1.6.1
++IMLIB2_VERSION = 1.7.1
+ IMLIB2_SOURCE = imlib2-$(IMLIB2_VERSION).tar.bz2
+ IMLIB2_SITE = http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)
+ IMLIB2_LICENSE = Imlib2
