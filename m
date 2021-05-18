@@ -1,66 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 May 2021 21:42:50 +0200
-Subject: [Buildroot] [PATCH] package/links: enable building graphics
- mode with only fb driver
-In-Reply-To: <CAPCnQJ=TNmHQ+s-fhjYauZ521aC7eUdnUQSugFPJv8ayp1264w@mail.gmail.com>
-References: <20210427091325.1488138-1-urjaman@gmail.com>
- <01b9f8cb-e83e-5e1f-228c-0e887c93915b@mind.be>
- <CAPCnQJ=TNmHQ+s-fhjYauZ521aC7eUdnUQSugFPJv8ayp1264w@mail.gmail.com>
-Message-ID: <cd08716b-6ec5-c7b5-54c8-8ee46ac0b0de@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 18 May 2021 21:41:47 +0200
+Subject: [Buildroot] [git commit branch/next] package/links: enable building
+ graphics mode with only fb driver
+Message-ID: <20210518192253.898B487B47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=4cf6c02fb0b8b216e446c1230cb8f1eb61763211
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+The "fb" framebuffer driver needs GPM (mouse support) to compile,
+but not DirectFB or Xorg.
 
-On 14/05/2021 11:26, Urja Rannikko wrote:
-> Hi,
-> 
-> On Wed, May 5, 2021 at 11:08 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->>
->>  Still not good enough, I'm afraid :-) You also need to depend on gpm in the .mk
->> file.
->>
-> It already does, atleast that's how i read this fragment in links.mk:
-> 
-> ifeq ($(BR2_PACKAGE_GPM),y)
-> LINKS_CONF_OPTS += --with-gpm
-> LINKS_DEPENDENCIES += gpm
-> else
-> LINKS_CONF_OPTS += --without-gpm
-> endif
-> 
-> And yes links can use GPM in textmode-only build too, so that seems
-> correct as-is.
+The .mk file already has an optional dependency on GPM, so it doesn't
+need to be added there.
 
- Oops, you're right, my bad.
+Also added a Kconfig comment for easier discovery of the GPM
+requirement.
 
- Applied to next, thanks!
+Signed-off-by: Urja Rannikko <urjaman@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/links/Config.in | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
- Regards,
- Arnout
-
-> 
->>  Also, I'm thinking: maybe we can turn this around and automatically select gpm?
->>
->>         select BR2_PACKAGE_GPM if !BR2_PACKAGE_DIRECTFB && !BR2_PACKAGE_XORG7
->>
->>  That way you don't need the comment either. Well, you still do because gpm
->> depends on static:
->>
->>         depends on !BR2_STATIC_LIBS if !BR2_PACKAGE_DIRECTFB && !BR2_PACKAGE_XORG7 # gpm
->>
->> so the comment would become:
->>
->> comment "links graphics needs dynamic libs, DirectFB or X11"
->>         depends on BR2_STATIC_LIBS && !BR2_PACKAGE_DIRECTFB && !BR2_PACKAGE_XORG7
->>
-> 
-> I have no hard opinion on this, except that I do dislike possibly
-> non-obvious use of select
-> (and it has the dependency trouble you listed), which would leave GPM
-> selected if one
-> toggled links graphics on and off while using menuconfig.
-> 
+diff --git a/package/links/Config.in b/package/links/Config.in
+index 713f53da4e..cc2389c9f1 100644
+--- a/package/links/Config.in
++++ b/package/links/Config.in
+@@ -10,11 +10,15 @@ if BR2_PACKAGE_LINKS
+ 
+ config BR2_PACKAGE_LINKS_GRAPHICS
+ 	bool "use graphics"
+-	depends on BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_GPM || BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXT if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBPNG
+ 	help
+-	  Enable graphics output for DirectFB or X11.
++	  Enable graphics output for framebuffer, DirectFB or X11.
++	  Framebuffer output requires GPM (console mouse).
+ 	  Otherwise links will be text-mode only.
+ 
++comment "links graphics needs GPM, DirectFB or X11"
++	depends on !BR2_PACKAGE_GPM && !BR2_PACKAGE_DIRECTFB && !BR2_PACKAGE_XORG7
++
+ endif
