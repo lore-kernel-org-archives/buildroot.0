@@ -1,49 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 14:29:52 +0200
-Subject: [Buildroot] [git commit branch/next] package/mbuffer: bump to
- version 20210328
-Message-ID: <20210518120158.A9990813B9@busybox.osuosl.org>
+Date: Tue, 18 May 2021 14:29:53 +0200
+Subject: [Buildroot] [git commit branch/next] package/ethtool: bump to
+ version 5.12
+Message-ID: <20210518120158.BDEC98118C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da50baa7c9337ffa83d4f910e3dd2032331857bf
+commit: https://git.buildroot.net/buildroot/commit/?id=ebf7eb7fff301b354b04c5dba96fc6accd6969f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Mircea GLIGA <mgliga@bitdefender.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mbuffer/mbuffer.hash | 4 ++--
- package/mbuffer/mbuffer.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mbuffer/mbuffer.hash b/package/mbuffer/mbuffer.hash
-index 73a8d3cf44..7c200d543e 100644
---- a/package/mbuffer/mbuffer.hash
-+++ b/package/mbuffer/mbuffer.hash
-@@ -1,8 +1,8 @@
- # From http://www.maier-komor.de/mbuffer.html
--md5  e2b4f3b0d0944c08d52c167841bde3c0  mbuffer-20200929.tgz
-+md5  4e4712db5fbd4e71bfbfa2c145c6c646  mbuffer-20210328.tgz
- 
- # Locally computed after checking signature upstream
--sha256  53a6e3c14e9a049f18a09840653dd84f18e7ec7560f2dcf2b61c0ab5f0ead4e8  mbuffer-20200929.tgz
-+sha256  51b5b8d8488991a55fe1dfce90130f9e47bc1ce286ba03b4f628c04b784fdc5d  mbuffer-20210328.tgz
- 
- # Hash for license file
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
-index 90a72ce657..c7c4456651 100644
---- a/package/mbuffer/mbuffer.mk
-+++ b/package/mbuffer/mbuffer.mk
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 334ff8d503..536579670f 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  817d5396a9307b4c637b435d4c558b8f5f964a1464a035ca3c0180f4cc93cfcf  ethtool-5.10.tar.xz
++sha256  f5ddfa9c75053d8011b8c8c99ec4e2d3c83cd1972f638692d62e37fa3ef36f07  ethtool-5.12.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index c9765eccff..f3e950f212 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MBUFFER_VERSION = 20200929
-+MBUFFER_VERSION = 20210328
- MBUFFER_SOURCE = mbuffer-$(MBUFFER_VERSION).tgz
- MBUFFER_SITE = http://www.maier-komor.de/software/mbuffer
- MBUFFER_LICENSE = GPL-3.0+
+-ETHTOOL_VERSION = 5.10
++ETHTOOL_VERSION = 5.12
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
