@@ -1,268 +1,82 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 13:12:38 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/iproute2: bump version to
- 5.12.0
-In-Reply-To: <20210517175357.32742-1-petr.vorel@gmail.com>
-References: <20210517175357.32742-1-petr.vorel@gmail.com>
-Message-ID: <20210518111238.GQ2506@scaer>
+Date: Tue, 18 May 2021 13:16:14 +0200
+Subject: [Buildroot] [git commit branch/next] package/libubootenv: bump to
+ version 0.3.2
+Message-ID: <20210518104730.A2410873E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=0173c06e5db4aa3d708e27872da05f272cfea83d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-05-17 19:53 +0200, Petr Vorel spake thusly:
-> Backport from upstream mailing list patch from Heiko Thiery which fixes
-> missing {name_to,open_by}_handle_at() on uclibc-ng < 1.0.35.
-> 
-> Drop patch from v5.8.0.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch | 11 ++++++-----
+ package/libubootenv/libubootenv.hash                          |  2 +-
+ package/libubootenv/libubootenv.mk                            |  4 ++--
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
-Applied to master, thanks.
-
-> ---
-> NOTE: "config.mk: Rerun configure when it is newer than config.mk" [1]
-> shouldn't be needed. Waiting for test runs.
-
-That seemed Ok as per your reply, so let's send this to the
-autobuilders, now! ;-)
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> Kind regards,
-> Petr
-> 
-> [1] https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=62c88ed9402650823a88c2974efdc39a320dfe7b
-> 
->  .../0001-devlink-update-include-files.patch   |  55 ---------
->  ...-when-name-open-_to_handle_at-is-not.patch | 114 ++++++++++++++++++
->  package/iproute2/iproute2.hash                |   2 +-
->  package/iproute2/iproute2.mk                  |   2 +-
->  4 files changed, 116 insertions(+), 57 deletions(-)
->  delete mode 100644 package/iproute2/0001-devlink-update-include-files.patch
->  create mode 100644 package/iproute2/0001-lib-fs-fix-issue-when-name-open-_to_handle_at-is-not.patch
-> 
-> diff --git a/package/iproute2/0001-devlink-update-include-files.patch b/package/iproute2/0001-devlink-update-include-files.patch
-> deleted file mode 100644
-> index 8cc6e4ec60..0000000000
-> --- a/package/iproute2/0001-devlink-update-include-files.patch
-> +++ /dev/null
-> @@ -1,55 +0,0 @@
-> -From 12fafa27c7b306e6c397e858f4d5a8159500f659 Mon Sep 17 00:00:00 2001
-> -From: Stephen Hemminger <stephen@networkplumber.org>
-> -Date: Thu, 11 Jun 2020 09:46:46 -0700
-> -Subject: devlink: update include files
-> -
-> -Use the tool iwyu to get more complete list of includes for
-> -all the bits used by devlink.
-> -
-> -This should also fix build with musl libc.
-> -
-> -Fixes: c4dfddccef4e ("fix JSON output of mon command")
-> -Reported-off-by: Dan Robertson <dan@dlrobertson.com>
-> -Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
-> -
-> -[Retrieved from:
-> -https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=12fafa27c7b306e6c397e858f4d5a8159500f659]
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ----
-> - devlink/devlink.c | 9 ++++++++-
-> - 1 file changed, 8 insertions(+), 1 deletion(-)
-> -
-> -diff --git a/devlink/devlink.c b/devlink/devlink.c
-> -index 507972c3..ce2e4676 100644
-> ---- a/devlink/devlink.c
-> -+++ b/devlink/devlink.c
-> -@@ -19,18 +19,25 @@
-> - #include <limits.h>
-> - #include <errno.h>
-> - #include <inttypes.h>
-> -+#include <signal.h>
-> -+#include <time.h>
-> -+#include <netinet/in.h>
-> -+#include <arpa/inet.h>
-> - #include <sys/sysinfo.h>
-> - #define _LINUX_SYSINFO_H /* avoid collision with musl header */
-> - #include <linux/genetlink.h>
-> - #include <linux/devlink.h>
-> -+#include <linux/netlink.h>
-> - #include <libmnl/libmnl.h>
-> - #include <netinet/ether.h>
-> -+#include <sys/select.h>
-> -+#include <sys/socket.h>
-> - #include <sys/types.h>
-> - 
-> - #include "SNAPSHOT.h"
-> - #include "list.h"
-> - #include "mnlg.h"
-> --#include "json_writer.h"
-> -+#include "json_print.h"
-> - #include "utils.h"
-> - #include "namespace.h"
-> - 
-> --- 
-> -cgit 1.2.3-1.el7
-> -
-> diff --git a/package/iproute2/0001-lib-fs-fix-issue-when-name-open-_to_handle_at-is-not.patch b/package/iproute2/0001-lib-fs-fix-issue-when-name-open-_to_handle_at-is-not.patch
-> new file mode 100644
-> index 0000000000..b4e6374874
-> --- /dev/null
-> +++ b/package/iproute2/0001-lib-fs-fix-issue-when-name-open-_to_handle_at-is-not.patch
-> @@ -0,0 +1,114 @@
-> +From c5b72cc56bf88160bbf477ec8565fed865e7a1c9 Mon Sep 17 00:00:00 2001
-> +From: Heiko Thiery <heiko.thiery@gmail.com>
-> +Date: Sat, 8 May 2021 08:49:26 +0200
-> +Subject: [PATCH] lib/fs: fix issue when {name,open}_to_handle_at() is not
-> + implemented
-> +
-> +With commit d5e6ee0dac64 the usage of functions name_to_handle_at() and
-> +open_by_handle_at() are introduced. But these function are not available
-> +e.g. in uclibc-ng < 1.0.35. To have a backward compatibility check for the
-> +availability in the configure script and in case of absence do a direct
-> +syscall.
-> +
-> +Fixes: d5e6ee0dac64 ("ss: introduce cgroup2 cache and helper functions")
-> +Cc: Dmitry Yakunin <zeil@yandex-team.ru>
-> +Cc: Petr Vorel <petr.vorel@gmail.com>
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-> +Signed-off-by: David Ahern <dsahern@kernel.org>
-> +[ upstream-status: https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=c5b72cc56bf88160bbf477ec8565fed865e7a1c9 ]
-> +---
-> + configure | 28 ++++++++++++++++++++++++++++
-> + lib/fs.c  | 25 +++++++++++++++++++++++++
-> + 2 files changed, 53 insertions(+)
-> +
-> +diff --git a/configure b/configure
-> +index 2c363d3b..179eae08 100755
-> +--- a/configure
-> ++++ b/configure
-> +@@ -202,6 +202,31 @@ EOF
-> +     rm -f $TMPDIR/setnstest.c $TMPDIR/setnstest
-> + }
-> +
-> ++check_name_to_handle_at()
-> ++{
-> ++    cat >$TMPDIR/name_to_handle_at_test.c <<EOF
-> ++#define _GNU_SOURCE
-> ++#include <sys/types.h>
-> ++#include <sys/stat.h>
-> ++#include <fcntl.h>
-> ++int main(int argc, char **argv)
-> ++{
-> ++	struct file_handle *fhp;
-> ++	int mount_id, flags, dirfd;
-> ++	char *pathname;
-> ++	name_to_handle_at(dirfd, pathname, fhp, &mount_id, flags);
-> ++	return 0;
-> ++}
-> ++EOF
-> ++    if $CC -I$INCLUDE -o $TMPDIR/name_to_handle_at_test $TMPDIR/name_to_handle_at_test.c >/dev/null 2>&1; then
-> ++        echo "yes"
-> ++        echo "CFLAGS += -DHAVE_HANDLE_AT" >>$CONFIG
-> ++    else
-> ++        echo "no"
-> ++    fi
-> ++    rm -f $TMPDIR/name_to_handle_at_test.c $TMPDIR/name_to_handle_at_test
-> ++}
-> ++
-> + check_ipset()
-> + {
-> +     cat >$TMPDIR/ipsettest.c <<EOF
-> +@@ -492,6 +517,9 @@ fi
-> + echo -n "libc has setns: "
-> + check_setns
-> +
-> ++echo -n "libc has name_to_handle_at: "
-> ++check_name_to_handle_at
-> ++
-> + echo -n "SELinux support: "
-> + check_selinux
-> +
-> +diff --git a/lib/fs.c b/lib/fs.c
-> +index f161d888..05697a7e 100644
-> +--- a/lib/fs.c
-> ++++ b/lib/fs.c
-> +@@ -25,11 +25,36 @@
-> +
-> + #include "utils.h"
-> +
-> ++#ifndef HAVE_HANDLE_AT
-> ++# include <sys/syscall.h>
-> ++#endif
-> ++
-> + #define CGROUP2_FS_NAME "cgroup2"
-> +
-> + /* if not already mounted cgroup2 is mounted here for iproute2's use */
-> + #define MNT_CGRP2_PATH  "/var/run/cgroup2"
-> +
-> ++
-> ++#ifndef HAVE_HANDLE_AT
-> ++struct file_handle {
-> ++	unsigned handle_bytes;
-> ++	int handle_type;
-> ++	unsigned char f_handle[];
-> ++};
-> ++
-> ++static int name_to_handle_at(int dirfd, const char *pathname,
-> ++	struct file_handle *handle, int *mount_id, int flags)
-> ++{
-> ++	return syscall(__NR_name_to_handle_at, dirfd, pathname, handle,
-> ++	               mount_id, flags);
-> ++}
-> ++
-> ++static int open_by_handle_at(int mount_fd, struct file_handle *handle, int flags)
-> ++{
-> ++	return syscall(__NR_open_by_handle_at, mount_fd, handle, flags);
-> ++}
-> ++#endif
-> ++
-> + /* return mount path of first occurrence of given fstype */
-> + static char *find_fs_mount(const char *fs_to_find)
-> + {
-> +--
-> +2.31.1
-> +
-> diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-> index b2a9e21e11..a5d6bf022c 100644
-> --- a/package/iproute2/iproute2.hash
-> +++ b/package/iproute2/iproute2.hash
-> @@ -1,3 +1,3 @@
->  # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
-> -sha256  725dc7ba94aae54c6f8d4223ca055d9fb4fe89d6994b1c03bfb4411c4dd10f21  iproute2-5.7.0.tar.xz
-> +sha256  9d268db98a36ee2a0e3ff3b92b2efff66fc1138a51e409bdef6ab3cfe15f326f  iproute2-5.12.0.tar.xz
->  sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-> diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-> index 3460c5c3b3..6cc0dd5210 100644
-> --- a/package/iproute2/iproute2.mk
-> +++ b/package/iproute2/iproute2.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -IPROUTE2_VERSION = 5.7.0
-> +IPROUTE2_VERSION = 5.12.0
->  IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
->  IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
->  IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
+index 2a234af78c..9040e1267e 100644
+--- a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
++++ b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
+@@ -26,10 +26,10 @@ Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+  1 file changed, 2 insertions(+), 4 deletions(-)
+ 
+ diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index a04dd11..3a2115d 100644
++index 4b71bc5..0b515f4 100644
+ --- a/src/CMakeLists.txt
+ +++ b/src/CMakeLists.txt
+-@@ -12,17 +12,15 @@ SET(include_HEADERS
++@@ -12,18 +12,16 @@ SET(include_HEADERS
+  
+  include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
+  
+@@ -41,8 +41,9 @@ index a04dd11..3a2115d 100644
+ -SET_TARGET_PROPERTIES(ubootenv_static PROPERTIES OUTPUT_NAME ubootenv)
+  add_executable(fw_printenv fw_printenv.c)
+  add_executable(fw_setenv fw_setenv.c)
+- target_link_libraries(fw_printenv ubootenv z)
+- target_link_libraries(fw_setenv ubootenv z)
++ target_link_libraries(ubootenv z)
++ target_link_libraries(fw_printenv ubootenv)
++ target_link_libraries(fw_setenv ubootenv)
+  
+ -install (TARGETS ubootenv ubootenv_static DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ +install (TARGETS ubootenv DESTINATION ${CMAKE_INSTALL_LIBDIR})
+@@ -50,5 +51,5 @@ index a04dd11..3a2115d 100644
+  install (TARGETS fw_printenv DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install (TARGETS fw_setenv DESTINATION ${CMAKE_INSTALL_BINDIR})
+ -- 
+-2.25.1
++2.30.2
+ 
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index 0b5320b36f..d6de614612 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e25adf81dd2d4a083cb2cf032843a1ee2bb1fab54aa7a0202bd2295186bfe1b7  libubootenv-e663439e3d39a4cdbddb7e818245a99c485fa965.tar.gz
++sha256  662ef1efe058e2d5a07498f7b63aff7b2a521c0f6f199c499fb3ae84b54121bd  libubootenv-0.3.2.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index 7a98f5324b..295226b9aa 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBUBOOTENV_VERSION = e663439e3d39a4cdbddb7e818245a99c485fa965
+-LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
++LIBUBOOTENV_VERSION = 0.3.2
++LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
+ LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
+ LIBUBOOTENV_INSTALL_STAGING = YES
