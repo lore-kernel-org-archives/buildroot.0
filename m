@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 14:41:09 +0200
-Subject: [Buildroot] [PATCH v1 2/2] package/pipewire: fix uclibc compile
- (getrandom related)
-In-Reply-To: <20210512204251.28928-2-ps.report@gmx.net>
+Date: Tue, 18 May 2021 14:41:29 +0200
+Subject: [Buildroot] [PATCH v1 1/2] package/pipewire: bump version to
+ 0.3.27
+In-Reply-To: <20210512204251.28928-1-ps.report@gmx.net>
 References: <20210512204251.28928-1-ps.report@gmx.net>
- <20210512204251.28928-2-ps.report@gmx.net>
-Message-ID: <20210518124109.GH2506@scaer>
+Message-ID: <20210518124129.GI2506@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,111 +14,100 @@ To: buildroot@busybox.net
 Peter, All,
 
 On 2021-05-12 22:42 +0200, Peter Seiderer spake thusly:
-> The getrandom() detection from meson.build failes with the following error
-> message:
+> - remove 0001-meson-prefer-libintl-on-FreeBSD.patch
+>   (from upstream [1])
 > 
->   .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name 'size_t'
->      27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
->         |                                   ^~~~~~
->   .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
-> 
-> Fix it by adding stddef.h include to the meson getrandom() detection.
-> 
-> Fixes:
-> 
->   - http://autobuild.buildroot.net/results/7e131bec458bf5c263ee1858d38ed5dc3cf704a6
-> 
->   ../src/pipewire/impl-core.c:54:9: error: conflicting types for ?getrandom?
->      54 | ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
->         |         ^~~~~~~~~
->   In file included from ../src/pipewire/impl-core.c:34:
->   .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:12: note: previous declaration of ?getrandom? was here
->      27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
->         |            ^~~~~~~~~
+> [1] https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/4d064a37183a0bf8198914dd68b063b2c9def17e
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Notes:
->   - maybe this failure is more a uclibc defect (missing include in
->     sys/random.h) and should be fixed there?
-
-Maybe, indeed. Can you see with them if they need a fix in their
-headers?
-
-However, there are uClibc-ng versions out there that will lack this
-missing include, so we have to cater for them.
 
 Applied to next, thanks.
 
 Regards,
 Yann E. MORIN.
 
->   - fix for same/similare failure was suggested already here [1] (by
->     adding -D_GNU_SOURCE), and suggestd patch is accepted/merged upstream
->     and is already present in the 0.3.27 source code, but did not fix
->     the failure...
-> 
-> [1] https://patchwork.ozlabs.org/project/buildroot/patch/20210504211016.1216759-1-fontaine.fabrice at gmail.com/
 > ---
->  ...n-fix-getrandom-detection-for-uclibc.patch | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
+>  ...0001-meson-prefer-libintl-on-FreeBSD.patch | 46 -------------------
+>  package/pipewire/pipewire.hash                |  2 +-
+>  package/pipewire/pipewire.mk                  |  2 +-
+>  3 files changed, 2 insertions(+), 48 deletions(-)
+>  delete mode 100644 package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch
 > 
-> diff --git a/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch b/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
-> new file mode 100644
-> index 0000000000..e902869ce9
-> --- /dev/null
-> +++ b/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
-> @@ -0,0 +1,49 @@
-> +From a36bc959768e100d2d72e027746e3a9d95cf29af Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Wed, 12 May 2021 22:08:39 +0200
-> +Subject: [PATCH] meson: fix getrandom detection for uclibc
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +The getrandom() detection from meson.build failes with the following error
-> +message:
-> +
-> +  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name 'size_t'
-> +     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
-> +        |                                   ^~~~~~
-> +  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
-> +
-> +Fix it by adding stddef.h include to the meson getrandom() detection.
-> +
-> +Fixes:
-> +
-> +  ../src/pipewire/impl-core.c:54:9: error: conflicting types for ?getrandom?
-> +     54 | ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
-> +        |         ^~~~~~~~~
-> +  In file included from ../src/pipewire/impl-core.c:34:
-> +  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:12: note: previous declaration of ?getrandom? was here
-> +     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
-> +        |            ^~~~~~~~~
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + meson.build | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index 03a9d174..01b4c7c8 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -274,7 +274,7 @@ if cc.has_function('memfd_create', prefix : '#include <sys/mman.h>', args : [ '-
-> +   cdata.set('HAVE_MEMFD_CREATE', 1)
-> + endif
-> + 
-> +-if cc.has_function('getrandom', prefix : '#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
-> ++if cc.has_function('getrandom', prefix : '#include <stddef.h>\n#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
-> +   cdata.set('HAVE_GETRANDOM', 1)
-> + endif
-> + 
-> +-- 
-> +2.31.1
-> +
+> diff --git a/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch b/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch
+> deleted file mode 100644
+> index b19715b2e8..0000000000
+> --- a/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch
+> +++ /dev/null
+> @@ -1,46 +0,0 @@
+> -From 4d064a37183a0bf8198914dd68b063b2c9def17e Mon Sep 17 00:00:00 2001
+> -From: Evgeniy Khramtsov <evgeniy@khramtsov.org>
+> -Date: Fri, 23 Apr 2021 22:57:51 +0300
+> -Subject: [PATCH] meson: prefer libintl on FreeBSD
+> -
+> -FreeBSD does not have gettext in libc.
+> -It is implemented in the third-party library.
+> -
+> -[Retrieved from:
+> -https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/4d064a37183a0bf8198914dd68b063b2c9def17e]
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ----
+> - meson.build              | 3 +++
+> - src/pipewire/meson.build | 2 +-
+> - 2 files changed, 4 insertions(+), 1 deletion(-)
+> -
+> -diff --git a/meson.build b/meson.build
+> -index 99a4b2d1c..0a9963fbb 100644
+> ---- a/meson.build
+> -+++ b/meson.build
+> -@@ -351,6 +351,9 @@ libinotify_dep = (build_machine.system() == 'freebsd'
+> -     ? dependency('libinotify', required: true)
+> -     : dependency('', required: false))
+> - 
+> -+# On FreeBSD, libintl library is required for gettext
+> -+libintl_dep = cc.find_library('intl', required: false)
+> -+
+> - alsa_dep = dependency('alsa', version : '>=1.1.7', required: get_option('pipewire-alsa'))
+> - 
+> - installed_tests_metadir = pipewire_datadir / 'installed-tests' / pipewire_name
+> -diff --git a/src/pipewire/meson.build b/src/pipewire/meson.build
+> -index 7f2d42a7a..d4c271373 100644
+> ---- a/src/pipewire/meson.build
+> -+++ b/src/pipewire/meson.build
+> -@@ -101,7 +101,7 @@ libpipewire = shared_library(pipewire_name, pipewire_sources,
+> -   c_args : libpipewire_c_args,
+> -   include_directories : [pipewire_inc, configinc, spa_inc],
+> -   install : true,
+> --  dependencies : [dl_lib, mathlib, pthread_lib, ],
+> -+  dependencies : [dl_lib, mathlib, pthread_lib, libintl_dep, ],
+> - )
+> - 
+> - pipewire_dep = declare_dependency(link_with : libpipewire,
+> --- 
+> -GitLab
+> -
+> diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+> index 4d2548e3ab..7c26e2ab29 100644
+> --- a/package/pipewire/pipewire.hash
+> +++ b/package/pipewire/pipewire.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated
+> -sha256  05cc9d25de45290c025da5da1b94fc705bddacd93cf3690d0b2988c1ac501ee1  pipewire-0.3.26.tar.gz
+> +sha256  657db1b9a29ae17a9f1d9782a45bda2ba5a893fef55e1ca26453e8f7f2d4e64e  pipewire-0.3.27.tar.gz
+>  sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+>  sha256  7db6138b0385e260ae8f09f050ea66c4e4fe775a11060d7f6ca2beb47f192d6f  LICENSE
+> diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+> index e5185aeb8c..8abbfc35be 100644
+> --- a/package/pipewire/pipewire.mk
+> +++ b/package/pipewire/pipewire.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -PIPEWIRE_VERSION = 0.3.26
+> +PIPEWIRE_VERSION = 0.3.27
+>  PIPEWIRE_SITE = $(call github,PipeWire,pipewire,$(PIPEWIRE_VERSION))
+>  PIPEWIRE_LICENSE = MIT
+>  PIPEWIRE_LICENSE_FILES = COPYING LICENSE
 > -- 
 > 2.31.1
 > 
