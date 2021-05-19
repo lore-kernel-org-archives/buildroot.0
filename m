@@ -1,159 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 19 May 2021 20:34:42 +0200
-Subject: [Buildroot] [PATCH v1 2/2] package/pipewire: fix uclibc compile
- (getrandom related)
-In-Reply-To: <20210518124109.GH2506@scaer>
-References: <20210512204251.28928-1-ps.report@gmx.net>
- <20210512204251.28928-2-ps.report@gmx.net>
- <20210518124109.GH2506@scaer>
-Message-ID: <20210519203442.075393f3@gmx.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 19 May 2021 22:01:48 +0300
+Subject: [Buildroot] [PATCH next] package/libcurl: make sure openssl
+ supports DES
+Message-ID: <d358be700aa4dcfe0df4ba7f15832d4721f718ba.1621450908.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+DES support in openssl is optional since commit a83d41867c8d
+("package/libopenssl: add option to enable some features"). curl uses
+DES support in openssl when enabled. Select DES support to avoid build
+failure.
 
-On Tue, 18 May 2021 14:41:09 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Fixes:
+http://autobuild.buildroot.net/results/8931fd2b71eb2490cdc041b47eff58377ac823da/
+http://autobuild.buildroot.net/results/f159195adf05c375d7d314a270afd3a55d43ebdd/
+http://autobuild.buildroot.net/results/e143c75bccd7bcd4216954b76099404a38cf9bc1/
 
-> Peter, All,
-> 
-> On 2021-05-12 22:42 +0200, Peter Seiderer spake thusly:
-> > The getrandom() detection from meson.build failes with the following error
-> > message:
-> > 
-> >   .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name 'size_t'
-> >      27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
-> >         |                                   ^~~~~~
-> >   .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
-> > 
-> > Fix it by adding stddef.h include to the meson getrandom() detection.
-> > 
-> > Fixes:
-> > 
-> >   - http://autobuild.buildroot.net/results/7e131bec458bf5c263ee1858d38ed5dc3cf704a6
-> > 
-> >   ../src/pipewire/impl-core.c:54:9: error: conflicting types for ?getrandom?
-> >      54 | ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
-> >         |         ^~~~~~~~~
-> >   In file included from ../src/pipewire/impl-core.c:34:
-> >   .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:12: note: previous declaration of ?getrandom? was here
-> >      27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
-> >         |            ^~~~~~~~~
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Notes:
-> >   - maybe this failure is more a uclibc defect (missing include in
-> >     sys/random.h) and should be fixed there?  
-> 
-> Maybe, indeed. Can you see with them if they need a fix in their
-> headers?
+Cc: Erwan GAUTRON <erwan.gautron@bertin.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libcurl/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Seems already be fixed, see [1]...
-
-> 
-> However, there are uClibc-ng versions out there that will lack this
-> missing include, so we have to cater for them.
-
-uClibc-ng versions since v1.0.35 should be o.k.
-
-Funnily the tar package seems to stumble over the same/similar failure ([2]):
-
-  In file included from ./sys/random.h:40,
-                   from getrandom.c:22:
-  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name 'size_t'
-     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
-        |                                   ^~~~~~
-  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
-      7 | #include <features.h>
-    +++ |+#include <stddef.h>
-      8 | 
-
-Regards,
-Peter
-
-[1] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/libc/sysdeps/linux/common/sys/random.h?id=00972c02c2b6e0a95d5def4a71bdfb188e091782
-[2] http://autobuild.buildroot.net/results/fcec6a867804db15e688510608cb0b054899acdd
-
-> 
-> Applied to next, thanks.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> >   - fix for same/similare failure was suggested already here [1] (by
-> >     adding -D_GNU_SOURCE), and suggestd patch is accepted/merged upstream
-> >     and is already present in the 0.3.27 source code, but did not fix
-> >     the failure...
-> > 
-> > [1] https://patchwork.ozlabs.org/project/buildroot/patch/20210504211016.1216759-1-fontaine.fabrice at gmail.com/
-> > ---
-> >  ...n-fix-getrandom-detection-for-uclibc.patch | 49 +++++++++++++++++++
-> >  1 file changed, 49 insertions(+)
-> >  create mode 100644 package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
-> > 
-> > diff --git a/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch b/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
-> > new file mode 100644
-> > index 0000000000..e902869ce9
-> > --- /dev/null
-> > +++ b/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
-> > @@ -0,0 +1,49 @@
-> > +From a36bc959768e100d2d72e027746e3a9d95cf29af Mon Sep 17 00:00:00 2001
-> > +From: Peter Seiderer <ps.report@gmx.net>
-> > +Date: Wed, 12 May 2021 22:08:39 +0200
-> > +Subject: [PATCH] meson: fix getrandom detection for uclibc
-> > +MIME-Version: 1.0
-> > +Content-Type: text/plain; charset=UTF-8
-> > +Content-Transfer-Encoding: 8bit
-> > +
-> > +The getrandom() detection from meson.build failes with the following error
-> > +message:
-> > +
-> > +  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name 'size_t'
-> > +     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
-> > +        |                                   ^~~~~~
-> > +  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
-> > +
-> > +Fix it by adding stddef.h include to the meson getrandom() detection.
-> > +
-> > +Fixes:
-> > +
-> > +  ../src/pipewire/impl-core.c:54:9: error: conflicting types for ?getrandom?
-> > +     54 | ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
-> > +        |         ^~~~~~~~~
-> > +  In file included from ../src/pipewire/impl-core.c:34:
-> > +  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:12: note: previous declaration of ?getrandom? was here
-> > +     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
-> > +        |            ^~~~~~~~~
-> > +
-> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > +---
-> > + meson.build | 2 +-
-> > + 1 file changed, 1 insertion(+), 1 deletion(-)
-> > +
-> > +diff --git a/meson.build b/meson.build
-> > +index 03a9d174..01b4c7c8 100644
-> > +--- a/meson.build
-> > ++++ b/meson.build
-> > +@@ -274,7 +274,7 @@ if cc.has_function('memfd_create', prefix : '#include <sys/mman.h>', args : [ '-
-> > +   cdata.set('HAVE_MEMFD_CREATE', 1)
-> > + endif
-> > + 
-> > +-if cc.has_function('getrandom', prefix : '#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
-> > ++if cc.has_function('getrandom', prefix : '#include <stddef.h>\n#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
-> > +   cdata.set('HAVE_GETRANDOM', 1)
-> > + endif
-> > + 
-> > +-- 
-> > +2.31.1
-> > +
-> > -- 
-> > 2.31.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot  
-> 
+diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+index b89c46f5eff7..466f9ee3a1c7 100644
+--- a/package/libcurl/Config.in
++++ b/package/libcurl/Config.in
+@@ -51,6 +51,7 @@ choice
+ config BR2_PACKAGE_LIBCURL_OPENSSL
+ 	bool "OpenSSL"
+ 	depends on BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 
+ config BR2_PACKAGE_LIBCURL_BEARSSL
+ 	bool "BearSSL"
+-- 
+2.30.2
