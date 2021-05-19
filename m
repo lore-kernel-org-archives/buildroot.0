@@ -1,92 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 13:38:11 +0200
-Subject: [Buildroot] [PATCH] configs/bananapi_m2_zero: bump versions and
- add WiFi support
-In-Reply-To: <20210508201614.16041-1-vincent.stehle@laposte.net>
-References: <20210508201614.16041-1-vincent.stehle@laposte.net>
-Message-ID: <20210519113811.GT2268078@scaer>
+Date: Wed, 19 May 2021 14:00:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python3-six: add python3 variant
+In-Reply-To: <1621370634009.93154@lab126.com>
+References: <1620853148995.76548@lab126.com> <20210518150056.GQ2506@scaer>
+ <1621370634009.93154@lab126.com>
+Message-ID: <20210519120015.GU2268078@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vincent, All,
+Chan, All,
 
-On 2021-05-08 22:16 +0200, Vincent Stehl? via buildroot spake thusly:
-> - Bump kernel to version 5.12.2.
-> - Bump U-Boot to version 2021.04.
-> 
-> Also, adapt the SD card name in the boot script to follow Linux naming.
-> While at it, add comments to make the defconfig more readable.
-> 
-> The Banana Pi M2 Zero comprises an AMPAK AP6212 module with a Broadcom
-> bcm43438/a1 WiFi chip. Add the necessary firmware and tools to support it
-> and update documentation. We switch to mdev for /dev management, so that
-> the WiFi driver get auto-loaded.
-> 
-> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
-> ---
-[--SNIP--]
-> diff --git a/board/bananapi/bananapi-m2-zero/firmware-links.sh b/board/bananapi/bananapi-m2-zero/firmware-links.sh
-> new file mode 100755
-> index 0000000000..7f320fb1a5
-> --- /dev/null
-> +++ b/board/bananapi/bananapi-m2-zero/firmware-links.sh
-> @@ -0,0 +1,9 @@
-> +#!/bin/sh
-> +# Create the necessary WiFi firmware symbolic links for the brcmfmac driver
-> +set -eu
-> +
-> +cd "$1/lib/firmware"
-> +[ -d brcm ] || mkdir -v brcm
-> +cd brcm
-> +ln -svf ../ap6212/nvram.txt brcmfmac43430-sdio.sinovoip,bpi-m2-zero.txt
-> +ln -svf ../ap6212/fw_bcm43438a1_apsta.bin brcmfmac43430-sdio.bin
+On 2021-05-18 20:43 +0000, Chan, Donald spake thusly:
+> On 2021-05-12 20:59 +0000, Chan, Donald via buildroot spake thusly:
+> >> Signed-off-by: Donald Chan <hoiho@lab126.com>
+> >Why do you need a python3-specific version of six?
+> This was for the host side Python packages
 
-In linux-firmware, there is the WHENCE file which describes the links to
-install, and we parse that in linux-firmware.mk.
+Your patch was adding both the target and the host variants, though.
 
-Why can't we do similarly with armbian-firmware.mk?
+> - I see the same patterns
+> for other python packages like
+> - python3-requests/python3-requests.mk
+> - python3-mako/python3-mako.mk
 
-Yeah, it misses WHENCE or something similar, but we should do it
-nonethelessC, like so:
+Ah, but those were added because we have a need for them: in some
+situations, we need to have both the python2 and python3 modules for
+those installed at the same time.
 
-    diff --git a/package/armbian-firmware/armbian-firmware.mk b/package/armbian-firmware/armbian-firmware.mk
-    index 0ed069025d..51bc5b903d 100644
-    --- a/package/armbian-firmware/armbian-firmware.mk
-    +++ b/package/armbian-firmware/armbian-firmware.mk
-    @@ -11,6 +11,13 @@ ARMBIAN_FIRMWARE_SITE_METHOD = git
-     # AP6212 WiFi/BT combo firmware
-     ifeq ($(BR2_PACKAGE_ARMBIAN_FIRMWARE_AP6212),y)
-     ARMBIAN_FIRMWARE_DIRS += ap6212
-    +define ARMBIAN_FIRMWARE_AP6212_LINKS
-    +	ln -svf ../ap6212/nvram.txt \
-    +		$(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.sinovoip,bpi-m2-zero.txt
-    +	ln -svf ../ap6212/fw_bcm43438a1_apsta.bin \
-    +		$(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.bin
-    +endef
-    +ARMBIAN_FIRMWARE_POST_INSTALL_TARGET_HOOKS += ARMBIAN_FIRMWARE_AP6212_LINKS
-     endif
-     
-     # AP6256 WiFi/BT combo firmware
+For example:
+    $ git grep -E 'host-python3?-mako'
+    package/gnuradio/gnuradio.mk:# host-python-mako and host-python-six are needed for volk to compile
+    package/gnuradio/gnuradio.mk:	host-python-mako \
+    package/jailhouse/jailhouse.mk:	host-python-mako \
+    package/mesa3d/mesa3d.mk:	host-python3-mako \
+    package/piglit/piglit.mk:	host-python-mako \
+    package/sdbusplus/sdbusplus.mk:	host-python-mako \
+    package/uhd/uhd.mk:	host-python-mako
 
-Also, if one look at armbian-firmware, there is already a brcm/
-sub-directory, and that already has brcm/brcmfmac43430-sdio.bin. Of
-course, the two are different...
+So, as you can see, we have packages that need the python2 host mako,
+and others (one, really) that needs the python3 host mako. The situation
+is similar for the other python3-specific packages.
 
-Additionally, linux-firmware has brcm/brcmfmac43430a0-sdio.bin and
-brcm/brcmfmac43430-sdio.AP6212.txt, again with different content. The
-latter states "NVRAM config file for the Ampak AP6212 43430 WiFi/BT
-module".
+> Let me me know if this makes sense.
 
-So, this is quite a mess. Why do we have to use the armbian-fw ones,
-instead of those from linux-firmware? We are using an upstream kernel,
-and supposedly, drivers in there are supposed (as I understand it) to
-only require blobs from linux-firmware...
+Yeah, I see the reasoning, but we are only adding the python3-specific
+variant when there is an actual need for it.
 
-By the way, where does the weird 'brcmfmac43430-sdio.sinovoip,bpi-m2-zero.txt'
-name comes from? Is that a 'compatible' string from the DT?
+If you can provide such an example that a specific host-python3-six
+is needed, do not hesitate to resend your patch with such an explanation
+in your commit log.
+
+Thanks again for your contribution!
 
 Regards,
 Yann E. MORIN.
