@@ -1,113 +1,94 @@
 From: Matthew Weber <matthew.weber@collins.com>
-Date: Tue, 18 May 2021 21:46:37 -0500
-Subject: [Buildroot] [PATCH v2 2/3] support/scripts/pkg-stats: add
- is_actual_package() and rework has_valid_infra()
+Date: Tue, 18 May 2021 21:46:38 -0500
+Subject: [Buildroot] [PATCH v2 3/3] support/scripts/pkg-stats: clarify when
+ a CVE/CPE should report as N/A
 In-Reply-To: <20210519024638.63607-1-matthew.weber@collins.com>
 References: <20210519024638.63607-1-matthew.weber@collins.com>
-Message-ID: <20210519024638.63607-2-matthew.weber@collins.com>
+Message-ID: <20210519024638.63607-3-matthew.weber@collins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-has_valid_infra() is incorrectly named; it probably should be named
-is_actual_package(), and has_valid_infra() would be changed to
-actually represent having an actual infra.
-
-This resolves packages reporting as having no valid package infra and
-cleans up reporting cases of CPE and CVEs where there isn't a valid version
-or package definition outside Buildroot
+ - If a package doesn't have any versioning, ignore and state that
+ - If a package is virtual, CVE=ignore and CPE state virtual
+ - For any of these NA cases, don't provide search link and color box
+   green
 
 Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Matthew Weber <matthew.weber@collins.com>
 ---
 Changes v1 -> v2
- - None
+[Yann
+ - Update coloring of case when package is virtual, color boxes green
+   for N/A of CPE and CVEs
 ---
- support/scripts/pkg-stats | 22 +++++++++++++++-------
- 1 file changed, 15 insertions(+), 7 deletions(-)
+ support/scripts/pkg-stats | 24 +++++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 42c36f7f94..0c34388066 100755
+index 0c34388066..cc91d13167 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -131,7 +131,15 @@ class Package:
- 
-     @property
-     def has_valid_infra(self):
-+        if self.infras is None:
-+            return False
-+        return len(self.infras) > 0
-+
-+    @property
-+    def is_actual_package(self):
-         try:
-+            if not self.has_valid_infra:
-+                return False
-             if self.infras[0][1] == 'virtual':
-                 return False
-         except IndexError:
-@@ -159,7 +167,7 @@ class Package:
-         """
-         Fills in the .status['license'] and .status['license-files'] fields
-         """
--        if not self.has_valid_infra:
-+        if not self.is_actual_package:
-             self.status['license'] = ("na", "no valid package infra")
-             self.status['license-files'] = ("na", "no valid package infra")
-             return
-@@ -177,7 +185,7 @@ class Package:
-         """
-         Fills in the .status['hash'] field
-         """
--        if not self.has_valid_infra:
-+        if not self.is_actual_package:
-             self.status['hash'] = ("na", "no valid package infra")
-             self.status['hash-license'] = ("na", "no valid package infra")
-             return
-@@ -192,7 +200,7 @@ class Package:
-         """
-         Fills in the .patch_count, .patch_files and .status['patches'] fields
-         """
--        if not self.has_valid_infra:
-+        if not self.is_actual_package:
-             self.status['patches'] = ("na", "no valid package infra")
-             return
- 
-@@ -220,7 +228,7 @@ class Package:
-         Fills in the .cpeid field
+@@ -229,7 +229,10 @@ class Package:
          """
          var = self.pkgvar()
--        if not self.has_valid_infra:
-+        if not self.is_actual_package:
-             self.status['cpe'] = ("na", "no valid package infra")
+         if not self.is_actual_package:
+-            self.status['cpe'] = ("na", "no valid package infra")
++            self.status['cpe'] = ("na", "N/A - virtual pkg")
++            return
++        if not self.current_version:
++            self.status['cpe'] = ("na", "no version information available")
              return
  
-@@ -551,13 +559,13 @@ async def check_package_latest_version(packages):
-       package, as known by release-monitoring.org
-     """
- 
--    for pkg in [p for p in packages if not p.has_valid_infra]:
-+    for pkg in [p for p in packages if not p.is_actual_package]:
-         pkg.status['version'] = ("na", "no valid package infra")
- 
-     tasks = []
-     connector = aiohttp.TCPConnector(limit_per_host=5)
-     async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
--        packages = [p for p in packages if p.has_valid_infra]
-+        packages = [p for p in packages if p.is_actual_package]
-         for pkg in packages:
-             tasks.append(asyncio.ensure_future(check_package_latest_version_get(sess, pkg, len(packages))))
-         await asyncio.wait(tasks)
-@@ -578,7 +586,7 @@ def check_package_cves(nvd_path, packages):
- 
+         if var in self.all_cpeids:
+@@ -587,7 +590,7 @@ def check_package_cves(nvd_path, packages):
      cpe_product_pkgs = defaultdict(list)
      for pkg in packages:
--        if not pkg.has_valid_infra:
-+        if not pkg.is_actual_package:
-             pkg.status['cve'] = ("na", "no valid package infra")
+         if not pkg.is_actual_package:
+-            pkg.status['cve'] = ("na", "no valid package infra")
++            pkg.status['cve'] = ("na", "N/A")
              continue
          if not pkg.current_version:
+             pkg.status['cve'] = ("na", "no version information available")
+@@ -909,6 +912,8 @@ def dump_html_pkg(f, pkg):
+         td_class.append("cve-ok")
+     elif pkg.is_status_error("cve"):
+         td_class.append("cve-nok")
++    elif pkg.is_status_na("cve") and not pkg.is_actual_package:
++        td_class.append("cve-ok")
+     else:
+         td_class.append("cve-unknown")
+     f.write("  <td class=\"%s\">\n" % " ".join(td_class))
+@@ -936,18 +941,23 @@ def dump_html_pkg(f, pkg):
+         td_class.append("cpe-ok")
+     elif pkg.is_status_error("cpe"):
+         td_class.append("cpe-nok")
++    elif pkg.is_status_na("cpe") and not pkg.is_actual_package:
++        td_class.append("cpe-ok")
+     else:
+         td_class.append("cpe-unknown")
+     f.write("  <td class=\"%s\">\n" % " ".join(td_class))
+     if pkg.cpeid:
+         f.write("  <code>%s</code>\n" % pkg.cpeid)
+     if not pkg.is_status_ok("cpe"):
+-        if pkg.cpeid:
+-            f.write("  <br/>%s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
+-                    (pkg.status['cpe'][1], ":".join(pkg.cpeid.split(":")[0:5])))
++        if pkg.is_actual_package and pkg.current_version:
++            if pkg.cpeid:
++                f.write("  <br/>%s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
++                        (pkg.status['cpe'][1], ":".join(pkg.cpeid.split(":")[0:5])))
++            else:
++                f.write("  %s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
++                        (pkg.status['cpe'][1], pkg.name))
+         else:
+-            f.write("  %s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %
+-                    (pkg.status['cpe'][1], pkg.name))
++            f.write("  %s\n" % pkg.status['cpe'][1])
+ 
+     f.write("  </td>\n")
+ 
 -- 
 2.17.1
