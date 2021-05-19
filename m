@@ -1,35 +1,37 @@
-From: Weber, Matthew L                            Collins <Matthew.Weber@collins.com>
-Date: Wed, 19 May 2021 20:03:39 +0000
-Subject: [Buildroot] [External] [PATCH next] package/libcurl: make sure
- openssl supports DES
-In-Reply-To: <d358be700aa4dcfe0df4ba7f15832d4721f718ba.1621450908.git.baruch@tkos.co.il>
-References: <d358be700aa4dcfe0df4ba7f15832d4721f718ba.1621450908.git.baruch@tkos.co.il>
-Message-ID: <DM2P110MB01053E590F79AA98F110BB87F22B9@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 May 2021 22:04:41 +0200
+Subject: [Buildroot] [git commit] package/uclibc: add CPE variables
+Message-ID: <20210519193547.F088A87E25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,
+commit: https://git.buildroot.net/buildroot/commit/?id=81c93749ae4b09023e864b5980d4f0a543445764
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Baruch Siach <baruch@tkos.co.il>
-> Sent: Wednesday, May 19, 2021 2:01 PM
-> To: buildroot at busybox.net <buildroot@busybox.net>
-> Cc: Weber, Matthew L Collins <Matthew.Weber@collins.com>; Baruch Siach <baruch@tkos.co.il>; Erwan GAUTRON <erwan.gautron@bertin.fr>
-> Subject: [External] [PATCH next] package/libcurl: make sure openssl supports DES
-> ?
-> DES support in openssl is optional since commit a83d41867c8d
-> ("package/libopenssl: add option to enable some features"). curl uses
-> DES support in openssl when enabled. Select DES support to avoid build
-> failure.
->
-> Fixes:
-> https://urldefense.com/v3/__http://autobuild.buildroot.net/results/8931fd2b71eb2490cdc041b47eff58377ac823da/__;!!MvWE!UmmU9q2BBP6QgUqCoJpck8B7DmzN-ei9QwOYrMj6DeAe2jpT3oKVDmRmO5OH6awGw02G$
-> https://urldefense.com/v3/__http://autobuild.buildroot.net/results/f159195adf05c375d7d314a270afd3a55d43ebdd/__;!!MvWE!UmmU9q2BBP6QgUqCoJpck8B7DmzN-ei9QwOYrMj6DeAe2jpT3oKVDmRmO5OH6RjpJmrT$
-> https://urldefense.com/v3/__http://autobuild.buildroot.net/results/e143c75bccd7bcd4216954b76099404a38cf9bc1/__;!!MvWE!UmmU9q2BBP6QgUqCoJpck8B7DmzN-ei9QwOYrMj6DeAe2jpT3oKVDmRmO5OH6cOXd9jD$
->
-> Cc: Erwan GAUTRON <erwan.gautron@bertin.fr>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+cpe:2.3:a:uclibc-ng_project:uclibc-ng is a valid CPE identifier for this
+package:
 
-Reviewed-by: Matthew Weber <matthew.weber@collins.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Auclibc-ng_project%3Auclibc-ng
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/uclibc/uclibc.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 3d253d93bc..a7c96684d0 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -10,6 +10,8 @@ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
+ UCLIBC_LICENSE_FILES = COPYING.LIB
+ UCLIBC_INSTALL_STAGING = YES
++UCLIBC_CPE_ID_VENDOR = uclibc-ng_project
++UCLIBC_CPE_ID_PRODUCT = uclibc-ng
+ 
+ define UCLIBC_HELP_CMDS
+ 	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
