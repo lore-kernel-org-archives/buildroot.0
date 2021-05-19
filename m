@@ -1,91 +1,116 @@
 From: Weber, Matthew L                            Collins <Matthew.Weber@collins.com>
-Date: Wed, 19 May 2021 01:20:36 +0000
-Subject: [Buildroot] [External] Re: [PATCH 3/3]
- support/scripts/pkg-stats: clarify when a CVE/CPE should report as N/A
-In-Reply-To: <20210518201649.GY2506@scaer>
-References: <20210518182155.47055-1-matthew.weber@collins.com>
- <20210518182155.47055-3-matthew.weber@collins.com>
- <20210518201649.GY2506@scaer>
-Message-ID: <DM2P110MB0105F384EA212815C98490A8F22B9@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
+Date: Wed, 19 May 2021 01:33:27 +0000
+Subject: [Buildroot] [External] Re: [PATCH v11 4/9] package/libclc: bump
+ version to 11.1.0
+In-Reply-To: <dbf8d669-1d2e-4556-30f9-8a44e74942f8@mind.be>
+References: <20210311142932.44985-1-matthew.weber@rockwellcollins.com>
+ <20210311142932.44985-4-matthew.weber@rockwellcollins.com>
+ <CANQCQpYpXG2_1JQp=8VJHtfmAEqXRPfQid5qeeDVYkdVVpSSBQ@mail.gmail.com>
+ <CANQCQpZGpLkvWwPpNPKjsygS83GBuTv6dDr63ePi0X7W+znLhg@mail.gmail.com>
+ <dbf8d669-1d2e-4556-30f9-8a44e74942f8@mind.be>
+Message-ID: <DM2P110MB01053EE60CA2DE6AA3196502F22B9@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Arnout,
 
 > -----Original Message-----
-> From: Yann E. MORIN <yann.morin.1998@free.fr>
-> Sent: Tuesday, May 18, 2021 3:17 PM
-> To: Weber, Matthew L Collins <Matthew.Weber@collins.com>
-> Cc: buildroot at buildroot.org
-> Subject: [External] Re: [Buildroot] [PATCH 3/3] support/scripts/pkg-stats:
-> clarify when a CVE/CPE should report as N/A
+> From: Arnout Vandecappelle <arnout@mind.be>
+> Sent: Tuesday, May 18, 2021 4:04 PM
+> To: Weber, Matthew L Collins <Matthew.Weber@collins.com>; buildroot
+> <buildroot@buildroot.org>
+> Cc: Joseph Kogut <joseph.kogut@gmail.com>; Romain Naour
+> <romain.naour@gmail.com>; Samuel Martin <s.martin49@gmail.com>;
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com>; Valentin Korenblit
+> <valentinkorenblit@gmail.com>
+> Subject: [External] Re: [Buildroot] [PATCH v11 4/9] package/libclc: bump
+> version to 11.1.0
 > 
-> Matthew, All,
+>  Hi Matt,
 > 
-> On 2021-05-18 13:21 -0500, Matthew Weber via buildroot spake thusly:
-> >  - If a package doesn't have any versioning, ignore and state that
-> >  - If a package is virtual, CVE=ignore and CPE state virtual
-> >  - For any of these NA cases, don't provide search link
+>  I was going to apply this series to next...
+> 
+> On 11/03/2021 20:37, Matthew Weber via buildroot wrote:
+> [snip]
+> >>> -# C++ compiler is used to build a small tool (prepare-builtins) for the
+> host.
+> >>> -# It must be built with the C++ compiler from the host.
+> >>> +# CMAKE_*_COMPILER_FORCED=ON skips testing the tools and
+> assumes #
+> >>> +llvm-config provided values
+> >>>  #
+> >>> -# The headers are installed in /usr/share and not /usr/include, -#
+> >>> because they are needed at runtime on the target to build the OpenCL
+> >>> -# kernels.
+> >>> +# CMAKE_CXX_COMPILER has to be set to the host compiler to build a
+> >>> +host # 'prepare_builtins' tool used during the build process
+> >>>  LIBCLC_CONF_OPTS = \
+> >>> -       --with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \
+> >>> -       --prefix=/usr \
+> >>> -       --includedir=/usr/share \
+> >>> -       --pkgconfigdir=/usr/lib/pkgconfig \
+> >>> -       --with-cxx-compiler=$(HOSTCXX_NOCCACHE)
+> >>> +       -DCMAKE_CLC_COMPILER_FORCED=ON \
+> >>> +       -DCMAKE_LLAsm_COMPILER_FORCED=ON \
+> >>> +       -DCMAKE_CXX_COMPILER="$(CMAKE_HOST_CXX_COMPILER)"
 > >
-> > Signed-off-by: Matthew Weber <matthew.weber@collins.com>
+> > Looks like I have a couple of bugs (I didn't have opencl checked in
+> > menuconfig)
 > 
-> Honestly, I get quickly lost in the coe of pkg-stats...
-> 
-> However, with this series applied, the cells for CVE and CPE for virtual
-> packages are not green, suggesting this is abnormal. However, this is
-> perfectly fine there are no CVE and no CPE for virtual packages, so they
-> should be green.
-> 
-> I managed to do that by adding the following on-top of this third patch:
-> 
->     diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
->     index 3aaf1169cb..d06778ab05 100755
->     --- a/support/scripts/pkg-stats
->     +++ b/support/scripts/pkg-stats
->     @@ -910,6 +910,8 @@ def dump_html_pkg(f, pkg):
->          td_class = ["centered"]
->          if pkg.is_status_ok("cve"):
->              td_class.append("cve-ok")
->     +    elif pkg.is_status_na("cve") and not pkg.is_actual_package:
->     +        td_class.append("cve-ok")
->          elif pkg.is_status_error("cve"):
->              td_class.append("cve-nok")
->          else:
->     @@ -937,6 +939,8 @@ def dump_html_pkg(f, pkg):
->          td_class = ["left"]
->          if pkg.is_status_ok("cpe"):
->              td_class.append("cpe-ok")
->     +    elif pkg.is_status_na("cpe") and not pkg.is_actual_package:
->     +        td_class.append("cpe-ok")
->          elif pkg.is_status_error("cpe"):
->              td_class.append("cpe-nok")
->          else:
-> 
-> But I am not usre this is the best solution... So, I've not applied patches 2 and
-> 3 in the series. Could you please respin with the above (if it's OK for you, or
-> with a better solution), please?
+> ... but then I saw this. So I didn't. Instead, I've marked the series as Changes
+> Requested. If you think it should be applied after all, please repost (or just
+> update patchwork if unchanged).
 
-I'll take a look (I noticed this and didn't have a good feeling if they should be green).
+Thx, this is definitely still broken.  I'll update the version as well when I take another look.
+
+-Matt
 
 > 
-> Additionally, as a further refinement, packages that have no version, like
-> urandom-scripts, makedevs, etc... are usually bundled with Buildroot. Do you
-> think for those we should:
+>  Oh, and 12.0.0 has been released now...
 > 
->  1. declare 'buildroot' to NVD, as the 'buildroot_project' vendor and
->     the 'buildroot' product, as well as 'makedevs', 'urandom-scripts' et
->     al. as products,
+> >
+> > 1) mesa3d.mk needs MESA3D_MESON_EXTRA_BINARIES +=
+> > llvm-config='$(STAGING_DIR)/bin/llvm-config' updated to point to the
 > 
->  2. add "MAKEDEVS_CPE_VENDOR = buildroot_project" to each of those
->     bundled packages.
+>  Normally, the foo-config programs are script, so it's OK to use the one in
+> staging. If it's an actual binary, we have to somehow patch it so it has target
+> config but compiles for host.
 > 
-
-I'd go with (2) where we use 'buildroot_project' as the vendor, and then each of those packages that have no version would use the Buildroot version and their name as the product.  I don't see any reason NIST won't support us adding those dictionary entries, and I know other distros do similar for things like ifupdown scripts, etc.
-
-I can work on a series like this but would like to get the pending one merged before we open this topic up ?
-
-Regards,
-Matt
+>  I'd expect llvm and related to be cross-compile friendly though...
+> 
+> > HOST_DIR llvm-config because it needs to be able to execute the tool.
+> > However this doesn't work since then you get the
+> > "host/lib/libLLVM-11.so when searching for -lLLVM-11 " error which
+> > makes sense since that's the host llvm-config we pointed at.....
+> > Unsure how to solve this one and we don't notice it in x86 builds.
+> > When you enable the AMD Radeon to build for aarch64 you can cause this
+> > error.
+> >
+> > 2) mesa3d doesn't quite build (pkgconfig can't find libclc).  I didn't
+> > catch that CMAKE_INSTALL_PREFIX is getting ignored (we set it in the
+> > pkg-cmake.mk infra) so the libclc.pc is getting installed in
+> > $HOST_DIR/usr/local/share vs $HOST_DIR/usr/share .  I haven't been
+> > able to figure out why the value doesn't take hold (ie after the
+> > configuration step libclc-11.1.0/CMakeCache.txt still shows /usr/local
+> > unless I force set the CMAKE_INSTALL_PREFIX value in
+> > libclc-11.1.0/CMakeList.txt before project().
+> 
+>  That *is* weird...
+> 
+>  Regards,
+>  Arnout
+> 
+> >
+> >
+> > Matt
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > https://urldefense.com/v3/__http://lists.busybox.net/mailman/listinfo/
+> > buildroot__;!!MvWE!SQZRb-
+> v4QExXQlkcTN3XlQyQjWlvHZdLk91QeKU2DXoT1xjmvjZ
+> > TjEB3aW0gMBkR77hW$
+> >
