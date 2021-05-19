@@ -1,55 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 May 2021 15:56:51 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/mesa3d{,
- -headers}: add CPE variables
-Message-ID: <20210519132812.2EA627F945@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 May 2021 16:17:24 +0200
+Subject: [Buildroot] [External] Re: [PATCH 1/1] package/libopenssl: add
+ option to enable some features
+In-Reply-To: <DM2P110MB01051BDEDB77556563850C07F22B9@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
+References: <20200511132133.738039-1-erwan.gautron@bertin.fr>
+ <20210516170955.GP2506@scaer>
+ <DM2P110MB01051BDEDB77556563850C07F22B9@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
+Message-ID: <20210519141724.GX2268078@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e2008668d04f8e1e641a21a7b5d8e479386532f7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+Matthew, All,
 
-cpe:2.3:a:mesa3d:mesa is a valid CPE identifier for this package:
+On 2021-05-19 13:31 +0000, Weber, Matthew L Collins via buildroot spake thusly:
+> On 2020-05-11 15:21 +0200, Erwan GAUTRON spake thusly:
+> > From: "GAUTRON, Erwan" <erwan.gautron@bertin.fr>
+> > 
+> > Openssl implements lot of algorithms that are not required in
+> > some emdedded devices and cyphers known as weak.
+> > Secure embedded systems shall disable unused algorithms (and weak algo)
+> > in order to be certified.
+> > This patch allows to select weak algorithms and mecanims to enable
+> > such as md5
+> > To ensure backward compatibility, all items are selected by default
+> > 
+> > Signed-off-by: Erwan GAUTRON <erwan.gautron@bertin.fr>
+> I noticed a build failure related to no-md5.  Were there cases where some of these weren't defined?
+> http://autobuild.buildroot.net/results/9d79c9f313ff989449e9b47c1ff0afd3a167fd2d/
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amesa3d%3Amesa
+As per CHANGES in the openssl tree:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998 at free.fr: add to mesa3d-headers too]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7fa481437e71484aa7064398e69aa63cdabb86b2)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mesa3d-headers/mesa3d-headers.mk | 3 +++
- package/mesa3d/mesa3d.mk                 | 2 ++
- 2 files changed, 5 insertions(+)
+    Changes between 1.0.2h and 1.1.0  [25 Aug 2016]
+    [--SNIP--]
+      *) Remove the no-aes, no-hmac, no-rsa, no-sha and no-md5 Configure options.
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 5deea5f977..6389b2501b 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -18,6 +18,9 @@ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
- MESA3D_HEADERS_LICENSE_FILES = docs/license.rst
-+MESA3D_HEADERS_CPE_ID_VENDOR = mesa3d
-+MESA3D_HEADERS_CPE_ID_PRODUCT = mesa
-+
- 
- # Only installs header files
- MESA3D_HEADERS_INSTALL_STAGING = YES
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index c9a7214aaa..36ea72f887 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -10,6 +10,8 @@ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
- MESA3D_LICENSE_FILES = docs/license.rst
-+MESA3D_CPE_ID_VENDOR = mesa3d
-+MESA3D_CPE_ID_PRODUCT = mesa
- 
- MESA3D_INSTALL_STAGING = YES
- 
+So, this can't have really worked with a recent openssl, in fact...
+
+Care to send a fixup patch dropping the md5 option, please?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
