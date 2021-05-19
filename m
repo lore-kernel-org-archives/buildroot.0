@@ -1,38 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 May 2021 21:51:07 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/weston: add
- WESTON_CPE_ID_VENDOR
-Message-ID: <20210519192210.471AA88769@busybox.osuosl.org>
+Date: Wed, 19 May 2021 21:51:06 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libsamplerate:
+ add LIBSAMPLERATE_CPE_ID_VENDOR
+Message-ID: <20210519192210.23BC288769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd71a0ffd89312d82bbfe8f3a659568aa8044472
+commit: https://git.buildroot.net/buildroot/commit/?id=79cc4df058200e932d550f56b262327ca5c56402
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:wayland:weston is a valid CPE identifier for this package:
+cpe:2.3:a:libsamplerate_project:libsamplerate is a valid CPE identifier
+for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awayland%3Aweston
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibsamplerate_project%3Alibsamplerate
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit bbfc6f546e36a2404786055ffbce41d2cdfc393a)
+(cherry picked from commit 7a899d67e8531522bff056bc23274311daf18828)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/weston/weston.mk | 1 +
+ package/libsamplerate/libsamplerate.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index f59963bf2e..8afe4bbab4 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -9,6 +9,7 @@ WESTON_SITE = https://wayland.freedesktop.org/releases
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
-+WESTON_CPE_ID_VENDOR = wayland
+diff --git a/package/libsamplerate/libsamplerate.mk b/package/libsamplerate/libsamplerate.mk
+index c107650cb4..146d57d15e 100644
+--- a/package/libsamplerate/libsamplerate.mk
++++ b/package/libsamplerate/libsamplerate.mk
+@@ -11,6 +11,7 @@ LIBSAMPLERATE_DEPENDENCIES = host-pkgconf
+ LIBSAMPLERATE_CONF_OPTS = --disable-fftw --program-transform-name=''
+ LIBSAMPLERATE_LICENSE = BSD-2-Clause
+ LIBSAMPLERATE_LICENSE_FILES = COPYING
++LIBSAMPLERATE_CPE_ID_VENDOR = libsamplerate_project
  
- WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
- 	libxkbcommon pixman libpng jpeg udev cairo libinput libdrm
+ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ LIBSAMPLERATE_DEPENDENCIES += alsa-lib
