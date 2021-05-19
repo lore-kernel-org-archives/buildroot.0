@@ -1,112 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 10:46:28 +0200
-Subject: [Buildroot] [PATCH v2] support/dependencies,
- scripts: accept patches with renames
-In-Reply-To: <20210519083405.326909-1-pojiro.jp@gmail.com>
-References: <20210519083405.326909-1-pojiro.jp@gmail.com>
-Message-ID: <20210519084628.GK2268078@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 May 2021 09:33:32 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ package/jquery-validation: add CPE variables
+Message-ID: <20210519083235.7D6B288084@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryota, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=76cfcb6fe5b45663339d39f387ae3b57aa1a2fe8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-On 2021-05-19 17:34 +0900, pojiro.jp at gmail.com spake thusly:
-> From: Ryota Kinukawa <pojiro.jp@gmail.com>
-> 
-> Currently, patches with renames are refused, as they reqire patch >= 2.7.
-> So far, we did not require that version because it was too recent to be widely available.
-> 
-> But patch 2.7 has been released in 2012, almost 9 years ago now;
-> it is old enough that we can start relying on it.
-> 
-> Add a check that patch is 2.7 or newer, and drop the check about
-> renames in apply-patches.sh.
-> 
-> Signed-off-by: Ryota Kinukawa <pojiro.jp@gmail.com>
+cpe:2.3:a:jqueryvalidation:jquery_validation is a valid CPE identifier
+for this package:
 
-Thanks for the respin! However, there must have been a misunderstanding
-:I already applied your previous patch with the few tweaks I pointed
-out. See the git tree:
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ajqueryvalidation%3Ajquery_validation
 
-    https://git.buildroot.org/buildroot/commit/?h=next&id=f46e13f05fa04a180a416876cf1dd4252dd841ad
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit a5ff2a28285e8d003466d5f00be058130a02bbf2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jquery-validation/jquery-validation.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks again for following up on this! :-)
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  support/dependencies/dependencies.sh | 16 ++++++++++++----
->  support/scripts/apply-patches.sh     |  5 -----
->  2 files changed, 12 insertions(+), 9 deletions(-)
-> 
-> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-> index 1954f038be..91e7cd60f9 100755
-> --- a/support/dependencies/dependencies.sh
-> +++ b/support/dependencies/dependencies.sh
-> @@ -163,7 +163,7 @@ fi
->  
->  # Check that a few mandatory programs are installed
->  missing_progs="no"
-> -for prog in patch perl tar wget cpio unzip rsync bc ${DL_TOOLS} ; do
-> +for prog in perl tar wget cpio unzip rsync bc ${DL_TOOLS} ; do
->  	if ! which $prog > /dev/null ; then
->  		echo "You must install '$prog' on your build machine";
->  		missing_progs="yes"
-> @@ -183,11 +183,19 @@ if test "${missing_progs}" = "yes" ; then
->  	exit 1
->  fi
->  
-> -# apply-patches.sh needs patch with --no-backup-if-mismatch support (GNU, busybox w/DESKTOP)
-> -if ! patch --no-backup-if-mismatch </dev/null 2>/dev/null; then
-> -	echo "Your patch program does not support the --no-backup-if-mismatch option. Install GNU patch"
-> +PATCH_VERSION="$(patch -v 2> /dev/null | sed -n 's/^GNU patch \(.*\)/\1/p')"
-> +if [ -z "${PATCH_VERSION}" ] ; then
-> +	echo
-> +	echo "You must install GNU patch"
->  	exit 1
->  fi
-> +PATCH_MAJOR="$(echo "${PATCH_VERSION}" | cut -d . -f 1)"
-> +PATCH_MINOR="$(echo "${PATCH_VERSION}" | cut -d . -f 2)"
-> +if [ "${PATCH_MAJOR}" -lt 2 ] || [ "${PATCH_MAJOR}" -eq 2 -a "${PATCH_MINOR}" -lt 7 ] ; then
-> +	echo
-> +	echo "You have GNU patch "${PATCH_VERSION}" installed. GNU patch >=2.7 is required"
-> +	exit 1;
-> +fi
->  
->  if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
->  	if ! which locale > /dev/null ; then
-> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-> index 9fb488c570..e5a2fdd09e 100755
-> --- a/support/scripts/apply-patches.sh
-> +++ b/support/scripts/apply-patches.sh
-> @@ -113,11 +113,6 @@ function apply_patch {
->          echo "  to be applied  : ${path}/${patch}"
->          exit 1
->      fi
-> -    if ${uncomp} "${path}/$patch" | grep -q "^rename from" && \
-> -       ${uncomp} "${path}/$patch" | grep -q "^rename to" ; then
-> -        echo "Error: patch contains some renames, not supported by old patch versions"
-> -        exit 1
-> -    fi
->      echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
->      ${uncomp} "${path}/$patch" | patch -g0 -p1 -E --no-backup-if-mismatch -d "${builddir}" -t -N $silent
->      if [ $? != 0 ] ; then
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
+index a8c2897983..43e57a9fc9 100644
+--- a/package/jquery-validation/jquery-validation.mk
++++ b/package/jquery-validation/jquery-validation.mk
+@@ -9,6 +9,8 @@ JQUERY_VALIDATION_SITE = http://jqueryvalidation.org/files
+ JQUERY_VALIDATION_SOURCE = jquery-validation-$(JQUERY_VALIDATION_VERSION).zip
+ JQUERY_VALIDATION_LICENSE = MIT
+ JQUERY_VALIDATION_LICENSE_FILES = README.md
++JQUERY_VALIDATION_CPE_ID_VENDOR = jqueryvalidation
++JQUERY_VALIDATION_CPE_ID_PRODUCT = jquery_validation
+ 
+ define JQUERY_VALIDATION_EXTRACT_CMDS
+ 	$(UNZIP) -d $(@D) $(JQUERY_VALIDATION_DL_DIR)/$(JQUERY_VALIDATION_SOURCE)
