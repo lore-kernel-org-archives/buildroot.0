@@ -1,71 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 11:44:10 +0200
-Subject: [Buildroot] [PATCH] package/python-falcon: Bump to version 3.0.1
-In-Reply-To: <20210518151413.4546-1-grzegorz@blach.pl>
-References: <20210518151413.4546-1-grzegorz@blach.pl>
-Message-ID: <20210519094410.GN2268078@scaer>
+Date: Wed, 19 May 2021 11:54:14 +0200
+Subject: [Buildroot] [git commit branch/next] package/webkitgtk: bump to
+ version 2.32.1
+Message-ID: <20210519092527.BC19482B2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Grzegorz, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=deac34e1d3e40fb1533ca1b674b39f09358af69b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-05-18 17:14 +0200, Grzegorz Blach spake thusly:
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Update to a new major release which bring in improvements and a few new
+features. Release notes:
 
-The log mentions only bug fixes, and the diff indeed really looks like
-only those two fixes, so I applied to master, thanks.
+  https://webkitgtk.org/2021/03/26/webkitgtk2.32.0-released.html
+  https://webkitgtk.org/2021/05/10/webkitgtk2.32.1-released.html
 
-Regards,
-Yann E. MORIN.
+None of the new features in WebKitGTK 2.32.x need additional
+dependencies.
 
-> ---
->  package/python-falcon/python-falcon.hash | 4 ++--
->  package/python-falcon/python-falcon.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
-> index 80b2aed54f..979419c25a 100644
-> --- a/package/python-falcon/python-falcon.hash
-> +++ b/package/python-falcon/python-falcon.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/falcon/json
-> -md5  0ebd5316cd7f59b9be4ea13650ea3a0d  falcon-3.0.0.tar.gz
-> -sha256  8d7c3d52ae4590ddfa0b3d9c75d44ab573340a5e78d72ee687712e757ac53929  falcon-3.0.0.tar.gz
-> +md5  4a70cfeeacb453f5fd7eb791bdd3ac01  falcon-3.0.1.tar.gz
-> +sha256  c41d84db325881a870e8b7129d5ecfd972fa4323cf77b7119a1d2a21966ee681  falcon-3.0.1.tar.gz
->  # Locally computed sha256 checksums
->  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-> diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
-> index 5b73b23277..1f400f9a1f 100644
-> --- a/package/python-falcon/python-falcon.mk
-> +++ b/package/python-falcon/python-falcon.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -PYTHON_FALCON_VERSION = 3.0.0
-> +PYTHON_FALCON_VERSION = 3.0.1
->  PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
-> -PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/f1/59/2748d63922a46e040be06cd175a6242a33ade7839aac37f441544bb6d651
-> +PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/63/22/6a9009c53ad78e65d88a44db8eccc7f39c6f54fc05fb43b1e9cbbc481d06
->  PYTHON_FALCON_SETUP_TYPE = setuptools
->  PYTHON_FALCON_LICENSE = Apache-2.0
->  PYTHON_FALCON_LICENSE_FILES = LICENSE
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index d85a7f46f2..d8bfa60fb8 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.30.6.tar.xz.sums
+-md5  11148c4ed400c58fe330ac94208cbc4d  webkitgtk-2.30.6.tar.xz
+-sha1  aaaf9b0f1780f3eae104ae0d3ad15b3e19cf6e8d  webkitgtk-2.30.6.tar.xz
+-sha256  50736ec7a91770b5939d715196e5fe7209b93efcdeef425b24dc51fb8e9d7c1e  webkitgtk-2.30.6.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.32.1.tar.xz.sums
++md5  b12790ae1209e1d5848aeb4fb70994db  webkitgtk-2.32.1.tar.xz
++sha1  c8c507d3c98c891ea5bfcfb6407320959dc77a2b  webkitgtk-2.32.1.tar.xz
++sha256  136117317f70f66486f71b8edf5e46f8776403c5d8a296e914b11a36ef836917  webkitgtk-2.32.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 1720ffc7d6..42132ca5fc 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.30.6
++WEBKITGTK_VERSION = 2.32.1
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
