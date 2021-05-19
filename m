@@ -1,41 +1,111 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 19 May 2021 22:01:48 +0300
-Subject: [Buildroot] [PATCH next] package/libcurl: make sure openssl
- supports DES
-Message-ID: <d358be700aa4dcfe0df4ba7f15832d4721f718ba.1621450908.git.baruch@tkos.co.il>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 19 May 2021 21:19:37 +0200
+Subject: [Buildroot] [PATCH] configs/bananapi_m2_zero: bump versions and
+ add WiFi support
+In-Reply-To: <20210519113811.GT2268078@scaer>
+References: <20210508201614.16041-1-vincent.stehle@laposte.net>
+ <20210519113811.GT2268078@scaer>
+Message-ID: <20210519211937.4c57db2e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-DES support in openssl is optional since commit a83d41867c8d
-("package/libopenssl: add option to enable some features"). curl uses
-DES support in openssl when enabled. Select DES support to avoid build
-failure.
+Hello Yann,
 
-Fixes:
-http://autobuild.buildroot.net/results/8931fd2b71eb2490cdc041b47eff58377ac823da/
-http://autobuild.buildroot.net/results/f159195adf05c375d7d314a270afd3a55d43ebdd/
-http://autobuild.buildroot.net/results/e143c75bccd7bcd4216954b76099404a38cf9bc1/
+On Wed, 19 May 2021 13:38:11 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Cc: Erwan GAUTRON <erwan.gautron@bertin.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libcurl/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+> Vincent, All,
+> 
+> On 2021-05-08 22:16 +0200, Vincent Stehl? via buildroot spake thusly:
+> > - Bump kernel to version 5.12.2.
+> > - Bump U-Boot to version 2021.04.
+> > 
+> > Also, adapt the SD card name in the boot script to follow Linux naming.
+> > While at it, add comments to make the defconfig more readable.
+> > 
+> > The Banana Pi M2 Zero comprises an AMPAK AP6212 module with a Broadcom
+> > bcm43438/a1 WiFi chip. Add the necessary firmware and tools to support it
+> > and update documentation. We switch to mdev for /dev management, so that
+> > the WiFi driver get auto-loaded.
+> > 
+> > Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+> > ---  
+> [--SNIP--]
+> > diff --git a/board/bananapi/bananapi-m2-zero/firmware-links.sh b/board/bananapi/bananapi-m2-zero/firmware-links.sh
+> > new file mode 100755
+> > index 0000000000..7f320fb1a5
+> > --- /dev/null
+> > +++ b/board/bananapi/bananapi-m2-zero/firmware-links.sh
+> > @@ -0,0 +1,9 @@
+> > +#!/bin/sh
+> > +# Create the necessary WiFi firmware symbolic links for the brcmfmac driver
+> > +set -eu
+> > +
+> > +cd "$1/lib/firmware"
+> > +[ -d brcm ] || mkdir -v brcm
+> > +cd brcm
+> > +ln -svf ../ap6212/nvram.txt brcmfmac43430-sdio.sinovoip,bpi-m2-zero.txt
+> > +ln -svf ../ap6212/fw_bcm43438a1_apsta.bin brcmfmac43430-sdio.bin  
+> 
+> In linux-firmware, there is the WHENCE file which describes the links to
+> install, and we parse that in linux-firmware.mk.
+> 
+> Why can't we do similarly with armbian-firmware.mk?
+> 
+> Yeah, it misses WHENCE or something similar, but we should do it
+> nonethelessC, like so:
+> 
+>     diff --git a/package/armbian-firmware/armbian-firmware.mk b/package/armbian-firmware/armbian-firmware.mk
+>     index 0ed069025d..51bc5b903d 100644
+>     --- a/package/armbian-firmware/armbian-firmware.mk
+>     +++ b/package/armbian-firmware/armbian-firmware.mk
+>     @@ -11,6 +11,13 @@ ARMBIAN_FIRMWARE_SITE_METHOD = git
+>      # AP6212 WiFi/BT combo firmware
+>      ifeq ($(BR2_PACKAGE_ARMBIAN_FIRMWARE_AP6212),y)
+>      ARMBIAN_FIRMWARE_DIRS += ap6212
+>     +define ARMBIAN_FIRMWARE_AP6212_LINKS
+>     +	ln -svf ../ap6212/nvram.txt \
+>     +		$(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.sinovoip,bpi-m2-zero.txt
+>     +	ln -svf ../ap6212/fw_bcm43438a1_apsta.bin \
+>     +		$(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.bin
+>     +endef
+>     +ARMBIAN_FIRMWARE_POST_INSTALL_TARGET_HOOKS += ARMBIAN_FIRMWARE_AP6212_LINKS
+>      endif
+>      
+>      # AP6256 WiFi/BT combo firmware
+> 
+> Also, if one look at armbian-firmware, there is already a brcm/
+> sub-directory, and that already has brcm/brcmfmac43430-sdio.bin. Of
+> course, the two are different...
+> 
+> Additionally, linux-firmware has brcm/brcmfmac43430a0-sdio.bin and
+> brcm/brcmfmac43430-sdio.AP6212.txt, again with different content. The
+> latter states "NVRAM config file for the Ampak AP6212 43430 WiFi/BT
+> module".
+> 
+> So, this is quite a mess. Why do we have to use the armbian-fw ones,
+> instead of those from linux-firmware? We are using an upstream kernel,
+> and supposedly, drivers in there are supposed (as I understand it) to
+> only require blobs from linux-firmware...
+> 
+> By the way, where does the weird 'brcmfmac43430-sdio.sinovoip,bpi-m2-zero.txt'
+> name comes from? Is that a 'compatible' string from the DT?
 
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index b89c46f5eff7..466f9ee3a1c7 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -51,6 +51,7 @@ choice
- config BR2_PACKAGE_LIBCURL_OPENSSL
- 	bool "OpenSSL"
- 	depends on BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 
- config BR2_PACKAGE_LIBCURL_BEARSSL
- 	bool "BearSSL"
--- 
-2.30.2
+It is the naming schema for (wifi) firmware configuration files:
+
+brcmfmac43430-sdio.<vendor>,<board>.txt
+
+See e.g. [1] for raspberry pi examples..., I think the board name comes from
+the dtb entries...
+
+Regards,
+peter
+
+[1] http://lists.busybox.net/pipermail/buildroot/2021-March/306920.html
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
