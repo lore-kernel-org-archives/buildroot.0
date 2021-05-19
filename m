@@ -1,61 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 22:49:35 +0200
-Subject: [Buildroot] [PATCHv2] package/libopenssl: md5 is not optional
-Message-ID: <20210519204935.2712775-1-yann.morin.1998@free.fr>
+Date: Wed, 19 May 2021 22:56:59 +0200
+Subject: [Buildroot] [git commit] package/flatcc: disable -Werror
+Message-ID: <20210519202901.5BA5F82790@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit a83d41867c8d (package/libopenssl: add option to enable some
-features) made md5 an optional feature.
+commit: https://git.buildroot.net/buildroot/commit/?id=1beb9784927d1a5402bcb16d618278d82c039459
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-However, md5 has not been optional since 1.1.0, released in 2016.
+Disable -Werror to fix the following build failure with gcc 11:
 
-Drop that option.
+/data/buildroot-autobuilder/instance-0/output-1/build/host-flatcc-0.6.0/include/flatcc/reflection/flatbuffers_common_builder.h: In function 'flatbuffers_char_array_copy_from_pe':
+/data/buildroot-autobuilder/instance-0/output-1/build/host-flatcc-0.6.0/include/flatcc/reflection/flatbuffers_common_builder.h:341:3: error: this 'for' clause does not guard... [-Werror=misleading-indentation]
+  341 |   for (i = 0; i < n; ++i) N ## _copy_from_pe(&p[i], &p2[i]); return p; }\
+      |   ^~~
+
+An other option would have been to retrieve the following upstream
+commit:
+https://github.com/dvidelabs/flatcc/commit/f8c4140dd9dde61c86db751f6002def78754fced
+but disabling -Werror is more future-proof
 
 Fixes:
-   - http://autobuild.buildroot.net/results/9d79c9f313ff989449e9b47c1ff0afd3a167fd2d/
+ - http://autobuild.buildroot.org/results/4d5cdddbfeefdeb943234b76eb08b04376f3c36d
 
-Reported-by: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Changes v1-> v2:
-  - add autobuild reference
-  - fix typo
+ package/flatcc/flatcc.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
----
- package/libopenssl/Config.in     | 4 ----
- package/libopenssl/libopenssl.mk | 1 -
- 2 files changed, 5 deletions(-)
-
-diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-index 7ed799075f..fcead4c11a 100644
---- a/package/libopenssl/Config.in
-+++ b/package/libopenssl/Config.in
-@@ -64,10 +64,6 @@ config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4
- 	bool "enable MD4"
- 	default y
+diff --git a/package/flatcc/flatcc.mk b/package/flatcc/flatcc.mk
+index c27809b86a..fcace691c0 100644
+--- a/package/flatcc/flatcc.mk
++++ b/package/flatcc/flatcc.mk
+@@ -10,6 +10,8 @@ FLATCC_LICENSE = Apache-2.0
+ FLATCC_LICENSE_FILES = LICENSE
+ FLATCC_INSTALL_STAGING = YES
+ FLATCC_DEPENDENCIES = host-flatcc
++FLATCC_CONF_OPTS = -DFLATCC_ALLOW_WERROR=OFF
++HOST_FLATCC_CONF_OPTS = -DFLATCC_ALLOW_WERROR=OFF
  
--config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD5
--	bool "enable MD5"
--	default y
--
- config BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2
- 	bool "enable MDC2"
- 	default y
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index c7f8ae714e..389a0a8b32 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -90,7 +90,6 @@ define LIBOPENSSL_CONFIGURE_CMDS
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4),,no-rc4) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD2),,no-md2) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4),,no-md4) \
--			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD5),,no-md5) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2),,no-mdc2) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2),,no-blake2) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_IDEA),,no-idea) \
--- 
-2.25.1
+ # Disable build of tests and samples
+ FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
