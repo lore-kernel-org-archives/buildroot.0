@@ -1,55 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 May 2021 21:56:07 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/redis: security
- bump to v6.0.13
-Message-ID: <20210519192735.9204088577@busybox.osuosl.org>
+Date: Wed, 19 May 2021 21:56:56 +0200
+Subject: [Buildroot] [PATCH] package/intel-microcode: security bump to
+ version 20210216
+In-Reply-To: <87eee5nrak.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Mon, 17 May 2021 20:33:55 +0200")
+References: <20210517173830.25189-1-peter@korsgaard.com>
+ <20210517175125.GC2506@scaer> <87eee5nrak.fsf@dell.be.48ers.dk>
+Message-ID: <877djubipj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=725eb18497691d843098b79b76e9b2ba22a626ad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-From the release notes:
-================================================================================
-Redis 6.0.13 Released Mon May 3 19:00:00 IST 2021
-================================================================================
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+ > Hi,
 
-Upgrade urgency: SECURITY, Contains fixes to security issues that affect
-authenticated client connections. LOW otherwise.
+ >>> +++ b/package/intel-microcode/intel-microcode.hash
+ >>> @@ -1,3 +1,3 @@
+ >>> # Locally computed
+ >>> -sha256  e42a264b7b86e80d013d6d00062467352c1f37e0aaea10fe5b51e4d8687921ab  intel-microcode-20201118.tar.gz
+ >>> -sha256  d9e989e1a7747f3ce93cb749aceca67a430d36c9bebc6e3205e0b3af3ca6304b  license
+ >>> +sha256  b855c81f78705f35341248a0603aa1a6e199ca7f59cd425e061b579329aa9eaa  intel-microcode-20210216.tar.gz
+ >>> +sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
 
-See https://github.com/redis/redis/blob/6.0.13/00-RELEASENOTES
+ >> We like to have a quick explanation about why the hash of a license file
+ >> changes. In this case, I've explained that's because the year changed.
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Ups, indeed - Forgot to add that.
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 9b87b49fb1..d9f1281aaa 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  f16ad973d19f80f121e53794d5eb48a997e2c6a85b5be41bb3b66750cc17bf6b  redis-6.0.12.tar.gz
-+sha256  3049763f4553ddd5a69552f41da3dd7dde9fbc524dbb15e517fee24cc73b790c  redis-6.0.13.tar.gz
- 
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index c851e589c4..b70692ac79 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 6.0.12
-+REDIS_VERSION = 6.0.13
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+ >> Applied to master, thanks.
+
+ > Thanks!
+
+Committed to 2021.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
