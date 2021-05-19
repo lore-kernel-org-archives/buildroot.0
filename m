@@ -1,29 +1,24 @@
-From: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Date: Wed, 19 May 2021 21:44:45 +0200
-Subject: [Buildroot] [PATCH 1/3] boot/at91bootstrap3: add support for
- at91bootstrap 4.x series
-In-Reply-To: <20210519120237.52ddc109@windsurf.orange-hotspot>
-References: <20210518213749.144355-1-thomas.petazzoni@bootlin.com>
- <20210518213749.144355-2-thomas.petazzoni@bootlin.com>
- <20210519093323.GL2268078@scaer>
- <20210519120237.52ddc109@windsurf.orange-hotspot>
-Message-ID: <67f43b07-1fc8-2eeb-9f3c-947f4b695d1e@grenoble.cnrs.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 May 2021 21:45:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libldns: add CPE variables
+In-Reply-To: <20210516112504.3774346-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 16 May 2021 13:25:04 +0200")
+References: <20210516112504.3774346-1-fontaine.fabrice@gmail.com>
+Message-ID: <87im3ecxsz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Thomas Petazzoni wrote:
-> I think we should ask the contributor of these defconfigs to use a
-> fixed version of AT91Bootstrap, because that's normally what we do for
-> bootloader/kernel versions in defconfigs.
+ > cpe:2.3:a:nlnetlabs:ldns is a valid CPE identifier for this package:
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anlnetlabs%3Aldns
 
-Oh, right, I hadn't noticed. Sorry for the mess. I just submitted a
-patch to pin these defconfifs to at91bootstrap 3.10.2, which I tested.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Best regards,
+Committed to 2021.02.x, thanks.
 
-Edgar Bonet.
+-- 
+Bye, Peter Korsgaard
