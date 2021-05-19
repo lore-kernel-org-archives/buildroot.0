@@ -1,289 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 May 2021 23:49:43 +0200
-Subject: [Buildroot] [PATCH 2/2] package/rustc: add support for Tier 1
- and Tier 2 platforms
-In-Reply-To: <20210518205432.133118-3-thomas.petazzoni@bootlin.com>
-References: <20210518205432.133118-1-thomas.petazzoni@bootlin.com>
- <20210518205432.133118-3-thomas.petazzoni@bootlin.com>
-Message-ID: <20210518214943.GF2506@scaer>
+From: Weber, Matthew L                            Collins <Matthew.Weber@collins.com>
+Date: Wed, 19 May 2021 01:20:36 +0000
+Subject: [Buildroot] [External] Re: [PATCH 3/3]
+ support/scripts/pkg-stats: clarify when a CVE/CPE should report as N/A
+In-Reply-To: <20210518201649.GY2506@scaer>
+References: <20210518182155.47055-1-matthew.weber@collins.com>
+ <20210518182155.47055-3-matthew.weber@collins.com>
+ <20210518201649.GY2506@scaer>
+Message-ID: <DM2P110MB0105F384EA212815C98490A8F22B9@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Yann,
 
-On 2021-05-18 22:54 +0200, Thomas Petazzoni spake thusly:
-> This commit reworks how BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is
-> defined to more clearly map with the list of platforms supported by
-> Rust as listed at
-> https://doc.rust-lang.org/nightly/rustc/platform-support.html. Indeed,
-> the situation is not as simple as a list of architectures, all
-> supported for both glibc and musl.
+> -----Original Message-----
+> From: Yann E. MORIN <yann.morin.1998@free.fr>
+> Sent: Tuesday, May 18, 2021 3:17 PM
+> To: Weber, Matthew L Collins <Matthew.Weber@collins.com>
+> Cc: buildroot at buildroot.org
+> Subject: [External] Re: [Buildroot] [PATCH 3/3] support/scripts/pkg-stats:
+> clarify when a CVE/CPE should report as N/A
 > 
-> So instead, we take the approach of directly mapping with what's
-> described at
-> https://doc.rust-lang.org/nightly/rustc/platform-support.html, which
-> means:
+> Matthew, All,
 > 
->  * A list of Tier 1 platforms (in fact just 3 platforms)
+> On 2021-05-18 13:21 -0500, Matthew Weber via buildroot spake thusly:
+> >  - If a package doesn't have any versioning, ignore and state that
+> >  - If a package is virtual, CVE=ignore and CPE state virtual
+> >  - For any of these NA cases, don't provide search link
+> >
+> > Signed-off-by: Matthew Weber <matthew.weber@collins.com>
 > 
->  * A list of Tier 2 platforms with host tools (i.e where rustc and
->    cargo themselves are available for the target, something that isn't
->    relevant for Buildroot)
+> Honestly, I get quickly lost in the coe of pkg-stats...
 > 
->  * A list of Tier 2 platforms with no host tools support.
+> However, with this series applied, the cells for CVE and CPE for virtual
+> packages are not green, suggesting this is abnormal. However, this is
+> perfectly fine there are no CVE and no CPE for virtual packages, so they
+> should be green.
 > 
-> For each platform, we add as a comment its Rust tuple name, as listed
-> at https://doc.rust-lang.org/nightly/rustc/platform-support.html, and
-> then the corresponding Buildroot architecture/libc dependency.
+> I managed to do that by adding the following on-top of this third patch:
 > 
-> This is obviously more verbose than it was, but it is also a lot
-> easier to maintain.
+>     diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+>     index 3aaf1169cb..d06778ab05 100755
+>     --- a/support/scripts/pkg-stats
+>     +++ b/support/scripts/pkg-stats
+>     @@ -910,6 +910,8 @@ def dump_html_pkg(f, pkg):
+>          td_class = ["centered"]
+>          if pkg.is_status_ok("cve"):
+>              td_class.append("cve-ok")
+>     +    elif pkg.is_status_na("cve") and not pkg.is_actual_package:
+>     +        td_class.append("cve-ok")
+>          elif pkg.is_status_error("cve"):
+>              td_class.append("cve-nok")
+>          else:
+>     @@ -937,6 +939,8 @@ def dump_html_pkg(f, pkg):
+>          td_class = ["left"]
+>          if pkg.is_status_ok("cpe"):
+>              td_class.append("cpe-ok")
+>     +    elif pkg.is_status_na("cpe") and not pkg.is_actual_package:
+>     +        td_class.append("cpe-ok")
+>          elif pkg.is_status_error("cpe"):
+>              td_class.append("cpe-nok")
+>          else:
 > 
-> With this, a total of 16 new platforms are supported, 13 of which are
-> musl-based. The additional non-musl platforms are ARMv5TE, RISC-V
-> 64-bit and Sparc64.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> But I am not usre this is the best solution... So, I've not applied patches 2 and
+> 3 in the series. Could you please respin with the above (if it's OK for you, or
+> with a better solution), please?
 
-Applied to next, thanks.
+I'll take a look (I noticed this and didn't have a good feeling if they should be green).
+
+> 
+> Additionally, as a further refinement, packages that have no version, like
+> urandom-scripts, makedevs, etc... are usually bundled with Buildroot. Do you
+> think for those we should:
+> 
+>  1. declare 'buildroot' to NVD, as the 'buildroot_project' vendor and
+>     the 'buildroot' product, as well as 'makedevs', 'urandom-scripts' et
+>     al. as products,
+> 
+>  2. add "MAKEDEVS_CPE_VENDOR = buildroot_project" to each of those
+>     bundled packages.
+> 
+
+I'd go with (2) where we use 'buildroot_project' as the vendor, and then each of those packages that have no version would use the Buildroot version and their name as the product.  I don't see any reason NIST won't support us adding those dictionary entries, and I know other distros do similar for things like ifupdown scripts, etc.
+
+I can work on a series like this but would like to get the pending one merged before we open this topic up ?
 
 Regards,
-Yann E. MORIN.
-
-> ---
->  package/rust-bin/rust-bin.hash |  48 +++++++++++++++
->  package/rustc/Config.in.host   | 104 +++++++++++++++++++++++++++++----
->  2 files changed, 140 insertions(+), 12 deletions(-)
-> 
-> diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
-> index 0800dcca97..f7fb983813 100644
-> --- a/package/rust-bin/rust-bin.hash
-> +++ b/package/rust-bin/rust-bin.hash
-> @@ -7,33 +7,72 @@ sha256  d440cb932bbaaf43b600bd47b2dd4a05bc669a74d88addeeb943d694638d8e6e  rust-1
->  # From https://static.rust-lang.org/dist/rust-std-1.52.0-aarch64-unknown-linux-gnu.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-aarch64-unknown-linux-gnu.tar.xz.asc
->  sha256  3720d98988302bc1f676cef2ea3b2a641404cbbe2d47d0f28f8954658586aa12  rust-std-1.52.0-aarch64-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-aarch64-unknown-linux-musl.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-aarch64-unknown-linux-musl.tar.xz.asc
-> +sha256 153d4a56264b3c38187c566ebdc3dee2e7573cad87b7c68b7e5c52d0c5ad056a  rust-std-1.52.0-aarch64-unknown-linux-musl.tar.xz
->  # From https://static.rust-lang.org/dist/rust-std-1.52.0-arm-unknown-linux-gnueabi.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-arm-unknown-linux-gnueabi.tar.xz.asc
->  sha256  593ec073c273028f60cf49d6084ee1809e075682f3e65f9cc86067f84f71d5f7  rust-std-1.52.0-arm-unknown-linux-gnueabi.tar.xz
->  # From https://static.rust-lang.org/dist/rust-std-1.52.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-arm-unknown-linux-gnueabihf.tar.xz.asc
->  sha256  c251bf48962ff8f96e3572cecee12b1b3286477e66cb9c42c1fbe0118d6bdaf5  rust-std-1.52.0-arm-unknown-linux-gnueabihf.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-arm-unknown-linux-musleabihf.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-arm-unknown-linux-musleabihf.tar.xz.asc
-> +sha256 236944c4ce5dfdc16471b2bc7dc45dfc04f97528a403851ef210fffa55d36434  rust-std-1.52.0-arm-unknown-linux-musleabihf.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-arm-unknown-linux-musleabi.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-arm-unknown-linux-musleabi.tar.xz.asc
-> +sha256 73d99f322c9a86219205aa6bb871a0f3e52c605c2d16a6821188ff90423073ec  rust-std-1.52.0-arm-unknown-linux-musleabi.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-armv5te-unknown-linux-gnueabi.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-armv5te-unknown-linux-gnueabi.tar.xz.asc
-> +sha256 fbe790020b1178aeb0be213ceabff9aa4542448685b3bc7a70f87edae200d1ae  rust-std-1.52.0-armv5te-unknown-linux-gnueabi.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-armv5te-unknown-linux-musleabi.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-armv5te-unknown-linux-musleabi.tar.xz.asc
-> +sha256 7c3f989962ab7d0cf841f1d5c597db3cb14d9f09427ab9ff35a26248cd3b3e01  rust-std-1.52.0-armv5te-unknown-linux-musleabi.tar.xz
->  # From https://static.rust-lang.org/dist/rust-std-1.52.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-armv7-unknown-linux-gnueabihf.tar.xz.asc
->  sha256  c28c6870b9717c6c2e2015a6a5581ccb130f9d393db8166da4513680fe03d4ea  rust-std-1.52.0-armv7-unknown-linux-gnueabihf.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-armv7-unknown-linux-musleabihf.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-armv7-unknown-linux-musleabihf.tar.xz.asc
-> +sha256 d483aad358c480d1593ebf6d9605bf012125670823fa7d895f528a2b4e0f5092  rust-std-1.52.0-armv7-unknown-linux-musleabihf.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-armv7-unknown-linux-musleabi.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-armv7-unknown-linux-musleabi.tar.xz.asc
-> +sha256 0a51992109c837a93d77a57edbbd3d25badca68b354a9fe4a77c354baff1559a  rust-std-1.52.0-armv7-unknown-linux-musleabi.tar.xz
->  # From https://static.rust-lang.org/dist/rust-std-1.52.0-i586-unknown-linux-gnu.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-i586-unknown-linux-gnu.tar.xz.asc
->  sha256  f4d094e1cd73372f1565473b072e22278afeb2b728a178e6e9f1c813a9b76c23  rust-std-1.52.0-i586-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-i586-unknown-linux-musl.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-i586-unknown-linux-musl.tar.xz.asc
-> +sha256 f364545baba647ce8b5e50b362303885bf5df47a9a285360d8c10a5948a36617  rust-std-1.52.0-i586-unknown-linux-musl.tar.xz
->  # From https://static.rust-lang.org/dist/rust-std-1.52.0-i686-unknown-linux-gnu.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-i686-unknown-linux-gnu.tar.xz.asc
->  sha256  54749b579a8426dd46afe67feb3c206b0b129e59873a443dcd93ed51232a37d6  rust-std-1.52.0-i686-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-i686-unknown-linux-musl.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-i686-unknown-linux-musl.tar.xz.asc
-> +sha256 517a5a714b696313dc2713b41482ff17034bf1755df859a8c99943932e903079  rust-std-1.52.0-i686-unknown-linux-musl.tar.xz
->  # From https://static.rust-lang.org/dist/rust-std-1.52.0-mips-unknown-linux-gnu.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-mips-unknown-linux-gnu.tar.xz.asc
->  sha256  51492598343e5490c620fd04a16c3f41e2fe9f52232dc67fc1bc937233a2e85d  rust-std-1.52.0-mips-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-mips-unknown-linux-musl.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-mips-unknown-linux-musl.tar.xz.asc
-> +sha256 bec4d58999205aae3224d01e29b8cf74c7899e034444684620d6e7613916de0d  rust-std-1.52.0-mips-unknown-linux-musl.tar.xz
->  # From https://static.rust-lang.org/dist/rust-std-1.52.0-mips64-unknown-linux-gnuabi64.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-mips64-unknown-linux-gnuabi64.tar.xz.asc
->  sha256  8db8fac92466389629055d590ca06b7ef1c82621f05cba709413f2ce2c3c5407  rust-std-1.52.0-mips64-unknown-linux-gnuabi64.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-mips64-unknown-linux-muslabi64.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-mips64-unknown-linux-muslabi64.tar.xz.asc
-> +sha256 43daa71ac3f7b86f98d8e5a4ee81bf0f4979ad33fc5a8e3f9f8604cacaa0ae14  rust-std-1.52.0-mips64-unknown-linux-muslabi64.tar.xz
->  # From https://static.rust-lang.org/dist/rust-std-1.52.0-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-mips64el-unknown-linux-gnuabi64.tar.xz.asc
->  sha256  824391b79c9b28be7a18feab1adb0eed1a9459667e93572fc8b343985ca965ba  rust-std-1.52.0-mips64el-unknown-linux-gnuabi64.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-mips64el-unknown-linux-muslabi64.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-mips64el-unknown-linux-muslabi64.tar.xz.asc
-> +sha256 84e9948c8d850dc1c76e146de0f577be7a4d2a8e9b42fee43b05d88237e37c82  rust-std-1.52.0-mips64el-unknown-linux-muslabi64.tar.xz
->  # From https://static.rust-lang.org/dist/rust-std-1.52.0-mipsel-unknown-linux-gnu.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-mipsel-unknown-linux-gnu.tar.xz.asc
->  sha256  a6de773dfcdc8cac832ac6c356e2c0ecfd94fd7f7242aac82f8922f5bd1639e9  rust-std-1.52.0-mipsel-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-mipsel-unknown-linux-musl.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-mipsel-unknown-linux-musl.tar.xz.asc
-> +sha256 724df483aaf0797e30844715c537be9257074355201e92c992d12b2376d1b0ce  rust-std-1.52.0-mipsel-unknown-linux-musl.tar.xz
->  # From https://static.rust-lang.org/dist/rust-std-1.52.0-powerpc-unknown-linux-gnu.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-powerpc-unknown-linux-gnu.tar.xz.asc
->  sha256  2ad7e17bcb8f632eb4206294ab977bbe1b7562009a3ca84a8d753ff454b1ee07  rust-std-1.52.0-powerpc-unknown-linux-gnu.tar.xz
-> @@ -43,9 +82,18 @@ sha256  a792384afe034322b4b430049f57ed5e5fe9efbcf74c13c3edaf04062392727a  rust-s
->  # From https://static.rust-lang.org/dist/rust-std-1.52.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
->  sha256  af5256a5f1cb189415b0d6b3e349312bbe8a78331a817c8da79ccfe9a07c0aed  rust-std-1.52.0-powerpc64le-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-riscv64gc-unknown-linux-gnu.tar.xz.asc
-> +sha256 573d8681cfc0ce71e735254ac33bfca7644fd4251699781b16dd18633a8e92ad  rust-std-1.52.0-riscv64gc-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-sparc64-unknown-linux-gnu.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-sparc64-unknown-linux-gnu.tar.xz.asc
-> +sha256 0320e71a4c010295968b7ba05e68550b97c6b42520e72f1a534b0135c966cc99  rust-std-1.52.0-sparc64-unknown-linux-gnu.tar.xz
->  # From https://static.rust-lang.org/dist/rust-std-1.52.0-x86_64-unknown-linux-gnu.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-x86_64-unknown-linux-gnu.tar.xz.asc
->  sha256  dcdc0083facd6484527494ee5b8f72e040a095ab346bb658ce176be573d5c9b4  rust-std-1.52.0-x86_64-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-std-1.52.0-x86_64-unknown-linux-musl.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-std-1.52.0-x86_64-unknown-linux-musl.tar.xz.asc
-> +sha256 d5809f3f1345a3c524f00cfa2ac1631b494a6de3143b1a3d081476f2c4f78905  rust-std-1.52.0-x86_64-unknown-linux-musl.tar.xz
->  # Locally generated
->  sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
->  sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-> diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-> index 1df25ae326..c5f64fd3c6 100644
-> --- a/package/rustc/Config.in.host
-> +++ b/package/rustc/Config.in.host
-> @@ -3,21 +3,101 @@ config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
->  	bool
->  	default y if BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  
-> +# The pre-built Rust standard library is only available for a number
-> +# of architectures/C libraries combinations, with different levels of
-> +# support: Tier 1 platforms, Tier 2 platforms with host tools, Tier 2
-> +# platforms, Tier 3 platforms. Below, we support Tier 1, Tier 2 with
-> +# host tools and Tier 2 platforms.
-> +
-> +# The below entries match Tier 1 platforms as described at
-> +# https://doc.rust-lang.org/nightly/rustc/platform-support.html.
-> +config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER1_PLATFORMS
-> +	bool
-> +	# aarch64-unknown-linux-gnu
-> +	default y if BR2_aarch64 && BR2_TOOLCHAIN_USES_GLIBC
-> +	# i686-unknown-linux-gnu
-> +	default y if (BR2_i686 || BR2_x86_pentiumpro || BR2_X86_CPU_HAS_MMX) && BR2_TOOLCHAIN_USES_GLIBC
-> +	# x86_64-unknown-linux-gnu
-> +	default y if BR2_x86_64 && BR2_TOOLCHAIN_USES_GLIBC
-> +
-> +# The below entries match Tier 2 platforms with host tools as
-> +# described at
-> +# https://doc.rust-lang.org/nightly/rustc/platform-support.html.
-> +config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_HOST_TOOLS_PLATFORMS
-> +	bool
-> +	# aarch64-unknown-linux-musl
-> +	default y if BR2_aarch64 && BR2_TOOLCHAIN_USES_MUSL
-> +	# arm-unknown-linux-gnueabi
-> +	default y if BR2_ARM_CPU_ARMV6 && BR2_ARM_EABI && BR2_TOOLCHAIN_USES_GLIBC
-> +	# arm-unknown-linux-gnueabihf
-> +	default y if BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
-> +	# armv7-unknown-linux-gnueabihf
-> +	default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
-> +	# mips-unknown-linux-gnu
-> +	default y if BR2_mips && BR2_TOOLCHAIN_USES_GLIBC && !BR2_MIPS_CPU_MIPS32R6
-> +	# mips64-unknown-linux-gnuabi64
-> +	default y if BR2_mips64 && BR2_TOOLCHAIN_USES_GLIBC && BR2_MIPS_NABI64 && !BR2_MIPS_CPU_MIPS32R6
-> +	# mipsel-unknown-linux-gnu
-> +	default y if BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC && !BR2_MIPS_CPU_MIPS32R6
-> +	# mips64el-unknown-linux-gnuabi64
-> +	default y if BR2_mips64el && BR2_TOOLCHAIN_USES_GLIBC && BR2_MIPS_NABI64 && !BR2_MIPS_CPU_MIPS32R6
-> +	# powerpc-unknown-linux-gnu
-> +	default y if BR2_powerpc && BR2_TOOLCHAIN_USES_GLIBC
-> +	# powerpc64-unknown-linux-gnu
-> +	default y if BR2_powerpc64 && BR2_TOOLCHAIN_USES_GLIBC
-> +	# powerpc64le-unknown-linux-gnu
-> +	default y if BR2_powerpc64le && BR2_TOOLCHAIN_USES_GLIBC
-> +	# riscv64gc-unknown-linux-gnu
-> +	# "g" stands for imafd, and we also need "c".
-> +	default y if BR2_riscv && BR2_RISCV_ISA_RVI && BR2_RISCV_ISA_RVM && \
-> +			BR2_RISCV_ISA_RVA && BR2_RISCV_ISA_RVF && \
-> +			BR2_RISCV_ISA_RVD && BR2_RISCV_ISA_RVC && \
-> +			BR2_TOOLCHAIN_USES_GLIBC
-> +	# x86_64-unknown-linux-musl
-> +	default y if BR2_x86_64 && BR2_TOOLCHAIN_USES_MUSL
-> +
-> +# The below entries match Tier 2 platforms without host tools as
-> +# described at
-> +# https://doc.rust-lang.org/nightly/rustc/platform-support.html.
-> +config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_PLATFORMS
-> +	bool
-> +	# arm-unknown-linux-musleabi
-> +	default y if BR2_ARM_CPU_ARMV6 && BR2_ARM_EABI && BR2_TOOLCHAIN_USES_MUSL
-> +	# arm-unknown-linux-musleabihf
-> +	default y if BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_MUSL
-> +	# armv5te-unknown-linux-gnueabi
-> +	default y if BR2_ARM_CPU_ARMV5 && BR2_ARM_EABI && BR2_TOOLCHAIN_USES_GLIBC
-> +	# armv5te-unknown-linux-musleabi
-> +	default y if BR2_ARM_CPU_ARMV5 && BR2_ARM_EABI && BR2_TOOLCHAIN_USES_MUSL
-> +	# armv7-unknown-linux-gnueabi
-> +	default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABI && BR2_TOOLCHAIN_USES_GLIBC
-> +	# armv7-unknown-linux-musleabi
-> +	default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABI && BR2_TOOLCHAIN_USES_MUSL
-> +	# armv7-unknown-linux-musleabihf
-> +	default y if BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_MUSL
-> +	# i586-unknown-linux-gnu
-> +	default y if BR2_i586 && BR2_TOOLCHAIN_USES_GLIBC
-> +	# i586-unknown-linux-musl
-> +	default y if BR2_i586 && BR2_TOOLCHAIN_USES_MUSL
-> +	# i686-unknown-linux-musl
-> +	default y if (BR2_i686 || BR2_x86_pentiumpro || BR2_X86_CPU_HAS_MMX) && BR2_TOOLCHAIN_USES_MUSL
-> +	# mips-unknown-linux-musl
-> +	default y if BR2_mips && BR2_TOOLCHAIN_USES_MUSL && !BR2_MIPS_CPU_MIPS32R6
-> +	# mips64-unknown-linux-muslabi64
-> +	default y if BR2_mips64 && BR2_TOOLCHAIN_USES_MUSL && BR2_MIPS_NABI64 && !BR2_MIPS_CPU_MIPS32R6
-> +	# mips64el-unknown-linux-muslabi64
-> +	default y if BR2_mips64el && BR2_TOOLCHAIN_USES_MUSL && BR2_MIPS_NABI64 && !BR2_MIPS_CPU_MIPS32R6
-> +	# mipsel-unknown-linux-musl
-> +	default y if BR2_mipsel && BR2_TOOLCHAIN_USES_MUSL && !BR2_MIPS_CPU_MIPS32R6
-> +	# sparc64-unknown-linux-gnu
-> +	default y if BR2_sparc64 && BR2_TOOLCHAIN_USES_GLIBC
-> +
->  # All target rust packages should depend on this option
->  config BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
->  	bool
-> -	# The pre-built Rust standard library is only available for the
-> -	# following architectures/ABIs, and is built against glibc.
-> -	default y if BR2_i386
-> -	default y if BR2_x86_64
-> -	default y if BR2_aarch64
-> -	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5 \
-> -	        && !(BR2_ARM_CPU_ARMV7A && BR2_ARM_EABI)
-> -	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-> -	default y if (BR2_mips || BR2_mipsel) && !BR2_MIPS_CPU_MIPS32R6
-> -	default y if (BR2_mips64 || BR2_mips64el) && !BR2_MIPS_CPU_MIPS64R6 \
-> -		&& BR2_MIPS_NABI64
-> -	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	default y if BR2_PACKAGE_HOST_RUSTC_TARGET_TIER1_PLATFORMS
-> +	default y if BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_HOST_TOOLS_PLATFORMS
-> +	default y if BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_PLATFORMS
->  	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
->  
->  config BR2_PACKAGE_HOST_RUSTC_ARCH
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Matt
