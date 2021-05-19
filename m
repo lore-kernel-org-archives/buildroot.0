@@ -1,35 +1,24 @@
-From: Weber, Matthew L                            Collins <Matthew.Weber@collins.com>
-Date: Wed, 19 May 2021 13:31:20 +0000
-Subject: [Buildroot] [External] Re: [PATCH 1/1] package/libopenssl: add
- option to enable some features
-In-Reply-To: <20210516170955.GP2506@scaer>
-References: <20200511132133.738039-1-erwan.gautron@bertin.fr>,
- <20210516170955.GP2506@scaer>
-Message-ID: <DM2P110MB01051BDEDB77556563850C07F22B9@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 May 2021 15:57:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lvm2: add LVM2_CPE_ID_VENDOR
+In-Reply-To: <20210515213606.3668135-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 15 May 2021 23:36:06 +0200")
+References: <20210515213606.3668135-1-fontaine.fabrice@gmail.com>
+Message-ID: <87wnrug72r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Erwan,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On 2020-05-11 15:21 +0200, Erwan GAUTRON spake thusly:
-> From: "GAUTRON, Erwan" <erwan.gautron@bertin.fr>
-> 
-> Openssl implements lot of algorithms that are not required in
-> some emdedded devices and cyphers known as weak.
-> Secure embedded systems shall disable unused algorithms (and weak algo)
-> in order to be certified.
-> This patch allows to select weak algorithms and mecanims to enable
-> such as md5
-> To ensure backward compatibility, all items are selected by default
-> 
-> Signed-off-by: Erwan GAUTRON <erwan.gautron@bertin.fr>
+ > cpe:2.3:a:redhat:lvm2 is a valid CPE identifier for this package:
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aredhat%3Alvm2
 
-I noticed a build failure related to no-md5.  Were there cases where some of these weren't defined?
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-http://autobuild.buildroot.net/results/9d79c9f313ff989449e9b47c1ff0afd3a167fd2d/
+Committed to 2021.02.x, thanks.
 
-Regards,
-Matt
+-- 
+Bye, Peter Korsgaard
