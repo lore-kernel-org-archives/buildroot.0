@@ -1,33 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 19 May 2021 22:12:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/synergy: add SYNERGY_CPE_ID_VENDOR
-Message-ID: <20210519201257.50570-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 May 2021 22:13:58 +0200
+Subject: [Buildroot] [git commit branch/next] package/libcurl: make sure
+ openssl supports DES
+Message-ID: <20210519194530.E8E2581356@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:symless:synergy is a valid CPE identifier for this package:
+commit: https://git.buildroot.net/buildroot/commit/?id=f25c820a4f93ad0ca7eaf5e504667bd4099b878c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asymless%3Asynergy
+DES support in openssl is optional since commit a83d41867c8d
+("package/libopenssl: add option to enable some features"). curl uses
+DES support in openssl when enabled. Select DES support to avoid build
+failure.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/8931fd2b71eb2490cdc041b47eff58377ac823da/
+http://autobuild.buildroot.net/results/f159195adf05c375d7d314a270afd3a55d43ebdd/
+http://autobuild.buildroot.net/results/e143c75bccd7bcd4216954b76099404a38cf9bc1/
+
+Cc: Erwan GAUTRON <erwan.gautron@bertin.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Matthew Weber <matthew.weber@collins.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/synergy/synergy.mk | 1 +
+ package/libcurl/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
-index 63c6e5cbc1..bc7ebea070 100644
---- a/package/synergy/synergy.mk
-+++ b/package/synergy/synergy.mk
-@@ -8,6 +8,7 @@ SYNERGY_VERSION = 2.0.12-beta
- SYNERGY_SITE = $(call github,symless,synergy-core,v$(SYNERGY_VERSION))
- SYNERGY_LICENSE = GPL-2.0
- SYNERGY_LICENSE_FILES = LICENSE
-+SYNERGY_CPE_ID_VENDOR = symless
- SYNERGY_DEPENDENCIES = xlib_libX11 xlib_libXtst
+diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+index b89c46f5ef..466f9ee3a1 100644
+--- a/package/libcurl/Config.in
++++ b/package/libcurl/Config.in
+@@ -51,6 +51,7 @@ choice
+ config BR2_PACKAGE_LIBCURL_OPENSSL
+ 	bool "OpenSSL"
+ 	depends on BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
  
- # Avoid using buildroot commit hash inside cmake/Version.cmake
--- 
-2.30.2
+ config BR2_PACKAGE_LIBCURL_BEARSSL
+ 	bool "BearSSL"
