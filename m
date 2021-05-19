@@ -1,9 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 17:03:41 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-dbus-next: new package
-In-Reply-To: <20210509080952.3984565-1-m.niestroj@grinn-global.com>
+Date: Wed, 19 May 2021 17:08:54 +0200
+Subject: [Buildroot] [PATCH 2/2] support/testing: add python-dbus-next
+ test
+In-Reply-To: <20210509080952.3984565-2-m.niestroj@grinn-global.com>
 References: <20210509080952.3984565-1-m.niestroj@grinn-global.com>
-Message-ID: <20210519150341.GA2268078@scaer>
+ <20210509080952.3984565-2-m.niestroj@grinn-global.com>
+Message-ID: <20210519150854.GB2268078@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,92 +17,131 @@ Marcin, All,
 On 2021-05-09 10:09 +0200, Marcin Niestroj spake thusly:
 > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 
-Applied to next, thanks.
+Applied to next, thanks for providing this runtime test! :-)
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  DEVELOPERS                                     |  1 +
->  package/Config.in                              |  1 +
->  package/python-dbus-next/Config.in             |  9 +++++++++
->  package/python-dbus-next/python-dbus-next.hash |  5 +++++
->  package/python-dbus-next/python-dbus-next.mk   | 14 ++++++++++++++
->  5 files changed, 30 insertions(+)
->  create mode 100644 package/python-dbus-next/Config.in
->  create mode 100644 package/python-dbus-next/python-dbus-next.hash
->  create mode 100644 package/python-dbus-next/python-dbus-next.mk
+>  DEVELOPERS                                    |  2 +
+>  .../tests/package/sample_python_dbus_next.py  | 44 +++++++++++++++++++
+>  .../tests/package/test_python_dbus_next.py    | 40 +++++++++++++++++
+>  3 files changed, 86 insertions(+)
+>  create mode 100644 support/testing/tests/package/sample_python_dbus_next.py
+>  create mode 100644 support/testing/tests/package/test_python_dbus_next.py
 > 
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index bbbb0ecfa8..610fd37e06 100644
+> index 610fd37e06..b5270e1c7d 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -1641,6 +1641,7 @@ F:	package/murata-cyw-fw/
->  F:	package/netdata/
->  F:	package/python-ansicolors/
->  F:	package/python-bleak/
-> +F:	package/python-dbus-next/
->  F:	package/python-iniconfig/
->  F:	package/python-intelhex/
->  F:	package/python-packaging/
-> diff --git a/package/Config.in b/package/Config.in
-> index 82b28d2835..1a8dd8f204 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -960,6 +960,7 @@ menu "External python modules"
->  	source "package/python-daphne/Config.in"
->  	source "package/python-dataproperty/Config.in"
->  	source "package/python-dateutil/Config.in"
-> +	source "package/python-dbus-next/Config.in"
->  	source "package/python-decorator/Config.in"
->  	source "package/python-defusedxml/Config.in"
->  	source "package/python-dialog/Config.in"
-> diff --git a/package/python-dbus-next/Config.in b/package/python-dbus-next/Config.in
+> @@ -1652,9 +1652,11 @@ F:	package/python-typing-extensions/
+>  F:	package/python-xmodem/
+>  F:	package/rs485conf/
+>  F:	package/turbolua/
+> +F:	support/testing/tests/package/sample_python_dbus_next.py
+>  F:	support/testing/tests/package/sample_python_pytest.py
+>  F:	support/testing/tests/package/sample_python_pytest_asyncio.py
+>  F:	support/testing/tests/package/test_netdata.py
+> +F:	support/testing/tests/package/test_python_dbus_next.py
+>  F:	support/testing/tests/package/test_python_pytest.py
+>  F:	support/testing/tests/package/test_python_pytest_asyncio.py
+>  
+> diff --git a/support/testing/tests/package/sample_python_dbus_next.py b/support/testing/tests/package/sample_python_dbus_next.py
 > new file mode 100644
-> index 0000000000..bafead8986
+> index 0000000000..1fcb76f45a
 > --- /dev/null
-> +++ b/package/python-dbus-next/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_DBUS_NEXT
-> +	bool "python-dbus-next"
-> +	depends on BR2_PACKAGE_PYTHON3
-> +	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
-> +	help
-> +	  A zero-dependency DBus library for Python with asyncio
-> +	  support.
+> +++ b/support/testing/tests/package/sample_python_dbus_next.py
+> @@ -0,0 +1,44 @@
+> +import asyncio
+> +from dbus_next.aio import MessageBus
+> +from dbus_next.service import ServiceInterface, method
+> +import dbus_next.introspection as intr
+> +from dbus_next import BusType
 > +
-> +	  https://github.com/altdesktop/python-dbus-next
-> diff --git a/package/python-dbus-next/python-dbus-next.hash b/package/python-dbus-next/python-dbus-next.hash
+> +
+> +class SampleInterface(ServiceInterface):
+> +    def __init__(self):
+> +        super().__init__('test.interface')
+> +
+> +    @method()
+> +    def Ping(self):
+> +        pass
+> +
+> +    @method()
+> +    def ConcatStrings(self, what1: 's', what2: 's') -> 's':
+> +        return what1 + what2
+> +
+> +
+> +async def main():
+> +    bus_name = 'dbus.next.sample'
+> +
+> +    bus = await MessageBus(bus_type=BusType.SYSTEM).connect()
+> +    bus2 = await MessageBus(bus_type=BusType.SYSTEM).connect()
+> +
+> +    await bus.request_name(bus_name)
+> +
+> +    service_interface = SampleInterface()
+> +    bus.export('/test/path', service_interface)
+> +
+> +    introspection = await bus2.introspect(bus_name, '/test/path')
+> +    assert type(introspection) is intr.Node
+> +    obj = bus2.get_proxy_object(bus_name, '/test/path', introspection)
+> +    interface = obj.get_interface(service_interface.name)
+> +
+> +    result = await interface.call_ping()
+> +    assert result is None
+> +
+> +    result = await interface.call_concat_strings('hello ', 'world')
+> +    assert result == 'hello world'
+> +
+> +
+> +asyncio.run(main())
+> diff --git a/support/testing/tests/package/test_python_dbus_next.py b/support/testing/tests/package/test_python_dbus_next.py
 > new file mode 100644
-> index 0000000000..fa1cbc9da7
+> index 0000000000..3c597ad198
 > --- /dev/null
-> +++ b/package/python-dbus-next/python-dbus-next.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/dbus-next/json
-> +md5  fcf7443b379ef69f95727bec0221ebc9  dbus_next-0.2.2.tar.gz
-> +sha256  f656a3d3450b670f228248ffb1c3a703a69c4a8cb10cce63b108f17c8bd6c3de  dbus_next-0.2.2.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256  c454ab6b8e0653a8eab828a8cbaaa368a1bbfba982178bb18b6177e311eae4cc  LICENSE
-> diff --git a/package/python-dbus-next/python-dbus-next.mk b/package/python-dbus-next/python-dbus-next.mk
-> new file mode 100644
-> index 0000000000..9aab9ac92b
-> --- /dev/null
-> +++ b/package/python-dbus-next/python-dbus-next.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-dbus-next
-> +#
-> +################################################################################
+> +++ b/support/testing/tests/package/test_python_dbus_next.py
+> @@ -0,0 +1,40 @@
+> +import textwrap
 > +
-> +PYTHON_DBUS_NEXT_VERSION = 0.2.2
-> +PYTHON_DBUS_NEXT_SOURCE = dbus_next-$(PYTHON_DBUS_NEXT_VERSION).tar.gz
-> +PYTHON_DBUS_NEXT_SITE = https://files.pythonhosted.org/packages/cb/fb/5ab0485c6460e39be75e16af95c0e23c2531c1ac5a482fffb9ee7d576e6f
-> +PYTHON_DBUS_NEXT_SETUP_TYPE = setuptools
-> +PYTHON_DBUS_NEXT_LICENSE = MIT
-> +PYTHON_DBUS_NEXT_LICENSE_FILES = LICENSE
 > +
-> +$(eval $(python-package))
+> +from tests.package.test_python import TestPythonPackageBase
+> +
+> +
+> +class TestPythonPy3DBusNext(TestPythonPackageBase):
+> +    __test__ = True
+> +    config = TestPythonPackageBase.config + \
+> +        """
+> +        BR2_PACKAGE_DBUS=y
+> +        BR2_PACKAGE_PYTHON3=y
+> +        BR2_PACKAGE_PYTHON_DBUS_NEXT=y
+> +        """
+> +    sample_scripts = ["tests/package/sample_python_dbus_next.py"]
+> +
+> +    def run_sample_scripts(self):
+> +        config = \
+> +            """
+> +            <!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+> +             "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+> +            <busconfig>
+> +              <policy user="root">
+> +                <allow own="dbus.next.sample"/>
+> +                <allow send_destination="dbus.next.sample"/>
+> +              </policy>
+> +            </busconfig>
+> +            """
+> +        config = textwrap.dedent(config)
+> +        config_dir = "/etc/dbus-1/system.d"
+> +        config_fn = "dbus.next.sample.conf"
+> +
+> +        # Setup and reload D-Bus configuration
+> +        self.emulator.run("mkdir -p " + config_dir)
+> +        self.emulator.run("cat > " + config_dir + "/" + config_fn +
+> +                          " <<EOF" + config + "EOF")
+> +        self.emulator.run("killall -SIGHUP dbus-daemon")
+> +
+> +        # Run test scripts
+> +        super().run_sample_scripts()
 > -- 
 > 2.31.1
 > 
