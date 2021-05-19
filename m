@@ -1,26 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 May 2021 21:48:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tpm2-tss: add CPE variables
-In-Reply-To: <20210516171101.4497-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 16 May 2021 19:11:01 +0200")
-References: <20210516171101.4497-1-fontaine.fabrice@gmail.com>
-Message-ID: <87fsyibj34.fsf@dell.be.48ers.dk>
+Date: Wed, 19 May 2021 21:51:06 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/terminology: add
+ TERMINOLOGY_CPE_ID_VENDOR
+Message-ID: <20210519192209.8005188769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=be9602b6040a0b62f3e1813ad788706be482e126
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > cpe:2.3:a:tpm2_software_stack_project:tpm2_software_stack is a valid CPE
- > identifier for this package:
+cpe:2.3:a:enlightenment:terminology is a valid CPE identifier for this
+package:
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atpm2_software_stack_project%3Atpm2_software_stack
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aenlightenment%3Aterminology
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 05bffd0613101ebaca87bd4de12c24eb1e6e5171)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/terminology/terminology.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed to 2021.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
+index d93e348781..6c6ec13cdd 100644
+--- a/package/terminology/terminology.mk
++++ b/package/terminology/terminology.mk
+@@ -9,6 +9,7 @@ TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
+ TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
+ TERMINOLOGY_LICENSE = BSD-2-Clause
+ TERMINOLOGY_LICENSE_FILES = COPYING
++TERMINOLOGY_CPE_ID_VENDOR = enlightenment
+ 
+ TERMINOLOGY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) efl host-pkgconf
+ TERMINOLOGY_CONF_OPTS = -Dedje-cc=$(HOST_DIR)/bin/edje_cc
