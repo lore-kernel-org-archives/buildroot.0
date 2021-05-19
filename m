@@ -1,83 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 11:56:11 +0200
-Subject: [Buildroot] [PATCH/next 2/2] package/webkitgtk: allow building
- with the musl libc
-In-Reply-To: <20210518190515.357554-3-aperez@igalia.com>
-References: <20210518190515.357554-1-aperez@igalia.com>
- <20210518190515.357554-3-aperez@igalia.com>
-Message-ID: <20210519095611.GP2268078@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 19 May 2021 12:02:37 +0200
+Subject: [Buildroot] [PATCH 1/3] boot/at91bootstrap3: add support for
+ at91bootstrap 4.x series
+In-Reply-To: <20210519093323.GL2268078@scaer>
+References: <20210518213749.144355-1-thomas.petazzoni@bootlin.com>
+ <20210518213749.144355-2-thomas.petazzoni@bootlin.com>
+ <20210519093323.GL2268078@scaer>
+Message-ID: <20210519120237.52ddc109@windsurf.orange-hotspot>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adrian, All,
+Hello Yann,
 
-On 2021-05-18 22:05 +0300, Adrian Perez de Castro spake thusly:
-> WebKitGTK 2.32.1 includes support for building with the musl libc,
-> therefore arrange dependencies to allow selecting the package when
-> a musl system is built. This is done by making the dependencies be
-> more granular, basically following what the wpewebkit package does.
+On Wed, 19 May 2021 11:33:23 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+
+> This introduces two issues.
 > 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> ---
->  package/webkitgtk/Config.in | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
+> First, and most important: this means that we now have two "known
+> versions". However, you forgot to account for the licensing stuff. We
+> use main.c as a substitute for a license file, but of course main.c
+> differs between 4.x and 3.x...
 > 
-> diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-> index 4ea931fde1..18b254dca5 100644
-> --- a/package/webkitgtk/Config.in
-> +++ b/package/webkitgtk/Config.in
-> @@ -12,20 +12,23 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
->  
-> -comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 7, host gcc >= 4.9"
-> +comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 7, host gcc >= 4.9"
->  	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-> +	depends on !BR2_BINFMT_FLAT
->  	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
-> -		!BR2_TOOLCHAIN_USES_GLIBC || \
-> +		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+> We could carry a per-version hash file, but using main.c as a license
+> file is really just hidding the issue. IOnstead, I've dropped it
+> altogether.
 
-But that also allows uclibc now... Is that intended? If so, this should
-also be mentioned in the commit log
+Aaah, yes, indeed. Thanks for spotting/detecting that.
 
->  		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
->  		!BR2_HOST_GCC_AT_LEAST_4_9
-> -	depends on BR2_USE_MMU
+> Eugen, Nicolas (and Simon?): would you care to add an actual license
+> file to your repository, please?
 
-How does that fit with allowing musl?
+Agreed, Eugen and Nicolas: it would really be better to have a proper
+LICENSE file in your repo. Please add it to both the 3.x branch and the
+4.x branch :-)
 
-Regards,
-Yann E. MORIN.
+> The second issue is less of an issue: there were two defconfigs that use
+> the default 3.x version. Without a tweak, they would have switched over
+> to using 4.x. So I pinned them with BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X.
 
->  config BR2_PACKAGE_WEBKITGTK
->  	bool "webkitgtk"
-> +	depends on !BR2_STATIC_LIBS # wayland
-> +	depends on !BR2_BINFMT_FLAT # icu
->  	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu
->  	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
-> -	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	depends on BR2_USE_WCHAR # icu, libsoup
->  	depends on BR2_PACKAGE_LIBGTK3
->  	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
->  	select BR2_PACKAGE_CAIRO
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Aah, yes, well spotted. I think we should ask the contributor of these
+defconfigs to use a fixed version of AT91Bootstrap, because that's
+normally what we do for bootloader/kernel versions in defconfigs.
 
+> With the aboce two issues adressed: applied to next, thanks.
+
+Many thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
