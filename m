@@ -1,39 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 May 2021 21:51:06 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libsamplerate:
- add LIBSAMPLERATE_CPE_ID_VENDOR
-Message-ID: <20210519192210.23BC288769@busybox.osuosl.org>
+Date: Wed, 19 May 2021 21:56:31 +0200
+Subject: [Buildroot] [PATCH for 2021.02.x 1/1] package/redis: security
+ bump to v6.0.13
+In-Reply-To: <20210517133833.177855-1-titouanchristophe@gmail.com> (Titouan
+ Christophe's message of "Mon, 17 May 2021 15:38:33 +0200")
+References: <20210517133833.177855-1-titouanchristophe@gmail.com>
+Message-ID: <87bl96biq8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79cc4df058200e932d550f56b262327ca5c56402
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Titouan" == Titouan Christophe <titouanchristophe@gmail.com> writes:
 
-cpe:2.3:a:libsamplerate_project:libsamplerate is a valid CPE identifier
-for this package:
+ > From the release notes:
+ > ================================================================================
+ > Redis 6.0.13 Released Mon May 3 19:00:00 IST 2021
+ > ================================================================================
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibsamplerate_project%3Alibsamplerate
+ > Upgrade urgency: SECURITY, Contains fixes to security issues that affect
+ > authenticated client connections. LOW otherwise.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7a899d67e8531522bff056bc23274311daf18828)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libsamplerate/libsamplerate.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > See https://github.com/redis/redis/blob/6.0.13/00-RELEASENOTES
 
-diff --git a/package/libsamplerate/libsamplerate.mk b/package/libsamplerate/libsamplerate.mk
-index c107650cb4..146d57d15e 100644
---- a/package/libsamplerate/libsamplerate.mk
-+++ b/package/libsamplerate/libsamplerate.mk
-@@ -11,6 +11,7 @@ LIBSAMPLERATE_DEPENDENCIES = host-pkgconf
- LIBSAMPLERATE_CONF_OPTS = --disable-fftw --program-transform-name=''
- LIBSAMPLERATE_LICENSE = BSD-2-Clause
- LIBSAMPLERATE_LICENSE_FILES = COPYING
-+LIBSAMPLERATE_CPE_ID_VENDOR = libsamplerate_project
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- LIBSAMPLERATE_DEPENDENCIES += alsa-lib
+ > Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+
+Committed to 2021.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
