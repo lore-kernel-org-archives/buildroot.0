@@ -1,53 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 22:12:04 +0200
-Subject: [Buildroot] [PATCH] package/libopenssl: md5 is not optional
-Message-ID: <20210519201204.2693525-1-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 19 May 2021 22:12:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/synergy: add SYNERGY_CPE_ID_VENDOR
+Message-ID: <20210519201257.50570-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit a83d41867c8d (package/libopenssl: add option to enable some
-features) made md5 an optional feature.
+cpe:2.3:a:symless:synergy is a valid CPE identifier for this package:
 
-However, md5 has nt been optional since 1.1.0, released in 2016.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asymless%3Asynergy
 
-Drop that option.
-
-Reported-by: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libopenssl/Config.in     | 4 ----
- package/libopenssl/libopenssl.mk | 1 -
- 2 files changed, 5 deletions(-)
+ package/synergy/synergy.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-index 7ed799075f..fcead4c11a 100644
---- a/package/libopenssl/Config.in
-+++ b/package/libopenssl/Config.in
-@@ -64,10 +64,6 @@ config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4
- 	bool "enable MD4"
- 	default y
+diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
+index 63c6e5cbc1..bc7ebea070 100644
+--- a/package/synergy/synergy.mk
++++ b/package/synergy/synergy.mk
+@@ -8,6 +8,7 @@ SYNERGY_VERSION = 2.0.12-beta
+ SYNERGY_SITE = $(call github,symless,synergy-core,v$(SYNERGY_VERSION))
+ SYNERGY_LICENSE = GPL-2.0
+ SYNERGY_LICENSE_FILES = LICENSE
++SYNERGY_CPE_ID_VENDOR = symless
+ SYNERGY_DEPENDENCIES = xlib_libX11 xlib_libXtst
  
--config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD5
--	bool "enable MD5"
--	default y
--
- config BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2
- 	bool "enable MDC2"
- 	default y
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index c7f8ae714e..389a0a8b32 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -90,7 +90,6 @@ define LIBOPENSSL_CONFIGURE_CMDS
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4),,no-rc4) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD2),,no-md2) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4),,no-md4) \
--			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD5),,no-md5) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2),,no-mdc2) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2),,no-blake2) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_IDEA),,no-idea) \
+ # Avoid using buildroot commit hash inside cmake/Version.cmake
 -- 
-2.25.1
+2.30.2
