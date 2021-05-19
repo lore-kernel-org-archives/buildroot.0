@@ -1,67 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 14:00:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python3-six: add python3 variant
-In-Reply-To: <1621370634009.93154@lab126.com>
-References: <1620853148995.76548@lab126.com> <20210518150056.GQ2506@scaer>
- <1621370634009.93154@lab126.com>
-Message-ID: <20210519120015.GU2268078@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 19 May 2021 14:19:10 +0200
+Subject: [Buildroot] [PATCH 3/3] boot/at91bootstrap3: add
+ BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3
+In-Reply-To: <ebcdcf55-e613-6b37-0faa-26b3d548b5be@microchip.com>
+References: <20210518213749.144355-1-thomas.petazzoni@bootlin.com>
+ <20210518213749.144355-4-thomas.petazzoni@bootlin.com>
+ <ebcdcf55-e613-6b37-0faa-26b3d548b5be@microchip.com>
+Message-ID: <20210519141910.0af4f949@windsurf.orange-hotspot>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chan, All,
+On Wed, 19 May 2021 11:29:23 +0000
+<Eugen.Hristev@microchip.com> wrote:
 
-On 2021-05-18 20:43 +0000, Chan, Donald spake thusly:
-> On 2021-05-12 20:59 +0000, Chan, Donald via buildroot spake thusly:
-> >> Signed-off-by: Donald Chan <hoiho@lab126.com>
-> >Why do you need a python3-specific version of six?
-> This was for the host side Python packages
+> > diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+> > index 18301a0dc0..966e393db5 100644
+> > --- a/boot/at91bootstrap3/Config.in
+> > +++ b/boot/at91bootstrap3/Config.in
+> > @@ -101,3 +101,11 @@ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE
+> >            Path to the at91bootstrap3 configuration file
+> > 
+> >   endif # BR2_TARGET_AT91BOOTSTRAP3
+> > +
+> > +config BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3
+> > +       bool "needs host-python3"  
+> 
+> Hi,
+> 
+> This prompt that appears in menuconfig is a bit unfriendly : it does not 
+> say who needs the host-python3, and it does not appear to be in the 
+> at91bootstrap3 -related options.
+> It is at the same indentation level as the other bootloaders, like 
+> Barebox, Grub, etc. So I think it's misleading and should be aligned 
+> with the other At91bootstrap options
 
-Your patch was adding both the target and the host variants, though.
+Crap, you're entirely right, it is misplaced: it should have been just
+two line above, within the if BR2_TARGET_AT91BOOTSTRAP3 ... endif block.
 
-> - I see the same patterns
-> for other python packages like
-> - python3-requests/python3-requests.mk
-> - python3-mako/python3-mako.mk
+Unless someone beats me at it, I'll send a patch fixing that.
 
-Ah, but those were added because we have a need for them: in some
-situations, we need to have both the python2 and python3 modules for
-those installed at the same time.
+Thanks for spotting this!
 
-For example:
-    $ git grep -E 'host-python3?-mako'
-    package/gnuradio/gnuradio.mk:# host-python-mako and host-python-six are needed for volk to compile
-    package/gnuradio/gnuradio.mk:	host-python-mako \
-    package/jailhouse/jailhouse.mk:	host-python-mako \
-    package/mesa3d/mesa3d.mk:	host-python3-mako \
-    package/piglit/piglit.mk:	host-python-mako \
-    package/sdbusplus/sdbusplus.mk:	host-python-mako \
-    package/uhd/uhd.mk:	host-python-mako
-
-So, as you can see, we have packages that need the python2 host mako,
-and others (one, really) that needs the python3 host mako. The situation
-is similar for the other python3-specific packages.
-
-> Let me me know if this makes sense.
-
-Yeah, I see the reasoning, but we are only adding the python3-specific
-variant when there is an actual need for it.
-
-If you can provide such an example that a specific host-python3-six
-is needed, do not hesitate to resend your patch with such an explanation
-in your commit log.
-
-Thanks again for your contribution!
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
