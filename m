@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 May 2021 14:19:10 +0200
-Subject: [Buildroot] [PATCH 3/3] boot/at91bootstrap3: add
- BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3
-In-Reply-To: <ebcdcf55-e613-6b37-0faa-26b3d548b5be@microchip.com>
+Date: Wed, 19 May 2021 14:20:51 +0200
+Subject: [Buildroot] [PATCH 1/3] boot/at91bootstrap3: add support for
+ at91bootstrap 4.x series
+In-Reply-To: <223d3cbf-f1cb-4bdc-aff6-f766e428da33@microchip.com>
 References: <20210518213749.144355-1-thomas.petazzoni@bootlin.com>
- <20210518213749.144355-4-thomas.petazzoni@bootlin.com>
- <ebcdcf55-e613-6b37-0faa-26b3d548b5be@microchip.com>
-Message-ID: <20210519141910.0af4f949@windsurf.orange-hotspot>
+ <20210518213749.144355-2-thomas.petazzoni@bootlin.com>
+ <20210519093323.GL2268078@scaer>
+ <20210519120237.52ddc109@windsurf.orange-hotspot>
+ <223d3cbf-f1cb-4bdc-aff6-f766e428da33@microchip.com>
+Message-ID: <20210519142051.6e84a675@windsurf.orange-hotspot>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 19 May 2021 11:29:23 +0000
+Hello Eugen,
+
+On Wed, 19 May 2021 11:36:56 +0000
 <Eugen.Hristev@microchip.com> wrote:
 
-> > diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-> > index 18301a0dc0..966e393db5 100644
-> > --- a/boot/at91bootstrap3/Config.in
-> > +++ b/boot/at91bootstrap3/Config.in
-> > @@ -101,3 +101,11 @@ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE
-> >            Path to the at91bootstrap3 configuration file
-> > 
-> >   endif # BR2_TARGET_AT91BOOTSTRAP3
-> > +
-> > +config BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3
-> > +       bool "needs host-python3"  
-> 
-> Hi,
-> 
-> This prompt that appears in menuconfig is a bit unfriendly : it does not 
-> say who needs the host-python3, and it does not appear to be in the 
-> at91bootstrap3 -related options.
-> It is at the same indentation level as the other bootloaders, like 
-> Barebox, Grub, etc. So I think it's misleading and should be aligned 
-> with the other At91bootstrap options
+> Thank you for taking care of this. You could have given me more feedback 
+> on my previous patch set so I would have changed it, if you felt like 
+> it, but now it's done, we can move forward, which is good.
 
-Crap, you're entirely right, it is misplaced: it should have been just
-two line above, within the if BR2_TARGET_AT91BOOTSTRAP3 ... endif block.
+Agreed, but sometimes the comments/ideas only come when really you
+apply the patch, and you mess up with the code to figure out the most
+appropriate way. Also, it was a way of avoiding another back-and-forth
+with another iteration. I discussed the patch series yesterday with the
+other BR maintainers, respin a series, and it got applied today.
+Problem solved :-)
 
-Unless someone beats me at it, I'll send a patch fixing that.
+(To the exception of the mistake you spotted in PATCH 3/3, of course!).
 
-Thanks for spotting this!
+> I will add a LICENSE file in the repo soon.
+
+That would be awesome. Could you add it to both the 3.x and the 4.x
+branches ? It would be nice to have another release on the 3.x branch
+that includes the LICENSE file.
+
+Thanks!
 
 Thomas
 -- 
