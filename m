@@ -1,38 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 May 2021 17:39:13 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/tini: add
- TINI_CPE_ID_VENDOR
-Message-ID: <20210519151137.B808088577@busybox.osuosl.org>
+Date: Wed, 19 May 2021 17:40:06 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libidn: add
+ LIBIDN_CPE_ID_VENDOR
+Message-ID: <20210519151137.EEB83885A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ed1c31c828c18c212b2c1c98922a6fa4f7ce2bb
+commit: https://git.buildroot.net/buildroot/commit/?id=1ce7c314c20645e868c8372e24e72ef8e8e5f743
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:tini_project:tini is a valid CPE identifier for this package:
+cpe:2.3:a:gnu:libidn is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atini_project%3Atini
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Alibidn
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5b074ef1f32c16fd3433f54a822527032b71b1a0)
+(cherry picked from commit 8391f7d189362317c23325bfb6c6a196ea2e32a1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tini/tini.mk | 1 +
+ package/libidn/libidn.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/tini/tini.mk b/package/tini/tini.mk
-index af4a3bcb5e..9da54f8a25 100644
---- a/package/tini/tini.mk
-+++ b/package/tini/tini.mk
-@@ -8,6 +8,7 @@ TINI_VERSION = 0.19.0
- TINI_SITE = $(call github,krallin,tini,v$(TINI_VERSION))
- TINI_LICENSE = MIT
- TINI_LICENSE_FILES = LICENSE
-+TINI_CPE_ID_VENDOR = tini_project
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index 2df3437029..c49bbe098e 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -12,6 +12,7 @@ LIBIDN_CONF_OPTS = --disable-java --enable-csharp=no
+ LIBIDN_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ LIBIDN_LICENSE = GPL-2.0+, GPL-3.0+, LGPL-3.0+
+ LIBIDN_LICENSE_FILES = COPYINGv2 COPYINGv3 COPYING.LESSERv3
++LIBIDN_CPE_ID_VENDOR = gnu
  
- TINI_CFLAGS = $(TARGET_CFLAGS) \
- 	-static \
+ define LIBIDN_REMOVE_BINARY
+ 	rm -f $(TARGET_DIR)/usr/bin/idn
