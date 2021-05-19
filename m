@@ -1,38 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 May 2021 17:35:48 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/taglib: add
- TAGLIB_CPE_ID_VENDOR
-Message-ID: <20210519150758.4471487A43@busybox.osuosl.org>
+Date: Wed, 19 May 2021 17:36:37 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/tclap: add
+ TCLAP_CPE_ID_VENDOR
+Message-ID: <20210519150758.63EBA87A43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d42350eb7ef32f3740da922ea45e9781e61fc75
+commit: https://git.buildroot.net/buildroot/commit/?id=54cb9e1fa6c1967e16f3dfc370b279d8c7d593ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:taglib:taglib is a valid CPE identifier for this package:
+cpe:2.3:a:tclap_project:tclap is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ataglib%3Ataglib
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atclap_project%3Atclap
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit eecf0e55d379083b9dd19256b8a3a2f8898c1b12)
+(cherry picked from commit 1ffd14f28a23c13f8daa0b6f538bd0fc8a1c3d30)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/taglib/taglib.mk | 1 +
+ package/tclap/tclap.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index 738be35756..f31f1046a5 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
-@@ -9,6 +9,7 @@ TAGLIB_SITE = http://taglib.github.io/releases
- TAGLIB_INSTALL_STAGING = YES
- TAGLIB_LICENSE = LGPL-2.1 or MPL-1.1
- TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
-+TAGLIB_CPE_ID_VENDOR = taglib
+diff --git a/package/tclap/tclap.mk b/package/tclap/tclap.mk
+index 63dea67ac4..e1856420f3 100644
+--- a/package/tclap/tclap.mk
++++ b/package/tclap/tclap.mk
+@@ -9,6 +9,7 @@ TCLAP_SITE = http://downloads.sourceforge.net/project/tclap
+ TCLAP_LICENSE = MIT
+ TCLAP_LICENSE_FILES = COPYING
+ TCLAP_INSTALL_STAGING = YES
++TCLAP_CPE_ID_VENDOR = tclap_project
  
- # 0002-Don-t-assume-TDRC-is-an-instance-of-TextIdentificationFrame.patch
- TAGLIB_IGNORE_CVES += CVE-2017-12678
+ # This package is a pure C++ template library, only made of headers.
+ TCLAP_INSTALL_TARGET = NO
