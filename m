@@ -1,105 +1,57 @@
-From: Qais Yousef <qais.yousef@arm.com>
-Date: Wed, 19 May 2021 19:07:21 +0100
-Subject: [Buildroot] [PATCHv6 4/5] package/bpftrace: new package
-In-Reply-To: <17334481-d69f-3705-c298-51a87a7d3a12@gmail.com>
-References: <20201220151203.2206747-1-romain.naour@gmail.com>
- <20201220151203.2206747-4-romain.naour@gmail.com>
- <20201221134549.nk4eu6qpto36ahpq@e107158-lin>
- <20210123194408.3omcypashiq44le5@e107158-lin>
- <20210225101849.nt6rnloszarwrgm3@e107158-lin>
- <CANLo3JhERRWK_kJCa0phxXVybPJuPM76PEEstN9tRUek04e+gQ@mail.gmail.com>
- <20210406115445.iueiqqgxhc7qz3yq@e107158-lin>
- <17334481-d69f-3705-c298-51a87a7d3a12@gmail.com>
-Message-ID: <20210519180721.hbrplzik4vsx76hp@e107158-lin.cambridge.arm.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 19 May 2021 20:14:23 +0200
+Subject: [Buildroot] [PATCH/next v1] package/postgresql: select mandatory
+ libopenssl features
+Message-ID: <20210519181423.8936-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/10/21 12:15, Romain Naour wrote:
-> Hello,
-> 
-> Le 06/04/2021 ? 13:54, Qais Yousef a ?crit?:
-> > On 02/25/21 12:01, Romain Naour wrote:
-> >> Hello Quais, All,
-> >>
-> >> Le jeu. 25 f?vr. 2021 ? 11:18, Qais Yousef <qais.yousef@arm.com> a ?crit :
-> >>
-> >>     On 01/23/21 19:44, Qais Yousef wrote:
-> >>     > On 12/21/20 13:45, Qais Yousef wrote:
-> >>     > > On 12/20/20 16:12, Romain Naour wrote:
-> >>     > > > From: Qais Yousef <qais.yousef@arm.com>
-> >>     > > >
-> >>     > > > bpftrace is a high-level tracing language for Linux enhanced Berkeley
-> >>     > > > Packet Filter (eBPF) available in recent Linux kernels (4.x).
-> >>     > > >
-> >>     > > > Only tested on x86_64 and aarch64. The package doesn't support i386
-> >>     and
-> >>     > > > aarch32.
-> >>     > > >
-> >>     > > > The libbpf dependency allow to enable the BTF support:
-> >>     > > >  # bpftrace --info
-> >>     > > >  System
-> >>     > > >    OS: Linux 5.4.58 #1 SMP Sun Dec 20 15:56:56 CET 2020
-> >>     > > >    Arch: aarch64
-> >>     > > >
-> >>     > > >  Build
-> >>     > > >    version: 2020.11-328-g019a9
-> >>     > > >    LLVM: 9.0.1
-> >>     > > >    foreach_sym: yes
-> >>     > > >    unsafe uprobe: no
-> >>     > > >    bfd: yes
-> >>     > > >    bpf_attach_kfunc: yes
-> >>     > > >    bcc_usdt_addsem: yes
-> >>     > > >    bcc bpf_attach_uprobe refcount: yes
-> >>     > > >    libbpf: yes
-> >>     > > >    libbpf btf dump: yes
-> >>     > > >    libbpf btf dump type decl: yes
-> >>     > > >
-> >>     > > > bfptrace doesn't use the libbpf_bcc library provided by bcc package.
-> >>     > > >
-> >>     > > > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> >>     > > > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> >>     > > > Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> >>     > > > ---
-> >>     > > > v6: Update DEVELOPERS file
-> >>     > >
-> >>     > > LGTM.
-> >>     >
-> >>     > Ping.
-> >>     >
-> >>     > I had issues with building patch 5, but the rest of the series is in good
-> >>     shape
-> >>     > IMO and can be merged independently at least.
-> >>     >
-> >>     > Is there anything more needs to be done to help get this support merged?
-> >>
-> >>     Ping again. It'd be great to finally have these merged.
-> >>
-> >>
-> >> Maintainers are currently busy at the release 2021.02 version of Buildroot.
-> >>
-> >> But yes, this work has been reviewed and reworked by Quais and me.
-> >>
-> >> I guess It's good to go.
-> > 
-> > Another gentle ping. Hopefully the release is done now for this to be
-> > considered.
-> 
-> Gentle ping too.
-> 
-> The patch series is here:
-> http://patchwork.ozlabs.org/project/buildroot/list/?series=221413
-> 
-> I didn't work on it since then, only the patch 5/5 needs to be reworked.
+Select mandatory libopenssl features (which are selectable since
+commit a83d41867c8d69a77d5cd0a665aa216af5340359):
 
-Ping!
+- BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH
+- BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST
+- BR2_PACKAGE_LIBOPENSSL_ENABLE_DES
 
-This series has been setting around since forever now. What's the right way
-forward to get this over the fence?
+Fixes:
 
-Thanks
+  - http://autobuild.buildroot.net/results/7fdcaa337a7369673ac4580ff7a2bbccc895dca2
 
---
-Qais Yousef
+  openssl.c:449:35: warning: implicit declaration of function 'EVP_bf_ecb'; did you mean 'EVP_sm4_ecb'? [-Wimplicit-function-declaration]
+    449 |  if (!EVP_EncryptInit_ex(evp_ctx, EVP_bf_ecb(), NULL, NULL, NULL))
+        |                                   ^~~~~~~~~~
+        |                                   EVP_sm4_ecb
+  openssl.c:449:35: warning: passing argument 2 of 'EVP_EncryptInit_ex' makes pointer from integer without a cast [-Wint-conversion]
+    449 |  if (!EVP_EncryptInit_ex(evp_ctx, EVP_bf_ecb(), NULL, NULL, NULL))
+        |                                   ^~~~~~~~~~~~
+        |                                   |
+        |                                   int
+  In file included from openssl.c:34:
+  .../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/openssl/evp.h:583:53: note: expected 'const EVP_CIPHER *' {aka 'const struct evp_cipher_st *'} but argument is of type 'int'
+    583 |                                   const EVP_CIPHER *cipher, ENGINE *impl,
+        |                                   ~~~~~~~~~~~~~~~~~~^~~~~~
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/postgresql/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+index 2debdc24d7..b42b219558 100644
+--- a/package/postgresql/Config.in
++++ b/package/postgresql/Config.in
+@@ -6,6 +6,9 @@ config BR2_PACKAGE_POSTGRESQL
+ 	# postgresql is unlikely to be used in a pure statically
+ 	# linked environment.
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH if BR2_PACKAGE_LIBOPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST if BR2_PACKAGE_LIBOPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  PostgreSQL is a powerful, open source object-relational
+ 	  database system.
+-- 
+2.31.1
