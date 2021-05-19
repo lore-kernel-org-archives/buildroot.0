@@ -1,45 +1,27 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 19 May 2021 21:41:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/flatcc: disable -Werror
-Message-ID: <20210519194104.48784-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 May 2021 21:42:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/terminology: add
+ TERMINOLOGY_CPE_ID_VENDOR
+In-Reply-To: <20210516101702.3770420-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 16 May 2021 12:17:02 +0200")
+References: <20210516101702.3770420-1-fontaine.fabrice@gmail.com>
+Message-ID: <87lf8aecis.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable -Werror to fix the following build failure with gcc 11:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-/data/buildroot-autobuilder/instance-0/output-1/build/host-flatcc-0.6.0/include/flatcc/reflection/flatbuffers_common_builder.h: In function 'flatbuffers_char_array_copy_from_pe':
-/data/buildroot-autobuilder/instance-0/output-1/build/host-flatcc-0.6.0/include/flatcc/reflection/flatbuffers_common_builder.h:341:3: error: this 'for' clause does not guard... [-Werror=misleading-indentation]
-  341 |   for (i = 0; i < n; ++i) N ## _copy_from_pe(&p[i], &p2[i]); return p; }\
-      |   ^~~
+ > cpe:2.3:a:enlightenment:terminology is a valid CPE identifier for this
+ > package:
 
-An other option would have been to retrieve the following upstream
-commit:
-https://github.com/dvidelabs/flatcc/commit/f8c4140dd9dde61c86db751f6002def78754fced
-but disabling -Werror is more future-proof
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aenlightenment%3Aterminology
 
-Fixes:
- - http://autobuild.buildroot.org/results/4d5cdddbfeefdeb943234b76eb08b04376f3c36d
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/flatcc/flatcc.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Committed to 2021.02.x, thanks.
 
-diff --git a/package/flatcc/flatcc.mk b/package/flatcc/flatcc.mk
-index c27809b86a..fcace691c0 100644
---- a/package/flatcc/flatcc.mk
-+++ b/package/flatcc/flatcc.mk
-@@ -10,6 +10,8 @@ FLATCC_LICENSE = Apache-2.0
- FLATCC_LICENSE_FILES = LICENSE
- FLATCC_INSTALL_STAGING = YES
- FLATCC_DEPENDENCIES = host-flatcc
-+FLATCC_CONF_OPTS = -DFLATCC_ALLOW_WERROR=OFF
-+HOST_FLATCC_CONF_OPTS = -DFLATCC_ALLOW_WERROR=OFF
- 
- # Disable build of tests and samples
- FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
 -- 
-2.30.2
+Bye, Peter Korsgaard
