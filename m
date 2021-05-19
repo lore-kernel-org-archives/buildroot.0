@@ -1,24 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 May 2021 21:43:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi: add CPE variables
-In-Reply-To: <20210516110536.3773761-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 16 May 2021 13:05:36 +0200")
-References: <20210516110536.3773761-1-fontaine.fabrice@gmail.com>
-Message-ID: <87mtsqcxvo.fsf@dell.be.48ers.dk>
+From: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Date: Wed, 19 May 2021 21:44:45 +0200
+Subject: [Buildroot] [PATCH 1/3] boot/at91bootstrap3: add support for
+ at91bootstrap 4.x series
+In-Reply-To: <20210519120237.52ddc109@windsurf.orange-hotspot>
+References: <20210518213749.144355-1-thomas.petazzoni@bootlin.com>
+ <20210518213749.144355-2-thomas.petazzoni@bootlin.com>
+ <20210519093323.GL2268078@scaer>
+ <20210519120237.52ddc109@windsurf.orange-hotspot>
+Message-ID: <67f43b07-1fc8-2eeb-9f3c-947f4b695d1e@grenoble.cnrs.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hi!
 
- > cpe:2.3:a:kodi:kodi is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akodi%3Akodi
+Thomas Petazzoni wrote:
+> I think we should ask the contributor of these defconfigs to use a
+> fixed version of AT91Bootstrap, because that's normally what we do for
+> bootloader/kernel versions in defconfigs.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Oh, right, I hadn't noticed. Sorry for the mess. I just submitted a
+patch to pin these defconfifs to at91bootstrap 3.10.2, which I tested.
 
-Committed to 2021.02.x, thanks.
+Best regards,
 
--- 
-Bye, Peter Korsgaard
+Edgar Bonet.
