@@ -1,117 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 10:32:12 +0200
-Subject: [Buildroot] [PATCH v2 3/3] support/scripts/pkg-stats: clarify
- when a CVE/CPE should report as N/A
-In-Reply-To: <20210519024638.63607-3-matthew.weber@collins.com>
-References: <20210519024638.63607-1-matthew.weber@collins.com>
- <20210519024638.63607-3-matthew.weber@collins.com>
-Message-ID: <20210519083212.GI2268078@scaer>
+From: pojiro.jp at gmail.com <pojiro.jp@gmail.com>
+Date: Wed, 19 May 2021 17:34:07 +0900
+Subject: [Buildroot] [PATCH v2] support/dependencies,
+ scripts: accept patches with renames
+In-Reply-To: <20210515094010.GA2506@scaer>
+References: <20210515094010.GA2506@scaer>
+Message-ID: <20210519083405.326909-1-pojiro.jp@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew, All,
+From: Ryota Kinukawa <pojiro.jp@gmail.com>
 
-On 2021-05-18 21:46 -0500, Matthew Weber via buildroot spake thusly:
->  - If a package doesn't have any versioning, ignore and state that
->  - If a package is virtual, CVE=ignore and CPE state virtual
->  - For any of these NA cases, don't provide search link and color box
->    green
-> 
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Matthew Weber <matthew.weber@collins.com>
+Currently, patches with renames are refused, as they reqire patch >= 2.7.
+So far, we did not require that version because it was too recent to be widely available.
 
-Applied to master, thanks.
+But patch 2.7 has been released in 2012, almost 9 years ago now;
+it is old enough that we can start relying on it.
 
-Regards,
-Yann E. MORIN.
+Add a check that patch is 2.7 or newer, and drop the check about
+renames in apply-patches.sh.
 
-> ---
-> Changes v1 -> v2
-> [Yann
->  - Update coloring of case when package is virtual, color boxes green
->    for N/A of CPE and CVEs
-> ---
->  support/scripts/pkg-stats | 24 +++++++++++++++++-------
->  1 file changed, 17 insertions(+), 7 deletions(-)
-> 
-> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index 0c34388066..cc91d13167 100755
-> --- a/support/scripts/pkg-stats
-> +++ b/support/scripts/pkg-stats
-> @@ -229,7 +229,10 @@ class Package:
->          """
->          var = self.pkgvar()
->          if not self.is_actual_package:
-> -            self.status['cpe'] = ("na", "no valid package infra")
-> +            self.status['cpe'] = ("na", "N/A - virtual pkg")
-> +            return
-> +        if not self.current_version:
-> +            self.status['cpe'] = ("na", "no version information available")
->              return
->  
->          if var in self.all_cpeids:
-> @@ -587,7 +590,7 @@ def check_package_cves(nvd_path, packages):
->      cpe_product_pkgs = defaultdict(list)
->      for pkg in packages:
->          if not pkg.is_actual_package:
-> -            pkg.status['cve'] = ("na", "no valid package infra")
-> +            pkg.status['cve'] = ("na", "N/A")
->              continue
->          if not pkg.current_version:
->              pkg.status['cve'] = ("na", "no version information available")
-> @@ -909,6 +912,8 @@ def dump_html_pkg(f, pkg):
->          td_class.append("cve-ok")
->      elif pkg.is_status_error("cve"):
->          td_class.append("cve-nok")
-> +    elif pkg.is_status_na("cve") and not pkg.is_actual_package:
-> +        td_class.append("cve-ok")
->      else:
->          td_class.append("cve-unknown")
->      f.write("  <td class=\"%s\">\n" % " ".join(td_class))
-> @@ -936,18 +941,23 @@ def dump_html_pkg(f, pkg):
->          td_class.append("cpe-ok")
->      elif pkg.is_status_error("cpe"):
->          td_class.append("cpe-nok")
-> +    elif pkg.is_status_na("cpe") and not pkg.is_actual_package:
-> +        td_class.append("cpe-ok")
->      else:
->          td_class.append("cpe-unknown")
->      f.write("  <td class=\"%s\">\n" % " ".join(td_class))
->      if pkg.cpeid:
->          f.write("  <code>%s</code>\n" % pkg.cpeid)
->      if not pkg.is_status_ok("cpe"):
-> -        if pkg.cpeid:
-> -            f.write("  <br/>%s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
-> -                    (pkg.status['cpe'][1], ":".join(pkg.cpeid.split(":")[0:5])))
-> +        if pkg.is_actual_package and pkg.current_version:
-> +            if pkg.cpeid:
-> +                f.write("  <br/>%s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
-> +                        (pkg.status['cpe'][1], ":".join(pkg.cpeid.split(":")[0:5])))
-> +            else:
-> +                f.write("  %s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
-> +                        (pkg.status['cpe'][1], pkg.name))
->          else:
-> -            f.write("  %s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %
-> -                    (pkg.status['cpe'][1], pkg.name))
-> +            f.write("  %s\n" % pkg.status['cpe'][1])
->  
->      f.write("  </td>\n")
->  
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Ryota Kinukawa <pojiro.jp@gmail.com>
+---
+ support/dependencies/dependencies.sh | 16 ++++++++++++----
+ support/scripts/apply-patches.sh     |  5 -----
+ 2 files changed, 12 insertions(+), 9 deletions(-)
 
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 1954f038be..91e7cd60f9 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -163,7 +163,7 @@ fi
+ 
+ # Check that a few mandatory programs are installed
+ missing_progs="no"
+-for prog in patch perl tar wget cpio unzip rsync bc ${DL_TOOLS} ; do
++for prog in perl tar wget cpio unzip rsync bc ${DL_TOOLS} ; do
+ 	if ! which $prog > /dev/null ; then
+ 		echo "You must install '$prog' on your build machine";
+ 		missing_progs="yes"
+@@ -183,11 +183,19 @@ if test "${missing_progs}" = "yes" ; then
+ 	exit 1
+ fi
+ 
+-# apply-patches.sh needs patch with --no-backup-if-mismatch support (GNU, busybox w/DESKTOP)
+-if ! patch --no-backup-if-mismatch </dev/null 2>/dev/null; then
+-	echo "Your patch program does not support the --no-backup-if-mismatch option. Install GNU patch"
++PATCH_VERSION="$(patch -v 2> /dev/null | sed -n 's/^GNU patch \(.*\)/\1/p')"
++if [ -z "${PATCH_VERSION}" ] ; then
++	echo
++	echo "You must install GNU patch"
+ 	exit 1
+ fi
++PATCH_MAJOR="$(echo "${PATCH_VERSION}" | cut -d . -f 1)"
++PATCH_MINOR="$(echo "${PATCH_VERSION}" | cut -d . -f 2)"
++if [ "${PATCH_MAJOR}" -lt 2 ] || [ "${PATCH_MAJOR}" -eq 2 -a "${PATCH_MINOR}" -lt 7 ] ; then
++	echo
++	echo "You have GNU patch "${PATCH_VERSION}" installed. GNU patch >=2.7 is required"
++	exit 1;
++fi
+ 
+ if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
+ 	if ! which locale > /dev/null ; then
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 9fb488c570..e5a2fdd09e 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -113,11 +113,6 @@ function apply_patch {
+         echo "  to be applied  : ${path}/${patch}"
+         exit 1
+     fi
+-    if ${uncomp} "${path}/$patch" | grep -q "^rename from" && \
+-       ${uncomp} "${path}/$patch" | grep -q "^rename to" ; then
+-        echo "Error: patch contains some renames, not supported by old patch versions"
+-        exit 1
+-    fi
+     echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
+     ${uncomp} "${path}/$patch" | patch -g0 -p1 -E --no-backup-if-mismatch -d "${builddir}" -t -N $silent
+     if [ $? != 0 ] ; then
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
