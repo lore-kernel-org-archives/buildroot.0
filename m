@@ -1,81 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 22:15:13 +0200
-Subject: [Buildroot] [PATCH/next v1] package/postgresql: select
- mandatory libopenssl features
-In-Reply-To: <20210519181423.8936-1-ps.report@gmx.net>
-References: <20210519181423.8936-1-ps.report@gmx.net>
-Message-ID: <20210519201513.GI2268078@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 19 May 2021 22:18:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/supervisor: add
+ SUPERVISOR_CPE_ID_VENDOR
+Message-ID: <20210519201805.50971-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+cpe:2.3:a:supervisord:supervisor is a valid CPE identifier for this
+package:
 
-On 2021-05-19 20:14 +0200, Peter Seiderer spake thusly:
-> Select mandatory libopenssl features (which are selectable since
-> commit a83d41867c8d69a77d5cd0a665aa216af5340359):
-> 
-> - BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH
-> - BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST
-> - BR2_PACKAGE_LIBOPENSSL_ENABLE_DES
-> 
-> Fixes:
-> 
->   - http://autobuild.buildroot.net/results/7fdcaa337a7369673ac4580ff7a2bbccc895dca2
-> 
->   openssl.c:449:35: warning: implicit declaration of function 'EVP_bf_ecb'; did you mean 'EVP_sm4_ecb'? [-Wimplicit-function-declaration]
->     449 |  if (!EVP_EncryptInit_ex(evp_ctx, EVP_bf_ecb(), NULL, NULL, NULL))
->         |                                   ^~~~~~~~~~
->         |                                   EVP_sm4_ecb
->   openssl.c:449:35: warning: passing argument 2 of 'EVP_EncryptInit_ex' makes pointer from integer without a cast [-Wint-conversion]
->     449 |  if (!EVP_EncryptInit_ex(evp_ctx, EVP_bf_ecb(), NULL, NULL, NULL))
->         |                                   ^~~~~~~~~~~~
->         |                                   |
->         |                                   int
->   In file included from openssl.c:34:
->   .../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/openssl/evp.h:583:53: note: expected 'const EVP_CIPHER *' {aka 'const struct evp_cipher_st *'} but argument is of type 'int'
->     583 |                                   const EVP_CIPHER *cipher, ENGINE *impl,
->         |                                   ~~~~~~~~~~~~~~~~~~^~~~~~
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asupervisord%3Asupervisor
 
-Applied to next, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/supervisor/supervisor.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/postgresql/Config.in | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-> index 2debdc24d7..b42b219558 100644
-> --- a/package/postgresql/Config.in
-> +++ b/package/postgresql/Config.in
-> @@ -6,6 +6,9 @@ config BR2_PACKAGE_POSTGRESQL
->  	# postgresql is unlikely to be used in a pure statically
->  	# linked environment.
->  	depends on !BR2_STATIC_LIBS
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH if BR2_PACKAGE_LIBOPENSSL
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST if BR2_PACKAGE_LIBOPENSSL
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
->  	help
->  	  PostgreSQL is a powerful, open source object-relational
->  	  database system.
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/supervisor/supervisor.mk b/package/supervisor/supervisor.mk
+index 424f46a7c2..92e8323080 100644
+--- a/package/supervisor/supervisor.mk
++++ b/package/supervisor/supervisor.mk
+@@ -8,6 +8,7 @@ SUPERVISOR_VERSION = 4.1.0
+ SUPERVISOR_SITE = https://files.pythonhosted.org/packages/de/87/ee1ad8fa533a4b5f2c7623f4a2b585d3c1947af7bed8e65bc7772274320e
+ SUPERVISOR_LICENSE = BSD-like, rdflib (http_client.py), PSF (medusa)
+ SUPERVISOR_LICENSE_FILES = COPYRIGHT.txt LICENSES.txt
++SUPERVISOR_CPE_ID_VENDOR = supervisord
+ SUPERVISOR_SETUP_TYPE = setuptools
+ 
+ define SUPERVISOR_INSTALL_CONF_FILES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
