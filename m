@@ -1,205 +1,71 @@
-From: Eugen Hristev <eugen.hristev@microchip.com>
-Date: Wed, 19 May 2021 15:30:11 +0300
-Subject: [Buildroot] [PATCH v4 -next] configs/microchip_sama5d2_icp: new
- defconfigs
-Message-ID: <20210519123011.426869-1-eugen.hristev@microchip.com>
+From: Nathaniel Husted <nathaniel.husted@outlook.com>
+Date: Wed, 19 May 2021 12:35:16 +0000
+Subject: [Buildroot] [PATCHv2 1/1] package/rustc: add musl as an
+ available Rust libc
+In-Reply-To: <20210518230043.63dc9ac7@windsurf.orange-hotspot>
+References: <SJ0PR18MB3898AC687557A2CD4FA0340995599@SJ0PR18MB3898.namprd18.prod.outlook.com>,
+ <20210518230043.63dc9ac7@windsurf.orange-hotspot>
+Message-ID: <SJ0PR18MB3898F64AF1A5908759597DBE952B9@SJ0PR18MB3898.namprd18.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the new SAMA5D2 ICP (Industrial Connectivity Board)
-with linux4sam_2020.10 components.
-Update README file with new defconfigs.
+Hi Thomas,
 
-https://www.linux4sam.org/bin/view/Linux4SAM/Sama5d2IcpMainPage
+Apologies for missing the robust engineering solution there. As a follow-up question, how does the buildroot community generally handle .hash file updates? Should these always be done in a package patch set via multiple parts? Do you test the gpg keys and sha256sums "by hand" or is there a utility used when version update commits occur?
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
----
-Changed in v4:
-- adapted to patches related to bootstrap3
-Changes in v3:
-- none
-Changes in v2:
-- removed unwanted configs
-- adapted to use bootstrap3 4.x series.
+I was looking through the contributor documentation to determine expectations with respect to patches and looked through the utilities folder to see if there were supporting tools but could not find a discussion.
 
- board/atmel/readme.txt                        |  2 +
- board/microchip/sama5d2_icp/genimage.cfg      | 31 ++++++++
- configs/microchip_sama5d2_icp_mmc_defconfig   | 31 ++++++++
- .../microchip_sama5d2_icp_mmc_dev_defconfig   | 74 +++++++++++++++++++
- 4 files changed, 138 insertions(+)
- create mode 100644 board/microchip/sama5d2_icp/genimage.cfg
- create mode 100644 configs/microchip_sama5d2_icp_mmc_defconfig
- create mode 100644 configs/microchip_sama5d2_icp_mmc_dev_defconfig
+Cheers,
+Nathaniel
+________________________________________
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Sent: Tuesday, May 18, 2021 5:00 PM
+To: Nathaniel Husted
+Cc: buildroot at buildroot.org; Eric Le Bihan
+Subject: Re: [Buildroot] [PATCHv2 1/1] package/rustc: add musl as an available Rust libc
 
-diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
-index 1f21dd15e4..a29d027214 100644
---- a/board/atmel/readme.txt
-+++ b/board/atmel/readme.txt
-@@ -23,6 +23,8 @@ This guide covers the following configurations:
-  - microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
-  - microchip_sam9x60ek_mmc_defconfig
-  - microchip_sam9x60ek_mmc_dev_defconfig
-+ - microchip_sama5d2_icp_mmc_defconfig
-+ - microchip_sama5d2_icp_mmc_dev_defconfig
- 
- These configurations will use AT91Bootstrap, u-boot and a linux kernel from
- the git trees maintained by Atmel.
-diff --git a/board/microchip/sama5d2_icp/genimage.cfg b/board/microchip/sama5d2_icp/genimage.cfg
-new file mode 100644
-index 0000000000..854751713f
---- /dev/null
-+++ b/board/microchip/sama5d2_icp/genimage.cfg
-@@ -0,0 +1,31 @@
-+# Image for SD card boot on Microchip SAMA5D2 ICP (Industrial Connectivity Platform)
-+#
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"at91-sama5d2_icp.dtb",
-+			"boot.bin",
-+			"u-boot.bin"
-+		}
-+	}
-+	size = 16M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+		offset = 1M
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/configs/microchip_sama5d2_icp_mmc_defconfig b/configs/microchip_sama5d2_icp_mmc_defconfig
-new file mode 100644
-index 0000000000..2196555311
---- /dev/null
-+++ b/configs/microchip_sama5d2_icp_mmc_defconfig
-@@ -0,0 +1,31 @@
-+BR2_arm=y
-+BR2_cortex_a5=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_INSTRUCTIONS_THUMB2=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama5d2_icp/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.10)/linux-linux4sam-2020.10.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_icp"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0-rc2)/at91bootstrap-v4.0.0-rc2.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_icpsd_uboot"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2020.10)/u-boot-at91-linux4sam-2020.10.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_icp_mmc"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/microchip_sama5d2_icp_mmc_dev_defconfig b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-new file mode 100644
-index 0000000000..1966d4baf1
---- /dev/null
-+++ b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-@@ -0,0 +1,74 @@
-+BR2_arm=y
-+BR2_cortex_a5=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_INSTRUCTIONS_THUMB2=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_PTHREAD_DEBUG=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama5d2_icp/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.10)/linux-linux4sam-2020.10.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_icp"
-+BR2_PACKAGE_LINUX_TOOLS_IIO=y
-+BR2_PACKAGE_BZIP2=y
-+BR2_PACKAGE_XZ=y
-+BR2_PACKAGE_ZIP=y
-+BR2_PACKAGE_GDB=y
-+BR2_PACKAGE_LMBENCH=y
-+BR2_PACKAGE_STRACE=y
-+BR2_PACKAGE_TREE=y
-+BR2_PACKAGE_DOSFSTOOLS=y
-+BR2_PACKAGE_DOSFSTOOLS_FATLABEL=y
-+BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
-+BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
-+BR2_PACKAGE_MMC_UTILS=y
-+BR2_PACKAGE_MTD=y
-+BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_EVTEST=y
-+BR2_PACKAGE_SETSERIAL=y
-+BR2_PACKAGE_SPI_TOOLS=y
-+BR2_PACKAGE_USBUTILS=y
-+BR2_PACKAGE_LIBSYSFS=y
-+BR2_PACKAGE_LIBDRM=y
-+BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
-+BR2_PACKAGE_DTC=y
-+BR2_PACKAGE_DTC_PROGRAMS=y
-+BR2_PACKAGE_ARGP_STANDALONE=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
-+BR2_PACKAGE_BRIDGE_UTILS=y
-+BR2_PACKAGE_CAN_UTILS=y
-+BR2_PACKAGE_ETHTOOL=y
-+BR2_PACKAGE_IPERF=y
-+BR2_PACKAGE_IPROUTE2=y
-+BR2_PACKAGE_IPTABLES=y
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_LRZSZ=y
-+BR2_PACKAGE_MII_DIAG=y
-+BR2_PACKAGE_OPENSSH=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_HTOP=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0-rc2)/at91bootstrap-v4.0.0-rc2.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_icpsd_uboot"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2020.10)/u-boot-at91-linux4sam-2020.10.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_icp_mmc"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
--- 
-2.17.1
+Hello Nathaniel,
+
+On Wed,  5 May 2021 11:53:46 -0400
+Nathaniel Husted <nathaniel.husted@outlook.com> wrote:
+
+> The current rustc package only supports gnu libc and hardcodes this
+> requirement. This patch adds musl to the available libc options for
+> Rust packages. Musl is now a Tier 2 supported environment for Rust.
+> Tier 2 means the platforms are "guaranteed to build" and official
+> binary releases are available. The changes in rustc.mk will also
+> support adding uclibc when that environment reaches Tier 2 support
+> but does not allow for uclibc currently as it is still a Tier 3
+> supported environment.
+>
+> This patch includes corrections from the prior version submitted
+> in March, 2021.
+>
+> Signed-off-by: Nathaniel Husted <nathaniel.husted@outlook.com>
+
+Thanks a lot. Unfortunately, after a more careful review, this patch
+still has issues:
+
+ (1) You're not updating package/rust-bin/rust-bin.hash for all those
+     new target platforms, so the download will fail as hashes are not
+     available.
+
+ (2) Changing "depends on glibc" with "depends on glibc || musl"
+     doesn't work as some architectures that are supported with glibc
+     are not supported with musl.
+
+So I went on and wrote a more complete/complex solution, which I have
+submitted at:
+
+  https://patchwork.ozlabs.org/project/buildroot/list/?series=244536
+
+Best regards,
+
+Thomas
+--
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
