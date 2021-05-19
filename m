@@ -1,68 +1,79 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 12:52:42 +0200
-Subject: [Buildroot] [PATCH] package/libmdbx: bump version to 0.10.0
-In-Reply-To: <20210509195650.58816-1-leo@yuriev.ru>
-References: <20210509195650.58816-1-leo@yuriev.ru>
-Message-ID: <20210519105242.GS2268078@scaer>
+From: Eugen.Hristev at microchip.com <Eugen.Hristev@microchip.com>
+Date: Wed, 19 May 2021 11:29:23 +0000
+Subject: [Buildroot] [PATCH 3/3] boot/at91bootstrap3: add
+ BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3
+In-Reply-To: <20210518213749.144355-4-thomas.petazzoni@bootlin.com>
+References: <20210518213749.144355-1-thomas.petazzoni@bootlin.com>
+ <20210518213749.144355-4-thomas.petazzoni@bootlin.com>
+Message-ID: <ebcdcf55-e613-6b37-0faa-26b3d548b5be@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Leonid, All,
-
-On 2021-05-09 22:56 +0300, Leonid Yuriev spake thusly:
-> Release notes: https://github.com/erthink/libmdbx/releases/tag/v0.10.0
+On 5/19/21 12:37 AM, Thomas Petazzoni wrote:
+> From: Eugen Hristev <eugen.hristev@microchip.com>
 > 
-> Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
-
-Applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
+> Some at91bootstrap3 configurations now use Python scripts on the host
+> for NAND/PMEC related utilities. In order to be able to use those
+> scripts, this commit adds a new
+> BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3 which allows to express the
+> need for host-python3 as a dependency to build at91bootstrap3.
+> 
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> [Thomas: this was extracted from a patch from Eugen adding
+> at91bootstrap 4.x support.]
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/libmdbx/libmdbx.hash | 2 +-
->  package/libmdbx/libmdbx.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>   boot/at91bootstrap3/Config.in         | 8 ++++++++
+>   boot/at91bootstrap3/at91bootstrap3.mk | 4 ++++
+>   2 files changed, 12 insertions(+)
 > 
-> diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
-> index fcfb4a673f..8ff8e99810 100644
-> --- a/package/libmdbx/libmdbx.hash
-> +++ b/package/libmdbx/libmdbx.hash
-> @@ -1,5 +1,5 @@
->  # Hashes from: https://github.com/erthink/libmdbx/releases/
-> -sha256  d12bc7189b746beaa85514fcd1fcf26b957bb8feadb11662a0e20c4e79410d3f  libmdbx-amalgamated-0.9.3.tar.gz
-> +sha256  767776d961fadeb51ee895fb70ed82a03051bae855a19396f0067b03076103bb  libmdbx-amalgamated-0.10.0.tar.gz
->  
->  # Locally calculated
->  sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-> diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-> index baf5193eb6..8e2eff0c7f 100644
-> --- a/package/libmdbx/libmdbx.mk
-> +++ b/package/libmdbx/libmdbx.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBMDBX_VERSION = 0.9.3
-> +LIBMDBX_VERSION = 0.10.0
->  LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.gz
->  LIBMDBX_SITE = https://github.com/erthink/libmdbx/releases/download/v$(LIBMDBX_VERSION)
->  LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
-> -- 
+> diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+> index 18301a0dc0..966e393db5 100644
+> --- a/boot/at91bootstrap3/Config.in
+> +++ b/boot/at91bootstrap3/Config.in
+> @@ -101,3 +101,11 @@ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE
+>            Path to the at91bootstrap3 configuration file
+> 
+>   endif # BR2_TARGET_AT91BOOTSTRAP3
+> +
+> +config BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3
+> +       bool "needs host-python3"
+
+Hi,
+
+This prompt that appears in menuconfig is a bit unfriendly : it does not 
+say who needs the host-python3, and it does not appear to be in the 
+at91bootstrap3 -related options.
+It is at the same indentation level as the other bootloaders, like 
+Barebox, Grub, etc. So I think it's misleading and should be aligned 
+with the other At91bootstrap options
+
+
+
+
+> +       help
+> +         Enable this option if the at91bootstrap build process needs
+> +         Python 3.x to be available on the host. This is needed in
+> +         some at91bootstrap configurations to use NAND/PMECC Python
+> +         scripts.
+> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+> index fdd87591bb..48200b2b6e 100644
+> --- a/boot/at91bootstrap3/at91bootstrap3.mk
+> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
+> @@ -30,6 +30,10 @@ AT91BOOTSTRAP3_CPE_ID_PRODUCT = at91bootstrap
+>   AT91BOOTSTRAP3_INSTALL_IMAGES = YES
+>   AT91BOOTSTRAP3_INSTALL_TARGET = NO
+> 
+> +ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3),y)
+> +AT91BOOTSTRAP3_DEPENDENCIES += host-python3
+> +endif
+> +
+>   AT91BOOTSTRAP3_CUSTOM_PATCH_DIR = \
+>          $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR))
+> 
+> --
 > 2.31.1
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
