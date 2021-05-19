@@ -1,46 +1,41 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Wed, 19 May 2021 09:59:38 +0200
-Subject: [Buildroot] [PATCH] package/grpc: bump to version 1.37.1
-Message-ID: <20210519075938.85560-1-buildroot@heine.tech>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 May 2021 09:26:50 +0200
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: verified CPE
+ has a known id but not version
+Message-ID: <20210519080212.DBD3E885A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes from Changelog [0]:
- - Fix #25897 to avoid crashes when certificates are not yet updated
- - [Backport] Fix use-after-unref bug in fault_injection_filter.
+commit: https://git.buildroot.net/buildroot/commit/?id=9b83bb13826ac3c34e6fb67a5092d94d98ca6a5d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[0] https://github.com/grpc/grpc/releases/tag/v1.37.1
+Currently a verified CPE reports the following if versions are not found
+ cpe:2.3:a:qemu:qemu:5.2.0:*:*:*:*:*:*:*
+ CPE identifier unknown in CPE database (Search)
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+This patch clarifies the report to state the 'version' is unknown instead
+of the 'identifier'.
+
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Matthew Weber <matthew.weber@collins.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/grpc/grpc.hash | 2 +-
- package/grpc/grpc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index 8189f738b5..925761f37a 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c2dc8e876ea12052d6dd16704492fd8921df8c6d38c70c4708da332cf116df22  grpc-1.37.0.tar.gz
-+sha256  acf247ec3a52edaee5dee28644a4e485c5e5badf46bdb24a80ca1d76cb8f1174  grpc-1.37.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index ee8dc38e70..fce69cbe56 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 0cd3674c52..42c36f7f94 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -610,7 +610,7 @@ def check_package_cpes(nvd_path, packages):
+         if cpedb.find(p.cpeid):
+             p.status['cpe'] = ("ok", "verified CPE identifier")
+         else:
+-            p.status['cpe'] = ("error", "CPE identifier unknown in CPE database")
++            p.status['cpe'] = ("error", "CPE version unknown in CPE database")
  
--GRPC_VERSION = 1.37.0
-+GRPC_VERSION = 1.37.1
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0
- GRPC_LICENSE_FILES = LICENSE
--- 
-2.25.1
+ 
+ def calculate_stats(packages):
