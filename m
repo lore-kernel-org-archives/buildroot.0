@@ -1,109 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 12:14:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/weston: add configuration
- options for weston shells
-In-Reply-To: <20210511154006.630376-1-martin.elshuber@theobroma-systems.com>
-References: <20210511154006.630376-1-martin.elshuber@theobroma-systems.com>
-Message-ID: <20210519101415.GQ2268078@scaer>
+Date: Wed, 19 May 2021 12:49:37 +0200
+Subject: [Buildroot] [git commit branch/next] package/dt-utils: bump version
+ to 2021.03.0
+Message-ID: <20210519102050.CBF7686F39@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=bb6b32f1a6ca2afd1ec97ac2049f529d89f69938
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-05-11 17:40 +0200, Martin Elshuber spake thusly:
-> Enable selection of used weston shells. By default all available
-> shells are enabled to keep the old behavior. The new configuration
-> options enable the user to select them individually.
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/dt-utils/dt-utils.hash | 2 +-
+ package/dt-utils/dt-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Don't we have to ensure that at least one is enabled, or is it valid to
-disable all of them?
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Martin Elshuber <martin.elshuber@theobroma-systems.com>
-> ---
->  package/weston/Config.in | 16 ++++++++++++++++
->  package/weston/weston.mk | 24 ++++++++++++++++++++++++
->  2 files changed, 40 insertions(+)
-> 
-> diff --git a/package/weston/Config.in b/package/weston/Config.in
-> index d07eba4c9d..60351ff09d 100644
-> --- a/package/weston/Config.in
-> +++ b/package/weston/Config.in
-> @@ -119,6 +119,22 @@ config BR2_PACKAGE_WESTON_XWAYLAND
->  comment "XWayland support needs libepoxy and X.org enabled"
->  	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
->  
-> +config BR2_PACKAGE_WESTON_SHELL_DESKTOP
-> +	bool "desktop shell"
-> +	default y
-> +
-> +config BR2_PACKAGE_WESTON_SHELL_FULLSCREEN
-> +	bool "fullscreen shell"
-> +	default y
-> +
-> +config BR2_PACKAGE_WESTON_SHELL_IVI
-> +	bool "ivi shell"
-> +	default y
-> +
-> +config BR2_PACKAGE_WESTON_SHELL_KIOSK
-> +	bool "kiosk shell"
-> +	default y
-> +
->  config BR2_PACKAGE_WESTON_DEMO_CLIENTS
->  	bool "demo clients"
->  	depends on BR2_USE_MMU # pango
-> diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-> index f59963bf2e..6953132c57 100644
-> --- a/package/weston/weston.mk
-> +++ b/package/weston/weston.mk
-> @@ -132,6 +132,30 @@ else
->  WESTON_CONF_OPTS += -Dtest-junit-xml=false
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_WESTON_SHELL_DESKTOP),y)
-> +WESTON_CONF_OPTS += -Dshell-desktop=true
-> +else
-> +WESTON_CONF_OPTS += -Dshell-desktop=false
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_WESTON_SHELL_FULLSCREEN),y)
-> +WESTON_CONF_OPTS += -Dshell-fullscreen=true
-> +else
-> +WESTON_CONF_OPTS += -Dshell-fullscreen=false
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_WESTON_SHELL_IVI),y)
-> +WESTON_CONF_OPTS += -Dshell-ivi=true
-> +else
-> +WESTON_CONF_OPTS += -Dshell-ivi=false
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_WESTON_SHELL_KIOSK),y)
-> +WESTON_CONF_OPTS += -Dshell-kiosk=true
-> +else
-> +WESTON_CONF_OPTS += -Dshell-kiosk=false
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
->  WESTON_CONF_OPTS += -Ddemo-clients=true
->  WESTON_DEPENDENCIES += pango
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/dt-utils/dt-utils.hash b/package/dt-utils/dt-utils.hash
+index e42e82578d..74819158bb 100644
+--- a/package/dt-utils/dt-utils.hash
++++ b/package/dt-utils/dt-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  737313719d7c04d7b9576fdc572d838c81ea22ea41a44c7646467018e67a0b97  dt-utils-v2019.01.0-br1.tar.gz
++sha256  8b29d3a8799170afdb1b077e655528bf4e6afe0c789107b1eec8fff9d4482771  dt-utils-v2021.03.0-br1.tar.gz
+ sha256  a45932c79317d15116eadbf1c9c6fc59117ec3c4621db3a876066defa723963b  COPYING
+diff --git a/package/dt-utils/dt-utils.mk b/package/dt-utils/dt-utils.mk
+index 25c287d434..bc7fd90631 100644
+--- a/package/dt-utils/dt-utils.mk
++++ b/package/dt-utils/dt-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DT_UTILS_VERSION = v2019.01.0
++DT_UTILS_VERSION = v2021.03.0
+ DT_UTILS_SITE = https://git.pengutronix.de/git/tools/dt-utils
+ DT_UTILS_SITE_METHOD = git
+ DT_UTILS_LICENSE = GPL-2.0
