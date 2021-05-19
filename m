@@ -1,14 +1,14 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 23:09:51 +0200
-Subject: [Buildroot] [git commit] package/libgtk3: add CPE variables
-Message-ID: <20210519204126.3345F81379@busybox.osuosl.org>
+Date: Wed, 19 May 2021 23:09:50 +0200
+Subject: [Buildroot] [git commit] package/libgtk2: add CPE variables
+Message-ID: <20210519204126.2AAB3864BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc579e498b6820893b0671a740b9261f40166ad9
+commit: https://git.buildroot.net/buildroot/commit/?id=c00da436bfd17d8fb891fa4b392ebaad638f01be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 cpe:2.3:a:gnome:gtk is a valid CPE identifier for this package:
@@ -18,19 +18,19 @@ cpe:2.3:a:gnome:gtk is a valid CPE identifier for this package:
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libgtk3/libgtk3.mk | 2 ++
+ package/libgtk2/libgtk2.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index f7345cf2e9..9ece409ba3 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -10,6 +10,8 @@ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
- LIBGTK3_LICENSE_FILES = COPYING
-+LIBGTK3_CPE_ID_VENDOR = gnome
-+LIBGTK3_CPE_ID_PRODUCT = gtk
- LIBGTK3_INSTALL_STAGING = YES
- LIBGTK3_AUTORECONF = YES
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index bcdf3e5d8c..d30e1d9d43 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -11,6 +11,8 @@ LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJ
+ LIBGTK2_INSTALL_STAGING = YES
+ LIBGTK2_LICENSE = LGPL-2.0+
+ LIBGTK2_LICENSE_FILES = COPYING
++LIBGTK2_CPE_ID_VENDOR = gnome
++LIBGTK2_CPE_ID_PRODUCT = gtk
+ # For 0001-reduce-dependencies.patch
+ LIBGTK2_AUTORECONF = YES
  
