@@ -1,38 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 May 2021 17:40:06 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libidn: add
- LIBIDN_CPE_ID_VENDOR
-Message-ID: <20210519151137.EEB83885A9@busybox.osuosl.org>
+Date: Wed, 19 May 2021 17:40:01 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libidn2: add
+ LIBIDN2_CPE_ID_VENDOR
+Message-ID: <20210519151137.E185682B86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ce7c314c20645e868c8372e24e72ef8e8e5f743
+commit: https://git.buildroot.net/buildroot/commit/?id=bbb314eb55f47e146c1b748dd0128938b7093c1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:gnu:libidn is a valid CPE identifier for this package:
+cpe:2.3:a:gnu:libidn2 is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Alibidn
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Alibidn2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8391f7d189362317c23325bfb6c6a196ea2e32a1)
+(cherry picked from commit 981850b35303d3bace4a6c0d7366b1f6e3682935)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libidn/libidn.mk | 1 +
+ package/libidn2/libidn2.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index 2df3437029..c49bbe098e 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
-@@ -12,6 +12,7 @@ LIBIDN_CONF_OPTS = --disable-java --enable-csharp=no
- LIBIDN_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- LIBIDN_LICENSE = GPL-2.0+, GPL-3.0+, LGPL-3.0+
- LIBIDN_LICENSE_FILES = COPYINGv2 COPYINGv3 COPYING.LESSERv3
-+LIBIDN_CPE_ID_VENDOR = gnu
- 
- define LIBIDN_REMOVE_BINARY
- 	rm -f $(TARGET_DIR)/usr/bin/idn
+diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
+index 3f87b9bb8c..4db302dbf4 100644
+--- a/package/libidn2/libidn2.mk
++++ b/package/libidn2/libidn2.mk
+@@ -8,6 +8,7 @@ LIBIDN2_VERSION = 2.3.0
+ LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
+ LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
++LIBIDN2_CPE_ID_VENDOR = gnu
+ LIBIDN2_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	$(TARGET_NLS_DEPENDENCIES) \
