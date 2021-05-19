@@ -1,57 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 23:08:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python3-six: add python3 variant
-In-Reply-To: <1621458008892.46397@lab126.com>
-References: <1620853148995.76548@lab126.com> <20210518150056.GQ2506@scaer>
- <1621370634009.93154@lab126.com> <20210519120015.GU2268078@scaer>
- <1621458008892.46397@lab126.com>
-Message-ID: <20210519210833.GO2268078@scaer>
+Date: Wed, 19 May 2021 23:09:51 +0200
+Subject: [Buildroot] [git commit] package/libgtk3: add CPE variables
+Message-ID: <20210519204126.3345F81379@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chan, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=dc579e498b6820893b0671a740b9261f40166ad9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-19 21:00 +0000, Chan, Donald via buildroot spake thusly:
-> On 2021-05-18 20:43 +0000, Chan, Donald spake thusly:
-> > > On 2021-05-12 20:59 +0000, Chan, Donald via buildroot spake thusly:
-> > > >> Signed-off-by: Donald Chan <hoiho@lab126.com>
-> > > >Why do you need a python3-specific version of six?
-> > > This was for the host side Python packages
-> > Your patch was adding both the target and the host variants, though.
-> Should I remove the $(eval $(python-package)) line then?
+cpe:2.3:a:gnome:gtk is a valid CPE identifier for this package:
 
-Yes. Just keep the host-python-package one.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Agtk
 
-> > If you can provide such an example that a specific host-python3-six
-> > is needed, do not hesitate to resend your patch with such an explanation
-> > in your commit log.
-> Yes do let me explain - I am making some contributions to another OSS
-> software (OP-TEE) that uses buildroot, and it requires a python3
-> variant of the python-cryptography module, which in returns requires
-> python3 variants of its dependencies (python-cffi, python-six,
-> python-pycparser, python-pip). etc.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libgtk3/libgtk3.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Ah, good explanations. Thanks. Please explain that in the commit log
-when you resubmit (see below).
-
-> Shall I re-submit everything in a new patch set (split to multiple patches)?
-
-Yes, please. Having the new host-python3-six alone does not make much
-sense. If it is followed in the same series by a patch that makes use of
-it, then it becones obvious what it is for.
-
-Thanks you for the follow-up with the explanations! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index f7345cf2e9..9ece409ba3 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -10,6 +10,8 @@ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
+ LIBGTK3_LICENSE_FILES = COPYING
++LIBGTK3_CPE_ID_VENDOR = gnome
++LIBGTK3_CPE_ID_PRODUCT = gtk
+ LIBGTK3_INSTALL_STAGING = YES
+ LIBGTK3_AUTORECONF = YES
+ 
