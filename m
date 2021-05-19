@@ -1,43 +1,36 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 20 May 2021 00:38:27 +0300
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: select missing
- multimedia deps
-Message-ID: <20210519213827.1291299-1-aperez@igalia.com>
+Date: Thu, 20 May 2021 00:42:00 +0300
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: make gst-gl depend on
+ _HAS_PLATFORM
+Message-ID: <20210519214200.1294908-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Select a few missing multimedia related dependencies:
-
-- BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT is needed for
-  "autoaudiosink"; not having this element can cause a crash as
-  it is used unconditionally.
-- BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA and
-  BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX are needed for
-  WebM video playback.
+The GStreamer-GL usage in WPE WebKit is usable as long as GStreamer
+is configured with a valid platform API (GLX+OpenGL, EGL+OpenGL,
+EGL+GLES, etc.), which is exactly what the symbol
+BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM represents.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/webkitgtk/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/wpewebkit/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 4ea931fde1..2ba8d47660 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -98,8 +98,11 @@ config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
- 	select BR2_PACKAGE_GST1_LIBAV
+diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+index 640f7c7011..71bce8a88e 100644
+--- a/package/wpewebkit/Config.in
++++ b/package/wpewebkit/Config.in
+@@ -109,7 +109,7 @@ if BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
+ config BR2_PACKAGE_WPEWEBKIT_USE_GSTREAMER_GL
+ 	bool "use gstreamer-gl"
+ 	default y
+-	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
++	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM
  	help
- 	  This option pulls in all of the required dependencies
+ 	  Use the GStreamer GL elements for handling video content.
+ 	  This is recommended as it improves performance of video
 -- 
 2.31.1
