@@ -1,58 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 May 2021 23:10:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libgtk3: add CPE variables
-In-Reply-To: <20210519203952.51993-1-fontaine.fabrice@gmail.com>
-References: <20210519203952.51993-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210519211058.GQ2268078@scaer>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 20 May 2021 00:14:39 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libepoxy: bump to version 1.5.7
+Message-ID: <20210519211439.1273019-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+This update includes a build fix for the RaspberryPi 4 (from 1.5.7)
+and a fix for the GL library loader when GLX is involved (from 1.5.6)
+Release notes:
 
-On 2021-05-19 22:39 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:gnome:gtk is a valid CPE identifier for this package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Agtk
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://github.com/anholt/libepoxy/releases/tag/1.5.6
+  https://github.com/anholt/libepoxy/releases/tag/1.5.7
 
-Applied to master, thanks.
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/libepoxy/libepoxy.hash | 4 ++--
+ package/libepoxy/libepoxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libgtk3/libgtk3.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-> index f7345cf2e9..9ece409ba3 100644
-> --- a/package/libgtk3/libgtk3.mk
-> +++ b/package/libgtk3/libgtk3.mk
-> @@ -10,6 +10,8 @@ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
->  LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
->  LIBGTK3_LICENSE = LGPL-2.0+
->  LIBGTK3_LICENSE_FILES = COPYING
-> +LIBGTK3_CPE_ID_VENDOR = gnome
-> +LIBGTK3_CPE_ID_PRODUCT = gtk
->  LIBGTK3_INSTALL_STAGING = YES
->  LIBGTK3_AUTORECONF = YES
->  
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+index 79876ad01d..57dd1aaa8f 100644
+--- a/package/libepoxy/libepoxy.hash
++++ b/package/libepoxy/libepoxy.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.5.sha256sum
+-sha256 261663db21bcc1cc232b07ea683252ee6992982276536924271535875f5b0556  libepoxy-1.5.5.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.7.sha256sum
++sha256 9479cc0146ffb395fdecf9bd2a5930834fd0bce490cbcc4681ffd716bb3a0763  libepoxy-1.5.7.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index bb578fb02c..729d1bff92 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBEPOXY_VERSION_MAJOR = 1.5
+-LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).5
++LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).7
+ LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.31.1
