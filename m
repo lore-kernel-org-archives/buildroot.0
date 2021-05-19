@@ -1,71 +1,46 @@
-From: Nathaniel Husted <nathaniel.husted@outlook.com>
-Date: Wed, 19 May 2021 12:35:16 +0000
-Subject: [Buildroot] [PATCHv2 1/1] package/rustc: add musl as an
- available Rust libc
-In-Reply-To: <20210518230043.63dc9ac7@windsurf.orange-hotspot>
-References: <SJ0PR18MB3898AC687557A2CD4FA0340995599@SJ0PR18MB3898.namprd18.prod.outlook.com>,
- <20210518230043.63dc9ac7@windsurf.orange-hotspot>
-Message-ID: <SJ0PR18MB3898F64AF1A5908759597DBE952B9@SJ0PR18MB3898.namprd18.prod.outlook.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 May 2021 14:34:58 +0200
+Subject: [Buildroot] [git commit branch/next] boot/at91bootstrap3: move
+ BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3
+Message-ID: <20210519120927.93E45812ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=a86318a79f405b5e601515e6c85d3ce7544bcb17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Apologies for missing the robust engineering solution there. As a follow-up question, how does the buildroot community generally handle .hash file updates? Should these always be done in a package patch set via multiple parts? Do you test the gpg keys and sha256sums "by hand" or is there a utility used when version update commits occur?
+As spotted by Eugen, BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3 currently
+is outside the at91bootstrap section, because it was inccorectly added
+after the 'endif' statement rather than before, which makes the
+menuconfig layout weird.
 
-I was looking through the contributor documentation to determine expectations with respect to patches and looked through the utilities folder to see if there were supporting tools but could not find a discussion.
+Move it around.
 
-Cheers,
-Nathaniel
-________________________________________
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Sent: Tuesday, May 18, 2021 5:00 PM
-To: Nathaniel Husted
-Cc: buildroot at buildroot.org; Eric Le Bihan
-Subject: Re: [Buildroot] [PATCHv2 1/1] package/rustc: add musl as an available Rust libc
+Reported-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/at91bootstrap3/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Hello Nathaniel,
-
-On Wed,  5 May 2021 11:53:46 -0400
-Nathaniel Husted <nathaniel.husted@outlook.com> wrote:
-
-> The current rustc package only supports gnu libc and hardcodes this
-> requirement. This patch adds musl to the available libc options for
-> Rust packages. Musl is now a Tier 2 supported environment for Rust.
-> Tier 2 means the platforms are "guaranteed to build" and official
-> binary releases are available. The changes in rustc.mk will also
-> support adding uclibc when that environment reaches Tier 2 support
-> but does not allow for uclibc currently as it is still a Tier 3
-> supported environment.
->
-> This patch includes corrections from the prior version submitted
-> in March, 2021.
->
-> Signed-off-by: Nathaniel Husted <nathaniel.husted@outlook.com>
-
-Thanks a lot. Unfortunately, after a more careful review, this patch
-still has issues:
-
- (1) You're not updating package/rust-bin/rust-bin.hash for all those
-     new target platforms, so the download will fail as hashes are not
-     available.
-
- (2) Changing "depends on glibc" with "depends on glibc || musl"
-     doesn't work as some architectures that are supported with glibc
-     are not supported with musl.
-
-So I went on and wrote a more complete/complex solution, which I have
-submitted at:
-
-  https://patchwork.ozlabs.org/project/buildroot/list/?series=244536
-
-Best regards,
-
-Thomas
---
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index 966e393db5..f44597bc00 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -100,8 +100,6 @@ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE
+ 	help
+ 	  Path to the at91bootstrap3 configuration file
+ 
+-endif # BR2_TARGET_AT91BOOTSTRAP3
+-
+ config BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3
+ 	bool "needs host-python3"
+ 	help
+@@ -109,3 +107,5 @@ config BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3
+ 	  Python 3.x to be available on the host. This is needed in
+ 	  some at91bootstrap configurations to use NAND/PMECC Python
+ 	  scripts.
++
++endif # BR2_TARGET_AT91BOOTSTRAP3
