@@ -1,18 +1,22 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 19 May 2021 08:00:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bird: add BIRD_CPE_ID_VENDOR
-Message-ID: <20210519060054.1586885-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 May 2021 08:12:54 +0200
+Subject: [Buildroot] [git commit] package/bird: add BIRD_CPE_ID_VENDOR
+Message-ID: <20210519054404.51A8987C1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=b68047e324e58078b03cbe697c206896d89f5acc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 cpe:2.3:a:nic:bird is a valid CPE identifier for this package:
 
   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anic%3Abird
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/bird/bird.mk | 1 +
  1 file changed, 1 insertion(+)
@@ -29,5 +33,3 @@ index 6b28102754..b711e7de01 100644
  BIRD_DEPENDENCIES = host-flex host-bison
  
  ifeq ($(BR2_PACKAGE_BIRD_CLIENT),y)
--- 
-2.30.2
