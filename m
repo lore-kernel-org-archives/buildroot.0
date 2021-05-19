@@ -1,169 +1,35 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 19 May 2021 22:26:17 +0200
-Subject: [Buildroot] [git commit] configs/rpi: fix defconfigs after
- upstream rebased
-In-Reply-To: <20210518142339.5F82681547@busybox.osuosl.org>
-References: <20210518142339.5F82681547@busybox.osuosl.org>
-Message-ID: <20210519222617.47589fd5@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 May 2021 22:26:38 +0200
+Subject: [Buildroot] [git commit] package/synergy: add SYNERGY_CPE_ID_VENDOR
+Message-ID: <20210519195751.A1B5588796@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=778e2e0467b2c6e59682692421dfe9319ea0adf0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 18 May 2021 16:50:03 +0200, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+cpe:2.3:a:symless:synergy is a valid CPE identifier for this package:
 
-> commit: https://git.buildroot.net/buildroot/commit/?id=8c3f281626fb3a9e7ca596ca1df2cc1d30252496
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Branches in the Rappberry Pi linux repository are often rebased, which
-> means that commits that are not reachable from a reference (tag,branch)
-> will eventually get garbage-collected.
->
-> This is probably what hapenned with the commit we are curently
-> referencing in our defconfig files.
->
-> Swith to using the current HEAD of the rpi-5.10.y brnch, in lieue of the
-> previous one.
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  configs/raspberrypi0_defconfig       | 2 +-
->  configs/raspberrypi0w_defconfig      | 2 +-
->  configs/raspberrypi2_defconfig       | 2 +-
->  configs/raspberrypi3_64_defconfig    | 2 +-
->  configs/raspberrypi3_defconfig       | 2 +-
->  configs/raspberrypi3_qt5we_defconfig | 2 +-
->  configs/raspberrypi4_64_defconfig    | 2 +-
->  configs/raspberrypi4_defconfig       | 2 +-
->  configs/raspberrypi_defconfig        | 2 +-
->  9 files changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-> index 84de42c631..4cccad83f7 100644
-> --- a/configs/raspberrypi0_defconfig
-> +++ b/configs/raspberrypi0_defconfig
-> @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
-                                                                                                                                                              ^ missing change of download file name to linux-b657cd2f27d9171b75c846f21e7b4bb581b3ed29.tar.gz
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asymless%3Asynergy
 
-Regards,
-Peter
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/synergy/synergy.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->
->  # Build the DTBs for A/B from the kernel sources: the zero is the same
-> diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-> index cf2f61a301..9833571e9e 100644
-> --- a/configs/raspberrypi0w_defconfig
-> +++ b/configs/raspberrypi0w_defconfig
-> @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
-> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-> index dc0939b639..ca65ba5259 100644
-> --- a/configs/raspberrypi2_defconfig
-> +++ b/configs/raspberrypi2_defconfig
-> @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-> index 04a2d01982..de50bdf550 100644
-> --- a/configs/raspberrypi3_64_defconfig
-> +++ b/configs/raspberrypi3_64_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-> index b2db9af239..2bf96ca4c5 100644
-> --- a/configs/raspberrypi3_defconfig
-> +++ b/configs/raspberrypi3_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-> index 5ce32bb9e6..69c02daf3d 100644
-> --- a/configs/raspberrypi3_qt5we_defconfig
-> +++ b/configs/raspberrypi3_qt5we_defconfig
-> @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
-> index bd7a470cda..eeaece49eb 100644
-> --- a/configs/raspberrypi4_64_defconfig
-> +++ b/configs/raspberrypi4_64_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-> index 35a6218a5c..85ba477d9f 100644
-> --- a/configs/raspberrypi4_defconfig
-> +++ b/configs/raspberrypi4_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-> index 214dc0eccb..8921faf56f 100644
-> --- a/configs/raspberrypi_defconfig
-> +++ b/configs/raspberrypi_defconfig
-> @@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,96110e96f1a82e236afb9a248258f1ef917766e9)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-96110e96f1a82e236afb9a248258f1ef917766e9.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->
->  # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
+index 63c6e5cbc1..bc7ebea070 100644
+--- a/package/synergy/synergy.mk
++++ b/package/synergy/synergy.mk
+@@ -8,6 +8,7 @@ SYNERGY_VERSION = 2.0.12-beta
+ SYNERGY_SITE = $(call github,symless,synergy-core,v$(SYNERGY_VERSION))
+ SYNERGY_LICENSE = GPL-2.0
+ SYNERGY_LICENSE_FILES = LICENSE
++SYNERGY_CPE_ID_VENDOR = symless
+ SYNERGY_DEPENDENCIES = xlib_libX11 xlib_libXtst
+ 
+ # Avoid using buildroot commit hash inside cmake/Version.cmake
