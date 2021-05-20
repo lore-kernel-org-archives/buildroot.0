@@ -1,8 +1,8 @@
 From: Chan, Donald <hoiho@lab126.com>
-Date: Thu, 20 May 2021 01:47:26 +0000
-Subject: [Buildroot] [PATCH 1/5] package/python3-six: add python3 host
+Date: Thu, 20 May 2021 01:48:00 +0000
+Subject: [Buildroot] [PATCH 2/5] package/python3-pip: add python3 host
  variant
-Message-ID: <1621475246377.74620@lab126.com>
+Message-ID: <1621475279766.55779@lab126.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +14,41 @@ python-cryptography and it is dependent on this.
 
 Signed-off-by: Donald Chan <hoiho@lab126.com>
 ---
- package/python3-six/python3-six.hash |  1 +
- package/python3-six/python3-six.mk   | 17 +++++++++++++++++
+ package/python3-pip/python3-pip.hash |  1 +
+ package/python3-pip/python3-pip.mk   | 17 +++++++++++++++++
  2 files changed, 18 insertions(+)
- create mode 120000 package/python3-six/python3-six.hash
- create mode 100644 package/python3-six/python3-six.mk
+ create mode 120000 package/python3-pip/python3-pip.hash
+ create mode 100644 package/python3-pip/python3-pip.mk
 
-diff --git a/package/python3-six/python3-six.hash b/package/python3-six/python3-six.hash
+diff --git a/package/python3-pip/python3-pip.hash b/package/python3-pip/python3-pip.hash
 new file mode 120000
-index 0000000..ed8cb89
+index 0000000..d90fb3d
 --- /dev/null
-+++ b/package/python3-six/python3-six.hash
++++ b/package/python3-pip/python3-pip.hash
 @@ -0,0 +1 @@
-+../python-six/python-six.hash
++../python-pip/python-pip.hash
 \ No newline at end of file
-diff --git a/package/python3-six/python3-six.mk b/package/python3-six/python3-six.mk
+diff --git a/package/python3-pip/python3-pip.mk b/package/python3-pip/python3-pip.mk
 new file mode 100644
-index 0000000..debd338
+index 0000000..098e502
 --- /dev/null
-+++ b/package/python3-six/python3-six.mk
++++ b/package/python3-pip/python3-pip.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# python3-six
++# python3-pip
 +#
 +################################################################################
 +
-+# Please keep in sync with package/python-six/python-six.mk
-+PYTHON3_SIX_VERSION = 1.15.0
-+PYTHON3_SIX_SOURCE = six-$(PYTHON3_SIX_VERSION).tar.gz
-+PYTHON3_SIX_SITE = https://files.pythonhosted.org/packages/6b/34/415834bfdafca3c5f451532e8a8d9ba89a21c9743a0c59fbd0205c7f9426
-+PYTHON3_SIX_SETUP_TYPE = setuptools
-+PYTHON3_SIX_LICENSE = MIT
-+PYTHON3_SIX_LICENSE_FILES = LICENSE
-+HOST_PYTHON3_SIX_DL_SUBDIR = python-six
-+HOST_PYTHON3_SIX_NEEDS_HOST_PYTHON = python3
++# Please keep in sync with package/python-pip/python-pip.mk
++PYTHON3_PIP_VERSION = 20.0.2
++PYTHON3_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
++PYTHON3_PIP_SITE = https://files.pythonhosted.org/packages/8e/76/66066b7bc71817238924c7e4b448abdb17eb0c92d645769c223f9ace478f
++PYTHON3_PIP_SETUP_TYPE = setuptools
++PYTHON3_PIP_LICENSE = MIT
++PYTHON3_PIP_LICENSE_FILES = LICENSE.txt
++HOST_PYTHON3_PIP_DL_SUBDIR = python-pip
++HOST_PYTHON3_PIP_NEEDS_HOST_PYTHON = python3
 +
 +$(eval $(host-python-package))
 -- 
