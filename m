@@ -1,46 +1,63 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 20 May 2021 12:15:25 +0200
-Subject: [Buildroot] [PATCH 2/2] support/testing: test_glxinfo load X11
- modules in the right order
-In-Reply-To: <87lf89ahm3.fsf@dell.be.48ers.dk>
-References: <20210513141149.3154510-1-romain.naour@gmail.com>
- <20210513141149.3154510-2-romain.naour@gmail.com>
- <87lf89ahm3.fsf@dell.be.48ers.dk>
-Message-ID: <f88891fa-a83d-9e1a-54de-5b1effeb2de8@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 May 2021 12:33:41 +0200
+Subject: [Buildroot] Spidermonkey bump version
+In-Reply-To: <a59a82c3-0000-73ca-6c6d-7ac2aef7ff2e@benettiengineering.com>
+References: <a59a82c3-0000-73ca-6c6d-7ac2aef7ff2e@benettiengineering.com>
+Message-ID: <20210520103341.GZ2268078@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Giulio, All,
 
-Le 20/05/2021 ? 11:18, Peter Korsgaard a ?crit?:
->>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
-> 
->  > From [1]
->  > "Xorg does not implement real dynamic linking and requires that its
->  > modules get loaded in the right order."
-> 
->  > From /var/log/Xorg.0.0.log:
->  >  (II) LoadModule: "modesetting"
->  >  (II) Loading /usr/lib/xorg/modules/drivers/modesetting_drv.so
->  >  (EE) Failed to load /usr/lib/xorg/modules/drivers/modesetting_drv.so: /usr/lib/xorg/modules/drivers/modesetting_drv.so: undefined symbol: shadowRemove
-> 
->  > Fixes:
->  > https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661899
-> 
->  > [1] https://forums.gentoo.org/viewtopic-p-8245578.html#8245578
-> 
->  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> 
-> Is this also applicable to 2021.02.x, E.G. where we use the older swrast
-> driver?
-> 
+On 2021-05-20 02:21 +0200, Giulio Benetti spake thusly:
+> since I'm working on udisks bump version I've noticed its dependency
+> spidermonkey that is pretty old. I've seen that download site points to a
+> gentoo archive to save 200M of download without downloading entire Firefox.
+> Would it make sense to change site back to [1] and bump it once 89.0 is
+> released?
 
-This patch is needed after the switch to the gallium swrast.
-Since the test_glxinfo was working for the 2021.02 release the backport is not
-needed.
+Here are my thoughts on that (mozjs == spidermonkey):
 
-Best regards,
-Romain
+  - of course, it is a bigger archive, but that's not necessarily an
+    issue in the grand scheme of things;
+
+  - the version we currently have does not require rust, but newer
+    versions do; if we update, it means less architectures we can run
+    spidermonkey, and thus polkit and its dependees, on;
+
+  - OE is still using mozjs 60.9.0:
+        https://git.openembedded.org/meta-openembedded/tree/meta-oe/dynamic-layers/meta-python/recipes-extended/mozjs/mozjs_60.9.0.bb
+
+  - polkit 0.116 (which we currently have) is the last to accept
+    mozjs-60; later versions of polkit require more recent versions of
+    mozjs: polkit0.117 requires mozjs-68, and 0.118, mozjs-78:
+        https://gitlab.freedesktop.org/polkit/polkit/-/blob/0.116/configure.ac#L82
+        https://gitlab.freedesktop.org/polkit/polkit/-/blob/0.117/configure.ac#L83
+        https://gitlab.freedesktop.org/polkit/polkit/-/blob/0.118/configure.ac#L83
+
+> The only packages that use it is polkit that in order is used by:
+> - udisks
+> and optionally by:
+> - gvfs
+> - brltty
+> - systemd
+
+So, I'm all meh... Maybe we'll have to bite the bullet and bump mozjs if
+we want to bump polkit (probably a good idea to avoid security issues?
+Although there is no known CVE for polkit 0.116:
+https://nvd.nist.gov/vuln/search/results?form_type=Advanced&results_type=overview&seach_type=all&query=cpe:2.3:a:polkit_project:polkit:0.116:*:*:*:*:*:*:*
+which does not mean there is no unknown issue either...)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
