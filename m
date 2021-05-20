@@ -1,59 +1,66 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 20 May 2021 10:25:08 -0700
-Subject: [Buildroot] [PATCH Next:1/1] package/libglib2: bump version to
- 2.68.2
-Message-ID: <20210520172508.802556-1-aduskett@gmail.com>
+Date: Thu, 20 May 2021 10:46:38 -0700
+Subject: [Buildroot] [PATCH/NEXT: 00/11] selinux packages: bump versions
+Message-ID: <20210520174649.1188340-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Includes an important bugfix: #2387 json-glib does not build with glib 2.68.1
+The selinux project also now uses the respective package versions for the
+release URL's, so we change that as well.
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/libglib2/0002-remove-cpp-requirement.patch | 2 +-
- package/libglib2/libglib2.hash                     | 4 ++--
- package/libglib2/libglib2.mk                       | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Adam Duskett (11):
+  package/libsepol: bump to version 3.2
+  package/libsepol/Config.in: Add policy version 33
+  package/libsemanage: bump to version 3.2
+  package/libselinux: bump to version 3.2
+  package/policycoreutils: bump to version 3.2
+  package/checkpolicy: bump to version 3.2
+  package/restorecond: bump to version 3.2
+  package/semodule-utils: bump to version 3.2
+  package/selinux-python: bump to version 3.2
+  package/setools: bump to version 4.4.0
+  package/audit: bump to version 3.0.1
 
-diff --git a/package/libglib2/0002-remove-cpp-requirement.patch b/package/libglib2/0002-remove-cpp-requirement.patch
-index 35d46e161b..9393bd258a 100644
---- a/package/libglib2/0002-remove-cpp-requirement.patch
-+++ b/package/libglib2/0002-remove-cpp-requirement.patch
-@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
- @@ -1,4 +1,4 @@
- -project('glib', 'c', 'cpp',
- +project('glib', 'c',
--   version : '2.68.1',
-+   version : '2.68.2',
-    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
-    meson_version : '>= 0.49.2',
- @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index e3a3aa7561..15e0085f78 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.68/glib-2.68.1.sha256sum
--sha256  241654b96bd36b88aaa12814efc4843b578e55d47440103727959ac346944333  glib-2.68.1.tar.xz
-+# https://download.gnome.org/sources/glib/2.68/glib-2.68.2.sha256sum
-+sha256  ecc7798a9cc034eabdfd7f246e6dd461cdbf1175fcc2e9867cc7da7b7309e0fb  glib-2.68.2.tar.xz
- # License files, locally calculated
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index e3263ce9ce..4f13622e36 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGLIB2_VERSION_MAJOR = 2.68
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
+ ...0001-Fix-audispd-path-in-auditd.conf.patch |  32 -----
+ ...tue-functions-for-strndupa-rawmemchr.patch | 133 ------------------
+ ...ns-need-to-be-external-when-building.patch |  28 ----
+ package/audit/audit.hash                      |   6 +-
+ package/audit/audit.mk                        |   2 +-
+ package/checkpolicy/checkpolicy.hash          |   2 +-
+ package/checkpolicy/checkpolicy.mk            |   4 +-
+ ...T-and-rely-on-the-installed-file-nam.patch |   2 +-
+ ...d-to-something-which-never-conflicts.patch |  71 ----------
+ package/libselinux/libselinux.hash            |   2 +-
+ package/libselinux/libselinux.mk              |   4 +-
+ package/libsemanage/libsemanage.hash          |   2 +-
+ package/libsemanage/libsemanage.mk            |   4 +-
+ package/libsepol/Config.in                    |   4 +-
+ package/libsepol/libsepol.hash                |   4 +-
+ package/libsepol/libsepol.mk                  |   4 +-
+ ...-all-paths-that-use-an-absolute-path.patch |  11 +-
+ .../0002-Add-PREFIX-to-host-paths.patch       |  36 +++--
+ package/policycoreutils/policycoreutils.hash  |   2 +-
+ package/policycoreutils/policycoreutils.mk    |   6 +-
+ package/restorecond/restorecond.hash          |   2 +-
+ package/restorecond/restorecond.mk            |   4 +-
+ package/selinux-python/selinux-python.hash    |   2 +-
+ package/selinux-python/selinux-python.mk      |   4 +-
+ package/semodule-utils/semodule-utils.hash    |   2 +-
+ package/semodule-utils/semodule-utils.mk      |   4 +-
+ ...-setools.InfoFlowAnalysis-and-setoo.patch} |  19 +--
+ .../0001-remove-werror-flag-from-setup.patch  |  31 ----
+ package/setools/setools.hash                  |   2 +-
+ package/setools/setools.mk                    |   2 +-
+ 30 files changed, 69 insertions(+), 362 deletions(-)
+ delete mode 100644 package/audit/0001-Fix-audispd-path-in-auditd.conf.patch
+ delete mode 100644 package/audit/0002-Add-substitue-functions-for-strndupa-rawmemchr.patch
+ delete mode 100644 package/audit/0003-Header-definitions-need-to-be-external-when-building.patch
+ delete mode 100644 package/libselinux/0003-libselinux-rename-gettid-to-something-which-never-conflicts.patch
+ rename package/setools/{0002-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch => 0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch} (88%)
+ delete mode 100644 package/setools/0001-remove-werror-flag-from-setup.patch
+
 -- 
 2.31.1
