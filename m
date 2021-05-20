@@ -1,68 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 May 2021 09:08:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bullet: needs threads
-In-Reply-To: <20210520065826.154984-1-fontaine.fabrice@gmail.com>
-References: <20210520065826.154984-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210520070859.GS2268078@scaer>
+Date: Thu, 20 May 2021 09:09:49 +0200
+Subject: [Buildroot] [git commit branch/next] package/libopenssl: md5 is not
+ optional
+Message-ID: <20210520064058.6B44B812C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=04e3dc3e4bf057f99475971956528e4a0c91dc2b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-05-20 08:58 +0200, Fabrice Fontaine spake thusly:
-> Build without threads fails because demo apps are not disabled since
-> commit 5f154799b6ed772a0c028072996e110fac131508
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/9db945ce0709f4116d2c1c7544322144b6e473bb
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Commit a83d41867c8d (package/libopenssl: add option to enable some
+features) made md5 an optional feature.
 
-Applied to master, thanks.
+However, md5 has not been optional since 1.1.0, released in 2016.
 
-Regards,
-Yann E. MORIN.
+Drop that option.
 
-> ---
->  package/bullet/Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/bullet/Config.in b/package/bullet/Config.in
-> index 1f632b8931..0c420e8212 100644
-> --- a/package/bullet/Config.in
-> +++ b/package/bullet/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_BULLET
->  	bool "bullet"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on !BR2_STATIC_LIBS # dlfcn.h
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_USE_WCHAR
->  	help
->  	  Bullet is a Collision Detection and Rigid Body Dynamics
-> @@ -9,6 +10,6 @@ config BR2_PACKAGE_BULLET
->  
->  	  http://bulletphysics.org
->  
-> -comment "bullet needs a toolchain w/ C++, dynamic library, wchar"
-> +comment "bullet needs a toolchain w/ C++, dynamic library, threads, wchar"
->  	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-> -		!BR2_USE_WCHAR
-> +		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes:
+   - http://autobuild.buildroot.net/results/9d79c9f313ff989449e9b47c1ff0afd3a167fd2d/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Reported-by: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
+Reviewed-by: "Matthew Weber" <Matthew.Weber@collins.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libopenssl/Config.in     | 4 ----
+ package/libopenssl/libopenssl.mk | 1 -
+ 2 files changed, 5 deletions(-)
+
+diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
+index 7ed799075f..fcead4c11a 100644
+--- a/package/libopenssl/Config.in
++++ b/package/libopenssl/Config.in
+@@ -64,10 +64,6 @@ config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4
+ 	bool "enable MD4"
+ 	default y
+ 
+-config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD5
+-	bool "enable MD5"
+-	default y
+-
+ config BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2
+ 	bool "enable MDC2"
+ 	default y
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index c7f8ae714e..389a0a8b32 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -90,7 +90,6 @@ define LIBOPENSSL_CONFIGURE_CMDS
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4),,no-rc4) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD2),,no-md2) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4),,no-md4) \
+-			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD5),,no-md5) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2),,no-mdc2) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2),,no-blake2) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_IDEA),,no-idea) \
