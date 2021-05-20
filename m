@@ -1,149 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 May 2021 09:11:12 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libpsl: new package
-In-Reply-To: <20210519212637.1282972-2-aperez@igalia.com>
-References: <20210519212637.1282972-1-aperez@igalia.com>
- <20210519212637.1282972-2-aperez@igalia.com>
-Message-ID: <999661ba-f9cf-6b66-c442-921595b49176@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 May 2021 09:14:02 +0200
+Subject: [Buildroot] [git commit] package/imx-gpu-viv: add dependency to
+ BR2_INSTALL_LIBSTDCPP to examples
+Message-ID: <20210520064514.5C9A381013@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Adrian,
+commit: https://git.buildroot.net/buildroot/commit/?id=3d78dbace207b6b93416b27abcb85dbccde97a6b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 19/05/2021 23:26, Adrian Perez de Castro wrote:
-> Package libpsl is a new non-optional dependency of libsoup.
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> ---
->  DEVELOPERS                 |  1 +
->  package/Config.in          |  1 +
->  package/libpsl/Config.in   |  5 +++++
->  package/libpsl/libpsl.hash |  2 ++
->  package/libpsl/libpsl.mk   | 28 ++++++++++++++++++++++++++++
->  5 files changed, 37 insertions(+)
->  create mode 100644 package/libpsl/Config.in
->  create mode 100644 package/libpsl/libpsl.hash
->  create mode 100644 package/libpsl/libpsl.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index a90ad1c354..4286ca5baf 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -35,6 +35,7 @@ F:	package/bubblewrap/
->  F:	package/cage/
->  F:	package/cog/
->  F:	package/libepoxy/
-> +F:	package/libpsl/
->  F:	package/libwpe/
->  F:	package/webkitgtk/
->  F:	package/wlroots/
-> diff --git a/package/Config.in b/package/Config.in
-> index 82b28d2835..eaa30ea161 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1788,6 +1788,7 @@ menu "Networking"
->  	source "package/libpagekite/Config.in"
->  	source "package/libpcap/Config.in"
->  	source "package/libpjsip/Config.in"
-> +	source "package/libpsl/Config.in"
->  	source "package/librelp/Config.in"
->  	source "package/librsync/Config.in"
->  	source "package/libshairplay/Config.in"
-> diff --git a/package/libpsl/Config.in b/package/libpsl/Config.in
-> new file mode 100644
-> index 0000000000..cecd12c983
-> --- /dev/null
-> +++ b/package/libpsl/Config.in
-> @@ -0,0 +1,5 @@
-> +config BR2_PACKAGE_LIBPSL
-> +	bool "libpsl"
-> +	depends on BR2_PACKAGE_ICU || BR2_PACKAGE_LIBIDN2 || BR2_PACKAGE_LIBIDN
+The examples require libstdc++.so.6 so add the required dependency to
+the Config.in.
 
- Since the dependency is non-obvious, we prefer select:
+  ./tiger: error while loading shared libraries: libstdc++.so.6: cannot open shared object file: No such file or directory
 
-	select BR2_PACKAGE_LIBIDN2 if !BR2_PACKAGE_ICU && !BR2_PACKAGE_LIBIDN
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/freescale-imx/imx-gpu-viv/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-
-> +	help
-> +	  C library to handle the Public Suffix List of TLDs.
-
- Upstream URL is missing.
-
-> diff --git a/package/libpsl/libpsl.hash b/package/libpsl/libpsl.hash
-> new file mode 100644
-> index 0000000000..6c1c640e98
-> --- /dev/null
-> +++ b/package/libpsl/libpsl.hash
-> @@ -0,0 +1,2 @@
-> +# Locally generated
-> +sha512  a5084b9df4ff2a0b1f5074b20972efe0da846473396d27b57967c7f6aa190ab3c910b4bfc4f8f03802f08decbbad5820d850c36ad59610262ae37fe77de0c7f5  libpsl-0.21.1.tar.gz
-
- For locally generated, we normally use sha256.
-
- Also, hash for COPYING is missing.
-
-> diff --git a/package/libpsl/libpsl.mk b/package/libpsl/libpsl.mk
-> new file mode 100644
-> index 0000000000..5a1336d7ce
-> --- /dev/null
-> +++ b/package/libpsl/libpsl.mk
-> @@ -0,0 +1,28 @@
-> +################################################################################
-> +#
-> +# libpsl
-> +#
-> +################################################################################
-> +
-> +LIBPSL_VERSION = 0.21.1
-> +LIBPSL_SITE = https://github.com/rockdaboot/libpsl/releases/download/$(LIBPSL_VERSION)
-> +LIBPSL_INSTALL_STAGING = YES
-> +LIBPSL_DEPENDENCIES = host-pkgconf
-> +LIBPSL_LICENSE = MIT
-> +LIBPSL_LICENSE_FILES = COPYING
-
- From README.md:
-
-src/psl-make-dafsa and src/lookup_string_in_fixed_set.c are licensed under the
-term written in src/LICENSE.chromium.
-
-So that should be included in LICENSE and LICENSE_FILES.
-
-> +LIBPSL_CONF_OPTS = -Ddocs=false
-> +
-> +ifeq ($(BR2_PACKAGE_ICU),y)
-> +LIBPSL_CONF_OPTS += -Druntime=libicu -Dbuiltin=libicu
-> +LIBPSL_DEPENDENCIES += icu
-> +else
-> +ifeq ($(BR2_PACKAGE_LIBIDN2),y)
-
- With
-
-else ifeq ($(BR2_PACKAGE_LIBIDN2),y)
-
-you only need one endif at the end.
-
- Also, since it's possible that all three are selected, we need to think a bit
-about the priorities. Preferring libidn2 over libidn is quite obvious, but about
-ICU I'm not so sure if it should be preferred over libidn2. In the select
-statement in Config.in libidn2 should clearly be preferred because it's much
-smaller. If ICU is selected anyway, that doesn't matter of course. So, is there
-any specific reason to prefer ICU over libidn2? I.e., does ICU offer more
-features? If it makes no difference either way, I think we should prefer libidn2
-over ICU to match the select in Config.in.
-
- Regards,
- Arnout
-
-> +LIBPSL_CONF_OPTS += -Druntime=libidn2 -Dbuiltin=libidn2
-> +LIBPSL_DEPENDENCIES += libidn2
-> +else
-> +LIBPSL_CONF_OPTS += -Druntime=libidn -Dbuiltin=libidn
-> +LIBPSL_DEPENDENCIES += libidn
-> +endif
-> +endif
-> +
-> +$(eval $(meson-package))
-> 
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index 6668ee8bb5..ca46c5036f 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -84,11 +84,17 @@ config BR2_PACKAGE_PROVIDES_LIBOPENVG
+ 
+ config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
+ 	bool "install examples"
++	# example binaries are linked against libstdc++.so.6
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Copy the Vivante examples to the target.
+ 
+ 	  Warning: examples take approximately 150 MB of disk space.
+ 
++comment "imx-gpu-viv-examples need a toolchain w/ C++ support"
++    depends on !BR2_INSTALL_LIBSTDCPP
++
++
+ config BR2_PACKAGE_IMX_GPU_VIV_GMEM_INFO
+ 	bool "install gmem_info tool"
+ 	help
