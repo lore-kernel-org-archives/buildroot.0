@@ -1,40 +1,63 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 20 May 2021 14:25:56 +0300
-Subject: [Buildroot] [PATCH 1/2] package/libpsl: new package
-In-Reply-To: <2fbad602-ec9f-bce7-acce-759a4981c3d7@mind.be>
-References: <20210519212637.1282972-1-aperez@igalia.com>
- <20210519212637.1282972-2-aperez@igalia.com>
- <999661ba-f9cf-6b66-c442-921595b49176@mind.be>
- <20210520134959.GB1322222@momiji>
- <2fbad602-ec9f-bce7-acce-759a4981c3d7@mind.be>
-Message-ID: <20210520142556.GB1327068@momiji>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 May 2021 13:43:38 +0200
+Subject: [Buildroot] [git commit branch/next]
+ configs/acmesystems_acqua_a5_*: use tested bootloader version
+Message-ID: <20210520112227.802C48395F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 20 May 2021 13:10:43 +0200 Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
-> 
-> On 20/05/2021 12:49, Adrian Perez de Castro wrote:
-> > As a related note: it is interesting that libpsl can be built against ICU
-> > because it is possible to have a configuration that needs ICU (as a dependency
-> > for WPE WebKit, for example) without any other package needing libidn/libidn2.
-> > So that's neat :)
-> 
->  libidn2 is so tiny (or rather, ICU is so huge) that it doesn't matter much IMHO.
+commit: https://git.buildroot.net/buildroot/commit/?id=82e7aa945a6c961b69503dd181db00344e833bf1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-True, libidn2 is tiny in comparison. Anyway, with v2 of the patch set I
-changed the order of checks to prefer libidn2 if it is selected, which
-matches the preference used by the build system :)
+The new branch "4.x" of at91bootstrap has dropped the contrib directory,
+which holds the defconfigs used by the Acmesystems Acqua A5 boards. We
+then cannot use the latest at91bootstrap anymore.
 
-Cheers,
--Adrian
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210520/e3f65d12/attachment.asc>
+As commit e009816c67fc1335a9b2da8687b55c5ff6aa27cf introduced support
+for at91bootstrap 4.x in the "next" branch, it had to work around this
+by pinning these defconfigs to the "latest 3.x" version.
+
+Avoid this and any future incompatibility problems by explicitly
+requesting a tested version of at91bootstrap.
+
+Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+[yann.morin.1998 at free.fr: use a custom git, like other acme defconfigs]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/acmesystems_acqua_a5_256mb_defconfig | 4 +++-
+ configs/acmesystems_acqua_a5_512mb_defconfig | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
+index f62b000654..618ef0e756 100644
+--- a/configs/acmesystems_acqua_a5_256mb_defconfig
++++ b/configs/acmesystems_acqua_a5_256mb_defconfig
+@@ -17,7 +17,9 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_AT91BOOTSTRAP3=y
+-BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.2"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="acqua-256m"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
+index 9d2f009a5a..e9d74be7c8 100644
+--- a/configs/acmesystems_acqua_a5_512mb_defconfig
++++ b/configs/acmesystems_acqua_a5_512mb_defconfig
+@@ -17,7 +17,9 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_AT91BOOTSTRAP3=y
+-BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.2"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="acqua-512m"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
