@@ -1,70 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 May 2021 10:40:36 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] lmbench: memsize:
- increase delay for slow FPGAs
-Message-ID: <20210520090953.76E95886C5@busybox.osuosl.org>
+Date: Thu, 20 May 2021 10:48:48 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/docker-engine:
+ devicemapper driver does not need liblvm2app
+Message-ID: <20210520090953.8E3AA886C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff50cfb1009a6f1a910d5c303fc94a50e350bc36
+commit: https://git.buildroot.net/buildroot/commit/?id=1690ddde4d78773ac54dd2d86af48cb3991e4102
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-otherwise memsize bails out and erroneously reports 1 MB
+lvm2 app library is not needed to build devicemapper filesystem driver
 
-NOK
-----
-| />/lmbench/bin/arc/memsize 16
-|
-| 1
-
-OK
-----
-| />/lmbench/bin/arc/memsize 16
-| 2MB OK3MB OK4MB OK5MB OK6MB OK7MB OK8MB OK9MB OK10MB OK11MB OK12MB OK13MB OK14MB OK15MB OK16MB OK
-| 16
-
-Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: tweak title]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2f6d7b6333367582eef14073af0a490bc87d79f3)
+(cherry picked from commit 378e9f4b11631725937d343ed58a091536575d65)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0-usec-to-prevent-memsize-from-timingout-.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ package/docker-engine/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch b/package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch
-new file mode 100644
-index 0000000000..6c3e7370e1
---- /dev/null
-+++ b/package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch
-@@ -0,0 +1,28 @@
-+From d85b61666aa2728f68b69d02bfb162c432df709f Mon Sep 17 00:00:00 2001
-+From: vgupta <vgupta@4eed8e25-bc12-0410-818a-f70ee6866280>
-+Date: Sat, 3 Mar 2012 10:02:24 +0000
-+Subject: [PATCH] TOO_LONG 100 usec to prevent memsize from timingout @80Mhz
-+
-+git-svn-id: http://sjvm-subversion02.internal.synopsys.com/svn/OSS/ARC_Linux/tests/lmbench-3.0-a9 at 157318 4eed8e25-bc12-0410-818a-f70ee6866280
-+
-+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
-+---
-+ src/memsize.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/memsize.c b/src/memsize.c
-+index eb25a0924872..b333cf8cbd32 100644
-+--- a/src/memsize.c
-++++ b/src/memsize.c
-+@@ -15,7 +15,7 @@ char	*id = "$Id$\n";
-+ #define	CHK(x)	if ((x) == -1) { perror("x"); exit(1); }
-+ 
-+ #ifndef	TOO_LONG
-+-#define	TOO_LONG	10	/* usecs */
-++#define	TOO_LONG	100	/* usecs */
-+ #endif
-+ 
-+ int	alarm_triggered = 0;
-+-- 
-+2.25.1
-+
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 85a4bc6a0f..4fa3b5a8c3 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -34,9 +34,7 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+ 	depends on BR2_USE_MMU # lvm2
+ 	depends on !BR2_STATIC_LIBS # lvm2
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2
+ 	select BR2_PACKAGE_LVM2
+-	select BR2_PACKAGE_LVM2_APP_LIBRARY
+ 	help
+ 	  Build the devicemapper filesystem driver for Docker.
+ 
