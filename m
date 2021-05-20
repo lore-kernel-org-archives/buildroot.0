@@ -1,70 +1,63 @@
-From: Chan, Donald <hoiho@lab126.com>
-Date: Thu, 20 May 2021 01:50:27 +0000
-Subject: [Buildroot] [PATCH 1/1] package/python3-six: add python3 variant
-In-Reply-To: <20210519210833.GO2268078@scaer>
-References: <1620853148995.76548@lab126.com> <20210518150056.GQ2506@scaer>
- <1621370634009.93154@lab126.com> <20210519120015.GU2268078@scaer>
- <1621458008892.46397@lab126.com>,<20210519210833.GO2268078@scaer>
-Message-ID: <1621475427693.92707@lab126.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 20 May 2021 07:00:24 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 21.1.1
+Message-ID: <20210520050024.6402-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Submitted a new set of 5 patches - thanks for helping!
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2021-May/000631.html
 
-________________________________________
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Sent: Wednesday, May 19, 2021 2:08 PM
-To: Chan, Donald
-Cc: buildroot at busybox.net
-Subject: RE: [EXTERNAL] [Buildroot] [PATCH 1/1] package/python3-six: add python3 variant
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-
-
-
-Chan, All,
-
-On 2021-05-19 21:00 +0000, Chan, Donald via buildroot spake thusly:
-> On 2021-05-18 20:43 +0000, Chan, Donald spake thusly:
-> > > On 2021-05-12 20:59 +0000, Chan, Donald via buildroot spake thusly:
-> > > >> Signed-off-by: Donald Chan <hoiho@lab126.com>
-> > > >Why do you need a python3-specific version of six?
-> > > This was for the host side Python packages
-> > Your patch was adding both the target and the host variants, though.
-> Should I remove the $(eval $(python-package)) line then?
-
-Yes. Just keep the host-python-package one.
-
-> > If you can provide such an example that a specific host-python3-six
-> > is needed, do not hesitate to resend your patch with such an explanation
-> > in your commit log.
-> Yes do let me explain - I am making some contributions to another OSS
-> software (OP-TEE) that uses buildroot, and it requires a python3
-> variant of the python-cryptography module, which in returns requires
-> python3 variants of its dependencies (python-cffi, python-six,
-> python-pycparser, python-pip). etc.
-
-Ah, good explanations. Thanks. Please explain that in the commit log
-when you resubmit (see below).
-
-> Shall I re-submit everything in a new patch set (split to multiple patches)?
-
-Yes, please. Having the new host-python3-six alone does not make much
-sense. If it is followed in the same series by a patch that makes use of
-it, then it becones obvious what it is for.
-
-Thanks you for the follow-up with the explanations! :-)
-
-Regards,
-Yann E. MORIN.
-
---
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 308c6701ab..143de09937 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 21.1.0
++MESA3D_HEADERS_VERSION = 21.1.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index b9eace0b42..9548f8d170 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2021-May/000630.html
+-sha256  0128f10e22970d3aed3d1034003731f94623015cd9797c07151417649c1b1ff8  mesa-21.1.0.tar.xz
+-sha512  9d7617a6d5dd8ec1d93fdda8fe8b2f745695c02bc381d685f1257f7e7f08d5c06f3c57ae71c5f2dfaabb1742b8a88f47294a369bd3ac553f29835f24ce5dd350  mesa-21.1.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2021-May/000631.html
++sha256  eec25ea379054e8911bc5de816aeb50f581b5b708414725003d2f00386b38dd2  mesa-21.1.1.tar.xz
++sha512  79d0e2b0e1e590e7f36a082df3584010a553af0b3060bd2d3a7ace700ac7a8d1b7734ba67f2e193dd441434eeec74a16e0dbcbf8c15061b5dd5d6a1feca73d62  mesa-21.1.1.tar.xz
+ 
+ # License
+ sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1425cb7217..aa81cd10a8 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 21.1.0
++MESA3D_VERSION = 21.1.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.29.2
