@@ -1,8 +1,8 @@
 From: Chan, Donald <hoiho@lab126.com>
-Date: Thu, 20 May 2021 01:48:00 +0000
-Subject: [Buildroot] [PATCH 2/5] package/python3-pip: add python3 host
+Date: Thu, 20 May 2021 01:48:29 +0000
+Subject: [Buildroot] [PATCH 3/5] package/python3-pycparser: add python3 host
  variant
-Message-ID: <1621475279766.55779@lab126.com>
+Message-ID: <1621475308301.45348@lab126.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +14,41 @@ python-cryptography and it is dependent on this.
 
 Signed-off-by: Donald Chan <hoiho@lab126.com>
 ---
- package/python3-pip/python3-pip.hash |  1 +
- package/python3-pip/python3-pip.mk   | 17 +++++++++++++++++
+ .../python3-pycparser/python3-pycparser.hash    |  1 +
+ package/python3-pycparser/python3-pycparser.mk  | 17 +++++++++++++++++
  2 files changed, 18 insertions(+)
- create mode 120000 package/python3-pip/python3-pip.hash
- create mode 100644 package/python3-pip/python3-pip.mk
+ create mode 120000 package/python3-pycparser/python3-pycparser.hash
+ create mode 100644 package/python3-pycparser/python3-pycparser.mk
 
-diff --git a/package/python3-pip/python3-pip.hash b/package/python3-pip/python3-pip.hash
+diff --git a/package/python3-pycparser/python3-pycparser.hash b/package/python3-pycparser/python3-pycparser.hash
 new file mode 120000
-index 0000000..d90fb3d
+index 0000000..7a1912c
 --- /dev/null
-+++ b/package/python3-pip/python3-pip.hash
++++ b/package/python3-pycparser/python3-pycparser.hash
 @@ -0,0 +1 @@
-+../python-pip/python-pip.hash
++../python-pycparser/python-pycparser.hash
 \ No newline at end of file
-diff --git a/package/python3-pip/python3-pip.mk b/package/python3-pip/python3-pip.mk
+diff --git a/package/python3-pycparser/python3-pycparser.mk b/package/python3-pycparser/python3-pycparser.mk
 new file mode 100644
-index 0000000..098e502
+index 0000000..68769ce
 --- /dev/null
-+++ b/package/python3-pip/python3-pip.mk
++++ b/package/python3-pycparser/python3-pycparser.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# python3-pip
++# python3-pycparser
 +#
 +################################################################################
 +
-+# Please keep in sync with package/python-pip/python-pip.mk
-+PYTHON3_PIP_VERSION = 20.0.2
-+PYTHON3_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
-+PYTHON3_PIP_SITE = https://files.pythonhosted.org/packages/8e/76/66066b7bc71817238924c7e4b448abdb17eb0c92d645769c223f9ace478f
-+PYTHON3_PIP_SETUP_TYPE = setuptools
-+PYTHON3_PIP_LICENSE = MIT
-+PYTHON3_PIP_LICENSE_FILES = LICENSE.txt
-+HOST_PYTHON3_PIP_DL_SUBDIR = python-pip
-+HOST_PYTHON3_PIP_NEEDS_HOST_PYTHON = python3
++# Please keep in sync with package/python-pycparser/python-pycparser.mk
++PYTHON3_PYCPARSER_VERSION = 2.20
++PYTHON3_PYCPARSER_SOURCE = pycparser-$(PYTHON3_PYCPARSER_VERSION).tar.gz
++PYTHON3_PYCPARSER_SITE = https://files.pythonhosted.org/packages/0f/86/e19659527668d70be91d0369aeaa055b4eb396b0f387a4f92293a20035bd
++PYTHON3_PYCPARSER_SETUP_TYPE = setuptools
++PYTHON3_PYCPARSER_LICENSE = BSD-3-Clause
++PYTHON3_PYCPARSER_LICENSE_FILES = LICENSE
++HOST_PYTHON3_PYCPARSER_DL_SUBDIR = python-pycparser
++HOST_PYTHON3_PYCPARSER_NEEDS_HOST_PYTHON = python3
 +
 +$(eval $(host-python-package))
 -- 
