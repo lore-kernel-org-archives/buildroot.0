@@ -1,81 +1,149 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 May 2021 09:10:21 +0200
-Subject: [Buildroot] [PATCHv2] package/libopenssl: md5 is not optional
-In-Reply-To: <20210519204935.2712775-1-yann.morin.1998@free.fr>
-References: <20210519204935.2712775-1-yann.morin.1998@free.fr>
-Message-ID: <20210520071021.GT2268078@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 May 2021 09:11:12 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libpsl: new package
+In-Reply-To: <20210519212637.1282972-2-aperez@igalia.com>
+References: <20210519212637.1282972-1-aperez@igalia.com>
+ <20210519212637.1282972-2-aperez@igalia.com>
+Message-ID: <999661ba-f9cf-6b66-c442-921595b49176@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+ Hi Adrian,
 
-On 2021-05-19 22:49 +0200, Yann E. MORIN spake thusly:
-> Commit a83d41867c8d (package/libopenssl: add option to enable some
-> features) made md5 an optional feature.
+On 19/05/2021 23:26, Adrian Perez de Castro wrote:
+> Package libpsl is a new non-optional dependency of libsoup.
 > 
-> However, md5 has not been optional since 1.1.0, released in 2016.
-> 
-> Drop that option.
-> 
-> Fixes:
->    - http://autobuild.buildroot.net/results/9d79c9f313ff989449e9b47c1ff0afd3a167fd2d/
-> 
-> Reported-by: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 > ---
-> Changes v1-> v2:
->   - add autobuild reference
->   - fix typo
+>  DEVELOPERS                 |  1 +
+>  package/Config.in          |  1 +
+>  package/libpsl/Config.in   |  5 +++++
+>  package/libpsl/libpsl.hash |  2 ++
+>  package/libpsl/libpsl.mk   | 28 ++++++++++++++++++++++++++++
+>  5 files changed, 37 insertions(+)
+>  create mode 100644 package/libpsl/Config.in
+>  create mode 100644 package/libpsl/libpsl.hash
+>  create mode 100644 package/libpsl/libpsl.mk
 > 
-> ---
->  package/libopenssl/Config.in     | 4 ----
->  package/libopenssl/libopenssl.mk | 1 -
->  2 files changed, 5 deletions(-)
-> 
-> diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-> index 7ed799075f..fcead4c11a 100644
-> --- a/package/libopenssl/Config.in
-> +++ b/package/libopenssl/Config.in
-> @@ -64,10 +64,6 @@ config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4
->  	bool "enable MD4"
->  	default y
->  
-> -config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD5
-> -	bool "enable MD5"
-> -	default y
-> -
->  config BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2
->  	bool "enable MDC2"
->  	default y
-> diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-> index c7f8ae714e..389a0a8b32 100644
-> --- a/package/libopenssl/libopenssl.mk
-> +++ b/package/libopenssl/libopenssl.mk
-> @@ -90,7 +90,6 @@ define LIBOPENSSL_CONFIGURE_CMDS
->  			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4),,no-rc4) \
->  			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD2),,no-md2) \
->  			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4),,no-md4) \
-> -			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD5),,no-md5) \
->  			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2),,no-mdc2) \
->  			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2),,no-blake2) \
->  			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_IDEA),,no-idea) \
-> -- 
-> 2.25.1
-> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index a90ad1c354..4286ca5baf 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -35,6 +35,7 @@ F:	package/bubblewrap/
+>  F:	package/cage/
+>  F:	package/cog/
+>  F:	package/libepoxy/
+> +F:	package/libpsl/
+>  F:	package/libwpe/
+>  F:	package/webkitgtk/
+>  F:	package/wlroots/
+> diff --git a/package/Config.in b/package/Config.in
+> index 82b28d2835..eaa30ea161 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1788,6 +1788,7 @@ menu "Networking"
+>  	source "package/libpagekite/Config.in"
+>  	source "package/libpcap/Config.in"
+>  	source "package/libpjsip/Config.in"
+> +	source "package/libpsl/Config.in"
+>  	source "package/librelp/Config.in"
+>  	source "package/librsync/Config.in"
+>  	source "package/libshairplay/Config.in"
+> diff --git a/package/libpsl/Config.in b/package/libpsl/Config.in
+> new file mode 100644
+> index 0000000000..cecd12c983
+> --- /dev/null
+> +++ b/package/libpsl/Config.in
+> @@ -0,0 +1,5 @@
+> +config BR2_PACKAGE_LIBPSL
+> +	bool "libpsl"
+> +	depends on BR2_PACKAGE_ICU || BR2_PACKAGE_LIBIDN2 || BR2_PACKAGE_LIBIDN
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ Since the dependency is non-obvious, we prefer select:
+
+	select BR2_PACKAGE_LIBIDN2 if !BR2_PACKAGE_ICU && !BR2_PACKAGE_LIBIDN
+
+
+> +	help
+> +	  C library to handle the Public Suffix List of TLDs.
+
+ Upstream URL is missing.
+
+> diff --git a/package/libpsl/libpsl.hash b/package/libpsl/libpsl.hash
+> new file mode 100644
+> index 0000000000..6c1c640e98
+> --- /dev/null
+> +++ b/package/libpsl/libpsl.hash
+> @@ -0,0 +1,2 @@
+> +# Locally generated
+> +sha512  a5084b9df4ff2a0b1f5074b20972efe0da846473396d27b57967c7f6aa190ab3c910b4bfc4f8f03802f08decbbad5820d850c36ad59610262ae37fe77de0c7f5  libpsl-0.21.1.tar.gz
+
+ For locally generated, we normally use sha256.
+
+ Also, hash for COPYING is missing.
+
+> diff --git a/package/libpsl/libpsl.mk b/package/libpsl/libpsl.mk
+> new file mode 100644
+> index 0000000000..5a1336d7ce
+> --- /dev/null
+> +++ b/package/libpsl/libpsl.mk
+> @@ -0,0 +1,28 @@
+> +################################################################################
+> +#
+> +# libpsl
+> +#
+> +################################################################################
+> +
+> +LIBPSL_VERSION = 0.21.1
+> +LIBPSL_SITE = https://github.com/rockdaboot/libpsl/releases/download/$(LIBPSL_VERSION)
+> +LIBPSL_INSTALL_STAGING = YES
+> +LIBPSL_DEPENDENCIES = host-pkgconf
+> +LIBPSL_LICENSE = MIT
+> +LIBPSL_LICENSE_FILES = COPYING
+
+ From README.md:
+
+src/psl-make-dafsa and src/lookup_string_in_fixed_set.c are licensed under the
+term written in src/LICENSE.chromium.
+
+So that should be included in LICENSE and LICENSE_FILES.
+
+> +LIBPSL_CONF_OPTS = -Ddocs=false
+> +
+> +ifeq ($(BR2_PACKAGE_ICU),y)
+> +LIBPSL_CONF_OPTS += -Druntime=libicu -Dbuiltin=libicu
+> +LIBPSL_DEPENDENCIES += icu
+> +else
+> +ifeq ($(BR2_PACKAGE_LIBIDN2),y)
+
+ With
+
+else ifeq ($(BR2_PACKAGE_LIBIDN2),y)
+
+you only need one endif at the end.
+
+ Also, since it's possible that all three are selected, we need to think a bit
+about the priorities. Preferring libidn2 over libidn is quite obvious, but about
+ICU I'm not so sure if it should be preferred over libidn2. In the select
+statement in Config.in libidn2 should clearly be preferred because it's much
+smaller. If ICU is selected anyway, that doesn't matter of course. So, is there
+any specific reason to prefer ICU over libidn2? I.e., does ICU offer more
+features? If it makes no difference either way, I think we should prefer libidn2
+over ICU to match the select in Config.in.
+
+ Regards,
+ Arnout
+
+> +LIBPSL_CONF_OPTS += -Druntime=libidn2 -Dbuiltin=libidn2
+> +LIBPSL_DEPENDENCIES += libidn2
+> +else
+> +LIBPSL_CONF_OPTS += -Druntime=libidn -Dbuiltin=libidn
+> +LIBPSL_DEPENDENCIES += libidn
+> +endif
+> +endif
+> +
+> +$(eval $(meson-package))
+> 
