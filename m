@@ -1,103 +1,54 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 21 May 2021 00:08:33 +0300
-Subject: [Buildroot] [PATCH/next 2/2] package/webkitgtk: allow building
- with the musl libc
-In-Reply-To: <20210519095611.GP2268078@scaer>
-References: <20210518190515.357554-1-aperez@igalia.com>
- <20210518190515.357554-3-aperez@igalia.com> <20210519095611.GP2268078@scaer>
-Message-ID: <20210521000833.GB1383533@momiji>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Fri, 21 May 2021 00:11:06 +0300
+Subject: [Buildroot] [PATCH v2 1/1] package/dhcp: add host-gawk to
+ dependencies and build environment
+In-Reply-To: <5ade5409-df01-2cde-7bfb-7767c04138f2@mind.be>
+References: <20210214145404.2587820-1-geomatsi@gmail.com>
+ <5ade5409-df01-2cde-7bfb-7767c04138f2@mind.be>
+Message-ID: <YKbQauodJeCyvNih@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hello Arnout,
 
-On Wed, 19 May 2021 11:56:11 +0200 "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
- 
-> On 2021-05-18 22:05 +0300, Adrian Perez de Castro spake thusly:
-> > WebKitGTK 2.32.1 includes support for building with the musl libc,
-> > therefore arrange dependencies to allow selecting the package when
-> > a musl system is built. This is done by making the dependencies be
-> > more granular, basically following what the wpewebkit package does.
+> > DHCP package may silently fail to install binaries to the target image.
+> > The problem occurs when buildroot configuration and build host provide
+> > different flavors of awk. For instance, mawk on build host and gawk in
+> > buildroot output/host. In this case isc-dhcp configure script detects
+> > gawk in output/host and generates Makefiles specifying gawk without
+> > absolute path. During Buildroot installation phase, those Makefiles
+> > are used to install dhcp binaries. They attempt to use gawk without
+> > absolute path. However build host does not have gawk.
 > > 
-> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> > ---
-> >  package/webkitgtk/Config.in | 11 +++++++----
-> >  1 file changed, 7 insertions(+), 4 deletions(-)
+> > To resolve the issue add host-gawk to the list of dhcp dependencies
+> > and explicitely specify absolute path to host-gawk.
 > > 
-> > diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-> > index 4ea931fde1..18b254dca5 100644
-> > --- a/package/webkitgtk/Config.in
-> > +++ b/package/webkitgtk/Config.in
-> > @@ -12,20 +12,23 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-> >  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> >  	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
-> >  
-> > -comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 7, host gcc >= 4.9"
-> > +comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 7, host gcc >= 4.9"
-> >  	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-> > +	depends on !BR2_BINFMT_FLAT
-> >  	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
-> > -		!BR2_TOOLCHAIN_USES_GLIBC || \
-> > +		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+> > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 > 
-> But that also allows uclibc now... Is that intended? If so, this should
-> also be mentioned in the commit log
+>  Heiko recently posted a patch that does the same thing, and I applied that one
+> because it only adds the dependency when the server is enabled (client doesn't
+> need gawk).
 
-Ah, this is intended, yes. I started with Musl because we landed the needed
-fixes in WebKit in the 2.32.1 release and it turns out that uClibc also
-benefits from them... and I wrote the patch before even trying an uClibc
-build, then forgot to reword it O:-)
- 
-> >  		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-> >  		!BR2_HOST_GCC_AT_LEAST_4_9
-> > -	depends on BR2_USE_MMU
-> 
-> How does that fit with allowing musl?
+I did some build tests in support/docker/Dockerfile image. It turns out
+that the patch suggested by Heiko is not enough. It adds host-gawk to 
+dependencies, but it does not set explicit path to this gawk in dhcp
+configuration scripts. As a result, the same issue can be reproduced
+immediately even with uclibc. The build test is as follows:
+- use docker builder image described in support/docker/Dockerfile
+  -- note that this image provides mawk flavor
+- start from default qemu_x86_defconfig
+- enable both isc-dhcp client and server
 
-This is a spurios dependency for the ?comment? entry and should have never
-been there to begin with. I will split this edit into its own commit.
+As a result, neighter dhclient nor dhcpd are installed into
+output/target. Previously, before the applied patch, the issue could be
+reproduced only with glibc which pulled host-gawk dependency. Besides,
+unless I missed something in my tests, dhclient installation is also
+impacted, so host-gawk should be added globally.
 
-Cheers,
--Adrian
+I will update my patch and send v3.
 
-> Regards,
-> Yann E. MORIN.
-> 
-> >  config BR2_PACKAGE_WEBKITGTK
-> >  	bool "webkitgtk"
-> > +	depends on !BR2_STATIC_LIBS # wayland
-> > +	depends on !BR2_BINFMT_FLAT # icu
-> >  	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu
-> >  	depends on BR2_INSTALL_LIBSTDCPP
-> > +	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
-> >  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
-> > -	depends on BR2_TOOLCHAIN_USES_GLIBC
-> > +	depends on BR2_USE_WCHAR # icu, libsoup
-> >  	depends on BR2_PACKAGE_LIBGTK3
-> >  	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-> >  	select BR2_PACKAGE_CAIRO
-> > -- 
-> > 2.31.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210521/64bf9110/attachment.asc>
+Regards,
+Sergey
