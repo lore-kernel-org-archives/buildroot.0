@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4BE7C4320A
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:29:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F723C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:30:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 77AB161037
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:29:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 77AB161037
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 5405E60F22
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:30:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5405E60F22
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DD2D404B4;
-	Tue,  3 Aug 2021 22:29:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2390840522;
+	Tue,  3 Aug 2021 22:30:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id npO1jT1FCtpW; Tue,  3 Aug 2021 22:29:57 +0000 (UTC)
+	with ESMTP id fuRQljovG_tw; Tue,  3 Aug 2021 22:30:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 497334045E;
-	Tue,  3 Aug 2021 22:29:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0E9971BF349
+	by smtp2.osuosl.org (Postfix) with ESMTP id CA5F34037A;
+	Tue,  3 Aug 2021 22:30:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 126BB1BF9AA
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CDA3340590
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D38B64053A
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fu12cPh2nYmf for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Sb3Jh_Spa7ZW for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40D9840585
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D44840458
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8B25B83553; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 9EE70810E2; Tue,  3 Aug 2021 21:09:42 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 23:11:34 +0200
+Date: Thu, 20 May 2021 22:15:13 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5141b64eb36e1f9a7683c702f020d11990bf041a
-X-Git-Newrev: e9d2c67f820071be149bec9a79811365e64f6264
+X-Git-Oldrev: 8f11388f4e60df88ffb210079f412736160474a5
+X-Git-Newrev: 0c65499c3f11e89c6c383629a99f192d14815dd9
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211020.8B25B83553@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/daq3: bump to version
- 3.0.4
+Message-Id: <20210803210942.9EE70810E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wpa_supplicant: fix
+ build with CVE-2021-30004 changes
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,48 +70,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9d2c67f820071be149bec9a79811365e64f6264
+commit: https://git.buildroot.net/buildroot/commit/?id=0c65499c3f11e89c6c383629a99f192d14815dd9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This bump will fix a build failure with snort3 raised since its bump to
-version 3.1.6.0 in commit e66f2fd310374779d415fa683813cc5f5ccf6be9
+Commit a8fbe67b9b16 ("package/wpa_supplicant: add upstream patch to fix
+CVE-2021-30004") added security patch from hostapd upstream without
+required ASN.1 helpers. Backport and adapt two commits from the
+hostapd upstream to add missing headers and helpers.
 
-https://github.com/snort3/libdaq/releases/tag/v3.0.4
-
-Fixes:
- - http://autobuild.buildroot.org/results/0019eac13bfb17da853d42ff52d6b12aebd3d45b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/daq3/daq3.hash | 2 +-
- package/daq3/daq3.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...de-stdbool.h-to-allow-C99-bool-to-be-used.patch | 32 +++++++++++++++++++
+ ...elper-functions-for-recognizing-tag-value.patch | 37 ++++++++++++++++++++++
+ 2 files changed, 69 insertions(+)
 
-diff --git a/package/daq3/daq3.hash b/package/daq3/daq3.hash
-index 33ad2e388b..e4cf4ebefe 100644
---- a/package/daq3/daq3.hash
-+++ b/package/daq3/daq3.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  920344f5c98ac68b401d1bc92ebaed78b0d15779b0480c213db279d0a60acc32  daq3-3.0.3.tar.gz
-+sha256  a376c7625d1442ddb7e3c75954c910cc9d64440e2f8f345981aa5fa6999ea206  daq3-3.0.4.tar.gz
- 
- # Hash for license files:
- sha256  64601289158eddad72cb4de72652f9e64dc886942c910b38ddee93ba13b0db26  COPYING
-diff --git a/package/daq3/daq3.mk b/package/daq3/daq3.mk
-index 50e0eaccba..b726031d39 100644
---- a/package/daq3/daq3.mk
-+++ b/package/daq3/daq3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DAQ3_VERSION = 3.0.3
-+DAQ3_VERSION = 3.0.4
- DAQ3_SITE = $(call github,snort3,libdaq,v$(DAQ3_VERSION))
- DAQ3_LICENSE = GPL-2.0
- DAQ3_LICENSE_FILES = COPYING LICENSE
+diff --git a/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch b/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+new file mode 100644
+index 0000000000..e52dbdb694
+--- /dev/null
++++ b/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+@@ -0,0 +1,32 @@
++From 99cf89555313056d3a8fa54b21d02dc880b363e1 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <jouni@codeaurora.org>
++Date: Mon, 20 Apr 2020 20:29:31 +0300
++Subject: [PATCH] Include stdbool.h to allow C99 bool to be used
++
++We have practically started requiring some C99 features, so might as
++well finally go ahead and bring in the C99 bool as well.
++
++Signed-off-by: Jouni Malinen <jouni@codeaurora.org>
++[geomatsi@gmail.com: backport from upstream]
++Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
++[yann.morin.1998@free.fr: keep upstream sha1 in header, drop numbering]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ src/utils/includes.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/utils/includes.h b/src/utils/includes.h
++index 75513fc8c..741fc9c14 100644
++--- a/src/utils/includes.h
+++++ b/src/utils/includes.h
++@@ -18,6 +18,7 @@
++ 
++ #include <stdlib.h>
++ #include <stddef.h>
+++#include <stdbool.h>
++ #include <stdio.h>
++ #include <stdarg.h>
++ #include <string.h>
++-- 
++2.25.1
++
+diff --git a/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch b/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
+new file mode 100644
+index 0000000000..a5415e7daf
+--- /dev/null
++++ b/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
+@@ -0,0 +1,37 @@
++From 9a990e8c4eb92dd64e0ec483599820e45c35ac23 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <j@w1.fi>
++Date: Sat, 13 Mar 2021 23:14:23 +0200
++Subject: [PATCH] ASN.1: Add helper functions for recognizing tag values
++
++Signed-off-by: Jouni Malinen <j@w1.fi>
++[geomatsi@gmail.com: backport asn1_is_null() from upstream 9a990e8c4eb9]
++Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
++[yann.morin.1998@free.fr: 
++  - reformat, keep the upstream sha1 and title,
++  - drop numbering
++]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ src/tls/asn1.h | 102 +++++++++++++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 102 insertions(+)
++
++diff --git a/src/tls/asn1.h b/src/tls/asn1.h
++index de3430adb..a4d1be473 100644
++--- a/src/tls/asn1.h
+++++ b/src/tls/asn1.h
++@@ -66,6 +66,12 @@ struct wpabuf * asn1_build_alg_id(const struct asn1_oid *oid,
++ unsigned long asn1_bit_string_to_long(const u8 *buf, size_t len);
++ int asn1_oid_equal(const struct asn1_oid *a, const struct asn1_oid *b);
++ 
+++static inline bool asn1_is_null(const struct asn1_hdr *hdr)
+++{
+++	return hdr->class == ASN1_CLASS_UNIVERSAL &&
+++		hdr->tag == ASN1_TAG_NULL;
+++}
+++
++ extern struct asn1_oid asn1_sha1_oid;
++ extern struct asn1_oid asn1_sha256_oid;
++ 
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
