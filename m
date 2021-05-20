@@ -1,50 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 May 2021 08:55:06 +0200
-Subject: [Buildroot] [PATCHv2 1/1] package/rustc: add musl as an
- available Rust libc
-In-Reply-To: <20210519150145.GZ2268078@scaer>
-References: <SJ0PR18MB3898AC687557A2CD4FA0340995599@SJ0PR18MB3898.namprd18.prod.outlook.com>
- <20210518230043.63dc9ac7@windsurf.orange-hotspot>
- <SJ0PR18MB3898F64AF1A5908759597DBE952B9@SJ0PR18MB3898.namprd18.prod.outlook.com>
- <20210519150145.GZ2268078@scaer>
-Message-ID: <0c0d1b6d-0707-2b0e-62b7-473ce3d62f49@mind.be>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 20 May 2021 08:54:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/imx-gpu-viv: add dependency to
+ BR2_INSTALL_LIBSTDCPP to examples
+Message-ID: <20210520065428.16860-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The examples require libstdc++.so.6 so add the required dependency to
+the Config.in.
 
+  ./tiger: error while loading shared libraries: libstdc++.so.6: cannot open shared object file: No such file or directory
 
-On 19/05/2021 17:01, Yann E. MORIN wrote:
->> Do you test the gpg keys and sha256sums "by hand" or is there a
->> utility used when version update commits occur?
-> There is no tooling in the Buildroot tree, no. Verifying signatures is
-> done manually. In this case, I think Thomas, after downloading all the
-> archives and their .asc, basically did:
->     for i in *.asc; do gpg --verify ${i}; done
-> 
-> But this case is exceptional; usually, there is only one file for which
-> to check the hash and signature, not 16! :-)
-> 
-> Also, I do not usually verify many signatures, since I have almost zero
-> connection in the WoT, so verifying a sig does not bring much benefit.
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ package/freescale-imx/imx-gpu-viv/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- I do some kind of TOFU because I store the signing key so next time I update
-the same package, the signature should match.
-
- Of course, I rarely update any package, certainly not twice, so the benefit is
-limited in my personal case :-)
-
- Regards,
- Arnout
-
-
-> But if my download got compromised (maliciously or accidentally), the
-> hash I added will be wrong for someone else, especially the autobuilders,
-> and we can act on the issue.
-> 
-> Of course, this does not work if the remote server was compromised, but
-> in that case, checking the signatures without a good trust-chain in the
-> WoT is useless too...
-> 
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index 6668ee8bb5..ca46c5036f 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -84,11 +84,17 @@ config BR2_PACKAGE_PROVIDES_LIBOPENVG
+ 
+ config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
+ 	bool "install examples"
++	# example binaries are linked against libstdc++.so.6
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Copy the Vivante examples to the target.
+ 
+ 	  Warning: examples take approximately 150 MB of disk space.
+ 
++comment "imx-gpu-viv-examples need a toolchain w/ C++ support"
++    depends on !BR2_INSTALL_LIBSTDCPP
++
++
+ config BR2_PACKAGE_IMX_GPU_VIV_GMEM_INFO
+ 	bool "install gmem_info tool"
+ 	help
+-- 
+2.30.0
