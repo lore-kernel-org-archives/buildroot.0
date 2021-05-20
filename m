@@ -1,59 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 20 May 2021 08:47:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libraw: depends on
- BR2_TOOLCHAIN_HAS_SYNC_4
-Message-ID: <20210520064729.154411-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 May 2021 08:55:06 +0200
+Subject: [Buildroot] [PATCHv2 1/1] package/rustc: add musl as an
+ available Rust libc
+In-Reply-To: <20210519150145.GZ2268078@scaer>
+References: <SJ0PR18MB3898AC687557A2CD4FA0340995599@SJ0PR18MB3898.namprd18.prod.outlook.com>
+ <20210518230043.63dc9ac7@windsurf.orange-hotspot>
+ <SJ0PR18MB3898F64AF1A5908759597DBE952B9@SJ0PR18MB3898.namprd18.prod.outlook.com>
+ <20210519150145.GZ2268078@scaer>
+Message-ID: <0c0d1b6d-0707-2b0e-62b7-473ce3d62f49@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libraw needs __sync_fetch_and_add since version 0.20.0 and
-https://github.com/LibRaw/LibRaw/commit/d1975cb0e055d2bfe58c9d845c9a3e57c346a2f9
 
-This will fix the following build failure with imagemagick which is
-raised since commit 2f47cfade4b298350d056f6d9a7525b837e2ba23:
 
-/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libraw_r.so: undefined reference to `__sync_fetch_and_add_4'
+On 19/05/2021 17:01, Yann E. MORIN wrote:
+>> Do you test the gpg keys and sha256sums "by hand" or is there a
+>> utility used when version update commits occur?
+> There is no tooling in the Buildroot tree, no. Verifying signatures is
+> done manually. In this case, I think Thomas, after downloading all the
+> archives and their .asc, basically did:
+>     for i in *.asc; do gpg --verify ${i}; done
+> 
+> But this case is exceptional; usually, there is only one file for which
+> to check the hash and signature, not 16! :-)
+> 
+> Also, I do not usually verify many signatures, since I have almost zero
+> connection in the WoT, so verifying a sig does not bring much benefit.
 
-Fixes:
- - http://autobuild.buildroot.org/results/900df43bd418d2da0c3ec875db1c5564dd857e94
+ I do some kind of TOFU because I store the signing key so next time I update
+the same package, the signature should match.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/efl/Config.in    | 1 +
- package/libraw/Config.in | 2 ++
- 2 files changed, 3 insertions(+)
+ Of course, I rarely update any package, certainly not twice, so the benefit is
+limited in my personal case :-)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 305d1469a7..05ded72cf7 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -258,6 +258,7 @@ config BR2_PACKAGE_EFL_WEBP
- 
- config BR2_PACKAGE_EFL_LIBRAW
- 	bool "libraw loader"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libraw
- 	select BR2_PACKAGE_LIBRAW
- 	help
- 	  This option enables the Evas generic Libraw loader
-diff --git a/package/libraw/Config.in b/package/libraw/Config.in
-index de763cd36a..631123c2d3 100644
---- a/package/libraw/Config.in
-+++ b/package/libraw/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBRAW
- 	bool "libraw"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  libraw is a raw image manipulation library
-@@ -7,4 +8,5 @@ config BR2_PACKAGE_LIBRAW
- 	  http://www.libraw.org/
- 
- comment "libraw needs a toolchain w/ C++"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP
--- 
-2.30.2
+ Regards,
+ Arnout
+
+
+> But if my download got compromised (maliciously or accidentally), the
+> hash I added will be wrong for someone else, especially the autobuilders,
+> and we can act on the issue.
+> 
+> Of course, this does not work if the remote server was compromised, but
+> in that case, checking the signatures without a good trust-chain in the
+> WoT is useless too...
+> 
