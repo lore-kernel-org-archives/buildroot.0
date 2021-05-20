@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 May 2021 14:59:46 +0200
-Subject: [Buildroot] [PATCH 2/3] package/libglib2: add -Dxattr=true when
- libselinux is selected
-In-Reply-To: <20210501195620.910716-2-aduskett@gmail.com>
+Date: Thu, 20 May 2021 15:01:15 +0200
+Subject: [Buildroot] [PATCH 3/3] package/gobject-introspection: bump to
+ version 1.68.0
+In-Reply-To: <20210501195620.910716-3-aduskett@gmail.com>
 References: <20210501195620.910716-1-aduskett@gmail.com>
- <20210501195620.910716-2-aduskett@gmail.com>
-Message-ID: <20210520125946.GC2268078@scaer>
+ <20210501195620.910716-3-aduskett@gmail.com>
+Message-ID: <20210520130115.GD2268078@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,37 +15,111 @@ To: buildroot@busybox.net
 Adam, All,
 
 On 2021-05-01 12:56 -0700, Adam Duskett spake thusly:
-> Xattrs is required for SELinux. Explicitly enable the feature when the
-> libselinux package is selected.
+> Other changes:
+>   - Change -Dgi_cross_use_host_gi=true to -Dgi_cross_use_prebuilt_gi=true as the
+>     option has changed.
+>   - Explicitly define python3 in both the host and target builds of
+>     g-ir-tool-template.in
 > 
 > Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
-Applied to next, thanks.
+I had never noticed so far, but we were missing a hash for
+giscanner/scannerlexer.l, which we use as a license file. I've added one
+now, and applied to next, thanks.
+
+Brace for impact! ;-]
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/libglib2/libglib2.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  .../gobject-introspection/0001-disable-tests.patch   |  2 +-
+>  .../0002-Add-rpath-links-to-ccompiler.patch          |  2 +-
+>  .../gobject-introspection/gobject-introspection.hash |  4 ++--
+>  .../gobject-introspection/gobject-introspection.mk   | 12 ++++++------
+>  4 files changed, 10 insertions(+), 10 deletions(-)
 > 
-> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-> index b5554d6b56..e3263ce9ce 100644
-> --- a/package/libglib2/libglib2.mk
-> +++ b/package/libglib2/libglib2.mk
-> @@ -77,10 +77,10 @@ LIBGLIB2_DEPENDENCIES += libiconv
->  endif
+> diff --git a/package/gobject-introspection/0001-disable-tests.patch b/package/gobject-introspection/0001-disable-tests.patch
+> index c75c7512d9..01b11998bd 100644
+> --- a/package/gobject-introspection/0001-disable-tests.patch
+> +++ b/package/gobject-introspection/0001-disable-tests.patch
+> @@ -16,7 +16,7 @@ diff --git a/meson.build b/meson.build
+>  index eed4d6b..5058664 100644
+>  --- a/meson.build
+>  +++ b/meson.build
+> -@@ -214,12 +214,6 @@ if get_option('build_introspection_data') == true
+> +@@ -222,12 +222,6 @@ if get_option('build_introspection_data') == true
+>   endif
+>   subdir('docs')
+>   
+> diff --git a/package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch b/package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch
+> index 08835d3ecc..9b9ae99779 100644
+> --- a/package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch
+> +++ b/package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch
+> @@ -15,7 +15,7 @@ diff --git a/giscanner/ccompiler.py b/giscanner/ccompiler.py
+>  index a8bd5b1..51bb9bc 100644
+>  --- a/giscanner/ccompiler.py
+>  +++ b/giscanner/ccompiler.py
+> -@@ -229,6 +229,8 @@ class CCompiler(object):
+> +@@ -231,6 +231,8 @@ class CCompiler(object):
+>   
+>           for envvar in runtime_path_envvar:
+>               if envvar in os.environ:
+> diff --git a/package/gobject-introspection/gobject-introspection.hash b/package/gobject-introspection/gobject-introspection.hash
+> index 68bf63e055..8ce7ae000c 100644
+> --- a/package/gobject-introspection/gobject-introspection.hash
+> +++ b/package/gobject-introspection/gobject-introspection.hash
+> @@ -1,4 +1,4 @@
+> -#From http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/1.64/gobject-introspection-1.64.1.sha256sum
+> -sha256 80beae6728c134521926affff9b2e97125749b38d38744dc901f4010ee3e7fa7 gobject-introspection-1.64.1.tar.xz
+> +#From http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/1.68/gobject-introspection-1.68.0.sha256sum
+> +sha256 d229242481a201b84a0c66716de1752bca41db4133672cfcfb37c93eb6e54a27 gobject-introspection-1.68.0.tar.xz
+>  sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5 COPYING.LGPL
+>  sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING.GPL
+> diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+> index eefb2c83f7..d8138b2e96 100644
+> --- a/package/gobject-introspection/gobject-introspection.mk
+> +++ b/package/gobject-introspection/gobject-introspection.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
 >  
->  ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-> -LIBGLIB2_CONF_OPTS += -Dselinux=enabled
-> +LIBGLIB2_CONF_OPTS += -Dselinux=enabled -Dxattr=true
->  LIBGLIB2_DEPENDENCIES += libselinux
->  else
-> -LIBGLIB2_CONF_OPTS += -Dselinux=disabled
-> +LIBGLIB2_CONF_OPTS += -Dselinux=disabled -Dxattr=false
->  endif
+> -GOBJECT_INTROSPECTION_VERSION_MAJOR = 1.64
+> -GOBJECT_INTROSPECTION_VERSION = $(GOBJECT_INTROSPECTION_VERSION_MAJOR).1
+> +GOBJECT_INTROSPECTION_VERSION_MAJOR = 1.68
+> +GOBJECT_INTROSPECTION_VERSION = $(GOBJECT_INTROSPECTION_VERSION_MAJOR).0
+>  GOBJECT_INTROSPECTION_SITE = http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/$(GOBJECT_INTROSPECTION_VERSION_MAJOR)
+>  GOBJECT_INTROSPECTION_SOURCE = gobject-introspection-$(GOBJECT_INTROSPECTION_VERSION).tar.xz
+>  GOBJECT_INTROSPECTION_INSTALL_STAGING = YES
+> @@ -43,7 +43,7 @@ HOST_GOBJECT_INTROSPECTION_NINJA_ENV += \
+>  # Use the host gi-scanner to prevent the scanner from generating incorrect
+>  # elf classes.
+>  GOBJECT_INTROSPECTION_CONF_OPTS = \
+> -	-Dgi_cross_use_host_gi=true \
+> +	-Dgi_cross_use_prebuilt_gi=true \
+>  	-Dgi_cross_binary_wrapper="$(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper" \
+>  	-Dgi_cross_ldd_wrapper="$(STAGING_DIR)/usr/bin/g-ir-scanner-lddwrapper" \
+>  	-Dbuild_introspection_data=true \
+> @@ -64,8 +64,8 @@ HOST_GOBJECT_INTROSPECTION_CONF_ENV = \
+>  	GI_SCANNER_DISABLE_CACHE=1
 >  
->  # Purge gdb-related files
+>  # Make sure g-ir-tool-template uses the host python.
+> -define GOBJECT_INTROSPECTION_FIX_TOOLTEMPLATE_PYTHON_PATH
+> -	$(SED) '1s%#!.*%#!$(HOST_DIR)/bin/python%' $(@D)/tools/g-ir-tool-template.in
+> +define GOBJECT_INTROSPECTION_FIX_TOOLS_PYTHON_PATH
+> +	$(SED) '1s%#!.*%#!$(HOST_DIR)/bin/python3%' $(@D)/tools/g-ir-tool-template.in
+>  endef
+>  HOST_GOBJECT_INTROSPECTION_PRE_CONFIGURE_HOOKS += GOBJECT_INTROSPECTION_FIX_TOOLTEMPLATE_PYTHON_PATH
+>  
+> @@ -75,7 +75,7 @@ HOST_GOBJECT_INTROSPECTION_PRE_CONFIGURE_HOOKS += GOBJECT_INTROSPECTION_FIX_TOOL
+>  # - Create a safe modules directory which does not exist so we don't load random things
+>  #   which may then get deleted (or their dependencies) and potentially segfault
+>  define GOBJECT_INTROSPECTION_INSTALL_PRE_WRAPPERS
+> -	$(SED) '1s%#!.*%#!$(HOST_DIR)/bin/python%' $(@D)/tools/g-ir-tool-template.in
+> +	$(SED) '1s%#!.*%#!$(HOST_DIR)/bin/python3%' $(@D)/tools/g-ir-tool-template.in
+>  
+>  	$(INSTALL) -D -m 755 $(GOBJECT_INTROSPECTION_PKGDIR)/g-ir-scanner-lddwrapper.in \
+>  		$(STAGING_DIR)/usr/bin/g-ir-scanner-lddwrapper
 > -- 
 > 2.31.1
 > 
