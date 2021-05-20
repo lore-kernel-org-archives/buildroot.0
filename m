@@ -1,37 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 May 2021 21:41:08 +0200
-Subject: [Buildroot] [git commit] package/libfuse: add LIBFUSE_CPE_ID_VENDOR
-Message-ID: <20210520191405.C447188E51@busybox.osuosl.org>
+Date: Thu, 20 May 2021 21:37:12 +0200
+Subject: [Buildroot] [git commit] package/libeXosip2: add CPE variables
+Message-ID: <20210520191405.B72A8885B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06a0b113304df2d276b7d3f2f2871b0943a56741
+commit: https://git.buildroot.net/buildroot/commit/?id=5b8d0ea147949dd51d8a1f1d6089fdaea1c780b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:libfuse_project:libfuse is a valid CPE identifier for this
-package:
+cpe:2.3:a:gnu:exosip is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibfuse_project%3Alibfuse
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Aexosip
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998 at free.fr: fix URL]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libfuse/libfuse.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libeXosip2/libeXosip2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index 074dc59886..2677e46853 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
-@@ -9,6 +9,7 @@ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse-$(LIBFUSE_VERSION)
- LIBFUSE_LICENSE = GPL-2.0, LGPL-2.1
- LIBFUSE_LICENSE_FILES = COPYING COPYING.LIB
-+LIBFUSE_CPE_ID_VENDOR = libfuse_project
- LIBFUSE_INSTALL_STAGING = YES
- LIBFUSE_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- LIBFUSE_CONF_OPTS = \
+diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
+index dba2b63a02..3ed637a3d4 100644
+--- a/package/libeXosip2/libeXosip2.mk
++++ b/package/libeXosip2/libeXosip2.mk
+@@ -11,6 +11,8 @@ LIBEXOSIP2_SITE = http://download.savannah.gnu.org/releases/exosip
+ LIBEXOSIP2_INSTALL_STAGING = YES
+ LIBEXOSIP2_LICENSE = GPL-2.0+
+ LIBEXOSIP2_LICENSE_FILES = COPYING
++LIBEXOSIP2_CPE_ID_VENDOR = gnu
++LIBEXOSIP2_CPE_ID_PRODUCT = exosip
+ 
+ LIBEXOSIP2_DEPENDENCIES = host-pkgconf libosip2
+ 
