@@ -1,68 +1,103 @@
-From: Weber, Matthew L                            Collins <Matthew.Weber@collins.com>
-Date: Thu, 20 May 2021 21:04:52 +0000
-Subject: [Buildroot] [External] [PATCH/NEXT: 01/11] package/libsepol:
- bump to version 3.2
-In-Reply-To: <DM2P110MB0105ED98FD4B279E2894DA12F22A9@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
-References: <20210520174649.1188340-1-aduskett@gmail.com>,
- <20210520174649.1188340-2-aduskett@gmail.com>,
- <DM2P110MB0105ED98FD4B279E2894DA12F22A9@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
-Message-ID: <DM2P110MB0105B7812C5988186E328BEDF22A9@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 21 May 2021 00:08:33 +0300
+Subject: [Buildroot] [PATCH/next 2/2] package/webkitgtk: allow building
+ with the musl libc
+In-Reply-To: <20210519095611.GP2268078@scaer>
+References: <20210518190515.357554-1-aperez@igalia.com>
+ <20210518190515.357554-3-aperez@igalia.com> <20210519095611.GP2268078@scaer>
+Message-ID: <20210521000833.GB1383533@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam,
+Hi!
 
-> From: buildroot <buildroot-bounces@busybox.net> on behalf of Weber, Matthew L Collins via buildroot <buildroot@busybox.net>
-> Sent: Thursday, May 20, 2021 3:02 PM
-> To: Adam Duskett <aduskett@gmail.com>; buildroot at buildroot.org <buildroot@buildroot.org>
-> Cc: Antoine Tenart <atenart@kernel.org>; Shotwell, Clayton L Collins <Clayton.Shotwell@collins.com>; Marcus Folkesson <marcus.folkesson@gmail.com>
-> Subject: Re: [Buildroot] [External] [PATCH/NEXT: 01/11] package/libsepol: bump to version 3.2
-> ?
-> Adam,
->
-> > From: Adam Duskett <aduskett@gmail.com>
-> > Sent: Thursday, May 20, 2021 12:46 PM
-> > To: buildroot at buildroot.org <buildroot@buildroot.org>
-> > Cc: Antoine Tenart <atenart@kernel.org>; Shotwell, Clayton L Collins <Clayton.Shotwell@collins.com>; Weber, Matthew L Collins <Matthew.Weber@collins.com>; Marcus Folkesson <marcus.folkesson@gmail.com>; Adam Duskett <aduskett@gmail.com>
-> > Subject: [External] [PATCH/NEXT: 01/11] package/libsepol: bump to version 3.2
-> > ?
-> > Signed-off-by: Adam Duskett <aduskett@gmail.com>
->
-> I applied this series against NEXT and ran the following:
-> ? ./support/testing/run-tests? tests.core.test_selinux.TestSELinuxPackage
->
-> However, it failed.?
+On Wed, 19 May 2021 11:56:11 +0200 "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+ 
+> On 2021-05-18 22:05 +0300, Adrian Perez de Castro spake thusly:
+> > WebKitGTK 2.32.1 includes support for building with the musl libc,
+> > therefore arrange dependencies to allow selecting the package when
+> > a musl system is built. This is done by making the dependencies be
+> > more granular, basically following what the wpewebkit package does.
+> > 
+> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> > ---
+> >  package/webkitgtk/Config.in | 11 +++++++----
+> >  1 file changed, 7 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+> > index 4ea931fde1..18b254dca5 100644
+> > --- a/package/webkitgtk/Config.in
+> > +++ b/package/webkitgtk/Config.in
+> > @@ -12,20 +12,23 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+> >  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> >  	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+> >  
+> > -comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 7, host gcc >= 4.9"
+> > +comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 7, host gcc >= 4.9"
+> >  	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+> > +	depends on !BR2_BINFMT_FLAT
+> >  	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
+> > -		!BR2_TOOLCHAIN_USES_GLIBC || \
+> > +		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+> 
+> But that also allows uclibc now... Is that intended? If so, this should
+> also be mentioned in the commit log
 
-So it turns out my test run didn't have a good rng and it failed for timeout reasons.  I did some adjustments and the tests now pass for all 4 runtest use cases.
+Ah, this is intended, yes. I started with Musl because we landed the needed
+fixes in WebKit in the 2.32.1 release and it turns out that uClibc also
+benefits from them... and I wrote the patch before even trying an uClibc
+build, then forgot to reword it O:-)
+ 
+> >  		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
+> >  		!BR2_HOST_GCC_AT_LEAST_4_9
+> > -	depends on BR2_USE_MMU
+> 
+> How does that fit with allowing musl?
 
-16:00:56 TestSELinuxExtraModulesDirs              Starting
-16:00:56 TestSELinuxExtraModules                  Starting
-16:01:43 TestSELinuxExtraModulesDirs              Cleaning up
-.16:01:43 TestSELinuxCustomGit                     Starting
-16:01:43 TestSELinuxCustomGit                     Cleaning up
-.16:01:43 TestSELinuxPackage                       Starting
-16:01:50 TestSELinuxExtraModules                  Cleaning up
-.16:03:07 TestSELinuxPackage                       Cleaning up
-.
-----------------------------------------------------------------------
-Ran 4 tests in 131.377s
+This is a spurios dependency for the ?comment? entry and should have never
+been there to begin with. I will split this edit into its own commit.
 
-OK
+Cheers,
+-Adrian
 
-      1 776f05a270 (HEAD) package/audit: bump to version 3.0.1
-      2 3551c17333 package/setools: bump to version 4.4.0
-      3 6fffc6cc35 package/selinux-python: bump to version 3.2
-      4 581eb0e524 package/semodule-utils: bump to version 3.2
-      5 7671336b99 package/restorecond: bump to version 3.2
-      6 c0a9412021 package/checkpolicy: bump to version 3.2
-      7 0450bd2b6f package/policycoreutils: bump to version 3.2
-      8 0ee7f07bfc package/libselinux: bump to version 3.2
-      9 e79fc41939 package/libsemanage: bump to version 3.2
-     10 29ee5a71f1 package/libsepol/Config.in: Add policy version 33
-     11 419acd7f43 package/libsepol: bump to version 3.2
-     12 abc110e362 (refs/remotes/upstream/next, refs/remotes/origin/next) package/gobject-introspection: bump to version 1.68.0
-
-Tested-by: Matthew Weber <matthew.weber@collins.com>
+> Regards,
+> Yann E. MORIN.
+> 
+> >  config BR2_PACKAGE_WEBKITGTK
+> >  	bool "webkitgtk"
+> > +	depends on !BR2_STATIC_LIBS # wayland
+> > +	depends on !BR2_BINFMT_FLAT # icu
+> >  	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu
+> >  	depends on BR2_INSTALL_LIBSTDCPP
+> > +	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
+> >  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
+> > -	depends on BR2_TOOLCHAIN_USES_GLIBC
+> > +	depends on BR2_USE_WCHAR # icu, libsoup
+> >  	depends on BR2_PACKAGE_LIBGTK3
+> >  	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+> >  	select BR2_PACKAGE_CAIRO
+> > -- 
+> > 2.31.1
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210521/64bf9110/attachment.asc>
