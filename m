@@ -1,47 +1,103 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 20 May 2021 20:24:21 +0200
-Subject: [Buildroot] [git commit] package/gd: fix addition of -liconv in
- gdlib.pc.in
-Message-ID: <20210520175540.186B5874EA@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 May 2021 20:28:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Fix uClibc build for
+ mips
+In-Reply-To: <20210411175508.1458401-1-bernd.kuhls@t-online.de>
+References: <20210411175508.1458401-1-bernd.kuhls@t-online.de>
+Message-ID: <ee340640-589b-4762-49d9-8ae4946df09e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=783fadbc1fe922339512a9389cb432dfd543e5dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Static build of gnuplot with gd and libiconv is broken since bump to
-version 2.3.1 in commit 970b2ca3cc3f927f679c871eeadb22ec110b0ed5:
 
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/9.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/lib/libgd.a(gdkanji.o): in function `do_convert':
-gdkanji.c:(.text+0x148): undefined reference to `libiconv_open'
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/9.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: gdkanji.c:(.text+0x1d0): undefined reference to `libiconv'
+On 11/04/2021 19:55, Bernd Kuhls wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/079/079df777211933b92ac5a67fc175839c8188850f/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...-libavutil-Fix-uClibc-build-for-mips.patch | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 package/ffmpeg/0003-libavutil-Fix-uClibc-build-for-mips.patch
+> 
+> diff --git a/package/ffmpeg/0003-libavutil-Fix-uClibc-build-for-mips.patch b/package/ffmpeg/0003-libavutil-Fix-uClibc-build-for-mips.patch
+> new file mode 100644
+> index 0000000000..36fa2b237a
+> --- /dev/null
+> +++ b/package/ffmpeg/0003-libavutil-Fix-uClibc-build-for-mips.patch
+> @@ -0,0 +1,64 @@
+> +From 0c052065df6c8be04a35d26566d2d927c680ec60 Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Sun, 11 Apr 2021 19:43:35 +0200
+> +Subject: [PATCH] libavutil: Fix uClibc build for mips
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +uClibc does not provide sys/auxv.h:
+> +
+> +libavutil/mips/cpu.c:26:10: fatal error: sys/auxv.h: No such file or directory
+> +
+> +and not getauxval:
+> +
+> +libavutil/mips/cpu.c: In function ?cpucfg_available?:
+> +libavutil/mips/cpu.c:37:12: error: implicit declaration of function ?getauxval? [-Werror=implicit-function-declaration]
+> +     return getauxval(AT_HWCAP) & HWCAP_LOONGSON_CPUCFG;
+> +            ^~~~~~~~~
+> +libavutil/mips/cpu.c:37:22: error: ?AT_HWCAP? undeclared (first use in this function)
+> +     return getauxval(AT_HWCAP) & HWCAP_LOONGSON_CPUCFG;
+> +
+> +Patch sent upstream:
+> +http://ffmpeg.org/pipermail/ffmpeg-devel/2021-April/278968.html
 
-This build failure is raised because LIBS has been replaced by
-LIBS_PRIVATES in gdlib.pc.in since
-https://github.com/libgd/libgd/commit/28ecfe77c817aff8ce56422d3e4e8533a281bc76
+ Upstream feedback was that it should be a check in configure instead. Are you
+working on that?
 
-Fixes:
- - http://autobuild.buildroot.org/results/5ab5f4744adfd8d8be483204a9c7f59e34ce26c6
+ Regards,
+ Arnout
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/gd/gd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 97a1a143ec..2df81e6d37 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -36,7 +36,7 @@ endif
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- GD_DEPENDENCIES += libiconv
- # not strictly needed for gd, but ensures -liconv ends up in gdlib.pc
--GD_CONF_ENV += LIBS="-liconv"
-+GD_CONF_ENV += LIBS_PRIVATES="-liconv"
- endif
- 
- ifeq ($(BR2_PACKAGE_JPEG),y)
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + libavutil/mips/cpu.c | 7 ++++---
+> + 1 file changed, 4 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/libavutil/mips/cpu.c b/libavutil/mips/cpu.c
+> +index 59619d54de..c5da77b22b 100644
+> +--- a/libavutil/mips/cpu.c
+> ++++ b/libavutil/mips/cpu.c
+> +@@ -19,7 +19,8 @@
+> + #include "libavutil/cpu.h"
+> + #include "libavutil/cpu_internal.h"
+> + #include "config.h"
+> +-#if defined __linux__ || defined __ANDROID__
+> ++#include <features.h>
+> ++#if (defined __linux__ || defined __ANDROID__) && !defined(__UCLIBC__)
+> + #include <stdint.h>
+> + #include <stdio.h>
+> + #include <string.h>
+> +@@ -28,7 +29,7 @@
+> + #include "libavutil/avstring.h"
+> + #endif
+> + 
+> +-#if defined __linux__ || defined __ANDROID__
+> ++#if (defined __linux__ || defined __ANDROID__) && !defined(__UCLIBC__)
+> + 
+> + #define HWCAP_LOONGSON_CPUCFG (1 << 14)
+> + 
+> +@@ -105,7 +106,7 @@ static int cpu_flags_cpuinfo(void)
+> + 
+> + int ff_get_cpu_flags_mips(void)
+> + {
+> +-#if defined __linux__ || defined __ANDROID__
+> ++#if (defined __linux__ || defined __ANDROID__) && !defined(__UCLIBC__)
+> +     if (cpucfg_available())
+> +         return cpu_flags_cpucfg();
+> +     else
+> +-- 
+> +2.29.2
+> +
+> 
