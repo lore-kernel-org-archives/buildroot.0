@@ -1,107 +1,157 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 May 2021 22:15:13 +0200
-Subject: [Buildroot] [git commit] package/wpa_supplicant: fix build with
+Date: Thu, 20 May 2021 22:18:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: fix build with
  CVE-2021-30004 changes
-Message-ID: <20210520194651.299DA88DDC@busybox.osuosl.org>
+In-Reply-To: <20210520190456.59520-1-geomatsi@gmail.com>
+References: <20210520190456.59520-1-geomatsi@gmail.com>
+Message-ID: <20210520201833.GG3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c65499c3f11e89c6c383629a99f192d14815dd9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Sergey, All,
 
-Commit a8fbe67b9b16 ("package/wpa_supplicant: add upstream patch to fix
-CVE-2021-30004") added security patch from hostapd upstream without
-required ASN.1 helpers. Backport and adapt two commits from the
-hostapd upstream to add missing headers and helpers.
+On 2021-05-20 22:04 +0300, Sergey Matyukevich spake thusly:
+> Commit a8fbe67b9b16 ("package/wpa_supplicant: add upstream patch to fix
+> CVE-2021-30004") added security patch from hostapd upstream without
+> required ASN.1 helpers. Backport and adapt two commits from the
+> hostapd upstream to add missing headers and helpers.
+> 
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...de-stdbool.h-to-allow-C99-bool-to-be-used.patch | 32 +++++++++++++++++++
- ...elper-functions-for-recognizing-tag-value.patch | 37 ++++++++++++++++++++++
- 2 files changed, 69 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch b/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
-new file mode 100644
-index 0000000000..e52dbdb694
---- /dev/null
-+++ b/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
-@@ -0,0 +1,32 @@
-+From 99cf89555313056d3a8fa54b21d02dc880b363e1 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <jouni@codeaurora.org>
-+Date: Mon, 20 Apr 2020 20:29:31 +0300
-+Subject: [PATCH] Include stdbool.h to allow C99 bool to be used
-+
-+We have practically started requiring some C99 features, so might as
-+well finally go ahead and bring in the C99 bool as well.
-+
-+Signed-off-by: Jouni Malinen <jouni@codeaurora.org>
-+[geomatsi at gmail.com: backport from upstream]
-+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-+[yann.morin.1998 at free.fr: keep upstream sha1 in header, drop numbering]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ src/utils/includes.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/utils/includes.h b/src/utils/includes.h
-+index 75513fc8c..741fc9c14 100644
-+--- a/src/utils/includes.h
-++++ b/src/utils/includes.h
-+@@ -18,6 +18,7 @@
-+ 
-+ #include <stdlib.h>
-+ #include <stddef.h>
-++#include <stdbool.h>
-+ #include <stdio.h>
-+ #include <stdarg.h>
-+ #include <string.h>
-+-- 
-+2.25.1
-+
-diff --git a/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch b/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
-new file mode 100644
-index 0000000000..a5415e7daf
---- /dev/null
-+++ b/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
-@@ -0,0 +1,37 @@
-+From 9a990e8c4eb92dd64e0ec483599820e45c35ac23 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Sat, 13 Mar 2021 23:14:23 +0200
-+Subject: [PATCH] ASN.1: Add helper functions for recognizing tag values
-+
-+Signed-off-by: Jouni Malinen <j@w1.fi>
-+[geomatsi at gmail.com: backport asn1_is_null() from upstream 9a990e8c4eb9]
-+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-+[yann.morin.1998 at free.fr: 
-+  - reformat, keep the upstream sha1 and title,
-+  - drop numbering
-+]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ src/tls/asn1.h | 102 +++++++++++++++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 102 insertions(+)
-+
-+diff --git a/src/tls/asn1.h b/src/tls/asn1.h
-+index de3430adb..a4d1be473 100644
-+--- a/src/tls/asn1.h
-++++ b/src/tls/asn1.h
-+@@ -66,6 +66,12 @@ struct wpabuf * asn1_build_alg_id(const struct asn1_oid *oid,
-+ unsigned long asn1_bit_string_to_long(const u8 *buf, size_t len);
-+ int asn1_oid_equal(const struct asn1_oid *a, const struct asn1_oid *b);
-+ 
-++static inline bool asn1_is_null(const struct asn1_hdr *hdr)
-++{
-++	return hdr->class == ASN1_CLASS_UNIVERSAL &&
-++		hdr->tag == ASN1_TAG_NULL;
-++}
-++
-+ extern struct asn1_oid asn1_sha1_oid;
-+ extern struct asn1_oid asn1_sha256_oid;
-+ 
-+-- 
-+2.25.1
-+
+I was surprised, because I saw zero issue about this in our
+autobuilders. But I could trigger one locally with:
+
+    BR2_arm=y
+    BR2_cortex_a7=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_INIT_NONE=y
+    BR2_SYSTEM_BIN_SH_NONE=y
+    # BR2_PACKAGE_BUSYBOX is not set
+    # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+    BR2_PACKAGE_WPA_SUPPLICANT=y
+    BR2_PACKAGE_WPA_SUPPLICANT_WEXT=y
+    BR2_PACKAGE_WPA_SUPPLICANT_WIRED=y
+    BR2_PACKAGE_WPA_SUPPLICANT_IBSS_RSN=y
+    BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
+    BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY=y
+    BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
+    BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT=y
+    BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG=y
+    BR2_PACKAGE_WPA_SUPPLICANT_WPS=y
+    BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
+    BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO=y
+    BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+    BR2_PACKAGE_WPA_SUPPLICANT_DBUS=y
+    BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION=y
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...dbool.h-to-allow-C99-bool-to-be-used.patch | 32 ++++++++++++++++
+>  ...-functions-for-recognizing-tag-value.patch | 37 +++++++++++++++++++
+>  2 files changed, 69 insertions(+)
+>  create mode 100644 package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+>  create mode 100644 package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
+> 
+> diff --git a/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch b/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+> new file mode 100644
+> index 0000000000..e52dbdb694
+> --- /dev/null
+> +++ b/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+> @@ -0,0 +1,32 @@
+> +From 99cf89555313056d3a8fa54b21d02dc880b363e1 Mon Sep 17 00:00:00 2001
+> +From: Jouni Malinen <jouni@codeaurora.org>
+> +Date: Mon, 20 Apr 2020 20:29:31 +0300
+> +Subject: [PATCH] Include stdbool.h to allow C99 bool to be used
+> +
+> +We have practically started requiring some C99 features, so might as
+> +well finally go ahead and bring in the C99 bool as well.
+> +
+> +Signed-off-by: Jouni Malinen <jouni@codeaurora.org>
+> +[geomatsi at gmail.com: backport from upstream]
+> +Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> +[yann.morin.1998 at free.fr: keep upstream sha1 in header, drop numbering]
+> +Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> +---
+> + src/utils/includes.h | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/src/utils/includes.h b/src/utils/includes.h
+> +index 75513fc8c..741fc9c14 100644
+> +--- a/src/utils/includes.h
+> ++++ b/src/utils/includes.h
+> +@@ -18,6 +18,7 @@
+> + 
+> + #include <stdlib.h>
+> + #include <stddef.h>
+> ++#include <stdbool.h>
+> + #include <stdio.h>
+> + #include <stdarg.h>
+> + #include <string.h>
+> +-- 
+> +2.25.1
+> +
+> diff --git a/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch b/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
+> new file mode 100644
+> index 0000000000..a5415e7daf
+> --- /dev/null
+> +++ b/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
+> @@ -0,0 +1,37 @@
+> +From 9a990e8c4eb92dd64e0ec483599820e45c35ac23 Mon Sep 17 00:00:00 2001
+> +From: Jouni Malinen <j@w1.fi>
+> +Date: Sat, 13 Mar 2021 23:14:23 +0200
+> +Subject: [PATCH] ASN.1: Add helper functions for recognizing tag values
+> +
+> +Signed-off-by: Jouni Malinen <j@w1.fi>
+> +[geomatsi at gmail.com: backport asn1_is_null() from upstream 9a990e8c4eb9]
+> +Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> +[yann.morin.1998 at free.fr: 
+> +  - reformat, keep the upstream sha1 and title,
+> +  - drop numbering
+> +]
+> +Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> +---
+> + src/tls/asn1.h | 102 +++++++++++++++++++++++++++++++++++++++++++++++++
+> + 1 file changed, 102 insertions(+)
+> +
+> +diff --git a/src/tls/asn1.h b/src/tls/asn1.h
+> +index de3430adb..a4d1be473 100644
+> +--- a/src/tls/asn1.h
+> ++++ b/src/tls/asn1.h
+> +@@ -66,6 +66,12 @@ struct wpabuf * asn1_build_alg_id(const struct asn1_oid *oid,
+> + unsigned long asn1_bit_string_to_long(const u8 *buf, size_t len);
+> + int asn1_oid_equal(const struct asn1_oid *a, const struct asn1_oid *b);
+> + 
+> ++static inline bool asn1_is_null(const struct asn1_hdr *hdr)
+> ++{
+> ++	return hdr->class == ASN1_CLASS_UNIVERSAL &&
+> ++		hdr->tag == ASN1_TAG_NULL;
+> ++}
+> ++
+> + extern struct asn1_oid asn1_sha1_oid;
+> + extern struct asn1_oid asn1_sha256_oid;
+> + 
+> +-- 
+> +2.25.1
+> +
+> -- 
+> 2.31.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
