@@ -1,37 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 May 2021 21:41:47 +0200
-Subject: [Buildroot] [git commit] package/libfuse3: add CPE variables
-Message-ID: <20210520191405.D00E3885B1@busybox.osuosl.org>
+Date: Thu, 20 May 2021 21:37:09 +0200
+Subject: [Buildroot] [git commit] package/poco: add POCO_CPE_ID_VENDOR
+Message-ID: <20210520191405.95EC3885B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e3e57394bd1268af5a79181080a8a9ad843b7f1
+commit: https://git.buildroot.net/buildroot/commit/?id=51c24ded8a0df846f9448de913282699225c74dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:libfuse_project:libfuse is a valid CPE identifier for this
-package:
+cpe:2.3:a:pocoproject:poco is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibfuse_project%3Alibfuse
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apocoproject%3Apoco
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libfuse3/libfuse3.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/poco/poco.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-index d61e313391..b1624ba887 100644
---- a/package/libfuse3/libfuse3.mk
-+++ b/package/libfuse3/libfuse3.mk
-@@ -8,6 +8,8 @@ LIBFUSE3_VERSION = 3.10.3
- LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
- LIBFUSE3_LICENSE = LGPL-2.1
- LIBFUSE3_LICENSE_FILES = LICENSE
-+LIBFUSE3_CPE_ID_VENDOR = libfuse_project
-+LIBFUSE3_CPE_ID_PRODUCT = libfuse
- LIBFUSE3_INSTALL_STAGING = YES
- LIBFUSE3_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- LIBFUSE3_CONF_OPTS = \
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index c605044ba3..857f215e3a 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -8,6 +8,7 @@ POCO_VERSION = 1.10.1
+ POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
+ POCO_LICENSE = BSL-1.0
+ POCO_LICENSE_FILES = LICENSE
++POCO_CPE_ID_VENDOR = pocoproject
+ POCO_INSTALL_STAGING = YES
+ 
+ POCO_DEPENDENCIES = zlib pcre \
