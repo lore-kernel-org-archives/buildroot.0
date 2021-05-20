@@ -1,69 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 May 2021 09:14:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/imx-gpu-viv: add dependency to
- BR2_INSTALL_LIBSTDCPP to examples
-In-Reply-To: <20210520065428.16860-1-heiko.thiery@gmail.com>
-References: <20210520065428.16860-1-heiko.thiery@gmail.com>
-Message-ID: <20210520071439.GU2268078@scaer>
+Date: Thu, 20 May 2021 09:19:32 +0200
+Subject: [Buildroot] [git commit] package/libraw: depends on
+ BR2_TOOLCHAIN_HAS_SYNC_4
+Message-ID: <20210520065044.63C6E873B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=edb32a03b5f989c57dfef0a4a3f939a5c2bce63f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-20 08:54 +0200, Heiko Thiery spake thusly:
-> The examples require libstdc++.so.6 so add the required dependency to
-> the Config.in.
-> 
->   ./tiger: error while loading shared libraries: libstdc++.so.6: cannot open shared object file: No such file or directory
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+libraw needs __sync_fetch_and_add since version 0.20.0 and
+https://github.com/LibRaw/LibRaw/commit/d1975cb0e055d2bfe58c9d845c9a3e57c346a2f9
 
-Applied to master, thanks.
+This will fix the following build failure with imagemagick which is
+raised since commit 2f47cfade4b298350d056f6d9a7525b837e2ba23:
 
-Regards,
-Yann E. MORIN.
+/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libraw_r.so: undefined reference to `__sync_fetch_and_add_4'
 
-> ---
->  package/freescale-imx/imx-gpu-viv/Config.in | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-> index 6668ee8bb5..ca46c5036f 100644
-> --- a/package/freescale-imx/imx-gpu-viv/Config.in
-> +++ b/package/freescale-imx/imx-gpu-viv/Config.in
-> @@ -84,11 +84,17 @@ config BR2_PACKAGE_PROVIDES_LIBOPENVG
->  
->  config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
->  	bool "install examples"
-> +	# example binaries are linked against libstdc++.so.6
-> +	depends on BR2_INSTALL_LIBSTDCPP
->  	help
->  	  Copy the Vivante examples to the target.
->  
->  	  Warning: examples take approximately 150 MB of disk space.
->  
-> +comment "imx-gpu-viv-examples need a toolchain w/ C++ support"
-> +    depends on !BR2_INSTALL_LIBSTDCPP
-> +
-> +
->  config BR2_PACKAGE_IMX_GPU_VIV_GMEM_INFO
->  	bool "install gmem_info tool"
->  	help
-> -- 
-> 2.30.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes:
+ - http://autobuild.buildroot.org/results/900df43bd418d2da0c3ec875db1c5564dd857e94
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/efl/Config.in    | 1 +
+ package/libraw/Config.in | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 305d1469a7..05ded72cf7 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -258,6 +258,7 @@ config BR2_PACKAGE_EFL_WEBP
+ 
+ config BR2_PACKAGE_EFL_LIBRAW
+ 	bool "libraw loader"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libraw
+ 	select BR2_PACKAGE_LIBRAW
+ 	help
+ 	  This option enables the Evas generic Libraw loader
+diff --git a/package/libraw/Config.in b/package/libraw/Config.in
+index de763cd36a..631123c2d3 100644
+--- a/package/libraw/Config.in
++++ b/package/libraw/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBRAW
+ 	bool "libraw"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  libraw is a raw image manipulation library
+@@ -7,4 +8,5 @@ config BR2_PACKAGE_LIBRAW
+ 	  http://www.libraw.org/
+ 
+ comment "libraw needs a toolchain w/ C++"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP
