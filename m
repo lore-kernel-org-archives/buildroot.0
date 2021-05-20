@@ -1,122 +1,139 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 20 May 2021 14:09:25 +0300
-Subject: [Buildroot] [PATCH v2 1/2] package/libpsl: new package
+Date: Thu, 20 May 2021 14:09:26 +0300
+Subject: [Buildroot] [PATCH v2 2/2] package/libsoup: bump to version 2.66.5
 In-Reply-To: <20210520110926.1592027-1-aperez@igalia.com>
 References: <20210519212637.1282972-1-aperez@igalia.com>
  <20210520110926.1592027-1-aperez@igalia.com>
-Message-ID: <20210520110926.1592027-2-aperez@igalia.com>
+Message-ID: <20210520110926.1592027-3-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Package libpsl is a new non-optional dependency of libsoup.
+Change libsoup to version 2.66.5, which introduces many fixes. This
+needs adding the libpsl dependency, and switching over to Meson as the
+autotools based build system is no more. The existing patch is not
+needed anymore.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
 Changes v1 -> v2:
-  - Make sure at least libidn2 is always selected as fallback (suggested
-    by Arnout).
-  - Add upstream URL (suggested by Arnout).
-  - Switch to sha256 hashes (suggested by Arnout).
-  - Add license file hashes and add missing license (suggested by Arnout).
-  - Check for libraries in the same order as libpsl's Meson build files:
-    libidn2, icu, then libidn.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+  - None.
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/libpsl/Config.in   |  7 +++++++
- package/libpsl/libpsl.hash |  6 ++++++
- package/libpsl/libpsl.mk   | 27 +++++++++++++++++++++++++++
- 5 files changed, 42 insertions(+)
- create mode 100644 package/libpsl/Config.in
- create mode 100644 package/libpsl/libpsl.hash
- create mode 100644 package/libpsl/libpsl.mk
+ .../0001-Revert-tld-parser-use-Python-3.patch | 27 -------------------
+ package/libsoup/Config.in                     |  1 +
+ package/libsoup/libsoup.hash                  |  4 +--
+ package/libsoup/libsoup.mk                    | 20 +++++++-------
+ 4 files changed, 13 insertions(+), 39 deletions(-)
+ delete mode 100644 package/libsoup/0001-Revert-tld-parser-use-Python-3.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a90ad1c354..4286ca5baf 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -35,6 +35,7 @@ F:	package/bubblewrap/
- F:	package/cage/
- F:	package/cog/
- F:	package/libepoxy/
-+F:	package/libpsl/
- F:	package/libwpe/
- F:	package/webkitgtk/
- F:	package/wlroots/
-diff --git a/package/Config.in b/package/Config.in
-index 82b28d2835..eaa30ea161 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1788,6 +1788,7 @@ menu "Networking"
- 	source "package/libpagekite/Config.in"
- 	source "package/libpcap/Config.in"
- 	source "package/libpjsip/Config.in"
-+	source "package/libpsl/Config.in"
- 	source "package/librelp/Config.in"
- 	source "package/librsync/Config.in"
- 	source "package/libshairplay/Config.in"
-diff --git a/package/libpsl/Config.in b/package/libpsl/Config.in
-new file mode 100644
-index 0000000000..26fcb091ed
---- /dev/null
-+++ b/package/libpsl/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBPSL
-+	bool "libpsl"
-+	select BR2_PACKAGE_LIBIDN2 if !BR2_PACKAGE_ICU && !BR2_PACKAGE_LIBIDN
-+	help
-+	  C library to handle the Public Suffix List of TLDs.
-+
-+	  https://github.com/rockdaboot/libpsl
-diff --git a/package/libpsl/libpsl.hash b/package/libpsl/libpsl.hash
-new file mode 100644
-index 0000000000..552935e9ec
---- /dev/null
-+++ b/package/libpsl/libpsl.hash
-@@ -0,0 +1,6 @@
-+# Locally generated
-+sha256  ac6ce1e1fbd4d0254c4ddb9d37f1fa99dec83619c1253328155206b896210d4c  libpsl-0.21.1.tar.gz
-+
-+# Hashes for license files:
-+sha256  7903413e7aa0bbcb77aa19150a3f1034edc0a760cff174f9a53efe4de6f056a4  COPYING
-+sha256  1d7f52747a9169751cdf2641a8299c0098e9ecdf9429296ffd55bdb14c9ed5b3  src/LICENSE.chromium
-diff --git a/package/libpsl/libpsl.mk b/package/libpsl/libpsl.mk
-new file mode 100644
-index 0000000000..a870cffae5
---- /dev/null
-+++ b/package/libpsl/libpsl.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# libpsl
-+#
-+################################################################################
-+
-+LIBPSL_VERSION = 0.21.1
-+LIBPSL_SITE = https://github.com/rockdaboot/libpsl/releases/download/$(LIBPSL_VERSION)
-+LIBPSL_INSTALL_STAGING = YES
-+LIBPSL_DEPENDENCIES = host-pkgconf
-+LIBPSL_LICENSE = MIT, BSD-3-Clause
-+LIBPSL_LICENSE_FILES = COPYING src/LICENSE.chromium
-+LIBPSL_CONF_OPTS = -Ddocs=false
-+
-+# The order of checks is the same as done by libpsl when configured.
-+ifeq ($(BR2_PACKAGE_LIBIDN2),y)
-+LIBPSL_CONF_OPTS += -Druntime=libidn2 -Dbuiltin=libidn2
-+LIBPSL_DEPENDENCIES += libidn2
-+else ifeq ($(BR2_PACKAGE_ICU),y)
-+LIBPSL_CONF_OPTS += -Druntime=libicu -Dbuiltin=libicu
-+LIBPSL_DEPENDENCIES += icu
-+else
-+LIBPSL_CONF_OPTS += -Druntime=libidn -Dbuiltin=libidn
-+LIBPSL_DEPENDENCIES += libidn
-+endif
-+
+diff --git a/package/libsoup/0001-Revert-tld-parser-use-Python-3.patch b/package/libsoup/0001-Revert-tld-parser-use-Python-3.patch
+deleted file mode 100644
+index c27ee986c6..0000000000
+--- a/package/libsoup/0001-Revert-tld-parser-use-Python-3.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 015926c80fa3e9704f05cbc1ad17f0a877f8de09 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Sat, 1 Sep 2018 15:39:04 +0200
+-Subject: [PATCH] Revert "tld-parser: use Python 3"
+-
+-This reverts commit 4b924e573da307436169d5ef7e04c0ab85b36ef9. The
+-script runs just fine with Python 2.x, there is no reason to enforce
+-using Python 3.x.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- libsoup/tld-parser.py | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/libsoup/tld-parser.py b/libsoup/tld-parser.py
+-index a743471a..5d9d2ba5 100755
+---- a/libsoup/tld-parser.py
+-+++ b/libsoup/tld-parser.py
+-@@ -1,4 +1,4 @@
+--#!/usr/bin/env python3
+-+#!/usr/bin/env python
+- 
+- # Generate tld rules
+- # Copyright (C) 2012 Red Hat, Inc.
+--- 
+-2.14.4
+-
+diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+index f6f8fde968..47adfb33f2 100644
+--- a/package/libsoup/Config.in
++++ b/package/libsoup/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBSOUP
+ 	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBPSL
+ 	select BR2_PACKAGE_SQLITE
+ 	help
+ 	  libsoup is an HTTP client/server library. It uses GObject
+diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
+index 666bbc278b..3b9009884d 100644
+--- a/package/libsoup/libsoup.hash
++++ b/package/libsoup/libsoup.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.62/libsoup-2.62.3.sha256sum
+-sha256	d312ade547495c2093ff8bda61f9b9727a98cfdae339f3263277dd39c0451172  libsoup-2.62.3.tar.xz
++# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.66/libsoup-2.66.5.sha256sum
++sha256  ee43be1485bd95b686236b1e0043ec6edb761a538616c9c63004d7d1979bb139  libsoup-2.66.5.tar.xz
+ # Locally calculated
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 44808225ea..1617940c8f 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSOUP_VERSION_MAJOR = 2.62
+-LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).3
++LIBSOUP_VERSION_MAJOR = 2.66
++LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).5
+ LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+ LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+ LIBSOUP_LICENSE = LGPL-2.0+
+@@ -13,27 +13,27 @@ LIBSOUP_LICENSE_FILES = COPYING
+ LIBSOUP_CPE_ID_VENDOR = gnome
+ LIBSOUP_INSTALL_STAGING = YES
+ LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
+-LIBSOUP_CONF_OPTS = --disable-glibtest --enable-vala=no --with-gssapi=no
++LIBSOUP_CONF_OPTS = -Dtests=false -Dvapi=false -Dgssapi=false
+ LIBSOUP_DEPENDENCIES = host-pkgconf host-libglib2 \
+-	libglib2 libxml2 sqlite host-intltool
++	libglib2 libpsl libxml2 sqlite host-intltool
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-LIBSOUP_CONF_OPTS += --with-introspection
++LIBSOUP_CONF_OPTS += -Dintrospection=true
+ LIBSOUP_DEPENDENCIES += gobject-introspection
+ else
+-LIBSOUP_CONF_OPTS += --without-introspection
++LIBSOUP_CONF_OPTS += -Dintrospection=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSOUP_GNOME),y)
+-LIBSOUP_CONF_OPTS += --with-gnome
++LIBSOUP_CONF_OPTS += -Dgnome=true
+ else
+-LIBSOUP_CONF_OPTS += --without-gnome
++LIBSOUP_CONF_OPTS += -Dgnome=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
+ LIBSOUP_DEPENDENCIES += glib-networking
+ else
+-LIBSOUP_CONF_OPTS += --disable-tls-check
++LIBSOUP_CONF_OPTS += -Dtls_check=false
+ endif
+ 
+-$(eval $(autotools-package))
 +$(eval $(meson-package))
 -- 
 2.31.1
