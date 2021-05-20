@@ -1,53 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 May 2021 11:38:14 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/environment-setup: Fix incorrect order of the `sed` expressions
-Message-ID: <20210520090953.CA8EF7FFFE@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 20 May 2021 12:15:25 +0200
+Subject: [Buildroot] [PATCH 2/2] support/testing: test_glxinfo load X11
+ modules in the right order
+In-Reply-To: <87lf89ahm3.fsf@dell.be.48ers.dk>
+References: <20210513141149.3154510-1-romain.naour@gmail.com>
+ <20210513141149.3154510-2-romain.naour@gmail.com>
+ <87lf89ahm3.fsf@dell.be.48ers.dk>
+Message-ID: <f88891fa-a83d-9e1a-54de-5b1effeb2de8@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a24df585b9239b8e8ec9c94fdcae3b131c636f07
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+Hello Peter,
 
-Order of the `sed` expressions is important; when this was commited
-to master, the order of the expressions from the original patch [1] was
-changed, rendering the second expression to noop.
+Le 20/05/2021 ? 11:18, Peter Korsgaard a ?crit?:
+>>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+> 
+>  > From [1]
+>  > "Xorg does not implement real dynamic linking and requires that its
+>  > modules get loaded in the right order."
+> 
+>  > From /var/log/Xorg.0.0.log:
+>  >  (II) LoadModule: "modesetting"
+>  >  (II) Loading /usr/lib/xorg/modules/drivers/modesetting_drv.so
+>  >  (EE) Failed to load /usr/lib/xorg/modules/drivers/modesetting_drv.so: /usr/lib/xorg/modules/drivers/modesetting_drv.so: undefined symbol: shadowRemove
+> 
+>  > Fixes:
+>  > https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661899
+> 
+>  > [1] https://forums.gentoo.org/viewtopic-p-8245578.html#8245578
+> 
+>  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> 
+> Is this also applicable to 2021.02.x, E.G. where we use the older swrast
+> driver?
+> 
 
-This made all the environment variables from the script to contain
-absolute paths: long absolute paths makes verbose builds difficult
-to read/follow.
-We can take advantage of the fact that the PATH is updated and we
-don't have to use absolute paths.
+This patch is needed after the switch to the gallium swrast.
+Since the test_glxinfo was working for the 2021.02 release the backport is not
+needed.
 
-Fixed by reordering the `sed` expresions:
-* first update the path of the binaries: e.g. 's%$(HOST_DIR)/bin/%%g'
-* only then update remaining paths: e.g. 's%$(HOST_DIR)%\$$SDK_PATH%g'
-
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20201027140140.47982-1-matthew.weber at rockwellcollins.com/
-
-Signed-off-by: Mircea GLIGA <mgliga@bitdefender.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit d0ed2725e9816677ab395334fdb7ec2559bce878)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/environment-setup/environment-setup.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-index fcad013f0d..f4c52921f7 100644
---- a/package/environment-setup/environment-setup.mk
-+++ b/package/environment-setup/environment-setup.mk
-@@ -26,8 +26,8 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
- 	printf "alias cmake=\"cmake \
- 		-DCMAKE_TOOLCHAIN_FILE=$(HOST_DIR)/share/buildroot/toolchainfile.cmake \
- 		-DCMAKE_INSTALL_PREFIX=/usr\"\n" >> $(ENVIRONMENT_SETUP_FILE)
--	$(SED) 's%$(HOST_DIR)%\$$SDK_PATH%g' \
--		-e 's%$(HOST_DIR)/bin/%%g' \
-+	$(SED) 's%$(HOST_DIR)/bin/%%g' \
-+		-e 's%$(HOST_DIR)%\$$SDK_PATH%g' \
- 		-e '/^export "PATH=/c\' \
- 		$(ENVIRONMENT_SETUP_FILE)
- 	printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
+Best regards,
+Romain
