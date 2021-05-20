@@ -1,66 +1,48 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 20 May 2021 10:46:38 -0700
-Subject: [Buildroot] [PATCH/NEXT: 00/11] selinux packages: bump versions
-Message-ID: <20210520174649.1188340-1-aduskett@gmail.com>
+Date: Thu, 20 May 2021 10:46:39 -0700
+Subject: [Buildroot] [PATCH/NEXT: 01/11] package/libsepol: bump to version
+ 3.2
+In-Reply-To: <20210520174649.1188340-1-aduskett@gmail.com>
+References: <20210520174649.1188340-1-aduskett@gmail.com>
+Message-ID: <20210520174649.1188340-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The selinux project also now uses the respective package versions for the
-release URL's, so we change that as well.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/libsepol/libsepol.hash | 4 ++--
+ package/libsepol/libsepol.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Adam Duskett (11):
-  package/libsepol: bump to version 3.2
-  package/libsepol/Config.in: Add policy version 33
-  package/libsemanage: bump to version 3.2
-  package/libselinux: bump to version 3.2
-  package/policycoreutils: bump to version 3.2
-  package/checkpolicy: bump to version 3.2
-  package/restorecond: bump to version 3.2
-  package/semodule-utils: bump to version 3.2
-  package/selinux-python: bump to version 3.2
-  package/setools: bump to version 4.4.0
-  package/audit: bump to version 3.0.1
-
- ...0001-Fix-audispd-path-in-auditd.conf.patch |  32 -----
- ...tue-functions-for-strndupa-rawmemchr.patch | 133 ------------------
- ...ns-need-to-be-external-when-building.patch |  28 ----
- package/audit/audit.hash                      |   6 +-
- package/audit/audit.mk                        |   2 +-
- package/checkpolicy/checkpolicy.hash          |   2 +-
- package/checkpolicy/checkpolicy.mk            |   4 +-
- ...T-and-rely-on-the-installed-file-nam.patch |   2 +-
- ...d-to-something-which-never-conflicts.patch |  71 ----------
- package/libselinux/libselinux.hash            |   2 +-
- package/libselinux/libselinux.mk              |   4 +-
- package/libsemanage/libsemanage.hash          |   2 +-
- package/libsemanage/libsemanage.mk            |   4 +-
- package/libsepol/Config.in                    |   4 +-
- package/libsepol/libsepol.hash                |   4 +-
- package/libsepol/libsepol.mk                  |   4 +-
- ...-all-paths-that-use-an-absolute-path.patch |  11 +-
- .../0002-Add-PREFIX-to-host-paths.patch       |  36 +++--
- package/policycoreutils/policycoreutils.hash  |   2 +-
- package/policycoreutils/policycoreutils.mk    |   6 +-
- package/restorecond/restorecond.hash          |   2 +-
- package/restorecond/restorecond.mk            |   4 +-
- package/selinux-python/selinux-python.hash    |   2 +-
- package/selinux-python/selinux-python.mk      |   4 +-
- package/semodule-utils/semodule-utils.hash    |   2 +-
- package/semodule-utils/semodule-utils.mk      |   4 +-
- ...-setools.InfoFlowAnalysis-and-setoo.patch} |  19 +--
- .../0001-remove-werror-flag-from-setup.patch  |  31 ----
- package/setools/setools.hash                  |   2 +-
- package/setools/setools.mk                    |   2 +-
- 30 files changed, 69 insertions(+), 362 deletions(-)
- delete mode 100644 package/audit/0001-Fix-audispd-path-in-auditd.conf.patch
- delete mode 100644 package/audit/0002-Add-substitue-functions-for-strndupa-rawmemchr.patch
- delete mode 100644 package/audit/0003-Header-definitions-need-to-be-external-when-building.patch
- delete mode 100644 package/libselinux/0003-libselinux-rename-gettid-to-something-which-never-conflicts.patch
- rename package/setools/{0002-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch => 0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch} (88%)
- delete mode 100644 package/setools/0001-remove-werror-flag-from-setup.patch
-
+diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
+index 1759d3ba04..b273f982b6 100644
+--- a/package/libsepol/libsepol.hash
++++ b/package/libsepol/libsepol.hash
+@@ -1,5 +1,5 @@
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 ae6778d01443fdd38cd30eeee846494e19f4d407b09872580372f4aa4bf8a3cc  libsepol-3.1.tar.gz
++sha256  dfc7f662af8000116e56a01de6a0394ed79be1b34b999e551346233c5dd19508  libsepol-3.2.tar.gz
+ 
+ # Hash for license file
+-sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
++sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index a4398bdc42..55125f2203 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSEPOL_VERSION = 3.1
+-LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/20200710
++LIBSEPOL_VERSION = 3.2
++LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEPOL_VERSION)
+ LIBSEPOL_LICENSE = LGPL-2.1+
+ LIBSEPOL_LICENSE_FILES = COPYING
+ LIBSEPOL_CPE_ID_VENDOR = selinuxproject
 -- 
 2.31.1
