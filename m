@@ -1,63 +1,107 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 20 May 2021 07:00:24 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 21.1.1
-Message-ID: <20210520050024.6402-1-bernd.kuhls@t-online.de>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Thu, 20 May 2021 08:48:53 +0300
+Subject: [Buildroot] [PATCH v2 1/1] package/hostapd: fix build with
+ CVE-2021-30004 changes
+Message-ID: <20210520054853.15608-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2021-May/000631.html
+Commit d65586f45a22 ("package/hostapd: add upstream patch to fix
+CVE-2021-30004") added security patch from hostapd upstream without
+required ASN.1 helpers. Backport and adapt two commits from the
+hostapd upstream to add missing headers and helpers.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+http://autobuild.buildroot.net/results/8f56cf556efbf447633ce873a21635f5adbc3cd2/
+
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ ...dbool.h-to-allow-C99-bool-to-be-used.patch | 32 +++++++++++++++++
+ .../0004-ASN.1-add-asn1_is_null-helper.patch  | 34 +++++++++++++++++++
+ 2 files changed, 66 insertions(+)
+ create mode 100644 package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+ create mode 100644 package/hostapd/0004-ASN.1-add-asn1_is_null-helper.patch
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 308c6701ab..143de09937 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 21.1.0
-+MESA3D_HEADERS_VERSION = 21.1.1
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index b9eace0b42..9548f8d170 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2021-May/000630.html
--sha256  0128f10e22970d3aed3d1034003731f94623015cd9797c07151417649c1b1ff8  mesa-21.1.0.tar.xz
--sha512  9d7617a6d5dd8ec1d93fdda8fe8b2f745695c02bc381d685f1257f7e7f08d5c06f3c57ae71c5f2dfaabb1742b8a88f47294a369bd3ac553f29835f24ce5dd350  mesa-21.1.0.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2021-May/000631.html
-+sha256  eec25ea379054e8911bc5de816aeb50f581b5b708414725003d2f00386b38dd2  mesa-21.1.1.tar.xz
-+sha512  79d0e2b0e1e590e7f36a082df3584010a553af0b3060bd2d3a7ace700ac7a8d1b7734ba67f2e193dd441434eeec74a16e0dbcbf8c15061b5dd5d6a1feca73d62  mesa-21.1.1.tar.xz
- 
- # License
- sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 1425cb7217..aa81cd10a8 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 21.1.0
-+MESA3D_VERSION = 21.1.1
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+diff --git a/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch b/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+new file mode 100644
+index 0000000000..74bd85f2af
+--- /dev/null
++++ b/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+@@ -0,0 +1,32 @@
++From b2feaf8fc6f3b1bed6c17cb1871889c66a2877dc Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <jouni@codeaurora.org>
++Date: Mon, 20 Apr 2020 20:29:31 +0300
++Subject: [PATCH 3/4] Include stdbool.h to allow C99 bool to be used
++
++We have practically started requiring some C99 features, so might as
++well finally go ahead and bring in the C99 bool as well.
++
++Signed-off-by: Jouni Malinen <jouni@codeaurora.org>
++Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
++
++Backport of commit 99cf89555313 ("Include stdbool.h to allow C99 bool
++to be used") to hostapd v2.9.
++---
++ src/utils/includes.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/utils/includes.h b/src/utils/includes.h
++index 75513fc8c..741fc9c14 100644
++--- a/src/utils/includes.h
+++++ b/src/utils/includes.h
++@@ -18,6 +18,7 @@
++ 
++ #include <stdlib.h>
++ #include <stddef.h>
+++#include <stdbool.h>
++ #include <stdio.h>
++ #include <stdarg.h>
++ #include <string.h>
++-- 
++2.31.1
++
+diff --git a/package/hostapd/0004-ASN.1-add-asn1_is_null-helper.patch b/package/hostapd/0004-ASN.1-add-asn1_is_null-helper.patch
+new file mode 100644
+index 0000000000..62e77e28ae
+--- /dev/null
++++ b/package/hostapd/0004-ASN.1-add-asn1_is_null-helper.patch
+@@ -0,0 +1,34 @@
++From 93179bfeed9282c5a17fc62f6cafaf9d95f91f3f Mon Sep 17 00:00:00 2001
++From: Sergey Matyukevich <geomatsi@gmail.com>
++Date: Thu, 20 May 2021 08:29:55 +0300
++Subject: [PATCH 4/4] ASN.1: add asn1_is_null helper
++
++Partially backport commit 9a990e8c4eb9 ("ASN.1: Add helper functions for
++recognizing tag values") to hostapd v2.9: add ASN.1 helper required to
++backport CVE-2021-30004 fix.
++
++Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
++---
++ src/tls/asn1.h | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/src/tls/asn1.h b/src/tls/asn1.h
++index 6bd7df565..77b94ef34 100644
++--- a/src/tls/asn1.h
+++++ b/src/tls/asn1.h
++@@ -66,6 +66,12 @@ void asn1_oid_to_str(const struct asn1_oid *oid, char *buf, size_t len);
++ unsigned long asn1_bit_string_to_long(const u8 *buf, size_t len);
++ int asn1_oid_equal(const struct asn1_oid *a, const struct asn1_oid *b);
++ 
+++static inline bool asn1_is_null(const struct asn1_hdr *hdr)
+++{
+++	return hdr->class == ASN1_CLASS_UNIVERSAL &&
+++		hdr->tag == ASN1_TAG_NULL;
+++}
+++
++ extern struct asn1_oid asn1_sha1_oid;
++ extern struct asn1_oid asn1_sha256_oid;
++ 
++-- 
++2.31.1
++
 -- 
-2.29.2
+2.31.1
