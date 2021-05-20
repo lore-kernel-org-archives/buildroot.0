@@ -1,146 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 May 2021 11:15:05 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/hostapd: fix build with
- CVE-2021-30004 changes
-In-Reply-To: <20210520054853.15608-1-geomatsi@gmail.com>
-References: <20210520054853.15608-1-geomatsi@gmail.com>
-Message-ID: <20210520091505.GY2268078@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 20 May 2021 11:18:12 +0200
+Subject: [Buildroot] [PATCH 2/2] support/testing: test_glxinfo load X11
+ modules in the right order
+In-Reply-To: <20210513141149.3154510-2-romain.naour@gmail.com> (Romain Naour's
+ message of "Thu, 13 May 2021 16:11:49 +0200")
+References: <20210513141149.3154510-1-romain.naour@gmail.com>
+ <20210513141149.3154510-2-romain.naour@gmail.com>
+Message-ID: <87lf89ahm3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergey, All,
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-On 2021-05-20 08:48 +0300, Sergey Matyukevich spake thusly:
-> Commit d65586f45a22 ("package/hostapd: add upstream patch to fix
-> CVE-2021-30004") added security patch from hostapd upstream without
-> required ASN.1 helpers. Backport and adapt two commits from the
-> hostapd upstream to add missing headers and helpers.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/8f56cf556efbf447633ce873a21635f5adbc3cd2/
-> 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+ > From [1]
+ > "Xorg does not implement real dynamic linking and requires that its
+ > modules get loaded in the right order."
 
-Applied to master, thanks.
+ > From /var/log/Xorg.0.0.log:
+ >  (II) LoadModule: "modesetting"
+ >  (II) Loading /usr/lib/xorg/modules/drivers/modesetting_drv.so
+ >  (EE) Failed to load /usr/lib/xorg/modules/drivers/modesetting_drv.so: /usr/lib/xorg/modules/drivers/modesetting_drv.so: undefined symbol: shadowRemove
 
-I've slightly adapated the commits, as we do nmot want the numbering in
-the patches, and I took the opportunity to slightly update the
-backports.
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661899
 
-While at it, I noticed that wpa_supplicant is also impacted by
-CVE-2021-30004, and we have backported a few patches too:
+ > [1] https://forums.gentoo.org/viewtopic-p-8245578.html#8245578
 
-    a8fbe67b9b16 package/wpa_supplicant: add upstream patch to fix CVE-2021-30004
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-And those patches also contain references to asn1_is_null(). I could not
-find any autobuilder issu about that, though... Could you check if we
-also need to carry similar patches for wpa_supplicant, please?
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...dbool.h-to-allow-C99-bool-to-be-used.patch | 32 +++++++++++++++++
->  .../0004-ASN.1-add-asn1_is_null-helper.patch  | 34 +++++++++++++++++++
->  2 files changed, 66 insertions(+)
->  create mode 100644 package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
->  create mode 100644 package/hostapd/0004-ASN.1-add-asn1_is_null-helper.patch
-> 
-> diff --git a/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch b/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
-> new file mode 100644
-> index 0000000000..74bd85f2af
-> --- /dev/null
-> +++ b/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
-> @@ -0,0 +1,32 @@
-> +From b2feaf8fc6f3b1bed6c17cb1871889c66a2877dc Mon Sep 17 00:00:00 2001
-> +From: Jouni Malinen <jouni@codeaurora.org>
-> +Date: Mon, 20 Apr 2020 20:29:31 +0300
-> +Subject: [PATCH 3/4] Include stdbool.h to allow C99 bool to be used
-> +
-> +We have practically started requiring some C99 features, so might as
-> +well finally go ahead and bring in the C99 bool as well.
-> +
-> +Signed-off-by: Jouni Malinen <jouni@codeaurora.org>
-> +Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> +
-> +Backport of commit 99cf89555313 ("Include stdbool.h to allow C99 bool
-> +to be used") to hostapd v2.9.
-> +---
-> + src/utils/includes.h | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/src/utils/includes.h b/src/utils/includes.h
-> +index 75513fc8c..741fc9c14 100644
-> +--- a/src/utils/includes.h
-> ++++ b/src/utils/includes.h
-> +@@ -18,6 +18,7 @@
-> + 
-> + #include <stdlib.h>
-> + #include <stddef.h>
-> ++#include <stdbool.h>
-> + #include <stdio.h>
-> + #include <stdarg.h>
-> + #include <string.h>
-> +-- 
-> +2.31.1
-> +
-> diff --git a/package/hostapd/0004-ASN.1-add-asn1_is_null-helper.patch b/package/hostapd/0004-ASN.1-add-asn1_is_null-helper.patch
-> new file mode 100644
-> index 0000000000..62e77e28ae
-> --- /dev/null
-> +++ b/package/hostapd/0004-ASN.1-add-asn1_is_null-helper.patch
-> @@ -0,0 +1,34 @@
-> +From 93179bfeed9282c5a17fc62f6cafaf9d95f91f3f Mon Sep 17 00:00:00 2001
-> +From: Sergey Matyukevich <geomatsi@gmail.com>
-> +Date: Thu, 20 May 2021 08:29:55 +0300
-> +Subject: [PATCH 4/4] ASN.1: add asn1_is_null helper
-> +
-> +Partially backport commit 9a990e8c4eb9 ("ASN.1: Add helper functions for
-> +recognizing tag values") to hostapd v2.9: add ASN.1 helper required to
-> +backport CVE-2021-30004 fix.
-> +
-> +Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> +---
-> + src/tls/asn1.h | 6 ++++++
-> + 1 file changed, 6 insertions(+)
-> +
-> +diff --git a/src/tls/asn1.h b/src/tls/asn1.h
-> +index 6bd7df565..77b94ef34 100644
-> +--- a/src/tls/asn1.h
-> ++++ b/src/tls/asn1.h
-> +@@ -66,6 +66,12 @@ void asn1_oid_to_str(const struct asn1_oid *oid, char *buf, size_t len);
-> + unsigned long asn1_bit_string_to_long(const u8 *buf, size_t len);
-> + int asn1_oid_equal(const struct asn1_oid *a, const struct asn1_oid *b);
-> + 
-> ++static inline bool asn1_is_null(const struct asn1_hdr *hdr)
-> ++{
-> ++	return hdr->class == ASN1_CLASS_UNIVERSAL &&
-> ++		hdr->tag == ASN1_TAG_NULL;
-> ++}
-> ++
-> + extern struct asn1_oid asn1_sha1_oid;
-> + extern struct asn1_oid asn1_sha256_oid;
-> + 
-> +-- 
-> +2.31.1
-> +
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Is this also applicable to 2021.02.x, E.G. where we use the older swrast
+driver?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
