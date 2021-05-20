@@ -1,39 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 May 2021 09:53:26 +0200
-Subject: [Buildroot] [git commit branch/next] package/raspberrypi-usbboot:
- enable for BR2_aarch64
-Message-ID: <20210520073019.B182B7FAF5@busybox.osuosl.org>
+Date: Thu, 20 May 2021 09:53:27 +0200
+Subject: [Buildroot] [git commit branch/next] board/raspberrypi: add rpi3 64
+ bit hint
+Message-ID: <20210520073019.C23AF87576@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53b4004d52594b4da24d771d33307ac9ef8d212e
+commit: https://git.buildroot.net/buildroot/commit/?id=eb3c965c8816519e3c07ad6f9fa6d17146b1cdab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/raspberrypi-usbboot/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ board/raspberrypi/readme.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/raspberrypi-usbboot/Config.in.host b/package/raspberrypi-usbboot/Config.in.host
-index b1a434f36e..e5772e3aa1 100644
---- a/package/raspberrypi-usbboot/Config.in.host
-+++ b/package/raspberrypi-usbboot/Config.in.host
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_HOST_RASPBERRYPI_USBBOOT
- 	bool "host raspberrypi-usbboot"
--	depends on BR2_arm
-+	depends on BR2_arm || BR2_aarch64
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-libusb
- 	help
- 	  This package builds and install the "rpiboot" tool for the
-@@ -13,5 +13,5 @@ config BR2_PACKAGE_HOST_RASPBERRYPI_USBBOOT
- 	  https://github.com/raspberrypi/usbboot
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index 8b3de6d251..ac784e07fd 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -35,6 +35,10 @@ For model 3 B and B+:
  
- comment "host raspberrypi-usbboot needs a toolchain w/ host gcc >= 4.9"
--	depends on BR2_arm
-+	depends on BR2_arm || BR2_aarch64
- 	depends on !BR2_HOST_GCC_AT_LEAST_4_9
+   $ make raspberrypi3_defconfig
+ 
++or for model 3 B and B+ (64 bit):
++
++  $ make raspberrypi3_64_defconfig
++
+ For model 4 B:
+ 
+   $ make raspberrypi4_defconfig
