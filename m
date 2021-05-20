@@ -1,64 +1,86 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Fri, 21 May 2021 00:45:13 +0300
-Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: fix build with
- CVE-2021-30004 changes
-In-Reply-To: <20210520201833.GG3208066@scaer>
-References: <20210520190456.59520-1-geomatsi@gmail.com>
- <20210520201833.GG3208066@scaer>
-Message-ID: <YKbYaYOVGxnmPd/1@curiosity>
+Date: Fri, 21 May 2021 00:52:24 +0300
+Subject: [Buildroot] [PATCH v3 1/1] package/dhcp: add host-gawk to global
+ dependencies and build environment
+Message-ID: <20210520215224.2749900-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+DHCP package may silently fail to install binaries to the target image.
+The problem occurs when buildroot output/host and build server provide
+different flavors of awk. For instance, mawk on build server and gawk
+in buildroot output/host. In this case isc-dhcp configure script detects
+gawk in output/host and generates Makefiles specifying gawk without
+absolute path. During Buildroot installation phase, those Makefiles
+are used to install dhcp binaries. They attempt to use gawk without
+absolute path. However build host does not have gawk.
 
-> > Commit a8fbe67b9b16 ("package/wpa_supplicant: add upstream patch to fix
-> > CVE-2021-30004") added security patch from hostapd upstream without
-> > required ASN.1 helpers. Backport and adapt two commits from the
-> > hostapd upstream to add missing headers and helpers.
-> > 
-> > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> 
-> Applied to master, thanks.
-> 
-> I was surprised, because I saw zero issue about this in our
-> autobuilders. But I could trigger one locally with:
-> 
->     BR2_arm=y
->     BR2_cortex_a7=y
->     BR2_TOOLCHAIN_EXTERNAL=y
->     BR2_INIT_NONE=y
->     BR2_SYSTEM_BIN_SH_NONE=y
->     # BR2_PACKAGE_BUSYBOX is not set
->     # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
->     BR2_PACKAGE_WPA_SUPPLICANT=y
->     BR2_PACKAGE_WPA_SUPPLICANT_WEXT=y
->     BR2_PACKAGE_WPA_SUPPLICANT_WIRED=y
->     BR2_PACKAGE_WPA_SUPPLICANT_IBSS_RSN=y
->     BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
->     BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY=y
->     BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
->     BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT=y
->     BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG=y
->     BR2_PACKAGE_WPA_SUPPLICANT_WPS=y
->     BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
->     BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO=y
->     BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
->     BR2_PACKAGE_WPA_SUPPLICANT_DBUS=y
->     BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION=y
+To resolve the issue add host-gawk to dependencies and specify absolute
+path to host-gawk in dhcp configure script using DHCP_CONF_ENV.
 
-This issue is relevant only for hostapd internal TLS implementation.
-So openssl needs to be disabled to make sure that internal TLS is
-selected. Probably this is the reason why we didn't observe this
-issue more frequenlty in the autobuilder ?
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
 
-As soon as internal TLS is selected, the following minimal
-wpa_supplicant configuration should be enough to trigger:
+Changes v1 -> v2 (after review and tests by Thomas Petazzoni):
+ - suggested change is the same
+ - root cause is figured out and commit message updated
 
-BR2_PACKAGE_WPA_SUPPLICANT=y
-BR2_PACKAGE_WPA_SUPPLICANT_EAP=y
+Changes v2 -> v3 (after patch by Heiko Thiery)
+ - keep host-gawk in global dependencies
+
+The root cause is explained in the commit message. Here are the
+steps to reproduce the issue on the up-to-date master branch in
+Buildroot Docker image from support/docker/Dockerfile:
+
+- start from default qemu_x86_defconfig
+- enable isc-dhcp server and client
+
+As a result, neither dhclient nor dhcpd are installed to the target.
+
+Note that Buildroot Docker image provides mawk. On the other hand,
+dhcp package (with server enabled) pulls host-gawk as a dependency.
+So build host awk (mawk) differs from buildroot host awk (gawk).
+To reproduce the same issue only for dhclient, uclibc can be
+replaced by glibc, which also pulls host-gawk as a dependency.
 
 Regards,
 Sergey
+
+ package/dhcp/dhcp.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 8d7157f357..db58870f88 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -9,7 +9,7 @@ DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
+ DHCP_INSTALL_STAGING = YES
+ DHCP_LICENSE = MPL-2.0
+ DHCP_LICENSE_FILES = LICENSE
+-DHCP_DEPENDENCIES = bind
++DHCP_DEPENDENCIES = bind host-gawk
+ DHCP_CPE_ID_VENDOR = isc
+ 
+ # use libtool-enabled configure.ac
+@@ -22,6 +22,8 @@ DHCP_CONF_ENV = \
+ 		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
+ 	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
+ 
++DHCP_CONF_ENV += ac_cv_prog_AWK=$(HOST_DIR)/bin/gawk
++
+ DHCP_CONF_OPTS = \
+ 	--with-libbind=$(STAGING_DIR)/usr \
+ 	--with-randomdev=/dev/random \
+@@ -55,7 +57,6 @@ define DHCP_INSTALL_LIBS
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
+-DHCP_DEPENDENCIES += host-gawk
+ define DHCP_INSTALL_CTL_LIBS
+ 	$(MAKE) -C $(@D)/dhcpctl install-exec DESTDIR=$(TARGET_DIR)
+ endef
+-- 
+2.31.1
