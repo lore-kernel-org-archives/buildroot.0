@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 May 2021 20:21:19 +0200
-Subject: [Buildroot] [PATCH v2] package/dhcp: add host-gawk optional
- dependency
-In-Reply-To: <20210507094304.21719-1-heiko.thiery@gmail.com>
-References: <20210507094304.21719-1-heiko.thiery@gmail.com>
-Message-ID: <e46585ce-3288-e427-4147-52e7bd6c8c04@mind.be>
+Date: Thu, 20 May 2021 20:22:14 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/dhcp: add host-gawk to
+ dependencies and build environment
+In-Reply-To: <20210214145404.2587820-1-geomatsi@gmail.com>
+References: <20210214145404.2587820-1-geomatsi@gmail.com>
+Message-ID: <5ade5409-df01-2cde-7bfb-7767c04138f2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,79 @@ To: buildroot@busybox.net
 
 
 
-On 07/05/2021 11:43, Heiko Thiery wrote:
-> On hosts where gawk is not available, it is not possible to build the
-> package with server option (BR2_PACKAGE_DHCP_SERVER).
-> The build goes through without errors but the binaries are not created
-> and installed. The reason is that autotools cannot find gawk.
+On 14/02/2021 15:54, Sergey Matyukevich wrote:
+> DHCP package may silently fail to install binaries to the target image.
+> The problem occurs when buildroot configuration and build host provide
+> different flavors of awk. For instance, mawk on build host and gawk in
+> buildroot output/host. In this case isc-dhcp configure script detects
+> gawk in output/host and generates Makefiles specifying gawk without
+> absolute path. During Buildroot installation phase, those Makefiles
+> are used to install dhcp binaries. They attempt to use gawk without
+> absolute path. However build host does not have gawk.
 > 
-> Fixes: Bug 13781
+> To resolve the issue add host-gawk to the list of dhcp dependencies
+> and explicitely specify absolute path to host-gawk.
 > 
-> Reported-by: Kay Jeschonneck <kay.jeschonneck@airbus.com>
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
- Applied to master, thanks.
+ Heiko recently posted a patch that does the same thing, and I applied that one
+because it only adds the dependency when the server is enabled (client doesn't
+need gawk).
+
+ Thanks!
 
  Regards,
  Arnout
 
 > ---
-> v2:
->  - set to correct bug number
 > 
->  package/dhcp/dhcp.mk | 1 +
->  1 file changed, 1 insertion(+)
+> Changes v1 -> v2 (after review and tests by Thomas Petazzoni):
+>  - suggested change is the same
+>  - root cause is figured out and commit message updated
+> 
+> The root cause is explained in commit message. Here are the steps
+> to reproduce the issue.
+> 
+> Buildroot Docker image at support/docker/Dockerfile provides a way to
+> reproduce the issue. This docker image includes mawk. Each of the
+> following cases starts from default qemu_x86_defconfig:
+> 
+> 1. Keep using uclibc, enable isc-dhcp server and client
+> Buildroot does not have any awk flavor installed in output/host, so
+> mawk from build host is used. Build dhcp. The result is ok: both
+> dhclient and dhcpd are installed on the target.
+> 
+> 2. Switch to glibc, enable isc-dhcp server and client
+> Note that glibc package has host-gawk among its dependencies. So in
+> this case build host awk (mawk) differs from buildroot host awk (gawk).
+> Build dhcp. The result is not ok: neither dhclient nor dhcpd are
+> installed to the target.
+> 
+> Regards,
+> Sergey
+> 
+>  package/dhcp/dhcp.mk | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
 > diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-> index 988c7792dc..8d7157f357 100644
+> index 988c7792dc..4a9e98485c 100644
 > --- a/package/dhcp/dhcp.mk
 > +++ b/package/dhcp/dhcp.mk
-> @@ -55,6 +55,7 @@ define DHCP_INSTALL_LIBS
->  endef
+> @@ -10,6 +10,7 @@ DHCP_INSTALL_STAGING = YES
+>  DHCP_LICENSE = MPL-2.0
+>  DHCP_LICENSE_FILES = LICENSE
+>  DHCP_DEPENDENCIES = bind
+> +DHCP_DEPENDENCIES = bind host-gawk
+>  DHCP_CPE_ID_VENDOR = isc
 >  
->  ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
-> +DHCP_DEPENDENCIES += host-gawk
->  define DHCP_INSTALL_CTL_LIBS
->  	$(MAKE) -C $(@D)/dhcpctl install-exec DESTDIR=$(TARGET_DIR)
->  endef
+>  # use libtool-enabled configure.ac
+> @@ -22,6 +23,8 @@ DHCP_CONF_ENV = \
+>  		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
+>  	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
+>  
+> +DHCP_CONF_ENV += ac_cv_prog_AWK=$(HOST_DIR)/bin/gawk
+> +
+>  DHCP_CONF_OPTS = \
+>  	--with-libbind=$(STAGING_DIR)/usr \
+>  	--with-randomdev=/dev/random \
 > 
