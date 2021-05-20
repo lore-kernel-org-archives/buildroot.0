@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 20 May 2021 21:31:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libfuse: add LIBFUSE_CPE_ID_VENDOR
-Message-ID: <20210520193124.183263-1-fontaine.fabrice@gmail.com>
+Date: Thu, 20 May 2021 21:31:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libfuse3: add CPE variables
+Message-ID: <20210520193154.183344-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,24 +11,25 @@ To: buildroot@busybox.net
 cpe:2.3:a:libfuse_project:libfuse is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asupervisord%3Asupervisor
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibfuse_project%3Alibfuse
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libfuse/libfuse.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libfuse3/libfuse3.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index 074dc59886..2677e46853 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
-@@ -9,6 +9,7 @@ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse-$(LIBFUSE_VERSION)
- LIBFUSE_LICENSE = GPL-2.0, LGPL-2.1
- LIBFUSE_LICENSE_FILES = COPYING COPYING.LIB
-+LIBFUSE_CPE_ID_VENDOR = libfuse_project
- LIBFUSE_INSTALL_STAGING = YES
- LIBFUSE_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- LIBFUSE_CONF_OPTS = \
+diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
+index d61e313391..b1624ba887 100644
+--- a/package/libfuse3/libfuse3.mk
++++ b/package/libfuse3/libfuse3.mk
+@@ -8,6 +8,8 @@ LIBFUSE3_VERSION = 3.10.3
+ LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
+ LIBFUSE3_LICENSE = LGPL-2.1
+ LIBFUSE3_LICENSE_FILES = LICENSE
++LIBFUSE3_CPE_ID_VENDOR = libfuse_project
++LIBFUSE3_CPE_ID_PRODUCT = libfuse
+ LIBFUSE3_INSTALL_STAGING = YES
+ LIBFUSE3_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ LIBFUSE3_CONF_OPTS = \
 -- 
 2.30.2
