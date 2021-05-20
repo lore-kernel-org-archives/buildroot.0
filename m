@@ -1,167 +1,264 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 20 May 2021 10:46:48 -0700
-Subject: [Buildroot] [PATCH/NEXT: 10/11] package/setools: bump to version
- 4.4.0
+Date: Thu, 20 May 2021 10:46:49 -0700
+Subject: [Buildroot] [PATCH/NEXT: 11/11] package/audit: bump to version 3.0.1
 In-Reply-To: <20210520174649.1188340-1-aduskett@gmail.com>
 References: <20210520174649.1188340-1-aduskett@gmail.com>
-Message-ID: <20210520174649.1188340-11-aduskett@gmail.com>
+Message-ID: <20210520174649.1188340-12-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove upstream patch 0001-remove-werror-flag-from-setup.patch
-- Refactor Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch to apply
-  to 4.4.0
+Drop all upstream patches as they no longer are applicable.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- ...-setools.InfoFlowAnalysis-and-setoo.patch} | 19 ++++++------
- .../0001-remove-werror-flag-from-setup.patch  | 31 -------------------
- package/setools/setools.hash                  |  2 +-
- package/setools/setools.mk                    |  2 +-
- 4 files changed, 12 insertions(+), 42 deletions(-)
- rename package/setools/{0002-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch => 0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch} (88%)
- delete mode 100644 package/setools/0001-remove-werror-flag-from-setup.patch
+ ...0001-Fix-audispd-path-in-auditd.conf.patch |  32 -----
+ ...tue-functions-for-strndupa-rawmemchr.patch | 133 ------------------
+ ...ns-need-to-be-external-when-building.patch |  28 ----
+ package/audit/audit.hash                      |   6 +-
+ package/audit/audit.mk                        |   2 +-
+ 5 files changed, 4 insertions(+), 197 deletions(-)
+ delete mode 100644 package/audit/0001-Fix-audispd-path-in-auditd.conf.patch
+ delete mode 100644 package/audit/0002-Add-substitue-functions-for-strndupa-rawmemchr.patch
+ delete mode 100644 package/audit/0003-Header-definitions-need-to-be-external-when-building.patch
 
-diff --git a/package/setools/0002-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch b/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-similarity index 88%
-rename from package/setools/0002-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-rename to package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-index f9519a0790..3c3ae97dff 100644
---- a/package/setools/0002-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-+++ b/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-@@ -15,6 +15,7 @@ sedta and seinfoflow to require python3-networkx
- Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
- [Refreshed for 4.3.0]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+[Refreshed for 4.4.0]
- ---
-  sedta                       | 3 ++-
-  seinfoflow                  | 5 +++--
-@@ -36,7 +37,7 @@ index 60861ca630a5..0056172a55e5 100755
- +import setools.dta
-  
-  
-- def print_transition(trans):
-+ def print_transition(trans: setools.DomainTransition) -> None:
- @@ -114,7 +115,7 @@ else:
-  
-  try:
-@@ -58,7 +59,7 @@ index f10c39de4d8e..fe733bbd0787 100755
-  import argparse
-  import sys
-  import logging
--@@ -101,8 +102,8 @@ elif args.booleans is not None:
-+@@ -102,8 +103,8 @@ elif args.booleans is not None:
-  try:
-      p = setools.SELinuxPolicy(args.policy)
-      m = setools.PermissionMap(args.map)
-@@ -70,20 +71,20 @@ index f10c39de4d8e..fe733bbd0787 100755
-      if args.shortest_path or args.all_paths:
-          if args.shortest_path:
- diff --git a/setools/__init__.py b/setools/__init__.py
--index 26fa5aa34a19..9e9058a6bf90 100644
-+index d72d343..4d5aaaa 100644
- --- a/setools/__init__.py
- +++ b/setools/__init__.py
--@@ -75,11 +75,11 @@ from .pcideviceconquery import PcideviceconQuery
-+@@ -91,11 +91,11 @@ from .pcideviceconquery import PcideviceconQuery
-  from .devicetreeconquery import DevicetreeconQuery
-  
-  # Information Flow Analysis
- -from .infoflow import InfoFlowAnalysis
- +# from .infoflow import InfoFlowAnalysis
-- from .permmap import PermissionMap
-+ from .permmap import PermissionMap, RuleWeight, Mapping
-  
-  # Domain Transition Analysis
---from .dta import DomainTransitionAnalysis
--+# from .dta import DomainTransitionAnalysis
-+-from .dta import DomainTransitionAnalysis, DomainEntrypoint, DomainTransition
-++# from .dta import DomainTransitionAnalysis, DomainEntrypoint, DomainTransition
-  
-  # Policy difference
-  from .diff import PolicyDifference
-@@ -91,7 +92,7 @@ diff --git a/setoolsgui/apol/dta.py b/setoolsgui/apol/dta.py
- index 4608b9dbf34e..2cde44c142e9 100644
- --- a/setoolsgui/apol/dta.py
- +++ b/setoolsgui/apol/dta.py
--@@ -23,7 +23,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QStringListModel, QThread
-+@@ -24,7 +24,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QStringListModel, QThread
-  from PyQt5.QtGui import QPalette, QTextCursor
-  from PyQt5.QtWidgets import QCompleter, QHeaderView, QMessageBox, QProgressDialog, \
-      QTreeWidgetItem
-@@ -99,7 +100,7 @@ index 4608b9dbf34e..2cde44c142e9 100644
- +from setools.dta import DomainTransitionAnalysis
-  
-  from ..logtosignal import LogHandlerToSignal
-- from .analysistab import AnalysisTab
-+ from .analysistab import AnalysisSection, AnalysisTab
- diff --git a/setoolsgui/apol/infoflow.py b/setoolsgui/apol/infoflow.py
- index 7bca299d23fc..7fee2778f35f 100644
- --- a/setoolsgui/apol/infoflow.py
-diff --git a/package/setools/0001-remove-werror-flag-from-setup.patch b/package/setools/0001-remove-werror-flag-from-setup.patch
+diff --git a/package/audit/0001-Fix-audispd-path-in-auditd.conf.patch b/package/audit/0001-Fix-audispd-path-in-auditd.conf.patch
 deleted file mode 100644
-index 0ab4006661..0000000000
---- a/package/setools/0001-remove-werror-flag-from-setup.patch
+index ccf45db911..0000000000
+--- a/package/audit/0001-Fix-audispd-path-in-auditd.conf.patch
 +++ /dev/null
-@@ -1,31 +0,0 @@
--From 8ab5a49247d870d92a8287db6134877ebf7a4379 Mon Sep 17 00:00:00 2001
--From: Adam Duskett <aduskett@gmail.com>
--Date: Thu, 12 Oct 2017 22:04:58 -0400
--Subject: [PATCH] remove werror flag from setup
+@@ -1,32 +0,0 @@
+-From 6e1fd09f7bc131c8f16d9cc43e2455ba4650c651 Mon Sep 17 00:00:00 2001
+-From: Carlos Santos <casantos@datacom.com.br>
+-Date: Sat, 3 Nov 2018 08:25:58 -0300
+-Subject: [PATCH] Fix audispd path in auditd.conf
 -
--Compilers older than gcc6 will generate uninitialized variable warnings which
--will cause compiling to fail.
+-audispd is installed at /usr/sbin but the configuration file pointed
+-to /sbin, causing auditd to fail on startup.
 -
--Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
--[Refreshed for 4.3.0]
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
+-This patch cannot be sent upstream because audispd does not exist
+-anymore on the master branch (it was merged to auditd).
+-
+-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ----
-- setup.py | 2 +-
+- init.d/auditd.conf | 2 +-
 - 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/setup.py b/setup.py
--index 457c83049ca5..4dcb30196abf 100644
----- a/setup.py
--+++ b/setup.py
--@@ -106,7 +106,7 @@ ext_py_mods = [Extension('setools.policyrep', ['setools/policyrep.pyx'],
--                          libraries=['selinux', 'sepol'],
--                          library_dirs=lib_dirs,
--                          define_macros=macros,
---                         extra_compile_args=['-Werror', '-Wextra',
--+                         extra_compile_args=['-Wextra',
--                                              '-Waggregate-return',
--                                              '-Wfloat-equal',
--                                              '-Wformat', '-Wformat=2',
+-diff --git a/init.d/auditd.conf b/init.d/auditd.conf
+-index 4dcda83..998904f 100644
+---- a/init.d/auditd.conf
+-+++ b/init.d/auditd.conf
+-@@ -13,7 +13,7 @@ max_log_file = 8
+- num_logs = 5
+- priority_boost = 4
+- disp_qos = lossy
+--dispatcher = /sbin/audispd
+-+dispatcher = /usr/sbin/audispd
+- name_format = NONE
+- ##name = mydomain
+- max_log_file_action = ROTATE
 --- 
--2.26.2
+-2.17.1
 -
-diff --git a/package/setools/setools.hash b/package/setools/setools.hash
-index 689b20a357..74428a177c 100644
---- a/package/setools/setools.hash
-+++ b/package/setools/setools.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256	da2c1d23edd24c4aa17d01d78e86c9e5fb5bf3aa38c71d5d63f41c750f6ef26c setools-4.3.0.tar.gz
-+sha256	202eac5f857475937bee8136cff278aa2b4a4b94a0dec63fbbbe18c9eb644a4e setools-4.4.0.tar.gz
- sha256  2f7547e10f76a382c24c053595f38a5cc6dda9347f508f254ca490e0046a9624 COPYING
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING.GPL
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LGPL
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index a07b1367a2..8e1c0d2cc6 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
+diff --git a/package/audit/0002-Add-substitue-functions-for-strndupa-rawmemchr.patch b/package/audit/0002-Add-substitue-functions-for-strndupa-rawmemchr.patch
+deleted file mode 100644
+index ac292c57d1..0000000000
+--- a/package/audit/0002-Add-substitue-functions-for-strndupa-rawmemchr.patch
++++ /dev/null
+@@ -1,133 +0,0 @@
+-From c39a071e7c021f6ff3554aca2758e97b47a9777c Mon Sep 17 00:00:00 2001
+-From: Steve Grubb <sgrubb@redhat.com>
+-Date: Tue, 26 Feb 2019 18:33:33 -0500
+-Subject: [PATCH] Add substitue functions for strndupa & rawmemchr
+-
+-(cherry picked from commit d579a08bb1cde71f939c13ac6b2261052ae9f77e)
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- auparse/auparse.c   | 12 +++++++++++-
+- auparse/interpret.c |  9 ++++++++-
+- configure.ac        | 14 +++++++++++++-
+- src/ausearch-lol.c  | 12 +++++++++++-
+- 4 files changed, 43 insertions(+), 4 deletions(-)
+-
+-diff --git a/auparse/auparse.c b/auparse/auparse.c
+-index 650db02..2e1c737 100644
+---- a/auparse/auparse.c
+-+++ b/auparse/auparse.c
+-@@ -1,5 +1,5 @@
+- /* auparse.c --
+-- * Copyright 2006-08,2012-17 Red Hat Inc., Durham, North Carolina.
+-+ * Copyright 2006-08,2012-19 Red Hat Inc., Durham, North Carolina.
+-  * All Rights Reserved.
+-  *
+-  * This library is free software; you can redistribute it and/or
+-@@ -1118,6 +1118,16 @@ static int str2event(char *s, au_event_t *e)
+- 	return 0;
+- }
+- 
+-+#ifndef HAVE_STRNDUPA
+-+static inline char *strndupa(const char *old, size_t n)
+-+{
+-+	size_t len = strnlen(old, n);
+-+	char *tmp = alloca(len + 1);
+-+	tmp[len] = 0;
+-+	return memcpy(tmp, old, len);
+-+}
+-+#endif
+-+
+- /* Returns 0 on success and 1 on error */
+- static int extract_timestamp(const char *b, au_event_t *e)
+- {
+-diff --git a/auparse/interpret.c b/auparse/interpret.c
+-index 51c4a5e..67b7b77 100644
+---- a/auparse/interpret.c
+-+++ b/auparse/interpret.c
+-@@ -853,6 +853,13 @@ err_out:
+- 		return print_escaped(id->val);
+- }
+- 
+-+// rawmemchr is faster. Let's use it if we have it.
+-+#ifdef HAVE_RAWMEMCHR
+-+#define STRCHR rawmemchr
+-+#else
+-+#define STRCHR strchr
+-+#endif
+-+
+- static const char *print_proctitle(const char *val)
+- {
+- 	char *out = (char *)print_escaped(val);
+-@@ -863,7 +870,7 @@ static const char *print_proctitle(const char *val)
+- 		// Proctitle has arguments separated by NUL bytes
+- 		// We need to write over the NUL bytes with a space
+- 		// so that we can see the arguments
+--		while ((ptr  = rawmemchr(ptr, '\0'))) {
+-+		while ((ptr  = STRCHR(ptr, '\0'))) {
+- 			if (ptr >= end)
+- 				break;
+- 			*ptr = ' ';
+-diff --git a/configure.ac b/configure.ac
+-index 6e345f1..6f3007e 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1,7 +1,7 @@
+- dnl
+- define([AC_INIT_NOTICE],
+- [### Generated automatically using autoconf version] AC_ACVERSION [
+--### Copyright 2005-18 Steve Grubb <sgrubb@redhat.com>
+-+### Copyright 2005-19 Steve Grubb <sgrubb@redhat.com>
+- ###
+- ### Permission is hereby granted, free of charge, to any person obtaining a
+- ### copy of this software and associated documentation files (the "Software"),
+-@@ -72,6 +72,18 @@ dnl; posix_fallocate is used in audisp-remote
+- AC_CHECK_FUNCS([posix_fallocate])
+- dnl; signalfd is needed for libev
+- AC_CHECK_FUNC([signalfd], [], [ AC_MSG_ERROR([The signalfd system call is necessary for auditd]) ])
+-+dnl; check if rawmemchr is available
+-+AC_CHECK_FUNCS([rawmemchr])
+-+dnl; check if strndupa is available
+-+AC_LINK_IFELSE(
+-+  [AC_LANG_SOURCE(
+-+    [[
+-+      #define _GNU_SOURCE
+-+      #include <string.h>
+-+      int main() { (void) strndupa("test", 10); return 0; }]])],
+-+ [AC_DEFINE(HAVE_STRNDUPA, 1, [Let us know if we have it or not])],
+-+ []
+-+)
+- 
+- ALLWARNS=""
+- ALLDEBUG="-g"
+-diff --git a/src/ausearch-lol.c b/src/ausearch-lol.c
+-index 5d17a72..758c33e 100644
+---- a/src/ausearch-lol.c
+-+++ b/src/ausearch-lol.c
+-@@ -1,6 +1,6 @@
+- /*
+- * ausearch-lol.c - linked list of linked lists library
+--* Copyright (c) 2008,2010,2014,2016 Red Hat Inc., Durham, North Carolina.
+-+* Copyright (c) 2008,2010,2014,2016,2019 Red Hat Inc., Durham, North Carolina.
+- * All Rights Reserved. 
+- *
+- * This software may be freely redistributed and/or modified under the
+-@@ -152,6 +152,16 @@ static int compare_event_time(event *e1, event *e2)
+- 	return 0;
+- }
+- 
+-+#ifndef HAVE_STRNDUPA
+-+static inline char *strndupa(const char *old, size_t n)
+-+{
+-+	size_t len = strnlen(old, n);
+-+	char *tmp = alloca(len + 1);
+-+	tmp[len] = 0;
+-+	return memcpy(tmp, old, len);
+-+}
+-+#endif
+-+
+- /*
+-  * This function will look at the line and pick out pieces of it.
+-  */
+--- 
+-2.21.0
+-
+diff --git a/package/audit/0003-Header-definitions-need-to-be-external-when-building.patch b/package/audit/0003-Header-definitions-need-to-be-external-when-building.patch
+deleted file mode 100644
+index 9a546261df..0000000000
+--- a/package/audit/0003-Header-definitions-need-to-be-external-when-building.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 017e6c6ab95df55f34e339d2139def83e5dada1f Mon Sep 17 00:00:00 2001
+-From: Steve Grubb <sgrubb@redhat.com>
+-Date: Fri, 10 Jan 2020 21:13:50 -0500
+-Subject: [PATCH] Header definitions need to be external when building with
+- -fno-common (which is default in GCC 10) - Tony Jones
+-
+-Patch taken from upstream: https://github.com/linux-audit/audit-userspace/commit/017e6c6ab95df55f34e339d2139def83e5dada1f
+-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+----
+- src/ausearch-common.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/ausearch-common.h b/src/ausearch-common.h
+-index 6669203..3040547 100644
+---- a/src/ausearch-common.h
+-+++ b/src/ausearch-common.h
+-@@ -50,7 +50,7 @@ extern pid_t event_pid;
+- extern int event_exact_match;
+- extern uid_t event_uid, event_euid, event_loginuid;
+- extern const char *event_tuid, *event_teuid, *event_tauid;
+--slist *event_node_list;
+-+extern slist *event_node_list;
+- extern const char *event_comm;
+- extern const char *event_filename;
+- extern const char *event_hostname;
+--- 
+-2.20.1
+-
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index 71e7df7dbc..4ef9a42b0d 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
+@@ -1,4 +1,4 @@
+ #Locally computed
+-sha256 0e5d4103646e00f8d1981e1cd2faea7a2ae28e854c31a803e907a383c5e2ecb7 audit-2.8.5.tar.gz
+-sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
+-sha256 f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa COPYING.LIB
++sha256  994c4250d8fd43f3087a3c2ce73461832e30f1e9b278bf5bb03c3e07091155a5  audit-3.0.1.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 05a16e6e31..df6650593d 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SETOOLS_VERSION = 4.3.0
-+SETOOLS_VERSION = 4.4.0
- SETOOLS_SITE = $(call github,SELinuxProject,setools,$(SETOOLS_VERSION))
- SETOOLS_DEPENDENCIES = libselinux libsepol python-setuptools host-bison host-flex host-python-cython host-swig
- SETOOLS_INSTALL_STAGING = YES
+-AUDIT_VERSION = 2.8.5
++AUDIT_VERSION = 3.0.1
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ AUDIT_LICENSE_FILES = COPYING COPYING.LIB
 -- 
 2.31.1
