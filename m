@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 May 2021 20:22:14 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/dhcp: add host-gawk to
- dependencies and build environment
-In-Reply-To: <20210214145404.2587820-1-geomatsi@gmail.com>
-References: <20210214145404.2587820-1-geomatsi@gmail.com>
-Message-ID: <5ade5409-df01-2cde-7bfb-7767c04138f2@mind.be>
+Date: Thu, 20 May 2021 20:24:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gd: fix addition of -liconv in
+ gdlib.pc.in
+In-Reply-To: <20210427185347.158518-1-fontaine.fabrice@gmail.com>
+References: <20210427185347.158518-1-fontaine.fabrice@gmail.com>
+Message-ID: <2b619ce3-eb7e-9aea-db35-0716aff396b0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,79 +13,43 @@ To: buildroot@busybox.net
 
 
 
-On 14/02/2021 15:54, Sergey Matyukevich wrote:
-> DHCP package may silently fail to install binaries to the target image.
-> The problem occurs when buildroot configuration and build host provide
-> different flavors of awk. For instance, mawk on build host and gawk in
-> buildroot output/host. In this case isc-dhcp configure script detects
-> gawk in output/host and generates Makefiles specifying gawk without
-> absolute path. During Buildroot installation phase, those Makefiles
-> are used to install dhcp binaries. They attempt to use gawk without
-> absolute path. However build host does not have gawk.
+On 27/04/2021 20:53, Fabrice Fontaine wrote:
+> Static build of gnuplot with gd and libiconv is broken since bump to
+> version 2.3.1 in commit 970b2ca3cc3f927f679c871eeadb22ec110b0ed5:
 > 
-> To resolve the issue add host-gawk to the list of dhcp dependencies
-> and explicitely specify absolute path to host-gawk.
+> /home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/9.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/lib/libgd.a(gdkanji.o): in function `do_convert':
+> gdkanji.c:(.text+0x148): undefined reference to `libiconv_open'
+> /home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/9.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: gdkanji.c:(.text+0x1d0): undefined reference to `libiconv'
 > 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> This build failure is raised because LIBS has been replaced by
+> LIBS_PRIVATES in gdlib.pc.in since
+> https://github.com/libgd/libgd/commit/28ecfe77c817aff8ce56422d3e4e8533a281bc76
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/5ab5f4744adfd8d8be483204a9c7f59e34ce26c6
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- Heiko recently posted a patch that does the same thing, and I applied that one
-because it only adds the dependency when the server is enabled (client doesn't
-need gawk).
-
- Thanks!
+ Applied to master, thanks.
 
  Regards,
  Arnout
 
 > ---
+>  package/gd/gd.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Changes v1 -> v2 (after review and tests by Thomas Petazzoni):
->  - suggested change is the same
->  - root cause is figured out and commit message updated
-> 
-> The root cause is explained in commit message. Here are the steps
-> to reproduce the issue.
-> 
-> Buildroot Docker image at support/docker/Dockerfile provides a way to
-> reproduce the issue. This docker image includes mawk. Each of the
-> following cases starts from default qemu_x86_defconfig:
-> 
-> 1. Keep using uclibc, enable isc-dhcp server and client
-> Buildroot does not have any awk flavor installed in output/host, so
-> mawk from build host is used. Build dhcp. The result is ok: both
-> dhclient and dhcpd are installed on the target.
-> 
-> 2. Switch to glibc, enable isc-dhcp server and client
-> Note that glibc package has host-gawk among its dependencies. So in
-> this case build host awk (mawk) differs from buildroot host awk (gawk).
-> Build dhcp. The result is not ok: neither dhclient nor dhcpd are
-> installed to the target.
-> 
-> Regards,
-> Sergey
-> 
->  package/dhcp/dhcp.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-> index 988c7792dc..4a9e98485c 100644
-> --- a/package/dhcp/dhcp.mk
-> +++ b/package/dhcp/dhcp.mk
-> @@ -10,6 +10,7 @@ DHCP_INSTALL_STAGING = YES
->  DHCP_LICENSE = MPL-2.0
->  DHCP_LICENSE_FILES = LICENSE
->  DHCP_DEPENDENCIES = bind
-> +DHCP_DEPENDENCIES = bind host-gawk
->  DHCP_CPE_ID_VENDOR = isc
+> diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+> index 97a1a143ec..2df81e6d37 100644
+> --- a/package/gd/gd.mk
+> +++ b/package/gd/gd.mk
+> @@ -36,7 +36,7 @@ endif
+>  ifeq ($(BR2_PACKAGE_LIBICONV),y)
+>  GD_DEPENDENCIES += libiconv
+>  # not strictly needed for gd, but ensures -liconv ends up in gdlib.pc
+> -GD_CONF_ENV += LIBS="-liconv"
+> +GD_CONF_ENV += LIBS_PRIVATES="-liconv"
+>  endif
 >  
->  # use libtool-enabled configure.ac
-> @@ -22,6 +23,8 @@ DHCP_CONF_ENV = \
->  		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
->  	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
->  
-> +DHCP_CONF_ENV += ac_cv_prog_AWK=$(HOST_DIR)/bin/gawk
-> +
->  DHCP_CONF_OPTS = \
->  	--with-libbind=$(STAGING_DIR)/usr \
->  	--with-randomdev=/dev/random \
+>  ifeq ($(BR2_PACKAGE_JPEG),y)
 > 
