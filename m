@@ -1,111 +1,146 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 May 2021 11:10:57 +0200
-Subject: [Buildroot] [git commit] package/hostapd: fix build with
+Date: Thu, 20 May 2021 11:15:05 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/hostapd: fix build with
  CVE-2021-30004 changes
-Message-ID: <20210520084213.A51D380FFE@busybox.osuosl.org>
+In-Reply-To: <20210520054853.15608-1-geomatsi@gmail.com>
+References: <20210520054853.15608-1-geomatsi@gmail.com>
+Message-ID: <20210520091505.GY2268078@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75496165dc5aa291941a995d43f65efeb35766f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Sergey, All,
 
-Commit d65586f45a22 ("package/hostapd: add upstream patch to fix
-CVE-2021-30004") added security patch from hostapd upstream without
-required ASN.1 helpers. Backport and adapt two commits from the
-hostapd upstream to add missing headers and helpers.
+On 2021-05-20 08:48 +0300, Sergey Matyukevich spake thusly:
+> Commit d65586f45a22 ("package/hostapd: add upstream patch to fix
+> CVE-2021-30004") added security patch from hostapd upstream without
+> required ASN.1 helpers. Backport and adapt two commits from the
+> hostapd upstream to add missing headers and helpers.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/8f56cf556efbf447633ce873a21635f5adbc3cd2/
+> 
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/8f56cf556efbf447633ce873a21635f5adbc3cd2/
+Applied to master, thanks.
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-[yann.morin.1998 at free.fr: slightly reformat the patches]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...de-stdbool.h-to-allow-C99-bool-to-be-used.patch | 32 +++++++++++++++++++
- ...elper-functions-for-recognizing-tag-value.patch | 37 ++++++++++++++++++++++
- 2 files changed, 69 insertions(+)
+I've slightly adapated the commits, as we do nmot want the numbering in
+the patches, and I took the opportunity to slightly update the
+backports.
 
-diff --git a/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch b/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
-new file mode 100644
-index 0000000000..e52dbdb694
---- /dev/null
-+++ b/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
-@@ -0,0 +1,32 @@
-+From 99cf89555313056d3a8fa54b21d02dc880b363e1 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <jouni@codeaurora.org>
-+Date: Mon, 20 Apr 2020 20:29:31 +0300
-+Subject: [PATCH] Include stdbool.h to allow C99 bool to be used
-+
-+We have practically started requiring some C99 features, so might as
-+well finally go ahead and bring in the C99 bool as well.
-+
-+Signed-off-by: Jouni Malinen <jouni@codeaurora.org>
-+[geomatsi at gmail.com: backport from upstream]
-+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-+[yann.morin.1998 at free.fr: keep upstream sha1 in header, drop numbering]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ src/utils/includes.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/utils/includes.h b/src/utils/includes.h
-+index 75513fc8c..741fc9c14 100644
-+--- a/src/utils/includes.h
-++++ b/src/utils/includes.h
-+@@ -18,6 +18,7 @@
-+ 
-+ #include <stdlib.h>
-+ #include <stddef.h>
-++#include <stdbool.h>
-+ #include <stdio.h>
-+ #include <stdarg.h>
-+ #include <string.h>
-+-- 
-+2.25.1
-+
-diff --git a/package/hostapd/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch b/package/hostapd/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
-new file mode 100644
-index 0000000000..a5415e7daf
---- /dev/null
-+++ b/package/hostapd/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
-@@ -0,0 +1,37 @@
-+From 9a990e8c4eb92dd64e0ec483599820e45c35ac23 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Sat, 13 Mar 2021 23:14:23 +0200
-+Subject: [PATCH] ASN.1: Add helper functions for recognizing tag values
-+
-+Signed-off-by: Jouni Malinen <j@w1.fi>
-+[geomatsi at gmail.com: backport asn1_is_null() from upstream 9a990e8c4eb9]
-+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-+[yann.morin.1998 at free.fr: 
-+  - reformat, keep the upstream sha1 and title,
-+  - drop numbering
-+]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ src/tls/asn1.h | 102 +++++++++++++++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 102 insertions(+)
-+
-+diff --git a/src/tls/asn1.h b/src/tls/asn1.h
-+index de3430adb..a4d1be473 100644
-+--- a/src/tls/asn1.h
-++++ b/src/tls/asn1.h
-+@@ -66,6 +66,12 @@ struct wpabuf * asn1_build_alg_id(const struct asn1_oid *oid,
-+ unsigned long asn1_bit_string_to_long(const u8 *buf, size_t len);
-+ int asn1_oid_equal(const struct asn1_oid *a, const struct asn1_oid *b);
-+ 
-++static inline bool asn1_is_null(const struct asn1_hdr *hdr)
-++{
-++	return hdr->class == ASN1_CLASS_UNIVERSAL &&
-++		hdr->tag == ASN1_TAG_NULL;
-++}
-++
-+ extern struct asn1_oid asn1_sha1_oid;
-+ extern struct asn1_oid asn1_sha256_oid;
-+ 
-+-- 
-+2.25.1
-+
+While at it, I noticed that wpa_supplicant is also impacted by
+CVE-2021-30004, and we have backported a few patches too:
+
+    a8fbe67b9b16 package/wpa_supplicant: add upstream patch to fix CVE-2021-30004
+
+And those patches also contain references to asn1_is_null(). I could not
+find any autobuilder issu about that, though... Could you check if we
+also need to carry similar patches for wpa_supplicant, please?
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...dbool.h-to-allow-C99-bool-to-be-used.patch | 32 +++++++++++++++++
+>  .../0004-ASN.1-add-asn1_is_null-helper.patch  | 34 +++++++++++++++++++
+>  2 files changed, 66 insertions(+)
+>  create mode 100644 package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+>  create mode 100644 package/hostapd/0004-ASN.1-add-asn1_is_null-helper.patch
+> 
+> diff --git a/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch b/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+> new file mode 100644
+> index 0000000000..74bd85f2af
+> --- /dev/null
+> +++ b/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+> @@ -0,0 +1,32 @@
+> +From b2feaf8fc6f3b1bed6c17cb1871889c66a2877dc Mon Sep 17 00:00:00 2001
+> +From: Jouni Malinen <jouni@codeaurora.org>
+> +Date: Mon, 20 Apr 2020 20:29:31 +0300
+> +Subject: [PATCH 3/4] Include stdbool.h to allow C99 bool to be used
+> +
+> +We have practically started requiring some C99 features, so might as
+> +well finally go ahead and bring in the C99 bool as well.
+> +
+> +Signed-off-by: Jouni Malinen <jouni@codeaurora.org>
+> +Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> +
+> +Backport of commit 99cf89555313 ("Include stdbool.h to allow C99 bool
+> +to be used") to hostapd v2.9.
+> +---
+> + src/utils/includes.h | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/src/utils/includes.h b/src/utils/includes.h
+> +index 75513fc8c..741fc9c14 100644
+> +--- a/src/utils/includes.h
+> ++++ b/src/utils/includes.h
+> +@@ -18,6 +18,7 @@
+> + 
+> + #include <stdlib.h>
+> + #include <stddef.h>
+> ++#include <stdbool.h>
+> + #include <stdio.h>
+> + #include <stdarg.h>
+> + #include <string.h>
+> +-- 
+> +2.31.1
+> +
+> diff --git a/package/hostapd/0004-ASN.1-add-asn1_is_null-helper.patch b/package/hostapd/0004-ASN.1-add-asn1_is_null-helper.patch
+> new file mode 100644
+> index 0000000000..62e77e28ae
+> --- /dev/null
+> +++ b/package/hostapd/0004-ASN.1-add-asn1_is_null-helper.patch
+> @@ -0,0 +1,34 @@
+> +From 93179bfeed9282c5a17fc62f6cafaf9d95f91f3f Mon Sep 17 00:00:00 2001
+> +From: Sergey Matyukevich <geomatsi@gmail.com>
+> +Date: Thu, 20 May 2021 08:29:55 +0300
+> +Subject: [PATCH 4/4] ASN.1: add asn1_is_null helper
+> +
+> +Partially backport commit 9a990e8c4eb9 ("ASN.1: Add helper functions for
+> +recognizing tag values") to hostapd v2.9: add ASN.1 helper required to
+> +backport CVE-2021-30004 fix.
+> +
+> +Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> +---
+> + src/tls/asn1.h | 6 ++++++
+> + 1 file changed, 6 insertions(+)
+> +
+> +diff --git a/src/tls/asn1.h b/src/tls/asn1.h
+> +index 6bd7df565..77b94ef34 100644
+> +--- a/src/tls/asn1.h
+> ++++ b/src/tls/asn1.h
+> +@@ -66,6 +66,12 @@ void asn1_oid_to_str(const struct asn1_oid *oid, char *buf, size_t len);
+> + unsigned long asn1_bit_string_to_long(const u8 *buf, size_t len);
+> + int asn1_oid_equal(const struct asn1_oid *a, const struct asn1_oid *b);
+> + 
+> ++static inline bool asn1_is_null(const struct asn1_hdr *hdr)
+> ++{
+> ++	return hdr->class == ASN1_CLASS_UNIVERSAL &&
+> ++		hdr->tag == ASN1_TAG_NULL;
+> ++}
+> ++
+> + extern struct asn1_oid asn1_sha1_oid;
+> + extern struct asn1_oid asn1_sha256_oid;
+> + 
+> +-- 
+> +2.31.1
+> +
+> -- 
+> 2.31.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
