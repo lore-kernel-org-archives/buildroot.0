@@ -1,21 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 May 2021 10:51:12 +0200
-Subject: [Buildroot] [PATCH 1/2] package/docker-engine: drop
- BR2_PACKAGE_LVM2_APP_LIBRARY
-In-Reply-To: <20210517170609.810302-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 17 May 2021 19:06:08 +0200")
-References: <20210517170609.810302-1-fontaine.fabrice@gmail.com>
-Message-ID: <87tumxaiv3.fsf@dell.be.48ers.dk>
+Date: Thu, 20 May 2021 11:05:27 +0200
+Subject: [Buildroot] [PATCH 1/1] libtirpc: bump version to 1.3.2
+In-Reply-To: <20210517174340.13697-1-petr.vorel@gmail.com> (Petr Vorel's
+ message of "Mon, 17 May 2021 19:43:40 +0200")
+References: <20210517174340.13697-1-petr.vorel@gmail.com>
+Message-ID: <87pmxlai7c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
- > lvm2 app library is not needed to build devicemapper filesystem driver
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+ > ---
+ > Tested:
+ >                     bootlin-armv5-uclibc [1/6]: OK
+ >                      bootlin-armv7-glibc [2/6]: OK
+ >                    bootlin-armv7m-uclibc [3/6]: OK
+ >                      bootlin-x86-64-musl [4/6]: OK
+ >                       br-arm-full-static [5/6]: OK
+ >                             sourcery-arm [6/6]: OK
+ > 6 builds, 0 skipped, 0 build failed, 0 legal-info failed
 
 Committed to 2021.02.x, thanks.
 
