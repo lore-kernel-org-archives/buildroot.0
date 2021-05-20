@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C0C3C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:25:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5605FC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:26:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C767160F22
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:25:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C767160F22
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 18F9F60F22
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:26:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 18F9F60F22
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DF5E608A3;
-	Tue,  3 Aug 2021 22:25:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1D2E40585;
+	Tue,  3 Aug 2021 22:26:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0HIZhDKY8yfa; Tue,  3 Aug 2021 22:25:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id diJSVGVm4UZd; Tue,  3 Aug 2021 22:26:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E716760863;
-	Tue,  3 Aug 2021 22:25:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 03E4D1BF349
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FC28405C2;
+	Tue,  3 Aug 2021 22:26:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0620F1BF9AA
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A2CDD835C9
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9EA3540595
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T4c2LkEKtRwy for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 54hV_eIkeJvZ for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F06CE83AE2
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 93CFB40430
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4618887884; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id E865285F62; Tue,  3 Aug 2021 21:09:41 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 27 Jul 2021 23:29:07 +0200
+Date: Thu, 20 May 2021 09:19:32 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c23612b5db036fe89accb8db48690d1ce1be4b1b
-X-Git-Newrev: f982f7043419dea2d21ebe20c1b383633a517674
+X-Git-Oldrev: 3d78dbace207b6b93416b27abcb85dbccde97a6b
+X-Git-Newrev: edb32a03b5f989c57dfef0a4a3f939a5c2bce63f
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211021.4618887884@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/scanpypi: fix flake8
- errors
+Message-Id: <20210803210941.E865285F62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libraw: depends on
+ BR2_TOOLCHAIN_HAS_SYNC_4
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,45 +70,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f982f7043419dea2d21ebe20c1b383633a517674
+commit: https://git.buildroot.net/buildroot/commit/?id=edb32a03b5f989c57dfef0a4a3f939a5c2bce63f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit e43c0509442c746bea305aa2b0a5f7ff5adfd142 introduced two flake8
-errors:
+libraw needs __sync_fetch_and_add since version 0.20.0 and
+https://github.com/LibRaw/LibRaw/commit/d1975cb0e055d2bfe58c9d845c9a3e57c346a2f9
 
-utils/scanpypi:300:26: E231 missing whitespace after ','
-utils/scanpypi:302:9: F841 local variable 'setup' is assigned to but never used
+This will fix the following build failure with imagemagick which is
+raised since commit 2f47cfade4b298350d056f6d9a7525b837e2ba23:
 
-The first one is easily fixed. The second one needs a little bit of
-explanation. Before commit e43c0509, the return value of
-imp.load_module() was used to be able to explicitly call the 'setup'
-function in it in case the metadata was not populated. Since that
-commit, calling that function is no longer needed, since setup.py is
-executed in exactly the same way as when it's run from the command line,
-so if that doesn't work, it's completely broken anyway. Therefore, we
-can simply discard the return value of imp.load_module().
+/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libraw_r.so: undefined reference to `__sync_fetch_and_add_4'
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fixes:
+ - http://autobuild.buildroot.org/results/900df43bd418d2da0c3ec875db1c5564dd857e94
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- utils/scanpypi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/efl/Config.in    | 1 +
+ package/libraw/Config.in | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 04c43f9311..9dede4e119 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -297,9 +297,9 @@ class BuildrootPackage():
-         """
-         current_dir = os.getcwd()
-         os.chdir(self.tmp_extract)
--        sys.path.insert(0,self.tmp_extract)
-+        sys.path.insert(0, self.tmp_extract)
-         s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
--        setup = imp.load_module('__main__', s_file, s_path, s_desc)
-+        imp.load_module('__main__', s_file, s_path, s_desc)
-         if self.metadata_name in self.setup_args:
-             pass
-         elif self.metadata_name.replace('_', '-') in self.setup_args:
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 305d1469a7..05ded72cf7 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -258,6 +258,7 @@ config BR2_PACKAGE_EFL_WEBP
+ 
+ config BR2_PACKAGE_EFL_LIBRAW
+ 	bool "libraw loader"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libraw
+ 	select BR2_PACKAGE_LIBRAW
+ 	help
+ 	  This option enables the Evas generic Libraw loader
+diff --git a/package/libraw/Config.in b/package/libraw/Config.in
+index de763cd36a..631123c2d3 100644
+--- a/package/libraw/Config.in
++++ b/package/libraw/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBRAW
+ 	bool "libraw"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  libraw is a raw image manipulation library
+@@ -7,4 +8,5 @@ config BR2_PACKAGE_LIBRAW
+ 	  http://www.libraw.org/
+ 
+ comment "libraw needs a toolchain w/ C++"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
