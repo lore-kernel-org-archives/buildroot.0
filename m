@@ -1,59 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 May 2021 21:45:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libfuse3: add CPE variables
-In-Reply-To: <20210520193154.183344-1-fontaine.fabrice@gmail.com>
-References: <20210520193154.183344-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210520194546.GE3208066@scaer>
+Date: Thu, 20 May 2021 21:50:41 +0200
+Subject: [Buildroot] [git commit branch/next] package/libglib2: bump version
+ to 2.68.2
+Message-ID: <20210520192213.BA358886B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ecb2ea34f3d20078bcc46f274374b4c0f7f072c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-05-20 21:31 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:libfuse_project:libfuse is a valid CPE identifier for this
-> package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibfuse_project%3Alibfuse
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Includes an important bugfix: #2387 json-glib does not build with glib 2.68.1
 
-Applied to master, thanks.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libglib2/0002-remove-cpp-requirement.patch | 2 +-
+ package/libglib2/libglib2.hash                     | 4 ++--
+ package/libglib2/libglib2.mk                       | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libfuse3/libfuse3.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-> index d61e313391..b1624ba887 100644
-> --- a/package/libfuse3/libfuse3.mk
-> +++ b/package/libfuse3/libfuse3.mk
-> @@ -8,6 +8,8 @@ LIBFUSE3_VERSION = 3.10.3
->  LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
->  LIBFUSE3_LICENSE = LGPL-2.1
->  LIBFUSE3_LICENSE_FILES = LICENSE
-> +LIBFUSE3_CPE_ID_VENDOR = libfuse_project
-> +LIBFUSE3_CPE_ID_PRODUCT = libfuse
->  LIBFUSE3_INSTALL_STAGING = YES
->  LIBFUSE3_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
->  LIBFUSE3_CONF_OPTS = \
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libglib2/0002-remove-cpp-requirement.patch b/package/libglib2/0002-remove-cpp-requirement.patch
+index 35d46e161b..9393bd258a 100644
+--- a/package/libglib2/0002-remove-cpp-requirement.patch
++++ b/package/libglib2/0002-remove-cpp-requirement.patch
+@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
+ @@ -1,4 +1,4 @@
+ -project('glib', 'c', 'cpp',
+ +project('glib', 'c',
+-   version : '2.68.1',
++   version : '2.68.2',
+    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+    meson_version : '>= 0.49.2',
+ @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index e3a3aa7561..15e0085f78 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.68/glib-2.68.1.sha256sum
+-sha256  241654b96bd36b88aaa12814efc4843b578e55d47440103727959ac346944333  glib-2.68.1.tar.xz
++# https://download.gnome.org/sources/glib/2.68/glib-2.68.2.sha256sum
++sha256  ecc7798a9cc034eabdfd7f246e6dd461cdbf1175fcc2e9867cc7da7b7309e0fb  glib-2.68.2.tar.xz
+ # License files, locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index e3263ce9ce..4f13622e36 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGLIB2_VERSION_MAJOR = 2.68
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
