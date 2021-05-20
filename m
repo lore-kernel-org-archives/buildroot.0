@@ -1,39 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 May 2021 12:59:36 +0200
-Subject: [Buildroot] [PATCH 2/2] support/testing: test_glxinfo load X11
- modules in the right order
-In-Reply-To: <f88891fa-a83d-9e1a-54de-5b1effeb2de8@gmail.com> (Romain Naour's
- message of "Thu, 20 May 2021 12:15:25 +0200")
-References: <20210513141149.3154510-1-romain.naour@gmail.com>
- <20210513141149.3154510-2-romain.naour@gmail.com>
- <87lf89ahm3.fsf@dell.be.48ers.dk>
- <f88891fa-a83d-9e1a-54de-5b1effeb2de8@gmail.com>
-Message-ID: <87zgwp8ycn.fsf@dell.be.48ers.dk>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 20 May 2021 14:09:24 +0300
+Subject: [Buildroot] [PATCH v2 0/2] Update to latest libsoup2
+In-Reply-To: <20210519212637.1282972-1-aperez@igalia.com>
+References: <20210519212637.1282972-1-aperez@igalia.com>
+Message-ID: <20210520110926.1592027-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+Hello all,
 
-Hi,
+While working on the WebKit package updates the last days I noticed that the
+version of libsoup2 in Buildroot is a tad old, and it seemed fitting to submit
+a patch set for updating it. Recent versions have a new dependency on libpsl,
+so a new package for it is added as well.
 
- >> > Fixes:
- >> > https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661899
- >> 
- >> > [1] https://forums.gentoo.org/viewtopic-p-8245578.html#8245578
- >> 
- >> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- >> 
- >> Is this also applicable to 2021.02.x, E.G. where we use the older swrast
- >> driver?
+Cheers,
+-Adrian
 
- > This patch is needed after the switch to the gallium swrast.
- > Since the test_glxinfo was working for the 2021.02 release the backport is not
- > needed.
+Adrian Perez de Castro (2):
+  package/libpsl: new package
+  package/libsoup: bump to version 2.66.5
 
-Ok, thanks!
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/libpsl/Config.in                      |  7 +++++
+ package/libpsl/libpsl.hash                    |  6 +++++
+ package/libpsl/libpsl.mk                      | 27 +++++++++++++++++++
+ .../0001-Revert-tld-parser-use-Python-3.patch | 27 -------------------
+ package/libsoup/Config.in                     |  1 +
+ package/libsoup/libsoup.hash                  |  4 +--
+ package/libsoup/libsoup.mk                    | 20 +++++++-------
+ 9 files changed, 55 insertions(+), 39 deletions(-)
+ create mode 100644 package/libpsl/Config.in
+ create mode 100644 package/libpsl/libpsl.hash
+ create mode 100644 package/libpsl/libpsl.mk
+ delete mode 100644 package/libsoup/0001-Revert-tld-parser-use-Python-3.patch
 
 -- 
-Bye, Peter Korsgaard
+2.31.1
