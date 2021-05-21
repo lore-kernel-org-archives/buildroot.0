@@ -1,139 +1,61 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 21 May 2021 13:37:37 +0300
-Subject: [Buildroot] [PATCH v3 2/2] package/libsoup: bump to version 2.66.5
-In-Reply-To: <20210521103737.3802646-1-aperez@igalia.com>
-References: <20210520110926.1592027-1-aperez@igalia.com>
- <20210521103737.3802646-1-aperez@igalia.com>
-Message-ID: <20210521103737.3802646-3-aperez@igalia.com>
+From: Weber, Matthew L                            Collins <Matthew.Weber@collins.com>
+Date: Fri, 21 May 2021 10:59:01 +0000
+Subject: [Buildroot] [External] Re: [PATCH/NEXT: 00/11] selinux
+ packages: bump versions
+In-Reply-To: <20210521100632.GJ3208066@scaer>
+References: <20210520174649.1188340-1-aduskett@gmail.com>,
+ <20210521100632.GJ3208066@scaer>
+Message-ID: <DM2P110MB0105A9D9DE2A48B511681BECF2299@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change libsoup to version 2.66.5, which introduces many fixes. This
-needs adding the libpsl dependency, and switching over to Meson as the
-autotools based build system is no more. The existing patch is not
-needed anymore.
+Yann,
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
-Changes v1 -> v2 -> v3:
-  - None.
----
- .../0001-Revert-tld-parser-use-Python-3.patch | 27 -------------------
- package/libsoup/Config.in                     |  1 +
- package/libsoup/libsoup.hash                  |  4 +--
- package/libsoup/libsoup.mk                    | 20 +++++++-------
- 4 files changed, 13 insertions(+), 39 deletions(-)
- delete mode 100644 package/libsoup/0001-Revert-tld-parser-use-Python-3.patch
+> From: Yann E. MORIN <yann.morin.1998@free.fr>
+> Sent: Friday, May 21, 2021 5:06 AM
+> To: Adam Duskett <aduskett@gmail.com>
+> Cc: buildroot at buildroot.org <buildroot@buildroot.org>; Marcus Folkesson <marcus.folkesson@gmail.com>; Antoine Tenart <atenart@kernel.org>; Shotwell, Clayton L Collins <Clayton.Shotwell@collins.com>; Weber, Matthew L Collins <Matthew.Weber@collins.com>
+> Subject: [External] Re: [Buildroot] [PATCH/NEXT: 00/11] selinux packages: bump versions
+> ?
+> Adam, All,
+>
+> On 2021-05-20 10:46 -0700, Adam Duskett spake thusly:
+> > The selinux project also now uses the respective package versions for the
+> > release URL's, so we change that as well.
+> >
+> > Adam Duskett (11):
+> >?? package/libsepol: bump to version 3.2
+> >?? package/libsepol/Config.in: Add policy version 33
+> >?? package/libsemanage: bump to version 3.2
+> >?? package/libselinux: bump to version 3.2
+> >?? package/policycoreutils: bump to version 3.2
+> >?? package/checkpolicy: bump to version 3.2
+> >?? package/restorecond: bump to version 3.2
+> >?? package/semodule-utils: bump to version 3.2
+> >?? package/selinux-python: bump to version 3.2
+> >?? package/setools: bump to version 4.4.0
+> >?? package/audit: bump to version 3.0.1
+>
+> Entire series applied to next, thanks.
+>
+> As discussed on IRC, could you look into either;
+>
+> ? - increasing the timeout of the selinux tests,
+>
+> ? - or, better, ensure that we start the qe;u instance with a proper
+> ??? virtual HWRNGmm as suggested by Matt and Khem;
+> ??? * start qemu with:
+> ??????? -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0
+> ??? * ensure virtio-rng is built-in to the kernel we use
 
-diff --git a/package/libsoup/0001-Revert-tld-parser-use-Python-3.patch b/package/libsoup/0001-Revert-tld-parser-use-Python-3.patch
-deleted file mode 100644
-index c27ee986c6..0000000000
---- a/package/libsoup/0001-Revert-tld-parser-use-Python-3.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 015926c80fa3e9704f05cbc1ad17f0a877f8de09 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Sat, 1 Sep 2018 15:39:04 +0200
--Subject: [PATCH] Revert "tld-parser: use Python 3"
--
--This reverts commit 4b924e573da307436169d5ef7e04c0ab85b36ef9. The
--script runs just fine with Python 2.x, there is no reason to enforce
--using Python 3.x.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- libsoup/tld-parser.py | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/libsoup/tld-parser.py b/libsoup/tld-parser.py
--index a743471a..5d9d2ba5 100755
----- a/libsoup/tld-parser.py
--+++ b/libsoup/tld-parser.py
--@@ -1,4 +1,4 @@
---#!/usr/bin/env python3
--+#!/usr/bin/env python
-- 
-- # Generate tld rules
-- # Copyright (C) 2012 Red Hat, Inc.
---- 
--2.14.4
--
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index f6f8fde968..47adfb33f2 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBSOUP
- 	depends on BR2_USE_MMU # glib2
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBPSL
- 	select BR2_PACKAGE_SQLITE
- 	help
- 	  libsoup is an HTTP client/server library. It uses GObject
-diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
-index 666bbc278b..3b9009884d 100644
---- a/package/libsoup/libsoup.hash
-+++ b/package/libsoup/libsoup.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.62/libsoup-2.62.3.sha256sum
--sha256	d312ade547495c2093ff8bda61f9b9727a98cfdae339f3263277dd39c0451172  libsoup-2.62.3.tar.xz
-+# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.66/libsoup-2.66.5.sha256sum
-+sha256  ee43be1485bd95b686236b1e0043ec6edb761a538616c9c63004d7d1979bb139  libsoup-2.66.5.tar.xz
- # Locally calculated
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index 44808225ea..1617940c8f 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBSOUP_VERSION_MAJOR = 2.62
--LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).3
-+LIBSOUP_VERSION_MAJOR = 2.66
-+LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).5
- LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
- LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
- LIBSOUP_LICENSE = LGPL-2.0+
-@@ -13,27 +13,27 @@ LIBSOUP_LICENSE_FILES = COPYING
- LIBSOUP_CPE_ID_VENDOR = gnome
- LIBSOUP_INSTALL_STAGING = YES
- LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
--LIBSOUP_CONF_OPTS = --disable-glibtest --enable-vala=no --with-gssapi=no
-+LIBSOUP_CONF_OPTS = -Dtests=false -Dvapi=false -Dgssapi=false
- LIBSOUP_DEPENDENCIES = host-pkgconf host-libglib2 \
--	libglib2 libxml2 sqlite host-intltool
-+	libglib2 libpsl libxml2 sqlite host-intltool
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--LIBSOUP_CONF_OPTS += --with-introspection
-+LIBSOUP_CONF_OPTS += -Dintrospection=true
- LIBSOUP_DEPENDENCIES += gobject-introspection
- else
--LIBSOUP_CONF_OPTS += --without-introspection
-+LIBSOUP_CONF_OPTS += -Dintrospection=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBSOUP_GNOME),y)
--LIBSOUP_CONF_OPTS += --with-gnome
-+LIBSOUP_CONF_OPTS += -Dgnome=true
- else
--LIBSOUP_CONF_OPTS += --without-gnome
-+LIBSOUP_CONF_OPTS += -Dgnome=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
- LIBSOUP_DEPENDENCIES += glib-networking
- else
--LIBSOUP_CONF_OPTS += --disable-tls-check
-+LIBSOUP_CONF_OPTS += -Dtls_check=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
--- 
-2.31.1
+A pattern for this was merged in the docker compose test (a9219660d30).  However, this test uses the base test 'builtin" kernel. Update steps would roughly be:
+1) Update to the qemu_cmd's for "builtin" kernels in support/testing/infra/emulator.py
+2) Kernel rebuilds on "builtin" images to support (if CONFIG not already selected) as they are binary downloads for runtest use
+3) Rerun of the whole test suite...
+
+So maybe easier to go with option 1 and extend timeouts for now?
+
+Matt
