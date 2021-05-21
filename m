@@ -1,35 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 21 May 2021 16:44:33 +0200
-Subject: [Buildroot] [PATCH 0/2] package/lvm2: fix installation (branch
- yem/lvm2-fixes)
-Message-ID: <cover.1621608266.git.yann.morin.1998@free.fr>
+Date: Fri, 21 May 2021 16:44:35 +0200
+Subject: [Buildroot] [PATCH 1/2] package/lvm2: fix inverted logic that is
+ confusing
+In-Reply-To: <cover.1621608266.git.yann.morin.1998@free.fr>
+References: <cover.1621608266.git.yann.morin.1998@free.fr>
+Message-ID: <eb20b6e4abe02eb0af674b787e49a8370c5491f6.1621608266.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Commit ff0f55e38197 (lvm2: replace !BR2_PACKAGE_LVM2_DMSETUP_ONLY by
+BR2_PACKAGE_LVM2_STANDARD_INSTALL) changed a negative-logic option to a
+positive-logic option.
 
-This small series cleans up the installation of lvm2 after the recent
-version bump.
+However, it kept the ordering of the conditional block, which became a
+negatice-logic condition.
 
-Regards,
-Yann E. MORIN.
+This is confusing; let's fix that.
 
+Reported-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/lvm2/lvm2.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/lvm2: fix inverted logic that is confusing
-      package/lvm2: fix installation of systemd units
-
- package/lvm2/lvm2.mk | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
-
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 224dbf5d54..00baa50a86 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -46,13 +46,13 @@ else
+ LVM2_CONF_OPTS += --disable-selinux
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),)
++ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),y)
++LVM2_INSTALL_STAGING_OPTS += install
++LVM2_INSTALL_TARGET_OPTS += install
++else
+ LVM2_MAKE_OPTS = device-mapper
+ LVM2_INSTALL_STAGING_OPTS += install_device-mapper
+ LVM2_INSTALL_TARGET_OPTS += install_device-mapper
+-else
+-LVM2_INSTALL_STAGING_OPTS += install
+-LVM2_INSTALL_TARGET_OPTS += install
+ endif
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
