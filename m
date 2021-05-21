@@ -1,75 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 21 May 2021 12:30:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uclibc: enable linuxthreads for
- MIPS
-In-Reply-To: <20210521095924.52527-1-mgliga@bitdefender.com>
-References: <20210521095924.52527-1-mgliga@bitdefender.com>
-Message-ID: <20210521103052.GK3208066@scaer>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 21 May 2021 13:37:35 +0300
+Subject: [Buildroot] [PATCH v3 0/2] Update to latest libsoup2
+In-Reply-To: <20210520110926.1592027-1-aperez@igalia.com>
+References: <20210520110926.1592027-1-aperez@igalia.com>
+Message-ID: <20210521103737.3802646-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mircea, All,
+Hello all,
 
-On 2021-05-21 12:59 +0300, Mircea GLIGA spake thusly:
-> Required for systems that do not have FUTEX support in kernel.
-> Native POSIX Thread Library (NPTL) relies on futexes, so we need
-> to use LinuxThreads instead on that systems.
-> 
-> Signed-off-by: Mircea GLIGA <mgliga@bitdefender.com>
-> ---
->  package/uclibc/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index e59fef3c69..ae27bc18fb 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -53,7 +53,7 @@ config BR2_PTHREADS_NATIVE
->  
->  config BR2_PTHREADS
->  	bool "linuxthreads"
-> -	depends on BR2_m68k || BR2_microblaze || BR2_or1k || BR2_arm || BR2_armeb || BR2_xtensa
-> +	depends on BR2_m68k || BR2_microblaze || BR2_or1k || BR2_arm || BR2_armeb || BR2_xtensa || BR2_mips || BR2_mipsel
+While working on the WebKit package updates the last days I noticed that the
+version of libsoup2 in Buildroot is a tad old, and it seemed fitting to submit
+a patch set for updating it. Recent versions have a new dependency on libpsl,
+so a new package for it is added as well.
 
-I was a bit annoyed by this very logn line, so I took the liberyty to
-split it, but then I looked at uclibc-ng for the list of architectures
-that still has LT support, and it turns out that almost all do, except:
+Cheers,
+-Adrian
 
-  - AArch64 (both endianness)
-  - riscv64
-  - metag (irrelevant for Buildroot)
+Adrian Perez de Castro (2):
+  package/libpsl: new package
+  package/libsoup: bump to version 2.66.5
 
-So I think it would be better to change the way we expose BR2_PTHREADS
-for uClibc:
-
-    config BR2_PTHREADS
-        bool "linuxthreads"
-        depends on !BR2_aarch64 && !BR2_aarch64_be
-        depends on !BR2_RISCV_64
-
-Could you please respin with this, please?
-
-Regards,
-Yann E. MORIN.
-
->  	select BR2_TOOLCHAIN_HAS_THREADS
->  
->  config BR2_PTHREADS_NONE
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/libpsl/Config.in                      |  8 ++++++
+ package/libpsl/libpsl.hash                    |  6 +++++
+ package/libpsl/libpsl.mk                      | 27 +++++++++++++++++++
+ .../0001-Revert-tld-parser-use-Python-3.patch | 27 -------------------
+ package/libsoup/Config.in                     |  1 +
+ package/libsoup/libsoup.hash                  |  4 +--
+ package/libsoup/libsoup.mk                    | 20 +++++++-------
+ 9 files changed, 56 insertions(+), 39 deletions(-)
+ create mode 100644 package/libpsl/Config.in
+ create mode 100644 package/libpsl/libpsl.hash
+ create mode 100644 package/libpsl/libpsl.mk
+ delete mode 100644 package/libsoup/0001-Revert-tld-parser-use-Python-3.patch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.31.1
