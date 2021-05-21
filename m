@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97C24C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:28:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ACD1C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:29:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 64B5161037
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:28:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 64B5161037
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 0085D6103C
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:29:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0085D6103C
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2EFD84045E;
-	Tue,  3 Aug 2021 22:28:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB44483BF5;
+	Tue,  3 Aug 2021 22:29:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HCEAmP36i870; Tue,  3 Aug 2021 22:28:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UZFGNk-UnGXr; Tue,  3 Aug 2021 22:29:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A5C0400F5;
-	Tue,  3 Aug 2021 22:28:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 421F283BE9;
+	Tue,  3 Aug 2021 22:29:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 100461BF9C1
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 120811BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB9EA40596
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0A8740597
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ut4pZF5pnE_C for <buildroot@lists.busybox.net>;
+ with ESMTP id q4IXr-gvoQDm for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A250C40527
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 71D07404F1
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id F3BD9861E0; Tue,  3 Aug 2021 21:09:41 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id BC52C810E2; Tue,  3 Aug 2021 21:09:42 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 20 May 2021 11:10:57 +0200
+Date: Fri, 21 May 2021 09:52:33 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: edb32a03b5f989c57dfef0a4a3f939a5c2bce63f
-X-Git-Newrev: 75496165dc5aa291941a995d43f65efeb35766f1
+X-Git-Oldrev: cfb83cc5a1a7defda1a04b1b014e55bd72fb77fa
+X-Git-Newrev: 9ec60e877e3cf9bb1a11f59ae18976f3f7087fed
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210941.F3BD9861E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/hostapd: fix build
- with CVE-2021-30004 changes
+Message-Id: <20210803210942.BC52C810E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dhcp: add host-gawk to
+ global dependencies and build environment
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,106 +70,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75496165dc5aa291941a995d43f65efeb35766f1
+commit: https://git.buildroot.net/buildroot/commit/?id=9ec60e877e3cf9bb1a11f59ae18976f3f7087fed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit d65586f45a22 ("package/hostapd: add upstream patch to fix
-CVE-2021-30004") added security patch from hostapd upstream without
-required ASN.1 helpers. Backport and adapt two commits from the
-hostapd upstream to add missing headers and helpers.
+DHCP package may silently fail to install binaries to the target image.
+The problem occurs when buildroot output/host and build server provide
+different flavors of awk. For instance, mawk on build server and gawk
+in buildroot output/host. In this case isc-dhcp configure script detects
+gawk in output/host and generates Makefiles specifying gawk without
+absolute path. During Buildroot installation phase, those Makefiles
+are used to install dhcp binaries. They attempt to use gawk without
+absolute path. However build host does not have gawk.
 
-Fixes:
-http://autobuild.buildroot.net/results/8f56cf556efbf447633ce873a21635f5adbc3cd2/
+To resolve the issue add host-gawk to dependencies and specify absolute
+path to host-gawk in dhcp configure script using DHCP_CONF_ENV.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-[yann.morin.1998@free.fr: slightly reformat the patches]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...de-stdbool.h-to-allow-C99-bool-to-be-used.patch | 32 +++++++++++++++++++
- ...elper-functions-for-recognizing-tag-value.patch | 37 ++++++++++++++++++++++
- 2 files changed, 69 insertions(+)
+ package/dhcp/dhcp.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch b/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
-new file mode 100644
-index 0000000000..e52dbdb694
---- /dev/null
-+++ b/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
-@@ -0,0 +1,32 @@
-+From 99cf89555313056d3a8fa54b21d02dc880b363e1 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <jouni@codeaurora.org>
-+Date: Mon, 20 Apr 2020 20:29:31 +0300
-+Subject: [PATCH] Include stdbool.h to allow C99 bool to be used
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 8d7157f357..db58870f88 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -9,7 +9,7 @@ DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
+ DHCP_INSTALL_STAGING = YES
+ DHCP_LICENSE = MPL-2.0
+ DHCP_LICENSE_FILES = LICENSE
+-DHCP_DEPENDENCIES = bind
++DHCP_DEPENDENCIES = bind host-gawk
+ DHCP_CPE_ID_VENDOR = isc
+ 
+ # use libtool-enabled configure.ac
+@@ -22,6 +22,8 @@ DHCP_CONF_ENV = \
+ 		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
+ 	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
+ 
++DHCP_CONF_ENV += ac_cv_prog_AWK=$(HOST_DIR)/bin/gawk
 +
-+We have practically started requiring some C99 features, so might as
-+well finally go ahead and bring in the C99 bool as well.
-+
-+Signed-off-by: Jouni Malinen <jouni@codeaurora.org>
-+[geomatsi@gmail.com: backport from upstream]
-+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-+[yann.morin.1998@free.fr: keep upstream sha1 in header, drop numbering]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ src/utils/includes.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/utils/includes.h b/src/utils/includes.h
-+index 75513fc8c..741fc9c14 100644
-+--- a/src/utils/includes.h
-++++ b/src/utils/includes.h
-+@@ -18,6 +18,7 @@
-+ 
-+ #include <stdlib.h>
-+ #include <stddef.h>
-++#include <stdbool.h>
-+ #include <stdio.h>
-+ #include <stdarg.h>
-+ #include <string.h>
-+-- 
-+2.25.1
-+
-diff --git a/package/hostapd/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch b/package/hostapd/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
-new file mode 100644
-index 0000000000..a5415e7daf
---- /dev/null
-+++ b/package/hostapd/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
-@@ -0,0 +1,37 @@
-+From 9a990e8c4eb92dd64e0ec483599820e45c35ac23 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Sat, 13 Mar 2021 23:14:23 +0200
-+Subject: [PATCH] ASN.1: Add helper functions for recognizing tag values
-+
-+Signed-off-by: Jouni Malinen <j@w1.fi>
-+[geomatsi@gmail.com: backport asn1_is_null() from upstream 9a990e8c4eb9]
-+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-+[yann.morin.1998@free.fr: 
-+  - reformat, keep the upstream sha1 and title,
-+  - drop numbering
-+]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ src/tls/asn1.h | 102 +++++++++++++++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 102 insertions(+)
-+
-+diff --git a/src/tls/asn1.h b/src/tls/asn1.h
-+index de3430adb..a4d1be473 100644
-+--- a/src/tls/asn1.h
-++++ b/src/tls/asn1.h
-+@@ -66,6 +66,12 @@ struct wpabuf * asn1_build_alg_id(const struct asn1_oid *oid,
-+ unsigned long asn1_bit_string_to_long(const u8 *buf, size_t len);
-+ int asn1_oid_equal(const struct asn1_oid *a, const struct asn1_oid *b);
-+ 
-++static inline bool asn1_is_null(const struct asn1_hdr *hdr)
-++{
-++	return hdr->class == ASN1_CLASS_UNIVERSAL &&
-++		hdr->tag == ASN1_TAG_NULL;
-++}
-++
-+ extern struct asn1_oid asn1_sha1_oid;
-+ extern struct asn1_oid asn1_sha256_oid;
-+ 
-+-- 
-+2.25.1
-+
+ DHCP_CONF_OPTS = \
+ 	--with-libbind=$(STAGING_DIR)/usr \
+ 	--with-randomdev=/dev/random \
+@@ -55,7 +57,6 @@ define DHCP_INSTALL_LIBS
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
+-DHCP_DEPENDENCIES += host-gawk
+ define DHCP_INSTALL_CTL_LIBS
+ 	$(MAKE) -C $(@D)/dhcpctl install-exec DESTDIR=$(TARGET_DIR)
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
