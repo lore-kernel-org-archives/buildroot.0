@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EEC3C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:33:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C728C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:33:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ECF0260240
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:33:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ECF0260240
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 33EB360240
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:33:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 33EB360240
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD87183C05;
-	Tue,  3 Aug 2021 22:33:30 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vldOh2h9uXoT; Tue,  3 Aug 2021 22:33:30 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B03983C01;
-	Tue,  3 Aug 2021 22:33:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 407B91BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 38E2E60A4E
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EC1060646;
+	Tue,  3 Aug 2021 22:33:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RPwA13BtsSZB for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rEXpS_oUch56; Tue,  3 Aug 2021 22:33:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7625E60585;
+	Tue,  3 Aug 2021 22:33:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 47F351BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4B9D7404F1
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a9llR2cgD9c4 for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB32F60902
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E7E664053C
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3119285583; Tue,  3 Aug 2021 21:10:12 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 456A7810E2; Tue,  3 Aug 2021 21:09:43 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 22:41:27 +0200
+Date: Fri, 21 May 2021 18:55:24 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d0a7e2bf9c8a7897e13eaaf6584b29a65c13df1c
-X-Git-Newrev: 4cf1efb04add60e5dcb3eb4edd9156a84d3e11ec
+X-Git-Oldrev: 5c07dfcc1a52e2804011574a3e022523a20546c8
+X-Git-Newrev: 51484b29cafce569ed1d9822e87de7bc16fb9d2e
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211012.3119285583@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lua-livr: bump to
- version 0.2.2
+Message-Id: <20210803210943.456A7810E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wpewebkit: select
+ gstreamer autoaudiosink
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,43 +70,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cf1efb04add60e5dcb3eb4edd9156a84d3e11ec
+commit: https://git.buildroot.net/buildroot/commit/?id=51484b29cafce569ed1d9822e87de7bc16fb9d2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff COPYRIGHT:
-- Copyright (C) 2018-2019 Francois Perrad.
-+ Copyright (C) 2018-2021 Francois Perrad.
+Select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT when multimedia
+support is enabled. This is needed at runtime to automatically select
+a suitable audio output element, otherwise WebKit will crash at an
+assertion due to the missing "autoaudiosink" element. More here:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  https://wpewebkit.org/about/faq.html#why-does-the-browser%2Flauncher-(e.g.-cog)-crash-when-trying-to-play-audio%3F
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/lua-livr/lua-livr.hash | 4 ++--
- package/lua-livr/lua-livr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/wpewebkit/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lua-livr/lua-livr.hash b/package/lua-livr/lua-livr.hash
-index a891420b49..73b0fefa71 100644
---- a/package/lua-livr/lua-livr.hash
-+++ b/package/lua-livr/lua-livr.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 a3890301ed5f393b585cab26ac944eddc9df41bfa2ab87c11785925193453493  lua-livr-0.2.1-1.src.rock
--sha256 8f09089acf52cfabcc2a44ec3a492dc261e0ae9df3c618f43b33805e696e02d8  lua-LIVR-0.2.1/COPYRIGHT
-+sha256 e2f39316b8a1e66420c56e8ddc9ce4c0118c1a240582f2ba52d7627da6dfb76d  lua-livr-0.2.2-1.src.rock
-+sha256 69fd426251454ea43a8068e58ac25d882922372de6b22e249bb56e00ea2cd834  lua-LIVR-0.2.2/COPYRIGHT
-diff --git a/package/lua-livr/lua-livr.mk b/package/lua-livr/lua-livr.mk
-index 25034b897b..3f114c725e 100644
---- a/package/lua-livr/lua-livr.mk
-+++ b/package/lua-livr/lua-livr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_LIVR_VERSION = 0.2.1-1
-+LUA_LIVR_VERSION = 0.2.2-1
- LUA_LIVR_NAME_UPSTREAM = lua-LIVR
- LUA_LIVR_LICENSE = MIT
- LUA_LIVR_LICENSE_FILES = $(LUA_LIVR_SUBDIR)/COPYRIGHT
+diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+index 640f7c7011..c8c66e8458 100644
+--- a/package/wpewebkit/Config.in
++++ b/package/wpewebkit/Config.in
+@@ -95,6 +95,7 @@ config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD
++	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
