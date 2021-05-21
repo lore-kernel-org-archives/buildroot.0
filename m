@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13640C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:36:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8D95C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:36:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D6E4761037
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:36:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D6E4761037
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 7416E6104F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:36:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7416E6104F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A40C740475;
-	Tue,  3 Aug 2021 22:36:37 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vhBRzIkfUoPU; Tue,  3 Aug 2021 22:36:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9509B40209;
-	Tue,  3 Aug 2021 22:36:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 01D531BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BEBC340598
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CE494159F;
+	Tue,  3 Aug 2021 22:36:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8oqGpHeK36mj for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mNeOr8BSNsJv; Tue,  3 Aug 2021 22:36:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9CDC41593;
+	Tue,  3 Aug 2021 22:36:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B8111BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7F60405C5
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 62VR16iGKZ6x for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1138740592
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 219BE404B4
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 5B67B87884; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 7896D7FCEC; Tue,  3 Aug 2021 21:09:43 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 31 Jul 2021 23:50:00 +0200
+Date: Fri, 21 May 2021 22:33:14 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 28c118814dbc394a4600f025b8e0f0f38b0d9eae
-X-Git-Newrev: ddd0330fe1360de5843f72306d2c766e3b4e6124
+X-Git-Oldrev: 48fd63e50440aabf463a65a9d7c5c32ba46f6af7
+X-Git-Newrev: 96c23d1d0f5fbe3da903507afa39393be844b565
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211024.5B67B87884@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/olsr: backport
- upstream patch to fix compat with gpsd 3.21
+Message-Id: <20210803210943.7896D7FCEC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/runc: security bump to
+ version 1.0.0-rc95
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,69 +70,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddd0330fe1360de5843f72306d2c766e3b4e6124
+commit: https://git.buildroot.net/buildroot/commit/?id=96c23d1d0f5fbe3da903507afa39393be844b565
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since the update of gpsd to 3.21, olsr was failing to build with:
+Fixes CVE-2021-30465: runc 1.0.0-rc94 and earlier are vulnerable to a symlink
+exchange attack whereby an attacker can request a seemingly-innocuous container
+configuration that actually results in the host filesystem being bind-mounted
+into the container, allowing for a container escape.
 
-src/gpsdclient.c: In function 'nmeaInfoFromGpsd':
-src/gpsdclient.c:373:14: error: 'struct gps_data_t' has no member named 'status'
-  373 |   if (gpsdata->status == STATUS_NO_FIX) {
-      |              ^~
-
-This is due to an API change in gpsd. This commit fixes that by
-backporting an upstream commit from olsr.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/d8c5564b24ff5b646cdd786d07b3a45ce5fa01ea/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...4-pud-adapt-gpsdclient.c-to-new-gpsd-3.21.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/olsr/0004-pud-adapt-gpsdclient.c-to-new-gpsd-3.21.patch b/package/olsr/0004-pud-adapt-gpsdclient.c-to-new-gpsd-3.21.patch
-new file mode 100644
-index 0000000000..8001343941
---- /dev/null
-+++ b/package/olsr/0004-pud-adapt-gpsdclient.c-to-new-gpsd-3.21.patch
-@@ -0,0 +1,35 @@
-+From 2f9ee6079b20fb5d3884472825a40c5c65550fa2 Mon Sep 17 00:00:00 2001
-+From: Nick Hainke <vincent@systemli.org>
-+Date: Sun, 30 May 2021 19:13:48 +0200
-+Subject: [PATCH] pud: adapt gpsdclient.c to new gpsd 3.21
-+
-+As mentioned:
-+"Move gps_data_t->status to gps_fix_t.status for better fix merging"
-+https://gitlab.com/gpsd/gpsd/-/commit/29991d6ffeb41ecfc8297db68bb68be0128c8514
-+
-+Signed-off-by: Nick Hainke <vincent@systemli.org>
-+Upstream: 79a28cdb4083b66c5d3a5f9c0d70dbdc86c0420c
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ lib/pud/src/gpsdclient.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/lib/pud/src/gpsdclient.c b/lib/pud/src/gpsdclient.c
-+index 2a7a26ee..a2a9cee0 100644
-+--- a/lib/pud/src/gpsdclient.c
-++++ b/lib/pud/src/gpsdclient.c
-+@@ -370,7 +370,11 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
-+           );
-+ 
-+   gpsdata->set &= ~STATUS_SET; /* always valid */
-++  #if GPSD_API_MAJOR_VERSION >= 10
-++  if (gpsdata->fix.status == STATUS_NO_FIX) {
-++  #else
-+   if (gpsdata->status == STATUS_NO_FIX) {
-++  #endif
-+     nmeaInfoClear(info);
-+     nmeaTimeSet(&info->utc, &info->present, NULL);
-+     return;
-+-- 
-+2.31.1
-+
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index d792947d5f..598bd3067f 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256	28378df983a3c586ed3ec8c76a774a9b10f36a0c323590a284b801cce95cc61f  runc-1.0.0-rc92.tar.gz
++sha256  02dac7f1a0dcfe55dd9820df787adedf030060870354915e7bba86f8487ce93c  runc-1.0.0-rc95.tar.gz
+ sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 14689bbde1..62b9f09bf2 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RUNC_VERSION_MAJOR = 1.0.0
+-RUNC_VERSION_MINOR = rc92
++RUNC_VERSION_MINOR = rc95
+ RUNC_VERSION = $(RUNC_VERSION_MAJOR)-$(RUNC_VERSION_MINOR)
+ RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
