@@ -1,62 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 21 May 2021 16:44:36 +0200
-Subject: [Buildroot] [PATCH 2/2] package/lvm2: fix installation of systemd
- units
-In-Reply-To: <cover.1621608266.git.yann.morin.1998@free.fr>
-References: <cover.1621608266.git.yann.morin.1998@free.fr>
-Message-ID: <7aca7804d91a74070a56be2b9d8781eb0fd82446.1621608266.git.yann.morin.1998@free.fr>
+From: Weber, Matthew L                            Collins <Matthew.Weber@collins.com>
+Date: Fri, 21 May 2021 16:10:00 +0000
+Subject: [Buildroot] [External] [PATCH 1/1] package/mtd: add
+ BR2_PACKAGE_MTD_UBIHEALTHD option
+In-Reply-To: <20210521152536.119635-1-luoxiaobing0926@gmail.com>
+References: <20210521152536.119635-1-luoxiaobing0926@gmail.com>
+Message-ID: <DM2P110MB010532B973B9D89D5F5078D3F2299@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we bump the version in commit 80997acd3587 (package/lvm2: bump
-version to 2.03.12), the installation of systemd units is no longer
-functional without a full installation.
+Xiaobing,
 
-As Pascal puts it: the systemd service files don't make a whole lot of
-sense when there isn't a full lvm2 install.
+> From: Xiaobing Luo <luoxiaobing0926@gmail.com>
+> Sent: Friday, May 21, 2021 10:25 AM
+> To: buildroot at buildroot.org <buildroot@buildroot.org>
+> Cc: Weber, Matthew L Collins <Matthew.Weber@collins.com>; Xiaobing Luo <luoxiaobing0926@gmail.com>
+> Subject: [External] [PATCH 1/1] package/mtd: add BR2_PACKAGE_MTD_UBIHEALTHD option
+> ?
+> mtd-utils-2.1.2 add ubihealthd daemon
+> package/mtd: add BR2_PACKAGE_MTD_UBIHEALTHD option
+>
+> Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
+> ---
 
-Move the conditional block that install system units, so that it only
-occurs when we do a full installation.
+It's great to see this daemon finally upstream!
 
-Fixes;
-    http://autobuild.buildroot.org/results/f47/f470ffb55625e2639cecde713442550eb532d0d7/
-    http://autobuild.buildroot.org/results/954/9547929292e81671fbe3a5b4bbc87a6424edb1ca/
-    http://autobuild.buildroot.org/results/303/30359c351a6ce2f9139494a531e036f0b0406ccf
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Co-Developped-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Cc: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/lvm2/lvm2.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 00baa50a86..5ce79768b6 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -49,16 +49,15 @@ endif
- ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),y)
- LVM2_INSTALL_STAGING_OPTS += install
- LVM2_INSTALL_TARGET_OPTS += install
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+LVM2_INSTALL_TARGET_OPTS += install_systemd_units install_systemd_generators
-+endif
- else
- LVM2_MAKE_OPTS = device-mapper
- LVM2_INSTALL_STAGING_OPTS += install_device-mapper
- LVM2_INSTALL_TARGET_OPTS += install_device-mapper
- endif
- 
--ifeq ($(BR2_INIT_SYSTEMD),y)
--LVM2_INSTALL_TARGET_OPTS += install_systemd_units install_systemd_generators
--endif
--
- ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
- endif
--- 
-2.25.1
+Reviewed-by: Matthew Weber <matthew.weber@collins.com>
