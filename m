@@ -1,64 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 21 May 2021 11:27:05 +0200
-Subject: [Buildroot] [PATCH 1/3] package/python-bluezero: depends on
- dbus-python and python-gobject
-In-Reply-To: <20210208005546.482866-1-grzegorz@blach.pl>
-References: <20210208005546.482866-1-grzegorz@blach.pl>
-Message-ID: <83710b43-6ca3-814e-32db-3090feb03ecf@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 21 May 2021 11:34:27 +0200
+Subject: [Buildroot] [git commit] package/waylandpp: add dependency to
+ BR2_INSTALL_LIBSTDCPP
+Message-ID: <20210521090532.9B22D8808E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ac16bb646fb8790654d9ae35bda39b4946d552d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+[yann.morin.1998 at free.fr: propagate the dependency to kodi]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/kodi/Config.in      | 1 +
+ package/waylandpp/Config.in | 6 ++++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-On 08/02/2021 01:55, Grzegorz Blach wrote:
-> As of version 0.4.0 observer.py uses dbus-python (to comunicate with BlueZ)
-> instead of python-aioblescan. Thus, all modules now depend on dbus-python.
-> 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-
- Applied to master, thanks.
-
- Since this is a fix, in the future, please add something like this to the
-commit message:
-
-Fixes:
-ModuleNotFoundError: No module named 'dbus'
-
-This indicates it as a fix in patchwork, so it stands out more between the +-400
-other patches. Also, it indicates to Peter that the patch should be backported
-to the stable branches.
-
-> ---
->  package/python-bluezero/Config.in | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/python-bluezero/Config.in b/package/python-bluezero/Config.in
-> index 9ea3686a2b..3a9e5df6b7 100644
-> --- a/package/python-bluezero/Config.in
-> +++ b/package/python-bluezero/Config.in
-> @@ -1,12 +1,9 @@
->  config BR2_PACKAGE_PYTHON_BLUEZERO
->  	bool "python-bluezero"
->  	depends on BR2_PACKAGE_PYTHON3
-> +	select BR2_PACKAGE_DBUS_PYTHON # runtime
-> +	select BR2_PACKAGE_PYTHON_GOBJECT # runtime
-
- After pushing, I noticed that you forgot to include the recursive dependencies
-of python-gobject. So I pushed a follow-up commit that adds them.
-
- Regards,
- Arnout
-
->  	help
->  	  Python library for Bluetooth Low Energy (BLE) on Linux.
->  
-> -	  For central.py, peripheral.py and broadcaster.py you need
-> -	  to enable the dbus-python and the bluez5-utils package.
-> -	  For observer.py, you need to enable the python-aioblescan
-> -	  package.
-> -
->  	  https://github.com/ukBaz/python-bluezero
-> 
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 782cca3c18..f4cfc6380c 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -35,6 +35,7 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND
+ 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # waylandpp
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # waylandpp
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # waylandpp
++	depends on BR2_INSTALL_LIBSTDCPP # waylandpp
+ 	depends on BR2_PACKAGE_WAYLAND # waylandpp
+ 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+ 	select BR2_PACKAGE_LIBXKBCOMMON
+diff --git a/package/waylandpp/Config.in b/package/waylandpp/Config.in
+index 3d7362b3c0..86ca965056 100644
+--- a/package/waylandpp/Config.in
++++ b/package/waylandpp/Config.in
+@@ -3,14 +3,16 @@ config BR2_PACKAGE_WAYLANDPP
+ 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_WAYLAND
+ 	help
+ 	  Wayland C++ bindings
+ 
+ 	  https://github.com/NilsBrause/waylandpp
+ 
+-comment "waylandpp needs an OpenGL-EGL/wayland backend, a toolchain w/ gcc >= 4.9, host gcc >= 4.9"
++comment "waylandpp needs an OpenGL-EGL/wayland backend, a toolchain w/ gcc >= 4.9, host gcc >= 4.9, C++ support"
+ 	depends on BR2_PACKAGE_WAYLAND
+ 	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+ 		!BR2_HOST_GCC_AT_LEAST_4_9 || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_INSTALL_LIBSTDCPP
