@@ -1,30 +1,102 @@
-From: Weber, Matthew L                            Collins <Matthew.Weber@collins.com>
-Date: Fri, 21 May 2021 16:10:00 +0000
-Subject: [Buildroot] [External] [PATCH 1/1] package/mtd: add
- BR2_PACKAGE_MTD_UBIHEALTHD option
-In-Reply-To: <20210521152536.119635-1-luoxiaobing0926@gmail.com>
-References: <20210521152536.119635-1-luoxiaobing0926@gmail.com>
-Message-ID: <DM2P110MB010532B973B9D89D5F5078D3F2299@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 21 May 2021 18:22:20 +0200
+Subject: [Buildroot] [PATCH 5/5] package/python3-cryptography: add
+ python3 host variant
+In-Reply-To: <1621475383746.46545@lab126.com>
+References: <1621475383746.46545@lab126.com>
+Message-ID: <20210521162220.GL3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Xiaobing,
+Chan, All,
 
-> From: Xiaobing Luo <luoxiaobing0926@gmail.com>
-> Sent: Friday, May 21, 2021 10:25 AM
-> To: buildroot at buildroot.org <buildroot@buildroot.org>
-> Cc: Weber, Matthew L Collins <Matthew.Weber@collins.com>; Xiaobing Luo <luoxiaobing0926@gmail.com>
-> Subject: [External] [PATCH 1/1] package/mtd: add BR2_PACKAGE_MTD_UBIHEALTHD option
-> ?
-> mtd-utils-2.1.2 add ubihealthd daemon
-> package/mtd: add BR2_PACKAGE_MTD_UBIHEALTHD option
->
-> Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
+(Not sure if I should address you as Chan, or Donald. Apologies if I
+messed up; just tell me! ;-) )
+
+On 2021-05-20 01:49 +0000, Chan, Donald via buildroot spake thusly:
+> Add a python3 host variant since another downstream OSS component
+> (OP-TEE) uses buildroot and it will depend on a python3 host variant
+> of python-cryptography.
+
+So, those 5 patches are OK (but still, see below for some comments)),
+but there is still nothing that uses those new host packages in the
+Buildroot tree.
+
+You said OP-TEE OS would use them, but you haven't provided a patch that
+does so, which still leaves those packages unused.
+
+I've had a quick look at the optee_os git tree [0], but I could not see
+anything thsat uses puthon cryptography.
+
+[0] https://github.com/OP-TEE/optee_os
+
+So, I guess those will only become usefull when optee_os is updated in
+Buildroot, to a version where python cryptography is actually used.
+
+In which case, adding those pacakges should be part of the series that
+updates optee_os.
+
+> Signed-off-by: Donald Chan <hoiho@lab126.com>
 > ---
+[--SNIP--]
+> diff --git a/package/python3-cryptography/python3-cryptography.mk b/package/python3-cryptography/python3-cryptography.mk
+> new file mode 100644
+> index 0000000..ce8e9e6
+> --- /dev/null
+> +++ b/package/python3-cryptography/python3-cryptography.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# python3-cryptography
+> +#
+> +################################################################################
+> +
+> +# Please keep in sync with package/python-cryptography/python-cryptography.mk
+> +PYTHON3_CRYPTOGRAPHY_VERSION = 3.0
 
-It's great to see this daemon finally upstream!
+This is not the latest version. 3.4.7 is not available:
 
-Reviewed-by: Matthew Weber <matthew.weber@collins.com>
+    https://pypi.org/project/cryptography/
+
+I haven't looked at the others, but be sure to submit packages that use
+the latest version. If that is not possible, then state so in the commit
+log, and explain why the latest can't be used.
+
+While waiting for an update to optee_os that does need those packages,
+I've marked them postponed in Patchwork [1], which basically means
+they'll no longer appear in the list of pending patches. Please include
+them uin the series that updates optee_os when that is ready.
+
+Thanks you! :-)
+
+Regards,
+Yann E. MORIN.
+
+> +PYTHON3_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON3_CRYPTOGRAPHY_VERSION).tar.gz
+> +PYTHON3_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/bf/ac/552fc8729d90393845cc3a2062facf4a89dcbe206fa78771d60ddaae7554
+> +PYTHON3_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+> +PYTHON3_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+> +PYTHON3_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+> +PYTHON3_CRYPTOGRAPHY_DEPENDENCIES = openssl
+> +HOST_PYTHON3_CRYPTOGRAPHY_DEPENDENCIES = host-python3-cffi host-python3-pip host-python3-six
+> +HOST_PYTHON3_CRYPTOGRAPHY_DL_SUBDIR = python-cryptography
+> +HOST_PYTHON3_CRYPTOGRAPHY_NEEDS_HOST_PYTHON = python3
+> +
+> +$(eval $(host-python-package))
+> -- 
+> 2.17.1
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
