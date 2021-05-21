@@ -1,102 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 21 May 2021 18:22:20 +0200
-Subject: [Buildroot] [PATCH 5/5] package/python3-cryptography: add
- python3 host variant
-In-Reply-To: <1621475383746.46545@lab126.com>
-References: <1621475383746.46545@lab126.com>
-Message-ID: <20210521162220.GL3208066@scaer>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 21 May 2021 16:51:43 +0000
+Subject: [Buildroot] [Bug 13816] xstart failed since update the x11 libraries
+In-Reply-To: <bug-13816-163@https.bugs.busybox.net/>
+References: <bug-13816-163@https.bugs.busybox.net/>
+Message-ID: <bug-13816-163-TJ8mjNgqfl@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chan, All,
+https://bugs.busybox.net/show_bug.cgi?id=13816
 
-(Not sure if I should address you as Chan, or Donald. Apologies if I
-messed up; just tell me! ;-) )
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+(In reply to jwack from comment #0)
 
-On 2021-05-20 01:49 +0000, Chan, Donald via buildroot spake thusly:
-> Add a python3 host variant since another downstream OSS component
-> (OP-TEE) uses buildroot and it will depend on a python3 host variant
-> of python-cryptography.
+fbdevHWSave() is defined here [1], so this looks more like a module loading
+order problem, see e.g. [2] for similar example...
 
-So, those 5 patches are OK (but still, see below for some comments)),
-but there is still nothing that uses those new host packages in the
-Buildroot tree.
+If not please provide a minimal (but complete) defconfig against plain
+buildroot version to reproduce the problem...
 
-You said OP-TEE OS would use them, but you haven't provided a patch that
-does so, which still leaves those packages unused.
-
-I've had a quick look at the optee_os git tree [0], but I could not see
-anything thsat uses puthon cryptography.
-
-[0] https://github.com/OP-TEE/optee_os
-
-So, I guess those will only become usefull when optee_os is updated in
-Buildroot, to a version where python cryptography is actually used.
-
-In which case, adding those pacakges should be part of the series that
-updates optee_os.
-
-> Signed-off-by: Donald Chan <hoiho@lab126.com>
-> ---
-[--SNIP--]
-> diff --git a/package/python3-cryptography/python3-cryptography.mk b/package/python3-cryptography/python3-cryptography.mk
-> new file mode 100644
-> index 0000000..ce8e9e6
-> --- /dev/null
-> +++ b/package/python3-cryptography/python3-cryptography.mk
-> @@ -0,0 +1,19 @@
-> +################################################################################
-> +#
-> +# python3-cryptography
-> +#
-> +################################################################################
-> +
-> +# Please keep in sync with package/python-cryptography/python-cryptography.mk
-> +PYTHON3_CRYPTOGRAPHY_VERSION = 3.0
-
-This is not the latest version. 3.4.7 is not available:
-
-    https://pypi.org/project/cryptography/
-
-I haven't looked at the others, but be sure to submit packages that use
-the latest version. If that is not possible, then state so in the commit
-log, and explain why the latest can't be used.
-
-While waiting for an update to optee_os that does need those packages,
-I've marked them postponed in Patchwork [1], which basically means
-they'll no longer appear in the list of pending patches. Please include
-them uin the series that updates optee_os when that is ready.
-
-Thanks you! :-)
-
-Regards,
-Yann E. MORIN.
-
-> +PYTHON3_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON3_CRYPTOGRAPHY_VERSION).tar.gz
-> +PYTHON3_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/bf/ac/552fc8729d90393845cc3a2062facf4a89dcbe206fa78771d60ddaae7554
-> +PYTHON3_CRYPTOGRAPHY_SETUP_TYPE = setuptools
-> +PYTHON3_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
-> +PYTHON3_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
-> +PYTHON3_CRYPTOGRAPHY_DEPENDENCIES = openssl
-> +HOST_PYTHON3_CRYPTOGRAPHY_DEPENDENCIES = host-python3-cffi host-python3-pip host-python3-six
-> +HOST_PYTHON3_CRYPTOGRAPHY_DL_SUBDIR = python-cryptography
-> +HOST_PYTHON3_CRYPTOGRAPHY_NEEDS_HOST_PYTHON = python3
-> +
-> +$(eval $(host-python-package))
-> -- 
-> 2.17.1
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+[1]
+https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/hw/xfree86/fbdevhw/fbdevhw.c#L748
+[2] http://lists.busybox.net/pipermail/buildroot/2021-May/310053.html
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+You are receiving this mail because:
+You are on the CC list for the bug.
