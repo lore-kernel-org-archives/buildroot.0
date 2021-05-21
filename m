@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 21 May 2021 22:34:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mutt: security bump to version
- 2.0.7
-In-Reply-To: <20210521185729.295695-1-fontaine.fabrice@gmail.com>
-References: <20210521185729.295695-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210521203419.GS3208066@scaer>
+Date: Fri, 21 May 2021 22:35:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to
+ version 3.4.5
+In-Reply-To: <20210521185544.287236-1-fontaine.fabrice@gmail.com>
+References: <20210521185544.287236-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210521203503.GT3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,12 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-05-21 20:57 +0200, Fabrice Fontaine spake thusly:
-> Fix CVE-2021-32055: Mutt 1.11.0 through 2.0.x before 2.0.7 (and NeoMutt
-> 2019-10-25 through 2021-05-04) has a $imap_qresync issue in which
-> imap/util.c has an out-of-bounds read in situations where an IMAP
-> sequence set ends with a comma. NOTE: the $imap_qresync setting for
-> QRESYNC is not enabled by default.
-> 
-> https://gitlab.com/muttmua/mutt/-/blob/mutt-2-0-7-rel/ChangeLog
+On 2021-05-21 20:55 +0200, Fabrice Fontaine spake thusly:
+> https://www.wireshark.org/security/wnpa-sec-2021-04.html
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+I've added a reference to the corresponding CVE: CVE-2021-22207.
 
 Applied to master, thanks.
 
@@ -30,32 +26,37 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/mutt/mutt.hash | 2 +-
->  package/mutt/mutt.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/wireshark/wireshark.hash | 6 +++---
+>  package/wireshark/wireshark.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-> index 8fccbd3709..6e1ca32851 100644
-> --- a/package/mutt/mutt.hash
-> +++ b/package/mutt/mutt.hash
-> @@ -1,3 +1,3 @@
+> diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+> index 71703a2a8b..57290b9060 100644
+> --- a/package/wireshark/wireshark.hash
+> +++ b/package/wireshark/wireshark.hash
+> @@ -1,6 +1,6 @@
+> -# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.4.txt
+> -sha1  fa5c553596dcc6a59735f96a9a0845e3c40abab2  wireshark-3.4.4.tar.xz
+> -sha256  729cd11e9715c600e5ad74ca472bacf8af32c20902192d5f2b271268511d4d29  wireshark-3.4.4.tar.xz
+> +# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.5.txt
+> +sha1  d01a9b5f58206fb458fe9fc2dac88ad0ea7152ce  wireshark-3.4.5.tar.xz
+> +sha256  de1aafd100a1e1207c850d180e97dd91ab8da0f5eb6beec545f725cdb145d333  wireshark-3.4.5.tar.xz
+>  
 >  # Locally calculated
-> -sha256  81e31c45895fd624747f19106aa2697d2aa135049ff2e9e9db0a6ed876bcb598  mutt-2.0.6.tar.gz
-> +sha256  957688c6a521561992d4f2f27cf9feb239c7c6c0042c6061c0e474a7dd26cc91  mutt-2.0.7.tar.gz
->  sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-> diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-> index 004a88d0b3..d7fcc01ad2 100644
-> --- a/package/mutt/mutt.mk
-> +++ b/package/mutt/mutt.mk
+>  sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+> diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+> index 8cdc7305d0..3d656cf349 100644
+> --- a/package/wireshark/wireshark.mk
+> +++ b/package/wireshark/wireshark.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -MUTT_VERSION = 2.0.6
-> +MUTT_VERSION = 2.0.7
->  MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
->  MUTT_LICENSE = GPL-2.0+
->  MUTT_LICENSE_FILES = GPL
+> -WIRESHARK_VERSION = 3.4.4
+> +WIRESHARK_VERSION = 3.4.5
+>  WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+>  WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+>  WIRESHARK_LICENSE = wireshark license
 > -- 
 > 2.30.2
 > 
