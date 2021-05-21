@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 21 May 2021 18:56:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: select gstreamer
- autoaudiosink
-In-Reply-To: <20210519213237.1286906-1-aperez@igalia.com>
-References: <20210519213237.1286906-1-aperez@igalia.com>
-Message-ID: <20210521165619.GN3208066@scaer>
+Date: Fri, 21 May 2021 18:56:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: select missing
+ multimedia deps
+In-Reply-To: <20210519213827.1291299-1-aperez@igalia.com>
+References: <20210519213827.1291299-1-aperez@igalia.com>
+Message-ID: <20210521165651.GO3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,44 @@ To: buildroot@busybox.net
 
 Adrian, All,
 
-On 2021-05-20 00:32 +0300, Adrian Perez de Castro spake thusly:
-> Select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT when multimedia
-> support is enabled. This is needed at runtime to automatically select
-> a suitable audio output element, otherwise WebKit will crash at an
-> assertion due to the missing "autoaudiosink" element. More here:
+On 2021-05-20 00:38 +0300, Adrian Perez de Castro spake thusly:
+> Select a few missing multimedia related dependencies:
 > 
->   https://wpewebkit.org/about/faq.html#why-does-the-browser%2Flauncher-(e.g.-cog)-crash-when-trying-to-play-audio%3F
+> - BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT is needed for
+>   "autoaudiosink"; not having this element can cause a crash as
+>   it is used unconditionally.
+> - BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA and
+>   BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX are needed for
+>   WebM video playback.
 > 
 > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-Applied to master, thanks. As I messed up, I also accidentally applied
-to next...
+Applied to master, thanks. As I mesed up too, I also accidentally
+applied to next...
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/wpewebkit/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  package/webkitgtk/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-> index 640f7c7011..c8c66e8458 100644
-> --- a/package/wpewebkit/Config.in
-> +++ b/package/wpewebkit/Config.in
-> @@ -95,6 +95,7 @@ config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
+> diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+> index 4ea931fde1..2ba8d47660 100644
+> --- a/package/webkitgtk/Config.in
+> +++ b/package/webkitgtk/Config.in
+> @@ -98,8 +98,11 @@ config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
 >  	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
 >  	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
 >  	select BR2_PACKAGE_GST1_PLUGINS_GOOD
 > +	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT
 >  	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4
->  	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
+> +	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
 >  	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP
+> +	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
+>  	select BR2_PACKAGE_GST1_LIBAV
+>  	help
+>  	  This option pulls in all of the required dependencies
 > -- 
 > 2.31.1
 > 
