@@ -1,138 +1,48 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 21 May 2021 20:41:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: link with -latomic
-Message-ID: <20210521184126.33794-1-fontaine.fabrice@gmail.com>
+Date: Fri, 21 May 2021 20:55:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
+ 3.4.5
+Message-ID: <20210521185544.287236-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build failure whiwh is raised since bump to version 0.3.26 in commit
-a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9
-
-Fixes:
- - http://autobuild.buildroot.org/results/b5305e8e7dd1a5e8bfaba72b06251056ba7d1af1
+https://www.wireshark.org/security/wnpa-sec-2021-04.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0003-fix-linking-with-latomic.patch       | 108 ++++++++++++++++++
- 1 file changed, 108 insertions(+)
- create mode 100644 package/pipewire/0003-fix-linking-with-latomic.patch
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pipewire/0003-fix-linking-with-latomic.patch b/package/pipewire/0003-fix-linking-with-latomic.patch
-new file mode 100644
-index 0000000000..77132173e4
---- /dev/null
-+++ b/package/pipewire/0003-fix-linking-with-latomic.patch
-@@ -0,0 +1,108 @@
-+From 5068aa54bde4e40d6faa8de43d93216bc3001a3e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 21 May 2021 07:47:46 +0200
-+Subject: [PATCH] fix linking with -latomic
-+
-+Linking with -latomic has been added to pipewire-jack since
-+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b8c58c74d835ee2918f9e391abd65f9e0132bdb4
-+
-+However, this is not the right place to add this dependency, atomic_dep
-+should be added to pipewire_dep to avoid the following build failure:
-+
-+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: src/pipewire/libpipewire-0.3.so.0.326.0.p/filter.c.o: in function `impl_node_process':
-+filter.c:(.text+0xf28): undefined reference to `__atomic_fetch_add_4'
-+
-+Indeed, atomic operation such as __atomic_fetch_add is used in libcamera
-+as well as in ./spa/plugins/libcamera/libcamera_wrapper.cpp,
-+./spa/include/spa/utils/ringbuffer.h and ./spa/include/spa/graph/graph.h
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/b5305e8e7dd1a5e8bfaba72b06251056ba7d1af1
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/689]
-+---
-+ meson.build                   | 11 +++++------
-+ pipewire-jack/src/meson.build |  4 ++--
-+ src/pipewire/meson.build      |  4 ++--
-+ 3 files changed, 9 insertions(+), 10 deletions(-)
-+
-+diff --git a/meson.build b/meson.build
-+index b6b4553b..1308373a 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -157,7 +157,7 @@ test_8_byte_atomic = '''
-+ int main(void)
-+ {
-+   int64_t eight;
-+-  __atomic_store_n(&eight, 123, __ATOMIC_SEQ_CST);
-++  __atomic_fetch_add(&eight, 123, __ATOMIC_SEQ_CST);
-+   return 0;
-+ }
-+ '''
-+@@ -166,16 +166,15 @@ int main(void)
-+ # operations on any reasonable architecture.
-+ if cc.links(
-+   test_8_byte_atomic,
-+-  name : '8-byte __atomic_store_n without libatomic')
-++  name : '8-byte __atomic_fetch_add without libatomic')
-+   atomic_dep = dependency('', required: false)
-+ elif cc.links(
-+   test_8_byte_atomic,
-+   dependencies : libatomic,
-+-  name : '8-byte __atomic_store_n with libatomic')
-++  name : '8-byte __atomic_fetch_add with libatomic')
-+   atomic_dep = libatomic
-+-elif get_option('pipewire-jack').enabled()
-+-  # Currently only required for the JACK backend
-+-  error('8-byte atomic operations are required for pipewire-jack')
-++else
-++  error('8-byte atomic operations are required')
-+ endif
-+ 
-+ cdata = configuration_data()
-+diff --git a/pipewire-jack/src/meson.build b/pipewire-jack/src/meson.build
-+index 83e340ba..386abc7f 100644
-+--- a/pipewire-jack/src/meson.build
-++++ b/pipewire-jack/src/meson.build
-+@@ -42,7 +42,7 @@ pipewire_jack = shared_library('jack',
-+     version : libversion,
-+     c_args : pipewire_jack_c_args,
-+     include_directories : [configinc, jack_inc],
-+-    dependencies : [pipewire_dep, atomic_dep, mathlib],
-++    dependencies : [pipewire_dep, mathlib],
-+     install : true,
-+     install_dir : libjack_path,
-+ )
-+@@ -53,7 +53,7 @@ pipewire_jackserver = shared_library('jackserver',
-+     version : libversion,
-+     c_args : pipewire_jack_c_args,
-+     include_directories : [configinc, jack_inc],
-+-    dependencies : [pipewire_dep, atomic_dep, mathlib],
-++    dependencies : [pipewire_dep, mathlib],
-+     install : true,
-+     install_dir : libjack_path,
-+ )
-+diff --git a/src/pipewire/meson.build b/src/pipewire/meson.build
-+index e80f3633..0fa6643a 100644
-+--- a/src/pipewire/meson.build
-++++ b/src/pipewire/meson.build
-+@@ -102,12 +102,12 @@ libpipewire = shared_library(pipewire_name, pipewire_sources,
-+   c_args : libpipewire_c_args,
-+   include_directories : [pipewire_inc, configinc, spa_inc],
-+   install : true,
-+-  dependencies : [dl_lib, mathlib, pthread_lib, libintl_dep, ],
-++  dependencies : [dl_lib, mathlib, pthread_lib, libintl_dep, atomic_dep, ],
-+ )
-+ 
-+ pipewire_dep = declare_dependency(link_with : libpipewire,
-+   include_directories : [pipewire_inc, configinc, spa_inc],
-+-  dependencies : [pthread_lib, ],
-++  dependencies : [pthread_lib, atomic_dep, ],
-+ )
-+ 
-+ pkgconfig.generate(filebase : 'lib at 0@'.format(pipewire_name),
-+-- 
-+2.30.2
-+
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 71703a2a8b..57290b9060 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.4.txt
+-sha1  fa5c553596dcc6a59735f96a9a0845e3c40abab2  wireshark-3.4.4.tar.xz
+-sha256  729cd11e9715c600e5ad74ca472bacf8af32c20902192d5f2b271268511d4d29  wireshark-3.4.4.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.5.txt
++sha1  d01a9b5f58206fb458fe9fc2dac88ad0ea7152ce  wireshark-3.4.5.tar.xz
++sha256  de1aafd100a1e1207c850d180e97dd91ab8da0f5eb6beec545f725cdb145d333  wireshark-3.4.5.tar.xz
+ 
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 8cdc7305d0..3d656cf349 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 3.4.4
++WIRESHARK_VERSION = 3.4.5
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 -- 
 2.30.2
