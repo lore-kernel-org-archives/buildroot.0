@@ -1,13 +1,16 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 21 May 2021 13:15:17 -0700
-Subject: [Buildroot] [PATCH 1/1] package/runc: security bump to version
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 21 May 2021 22:33:14 +0200
+Subject: [Buildroot] [git commit] package/runc: security bump to version
  1.0.0-rc95
-Message-ID: <20210521201517.214072-1-christian@paral.in>
+Message-ID: <20210521200419.9967B890FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=96c23d1d0f5fbe3da903507afa39393be844b565
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes CVE-2021-30465: runc 1.0.0-rc94 and earlier are vulnerable to a symlink
 exchange attack whereby an attacker can request a seemingly-innocuous container
@@ -15,6 +18,7 @@ configuration that actually results in the host filesystem being bind-mounted
 into the container, allowing for a container escape.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/runc/runc.hash | 2 +-
  package/runc/runc.mk   | 2 +-
@@ -42,5 +46,3 @@ index 14689bbde1..62b9f09bf2 100644
  RUNC_VERSION = $(RUNC_VERSION_MAJOR)-$(RUNC_VERSION_MINOR)
  RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
  RUNC_LICENSE = Apache-2.0
--- 
-2.31.1
