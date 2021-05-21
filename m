@@ -1,41 +1,33 @@
-From: Mircea GLIGA <mgliga@bitdefender.com>
-Date: Fri, 21 May 2021 16:41:22 +0300
-Subject: [Buildroot] [PATCH v2] package/uclibc: enable linuxthreads for all
- supported architectures
-In-Reply-To: <20210521095924.52527-1-mgliga@bitdefender.com>
-References: <20210521095924.52527-1-mgliga@bitdefender.com>
-Message-ID: <20210521134122.122426-1-mgliga@bitdefender.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 21 May 2021 16:00:08 +0200
+Subject: [Buildroot] [git commit] package/lvm2: drop legacy default
+Message-ID: <20210521133445.74100886DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Synchronize the list of architectures that have LinuxThreads support
-with the ones from uClibc-ng.
+commit: https://git.buildroot.net/buildroot/commit/?id=5c07dfcc1a52e2804011574a3e022523a20546c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mircea GLIGA <mgliga@bitdefender.com>
----
-Changes v1 -> v2:
-  - enable linuxthreads for all supported architectures,
-    not just MIPS (suggested by Yann E. MORIN)
----
- package/uclibc/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Commit f289b1b36f5c (legacy: drop options removed more than 5 years ago
+now) forgot to remove a legacy default.
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index e59fef3c69..2091166b62 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -53,7 +53,8 @@ config BR2_PTHREADS_NATIVE
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/lvm2/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+index f8bcdffb38..317027929e 100644
+--- a/package/lvm2/Config.in
++++ b/package/lvm2/Config.in
+@@ -26,7 +26,6 @@ if BR2_PACKAGE_LVM2
  
- config BR2_PTHREADS
- 	bool "linuxthreads"
--	depends on BR2_m68k || BR2_microblaze || BR2_or1k || BR2_arm || BR2_armeb || BR2_xtensa
-+	depends on !BR2_aarch64 && !BR2_aarch64_be
-+	depends on !BR2_RISCV_64
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PTHREADS_NONE
--- 
-2.31.1
+ config BR2_PACKAGE_LVM2_STANDARD_INSTALL
+ 	bool "standard install instead of only dmsetup"
+-	default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
+ 	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	help
