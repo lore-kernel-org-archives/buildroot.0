@@ -1,77 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 21 May 2021 22:03:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boost: disable logs with riscv32
-Message-ID: <20210521200323.426580-1-fontaine.fabrice@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 21 May 2021 13:15:17 -0700
+Subject: [Buildroot] [PATCH 1/1] package/runc: security bump to version
+ 1.0.0-rc95
+Message-ID: <20210521201517.214072-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-boost logs can't be built with riscv32 because it unconditionally uses
-__NR_futex:
+Fixes CVE-2021-30465: runc 1.0.0-rc94 and earlier are vulnerable to a symlink
+exchange attack whereby an attacker can request a seemingly-innocuous container
+configuration that actually results in the host filesystem being bind-mounted
+into the container, allowing for a container escape.
 
-libs/log/src/event.cpp: In member function 'void boost::log::v2_mt_posix::aux::futex_based_event::wait()':
-libs/log/src/event.cpp:38:29: error: '__NR_futex' was not declared in this scope
-   38 | #define BOOST_LOG_SYS_FUTEX __NR_futex
-      |                             ^~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/8c8135fd7c0517c66c9b3975c494da6d7934cc1b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/azmq/Config.in  | 3 +++
- package/boost/Config.in | 3 +++
- 2 files changed, 6 insertions(+)
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/azmq/Config.in b/package/azmq/Config.in
-index 37131a260a..6751d533a4 100644
---- a/package/azmq/Config.in
-+++ b/package/azmq/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_AZMQ
- 	bool "azmq"
-+	depends on !BR2_RISCV_32 # boost-log
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # boost-log
-@@ -22,9 +23,11 @@ config BR2_PACKAGE_AZMQ
- 	  https://github.com/zeromq/azmq
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index d792947d5f..598bd3067f 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256	28378df983a3c586ed3ec8c76a774a9b10f36a0c323590a284b801cce95cc61f  runc-1.0.0-rc92.tar.gz
++sha256  02dac7f1a0dcfe55dd9820df787adedf030060870354915e7bba86f8487ce93c  runc-1.0.0-rc95.tar.gz
+ sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 14689bbde1..62b9f09bf2 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- comment "azmq needs a toolchain w/ C++11, wchar and NPTL"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
- 		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
- 
- comment "azmq needs exception_ptr"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 3e96e1ede3..75bb81600a 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -240,6 +240,7 @@ comment "boost-locale needs a toolchain not affected by GCC bug 64735"
- 
- config BR2_PACKAGE_BOOST_LOG
- 	bool "boost-log"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
-@@ -253,10 +254,12 @@ config BR2_PACKAGE_BOOST_LOG
- 	  Logging library.
- 
- comment "boost-log needs a toolchain w/ NPTL"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
- comment "boost-log needs a toolchain not affected by GCC bug 64735"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
- config BR2_PACKAGE_BOOST_MATH
+ RUNC_VERSION_MAJOR = 1.0.0
+-RUNC_VERSION_MINOR = rc92
++RUNC_VERSION_MINOR = rc95
+ RUNC_VERSION = $(RUNC_VERSION_MAJOR)-$(RUNC_VERSION_MINOR)
+ RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
 -- 
-2.30.2
+2.31.1
