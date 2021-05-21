@@ -1,48 +1,77 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 21 May 2021 20:57:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mutt: security bump to version 2.0.7
-Message-ID: <20210521185729.295695-1-fontaine.fabrice@gmail.com>
+Date: Fri, 21 May 2021 22:03:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/boost: disable logs with riscv32
+Message-ID: <20210521200323.426580-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2021-32055: Mutt 1.11.0 through 2.0.x before 2.0.7 (and NeoMutt
-2019-10-25 through 2021-05-04) has a $imap_qresync issue in which
-imap/util.c has an out-of-bounds read in situations where an IMAP
-sequence set ends with a comma. NOTE: the $imap_qresync setting for
-QRESYNC is not enabled by default.
+boost logs can't be built with riscv32 because it unconditionally uses
+__NR_futex:
 
-https://gitlab.com/muttmua/mutt/-/blob/mutt-2-0-7-rel/ChangeLog
+libs/log/src/event.cpp: In member function 'void boost::log::v2_mt_posix::aux::futex_based_event::wait()':
+libs/log/src/event.cpp:38:29: error: '__NR_futex' was not declared in this scope
+   38 | #define BOOST_LOG_SYS_FUTEX __NR_futex
+      |                             ^~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/8c8135fd7c0517c66c9b3975c494da6d7934cc1b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/azmq/Config.in  | 3 +++
+ package/boost/Config.in | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index 8fccbd3709..6e1ca32851 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  81e31c45895fd624747f19106aa2697d2aa135049ff2e9e9db0a6ed876bcb598  mutt-2.0.6.tar.gz
-+sha256  957688c6a521561992d4f2f27cf9feb239c7c6c0042c6061c0e474a7dd26cc91  mutt-2.0.7.tar.gz
- sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 004a88d0b3..d7fcc01ad2 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/azmq/Config.in b/package/azmq/Config.in
+index 37131a260a..6751d533a4 100644
+--- a/package/azmq/Config.in
++++ b/package/azmq/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_AZMQ
+ 	bool "azmq"
++	depends on !BR2_RISCV_32 # boost-log
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # boost-log
+@@ -22,9 +23,11 @@ config BR2_PACKAGE_AZMQ
+ 	  https://github.com/zeromq/azmq
  
--MUTT_VERSION = 2.0.6
-+MUTT_VERSION = 2.0.7
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
+ comment "azmq needs a toolchain w/ C++11, wchar and NPTL"
++	depends on !BR2_RISCV_32
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
+ 		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
+ 
+ comment "azmq needs exception_ptr"
++	depends on !BR2_RISCV_32
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 3e96e1ede3..75bb81600a 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -240,6 +240,7 @@ comment "boost-locale needs a toolchain not affected by GCC bug 64735"
+ 
+ config BR2_PACKAGE_BOOST_LOG
+ 	bool "boost-log"
++	depends on !BR2_RISCV_32
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
+@@ -253,10 +254,12 @@ config BR2_PACKAGE_BOOST_LOG
+ 	  Logging library.
+ 
+ comment "boost-log needs a toolchain w/ NPTL"
++	depends on !BR2_RISCV_32
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 
+ comment "boost-log needs a toolchain not affected by GCC bug 64735"
++	depends on !BR2_RISCV_32
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 
+ config BR2_PACKAGE_BOOST_MATH
 -- 
 2.30.2
