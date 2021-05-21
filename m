@@ -1,150 +1,71 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 22 May 2021 00:00:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: link with -latomic
-In-Reply-To: <20210521184126.33794-1-fontaine.fabrice@gmail.com>
-References: <20210521184126.33794-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210522000035.234222d2@gmx.net>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sat, 22 May 2021 00:31:11 +0200
+Subject: [Buildroot] Spidermonkey bump version
+In-Reply-To: <20210520103341.GZ2268078@scaer>
+References: <a59a82c3-0000-73ca-6c6d-7ac2aef7ff2e@benettiengineering.com>
+ <20210520103341.GZ2268078@scaer>
+Message-ID: <0231243a-bd17-2c0a-7486-80a28fd662c4@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hi Yann, All,
 
-minor nitpick below...
+On 5/20/21 12:33 PM, Yann E. MORIN wrote:
+> Giulio, All,
+> 
+> On 2021-05-20 02:21 +0200, Giulio Benetti spake thusly:
+>> since I'm working on udisks bump version I've noticed its dependency
+>> spidermonkey that is pretty old. I've seen that download site points to a
+>> gentoo archive to save 200M of download without downloading entire Firefox.
+>> Would it make sense to change site back to [1] and bump it once 89.0 is
+>> released?
+> 
+> Here are my thoughts on that (mozjs == spidermonkey):
+> 
+>    - of course, it is a bigger archive, but that's not necessarily an
+>      issue in the grand scheme of things;
 
-On Fri, 21 May 2021 20:41:26 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+I agree
 
-> Fix build failure whiwh is raised since bump to version 0.3.26 in commit
+>    - the version we currently have does not require rust, but newer
+>      versions do; if we update, it means less architectures we can run
+>      spidermonkey, and thus polkit and its dependees, on;
+> 
+>    - OE is still using mozjs 60.9.0:
+>          https://git.openembedded.org/meta-openembedded/tree/meta-oe/dynamic-layers/meta-python/recipes-extended/mozjs/mozjs_60.9.0.bb
+> 
+>    - polkit 0.116 (which we currently have) is the last to accept
+>      mozjs-60; later versions of polkit require more recent versions of
+>      mozjs: polkit0.117 requires mozjs-68, and 0.118, mozjs-78:
+>          https://gitlab.freedesktop.org/polkit/polkit/-/blob/0.116/configure.ac#L82
+>          https://gitlab.freedesktop.org/polkit/polkit/-/blob/0.117/configure.ac#L83
+>          https://gitlab.freedesktop.org/polkit/polkit/-/blob/0.118/configure.ac#L83
+> 
+>> The only packages that use it is polkit that in order is used by:
+>> - udisks
+>> and optionally by:
+>> - gvfs
+>> - brltty
+>> - systemd
+> 
+> So, I'm all meh... Maybe we'll have to bite the bullet and bump mozjs if
+> we want to bump polkit (probably a good idea to avoid security issues?
+> Although there is no known CVE for polkit 0.116:
+> https://nvd.nist.gov/vuln/search/results?form_type=Advanced&results_type=overview&seach_type=all&query=cpe:2.3:a:polkit_project:polkit:0.116:*:*:*:*:*:*:*
+> which does not mean there is no unknown issue either...)
 
-s/whiwh/which/
+I'm giving a try and I've seen that until mozjs-78 configure file is 
+already present while on latest version firefox-89.0 there is not and 
+the whole build system changed.
 
-Regards,
-Peter
+Since we need spidermonkey 78 for polkit 0.118 I would go for bumping 
+spidermonkey to 0.78 if it's not too difficult.
+What do you think?
 
-> a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/b5305e8e7dd1a5e8bfaba72b06251056ba7d1af1
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0003-fix-linking-with-latomic.patch       | 108 ++++++++++++++++++
->  1 file changed, 108 insertions(+)
->  create mode 100644 package/pipewire/0003-fix-linking-with-latomic.patch
->
-> diff --git a/package/pipewire/0003-fix-linking-with-latomic.patch b/package/pipewire/0003-fix-linking-with-latomic.patch
-> new file mode 100644
-> index 0000000000..77132173e4
-> --- /dev/null
-> +++ b/package/pipewire/0003-fix-linking-with-latomic.patch
-> @@ -0,0 +1,108 @@
-> +From 5068aa54bde4e40d6faa8de43d93216bc3001a3e Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Fri, 21 May 2021 07:47:46 +0200
-> +Subject: [PATCH] fix linking with -latomic
-> +
-> +Linking with -latomic has been added to pipewire-jack since
-> +https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b8c58c74d835ee2918f9e391abd65f9e0132bdb4
-> +
-> +However, this is not the right place to add this dependency, atomic_dep
-> +should be added to pipewire_dep to avoid the following build failure:
-> +
-> +/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: src/pipewire/libpipewire-0.3.so.0.326.0.p/filter.c.o: in function `impl_node_process':
-> +filter.c:(.text+0xf28): undefined reference to `__atomic_fetch_add_4'
-> +
-> +Indeed, atomic operation such as __atomic_fetch_add is used in libcamera
-> +as well as in ./spa/plugins/libcamera/libcamera_wrapper.cpp,
-> +./spa/include/spa/utils/ringbuffer.h and ./spa/include/spa/graph/graph.h
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/b5305e8e7dd1a5e8bfaba72b06251056ba7d1af1
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status:
-> +https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/689]
-> +---
-> + meson.build                   | 11 +++++------
-> + pipewire-jack/src/meson.build |  4 ++--
-> + src/pipewire/meson.build      |  4 ++--
-> + 3 files changed, 9 insertions(+), 10 deletions(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index b6b4553b..1308373a 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -157,7 +157,7 @@ test_8_byte_atomic = '''
-> + int main(void)
-> + {
-> +   int64_t eight;
-> +-  __atomic_store_n(&eight, 123, __ATOMIC_SEQ_CST);
-> ++  __atomic_fetch_add(&eight, 123, __ATOMIC_SEQ_CST);
-> +   return 0;
-> + }
-> + '''
-> +@@ -166,16 +166,15 @@ int main(void)
-> + # operations on any reasonable architecture.
-> + if cc.links(
-> +   test_8_byte_atomic,
-> +-  name : '8-byte __atomic_store_n without libatomic')
-> ++  name : '8-byte __atomic_fetch_add without libatomic')
-> +   atomic_dep = dependency('', required: false)
-> + elif cc.links(
-> +   test_8_byte_atomic,
-> +   dependencies : libatomic,
-> +-  name : '8-byte __atomic_store_n with libatomic')
-> ++  name : '8-byte __atomic_fetch_add with libatomic')
-> +   atomic_dep = libatomic
-> +-elif get_option('pipewire-jack').enabled()
-> +-  # Currently only required for the JACK backend
-> +-  error('8-byte atomic operations are required for pipewire-jack')
-> ++else
-> ++  error('8-byte atomic operations are required')
-> + endif
-> +
-> + cdata = configuration_data()
-> +diff --git a/pipewire-jack/src/meson.build b/pipewire-jack/src/meson.build
-> +index 83e340ba..386abc7f 100644
-> +--- a/pipewire-jack/src/meson.build
-> ++++ b/pipewire-jack/src/meson.build
-> +@@ -42,7 +42,7 @@ pipewire_jack = shared_library('jack',
-> +     version : libversion,
-> +     c_args : pipewire_jack_c_args,
-> +     include_directories : [configinc, jack_inc],
-> +-    dependencies : [pipewire_dep, atomic_dep, mathlib],
-> ++    dependencies : [pipewire_dep, mathlib],
-> +     install : true,
-> +     install_dir : libjack_path,
-> + )
-> +@@ -53,7 +53,7 @@ pipewire_jackserver = shared_library('jackserver',
-> +     version : libversion,
-> +     c_args : pipewire_jack_c_args,
-> +     include_directories : [configinc, jack_inc],
-> +-    dependencies : [pipewire_dep, atomic_dep, mathlib],
-> ++    dependencies : [pipewire_dep, mathlib],
-> +     install : true,
-> +     install_dir : libjack_path,
-> + )
-> +diff --git a/src/pipewire/meson.build b/src/pipewire/meson.build
-> +index e80f3633..0fa6643a 100644
-> +--- a/src/pipewire/meson.build
-> ++++ b/src/pipewire/meson.build
-> +@@ -102,12 +102,12 @@ libpipewire = shared_library(pipewire_name, pipewire_sources,
-> +   c_args : libpipewire_c_args,
-> +   include_directories : [pipewire_inc, configinc, spa_inc],
-> +   install : true,
-> +-  dependencies : [dl_lib, mathlib, pthread_lib, libintl_dep, ],
-> ++  dependencies : [dl_lib, mathlib, pthread_lib, libintl_dep, atomic_dep, ],
-> + )
-> +
-> + pipewire_dep = declare_dependency(link_with : libpipewire,
-> +   include_directories : [pipewire_inc, configinc, spa_inc],
-> +-  dependencies : [pthread_lib, ],
-> ++  dependencies : [pthread_lib, atomic_dep, ],
-> + )
-> +
-> + pkgconfig.generate(filebase : 'lib at 0@'.format(pipewire_name),
-> +--
-> +2.30.2
-> +
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
