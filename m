@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C66DFC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:29:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAA5FC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:29:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 87FB860F56
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:29:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 87FB860F56
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 7555C60F58
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:29:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7555C60F58
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5FEB48397F;
-	Tue,  3 Aug 2021 21:29:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 51C4660590;
+	Tue,  3 Aug 2021 21:29:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xhbbRnUrFi-P; Tue,  3 Aug 2021 21:29:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id scrZpy9cFFL8; Tue,  3 Aug 2021 21:29:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACE81837DA;
-	Tue,  3 Aug 2021 21:29:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 08BD81BF349
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0625C60594;
+	Tue,  3 Aug 2021 21:29:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A4DC1BF9C1
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 43A5340476
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AE1B8606DC
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gJubt31QTLB0 for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7MiKa0_T0-iE for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0E63240481
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7180860838
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 664D98B43C; Tue,  3 Aug 2021 21:09:37 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id C813488523; Tue,  3 Aug 2021 21:09:42 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 15 May 2021 14:18:19 +0200
+Date: Fri, 21 May 2021 10:31:00 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 13c22420340d7e31f48ca955882ec2edc731961c
-X-Git-Newrev: 75d795c4930ea2bd4ebd70d8efea747624bb1b01
+X-Git-Oldrev: 9ec60e877e3cf9bb1a11f59ae18976f3f7087fed
+X-Git-Newrev: e5978dae8527ec7a6714920f3ae5112e2cbffa41
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210937.664D98B43C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/gstreamer1/gst1-rtsp-server: add CPE variables
+Message-Id: <20210803210942.C813488523@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/binutils: update or1k
+ patches for plt link version with upstream
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,33 +70,451 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75d795c4930ea2bd4ebd70d8efea747624bb1b01
+commit: https://git.buildroot.net/buildroot/commit/?id=e5978dae8527ec7a6714920f3ae5112e2cbffa41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:gstreamer_project:gst-rtsp-server is a valid CPE identifier
-for this package:
+Actual patches are stubs suggested but now they are available as upstream.
+So let's substitute them since they make part of a or1k patchset and next
+patch will add the others.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agstreamer_project%3Agst-rtsp-server
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Arnout: remove the PATCH M/N parts - cfr. check-package]
 ---
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ .../2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch   | 35 -------------
+ ...sue-with-plt-link-failure-for-local-calls.patch | 59 ++++++++++++++++++++++
+ .../2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch   | 35 -------------
+ ...sue-with-plt-link-failure-for-local-calls.patch | 59 ++++++++++++++++++++++
+ .../2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch | 35 -------------
+ ...sue-with-plt-link-failure-for-local-calls.patch | 59 ++++++++++++++++++++++
+ .../2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch | 35 -------------
+ ...sue-with-plt-link-failure-for-local-calls.patch | 59 ++++++++++++++++++++++
+ 8 files changed, 236 insertions(+), 140 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index 95d917fd5c..878195b74d 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-@@ -9,6 +9,8 @@ GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
- GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
- GST1_RTSP_SERVER_LICENSE_FILES = COPYING COPYING.LIB
-+GST1_RTSP_SERVER_CPE_ID_VENDOR = gstreamer_project
-+GST1_RTSP_SERVER_CPE_ID_PRODUCT = gst-rtsp-server
- GST1_RTSP_SERVER_INSTALL_STAGING = YES
- GST1_RTSP_SERVER_DEPENDENCIES = \
- 	host-pkgconf \
+diff --git a/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
+deleted file mode 100644
+index 824c9ce3e5..0000000000
+--- a/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 93cf62b662499e560812145dd989056fcf14f00e Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Mon, 22 Mar 2021 13:30:07 +0100
+-Subject: [PATCH] bfd/elf32-or1k: fix ld assert
+-
+-Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- bfd/elf32-or1k.c | 9 ++++-----
+- 1 file changed, 4 insertions(+), 5 deletions(-)
+-
+-diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
+-index 2f200b197b..ae508540f5 100644
+---- a/bfd/elf32-or1k.c
+-+++ b/bfd/elf32-or1k.c
+-@@ -2535,11 +2535,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
+-   if (h->type == STT_FUNC
+-       || h->needs_plt)
+-     {
+--      if (! bfd_link_pic (info)
+--	  && !h->def_dynamic
+--	  && !h->ref_dynamic
+--	  && h->root.type != bfd_link_hash_undefweak
+--	  && h->root.type != bfd_link_hash_undefined)
+-+      if (h->plt.refcount <= 0
+-+         || (SYMBOL_CALLS_LOCAL (info, h)
+-+         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+-+             && h->root.type == bfd_link_hash_undefweak)))
+- 	{
+- 	  /* This case can occur if we saw a PLT reloc in an input
+- 	     file, but the symbol was never referred to by a dynamic
+--- 
+-2.25.1
+-
+diff --git a/package/binutils/2.32/0010-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch b/package/binutils/2.32/0010-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+new file mode 100644
+index 0000000000..a67d12789e
+--- /dev/null
++++ b/package/binutils/2.32/0010-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+@@ -0,0 +1,59 @@
++From 788cda9f9447e0fe67e582e8fb5adafd678d08b2 Mon Sep 17 00:00:00 2001
++From: Stafford Horne <shorne@gmail.com>
++Date: Sun, 2 May 2021 06:02:14 +0900
++Subject: [PATCH] or1k: Fix issue with plt link failure for local calls
++
++When building protobuf we were seeing the assert failure:
++
++    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
++    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
++    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
++    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
++    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
++    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
++    collect2: error: ld returned 1 exit status
++
++This failure happens while writing out PLT entries, there is a check
++"BFD_ASSERT (h->dynindx != -1)" to confirm all plt entries have dynamic
++symbol attributes.  This was failing for symbols that were
++"forced_local" in previous linking code.
++
++The fix adds logic to or1k_elf_adjust_dynamic_symbol to identify
++"forced_local" symbols and exclude them from the the PLT.
++
++bfd/ChangeLog:
++
++	PR 27624
++	* elf32-or1k.c (or1k_elf_adjust_dynamic_symbol): Change
++	condition used to cleanup plt entries to cleanup forced local
++	entries.
++
++Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 2f200b197b8..1f2c88b0b3a 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2535,11 +2535,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
++   if (h->type == STT_FUNC
++       || h->needs_plt)
++     {
++-      if (! bfd_link_pic (info)
++-	  && !h->def_dynamic
++-	  && !h->ref_dynamic
++-	  && h->root.type != bfd_link_hash_undefweak
++-	  && h->root.type != bfd_link_hash_undefined)
+++      if (h->plt.refcount <= 0
+++	  || (SYMBOL_CALLS_LOCAL (info, h)
+++	  || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+++	      && h->root.type == bfd_link_hash_undefweak)))
++ 	{
++ 	  /* This case can occur if we saw a PLT reloc in an input
++ 	     file, but the symbol was never referred to by a dynamic
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
+deleted file mode 100644
+index 756493667f..0000000000
+--- a/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Mon, 22 Mar 2021 13:30:07 +0100
+-Subject: [PATCH] bfd/elf32-or1k: fix ld assert
+-
+-Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- bfd/elf32-or1k.c | 9 ++++-----
+- 1 file changed, 4 insertions(+), 5 deletions(-)
+-
+-diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
+-index 65938e5137..41908f8938 100644
+---- a/bfd/elf32-or1k.c
+-+++ b/bfd/elf32-or1k.c
+-@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
+-   if (h->type == STT_FUNC
+-       || h->needs_plt)
+-     {
+--      if (! bfd_link_pic (info)
+--	  && !h->def_dynamic
+--	  && !h->ref_dynamic
+--	  && h->root.type != bfd_link_hash_undefweak
+--	  && h->root.type != bfd_link_hash_undefined)
+-+      if (h->plt.refcount <= 0
+-+         || (SYMBOL_CALLS_LOCAL (info, h)
+-+         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+-+             && h->root.type == bfd_link_hash_undefweak)))
+- 	{
+- 	  /* This case can occur if we saw a PLT reloc in an input
+- 	     file, but the symbol was never referred to by a dynamic
+--- 
+-2.25.1
+-
+diff --git a/package/binutils/2.34/0003-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch b/package/binutils/2.34/0003-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+new file mode 100644
+index 0000000000..bc0ef2b224
+--- /dev/null
++++ b/package/binutils/2.34/0003-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+@@ -0,0 +1,59 @@
++From 651c3617a04a1d1f78e89623b81be7ba32ff59a5 Mon Sep 17 00:00:00 2001
++From: Stafford Horne <shorne@gmail.com>
++Date: Sun, 2 May 2021 06:02:14 +0900
++Subject: [PATCH] or1k: Fix issue with plt link failure for local calls
++
++When building protobuf we were seeing the assert failure:
++
++    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
++    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
++    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
++    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
++    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
++    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
++    collect2: error: ld returned 1 exit status
++
++This failure happens while writing out PLT entries, there is a check
++"BFD_ASSERT (h->dynindx != -1)" to confirm all plt entries have dynamic
++symbol attributes.  This was failing for symbols that were
++"forced_local" in previous linking code.
++
++The fix adds logic to or1k_elf_adjust_dynamic_symbol to identify
++"forced_local" symbols and exclude them from the the PLT.
++
++bfd/ChangeLog:
++
++	PR 27624
++	* elf32-or1k.c (or1k_elf_adjust_dynamic_symbol): Change
++	condition used to cleanup plt entries to cleanup forced local
++	entries.
++
++Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 31ef758a926..58246875546 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2535,11 +2535,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
++   if (h->type == STT_FUNC
++       || h->needs_plt)
++     {
++-      if (! bfd_link_pic (info)
++-	  && !h->def_dynamic
++-	  && !h->ref_dynamic
++-	  && h->root.type != bfd_link_hash_undefweak
++-	  && h->root.type != bfd_link_hash_undefined)
+++      if (h->plt.refcount <= 0
+++	  || (SYMBOL_CALLS_LOCAL (info, h)
+++	  || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+++	      && h->root.type == bfd_link_hash_undefweak)))
++ 	{
++ 	  /* This case can occur if we saw a PLT reloc in an input
++ 	     file, but the symbol was never referred to by a dynamic
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
+deleted file mode 100644
+index 756493667f..0000000000
+--- a/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Mon, 22 Mar 2021 13:30:07 +0100
+-Subject: [PATCH] bfd/elf32-or1k: fix ld assert
+-
+-Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- bfd/elf32-or1k.c | 9 ++++-----
+- 1 file changed, 4 insertions(+), 5 deletions(-)
+-
+-diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
+-index 65938e5137..41908f8938 100644
+---- a/bfd/elf32-or1k.c
+-+++ b/bfd/elf32-or1k.c
+-@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
+-   if (h->type == STT_FUNC
+-       || h->needs_plt)
+-     {
+--      if (! bfd_link_pic (info)
+--	  && !h->def_dynamic
+--	  && !h->ref_dynamic
+--	  && h->root.type != bfd_link_hash_undefweak
+--	  && h->root.type != bfd_link_hash_undefined)
+-+      if (h->plt.refcount <= 0
+-+         || (SYMBOL_CALLS_LOCAL (info, h)
+-+         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+-+             && h->root.type == bfd_link_hash_undefweak)))
+- 	{
+- 	  /* This case can occur if we saw a PLT reloc in an input
+- 	     file, but the symbol was never referred to by a dynamic
+--- 
+-2.25.1
+-
+diff --git a/package/binutils/2.35.2/0003-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch b/package/binutils/2.35.2/0003-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+new file mode 100644
+index 0000000000..81fb6b8518
+--- /dev/null
++++ b/package/binutils/2.35.2/0003-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+@@ -0,0 +1,59 @@
++From baf313f84b106a5a29f01796afd857e69abf8b08 Mon Sep 17 00:00:00 2001
++From: Stafford Horne <shorne@gmail.com>
++Date: Sun, 2 May 2021 06:02:14 +0900
++Subject: [PATCH] or1k: Fix issue with plt link failure for local calls
++
++When building protobuf we were seeing the assert failure:
++
++    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
++    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
++    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
++    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
++    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
++    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
++    collect2: error: ld returned 1 exit status
++
++This failure happens while writing out PLT entries, there is a check
++"BFD_ASSERT (h->dynindx != -1)" to confirm all plt entries have dynamic
++symbol attributes.  This was failing for symbols that were
++"forced_local" in previous linking code.
++
++The fix adds logic to or1k_elf_adjust_dynamic_symbol to identify
++"forced_local" symbols and exclude them from the the PLT.
++
++bfd/ChangeLog:
++
++	PR 27624
++	* elf32-or1k.c (or1k_elf_adjust_dynamic_symbol): Change
++	condition used to cleanup plt entries to cleanup forced local
++	entries.
++
++Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 7c02d004cc7..bbfa2bfe614 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2568,11 +2568,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
++   if (h->type == STT_FUNC
++       || h->needs_plt)
++     {
++-      if (! bfd_link_pic (info)
++-	  && !h->def_dynamic
++-	  && !h->ref_dynamic
++-	  && h->root.type != bfd_link_hash_undefweak
++-	  && h->root.type != bfd_link_hash_undefined)
+++      if (h->plt.refcount <= 0
+++	  || (SYMBOL_CALLS_LOCAL (info, h)
+++	  || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+++	      && h->root.type == bfd_link_hash_undefweak)))
++ 	{
++ 	  /* This case can occur if we saw a PLT reloc in an input
++ 	     file, but the symbol was never referred to by a dynamic
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
+deleted file mode 100644
+index 756493667f..0000000000
+--- a/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Mon, 22 Mar 2021 13:30:07 +0100
+-Subject: [PATCH] bfd/elf32-or1k: fix ld assert
+-
+-Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- bfd/elf32-or1k.c | 9 ++++-----
+- 1 file changed, 4 insertions(+), 5 deletions(-)
+-
+-diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
+-index 65938e5137..41908f8938 100644
+---- a/bfd/elf32-or1k.c
+-+++ b/bfd/elf32-or1k.c
+-@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
+-   if (h->type == STT_FUNC
+-       || h->needs_plt)
+-     {
+--      if (! bfd_link_pic (info)
+--	  && !h->def_dynamic
+--	  && !h->ref_dynamic
+--	  && h->root.type != bfd_link_hash_undefweak
+--	  && h->root.type != bfd_link_hash_undefined)
+-+      if (h->plt.refcount <= 0
+-+         || (SYMBOL_CALLS_LOCAL (info, h)
+-+         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+-+             && h->root.type == bfd_link_hash_undefweak)))
+- 	{
+- 	  /* This case can occur if we saw a PLT reloc in an input
+- 	     file, but the symbol was never referred to by a dynamic
+--- 
+-2.25.1
+-
+diff --git a/package/binutils/2.36.1/0003-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch b/package/binutils/2.36.1/0003-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+new file mode 100644
+index 0000000000..85931ff661
+--- /dev/null
++++ b/package/binutils/2.36.1/0003-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+@@ -0,0 +1,59 @@
++From b5fdaa85790dff45fd2c3fd15405c16dbc50a074 Mon Sep 17 00:00:00 2001
++From: Stafford Horne <shorne@gmail.com>
++Date: Sun, 2 May 2021 06:02:14 +0900
++Subject: [PATCH] or1k: Fix issue with plt link failure for local calls
++
++When building protobuf we were seeing the assert failure:
++
++    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
++    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
++    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
++    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
++    /home/giuliobenetti/git/upstream/or1k-binutils-2.36.1/host/lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
++    BFD (GNU Binutils) 2.36.1 assertion fail elf32-or1k.c:2377
++    collect2: error: ld returned 1 exit status
++
++This failure happens while writing out PLT entries, there is a check
++"BFD_ASSERT (h->dynindx != -1)" to confirm all plt entries have dynamic
++symbol attributes.  This was failing for symbols that were
++"forced_local" in previous linking code.
++
++The fix adds logic to or1k_elf_adjust_dynamic_symbol to identify
++"forced_local" symbols and exclude them from the the PLT.
++
++bfd/ChangeLog:
++
++	PR 27624
++	* elf32-or1k.c (or1k_elf_adjust_dynamic_symbol): Change
++	condition used to cleanup plt entries to cleanup forced local
++	entries.
++
++Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 65938e51378..4f82cc4c667 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
++   if (h->type == STT_FUNC
++       || h->needs_plt)
++     {
++-      if (! bfd_link_pic (info)
++-	  && !h->def_dynamic
++-	  && !h->ref_dynamic
++-	  && h->root.type != bfd_link_hash_undefweak
++-	  && h->root.type != bfd_link_hash_undefined)
+++      if (h->plt.refcount <= 0
+++	  || (SYMBOL_CALLS_LOCAL (info, h)
+++	  || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+++	      && h->root.type == bfd_link_hash_undefweak)))
++ 	{
++ 	  /* This case can occur if we saw a PLT reloc in an input
++ 	     file, but the symbol was never referred to by a dynamic
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
