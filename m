@@ -1,76 +1,137 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 21 May 2021 16:21:59 +0200
-Subject: [Buildroot] [PATCH 0/9] Fix binutils bug 21464 and remove it
-In-Reply-To: <8db63dbe-1abb-3fbf-59c6-6cb14fde577c@mind.be>
-References: <20210503111350.2933319-1-giulio.benetti@benettiengineering.com>
- <8db63dbe-1abb-3fbf-59c6-6cb14fde577c@mind.be>
-Message-ID: <62032574-bad4-5d93-fc72-4d3b455fe899@benettiengineering.com>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Fri, 21 May 2021 09:41:49 -0500
+Subject: [Buildroot] [PATCH] package/nginx: fix NGINX pidfile handling
+ systemd
+Message-ID: <20210521144149.35725-1-matthew.weber@collins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Based on https://git.launchpad.net/ubuntu/+source/nginx/plain/debian/patches/nginx-fix-pidfile.patch
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/nginx/+bug/1581864
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=876365
 
-On 5/21/21 10:46 AM, Arnout Vandecappelle wrote:
->   Hi Giulio,
-> 
->   Thanks for these!
+Upstream bug: (deferred fix)
+https://trac.nginx.org/nginx/ticket/1897?cversion=0&cnum_hist=2
 
-Happy to help :-)
+Signed-off-by: Matthew Weber <matthew.weber@collins.com>
+---
+ .../0010-Fix-NGINX-pidfile-handling.patch     | 105 ++++++++++++++++++
+ 1 file changed, 105 insertions(+)
+ create mode 100644 package/nginx/0010-Fix-NGINX-pidfile-handling.patch
 
-> On 03/05/2021 13:13, Giulio Benetti wrote:
->> This patchset fixes binutils bug 21464 and fixes libgeos build failure
->> by introducing the gcc option flag -mcmodel. This is done by adding
->> upstreamed binutils and gcc patches. Note tha this way buildroot
->> toolchains can be considered bug binutils 21464 free and the only other
->> OpenRisc toolchain supported is the external Bootlin one. So this
->> patchset has to be considered valid once Bootlin updates its OpenRisc
->> by adding binutils and gcc patches that are added with patches in this
->> patchset.
->>
->> Giulio Benetti (9):
->>    package/binutils: update or1k patches for plt link version with
->>      upstream
->>    package/binutils: add upstream backported patches to support
->>      -mcmodel=large gcc option
->>    package/gcc: add upstream patches that introduce -mcmodel=large option
->>      for or1k
-> 
->   Patches 1-3 applied to master. Note that I had to fix all of them up because
-> they failed check-package. The [PATCH N/M] things are not allowed. Ideally, when
-> you add patches, you shouldn't just pluck them from the mailing list. Instead,
-> you should apply them in a git clone - preferably by cherry-picking with `git
-> cherry-pick -x <sha1>` if they have been applied upstream. Then you should
-> regenerate *all* patches `git format-patch -N <base>..`. Then verify that only
-> the patches that you intended to change have actually changed.
-
-Oh right, thank you for modifying them, I've forgotten to check-package 
-them.
-
-> 
->>    package/libgeos: fix build failure due to missing -mcmodel=large
->>    package/protobuf: fix build failure due to missing -mcmodel=large
-> 
->   As mentioned, these can only be applied after Thomas updates the bootlin
-> toolchains *and* the patch to update them in Buildroot has been merged. That's
-> not going to happen on master :-)
-
-Ok
-
->>    toolchain: remove binutils bug 21464
->>    package/libgeos: remove binutils bug 21464 dependency
->>    package/postgis: remove libgeos binutils bug 21464 inheritance
->>    package/protobuf: remove binutils bug 21464 dependency
-> 
->   These four should be squashed into a single patch.
-
-I've just sent a v2 for this:
-https://patchwork.ozlabs.org/project/buildroot/patch/20210521140942.3032331-1-giulio.benetti at benettiengineering.com/
-
-
-Kind regards
+diff --git a/package/nginx/0010-Fix-NGINX-pidfile-handling.patch b/package/nginx/0010-Fix-NGINX-pidfile-handling.patch
+new file mode 100644
+index 0000000000..9a50118434
+--- /dev/null
++++ b/package/nginx/0010-Fix-NGINX-pidfile-handling.patch
+@@ -0,0 +1,105 @@
++From 2491379370059c7b9a2b956a49c90a9de55f5dcb Mon Sep 17 00:00:00 2001
++From: Tj <ubuntu@iam.tj>
++Date: Fri, 21 May 2021 09:35:53 -0500
++Subject: [PATCH] Fix NGINX pidfile handling
++
++Based on https://git.launchpad.net/ubuntu/+source/nginx/plain/debian/patches/nginx-fix-pidfile.patch
++Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/nginx/+bug/1581864
++Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=876365
++Last-Update: 2020-06-24
++
++Upstream bug: (deferred fix)
++https://trac.nginx.org/nginx/ticket/1897?cversion=0&cnum_hist=2
++
++Signed-off-by: Tj <ubuntu@iam.tj>
++Signed-off-by: Matthew Weber <matthew.weber@collins.com>
++---
++ src/core/nginx.c         | 24 +++++++++++++++++++++---
++ src/os/unix/ngx_daemon.c |  8 ++++++--
++ 2 files changed, 27 insertions(+), 5 deletions(-)
++
++diff --git a/src/core/nginx.c b/src/core/nginx.c
++index 9fcb0eb..083eba1 100644
++--- a/src/core/nginx.c
+++++ b/src/core/nginx.c
++@@ -338,14 +338,21 @@ main(int argc, char *const *argv)
++         ngx_process = NGX_PROCESS_MASTER;
++     }
++ 
+++    /* tell-tale to detect if this is parent or child process */
+++    ngx_int_t child_pid = NGX_BUSY;
+++
++ #if !(NGX_WIN32)
++ 
++     if (ngx_init_signals(cycle->log) != NGX_OK) {
++         return 1;
++     }
++ 
+++    /* tell-tale that this code has been executed */
+++    child_pid--;
+++
++     if (!ngx_inherited && ccf->daemon) {
++-        if (ngx_daemon(cycle->log) != NGX_OK) {
+++        child_pid = ngx_daemon(cycle->log);
+++        if (child_pid == NGX_ERROR) {
++             return 1;
++         }
++ 
++@@ -358,8 +365,19 @@ main(int argc, char *const *argv)
++ 
++ #endif
++ 
++-    if (ngx_create_pidfile(&ccf->pid, cycle->log) != NGX_OK) {
++-        return 1;
+++    /* If ngx_daemon() returned the child's PID in the parent process
+++     * after the fork() set ngx_pid to the child_pid, which gets
+++     * written to the PID file, then exit.
+++     * For NGX_WIN32 always write the PID file
+++     * For others, only write it from the parent process */
+++    if (child_pid < NGX_OK || child_pid > NGX_OK) {
+++	ngx_pid = child_pid > NGX_OK ? child_pid : ngx_pid;
+++        if (ngx_create_pidfile(&ccf->pid, cycle->log) != NGX_OK) {
+++            return 1;
+++	}
+++    }
+++    if (child_pid > NGX_OK) {
+++        exit(0);
++     }
++ 
++     if (ngx_log_redirect_stderr(cycle) != NGX_OK) {
++diff --git a/src/os/unix/ngx_daemon.c b/src/os/unix/ngx_daemon.c
++index 385c49b..3719854 100644
++--- a/src/os/unix/ngx_daemon.c
+++++ b/src/os/unix/ngx_daemon.c
++@@ -7,14 +7,17 @@
++ 
++ #include <ngx_config.h>
++ #include <ngx_core.h>
+++#include <unistd.h>
++ 
++ 
++ ngx_int_t
++ ngx_daemon(ngx_log_t *log)
++ {
++     int  fd;
+++    /* retain the return value for passing back to caller */
+++    pid_t pid_child = fork();
++ 
++-    switch (fork()) {
+++    switch (pid_child) {
++     case -1:
++         ngx_log_error(NGX_LOG_EMERG, log, ngx_errno, "fork() failed");
++         return NGX_ERROR;
++@@ -23,7 +26,8 @@ ngx_daemon(ngx_log_t *log)
++         break;
++ 
++     default:
++-        exit(0);
+++        /* let caller do the exit() */
+++        return pid_child;
++     }
++ 
++     ngx_parent = ngx_pid;
++-- 
++2.17.1
++
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.17.1
