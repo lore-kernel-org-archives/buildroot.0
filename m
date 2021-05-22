@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 May 2021 22:31:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/proxychains-ng: add
- PROXYCHAINS_NG_CPE_ID_VENDOR
-In-Reply-To: <20210522201136.280482-1-fontaine.fabrice@gmail.com>
-References: <20210522201136.280482-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210522203100.GH3208066@scaer>
+Date: Sat, 22 May 2021 22:31:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pulseaudio: add
+ PULSEAUDIO_CPE_ID_VENDOR
+In-Reply-To: <20210522202156.282991-1-fontaine.fabrice@gmail.com>
+References: <20210522202156.282991-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210522203116.GI3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +13,11 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-05-22 22:11 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:proxychains-ng_project:proxychains-ng is a valid CPE
-> identifier for this package:
+On 2021-05-22 22:21 +0200, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:pulseaudio:pulseaudio is a valid CPE identifier for this
+> package:
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aproxychains-ng_project%3Aproxychains-ng
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apulseaudio%3Apulseaudio
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -27,21 +27,21 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/proxychains-ng/proxychains-ng.mk | 1 +
+>  package/pulseaudio/pulseaudio.mk | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
-> index a9f3fc9561..0437f7d911 100644
-> --- a/package/proxychains-ng/proxychains-ng.mk
-> +++ b/package/proxychains-ng/proxychains-ng.mk
-> @@ -9,6 +9,7 @@ PROXYCHAINS_NG_SOURCE = proxychains-ng-$(PROXYCHAINS_NG_VERSION).tar.bz2
->  PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
->  PROXYCHAINS_NG_LICENSE = GPL-2.0+
->  PROXYCHAINS_NG_LICENSE_FILES = COPYING
-> +PROXYCHAINS_NG_CPE_ID_VENDOR = proxychains-ng_project
->  
->  define PROXYCHAINS_NG_CONFIGURE_CMDS
->  	cd $(@D) && \
+> diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+> index 6dfb1f8647..19e08f55ae 100644
+> --- a/package/pulseaudio/pulseaudio.mk
+> +++ b/package/pulseaudio/pulseaudio.mk
+> @@ -10,6 +10,7 @@ PULSEAUDIO_SITE = https://freedesktop.org/software/pulseaudio/releases
+>  PULSEAUDIO_INSTALL_STAGING = YES
+>  PULSEAUDIO_LICENSE = LGPL-2.1+ (specific license for modules, see LICENSE file)
+>  PULSEAUDIO_LICENSE_FILES = LICENSE GPL LGPL
+> +PULSEAUDIO_CPE_ID_VENDOR = pulseaudio
+>  PULSEAUDIO_CONF_OPTS = \
+>  	--disable-default-build-tests \
+>  	--disable-legacy-database-entry-format \
 > -- 
 > 2.30.2
 > 
