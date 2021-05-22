@@ -1,61 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 May 2021 10:32:57 +0200
-Subject: [Buildroot] [PATCH 5/5] package/python3-cryptography: add
- python3 host variant
-In-Reply-To: <1621644168551.61151@lab126.com>
-References: <1621475383746.46545@lab126.com> <20210521162220.GL3208066@scaer>
- <1621644168551.61151@lab126.com>
-Message-ID: <20210522083257.GY3208066@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 22 May 2021 11:40:24 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/kodi-inputstream-adaptive:
+ bump version to 2.6.16-Matrix
+Message-ID: <20210522094024.5252-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Donald, All,
+Changelog:
+https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
 
-+Peter, +Thomas, +Arnout
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2021-05-22 00:42 +0000, Chan, Donald via buildroot spake thusly:
-> On 2021-05-20 01:49 +0000, Chan, Donald via buildroot spake thusly:
-> > > Add a python3 host variant since another downstream OSS component
-> > > (OP-TEE) uses buildroot and it will depend on a python3 host variant
-> > > of python-cryptography.
-> > So, those 5 patches are OK (but still, see below for some comments)),
-> > but there is still nothing that uses those new host packages in the
-> > Buildroot tree.
-[--SNIP--]
-> > In which case, adding those pacakges should be part of the series that
-> > updates optee_os.
-> It's a chicken and egg problem - the original OP-TEE ticket to migrate
-> to pyca/cryptography is https://github.com/OP-TEE/optee_os/issues/4599,
-> but if it's merged now, it will immediately break their CI because they
-> are still using buildroot 2021.02 (https://github.com/OP-TEE/manifest/blob/master/default.xml#L24).
-
-Ah. that's the piece I was missing: the CI is using an unmodified,
-released version of Buildroot. That's neat! :-)
-
-I can see the chicken-n-egg problem, now, thanks.
-
-> So the best approach seems to be:
-> 1. Update buildroot with these new packages
-> 2. Wait till there is a new buildroot release, submit a PR to update their manifest
-> 3. Then submit another PR to migrate to pyca/cryptography
-> It's going to be a long process but it will cause the least amount of disruptions. 
-
-I've reinistated these pactches in the "new" state, so they are back
-under consideration. We'll see what the opinion of the other maintainers
-are.
-
-Peter, Thomas, Arnout: your thoughts?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 12e9f20904..f3a4bf9ec3 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  179b337c397ff484f25a936f8c50114a112d5107f6d3cf41b4e9fb92507525fd  kodi-inputstream-adaptive-2.6.15-Matrix.tar.gz
++sha256  49b9971973a8df16faa2a7a46d81156484a27c98930eae56dad12d466910db13  kodi-inputstream-adaptive-2.6.16-Matrix.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 6176d7bff0..1ffc6bc25a 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.15-Matrix
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.16-Matrix
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
