@@ -1,141 +1,106 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 22 May 2021 18:31:35 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/pipewire: link with -latomic
-Message-ID: <20210522163135.16441-1-fontaine.fabrice@gmail.com>
+Date: Sat, 22 May 2021 18:53:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qemu: fix build with latest binutils
+Message-ID: <20210522165350.99404-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build failure which is raised since bump to version 0.3.26 in commit
-a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9
-
 Fixes:
- - http://autobuild.buildroot.org/results/b5305e8e7dd1a5e8bfaba72b06251056ba7d1af1
+ - http://autobuild.buildroot.org/results/c0881df995093036eb7579d870efcae3feb323aa
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Peter Seiderer):
- - Fix typo
+ ...-no-pie-is-no-functional-linker-flag.patch | 79 +++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+ create mode 100644 package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
 
- .../0003-fix-linking-with-latomic.patch       | 108 ++++++++++++++++++
- 1 file changed, 108 insertions(+)
- create mode 100644 package/pipewire/0003-fix-linking-with-latomic.patch
-
-diff --git a/package/pipewire/0003-fix-linking-with-latomic.patch b/package/pipewire/0003-fix-linking-with-latomic.patch
+diff --git a/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch b/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
 new file mode 100644
-index 0000000000..77132173e4
+index 0000000000..6a21949157
 --- /dev/null
-+++ b/package/pipewire/0003-fix-linking-with-latomic.patch
-@@ -0,0 +1,108 @@
-+From 5068aa54bde4e40d6faa8de43d93216bc3001a3e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 21 May 2021 07:47:46 +0200
-+Subject: [PATCH] fix linking with -latomic
++++ b/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
+@@ -0,0 +1,79 @@
++From bbd2d5a8120771ec59b86a80a1f51884e0a26e53 Mon Sep 17 00:00:00 2001
++From: Christian Ehrhardt <christian.ehrhardt@canonical.com>
++Date: Mon, 14 Dec 2020 16:09:38 +0100
++Subject: [PATCH] build: -no-pie is no functional linker flag
 +
-+Linking with -latomic has been added to pipewire-jack since
-+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b8c58c74d835ee2918f9e391abd65f9e0132bdb4
++Recent binutils changes dropping unsupported options [1] caused a build
++issue in regard to the optionroms.
 +
-+However, this is not the right place to add this dependency, atomic_dep
-+should be added to pipewire_dep to avoid the following build failure:
++  ld -m elf_i386 -T /<<PKGBUILDDIR>>/pc-bios/optionrom//flat.lds -no-pie \
++    -s -o multiboot.img multiboot.o
++  ld.bfd: Error: unable to disambiguate: -no-pie (did you mean --no-pie ?)
 +
-+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: src/pipewire/libpipewire-0.3.so.0.326.0.p/filter.c.o: in function `impl_node_process':
-+filter.c:(.text+0xf28): undefined reference to `__atomic_fetch_add_4'
++This isn't really a regression in ld.bfd, filing the bug upstream
++revealed that this never worked as a ld flag [2] - in fact it seems we
++were by accident setting --nmagic).
 +
-+Indeed, atomic operation such as __atomic_fetch_add is used in libcamera
-+as well as in ./spa/plugins/libcamera/libcamera_wrapper.cpp,
-+./spa/include/spa/utils/ringbuffer.h and ./spa/include/spa/graph/graph.h
++Since it never had the wanted effect this usage of LDFLAGS_NOPIE, should be
++droppable without any effect. This also is the only use-case of LDFLAGS_NOPIE
++in .mak, therefore we can also remove it from being added there.
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/b5305e8e7dd1a5e8bfaba72b06251056ba7d1af1
++[1]: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=983d925d
++[2]: https://sourceware.org/bugzilla/show_bug.cgi?id=27050#c5
 +
++Signed-off-by: Christian Ehrhardt <christian.ehrhardt@canonical.com>
++Message-Id: <20201214150938.1297512-1-christian.ehrhardt@canonical.com>
++Cc: qemu-stable at nongnu.org
++Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
++
++[Retrieved from:
++https://gitlab.com/qemu-project/qemu/-/commit/bbd2d5a8120771ec59b86a80a1f51884e0a26e53]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/689]
 +---
-+ meson.build                   | 11 +++++------
-+ pipewire-jack/src/meson.build |  4 ++--
-+ src/pipewire/meson.build      |  4 ++--
-+ 3 files changed, 9 insertions(+), 10 deletions(-)
++ configure                  | 3 ---
++ pc-bios/optionrom/Makefile | 1 -
++ 2 files changed, 4 deletions(-)
 +
-+diff --git a/meson.build b/meson.build
-+index b6b4553b..1308373a 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -157,7 +157,7 @@ test_8_byte_atomic = '''
-+ int main(void)
-+ {
-+   int64_t eight;
-+-  __atomic_store_n(&eight, 123, __ATOMIC_SEQ_CST);
-++  __atomic_fetch_add(&eight, 123, __ATOMIC_SEQ_CST);
-+   return 0;
-+ }
-+ '''
-+@@ -166,16 +166,15 @@ int main(void)
-+ # operations on any reasonable architecture.
-+ if cc.links(
-+   test_8_byte_atomic,
-+-  name : '8-byte __atomic_store_n without libatomic')
-++  name : '8-byte __atomic_fetch_add without libatomic')
-+   atomic_dep = dependency('', required: false)
-+ elif cc.links(
-+   test_8_byte_atomic,
-+   dependencies : libatomic,
-+-  name : '8-byte __atomic_store_n with libatomic')
-++  name : '8-byte __atomic_fetch_add with libatomic')
-+   atomic_dep = libatomic
-+-elif get_option('pipewire-jack').enabled()
-+-  # Currently only required for the JACK backend
-+-  error('8-byte atomic operations are required for pipewire-jack')
-++else
-++  error('8-byte atomic operations are required')
-+ endif
++diff --git a/configure b/configure
++index cb21108d34..c228f7c21e 100755
++--- a/configure
+++++ b/configure
++@@ -2137,7 +2137,6 @@ EOF
++ # Check we support --no-pie first; we will need this for building ROMs.
++ if compile_prog "-Werror -fno-pie" "-no-pie"; then
++   CFLAGS_NOPIE="-fno-pie"
++-  LDFLAGS_NOPIE="-no-pie"
++ fi
 + 
-+ cdata = configuration_data()
-+diff --git a/pipewire-jack/src/meson.build b/pipewire-jack/src/meson.build
-+index 83e340ba..386abc7f 100644
-+--- a/pipewire-jack/src/meson.build
-++++ b/pipewire-jack/src/meson.build
-+@@ -42,7 +42,7 @@ pipewire_jack = shared_library('jack',
-+     version : libversion,
-+     c_args : pipewire_jack_c_args,
-+     include_directories : [configinc, jack_inc],
-+-    dependencies : [pipewire_dep, atomic_dep, mathlib],
-++    dependencies : [pipewire_dep, mathlib],
-+     install : true,
-+     install_dir : libjack_path,
-+ )
-+@@ -53,7 +53,7 @@ pipewire_jackserver = shared_library('jackserver',
-+     version : libversion,
-+     c_args : pipewire_jack_c_args,
-+     include_directories : [configinc, jack_inc],
-+-    dependencies : [pipewire_dep, atomic_dep, mathlib],
-++    dependencies : [pipewire_dep, mathlib],
-+     install : true,
-+     install_dir : libjack_path,
-+ )
-+diff --git a/src/pipewire/meson.build b/src/pipewire/meson.build
-+index e80f3633..0fa6643a 100644
-+--- a/src/pipewire/meson.build
-++++ b/src/pipewire/meson.build
-+@@ -102,12 +102,12 @@ libpipewire = shared_library(pipewire_name, pipewire_sources,
-+   c_args : libpipewire_c_args,
-+   include_directories : [pipewire_inc, configinc, spa_inc],
-+   install : true,
-+-  dependencies : [dl_lib, mathlib, pthread_lib, libintl_dep, ],
-++  dependencies : [dl_lib, mathlib, pthread_lib, libintl_dep, atomic_dep, ],
-+ )
++ if test "$static" = "yes"; then
++@@ -2153,7 +2152,6 @@ if test "$static" = "yes"; then
++   fi
++ elif test "$pie" = "no"; then
++   CONFIGURE_CFLAGS="$CFLAGS_NOPIE $CONFIGURE_CFLAGS"
++-  CONFIGURE_LDFLAGS="$LDFLAGS_NOPIE $CONFIGURE_LDFLAGS"
++ elif compile_prog "-Werror -fPIE -DPIE" "-pie"; then
++   CONFIGURE_CFLAGS="-fPIE -DPIE $CONFIGURE_CFLAGS"
++   CONFIGURE_LDFLAGS="-pie $CONFIGURE_LDFLAGS"
++@@ -6714,7 +6712,6 @@ echo "QEMU_CXXFLAGS=$QEMU_CXXFLAGS" >> $config_host_mak
++ echo "GLIB_CFLAGS=$glib_cflags" >> $config_host_mak
++ echo "GLIB_LIBS=$glib_libs" >> $config_host_mak
++ echo "QEMU_LDFLAGS=$QEMU_LDFLAGS" >> $config_host_mak
++-echo "LDFLAGS_NOPIE=$LDFLAGS_NOPIE" >> $config_host_mak
++ echo "LD_I386_EMULATION=$ld_i386_emulation" >> $config_host_mak
++ echo "EXESUF=$EXESUF" >> $config_host_mak
++ echo "HOST_DSOSUF=$HOST_DSOSUF" >> $config_host_mak
++diff --git a/pc-bios/optionrom/Makefile b/pc-bios/optionrom/Makefile
++index 084fc10f05..30771f8d17 100644
++--- a/pc-bios/optionrom/Makefile
+++++ b/pc-bios/optionrom/Makefile
++@@ -41,7 +41,6 @@ override CFLAGS += $(call cc-option, $(Wa)-32)
 + 
-+ pipewire_dep = declare_dependency(link_with : libpipewire,
-+   include_directories : [pipewire_inc, configinc, spa_inc],
-+-  dependencies : [pthread_lib, ],
-++  dependencies : [pthread_lib, atomic_dep, ],
-+ )
++ LD_I386_EMULATION ?= elf_i386
++ override LDFLAGS = -m $(LD_I386_EMULATION) -T $(SRC_DIR)/flat.lds
++-override LDFLAGS += $(LDFLAGS_NOPIE)
 + 
-+ pkgconfig.generate(filebase : 'lib at 0@'.format(pipewire_name),
++ all: multiboot.bin linuxboot.bin linuxboot_dma.bin kvmvapic.bin pvh.bin
++ 
 +-- 
-+2.30.2
++GitLab
 +
 -- 
 2.30.2
