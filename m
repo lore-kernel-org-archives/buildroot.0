@@ -1,71 +1,113 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sat, 22 May 2021 00:31:11 +0200
-Subject: [Buildroot] Spidermonkey bump version
-In-Reply-To: <20210520103341.GZ2268078@scaer>
-References: <a59a82c3-0000-73ca-6c6d-7ac2aef7ff2e@benettiengineering.com>
- <20210520103341.GZ2268078@scaer>
-Message-ID: <0231243a-bd17-2c0a-7486-80a28fd662c4@benettiengineering.com>
+From: Chan, Donald <hoiho@lab126.com>
+Date: Sat, 22 May 2021 00:42:48 +0000
+Subject: [Buildroot] [PATCH 5/5] package/python3-cryptography: add
+ python3 host variant
+In-Reply-To: <20210521162220.GL3208066@scaer>
+References: <1621475383746.46545@lab126.com>,<20210521162220.GL3208066@scaer>
+Message-ID: <1621644168551.61151@lab126.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
 
-On 5/20/21 12:33 PM, Yann E. MORIN wrote:
-> Giulio, All,
-> 
-> On 2021-05-20 02:21 +0200, Giulio Benetti spake thusly:
->> since I'm working on udisks bump version I've noticed its dependency
->> spidermonkey that is pretty old. I've seen that download site points to a
->> gentoo archive to save 200M of download without downloading entire Firefox.
->> Would it make sense to change site back to [1] and bump it once 89.0 is
->> released?
-> 
-> Here are my thoughts on that (mozjs == spidermonkey):
-> 
->    - of course, it is a bigger archive, but that's not necessarily an
->      issue in the grand scheme of things;
+> (Not sure if I should address you as Chan, or Donald. Apologies if I
+messed up; just tell me! ;-) )
 
-I agree
+Donald is fine :)
 
->    - the version we currently have does not require rust, but newer
->      versions do; if we update, it means less architectures we can run
->      spidermonkey, and thus polkit and its dependees, on;
+On 2021-05-20 01:49 +0000, Chan, Donald via buildroot spake thusly:
+> > Add a python3 host variant since another downstream OSS component
+> > (OP-TEE) uses buildroot and it will depend on a python3 host variant
+> > of python-cryptography.
 > 
->    - OE is still using mozjs 60.9.0:
->          https://git.openembedded.org/meta-openembedded/tree/meta-oe/dynamic-layers/meta-python/recipes-extended/mozjs/mozjs_60.9.0.bb
+> So, those 5 patches are OK (but still, see below for some comments)),
+> but there is still nothing that uses those new host packages in the
+> Buildroot tree.
 > 
->    - polkit 0.116 (which we currently have) is the last to accept
->      mozjs-60; later versions of polkit require more recent versions of
->      mozjs: polkit0.117 requires mozjs-68, and 0.118, mozjs-78:
->          https://gitlab.freedesktop.org/polkit/polkit/-/blob/0.116/configure.ac#L82
->          https://gitlab.freedesktop.org/polkit/polkit/-/blob/0.117/configure.ac#L83
->          https://gitlab.freedesktop.org/polkit/polkit/-/blob/0.118/configure.ac#L83
+> You said OP-TEE OS would use them, but you haven't provided a patch that
+> does so, which still leaves those packages unused.
 > 
->> The only packages that use it is polkit that in order is used by:
->> - udisks
->> and optionally by:
->> - gvfs
->> - brltty
->> - systemd
+> I've had a quick look at the optee_os git tree [0], but I could not see
+> anything thsat uses puthon cryptography.
 > 
-> So, I'm all meh... Maybe we'll have to bite the bullet and bump mozjs if
-> we want to bump polkit (probably a good idea to avoid security issues?
-> Although there is no known CVE for polkit 0.116:
-> https://nvd.nist.gov/vuln/search/results?form_type=Advanced&results_type=overview&seach_type=all&query=cpe:2.3:a:polkit_project:polkit:0.116:*:*:*:*:*:*:*
-> which does not mean there is no unknown issue either...)
+> [0] https://github.com/OP-TEE/optee_os
+> 
+> So, I guess those will only become usefull when optee_os is updated in
+> Buildroot, to a version where python cryptography is actually used.
+> 
+> In which case, adding those pacakges should be part of the series that
+> updates optee_os.
 
-I'm giving a try and I've seen that until mozjs-78 configure file is 
-already present while on latest version firefox-89.0 there is not and 
-the whole build system changed.
+It's a chicken and egg problem - the original OP-TEE ticket to migrate to pyca/cryptography is https://github.com/OP-TEE/optee_os/issues/4599, but if it's merged now, it will immediately break their CI because they are still using buildroot 2021.02 (https://github.com/OP-TEE/manifest/blob/master/default.xml#L24).
 
-Since we need spidermonkey 78 for polkit 0.118 I would go for bumping 
-spidermonkey to 0.78 if it's not too difficult.
-What do you think?
+So the best approach seems to be:
 
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
+1. Update buildroot with these new packages
+2. Wait till there is a new buildroot release, submit a PR to update their manifest
+3. Then submit another PR to migrate to pyca/cryptography
+
+It's going to be a long process but it will cause the least amount of disruptions. 
+
+> Signed-off-by: Donald Chan <hoiho@lab126.com>
+> ---
+[--SNIP--]
+> diff --git a/package/python3-cryptography/python3-cryptography.mk b/package/python3-cryptography/python3-cryptography.mk
+> new file mode 100644
+> index 0000000..ce8e9e6
+> --- /dev/null
+> +++ b/package/python3-cryptography/python3-cryptography.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# python3-cryptography
+> +#
+> +################################################################################
+> +
+> +# Please keep in sync with package/python-cryptography/python-cryptography.mk
+> +PYTHON3_CRYPTOGRAPHY_VERSION = 3.0
+
+This is not the latest version. 3.4.7 is not available:
+
+    https://pypi.org/project/cryptography/
+
+I haven't looked at the others, but be sure to submit packages that use
+the latest version. If that is not possible, then state so in the commit
+log, and explain why the latest can't be used.
+
+While waiting for an update to optee_os that does need those packages,
+I've marked them postponed in Patchwork [1], which basically means
+they'll no longer appear in the list of pending patches. Please include
+them uin the series that updates optee_os when that is ready.
+
+Thanks you! :-)
+
+Regards,
+Yann E. MORIN.
+
+> +PYTHON3_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON3_CRYPTOGRAPHY_VERSION).tar.gz
+> +PYTHON3_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/bf/ac/552fc8729d90393845cc3a2062facf4a89dcbe206fa78771d60ddaae7554
+> +PYTHON3_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+> +PYTHON3_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+> +PYTHON3_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+> +PYTHON3_CRYPTOGRAPHY_DEPENDENCIES = openssl
+> +HOST_PYTHON3_CRYPTOGRAPHY_DEPENDENCIES = host-python3-cffi host-python3-pip host-python3-six
+> +HOST_PYTHON3_CRYPTOGRAPHY_DL_SUBDIR = python-cryptography
+> +HOST_PYTHON3_CRYPTOGRAPHY_NEEDS_HOST_PYTHON = python3
+> +
+> +$(eval $(host-python-package))
+> --
+> 2.17.1
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+--
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
