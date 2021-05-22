@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 May 2021 18:59:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/llvm: include limits
-In-Reply-To: <20210522151037.14378-1-fontaine.fabrice@gmail.com>
-References: <20210522151037.14378-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210522165936.GZ3208066@scaer>
+Date: Sat, 22 May 2021 18:59:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uhd: USRP1 needs gcc >= 4.9
+In-Reply-To: <20210522162924.16002-1-fontaine.fabrice@gmail.com>
+References: <20210522162924.16002-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210522165951.GA3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,12 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-05-22 17:10 +0200, Fabrice Fontaine spake thusly:
-> Fix the following build failure:
-> 
-> In file included from /data/buildroot-autobuilder/instance-0/output-1/build/host-llvm-9.0.1/utils/benchmark/src/benchmark_register.cc:15:
-> /data/buildroot-autobuilder/instance-0/output-1/build/host-llvm-9.0.1/utils/benchmark/src/benchmark_register.h: In function 'void AddRange(std::vector<T>*, T, T, int)':
-> /data/buildroot-autobuilder/instance-0/output-1/build/host-llvm-9.0.1/utils/benchmark/src/benchmark_register.h:17:30: error: 'numeric_limits' is not a member of 'std'
->    17 |   static const T kmax = std::numeric_limits<T>::max();
->       |                              ^~~~~~~~~~~~~~
+On 2021-05-22 18:29 +0200, Fabrice Fontaine spake thusly:
+> Commit c577eac16eaae515973faf3013da197516bfd391 forgot to add
+> dependencies of BR2_PACKAGE_UHD_USB to BR2_PACKAGE_UHD_USRP1
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/68581aad7c622a1fc74bb5556799e3c681425b2a
+>  - http://autobuild.buildroot.org/results/eaae6548fb536e2b0ea539c236cd7579e63fa21e
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -32,40 +27,28 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  .../llvm/0001-nfc-Fix-missing-include.patch   | 24 +++++++++++++++++++
->  1 file changed, 24 insertions(+)
->  create mode 100644 package/llvm/0001-nfc-Fix-missing-include.patch
+>  package/uhd/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/llvm/0001-nfc-Fix-missing-include.patch b/package/llvm/0001-nfc-Fix-missing-include.patch
-> new file mode 100644
-> index 0000000000..62111ca138
-> --- /dev/null
-> +++ b/package/llvm/0001-nfc-Fix-missing-include.patch
-> @@ -0,0 +1,24 @@
-> +From b498303066a63a203d24f739b2d2e0e56dca70d1 Mon Sep 17 00:00:00 2001
-> +From: serge-sans-paille <sguelton@redhat.com>
-> +Date: Tue, 10 Nov 2020 14:55:25 +0100
-> +Subject: [PATCH] [nfc] Fix missing include
+> diff --git a/package/uhd/Config.in b/package/uhd/Config.in
+> index fae0887509..f61bbf0e8f 100644
+> --- a/package/uhd/Config.in
+> +++ b/package/uhd/Config.in
+> @@ -129,10 +129,14 @@ comment "USB support needs a toolchain w/ gcc >= 4.9"
+>  
+>  config BR2_PACKAGE_UHD_USRP1
+>  	bool "USRP1 support"
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+>  	select BR2_PACKAGE_UHD_USB
+>  	help
+>  	  enable USRP1 support
+>  
+> +comment "USRP1 support needs a toolchain w/ gcc >= 4.9"
+> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 > +
-> +[Retrieved (and backported) from:
-> +https://github.com/llvm/llvm-project/commit/b498303066a63a203d24f739b2d2e0e56dca70d1]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + llvm/utils/benchmark/src/benchmark_register.h | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/utils/benchmark/src/benchmark_register.h b/utils/benchmark/src/benchmark_register.h
-> +index 0705e219f2fa2..4caa5ad4da079 100644
-> +--- a/utils/benchmark/src/benchmark_register.h
-> ++++ b/utils/benchmark/src/benchmark_register.h
-> +@@ -1,6 +1,7 @@
-> + #ifndef BENCHMARK_REGISTER_H
-> + #define BENCHMARK_REGISTER_H
-> + 
-> ++#include <limits>
-> + #include <vector>
-> + 
-> + #include "check.h"
+>  config BR2_PACKAGE_UHD_USRP2
+>  	bool "USRP2 support"
+>  	help
 > -- 
 > 2.30.2
 > 
