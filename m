@@ -1,38 +1,35 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sat, 22 May 2021 23:12:09 +0300
-Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: enable MD4 in
- openssl
-Message-ID: <20210522201209.642371-1-geomatsi@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 22 May 2021 22:21:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pulseaudio: add
+ PULSEAUDIO_CPE_ID_VENDOR
+Message-ID: <20210522202156.282991-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hostapd/wpa_supplicant crypto backend assumes that openssl always
-provides MD4 support. However MD4 support in openssl has become
-optional since  commit a83d41867c8d ("package/libopenssl: add
-option to enable some features").
+cpe:2.3:a:pulseaudio:pulseaudio is a valid CPE identifier for this
+package:
 
-Select openssl MD4 support in wpa_supplicant Kconfig to avoid
-build failures.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apulseaudio%3Apulseaudio
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wpa_supplicant/Config.in | 1 +
+ package/pulseaudio/pulseaudio.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index 27ad22430a..67117c141b 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -1,6 +1,7 @@
- menuconfig BR2_PACKAGE_WPA_SUPPLICANT
- 	bool "wpa_supplicant"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  WPA supplicant for secure wireless networks
- 
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 6dfb1f8647..19e08f55ae 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -10,6 +10,7 @@ PULSEAUDIO_SITE = https://freedesktop.org/software/pulseaudio/releases
+ PULSEAUDIO_INSTALL_STAGING = YES
+ PULSEAUDIO_LICENSE = LGPL-2.1+ (specific license for modules, see LICENSE file)
+ PULSEAUDIO_LICENSE_FILES = LICENSE GPL LGPL
++PULSEAUDIO_CPE_ID_VENDOR = pulseaudio
+ PULSEAUDIO_CONF_OPTS = \
+ 	--disable-default-build-tests \
+ 	--disable-legacy-database-entry-format \
 -- 
-2.31.1
+2.30.2
