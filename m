@@ -1,57 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 May 2021 22:04:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pigz: add PIGZ_CPE_ID_VENDOR
-In-Reply-To: <20210522175803.279609-1-fontaine.fabrice@gmail.com>
-References: <20210522175803.279609-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210522200433.GF3208066@scaer>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sat, 22 May 2021 23:07:43 +0300
+Subject: [Buildroot] [RFC/next 1/1] package/hostapd: enable MD4 in
+ openssl
+In-Reply-To: <20210522195910.GC3208066@scaer>
+References: <20210522194845.593676-1-geomatsi@gmail.com>
+ <20210522195910.GC3208066@scaer>
+Message-ID: <YKlkjxJQTr3NjIxY@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hello Yann,
 
-On 2021-05-22 19:58 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:zlib:pigz is a valid CPE identifier for this package:
+> > Hostapd assumes that openssl always provides MD4 support. However MD4
+> > support in openssl has become optional since  commit a83d41867c8d
+> > ("package/libopenssl: add option to enable some features").
+> > 
+> > Select openssl MD4 support in hostapd Kconfig to avoid build failures.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/09ce1d8009da98cd2a3f2c8488abaa9f060a9d6b/
+> > 
+> > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Azlib%3Apigz
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Applied to next, thanks.
 
-Applied to master, thanks.
+Once again I forgot about wpa_supplicant. It has the same issue, though
+not yet in autobuilder. I will double-check build and send another fix.
 
 Regards,
-Yann E. MORIN.
-
-> ---
->  package/pigz/pigz.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/pigz/pigz.mk b/package/pigz/pigz.mk
-> index fdf5fa40e8..3e5e892797 100644
-> --- a/package/pigz/pigz.mk
-> +++ b/package/pigz/pigz.mk
-> @@ -10,6 +10,7 @@ PIGZ_DEPENDENCIES = zlib
->  HOST_PIGZ_DEPENDENCIES = host-zlib
->  PIGZ_LICENSE = Zlib
->  PIGZ_LICENSE_FILES = README
-> +PIGZ_CPE_ID_VENDOR = zlib
->  
->  define PIGZ_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Sergey
