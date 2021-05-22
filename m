@@ -1,106 +1,65 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 22 May 2021 18:53:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qemu: fix build with latest binutils
-Message-ID: <20210522165350.99404-1-fontaine.fabrice@gmail.com>
+From: Vincent =?iso-8859-1?Q?Stehl=E9?= <vincent.stehle@laposte.net>
+Date: Sat, 22 May 2021 18:56:25 +0200
+Subject: [Buildroot] [PATCH] configs/bananapi_m2_zero: bump versions and
+ add WiFi support
+In-Reply-To: <20210519113811.GT2268078@scaer>
+References: <20210508201614.16041-1-vincent.stehle@laposte.net>
+ <20210519113811.GT2268078@scaer>
+Message-ID: <YKk3uXNOZ5pKsOLZ@romuald.bergerie>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/c0881df995093036eb7579d870efcae3feb323aa
+On Wed, May 19, 2021 at 01:38:11PM +0200, Yann E. MORIN wrote:
+..
+> Also, if one look at armbian-firmware, there is already a brcm/
+> sub-directory, and that already has brcm/brcmfmac43430-sdio.bin. Of
+> course, the two are different...
+> 
+> Additionally, linux-firmware has brcm/brcmfmac43430a0-sdio.bin and
+> brcm/brcmfmac43430-sdio.AP6212.txt, again with different content. The
+> latter states "NVRAM config file for the Ampak AP6212 43430 WiFi/BT
+> module".
+> 
+> So, this is quite a mess. Why do we have to use the armbian-fw ones,
+> instead of those from linux-firmware? We are using an upstream kernel,
+> and supposedly, drivers in there are supposed (as I understand it) to
+> only require blobs from linux-firmware...
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-no-pie-is-no-functional-linker-flag.patch | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
+Hi Yann,
 
-diff --git a/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch b/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
-new file mode 100644
-index 0000000000..6a21949157
---- /dev/null
-+++ b/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
-@@ -0,0 +1,79 @@
-+From bbd2d5a8120771ec59b86a80a1f51884e0a26e53 Mon Sep 17 00:00:00 2001
-+From: Christian Ehrhardt <christian.ehrhardt@canonical.com>
-+Date: Mon, 14 Dec 2020 16:09:38 +0100
-+Subject: [PATCH] build: -no-pie is no functional linker flag
-+
-+Recent binutils changes dropping unsupported options [1] caused a build
-+issue in regard to the optionroms.
-+
-+  ld -m elf_i386 -T /<<PKGBUILDDIR>>/pc-bios/optionrom//flat.lds -no-pie \
-+    -s -o multiboot.img multiboot.o
-+  ld.bfd: Error: unable to disambiguate: -no-pie (did you mean --no-pie ?)
-+
-+This isn't really a regression in ld.bfd, filing the bug upstream
-+revealed that this never worked as a ld flag [2] - in fact it seems we
-+were by accident setting --nmagic).
-+
-+Since it never had the wanted effect this usage of LDFLAGS_NOPIE, should be
-+droppable without any effect. This also is the only use-case of LDFLAGS_NOPIE
-+in .mak, therefore we can also remove it from being added there.
-+
-+[1]: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=983d925d
-+[2]: https://sourceware.org/bugzilla/show_bug.cgi?id=27050#c5
-+
-+Signed-off-by: Christian Ehrhardt <christian.ehrhardt@canonical.com>
-+Message-Id: <20201214150938.1297512-1-christian.ehrhardt@canonical.com>
-+Cc: qemu-stable at nongnu.org
-+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-+
-+[Retrieved from:
-+https://gitlab.com/qemu-project/qemu/-/commit/bbd2d5a8120771ec59b86a80a1f51884e0a26e53]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure                  | 3 ---
-+ pc-bios/optionrom/Makefile | 1 -
-+ 2 files changed, 4 deletions(-)
-+
-+diff --git a/configure b/configure
-+index cb21108d34..c228f7c21e 100755
-+--- a/configure
-++++ b/configure
-+@@ -2137,7 +2137,6 @@ EOF
-+ # Check we support --no-pie first; we will need this for building ROMs.
-+ if compile_prog "-Werror -fno-pie" "-no-pie"; then
-+   CFLAGS_NOPIE="-fno-pie"
-+-  LDFLAGS_NOPIE="-no-pie"
-+ fi
-+ 
-+ if test "$static" = "yes"; then
-+@@ -2153,7 +2152,6 @@ if test "$static" = "yes"; then
-+   fi
-+ elif test "$pie" = "no"; then
-+   CONFIGURE_CFLAGS="$CFLAGS_NOPIE $CONFIGURE_CFLAGS"
-+-  CONFIGURE_LDFLAGS="$LDFLAGS_NOPIE $CONFIGURE_LDFLAGS"
-+ elif compile_prog "-Werror -fPIE -DPIE" "-pie"; then
-+   CONFIGURE_CFLAGS="-fPIE -DPIE $CONFIGURE_CFLAGS"
-+   CONFIGURE_LDFLAGS="-pie $CONFIGURE_LDFLAGS"
-+@@ -6714,7 +6712,6 @@ echo "QEMU_CXXFLAGS=$QEMU_CXXFLAGS" >> $config_host_mak
-+ echo "GLIB_CFLAGS=$glib_cflags" >> $config_host_mak
-+ echo "GLIB_LIBS=$glib_libs" >> $config_host_mak
-+ echo "QEMU_LDFLAGS=$QEMU_LDFLAGS" >> $config_host_mak
-+-echo "LDFLAGS_NOPIE=$LDFLAGS_NOPIE" >> $config_host_mak
-+ echo "LD_I386_EMULATION=$ld_i386_emulation" >> $config_host_mak
-+ echo "EXESUF=$EXESUF" >> $config_host_mak
-+ echo "HOST_DSOSUF=$HOST_DSOSUF" >> $config_host_mak
-+diff --git a/pc-bios/optionrom/Makefile b/pc-bios/optionrom/Makefile
-+index 084fc10f05..30771f8d17 100644
-+--- a/pc-bios/optionrom/Makefile
-++++ b/pc-bios/optionrom/Makefile
-+@@ -41,7 +41,6 @@ override CFLAGS += $(call cc-option, $(Wa)-32)
-+ 
-+ LD_I386_EMULATION ?= elf_i386
-+ override LDFLAGS = -m $(LD_I386_EMULATION) -T $(SRC_DIR)/flat.lds
-+-override LDFLAGS += $(LDFLAGS_NOPIE)
-+ 
-+ all: multiboot.bin linuxboot.bin linuxboot_dma.bin kvmvapic.bin pvh.bin
-+ 
-+-- 
-+GitLab
-+
--- 
-2.30.2
+Thanks for the review.
+
+You are right, there are multiple firmware candidates. I selected this Armbian
+AP6212 firmware a while ago for a specific scenario of STA+AP. For the
+buildroot config, I think any firmware capable of STA should do. After a quick
+re-test the following combinations work fine:
+
+linux-firmware-20201022/brcm/brcmfmac43430-sdio.AP6212.txt
++ linux-firmware-20201022/brcm/brcmfmac43430-sdio.bin
+
+armbian-firmware-70a08503ac9e765f5d1ccf4fa3e825db0751e53e/brcm/brcmfmac43430-sdio.bin
++ armbian-firmware-70a08503ac9e765f5d1ccf4fa3e825db0751e53e/brcm/brcmfmac43430-sdio.txt
+
+armbian-firmware-70a08503ac9e765f5d1ccf4fa3e825db0751e53e/ap6212/fw_bcm43438a1.bin
++ armbian-firmware-70a08503ac9e765f5d1ccf4fa3e825db0751e53e/ap6212/nvram.txt
+
+armbian-firmware-70a08503ac9e765f5d1ccf4fa3e825db0751e53e/ap6212/fw_bcm43438a1_apsta.bin
++ armbian-firmware-70a08503ac9e765f5d1ccf4fa3e825db0751e53e/ap6212/nvram.txt
+
+(No working combination with rpi-wifi-firmware.)
+
+I will re-post an updated configuration using linux-firmware instead. Let's see
+if I can submit a patch to the linux-firmware WHENCE file for the symlinks.
+
+> By the way, where does the weird 'brcmfmac43430-sdio.sinovoip,bpi-m2-zero.txt'
+> name comes from? Is that a 'compatible' string from the DT?
+
+Peter explained the naming in another e-mail already but FWIW the driver also
+considers the more generic brcmfmac43430-sdio.txt as second choice. Not sure if
+that helps us here.
+
+Best regards,
+Vincent.
