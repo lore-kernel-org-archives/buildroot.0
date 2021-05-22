@@ -1,65 +1,60 @@
-From: Vincent =?iso-8859-1?Q?Stehl=E9?= <vincent.stehle@laposte.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Sat, 22 May 2021 18:56:25 +0200
-Subject: [Buildroot] [PATCH] configs/bananapi_m2_zero: bump versions and
- add WiFi support
-In-Reply-To: <20210519113811.GT2268078@scaer>
-References: <20210508201614.16041-1-vincent.stehle@laposte.net>
- <20210519113811.GT2268078@scaer>
-Message-ID: <YKk3uXNOZ5pKsOLZ@romuald.bergerie>
+Subject: [Buildroot] [git commit] package/llvm: include limits
+Message-ID: <20210522162958.E7B9788DDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 19, 2021 at 01:38:11PM +0200, Yann E. MORIN wrote:
-..
-> Also, if one look at armbian-firmware, there is already a brcm/
-> sub-directory, and that already has brcm/brcmfmac43430-sdio.bin. Of
-> course, the two are different...
-> 
-> Additionally, linux-firmware has brcm/brcmfmac43430a0-sdio.bin and
-> brcm/brcmfmac43430-sdio.AP6212.txt, again with different content. The
-> latter states "NVRAM config file for the Ampak AP6212 43430 WiFi/BT
-> module".
-> 
-> So, this is quite a mess. Why do we have to use the armbian-fw ones,
-> instead of those from linux-firmware? We are using an upstream kernel,
-> and supposedly, drivers in there are supposed (as I understand it) to
-> only require blobs from linux-firmware...
+commit: https://git.buildroot.net/buildroot/commit/?id=8d8f456d59ca5b1e70e37f899743b8d41514cb40
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi Yann,
+Fix the following build failure:
 
-Thanks for the review.
+In file included from /data/buildroot-autobuilder/instance-0/output-1/build/host-llvm-9.0.1/utils/benchmark/src/benchmark_register.cc:15:
+/data/buildroot-autobuilder/instance-0/output-1/build/host-llvm-9.0.1/utils/benchmark/src/benchmark_register.h: In function 'void AddRange(std::vector<T>*, T, T, int)':
+/data/buildroot-autobuilder/instance-0/output-1/build/host-llvm-9.0.1/utils/benchmark/src/benchmark_register.h:17:30: error: 'numeric_limits' is not a member of 'std'
+   17 |   static const T kmax = std::numeric_limits<T>::max();
+      |                              ^~~~~~~~~~~~~~
 
-You are right, there are multiple firmware candidates. I selected this Armbian
-AP6212 firmware a while ago for a specific scenario of STA+AP. For the
-buildroot config, I think any firmware capable of STA should do. After a quick
-re-test the following combinations work fine:
+Fixes:
+ - http://autobuild.buildroot.org/results/68581aad7c622a1fc74bb5556799e3c681425b2a
 
-linux-firmware-20201022/brcm/brcmfmac43430-sdio.AP6212.txt
-+ linux-firmware-20201022/brcm/brcmfmac43430-sdio.bin
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/llvm/0001-nfc-Fix-missing-include.patch | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-armbian-firmware-70a08503ac9e765f5d1ccf4fa3e825db0751e53e/brcm/brcmfmac43430-sdio.bin
-+ armbian-firmware-70a08503ac9e765f5d1ccf4fa3e825db0751e53e/brcm/brcmfmac43430-sdio.txt
-
-armbian-firmware-70a08503ac9e765f5d1ccf4fa3e825db0751e53e/ap6212/fw_bcm43438a1.bin
-+ armbian-firmware-70a08503ac9e765f5d1ccf4fa3e825db0751e53e/ap6212/nvram.txt
-
-armbian-firmware-70a08503ac9e765f5d1ccf4fa3e825db0751e53e/ap6212/fw_bcm43438a1_apsta.bin
-+ armbian-firmware-70a08503ac9e765f5d1ccf4fa3e825db0751e53e/ap6212/nvram.txt
-
-(No working combination with rpi-wifi-firmware.)
-
-I will re-post an updated configuration using linux-firmware instead. Let's see
-if I can submit a patch to the linux-firmware WHENCE file for the symlinks.
-
-> By the way, where does the weird 'brcmfmac43430-sdio.sinovoip,bpi-m2-zero.txt'
-> name comes from? Is that a 'compatible' string from the DT?
-
-Peter explained the naming in another e-mail already but FWIW the driver also
-considers the more generic brcmfmac43430-sdio.txt as second choice. Not sure if
-that helps us here.
-
-Best regards,
-Vincent.
+diff --git a/package/llvm/0001-nfc-Fix-missing-include.patch b/package/llvm/0001-nfc-Fix-missing-include.patch
+new file mode 100644
+index 0000000000..62111ca138
+--- /dev/null
++++ b/package/llvm/0001-nfc-Fix-missing-include.patch
+@@ -0,0 +1,24 @@
++From b498303066a63a203d24f739b2d2e0e56dca70d1 Mon Sep 17 00:00:00 2001
++From: serge-sans-paille <sguelton@redhat.com>
++Date: Tue, 10 Nov 2020 14:55:25 +0100
++Subject: [PATCH] [nfc] Fix missing include
++
++[Retrieved (and backported) from:
++https://github.com/llvm/llvm-project/commit/b498303066a63a203d24f739b2d2e0e56dca70d1]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ llvm/utils/benchmark/src/benchmark_register.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/utils/benchmark/src/benchmark_register.h b/utils/benchmark/src/benchmark_register.h
++index 0705e219f2fa2..4caa5ad4da079 100644
++--- a/utils/benchmark/src/benchmark_register.h
+++++ b/utils/benchmark/src/benchmark_register.h
++@@ -1,6 +1,7 @@
++ #ifndef BENCHMARK_REGISTER_H
++ #define BENCHMARK_REGISTER_H
++ 
+++#include <limits>
++ #include <vector>
++ 
++ #include "check.h"
