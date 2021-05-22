@@ -1,63 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 May 2021 21:59:10 +0200
-Subject: [Buildroot] [RFC/next 1/1] package/hostapd: enable MD4 in
- openssl
-In-Reply-To: <20210522194845.593676-1-geomatsi@gmail.com>
-References: <20210522194845.593676-1-geomatsi@gmail.com>
-Message-ID: <20210522195910.GC3208066@scaer>
+Date: Sat, 22 May 2021 21:59:39 +0200
+Subject: [Buildroot] [git commit] package/pngquant: add
+ PNGQUANT_CPE_ID_VENDOR
+Message-ID: <20210522193402.9FCC086D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergey, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f5732350befabe242bb2c5f649fec48592e385cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-22 22:48 +0300, Sergey Matyukevich spake thusly:
-> Hostapd assumes that openssl always provides MD4 support. However MD4
-> support in openssl has become optional since  commit a83d41867c8d
-> ("package/libopenssl: add option to enable some features").
-> 
-> Select openssl MD4 support in hostapd Kconfig to avoid build failures.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/09ce1d8009da98cd2a3f2c8488abaa9f060a9d6b/
-> 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+cpe:2.3:a:pngquant:pngquant is a valid CPE identifier for this package:
 
-Applied to next, thanks.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apngquant%3Apngquant
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pngquant/pngquant.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> ---
->  package/hostapd/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
-> index 54d2086c09..1ac7f6cd5a 100644
-> --- a/package/hostapd/Config.in
-> +++ b/package/hostapd/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_HOSTAPD
->  	bool "hostapd"
->  	depends on BR2_USE_MMU # fork()
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
->  	help
->  	  User space daemon for wireless access points.
->  
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
+index c5a17e872a..1729ff1927 100644
+--- a/package/pngquant/pngquant.mk
++++ b/package/pngquant/pngquant.mk
+@@ -9,6 +9,7 @@ PNGQUANT_SOURCE = pngquant-$(PNGQUANT_VERSION)-src.tar.gz
+ PNGQUANT_SITE = https://pngquant.org
+ PNGQUANT_LICENSE = GPL-3.0+
+ PNGQUANT_LICENSE_FILES = COPYRIGHT
++PNGQUANT_CPE_ID_VENDOR = pngquant
+ HOST_PNGQUANT_DEPENDENCIES = host-libpng
+ PNGQUANT_DEPENDENCIES = libpng
+ 
