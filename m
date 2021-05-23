@@ -1,31 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 20:37:09 +0200
-Subject: [Buildroot] [PATCH v2] package/dhcp: add host-gawk optional
- dependency
-In-Reply-To: <20210507094304.21719-1-heiko.thiery@gmail.com> (Heiko Thiery's
- message of "Fri, 7 May 2021 11:43:05 +0200")
-References: <20210507094304.21719-1-heiko.thiery@gmail.com>
-Message-ID: <878s4547qi.fsf@dell.be.48ers.dk>
+Date: Sun, 23 May 2021 20:38:25 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/dhcp: add host-gawk to
+ global dependencies and build environment
+In-Reply-To: <20210520215224.2749900-1-geomatsi@gmail.com> (Sergey
+ Matyukevich's message of "Fri, 21 May 2021 00:52:24 +0300")
+References: <20210520215224.2749900-1-geomatsi@gmail.com>
+Message-ID: <871r9x47oe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
+>>>>> "Sergey" == Sergey Matyukevich <geomatsi@gmail.com> writes:
 
- > On hosts where gawk is not available, it is not possible to build the
- > package with server option (BR2_PACKAGE_DHCP_SERVER).
- > The build goes through without errors but the binaries are not created
- > and installed. The reason is that autotools cannot find gawk.
+ > DHCP package may silently fail to install binaries to the target image.
+ > The problem occurs when buildroot output/host and build server provide
+ > different flavors of awk. For instance, mawk on build server and gawk
+ > in buildroot output/host. In this case isc-dhcp configure script detects
+ > gawk in output/host and generates Makefiles specifying gawk without
+ > absolute path. During Buildroot installation phase, those Makefiles
+ > are used to install dhcp binaries. They attempt to use gawk without
+ > absolute path. However build host does not have gawk.
 
- > Fixes: Bug 13781
+ > To resolve the issue add host-gawk to dependencies and specify absolute
+ > path to host-gawk in dhcp configure script using DHCP_CONF_ENV.
 
- > Reported-by: Kay Jeschonneck <kay.jeschonneck@airbus.com>
- > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
- > ---
- > v2:
- >  - set to correct bug number
+ > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
 Committed to 2021.02.x, thanks.
 
