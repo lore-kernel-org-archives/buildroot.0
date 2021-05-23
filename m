@@ -1,38 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 17:58:45 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/synergy: add
- SYNERGY_CPE_ID_VENDOR
-Message-ID: <20210523160324.C506380235@busybox.osuosl.org>
+Date: Sun, 23 May 2021 18:03:57 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libgtk3: add CPE
+ variables
+Message-ID: <20210523160325.23BCB80235@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3194fe85d57ec6473de609314ce86d40b54bdf5f
+commit: https://git.buildroot.net/buildroot/commit/?id=094f0bbe6b487ed1e8fd66b584090a9516280051
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:symless:synergy is a valid CPE identifier for this package:
+cpe:2.3:a:gnome:gtk is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asymless%3Asynergy
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Agtk
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 778e2e0467b2c6e59682692421dfe9319ea0adf0)
+(cherry picked from commit dc579e498b6820893b0671a740b9261f40166ad9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/synergy/synergy.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libgtk3/libgtk3.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
-index 63c6e5cbc1..bc7ebea070 100644
---- a/package/synergy/synergy.mk
-+++ b/package/synergy/synergy.mk
-@@ -8,6 +8,7 @@ SYNERGY_VERSION = 2.0.12-beta
- SYNERGY_SITE = $(call github,symless,synergy-core,v$(SYNERGY_VERSION))
- SYNERGY_LICENSE = GPL-2.0
- SYNERGY_LICENSE_FILES = LICENSE
-+SYNERGY_CPE_ID_VENDOR = symless
- SYNERGY_DEPENDENCIES = xlib_libX11 xlib_libXtst
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index f7345cf2e9..9ece409ba3 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -10,6 +10,8 @@ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
+ LIBGTK3_LICENSE_FILES = COPYING
++LIBGTK3_CPE_ID_VENDOR = gnome
++LIBGTK3_CPE_ID_PRODUCT = gtk
+ LIBGTK3_INSTALL_STAGING = YES
+ LIBGTK3_AUTORECONF = YES
  
- # Avoid using buildroot commit hash inside cmake/Version.cmake
