@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8882C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:25:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E67BC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:25:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AAFC360F0F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:25:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AAFC360F0F
+	by mail.kernel.org (Postfix) with ESMTPS id EC4F460F45
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:25:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EC4F460F45
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8544F402C0;
-	Tue,  3 Aug 2021 21:25:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C77A2607E4;
+	Tue,  3 Aug 2021 21:25:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LEP4MptcHtYb; Tue,  3 Aug 2021 21:25:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3kZX0HyZ_3Oc; Tue,  3 Aug 2021 21:25:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC0F0402BD;
-	Tue,  3 Aug 2021 21:25:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7451A1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BFBF60673;
+	Tue,  3 Aug 2021 21:25:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B8701BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 242C24045A
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D2B9835B1
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KaiGh5T2qozk for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UBZzjJJa8y_V for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8FE1F4028C
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A555F837A4
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id DA8BF8B43E; Tue,  3 Aug 2021 21:09:41 +0000 (UTC)
+ id F0037864A8; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 20 May 2021 09:14:02 +0200
+Date: Sun, 23 May 2021 19:49:55 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 808fbb17fc721a4fd3e28ad12582ae267a486ac3
-X-Git-Newrev: 3d78dbace207b6b93416b27abcb85dbccde97a6b
+X-Git-Oldrev: 84c07e1f51a0305995c6b956bc91a7f1a78746ed
+X-Git-Newrev: 5dfb873acfd85196fe141a3e5b9fd170a4c36094
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210941.DA8BF8B43E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/imx-gpu-viv: add
- dependency to BR2_INSTALL_LIBSTDCPP to examples
+Message-Id: <20210803210944.F0037864A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mini-snmpd: add CPE
+ variables
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,42 +70,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d78dbace207b6b93416b27abcb85dbccde97a6b
+commit: https://git.buildroot.net/buildroot/commit/?id=5dfb873acfd85196fe141a3e5b9fd170a4c36094
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The examples require libstdc++.so.6 so add the required dependency to
-the Config.in.
+cpe:2.3:a:minisnmpd_project:minisnmpd is a valid CPE identifier for this
+package:
 
-  ./tiger: error while loading shared libraries: libstdc++.so.6: cannot open shared object file: No such file or directory
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aminisnmpd_project%3Aminisnmpd
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/freescale-imx/imx-gpu-viv/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/mini-snmpd/mini-snmpd.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-index 6668ee8bb5..ca46c5036f 100644
---- a/package/freescale-imx/imx-gpu-viv/Config.in
-+++ b/package/freescale-imx/imx-gpu-viv/Config.in
-@@ -84,11 +84,17 @@ config BR2_PACKAGE_PROVIDES_LIBOPENVG
+diff --git a/package/mini-snmpd/mini-snmpd.mk b/package/mini-snmpd/mini-snmpd.mk
+index 570241c256..1f6e5c1919 100644
+--- a/package/mini-snmpd/mini-snmpd.mk
++++ b/package/mini-snmpd/mini-snmpd.mk
+@@ -8,6 +8,8 @@ MINI_SNMPD_VERSION = 1.6
+ MINI_SNMPD_SITE = $(call github,troglobit,mini-snmpd,v$(MINI_SNMPD_VERSION))
+ MINI_SNMPD_LICENSE = GPL-2.0
+ MINI_SNMPD_LICENSE_FILES = COPYING
++MINI_SNMPD_CPE_ID_VENDOR = minisnmpd_project
++MINI_SNMPD_CPE_ID_PRODUCT = minisnmpd
+ MINI_SNMPD_AUTORECONF = YES
+ MINI_SNMPD_DEPENDENCIES = host-pkgconf
  
- config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
- 	bool "install examples"
-+	# example binaries are linked against libstdc++.so.6
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Copy the Vivante examples to the target.
- 
- 	  Warning: examples take approximately 150 MB of disk space.
- 
-+comment "imx-gpu-viv-examples need a toolchain w/ C++ support"
-+    depends on !BR2_INSTALL_LIBSTDCPP
-+
-+
- config BR2_PACKAGE_IMX_GPU_VIV_GMEM_INFO
- 	bool "install gmem_info tool"
- 	help
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
