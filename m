@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9172C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:30:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E184C4320A
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:30:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8582360F56
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:30:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8582360F56
+	by mail.kernel.org (Postfix) with ESMTPS id D3C8860F46
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:30:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D3C8860F46
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C73D83947;
-	Tue,  3 Aug 2021 21:30:46 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g0GarooVev2Y; Tue,  3 Aug 2021 21:30:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0A7E83576;
-	Tue,  3 Aug 2021 21:30:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3EA141BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF0FC605E0
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6AFF6061C;
+	Tue,  3 Aug 2021 21:30:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pjd-Aon53-AB for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vFVo5-lA-VXR; Tue,  3 Aug 2021 21:30:58 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FF1D605C8;
+	Tue,  3 Aug 2021 21:30:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D69D1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E06944044B
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d9wPa5xFsCSu for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0BF9160838
+ by smtp4.osuosl.org (Postfix) with ESMTP id 34BB240275
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 63B008B43E; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
+ id 7E9D385F62; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 23 May 2021 13:47:19 +0200
+Date: Sun, 23 May 2021 14:13:19 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 81009e31d9d79a125dfaf402baeb6e0acf2c6fed
-X-Git-Newrev: c95d3d8ab8f8c057cb57204419dd9b6445a92622
+X-Git-Oldrev: 77d1a1be546aac3773e390b2a15647114567da1f
+X-Git-Newrev: 648ff342db3bac164e098673ded1a82bb843f91a
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210944.63B008B43E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libical: add
- LIBICAL_CPE_ID_VENDOR
+Message-Id: <20210803210944.7E9D385F62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/hwloc: add optional
+ dependencies to udev, libxml2, ncurses & numactl
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,32 +70,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c95d3d8ab8f8c057cb57204419dd9b6445a92622
+commit: https://git.buildroot.net/buildroot/commit/?id=648ff342db3bac164e098673ded1a82bb843f91a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:libical_project:libical is a valid CPE identifier for this
-package:
+udev:
+https://github.com/open-mpi/hwloc/blob/master/config/hwloc.m4#L626
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibical_project%3Alibical
+libxml2:
+https://github.com/open-mpi/hwloc/blob/master/config/hwloc.m4#L1273
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ncurses:
+https://github.com/open-mpi/hwloc/blob/master/config/hwloc_internal.m4#L340
+
+numactl:
+https://github.com/open-mpi/hwloc/blob/master/config/hwloc_internal.m4#L419
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998@free.fr: drop unconditional --disable-libxml2]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libical/libical.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/hwloc/hwloc.mk | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/package/libical/libical.mk b/package/libical/libical.mk
-index f9a266026e..afbbfd98c8 100644
---- a/package/libical/libical.mk
-+++ b/package/libical/libical.mk
-@@ -9,6 +9,7 @@ LIBICAL_SITE = https://github.com/libical/libical/releases/download/v$(LIBICAL_V
- LIBICAL_INSTALL_STAGING = YES
- LIBICAL_LICENSE = MPL-1.0 or LGPL-2.1
- LIBICAL_LICENSE_FILES = LICENSE
-+LIBICAL_CPE_ID_VENDOR = libical_project
+diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
+index 77a25a1775..2a5a82cea4 100644
+--- a/package/hwloc/hwloc.mk
++++ b/package/hwloc/hwloc.mk
+@@ -24,9 +24,15 @@ HWLOC_CONF_OPTS = \
+ 	--disable-nvml \
+ 	--disable-gl \
+ 	--disable-cairo \
+-	--disable-libxml2 \
+ 	--disable-doxygen
  
- # 0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
- LIBICAL_IGNORE_CVES += CVE-2016-9584
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++HWLOC_CONF_OPTS += --enable-libudev
++HWLOC_DEPENDENCIES += udev
++else
++HWLOC_CONF_OPTS += --disable-libudev
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPCIACCESS),y)
+ HWLOC_CONF_OPTS += --enable-pci
+ HWLOC_DEPENDENCIES += libpciaccess
+@@ -34,4 +40,19 @@ else
+ HWLOC_CONF_OPTS += --disable-pci
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++HWLOC_CONF_OPTS += --enable-libxml2
++HWLOC_DEPENDENCIES += libxml2
++else
++HWLOC_CONF_OPTS += --disable-libxml2
++endif
++
++ifeq ($(BR2_PACKAGE_NCURSES),y)
++HWLOC_DEPENDENCIES += ncurses
++endif
++
++ifeq ($(BR2_PACKAGE_NUMACTL),y)
++HWLOC_DEPENDENCIES += numactl
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
