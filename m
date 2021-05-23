@@ -1,38 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 20:27:22 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/less: add
- LESS_CPE_ID_VENDOR
-Message-ID: <20210523180930.DE1238A275@busybox.osuosl.org>
+Date: Sun, 23 May 2021 20:35:53 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/imx-gpu-viv: fix
+ Config.in indentation
+Message-ID: <20210523180931.4BDE783797@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9fbcc6be971f4a3c2d0b223154bd683f98eb43e
+commit: https://git.buildroot.net/buildroot/commit/?id=ed2d65cfb63f32734b970f1e2321b8029002f548
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:gnu:less is a valid CPE identifier for this package:
+As reported by check-package.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Aless
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0030cbd43094650481a6a0381b0a573903bd1cb9)
+Fixes: 3d78dbace207b6b93416b27abcb85dbccde97a6b
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit cfb83cc5a1a7defda1a04b1b014e55bd72fb77fa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/less/less.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/freescale-imx/imx-gpu-viv/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/less/less.mk b/package/less/less.mk
-index 89962f9529..a15bd25bec 100644
---- a/package/less/less.mk
-+++ b/package/less/less.mk
-@@ -8,6 +8,7 @@ LESS_VERSION = 563
- LESS_SITE = http://www.greenwoodsoftware.com/less
- LESS_LICENSE = GPL-3.0+
- LESS_LICENSE_FILES = COPYING
-+LESS_CPE_ID_VENDOR = gnu
- LESS_DEPENDENCIES = ncurses
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index 633e04883e..232e70a80b 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -91,8 +91,7 @@ config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
+ 	  Warning: examples take approximately 150 MB of disk space.
  
- define LESS_INSTALL_TARGET_CMDS
+ comment "imx-gpu-viv-examples need a toolchain w/ C++ support"
+-    depends on !BR2_INSTALL_LIBSTDCPP
+-
++	depends on !BR2_INSTALL_LIBSTDCPP
+ 
+ config BR2_PACKAGE_IMX_GPU_VIV_GMEM_INFO
+ 	bool "install gmem_info tool"
