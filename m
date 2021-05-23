@@ -1,64 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 20:36:00 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/dhcp: add
- host-gawk to global dependencies and build environment
-Message-ID: <20210523180931.6083083797@busybox.osuosl.org>
+Date: Sun, 23 May 2021 20:45:27 +0200
+Subject: [Buildroot] [git commit] package/assimp: depends on libzlib
+In-Reply-To: <20210520191635.9A5E58889C@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Thu, 20 May 2021 21:45:23 +0200")
+References: <20210520191635.9A5E58889C@busybox.osuosl.org>
+Message-ID: <87wnrp2ss8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8d1e0532bf2a62b55b6b42fd75e097649d86729
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-DHCP package may silently fail to install binaries to the target image.
-The problem occurs when buildroot output/host and build server provide
-different flavors of awk. For instance, mawk on build server and gawk
-in buildroot output/host. In this case isc-dhcp configure script detects
-gawk in output/host and generates Makefiles specifying gawk without
-absolute path. During Buildroot installation phase, those Makefiles
-are used to install dhcp binaries. They attempt to use gawk without
-absolute path. However build host does not have gawk.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=8f11388f4e60df88ffb210079f412736160474a5
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To resolve the issue add host-gawk to dependencies and specify absolute
-path to host-gawk in dhcp configure script using DHCP_CONF_ENV.
+ > assimp doesn't build with zlib-ng because Z_EXPORT and z_crc_t are used
+ > by the bundled unzip source code
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 9ec60e877e3cf9bb1a11f59ae18976f3f7087fed)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dhcp/dhcp.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 8d7157f357..db58870f88 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -9,7 +9,7 @@ DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
- DHCP_INSTALL_STAGING = YES
- DHCP_LICENSE = MPL-2.0
- DHCP_LICENSE_FILES = LICENSE
--DHCP_DEPENDENCIES = bind
-+DHCP_DEPENDENCIES = bind host-gawk
- DHCP_CPE_ID_VENDOR = isc
- 
- # use libtool-enabled configure.ac
-@@ -22,6 +22,8 @@ DHCP_CONF_ENV = \
- 		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
- 	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
- 
-+DHCP_CONF_ENV += ac_cv_prog_AWK=$(HOST_DIR)/bin/gawk
-+
- DHCP_CONF_OPTS = \
- 	--with-libbind=$(STAGING_DIR)/usr \
- 	--with-randomdev=/dev/random \
-@@ -55,7 +57,6 @@ define DHCP_INSTALL_LIBS
- endef
- 
- ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
--DHCP_DEPENDENCIES += host-gawk
- define DHCP_INSTALL_CTL_LIBS
- 	$(MAKE) -C $(@D)/dhcpctl install-exec DESTDIR=$(TARGET_DIR)
- endef
+Committed to 2021.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
