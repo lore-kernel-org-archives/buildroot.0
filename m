@@ -1,57 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 May 2021 11:03:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/msmtp: add MSMTP_CPE_ID_VENDOR
-In-Reply-To: <20210522204209.284119-1-fontaine.fabrice@gmail.com>
-References: <20210522204209.284119-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210523090325.GN3208066@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 23 May 2021 11:29:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: needs dynamic library
+Message-ID: <20210523092920.1476926-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Since bump to version 0.3.26 in commit
+a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9, pipewire needs dynamic library
+support for at least spa plugins (which can be disabled) and spa tools
+(which can't be disabled)
 
-On 2021-05-22 22:42 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:marlam:msmtp is a valid CPE identifier for this package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amarlam%3Amsmtp
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/ea05fa6ca39b1ac55e301e5c11d3a62080d36e9e
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/pipewire/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/msmtp/msmtp.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-> index cae03d7724..3db36f4cd0 100644
-> --- a/package/msmtp/msmtp.mk
-> +++ b/package/msmtp/msmtp.mk
-> @@ -11,6 +11,7 @@ MSMTP_DEPENDENCIES = host-pkgconf
->  MSMTP_CONF_OPTS = --disable-gai-idn
->  MSMTP_LICENSE = GPL-3.0+
->  MSMTP_LICENSE_FILES = COPYING
-> +MSMTP_CPE_ID_VENDOR = marlam
->  
->  # msmtpd needs fork
->  ifeq ($(BR2_USE_MMU),y)
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
+index 851312a1a1..b6809c228e 100644
+--- a/package/pipewire/Config.in
++++ b/package/pipewire/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PIPEWIRE
+ 	bool "pipewire"
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+@@ -40,7 +41,7 @@ comment "pipewire v4l2 support needs udev and a toolchain w/ headers >= 3.18"
+ 
+ endif
+ 
+-comment "pipewire needs a toolchain w/ threads, gcc >= 5"
++comment "pipewire needs a toolchain w/ dynamic library, threads, gcc >= 5"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
