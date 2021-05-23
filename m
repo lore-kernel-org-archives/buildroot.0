@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DE7AC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:41:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 591ECC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:41:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0174261037
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:41:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0174261037
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 21C5160F58
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:41:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 21C5160F58
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D098683CF4;
-	Tue,  3 Aug 2021 22:41:22 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mGhClw8pXyr1; Tue,  3 Aug 2021 22:41:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 390B683CDF;
-	Tue,  3 Aug 2021 22:41:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AF9571BF9C1
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D42DB608A5
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0AF7608E2;
+	Tue,  3 Aug 2021 22:41:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JdxL2tmXpOXK for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Skao0kJddBRL; Tue,  3 Aug 2021 22:41:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 51074608B0;
+	Tue,  3 Aug 2021 22:41:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B4CF61BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25CF9405E1
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dJdTUxYOn6Vy for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 37E7D60A42
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F3E50404C9
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8273383D7B; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 3F6C885F62; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 15:38:44 +0200
+Date: Sun, 23 May 2021 13:45:59 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ed4cfbb7730b0172f1e503a279e214810eec049f
-X-Git-Newrev: 2c61b1acfce416a0318a61ededa82a257f87e21f
+X-Git-Oldrev: d64238104949d3c3653cc35f1cb76282792d4c4f
+X-Git-Newrev: ecb55c43cea48445fec74b0c9758431bcb1a54f0
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211017.8273383D7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/timescaledb: bump
- version to 2.3.0
+Message-Id: <20210803210944.3F6C885F62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lz4: add upstream
+ security fix for CVE-2021-3520
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,38 +70,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c61b1acfce416a0318a61ededa82a257f87e21f
+commit: https://git.buildroot.net/buildroot/commit/?id=ecb55c43cea48445fec74b0c9758431bcb1a54f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes a potential memory corruption with negative memmove() size.  For
+details, see (NVD not yet updated):
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index 98f966ee3d..e97045f7d5 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e928c939803706d0d5b11d6751d4f0d0514e540ceffc74a46a9732f9a111d313  timescaledb-2.1.1.tar.gz
-+sha256  730e61e48f471c1d643494421d21e43766128cbcb62a5c4b138c171379195cf2  timescaledb-2.3.0.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index d2a48a0f63..27e9142b0c 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+https://security-tracker.debian.org/tracker/CVE-2021-3520
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...al-memory-corruption-with-negative-memmov.patch | 26 ++++++++++++++++++++++
+ package/lz4/lz4.mk                                 |  3 +++
+ 2 files changed, 29 insertions(+)
+
+diff --git a/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch b/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch
+new file mode 100644
+index 0000000000..57e4e38f84
+--- /dev/null
++++ b/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch
+@@ -0,0 +1,26 @@
++From 8301a21773ef61656225e264f4f06ae14462bca7 Mon Sep 17 00:00:00 2001
++From: Jasper Lievisse Adriaanse <j@jasper.la>
++Date: Fri, 26 Feb 2021 15:21:20 +0100
++Subject: [PATCH] Fix potential memory corruption with negative memmove() size
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ lib/lz4.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/lz4.c b/lib/lz4.c
++index 5f524d0..c2f504e 100644
++--- a/lib/lz4.c
+++++ b/lib/lz4.c
++@@ -1749,7 +1749,7 @@ LZ4_decompress_generic(
++                  const size_t dictSize         /* note : = 0 if noDict */
++                  )
++ {
++-    if (src == NULL) { return -1; }
+++    if ((src == NULL) || (outputSize < 0)) { return -1; }
++ 
++     {   const BYTE* ip = (const BYTE*) src;
++         const BYTE* const iend = ip + srcSize;
++-- 
++2.20.1
++
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index e0236c05b1..9b9b6198c3 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -17,6 +17,9 @@ LZ4_CPE_ID_VENDOR = yann_collet
+ # See https://github.com/lz4/lz4/issues/818
+ LZ4_IGNORE_CVES += CVE-2014-4715
  
--TIMESCALEDB_VERSION = 2.1.1
-+TIMESCALEDB_VERSION = 2.3.0
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
++# 0001-Fix-potential-memory-corruption-with-negative-memmov.patch
++LZ4_IGNORE_CVES += CVE-2021-3520
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LZ4_MAKE_OPTS += BUILD_SHARED=no
+ else ifeq ($(BR2_SHARED_LIBS),y)
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
