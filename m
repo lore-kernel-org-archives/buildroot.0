@@ -1,40 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 17:58:34 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/uclibc: add CPE
- variables
-Message-ID: <20210523160324.B46788A2FE@busybox.osuosl.org>
+Date: Sun, 23 May 2021 17:55:41 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/musl: add
+ MUSL_CPE_ID_VENDOR
+Message-ID: <20210523160324.9749980235@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69470f9d323e6788aa571e7b5b082cf68c5ca432
+commit: https://git.buildroot.net/buildroot/commit/?id=b71075861229b6528c4f8b797a8f97b29017a120
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:uclibc-ng_project:uclibc-ng is a valid CPE identifier for this
-package:
+cpe:2.3:a:musl-libc:musl is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Auclibc-ng_project%3Auclibc-ng
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amusl-libc%3Amusl
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 81c93749ae4b09023e864b5980d4f0a543445764)
+(cherry picked from commit 8ac2e592c0ada30887a99082851de204d8b807c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/uclibc.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/musl/musl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 3d253d93bc..a7c96684d0 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -10,6 +10,8 @@ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
- UCLIBC_LICENSE_FILES = COPYING.LIB
- UCLIBC_INSTALL_STAGING = YES
-+UCLIBC_CPE_ID_VENDOR = uclibc-ng_project
-+UCLIBC_CPE_ID_PRODUCT = uclibc-ng
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 82b3eeaf52..d4f26b50a7 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -8,6 +8,7 @@ MUSL_VERSION = 1.2.2
+ MUSL_SITE = http://www.musl-libc.org/releases
+ MUSL_LICENSE = MIT
+ MUSL_LICENSE_FILES = COPYRIGHT
++MUSL_CPE_ID_VENDOR = musl-libc
  
- define UCLIBC_HELP_CMDS
- 	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
+ # Before musl is configured, we must have the first stage
+ # cross-compiler and the kernel headers
