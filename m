@@ -1,42 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 20:26:50 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/dhcp: add
- host-gawk optional dependency
-Message-ID: <20210523180930.BAD838A275@busybox.osuosl.org>
+Date: Sun, 23 May 2021 20:27:37 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libfuse: add
+ LIBFUSE_CPE_ID_VENDOR
+Message-ID: <20210523180931.121E08A275@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc2dfa025083d29d9cdf5d19c4ed03d24d90b54e
+commit: https://git.buildroot.net/buildroot/commit/?id=61d8bb3196fa2763997a787907be179fdc119100
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-On hosts where gawk is not available, it is not possible to build the
-package with server option (BR2_PACKAGE_DHCP_SERVER).
-The build goes through without errors but the binaries are not created
-and installed. The reason is that autotools cannot find gawk.
+cpe:2.3:a:libfuse_project:libfuse is a valid CPE identifier for this
+package:
 
-Fixes: Bug 13781
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibfuse_project%3Alibfuse
 
-Reported-by: Kay Jeschonneck <kay.jeschonneck@airbus.com>
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 085d20e5e684a83736897332a7ec9d3363ea3e51)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: fix URL]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 06a0b113304df2d276b7d3f2f2871b0943a56741)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dhcp/dhcp.mk | 1 +
+ package/libfuse/libfuse.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 988c7792dc..8d7157f357 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -55,6 +55,7 @@ define DHCP_INSTALL_LIBS
- endef
- 
- ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
-+DHCP_DEPENDENCIES += host-gawk
- define DHCP_INSTALL_CTL_LIBS
- 	$(MAKE) -C $(@D)/dhcpctl install-exec DESTDIR=$(TARGET_DIR)
- endef
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index 074dc59886..2677e46853 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -9,6 +9,7 @@ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
+ LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse-$(LIBFUSE_VERSION)
+ LIBFUSE_LICENSE = GPL-2.0, LGPL-2.1
+ LIBFUSE_LICENSE_FILES = COPYING COPYING.LIB
++LIBFUSE_CPE_ID_VENDOR = libfuse_project
+ LIBFUSE_INSTALL_STAGING = YES
+ LIBFUSE_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ LIBFUSE_CONF_OPTS = \
