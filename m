@@ -2,56 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64E61C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:39:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77A6CC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:39:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2929560EBB
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:39:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2929560EBB
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 3292F601FD
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:39:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3292F601FD
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0440A60867;
-	Tue,  3 Aug 2021 22:39:07 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vr9HbdUtHz8m; Tue,  3 Aug 2021 22:39:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C47A606DC;
-	Tue,  3 Aug 2021 22:39:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1809A1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 752924048C
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10D6F415BA;
+	Tue,  3 Aug 2021 22:39:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uv8iPhLaIsfh for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UEMqhEXPy-6F; Tue,  3 Aug 2021 22:39:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F423415AC;
+	Tue,  3 Aug 2021 22:39:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F5B61BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DDC9C404D8
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Tcd1plemGctO for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9BA1A4045A
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A2CAD4051E
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E4FAA87C2D; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 01F76810E2; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 1 Aug 2021 00:02:51 +0200
+Date: Sun, 23 May 2021 10:59:02 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f0baab0d51661038ffd102d933bee392fad9c55e
-X-Git-Newrev: 2f57920841f6e9dc74416c2cc77e01e41265fc40
+X-Git-Oldrev: 27c764153abae370106451779e88c32a6ba62c1d
+X-Git-Newrev: eb72fa0d3cfe73217a96329c6b190cbfde63971c
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211024.E4FAA87C2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gli: disable tests
+Message-Id: <20210803210944.01F76810E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pwgen: add
+ PWGEN_CPE_ID_VENDOR
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,88 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f57920841f6e9dc74416c2cc77e01e41265fc40
+commit: https://git.buildroot.net/buildroot/commit/?id=eb72fa0d3cfe73217a96329c6b190cbfde63971c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Disable tests to avoid the following build failure with gcc 11:
+cpe:2.3:a:pwgen_project:pwgen is a valid CPE identifier for this
+package:
 
-/srv/storage/autobuild/run/instance-2/output-1/build/gli-559cbe1ec38878e182507d331e0780fbae5baf15/test/core/core_convert.cpp: In function 'bool convert_rgb32f_rgb9e5(const char*, const char*)':
-/srv/storage/autobuild/run/instance-2/output-1/build/gli-559cbe1ec38878e182507d331e0780fbae5baf15/test/core/core_convert.cpp:36:45: error: ordered comparison of pointer with integer zero ('const char*' and 'int')
-   36 |         if(std::strstr(FilenameDst, ".dds") > 0 || std::strstr(FilenameDst, ".ktx") > 0)
-      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/4f1dbb7cf2b071f3b92d00d13984068ef5f5b329
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apwgen_project%3Apwgen
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gli/0001-Optional-building-tests.patch | 45 ++++++++++++++++++++++++++
- package/gli/gli.mk                             |  2 ++
- 2 files changed, 47 insertions(+)
+ package/pwgen/pwgen.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gli/0001-Optional-building-tests.patch b/package/gli/0001-Optional-building-tests.patch
-new file mode 100644
-index 0000000000..c085e5060b
---- /dev/null
-+++ b/package/gli/0001-Optional-building-tests.patch
-@@ -0,0 +1,45 @@
-+From 629fc81ce73114a5925484937df796467adbe8c7 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Jo=C3=A3o=20Pereira?= <pereira.john94@gmail.com>
-+Date: Fri, 22 Mar 2019 22:58:17 +0000
-+Subject: [PATCH] Optional building tests
-+
-+[Retrieved from:
-+https://github.com/g-truc/gli/commit/629fc81ce73114a5925484937df796467adbe8c7]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ CMakeLists.txt      | 1 +
-+ test/CMakeLists.txt | 8 +++++---
-+ 2 files changed, 6 insertions(+), 3 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 6eb1a68b..bcff7ef0 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -13,6 +13,7 @@ include(GNUInstallDirs)
-+ include(CMakePackageConfigHelpers)
-+ 
-+ enable_testing()
-++option(GLI_TEST_ENABLE "Build unit tests" ON)
-+ 
-+ add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-+ add_definitions(-DSOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
-+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
-+index 6b1d4826..e51a3181 100644
-+--- a/test/CMakeLists.txt
-++++ b/test/CMakeLists.txt
-+@@ -19,10 +19,12 @@ function(glmCreateTestGTC NAME)
-+ 	set(SAMPLE_NAME test-${NAME})
-+ 	add_executable(${SAMPLE_NAME} ${NAME}.cpp)
-+ 	target_link_libraries(${SAMPLE_NAME} gli)
-+-	add_test( 
-++	add_test(
-+ 		NAME ${SAMPLE_NAME}
-+ 		COMMAND $<TARGET_FILE:${SAMPLE_NAME}> )
-+ endfunction()
-+ 
-+-add_subdirectory(bug)
-+-add_subdirectory(core)
-++if(GLI_TEST_ENABLE)
-++	add_subdirectory(bug)
-++	add_subdirectory(core)
-++endif()
-diff --git a/package/gli/gli.mk b/package/gli/gli.mk
-index 6a332d0e08..9b9990910a 100644
---- a/package/gli/gli.mk
-+++ b/package/gli/gli.mk
-@@ -14,4 +14,6 @@ GLI_LICENSE_FILES = manual.md
- GLI_INSTALL_STAGING = YES
- GLI_INSTALL_TARGET = NO
+diff --git a/package/pwgen/pwgen.mk b/package/pwgen/pwgen.mk
+index ad9465b82c..89925bb300 100644
+--- a/package/pwgen/pwgen.mk
++++ b/package/pwgen/pwgen.mk
+@@ -8,6 +8,7 @@ PWGEN_VERSION = 2.08
+ PWGEN_SITE = http://downloads.sourceforge.net/project/pwgen/pwgen/$(PWGEN_VERSION)
+ PWGEN_LICENSE = GPL-2.0
+ PWGEN_LICENSE_FILES = debian/copyright
++PWGEN_CPE_ID_VENDOR = pwgen_project
  
-+GLI_CONF_OPTS = -DGLI_TEST_ENABLE=OFF
-+
- $(eval $(cmake-package))
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
