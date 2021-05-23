@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33EF2C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D25D8C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:43:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E5EEF60F58
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:42:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E5EEF60F58
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 9313960F56
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:43:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9313960F56
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B792F403FF;
-	Tue,  3 Aug 2021 22:42:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5CC3E40135;
+	Tue,  3 Aug 2021 22:43:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y6cmYlQjWqvL; Tue,  3 Aug 2021 22:42:47 +0000 (UTC)
+	with ESMTP id xQWNkpHY2fAY; Tue,  3 Aug 2021 22:43:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9BD1340135;
-	Tue,  3 Aug 2021 22:42:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 236A31BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E3BD1404F6;
+	Tue,  3 Aug 2021 22:42:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E9DF1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 48C5260A86
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E91E40586
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ByJREZCbvh7d for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T8mp1qlaTnqo for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A14B60890
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 07CCA40580
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E48A983FBA; Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 4CAAE810E2; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 23:57:58 +0200
+Date: Sun, 23 May 2021 13:47:14 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e43c0509442c746bea305aa2b0a5f7ff5adfd142
-X-Git-Newrev: 5a189d3a24e66c8c1d5fd8e63714d2dd79f6c8ac
+X-Git-Oldrev: ecb55c43cea48445fec74b0c9758431bcb1a54f0
+X-Git-Newrev: b3c332853eb6aeec627f53c8cef7658c3cf304f6
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211018.E48A983FBA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/open62541: cleanup
- tools files after installation
+Message-Id: <20210803210944.4CAAE810E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/blktrace: add
+ BLKTRACE_CPE_ID_VENDOR
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,43 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a189d3a24e66c8c1d5fd8e63714d2dd79f6c8ac
+commit: https://git.buildroot.net/buildroot/commit/?id=b3c332853eb6aeec627f53c8cef7658c3cf304f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The open62541 tools directory is indeed 52 MiB, which built as a standalone package
-named 'libopen62541-1-tools' in launchpad. Nothing is required at runtime.
+cpe:2.3:a:blktrace_project:blktrace is a valid CPE identifier for this
+package:
 
-See the official debian control file template:
-https://raw.githubusercontent.com/open62541/open62541/master/debian/control-template
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ablktrace_project%3Ablktrace
 
-See https://launchpad.net/~open62541-team/+archive/ubuntu/ppa/+packages
-libopen62541-1       Open source implementation of OPC UA - shared library
-libopen62541-1-dev   Open source implementation of OPC UA - development files
-libopen62541-1-tools Open source implementation of OPC UA - tools
-open62541-doc        Open source implementation of OPC UA - documentation
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/open62541/open62541.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/blktrace/blktrace.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index 102e09a429..3f75196817 100644
---- a/package/open62541/open62541.mk
-+++ b/package/open62541/open62541.mk
-@@ -54,4 +54,11 @@ else
- OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=OFF
- endif
+diff --git a/package/blktrace/blktrace.mk b/package/blktrace/blktrace.mk
+index 4ada2e8e4b..1a5f59bcce 100644
+--- a/package/blktrace/blktrace.mk
++++ b/package/blktrace/blktrace.mk
+@@ -9,6 +9,7 @@ BLKTRACE_SITE = http://brick.kernel.dk/snaps
+ BLKTRACE_DEPENDENCIES = libaio
+ BLKTRACE_LICENSE = GPL-2.0+
+ BLKTRACE_LICENSE_FILES = COPYING
++BLKTRACE_CPE_ID_VENDOR = blktrace_project
  
-+# Remove unneeded files
-+define OPEN62541_REMOVE_UNNEEDED_FILES
-+	$(RM) -r $(TARGET_DIR)/usr/share/open62541
-+endef
-+
-+OPEN62541_POST_INSTALL_TARGET_HOOKS += OPEN62541_REMOVE_UNNEEDED_FILES
-+
- $(eval $(cmake-package))
+ # 0001-btt-make-device-devno-use-PATH_MAX-to-avoid-overflow.patch
+ BLKTRACE_IGNORE_CVES += CVE-2018-10689
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
