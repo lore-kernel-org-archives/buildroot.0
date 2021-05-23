@@ -1,37 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 May 2021 19:48:39 +0200
-Subject: [Buildroot] [git commit] package/oprofile: add
- OPROFILE_CPE_ID_VENDOR
-Message-ID: <20210523172850.5CA788142B@busybox.osuosl.org>
+Date: Sun, 23 May 2021 19:49:55 +0200
+Subject: [Buildroot] [git commit] package/mini-snmpd: add CPE variables
+Message-ID: <20210523172850.BA3848142B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd5dabce4c229cb472b61390e76da9fa9abd28df
+commit: https://git.buildroot.net/buildroot/commit/?id=5dfb873acfd85196fe141a3e5b9fd170a4c36094
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:maynard_johnson:oprofile is a valid CPE identifier for this
+cpe:2.3:a:minisnmpd_project:minisnmpd is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amaynard_johnson%3Aoprofile
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aminisnmpd_project%3Aminisnmpd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/oprofile/oprofile.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/mini-snmpd/mini-snmpd.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 50693ddd1e..85bc4efa9b 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -8,6 +8,7 @@ OPROFILE_VERSION = 1.4.0
- OPROFILE_SITE = http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-$(OPROFILE_VERSION)
- OPROFILE_LICENSE = GPL-2.0+
- OPROFILE_LICENSE_FILES = COPYING
-+OPROFILE_CPE_ID_VENDOR = maynard_johnson
- OPROFILE_CONF_OPTS = \
- 	--disable-account-check \
- 	--enable-gui=no \
+diff --git a/package/mini-snmpd/mini-snmpd.mk b/package/mini-snmpd/mini-snmpd.mk
+index 570241c256..1f6e5c1919 100644
+--- a/package/mini-snmpd/mini-snmpd.mk
++++ b/package/mini-snmpd/mini-snmpd.mk
+@@ -8,6 +8,8 @@ MINI_SNMPD_VERSION = 1.6
+ MINI_SNMPD_SITE = $(call github,troglobit,mini-snmpd,v$(MINI_SNMPD_VERSION))
+ MINI_SNMPD_LICENSE = GPL-2.0
+ MINI_SNMPD_LICENSE_FILES = COPYING
++MINI_SNMPD_CPE_ID_VENDOR = minisnmpd_project
++MINI_SNMPD_CPE_ID_PRODUCT = minisnmpd
+ MINI_SNMPD_AUTORECONF = YES
+ MINI_SNMPD_DEPENDENCIES = host-pkgconf
+ 
