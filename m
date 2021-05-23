@@ -1,70 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 May 2021 14:28:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: needs dynamic library
-In-Reply-To: <20210523092920.1476926-1-fontaine.fabrice@gmail.com>
-References: <20210523092920.1476926-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210523122853.GV3208066@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 23 May 2021 15:29:37 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libnids: add LIBNIDS_CPE_ID_VENDOR
+Message-ID: <20210523132938.1520248-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+cpe:2.3:a:libnids_project:libnids is a valid CPE identifier for this
+package:
 
-On 2021-05-23 11:29 +0200, Fabrice Fontaine spake thusly:
-> Since bump to version 0.3.26 in commit
-> a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9, pipewire needs dynamic library
-> support for at least spa plugins (which can be disabled) and spa tools
-> (which can't be disabled)
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/ea05fa6ca39b1ac55e301e5c11d3a62080d36e9e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibnids_project%3Alibnids
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libnids/libnids.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pipewire/Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
-> index 851312a1a1..b6809c228e 100644
-> --- a/package/pipewire/Config.in
-> +++ b/package/pipewire/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PIPEWIRE
->  	bool "pipewire"
-> +	depends on !BR2_STATIC_LIBS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
->  	depends on BR2_USE_MMU # dbus
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> @@ -40,7 +41,7 @@ comment "pipewire v4l2 support needs udev and a toolchain w/ headers >= 3.18"
->  
->  endif
->  
-> -comment "pipewire needs a toolchain w/ threads, gcc >= 5"
-> +comment "pipewire needs a toolchain w/ dynamic library, threads, gcc >= 5"
->  	depends on BR2_USE_MMU
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-> +	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
->  		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libnids/libnids.mk b/package/libnids/libnids.mk
+index fb3df318b4..4a9138b80e 100644
+--- a/package/libnids/libnids.mk
++++ b/package/libnids/libnids.mk
+@@ -8,6 +8,7 @@ LIBNIDS_VERSION = 1.24
+ LIBNIDS_SITE = https://sourceforge.net/projects/libnids/files/libnids/$(LIBNIDS_VERSION)
+ LIBNIDS_LICENSE = GPL-2.0
+ LIBNIDS_LICENSE_FILES = COPYING
++LIBNIDS_CPE_ID_VENDOR = libnids_project
+ LIBNIDS_INSTALL_STAGING = YES
+ LIBNIDS_DEPENDENCIES = host-pkgconf libpcap
+ LIBNIDS_AUTORECONF = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
