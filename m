@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 May 2021 11:03:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpv: add MPV_CPE_ID_VENDOR
-In-Reply-To: <20210522202854.283529-1-fontaine.fabrice@gmail.com>
-References: <20210522202854.283529-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210523090307.GM3208066@scaer>
+Date: Sun, 23 May 2021 11:03:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/msmtp: add MSMTP_CPE_ID_VENDOR
+In-Reply-To: <20210522204209.284119-1-fontaine.fabrice@gmail.com>
+References: <20210522204209.284119-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210523090325.GN3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,10 +12,10 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-05-22 22:28 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:mpv:mpv is a valid CPE identifier for this package:
+On 2021-05-22 22:42 +0200, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:marlam:msmtp is a valid CPE identifier for this package:
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ampv%3Ampv
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amarlam%3Amsmtp
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -25,21 +25,21 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/mpv/mpv.mk | 1 +
+>  package/msmtp/msmtp.mk | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-> index 18f307d186..ca3b8c878a 100644
-> --- a/package/mpv/mpv.mk
-> +++ b/package/mpv/mpv.mk
-> @@ -11,6 +11,7 @@ MPV_DEPENDENCIES = \
->  	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
->  MPV_LICENSE = GPL-2.0+
->  MPV_LICENSE_FILES = LICENSE.GPL
-> +MPV_CPE_ID_VENDOR = mpv
+> diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+> index cae03d7724..3db36f4cd0 100644
+> --- a/package/msmtp/msmtp.mk
+> +++ b/package/msmtp/msmtp.mk
+> @@ -11,6 +11,7 @@ MSMTP_DEPENDENCIES = host-pkgconf
+>  MSMTP_CONF_OPTS = --disable-gai-idn
+>  MSMTP_LICENSE = GPL-3.0+
+>  MSMTP_LICENSE_FILES = COPYING
+> +MSMTP_CPE_ID_VENDOR = marlam
 >  
->  MPV_NEEDS_EXTERNAL_WAF = YES
->  
+>  # msmtpd needs fork
+>  ifeq ($(BR2_USE_MMU),y)
 > -- 
 > 2.30.2
 > 
