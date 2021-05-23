@@ -1,46 +1,67 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 23 May 2021 11:29:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: needs dynamic library
-Message-ID: <20210523092920.1476926-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 May 2021 11:16:50 +0200
+Subject: [Buildroot] [git commit] package/vlc: fix build with latest live555
+Message-ID: <20210523090506.304D383970@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since bump to version 0.3.26 in commit
-a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9, pipewire needs dynamic library
-support for at least spa plugins (which can be disabled) and spa tools
-(which can't be disabled)
+commit: https://git.buildroot.net/buildroot/commit/?id=eb6017fabe09fbb654b153414aba332d78002bd7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fix build failure with live555 raised since commit
+6ad1c7f12e57ab7c6f022470e0aacec442d14267
 
 Fixes:
- - http://autobuild.buildroot.org/results/ea05fa6ca39b1ac55e301e5c11d3a62080d36e9e
+ - http://autobuild.buildroot.org/results/83170984f96238756c45bf1f4e542363afafd45f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pipewire/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ ...ess-live555.cpp-fix-build-with-live555-20.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
-index 851312a1a1..b6809c228e 100644
---- a/package/pipewire/Config.in
-+++ b/package/pipewire/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PIPEWIRE
- 	bool "pipewire"
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
- 	depends on BR2_USE_MMU # dbus
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
-@@ -40,7 +41,7 @@ comment "pipewire v4l2 support needs udev and a toolchain w/ headers >= 3.18"
- 
- endif
- 
--comment "pipewire needs a toolchain w/ threads, gcc >= 5"
-+comment "pipewire needs a toolchain w/ dynamic library, threads, gcc >= 5"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
--- 
-2.30.2
+diff --git a/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch b/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
+new file mode 100644
+index 0000000000..5f046648d4
+--- /dev/null
++++ b/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
+@@ -0,0 +1,36 @@
++From eba390d13ec4089cd6b9d8687ab3f8905b9d3ac8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 22 May 2021 22:56:04 +0200
++Subject: [PATCH] modules/access/live555.cpp: fix build with live555 >=
++ 2020.12.11
++
++Since live555-2020.12.11, connectionEndpointAddress() member function
++use a "struct sockaddr_storage" in preparation for eventual support of
++IPv6: http://www.live555.com/liveMedia/public/changelog.txt
++
++Fixes:
++ - http://autobuild.buildroot.org/results/83170984f96238756c45bf1f4e542363afafd45f
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ modules/access/live555.cpp | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/modules/access/live555.cpp b/modules/access/live555.cpp
++index 9d6e01ae32..32a6c294eb 100644
++--- a/modules/access/live555.cpp
+++++ b/modules/access/live555.cpp
++@@ -850,7 +850,9 @@ static int SessionsSetup( demux_t *p_demux )
++             if( !p_sys->b_multicast )
++             {
++                 /* We need different rollover behaviour for multicast */
++-                p_sys->b_multicast = IsMulticastAddress( sub->connectionEndpointAddress() );
+++                struct sockaddr_storage tempAddr;
+++                sub->getConnectionEndpointAddress( tempAddr );
+++                p_sys->b_multicast = IsMulticastAddress( tempAddr );
++             }
++ 
++             tk = (live_track_t*)malloc( sizeof( live_track_t ) );
++-- 
++2.30.2
++
