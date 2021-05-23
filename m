@@ -1,39 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 18:03:57 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libgtk3: add CPE
- variables
-Message-ID: <20210523160325.23BCB80235@busybox.osuosl.org>
+Date: Sun, 23 May 2021 18:32:20 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/imx-gpu-viv: add
+ dependency to BR2_INSTALL_LIBSTDCPP to examples
+Message-ID: <20210523160325.365C87FFA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=094f0bbe6b487ed1e8fd66b584090a9516280051
+commit: https://git.buildroot.net/buildroot/commit/?id=1d62023aea17b429b1d7f14462a54c51a8bc7f43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:gnome:gtk is a valid CPE identifier for this package:
+The examples require libstdc++.so.6 so add the required dependency to
+the Config.in.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Agtk
+  ./tiger: error while loading shared libraries: libstdc++.so.6: cannot open shared object file: No such file or directory
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit dc579e498b6820893b0671a740b9261f40166ad9)
+(cherry picked from commit 3d78dbace207b6b93416b27abcb85dbccde97a6b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgtk3/libgtk3.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/freescale-imx/imx-gpu-viv/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index f7345cf2e9..9ece409ba3 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -10,6 +10,8 @@ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
- LIBGTK3_LICENSE_FILES = COPYING
-+LIBGTK3_CPE_ID_VENDOR = gnome
-+LIBGTK3_CPE_ID_PRODUCT = gtk
- LIBGTK3_INSTALL_STAGING = YES
- LIBGTK3_AUTORECONF = YES
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index cca2689905..633e04883e 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -83,11 +83,17 @@ config BR2_PACKAGE_PROVIDES_LIBOPENVG
  
+ config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
+ 	bool "install examples"
++	# example binaries are linked against libstdc++.so.6
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Copy the Vivante examples to the target.
+ 
+ 	  Warning: examples take approximately 150 MB of disk space.
+ 
++comment "imx-gpu-viv-examples need a toolchain w/ C++ support"
++    depends on !BR2_INSTALL_LIBSTDCPP
++
++
+ config BR2_PACKAGE_IMX_GPU_VIV_GMEM_INFO
+ 	bool "install gmem_info tool"
+ 	help
