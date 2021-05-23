@@ -1,68 +1,71 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 23 May 2021 11:43:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/hwloc: add optional dependencies to
- udev, libxml2, ncurses & numactl
-Message-ID: <20210523094346.118963-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 May 2021 11:52:39 +0200
+Subject: [Buildroot] [PATCH] package/lz4: add upstream security fix for
+ CVE-2021-3520
+Message-ID: <20210523095239.18348-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-udev:
-https://github.com/open-mpi/hwloc/blob/master/config/hwloc.m4#L626
+Fixes a potential memory corruption with negative memmove() size.  For
+details, see (NVD not yet updated):
 
-libxml2:
-https://github.com/open-mpi/hwloc/blob/master/config/hwloc.m4#L1273
+https://security-tracker.debian.org/tracker/CVE-2021-3520
 
-ncurses:
-https://github.com/open-mpi/hwloc/blob/master/config/hwloc_internal.m4#L340
-
-numactl:
-https://github.com/open-mpi/hwloc/blob/master/config/hwloc_internal.m4#L419
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hwloc/hwloc.mk | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ ...mory-corruption-with-negative-memmov.patch | 26 +++++++++++++++++++
+ package/lz4/lz4.mk                            |  3 +++
+ 2 files changed, 29 insertions(+)
+ create mode 100644 package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch
 
-diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
-index 77a25a1775..8a08ab89c8 100644
---- a/package/hwloc/hwloc.mk
-+++ b/package/hwloc/hwloc.mk
-@@ -27,6 +27,13 @@ HWLOC_CONF_OPTS = \
- 	--disable-libxml2 \
- 	--disable-doxygen
+diff --git a/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch b/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch
+new file mode 100644
+index 0000000000..57e4e38f84
+--- /dev/null
++++ b/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch
+@@ -0,0 +1,26 @@
++From 8301a21773ef61656225e264f4f06ae14462bca7 Mon Sep 17 00:00:00 2001
++From: Jasper Lievisse Adriaanse <j@jasper.la>
++Date: Fri, 26 Feb 2021 15:21:20 +0100
++Subject: [PATCH] Fix potential memory corruption with negative memmove() size
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ lib/lz4.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/lz4.c b/lib/lz4.c
++index 5f524d0..c2f504e 100644
++--- a/lib/lz4.c
+++++ b/lib/lz4.c
++@@ -1749,7 +1749,7 @@ LZ4_decompress_generic(
++                  const size_t dictSize         /* note : = 0 if noDict */
++                  )
++ {
++-    if (src == NULL) { return -1; }
+++    if ((src == NULL) || (outputSize < 0)) { return -1; }
++ 
++     {   const BYTE* ip = (const BYTE*) src;
++         const BYTE* const iend = ip + srcSize;
++-- 
++2.20.1
++
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index e0236c05b1..9b9b6198c3 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -17,6 +17,9 @@ LZ4_CPE_ID_VENDOR = yann_collet
+ # See https://github.com/lz4/lz4/issues/818
+ LZ4_IGNORE_CVES += CVE-2014-4715
  
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-+HWLOC_CONF_OPTS += --enable-libudev
-+HWLOC_DEPENDENCIES += udev
-+else
-+HWLOC_CONF_OPTS += --disable-libudev
-+endif
++# 0001-Fix-potential-memory-corruption-with-negative-memmov.patch
++LZ4_IGNORE_CVES += CVE-2021-3520
 +
- ifeq ($(BR2_PACKAGE_LIBPCIACCESS),y)
- HWLOC_CONF_OPTS += --enable-pci
- HWLOC_DEPENDENCIES += libpciaccess
-@@ -34,4 +41,19 @@ else
- HWLOC_CONF_OPTS += --disable-pci
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBXML2),y)
-+HWLOC_CONF_OPTS += --enable-libxml2
-+HWLOC_DEPENDENCIES += libxml2
-+else
-+HWLOC_CONF_OPTS += --disable-libxml2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
-+HWLOC_DEPENDENCIES += ncurses
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NUMACTL),y)
-+HWLOC_DEPENDENCIES += numactl
-+endif
-+
- $(eval $(autotools-package))
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LZ4_MAKE_OPTS += BUILD_SHARED=no
+ else ifeq ($(BR2_SHARED_LIBS),y)
 -- 
-2.29.2
+2.20.1
