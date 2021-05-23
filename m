@@ -1,50 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 18:02:49 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/flatcc: disable
- -Werror
-Message-ID: <20210523160324.E97BB8A2FB@busybox.osuosl.org>
+Date: Sun, 23 May 2021 19:55:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libraw: depends on
+ BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <20210520064729.154411-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 20 May 2021 08:47:29 +0200")
+References: <20210520064729.154411-1-fontaine.fabrice@gmail.com>
+Message-ID: <87bl915o87.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=465c6ec847f5e281836aba2489c50c61bc1e659e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Disable -Werror to fix the following build failure with gcc 11:
+ > libraw needs __sync_fetch_and_add since version 0.20.0 and
+ > https://github.com/LibRaw/LibRaw/commit/d1975cb0e055d2bfe58c9d845c9a3e57c346a2f9
 
-/data/buildroot-autobuilder/instance-0/output-1/build/host-flatcc-0.6.0/include/flatcc/reflection/flatbuffers_common_builder.h: In function 'flatbuffers_char_array_copy_from_pe':
-/data/buildroot-autobuilder/instance-0/output-1/build/host-flatcc-0.6.0/include/flatcc/reflection/flatbuffers_common_builder.h:341:3: error: this 'for' clause does not guard... [-Werror=misleading-indentation]
-  341 |   for (i = 0; i < n; ++i) N ## _copy_from_pe(&p[i], &p2[i]); return p; }\
-      |   ^~~
+ > This will fix the following build failure with imagemagick which is
+ > raised since commit 2f47cfade4b298350d056f6d9a7525b837e2ba23:
 
-An other option would have been to retrieve the following upstream
-commit:
-https://github.com/dvidelabs/flatcc/commit/f8c4140dd9dde61c86db751f6002def78754fced
-but disabling -Werror is more future-proof
+ > /home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libraw_r.so: undefined reference to `__sync_fetch_and_add_4'
 
-Fixes:
- - http://autobuild.buildroot.org/results/4d5cdddbfeefdeb943234b76eb08b04376f3c36d
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/900df43bd418d2da0c3ec875db1c5564dd857e94
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1beb9784927d1a5402bcb16d618278d82c039459)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/flatcc/flatcc.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/flatcc/flatcc.mk b/package/flatcc/flatcc.mk
-index c27809b86a..fcace691c0 100644
---- a/package/flatcc/flatcc.mk
-+++ b/package/flatcc/flatcc.mk
-@@ -10,6 +10,8 @@ FLATCC_LICENSE = Apache-2.0
- FLATCC_LICENSE_FILES = LICENSE
- FLATCC_INSTALL_STAGING = YES
- FLATCC_DEPENDENCIES = host-flatcc
-+FLATCC_CONF_OPTS = -DFLATCC_ALLOW_WERROR=OFF
-+HOST_FLATCC_CONF_OPTS = -DFLATCC_ALLOW_WERROR=OFF
- 
- # Disable build of tests and samples
- FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
+Committed to 2021.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
