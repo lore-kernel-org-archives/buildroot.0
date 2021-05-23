@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 May 2021 20:00:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minizip: add
- MINIZIP_CPE_ID_VENDOR
-In-Reply-To: <20210523141925.1523106-1-fontaine.fabrice@gmail.com>
-References: <20210523141925.1523106-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210523180012.GA3208066@scaer>
+Date: Sun, 23 May 2021 20:00:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/minidlna: add CPE variables
+In-Reply-To: <20210523142411.1523429-1-fontaine.fabrice@gmail.com>
+References: <20210523142411.1523429-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210523180029.GB3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +12,36 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-05-23 16:19 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:minizip_project:minizip is a valid CPE identifier for this
-> package:
+On 2021-05-23 16:24 +0200, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:readymedia_project:readymedia is a valid CPE identifier for
+> this package:
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aminizip_project%3Aminizip
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Areadymedia_project%3Areadymedia
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/minizip/minizip.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-> index 6bdc63a096..12d09c0ea6 100644
-> --- a/package/minizip/minizip.mk
-> +++ b/package/minizip/minizip.mk
-> @@ -14,6 +14,7 @@ MINIZIP_CONF_OPTS = \
->  	-DMZ_FETCH_LIBS=OFF
->  MINIZIP_LICENSE = Zlib
->  MINIZIP_LICENSE_FILES = LICENSE
-> +MINZIP_CPE_ID_VENDOR = minizip_project
 
-    $ make check-package
-    package/minizip/minizip.mk:17: possible typo: MINZIP_CPE_ID_VENDOR -> *MINIZIP*
-
-Applied to master, with that fixed, thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
+> ---
+>  package/minidlna/minidlna.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
+> index 0bb3dd3502..86a2bb368d 100644
+> --- a/package/minidlna/minidlna.mk
+> +++ b/package/minidlna/minidlna.mk
+> @@ -8,6 +8,8 @@ MINIDLNA_VERSION = 1.3.0
+>  MINIDLNA_SITE = https://downloads.sourceforge.net/project/minidlna/minidlna/$(MINIDLNA_VERSION)
+>  MINIDLNA_LICENSE = GPL-2.0, BSD-3-Clause
+>  MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
+> +MINIDLNA_CPE_ID_VENDOR = readymedia_project
+> +MINIDLNA_CPE_ID_PRODUCT = readymedia
 >  
->  ifeq ($(BR2_PACKAGE_BZIP2),y)
->  MINIZIP_DEPENDENCIES += bzip2
+>  MINIDLNA_DEPENDENCIES = \
+>  	$(TARGET_NLS_DEPENDENCIES) \
 > -- 
 > 2.30.2
 > 
