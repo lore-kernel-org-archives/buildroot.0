@@ -1,36 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 May 2021 19:48:37 +0200
-Subject: [Buildroot] [git commit] package/libnids: add LIBNIDS_CPE_ID_VENDOR
-Message-ID: <20210523172850.53DA0864E6@busybox.osuosl.org>
+Date: Sun, 23 May 2021 19:48:39 +0200
+Subject: [Buildroot] [git commit] package/oprofile: add
+ OPROFILE_CPE_ID_VENDOR
+Message-ID: <20210523172850.5CA788142B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ab5ec3fbcb05c6272ace6976e95155060202585
+commit: https://git.buildroot.net/buildroot/commit/?id=bd5dabce4c229cb472b61390e76da9fa9abd28df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:libnids_project:libnids is a valid CPE identifier for this
+cpe:2.3:a:maynard_johnson:oprofile is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibnids_project%3Alibnids
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amaynard_johnson%3Aoprofile
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libnids/libnids.mk | 1 +
+ package/oprofile/oprofile.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libnids/libnids.mk b/package/libnids/libnids.mk
-index fb3df318b4..4a9138b80e 100644
---- a/package/libnids/libnids.mk
-+++ b/package/libnids/libnids.mk
-@@ -8,6 +8,7 @@ LIBNIDS_VERSION = 1.24
- LIBNIDS_SITE = https://sourceforge.net/projects/libnids/files/libnids/$(LIBNIDS_VERSION)
- LIBNIDS_LICENSE = GPL-2.0
- LIBNIDS_LICENSE_FILES = COPYING
-+LIBNIDS_CPE_ID_VENDOR = libnids_project
- LIBNIDS_INSTALL_STAGING = YES
- LIBNIDS_DEPENDENCIES = host-pkgconf libpcap
- LIBNIDS_AUTORECONF = YES
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 50693ddd1e..85bc4efa9b 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -8,6 +8,7 @@ OPROFILE_VERSION = 1.4.0
+ OPROFILE_SITE = http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-$(OPROFILE_VERSION)
+ OPROFILE_LICENSE = GPL-2.0+
+ OPROFILE_LICENSE_FILES = COPYING
++OPROFILE_CPE_ID_VENDOR = maynard_johnson
+ OPROFILE_CONF_OPTS = \
+ 	--disable-account-check \
+ 	--enable-gui=no \
