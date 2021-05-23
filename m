@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 18:04:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libgtk3: add CPE variables
-In-Reply-To: <20210519203952.51993-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 19 May 2021 22:39:52 +0200")
-References: <20210519203952.51993-1-fontaine.fabrice@gmail.com>
-Message-ID: <87o8d15tds.fsf@dell.be.48ers.dk>
+Date: Sun, 23 May 2021 18:04:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libgtk2: add CPE variables
+In-Reply-To: <20210519203859.51884-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 19 May 2021 22:38:59 +0200")
+References: <20210519203859.51884-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k0np5tdk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
