@@ -1,49 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 18:32:20 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/imx-gpu-viv: add
- dependency to BR2_INSTALL_LIBSTDCPP to examples
-Message-ID: <20210523160325.365C87FFA5@busybox.osuosl.org>
+Date: Sun, 23 May 2021 17:55:56 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/nbd: add CPE
+ variables
+Message-ID: <20210523160324.A5EBA8A2FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d62023aea17b429b1d7f14462a54c51a8bc7f43
+commit: https://git.buildroot.net/buildroot/commit/?id=9784aa99a6de2bf86137889af35558702e4199d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-The examples require libstdc++.so.6 so add the required dependency to
-the Config.in.
+cpe:2.3:a:network_block_device_project:network_block_device is a valid
+CPE identifier for this package:
 
-  ./tiger: error while loading shared libraries: libstdc++.so.6: cannot open shared object file: No such file or directory
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anetwork_block_device_project%3Anetwork_block_device
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3d78dbace207b6b93416b27abcb85dbccde97a6b)
+(cherry picked from commit 08194ef1596c7bc9687bc5eff1018c9452a72a04)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/imx-gpu-viv/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/nbd/nbd.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-index cca2689905..633e04883e 100644
---- a/package/freescale-imx/imx-gpu-viv/Config.in
-+++ b/package/freescale-imx/imx-gpu-viv/Config.in
-@@ -83,11 +83,17 @@ config BR2_PACKAGE_PROVIDES_LIBOPENVG
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index 5fd5555510..6c77bffdfe 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -11,6 +11,8 @@ NBD_CONF_OPTS = --enable-lfs
+ NBD_DEPENDENCIES = host-pkgconf libglib2
+ NBD_LICENSE = GPL-2.0
+ NBD_LICENSE_FILES = COPYING
++NBD_CPE_ID_VENDOR = network_block_device_project
++NBD_CPE_ID_PRODUCT = network_block_device
  
- config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
- 	bool "install examples"
-+	# example binaries are linked against libstdc++.so.6
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Copy the Vivante examples to the target.
- 
- 	  Warning: examples take approximately 150 MB of disk space.
- 
-+comment "imx-gpu-viv-examples need a toolchain w/ C++ support"
-+    depends on !BR2_INSTALL_LIBSTDCPP
-+
-+
- config BR2_PACKAGE_IMX_GPU_VIV_GMEM_INFO
- 	bool "install gmem_info tool"
- 	help
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ # We have linux/falloc.h
