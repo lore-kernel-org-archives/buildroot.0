@@ -1,24 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 20:34:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libfuse3: add CPE variables
-In-Reply-To: <20210520193154.183344-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 20 May 2021 21:31:54 +0200")
-References: <20210520193154.183344-1-fontaine.fabrice@gmail.com>
-Message-ID: <87lf8547v5.fsf@dell.be.48ers.dk>
+Date: Sun, 23 May 2021 20:36:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: fix build with
+ CVE-2021-30004 changes
+In-Reply-To: <20210520201833.GG3208066@scaer> (Yann E. MORIN's message of
+ "Thu, 20 May 2021 22:18:33 +0200")
+References: <20210520190456.59520-1-geomatsi@gmail.com>
+ <20210520201833.GG3208066@scaer>
+Message-ID: <87h7it47rk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > cpe:2.3:a:libfuse_project:libfuse is a valid CPE identifier for this
- > package:
+ > Sergey, All,
+ > On 2021-05-20 22:04 +0300, Sergey Matyukevich spake thusly:
+ >> Commit a8fbe67b9b16 ("package/wpa_supplicant: add upstream patch to fix
+ >> CVE-2021-30004") added security patch from hostapd upstream without
+ >> required ASN.1 helpers. Backport and adapt two commits from the
+ >> hostapd upstream to add missing headers and helpers.
+ >> 
+ >> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibfuse_project%3Alibfuse
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Applied to master, thanks.
 
 Committed to 2021.02.x, thanks.
 
