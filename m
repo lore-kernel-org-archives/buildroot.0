@@ -1,34 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 20:38:25 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/dhcp: add host-gawk to
- global dependencies and build environment
-In-Reply-To: <20210520215224.2749900-1-geomatsi@gmail.com> (Sergey
- Matyukevich's message of "Fri, 21 May 2021 00:52:24 +0300")
-References: <20210520215224.2749900-1-geomatsi@gmail.com>
-Message-ID: <871r9x47oe.fsf@dell.be.48ers.dk>
+Date: Sun, 23 May 2021 19:53:34 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libraw: depends
+ on BR2_TOOLCHAIN_HAS_SYNC_4
+Message-ID: <20210523180930.8C5CB83797@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sergey" == Sergey Matyukevich <geomatsi@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=debf640277bcae0eca3eb1d3b0f74b54b6ed5ac7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > DHCP package may silently fail to install binaries to the target image.
- > The problem occurs when buildroot output/host and build server provide
- > different flavors of awk. For instance, mawk on build server and gawk
- > in buildroot output/host. In this case isc-dhcp configure script detects
- > gawk in output/host and generates Makefiles specifying gawk without
- > absolute path. During Buildroot installation phase, those Makefiles
- > are used to install dhcp binaries. They attempt to use gawk without
- > absolute path. However build host does not have gawk.
+libraw needs __sync_fetch_and_add since version 0.20.0 and
+https://github.com/LibRaw/LibRaw/commit/d1975cb0e055d2bfe58c9d845c9a3e57c346a2f9
 
- > To resolve the issue add host-gawk to dependencies and specify absolute
- > path to host-gawk in dhcp configure script using DHCP_CONF_ENV.
+This will fix the following build failure with imagemagick which is
+raised since commit 2f47cfade4b298350d056f6d9a7525b837e2ba23:
 
- > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libraw_r.so: undefined reference to `__sync_fetch_and_add_4'
 
-Committed to 2021.02.x, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/900df43bd418d2da0c3ec875db1c5564dd857e94
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit edb32a03b5f989c57dfef0a4a3f939a5c2bce63f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/efl/Config.in    | 1 +
+ package/libraw/Config.in | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 305d1469a7..05ded72cf7 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -258,6 +258,7 @@ config BR2_PACKAGE_EFL_WEBP
+ 
+ config BR2_PACKAGE_EFL_LIBRAW
+ 	bool "libraw loader"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libraw
+ 	select BR2_PACKAGE_LIBRAW
+ 	help
+ 	  This option enables the Evas generic Libraw loader
+diff --git a/package/libraw/Config.in b/package/libraw/Config.in
+index de763cd36a..631123c2d3 100644
+--- a/package/libraw/Config.in
++++ b/package/libraw/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBRAW
+ 	bool "libraw"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  libraw is a raw image manipulation library
+@@ -7,4 +8,5 @@ config BR2_PACKAGE_LIBRAW
+ 	  http://www.libraw.org/
+ 
+ comment "libraw needs a toolchain w/ C++"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP
