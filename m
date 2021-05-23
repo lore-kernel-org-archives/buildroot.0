@@ -1,47 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 11:39:39 +0200
-Subject: [Buildroot] [git commit] package/imagemagick: security bump to
- version 7.0.11-13
-Message-ID: <20210523091101.EC3F588084@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 23 May 2021 11:43:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/hwloc: add optional dependencies to
+ udev, libxml2, ncurses & numactl
+Message-ID: <20210523094346.118963-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d64238104949d3c3653cc35f1cb76282792d4c4f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+udev:
+https://github.com/open-mpi/hwloc/blob/master/config/hwloc.m4#L626
 
-Fix CVE-2021-20309 to CVE-2021-20313
+libxml2:
+https://github.com/open-mpi/hwloc/blob/master/config/hwloc.m4#L1273
 
-https://github.com/ImageMagick/ImageMagick/blob/7.0.11-13/ChangeLog
+ncurses:
+https://github.com/open-mpi/hwloc/blob/master/config/hwloc_internal.m4#L340
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+numactl:
+https://github.com/open-mpi/hwloc/blob/master/config/hwloc_internal.m4#L419
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/hwloc/hwloc.mk | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index c45caf6c52..b787643fde 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  84442158aea070095efa832cfe868fd99d6befdf609444f0c9e9f1b4f25480cd  imagemagick-7.0.10-62.tar.gz
-+sha256  fc454be622724c6224fa6c8230bb9c50191a05fbf05b9c9c25aa3e5497090b83  imagemagick-7.0.11-13.tar.gz
- sha256  040badb77b659e751ea16113490a937e1e01f3f5d32181e966b8982413533fb2  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 97517228cf..a6eaf99887 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
+index 77a25a1775..8a08ab89c8 100644
+--- a/package/hwloc/hwloc.mk
++++ b/package/hwloc/hwloc.mk
+@@ -27,6 +27,13 @@ HWLOC_CONF_OPTS = \
+ 	--disable-libxml2 \
+ 	--disable-doxygen
  
--IMAGEMAGICK_VERSION = 7.0.10-62
-+IMAGEMAGICK_VERSION = 7.0.11-13
- IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++HWLOC_CONF_OPTS += --enable-libudev
++HWLOC_DEPENDENCIES += udev
++else
++HWLOC_CONF_OPTS += --disable-libudev
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPCIACCESS),y)
+ HWLOC_CONF_OPTS += --enable-pci
+ HWLOC_DEPENDENCIES += libpciaccess
+@@ -34,4 +41,19 @@ else
+ HWLOC_CONF_OPTS += --disable-pci
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++HWLOC_CONF_OPTS += --enable-libxml2
++HWLOC_DEPENDENCIES += libxml2
++else
++HWLOC_CONF_OPTS += --disable-libxml2
++endif
++
++ifeq ($(BR2_PACKAGE_NCURSES),y)
++HWLOC_DEPENDENCIES += ncurses
++endif
++
++ifeq ($(BR2_PACKAGE_NUMACTL),y)
++HWLOC_DEPENDENCIES += numactl
++endif
++
+ $(eval $(autotools-package))
+-- 
+2.29.2
