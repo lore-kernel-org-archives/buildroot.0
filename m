@@ -1,36 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 May 2021 20:35:45 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/wpa_supplicant:
- fix build with CVE-2021-30004 changes
-Message-ID: <20210523180931.38A008A275@busybox.osuosl.org>
+Date: Sun, 23 May 2021 20:10:18 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/hostapd: fix
+ build with CVE-2021-30004 changes
+Message-ID: <20210523180930.A6CDC81601@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cce9a17ddbc099d27ec8398196ae9e6594fa161
+commit: https://git.buildroot.net/buildroot/commit/?id=389373e0104896fe4d7eab003573307af56d623d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Commit a8fbe67b9b16 ("package/wpa_supplicant: add upstream patch to fix
+Commit d65586f45a22 ("package/hostapd: add upstream patch to fix
 CVE-2021-30004") added security patch from hostapd upstream without
 required ASN.1 helpers. Backport and adapt two commits from the
 hostapd upstream to add missing headers and helpers.
 
+Fixes:
+http://autobuild.buildroot.net/results/8f56cf556efbf447633ce873a21635f5adbc3cd2/
+
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+[yann.morin.1998 at free.fr: slightly reformat the patches]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0c65499c3f11e89c6c383629a99f192d14815dd9)
+(cherry picked from commit 75496165dc5aa291941a995d43f65efeb35766f1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  ...de-stdbool.h-to-allow-C99-bool-to-be-used.patch | 32 +++++++++++++++++++
  ...elper-functions-for-recognizing-tag-value.patch | 37 ++++++++++++++++++++++
  2 files changed, 69 insertions(+)
 
-diff --git a/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch b/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
+diff --git a/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch b/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
 new file mode 100644
 index 0000000000..e52dbdb694
 --- /dev/null
-+++ b/package/wpa_supplicant/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
++++ b/package/hostapd/0003-Include-stdbool.h-to-allow-C99-bool-to-be-used.patch
 @@ -0,0 +1,32 @@
 +From 99cf89555313056d3a8fa54b21d02dc880b363e1 Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <jouni@codeaurora.org>
@@ -64,11 +68,11 @@ index 0000000000..e52dbdb694
 +-- 
 +2.25.1
 +
-diff --git a/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch b/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
+diff --git a/package/hostapd/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch b/package/hostapd/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
 new file mode 100644
 index 0000000000..a5415e7daf
 --- /dev/null
-+++ b/package/wpa_supplicant/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
++++ b/package/hostapd/0004-ASN.1-Add-helper-functions-for-recognizing-tag-value.patch
 @@ -0,0 +1,37 @@
 +From 9a990e8c4eb92dd64e0ec483599820e45c35ac23 Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <j@w1.fi>
