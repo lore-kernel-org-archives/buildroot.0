@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AECAC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:23:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5FCDC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:23:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 52C0560F45
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:23:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 52C0560F45
+	by mail.kernel.org (Postfix) with ESMTPS id 812DB60F45
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:23:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 812DB60F45
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31FEF6086E;
-	Tue,  3 Aug 2021 21:23:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C33283126;
+	Tue,  3 Aug 2021 21:23:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u-oiOBwOa94E; Tue,  3 Aug 2021 21:23:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QNU6YXWQanyL; Tue,  3 Aug 2021 21:23:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 810046067E;
-	Tue,  3 Aug 2021 21:23:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1F1AD1BF9C2
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8E5182F87;
+	Tue,  3 Aug 2021 21:23:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 13C921BF9C1
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F68A6067E
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 399EC83976
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lANoasrYiGQg for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WRtuQSJXAvui for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B72A760653
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7F20382862
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0DD068399D; Tue,  3 Aug 2021 21:09:41 +0000 (UTC)
+ id C9A9582941; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 19 May 2021 08:12:54 +0200
+Date: Sun, 23 May 2021 19:49:23 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3ae38ddea2bd84a3a43fea38a17de197d2f17b52
-X-Git-Newrev: b68047e324e58078b03cbe697c206896d89f5acc
+X-Git-Oldrev: 22c5e1f847ceb05071a2de1b32bd9ba5e74e439e
+X-Git-Newrev: 425339dcdfb2d4fa16ee11231752a5cc8250e78f
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210941.0DD068399D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bird: add
- BIRD_CPE_ID_VENDOR
+Message-Id: <20210803210944.C9A9582941@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/minizip: add
+ MINIZIP_CPE_ID_VENDOR
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,31 +70,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b68047e324e58078b03cbe697c206896d89f5acc
+commit: https://git.buildroot.net/buildroot/commit/?id=425339dcdfb2d4fa16ee11231752a5cc8250e78f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:nic:bird is a valid CPE identifier for this package:
+cpe:2.3:a:minizip_project:minizip is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anic%3Abird
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aminizip_project%3Aminizip
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: fix typo MINZIP -> MINIZIP]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/bird/bird.mk | 1 +
+ package/minizip/minizip.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/bird/bird.mk b/package/bird/bird.mk
-index 6b28102754..b711e7de01 100644
---- a/package/bird/bird.mk
-+++ b/package/bird/bird.mk
-@@ -8,6 +8,7 @@ BIRD_VERSION = 2.0.7
- BIRD_SITE = ftp://bird.network.cz/pub/bird
- BIRD_LICENSE = GPL-2.0+
- BIRD_LICENSE_FILES = README
-+BIRD_CPE_ID_VENDOR = nic
- BIRD_DEPENDENCIES = host-flex host-bison
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index b2294fb530..53f33fb9c1 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
+@@ -14,6 +14,7 @@ MINIZIP_CONF_OPTS = \
+ 	-DMZ_FETCH_LIBS=OFF
+ MINIZIP_LICENSE = Zlib
+ MINIZIP_LICENSE_FILES = LICENSE
++MINIZIP_CPE_ID_VENDOR = minizip_project
  
- ifeq ($(BR2_PACKAGE_BIRD_CLIENT),y)
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ MINIZIP_DEPENDENCIES += bzip2
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
