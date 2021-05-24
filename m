@@ -1,108 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 14:16:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/makedumpfile: bump to version
- 1.6.9
-In-Reply-To: <20210523103508.29359-1-egorenar-dev@posteo.net>
-References: <20210523103508.29359-1-egorenar-dev@posteo.net>
-Message-ID: <20210524121653.GS3208066@scaer>
+Date: Mon, 24 May 2021 14:17:28 +0200
+Subject: [Buildroot] [git commit branch/next] package/pifmrds: use pkg-config
+Message-ID: <20210524115418.A121780424@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=1c833604aef36d381353c9b5541e22e9eaa277aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-05-23 10:35 +0000, Alexander Egorenkov spake thusly:
-> Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+Use pkg-config to retrieve libsndfile dependencies
 
-Applied to next, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 888546e5273d77d49bec564a515e85d7acee6bdd)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pifmrds/0003-Makefile-fix-static-link.patch | 6 ++++--
+ package/pifmrds/pifmrds.mk                          | 3 ++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...-makedumpfile.h-fix-build-on-sparc64.patch | 35 -------------------
->  package/makedumpfile/makedumpfile.hash        |  2 +-
->  package/makedumpfile/makedumpfile.mk          |  2 +-
->  3 files changed, 2 insertions(+), 37 deletions(-)
->  delete mode 100644 package/makedumpfile/0002-makedumpfile.h-fix-build-on-sparc64.patch
-> 
-> diff --git a/package/makedumpfile/0002-makedumpfile.h-fix-build-on-sparc64.patch b/package/makedumpfile/0002-makedumpfile.h-fix-build-on-sparc64.patch
-> deleted file mode 100644
-> index defc101949..0000000000
-> --- a/package/makedumpfile/0002-makedumpfile.h-fix-build-on-sparc64.patch
-> +++ /dev/null
-> @@ -1,35 +0,0 @@
-> -From 2c132ac5e6656723821acdb0ee57b34c42851fed Mon Sep 17 00:00:00 2001
-> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Thu, 4 Feb 2021 20:15:56 +0100
-> -Subject: [PATCH] makedumpfile.h: fix build on sparc64
-> -
-> -Fix the following build failure on sparc64:
-> -
-> -/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc64-buildroot-linux-gnu/9.3.0/../../../../sparc64-buildroot-linux-gnu/bin/ld: /tmp/ccylTux8.o: in function `find_kaslr_offsets':
-> -/home/giuliobenetti/autobuild/run/instance-0/output-1/build/makedumpfile-1.6.8/makedumpfile.c:4017: undefined reference to `get_kaslr_offset'
-> -
-> -Fixes:
-> - - http://autobuild.buildroot.org/results/1421f54f7599bba62c0a4bd5c65ce21c8cc7ee1a
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status:
-> -http://lists.infradead.org/pipermail/kexec/2021-February/021996.html]
-> ----
-> - makedumpfile.h | 1 +
-> - 1 file changed, 1 insertion(+)
-> -
-> -diff --git a/makedumpfile.h b/makedumpfile.h
-> -index 97a5554..dfc1a77 100644
-> ---- a/makedumpfile.h
-> -+++ b/makedumpfile.h
-> -@@ -1139,6 +1139,7 @@ unsigned long long vaddr_to_paddr_sparc64(unsigned long vaddr);
-> - #define get_machdep_info()      TRUE
-> - #define get_phys_base()         get_phys_base_sparc64()
-> - #define get_versiondep_info()   get_versiondep_info_sparc64()
-> -+#define get_kaslr_offset(X)     stub_false()
-> - #define vaddr_to_paddr(X)       vaddr_to_paddr_sparc64(X)
-> - #define paddr_to_vaddr(X)	paddr_to_vaddr_general(X)
-> - #define is_phys_addr(X)		stub_true_ul(X)
-> --- 
-> -2.29.2
-> -
-> diff --git a/package/makedumpfile/makedumpfile.hash b/package/makedumpfile/makedumpfile.hash
-> index 1b2df008d2..f85f334cbf 100644
-> --- a/package/makedumpfile/makedumpfile.hash
-> +++ b/package/makedumpfile/makedumpfile.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256  85d79b7090e9a8ce0d426795d3bc1de2858def7e12954d9bc6ae03de160b694c  makedumpfile-1.6.8.tar.gz
-> +sha256  393ea8f22393c059ad21de9b1c3f45d9d0d8dbeb0ccb1417815b835d03f7c350  makedumpfile-1.6.9.tar.gz
->  sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-> diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
-> index 99fb3a71c8..16271e2246 100644
-> --- a/package/makedumpfile/makedumpfile.mk
-> +++ b/package/makedumpfile/makedumpfile.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -MAKEDUMPFILE_VERSION = 1.6.8
-> +MAKEDUMPFILE_VERSION = 1.6.9
->  MAKEDUMPFILE_SITE = $(call github,makedumpfile,makedumpfile,$(MAKEDUMPFILE_VERSION))
->  MAKEDUMPFILE_DEPENDENCIES = bzip2 elfutils xz zlib
->  MAKEDUMPFILE_LICENSE = GPL-2.0
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pifmrds/0003-Makefile-fix-static-link.patch b/package/pifmrds/0003-Makefile-fix-static-link.patch
+index ecd7c4fc4c..3bd91c981f 100644
+--- a/package/pifmrds/0003-Makefile-fix-static-link.patch
++++ b/package/pifmrds/0003-Makefile-fix-static-link.patch
+@@ -4,6 +4,8 @@ Since libsndfile uses funtions from libm, the -lm should be specified
+ after libsndfile for static linking.
+ 
+ Signed-off-by: "Eric Limpens" <Limpens@gmail.com>
++[Fabrice: add $(SNDFILE_LIBS) to pass all dependencies from pkg-config]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ 
+ diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile
+ --- pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile	2016-02-26 08:06:43.102962592 +0100
+@@ -13,11 +15,11 @@ diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pi
+  
+  app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
+ -	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
+-+	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lsndfile -lm
+++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o $(SNDFILE_LIBS)
+  
+  rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
+ -	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
+-+	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lsndfile -lm
+++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o $(SNDFILE_LIBS)
+  
+  rds.o: rds.c waveforms.h
+  	$(CC) $(CFLAGS) rds.c
+diff --git a/package/pifmrds/pifmrds.mk b/package/pifmrds/pifmrds.mk
+index 509ec80876..33c13bae33 100644
+--- a/package/pifmrds/pifmrds.mk
++++ b/package/pifmrds/pifmrds.mk
+@@ -6,13 +6,14 @@
+ 
+ PIFMRDS_VERSION = 0bf57f9ce0d954365a38d8af8e7be6f28521c3f2
+ PIFMRDS_SITE = $(call github,ChristopheJacquet,PiFmRds,$(PIFMRDS_VERSION))
+-PIFMRDS_DEPENDENCIES = libsndfile
++PIFMRDS_DEPENDENCIES = host-pkgconf libsndfile
+ PIFMRDS_LICENSE = GPL-3.0+
+ PIFMRDS_LICENSE_FILES = LICENSE
+ 
+ define PIFMRDS_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -ffast-math -c" \
++		SNDFILE_LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs sndfile`" \
+ 		app rds_wav
+ endef
+ 
