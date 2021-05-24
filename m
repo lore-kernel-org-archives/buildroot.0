@@ -1,111 +1,110 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 31 May 2021 23:29:41 +0200
-Subject: [Buildroot] [git commit] Update for 2021.05-rc3
-Message-ID: <20210531210850.A4E298B306@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 May 2021 15:20:14 +0200
+Subject: [Buildroot] [git commit] package/libpsl: new package
+Message-ID: <20210607144657.A265C80E35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4132725bd521308116f069c61d8e2002a2185cc
+commit: https://git.buildroot.net/buildroot/commit/?id=47acda3a95bd4310f884e741f20785d374af7b22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    | 16 ++++++++++++++++
- Makefile                   |  4 ++--
- docs/website/download.html | 18 +++++++++---------
- 3 files changed, 27 insertions(+), 11 deletions(-)
+Package libpsl is a new non-optional dependency of future libsoup
+versions.
 
-diff --git a/CHANGES b/CHANGES
-index 53b9020767..95b3a38024 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,19 @@
-+2021.05-rc3, released May 31th, 2021
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+[yann.morin.1998 at free.fr: reorder some variables]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/libpsl/Config.in   |  8 ++++++++
+ package/libpsl/libpsl.hash |  6 ++++++
+ package/libpsl/libpsl.mk   | 27 +++++++++++++++++++++++++++
+ 5 files changed, 43 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 979813c1dd..845089736b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -35,6 +35,7 @@ F:	package/bubblewrap/
+ F:	package/cage/
+ F:	package/cog/
+ F:	package/libepoxy/
++F:	package/libpsl/
+ F:	package/libwpe/
+ F:	package/webkitgtk/
+ F:	package/wlroots/
+diff --git a/package/Config.in b/package/Config.in
+index 3c99ba8030..4dac63ab90 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1792,6 +1792,7 @@ menu "Networking"
+ 	source "package/libpagekite/Config.in"
+ 	source "package/libpcap/Config.in"
+ 	source "package/libpjsip/Config.in"
++	source "package/libpsl/Config.in"
+ 	source "package/librelp/Config.in"
+ 	source "package/librsync/Config.in"
+ 	source "package/libshairplay/Config.in"
+diff --git a/package/libpsl/Config.in b/package/libpsl/Config.in
+new file mode 100644
+index 0000000000..dd484799e7
+--- /dev/null
++++ b/package/libpsl/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBPSL
++	bool "libpsl"
++	select BR2_PACKAGE_LIBIDN2 if !BR2_PACKAGE_ICU && !BR2_PACKAGE_LIBIDN
++	select BR2_PACKAGE_LIBUNISTRING if !BR2_PACKAGE_ICU
++	help
++	  C library to handle the Public Suffix List of TLDs.
 +
-+	Fixes all over the tree.
++	  https://github.com/rockdaboot/libpsl
+diff --git a/package/libpsl/libpsl.hash b/package/libpsl/libpsl.hash
+new file mode 100644
+index 0000000000..552935e9ec
+--- /dev/null
++++ b/package/libpsl/libpsl.hash
+@@ -0,0 +1,6 @@
++# Locally generated
++sha256  ac6ce1e1fbd4d0254c4ddb9d37f1fa99dec83619c1253328155206b896210d4c  libpsl-0.21.1.tar.gz
 +
-+	meson: Explicitly disable PIE support (b_pie) as it is handled
-+	by the toolchain wrapper.
++# Hashes for license files:
++sha256  7903413e7aa0bbcb77aa19150a3f1034edc0a760cff174f9a53efe4de6f056a4  COPYING
++sha256  1d7f52747a9169751cdf2641a8299c0098e9ecdf9429296ffd55bdb14c9ed5b3  src/LICENSE.chromium
+diff --git a/package/libpsl/libpsl.mk b/package/libpsl/libpsl.mk
+new file mode 100644
+index 0000000000..69e5da4ca4
+--- /dev/null
++++ b/package/libpsl/libpsl.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# libpsl
++#
++################################################################################
 +
-+	Updated/fixed packages: boost, dhcp, expat, gdb, hwloc, imagemagick,
-+	libcurl, libopenh264, llvm, lz4, mpv, nginx, paho-mqtt-c, pifmrds,
-+	pipewire, python-bluezero, python-pillow, qemu, strace, uhd, vlc,
-+	webkitgtk
++LIBPSL_VERSION = 0.21.1
++LIBPSL_SITE = https://github.com/rockdaboot/libpsl/releases/download/$(LIBPSL_VERSION)
++LIBPSL_LICENSE = MIT, BSD-3-Clause
++LIBPSL_LICENSE_FILES = COPYING src/LICENSE.chromium
++LIBPSL_DEPENDENCIES = host-pkgconf
++LIBPSL_INSTALL_STAGING = YES
++LIBPSL_CONF_OPTS = -Ddocs=false
 +
-+	Issues resolved (http://bugs.uclibc.org):
++# The order of checks is the same as done by libpsl when configured.
++ifeq ($(BR2_PACKAGE_LIBIDN2)$(BR2_PACKAGE_LIBUNISTRING),yy)
++LIBPSL_CONF_OPTS += -Druntime=libidn2 -Dbuiltin=libidn2
++LIBPSL_DEPENDENCIES += libidn2 libunistring
++else ifeq ($(BR2_PACKAGE_ICU),y)
++LIBPSL_CONF_OPTS += -Druntime=libicu -Dbuiltin=libicu
++LIBPSL_DEPENDENCIES += icu
++else
++LIBPSL_CONF_OPTS += -Druntime=libidn -Dbuiltin=libidn
++LIBPSL_DEPENDENCIES += libidn libunistring
++endif
 +
-+	#13821: Wrong url for libnfsidmap package
-+
- 2021.05-rc2, released May 22th, 2021
- 
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index 57322fb586..29250a232d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2021.05-rc2
-+export BR2_VERSION := 2021.05-rc3
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1621690900
-+BR2_VERSION_EPOCH = 1622496000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 3654285527..ea3af3bfb0 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -76,37 +76,37 @@
- 	</div>
-       </div>
- -->
--      <h3 style="text-align: center;">Latest release candidate: <b>2021.05-rc2</b></h3>
-+      <h3 style="text-align: center;">Latest release candidate: <b>2021.05-rc3</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2021.05-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2021.05-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2021.05-rc2.tar.gz">buildroot-2021.05-rc2.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2021.05-rc2.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2021.05-rc3.tar.gz">buildroot-2021.05-rc3.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2021.05-rc3.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2021.05-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2021.05-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2021.05-rc2.tar.bz2">buildroot-2021.05-rc2.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2021.05-rc2.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2021.05-rc3.tar.bz2">buildroot-2021.05-rc3.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2021.05-rc3.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
++$(eval $(meson-package))
