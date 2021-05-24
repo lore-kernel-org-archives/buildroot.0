@@ -1,75 +1,111 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 16:01:57 +0200
-Subject: [Buildroot] [PATCH] package/{protobuf,
- python-protobuf}: bump to version 3.17
-In-Reply-To: <20210520132841.158262-1-buildroot@heine.tech>
-References: <20210520132841.158262-1-buildroot@heine.tech>
-Message-ID: <20210524140157.GF3208066@scaer>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 24 May 2021 17:17:19 +0300
+Subject: [Buildroot] [PATCH v3 1/2] package/libpsl: new package
+In-Reply-To: <20210524132628.GB3208066@scaer>
+References: <20210521103737.3802646-1-aperez@igalia.com>
+ <20210521103737.3802646-2-aperez@igalia.com> <20210524132628.GB3208066@scaer>
+Message-ID: <20210524171719.GB93727@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael, All,
-
-On 2021-05-20 15:28 +0200, Michael Nosthoff via buildroot spake thusly:
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-
-Applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/protobuf/protobuf.hash               | 2 +-
->  package/protobuf/protobuf.mk                 | 2 +-
->  package/python-protobuf/python-protobuf.hash | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+On Mon, 24 May 2021 15:26:28 +0200 "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> Adrian, All,
 > 
-> diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-> index 79d3184f59..6818b6f83a 100644
-> --- a/package/protobuf/protobuf.hash
-> +++ b/package/protobuf/protobuf.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
->  sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-> -sha256  bbdfb7455431d7d58666e8a2996d14b236718ff238eecde10646581e4c87f168  protobuf-cpp-3.15.6.tar.gz
-> +sha256  84d30a78cae000be164ac6b973ee1dc0664669d63685dfbcf96f058c50456f19  protobuf-cpp-3.17.0.tar.gz
-> diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-> index ea75480038..7ba99d2c4b 100644
-> --- a/package/protobuf/protobuf.mk
-> +++ b/package/protobuf/protobuf.mk
-> @@ -7,7 +7,7 @@
->  # When bumping this package, make sure to also verify if the
->  # python-protobuf package still works and to update its hash,
->  # as they share the same version/site variables.
-> -PROTOBUF_VERSION = 3.15.6
-> +PROTOBUF_VERSION = 3.17.0
->  PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
->  PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
->  PROTOBUF_LICENSE = BSD-3-Clause
-> diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-> index 0d3665b736..3ed9de739a 100644
-> --- a/package/python-protobuf/python-protobuf.hash
-> +++ b/package/python-protobuf/python-protobuf.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  7e8c58a14950ac7a727864d5c521f48c81feb66ff7df325487fc930c9aa50d8b  protobuf-python-3.15.6.tar.gz
-> +sha256  3011bfbc18d1c695ee393cb0dc1042282cfa33ef6573fe82732aefc9f7286121  protobuf-python-3.17.0.tar.gz
->  sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+> On 2021-05-21 13:37 +0300, Adrian Perez de Castro spake thusly:
+> > Package libpsl is a new non-optional dependency of libsoup.
+> > 
+> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> > ---
+> > fixup! package/libpsl: new package
+> 
+> I like 'fixup!' too. :-)
+
+Heh, a bit of a rebase slipped in the commit log. Sometimes it happens.
+?\_(?)_/? 
+ 
+> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> > ---
+> [--SNIP--]
+> > diff --git a/package/libpsl/libpsl.hash b/package/libpsl/libpsl.hash
+> > new file mode 100644
+> > index 0000000000..552935e9ec
+> > --- /dev/null
+> > +++ b/package/libpsl/libpsl.hash
+> > @@ -0,0 +1,6 @@
+> > +# Locally generated
+> > +sha256  ac6ce1e1fbd4d0254c4ddb9d37f1fa99dec83619c1253328155206b896210d4c  libpsl-0.21.1.tar.gz
+> > +
+> > +# Hashes for license files:
+> > +sha256  7903413e7aa0bbcb77aa19150a3f1034edc0a760cff174f9a53efe4de6f056a4  COPYING
+> > +sha256  1d7f52747a9169751cdf2641a8299c0098e9ecdf9429296ffd55bdb14c9ed5b3  src/LICENSE.chromium
+> > diff --git a/package/libpsl/libpsl.mk b/package/libpsl/libpsl.mk
+> > new file mode 100644
+> > index 0000000000..1abdc6b208
+> > --- /dev/null
+> > +++ b/package/libpsl/libpsl.mk
+> > @@ -0,0 +1,27 @@
+> > +################################################################################
+> > +#
+> > +# libpsl
+> > +#
+> > +################################################################################
+> > +
+> > +LIBPSL_VERSION = 0.21.1
+> > +LIBPSL_SITE = https://github.com/rockdaboot/libpsl/releases/download/$(LIBPSL_VERSION)
+> > +LIBPSL_INSTALL_STAGING = YES
+> > +LIBPSL_DEPENDENCIES = host-pkgconf
+> > +LIBPSL_LICENSE = MIT, BSD-3-Clause
+> > +LIBPSL_LICENSE_FILES = COPYING src/LICENSE.chromium
+> 
+> Pet-peeve of mine: try and be consistent in variable ordering. ;-)
+> 
+> so I've done a bit of reordering, and Applied to next, thanks.
+
+Great, thank you!
+
+Looking forward to the next release with an up-to-date libsoup.
+-Adrian
+
+> Regards,
+> Yann E. MORIN.
+> 
+> > +LIBPSL_CONF_OPTS = -Ddocs=false
+> > +
+> > +# The order of checks is the same as done by libpsl when configured.
+> > +ifeq ($(BR2_PACKAGE_LIBIDN2)$(BR2_PACKAGE_LIBUNISTRING),yy)
+> > +LIBPSL_CONF_OPTS += -Druntime=libidn2 -Dbuiltin=libidn2
+> > +LIBPSL_DEPENDENCIES += libidn2 libunistring
+> > +else ifeq ($(BR2_PACKAGE_ICU),y)
+> > +LIBPSL_CONF_OPTS += -Druntime=libicu -Dbuiltin=libicu
+> > +LIBPSL_DEPENDENCIES += icu
+> > +else
+> > +LIBPSL_CONF_OPTS += -Druntime=libidn -Dbuiltin=libidn
+> > +LIBPSL_DEPENDENCIES += libidn libunistring
+> > +endif
+> > +
+> > +$(eval $(meson-package))
+> > -- 
+> > 2.31.1
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 > -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210524/e6a64957/attachment.asc>
