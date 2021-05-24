@@ -1,48 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 14:11:39 +0200
-Subject: [Buildroot] [git commit] package/fluidsynth: bump to version 2.2.1
-Message-ID: <20210607144657.42324814AD@busybox.osuosl.org>
+Date: Mon, 24 May 2021 16:00:43 +0200
+Subject: [Buildroot] [git commit] package/{protobuf,
+ python-protobuf}: bump to version 3.17
+Message-ID: <20210607144657.B9BCF814BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=daa27958d472a118d38bdf31151879e9ffc17a51
+commit: https://git.buildroot.net/buildroot/commit/?id=ea42a5670a87452db400479e9674c4b0cf25f65c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For change log since v2.2.0, see:
-- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.2.1
-
-./utils/test-pkg --package fluidsynth
-6 builds, 2 skipped, 0 build failed, 0 legal-info failed
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/fluidsynth/fluidsynth.hash | 2 +-
- package/fluidsynth/fluidsynth.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
-index 12620f51c5..08a19e23f8 100644
---- a/package/fluidsynth/fluidsynth.hash
-+++ b/package/fluidsynth/fluidsynth.hash
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 79d3184f59..6818b6f83a 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  928fb16f307507485bd1d9b010dafba8c747bce5de2ba47ab1705944c87013b6  fluidsynth-2.2.0.tar.gz
-+sha256  1c56660f23f6c406b36646cc619fc2d2a5265d1d3290e79bcef4505bcd985fdd  fluidsynth-2.2.1.tar.gz
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
-index 4cce6d6448..88b4ba4eda 100644
---- a/package/fluidsynth/fluidsynth.mk
-+++ b/package/fluidsynth/fluidsynth.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLUIDSYNTH_VERSION = 2.2.0
-+FLUIDSYNTH_VERSION = 2.2.1
- FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
- FLUIDSYNTH_LICENSE = LGPL-2.1+
- FLUIDSYNTH_LICENSE_FILES = LICENSE
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  bbdfb7455431d7d58666e8a2996d14b236718ff238eecde10646581e4c87f168  protobuf-cpp-3.15.6.tar.gz
++sha256  84d30a78cae000be164ac6b973ee1dc0664669d63685dfbcf96f058c50456f19  protobuf-cpp-3.17.0.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index ea75480038..7ba99d2c4b 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 3.15.6
++PROTOBUF_VERSION = 3.17.0
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 0d3665b736..3ed9de739a 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7e8c58a14950ac7a727864d5c521f48c81feb66ff7df325487fc930c9aa50d8b  protobuf-python-3.15.6.tar.gz
++sha256  3011bfbc18d1c695ee393cb0dc1042282cfa33ef6573fe82732aefc9f7286121  protobuf-python-3.17.0.tar.gz
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
