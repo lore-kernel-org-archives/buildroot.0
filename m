@@ -1,44 +1,38 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Mon, 24 May 2021 19:33:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libgit2: disable NTLM support
- inconditionally.
-Message-ID: <20210524173310.4568-1-nicolas.cavallari@green-communications.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 May 2021 19:40:22 +0200
+Subject: [Buildroot] [PATCH] package/libepoxy: bump to version 1.5.7
+In-Reply-To: <20210524181047.GB97068@momiji>
+References: <20210524144538.1983376-1-francois.perrad@gadz.org>
+ <20210524181047.GB97068@momiji>
+Message-ID: <20210524174022.GH3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NTLM is an old authentication protocol depending on DES and MD4 and
-its creator, Microsoft, discourage its use since 2010, because it is
-weak and vulnerable to many attacks.
+Fran?ois, Adrian, All,
 
-libgit2 has support for NTLM and it is enabled by default if openssl
-is used, however, since commit a83d41867c8d ("package/libopenssl: add
-option to enable some features"), support for DES and MD4 can be
-disabled in openssl.
+On 2021-05-24 18:10 +0300, Adrian Perez de Castro spake thusly:
+> On Mon, 24 May 2021 16:45:38 +0200 Francois Perrad <fperrad@gmail.com> wrote:
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> 
+> Probably we can count this as an Acked-By for
+> https://patchwork.ozlabs.org/project/buildroot/patch/20210519211439.1273019-1-aperez at igalia.com/
+> (or vice versa).
 
-Since openssl is an optional dependency to libgit2 and getting rid of
-NTLM is a goal in itself for many windows administrators, disable NTLM
-by default.
+I've applied Adrian patch because it was first, but I've melt it with
+Fran?ios' patch that fixes the indentation in the hash file.
 
-Fixes: http://autobuild.buildroot.net/results/efb4ce2174cb6944558e895ce852182ba2738a70
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
----
- package/libgit2/libgit2.mk | 1 +
- 1 file changed, 1 insertion(+)
+Thanks both!
 
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index e5d17fa3dd..668fa758f8 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -17,6 +17,7 @@ LIBGIT2_CONF_OPTS = \
- 	-DUSE_ICONV=ON \
- 	-DREGEX_BACKEND=regcomp \
- 	-DUSE_HTTP_PARSER=system \
-+	-DUSE_NTLMCLIENT=OFF \
- 	-DTHREADSAFE=$(if $(BR2_TOOLCHAIN_HAS_THREADS),ON,OFF)
- 
- LIBGIT2_DEPENDENCIES = zlib libhttpparser
+Regards,
+Yann E. MORIN.
+
 -- 
-2.32.0.rc0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
