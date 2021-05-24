@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D4BDC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:34:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2884C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:34:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5565D60F9C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:34:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5565D60F9C
+	by mail.kernel.org (Postfix) with ESMTPS id 9AE8E60F9C
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:34:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9AE8E60F9C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 325254058B;
-	Tue,  3 Aug 2021 21:34:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 781894053D;
+	Tue,  3 Aug 2021 21:34:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gTElWSutYsE3; Tue,  3 Aug 2021 21:34:20 +0000 (UTC)
+	with ESMTP id TnVJRbgqAHuf; Tue,  3 Aug 2021 21:34:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C1F14056E;
-	Tue,  3 Aug 2021 21:34:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 170B11BF9C2
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B678C401F7;
+	Tue,  3 Aug 2021 21:34:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A6271BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8CDAC40475
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25DBC60662
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HmC0gbooyZOk for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id djLM6_Hkw85t for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2A38B40001
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 75D4660862
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 715FC87BB7; Tue,  3 Aug 2021 21:09:37 +0000 (UTC)
+ id BF53185F62; Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 May 2021 14:18:21 +0200
+Date: Mon, 24 May 2021 22:19:44 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 75d795c4930ea2bd4ebd70d8efea747624bb1b01
-X-Git-Newrev: 38fb1ad2a00d7584e2a7fdc1b966e9fa7e844e11
+X-Git-Oldrev: 09057202022e16d6c3ad0cac1c30789b08b04feb
+X-Git-Newrev: 4f79b1cb93757e23d74e748f94f15a65b363f887
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210937.715FC87BB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gstreamer1/gstreamer1:
- add CPE variables
+Message-Id: <20210803210945.BF53185F62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-bluezero:
+ select dbus
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,33 +70,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38fb1ad2a00d7584e2a7fdc1b966e9fa7e844e11
+commit: https://git.buildroot.net/buildroot/commit/?id=4f79b1cb93757e23d74e748f94f15a65b363f887
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:gstreamer_project:gstreamer is a valid CPE identifier for this
-package:
+Build is broken since commit
+8bdc5e7c4d975193b1e18999ed840507cea63bd6 because BR2_PACKAGE_DBUS_PYTHON
+is selected without selecting BR2_PACKAGE_DBUS
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agstreamer_project%3Agstreamer
+Fixes:
+ - http://autobuild.buildroot.org/results/378dd714940440b8f9db763479ae929e90e33b80
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gstreamer1/gstreamer1/gstreamer1.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-bluezero/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index 99846c1be5..171ea2b8e3 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -10,6 +10,8 @@ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
- GSTREAMER1_LICENSE_FILES = COPYING
- GSTREAMER1_LICENSE = LGPL-2.0+, LGPL-2.1+
-+GSTREAMER1_CPE_ID_VENDOR = gstreamer_project
-+GSTREAMER1_CPE_ID_PRODUCT = gstreamer
- 
- GSTREAMER1_CONF_OPTS = \
- 	-Dexamples=disabled \
+diff --git a/package/python-bluezero/Config.in b/package/python-bluezero/Config.in
+index 7126b3ca50..c391bfa858 100644
+--- a/package/python-bluezero/Config.in
++++ b/package/python-bluezero/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_BLUEZERO
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # python-gobject -> gobject-introspection
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # python-gobject -> gobject-introspection
+ 	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_DBUS # runtime
+ 	select BR2_PACKAGE_DBUS_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_GOBJECT # runtime
+ 	help
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
