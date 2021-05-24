@@ -1,68 +1,119 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 22:27:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-bluezero: select dbus
-In-Reply-To: <20210524185617.10260-1-fontaine.fabrice@gmail.com>
-References: <20210524185617.10260-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210524202727.GM3208066@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 24 May 2021 23:05:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenh264: fix mips32 build
+Message-ID: <20210524210529.353499-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Fix build failure with mips32 which is raised since the addition of
+bootlin toolchains
 
-On 2021-05-24 20:56 +0200, Fabrice Fontaine spake thusly:
-> Build is broken since commit
-> 8bdc5e7c4d975193b1e18999ed840507cea63bd6 because BR2_PACKAGE_DBUS_PYTHON
-> is selected without selecting BR2_PACKAGE_DBUS
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/378dd714940440b8f9db763479ae929e90e33b80
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...n-inc-asmdefs_mmi.h-fix-mips32-build.patch | 89 +++++++++++++++++++
+ 1 file changed, 89 insertions(+)
+ create mode 100644 package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
 
-But see below for a little comment...
-
-> ---
->  package/python-bluezero/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/python-bluezero/Config.in b/package/python-bluezero/Config.in
-> index 7126b3ca50..c391bfa858 100644
-> --- a/package/python-bluezero/Config.in
-> +++ b/package/python-bluezero/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_BLUEZERO
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # python-gobject -> gobject-introspection
->  	depends on BR2_TOOLCHAIN_USES_GLIBC # python-gobject -> gobject-introspection
->  	depends on BR2_PACKAGE_PYTHON3
-> +	select BR2_PACKAGE_DBUS # runtime
-
-This is not propagating the MMU dependency from DBus. It is implied,
-because python3 already depends on MMU, but this is confusing...
-
-Anyway. Applied, thanks!
-
-Regards,
-Yann E. MORIN.
-
->  	select BR2_PACKAGE_DBUS_PYTHON # runtime
->  	select BR2_PACKAGE_PYTHON_GOBJECT # runtime
->  	help
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
+new file mode 100644
+index 0000000000..e11b1d13ef
+--- /dev/null
++++ b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
+@@ -0,0 +1,89 @@
++From c505f81e336088b6729a5407a03459f488353288 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 24 May 2021 22:54:01 +0200
++Subject: [PATCH] codec/common/inc/asmdefs_mmi.h: fix mips32 build
++
++Fix the following build failure on mips32 which is raised since version
++2.0.0 and
++https://github.com/cisco/openh264/commit/b13e5bceb18ebb93d0313b46aab4af6f480ca933:
++
++codec/common/mips/copy_mb_mmi.c: In function 'WelsCopy16x16_mmi':
++./codec/common/inc/asmdefs_mmi.h:293:21: error: '_ABI64' undeclared (first use in this function)
++  293 |    if (_MIPS_SIM == _ABI64)                                    \
++      |                     ^~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/cisco/openh264/pull/3384]
++---
++ codec/common/inc/asmdefs_mmi.h | 17 +++++++++++------
++ 1 file changed, 11 insertions(+), 6 deletions(-)
++
++diff --git a/codec/common/inc/asmdefs_mmi.h b/codec/common/inc/asmdefs_mmi.h
++index 69a7ae39..5d1aed93 100644
++--- a/codec/common/inc/asmdefs_mmi.h
+++++ b/codec/common/inc/asmdefs_mmi.h
++@@ -288,9 +288,9 @@
++ /**
++  * backup register
++  */
+++#if defined(_ABI64) && _MIPS_SIM == _ABI64
++ #define BACKUP_REG \
++    double __attribute__((aligned(16))) __back_temp[8];         \
++-   if (_MIPS_SIM == _ABI64)                                    \
++    __asm__ volatile (                                          \
++      "gssqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
++      "gssqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
++@@ -299,8 +299,10 @@
++      :                                                         \
++      : [temp]"r"(__back_temp)                                  \
++      : "memory"                                                \
++-   );                                                          \
++-  else                                                         \
+++   );
+++#else
+++#define BACKUP_REG \
+++   double __attribute__((aligned(16))) __back_temp[8];         \
++    __asm__ volatile (                                          \
++      "gssqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
++      "gssqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
++@@ -309,12 +311,13 @@
++      : [temp]"r"(__back_temp)                                  \
++      : "memory"                                                \
++    );
+++#endif
++ 
++ /**
++  * recover register
++  */
+++#if defined(_ABI64) && _MIPS_SIM == _ABI64
++ #define RECOVER_REG \
++-   if (_MIPS_SIM == _ABI64)                                    \
++    __asm__ volatile (                                          \
++      "gslqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
++      "gslqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
++@@ -323,8 +326,9 @@
++      :                                                         \
++      : [temp]"r"(__back_temp)                                  \
++      : "memory"                                                \
++-   );                                                          \
++-   else                                                        \
+++   );
+++#else
+++#define RECOVER_REG \
++    __asm__ volatile (                                          \
++      "gslqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
++      "gslqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
++@@ -333,6 +337,7 @@
++      : [temp]"r"(__back_temp)                                  \
++      : "memory"                                                \
++    );
+++#endif
++ 
++ # define OK             1
++ # define NOTOK          0
++-- 
++2.30.2
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
