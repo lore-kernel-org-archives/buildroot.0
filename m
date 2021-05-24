@@ -1,85 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 10:56:27 +0200
-Subject: [Buildroot] [PATCH 4/4] package/python-pillow: security bump to
- version 8.2.0
-In-Reply-To: <20210522174159.278657-4-fontaine.fabrice@gmail.com>
-References: <20210522174159.278657-1-fontaine.fabrice@gmail.com>
- <20210522174159.278657-4-fontaine.fabrice@gmail.com>
-Message-ID: <20210524085627.GK3208066@scaer>
+Date: Mon, 24 May 2021 13:40:35 +0200
+Subject: [Buildroot] [git commit] package/php-imagick: add CPE variables
+Message-ID: <20210524111505.C74D38859E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, all,
+commit: https://git.buildroot.net/buildroot/commit/?id=5022410324a4c1bcc9873c3ef2060c570a7ea31b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-22 19:41 +0200, Fabrice Fontaine spake thusly:
-> - Fix numerous CVEs:
->   https://pillow.readthedocs.io/en/stable/releasenotes/8.2.0.html#security
->   https://pillow.readthedocs.io/en/stable/releasenotes/8.1.2.html#security
->   https://pillow.readthedocs.io/en/stable/releasenotes/8.1.1.html#security
->   https://pillow.readthedocs.io/en/stable/releasenotes/8.1.0.html#security
-> - Update license to HPND:
->   https://github.com/python-pillow/Pillow/commit/81078e8a0d26c9094446a64aadfa8047b8af3484
-> 
-> https://pillow.readthedocs.io/en/stable/releasenotes/index.html
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+cpe:2.3:a:php:imagick is a valid CPE identifier for this package:
 
-Applied to master, thanks.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aphp%3Aimagick
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/php-imagick/php-imagick.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> ---
->  package/python-pillow/python-pillow.hash | 7 ++++---
->  package/python-pillow/python-pillow.mk   | 6 +++---
->  2 files changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-> index 0849577f66..562cb2c1a2 100644
-> --- a/package/python-pillow/python-pillow.hash
-> +++ b/package/python-pillow/python-pillow.hash
-> @@ -1,4 +1,5 @@
-> -# md5, sha256 from https://pypi.org/project/Pillow/
-> -sha256	11c5c6e9b02c9dac08af04f093eb5a2f84857df70a7d4a6a6ad461aca803fb9e  Pillow-8.0.1.tar.gz
-> +# md5, sha256 from https://pypi.org/pypi/pillow/json
-> +md5  21c03274a9f59b9c00419852a8faebe7  Pillow-8.2.0.tar.gz
-> +sha256	a787ab10d7bb5494e5f76536ac460741788f1fbce851068d73a87ca7c35fc3e1  Pillow-8.2.0.tar.gz
->  # Locally computed sha256 checksums
-> -sha256	37de42abe33a247e8f03d2313657a0f174a239a198f526add6544ff3e2643b81  LICENSE
-> +sha256	5bb11d96b393a698df70018069a986248021f286344c437a13f299c3daf1dfd4  LICENSE
-> diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-> index 61f386df07..9529f54633 100644
-> --- a/package/python-pillow/python-pillow.mk
-> +++ b/package/python-pillow/python-pillow.mk
-> @@ -4,10 +4,10 @@
->  #
->  ################################################################################
->  
-> -PYTHON_PILLOW_VERSION = 8.0.1
-> -PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/2b/06/93bf1626ef36815010e971a5ce90f49919d84ab5d2fa310329f843a74bc1
-> +PYTHON_PILLOW_VERSION = 8.2.0
-> +PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/21/23/af6bac2a601be6670064a817273d4190b79df6f74d8012926a39bc7aa77f
->  PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
-> -PYTHON_PILLOW_LICENSE = PIL Software License
-> +PYTHON_PILLOW_LICENSE = HPND
->  PYTHON_PILLOW_LICENSE_FILES = LICENSE
->  PYTHON_PILLOW_CPE_ID_VENDOR = python
->  PYTHON_PILLOW_CPE_ID_PRODUCT = pillow
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
+index ca0cbc7492..6fb43de0ca 100644
+--- a/package/php-imagick/php-imagick.mk
++++ b/package/php-imagick/php-imagick.mk
+@@ -13,6 +13,8 @@ PHP_IMAGICK_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+ PHP_IMAGICK_DEPENDENCIES = imagemagick php host-autoconf
+ PHP_IMAGICK_LICENSE = PHP-3.01
+ PHP_IMAGICK_LICENSE_FILES = LICENSE
++PHP_IMAGICK_CPE_ID_VENDOR = php
++PHP_IMAGICK_CPE_ID_PRODUCT = imagick
+ 
+ define PHP_IMAGICK_PHPIZE
+ 	(cd $(@D); \
