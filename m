@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 15:23:13 +0200
-Subject: [Buildroot] [PATCH v3 0/2] Update to latest libsoup2
-In-Reply-To: <20210521103737.3802646-1-aperez@igalia.com>
+Date: Mon, 24 May 2021 15:26:28 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/libpsl: new package
+In-Reply-To: <20210521103737.3802646-2-aperez@igalia.com>
 References: <20210521103737.3802646-1-aperez@igalia.com>
-Message-ID: <20210524132313.GA3208066@scaer>
+ <20210521103737.3802646-2-aperez@igalia.com>
+Message-ID: <20210524132628.GB3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +14,70 @@ To: buildroot@busybox.net
 Adrian, All,
 
 On 2021-05-21 13:37 +0300, Adrian Perez de Castro spake thusly:
-> Hello all,
+> Package libpsl is a new non-optional dependency of libsoup.
 > 
-> While working on the WebKit package updates the last days I noticed that the
-> version of libsoup2 in Buildroot is a tad old, and it seemed fitting to submit
-> a patch set for updating it. Recent versions have a new dependency on libpsl,
-> so a new package for it is added as well.
-> 
-> Cheers,
-> -Adrian
-> 
-> Adrian Perez de Castro (2):
->   package/libpsl: new package
->   package/libsoup: bump to version 2.66.5
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
+> fixup! package/libpsl: new package
 
-Series of two applied to next, thanks.
+I like 'fixup!' too. :-)
+
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
+[--SNIP--]
+> diff --git a/package/libpsl/libpsl.hash b/package/libpsl/libpsl.hash
+> new file mode 100644
+> index 0000000000..552935e9ec
+> --- /dev/null
+> +++ b/package/libpsl/libpsl.hash
+> @@ -0,0 +1,6 @@
+> +# Locally generated
+> +sha256  ac6ce1e1fbd4d0254c4ddb9d37f1fa99dec83619c1253328155206b896210d4c  libpsl-0.21.1.tar.gz
+> +
+> +# Hashes for license files:
+> +sha256  7903413e7aa0bbcb77aa19150a3f1034edc0a760cff174f9a53efe4de6f056a4  COPYING
+> +sha256  1d7f52747a9169751cdf2641a8299c0098e9ecdf9429296ffd55bdb14c9ed5b3  src/LICENSE.chromium
+> diff --git a/package/libpsl/libpsl.mk b/package/libpsl/libpsl.mk
+> new file mode 100644
+> index 0000000000..1abdc6b208
+> --- /dev/null
+> +++ b/package/libpsl/libpsl.mk
+> @@ -0,0 +1,27 @@
+> +################################################################################
+> +#
+> +# libpsl
+> +#
+> +################################################################################
+> +
+> +LIBPSL_VERSION = 0.21.1
+> +LIBPSL_SITE = https://github.com/rockdaboot/libpsl/releases/download/$(LIBPSL_VERSION)
+> +LIBPSL_INSTALL_STAGING = YES
+> +LIBPSL_DEPENDENCIES = host-pkgconf
+> +LIBPSL_LICENSE = MIT, BSD-3-Clause
+> +LIBPSL_LICENSE_FILES = COPYING src/LICENSE.chromium
+
+Pet-peeve of mine: try and be consistent in variable ordering. ;-)
+
+so I've done a bit of reordering, and Applied to next, thanks.
 
 Regards,
 Yann E. MORIN.
 
->  DEVELOPERS                                    |  1 +
->  package/Config.in                             |  1 +
->  package/libpsl/Config.in                      |  8 ++++++
->  package/libpsl/libpsl.hash                    |  6 +++++
->  package/libpsl/libpsl.mk                      | 27 +++++++++++++++++++
->  .../0001-Revert-tld-parser-use-Python-3.patch | 27 -------------------
->  package/libsoup/Config.in                     |  1 +
->  package/libsoup/libsoup.hash                  |  4 +--
->  package/libsoup/libsoup.mk                    | 20 +++++++-------
->  9 files changed, 56 insertions(+), 39 deletions(-)
->  create mode 100644 package/libpsl/Config.in
->  create mode 100644 package/libpsl/libpsl.hash
->  create mode 100644 package/libpsl/libpsl.mk
->  delete mode 100644 package/libsoup/0001-Revert-tld-parser-use-Python-3.patch
-> 
+> +LIBPSL_CONF_OPTS = -Ddocs=false
+> +
+> +# The order of checks is the same as done by libpsl when configured.
+> +ifeq ($(BR2_PACKAGE_LIBIDN2)$(BR2_PACKAGE_LIBUNISTRING),yy)
+> +LIBPSL_CONF_OPTS += -Druntime=libidn2 -Dbuiltin=libidn2
+> +LIBPSL_DEPENDENCIES += libidn2 libunistring
+> +else ifeq ($(BR2_PACKAGE_ICU),y)
+> +LIBPSL_CONF_OPTS += -Druntime=libicu -Dbuiltin=libicu
+> +LIBPSL_DEPENDENCIES += icu
+> +else
+> +LIBPSL_CONF_OPTS += -Druntime=libidn -Dbuiltin=libidn
+> +LIBPSL_DEPENDENCIES += libidn libunistring
+> +endif
+> +
+> +$(eval $(meson-package))
 > -- 
 > 2.31.1
 > 
