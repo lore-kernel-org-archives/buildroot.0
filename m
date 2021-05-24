@@ -1,40 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 10:30:35 +0200
-Subject: [Buildroot] [git commit] package/python-pillow: add xcb support
-Message-ID: <20210524082154.1B77C86497@busybox.osuosl.org>
+Date: Mon, 24 May 2021 10:50:56 +0200
+Subject: [Buildroot] [git commit] package/python-pillow: security bump to
+ version 8.2.0
+Message-ID: <20210524082154.4256B88DC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1e0e275c6715bf2963bdcf32d7008321e525d1b
+commit: https://git.buildroot.net/buildroot/commit/?id=e4625ae8d5e23bb66a774d085fe74a0463f835c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libxcb is an optional dependency since version 7.1.0 and
-https://github.com/python-pillow/Pillow/commit/3c39e6fcf6a11b18eec0d1c66710bcd35033d069
+- Fix numerous CVEs:
+  https://pillow.readthedocs.io/en/stable/releasenotes/8.2.0.html#security
+  https://pillow.readthedocs.io/en/stable/releasenotes/8.1.2.html#security
+  https://pillow.readthedocs.io/en/stable/releasenotes/8.1.1.html#security
+  https://pillow.readthedocs.io/en/stable/releasenotes/8.1.0.html#security
+- Update license to HPND:
+  https://github.com/python-pillow/Pillow/commit/81078e8a0d26c9094446a64aadfa8047b8af3484
+
+https://pillow.readthedocs.io/en/stable/releasenotes/index.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pillow/python-pillow.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/python-pillow/python-pillow.hash | 7 ++++---
+ package/python-pillow/python-pillow.mk   | 6 +++---
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index 0849577f66..562cb2c1a2 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,4 +1,5 @@
+-# md5, sha256 from https://pypi.org/project/Pillow/
+-sha256	11c5c6e9b02c9dac08af04f093eb5a2f84857df70a7d4a6a6ad461aca803fb9e  Pillow-8.0.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pillow/json
++md5  21c03274a9f59b9c00419852a8faebe7  Pillow-8.2.0.tar.gz
++sha256	a787ab10d7bb5494e5f76536ac460741788f1fbce851068d73a87ca7c35fc3e1  Pillow-8.2.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	37de42abe33a247e8f03d2313657a0f174a239a198f526add6544ff3e2643b81  LICENSE
++sha256	5bb11d96b393a698df70018069a986248021f286344c437a13f299c3daf1dfd4  LICENSE
 diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 3018758b48..ab52f38df1 100644
+index fd0c6ce862..42607e0bbd 100644
 --- a/package/python-pillow/python-pillow.mk
 +++ b/package/python-pillow/python-pillow.mk
-@@ -35,6 +35,13 @@ else
- PYTHON_PILLOW_BUILD_OPTS += --disable-lcms
- endif
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBXCB),y)
-+PYTHON_PILLOW_DEPENDENCIES += libxcb
-+PYTHON_PILLOW_BUILD_OPTS += --enable-xcb
-+else
-+PYTHON_PILLOW_BUILD_OPTS += --disable-xcb
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENJPEG),y)
- PYTHON_PILLOW_DEPENDENCIES += openjpeg
- PYTHON_PILLOW_BUILD_OPTS += --enable-jpeg2000
+-PYTHON_PILLOW_VERSION = 8.0.1
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/2b/06/93bf1626ef36815010e971a5ce90f49919d84ab5d2fa310329f843a74bc1
++PYTHON_PILLOW_VERSION = 8.2.0
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/21/23/af6bac2a601be6670064a817273d4190b79df6f74d8012926a39bc7aa77f
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+-PYTHON_PILLOW_LICENSE = PIL Software License
++PYTHON_PILLOW_LICENSE = HPND
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
+ PYTHON_PILLOW_CPE_ID_VENDOR = python
+ PYTHON_PILLOW_CPE_ID_PRODUCT = pillow
