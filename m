@@ -1,75 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 19:53:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mtd: add
- BR2_PACKAGE_MTD_UBIHEALTHD option
-In-Reply-To: <20210524143715.578572-1-luoxiaobing0926@gmail.com>
-References: <20210524143715.578572-1-luoxiaobing0926@gmail.com>
-Message-ID: <20210524175324.GL3208066@scaer>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 24 May 2021 20:05:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: bump version to
+ 20210524
+Message-ID: <20210524180552.17283-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Xiaobing, All,
+Add locally computed sha256 (+ keep sha1 from github checksum file).
 
-On 2021-05-24 14:37 +0000, Xiaobing Luo spake thusly:
-> mtd-utils-2.1.2 add ubihealthd daemon
-> package/mtd: add BR2_PACKAGE_MTD_UBIHEALTHD option
+sysinfo.h fix patch is still needed (until Buildroot MUSL toolchain gets
+updated).
 
-Spurious repetition of the commit title; I've dropped that.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/ltp-testsuite/ltp-testsuite.hash | 5 +++--
+ package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-> Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
-
-Applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/mtd/Config.in | 4 ++++
->  package/mtd/mtd.mk    | 1 +
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-> index 590ca7f5ef..c7ad3b3cdc 100644
-> --- a/package/mtd/Config.in
-> +++ b/package/mtd/Config.in
-> @@ -137,6 +137,10 @@ config BR2_PACKAGE_MTD_UBIFORMAT
->  	bool "ubiformat"
->  	default y
->  
-> +config BR2_PACKAGE_MTD_UBIHEALTHD
-> +	bool "ubihealthd"
-> +	default y
-> +
->  config BR2_PACKAGE_MTD_UBIMKVOL
->  	bool "ubimkvol"
->  	default y
-> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-> index c4fa56d260..121dfa554b 100644
-> --- a/package/mtd/mtd.mk
-> +++ b/package/mtd/mtd.mk
-> @@ -96,6 +96,7 @@ MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIATTACH)	+= ubiattach
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBICRC32)		+= ubicrc32
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIDETACH)	+= ubidetach
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIFORMAT)	+= ubiformat
-> +MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIHEALTHD)	+= ubihealthd
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIMKVOL)		+= ubimkvol
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBINFO)		+= ubinfo
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBINIZE)		+= ubinize
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index f0b2c89704..ed2a50cd4f 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
+@@ -1,4 +1,5 @@
+-# From: https://github.com/linux-test-project/ltp/releases/download/20210121/ltp-full-20210121.tar.xz.sha1
+-sha1 ac9c1c711aed4319c5fbd0b665d36f75236a4ec2  ltp-full-20210121.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20210524/ltp-full-20210524.tar.xz.sha1
++sha1 08d84f8ac3ba0c800f3070768c651703869105d7  ltp-full-20210524.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  831678c64b85a8c24957c71632752537b2266890f2d2f352da9ed0ec45458189  ltp-full-20210524.tar.xz
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 43ee134d1c..f3f6c74fcc 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTP_TESTSUITE_VERSION = 20210121
++LTP_TESTSUITE_VERSION = 20210524
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.31.1
