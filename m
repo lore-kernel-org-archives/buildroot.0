@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 10:52:51 +0200
-Subject: [Buildroot] [PATCH 2/4] package/python-pillow: add xcb support
-In-Reply-To: <20210522174159.278657-2-fontaine.fabrice@gmail.com>
+Date: Mon, 24 May 2021 10:56:12 +0200
+Subject: [Buildroot] [PATCH 3/4] package/python-pillow: add webpmux
+ support
+In-Reply-To: <20210522174159.278657-3-fontaine.fabrice@gmail.com>
 References: <20210522174159.278657-1-fontaine.fabrice@gmail.com>
- <20210522174159.278657-2-fontaine.fabrice@gmail.com>
-Message-ID: <20210524085251.GI3208066@scaer>
+ <20210522174159.278657-3-fontaine.fabrice@gmail.com>
+Message-ID: <20210524085612.GJ3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +15,49 @@ To: buildroot@busybox.net
 Fabrice, All,
 
 On 2021-05-22 19:41 +0200, Fabrice Fontaine spake thusly:
-> libxcb is an optional dependency since version 7.1.0 and
-> https://github.com/python-pillow/Pillow/commit/3c39e6fcf6a11b18eec0d1c66710bcd35033d069
+> webpmux is an optional dependency since version 2.2.0 and
+> https://github.com/python-pillow/Pillow/commit/b4735f7829bb88c99071cd91b208aa6ffd2cba24
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-This is fixing a hiodden dependency, so: applied to master, thanks.
+This is not fixing a hidden dependency, however;
+  - I have not checked what the default is, so maybe it does fix a
+    hidden dependency after all,
+  - it got pulled as pat of the rest of the series,
+  - and I had to do some changes, see below...
+
+> ---
+>  package/python-pillow/python-pillow.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+> index ab52f38df1..61f386df07 100644
+> --- a/package/python-pillow/python-pillow.mk
+> +++ b/package/python-pillow/python-pillow.mk
+> @@ -63,6 +63,12 @@ else
+>  PYTHON_PILLOW_BUILD_OPTS += --disable-webp
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_WEBP_DEMUX)$(BR2_PACKAGE_WEBP_MUX),yy)
+> +PYTHON_PILLOW_BUILD_OPTS += --enable-webpmux
+> +else
+> +PYTHON_PILLOW_BUILD_OPTS += --disable-webpmux
+> +endif
+
+I was confused to not see a dependency on webp itself, but it is already
+there. It;s just that this new conditional was not in the existing
+webp-conditional block.
+
+So, I moved the new check inside the existing webp-conditional block,
+added an explicit disable for webpmux in the else clause, and applied
+to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/python-pillow/python-pillow.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-> index 3018758b48..ab52f38df1 100644
-> --- a/package/python-pillow/python-pillow.mk
-> +++ b/package/python-pillow/python-pillow.mk
-> @@ -35,6 +35,13 @@ else
->  PYTHON_PILLOW_BUILD_OPTS += --disable-lcms
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBXCB),y)
-> +PYTHON_PILLOW_DEPENDENCIES += libxcb
-> +PYTHON_PILLOW_BUILD_OPTS += --enable-xcb
-> +else
-> +PYTHON_PILLOW_BUILD_OPTS += --disable-xcb
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_OPENJPEG),y)
->  PYTHON_PILLOW_DEPENDENCIES += openjpeg
->  PYTHON_PILLOW_BUILD_OPTS += --enable-jpeg2000
+>  define PYTHON_PILLOW_BUILD_CMDS
+>  	cd $(PYTHON_PILLOW_BUILDDIR); \
+>  		PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
 > -- 
 > 2.30.2
 > 
