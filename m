@@ -1,49 +1,36 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 24 May 2021 20:05:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: bump version to
- 20210524
-Message-ID: <20210524180552.17283-1-petr.vorel@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 24 May 2021 20:56:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-bluezero: select dbus
+Message-ID: <20210524185617.10260-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add locally computed sha256 (+ keep sha1 from github checksum file).
+Build is broken since commit
+8bdc5e7c4d975193b1e18999ed840507cea63bd6 because BR2_PACKAGE_DBUS_PYTHON
+is selected without selecting BR2_PACKAGE_DBUS
 
-sysinfo.h fix patch is still needed (until Buildroot MUSL toolchain gets
-updated).
+Fixes:
+ - http://autobuild.buildroot.org/results/378dd714940440b8f9db763479ae929e90e33b80
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ltp-testsuite/ltp-testsuite.hash | 5 +++--
- package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/python-bluezero/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-index f0b2c89704..ed2a50cd4f 100644
---- a/package/ltp-testsuite/ltp-testsuite.hash
-+++ b/package/ltp-testsuite/ltp-testsuite.hash
-@@ -1,4 +1,5 @@
--# From: https://github.com/linux-test-project/ltp/releases/download/20210121/ltp-full-20210121.tar.xz.sha1
--sha1 ac9c1c711aed4319c5fbd0b665d36f75236a4ec2  ltp-full-20210121.tar.xz
-+# From: https://github.com/linux-test-project/ltp/releases/download/20210524/ltp-full-20210524.tar.xz.sha1
-+sha1 08d84f8ac3ba0c800f3070768c651703869105d7  ltp-full-20210524.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  831678c64b85a8c24957c71632752537b2266890f2d2f352da9ed0ec45458189  ltp-full-20210524.tar.xz
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 43ee134d1c..f3f6c74fcc 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LTP_TESTSUITE_VERSION = 20210121
-+LTP_TESTSUITE_VERSION = 20210524
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- 
+diff --git a/package/python-bluezero/Config.in b/package/python-bluezero/Config.in
+index 7126b3ca50..c391bfa858 100644
+--- a/package/python-bluezero/Config.in
++++ b/package/python-bluezero/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_BLUEZERO
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # python-gobject -> gobject-introspection
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # python-gobject -> gobject-introspection
+ 	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_DBUS # runtime
+ 	select BR2_PACKAGE_DBUS_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_GOBJECT # runtime
+ 	help
 -- 
-2.31.1
+2.30.2
