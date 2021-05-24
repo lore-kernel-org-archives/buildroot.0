@@ -1,75 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 19:41:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libepoxy: bump to version 1.5.7
-In-Reply-To: <20210519211439.1273019-1-aperez@igalia.com>
-References: <20210519211439.1273019-1-aperez@igalia.com>
-Message-ID: <20210524174115.GI3208066@scaer>
+Date: Mon, 24 May 2021 19:44:00 +0200
+Subject: [Buildroot] [git commit branch/next] package/libgit2: disable NTLM
+ support unconditionally.
+Message-ID: <20210524171637.6190A80F77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adrian, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=cb53b131f64adfb6bba86d1f466665721241b684
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-05-20 00:14 +0300, Adrian Perez de Castro spake thusly:
-> This update includes a build fix for the RaspberryPi 4 (from 1.5.7)
-> and a fix for the GL library loader when GLX is involved (from 1.5.6)
-> Release notes:
-> 
->   https://github.com/anholt/libepoxy/releases/tag/1.5.6
->   https://github.com/anholt/libepoxy/releases/tag/1.5.7
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+NTLM is an old authentication protocol depending on DES and MD4 and
+its creator, Microsoft, discourage its use since 2010, because it is
+weak and vulnerable to many attacks.
 
-Applied to next, with the indentation fix in the hash file from
-Fran?ois, thanks!
+libgit2 has support for NTLM and it is enabled by default if openssl
+is used, however, since commit a83d41867c8d ("package/libopenssl: add
+option to enable some features"), support for DES and MD4 can be
+disabled in openssl.
 
-Regards,
-Yann E. MORIN.
+Since openssl is an optional dependency to libgit2 and getting rid of
+NTLM is a goal in itself for many windows administrators, disable NTLM
+by default.
 
-> ---
->  package/libepoxy/libepoxy.hash | 4 ++--
->  package/libepoxy/libepoxy.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
-> index 79876ad01d..57dd1aaa8f 100644
-> --- a/package/libepoxy/libepoxy.hash
-> +++ b/package/libepoxy/libepoxy.hash
-> @@ -1,5 +1,5 @@
-> -# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.5.sha256sum
-> -sha256 261663db21bcc1cc232b07ea683252ee6992982276536924271535875f5b0556  libepoxy-1.5.5.tar.xz
-> +# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.7.sha256sum
-> +sha256 9479cc0146ffb395fdecf9bd2a5930834fd0bce490cbcc4681ffd716bb3a0763  libepoxy-1.5.7.tar.xz
->  
->  # Hashes for license files:
->  sha256 8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
-> diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
-> index bb578fb02c..729d1bff92 100644
-> --- a/package/libepoxy/libepoxy.mk
-> +++ b/package/libepoxy/libepoxy.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  LIBEPOXY_VERSION_MAJOR = 1.5
-> -LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).5
-> +LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).7
->  LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
->  LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
->  LIBEPOXY_INSTALL_STAGING = YES
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes: http://autobuild.buildroot.net/results/efb4ce2174cb6944558e895ce852182ba2738a70
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libgit2/libgit2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index e5d17fa3dd..668fa758f8 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -17,6 +17,7 @@ LIBGIT2_CONF_OPTS = \
+ 	-DUSE_ICONV=ON \
+ 	-DREGEX_BACKEND=regcomp \
+ 	-DUSE_HTTP_PARSER=system \
++	-DUSE_NTLMCLIENT=OFF \
+ 	-DTHREADSAFE=$(if $(BR2_TOOLCHAIN_HAS_THREADS),ON,OFF)
+ 
+ LIBGIT2_DEPENDENCIES = zlib libhttpparser
