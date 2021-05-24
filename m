@@ -1,53 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 15:32:38 +0200
-Subject: [Buildroot] [PATCH] utils/genrandconfig: drop hardening Config
- enables
-In-Reply-To: <20210524131631.GZ3208066@scaer>
-References: <20210521131752.9893-1-matthew.weber@collins.com>
- <20210524131631.GZ3208066@scaer>
-Message-ID: <20210524133238.GE3208066@scaer>
+Date: Mon, 24 May 2021 15:57:06 +0200
+Subject: [Buildroot] [git commit] package/{protobuf,
+ python-protobuf}: bump to version 3.17
+Message-ID: <20210524132857.51E5E86AE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=92332d31d590f731a55926166dd2da8181c8fcaf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-24 15:16 +0200, Yann E. MORIN spake thusly:
-> On 2021-05-21 08:17 -0500, Matthew Weber via buildroot spake thusly:
-> > Since 810ba387bec3c5b, some form of these options are enable
-> > by default. Specifically:
-> > 
-> > - Kept FORTIFY level 2 option as the default is now level 1.
-> > - Removed all SSP options as the default now uses the best
-> >   option based on toolchain support.
-> > - Similar to SSP, for RELRO, the default now uses the best
-> >   option based on toolchain support.
-> > - Completely drop PIC PIE as it defaults =y
-> > 
-> > Signed-off-by: Matthew Weber <matthew.weber@collins.com>
-> > ---
-[--SNIP--]
-> I was going to apply this, but then I was wondering: shouldn't we
-> randomly *disable* them, now?
-> 
-> Indeed, as much enabling those options randomly helped uncover build
-> issues, maybe disabling them would also help?
-> 
-> But I don't feel very strong either, so you should have no issue
-> convincing me to apply as-is. ;-)
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-As discussed on IRC: if there is an issue with any of those disabled, we
-can handle them as they are reported by users.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 79d3184f59..6818b6f83a 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  bbdfb7455431d7d58666e8a2996d14b236718ff238eecde10646581e4c87f168  protobuf-cpp-3.15.6.tar.gz
++sha256  84d30a78cae000be164ac6b973ee1dc0664669d63685dfbcf96f058c50456f19  protobuf-cpp-3.17.0.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index ea75480038..7ba99d2c4b 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 3.15.6
++PROTOBUF_VERSION = 3.17.0
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 0d3665b736..3ed9de739a 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7e8c58a14950ac7a727864d5c521f48c81feb66ff7df325487fc930c9aa50d8b  protobuf-python-3.15.6.tar.gz
++sha256  3011bfbc18d1c695ee393cb0dc1042282cfa33ef6573fe82732aefc9f7286121  protobuf-python-3.17.0.tar.gz
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
