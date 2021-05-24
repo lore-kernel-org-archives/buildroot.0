@@ -1,86 +1,44 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 24 May 2021 16:45:25 +0200
-Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 2.8.1
-Message-ID: <20210524144525.1983320-1-francois.perrad@gadz.org>
+Date: Mon, 24 May 2021 16:45:38 +0200
+Subject: [Buildroot] [PATCH] package/libepoxy: bump to version 1.5.7
+Message-ID: <20210524144538.1983376-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-remove unknown option fontconfig
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../harfbuzz/0001-meson.build-check-for-pthread.h.patch  | 9 +--------
- package/harfbuzz/harfbuzz.hash                           | 2 +-
- package/harfbuzz/harfbuzz.mk                             | 4 +---
- 3 files changed, 3 insertions(+), 12 deletions(-)
+ package/libepoxy/libepoxy.hash | 6 +++---
+ package/libepoxy/libepoxy.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/harfbuzz/0001-meson.build-check-for-pthread.h.patch b/package/harfbuzz/0001-meson.build-check-for-pthread.h.patch
-index 6d7225cbb..9fa09863c 100644
---- a/package/harfbuzz/0001-meson.build-check-for-pthread.h.patch
-+++ b/package/harfbuzz/0001-meson.build-check-for-pthread.h.patch
-@@ -26,7 +26,7 @@ diff --git a/meson.build b/meson.build
- index bf3925db..6d263d48 100644
- --- a/meson.build
- +++ b/meson.build
--@@ -281,13 +281,15 @@ endif
-+@@ -281,7 +281,9 @@ endif
-  # threads
-  thread_dep = null_dep
-  if host_machine.system() != 'windows'
-@@ -37,13 +37,6 @@ index bf3925db..6d263d48 100644
-  
-    if thread_dep.found()
-      conf.set('HAVE_PTHREAD', 1)
--   else
--     check_headers += ['sched.h']
---    check_funcs += ['sched_yield', {'link_with': 'rt'}]
--+    check_funcs += [['sched_yield', {'link_with': 'rt'}]]
--   endif
-- endif
-- 
- -- 
- 2.29.2
+diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+index 79876ad01..c2ff362fa 100644
+--- a/package/libepoxy/libepoxy.hash
++++ b/package/libepoxy/libepoxy.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.5.sha256sum
+-sha256 261663db21bcc1cc232b07ea683252ee6992982276536924271535875f5b0556  libepoxy-1.5.5.tar.xz
++# From https://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.7.sha256sum
++sha256  9479cc0146ffb395fdecf9bd2a5930834fd0bce490cbcc4681ffd716bb3a0763  libepoxy-1.5.7.tar.xz
  
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 98b137c8b..ad81b34fd 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6ad11d653347bd25d8317589df4e431a2de372c0cf9be3543368e07ec23bb8e7  harfbuzz-2.7.4.tar.xz
-+sha256  4124f663ec4bf4e294d9cf230668370b4249a48ff34deaf0f06e8fc82d891300  harfbuzz-2.8.1.tar.xz
- sha256  beb3f017ceb41387667f78237a7cecf84defa0ed257c505894663d6a9f13211b  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index f1ef7ee95..60cc8b724 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
+ # Hashes for license files:
+-sha256 8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
++sha256  8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index bb578fb02..729d1bff9 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--HARFBUZZ_VERSION = 2.7.4
-+HARFBUZZ_VERSION = 2.8.1
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
-@@ -12,7 +12,6 @@ HARFBUZZ_LICENSE_FILES = COPYING
- HARFBUZZ_CPE_ID_VENDOR = harfbuzz_project
- HARFBUZZ_INSTALL_STAGING = YES
- HARFBUZZ_CONF_OPTS = \
--	-Dfontconfig=disabled \
- 	-Dgdi=disabled \
- 	-Ddirectwrite=disabled \
- 	-Dcoretext=disabled \
-@@ -31,7 +30,6 @@ HOST_HARFBUZZ_CONF_OPTS = \
- 	-Dglib=enabled \
- 	-Dgobject=disabled \
- 	-Dcairo=disabled \
--	-Dfontconfig=disabled \
- 	-Dicu=disabled \
- 	-Dgraphite=disabled \
- 	-Dfreetype=enabled \
+ LIBEPOXY_VERSION_MAJOR = 1.5
+-LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).5
++LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).7
+ LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
 -- 
 2.30.2
