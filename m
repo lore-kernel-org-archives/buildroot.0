@@ -1,84 +1,137 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 14:14:03 +0200
-Subject: [Buildroot] [git commit] package/makedumpfile: bump to version 1.6.9
-Message-ID: <20210607144657.4CB2F80FB4@busybox.osuosl.org>
+Date: Mon, 24 May 2021 14:43:54 +0200
+Subject: [Buildroot] [git commit] package/xmrig: new package
+Message-ID: <20210607144657.7D59C80FB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb648d12fa733788cd2ea8e0fa8b00bb95983c4e
+commit: https://git.buildroot.net/buildroot/commit/?id=6f70990ccf6cb993fc31519337390e436d15493b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[me:
+  - introduce XMRIG_SUFFIX
+  - extend comment about installation commands
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0002-makedumpfile.h-fix-build-on-sparc64.patch | 35 ----------------------
- package/makedumpfile/makedumpfile.hash             |  2 +-
- package/makedumpfile/makedumpfile.mk               |  2 +-
- 3 files changed, 2 insertions(+), 37 deletions(-)
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/xmrig/Config.in  | 22 ++++++++++++++++++++++
+ package/xmrig/xmrig.hash |  3 +++
+ package/xmrig/xmrig.mk   | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 70 insertions(+)
 
-diff --git a/package/makedumpfile/0002-makedumpfile.h-fix-build-on-sparc64.patch b/package/makedumpfile/0002-makedumpfile.h-fix-build-on-sparc64.patch
-deleted file mode 100644
-index defc101949..0000000000
---- a/package/makedumpfile/0002-makedumpfile.h-fix-build-on-sparc64.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 2c132ac5e6656723821acdb0ee57b34c42851fed Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 4 Feb 2021 20:15:56 +0100
--Subject: [PATCH] makedumpfile.h: fix build on sparc64
--
--Fix the following build failure on sparc64:
--
--/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc64-buildroot-linux-gnu/9.3.0/../../../../sparc64-buildroot-linux-gnu/bin/ld: /tmp/ccylTux8.o: in function `find_kaslr_offsets':
--/home/giuliobenetti/autobuild/run/instance-0/output-1/build/makedumpfile-1.6.8/makedumpfile.c:4017: undefined reference to `get_kaslr_offset'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/1421f54f7599bba62c0a4bd5c65ce21c8cc7ee1a
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--http://lists.infradead.org/pipermail/kexec/2021-February/021996.html]
-----
-- makedumpfile.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/makedumpfile.h b/makedumpfile.h
--index 97a5554..dfc1a77 100644
----- a/makedumpfile.h
--+++ b/makedumpfile.h
--@@ -1139,6 +1139,7 @@ unsigned long long vaddr_to_paddr_sparc64(unsigned long vaddr);
-- #define get_machdep_info()      TRUE
-- #define get_phys_base()         get_phys_base_sparc64()
-- #define get_versiondep_info()   get_versiondep_info_sparc64()
--+#define get_kaslr_offset(X)     stub_false()
-- #define vaddr_to_paddr(X)       vaddr_to_paddr_sparc64(X)
-- #define paddr_to_vaddr(X)	paddr_to_vaddr_general(X)
-- #define is_phys_addr(X)		stub_true_ul(X)
---- 
--2.29.2
--
-diff --git a/package/makedumpfile/makedumpfile.hash b/package/makedumpfile/makedumpfile.hash
-index 1b2df008d2..f85f334cbf 100644
---- a/package/makedumpfile/makedumpfile.hash
-+++ b/package/makedumpfile/makedumpfile.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  85d79b7090e9a8ce0d426795d3bc1de2858def7e12954d9bc6ae03de160b694c  makedumpfile-1.6.8.tar.gz
-+sha256  393ea8f22393c059ad21de9b1c3f45d9d0d8dbeb0ccb1417815b835d03f7c350  makedumpfile-1.6.9.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
-index 99fb3a71c8..16271e2246 100644
---- a/package/makedumpfile/makedumpfile.mk
-+++ b/package/makedumpfile/makedumpfile.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 988612a944..979813c1dd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -455,6 +455,7 @@ F:	package/waylandpp/
+ F:	package/x11r7/
+ F:	package/x264/
+ F:	package/x265/
++F:	package/xmrig/
+ F:	package/ytree/
+ F:	package/znc/
+ F:	support/testing/tests/package/test_perl_html_parser.py
+diff --git a/package/Config.in b/package/Config.in
+index 8e017654d2..3c99ba8030 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2061,6 +2061,7 @@ menu "Miscellaneous"
+ 	source "package/sunwait/Config.in"
+ 	source "package/taskd/Config.in"
+ 	source "package/wine/Config.in"
++	source "package/xmrig/Config.in"
+ 	source "package/xutil_util-macros/Config.in"
+ endmenu
  
--MAKEDUMPFILE_VERSION = 1.6.8
-+MAKEDUMPFILE_VERSION = 1.6.9
- MAKEDUMPFILE_SITE = $(call github,makedumpfile,makedumpfile,$(MAKEDUMPFILE_VERSION))
- MAKEDUMPFILE_DEPENDENCIES = bzip2 elfutils xz zlib
- MAKEDUMPFILE_LICENSE = GPL-2.0
+diff --git a/package/xmrig/Config.in b/package/xmrig/Config.in
+new file mode 100644
+index 0000000000..7024241017
+--- /dev/null
++++ b/package/xmrig/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_XMRIG
++	bool "xmrig"
++	# archs officially supported by upstream
++	depends on BR2_aarch64 || BR2_x86_64 || BR2_i386
++	depends on BR2_USE_MMU # libuv
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
++	# xmrig needs fenv.h which is not provided by uclibc
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	depends on !BR2_STATIC_LIBS # libuv
++	select BR2_PACKAGE_LIBUV
++	help
++	  RandomX, CryptoNight, AstroBWT and Argon2 CPU/GPU miner.
++
++	  https://xmrig.com
++
++comment "xmrig needs a glibc or musl toolchain w/ NPTL, dynamic library"
++	depends on BR2_aarch64 || BR2_x86_64 || BR2_i386
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
++		BR2_TOOLCHAIN_USES_UCLIBC || BR2_STATIC_LIBS
+diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
+new file mode 100644
+index 0000000000..c80bdd6621
+--- /dev/null
++++ b/package/xmrig/xmrig.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  7570030c4b3e257bda190a100dc59f78b74c823af7561222a99b296f5e7b1ac2  xmrig-6.12.1.tar.gz
++sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
+new file mode 100644
+index 0000000000..2202d875c5
+--- /dev/null
++++ b/package/xmrig/xmrig.mk
+@@ -0,0 +1,43 @@
++################################################################################
++#
++# xmrig
++#
++################################################################################
++
++XMRIG_VERSION = 6.12.1
++XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
++XMRIG_LICENSE = GPL-3.0+
++XMRIG_LICENSE_FILES = LICENSE
++XMRIG_DEPENDENCIES = libuv
++XMRIG_CONF_OPTS = -DWITH_CUDA=OFF
++
++ifeq ($(BR2_PACKAGE_HAS_LIBOPENCL),y)
++XMRIG_CONF_OPTS += -DWITH_OPENCL=ON
++XMRIG_DEPENDENCIES += libopencl
++else
++XMRIG_CONF_OPTS += -DWITH_OPENCL=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_HWLOC),y)
++XMRIG_CONF_OPTS += -DWITH_HWLOC=ON
++XMRIG_DEPENDENCIES += hwloc
++else
++XMRIG_CONF_OPTS += -DWITH_HWLOC=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++XMRIG_CONF_OPTS += -DWITH_TLS=ON
++XMRIG_DEPENDENCIES += openssl
++else
++XMRIG_CONF_OPTS += -DWITH_TLS=OFF
++XMRIG_SUFFIX = -notls
++endif
++
++# Upstream provides no installation rule:
++#   *** No rule to make target 'install/fast'.  Stop.
++define XMRIG_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/xmrig$(XMRIG_SUFFIX) \
++		$(TARGET_DIR)/usr/bin/xmrig$(XMRIG_SUFFIX)
++endef
++
++$(eval $(cmake-package))
