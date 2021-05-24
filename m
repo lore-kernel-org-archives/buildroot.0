@@ -1,53 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 16:00:43 +0200
-Subject: [Buildroot] [git commit] package/{protobuf,
- python-protobuf}: bump to version 3.17
-Message-ID: <20210607144657.B9BCF814BD@busybox.osuosl.org>
+Date: Mon, 24 May 2021 14:17:28 +0200
+Subject: [Buildroot] [git commit] package/pifmrds: use pkg-config
+Message-ID: <20210607144657.5758580FB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea42a5670a87452db400479e9674c4b0cf25f65c
+commit: https://git.buildroot.net/buildroot/commit/?id=1c833604aef36d381353c9b5541e22e9eaa277aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Use pkg-config to retrieve libsndfile dependencies
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 888546e5273d77d49bec564a515e85d7acee6bdd)
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/pifmrds/0003-Makefile-fix-static-link.patch | 6 ++++--
+ package/pifmrds/pifmrds.mk                          | 3 ++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 79d3184f59..6818b6f83a 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  bbdfb7455431d7d58666e8a2996d14b236718ff238eecde10646581e4c87f168  protobuf-cpp-3.15.6.tar.gz
-+sha256  84d30a78cae000be164ac6b973ee1dc0664669d63685dfbcf96f058c50456f19  protobuf-cpp-3.17.0.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index ea75480038..7ba99d2c4b 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 3.15.6
-+PROTOBUF_VERSION = 3.17.0
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index 0d3665b736..3ed9de739a 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7e8c58a14950ac7a727864d5c521f48c81feb66ff7df325487fc930c9aa50d8b  protobuf-python-3.15.6.tar.gz
-+sha256  3011bfbc18d1c695ee393cb0dc1042282cfa33ef6573fe82732aefc9f7286121  protobuf-python-3.17.0.tar.gz
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/pifmrds/0003-Makefile-fix-static-link.patch b/package/pifmrds/0003-Makefile-fix-static-link.patch
+index ecd7c4fc4c..3bd91c981f 100644
+--- a/package/pifmrds/0003-Makefile-fix-static-link.patch
++++ b/package/pifmrds/0003-Makefile-fix-static-link.patch
+@@ -4,6 +4,8 @@ Since libsndfile uses funtions from libm, the -lm should be specified
+ after libsndfile for static linking.
+ 
+ Signed-off-by: "Eric Limpens" <Limpens@gmail.com>
++[Fabrice: add $(SNDFILE_LIBS) to pass all dependencies from pkg-config]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ 
+ diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile
+ --- pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile	2016-02-26 08:06:43.102962592 +0100
+@@ -13,11 +15,11 @@ diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pi
+  
+  app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
+ -	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
+-+	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lsndfile -lm
+++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o $(SNDFILE_LIBS)
+  
+  rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
+ -	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
+-+	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lsndfile -lm
+++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o $(SNDFILE_LIBS)
+  
+  rds.o: rds.c waveforms.h
+  	$(CC) $(CFLAGS) rds.c
+diff --git a/package/pifmrds/pifmrds.mk b/package/pifmrds/pifmrds.mk
+index 509ec80876..33c13bae33 100644
+--- a/package/pifmrds/pifmrds.mk
++++ b/package/pifmrds/pifmrds.mk
+@@ -6,13 +6,14 @@
+ 
+ PIFMRDS_VERSION = 0bf57f9ce0d954365a38d8af8e7be6f28521c3f2
+ PIFMRDS_SITE = $(call github,ChristopheJacquet,PiFmRds,$(PIFMRDS_VERSION))
+-PIFMRDS_DEPENDENCIES = libsndfile
++PIFMRDS_DEPENDENCIES = host-pkgconf libsndfile
+ PIFMRDS_LICENSE = GPL-3.0+
+ PIFMRDS_LICENSE_FILES = LICENSE
+ 
+ define PIFMRDS_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -ffast-math -c" \
++		SNDFILE_LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs sndfile`" \
+ 		app rds_wav
+ endef
+ 
