@@ -1,33 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 24 May 2021 14:29:01 +0200
-Subject: [Buildroot] [PATCH/next v2 1/1] package/xmrig: new package
-Message-ID: <20210524122901.1060817-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 May 2021 14:43:54 +0200
+Subject: [Buildroot] [git commit branch/next] package/xmrig: new package
+Message-ID: <20210524121553.25E318A4CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: sorted Config.in depends (Yann)
-    added comment why XMRIG_INSTALL_TARGET_CMDS is needed (Yann)
+commit: https://git.buildroot.net/buildroot/commit/?id=6f70990ccf6cb993fc31519337390e436d15493b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[me:
+  - introduce XMRIG_SUFFIX
+  - extend comment about installation commands
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
  DEVELOPERS               |  1 +
  package/Config.in        |  1 +
- package/xmrig/Config.in  | 22 +++++++++++++++++++++
+ package/xmrig/Config.in  | 22 ++++++++++++++++++++++
  package/xmrig/xmrig.hash |  3 +++
- package/xmrig/xmrig.mk   | 41 ++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 68 insertions(+)
- create mode 100644 package/xmrig/Config.in
- create mode 100644 package/xmrig/xmrig.hash
- create mode 100644 package/xmrig/xmrig.mk
+ package/xmrig/xmrig.mk   | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 70 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a90ad1c354..ffe99a219d 100644
+index 988612a944..979813c1dd 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -456,6 +456,7 @@ F:	package/waylandpp/
+@@ -455,6 +455,7 @@ F:	package/waylandpp/
  F:	package/x11r7/
  F:	package/x264/
  F:	package/x265/
@@ -36,10 +38,10 @@ index a90ad1c354..ffe99a219d 100644
  F:	package/znc/
  F:	support/testing/tests/package/test_perl_html_parser.py
 diff --git a/package/Config.in b/package/Config.in
-index 4af6057c4d..828c013fe7 100644
+index 8e017654d2..3c99ba8030 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2059,6 +2059,7 @@ menu "Miscellaneous"
+@@ -2061,6 +2061,7 @@ menu "Miscellaneous"
  	source "package/sunwait/Config.in"
  	source "package/taskd/Config.in"
  	source "package/wine/Config.in"
@@ -86,10 +88,10 @@ index 0000000000..c80bdd6621
 +sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
 diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
 new file mode 100644
-index 0000000000..98ea1fc07a
+index 0000000000..2202d875c5
 --- /dev/null
 +++ b/package/xmrig/xmrig.mk
-@@ -0,0 +1,41 @@
+@@ -0,0 +1,43 @@
 +################################################################################
 +#
 +# xmrig
@@ -122,14 +124,14 @@ index 0000000000..98ea1fc07a
 +XMRIG_DEPENDENCIES += openssl
 +else
 +XMRIG_CONF_OPTS += -DWITH_TLS=OFF
++XMRIG_SUFFIX = -notls
 +endif
 +
-+# Fixes '*** No rule to make target 'install/fast'.  Stop.'
++# Upstream provides no installation rule:
++#   *** No rule to make target 'install/fast'.  Stop.
 +define XMRIG_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/xmrig$(if $(BR2_PACKAGE_OPENSSL),,-notls) \
-+		$(TARGET_DIR)/usr/bin/xmrig$(if $(BR2_PACKAGE_OPENSSL),,-notls)
++	$(INSTALL) -m 0755 -D $(@D)/xmrig$(XMRIG_SUFFIX) \
++		$(TARGET_DIR)/usr/bin/xmrig$(XMRIG_SUFFIX)
 +endef
 +
 +$(eval $(cmake-package))
--- 
-2.29.2
