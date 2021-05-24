@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A51CFC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:32:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C93DC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:32:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 66D1960F9C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:32:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 66D1960F9C
+	by mail.kernel.org (Postfix) with ESMTPS id 4AE5A60F9C
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:32:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4AE5A60F9C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A64160726;
-	Tue,  3 Aug 2021 21:32:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 144964010B;
+	Tue,  3 Aug 2021 21:32:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bgXrZ_hiOmQP; Tue,  3 Aug 2021 21:32:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rU1dTO_fr9ex; Tue,  3 Aug 2021 21:32:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28C52605E0;
-	Tue,  3 Aug 2021 21:32:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 76E491BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1A484400C8;
+	Tue,  3 Aug 2021 21:32:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 122561BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D5356402EE
+ by smtp3.osuosl.org (Postfix) with ESMTP id D55926086E
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1DudyS4v3UBo for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xRXlirZLTDyn for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5109B40291
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4799060726
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9B61685F62; Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
+ id 91F4182941; Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 24 May 2021 15:29:26 +0200
+Date: Mon, 24 May 2021 15:27:49 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cb1134bb79dde2ef1e457546c5064e82eaf63b63
-X-Git-Newrev: 4e55bc8a4dc31c6c848631d1034a6dbbe140492b
+X-Git-Oldrev: 888546e5273d77d49bec564a515e85d7acee6bdd
+X-Git-Newrev: cb1134bb79dde2ef1e457546c5064e82eaf63b63
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210945.9B61685F62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/genrandconfig: drop
- hardening Config enables
+Message-Id: <20210803210945.91F4182941@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libffi: drop
+ superfluous CPE_ID_VERSION
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,52 +70,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e55bc8a4dc31c6c848631d1034a6dbbe140492b
+commit: https://git.buildroot.net/buildroot/commit/?id=cb1134bb79dde2ef1e457546c5064e82eaf63b63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since 810ba387bec3c5b, some form of these options are enable
-by default. Specifically:
+The default for FOO_CPE_ID_VERSION is to default to FOO_VERSION, so drop
+this superfluous definition.
 
-- Kept FORTIFY level 2 option as the default is now level 1.
-- Removed all SSP options as the default now uses the best
-  option based on toolchain support.
-- Similar to SSP, for RELRO, the default now uses the best
-  option based on toolchain support.
-- Completely drop PIC PIE as it defaults =y
-
-Signed-off-by: Matthew Weber <matthew.weber@collins.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
+Reviewed-by: Matthew Weber <Matthew.Weber@collins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- utils/genrandconfig | 14 --------------
- 1 file changed, 14 deletions(-)
+ package/libffi/libffi.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 93dc6d898b..e1655655fa 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -371,22 +371,8 @@ def gen_config(args):
-         configlines.append("BR2_OPTIMIZE_2=y\n")
-     if randint(0, 4) == 0:
-         configlines.append("BR2_SYSTEM_ENABLE_NLS=y\n")
--    if randint(0, 4) == 0:
--        configlines.append("BR2_PIC_PIE=y\n")
--    if randint(0, 4) == 0:
--        configlines.append("BR2_RELRO_FULL=y\n")
--    elif randint(0, 4) == 0:
--        configlines.append("BR2_RELRO_PARTIAL=y\n")
--    if randint(0, 4) == 0:
--        configlines.append("BR2_SSP_ALL=y\n")
--    elif randint(0, 4) == 0:
--        configlines.append("BR2_SSP_REGULAR=y\n")
--    elif randint(0, 4) == 0:
--        configlines.append("BR2_SSP_STRONG=y\n")
-     if randint(0, 4) == 0:
-         configlines.append("BR2_FORTIFY_SOURCE_2=y\n")
--    elif randint(0, 4) == 0:
--        configlines.append("BR2_FORTIFY_SOURCE_1=y\n")
+diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+index f8b6568341..c7705b9e46 100644
+--- a/package/libffi/libffi.mk
++++ b/package/libffi/libffi.mk
+@@ -6,7 +6,6 @@
  
-     # Randomly enable BR2_REPRODUCIBLE 10% of times
-     # also enable tar filesystem images for testing
+ LIBFFI_VERSION = 3.3
+ LIBFFI_SITE = $(call github,libffi,libffi,v$(LIBFFI_VERSION))
+-LIBFFI_CPE_ID_VERSION = 3.3
+ LIBFFI_CPE_ID_UPDATE = rc0
+ LIBFFI_LICENSE = MIT
+ LIBFFI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
