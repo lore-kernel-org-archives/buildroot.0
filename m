@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C93DC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:32:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97E2DC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:33:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4AE5A60F9C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:32:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4AE5A60F9C
+	by mail.kernel.org (Postfix) with ESMTPS id 6037860F9C
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:33:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6037860F9C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 144964010B;
-	Tue,  3 Aug 2021 21:32:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C7814053D;
+	Tue,  3 Aug 2021 21:33:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rU1dTO_fr9ex; Tue,  3 Aug 2021 21:32:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7sFFbNmfjwRt; Tue,  3 Aug 2021 21:33:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A484400C8;
-	Tue,  3 Aug 2021 21:32:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 122561BF349
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7101E40508;
+	Tue,  3 Aug 2021 21:33:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1790E1BF9C1
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D55926086E
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1099240291
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xRXlirZLTDyn for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JKaHccIBCZGE for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4799060726
+ by smtp4.osuosl.org (Postfix) with ESMTP id 18ED740275
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 91F4182941; Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
+ id 635C885F62; Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 24 May 2021 15:27:49 +0200
+Date: Mon, 24 May 2021 13:40:30 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 888546e5273d77d49bec564a515e85d7acee6bdd
-X-Git-Newrev: cb1134bb79dde2ef1e457546c5064e82eaf63b63
+X-Git-Oldrev: 5c81ffaffc9e14a9ec1009749c8b1c41f7bb9139
+X-Git-Newrev: 0aae08ee3da00ccfc52ce6c8722054549c28cf05
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210945.91F4182941@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libffi: drop
- superfluous CPE_ID_VERSION
+Message-Id: <20210803210945.635C885F62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/perl: add
+ PERL_CPE_ID_VENDOR
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,33 +70,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb1134bb79dde2ef1e457546c5064e82eaf63b63
+commit: https://git.buildroot.net/buildroot/commit/?id=0aae08ee3da00ccfc52ce6c8722054549c28cf05
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The default for FOO_CPE_ID_VERSION is to default to FOO_VERSION, so drop
-this superfluous definition.
+cpe:2.3:a:perl:perl is a valid CPE identifier for this package:
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
-Reviewed-by: Matthew Weber <Matthew.Weber@collins.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aperl%3Aperl
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libffi/libffi.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/perl/perl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-index f8b6568341..c7705b9e46 100644
---- a/package/libffi/libffi.mk
-+++ b/package/libffi/libffi.mk
-@@ -6,7 +6,6 @@
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index a77686f951..f661fef013 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -11,6 +11,7 @@ PERL_SITE = https://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
++PERL_CPE_ID_VENDOR = perl
+ PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ PERL_INSTALL_STAGING = YES
  
- LIBFFI_VERSION = 3.3
- LIBFFI_SITE = $(call github,libffi,libffi,v$(LIBFFI_VERSION))
--LIBFFI_CPE_ID_VERSION = 3.3
- LIBFFI_CPE_ID_UPDATE = rc0
- LIBFFI_LICENSE = MIT
- LIBFFI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
