@@ -1,69 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 14:01:05 +0200
-Subject: [Buildroot] [git commit] package/pifmrds: use pkg-config
-Message-ID: <20210524113447.8C5F28A4CB@busybox.osuosl.org>
+Date: Mon, 24 May 2021 14:13:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version
+ 2.2.1
+In-Reply-To: <20210523204447.1105360-1-ju.o@free.fr>
+References: <20210523204447.1105360-1-ju.o@free.fr>
+Message-ID: <20210524121320.GR3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=888546e5273d77d49bec564a515e85d7acee6bdd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Julien, All,
 
-Use pkg-config to retrieve libsndfile dependencies
+On 2021-05-23 22:44 +0200, Julien Olivain spake thusly:
+> For change log since v2.2.0, see:
+> - https://github.com/FluidSynth/fluidsynth/releases/tag/v2.2.1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/pifmrds/0003-Makefile-fix-static-link.patch | 6 ++++--
- package/pifmrds/pifmrds.mk                          | 3 ++-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+Nothing really scary stands out in that release Ino security issue).
 
-diff --git a/package/pifmrds/0003-Makefile-fix-static-link.patch b/package/pifmrds/0003-Makefile-fix-static-link.patch
-index ecd7c4fc4c..3bd91c981f 100644
---- a/package/pifmrds/0003-Makefile-fix-static-link.patch
-+++ b/package/pifmrds/0003-Makefile-fix-static-link.patch
-@@ -4,6 +4,8 @@ Since libsndfile uses funtions from libm, the -lm should be specified
- after libsndfile for static linking.
- 
- Signed-off-by: "Eric Limpens" <Limpens@gmail.com>
-+[Fabrice: add $(SNDFILE_LIBS) to pass all dependencies from pkg-config]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- 
- diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile
- --- pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile	2016-02-26 08:06:43.102962592 +0100
-@@ -13,11 +15,11 @@ diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pi
-  
-  app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
- -	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
--+	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lsndfile -lm
-++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o $(SNDFILE_LIBS)
-  
-  rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
- -	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
--+	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lsndfile -lm
-++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o $(SNDFILE_LIBS)
-  
-  rds.o: rds.c waveforms.h
-  	$(CC) $(CFLAGS) rds.c
-diff --git a/package/pifmrds/pifmrds.mk b/package/pifmrds/pifmrds.mk
-index 509ec80876..33c13bae33 100644
---- a/package/pifmrds/pifmrds.mk
-+++ b/package/pifmrds/pifmrds.mk
-@@ -6,13 +6,14 @@
- 
- PIFMRDS_VERSION = 0bf57f9ce0d954365a38d8af8e7be6f28521c3f2
- PIFMRDS_SITE = $(call github,ChristopheJacquet,PiFmRds,$(PIFMRDS_VERSION))
--PIFMRDS_DEPENDENCIES = libsndfile
-+PIFMRDS_DEPENDENCIES = host-pkgconf libsndfile
- PIFMRDS_LICENSE = GPL-3.0+
- PIFMRDS_LICENSE_FILES = LICENSE
- 
- define PIFMRDS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)" \
- 		CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -ffast-math -c" \
-+		SNDFILE_LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs sndfile`" \
- 		app rds_wav
- endef
- 
+> ./utils/test-pkg --package fluidsynth
+> 6 builds, 2 skipped, 0 build failed, 0 legal-info failed
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+
+So: applied to next, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/fluidsynth/fluidsynth.hash | 2 +-
+>  package/fluidsynth/fluidsynth.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+> index 12620f51c5..08a19e23f8 100644
+> --- a/package/fluidsynth/fluidsynth.hash
+> +++ b/package/fluidsynth/fluidsynth.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256  928fb16f307507485bd1d9b010dafba8c747bce5de2ba47ab1705944c87013b6  fluidsynth-2.2.0.tar.gz
+> +sha256  1c56660f23f6c406b36646cc619fc2d2a5265d1d3290e79bcef4505bcd985fdd  fluidsynth-2.2.1.tar.gz
+>  sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+> diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+> index b94db61528..1355c06c4a 100644
+> --- a/package/fluidsynth/fluidsynth.mk
+> +++ b/package/fluidsynth/fluidsynth.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -FLUIDSYNTH_VERSION = 2.2.0
+> +FLUIDSYNTH_VERSION = 2.2.1
+>  FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+>  FLUIDSYNTH_LICENSE = LGPL-2.1+
+>  FLUIDSYNTH_LICENSE_FILES = LICENSE
+> -- 
+> 2.31.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
