@@ -1,71 +1,102 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 14:17:28 +0200
-Subject: [Buildroot] [git commit] package/pifmrds: use pkg-config
-Message-ID: <20210607144657.5758580FB4@busybox.osuosl.org>
+Date: Mon, 24 May 2021 19:31:40 +0200
+Subject: [Buildroot] [git commit] package/libsoup: bump to version 2.72.0
+Message-ID: <20210607144657.C44B6874E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c833604aef36d381353c9b5541e22e9eaa277aa
+commit: https://git.buildroot.net/buildroot/commit/?id=8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use pkg-config to retrieve libsndfile dependencies
+Among other fixes, switching to the current stable version plugs a few
+memory leaks; solves many WebSocket bugs; makes NTLM authentication work;
+allows building gobject-introspection data when cross-building (to be
+enabled in a separate patch); fixes message cancellation; adds support
+for HTTP 308 permanent redirects, same-site cookies, secure cookies,
+HSTS, and Brotli compression.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 888546e5273d77d49bec564a515e85d7acee6bdd)
+This also removes the unneeded LIBSOUP_CONF_ENV which defined an
+autoconf variable, and updates the Meson build configuration options
+to follow the changes done by upstream.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+[yann.morin.1998 at free.fr:
+  - reorder options and move them one per line
+  - while at it, do the same for dependencies
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pifmrds/0003-Makefile-fix-static-link.patch | 6 ++++--
- package/pifmrds/pifmrds.mk                          | 3 ++-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/libsoup/libsoup.hash |  4 ++--
+ package/libsoup/libsoup.mk   | 35 +++++++++++++++++++++++++++--------
+ 2 files changed, 29 insertions(+), 10 deletions(-)
 
-diff --git a/package/pifmrds/0003-Makefile-fix-static-link.patch b/package/pifmrds/0003-Makefile-fix-static-link.patch
-index ecd7c4fc4c..3bd91c981f 100644
---- a/package/pifmrds/0003-Makefile-fix-static-link.patch
-+++ b/package/pifmrds/0003-Makefile-fix-static-link.patch
-@@ -4,6 +4,8 @@ Since libsndfile uses funtions from libm, the -lm should be specified
- after libsndfile for static linking.
+diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
+index 3b9009884d..01bf419563 100644
+--- a/package/libsoup/libsoup.hash
++++ b/package/libsoup/libsoup.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.66/libsoup-2.66.5.sha256sum
+-sha256  ee43be1485bd95b686236b1e0043ec6edb761a538616c9c63004d7d1979bb139  libsoup-2.66.5.tar.xz
++# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.72/libsoup-2.72.0.sha256sum
++sha256  170c3f8446b0f65f8e4b93603349172b1085fb8917c181d10962f02bb85f5387  libsoup-2.72.0.tar.xz
+ # Locally calculated
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 1617940c8f..6711326711 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -4,24 +4,43 @@
+ #
+ ################################################################################
  
- Signed-off-by: "Eric Limpens" <Limpens@gmail.com>
-+[Fabrice: add $(SNDFILE_LIBS) to pass all dependencies from pkg-config]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-LIBSOUP_VERSION_MAJOR = 2.66
+-LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).5
++LIBSOUP_VERSION_MAJOR = 2.72
++LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
+ LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+ LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+ LIBSOUP_LICENSE = LGPL-2.0+
+ LIBSOUP_LICENSE_FILES = COPYING
+ LIBSOUP_CPE_ID_VENDOR = gnome
+ LIBSOUP_INSTALL_STAGING = YES
+-LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
+-LIBSOUP_CONF_OPTS = -Dtests=false -Dvapi=false -Dgssapi=false
+-LIBSOUP_DEPENDENCIES = host-pkgconf host-libglib2 \
+-	libglib2 libpsl libxml2 sqlite host-intltool
++LIBSOUP_DEPENDENCIES = \
++	host-intltool \
++	host-libglib2 \
++	host-pkgconf \
++	libglib2 \
++	libpsl \
++	libxml2 \
++	sqlite
++
++LIBSOUP_CONF_OPTS = \
++	-Dgssapi=disabled \
++	-Dgtk_doc=false \
++	-Dntlm=disabled \
++	-Dsysprof=disabled \
++	-Dtests=false \
++	-Dvapi=disabled
++
++ifeq ($(BR2_PACKAGE_BROTLI),y)
++LIBSOUP_CONF_OPTS += -Dbrotli=enabled
++LIBSOUP_DEPENDENCIES += brotli
++else
++LIBSOUP_CONF_OPTS += -Dbrotli=disabled
++endif
  
- diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile
- --- pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile	2016-02-26 08:06:43.102962592 +0100
-@@ -13,11 +15,11 @@ diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pi
-  
-  app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
- -	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
--+	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lsndfile -lm
-++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o $(SNDFILE_LIBS)
-  
-  rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
- -	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
--+	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lsndfile -lm
-++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o $(SNDFILE_LIBS)
-  
-  rds.o: rds.c waveforms.h
-  	$(CC) $(CFLAGS) rds.c
-diff --git a/package/pifmrds/pifmrds.mk b/package/pifmrds/pifmrds.mk
-index 509ec80876..33c13bae33 100644
---- a/package/pifmrds/pifmrds.mk
-+++ b/package/pifmrds/pifmrds.mk
-@@ -6,13 +6,14 @@
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-LIBSOUP_CONF_OPTS += -Dintrospection=true
++LIBSOUP_CONF_OPTS += -Dintrospection=enabled
+ LIBSOUP_DEPENDENCIES += gobject-introspection
+ else
+-LIBSOUP_CONF_OPTS += -Dintrospection=false
++LIBSOUP_CONF_OPTS += -Dintrospection=disabled
+ endif
  
- PIFMRDS_VERSION = 0bf57f9ce0d954365a38d8af8e7be6f28521c3f2
- PIFMRDS_SITE = $(call github,ChristopheJacquet,PiFmRds,$(PIFMRDS_VERSION))
--PIFMRDS_DEPENDENCIES = libsndfile
-+PIFMRDS_DEPENDENCIES = host-pkgconf libsndfile
- PIFMRDS_LICENSE = GPL-3.0+
- PIFMRDS_LICENSE_FILES = LICENSE
- 
- define PIFMRDS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)" \
- 		CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -ffast-math -c" \
-+		SNDFILE_LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs sndfile`" \
- 		app rds_wav
- endef
- 
+ ifeq ($(BR2_PACKAGE_LIBSOUP_GNOME),y)
