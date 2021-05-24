@@ -1,21 +1,21 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 13:45:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libmspack: add CPE variables
-In-Reply-To: <20210523210302.1532313-1-fontaine.fabrice@gmail.com>
-References: <20210523210302.1532313-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210524114534.GN3208066@scaer>
+Date: Mon, 24 May 2021 13:45:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php-imagick: add CPE variables
+In-Reply-To: <20210523211348.1532716-1-fontaine.fabrice@gmail.com>
+References: <20210523211348.1532716-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210524114553.GO3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Fabrice, all,
 
-On 2021-05-23 23:03 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:kyzer:libmspack is a valid CPE identifier for this package:
+On 2021-05-23 23:13 +0200, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:php:imagick is a valid CPE identifier for this package:
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:kyzer:libmspack
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aphp%3Aimagick
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -25,30 +25,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/libmspack/libmspack.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+>  package/php-imagick/php-imagick.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/libmspack/libmspack.mk b/package/libmspack/libmspack.mk
-> index e9fdc3ca8d..f806192eec 100644
-> --- a/package/libmspack/libmspack.mk
-> +++ b/package/libmspack/libmspack.mk
-> @@ -4,10 +4,15 @@
->  #
->  ################################################################################
+> diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
+> index ca0cbc7492..6fb43de0ca 100644
+> --- a/package/php-imagick/php-imagick.mk
+> +++ b/package/php-imagick/php-imagick.mk
+> @@ -13,6 +13,8 @@ PHP_IMAGICK_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+>  PHP_IMAGICK_DEPENDENCIES = imagemagick php host-autoconf
+>  PHP_IMAGICK_LICENSE = PHP-3.01
+>  PHP_IMAGICK_LICENSE_FILES = LICENSE
+> +PHP_IMAGICK_CPE_ID_VENDOR = php
+> +PHP_IMAGICK_CPE_ID_PRODUCT = imagick
 >  
-> -LIBMSPACK_VERSION = 0.10.1alpha
-> +LIBMSPACK_VERSION_MAJOR = 0.10.1
-> +LIBMSPACK_VERSION_MINOR = alpha
-> +LIBMSPACK_VERSION = $(LIBMSPACK_VERSION_MAJOR)$(LIBMSPACK_VERSION_MINOR)
->  LIBMSPACK_SITE = https://www.cabextract.org.uk/libmspack
->  LIBMSPACK_LICENSE = LGPL-2.1
->  LIBMSPACK_LICENSE_FILES = COPYING.LIB
-> +LIBMSPACK_CPE_ID_VENDOR = kyzer
-> +LIBMSPACK_CPE_ID_VERSION = $(LIBMSPACK_VERSION_MAJOR)
-> +LIBMSPACK_CPE_ID_UPDATE = $(LIBMSPACK_VERSION_MINOR)
->  LIBMSPACK_INSTALL_STAGING = YES
->  
->  $(eval $(autotools-package))
+>  define PHP_IMAGICK_PHPIZE
+>  	(cd $(@D); \
 > -- 
 > 2.30.2
 > 
