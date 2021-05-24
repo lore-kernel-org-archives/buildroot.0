@@ -1,48 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 13:45:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php-imagick: add CPE variables
-In-Reply-To: <20210523211348.1532716-1-fontaine.fabrice@gmail.com>
-References: <20210523211348.1532716-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210524114553.GO3208066@scaer>
+Date: Mon, 24 May 2021 14:00:04 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/xmrig: new package
+In-Reply-To: <20210523103047.595306-1-bernd.kuhls@t-online.de>
+References: <20210523103047.595306-1-bernd.kuhls@t-online.de>
+Message-ID: <20210524120004.GP3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, all,
+Bernd, All,
 
-On 2021-05-23 23:13 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:php:imagick is a valid CPE identifier for this package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aphp%3Aimagick
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 2021-05-23 12:30 +0200, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+[--SNIP--]
+> diff --git a/package/xmrig/Config.in b/package/xmrig/Config.in
+> new file mode 100644
+> index 0000000000..3007201610
+> --- /dev/null
+> +++ b/package/xmrig/Config.in
+> @@ -0,0 +1,22 @@
+> +config BR2_PACKAGE_XMRIG
+> +	bool "xmrig"
+> +	# archs officially supported by upstream
+> +	depends on BR2_aarch64 || BR2_x86_64 || BR2_i386
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+> +	depends on BR2_USE_MMU # libuv
 
-Applied to master, thanks.
+MMU is an architecture dependency, it moust come before toolchain
+dependencies.
+
+> +	depends on !BR2_STATIC_LIBS # libuv
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+> +	# xmrig needs fenv.h which is not provided by uclibc
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+> +	select BR2_PACKAGE_LIBUV
+> +	help
+> +	  RandomX, CryptoNight, AstroBWT and Argon2 CPU/GPU miner.
+> +
+> +	  https://xmrig.com
+> +
+> +comment "xmrig needs a glibc or musl toolchain w/ NPTL, dynamic library"
+> +	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
+> +		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+> +	depends on BR2_aarch64 || BR2_x86_64 || BR2_i386
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+
+Keep the same ordering in the comment depndencies as in the main option
+dependencies.
+
+[--SNIP--]
+> diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
+> new file mode 100644
+> index 0000000000..aa36fcdf57
+> --- /dev/null
+> +++ b/package/xmrig/xmrig.mk
+> @@ -0,0 +1,40 @@
+[--SNIP--]
+> +define XMRIG_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 0755 -D $(@D)/xmrig$(if $(BR2_PACKAGE_OPENSSL),,-notls) \
+> +		$(TARGET_DIR)/usr/bin/xmrig$(if $(BR2_PACKAGE_OPENSSL),,-notls)
+> +endef
+
+Why can't we use the default install commands?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/php-imagick/php-imagick.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
-> index ca0cbc7492..6fb43de0ca 100644
-> --- a/package/php-imagick/php-imagick.mk
-> +++ b/package/php-imagick/php-imagick.mk
-> @@ -13,6 +13,8 @@ PHP_IMAGICK_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
->  PHP_IMAGICK_DEPENDENCIES = imagemagick php host-autoconf
->  PHP_IMAGICK_LICENSE = PHP-3.01
->  PHP_IMAGICK_LICENSE_FILES = LICENSE
-> +PHP_IMAGICK_CPE_ID_VENDOR = php
-> +PHP_IMAGICK_CPE_ID_PRODUCT = imagick
->  
->  define PHP_IMAGICK_PHPIZE
->  	(cd $(@D); \
+> +
+> +$(eval $(cmake-package))
 > -- 
-> 2.30.2
+> 2.29.2
 > 
 > _______________________________________________
 > buildroot mailing list
