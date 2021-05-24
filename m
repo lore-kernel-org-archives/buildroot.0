@@ -1,36 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 May 2021 13:40:35 +0200
-Subject: [Buildroot] [git commit] package/php-imagick: add CPE variables
-Message-ID: <20210524111505.C74D38859E@busybox.osuosl.org>
+Date: Mon, 24 May 2021 13:40:30 +0200
+Subject: [Buildroot] [git commit] package/perl: add PERL_CPE_ID_VENDOR
+Message-ID: <20210524111505.A6E7D86BF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5022410324a4c1bcc9873c3ef2060c570a7ea31b
+commit: https://git.buildroot.net/buildroot/commit/?id=0aae08ee3da00ccfc52ce6c8722054549c28cf05
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:php:imagick is a valid CPE identifier for this package:
+cpe:2.3:a:perl:perl is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aphp%3Aimagick
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aperl%3Aperl
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/php-imagick/php-imagick.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/perl/perl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
-index ca0cbc7492..6fb43de0ca 100644
---- a/package/php-imagick/php-imagick.mk
-+++ b/package/php-imagick/php-imagick.mk
-@@ -13,6 +13,8 @@ PHP_IMAGICK_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
- PHP_IMAGICK_DEPENDENCIES = imagemagick php host-autoconf
- PHP_IMAGICK_LICENSE = PHP-3.01
- PHP_IMAGICK_LICENSE_FILES = LICENSE
-+PHP_IMAGICK_CPE_ID_VENDOR = php
-+PHP_IMAGICK_CPE_ID_PRODUCT = imagick
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index a77686f951..f661fef013 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -11,6 +11,7 @@ PERL_SITE = https://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
++PERL_CPE_ID_VENDOR = perl
+ PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ PERL_INSTALL_STAGING = YES
  
- define PHP_IMAGICK_PHPIZE
- 	(cd $(@D); \
