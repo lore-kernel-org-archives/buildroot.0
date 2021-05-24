@@ -1,43 +1,82 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 24 May 2021 16:46:01 +0200
-Subject: [Buildroot] [PATCH] package/pango: bump to version 1.48.4
-Message-ID: <20210524144601.1983484-1-francois.perrad@gadz.org>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 24 May 2021 18:01:12 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libsoup: bump to version 2.72.0
+Message-ID: <20210524150112.3049254-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/pango/pango.hash | 4 ++--
- package/pango/pango.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Among other fixes, switching to the current stable version plugs a few
+memory leaks; solves many WebSocket bugs; makes NTLM authentication work;
+allows building gobject-introspection data when cross-building (to be
+enabled in a separate patch); fixes message cancellation; adds support
+for HTTP 308 permanent redirects, same-site cookies, secure cookies,
+HSTS, and Brotli compression.
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index a672b7cfa..3d6167058 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.48/pango-1.48.0.sha256sum
--sha256  391f26f3341c2d7053e0fb26a956bd42360dadd825efe7088b1e9340a65e74e6  pango-1.48.0.tar.xz
-+# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.48/pango-1.48.4.sha256sum
-+sha256  418913fb062071a075846244989d4a67aa5c80bf0eae8ee4555a092fd566a37a  pango-1.48.4.tar.xz
- 
- # Locally computed
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 803e46f19..cc09e3a64 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
+This also removes the unneeded LIBSOUP_CONF_ENV which defined an
+autoconf variable, and updates the Meson build configuration options
+to follow the changes done by upstream.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/libsoup/libsoup.hash |  4 ++--
+ package/libsoup/libsoup.mk   | 19 +++++++++++++------
+ 2 files changed, 15 insertions(+), 8 deletions(-)
+
+diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
+index 3b9009884d..01bf419563 100644
+--- a/package/libsoup/libsoup.hash
++++ b/package/libsoup/libsoup.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.66/libsoup-2.66.5.sha256sum
+-sha256  ee43be1485bd95b686236b1e0043ec6edb761a538616c9c63004d7d1979bb139  libsoup-2.66.5.tar.xz
++# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.72/libsoup-2.72.0.sha256sum
++sha256  170c3f8446b0f65f8e4b93603349172b1085fb8917c181d10962f02bb85f5387  libsoup-2.72.0.tar.xz
+ # Locally calculated
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 1617940c8f..814a35ee4c 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -4,24 +4,31 @@
+ #
  ################################################################################
  
- PANGO_VERSION_MAJOR = 1.48
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).0
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).4
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
+-LIBSOUP_VERSION_MAJOR = 2.66
+-LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).5
++LIBSOUP_VERSION_MAJOR = 2.72
++LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
+ LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+ LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+ LIBSOUP_LICENSE = LGPL-2.0+
+ LIBSOUP_LICENSE_FILES = COPYING
+ LIBSOUP_CPE_ID_VENDOR = gnome
+ LIBSOUP_INSTALL_STAGING = YES
+-LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
+-LIBSOUP_CONF_OPTS = -Dtests=false -Dvapi=false -Dgssapi=false
++LIBSOUP_CONF_OPTS = -Dtests=false -Dgtk_doc=false -Dsysprof=disabled \
++	-Dvapi=disabled -Dgssapi=disabled -Dntlm=disabled
+ LIBSOUP_DEPENDENCIES = host-pkgconf host-libglib2 \
+ 	libglib2 libpsl libxml2 sqlite host-intltool
+ 
++ifeq ($(BR2_PACKAGE_BROTLI),y)
++LIBSOUP_CONF_OPTS += -Dbrotli=enabled
++LIBSOUP_DEPENDENCIES += brotli
++else
++LIBSOUP_CONF_OPTS += -Dbrotli=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-LIBSOUP_CONF_OPTS += -Dintrospection=true
++LIBSOUP_CONF_OPTS += -Dintrospection=enabled
+ LIBSOUP_DEPENDENCIES += gobject-introspection
+ else
+-LIBSOUP_CONF_OPTS += -Dintrospection=false
++LIBSOUP_CONF_OPTS += -Dintrospection=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSOUP_GNOME),y)
 -- 
-2.30.2
+2.31.1
