@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 25 May 2021 14:27:49 +0200
-Subject: [Buildroot] [PATCHv3 14/15] package/pkg-meson.mk: determine
- 'buildtype' based on BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
+Date: Tue, 25 May 2021 14:27:50 +0200
+Subject: [Buildroot] [PATCHv3 15/15] utils/genrandconfig: also test
+ BR2_ENABLE_RUNTIME_DEBUG
 In-Reply-To: <20210525122750.5022-1-patrickdepinguin@gmail.com>
 References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
-Message-ID: <20210525122750.5022-15-patrickdepinguin@gmail.com>
+Message-ID: <20210525122750.5022-16-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,25 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
-should have no negative effect on performance.
-
-Introduction of 'assert' statements, 'debug'-type builds with additional
-logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
+... similar to BR2_ENABLE_DEBUG.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/pkg-meson.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/genrandconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index a57820d4d2..dafad3b1eb 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -89,7 +89,7 @@ define $(2)_CONFIGURE_CMDS
- 		--prefix=/usr \
- 		--libdir=lib \
- 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
--		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
-+		--buildtype=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
- 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
- 		-Dstrip=false \
- 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 93dc6d898b..ca3e77e3e3 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -357,6 +357,8 @@ def gen_config(args):
+     # Amend the configuration with a few things.
+     if randint(0, 20) == 0:
+         configlines.append("BR2_ENABLE_DEBUG=y\n")
++    if randint(0, 20) == 0:
++        configlines.append("BR2_ENABLE_RUNTIME_DEBUG=y\n")
+     if randint(0, 1) == 0:
+         configlines.append("BR2_INIT_BUSYBOX=y\n")
+     elif randint(0, 15) == 0:
 -- 
 2.26.3
