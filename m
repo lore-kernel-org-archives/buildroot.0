@@ -1,43 +1,51 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Tue, 25 May 2021 19:26:47 +0200
-Subject: [Buildroot] [PATCH v2 1/5] package/zstd: bump to version 1.5.0
-Message-ID: <20210525172652.821351-1-nolange79@gmail.com>
+Date: Tue, 25 May 2021 19:26:48 +0200
+Subject: [Buildroot] [PATCH v2 2/5] package/zstd: Simplify host-build
+In-Reply-To: <20210525172652.821351-1-nolange79@gmail.com>
+References: <20210525172652.821351-1-nolange79@gmail.com>
+Message-ID: <20210525172652.821351-2-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+1.5.0 uses Threads by default for cli tool and DSO,
+should not be necessary to do anything special.
+
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/zstd/zstd.hash | 4 ++--
- package/zstd/zstd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/zstd/zstd.mk | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
-index a979501e5f..2d7bf37b2a 100644
---- a/package/zstd/zstd.hash
-+++ b/package/zstd/zstd.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/facebook/zstd/releases/download/v1.4.9/zstd-1.4.9.tar.gz.sha256
--sha256  29ac74e19ea28659017361976240c4b5c5c24db3b89338731a6feb97c038d293  zstd-1.4.9.tar.gz
-+# From https://github.com/facebook/zstd/releases/download/v1.5.0/zstd-1.5.0.tar.gz.sha256
-+sha256  5194fbfa781fcf45b98c5e849651aa7b3b0a008c6b72d4a0db760f3002291e94  zstd-1.5.0.tar.gz
- 
- # License files (locally computed)
- sha256  2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b  LICENSE
 diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index 63ea8b1b35..194974147c 100644
+index 194974147c..2a876376a2 100644
 --- a/package/zstd/zstd.mk
 +++ b/package/zstd/zstd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -78,21 +78,16 @@ define ZSTD_INSTALL_TARGET_CMDS
+ 		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/lib $(ZSTD_INSTALL_LIBS)
+ endef
  
--ZSTD_VERSION = 1.4.9
-+ZSTD_VERSION = 1.5.0
- ZSTD_SITE = https://github.com/facebook/zstd/releases/download/v$(ZSTD_VERSION)
- ZSTD_INSTALL_STAGING = YES
- ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
+-# note: only limited 'HAVE_...' options for host library build only
+-HOST_ZSTD_OPTS = HAVE_THREAD=1
++HOST_ZSTD_OPTS += PREFIX=$(HOST_DIR)
+ 
+ define HOST_ZSTD_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
+-		-C $(@D)/lib libzstd.a-mt libzstd-mt
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
+-		-C $(@D) zstd
++		-C $(@D) zstd-release lib-release
+ endef
+ 
+ define HOST_ZSTD_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
+-		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/lib install
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
+-		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/programs install
++		-C $(@D) install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.30.2
