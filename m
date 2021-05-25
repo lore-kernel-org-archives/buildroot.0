@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 May 2021 23:18:15 +0200
-Subject: [Buildroot] [PATCHv3 08/15] package/oracle-mysql: use
+Date: Tue, 25 May 2021 23:24:09 +0200
+Subject: [Buildroot] [PATCHv3 09/15] package/qt5: use
  BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
-In-Reply-To: <20210525122750.5022-9-patrickdepinguin@gmail.com>
+In-Reply-To: <20210525122750.5022-10-patrickdepinguin@gmail.com>
 References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
- <20210525122750.5022-9-patrickdepinguin@gmail.com>
-Message-ID: <ffcb24be-bcdc-709a-85a0-75b76e175fa4@mind.be>
+ <20210525122750.5022-10-patrickdepinguin@gmail.com>
+Message-ID: <ad9ec3db-fff8-2668-3746-4d5028e42a36@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -31,20 +31,20 @@ Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
  Arnout
 
 > ---
->  package/oracle-mysql/oracle-mysql.mk | 2 +-
+>  package/qt5/qt5base/qt5base.mk | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
-> index ccfa40cfb1..e7d6354ed8 100644
-> --- a/package/oracle-mysql/oracle-mysql.mk
-> +++ b/package/oracle-mysql/oracle-mysql.mk
-> @@ -95,7 +95,7 @@ ORACLE_MYSQL_CONF_OPTS += \
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index 84e9fa4edb..8b55aa3098 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -86,7 +86,7 @@ else
+>  QT5BASE_CONFIGURE_OPTS += -no-gbm
+>  endif
 >  
->  # Debugging is only available for the server, so no need for
->  # this if-block outside of the server if-block
 > -ifeq ($(BR2_ENABLE_DEBUG),y)
 > +ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
->  ORACLE_MYSQL_CONF_OPTS += --with-debug=full
+>  QT5BASE_CONFIGURE_OPTS += -debug
 >  else
->  ORACLE_MYSQL_CONF_OPTS += --without-debug
+>  QT5BASE_CONFIGURE_OPTS += -release
 > 
