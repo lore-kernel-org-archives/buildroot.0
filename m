@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 25 May 2021 14:27:39 +0200
-Subject: [Buildroot] [PATCHv3 04/15] package/flare-engine: update explicit
- setting of CMAKE_BUILD_TYPE
+Date: Tue, 25 May 2021 14:27:40 +0200
+Subject: [Buildroot] [PATCHv3 05/15] package/sysrepo: use default
+ CMAKE_BUILD_TYPE for host package
 In-Reply-To: <20210525122750.5022-1-patrickdepinguin@gmail.com>
 References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
-Message-ID: <20210525122750.5022-5-patrickdepinguin@gmail.com>
+Message-ID: <20210525122750.5022-6-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,30 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-The flare-engine package forces CMAKE_BUILD_TYPE=RelWithDebInfo in case
-Buildroot would normally set CMAKE_BUILD_TYPE=Debug. Previously, this would
-happen if BR2_ENABLE_DEBUG is set, but now we should check
-BR2_ENABLE_RUNTIME_DEBUG instead.
+Use the default build type for host-sysrepo.
+In the current version of sysrepo, this happens to be 'Debug'.
+As 'Debug' also enables tests, explicitly disable them.
 
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/flare-engine/flare-engine.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/sysrepo/sysrepo.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
-index e2f3eefa28..503eb0825f 100644
---- a/package/flare-engine/flare-engine.mk
-+++ b/package/flare-engine/flare-engine.mk
-@@ -15,7 +15,7 @@ FLARE_ENGINE_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf
- FLARE_ENGINE_CONF_OPTS += -DBINDIR=bin -DDATADIR=share/flare
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index dbc7b16b63..f5be29d2c9 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
+@@ -26,8 +26,9 @@ define SYSREPO_INSTALL_INIT_SYSV
+ endef
  
- # Don't use the default Debug type as it adds -pg (gprof)
--ifeq ($(BR2_ENABLE_DEBUG),y)
-+ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
- FLARE_ENGINE_CONF_OPTS += -DCMAKE_BUILD_TYPE=RelWithDebInfo
- endif
+ HOST_SYSREPO_CONF_OPTS = \
+-	-DCMAKE_BUILD_TYPE=Release \
+ 	-DBUILD_EXAMPLES=OFF \
++	-DENABLE_TESTS=OFF \
++	-DENABLE_VALGRIND_TESTS=OFF \
+ 	-DREPO_PATH=$(TARGET_DIR)/etc/sysrepo
  
+ $(eval $(cmake-package))
 -- 
 2.26.3
