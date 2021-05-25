@@ -1,129 +1,120 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 May 2021 21:29:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libopenh264: fix mips32 build
-In-Reply-To: <20210524210529.353499-1-fontaine.fabrice@gmail.com>
-References: <20210524210529.353499-1-fontaine.fabrice@gmail.com>
-Message-ID: <3377d4f5-7c84-fd97-1b1c-edace7c978c8@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 25 May 2021 21:27:42 +0200
+Subject: [Buildroot] [git commit] package/libopenh264: fix mips32 build
+Message-ID: <20210525190021.CF6188859E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=52b875d3ac84c84c16fefe19cfec465697bffecb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fix build failure with mips32 which is raised since the addition of
+bootlin toolchains
 
-On 24/05/2021 23:05, Fabrice Fontaine wrote:
-> Fix build failure with mips32 which is raised since the addition of
-> bootlin toolchains
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
 
- Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...common-inc-asmdefs_mmi.h-fix-mips32-build.patch | 89 ++++++++++++++++++++++
+ 1 file changed, 89 insertions(+)
 
- Regards,
- Arnout
-
-> ---
->  ...n-inc-asmdefs_mmi.h-fix-mips32-build.patch | 89 +++++++++++++++++++
->  1 file changed, 89 insertions(+)
->  create mode 100644 package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
-> 
-> diff --git a/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
-> new file mode 100644
-> index 0000000000..e11b1d13ef
-> --- /dev/null
-> +++ b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
-> @@ -0,0 +1,89 @@
-> +From c505f81e336088b6729a5407a03459f488353288 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Mon, 24 May 2021 22:54:01 +0200
-> +Subject: [PATCH] codec/common/inc/asmdefs_mmi.h: fix mips32 build
-> +
-> +Fix the following build failure on mips32 which is raised since version
-> +2.0.0 and
-> +https://github.com/cisco/openh264/commit/b13e5bceb18ebb93d0313b46aab4af6f480ca933:
-> +
-> +codec/common/mips/copy_mb_mmi.c: In function 'WelsCopy16x16_mmi':
-> +./codec/common/inc/asmdefs_mmi.h:293:21: error: '_ABI64' undeclared (first use in this function)
-> +  293 |    if (_MIPS_SIM == _ABI64)                                    \
-> +      |                     ^~~~~~
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/cisco/openh264/pull/3384]
-> +---
-> + codec/common/inc/asmdefs_mmi.h | 17 +++++++++++------
-> + 1 file changed, 11 insertions(+), 6 deletions(-)
-> +
-> +diff --git a/codec/common/inc/asmdefs_mmi.h b/codec/common/inc/asmdefs_mmi.h
-> +index 69a7ae39..5d1aed93 100644
-> +--- a/codec/common/inc/asmdefs_mmi.h
-> ++++ b/codec/common/inc/asmdefs_mmi.h
-> +@@ -288,9 +288,9 @@
-> + /**
-> +  * backup register
-> +  */
-> ++#if defined(_ABI64) && _MIPS_SIM == _ABI64
-> + #define BACKUP_REG \
-> +    double __attribute__((aligned(16))) __back_temp[8];         \
-> +-   if (_MIPS_SIM == _ABI64)                                    \
-> +    __asm__ volatile (                                          \
-> +      "gssqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
-> +      "gssqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
-> +@@ -299,8 +299,10 @@
-> +      :                                                         \
-> +      : [temp]"r"(__back_temp)                                  \
-> +      : "memory"                                                \
-> +-   );                                                          \
-> +-  else                                                         \
-> ++   );
-> ++#else
-> ++#define BACKUP_REG \
-> ++   double __attribute__((aligned(16))) __back_temp[8];         \
-> +    __asm__ volatile (                                          \
-> +      "gssqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
-> +      "gssqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
-> +@@ -309,12 +311,13 @@
-> +      : [temp]"r"(__back_temp)                                  \
-> +      : "memory"                                                \
-> +    );
-> ++#endif
-> + 
-> + /**
-> +  * recover register
-> +  */
-> ++#if defined(_ABI64) && _MIPS_SIM == _ABI64
-> + #define RECOVER_REG \
-> +-   if (_MIPS_SIM == _ABI64)                                    \
-> +    __asm__ volatile (                                          \
-> +      "gslqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
-> +      "gslqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
-> +@@ -323,8 +326,9 @@
-> +      :                                                         \
-> +      : [temp]"r"(__back_temp)                                  \
-> +      : "memory"                                                \
-> +-   );                                                          \
-> +-   else                                                        \
-> ++   );
-> ++#else
-> ++#define RECOVER_REG \
-> +    __asm__ volatile (                                          \
-> +      "gslqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
-> +      "gslqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
-> +@@ -333,6 +337,7 @@
-> +      : [temp]"r"(__back_temp)                                  \
-> +      : "memory"                                                \
-> +    );
-> ++#endif
-> + 
-> + # define OK             1
-> + # define NOTOK          0
-> +-- 
-> +2.30.2
-> +
-> 
+diff --git a/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
+new file mode 100644
+index 0000000000..e11b1d13ef
+--- /dev/null
++++ b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
+@@ -0,0 +1,89 @@
++From c505f81e336088b6729a5407a03459f488353288 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 24 May 2021 22:54:01 +0200
++Subject: [PATCH] codec/common/inc/asmdefs_mmi.h: fix mips32 build
++
++Fix the following build failure on mips32 which is raised since version
++2.0.0 and
++https://github.com/cisco/openh264/commit/b13e5bceb18ebb93d0313b46aab4af6f480ca933:
++
++codec/common/mips/copy_mb_mmi.c: In function 'WelsCopy16x16_mmi':
++./codec/common/inc/asmdefs_mmi.h:293:21: error: '_ABI64' undeclared (first use in this function)
++  293 |    if (_MIPS_SIM == _ABI64)                                    \
++      |                     ^~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/cisco/openh264/pull/3384]
++---
++ codec/common/inc/asmdefs_mmi.h | 17 +++++++++++------
++ 1 file changed, 11 insertions(+), 6 deletions(-)
++
++diff --git a/codec/common/inc/asmdefs_mmi.h b/codec/common/inc/asmdefs_mmi.h
++index 69a7ae39..5d1aed93 100644
++--- a/codec/common/inc/asmdefs_mmi.h
+++++ b/codec/common/inc/asmdefs_mmi.h
++@@ -288,9 +288,9 @@
++ /**
++  * backup register
++  */
+++#if defined(_ABI64) && _MIPS_SIM == _ABI64
++ #define BACKUP_REG \
++    double __attribute__((aligned(16))) __back_temp[8];         \
++-   if (_MIPS_SIM == _ABI64)                                    \
++    __asm__ volatile (                                          \
++      "gssqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
++      "gssqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
++@@ -299,8 +299,10 @@
++      :                                                         \
++      : [temp]"r"(__back_temp)                                  \
++      : "memory"                                                \
++-   );                                                          \
++-  else                                                         \
+++   );
+++#else
+++#define BACKUP_REG \
+++   double __attribute__((aligned(16))) __back_temp[8];         \
++    __asm__ volatile (                                          \
++      "gssqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
++      "gssqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
++@@ -309,12 +311,13 @@
++      : [temp]"r"(__back_temp)                                  \
++      : "memory"                                                \
++    );
+++#endif
++ 
++ /**
++  * recover register
++  */
+++#if defined(_ABI64) && _MIPS_SIM == _ABI64
++ #define RECOVER_REG \
++-   if (_MIPS_SIM == _ABI64)                                    \
++    __asm__ volatile (                                          \
++      "gslqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
++      "gslqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
++@@ -323,8 +326,9 @@
++      :                                                         \
++      : [temp]"r"(__back_temp)                                  \
++      : "memory"                                                \
++-   );                                                          \
++-   else                                                        \
+++   );
+++#else
+++#define RECOVER_REG \
++    __asm__ volatile (                                          \
++      "gslqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
++      "gslqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
++@@ -333,6 +337,7 @@
++      : [temp]"r"(__back_temp)                                  \
++      : "memory"                                                \
++    );
+++#endif
++ 
++ # define OK             1
++ # define NOTOK          0
++-- 
++2.30.2
++
