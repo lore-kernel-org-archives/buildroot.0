@@ -1,119 +1,75 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 24 May 2021 23:05:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libopenh264: fix mips32 build
-Message-ID: <20210524210529.353499-1-fontaine.fabrice@gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 25 May 2021 05:15:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: bump version to
+ 20210524
+In-Reply-To: <20210524180552.17283-1-petr.vorel@gmail.com>
+References: <20210524180552.17283-1-petr.vorel@gmail.com>
+Message-ID: <YKxr1l3AqGT+hMKr@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build failure with mips32 which is raised since the addition of
-bootlin toolchains
+Hi,
 
-Fixes:
- - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
+> Add locally computed sha256 (+ keep sha1 from github checksum file).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...n-inc-asmdefs_mmi.h-fix-mips32-build.patch | 89 +++++++++++++++++++
- 1 file changed, 89 insertions(+)
- create mode 100644 package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
+> sysinfo.h fix patch is still needed (until Buildroot MUSL toolchain gets
+> updated).
+tested:
 
-diff --git a/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
-new file mode 100644
-index 0000000000..e11b1d13ef
---- /dev/null
-+++ b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
-@@ -0,0 +1,89 @@
-+From c505f81e336088b6729a5407a03459f488353288 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 24 May 2021 22:54:01 +0200
-+Subject: [PATCH] codec/common/inc/asmdefs_mmi.h: fix mips32 build
-+
-+Fix the following build failure on mips32 which is raised since version
-+2.0.0 and
-+https://github.com/cisco/openh264/commit/b13e5bceb18ebb93d0313b46aab4af6f480ca933:
-+
-+codec/common/mips/copy_mb_mmi.c: In function 'WelsCopy16x16_mmi':
-+./codec/common/inc/asmdefs_mmi.h:293:21: error: '_ABI64' undeclared (first use in this function)
-+  293 |    if (_MIPS_SIM == _ABI64)                                    \
-+      |                     ^~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/cisco/openh264/pull/3384]
-+---
-+ codec/common/inc/asmdefs_mmi.h | 17 +++++++++++------
-+ 1 file changed, 11 insertions(+), 6 deletions(-)
-+
-+diff --git a/codec/common/inc/asmdefs_mmi.h b/codec/common/inc/asmdefs_mmi.h
-+index 69a7ae39..5d1aed93 100644
-+--- a/codec/common/inc/asmdefs_mmi.h
-++++ b/codec/common/inc/asmdefs_mmi.h
-+@@ -288,9 +288,9 @@
-+ /**
-+  * backup register
-+  */
-++#if defined(_ABI64) && _MIPS_SIM == _ABI64
-+ #define BACKUP_REG \
-+    double __attribute__((aligned(16))) __back_temp[8];         \
-+-   if (_MIPS_SIM == _ABI64)                                    \
-+    __asm__ volatile (                                          \
-+      "gssqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
-+      "gssqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
-+@@ -299,8 +299,10 @@
-+      :                                                         \
-+      : [temp]"r"(__back_temp)                                  \
-+      : "memory"                                                \
-+-   );                                                          \
-+-  else                                                         \
-++   );
-++#else
-++#define BACKUP_REG \
-++   double __attribute__((aligned(16))) __back_temp[8];         \
-+    __asm__ volatile (                                          \
-+      "gssqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
-+      "gssqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
-+@@ -309,12 +311,13 @@
-+      : [temp]"r"(__back_temp)                                  \
-+      : "memory"                                                \
-+    );
-++#endif
-+ 
-+ /**
-+  * recover register
-+  */
-++#if defined(_ABI64) && _MIPS_SIM == _ABI64
-+ #define RECOVER_REG \
-+-   if (_MIPS_SIM == _ABI64)                                    \
-+    __asm__ volatile (                                          \
-+      "gslqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
-+      "gslqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
-+@@ -323,8 +326,9 @@
-+      :                                                         \
-+      : [temp]"r"(__back_temp)                                  \
-+      : "memory"                                                \
-+-   );                                                          \
-+-   else                                                        \
-++   );
-++#else
-++#define RECOVER_REG \
-+    __asm__ volatile (                                          \
-+      "gslqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
-+      "gslqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
-+@@ -333,6 +337,7 @@
-+      : [temp]"r"(__back_temp)                                  \
-+      : "memory"                                                \
-+    );
-++#endif
-+ 
-+ # define OK             1
-+ # define NOTOK          0
-+-- 
-+2.30.2
-+
--- 
-2.30.2
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: SKIPPED
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                            sourcery-arm [6/6]: OK
+6 builds, 1 skipped, 0 build failed, 0 legal-info failed
+
+                             andes-nds32 [ 1/45]: OK
+                             arm-aarch64 [ 2/45]: OK
+                   bootlin-aarch64-glibc [ 3/45]: OK
+               bootlin-arcle-hs38-uclibc [ 4/45]: OK
+                    bootlin-armv5-uclibc [ 5/45]: OK
+                     bootlin-armv7-glibc [ 6/45]: OK
+                   bootlin-armv7m-uclibc [ 7/45]: SKIPPED
+                      bootlin-armv7-musl [ 8/45]: OK
+             bootlin-microblazeel-uclibc [ 9/45]: OK
+                   bootlin-mipsel-uclibc [10/45]: OK
+                bootlin-mipsel32r6-glibc [11/45]: OK
+                bootlin-m68k-5208-uclibc [12/45]: SKIPPED
+               bootlin-m68k-68040-uclibc [13/45]: OK
+                     bootlin-nios2-glibc [14/45]: SKIPPED
+                 bootlin-openrisc-uclibc [15/45]: OK
+           bootlin-powerpc-e500mc-uclibc [16/45]: OK
+        bootlin-powerpc64le-power8-glibc [17/45]: OK
+                   bootlin-riscv32-glibc [18/45]: OK
+                   bootlin-riscv64-glibc [19/45]: OK
+                    bootlin-riscv64-musl [20/45]: OK
+                      bootlin-sh4-uclibc [21/45]: OK
+                    bootlin-sparc-uclibc [22/45]: SKIPPED
+                   bootlin-sparc64-glibc [23/45]: OK
+                   bootlin-xtensa-uclibc [24/45]: OK
+                    bootlin-x86-64-glibc [25/45]: OK
+                     bootlin-x86-64-musl [26/45]: OK
+                   bootlin-x86-64-uclibc [27/45]: OK
+                            br-arm-basic [28/45]: OK
+                    br-arm-full-nothread [29/45]: SKIPPED
+                      br-arm-full-static [30/45]: OK
+                br-i386-pentium-mmx-musl [31/45]: OK
+                   br-i386-pentium4-full [32/45]: OK
+                      br-mips64-n64-full [33/45]: OK
+                 br-mips64r6-el-hf-glibc [34/45]: OK
+               br-powerpc-603e-basic-cpp [35/45]: OK
+               br-powerpc64-power7-glibc [36/45]: OK
+                       linaro-aarch64-be [37/45]: OK
+                          linaro-aarch64 [38/45]: OK
+                              linaro-arm [39/45]: OK
+                     sourcery-arm-armv4t [40/45]: OK
+                            sourcery-arm [41/45]: OK
+                     sourcery-arm-thumb2 [42/45]: OK
+                           sourcery-mips [43/45]: OK
+                         sourcery-mips64 [44/45]: OK
+                          sourcery-nios2 [45/45]: SKIPPED
+45 builds, 6 skipped, 0 build failed, 0 legal-info failed
