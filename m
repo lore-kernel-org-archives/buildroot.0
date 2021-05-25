@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 May 2021 21:26:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boost: disable logs with riscv32
-In-Reply-To: <20210521200323.426580-1-fontaine.fabrice@gmail.com>
-References: <20210521200323.426580-1-fontaine.fabrice@gmail.com>
-Message-ID: <a223a026-dfcd-ffb0-7791-b6cfc3600170@mind.be>
+Date: Tue, 25 May 2021 21:29:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenh264: fix mips32 build
+In-Reply-To: <20210524210529.353499-1-fontaine.fabrice@gmail.com>
+References: <20210524210529.353499-1-fontaine.fabrice@gmail.com>
+Message-ID: <3377d4f5-7c84-fd97-1b1c-edace7c978c8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,81 +12,118 @@ To: buildroot@busybox.net
 
 
 
-On 21/05/2021 22:03, Fabrice Fontaine wrote:
-> boost logs can't be built with riscv32 because it unconditionally uses
-> __NR_futex:
+On 24/05/2021 23:05, Fabrice Fontaine wrote:
+> Fix build failure with mips32 which is raised since the addition of
+> bootlin toolchains
 > 
-> libs/log/src/event.cpp: In member function 'void boost::log::v2_mt_posix::aux::futex_based_event::wait()':
-> libs/log/src/event.cpp:38:29: error: '__NR_futex' was not declared in this scope
->    38 | #define BOOST_LOG_SYS_FUTEX __NR_futex
->       |                             ^~~~~~~~~~
+> Fixes:
+>  - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- There seems to be a similar issue in boost/atomic/detail/futex.hpp, e.g. [1].
-Could you handle that as well?
-
+ Applied to master, thanks.
 
  Regards,
  Arnout
 
-
-[1]
-http://autobuild.buildroot.net/results/6aa/6aa7ac8b14c3ba4f674d541fabb4476680b299a7/build-end.log
-
-
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/8c8135fd7c0517c66c9b3975c494da6d7934cc1b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/azmq/Config.in  | 3 +++
->  package/boost/Config.in | 3 +++
->  2 files changed, 6 insertions(+)
+>  ...n-inc-asmdefs_mmi.h-fix-mips32-build.patch | 89 +++++++++++++++++++
+>  1 file changed, 89 insertions(+)
+>  create mode 100644 package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
 > 
-> diff --git a/package/azmq/Config.in b/package/azmq/Config.in
-> index 37131a260a..6751d533a4 100644
-> --- a/package/azmq/Config.in
-> +++ b/package/azmq/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_AZMQ
->  	bool "azmq"
-> +	depends on !BR2_RISCV_32 # boost-log
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_ATOMIC
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # boost-log
-> @@ -22,9 +23,11 @@ config BR2_PACKAGE_AZMQ
->  	  https://github.com/zeromq/azmq
->  
->  comment "azmq needs a toolchain w/ C++11, wchar and NPTL"
-> +	depends on !BR2_RISCV_32
->  	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
->  	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
->  		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
->  
->  comment "azmq needs exception_ptr"
-> +	depends on !BR2_RISCV_32
->  	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-> diff --git a/package/boost/Config.in b/package/boost/Config.in
-> index 3e96e1ede3..75bb81600a 100644
-> --- a/package/boost/Config.in
-> +++ b/package/boost/Config.in
-> @@ -240,6 +240,7 @@ comment "boost-locale needs a toolchain not affected by GCC bug 64735"
->  
->  config BR2_PACKAGE_BOOST_LOG
->  	bool "boost-log"
-> +	depends on !BR2_RISCV_32>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
-> @@ -253,10 +254,12 @@ config BR2_PACKAGE_BOOST_LOG
->  	  Logging library.
->  
->  comment "boost-log needs a toolchain w/ NPTL"
-> +	depends on !BR2_RISCV_32
->  	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  
->  comment "boost-log needs a toolchain not affected by GCC bug 64735"
-> +	depends on !BR2_RISCV_32
->  	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
->  
->  config BR2_PACKAGE_BOOST_MATH
+> diff --git a/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
+> new file mode 100644
+> index 0000000000..e11b1d13ef
+> --- /dev/null
+> +++ b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
+> @@ -0,0 +1,89 @@
+> +From c505f81e336088b6729a5407a03459f488353288 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Mon, 24 May 2021 22:54:01 +0200
+> +Subject: [PATCH] codec/common/inc/asmdefs_mmi.h: fix mips32 build
+> +
+> +Fix the following build failure on mips32 which is raised since version
+> +2.0.0 and
+> +https://github.com/cisco/openh264/commit/b13e5bceb18ebb93d0313b46aab4af6f480ca933:
+> +
+> +codec/common/mips/copy_mb_mmi.c: In function 'WelsCopy16x16_mmi':
+> +./codec/common/inc/asmdefs_mmi.h:293:21: error: '_ABI64' undeclared (first use in this function)
+> +  293 |    if (_MIPS_SIM == _ABI64)                                    \
+> +      |                     ^~~~~~
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://github.com/cisco/openh264/pull/3384]
+> +---
+> + codec/common/inc/asmdefs_mmi.h | 17 +++++++++++------
+> + 1 file changed, 11 insertions(+), 6 deletions(-)
+> +
+> +diff --git a/codec/common/inc/asmdefs_mmi.h b/codec/common/inc/asmdefs_mmi.h
+> +index 69a7ae39..5d1aed93 100644
+> +--- a/codec/common/inc/asmdefs_mmi.h
+> ++++ b/codec/common/inc/asmdefs_mmi.h
+> +@@ -288,9 +288,9 @@
+> + /**
+> +  * backup register
+> +  */
+> ++#if defined(_ABI64) && _MIPS_SIM == _ABI64
+> + #define BACKUP_REG \
+> +    double __attribute__((aligned(16))) __back_temp[8];         \
+> +-   if (_MIPS_SIM == _ABI64)                                    \
+> +    __asm__ volatile (                                          \
+> +      "gssqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
+> +      "gssqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
+> +@@ -299,8 +299,10 @@
+> +      :                                                         \
+> +      : [temp]"r"(__back_temp)                                  \
+> +      : "memory"                                                \
+> +-   );                                                          \
+> +-  else                                                         \
+> ++   );
+> ++#else
+> ++#define BACKUP_REG \
+> ++   double __attribute__((aligned(16))) __back_temp[8];         \
+> +    __asm__ volatile (                                          \
+> +      "gssqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
+> +      "gssqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
+> +@@ -309,12 +311,13 @@
+> +      : [temp]"r"(__back_temp)                                  \
+> +      : "memory"                                                \
+> +    );
+> ++#endif
+> + 
+> + /**
+> +  * recover register
+> +  */
+> ++#if defined(_ABI64) && _MIPS_SIM == _ABI64
+> + #define RECOVER_REG \
+> +-   if (_MIPS_SIM == _ABI64)                                    \
+> +    __asm__ volatile (                                          \
+> +      "gslqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
+> +      "gslqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
+> +@@ -323,8 +326,9 @@
+> +      :                                                         \
+> +      : [temp]"r"(__back_temp)                                  \
+> +      : "memory"                                                \
+> +-   );                                                          \
+> +-   else                                                        \
+> ++   );
+> ++#else
+> ++#define RECOVER_REG \
+> +    __asm__ volatile (                                          \
+> +      "gslqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
+> +      "gslqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
+> +@@ -333,6 +337,7 @@
+> +      : [temp]"r"(__back_temp)                                  \
+> +      : "memory"                                                \
+> +    );
+> ++#endif
+> + 
+> + # define OK             1
+> + # define NOTOK          0
+> +-- 
+> +2.30.2
+> +
+> 
