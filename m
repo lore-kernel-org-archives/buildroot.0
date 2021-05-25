@@ -1,12 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 25 May 2021 22:07:03 +0200
-Subject: [Buildroot] [PATCH 3/3] package/pifmrds: use pkg-config
-In-Reply-To: <d13c52e3-51c2-8035-092c-5bf4d9aee9c2@mind.be>
-References: <20210523101121.1517749-1-fontaine.fabrice@gmail.com>
- <20210523101121.1517749-3-fontaine.fabrice@gmail.com>
- <20210524120225.GQ3208066@scaer>
- <d13c52e3-51c2-8035-092c-5bf4d9aee9c2@mind.be>
-Message-ID: <20210525200703.GN3208066@scaer>
+Date: Tue, 25 May 2021 22:10:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pifmrds: always link with -lm
+In-Reply-To: <e4e76247-cd73-a6a5-72f1-6c7a6c4f8d86@mind.be>
+References: <20210525054427.455433-1-fontaine.fabrice@gmail.com>
+ <e4e76247-cd73-a6a5-72f1-6c7a6c4f8d86@mind.be>
+Message-ID: <20210525201012.GO3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,108 +13,68 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2021-05-25 21:47 +0200, Arnout Vandecappelle spake thusly:
-> On 24/05/2021 14:02, Yann E. MORIN wrote:
-> > Fabrice, All,
+On 2021-05-25 21:59 +0200, Arnout Vandecappelle spake thusly:
+> On 25/05/2021 07:44, Fabrice Fontaine wrote:
+> > Commit 888546e5273d77d49bec564a515e85d7acee6bdd wrongly removed linking
+> > with -lm resulting in the following build failure:
 > > 
-> > On 2021-05-23 12:11 +0200, Fabrice Fontaine spake thusly:
-> >> Use pkg-config to retrieve libsndfile dependencies
-> > 
-> > This patch should have been the first in the series. Indeed, if only the
-> > first two patches are applied, then pifmrds build is broken...
-> > 
-> > Anyway, this is by itself a build-fix too, so: applied to master, thanks.
+> > /home/buildroot/autobuild/run/instance-3/output-1/host/bin/arm-linux-gnueabihf-gcc  -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lsndfile
+> > /home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/7.3.1/../../../../arm-linux-gnueabihf/bin/ld: fm_mpx.o: undefined reference to symbol 'cos@@GLIBC_2.4'
+> > /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/lib/libm.so.6: error adding symbols: DSO missing from command line
 > 
->  How is this a build fix?
+>  Although the only undefined reference here was for a symbol referenced from
+> pifmrds itself, the original patch was actually for libsndfile (it uses pow and
+> frexp, possibly others as well). So I would actually expect libsndfile to add it
+> to its libs in the pc file.
 
-I interpreted it as a bug fix, because:
- 1. the existing patches injects -lm after -lsndfile because libsndfile
-    needs symbolsd from libm
- 2. this patch changed that to grab libsndfile's needed libs from
-    pkg-config
- 3. and dropping -lm because I understood it came from pkg-config
+That's what I assumed...
 
->  It actually breaks things so I'm not convinced...
+>  That said, since pifmrds uses math functions directly, this fix is still
+> correct, so applied to master, thanks.
 
-Indeed, because (3) above is wrong, indeed (I've did a build to confirm
-that). And that's why Fabrice recently sent:
-    https://patchwork.ozlabs.org/project/buildroot/patch/20210525054427.455433-1-fontaine.fabrice at gmail.com/
+But then, we should change the commit log of that patch, to state that
+-lm is need for pifmrds itself, otherwise this is going to stay
+confusing when we update to a libsndfile that properly add -lm to its
+.pc file, no?
 
-(and I noticed that you just applied it before I got to it, thanks).
-
-But on principle, using pkg-config to get the dependencies of a libraries
-is still a good idea, I believe...
-
-Crgd    
+Regards,
+Yann E. MORIN.
 
 >  Regards,
 >  Arnout
 > 
 > > 
-> > Regards,
-> > Yann E. MORIN.
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/b2a6e6fd77bf9071ce9f75fed1811be9ffe5366d
 > > 
-> >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >> ---
-> >>  package/pifmrds/0003-Makefile-fix-static-link.patch | 6 ++++--
-> >>  package/pifmrds/pifmrds.mk                          | 3 ++-
-> >>  2 files changed, 6 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/package/pifmrds/0003-Makefile-fix-static-link.patch b/package/pifmrds/0003-Makefile-fix-static-link.patch
-> >> index ecd7c4fc4c..3bd91c981f 100644
-> >> --- a/package/pifmrds/0003-Makefile-fix-static-link.patch
-> >> +++ b/package/pifmrds/0003-Makefile-fix-static-link.patch
-> >> @@ -4,6 +4,8 @@ Since libsndfile uses funtions from libm, the -lm should be specified
-> >>  after libsndfile for static linking.
-> >>  
-> >>  Signed-off-by: "Eric Limpens" <Limpens@gmail.com>
-> >> +[Fabrice: add $(SNDFILE_LIBS) to pass all dependencies from pkg-config]
-> >> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >>  
-> >>  diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile
-> >>  --- pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile	2016-02-26 08:06:43.102962592 +0100
-> >> @@ -13,11 +15,11 @@ diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pi
-> >>   
-> >>   app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
-> >>  -	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
-> >> -+	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lsndfile -lm
-> >> ++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o $(SNDFILE_LIBS)
-> >>   
-> >>   rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
-> >>  -	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
-> >> -+	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lsndfile -lm
-> >> ++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o $(SNDFILE_LIBS)
-> >>   
-> >>   rds.o: rds.c waveforms.h
-> >>   	$(CC) $(CFLAGS) rds.c
-> >> diff --git a/package/pifmrds/pifmrds.mk b/package/pifmrds/pifmrds.mk
-> >> index 509ec80876..33c13bae33 100644
-> >> --- a/package/pifmrds/pifmrds.mk
-> >> +++ b/package/pifmrds/pifmrds.mk
-> >> @@ -6,13 +6,14 @@
-> >>  
-> >>  PIFMRDS_VERSION = 0bf57f9ce0d954365a38d8af8e7be6f28521c3f2
-> >>  PIFMRDS_SITE = $(call github,ChristopheJacquet,PiFmRds,$(PIFMRDS_VERSION))
-> >> -PIFMRDS_DEPENDENCIES = libsndfile
-> >> +PIFMRDS_DEPENDENCIES = host-pkgconf libsndfile
-> >>  PIFMRDS_LICENSE = GPL-3.0+
-> >>  PIFMRDS_LICENSE_FILES = LICENSE
-> >>  
-> >>  define PIFMRDS_BUILD_CMDS
-> >>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)" \
-> >>  		CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -ffast-math -c" \
-> >> +		SNDFILE_LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs sndfile`" \
-> >>  		app rds_wav
-> >>  endef
-> >>  
-> >> -- 
-> >> 2.30.2
-> >>
-> >> _______________________________________________
-> >> buildroot mailing list
-> >> buildroot at busybox.net
-> >> http://lists.busybox.net/mailman/listinfo/buildroot
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/pifmrds/0003-Makefile-fix-static-link.patch | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
 > > 
+> > diff --git a/package/pifmrds/0003-Makefile-fix-static-link.patch b/package/pifmrds/0003-Makefile-fix-static-link.patch
+> > index 3bd91c981f..3832b77d59 100644
+> > --- a/package/pifmrds/0003-Makefile-fix-static-link.patch
+> > +++ b/package/pifmrds/0003-Makefile-fix-static-link.patch
+> > @@ -15,11 +15,11 @@ diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pi
+> >   
+> >   app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
+> >  -	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
+> > -+	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o $(SNDFILE_LIBS)
+> > ++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o $(SNDFILE_LIBS) -lm
+> >   
+> >   rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
+> >  -	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
+> > -+	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o $(SNDFILE_LIBS)
+> > ++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o $(SNDFILE_LIBS) -lm
+> >   
+> >   rds.o: rds.c waveforms.h
+> >   	$(CC) $(CFLAGS) rds.c
+> > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
