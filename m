@@ -1,28 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 25 May 2021 20:11:45 +0000
-Subject: [Buildroot] [Bug 13821] Wrong url for libnfsidmap package
-In-Reply-To: <bug-13821-163@https.bugs.busybox.net/>
-References: <bug-13821-163@https.bugs.busybox.net/>
-Message-ID: <bug-13821-163-A9BI7lktrJ@https.bugs.busybox.net/>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 25 May 2021 22:24:06 +0200
+Subject: [Buildroot] [git commit] package/webkitgtk: disable gamepad support
+Message-ID: <20210525195455.D6CCB8A4CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13821
+commit: https://git.buildroot.net/buildroot/commit/?id=97b2511edb75ff885140f2ea3253d1a862c2cc58
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Arnout Vandecappelle <arnout@mind.be> changed:
+Pass -DENABLE_GAMEPAD=OFF to CMake in order to disable support for the
+gamepad API, which requires libmanette, a library that is not yet
+available in Buildroot.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |INVALID
-             Status|NEW                         |RESOLVED
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/webkitgtk/webkitgtk.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
---- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
-There is no libnfsidmap package in buildroot, nor anything resembling it.
-Please report this issue to whichever fork of buildroot you're using.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 1720ffc7d6..f1c0560498 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -18,6 +18,7 @@ WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
+ 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
+ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_API_TESTS=OFF \
++	-DENABLE_GAMEPAD=OFF \
+ 	-DENABLE_GEOLOCATION=OFF \
+ 	-DENABLE_GTKDOC=OFF \
+ 	-DENABLE_INTROSPECTION=OFF \
