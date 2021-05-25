@@ -1,120 +1,97 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 25 May 2021 21:27:42 +0200
-Subject: [Buildroot] [git commit] package/libopenh264: fix mips32 build
-Message-ID: <20210525190021.CF6188859E@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 25 May 2021 21:47:24 +0200
+Subject: [Buildroot] [PATCH 3/3] package/pifmrds: use pkg-config
+In-Reply-To: <20210524120225.GQ3208066@scaer>
+References: <20210523101121.1517749-1-fontaine.fabrice@gmail.com>
+ <20210523101121.1517749-3-fontaine.fabrice@gmail.com>
+ <20210524120225.GQ3208066@scaer>
+Message-ID: <d13c52e3-51c2-8035-092c-5bf4d9aee9c2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52b875d3ac84c84c16fefe19cfec465697bffecb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix build failure with mips32 which is raised since the addition of
-bootlin toolchains
 
-Fixes:
- - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
+On 24/05/2021 14:02, Yann E. MORIN wrote:
+> Fabrice, All,
+> 
+> On 2021-05-23 12:11 +0200, Fabrice Fontaine spake thusly:
+>> Use pkg-config to retrieve libsndfile dependencies
+> 
+> This patch should have been the first in the series. Indeed, if only the
+> first two patches are applied, then pifmrds build is broken...
+> 
+> Anyway, this is by itself a build-fix too, so: applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...common-inc-asmdefs_mmi.h-fix-mips32-build.patch | 89 ++++++++++++++++++++++
- 1 file changed, 89 insertions(+)
+ How is this a build fix? It actually breaks things so I'm not convinced...
 
-diff --git a/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
-new file mode 100644
-index 0000000000..e11b1d13ef
---- /dev/null
-+++ b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
-@@ -0,0 +1,89 @@
-+From c505f81e336088b6729a5407a03459f488353288 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 24 May 2021 22:54:01 +0200
-+Subject: [PATCH] codec/common/inc/asmdefs_mmi.h: fix mips32 build
-+
-+Fix the following build failure on mips32 which is raised since version
-+2.0.0 and
-+https://github.com/cisco/openh264/commit/b13e5bceb18ebb93d0313b46aab4af6f480ca933:
-+
-+codec/common/mips/copy_mb_mmi.c: In function 'WelsCopy16x16_mmi':
-+./codec/common/inc/asmdefs_mmi.h:293:21: error: '_ABI64' undeclared (first use in this function)
-+  293 |    if (_MIPS_SIM == _ABI64)                                    \
-+      |                     ^~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/cisco/openh264/pull/3384]
-+---
-+ codec/common/inc/asmdefs_mmi.h | 17 +++++++++++------
-+ 1 file changed, 11 insertions(+), 6 deletions(-)
-+
-+diff --git a/codec/common/inc/asmdefs_mmi.h b/codec/common/inc/asmdefs_mmi.h
-+index 69a7ae39..5d1aed93 100644
-+--- a/codec/common/inc/asmdefs_mmi.h
-++++ b/codec/common/inc/asmdefs_mmi.h
-+@@ -288,9 +288,9 @@
-+ /**
-+  * backup register
-+  */
-++#if defined(_ABI64) && _MIPS_SIM == _ABI64
-+ #define BACKUP_REG \
-+    double __attribute__((aligned(16))) __back_temp[8];         \
-+-   if (_MIPS_SIM == _ABI64)                                    \
-+    __asm__ volatile (                                          \
-+      "gssqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
-+      "gssqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
-+@@ -299,8 +299,10 @@
-+      :                                                         \
-+      : [temp]"r"(__back_temp)                                  \
-+      : "memory"                                                \
-+-   );                                                          \
-+-  else                                                         \
-++   );
-++#else
-++#define BACKUP_REG \
-++   double __attribute__((aligned(16))) __back_temp[8];         \
-+    __asm__ volatile (                                          \
-+      "gssqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
-+      "gssqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
-+@@ -309,12 +311,13 @@
-+      : [temp]"r"(__back_temp)                                  \
-+      : "memory"                                                \
-+    );
-++#endif
-+ 
-+ /**
-+  * recover register
-+  */
-++#if defined(_ABI64) && _MIPS_SIM == _ABI64
-+ #define RECOVER_REG \
-+-   if (_MIPS_SIM == _ABI64)                                    \
-+    __asm__ volatile (                                          \
-+      "gslqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
-+      "gslqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
-+@@ -323,8 +326,9 @@
-+      :                                                         \
-+      : [temp]"r"(__back_temp)                                  \
-+      : "memory"                                                \
-+-   );                                                          \
-+-   else                                                        \
-++   );
-++#else
-++#define RECOVER_REG \
-+    __asm__ volatile (                                          \
-+      "gslqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
-+      "gslqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
-+@@ -333,6 +337,7 @@
-+      : [temp]"r"(__back_temp)                                  \
-+      : "memory"                                                \
-+    );
-++#endif
-+ 
-+ # define OK             1
-+ # define NOTOK          0
-+-- 
-+2.30.2
-+
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>> ---
+>>  package/pifmrds/0003-Makefile-fix-static-link.patch | 6 ++++--
+>>  package/pifmrds/pifmrds.mk                          | 3 ++-
+>>  2 files changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/package/pifmrds/0003-Makefile-fix-static-link.patch b/package/pifmrds/0003-Makefile-fix-static-link.patch
+>> index ecd7c4fc4c..3bd91c981f 100644
+>> --- a/package/pifmrds/0003-Makefile-fix-static-link.patch
+>> +++ b/package/pifmrds/0003-Makefile-fix-static-link.patch
+>> @@ -4,6 +4,8 @@ Since libsndfile uses funtions from libm, the -lm should be specified
+>>  after libsndfile for static linking.
+>>  
+>>  Signed-off-by: "Eric Limpens" <Limpens@gmail.com>
+>> +[Fabrice: add $(SNDFILE_LIBS) to pass all dependencies from pkg-config]
+>> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>  
+>>  diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile
+>>  --- pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile	2016-02-26 08:06:43.102962592 +0100
+>> @@ -13,11 +15,11 @@ diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pi
+>>   
+>>   app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
+>>  -	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
+>> -+	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lsndfile -lm
+>> ++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o $(SNDFILE_LIBS)
+>>   
+>>   rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
+>>  -	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
+>> -+	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lsndfile -lm
+>> ++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o $(SNDFILE_LIBS)
+>>   
+>>   rds.o: rds.c waveforms.h
+>>   	$(CC) $(CFLAGS) rds.c
+>> diff --git a/package/pifmrds/pifmrds.mk b/package/pifmrds/pifmrds.mk
+>> index 509ec80876..33c13bae33 100644
+>> --- a/package/pifmrds/pifmrds.mk
+>> +++ b/package/pifmrds/pifmrds.mk
+>> @@ -6,13 +6,14 @@
+>>  
+>>  PIFMRDS_VERSION = 0bf57f9ce0d954365a38d8af8e7be6f28521c3f2
+>>  PIFMRDS_SITE = $(call github,ChristopheJacquet,PiFmRds,$(PIFMRDS_VERSION))
+>> -PIFMRDS_DEPENDENCIES = libsndfile
+>> +PIFMRDS_DEPENDENCIES = host-pkgconf libsndfile
+>>  PIFMRDS_LICENSE = GPL-3.0+
+>>  PIFMRDS_LICENSE_FILES = LICENSE
+>>  
+>>  define PIFMRDS_BUILD_CMDS
+>>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)" \
+>>  		CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -ffast-math -c" \
+>> +		SNDFILE_LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs sndfile`" \
+>>  		app rds_wav
+>>  endef
+>>  
+>> -- 
+>> 2.30.2
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
