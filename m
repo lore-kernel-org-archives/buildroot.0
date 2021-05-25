@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 May 2021 22:32:45 +0200
-Subject: [Buildroot] [PATCHv3 00/15] Introduce BR2_ENABLE_RUNTIME_DEBUG
-In-Reply-To: <20210525122750.5022-1-patrickdepinguin@gmail.com>
+Date: Tue, 25 May 2021 22:34:32 +0200
+Subject: [Buildroot] [PATCHv3 02/15] core: introduce
+ BR2_ENABLE_RUNTIME_DEBUG
+In-Reply-To: <20210525122750.5022-3-patrickdepinguin@gmail.com>
 References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
-Message-ID: <8c7a22da-c7ec-182e-3c1f-5da2b269949e@mind.be>
+ <20210525122750.5022-3-patrickdepinguin@gmail.com>
+Message-ID: <5360781d-d225-68f6-e419-6744b8fa9c16@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,77 +17,79 @@ To: buildroot@busybox.net
 On 25/05/2021 14:27, Thomas De Schampheleire wrote:
 > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > 
-> Hello,
+> Some packages have optional runtime assertions, extra traces, or other
+> elements that can help in debugging problems. However, such runtime elements
+> can negatively influence performance.
 > 
-> This patch series started with as main goal to fix the performance degradation
-> found when testing gRPC in combination with BR2_ENABLE_DEBUG.
+> In a test program performing 100K gRPC calls from a client to a local server
+> and receiving the returned response, we see following execution time:
 > 
-> Its implementation strives to settle a discussion that has happened several
-> times, regarding the CMAKE_BUILD_TYPE that Buildroot should set, by not forcing
-> anything upon the user but allowing the choice.
+>     - runtime debug enabled: 1065 seconds
+>     - runtime debug disabled:  48 seconds
 > 
-> Additionally, it cleans up some related changes done in specific packages.
+> This is more than a factor 20 (!) difference. Analysis shows that the
+> problem mostly stems from libabseil-cpp (a dependency of gRPC) which enables
+> mutex deadlock analysis when the preprocessor flag 'NDEBUG' is not set,
+> which adds a 'backtrace()' call on every lock/unlock.  Potentially worse,
+> when libunwind is enabled and linked with the test program, 'backtrace()' is
+> not provided by glibc but by libunwind itself.
 > 
-> After this series, there are still packages that set CMAKE_BUILD_TYPE
-> explicitly, but the associated comments indicate that they are needed to avoid
-> build failures, so they are not touched.
+> For production systems, users expect good performance out-of-the-box. In the
+> example above, the difference is huge and unless explicitly tested and
+> analyzed, users may not realize that the performance could be much better.
+> 
+> Address this problem by introducing a new option BR2_ENABLE_RUNTIME_DEBUG,
+> which can be used by packages or package infrastructures to set the
+> necessary flags.
+> 
+> Note that BR2_ENABLE_RUNTIME_DEBUG is orthogonal to BR2_ENABLE_DEBUG: the
+> former changes runtime behavior, while the latter is only expected to add
+> debug symbols to the build. Today, the cmake build system does introduce a
+> runtime impact when BR2_ENABLE_DEBUG is set, but that will be rectified in a
+> subsequent commit.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  Config.in | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/Config.in b/Config.in
+> index c65e34bd5e..a008425688 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -412,6 +412,19 @@ config BR2_DEBUG_3
+>  endchoice
+>  endif
+>  
+> +config BR2_ENABLE_RUNTIME_DEBUG
 
- There are probably also lots of (non-cmake) packages that have options that
-should depend on this new config option, but we don't need to fix the world
-right away.
+ I'm still not convinced that RUNTIME_DEBUG is the best name, but I can't think
+of anything better.
 
- For the record: I'm in agreement with this series (with some small comments
-which I'll make in individual patches). However, it's a bit too controversial
-for me to apply outright, so I'm waiting for acks from other developers.
+> +	bool "build packages with runtime debugging info"
+
+ It's not debugging info (that is actually covered by BR2_ENABLE_DEBUG) - it's
+debugging support. Or maybe just "debugging".
+
+ Nitpick, of course, so:
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-> 
-> v2: fix sysrepo after comment by Jan Kundr?t (thanks!)
-> v3:
-> - new patch setting -g0 (Arnout)
-> - don't set -DNDEBUG globally anymore, and drop related libjson change
-> - flare-engine, supertux: retain disabling of -pg option (Arnout)
-> - sysrepo: new patch for host-sysrepo, disable tests for target (Arnout)
-> - update several packages to use BR2_ENABLE_RUNTIME_DEBUG instead of
->   BR2_ENABLE_DEBUG
-> 
-> 
-> Thomas De Schampheleire (15):
->   package/Makefile.in: pass '-g0' explicitly if !BR2_ENABLE_DEBUG
->   core: introduce BR2_ENABLE_RUNTIME_DEBUG
->   package/pkg-cmake.mk: determine CMAKE_BUILD_TYPE depending on
->     BR2_ENABLE_RUNTIME_DEBUG
->   package/flare-engine: update explicit setting of CMAKE_BUILD_TYPE
->   package/sysrepo: use default CMAKE_BUILD_TYPE for host package
->   package/sysrepo: remove explicit setting of CMAKE_BUILD_TYPE
->   package/boost: use BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
->   package/oracle-mysql: use BR2_ENABLE_RUNTIME_DEBUG iso
->     BR2_ENABLE_DEBUG
->   package/qt5: use BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
->   package/ripgrep: use BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
->   package/sofia-sip: use BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
->   package/uclibc: use BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
->   package/zmqpp: use BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
->   package/pkg-meson.mk: determine 'buildtype' based on
->     BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
->   utils/genrandconfig: also test BR2_ENABLE_RUNTIME_DEBUG
-> 
->  Config.in                             | 13 +++++++++++++
->  docs/manual/adding-packages-cmake.txt |  2 +-
->  package/Makefile.in                   |  3 +++
->  package/boost/boost.mk                |  2 +-
->  package/flare-engine/flare-engine.mk  |  2 +-
->  package/oracle-mysql/oracle-mysql.mk  |  2 +-
->  package/pkg-cmake.mk                  |  2 +-
->  package/pkg-meson.mk                  |  2 +-
->  package/qt5/qt5base/qt5base.mk        |  2 +-
->  package/ripgrep/ripgrep.mk            |  2 +-
->  package/sofia-sip/sofia-sip.mk        |  2 +-
->  package/sysrepo/sysrepo.mk            |  9 ++++++---
->  package/uclibc/uclibc.mk              |  2 +-
->  package/zmqpp/zmqpp.mk                |  2 +-
->  utils/genrandconfig                   |  2 ++
->  15 files changed, 35 insertions(+), 14 deletions(-)
+> +	help
+> +	  Some packages may have runtime assertions, extra traces, and
+> +	  similar runtime elements that can help debugging. However,
+> +	  these elements may negatively influence performance so should
+> +	  normally not be enabled on production systems.
+> +
+> +	  Enable this option to enable such runtime debugging.
+> +
+> +	  Note: disabling this option is not a guarantee that all
+> +	  packages effectively removed these runtime debugging elements.
+> +
+>  config BR2_STRIP_strip
+>  	bool "strip target binaries"
+>  	default y
 > 
