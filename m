@@ -1,44 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 May 2021 22:24:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: disable gamepad
- support
-In-Reply-To: <20210525124441.1136863-1-aperez@igalia.com>
-References: <20210525124441.1136863-1-aperez@igalia.com>
-Message-ID: <e5a8c308-cb1b-1982-27a5-991b956cfc8b@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 25 May 2021 22:29:44 +0200
+Subject: [Buildroot] [git commit branch/next] package/Makefile.in: pass
+ '-g0' explicitly if !BR2_ENABLE_DEBUG
+Message-ID: <20210525200027.7B8C38746F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ebc1ded1913875869eb5cfb27c4100da737e225b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+If BR2_ENABLE_DEBUG is not set, Buildroot did not pass any flag
+to control debug level. This means that the build system of the package
+itself would control it.
 
-On 25/05/2021 14:44, Adrian Perez de Castro wrote:
-> Pass -DENABLE_GAMEPAD=OFF to CMake in order to disable support for the
-> gamepad API, which requires libmanette, a library that is not yet
-> available in Buildroot.
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Instead, provide an explicit '-g0' (no debugging symbols) to get consistent
+behavior across packages.
 
- Applied to master, thanks.
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/Makefile.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
- Regards,
- Arnout
-
-> ---
->  package/webkitgtk/webkitgtk.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-> index 8a332b97bc..e6f9d08ef6 100644
-> --- a/package/webkitgtk/webkitgtk.mk
-> +++ b/package/webkitgtk/webkitgtk.mk
-> @@ -18,6 +18,7 @@ WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
->  	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
->  WEBKITGTK_CONF_OPTS = \
->  	-DENABLE_API_TESTS=OFF \
-> +	-DENABLE_GAMEPAD=OFF \
->  	-DENABLE_GEOLOCATION=OFF \
->  	-DENABLE_GTKDOC=OFF \
->  	-DENABLE_INTROSPECTION=OFF \
-> 
+diff --git a/package/Makefile.in b/package/Makefile.in
+index f4028bc67c..86db62ba5b 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -136,6 +136,9 @@ endif
+ ifeq ($(BR2_OPTIMIZE_FAST),y)
+ TARGET_OPTIMIZATION = -Ofast
+ endif
++ifeq ($(BR2_ENABLE_DEBUG),)
++TARGET_DEBUGGING = -g0
++endif
+ ifeq ($(BR2_DEBUG_1),y)
+ TARGET_DEBUGGING = -g1
+ endif
