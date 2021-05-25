@@ -1,85 +1,36 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Tue, 25 May 2021 19:26:51 +0200
-Subject: [Buildroot] [PATCH v2 5/5] package/zstd: Add option for cli binary
-In-Reply-To: <20210525172652.821351-1-nolange79@gmail.com>
-References: <20210525172652.821351-1-nolange79@gmail.com>
-Message-ID: <20210525172652.821351-5-nolange79@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 25 May 2021 20:18:02 +0200
+Subject: [Buildroot] [PATCH] package/grpc: restrict host-grpc to the
+ absolute minimum
+In-Reply-To: <87a6oiu4qs.fsf@tarshish>
+References: <20210525165602.18943-1-patrickdepinguin@gmail.com>
+ <87a6oiu4qs.fsf@tarshish>
+Message-ID: <CAAXf6LWAwbvkb6B4WrKR0qDwvcKwEeNoZToXPzAszf5KNvfM_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There are a couple of targets to build the cli tool with less
-features (no legacy-support, benchmarking),
-or dynamically linked to the library.
+El mar, 25 may 2021 a las 19:02, Baruch Siach (<baruch@tkos.co.il>) escribi?:
+>
+> Hi Thomas,
+>
+> On Tue, May 25 2021, Thomas De Schampheleire wrote:
+> > @@ -20,10 +19,9 @@ config BR2_PACKAGE_GRPC
+> >
+> >         http://github.com/grpc/grpc
+> >
+> > -comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9, host gcc >= 4.9"
+> > +comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.99"
+>
+> Extra '9' here.
 
-Add an option to choose the variant.
+Thanks Baruch.
+This update of the Config.in comment was a last-minute change. (The
+real code is already used for a few months in our work repo).
 
-To allow the installation step to pick the variant, it
-has to be copied to the normal location.
+I'll send a v2.
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- package/zstd/Config.in | 21 +++++++++++++++++++++
- package/zstd/zstd.mk   |  9 ++++++++-
- 2 files changed, 29 insertions(+), 1 deletion(-)
-
-diff --git a/package/zstd/Config.in b/package/zstd/Config.in
-index 9fa70c65cc..0d2ab84771 100644
---- a/package/zstd/Config.in
-+++ b/package/zstd/Config.in
-@@ -10,3 +10,24 @@ config BR2_PACKAGE_ZSTD
- 	  compression formats
- 
- 	  https://facebook.github.io/zstd
-+
-+if BR2_PACKAGE_ZSTD
-+
-+choice
-+	prompt "Executable flavor"
-+	help
-+	  Pick between variants of the zstd tool.
-+
-+config BR2_PACKAGE_ZSTD_PROG_DEFAULT
-+	bool "Default build (static, full-featured)"
-+
-+config BR2_PACKAGE_ZSTD_PROG_DYNAMIC
-+	bool "Dynamic build (needs library with identical version)"
-+	depends on !BR2_STATIC_LIBS
-+
-+config BR2_PACKAGE_ZSTD_PROG_SMALL
-+	bool "Small build (static, less features)"
-+
-+endchoice
-+
-+endif
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index a9499df4d0..ecad26e0df 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -48,6 +48,11 @@ endif
- ZSTD_OPTS += "MOREFLAGS=$(ZSTD_OPTS_MOREFLAGS)"
- 
- ZSTD_BUILD_PROG_TARGET := zstd-release
-+ifeq ($(BR2_PACKAGE_ZSTD_PROG_DYNAMIC),y)
-+ZSTD_BUILD_PROG_TARGET := zstd-dll
-+else ifeq ($(BR2_PACKAGE_ZSTD_PROG_SMALL),y)
-+ZSTD_BUILD_PROG_TARGET := zstd-small
-+endif
- 
- # Since v1.5.0 the dynamic library is built for
- # multithreading, while the static library is not.
-@@ -78,7 +83,9 @@ define ZSTD_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
- 		-C $(@D)/lib $(addsuffix -release,$(ZSTD_BUILD_LIBS) libzstd.pc)
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
--		-C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET)
-+		-C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET) && \
-+	{ [ ! -e $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) ] || \
-+		ln -f $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) $(@D)/programs/zstd; }
- endef
- 
- define ZSTD_INSTALL_STAGING_CMDS
--- 
-2.30.2
+Best regards,
+Thomas
