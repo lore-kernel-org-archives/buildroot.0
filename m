@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 May 2021 23:32:36 +0200
-Subject: [Buildroot] [PATCHv3 11/15] package/sofia-sip: use
+Date: Tue, 25 May 2021 23:43:03 +0200
+Subject: [Buildroot] [PATCHv3 12/15] package/uclibc: use
  BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
-In-Reply-To: <20210525122750.5022-12-patrickdepinguin@gmail.com>
+In-Reply-To: <20210525122750.5022-13-patrickdepinguin@gmail.com>
 References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
- <20210525122750.5022-12-patrickdepinguin@gmail.com>
-Message-ID: <0fd19bad-277f-ae7d-1928-fd4dc0bf6fcc@mind.be>
+ <20210525122750.5022-13-patrickdepinguin@gmail.com>
+Message-ID: <41d26a40-3880-1738-376b-2fe78fe7b439@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,32 +25,35 @@ On 25/05/2021 14:27, Thomas De Schampheleire wrote:
 > 
 > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > ---
->  package/sofia-sip/sofia-sip.mk | 2 +-
+>  package/uclibc/uclibc.mk | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-> index 5c383400ff..cb867ba0dc 100644
-> --- a/package/sofia-sip/sofia-sip.mk
-> +++ b/package/sofia-sip/sofia-sip.mk
-> @@ -30,7 +30,7 @@ SOFIA_SIP_CONF_OPTS += \
->  	--without-openssl
->  endif
->  
+> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+> index 3d253d93bc..61bdbd50a0 100644
+> --- a/package/uclibc/uclibc.mk
+> +++ b/package/uclibc/uclibc.mk
+> @@ -205,7 +205,7 @@ endif
+>  #
+>  # Debug
+>  #
 > -ifeq ($(BR2_ENABLE_DEBUG),y)
 > +ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
->  SOFIA_SIP_CONF_OPTS += --enable-ndebug
 
- Actually, the logic was inverted here (already wrong in the current situation):
---enable-ndebug should be given when RUNTIME_DEBUG is *not* set.
+ This one I'm not so sure... In UClibc, we don't (want to) enforce the -g/-O
+options as strictly. In fact, we don't pass them down into uClibc at all. And
+indeed, the DODEBUG option mostly controls debug symbols and optimisation. The
+only "runtime debugging" difference that I can see are:
 
- However, I think we should define -DNDEBUG in TARGET_CPPFLAGS, so it wouldn't
-be necessary to pass it explicitly here (--enable-ndebug does nothing more than
-defining NDEBUG).
+- different way of handling SSP errors;
+- debug messages in linuxthreads.
 
+ So I don't think this patch should be applied.
 
  Regards,
  Arnout
 
->  endif
->  
+
+>  define UCLIBC_DEBUG_CONFIG
+>  	$(call KCONFIG_ENABLE_OPT,DODEBUG)
+>  endef
 > 
