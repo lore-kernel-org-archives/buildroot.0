@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 25 May 2021 14:27:42 +0200
-Subject: [Buildroot] [PATCHv3 07/15] package/boost: use
+Date: Tue, 25 May 2021 14:27:43 +0200
+Subject: [Buildroot] [PATCHv3 08/15] package/oracle-mysql: use
  BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
 In-Reply-To: <20210525122750.5022-1-patrickdepinguin@gmail.com>
 References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
-Message-ID: <20210525122750.5022-8-patrickdepinguin@gmail.com>
+Message-ID: <20210525122750.5022-9-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,21 +21,21 @@ logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/boost/boost.mk | 2 +-
+ package/oracle-mysql/oracle-mysql.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 8d745ecc72..e72ddf897c 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -95,7 +95,7 @@ BOOST_OPTS += --no-cmake-config \
- 	     toolset=gcc \
- 	     threading=multi \
- 	     abi=$(BOOST_ABI) \
--	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release)
-+	     variant=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release)
+diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
+index ccfa40cfb1..e7d6354ed8 100644
+--- a/package/oracle-mysql/oracle-mysql.mk
++++ b/package/oracle-mysql/oracle-mysql.mk
+@@ -95,7 +95,7 @@ ORACLE_MYSQL_CONF_OPTS += \
  
- ifeq ($(BR2_sparc64),y)
- BOOST_OPTS += architecture=sparc instruction-set=ultrasparc
+ # Debugging is only available for the server, so no need for
+ # this if-block outside of the server if-block
+-ifeq ($(BR2_ENABLE_DEBUG),y)
++ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
+ ORACLE_MYSQL_CONF_OPTS += --with-debug=full
+ else
+ ORACLE_MYSQL_CONF_OPTS += --without-debug
 -- 
 2.26.3
