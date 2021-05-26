@@ -1,50 +1,54 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 26 May 2021 22:06:24 +0200
-Subject: [Buildroot] [PATCH 0/3] Riscv32 gcc bug 93532 workaround
-In-Reply-To: <cf8e196a-a9a6-74d3-76ad-dbe98a86b00a@mind.be>
-References: <20200203165946.50232-1-giulio.benetti@benettiengineering.com>
- <cf8e196a-a9a6-74d3-76ad-dbe98a86b00a@mind.be>
-Message-ID: <402ebd21-9ba4-18e9-c1c9-c839975c55d7@benettiengineering.com>
+From: Siddharth Menon <siddharth.menon@motional.com>
+Date: Wed, 26 May 2021 16:06:41 -0400
+Subject: [Buildroot] http://sources.buildroot.net outage
+In-Reply-To: <mailman.18583.1622059078.203266.buildroot@busybox.net>
+References: <mailman.18583.1622059078.203266.buildroot@busybox.net>
+Message-ID: <CACFsnY0pcjds_Z8+jEV1pmE_60xA1wFmJ+yq17oQ1Ymb1mzGWA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi,
 
-On 5/26/21 8:43 PM, Arnout Vandecappelle wrote:
->   Hi Giulio,
-> 
-> On 03/02/2020 17:59, Giulio Benetti wrote:
->> Following Microblaze experience on gcc ICE and hangs let's treat the same
->> way Riscv32 gcc bugs. So let's introduce gcc bug already reported and
->> work around failing packages using -O0 optimization flash since no other
->> workarounds worked(disable -g, trying -O1).
->>
->> Giulio Benetti (3):
->>    toolchain: introduce BR2_TOOLCHAIN_HAS_GCC_BUG_93532
->>    package/bullet: fix build failure due to gcc bug 93532
->>    package/lmbench: fix build failure due to gcc bug 93532
-> 
->   This series has languished on patchwork for a long time. Since then, we've
-> updated our autobuilders to GCC 9 for RISCV32 so we no longer see the issue.
-> 
->   Since RISCV is still relatively new, we can kind of assume people will use a
-> recent toolchain as well.
-> 
->   Therefore, I propose to drop this series rather than introducing complexity
-> that benefits nobody.
-> 
->   I've marked the series as Rejected in patchwork. Feel free to reopen if there's
-> a reason to.
+Some of our CI jobs are failing because it looks like
+http://sources.buildroot.net
+<https://urldefense.com/v3/__http://sources.buildroot.net__;!!OUh6yQBS5Rss!s2U8npqgKhNTD6J6DwpxoUix6K0uHbN3P5QfE7RAvseO8G_3gFCzmKfmSaTRYCKPpcpbPA$>
+is experiencing an outage:
+[image: image.png]
+I couldn't find any outage reports. Is this something that can be resolved
+soon?
 
-I totally agree, those bugs never showed up anymore since I've submitted 
-those patches, so it's ok for me.
+There seem to be other links broken in my image which is why the build is
+using the backup URL:
+[image: image.png]
 
-Thank you
+Sincerely,
 
-Best regards
+- Sid Menon
+
 -- 
-Giulio Benetti
-Benetti Engineering sas
+This email contains information belonging to Motional AD LLC or its 
+affiliates and may contain confidential, proprietary, copyrighted and/or 
+privileged information. Any unauthorized review, use, reliance, disclosure, 
+distribution or copying is prohibited. If you are not the intended 
+recipient, immediately destroy all copies of the original email and any 
+attachments and contact the sender by reply email.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210526/1bb7ec95/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: image.png
+Type: image/png
+Size: 140564 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210526/1bb7ec95/attachment-0002.png>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: image.png
+Type: image/png
+Size: 77857 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210526/1bb7ec95/attachment-0003.png>
