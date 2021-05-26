@@ -1,243 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 26 May 2021 22:05:50 +0200
-Subject: [Buildroot] [PATCH 1/2] package/mupdf: new package.
-In-Reply-To: <20200207093705.32687-2-raphael.melotte@essensium.com>
-References: <20200207093705.32687-1-raphael.melotte@essensium.com>
- <20200207093705.32687-2-raphael.melotte@essensium.com>
-Message-ID: <d5c3870f-a7a3-da10-6fdd-eb588df78d18@mind.be>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 26 May 2021 22:06:24 +0200
+Subject: [Buildroot] [PATCH 0/3] Riscv32 gcc bug 93532 workaround
+In-Reply-To: <cf8e196a-a9a6-74d3-76ad-dbe98a86b00a@mind.be>
+References: <20200203165946.50232-1-giulio.benetti@benettiengineering.com>
+ <cf8e196a-a9a6-74d3-76ad-dbe98a86b00a@mind.be>
+Message-ID: <402ebd21-9ba4-18e9-c1c9-c839975c55d7@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Applied to next with some changes.
+Hi Arnout,
 
-On 07/02/2020 10:37, Rapha?l M?lotte wrote:
-> MuPDF is a lightweight PDF, XPS, and E-book viewer.
+On 5/26/21 8:43 PM, Arnout Vandecappelle wrote:
+>   Hi Giulio,
 > 
-> Note: some packages, like PyMuPDF, depend on mupdf's libraries, hence
-> the patch.
+> On 03/02/2020 17:59, Giulio Benetti wrote:
+>> Following Microblaze experience on gcc ICE and hangs let's treat the same
+>> way Riscv32 gcc bugs. So let's introduce gcc bug already reported and
+>> work around failing packages using -O0 optimization flash since no other
+>> workarounds worked(disable -g, trying -O1).
+>>
+>> Giulio Benetti (3):
+>>    toolchain: introduce BR2_TOOLCHAIN_HAS_GCC_BUG_93532
+>>    package/bullet: fix build failure due to gcc bug 93532
+>>    package/lmbench: fix build failure due to gcc bug 93532
 > 
-> Signed-off-by: Rapha?l M?lotte <raphael.melotte@mind.be>
-
- This sign-off wasn't needed. I removed it.
-
-> Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
-> ---
->  DEVELOPERS                                    |  1 +
->  package/Config.in                             |  1 +
->  ...-Makefile-add-an-install_libs-target.patch | 41 ++++++++++++
->  package/mupdf/Config.in                       | 15 +++++
->  package/mupdf/mupdf.hash                      |  8 +++
->  package/mupdf/mupdf.mk                        | 62 +++++++++++++++++++
->  6 files changed, 128 insertions(+)
->  create mode 100644 package/mupdf/0001-Makefile-add-an-install_libs-target.patch
->  create mode 100644 package/mupdf/Config.in
->  create mode 100644 package/mupdf/mupdf.hash
->  create mode 100644 package/mupdf/mupdf.mk
+>   This series has languished on patchwork for a long time. Since then, we've
+> updated our autobuilders to GCC 9 for RISCV32 so we no longer see the issue.
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 5f1e37a063..9c527c3625 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1930,6 +1930,7 @@ F:	package/paho-mqtt-cpp/
->  
->  N:	Rapha?l M?lotte <raphael.melotte@essensium.com>
->  F:	package/jbig2dec/
-> +F:	package/mupdf/
->  
->  N:	R?mi R?rolle <remi.rerolle@gmail.com>
->  F:	package/libfreeimage/
-> diff --git a/package/Config.in b/package/Config.in
-> index b2f315ae69..df29673221 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -351,6 +351,7 @@ comment "X applications"
->  	source "package/gtkperf/Config.in"
->  	source "package/leafpad/Config.in"
->  	source "package/midori/Config.in"
-> +	source "package/mupdf/Config.in"
->  	source "package/nodm/Config.in"
->  	source "package/pcmanfm/Config.in"
->  	source "package/qt-webkit-kiosk/Config.in"
-> diff --git a/package/mupdf/0001-Makefile-add-an-install_libs-target.patch b/package/mupdf/0001-Makefile-add-an-install_libs-target.patch
-> new file mode 100644
-> index 0000000000..9cb5a2fec9
-> --- /dev/null
-> +++ b/package/mupdf/0001-Makefile-add-an-install_libs-target.patch
-> @@ -0,0 +1,41 @@
-> +From 0989f13ecbc2155b05da0cb091801d32d750d2d4 Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?=
-> + <raphael.melotte@essensium.com>
-> +Date: Thu, 29 Aug 2019 09:51:02 +0200
-> +Subject: [PATCH] Makefile: add an install_libs target.
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +This allows to install only the library files (if you need pymupdf but
-> +not mupdf binaries for example).
-> +
-> +Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
-
- Did you send this patch upstream?
-
-> +---
-> + Makefile | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index c5bc541ac..e14f88526 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -322,7 +322,7 @@ libs: $(INSTALL_LIBS)
-> + tools: $(TOOL_APPS)
-> + apps: $(TOOL_APPS) $(VIEW_APPS)
-> + 
-> +-install: libs apps
-> ++install_libs:
-> + 	install -d $(DESTDIR)$(incdir)/mupdf
-> + 	install -d $(DESTDIR)$(incdir)/mupdf/fitz
-> + 	install -d $(DESTDIR)$(incdir)/mupdf/pdf
-> +@@ -333,6 +333,7 @@ install: libs apps
-> + 	install -d $(DESTDIR)$(libdir)
-> + 	install -m 644 $(INSTALL_LIBS) $(DESTDIR)$(libdir)
-> + 
-> ++install: libs apps install_libs
-> + 	install -d $(DESTDIR)$(bindir)
-> + 	install -m 755 $(TOOL_APPS) $(VIEW_APPS) $(DESTDIR)$(bindir)
-> + 
-> +-- 
-> +2.21.0
-> +
-> diff --git a/package/mupdf/Config.in b/package/mupdf/Config.in
-> new file mode 100644
-> index 0000000000..d66cd0edd4
-> --- /dev/null
-> +++ b/package/mupdf/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_MUPDF
-> +	bool "mupdf"
-> +	depends on BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_FREETYPE
-> +	select BR2_PACKAGE_HARFBUZZ
-
- You forgot to propagate the dependencies of harfbuzz. I fixed that.
-
-> +	select BR2_PACKAGE_JBIG2DEC
-> +	select BR2_PACKAGE_JPEG
-> +	select BR2_PACKAGE_LCMS2
-> +	select BR2_PACKAGE_OPENJPEG
-> +	select BR2_PACKAGE_XLIB_LIBX11
-> +	select BR2_PACKAGE_ZLIB
-> +	help
-> +	  MuPDF is a lightweight PDF, XPS, and E-book viewer.
-> +
-> +	  https://www.mupdf.com/index.html
-> diff --git a/package/mupdf/mupdf.hash b/package/mupdf/mupdf.hash
-> new file mode 100644
-> index 0000000000..27ae860cdd
-> --- /dev/null
-> +++ b/package/mupdf/mupdf.hash
-> @@ -0,0 +1,8 @@
-> +# From https://mupdf.com/downloads/index.html:
-> +sha1 18f069b7cc125e53f541163ac305c588c94dea97 mupdf-1.14.0-source.tar.gz
-
- This should have been 1.16. I fixed that.
-
-> +
-> +# Locally computed:
-> +sha256 64d537895641b711737cc58fe762481b07ea71d1506e8bd8a13434e093b0068d  mupdf-1.16.0-source.tar.gz
-> +
-> +# Hash for license files:
-> +sha256 57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  COPYING
-> diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-> new file mode 100644
-> index 0000000000..27cc9e5ed9
-> --- /dev/null
-> +++ b/package/mupdf/mupdf.mk
-> @@ -0,0 +1,62 @@
-> +################################################################################
-> +#
-> +# mudpf
-> +#
-> +################################################################################
-> +
-> +MUPDF_VERSION = 1.16.0
-
- You'll get weekly mails to remind you to update to 1.18.0 :-)
-
-> +MUPDF_SOURCE = mupdf-$(MUPDF_VERSION)-source.tar.gz
-
- There's also a significantly smaller .xz. We prefer that.
-
-> +MUPDF_SITE = https://mupdf.com/downloads/archive
-> +MUPDF_LICENSE = AGPL-3.0+
-> +MUPDF_LICENSE_FILES = COPYING
-> +MUPDF_INSTALL_STAGING = YES
-> +MUPDF_DEPENDENCIES = \
-> +	freetype \
-> +	harfbuzz \
-> +	host-pkgconf \
-> +	jbig2dec jpeg \
-> +	lcms2 openjpeg \
-> +	xlib_libX11 \
-> +	zlib
-> +
-> +MUPDF_PKG_CONFIG_PACKAGES = \
-> +	freetype2 \
-> +	harfbuzz \
-> +	libjpeg \
-> +	zlib
-> +
-> +MUPDF_CFLAGS = $(TARGET_CFLAGS)\
-
- Weird line splitting, and there should a a space before the backslash. I fixed
-that.
-
-> +	`$(PKG_CONFIG_HOST_BINARY) --cflags $(MUPDF_PKG_CONFIG_PACKAGES)`\
-> +	-fPIC # -fPIC is needed because the Makefile doesn't append it.
-> +
-> +MUPDF_LDFLAGS = $(TARGET_LDFLAGS)\
-> +	`$(PKG_CONFIG_HOST_BINARY) --libs $(MUPDF_PKG_CONFIG_PACKAGES)`
-> +
-> +# mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
-> +# with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
-> +MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
-> +	XCFLAGS="$(MUPDF_CFLAGS)" \
-> +	XLIBS="$(MUPDF_LDFLAGS)" \
-> +	USE_SYSTEM_LIBS=yes
-> +
-> +# Modern versions of mupdf depend on OpenGL,
-> +# we disable it because it may not be available:
-> +define MUPDF_DISABLE_OPENGL
-
- I guess it would be OK to use GLUT if freeglut is selected, so maybe this
-should be put inside ifneq ($(BR2_PACKAGE_FREEGLUT),y) ?
-
-> +	sed -i 's/HAVE_GLUT := yes/HAVE_GLUT := no/g' $(@D)/Makerules
-> +endef
-> +
-> +MUPDF_POST_EXTRACT_HOOKS = MUPDF_DISABLE_OPENGL
-
- We do patching in a post-patch hook, not post-extract. I fixed that.
-
- Regards,
- Arnout
-
-> +
-> +define MUPDF_BUILD_CMDS
-> +	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) all
-> +endef
-> +
-> +define MUPDF_INSTALL_STAGING_CMDS
-> +	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" prefix="/usr" install_libs
-> +endef
-> +
-> +define MUPDF_INSTALL_TARGET_CMDS
-> +	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" prefix="/usr" install
-> +endef
-> +
-> +$(eval $(generic-package))
+>   Since RISCV is still relatively new, we can kind of assume people will use a
+> recent toolchain as well.
 > 
+>   Therefore, I propose to drop this series rather than introducing complexity
+> that benefits nobody.
+> 
+>   I've marked the series as Rejected in patchwork. Feel free to reopen if there's
+> a reason to.
+
+I totally agree, those bugs never showed up anymore since I've submitted 
+those patches, so it's ok for me.
+
+Thank you
+
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
