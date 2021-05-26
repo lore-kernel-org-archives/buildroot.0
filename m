@@ -1,93 +1,186 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 26 May 2021 20:45:36 +0200
-Subject: [Buildroot] [PATCH 0/5] [RFC] Introduce cross-bin directory
-In-Reply-To: <a18e0834-cec0-5de4-a6c5-48a5f4c94035@mind.be>
-References: <20200204142456.1537358-1-arnout@mind.be>
- <a18e0834-cec0-5de4-a6c5-48a5f4c94035@mind.be>
-Message-ID: <203dc233-85a2-f9d1-680c-52e7887d7250@mind.be>
+Date: Wed, 26 May 2021 21:11:53 +0200
+Subject: [Buildroot] [PATCH] New board: pine64+
+In-Reply-To: <20191229214821.15301-1-avraham.shukron@gmail.com>
+References: <20191229214821.15301-1-avraham.shukron@gmail.com>
+Message-ID: <e054c335-a67a-40aa-4c14-73a726efece8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Avi,
 
+ One and a half years after you submitted this patch, you're probably not too
+motivated to follow up on it... Still, I have some feedback. I've marked the
+patch as Changes Requested in patchwork.
 
-On 04/02/2020 16:15, Arnout Vandecappelle wrote:
+On 29/12/2019 22:48, Avi Shukron wrote:
+> The pine64+ is a variant of the original pine64 with 1/2 GB RAM and
+> GbE phy.
 > 
+> The pine64+ has a distinct dts file in both mainline kernel and uboot,
+> thus it cannot be supported with the existing pine64_defconfig.
 > 
-> On 04/02/2020 15:24, Arnout Vandecappelle (Essensium/Mind) wrote:
->> This series is the start of a "cross-bin" directory that I've mentioned
->> a couple of times already.
->>
->> The idea is that host-tools that are meant for cross-building but don't
->> encode the cross-target in their name can be put in this directory, and
->> we put this directory in front of PATH for cross-compilation. For
->> example, the pkg-config wrapper is really a cross-compilation wrapper.
->> To be able to support building of host tools with it, we need to add
->> environment variables to force host compilation in HOST_CONFIGURE_OPTS.
->> By moving the pkg-config wrapper to the cross-bin directory, we can
->> avoid that: for cross-compilation (i.e. target packages), the cross-bin
->> dir is put in front of PATH, so the pkg-config wrapper for target is
->> found. For native compilation (i.e. host packages), the cross-bin dir
->> is *not* put in PATH, so the normal pkg-config configuration will be
->> used.
->>
->> This series does not do that yet for pkg-config itself. It is only done
->> for python and python3. The idea is to start with something a little
->> bit less far-reaching that pkg-config. Also, the python3 change is
->> needed for meson packages that build python modules from C code (e.g.
->> recent python-gobject). These need to have _PYTHON_SYSCONFIGDATA_NAME
->> set in the environment, but we can't just export that unconditionally
->> even for target packages because sometimes (e.g. in libglib2) meson
->> builds native python modules as part of the build and those should
->> *not* have _PYTHON_SYSCONFIGDATA_NAME set to the target name... The
->> python3 wrapper nicely solves this.
->>
->> The python2 wrapper is added as well for symmetry, and because it
->> allows us to simplify the inner-python-package definitions.
->>
->> This series is posted as an RFC, but it can actually be applied as is.
->> It is a requirement for many packages that use the newly-added
->> gobject-introspection (e.g. gstreamer1, python-gobject).
-
- In the end, it seems this series was not really that important for
-gobject-introspection. And it turns out not to work as well as I hoped to begin
-with.
-
- Therefore, I've marked it as Rejected in patchwork.
-
+> The board is added with mainline ATF, Uboot and kernel support, all at
+> the latest (or almost) version.
 > 
->  Yann noticed that he has posted something similar/related three years ago:
+> The new defconfig for the board was tested and booted successfully with
+> serial console access + console output to HDMI. Network interface eth0
+> is working properly and configured with DHCP at boot time.
 > 
-> http://lists.busybox.net/pipermail/buildroot/2015-December/147891.html
+> Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
+> ---
+>  board/pine64/pine64-plus/boot.cmd     |  6 +++
+>  board/pine64/pine64-plus/genimage.cfg | 39 +++++++++++++++++++
+>  board/pine64/pine64-plus/readme.txt   | 55 +++++++++++++++++++++++++++
+>  configs/pine64_plus_defconfig         | 35 +++++++++++++++++
+>  4 files changed, 135 insertions(+)
+>  create mode 100644 board/pine64/pine64-plus/boot.cmd
+>  create mode 100644 board/pine64/pine64-plus/genimage.cfg
+>  create mode 100644 board/pine64/pine64-plus/readme.txt
+>  create mode 100644 configs/pine64_plus_defconfig
+> 
+> diff --git a/board/pine64/pine64-plus/boot.cmd b/board/pine64/pine64-plus/boot.cmd
+> new file mode 100644
+> index 0000000000..511111e2ee
+> --- /dev/null
+> +++ b/board/pine64/pine64-plus/boot.cmd
+> @@ -0,0 +1,6 @@
+> +setenv bootargs console=tty0 console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+> +
+> +fatload mmc 0 $kernel_addr_r Image
+> +fatload mmc 0 $fdt_addr_r sun50i-a64-pine64-plus.dtb
+> +
+> +booti $kernel_addr_r - $fdt_addr_r
+> diff --git a/board/pine64/pine64-plus/genimage.cfg b/board/pine64/pine64-plus/genimage.cfg
+> new file mode 100644
+> index 0000000000..60dac9d882
+> --- /dev/null
+> +++ b/board/pine64/pine64-plus/genimage.cfg
+> @@ -0,0 +1,39 @@
+> +image boot.vfat {
+> +	vfat {
+> +		files = {
+> +			"Image",
+> +			"sun50i-a64-pine64-plus.dtb",
+> +			"boot.scr"
+> +		}
+> +	}
+> +	size = 64M
+> +}
+> +
+> +image sdcard.img {
+> +	hdimage {
+> +	}
+> +
+> +	partition spl {
+> +		in-partition-table = "no"
+> +		image = "sunxi-spl.bin"
+> +		offset = 8192
+> +	}
+> +
+> +	partition u-boot {
+> +		in-partition-table = "no"
+> +		image = "u-boot.itb"
+> +		offset = 40K
+> +		size = 1M # 1MB - 40K
 
- Maybe another attempt in 2025 then :-)
+ I guess you copied the comment from somewhere - 1M is not 1MB - 40K :-) Hm,
+apparently that comment is wrong in quite a lot of genimage.cfg files... Anyway,
+let's not propagate the madness!
+
+> +	}
+> +
+> +	partition boot {
+> +		partition-type = 0xC
+> +		bootable = "true"
+> +		image = "boot.vfat"
+
+ Modern upstream U-Boot generally supports using /boot in the ext4. Any reason
+not to use that? (It's OK to do it like this even if it's just because "that's
+what the wiki page says".) Similarly, modern devices generally use a GPT
+partition table.
+
+> +	}
+> +
+> +	partition rootfs {
+> +		partition-type = 0x83
+> +		image = "rootfs.ext4"
+> +	}
+> +}
+
+[snip]
+> diff --git a/configs/pine64_plus_defconfig b/configs/pine64_plus_defconfig
+> new file mode 100644
+> index 0000000000..d1b267b64e
+> --- /dev/null
+> +++ b/configs/pine64_plus_defconfig
+> @@ -0,0 +1,35 @@
+> +BR2_aarch64=y
+
+ Please explicitly set BR2_cortex_a53=y
+
+ Also, it's nice if you beautify the defconfig and split it in sections. See
+e.g. pine64_defconfig.
+
+> +BR2_ARM_FPU_VFPV4=y
+> +BR2_CCACHE=y
+
+ We don't use ccache in our defconfigs. Defconfigs are supposed to be minimal.
+
+> +BR2_TOOLCHAIN_EXTERNAL=y
+
+ We use an internal toolchain (with uClibc) unless there's a *very* good reason
+not to.
+
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64+"
+> +BR2_SYSTEM_DHCP="eth0"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pine64-plus/genimage.cfg"
+> +BR2_LINUX_KERNEL=y
+
+ Always use BR2_LINUX_KERNEL_CUSTOM_VERSION=y and use an explicit *tested*
+kernel version. Otherwise, when the default kernel version is bumped in
+Buildroot, the board may suddenly break.
+
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-pine64-plus"
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="100M"
+
+ Is there a reason to make a larger rootfs? We normally only do that for configs
+which have large extra requirements.
+
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG=y
+
+ Is there a reason to turn on debugging?
+
 
  Regards,
  Arnout
 
+
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pine64_plus"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
+> +BR2_TARGET_UBOOT_BOOT_SCRIPT=y
+> +BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/pine64/pine64-plus/boot.cmd"
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
 > 
-> 
->  Regards,
->  Arnout
-> 
->>
->> Arnout Vandecappelle (5):
->>   package/Makefile.in: add HOST_BIN_CROSS
->>   package/python3: install wrapper in HOST_BIN_CROSS
->>   package/python: install wrapper in HOST_BIN_CROSS
->>   package/pkg-python: rely on python wrapper in HOST_BIN_CROSS
->>   package/pkg-meson: use TARGET_MAKE_ENV in configure
->>
->>  package/Makefile.in               |  5 ++++-
->>  package/pkg-meson.mk              |  2 +-
->>  package/pkg-python.mk             | 22 +++-------------------
->>  package/python/python-wrapper.in  | 10 ++++++++++
->>  package/python/python.mk          | 17 ++++++++++++++---
->>  package/python3/python-wrapper.in | 24 ++++++++++++++++++++++++
->>  package/python3/python3.mk        | 17 ++++++++++++++---
->>  7 files changed, 70 insertions(+), 27 deletions(-)
->>  create mode 100644 package/python/python-wrapper.in
->>  create mode 100644 package/python3/python-wrapper.in
->>
