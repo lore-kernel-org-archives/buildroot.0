@@ -1,135 +1,218 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 26 May 2021 22:04:36 +0200
-Subject: [Buildroot] [git commit branch/next] package/python-pymupdf: new
- package.
-Message-ID: <20210526194129.ABB6B83AF4@busybox.osuosl.org>
+Date: Wed, 26 May 2021 21:47:50 +0200
+Subject: [Buildroot] [git commit branch/next] package/mupdf: new package.
+Message-ID: <20210526194129.A19D283A79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71f7fc8a27af383d3307945bf6e880491cb74bd4
+commit: https://git.buildroot.net/buildroot/commit/?id=9806302851feea83fd41c60e8ffb0855a7b4e706
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Python bindings for the PDF rendering library MuPDF.
+MuPDF is a lightweight PDF, XPS, and E-book viewer.
+
+Note: some packages, like PyMuPDF, depend on mupdf's libraries, hence
+the patch.
 
 Signed-off-by: Rapha??l M??lotte <raphael.melotte@essensium.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 [Arnout:
  - propagate harfbuzz dependencies;
- - add comment to mupdf to keep versions in sync;
- - clarify license situation + lack of license file]
+ - correct version number in hash file;
+ - patch on post-patch hook instead of post-extract;
+ - nicer line splitting]
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/mupdf/mupdf.mk                     |  1 +
- package/python-pymupdf/Config.in           | 21 +++++++++++++++++++++
- package/python-pymupdf/python-pymupdf.hash |  3 +++
- package/python-pymupdf/python-pymupdf.mk   | 26 ++++++++++++++++++++++++++
- 6 files changed, 53 insertions(+)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../0001-Makefile-add-an-install_libs-target.patch | 41 ++++++++++++++
+ package/mupdf/Config.in                            | 23 ++++++++
+ package/mupdf/mupdf.hash                           |  8 +++
+ package/mupdf/mupdf.mk                             | 64 ++++++++++++++++++++++
+ 6 files changed, 138 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 2a7a64ce15..a0a9cebfe6 100644
+index 845089736b..2a7a64ce15 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2254,6 +2254,7 @@ F:	package/mupdf/
+@@ -2250,6 +2250,7 @@ F:	package/bitwise/
+ 
+ N:	Rapha??l M??lotte <raphael.melotte@essensium.com>
+ F:	package/jbig2dec/
++F:	package/mupdf/
  F:	package/python-boto3/
  F:	package/python-botocore/
  F:	package/python-jmespath/
-+F:	package/python-pymupdf/
- F:	package/python-s3transfer/
- 
- N:	Refik Tuzakli <tuzakli.refik@gmail.com>
 diff --git a/package/Config.in b/package/Config.in
-index c30ceb03b4..e42f579494 100644
+index 4dac63ab90..c30ceb03b4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1138,6 +1138,7 @@ menu "External python modules"
- 	source "package/python-pylibftdi/Config.in"
- 	source "package/python-pylru/Config.in"
- 	source "package/python-pymodbus/Config.in"
-+	source "package/python-pymupdf/Config.in"
- 	source "package/python-pymysql/Config.in"
- 	source "package/python-pynacl/Config.in"
- 	source "package/python-pyopenssl/Config.in"
-diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-index 6058b85792..5a905f7903 100644
---- a/package/mupdf/mupdf.mk
-+++ b/package/mupdf/mupdf.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
- 
-+# python-pymupdf's version must match exactly mupdf's version
- MUPDF_VERSION = 1.16.0
- MUPDF_SOURCE = mupdf-$(MUPDF_VERSION)-source.tar.gz
- MUPDF_SITE = https://mupdf.com/downloads/archive
-diff --git a/package/python-pymupdf/Config.in b/package/python-pymupdf/Config.in
+@@ -375,6 +375,7 @@ comment "X applications"
+ 	source "package/gtkperf/Config.in"
+ 	source "package/leafpad/Config.in"
+ 	source "package/midori/Config.in"
++	source "package/mupdf/Config.in"
+ 	source "package/nodm/Config.in"
+ 	source "package/pcmanfm/Config.in"
+ 	source "package/qt-webkit-kiosk/Config.in"
+diff --git a/package/mupdf/0001-Makefile-add-an-install_libs-target.patch b/package/mupdf/0001-Makefile-add-an-install_libs-target.patch
 new file mode 100644
-index 0000000000..cd4c8cfcbb
+index 0000000000..9cb5a2fec9
 --- /dev/null
-+++ b/package/python-pymupdf/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_PYTHON_PYMUPDF
-+	bool "python-pymupdf"
-+	depends on BR2_INSTALL_LIBSTDCPP # mupdf -> harfbuzz
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mupdf -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # mupdf -> harfbuzz
++++ b/package/mupdf/0001-Makefile-add-an-install_libs-target.patch
+@@ -0,0 +1,41 @@
++From 0989f13ecbc2155b05da0cb091801d32d750d2d4 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?=
++ <raphael.melotte@essensium.com>
++Date: Thu, 29 Aug 2019 09:51:02 +0200
++Subject: [PATCH] Makefile: add an install_libs target.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This allows to install only the library files (if you need pymupdf but
++not mupdf binaries for example).
++
++Signed-off-by: Rapha??l M??lotte <raphael.melotte@essensium.com>
++---
++ Makefile | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index c5bc541ac..e14f88526 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -322,7 +322,7 @@ libs: $(INSTALL_LIBS)
++ tools: $(TOOL_APPS)
++ apps: $(TOOL_APPS) $(VIEW_APPS)
++ 
++-install: libs apps
+++install_libs:
++ 	install -d $(DESTDIR)$(incdir)/mupdf
++ 	install -d $(DESTDIR)$(incdir)/mupdf/fitz
++ 	install -d $(DESTDIR)$(incdir)/mupdf/pdf
++@@ -333,6 +333,7 @@ install: libs apps
++ 	install -d $(DESTDIR)$(libdir)
++ 	install -m 644 $(INSTALL_LIBS) $(DESTDIR)$(libdir)
++ 
+++install: libs apps install_libs
++ 	install -d $(DESTDIR)$(bindir)
++ 	install -m 755 $(TOOL_APPS) $(VIEW_APPS) $(DESTDIR)$(bindir)
++ 
++-- 
++2.21.0
++
+diff --git a/package/mupdf/Config.in b/package/mupdf/Config.in
+new file mode 100644
+index 0000000000..dc296b3e8a
+--- /dev/null
++++ b/package/mupdf/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_MUPDF
++	bool "mupdf"
++	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
 +	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_MUPDF
++	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_HARFBUZZ
++	select BR2_PACKAGE_JBIG2DEC
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LCMS2
++	select BR2_PACKAGE_OPENJPEG
++	select BR2_PACKAGE_XLIB_LIBX11
 +	select BR2_PACKAGE_ZLIB
 +	help
-+	  Python bindings for the PDF rendering library MuPDF.
++	  MuPDF is a lightweight PDF, XPS, and E-book viewer.
 +
-+	  https://github.com/pymupdf/PyMuPDF
++	  https://www.mupdf.com/index.html
 +
-+comment "python-pymupdf needs Xorg"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_PACKAGE_XORG7
-+
-+comment "python-pymupdf needs a toolchain w/ C++, gcc >= 4.8"
++comment "mupdf needs a toolchain w/ C++, gcc >= 4.8"
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
 +	depends on !BR2_INSTALL_LIBSTDCPP || \
 +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/python-pymupdf/python-pymupdf.hash b/package/python-pymupdf/python-pymupdf.hash
+diff --git a/package/mupdf/mupdf.hash b/package/mupdf/mupdf.hash
 new file mode 100644
-index 0000000000..6729c6b91b
+index 0000000000..ec4893046d
 --- /dev/null
-+++ b/package/python-pymupdf/python-pymupdf.hash
-@@ -0,0 +1,3 @@
-+# md5, sha256 from https://pypi.org/pypi/pymupdf/json
-+md5	0e924bbb7364ba63df65d33fee9656f0  PyMuPDF-1.16.0.tar.gz
-+sha256	1a6cc5b8b0fb9aa16bfa453fdfed445398f00d2556e78d90ba54cdce8d900857  python-pymupdf-1.16.0.tar.gz
-diff --git a/package/python-pymupdf/python-pymupdf.mk b/package/python-pymupdf/python-pymupdf.mk
++++ b/package/mupdf/mupdf.hash
+@@ -0,0 +1,8 @@
++# From https://mupdf.com/downloads/index.html:
++sha1 18f069b7cc125e53f541163ac305c588c94dea97 mupdf-1.16.0-source.tar.gz
++
++# Locally computed:
++sha256 64d537895641b711737cc58fe762481b07ea71d1506e8bd8a13434e093b0068d  mupdf-1.16.0-source.tar.gz
++
++# Hash for license files:
++sha256 57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  COPYING
+diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
 new file mode 100644
-index 0000000000..9f8d1744b1
+index 0000000000..6058b85792
 --- /dev/null
-+++ b/package/python-pymupdf/python-pymupdf.mk
-@@ -0,0 +1,26 @@
++++ b/package/mupdf/mupdf.mk
+@@ -0,0 +1,64 @@
 +################################################################################
 +#
-+# python-pymupdf
++# mudpf
 +#
 +################################################################################
 +
-+# python-pymupdf's version must match exactly mupdf's version
-+PYTHON_PYMUPDF_VERSION = 1.16.0
-+PYTHON_PYMUPDF_SOURCE = PyMuPDF-$(PYTHON_PYMUPDF_VERSION).tar.gz
-+PYTHON_PYMUPDF_SITE = https://files.pythonhosted.org/packages/d2/da/692102b6e6868a57d1dc7f98d07413116a02493b3b49a798dcd6f676d368
-+PYTHON_PYMUPDF_SETUP_TYPE = distutils
-+PYTHON_PYMUPDF_LICENSE = GPL-3.0, AGPL-3.0+ (code generated from mupdf)
-+# No license file included in pip, but it's present on github
-+PYTHON_PYMUPDF_DEPENDENCIES = mupdf zlib
++MUPDF_VERSION = 1.16.0
++MUPDF_SOURCE = mupdf-$(MUPDF_VERSION)-source.tar.gz
++MUPDF_SITE = https://mupdf.com/downloads/archive
++MUPDF_LICENSE = AGPL-3.0+
++MUPDF_LICENSE_FILES = COPYING
++MUPDF_INSTALL_STAGING = YES
++MUPDF_DEPENDENCIES = \
++	freetype \
++	harfbuzz \
++	host-pkgconf \
++	jbig2dec jpeg \
++	lcms2 openjpeg \
++	xlib_libX11 \
++	zlib
 +
-+PYTHON_PYMUPDF_ENV = CFLAGS="-I$(STAGING_DIR)/usr/include/mupdf"
++MUPDF_PKG_CONFIG_PACKAGES = \
++	freetype2 \
++	harfbuzz \
++	libjpeg \
++	zlib
 +
-+# We need to remove the original paths as we provide them in the CFLAGS:
-+define PYTHON_PYMUPDF_REMOVE_PATHS
-+	sed -i "s:\/usr\/include\/mupdf::g" $(@D)/setup.py
-+	sed -i "s:\/usr\/local\/include\/mupdf::g" $(@D)/setup.py
++MUPDF_CFLAGS = \
++	$(TARGET_CFLAGS) \
++	`$(PKG_CONFIG_HOST_BINARY) --cflags $(MUPDF_PKG_CONFIG_PACKAGES)` \
++	-fPIC # -fPIC is needed because the Makefile doesn't append it.
++
++MUPDF_LDFLAGS = \
++	$(TARGET_LDFLAGS) \
++	`$(PKG_CONFIG_HOST_BINARY) --libs $(MUPDF_PKG_CONFIG_PACKAGES)`
++
++# mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
++# with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
++MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
++	XCFLAGS="$(MUPDF_CFLAGS)" \
++	XLIBS="$(MUPDF_LDFLAGS)" \
++	USE_SYSTEM_LIBS=yes
++
++# Modern versions of mupdf depend on OpenGL,
++# we disable it because it may not be available:
++define MUPDF_DISABLE_OPENGL
++	sed -i 's/HAVE_GLUT := yes/HAVE_GLUT := no/g' $(@D)/Makerules
 +endef
 +
-+PYTHON_PYMUPDF_POST_PATCH_HOOKS = PYTHON_PYMUPDF_REMOVE_PATHS
++MUPDF_POST_PATCH_HOOKS = MUPDF_DISABLE_OPENGL
 +
-+$(eval $(python-package))
++define MUPDF_BUILD_CMDS
++	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) all
++endef
++
++define MUPDF_INSTALL_STAGING_CMDS
++	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" prefix="/usr" install_libs
++endef
++
++define MUPDF_INSTALL_TARGET_CMDS
++	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" prefix="/usr" install
++endef
++
++$(eval $(generic-package))
