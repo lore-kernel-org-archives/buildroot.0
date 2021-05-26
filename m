@@ -1,218 +1,199 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 26 May 2021 21:47:50 +0200
-Subject: [Buildroot] [git commit branch/next] package/mupdf: new package.
-Message-ID: <20210526194129.A19D283A79@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 26 May 2021 22:48:56 +0200
+Subject: [Buildroot] [PATCH] package/nginx: fix NGINX pidfile handling
+ systemd
+In-Reply-To: <20210521144149.35725-1-matthew.weber@collins.com>
+References: <20210521144149.35725-1-matthew.weber@collins.com>
+Message-ID: <20210526204856.GP3208066@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9806302851feea83fd41c60e8ffb0855a7b4e706
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Matthew, All,
 
-MuPDF is a lightweight PDF, XPS, and E-book viewer.
+On 2021-05-21 09:41 -0500, Matthew Weber via buildroot spake thusly:
+> Based on https://git.launchpad.net/ubuntu/+source/nginx/plain/debian/patches/nginx-fix-pidfile.patch
+> Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/nginx/+bug/1581864
+> Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=876365
+> 
+> Upstream bug: (deferred fix)
+> https://trac.nginx.org/nginx/ticket/1897?cversion=0&cnum_hist=2
 
-Note: some packages, like PyMuPDF, depend on mupdf's libraries, hence
-the patch.
+So, basically, upstream refused to fix that bug, because (re-ordered so
+that what I believe most important gets listed first):
 
-Signed-off-by: Rapha??l M??lotte <raphael.melotte@essensium.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Arnout:
- - propagate harfbuzz dependencies;
- - correct version number in hash file;
- - patch on post-patch hook instead of post-extract;
- - nicer line splitting]
----
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../0001-Makefile-add-an-install_libs-target.patch | 41 ++++++++++++++
- package/mupdf/Config.in                            | 23 ++++++++
- package/mupdf/mupdf.hash                           |  8 +++
- package/mupdf/mupdf.mk                             | 64 ++++++++++++++++++++++
- 6 files changed, 138 insertions(+)
+  - the believe the Ubuntu patch (which this is based on) is incorrect:
+    "The patch suggested in the Ubuntu bugtracker to write pidfile in
+    the parent process looks wrong. In particular, it does so with the
+    wrong umask, which is set in the child process only."
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 845089736b..2a7a64ce15 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2250,6 +2250,7 @@ F:	package/bitwise/
- 
- N:	Rapha??l M??lotte <raphael.melotte@essensium.com>
- F:	package/jbig2dec/
-+F:	package/mupdf/
- F:	package/python-boto3/
- F:	package/python-botocore/
- F:	package/python-jmespath/
-diff --git a/package/Config.in b/package/Config.in
-index 4dac63ab90..c30ceb03b4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -375,6 +375,7 @@ comment "X applications"
- 	source "package/gtkperf/Config.in"
- 	source "package/leafpad/Config.in"
- 	source "package/midori/Config.in"
-+	source "package/mupdf/Config.in"
- 	source "package/nodm/Config.in"
- 	source "package/pcmanfm/Config.in"
- 	source "package/qt-webkit-kiosk/Config.in"
-diff --git a/package/mupdf/0001-Makefile-add-an-install_libs-target.patch b/package/mupdf/0001-Makefile-add-an-install_libs-target.patch
-new file mode 100644
-index 0000000000..9cb5a2fec9
---- /dev/null
-+++ b/package/mupdf/0001-Makefile-add-an-install_libs-target.patch
-@@ -0,0 +1,41 @@
-+From 0989f13ecbc2155b05da0cb091801d32d750d2d4 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?=
-+ <raphael.melotte@essensium.com>
-+Date: Thu, 29 Aug 2019 09:51:02 +0200
-+Subject: [PATCH] Makefile: add an install_libs target.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+This allows to install only the library files (if you need pymupdf but
-+not mupdf binaries for example).
-+
-+Signed-off-by: Rapha??l M??lotte <raphael.melotte@essensium.com>
-+---
-+ Makefile | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index c5bc541ac..e14f88526 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -322,7 +322,7 @@ libs: $(INSTALL_LIBS)
-+ tools: $(TOOL_APPS)
-+ apps: $(TOOL_APPS) $(VIEW_APPS)
-+ 
-+-install: libs apps
-++install_libs:
-+ 	install -d $(DESTDIR)$(incdir)/mupdf
-+ 	install -d $(DESTDIR)$(incdir)/mupdf/fitz
-+ 	install -d $(DESTDIR)$(incdir)/mupdf/pdf
-+@@ -333,6 +333,7 @@ install: libs apps
-+ 	install -d $(DESTDIR)$(libdir)
-+ 	install -m 644 $(INSTALL_LIBS) $(DESTDIR)$(libdir)
-+ 
-++install: libs apps install_libs
-+ 	install -d $(DESTDIR)$(bindir)
-+ 	install -m 755 $(TOOL_APPS) $(VIEW_APPS) $(DESTDIR)$(bindir)
-+ 
-+-- 
-+2.21.0
-+
-diff --git a/package/mupdf/Config.in b/package/mupdf/Config.in
-new file mode 100644
-index 0000000000..dc296b3e8a
---- /dev/null
-+++ b/package/mupdf/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_MUPDF
-+	bool "mupdf"
-+	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_HARFBUZZ
-+	select BR2_PACKAGE_JBIG2DEC
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LCMS2
-+	select BR2_PACKAGE_OPENJPEG
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  MuPDF is a lightweight PDF, XPS, and E-book viewer.
-+
-+	  https://www.mupdf.com/index.html
-+
-+comment "mupdf needs a toolchain w/ C++, gcc >= 4.8"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/mupdf/mupdf.hash b/package/mupdf/mupdf.hash
-new file mode 100644
-index 0000000000..ec4893046d
---- /dev/null
-+++ b/package/mupdf/mupdf.hash
-@@ -0,0 +1,8 @@
-+# From https://mupdf.com/downloads/index.html:
-+sha1 18f069b7cc125e53f541163ac305c588c94dea97 mupdf-1.16.0-source.tar.gz
-+
-+# Locally computed:
-+sha256 64d537895641b711737cc58fe762481b07ea71d1506e8bd8a13434e093b0068d  mupdf-1.16.0-source.tar.gz
-+
-+# Hash for license files:
-+sha256 57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  COPYING
-diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-new file mode 100644
-index 0000000000..6058b85792
---- /dev/null
-+++ b/package/mupdf/mupdf.mk
-@@ -0,0 +1,64 @@
-+################################################################################
-+#
-+# mudpf
-+#
-+################################################################################
-+
-+MUPDF_VERSION = 1.16.0
-+MUPDF_SOURCE = mupdf-$(MUPDF_VERSION)-source.tar.gz
-+MUPDF_SITE = https://mupdf.com/downloads/archive
-+MUPDF_LICENSE = AGPL-3.0+
-+MUPDF_LICENSE_FILES = COPYING
-+MUPDF_INSTALL_STAGING = YES
-+MUPDF_DEPENDENCIES = \
-+	freetype \
-+	harfbuzz \
-+	host-pkgconf \
-+	jbig2dec jpeg \
-+	lcms2 openjpeg \
-+	xlib_libX11 \
-+	zlib
-+
-+MUPDF_PKG_CONFIG_PACKAGES = \
-+	freetype2 \
-+	harfbuzz \
-+	libjpeg \
-+	zlib
-+
-+MUPDF_CFLAGS = \
-+	$(TARGET_CFLAGS) \
-+	`$(PKG_CONFIG_HOST_BINARY) --cflags $(MUPDF_PKG_CONFIG_PACKAGES)` \
-+	-fPIC # -fPIC is needed because the Makefile doesn't append it.
-+
-+MUPDF_LDFLAGS = \
-+	$(TARGET_LDFLAGS) \
-+	`$(PKG_CONFIG_HOST_BINARY) --libs $(MUPDF_PKG_CONFIG_PACKAGES)`
-+
-+# mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
-+# with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
-+MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
-+	XCFLAGS="$(MUPDF_CFLAGS)" \
-+	XLIBS="$(MUPDF_LDFLAGS)" \
-+	USE_SYSTEM_LIBS=yes
-+
-+# Modern versions of mupdf depend on OpenGL,
-+# we disable it because it may not be available:
-+define MUPDF_DISABLE_OPENGL
-+	sed -i 's/HAVE_GLUT := yes/HAVE_GLUT := no/g' $(@D)/Makerules
-+endef
-+
-+MUPDF_POST_PATCH_HOOKS = MUPDF_DISABLE_OPENGL
-+
-+define MUPDF_BUILD_CMDS
-+	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) all
-+endef
-+
-+define MUPDF_INSTALL_STAGING_CMDS
-+	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" prefix="/usr" install_libs
-+endef
-+
-+define MUPDF_INSTALL_TARGET_CMDS
-+	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" prefix="/usr" install
-+endef
-+
-+$(eval $(generic-package))
+  - they believe the synchronisation described in systemd's doc is too
+    complex:
+    "The patch to synchronize things as recommended bysystemd's
+    daemon(7) manpage [...] wasn't committed as the change is considered
+    too complex for the problem it solves"
+
+  - they believe the message is innocuous (I suppose because systemd
+    will loop to TERM then KILL all proceses in a cgroup, thus actually
+    and eventually ending the nginx daemon).
+
+  - a then-future version of systemd should include support for that
+    situation with new the new unit directive "Type=pid-file"
+
+ - a few various lesser interesting (to us) reasons
+
+However, there seems to be an easy workaround: complement the systemd
+unit with:
+
+    ExecStartPost=/bin/sleep 0.1
+
+(or even a bigger number if we want to support slow systems).
+
+Given that the patch on the code was rejected by upstream, I am wary to
+bundle it in Buildroot, because we will supposedly have to carry it
+forever. In this respect, tweaking the ystemd unit seems a leser burden.
+
+However, what about the systemd situation: is the reference
+Type=pid-file feautre now implemented? Do we have it in the version
+packaged in Buildroot?
+
+If so, maybe we could then tweak the unit to make use of it, instead of
+the sleep workaround?
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Matthew Weber <matthew.weber@collins.com>
+> ---
+>  .../0010-Fix-NGINX-pidfile-handling.patch     | 105 ++++++++++++++++++
+>  1 file changed, 105 insertions(+)
+>  create mode 100644 package/nginx/0010-Fix-NGINX-pidfile-handling.patch
+> 
+> diff --git a/package/nginx/0010-Fix-NGINX-pidfile-handling.patch b/package/nginx/0010-Fix-NGINX-pidfile-handling.patch
+> new file mode 100644
+> index 0000000000..9a50118434
+> --- /dev/null
+> +++ b/package/nginx/0010-Fix-NGINX-pidfile-handling.patch
+> @@ -0,0 +1,105 @@
+> +From 2491379370059c7b9a2b956a49c90a9de55f5dcb Mon Sep 17 00:00:00 2001
+> +From: Tj <ubuntu@iam.tj>
+> +Date: Fri, 21 May 2021 09:35:53 -0500
+> +Subject: [PATCH] Fix NGINX pidfile handling
+> +
+> +Based on https://git.launchpad.net/ubuntu/+source/nginx/plain/debian/patches/nginx-fix-pidfile.patch
+> +Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/nginx/+bug/1581864
+> +Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=876365
+> +Last-Update: 2020-06-24
+> +
+> +Upstream bug: (deferred fix)
+> +https://trac.nginx.org/nginx/ticket/1897?cversion=0&cnum_hist=2
+> +
+> +Signed-off-by: Tj <ubuntu@iam.tj>
+> +Signed-off-by: Matthew Weber <matthew.weber@collins.com>
+> +---
+> + src/core/nginx.c         | 24 +++++++++++++++++++++---
+> + src/os/unix/ngx_daemon.c |  8 ++++++--
+> + 2 files changed, 27 insertions(+), 5 deletions(-)
+> +
+> +diff --git a/src/core/nginx.c b/src/core/nginx.c
+> +index 9fcb0eb..083eba1 100644
+> +--- a/src/core/nginx.c
+> ++++ b/src/core/nginx.c
+> +@@ -338,14 +338,21 @@ main(int argc, char *const *argv)
+> +         ngx_process = NGX_PROCESS_MASTER;
+> +     }
+> + 
+> ++    /* tell-tale to detect if this is parent or child process */
+> ++    ngx_int_t child_pid = NGX_BUSY;
+> ++
+> + #if !(NGX_WIN32)
+> + 
+> +     if (ngx_init_signals(cycle->log) != NGX_OK) {
+> +         return 1;
+> +     }
+> + 
+> ++    /* tell-tale that this code has been executed */
+> ++    child_pid--;
+> ++
+> +     if (!ngx_inherited && ccf->daemon) {
+> +-        if (ngx_daemon(cycle->log) != NGX_OK) {
+> ++        child_pid = ngx_daemon(cycle->log);
+> ++        if (child_pid == NGX_ERROR) {
+> +             return 1;
+> +         }
+> + 
+> +@@ -358,8 +365,19 @@ main(int argc, char *const *argv)
+> + 
+> + #endif
+> + 
+> +-    if (ngx_create_pidfile(&ccf->pid, cycle->log) != NGX_OK) {
+> +-        return 1;
+> ++    /* If ngx_daemon() returned the child's PID in the parent process
+> ++     * after the fork() set ngx_pid to the child_pid, which gets
+> ++     * written to the PID file, then exit.
+> ++     * For NGX_WIN32 always write the PID file
+> ++     * For others, only write it from the parent process */
+> ++    if (child_pid < NGX_OK || child_pid > NGX_OK) {
+> ++	ngx_pid = child_pid > NGX_OK ? child_pid : ngx_pid;
+> ++        if (ngx_create_pidfile(&ccf->pid, cycle->log) != NGX_OK) {
+> ++            return 1;
+> ++	}
+> ++    }
+> ++    if (child_pid > NGX_OK) {
+> ++        exit(0);
+> +     }
+> + 
+> +     if (ngx_log_redirect_stderr(cycle) != NGX_OK) {
+> +diff --git a/src/os/unix/ngx_daemon.c b/src/os/unix/ngx_daemon.c
+> +index 385c49b..3719854 100644
+> +--- a/src/os/unix/ngx_daemon.c
+> ++++ b/src/os/unix/ngx_daemon.c
+> +@@ -7,14 +7,17 @@
+> + 
+> + #include <ngx_config.h>
+> + #include <ngx_core.h>
+> ++#include <unistd.h>
+> + 
+> + 
+> + ngx_int_t
+> + ngx_daemon(ngx_log_t *log)
+> + {
+> +     int  fd;
+> ++    /* retain the return value for passing back to caller */
+> ++    pid_t pid_child = fork();
+> + 
+> +-    switch (fork()) {
+> ++    switch (pid_child) {
+> +     case -1:
+> +         ngx_log_error(NGX_LOG_EMERG, log, ngx_errno, "fork() failed");
+> +         return NGX_ERROR;
+> +@@ -23,7 +26,8 @@ ngx_daemon(ngx_log_t *log)
+> +         break;
+> + 
+> +     default:
+> +-        exit(0);
+> ++        /* let caller do the exit() */
+> ++        return pid_child;
+> +     }
+> + 
+> +     ngx_parent = ngx_pid;
+> +-- 
+> +2.17.1
+> +
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
