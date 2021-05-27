@@ -1,50 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 May 2021 17:21:48 +0200
-Subject: [Buildroot] [git commit] package/paho-mqtt-c: security bump to
- version 1.3.9
-Message-ID: <20210527145308.5648787C50@busybox.osuosl.org>
+Date: Thu, 27 May 2021 17:22:04 +0200
+Subject: [Buildroot] [git commit] package/mpv: security bump to version
+ 0.33.1
+Message-ID: <20210527145308.79FE38135B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9dad1ef144077b92a8524a3311b1d598a306fdfb
+commit: https://git.buildroot.net/buildroot/commit/?id=34a387b5f68d2cc259d4fe641c128232edb6da62
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Old security issue not fixed:
-https://github.com/eclipse/paho.mqtt.c/issues/1084
+Fix CVE-2021-30145: A format string vulnerability in mpv through 0.33.0
+allows user-assisted remote attackers to achieve code execution via a
+crafted m3u playlist file.
 
-https://github.com/eclipse/paho.mqtt.c/milestone/16?closed=1
+https://github.com/mpv-player/mpv/releases/tag/v0.33.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
+ package/mpv/mpv.hash | 2 +-
+ package/mpv/mpv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 5223757f0f..4cdedfbf9a 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  4920ff685344cdb0272568bc4414dcf48fcdfc4a98c78b1f3ca49c38417bf391  paho-mqtt-c-1.3.8.tar.gz
-+sha256  386c9b5fa1cf6d0d516db12d57fd8f6a410dd0fdc5e9a2da870aae437a2535ed  paho-mqtt-c-1.3.9.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index b9b4f217fb..68b58f2e02 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
+index 548a0f0159..0c7eb5f8a5 100644
+--- a/package/mpv/mpv.hash
++++ b/package/mpv/mpv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f1b9baf5dc2eeaf376597c28a6281facf6ed98ff3d567e3955c95bf2459520b4  mpv-0.33.0.tar.gz
++sha256  100a116b9f23bdcda3a596e9f26be3a69f166a4f1d00910d1789b6571c46f3a9  mpv-0.33.1.tar.gz
+ sha256  a99d7b0625a0566271aad6de694e52eafd566db024f9516720d526c680d3ee30  LICENSE.GPL
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index ca3b8c878a..5713b98e8e 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PAHO_MQTT_C_VERSION = 1.3.8
-+PAHO_MQTT_C_VERSION = 1.3.9
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+-MPV_VERSION = 0.33.0
++MPV_VERSION = 0.33.1
+ MPV_SITE = $(call github,mpv-player,mpv,v$(MPV_VERSION))
+ MPV_DEPENDENCIES = \
+ 	host-pkgconf ffmpeg libass zlib \
