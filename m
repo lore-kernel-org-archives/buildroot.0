@@ -1,83 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 27 May 2021 22:37:21 +0200
-Subject: [Buildroot] [Bug 13586] New: grub failure with BR2_OPTIMIZE_3
-In-Reply-To: <638b4284c5ac4639b393d2ade58994dc@AcuMS.aculab.com>
-References: <bug-13586-163@https.bugs.busybox.net/>
- <CANabuZcix3uT0SwKotJoPBAu6WvZ_SVQ99y=navBARH=GRKZ9w@mail.gmail.com>
- <20210527154435.GV3208066@scaer>
- <638b4284c5ac4639b393d2ade58994dc@AcuMS.aculab.com>
-Message-ID: <20210527203721.GA2788252@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 27 May 2021 22:49:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libkcapi: fix build on riscv32
+Message-ID: <20210527204904.480560-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-David, All,
+Fix the following build failure on riscv32:
 
-On 2021-05-27 16:28 +0000, David Laight spake thusly:
-> From: Yann E. MORIN
-> > On 2021-05-27 17:33 +0200, Andreas Hilse via buildroot spake thusly:
-> > > following up on this because I also encountered this error.
-> > >
-> > > There is a bug report on the grub bug tracker by Tony Battersby who
-> > > bisected the error down to a certain patch/bugfix:
-> > > https://savannah.gnu.org/bugs/?60458
-> > >
-> > > The mentioned patch has also been included in buildroot as
-> > > boot/grub2/0132-kern-parser-Fix-a-stack-buffer-overflow.patch with
-> > > commit e840f2d469.
-> > >
-> > > I can also confirm, that removing that patch fixes the issue of grub
-> > > loop of endless rebooting.
-> > However, this patch is a security fix, so reverting it is not so nice
-> > either.
-> > 
-> > Since it seems that using another optimisation level works arorund the
-> > issue, I would be more inclined to change that, e.g. to -Os, as the
-> > reporter seems to imply it works for them.
-> > 
-> > Would you please send a patch with such a workaround, please?
-> 
-> Hmmmm if the code fails to compile with -O2 it is probably broken.
-> (Unlike -O3 which tends to be a compiler bug!)
-> 
-> So they may have replaced one security bug with another one.
+lib/internal.h:331:20: error: '__NR_io_getevents' undeclared (first use in this function); did you mean 'io_getevents'?
+  331 |     return syscall(__NR_io_getevents, ctx, min, max, events, timeout);
+      |                    ^~~~~~~~~~~~~~
 
-Maybe... However, I prefer we keep the patch that is actually known for
-fixing a security issue, and workaround the breakage it introduces,
-rather than revert it just because it "may have replaced one security
-bug with another one."
+Fixes:
+ - http://autobuild.buildroot.org/results/c828d4330a8888fe8db4299dc2f20759947f329f
 
-If/when there is a report that an actual security issue is intriduced in
-that patch, then we can reconsider, and evaluate which issue we want to
-sacrifice.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...f-__NR_io_getevents-when-not-defined.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/libkcapi/0001-Disable-use-of-__NR_io_getevents-when-not-defined.patch
 
-Of course, if there is a better fix, then we can use that (I've looked
-at their git tree, there is nothing I could identify).
-
-In the meantime, I stand by my position that we should just work around
-the isue by building with -Os, because at the very least it makes for a
-bootable system again.
-
-> The patch is too big to eyeball for errors.
-
-Indeed.
-
-> I did manage to build grub with AVX support.
-> Spent ages working out why it wouldn't boot a kernel on an Atom.
-> (I knew userspace was broken.)
-> It is probably worth passing -mno-avx when building grub.
-
-But this seems like a totally different issue, is it not?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libkcapi/0001-Disable-use-of-__NR_io_getevents-when-not-defined.patch b/package/libkcapi/0001-Disable-use-of-__NR_io_getevents-when-not-defined.patch
+new file mode 100644
+index 0000000000..20aa75b741
+--- /dev/null
++++ b/package/libkcapi/0001-Disable-use-of-__NR_io_getevents-when-not-defined.patch
+@@ -0,0 +1,42 @@
++From 455c4938f5822c017c7ff79dd2dca638b6410923 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Sun, 15 Nov 2020 18:05:48 -0800
++Subject: [PATCH] Disable use of __NR_io_getevents when not defined
++
++Architectures like riscv32 do not define this syscall, therefore return
++ENOSYS on such architectures
++
++Upstream-Status: Pending
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Stephan Mueller <smueller@chronox.de>
++[Retrieved from:
++https://github.com/smuellerDD/libkcapi/commit/455c4938f5822c017c7ff79dd2dca638b6410923]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/internal.h | 11 +++++++++--
++ 1 file changed, 9 insertions(+), 2 deletions(-)
++
++diff --git a/lib/internal.h b/lib/internal.h
++index 1237827..f765461 100644
++--- a/lib/internal.h
+++++ b/lib/internal.h
++@@ -325,10 +325,17 @@ static inline int io_submit(aio_context_t ctx, long n,  struct iocb **iocb)
++     return syscall(__NR_io_submit, ctx, n, iocb);
++ }
++ 
++-static inline int io_getevents(aio_context_t ctx, long min, long max,
++-            struct io_event *events, struct timespec *timeout)
+++static inline int io_getevents(__attribute__((unused)) aio_context_t ctx,
+++            __attribute__((unused)) long min,
+++            __attribute__((unused)) long max,
+++            __attribute__((unused)) struct io_event *events,
+++            __attribute__((unused)) struct timespec *timeout)
++ {
+++#ifdef __NR_io_getevents
++     return syscall(__NR_io_getevents, ctx, min, max, events, timeout);
+++#else
+++    return -ENOSYS;
+++#endif
++ }
++ 
++ /************************************************************
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
