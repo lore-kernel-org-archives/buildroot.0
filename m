@@ -1,39 +1,34 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 27 May 2021 16:35:03 +0300
-Subject: [Buildroot] [PATCH next 1/1] package/weston: enable libseat
- launcher if seatd is enabled
-Message-ID: <20210527133503.412330-1-aperez@igalia.com>
+Date: Thu, 27 May 2021 16:37:52 +0300
+Subject: [Buildroot] [PATCH next 1/1] package/wlroots: check for
+ BR2_PACKAGE_SEATD
+Message-ID: <20210527133752.413075-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable building Weston's libseat launcher, now that the seatd package
-is available.
+Fix the wlroots packaging by checking for the correct variable to
+determine whether seatd is being built.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/weston/weston.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/wlroots/wlroots.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index f59963bf2e..6afc5e269c 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -25,6 +25,13 @@ else
- WESTON_CONF_OPTS += -Dsimple-clients=
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index 38ddba743d..0696d037df 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -46,7 +46,7 @@ else
+ WLROOTS_CONF_OPTS += -Dx11-backend=disabled -Dxwayland=disabled
  endif
  
+-ifeq ($(BR2_PACKAGE_SEATD_LIBSEAT),y)
 +ifeq ($(BR2_PACKAGE_SEATD),y)
-+WESTON_CONF_OPTS += -Dlauncher-libseat=true
-+WESTON_DEPENDENCIES += seatd
-+else
-+WESTON_CONF_OPTS += -Dlauncher-libseat=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_SYSTEMD),yy)
- WESTON_CONF_OPTS += -Dlauncher-logind=true
- WESTON_DEPENDENCIES += dbus systemd
+ WLROOTS_CONF_OPTS += -Dlibseat=enabled
+ WLROOTS_DEPENDENCIES += seatd
+ else
 -- 
 2.31.1
