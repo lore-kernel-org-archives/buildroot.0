@@ -1,48 +1,69 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 27 May 2021 20:49:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uftrace: needs dynamic library
-Message-ID: <20210527184921.15596-1-fontaine.fabrice@gmail.com>
+Date: Thu, 27 May 2021 22:03:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcamera: fix build on sparc v8
+Message-ID: <20210527200354.478341-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since its addition in commit 09c97972d9f90b69cfc36f9ffe9e22c13daf9307,
-uftrace always build dynamic library which will raise the following
-build failure:
-
-  LINK     libmcount/libmcount.so
-/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/9.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/9.3.0/crtbeginT.o: relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
+Fix build failure with sparc v8 which is raised since commit
+bd9b7b092cf34dc065a4b40268c18a9fe319f5e4 due to
+https://git.linuxtv.org/libcamera.git/commit/?id=a8310248fc26cc1e1b791af5e9394c1d20bee269
 
 Fixes:
- - http://autobuild.buildroot.org/results/980bb38c6417bd48828379677762382030c5b28a
+ - http://autobuild.buildroot.org/results/d0726b2253f1f3d006e057f3b32c646c4b9b5f7a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/uftrace/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ ...ra-add-dependencies-to-libcamera_dep.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch
 
-diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
-index 6de9b840ba..98ddb7cbfb 100644
---- a/package/uftrace/Config.in
-+++ b/package/uftrace/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_UFTRACE
- 	bool "uftrace"
- 	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_ARGP_STANDALONE if \
- 	       BR2_TOOLCHAIN_USES_UCLIBC || \
- 	       BR2_TOOLCHAIN_USES_MUSL
-@@ -22,6 +23,6 @@ config BR2_PACKAGE_UFTRACE
- 
- 	  https://github.com/namhyung/uftrace
- 
--comment "uftrace needs a toolchain w/ threads"
-+comment "uftrace needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch b/package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch
+new file mode 100644
+index 0000000000..b83fe93a47
+--- /dev/null
++++ b/package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch
+@@ -0,0 +1,38 @@
++From 1a2fd4526e0858827f47a7e9359df34f0d0e3108 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 27 May 2021 21:00:21 +0200
++Subject: [PATCH] libcamera: add dependencies to libcamera_dep
++
++Add dependencies to libcamera_dep to avoid the following build failure
++with qcam on sparc v8 which is raised since commit
++a8310248fc26cc1e1b791af5e9394c1d20bee269:
++
++FAILED: src/qcam/qcam
++/srv/storage/autobuild/run/instance-0/output-1/host/bin/sparc-linux-g++  -o src/qcam/qcam src/qcam/qcam.p/meson-generated_.._qt5-feathericons_qrc.cpp.o src/qcam/qcam.p/meson-generated_moc_main_window.cpp.o src/qcam/qcam.p/meson-generated_moc_viewfinder_qt.cpp.o src/qcam/qcam.p/.._cam_options.cpp.o src/qcam/qcam.p/.._cam_stream_options.cpp.o src/qcam/qcam.p/format_converter.cpp.o src/qcam/qcam.p/main.cpp.o src/qcam/qcam.p/main_window.cpp.o src/qcam/qcam.p/message_handler.cpp.o src/qcam/qcam.p/viewfinder_qt.cpp.o src/qcam/qcam.p/dng_writer.cpp.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -Wshadow -include config.h '-Wl,-rpath,$ORIGIN/../libcamera' -Wl,-rpath-link,/srv/storage/autobuild/run/instance-0/output-1/build/libcamera-3a1f67a8031ac5ad96a11d5dc8b2e8976290497b/build/src/libcamera -Wl,--start-group src/libcamera/libcamera.so /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Core.so /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Gui.so /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Widgets.so /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libtiff.so -Wl,--end-group
++/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: src/qcam/qcam.p/main_window.cpp.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
++/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
++
++Fixes:
++ - http://autobuild.buildroot.org/results/d0726b2253f1f3d006e057f3b32c646c4b9b5f7a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://bugs.libcamera.org/show_bug.cgi?id=39]
++---
++ src/libcamera/meson.build | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/libcamera/meson.build b/src/libcamera/meson.build
++index cc2b8669..af3533ad 100644
++--- a/src/libcamera/meson.build
+++++ b/src/libcamera/meson.build
++@@ -160,6 +160,7 @@ libcamera_dep = declare_dependency(sources : [
++                                        libcamera_public_headers,
++                                    ],
++                                    include_directories : libcamera_includes,
+++                                   dependencies : libcamera_deps,
++                                    link_with : libcamera)
++ 
++ subdir('proxy/worker')
++-- 
++2.30.2
++
 -- 
 2.30.2
