@@ -1,40 +1,27 @@
-From: Juergen Stuber <juergen@jstuber.net>
-Date: Thu, 27 May 2021 16:51:18 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain/toolchain-external: Allow
- relative paths in BR2_TOOLCHAIN_EXTERNAL_PATH.
-Message-ID: <20210527145118.31373-1-juergen@jstuber.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 May 2021 17:22:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: security bump to
+ version 1.3.9
+In-Reply-To: <20210527060513.410423-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 27 May 2021 08:05:13 +0200")
+References: <20210527060513.410423-1-fontaine.fabrice@gmail.com>
+Message-ID: <871r9s2od3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Convert BR2_TOOLCHAIN_EXTERNAL_PATH to an absolute path when used.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Otherwise the symbolic links to the external toolchain binaries are
-not installed in host/bin when BR2_TOOLCHAIN_EXTERNAL_PATH is relative.
-This happens because TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
-changes directory into host/bin to create the symbolic links.
-From there the tools are no longer found via the relative path and
-a single symbolic link host/bin/$(prefix)-* is created instead.
+ > Old security issue not fixed:
+ > https://github.com/eclipse/paho.mqtt.c/issues/1084
 
-Signed-off-by: Juergen Stuber <juergen@jstuber.net>
----
- toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > https://github.com/eclipse/paho.mqtt.c/milestone/16?closed=1
 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 6d91cb5d1e..2b70007a34 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -68,7 +68,7 @@ TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR = $(HOST_DIR)/opt/ext-toolchain
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
- TOOLCHAIN_EXTERNAL_INSTALL_DIR = $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
- else
--TOOLCHAIN_EXTERNAL_INSTALL_DIR = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
-+TOOLCHAIN_EXTERNAL_INSTALL_DIR = $(abspath $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH)))
- endif
- 
- ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
