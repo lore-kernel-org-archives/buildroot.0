@@ -1,219 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 27 May 2021 22:49:35 +0200
-Subject: [Buildroot] [PATCH] package/nginx: fix NGINX pidfile handling
- systemd
-In-Reply-To: <20210526204856.GP3208066@scaer>
-References: <20210521144149.35725-1-matthew.weber@collins.com>
- <20210526204856.GP3208066@scaer>
-Message-ID: <a6b5f2ef-b33a-e300-9e0b-478ea2296969@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 27 May 2021 22:54:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/directfb: disable on riscv32
+Message-ID: <20210527205415.480887-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+directfb unconditionally uses __NR_futex which will raise the following
+build failure on riscv32:
 
+system.c:242:21: error: '__NR_futex' undeclared (first use in this function)
+  242 |      ret = syscall( __NR_futex, uaddr, op, val, timeout, uaddr2, val3 );
+      |                     ^~~~~~~~~~
 
-On 26/05/2021 22:48, Yann E. MORIN wrote:
-> Matthew, All,
-> 
-> On 2021-05-21 09:41 -0500, Matthew Weber via buildroot spake thusly:
->> Based on https://git.launchpad.net/ubuntu/+source/nginx/plain/debian/patches/nginx-fix-pidfile.patch
->> Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/nginx/+bug/1581864
->> Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=876365
->>
->> Upstream bug: (deferred fix)
->> https://trac.nginx.org/nginx/ticket/1897?cversion=0&cnum_hist=2
-> 
-> So, basically, upstream refused to fix that bug, because (re-ordered so
-> that what I believe most important gets listed first):
-> 
->   - the believe the Ubuntu patch (which this is based on) is incorrect:
->     "The patch suggested in the Ubuntu bugtracker to write pidfile in
->     the parent process looks wrong. In particular, it does so with the
->     wrong umask, which is set in the child process only."
-> 
->   - they believe the synchronisation described in systemd's doc is too
->     complex:
->     "The patch to synchronize things as recommended bysystemd's
->     daemon(7) manpage [...] wasn't committed as the change is considered
->     too complex for the problem it solves"
-> 
->   - they believe the message is innocuous (I suppose because systemd
->     will loop to TERM then KILL all proceses in a cgroup, thus actually
->     and eventually ending the nginx daemon).
-> 
->   - a then-future version of systemd should include support for that
->     situation with new the new unit directive "Type=pid-file"
-> 
->  - a few various lesser interesting (to us) reasons
-> 
-> However, there seems to be an easy workaround: complement the systemd
-> unit with:
-> 
->     ExecStartPost=/bin/sleep 0.1
-> 
-> (or even a bigger number if we want to support slow systems).
-> 
-> Given that the patch on the code was rejected by upstream, I am wary to
-> bundle it in Buildroot, because we will supposedly have to carry it
-> forever. In this respect, tweaking the ystemd unit seems a leser burden.
-> 
-> However, what about the systemd situation: is the reference
-> Type=pid-file feautre now implemented? Do we have it in the version
-> packaged in Buildroot?
-> 
-> If so, maybe we could then tweak the unit to make use of it, instead of
-> the sleep workaround?
+Fixes:
+ - http://autobuild.buildroot.org/results/c0f4168575fa85af933539441eea95a3b10dac91
 
- Current git master still has it in TODO, so I guess not..
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/directfb/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
- I think there was one useful comment on the Ubuntu bug [1]:
-
->>>
-As far as I can tell, this daemonization is not needed for the systemd service
-use-case. The service should be Type=simple, and 'daemon off'. The standard file
-handles get redirected by systemd anyway, and non-stop upgrade cannot be used in
-this case either. (See:
-http://nginx.org/en/docs/faq/daemon_master_process_off.html )
-<<<
-
- So I rather think we should go for that solution.
-
-
- Regards,
- Arnout
-
-[1] https://bugs.launchpad.net/ubuntu/+source/nginx/+bug/1581864/comments/7
-
-
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> Signed-off-by: Matthew Weber <matthew.weber@collins.com>
->> ---
->>  .../0010-Fix-NGINX-pidfile-handling.patch     | 105 ++++++++++++++++++
->>  1 file changed, 105 insertions(+)
->>  create mode 100644 package/nginx/0010-Fix-NGINX-pidfile-handling.patch
->>
->> diff --git a/package/nginx/0010-Fix-NGINX-pidfile-handling.patch b/package/nginx/0010-Fix-NGINX-pidfile-handling.patch
->> new file mode 100644
->> index 0000000000..9a50118434
->> --- /dev/null
->> +++ b/package/nginx/0010-Fix-NGINX-pidfile-handling.patch
->> @@ -0,0 +1,105 @@
->> +From 2491379370059c7b9a2b956a49c90a9de55f5dcb Mon Sep 17 00:00:00 2001
->> +From: Tj <ubuntu@iam.tj>
->> +Date: Fri, 21 May 2021 09:35:53 -0500
->> +Subject: [PATCH] Fix NGINX pidfile handling
->> +
->> +Based on https://git.launchpad.net/ubuntu/+source/nginx/plain/debian/patches/nginx-fix-pidfile.patch
->> +Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/nginx/+bug/1581864
->> +Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=876365
->> +Last-Update: 2020-06-24
->> +
->> +Upstream bug: (deferred fix)
->> +https://trac.nginx.org/nginx/ticket/1897?cversion=0&cnum_hist=2
->> +
->> +Signed-off-by: Tj <ubuntu@iam.tj>
->> +Signed-off-by: Matthew Weber <matthew.weber@collins.com>
->> +---
->> + src/core/nginx.c         | 24 +++++++++++++++++++++---
->> + src/os/unix/ngx_daemon.c |  8 ++++++--
->> + 2 files changed, 27 insertions(+), 5 deletions(-)
->> +
->> +diff --git a/src/core/nginx.c b/src/core/nginx.c
->> +index 9fcb0eb..083eba1 100644
->> +--- a/src/core/nginx.c
->> ++++ b/src/core/nginx.c
->> +@@ -338,14 +338,21 @@ main(int argc, char *const *argv)
->> +         ngx_process = NGX_PROCESS_MASTER;
->> +     }
->> + 
->> ++    /* tell-tale to detect if this is parent or child process */
->> ++    ngx_int_t child_pid = NGX_BUSY;
->> ++
->> + #if !(NGX_WIN32)
->> + 
->> +     if (ngx_init_signals(cycle->log) != NGX_OK) {
->> +         return 1;
->> +     }
->> + 
->> ++    /* tell-tale that this code has been executed */
->> ++    child_pid--;
->> ++
->> +     if (!ngx_inherited && ccf->daemon) {
->> +-        if (ngx_daemon(cycle->log) != NGX_OK) {
->> ++        child_pid = ngx_daemon(cycle->log);
->> ++        if (child_pid == NGX_ERROR) {
->> +             return 1;
->> +         }
->> + 
->> +@@ -358,8 +365,19 @@ main(int argc, char *const *argv)
->> + 
->> + #endif
->> + 
->> +-    if (ngx_create_pidfile(&ccf->pid, cycle->log) != NGX_OK) {
->> +-        return 1;
->> ++    /* If ngx_daemon() returned the child's PID in the parent process
->> ++     * after the fork() set ngx_pid to the child_pid, which gets
->> ++     * written to the PID file, then exit.
->> ++     * For NGX_WIN32 always write the PID file
->> ++     * For others, only write it from the parent process */
->> ++    if (child_pid < NGX_OK || child_pid > NGX_OK) {
->> ++	ngx_pid = child_pid > NGX_OK ? child_pid : ngx_pid;
->> ++        if (ngx_create_pidfile(&ccf->pid, cycle->log) != NGX_OK) {
->> ++            return 1;
->> ++	}
->> ++    }
->> ++    if (child_pid > NGX_OK) {
->> ++        exit(0);
->> +     }
->> + 
->> +     if (ngx_log_redirect_stderr(cycle) != NGX_OK) {
->> +diff --git a/src/os/unix/ngx_daemon.c b/src/os/unix/ngx_daemon.c
->> +index 385c49b..3719854 100644
->> +--- a/src/os/unix/ngx_daemon.c
->> ++++ b/src/os/unix/ngx_daemon.c
->> +@@ -7,14 +7,17 @@
->> + 
->> + #include <ngx_config.h>
->> + #include <ngx_core.h>
->> ++#include <unistd.h>
->> + 
->> + 
->> + ngx_int_t
->> + ngx_daemon(ngx_log_t *log)
->> + {
->> +     int  fd;
->> ++    /* retain the return value for passing back to caller */
->> ++    pid_t pid_child = fork();
->> + 
->> +-    switch (fork()) {
->> ++    switch (pid_child) {
->> +     case -1:
->> +         ngx_log_error(NGX_LOG_EMERG, log, ngx_errno, "fork() failed");
->> +         return NGX_ERROR;
->> +@@ -23,7 +26,8 @@ ngx_daemon(ngx_log_t *log)
->> +         break;
->> + 
->> +     default:
->> +-        exit(0);
->> ++        /* let caller do the exit() */
->> ++        return pid_child;
->> +     }
->> + 
->> +     ngx_parent = ngx_pid;
->> +-- 
->> +2.17.1
->> +
->> -- 
->> 2.17.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 20481f56da..f4d6b8cbd1 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_DIRECTFB
+ 	bool "directfb"
++	depends on !BR2_RISCV_32
+ 	depends on !BR2_STATIC_LIBS # static link issues
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+@@ -161,6 +162,7 @@ config BR2_PACKAGE_DIRECTFB_TESTS
+ endif # BR2_PACKAGE_DIRECTFB
+ 
+ comment "directfb needs a glibc or uClibc toolchain w/ C++, NPTL, gcc >= 4.5, dynamic library"
++	depends on !BR2_RISCV_32
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || BR2_TOOLCHAIN_USES_MUSL || \
+-- 
+2.30.2
