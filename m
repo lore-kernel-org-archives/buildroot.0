@@ -1,35 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 27 May 2021 15:50:40 +0300
-Subject: [Buildroot] [PATCH] package/netperf: move SITE so s.b.n
-Message-ID: <c160b9eba623c54debf9bf50d69cca4a6d6ed69e.1622119840.git.baruch@tkos.co.il>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 27 May 2021 16:35:03 +0300
+Subject: [Buildroot] [PATCH next 1/1] package/weston: enable libseat
+ launcher if seatd is enabled
+Message-ID: <20210527133503.412330-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The original site is gone.
+Enable building Weston's libseat launcher, now that the seatd package
+is available.
 
-Fixes:
-http://autobuild.buildroot.net/results/8d4a2ef5a7f50ea21b844d6cf806bb83016ae17b/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/netperf/netperf.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/weston/weston.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/netperf/netperf.mk b/package/netperf/netperf.mk
-index 8b2280830f3c..0c423249c4c9 100644
---- a/package/netperf/netperf.mk
-+++ b/package/netperf/netperf.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index f59963bf2e..6afc5e269c 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -25,6 +25,13 @@ else
+ WESTON_CONF_OPTS += -Dsimple-clients=
+ endif
  
- NETPERF_VERSION = 2.7.0
--NETPERF_SITE = ftp://ftp.netperf.org/netperf
-+NETPERF_SITE = http://sources.buildroot.net/netperf
- NETPERF_SOURCE = netperf-$(NETPERF_VERSION).tar.bz2
- # gcc 5+ defaults to gnu99 which breaks netperf
- NETPERF_CONF_ENV = \
++ifeq ($(BR2_PACKAGE_SEATD),y)
++WESTON_CONF_OPTS += -Dlauncher-libseat=true
++WESTON_DEPENDENCIES += seatd
++else
++WESTON_CONF_OPTS += -Dlauncher-libseat=false
++endif
++
+ ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_SYSTEMD),yy)
+ WESTON_CONF_OPTS += -Dlauncher-logind=true
+ WESTON_DEPENDENCIES += dbus systemd
 -- 
-2.30.2
+2.31.1
