@@ -1,64 +1,129 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 27 May 2021 23:04:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/capnproto: fix build on riscv32
-Message-ID: <20210527210402.555334-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 May 2021 23:35:31 +0200
+Subject: [Buildroot] [PATCH] package/libcurl: security bump to version 7.77.0
+Message-ID: <20210527213532.1521-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/1c1cd4775241ee57d878cad5c978413d4b4a8736
+Fixes the following security issues:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- CVE-2021-22897: schannel cipher selection surprise
+  https://curl.se/docs/CVE-2021-22897.html
+
+- CVE-2021-22898: TELNET stack contents disclosure
+  https://curl.se/docs/CVE-2021-22898.html
+
+- CVE-2021-22901: TLS session caching disaster
+  https://curl.se/docs/CVE-2021-22901.html
+
+Unconditionally disable the ldap(s) options.  These require external
+libraries, but the options were ignored if the needed libraries weren't
+available. This is now changed to be a fatal error since
+
+https://github.com/curl/curl/commit/dae382a1a1481a94b708c82d5aa9fa7253084160
+
+Additionally, add a post-7.77.0 upstream patch to fix compilation with
+bearssl.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...it-architectures-using-64-bit-time_t.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
+ ...ncorrect-const-on-variable-that-is-m.patch | 31 +++++++++++++++++++
+ package/libcurl/libcurl.hash                  |  4 +--
+ package/libcurl/libcurl.mk                    |  8 ++---
+ 3 files changed, 35 insertions(+), 8 deletions(-)
+ create mode 100644 package/libcurl/0001-bearssl-remove-incorrect-const-on-variable-that-is-m.patch
 
-diff --git a/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
+diff --git a/package/libcurl/0001-bearssl-remove-incorrect-const-on-variable-that-is-m.patch b/package/libcurl/0001-bearssl-remove-incorrect-const-on-variable-that-is-m.patch
 new file mode 100644
-index 0000000000..ce70ab8f29
+index 0000000000..e636cc9d1d
 --- /dev/null
-+++ b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
-@@ -0,0 +1,37 @@
-+From e2a05a19e9dc51287e19cc9f11fd91449219e361 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Sun, 15 Nov 2020 12:10:28 -0800
-+Subject: [PATCH] mutex: Fix build on 32-bit architectures using 64-bit time_t
++++ b/package/libcurl/0001-bearssl-remove-incorrect-const-on-variable-that-is-m.patch
+@@ -0,0 +1,31 @@
++From a03ea6223950002eba8b1ef0df3133c62f387d6b Mon Sep 17 00:00:00 2001
++From: Michael Forney <mforney@mforney.org>
++Date: Tue, 25 May 2021 23:42:07 -0700
++Subject: [PATCH] bearssl: remove incorrect const on variable that is modified
 +
-+mutex code uses SYS_futex, which it expects from system C library.
-+in glibc (/usr/include/bits/syscall.h defines it in terms of of NR_futex)
-+rv32 is using 64bit time_t from get go unlike other 32bit architectures
-+in glibc, therefore it wont have NR_futex defined but just NR_futex_time64
-+this aliases it to NR_futex so that SYS_futex is then defined for rv32
++hostname may be set to NULL later on in this function if it is an
++IP address.
 +
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+[Retrieved from:
-+https://github.com/capnproto/capnproto/commit/e2a05a19e9dc51287e19cc9f11fd91449219e361]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Closes #7133
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+ c++/src/kj/mutex.c++ | 6 ++++++
-+ 1 file changed, 6 insertions(+)
++ lib/vtls/bearssl.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/c++/src/kj/mutex.c++ b/c++/src/kj/mutex.c++
-+index c81cead7b..e1594b117 100644
-+--- a/c++/src/kj/mutex.c++
-++++ b/c++/src/kj/mutex.c++
-+@@ -39,7 +39,13 @@
-+ 
-+ #ifndef SYS_futex
-+ // Missing on Android/Bionic.
-++#ifdef __NR_futex
-+ #define SYS_futex __NR_futex
-++#elif defined(SYS_futex_time64)
-++#define SYS_futex SYS_futex_time64
-++#else
-++#error "Need working SYS_futex"
-++#endif
-+ #endif
-+ 
-+ #ifndef FUTEX_WAIT_PRIVATE
++diff --git a/lib/vtls/bearssl.c b/lib/vtls/bearssl.c
++index 7f729713d..40a5e7879 100644
++--- a/lib/vtls/bearssl.c
+++++ b/lib/vtls/bearssl.c
++@@ -300,7 +300,7 @@ static CURLcode bearssl_connect_step1(struct Curl_easy *data,
++   struct ssl_connect_data *connssl = &conn->ssl[sockindex];
++   struct ssl_backend_data *backend = connssl->backend;
++   const char * const ssl_cafile = SSL_CONN_CONFIG(CAfile);
++-  const char * const hostname = SSL_HOST_NAME();
+++  const char *hostname = SSL_HOST_NAME();
++   const bool verifypeer = SSL_CONN_CONFIG(verifypeer);
++   const bool verifyhost = SSL_CONN_CONFIG(verifyhost);
++   CURLcode ret;
++-- 
++2.20.1
++
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 9ee98f1e13..183321588f 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.76.1.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.77.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  64bb5288c39f0840c07d077e30d9052e1cbb9fa6c2dc52523824cc859e679145  curl-7.76.1.tar.xz
++sha256  0f64582c54282f31c0de9f0a1a596b182776bd4df9a4c4a2a41bbeb54f62594b  curl-7.77.0.tar.xz
+ sha256  6fd1a1c008b5ef4c4741dd188c3f8af6944c14c25afa881eb064f98fb98358e7  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index f2cfd72897..53ff9836c1 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.76.1
++LIBCURL_VERSION = 7.77.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+@@ -24,7 +24,7 @@ LIBCURL_INSTALL_STAGING = YES
+ # generate C code) isn't very useful
+ LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
+ 	--enable-hidden-symbols --with-random=/dev/urandom --disable-curldebug \
+-	--disable-libcurl-option
++	--disable-libcurl-option --disable-ldap --disable-ldaps
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ LIBCURL_CONF_OPTS += --enable-threaded-resolver
+@@ -150,8 +150,6 @@ LIBCURL_CONF_OPTS += \
+ 	--enable-dict \
+ 	--enable-gopher \
+ 	--enable-imap \
+-	--enable-ldap \
+-	--enable-ldaps \
+ 	--enable-pop3 \
+ 	--enable-rtsp \
+ 	--enable-smb \
+@@ -163,8 +161,6 @@ LIBCURL_CONF_OPTS += \
+ 	--disable-dict \
+ 	--disable-gopher \
+ 	--disable-imap \
+-	--disable-ldap \
+-	--disable-ldaps \
+ 	--disable-pop3 \
+ 	--disable-rtsp \
+ 	--disable-smb \
 -- 
-2.30.2
+2.20.1
