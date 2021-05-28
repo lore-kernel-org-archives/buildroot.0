@@ -1,106 +1,81 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 May 2021 14:38:19 +0200
-Subject: [Buildroot] [PATCH] package/nginx: add upstream CVE-2021-23017
- security fix
-In-Reply-To: <20210528092314.21886-1-peter@korsgaard.com>
-References: <20210528092314.21886-1-peter@korsgaard.com>
-Message-ID: <20210528123819.GE2788252@scaer>
+Date: Fri, 28 May 2021 15:12:52 +0200
+Subject: [Buildroot] [PATCH] package/nginx: fix NGINX pidfile handling
+ systemd
+In-Reply-To: <4f98da29-4eb3-e5af-2139-a55d6defa12e@mind.be>
+References: <20210521144149.35725-1-matthew.weber@collins.com>
+ <20210526204856.GP3208066@scaer>
+ <a6b5f2ef-b33a-e300-9e0b-478ea2296969@mind.be>
+ <20210528113959.GB2788252@scaer>
+ <4f98da29-4eb3-e5af-2139-a55d6defa12e@mind.be>
+Message-ID: <20210528131252.GF2788252@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Arnout, All,
 
-On 2021-05-28 11:23 +0200, Peter Korsgaard spake thusly:
-> Fixes the following vulnerability:
+On 2021-05-28 13:51 +0200, Arnout Vandecappelle spake thusly:
+> On 28/05/2021 13:39, Yann E. MORIN wrote:
+> > On 2021-05-27 22:49 +0200, Arnout Vandecappelle spake thusly:
+> >> On 26/05/2021 22:48, Yann E. MORIN wrote:
+> >>> On 2021-05-21 09:41 -0500, Matthew Weber via buildroot spake thusly:
+> >>>> Upstream bug: (deferred fix)
+> >>>> https://trac.nginx.org/nginx/ticket/1897?cversion=0&cnum_hist=2
+> >>> So, basically, upstream refused to fix that bug [...]
+> > [--SNIP--]
+> >>> If so, maybe we could then tweak the unit to make use of it, instead of
+> >>> the sleep workaround?
+> >>  I think there was one useful comment on the Ubuntu bug [1]:
+> >>>>>
+> >> As far as I can tell, this daemonization is not needed for the systemd service
+> >> use-case. The service should be Type=simple, and 'daemon off'. The standard file
+> >> handles get redirected by systemd anyway, and non-stop upgrade cannot be used in
+> >> this case either. (See:
+> >> http://nginx.org/en/docs/faq/daemon_master_process_off.html )
+> >> <<<
+> >>  So I rather think we should go for that solution.
+> > 
+> > Indeed, that seems an even better solution, and probably an actual fix.
 > 
-> - CVE-2021-23017: 1-byte memory overwrite in resolver
+>  Unfortunately, not so easy in practice. "daemon off" means a change in the
+> configuration file, which is typically going to be modified by the user. Also,
+> it's something that comes from nginx itself, so we'd have to patch the one that
+> gets installed by nginx (and that one will probably be overwritten anyway in an
+> overlay).
 > 
-> For more details, see the advisories:
-> https://mailman.nginx.org/pipermail/nginx-announce/2021/000300.html
-> https://www.openwall.com/lists/oss-security/2021/05/25/5
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>  Also, daemon off should only be done in systemd; sysvinit still wants nginx to
+> daemonize! So it's conditional patching, and we don't like that... Well, I guess
+> it can be done post-install with a sed script that inserts an aditional line at
+> the beginning of the file.
 
-Applied to master, thanks.
+Well, except for the overlay issue, it seems to be pretty easy to do;
+
+    diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+    index e93e802fd3..411d686cdd 100644
+    --- a/package/nginx/nginx.mk
+    +++ b/package/nginx/nginx.mk
+    @@ -314,6 +314,10 @@ endef
+     define NGINX_INSTALL_INIT_SYSTEMD
+     	$(INSTALL) -D -m 0644 package/nginx/nginx.service \
+     		$(TARGET_DIR)/usr/lib/systemd/system/nginx.service
+    +	mkdir -p $(TARGET_DIR)/etc/systemd/system/nginx.d
+    +	$(SED) '1idaemon off;' $(TARGET_DIR)/etc/nginx.conf
+    +	printf '[Service]\nType=simple\n' \
+    +		>$(TARGET_DIR)/etc/systemd/system/nginx.d/buildroot-no-daemon.conf
+     endef
+     
+     define NGINX_INSTALL_INIT_SYSV
+
+But of course, is a user provides their daemon-using config file, they'd
+be out of luck...
+
+In the end, maybe the sleep-based workaround is just good-enough?
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  ...ff-by-one-write-in-ngx_resolver_copy.patch | 39 +++++++++++++++++++
->  package/nginx/nginx.mk                        |  3 ++
->  2 files changed, 42 insertions(+)
->  create mode 100644 package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
-> 
-> diff --git a/package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch b/package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
-> new file mode 100644
-> index 0000000000..c7e354003a
-> --- /dev/null
-> +++ b/package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
-> @@ -0,0 +1,39 @@
-> +From 9f1dcb0c0473641730b871dee984016ff19d2c53 Mon Sep 17 00:00:00 2001
-> +From: Maxim Dounin <mdounin@mdounin.ru>
-> +Date: Tue, 25 May 2021 15:17:36 +0300
-> +Subject: [PATCH] Resolver: fixed off-by-one write in ngx_resolver_copy().
-> +
-> +Reported by Luis Merino, Markus Vervier, Eric Sesterhenn, X41 D-Sec GmbH.
-> +
-> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> +---
-> + src/core/ngx_resolver.c | 8 ++++----
-> + 1 file changed, 4 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/src/core/ngx_resolver.c b/src/core/ngx_resolver.c
-> +index 79390701..63b26193 100644
-> +--- a/src/core/ngx_resolver.c
-> ++++ b/src/core/ngx_resolver.c
-> +@@ -4008,15 +4008,15 @@ done:
-> +             n = *src++;
-> + 
-> +         } else {
-> ++            if (dst != name->data) {
-> ++                *dst++ = '.';
-> ++            }
-> ++
-> +             ngx_strlow(dst, src, n);
-> +             dst += n;
-> +             src += n;
-> + 
-> +             n = *src++;
-> +-
-> +-            if (n != 0) {
-> +-                *dst++ = '.';
-> +-            }
-> +         }
-> + 
-> +         if (n == 0) {
-> +-- 
-> +2.20.1
-> +
-> diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-> index 8a371a2cc8..e93e802fd3 100644
-> --- a/package/nginx/nginx.mk
-> +++ b/package/nginx/nginx.mk
-> @@ -13,6 +13,9 @@ NGINX_DEPENDENCIES = \
->  	host-pkgconf \
->  	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt)
->  
-> +# 0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
-> +NGINX_IGNORE_CVES += CVE-2021-23017
-> +
->  NGINX_CONF_OPTS = \
->  	--crossbuild=Linux::$(BR2_ARCH) \
->  	--with-cc="$(TARGET_CC)" \
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
