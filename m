@@ -1,11 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 28 May 2021 23:01:09 +0200
-Subject: [Buildroot] [PATCHv3 14/15] package/pkg-meson.mk: determine
- 'buildtype' based on BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
-In-Reply-To: <20210525122750.5022-15-patrickdepinguin@gmail.com>
+Date: Fri, 28 May 2021 23:07:34 +0200
+Subject: [Buildroot] [PATCHv3 11/15] package/sofia-sip: use
+ BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
+In-Reply-To: <CAAXf6LVGSaNNgncfR4wUo+gpLgusD+uoS8amFKeb6tiRGQ+pCg@mail.gmail.com>
 References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
- <20210525122750.5022-15-patrickdepinguin@gmail.com>
-Message-ID: <866ad257-d6e9-7dc4-98e7-e83e027f8fac@mind.be>
+ <20210525122750.5022-12-patrickdepinguin@gmail.com>
+ <0fd19bad-277f-ae7d-1928-fd4dc0bf6fcc@mind.be>
+ <CAAXf6LVGSaNNgncfR4wUo+gpLgusD+uoS8amFKeb6tiRGQ+pCg@mail.gmail.com>
+Message-ID: <b46b5074-12c3-8099-5946-de715f715a8e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,96 +16,67 @@ To: buildroot@busybox.net
 
 
 
-On 25/05/2021 14:27, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+On 28/05/2021 20:35, Thomas De Schampheleire wrote:
+> El mar, 25 may 2021 a las 23:32, Arnout Vandecappelle
+> (<arnout@mind.be>) escribi?:
+>>
+>>
+>> On 25/05/2021 14:27, Thomas De Schampheleire wrote:
+>>> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>>
+>>> BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
+>>> should have no negative effect on performance.
+>>>
+>>> Introduction of 'assert' statements, 'debug'-type builds with additional
+>>> logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
+>>>
+>>> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>> ---
+>>>  package/sofia-sip/sofia-sip.mk | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
+>>> index 5c383400ff..cb867ba0dc 100644
+>>> --- a/package/sofia-sip/sofia-sip.mk
+>>> +++ b/package/sofia-sip/sofia-sip.mk
+>>> @@ -30,7 +30,7 @@ SOFIA_SIP_CONF_OPTS += \
+>>>       --without-openssl
+>>>  endif
+>>>
+>>> -ifeq ($(BR2_ENABLE_DEBUG),y)
+>>> +ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
+>>>  SOFIA_SIP_CONF_OPTS += --enable-ndebug
+>>  Actually, the logic was inverted here (already wrong in the current situation):
+>> --enable-ndebug should be given when RUNTIME_DEBUG is *not* set.
+> Indeed, you're right. I'll add a patch to fix that first.
 > 
-> BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
-> should have no negative effect on performance.
-> 
-> Introduction of 'assert' statements, 'debug'-type builds with additional
-> logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  package/pkg-meson.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index a57820d4d2..dafad3b1eb 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -89,7 +89,7 @@ define $(2)_CONFIGURE_CMDS
->  		--prefix=/usr \
->  		--libdir=lib \
->  		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
-> -		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
-> +		--buildtype=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
+>>  However, I think we should define -DNDEBUG in TARGET_CPPFLAGS, so it wouldn't
+>> be necessary to pass it explicitly here (--enable-ndebug does nothing more than
+>> defining NDEBUG).
+> In a previous iteration I basically did that, but dropped that patch
+> because it also had effect in the toolchain wrapper,
 
- I haven't checked yet in the source code what the effect of buildtype is, nor
-have I tested it, but the documentation says:
+ No it doesn't... TARGET_CFLAGS isn't set in the toolchain wrapper. Only
+arch-specific options are there, and BR2_TARGET_OPTIMIZATION (which is intended
+for arch-specific -m flags).
 
+> which may be used
+> to build project-specific projects, and which caused compilation
+> failures when NDEBUG was unexpectedly set
 
-For setting optimization levels and
-toggling debug, you can either set the `buildtype` option, or you can
-set the `optimization` and `debug` options which give finer control
-over the same. Whichever you decide to use, the other will be deduced
-from it. For example, `-Dbuildtype=debugoptimized` is the same as
-`-Ddebug=true -Doptimization=2` and vice-versa. This table documents
-the two-way mapping:
+ If it's built by Buildroot, then of course it *is* going to be passed in
+through CFLAGS.
 
-| buildtype      | debug | optimization |
-| ---------      | ----- | ------------ |
-| plain          | false | 0            |
-| debug          | true  | 0            |
-| debugoptimized | true  | 2            |
-| release        | false | 3            |
-| minsize        | true  | s            |
+> (e.g. variables only used
+> for assert statements, which got compiled away with NDEBUG). Granted,
+> this is actually a problem in such code, but nevertheless it was my
+> reality and I expect those of others too.
 
-All other combinations of `debug` and `optimization` set `buildtype` to `'custom'`.
-
-
-So I think this should be just 'custom', regardless of RUNTIME_DEBUG.
-
-
- That said, it *is* possible that the debug option has more effect than just
-'-g'... So I checked the meson source. There are a bunch of effects.
-
-* For gcc, it just sets -g/-O options.
-
-* On windows and mac, there are a bunch of other effects but I didn't look at that.
-
-* For boost, it selects the "g" suffix if necessary - but we install without
-that suffix anyway.
-
-* For rust, it only has effect on optimisation flags. Note that we currently
-don't set optimisation flags correctly for rust, so we have something to learn
-there.
-
-* For fortran, java, cuda, it als only affects optimisation and debug flags.
-
-* There is one more relevant effect: there is an option "b_ndebug", which
-defaults to false. A project can set it to "if-release" - in that case, -DNDEBUG
-is passed if the buildtype if 'release'.
-
-
- So it sounds like setting buildtype to release in the RUNTIME_DEBUG case is the
-right thing to do. There is one caveat (but this is already the case now): it
-will force the optimisation to -O3, and I believe that that will override the
-optimisation option we set in cflags. But that's essentially what happens now
-already, so not something that needs to be addressed by this series.
-
- In the non-RUNTIME_DEBUG case, however, I don't think we should set to "debug",
-because that will add a -g option. Maybe "plain" is the best option.
-
- Alternatively, we leave buildtype alone, and instead set debug to false,
-optimization to the value corresponding to the optimisation level chosen, and
-b_ndebug to true or false based on RUNTIME_DEBUG.
-
+ If you don't want to fix the actual issue, you can always add -UNDEBUG in the
+package-specific CFLAGS or in the package build system.
 
  Regards,
  Arnout
 
->  		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
->  		-Dstrip=false \
->  		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
-> 
+> See http://patchwork.ozlabs.org/project/buildroot/patch/20210212135451.22786-3-patrickdepinguin at gmail.com/
+>    and my last comment on it.
