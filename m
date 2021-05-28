@@ -1,52 +1,133 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 May 2021 14:01:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/weston: add configuration
- options for weston shells
-In-Reply-To: <4238f9b6-4ea4-1529-e050-09db00cc0e5c@theobroma-systems.com>
-References: <20210511154006.630376-1-martin.elshuber@theobroma-systems.com>
- <20210519101415.GQ2268078@scaer>
- <4238f9b6-4ea4-1529-e050-09db00cc0e5c@theobroma-systems.com>
-Message-ID: <20210528120152.GC2788252@scaer>
+Date: Fri, 28 May 2021 14:19:33 +0200
+Subject: [Buildroot] [git commit] package/libcurl: security bump to version
+ 7.77.0
+Message-ID: <20210528115121.CA5A187A45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=eae15d62c6a857f43d6f21af9a30f38994b3efc5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-28 12:54 +0200, Martin Elshuber spake thusly:
-> On 19/05/2021 12:14, Yann E. MORIN wrote:
-> > On 2021-05-11 17:40 +0200, Martin Elshuber spake thusly:
-> >> Enable selection of used weston shells. By default all available
-> >> shells are enabled to keep the old behavior. The new configuration
-> >> options enable the user to select them individually.
-> > Don't we have to ensure that at least one is enabled, or is it valid to
-> > disable all of them?
-> I think it makes sense to allow disabling all shells, since one might
-> want to add its own, non default, implementaion.
-> I this case the user might want disable all shells that are included in
-> the weston package.
+Fixes the following security issues:
 
-I see your point. But then, people writting their own are also probably
-be writteing their entire compositor too, probably...
+- CVE-2021-22897: schannel cipher selection surprise
+  https://curl.se/docs/CVE-2021-22897.html
 
-But otherwise, you have a point anyway.
+- CVE-2021-22898: TELNET stack contents disclosure
+  https://curl.se/docs/CVE-2021-22898.html
 
-> I suggest to add a help comment:
-> help
-> ? if unsure say yes
+- CVE-2021-22901: TLS session caching disaster
+  https://curl.se/docs/CVE-2021-22901.html
 
-That has never prevented people from saying 'n' even when they don't
-know. You can't prevent anyone from shooting themselves in the foot. ;-)
+Unconditionally disable the ldap(s) options.  These require external
+libraries, but the options were ignored if the needed libraries weren't
+available. This is now changed to be a fatal error since
 
-Regards,
-Yann E. MORIN.
+https://github.com/curl/curl/commit/dae382a1a1481a94b708c82d5aa9fa7253084160
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Additionally, add a post-7.77.0 upstream patch to fix compilation with
+bearssl.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[yann.morin.1998 at free.fr: annotate the patch, that it is a backport]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...ove-incorrect-const-on-variable-that-is-m.patch | 32 ++++++++++++++++++++++
+ package/libcurl/libcurl.hash                       |  4 +--
+ package/libcurl/libcurl.mk                         |  8 ++----
+ 3 files changed, 36 insertions(+), 8 deletions(-)
+
+diff --git a/package/libcurl/0001-bearssl-remove-incorrect-const-on-variable-that-is-m.patch b/package/libcurl/0001-bearssl-remove-incorrect-const-on-variable-that-is-m.patch
+new file mode 100644
+index 0000000000..b88791fa45
+--- /dev/null
++++ b/package/libcurl/0001-bearssl-remove-incorrect-const-on-variable-that-is-m.patch
+@@ -0,0 +1,32 @@
++From a03ea6223950002eba8b1ef0df3133c62f387d6b Mon Sep 17 00:00:00 2001
++From: Michael Forney <mforney@mforney.org>
++Date: Tue, 25 May 2021 23:42:07 -0700
++Subject: [PATCH] bearssl: remove incorrect const on variable that is modified
++
++hostname may be set to NULL later on in this function if it is an
++IP address.
++
++Closes #7133
++
++[peter at korsgaard.com: backported from upstream]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ lib/vtls/bearssl.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/vtls/bearssl.c b/lib/vtls/bearssl.c
++index 7f729713d..40a5e7879 100644
++--- a/lib/vtls/bearssl.c
+++++ b/lib/vtls/bearssl.c
++@@ -300,7 +300,7 @@ static CURLcode bearssl_connect_step1(struct Curl_easy *data,
++   struct ssl_connect_data *connssl = &conn->ssl[sockindex];
++   struct ssl_backend_data *backend = connssl->backend;
++   const char * const ssl_cafile = SSL_CONN_CONFIG(CAfile);
++-  const char * const hostname = SSL_HOST_NAME();
+++  const char *hostname = SSL_HOST_NAME();
++   const bool verifypeer = SSL_CONN_CONFIG(verifypeer);
++   const bool verifyhost = SSL_CONN_CONFIG(verifyhost);
++   CURLcode ret;
++-- 
++2.20.1
++
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 9ee98f1e13..183321588f 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.76.1.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.77.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  64bb5288c39f0840c07d077e30d9052e1cbb9fa6c2dc52523824cc859e679145  curl-7.76.1.tar.xz
++sha256  0f64582c54282f31c0de9f0a1a596b182776bd4df9a4c4a2a41bbeb54f62594b  curl-7.77.0.tar.xz
+ sha256  6fd1a1c008b5ef4c4741dd188c3f8af6944c14c25afa881eb064f98fb98358e7  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index f2cfd72897..53ff9836c1 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.76.1
++LIBCURL_VERSION = 7.77.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+@@ -24,7 +24,7 @@ LIBCURL_INSTALL_STAGING = YES
+ # generate C code) isn't very useful
+ LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
+ 	--enable-hidden-symbols --with-random=/dev/urandom --disable-curldebug \
+-	--disable-libcurl-option
++	--disable-libcurl-option --disable-ldap --disable-ldaps
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ LIBCURL_CONF_OPTS += --enable-threaded-resolver
+@@ -150,8 +150,6 @@ LIBCURL_CONF_OPTS += \
+ 	--enable-dict \
+ 	--enable-gopher \
+ 	--enable-imap \
+-	--enable-ldap \
+-	--enable-ldaps \
+ 	--enable-pop3 \
+ 	--enable-rtsp \
+ 	--enable-smb \
+@@ -163,8 +161,6 @@ LIBCURL_CONF_OPTS += \
+ 	--disable-dict \
+ 	--disable-gopher \
+ 	--disable-imap \
+-	--disable-ldap \
+-	--disable-ldaps \
+ 	--disable-pop3 \
+ 	--disable-rtsp \
+ 	--disable-smb \
