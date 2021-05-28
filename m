@@ -1,58 +1,40 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 28 May 2021 20:49:01 +0200
-Subject: [Buildroot] [PATCHv3 12/15] package/uclibc: use
- BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
-In-Reply-To: <41d26a40-3880-1738-376b-2fe78fe7b439@mind.be>
-References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
- <20210525122750.5022-13-patrickdepinguin@gmail.com>
- <41d26a40-3880-1738-376b-2fe78fe7b439@mind.be>
-Message-ID: <CAAXf6LX2SK1b9zsdhj+0-nXDO5GkrckrJeUa=Yh_gFKpH7S--g@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 28 May 2021 21:17:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: handle b_pie
+Message-ID: <20210528191748.1598384-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mar, 25 may 2021 a las 23:43, Arnout Vandecappelle
-(<arnout@mind.be>) escribi?:
->
->
->
-> On 25/05/2021 14:27, Thomas De Schampheleire wrote:
-> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >
-> > BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
-> > should have no negative effect on performance.
-> >
-> > Introduction of 'assert' statements, 'debug'-type builds with additional
-> > logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
-> >
-> > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> > ---
-> >  package/uclibc/uclibc.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> > index 3d253d93bc..61bdbd50a0 100644
-> > --- a/package/uclibc/uclibc.mk
-> > +++ b/package/uclibc/uclibc.mk
-> > @@ -205,7 +205,7 @@ endif
-> >  #
-> >  # Debug
-> >  #
-> > -ifeq ($(BR2_ENABLE_DEBUG),y)
-> > +ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
->
->  This one I'm not so sure... In UClibc, we don't (want to) enforce the -g/-O
-> options as strictly. In fact, we don't pass them down into uClibc at all. And
-> indeed, the DODEBUG option mostly controls debug symbols and optimisation. The
-> only "runtime debugging" difference that I can see are:
->
-> - different way of handling SSP errors;
-> - debug messages in linuxthreads.
->
->  So I don't think this patch should be applied.
+pipewire unconditionally enables b_pie since version 0.3.20 and
+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/abe73c9146cd223b40b22581b1fd58bc044c671e
+which will raise the following build failure on m68k since commit
+a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9:
 
-OK, I'll drop it from the series, thanks.
+/srv/storage/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/9.3.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-1/output-1/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/Scrt1.o: in function `lib_main':
+(.text+0x4): undefined reference to `__shared_flat_add_library'
 
-/Thomas
+Fixes:
+ - http://autobuild.buildroot.org/results/c258a2736661af8ea73abeda2503d8682e65f1e2
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/pkg-meson.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index a57820d4d2..a55063d58e 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -91,6 +91,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+ 		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+ 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
++		-Db_pie=$(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),true,false) \
+ 		-Dstrip=false \
+ 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
+ 		$$($$(PKG)_CONF_OPTS) \
+-- 
+2.30.2
