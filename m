@@ -1,85 +1,65 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Fri, 28 May 2021 22:29:32 +0200
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 28 May 2021 22:49:50 +0200
 Subject: [Buildroot] Verifying linux 5.4.x hashes
-In-Reply-To: <20210528195506.GH2788252@scaer>
+In-Reply-To: <20210528202931.futcxwo2lokvoact@falbala.internal.home.lespocky.de>
 References: <BN8PR11MB366618492FB8C57A78D7752BFF229@BN8PR11MB3666.namprd11.prod.outlook.com>
  <20210528195506.GH2788252@scaer>
-Message-ID: <20210528202931.futcxwo2lokvoact@falbala.internal.home.lespocky.de>
+ <20210528202931.futcxwo2lokvoact@falbala.internal.home.lespocky.de>
+Message-ID: <20210528204950.GJ2788252@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Alexander, All,
 
-On Fri, May 28, 2021 at 09:55:06PM +0200, Yann E. MORIN wrote:
-> On 2021-05-28 17:15 +0000, Ian Merin via buildroot spake thusly:
-> > Hello, -- question about verifying linux kernel hashes.  I see in the
-> > linux.hash file there is an entry for the latest 5.4.x version, but I
-> > dont see any way to actually download and verify that 5.4.x version
-> > against the hash in linux.hash
-> 
-> Here's a quick summary of our discussion on IRC:
-> 
->   - the hash file is shared between linux and linux-headers
->   - it is still possible to select a linux 5.4.x as linux-headers
->   - hence we still ahve a 5.4.x entry even for linux
->   - the hashes for custom version are not checked at all, becasue we
->     can't have all the hashes of all the kernel versions
+On 2021-05-28 22:29 +0200, Alexander Dahl spake thusly:
+> On Fri, May 28, 2021 at 09:55:06PM +0200, Yann E. MORIN wrote:
+> >   - the hashes for custom version are not checked at all, becasue we
+> >     can't have all the hashes of all the kernel versions
+> Maybe not for non official version, but why not for all mainline
+> kernel versions?
+>     % git tag | grep -v rc | wc -l
+>     3025
+> This would be 3k lines of text currently, big compared to other
+> buildroot hashes files, but not that huge in general.  If one could
+> split it up for major releases, I would consider it maintainable,
+> that's just few hundred lines per kernel version max.
 
-Maybe not for non official version, but why not for all mainline
-kernel versions?
+The problem is not really about the number of hashes. The problem is
+about kernel relases that are made after we have done a relase.
 
-    % git tag | grep -v rc | wc -l
-    3025
+For example, let's assume that we add all known hashes right now (and
+update until we release. When we release Buildroot 2021.05, it is
+frozen: it's not going to change, that's all about being a release.
 
-This would be 3k lines of text currently, big compared to other
-buildroot hashes files, but not that huge in general.  If one could
-split it up for major releases, I would consider it maintainable,
-that's just few hundred lines per kernel version max.
+A day after we release 2021.05 with all say) then-known 5.4.x versions
+and thus up to and including 5.4.123, the kernel team (GKH) releases
+5.4.124.
 
-> > What would be the method to have buildroot download the ???latest???
-> > 5.4.x kernel and also verify its hash against linux.hash?
-> 
-> And now a quick summary for that part;
-> 
->  1. expand the hash-checking infra to accept custom hashes; that would
->     impact:
->         package/pkg-generic
->         package/pkg-download
->         support/download/dl-wrapper
->         support/download/check-hash
-> 
->  2. in linux/Config.in add a new entry for custom version:
->         BR2_LINUX_KERNEL_CUSTOM_VERSION_HASHES="sha256:1234abcd sha512:abcd1234"
-> 
-> Note that I am not vey fond of the hash being set in the menuconfig, but
-> I don't have a definitive better idea.
+Then Buildroot 2021.05 no longer has a hash for all kernel releases.
 
-What about the above one?  Would be quite some work to setup, but once
-in place it would be just adding a new hash to the file instead of
-replacing the old one.
+That is the actual problem: kernel releases are going to be made after
+we tag and release our own versions.
 
-> One thing to consider, though: people that want to check custom versions
-> are probably already using a br2-external tree, so they could very well
-> set such hashes in their tree, e.g;
+So, no, we can't have a hash for all kernel versions.
 
-Would of course not apply to custom versions, for mainline only.  But
-we all head for mainline first, anyways, don't we? ;-)
+Besides, you are missing the (presumably much fewer) CIP-SLTS and
+CIP-RT-SLTS versions, but that's a detail...
 
-Greets
-Alex
+> Would of course not apply to custom versions, for mainline only.  But
+> we all head for mainline first, anyways, don't we? ;-)
+
+Muahahaha! :-]
+
+Regards,
+Yann E. MORIN.
 
 -- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210528/a867ad05/attachment.asc>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
