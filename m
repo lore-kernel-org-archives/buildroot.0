@@ -1,40 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 28 May 2021 21:17:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: handle b_pie
-Message-ID: <20210528191748.1598384-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 28 May 2021 21:41:28 +0200
+Subject: [Buildroot] [PATCH] package/nginx: fix NGINX pidfile handling
+ systemd
+In-Reply-To: <3ebb96db-8047-2fa0-b18e-50f58c459f0e@mind.be>
+References: <20210521144149.35725-1-matthew.weber@collins.com>
+ <20210526204856.GP3208066@scaer>
+ <a6b5f2ef-b33a-e300-9e0b-478ea2296969@mind.be>
+ <20210528113959.GB2788252@scaer>
+ <4f98da29-4eb3-e5af-2139-a55d6defa12e@mind.be>
+ <87lf7y274w.fsf@dell.be.48ers.dk>
+ <3ebb96db-8047-2fa0-b18e-50f58c459f0e@mind.be>
+Message-ID: <20210528194128.GG2788252@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pipewire unconditionally enables b_pie since version 0.3.20 and
-https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/abe73c9146cd223b40b22581b1fd58bc044c671e
-which will raise the following build failure on m68k since commit
-a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9:
+Arnout, Peter, Matthew, All,
 
-/srv/storage/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/9.3.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-1/output-1/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/Scrt1.o: in function `lib_main':
-(.text+0x4): undefined reference to `__shared_flat_add_library'
+On 2021-05-28 18:05 +0200, Arnout Vandecappelle spake thusly:
+> On 28/05/2021 17:46, Peter Korsgaard wrote:
+> > Notice that you can override the configuration on the command line with
+> > the -g option (-g 'daemon off;')
+>  I didn't realize that was possible! Then we can do it from the service file
+> directly, and it becomes trivial. Matt?
 
-Fixes:
- - http://autobuild.buildroot.org/results/c258a2736661af8ea73abeda2503d8682e65f1e2
+Ah indeed, that really sounds like the proper workaround/solution/fix.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/pkg-meson.mk | 1 +
- 1 file changed, 1 insertion(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index a57820d4d2..a55063d58e 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -91,6 +91,7 @@ define $(2)_CONFIGURE_CMDS
- 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
- 		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
- 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
-+		-Db_pie=$(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),true,false) \
- 		-Dstrip=false \
- 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
- 		$$($$(PKG)_CONF_OPTS) \
 -- 
-2.30.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
