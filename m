@@ -1,50 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 May 2021 23:41:23 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2021.05-rc2
-Message-ID: <20210527211208.839B68A869@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 28 May 2021 07:34:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: disable on riscv32
+Message-ID: <20210528053443.640308-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f1d220419515c44275b21b55ac1382f4192c2f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+vlc unconditionally uses __NR_futex resulting in the following build
+failure on riscv32:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+linux/thread.c:53:20: error: '__NR_futex' undeclared (first use in this function)
+   53 |     return syscall(__NR_futex, addr, op, val, to, addr2, val3);
+      |                    ^~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/be0f2243919d7a052b33118d8a901c922f8d88e7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- docs/website/news.html | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ package/vlc/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index f3273a8771..862cd1ab84 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,27 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+index 96ff8f2fcb..964b7660af 100644
+--- a/package/vlc/Config.in
++++ b/package/vlc/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_VLC
+ 	bool "vlc"
++	depends on !BR2_RISCV_32
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
+@@ -23,6 +24,7 @@ config BR2_PACKAGE_VLC_OPENCV3_BACKEND
+ 	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
  
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2021.05-rc2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>22 May 2021</small></p>
-+      </div>
-+      <div class="timeline-body">
-+        <p>2021.05-rc2 has been released with more cleanups and build fixes. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.05-rc2">CHANGES</a>
-+	  file for details.</p>
-+
-+	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2021.05-rc2.tar.bz2">2021.05-rc2
-+	  release candidate</a>, and report any problems found to the
-+	  <a href="support.html">mailing list</a> or
-+	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ comment "vlc needs a toolchain w/ C++, dynamic library, wchar, threads, gcc >= 4.9, headers >= 3.7"
++	depends on !BR2_RISCV_32
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS \
+ 		|| !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
+-- 
+2.30.2
