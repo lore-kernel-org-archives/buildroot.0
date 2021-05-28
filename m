@@ -1,56 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 28 May 2021 13:51:26 +0200
-Subject: [Buildroot] [PATCH] package/nginx: fix NGINX pidfile handling
- systemd
-In-Reply-To: <20210528113959.GB2788252@scaer>
-References: <20210521144149.35725-1-matthew.weber@collins.com>
- <20210526204856.GP3208066@scaer>
- <a6b5f2ef-b33a-e300-9e0b-478ea2296969@mind.be>
- <20210528113959.GB2788252@scaer>
-Message-ID: <4f98da29-4eb3-e5af-2139-a55d6defa12e@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 28 May 2021 14:01:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/weston: add configuration
+ options for weston shells
+In-Reply-To: <4238f9b6-4ea4-1529-e050-09db00cc0e5c@theobroma-systems.com>
+References: <20210511154006.630376-1-martin.elshuber@theobroma-systems.com>
+ <20210519101415.GQ2268078@scaer>
+ <4238f9b6-4ea4-1529-e050-09db00cc0e5c@theobroma-systems.com>
+Message-ID: <20210528120152.GC2788252@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Martin, All,
 
+On 2021-05-28 12:54 +0200, Martin Elshuber spake thusly:
+> On 19/05/2021 12:14, Yann E. MORIN wrote:
+> > On 2021-05-11 17:40 +0200, Martin Elshuber spake thusly:
+> >> Enable selection of used weston shells. By default all available
+> >> shells are enabled to keep the old behavior. The new configuration
+> >> options enable the user to select them individually.
+> > Don't we have to ensure that at least one is enabled, or is it valid to
+> > disable all of them?
+> I think it makes sense to allow disabling all shells, since one might
+> want to add its own, non default, implementaion.
+> I this case the user might want disable all shells that are included in
+> the weston package.
 
-On 28/05/2021 13:39, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2021-05-27 22:49 +0200, Arnout Vandecappelle spake thusly:
->> On 26/05/2021 22:48, Yann E. MORIN wrote:
->>> On 2021-05-21 09:41 -0500, Matthew Weber via buildroot spake thusly:
->>>> Upstream bug: (deferred fix)
->>>> https://trac.nginx.org/nginx/ticket/1897?cversion=0&cnum_hist=2
->>> So, basically, upstream refused to fix that bug [...]
-> [--SNIP--]
->>> If so, maybe we could then tweak the unit to make use of it, instead of
->>> the sleep workaround?
->>  I think there was one useful comment on the Ubuntu bug [1]:
->>>>>
->> As far as I can tell, this daemonization is not needed for the systemd service
->> use-case. The service should be Type=simple, and 'daemon off'. The standard file
->> handles get redirected by systemd anyway, and non-stop upgrade cannot be used in
->> this case either. (See:
->> http://nginx.org/en/docs/faq/daemon_master_process_off.html )
->> <<<
->>  So I rather think we should go for that solution.
-> 
-> Indeed, that seems an even better solution, and probably an actual fix.
+I see your point. But then, people writting their own are also probably
+be writteing their entire compositor too, probably...
 
- Unfortunately, not so easy in practice. "daemon off" means a change in the
-configuration file, which is typically going to be modified by the user. Also,
-it's something that comes from nginx itself, so we'd have to patch the one that
-gets installed by nginx (and that one will probably be overwritten anyway in an
-overlay).
+But otherwise, you have a point anyway.
 
- Also, daemon off should only be done in systemd; sysvinit still wants nginx to
-daemonize! So it's conditional patching, and we don't like that... Well, I guess
-it can be done post-install with a sed script that inserts an aditional line at
-the beginning of the file.
+> I suggest to add a help comment:
+> help
+> ? if unsure say yes
 
+That has never prevented people from saying 'n' even when they don't
+know. You can't prevent anyone from shooting themselves in the foot. ;-)
 
- Regards,
- Arnout
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
