@@ -1,65 +1,109 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 May 2021 22:49:50 +0200
-Subject: [Buildroot] Verifying linux 5.4.x hashes
-In-Reply-To: <20210528202931.futcxwo2lokvoact@falbala.internal.home.lespocky.de>
-References: <BN8PR11MB366618492FB8C57A78D7752BFF229@BN8PR11MB3666.namprd11.prod.outlook.com>
- <20210528195506.GH2788252@scaer>
- <20210528202931.futcxwo2lokvoact@falbala.internal.home.lespocky.de>
-Message-ID: <20210528204950.GJ2788252@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 28 May 2021 23:01:09 +0200
+Subject: [Buildroot] [PATCHv3 14/15] package/pkg-meson.mk: determine
+ 'buildtype' based on BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
+In-Reply-To: <20210525122750.5022-15-patrickdepinguin@gmail.com>
+References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
+ <20210525122750.5022-15-patrickdepinguin@gmail.com>
+Message-ID: <866ad257-d6e9-7dc4-98e7-e83e027f8fac@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander, All,
 
-On 2021-05-28 22:29 +0200, Alexander Dahl spake thusly:
-> On Fri, May 28, 2021 at 09:55:06PM +0200, Yann E. MORIN wrote:
-> >   - the hashes for custom version are not checked at all, becasue we
-> >     can't have all the hashes of all the kernel versions
-> Maybe not for non official version, but why not for all mainline
-> kernel versions?
->     % git tag | grep -v rc | wc -l
->     3025
-> This would be 3k lines of text currently, big compared to other
-> buildroot hashes files, but not that huge in general.  If one could
-> split it up for major releases, I would consider it maintainable,
-> that's just few hundred lines per kernel version max.
 
-The problem is not really about the number of hashes. The problem is
-about kernel relases that are made after we have done a relase.
+On 25/05/2021 14:27, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
+> should have no negative effect on performance.
+> 
+> Introduction of 'assert' statements, 'debug'-type builds with additional
+> logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  package/pkg-meson.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index a57820d4d2..dafad3b1eb 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -89,7 +89,7 @@ define $(2)_CONFIGURE_CMDS
+>  		--prefix=/usr \
+>  		--libdir=lib \
+>  		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+> -		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+> +		--buildtype=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
 
-For example, let's assume that we add all known hashes right now (and
-update until we release. When we release Buildroot 2021.05, it is
-frozen: it's not going to change, that's all about being a release.
+ I haven't checked yet in the source code what the effect of buildtype is, nor
+have I tested it, but the documentation says:
 
-A day after we release 2021.05 with all say) then-known 5.4.x versions
-and thus up to and including 5.4.123, the kernel team (GKH) releases
-5.4.124.
 
-Then Buildroot 2021.05 no longer has a hash for all kernel releases.
+For setting optimization levels and
+toggling debug, you can either set the `buildtype` option, or you can
+set the `optimization` and `debug` options which give finer control
+over the same. Whichever you decide to use, the other will be deduced
+from it. For example, `-Dbuildtype=debugoptimized` is the same as
+`-Ddebug=true -Doptimization=2` and vice-versa. This table documents
+the two-way mapping:
 
-That is the actual problem: kernel releases are going to be made after
-we tag and release our own versions.
+| buildtype      | debug | optimization |
+| ---------      | ----- | ------------ |
+| plain          | false | 0            |
+| debug          | true  | 0            |
+| debugoptimized | true  | 2            |
+| release        | false | 3            |
+| minsize        | true  | s            |
 
-So, no, we can't have a hash for all kernel versions.
+All other combinations of `debug` and `optimization` set `buildtype` to `'custom'`.
 
-Besides, you are missing the (presumably much fewer) CIP-SLTS and
-CIP-RT-SLTS versions, but that's a detail...
 
-> Would of course not apply to custom versions, for mainline only.  But
-> we all head for mainline first, anyways, don't we? ;-)
+So I think this should be just 'custom', regardless of RUNTIME_DEBUG.
 
-Muahahaha! :-]
 
-Regards,
-Yann E. MORIN.
+ That said, it *is* possible that the debug option has more effect than just
+'-g'... So I checked the meson source. There are a bunch of effects.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+* For gcc, it just sets -g/-O options.
+
+* On windows and mac, there are a bunch of other effects but I didn't look at that.
+
+* For boost, it selects the "g" suffix if necessary - but we install without
+that suffix anyway.
+
+* For rust, it only has effect on optimisation flags. Note that we currently
+don't set optimisation flags correctly for rust, so we have something to learn
+there.
+
+* For fortran, java, cuda, it als only affects optimisation and debug flags.
+
+* There is one more relevant effect: there is an option "b_ndebug", which
+defaults to false. A project can set it to "if-release" - in that case, -DNDEBUG
+is passed if the buildtype if 'release'.
+
+
+ So it sounds like setting buildtype to release in the RUNTIME_DEBUG case is the
+right thing to do. There is one caveat (but this is already the case now): it
+will force the optimisation to -O3, and I believe that that will override the
+optimisation option we set in cflags. But that's essentially what happens now
+already, so not something that needs to be addressed by this series.
+
+ In the non-RUNTIME_DEBUG case, however, I don't think we should set to "debug",
+because that will add a -g option. Maybe "plain" is the best option.
+
+ Alternatively, we leave buildtype alone, and instead set debug to false,
+optimization to the value corresponding to the optimisation level chosen, and
+b_ndebug to true or false based on RUNTIME_DEBUG.
+
+
+ Regards,
+ Arnout
+
+>  		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+>  		-Dstrip=false \
+>  		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
+> 
