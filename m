@@ -1,82 +1,153 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 28 May 2021 23:07:34 +0200
-Subject: [Buildroot] [PATCHv3 11/15] package/sofia-sip: use
- BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
-In-Reply-To: <CAAXf6LVGSaNNgncfR4wUo+gpLgusD+uoS8amFKeb6tiRGQ+pCg@mail.gmail.com>
-References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
- <20210525122750.5022-12-patrickdepinguin@gmail.com>
- <0fd19bad-277f-ae7d-1928-fd4dc0bf6fcc@mind.be>
- <CAAXf6LVGSaNNgncfR4wUo+gpLgusD+uoS8amFKeb6tiRGQ+pCg@mail.gmail.com>
-Message-ID: <b46b5074-12c3-8099-5946-de715f715a8e@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 28 May 2021 23:42:55 +0200
+Subject: [Buildroot] [Bug 13586] New: grub failure with BR2_OPTIMIZE_3
+In-Reply-To: <CANabuZfVw+ccU8rvVQ67HPnkGMKWTPFpYELbTEVcpiXv6kdhpQ@mail.gmail.com>
+References: <bug-13586-163@https.bugs.busybox.net/>
+ <CANabuZcix3uT0SwKotJoPBAu6WvZ_SVQ99y=navBARH=GRKZ9w@mail.gmail.com>
+ <20210527154435.GV3208066@scaer>
+ <638b4284c5ac4639b393d2ade58994dc@AcuMS.aculab.com>
+ <20210527203721.GA2788252@scaer>
+ <CANabuZfVw+ccU8rvVQ67HPnkGMKWTPFpYELbTEVcpiXv6kdhpQ@mail.gmail.com>
+Message-ID: <20210528214255.GK2788252@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Andreas, All,
 
-
-On 28/05/2021 20:35, Thomas De Schampheleire wrote:
-> El mar, 25 may 2021 a las 23:32, Arnout Vandecappelle
-> (<arnout@mind.be>) escribi?:
->>
->>
->> On 25/05/2021 14:27, Thomas De Schampheleire wrote:
->>> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->>>
->>> BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
->>> should have no negative effect on performance.
->>>
->>> Introduction of 'assert' statements, 'debug'-type builds with additional
->>> logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
->>>
->>> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->>> ---
->>>  package/sofia-sip/sofia-sip.mk | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
->>> index 5c383400ff..cb867ba0dc 100644
->>> --- a/package/sofia-sip/sofia-sip.mk
->>> +++ b/package/sofia-sip/sofia-sip.mk
->>> @@ -30,7 +30,7 @@ SOFIA_SIP_CONF_OPTS += \
->>>       --without-openssl
->>>  endif
->>>
->>> -ifeq ($(BR2_ENABLE_DEBUG),y)
->>> +ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
->>>  SOFIA_SIP_CONF_OPTS += --enable-ndebug
->>  Actually, the logic was inverted here (already wrong in the current situation):
->> --enable-ndebug should be given when RUNTIME_DEBUG is *not* set.
-> Indeed, you're right. I'll add a patch to fix that first.
+On 2021-05-28 15:48 +0200, Andreas Hilse via buildroot spake thusly:
+> > Would you please send a patch with such a workaround, please?
 > 
->>  However, I think we should define -DNDEBUG in TARGET_CPPFLAGS, so it wouldn't
->> be necessary to pass it explicitly here (--enable-ndebug does nothing more than
->> defining NDEBUG).
-> In a previous iteration I basically did that, but dropped that patch
-> because it also had effect in the toolchain wrapper,
+> I tried to workaround in grub2.mk setting -Os as additional flags in
+> the TARGET_* variables for GRUB2_CONF_ENV as that seemed the right
+> place according to this comment:
+> # Grub2 is kind of special: it considers CC, LD and so on to be the
+> # tools to build the host programs and uses TARGET_CC, TARGET_CFLAGS,
+> # TARGET_CPPFLAGS, TARGET_LDFLAGS to build the bootloader itself.
+> ...
+> GRUB2_CONF_ENV = \
+>     CPP="$(TARGET_CC) -E" \
+>     TARGET_CC="$(TARGET_CC)" \
+>     TARGET_CFLAGS="$(TARGET_CFLAGS) -Os" \
+>     TARGET_CPPFLAGS="$(TARGET_CPPFLAGS) -Os -fno-stack-protector" \
+>     TARGET_LDFLAGS="$(TARGET_LDFLAGS) -Os" \
+>     TARGET_NM="$(TARGET_NM)" \
+>     TARGET_OBJCOPY="$(TARGET_OBJCOPY)" \
+>     TARGET_STRIP="$(TARGET_CROSS)strip"
+> 
+> But -O2 still is in the build commands in a place after -Os and thus
+> takes preference.
+> Do you have any suggestions for a different workaround or on how to
+> fix the above one?
 
- No it doesn't... TARGET_CFLAGS isn't set in the toolchain wrapper. Only
-arch-specific options are there, and BR2_TARGET_OPTIMIZATION (which is intended
-for arch-specific -m flags).
+So, grub2 is indeed... special...
 
-> which may be used
-> to build project-specific projects, and which caused compilation
-> failures when NDEBUG was unexpectedly set
+So I took the above claim aboce variable naming and their usage, and
+applied this patch:
 
- If it's built by Buildroot, then of course it *is* going to be passed in
-through CFLAGS.
+    diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+    index af16ee91e1..0e5ab89301 100644
+    --- a/boot/grub2/grub2.mk
+    +++ b/boot/grub2/grub2.mk
+    @@ -118,9 +118,9 @@ HOST_GRUB2_CONF_ENV = \
+     GRUB2_CONF_ENV = \
+            CPP="$(TARGET_CC) -E" \
+            TARGET_CC="$(TARGET_CC)" \
+    -       TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+    -       TARGET_CPPFLAGS="$(TARGET_CPPFLAGS) -fno-stack-protector" \
+    -       TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
+    +       TARGET_CFLAGS="$(filter-out -O%,$(TARGET_CFLAGS)) -Os" \
+    +       TARGET_CPPFLAGS="$(filter-out -O%,$(TARGET_CPPFLAGS)) -Os -fno-stack-protector" \
+    +       TARGET_LDFLAGS="$(filter-out -O%,$(TARGET_LDFLAGS)) -Os" \
+            TARGET_NM="$(TARGET_NM)" \
+            TARGET_OBJCOPY="$(TARGET_OBJCOPY)" \
+            TARGET_STRIP="$(TARGET_CROSS)strip"
 
-> (e.g. variables only used
-> for assert statements, which got compiled away with NDEBUG). Granted,
-> this is actually a problem in such code, but nevertheless it was my
-> reality and I expect those of others too.
+And I configured with -Ofast (which is used nowhere in grub2's source
+tree, so I know it comes from Buildroot when I see it).
 
- If you don't want to fix the actual issue, you can always add -UNDEBUG in the
-package-specific CFLAGS or in the package build system.
+So, what's the CONF_ENV looking like? Seems my -Ofast is removed, and
+the -Os is added:
 
- Regards,
- Arnout
+    $ make printvars VARS=GRUB2_CONF_ENV
+    ... \
+    TARGET_CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=1 -Os" \
+    TARGET_CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fno-stack-protector" \
+    TARGET_LDFLAGS=" -Os" \
+    ...
 
-> See http://patchwork.ozlabs.org/project/buildroot/patch/20210212135451.22786-3-patrickdepinguin at gmail.com/
->    and my last comment on it.
+So far, so good.
+
+But what happens when I actually build?
+
+    $ make grub2-build >build.log
+    [...]
+    $ grep kern/parser.c build.log     # the file patched by the offending patch)
+    .../x86_64-linux-gcc \
+        -DHAVE_CONFIG_H -I. -I.. \
+        -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fno-stack-protector \
+        [...] \
+        -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=1 -Os
+        [...] \
+        -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Ofast  -D_FORTIFY_SOURCE=1 \
+        -c -o kern/kernel_exec-parser.o `test -f 'kern/parser.c' || echo './'`kern/parser.c
+
+He, what? Where's that -Ofast coming from?
+
+    $ grep ./configure build.log
+    cd /home/ymorin/dev/buildroot/O/build/grub2-2.04/ && rm -rf config.cache && \
+    PATH="..." \
+    [...] \
+    CFLAGS_FOR_BUILD="-O2 -I/home/ymorin/dev/buildroot/O/host/include" \
+    CXXFLAGS_FOR_BUILD="-O2 -I/home/ymorin/dev/buildroot/O/host/include" \
+    [...] \
+    CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64" \
+    CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Ofast -D_FORTIFY_SOURCE=1" \
+    CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Ofast  -D_FORTIFY_SOURCE=1" \
+    LDFLAGS="" \
+    FCFLAGS=" -Ofast " \
+    FFLAGS=" -Ofast " \
+    [...] \
+    TARGET_CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=1 -Os" \
+    TARGET_CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fno-stack-protector" \
+    TARGET_LDFLAGS=" -Os" \
+    [...] \
+    ./configure \
+    [...]
+
+OK, so -Ofast still comes from a few locations;
+
+  - CFLAGS_FOR_BUILD or CXXFLAGS_FOR_BUILD: unlikely, or we'd also note
+    include path pointing to the host dir, which is not the case
+
+  - FCFLAGS, FFLAGS: unlikely, this is not fortran
+
+  - CXXFLAGS: unlikely, this is not C++ code
+
+We're left with just CPPFLAGS and CFLAGS. Those are not supposed to be
+used, but they are...
+
+Meh... :-(
+
+So, maybe things have changed from way back when we wrote that comment
+(back in 2014, seven years ago!), or maybe we did not undestand all of
+it, or maybe we did not explain it properly, or a bit of all of that...
+
+In any case, we might want to also override CFLAGS and CPPFLAGS in the
+same vein as the above patch does for TARGET_CFLAGS et al.
+
+Care to have a look at that, see if it fixes the issue, and you can get
+a bootable grub2, please?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
