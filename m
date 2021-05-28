@@ -1,46 +1,87 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri, 28 May 2021 09:35:11 +0200
-Subject: [Buildroot] [PATCH 5/5] package/optee-test: bump to version 3.13.0
-In-Reply-To: <20210528073511.16854-1-etienne.carriere@linaro.org>
-References: <20210528073511.16854-1-etienne.carriere@linaro.org>
-Message-ID: <20210528073511.16854-5-etienne.carriere@linaro.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 28 May 2021 11:23:13 +0200
+Subject: [Buildroot] [PATCH] package/nginx: add upstream CVE-2021-23017
+ security fix
+Message-ID: <20210528092314.21886-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump OP-TEE Test package version to OP-TEE release 3.13.0.
+Fixes the following vulnerability:
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+- CVE-2021-23017: 1-byte memory overwrite in resolver
+
+For more details, see the advisories:
+https://mailman.nginx.org/pipermail/nginx-announce/2021/000300.html
+https://www.openwall.com/lists/oss-security/2021/05/25/5
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/optee-test/optee-test.hash | 4 ++--
- package/optee-test/optee-test.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...ff-by-one-write-in-ngx_resolver_copy.patch | 39 +++++++++++++++++++
+ package/nginx/nginx.mk                        |  3 ++
+ 2 files changed, 42 insertions(+)
+ create mode 100644 package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
 
-diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
-index 0c789e1cd1..39bd68532d 100644
---- a/package/optee-test/optee-test.hash
-+++ b/package/optee-test/optee-test.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/OP-TEE/optee_test/archive/3.12.0/optee-test-3.12.0.tar.gz
--sha256 beebdc98e95af2e7a20595f7d6ca716872efde1ec74a48ab07be599f21e8ad70  optee-test-3.12.0.tar.gz
-+# From https://github.com/OP-TEE/optee_test/archive/3.13.0/optee-test-3.13.0.tar.gz
-+sha256 4dda2a6b2f7667664cc3bc2578a90c1e60fef7e1c296b8fa8f317ba93302a652  optee-test-3.13.0.tar.gz
- # Locally computed
- sha256 6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
-diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
-index a2d18dadfc..ed6ec3fb39 100644
---- a/package/optee-test/optee-test.mk
-+++ b/package/optee-test/optee-test.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch b/package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
+new file mode 100644
+index 0000000000..c7e354003a
+--- /dev/null
++++ b/package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
+@@ -0,0 +1,39 @@
++From 9f1dcb0c0473641730b871dee984016ff19d2c53 Mon Sep 17 00:00:00 2001
++From: Maxim Dounin <mdounin@mdounin.ru>
++Date: Tue, 25 May 2021 15:17:36 +0300
++Subject: [PATCH] Resolver: fixed off-by-one write in ngx_resolver_copy().
++
++Reported by Luis Merino, Markus Vervier, Eric Sesterhenn, X41 D-Sec GmbH.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/core/ngx_resolver.c | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/core/ngx_resolver.c b/src/core/ngx_resolver.c
++index 79390701..63b26193 100644
++--- a/src/core/ngx_resolver.c
+++++ b/src/core/ngx_resolver.c
++@@ -4008,15 +4008,15 @@ done:
++             n = *src++;
++ 
++         } else {
+++            if (dst != name->data) {
+++                *dst++ = '.';
+++            }
+++
++             ngx_strlow(dst, src, n);
++             dst += n;
++             src += n;
++ 
++             n = *src++;
++-
++-            if (n != 0) {
++-                *dst++ = '.';
++-            }
++         }
++ 
++         if (n == 0) {
++-- 
++2.20.1
++
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 8a371a2cc8..e93e802fd3 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -13,6 +13,9 @@ NGINX_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt)
  
--OPTEE_TEST_VERSION = 3.12.0
-+OPTEE_TEST_VERSION = 3.13.0
- OPTEE_TEST_SITE = $(call github,OP-TEE,optee_test,$(OPTEE_TEST_VERSION))
- OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
- OPTEE_TEST_LICENSE_FILES = LICENSE.md
++# 0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
++NGINX_IGNORE_CVES += CVE-2021-23017
++
+ NGINX_CONF_OPTS = \
+ 	--crossbuild=Linux::$(BR2_ARCH) \
+ 	--with-cc="$(TARGET_CC)" \
 -- 
-2.17.1
+2.20.1
