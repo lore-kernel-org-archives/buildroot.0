@@ -1,81 +1,56 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 28 May 2021 13:50:16 +0200
-Subject: [Buildroot] [PATCHv3 04/15] package/flare-engine: update
- explicit setting of CMAKE_BUILD_TYPE
-In-Reply-To: <f426322d-116b-ea4a-f363-73eaed1690eb@mind.be>
-References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
- <20210525122750.5022-5-patrickdepinguin@gmail.com>
- <e58f9d8c-21bc-5450-47a6-f6e4b959691b@mind.be>
- <CAAXf6LWH8ryc64FFt9zoCtnjqxqENMv=FhcGopYsi3HP_cU0Rw@mail.gmail.com>
- <f426322d-116b-ea4a-f363-73eaed1690eb@mind.be>
-Message-ID: <CAAXf6LUMGLTHA-6tWm01TLxVjk-jOp57WOn9wC2TRqjD8Xiyrg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 28 May 2021 13:51:26 +0200
+Subject: [Buildroot] [PATCH] package/nginx: fix NGINX pidfile handling
+ systemd
+In-Reply-To: <20210528113959.GB2788252@scaer>
+References: <20210521144149.35725-1-matthew.weber@collins.com>
+ <20210526204856.GP3208066@scaer>
+ <a6b5f2ef-b33a-e300-9e0b-478ea2296969@mind.be>
+ <20210528113959.GB2788252@scaer>
+Message-ID: <4f98da29-4eb3-e5af-2139-a55d6defa12e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mi?, 26 may 2021 a las 17:18, Arnout Vandecappelle
-(<arnout@mind.be>) escribi?:
->
->
->
-> On 26/05/2021 16:28, Thomas De Schampheleire wrote:
-> > El mar, 25 may 2021 a las 22:51, Arnout Vandecappelle
-> > (<arnout@mind.be>) escribi?:
-> >>
-> >>
-> >>
-> >> On 25/05/2021 14:27, Thomas De Schampheleire wrote:
-> >>> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >>>
-> >>> The flare-engine package forces CMAKE_BUILD_TYPE=RelWithDebInfo in case
-> >>> Buildroot would normally set CMAKE_BUILD_TYPE=Debug. Previously, this would
-> >>> happen if BR2_ENABLE_DEBUG is set, but now we should check
-> >>> BR2_ENABLE_RUNTIME_DEBUG instead.
-> >>>
-> >>> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >>> ---
-> >>>  package/flare-engine/flare-engine.mk | 2 +-
-> >>>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
-> >>> index e2f3eefa28..503eb0825f 100644
-> >>> --- a/package/flare-engine/flare-engine.mk
-> >>> +++ b/package/flare-engine/flare-engine.mk
-> >>> @@ -15,7 +15,7 @@ FLARE_ENGINE_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf
-> >>>  FLARE_ENGINE_CONF_OPTS += -DBINDIR=bin -DDATADIR=share/flare
-> >>>
-> >>>  # Don't use the default Debug type as it adds -pg (gprof)
-> >>
-> >>  Debug type is no longer default :-)
-> >>
-> >>> -ifeq ($(BR2_ENABLE_DEBUG),y)
-> >>> +ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
-> >>>  FLARE_ENGINE_CONF_OPTS += -DCMAKE_BUILD_TYPE=RelWithDebInfo
-> >>
-> >>  Since CMAKE_BUILD_TYPE is only used by flare-engine to set -O2 -g flags, maybe
-> >> it would be better/cleaner to just unconditionally set build type to Release?
-> >>
-> >
-> > I was checking the situation with BR2_ENABLE_DEBUG=y and see that the
-> > flags of Buildroot do not survive. E.g. compilation commands are:
-> >
-> > ... -Os -g2 -D_FORTIFY_SOURCE=1 -O2 -g0 ...
-> >
-> > The '-O2 -g0' are from the 'Release' build type, set by flare-engine
-> > itself, and '-Os -g2' is what Buildroot sets.
-> >
-> > So it means that in the current state of things, this patch would
-> > actually remove debugging symbols when requested, and so would using
-> > 'Release' unconditionally.
-> > The pkg-cmake.mk intends to pass its flags to each cmake package and
-> > they should survive. In flare-engine this principle is violated.
-> > So unless there is a better way to fix that, we may actually need to
-> > keep the existing check on BR2_ENABLE_DEBUG and set RelWithDebInfo in
-> > that case.
->
->  There is actually a different way - set CMAKE_BUILD_TYPE to Buildroot (or
-> anything else that is not covered by the CMakeLists.txt).
 
-Thanks, this indeed works.
+
+On 28/05/2021 13:39, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2021-05-27 22:49 +0200, Arnout Vandecappelle spake thusly:
+>> On 26/05/2021 22:48, Yann E. MORIN wrote:
+>>> On 2021-05-21 09:41 -0500, Matthew Weber via buildroot spake thusly:
+>>>> Upstream bug: (deferred fix)
+>>>> https://trac.nginx.org/nginx/ticket/1897?cversion=0&cnum_hist=2
+>>> So, basically, upstream refused to fix that bug [...]
+> [--SNIP--]
+>>> If so, maybe we could then tweak the unit to make use of it, instead of
+>>> the sleep workaround?
+>>  I think there was one useful comment on the Ubuntu bug [1]:
+>>>>>
+>> As far as I can tell, this daemonization is not needed for the systemd service
+>> use-case. The service should be Type=simple, and 'daemon off'. The standard file
+>> handles get redirected by systemd anyway, and non-stop upgrade cannot be used in
+>> this case either. (See:
+>> http://nginx.org/en/docs/faq/daemon_master_process_off.html )
+>> <<<
+>>  So I rather think we should go for that solution.
+> 
+> Indeed, that seems an even better solution, and probably an actual fix.
+
+ Unfortunately, not so easy in practice. "daemon off" means a change in the
+configuration file, which is typically going to be modified by the user. Also,
+it's something that comes from nginx itself, so we'd have to patch the one that
+gets installed by nginx (and that one will probably be overwritten anyway in an
+overlay).
+
+ Also, daemon off should only be done in systemd; sysvinit still wants nginx to
+daemonize! So it's conditional patching, and we don't like that... Well, I guess
+it can be done post-install with a sed script that inserts an aditional line at
+the beginning of the file.
+
+
+ Regards,
+ Arnout
