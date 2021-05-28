@@ -1,135 +1,140 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
-Date: Fri, 28 May 2021 16:02:17 +0200
-Subject: [Buildroot] [PATCH] package/fwts: bump to version 21.05.00
-Message-ID: <20210528140218.9878-1-vincent.stehle@laposte.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 28 May 2021 16:17:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/capnproto: fix build on riscv32
+In-Reply-To: <CAPi7W83+pf05_ssNVpaY=mEOpr4MNA4DVX5m+0RViDfig91mwA@mail.gmail.com>
+References: <20210527210402.555334-1-fontaine.fabrice@gmail.com>
+ <20210528065949.GA2170022@sunra>
+ <CAPi7W83+pf05_ssNVpaY=mEOpr4MNA4DVX5m+0RViDfig91mwA@mail.gmail.com>
+Message-ID: <f46b99ad-b713-3fff-5b55-3f15300bd4ce@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update patch
 
-Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
-Cc: Erico Nunes <nunes.erico@gmail.com>
----
- .../fwts/0001-build-do-not-use-Werror.patch   | 33 +++++++++++--------
- package/fwts/fwts.hash                        |  2 +-
- package/fwts/fwts.mk                          |  2 +-
- 3 files changed, 21 insertions(+), 16 deletions(-)
 
-diff --git a/package/fwts/0001-build-do-not-use-Werror.patch b/package/fwts/0001-build-do-not-use-Werror.patch
-index 07f64b35b1..715c4f63a5 100644
---- a/package/fwts/0001-build-do-not-use-Werror.patch
-+++ b/package/fwts/0001-build-do-not-use-Werror.patch
-@@ -1,7 +1,10 @@
--From 4c202c0fd7e5bd3264c720d715f05573047d9cf5 Mon Sep 17 00:00:00 2001
-+From e481c2f990ffa71f205d4b9daf0823e71269a7f3 Mon Sep 17 00:00:00 2001
- From: Erico Nunes <nunes.erico@gmail.com>
- Date: Fri, 12 Aug 2016 23:11:56 +0200
- Subject: [PATCH] fwts: do not use -Werror
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
- 
- Warnings come and go with various compiler versions, so using -Werror is
- prone to cause build failures with various compiler versions, especially
-@@ -12,6 +15,8 @@ Remove use of -Werror.
- Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
- [Fabrice: updated for 20.08.00]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Vincent: rebased onto V21.05.00]
-+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
- ---
-  configure.ac              | 2 +-
-  src/Makefile.am           | 2 +-
-@@ -20,7 +25,7 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-  4 files changed, 4 insertions(+), 4 deletions(-)
- 
- diff --git a/configure.ac b/configure.ac
--index 0109d644..3ca599e1 100644
-+index f40c3678..0ff5025b 100644
- --- a/configure.ac
- +++ b/configure.ac
- @@ -1,5 +1,5 @@
-@@ -31,12 +36,12 @@ index 0109d644..3ca599e1 100644
-  	  AC_CANONICAL_HOST
-  	  AC_CONFIG_MACRO_DIR([m4])
- diff --git a/src/Makefile.am b/src/Makefile.am
--index 52c637dd..d9d73f1c 100644
-+index cdabb386..7c2e5730 100644
- --- a/src/Makefile.am
- +++ b/src/Makefile.am
--@@ -14,7 +14,7 @@ AM_CPPFLAGS = \
-- 	`pkg-config --silence-errors --cflags json` \
-- 	`pkg-config --silence-errors --cflags json-c` \
-+@@ -12,7 +12,7 @@ AM_CPPFLAGS = \
-+ 	-I$(top_srcdir)/src/acpica/source/compiler	\
-+ 	-I$(top_srcdir)/efi_runtime			\
-  	-pthread `pkg-config --cflags glib-2.0 gio-2.0` \
- -	-Wall -Werror -Wextra				\
- +	-Wall -Wextra					\
-@@ -44,10 +49,10 @@ index 52c637dd..d9d73f1c 100644
-  	-Wfloat-equal -Wmissing-declarations		\
-  	-Wno-long-long -Wredundant-decls -Wshadow	\
- diff --git a/src/lib/src/Makefile.am b/src/lib/src/Makefile.am
--index 54de7f44..e129ed16 100644
-+index 55c52b41..50efa97a 100644
- --- a/src/lib/src/Makefile.am
- +++ b/src/lib/src/Makefile.am
--@@ -24,7 +24,7 @@ AM_CPPFLAGS = \
-+@@ -25,7 +25,7 @@ AM_CPPFLAGS = \
-  	`pkg-config --silence-errors --cflags json-c`	\
-  	`pkg-config --cflags glib-2.0 gio-2.0` 		\
-  	-DDATAROOTDIR=\"$(datarootdir)\"		\
-@@ -57,18 +62,18 @@ index 54de7f44..e129ed16 100644
-  
-  pkglib_LTLIBRARIES = libfwts.la
- diff --git a/src/utilities/Makefile.am b/src/utilities/Makefile.am
--index aa37de55..4d5297cc 100644
-+index 1fc0fc02..53614e33 100644
- --- a/src/utilities/Makefile.am
- +++ b/src/utilities/Makefile.am
- @@ -16,7 +16,7 @@
-  # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-  #
-  
---AM_CPPFLAGS = -Wall -Werror -Wextra -DDATAROOTDIR=\"$(datarootdir)\" \
--+AM_CPPFLAGS = -Wall -Wextra -DDATAROOTDIR=\"$(datarootdir)\" \
-- 	`pkg-config --silence-errors --cflags json` \
-- 	`pkg-config --silence-errors --cflags json-c`
-+-AM_CPPFLAGS = -Wall -Werror -Wextra -DDATAROOTDIR=\"$(datarootdir)\" 	\
-++AM_CPPFLAGS = -Wall -Wextra -DDATAROOTDIR=\"$(datarootdir)\" 	\
-+ 	-I$(srcdir)/../lib/include
-  
-+ bin_PROGRAMS = kernelscan
- -- 
--2.17.1
-+2.30.2
- 
-diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
-index 916035bda6..fc79a0b812 100644
---- a/package/fwts/fwts.hash
-+++ b/package/fwts/fwts.hash
-@@ -1,5 +1,5 @@
- # Hash from: http://fwts.ubuntu.com/release/SHA256SUMS
--sha256  02160657383a918a48c946a0ffb72c047d19a46f1455c29c0fff4d9ef7e48680  fwts-V21.02.00.tar.gz
-+sha256  e2d6e8b0704eba859a567fb8764e5dc5385793fc26bd00ecc70e7af03fd2568d  fwts-V21.05.00.tar.gz
- 
- # Hash for license file
- sha256  2003f5c8a1e40d7882f1499bd7adb7bc748c9656851abb28647a3d297c2e8e23  debian/copyright
-diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
-index eaff7b786b..402a9e0b8f 100644
---- a/package/fwts/fwts.mk
-+++ b/package/fwts/fwts.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FWTS_VERSION = 21.02.00
-+FWTS_VERSION = 21.05.00
- FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
- FWTS_SITE = http://fwts.ubuntu.com/release
- FWTS_STRIP_COMPONENTS = 0
--- 
-2.30.2
+On 28/05/2021 09:11, Fabrice Fontaine wrote:
+> Hi Koen,
+> 
+> Le ven. 28 mai 2021 ? 09:00, Koen Martens <gmc@sonologic.nl> a ?crit :
+>>
+>> Hi,
+>>
+>> Thanks for diving into this. I've had emails about this for months, and briefly
+>> looked at it, but never found the time to properly figure it out.
+>>
+>> I see the patch below is also present upstream. Do you know whether this has
+>> already been released or when it will be?
+> I don't know when upstream will release a new version.
+> However, after digging through a lot of riscv32 build failures on
+> other packages, I'm not sure that this upstream patch is right
+> anymore.
+> Aliasing SYS_futex to SYS_futex_time64 has been rejected by vlc for example:
+> https://patches.videolan.org/patch/30581/
+
+ That patch looks OK to me:
+
++/* 32bit architectures with 64bit time_t do not define __NR_futex syscall */
++#if !defined(SYS_futex) && defined(SYS_futex_time64)
++#define SYS_futex SYS_futex_time64
++#endif
+
+ The comment was "this patch won't work if the userspace ABI uses the
+64-bit time_t on a 32-bit ISA that did start with 32-bit time_t" - but that's
+not true. On a 32-bit ISA that did start with 32-bit time_t, SYS_futex will be
+defined (or SYS_foo is not properly exported by libc and then SYS_futex_time64
+isn't defined either).
+
+ To be really safe, you should maybe also check that __TIMESIZE == 64 [1] - but
+that may break on musl or uClibc.
+
+ Or even better of course would be to patch all code to use the __time64_t
+instead of time_t everywhere, independent of __TIMESIZE. But even then you'd
+need fallback to time_t for old libc/kernel.
+
+
+ Regards,
+ Arnout
+
+
+[1]
+https://www.gnu.org/software/libc/manual/html_node/64_002dbit-time-symbol-handling.html
+
+
+
+
+
+> So another option would be to just disable capnproto on riscv32.
+>>
+>> Given that this exact patch is also applied upstream, your patch below seems fine
+>> to me.
+>>
+>> Cheers,
+>>
+>> Koen
+>>
+>> On Thu, May 27, 2021 at 11:04:02PM +0200, Fabrice Fontaine wrote:
+>>> Fixes:
+>>>  - http://autobuild.buildroot.org/results/1c1cd4775241ee57d878cad5c978413d4b4a8736
+>>>
+>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>> ---
+>>>  ...it-architectures-using-64-bit-time_t.patch | 37 +++++++++++++++++++
+>>>  1 file changed, 37 insertions(+)
+>>>  create mode 100644 package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
+>>>
+>>> diff --git a/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
+>>> new file mode 100644
+>>> index 0000000000..ce70ab8f29
+>>> --- /dev/null
+>>> +++ b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
+>>> @@ -0,0 +1,37 @@
+>>> +From e2a05a19e9dc51287e19cc9f11fd91449219e361 Mon Sep 17 00:00:00 2001
+>>> +From: Khem Raj <raj.khem@gmail.com>
+>>> +Date: Sun, 15 Nov 2020 12:10:28 -0800
+>>> +Subject: [PATCH] mutex: Fix build on 32-bit architectures using 64-bit time_t
+>>> +
+>>> +mutex code uses SYS_futex, which it expects from system C library.
+>>> +in glibc (/usr/include/bits/syscall.h defines it in terms of of NR_futex)
+>>> +rv32 is using 64bit time_t from get go unlike other 32bit architectures
+>>> +in glibc, therefore it wont have NR_futex defined but just NR_futex_time64
+>>> +this aliases it to NR_futex so that SYS_futex is then defined for rv32
+>>> +
+>>> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
+>>> +[Retrieved from:
+>>> +https://github.com/capnproto/capnproto/commit/e2a05a19e9dc51287e19cc9f11fd91449219e361]
+>>> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>> +---
+>>> + c++/src/kj/mutex.c++ | 6 ++++++
+>>> + 1 file changed, 6 insertions(+)
+>>> +
+>>> +diff --git a/c++/src/kj/mutex.c++ b/c++/src/kj/mutex.c++
+>>> +index c81cead7b..e1594b117 100644
+>>> +--- a/c++/src/kj/mutex.c++
+>>> ++++ b/c++/src/kj/mutex.c++
+>>> +@@ -39,7 +39,13 @@
+>>> +
+>>> + #ifndef SYS_futex
+>>> + // Missing on Android/Bionic.
+>>> ++#ifdef __NR_futex
+>>> + #define SYS_futex __NR_futex
+>>> ++#elif defined(SYS_futex_time64)
+>>> ++#define SYS_futex SYS_futex_time64
+>>> ++#else
+>>> ++#error "Need working SYS_futex"
+>>> ++#endif
+>>> + #endif
+>>> +
+>>> + #ifndef FUTEX_WAIT_PRIVATE
+>>> --
+>>> 2.30.2
+>>>
+> Best Regards,
+> 
+> Fabrice
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
