@@ -1,154 +1,90 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 May 2021 14:21:20 +0200
-Subject: [Buildroot] [PATCH] package/libcurl: security bump to version
- 7.77.0
-In-Reply-To: <20210527213532.1521-1-peter@korsgaard.com>
-References: <20210527213532.1521-1-peter@korsgaard.com>
-Message-ID: <20210528122120.GD2788252@scaer>
+Date: Fri, 28 May 2021 14:36:39 +0200
+Subject: [Buildroot] [git commit] package/nginx: add upstream CVE-2021-23017
+ security fix
+Message-ID: <20210528120731.642648AF1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ab9ceea782c770acdb9a25d8601b12af261c8ccb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-27 23:35 +0200, Peter Korsgaard spake thusly:
-> Fixes the following security issues:
-> 
-> - CVE-2021-22897: schannel cipher selection surprise
->   https://curl.se/docs/CVE-2021-22897.html
-> 
-> - CVE-2021-22898: TELNET stack contents disclosure
->   https://curl.se/docs/CVE-2021-22898.html
-> 
-> - CVE-2021-22901: TLS session caching disaster
->   https://curl.se/docs/CVE-2021-22901.html
-> 
-> Unconditionally disable the ldap(s) options.  These require external
-> libraries, but the options were ignored if the needed libraries weren't
-> available. This is now changed to be a fatal error since
-> 
-> https://github.com/curl/curl/commit/dae382a1a1481a94b708c82d5aa9fa7253084160
-> 
-> Additionally, add a post-7.77.0 upstream patch to fix compilation with
-> bearssl.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes the following vulnerability:
 
-Applied to master, thanks.
+- CVE-2021-23017: 1-byte memory overwrite in resolver
 
-Regards,
-Yann E. MORIN.
+For more details, see the advisories:
+https://mailman.nginx.org/pipermail/nginx-announce/2021/000300.html
+https://www.openwall.com/lists/oss-security/2021/05/25/5
 
-> ---
->  ...ncorrect-const-on-variable-that-is-m.patch | 31 +++++++++++++++++++
->  package/libcurl/libcurl.hash                  |  4 +--
->  package/libcurl/libcurl.mk                    |  8 ++---
->  3 files changed, 35 insertions(+), 8 deletions(-)
->  create mode 100644 package/libcurl/0001-bearssl-remove-incorrect-const-on-variable-that-is-m.patch
-> 
-> diff --git a/package/libcurl/0001-bearssl-remove-incorrect-const-on-variable-that-is-m.patch b/package/libcurl/0001-bearssl-remove-incorrect-const-on-variable-that-is-m.patch
-> new file mode 100644
-> index 0000000000..e636cc9d1d
-> --- /dev/null
-> +++ b/package/libcurl/0001-bearssl-remove-incorrect-const-on-variable-that-is-m.patch
-> @@ -0,0 +1,31 @@
-> +From a03ea6223950002eba8b1ef0df3133c62f387d6b Mon Sep 17 00:00:00 2001
-> +From: Michael Forney <mforney@mforney.org>
-> +Date: Tue, 25 May 2021 23:42:07 -0700
-> +Subject: [PATCH] bearssl: remove incorrect const on variable that is modified
-> +
-> +hostname may be set to NULL later on in this function if it is an
-> +IP address.
-> +
-> +Closes #7133
-> +
-> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> +---
-> + lib/vtls/bearssl.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/lib/vtls/bearssl.c b/lib/vtls/bearssl.c
-> +index 7f729713d..40a5e7879 100644
-> +--- a/lib/vtls/bearssl.c
-> ++++ b/lib/vtls/bearssl.c
-> +@@ -300,7 +300,7 @@ static CURLcode bearssl_connect_step1(struct Curl_easy *data,
-> +   struct ssl_connect_data *connssl = &conn->ssl[sockindex];
-> +   struct ssl_backend_data *backend = connssl->backend;
-> +   const char * const ssl_cafile = SSL_CONN_CONFIG(CAfile);
-> +-  const char * const hostname = SSL_HOST_NAME();
-> ++  const char *hostname = SSL_HOST_NAME();
-> +   const bool verifypeer = SSL_CONN_CONFIG(verifypeer);
-> +   const bool verifyhost = SSL_CONN_CONFIG(verifyhost);
-> +   CURLcode ret;
-> +-- 
-> +2.20.1
-> +
-> diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-> index 9ee98f1e13..183321588f 100644
-> --- a/package/libcurl/libcurl.hash
-> +++ b/package/libcurl/libcurl.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature
-> -# https://curl.haxx.se/download/curl-7.76.1.tar.xz.asc
-> +# https://curl.haxx.se/download/curl-7.77.0.tar.xz.asc
->  # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
-> -sha256  64bb5288c39f0840c07d077e30d9052e1cbb9fa6c2dc52523824cc859e679145  curl-7.76.1.tar.xz
-> +sha256  0f64582c54282f31c0de9f0a1a596b182776bd4df9a4c4a2a41bbeb54f62594b  curl-7.77.0.tar.xz
->  sha256  6fd1a1c008b5ef4c4741dd188c3f8af6944c14c25afa881eb064f98fb98358e7  COPYING
-> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-> index f2cfd72897..53ff9836c1 100644
-> --- a/package/libcurl/libcurl.mk
-> +++ b/package/libcurl/libcurl.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBCURL_VERSION = 7.76.1
-> +LIBCURL_VERSION = 7.77.0
->  LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
->  LIBCURL_SITE = https://curl.haxx.se/download
->  LIBCURL_DEPENDENCIES = host-pkgconf \
-> @@ -24,7 +24,7 @@ LIBCURL_INSTALL_STAGING = YES
->  # generate C code) isn't very useful
->  LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
->  	--enable-hidden-symbols --with-random=/dev/urandom --disable-curldebug \
-> -	--disable-libcurl-option
-> +	--disable-libcurl-option --disable-ldap --disable-ldaps
->  
->  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
->  LIBCURL_CONF_OPTS += --enable-threaded-resolver
-> @@ -150,8 +150,6 @@ LIBCURL_CONF_OPTS += \
->  	--enable-dict \
->  	--enable-gopher \
->  	--enable-imap \
-> -	--enable-ldap \
-> -	--enable-ldaps \
->  	--enable-pop3 \
->  	--enable-rtsp \
->  	--enable-smb \
-> @@ -163,8 +161,6 @@ LIBCURL_CONF_OPTS += \
->  	--disable-dict \
->  	--disable-gopher \
->  	--disable-imap \
-> -	--disable-ldap \
-> -	--disable-ldaps \
->  	--disable-pop3 \
->  	--disable-rtsp \
->  	--disable-smb \
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[yann.morin.1998 at free.fr: annotate the patch, that it is a backport]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...xed-off-by-one-write-in-ngx_resolver_copy.patch | 40 ++++++++++++++++++++++
+ package/nginx/nginx.mk                             |  3 ++
+ 2 files changed, 43 insertions(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch b/package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
+new file mode 100644
+index 0000000000..ba47768fe5
+--- /dev/null
++++ b/package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
+@@ -0,0 +1,40 @@
++From 9f1dcb0c0473641730b871dee984016ff19d2c53 Mon Sep 17 00:00:00 2001
++From: Maxim Dounin <mdounin@mdounin.ru>
++Date: Tue, 25 May 2021 15:17:36 +0300
++Subject: [PATCH] Resolver: fixed off-by-one write in ngx_resolver_copy().
++
++Reported by Luis Merino, Markus Vervier, Eric Sesterhenn, X41 D-Sec GmbH.
++
++[peter at korsgaard.com: backport from upstream]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/core/ngx_resolver.c | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/core/ngx_resolver.c b/src/core/ngx_resolver.c
++index 79390701..63b26193 100644
++--- a/src/core/ngx_resolver.c
+++++ b/src/core/ngx_resolver.c
++@@ -4008,15 +4008,15 @@ done:
++             n = *src++;
++ 
++         } else {
+++            if (dst != name->data) {
+++                *dst++ = '.';
+++            }
+++
++             ngx_strlow(dst, src, n);
++             dst += n;
++             src += n;
++ 
++             n = *src++;
++-
++-            if (n != 0) {
++-                *dst++ = '.';
++-            }
++         }
++ 
++         if (n == 0) {
++-- 
++2.20.1
++
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 8a371a2cc8..e93e802fd3 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -13,6 +13,9 @@ NGINX_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt)
+ 
++# 0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
++NGINX_IGNORE_CVES += CVE-2021-23017
++
+ NGINX_CONF_OPTS = \
+ 	--crossbuild=Linux::$(BR2_ARCH) \
+ 	--with-cc="$(TARGET_CC)" \
