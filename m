@@ -1,95 +1,98 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 28 May 2021 08:00:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lttng-tools: disable tests
-Message-ID: <20210528060023.773575-1-fontaine.fabrice@gmail.com>
+Date: Fri, 28 May 2021 09:11:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/capnproto: fix build on riscv32
+In-Reply-To: <20210528065949.GA2170022@sunra>
+References: <20210527210402.555334-1-fontaine.fabrice@gmail.com>
+ <20210528065949.GA2170022@sunra>
+Message-ID: <CAPi7W83+pf05_ssNVpaY=mEOpr4MNA4DVX5m+0RViDfig91mwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disabling tests will fix the following build failures on riscv32:
+Hi Koen,
 
-select_poll_epoll.c:408:16: note: each undeclared identifier is reported only once for each function it appears in
-select_poll_epoll.c: In function 'ppoll_fds_ulong_max':
-select_poll_epoll.c:440:16: error: 'SYS_ppoll' undeclared (first use in this function); did you mean 'SYS_tkill'?
-  440 |  ret = syscall(SYS_ppoll, ufds, ULONG_MAX, NULL, NULL);
-      |                ^~~~~~~~~
-      |                SYS_tkill
-select_poll_epoll.c: In function 'pselect_invalid_fd':
-select_poll_epoll.c:488:16: error: 'SYS_pselect6' undeclared (first use in this function); did you mean 'SYS_semctl'?
-  488 |  ret = syscall(SYS_pselect6, fd + 1, &rfds, NULL, NULL, NULL, NULL);
-      |                ^~~~~~~~~~~~
-      |                SYS_semctl
+Le ven. 28 mai 2021 ? 09:00, Koen Martens <gmc@sonologic.nl> a ?crit :
+>
+> Hi,
+>
+> Thanks for diving into this. I've had emails about this for months, and briefly
+> looked at it, but never found the time to properly figure it out.
+>
+> I see the patch below is also present upstream. Do you know whether this has
+> already been released or when it will be?
+I don't know when upstream will release a new version.
+However, after digging through a lot of riscv32 build failures on
+other packages, I'm not sure that this upstream patch is right
+anymore.
+Aliasing SYS_futex to SYS_futex_time64 has been rejected by vlc for example:
+https://patches.videolan.org/patch/30581/
+So another option would be to just disable capnproto on riscv32.
+>
+> Given that this exact patch is also applied upstream, your patch below seems fine
+> to me.
+>
+> Cheers,
+>
+> Koen
+>
+> On Thu, May 27, 2021 at 11:04:02PM +0200, Fabrice Fontaine wrote:
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/1c1cd4775241ee57d878cad5c978413d4b4a8736
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  ...it-architectures-using-64-bit-time_t.patch | 37 +++++++++++++++++++
+> >  1 file changed, 37 insertions(+)
+> >  create mode 100644 package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
+> >
+> > diff --git a/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
+> > new file mode 100644
+> > index 0000000000..ce70ab8f29
+> > --- /dev/null
+> > +++ b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
+> > @@ -0,0 +1,37 @@
+> > +From e2a05a19e9dc51287e19cc9f11fd91449219e361 Mon Sep 17 00:00:00 2001
+> > +From: Khem Raj <raj.khem@gmail.com>
+> > +Date: Sun, 15 Nov 2020 12:10:28 -0800
+> > +Subject: [PATCH] mutex: Fix build on 32-bit architectures using 64-bit time_t
+> > +
+> > +mutex code uses SYS_futex, which it expects from system C library.
+> > +in glibc (/usr/include/bits/syscall.h defines it in terms of of NR_futex)
+> > +rv32 is using 64bit time_t from get go unlike other 32bit architectures
+> > +in glibc, therefore it wont have NR_futex defined but just NR_futex_time64
+> > +this aliases it to NR_futex so that SYS_futex is then defined for rv32
+> > +
+> > +Signed-off-by: Khem Raj <raj.khem@gmail.com>
+> > +[Retrieved from:
+> > +https://github.com/capnproto/capnproto/commit/e2a05a19e9dc51287e19cc9f11fd91449219e361]
+> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +---
+> > + c++/src/kj/mutex.c++ | 6 ++++++
+> > + 1 file changed, 6 insertions(+)
+> > +
+> > +diff --git a/c++/src/kj/mutex.c++ b/c++/src/kj/mutex.c++
+> > +index c81cead7b..e1594b117 100644
+> > +--- a/c++/src/kj/mutex.c++
+> > ++++ b/c++/src/kj/mutex.c++
+> > +@@ -39,7 +39,13 @@
+> > +
+> > + #ifndef SYS_futex
+> > + // Missing on Android/Bionic.
+> > ++#ifdef __NR_futex
+> > + #define SYS_futex __NR_futex
+> > ++#elif defined(SYS_futex_time64)
+> > ++#define SYS_futex SYS_futex_time64
+> > ++#else
+> > ++#error "Need working SYS_futex"
+> > ++#endif
+> > + #endif
+> > +
+> > + #ifndef FUTEX_WAIT_PRIVATE
+> > --
+> > 2.30.2
+> >
+Best Regards,
 
-Fixes:
- - http://autobuild.buildroot.org/results/dd39188a7191efa512a51f18f4c34d9ee711a6a7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-configure.ac-add-disable-tests.patch | 37 +++++++++++++++++++
- package/lttng-tools/lttng-tools.mk            |  3 ++
- 2 files changed, 40 insertions(+)
- create mode 100644 package/lttng-tools/0001-configure.ac-add-disable-tests.patch
-
-diff --git a/package/lttng-tools/0001-configure.ac-add-disable-tests.patch b/package/lttng-tools/0001-configure.ac-add-disable-tests.patch
-new file mode 100644
-index 0000000000..f569c7ec70
---- /dev/null
-+++ b/package/lttng-tools/0001-configure.ac-add-disable-tests.patch
-@@ -0,0 +1,37 @@
-+From 8c3a5d0921090e2fc3c4e2561509d23eb9ffa6dd Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 2 Apr 2021 21:07:07 +0200
-+Subject: [PATCH] configure.ac: add --disable-tests
-+
-+Allow the user to explicitly disable tests
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/lttng/lttng-tools/pull/162]
-+---
-+ configure.ac | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 04f9cef4..372cdf3d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -862,6 +862,8 @@ AC_ARG_ENABLE([bin-lttng-sessiond], AS_HELP_STRING([--disable-bin-lttng-sessiond
-+ 	      [Disable the build of lttng-sessiond binaries]))
-+ AC_ARG_ENABLE([extras], AS_HELP_STRING([--disable-extras],
-+ 	      [Disable the build of the extra components]))
-++AC_ARG_ENABLE([tests], AS_HELP_STRING([--disable-tests],
-++	      [Disable the build of the test components]))
-+ 
-+ 
-+ # Always build libconfig since it a dependency of libcommon
-+@@ -1027,6 +1029,7 @@ AM_CONDITIONAL([BUILD_BIN_LTTNG_SESSIOND], [test x$enable_bin_lttng_sessiond !=
-+ 
-+ # Export the tests and extras build conditions.
-+ AS_IF([\
-++test "x$enable_tests" != "xno" && \
-+ test "x$enable_bin_lttng" != "xno" && \
-+ test "x$enable_bin_lttng_consumerd" != "xno" && \
-+ test "x$enable_bin_lttng_crash" != "xno" && \
-+-- 
-+2.30.2
-+
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index 8789ded333..fdc5c33bd2 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -11,8 +11,11 @@ LTTNG_TOOLS_INSTALL_STAGING = YES
- LTTNG_TOOLS_LICENSE = GPL-2.0, LGPL-2.1 (include/lttng/*, src/lib/lttng-ctl/*)
- LTTNG_TOOLS_LICENSE_FILES = LICENSE $(addprefix LICENSES/,BSD-2-Clause BSD-3-Clause GPL-2.0 LGPL-2.1 MIT)
- LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt util-linux
-+# We're patching configure.ac
-+LTTNG_TOOLS_AUTORECONF = YES
- LTTNG_TOOLS_CONF_OPTS = \
- 	--disable-man-pages \
-+	--disable-tests \
- 	--with-lttng-system-rundir=/run/lttng
- 
- ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
--- 
-2.30.2
+Fabrice
