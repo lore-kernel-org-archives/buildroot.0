@@ -1,168 +1,200 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 28 May 2021 17:26:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/capnproto: fix build on riscv32
-In-Reply-To: <7eca6978-c70c-cb04-00f3-3ddad374e7f5@mind.be>
-References: <20210527210402.555334-1-fontaine.fabrice@gmail.com>
- <20210528065949.GA2170022@sunra>
- <CAPi7W83+pf05_ssNVpaY=mEOpr4MNA4DVX5m+0RViDfig91mwA@mail.gmail.com>
- <f46b99ad-b713-3fff-5b55-3f15300bd4ce@mind.be>
- <CAPi7W81NhANSaH3ytFt3OWfs8qUxXOxNu1O1n23kv8TohAkqbQ@mail.gmail.com>
- <7eca6978-c70c-cb04-00f3-3ddad374e7f5@mind.be>
-Message-ID: <CAPi7W83Se-c8b3VWT4z35dh0WXZJMBSb-ZXmOAUHVYV9fbAoXg@mail.gmail.com>
+From: Dominik Michael Rauh <dmrauh@posteo.de>
+Date: Fri, 28 May 2021 15:29:36 +0000
+Subject: [Buildroot] [PATCH v3] package/libgdal: new package
+In-Reply-To: <20210504165735.86089-1-dmrauh@posteo.de>
+References: <20210504165735.86089-1-dmrauh@posteo.de>
+Message-ID: <20210528152936.368915-1-dmrauh@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le ven. 28 mai 2021 ? 17:25, Arnout Vandecappelle <arnout@mind.be> a ?crit :
->
->
->
-> On 28/05/2021 16:33, Fabrice Fontaine wrote:
-> > Hi Arnout,
-> >
-> > Le ven. 28 mai 2021 ? 16:17, Arnout Vandecappelle <arnout@mind.be> a ?crit :
-> >>
-> >>
-> >>
-> >> On 28/05/2021 09:11, Fabrice Fontaine wrote:
-> >>> Hi Koen,
-> >>>
-> >>> Le ven. 28 mai 2021 ? 09:00, Koen Martens <gmc@sonologic.nl> a ?crit :
-> >>>>
-> >>>> Hi,
-> >>>>
-> >>>> Thanks for diving into this. I've had emails about this for months, and briefly
-> >>>> looked at it, but never found the time to properly figure it out.
-> >>>>
-> >>>> I see the patch below is also present upstream. Do you know whether this has
-> >>>> already been released or when it will be?
-> >>> I don't know when upstream will release a new version.
-> >>> However, after digging through a lot of riscv32 build failures on
-> >>> other packages, I'm not sure that this upstream patch is right
-> >>> anymore.
-> >>> Aliasing SYS_futex to SYS_futex_time64 has been rejected by vlc for example:
-> >>> https://patches.videolan.org/patch/30581/
-> >>
-> >>  That patch looks OK to me:
-> >>
-> >> +/* 32bit architectures with 64bit time_t do not define __NR_futex syscall */
-> >> +#if !defined(SYS_futex) && defined(SYS_futex_time64)
-> >> +#define SYS_futex SYS_futex_time64
-> >> +#endif
-> >>
-> >>  The comment was "this patch won't work if the userspace ABI uses the
-> >> 64-bit time_t on a 32-bit ISA that did start with 32-bit time_t" - but that's
-> >> not true. On a 32-bit ISA that did start with 32-bit time_t, SYS_futex will be
-> >> defined (or SYS_foo is not properly exported by libc and then SYS_futex_time64
-> >> isn't defined either).
-> >>
-> >>  To be really safe, you should maybe also check that __TIMESIZE == 64 [1] - but
-> >> that may break on musl or uClibc.
-> >>
-> >>  Or even better of course would be to patch all code to use the __time64_t
-> >> instead of time_t everywhere, independent of __TIMESIZE. But even then you'd
-> >> need fallback to time_t for old libc/kernel.
-> > Thanks for your feedback, I'll then send a v2 of my patch for vlc to
-> > fix the build on riscv32 instead of disabling it.
->
->  Well, no, only if upstream vlc is going to accept that approach.
-OK, then feel free to apply v1 ;-)
->
->  Regards,
->  Arnout
->
-> >>
-> >>
-> >>  Regards,
-> >>  Arnout
-> >>
-> >>
-> >> [1]
-> >> https://www.gnu.org/software/libc/manual/html_node/64_002dbit-time-symbol-handling.html
-> >>
-> >>
-> >>
-> >>
-> >>
-> >>> So another option would be to just disable capnproto on riscv32.
-> >>>>
-> >>>> Given that this exact patch is also applied upstream, your patch below seems fine
-> >>>> to me.
-> >>>>
-> >>>> Cheers,
-> >>>>
-> >>>> Koen
-> >>>>
-> >>>> On Thu, May 27, 2021 at 11:04:02PM +0200, Fabrice Fontaine wrote:
-> >>>>> Fixes:
-> >>>>>  - http://autobuild.buildroot.org/results/1c1cd4775241ee57d878cad5c978413d4b4a8736
-> >>>>>
-> >>>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >>>>> ---
-> >>>>>  ...it-architectures-using-64-bit-time_t.patch | 37 +++++++++++++++++++
-> >>>>>  1 file changed, 37 insertions(+)
-> >>>>>  create mode 100644 package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
-> >>>>>
-> >>>>> diff --git a/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
-> >>>>> new file mode 100644
-> >>>>> index 0000000000..ce70ab8f29
-> >>>>> --- /dev/null
-> >>>>> +++ b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
-> >>>>> @@ -0,0 +1,37 @@
-> >>>>> +From e2a05a19e9dc51287e19cc9f11fd91449219e361 Mon Sep 17 00:00:00 2001
-> >>>>> +From: Khem Raj <raj.khem@gmail.com>
-> >>>>> +Date: Sun, 15 Nov 2020 12:10:28 -0800
-> >>>>> +Subject: [PATCH] mutex: Fix build on 32-bit architectures using 64-bit time_t
-> >>>>> +
-> >>>>> +mutex code uses SYS_futex, which it expects from system C library.
-> >>>>> +in glibc (/usr/include/bits/syscall.h defines it in terms of of NR_futex)
-> >>>>> +rv32 is using 64bit time_t from get go unlike other 32bit architectures
-> >>>>> +in glibc, therefore it wont have NR_futex defined but just NR_futex_time64
-> >>>>> +this aliases it to NR_futex so that SYS_futex is then defined for rv32
-> >>>>> +
-> >>>>> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
-> >>>>> +[Retrieved from:
-> >>>>> +https://github.com/capnproto/capnproto/commit/e2a05a19e9dc51287e19cc9f11fd91449219e361]
-> >>>>> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >>>>> +---
-> >>>>> + c++/src/kj/mutex.c++ | 6 ++++++
-> >>>>> + 1 file changed, 6 insertions(+)
-> >>>>> +
-> >>>>> +diff --git a/c++/src/kj/mutex.c++ b/c++/src/kj/mutex.c++
-> >>>>> +index c81cead7b..e1594b117 100644
-> >>>>> +--- a/c++/src/kj/mutex.c++
-> >>>>> ++++ b/c++/src/kj/mutex.c++
-> >>>>> +@@ -39,7 +39,13 @@
-> >>>>> +
-> >>>>> + #ifndef SYS_futex
-> >>>>> + // Missing on Android/Bionic.
-> >>>>> ++#ifdef __NR_futex
-> >>>>> + #define SYS_futex __NR_futex
-> >>>>> ++#elif defined(SYS_futex_time64)
-> >>>>> ++#define SYS_futex SYS_futex_time64
-> >>>>> ++#else
-> >>>>> ++#error "Need working SYS_futex"
-> >>>>> ++#endif
-> >>>>> + #endif
-> >>>>> +
-> >>>>> + #ifndef FUTEX_WAIT_PRIVATE
-> >>>>> --
-> >>>>> 2.30.2
-> >>>>>
-> >>> Best Regards,
-> >>>
-> >>> Fabrice
-> >>> _______________________________________________
-> >>> buildroot mailing list
-> >>> buildroot at busybox.net
-> >>> http://lists.busybox.net/mailman/listinfo/buildroot
-> >>>
-> > Best Regards,
-> >
-> > Fabrice
-> >
-Best Regards,
+GDAL is a translator library for raster and vector geospatial data
+formats. As a library, it presents a single raster abstract data model
+and single vector abstract data model to the calling application for all
+supported formats. It also comes with a variety of useful command line
+utilities for data translation and processing.
 
-Fabrice
+https://gdal.org/
+
+Signed-off-by: Dominik Michael Rauh <dmrauh@posteo.de>
+---
+Changes v2 -> v3:
+-  Bump version from 3.2.2 to 3.3.0
+
+Changes v1 -> v2 (after review by Peter Seiderer):
+-  Disable NEON and VSX support when using libgdal's libpng
+-  Disable compilation for toolchains with binutils bug 21464 or 27597
+-  Add the proper "depends" demanded by proj
+-  Fix the comment in Config.in
+-  Hopefully add the complete LIBGDAL_LICENSE information
+
+ package/Config.in                             |  1 +
+ ...1-port-cpl_recode_iconv.cpp-use-cast.patch | 38 +++++++++++++++
+ package/libgdal/Config.in                     | 27 +++++++++++
+ package/libgdal/libgdal.hash                  |  6 +++
+ package/libgdal/libgdal.mk                    | 48 +++++++++++++++++++
+ 5 files changed, 120 insertions(+)
+ create mode 100644 package/libgdal/0001-port-cpl_recode_iconv.cpp-use-cast.patch
+ create mode 100644 package/libgdal/Config.in
+ create mode 100644 package/libgdal/libgdal.hash
+ create mode 100644 package/libgdal/libgdal.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 82b28d2835..c2262835cc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1914,6 +1914,7 @@ menu "Other"
+ 	source "package/libevdev/Config.in"
+ 	source "package/libevent/Config.in"
+ 	source "package/libffi/Config.in"
++	source "package/libgdal/Config.in"
+ 	source "package/libgee/Config.in"
+ 	source "package/libgeos/Config.in"
+ 	source "package/libglib2/Config.in"
+diff --git a/package/libgdal/0001-port-cpl_recode_iconv.cpp-use-cast.patch b/package/libgdal/0001-port-cpl_recode_iconv.cpp-use-cast.patch
+new file mode 100644
+index 0000000000..9fa958524f
+--- /dev/null
++++ b/package/libgdal/0001-port-cpl_recode_iconv.cpp-use-cast.patch
+@@ -0,0 +1,38 @@
++From 0730ebc7a1e22a169bf3a1d873e130e079a68b3d Mon Sep 17 00:00:00 2001
++From: Dominik Michael Rauh <dmrauh@posteo.de>
++Date: Sat, 1 May 2021 20:11:30 +0200
++Subject: [PATCH] port/cpl_recode_iconv.cpp: use cast
++
++Fixes error: invalid cast from type 'int' to type 'iconv_t' {aka 'long
++int'}
++
++Signed-off-by: Dominik Michael Rauh <dmrauh@posteo.de>
++---
++ port/cpl_recode_iconv.cpp | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/port/cpl_recode_iconv.cpp b/port/cpl_recode_iconv.cpp
++index d341bb1..2346012 100644
++--- a/port/cpl_recode_iconv.cpp
+++++ b/port/cpl_recode_iconv.cpp
++@@ -87,7 +87,7 @@ char *CPLRecodeIconv( const char *pszSource,
++ 
++     sConv = iconv_open( pszDstEncoding, pszSrcEncoding );
++ 
++-    if( sConv == reinterpret_cast<iconv_t>(-1) )
+++    if( sConv == (iconv_t)(-1) )
++     {
++         CPLError( CE_Warning, CPLE_AppDefined,
++                   "Recode from %s to %s failed with the error: \"%s\".",
++@@ -234,7 +234,7 @@ char *CPLRecodeFromWCharIconv( const wchar_t *pwszSource,
++ 
++     sConv = iconv_open( pszDstEncoding, pszSrcEncoding );
++ 
++-    if( sConv == reinterpret_cast<iconv_t>(-1) )
+++    if( sConv == (iconv_t)(-1) )
++     {
++         CPLFree( pszIconvSrcBuf );
++         CPLError( CE_Warning, CPLE_AppDefined,
++-- 
++2.31.1
++
+diff --git a/package/libgdal/Config.in b/package/libgdal/Config.in
+new file mode 100644
+index 0000000000..a197d25aff
+--- /dev/null
++++ b/package/libgdal/Config.in
+@@ -0,0 +1,27 @@
++config BR2_PACKAGE_LIBGDAL
++	bool "libgdal"
++	depends on BR2_INSTALL_LIBSTDCPP # proj
++	# configure can't find proj, when linking statically
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, proj
++	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
++	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
++	depends on BR2_TOOLCHAIN_HAS_THREADS # proj
++	depends on BR2_USE_WCHAR # proj
++	select BR2_PACKAGE_PROJ
++	help
++	  GDAL is a translator library for raster and vector geospatial
++	  data formats. As a library, it presents a single raster
++	  abstract data model and single vector abstract data model to
++	  the calling application for all supported formats. It also
++	  comes with a variety of useful command line utilities for data
++	  translation and processing.
++
++	  https://gdal.org/
++
++comment "libgdal needs a toolchain w/ C++, dynamic library, gcc >= 4.7, not binutils bug 21464, 27597, threads, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
++		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
++		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597 || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR
+diff --git a/package/libgdal/libgdal.hash b/package/libgdal/libgdal.hash
+new file mode 100644
+index 0000000000..2dc6dc3766
+--- /dev/null
++++ b/package/libgdal/libgdal.hash
+@@ -0,0 +1,6 @@
++# md5 from: https://download.osgeo.org/gdal/3.3.0/gdal-3.3.0.tar.xz.md5, sha256 locally computed:
++md5  000db27a7b3e146b9dcb3838aabde2ab  gdal-3.3.0.tar.xz
++sha256  190c8f4b56afc767f43836b2a5cd53cc52ee7fdc25eb78c6079c5a244e28efa7  gdal-3.3.0.tar.xz
++
++# Hash of license file:
++sha256  b82e6cca0b13f5db2f22ab667f22254fb1f4b135ea73d5bd6238ef89aff31f6c  LICENSE.TXT
+diff --git a/package/libgdal/libgdal.mk b/package/libgdal/libgdal.mk
+new file mode 100644
+index 0000000000..b86b2154e4
+--- /dev/null
++++ b/package/libgdal/libgdal.mk
+@@ -0,0 +1,48 @@
++################################################################################
++#
++# libgdal
++#
++################################################################################
++
++LIBGDAL_VERSION = 3.3.0
++LIBGDAL_SITE = https://download.osgeo.org/gdal/$(LIBGDAL_VERSION)
++LIBGDAL_SOURCE = gdal-$(LIBGDAL_VERSION).tar.xz
++LIBGDAL_LICENSE = MIT (GDAL/OGR), BSD-3-Clause, BSD-Style, APACHE-2.0
++LIBGDAL_LICENSE_FILES = LICENSE.TXT
++LIBGDAL_INSTALL_STAGING = YES
++LIBGDAL_CONFIG_SCRIPTS = gdal-config
++LIBGDAL_DEPENDENCIES = host-pkgconf proj
++
++# libgdal fails to detect NEON support on aarch64 or ARM platforms
++# resp. VSX support on PowerPC based platforms. While linking an
++# application with libgdal.so, we get an undefined reference to
++# png_init_filter_functions_neon resp. png_init_filter_functions_vsx.
++# Some files are missing in the libpng bundled with libgdal, in
++# particular arm/arm_init.c and powerpc/powerpc_init.c, so disable NEON
++# and VSX support completely when using libgdal's internal libpng.
++
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++LIBGDAL_DEPENDENCIES += libpng
++LIBGDAL_CONF_OPTS += --with-png=$(STAGING_DIR)/usr
++else
++LIBGDAL_CONF_OPTS += --with-png=internal
++LIBGDAL_CPPFLAGS += -DPNG_ARM_NEON_OPT=0 -DPNG_POWERPC_VSX_OPT=0
++endif
++
++ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
++LIBGDAL_DEPENDENCIES += postgresql
++LIBGDAL_CONF_OPTS += --with-pg=yes
++else
++LIBGDAL_CONF_OPTS += --with-pg=no
++endif
++
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++LIBGDAL_DEPENDENCIES += libxml2
++LIBGDAL_CONF_OPTS += --with-xml2=yes
++else
++LIBGDAL_CONF_OPTS += --with-xml2=no
++endif
++
++LIBGDAL_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) $(LIBGDAL_CPPFLAGS)"
++
++$(eval $(autotools-package))
+-- 
+2.31.1
