@@ -1,40 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 May 2021 11:16:35 +0200
-Subject: [Buildroot] [git commit] Revert "package/pkg-meson: handle b_pie"
-Message-ID: <20210529084938.3FA568A437@busybox.osuosl.org>
+Date: Sat, 29 May 2021 11:21:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: handle b_pie
+In-Reply-To: <20210529090943.GM2788252@scaer>
+References: <20210528191748.1598384-1-fontaine.fabrice@gmail.com>
+ <20210529090943.GM2788252@scaer>
+Message-ID: <20210529092141.GO2788252@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfceec6b5f17a993470ad4fdeb4c3afb1f513635
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-This reverts commit a8a147f6046f9d11d4685ddfa5c2a6a01f4d7219.
+On 2021-05-29 11:09 +0200, Yann E. MORIN spake thusly:
+> On 2021-05-28 21:17 +0200, Fabrice Fontaine spake thusly:
+> > pipewire unconditionally enables b_pie since version 0.3.20 and
+> > https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/abe73c9146cd223b40b22581b1fd58bc044c671e
+> > which will raise the following build failure on m68k since commit
+> > a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9:
+> > 
+> > /srv/storage/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/9.3.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-1/output-1/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/Scrt1.o: in function `lib_main':
+> > (.text+0x4): undefined reference to `__shared_flat_add_library'
+> > 
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/c258a2736661af8ea73abeda2503d8682e65f1e2
+> > 
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/pkg-meson.mk | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> > index a57820d4d2..a55063d58e 100644
+> > --- a/package/pkg-meson.mk
+> > +++ b/package/pkg-meson.mk
+> > @@ -91,6 +91,7 @@ define $(2)_CONFIGURE_CMDS
+> >  		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+> >  		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+> >  		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+> > +		-Db_pie=$(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),true,false) \
+[--SNIP--]
+> In the meantime, I think it is still correct to have b_pie on the
+> command line for our infra, like we have strip, so: applied to master,
+> thanks.
 
-That commit incorrectly made use of BR2_TOOLCHAIN_SUPPORTS_PIE, when it
-should have been using BR2_PIC_PIE.
+Given a later patch that arrived in parallel, it turns out this patch
+was not correct, and that we still have a bit of interrogation on that,
+so I've reverted it, sorry. I'll keep an eye on the discussions...
 
-Besides, another attempt is pending, that unconditionally disables it as
-it will be set by the toolchain wrapper already.
+Regards,
+Yann E. MORIN.
 
-For both reasons, revert rather than switch over to BR2_PIC_PIE.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/pkg-meson.mk | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index a55063d58e..a57820d4d2 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -91,7 +91,6 @@ define $(2)_CONFIGURE_CMDS
- 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
- 		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
- 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
--		-Db_pie=$(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),true,false) \
- 		-Dstrip=false \
- 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
- 		$$($$(PKG)_CONF_OPTS) \
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
