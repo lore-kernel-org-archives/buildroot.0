@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2884C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:34:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CC92C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:34:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9AE8E60F9C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:34:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9AE8E60F9C
+	by mail.kernel.org (Postfix) with ESMTPS id 0528A60F9C
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:34:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0528A60F9C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 781894053D;
-	Tue,  3 Aug 2021 21:34:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3B884049A;
+	Tue,  3 Aug 2021 21:34:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TnVJRbgqAHuf; Tue,  3 Aug 2021 21:34:32 +0000 (UTC)
+	with ESMTP id eEGMO57ZPJpd; Tue,  3 Aug 2021 21:34:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B678C401F7;
-	Tue,  3 Aug 2021 21:34:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0A6271BF349
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E1504022A;
+	Tue,  3 Aug 2021 21:34:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 13E5A1BF9AA
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 25DBC60662
+ by smtp4.osuosl.org (Postfix) with ESMTP id A980A40508
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id djLM6_Hkw85t for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TGuD_PcTfyoW for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 75D4660862
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 12553404D4
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id BF53185F62; Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
+ id 5B29B864A8; Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 24 May 2021 22:19:44 +0200
+Date: Sat, 29 May 2021 11:10:00 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 09057202022e16d6c3ad0cac1c30789b08b04feb
-X-Git-Newrev: 4f79b1cb93757e23d74e748f94f15a65b363f887
+X-Git-Oldrev: 4fce8cd4ae87001c499064b021b32fef65c0c045
+X-Git-Newrev: a8a147f6046f9d11d4685ddfa5c2a6a01f4d7219
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210945.BF53185F62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-bluezero:
- select dbus
+Message-Id: <20210803210946.5B29B864A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pkg-meson: handle b_pie
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,34 +69,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f79b1cb93757e23d74e748f94f15a65b363f887
+commit: https://git.buildroot.net/buildroot/commit/?id=a8a147f6046f9d11d4685ddfa5c2a6a01f4d7219
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Build is broken since commit
-8bdc5e7c4d975193b1e18999ed840507cea63bd6 because BR2_PACKAGE_DBUS_PYTHON
-is selected without selecting BR2_PACKAGE_DBUS
+pipewire unconditionally enables b_pie since version 0.3.20 and
+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/abe73c9146cd223b40b22581b1fd58bc044c671e
+which will raise the following build failure on m68k since commit
+a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9:
+
+/srv/storage/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/9.3.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-1/output-1/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/Scrt1.o: in function `lib_main':
+(.text+0x4): undefined reference to `__shared_flat_add_library'
 
 Fixes:
- - http://autobuild.buildroot.org/results/378dd714940440b8f9db763479ae929e90e33b80
+ - http://autobuild.buildroot.org/results/c258a2736661af8ea73abeda2503d8682e65f1e2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-bluezero/Config.in | 1 +
+ package/pkg-meson.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/python-bluezero/Config.in b/package/python-bluezero/Config.in
-index 7126b3ca50..c391bfa858 100644
---- a/package/python-bluezero/Config.in
-+++ b/package/python-bluezero/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_BLUEZERO
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # python-gobject -> gobject-introspection
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # python-gobject -> gobject-introspection
- 	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_DBUS # runtime
- 	select BR2_PACKAGE_DBUS_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_GOBJECT # runtime
- 	help
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index a57820d4d2..a55063d58e 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -91,6 +91,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+ 		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+ 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
++		-Db_pie=$(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),true,false) \
+ 		-Dstrip=false \
+ 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
+ 		$$($$(PKG)_CONF_OPTS) \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
