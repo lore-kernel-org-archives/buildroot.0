@@ -1,77 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 May 2021 21:42:10 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/pkg-meson: always set b_pie to false
-In-Reply-To: <20210529084836.2472641-1-fontaine.fabrice@gmail.com>
-References: <20210529084836.2472641-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210529194210.GB3858765@scaer>
+Date: Sat, 29 May 2021 22:05:19 +0200
+Subject: [Buildroot] [git commit] package/strace: xtensa needs headers >= 5.0
+Message-ID: <20210529193537.7CF9D814D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=fb25c95a0b88c63e2b2376a22ee906ca1f714d04
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-05-29 10:48 +0200, Fabrice Fontaine spake thusly:
-> pipewire unconditionally enables b_pie since version 0.3.20 and
-> https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/abe73c9146cd223b40b22581b1fd58bc044c671e
-> which will raise the following build failure on m68k since commit
-> a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9:
-> 
-> /srv/storage/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/m68k-buildroot-linux-uclibc/9.3.0/../../../../m68k-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-1/output-1/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/Scrt1.o: in function `lib_main':
-> (.text+0x4): undefined reference to `__shared_flat_add_library'
-> 
-> To fix this build failure, always set b_pie to false as PIE will be
-> enabled by toolchain/toolchain-wrapper.mk if needed
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c258a2736661af8ea73abeda2503d8682e65f1e2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+xtensa support needs user_pt_regs since version 5.6 and
+https://github.com/strace/strace/commit/2429c69961e2598902bded9c02dd601b362b66b4
 
-Applied to master, thanks.
+However user_pt_regs is only available since kernel 5.0 and
+https://github.com/torvalds/linux/commit/06fbac8e8971f2fa526e189304dd95ee62f39dbe
 
-Moving the options to the cross-compilation file can be done in a later
-patch, possibly to be applied after the release to avoid introducing too
-much unknown so close to the release...
+Fixes:
+ - http://autobuild.buildroot.org/results/c6c4fb3b9098c5fc5dbe4415e2a9757fc775b746
 
-Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/strace/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2:
->  - Always set b_pie to false
-> 
->  package/pkg-meson.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index a57820d4d2..1857450564 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -91,6 +91,7 @@ define $(2)_CONFIGURE_CMDS
->  		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
->  		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
->  		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
-> +		-Db_pie=false \
->  		-Dstrip=false \
->  		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
->  		$$($$(PKG)_CONF_OPTS) \
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/strace/Config.in b/package/strace/Config.in
+index 5b33dad392..c394d4c398 100644
+--- a/package/strace/Config.in
++++ b/package/strace/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_STRACE
+ 	bool "strace"
+ 	# needs at least kernel headers 4.0 on nios2
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
++	# needs at least kernel headers 5.0 on xtensa
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_xtensa
+ 	depends on !BR2_nds32 && !BR2_RISCV_32
+ 	help
+ 	  A useful diagnostic, instructional, and debugging tool.
+@@ -16,3 +18,7 @@ config BR2_PACKAGE_STRACE
+ comment "strace needs a toolchain w/ headers >= 4.0 on nios2"
+ 	depends on BR2_nios2
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++
++comment "strace needs a toolchain w/ headers >= 5.0 on xtensa"
++	depends on BR2_xtensa
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
