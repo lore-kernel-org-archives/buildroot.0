@@ -1,41 +1,38 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 29 May 2021 23:48:15 -0700
-Subject: [Buildroot] [PATCH 1/1] package/delve: bump to version 1.6.1
-Message-ID: <20210530064815.1173206-1-christian@paral.in>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 30 May 2021 10:14:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcutl: fix build with gcc 11
+Message-ID: <20210530081404.3086770-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/delve/delve.hash | 4 ++--
- package/delve/delve.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Add -std=c++11 to fix the following build failure with gcc 11:
 
-diff --git a/package/delve/delve.hash b/package/delve/delve.hash
-index e8bb9c37ad..3d117813c6 100644
---- a/package/delve/delve.hash
-+++ b/package/delve/delve.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f8bbaecdfc9d1ff6148900d3dea44b6dd06a7f0197be4e9a75c289b7f62682ab  delve-1.5.0.tar.gz
--sha256	778864b990007e8cef6633f8c372dd05bac1fada6cf67b008afb1483f83b38f5  LICENSE
-+sha256  e73f7fc063632268d3bdf53486aeafd98cceb8f86f4af56903dedfebaefe690d  delve-1.6.1.tar.gz
-+sha256  778864b990007e8cef6633f8c372dd05bac1fada6cf67b008afb1483f83b38f5  LICENSE
-diff --git a/package/delve/delve.mk b/package/delve/delve.mk
-index f574bc5c08..6c346552a4 100644
---- a/package/delve/delve.mk
-+++ b/package/delve/delve.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+In file included from shared-ptr/base.cxx:5:
+../cutl/shared-ptr/base.hxx:34:41: error: ISO C++17 does not allow dynamic exception specifications
+   34 | operator new (std::size_t, cutl::share) throw (std::bad_alloc);
+      |                                         ^~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/60a39d402a0d051c92aa11421b7a14f7729a0380
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libcutl/libcutl.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libcutl/libcutl.mk b/package/libcutl/libcutl.mk
+index 49c05e6019..2b704ad3b8 100644
+--- a/package/libcutl/libcutl.mk
++++ b/package/libcutl/libcutl.mk
+@@ -11,5 +11,6 @@ LIBCUTL_SITE = https://www.codesynthesis.com/download/libcutl/$(LIBCUTL_VERSION_
+ LIBCUTL_INSTALL_STAGING = YES
+ LIBCUTL_LICENSE = MIT
+ LIBCUTL_LICENSE_FILES = LICENSE
++HOST_LIBCUTL_CONF_ENV = CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
  
--DELVE_VERSION = 1.5.0
-+DELVE_VERSION = 1.6.1
- DELVE_SITE = $(call github,go-delve,delve,v$(DELVE_VERSION))
- DELVE_LICENSE = MIT
- DELVE_LICENSE_FILES = LICENSE
+ $(eval $(host-autotools-package))
 -- 
-2.31.1
+2.30.2
