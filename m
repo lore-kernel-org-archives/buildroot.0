@@ -1,53 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 May 2021 10:44:57 +0200
-Subject: [Buildroot] [PATCH] package/dhcp: security bump to version 4.4.2-P1
-Message-ID: <20210530084457.24417-1-peter@korsgaard.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 30 May 2021 13:19:01 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/icu: bump version to 69-1
+Message-ID: <20210530111901.11327-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+Release notes: http://site.icu-project.org/download/69
 
-- CVE-2021-25217: A buffer overrun in lease file parsing code can be used to
-  exploit a common vulnerability shared by dhcpd and dhclient
-
-For details, see the advisory:
-https://kb.isc.org/docs/cve-2021-25217
-
-Update the LICENSE hash for a change of copyright years.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dhcp/dhcp.hash | 6 +++---
- package/dhcp/dhcp.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/icu/icu.hash | 2 +-
+ package/icu/icu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dhcp/dhcp.hash b/package/dhcp/dhcp.hash
-index 92ecdfec58..ec7c4fe58d 100644
---- a/package/dhcp/dhcp.hash
-+++ b/package/dhcp/dhcp.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/dhcp/4.4.2/dhcp-4.4.2.tar.gz.sha256.asc
--sha256  1a7ccd64a16e5e68f7b5e0f527fd07240a2892ea53fe245620f4f5f607004521  dhcp-4.4.2.tar.gz
-+# Verified from https://ftp.isc.org/isc/dhcp/4.4.2-P1/dhcp-4.4.2-P1.tar.gz.sha256.asc
-+sha256  b05e04337539545a8faa0d6ac518defc61a07e5aec66a857f455e7f218c85a1a  dhcp-4.4.2-P1.tar.gz
- # Locally calculated
--sha256  89e7b0661134cc118bdcdeb87ff0493d544bc5723c9ca6616fa05f03539738af  LICENSE
-+sha256  9961fce0d83a6229b9084cdadedfa723a53274c63af610c9adb61b607e0f5a76  LICENSE
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index db58870f88..1edb3c5e99 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DHCP_VERSION = 4.4.2
-+DHCP_VERSION = 4.4.2-P1
- DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
- DHCP_INSTALL_STAGING = YES
- DHCP_LICENSE = MPL-2.0
+diff --git a/package/icu/icu.hash b/package/icu/icu.hash
+index 80cdd7df0c..5ed7cc4217 100644
+--- a/package/icu/icu.hash
++++ b/package/icu/icu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a9f2e3d8b4434b8e53878b4308bd1e6ee51c9c7042e2b1a376abefb6fbb29f2d  icu4c-68_1-src.tgz
++sha256  4cba7b7acd1d3c42c44bb0c14be6637098c7faf2b330ce876bc5f3b915d09745  icu4c-69_1-src.tgz
+ sha256  7915b19db903070778581ae05d8bf4ea241b34a05deb51ca4f5cbb15ea1cbba3  LICENSE
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 4d67831c76..0a17c61462 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -7,7 +7,7 @@
+ # Git tags (and therefore versions on release-monitoring.org) use the
+ # XX-Y format, but the tarballs are named XX_Y and the containing
+ # directories XX.Y.
+-ICU_VERSION = 68-1
++ICU_VERSION = 69-1
+ ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
+ ICU_SITE = \
+ 	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
 -- 
-2.20.1
+2.29.2
