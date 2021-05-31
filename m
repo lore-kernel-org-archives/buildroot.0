@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue,  1 Jun 2021 00:27:32 +0300
-Subject: [Buildroot] [PATCH/RFC 12/28]
- configs/friendlyarm_nanopi_neo_plus2_defconfig: switch to upstream ATF
+Date: Tue,  1 Jun 2021 00:27:33 +0300
+Subject: [Buildroot] [PATCH/RFC 13/28] configs/amarula_a64_relic_defconfig:
+ switch to upstream ATF
 In-Reply-To: <20210531212748.2378872-1-geomatsi@gmail.com>
 References: <20210531212748.2378872-1-geomatsi@gmail.com>
-Message-ID: <20210531212748.2378872-13-geomatsi@gmail.com>
+Message-ID: <20210531212748.2378872-14-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,14 +17,14 @@ GCC stack protection, so make sure to disable this ATF feature.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- configs/friendlyarm_nanopi_neo_plus2_defconfig | 8 ++++----
+ configs/amarula_a64_relic_defconfig | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/friendlyarm_nanopi_neo_plus2_defconfig b/configs/friendlyarm_nanopi_neo_plus2_defconfig
-index 461e468cb6..91b8ad1a22 100644
---- a/configs/friendlyarm_nanopi_neo_plus2_defconfig
-+++ b/configs/friendlyarm_nanopi_neo_plus2_defconfig
-@@ -8,10 +8,10 @@ BR2_ROOTFS_OVERLAY="board/friendlyarm/nanopi-neo-plus2/rootfs_overlay"
+diff --git a/configs/amarula_a64_relic_defconfig b/configs/amarula_a64_relic_defconfig
+index 304a3ef824..3e51cefdbc 100644
+--- a/configs/amarula_a64_relic_defconfig
++++ b/configs/amarula_a64_relic_defconfig
+@@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
  
  # Firmware
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
@@ -36,7 +36,7 @@ index 461e468cb6..91b8ad1a22 100644
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.4"
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_DISABLE_SSP=y
- R2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
  
  # Bootloader
 -- 
