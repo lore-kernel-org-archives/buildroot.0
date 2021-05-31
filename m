@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue,  1 Jun 2021 00:27:41 +0300
-Subject: [Buildroot] [PATCH/RFC 21/28] configs/orangepi_prime_defconfig:
- bump BSP versions
+Date: Tue,  1 Jun 2021 00:27:42 +0300
+Subject: [Buildroot] [PATCH/RFC 22/28] configs/orangepi_win_defconfig: bump
+ BSP versions
 In-Reply-To: <20210531212748.2378872-1-geomatsi@gmail.com>
 References: <20210531212748.2378872-1-geomatsi@gmail.com>
-Message-ID: <20210531212748.2378872-22-geomatsi@gmail.com>
+Message-ID: <20210531212748.2378872-23-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,14 +29,14 @@ using custom U-Boot build options.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- board/orangepi/orangepi-prime/genimage.cfg | 10 ++--------
- configs/orangepi_prime_defconfig           | 13 ++++++-------
- 2 files changed, 8 insertions(+), 15 deletions(-)
+ board/orangepi/orangepi-win/genimage.cfg | 10 ++--------
+ configs/orangepi_win_defconfig           | 15 ++++++++-------
+ 2 files changed, 10 insertions(+), 15 deletions(-)
 
-diff --git a/board/orangepi/orangepi-prime/genimage.cfg b/board/orangepi/orangepi-prime/genimage.cfg
-index bb01ed9f10..be7e9d7908 100644
---- a/board/orangepi/orangepi-prime/genimage.cfg
-+++ b/board/orangepi/orangepi-prime/genimage.cfg
+diff --git a/board/orangepi/orangepi-win/genimage.cfg b/board/orangepi/orangepi-win/genimage.cfg
+index db025d55ca..f24ea32584 100644
+--- a/board/orangepi/orangepi-win/genimage.cfg
++++ b/board/orangepi/orangepi-win/genimage.cfg
 @@ -15,15 +15,9 @@ image sdcard.img {
  
  	partition spl {
@@ -55,30 +55,30 @@ index bb01ed9f10..be7e9d7908 100644
  	}
  
  	partition boot {
-diff --git a/configs/orangepi_prime_defconfig b/configs/orangepi_prime_defconfig
-index ddee65c185..580a2baf5b 100644
---- a/configs/orangepi_prime_defconfig
-+++ b/configs/orangepi_prime_defconfig
+diff --git a/configs/orangepi_win_defconfig b/configs/orangepi_win_defconfig
+index 217f3e1e42..cf7c0d5e3c 100644
+--- a/configs/orangepi_win_defconfig
++++ b/configs/orangepi_win_defconfig
 @@ -2,8 +2,7 @@ BR2_aarch64=y
  BR2_cortex_a53=y
  BR2_ARM_FPU_VFPV4=y
  
--# Linux headers same as kernel, a 5.0 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
  
  # Firmware
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-@@ -17,15 +16,15 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+@@ -17,14 +16,15 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_prime"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_win"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
  BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
 -BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 -BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
@@ -88,15 +88,19 @@ index ddee65c185..580a2baf5b 100644
 +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
  BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-prime/boot.cmd"
-@@ -33,7 +32,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-prime/b
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-win/boot.cmd"
+@@ -32,10 +32,11 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-win/boo
  # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-prime"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-orangepi-win"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ # Filesystem
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Win/Win Plus"
 -- 
 2.31.1
