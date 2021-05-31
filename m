@@ -1,60 +1,43 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue,  1 Jun 2021 00:27:23 +0300
-Subject: [Buildroot] [PATCH/RFC 03/28] support/testing/tests/boot/test_atf:
- update U-Boot in TestATFAllwinner
+Date: Tue,  1 Jun 2021 00:27:24 +0300
+Subject: [Buildroot] [PATCH/RFC 04/28]
+ configs/orangepi_zero_plus2_defconfig: switch to upstream ATF
 In-Reply-To: <20210531212748.2378872-1-geomatsi@gmail.com>
 References: <20210531212748.2378872-1-geomatsi@gmail.com>
-Message-ID: <20210531212748.2378872-4-geomatsi@gmail.com>
+Message-ID: <20210531212748.2378872-5-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot version in TestATFAllwinner. Updating U-Boot version to
-2021.04 requires the following two changes.
-
-First, after switching to binman, u-boot.itb is no more generated for
-64-bit sunxi boards. Combined u-boot-sunxi-with-spl.bin image should
-be used instead. This image contains SPL, U-Boot, and FIT image,
-where FIT image contains other binaries such as BL31 and SCP.
-
-Second, new U-Boot enables support for System Control Processor (SCP)
-firmware. SCP firmware is included by default into FIT image in the
-combined u-boot-sunxi-with-spl.bin binary. When SCP is not available
-or not needed, it should be explicitly disabled by pointing to an
-empty file. Support for Allwinner SCP firmware is not yet available
-neither in Buildroot nor in mainline kernel. So disable it for now
-using custom U-Boot build options.
+Switch to upstream ATF that provides basic support for H5 and A64.
+Note that allwinner platform layer does not provide support for
+GCC stack protection, so make sure to disable this ATF feature.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- support/testing/tests/boot/test_atf.py | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ configs/orangepi_zero_plus2_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
-index c86c32092c..a5037b4b27 100644
---- a/support/testing/tests/boot/test_atf.py
-+++ b/support/testing/tests/boot/test_atf.py
-@@ -42,16 +42,15 @@ class TestATFAllwinner(infra.basetest.BRTest):
-         BR2_TARGET_UBOOT=y
-         BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-         BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-         BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
-         BR2_TARGET_UBOOT_NEEDS_DTC=y
-         BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-         BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-         BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--        BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--        BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-         BR2_TARGET_UBOOT_SPL=y
--        BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
-+        BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+        BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
-         """
+diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
+index aa4c5c9413..282418885f 100644
+--- a/configs/orangepi_zero_plus2_defconfig
++++ b/configs/orangepi_zero_plus2_defconfig
+@@ -8,10 +8,10 @@ BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
  
-     def test_run(self):
+ # Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.4"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_DISABLE_SSP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ 
+ # Bootloader
 -- 
 2.31.1
