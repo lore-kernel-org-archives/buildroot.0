@@ -1,14 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 31 May 2021 12:44:20 +0200
-Subject: [Buildroot] [PATCHv3 11/15] package/sofia-sip: use
- BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
-In-Reply-To: <b46b5074-12c3-8099-5946-de715f715a8e@mind.be>
-References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
- <20210525122750.5022-12-patrickdepinguin@gmail.com>
- <0fd19bad-277f-ae7d-1928-fd4dc0bf6fcc@mind.be>
- <CAAXf6LVGSaNNgncfR4wUo+gpLgusD+uoS8amFKeb6tiRGQ+pCg@mail.gmail.com>
- <b46b5074-12c3-8099-5946-de715f715a8e@mind.be>
-Message-ID: <CAAXf6LXyd2nCvGPFYs9SH05no7Z9+wy1COn7r1XiYxczU+g70Q@mail.gmail.com>
+Date: Mon, 31 May 2021 17:02:00 +0200
+Subject: [Buildroot] [PATCH v2 5/5] package/zstd: Add option for cli
+ binary
+In-Reply-To: <20210525172652.821351-5-nolange79@gmail.com>
+References: <20210525172652.821351-1-nolange79@gmail.com>
+ <20210525172652.821351-5-nolange79@gmail.com>
+Message-ID: <CAAXf6LUvCxZ_o2T0puJZ8ybDOyh20303-tXWLsgh3HNqt_OvrQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,75 +14,134 @@ To: buildroot@busybox.net
 
 Hello,
 
-El vie, 28 may 2021 a las 23:07, Arnout Vandecappelle
-(<arnout@mind.be>) escribi?:
+El mar, 25 may 2021 a las 19:28, Norbert Lange (<nolange79@gmail.com>) escribi?:
 >
+> There are a couple of targets to build the cli tool with less
+> features (no legacy-support, benchmarking),
+> or dynamically linked to the library.
 >
+> Add an option to choose the variant.
 >
-> On 28/05/2021 20:35, Thomas De Schampheleire wrote:
-> > El mar, 25 may 2021 a las 23:32, Arnout Vandecappelle
-> > (<arnout@mind.be>) escribi?:
-> >>
-> >>
-> >> On 25/05/2021 14:27, Thomas De Schampheleire wrote:
-> >>> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >>>
-> >>> BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
-> >>> should have no negative effect on performance.
-> >>>
-> >>> Introduction of 'assert' statements, 'debug'-type builds with additional
-> >>> logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
-> >>>
-> >>> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >>> ---
-> >>>  package/sofia-sip/sofia-sip.mk | 2 +-
-> >>>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-> >>> index 5c383400ff..cb867ba0dc 100644
-> >>> --- a/package/sofia-sip/sofia-sip.mk
-> >>> +++ b/package/sofia-sip/sofia-sip.mk
-> >>> @@ -30,7 +30,7 @@ SOFIA_SIP_CONF_OPTS += \
-> >>>       --without-openssl
-> >>>  endif
-> >>>
-> >>> -ifeq ($(BR2_ENABLE_DEBUG),y)
-> >>> +ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
-> >>>  SOFIA_SIP_CONF_OPTS += --enable-ndebug
-> >>  Actually, the logic was inverted here (already wrong in the current situation):
-> >> --enable-ndebug should be given when RUNTIME_DEBUG is *not* set.
-> > Indeed, you're right. I'll add a patch to fix that first.
-> >
-> >>  However, I think we should define -DNDEBUG in TARGET_CPPFLAGS, so it wouldn't
-> >> be necessary to pass it explicitly here (--enable-ndebug does nothing more than
-> >> defining NDEBUG).
-> > In a previous iteration I basically did that, but dropped that patch
-> > because it also had effect in the toolchain wrapper,
+> To allow the installation step to pick the variant, it
+> has to be copied to the normal location.
 >
->  No it doesn't... TARGET_CFLAGS isn't set in the toolchain wrapper. Only
-> arch-specific options are there, and BR2_TARGET_OPTIMIZATION (which is intended
-> for arch-specific -m flags).
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/zstd/Config.in | 21 +++++++++++++++++++++
+>  package/zstd/zstd.mk   |  9 ++++++++-
+>  2 files changed, 29 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/zstd/Config.in b/package/zstd/Config.in
+> index 9fa70c65cc..0d2ab84771 100644
+> --- a/package/zstd/Config.in
+> +++ b/package/zstd/Config.in
+> @@ -10,3 +10,24 @@ config BR2_PACKAGE_ZSTD
+>           compression formats
+>
+>           https://facebook.github.io/zstd
+> +
+> +if BR2_PACKAGE_ZSTD
+> +
+> +choice
+> +       prompt "Executable flavor"
+> +       help
+> +         Pick between variants of the zstd tool.
+> +
+> +config BR2_PACKAGE_ZSTD_PROG_DEFAULT
+> +       bool "Default build (static, full-featured)"
+> +
+> +config BR2_PACKAGE_ZSTD_PROG_DYNAMIC
+> +       bool "Dynamic build (needs library with identical version)"
+> +       depends on !BR2_STATIC_LIBS
 
-I had to reproduce the issue in order to understand where my
-conclusion was wrong.
+Is there a reason not to make this one the default, instead of the
+static variant?
+From my point of view, the PROG_DYNAMIC has as main advantage a
+reduction in rootfs size, since zstd is quite large and with the
+static version duplicating part of the shared object.
 
-The compiler wrapper indeed does not pass these flags.
-The problem in our case is that the -DNDEBUG is passed via a
-<project>-config script to external compilations. In our case, xenomai
-is used, and it provides a 'xeno-config' script to get the correct
-compilation and linker flags. The generated file contains the flags
-set by Buildroot in XENO_BASE_CFLAGS . With the mentioned patch, this
-would include -DNDEBUG.
-And the output of 'xeno-config [...] --cflags' was used in the
-compilation of the external project.
+Earlier I sent a patch for this (exact implementation was still based
+on v1.4.9 and sending of the update patch was pending the new 1.5.0
+release), see:
+http://patchwork.ozlabs.org/project/buildroot/patch/20201204095703.4714-1-patrickdepinguin at gmail.com/
 
-We can work around that by filtering the output of 'xeno-config' in
-our local makefiles.
+In context of Buildroot, the expectation is that one builds the entire
+thing in one go. This means that binary and library will be from the
+same version anyway.
+In that sense, the option description may be confusing.
 
-Note that Thomas Petazzoni had initial doubts on the mentioned patch
-(http://patchwork.ozlabs.org/project/buildroot/patch/20210212135451.22786-3-patrickdepinguin at gmail.com/).
+In fact, I even wonder if it is needed to provide the PROG_DEFAULT at
+all. If shared libraries are supported, I see no reason why one would
+like a static version of the binary.
+So I would reduce this patch to two options:
 
-If you think we should re-add it to the series, I will do it.
+- standard build
+- small build
 
-Thanks,
+and depending on the options BR2_STATIC_LIBS / SHARED_STATIC_LIBS the
+'standard build' would result in a dynamically-linked object or a
+static one.
+
+
+> +
+> +config BR2_PACKAGE_ZSTD_PROG_SMALL
+> +       bool "Small build (static, less features)"
+> +
+> +endchoice
+> +
+> +endif
+> diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+> index a9499df4d0..ecad26e0df 100644
+> --- a/package/zstd/zstd.mk
+> +++ b/package/zstd/zstd.mk
+> @@ -48,6 +48,11 @@ endif
+>  ZSTD_OPTS += "MOREFLAGS=$(ZSTD_OPTS_MOREFLAGS)"
+>
+>  ZSTD_BUILD_PROG_TARGET := zstd-release
+> +ifeq ($(BR2_PACKAGE_ZSTD_PROG_DYNAMIC),y)
+> +ZSTD_BUILD_PROG_TARGET := zstd-dll
+> +else ifeq ($(BR2_PACKAGE_ZSTD_PROG_SMALL),y)
+> +ZSTD_BUILD_PROG_TARGET := zstd-small
+> +endif
+
+We don't generally use := in Buildroot, unless really needed. These
+assignments could just be '='.
+
+
+>
+>  # Since v1.5.0 the dynamic library is built for
+>  # multithreading, while the static library is not.
+> @@ -78,7 +83,9 @@ define ZSTD_BUILD_CMDS
+>         $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+>                 -C $(@D)/lib $(addsuffix -release,$(ZSTD_BUILD_LIBS) libzstd.pc)
+>         $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> -               -C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET)
+> +               -C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET) && \
+> +       { [ ! -e $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) ] || \
+> +               ln -f $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) $(@D)/programs/zstd; }
+
+I find this code not particularly readable.
+Why does the group need to be continued with '&&' ? If you don't do
+that, a failure in the make will stop right there, which is fine.
+This together with the use of the || shorthand, especially with the
+negated condition, is not obvious.
+
+Also, this hardlink is only actually needed for the 'zstd-small' case,
+because both 'zstd-release' and 'zstd-dll' just generate a binary
+called 'zstd'. In the latter cases, the [ ] condition will be false,
+and nothing to be done.
+
+So I would consider to leave the original make untouched and use
+following instead:
+
+
+ifeq ($(BR2_PACKAGE_ZSTD_PROG_SMALL),y)
+define ZSTD_HARDLINK_BUILD_PROG_TARGET
+        ln -f $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) $(@D)/programs/zstd
+endef
+ZSTD_POST_BUILD_HOOKS += ZSTD_HARDLINK_BUILD_PROG_TARGET
+endif
+
+
+Best regards,
 Thomas
