@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue,  1 Jun 2021 00:27:29 +0300
-Subject: [Buildroot] [PATCH/RFC 09/28] configs/orangepi_win_defconfig:
- switch to upstream ATF
+Date: Tue,  1 Jun 2021 00:27:30 +0300
+Subject: [Buildroot] [PATCH/RFC 10/28]
+ configs/friendlyarm_nanopi_a64_defconfig: switch to upstream ATF
 In-Reply-To: <20210531212748.2378872-1-geomatsi@gmail.com>
 References: <20210531212748.2378872-1-geomatsi@gmail.com>
-Message-ID: <20210531212748.2378872-10-geomatsi@gmail.com>
+Message-ID: <20210531212748.2378872-11-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,14 +17,14 @@ GCC stack protection, so make sure to disable this ATF feature.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- configs/orangepi_win_defconfig | 8 ++++----
+ configs/friendlyarm_nanopi_a64_defconfig | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/orangepi_win_defconfig b/configs/orangepi_win_defconfig
-index 715ff3b711..217f3e1e42 100644
---- a/configs/orangepi_win_defconfig
-+++ b/configs/orangepi_win_defconfig
-@@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+diff --git a/configs/friendlyarm_nanopi_a64_defconfig b/configs/friendlyarm_nanopi_a64_defconfig
+index 4df22b2a2f..d0c2f71960 100644
+--- a/configs/friendlyarm_nanopi_a64_defconfig
++++ b/configs/friendlyarm_nanopi_a64_defconfig
+@@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
  
  # Firmware
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
