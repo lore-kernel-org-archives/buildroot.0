@@ -1,54 +1,27 @@
-From: Andreas Hilse <andreas.hilse@googlemail.com>
-Date: Mon, 31 May 2021 12:22:28 +0200
-Subject: [Buildroot] [Bug 13586] New: grub failure with BR2_OPTIMIZE_3
-In-Reply-To: <20210528214255.GK2788252@scaer>
-References: <bug-13586-163@https.bugs.busybox.net/>
- <CANabuZcix3uT0SwKotJoPBAu6WvZ_SVQ99y=navBARH=GRKZ9w@mail.gmail.com>
- <20210527154435.GV3208066@scaer>
- <638b4284c5ac4639b393d2ade58994dc@AcuMS.aculab.com>
- <20210527203721.GA2788252@scaer>
- <CANabuZfVw+ccU8rvVQ67HPnkGMKWTPFpYELbTEVcpiXv6kdhpQ@mail.gmail.com>
- <20210528214255.GK2788252@scaer>
-Message-ID: <CANabuZdQQTsX5Qfz24ukPUfufw-jPVipLuOJD-QJF+K6ywV7+A@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 31 May 2021 12:29:45 +0200
+Subject: [Buildroot] [PATCH 0/2] NSS & NSPR bump version
+Message-ID: <20210531102947.7501-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This patchset bumps version of both libnss and libnspr. libnss version
+3.66 requires libnspr version 4.31. This patchset must be applied after
+commit:
+https://git.buildroot.net/buildroot/commit/?h=next&id=4eadbfeb94806b6d9b69cbc5cbfa9d6468a2eee1
 
-> So, maybe things have changed from way back when we wrote that comment
-> (back in 2014, seven years ago!), or maybe we did not undestand all of
-> it, or maybe we did not explain it properly, or a bit of all of that...
->
-> In any case, we might want to also override CFLAGS and CPPFLAGS in the
-> same vein as the above patch does for TARGET_CFLAGS et al.
->
-> Care to have a look at that, see if it fixes the issue, and you can get
-> a bootable grub2, please?
+Giulio Benetti (2):
+  package/libnspr: bump version to 4.31
+  package/libnss: bump version to 3.66
 
-Additionally overriding CFLAGS and CPPFLAGS results in a bootable grub2.
+ package/libnspr/libnspr.hash | 4 ++--
+ package/libnspr/libnspr.mk   | 2 +-
+ package/libnss/libnss.hash   | 4 ++--
+ package/libnss/libnss.mk     | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index af16ee91e1..52e9199ae9 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -118,9 +118,11 @@ HOST_GRUB2_CONF_ENV = \
- GRUB2_CONF_ENV = \
-        CPP="$(TARGET_CC) -E" \
-        TARGET_CC="$(TARGET_CC)" \
--       TARGET_CFLAGS="$(TARGET_CFLAGS)" \
--       TARGET_CPPFLAGS="$(TARGET_CPPFLAGS) -fno-stack-protector" \
--       TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
-+       CFLAGS="$(TARGET_CFLAGS) -Os" \
-+       TARGET_CFLAGS="$(TARGET_CFLAGS) -Os" \
-+       CPPFLAGS="$(TARGET_CPPFLAGS) -Os -fno-stack-protector" \
-+       TARGET_CPPFLAGS="$(TARGET_CPPFLAGS) -Os -fno-stack-protector" \
-+       TARGET_LDFLAGS="$(TARGET_LDFLAGS) -Os" \
-        TARGET_NM="$(TARGET_NM)" \
-        TARGET_OBJCOPY="$(TARGET_OBJCOPY)" \
-        TARGET_STRIP="$(TARGET_CROSS)strip"
-
-Best regards
-Andreas
+-- 
+2.25.1
