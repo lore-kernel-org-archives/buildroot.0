@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue,  1 Jun 2021 00:27:33 +0300
-Subject: [Buildroot] [PATCH/RFC 13/28] configs/amarula_a64_relic_defconfig:
- switch to upstream ATF
+Date: Tue,  1 Jun 2021 00:27:34 +0300
+Subject: [Buildroot] [PATCH/RFC 14/28]
+ configs/olimex_a64_olinuxino_defconfig: switch to mainline ATF
 In-Reply-To: <20210531212748.2378872-1-geomatsi@gmail.com>
 References: <20210531212748.2378872-1-geomatsi@gmail.com>
-Message-ID: <20210531212748.2378872-14-geomatsi@gmail.com>
+Message-ID: <20210531212748.2378872-15-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,14 +17,14 @@ GCC stack protection, so make sure to disable this ATF feature.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- configs/amarula_a64_relic_defconfig | 8 ++++----
+ configs/olimex_a64_olinuxino_defconfig | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/amarula_a64_relic_defconfig b/configs/amarula_a64_relic_defconfig
-index 304a3ef824..3e51cefdbc 100644
---- a/configs/amarula_a64_relic_defconfig
-+++ b/configs/amarula_a64_relic_defconfig
-@@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
+diff --git a/configs/olimex_a64_olinuxino_defconfig b/configs/olimex_a64_olinuxino_defconfig
+index e35c6014bd..f9b40410ce 100644
+--- a/configs/olimex_a64_olinuxino_defconfig
++++ b/configs/olimex_a64_olinuxino_defconfig
+@@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
  
  # Firmware
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
