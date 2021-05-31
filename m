@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue,  1 Jun 2021 00:27:25 +0300
-Subject: [Buildroot] [PATCH/RFC 05/28] configs/bananapi_m64_defconfig:
+Date: Tue,  1 Jun 2021 00:27:26 +0300
+Subject: [Buildroot] [PATCH/RFC 06/28] configs/orangepi_zero_plus_defconfig:
  switch to upstream ATF
 In-Reply-To: <20210531212748.2378872-1-geomatsi@gmail.com>
 References: <20210531212748.2378872-1-geomatsi@gmail.com>
-Message-ID: <20210531212748.2378872-6-geomatsi@gmail.com>
+Message-ID: <20210531212748.2378872-7-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,14 +17,14 @@ GCC stack protection, so make sure to disable this ATF feature.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- configs/bananapi_m64_defconfig | 8 ++++----
+ configs/orangepi_zero_plus_defconfig | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/bananapi_m64_defconfig b/configs/bananapi_m64_defconfig
-index b93332ed21..4bf8f1e96c 100644
---- a/configs/bananapi_m64_defconfig
-+++ b/configs/bananapi_m64_defconfig
-@@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+diff --git a/configs/orangepi_zero_plus_defconfig b/configs/orangepi_zero_plus_defconfig
+index cf82f8b3cc..d3cd1d1b63 100644
+--- a/configs/orangepi_zero_plus_defconfig
++++ b/configs/orangepi_zero_plus_defconfig
+@@ -8,10 +8,10 @@ BR2_SYSTEM_DHCP="eth0"
  
  # Firmware
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
