@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue,  1 Jun 2021 00:27:27 +0300
-Subject: [Buildroot] [PATCH/RFC 07/28] configs/orangepi_pc2_defconfig:
+Date: Tue,  1 Jun 2021 00:27:28 +0300
+Subject: [Buildroot] [PATCH/RFC 08/28] configs/orangepi_prime_defconfig:
  switch to upstream ATF
 In-Reply-To: <20210531212748.2378872-1-geomatsi@gmail.com>
 References: <20210531212748.2378872-1-geomatsi@gmail.com>
-Message-ID: <20210531212748.2378872-8-geomatsi@gmail.com>
+Message-ID: <20210531212748.2378872-9-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,13 +17,13 @@ GCC stack protection, so make sure to disable this ATF feature.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- configs/orangepi_pc2_defconfig | 8 ++++----
+ configs/orangepi_prime_defconfig | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/orangepi_pc2_defconfig b/configs/orangepi_pc2_defconfig
-index c7e17c8eb1..e7af1d4276 100644
---- a/configs/orangepi_pc2_defconfig
-+++ b/configs/orangepi_pc2_defconfig
+diff --git a/configs/orangepi_prime_defconfig b/configs/orangepi_prime_defconfig
+index f8f958c67b..ddee65c185 100644
+--- a/configs/orangepi_prime_defconfig
++++ b/configs/orangepi_prime_defconfig
 @@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
  
  # Firmware
