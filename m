@@ -1,44 +1,74 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon, 31 May 2021 12:29:46 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libnspr: bump version to 4.31
-In-Reply-To: <20210531102947.7501-1-giulio.benetti@benettiengineering.com>
-References: <20210531102947.7501-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210531102947.7501-2-giulio.benetti@benettiengineering.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 31 May 2021 12:30:15 +0200
+Subject: [Buildroot] [PATCHv3 13/15] package/zmqpp: use
+ BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
+In-Reply-To: <cb05cfc8-283b-1418-4c4c-1d70e763570c@mind.be>
+References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
+ <20210525122750.5022-14-patrickdepinguin@gmail.com>
+ <cb05cfc8-283b-1418-4c4c-1d70e763570c@mind.be>
+Message-ID: <CAAXf6LXV2tMV8rr5yB8e6uSBTgMJQZraqeAi1zBWm-hFt29Eyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/libnspr/libnspr.hash | 4 ++--
- package/libnspr/libnspr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+El mar, 25 may 2021 a las 23:48, Arnout Vandecappelle
+(<arnout@mind.be>) escribi?:
+>
+>
+>
+> On 25/05/2021 14:27, Thomas De Schampheleire wrote:
+> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> >
+> > BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
+> > should have no negative effect on performance.
+> >
+> > Introduction of 'assert' statements, 'debug'-type builds with additional
+> > logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
+> >
+> > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> > ---
+> >  package/zmqpp/zmqpp.mk | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
+> > index 3cd19d644a..cfef9874d0 100644
+> > --- a/package/zmqpp/zmqpp.mk
+> > +++ b/package/zmqpp/zmqpp.mk
+> > @@ -19,7 +19,7 @@ ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
+> >  # -ffast-math -finline-functions -fomit-frame-pointer are disabled,
+> >  # so only set CONFIG for the non-affected cases.
+> >  ifneq ($(BR2_or1k):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:)
+> > -ZMQPP_CONFIG = $(if $(BR2_ENABLE_DEBUG),debug,release)
+> > +ZMQPP_CONFIG = $(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release)
+>
+>  This is the effect of CONFIG:
+>
+> CONFIG_FLAGS =
+> ifeq ($(CONFIG),debug)
+>         CONFIG_FLAGS = -g -fno-inline -ftemplate-depth-1000
+> endif
+> ifeq ($(CONFIG),valgrind)
+>         CONFIG_FLAGS = -g -O1 -DNO_DEBUG_LOG -DNO_TRACE_LOG
+> endif
+> ifeq ($(CONFIG),max)
+>         CONFIG_FLAGS = -O3 -funroll-loops -ffast-math -finline-functions
+> -fomit-frame-pointer -DNDEBUG
+> endif
+> ifneq (,$(findstring $(CONFIG),release loadtest))
+>         CONFIG_FLAGS = -O3 -funroll-loops -ffast-math -finline-functions
+> -fomit-frame-pointer -DNO_DEBUG_LOG -DNO_TRACE_LOG -DNDEBUG
+> endif
+>
+>
+>  So I'm OK with the release case, but I think maybe in the RUNTIME_DEBUG case we
+> don't want to set anything at all. Neither -fno-inline nor -ftemplate-depth is
+> what we want, I think. So maybe we should set nothing at all?
 
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index 8ca0f573b9..aaf9b1dff2 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/nspr/releases/v4.30/src/SHA256SUMS
--sha256  8d4cd8f8409484dc4c3d31e180354bfc506573eccf86cd691106a1ef7edc913b  nspr-4.30.tar.gz
-+# From https://ftp.mozilla.org/pub/nspr/releases/v4.31/src/SHA256SUMS
-+sha256  5729da87d5fbf1584b72840751e0c6f329b5d541850cacd1b61652c95015abc8  nspr-4.31.tar.gz
- # Locally calculated
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 67fb738b57..f78caea30b 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSPR_VERSION = 4.30
-+LIBNSPR_VERSION = 4.31
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
--- 
-2.25.1
+Ok, I will set 'buildroot' instead of 'debug'   (empty value could be
+confusing, as the CONFIG variable is also passed to 'BUILD_ENV', even
+though that is currently unused).
+
+Thanks,
+Thomas
