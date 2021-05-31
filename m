@@ -1,55 +1,111 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 31 May 2021 22:29:04 +0200
-Subject: [Buildroot] [git commit] package/dhcp: security bump to version
- 4.4.2-P1
-Message-ID: <20210531195955.70FBD8A2F7@busybox.osuosl.org>
+Date: Mon, 31 May 2021 23:29:41 +0200
+Subject: [Buildroot] [git commit] Update for 2021.05-rc3
+Message-ID: <20210531210850.A4E298B306@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cebf2b91b3e46efb8ca1fd3f092544fb158909d8
+commit: https://git.buildroot.net/buildroot/commit/?id=e4132725bd521308116f069c61d8e2002a2185cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes the following security issue:
-
-- CVE-2021-25217: A buffer overrun in lease file parsing code can be used to
-  exploit a common vulnerability shared by dhcpd and dhclient
-
-For details, see the advisory:
-https://kb.isc.org/docs/cve-2021-25217
-
-Update the LICENSE hash for a change of copyright years.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dhcp/dhcp.hash | 6 +++---
- package/dhcp/dhcp.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ CHANGES                    | 16 ++++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 18 +++++++++---------
+ 3 files changed, 27 insertions(+), 11 deletions(-)
 
-diff --git a/package/dhcp/dhcp.hash b/package/dhcp/dhcp.hash
-index 92ecdfec58..ec7c4fe58d 100644
---- a/package/dhcp/dhcp.hash
-+++ b/package/dhcp/dhcp.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/dhcp/4.4.2/dhcp-4.4.2.tar.gz.sha256.asc
--sha256  1a7ccd64a16e5e68f7b5e0f527fd07240a2892ea53fe245620f4f5f607004521  dhcp-4.4.2.tar.gz
-+# Verified from https://ftp.isc.org/isc/dhcp/4.4.2-P1/dhcp-4.4.2-P1.tar.gz.sha256.asc
-+sha256  b05e04337539545a8faa0d6ac518defc61a07e5aec66a857f455e7f218c85a1a  dhcp-4.4.2-P1.tar.gz
- # Locally calculated
--sha256  89e7b0661134cc118bdcdeb87ff0493d544bc5723c9ca6616fa05f03539738af  LICENSE
-+sha256  9961fce0d83a6229b9084cdadedfa723a53274c63af610c9adb61b607e0f5a76  LICENSE
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index db58870f88..1edb3c5e99 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/CHANGES b/CHANGES
+index 53b9020767..95b3a38024 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,19 @@
++2021.05-rc3, released May 31th, 2021
++
++	Fixes all over the tree.
++
++	meson: Explicitly disable PIE support (b_pie) as it is handled
++	by the toolchain wrapper.
++
++	Updated/fixed packages: boost, dhcp, expat, gdb, hwloc, imagemagick,
++	libcurl, libopenh264, llvm, lz4, mpv, nginx, paho-mqtt-c, pifmrds,
++	pipewire, python-bluezero, python-pillow, qemu, strace, uhd, vlc,
++	webkitgtk
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#13821: Wrong url for libnfsidmap package
++
+ 2021.05-rc2, released May 22th, 2021
  
--DHCP_VERSION = 4.4.2
-+DHCP_VERSION = 4.4.2-P1
- DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
- DHCP_INSTALL_STAGING = YES
- DHCP_LICENSE = MPL-2.0
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 57322fb586..29250a232d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2021.05-rc2
++export BR2_VERSION := 2021.05-rc3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1621690900
++BR2_VERSION_EPOCH = 1622496000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 3654285527..ea3af3bfb0 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -76,37 +76,37 @@
+ 	</div>
+       </div>
+ -->
+-      <h3 style="text-align: center;">Latest release candidate: <b>2021.05-rc2</b></h3>
++      <h3 style="text-align: center;">Latest release candidate: <b>2021.05-rc3</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2021.05-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2021.05-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2021.05-rc2.tar.gz">buildroot-2021.05-rc2.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2021.05-rc2.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2021.05-rc3.tar.gz">buildroot-2021.05-rc3.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2021.05-rc3.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2021.05-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2021.05-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2021.05-rc2.tar.bz2">buildroot-2021.05-rc2.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2021.05-rc2.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2021.05-rc3.tar.bz2">buildroot-2021.05-rc3.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2021.05-rc3.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
