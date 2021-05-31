@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue,  1 Jun 2021 00:27:35 +0300
-Subject: [Buildroot] [PATCH/RFC 15/28] configs/pine64_defconfig: switch to
- mainline ATF
+Date: Tue,  1 Jun 2021 00:27:36 +0300
+Subject: [Buildroot] [PATCH/RFC 16/28] configs/pine64_sopine_defconfig:
+ switch to upstream ATF
 In-Reply-To: <20210531212748.2378872-1-geomatsi@gmail.com>
 References: <20210531212748.2378872-1-geomatsi@gmail.com>
-Message-ID: <20210531212748.2378872-16-geomatsi@gmail.com>
+Message-ID: <20210531212748.2378872-17-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,13 +17,13 @@ GCC stack protection, so make sure to disable this ATF feature.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- configs/pine64_defconfig | 8 ++++----
+ configs/pine64_sopine_defconfig | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/pine64_defconfig b/configs/pine64_defconfig
-index 2bdb6f6ae1..981360b934 100644
---- a/configs/pine64_defconfig
-+++ b/configs/pine64_defconfig
+diff --git a/configs/pine64_sopine_defconfig b/configs/pine64_sopine_defconfig
+index 6fa511477c..11539ac671 100644
+--- a/configs/pine64_sopine_defconfig
++++ b/configs/pine64_sopine_defconfig
 @@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
  
  # Firmware
