@@ -1,15 +1,15 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jun 2021 22:39:58 +0200
-Subject: [Buildroot] [git commit] package/ripgrep: use
- BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
-Message-ID: <20210607144658.D175D810DA@busybox.osuosl.org>
+Date: Tue, 1 Jun 2021 22:39:52 +0200
+Subject: [Buildroot] [git commit] package/qt5: use BR2_ENABLE_RUNTIME_DEBUG
+ iso BR2_ENABLE_DEBUG
+Message-ID: <20210607144658.C6A3A814BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df35cd7976aa74489abff8b1bd3f3e05b5fe87be
+commit: https://git.buildroot.net/buildroot/commit/?id=a93b467427a017f57dd4bc0823759c39c5365a35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
@@ -22,19 +22,19 @@ Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/ripgrep/ripgrep.mk | 2 +-
+ package/qt5/qt5base/qt5base.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
-index 9dd8d58de1..c3c12fd185 100644
---- a/package/ripgrep/ripgrep.mk
-+++ b/package/ripgrep/ripgrep.mk
-@@ -18,7 +18,7 @@ RIPGREP_CARGO_OPTS = \
- 	--target=$(RUSTC_TARGET_NAME) \
- 	--manifest-path=$(@D)/Cargo.toml
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 84e9fa4edb..8b55aa3098 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -86,7 +86,7 @@ else
+ QT5BASE_CONFIGURE_OPTS += -no-gbm
+ endif
  
 -ifeq ($(BR2_ENABLE_DEBUG),y)
 +ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
- RIPGREP_CARGO_BIN_SUBDIR = debug
+ QT5BASE_CONFIGURE_OPTS += -debug
  else
- RIPGREP_CARGO_OPTS += --release
+ QT5BASE_CONFIGURE_OPTS += -release
