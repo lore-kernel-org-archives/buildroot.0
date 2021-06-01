@@ -1,74 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jun 2021 22:30:17 +0200
-Subject: [Buildroot] [PATCHv4 15/16] package/pkg-meson.mk: determine
- 'buildtype' based on BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
-In-Reply-To: <20210601143422.25064-16-patrickdepinguin@gmail.com>
-References: <20210601143422.25064-1-patrickdepinguin@gmail.com>
- <20210601143422.25064-16-patrickdepinguin@gmail.com>
-Message-ID: <20210601203017.GB168928@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Jun 2021 22:31:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcamera: fix build on sparc v8
+In-Reply-To: <20210527200354.478341-1-fontaine.fabrice@gmail.com>
+References: <20210527200354.478341-1-fontaine.fabrice@gmail.com>
+Message-ID: <2d1962f3-fa9d-3396-c361-c974ab72f348@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
 
-Eric, and other meson experts: question for you below...
 
-On 2021-06-01 16:34 +0200, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+On 27/05/2021 22:03, Fabrice Fontaine wrote:
+> Fix build failure with sparc v8 which is raised since commit
+> bd9b7b092cf34dc065a4b40268c18a9fe319f5e4 due to
+> https://git.linuxtv.org/libcamera.git/commit/?id=a8310248fc26cc1e1b791af5e9394c1d20bee269
 > 
-> BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
-> should have no negative effect on performance.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/d0726b2253f1f3d006e057f3b32c646c4b9b5f7a
 > 
-> Introduction of 'assert' statements, 'debug'-type builds with additional
-> logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+ Applied to master, thanks.
+
 > ---
->  package/pkg-meson.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  ...ra-add-dependencies-to-libcamera_dep.patch | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch
 > 
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index a57820d4d2..dafad3b1eb 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -89,7 +89,7 @@ define $(2)_CONFIGURE_CMDS
->  		--prefix=/usr \
->  		--libdir=lib \
->  		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
-> -		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
-> +		--buildtype=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
+> diff --git a/package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch b/package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch
+> new file mode 100644
+> index 0000000000..b83fe93a47
+> --- /dev/null
+> +++ b/package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch
+> @@ -0,0 +1,38 @@
+> +From 1a2fd4526e0858827f47a7e9359df34f0d0e3108 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Thu, 27 May 2021 21:00:21 +0200
+> +Subject: [PATCH] libcamera: add dependencies to libcamera_dep
+> +
+> +Add dependencies to libcamera_dep to avoid the following build failure
+> +with qcam on sparc v8 which is raised since commit
+> +a8310248fc26cc1e1b791af5e9394c1d20bee269:
+> +
+> +FAILED: src/qcam/qcam
+> +/srv/storage/autobuild/run/instance-0/output-1/host/bin/sparc-linux-g++  -o src/qcam/qcam src/qcam/qcam.p/meson-generated_.._qt5-feathericons_qrc.cpp.o src/qcam/qcam.p/meson-generated_moc_main_window.cpp.o src/qcam/qcam.p/meson-generated_moc_viewfinder_qt.cpp.o src/qcam/qcam.p/.._cam_options.cpp.o src/qcam/qcam.p/.._cam_stream_options.cpp.o src/qcam/qcam.p/format_converter.cpp.o src/qcam/qcam.p/main.cpp.o src/qcam/qcam.p/main_window.cpp.o src/qcam/qcam.p/message_handler.cpp.o src/qcam/qcam.p/viewfinder_qt.cpp.o src/qcam/qcam.p/dng_writer.cpp.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -Wshadow -include config.h '-Wl,-rpath,$ORIGIN/../libcamera' -Wl,-rpath-link,/srv/storage/autobuild/run/instance-0/output-1/build/libcamera-3a1f67a8031ac5ad96a11d5dc8b2e8976290497b/build/src/libcamera -Wl,--start-group src/libcamera/libcamera.so /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Core.so /srv/storage/autobuild/run/instance-0/output-1/
+>  host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Gui.so /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Widgets.so /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libtiff.so -Wl,--end-group
 
-I agree on this specific change.
+ Something went wrong with the patch here - split by the mailer?
 
-However, more globally: 'buildtype' governs two settings [0]: 'debug'
-and 'optimisation'. The 'optimisation' part is already part of our
-CFLAGS, so we don't need to drive it from meson.
+> +/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: src/qcam/qcam.p/main_window.cpp.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
+> +/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/d0726b2253f1f3d006e057f3b32c646c4b9b5f7a
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://bugs.libcamera.org/show_bug.cgi?id=39]
 
-So, I think that what we need, is to just set the 'debug' option, rather
-than the full 'buildtype'.
+ Why didn't you send it to the mailing list [1] so it gets captured in patchwork
+[2] ?
 
-Thoughts?
+ Regards,
+ Arnout
 
-[0] https://mesonbuild.com/Builtin-options.html#core-options
+[1] https://lists.libcamera.org/pipermail/libcamera-devel/2021-June/thread.html
+[2] https://patchwork.libcamera.org/project/libcamera/list/
 
->  		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
->  		-Dstrip=false \
->  		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
-> -- 
-> 2.26.3
+
+> +---
+> + src/libcamera/meson.build | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/src/libcamera/meson.build b/src/libcamera/meson.build
+> +index cc2b8669..af3533ad 100644
+> +--- a/src/libcamera/meson.build
+> ++++ b/src/libcamera/meson.build
+> +@@ -160,6 +160,7 @@ libcamera_dep = declare_dependency(sources : [
+> +                                        libcamera_public_headers,
+> +                                    ],
+> +                                    include_directories : libcamera_includes,
+> ++                                   dependencies : libcamera_deps,
+> +                                    link_with : libcamera)
+> + 
+> + subdir('proxy/worker')
+> +-- 
+> +2.30.2
+> +
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
