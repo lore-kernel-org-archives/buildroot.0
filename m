@@ -1,48 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Jun 2021 11:35:48 +0200
-Subject: [Buildroot] Buildroot 2021.05-rc3 released
-Message-ID: <87y2buyljf.fsf@dell.be.48ers.dk>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Tue,  1 Jun 2021 13:15:52 +0200
+Subject: [Buildroot] [PATCH] package/i2c-tools: add I2C_TOOLS_CPE_ID_VENDOR
+Message-ID: <20210601111551.4155-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+cpe:2.3:a:i2c-tools_project:i2c-tools is a valid CPE identifier for this
+package:
 
-Buildroot 2021.05-rc3 is released - Go download it at:
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ai2c-tools_project%3Ai2c-tools
 
-http://buildroot.net/downloads/buildroot-2021.05-rc3.tar.gz
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ package/i2c-tools/i2c-tools.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-or
-
-http://buildroot.net/downloads/buildroot-2021.05-rc3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2021.05-rc2..
-
-    49  Fabrice Fontaine
-     6  Peter Korsgaard
-     4  Yann E. MORIN
-     1  Adrian Perez de Castro
-     1  Bernd Kuhls
-     1  Matthew Weber
-     1  Michael Nosthoff
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.05-rc3
-
-Expect the final 2021.05 within a few days, unless any major issues
-shows up.
-
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index c1770cf636..8936f6c4f6 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -9,6 +9,7 @@ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.xz
+ I2C_TOOLS_SITE = https://www.kernel.org/pub/software/utils/i2c-tools
+ I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus), LGPL-2.1+ (libi2c)
+ I2C_TOOLS_LICENSE_FILES = COPYING COPYING.LGPL README
++I2C_TOOLS_CPE_ID_VENDOR = i2c-tools_project
+ I2C_TOOLS_MAKE_OPTS = EXTRA=eeprog
+ I2C_TOOLS_INSTALL_STAGING = YES
+ 
 -- 
-Bye, Peter Korsgaard
+2.30.0
