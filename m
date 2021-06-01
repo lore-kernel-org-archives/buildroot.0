@@ -1,66 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jun 2021 22:39:31 +0200
-Subject: [Buildroot] [git commit branch/next] package/flare-engine: disable
- effect of CMAKE_BUILD_TYPE
-Message-ID: <20210601201204.54CC881107@busybox.osuosl.org>
+Date: Tue, 1 Jun 2021 22:39:33 +0200
+Subject: [Buildroot] [git commit branch/next] package/sysrepo: use default
+ CMAKE_BUILD_TYPE for host package
+Message-ID: <20210601201206.9C20681107@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2f318270e3fcffc502b45a4503ecdde7033bf1c
+commit: https://git.buildroot.net/buildroot/commit/?id=9a7afc0bb68163d30c0a10640cebc7d77723626d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-flare-engine enables profiling when CMAKE_BUILD_TYPE is 'Debug'. The
-Buildroot package explicitly avoided that by forcing CMAKE_BUILD_TYPE to
-'RelWithDebInfo' when pkg-cmake.mk would normally set it to 'Debug'. Until
-recently, this was the case when BR2_ENABLE_DEBUG was enabled.
+Use the default build type for host-sysrepo.
+In the current version of sysrepo, this happens to be 'Debug'.
+As 'Debug' also enables tests, explicitly disable them.
 
-A previous commit changed the condition under which CMAKE_BUILD_TYPE=Debug
-was set, from BR2_ENABLE_DEBUG=y to BR2_ENABLE_RUNTIME_DEBUG=y, so logically
-the flare-engine package would have to be updated accordingly.
-
-However, apart from the profiling flag, the flare-engine package only uses
-CMAKE_BUILD_TYPE to determine flags that Buildroot wants to control itself,
-like optimization and debugging flags.
-
-This means we can fake CMAKE_BUILD_TYPE to a value that has no meaning for
-flare-engine itself, without needing to check BR2_ENABLE_DEBUG nor
-BR2_ENABLE_RUNTIME_DEBUG.
-
-Incidentally, this trick was already done in case
-BR2_TOOLCHAIN_HAS_GCC_BUG_85180 was true, so move that line out of this
-condition.
-
+Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/flare-engine/flare-engine.mk | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ package/sysrepo/sysrepo.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
-index e2f3eefa28..b91fc16af3 100644
---- a/package/flare-engine/flare-engine.mk
-+++ b/package/flare-engine/flare-engine.mk
-@@ -14,16 +14,12 @@ FLARE_ENGINE_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf
- # Don't use /usr/games and /usr/share/games
- FLARE_ENGINE_CONF_OPTS += -DBINDIR=bin -DDATADIR=share/flare
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index dbc7b16b63..f5be29d2c9 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
+@@ -26,8 +26,9 @@ define SYSREPO_INSTALL_INIT_SYSV
+ endef
  
--# Don't use the default Debug type as it adds -pg (gprof)
--ifeq ($(BR2_ENABLE_DEBUG),y)
--FLARE_ENGINE_CONF_OPTS += -DCMAKE_BUILD_TYPE=RelWithDebInfo
--endif
-+# CMAKE_BUILD_TYPE is only used to set optimization and debug flags, all of
-+# which we want Buildroot to steer explicitly. Explicitly set a fake build type
-+# to get this control.
-+FLARE_ENGINE_CONF_OPTS += -DCMAKE_BUILD_TYPE=Buildroot
+ HOST_SYSREPO_CONF_OPTS = \
+-	-DCMAKE_BUILD_TYPE=Release \
+ 	-DBUILD_EXAMPLES=OFF \
++	-DENABLE_TESTS=OFF \
++	-DENABLE_VALGRIND_TESTS=OFF \
+ 	-DREPO_PATH=$(TARGET_DIR)/etc/sysrepo
  
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
--# CMakeLists.txt sets CMAKE_CXX_FLAGS_<BUILD_TYPE> depending on
--# BUILD_TYPE, and this comes after the generic CMAKE_CXX_FLAGS.
--# Override CMAKE_BUILD_TYPE so no overrides are applied.
--FLARE_ENGINE_CONF_OPTS += -DCMAKE_BUILD_TYPE=Buildroot
- FLARE_ENGINE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -O0"
- endif
- 
+ $(eval $(cmake-package))
