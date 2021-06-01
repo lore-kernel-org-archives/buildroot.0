@@ -1,77 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jun 2021 22:39:23 +0200
-Subject: [Buildroot] [git commit branch/next] core: introduce
- BR2_ENABLE_RUNTIME_DEBUG
-Message-ID: <20210601201159.543C9838F4@busybox.osuosl.org>
+Date: Tue, 1 Jun 2021 22:39:26 +0200
+Subject: [Buildroot] [git commit branch/next] core: enable 'NDEBUG' unless
+ BR2_ENABLE_RUNTIME_DEBUG is set
+Message-ID: <20210601201200.AA1B7838F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7939fe2a0b15ba46faa77552567a2852aea387f
+commit: https://git.buildroot.net/buildroot/commit/?id=5a8c50fe05afacc3cbe8e7347e238da9f242fab0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Some packages have optional runtime assertions, extra traces, or other
-elements that can help in debugging problems. However, such runtime elements
-can negatively influence performance.
+The 'assert' statement in glibc honors the 'NDEBUG' preprocessor macro: if
+it is set, then the assert statement is compiled away.
 
-In a test program performing 100K gRPC calls from a client to a local server
-and receiving the returned response, we see following execution time:
-
-    - runtime debug enabled: 1065 seconds
-    - runtime debug disabled:  48 seconds
-
-This is more than a factor 20 (!) difference. Analysis shows that the
-problem mostly stems from libabseil-cpp (a dependency of gRPC) which enables
-mutex deadlock analysis when the preprocessor flag 'NDEBUG' is not set,
-which adds a 'backtrace()' call on every lock/unlock.  Potentially worse,
-when libunwind is enabled and linked with the test program, 'backtrace()' is
-not provided by glibc but by libunwind itself.
-
-For production systems, users expect good performance out-of-the-box. In the
-example above, the difference is huge and unless explicitly tested and
-analyzed, users may not realize that the performance could be much better.
-
-Address this problem by introducing a new option BR2_ENABLE_RUNTIME_DEBUG,
-which can be used by packages or package infrastructures to set the
-necessary flags.
-
-Note that BR2_ENABLE_RUNTIME_DEBUG is orthogonal to BR2_ENABLE_DEBUG: the
-former changes runtime behavior, while the latter is only expected to add
-debug symbols to the build. Today, the cmake build system does introduce a
-runtime impact when BR2_ENABLE_DEBUG is set, but that will be rectified in a
-subsequent commit.
+Define this 'NDEBUG' macro when BR2_ENABLE_RUNTIME_DEBUG is disabled (the
+default case).
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ package/Makefile.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index c65e34bd5e..a008425688 100644
---- a/Config.in
-+++ b/Config.in
-@@ -412,6 +412,19 @@ config BR2_DEBUG_3
- endchoice
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 86db62ba5b..955e6a8e8c 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -148,6 +148,9 @@ endif
+ ifeq ($(BR2_DEBUG_3),y)
+ TARGET_DEBUGGING = -g3
  endif
++ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),)
++TARGET_DEBUGGING += -DNDEBUG
++endif
  
-+config BR2_ENABLE_RUNTIME_DEBUG
-+	bool "build packages with runtime debugging info"
-+	help
-+	  Some packages may have runtime assertions, extra traces, and
-+	  similar runtime elements that can help debugging. However,
-+	  these elements may negatively influence performance so should
-+	  normally not be enabled on production systems.
-+
-+	  Enable this option to enable such runtime debugging.
-+
-+	  Note: disabling this option is not a guarantee that all
-+	  packages effectively removed these runtime debugging elements.
-+
- config BR2_STRIP_strip
- 	bool "strip target binaries"
- 	default y
+ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+ 
