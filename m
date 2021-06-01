@@ -1,64 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jun 2021 22:40:05 +0200
-Subject: [Buildroot] [git commit] package/zmqpp: don't set CONFIG=debug
-Message-ID: <20210607144659.0305B814BD@busybox.osuosl.org>
+Date: Tue, 1 Jun 2021 22:40:12 +0200
+Subject: [Buildroot] [git commit] utils/genrandconfig: also test
+ BR2_ENABLE_RUNTIME_DEBUG
+Message-ID: <20210607144659.294CE80E35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47c26b3e5fcda164ffdf6b9e4be8057367203af9
+commit: https://git.buildroot.net/buildroot/commit/?id=7c9dfe4fd93639ebc621449217c0bbc2f7415e43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Below are the flags set by zmqpp depending on the specified CONFIG variable:
-
-CONFIG_FLAGS =
-ifeq ($(CONFIG),debug)
-        CONFIG_FLAGS = -g -fno-inline -ftemplate-depth-1000
-endif
-ifeq ($(CONFIG),valgrind)
-        CONFIG_FLAGS = -g -O1 -DNO_DEBUG_LOG -DNO_TRACE_LOG
-endif
-ifeq ($(CONFIG),max)
-        CONFIG_FLAGS = -O3 -funroll-loops -ffast-math -finline-functions \
-            -fomit-frame-pointer -DNDEBUG
-endif
-ifneq (,$(findstring $(CONFIG),release loadtest))
-        CONFIG_FLAGS = -O3 -funroll-loops -ffast-math -finline-functions \
-            -fomit-frame-pointer -DNO_DEBUG_LOG -DNO_TRACE_LOG -DNDEBUG
-endif
-
-For the flags added with CONFIG=debug, '-g' is to be steered by the core
-infrastructure (could be '-g1', '-g2' etc.)
-The flag '-ftemplate-depth' is only a protection against incorrect code and
-not really needed in Buildroot context.
-Finally, the flag '-fno-inline' may be useful when really stepping through
-zmqpp code, but is a very specific use case.
-
-With the above in mind, not passing CONFIG=debug may actually be better.
-Use 'CONFIG=buildroot' instead.
-
-Note that we don't pass an empty 'CONFIG' to avoid confusion, as this
-variable is also passed through to the variable BUILD_ENV, even though it is
-currently unused.
+... similar to BR2_ENABLE_DEBUG.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/zmqpp/zmqpp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/genrandconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-index 3cd19d644a..c629f14920 100644
---- a/package/zmqpp/zmqpp.mk
-+++ b/package/zmqpp/zmqpp.mk
-@@ -19,7 +19,7 @@ ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
- # -ffast-math -finline-functions -fomit-frame-pointer are disabled,
- # so only set CONFIG for the non-affected cases.
- ifneq ($(BR2_or1k):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:)
--ZMQPP_CONFIG = $(if $(BR2_ENABLE_DEBUG),debug,release)
-+ZMQPP_CONFIG = $(if $(BR2_ENABLE_DEBUG),buildroot,release)
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 93dc6d898b..ca3e77e3e3 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -357,6 +357,8 @@ def gen_config(args):
+     # Amend the configuration with a few things.
+     if randint(0, 20) == 0:
+         configlines.append("BR2_ENABLE_DEBUG=y\n")
++    if randint(0, 20) == 0:
++        configlines.append("BR2_ENABLE_RUNTIME_DEBUG=y\n")
+     if randint(0, 1) == 0:
+         configlines.append("BR2_INIT_BUSYBOX=y\n")
+     elif randint(0, 15) == 0:
