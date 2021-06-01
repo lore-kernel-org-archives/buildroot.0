@@ -1,127 +1,148 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue,  1 Jun 2021 21:16:16 +0200
-Subject: [Buildroot] [PATCH] uclibc: powerpc: fix PIE/PIC builds with
- secureplt enabled by default
-Message-ID: <20210601191616.153644-1-romain.naour@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Jun 2021 21:31:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: handle b_pie
+In-Reply-To: <20210529193011.GA3858765@scaer>
+References: <20210528191748.1598384-1-fontaine.fabrice@gmail.com>
+ <20210529090943.GM2788252@scaer> <20210529092141.GO2788252@scaer>
+ <CAPi7W81QTY2s-sraNPmB4wL3GSR4zys1cwW9D69OZWGZ0ZhWNg@mail.gmail.com>
+ <20210529193011.GA3858765@scaer>
+Message-ID: <38f9645e-5f54-e8b4-33b7-0f2439153b0e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apply the fix provided by Yann Sionneau when secureplt is enabled
-by default by gcc compiler along with PIE/PIC options.
 
-"For the secure PLT to work in PIC, the r30 register needs to point to the GOT"
 
-Fixes:
-[qemu_ppc_e500mc_defconfig] https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661606
-[qemu_ppc_g3beige_defconfig] https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661607
-[qemu_ppc_mac99_defconfig] https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661609
+On 29/05/2021 21:30, Yann E. MORIN wrote:
+> Fabrice, All,
+> 
+> Meson experts, questions for you below!
+> 
+> On 2021-05-29 11:41 +0200, Fabrice Fontaine spake thusly:
+>> Le sam. 29 mai 2021 ? 11:21, Yann E. MORIN <yann.morin.1998@free.fr> a
+>> ?crit :
+>>> On 2021-05-29 11:09 +0200, Yann E. MORIN spake thusly:
+>>>> On 2021-05-28 21:17 +0200, Fabrice Fontaine spake thusly:
+> [--SNIP--]
+>>>>> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+>>>>> index a57820d4d2..a55063d58e 100644
+>>>>> --- a/package/pkg-meson.mk
+>>>>> +++ b/package/pkg-meson.mk
+>>>>> @@ -91,6 +91,7 @@ define $(2)_CONFIGURE_CMDS
+>>>>>             --default-library=$(if
+>>>>>             $(BR2_STATIC_LIBS),static,shared) \
+>>>>>             --buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release)
+>>>>>             \
+>>>>>             --cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+>>>>>             \
+>>>>> +           -Db_pie=$(if
+>>>>> $(BR2_TOOLCHAIN_SUPPORTS_PIE),true,false) \
+>>> Given a later patch that arrived in parallel, it turns out this
+>>> patch
+>>> was not correct, and that we still have a bit of interrogation on
+>>> that,
+>>> so I've reverted it, sorry. I'll keep an eye on the discussions...
+>> I think that the second version of this patch (i.e. always disabling
+>> b_pie through command line) is the best option because:
+>> - PIE is already enabled by the toolchain-wrapper:
+>> hardening-check
+>> output/build/pipewire-0.3.26/build/spa/plugins/audioconvert/benchmark-resample
+>> output/build/pipewire-0.3.26/build/spa/plugins/audioconvert/benchmark-resample:
+>>  Position Independent Executable: yes
+> 
+> OK, so PIE is indeed applied when building, good.
+> 
+>> - Enabling PIE in two different places is not future-proof and is not
+>> done in any other infrastructures (autotools, cmake, etc.).
+> 
+> Yeah, that makes perfect sense.
+> 
+>> I think
+>> this is also the reason why strip is unconditionally disabled in the
+>> command line (it is already handled in Makefile.in)
+> 
+> Yeah, I know about strip. However, my question for the meson experts in
+> the room, is: should we leave that (strip, b_pie) on the command line,
+> or should we have them in the cross-compilation file?
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Yann Sionneau <yann@sionneau.net>
----
- ...PIC-builds-with-newer-gcc-binutils-w.patch | 91 +++++++++++++++++++
- 1 file changed, 91 insertions(+)
- create mode 100644 package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch
+ Well, currently we pass them in the toolchain wrapper.
 
-diff --git a/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch b/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch
-new file mode 100644
-index 0000000000..040699df83
---- /dev/null
-+++ b/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch
-@@ -0,0 +1,91 @@
-+From 6c95eccff5eb43c8c3ad865d3b1316b7952cc58e Mon Sep 17 00:00:00 2001
-+From: Yann Sionneau <yann@sionneau.net>
-+Date: Fri, 28 May 2021 08:59:58 +0200
-+Subject: [PATCH] powerpc: fix PIE/PIC builds with newer gcc/binutils which use
-+ secureplt by default
-+
-+This patch fixes segfault of all user space processes (including init, which caused a panic) on recent buildroot powerpc32 builds.
-+
-+The issue has been reported by Romain Naour in this thread: https://mailman.uclibc-ng.org/pipermail/devel/2021-May/002068.html
-+
-+Recent buildroot toolchain enables secure PLT in powerpc gcc.
-+The latter will then supply -msecure-plt to gas invocations by default.
-+Recent buildroot also enables PIE by default.
-+
-+For the secure PLT to work in PIC, the r30 register needs to point to the GOT.
-+Old "bss plt" was just a one-instruction-wide PLT slot, pointed-to by a R_PPC_JMP_SLOT relocation, which was written on-the-fly to contain a branch instruction to the correct address. It therefore had to stay writable+executable, which you generally want to avoid for security reasons.
-+New secure PLT only contains read-only code which loads the branch address from the writable GOT.
-+
-+Note: secure PLT without PIC does not need r30 to be set. Because offset between plt stub code and got is known at link-time. In this case the PLT entry looks like:
-+1009b3e0 <__uClibc_main@plt>:
-+1009b3e0:       3d 60 10 0e     lis     r11,4110
-+1009b3e4:       81 6b 03 74     lwz     r11,884(r11)
-+1009b3e8:       7d 69 03 a6     mtctr   r11
-+1009b3ec:       4e 80 04 20     bctr
-+
-+Whereas secure PLT with PIC - offset between plt and got is unknown at link-time - looks like this:
-+000af800 <00000000.plt_pic32.__uClibc_main>:
-+   af800:       81 7e 03 80     lwz     r11,896(r30)
-+   af804:       7d 69 03 a6     mtctr   r11
-+   af808:       4e 80 04 20     bctr
-+   af80c:       60 00 00 00     nop
-+
-+Upstream status: Pending:
-+https://mailman.uclibc-ng.org/pipermail/devel/2021-May/002091.html
-+
-+Signed-off-by: Yann Sionneau <yann@sionneau.net>
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ Rules.mak                         | 3 ++-
-+ ldso/ldso/powerpc/dl-startup.h    | 3 +++
-+ libc/sysdeps/linux/powerpc/crt1.S | 4 ++++
-+ 3 files changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/Rules.mak b/Rules.mak
-+index 10f88b3de..60ac59b85 100644
-+--- a/Rules.mak
-++++ b/Rules.mak
-+@@ -477,9 +477,10 @@ ifeq ($(TARGET_ARCH),powerpc)
-+ 	PICFLAG:=-fpic
-+ 	PIEFLAG_NAME:=-fpie
-+ 	PPC_HAS_REL16:=$(shell printf "\t.text\n\taddis 11,30,_GLOBAL_OFFSET_TABLE_-. at ha\n" | $(CC) -c -x assembler -o /dev/null -  2> /dev/null && echo -n y || echo -n n)
-++	PPC_HAS_SECUREPLT:=$(shell $(CC) --verbose 2>&1 | grep -- --enable-secureplt > /dev/null && echo -n y || echo -n n)
-++	CPU_CFLAGS-$(PPC_HAS_SECUREPLT) += -DPPC_HAS_SECUREPLT
-+ 	CPU_CFLAGS-$(PPC_HAS_REL16)+= -DHAVE_ASM_PPC_REL16
-+ 	CPU_CFLAGS-$(CONFIG_E500) += "-D__NO_MATH_INLINES"
-+-
-+ endif
-+ 
-+ ifeq ($(TARGET_ARCH),bfin)
-+diff --git a/ldso/ldso/powerpc/dl-startup.h b/ldso/ldso/powerpc/dl-startup.h
-+index 8b2a517e2..7749395eb 100644
-+--- a/ldso/ldso/powerpc/dl-startup.h
-++++ b/ldso/ldso/powerpc/dl-startup.h
-+@@ -25,6 +25,9 @@ __asm__(
-+ #else
-+     "	bl	_GLOBAL_OFFSET_TABLE_-4 at local\n" /*  Put our GOT pointer in r31, */
-+     "	mflr	31\n"
-++#endif
-++#ifdef PPC_HAS_SECUREPLT
-++    "   mr      30,31\n"
-+ #endif
-+     "	addi	1,1,16\n" /* Restore SP */
-+     "	lwz	7,_dl_skip_args at got(31)\n" /* load EA of _dl_skip_args */
-+diff --git a/libc/sysdeps/linux/powerpc/crt1.S b/libc/sysdeps/linux/powerpc/crt1.S
-+index 27bfc5a5a..3f5d056c0 100644
-+--- a/libc/sysdeps/linux/powerpc/crt1.S
-++++ b/libc/sysdeps/linux/powerpc/crt1.S
-+@@ -56,6 +56,10 @@ _start:
-+ # else
-+ 	bl	_GLOBAL_OFFSET_TABLE_-4 at local
-+ 	mflr	r31
-++# endif
-++	/* in PIC/PIE, plt stubs need r30 to point to the GOT if using secure-plt */
-++# ifdef PPC_HAS_SECUREPLT
-++	mr	30,31
-+ # endif
-+ #endif
-+ 	/* Set up the small data pointer in r13.  */
-+-- 
-+2.31.1
-+
--- 
-2.31.1
+ If we would put -fPIE in the cflags in the cross-compilation file, we'd hit
+this message:
+
+        if '-f' + arg.lower() in all_flags or '-f' + arg.upper() in all_flags:
+            mlog.warning("Use the '{}' kwarg instead of passing '{}' manually to
+{!r}".format(arg, '-f' + arg, self.name))
+            return True
+
+ But now, meson doesn't notice because we hide it in the wrapper.
+
+ Anyway, the only effect of b_pie (or various other ways of passing the same
+option) is that it adds -fPIE to the compilation flags. So I don't think it's
+useful to set b_pie.
+
+
+> Additionaly, the machine-files documentation [0] lists pkg_config_path
+> as being part of the builtin options, so shouldn't we also push that
+> into the cross-compilation file?
+
+ Yes, that's just accidental. It was passed as a command-line option in the
+weston package, and later refactored in the core package-meson in commit
+5cff3a8bdfba92e9f61d0984df08f1ecd205c072 - but still keeping it as a
+command-line option.
+
+
+> As of today, we have two places where we push meson options: the command
+> line, and the cross-compilation file. To further Fanrice's argument:
+> having two places where we push options is not very consistent and
+> future-proof.
+> 
+> Basically, that would give a patch like (@HOST_DIR@ is already replaced):
+> 
+>     diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+>     index 37b49eea3b..942f68f008 100644
+>     --- a/package/meson/cross-compilation.conf.in
+>     +++ b/package/meson/cross-compilation.conf.in
+>     @@ -13,6 +13,9 @@ g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
+>      g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
+>      
+>      [built-in options]
+>     +b_pie = false
+>     +strip = false
+>     +build.pkg_config_path = '@HOST_DIR@/lib/pkgconfig'
+>      c_args = [@TARGET_CFLAGS@]
+>      c_link_args = [@TARGET_LDFLAGS@]
+>      cpp_args = [@TARGET_CXXFLAGS@]
+>     diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+>     index 1857450564..87cf0e3dd7 100644
+>     --- a/package/pkg-meson.mk
+>     +++ b/package/pkg-meson.mk
+>     @@ -91,9 +91,6 @@ define $(2)_CONFIGURE_CMDS
+>      		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+>      		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+>      		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+>     -		-Db_pie=false \
+>     -		-Dstrip=false \
+>     -		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
+>      		$$($$(PKG)_CONF_OPTS) \
+>      		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+>      endef
+
+ LGTM.
+
+
+ Regards,
+ Arnout
+
+> As far as I can tell from the documentation, this really seems like this
+> should be what we want to do in Buildroot, because that way, these
+> settings will also be used for the SDK, or for building manually outside
+> of Buildroot...
+> 
+> So, what's your thoughts about that?
+> 
+> Regards,
+> Yann E. MORIN.
+> 
