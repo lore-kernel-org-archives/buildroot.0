@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue,  1 Jun 2021 16:34:19 +0200
-Subject: [Buildroot] [PATCHv4 14/16] package/zmqpp: use
- BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
+Date: Tue,  1 Jun 2021 16:34:20 +0200
+Subject: [Buildroot] [PATCHv4 15/16] package/pkg-meson.mk: determine
+ 'buildtype' based on BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
 In-Reply-To: <20210601143422.25064-1-patrickdepinguin@gmail.com>
 References: <20210601143422.25064-1-patrickdepinguin@gmail.com>
-Message-ID: <20210601143422.25064-15-patrickdepinguin@gmail.com>
+Message-ID: <20210601143422.25064-16-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,21 +21,21 @@ logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/zmqpp/zmqpp.mk | 2 +-
+ package/pkg-meson.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-index c629f14920..32fabf26ef 100644
---- a/package/zmqpp/zmqpp.mk
-+++ b/package/zmqpp/zmqpp.mk
-@@ -19,7 +19,7 @@ ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
- # -ffast-math -finline-functions -fomit-frame-pointer are disabled,
- # so only set CONFIG for the non-affected cases.
- ifneq ($(BR2_or1k):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:)
--ZMQPP_CONFIG = $(if $(BR2_ENABLE_DEBUG),buildroot,release)
-+ZMQPP_CONFIG = $(if $(BR2_ENABLE_RUNTIME_DEBUG),buildroot,release)
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index a57820d4d2..dafad3b1eb 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -89,7 +89,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--prefix=/usr \
+ 		--libdir=lib \
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+-		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
++		--buildtype=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
+ 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+ 		-Dstrip=false \
+ 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
 -- 
 2.26.3
