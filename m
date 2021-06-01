@@ -1,61 +1,77 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Jun 2021 22:39:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/directfb: disable on riscv32
-In-Reply-To: <20210527205415.480887-1-fontaine.fabrice@gmail.com>
-References: <20210527205415.480887-1-fontaine.fabrice@gmail.com>
-Message-ID: <04be2355-aec8-670d-91e6-5f25c09a29fd@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 1 Jun 2021 22:39:23 +0200
+Subject: [Buildroot] [git commit branch/next] core: introduce
+ BR2_ENABLE_RUNTIME_DEBUG
+Message-ID: <20210601201159.543C9838F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=b7939fe2a0b15ba46faa77552567a2852aea387f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Some packages have optional runtime assertions, extra traces, or other
+elements that can help in debugging problems. However, such runtime elements
+can negatively influence performance.
 
-On 27/05/2021 22:54, Fabrice Fontaine wrote:
-> directfb unconditionally uses __NR_futex which will raise the following
-> build failure on riscv32:
-> 
-> system.c:242:21: error: '__NR_futex' undeclared (first use in this function)
->   242 |      ret = syscall( __NR_futex, uaddr, op, val, timeout, uaddr2, val3 );
+In a test program performing 100K gRPC calls from a client to a local server
+and receiving the returned response, we see following execution time:
 
- This could probably be fixed by using __NR_futex64, but directfb is pretty dead
-anyway.
+    - runtime debug enabled: 1065 seconds
+    - runtime debug disabled:  48 seconds
 
+This is more than a factor 20 (!) difference. Analysis shows that the
+problem mostly stems from libabseil-cpp (a dependency of gRPC) which enables
+mutex deadlock analysis when the preprocessor flag 'NDEBUG' is not set,
+which adds a 'backtrace()' call on every lock/unlock.  Potentially worse,
+when libunwind is enabled and linked with the test program, 'backtrace()' is
+not provided by glibc but by libunwind itself.
 
- Applied to master, thanks.
+For production systems, users expect good performance out-of-the-box. In the
+example above, the difference is huge and unless explicitly tested and
+analyzed, users may not realize that the performance could be much better.
 
- Regards,
- Arnout
+Address this problem by introducing a new option BR2_ENABLE_RUNTIME_DEBUG,
+which can be used by packages or package infrastructures to set the
+necessary flags.
 
+Note that BR2_ENABLE_RUNTIME_DEBUG is orthogonal to BR2_ENABLE_DEBUG: the
+former changes runtime behavior, while the latter is only expected to add
+debug symbols to the build. Today, the cmake build system does introduce a
+runtime impact when BR2_ENABLE_DEBUG is set, but that will be rectified in a
+subsequent commit.
 
->       |                     ^~~~~~~~~~
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c0f4168575fa85af933539441eea95a3b10dac91
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/directfb/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-> index 20481f56da..f4d6b8cbd1 100644
-> --- a/package/directfb/Config.in
-> +++ b/package/directfb/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_DIRECTFB
->  	bool "directfb"
-> +	depends on !BR2_RISCV_32
->  	depends on !BR2_STATIC_LIBS # static link issues
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  	depends on BR2_INSTALL_LIBSTDCPP
-> @@ -161,6 +162,7 @@ config BR2_PACKAGE_DIRECTFB_TESTS
->  endif # BR2_PACKAGE_DIRECTFB
->  
->  comment "directfb needs a glibc or uClibc toolchain w/ C++, NPTL, gcc >= 4.5, dynamic library"
-> +	depends on !BR2_RISCV_32
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_INSTALL_LIBSTDCPP || \
->  		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || BR2_TOOLCHAIN_USES_MUSL || \
-> 
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Config.in | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/Config.in b/Config.in
+index c65e34bd5e..a008425688 100644
+--- a/Config.in
++++ b/Config.in
+@@ -412,6 +412,19 @@ config BR2_DEBUG_3
+ endchoice
+ endif
+ 
++config BR2_ENABLE_RUNTIME_DEBUG
++	bool "build packages with runtime debugging info"
++	help
++	  Some packages may have runtime assertions, extra traces, and
++	  similar runtime elements that can help debugging. However,
++	  these elements may negatively influence performance so should
++	  normally not be enabled on production systems.
++
++	  Enable this option to enable such runtime debugging.
++
++	  Note: disabling this option is not a guarantee that all
++	  packages effectively removed these runtime debugging elements.
++
+ config BR2_STRIP_strip
+ 	bool "strip target binaries"
+ 	default y
