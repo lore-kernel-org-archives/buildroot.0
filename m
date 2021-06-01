@@ -1,105 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jun 2021 22:32:14 +0200
-Subject: [Buildroot] [PATCHv4 01/16] core: introduce
- BR2_ENABLE_RUNTIME_DEBUG
-In-Reply-To: <20210601143422.25064-2-patrickdepinguin@gmail.com>
-References: <20210601143422.25064-1-patrickdepinguin@gmail.com>
- <20210601143422.25064-2-patrickdepinguin@gmail.com>
-Message-ID: <20210601203214.GC168928@scaer>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 1 Jun 2021 22:17:53 +0200
+Subject: [Buildroot] [git commit] package/uftrace: needs dynamic library
+Message-ID: <20210601200253.B4598814AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=689033a8c22829cd68b318d51fe04e997466c837
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-06-01 16:34 +0200, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> Some packages have optional runtime assertions, extra traces, or other
-> elements that can help in debugging problems. However, such runtime elements
-> can negatively influence performance.
-> 
-> In a test program performing 100K gRPC calls from a client to a local server
-> and receiving the returned response, we see following execution time:
-> 
->     - runtime debug enabled: 1065 seconds
->     - runtime debug disabled:  48 seconds
-> 
-> This is more than a factor 20 (!) difference. Analysis shows that the
-> problem mostly stems from libabseil-cpp (a dependency of gRPC) which enables
-> mutex deadlock analysis when the preprocessor flag 'NDEBUG' is not set,
-> which adds a 'backtrace()' call on every lock/unlock.  Potentially worse,
-> when libunwind is enabled and linked with the test program, 'backtrace()' is
-> not provided by glibc but by libunwind itself.
-> 
-> For production systems, users expect good performance out-of-the-box. In the
-> example above, the difference is huge and unless explicitly tested and
-> analyzed, users may not realize that the performance could be much better.
-> 
-> Address this problem by introducing a new option BR2_ENABLE_RUNTIME_DEBUG,
-> which can be used by packages or package infrastructures to set the
-> necessary flags.
-> 
-> Note that BR2_ENABLE_RUNTIME_DEBUG is orthogonal to BR2_ENABLE_DEBUG: the
-> former changes runtime behavior, while the latter is only expected to add
-> debug symbols to the build. Today, the cmake build system does introduce a
-> runtime impact when BR2_ENABLE_DEBUG is set, but that will be rectified in a
-> subsequent commit.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Since its addition in commit 09c97972d9f90b69cfc36f9ffe9e22c13daf9307,
+uftrace always builds a dynamic library which will raise the following
+build failure:
 
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+  LINK     libmcount/libmcount.so
+.../ld: .../crtbeginT.o: relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
 
-No, I am *not* going to bikeshed on the prompt... ;-)
+Fixes:
+ - http://autobuild.buildroot.org/results/980bb38c6417bd48828379677762382030c5b28a
 
-Although yes, I can see how it could be a little bit confusing...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/uftrace/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  Config.in | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/Config.in b/Config.in
-> index c65e34bd5e..a008425688 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -412,6 +412,19 @@ config BR2_DEBUG_3
->  endchoice
->  endif
->  
-> +config BR2_ENABLE_RUNTIME_DEBUG
-> +	bool "build packages with runtime debugging info"
-> +	help
-> +	  Some packages may have runtime assertions, extra traces, and
-> +	  similar runtime elements that can help debugging. However,
-> +	  these elements may negatively influence performance so should
-> +	  normally not be enabled on production systems.
-> +
-> +	  Enable this option to enable such runtime debugging.
-> +
-> +	  Note: disabling this option is not a guarantee that all
-> +	  packages effectively removed these runtime debugging elements.
-> +
->  config BR2_STRIP_strip
->  	bool "strip target binaries"
->  	default y
-> -- 
-> 2.26.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
+index 6de9b840ba..98ddb7cbfb 100644
+--- a/package/uftrace/Config.in
++++ b/package/uftrace/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_UFTRACE
+ 	bool "uftrace"
+ 	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_ARGP_STANDALONE if \
+ 	       BR2_TOOLCHAIN_USES_UCLIBC || \
+ 	       BR2_TOOLCHAIN_USES_MUSL
+@@ -22,6 +23,6 @@ config BR2_PACKAGE_UFTRACE
+ 
+ 	  https://github.com/namhyung/uftrace
+ 
+-comment "uftrace needs a toolchain w/ threads"
++comment "uftrace needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
