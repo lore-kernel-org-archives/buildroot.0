@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 145B1C432BE
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:40:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6252C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:40:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D983261040
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:40:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D983261040
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 745D660F8F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:40:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 745D660F8F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3D2D83366;
-	Tue,  3 Aug 2021 21:40:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49F8A81DAB;
+	Tue,  3 Aug 2021 21:40:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ac7PITIgQsas; Tue,  3 Aug 2021 21:40:14 +0000 (UTC)
+	with ESMTP id RefL_v7XU2V3; Tue,  3 Aug 2021 21:40:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0D0A82F32;
-	Tue,  3 Aug 2021 21:40:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0A7CD1BF349
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C7B2837AC;
+	Tue,  3 Aug 2021 21:40:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2980A1BF9AA
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 63D8B4048C
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E26994053F
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4xA7DEq-mknr for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FqPZn_LU_duH for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18EAB40435
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 12EE540524
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 70DA685E09; Tue,  3 Aug 2021 21:09:36 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 58434843F5; Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 15 May 2021 08:30:26 +0200
+Date: Tue, 1 Jun 2021 23:14:50 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9c108afab81b675eddc1f71cc496b47d9077bdb1
-X-Git-Newrev: 7320e5dd6269149869b542aa9d0db62bae31709b
+X-Git-Oldrev: 2df1c10ba76fa9d8d40a438d16c40cba15ec5db6
+X-Git-Newrev: 94a3b3f062db63ed92ae38f97c49b6de2fb59c0d
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210936.70DA685E09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libxslt: fix build
- with latest libxml2
+Message-Id: <20210803210947.58434843F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gupnp: security bump
+ to version 1.2.6
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,76 +70,200 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7320e5dd6269149869b542aa9d0db62bae31709b
+commit: https://git.buildroot.net/buildroot/commit/?id=94a3b3f062db63ed92ae38f97c49b6de2fb59c0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Build is broken since bump of libxml2 to version 2.9.11 in commit
-a241dcec4188dbf30fbc8b65d7e6f2ece9da3d04 because libxslt calls the
-following command "${XML_CONFIG} --libs print" which will return an
-error code since
-https://github.com/GNOME/libxml2/commit/2a357ab99e6f5c9196384b11cd91dd993f93014c
+Fix CVE-2021-33516: An issue was discovered in GUPnP before 1.0.7 and
+1.1.x and 1.2.x before 1.2.5. It allows DNS rebinding. A remote web
+server can exploit this vulnerability to trick a victim's browser into
+triggering actions against local UPnP services implemented using this
+library. Depending on the affected service, this could be used for data
+exfiltration, data tempering, etc.
 
-Fixes:
- - http://autobuild.buildroot.org/results/47ceb8c24c9ead8a450b7fea3266f760d6b77b4f
+Replace patch by upstream commit as current patch doesn't apply cleanly
+
+https://discourse.gnome.org/t/security-relevant-releases-for-gupnp-issue-cve-2021-33516/6536
+https://gitlab.gnome.org/GNOME/gupnp/-/blob/gupnp-1.2.6/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...Fix-xml2-config-check-in-configure-script.patch | 31 ++++++++++++++++++++++
- package/libxslt/libxslt.mk                         |  2 ++
- 2 files changed, 33 insertions(+)
+ ...d-Always-build-gupnp-binding-tool-manpage.patch | 60 ------------------
+ ...eck-for-stylesheet-existence-on-doc-build.patch | 73 ++++++++++++++++++++++
+ package/gupnp/gupnp.hash                           |  4 +-
+ package/gupnp/gupnp.mk                             |  2 +-
+ 4 files changed, 76 insertions(+), 63 deletions(-)
 
-diff --git a/package/libxslt/0001-Fix-xml2-config-check-in-configure-script.patch b/package/libxslt/0001-Fix-xml2-config-check-in-configure-script.patch
+diff --git a/package/gupnp/0001-Revert-build-Always-build-gupnp-binding-tool-manpage.patch b/package/gupnp/0001-Revert-build-Always-build-gupnp-binding-tool-manpage.patch
+deleted file mode 100644
+index 05b07b49c5..0000000000
+--- a/package/gupnp/0001-Revert-build-Always-build-gupnp-binding-tool-manpage.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 9225b076d107538209fbd5b8bbc21a68d1b2c016 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 15 Jul 2020 22:42:44 +0200
+-Subject: [PATCH] Revert "build: Always build gupnp-binding-tool manpage"
+-
+-This reverts commit 23f54c2a1e8718e836224d68dafded091604a677 until
+-upstream decides what to do between adding a new option or renaming
+-gtk_doc into documentation:
+-https://gitlab.gnome.org/GNOME/gupnp/-/issues/17
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- doc/meson.build | 2 --
+- meson.build     | 5 ++++-
+- 2 files changed, 4 insertions(+), 3 deletions(-)
+-
+-diff --git a/doc/meson.build b/doc/meson.build
+-index b71b657..478650b 100644
+---- a/doc/meson.build
+-+++ b/doc/meson.build
+-@@ -4,7 +4,6 @@ version_xml = configure_file(input: 'version.xml.in',
+-                output: 'version.xml', configuration:
+-                entities)
+- 
+--if get_option('gtk_doc')
+- gnome.gtkdoc('gupnp',
+-              main_xml : 'gupnp-docs.xml',
+-              src_dir : [join_paths(meson.source_root(), 'libgupnp'),
+-@@ -27,7 +26,6 @@ gnome.gtkdoc('gupnp',
+-                  'gupnp-types-private.h'
+-              ],
+-              install : true)
+--endif
+- 
+- xsltproc = find_program('xsltproc', required: false)
+- if xsltproc.found()
+-diff --git a/meson.build b/meson.build
+-index 28c40b2..dea0a49 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -31,12 +31,15 @@ dependencies = [
+- subdir('libgupnp')
+- subdir('tests')
+- subdir('tools')
+--subdir('doc')
+- 
+- if get_option('vapi') and get_option('introspection')
+-     subdir('vala')
+- endif
+- 
+-+if get_option('gtk_doc')
+-+    subdir('doc')
+-+endif
+-+
+- if get_option('examples')
+-     subdir('examples')
+- endif
+--- 
+-2.27.0
+-
+diff --git a/package/gupnp/0001-doc-Check-for-stylesheet-existence-on-doc-build.patch b/package/gupnp/0001-doc-Check-for-stylesheet-existence-on-doc-build.patch
 new file mode 100644
-index 0000000000..3848dcb235
+index 0000000000..448996da04
 --- /dev/null
-+++ b/package/libxslt/0001-Fix-xml2-config-check-in-configure-script.patch
-@@ -0,0 +1,31 @@
-+From 90c34c8bb90e095a8a8fe8b2ce368bd9ff1837cc Mon Sep 17 00:00:00 2001
-+From: Nick Wellnhofer <wellnhofer@aevum.de>
-+Date: Fri, 15 Nov 2019 11:53:11 +0100
-+Subject: [PATCH] Fix xml2-config check in configure script
++++ b/package/gupnp/0001-doc-Check-for-stylesheet-existence-on-doc-build.patch
+@@ -0,0 +1,73 @@
++From 7ce37c94596029358a67d732a82e4313f7b89135 Mon Sep 17 00:00:00 2001
++From: Jens Georg <mail@jensge.org>
++Date: Sun, 30 May 2021 13:13:00 +0200
++Subject: [PATCH] doc: Check for stylesheet existence on doc build
 +
-+A 'print' option has never been supported. After a recent change to
-+libxml2, invalid options cause xml2-config to fail.
++Checking for xsltproc is not enough
++
++Fixes #17
 +
 +[Retrieved from:
-+https://gitlab.gnome.org/GNOME/libxslt/-/commit/90c34c8bb90e095a8a8fe8b2ce368bd9ff1837cc]
++https://gitlab.gnome.org/GNOME/gupnp/-/commit/7ce37c94596029358a67d732a82e4313f7b89135]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ doc/meson.build | 34 +++++++++++++++++++++++++---------
++ 1 file changed, 25 insertions(+), 9 deletions(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 3da57b18..585b9d7c 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -548,7 +548,7 @@ dnl make sure xml2-config is executable,
-+ dnl test version and init our variables
-+ dnl
++diff --git a/doc/meson.build b/doc/meson.build
++index 26c32c9..eb69d07 100644
++--- a/doc/meson.build
+++++ b/doc/meson.build
++@@ -30,6 +30,8 @@ endif
 + 
-+-if test "x$LIBXML_LIBS" = "x" && ${XML_CONFIG} --libs print > /dev/null 2>&1
-++if test "x$LIBXML_LIBS" = "x" && ${XML_CONFIG} --libs > /dev/null 2>&1
-+ then
-+     AC_MSG_CHECKING(for libxml libraries >= $LIBXML_REQUIRED_VERSION)
-+     XMLVERS=`$XML_CONFIG --version`
++ xsltproc = find_program('xsltproc', required: false)
++ if xsltproc.found()
+++    stylesheet = 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl'
+++
++     xlstproc_flags = [
++         '--nonet',
++         '--xinclude',
++@@ -45,17 +47,31 @@ if xsltproc.found()
++         xsltproc,
++         xlstproc_flags,
++         '-o', '@OUTPUT@',
++-        'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
+++        stylesheet,
++         '@INPUT@'
++     ]
++ 
++-    custom_target(
++-        'man 1 pages',
++-        input: 'gupnp-binding-tool.xml',
++-        output: 'gupnp-binding-tool-1.2.1',
++-        command: xsltproc_args,
++-        depend_files : version_xml,
++-        install: true,
++-        install_dir: join_paths(get_option('mandir'), 'man1')
+++    stylesheet_check = run_command(
+++        [
+++            xsltproc,
+++            xlstproc_flags,
+++            '--noout',
+++            stylesheet,
+++            'gupnp-binding-tool.xml'
+++        ]
++     )
+++    if (stylesheet_check.returncode() == 0)
+++        message('Stylesheet ' + stylesheet + ' available')
+++        custom_target(
+++            'man 1 pages',
+++            input: 'gupnp-binding-tool.xml',
+++            output: 'gupnp-binding-tool-1.2.1',
+++            command: xsltproc_args,
+++            depend_files : version_xml,
+++            install: true,
+++            install_dir: join_paths(get_option('mandir'), 'man1')
+++        )
+++    else
+++        message('Stylesheet ' + stylesheet + ' not found, not building man page')
+++    endif
++ endif
 +-- 
 +GitLab
 +
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 3c603ad9f6..d0f79d2521 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -10,6 +10,8 @@ LIBXSLT_INSTALL_STAGING = YES
- LIBXSLT_LICENSE = MIT
- LIBXSLT_LICENSE_FILES = COPYING
- LIBXSLT_CPE_ID_VENDOR = xmlsoft
-+# We're patching configure.ac
-+LIBXSLT_AUTORECONF = YES
+diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
+index 60339ec9ca..7064c9f6b8 100644
+--- a/package/gupnp/gupnp.hash
++++ b/package/gupnp/gupnp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.4.sha256sum:
+-sha256  f7a0307ea51f5e44d1b832f493dd9045444a3a4e211ef85dfd9aa5dd6eaea7d1  gupnp-1.2.4.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.6.sha256sum:
++sha256  00b20f1e478a72deac92c34723693a2ac55789ed1e4bb4eed99eb4d62092aafd  gupnp-1.2.6.tar.xz
  
- LIBXSLT_CONF_OPTS = \
- 	--with-gnu-ld \
+ # Hash for license file:
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index e90787eb84..7ec0e6388c 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GUPNP_VERSION_MAJOR = 1.2
+-GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).4
++GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).6
+ GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
+ GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
+ GUPNP_LICENSE = LGPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
