@@ -1,47 +1,78 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 1 Jun 2021 16:24:32 +0200
-Subject: [Buildroot] [PATCHv3 06/15] package/sysrepo: remove explicit
- setting of CMAKE_BUILD_TYPE
-In-Reply-To: <d3098530-47bb-c944-b226-275d64ff4591@mind.be>
-References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
- <20210525122750.5022-7-patrickdepinguin@gmail.com>
- <d3098530-47bb-c944-b226-275d64ff4591@mind.be>
-Message-ID: <CAAXf6LVcWAOgB6HCUbzNJCRhb20L96Xz=DRkFTOGXq7mFqEVKQ@mail.gmail.com>
+Date: Tue,  1 Jun 2021 16:34:06 +0200
+Subject: [Buildroot] [PATCHv4 01/16] core: introduce BR2_ENABLE_RUNTIME_DEBUG
+In-Reply-To: <20210601143422.25064-1-patrickdepinguin@gmail.com>
+References: <20210601143422.25064-1-patrickdepinguin@gmail.com>
+Message-ID: <20210601143422.25064-2-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mar, 25 may 2021 a las 22:56, Arnout Vandecappelle
-(<arnout@mind.be>) escribi?:
->
->
->
-> On 25/05/2021 14:27, Thomas De Schampheleire wrote:
-> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >
-> > sysrepo explicitly sets CMAKE_BUILD_TYPE=Release, ignoring any possible
-> > value of BR2_ENABLE_DEBUG (previously) or BR2_ENABLE_RUNTIME_DEBUG (now).
-> >
-> > With the introduction of BR2_ENABLE_RUNTIME_DEBUG, this change should no
-> > longer be necessary. Users that do not wish to have additional runtime
-> > debugging just keep BR2_ENABLE_RUNTIME_DEBUG disabled (default value).
-> >
-> > As the 'Debug' build type enables tests, disable them explicitly.
-> > As the 'Debug' build type uses a custom REPO_PATH which does not exist on
-> > target, force /etc/sysrepo like in the 'Release' build type.
-> >
-> > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
-> Although I think this could have been squashed with the previous patch.
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-I thought a separate patch was intended based on your comment:
-http://patchwork.ozlabs.org/comment/2633317/
+Some packages have optional runtime assertions, extra traces, or other
+elements that can help in debugging problems. However, such runtime elements
+can negatively influence performance.
 
-In v4 I'm sending the patch still separated but feel free to squash it.
+In a test program performing 100K gRPC calls from a client to a local server
+and receiving the returned response, we see following execution time:
 
-Thanks,
-Thomas
+    - runtime debug enabled: 1065 seconds
+    - runtime debug disabled:  48 seconds
+
+This is more than a factor 20 (!) difference. Analysis shows that the
+problem mostly stems from libabseil-cpp (a dependency of gRPC) which enables
+mutex deadlock analysis when the preprocessor flag 'NDEBUG' is not set,
+which adds a 'backtrace()' call on every lock/unlock.  Potentially worse,
+when libunwind is enabled and linked with the test program, 'backtrace()' is
+not provided by glibc but by libunwind itself.
+
+For production systems, users expect good performance out-of-the-box. In the
+example above, the difference is huge and unless explicitly tested and
+analyzed, users may not realize that the performance could be much better.
+
+Address this problem by introducing a new option BR2_ENABLE_RUNTIME_DEBUG,
+which can be used by packages or package infrastructures to set the
+necessary flags.
+
+Note that BR2_ENABLE_RUNTIME_DEBUG is orthogonal to BR2_ENABLE_DEBUG: the
+former changes runtime behavior, while the latter is only expected to add
+debug symbols to the build. Today, the cmake build system does introduce a
+runtime impact when BR2_ENABLE_DEBUG is set, but that will be rectified in a
+subsequent commit.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+---
+ Config.in | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/Config.in b/Config.in
+index c65e34bd5e..a008425688 100644
+--- a/Config.in
++++ b/Config.in
+@@ -412,6 +412,19 @@ config BR2_DEBUG_3
+ endchoice
+ endif
+ 
++config BR2_ENABLE_RUNTIME_DEBUG
++	bool "build packages with runtime debugging info"
++	help
++	  Some packages may have runtime assertions, extra traces, and
++	  similar runtime elements that can help debugging. However,
++	  these elements may negatively influence performance so should
++	  normally not be enabled on production systems.
++
++	  Enable this option to enable such runtime debugging.
++
++	  Note: disabling this option is not a guarantee that all
++	  packages effectively removed these runtime debugging elements.
++
+ config BR2_STRIP_strip
+ 	bool "strip target binaries"
+ 	default y
+-- 
+2.26.3
