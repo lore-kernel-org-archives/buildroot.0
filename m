@@ -1,12 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Jun 2021 21:31:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: handle b_pie
-In-Reply-To: <20210529193011.GA3858765@scaer>
-References: <20210528191748.1598384-1-fontaine.fabrice@gmail.com>
- <20210529090943.GM2788252@scaer> <20210529092141.GO2788252@scaer>
- <CAPi7W81QTY2s-sraNPmB4wL3GSR4zys1cwW9D69OZWGZ0ZhWNg@mail.gmail.com>
- <20210529193011.GA3858765@scaer>
-Message-ID: <38f9645e-5f54-e8b4-33b7-0f2439153b0e@mind.be>
+Date: Tue, 1 Jun 2021 21:43:09 +0200
+Subject: [Buildroot] [PATCH] package/hostapd: add upstream patch to fix
+ CVE-2021-27803
+In-Reply-To: <20210601180915.14897-1-sam.voss@collins.com>
+References: <20210601180915.14897-1-sam.voss@collins.com>
+Message-ID: <c668ab81-0ad8-aa1d-0089-d53f4957a59a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,134 +13,59 @@ To: buildroot@busybox.net
 
 
 
-On 29/05/2021 21:30, Yann E. MORIN wrote:
-> Fabrice, All,
+On 01/06/2021 20:09, Sam Voss via buildroot wrote:
+> Fixes the following:
 > 
-> Meson experts, questions for you below!
+> - CVE-2021-27803: A vulnerability was discovered in how p2p/p2p_pd.c in
+> wpa_supplicant before 2.10 processes P2P (Wi-Fi Direct) provision
+> discovery requests. It could result in denial of service or other impact
+> (potentially execution of arbitrary code), for an attacker within radio
+> range.
 > 
-> On 2021-05-29 11:41 +0200, Fabrice Fontaine spake thusly:
->> Le sam. 29 mai 2021 ? 11:21, Yann E. MORIN <yann.morin.1998@free.fr> a
->> ?crit :
->>> On 2021-05-29 11:09 +0200, Yann E. MORIN spake thusly:
->>>> On 2021-05-28 21:17 +0200, Fabrice Fontaine spake thusly:
-> [--SNIP--]
->>>>> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
->>>>> index a57820d4d2..a55063d58e 100644
->>>>> --- a/package/pkg-meson.mk
->>>>> +++ b/package/pkg-meson.mk
->>>>> @@ -91,6 +91,7 @@ define $(2)_CONFIGURE_CMDS
->>>>>             --default-library=$(if
->>>>>             $(BR2_STATIC_LIBS),static,shared) \
->>>>>             --buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release)
->>>>>             \
->>>>>             --cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf
->>>>>             \
->>>>> +           -Db_pie=$(if
->>>>> $(BR2_TOOLCHAIN_SUPPORTS_PIE),true,false) \
->>> Given a later patch that arrived in parallel, it turns out this
->>> patch
->>> was not correct, and that we still have a bit of interrogation on
->>> that,
->>> so I've reverted it, sorry. I'll keep an eye on the discussions...
->> I think that the second version of this patch (i.e. always disabling
->> b_pie through command line) is the best option because:
->> - PIE is already enabled by the toolchain-wrapper:
->> hardening-check
->> output/build/pipewire-0.3.26/build/spa/plugins/audioconvert/benchmark-resample
->> output/build/pipewire-0.3.26/build/spa/plugins/audioconvert/benchmark-resample:
->>  Position Independent Executable: yes
-> 
-> OK, so PIE is indeed applied when building, good.
-> 
->> - Enabling PIE in two different places is not future-proof and is not
->> done in any other infrastructures (autotools, cmake, etc.).
-> 
-> Yeah, that makes perfect sense.
-> 
->> I think
->> this is also the reason why strip is unconditionally disabled in the
->> command line (it is already handled in Makefile.in)
-> 
-> Yeah, I know about strip. However, my question for the meson experts in
-> the room, is: should we leave that (strip, b_pie) on the command line,
-> or should we have them in the cross-compilation file?
+> Signed-off-by: Sam Voss <sam.voss@collins.com>
 
- Well, currently we pass them in the toolchain wrapper.
-
- If we would put -fPIE in the cflags in the cross-compilation file, we'd hit
-this message:
-
-        if '-f' + arg.lower() in all_flags or '-f' + arg.upper() in all_flags:
-            mlog.warning("Use the '{}' kwarg instead of passing '{}' manually to
-{!r}".format(arg, '-f' + arg, self.name))
-            return True
-
- But now, meson doesn't notice because we hide it in the wrapper.
-
- Anyway, the only effect of b_pie (or various other ways of passing the same
-option) is that it adds -fPIE to the compilation flags. So I don't think it's
-useful to set b_pie.
-
-
-> Additionaly, the machine-files documentation [0] lists pkg_config_path
-> as being part of the builtin options, so shouldn't we also push that
-> into the cross-compilation file?
-
- Yes, that's just accidental. It was passed as a command-line option in the
-weston package, and later refactored in the core package-meson in commit
-5cff3a8bdfba92e9f61d0984df08f1ecd205c072 - but still keeping it as a
-command-line option.
-
-
-> As of today, we have two places where we push meson options: the command
-> line, and the cross-compilation file. To further Fanrice's argument:
-> having two places where we push options is not very consistent and
-> future-proof.
-> 
-> Basically, that would give a patch like (@HOST_DIR@ is already replaced):
-> 
->     diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
->     index 37b49eea3b..942f68f008 100644
->     --- a/package/meson/cross-compilation.conf.in
->     +++ b/package/meson/cross-compilation.conf.in
->     @@ -13,6 +13,9 @@ g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
->      g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
->      
->      [built-in options]
->     +b_pie = false
->     +strip = false
->     +build.pkg_config_path = '@HOST_DIR@/lib/pkgconfig'
->      c_args = [@TARGET_CFLAGS@]
->      c_link_args = [@TARGET_LDFLAGS@]
->      cpp_args = [@TARGET_CXXFLAGS@]
->     diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
->     index 1857450564..87cf0e3dd7 100644
->     --- a/package/pkg-meson.mk
->     +++ b/package/pkg-meson.mk
->     @@ -91,9 +91,6 @@ define $(2)_CONFIGURE_CMDS
->      		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
->      		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
->      		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
->     -		-Db_pie=false \
->     -		-Dstrip=false \
->     -		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
->      		$$($$(PKG)_CONF_OPTS) \
->      		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
->      endef
-
- LGTM.
-
+ Applied to master, thanks.
 
  Regards,
  Arnout
 
-> As far as I can tell from the documentation, this really seems like this
-> should be what we want to do in Buildroot, because that way, these
-> settings will also be used for the SDK, or for building manually outside
-> of Buildroot...
+> ---
+>  package/hostapd/hostapd.hash | 1 +
+>  package/hostapd/hostapd.mk   | 6 +++++-
+>  2 files changed, 6 insertions(+), 1 deletion(-)
 > 
-> So, what's your thoughts about that?
-> 
-> Regards,
-> Yann E. MORIN.
+> diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
+> index e2f76c12d9..9ac5f4b392 100644
+> --- a/package/hostapd/hostapd.hash
+> +++ b/package/hostapd/hostapd.hash
+> @@ -3,4 +3,5 @@ sha256  881d7d6a90b2428479288d64233151448f8990ab4958e0ecaca7eeb3c9db2bd7  hostap
+>  sha256  2d9a5b9d616f1b4aa4a22b967cee866e2f69b798b0b46803a7928c8559842bd7  0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch
+>  sha256  49feb35a5276279b465f6836d6fa2c6b34d94dc979e8b840d1918865c04260de  0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch
+>  sha256  a8212a2d89a5bab2824d22b6047e7740553df163114fcec94832bfa9c5c5d78a  0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch
+> +sha256  7f40cfec5faf5e927ea9028ab9392cd118685bde7229ad24210caf0a8f6e9611  0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
+>  sha256  9da5dd0776da266b180b915e460ff75c6ff729aca1196ab396529510f24f3761  README
+> diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+> index 8eff92eb1e..8820254f89 100644
+> --- a/package/hostapd/hostapd.mk
+> +++ b/package/hostapd/hostapd.mk
+> @@ -11,7 +11,8 @@ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+>  HOSTAPD_PATCH = \
+>  	https://w1.fi/security/2020-1/0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch \
+>  	https://w1.fi/security/2020-1/0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch \
+> -	https://w1.fi/security/2020-1/0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch
+> +	https://w1.fi/security/2020-1/0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch \
+> +	https://w1.fi/security/2021-1/0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
+>  HOSTAPD_DEPENDENCIES = host-pkgconf
+>  HOSTAPD_CFLAGS = $(TARGET_CFLAGS)
+>  HOSTAPD_LICENSE = BSD-3-Clause
+> @@ -26,6 +27,9 @@ HOSTAPD_IGNORE_CVES += CVE-2020-12695
+>  # 0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
+>  HOSTAPD_IGNORE_CVES += CVE-2021-30004
+>  
+> +# 0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
+> +HOSTAPD_IGNORE_CVES += CVE-2021-27803
+> +
+>  HOSTAPD_CPE_ID_VENDOR = w1.fi
+>  HOSTAPD_CONFIG_SET =
+>  
 > 
