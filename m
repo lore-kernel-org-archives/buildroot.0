@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BCC3C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:28:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E27BC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:28:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D4F6C60F70
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:28:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D4F6C60F70
+	by mail.kernel.org (Postfix) with ESMTPS id 5B2F560F58
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:28:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5B2F560F58
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC5CA4045A;
-	Tue,  3 Aug 2021 21:28:01 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yfABuW-stktZ; Tue,  3 Aug 2021 21:28:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BCC6404A7;
-	Tue,  3 Aug 2021 21:27:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2E3F21BF9C2
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4450760863
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 334BA6068B;
+	Tue,  3 Aug 2021 21:28:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A7LfNnYwHyJ7 for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4XazVPp_TBtq; Tue,  3 Aug 2021 21:28:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8881060596;
+	Tue,  3 Aug 2021 21:28:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1905E1BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2E6C28398E
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ax1_ZoKsq7z3 for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A705F60673
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8A9D0834FE
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id EFD6588523; Tue,  3 Aug 2021 21:09:42 +0000 (UTC)
+ id D58E985F62; Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Fri, 21 May 2021 10:54:39 +0200
+Date: Tue, 1 Jun 2021 21:59:35 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f8367664f8aea1e962c111df0432014d744fd00f
-X-Git-Newrev: 8c7222ad038a4b83e69733353ba3219815ac66d9
+X-Git-Oldrev: 9584765654c8e71842ad516b5979b3d7f396370f
+X-Git-Newrev: 4d6ca0a8acac3509f1008799f3a72d3490572e16
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210942.EFD6588523@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mender: the dbus
- plugin requires libglib2
+Message-Id: <20210803210946.D58E985F62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libcutl: fix build
+ with gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,39 +70,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c7222ad038a4b83e69733353ba3219815ac66d9
+commit: https://git.buildroot.net/buildroot/commit/?id=4d6ca0a8acac3509f1008799f3a72d3490572e16
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If libglib2 is not build before building the dbus plugin, mender fails to
-compile with the following error:
-Package 'gio-2.0', required by 'virtual:world', not found
+Add -std=c++11 to fix the following build failure with gcc 11:
 
- - Add a check for libglib2 in addition to dbus when enabling the dbus plugin.
- - Depend on libglib2 if both packages are selected.
+In file included from shared-ptr/base.cxx:5:
+../cutl/shared-ptr/base.hxx:34:41: error: ISO C++17 does not allow dynamic exception specifications
+   34 | operator new (std::size_t, cutl::share) throw (std::bad_alloc);
+      |                                         ^~~~~
 
 Fixes:
-http://autobuild.buildroot.org/results/1bc5893b88db08612059ad899c2bc3b2abb291fb
+ - http://autobuild.buildroot.org/results/60a39d402a0d051c92aa11421b7a14f7729a0380
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/mender/mender.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libcutl/libcutl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index b4c5761151..a110caf551 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -87,7 +87,8 @@ else
- MENDER_TAGS += nolzma
- endif
+diff --git a/package/libcutl/libcutl.mk b/package/libcutl/libcutl.mk
+index 49c05e6019..2b704ad3b8 100644
+--- a/package/libcutl/libcutl.mk
++++ b/package/libcutl/libcutl.mk
+@@ -11,5 +11,6 @@ LIBCUTL_SITE = https://www.codesynthesis.com/download/libcutl/$(LIBCUTL_VERSION_
+ LIBCUTL_INSTALL_STAGING = YES
+ LIBCUTL_LICENSE = MIT
+ LIBCUTL_LICENSE_FILES = LICENSE
++HOST_LIBCUTL_CONF_ENV = CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
  
--ifeq ($(BR2_PACKAGE_DBUS),y)
-+ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_LIBGLIB2),yy)
-+MENDER_DEPENDENCIES += libglib2
- define MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
- 	$(INSTALL) -D -m 0755 $(@D)/support/dbus/io.mender.AuthenticationManager.conf \
- 		      $(TARGET_DIR)/etc/dbus-1/system.d/io.mender.AuthenticationManager.conf
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
