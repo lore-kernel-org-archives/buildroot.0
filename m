@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Jun 2021 21:53:10 +0200
-Subject: [Buildroot] [PATCH] uclibc: powerpc: fix PIE/PIC builds with
- secureplt enabled by default
-In-Reply-To: <20210601191616.153644-1-romain.naour@gmail.com>
-References: <20210601191616.153644-1-romain.naour@gmail.com>
-Message-ID: <b2f1b4cc-696b-005e-0bcc-cc956df08d2d@mind.be>
+Date: Tue, 1 Jun 2021 21:57:29 +0200
+Subject: [Buildroot] [PATCH] package/i2c-tools: add
+ I2C_TOOLS_CPE_ID_VENDOR
+In-Reply-To: <20210601111551.4155-1-heiko.thiery@gmail.com>
+References: <20210601111551.4155-1-heiko.thiery@gmail.com>
+Message-ID: <40abb9ff-dd06-5b60-b16a-8ea43bf1ab4d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,129 +13,33 @@ To: buildroot@busybox.net
 
 
 
-On 01/06/2021 21:16, Romain Naour wrote:
-> Apply the fix provided by Yann Sionneau when secureplt is enabled
-> by default by gcc compiler along with PIE/PIC options.
+On 01/06/2021 13:15, Heiko Thiery wrote:
+> cpe:2.3:a:i2c-tools_project:i2c-tools is a valid CPE identifier for this
+> package:
 > 
-> "For the secure PLT to work in PIC, the r30 register needs to point to the GOT"
+> https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ai2c-tools_project%3Ai2c-tools
 > 
-> Fixes:
-> [qemu_ppc_e500mc_defconfig] https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661606
-> [qemu_ppc_g3beige_defconfig] https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661607
-> [qemu_ppc_mac99_defconfig] https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661609
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Yann Sionneau <yann@sionneau.net>
-
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 
  Applied to master, thanks.
-
- Perhaps I should have waited a few days for feedback from the uclibc-ng mailing
-list... Oh well.
 
  Regards,
  Arnout
 
 > ---
->  ...PIC-builds-with-newer-gcc-binutils-w.patch | 91 +++++++++++++++++++
->  1 file changed, 91 insertions(+)
->  create mode 100644 package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch
+>  package/i2c-tools/i2c-tools.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch b/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch
-> new file mode 100644
-> index 0000000000..040699df83
-> --- /dev/null
-> +++ b/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch
-> @@ -0,0 +1,91 @@
-> +From 6c95eccff5eb43c8c3ad865d3b1316b7952cc58e Mon Sep 17 00:00:00 2001
-> +From: Yann Sionneau <yann@sionneau.net>
-> +Date: Fri, 28 May 2021 08:59:58 +0200
-> +Subject: [PATCH] powerpc: fix PIE/PIC builds with newer gcc/binutils which use
-> + secureplt by default
-> +
-> +This patch fixes segfault of all user space processes (including init, which caused a panic) on recent buildroot powerpc32 builds.
-> +
-> +The issue has been reported by Romain Naour in this thread: https://mailman.uclibc-ng.org/pipermail/devel/2021-May/002068.html
-> +
-> +Recent buildroot toolchain enables secure PLT in powerpc gcc.
-> +The latter will then supply -msecure-plt to gas invocations by default.
-> +Recent buildroot also enables PIE by default.
-> +
-> +For the secure PLT to work in PIC, the r30 register needs to point to the GOT.
-> +Old "bss plt" was just a one-instruction-wide PLT slot, pointed-to by a R_PPC_JMP_SLOT relocation, which was written on-the-fly to contain a branch instruction to the correct address. It therefore had to stay writable+executable, which you generally want to avoid for security reasons.
-> +New secure PLT only contains read-only code which loads the branch address from the writable GOT.
-> +
-> +Note: secure PLT without PIC does not need r30 to be set. Because offset between plt stub code and got is known at link-time. In this case the PLT entry looks like:
-> +1009b3e0 <__uClibc_main@plt>:
-> +1009b3e0:       3d 60 10 0e     lis     r11,4110
-> +1009b3e4:       81 6b 03 74     lwz     r11,884(r11)
-> +1009b3e8:       7d 69 03 a6     mtctr   r11
-> +1009b3ec:       4e 80 04 20     bctr
-> +
-> +Whereas secure PLT with PIC - offset between plt and got is unknown at link-time - looks like this:
-> +000af800 <00000000.plt_pic32.__uClibc_main>:
-> +   af800:       81 7e 03 80     lwz     r11,896(r30)
-> +   af804:       7d 69 03 a6     mtctr   r11
-> +   af808:       4e 80 04 20     bctr
-> +   af80c:       60 00 00 00     nop
-> +
-> +Upstream status: Pending:
-> +https://mailman.uclibc-ng.org/pipermail/devel/2021-May/002091.html
-> +
-> +Signed-off-by: Yann Sionneau <yann@sionneau.net>
-> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> +---
-> + Rules.mak                         | 3 ++-
-> + ldso/ldso/powerpc/dl-startup.h    | 3 +++
-> + libc/sysdeps/linux/powerpc/crt1.S | 4 ++++
-> + 3 files changed, 9 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Rules.mak b/Rules.mak
-> +index 10f88b3de..60ac59b85 100644
-> +--- a/Rules.mak
-> ++++ b/Rules.mak
-> +@@ -477,9 +477,10 @@ ifeq ($(TARGET_ARCH),powerpc)
-> + 	PICFLAG:=-fpic
-> + 	PIEFLAG_NAME:=-fpie
-> + 	PPC_HAS_REL16:=$(shell printf "\t.text\n\taddis 11,30,_GLOBAL_OFFSET_TABLE_-. at ha\n" | $(CC) -c -x assembler -o /dev/null -  2> /dev/null && echo -n y || echo -n n)
-> ++	PPC_HAS_SECUREPLT:=$(shell $(CC) --verbose 2>&1 | grep -- --enable-secureplt > /dev/null && echo -n y || echo -n n)
-> ++	CPU_CFLAGS-$(PPC_HAS_SECUREPLT) += -DPPC_HAS_SECUREPLT
-> + 	CPU_CFLAGS-$(PPC_HAS_REL16)+= -DHAVE_ASM_PPC_REL16
-> + 	CPU_CFLAGS-$(CONFIG_E500) += "-D__NO_MATH_INLINES"
-> +-
-> + endif
-> + 
-> + ifeq ($(TARGET_ARCH),bfin)
-> +diff --git a/ldso/ldso/powerpc/dl-startup.h b/ldso/ldso/powerpc/dl-startup.h
-> +index 8b2a517e2..7749395eb 100644
-> +--- a/ldso/ldso/powerpc/dl-startup.h
-> ++++ b/ldso/ldso/powerpc/dl-startup.h
-> +@@ -25,6 +25,9 @@ __asm__(
-> + #else
-> +     "	bl	_GLOBAL_OFFSET_TABLE_-4 at local\n" /*  Put our GOT pointer in r31, */
-> +     "	mflr	31\n"
-> ++#endif
-> ++#ifdef PPC_HAS_SECUREPLT
-> ++    "   mr      30,31\n"
-> + #endif
-> +     "	addi	1,1,16\n" /* Restore SP */
-> +     "	lwz	7,_dl_skip_args at got(31)\n" /* load EA of _dl_skip_args */
-> +diff --git a/libc/sysdeps/linux/powerpc/crt1.S b/libc/sysdeps/linux/powerpc/crt1.S
-> +index 27bfc5a5a..3f5d056c0 100644
-> +--- a/libc/sysdeps/linux/powerpc/crt1.S
-> ++++ b/libc/sysdeps/linux/powerpc/crt1.S
-> +@@ -56,6 +56,10 @@ _start:
-> + # else
-> + 	bl	_GLOBAL_OFFSET_TABLE_-4 at local
-> + 	mflr	r31
-> ++# endif
-> ++	/* in PIC/PIE, plt stubs need r30 to point to the GOT if using secure-plt */
-> ++# ifdef PPC_HAS_SECUREPLT
-> ++	mr	30,31
-> + # endif
-> + #endif
-> + 	/* Set up the small data pointer in r13.  */
-> +-- 
-> +2.31.1
-> +
+> diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+> index c1770cf636..8936f6c4f6 100644
+> --- a/package/i2c-tools/i2c-tools.mk
+> +++ b/package/i2c-tools/i2c-tools.mk
+> @@ -9,6 +9,7 @@ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.xz
+>  I2C_TOOLS_SITE = https://www.kernel.org/pub/software/utils/i2c-tools
+>  I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus), LGPL-2.1+ (libi2c)
+>  I2C_TOOLS_LICENSE_FILES = COPYING COPYING.LGPL README
+> +I2C_TOOLS_CPE_ID_VENDOR = i2c-tools_project
+>  I2C_TOOLS_MAKE_OPTS = EXTRA=eeprog
+>  I2C_TOOLS_INSTALL_STAGING = YES
+>  
 > 
