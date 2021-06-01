@@ -1,76 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jun 2021 22:39:23 +0200
-Subject: [Buildroot] [git commit] core: introduce BR2_ENABLE_RUNTIME_DEBUG
-Message-ID: <20210607144658.6197C814BD@busybox.osuosl.org>
+Date: Tue, 1 Jun 2021 22:40:10 +0200
+Subject: [Buildroot] [git commit] package/pkg-meson.mk: determine
+ 'buildtype' based on BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
+Message-ID: <20210607144659.1C61E814BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7939fe2a0b15ba46faa77552567a2852aea387f
+commit: https://git.buildroot.net/buildroot/commit/?id=603a949af081742990db32f3f656d0352c357acb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some packages have optional runtime assertions, extra traces, or other
-elements that can help in debugging problems. However, such runtime elements
-can negatively influence performance.
+BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
+should have no negative effect on performance.
 
-In a test program performing 100K gRPC calls from a client to a local server
-and receiving the returned response, we see following execution time:
-
-    - runtime debug enabled: 1065 seconds
-    - runtime debug disabled:  48 seconds
-
-This is more than a factor 20 (!) difference. Analysis shows that the
-problem mostly stems from libabseil-cpp (a dependency of gRPC) which enables
-mutex deadlock analysis when the preprocessor flag 'NDEBUG' is not set,
-which adds a 'backtrace()' call on every lock/unlock.  Potentially worse,
-when libunwind is enabled and linked with the test program, 'backtrace()' is
-not provided by glibc but by libunwind itself.
-
-For production systems, users expect good performance out-of-the-box. In the
-example above, the difference is huge and unless explicitly tested and
-analyzed, users may not realize that the performance could be much better.
-
-Address this problem by introducing a new option BR2_ENABLE_RUNTIME_DEBUG,
-which can be used by packages or package infrastructures to set the
-necessary flags.
-
-Note that BR2_ENABLE_RUNTIME_DEBUG is orthogonal to BR2_ENABLE_DEBUG: the
-former changes runtime behavior, while the latter is only expected to add
-debug symbols to the build. Today, the cmake build system does introduce a
-runtime impact when BR2_ENABLE_DEBUG is set, but that will be rectified in a
-subsequent commit.
+Introduction of 'assert' statements, 'debug'-type builds with additional
+logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ package/pkg-meson.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in b/Config.in
-index c65e34bd5e..a008425688 100644
---- a/Config.in
-+++ b/Config.in
-@@ -412,6 +412,19 @@ config BR2_DEBUG_3
- endchoice
- endif
- 
-+config BR2_ENABLE_RUNTIME_DEBUG
-+	bool "build packages with runtime debugging info"
-+	help
-+	  Some packages may have runtime assertions, extra traces, and
-+	  similar runtime elements that can help debugging. However,
-+	  these elements may negatively influence performance so should
-+	  normally not be enabled on production systems.
-+
-+	  Enable this option to enable such runtime debugging.
-+
-+	  Note: disabling this option is not a guarantee that all
-+	  packages effectively removed these runtime debugging elements.
-+
- config BR2_STRIP_strip
- 	bool "strip target binaries"
- 	default y
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index a57820d4d2..dafad3b1eb 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -89,7 +89,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--prefix=/usr \
+ 		--libdir=lib \
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+-		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
++		--buildtype=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
+ 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+ 		-Dstrip=false \
+ 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
