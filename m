@@ -1,87 +1,120 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Jun 2021 22:36:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libkcapi: fix build on riscv32
-In-Reply-To: <20210527204904.480560-1-fontaine.fabrice@gmail.com>
-References: <20210527204904.480560-1-fontaine.fabrice@gmail.com>
-Message-ID: <3ff67454-de48-2029-c05f-73d02ce28d55@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 1 Jun 2021 22:37:37 +0200
+Subject: [Buildroot] [PATCHv4 03/16] package/pkg-cmake.mk: determine
+ CMAKE_BUILD_TYPE depending on BR2_ENABLE_RUNTIME_DEBUG
+In-Reply-To: <20210601143422.25064-4-patrickdepinguin@gmail.com>
+References: <20210601143422.25064-1-patrickdepinguin@gmail.com>
+ <20210601143422.25064-4-patrickdepinguin@gmail.com>
+Message-ID: <20210601203737.GE168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, All,
 
+On 2021-06-01 16:34 +0200, Thomas De Schampheleire spake thusly:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> The CMAKE_BUILD_TYPE is currently set as 'Debug' in case BR2_ENABLE_DEBUG is
+> set, and as 'Release' in other cases. However, while the description of
+> BR2_ENABLE_DEBUG is to enable debug symbols (no runtime impact), the 'Debug'
+> build type in CMake can actually have runtime impact. For one, because it
+> does not set -DNDEBUG like is done for 'Release', but also because packages
+> may do custom things based on it.
+> 
+> The question of which CMAKE_BUILD_TYPE Buildroot should set, be it 'Debug',
+> 'Release', 'RelWithDebInfo' or others, has come up several times in the
+> past. See some references below:
+> 
+> - July 2016: switch from Debug to RelWithDebInfo:
+>   https://git.buildroot.org/buildroot/commit/?id=4b0120183404913f7f7788ef4f0f6b51498ef363
+> 
+> - October 2016: switch from RelWithDebInfo back to Debug:
+>   https://git.buildroot.org/buildroot/commit/?id=104bb29e0490bfb487e2e665448dd3ca07fcc2b5
+>   and changes to make sure Buildroot's flags are respected:
+>   https://git.buildroot.org/buildroot/commit/?id=12494ef48f893684d0800e7f6fe39a2ceaed0451
+> 
+> - August 2017: bug #10246 - "BR2_ENABLE_DEBUG does not have the expected
+>   effect for cmake packages"
+>   https://bugs.busybox.net/show_bug.cgi?id=10246
+> 
+> - August 2017: mail thread following bug #10246:
+>   http://lists.busybox.net/pipermail/buildroot/2017-August/200778.html
+> 
+> In the last mail thread, Samuel Martin confirmed that the 'Release' build
+> type could be used in all cases, because Buildroot is actually making sure
+> that the optimization flags are those determined by Buildroot, not the
+> defaults of cmake, thanks to commit 12494ef48f.
+> But Arnout Vandecappelle objected to using always 'Release', stating that
+> users may actually want the extra assertions.
+> 
+> With the introduction of BR2_ENABLE_RUNTIME_DEBUG, Buildroot can now cater
+> for all cases:
+> 
+> - use CMAKE_BUILD_TYPE=Release by default. This makes sure that there is no
+>   unexpected performance degradation triggered by enabling BR2_ENABLE_DEBUG.
+> 
+> - users can optionally enable BR2_ENABLE_RUNTIME_DEBUG if they want runtime
+>   debug info like assertions, at the risk of introducing performance
+>   degradation. In this case, we switch to CMAKE_BUILD_TYPE=Debug.
+> 
+> - orthogonally to the above, BR2_ENABLE_DEBUG still determines passing the
+>   '-g' flag to enable debug symbols, and BR2_OPTIMIZE_X still determines the
+>   used optimization flags.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-On 27/05/2021 22:49, Fabrice Fontaine wrote:
-> Fix the following build failure on riscv32:
-> 
-> lib/internal.h:331:20: error: '__NR_io_getevents' undeclared (first use in this function); did you mean 'io_getevents'?
->   331 |     return syscall(__NR_io_getevents, ctx, min, max, events, timeout);
->       |                    ^~~~~~~~~~~~~~
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c828d4330a8888fe8db4299dc2f20759947f329f
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 > ---
->  ...f-__NR_io_getevents-when-not-defined.patch | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/libkcapi/0001-Disable-use-of-__NR_io_getevents-when-not-defined.patch
+>  docs/manual/adding-packages-cmake.txt | 2 +-
+>  package/pkg-cmake.mk                  | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/libkcapi/0001-Disable-use-of-__NR_io_getevents-when-not-defined.patch b/package/libkcapi/0001-Disable-use-of-__NR_io_getevents-when-not-defined.patch
-> new file mode 100644
-> index 0000000000..20aa75b741
-> --- /dev/null
-> +++ b/package/libkcapi/0001-Disable-use-of-__NR_io_getevents-when-not-defined.patch
-> @@ -0,0 +1,42 @@
-> +From 455c4938f5822c017c7ff79dd2dca638b6410923 Mon Sep 17 00:00:00 2001
-> +From: Khem Raj <raj.khem@gmail.com>
-> +Date: Sun, 15 Nov 2020 18:05:48 -0800
-> +Subject: [PATCH] Disable use of __NR_io_getevents when not defined
-> +
-> +Architectures like riscv32 do not define this syscall, therefore return
-> +ENOSYS on such architectures
-> +
-> +Upstream-Status: Pending
-
- I don't really like those vague OpenEmbedded patches :-)
-
- Applied to master, thanks.
-
- Regards,
- Arnout
-
-> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
-> +Signed-off-by: Stephan Mueller <smueller@chronox.de>
-> +[Retrieved from:
-> +https://github.com/smuellerDD/libkcapi/commit/455c4938f5822c017c7ff79dd2dca638b6410923]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + lib/internal.h | 11 +++++++++--
-> + 1 file changed, 9 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/lib/internal.h b/lib/internal.h
-> +index 1237827..f765461 100644
-> +--- a/lib/internal.h
-> ++++ b/lib/internal.h
-> +@@ -325,10 +325,17 @@ static inline int io_submit(aio_context_t ctx, long n,  struct iocb **iocb)
-> +     return syscall(__NR_io_submit, ctx, n, iocb);
-> + }
-> + 
-> +-static inline int io_getevents(aio_context_t ctx, long min, long max,
-> +-            struct io_event *events, struct timespec *timeout)
-> ++static inline int io_getevents(__attribute__((unused)) aio_context_t ctx,
-> ++            __attribute__((unused)) long min,
-> ++            __attribute__((unused)) long max,
-> ++            __attribute__((unused)) struct io_event *events,
-> ++            __attribute__((unused)) struct timespec *timeout)
-> + {
-> ++#ifdef __NR_io_getevents
-> +     return syscall(__NR_io_getevents, ctx, min, max, events, timeout);
-> ++#else
-> ++    return -ENOSYS;
-> ++#endif
-> + }
-> + 
-> + /************************************************************
+> diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+> index 73f0943024..541d7422cf 100644
+> --- a/docs/manual/adding-packages-cmake.txt
+> +++ b/docs/manual/adding-packages-cmake.txt
+> @@ -100,7 +100,7 @@ typical packages will therefore only use a few of them.
+>    necessary to set them in the package's +*.mk+ file unless you want
+>    to override them:
+>  
+> -** +CMAKE_BUILD_TYPE+ is driven by +BR2_ENABLE_DEBUG+;
+> +** +CMAKE_BUILD_TYPE+ is driven by +BR2_ENABLE_RUNTIME_DEBUG+;
+>  ** +CMAKE_INSTALL_PREFIX+;
+>  ** +BUILD_SHARED_LIBS+ is driven by +BR2_STATIC_LIBS+;
+>  ** +BUILD_DOC+, +BUILD_DOCS+ are disabled;
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 37078f3c34..4ee100a0c6 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -266,7 +266,7 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
+>  		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
+>  		-e 's#@@TOOLCHAIN_HAS_CXX@@#$(if $(BR2_INSTALL_LIBSTDCPP),1,0)#' \
+>  		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
+> -		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
+> +		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_RUNTIME_DEBUG),Debug,Release)#' \
+>  		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+>  		> $(HOST_DIR)/share/buildroot/toolchainfile.cmake
+>  	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot.cmake \
+> -- 
+> 2.26.3
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
