@@ -1,107 +1,205 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Jun 2021 23:06:03 +0200
-Subject: [Buildroot] [PATCH] package/hostapd: add upstream patch to fix
- CVE-2021-27803
-In-Reply-To: <20210601200043.GA168928@scaer>
-References: <20210601180915.14897-1-sam.voss@collins.com>
- <20210601200043.GA168928@scaer>
-Message-ID: <11b326bb-8425-7615-f4bc-ce380dcadbf8@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  1 Jun 2021 23:12:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gupnp: security bump to version
+ 1.2.6
+Message-ID: <20210601211221.144905-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fix CVE-2021-33516: An issue was discovered in GUPnP before 1.0.7 and
+1.1.x and 1.2.x before 1.2.5. It allows DNS rebinding. A remote web
+server can exploit this vulnerability to trick a victim's browser into
+triggering actions against local UPnP services implemented using this
+library. Depending on the affected service, this could be used for data
+exfiltration, data tempering, etc.
 
+Replace patch by upstream commit as current patch doesn't apply cleanly
 
-On 01/06/2021 22:00, Yann E. MORIN wrote:
-> Sam, All,
-> 
-> On 2021-06-01 13:09 -0500, Sam Voss via buildroot spake thusly:
->> Fixes the following:
->>
->> - CVE-2021-27803: A vulnerability was discovered in how p2p/p2p_pd.c in
->> wpa_supplicant before 2.10 processes P2P (Wi-Fi Direct) provision
->> discovery requests. It could result in denial of service or other impact
->> (potentially execution of arbitrary code), for an attacker within radio
->> range.
-> 
-> Usually, when there is a patch to hostpad to fix a CVE, we probably need
-> the same patch against wpa_supplicant, since they both shared the same
-> source tree...
-> 
-> See for example:
-> 
->     0c65499c3f package/wpa_supplicant: fix build with CVE-2021-30004 changes
->     75496165dc package/hostapd: fix build with CVE-2021-30004 changes
->     a8fbe67b9b package/wpa_supplicant: add upstream patch to fix CVE-2021-30004
->     d65586f45a package/hostapd: add upstream patch to fix CVE-2021-30004
->     2f6a6b8e50 package/wpa_supplicant: ignore CVE-2021-30004 when using openssl
->     3d3348fd03 package/hostapd: ignore CVE-2021-30004 when using openssl
->     650d907c13 package/wpa_supplicant: fix CVE-2019-16275
->     749fbab0bb package/hostapd: fix CVE-2019-16275
-> 
-> Could you look at providing a patch to wpa_supplicant for
-> CVE-2021-27803, please?
+https://discourse.gnome.org/t/security-relevant-releases-for-gupnp-issue-cve-2021-33516/6536
+https://gitlab.gnome.org/GNOME/gupnp/-/blob/gupnp-1.2.6/NEWS
 
- Peter already applied it in 9ada4eb2f1c3d67ee49f6f5466738bcd821fc647, at the
-time there was no CVE yet. Fabrice later added the exception for CVE-2021-27803
-in 1a7cf592a834357c5777e452f0b7ab7652e7d389.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ays-build-gupnp-binding-tool-manpage.patch | 60 ---------------
+ ...or-stylesheet-existence-on-doc-build.patch | 73 +++++++++++++++++++
+ package/gupnp/gupnp.hash                      |  4 +-
+ package/gupnp/gupnp.mk                        |  2 +-
+ 4 files changed, 76 insertions(+), 63 deletions(-)
+ delete mode 100644 package/gupnp/0001-Revert-build-Always-build-gupnp-binding-tool-manpage.patch
+ create mode 100644 package/gupnp/0001-doc-Check-for-stylesheet-existence-on-doc-build.patch
 
- So Sam, nothing to do :-)
-
- Regards,
- Arnout
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> Signed-off-by: Sam Voss <sam.voss@collins.com>
->> ---
->>  package/hostapd/hostapd.hash | 1 +
->>  package/hostapd/hostapd.mk   | 6 +++++-
->>  2 files changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
->> index e2f76c12d9..9ac5f4b392 100644
->> --- a/package/hostapd/hostapd.hash
->> +++ b/package/hostapd/hostapd.hash
->> @@ -3,4 +3,5 @@ sha256  881d7d6a90b2428479288d64233151448f8990ab4958e0ecaca7eeb3c9db2bd7  hostap
->>  sha256  2d9a5b9d616f1b4aa4a22b967cee866e2f69b798b0b46803a7928c8559842bd7  0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch
->>  sha256  49feb35a5276279b465f6836d6fa2c6b34d94dc979e8b840d1918865c04260de  0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch
->>  sha256  a8212a2d89a5bab2824d22b6047e7740553df163114fcec94832bfa9c5c5d78a  0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch
->> +sha256  7f40cfec5faf5e927ea9028ab9392cd118685bde7229ad24210caf0a8f6e9611  0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
->>  sha256  9da5dd0776da266b180b915e460ff75c6ff729aca1196ab396529510f24f3761  README
->> diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
->> index 8eff92eb1e..8820254f89 100644
->> --- a/package/hostapd/hostapd.mk
->> +++ b/package/hostapd/hostapd.mk
->> @@ -11,7 +11,8 @@ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
->>  HOSTAPD_PATCH = \
->>  	https://w1.fi/security/2020-1/0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch \
->>  	https://w1.fi/security/2020-1/0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch \
->> -	https://w1.fi/security/2020-1/0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch
->> +	https://w1.fi/security/2020-1/0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch \
->> +	https://w1.fi/security/2021-1/0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
->>  HOSTAPD_DEPENDENCIES = host-pkgconf
->>  HOSTAPD_CFLAGS = $(TARGET_CFLAGS)
->>  HOSTAPD_LICENSE = BSD-3-Clause
->> @@ -26,6 +27,9 @@ HOSTAPD_IGNORE_CVES += CVE-2020-12695
->>  # 0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
->>  HOSTAPD_IGNORE_CVES += CVE-2021-30004
->>  
->> +# 0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
->> +HOSTAPD_IGNORE_CVES += CVE-2021-27803
->> +
->>  HOSTAPD_CPE_ID_VENDOR = w1.fi
->>  HOSTAPD_CONFIG_SET =
->>  
->> -- 
->> 2.17.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/gupnp/0001-Revert-build-Always-build-gupnp-binding-tool-manpage.patch b/package/gupnp/0001-Revert-build-Always-build-gupnp-binding-tool-manpage.patch
+deleted file mode 100644
+index 05b07b49c5..0000000000
+--- a/package/gupnp/0001-Revert-build-Always-build-gupnp-binding-tool-manpage.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 9225b076d107538209fbd5b8bbc21a68d1b2c016 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 15 Jul 2020 22:42:44 +0200
+-Subject: [PATCH] Revert "build: Always build gupnp-binding-tool manpage"
+-
+-This reverts commit 23f54c2a1e8718e836224d68dafded091604a677 until
+-upstream decides what to do between adding a new option or renaming
+-gtk_doc into documentation:
+-https://gitlab.gnome.org/GNOME/gupnp/-/issues/17
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- doc/meson.build | 2 --
+- meson.build     | 5 ++++-
+- 2 files changed, 4 insertions(+), 3 deletions(-)
+-
+-diff --git a/doc/meson.build b/doc/meson.build
+-index b71b657..478650b 100644
+---- a/doc/meson.build
+-+++ b/doc/meson.build
+-@@ -4,7 +4,6 @@ version_xml = configure_file(input: 'version.xml.in',
+-                output: 'version.xml', configuration:
+-                entities)
+- 
+--if get_option('gtk_doc')
+- gnome.gtkdoc('gupnp',
+-              main_xml : 'gupnp-docs.xml',
+-              src_dir : [join_paths(meson.source_root(), 'libgupnp'),
+-@@ -27,7 +26,6 @@ gnome.gtkdoc('gupnp',
+-                  'gupnp-types-private.h'
+-              ],
+-              install : true)
+--endif
+- 
+- xsltproc = find_program('xsltproc', required: false)
+- if xsltproc.found()
+-diff --git a/meson.build b/meson.build
+-index 28c40b2..dea0a49 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -31,12 +31,15 @@ dependencies = [
+- subdir('libgupnp')
+- subdir('tests')
+- subdir('tools')
+--subdir('doc')
+- 
+- if get_option('vapi') and get_option('introspection')
+-     subdir('vala')
+- endif
+- 
+-+if get_option('gtk_doc')
+-+    subdir('doc')
+-+endif
+-+
+- if get_option('examples')
+-     subdir('examples')
+- endif
+--- 
+-2.27.0
+-
+diff --git a/package/gupnp/0001-doc-Check-for-stylesheet-existence-on-doc-build.patch b/package/gupnp/0001-doc-Check-for-stylesheet-existence-on-doc-build.patch
+new file mode 100644
+index 0000000000..448996da04
+--- /dev/null
++++ b/package/gupnp/0001-doc-Check-for-stylesheet-existence-on-doc-build.patch
+@@ -0,0 +1,73 @@
++From 7ce37c94596029358a67d732a82e4313f7b89135 Mon Sep 17 00:00:00 2001
++From: Jens Georg <mail@jensge.org>
++Date: Sun, 30 May 2021 13:13:00 +0200
++Subject: [PATCH] doc: Check for stylesheet existence on doc build
++
++Checking for xsltproc is not enough
++
++Fixes #17
++
++[Retrieved from:
++https://gitlab.gnome.org/GNOME/gupnp/-/commit/7ce37c94596029358a67d732a82e4313f7b89135]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ doc/meson.build | 34 +++++++++++++++++++++++++---------
++ 1 file changed, 25 insertions(+), 9 deletions(-)
++
++diff --git a/doc/meson.build b/doc/meson.build
++index 26c32c9..eb69d07 100644
++--- a/doc/meson.build
+++++ b/doc/meson.build
++@@ -30,6 +30,8 @@ endif
++ 
++ xsltproc = find_program('xsltproc', required: false)
++ if xsltproc.found()
+++    stylesheet = 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl'
+++
++     xlstproc_flags = [
++         '--nonet',
++         '--xinclude',
++@@ -45,17 +47,31 @@ if xsltproc.found()
++         xsltproc,
++         xlstproc_flags,
++         '-o', '@OUTPUT@',
++-        'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
+++        stylesheet,
++         '@INPUT@'
++     ]
++ 
++-    custom_target(
++-        'man 1 pages',
++-        input: 'gupnp-binding-tool.xml',
++-        output: 'gupnp-binding-tool-1.2.1',
++-        command: xsltproc_args,
++-        depend_files : version_xml,
++-        install: true,
++-        install_dir: join_paths(get_option('mandir'), 'man1')
+++    stylesheet_check = run_command(
+++        [
+++            xsltproc,
+++            xlstproc_flags,
+++            '--noout',
+++            stylesheet,
+++            'gupnp-binding-tool.xml'
+++        ]
++     )
+++    if (stylesheet_check.returncode() == 0)
+++        message('Stylesheet ' + stylesheet + ' available')
+++        custom_target(
+++            'man 1 pages',
+++            input: 'gupnp-binding-tool.xml',
+++            output: 'gupnp-binding-tool-1.2.1',
+++            command: xsltproc_args,
+++            depend_files : version_xml,
+++            install: true,
+++            install_dir: join_paths(get_option('mandir'), 'man1')
+++        )
+++    else
+++        message('Stylesheet ' + stylesheet + ' not found, not building man page')
+++    endif
++ endif
++-- 
++GitLab
++
+diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
+index 60339ec9ca..7064c9f6b8 100644
+--- a/package/gupnp/gupnp.hash
++++ b/package/gupnp/gupnp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.4.sha256sum:
+-sha256  f7a0307ea51f5e44d1b832f493dd9045444a3a4e211ef85dfd9aa5dd6eaea7d1  gupnp-1.2.4.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.6.sha256sum:
++sha256  00b20f1e478a72deac92c34723693a2ac55789ed1e4bb4eed99eb4d62092aafd  gupnp-1.2.6.tar.xz
+ 
+ # Hash for license file:
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index e90787eb84..7ec0e6388c 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GUPNP_VERSION_MAJOR = 1.2
+-GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).4
++GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).6
+ GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
+ GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
+ GUPNP_LICENSE = LGPL-2.0+
+-- 
+2.30.2
