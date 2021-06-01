@@ -1,39 +1,58 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue,  1 Jun 2021 16:34:21 +0200
-Subject: [Buildroot] [PATCHv4 16/16] utils/genrandconfig: also test
- BR2_ENABLE_RUNTIME_DEBUG
-In-Reply-To: <20210601143422.25064-1-patrickdepinguin@gmail.com>
-References: <20210601143422.25064-1-patrickdepinguin@gmail.com>
-Message-ID: <20210601143422.25064-17-patrickdepinguin@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Jun 2021 16:39:36 +0200
+Subject: [Buildroot] [PATCHv3 06/15] package/sysrepo: remove explicit
+ setting of CMAKE_BUILD_TYPE
+In-Reply-To: <CAAXf6LVcWAOgB6HCUbzNJCRhb20L96Xz=DRkFTOGXq7mFqEVKQ@mail.gmail.com>
+References: <20210525122750.5022-1-patrickdepinguin@gmail.com>
+ <20210525122750.5022-7-patrickdepinguin@gmail.com>
+ <d3098530-47bb-c944-b226-275d64ff4591@mind.be>
+ <CAAXf6LVcWAOgB6HCUbzNJCRhb20L96Xz=DRkFTOGXq7mFqEVKQ@mail.gmail.com>
+Message-ID: <d12e55e8-97c7-9eab-5070-9bc6f8853d10@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-... similar to BR2_ENABLE_DEBUG.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On 01/06/2021 16:24, Thomas De Schampheleire wrote:
+> El mar, 25 may 2021 a las 22:56, Arnout Vandecappelle
+> (<arnout@mind.be>) escribi?:
+>>
+>>
+>>
+>> On 25/05/2021 14:27, Thomas De Schampheleire wrote:
+>>> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>>
+>>> sysrepo explicitly sets CMAKE_BUILD_TYPE=Release, ignoring any possible
+>>> value of BR2_ENABLE_DEBUG (previously) or BR2_ENABLE_RUNTIME_DEBUG (now).
+>>>
+>>> With the introduction of BR2_ENABLE_RUNTIME_DEBUG, this change should no
+>>> longer be necessary. Users that do not wish to have additional runtime
+>>> debugging just keep BR2_ENABLE_RUNTIME_DEBUG disabled (default value).
+>>>
+>>> As the 'Debug' build type enables tests, disable them explicitly.
+>>> As the 'Debug' build type uses a custom REPO_PATH which does not exist on
+>>> target, force /etc/sysrepo like in the 'Release' build type.
+>>>
+>>> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>
+>> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>>
+>> Although I think this could have been squashed with the previous patch.
+> 
+> I thought a separate patch was intended based on your comment:
+> http://patchwork.ozlabs.org/comment/2633317/
 
----
- utils/genrandconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ Good point! I should have already applied patch 5.
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 93dc6d898b..ca3e77e3e3 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -357,6 +357,8 @@ def gen_config(args):
-     # Amend the configuration with a few things.
-     if randint(0, 20) == 0:
-         configlines.append("BR2_ENABLE_DEBUG=y\n")
-+    if randint(0, 20) == 0:
-+        configlines.append("BR2_ENABLE_RUNTIME_DEBUG=y\n")
-     if randint(0, 1) == 0:
-         configlines.append("BR2_INIT_BUSYBOX=y\n")
-     elif randint(0, 15) == 0:
--- 
-2.26.3
+ Regards,
+ Arnout
+
+> 
+> In v4 I'm sending the patch still separated but feel free to squash it.
+> 
+> Thanks,
+> Thomas
+> 
