@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9F0CC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:36:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F960C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:37:05 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A085860524
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:36:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A085860524
+	by mail.kernel.org (Postfix) with ESMTPS id 5B8FC604AC
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:37:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5B8FC604AC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7269040442;
-	Tue,  3 Aug 2021 21:36:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2BB6B4010B;
+	Tue,  3 Aug 2021 21:37:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E1VUCOWTUdPg; Tue,  3 Aug 2021 21:36:50 +0000 (UTC)
+	with ESMTP id 0kwX-AMOXKHJ; Tue,  3 Aug 2021 21:37:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D9BC4025C;
-	Tue,  3 Aug 2021 21:36:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 472B61BF9C2
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 01A1F40001;
+	Tue,  3 Aug 2021 21:37:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2BC6F1BF9C1
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BFB7C83A9D
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1AF3D60862
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m2MVXlVjRThI for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dpZGFm65lf_b for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1DB4B8354D
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A43E60868
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 63C8786016; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+ id B45F1864A8; Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 20 Jun 2021 15:40:12 +0200
+Date: Tue, 1 Jun 2021 21:47:51 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ebda5414d33b11e4e49c9300d50fd24cb840b41c
-X-Git-Newrev: 4d85defa7103aadc74223868fb83ed0bed144f4d
+X-Git-Oldrev: 93b8d601bc208f7f3ac6a2c496590bcc25cc7b46
+X-Git-Newrev: 6b4b63a571d7e12042d661852f034ff413ec25a7
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210953.63C8786016@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libuhttpd: bump
- version to 3.12.1
+Message-Id: <20210803210946.B45F1864A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Config.in: disable PIC/PIE for
+ Nios2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,98 +70,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d85defa7103aadc74223868fb83ed0bed144f4d
+commit: https://git.buildroot.net/buildroot/commit/?id=6b4b63a571d7e12042d661852f034ff413ec25a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-CMake options have been renamed: UHTTPD_ prefix was dropped,
-BUILD_STATIC_LIBS renamed to BUILD_STATIC.
+Recently in Buildroot the option BR2_PIC_PIE has been enabled by default along
+with other hardening features [1]. Since then the nios2 defconfig
+qemu_nios2_10m50_defconfig is failing to boot due to a segfault in init program:
 
-Also fix handling of BUILD_STATIC: it should only be given when building
-static libs, otherwise no dynamic lib is built.
+Run /init as init process
+  with arguments:
+    /init
+  with environment:
+    HOME=/
+    TERM=linux
+Failed to execute /init (error -12)
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+See Buildroot build log and Qemu runtime test log in build artifacts [2].
+
+Analyzing one of the binary with strace show that the problem occur
+very early when starting the new process:
+
+ # strace ./busybox
+ execve("./busybox", ["./busybox"], 0x7f91ce90 /* 10 vars */) = -1 ENOMEM
+(Cannot allocate memory)
+ +++ killed by SIGSEGV +++
+
+Several binutils/glibc/gcc version has been tested without any success.
+
+The issue has been reported to the glibc mailing list but it can be a linker
+or kernel bug [3].
+
+For the Buildroot 2021.05 release, disable BR2_PIC_PIE until the problem is
+found and fixed.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1285145889
+
+[1] https://git.buildroot.net/buildroot/commit/?id=810ba387bec3c5b6904e8893fb4cb6f9d3717466
+[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/1285145889
+[3] https://sourceware.org/pipermail/libc-alpha/2021-May/126912.html
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libuhttpd/libuhttpd.hash |  2 +-
- package/libuhttpd/libuhttpd.mk   | 40 +++++++++++++++++++++-------------------
- 2 files changed, 22 insertions(+), 20 deletions(-)
+ Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index 19a02e5be0..98bd6e513b 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  dcd95fac7b29d43f57e942db6e9fb4c8745d4284684cd627d60c8a7f8c76cd32  libuhttpd-3.11.0.tar.gz
-+sha256  c234dd3d491c4daa047e28870c6e740529b2eff2dd027dafb6bf02d8dba286b0  libuhttpd-3.12.1.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index 61afec701e..3a99fe0613 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in b/Config.in
+index c65e34bd5e..d9be677c21 100644
+--- a/Config.in
++++ b/Config.in
+@@ -716,6 +716,8 @@ comment "Security Hardening Options"
+ config BR2_PIC_PIE
+ 	bool "Build code with PIC/PIE"
+ 	default y
++	# Nios2 toolchains produce non working binaries with -fPIC
++	depends on !BR2_nios2
+ 	depends on BR2_SHARED_LIBS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	help
+@@ -723,6 +725,7 @@ config BR2_PIC_PIE
+ 	  Position-Independent Executables (PIE).
  
--LIBUHTTPD_VERSION = 3.11.0
-+LIBUHTTPD_VERSION = 3.12.1
- LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
- LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
-@@ -14,33 +14,35 @@ LIBUHTTPD_DEPENDENCIES = libev
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBUHTTPD_DEPENDENCIES += openssl
- LIBUHTTPD_CONF_OPTS += \
--	-DUHTTPD_SSL_SUPPORT=ON \
--	-DUHTTPD_USE_MBEDTLS=OFF \
--	-DUHTTPD_USE_OPENSSL=ON \
--	-DUHTTPD_USE_WOLFSSL=OFF
-+	-DSSL_SUPPORT=ON \
-+	-DUSE_MBEDTLS=OFF \
-+	-DUSE_OPENSSL=ON \
-+	-DUSE_WOLFSSL=OFF
- else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
- LIBUHTTPD_DEPENDENCIES += wolfssl
- LIBUHTTPD_CONF_OPTS += \
--	-DUHTTPD_SSL_SUPPORT=ON \
--	-DUHTTPD_USE_MBEDTLS=OFF \
--	-DUHTTPD_USE_OPENSSL=OFF \
--	-DUHTTPD_USE_WOLFSSL=ON
-+	-DSSL_SUPPORT=ON \
-+	-DUSE_MBEDTLS=OFF \
-+	-DUSE_OPENSSL=OFF \
-+	-DUSE_WOLFSSL=ON
- else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
- LIBUHTTPD_DEPENDENCIES += mbedtls
- LIBUHTTPD_CONF_OPTS += \
--	-DUHTTPD_SSL_SUPPORT=ON \
--	-DUHTTPD_USE_MBEDTLS=ON \
--	-DUHTTPD_USE_OPENSSL=OFF \
--	-DUHTTPD_USE_WOLFSSL=OFF
-+	-DSSL_SUPPORT=ON \
-+	-DUSE_MBEDTLS=ON \
-+	-DUSE_OPENSSL=OFF \
-+	-DUSE_WOLFSSL=OFF
- else
--LIBUHTTPD_CONF_OPTS += -DUHTTPD_SSL_SUPPORT=OFF
-+LIBUHTTPD_CONF_OPTS += \
-+	-DSSL_SUPPORT=OFF
- endif
+ comment "PIC/PIE needs a toolchain w/ PIE"
++	depends on !BR2_nios2
+ 	depends on BR2_SHARED_LIBS
+ 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
  
--# BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
--ifeq ($(BR2_SHARED_STATIC_LIBS),y)
--LIBUHTTPD_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
--else ifeq ($(BR2_SHARED_LIBS),y)
--LIBUHTTPD_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
-+# BUILD_STATIC builds *only* the static lib, which is not what we want for
-+# BR2_SHARED_STATIC.
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LIBUHTTPD_CONF_OPTS += -DBUILD_STATIC=ON
-+else
-+LIBUHTTPD_CONF_OPTS += -DBUILD_STATIC=OFF
- endif
+@@ -813,6 +816,7 @@ config BR2_RELRO_PARTIAL
  
- $(eval $(cmake-package))
+ config BR2_RELRO_FULL
+ 	bool "Full"
++	depends on !BR2_nios2 # BR2_PIC_PIE
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	select BR2_PIC_PIE
+ 	help
+@@ -821,6 +825,7 @@ config BR2_RELRO_FULL
+ 	  program loading, i.e every time an executable is started.
+ 
+ comment "RELRO Full needs a toolchain w/ PIE"
++	depends on !BR2_nios2
+ 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
+ 
+ endchoice
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
