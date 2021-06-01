@@ -1,65 +1,57 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 1 Jun 2021 22:40:04 +0200
-Subject: [Buildroot] [git commit] package/capnproto: fix build on riscv32
-Message-ID: <20210601201234.2618F886C7@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Jun 2021 22:48:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: disable on riscv32
+In-Reply-To: <20210528053443.640308-1-fontaine.fabrice@gmail.com>
+References: <20210528053443.640308-1-fontaine.fabrice@gmail.com>
+Message-ID: <5eca1cbd-e344-f4a4-59e0-fb4f549254bd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8c2a3e2d8e1386f9f153238046e5968acf4517a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/1c1cd4775241ee57d878cad5c978413d4b4a8736
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...-32-bit-architectures-using-64-bit-time_t.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+On 28/05/2021 07:34, Fabrice Fontaine wrote:
+> vlc unconditionally uses __NR_futex resulting in the following build
+> failure on riscv32:
+> 
+> linux/thread.c:53:20: error: '__NR_futex' undeclared (first use in this function)
+>    53 |     return syscall(__NR_futex, addr, op, val, to, addr2, val3);
+>       |                    ^~~~~~~~~~
+> 
 
-diff --git a/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
-new file mode 100644
-index 0000000000..ce70ab8f29
---- /dev/null
-+++ b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
-@@ -0,0 +1,37 @@
-+From e2a05a19e9dc51287e19cc9f11fd91449219e361 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Sun, 15 Nov 2020 12:10:28 -0800
-+Subject: [PATCH] mutex: Fix build on 32-bit architectures using 64-bit time_t
-+
-+mutex code uses SYS_futex, which it expects from system C library.
-+in glibc (/usr/include/bits/syscall.h defines it in terms of of NR_futex)
-+rv32 is using 64bit time_t from get go unlike other 32bit architectures
-+in glibc, therefore it wont have NR_futex defined but just NR_futex_time64
-+this aliases it to NR_futex so that SYS_futex is then defined for rv32
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+[Retrieved from:
-+https://github.com/capnproto/capnproto/commit/e2a05a19e9dc51287e19cc9f11fd91449219e361]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ c++/src/kj/mutex.c++ | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/c++/src/kj/mutex.c++ b/c++/src/kj/mutex.c++
-+index c81cead7b..e1594b117 100644
-+--- a/c++/src/kj/mutex.c++
-++++ b/c++/src/kj/mutex.c++
-+@@ -39,7 +39,13 @@
-+ 
-+ #ifndef SYS_futex
-+ // Missing on Android/Bionic.
-++#ifdef __NR_futex
-+ #define SYS_futex __NR_futex
-++#elif defined(SYS_futex_time64)
-++#define SYS_futex SYS_futex_time64
-++#else
-++#error "Need working SYS_futex"
-++#endif
-+ #endif
-+ 
-+ #ifndef FUTEX_WAIT_PRIVATE
+ I added a comment that the upstream patch is rejected and applied to master,
+thanks.
+
+ Regards,
+ Arnout
+
+> Fixes:
+>  - http://autobuild.buildroot.org/results/be0f2243919d7a052b33118d8a901c922f8d88e7
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/vlc/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+> index 96ff8f2fcb..964b7660af 100644
+> --- a/package/vlc/Config.in
+> +++ b/package/vlc/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_VLC
+>  	bool "vlc"
+> +	depends on !BR2_RISCV_32
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on !BR2_STATIC_LIBS
+> @@ -23,6 +24,7 @@ config BR2_PACKAGE_VLC_OPENCV3_BACKEND
+>  	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
+>  
+>  comment "vlc needs a toolchain w/ C++, dynamic library, wchar, threads, gcc >= 4.9, headers >= 3.7"
+> +	depends on !BR2_RISCV_32
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS \
+>  		|| !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
+> 
