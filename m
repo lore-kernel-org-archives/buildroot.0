@@ -1,94 +1,128 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 1 Jun 2021 21:47:51 +0200
-Subject: [Buildroot] [git commit] Config.in: disable PIC/PIE for Nios2
-Message-ID: <20210601192023.6745E838F9@busybox.osuosl.org>
+Date: Tue, 1 Jun 2021 21:48:49 +0200
+Subject: [Buildroot] [git commit] uclibc: powerpc: fix PIE/PIC builds with
+ secureplt enabled by default
+Message-ID: <20210601192025.B57D78B451@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b4b63a571d7e12042d661852f034ff413ec25a7
+commit: https://git.buildroot.net/buildroot/commit/?id=826d350fc345273c56b8f3059aef2aac93181107
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Recently in Buildroot the option BR2_PIC_PIE has been enabled by default along
-with other hardening features [1]. Since then the nios2 defconfig
-qemu_nios2_10m50_defconfig is failing to boot due to a segfault in init program:
+Apply the fix provided by Yann Sionneau when secureplt is enabled
+by default by gcc compiler along with PIE/PIC options.
 
-Run /init as init process
-  with arguments:
-    /init
-  with environment:
-    HOME=/
-    TERM=linux
-Failed to execute /init (error -12)
-
-See Buildroot build log and Qemu runtime test log in build artifacts [2].
-
-Analyzing one of the binary with strace show that the problem occur
-very early when starting the new process:
-
- # strace ./busybox
- execve("./busybox", ["./busybox"], 0x7f91ce90 /* 10 vars */) = -1 ENOMEM
-(Cannot allocate memory)
- +++ killed by SIGSEGV +++
-
-Several binutils/glibc/gcc version has been tested without any success.
-
-The issue has been reported to the glibc mailing list but it can be a linker
-or kernel bug [3].
-
-For the Buildroot 2021.05 release, disable BR2_PIC_PIE until the problem is
-found and fixed.
+"For the secure PLT to work in PIC, the r30 register needs to point to the GOT"
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1285145889
-
-[1] https://git.buildroot.net/buildroot/commit/?id=810ba387bec3c5b6904e8893fb4cb6f9d3717466
-[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/1285145889
-[3] https://sourceware.org/pipermail/libc-alpha/2021-May/126912.html
+[qemu_ppc_e500mc_defconfig] https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661606
+[qemu_ppc_g3beige_defconfig] https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661607
+[qemu_ppc_mac99_defconfig] https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661609
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Yann Sionneau <yann@sionneau.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ ...-PIE-PIC-builds-with-newer-gcc-binutils-w.patch | 91 ++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index c65e34bd5e..d9be677c21 100644
---- a/Config.in
-+++ b/Config.in
-@@ -716,6 +716,8 @@ comment "Security Hardening Options"
- config BR2_PIC_PIE
- 	bool "Build code with PIC/PIE"
- 	default y
-+	# Nios2 toolchains produce non working binaries with -fPIC
-+	depends on !BR2_nios2
- 	depends on BR2_SHARED_LIBS
- 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
- 	help
-@@ -723,6 +725,7 @@ config BR2_PIC_PIE
- 	  Position-Independent Executables (PIE).
- 
- comment "PIC/PIE needs a toolchain w/ PIE"
-+	depends on !BR2_nios2
- 	depends on BR2_SHARED_LIBS
- 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
- 
-@@ -813,6 +816,7 @@ config BR2_RELRO_PARTIAL
- 
- config BR2_RELRO_FULL
- 	bool "Full"
-+	depends on !BR2_nios2 # BR2_PIC_PIE
- 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
- 	select BR2_PIC_PIE
- 	help
-@@ -821,6 +825,7 @@ config BR2_RELRO_FULL
- 	  program loading, i.e every time an executable is started.
- 
- comment "RELRO Full needs a toolchain w/ PIE"
-+	depends on !BR2_nios2
- 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
- 
- endchoice
+diff --git a/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch b/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch
+new file mode 100644
+index 0000000000..040699df83
+--- /dev/null
++++ b/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch
+@@ -0,0 +1,91 @@
++From 6c95eccff5eb43c8c3ad865d3b1316b7952cc58e Mon Sep 17 00:00:00 2001
++From: Yann Sionneau <yann@sionneau.net>
++Date: Fri, 28 May 2021 08:59:58 +0200
++Subject: [PATCH] powerpc: fix PIE/PIC builds with newer gcc/binutils which use
++ secureplt by default
++
++This patch fixes segfault of all user space processes (including init, which caused a panic) on recent buildroot powerpc32 builds.
++
++The issue has been reported by Romain Naour in this thread: https://mailman.uclibc-ng.org/pipermail/devel/2021-May/002068.html
++
++Recent buildroot toolchain enables secure PLT in powerpc gcc.
++The latter will then supply -msecure-plt to gas invocations by default.
++Recent buildroot also enables PIE by default.
++
++For the secure PLT to work in PIC, the r30 register needs to point to the GOT.
++Old "bss plt" was just a one-instruction-wide PLT slot, pointed-to by a R_PPC_JMP_SLOT relocation, which was written on-the-fly to contain a branch instruction to the correct address. It therefore had to stay writable+executable, which you generally want to avoid for security reasons.
++New secure PLT only contains read-only code which loads the branch address from the writable GOT.
++
++Note: secure PLT without PIC does not need r30 to be set. Because offset between plt stub code and got is known at link-time. In this case the PLT entry looks like:
++1009b3e0 <__uClibc_main@plt>:
++1009b3e0:       3d 60 10 0e     lis     r11,4110
++1009b3e4:       81 6b 03 74     lwz     r11,884(r11)
++1009b3e8:       7d 69 03 a6     mtctr   r11
++1009b3ec:       4e 80 04 20     bctr
++
++Whereas secure PLT with PIC - offset between plt and got is unknown at link-time - looks like this:
++000af800 <00000000.plt_pic32.__uClibc_main>:
++   af800:       81 7e 03 80     lwz     r11,896(r30)
++   af804:       7d 69 03 a6     mtctr   r11
++   af808:       4e 80 04 20     bctr
++   af80c:       60 00 00 00     nop
++
++Upstream status: Pending:
++https://mailman.uclibc-ng.org/pipermail/devel/2021-May/002091.html
++
++Signed-off-by: Yann Sionneau <yann@sionneau.net>
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ Rules.mak                         | 3 ++-
++ ldso/ldso/powerpc/dl-startup.h    | 3 +++
++ libc/sysdeps/linux/powerpc/crt1.S | 4 ++++
++ 3 files changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/Rules.mak b/Rules.mak
++index 10f88b3de..60ac59b85 100644
++--- a/Rules.mak
+++++ b/Rules.mak
++@@ -477,9 +477,10 @@ ifeq ($(TARGET_ARCH),powerpc)
++ 	PICFLAG:=-fpic
++ 	PIEFLAG_NAME:=-fpie
++ 	PPC_HAS_REL16:=$(shell printf "\t.text\n\taddis 11,30,_GLOBAL_OFFSET_TABLE_-. at ha\n" | $(CC) -c -x assembler -o /dev/null -  2> /dev/null && echo -n y || echo -n n)
+++	PPC_HAS_SECUREPLT:=$(shell $(CC) --verbose 2>&1 | grep -- --enable-secureplt > /dev/null && echo -n y || echo -n n)
+++	CPU_CFLAGS-$(PPC_HAS_SECUREPLT) += -DPPC_HAS_SECUREPLT
++ 	CPU_CFLAGS-$(PPC_HAS_REL16)+= -DHAVE_ASM_PPC_REL16
++ 	CPU_CFLAGS-$(CONFIG_E500) += "-D__NO_MATH_INLINES"
++-
++ endif
++ 
++ ifeq ($(TARGET_ARCH),bfin)
++diff --git a/ldso/ldso/powerpc/dl-startup.h b/ldso/ldso/powerpc/dl-startup.h
++index 8b2a517e2..7749395eb 100644
++--- a/ldso/ldso/powerpc/dl-startup.h
+++++ b/ldso/ldso/powerpc/dl-startup.h
++@@ -25,6 +25,9 @@ __asm__(
++ #else
++     "	bl	_GLOBAL_OFFSET_TABLE_-4 at local\n" /*  Put our GOT pointer in r31, */
++     "	mflr	31\n"
+++#endif
+++#ifdef PPC_HAS_SECUREPLT
+++    "   mr      30,31\n"
++ #endif
++     "	addi	1,1,16\n" /* Restore SP */
++     "	lwz	7,_dl_skip_args at got(31)\n" /* load EA of _dl_skip_args */
++diff --git a/libc/sysdeps/linux/powerpc/crt1.S b/libc/sysdeps/linux/powerpc/crt1.S
++index 27bfc5a5a..3f5d056c0 100644
++--- a/libc/sysdeps/linux/powerpc/crt1.S
+++++ b/libc/sysdeps/linux/powerpc/crt1.S
++@@ -56,6 +56,10 @@ _start:
++ # else
++ 	bl	_GLOBAL_OFFSET_TABLE_-4 at local
++ 	mflr	r31
+++# endif
+++	/* in PIC/PIE, plt stubs need r30 to point to the GOT if using secure-plt */
+++# ifdef PPC_HAS_SECUREPLT
+++	mr	30,31
++ # endif
++ #endif
++ 	/* Set up the small data pointer in r13.  */
++-- 
++2.31.1
++
