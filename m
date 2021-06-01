@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue,  1 Jun 2021 16:34:16 +0200
-Subject: [Buildroot] [PATCHv4 11/16] package/sofia-sip: correct passing of
- '--enable-ndebug'
+Date: Tue,  1 Jun 2021 16:34:17 +0200
+Subject: [Buildroot] [PATCHv4 12/16] package/sofia-sip: don't set 'NDEBUG'
+ explicitly
 In-Reply-To: <20210601143422.25064-1-patrickdepinguin@gmail.com>
 References: <20210601143422.25064-1-patrickdepinguin@gmail.com>
-Message-ID: <20210601143422.25064-12-patrickdepinguin@gmail.com>
+Message-ID: <20210601143422.25064-13-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,40 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-The preprocessor option NDEBUG, triggered by the configure option
-'--enable-ndebug', should be read as 'no-debug'. When NDEBUG is set, asserts
-are _disabled_.
+BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
+should have no negative effect on performance.
 
-The sofia-sip package had inverted logic, and set '--enable-ndebug' when
-BR2_ENABLE_DEBUG was enabled, while it should be the other way around.
+Introduction of 'assert' statements, 'debug'-type builds with additional
+logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
 
-Reported-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+The sofia-sip package was setting '--enable-ndebug' conditionally based on
+BR2_ENABLE_DEBUG, and this would have to be updated to be based on
+BR2_ENABLE_RUNTIME_DEBUG.
+
+However, the sofia-sip option '--enable-ndebug' only sets the 'NDEBUG'
+preprocessor macro, and the core package infrastructure already sets this
+macro correctly based on BR2_ENABLE_RUNTIME_DEBUG.
+
+This means that the explicit '--enable-ndebug' flag can be removed.
+
+Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
-v4: new patch;
-Even though the next patch will remove this block altogether, I keep this
-correction as a separate patch to make it clear that the original code was
-incorrect, and allow potential backporting to other branches.
-
- package/sofia-sip/sofia-sip.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/sofia-sip/sofia-sip.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-index 5c383400ff..274c72fce8 100644
+index 274c72fce8..fb565637eb 100644
 --- a/package/sofia-sip/sofia-sip.mk
 +++ b/package/sofia-sip/sofia-sip.mk
-@@ -30,7 +30,7 @@ SOFIA_SIP_CONF_OPTS += \
+@@ -30,8 +30,4 @@ SOFIA_SIP_CONF_OPTS += \
  	--without-openssl
  endif
  
--ifeq ($(BR2_ENABLE_DEBUG),y)
-+ifeq ($(BR2_ENABLE_DEBUG),)
- SOFIA_SIP_CONF_OPTS += --enable-ndebug
- endif
- 
+-ifeq ($(BR2_ENABLE_DEBUG),)
+-SOFIA_SIP_CONF_OPTS += --enable-ndebug
+-endif
+-
+ $(eval $(autotools-package))
 -- 
 2.26.3
