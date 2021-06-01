@@ -1,41 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jun 2021 22:39:26 +0200
-Subject: [Buildroot] [git commit] core: enable 'NDEBUG' unless
- BR2_ENABLE_RUNTIME_DEBUG is set
-Message-ID: <20210607144658.6F57080E35@busybox.osuosl.org>
+Date: Tue, 1 Jun 2021 22:40:03 +0200
+Subject: [Buildroot] [git commit] package/sofia-sip: don't set 'NDEBUG'
+ explicitly
+Message-ID: <20210607144658.EB19B80E35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a8c50fe05afacc3cbe8e7347e238da9f242fab0
+commit: https://git.buildroot.net/buildroot/commit/?id=0993954814e8f54c7fea5dcb6dff1cc2c3d3e780
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The 'assert' statement in glibc honors the 'NDEBUG' preprocessor macro: if
-it is set, then the assert statement is compiled away.
+BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
+should have no negative effect on performance.
 
-Define this 'NDEBUG' macro when BR2_ENABLE_RUNTIME_DEBUG is disabled (the
-default case).
+Introduction of 'assert' statements, 'debug'-type builds with additional
+logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
 
+The sofia-sip package was setting '--enable-ndebug' conditionally based on
+BR2_ENABLE_DEBUG, and this would have to be updated to be based on
+BR2_ENABLE_RUNTIME_DEBUG.
+
+However, the sofia-sip option '--enable-ndebug' only sets the 'NDEBUG'
+preprocessor macro, and the core package infrastructure already sets this
+macro correctly based on BR2_ENABLE_RUNTIME_DEBUG.
+
+This means that the explicit '--enable-ndebug' flag can be removed.
+
+Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/Makefile.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/sofia-sip/sofia-sip.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 86db62ba5b..955e6a8e8c 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -148,6 +148,9 @@ endif
- ifeq ($(BR2_DEBUG_3),y)
- TARGET_DEBUGGING = -g3
+diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
+index 274c72fce8..fb565637eb 100644
+--- a/package/sofia-sip/sofia-sip.mk
++++ b/package/sofia-sip/sofia-sip.mk
+@@ -30,8 +30,4 @@ SOFIA_SIP_CONF_OPTS += \
+ 	--without-openssl
  endif
-+ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),)
-+TARGET_DEBUGGING += -DNDEBUG
-+endif
  
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
+-ifeq ($(BR2_ENABLE_DEBUG),)
+-SOFIA_SIP_CONF_OPTS += --enable-ndebug
+-endif
+-
+ $(eval $(autotools-package))
