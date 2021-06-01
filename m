@@ -1,42 +1,50 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  1 Jun 2021 22:10:00 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/xmrig: bump version to 6.12.2
-Message-ID: <20210601201000.683675-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Jun 2021 22:15:41 +0200
+Subject: [Buildroot] [PATCH] package/netperf: move SITE so s.b.n
+In-Reply-To: <c160b9eba623c54debf9bf50d69cca4a6d6ed69e.1622119840.git.baruch@tkos.co.il>
+References: <c160b9eba623c54debf9bf50d69cca4a6d6ed69e.1622119840.git.baruch@tkos.co.il>
+Message-ID: <c60f9708-bc65-28df-7043-729a34b519f7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://github.com/xmrig/xmrig/blob/master/CHANGELOG.md
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/xmrig/xmrig.hash | 2 +-
- package/xmrig/xmrig.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
-index c80bdd6621..ad5763847d 100644
---- a/package/xmrig/xmrig.hash
-+++ b/package/xmrig/xmrig.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7570030c4b3e257bda190a100dc59f78b74c823af7561222a99b296f5e7b1ac2  xmrig-6.12.1.tar.gz
-+sha256  7baca03d289f108883e5606c1a1d0287baf6a2425def48e5c413200b5db88bfa  xmrig-6.12.2.tar.gz
- sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
-diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
-index 2202d875c5..cf9da18bcd 100644
---- a/package/xmrig/xmrig.mk
-+++ b/package/xmrig/xmrig.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XMRIG_VERSION = 6.12.1
-+XMRIG_VERSION = 6.12.2
- XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
- XMRIG_LICENSE = GPL-3.0+
- XMRIG_LICENSE_FILES = LICENSE
--- 
-2.29.2
+On 27/05/2021 14:50, Baruch Siach wrote:
+> The original site is gone.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/8d4a2ef5a7f50ea21b844d6cf806bb83016ae17b/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/netperf/netperf.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/netperf/netperf.mk b/package/netperf/netperf.mk
+> index 8b2280830f3c..0c423249c4c9 100644
+> --- a/package/netperf/netperf.mk
+> +++ b/package/netperf/netperf.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  NETPERF_VERSION = 2.7.0
+> -NETPERF_SITE = ftp://ftp.netperf.org/netperf
+> +NETPERF_SITE = http://sources.buildroot.net/netperf
+
+ I believe upstream moved to https://hewlettpackard.github.io/netperf/
+
+ That one *does* have a configure script. Still need to check if the tarball has
+the same contents though. The hash doesn't match, that's for sure.
+
+ Marked as changes requested.
+
+ Regards,
+ Arnout
+
+>  NETPERF_SOURCE = netperf-$(NETPERF_VERSION).tar.bz2
+>  # gcc 5+ defaults to gnu99 which breaks netperf
+>  NETPERF_CONF_ENV = \
+> 
