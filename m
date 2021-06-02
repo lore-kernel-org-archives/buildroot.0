@@ -1,78 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  2 Jun 2021 08:25:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iftop: fix static build
-Message-ID: <20210602062550.818231-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 2 Jun 2021 11:23:46 +0200
+Subject: [Buildroot] [RPi4] Enable GTK3 on Buildroot
+In-Reply-To: <CAHEfaqaqb213HJAdUV7x3K_gk=mFCsdc_5ozFuykD3AU53xmoQ@mail.gmail.com>
+References: <CAHEfaqaqb213HJAdUV7x3K_gk=mFCsdc_5ozFuykD3AU53xmoQ@mail.gmail.com>
+Message-ID: <20210602112346.472e95a5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/eb53ff6b031c654daec57050dec376b5c9134a81
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ame-pcap_filter-to-iftop_pcap_filter.patch | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 package/iftop/0002-Rename-pcap_filter-to-iftop_pcap_filter.patch
+On Tue, 1 Jun 2021 15:21:29 -0600
+Derek T <derek.tata1@gmail.com> wrote:
 
-diff --git a/package/iftop/0002-Rename-pcap_filter-to-iftop_pcap_filter.patch b/package/iftop/0002-Rename-pcap_filter-to-iftop_pcap_filter.patch
-new file mode 100644
-index 0000000000..92eedccab7
---- /dev/null
-+++ b/package/iftop/0002-Rename-pcap_filter-to-iftop_pcap_filter.patch
-@@ -0,0 +1,51 @@
-+From 64a185ce2017e4523f4bc39a36c7aebd6d68549a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 2 Jun 2021 08:21:04 +0200
-+Subject: [PATCH] Rename pcap_filter to iftop_pcap_filter
-+
-+Rename pcap_filter to iftop_pcap_filter to fix the following static
-+build failure:
-+
-+/home/buildroot/autobuild/run/instance-3/output-1/host/bin/riscv64-linux-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static   -static -o iftop addr_hash.o edline.o hash.o iftop.o ns_hash.o options.o resolver.o screenfilter.o serv_hash.o sorted_list.o threadprof.o ui_common.o ui.o tui.o util.o addrs_ioctl.o addrs_dlpi.o dlcommon.o stringmap.o cfgfile.o vector.o  -lpcap -lpcap -L/home/buildroot/autobuild/run/instance-3/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/bin/../../../../bin/../riscv64-buildroot-linux-musl/sysroot/usr/lib -lnl-genl-3 -lnl-3 -lpthread   -lcurses
-+/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv64-buildroot-linux-musl/10.2.0/../../../../riscv64-buildroot-linux-musl/bin/ld: /home/buildroot/autobuild/run/instance-3/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/bin/../../../../bin/../riscv64-buildroot-linux-musl/sysroot/usr/lib/libpcap.a(bpf_filter.o): in function `pcap_filter':
-+bpf_filter.c:(.text+0x4a8): multiple definition of `pcap_filter'; iftop.o:iftop.c:(.bss+0x1a8): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/eb53ff6b031c654daec57050dec376b5c9134a81
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ iftop.c      | 6 +++---
-+ 1 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/iftop.c b/iftop.c
-+index aaec6aa..f89eee3 100644
-+--- a/iftop.c
-++++ b/iftop.c
-+@@ -74,7 +74,7 @@ int history_len = 1;
-+ pthread_mutex_t tick_mutex;
-+ 
-+ pcap_t* pd; /* pcap descriptor */
-+-struct bpf_program pcap_filter;
-++struct bpf_program iftop_pcap_filter;
-+ pcap_handler packet_handler;
-+ 
-+ sig_atomic_t foad;
-+@@ -679,12 +679,12 @@ char *set_filter_code(const char *filter) {
-+         sprintf(x, "(%s) and (ip or ip6)", filter);
-+     } else
-+         x = xstrdup("ip or ip6");
-+-    if (pcap_compile(pd, &pcap_filter, x, 1, 0) == -1) {
-++    if (pcap_compile(pd, &iftop_pcap_filter, x, 1, 0) == -1) {
-+         xfree(x);
-+         return pcap_geterr(pd);
-+     }
-+     xfree(x);
-+-    if (pcap_setfilter(pd, &pcap_filter) == -1)
-++    if (pcap_setfilter(pd, &iftop_pcap_filter) == -1)
-+         return pcap_geterr(pd);
-+     else
-+         return NULL;
-+-- 
-+2.30.2
-+
+> I am trying to enable GTK3 on Buildroot to deploy to a Raspberry Pi 4, and
+> having trouble initializing the Xorg server with an HDMI display.  The
+> persistent error seems to be an undefined symbol while loading
+> fbturbo_drv.so.  I tried manually loading the libraries in the config file,
+> which helped with some of the undefined symbol errors, but the symbol
+> "fbdevHWSave" has continued to throw an error.  I have a Weston daemon
+> running on the device, and on boot a desktop screen shows up on the
+> display.
+
+If you already have Weston up and running, why are you not using the
+Wayland backend of Gtk3 ? It seems more logical than trying to get
+X.org working.
+
+Best regards,
+
+Thomas
 -- 
-2.30.2
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
