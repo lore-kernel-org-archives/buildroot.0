@@ -1,100 +1,92 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Jun 2021 22:44:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package: add libtsm
-In-Reply-To: <20210406022940.14488-1-pluhuxc@163.com>
-References: <20210406022940.14488-1-pluhuxc@163.com>
-Message-ID: <c211cc8e-badf-5382-fc9f-f49edd247746@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 2 Jun 2021 22:45:15 +0200
+Subject: [Buildroot] [git commit branch/next] package/python3: add optional
+ support for berkeleydb
+Message-ID: <20210602202837.DF2DE80E15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- I was going to apply to next, however:
+commit: https://git.buildroot.net/buildroot/commit/?id=7bd1b51d07d9028c997edb1efe5d9e85c39d6e84
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 06/04/2021 04:29, pluhuxc at 163.com wrote:
-> From: luhui <pluhuxc@163.com>
-> 
-> Signed-off-by: luhui <pluhuxc@163.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...n-option-to-disable-the-berkeleydb-module.patch | 30 ++++++++++++++++++++++
+ package/python3/Config.in                          |  6 +++++
+ package/python3/python3.mk                         |  6 +++++
+ 3 files changed, 42 insertions(+)
 
- We need a real name here. Signed-off-by is a legal statement, therefore it
-needs a real name. Itis a short way for you to  assert that you are entitled to
-contribute the patch under buildroot's  GPL license.  See
-http://elinux.org/Developer_Certificate_Of_Origin for more details.
-
- You can simply reply to this mail with the Signed-off-by and we will pick it up
-from there. Or feel free to resend the patch of course.
-
- Meanwhile, I'll already add my
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
->  package/Config.in          |  1 +
->  package/libtsm/Config.in   | 10 ++++++++++
->  package/libtsm/libtsm.hash |  4 ++++
->  package/libtsm/libtsm.mk   | 14 ++++++++++++++
->  4 files changed, 29 insertions(+)
->  create mode 100644 package/libtsm/Config.in
->  create mode 100644 package/libtsm/libtsm.hash
->  create mode 100644 package/libtsm/libtsm.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 1269bc7b51..ca86e3dd2e 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1932,6 +1932,7 @@ menu "Other"
->  	source "package/libtasn1/Config.in"
->  	source "package/libtommath/Config.in"
->  	source "package/libtpl/Config.in"
-> +	source "package/libtsm/Config.in"
->  	source "package/libubox/Config.in"
->  	source "package/libuci/Config.in"
->  	source "package/libunwind/Config.in"
-> diff --git a/package/libtsm/Config.in b/package/libtsm/Config.in
-> new file mode 100644
-> index 0000000000..03217dbc69
-> --- /dev/null
-> +++ b/package/libtsm/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_LIBTSM
-> +	bool "libtsm"
-> +	select BR2_PACKAGE_LIBXKBCOMMON
-> +	help
-> +	  TSM is a state machine for DEC VT100-VT520
-> +	  compatible terminal emulators. It tries to
-> +	  support all common standards while keeping
-> +	  compatibility to existing emulators.
-> +
-> +	  https://github.com/Aetf/libtsm
-> diff --git a/package/libtsm/libtsm.hash b/package/libtsm/libtsm.hash
-> new file mode 100644
-> index 0000000000..0b6c01b1a0
-> --- /dev/null
-> +++ b/package/libtsm/libtsm.hash
-> @@ -0,0 +1,4 @@
-> +sha256 7bab5ac3b5709a3f0c9d43207e8be5651402034d31c96e58140423fce55eb6c9  libtsm-4.0.1.tar.gz
-> +sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LICENSE_htable
-> +sha256 47b3a15b5259545b866f33c302d485fe414c65917de179b33f411c2f8722c7da  COPYING
-> +sha256 3d2f828a7b462939e5278ec83c7663a9ebe50851fc64883a4f544ed04f12fe03  external/wcwidth/LICENSE.txt
-> diff --git a/package/libtsm/libtsm.mk b/package/libtsm/libtsm.mk
-> new file mode 100644
-> index 0000000000..2ed567f6f0
-> --- /dev/null
-> +++ b/package/libtsm/libtsm.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# libtsm
-> +#
-> +################################################################################
-> +
-> +LIBTSM_VERSION = 4.0.1
-> +LIBTSM_SITE = $(call github,Aetf,libtsm,v$(LIBTSM_VERSION))
-> +LIBTSM_INSTALL_STAGING = YES
-> +LIBTSM_SUPPORTS_IN_SOURCE_BUILD = NO
-> +LIBTSM_LICENSE = BSD-2-Clause, MIT, LGPL-2.1+, ISC
-> +LIBTSM_LICENSE_FILES = COPYING LICENSE_htable external/wcwidth/LICENSE.txt
-> +
-> +$(eval $(cmake-package))
-> 
+diff --git a/package/python3/0034-Add-an-option-to-disable-the-berkeleydb-module.patch b/package/python3/0034-Add-an-option-to-disable-the-berkeleydb-module.patch
+new file mode 100644
+index 0000000000..f763fcaa82
+--- /dev/null
++++ b/package/python3/0034-Add-an-option-to-disable-the-berkeleydb-module.patch
+@@ -0,0 +1,30 @@
++From cf4d7fd9f7cb6c1ced32ee323b2b5755640051b7 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 11 Apr 2020 22:01:40 +0200
++Subject: [PATCH] Add an option to disable the berkeleydb module
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ configure.ac | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 72c1d86e82..8c3912d237 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -3326,6 +3326,12 @@ if test "$UUID" = "no"; then
++    DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _uuid"
++ fi
++ 
+++AC_ARG_ENABLE(berkeleydb,
+++	AS_HELP_STRING([--disable-berkeleydb], [disable berkeleydb]),
+++	[ if test "$enableval" = "no"; then
+++	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _dbm"
+++	  fi])
+++
++ AC_SUBST(PYDOC)
++ 
++ AC_ARG_ENABLE(pydoc,
++-- 
++2.25.0
++
+diff --git a/package/python3/Config.in b/package/python3/Config.in
+index 3a9dd4b2f4..efc4dbb3d4 100644
+--- a/package/python3/Config.in
++++ b/package/python3/Config.in
+@@ -46,6 +46,12 @@ config BR2_PACKAGE_PYTHON3_2TO3
+ 	help
+ 	  code translation from python 2 to 3
+ 
++config BR2_PACKAGE_PYTHON3_BERKELEYDB
++	bool "berkeleydb"
++	select BR2_PACKAGE_BERKELEYDB
++	help
++	  berkeleydb module for Python3
++
+ config BR2_PACKAGE_PYTHON3_BZIP2
+ 	bool "bz2 module"
+ 	select BR2_PACKAGE_BZIP2
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index b492e09154..991e24a440 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -57,6 +57,12 @@ else
+ PYTHON3_CONF_OPTS += --disable-lib2to3
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PYTHON3_BERKELEYDB),y)
++PYTHON3_DEPENDENCIES += berkeleydb
++else
++PYTHON3_CONF_OPTS += --disable-berkeleydb
++endif
++
+ ifeq ($(BR2_PACKAGE_PYTHON3_READLINE),y)
+ PYTHON3_DEPENDENCIES += readline
+ else
