@@ -1,67 +1,100 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Jun 2021 22:35:36 +0200
-Subject: [Buildroot] [RPi4] Enable GTK3 on Buildroot
-In-Reply-To: <20210602222632.73390af3@gmx.net>
-References: <CAHEfaqaqb213HJAdUV7x3K_gk=mFCsdc_5ozFuykD3AU53xmoQ@mail.gmail.com>
- <20210602112346.472e95a5@windsurf.home> <20210602222632.73390af3@gmx.net>
-Message-ID: <b532d888-d2a6-bf79-0544-9e5b73aa978a@mind.be>
+Date: Wed, 2 Jun 2021 22:44:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package: add libtsm
+In-Reply-To: <20210406022940.14488-1-pluhuxc@163.com>
+References: <20210406022940.14488-1-pluhuxc@163.com>
+Message-ID: <c211cc8e-badf-5382-fc9f-f49edd247746@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ I was going to apply to next, however:
 
+On 06/04/2021 04:29, pluhuxc at 163.com wrote:
+> From: luhui <pluhuxc@163.com>
+> 
+> Signed-off-by: luhui <pluhuxc@163.com>
 
-On 02/06/2021 22:26, Peter Seiderer wrote:
-> Hello Derek,
-> 
-> On Wed, 2 Jun 2021 11:23:46 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
->> Hello,
->>
->> On Tue, 1 Jun 2021 15:21:29 -0600
->> Derek T <derek.tata1@gmail.com> wrote:
->>
->>> I am trying to enable GTK3 on Buildroot to deploy to a Raspberry Pi 4, and
->>> having trouble initializing the Xorg server with an HDMI display.  The
->>> persistent error seems to be an undefined symbol while loading
->>> fbturbo_drv.so.  I tried manually loading the libraries in the config file,
->>> which helped with some of the undefined symbol errors, but the symbol
->>> "fbdevHWSave" has continued to throw an error.  I have a Weston daemon
->>> running on the device, and on boot a desktop screen shows up on the
->>> display.
->>
->> If you already have Weston up and running, why are you not using the
->> Wayland backend of Gtk3 ? It seems more logical than trying to get
->> X.org working.
-> 
-> Despite the suggestion that there are better solutions than fbturbo on RPi4
-> your problem should be fixed by the buildroot patch
-> '[v1] package/x11r7/xdriver_xf86-video-fbturbo: fix driver loading' (see [1])...,
-> thanks for providing the buildroot config file to reproduce the failure...
+ We need a real name here. Signed-off-by is a legal statement, therefore it
+needs a real name. Itis a short way for you to  assert that you are entitled to
+contribute the patch under buildroot's  GPL license.  See
+http://elinux.org/Developer_Certificate_Of_Origin for more details.
 
- If that works for you, please reply to that mail with
+ You can simply reply to this mail with the Signed-off-by and we will pick it up
+from there. Or feel free to resend the patch of course.
 
-Tested-by: your name <your@email.address>
+ Meanwhile, I'll already add my
 
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Regards,
- Arnout
-
+> ---
+>  package/Config.in          |  1 +
+>  package/libtsm/Config.in   | 10 ++++++++++
+>  package/libtsm/libtsm.hash |  4 ++++
+>  package/libtsm/libtsm.mk   | 14 ++++++++++++++
+>  4 files changed, 29 insertions(+)
+>  create mode 100644 package/libtsm/Config.in
+>  create mode 100644 package/libtsm/libtsm.hash
+>  create mode 100644 package/libtsm/libtsm.mk
 > 
-> Regards,
-> Peter
-> 
-> [1] https://patchwork.ozlabs.org/project/buildroot/patch/20210602201529.6210-1-ps.report at gmx.net/
-> 
->>
->> Best regards,
->>
->> Thomas
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/package/Config.in b/package/Config.in
+> index 1269bc7b51..ca86e3dd2e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1932,6 +1932,7 @@ menu "Other"
+>  	source "package/libtasn1/Config.in"
+>  	source "package/libtommath/Config.in"
+>  	source "package/libtpl/Config.in"
+> +	source "package/libtsm/Config.in"
+>  	source "package/libubox/Config.in"
+>  	source "package/libuci/Config.in"
+>  	source "package/libunwind/Config.in"
+> diff --git a/package/libtsm/Config.in b/package/libtsm/Config.in
+> new file mode 100644
+> index 0000000000..03217dbc69
+> --- /dev/null
+> +++ b/package/libtsm/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_LIBTSM
+> +	bool "libtsm"
+> +	select BR2_PACKAGE_LIBXKBCOMMON
+> +	help
+> +	  TSM is a state machine for DEC VT100-VT520
+> +	  compatible terminal emulators. It tries to
+> +	  support all common standards while keeping
+> +	  compatibility to existing emulators.
+> +
+> +	  https://github.com/Aetf/libtsm
+> diff --git a/package/libtsm/libtsm.hash b/package/libtsm/libtsm.hash
+> new file mode 100644
+> index 0000000000..0b6c01b1a0
+> --- /dev/null
+> +++ b/package/libtsm/libtsm.hash
+> @@ -0,0 +1,4 @@
+> +sha256 7bab5ac3b5709a3f0c9d43207e8be5651402034d31c96e58140423fce55eb6c9  libtsm-4.0.1.tar.gz
+> +sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LICENSE_htable
+> +sha256 47b3a15b5259545b866f33c302d485fe414c65917de179b33f411c2f8722c7da  COPYING
+> +sha256 3d2f828a7b462939e5278ec83c7663a9ebe50851fc64883a4f544ed04f12fe03  external/wcwidth/LICENSE.txt
+> diff --git a/package/libtsm/libtsm.mk b/package/libtsm/libtsm.mk
+> new file mode 100644
+> index 0000000000..2ed567f6f0
+> --- /dev/null
+> +++ b/package/libtsm/libtsm.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# libtsm
+> +#
+> +################################################################################
+> +
+> +LIBTSM_VERSION = 4.0.1
+> +LIBTSM_SITE = $(call github,Aetf,libtsm,v$(LIBTSM_VERSION))
+> +LIBTSM_INSTALL_STAGING = YES
+> +LIBTSM_SUPPORTS_IN_SOURCE_BUILD = NO
+> +LIBTSM_LICENSE = BSD-2-Clause, MIT, LGPL-2.1+, ISC
+> +LIBTSM_LICENSE_FILES = COPYING LICENSE_htable external/wcwidth/LICENSE.txt
+> +
+> +$(eval $(cmake-package))
 > 
