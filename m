@@ -1,74 +1,29 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Jun 2021 23:12:45 +0200
-Subject: [Buildroot] [PATCH 2/2] package/lvm2: fix installation of
- systemd units
-In-Reply-To: <7aca7804d91a74070a56be2b9d8781eb0fd82446.1621608266.git.yann.morin.1998@free.fr>
-References: <cover.1621608266.git.yann.morin.1998@free.fr>
- <7aca7804d91a74070a56be2b9d8781eb0fd82446.1621608266.git.yann.morin.1998@free.fr>
-Message-ID: <5ace21b3-7b64-8c5a-3cb5-0d26bdd251d0@mind.be>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed,  2 Jun 2021 23:48:20 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Giulio Benetti to udisks package
+Message-ID: <20210602214820.119956-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-On 21/05/2021 16:44, Yann E. MORIN wrote:
-> Since we bump the version in commit 80997acd3587 (package/lvm2: bump
-> version to 2.03.12), the installation of systemd units is no longer
-> functional without a full installation.
-> 
-> As Pascal puts it: the systemd service files don't make a whole lot of
-> sense when there isn't a full lvm2 install.
-> 
-> Move the conditional block that install system units, so that it only
-> occurs when we do a full installation.
-> 
-> Fixes;
-
- In the future, please use a colon so patchwork picks it up as a fix :-)
-
->     http://autobuild.buildroot.org/results/f47/f470ffb55625e2639cecde713442550eb532d0d7/
->     http://autobuild.buildroot.org/results/954/9547929292e81671fbe3a5b4bbc87a6424edb1ca/
->     http://autobuild.buildroot.org/results/303/30359c351a6ce2f9139494a531e036f0b0406ccf
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Co-Developped-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> Cc: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
- Series applied to master, thanks.
-
- Regards,
- Arnout
-
-> ---
->  package/lvm2/lvm2.mk | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-> index 00baa50a86..5ce79768b6 100644
-> --- a/package/lvm2/lvm2.mk
-> +++ b/package/lvm2/lvm2.mk
-> @@ -49,16 +49,15 @@ endif
->  ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),y)
->  LVM2_INSTALL_STAGING_OPTS += install
->  LVM2_INSTALL_TARGET_OPTS += install
-> +ifeq ($(BR2_INIT_SYSTEMD),y)
-> +LVM2_INSTALL_TARGET_OPTS += install_systemd_units install_systemd_generators
-> +endif
->  else
->  LVM2_MAKE_OPTS = device-mapper
->  LVM2_INSTALL_STAGING_OPTS += install_device-mapper
->  LVM2_INSTALL_TARGET_OPTS += install_device-mapper
->  endif
->  
-> -ifeq ($(BR2_INIT_SYSTEMD),y)
-> -LVM2_INSTALL_TARGET_OPTS += install_systemd_units install_systemd_generators
-> -endif
-> -
->  ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
->  LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
->  endif
-> 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c16a3baf4e..c77e2fdc33 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1048,6 +1048,7 @@ F:	package/minicom/
+ F:	package/nfs-utils/
+ F:	package/sunxi-mali-mainline/
+ F:	package/sunxi-mali-mainline-driver/
++F:	package/udisks/
+ 
+ N:	Gregory Dymarek <gregd72002@gmail.com>
+ F:	package/ding-libs/
+-- 
+2.25.1
