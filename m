@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Jun 2021 22:33:53 +0200
-Subject: [Buildroot] [PATCH] package/netperf: move SITE so s.b.n
-In-Reply-To: <87v96wrw9p.fsf@tarshish>
-References: <c160b9eba623c54debf9bf50d69cca4a6d6ed69e.1622119840.git.baruch@tkos.co.il>
- <7d24aa70-74c4-1166-e69f-5d8c7a5c6875@mind.be>
- <a7969129-6272-575d-0846-1874629cebc4@mind.be> <87v96wrw9p.fsf@tarshish>
-Message-ID: <9b1f89a2-6047-cad0-91fd-39a91c67d6f2@mind.be>
+Date: Wed, 2 Jun 2021 22:35:36 +0200
+Subject: [Buildroot] [RPi4] Enable GTK3 on Buildroot
+In-Reply-To: <20210602222632.73390af3@gmx.net>
+References: <CAHEfaqaqb213HJAdUV7x3K_gk=mFCsdc_5ozFuykD3AU53xmoQ@mail.gmail.com>
+ <20210602112346.472e95a5@windsurf.home> <20210602222632.73390af3@gmx.net>
+Message-ID: <b532d888-d2a6-bf79-0544-9e5b73aa978a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +13,55 @@ To: buildroot@busybox.net
 
 
 
-On 02/06/2021 19:50, Baruch Siach wrote:
-> Hi Arnout,
+On 02/06/2021 22:26, Peter Seiderer wrote:
+> Hello Derek,
 > 
-> On Wed, Jun 02 2021, Arnout Vandecappelle wrote:
->>>> -NETPERF_SITE = ftp://ftp.netperf.org/netperf
->>>> +NETPERF_SITE = http://sources.buildroot.net/netperf
+> On Wed, 2 Jun 2021 11:23:46 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+>> Hello,
 >>
->>  We prefer buildroot.org over buildroot.net nowadays, so I changed that.
+>> On Tue, 1 Jun 2021 15:21:29 -0600
+>> Derek T <derek.tata1@gmail.com> wrote:
+>>
+>>> I am trying to enable GTK3 on Buildroot to deploy to a Raspberry Pi 4, and
+>>> having trouble initializing the Xorg server with an HDMI display.  The
+>>> persistent error seems to be an undefined symbol while loading
+>>> fbturbo_drv.so.  I tried manually loading the libraries in the config file,
+>>> which helped with some of the undefined symbol errors, but the symbol
+>>> "fbdevHWSave" has continued to throw an error.  I have a Weston daemon
+>>> running on the device, and on boot a desktop screen shows up on the
+>>> display.
+>>
+>> If you already have Weston up and running, why are you not using the
+>> Wayland backend of Gtk3 ? It seems more logical than trying to get
+>> X.org working.
 > 
-> BR2_BACKUP_SITE still defaults to "http://sources.buildroot.net". Should
-> we change that?
+> Despite the suggestion that there are better solutions than fbturbo on RPi4
+> your problem should be fixed by the buildroot patch
+> '[v1] package/x11r7/xdriver_xf86-video-fbturbo: fix driver loading' (see [1])...,
+> thanks for providing the buildroot config file to reproduce the failure...
 
- It's just a nice-to-have. I applied your other patch with buildroot.net.
+ If that works for you, please reply to that mail with
+
+Tested-by: your name <your@email.address>
+
 
  Regards,
  Arnout
+
+> 
+> Regards,
+> Peter
+> 
+> [1] https://patchwork.ozlabs.org/project/buildroot/patch/20210602201529.6210-1-ps.report at gmx.net/
+> 
+>>
+>> Best regards,
+>>
+>> Thomas
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
