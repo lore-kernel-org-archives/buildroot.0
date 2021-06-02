@@ -1,29 +1,30 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed,  2 Jun 2021 23:48:20 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Giulio Benetti to udisks package
-Message-ID: <20210602214820.119956-1-giulio.benetti@benettiengineering.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 2 Jun 2021 20:00:15 -0300
+Subject: [Buildroot] EUDEV takes a very long time to load the Wifi firmware
+Message-ID: <CAOMZO5CcUAt1kBQ4W-nu6U4KP40UbSwa4ohFBq42dDNresANHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+Hi,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c16a3baf4e..c77e2fdc33 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1048,6 +1048,7 @@ F:	package/minicom/
- F:	package/nfs-utils/
- F:	package/sunxi-mali-mainline/
- F:	package/sunxi-mali-mainline-driver/
-+F:	package/udisks/
- 
- N:	Gregory Dymarek <gregd72002@gmail.com>
- F:	package/ding-libs/
--- 
-2.25.1
+I am running kernel 5.12.4 on an imx6dl-pico-pi board with a QCA9377 Wifi chip.
+
+Originally I was selecting BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y,
+but that caused the QCA9377 firmware to be loaded only after almost 3
+minutes.
+
+Changing it to BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y caused the
+QCA9377 firmware to be loaded very quickly as expected.
+
+I am using a recent master version of Buildroot:
+ab9ceea782c770acdb9a25d8601b12af261c8ccb
+
+I am OK with using MDEV but just wanted to report it in case someone
+knows if this is a known EUDEV issue.
+
+Thanks,
+
+Fabio Estevam
