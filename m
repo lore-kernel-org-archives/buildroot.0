@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E913EC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:53:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0E56C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:53:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B37BE60525
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:53:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B37BE60525
+	by mail.kernel.org (Postfix) with ESMTPS id B6AF660525
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:53:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B6AF660525
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8731183CBC;
-	Tue,  3 Aug 2021 22:53:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E6B8415AF;
+	Tue,  3 Aug 2021 22:53:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8-XkM5ftEXoD; Tue,  3 Aug 2021 22:53:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TQhu5evAVCLf; Tue,  3 Aug 2021 22:53:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D6ED083B1F;
-	Tue,  3 Aug 2021 22:52:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E39CB415A5;
+	Tue,  3 Aug 2021 22:53:11 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4D2691BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:12:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1561C1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:12:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B8D18405B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB38540430
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cv-ZrWPGwx9U for <buildroot@lists.busybox.net>;
+ with ESMTP id vs8KxMczqE4X for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E027340430
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 47933404BF
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 422AB85F62; Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
+ id 8AFF585F62; Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 1 Jun 2021 22:42:59 +0200
+Date: Wed, 2 Jun 2021 23:08:13 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e8c2a3e2d8e1386f9f153238046e5968acf4517a
-X-Git-Newrev: cc86b866ac8ddfe41679334526040f5426fa25b1
+X-Git-Oldrev: 351122979b2841560f0e3e5278e183579daa1419
+X-Git-Newrev: 4526078d1b4be109d13343243151a6eb98f0532f
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210947.422AB85F62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/vlc: disable on riscv32
+Message-Id: <20210803210947.8AFF585F62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lvm2: fix inverted
+ logic that is confusing
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,48 +70,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc86b866ac8ddfe41679334526040f5426fa25b1
+commit: https://git.buildroot.net/buildroot/commit/?id=4526078d1b4be109d13343243151a6eb98f0532f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-vlc unconditionally uses __NR_futex resulting in the following build
-failure on riscv32:
+Commit ff0f55e38197 (lvm2: replace !BR2_PACKAGE_LVM2_DMSETUP_ONLY by
+BR2_PACKAGE_LVM2_STANDARD_INSTALL) changed a negative-logic option to a
+positive-logic option.
 
-linux/thread.c:53:20: error: '__NR_futex' undeclared (first use in this function)
-   53 |     return syscall(__NR_futex, addr, op, val, to, addr2, val3);
-      |                    ^~~~~~~~~~
+However, it kept the ordering of the conditional block, which became a
+negatice-logic condition.
 
-A patch that fixes this was submitted upstream, but rejected [1].
+This is confusing; let's fix that.
 
-Fixes:
- - http://autobuild.buildroot.org/results/be0f2243919d7a052b33118d8a901c922f8d88e7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reported-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-[1] https://patches.videolan.org/patch/30581/
 ---
- package/vlc/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/lvm2/lvm2.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index 96ff8f2fcb..964b7660af 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_VLC
- 	bool "vlc"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
-@@ -23,6 +24,7 @@ config BR2_PACKAGE_VLC_OPENCV3_BACKEND
- 	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 224dbf5d54..00baa50a86 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -46,13 +46,13 @@ else
+ LVM2_CONF_OPTS += --disable-selinux
+ endif
  
- comment "vlc needs a toolchain w/ C++, dynamic library, wchar, threads, gcc >= 4.9, headers >= 3.7"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS \
- 		|| !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
+-ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),)
++ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),y)
++LVM2_INSTALL_STAGING_OPTS += install
++LVM2_INSTALL_TARGET_OPTS += install
++else
+ LVM2_MAKE_OPTS = device-mapper
+ LVM2_INSTALL_STAGING_OPTS += install_device-mapper
+ LVM2_INSTALL_TARGET_OPTS += install_device-mapper
+-else
+-LVM2_INSTALL_STAGING_OPTS += install
+-LVM2_INSTALL_TARGET_OPTS += install
+ endif
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
