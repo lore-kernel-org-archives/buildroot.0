@@ -2,91 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AE7EC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:54:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2D01C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:54:28 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1262860525
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:54:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1262860525
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 889A460525
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:54:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 889A460525
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8022415DC;
-	Tue,  3 Aug 2021 22:54:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 638DE40266;
+	Tue,  3 Aug 2021 22:54:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PbaWJUPNYc8d; Tue,  3 Aug 2021 22:54:15 +0000 (UTC)
+	with ESMTP id T5PP7qqjyYuH; Tue,  3 Aug 2021 22:54:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 55FD2415EB;
-	Tue,  3 Aug 2021 22:54:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CA0DA1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:12:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A68EB401D2;
+	Tue,  3 Aug 2021 22:54:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 169D21BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:12:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B9CBF605E0
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:12:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 10F7E4061D
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RQS9WlaASZic for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:12:21 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 05EA6605CF
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:12:20 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- a192-20020a1c7fc90000b0290253b32e8796so2612166wmd.0
- for <buildroot@buildroot.org>; Tue, 03 Aug 2021 14:12:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=5K79xhh150hL3fITNlQBjYn/8hnIizez/TeVNL1o9Bk=;
- b=e9HKvtSQtXae/zrvm/sFIOToc72w1uWOwktvBXUNW1pro1WUxYoYvOHyKiU3d3atG7
- ATzzl/xsYOCMcp6qvAnNfOP5yf4wwndt59U0HO8lRsS/btqcxKYEiSObPCXbicgPF55a
- 13ixZk8lLyzqJhup8qLnS+OFWRXLjgdqDf3W0zBN8+5RVdMgSMQ7/AgE8COdWmJkPqLN
- hRpZdt/1jX7iJs6+46/Lf4OUHjCvNZYJlNWN0QHgayrePLCaAztZlMPFW4MGTJ8VcftV
- msx+vBvZ4cl4ihAXBDInNSk6qorZG3+Hg588qrCNZAYzcf3GHkGDFUm8t/PIiTwA/zAu
- om7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=5K79xhh150hL3fITNlQBjYn/8hnIizez/TeVNL1o9Bk=;
- b=SGAcHWGLjepg5ASKTg1cYpXjKnGFf1Z4+XcHuwp0O0/TdWhrOy/eBHsRZsK4nx4Elr
- vbKEvuccCPM3VMTGs+fjUHbNjb3nDuRLquJ4fYXxNW/2hcdfrN3ZRFEdm2hhpM/N1lVd
- KZnyolGdUfDBjnYRNkNkAi3qr2UQweBFgQrXBDZZZ0dMA0gB4b3Q3yFrehs5NKnGbVal
- tpzcCVdYjaufJFZM3hAKCOILKmM+AOfbdFaDpPLFzxoa43Eyt5O+6cYWczspKK7H0vl3
- kjHV/999VWj3JIiThUHHYwG0IfQ9n1++D3in1Ww59rpDSOSNzqSn9l6DQR125Z4Dc791
- 2Sxg==
-X-Gm-Message-State: AOAM530PvuxacG4jiU+SeCuZaYh5vVVHV9MlHxUwTKGSIxIrUZVce4lW
- /QMnFPUyNnHx8TfPv/MrjoaNOxsSpcZoEQ==
-X-Google-Smtp-Source: ABdhPJxW3Ox7fsyK0TLNHZcjgZes8aK6SfN7vWtwDuWGER1lJi1nU2UkTguh/z4cyAAw6m+y/j5B1Q==
-X-Received: by 2002:a1c:c9:: with SMTP id 192mr23189894wma.128.1628025138871; 
- Tue, 03 Aug 2021 14:12:18 -0700 (PDT)
-Received: from kali.home (pop.92-184-97-75.mobile.abo.orange.fr.
- [92.184.97.75])
- by smtp.gmail.com with ESMTPSA id j140sm106235wmj.37.2021.08.03.14.12.17
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 03 Aug 2021 14:12:18 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Sbh52SAUHzrS for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:56 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4FB47405A0
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 94C9C843F5; Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue,  3 Aug 2021 23:12:10 +0200
-Message-Id: <20210803211210.344167-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/netsnmp: add SELinux module
+Date: Wed, 2 Jun 2021 23:08:48 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 4526078d1b4be109d13343243151a6eb98f0532f
+X-Git-Newrev: 8a313b019c7d7e898186a8b08f9c25ae0194fa16
+X-Patchwork-Hint: ignore
+Message-Id: <20210803210947.94C9C843F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lvm2: fix installation
+ of systemd units
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,35 +64,61 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Support for netsnmp is added by the services/snmp module in the SELinux
-refpolicy.
+commit: https://git.buildroot.net/buildroot/commit/?id=8a313b019c7d7e898186a8b08f9c25ae0194fa16
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Since we bump the version in commit 80997acd3587 (package/lvm2: bump
+version to 2.03.12), the installation of systemd units is no longer
+functional without a full installation.
+
+As Pascal puts it: the systemd service files don't make a whole lot of
+sense when there isn't a full lvm2 install.
+
+Move the conditional block that install system units, so that it only
+occurs when we do a full installation.
+
+Fixes;
+    http://autobuild.buildroot.org/results/f47/f470ffb55625e2639cecde713442550eb532d0d7/
+    http://autobuild.buildroot.org/results/954/9547929292e81671fbe3a5b4bbc87a6424edb1ca/
+    http://autobuild.buildroot.org/results/303/30359c351a6ce2f9139494a531e036f0b0406ccf
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Co-Developped-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Cc: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/netsnmp/netsnmp.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/lvm2/lvm2.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 1a9a776033..985cfeac72 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -11,6 +11,7 @@ NETSNMP_LICENSE = Various BSD-like
- NETSNMP_LICENSE_FILES = COPYING
- NETSNMP_CPE_ID_VENDOR = net-snmp
- NETSNMP_CPE_ID_PRODUCT = $(NETSNMP_CPE_ID_VENDOR)
-+NETSNMP_SELINUX_MODULES = snmp
- NETSNMP_INSTALL_STAGING = YES
- NETSNMP_CONF_ENV = \
- 	ac_cv_NETSNMP_CAN_USE_SYSCTL=no \
--- 
-2.30.2
-
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 00baa50a86..70787fe91b 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -49,14 +49,15 @@ endif
+ ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),y)
+ LVM2_INSTALL_STAGING_OPTS += install
+ LVM2_INSTALL_TARGET_OPTS += install
++ifeq ($(BR2_INIT_SYSTEMD),y)
++LVM2_INSTALL_TARGET_OPTS += install_systemd_units install_systemd_generators
++endif
+ else
+ LVM2_MAKE_OPTS = device-mapper
+ LVM2_INSTALL_STAGING_OPTS += install_device-mapper
+ LVM2_INSTALL_TARGET_OPTS += install_device-mapper
+ endif
+ 
+-ifeq ($(BR2_INIT_SYSTEMD),y)
+-LVM2_INSTALL_TARGET_OPTS += install_systemd_units install_systemd_generators
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
