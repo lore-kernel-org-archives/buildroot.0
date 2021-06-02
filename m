@@ -2,56 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C90FC432BE
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:39:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99F22C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:39:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0E12761029
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:39:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0E12761029
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 4709760F8F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:39:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4709760F8F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD1104010B;
-	Tue,  3 Aug 2021 21:39:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FD476061C;
+	Tue,  3 Aug 2021 21:39:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bXjxR7jJVEtY; Tue,  3 Aug 2021 21:39:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OXHMroQaOo6t; Tue,  3 Aug 2021 21:39:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B611940179;
-	Tue,  3 Aug 2021 21:39:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 27D281BF9AA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F7776059F;
+	Tue,  3 Aug 2021 21:39:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F3571BF9C1
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1FF4A835B1
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 02A91608A1
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RGWAT-6-cawB for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L4xsdhdARW95 for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 64A32837DA
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 367D36063A
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A5A5481363; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 811A9843F5; Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Fri, 25 Jun 2021 13:59:33 +0200
+Date: Wed, 2 Jun 2021 20:06:35 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3bb260cf38603d49f9ac55e8d37031698d41b7a8
-X-Git-Newrev: 6bccac75ea3f8cd66bcde3747067add14b0c4f2c
+X-Git-Oldrev: 16600cde239a39c3d13b66271d0c3b3238f858cf
+X-Git-Newrev: 351122979b2841560f0e3e5278e183579daa1419
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210955.A5A5481363@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bmap-tools: new package
+Message-Id: <20210803210947.811A9843F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/apache: security bump
+ version to 2.4.48
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,131 +70,132 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bccac75ea3f8cd66bcde3747067add14b0c4f2c
+commit: https://git.buildroot.net/buildroot/commit/?id=351122979b2841560f0e3e5278e183579daa1419
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
-[Thomas: numerous reworks, add myself in DEVELOPERS]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS                         |  2 ++
- package/Config.in                  |  1 +
- package/bmap-tools/Config.in       | 44 ++++++++++++++++++++++++++++++++++++++
- package/bmap-tools/bmap-tools.hash |  3 +++
- package/bmap-tools/bmap-tools.mk   | 13 +++++++++++
- 5 files changed, 63 insertions(+)
+Changelog: https://downloads.apache.org/httpd/CHANGES_2.4.48
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9ff590978c..1b5df54386 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1985,6 +1985,7 @@ F:	board/intel/galileo/
- F:	configs/galileo_defconfig
+Fixes CVE-2021-31618:
+mod_http2: Fix a potential NULL pointer dereference [Ivan Zhakov]
+
+Removed patch 0004 which is included in upstream release.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...c-ap_log_pid-Use-a-temporary-file-then-re.patch | 77 ----------------------
+ package/apache/apache.hash                         |  4 +-
+ package/apache/apache.mk                           |  2 +-
+ 3 files changed, 3 insertions(+), 80 deletions(-)
+
+diff --git a/package/apache/0004-server-log.c-ap_log_pid-Use-a-temporary-file-then-re.patch b/package/apache/0004-server-log.c-ap_log_pid-Use-a-temporary-file-then-re.patch
+deleted file mode 100644
+index af3cd47a30..0000000000
+--- a/package/apache/0004-server-log.c-ap_log_pid-Use-a-temporary-file-then-re.patch
++++ /dev/null
+@@ -1,77 +0,0 @@
+-From 5b95d256387b45fbe33f7ee7890ae35afdd5c371 Mon Sep 17 00:00:00 2001
+-From: Joe Orton <jorton@apache.org>
+-Date: Fri, 13 Mar 2020 14:34:18 +0000
+-Subject: [PATCH] * server/log.c (ap_log_pid): Use a temporary file, then
+- rename once   successfully written; also add error checking.  Avoids startup 
+-  failures if a previous httpd invocation crashed while writing the   pidfile.
+-
+-Submitted by: Nicolas Carrier <carrier.nicolas0 gmail.com>, jorton
+-Github: closes #100, closes #69
+-PR: 63140
+-
+-git-svn-id: https://svn.apache.org/repos/asf/httpd/httpd/trunk@1875153 13f79535-47bb-0310-9956-ffa450edef68
+-Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+----
+- server/log.c | 33 ++++++++++++++++++++++++++-------
+- 1 file changed, 26 insertions(+), 7 deletions(-)
+-
+-diff --git a/server/log.c b/server/log.c
+-index f0bde6e4b8..8d54b4e057 100644
+---- a/server/log.c
+-+++ b/server/log.c
+-@@ -1598,6 +1598,9 @@ AP_DECLARE(void) ap_log_pid(apr_pool_t *p, const char *filename)
+-     pid_t mypid;
+-     apr_status_t rv;
+-     const char *fname;
+-+    char *temp_fname;
+-+    apr_fileperms_t perms;
+-+    char pidstr[64];
+- 
+-     if (!filename) {
+-         return;
+-@@ -1626,19 +1629,35 @@ AP_DECLARE(void) ap_log_pid(apr_pool_t *p, const char *filename)
+-                       fname);
+-     }
+- 
+--    if ((rv = apr_file_open(&pid_file, fname,
+--                            APR_WRITE | APR_CREATE | APR_TRUNCATE,
+--                            APR_UREAD | APR_UWRITE | APR_GREAD | APR_WREAD, p))
+--        != APR_SUCCESS) {
+-+    temp_fname = apr_pstrcat(p, fname, ".XXXXXX", NULL);
+-+    rv = apr_file_mktemp(&pid_file, temp_fname,
+-+                         APR_FOPEN_WRITE | APR_FOPEN_CREATE | APR_FOPEN_TRUNCATE, p);
+-+    if (rv != APR_SUCCESS) {
+-         ap_log_error(APLOG_MARK, APLOG_ERR, rv, NULL, APLOGNO(00099)
+--                     "could not create %s", fname);
+-+                     "could not create %s", temp_fname);
+-         ap_log_error(APLOG_MARK, APLOG_ERR, 0, NULL, APLOGNO(00100)
+-                      "%s: could not log pid to file %s",
+-                      ap_server_argv0, fname);
+-         exit(1);
+-     }
+--    apr_file_printf(pid_file, "%" APR_PID_T_FMT APR_EOL_STR, mypid);
+--    apr_file_close(pid_file);
+-+
+-+    apr_snprintf(pidstr, sizeof pidstr, "%" APR_PID_T_FMT APR_EOL_STR, mypid);
+-+
+-+    perms = APR_UREAD | APR_UWRITE | APR_GREAD | APR_WREAD;
+-+    rv = apr_file_perms_set(temp_fname, perms);    
+-+    if (rv == APR_SUCCESS)
+-+        rv = apr_file_write_full(pid_file, pidstr, strlen(pidstr), NULL);
+-+    if (rv == APR_SUCCESS)
+-+        rv = apr_file_close(pid_file);
+-+    if (rv == APR_SUCCESS)
+-+        rv = apr_file_rename(temp_fname, fname, p);
+-+    if (rv != APR_SUCCESS) {
+-+        ap_log_error(APLOG_MARK, APLOG_ERR, rv, NULL, APLOGNO(10231)
+-+                     "%s: Failed creating pid file %s",
+-+                     ap_server_argv0, temp_fname);
+-+        exit(1);
+-+    }
+-+
+-     saved_pid = mypid;
+- }
+- 
+--- 
+-2.25.2
+-
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index bd3f6ac7ba..c03934b40a 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,5 +1,5 @@
+ # From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.{sha256,sha512}
+-sha256  740eddf6e1c641992b22359cabc66e6325868c3c5e2e3f98faf349b61ecf41ea  httpd-2.4.46.tar.bz2
+-sha512  5936784bb662e9d8a4f7fe38b70c043b468114d931cd10ea831bfe74461ea5856b64f88f42c567ab791fc8907640a99884ba4b6a600f86d661781812735b6f13  httpd-2.4.46.tar.bz2
++sha256  1bc826e7b2e88108c7e4bf43c026636f77a41d849cfb667aa7b5c0b86dbf966c  httpd-2.4.48.tar.bz2
++sha512  6c250626f1e7d10428a92d984fd48ff841effcc8705f7816ab71b681bbd51d0012ad158dcd13763fe7d630311f2de258b27574603140d648be42796ab8326724  httpd-2.4.48.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 6b9d18ac00..7dbd1a4512 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Nicolas Carrier <nicolas.carrier@orolia.com>
-+F:	package/bmap-tools/
- F:	package/php-xdebug/
- F:	package/python-augeas/
- F:	support/testing/tests/package/sample_python_augeas.py
-@@ -2638,6 +2639,7 @@ F:	configs/stm32mp157c_dk2_defconfig
- F:	package/android-tools/
- F:	package/b43-firmware/
- F:	package/b43-fwcutter/
-+F:	package/bmap-tools/
- F:	package/c-periphery/
- F:	package/cdrkit/
- F:	package/cifs-utils/
-diff --git a/package/Config.in b/package/Config.in
-index 35e6d4d493..22947edf2c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -196,6 +196,7 @@ menu "Filesystem and flash utilities"
- 	source "package/aufs/Config.in"
- 	source "package/aufs-util/Config.in"
- 	source "package/autofs/Config.in"
-+	source "package/bmap-tools/Config.in"
- 	source "package/btrfs-progs/Config.in"
- 	source "package/cifs-utils/Config.in"
- 	source "package/cpio/Config.in"
-diff --git a/package/bmap-tools/Config.in b/package/bmap-tools/Config.in
-new file mode 100644
-index 0000000000..83b4d92786
---- /dev/null
-+++ b/package/bmap-tools/Config.in
-@@ -0,0 +1,44 @@
-+config BR2_PACKAGE_BMAP_TOOLS
-+	bool "bmap-tools"
-+	depends on BR2_PACKAGE_PYTHON3 || BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime, pkg_resources
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  Tool to flash image files to block devices using the block map
-+	  bmaptool is a generic tool for creating the block map (bmap)
-+	  for a file, and copying files using the block map. The idea is
-+	  that large file containing unused blocks, like raw system
-+	  image files, can be copied or flashed a lot faster with
-+	  bmaptool than with traditional tools like "dd" or "cp".
-+
-+	  Relevant optional dependencies:
-+
-+	  - Busybox compiled with CONFIG_BZIP2, or BR2_PACKAGE_BZIP2,
-+	    to support bz2 compressed images
-+
-+	  - BR2_PACKAGE_PIGZ for optimized gzip decompression
-+
-+	  - Busybox compiled with CONFIG_LZOP, or BR2_PACKAGE_LZOP, to
-+	    support lzo compressed images.
-+
-+	  - BR2_PACKAGE_ZIP to support zip compressed images
-+
-+	  - BR2_PACKAGE_LZ4 to support lz4 compressed images
-+
-+	  - BR2_PACKAGE_ZSTD to support zstd compressed images
-+
-+	  - Busybox compiled CONFIG_FEATURE_SEAMLESS_* or
-+	    BR2_PACKAGE_TAR to support tar compressed images
-+
-+	  - BR2_PACKAGE_OPENSSH to retrieve images over SSH.
-+
-+	  - BR2_PACKAGE_SSHPASS to retrieve images over SSH if
-+	    password authentication is used.
-+
-+	  Image signature verification is not supported as
-+	  python-gpgme is not available. Optimized bzip2 decompression
-+	  is not supported as pbzip2 is not available.
-+
-+	  https://github.com/intel/bmap-tools
-diff --git a/package/bmap-tools/bmap-tools.hash b/package/bmap-tools/bmap-tools.hash
-new file mode 100644
-index 0000000000..82a570ecac
---- /dev/null
-+++ b/package/bmap-tools/bmap-tools.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  0658afb972e7221aa16fece3f84e29e5102e901c929253d7fb6040bde28243f7  bmap-tools-3.6.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/bmap-tools/bmap-tools.mk b/package/bmap-tools/bmap-tools.mk
-new file mode 100644
-index 0000000000..c8b41c225f
---- /dev/null
-+++ b/package/bmap-tools/bmap-tools.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# bmap-tools
-+#
-+################################################################################
-+
-+BMAP_TOOLS_VERSION = 3.6
-+BMAP_TOOLS_SITE = $(call github,intel,bmap-tools,v$(BMAP_TOOLS_VERSION))
-+BMAP_TOOLS_LICENSE = GPL-2.0
-+BMAP_TOOLS_LICENSE_FILES = COPYING
-+BMAP_TOOLS_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+-APACHE_VERSION = 2.4.46
++APACHE_VERSION = 2.4.48
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
