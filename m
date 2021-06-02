@@ -1,100 +1,76 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  2 Jun 2021 08:10:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libraw: add Libs.private to
- libraw.pc
-Message-ID: <20210602061019.749260-1-fontaine.fabrice@gmail.com>
+Date: Wed,  2 Jun 2021 08:25:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iftop: fix static build
+Message-ID: <20210602062550.818231-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add Libs.private to libraw.pc to fix the following static build failure
-with imagemagick which is raised since commit
-2f47cfade4b298350d056f6d9a7525b837e2ba23:
-
-/home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libjasper.a(jpg_enc.c.o): in function `jpg_encode':
-jpg_enc.c:(.text+0x1f4): undefined reference to `jpeg_stdio_dest'
-
 Fixes:
- - http://autobuild.buildroot.org/results/88e43a1ea2059a684e50b0f5f2af407e8c6df2e1
+ - http://autobuild.buildroot.org/results/eb53ff6b031c654daec57050dec376b5c9134a81
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-Add-Libs.private-to-libraw.pc.patch  | 67 +++++++++++++++++++
- 1 file changed, 67 insertions(+)
- create mode 100644 package/libraw/0001-Add-Libs.private-to-libraw.pc.patch
+ ...ame-pcap_filter-to-iftop_pcap_filter.patch | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/iftop/0002-Rename-pcap_filter-to-iftop_pcap_filter.patch
 
-diff --git a/package/libraw/0001-Add-Libs.private-to-libraw.pc.patch b/package/libraw/0001-Add-Libs.private-to-libraw.pc.patch
+diff --git a/package/iftop/0002-Rename-pcap_filter-to-iftop_pcap_filter.patch b/package/iftop/0002-Rename-pcap_filter-to-iftop_pcap_filter.patch
 new file mode 100644
-index 0000000000..a90af23178
+index 0000000000..92eedccab7
 --- /dev/null
-+++ b/package/libraw/0001-Add-Libs.private-to-libraw.pc.patch
-@@ -0,0 +1,67 @@
-+From ad911cbc3c16397cf9d326c30571a4d1edaaa03f Mon Sep 17 00:00:00 2001
++++ b/package/iftop/0002-Rename-pcap_filter-to-iftop_pcap_filter.patch
+@@ -0,0 +1,51 @@
++From 64a185ce2017e4523f4bc39a36c7aebd6d68549a Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 2 Jun 2021 07:45:40 +0200
-+Subject: [PATCH] Add Libs.private to libraw.pc
++Date: Wed, 2 Jun 2021 08:21:04 +0200
++Subject: [PATCH] Rename pcap_filter to iftop_pcap_filter
 +
-+Add Libs.private to libraw.pc to avoid the following static build
-+failure when enabling libraw with jasper support in imagemagick:
++Rename pcap_filter to iftop_pcap_filter to fix the following static
++build failure:
 +
-+/home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libjasper.a(jpg_enc.c.o): in function `jpg_encode':
-+jpg_enc.c:(.text+0x1f4): undefined reference to `jpeg_stdio_dest'
-+
-+-ljpeg must be added after -ljasper because jasper depends on jpeg
++/home/buildroot/autobuild/run/instance-3/output-1/host/bin/riscv64-linux-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static   -static -o iftop addr_hash.o edline.o hash.o iftop.o ns_hash.o options.o resolver.o screenfilter.o serv_hash.o sorted_list.o threadprof.o ui_common.o ui.o tui.o util.o addrs_ioctl.o addrs_dlpi.o dlcommon.o stringmap.o cfgfile.o vector.o  -lpcap -lpcap -L/home/buildroot/autobuild/run/instance-3/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/bin/../../../../bin/../riscv64-buildroot-linux-musl/sysroot/usr/lib -lnl-genl-3 -lnl-3 -lpthread   -lcurses
++/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv64-buildroot-linux-musl/10.2.0/../../../../riscv64-buildroot-linux-musl/bin/ld: /home/buildroot/autobuild/run/instance-3/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/bin/../../../../bin/../riscv64-buildroot-linux-musl/sysroot/usr/lib/libpcap.a(bpf_filter.o): in function `pcap_filter':
++bpf_filter.c:(.text+0x4a8): multiple definition of `pcap_filter'; iftop.o:iftop.c:(.bss+0x1a8): first defined here
 +
 +Fixes:
-+ - http://autobuild.buildroot.org/results/88e43a1ea2059a684e50b0f5f2af407e8c6df2e1
++ - http://autobuild.buildroot.org/results/eb53ff6b031c654daec57050dec376b5c9134a81
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/LibRaw/LibRaw/pull/406]
 +---
-+ configure.ac   | 2 ++
-+ libraw.pc.in   | 1 +
-+ libraw_r.pc.in | 1 +
-+ 3 files changed, 4 insertions(+)
++ iftop.c      | 6 +++---
++ 1 files changed, 3 insertions(+), 3 deletions(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 4ab2f313..7bf5fdfd 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -57,6 +57,7 @@ if test x$jpeg = xtrue; then
-+                         AC_CHECK_HEADERS([jpeglib.h], [
-+                                 CPPFLAGS="$CPPFLAGS -DUSE_JPEG -DUSE_JPEG8"
-+                                 LIBS="$LIBS -ljpeg"
-++                                AC_SUBST([PACKAGE_LIBS_PRIVATE],"-ljpeg $PACKAGE_LIBS_PRIVATE")
-+                         ], AC_MSG_WARN([no jpeg headers found]))
-+                 ],
-+                 AC_MSG_WARN([libjpeg not found])
-+@@ -78,6 +79,7 @@ if test x$jasper = xtrue; then
-+                         AC_CHECK_HEADERS([jasper/jasper.h], [
-+                                 CPPFLAGS="$CPPFLAGS -DUSE_JASPER"
-+                                 LIBS="$LIBS -ljasper"
-++                                AC_SUBST([PACKAGE_LIBS_PRIVATE],"-ljasper $PACKAGE_LIBS_PRIVATE")
-+                         ], AC_MSG_WARN([no jasper headers found]))
-+                 ],
-+                 AC_MSG_WARN([libjasper not found])
-+diff --git a/libraw.pc.in b/libraw.pc.in
-+index 1bab18b8..c95fbc48 100644
-+--- a/libraw.pc.in
-++++ b/libraw.pc.in
-+@@ -8,4 +8,5 @@ Description: Raw image decoder library (non-thread-safe)
-+ Requires: @PACKAGE_REQUIRES@
-+ Version: @PACKAGE_VERSION@
-+ Libs: -L${libdir} -lraw -lstdc++ at PC_OPENMP@
-++Libs.private: @PACKAGE_LIBS_PRIVATE@
-+ Cflags: -I${includedir}/libraw -I${includedir}
-+diff --git a/libraw_r.pc.in b/libraw_r.pc.in
-+index e8427271..92bbbffa 100644
-+--- a/libraw_r.pc.in
-++++ b/libraw_r.pc.in
-+@@ -8,4 +8,5 @@ Description: Raw image decoder library (thread-safe)
-+ Requires: @PACKAGE_REQUIRES@
-+ Version: @PACKAGE_VERSION@
-+ Libs: -L${libdir} -lraw_r -lstdc++ at PC_OPENMP@
-++Libs.private: @PACKAGE_LIBS_PRIVATE@
-+ Cflags: -I${includedir}/libraw -I${includedir}
++diff --git a/iftop.c b/iftop.c
++index aaec6aa..f89eee3 100644
++--- a/iftop.c
+++++ b/iftop.c
++@@ -74,7 +74,7 @@ int history_len = 1;
++ pthread_mutex_t tick_mutex;
++ 
++ pcap_t* pd; /* pcap descriptor */
++-struct bpf_program pcap_filter;
+++struct bpf_program iftop_pcap_filter;
++ pcap_handler packet_handler;
++ 
++ sig_atomic_t foad;
++@@ -679,12 +679,12 @@ char *set_filter_code(const char *filter) {
++         sprintf(x, "(%s) and (ip or ip6)", filter);
++     } else
++         x = xstrdup("ip or ip6");
++-    if (pcap_compile(pd, &pcap_filter, x, 1, 0) == -1) {
+++    if (pcap_compile(pd, &iftop_pcap_filter, x, 1, 0) == -1) {
++         xfree(x);
++         return pcap_geterr(pd);
++     }
++     xfree(x);
++-    if (pcap_setfilter(pd, &pcap_filter) == -1)
+++    if (pcap_setfilter(pd, &iftop_pcap_filter) == -1)
++         return pcap_geterr(pd);
++     else
++         return NULL;
 +-- 
 +2.30.2
 +
