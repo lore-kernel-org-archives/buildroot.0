@@ -1,30 +1,41 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 2 Jun 2021 20:00:15 -0300
-Subject: [Buildroot] EUDEV takes a very long time to load the Wifi firmware
-Message-ID: <CAOMZO5CcUAt1kBQ4W-nu6U4KP40UbSwa4ohFBq42dDNresANHw@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Thu,  3 Jun 2021 02:58:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lvm2: remove endif that prevents
+ Buildroot to use Makefiles at all
+In-Reply-To: <20210603005805.216004-1-giulio.benetti@benettiengineering.com>
+References: <20210603005805.216004-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20210603005805.216004-2-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Commit [1] breaks Buildroot Makefile since a Makefile endif has been left
+with no sense giving following error:
+package/lvm2/lvm2.mk:61: *** extraneous 'endif'.  Stop.
 
-I am running kernel 5.12.4 on an imx6dl-pico-pi board with a QCA9377 Wifi chip.
+So let's remove that forgotten endif.
 
-Originally I was selecting BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y,
-but that caused the QCA9377 firmware to be loaded only after almost 3
-minutes.
+[1]: https://git.buildroot.net/buildroot/commit/?id=8a313b019c7d7e898186a8b08f9c25ae0194fa16
 
-Changing it to BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y caused the
-QCA9377 firmware to be loaded very quickly as expected.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/lvm2/lvm2.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-I am using a recent master version of Buildroot:
-ab9ceea782c770acdb9a25d8601b12af261c8ccb
-
-I am OK with using MDEV but just wanted to report it in case someone
-knows if this is a known EUDEV issue.
-
-Thanks,
-
-Fabio Estevam
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 70787fe91b..5ce79768b6 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -58,8 +58,6 @@ LVM2_INSTALL_STAGING_OPTS += install_device-mapper
+ LVM2_INSTALL_TARGET_OPTS += install_device-mapper
+ endif
+ 
+-endif
+-
+ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+ LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
+ endif
+-- 
+2.25.1
