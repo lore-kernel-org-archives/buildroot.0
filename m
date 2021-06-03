@@ -1,39 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  3 Jun 2021 19:10:42 +0300
-Subject: [Buildroot] [PATCH next] package/gnutls: disable tests
-Message-ID: <6a855a1d0fd3bd8f4bd59d87e349ab52ea501eab.1622736642.git.baruch@tkos.co.il>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  3 Jun 2021 18:39:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/acpid: add CPE variables
+Message-ID: <20210603163928.346877-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tests can't build with NDEBUG is defined. Since commit 5a8c50fe05afa
-("core: enable 'NDEBUG' unless BR2_ENABLE_RUNTIME_DEBUG is set") NDEBUG
-is defined on !BR2_ENABLE_RUNTIME_DEBUG. Just disable tests.
+cpe:2.3:a:tedfelix:acpid2 is a valid CPE identifier for this package:
 
-Fixes:
-http://autobuild.buildroot.net/results/9ec31793484a69c14a66b7338d795089c07b9937/
-http://autobuild.buildroot.net/results/6ef8f1534237f2df4cff0a0bc0364fe9a46a5343/
-http://autobuild.buildroot.net/results/05ff156687138627f244ca3f6cb58f1ce7d127c4/
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atedfelix%3Aacpid2
 
-Cc: Matt Weber <matthew.weber@collins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gnutls/gnutls.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/acpid/acpid.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 14855bcebc8f..6fc9ffad0b3f 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -23,6 +23,7 @@ GNUTLS_CONF_OPTS = \
- 	--disable-guile \
- 	--disable-libdane \
- 	--disable-rpath \
-+	--disable-tests \
- 	--enable-local-libopts \
- 	--enable-openssl-compatibility \
- 	--with-librt-prefix=$(STAGING_DIR) \
+diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+index ff6e62b5cd..3473e7b5f6 100644
+--- a/package/acpid/acpid.mk
++++ b/package/acpid/acpid.mk
+@@ -9,6 +9,8 @@ ACPID_SOURCE = acpid-$(ACPID_VERSION).tar.xz
+ ACPID_SITE = http://downloads.sourceforge.net/project/acpid2
+ ACPID_LICENSE = GPL-2.0+
+ ACPID_LICENSE_FILES = COPYING
++ACPID_CPE_ID_VENDOR = tedfelix
++ACPID_CPE_ID_PRODUCT = acpid2
+ 
+ define ACPID_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 package/acpid/acpid.service \
 -- 
 2.30.2
