@@ -1,83 +1,102 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Thu, 3 Jun 2021 13:50:41 +0200
-Subject: [Buildroot] EUDEV takes a very long time to load the Wifi
- firmware
-In-Reply-To: <CAOMZO5Bv9A3CJq05PB8QPMus2s2atVbuSxCJGUyjXGBUP0x4Wg@mail.gmail.com>
-References: <CAOMZO5CcUAt1kBQ4W-nu6U4KP40UbSwa4ohFBq42dDNresANHw@mail.gmail.com>
- <87sg1zzcz2.fsf@dell.be.48ers.dk>
- <CAOMZO5Bv9A3CJq05PB8QPMus2s2atVbuSxCJGUyjXGBUP0x4Wg@mail.gmail.com>
-Message-ID: <CAOf5uwkcRo-+49U5bTxs=eyJUOKfBB9RbFx_RiX2ooMtvXeowg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 3 Jun 2021 14:17:19 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libcamera: fix atomic linking
+ with qcam
+In-Reply-To: <ce1a528d-23f3-e2f6-081d-7e2962d2cc9a@ideasonboard.com>
+References: <20210603053644.3432-1-fontaine.fabrice@gmail.com>
+ <20210603053644.3432-2-fontaine.fabrice@gmail.com>
+ <ce1a528d-23f3-e2f6-081d-7e2962d2cc9a@ideasonboard.com>
+Message-ID: <CAPi7W80C77dVVQt+gf=OaMziffLjhz0t81y8Y=zKhRe2CH_GEQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hi Kieran,
 
-On Thu, Jun 3, 2021 at 1:45 PM Fabio Estevam <festevam@gmail.com> wrote:
+Le jeu. 3 juin 2021 ? 13:06, Kieran Bingham
+<kieran.bingham@ideasonboard.com> a ?crit :
+>
+> Hi Fabrice,
+>
+> On 03/06/2021 06:36, Fabrice Fontaine wrote:
+> > Fix build failure with sparc v8 which is raised since commit
+> > bd9b7b092cf34dc065a4b40268c18a9fe319f5e4 due to
+> > https://git.linuxtv.org/libcamera.git/commit/?id=97e8b3a2eb321884fe1e15fb584f41a38cc33d51
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/d0726b2253f1f3d006e057f3b32c646c4b9b5f7a
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  .../0001-qcam-Add-libatomic-dependency        | 40 +++++++++++++++++++
+> >  1 file changed, 40 insertions(+)
+> >  create mode 100644 package/libcamera/0001-qcam-Add-libatomic-dependency
+> >
+> > diff --git a/package/libcamera/0001-qcam-Add-libatomic-dependency b/package/libcamera/0001-qcam-Add-libatomic-dependency
+> > new file mode 100644
+> > index 0000000000..72e4b1aee3
+> > --- /dev/null
+> > +++ b/package/libcamera/0001-qcam-Add-libatomic-dependency
+> > @@ -0,0 +1,40 @@
+> > +From 59de56f42a0fda1b8e778fb237b7bce494dc0584 Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +Date: Wed, 2 Jun 2021 22:56:49 +0200
+> > +Subject: qcam: Add libatomic dependency
+> > +
+> > +Add libatomic dependency due to std::shared_ptr which is used by qcam
+> > +since its addition in commit 97e8b3a2eb321884fe1e15fb584f41a38cc33d51:
+> > +https://en.cppreference.com/w/cpp/memory/shared_ptr.
+> > +
+> > +This will avoid the following build failure:
+> > +
+> > +/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: src/qcam/qcam.p/main_window.cpp.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
+> > +
+> > +Fixes:
+> > + - http://autobuild.buildroot.org/results/d0726b2253f1f3d006e057f3b32c646c4b9b5f7a
+> > +
+> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > +Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > +[Retrieved from:
+> > +https://git.linuxtv.org/libcamera.git/commit/?id=59de56f42a0fda1b8e778fb237b7bce494dc0584]
+>
+> Given that this is now an upstream commit - wouldn't it make more sense
+> to bump the libcamera version to here, rather than carry the patch back?
+>
+> Or is there some reason you don't want to update yet?
+Yes, there is a very good reason: buildroot 2021.05 will be released
+in the next few hours/days.
+> --
+> Kieran
+>
+>
+> > +---
+> > + src/qcam/meson.build | 1 +
+> > + 1 file changed, 1 insertion(+)
+> > +
+> > +diff --git a/src/qcam/meson.build b/src/qcam/meson.build
+> > +index acde7682..fad4cc95 100644
+> > +--- a/src/qcam/meson.build
+> > ++++ b/src/qcam/meson.build
+> > +@@ -34,6 +34,7 @@ qcam_resources = files([
+> > + ])
+> > +
+> > + qcam_deps = [
+> > ++    libatomic,
+> > +     libcamera_dep,
+> > +     qt5_dep,
+> > + ]
+> > +--
+> > +cgit v1.2.1
+> > +
+> >
+>
+> --
+> Regards
+> --
+> Kieran
+Best Regards,
 
-> Hi Peter,
->
-> On Thu, Jun 3, 2021 at 3:20 AM Peter Korsgaard <peter@korsgaard.com>
-> wrote:
->
-> > Is there anything of interest in the logs? The eudev init script runs
-> > udevadm settle, does that take a long time or perhaps even times out?
->
-> Unfortunately, no logs are shown. I only get the kernel-related
-> firmware loading messages:
->
-> [  192.544227] ath10k_sdio mmc1:0001:1: qca9377 hw1.1 sdio target
-> 0x05020001 chip_id 0x00000000 sub 0000:0000
-> [  192.554451] ath10k_sdio mmc1:0001:1: kconfig debug 0 debugfs 0
-> tracing 0 dfs 0 testmode 0
-> [  192.566465] ath10k_sdio mmc1:0001:1: firmware ver
-> WLAN.TF.1.1.1-00061-QCATFSWPZ-1 api 5 features ignore-otp crc32
-> 7746e551
-> [  192.765756] ath10k_sdio mmc1:0001:1: failed to fetch board data for
->
-> bus=sdio,vendor=0271,device=0701,subsystem-vendor=0000,subsystem-device=0000
-> from ath10k/QCA9377/hw1.0/board-2.bin
-> [  192.784424] ath10k_sdio mmc1:0001:1: board_file api 1 bmi_id N/A
-> crc32 544289f7
-> [  194.081698] ath10k_sdio mmc1:0001:1: htt-ver 3.32 wmi-op 4 htt-op 3
-> cal otp max-sta 32 raw 0 hwcrypto 1
-> [  194.160101] mmc1: queuing unknown CIS tuple 0x01 (3 bytes)
-> [  194.177321] mmc1: queuing unknown CIS tuple 0x1a (5 bytes)
-> [  194.187873] mmc1: queuing unknown CIS tuple 0x1b (8 bytes)
-> [  194.194279] mmc1: queuing unknown CIS tuple 0x14 (0 bytes)
->
->
-You need to log eudev and increase log level. That show when sdio peripheral
-is detected and we need a dmesg log
-
-Michael
-
-after more than 3 minutes as shown by the timestamp.
->
-> With mdev these same messages appear after 9 seconds.
->
-> Thanks
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
--- 
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael at amarulasolutions.com
-__________________________________
-
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info at amarulasolutions.com
-www.amarulasolutions.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210603/bfe1d842/attachment.html>
+Fabrice
