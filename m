@@ -1,74 +1,86 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  3 Jun 2021 07:36:44 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libcamera: fix atomic linking with
- qcam
-In-Reply-To: <20210603053644.3432-1-fontaine.fabrice@gmail.com>
-References: <20210603053644.3432-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210603053644.3432-2-fontaine.fabrice@gmail.com>
+Date: Thu,  3 Jun 2021 07:56:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: fix build with gcc 11
+Message-ID: <20210603055644.333578-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build failure with sparc v8 which is raised since commit
-bd9b7b092cf34dc065a4b40268c18a9fe319f5e4 due to
-https://git.linuxtv.org/libcamera.git/commit/?id=97e8b3a2eb321884fe1e15fb584f41a38cc33d51
+Fix the following build failure with gcc 11:
+
+/data/buildroot-autobuilder/instance-0/output-1/build/qt5base-5.15.2/include/QtCore/../../src/corelib/global/qfloat16.h:300:7: error: 'numeric_limits' is not a class template
+  300 | class numeric_limits<QT_PREPEND_NAMESPACE(qfloat16)> : public numeric_limits<float>
+      |       ^~~~~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/d0726b2253f1f3d006e057f3b32c646c4b9b5f7a
+ - http://autobuild.buildroot.org/results/9a7a987af40b8408ccdfcae4890008c7090b41a1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-qcam-Add-libatomic-dependency        | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/libcamera/0001-qcam-Add-libatomic-dependency
+ ...Fix-build-with-GCC-11-include-limits.patch | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 package/qt5/qt5base/0006-Fix-build-with-GCC-11-include-limits.patch
 
-diff --git a/package/libcamera/0001-qcam-Add-libatomic-dependency b/package/libcamera/0001-qcam-Add-libatomic-dependency
+diff --git a/package/qt5/qt5base/0006-Fix-build-with-GCC-11-include-limits.patch b/package/qt5/qt5base/0006-Fix-build-with-GCC-11-include-limits.patch
 new file mode 100644
-index 0000000000..72e4b1aee3
+index 0000000000..f014a160d5
 --- /dev/null
-+++ b/package/libcamera/0001-qcam-Add-libatomic-dependency
-@@ -0,0 +1,40 @@
-+From 59de56f42a0fda1b8e778fb237b7bce494dc0584 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 2 Jun 2021 22:56:49 +0200
-+Subject: qcam: Add libatomic dependency
++++ b/package/qt5/qt5base/0006-Fix-build-with-GCC-11-include-limits.patch
+@@ -0,0 +1,53 @@
++From 9c56d4da2ff631a8c1c30475bd792f6c86bda53c Mon Sep 17 00:00:00 2001
++From: Thiago Macieira <thiago.macieira@intel.com>
++Date: Mon, 18 Jan 2021 07:40:54 -0800
++Subject: [PATCH] Fix build with GCC 11: include <limits>
 +
-+Add libatomic dependency due to std::shared_ptr which is used by qcam
-+since its addition in commit 97e8b3a2eb321884fe1e15fb584f41a38cc33d51:
-+https://en.cppreference.com/w/cpp/memory/shared_ptr.
++Fixes: QTBUG-90395
++Pick-to: 6.0
++Change-Id: Iecc74d2000eb40dfbe7bfffd165b5dd3708b7a40
++Reviewed-by: Edward Welbourne <edward.welbourne@qt.io>
 +
-+This will avoid the following build failure:
-+
-+/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: src/qcam/qcam.p/main_window.cpp.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/d0726b2253f1f3d006e057f3b32c646c4b9b5f7a
-+
++[Retrieved (and backported) from:
++https://github.com/qt/qtbase/commit/9c56d4da2ff631a8c1c30475bd792f6c86bda53c]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-+[Retrieved from:
-+https://git.linuxtv.org/libcamera.git/commit/?id=59de56f42a0fda1b8e778fb237b7bce494dc0584]
 +---
-+ src/qcam/meson.build | 1 +
-+ 1 file changed, 1 insertion(+)
++ src/corelib/global/qendian.h  | 6 ++++--
++ src/corelib/global/qfloat16.h | 1 +
++ 2 files changed, 5 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/qcam/meson.build b/src/qcam/meson.build
-+index acde7682..fad4cc95 100644
-+--- a/src/qcam/meson.build
-++++ b/src/qcam/meson.build
-+@@ -34,6 +34,7 @@ qcam_resources = files([
-+ ])
++diff --git a/src/corelib/global/qendian.h b/src/corelib/global/qendian.h
++index 99b529f17cd..c874c5e47ab 100644
++--- a/src/corelib/global/qendian.h
+++++ b/src/corelib/global/qendian.h
++@@ -1,7 +1,7 @@
++ /****************************************************************************
++ **
++-** Copyright (C) 2016 The Qt Company Ltd.
++-** Copyright (C) 2016 Intel Corporation.
+++** Copyright (C) 2021 The Qt Company Ltd.
+++** Copyright (C) 2021 Intel Corporation.
++ ** Contact: https://www.qt.io/licensing/
++ **
++ ** This file is part of the QtCore module of the Qt Toolkit.
++@@ -44,6 +44,8 @@
++ #include <QtCore/qfloat16.h>
++ #include <QtCore/qglobal.h>
 + 
-+ qcam_deps = [
-++    libatomic,
-+     libcamera_dep,
-+     qt5_dep,
-+ ]
-+-- 
-+cgit v1.2.1
+++#include <limits>
+++
++ // include stdlib.h and hope that it defines __GLIBC__ for glibc-based systems
++ #include <stdlib.h>
++ #include <string.h>
++diff --git a/src/corelib/global/qfloat16.h b/src/corelib/global/qfloat16.h
++index e9477d2ecec..a25fac28862 100644
++--- a/src/corelib/global/qfloat16.h
+++++ b/src/corelib/global/qfloat16.h
++@@ -44,6 +44,7 @@
 +
++ #include <QtCore/qglobal.h>
++ #include <QtCore/qmetatype.h>
+++#include <limits>
++ #include <string.h>
++ 
++ #if defined(QT_COMPILER_SUPPORTS_F16C) && defined(__AVX2__) && !defined(__F16C__)
 -- 
 2.30.2
