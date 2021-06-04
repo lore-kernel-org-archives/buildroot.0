@@ -1,60 +1,112 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:17:50 -0000
-Subject: [Buildroot] [git commit] package/cage: bump to version 0.1.3
-Message-ID: <20210607144654.481E9814AD@busybox.osuosl.org>
+Date: Fri, 4 Jun 2021 22:38:42 +0200
+Subject: [Buildroot] [git commit] package/wpewebkit: import patch to support
+ uclibc
+Message-ID: <20210607144659.615AF80E35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4dc6bcd180c892442221cc330b365da6e0efa399
+commit: https://git.buildroot.net/buildroot/commit/?id=35eb9b566a297c8fe78205653a9607fe10563836
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update to version 0.1.3, which is a matenance release which does not
-add any new features but can be built against wlroots 0.13.0. A new
-build option to toggle man pages is set to always disabled.
+Import a small patch from the upstream Bugzilla which is needed to allow
+building WPE WebKit against uClibc.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+[yann.morin.1998 at free.fr: add upstream commit refs in backported patch]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/cage/cage.hash | 2 +-
- package/cage/cage.mk   | 7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ .../0001-Support-building-against-uClibc.patch     | 82 ++++++++++++++++++++++
+ 1 file changed, 82 insertions(+)
 
-diff --git a/package/cage/cage.hash b/package/cage/cage.hash
-index 5cae952d72..6e312bbf5f 100644
---- a/package/cage/cage.hash
-+++ b/package/cage/cage.hash
-@@ -1,5 +1,5 @@
- # Generated locally
--sha256 38a3e3968f00cc58fe1d9448e972cfac7d1efa30c48699f09032f264101a55ac  cage-0.1.2.1.tar.gz
-+sha256 c28aa8230f937c89b564967748451c1eb15d8633a71a1ed6e22d532afa15462e  cage-0.1.3.tar.gz
- 
- # Hashes for license files:
- sha256 e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
-diff --git a/package/cage/cage.mk b/package/cage/cage.mk
-index 9fc01d36c1..0950c70474 100644
---- a/package/cage/cage.mk
-+++ b/package/cage/cage.mk
-@@ -4,16 +4,17 @@
- #
- ################################################################################
- 
--CAGE_VERSION = 0.1.2.1
-+CAGE_VERSION = 0.1.3
- CAGE_SITE = https://github.com/Hjdskes/cage/releases/download/v$(CAGE_VERSION)
- CAGE_LICENSE = MIT
- CAGE_LICENSE_FILES = LICENSE
- CAGE_DEPENDENCIES = host-pkgconf wlroots
-+CAGE_CONF_OPTS = -Dman-pages=disabled
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
--CAGE_CONF_OPTS = -Dxwayland=true
-+CAGE_CONF_OPTS += -Dxwayland=true
- else
--CAGE_CONF_OPTS = -Dxwayland=false
-+CAGE_CONF_OPTS += -Dxwayland=false
- endif
- 
- $(eval $(meson-package))
+diff --git a/package/wpewebkit/0001-Support-building-against-uClibc.patch b/package/wpewebkit/0001-Support-building-against-uClibc.patch
+new file mode 100644
+index 0000000000..7c0918a195
+--- /dev/null
++++ b/package/wpewebkit/0001-Support-building-against-uClibc.patch
+@@ -0,0 +1,82 @@
++From 624d3b6a99778443e35fb260bef50a3969df9215 Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Wed, 26 May 2021 01:24:59 +0300
++Subject: [PATCH] Support building against uClibc
++ https://bugs.webkit.org/show_bug.cgi?id=226244
++
++Reviewed by Michael Catanzaro.
++
++Source/JavaScriptCore:
++
++* assembler/MacroAssemblerARM64.cpp:
++(getauxval): Provide a fallback implementation of getauxval() for
++systems which do not provide <sys/auxv.h>, like those using uClibc
++as their C library.
++
++Source/WTF:
++
++* wtf/PlatformRegisters.h: Use the <sys/ucontext.h> header instead of
++<ucontext.h>, which is enough to gain access to the type definitions
++for CPU registers and is available on every libc. On the other hand,
++uClibc does not have <ucontext.h>, so this fixes the build in that
++case.
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++[Backport from upstream:
++  - https://bugs.webkit.org/show_bug.cgi?id=226244
++  - https://trac.webkit.org/changeset/278302 (current svn, soon legacy)
++  - https://commits.webkit.org/238339 at main (future-proof for after the migration to git)
++]
++[yann.morin.1998 at free.fr: add upstream commit refs]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ .../assembler/MacroAssemblerARM64.cpp          | 18 ++++++++++++++++++
++ Source/WTF/wtf/PlatformRegisters.h             |  2 +-
++ 2 files changed, 19 insertions(+), 1 deletion(-)
++
++diff --git a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
++index 9e5c5147ea0..d20e632d825 100644
++--- a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
+++++ b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
++@@ -34,7 +34,25 @@
++ 
++ #if OS(LINUX)
++ #include <asm/hwcap.h>
+++#if __has_include(<sys/auxv.h>)
++ #include <sys/auxv.h>
+++#else
+++#include <linux/auxvec.h>
+++// Provide an implementation for C libraries which do not ship one.
+++static unsigned long getauxval(unsigned long type)
+++{
+++    char** env = environ;
+++    while (*env++) { /* no-op */ }
+++
+++    for (auto* auxv = reinterpret_cast<unsigned long*>(env); *auxv != AT_NULL; auxv += 2) {
+++        if (*auxv == type)
+++            return auxv[1];
+++    }
+++
+++    errno = ENOENT;
+++    return 0;
+++}
+++#endif
++ #endif
++ 
++ namespace JSC {
++diff --git a/Source/WTF/wtf/PlatformRegisters.h b/Source/WTF/wtf/PlatformRegisters.h
++index d26ef985169..e7f15b7eb62 100644
++--- a/Source/WTF/wtf/PlatformRegisters.h
+++++ b/Source/WTF/wtf/PlatformRegisters.h
++@@ -35,7 +35,7 @@
++ #elif OS(WINDOWS)
++ #include <windows.h>
++ #else
++-#include <ucontext.h>
+++#include <sys/ucontext.h>
++ #endif
++ 
++ namespace WTF {
++-- 
++2.31.1
++
