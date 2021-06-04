@@ -1,45 +1,112 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  4 Jun 2021 20:47:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dc3dd: disable on riscv32
-Message-ID: <20210604184706.5069-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 4 Jun 2021 22:38:42 +0200
+Subject: [Buildroot] [git commit branch/next] package/wpewebkit: import
+ patch to support uclibc
+Message-ID: <20210604201701.5E3B28A425@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable dc3dd on riscv32 to avoid the following build failure:
+commit: https://git.buildroot.net/buildroot/commit/?id=35eb9b566a297c8fe78205653a9607fe10563836
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In file included from getdate.y:40:
-verify.h:132:30: error: negative width in bit-field 'verify_error_if_negative_size__'
-  132 |       (struct { unsigned int verify_error_if_negative_size__: (R) ? 1 : -1; }))
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Import a small patch from the upstream Bugzilla which is needed to allow
+building WPE WebKit against uClibc.
 
-Fixes:
- - http://autobuild.buildroot.org/results/267151dec9d2328a5f8c61ddf224219a4f617e5c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+[yann.morin.1998 at free.fr: add upstream commit refs in backported patch]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/dc3dd/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ .../0001-Support-building-against-uClibc.patch     | 82 ++++++++++++++++++++++
+ 1 file changed, 82 insertions(+)
 
-diff --git a/package/dc3dd/Config.in b/package/dc3dd/Config.in
-index 0383897cd5..715451beb7 100644
---- a/package/dc3dd/Config.in
-+++ b/package/dc3dd/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_DC3DD
- 	bool "dc3dd"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	help
-@@ -11,5 +12,6 @@ config BR2_PACKAGE_DC3DD
- 	  https://sourceforge.net/projects/dc3dd/
- 
- comment "dc3dd needs a glibc or uClibc toolchain w/ threads"
-+	depends on !BR2_RISCV_32
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_TOOLCHAIN_USES_MUSL
--- 
-2.30.2
+diff --git a/package/wpewebkit/0001-Support-building-against-uClibc.patch b/package/wpewebkit/0001-Support-building-against-uClibc.patch
+new file mode 100644
+index 0000000000..7c0918a195
+--- /dev/null
++++ b/package/wpewebkit/0001-Support-building-against-uClibc.patch
+@@ -0,0 +1,82 @@
++From 624d3b6a99778443e35fb260bef50a3969df9215 Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Wed, 26 May 2021 01:24:59 +0300
++Subject: [PATCH] Support building against uClibc
++ https://bugs.webkit.org/show_bug.cgi?id=226244
++
++Reviewed by Michael Catanzaro.
++
++Source/JavaScriptCore:
++
++* assembler/MacroAssemblerARM64.cpp:
++(getauxval): Provide a fallback implementation of getauxval() for
++systems which do not provide <sys/auxv.h>, like those using uClibc
++as their C library.
++
++Source/WTF:
++
++* wtf/PlatformRegisters.h: Use the <sys/ucontext.h> header instead of
++<ucontext.h>, which is enough to gain access to the type definitions
++for CPU registers and is available on every libc. On the other hand,
++uClibc does not have <ucontext.h>, so this fixes the build in that
++case.
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++[Backport from upstream:
++  - https://bugs.webkit.org/show_bug.cgi?id=226244
++  - https://trac.webkit.org/changeset/278302 (current svn, soon legacy)
++  - https://commits.webkit.org/238339 at main (future-proof for after the migration to git)
++]
++[yann.morin.1998 at free.fr: add upstream commit refs]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ .../assembler/MacroAssemblerARM64.cpp          | 18 ++++++++++++++++++
++ Source/WTF/wtf/PlatformRegisters.h             |  2 +-
++ 2 files changed, 19 insertions(+), 1 deletion(-)
++
++diff --git a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
++index 9e5c5147ea0..d20e632d825 100644
++--- a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
+++++ b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
++@@ -34,7 +34,25 @@
++ 
++ #if OS(LINUX)
++ #include <asm/hwcap.h>
+++#if __has_include(<sys/auxv.h>)
++ #include <sys/auxv.h>
+++#else
+++#include <linux/auxvec.h>
+++// Provide an implementation for C libraries which do not ship one.
+++static unsigned long getauxval(unsigned long type)
+++{
+++    char** env = environ;
+++    while (*env++) { /* no-op */ }
+++
+++    for (auto* auxv = reinterpret_cast<unsigned long*>(env); *auxv != AT_NULL; auxv += 2) {
+++        if (*auxv == type)
+++            return auxv[1];
+++    }
+++
+++    errno = ENOENT;
+++    return 0;
+++}
+++#endif
++ #endif
++ 
++ namespace JSC {
++diff --git a/Source/WTF/wtf/PlatformRegisters.h b/Source/WTF/wtf/PlatformRegisters.h
++index d26ef985169..e7f15b7eb62 100644
++--- a/Source/WTF/wtf/PlatformRegisters.h
+++++ b/Source/WTF/wtf/PlatformRegisters.h
++@@ -35,7 +35,7 @@
++ #elif OS(WINDOWS)
++ #include <windows.h>
++ #else
++-#include <ucontext.h>
+++#include <sys/ucontext.h>
++ #endif
++ 
++ namespace WTF {
++-- 
++2.31.1
++
