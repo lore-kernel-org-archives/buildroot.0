@@ -1,39 +1,22 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 4 Jun 2021 23:38:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lvm2: disable parallel build
-In-Reply-To: <CAPi7W82V4XDKO_eiShfaR5VUUNANZ3K316Kx8MrMA6MuKMqPmA@mail.gmail.com>
-References: <20210516202828.321469-1-fontaine.fabrice@gmail.com>
- <20210517074411.GR2506@scaer>
- <CAPi7W82V4XDKO_eiShfaR5VUUNANZ3K316Kx8MrMA6MuKMqPmA@mail.gmail.com>
-Message-ID: <20210604213832.GK168928@scaer>
+Date: Fri, 4 Jun 2021 23:40:55 +0200
+Subject: [Buildroot] [git commit] package/lvm2: disable parallel build
+Message-ID: <20210604211734.7CB12836F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, Pascal, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=bedd8420786b184f4aec4433800083a3468cfe1c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-06-04 20:37 +0200, Fabrice Fontaine spake thusly:
-> Le lun. 17 mai 2021 ? 09:44, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
-> > On 2021-05-16 22:28 +0200, Fabrice Fontaine spake thusly:
-> > > Parallel build is broken since bump to version 2.03.13 in commit
-> > > 80997acd3587a4528f8877d9e8a502c39ed800c5:
-> > [--SNIP--]
-> > > Fixes:
-> > >  - http://autobuild.buildroot.org/results/30359c351a6ce2f9139494a531e036f0b0406ccf
-[--SNIP--]
-> > > +# parallel build issues
-> > > +LVM2_MAKE = $(MAKE1)
-> > This is unfortuantely not sufficient:
-> Even if this is not sufficient, disabling parallel build is still
-> needed to avoid the build failure related to dmsetup being truncated
-> or main being undefined.
-> There are 5 build failures today due to this issue.
+Parallel build is broken since bump to version 2.03.12 in commit
+80997acd35. Commits 4526078d1b, 8a313b019c, and a7186cd1ea tried to fix
+that by only installing systemd units when appropriate.
 
-Indeed, there is quite some funny breakage...
+It turns out that there are more cases where parallel build still fails:
 
-For example;
     http://autobuild.buildroot.org/results/995/995f46ee0033e34261ba7b24b61c41e7a088602b/
 
     >>> lvm2 2.03.12 Installing to staging directory
@@ -71,43 +54,36 @@ Or:
 Similar traces in either case: it tries to build dmsetup twice, at
 intall time instead of build time.
 
-So. I can accept that there is a parallel build issue [0], but this is
-even more involved than that, because the build should not happen at
-install time, and it should not be duplicated. With MAKE1, we have an
-install sequence that looks like:
+Fixes:
+  - http://autobuild.buildroot.org/results/995/995f46ee0033e34261ba7b24b61c41e7a088602b/
+  - http://autobuild.buildroot.org/results/a4e/a4ea87da502272dc2e677123b6fbcb0c23106f0b/
 
-    >>> lvm2 2.03.12 Installing to staging directory
-    [...]
-    /usr/bin/make -C dm-tools install_device-mapper
-        [CC] dmsetup.c
-        [CC] dmsetup
-        [INSTALL] dmsetup
-    /usr/bin/make -C dm-tools device-mapper
-    make[4]: Nothing to be done for 'device-mapper'.
-    /usr/bin/make -C dm-tools
-    make[4]: Nothing to be done for 'all'.
-    /usr/bin/make -C dm-tools install
-        [INSTALL] dmsetup
-        [INSTALL] ioctl/libdevmapper.so
-        [INSTALL] libdevmapper.pc
-        [INSTALL] libdevmapper.h
+Note that this is just a workaround for a broken buildsystem anyway:
+indeed, the build of dmsetup is done at install time, instead of build
+time. More fixes should be worked on with upstream to properly fix the
+issue...
 
-I guess we need to review more in-depth how we configure/build/install
-the lvm2 package...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr:
+  - update after the three partial fix-commits
+  - extend commit log accordingly
+  - add new upstream failures
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/lvm2/lvm2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Pascal, this conditional installation is your deed. Could you have a
-look, please?
-
-[0] I was only able to get the install failure after 6 successful
-builds, so it does indeed smell like a parallel issue.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 5ce79768b6..6726e165b1 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -11,6 +11,8 @@ LVM2_INSTALL_STAGING = YES
+ LVM2_LICENSE = GPL-2.0, LGPL-2.1
+ LVM2_LICENSE_FILES = COPYING COPYING.LIB
+ LVM2_CPE_ID_PRODUCT = redhat
++# parallel build issues
++LVM2_MAKE = $(MAKE1)
+ 
+ # Make sure that binaries and libraries are installed with write
+ # permissions for the owner. We disable NLS because it's broken, and
