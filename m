@@ -1,42 +1,38 @@
-From: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
-Date: Fri, 4 Jun 2021 08:57:46 +0200
-Subject: [Buildroot] [PATCH] package/iperf3: bump to version 3.10.1
-Message-ID: <20210604065746.z7jac6gpazqq7eqb@zenon.in.qult.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  4 Jun 2021 10:00:19 +0300
+Subject: [Buildroot] [PATCH next] package/libssh2: requires RIPEMD160 in
+ openssl
+Message-ID: <2a3232b207a3fc5f9f7c21a1fc923096aca662cf.1622790019.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
----
- package/iperf3/iperf3.hash | 4 ++--
- package/iperf3/iperf3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Enable RIPEMD160 in openssl for libssh2 to avoid link time failure.
 
-diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
-index fa9d54f404..0f8af088cc 100644
---- a/package/iperf3/iperf3.hash
-+++ b/package/iperf3/iperf3.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.es.net/pub/iperf/iperf-3.9.tar.gz.sha256
--sha256	24b63a26382325f759f11d421779a937b63ca1bc17c44587d2fcfedab60ac038  iperf-3.9.tar.gz
-+# From https://downloads.es.net/pub/iperf/iperf-3.10.1.tar.gz.sha256
-+sha256  03bc9760cc54a245191d46bfc8edaf8a4750f0e87abca6764486972044d6715a  iperf-3.10.1.tar.gz
- # Locally computed
- sha256	9ef73096bdd5209dd979bfa1fec70aeb42a7255d2df3aec423642aa92d5e9f40  LICENSE
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 7d20b86e78..8c57c61fce 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Fixes:
+http://autobuild.buildroot.net/results/c6e031fca123865138d18c96d895778c03b639be/
+http://autobuild.buildroot.net/results/4284098c0f29fdb7a4df9acbc23986e685c542d2/
+http://autobuild.buildroot.net/results/a457bf27dfc0029cbfc2fdbf371aad1e2efa5b83/
+
+Cc: Matt Weber <matthew.weber@collins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libssh2/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
+index 90c38813b35f..ce2dd303fa35 100644
+--- a/package/libssh2/Config.in
++++ b/package/libssh2/Config.in
+@@ -27,6 +27,7 @@ config BR2_PACKAGE_LIBSSH2_LIBGCRYPT
+ config BR2_PACKAGE_LIBSSH2_OPENSSL
+ 	bool "openssl"
+ 	depends on BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
  
--IPERF3_VERSION = 3.9
-+IPERF3_VERSION = 3.10.1
- IPERF3_SITE = https://downloads.es.net/pub/iperf
- IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
- IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
+ endchoice
+ endif
 -- 
-2.25.1
+2.30.2
