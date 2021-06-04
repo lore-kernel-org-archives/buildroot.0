@@ -1,50 +1,100 @@
-From: Laurent Cans <laurent.cans@gmail.com>
-Date: Fri, 4 Jun 2021 17:32:27 +0200
-Subject: [Buildroot] [PATCH next] package/aircrack-ng: requires RC4
- support in openssl
-In-Reply-To: <b6e89a157a624095c2c285f4b142404f5272b5de.1622792160.git.baruch@tkos.co.il>
-References: <b6e89a157a624095c2c285f4b142404f5272b5de.1622792160.git.baruch@tkos.co.il>
-Message-ID: <CAA1eMkFHtmkqK=i4MDq-84PzwSXNkO8s11n-zG60-815wbZfJQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 4 Jun 2021 20:37:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lvm2: disable parallel build
+In-Reply-To: <20210517074411.GR2506@scaer>
+References: <20210516202828.321469-1-fontaine.fabrice@gmail.com>
+ <20210517074411.GR2506@scaer>
+Message-ID: <CAPi7W82V4XDKO_eiShfaR5VUUNANZ3K316Kx8MrMA6MuKMqPmA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear all,
 
-Le ven. 4 juin 2021 ? 09:36, Baruch Siach <baruch@tkos.co.il> a ?crit :
+Le lun. 17 mai 2021 ? 09:44, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
 >
-> Enable RC4 in openssl to fix build failure when openssl is the crypto
-> backend of aircrack-ng.
+> Fabrice, All,
 >
-> Fixes:
-> http://autobuild.buildroot.net/results/007b7d88aed3902fb8ed10ee5c0ff0dc1899756d/
-> http://autobuild.buildroot.net/results/da464dd449bb950104122535eabf8a4e914d0a9e/
-> http://autobuild.buildroot.net/results/d10fec8378c334e896d9e38afe00193ef747192f/
+> +Pascal for commit cb0ce03ba636
 >
-> Cc: Laurent Cans <laurent.cans@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/aircrack-ng/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+> On 2021-05-16 22:28 +0200, Fabrice Fontaine spake thusly:
+> > Parallel build is broken since bump to version 2.03.13 in commit
+> > 80997acd3587a4528f8877d9e8a502c39ed800c5:
+> [--SNIP--]
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/30359c351a6ce2f9139494a531e036f0b0406ccf
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/lvm2/lvm2.mk | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+> > index 224dbf5d54..509b979294 100644
+> > --- a/package/lvm2/lvm2.mk
+> > +++ b/package/lvm2/lvm2.mk
+> > @@ -11,6 +11,8 @@ LVM2_INSTALL_STAGING = YES
+> >  LVM2_LICENSE = GPL-2.0, LGPL-2.1
+> >  LVM2_LICENSE_FILES = COPYING COPYING.LIB
+> >  LVM2_CPE_ID_PRODUCT = redhat
+> > +# parallel build issues
+> > +LVM2_MAKE = $(MAKE1)
 >
-> diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
-> index f3e2bc4ef12b..eb997e8d1bdb 100644
-> --- a/package/aircrack-ng/Config.in
-> +++ b/package/aircrack-ng/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_AIRCRACK_NG
->         depends on BR2_INSTALL_LIBSTDCPP
->         depends on !BR2_STATIC_LIBS # dlfcn.h
->         select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBGCRYPT
-> +       select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
->         help
->           A set of tools for auditing wireless networks
+> This is unfortuantely not sufficient:
+Even if this is not sufficient, disabling parallel build is still
+needed to avoid the build failure related to dmsetup being truncated
+or main being undefined.
+There are 5 build failures today due to this issue.
+>
+>     [...] /usr/bin/make -j1 DESTDIR=/home/ymorin/dev/buildroot/O/target install_device-mapper install_systemd_units install_systemd_generators -C /home/ymorin/dev/buildroot/O/build/lvm2-2.03.12/
+>     [...]
+>     /usr/bin/make -C scripts install_systemd_generators
+>         [INSTALL] systemd_generators
+>     /usr/bin/install: cannot stat 'lvm2_activation_generator_systemd_red_hat': No such file or directory
+>     make[3]: *** [Makefile:86: install_systemd_generators] Error 1
+>     make[2]: *** [Makefile:141: install_systemd_generators] Error 2
+>     make[1]: *** [package/pkg-generic.mk:341: /home/ymorin/dev/buildroot/O/build/lvm2-2.03.12/.stamp_target_installed] Error 2
+>     make: *** [Makefile:23: _all] Error 2
+>
+> This is probably because, in the systemd case, we force the installation
+> of systemd stuff:
+>
+>    66 ifeq ($(BR2_INIT_SYSTEMD),y)
+>    67 LVM2_INSTALL_TARGET_OPTS += install_systemd_units install_systemd_generators
+>    68 endif
+>
+> But nothing ensures they are actually built.
+>
+> I suspect commit cb0ce03ba636 (package/lvm2: install systemd units and
+> generators) is no longer valid after the bump to 2.03.x
+>
+> Pascal, you came up with the systemd integration. Could you also have a
+> look at this build failure, please?
+>
+>     http://autobuild.buildroot.org/results/30359c351a6ce2f9139494a531e036f0b0406ccf
+>
+> Regards,
+> Yann E. MORIN.
+>
+> >  # Make sure that binaries and libraries are installed with write
+> >  # permissions for the owner. We disable NLS because it's broken, and
+> > --
+> > 2.30.2
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
 >
 > --
-> 2.30.2
->
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+Best Regards,
 
-Acked-by: Laurent Cans <laurent.cans@gmail.com>
-
-Laurent
+Fabrice
