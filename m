@@ -1,32 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 4 Jun 2021 22:38:42 +0200
-Subject: [Buildroot] [git commit branch/next] package/wpewebkit: import
- patch to support uclibc
-Message-ID: <20210604201701.5E3B28A425@busybox.osuosl.org>
+Date: Fri, 4 Jun 2021 22:37:26 +0200
+Subject: [Buildroot] [git commit branch/next] package/webkitgtk: allow
+ building with musl and uclibc
+Message-ID: <20210604201701.4D70B8B46E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35eb9b566a297c8fe78205653a9607fe10563836
+commit: https://git.buildroot.net/buildroot/commit/?id=4140e0ffdfd9b35df7670ebb08074e967a4f0621
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Import a small patch from the upstream Bugzilla which is needed to allow
-building WPE WebKit against uClibc.
+WebKitGTK 2.32.1 includes fixes for building with the Musl libc, which
+also makes it possible to use uClibc as well, therefore arrange
+dependencies to allow selecting the package any of the C libraries is in
+use. This is done by making the dependencies be more granular, basically
+following what the wpewebkit package does.
+
+In order to make make it build against uClibc a small patch that has
+been submitted to the upstream's Bugzilla is needed.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 [yann.morin.1998 at free.fr: add upstream commit refs in backported patch]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  .../0001-Support-building-against-uClibc.patch     | 82 ++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
+ package/webkitgtk/Config.in                        | 10 ++-
+ 2 files changed, 89 insertions(+), 3 deletions(-)
 
-diff --git a/package/wpewebkit/0001-Support-building-against-uClibc.patch b/package/wpewebkit/0001-Support-building-against-uClibc.patch
+diff --git a/package/webkitgtk/0001-Support-building-against-uClibc.patch b/package/webkitgtk/0001-Support-building-against-uClibc.patch
 new file mode 100644
 index 0000000000..7c0918a195
 --- /dev/null
-+++ b/package/wpewebkit/0001-Support-building-against-uClibc.patch
++++ b/package/webkitgtk/0001-Support-building-against-uClibc.patch
 @@ -0,0 +1,82 @@
 +From 624d3b6a99778443e35fb260bef50a3969df9215 Mon Sep 17 00:00:00 2001
 +From: Adrian Perez de Castro <aperez@igalia.com>
@@ -110,3 +117,35 @@ index 0000000000..7c0918a195
 +-- 
 +2.31.1
 +
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index a05161d052..425bf81e4e 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -12,20 +12,24 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 
+-comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 7, host gcc >= 4.9"
++comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 7, host gcc >= 4.9"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
++	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_USES_GLIBC || \
++		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
+ 		!BR2_HOST_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_WEBKITGTK
+ 	bool "webkitgtk"
++	depends on !BR2_STATIC_LIBS # wayland
++	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_USE_WCHAR # icu, libsoup
+ 	depends on BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_CAIRO
