@@ -1,164 +1,108 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 4 Jun 2021 23:15:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: allow building with
- musl and uclibc
-In-Reply-To: <20210526182416.2798443-1-aperez@igalia.com>
-References: <20210526182416.2798443-1-aperez@igalia.com>
-Message-ID: <20210604211549.GJ168928@scaer>
+Date: Fri, 4 Jun 2021 23:38:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lvm2: disable parallel build
+In-Reply-To: <CAPi7W82V4XDKO_eiShfaR5VUUNANZ3K316Kx8MrMA6MuKMqPmA@mail.gmail.com>
+References: <20210516202828.321469-1-fontaine.fabrice@gmail.com>
+ <20210517074411.GR2506@scaer>
+ <CAPi7W82V4XDKO_eiShfaR5VUUNANZ3K316Kx8MrMA6MuKMqPmA@mail.gmail.com>
+Message-ID: <20210604213832.GK168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adrian, All,
+Fabrice, Pascal, All,
 
-On 2021-05-26 21:24 +0300, Adrian Perez de Castro spake thusly:
-> WebKitGTK 2.32.1 includes fixes for building with the Musl libc, which
-> also makes it possible to use uClibc as well, therefore arrange
-> dependencies to allow selecting the package any of the C libraries is in
-> use. This is done by making the dependencies be more granular, basically
-> following what the wpewebkit package does.
-> 
-> In order to make make it build against uClibc a small patch that has
-> been submitted to the upstream's Bugzilla is needed.
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+On 2021-06-04 20:37 +0200, Fabrice Fontaine spake thusly:
+> Le lun. 17 mai 2021 ? 09:44, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+> > On 2021-05-16 22:28 +0200, Fabrice Fontaine spake thusly:
+> > > Parallel build is broken since bump to version 2.03.13 in commit
+> > > 80997acd3587a4528f8877d9e8a502c39ed800c5:
+> > [--SNIP--]
+> > > Fixes:
+> > >  - http://autobuild.buildroot.org/results/30359c351a6ce2f9139494a531e036f0b0406ccf
+[--SNIP--]
+> > > +# parallel build issues
+> > > +LVM2_MAKE = $(MAKE1)
+> > This is unfortuantely not sufficient:
+> Even if this is not sufficient, disabling parallel build is still
+> needed to avoid the build failure related to dmsetup being truncated
+> or main being undefined.
+> There are 5 build failures today due to this issue.
 
-Applied to next, thanks.
+Indeed, there is quite some funny breakage...
 
-Same tweaks as for the wpewebkit patch.
+For example;
+    http://autobuild.buildroot.org/results/995/995f46ee0033e34261ba7b24b61c41e7a088602b/
+
+    >>> lvm2 2.03.12 Installing to staging directory
+    [...]
+        [INSTALL] ioctl/libdevmapper.so
+        [CC] dmsetup.c
+    /usr/bin/make -C lib install_device-mapper
+        [CC] dmsetup.c
+    [...]
+        [CC] dmsetup
+        [CC] dmsetup
+    /nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /nvme/rc-buildroot-test/scripts/instance-0/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/Scrt1.o: in function `_start':
+    (.text+0x54): undefined reference to `main'
+    collect2: error: ld returned 1 exit status
+    Makefile:60: recipe for target 'dmsetup' failed
+
+Or:
+
+    http://autobuild.buildroot.org/results/a4e/a4ea87da502272dc2e677123b6fbcb0c23106f0b/
+
+    >>> lvm2 2.03.12 Installing to staging directory
+    [...]
+        [CC] dmsetup
+    /home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/9.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-musleabihf/sysroot/lib/Scrt1.o: in function `_start_c':
+    Scrt1.c:(.text._start_c+0x5c): undefined reference to `main'
+    collect2: error: ld returned 1 exit status
+    make[3]: *** [Makefile:61: dmsetup] Error 1
+    make[3]: Leaving directory '/home/giuliobenetti/autobuild/run/instance-3/output-1/build/lvm2-2.03.12/libdm/dm-tools'
+    make[2]: *** [../libdm/make.tmpl:315: dm-tools.device-mapper] Error 2
+    make[2]: *** Waiting for unfinished jobs....
+        [CC] dmsetup
+        [INSTALL] dmsetup
+    [...]
+
+Similar traces in either case: it tries to build dmsetup twice, at
+intall time instead of build time.
+
+So. I can accept that there is a parallel build issue [0], but this is
+even more involved than that, because the build should not happen at
+install time, and it should not be duplicated. With MAKE1, we have an
+install sequence that looks like:
+
+    >>> lvm2 2.03.12 Installing to staging directory
+    [...]
+    /usr/bin/make -C dm-tools install_device-mapper
+        [CC] dmsetup.c
+        [CC] dmsetup
+        [INSTALL] dmsetup
+    /usr/bin/make -C dm-tools device-mapper
+    make[4]: Nothing to be done for 'device-mapper'.
+    /usr/bin/make -C dm-tools
+    make[4]: Nothing to be done for 'all'.
+    /usr/bin/make -C dm-tools install
+        [INSTALL] dmsetup
+        [INSTALL] ioctl/libdevmapper.so
+        [INSTALL] libdevmapper.pc
+        [INSTALL] libdevmapper.h
+
+I guess we need to review more in-depth how we configure/build/install
+the lvm2 package...
+
+Pascal, this conditional installation is your deed. Could you have a
+look, please?
+
+[0] I was only able to get the install failure after 6 successful
+builds, so it does indeed smell like a parallel issue.
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  ...0001-Support-building-against-uClibc.patch | 76 +++++++++++++++++++
->  package/webkitgtk/Config.in                   | 10 ++-
->  2 files changed, 83 insertions(+), 3 deletions(-)
->  create mode 100644 package/webkitgtk/0001-Support-building-against-uClibc.patch
-> 
-> diff --git a/package/webkitgtk/0001-Support-building-against-uClibc.patch b/package/webkitgtk/0001-Support-building-against-uClibc.patch
-> new file mode 100644
-> index 0000000000..cbed551d2d
-> --- /dev/null
-> +++ b/package/webkitgtk/0001-Support-building-against-uClibc.patch
-> @@ -0,0 +1,76 @@
-> +From 624d3b6a99778443e35fb260bef50a3969df9215 Mon Sep 17 00:00:00 2001
-> +From: Adrian Perez de Castro <aperez@igalia.com>
-> +Date: Wed, 26 May 2021 01:24:59 +0300
-> +Subject: [PATCH] Support building against uClibc
-> + https://bugs.webkit.org/show_bug.cgi?id=226244
-> +
-> +Reviewed by NOBODY (OOPS!).
-> +
-> +Source/JavaScriptCore:
-> +
-> +* assembler/MacroAssemblerARM64.cpp:
-> +(getauxval): Provide a fallback implementation of getauxval() for
-> +systems which do not provide <sys/auxv.h>, like those using uClibc
-> +as their C library.
-> +
-> +Source/WTF:
-> +
-> +* wtf/PlatformRegisters.h: Use the <sys/ucontext.h> header instead of
-> +<ucontext.h>, which is enough to gain access to the type definitions
-> +for CPU registers and is available on every libc. On the other hand,
-> +uClibc does not have <ucontext.h>, so this fixes the build in that
-> +case.
-> +
-> +Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> +[Upstream status: https://bugs.webkit.org/show_bug.cgi?id=226244]
-> +---
-> + .../assembler/MacroAssemblerARM64.cpp          | 18 ++++++++++++++++++
-> + Source/WTF/wtf/PlatformRegisters.h             |  2 +-
-> + 2 files changed, 19 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
-> +index 9e5c5147ea0..d20e632d825 100644
-> +--- a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
-> ++++ b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
-> +@@ -34,7 +34,25 @@
-> + 
-> + #if OS(LINUX)
-> + #include <asm/hwcap.h>
-> ++#if __has_include(<sys/auxv.h>)
-> + #include <sys/auxv.h>
-> ++#else
-> ++#include <linux/auxvec.h>
-> ++// Provide an implementation for C libraries which do not ship one.
-> ++static unsigned long getauxval(unsigned long type)
-> ++{
-> ++    char** env = environ;
-> ++    while (*env++) { /* no-op */ }
-> ++
-> ++    for (auto* auxv = reinterpret_cast<unsigned long*>(env); *auxv != AT_NULL; auxv += 2) {
-> ++        if (*auxv == type)
-> ++            return auxv[1];
-> ++    }
-> ++
-> ++    errno = ENOENT;
-> ++    return 0;
-> ++}
-> ++#endif
-> + #endif
-> + 
-> + namespace JSC {
-> +diff --git a/Source/WTF/wtf/PlatformRegisters.h b/Source/WTF/wtf/PlatformRegisters.h
-> +index d26ef985169..e7f15b7eb62 100644
-> +--- a/Source/WTF/wtf/PlatformRegisters.h
-> ++++ b/Source/WTF/wtf/PlatformRegisters.h
-> +@@ -35,7 +35,7 @@
-> + #elif OS(WINDOWS)
-> + #include <windows.h>
-> + #else
-> +-#include <ucontext.h>
-> ++#include <sys/ucontext.h>
-> + #endif
-> + 
-> + namespace WTF {
-> +-- 
-> +2.31.1
-> +
-> diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-> index a05161d052..425bf81e4e 100644
-> --- a/package/webkitgtk/Config.in
-> +++ b/package/webkitgtk/Config.in
-> @@ -12,20 +12,24 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
->  
-> -comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 7, host gcc >= 4.9"
-> +comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 7, host gcc >= 4.9"
->  	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-> +	depends on !BR2_BINFMT_FLAT
->  	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
-> -		!BR2_TOOLCHAIN_USES_GLIBC || \
-> +		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
->  		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
->  		!BR2_HOST_GCC_AT_LEAST_4_9
->  	depends on BR2_USE_MMU
->  
->  config BR2_PACKAGE_WEBKITGTK
->  	bool "webkitgtk"
-> +	depends on !BR2_STATIC_LIBS # wayland
-> +	depends on !BR2_BINFMT_FLAT # icu
->  	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu
->  	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
-> -	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	depends on BR2_USE_WCHAR # icu, libsoup
->  	depends on BR2_PACKAGE_LIBGTK3
->  	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
->  	select BR2_PACKAGE_CAIRO
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
