@@ -1,35 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Jun 2021 21:38:20 +0200
-Subject: [Buildroot] [git commit] package/chrony: add CHRONY_CPE_ID_VENDOR
-Message-ID: <20210605190824.8BBA88A434@busybox.osuosl.org>
+Date: Sat, 5 Jun 2021 21:40:56 +0200
+Subject: [Buildroot] [git commit] package/apcupsd: add APCUPSD_CPE_ID_VENDOR
+Message-ID: <20210605191039.32BCA8378B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a7cb59ced04f74448c6dc2d07bbe66164fc3d7b
+commit: https://git.buildroot.net/buildroot/commit/?id=47ce1876ae7c202e045fda1c978412cd5c7724c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:tuxfamily:chrony is a valid CPE identifier for this package:
+cpe:2.3:a:apcupsd:apcupsd is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atuxfamily%3Achrony
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aapcupsd%3Aapcupsd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/chrony/chrony.mk | 1 +
+ package/apcupsd/apcupsd.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index ef459ad38b..b73ddb56b2 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -8,6 +8,7 @@ CHRONY_VERSION = 4.0
- CHRONY_SITE = http://download.tuxfamily.org/chrony
- CHRONY_LICENSE = GPL-2.0
- CHRONY_LICENSE_FILES = COPYING
-+CHRONY_CPE_ID_VENDOR = tuxfamily
- CHRONY_DEPENDENCIES = host-pkgconf
+diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
+index 410bce9aec..9e707e1a5a 100644
+--- a/package/apcupsd/apcupsd.mk
++++ b/package/apcupsd/apcupsd.mk
+@@ -8,6 +8,7 @@ APCUPSD_VERSION = 3.14.14
+ APCUPSD_SITE = http://downloads.sourceforge.net/project/apcupsd/apcupsd%20-%20Stable/$(APCUPSD_VERSION)
+ APCUPSD_LICENSE = GPL-2.0
+ APCUPSD_LICENSE_FILES = COPYING
++APCUPSD_CPE_ID_VENDOR = apcupsd
+ APCUPSD_CONF_OPTS = --disable-test
  
- CHRONY_CONF_OPTS = \
+ ifneq ($(BR2_PACKAGE_APCUPSD_MODBUS_USB)$(BR2_PACKAGE_APCUPSD_USB),)
