@@ -1,56 +1,129 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  5 Jun 2021 23:14:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mono-gtksharp3: fix build with
- latest mono
-Message-ID: <20210605211425.2350294-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 5 Jun 2021 23:21:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mpv: handle --{en,
+ dis}able-libmpv-{shared, static}
+In-Reply-To: <20210605200555.1252806-1-fontaine.fabrice@gmail.com>
+References: <20210605200555.1252806-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210605212120.GB168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build failure with latest mono which is raised since commit
-4c8a285b6e35c4028341f874760bfa9226ebff94
+Fabrice, All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/ff3edfe406f00a29429d2fa4258af12c87e5fb96
+On 2021-06-05 22:05 +0200, Fabrice Fontaine spake thusly:
+> libmpv-static and libmpv-shared are disabled by default resulting in the
+> following build failure when building with gl but without rpi, wayland
+> or x11:
+> 
+> Checking for OpenGL without platform-specific code (e.g. for libmpv)      : libmpv-shared not found
+> Checking for OpenGL context support                                       : gl-cocoa not found
+> You manually enabled the feature 'gl', but the autodetection check failed.
+> 
+> Here is an extract of wscript:
+> 
+>     } , {
+>         'name': '--plain-gl',
+>         'desc': 'OpenGL without platform-specific code (e.g. for libmpv)',
+>         'deps': 'libmpv-shared || libmpv-static',
+>         'func': check_true,
+>     }, {
+>         'name': '--gl',
+>         'desc': 'OpenGL context support',
+>         'deps': 'gl-cocoa || gl-x11 || egl-x11 || egl-drm || '
+>                  + 'gl-win32 || gl-wayland || rpi || '
+>                  + 'plain-gl',
+>         'func': check_true,
+>         'req': True,
+>         'fmsg': "No OpenGL video output found or enabled. " +
+>                 "Aborting. If you really mean to compile without OpenGL " +
+>                 "video outputs use --disable-gl.",
+>     }, {
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/590d2a8b6746ef071dfb439e42b636f81dbdc35d
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/mpv/mpv.mk | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+> index 5713b98e8e..364a49f893 100644
+> --- a/package/mpv/mpv.mk
+> +++ b/package/mpv/mpv.mk
+> @@ -28,6 +28,20 @@ MPV_CONF_OPTS = \
+>  	--disable-uchardet \
+>  	--disable-vapoursynth
+>  
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +MPV_CONF_OPTS += \
+> +	--disable-libmpv-shared \
+> +	--enable-libmpv-static
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0002-Mono-compilation-error-branch.patch  | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
+Two options fit on a single line, so no need for a multi-line.
 
-diff --git a/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch b/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
-new file mode 100644
-index 0000000000..0d52401b4a
---- /dev/null
-+++ b/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
-@@ -0,0 +1,25 @@
-+From fe18352a4bc9f0cf3b6cf63b8cc03c5d6e41863b Mon Sep 17 00:00:00 2001
-+From: plprevost <plprevost@sii.fr>
-+Date: Wed, 12 May 2021 16:46:16 +0200
-+Subject: [PATCH] refs issue:#298 Fix mono compilation errors
-+
-+[Retrieved from:
-+https://github.com/mono/gtk-sharp/pull/299/commits/fe18352a4bc9f0cf3b6cf63b8cc03c5d6e41863b]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ sample/test/TestRange.cs | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/sample/test/TestRange.cs b/sample/test/TestRange.cs
-+index 82fb81105..8727c9a77 100644
-+--- a/sample/test/TestRange.cs
-++++ b/sample/test/TestRange.cs
-+@@ -8,7 +8,7 @@
-+ 
-+ using System;
-+ 
-+-using Gtk;
-++using Gtk; using Range = Gtk.Range;
-+ 
-+ namespace WidgetViewer {
-+ 
+> +else ifeq ($(BR2_SHARED_LIBS),y)
+> +MPV_CONF_OPTS += \
+> +	--enable-libmpv-shared \
+> +	--disable-libmpv-static
+> +else
+> +MPV_CONF_OPTS += \
+> +	--enable-libmpv-shared \
+> +	--enable-libmpv-static
+> +endif
+
+In wscript, it seems the shared version and the static version are
+incompatible, extract:
+
+    }, {
+        'name': '--libmpv-shared',
+        'desc': 'shared library',
+        'default': 'disable',
+        'func': check_true
+    }, {
+        'name': '--libmpv-static',
+        'desc': 'static library',
+        'default': 'disable',
+        'deps': '!libmpv-shared',    <- here:  ! libmpv-shared
+        'func': check_true
+    },
+
+So we can't have both enabled simultaneously...
+
+I would think that we should favour the shared library when doing a
+static+shared BR configuration.
+
+So, probably just the following would be OK:
+
+    ifeq ($(BR2_STATIC_LIBS),y)
+    MPV_CONF_OPTS += --disable-libmpv-shared --enable-libmpv-static
+    else
+    MPV_CONF_OPTS += --enable-libmpv-shared --disable-libmpv-static
+    endif
+
+Can you review/test that and resend another patch, please?
+
+Regards,
+Yann E. MORIN.
+
+>  # ALSA support requires pcm+mixer
+>  ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yy)
+>  MPV_CONF_OPTS += --enable-alsa
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.30.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
