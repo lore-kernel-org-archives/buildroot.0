@@ -1,50 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:17:59 -0000
-Subject: [Buildroot] [git commit] package/imlib2: bump version to 1.7.1
-Message-ID: <20210607144654.9CC20814AD@busybox.osuosl.org>
+Date: Sat, 5 Jun 2021 12:49:32 +0200
+Subject: [Buildroot] [git commit] package/libssh2: requires RIPEMD160 in
+ openssl
+Message-ID: <20210607144659.6B756814BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf149cd90351d9e4357830c994daf7f72f6cf7ee
+commit: https://git.buildroot.net/buildroot/commit/?id=88e55a82e01e29b41e9efd435bc27ec737e95259
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Enable RIPEMD160 in openssl for libssh2 to avoid link time failure.
+
+Fixes:
+http://autobuild.buildroot.net/results/c6e031fca123865138d18c96d895778c03b639be/
+http://autobuild.buildroot.net/results/4284098c0f29fdb7a4df9acbc23986e685c542d2/
+http://autobuild.buildroot.net/results/a457bf27dfc0029cbfc2fdbf371aad1e2efa5b83/
+
+Cc: Matt Weber <matthew.weber@collins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/imlib2/imlib2.hash | 8 ++++----
- package/imlib2/imlib2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libssh2/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/imlib2/imlib2.hash b/package/imlib2/imlib2.hash
-index 68f6c91db7..3df3deffec 100644
---- a/package/imlib2/imlib2.hash
-+++ b/package/imlib2/imlib2.hash
-@@ -1,8 +1,8 @@
--# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.6.1/
--md5  7b3fbcb974b48822b32b326c6a47764b  imlib2-1.6.1.tar.bz2
--sha1  3b5f850e83cbb7481e33061348fb9c7a555c8c60  imlib2-1.6.1.tar.bz2
-+# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.7.1/
-+md5  98569de9b10bcb6fd5d13e4d331ddd81  imlib2-1.7.1.tar.bz2
-+sha1  092c66ae0180798a4036e68c68d7f316de192e36  imlib2-1.7.1.tar.bz2
+diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
+index 90c38813b3..ce2dd303fa 100644
+--- a/package/libssh2/Config.in
++++ b/package/libssh2/Config.in
+@@ -27,6 +27,7 @@ config BR2_PACKAGE_LIBSSH2_LIBGCRYPT
+ config BR2_PACKAGE_LIBSSH2_OPENSSL
+ 	bool "openssl"
+ 	depends on BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
  
- # Locally computed
--sha256  4d393a77e13da883c8ee2da3b029da3570210fe37d000c9ac33d9fce751b166d  imlib2-1.6.1.tar.bz2
-+sha256  033a6a639dcbc8e03f65ff05e57068e7346d50ee2f2fff304bb9095a1b2bc407  imlib2-1.7.1.tar.bz2
- sha256  fb70339dd33a77b6213c7ae067fccf93d04af44ff3f937c61f8863f7970e73f6  COPYING
- sha256  8c9a2e92ed4937e2d30c2ea95439c36ed3002fc47e34efee43455a460fee8ef5  COPYING-PLAIN
-diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
-index a88558575d..6d973827dc 100644
---- a/package/imlib2/imlib2.mk
-+++ b/package/imlib2/imlib2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMLIB2_VERSION = 1.6.1
-+IMLIB2_VERSION = 1.7.1
- IMLIB2_SOURCE = imlib2-$(IMLIB2_VERSION).tar.bz2
- IMLIB2_SITE = http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)
- IMLIB2_LICENSE = Imlib2
+ endchoice
+ endif
