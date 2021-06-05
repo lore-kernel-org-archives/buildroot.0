@@ -1,81 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Jun 2021 23:03:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/odb: fix build with gcc 11
-In-Reply-To: <20210605201326.GY168928@scaer>
-References: <20210603200901.375386-1-fontaine.fabrice@gmail.com>
- <20210605201326.GY168928@scaer>
-Message-ID: <20210605210351.GA168928@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 5 Jun 2021 23:05:48 +0200
+Subject: [Buildroot] [PATCH] scipts/autobuild-run: properly import
+ urllib2.URLError
+In-Reply-To: <20210605210016.1157351-1-yann.morin.1998@free.fr>
+References: <20210605210016.1157351-1-yann.morin.1998@free.fr>
+Message-ID: <20210605230548.5daa732c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+On Sat,  5 Jun 2021 23:00:16 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On 2021-06-05 22:13 +0200, Yann E. MORIN spake thusly:
-> On 2021-06-03 22:09 +0200, Fabrice Fontaine spake thusly:
-> > Add -std=c++11 to fix the following build failure with gcc 11:
-> > 
-> > /data/buildroot-autobuilder/instance-0/output-1/host/include/cutl/shared-ptr/base.hxx:34:41: error: ISO C++17 does not allow dynamic exception specifications
-> >    34 | operator new (std::size_t, cutl::share) throw (std::bad_alloc);
-> >       |                                         ^~~~~
-> > 
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/9cbb8be7a1d8ac5913fbc5e2a78c4c45b5daf8e2
-> > 
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Applied to master, thanks.
-
-I had already applied that in the afternoon, but when I applied the qt5
-fix, I mis-replied here... Sorry for the confusion...
-
-Regards,
-Yann E. MORIN.
-
-> Regards,
-> Yann E. MORIN.
+> Commit 37766e9 (scripts/autobuild-run: add a retry loop to not fail on
+> urllib URLError) introduced an import of URLError, but that raises
+> exceptions in both python2 and python3:
 > 
-> > ---
-> >  package/odb/odb.mk | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/package/odb/odb.mk b/package/odb/odb.mk
-> > index 11086471e6..85c7ccb8bb 100644
-> > --- a/package/odb/odb.mk
-> > +++ b/package/odb/odb.mk
-> > @@ -11,6 +11,7 @@ ODB_SITE = https://www.codesynthesis.com/download/odb/$(ODB_VERSION_MAJOR)
-> >  ODB_LICENSE = GPL-3.0
-> >  ODB_LICENSE_FILES = LICENSE
-> >  HOST_ODB_DEPENDENCIES = host-libcutl
-> > +HOST_ODB_CONF_ENV = CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
-> >  
-> >  # Prevent odb from trying to install the gcc plugin into the hosts
-> >  # gcc plugin directory. Instead, this will install the gcc plugin
-> > -- 
-> > 2.30.2
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+>     $ python2 -c 'import urllib2.URLError as URLError'
+>     Traceback (most recent call last):
+>       File "<string>", line 1, in <module>
+>     ImportError: No module named URLError
 > 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>     $ python3 -c 'import urllib.error.URLError as URLError'
+>     Traceback (most recent call last):
+>       File "<string>", line 1, in <module>
+>     ModuleNotFoundError: No module named 'urllib.error.URLError'; 'urllib.error' is not a package
+> 
+> The working solution is to import from:
+> 
+>     $ python2 -c 'from urllib2 import URLError; raise URLError(None)'
+>     Traceback (most recent call last):
+>       File "<string>", line 1, in <module>
+>     urllib2.URLError: <urlopen error None>
+> 
+>     $ python3 -c 'from urllib.error import URLError; raise URLError(None)'
+>     Traceback (most recent call last):
+>       File "<string>", line 1, in <module>
+>     urllib.error.URLError: <urlopen error None>
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
