@@ -1,81 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Jun 2021 12:12:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dc3dd: disable on riscv32
-In-Reply-To: <20210604184706.5069-1-fontaine.fabrice@gmail.com>
-References: <20210604184706.5069-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210605101207.GM168928@scaer>
+Date: Sat, 5 Jun 2021 12:49:32 +0200
+Subject: [Buildroot] [git commit branch/next] package/libssh2: requires
+ RIPEMD160 in openssl
+Message-ID: <20210605102059.4C83E82790@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=88e55a82e01e29b41e9efd435bc27ec737e95259
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-06-04 20:47 +0200, Fabrice Fontaine spake thusly:
-> Disable dc3dd on riscv32 to avoid the following build failure:
-> 
-> In file included from getdate.y:40:
-> verify.h:132:30: error: negative width in bit-field 'verify_error_if_negative_size__'
->   132 |       (struct { unsigned int verify_error_if_negative_size__: (R) ? 1 : -1; }))
->       |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Enable RIPEMD160 in openssl for libssh2 to avoid link time failure.
 
-You left out the most important part of the error message:
+Fixes:
+http://autobuild.buildroot.net/results/c6e031fca123865138d18c96d895778c03b639be/
+http://autobuild.buildroot.net/results/4284098c0f29fdb7a4df9acbc23986e685c542d2/
+http://autobuild.buildroot.net/results/a457bf27dfc0029cbfc2fdbf371aad1e2efa5b83/
 
-    verify.h:138:61: note: in expansion of macro 'verify_true'
-      138 | # define verify(R) extern int (* verify_function__ (void)) [verify_true (R)]
-          |                                                             ^~~~~~~~~~~
-    getdate.y:116:1: note: in expansion of macro 'verify'
-      116 | verify (LONG_MIN <= TYPE_MINIMUM (time_t) && TYPE_MAXIMUM (time_t) <= LONG_MAX);
-          | ^~~~~~
+Cc: Matt Weber <matthew.weber@collins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libssh2/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-This is again the case where riscv32 has never had a 32-bit wide time,
-and got 64-bit from the onset.
-
-I've added this extra info to the commit log and applied to master,
-thanks.
-
-Regards,
-Yann E. MORIN.
-
-> Fixes:
->  - http://autobuild.buildroot.org/results/267151dec9d2328a5f8c61ddf224219a4f617e5c
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/dc3dd/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/dc3dd/Config.in b/package/dc3dd/Config.in
-> index 0383897cd5..715451beb7 100644
-> --- a/package/dc3dd/Config.in
-> +++ b/package/dc3dd/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_DC3DD
->  	bool "dc3dd"
-> +	depends on !BR2_RISCV_32
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on !BR2_TOOLCHAIN_USES_MUSL
->  	help
-> @@ -11,5 +12,6 @@ config BR2_PACKAGE_DC3DD
->  	  https://sourceforge.net/projects/dc3dd/
->  
->  comment "dc3dd needs a glibc or uClibc toolchain w/ threads"
-> +	depends on !BR2_RISCV_32
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
->  		BR2_TOOLCHAIN_USES_MUSL
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
+index 90c38813b3..ce2dd303fa 100644
+--- a/package/libssh2/Config.in
++++ b/package/libssh2/Config.in
+@@ -27,6 +27,7 @@ config BR2_PACKAGE_LIBSSH2_LIBGCRYPT
+ config BR2_PACKAGE_LIBSSH2_OPENSSL
+ 	bool "openssl"
+ 	depends on BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
+ 
+ endchoice
+ endif
