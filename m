@@ -1,54 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Jun 2021 23:05:48 +0200
-Subject: [Buildroot] [PATCH] scipts/autobuild-run: properly import
- urllib2.URLError
-In-Reply-To: <20210605210016.1157351-1-yann.morin.1998@free.fr>
-References: <20210605210016.1157351-1-yann.morin.1998@free.fr>
-Message-ID: <20210605230548.5daa732c@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  5 Jun 2021 23:14:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mono-gtksharp3: fix build with
+ latest mono
+Message-ID: <20210605211425.2350294-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  5 Jun 2021 23:00:16 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Fix build failure with latest mono which is raised since commit
+4c8a285b6e35c4028341f874760bfa9226ebff94
 
-> Commit 37766e9 (scripts/autobuild-run: add a retry loop to not fail on
-> urllib URLError) introduced an import of URLError, but that raises
-> exceptions in both python2 and python3:
-> 
->     $ python2 -c 'import urllib2.URLError as URLError'
->     Traceback (most recent call last):
->       File "<string>", line 1, in <module>
->     ImportError: No module named URLError
-> 
->     $ python3 -c 'import urllib.error.URLError as URLError'
->     Traceback (most recent call last):
->       File "<string>", line 1, in <module>
->     ModuleNotFoundError: No module named 'urllib.error.URLError'; 'urllib.error' is not a package
-> 
-> The working solution is to import from:
-> 
->     $ python2 -c 'from urllib2 import URLError; raise URLError(None)'
->     Traceback (most recent call last):
->       File "<string>", line 1, in <module>
->     urllib2.URLError: <urlopen error None>
-> 
->     $ python3 -c 'from urllib.error import URLError; raise URLError(None)'
->     Traceback (most recent call last):
->       File "<string>", line 1, in <module>
->     urllib.error.URLError: <urlopen error None>
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/ff3edfe406f00a29429d2fa4258af12c87e5fb96
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0002-Mono-compilation-error-branch.patch  | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
 
-Thanks!
-
-Thomas
+diff --git a/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch b/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
+new file mode 100644
+index 0000000000..0d52401b4a
+--- /dev/null
++++ b/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
+@@ -0,0 +1,25 @@
++From fe18352a4bc9f0cf3b6cf63b8cc03c5d6e41863b Mon Sep 17 00:00:00 2001
++From: plprevost <plprevost@sii.fr>
++Date: Wed, 12 May 2021 16:46:16 +0200
++Subject: [PATCH] refs issue:#298 Fix mono compilation errors
++
++[Retrieved from:
++https://github.com/mono/gtk-sharp/pull/299/commits/fe18352a4bc9f0cf3b6cf63b8cc03c5d6e41863b]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ sample/test/TestRange.cs | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/sample/test/TestRange.cs b/sample/test/TestRange.cs
++index 82fb81105..8727c9a77 100644
++--- a/sample/test/TestRange.cs
+++++ b/sample/test/TestRange.cs
++@@ -8,7 +8,7 @@
++ 
++ using System;
++ 
++-using Gtk;
+++using Gtk; using Range = Gtk.Range;
++ 
++ namespace WidgetViewer {
++ 
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.2
