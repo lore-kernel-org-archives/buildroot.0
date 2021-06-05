@@ -1,53 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Jun 2021 21:41:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/acpid: add CPE variables
-In-Reply-To: <20210603163928.346877-1-fontaine.fabrice@gmail.com>
-References: <20210603163928.346877-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210605194134.GV168928@scaer>
+Date: Sat, 5 Jun 2021 21:44:31 +0200
+Subject: [Buildroot] [PATCH/RFC 00/28] sunxi: switch to mainline ATF
+In-Reply-To: <YLevjeOAyN3kaLng@curiosity>
+References: <20210531212748.2378872-1-geomatsi@gmail.com>
+ <CAEyMn7a6wLjxHVV1fO3PL7pWjrOnaAuhAAC9jDvM-biSORmRoA@mail.gmail.com>
+ <YLevjeOAyN3kaLng@curiosity>
+Message-ID: <20210605194431.GW168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Sergey, All,
 
-On 2021-06-03 18:39 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:tedfelix:acpid2 is a valid CPE identifier for this package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atedfelix%3Aacpid2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 2021-06-02 19:19 +0300, Sergey Matyukevich spake thusly:
+> > > This patch set updates BSP on H5/A64 sunxi boards. For each board
+> > > the following changes are implemented:
+> > > - switch from early Allwinner ATF port to mainline ATF
+> > > - bump Linux kernel and U-Boot versions
+> > > Note that I have only orangepi-zero-plus2 board at my disposal. So only
+> > > this board has been tested. For all the other boards only build tests
+> > > have been completed. Any help with boot tests on other H5/A64 sunxi
+> > > boards is more than welcome.
+> > Are you aware that we already bumped the ATF version to v2.5 in the
+> > next branch [1] and do you stick to v2.4 in all your changed
+> > defconfigs to avoid any regression?
+> > [1] https://git.buildroot.net/buildroot/commit/?h=next&id=cb5d9fdf1ebf7002a29e6fa43c817611e2e4e8d1
+> No, I missed that commit. Thanks for letting me know. Anyway, I posted
+> the patches as RFC to collect some feedback and probably get some help
+> with testing. So in the next revision of the patches I will use v2.5.
 
-Applied to master, thanks.
+Based on your feedback, I understand you'll be sending an updated
+series.
+
+As such, I've marked this one as changes-requested in patchwork. Thanks!
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/acpid/acpid.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
-> index ff6e62b5cd..3473e7b5f6 100644
-> --- a/package/acpid/acpid.mk
-> +++ b/package/acpid/acpid.mk
-> @@ -9,6 +9,8 @@ ACPID_SOURCE = acpid-$(ACPID_VERSION).tar.xz
->  ACPID_SITE = http://downloads.sourceforge.net/project/acpid2
->  ACPID_LICENSE = GPL-2.0+
->  ACPID_LICENSE_FILES = COPYING
-> +ACPID_CPE_ID_VENDOR = tedfelix
-> +ACPID_CPE_ID_PRODUCT = acpid2
->  
->  define ACPID_INSTALL_INIT_SYSTEMD
->  	$(INSTALL) -D -m 0644 package/acpid/acpid.service \
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
