@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Jun 2021 21:41:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apcupsd: add
- APCUPSD_CPE_ID_VENDOR
-In-Reply-To: <20210603164658.347564-1-fontaine.fabrice@gmail.com>
-References: <20210603164658.347564-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210605194121.GU168928@scaer>
+Date: Sat, 5 Jun 2021 21:41:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/acpid: add CPE variables
+In-Reply-To: <20210603163928.346877-1-fontaine.fabrice@gmail.com>
+References: <20210603163928.346877-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210605194134.GV168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +12,10 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-06-03 18:46 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:apcupsd:apcupsd is a valid CPE identifier for this package:
+On 2021-06-03 18:39 +0200, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:tedfelix:acpid2 is a valid CPE identifier for this package:
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aapcupsd%3Aapcupsd
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atedfelix%3Aacpid2
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -26,21 +25,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/apcupsd/apcupsd.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/acpid/acpid.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
-> index 410bce9aec..9e707e1a5a 100644
-> --- a/package/apcupsd/apcupsd.mk
-> +++ b/package/apcupsd/apcupsd.mk
-> @@ -8,6 +8,7 @@ APCUPSD_VERSION = 3.14.14
->  APCUPSD_SITE = http://downloads.sourceforge.net/project/apcupsd/apcupsd%20-%20Stable/$(APCUPSD_VERSION)
->  APCUPSD_LICENSE = GPL-2.0
->  APCUPSD_LICENSE_FILES = COPYING
-> +APCUPSD_CPE_ID_VENDOR = apcupsd
->  APCUPSD_CONF_OPTS = --disable-test
+> diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+> index ff6e62b5cd..3473e7b5f6 100644
+> --- a/package/acpid/acpid.mk
+> +++ b/package/acpid/acpid.mk
+> @@ -9,6 +9,8 @@ ACPID_SOURCE = acpid-$(ACPID_VERSION).tar.xz
+>  ACPID_SITE = http://downloads.sourceforge.net/project/acpid2
+>  ACPID_LICENSE = GPL-2.0+
+>  ACPID_LICENSE_FILES = COPYING
+> +ACPID_CPE_ID_VENDOR = tedfelix
+> +ACPID_CPE_ID_PRODUCT = acpid2
 >  
->  ifneq ($(BR2_PACKAGE_APCUPSD_MODBUS_USB)$(BR2_PACKAGE_APCUPSD_USB),)
+>  define ACPID_INSTALL_INIT_SYSTEMD
+>  	$(INSTALL) -D -m 0644 package/acpid/acpid.service \
 > -- 
 > 2.30.2
 > 
