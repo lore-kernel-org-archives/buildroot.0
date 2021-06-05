@@ -1,48 +1,99 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Jun 2021 21:44:31 +0200
-Subject: [Buildroot] [PATCH/RFC 00/28] sunxi: switch to mainline ATF
-In-Reply-To: <YLevjeOAyN3kaLng@curiosity>
-References: <20210531212748.2378872-1-geomatsi@gmail.com>
- <CAEyMn7a6wLjxHVV1fO3PL7pWjrOnaAuhAAC9jDvM-biSORmRoA@mail.gmail.com>
- <YLevjeOAyN3kaLng@curiosity>
-Message-ID: <20210605194431.GW168928@scaer>
+Date: Sat, 5 Jun 2021 21:47:14 +0200
+Subject: [Buildroot] [git commit] package/intel-mediadriver: disable -Werror
+Message-ID: <20210605191658.BDB2D878C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergey, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=e93eaf7248d62e5e79a3b0e46de7483094a276d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-06-02 19:19 +0300, Sergey Matyukevich spake thusly:
-> > > This patch set updates BSP on H5/A64 sunxi boards. For each board
-> > > the following changes are implemented:
-> > > - switch from early Allwinner ATF port to mainline ATF
-> > > - bump Linux kernel and U-Boot versions
-> > > Note that I have only orangepi-zero-plus2 board at my disposal. So only
-> > > this board has been tested. For all the other boards only build tests
-> > > have been completed. Any help with boot tests on other H5/A64 sunxi
-> > > boards is more than welcome.
-> > Are you aware that we already bumped the ATF version to v2.5 in the
-> > next branch [1] and do you stick to v2.4 in all your changed
-> > defconfigs to avoid any regression?
-> > [1] https://git.buildroot.net/buildroot/commit/?h=next&id=cb5d9fdf1ebf7002a29e6fa43c817611e2e4e8d1
-> No, I missed that commit. Thanks for letting me know. Anyway, I posted
-> the patches as RFC to collect some feedback and probably get some help
-> with testing. So in the next revision of the patches I will use v2.5.
+Disable -Werror to avoid the following build failure:
 
-Based on your feedback, I understand you'll be sending an updated
-series.
+<command-line>: error: "_FORTIFY_SOURCE" redefined [-Werror]
 
-As such, I've marked this one as changes-requested in patchwork. Thanks!
+MEDIA_BUILD_FATAL_WARNINGS option is available since version 18.2.0 and
+https://github.com/intel/media-driver/commit/6932fc0ffb8228245052528820adafb6743f7482
 
-Regards,
-Yann E. MORIN.
+Fixes:
+ - http://autobuild.buildroot.org/results/52638d95312e464626d1c4047b3b26d4f57a1cd2
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...ux-CMakelists.txt-respect-MEDIA_BUILD_FAT.patch | 51 ++++++++++++++++++++++
+ package/intel-mediadriver/intel-mediadriver.mk     |  1 +
+ 2 files changed, 52 insertions(+)
+
+diff --git a/package/intel-mediadriver/0003-cmrtlib-linux-CMakelists.txt-respect-MEDIA_BUILD_FAT.patch b/package/intel-mediadriver/0003-cmrtlib-linux-CMakelists.txt-respect-MEDIA_BUILD_FAT.patch
+new file mode 100644
+index 0000000000..bc7a27f4d0
+--- /dev/null
++++ b/package/intel-mediadriver/0003-cmrtlib-linux-CMakelists.txt-respect-MEDIA_BUILD_FAT.patch
+@@ -0,0 +1,51 @@
++From f09fddd6763aca237f19417de05a1f5de7f51d40 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 5 Jun 2021 16:57:32 +0200
++Subject: [PATCH] cmrtlib/linux/CMakelists.txt: respect
++ MEDIA_BUILD_FATAL_WARNINGS
++
++Respect MEDIA_BUILD_FATAL_WARNINGS to avoid the following build failure
++when the user provides _FORTIFY_SOURCE:
++
++In file included from /home/buildroot/autobuild/instance-0/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/dlfcn.h:22,
++                 from /home/buildroot/autobuild/instance-0/output-1/build/intel-mediadriver-19.4.0r/cmrtlib/linux/../linux/share/cm_include.h:30,
++                 from /home/buildroot/autobuild/instance-0/output-1/build/intel-mediadriver-19.4.0r/cmrtlib/agnostic/share/cm_printf_host.cpp:23:
++/home/buildroot/autobuild/instance-0/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/features.h:397:4: error: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror=cpp]
++  397 | #  warning _FORTIFY_SOURCE requires compiling with optimization (-O)
++      |    ^~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/52638d95312e464626d1c4047b3b26d4f57a1cd2
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/intel/media-driver/pull/1203]
++---
++ cmrtlib/linux/CMakeLists.txt | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/cmrtlib/linux/CMakeLists.txt b/cmrtlib/linux/CMakeLists.txt
++index 7a0193a8..65f71cee 100644
++--- a/cmrtlib/linux/CMakeLists.txt
+++++ b/cmrtlib/linux/CMakeLists.txt
++@@ -32,12 +32,16 @@ else()
++ 
++ # Set up compile options that will be used for the Linux build
++ if(CMAKE_COMPILER_IS_GNUCC)
++-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4.1 -std=c++11 -fPIC -fpermissive -Werror")
+++    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4.1 -std=c++11 -fPIC -fpermissive")
++     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fno-strict-aliasing ")
++     set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -D__DEBUG -O0")
++-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse4.1 -std=c++11 -fPIC -fpermissive -Werror")
+++    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse4.1 -std=c++11 -fPIC -fpermissive")
++     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-strict-aliasing")
++     set(CMAKE_C_FLAGS_DEBUG   "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -D__DEBUG -O0")
+++    if(MEDIA_BUILD_FATAL_WARNINGS)
+++        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS} -Werror")
+++        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS} -Werror")
+++    endif()
++ 
++    set(GCC_SECURE_LINK_FLAGS "-z relro -z now")
++    set(CMAKE_SKIP_RPATH ON)
++-- 
++2.30.2
++
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index 963e4b8f9c..01423b9611 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -23,6 +23,7 @@ INTEL_MEDIADRIVER_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
+ INTEL_MEDIADRIVER_CONF_OPTS = \
+ 	-DINSTALL_DRIVER_SYSCONF=OFF \
++	-DMEDIA_BUILD_FATAL_WARNINGS=OFF \
+ 	-DMEDIA_RUN_TEST_SUITE=OFF
+ 
+ $(eval $(cmake-package))
