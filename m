@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A828FC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73CA1C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:58:24 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 701A960238
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:58:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 701A960238
+	by mail.kernel.org (Postfix) with ESMTPS id 4370C60238
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:58:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4370C60238
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 487C4608A7;
-	Tue,  3 Aug 2021 22:58:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E6A360875;
+	Tue,  3 Aug 2021 22:58:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nbJLvNubJVd3; Tue,  3 Aug 2021 22:58:10 +0000 (UTC)
+	with ESMTP id lTeYjAQlvkhG; Tue,  3 Aug 2021 22:58:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96F43608F2;
-	Tue,  3 Aug 2021 22:58:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6747608F2;
+	Tue,  3 Aug 2021 22:58:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1F07D1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:12:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0818F1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:12:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A6623404DE
+ by smtp2.osuosl.org (Postfix) with ESMTP id C923740602
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Szoe_wjE7XcZ for <buildroot@lists.busybox.net>;
+ with ESMTP id nsanvnHE-DFe for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 473B840614
+ by smtp2.osuosl.org (Postfix) with ESMTP id 098CA4058C
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9ECF285F62; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
+ id 5D2B0843F5; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 6 Jun 2021 22:42:10 +0200
+Date: Sun, 6 Jun 2021 10:07:56 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f87c377a53e31e2638d0193acab5a40b4aa49b59
-X-Git-Newrev: 7cee1f6eecc5d36921fa99d69ef4bbe007549bac
+X-Git-Oldrev: 8e3d620251b33164eaaf72a221d11ff21b440614
+X-Git-Newrev: 9dc2b4a4eee557d3d9e7df31e9d2e96f364a2f03
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210948.9ECF285F62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python3-cryptography:
- add python3 host variant
+Message-Id: <20210803210948.5D2B0843F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xdriver_xf86-video-fbturbo: fix driver loading
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,83 +65,340 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8953991719343590992=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7cee1f6eecc5d36921fa99d69ef4bbe007549bac
+--===============8953991719343590992==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=9dc2b4a4eee557d3d9e7df31e9d2e96f364a2f03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a python3 host variant since another downstream OSS component
-(OP-TEE) uses buildroot and it will depend on a python3 host variant
-of python-cryptography.
+Port two xf86-video-fbdev upstream patches to xf86-video-fbturbo fixing
+incompatibility with latest xorg release and add mandatory module loading
+section to installed xorg.conf:
 
-Signed-off-by: Donald Chan <hoiho@lab126.com>
-[yann.morin.1998@free.fr:
-  - drop target _DEPENDENCIES since this is a host-only package
-  - instead, add host-openssl to dependencies
-  - add CPE variables
-  - also add sync comment for python-pip
-]
+- patch 0002-Use-own-thunk-functions-instead-of-fbdevHW-Weak.patch, fixes:
+  [    12.638] (II) LoadModule: "fbturbo"
+  [    12.639] (II) Loading /usr/lib/xorg/modules/drivers/fbturbo_drv.so
+  [    12.642] (EE) Failed to load /usr/lib/xorg/modules/drivers/fbturbo_drv.so: /usr/lib/xorg/modules/drivers/fbturbo_drv.so: undefined symbol: shadowUpdatePackedWeak
+  [    12.642] (EE) Failed to load module "fbturbo" (loader failed, 0)
+
+- patch 0003-Update-for-1.20-ABI.patch, fixes:
+  [    12.551] (II) LoadModule: "fbturbo"
+  [    12.553] (II) Loading /usr/lib/xorg/modules/drivers/fbturbo_drv.so
+  [    12.556] (EE) Failed to load /usr/lib/xorg/modules/drivers/fbturbo_drv.so: /usr/lib/xorg/modules/drivers/fbturbo_drv.so: undefined symbol: xf86DisableRandR
+  [    12.556] (EE) Failed to load module "fbturbo" (loader failed, 0)
+
+- patch 0004-xorg.conf-add-mandatory-modules-fb-shadow-fbdevhw.patch, fixes:
+
+  module fbdevhw:
+  [   303.906] (II) LoadModule: "fbturbo"
+  [   303.906] (II) Loading /usr/lib/xorg/modules/drivers/fbturbo_drv.so
+  [   303.907] (EE) Failed to load /usr/lib/xorg/modules/drivers/fbturbo_drv.so: /usr/lib/xorg/modules/drivers/fbturbo_drv.so: undefined symbol: fbdevHWSave
+  [   303.907] (EE) Failed to load module "fbturbo" (loader failed, 0)
+  [   303.907] (EE) No drivers available.
+
+  module shadow:
+  [   426.403] (II) LoadModule: "fbturbo"
+  [   426.404] (II) Loading /usr/lib/xorg/modules/drivers/fbturbo_drv.so
+  [   426.404] (EE) Failed to load /usr/lib/xorg/modules/drivers/fbturbo_drv.so: /usr/lib/xorg/modules/drivers/fbturbo_drv.so: undefined symbol: shadowRemove
+  [   426.404] (EE) Failed to load module "fbturbo" (loader failed, 0)
+  [   426.404] (EE) No drivers available.
+
+  module fb:
+  [   471.912] (II) LoadModule: "shadow"
+  [   471.913] (II) Loading /usr/lib/xorg/modules/libshadow.so
+  [   471.913] (EE) Failed to load /usr/lib/xorg/modules/libshadow.so: /usr/lib/xorg/modules/libshadow.so: undefined symbol: fbGetScreenPrivateKey
+  [   471.913] (EE) Failed to load module "shadow" (loader failed, 0)
+
+Fixes:
+  - https://bugs.busybox.net/show_bug.cgi?id=13816
+  - http://lists.busybox.net/pipermail/buildroot/2021-June/311763.html
+
+Reported-by: Jürgen Wack <juergen.wack@gmx.de>
+Reported-by: Derek T <derek.tata1@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[yann.morin.1998@free.fr: fix check-package errors]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-cryptography/python-cryptography.mk |  1 +
- .../python3-cryptography/python3-cryptography.hash |  1 +
- .../python3-cryptography/python3-cryptography.mk   | 24 ++++++++++++++++++++++
- 3 files changed, 26 insertions(+)
+ ...n-thunk-functions-instead-of-fbdevHW-Weak.patch | 160 +++++++++++++++++++++
+ .../0003-Update-for-1.20-ABI.patch                 |  30 ++++
+ ...f-add-mandatory-modules-fb-shadow-fbdevhw.patch |  53 +++++++
+ 3 files changed, 243 insertions(+)
 
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index bc7a9f8027..eff0fa14a5 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
- 
-+# Please keep in sync with package/python3-cryptography/python3-cryptography.mk
- PYTHON_CRYPTOGRAPHY_VERSION = 3.0
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
- PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/bf/ac/552fc8729d90393845cc3a2062facf4a89dcbe206fa78771d60ddaae7554
-diff --git a/package/python3-cryptography/python3-cryptography.hash b/package/python3-cryptography/python3-cryptography.hash
-new file mode 120000
-index 0000000000..73fa25f572
---- /dev/null
-+++ b/package/python3-cryptography/python3-cryptography.hash
-@@ -0,0 +1 @@
-+../python-cryptography/python-cryptography.hash
-\ No newline at end of file
-diff --git a/package/python3-cryptography/python3-cryptography.mk b/package/python3-cryptography/python3-cryptography.mk
+diff --git a/package/x11r7/xdriver_xf86-video-fbturbo/0002-Use-own-thunk-functions-instead-of-fbdevHW-Weak.patch b/package/x11r7/xdriver_xf86-video-fbturbo/0002-Use-own-thunk-functions-instead-of-fbdevHW-Weak.patch
 new file mode 100644
-index 0000000000..03112e41d4
+index 0000000000..709efba5ab
 --- /dev/null
-+++ b/package/python3-cryptography/python3-cryptography.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# python3-cryptography
-+#
-+################################################################################
++++ b/package/x11r7/xdriver_xf86-video-fbturbo/0002-Use-own-thunk-functions-instead-of-fbdevHW-Weak.patch
+@@ -0,0 +1,160 @@
++From 2186a4e5ed6b8b8f24ebd4d2045df10d1f895999 Mon Sep 17 00:00:00 2001
++From: Adam Jackson <ajax@redhat.com>
++Date: Wed, 21 May 2014 09:49:56 -0400
++Subject: [PATCH] Use own thunk functions instead of fbdevHW*Weak
 +
-+# Please keep in sync with package/python-cryptography/python-cryptography.mk
-+PYTHON3_CRYPTOGRAPHY_VERSION = 3.0
-+PYTHON3_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON3_CRYPTOGRAPHY_VERSION).tar.gz
-+PYTHON3_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/bf/ac/552fc8729d90393845cc3a2062facf4a89dcbe206fa78771d60ddaae7554
-+PYTHON3_CRYPTOGRAPHY_SETUP_TYPE = setuptools
-+PYTHON3_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
-+PYTHON3_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
-+PYTHON3_CRYPTOGRAPHY_CPE_ID_VENDOR = cryptography_project
-+PYTHON3_CRYPTOGRAPHY_CPE_ID_PRODUCT = cryptography
-+HOST_PYTHON3_CRYPTOGRAPHY_DL_SUBDIR = python-cryptography
-+HOST_PYTHON3_CRYPTOGRAPHY_NEEDS_HOST_PYTHON = python3
-+HOST_PYTHON3_CRYPTOGRAPHY_DEPENDENCIES = \
-+	host-openssl \
-+	host-python3-cffi \
-+	host-python3-pip \
-+	host-python3-six
++I plan to remove the Weak functions from a future server.
 +
-+$(eval $(host-python-package))
++Signed-off-by: Adam Jackson <ajax@redhat.com>
++[Upstream https://gitlab.freedesktop.org/xorg/driver/xf86-video-fbdev/-/commit/2673e727063fe28310836f1e6e9eda552930218a
++ ported to xf86-video-fbturbo]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/fbdev.c | 86 +++++++++++++++++++++++++++++++++++++++++++----------
++ 1 file changed, 71 insertions(+), 15 deletions(-)
++
++diff --git a/src/fbdev.c b/src/fbdev.c
++index 90d9f39..81bd1fb 100644
++--- a/src/fbdev.c
+++++ b/src/fbdev.c
++@@ -269,6 +269,35 @@ FBDevIdentify(int flags)
++ 	xf86PrintChipsets(FBDEV_NAME, "driver for framebuffer", FBDevChipsets);
++ }
++ 
+++static Bool
+++fbdevSwitchMode(ScrnInfoPtr pScrn, DisplayModePtr mode)
+++{
+++    return fbdevHWSwitchMode(pScrn, mode);
+++}
+++
+++static void
+++fbdevAdjustFrame(ScrnInfoPtr pScrn, int x, int y)
+++{
+++    fbdevHWAdjustFrame(pScrn, x, y);
+++}
+++
+++static Bool
+++fbdevEnterVT(ScrnInfoPtr pScrn)
+++{
+++    return fbdevHWEnterVT(pScrn);
+++}
+++
+++static void
+++fbdevLeaveVT(ScrnInfoPtr pScrn)
+++{
+++    fbdevHWLeaveVT(pScrn);
+++}
+++
+++static ModeStatus
+++fbdevValidMode(ScrnInfoPtr pScrn, DisplayModePtr mode, Bool verbose, int flags)
+++{
+++    return fbdevHWValidMode(pScrn, mode, verbose, flags);
+++}
++ 
++ #ifdef XSERVER_LIBPCIACCESS
++ static Bool FBDevPciProbe(DriverPtr drv, int entity_num,
++@@ -294,11 +323,11 @@ static Bool FBDevPciProbe(DriverPtr drv, int entity_num,
++ 	    pScrn->Probe         = FBDevProbe;
++ 	    pScrn->PreInit       = FBDevPreInit;
++ 	    pScrn->ScreenInit    = FBDevScreenInit;
++-	    pScrn->SwitchMode    = fbdevHWSwitchModeWeak();
++-	    pScrn->AdjustFrame   = fbdevHWAdjustFrameWeak();
++-	    pScrn->EnterVT       = fbdevHWEnterVTWeak();
++-	    pScrn->LeaveVT       = fbdevHWLeaveVTWeak();
++-	    pScrn->ValidMode     = fbdevHWValidModeWeak();
+++	    pScrn->SwitchMode    = fbdevSwitchMode;
+++	    pScrn->AdjustFrame   = fbdevAdjustFrame;
+++	    pScrn->EnterVT       = fbdevEnterVT;
+++	    pScrn->LeaveVT       = fbdevLeaveVT;
+++	    pScrn->ValidMode     = fbdevValidMode;
++ 
++ 	    xf86DrvMsg(pScrn->scrnIndex, X_CONFIG,
++ 		       "claimed PCI slot %d@%d:%d:%d\n", 
++@@ -411,11 +440,11 @@ FBDevProbe(DriverPtr drv, int flags)
++ 		    pScrn->Probe         = FBDevProbe;
++ 		    pScrn->PreInit       = FBDevPreInit;
++ 		    pScrn->ScreenInit    = FBDevScreenInit;
++-		    pScrn->SwitchMode    = fbdevHWSwitchModeWeak();
++-		    pScrn->AdjustFrame   = fbdevHWAdjustFrameWeak();
++-		    pScrn->EnterVT       = fbdevHWEnterVTWeak();
++-		    pScrn->LeaveVT       = fbdevHWLeaveVTWeak();
++-		    pScrn->ValidMode     = fbdevHWValidModeWeak();
+++		    pScrn->SwitchMode    = fbdevSwitchMode;
+++		    pScrn->AdjustFrame   = fbdevAdjustFrame;
+++		    pScrn->EnterVT       = fbdevEnterVT;
+++		    pScrn->LeaveVT       = fbdevLeaveVT;
+++		    pScrn->ValidMode     = fbdevValidMode;
++ 		    
++ 		    xf86DrvMsg(pScrn->scrnIndex, X_INFO,
++ 			       "using %s\n", dev ? dev : "default device");
++@@ -656,6 +685,17 @@ FBDevPreInit(ScrnInfoPtr pScrn, int flags)
++ 	return TRUE;
++ }
++ 
+++static void
+++fbdevUpdateRotatePacked(ScreenPtr pScreen, shadowBufPtr pBuf)
+++{
+++    shadowUpdateRotatePacked(pScreen, pBuf);
+++}
+++
+++static void
+++fbdevUpdatePacked(ScreenPtr pScreen, shadowBufPtr pBuf)
+++{
+++    shadowUpdatePacked(pScreen, pBuf);
+++}
++ 
++ static Bool
++ FBDevCreateScreenResources(ScreenPtr pScreen)
++@@ -675,7 +715,7 @@ FBDevCreateScreenResources(ScreenPtr pScreen)
++     pPixmap = pScreen->GetScreenPixmap(pScreen);
++ 
++     if (!shadowAdd(pScreen, pPixmap, fPtr->rotate ?
++-		   shadowUpdateRotatePackedWeak() : shadowUpdatePackedWeak(),
+++		   fbdevUpdateRotatePacked : fbdevUpdatePacked,
++ 		   FBDevWindowLinear, fPtr->rotate, NULL)) {
++ 	return FALSE;
++     }
++@@ -699,6 +739,23 @@ FBDevShadowInit(ScreenPtr pScreen)
++     return TRUE;
++ }
++ 
+++static void
+++fbdevLoadPalette(ScrnInfoPtr pScrn, int num, int *i, LOCO *col, VisualPtr pVis)
+++{
+++    fbdevHWLoadPalette(pScrn, num, i, col, pVis);
+++}
+++
+++static void
+++fbdevDPMSSet(ScrnInfoPtr pScrn, int mode, int flags)
+++{
+++    fbdevHWDPMSSet(pScrn, mode, flags);
+++}
+++
+++static Bool
+++fbdevSaveScreen(ScreenPtr pScreen, int mode)
+++{
+++    return fbdevHWSaveScreen(pScreen, mode);
+++}
++ 
++ static Bool
++ FBDevScreenInit(SCREEN_INIT_ARGS_DECL)
++@@ -1025,13 +1082,12 @@ FBDevScreenInit(SCREEN_INIT_ARGS_DECL)
++ 		return FALSE;
++ 	}
++ 	flags = CMAP_PALETTED_TRUECOLOR;
++-	if(!xf86HandleColormaps(pScreen, 256, 8, fbdevHWLoadPaletteWeak(), 
++-				NULL, flags))
+++	if(!xf86HandleColormaps(pScreen, 256, 8, fbdevLoadPalette, NULL, flags))
++ 		return FALSE;
++ 
++-	xf86DPMSInit(pScreen, fbdevHWDPMSSetWeak(), 0);
+++	xf86DPMSInit(pScreen, fbdevDPMSSet, 0);
++ 
++-	pScreen->SaveScreen = fbdevHWSaveScreenWeak();
+++	pScreen->SaveScreen = fbdevSaveScreen;
++ 
++ 	/* Wrap the current CloseScreen function */
++ 	fPtr->CloseScreen = pScreen->CloseScreen;
++-- 
++2.31.1
++
+diff --git a/package/x11r7/xdriver_xf86-video-fbturbo/0003-Update-for-1.20-ABI.patch b/package/x11r7/xdriver_xf86-video-fbturbo/0003-Update-for-1.20-ABI.patch
+new file mode 100644
+index 0000000000..99ccc7a11f
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-fbturbo/0003-Update-for-1.20-ABI.patch
+@@ -0,0 +1,30 @@
++From 5112829fe3f9f4776276800a175bf460061f83b1 Mon Sep 17 00:00:00 2001
++From: Adam Jackson <ajax@redhat.com>
++Date: Wed, 30 May 2018 12:31:04 -0400
++Subject: [PATCH] Update for 1.20 ABI
++
++Signed-off-by: Adam Jackson <ajax@redhat.com>
++[Upstream https://gitlab.freedesktop.org/xorg/driver/xf86-video-fbdev/-/commit/67525c485f3b32ce0c9bff250d905852f75dfc1c
++ ported to xf86-video-fbturbo]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/fbdev.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/fbdev.c b/src/fbdev.c
++index 81bd1fb..489a231 100644
++--- a/src/fbdev.c
+++++ b/src/fbdev.c
++@@ -1036,7 +1036,9 @@ FBDevScreenInit(SCREEN_INIT_ARGS_DECL)
++ 	  xf86DrvMsg(pScrn->scrnIndex, X_INFO, "display rotated; disabling DGA\n");
++ 	  xf86DrvMsg(pScrn->scrnIndex, X_INFO, "using driver rotation; disabling "
++ 			                "XRandR\n");
+++#if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 24
++ 	  xf86DisableRandR();
+++#endif
++ 	  if (pScrn->bitsPerPixel == 24)
++ 	    xf86DrvMsg(pScrn->scrnIndex, X_WARNING, "rotation might be broken at 24 "
++                                              "bits per pixel\n");
++-- 
++2.31.1
++
+diff --git a/package/x11r7/xdriver_xf86-video-fbturbo/0004-xorg.conf-add-mandatory-modules-fb-shadow-fbdevhw.patch b/package/x11r7/xdriver_xf86-video-fbturbo/0004-xorg.conf-add-mandatory-modules-fb-shadow-fbdevhw.patch
+new file mode 100644
+index 0000000000..7da36a4472
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-fbturbo/0004-xorg.conf-add-mandatory-modules-fb-shadow-fbdevhw.patch
+@@ -0,0 +1,53 @@
++From 04d1f756ac1204b8d5be1757499ac3a239bd93e1 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Wed, 2 Jun 2021 21:42:56 +0200
++Subject: [PATCH] xorg.conf: add mandatory modules (fb, shadow, fbdevhw)
++
++Xorg does not implement real dynamic linking and requires that its
++modules get loaded so add mandatory modules:
++
++- fbdevhw, fixes:
++  [   303.906] (II) LoadModule: "fbturbo"
++  [   303.906] (II) Loading /usr/lib/xorg/modules/drivers/fbturbo_drv.so
++  [   303.907] (EE) Failed to load /usr/lib/xorg/modules/drivers/fbturbo_drv.so: /usr/lib/xorg/modules/drivers/fbturbo_drv.so: undefined symbol: fbdevHWSave
++  [   303.907] (EE) Failed to load module "fbturbo" (loader failed, 0)
++  [   303.907] (EE) No drivers available.
++
++- shadow, fixes:
++  [   426.403] (II) LoadModule: "fbturbo"
++  [   426.404] (II) Loading /usr/lib/xorg/modules/drivers/fbturbo_drv.so
++  [   426.404] (EE) Failed to load /usr/lib/xorg/modules/drivers/fbturbo_drv.so: /usr/lib/xorg/modules/drivers/fbturbo_drv.so: undefined symbol: shadowRemove
++  [   426.404] (EE) Failed to load module "fbturbo" (loader failed, 0)
++  [   426.404] (EE) No drivers available.
++
++- fb, fixes:
++  [   471.912] (II) LoadModule: "shadow"
++  [   471.913] (II) Loading /usr/lib/xorg/modules/libshadow.so
++  [   471.913] (EE) Failed to load /usr/lib/xorg/modules/libshadow.so: /usr/lib/xorg/modules/libshadow.so: undefined symbol: fbGetScreenPrivateKey
++  [   471.913] (EE) Failed to load module "shadow" (loader failed, 0)
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ xorg.conf | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/xorg.conf b/xorg.conf
++index 6217d11..fda62e3 100644
++--- a/xorg.conf
+++++ b/xorg.conf
++@@ -8,6 +8,12 @@
++ # Run "man fbturbo" to get additional information about the extra
++ # configuration options for tuning the driver.
++ 
+++Section "Module"
+++   Load "fb"
+++   Load "shadow"
+++   Load "fbdevhw"
+++EndSection
+++
++ Section "Device"
++         Identifier      "Allwinner A10/A13 FBDEV"
++         Driver          "fbturbo"
++-- 
++2.31.1
++
+
+--===============8953991719343590992==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============8953991719343590992==--
