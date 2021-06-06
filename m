@@ -1,84 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Sun, 6 Jun 2021 22:42:10 +0200
-Subject: [Buildroot] [git commit] package/python3-cffi: add python3 host
- variant
-Message-ID: <20210606203301.96D28815DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python3-pycparser: add python3
+ host variant
+Message-ID: <20210606203301.7DFDF80480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f87c377a53e31e2638d0193acab5a40b4aa49b59
+commit: https://git.buildroot.net/buildroot/commit/?id=9e2f12ae1cf68c4b8edb736f7d68ba159f34f1dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Add a python3 host variant since we are adding a python3 host variant of
 python-cryptography and it is dependent on this.
 
 Signed-off-by: Donald Chan <hoiho@lab126.com>
-[yann.morin.1998 at free.fr:
-  - drop target _DEPENDENCIES since this is a host-only package
-  - also add sync comment to python-cffi
-]
+[yann.morin.1998 at free.fr: also add sync comment to python-pycparser]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-cffi/python-cffi.mk     |  1 +
- package/python3-cffi/python3-cffi.hash |  1 +
- package/python3-cffi/python3-cffi.mk   | 29 +++++++++++++++++++++++++++++
- 3 files changed, 31 insertions(+)
+ package/python-pycparser/python-pycparser.mk     |  1 +
+ package/python3-pycparser/python3-pycparser.hash |  1 +
+ package/python3-pycparser/python3-pycparser.mk   | 17 +++++++++++++++++
+ 3 files changed, 19 insertions(+)
 
-diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
-index f882349fd7..f0b5b4560f 100644
---- a/package/python-cffi/python-cffi.mk
-+++ b/package/python-cffi/python-cffi.mk
+diff --git a/package/python-pycparser/python-pycparser.mk b/package/python-pycparser/python-pycparser.mk
+index 8af37fce98..5f44a562af 100644
+--- a/package/python-pycparser/python-pycparser.mk
++++ b/package/python-pycparser/python-pycparser.mk
 @@ -4,6 +4,7 @@
  #
  ################################################################################
  
-+# Please keep in sync with package/python3-cffi/python3-cffi.mk
- PYTHON_CFFI_VERSION = 1.14.2
- PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
- PYTHON_CFFI_SITE = https://files.pythonhosted.org/packages/f7/09/88bbe20b76ca76be052c366fe77aa5e3cd6e5f932766e5597fecdd95b2a8
-diff --git a/package/python3-cffi/python3-cffi.hash b/package/python3-cffi/python3-cffi.hash
++# Please keep in sync with package/python3-pycparser/python3-pycparser.mk
+ PYTHON_PYCPARSER_VERSION = 2.20
+ PYTHON_PYCPARSER_SOURCE = pycparser-$(PYTHON_PYCPARSER_VERSION).tar.gz
+ PYTHON_PYCPARSER_SITE = https://files.pythonhosted.org/packages/0f/86/e19659527668d70be91d0369aeaa055b4eb396b0f387a4f92293a20035bd
+diff --git a/package/python3-pycparser/python3-pycparser.hash b/package/python3-pycparser/python3-pycparser.hash
 new file mode 120000
-index 0000000000..1f98d8df9c
+index 0000000000..7a1912cad2
 --- /dev/null
-+++ b/package/python3-cffi/python3-cffi.hash
++++ b/package/python3-pycparser/python3-pycparser.hash
 @@ -0,0 +1 @@
-+../python-cffi/python-cffi.hash
++../python-pycparser/python-pycparser.hash
 \ No newline at end of file
-diff --git a/package/python3-cffi/python3-cffi.mk b/package/python3-cffi/python3-cffi.mk
+diff --git a/package/python3-pycparser/python3-pycparser.mk b/package/python3-pycparser/python3-pycparser.mk
 new file mode 100644
-index 0000000000..7541e71b73
+index 0000000000..68769ceb46
 --- /dev/null
-+++ b/package/python3-cffi/python3-cffi.mk
-@@ -0,0 +1,29 @@
++++ b/package/python3-pycparser/python3-pycparser.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# python3-cffi
++# python3-pycparser
 +#
 +################################################################################
 +
-+# Please keep in sync with package/python-cffi/python-cffi.mk
-+PYTHON3_CFFI_VERSION = 1.14.2
-+PYTHON3_CFFI_SOURCE = cffi-$(PYTHON3_CFFI_VERSION).tar.gz
-+PYTHON3_CFFI_SITE = https://files.pythonhosted.org/packages/f7/09/88bbe20b76ca76be052c366fe77aa5e3cd6e5f932766e5597fecdd95b2a8
-+PYTHON3_CFFI_SETUP_TYPE = setuptools
-+PYTHON3_CFFI_LICENSE = MIT
-+PYTHON3_CFFI_LICENSE_FILES = LICENSE
-+
-+# This host package uses pkg-config to find libffi, so we have to
-+# provide the proper hints for pkg-config to behave properly for host
-+# packages.
-+HOST_PYTHON3_CFFI_ENV = \
-+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-+	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+	PKG_CONFIG_SYSROOT_DIR="/" \
-+	PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
-+HOST_PYTHON3_CFFI_DEPENDENCIES = host-pkgconf host-python3-pycparser host-libffi
-+
-+HOST_PYTHON3_CFFI_DL_SUBDIR = python-cffi
-+HOST_PYTHON3_CFFI_NEEDS_HOST_PYTHON = python3
++# Please keep in sync with package/python-pycparser/python-pycparser.mk
++PYTHON3_PYCPARSER_VERSION = 2.20
++PYTHON3_PYCPARSER_SOURCE = pycparser-$(PYTHON3_PYCPARSER_VERSION).tar.gz
++PYTHON3_PYCPARSER_SITE = https://files.pythonhosted.org/packages/0f/86/e19659527668d70be91d0369aeaa055b4eb396b0f387a4f92293a20035bd
++PYTHON3_PYCPARSER_SETUP_TYPE = setuptools
++PYTHON3_PYCPARSER_LICENSE = BSD-3-Clause
++PYTHON3_PYCPARSER_LICENSE_FILES = LICENSE
++HOST_PYTHON3_PYCPARSER_DL_SUBDIR = python-pycparser
++HOST_PYTHON3_PYCPARSER_NEEDS_HOST_PYTHON = python3
 +
 +$(eval $(host-python-package))
