@@ -1,55 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Jun 2021 23:04:26 +0200
-Subject: [Buildroot] [git commit] package/mimic: fix static build with gcc 10
-Message-ID: <20210606203407.EB4638B6BF@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 6 Jun 2021 23:05:19 +0200
+Subject: [Buildroot] [git commit] DEVELOPPERS: remove Chakra Divi
+Message-ID: <20210606203508.9FBA18B734@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c3e0f95bcaa3fe3a787abac4401c5a4c2860ef6
+commit: https://git.buildroot.net/buildroot/commit/?id=48235e6fc5f9f452b7b48fd7f2297093c4dd16ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/bee20bbfa4fa64ed8704bfb9586d5a3148f39fdf
+The domain for their email is now a parking-site, and mails are not
+delivered anymore.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0001-Fix-linking-on-gcc-10.2.0-or-newer.patch  | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ DEVELOPERS | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch b/package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch
-new file mode 100644
-index 0000000000..ea02bf587e
---- /dev/null
-+++ b/package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch
-@@ -0,0 +1,27 @@
-+From 77b36eaeb2c38eba571b8db7e9bb0fd507774e6d Mon Sep 17 00:00:00 2001
-+From: Kris Gesling <kris.gesling@mycroft.ai>
-+Date: Tue, 11 May 2021 09:15:22 +0930
-+Subject: [PATCH] Fix linking on gcc 10.2.0 or newer
-+
-+Co-authored-by: MichaelSabal <michaelsabal@users.noreply.github.com>
-+
-+[Retrieved from:
-+https://github.com/MycroftAI/mimic1/commit/77b36eaeb2c38eba571b8db7e9bb0fd507774e6d]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lang/cmu_indic_lang/cmu_indic_lang.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lang/cmu_indic_lang/cmu_indic_lang.h b/lang/cmu_indic_lang/cmu_indic_lang.h
-+index 75ee46c..83e2afa 100644
-+--- a/lang/cmu_indic_lang/cmu_indic_lang.h
-++++ b/lang/cmu_indic_lang/cmu_indic_lang.h
-+@@ -51,7 +51,7 @@ void cmu_indic_lang_init(cst_voice *v);
-+ extern const cst_phoneset cmu_indic_phoneset;
-+ extern const cst_cart cmu_indic_phrasing_cart; 
-+ 
-+-const cst_regex * const cst_rx_not_indic;
-++extern const cst_regex * const cst_rx_not_indic;
-+ 
-+ #ifdef __cplusplus
-+ } /* extern "C" */
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 59ab25ea5a..a7f9cdeb61 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -495,16 +495,6 @@ F:	package/libsvg-cairo/
+ N:	C??dric Ch??pied <cedric.chepied@gmail.com>
+ F:	package/znc/
+ 
+-N:	Chakra Divi <chakra@openedev.com>
+-F:	board/friendlyarm/nanopi-m1
+-F:	board/friendlyarm/nanopi-m1-plus
+-F:	board/olimex/a13_olinuxino
+-F:	board/orangepi/orangepi-plus
+-F:	configs/friendlyarm_nanopi_m1_defconfig
+-F:	configs/friendlyarm_nanopi_m1_plus_defconfig
+-F:	configs/olimex_a13_olinuxino_defconfig
+-F:	configs/orangepi_plus_defconfig
+-
+ N:	Chris Packham <judge.packham@gmail.com>
+ F:	package/coremark/
+ F:	package/coremark-pro/
