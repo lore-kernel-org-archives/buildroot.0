@@ -1,49 +1,101 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Jun 2021 09:25:10 +0200
-Subject: [Buildroot] [git commit] boot/beaglev-ddrinit: update to include
- upstream fixes
-Message-ID: <20210606065707.E62D48A665@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  6 Jun 2021 09:28:59 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/ffmpeg: Fix build for mips
+Message-ID: <20210606072859.671227-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f63917485b109dc050aee65c9b98b1cb814b350
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+http://autobuild.buildroot.net/results/079/079df777211933b92ac5a67fc175839c8188850f/
 
-Update commit ID to include recent upstream fixes:
-
-- Fix I and D cache synchronization issue (2e2f6faaf105)
-- Add carriage return to correct menu formatting (2f6ea51dbb51)
-- Add copyright info (7d3413d2ffd9)
-- Expand the limit on the size of uboot when update it (623888127a0e)
-
-Signed-off-by: Drew Fustini <drew@beagleboard.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- boot/beaglev-ddrinit/beaglev-ddrinit.hash | 2 +-
- boot/beaglev-ddrinit/beaglev-ddrinit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v2: updated patch following upstream review
 
-diff --git a/boot/beaglev-ddrinit/beaglev-ddrinit.hash b/boot/beaglev-ddrinit/beaglev-ddrinit.hash
-index 5bbbe28f07..7f43346696 100644
---- a/boot/beaglev-ddrinit/beaglev-ddrinit.hash
-+++ b/boot/beaglev-ddrinit/beaglev-ddrinit.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  0809b72e1e8e40f82acdcfd4c8a6a120e14bd9ed395592e075bb54acc8c07271  beaglev-ddrinit-15b80de81263996affb2a29332aa681925709983.tar.gz
-+sha256  df58c3da7a6f429095f4d56e7f1f5b7c855a0cbe82a2569586ce0c5fdd1bf256  beaglev-ddrinit-2e2f6faaf1059b61bb06ea00404199d1de55f201.tar.gz
-diff --git a/boot/beaglev-ddrinit/beaglev-ddrinit.mk b/boot/beaglev-ddrinit/beaglev-ddrinit.mk
-index 02df0613ee..2f1ce3ee87 100644
---- a/boot/beaglev-ddrinit/beaglev-ddrinit.mk
-+++ b/boot/beaglev-ddrinit/beaglev-ddrinit.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Commit on the 'starfive' branch
--BEAGLEV_DDRINIT_VERSION = 15b80de81263996affb2a29332aa681925709983
-+BEAGLEV_DDRINIT_VERSION = 2e2f6faaf1059b61bb06ea00404199d1de55f201
- BEAGLEV_DDRINIT_SITE = $(call github,starfive-tech,beagle_ddrinit,$(BEAGLEV_DDRINIT_VERSION))
- BEAGLEV_DDRINIT_INSTALL_TARGET = NO
- BEAGLEV_DDRINIT_INSTALL_IMAGES = YES
+ .../0003-libavutil-Fix-mips-build.patch       | 72 +++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 package/ffmpeg/0003-libavutil-Fix-mips-build.patch
+
+diff --git a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
+new file mode 100644
+index 0000000000..7af01463e8
+--- /dev/null
++++ b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
+@@ -0,0 +1,72 @@
++From 6e8daf0d502a2a822f1f08f42368d7d676dc1a9e Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 6 Jun 2021 08:54:53 +0200
++Subject: [PATCH] libavutil: Fix mips build
++
++Check for sys/auxv.h because not all toolchains contain this header.
++
++Fixes https://trac.ffmpeg.org/ticket/9138
++
++Patch sent upstream:
++http://ffmpeg.org/pipermail/ffmpeg-devel/2021-June/281037.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ configure            | 2 ++
++ libavutil/mips/cpu.c | 6 +++---
++ 2 files changed, 5 insertions(+), 3 deletions(-)
++
++diff --git a/configure b/configure
++index 82367fd30d..b0154cb8b2 100755
++--- a/configure
+++++ b/configure
++@@ -2161,6 +2161,7 @@ HEADERS_LIST="
++     opencv2_core_core_c_h
++     OpenGL_gl3_h
++     poll_h
+++    sys_auxv_h
++     sys_param_h
++     sys_resource_h
++     sys_select_h
++@@ -6210,6 +6211,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
++ check_headers windows.h
++ check_headers X11/extensions/XvMClib.h
++ check_headers asm/types.h
+++check_headers sys/auxv.h
++ 
++ # it seems there are versions of clang in some distros that try to use the
++ # gcc headers, which explodes for stdatomic
++diff --git a/libavutil/mips/cpu.c b/libavutil/mips/cpu.c
++index 59619d54de..4738104cdd 100644
++--- a/libavutil/mips/cpu.c
+++++ b/libavutil/mips/cpu.c
++@@ -19,7 +19,7 @@
++ #include "libavutil/cpu.h"
++ #include "libavutil/cpu_internal.h"
++ #include "config.h"
++-#if defined __linux__ || defined __ANDROID__
+++#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
++ #include <stdint.h>
++ #include <stdio.h>
++ #include <string.h>
++@@ -28,7 +28,7 @@
++ #include "libavutil/avstring.h"
++ #endif
++ 
++-#if defined __linux__ || defined __ANDROID__
+++#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
++ 
++ #define HWCAP_LOONGSON_CPUCFG (1 << 14)
++ 
++@@ -105,7 +105,7 @@ static int cpu_flags_cpuinfo(void)
++ 
++ int ff_get_cpu_flags_mips(void)
++ {
++-#if defined __linux__ || defined __ANDROID__
+++#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
++     if (cpucfg_available())
++         return cpu_flags_cpucfg();
++     else
++-- 
++2.29.2
++
+-- 
+2.29.2
