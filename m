@@ -1,34 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 Jun 2021 09:09:35 +0200
-Subject: [Buildroot] [PATCH] package/hostapd: add upstream patch to fix
- CVE-2021-27803
-In-Reply-To: <11b326bb-8425-7615-f4bc-ce380dcadbf8@mind.be> (Arnout
- Vandecappelle's message of "Tue, 1 Jun 2021 23:06:03 +0200")
-References: <20210601180915.14897-1-sam.voss@collins.com>
- <20210601200043.GA168928@scaer>
- <11b326bb-8425-7615-f4bc-ce380dcadbf8@mind.be>
-Message-ID: <87y2bnxyds.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 6 Jun 2021 09:20:12 +0200
+Subject: [Buildroot] [PATCH] scipts/autobuild-run: properly import
+ urllib2.URLError
+In-Reply-To: <20210605230548.5daa732c@windsurf>
+References: <20210605210016.1157351-1-yann.morin.1998@free.fr>
+ <20210605230548.5daa732c@windsurf>
+Message-ID: <20210606072012.GC168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+All,
 
-Hi,
+On 2021-06-05 23:05 +0200, Thomas Petazzoni spake thusly:
+> On Sat,  5 Jun 2021 23:00:16 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > Commit 37766e9 (scripts/autobuild-run: add a retry loop to not fail on
+> > urllib URLError) introduced an import of URLError, but that raises
+> > exceptions in both python2 and python3:
+[--SNIP--]
+> > The working solution is to import from:
+[--SNIP--]
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
- >> Could you look at providing a patch to wpa_supplicant for
- >> CVE-2021-27803, please?
+Applied to master (on buildroot-test), thanks.
 
- >  Peter already applied it in 9ada4eb2f1c3d67ee49f6f5466738bcd821fc647, at the
- > time there was no CVE yet. Fabrice later added the exception for CVE-2021-27803
- > in 1a7cf592a834357c5777e452f0b7ab7652e7d389.
-
-Indeed. I did not add it to hostapd at the time, as the issue (to my
-reading at least) is specific to wpa_supplicant.
-
-Why are we adding it to hostapd here? Just for consistency?
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
