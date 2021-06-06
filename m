@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 029C4C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:57:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 625EEC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:57:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C362660F41
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:57:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C362660F41
+	by mail.kernel.org (Postfix) with ESMTPS id 314E2604AC
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:57:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 314E2604AC
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9A9FB83D50;
-	Tue,  3 Aug 2021 22:57:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D87483D6B;
+	Tue,  3 Aug 2021 22:57:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cCdVhrTv6T97; Tue,  3 Aug 2021 22:57:07 +0000 (UTC)
+	with ESMTP id c14Rx40E87nw; Tue,  3 Aug 2021 22:57:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0BCF83D51;
-	Tue,  3 Aug 2021 22:57:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 325BB83D60;
+	Tue,  3 Aug 2021 22:57:19 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 101301BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:12:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 120931BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 640EE4057E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 943A54060F
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eSIvyOVfERAI for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:56 +0000 (UTC)
+ with ESMTP id EKIae2uTL6Qr for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EEF2D4060F
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B97D4060A
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 52D48864A8; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
+ id 91844843F5; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 6 Jun 2021 09:52:58 +0200
+Date: Sun, 6 Jun 2021 22:42:10 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 11e8ced584068ce0e15ea6b1af117aa12d423126
-X-Git-Newrev: 8e3d620251b33164eaaf72a221d11ff21b440614
+X-Git-Oldrev: 9e2f12ae1cf68c4b8edb736f7d68ba159f34f1dd
+X-Git-Newrev: f87c377a53e31e2638d0193acab5a40b4aa49b59
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210948.52D48864A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ffmpeg: Fix build for
- mips
+Message-Id: <20210803210948.91844843F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python3-cffi: add
+ python3 host variant
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,96 +70,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e3d620251b33164eaaf72a221d11ff21b440614
+commit: https://git.buildroot.net/buildroot/commit/?id=f87c377a53e31e2638d0193acab5a40b4aa49b59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/079/079df777211933b92ac5a67fc175839c8188850f/
+Add a python3 host variant since we are adding a python3 host variant of
+python-cryptography and it is dependent on this.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Donald Chan <hoiho@lab126.com>
+[yann.morin.1998@free.fr:
+  - drop target _DEPENDENCIES since this is a host-only package
+  - also add sync comment to python-cffi
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/ffmpeg/0003-libavutil-Fix-mips-build.patch | 72 ++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+ package/python-cffi/python-cffi.mk     |  1 +
+ package/python3-cffi/python3-cffi.hash |  1 +
+ package/python3-cffi/python3-cffi.mk   | 29 +++++++++++++++++++++++++++++
+ 3 files changed, 31 insertions(+)
 
-diff --git a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-new file mode 100644
-index 0000000000..7af01463e8
+diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+index f882349fd7..f0b5b4560f 100644
+--- a/package/python-cffi/python-cffi.mk
++++ b/package/python-cffi/python-cffi.mk
+@@ -4,6 +4,7 @@
+ #
+ ################################################################################
+ 
++# Please keep in sync with package/python3-cffi/python3-cffi.mk
+ PYTHON_CFFI_VERSION = 1.14.2
+ PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
+ PYTHON_CFFI_SITE = https://files.pythonhosted.org/packages/f7/09/88bbe20b76ca76be052c366fe77aa5e3cd6e5f932766e5597fecdd95b2a8
+diff --git a/package/python3-cffi/python3-cffi.hash b/package/python3-cffi/python3-cffi.hash
+new file mode 120000
+index 0000000000..1f98d8df9c
 --- /dev/null
-+++ b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-@@ -0,0 +1,72 @@
-+From 6e8daf0d502a2a822f1f08f42368d7d676dc1a9e Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 6 Jun 2021 08:54:53 +0200
-+Subject: [PATCH] libavutil: Fix mips build
++++ b/package/python3-cffi/python3-cffi.hash
+@@ -0,0 +1 @@
++../python-cffi/python-cffi.hash
+\ No newline at end of file
+diff --git a/package/python3-cffi/python3-cffi.mk b/package/python3-cffi/python3-cffi.mk
+new file mode 100644
+index 0000000000..7541e71b73
+--- /dev/null
++++ b/package/python3-cffi/python3-cffi.mk
+@@ -0,0 +1,29 @@
++################################################################################
++#
++# python3-cffi
++#
++################################################################################
 +
-+Check for sys/auxv.h because not all toolchains contain this header.
++# Please keep in sync with package/python-cffi/python-cffi.mk
++PYTHON3_CFFI_VERSION = 1.14.2
++PYTHON3_CFFI_SOURCE = cffi-$(PYTHON3_CFFI_VERSION).tar.gz
++PYTHON3_CFFI_SITE = https://files.pythonhosted.org/packages/f7/09/88bbe20b76ca76be052c366fe77aa5e3cd6e5f932766e5597fecdd95b2a8
++PYTHON3_CFFI_SETUP_TYPE = setuptools
++PYTHON3_CFFI_LICENSE = MIT
++PYTHON3_CFFI_LICENSE_FILES = LICENSE
 +
-+Fixes https://trac.ffmpeg.org/ticket/9138
++# This host package uses pkg-config to find libffi, so we have to
++# provide the proper hints for pkg-config to behave properly for host
++# packages.
++HOST_PYTHON3_CFFI_ENV = \
++	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
++	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
++	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++	PKG_CONFIG_SYSROOT_DIR="/" \
++	PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
++HOST_PYTHON3_CFFI_DEPENDENCIES = host-pkgconf host-python3-pycparser host-libffi
 +
-+Patch sent upstream:
-+http://ffmpeg.org/pipermail/ffmpeg-devel/2021-June/281037.html
++HOST_PYTHON3_CFFI_DL_SUBDIR = python-cffi
++HOST_PYTHON3_CFFI_NEEDS_HOST_PYTHON = python3
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure            | 2 ++
-+ libavutil/mips/cpu.c | 6 +++---
-+ 2 files changed, 5 insertions(+), 3 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 82367fd30d..b0154cb8b2 100755
-+--- a/configure
-++++ b/configure
-+@@ -2161,6 +2161,7 @@ HEADERS_LIST="
-+     opencv2_core_core_c_h
-+     OpenGL_gl3_h
-+     poll_h
-++    sys_auxv_h
-+     sys_param_h
-+     sys_resource_h
-+     sys_select_h
-+@@ -6210,6 +6211,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
-+ check_headers windows.h
-+ check_headers X11/extensions/XvMClib.h
-+ check_headers asm/types.h
-++check_headers sys/auxv.h
-+ 
-+ # it seems there are versions of clang in some distros that try to use the
-+ # gcc headers, which explodes for stdatomic
-+diff --git a/libavutil/mips/cpu.c b/libavutil/mips/cpu.c
-+index 59619d54de..4738104cdd 100644
-+--- a/libavutil/mips/cpu.c
-++++ b/libavutil/mips/cpu.c
-+@@ -19,7 +19,7 @@
-+ #include "libavutil/cpu.h"
-+ #include "libavutil/cpu_internal.h"
-+ #include "config.h"
-+-#if defined __linux__ || defined __ANDROID__
-++#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
-+ #include <stdint.h>
-+ #include <stdio.h>
-+ #include <string.h>
-+@@ -28,7 +28,7 @@
-+ #include "libavutil/avstring.h"
-+ #endif
-+ 
-+-#if defined __linux__ || defined __ANDROID__
-++#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
-+ 
-+ #define HWCAP_LOONGSON_CPUCFG (1 << 14)
-+ 
-+@@ -105,7 +105,7 @@ static int cpu_flags_cpuinfo(void)
-+ 
-+ int ff_get_cpu_flags_mips(void)
-+ {
-+-#if defined __linux__ || defined __ANDROID__
-++#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
-+     if (cpucfg_available())
-+         return cpu_flags_cpucfg();
-+     else
-+-- 
-+2.29.2
-+
++$(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
