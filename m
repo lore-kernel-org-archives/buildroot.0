@@ -1,80 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Jun 2021 09:43:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mono-gtksharp3: fix build with
- latest mono
-In-Reply-To: <20210605211425.2350294-1-fontaine.fabrice@gmail.com>
-References: <20210605211425.2350294-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210606074307.GH168928@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  6 Jun 2021 09:51:01 +0200
+Subject: [Buildroot] [PATCH/next 1/3] package/libdvdread: bump version to
+ 6.1.2
+Message-ID: <20210606075103.699369-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Release notes:
+https://code.videolan.org/videolan/libdvdread/-/blob/master/NEWS
 
-On 2021-06-05 23:14 +0200, Fabrice Fontaine spake thusly:
-> Fix build failure with latest mono which is raised since commit
-> 4c8a285b6e35c4028341f874760bfa9226ebff94
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/ff3edfe406f00a29429d2fa4258af12c87e5fb96
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Removed md5 hash, reformatted hashes.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libdvdread/libdvdread.hash | 12 +++++-------
+ package/libdvdread/libdvdread.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../0002-Mono-compilation-error-branch.patch  | 25 +++++++++++++++++++
->  1 file changed, 25 insertions(+)
->  create mode 100644 package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
-> 
-> diff --git a/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch b/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
-> new file mode 100644
-> index 0000000000..0d52401b4a
-> --- /dev/null
-> +++ b/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
-> @@ -0,0 +1,25 @@
-> +From fe18352a4bc9f0cf3b6cf63b8cc03c5d6e41863b Mon Sep 17 00:00:00 2001
-> +From: plprevost <plprevost@sii.fr>
-> +Date: Wed, 12 May 2021 16:46:16 +0200
-> +Subject: [PATCH] refs issue:#298 Fix mono compilation errors
-> +
-> +[Retrieved from:
-> +https://github.com/mono/gtk-sharp/pull/299/commits/fe18352a4bc9f0cf3b6cf63b8cc03c5d6e41863b]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + sample/test/TestRange.cs | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/sample/test/TestRange.cs b/sample/test/TestRange.cs
-> +index 82fb81105..8727c9a77 100644
-> +--- a/sample/test/TestRange.cs
-> ++++ b/sample/test/TestRange.cs
-> +@@ -8,7 +8,7 @@
-> + 
-> + using System;
-> + 
-> +-using Gtk;
-> ++using Gtk; using Range = Gtk.Range;
-> + 
-> + namespace WidgetViewer {
-> + 
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libdvdread/libdvdread.hash b/package/libdvdread/libdvdread.hash
+index 00066619ce..de9afcfa30 100644
+--- a/package/libdvdread/libdvdread.hash
++++ b/package/libdvdread/libdvdread.hash
+@@ -1,9 +1,7 @@
+-# From http://download.videolan.org/pub/videolan/libdvdread/6.1.1/libdvdread-6.1.1.tar.bz2.md5
+-md5 09c7423568fb679279fd2a2bc6b10b6e libdvdread-6.1.1.tar.bz2
+-# From http://download.videolan.org/pub/videolan/libdvdread/6.1.1/libdvdread-6.1.1.tar.bz2.sha1
+-sha1 d2e5056de89fb5fed478c0af5a72e8b781d0c396 libdvdread-6.1.1.tar.bz2
+-# From http://download.videolan.org/pub/videolan/libdvdread/6.1.1/libdvdread-6.1.1.tar.bz2.sha256
+-sha256 3e357309a17c5be3731385b9eabda6b7e3fa010f46022a06f104553bf8e21796 libdvdread-6.1.1.tar.bz2
++# From http://download.videolan.org/pub/videolan/libdvdread/6.1.2/libdvdread-6.1.2.tar.bz2.sha1
++sha1  789d0780fbdcd7d6dadf0fda3d4a4b6198c16393  libdvdread-6.1.2.tar.bz2
++# From http://download.videolan.org/pub/videolan/libdvdread/6.1.2/libdvdread-6.1.2.tar.bz2.sha256
++sha256  cc190f553758ced7571859e301f802cb4821f164d02bfacfd320c14a4e0da763  libdvdread-6.1.2.tar.bz2
+ 
+ # Hash for license file:
+-sha256	d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572	COPYING
++sha256  d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572  COPYING
+diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
+index aa91d3162a..9ddb6721c7 100644
+--- a/package/libdvdread/libdvdread.mk
++++ b/package/libdvdread/libdvdread.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDVDREAD_VERSION = 6.1.1
++LIBDVDREAD_VERSION = 6.1.2
+ LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.bz2
+ LIBDVDREAD_SITE = http://www.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_VERSION)
+ LIBDVDREAD_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
