@@ -1,70 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  6 Jun 2021 00:00:31 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] package/mpv: handle --{en,
- dis}able-libmpv-{shared, static}
-Message-ID: <20210605220031.2750663-1-fontaine.fabrice@gmail.com>
+From: Drew Fustini <drew@beagleboard.org>
+Date: Sat,  5 Jun 2021 17:51:23 -0700
+Subject: [Buildroot] [PATCH] boot/beaglev-secondboot: update to include
+ upstream fixes
+Message-ID: <20210606005122.377029-1-drew@beagleboard.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libmpv-static and libmpv-shared are disabled by default resulting in the
-following build failure when building with gl but without rpi, wayland
-or x11:
+Update the commit id to include upstream fixes:
 
-Checking for OpenGL without platform-specific code (e.g. for libmpv)      : libmpv-shared not found
-Checking for OpenGL context support                                       : gl-cocoa not found
-You manually enabled the feature 'gl', but the autodetection check failed.
+- Fix print format in load_and_run_ddr(e976d186e69a)
+- Update copyright info (f2b049b7fff2)
+- Avoid chiplink address exception (86664be28e5d)
 
-Here is an extract of wscript:
-
-    } , {
-        'name': '--plain-gl',
-        'desc': 'OpenGL without platform-specific code (e.g. for libmpv)',
-        'deps': 'libmpv-shared || libmpv-static',
-        'func': check_true,
-    }, {
-        'name': '--gl',
-        'desc': 'OpenGL context support',
-        'deps': 'gl-cocoa || gl-x11 || egl-x11 || egl-drm || '
-                 + 'gl-win32 || gl-wayland || rpi || '
-                 + 'plain-gl',
-        'func': check_true,
-        'req': True,
-        'fmsg': "No OpenGL video output found or enabled. " +
-                "Aborting. If you really mean to compile without OpenGL " +
-                "video outputs use --disable-gl.",
-    }, {
-
-Fixes:
- - http://autobuild.buildroot.org/results/590d2a8b6746ef071dfb439e42b636f81dbdc35d
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Drew Fustini <drew@beagleboard.org>
 ---
-Changes v1 -> v2 (after review of Yann E. Morin):
- - shared and static can't be enabled simultaneously so prefer shared
-   over static for BR2_SHARED_STATIC_LIBS
+ boot/beaglev-secondboot/beaglev-secondboot.hash | 2 +-
+ boot/beaglev-secondboot/beaglev-secondboot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- package/mpv/mpv.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 5713b98e8e..25ac783b52 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -28,6 +28,12 @@ MPV_CONF_OPTS = \
- 	--disable-uchardet \
- 	--disable-vapoursynth
+diff --git a/boot/beaglev-secondboot/beaglev-secondboot.hash b/boot/beaglev-secondboot/beaglev-secondboot.hash
+index d936263d1a2f..e0ca0e149dab 100644
+--- a/boot/beaglev-secondboot/beaglev-secondboot.hash
++++ b/boot/beaglev-secondboot/beaglev-secondboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  b97dc40dbfc49ced591d6ef53d06adebf90b9c467d3754ec51b2626593d97cbd  beaglev-secondboot-a4f0b4307f877890f998b3216cffcc9f27a5f993.tar.gz
++sha256  56519b20a8ac2b68770cacd5158190dfcb2b3762a759b1c44582ca25ffbccc5d  beaglev-secondboot-e976d186e69a1a84884265b0689626fa254a950d.tar.gz
+diff --git a/boot/beaglev-secondboot/beaglev-secondboot.mk b/boot/beaglev-secondboot/beaglev-secondboot.mk
+index 7bd97165decc..6d904b02ba31 100644
+--- a/boot/beaglev-secondboot/beaglev-secondboot.mk
++++ b/boot/beaglev-secondboot/beaglev-secondboot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+MPV_CONF_OPTS += --disable-libmpv-shared --enable-libmpv-static
-+else
-+MPV_CONF_OPTS += --enable-libmpv-shared --disable-libmpv-static
-+endif
-+
- # ALSA support requires pcm+mixer
- ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yy)
- MPV_CONF_OPTS += --enable-alsa
+ # Commit on the 'starfive' branch
+-BEAGLEV_SECONDBOOT_VERSION = a4f0b4307f877890f998b3216cffcc9f27a5f993
++BEAGLEV_SECONDBOOT_VERSION = e976d186e69a1a84884265b0689626fa254a950d
+ BEAGLEV_SECONDBOOT_SITE = $(call github,starfive-tech,beagle_secondBoot,$(BEAGLEV_SECONDBOOT_VERSION))
+ BEAGLEV_SECONDBOOT_INSTALL_TARGET = NO
+ BEAGLEV_SECONDBOOT_INSTALL_IMAGES = YES
 -- 
-2.30.2
+2.27.0
