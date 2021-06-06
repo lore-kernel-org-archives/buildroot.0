@@ -1,125 +1,100 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Jun 2021 09:54:33 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/ffmpeg: Fix build for mips
-In-Reply-To: <20210606072859.671227-1-bernd.kuhls@t-online.de>
-References: <20210606072859.671227-1-bernd.kuhls@t-online.de>
-Message-ID: <20210606075433.GI168928@scaer>
+Date: Sun, 6 Jun 2021 09:52:58 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: Fix build for mips
+Message-ID: <20210606072415.0BC02810FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=8e3d620251b33164eaaf72a221d11ff21b440614
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-06-06 09:28 +0200, Bernd Kuhls spake thusly:
-> Fixes:
-> http://autobuild.buildroot.net/results/079/079df777211933b92ac5a67fc175839c8188850f/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+http://autobuild.buildroot.net/results/079/079df777211933b92ac5a67fc175839c8188850f/
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/ffmpeg/0003-libavutil-Fix-mips-build.patch | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> v2: updated patch following upstream review
-> 
->  .../0003-libavutil-Fix-mips-build.patch       | 72 +++++++++++++++++++
->  1 file changed, 72 insertions(+)
->  create mode 100644 package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-> 
-> diff --git a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-> new file mode 100644
-> index 0000000000..7af01463e8
-> --- /dev/null
-> +++ b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-> @@ -0,0 +1,72 @@
-> +From 6e8daf0d502a2a822f1f08f42368d7d676dc1a9e Mon Sep 17 00:00:00 2001
-> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +Date: Sun, 6 Jun 2021 08:54:53 +0200
-> +Subject: [PATCH] libavutil: Fix mips build
-> +
-> +Check for sys/auxv.h because not all toolchains contain this header.
-> +
-> +Fixes https://trac.ffmpeg.org/ticket/9138
-> +
-> +Patch sent upstream:
-> +http://ffmpeg.org/pipermail/ffmpeg-devel/2021-June/281037.html
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + configure            | 2 ++
-> + libavutil/mips/cpu.c | 6 +++---
-> + 2 files changed, 5 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/configure b/configure
-> +index 82367fd30d..b0154cb8b2 100755
-> +--- a/configure
-> ++++ b/configure
-> +@@ -2161,6 +2161,7 @@ HEADERS_LIST="
-> +     opencv2_core_core_c_h
-> +     OpenGL_gl3_h
-> +     poll_h
-> ++    sys_auxv_h
-> +     sys_param_h
-> +     sys_resource_h
-> +     sys_select_h
-> +@@ -6210,6 +6211,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
-> + check_headers windows.h
-> + check_headers X11/extensions/XvMClib.h
-> + check_headers asm/types.h
-> ++check_headers sys/auxv.h
-> + 
-> + # it seems there are versions of clang in some distros that try to use the
-> + # gcc headers, which explodes for stdatomic
-> +diff --git a/libavutil/mips/cpu.c b/libavutil/mips/cpu.c
-> +index 59619d54de..4738104cdd 100644
-> +--- a/libavutil/mips/cpu.c
-> ++++ b/libavutil/mips/cpu.c
-> +@@ -19,7 +19,7 @@
-> + #include "libavutil/cpu.h"
-> + #include "libavutil/cpu_internal.h"
-> + #include "config.h"
-> +-#if defined __linux__ || defined __ANDROID__
-> ++#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
-> + #include <stdint.h>
-> + #include <stdio.h>
-> + #include <string.h>
-> +@@ -28,7 +28,7 @@
-> + #include "libavutil/avstring.h"
-> + #endif
-> + 
-> +-#if defined __linux__ || defined __ANDROID__
-> ++#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
-> + 
-> + #define HWCAP_LOONGSON_CPUCFG (1 << 14)
-> + 
-> +@@ -105,7 +105,7 @@ static int cpu_flags_cpuinfo(void)
-> + 
-> + int ff_get_cpu_flags_mips(void)
-> + {
-> +-#if defined __linux__ || defined __ANDROID__
-> ++#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
-> +     if (cpucfg_available())
-> +         return cpu_flags_cpucfg();
-> +     else
-> +-- 
-> +2.29.2
-> +
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
+new file mode 100644
+index 0000000000..7af01463e8
+--- /dev/null
++++ b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
+@@ -0,0 +1,72 @@
++From 6e8daf0d502a2a822f1f08f42368d7d676dc1a9e Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 6 Jun 2021 08:54:53 +0200
++Subject: [PATCH] libavutil: Fix mips build
++
++Check for sys/auxv.h because not all toolchains contain this header.
++
++Fixes https://trac.ffmpeg.org/ticket/9138
++
++Patch sent upstream:
++http://ffmpeg.org/pipermail/ffmpeg-devel/2021-June/281037.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ configure            | 2 ++
++ libavutil/mips/cpu.c | 6 +++---
++ 2 files changed, 5 insertions(+), 3 deletions(-)
++
++diff --git a/configure b/configure
++index 82367fd30d..b0154cb8b2 100755
++--- a/configure
+++++ b/configure
++@@ -2161,6 +2161,7 @@ HEADERS_LIST="
++     opencv2_core_core_c_h
++     OpenGL_gl3_h
++     poll_h
+++    sys_auxv_h
++     sys_param_h
++     sys_resource_h
++     sys_select_h
++@@ -6210,6 +6211,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
++ check_headers windows.h
++ check_headers X11/extensions/XvMClib.h
++ check_headers asm/types.h
+++check_headers sys/auxv.h
++ 
++ # it seems there are versions of clang in some distros that try to use the
++ # gcc headers, which explodes for stdatomic
++diff --git a/libavutil/mips/cpu.c b/libavutil/mips/cpu.c
++index 59619d54de..4738104cdd 100644
++--- a/libavutil/mips/cpu.c
+++++ b/libavutil/mips/cpu.c
++@@ -19,7 +19,7 @@
++ #include "libavutil/cpu.h"
++ #include "libavutil/cpu_internal.h"
++ #include "config.h"
++-#if defined __linux__ || defined __ANDROID__
+++#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
++ #include <stdint.h>
++ #include <stdio.h>
++ #include <string.h>
++@@ -28,7 +28,7 @@
++ #include "libavutil/avstring.h"
++ #endif
++ 
++-#if defined __linux__ || defined __ANDROID__
+++#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
++ 
++ #define HWCAP_LOONGSON_CPUCFG (1 << 14)
++ 
++@@ -105,7 +105,7 @@ static int cpu_flags_cpuinfo(void)
++ 
++ int ff_get_cpu_flags_mips(void)
++ {
++-#if defined __linux__ || defined __ANDROID__
+++#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
++     if (cpucfg_available())
++         return cpu_flags_cpucfg();
++     else
++-- 
++2.29.2
++
