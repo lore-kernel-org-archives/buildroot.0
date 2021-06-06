@@ -1,60 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun,  6 Jun 2021 09:05:21 +0200
-Subject: [Buildroot] [PATCH] configs/minnowboard_max-graphical_defconfig:
- unbreak X11/mesa
-Message-ID: <20210606070522.13728-1-peter@korsgaard.com>
+Date: Sun, 06 Jun 2021 09:09:35 +0200
+Subject: [Buildroot] [PATCH] package/hostapd: add upstream patch to fix
+ CVE-2021-27803
+In-Reply-To: <11b326bb-8425-7615-f4bc-ce380dcadbf8@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 1 Jun 2021 23:06:03 +0200")
+References: <20210601180915.14897-1-sam.voss@collins.com>
+ <20210601200043.GA168928@scaer>
+ <11b326bb-8425-7615-f4bc-ce380dcadbf8@mind.be>
+Message-ID: <87y2bnxyds.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/1297337965
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Commit 15a2f9b819806d38a7d8172a2 (package/{mesa3d, mesa3d-headers}: bump
-version to 21.0.2) marked BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST as legacy,
-but forgot to update the defconfig.  The SW rasterizer isn't really needed
-with the Intel GPU, so just drop it.
+Hi,
 
-In addition, X11 now needs some help with loading the modules in the correct
-order, similar to how it was done for the test in commit 4a3639bad01a
-(support/testing: test_glxinfo load X11 modules in the right order).
+ >> Could you look at providing a patch to wpa_supplicant for
+ >> CVE-2021-27803, please?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../etc/X11/xorg.conf.d/01-modules.conf               | 11 +++++++++++
- configs/minnowboard_max-graphical_defconfig           |  1 -
- 2 files changed, 11 insertions(+), 1 deletion(-)
- create mode 100644 board/minnowboard/fs-overlay-graphical/etc/X11/xorg.conf.d/01-modules.conf
+ >  Peter already applied it in 9ada4eb2f1c3d67ee49f6f5466738bcd821fc647, at the
+ > time there was no CVE yet. Fabrice later added the exception for CVE-2021-27803
+ > in 1a7cf592a834357c5777e452f0b7ab7652e7d389.
 
-diff --git a/board/minnowboard/fs-overlay-graphical/etc/X11/xorg.conf.d/01-modules.conf b/board/minnowboard/fs-overlay-graphical/etc/X11/xorg.conf.d/01-modules.conf
-new file mode 100644
-index 0000000000..91659baa65
---- /dev/null
-+++ b/board/minnowboard/fs-overlay-graphical/etc/X11/xorg.conf.d/01-modules.conf
-@@ -0,0 +1,11 @@
-+
-+# Xorg does not implement real dynamic linking and requires that its
-+# modules get loaded in the right order.
-+# https://forums.gentoo.org/viewtopic-p-8245578.html#8245578
-+Section "Module"
-+   Load "vgahw"
-+   Load "fb"
-+   Load "shadowfb"
-+   Load "int10"
-+   Load "vbe"
-+EndSection
-diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
-index 3b769ca6e7..051c7584dc 100644
---- a/configs/minnowboard_max-graphical_defconfig
-+++ b/configs/minnowboard_max-graphical_defconfig
-@@ -40,7 +40,6 @@ BR2_PACKAGE_ALSA_UTILS_APLAY=y
- BR2_PACKAGE_GLMARK2=y
- BR2_PACKAGE_MESA3D_DEMOS=y
- BR2_PACKAGE_MESA3D=y
--BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
- BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
- BR2_PACKAGE_MESA3D_OPENGL_GLX=y
- 
+Indeed. I did not add it to hostapd at the time, as the issue (to my
+reading at least) is specific to wpa_supplicant.
+
+Why are we adding it to hostapd here? Just for consistency?
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
