@@ -1,37 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 Jun 2021 09:21:18 +0200
-Subject: [Buildroot] [PATCH] package/netperf: move SITE so s.b.n
-In-Reply-To: <87v96wrw9p.fsf@tarshish> (Baruch Siach's message of "Wed, 02 Jun
- 2021 20:50:26 +0300")
-References: <c160b9eba623c54debf9bf50d69cca4a6d6ed69e.1622119840.git.baruch@tkos.co.il>
- <7d24aa70-74c4-1166-e69f-5d8c7a5c6875@mind.be>
- <a7969129-6272-575d-0846-1874629cebc4@mind.be>
- <87v96wrw9p.fsf@tarshish>
-Message-ID: <87tumbxxu9.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 6 Jun 2021 09:25:07 +0200
+Subject: [Buildroot] [git commit] boot/beaglev-secondboot: update to include
+ upstream fixes
+Message-ID: <20210606065707.DBCF381470@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f1e014655da6b77c9e1768cb0d6fb78f1321ae5b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi Arnout,
- > On Wed, Jun 02 2021, Arnout Vandecappelle wrote:
- >>>> -NETPERF_SITE = ftp://ftp.netperf.org/netperf
- >>>> +NETPERF_SITE = http://sources.buildroot.net/netperf
- >> 
- >> We prefer buildroot.org over buildroot.net nowadays, so I changed that.
+Update the commit id to include upstream fixes:
 
- > BR2_BACKUP_SITE still defaults to "http://sources.buildroot.net". Should
- > we change that?
+- Fix print format in load_and_run_ddr(e976d186e69a)
+- Update copyright info (f2b049b7fff2)
+- Avoid chiplink address exception (86664be28e5d)
 
-There is a fairly important difference between .net and .org, .net is
-though the cloudflare cache, but .org goes straight to our upstream
-server.
+Signed-off-by: Drew Fustini <drew@beagleboard.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/beaglev-secondboot/beaglev-secondboot.hash | 2 +-
+ boot/beaglev-secondboot/beaglev-secondboot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Given the extra bandwidth and availibility of Cloudflare, I would prefer
-we use .net.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/beaglev-secondboot/beaglev-secondboot.hash b/boot/beaglev-secondboot/beaglev-secondboot.hash
+index d936263d1a..e0ca0e149d 100644
+--- a/boot/beaglev-secondboot/beaglev-secondboot.hash
++++ b/boot/beaglev-secondboot/beaglev-secondboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  b97dc40dbfc49ced591d6ef53d06adebf90b9c467d3754ec51b2626593d97cbd  beaglev-secondboot-a4f0b4307f877890f998b3216cffcc9f27a5f993.tar.gz
++sha256  56519b20a8ac2b68770cacd5158190dfcb2b3762a759b1c44582ca25ffbccc5d  beaglev-secondboot-e976d186e69a1a84884265b0689626fa254a950d.tar.gz
+diff --git a/boot/beaglev-secondboot/beaglev-secondboot.mk b/boot/beaglev-secondboot/beaglev-secondboot.mk
+index 7bd97165de..6d904b02ba 100644
+--- a/boot/beaglev-secondboot/beaglev-secondboot.mk
++++ b/boot/beaglev-secondboot/beaglev-secondboot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Commit on the 'starfive' branch
+-BEAGLEV_SECONDBOOT_VERSION = a4f0b4307f877890f998b3216cffcc9f27a5f993
++BEAGLEV_SECONDBOOT_VERSION = e976d186e69a1a84884265b0689626fa254a950d
+ BEAGLEV_SECONDBOOT_SITE = $(call github,starfive-tech,beagle_secondBoot,$(BEAGLEV_SECONDBOOT_VERSION))
+ BEAGLEV_SECONDBOOT_INSTALL_TARGET = NO
+ BEAGLEV_SECONDBOOT_INSTALL_IMAGES = YES
