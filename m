@@ -1,74 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Jun 2021 22:42:00 +0200
-Subject: [Buildroot] [git commit] package/python3-pip: add python3 host
- variant
-Message-ID: <20210606203301.633CD815DB@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 6 Jun 2021 23:04:26 +0200
+Subject: [Buildroot] [git commit] package/mimic: fix static build with gcc 10
+Message-ID: <20210606203407.EB4638B6BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5864b40faccd6a5f5e7a5441ccc820e2b5ee72f7
+commit: https://git.buildroot.net/buildroot/commit/?id=1c3e0f95bcaa3fe3a787abac4401c5a4c2860ef6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a python3 host variant since we are adding a python3 host variant of
-python-cryptography and it is dependent on this.
+Fixes:
+ - http://autobuild.buildroot.org/results/bee20bbfa4fa64ed8704bfb9586d5a3148f39fdf
 
-Signed-off-by: Donald Chan <hoiho@lab126.com>
-[yann.morin.1998 at free.fr:
-  - add CPE variables
-  - also add sync comment for python-pip
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pip/python-pip.mk     |  1 +
- package/python3-pip/python3-pip.hash |  1 +
- package/python3-pip/python3-pip.mk   | 19 +++++++++++++++++++
- 3 files changed, 21 insertions(+)
+ .../0001-Fix-linking-on-gcc-10.2.0-or-newer.patch  | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
-index f881a3ce55..71f76e2842 100644
---- a/package/python-pip/python-pip.mk
-+++ b/package/python-pip/python-pip.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
- 
-+# Please keep in sync with package/python3-pip/python3-pip.mk
- PYTHON_PIP_VERSION = 20.0.2
- PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
- PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/8e/76/66066b7bc71817238924c7e4b448abdb17eb0c92d645769c223f9ace478f
-diff --git a/package/python3-pip/python3-pip.hash b/package/python3-pip/python3-pip.hash
-new file mode 120000
-index 0000000000..d90fb3d005
---- /dev/null
-+++ b/package/python3-pip/python3-pip.hash
-@@ -0,0 +1 @@
-+../python-pip/python-pip.hash
-\ No newline at end of file
-diff --git a/package/python3-pip/python3-pip.mk b/package/python3-pip/python3-pip.mk
+diff --git a/package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch b/package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch
 new file mode 100644
-index 0000000000..58e3c06c39
+index 0000000000..ea02bf587e
 --- /dev/null
-+++ b/package/python3-pip/python3-pip.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# python3-pip
-+#
-+################################################################################
++++ b/package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch
+@@ -0,0 +1,27 @@
++From 77b36eaeb2c38eba571b8db7e9bb0fd507774e6d Mon Sep 17 00:00:00 2001
++From: Kris Gesling <kris.gesling@mycroft.ai>
++Date: Tue, 11 May 2021 09:15:22 +0930
++Subject: [PATCH] Fix linking on gcc 10.2.0 or newer
 +
-+# Please keep in sync with package/python-pip/python-pip.mk
-+PYTHON3_PIP_VERSION = 20.0.2
-+PYTHON3_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
-+PYTHON3_PIP_SITE = https://files.pythonhosted.org/packages/8e/76/66066b7bc71817238924c7e4b448abdb17eb0c92d645769c223f9ace478f
-+PYTHON3_PIP_SETUP_TYPE = setuptools
-+PYTHON3_PIP_LICENSE = MIT
-+PYTHON3_PIP_LICENSE_FILES = LICENSE.txt
-+PYTHON3_PIP_CPE_ID_VENDOR = pypa
-+PYTHON3_PIP_CPE_ID_PRODUCT = pip
-+HOST_PYTHON3_PIP_DL_SUBDIR = python-pip
-+HOST_PYTHON3_PIP_NEEDS_HOST_PYTHON = python3
++Co-authored-by: MichaelSabal <michaelsabal@users.noreply.github.com>
 +
-+$(eval $(host-python-package))
++[Retrieved from:
++https://github.com/MycroftAI/mimic1/commit/77b36eaeb2c38eba571b8db7e9bb0fd507774e6d]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lang/cmu_indic_lang/cmu_indic_lang.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lang/cmu_indic_lang/cmu_indic_lang.h b/lang/cmu_indic_lang/cmu_indic_lang.h
++index 75ee46c..83e2afa 100644
++--- a/lang/cmu_indic_lang/cmu_indic_lang.h
+++++ b/lang/cmu_indic_lang/cmu_indic_lang.h
++@@ -51,7 +51,7 @@ void cmu_indic_lang_init(cst_voice *v);
++ extern const cst_phoneset cmu_indic_phoneset;
++ extern const cst_cart cmu_indic_phrasing_cart; 
++ 
++-const cst_regex * const cst_rx_not_indic;
+++extern const cst_regex * const cst_rx_not_indic;
++ 
++ #ifdef __cplusplus
++ } /* extern "C" */
