@@ -1,101 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:17:42 -0000
-Subject: [Buildroot] [git commit] package/pipewire: bump version to 0.3.27
-Message-ID: <20210607144653.3E1BC82B86@busybox.osuosl.org>
+Date: Mon, 07 Jun 2021 15:17:43 -0000
+Subject: [Buildroot] [git commit] package/libglib2: add -Dxattr=true when
+ libselinux is selected
+Message-ID: <20210607144656.04EA2814BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0dda1a44a0859fc15b318e493c151ca1d807ba24
+commit: https://git.buildroot.net/buildroot/commit/?id=bdbd6ab4d031b03fe68c656ab91d82dba9e208c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- remove 0001-meson-prefer-libintl-on-FreeBSD.patch
-  (from upstream [1])
+Xattrs is required for SELinux. Explicitly enable the feature when the
+libselinux package is selected.
 
-[1] https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/4d064a37183a0bf8198914dd68b063b2c9def17e
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0001-meson-prefer-libintl-on-FreeBSD.patch     | 46 ----------------------
- package/pipewire/pipewire.hash                     |  2 +-
- package/pipewire/pipewire.mk                       |  2 +-
- 3 files changed, 2 insertions(+), 48 deletions(-)
+ package/libglib2/libglib2.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch b/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch
-deleted file mode 100644
-index b19715b2e8..0000000000
---- a/package/pipewire/0001-meson-prefer-libintl-on-FreeBSD.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 4d064a37183a0bf8198914dd68b063b2c9def17e Mon Sep 17 00:00:00 2001
--From: Evgeniy Khramtsov <evgeniy@khramtsov.org>
--Date: Fri, 23 Apr 2021 22:57:51 +0300
--Subject: [PATCH] meson: prefer libintl on FreeBSD
--
--FreeBSD does not have gettext in libc.
--It is implemented in the third-party library.
--
--[Retrieved from:
--https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/4d064a37183a0bf8198914dd68b063b2c9def17e]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- meson.build              | 3 +++
-- src/pipewire/meson.build | 2 +-
-- 2 files changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index 99a4b2d1c..0a9963fbb 100644
----- a/meson.build
--+++ b/meson.build
--@@ -351,6 +351,9 @@ libinotify_dep = (build_machine.system() == 'freebsd'
--     ? dependency('libinotify', required: true)
--     : dependency('', required: false))
-- 
--+# On FreeBSD, libintl library is required for gettext
--+libintl_dep = cc.find_library('intl', required: false)
--+
-- alsa_dep = dependency('alsa', version : '>=1.1.7', required: get_option('pipewire-alsa'))
-- 
-- installed_tests_metadir = pipewire_datadir / 'installed-tests' / pipewire_name
--diff --git a/src/pipewire/meson.build b/src/pipewire/meson.build
--index 7f2d42a7a..d4c271373 100644
----- a/src/pipewire/meson.build
--+++ b/src/pipewire/meson.build
--@@ -101,7 +101,7 @@ libpipewire = shared_library(pipewire_name, pipewire_sources,
--   c_args : libpipewire_c_args,
--   include_directories : [pipewire_inc, configinc, spa_inc],
--   install : true,
---  dependencies : [dl_lib, mathlib, pthread_lib, ],
--+  dependencies : [dl_lib, mathlib, pthread_lib, libintl_dep, ],
-- )
-- 
-- pipewire_dep = declare_dependency(link_with : libpipewire,
---- 
--GitLab
--
-diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
-index 4d2548e3ab..7c26e2ab29 100644
---- a/package/pipewire/pipewire.hash
-+++ b/package/pipewire/pipewire.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  05cc9d25de45290c025da5da1b94fc705bddacd93cf3690d0b2988c1ac501ee1  pipewire-0.3.26.tar.gz
-+sha256  657db1b9a29ae17a9f1d9782a45bda2ba5a893fef55e1ca26453e8f7f2d4e64e  pipewire-0.3.27.tar.gz
- sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
- sha256  7db6138b0385e260ae8f09f050ea66c4e4fe775a11060d7f6ca2beb47f192d6f  LICENSE
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index e5185aeb8c..8abbfc35be 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index b5554d6b56..e3263ce9ce 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -77,10 +77,10 @@ LIBGLIB2_DEPENDENCIES += libiconv
+ endif
  
--PIPEWIRE_VERSION = 0.3.26
-+PIPEWIRE_VERSION = 0.3.27
- PIPEWIRE_SITE = $(call github,PipeWire,pipewire,$(PIPEWIRE_VERSION))
- PIPEWIRE_LICENSE = MIT
- PIPEWIRE_LICENSE_FILES = COPYING LICENSE
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+-LIBGLIB2_CONF_OPTS += -Dselinux=enabled
++LIBGLIB2_CONF_OPTS += -Dselinux=enabled -Dxattr=true
+ LIBGLIB2_DEPENDENCIES += libselinux
+ else
+-LIBGLIB2_CONF_OPTS += -Dselinux=disabled
++LIBGLIB2_CONF_OPTS += -Dselinux=disabled -Dxattr=false
+ endif
+ 
+ # Purge gdb-related files
