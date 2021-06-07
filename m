@@ -1,51 +1,81 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:17:36 -0000
-Subject: [Buildroot] [git commit] configs: add espressobin ultra dts and
- bump kernel to 5.11.21
-Message-ID: <20210607144653.10A2B8B398@busybox.osuosl.org>
+Date: Mon, 07 Jun 2021 15:17:37 -0000
+Subject: [Buildroot] [git commit] package/libubootenv: bump to version 0.3.2
+Message-ID: <20210607144652.6EE4A8B398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04cd621a4532601328157aacf2c78c171f25eb52
+commit: https://git.buildroot.net/buildroot/commit/?id=0173c06e5db4aa3d708e27872da05f272cfea83d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds support for the Globalscale EspressoBin Ultra, which is
-an evolution of the EspressoBin family.  Same SoC and switchcore, more
-Ethernet ports, including one PoE PD port.
-
-Tested-by: Atallah Amine <amine_atallah@outlook.com>
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/globalscale_espressobin_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ ...src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch | 11 ++++++-----
+ package/libubootenv/libubootenv.hash                          |  2 +-
+ package/libubootenv/libubootenv.mk                            |  4 ++--
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/configs/globalscale_espressobin_defconfig b/configs/globalscale_espressobin_defconfig
-index 50cfc6b530..37d9c1859c 100644
---- a/configs/globalscale_espressobin_defconfig
-+++ b/configs/globalscale_espressobin_defconfig
-@@ -2,17 +2,17 @@ BR2_aarch64=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_VFPV4=y
+diff --git a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
+index 2a234af78c..9040e1267e 100644
+--- a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
++++ b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
+@@ -26,10 +26,10 @@ Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+  1 file changed, 2 insertions(+), 4 deletions(-)
  
--# Linux headers same as kernel, a 5.6 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
-+# Linux headers same as kernel, a 5.11 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_11=y
+ diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index a04dd11..3a2115d 100644
++index 4b71bc5..0b515f4 100644
+ --- a/src/CMakeLists.txt
+ +++ b/src/CMakeLists.txt
+-@@ -12,17 +12,15 @@ SET(include_HEADERS
++@@ -12,18 +12,16 @@ SET(include_HEADERS
+  
+  include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
+  
+@@ -41,8 +41,9 @@ index a04dd11..3a2115d 100644
+ -SET_TARGET_PROPERTIES(ubootenv_static PROPERTIES OUTPUT_NAME ubootenv)
+  add_executable(fw_printenv fw_printenv.c)
+  add_executable(fw_setenv fw_setenv.c)
+- target_link_libraries(fw_printenv ubootenv z)
+- target_link_libraries(fw_setenv ubootenv z)
++ target_link_libraries(ubootenv z)
++ target_link_libraries(fw_printenv ubootenv)
++ target_link_libraries(fw_setenv ubootenv)
+  
+ -install (TARGETS ubootenv ubootenv_static DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ +install (TARGETS ubootenv DESTINATION ${CMAKE_INSTALL_LIBDIR})
+@@ -50,5 +51,5 @@ index a04dd11..3a2115d 100644
+  install (TARGETS fw_printenv DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install (TARGETS fw_setenv DESTINATION ${CMAKE_INSTALL_BINDIR})
+ -- 
+-2.25.1
++2.30.2
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.11"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.11.21"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/globalscale/espressobin/linux-extras.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-3720-espressobin marvell/armada-3720-espressobin-emmc marvell/armada-3720-espressobin-v7 marvell/armada-3720-espressobin-v7-emmc"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-3720-espressobin marvell/armada-3720-espressobin-emmc marvell/armada-3720-espressobin-v7 marvell/armada-3720-espressobin-v7-emmc marvell/armada-3720-espressobin-ultra"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index 0b5320b36f..d6de614612 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e25adf81dd2d4a083cb2cf032843a1ee2bb1fab54aa7a0202bd2295186bfe1b7  libubootenv-e663439e3d39a4cdbddb7e818245a99c485fa965.tar.gz
++sha256  662ef1efe058e2d5a07498f7b63aff7b2a521c0f6f199c499fb3ae84b54121bd  libubootenv-0.3.2.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index 7a98f5324b..295226b9aa 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
+-LIBUBOOTENV_VERSION = e663439e3d39a4cdbddb7e818245a99c485fa965
+-LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
++LIBUBOOTENV_VERSION = 0.3.2
++LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
+ LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
+ LIBUBOOTENV_INSTALL_STAGING = YES
