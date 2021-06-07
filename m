@@ -1,81 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:37 -0000
-Subject: [Buildroot] [git commit] package/libubootenv: bump to version 0.3.2
-Message-ID: <20210607144652.6EE4A8B398@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ethtool: bump to version 5.12
+Message-ID: <20210607144653.2FF988B398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0173c06e5db4aa3d708e27872da05f272cfea83d
+commit: https://git.buildroot.net/buildroot/commit/?id=ebf7eb7fff301b354b04c5dba96fc6accd6969f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch | 11 ++++++-----
- package/libubootenv/libubootenv.hash                          |  2 +-
- package/libubootenv/libubootenv.mk                            |  4 ++--
- 3 files changed, 9 insertions(+), 8 deletions(-)
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-index 2a234af78c..9040e1267e 100644
---- a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-+++ b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-@@ -26,10 +26,10 @@ Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-  1 file changed, 2 insertions(+), 4 deletions(-)
- 
- diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index a04dd11..3a2115d 100644
-+index 4b71bc5..0b515f4 100644
- --- a/src/CMakeLists.txt
- +++ b/src/CMakeLists.txt
--@@ -12,17 +12,15 @@ SET(include_HEADERS
-+@@ -12,18 +12,16 @@ SET(include_HEADERS
-  
-  include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
-  
-@@ -41,8 +41,9 @@ index a04dd11..3a2115d 100644
- -SET_TARGET_PROPERTIES(ubootenv_static PROPERTIES OUTPUT_NAME ubootenv)
-  add_executable(fw_printenv fw_printenv.c)
-  add_executable(fw_setenv fw_setenv.c)
-- target_link_libraries(fw_printenv ubootenv z)
-- target_link_libraries(fw_setenv ubootenv z)
-+ target_link_libraries(ubootenv z)
-+ target_link_libraries(fw_printenv ubootenv)
-+ target_link_libraries(fw_setenv ubootenv)
-  
- -install (TARGETS ubootenv ubootenv_static DESTINATION ${CMAKE_INSTALL_LIBDIR})
- +install (TARGETS ubootenv DESTINATION ${CMAKE_INSTALL_LIBDIR})
-@@ -50,5 +51,5 @@ index a04dd11..3a2115d 100644
-  install (TARGETS fw_printenv DESTINATION ${CMAKE_INSTALL_BINDIR})
-  install (TARGETS fw_setenv DESTINATION ${CMAKE_INSTALL_BINDIR})
- -- 
--2.25.1
-+2.30.2
- 
-diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
-index 0b5320b36f..d6de614612 100644
---- a/package/libubootenv/libubootenv.hash
-+++ b/package/libubootenv/libubootenv.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 334ff8d503..536579670f 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  817d5396a9307b4c637b435d4c558b8f5f964a1464a035ca3c0180f4cc93cfcf  ethtool-5.10.tar.xz
++sha256  f5ddfa9c75053d8011b8c8c99ec4e2d3c83cd1972f638692d62e37fa3ef36f07  ethtool-5.12.tar.xz
  # Locally calculated
--sha256  e25adf81dd2d4a083cb2cf032843a1ee2bb1fab54aa7a0202bd2295186bfe1b7  libubootenv-e663439e3d39a4cdbddb7e818245a99c485fa965.tar.gz
-+sha256  662ef1efe058e2d5a07498f7b63aff7b2a521c0f6f199c499fb3ae84b54121bd  libubootenv-0.3.2.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
-diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
-index 7a98f5324b..295226b9aa 100644
---- a/package/libubootenv/libubootenv.mk
-+++ b/package/libubootenv/libubootenv.mk
-@@ -4,8 +4,8 @@
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index c9765eccff..f3e950f212 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUBOOTENV_VERSION = e663439e3d39a4cdbddb7e818245a99c485fa965
--LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
-+LIBUBOOTENV_VERSION = 0.3.2
-+LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
- LIBUBOOTENV_LICENSE = LGPL-2.1
- LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
- LIBUBOOTENV_INSTALL_STAGING = YES
+-ETHTOOL_VERSION = 5.10
++ETHTOOL_VERSION = 5.12
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
