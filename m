@@ -1,39 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jun 2021 22:40:08 +0200
-Subject: [Buildroot] [git commit] package/zmqpp: use
- BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
-Message-ID: <20210607144659.1007080E35@busybox.osuosl.org>
+Date: Mon, 07 Jun 2021 15:17:58 -0000
+Subject: [Buildroot] [git commit] package/ltp-testsuite: enable ebizzy
+Message-ID: <20210607144654.A6DBC81191@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2af0d35875783143b91d9b189943de74b8950bb5
+commit: https://git.buildroot.net/buildroot/commit/?id=e18ebde613d297e470f9a219a32bf535dccc2013
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
-should have no negative effect on performance.
+ebizzy has been fixed in 20200930 (commit 967612c45).
 
-Introduction of 'assert' statements, 'debug'-type builds with additional
-logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/zmqpp/zmqpp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ltp-testsuite/ltp-testsuite.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-index c629f14920..32fabf26ef 100644
---- a/package/zmqpp/zmqpp.mk
-+++ b/package/zmqpp/zmqpp.mk
-@@ -19,7 +19,7 @@ ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
- # -ffast-math -finline-functions -fomit-frame-pointer are disabled,
- # so only set CONFIG for the non-affected cases.
- ifneq ($(BR2_or1k):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:)
--ZMQPP_CONFIG = $(if $(BR2_ENABLE_DEBUG),buildroot,release)
-+ZMQPP_CONFIG = $(if $(BR2_ENABLE_RUNTIME_DEBUG),buildroot,release)
- endif
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 43ee134d1c..978d01b7a6 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -76,8 +76,7 @@ LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_MUSL) += \
+ 	testcases/kernel/syscalls/getcontext/getcontext01.c \
+ 	testcases/kernel/syscalls/rt_tgsigqueueinfo/rt_tgsigqueueinfo01.c \
+ 	testcases/kernel/syscalls/timer_create/timer_create01.c \
+-	testcases/kernel/syscalls/timer_create/timer_create03.c \
+-	utils/benchmark/ebizzy-0.3
++	testcases/kernel/syscalls/timer_create/timer_create03.c
  
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ # ldd command build system tries to build a shared library unconditionally.
+ LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_STATIC_LIBS) += \
