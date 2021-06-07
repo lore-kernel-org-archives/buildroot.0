@@ -1,52 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:17:43 -0000
-Subject: [Buildroot] [git commit] package/gcc: enable secureplt for powerpc64
-Message-ID: <20210607144653.01C7A81191@busybox.osuosl.org>
+Date: Mon, 07 Jun 2021 15:17:44 -0000
+Subject: [Buildroot] [git commit] package/libsepol: bump to version 3.2
+Message-ID: <20210607144656.4CD9A814BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=578de6edbfe95ee8e56c4f81df24f6bd8115d35d
+commit: https://git.buildroot.net/buildroot/commit/?id=e9b35ce3ea36a6326ff1b6f368cc3d140876659d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-GCC support enabling secureplt for powerpc64.
-
-From [1]
-"PowerPC has two PLT models: BSS-PLT and Secure-PLT. BSS-PLT uses
-runtime code generation to generate the PLT stubs. Secure-PLT was
-introduced with GCC 4.1 and Binutils 2.17 (base has GCC 4.2.1 and
-Binutils 2.17), and is a more secure PLT format, using a read-only
-linkage table, with the dynamic linker populating a non-executable
-index table."
-
-This option is always enabled by glibc testing script
-called build-many-glibcs.py [1]. This script exist since
-glibc 2.25.
-
-Runtime tested with qemu_ppc64_e5500_defconfig.
-
-[1] https://reviews.freebsd.org/D20598
-[2] https://sourceware.org/git/?p=glibc.git;a=blob;f=scripts/build-many-glibcs.py;h=9c08ab7b326e6385abb835eb32dd143952a71942;hb=9826b03b747b841f5fc6de2054bf1ef3f5c4bdf3#l345
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Matt Weber <matthew.weber@collins.com>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Tested-by: Matthew Weber <matthew.weber@collins.com>
+Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gcc/gcc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libsepol/libsepol.hash | 4 ++--
+ package/libsepol/libsepol.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 5e419f7ede..ed9b93e50f 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -231,7 +231,7 @@ endif
- # Set default to Secure-PLT to prevent run-time
- # generation of PLT stubs (supports RELRO and
- # SELinux non-exemem capabilities)
--ifeq ($(BR2_powerpc),y)
-+ifeq ($(BR2_powerpc)$(BR2_powerpc64),y)
- HOST_GCC_COMMON_CONF_OPTS += --enable-secureplt
- endif
+diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
+index 1759d3ba04..b273f982b6 100644
+--- a/package/libsepol/libsepol.hash
++++ b/package/libsepol/libsepol.hash
+@@ -1,5 +1,5 @@
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 ae6778d01443fdd38cd30eeee846494e19f4d407b09872580372f4aa4bf8a3cc  libsepol-3.1.tar.gz
++sha256  dfc7f662af8000116e56a01de6a0394ed79be1b34b999e551346233c5dd19508  libsepol-3.2.tar.gz
  
+ # Hash for license file
+-sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
++sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index a4398bdc42..55125f2203 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSEPOL_VERSION = 3.1
+-LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/20200710
++LIBSEPOL_VERSION = 3.2
++LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEPOL_VERSION)
+ LIBSEPOL_LICENSE = LGPL-2.1+
+ LIBSEPOL_LICENSE_FILES = COPYING
+ LIBSEPOL_CPE_ID_VENDOR = selinuxproject
