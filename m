@@ -1,42 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:17:39 -0000
-Subject: [Buildroot] [git commit] package/links: bump version to 2.22
-Message-ID: <20210607144652.B8EF081191@busybox.osuosl.org>
+Date: Mon, 07 Jun 2021 15:17:40 -0000
+Subject: [Buildroot] [git commit] package/cog: bump to version 0.10.0
+Message-ID: <20210607144653.D35118B398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b93930ab12b8fbd2d90e01f99ddf2aa2ce50f66e
+commit: https://git.buildroot.net/buildroot/commit/?id=61fb1a40e52183d0be0c14ccc77e613f7414f077
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Release notes:
+
+  https://wpewebkit.org/release/cog-0.10.0.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/links/links.hash | 2 +-
- package/links/links.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cog/cog.hash | 8 ++++----
+ package/cog/cog.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/links/links.hash b/package/links/links.hash
-index f941c2cd1b..156b73fb63 100644
---- a/package/links/links.hash
-+++ b/package/links/links.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  285eed8591c7781ec26213df82786665aaa1b9286782e8a7a1a7e2a6e1630d63  links-2.21.tar.bz2
-+sha256  0364986b3a7f1e8e3171bea362b53f71e1dd3360a8842d66fdc65580ebc2084d  links-2.22.tar.bz2
- sha256  92deeb70791366630095d4e0714fe37d6e2bd5db0e6ef498ebb8de328f45b253  COPYING
-diff --git a/package/links/links.mk b/package/links/links.mk
-index 5213e02bd5..015878f892 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+index 2cafe8ca6e..566d30fa2a 100644
+--- a/package/cog/cog.hash
++++ b/package/cog/cog.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/cog-0.8.1.tar.xz.sums
+-md5  21664fb04c9149dea6d68e13e6074276  cog-0.8.1.tar.xz
+-sha1  baabba7f0f6009c64ef0c4f7c5f807382cffef5d  cog-0.8.1.tar.xz
+-sha256  b82e917eb764943b9859c631974f8f0e748b79ae87bb7a944f46c818740e0208  cog-0.8.1.tar.xz
++# From https://wpewebkit.org/releases/cog-0.10.0.tar.xz.sums
++md5  1b0407b6163a3a01afdfc0fb454a7570  cog-0.10.0.tar.xz
++sha1  911816c00a2b08f4cfd388b1d2e176835c9b4e9e  cog-0.10.0.tar.xz
++sha256  2c72369c636ca4684370adad1344071b23c9ee2c851eb7d738fa2e1d7092031f  cog-0.10.0.tar.xz
+ 
+ # Hashes for license files:
+ sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index 86bdf935d2..d373e6e1b6 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINKS_VERSION = 2.21
-+LINKS_VERSION = 2.22
- LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
- LINKS_SITE = http://links.twibright.com/download
- LINKS_DEPENDENCIES = host-pkgconf
+-COG_VERSION = 0.8.1
++COG_VERSION = 0.10.0
+ COG_SITE = https://wpewebkit.org/releases
+ COG_SOURCE = cog-$(COG_VERSION).tar.xz
+ COG_INSTALL_STAGING = YES
