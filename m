@@ -1,70 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Jun 2021 23:40:39 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/vlc: fix build
- with latest live555
-Message-ID: <20210607211335.062A58B876@busybox.osuosl.org>
+Date: Mon, 7 Jun 2021 23:39:14 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/pwgen: add
+ PWGEN_CPE_ID_VENDOR
+Message-ID: <20210607211334.D763E8B845@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32f4885cc30160410e98a3c726773b33a5e88cae
+commit: https://git.buildroot.net/buildroot/commit/?id=089246ef52c486f99b447443fe2aee96dd3e5bc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix build failure with live555 raised since commit
-6ad1c7f12e57ab7c6f022470e0aacec442d14267
+cpe:2.3:a:pwgen_project:pwgen is a valid CPE identifier for this
+package:
 
-Fixes:
- - http://autobuild.buildroot.org/results/83170984f96238756c45bf1f4e542363afafd45f
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apwgen_project%3Apwgen
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit eb6017fabe09fbb654b153414aba332d78002bd7)
+(cherry picked from commit eb72fa0d3cfe73217a96329c6b190cbfde63971c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ess-live555.cpp-fix-build-with-live555-20.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/pwgen/pwgen.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch b/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
-new file mode 100644
-index 0000000000..5f046648d4
---- /dev/null
-+++ b/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
-@@ -0,0 +1,36 @@
-+From eba390d13ec4089cd6b9d8687ab3f8905b9d3ac8 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 22 May 2021 22:56:04 +0200
-+Subject: [PATCH] modules/access/live555.cpp: fix build with live555 >=
-+ 2020.12.11
-+
-+Since live555-2020.12.11, connectionEndpointAddress() member function
-+use a "struct sockaddr_storage" in preparation for eventual support of
-+IPv6: http://www.live555.com/liveMedia/public/changelog.txt
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/83170984f96238756c45bf1f4e542363afafd45f
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ modules/access/live555.cpp | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/modules/access/live555.cpp b/modules/access/live555.cpp
-+index 9d6e01ae32..32a6c294eb 100644
-+--- a/modules/access/live555.cpp
-++++ b/modules/access/live555.cpp
-+@@ -850,7 +850,9 @@ static int SessionsSetup( demux_t *p_demux )
-+             if( !p_sys->b_multicast )
-+             {
-+                 /* We need different rollover behaviour for multicast */
-+-                p_sys->b_multicast = IsMulticastAddress( sub->connectionEndpointAddress() );
-++                struct sockaddr_storage tempAddr;
-++                sub->getConnectionEndpointAddress( tempAddr );
-++                p_sys->b_multicast = IsMulticastAddress( tempAddr );
-+             }
-+ 
-+             tk = (live_track_t*)malloc( sizeof( live_track_t ) );
-+-- 
-+2.30.2
-+
+diff --git a/package/pwgen/pwgen.mk b/package/pwgen/pwgen.mk
+index ad9465b82c..89925bb300 100644
+--- a/package/pwgen/pwgen.mk
++++ b/package/pwgen/pwgen.mk
+@@ -8,6 +8,7 @@ PWGEN_VERSION = 2.08
+ PWGEN_SITE = http://downloads.sourceforge.net/project/pwgen/pwgen/$(PWGEN_VERSION)
+ PWGEN_LICENSE = GPL-2.0
+ PWGEN_LICENSE_FILES = debian/copyright
++PWGEN_CPE_ID_VENDOR = pwgen_project
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
