@@ -1,94 +1,40 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 7 Jun 2021 08:53:10 +1000
-Subject: [Buildroot] [PATCH for-next 1/2] package/gdb: enable gdbserver
- support for riscv
-In-Reply-To: <20210606150351.423542-1-romain.naour@gmail.com>
-References: <20210606150351.423542-1-romain.naour@gmail.com>
-Message-ID: <CAKmqyKPRHHYDYC+M=XD20RYq7xgowfK5N9w24Dsz9zZXuCKk+g@mail.gmail.com>
+From: Jianhui Zhao <zhaojh329@gmail.com>
+Date: Mon,  7 Jun 2021 10:42:38 +0800
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump version to 3.11.0
+Message-ID: <20210607024239.2657720-1-zhaojh329@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 7, 2021 at 1:04 AM Romain Naour <romain.naour@gmail.com> wrote:
->
-> It turn out that gdbserver support for riscv is available since 10.1 release, since commit [1]
->
-> When BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS is not enabled, gdb will use the stable version (9.x)
-> where gdbserver for riscv is not available.
->
-> When BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS enabled, only allow gdb 10.1 in version choice and
-> allow enabling gdbserver for the target.
->
-> [1] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=bf84f7066626c78884436e1c39fb60f04c665f21
->
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+---
+ package/libuhttpd/libuhttpd.hash | 2 +-
+ package/libuhttpd/libuhttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
-
-Alistair
-
-> ---
-> git tag --contains bf84f7066626c78884436e1c39fb60f04c665f21
-> returns gdb-10.1-release tag as the oldest containing this commit.
-> ---
->  package/gdb/Config.in      | 6 +++---
->  package/gdb/Config.in.host | 3 ++-
->  2 files changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-> index 262740fc4c..68a24e0b36 100644
-> --- a/package/gdb/Config.in
-> +++ b/package/gdb/Config.in
-> @@ -19,8 +19,8 @@ config BR2_PACKAGE_GDB
->         depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
->         depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
->         depends on BR2_INSTALL_LIBSTDCPP
-> -       # no gdbserver on riscv
-> -       select BR2_PACKAGE_GDB_DEBUGGER if BR2_riscv
-> +       # no gdbserver on riscv until 10.1 release
-> +       select BR2_PACKAGE_GDB_DEBUGGER if BR2_riscv && !BR2_GDB_VERSION_10
->         # When the external toolchain gdbserver is copied to the
->         # target, we don't allow building a separate gdbserver. The
->         # one from the external toolchain should be used.
-> @@ -47,7 +47,7 @@ if BR2_PACKAGE_GDB
->  config BR2_PACKAGE_GDB_SERVER
->         bool "gdbserver"
->         depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
-> -       depends on !BR2_riscv
-> +       depends on !BR2_riscv || BR2_riscv && BR2_GDB_VERSION_10
->         help
->           Build the gdbserver stub to run on the target.
->           A full gdb is needed to debug the progam.
-> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-> index 07e75b2c0e..5aead236d0 100644
-> --- a/package/gdb/Config.in.host
-> +++ b/package/gdb/Config.in.host
-> @@ -4,7 +4,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
->         depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
->         depends on !BR2_microblaze
->         depends on !BR2_or1k
-> -       depends on !BR2_riscv
->         depends on !BR2_nds32
->
->  comment "Host GDB Options"
-> @@ -70,9 +69,11 @@ choice
->
->  config BR2_GDB_VERSION_8_3
->         bool "gdb 8.3.x"
-> +       depends on !BR2_riscv
->
->  config BR2_GDB_VERSION_9_2
->         bool "gdb 9.2.x"
-> +       depends on !BR2_riscv
->
->  config BR2_GDB_VERSION_10
->         bool "gdb 10.x"
-> --
-> 2.31.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+index 4b0b5027c6..19a02e5be0 100644
+--- a/package/libuhttpd/libuhttpd.hash
++++ b/package/libuhttpd/libuhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6e7a9ad61e3d0ab5bd4d20b274b850542dff8057a8fcf6c36ce59eb34818f61f  libuhttpd-3.10.1.tar.gz
++sha256  dcd95fac7b29d43f57e942db6e9fb4c8745d4284684cd627d60c8a7f8c76cd32  libuhttpd-3.11.0.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
+index 326c78face..61afec701e 100644
+--- a/package/libuhttpd/libuhttpd.mk
++++ b/package/libuhttpd/libuhttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUHTTPD_VERSION = 3.10.1
++LIBUHTTPD_VERSION = 3.11.0
+ LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
+ LIBUHTTPD_LICENSE = MIT
+ LIBUHTTPD_LICENSE_FILES = LICENSE
+-- 
+2.25.1
