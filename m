@@ -1,12 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 7 Jun 2021 21:00:13 +0200
-Subject: [Buildroot] [PATCH] package/netperf: move SITE so s.b.n
-In-Reply-To: <87tumbxxu9.fsf@dell.be.48ers.dk>
-References: <c160b9eba623c54debf9bf50d69cca4a6d6ed69e.1622119840.git.baruch@tkos.co.il>
- <7d24aa70-74c4-1166-e69f-5d8c7a5c6875@mind.be>
- <a7969129-6272-575d-0846-1874629cebc4@mind.be> <87v96wrw9p.fsf@tarshish>
- <87tumbxxu9.fsf@dell.be.48ers.dk>
-Message-ID: <8fac0332-92aa-9545-7a30-afa8194e0d56@mind.be>
+Date: Mon, 7 Jun 2021 21:16:49 +0200
+Subject: [Buildroot] Is there a better version of vi?
+In-Reply-To: <f7452a41879246d3a3bdbe185657ccdc@AcuMS.aculab.com>
+References: <f7452a41879246d3a3bdbe185657ccdc@AcuMS.aculab.com>
+Message-ID: <df983b32-db5a-1eda-cee5-0b15c181a32c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,28 +12,50 @@ To: buildroot@busybox.net
 
 
 
-On 06/06/2021 09:21, Peter Korsgaard wrote:
->>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
-> 
->  > Hi Arnout,
->  > On Wed, Jun 02 2021, Arnout Vandecappelle wrote:
->  >>>> -NETPERF_SITE = ftp://ftp.netperf.org/netperf
->  >>>> +NETPERF_SITE = http://sources.buildroot.net/netperf
->  >> 
->  >> We prefer buildroot.org over buildroot.net nowadays, so I changed that.
-> 
->  > BR2_BACKUP_SITE still defaults to "http://sources.buildroot.net". Should
->  > we change that?
-> 
-> There is a fairly important difference between .net and .org, .net is
-> though the cloudflare cache, but .org goes straight to our upstream
-> server.
-> 
-> Given the extra bandwidth and availibility of Cloudflare, I would prefer
-> we use .net.
+On 03/06/2021 15:27, David Laight wrote:
+> The version of vi is busybox is somewhat cutdown.
+> I can't see an option to include either nvi or vim.
 
- Wouldn't it be possible to route sources.buildroot.org through cloudflare as well?
+Symbol: BR2_PACKAGE_VIM [=n]
 
+Type  : bool
+
+Prompt: vim
+
+  Location:
+
+    -> Target packages
+
+(1)   -> Text editors and viewers
+
+  Defined at package/vim/Config.in:1
+
+  Depends on: BR2_USE_MMU [=y] && BR2_USE_WCHAR [=y] &&
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS [=y]
+  Selects: BR2_PACKAGE_NCURSES [=n]
+
+ I suspect you didn't turn on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+
+ vim is pretty large though, adding nvi might be a good idea. Feel free to send
+a patch!
 
  Regards,
  Arnout
+
+> 
+> While vim has grown all sorts of horrid extensions
+> it would be nice to have a version that matches the
+> code from the late 1980s.
+> Most annoying is not having :g//p
+> 
+> 	David
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
