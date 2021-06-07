@@ -1,42 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Jun 2021 12:49:34 +0200
-Subject: [Buildroot] [git commit] package/aircrack-ng: requires RC4 support
- in openssl
-Message-ID: <20210607144659.75A7080E35@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 7 Jun 2021 17:18:41 +0200
+Subject: [Buildroot] [git commit] package/udisks: drop unused lvm2 support
+Message-ID: <20210607144942.89C308B82A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81a9e7297cb93eba27a7b7dd85c5fc72a2e270e2
+commit: https://git.buildroot.net/buildroot/commit/?id=e509ddd44fbe74adcd98afdf6e7e95eef8e51e44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Enable RC4 in openssl to fix build failure when openssl is the crypto
-backend of aircrack-ng.
+BR2_PACKAGE_UDISKS_LVM2 was dropped in commit eb251b30084e38 (package/lvm2:
+drop BR2_PACKAGE_LVM2_APP_LIBRARY), but missed when merging next.  Drop it.
 
-Fixes:
-http://autobuild.buildroot.net/results/007b7d88aed3902fb8ed10ee5c0ff0dc1899756d/
-http://autobuild.buildroot.net/results/da464dd449bb950104122535eabf8a4e914d0a9e/
-http://autobuild.buildroot.net/results/d10fec8378c334e896d9e38afe00193ef747192f/
-
-Cc: Laurent Cans <laurent.cans@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Laurent Cans <laurent.cans@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/aircrack-ng/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/udisks/udisks.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
-index f3e2bc4ef1..eb997e8d1b 100644
---- a/package/aircrack-ng/Config.in
-+++ b/package/aircrack-ng/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_AIRCRACK_NG
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBGCRYPT
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  A set of tools for auditing wireless networks
+diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
+index 1090f77846..aa1a73aff5 100644
+--- a/package/udisks/udisks.mk
++++ b/package/udisks/udisks.mk
+@@ -39,8 +39,4 @@ UDISKS_CONF_OPTS = \
+ 	--disable-vdo \
+ 	--disable-zram
  
+-ifeq ($(BR2_PACKAGE_UDISKS_LVM2),y)
+-UDISKS_CONF_OPTS += --enable-lvm2
+-endif
+-
+ $(eval $(autotools-package))
