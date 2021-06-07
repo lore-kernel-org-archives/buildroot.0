@@ -1,40 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:18:32 -0000
-Subject: [Buildroot] [git commit] package/hostapd: enable MD4 in openssl
-Message-ID: <20210607144657.2BB0E814AD@busybox.osuosl.org>
+Date: Mon, 07 Jun 2021 15:18:33 -0000
+Subject: [Buildroot] [git commit] package/openocd: add optional dependency
+ on libgpiod
+Message-ID: <20210607144657.15FBD80FB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbf123d9ca6e9019618ace24abe9b21c1f074226
+commit: https://git.buildroot.net/buildroot/commit/?id=636cd56e54672a6782367fa28ed2ac1f96a22166
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hostapd assumes that openssl always provides MD4 support. However MD4
-support in openssl has become optional since  commit a83d41867c8d
-("package/libopenssl: add option to enable some features").
+To make the Linux GPIOD bitbang adapter driver through libgpiod
+available.
 
-Select openssl MD4 support in hostapd Kconfig to avoid build failures.
-
-Fixes:
-http://autobuild.buildroot.net/results/09ce1d8009da98cd2a3f2c8488abaa9f060a9d6b/
-
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/hostapd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/openocd/openocd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
-index 54d2086c09..1ac7f6cd5a 100644
---- a/package/hostapd/Config.in
-+++ b/package/hostapd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOSTAPD
- 	bool "hostapd"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  User space daemon for wireless access points.
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+index 1460495a88..b74426ff47 100644
+--- a/package/openocd/openocd.mk
++++ b/package/openocd/openocd.mk
+@@ -32,7 +32,8 @@ OPENOCD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_LIBUSB),libusb) \
+ 	$(if $(BR2_PACKAGE_LIBUSB_COMPAT),libusb-compat) \
+ 	$(if $(BR2_PACKAGE_LIBHID),libhid) \
+-	$(if $(BR2_PACKAGE_HIDAPI),hidapi)
++	$(if $(BR2_PACKAGE_HIDAPI),hidapi) \
++	$(if $(BR2_PACKAGE_LIBGPIOD),libgpiod)
  
+ # Adapters
+ OPENOCD_CONF_OPTS += \
