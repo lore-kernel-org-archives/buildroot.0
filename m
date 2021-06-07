@@ -1,45 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:17:41 -0000
-Subject: [Buildroot] [git commit] package/nano: bump to version 5.7
-Message-ID: <20210607144652.C83BA8B398@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 07 Jun 2021 15:17:42 -0000
+Subject: [Buildroot] [git commit] package/llvm: add BPF backend
+Message-ID: <20210607144656.28E1B814AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=845acb9c31fd0f8f547f6cc84ea5007ae23ace8a
+commit: https://git.buildroot.net/buildroot/commit/?id=72e57b7b4bc0efa960dd9c569dd674b0c005fad7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+bcc is a front-end tool for eBPF :
+https://github.com/iovisor/bcc/blob/master/README.md.
+eBPF is the most powerful Linux tracer, and bcc
+allows to write eBPF scripts in C and PYTHON3.
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index cbb4977223..532a68e0c9 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v5/nano-5.6.1.tar.xz.asc
-+# https://www.nano-editor.org/dist/v5/nano-5.7.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256  760d7059e0881ca0ee7e2a33b09d999ec456ff7204df86bee58eb6f523ee8b09  nano-5.6.1.tar.xz
-+sha256  d4b181cc2ec11def3711b4649e34f2be7a668e70ab506860514031d069cccafa  nano-5.7.tar.xz
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 77126fd4b0..39d9be12ba 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+BCC requires enabling LLVM backend BPF support.
+
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Qais Yousef <qais.yousef@arm.com>
+Reviewed-by: Qais Yousef <qais.yousef@arm.com>
+Cc: Qais Yousef <qais.yousef@arm.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/llvm/Config.in | 6 ++++++
+ package/llvm/llvm.mk   | 5 +++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+index 1d21d879da..6ec2ffcfe6 100644
+--- a/package/llvm/Config.in
++++ b/package/llvm/Config.in
+@@ -47,6 +47,12 @@ config BR2_PACKAGE_LLVM_RTTI
  
- NANO_VERSION_MAJOR = 5
--NANO_VERSION = $(NANO_VERSION_MAJOR).6.1
-+NANO_VERSION = $(NANO_VERSION_MAJOR).7
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+ 	  https://llvm.org/docs/HowToSetUpLLVMStyleRTTI.html
+ 
++config BR2_PACKAGE_LLVM_BPF
++	bool "BPF backend"
++	help
++	  Build BPF target. Select this option if you are going
++	  to install bcc on the target.
++
+ endif
+ 
+ comment "llvm needs a toolchain w/ wchar, threads, C++, gcc >= 4.8, dynamic library"
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 7d60fe7f8c..6c721c30b9 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -62,6 +62,11 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
+ LLVM_TARGETS_TO_BUILD += AMDGPU
+ endif
+ 
++# Build BPF backend
++ifeq ($(BR2_PACKAGE_LLVM_BPF),y)
++LLVM_TARGETS_TO_BUILD += BPF
++endif
++
+ # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
+ LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
+ 
