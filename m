@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 07 Jun 2021 23:37:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/picocom: add
- PICOCOM_CPE_ID_VENDOR
-In-Reply-To: <20210522175351.279349-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 22 May 2021 19:53:51 +0200")
-References: <20210522175351.279349-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a6o1uzip.fsf@dell.be.48ers.dk>
+Date: Mon, 07 Jun 2021 23:38:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pigz: add PIGZ_CPE_ID_VENDOR
+In-Reply-To: <20210522175803.279609-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 22 May 2021 19:58:03 +0200")
+References: <20210522175803.279609-1-fontaine.fabrice@gmail.com>
+Message-ID: <875yypuzha.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > cpe:2.3:a:picocom_project:picocom is a valid CPE identifier for this
- > package:
-
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apicocom_project%3Apicocom
+ > cpe:2.3:a:zlib:pigz is a valid CPE identifier for this package:
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Azlib%3Apigz
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2021.02.x, thanks.
-
- > ---
- >  package/picocom/picocom.mk | 1 +
- >  1 file changed, 1 insertion(+)
-
- > diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
- > index d27c734376..2d585bb2f5 100644
- > --- a/package/picocom/picocom.mk
- > +++ b/package/picocom/picocom.mk
- > @@ -8,6 +8,7 @@ PICOCOM_VERSION = 3.1
- >  PICOCOM_SITE = $(call github,npat-efault,picocom,$(PICOCOM_VERSION))
- >  PICOCOM_LICENSE = GPL-2.0+
- >  PICOCOM_LICENSE_FILES = LICENSE.txt
- > +PICOCOM_CPE_ID_VENDOR = picocom_project
- 
- >  define PICOCOM_BUILD_CMDS
- >  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- > -- 
- > 2.30.2
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
