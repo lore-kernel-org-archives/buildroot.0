@@ -1,51 +1,33 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:46 -0000
-Subject: [Buildroot] [git commit] package/links: enable building graphics
- mode with only fb driver
-Message-ID: <20210607144654.5220A8B398@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/raspberrypi: add rpi3 64 bit hint
+Message-ID: <20210607144655.B328181191@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cf6c02fb0b8b216e446c1230cb8f1eb61763211
+commit: https://git.buildroot.net/buildroot/commit/?id=eb3c965c8816519e3c07ad6f9fa6d17146b1cdab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The "fb" framebuffer driver needs GPM (mouse support) to compile,
-but not DirectFB or Xorg.
-
-The .mk file already has an optional dependency on GPM, so it doesn't
-need to be added there.
-
-Also added a Kconfig comment for easier discovery of the GPM
-requirement.
-
-Signed-off-by: Urja Rannikko <urjaman@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/links/Config.in | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ board/raspberrypi/readme.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/links/Config.in b/package/links/Config.in
-index 713f53da4e..cc2389c9f1 100644
---- a/package/links/Config.in
-+++ b/package/links/Config.in
-@@ -10,11 +10,15 @@ if BR2_PACKAGE_LINKS
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index 8b3de6d251..ac784e07fd 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -35,6 +35,10 @@ For model 3 B and B+:
  
- config BR2_PACKAGE_LINKS_GRAPHICS
- 	bool "use graphics"
--	depends on BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_GPM || BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXT if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_LIBPNG
- 	help
--	  Enable graphics output for DirectFB or X11.
-+	  Enable graphics output for framebuffer, DirectFB or X11.
-+	  Framebuffer output requires GPM (console mouse).
- 	  Otherwise links will be text-mode only.
+   $ make raspberrypi3_defconfig
  
-+comment "links graphics needs GPM, DirectFB or X11"
-+	depends on !BR2_PACKAGE_GPM && !BR2_PACKAGE_DIRECTFB && !BR2_PACKAGE_XORG7
++or for model 3 B and B+ (64 bit):
 +
- endif
++  $ make raspberrypi3_64_defconfig
++
+ For model 4 B:
+ 
+   $ make raspberrypi4_defconfig
