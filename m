@@ -1,32 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 07 Jun 2021 23:17:34 +0200
-Subject: [Buildroot] [git commit] package/python-bluezero: add recursive
- dependencies
-In-Reply-To: <20210521085447.0BE2A86AE6@busybox.osuosl.org> (Arnout
- Vandecappelle's message of "Fri, 21 May 2021 11:12:30 +0200")
-References: <20210521085447.0BE2A86AE6@busybox.osuosl.org>
-Message-ID: <87mts1wf0x.fsf@dell.be.48ers.dk>
+Date: Mon, 07 Jun 2021 23:18:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-bluezero: select dbus
+In-Reply-To: <20210524185617.10260-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 24 May 2021 20:56:17 +0200")
+References: <20210524185617.10260-1-fontaine.fabrice@gmail.com>
+Message-ID: <87im2pwez5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=e2bcf6605a540ff370479dffe94cd26ee6df2c6e
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Build is broken since commit
+ > 8bdc5e7c4d975193b1e18999ed840507cea63bd6 because BR2_PACKAGE_DBUS_PYTHON
+ > is selected without selecting BR2_PACKAGE_DBUS
 
- > python-bluezero selects python-gobject but fails to include its arch and
- > toolchain dependencies. Add them now, as well as the corresponding
- > comment.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/378dd714940440b8f9db763479ae929e90e33b80
 
- > dbus-python also has some dependencies, but all of them are covered by
- > the python3 dependency, so don't bother with those.
-
- > Fixes: 8bdc5e7c4d975193b1e18999ed840507cea63bd6
-
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2021.02.x, thanks.
 
