@@ -1,39 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jun 2021 22:39:37 +0200
-Subject: [Buildroot] [git commit] package/boost: use
- BR2_ENABLE_RUNTIME_DEBUG iso BR2_ENABLE_DEBUG
-Message-ID: <20210607144658.A79AB814BD@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 07 Jun 2021 15:17:57 -0000
+Subject: [Buildroot] [git commit] package/gobject-introspection/Config.in:
+ Allow RISCV_32 builds
+Message-ID: <20210607144654.89C3981191@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5107b8740131aa92fddd61f8bef7535c9945bc0
+commit: https://git.buildroot.net/buildroot/commit/?id=330bbd68923269f0adacec3cfa39ae30a78ca705
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-BR2_ENABLE_DEBUG should just steer the availability of debug symbols and
-should have no negative effect on performance.
+Qemu 6.0.0 no longer segfaults when running qemu-riscv32. As such, it's now
+possible to allow riscv32 to compile gobject-introspection.
 
-Introduction of 'assert' statements, 'debug'-type builds with additional
-logging, etc. should be steered by BR2_ENABLE_RUNTIME_DEBUG instead.
+This partially reverts commit c94a212390e33c122cf9db4c772caf8bf3804565.
+The symbol BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS is kept, even
+though it is now equivalent to BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS,
+because it's likely that architecture dependencies will pop up again in
+the future.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+The configuration of a previously failing autobuilder [1] now passes.
+
+[1] http://autobuild.buildroot.org/results/668397b1df42297505e6fc8353c4752290a5628d
+
+Signed-off-by: Adam Duskett <aduskett@rivian.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/boost/boost.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gobject-introspection/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 8d745ecc72..e72ddf897c 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -95,7 +95,7 @@ BOOST_OPTS += --no-cmake-config \
- 	     toolset=gcc \
- 	     threading=multi \
- 	     abi=$(BOOST_ABI) \
--	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release)
-+	     variant=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release)
+diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
+index 57c569704e..bacf44363c 100644
+--- a/package/gobject-introspection/Config.in
++++ b/package/gobject-introspection/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+ 	bool
+ 	default y
+ 	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+-	depends on !BR2_RISCV_32 # qemu-riscv32 segfaults in qemu-5.0.0
  
- ifeq ($(BR2_sparc64),y)
- BOOST_OPTS += architecture=sparc instruction-set=ultrasparc
+ config BR2_PACKAGE_GOBJECT_INTROSPECTION
+ 	bool "gobject-introspection"
