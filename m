@@ -1,88 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:36 -0000
-Subject: [Buildroot] [git commit] support/dependencies,
- scripts: accept patches with renames
-Message-ID: <20210607144654.CFB4A814AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs: add espressobin ultra dts and
+ bump kernel to 5.11.21
+Message-ID: <20210607144653.10A2B8B398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f46e13f05fa04a180a416876cf1dd4252dd841ad
+commit: https://git.buildroot.net/buildroot/commit/?id=04cd621a4532601328157aacf2c78c171f25eb52
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, patches with renames are refused, as they reqire patch 2.7
-or newer. So far, we did not require that version because it was too
-recent to be widely available.
+This patch adds support for the Globalscale EspressoBin Ultra, which is
+an evolution of the EspressoBin family.  Same SoC and switchcore, more
+Ethernet ports, including one PoE PD port.
 
-But patch 2.7 has been released in 2012, almost 9 years ago now; it is
-old enough that we can start relying on it.
-
-Add a check that patch is GNU patch 2.7 or newer, and so drop the common
-check for patch, and drop the check about renames in apply-patches.sh.
-
-Signed-off-by: Ryota Kinukawa <pojiro.jp@gmail.com>
-[yann.morin.1998 at free.fr:
-  - drop common check
-  - shorten variable names
-  - drop now-incorrect comment about busybox w/desktop
-]
+Tested-by: Atallah Amine <amine_atallah@outlook.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/dependencies/dependencies.sh | 16 ++++++++++++----
- support/scripts/apply-patches.sh     |  5 -----
- 2 files changed, 12 insertions(+), 9 deletions(-)
+ configs/globalscale_espressobin_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 1954f038be..c604a9efcc 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -163,7 +163,7 @@ fi
+diff --git a/configs/globalscale_espressobin_defconfig b/configs/globalscale_espressobin_defconfig
+index 50cfc6b530..37d9c1859c 100644
+--- a/configs/globalscale_espressobin_defconfig
++++ b/configs/globalscale_espressobin_defconfig
+@@ -2,17 +2,17 @@ BR2_aarch64=y
+ BR2_cortex_a53=y
+ BR2_ARM_FPU_VFPV4=y
  
- # Check that a few mandatory programs are installed
- missing_progs="no"
--for prog in patch perl tar wget cpio unzip rsync bc ${DL_TOOLS} ; do
-+for prog in perl tar wget cpio unzip rsync bc ${DL_TOOLS} ; do
- 	if ! which $prog > /dev/null ; then
- 		echo "You must install '$prog' on your build machine";
- 		missing_progs="yes"
-@@ -183,11 +183,19 @@ if test "${missing_progs}" = "yes" ; then
- 	exit 1
- fi
+-# Linux headers same as kernel, a 5.6 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
++# Linux headers same as kernel, a 5.11 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_11=y
  
--# apply-patches.sh needs patch with --no-backup-if-mismatch support (GNU, busybox w/DESKTOP)
--if ! patch --no-backup-if-mismatch </dev/null 2>/dev/null; then
--	echo "Your patch program does not support the --no-backup-if-mismatch option. Install GNU patch"
-+PATCH_VERSION="$(patch -v 2>/dev/null | sed -n 's/^GNU patch \(.*\)/\1/p')"
-+if [ -z "${PATCH_VERSION}" ] ; then
-+	echo
-+	echo "You must install GNU patch"
- 	exit 1
- fi
-+PATCH_MAJOR="$(echo "${PATCH_VERSION}" | cut -d . -f 1)"
-+PATCH_MINOR="$(echo "${PATCH_VERSION}" | cut -d . -f 2)"
-+if [ "${PATCH_MAJOR}" -lt 2 ] || [ "${PATCH_MAJOR}" -eq 2 -a "${PATCH_MINOR}" -lt 7 ] ; then
-+	echo
-+	echo "You have GNU patch '${PATCH_VERSION}' installed.  GNU patch >= 2.7 is required"
-+	exit 1;
-+fi
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.11"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.11.21"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/globalscale/espressobin/linux-extras.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-3720-espressobin marvell/armada-3720-espressobin-emmc marvell/armada-3720-espressobin-v7 marvell/armada-3720-espressobin-v7-emmc"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-3720-espressobin marvell/armada-3720-espressobin-emmc marvell/armada-3720-espressobin-v7 marvell/armada-3720-espressobin-v7-emmc marvell/armada-3720-espressobin-ultra"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  
- if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
- 	if ! which locale > /dev/null ; then
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 9fb488c570..e5a2fdd09e 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -113,11 +113,6 @@ function apply_patch {
-         echo "  to be applied  : ${path}/${patch}"
-         exit 1
-     fi
--    if ${uncomp} "${path}/$patch" | grep -q "^rename from" && \
--       ${uncomp} "${path}/$patch" | grep -q "^rename to" ; then
--        echo "Error: patch contains some renames, not supported by old patch versions"
--        exit 1
--    fi
-     echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
-     ${uncomp} "${path}/$patch" | patch -g0 -p1 -E --no-backup-if-mismatch -d "${builddir}" -t -N $silent
-     if [ $? != 0 ] ; then
