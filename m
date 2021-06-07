@@ -1,50 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Jun 2021 23:34:57 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/runc: security
- bump to version 1.0.0-rc95
-Message-ID: <20210607211334.6CCAF8B876@busybox.osuosl.org>
+Date: Mon, 7 Jun 2021 23:43:09 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/lz4: add upstream
+ security fix for CVE-2021-3520
+Message-ID: <20210607211335.1D5368004A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10c2e6c588f2925be6c3a3c64019173d139fe48f
+commit: https://git.buildroot.net/buildroot/commit/?id=a9c45a66a201a5d1eb1be8cedb49dd04b1ee2b56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes CVE-2021-30465: runc 1.0.0-rc94 and earlier are vulnerable to a symlink
-exchange attack whereby an attacker can request a seemingly-innocuous container
-configuration that actually results in the host filesystem being bind-mounted
-into the container, allowing for a container escape.
+Fixes a potential memory corruption with negative memmove() size.  For
+details, see (NVD not yet updated):
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+https://security-tracker.debian.org/tracker/CVE-2021-3520
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 96c23d1d0f5fbe3da903507afa39393be844b565)
+(cherry picked from commit ecb55c43cea48445fec74b0c9758431bcb1a54f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...al-memory-corruption-with-negative-memmov.patch | 26 ++++++++++++++++++++++
+ package/lz4/lz4.mk                                 |  3 +++
+ 2 files changed, 29 insertions(+)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index d792947d5f..598bd3067f 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256	28378df983a3c586ed3ec8c76a774a9b10f36a0c323590a284b801cce95cc61f  runc-1.0.0-rc92.tar.gz
-+sha256  02dac7f1a0dcfe55dd9820df787adedf030060870354915e7bba86f8487ce93c  runc-1.0.0-rc95.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 14689bbde1..62b9f09bf2 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch b/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch
+new file mode 100644
+index 0000000000..57e4e38f84
+--- /dev/null
++++ b/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch
+@@ -0,0 +1,26 @@
++From 8301a21773ef61656225e264f4f06ae14462bca7 Mon Sep 17 00:00:00 2001
++From: Jasper Lievisse Adriaanse <j@jasper.la>
++Date: Fri, 26 Feb 2021 15:21:20 +0100
++Subject: [PATCH] Fix potential memory corruption with negative memmove() size
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ lib/lz4.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/lz4.c b/lib/lz4.c
++index 5f524d0..c2f504e 100644
++--- a/lib/lz4.c
+++++ b/lib/lz4.c
++@@ -1749,7 +1749,7 @@ LZ4_decompress_generic(
++                  const size_t dictSize         /* note : = 0 if noDict */
++                  )
++ {
++-    if (src == NULL) { return -1; }
+++    if ((src == NULL) || (outputSize < 0)) { return -1; }
++ 
++     {   const BYTE* ip = (const BYTE*) src;
++         const BYTE* const iend = ip + srcSize;
++-- 
++2.20.1
++
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index e0236c05b1..9b9b6198c3 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -17,6 +17,9 @@ LZ4_CPE_ID_VENDOR = yann_collet
+ # See https://github.com/lz4/lz4/issues/818
+ LZ4_IGNORE_CVES += CVE-2014-4715
  
- RUNC_VERSION_MAJOR = 1.0.0
--RUNC_VERSION_MINOR = rc92
-+RUNC_VERSION_MINOR = rc95
- RUNC_VERSION = $(RUNC_VERSION_MAJOR)-$(RUNC_VERSION_MINOR)
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
++# 0001-Fix-potential-memory-corruption-with-negative-memmov.patch
++LZ4_IGNORE_CVES += CVE-2021-3520
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LZ4_MAKE_OPTS += BUILD_SHARED=no
+ else ifeq ($(BR2_SHARED_LIBS),y)
