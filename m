@@ -1,74 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Jun 2021 23:43:09 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/lz4: add upstream
- security fix for CVE-2021-3520
-Message-ID: <20210607211335.1D5368004A@busybox.osuosl.org>
+Date: Mon, 7 Jun 2021 23:37:27 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/pngquant: add
+ PNGQUANT_CPE_ID_VENDOR
+Message-ID: <20210607211334.953AE7FFCC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9c45a66a201a5d1eb1be8cedb49dd04b1ee2b56
+commit: https://git.buildroot.net/buildroot/commit/?id=31477c01812fa6582053c8206b4ea4cacfee4ded
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes a potential memory corruption with negative memmove() size.  For
-details, see (NVD not yet updated):
+cpe:2.3:a:pngquant:pngquant is a valid CPE identifier for this package:
 
-https://security-tracker.debian.org/tracker/CVE-2021-3520
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apngquant%3Apngquant
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ecb55c43cea48445fec74b0c9758431bcb1a54f0)
+(cherry picked from commit f5732350befabe242bb2c5f649fec48592e385cc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...al-memory-corruption-with-negative-memmov.patch | 26 ++++++++++++++++++++++
- package/lz4/lz4.mk                                 |  3 +++
- 2 files changed, 29 insertions(+)
+ package/pngquant/pngquant.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch b/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch
-new file mode 100644
-index 0000000000..57e4e38f84
---- /dev/null
-+++ b/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch
-@@ -0,0 +1,26 @@
-+From 8301a21773ef61656225e264f4f06ae14462bca7 Mon Sep 17 00:00:00 2001
-+From: Jasper Lievisse Adriaanse <j@jasper.la>
-+Date: Fri, 26 Feb 2021 15:21:20 +0100
-+Subject: [PATCH] Fix potential memory corruption with negative memmove() size
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ lib/lz4.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/lz4.c b/lib/lz4.c
-+index 5f524d0..c2f504e 100644
-+--- a/lib/lz4.c
-++++ b/lib/lz4.c
-+@@ -1749,7 +1749,7 @@ LZ4_decompress_generic(
-+                  const size_t dictSize         /* note : = 0 if noDict */
-+                  )
-+ {
-+-    if (src == NULL) { return -1; }
-++    if ((src == NULL) || (outputSize < 0)) { return -1; }
-+ 
-+     {   const BYTE* ip = (const BYTE*) src;
-+         const BYTE* const iend = ip + srcSize;
-+-- 
-+2.20.1
-+
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-index e0236c05b1..9b9b6198c3 100644
---- a/package/lz4/lz4.mk
-+++ b/package/lz4/lz4.mk
-@@ -17,6 +17,9 @@ LZ4_CPE_ID_VENDOR = yann_collet
- # See https://github.com/lz4/lz4/issues/818
- LZ4_IGNORE_CVES += CVE-2014-4715
+diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
+index c5a17e872a..1729ff1927 100644
+--- a/package/pngquant/pngquant.mk
++++ b/package/pngquant/pngquant.mk
+@@ -9,6 +9,7 @@ PNGQUANT_SOURCE = pngquant-$(PNGQUANT_VERSION)-src.tar.gz
+ PNGQUANT_SITE = https://pngquant.org
+ PNGQUANT_LICENSE = GPL-3.0+
+ PNGQUANT_LICENSE_FILES = COPYRIGHT
++PNGQUANT_CPE_ID_VENDOR = pngquant
+ HOST_PNGQUANT_DEPENDENCIES = host-libpng
+ PNGQUANT_DEPENDENCIES = libpng
  
-+# 0001-Fix-potential-memory-corruption-with-negative-memmov.patch
-+LZ4_IGNORE_CVES += CVE-2021-3520
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- LZ4_MAKE_OPTS += BUILD_SHARED=no
- else ifeq ($(BR2_SHARED_LIBS),y)
