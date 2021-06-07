@@ -1,96 +1,73 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:40 -0000
-Subject: [Buildroot] [git commit] package/numactl: add -latomic to numa.pc
-Message-ID: <20210607144654.9361881191@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: new boot test for EDK2
+Message-ID: <20210607144652.4270881191@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a699a667bd64a52ad3c30210c4756953232cc9cc
+commit: https://git.buildroot.net/buildroot/commit/?id=6131efc62c4543e9a998305cc62f4ef3b200ad1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead of passing -latomic through LDFLAGS as done in commit
-4ed540ddf59bec4b389be44d7f42820d2466904f, properly check for it in
-configure.ac and add it to numa.pc or numactl users won't be able to get
-it
+Boot a QEMU sbsa-ref machine with ATF, EDK2, GRUB2 and a minimal
+kernel. This is a simple but effective test of a compliant setup.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Dick Olsson <hi@senzilla.io>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../numactl/0002-link-with-latomic-if-needed.patch | 52 ++++++++++++++++++++++
- package/numactl/numactl.mk                         |  4 --
- 2 files changed, 52 insertions(+), 4 deletions(-)
+ support/testing/tests/boot/test_edk2.py | 45 +++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/package/numactl/0002-link-with-latomic-if-needed.patch b/package/numactl/0002-link-with-latomic-if-needed.patch
+diff --git a/support/testing/tests/boot/test_edk2.py b/support/testing/tests/boot/test_edk2.py
 new file mode 100644
-index 0000000000..6dff0cb233
+index 0000000000..c1be8fad95
 --- /dev/null
-+++ b/package/numactl/0002-link-with-latomic-if-needed.patch
-@@ -0,0 +1,52 @@
-+From e0de0d9e981ddb53bdeb4a4b9dc43046c9ff4ff9 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 6 May 2021 23:08:36 +0200
-+Subject: [PATCH] link with -latomic if needed
++++ b/support/testing/tests/boot/test_edk2.py
+@@ -0,0 +1,45 @@
++import os
 +
-+numactl unconditionally uses __atomic_fetch_and but some architectures
-+(e.g. sparc) needs to link with -latomic to be able to use it. So check
-+if -latomic is needed and update numa.pc accordingly
++import infra.basetest
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/numactl/numactl/commit/e0de0d9e981ddb53bdeb4a4b9dc43046c9ff4ff9]
-+---
-+ Makefile.am  | 1 +
-+ configure.ac | 2 ++
-+ numa.pc.in   | 1 +
-+ 3 files changed, 4 insertions(+)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 44d0d76..34f6815 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -151,6 +151,7 @@ SED_PROCESS = \
-+         -e 's, at exec_prefix\@,$(exec_prefix),g' \
-+         -e 's, at libdir\@,$(libdir),g' \
-+         -e 's, at includedir\@,$(includedir),g' \
-++        -e 's, at LIBS\@,$(LIBS),g' \
-+         < $< > $@ || rm $@
-+ 
-+ %.pc: %.pc.in Makefile
-+diff --git a/configure.ac b/configure.ac
-+index 659a765..e3b0eb3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -24,6 +24,8 @@ AM_CONDITIONAL([HAVE_TREE_VECTORIZE], [test x"${tree_vectorize}" = x"true"])
-+ 
-+ AC_CONFIG_FILES([Makefile])
-+ 
-++AC_SEARCH_LIBS([__atomic_fetch_and_1], [atomic])
-++
-+ # GCC tries to be "helpful" and only issue a warning for unrecognized
-+ # attributes.  So we compile the test with Werror, so that if the
-+ # attribute is not recognized the compilation fails
-+diff --git a/numa.pc.in b/numa.pc.in
-+index 8a0f202..cc04d50 100644
-+--- a/numa.pc.in
-++++ b/numa.pc.in
-+@@ -8,3 +8,4 @@ Description: NUMA policy library
-+ Version: @VERSION@
-+ Cflags: -I${includedir}
-+ Libs: -L${libdir} -lnuma
-++Libs.Private: @LIBS@
-diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-index 3364f6c5c3..cf9c759693 100644
---- a/package/numactl/numactl.mk
-+++ b/package/numactl/numactl.mk
-@@ -12,8 +12,4 @@ NUMACTL_INSTALL_STAGING = YES
- NUMACTL_AUTORECONF = YES
- NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
- 
--ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--NUMACTL_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
--endif
--
- $(eval $(autotools-package))
++class TestEdk2(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_4=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/aarch64-sbsa/assemble-flash-images support/scripts/genimage.sh"
++        BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/qemu/aarch64-sbsa/genimage.cfg"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.34"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-sbsa/linux.config"
++        BR2_TARGET_EDK2=y
++        BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA=y
++        BR2_TARGET_GRUB2=y
++        BR2_TARGET_GRUB2_ARM64_EFI=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu_sbsa"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++        BR2_PACKAGE_HOST_GENIMAGE=y
++        BR2_PACKAGE_HOST_DOSFSTOOLS=y
++        BR2_PACKAGE_HOST_MTOOLS=y
++        """
++
++    def test_run(self):
++        hda = os.path.join(self.builddir, "images", "disk.img")
++        flash0 = os.path.join(self.builddir, "images", "SBSA_FLASH0.fd")
++        flash1 = os.path.join(self.builddir, "images", "SBSA_FLASH1.fd")
++        self.emulator.boot(arch="aarch64",
++                           options=["-M", "sbsa-ref",
++                                    "-cpu", "cortex-a57",
++                                    "-m", "512M",
++                                    "-pflash", flash0,
++                                    "-pflash", flash1,
++                                    "-hda", hda])
++        self.emulator.login()
