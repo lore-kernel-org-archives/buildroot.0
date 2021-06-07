@@ -1,91 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:45 -0000
-Subject: [Buildroot] [git commit] configs/beaglebone: bump kernel and U-Boot
- versions
-Message-ID: <20210607144653.5E8588B398@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uclibc: enable linuxthreads for
+ all supported architectures
+Message-ID: <20210607144656.CA57D8B398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08c48454e2df167aa8bf8234c0d0b248dd351c3f
+commit: https://git.buildroot.net/buildroot/commit/?id=b9a5448aa05f90718768302a64d2f4a57f260be0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump kernel to version 5.10.30-ti-r3.
-- Bump U-Boot to version 2021.04.
+Synchronize the list of architectures that have LinuxThreads support
+with the ones from uClibc-ng.
 
-Add mdev to the beaglebone_defconfig. This gives us automatic USB support,
-as the omap2plus kernel has most drivers as modules.
-
-While at it, enable VFPv3 with 32 registers (instead of 16) and add a few
-comments to the defconfig.
-
-Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Lothar Felten <lothar.felten@gmail.com>
+Signed-off-by: Mircea GLIGA <mgliga@bitdefender.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/beaglebone_defconfig | 27 ++++++++++++++++++++++++---
- 1 file changed, 24 insertions(+), 3 deletions(-)
+ package/uclibc/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 9a4be13ec5..763696d1dd 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -1,31 +1,52 @@
-+# Architecture
- BR2_arm=y
- BR2_cortex_a8=y
-+BR2_ARM_FPU_VFPV3=y
-+
-+# Patches
- BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+
-+# System
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+
-+# Image
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/beaglebone/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglebone/genimage.cfg"
-+
-+# Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,4.19.79-ti-r30)/linux-4.19.79-ti-r30.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,5.10.30-ti-r3)/linux-5.10.30-ti-r3.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="MLO"
-+
-+# Required tools to create the SD image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-+
-+# Supporting host tools to build FIT image
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index e59fef3c69..2091166b62 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -53,7 +53,8 @@ config BR2_PTHREADS_NATIVE
+ 
+ config BR2_PTHREADS
+ 	bool "linuxthreads"
+-	depends on BR2_m68k || BR2_microblaze || BR2_or1k || BR2_arm || BR2_armeb || BR2_xtensa
++	depends on !BR2_aarch64 && !BR2_aarch64_be
++	depends on !BR2_RISCV_64
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PTHREADS_NONE
