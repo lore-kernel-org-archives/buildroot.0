@@ -1,66 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 07 Jun 2021 14:57:22 +0000
-Subject: [Buildroot] [Bug 13836] New: package build failure when target
- install set to no on pkg-generic pkg types
-Message-ID: <bug-13836-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 07 Jun 2021 15:17:31 -0000
+Subject: [Buildroot] [git commit] package/kodi-pvr-mediaportal-tvserver:
+ bump version to 8.1.2
+Message-ID: <20210607144651.37EFF8B398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13836
+commit: https://git.buildroot.net/buildroot/commit/?id=b1eaba3616c8d8a958e7162383865fb8337d1c93
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-            Bug ID: 13836
-           Summary: package build failure when target install set to no on
-                    pkg-generic pkg types
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: matthew.weber at rockwellcollins.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Removed all patches which were applied upstream:
+https://github.com/kodi-pvr/pvr.mediaportal.tvserver/commits/Matrix
 
-Here are the relevant assumptions/if's:
+Changelog:
+https://github.com/kodi-pvr/pvr.mediaportal.tvserver/blob/Matrix/pvr.mediaportal.tvserver/changelog.txt
 
-Buildroot 2021.02.x 
-( based on git log review, should also apply to master )
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ved-no-more-supported-C-17-declaration-ke.patch |  29 -
+ .../0002-Remove-p8-os-includes.patch               | 157 -----
+ .../0003-Use-kodi-StringUtils.patch                | 124 ----
+ .../0004-Remove-SAFE_DELETE.patch                  | 289 ---------
+ ...thread-sleep_for-instead-of-p8-time-utils.patch | 308 ----------
+ ...ead-std-mutex-condition_variable-instead-.patch | 673 ---------------------
+ .../0007-Remove-charset-converter-dependency.patch |  55 --
+ .../0008-Remove-p8-platform-dependency.patch       |  74 ---
+ .../0009-Travis-changes-for-cpp17.patch            |  28 -
+ ...ister-keyword-as-no-longer-valid-in-CPP17.patch |  23 -
+ .../0011-changelog-and-version-v8.1.1.patch        |  42 --
+ .../kodi-pvr-mediaportal-tvserver.hash             |   2 +-
+ .../kodi-pvr-mediaportal-tvserver.mk               |   2 +-
+ 13 files changed, 2 insertions(+), 1804 deletions(-)
 
-Package A is pkg-generic
-Package A is the last "pkg-generic" package built
-Package A has PACKAGE_A_INSTALL_TARGET = NO
-
-Then this error occurs:
-/bin/sh: /home/tbuild/myboard/build/package_a/.files-list.after: No such file
-or directory
-make[1]: *** [/home/tbuild/myboard/build/package_a/.stamp_installed] Error 1
-make: *** [_all] Error 2
-
-because of assumptions with this target in rc-buildroot/package/pkg-generic.mk:
-# Final installation step, completed when all installation steps
-# (host, images, staging, target) have completed
-$(BUILD_DIR)/%/.stamp_installed:
-        @$(call pkg_size_after,$(TARGET_DIR))
-        @$(call pkg_size_after,$(STAGING_DIR),-staging)
-        @$(call pkg_size_after,$(HOST_DIR),-host)
-        @$(call check_bin_arch)
-        $(Q)touch $@
-
-Ugly solution that worked:
-simply remove the PACKAGE_A_INSTALL_TARGET = NO
-
-Possible solution:
-
-1) use a package type other than pkg-generic?
-2) change the buildroot logic to subtract INSTALL_TARGET = NO packages from
-this target build step.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Patch is too large, so refusing to show it
