@@ -1,129 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:43 -0000
-Subject: [Buildroot] [git commit] board/raspberrypi: add Compute Module 4/IO
- Board support (64 Bit)
-Message-ID: <20210607144655.DAC16814AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: enable secureplt for powerpc64
+Message-ID: <20210607144653.01C7A81191@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46f01da8a4a578f251b35d74388690a53b749f00
+commit: https://git.buildroot.net/buildroot/commit/?id=578de6edbfe95ee8e56c4f81df24f6bd8115d35d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+GCC support enabling secureplt for powerpc64.
+
+From [1]
+"PowerPC has two PLT models: BSS-PLT and Secure-PLT. BSS-PLT uses
+runtime code generation to generate the PLT stubs. Secure-PLT was
+introduced with GCC 4.1 and Binutils 2.17 (base has GCC 4.2.1 and
+Binutils 2.17), and is a more secure PLT format, using a read-only
+linkage table, with the dynamic linker populating a non-executable
+index table."
+
+This option is always enabled by glibc testing script
+called build-many-glibcs.py [1]. This script exist since
+glibc 2.25.
+
+Runtime tested with qemu_ppc64_e5500_defconfig.
+
+[1] https://reviews.freebsd.org/D20598
+[2] https://sourceware.org/git/?p=glibc.git;a=blob;f=scripts/build-many-glibcs.py;h=9c08ab7b326e6385abb835eb32dd143952a71942;hb=9826b03b747b841f5fc6de2054bf1ef3f5c4bdf3#l345
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Matt Weber <matthew.weber@collins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/raspberrypi/genimage-raspberrypicm4io-64.cfg | 30 ++++++++++++++++
- board/raspberrypi/readme.txt                       |  4 +++
- board/raspberrypicm4io-64                          |  1 +
- configs/raspberrypicm4io_64_defconfig              | 41 ++++++++++++++++++++++
- 4 files changed, 76 insertions(+)
+ package/gcc/gcc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/raspberrypi/genimage-raspberrypicm4io-64.cfg b/board/raspberrypi/genimage-raspberrypicm4io-64.cfg
-new file mode 100644
-index 0000000000..32a7ca897d
---- /dev/null
-+++ b/board/raspberrypi/genimage-raspberrypicm4io-64.cfg
-@@ -0,0 +1,30 @@
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      "bcm2711-rpi-cm4.dtb",
-+      "rpi-firmware/cmdline.txt",
-+      "rpi-firmware/config.txt",
-+      "rpi-firmware/fixup.dat",
-+      "rpi-firmware/start.elf",
-+      "rpi-firmware/overlays",
-+      "Image"
-+    }
-+  }
-+  size = 32M
-+}
-+
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition boot {
-+    partition-type = 0xC
-+    bootable = "true"
-+    image = "boot.vfat"
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext4"
-+  }
-+}
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 2032bf80ed..62cb248633 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -52,6 +52,10 @@ For model CM4 (on IO Board):
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 5e419f7ede..ed9b93e50f 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -231,7 +231,7 @@ endif
+ # Set default to Secure-PLT to prevent run-time
+ # generation of PLT stubs (supports RELRO and
+ # SELinux non-exemem capabilities)
+-ifeq ($(BR2_powerpc),y)
++ifeq ($(BR2_powerpc)$(BR2_powerpc64),y)
+ HOST_GCC_COMMON_CONF_OPTS += --enable-secureplt
+ endif
  
-   $ make raspberrypicm4io_defconfig
- 
-+or for CM4 (on IO Board - 64 bit):
-+
-+  $ make raspberrypicm4io_64_defconfig
-+
- Build the rootfs
- ----------------
- 
-diff --git a/board/raspberrypicm4io-64 b/board/raspberrypicm4io-64
-new file mode 120000
-index 0000000000..fcdafc81ed
---- /dev/null
-+++ b/board/raspberrypicm4io-64
-@@ -0,0 +1 @@
-+raspberrypi
-\ No newline at end of file
-diff --git a/configs/raspberrypicm4io_64_defconfig b/configs/raspberrypicm4io_64_defconfig
-new file mode 100644
-index 0000000000..66a9332fe5
---- /dev/null
-+++ b/configs/raspberrypicm4io_64_defconfig
-@@ -0,0 +1,41 @@
-+BR2_aarch64=y
-+BR2_cortex_a72=y
-+BR2_ARM_FPU_VFPV4=y
-+
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+BR2_SYSTEM_DHCP="eth0"
-+
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-b657cd2f27d9171b75c846f21e7b4bb581b3ed29.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-+
-+# Build the DTB from the kernel sources
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-cm4"
-+
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+BR2_PACKAGE_RPI_FIRMWARE=y
-+BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
-+
-+# Required tools to create the SD image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
-+# Required tool to flash CM4 eMMC memory
-+BR2_PACKAGE_HOST_RASPBERRYPI_USBBOOT
-+
-+# Filesystem / image
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypicm4io-64/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypicm4io-64/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay --aarch64"
