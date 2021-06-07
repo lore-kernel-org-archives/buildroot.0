@@ -1,61 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:18:02 -0000
-Subject: [Buildroot] [git commit] boot/at91bootstrap3: add
- BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3
-Message-ID: <20210607144655.11BC781191@busybox.osuosl.org>
+Date: Mon, 07 Jun 2021 15:18:03 -0000
+Subject: [Buildroot] [git commit] package/grpc: bump to version 1.37.1
+Message-ID: <20210607144654.E767A81191@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d98b5df418d6ba428205a37f5e4beb95f6f3dc01
+commit: https://git.buildroot.net/buildroot/commit/?id=f7735a8f3e7231254928b0ce67c25280739443c9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some at91bootstrap3 configurations now use Python scripts on the host
-for NAND/PMEC related utilities. In order to be able to use those
-scripts, this commit adds a new
-BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3 which allows to express the
-need for host-python3 as a dependency to build at91bootstrap3.
+Fixes from Changelog [0]:
+ - Fix #25897 to avoid crashes when certificates are not yet updated
+ - [Backport] Fix use-after-unref bug in fault_injection_filter.
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-[Thomas: this was extracted from a patch from Eugen adding
-at91bootstrap 4.x support.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[0] https://github.com/grpc/grpc/releases/tag/v1.37.1
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- boot/at91bootstrap3/Config.in         | 8 ++++++++
- boot/at91bootstrap3/at91bootstrap3.mk | 4 ++++
- 2 files changed, 12 insertions(+)
+ package/grpc/grpc.hash | 2 +-
+ package/grpc/grpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index 18301a0dc0..966e393db5 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -101,3 +101,11 @@ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE
- 	  Path to the at91bootstrap3 configuration file
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 8189f738b5..925761f37a 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c2dc8e876ea12052d6dd16704492fd8921df8c6d38c70c4708da332cf116df22  grpc-1.37.0.tar.gz
++sha256  acf247ec3a52edaee5dee28644a4e485c5e5badf46bdb24a80ca1d76cb8f1174  grpc-1.37.1.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 320c287bd1..f3ce3de34f 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif # BR2_TARGET_AT91BOOTSTRAP3
-+
-+config BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3
-+	bool "needs host-python3"
-+	help
-+	  Enable this option if the at91bootstrap build process needs
-+	  Python 3.x to be available on the host. This is needed in
-+	  some at91bootstrap configurations to use NAND/PMECC Python
-+	  scripts.
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index c4d7bd6106..b253129dfb 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -27,6 +27,10 @@ AT91BOOTSTRAP3_CPE_ID_PRODUCT = at91bootstrap
- AT91BOOTSTRAP3_INSTALL_IMAGES = YES
- AT91BOOTSTRAP3_INSTALL_TARGET = NO
- 
-+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_NEEDS_PYTHON3),y)
-+AT91BOOTSTRAP3_DEPENDENCIES += host-python3
-+endif
-+
- AT91BOOTSTRAP3_CUSTOM_PATCH_DIR = \
- 	$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR))
- 
+-GRPC_VERSION = 1.37.0
++GRPC_VERSION = 1.37.1
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0
+ GRPC_LICENSE_FILES = LICENSE
