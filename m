@@ -1,49 +1,97 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:36 -0000
-Subject: [Buildroot] [git commit] package/python-pytest-asyncio: bump
- version to 0.15.1
-Message-ID: <20210607144652.E48B282B86@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pipewire: fix uclibc compile
+ (getrandom related)
+Message-ID: <20210607144653.52B0B82B86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b4cb8faeb0c4247d5d8589e7500d23f576d19bd
+commit: https://git.buildroot.net/buildroot/commit/?id=b003cb5d16de9c92baba7dea7a6626c71cefc4fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+The getrandom() detection from meson.build failes with the following error
+message:
+
+  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name 'size_t'
+     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
+        |                                   ^~~~~~
+  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
+
+Fix it by adding stddef.h include to the meson getrandom() detection.
+
+Fixes:
+
+  - http://autobuild.buildroot.net/results/7e131bec458bf5c263ee1858d38ed5dc3cf704a6
+
+  ../src/pipewire/impl-core.c:54:9: error: conflicting types for ???getrandom???
+     54 | ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
+        |         ^~~~~~~~~
+  In file included from ../src/pipewire/impl-core.c:34:
+  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:12: note: previous declaration of ???getrandom??? was here
+     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
+        |            ^~~~~~~~~
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pytest-asyncio/python-pytest-asyncio.hash | 4 ++--
- package/python-pytest-asyncio/python-pytest-asyncio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...-meson-fix-getrandom-detection-for-uclibc.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
-index 40541f54ba..4949919ecb 100644
---- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
-+++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
--md5  b63593bc08f445f6e3f14c34128a68ed  pytest-asyncio-0.14.0.tar.gz
--sha256  9882c0c6b24429449f5f969a5158b528f39bde47dc32e85b9f0403965017e700  pytest-asyncio-0.14.0.tar.gz
-+md5  8940c41c342b5bafe2ebb0d6e5c320ec  pytest-asyncio-0.15.1.tar.gz
-+sha256  2564ceb9612bbd560d19ca4b41347b54e7835c2f792c504f698e05395ed63f6f  pytest-asyncio-0.15.1.tar.gz
- # Locally computed sha256 checksums
- sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
-diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
-index 0645db3eb7..bd2e0083a9 100644
---- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
-+++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYTEST_ASYNCIO_VERSION = 0.14.0
-+PYTHON_PYTEST_ASYNCIO_VERSION = 0.15.1
- PYTHON_PYTEST_ASYNCIO_SOURCE = pytest-asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
--PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/65/09/9472d4db0625cf56d40f4e405f955faf6469be00858a273b71332f3fcd1f
-+PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/de/c1/b2b0119e30f61f7ec8b44f129f6fde46a1a7329de17110f124639aa8896b
- PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
- PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
- PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
+diff --git a/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch b/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
+new file mode 100644
+index 0000000000..e902869ce9
+--- /dev/null
++++ b/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
+@@ -0,0 +1,49 @@
++From a36bc959768e100d2d72e027746e3a9d95cf29af Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Wed, 12 May 2021 22:08:39 +0200
++Subject: [PATCH] meson: fix getrandom detection for uclibc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The getrandom() detection from meson.build failes with the following error
++message:
++
++  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name 'size_t'
++     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
++        |                                   ^~~~~~
++  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
++
++Fix it by adding stddef.h include to the meson getrandom() detection.
++
++Fixes:
++
++  ../src/pipewire/impl-core.c:54:9: error: conflicting types for ???getrandom???
++     54 | ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
++        |         ^~~~~~~~~
++  In file included from ../src/pipewire/impl-core.c:34:
++  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:12: note: previous declaration of ???getrandom??? was here
++     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
++        |            ^~~~~~~~~
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 03a9d174..01b4c7c8 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -274,7 +274,7 @@ if cc.has_function('memfd_create', prefix : '#include <sys/mman.h>', args : [ '-
++   cdata.set('HAVE_MEMFD_CREATE', 1)
++ endif
++ 
++-if cc.has_function('getrandom', prefix : '#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
+++if cc.has_function('getrandom', prefix : '#include <stddef.h>\n#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
++   cdata.set('HAVE_GETRANDOM', 1)
++ endif
++ 
++-- 
++2.31.1
++
