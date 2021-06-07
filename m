@@ -1,54 +1,42 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sun, 6 Jun 2021 22:59:41 -0700
-Subject: [Buildroot] [PATCH 1/1] package/delve: bump to version 1.6.1
-In-Reply-To: <20210530064815.1173206-1-christian@paral.in>
-References: <20210530064815.1173206-1-christian@paral.in>
-Message-ID: <CA+h8R2r3CnJ75ZgYjHSP7iKh=sT937V2_GjKvrjxZeu33h81ig@mail.gmail.com>
+Date: Sun,  6 Jun 2021 23:01:58 -0700
+Subject: [Buildroot] [PATCH 1/1] package/fuse-overlayfs: bump to version
+ 1.5.0
+Message-ID: <20210607060158.1471289-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/fuse-overlayfs/fuse-overlayfs.hash | 2 +-
+ package/fuse-overlayfs/fuse-overlayfs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This delve 1.6.1 version change was mentioned in the version update
-email you just sent:
-
-On Sat, May 29, 2021 at 11:48 PM Christian Stewart <christian@paral.in> wrote:
->
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/delve/delve.hash | 4 ++--
->  package/delve/delve.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/delve/delve.hash b/package/delve/delve.hash
-> index e8bb9c37ad..3d117813c6 100644
-> --- a/package/delve/delve.hash
-> +++ b/package/delve/delve.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  f8bbaecdfc9d1ff6148900d3dea44b6dd06a7f0197be4e9a75c289b7f62682ab  delve-1.5.0.tar.gz
-> -sha256 778864b990007e8cef6633f8c372dd05bac1fada6cf67b008afb1483f83b38f5  LICENSE
-> +sha256  e73f7fc063632268d3bdf53486aeafd98cceb8f86f4af56903dedfebaefe690d  delve-1.6.1.tar.gz
-> +sha256  778864b990007e8cef6633f8c372dd05bac1fada6cf67b008afb1483f83b38f5  LICENSE
-> diff --git a/package/delve/delve.mk b/package/delve/delve.mk
-> index f574bc5c08..6c346552a4 100644
-> --- a/package/delve/delve.mk
-> +++ b/package/delve/delve.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -DELVE_VERSION = 1.5.0
-> +DELVE_VERSION = 1.6.1
->  DELVE_SITE = $(call github,go-delve,delve,v$(DELVE_VERSION))
->  DELVE_LICENSE = MIT
->  DELVE_LICENSE_FILES = LICENSE
-> --
-> 2.31.1
->
-
-Best regards,
-Christian Stewart
+diff --git a/package/fuse-overlayfs/fuse-overlayfs.hash b/package/fuse-overlayfs/fuse-overlayfs.hash
+index 9770ee0d3f..f9473c154a 100644
+--- a/package/fuse-overlayfs/fuse-overlayfs.hash
++++ b/package/fuse-overlayfs/fuse-overlayfs.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  7e5666aef4f2047e6a5202d6438b08c2d314dba5b40e431014e7dbb8168d9018  fuse-overlayfs-1.4.0.tar.gz
++sha256  6c81b65b71067b303aaa9871f512c2cabc23e2b793f19c6c854d01a492b5a923  fuse-overlayfs-1.5.0.tar.gz
+ # Locally computed
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/fuse-overlayfs/fuse-overlayfs.mk b/package/fuse-overlayfs/fuse-overlayfs.mk
+index 707cacce03..0ad7dbc51d 100644
+--- a/package/fuse-overlayfs/fuse-overlayfs.mk
++++ b/package/fuse-overlayfs/fuse-overlayfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FUSE_OVERLAYFS_VERSION = 1.4.0
++FUSE_OVERLAYFS_VERSION = 1.5.0
+ FUSE_OVERLAYFS_SITE = $(call github,containers,fuse-overlayfs,v$(FUSE_OVERLAYFS_VERSION))
+ FUSE_OVERLAYFS_LICENSE = GPL-3.0
+ FUSE_OVERLAYFS_LICENSE_FILES = COPYING
+-- 
+2.31.1
