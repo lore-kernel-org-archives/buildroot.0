@@ -1,60 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:18:17 -0000
-Subject: [Buildroot] [git commit] package/libglib2: bump version to 2.68.2
-Message-ID: <20210607144656.1C1F2814BD@busybox.osuosl.org>
+Date: Mon, 07 Jun 2021 15:18:18 -0000
+Subject: [Buildroot] [git commit] package/libsepol/Config.in: Add policy
+ version 33
+Message-ID: <20210607144656.58A7C814AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ecb2ea34f3d20078bcc46f274374b4c0f7f072c1
+commit: https://git.buildroot.net/buildroot/commit/?id=6fd41b6d46385ecf5ed2f3e2867213d060f207bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Includes an important bugfix: #2387 json-glib does not build with glib 2.68.1
+Policy version 33 was added starting with kernel 5.8.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Tested-by: Matthew Weber <matthew.weber@collins.com>
+Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libglib2/0002-remove-cpp-requirement.patch | 2 +-
- package/libglib2/libglib2.hash                     | 4 ++--
- package/libglib2/libglib2.mk                       | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/libsepol/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/libglib2/0002-remove-cpp-requirement.patch b/package/libglib2/0002-remove-cpp-requirement.patch
-index 35d46e161b..9393bd258a 100644
---- a/package/libglib2/0002-remove-cpp-requirement.patch
-+++ b/package/libglib2/0002-remove-cpp-requirement.patch
-@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
- @@ -1,4 +1,4 @@
- -project('glib', 'c', 'cpp',
- +project('glib', 'c',
--   version : '2.68.1',
-+   version : '2.68.2',
-    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
-    meson_version : '>= 0.49.2',
- @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index e3a3aa7561..15e0085f78 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.68/glib-2.68.1.sha256sum
--sha256  241654b96bd36b88aaa12814efc4843b578e55d47440103727959ac346944333  glib-2.68.1.tar.xz
-+# https://download.gnome.org/sources/glib/2.68/glib-2.68.2.sha256sum
-+sha256  ecc7798a9cc034eabdfd7f246e6dd461cdbf1175fcc2e9867cc7da7b7309e0fb  glib-2.68.2.tar.xz
- # License files, locally calculated
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index e3263ce9ce..4f13622e36 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
+index 6c66809c9e..04af880e67 100644
+--- a/package/libsepol/Config.in
++++ b/package/libsepol/Config.in
+@@ -11,6 +11,7 @@ if BR2_PACKAGE_LIBSEPOL
  
- LIBGLIB2_VERSION_MAJOR = 2.68
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
+ config BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
+ 	int "Policy version"
++	default 33 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
+ 	default 32 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
+ 	default 31 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+ 	default 30 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+@@ -29,7 +30,8 @@ config BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
+ 	  >= 3.14 < 4.3    29
+ 	  >= 4.3 < 4.13    30
+ 	  >= 4.13 < 5.5    31
+-	  >= 5.5           32
++	  >= 5.5 < 5.8     32
++	  >= 5.8           33
+ 
+ endif
+ 
