@@ -1,41 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Jun 2021 23:21:09 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/wpewebkit: select
- gstreamer autoaudiosink
-Message-ID: <20210607205546.8606D88F9F@busybox.osuosl.org>
+Date: Mon, 7 Jun 2021 23:22:12 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/wireshark:
+ security bump to version 3.4.5
+Message-ID: <20210607205546.8FB3580AEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a9c4dc3d4995c4ea195cc68a99f4a96e6b1f645
+commit: https://git.buildroot.net/buildroot/commit/?id=98345c9bcf34a1a9a877e19b508a8f1ad814cc9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT when multimedia
-support is enabled. This is needed at runtime to automatically select
-a suitable audio output element, otherwise WebKit will crash at an
-assertion due to the missing "autoaudiosink" element. More here:
+Fixes: CVE-2021-22207 Excessive memory consumption in MS-WSP dissector
+in Wireshark 3.4.0 to 3.4.4 and 3.2.0 to 3.2.12 allows denial of service
+via packet injection or crafted capture file
 
-  https://wpewebkit.org/about/faq.html#why-does-the-browser%2Flauncher-(e.g.-cog)-crash-when-trying-to-play-audio%3F
+See also: https://www.wireshark.org/security/wnpa-sec-2021-04.html
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: add CVE reference]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 51484b29cafce569ed1d9822e87de7bc16fb9d2e)
+(cherry picked from commit 92de0d76ad76bd804683944edae41283acea67a3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 640f7c7011..c8c66e8458 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -95,6 +95,7 @@ config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 71703a2a8b..57290b9060 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.4.txt
+-sha1  fa5c553596dcc6a59735f96a9a0845e3c40abab2  wireshark-3.4.4.tar.xz
+-sha256  729cd11e9715c600e5ad74ca472bacf8af32c20902192d5f2b271268511d4d29  wireshark-3.4.4.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.5.txt
++sha1  d01a9b5f58206fb458fe9fc2dac88ad0ea7152ce  wireshark-3.4.5.tar.xz
++sha256  de1aafd100a1e1207c850d180e97dd91ab8da0f5eb6beec545f725cdb145d333  wireshark-3.4.5.tar.xz
+ 
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 8cdc7305d0..3d656cf349 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 3.4.4
++WIRESHARK_VERSION = 3.4.5
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
