@@ -1,46 +1,129 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:43 -0000
-Subject: [Buildroot] [git commit] package/libmdbx: bump version to 0.10.0
-Message-ID: <20210607144655.31185814AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/raspberrypi: add Compute Module 4/IO
+ Board support (64 Bit)
+Message-ID: <20210607144655.DAC16814AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1505d406fb4ab6539bebae512d6ef9cf196699b7
+commit: https://git.buildroot.net/buildroot/commit/?id=46f01da8a4a578f251b35d74388690a53b749f00
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://github.com/erthink/libmdbx/releases/tag/v0.10.0
-
-Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libmdbx/libmdbx.hash | 2 +-
- package/libmdbx/libmdbx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/raspberrypi/genimage-raspberrypicm4io-64.cfg | 30 ++++++++++++++++
+ board/raspberrypi/readme.txt                       |  4 +++
+ board/raspberrypicm4io-64                          |  1 +
+ configs/raspberrypicm4io_64_defconfig              | 41 ++++++++++++++++++++++
+ 4 files changed, 76 insertions(+)
 
-diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
-index fcfb4a673f..8ff8e99810 100644
---- a/package/libmdbx/libmdbx.hash
-+++ b/package/libmdbx/libmdbx.hash
-@@ -1,5 +1,5 @@
- # Hashes from: https://github.com/erthink/libmdbx/releases/
--sha256  d12bc7189b746beaa85514fcd1fcf26b957bb8feadb11662a0e20c4e79410d3f  libmdbx-amalgamated-0.9.3.tar.gz
-+sha256  767776d961fadeb51ee895fb70ed82a03051bae855a19396f0067b03076103bb  libmdbx-amalgamated-0.10.0.tar.gz
+diff --git a/board/raspberrypi/genimage-raspberrypicm4io-64.cfg b/board/raspberrypi/genimage-raspberrypicm4io-64.cfg
+new file mode 100644
+index 0000000000..32a7ca897d
+--- /dev/null
++++ b/board/raspberrypi/genimage-raspberrypicm4io-64.cfg
+@@ -0,0 +1,30 @@
++image boot.vfat {
++  vfat {
++    files = {
++      "bcm2711-rpi-cm4.dtb",
++      "rpi-firmware/cmdline.txt",
++      "rpi-firmware/config.txt",
++      "rpi-firmware/fixup.dat",
++      "rpi-firmware/start.elf",
++      "rpi-firmware/overlays",
++      "Image"
++    }
++  }
++  size = 32M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index 2032bf80ed..62cb248633 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -52,6 +52,10 @@ For model CM4 (on IO Board):
  
- # Locally calculated
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-index baf5193eb6..8e2eff0c7f 100644
---- a/package/libmdbx/libmdbx.mk
-+++ b/package/libmdbx/libmdbx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+   $ make raspberrypicm4io_defconfig
  
--LIBMDBX_VERSION = 0.9.3
-+LIBMDBX_VERSION = 0.10.0
- LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.gz
- LIBMDBX_SITE = https://github.com/erthink/libmdbx/releases/download/v$(LIBMDBX_VERSION)
- LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
++or for CM4 (on IO Board - 64 bit):
++
++  $ make raspberrypicm4io_64_defconfig
++
+ Build the rootfs
+ ----------------
+ 
+diff --git a/board/raspberrypicm4io-64 b/board/raspberrypicm4io-64
+new file mode 120000
+index 0000000000..fcdafc81ed
+--- /dev/null
++++ b/board/raspberrypicm4io-64
+@@ -0,0 +1 @@
++raspberrypi
+\ No newline at end of file
+diff --git a/configs/raspberrypicm4io_64_defconfig b/configs/raspberrypicm4io_64_defconfig
+new file mode 100644
+index 0000000000..66a9332fe5
+--- /dev/null
++++ b/configs/raspberrypicm4io_64_defconfig
+@@ -0,0 +1,41 @@
++BR2_aarch64=y
++BR2_cortex_a72=y
++BR2_ARM_FPU_VFPV4=y
++
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++
++BR2_SYSTEM_DHCP="eth0"
++
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,b657cd2f27d9171b75c846f21e7b4bb581b3ed29)/linux-b657cd2f27d9171b75c846f21e7b4bb581b3ed29.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
++
++# Build the DTB from the kernel sources
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-cm4"
++
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
++
++# Required tools to create the SD image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# Required tool to flash CM4 eMMC memory
++BR2_PACKAGE_HOST_RASPBERRYPI_USBBOOT
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypicm4io-64/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypicm4io-64/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay --aarch64"
