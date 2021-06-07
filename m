@@ -1,38 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:18:29 -0000
-Subject: [Buildroot] [git commit] package/webkitgtk: make gst-gl depend on
- _HAS_PLATFORM
-Message-ID: <20210607144657.011CF80FB4@busybox.osuosl.org>
+Date: Mon, 07 Jun 2021 15:18:30 -0000
+Subject: [Buildroot] [git commit] package/wpewebkit: select gstreamer
+ autoaudiosink
+Message-ID: <20210607144656.D4B6D814AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e6efb5884c9479703f8023415df8ba707e61664
+commit: https://git.buildroot.net/buildroot/commit/?id=ad9d1332dc2e610586da3bc1d4be44f927ef44c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The GStreamer-GL usage in WebKitGTK is usable as long as GStreamer
-is configured with a valid platform API (GLX+OpenGL, EGL+OpenGL,
-EGL+GLES, etc.), which is exactly what the symbol
-BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM represents.
+Select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT when multimedia
+support is enabled. This is needed at runtime to automatically select
+a suitable audio output element, otherwise WebKit will crash at an
+assertion due to the missing "autoaudiosink" element. More here:
+
+  https://wpewebkit.org/about/faq.html#why-does-the-browser%2Flauncher-(e.g.-cog)-crash-when-trying-to-play-audio%3F
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/webkitgtk/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/wpewebkit/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 2ba8d47660..a05161d052 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -113,7 +113,7 @@ if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
- config BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL
- 	bool "use gstreamer-gl"
- 	default y
--	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
-+	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM
- 	help
- 	  Use the GStreamer GL elements for handling video content.
- 	  This is recommended as it improves performance of video
+diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+index 640f7c7011..c8c66e8458 100644
+--- a/package/wpewebkit/Config.in
++++ b/package/wpewebkit/Config.in
+@@ -95,6 +95,7 @@ config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD
++	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP
