@@ -1,63 +1,49 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:36 -0000
-Subject: [Buildroot] [git commit] package/openblas: install static library
- even if BR2_STATIC_LIBS is not set
-Message-ID: <20210607144654.5CC0481191@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pytest-asyncio: bump
+ version to 0.15.1
+Message-ID: <20210607144652.E48B282B86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8dd9bbda3541043f64f02256fbd43624b0b3d278
+commit: https://git.buildroot.net/buildroot/commit/?id=0b4cb8faeb0c4247d5d8589e7500d23f576d19bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-openblas has options 'NO_STATIC' and 'NO_SHARED' to steer the installation
-of libopenblas.a and libopenblas.so. But this does not impact anything in
-the build process, other than copying the respective file to the output
-directory.
-
-As openblas is very large (e.g. 3MB on ARM) but applications may only use a
-small part of it, such applications may want to link statically with
-openblas, even though the global BR2_STATIC_LIBS is not set and not desired.
-
-One approach would have been to introduce options
-BR2_PACKAGE_OPENBLAS_BUILD_SHARED_LIB and
-BR2_PACKAGE_OPENBLAS_BUILD_STATIC_LIB which could be freely selected
-regardless of BR2_STATIC_LIBS / BR2_SHARED_LIBS.
-
-But since the installation of a static library does not have any negative
-impact except for some disk space on the host system (.a files are removed
-from the target in target-finalize anyway), change the installation rules to
-install the static library unconditionally.
-
-NO_SHARED is still passed for static-libs-only systems, because the
-dynamic library would unnecessarily take up target disk space for such
-systems.
-
-Users that only need the static library would still need to remove the
-shared library from a post-build script to actually save space.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/openblas/openblas.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/python-pytest-asyncio/python-pytest-asyncio.hash | 4 ++--
+ package/python-pytest-asyncio/python-pytest-asyncio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index 21d05cf30d..60b9d9b15b 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
-@@ -42,10 +42,10 @@ endif
- OPENBLAS_MAKE_OPTS += USE_OPENMP=0
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+index 40541f54ba..4949919ecb 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
+-md5  b63593bc08f445f6e3f14c34128a68ed  pytest-asyncio-0.14.0.tar.gz
+-sha256  9882c0c6b24429449f5f969a5158b528f39bde47dc32e85b9f0403965017e700  pytest-asyncio-0.14.0.tar.gz
++md5  8940c41c342b5bafe2ebb0d6e5c320ec  pytest-asyncio-0.15.1.tar.gz
++sha256  2564ceb9612bbd560d19ca4b41347b54e7835c2f792c504f698e05395ed63f6f  pytest-asyncio-0.15.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+index 0645db3eb7..bd2e0083a9 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Static-only/Shared-only toggle
-+# Note: static library is always generated so that applications can link
-+# statically for size reduction, even if BR2_STATIC_LIBS is not set.
- ifeq ($(BR2_STATIC_LIBS),y)
- OPENBLAS_MAKE_OPTS += NO_SHARED=1
--else ifeq ($(BR2_SHARED_LIBS),y)
--OPENBLAS_MAKE_OPTS += NO_STATIC=1
- endif
- 
- # binutils version <= 2.23.2 has a bug
+-PYTHON_PYTEST_ASYNCIO_VERSION = 0.14.0
++PYTHON_PYTEST_ASYNCIO_VERSION = 0.15.1
+ PYTHON_PYTEST_ASYNCIO_SOURCE = pytest-asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
+-PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/65/09/9472d4db0625cf56d40f4e405f955faf6469be00858a273b71332f3fcd1f
++PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/de/c1/b2b0119e30f61f7ec8b44f129f6fde46a1a7329de17110f124639aa8896b
+ PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
+ PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
+ PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
