@@ -1,39 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Jun 2021 23:39:05 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/pulseaudio: add
- PULSEAUDIO_CPE_ID_VENDOR
-Message-ID: <20210607211334.C725B8004A@busybox.osuosl.org>
+Date: Mon, 7 Jun 2021 23:42:21 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/imagemagick:
+ security bump to version 7.0.11-13
+Message-ID: <20210607211335.106618B845@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64b824184dec561545006eeaadc2a41152a497f3
+commit: https://git.buildroot.net/buildroot/commit/?id=b14c5918d4022e1a67ec85bd65e115a36f4bb32c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:pulseaudio:pulseaudio is a valid CPE identifier for this
-package:
+Fix CVE-2021-20309 to CVE-2021-20313
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apulseaudio%3Apulseaudio
+https://github.com/ImageMagick/ImageMagick/blob/7.0.11-13/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 27c764153abae370106451779e88c32a6ba62c1d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d64238104949d3c3653cc35f1cb76282792d4c4f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pulseaudio/pulseaudio.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index ad1710c6f7..f7d7492ee1 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -10,6 +10,7 @@ PULSEAUDIO_SITE = https://freedesktop.org/software/pulseaudio/releases
- PULSEAUDIO_INSTALL_STAGING = YES
- PULSEAUDIO_LICENSE = LGPL-2.1+ (specific license for modules, see LICENSE file)
- PULSEAUDIO_LICENSE_FILES = LICENSE GPL LGPL
-+PULSEAUDIO_CPE_ID_VENDOR = pulseaudio
- PULSEAUDIO_CONF_OPTS = \
- 	--disable-default-build-tests \
- 	--disable-legacy-database-entry-format \
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index c45caf6c52..b787643fde 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  84442158aea070095efa832cfe868fd99d6befdf609444f0c9e9f1b4f25480cd  imagemagick-7.0.10-62.tar.gz
++sha256  fc454be622724c6224fa6c8230bb9c50191a05fbf05b9c9c25aa3e5497090b83  imagemagick-7.0.11-13.tar.gz
+ sha256  040badb77b659e751ea16113490a937e1e01f3f5d32181e966b8982413533fb2  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 97517228cf..a6eaf99887 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.0.10-62
++IMAGEMAGICK_VERSION = 7.0.11-13
+ IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
+ IMAGEMAGICK_LICENSE = Apache-2.0
+ IMAGEMAGICK_LICENSE_FILES = LICENSE
