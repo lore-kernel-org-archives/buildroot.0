@@ -1,46 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:41 -0000
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
- version to 2.6.15-Matrix
-Message-ID: <20210607144653.F3ED382B86@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcurl: make sure openssl
+ supports DES
+Message-ID: <20210607144655.7092E814AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0cb51333c47690f7a6a3bda015e99ff0646bcdd
+commit: https://git.buildroot.net/buildroot/commit/?id=f25c820a4f93ad0ca7eaf5e504667bd4099b878c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
+DES support in openssl is optional since commit a83d41867c8d
+("package/libopenssl: add option to enable some features"). curl uses
+DES support in openssl when enabled. Select DES support to avoid build
+failure.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+http://autobuild.buildroot.net/results/8931fd2b71eb2490cdc041b47eff58377ac823da/
+http://autobuild.buildroot.net/results/f159195adf05c375d7d314a270afd3a55d43ebdd/
+http://autobuild.buildroot.net/results/e143c75bccd7bcd4216954b76099404a38cf9bc1/
+
+Cc: Erwan GAUTRON <erwan.gautron@bertin.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Matthew Weber <matthew.weber@collins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcurl/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 2626968f1b..12e9f20904 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f1756932e8cc602ce66c5db3bc1d44a442c01197c193561ca9248a405bd8bd86  kodi-inputstream-adaptive-2.6.14-Matrix.tar.gz
-+sha256  179b337c397ff484f25a936f8c50114a112d5107f6d3cf41b4e9fb92507525fd  kodi-inputstream-adaptive-2.6.15-Matrix.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index b72241ab39..6176d7bff0 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+index b89c46f5ef..466f9ee3a1 100644
+--- a/package/libcurl/Config.in
++++ b/package/libcurl/Config.in
+@@ -51,6 +51,7 @@ choice
+ config BR2_PACKAGE_LIBCURL_OPENSSL
+ 	bool "OpenSSL"
+ 	depends on BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.14-Matrix
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.15-Matrix
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+ config BR2_PACKAGE_LIBCURL_BEARSSL
+ 	bool "BearSSL"
