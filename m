@@ -1,14 +1,14 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:18:23 -0000
-Subject: [Buildroot] [git commit] package/libsemanage: bump to version 3.2
-Message-ID: <20210607144656.63686814BD@busybox.osuosl.org>
+Date: Mon, 07 Jun 2021 15:18:24 -0000
+Subject: [Buildroot] [git commit] package/semodule-utils: bump to version 3.2
+Message-ID: <20210607144656.9CE987FD23@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d04944b0c5f0003bd1b4df422c09a0b4653e7ed9
+commit: https://git.buildroot.net/buildroot/commit/?id=dbadff7075497c02ded4beb5c6427e0fe8b63657
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
@@ -16,33 +16,33 @@ Tested-by: Matthew Weber <matthew.weber@collins.com>
 Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libsemanage/libsemanage.hash | 2 +-
- package/libsemanage/libsemanage.mk   | 4 ++--
+ package/semodule-utils/semodule-utils.hash | 2 +-
+ package/semodule-utils/semodule-utils.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
-index a977ddabc6..117fd40d6a 100644
---- a/package/libsemanage/libsemanage.hash
-+++ b/package/libsemanage/libsemanage.hash
+diff --git a/package/semodule-utils/semodule-utils.hash b/package/semodule-utils/semodule-utils.hash
+index d015205d53..595183924d 100644
+--- a/package/semodule-utils/semodule-utils.hash
++++ b/package/semodule-utils/semodule-utils.hash
 @@ -1,5 +1,5 @@
- # From: https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 22d6c75526e40d1781c30bcf29abf97171bdfe6780923f11c8e1c76a75a21ff8 libsemanage-3.1.tar.gz
-+sha256 d722a55ca4fe2d4e2b30527720db657e6238b28079e69e2e4affeb8e733ee511 libsemanage-3.2.tar.gz
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 0cc37f9cec751d9c2abb5f2b228b060567e973cb47c19b53b8a4a7378baaa853 semodule-utils-3.1.tar.gz
++sha256 be155654883c8dc4d05493e04a3eb9e56d28803009f1fdd721d42c68b878f757 semodule-utils-3.2.tar.gz
  
  # Hash for license file
- sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index 48e2bbbc8b..bbe976a2c9 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
+ sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
+diff --git a/package/semodule-utils/semodule-utils.mk b/package/semodule-utils/semodule-utils.mk
+index c89f28d60e..426dbdb7b6 100644
+--- a/package/semodule-utils/semodule-utils.mk
++++ b/package/semodule-utils/semodule-utils.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBSEMANAGE_VERSION = 3.1
--LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/20200710
-+LIBSEMANAGE_VERSION = 3.2
-+LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEMANAGE_VERSION)
- LIBSEMANAGE_LICENSE = LGPL-2.1+
- LIBSEMANAGE_LICENSE_FILES = COPYING
- LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux bzip2
+-SEMODULE_UTILS_VERSION = 3.1
+-SEMODULE_UTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/20200710
++SEMODULE_UTILS_VERSION = 3.2
++SEMODULE_UTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(SEMODULE_UTILS_VERSION)
+ SEMODULE_UTILS_LICENSE = GPL-2.0
+ SEMODULE_UTILS_LICENSE_FILES = COPYING
+ SEMODULE_UTILS_DEPENDENCIES = libsepol
