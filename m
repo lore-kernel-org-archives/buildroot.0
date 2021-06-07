@@ -1,45 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 07 Jun 2021 15:17:31 -0000
-Subject: [Buildroot] [git commit] package/libudfread: bump version to 1.1.2
-Message-ID: <20210607144651.562538B398@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 07 Jun 2021 15:17:32 -0000
+Subject: [Buildroot] [git commit] package/libbluray: add optional support
+ for libudfread
+Message-ID: <20210607144651.726ED8B398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f75975b995a004b188d215a7f4306e4ba4818479
+commit: https://git.buildroot.net/buildroot/commit/?id=698ddd07b4a1cadc57b0f6b72a0bedcf957ef104
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://code.videolan.org/videolan/libudfread/-/blob/master/ChangeLog
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libudfread/libudfread.hash | 2 +-
- package/libudfread/libudfread.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libbluray/libbluray.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libudfread/libudfread.hash b/package/libudfread/libudfread.hash
-index 14d24b5dbc..332b472d59 100644
---- a/package/libudfread/libudfread.hash
-+++ b/package/libudfread/libudfread.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  529ffa189a6b9fbe08c77430bd18201007b9b20b3153ad92ebd5e1cc515e7151  libudfread-1.1.1.tar.bz2
-+sha256  cd062016d78902da53a34c4d536479dbb70b2a05116354d46ead4d0c498ed375  libudfread-1.1.2.tar.bz2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libudfread/libudfread.mk b/package/libudfread/libudfread.mk
-index 6803a918d0..55d4fb8e47 100644
---- a/package/libudfread/libudfread.mk
-+++ b/package/libudfread/libudfread.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index 5c5f603dd8..233797f38d 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
+@@ -19,6 +19,10 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ LIBBLURAY_DEPENDENCIES += libiconv
+ endif
  
--LIBUDFREAD_VERSION = 1.1.1
-+LIBUDFREAD_VERSION = 1.1.2
- LIBUDFREAD_SOURCE = libudfread-$(LIBUDFREAD_VERSION).tar.bz2
- LIBUDFREAD_SITE = https://code.videolan.org/videolan/libudfread/-/archive/$(LIBUDFREAD_VERSION)
- LIBUDFREAD_AUTORECONF = YES
++ifeq ($(BR2_PACKAGE_LIBUDFREAD),y)
++LIBBLURAY_DEPENDENCIES += libudfread
++endif
++
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ LIBBLURAY_DEPENDENCIES += freetype
+ LIBBLURAY_CONF_OPTS += --with-freetype
