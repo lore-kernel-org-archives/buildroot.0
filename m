@@ -1,46 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:39 -0000
-Subject: [Buildroot] [git commit] package/kodi-pvr-mediaportal-tvserver:
- bump version to 8.2.0-Matrix
-Message-ID: <20210607144653.E609D81191@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/links: bump version to 2.22
+Message-ID: <20210607144652.B8EF081191@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7750fe1ee7f0d232847daeb04c99f59675dbdf20
+commit: https://git.buildroot.net/buildroot/commit/?id=b93930ab12b8fbd2d90e01f99ddf2aa2ce50f66e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/kodi-pvr/pvr.mediaportal.tvserver/blob/Matrix/pvr.mediaportal.tvserver/changelog.txt
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash    | 2 +-
- package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk  | 2 +-
+ package/links/links.hash | 2 +-
+ package/links/links.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
-index 83ac680914..ca526f40a0 100644
---- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
-+++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+diff --git a/package/links/links.hash b/package/links/links.hash
+index f941c2cd1b..156b73fb63 100644
+--- a/package/links/links.hash
++++ b/package/links/links.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  cea87ccdceee834c96d6b6887b78213ccf79890fec97436cbef17c57b9cdac15  kodi-pvr-mediaportal-tvserver-8.1.2-Matrix.tar.gz
-+sha256  0109daa45d7b6450954b40d0b09dbef28818c551e9f0fea9943cfd06f0a7ec40  kodi-pvr-mediaportal-tvserver-8.2.0-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
-index 02b24ef271..50a9147a9d 100644
---- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
-+++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+ # Locally calculated
+-sha256  285eed8591c7781ec26213df82786665aaa1b9286782e8a7a1a7e2a6e1630d63  links-2.21.tar.bz2
++sha256  0364986b3a7f1e8e3171bea362b53f71e1dd3360a8842d66fdc65580ebc2084d  links-2.22.tar.bz2
+ sha256  92deeb70791366630095d4e0714fe37d6e2bd5db0e6ef498ebb8de328f45b253  COPYING
+diff --git a/package/links/links.mk b/package/links/links.mk
+index 5213e02bd5..015878f892 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 8.1.2-Matrix
-+KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 8.2.0-Matrix
- KODI_PVR_MEDIAPORTAL_TVSERVER_SITE = $(call github,kodi-pvr,pvr.mediaportal.tvserver,$(KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION))
- KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE = GPL-2.0+
- KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = LICENSE.md
+-LINKS_VERSION = 2.21
++LINKS_VERSION = 2.22
+ LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
+ LINKS_SITE = http://links.twibright.com/download
+ LINKS_DEPENDENCIES = host-pkgconf
