@@ -1,42 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:17:32 -0000
-Subject: [Buildroot] [git commit] package/libuhttpd: bump version to 3.11.0
-Message-ID: <20210607144652.7CDD68B848@busybox.osuosl.org>
+Date: Mon, 07 Jun 2021 15:17:33 -0000
+Subject: [Buildroot] [git commit] package/bdwgc: Fix 'undefined reference to
+ __data_start' linker error on RISC-V
+Message-ID: <20210607144651.F04A57FDAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=815d7f2617d03b9d9718dd0263fe32bd3b1b312e
+commit: https://git.buildroot.net/buildroot/commit/?id=0f334a95ec9dc65be0c10c6bb686002e3f475035
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Backport an upstream patch fixing a link issue with libgc.so on RISC-V
+
+riscv64-buildroot-linux-musl/sysroot/usr/lib/libgc.so: undefined reference to `__data_start'
+
+https://gitlab.com/kubu93/buildroot/-/jobs/1229888983
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libuhttpd/libuhttpd.hash | 2 +-
- package/libuhttpd/libuhttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ed-reference-to-__data_start-linker-error.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index 4b0b5027c6..19a02e5be0 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6e7a9ad61e3d0ab5bd4d20b274b850542dff8057a8fcf6c36ce59eb34818f61f  libuhttpd-3.10.1.tar.gz
-+sha256  dcd95fac7b29d43f57e942db6e9fb4c8745d4284684cd627d60c8a7f8c76cd32  libuhttpd-3.11.0.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index 326c78face..61afec701e 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUHTTPD_VERSION = 3.10.1
-+LIBUHTTPD_VERSION = 3.11.0
- LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
- LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
+diff --git a/package/bdwgc/0001-Fix-undefined-reference-to-__data_start-linker-error.patch b/package/bdwgc/0001-Fix-undefined-reference-to-__data_start-linker-error.patch
+new file mode 100644
+index 0000000000..81221c9f66
+--- /dev/null
++++ b/package/bdwgc/0001-Fix-undefined-reference-to-__data_start-linker-error.patch
+@@ -0,0 +1,33 @@
++From 301ef15aefa6764466c374d07efb511b1c3862cc Mon Sep 17 00:00:00 2001
++From: Nikita Ermakov <coffe92@gmail.com>
++Date: Wed, 20 May 2020 17:57:17 +0300
++Subject: [PATCH] Fix 'undefined reference to __data_start' linker error on
++ RISC-V
++
++Issue #294 (bdwgc).
++
++* include/private/gcconfig.h [RISCV && LINUX] (__data_start): Add
++attribute(weak).
++
++(cherry picked from commit 538562ad01b181f4cc3913da1ac06a77945cd9b9)
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ include/private/gcconfig.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/private/gcconfig.h b/include/private/gcconfig.h
++index d9d45da1..d6cefa6f 100644
++--- a/include/private/gcconfig.h
+++++ b/include/private/gcconfig.h
++@@ -2943,7 +2943,7 @@ EXTERN_C_BEGIN
++ #   define ALIGNMENT (CPP_WORDSZ/8)
++ #   ifdef LINUX
++ #     define OS_TYPE "LINUX"
++-      extern int __data_start[];
+++      extern int __data_start[] __attribute__((__weak__));
++ #     define DATASTART ((ptr_t)__data_start)
++ #     define LINUX_STACKBOTTOM
++ #     define DYNAMIC_LOADING
++-- 
++2.30.2
++
