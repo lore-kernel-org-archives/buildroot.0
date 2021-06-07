@@ -1,58 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:38 -0000
-Subject: [Buildroot] [git commit] package/webkitgtk: bump to version 2.32.1
-Message-ID: <20210607144655.1B761814AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtty: bump version to 7.4.0
+Message-ID: <20210607144652.8A54281191@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=deac34e1d3e40fb1533ca1b674b39f09358af69b
+commit: https://git.buildroot.net/buildroot/commit/?id=6b5907bf65d27ed98532e9783f92f5575f38b3d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update to a new major release which bring in improvements and a few new
-features. Release notes:
-
-  https://webkitgtk.org/2021/03/26/webkitgtk2.32.0-released.html
-  https://webkitgtk.org/2021/05/10/webkitgtk2.32.1-released.html
-
-None of the new features in WebKitGTK 2.32.x need additional
-dependencies.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/rtty/rtty.hash | 2 +-
+ package/rtty/rtty.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index d85a7f46f2..d8bfa60fb8 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.30.6.tar.xz.sums
--md5  11148c4ed400c58fe330ac94208cbc4d  webkitgtk-2.30.6.tar.xz
--sha1  aaaf9b0f1780f3eae104ae0d3ad15b3e19cf6e8d  webkitgtk-2.30.6.tar.xz
--sha256  50736ec7a91770b5939d715196e5fe7209b93efcdeef425b24dc51fb8e9d7c1e  webkitgtk-2.30.6.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.32.1.tar.xz.sums
-+md5  b12790ae1209e1d5848aeb4fb70994db  webkitgtk-2.32.1.tar.xz
-+sha1  c8c507d3c98c891ea5bfcfb6407320959dc77a2b  webkitgtk-2.32.1.tar.xz
-+sha256  136117317f70f66486f71b8edf5e46f8776403c5d8a296e914b11a36ef836917  webkitgtk-2.32.1.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 1720ffc7d6..42132ca5fc 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
+diff --git a/package/rtty/rtty.hash b/package/rtty/rtty.hash
+index 283a5d1da5..b2e9db2436 100644
+--- a/package/rtty/rtty.hash
++++ b/package/rtty/rtty.hash
+@@ -1,2 +1,2 @@
+-sha256  4c60eacd7a653988a1907284de2ecf360c74f55ef9e21c40b9ebd87af6570908  rtty-7.3.2.tar.gz
++sha256  9bc5d30dfa9bd664a62711b6229f47505b83adb364907f24e3a404aad52a4802  rtty-7.4.0.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
+index dc91445287..4ec220394c 100644
+--- a/package/rtty/rtty.mk
++++ b/package/rtty/rtty.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.30.6
-+WEBKITGTK_VERSION = 2.32.1
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-RTTY_VERSION = 7.3.2
++RTTY_VERSION = 7.4.0
+ RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
+ RTTY_LICENSE = MIT
+ RTTY_LICENSE_FILES = LICENSE
