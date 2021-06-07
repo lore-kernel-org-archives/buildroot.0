@@ -1,59 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:18:08 -0000
-Subject: [Buildroot] [git commit] package/postgresql: select mandatory
- libopenssl features
-Message-ID: <20210607144655.7A1E981191@busybox.osuosl.org>
+Date: Mon, 07 Jun 2021 15:18:09 -0000
+Subject: [Buildroot] [git commit] package/dt-utils: bump version to 2021.03.0
+Message-ID: <20210607144655.265DB81191@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=beada77a7355c07cae7865afec41d67af6db4485
+commit: https://git.buildroot.net/buildroot/commit/?id=bb6b32f1a6ca2afd1ec97ac2049f529d89f69938
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Select mandatory libopenssl features (which are selectable since
-commit a83d41867c8d69a77d5cd0a665aa216af5340359):
-
-- BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH
-- BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST
-- BR2_PACKAGE_LIBOPENSSL_ENABLE_DES
-
-Fixes:
-
-  - http://autobuild.buildroot.net/results/7fdcaa337a7369673ac4580ff7a2bbccc895dca2
-
-  openssl.c:449:35: warning: implicit declaration of function 'EVP_bf_ecb'; did you mean 'EVP_sm4_ecb'? [-Wimplicit-function-declaration]
-    449 |  if (!EVP_EncryptInit_ex(evp_ctx, EVP_bf_ecb(), NULL, NULL, NULL))
-        |                                   ^~~~~~~~~~
-        |                                   EVP_sm4_ecb
-  openssl.c:449:35: warning: passing argument 2 of 'EVP_EncryptInit_ex' makes pointer from integer without a cast [-Wint-conversion]
-    449 |  if (!EVP_EncryptInit_ex(evp_ctx, EVP_bf_ecb(), NULL, NULL, NULL))
-        |                                   ^~~~~~~~~~~~
-        |                                   |
-        |                                   int
-  In file included from openssl.c:34:
-  .../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/openssl/evp.h:583:53: note: expected 'const EVP_CIPHER *' {aka 'const struct evp_cipher_st *'} but argument is of type 'int'
-    583 |                                   const EVP_CIPHER *cipher, ENGINE *impl,
-        |                                   ~~~~~~~~~~~~~~~~~~^~~~~~
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/postgresql/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/dt-utils/dt-utils.hash | 2 +-
+ package/dt-utils/dt-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-index 2debdc24d7..b42b219558 100644
---- a/package/postgresql/Config.in
-+++ b/package/postgresql/Config.in
-@@ -6,6 +6,9 @@ config BR2_PACKAGE_POSTGRESQL
- 	# postgresql is unlikely to be used in a pure statically
- 	# linked environment.
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  PostgreSQL is a powerful, open source object-relational
- 	  database system.
+diff --git a/package/dt-utils/dt-utils.hash b/package/dt-utils/dt-utils.hash
+index e42e82578d..74819158bb 100644
+--- a/package/dt-utils/dt-utils.hash
++++ b/package/dt-utils/dt-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  737313719d7c04d7b9576fdc572d838c81ea22ea41a44c7646467018e67a0b97  dt-utils-v2019.01.0-br1.tar.gz
++sha256  8b29d3a8799170afdb1b077e655528bf4e6afe0c789107b1eec8fff9d4482771  dt-utils-v2021.03.0-br1.tar.gz
+ sha256  a45932c79317d15116eadbf1c9c6fc59117ec3c4621db3a876066defa723963b  COPYING
+diff --git a/package/dt-utils/dt-utils.mk b/package/dt-utils/dt-utils.mk
+index 25c287d434..bc7fd90631 100644
+--- a/package/dt-utils/dt-utils.mk
++++ b/package/dt-utils/dt-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DT_UTILS_VERSION = v2019.01.0
++DT_UTILS_VERSION = v2021.03.0
+ DT_UTILS_SITE = https://git.pengutronix.de/git/tools/dt-utils
+ DT_UTILS_SITE_METHOD = git
+ DT_UTILS_LICENSE = GPL-2.0
