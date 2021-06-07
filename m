@@ -1,64 +1,48 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:42 -0000
-Subject: [Buildroot] [git commit] package/llvm: add BPF backend
-Message-ID: <20210607144656.28E1B814AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mbuffer: bump to version 20210328
+Message-ID: <20210607144653.2069082B86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72e57b7b4bc0efa960dd9c569dd674b0c005fad7
+commit: https://git.buildroot.net/buildroot/commit/?id=da50baa7c9337ffa83d4f910e3dd2032331857bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-bcc is a front-end tool for eBPF :
-https://github.com/iovisor/bcc/blob/master/README.md.
-eBPF is the most powerful Linux tracer, and bcc
-allows to write eBPF scripts in C and PYTHON3.
-
-BCC requires enabling LLVM backend BPF support.
-
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Tested-by: Qais Yousef <qais.yousef@arm.com>
-Reviewed-by: Qais Yousef <qais.yousef@arm.com>
-Cc: Qais Yousef <qais.yousef@arm.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Mircea GLIGA <mgliga@bitdefender.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/llvm/Config.in | 6 ++++++
- package/llvm/llvm.mk   | 5 +++++
- 2 files changed, 11 insertions(+)
+ package/mbuffer/mbuffer.hash | 4 ++--
+ package/mbuffer/mbuffer.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-index 1d21d879da..6ec2ffcfe6 100644
---- a/package/llvm/Config.in
-+++ b/package/llvm/Config.in
-@@ -47,6 +47,12 @@ config BR2_PACKAGE_LLVM_RTTI
+diff --git a/package/mbuffer/mbuffer.hash b/package/mbuffer/mbuffer.hash
+index 73a8d3cf44..7c200d543e 100644
+--- a/package/mbuffer/mbuffer.hash
++++ b/package/mbuffer/mbuffer.hash
+@@ -1,8 +1,8 @@
+ # From http://www.maier-komor.de/mbuffer.html
+-md5  e2b4f3b0d0944c08d52c167841bde3c0  mbuffer-20200929.tgz
++md5  4e4712db5fbd4e71bfbfa2c145c6c646  mbuffer-20210328.tgz
  
- 	  https://llvm.org/docs/HowToSetUpLLVMStyleRTTI.html
+ # Locally computed after checking signature upstream
+-sha256  53a6e3c14e9a049f18a09840653dd84f18e7ec7560f2dcf2b61c0ab5f0ead4e8  mbuffer-20200929.tgz
++sha256  51b5b8d8488991a55fe1dfce90130f9e47bc1ce286ba03b4f628c04b784fdc5d  mbuffer-20210328.tgz
  
-+config BR2_PACKAGE_LLVM_BPF
-+	bool "BPF backend"
-+	help
-+	  Build BPF target. Select this option if you are going
-+	  to install bcc on the target.
-+
- endif
+ # Hash for license file
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
+index 90a72ce657..c7c4456651 100644
+--- a/package/mbuffer/mbuffer.mk
++++ b/package/mbuffer/mbuffer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "llvm needs a toolchain w/ wchar, threads, C++, gcc >= 4.8, dynamic library"
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 7d60fe7f8c..6c721c30b9 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -62,6 +62,11 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
- LLVM_TARGETS_TO_BUILD += AMDGPU
- endif
- 
-+# Build BPF backend
-+ifeq ($(BR2_PACKAGE_LLVM_BPF),y)
-+LLVM_TARGETS_TO_BUILD += BPF
-+endif
-+
- # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
- LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
- 
+-MBUFFER_VERSION = 20200929
++MBUFFER_VERSION = 20210328
+ MBUFFER_SOURCE = mbuffer-$(MBUFFER_VERSION).tgz
+ MBUFFER_SITE = http://www.maier-komor.de/software/mbuffer
+ MBUFFER_LICENSE = GPL-3.0+
