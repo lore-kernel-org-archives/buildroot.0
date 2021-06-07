@@ -1,44 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:41 -0000
-Subject: [Buildroot] [git commit] package/libcurl: make sure openssl
- supports DES
-Message-ID: <20210607144655.7092E814AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nano: bump to version 5.7
+Message-ID: <20210607144652.C83BA8B398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f25c820a4f93ad0ca7eaf5e504667bd4099b878c
+commit: https://git.buildroot.net/buildroot/commit/?id=845acb9c31fd0f8f547f6cc84ea5007ae23ace8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-DES support in openssl is optional since commit a83d41867c8d
-("package/libopenssl: add option to enable some features"). curl uses
-DES support in openssl when enabled. Select DES support to avoid build
-failure.
-
-Fixes:
-http://autobuild.buildroot.net/results/8931fd2b71eb2490cdc041b47eff58377ac823da/
-http://autobuild.buildroot.net/results/f159195adf05c375d7d314a270afd3a55d43ebdd/
-http://autobuild.buildroot.net/results/e143c75bccd7bcd4216954b76099404a38cf9bc1/
-
-Cc: Erwan GAUTRON <erwan.gautron@bertin.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: Matthew Weber <matthew.weber@collins.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libcurl/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index b89c46f5ef..466f9ee3a1 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -51,6 +51,7 @@ choice
- config BR2_PACKAGE_LIBCURL_OPENSSL
- 	bool "OpenSSL"
- 	depends on BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index cbb4977223..532a68e0c9 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v5/nano-5.6.1.tar.xz.asc
++# https://www.nano-editor.org/dist/v5/nano-5.7.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256  760d7059e0881ca0ee7e2a33b09d999ec456ff7204df86bee58eb6f523ee8b09  nano-5.6.1.tar.xz
++sha256  d4b181cc2ec11def3711b4649e34f2be7a668e70ab506860514031d069cccafa  nano-5.7.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 77126fd4b0..39d9be12ba 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- config BR2_PACKAGE_LIBCURL_BEARSSL
- 	bool "BearSSL"
+ NANO_VERSION_MAJOR = 5
+-NANO_VERSION = $(NANO_VERSION_MAJOR).6.1
++NANO_VERSION = $(NANO_VERSION_MAJOR).7
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
