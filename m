@@ -1,46 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:39 -0000
-Subject: [Buildroot] [git commit] package/libatomic_ops: enable for riscv32
- and riscv64
-Message-ID: <20210607144652.0A4778B398@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-mediaportal-tvserver:
+ bump version to 8.2.0-Matrix
+Message-ID: <20210607144653.E609D81191@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=626a98a4492440a10e9374b9ce77b8b4ca02f310
+commit: https://git.buildroot.net/buildroot/commit/?id=7750fe1ee7f0d232847daeb04c99f59675dbdf20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The riscv support has been added since v7.6.4 release.
+Changelog:
+https://github.com/kodi-pvr/pvr.mediaportal.tvserver/blob/Matrix/pvr.mediaportal.tvserver/changelog.txt
 
-https://github.com/ivmai/libatomic_ops/commit/137643f1417ded071c56e05401ca6a3c16492d96
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
-[yann.morin.1998 at free.fr:
-  - split the long line
-  - reorder the archs alphabetically, and group related ones
-]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libatomic_ops/Config.in | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ .../kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash    | 2 +-
+ package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libatomic_ops/Config.in b/package/libatomic_ops/Config.in
-index e9206f3395..8287c6522d 100644
---- a/package/libatomic_ops/Config.in
-+++ b/package/libatomic_ops/Config.in
-@@ -1,6 +1,11 @@
- config BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
- 	bool
--	default y if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_sparc || BR2_sparc64 || BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	default y if BR2_aarch64 || BR2_arm || BR2_armeb
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-+	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	default y if BR2_riscv
-+	default y if BR2_sparc || BR2_sparc64
- 	# Unsupported for MIPS R6
- 	depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+index 83ac680914..ca526f40a0 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  cea87ccdceee834c96d6b6887b78213ccf79890fec97436cbef17c57b9cdac15  kodi-pvr-mediaportal-tvserver-8.1.2-Matrix.tar.gz
++sha256  0109daa45d7b6450954b40d0b09dbef28818c551e9f0fea9943cfd06f0a7ec40  kodi-pvr-mediaportal-tvserver-8.2.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+index 02b24ef271..50a9147a9d 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 8.1.2-Matrix
++KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 8.2.0-Matrix
+ KODI_PVR_MEDIAPORTAL_TVSERVER_SITE = $(call github,kodi-pvr,pvr.mediaportal.tvserver,$(KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION))
+ KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE = GPL-2.0+
+ KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = LICENSE.md
