@@ -1,51 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Mon, 07 Jun 2021 15:17:46 -0000
-Subject: [Buildroot] [git commit] package/webkitgtk: select missing
- multimedia deps
-Message-ID: <20210607144656.DF55D814BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/links: enable building graphics
+ mode with only fb driver
+Message-ID: <20210607144654.5220A8B398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d47e5c284faf706cac9e94a48a0abb5e604854f
+commit: https://git.buildroot.net/buildroot/commit/?id=4cf6c02fb0b8b216e446c1230cb8f1eb61763211
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Select a few missing multimedia related dependencies:
+The "fb" framebuffer driver needs GPM (mouse support) to compile,
+but not DirectFB or Xorg.
 
-- BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT is needed for
-  "autoaudiosink"; not having this element can cause a crash as
-  it is used unconditionally.
-- BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA and
-  BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX are needed for
-  WebM video playback.
+The .mk file already has an optional dependency on GPM, so it doesn't
+need to be added there.
 
-Note that BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX depends on THREADS
-(because of libvpx), but webktigtk already depend on libgtk3, which
-depends on THREADS. The probability that GTK3 drops the dependency on
-THREADS is sufficiently close to zero that we need not account for that.
-So we do not propagate the THREADS dependency for this option.
+Also added a Kconfig comment for easier discovery of the GPM
+requirement.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Urja Rannikko <urjaman@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/webkitgtk/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/links/Config.in | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 4ea931fde1..2ba8d47660 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -98,8 +98,11 @@ config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
- 	select BR2_PACKAGE_GST1_LIBAV
+diff --git a/package/links/Config.in b/package/links/Config.in
+index 713f53da4e..cc2389c9f1 100644
+--- a/package/links/Config.in
++++ b/package/links/Config.in
+@@ -10,11 +10,15 @@ if BR2_PACKAGE_LINKS
+ 
+ config BR2_PACKAGE_LINKS_GRAPHICS
+ 	bool "use graphics"
+-	depends on BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_GPM || BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXT if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBPNG
  	help
- 	  This option pulls in all of the required dependencies
+-	  Enable graphics output for DirectFB or X11.
++	  Enable graphics output for framebuffer, DirectFB or X11.
++	  Framebuffer output requires GPM (console mouse).
+ 	  Otherwise links will be text-mode only.
+ 
++comment "links graphics needs GPM, DirectFB or X11"
++	depends on !BR2_PACKAGE_GPM && !BR2_PACKAGE_DIRECTFB && !BR2_PACKAGE_XORG7
++
+ endif
