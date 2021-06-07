@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon,  7 Jun 2021 19:56:00 +0200
-Subject: [Buildroot] [PATCH 2/6] package/perl-http-message: bump to version
- 6.32
+Date: Mon,  7 Jun 2021 19:56:02 +0200
+Subject: [Buildroot] [PATCH 4/6] package/perl-libwww-perl: bump to version
+ 6.54
 In-Reply-To: <20210607175604.2850795-1-francois.perrad@gadz.org>
 References: <20210607175604.2850795-1-francois.perrad@gadz.org>
-Message-ID: <20210607175604.2850795-2-francois.perrad@gadz.org>
+Message-ID: <20210607175604.2850795-4-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-http-message/perl-http-message.hash | 4 ++--
- package/perl-http-message/perl-http-message.mk   | 2 +-
+ package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
+ package/perl-libwww-perl/perl-libwww-perl.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
-index a074bb4cb..2728a2690 100644
---- a/package/perl-http-message/perl-http-message.hash
-+++ b/package/perl-http-message/perl-http-message.hash
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
+index 8081e127f..d04fb9699 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.hash
++++ b/package/perl-libwww-perl/perl-libwww-perl.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  058f0598ee52a816ccb1d9dceb798520  HTTP-Message-6.29.tar.gz
--sha256  f4417970679e08f6deb0609009aa9515dee0c8d91dbadd6b86a26e2b8e0d6341  HTTP-Message-6.29.tar.gz
-+md5  703551d67da8ba7ecbe0955d7c7a325d  HTTP-Message-6.32.tar.gz
-+sha256  ac32960ce01a3ae4a950666736f2bd633fb694c60ad545adaad9cb5fe5c12278  HTTP-Message-6.32.tar.gz
+-md5  33fdb6415018b8bf94242cace1b06479  libwww-perl-6.53.tar.gz
+-sha256  9cbb7c688416a20c1aba9a32568504af1143ced58b572c502a1b2fb8a500f535  libwww-perl-6.53.tar.gz
++md5  aea3e2a207b128371db0ef0f86229667  libwww-perl-6.54.tar.gz
++sha256  76917708bd91fbb15eb5eece25ddd2ed1fa65a5b6b05a3ab2a7facce17dfc81d  libwww-perl-6.54.tar.gz
  
  # computed by scancpan
- sha256  1379396dcd2291f17a741d2d6bf14d379f5f2ab91b3c7e7b92c5f82856e2d7ac  LICENSE
-diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
-index 1b3a93d7c..1cdac5def 100644
---- a/package/perl-http-message/perl-http-message.mk
-+++ b/package/perl-http-message/perl-http-message.mk
+ sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENSE
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
+index d96035e42..877ab9b36 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.mk
++++ b/package/perl-libwww-perl/perl-libwww-perl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_MESSAGE_VERSION = 6.29
-+PERL_HTTP_MESSAGE_VERSION = 6.32
- PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
- PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_MESSAGE_LICENSE = Artistic or GPL-1.0+
+-PERL_LIBWWW_PERL_VERSION = 6.53
++PERL_LIBWWW_PERL_VERSION = 6.54
+ PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
+ PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
 -- 
 2.30.2
