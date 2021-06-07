@@ -1,91 +1,266 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:35 -0000
-Subject: [Buildroot] [git commit] package/edk2-platforms: new package
-Message-ID: <20210607144652.1D17481191@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_aarch64_sbsa_defconfig: new
+ config for QEMU sbsa-ref
+Message-ID: <20210607144652.37B768B398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33aa59e7b500e60f2d736a17183c7d49b7baf5bd
+commit: https://git.buildroot.net/buildroot/commit/?id=a8466cc5acd29711e534b48764e0db12e5472cf8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-EDK2 firmware is usually built from two sources; the core EDK2
-environment, and additional platform description files maintained
-separately. This package adds the latter set of description files to
-staging so that the core EDK2 package can build with these for certain
-platforms during the building process.
+This introduces a configuration for the SBSA reference machine under
+QEMU that is intended for developing and testing firmware. It consists
+of ATF that load EDK2 as BL33 which in turn will load GRUB2.
+
+Included with the board files is a minimal kernel configuration, almost
+identical to that of board/qemu/aarch64-virt/linux.config. The main
+difference is the addition of ACPI which is preferred over DTB for
+booting an UEFI system.
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/Config.in                          |  1 +
- package/edk2-platforms/Config.in           |  8 ++++++++
- package/edk2-platforms/edk2-platforms.hash |  3 +++
- package/edk2-platforms/edk2-platforms.mk   | 22 ++++++++++++++++++++++
- 4 files changed, 34 insertions(+)
+ board/qemu/aarch64-sbsa/assemble-flash-images | 11 +++++
+ board/qemu/aarch64-sbsa/genimage.cfg          | 30 ++++++++++++
+ board/qemu/aarch64-sbsa/grub.cfg              |  6 +++
+ board/qemu/aarch64-sbsa/linux.config          | 68 +++++++++++++++++++++++++++
+ board/qemu/aarch64-sbsa/readme.txt            | 32 +++++++++++++
+ configs/qemu_aarch64_sbsa_defconfig           | 49 +++++++++++++++++++
+ 6 files changed, 196 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 82b28d2835..45d75c71d0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -460,6 +460,7 @@ endmenu
- 	source "package/dvb-apps/Config.in"
- 	source "package/dvbsnoop/Config.in"
- 	source "package/edid-decode/Config.in"
-+	source "package/edk2-platforms/Config.in"
- 	source "package/eudev/Config.in"
- 	source "package/ev3dev-linux-drivers/Config.in"
- 	source "package/evemu/Config.in"
-diff --git a/package/edk2-platforms/Config.in b/package/edk2-platforms/Config.in
-new file mode 100644
-index 0000000000..17633c0fdd
+diff --git a/board/qemu/aarch64-sbsa/assemble-flash-images b/board/qemu/aarch64-sbsa/assemble-flash-images
+new file mode 100755
+index 0000000000..abcc276b0b
 --- /dev/null
-+++ b/package/edk2-platforms/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_EDK2_PLATFORMS
-+	bool
-+	help
-+	  EDK2 description files for all supported platforms.
-+	  The main EDK2 bootloader package will depend on these
-+	  description files while building firmware for some platforms.
++++ b/board/qemu/aarch64-sbsa/assemble-flash-images
+@@ -0,0 +1,11 @@
++#!/bin/bash
 +
-+	  https://github.com/tianocore/edk2-platforms
-diff --git a/package/edk2-platforms/edk2-platforms.hash b/package/edk2-platforms/edk2-platforms.hash
++set -e
++
++BOARD_DIR="$(dirname $0)"
++
++cp -f ${BOARD_DIR}/grub.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
++
++# The QEMU sbsa machine expects flash devices to be 256M.
++truncate -s 256M ${BINARIES_DIR}/SBSA_FLASH0.fd
++truncate -s 256M ${BINARIES_DIR}/SBSA_FLASH1.fd
+diff --git a/board/qemu/aarch64-sbsa/genimage.cfg b/board/qemu/aarch64-sbsa/genimage.cfg
 new file mode 100644
-index 0000000000..30ae235078
+index 0000000000..285b308d90
 --- /dev/null
-+++ b/package/edk2-platforms/edk2-platforms.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  dfdc34fea86e5037a3a6cbd2a83b1f655f16b4c9ab4f5ff9da91e45a358c9a14  edk2-platforms-db922e1253cb6f1fc456805bc42fb7d401eed5c2.tar.gz
-+sha256  50ce20c9cfdb0e19ee34fe0a51fc0afe961f743697b068359ab2f862b494df80  License.txt
-diff --git a/package/edk2-platforms/edk2-platforms.mk b/package/edk2-platforms/edk2-platforms.mk
++++ b/board/qemu/aarch64-sbsa/genimage.cfg
+@@ -0,0 +1,30 @@
++image efi-part.vfat {
++  vfat {
++    file startup.nsh {
++      image = "efi-part/startup.nsh"
++    }
++    file EFI {
++      image = "efi-part/EFI"
++    }
++    file Image {
++      image = "Image"
++    }
++  }
++  size = 32M
++}
++
++image disk.img {
++  hdimage {
++    gpt = true
++  }
++
++  partition boot {
++    partition-type = 0xEF
++    image = "efi-part.vfat"
++  }
++
++  partition root {
++    partition-type = 0x83
++    image = "rootfs.ext2"
++  }
++}
+diff --git a/board/qemu/aarch64-sbsa/grub.cfg b/board/qemu/aarch64-sbsa/grub.cfg
 new file mode 100644
-index 0000000000..47e6b1c51d
+index 0000000000..cd486caf4c
 --- /dev/null
-+++ b/package/edk2-platforms/edk2-platforms.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# edk2-platforms
-+#
-+################################################################################
++++ b/board/qemu/aarch64-sbsa/grub.cfg
+@@ -0,0 +1,6 @@
++set default="0"
++set timeout="5"
 +
-+# Keep in sync with latest commit as of the release date for boot/edk2
-+EDK2_PLATFORMS_VERSION = db922e1253cb6f1fc456805bc42fb7d401eed5c2
-+EDK2_PLATFORMS_SITE = $(call github,tianocore,edk2-platforms,$(EDK2_PLATFORMS_VERSION))
-+EDK2_PLATFORMS_LICENSE = BSD-2-Clause
-+EDK2_PLATFORMS_LICENSE_FILE = License.txt
-+EDK2_PLATFORMS_INSTALL_TARGET = NO
-+EDK2_PLATFORMS_INSTALL_STAGING = YES
++menuentry "Buildroot" {
++	linux /Image root=/dev/sda2 rootwait console=ttyAMA0
++}
+diff --git a/board/qemu/aarch64-sbsa/linux.config b/board/qemu/aarch64-sbsa/linux.config
+new file mode 100644
+index 0000000000..a60cce02ec
+--- /dev/null
++++ b/board/qemu/aarch64-sbsa/linux.config
+@@ -0,0 +1,68 @@
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ_IDLE=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_TASKSTATS=y
++CONFIG_SCHED_AUTOGROUP=y
++CONFIG_PROFILING=y
++CONFIG_ARCH_VEXPRESS=y
++CONFIG_COMPAT=y
++CONFIG_FW_CFG_SYSFS=y
++CONFIG_FW_CFG_SYSFS_CMDLINE=y
++CONFIG_ACPI=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_BLK_DEV_BSGLIB=y
++CONFIG_BINFMT_MISC=y
++CONFIG_TRANSPARENT_HUGEPAGE=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_PACKET_DIAG=y
++CONFIG_UNIX=y
++CONFIG_NET_KEY=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_ADVANCED_ROUTER=y
++CONFIG_BRIDGE=m
++CONFIG_NET_SCHED=y
++CONFIG_VSOCKETS=y
++CONFIG_PCI=y
++CONFIG_PCI_HOST_GENERIC=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_VIRTIO_BLK=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_CHR_DEV_SG=y
++CONFIG_SCSI_CONSTANTS=y
++CONFIG_SCSI_LOGGING=y
++CONFIG_SCSI_SCAN_ASYNC=y
++CONFIG_SCSI_VIRTIO=y
++CONFIG_ATA=y
++CONFIG_SATA_AHCI_PLATFORM=y
++CONFIG_NETDEVICES=y
++CONFIG_DUMMY=y
++CONFIG_MACVLAN=y
++CONFIG_VIRTIO_NET=y
++CONFIG_NLMON=y
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
++CONFIG_VIRTIO_CONSOLE=y
++CONFIG_HW_RANDOM=y
++CONFIG_HW_RANDOM_VIRTIO=y
++CONFIG_TCG_TPM=y
++CONFIG_TCG_TIS=y
++CONFIG_DRM=y
++CONFIG_DRM_VIRTIO_GPU=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_PL031=y
++CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_MMIO=y
++CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
++CONFIG_MAILBOX=y
++CONFIG_PL320_MBOX=y
++CONFIG_ARM_SMMU_V3=y
++CONFIG_EXT4_FS=y
++CONFIG_FUSE_FS=y
++CONFIG_VIRTIO_FS=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
+diff --git a/board/qemu/aarch64-sbsa/readme.txt b/board/qemu/aarch64-sbsa/readme.txt
+new file mode 100644
+index 0000000000..7935108ef1
+--- /dev/null
++++ b/board/qemu/aarch64-sbsa/readme.txt
+@@ -0,0 +1,32 @@
++Intro
++=====
 +
-+# There is nothing to build for edk2-platforms. All we need to do is to copy
-+# all description files to staging, for other packages to build with.
-+define EDK2_PLATFORMS_INSTALL_STAGING_CMDS
-+	rm -rf $(STAGING_DIR)/usr/share/edk2-platforms
-+	cp -rf $(@D) $(STAGING_DIR)/usr/share/edk2-platforms
-+endef
++The QEMU sbsa-ref machine is primarily meant for firmware development
++and testing according to ARM's SBSA and SBBR standards.
 +
-+$(eval $(generic-package))
++Build
++=====
++
++  $ make qemu_aarch64_sbsa_defconfig
++  $ make
++
++Emulation
++=========
++
++Run the emulation with:
++
++  qemu-system-aarch64 \
++    -M sbsa-ref \
++    -cpu cortex-a53 \
++    -smp 4 \
++    -m 1024 \
++    -nographic \
++    -pflash output/images/SBSA_FLASH0.fd \
++    -pflash output/images/SBSA_FLASH1.fd \
++    -hda output/images/disk.img
++
++Note that if you want to run sbsa-ref emulation with QEMU provided by
++your distro (i.e., not host-qemu by Buildroot) then you may need to
++install the SeaBIOS package for some required drivers. On Debian:
++
++  # apt install seabios
+diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qemu_aarch64_sbsa_defconfig
+new file mode 100644
+index 0000000000..20ae393cd7
+--- /dev/null
++++ b/configs/qemu_aarch64_sbsa_defconfig
+@@ -0,0 +1,49 @@
++# Architecture
++BR2_aarch64=y
++BR2_cortex_a53=y
++
++# Toolchain
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++
++# System
++BR2_SYSTEM_DHCP="eth0"
++BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Image
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/aarch64-sbsa/assemble-flash-images support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/qemu/aarch64-sbsa/genimage.cfg"
++
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.34"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# UEFI firmware
++BR2_TARGET_EDK2=y
++BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA=y
++BR2_TARGET_GRUB2=y
++BR2_TARGET_GRUB2_ARM64_EFI=y
++
++# ARM Trusted Firmware
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu_sbsa"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++
++# Host tools for genimage
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# host-qemu for gitlab testing
++BR2_PACKAGE_HOST_QEMU=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
