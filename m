@@ -1,91 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 07 Jun 2021 15:17:37 -0000
-Subject: [Buildroot] [git commit] package/libqmi: bump version to 1.28.4
-Message-ID: <20210607144652.AA5D78B398@busybox.osuosl.org>
+Date: Mon, 07 Jun 2021 15:17:38 -0000
+Subject: [Buildroot] [git commit] package/webkitgtk: bump to version 2.32.1
+Message-ID: <20210607144655.1B761814AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=118cf25a5ca012bd32031820250d0e5196be751a
+commit: https://git.buildroot.net/buildroot/commit/?id=deac34e1d3e40fb1533ca1b674b39f09358af69b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch backported from this release.
+Update to a new major release which bring in improvements and a few new
+features. Release notes:
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+  https://webkitgtk.org/2021/03/26/webkitgtk2.32.0-released.html
+  https://webkitgtk.org/2021/05/10/webkitgtk2.32.1-released.html
+
+None of the new features in WebKitGTK 2.32.x need additional
+dependencies.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...build-when-ARPHRD_RAWIP-isn-t-defined-in-.patch | 39 ----------------------
- package/libqmi/libqmi.hash                         |  2 +-
- package/libqmi/libqmi.mk                           |  2 +-
- 3 files changed, 2 insertions(+), 41 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libqmi/0001-libqmi-fix-build-when-ARPHRD_RAWIP-isn-t-defined-in-.patch b/package/libqmi/0001-libqmi-fix-build-when-ARPHRD_RAWIP-isn-t-defined-in-.patch
-deleted file mode 100644
-index 1212878af4..0000000000
---- a/package/libqmi/0001-libqmi-fix-build-when-ARPHRD_RAWIP-isn-t-defined-in-.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From cdec8660427d2895415f1d84426e39d1ed145136 Mon Sep 17 00:00:00 2001
--From: Aleksander Morgado <aleksander@aleksander.es>
--Date: Tue, 30 Mar 2021 00:13:45 +0200
--Subject: [PATCH] libqmi: fix build when ARPHRD_RAWIP isn't defined in libc
--
--The kernel may be new enough to have rmnet support, but it could be
--that libc doesn't have ARPHRD_RAWIP defined yet; if so, just define it
--ourselves.
--
--Fixes http://autobuild.buildroot.org/results/c8853b7161bd85d46c1282c6c097e7ef4042ae68
--
--Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-----
-- src/libqmi-glib/qmi-net-port-manager-rmnet.c | 7 +++++++
-- 1 file changed, 7 insertions(+)
--
--diff --git a/src/libqmi-glib/qmi-net-port-manager-rmnet.c b/src/libqmi-glib/qmi-net-port-manager-rmnet.c
--index eb26129..571d4c4 100644
----- a/src/libqmi-glib/qmi-net-port-manager-rmnet.c
--+++ b/src/libqmi-glib/qmi-net-port-manager-rmnet.c
--@@ -24,8 +24,15 @@
-- #include <linux/if_link.h>
-- #include <linux/netlink.h>
-- #include <linux/rtnetlink.h>
--+
-- #include <net/if.h>
-- #include <net/if_arp.h>
--+
--+/* The if_arp.h from libc may not have this symbol yet */
--+#if !defined ARPHRD_RAWIP
--+#define ARPHRD_RAWIP 519
--+#endif
--+
-- #include <sys/socket.h>
-- #include <sys/types.h>
-- #include <string.h>
---- 
--2.30.1
--
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index 8cf25f486a..2720a8236d 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
--sha256  8c8c3ee719874d2529bce9b35b028fe435b36f003979a360d3ad0938449db783  libqmi-1.28.2.tar.xz
-+sha256  3b14cd2ab5221a7adbb39fed16ef697538ea1c79308821ad2d19b505e1daaea0  libqmi-1.28.4.tar.xz
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 6fc6d4a50d..278c0116be 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index d85a7f46f2..d8bfa60fb8 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.30.6.tar.xz.sums
+-md5  11148c4ed400c58fe330ac94208cbc4d  webkitgtk-2.30.6.tar.xz
+-sha1  aaaf9b0f1780f3eae104ae0d3ad15b3e19cf6e8d  webkitgtk-2.30.6.tar.xz
+-sha256  50736ec7a91770b5939d715196e5fe7209b93efcdeef425b24dc51fb8e9d7c1e  webkitgtk-2.30.6.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.32.1.tar.xz.sums
++md5  b12790ae1209e1d5848aeb4fb70994db  webkitgtk-2.32.1.tar.xz
++sha1  c8c507d3c98c891ea5bfcfb6407320959dc77a2b  webkitgtk-2.32.1.tar.xz
++sha256  136117317f70f66486f71b8edf5e46f8776403c5d8a296e914b11a36ef836917  webkitgtk-2.32.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 1720ffc7d6..42132ca5fc 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBQMI_VERSION = 1.28.2
-+LIBQMI_VERSION = 1.28.4
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+-WEBKITGTK_VERSION = 2.30.6
++WEBKITGTK_VERSION = 2.32.1
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
