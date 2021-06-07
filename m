@@ -1,41 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Jun 2021 23:18:18 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python-bluezero:
- select dbus
-Message-ID: <20210607205546.5EF8E80AEA@busybox.osuosl.org>
+Date: Mon, 7 Jun 2021 23:20:05 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/lvm2: drop legacy
+ default
+Message-ID: <20210607205546.7660C80187@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6aa6df736e8a8c7bac6b3107ff4efe25136c436
+commit: https://git.buildroot.net/buildroot/commit/?id=3cdbe916c80c87a727dbcac7a9c05d1394946e37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Build is broken since commit
-8bdc5e7c4d975193b1e18999ed840507cea63bd6 because BR2_PACKAGE_DBUS_PYTHON
-is selected without selecting BR2_PACKAGE_DBUS
+Commit f289b1b36f5c (legacy: drop options removed more than 5 years ago
+now) forgot to remove a legacy default.
 
-Fixes:
- - http://autobuild.buildroot.org/results/378dd714940440b8f9db763479ae929e90e33b80
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4f79b1cb93757e23d74e748f94f15a65b363f887)
+(cherry picked from commit 5c07dfcc1a52e2804011574a3e022523a20546c8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-bluezero/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/lvm2/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/python-bluezero/Config.in b/package/python-bluezero/Config.in
-index 7126b3ca50..c391bfa858 100644
---- a/package/python-bluezero/Config.in
-+++ b/package/python-bluezero/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_BLUEZERO
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # python-gobject -> gobject-introspection
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # python-gobject -> gobject-introspection
- 	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_DBUS # runtime
- 	select BR2_PACKAGE_DBUS_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_GOBJECT # runtime
+diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+index a9c5c453fc..5e767e2e97 100644
+--- a/package/lvm2/Config.in
++++ b/package/lvm2/Config.in
+@@ -26,7 +26,6 @@ if BR2_PACKAGE_LVM2
+ 
+ config BR2_PACKAGE_LVM2_STANDARD_INSTALL
+ 	bool "standard install instead of only dmsetup"
+-	default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
+ 	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
  	help
