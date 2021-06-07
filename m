@@ -1,48 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:32 -0000
-Subject: [Buildroot] [git commit] DEVELOPERS: add files related to EDK2 for
- Dick Olsson
-Message-ID: <20210607144652.512728B848@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libuhttpd: bump version to 3.11.0
+Message-ID: <20210607144652.7CDD68B848@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=823c173639971b491440b9ec7cf93e3c166e43da
+commit: https://git.buildroot.net/buildroot/commit/?id=815d7f2617d03b9d9718dd0263fe32bd3b1b312e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Dick Olsson <hi@senzilla.io>
-[yann.morin.1998 at free.fr: drop files from patches not applied]
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/libuhttpd/libuhttpd.hash | 2 +-
+ package/libuhttpd/libuhttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b688c8a8c1..2d5c692062 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -675,7 +675,14 @@ N:	Derrick Lyndon Pallas <derrick@meter.com>
- F:	package/ipcalc/
+diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+index 4b0b5027c6..19a02e5be0 100644
+--- a/package/libuhttpd/libuhttpd.hash
++++ b/package/libuhttpd/libuhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6e7a9ad61e3d0ab5bd4d20b274b850542dff8057a8fcf6c36ce59eb34818f61f  libuhttpd-3.10.1.tar.gz
++sha256  dcd95fac7b29d43f57e942db6e9fb4c8745d4284684cd627d60c8a7f8c76cd32  libuhttpd-3.11.0.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
+index 326c78face..61afec701e 100644
+--- a/package/libuhttpd/libuhttpd.mk
++++ b/package/libuhttpd/libuhttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Dick Olsson <hi@senzilla.io>
-+F:	board/aarch64-efi/
-+F:	board/pc/
-+F:	board/qemu/aarch64-sbsa/
-+F:	boot/arm-trusted-firmware/
-+F:	boot/edk2/
-+F:	configs/qemu_aarch64_sbsa_defconfig
- F:	package/bearssl/
-+F:	package/edk2-platforms/
- F:	package/execline/
- F:	package/mdevd/
- F:	package/s6-dns/
-@@ -686,6 +693,7 @@ F:	package/s6-portable-utils/
- F:	package/s6-rc/
- F:	package/s6/
- F:	package/skalibs/
-+F:	support/testing/tests/boot/test_edk2.py
- 
- N:	Dimitrios Siganos <dimitris@siganos.org>
- F:	package/wireless-regdb/
+-LIBUHTTPD_VERSION = 3.10.1
++LIBUHTTPD_VERSION = 3.11.0
+ LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
+ LIBUHTTPD_LICENSE = MIT
+ LIBUHTTPD_LICENSE_FILES = LICENSE
