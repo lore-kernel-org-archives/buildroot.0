@@ -1,54 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 7 Jun 2021 21:21:46 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libcamera: fix atomic linking
- with qcam
-In-Reply-To: <57131d90-7811-7cee-e986-f5711e40abfa@ideasonboard.com>
-References: <20210603053644.3432-1-fontaine.fabrice@gmail.com>
- <20210603053644.3432-2-fontaine.fabrice@gmail.com>
- <ce1a528d-23f3-e2f6-081d-7e2962d2cc9a@ideasonboard.com>
- <CAPi7W80C77dVVQt+gf=OaMziffLjhz0t81y8Y=zKhRe2CH_GEQ@mail.gmail.com>
- <57131d90-7811-7cee-e986-f5711e40abfa@ideasonboard.com>
-Message-ID: <c77f8981-f202-4923-59f3-62ac67ef1958@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 07 Jun 2021 22:22:52 +0200
+Subject: [Buildroot] [PATCH] package/netperf: move SITE so s.b.n
+In-Reply-To: <8fac0332-92aa-9545-7a30-afa8194e0d56@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 7 Jun 2021 21:00:13 +0200")
+References: <c160b9eba623c54debf9bf50d69cca4a6d6ed69e.1622119840.git.baruch@tkos.co.il>
+ <7d24aa70-74c4-1166-e69f-5d8c7a5c6875@mind.be>
+ <a7969129-6272-575d-0846-1874629cebc4@mind.be>
+ <87v96wrw9p.fsf@tarshish> <87tumbxxu9.fsf@dell.be.48ers.dk>
+ <8fac0332-92aa-9545-7a30-afa8194e0d56@mind.be>
+Message-ID: <874ke9xw4j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
+Hi,
 
-On 03/06/2021 15:07, Kieran Bingham wrote:
-> Hi Fabrice,
-> 
-> On 03/06/2021 13:17, Fabrice Fontaine wrote:
->> Hi Kieran,
->>
->> Le jeu. 3 juin 2021 ? 13:06, Kieran Bingham
->> <kieran.bingham@ideasonboard.com> a ?crit :
->>>
->>> Hi Fabrice,
->>>
->>> On 03/06/2021 06:36, Fabrice Fontaine wrote:
-[snip]
->>>> +[Retrieved from:
->>>> +https://git.linuxtv.org/libcamera.git/commit/?id=59de56f42a0fda1b8e778fb237b7bce494dc0584]
+ >> >> We prefer buildroot.org over buildroot.net nowadays, so I changed that.
+ >> 
+ >> > BR2_BACKUP_SITE still defaults to "http://sources.buildroot.net". Should
+ >> > we change that?
+ >> 
+ >> There is a fairly important difference between .net and .org, .net is
+ >> though the cloudflare cache, but .org goes straight to our upstream
+ >> server.
+ >> 
+ >> Given the extra bandwidth and availibility of Cloudflare, I would prefer
+ >> we use .net.
 
- Although we generally prefer upstream patches, in this case I don't think it's
-worth replacing the patch that is already committed with the upstream one, since
-it's anyway just a build-time change. Therefore, I've marked the series as Rejected.
+ >  Wouldn't it be possible to route sources.buildroot.org through cloudflare as well?
 
->>>
->>> Given that this is now an upstream commit - wouldn't it make more sense
->>> to bump the libcamera version to here, rather than carry the patch back?
->>>
->>> Or is there some reason you don't want to update yet?
->> Yes, there is a very good reason: buildroot 2021.05 will be released
->> in the next few hours/days.
-> 
-> That's understandable, no problem here!
+It would, but there were some complications back when we set it up,
+E.G. you need to use cloudflares DNS servers and we didn't originally
+have control of the buildroot.org.
 
- Now that 2021.05 has been released, it would be a good time to bump libcamera
-and remove the patch!
+Only having cloudflare on one of the domains was also quite handy for
+comparing behaviour when debugging in the beginning.
 
- Regards,
- Arnout
+But yeah, we should probably use the same setup for both domains now. We
+originally put Cloudflare in front because of bandwidth/latency issues
+with s.b.o for some users. Given that Cloudflare is a bit controversial,
+it is maybe worth checking if we should keep on using it or drop it.
+
+According to the Cloudflare stats, ~45% of the requests are cached,
+saving ~1TB traffic/month.
+
+Thomas, I think you had performance issues in the beginning, can you
+compare speed again?
+
+-- 
+Bye, Peter Korsgaard
