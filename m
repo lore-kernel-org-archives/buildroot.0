@@ -1,86 +1,84 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 7 Jun 2021 16:09:34 +0200
-Subject: [Buildroot] [PATCH/RFC 01/28] boot/arm-trusted-firmware: option
- to disable stack protection
-In-Reply-To: <20210531212748.2378872-2-geomatsi@gmail.com>
-References: <20210531212748.2378872-1-geomatsi@gmail.com>
- <20210531212748.2378872-2-geomatsi@gmail.com>
-Message-ID: <CAEyMn7bawNC19ZsrfQa0GdJq8+BRQo539Ncp92TBYx4AVYMTTg@mail.gmail.com>
+Date: Mon, 7 Jun 2021 16:53:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mtd: add
+ BR2_PACKAGE_MTD_UBIHEALTHD option
+In-Reply-To: <20210524143715.578572-1-luoxiaobing0926@gmail.com>
+References: <20210524143715.578572-1-luoxiaobing0926@gmail.com>
+Message-ID: <CAEyMn7ajLEagr6Rb04aKa=a8KKFr6w6mUKCj3yn5Azequos0Tg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sergey,
+Hi Xiabing,
 
-Am Mo., 31. Mai 2021 um 23:28 Uhr schrieb Sergey Matyukevich
-<geomatsi@gmail.com>:
+
+Am Mo., 24. Mai 2021 um 16:37 Uhr schrieb Xiaobing Luo
+<luoxiaobing0926@gmail.com>:
 >
-> Default value for ATF build flag  ENABLE_STACK_PROTECTOR is "none".
-> Buildroot sets appropriate ENABLE_STACK_PROTECTOR build flag value
-> based on the enabled BR2_SSP_* options. For any values other than
-> "none", ATF platform specific hook 'plat_get_stack_protector_canary'
-> should be implemented. However this hook is not implemented by all
-> the platforms supported by ATF. For instance, allwinner does not
-> provide such a hook.
+> mtd-utils-2.1.2 add ubihealthd daemon
+> package/mtd: add BR2_PACKAGE_MTD_UBIHEALTHD option
 >
-> Add new option BR2_TARGET_ARM_TRUSTED_FIRMWARE_DISABLE_SSP to disable
-> GCC stack protecton when selected ATF platform does not provide
-> support for this feature.
-
-I tested this patch to build a defconfig with buildroot toolchain that
-has SSP enabled. By using the
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_DISABLE_SSP option I was able to build
-ATF v2.5 for a imx8m platform without the described error
-(plat_get_stack_protector_cannary).
-
-When you update your patch series I can add a tested-by.
-
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
 > ---
->  boot/arm-trusted-firmware/Config.in               | 7 +++++++
->  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 ++++
->  2 files changed, 11 insertions(+)
+>  package/mtd/Config.in | 4 ++++
+>  package/mtd/mtd.mk    | 1 +
+>  2 files changed, 5 insertions(+)
 >
-> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-> index c06294040e..9b851845b9 100644
-> --- a/boot/arm-trusted-firmware/Config.in
-> +++ b/boot/arm-trusted-firmware/Config.in
-> @@ -175,4 +175,11 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN
->           Select this option if your ATF board configuration requires
->           an ARM32 bare metal toolchain to be available.
+> diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+> index 590ca7f5ef..c7ad3b3cdc 100644
+> --- a/package/mtd/Config.in
+> +++ b/package/mtd/Config.in
+> @@ -137,6 +137,10 @@ config BR2_PACKAGE_MTD_UBIFORMAT
+>         bool "ubiformat"
+>         default y
 >
-> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DISABLE_SSP
-> +       bool "Disable stack protection"
-> +       help
-> +         Select this option to explicitly disable stack protection checks in GCC.
-> +         Such checks need to be disabled if ATF platform port does not implement
-> +         plat_get_stack_protector_canary() hook.
+> +config BR2_PACKAGE_MTD_UBIHEALTHD
+> +       bool "ubihealthd"
+> +       default y
 > +
->  endif
-> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> index 0597cecf71..3fb65a01b3 100644
-> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> @@ -100,6 +100,9 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
->  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
->  endif
->
-> +ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_DISABLE_SSP),y)
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=none
-> +else
->  ifeq ($(BR2_SSP_REGULAR),y)
->  ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=default
->  else ifeq ($(BR2_SSP_STRONG),y)
-> @@ -107,6 +110,7 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=strong
->  else ifeq ($(BR2_SSP_ALL),y)
->  ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=all
->  endif
-> +endif
->
->  ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
->
+>  config BR2_PACKAGE_MTD_UBIMKVOL
+>         bool "ubimkvol"
+>         default y
+> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+> index c4fa56d260..121dfa554b 100644
+> --- a/package/mtd/mtd.mk
+> +++ b/package/mtd/mtd.mk
+> @@ -96,6 +96,7 @@ MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIATTACH)      += ubiattach
+>  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBICRC32)                += ubicrc32
+>  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIDETACH)       += ubidetach
+>  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIFORMAT)       += ubiformat
+> +MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIHEALTHD)      += ubihealthd
 
-Thank you,
+While testing the next branch I faced an issue with your change:
+
+/usr/bin/install: cannot stat
+'/home/hthiery/br-test-pkg/bootlin-armv5-uclibc/build/mtd-2.1.2/ubihealthd':
+No such file or directory
+
+This can easily reproduced by test-pkg:
+# utils/test-pkg -p mtd
+                    bootlin-armv5-uclibc [1/6]: FAILED
+                     bootlin-armv7-glibc [2/6]: FAILED
+                   bootlin-armv7m-uclibc [3/6]: FAILED
+                     bootlin-x86-64-musl [4/6]: FAILED
+                      br-arm-full-static [5/6]: FAILED
+                            sourcery-arm [6/6]: FAILED
+6 builds, 0 skipped, 6 build failed, 0 legal-info failed
+
+Could you take a look at this?
+
+-- 
 Heiko
+
+>  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIMKVOL)                += ubimkvol
+>  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBINFO)          += ubinfo
+>  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBINIZE)         += ubinize
+> --
+> 2.25.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
