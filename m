@@ -1,55 +1,78 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 07 Jun 2021 22:22:52 +0200
-Subject: [Buildroot] [PATCH] package/netperf: move SITE so s.b.n
-In-Reply-To: <8fac0332-92aa-9545-7a30-afa8194e0d56@mind.be> (Arnout
- Vandecappelle's message of "Mon, 7 Jun 2021 21:00:13 +0200")
-References: <c160b9eba623c54debf9bf50d69cca4a6d6ed69e.1622119840.git.baruch@tkos.co.il>
- <7d24aa70-74c4-1166-e69f-5d8c7a5c6875@mind.be>
- <a7969129-6272-575d-0846-1874629cebc4@mind.be>
- <87v96wrw9p.fsf@tarshish> <87tumbxxu9.fsf@dell.be.48ers.dk>
- <8fac0332-92aa-9545-7a30-afa8194e0d56@mind.be>
-Message-ID: <874ke9xw4j.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon,  7 Jun 2021 22:42:15 +0200
+Subject: [Buildroot] [PATCH v5 0/5] Introduce bmap-tools as target + host
+ package
+Message-ID: <20210607204221.124908-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hello,
 
-Hi,
+Back in 2019, Nicolas Carrier started a patch series on bmap-tools,
+which was kind of abandonned after 4 iterations. I'm now trying to
+pick it up and revive it.
 
- >> >> We prefer buildroot.org over buildroot.net nowadays, so I changed that.
- >> 
- >> > BR2_BACKUP_SITE still defaults to "http://sources.buildroot.net". Should
- >> > we change that?
- >> 
- >> There is a fairly important difference between .net and .org, .net is
- >> though the cloudflare cache, but .org goes straight to our upstream
- >> server.
- >> 
- >> Given the extra bandwidth and availibility of Cloudflare, I would prefer
- >> we use .net.
+Compared to the v4 from Nicolas:
 
- >  Wouldn't it be possible to route sources.buildroot.org through cloudflare as well?
+ - Checked the list of optional runtime dependencies that bmap-tools
+   can use, as suggested by Romain Naour, and added some explanations
+   in the Config.in help text about them. There is not much more we
+   can do about them in Buildroot: they are not optional build time
+   dependencies, but only runtime dependencies, and only needed when
+   certain features are needed (so there is no reason to make them
+   mandatory dependencies).
 
-It would, but there were some complications back when we set it up,
-E.G. you need to use cloudflares DNS servers and we didn't originally
-have control of the buildroot.org.
+ - Added the missing pyexpat runtime dependency.
 
-Only having cloudflare on one of the domains was also quite handy for
-comparing behaviour when debugging in the beginning.
+ - Drop incorrect build-time dependencies, which are only runtime ones
+   (target python-setuptools)
 
-But yeah, we should probably use the same setup for both domains now. We
-originally put Cloudflare in front because of bandwidth/latency issues
-with s.b.o for some users. Given that Cloudflare is a bit controversial,
-it is maybe worth checking if we should keep on using it or drop it.
+ - Update to the latest version of bmap-tools
 
-According to the Cloudflare stats, ~45% of the requests are cached,
-saving ~1TB traffic/month.
+ - Misc improvements to the test cases, migration to a newer toolchain
+   that doesn't exhibit an fallocate() bug. Moving to a newer
+   toolchain requires updating the pre-built kernel image used for the
+   runtime test infrastructure.
 
-Thomas, I think you had performance issues in the beginning, can you
-compare speed again?
+ - Added a host variant for the bmap-tools package, as this tool can
+   also be very useful on the host to optimize the time needed to
+   write an image. This host bmap-tools package comes with a test case
+   as well.
+
+Thanks!
+
+Thomas Petazzoni
+
+Nicolas Carrier (2):
+  package/bmap-tools: new package
+  support/testing/tests/package/test_bmap_tools: new test
+
+Thomas Petazzoni (3):
+  package/bmap-tools: enable host package
+  support/testing/infra/emulator.py: update pre-built kernels
+  support/testing/tests/package/test_bmap_tools: add test for host
+    bmap-tools
+
+ DEVELOPERS                                    |  6 ++
+ package/Config.in                             |  1 +
+ package/Config.in.host                        |  1 +
+ package/bmap-tools/Config.in                  | 44 ++++++++++
+ package/bmap-tools/Config.in.host             | 12 +++
+ package/bmap-tools/bmap-tools.hash            |  3 +
+ package/bmap-tools/bmap-tools.mk              | 14 +++
+ support/testing/infra/emulator.py             |  8 +-
+ .../tests/package/sample_bmap_tools.sh        | 15 ++++
+ .../testing/tests/package/test_bmap_tools.py  | 88 +++++++++++++++++++
+ 10 files changed, 188 insertions(+), 4 deletions(-)
+ create mode 100644 package/bmap-tools/Config.in
+ create mode 100644 package/bmap-tools/Config.in.host
+ create mode 100644 package/bmap-tools/bmap-tools.hash
+ create mode 100644 package/bmap-tools/bmap-tools.mk
+ create mode 100755 support/testing/tests/package/sample_bmap_tools.sh
+ create mode 100644 support/testing/tests/package/test_bmap_tools.py
 
 -- 
-Bye, Peter Korsgaard
+2.31.1
