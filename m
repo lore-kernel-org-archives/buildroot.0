@@ -1,58 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 07 Jun 2021 15:17:41 -0000
-Subject: [Buildroot] [git commit] package/libopenssl: md5 is not optional
-Message-ID: <20210607144655.8509F814AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
+ version to 2.6.15-Matrix
+Message-ID: <20210607144653.F3ED382B86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04e3dc3e4bf057f99475971956528e4a0c91dc2b
+commit: https://git.buildroot.net/buildroot/commit/?id=d0cb51333c47690f7a6a3bda015e99ff0646bcdd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit a83d41867c8d (package/libopenssl: add option to enable some
-features) made md5 an optional feature.
+Changelog:
+https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
 
-However, md5 has not been optional since 1.1.0, released in 2016.
-
-Drop that option.
-
-Fixes:
-   - http://autobuild.buildroot.net/results/9d79c9f313ff989449e9b47c1ff0afd3a167fd2d/
-
-Reported-by: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
-Reviewed-by: "Matthew Weber" <Matthew.Weber@collins.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libopenssl/Config.in     | 4 ----
- package/libopenssl/libopenssl.mk | 1 -
- 2 files changed, 5 deletions(-)
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-index 7ed799075f..fcead4c11a 100644
---- a/package/libopenssl/Config.in
-+++ b/package/libopenssl/Config.in
-@@ -64,10 +64,6 @@ config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4
- 	bool "enable MD4"
- 	default y
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 2626968f1b..12e9f20904 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f1756932e8cc602ce66c5db3bc1d44a442c01197c193561ca9248a405bd8bd86  kodi-inputstream-adaptive-2.6.14-Matrix.tar.gz
++sha256  179b337c397ff484f25a936f8c50114a112d5107f6d3cf41b4e9fb92507525fd  kodi-inputstream-adaptive-2.6.15-Matrix.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index b72241ab39..6176d7bff0 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD5
--	bool "enable MD5"
--	default y
--
- config BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2
- 	bool "enable MDC2"
- 	default y
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index c7f8ae714e..389a0a8b32 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -90,7 +90,6 @@ define LIBOPENSSL_CONFIGURE_CMDS
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4),,no-rc4) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD2),,no-md2) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4),,no-md4) \
--			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD5),,no-md5) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2),,no-mdc2) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2),,no-blake2) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_IDEA),,no-idea) \
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.14-Matrix
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.15-Matrix
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
