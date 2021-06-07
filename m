@@ -1,84 +1,66 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 7 Jun 2021 16:53:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mtd: add
- BR2_PACKAGE_MTD_UBIHEALTHD option
-In-Reply-To: <20210524143715.578572-1-luoxiaobing0926@gmail.com>
-References: <20210524143715.578572-1-luoxiaobing0926@gmail.com>
-Message-ID: <CAEyMn7ajLEagr6Rb04aKa=a8KKFr6w6mUKCj3yn5Azequos0Tg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 07 Jun 2021 14:57:22 +0000
+Subject: [Buildroot] [Bug 13836] New: package build failure when target
+ install set to no on pkg-generic pkg types
+Message-ID: <bug-13836-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Xiabing,
+https://bugs.busybox.net/show_bug.cgi?id=13836
 
+            Bug ID: 13836
+           Summary: package build failure when target install set to no on
+                    pkg-generic pkg types
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: matthew.weber at rockwellcollins.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Am Mo., 24. Mai 2021 um 16:37 Uhr schrieb Xiaobing Luo
-<luoxiaobing0926@gmail.com>:
->
-> mtd-utils-2.1.2 add ubihealthd daemon
-> package/mtd: add BR2_PACKAGE_MTD_UBIHEALTHD option
->
-> Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
-> ---
->  package/mtd/Config.in | 4 ++++
->  package/mtd/mtd.mk    | 1 +
->  2 files changed, 5 insertions(+)
->
-> diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-> index 590ca7f5ef..c7ad3b3cdc 100644
-> --- a/package/mtd/Config.in
-> +++ b/package/mtd/Config.in
-> @@ -137,6 +137,10 @@ config BR2_PACKAGE_MTD_UBIFORMAT
->         bool "ubiformat"
->         default y
->
-> +config BR2_PACKAGE_MTD_UBIHEALTHD
-> +       bool "ubihealthd"
-> +       default y
-> +
->  config BR2_PACKAGE_MTD_UBIMKVOL
->         bool "ubimkvol"
->         default y
-> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-> index c4fa56d260..121dfa554b 100644
-> --- a/package/mtd/mtd.mk
-> +++ b/package/mtd/mtd.mk
-> @@ -96,6 +96,7 @@ MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIATTACH)      += ubiattach
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBICRC32)                += ubicrc32
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIDETACH)       += ubidetach
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIFORMAT)       += ubiformat
-> +MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIHEALTHD)      += ubihealthd
+Here are the relevant assumptions/if's:
 
-While testing the next branch I faced an issue with your change:
+Buildroot 2021.02.x 
+( based on git log review, should also apply to master )
 
-/usr/bin/install: cannot stat
-'/home/hthiery/br-test-pkg/bootlin-armv5-uclibc/build/mtd-2.1.2/ubihealthd':
-No such file or directory
+Package A is pkg-generic
+Package A is the last "pkg-generic" package built
+Package A has PACKAGE_A_INSTALL_TARGET = NO
 
-This can easily reproduced by test-pkg:
-# utils/test-pkg -p mtd
-                    bootlin-armv5-uclibc [1/6]: FAILED
-                     bootlin-armv7-glibc [2/6]: FAILED
-                   bootlin-armv7m-uclibc [3/6]: FAILED
-                     bootlin-x86-64-musl [4/6]: FAILED
-                      br-arm-full-static [5/6]: FAILED
-                            sourcery-arm [6/6]: FAILED
-6 builds, 0 skipped, 6 build failed, 0 legal-info failed
+Then this error occurs:
+/bin/sh: /home/tbuild/myboard/build/package_a/.files-list.after: No such file
+or directory
+make[1]: *** [/home/tbuild/myboard/build/package_a/.stamp_installed] Error 1
+make: *** [_all] Error 2
 
-Could you take a look at this?
+because of assumptions with this target in rc-buildroot/package/pkg-generic.mk:
+# Final installation step, completed when all installation steps
+# (host, images, staging, target) have completed
+$(BUILD_DIR)/%/.stamp_installed:
+        @$(call pkg_size_after,$(TARGET_DIR))
+        @$(call pkg_size_after,$(STAGING_DIR),-staging)
+        @$(call pkg_size_after,$(HOST_DIR),-host)
+        @$(call check_bin_arch)
+        $(Q)touch $@
+
+Ugly solution that worked:
+simply remove the PACKAGE_A_INSTALL_TARGET = NO
+
+Possible solution:
+
+1) use a package type other than pkg-generic?
+2) change the buildroot logic to subtract INSTALL_TARGET = NO packages from
+this target build step.
 
 -- 
-Heiko
-
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBIMKVOL)                += ubimkvol
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBINFO)          += ubinfo
->  MTD_TARGETS_$(BR2_PACKAGE_MTD_UBINIZE)         += ubinize
-> --
-> 2.25.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+You are receiving this mail because:
+You are on the CC list for the bug.
