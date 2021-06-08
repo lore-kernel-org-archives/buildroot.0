@@ -1,62 +1,25 @@
-From: David Laight <David.Laight@ACULAB.COM>
-Date: Tue, 8 Jun 2021 08:16:00 +0000
-Subject: [Buildroot] Is there a better version of vi?
-In-Reply-To: <df983b32-db5a-1eda-cee5-0b15c181a32c@mind.be>
-References: <f7452a41879246d3a3bdbe185657ccdc@AcuMS.aculab.com>
- <df983b32-db5a-1eda-cee5-0b15c181a32c@mind.be>
-Message-ID: <9b3a166571d646a49a887d73a1d4aaf0@AcuMS.aculab.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 08 Jun 2021 10:23:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qemu: fix build with latest
+ binutils
+In-Reply-To: <20210522165350.99404-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 22 May 2021 18:53:50 +0200")
+References: <20210522165350.99404-1-fontaine.fabrice@gmail.com>
+Message-ID: <875yyorchf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Arnout Vandecappelle
-> Sent: 07 June 2021 20:17
-> 
-> On 03/06/2021 15:27, David Laight wrote:
-> > The version of vi is busybox is somewhat cutdown.
-> > I can't see an option to include either nvi or vim.
-> 
-> Symbol: BR2_PACKAGE_VIM [=n]
-> 
-> Type  : bool
-> 
-> Prompt: vim
-> 
->   Location:
-> 
->     -> Target packages
-> 
-> (1)   -> Text editors and viewers
-> 
->   Defined at package/vim/Config.in:1
-> 
->   Depends on: BR2_USE_MMU [=y] && BR2_USE_WCHAR [=y] &&
-> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS [=y]
->   Selects: BR2_PACKAGE_NCURSES [=n]
-> 
->  I suspect you didn't turn on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Probably because it is hidden!
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/c0881df995093036eb7579d870efcae3feb323aa
 
->  vim is pretty large though,
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-It also contains a lot of pointless crap.
-Killing all the 'plugins' would be a start.
+Committed to 2021.02.x, thanks.
 
-My current build is for an x86 with an SSD - size doesn't
-really matter.
-OTOH I've removed python to save build time - not needed.
-
-> adding nvi might be a good idea. Feel free to send a patch!
-
-:-)
-I wonder if the fixes I did to netBSD's version got back
-to (whatever) the main repository is.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+-- 
+Bye, Peter Korsgaard
