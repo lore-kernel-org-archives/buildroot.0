@@ -1,39 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jun 2021 09:12:26 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/minissdpd: add
- MINISSDPD_CPE_ID_VENDOR
-Message-ID: <20210608064257.7786A8A437@busybox.osuosl.org>
+Date: Tue, 8 Jun 2021 09:11:47 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/minizip: add
+ MINIZIP_CPE_ID_VENDOR
+Message-ID: <20210608064257.5F7738789D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db4b42eeddd48adae06f1a601599c246dae06bca
+commit: https://git.buildroot.net/buildroot/commit/?id=700f216173fa7cf14f645309f4f3239812efea01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:miniupnp_project:minissdpd is a valid CPE identifier for this
+cpe:2.3:a:minizip_project:minizip is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aminiupnp_project%3Aminissdpd
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aminizip_project%3Aminizip
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: fix typo MINZIP -> MINIZIP]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 84c07e1f51a0305995c6b956bc91a7f1a78746ed)
+(cherry picked from commit 425339dcdfb2d4fa16ee11231752a5cc8250e78f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minissdpd/minissdpd.mk | 1 +
+ package/minizip/minizip.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/minissdpd/minissdpd.mk b/package/minissdpd/minissdpd.mk
-index 4560919baa..214af76387 100644
---- a/package/minissdpd/minissdpd.mk
-+++ b/package/minissdpd/minissdpd.mk
-@@ -8,6 +8,7 @@ MINISSDPD_VERSION = 1.5.20200928
- MINISSDPD_SITE = http://miniupnp.free.fr/files
- MINISSDPD_LICENSE = BSD-3-Clause
- MINISSDPD_LICENSE_FILES = LICENSE
-+MINISSDPD_CPE_ID_VENDOR = miniupnp_project
- MINISSDPD_DEPENDENCIES = libnfnetlink
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index b2294fb530..53f33fb9c1 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
+@@ -14,6 +14,7 @@ MINIZIP_CONF_OPTS = \
+ 	-DMZ_FETCH_LIBS=OFF
+ MINIZIP_LICENSE = Zlib
+ MINIZIP_LICENSE_FILES = LICENSE
++MINIZIP_CPE_ID_VENDOR = minizip_project
  
- define MINISSDPD_BUILD_CMDS
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ MINIZIP_DEPENDENCIES += bzip2
