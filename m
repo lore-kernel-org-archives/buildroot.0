@@ -1,47 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jun 2021 10:26:43 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libmspack: add
- CPE variables
-Message-ID: <20210608075705.2A14688390@busybox.osuosl.org>
+From: Andreas Ziegler <br015@umbiko.net>
+Date: Tue,  8 Jun 2021 10:53:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rpcbind fix version number
+Message-ID: <20210608085332.19296-1-br015@umbiko.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32640f39e90835ba99355ed8ef1601eb16cd4710
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+Commit d13b292cec8166c4712cf4a0defbeee827ffaf78 introduced a patch for rpcbind but also changed the version number to a non-existing value. 
 
-cpe:2.3:a:kyzer:libmspack is a valid CPE identifier for this package:
+Change rpcbind to last released version and adapt hash value. 
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:kyzer:libmspack
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 20e20555c843c4c7d244ef88346352f344fb4346)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 ---
- package/libmspack/libmspack.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/rpcbind/rpcbind.hash | 2 +-
+ package/rpcbind/rpcbind.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmspack/libmspack.mk b/package/libmspack/libmspack.mk
-index e9fdc3ca8d..f806192eec 100644
---- a/package/libmspack/libmspack.mk
-+++ b/package/libmspack/libmspack.mk
-@@ -4,10 +4,15 @@
+diff --git a/package/rpcbind/rpcbind.hash b/package/rpcbind/rpcbind.hash
+index 1960b86c13..6ab7d89265 100644
+--- a/package/rpcbind/rpcbind.hash
++++ b/package/rpcbind/rpcbind.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 2ce360683963b35c19c43f0ee2c7f18aa5b81ef41c3fdbd15ffcb00b8bffda7a  rpcbind-1.2.5.tar.bz2
++sha256 5613746489cae5ae23a443bb85c05a11741a5f12c8f55d2bb5e83b9defeee8de  rpcbind-1.2.6.tar.bz2
+ sha256 2b9477d2f4ab277b29702958f0058546edc120aae4b5fb8b8d1a9652104e1ba3  COPYING
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index fea2103794..d9f25e698e 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMSPACK_VERSION = 0.10.1alpha
-+LIBMSPACK_VERSION_MAJOR = 0.10.1
-+LIBMSPACK_VERSION_MINOR = alpha
-+LIBMSPACK_VERSION = $(LIBMSPACK_VERSION_MAJOR)$(LIBMSPACK_VERSION_MINOR)
- LIBMSPACK_SITE = https://www.cabextract.org.uk/libmspack
- LIBMSPACK_LICENSE = LGPL-2.1
- LIBMSPACK_LICENSE_FILES = COPYING.LIB
-+LIBMSPACK_CPE_ID_VENDOR = kyzer
-+LIBMSPACK_CPE_ID_VERSION = $(LIBMSPACK_VERSION_MAJOR)
-+LIBMSPACK_CPE_ID_UPDATE = $(LIBMSPACK_VERSION_MINOR)
- LIBMSPACK_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+-RPCBIND_VERSION = 1.3.2
++RPCBIND_VERSION = 1.2.6
+ RPCBIND_SITE = http://downloads.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIND_VERSION)
+ RPCBIND_SOURCE = rpcbind-$(RPCBIND_VERSION).tar.bz2
+ RPCBIND_LICENSE = BSD-3-Clause
+-- 
+2.25.1
