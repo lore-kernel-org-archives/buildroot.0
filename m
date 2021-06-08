@@ -1,39 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jun 2021 10:27:00 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/php-imagick: add
+Date: Tue, 8 Jun 2021 10:26:43 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libmspack: add
  CPE variables
-Message-ID: <20210608075705.3734D7FE1E@busybox.osuosl.org>
+Message-ID: <20210608075705.2A14688390@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5603394b97d749c40218055f4dd18187c0d1e4c2
+commit: https://git.buildroot.net/buildroot/commit/?id=32640f39e90835ba99355ed8ef1601eb16cd4710
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:php:imagick is a valid CPE identifier for this package:
+cpe:2.3:a:kyzer:libmspack is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aphp%3Aimagick
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:kyzer:libmspack
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5022410324a4c1bcc9873c3ef2060c570a7ea31b)
+(cherry picked from commit 20e20555c843c4c7d244ef88346352f344fb4346)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php-imagick/php-imagick.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libmspack/libmspack.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
-index ca0cbc7492..6fb43de0ca 100644
---- a/package/php-imagick/php-imagick.mk
-+++ b/package/php-imagick/php-imagick.mk
-@@ -13,6 +13,8 @@ PHP_IMAGICK_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
- PHP_IMAGICK_DEPENDENCIES = imagemagick php host-autoconf
- PHP_IMAGICK_LICENSE = PHP-3.01
- PHP_IMAGICK_LICENSE_FILES = LICENSE
-+PHP_IMAGICK_CPE_ID_VENDOR = php
-+PHP_IMAGICK_CPE_ID_PRODUCT = imagick
+diff --git a/package/libmspack/libmspack.mk b/package/libmspack/libmspack.mk
+index e9fdc3ca8d..f806192eec 100644
+--- a/package/libmspack/libmspack.mk
++++ b/package/libmspack/libmspack.mk
+@@ -4,10 +4,15 @@
+ #
+ ################################################################################
  
- define PHP_IMAGICK_PHPIZE
- 	(cd $(@D); \
+-LIBMSPACK_VERSION = 0.10.1alpha
++LIBMSPACK_VERSION_MAJOR = 0.10.1
++LIBMSPACK_VERSION_MINOR = alpha
++LIBMSPACK_VERSION = $(LIBMSPACK_VERSION_MAJOR)$(LIBMSPACK_VERSION_MINOR)
+ LIBMSPACK_SITE = https://www.cabextract.org.uk/libmspack
+ LIBMSPACK_LICENSE = LGPL-2.1
+ LIBMSPACK_LICENSE_FILES = COPYING.LIB
++LIBMSPACK_CPE_ID_VENDOR = kyzer
++LIBMSPACK_CPE_ID_VERSION = $(LIBMSPACK_VERSION_MAJOR)
++LIBMSPACK_CPE_ID_UPDATE = $(LIBMSPACK_VERSION_MINOR)
+ LIBMSPACK_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
