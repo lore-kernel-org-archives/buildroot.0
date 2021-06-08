@@ -1,74 +1,31 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  8 Jun 2021 08:01:32 +0200
-Subject: [Buildroot] [PATCH v3 3/3] package/intel-mediasdk: bump version to
- 21.1.3
-In-Reply-To: <20210608060132.8727-1-bernd.kuhls@t-online.de>
-References: <20210608060132.8727-1-bernd.kuhls@t-online.de>
-Message-ID: <20210608060132.8727-3-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 08 Jun 2021 08:35:47 +0200
+Subject: [Buildroot] [PATCH/stable] package/putty: Ignore CVE-2021-33500
+In-Reply-To: <20210608050921.tm7q7miatnfyy3v7@falbala.internal.home.lespocky.de>
+ (Alexander Dahl's message of "Tue, 8 Jun 2021 07:09:22 +0200")
+References: <20210601070316.27441-1-post@lespocky.de>
+ <20210608050921.tm7q7miatnfyy3v7@falbala.internal.home.lespocky.de>
+Message-ID: <87y2bksw1o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed dependency to X.org following changes in intel-mediadriver.
-Reformatted hashes.
+>>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v3: no changes
-v2: initial version
+ > Hello everyone,
+ > since I get autobuilder warning mails every Monday for CVE-2021-33500
+ > now, I kindly wanted to ask, if this is the right approach?
 
- package/intel-mediasdk/Config.in           | 5 -----
- package/intel-mediasdk/intel-mediasdk.hash | 4 ++--
- package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
- 3 files changed, 3 insertions(+), 8 deletions(-)
+ > That CVE only affects Windows, master has putty 0.75 which has that
+ > fixed already. So I thought it would not be necessary to backport 0.75
+ > to the stable branch(es), but ignore that CVE in stable branches only?
 
-diff --git a/package/intel-mediasdk/Config.in b/package/intel-mediasdk/Config.in
-index 05293d7604..c1f609e3f8 100644
---- a/package/intel-mediasdk/Config.in
-+++ b/package/intel-mediasdk/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_INTEL_MEDIASDK
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # intel-mediadriver
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # intel-mediadriver
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # intel-mediadriver
--	depends on BR2_PACKAGE_XORG7  # intel-mediadriver
- 	select BR2_PACKAGE_INTEL_MEDIADRIVER
- 	select BR2_PACKAGE_LIBDRM_INTEL
- 	help
-@@ -21,10 +20,6 @@ config BR2_PACKAGE_INTEL_MEDIASDK
- 
- 	  http://mediasdk.intel.com/
- 
--comment "intel-mediasdk needs X.org"
--	depends on BR2_x86_64 && BR2_TOOLCHAIN_HAS_SYNC_1
--	depends on !BR2_PACKAGE_XORG7
--
- comment "intel-mediasdk needs a toolchain w/ dynamic library, C++, NPTL"
- 	depends on BR2_x86_64 && BR2_TOOLCHAIN_HAS_SYNC_1
- 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
-diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
-index 103c8bb52d..04947b6eee 100644
---- a/package/intel-mediasdk/intel-mediasdk.hash
-+++ b/package/intel-mediasdk/intel-mediasdk.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 289a40ffe73dc291461d97edf452bdc622f76e52666483fd1eb4f131d2921cd1  intel-mediasdk-19.4.0.tar.gz
--sha256 dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
-+sha256  718e68e3be78fcdc2dea0e3cd4714c38df2d451d7c8afef840c9c07e82bd4cb9  intel-mediasdk-21.1.3.tar.gz
-+sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
-diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
-index 5467c96380..93bf25779a 100644
---- a/package/intel-mediasdk/intel-mediasdk.mk
-+++ b/package/intel-mediasdk/intel-mediasdk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INTEL_MEDIASDK_VERSION = 19.4.0
-+INTEL_MEDIASDK_VERSION = 21.1.3
- INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
- INTEL_MEDIASDK_LICENSE = MIT
- INTEL_MEDIASDK_LICENSE_FILES = LICENSE
+Yes, that is fine. Sorry, I am running a bit behind on the LTS
+backports, but I will get to it this week.
+
+Thanks.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
