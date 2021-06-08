@@ -1,64 +1,110 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jun 2021 10:25:14 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python-pillow:
- security bump to version 8.2.0
-Message-ID: <20210608075705.03B0F88390@busybox.osuosl.org>
+Date: Tue, 8 Jun 2021 10:21:13 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/qemu: fix build
+ with latest binutils
+Message-ID: <20210608075704.A29C788390@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3cd45d3208e329ef8801f65ccfdc193bbf8ce23
+commit: https://git.buildroot.net/buildroot/commit/?id=6431ed682e8ec69d0a921a2bcb3e7cce7f8048dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-- Fix numerous CVEs:
-  https://pillow.readthedocs.io/en/stable/releasenotes/8.2.0.html#security
-  https://pillow.readthedocs.io/en/stable/releasenotes/8.1.2.html#security
-  https://pillow.readthedocs.io/en/stable/releasenotes/8.1.1.html#security
-  https://pillow.readthedocs.io/en/stable/releasenotes/8.1.0.html#security
-- Update license to HPND:
-  https://github.com/python-pillow/Pillow/commit/81078e8a0d26c9094446a64aadfa8047b8af3484
-
-https://pillow.readthedocs.io/en/stable/releasenotes/index.html
+Fixes:
+ - http://autobuild.buildroot.org/results/c0881df995093036eb7579d870efcae3feb323aa
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e4625ae8d5e23bb66a774d085fe74a0463f835c5)
+(cherry picked from commit 1eb1a24e9ff38667e4cc0ae8930a69a3026971e3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pillow/python-pillow.hash | 7 ++++---
- package/python-pillow/python-pillow.mk   | 6 +++---
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ ...build-no-pie-is-no-functional-linker-flag.patch | 79 ++++++++++++++++++++++
+ 1 file changed, 79 insertions(+)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 0849577f66..562cb2c1a2 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,4 +1,5 @@
--# md5, sha256 from https://pypi.org/project/Pillow/
--sha256	11c5c6e9b02c9dac08af04f093eb5a2f84857df70a7d4a6a6ad461aca803fb9e  Pillow-8.0.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pillow/json
-+md5  21c03274a9f59b9c00419852a8faebe7  Pillow-8.2.0.tar.gz
-+sha256	a787ab10d7bb5494e5f76536ac460741788f1fbce851068d73a87ca7c35fc3e1  Pillow-8.2.0.tar.gz
- # Locally computed sha256 checksums
--sha256	37de42abe33a247e8f03d2313657a0f174a239a198f526add6544ff3e2643b81  LICENSE
-+sha256	5bb11d96b393a698df70018069a986248021f286344c437a13f299c3daf1dfd4  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index fd0c6ce862..42607e0bbd 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_PILLOW_VERSION = 8.0.1
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/2b/06/93bf1626ef36815010e971a5ce90f49919d84ab5d2fa310329f843a74bc1
-+PYTHON_PILLOW_VERSION = 8.2.0
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/21/23/af6bac2a601be6670064a817273d4190b79df6f74d8012926a39bc7aa77f
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_LICENSE = PIL Software License
-+PYTHON_PILLOW_LICENSE = HPND
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_CPE_ID_VENDOR = python
- PYTHON_PILLOW_CPE_ID_PRODUCT = pillow
+diff --git a/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch b/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
+new file mode 100644
+index 0000000000..6a21949157
+--- /dev/null
++++ b/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
+@@ -0,0 +1,79 @@
++From bbd2d5a8120771ec59b86a80a1f51884e0a26e53 Mon Sep 17 00:00:00 2001
++From: Christian Ehrhardt <christian.ehrhardt@canonical.com>
++Date: Mon, 14 Dec 2020 16:09:38 +0100
++Subject: [PATCH] build: -no-pie is no functional linker flag
++
++Recent binutils changes dropping unsupported options [1] caused a build
++issue in regard to the optionroms.
++
++  ld -m elf_i386 -T /<<PKGBUILDDIR>>/pc-bios/optionrom//flat.lds -no-pie \
++    -s -o multiboot.img multiboot.o
++  ld.bfd: Error: unable to disambiguate: -no-pie (did you mean --no-pie ?)
++
++This isn't really a regression in ld.bfd, filing the bug upstream
++revealed that this never worked as a ld flag [2] - in fact it seems we
++were by accident setting --nmagic).
++
++Since it never had the wanted effect this usage of LDFLAGS_NOPIE, should be
++droppable without any effect. This also is the only use-case of LDFLAGS_NOPIE
++in .mak, therefore we can also remove it from being added there.
++
++[1]: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=983d925d
++[2]: https://sourceware.org/bugzilla/show_bug.cgi?id=27050#c5
++
++Signed-off-by: Christian Ehrhardt <christian.ehrhardt@canonical.com>
++Message-Id: <20201214150938.1297512-1-christian.ehrhardt@canonical.com>
++Cc: qemu-stable at nongnu.org
++Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
++
++[Retrieved from:
++https://gitlab.com/qemu-project/qemu/-/commit/bbd2d5a8120771ec59b86a80a1f51884e0a26e53]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure                  | 3 ---
++ pc-bios/optionrom/Makefile | 1 -
++ 2 files changed, 4 deletions(-)
++
++diff --git a/configure b/configure
++index cb21108d34..c228f7c21e 100755
++--- a/configure
+++++ b/configure
++@@ -2137,7 +2137,6 @@ EOF
++ # Check we support --no-pie first; we will need this for building ROMs.
++ if compile_prog "-Werror -fno-pie" "-no-pie"; then
++   CFLAGS_NOPIE="-fno-pie"
++-  LDFLAGS_NOPIE="-no-pie"
++ fi
++ 
++ if test "$static" = "yes"; then
++@@ -2153,7 +2152,6 @@ if test "$static" = "yes"; then
++   fi
++ elif test "$pie" = "no"; then
++   CONFIGURE_CFLAGS="$CFLAGS_NOPIE $CONFIGURE_CFLAGS"
++-  CONFIGURE_LDFLAGS="$LDFLAGS_NOPIE $CONFIGURE_LDFLAGS"
++ elif compile_prog "-Werror -fPIE -DPIE" "-pie"; then
++   CONFIGURE_CFLAGS="-fPIE -DPIE $CONFIGURE_CFLAGS"
++   CONFIGURE_LDFLAGS="-pie $CONFIGURE_LDFLAGS"
++@@ -6714,7 +6712,6 @@ echo "QEMU_CXXFLAGS=$QEMU_CXXFLAGS" >> $config_host_mak
++ echo "GLIB_CFLAGS=$glib_cflags" >> $config_host_mak
++ echo "GLIB_LIBS=$glib_libs" >> $config_host_mak
++ echo "QEMU_LDFLAGS=$QEMU_LDFLAGS" >> $config_host_mak
++-echo "LDFLAGS_NOPIE=$LDFLAGS_NOPIE" >> $config_host_mak
++ echo "LD_I386_EMULATION=$ld_i386_emulation" >> $config_host_mak
++ echo "EXESUF=$EXESUF" >> $config_host_mak
++ echo "HOST_DSOSUF=$HOST_DSOSUF" >> $config_host_mak
++diff --git a/pc-bios/optionrom/Makefile b/pc-bios/optionrom/Makefile
++index 084fc10f05..30771f8d17 100644
++--- a/pc-bios/optionrom/Makefile
+++++ b/pc-bios/optionrom/Makefile
++@@ -41,7 +41,6 @@ override CFLAGS += $(call cc-option, $(Wa)-32)
++ 
++ LD_I386_EMULATION ?= elf_i386
++ override LDFLAGS = -m $(LD_I386_EMULATION) -T $(SRC_DIR)/flat.lds
++-override LDFLAGS += $(LDFLAGS_NOPIE)
++ 
++ all: multiboot.bin linuxboot.bin linuxboot_dma.bin kvmvapic.bin pvh.bin
++ 
++-- 
++GitLab
++
