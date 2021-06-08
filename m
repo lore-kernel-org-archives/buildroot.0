@@ -1,31 +1,71 @@
-From: Andrey Nechypurenko <andreynech@gmail.com>
-Date: Tue, 8 Jun 2021 22:55:47 +0200
-Subject: [Buildroot] BL2: Failed to load image (-80)
-In-Reply-To: <YL/KmfuuLHgmtIE+@curiosity>
-References: <CAOiXNkDSm5hf=WH5ECrVN_DkYk4KCwG46_0L6iWbpbXAW4wRig@mail.gmail.com>
- <YL/KmfuuLHgmtIE+@curiosity>
-Message-ID: <CAOiXNkCykbPW8qkEhx_9VyoQnBRd=mxofDD4EX4c-o66XFCgpA@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 8 Jun 2021 23:29:21 +0200
+Subject: [Buildroot] [PATCH 2/9] package/binutils: add upstream
+ backported patches to support -mcmodel=large gcc option
+In-Reply-To: <20210503111350.2933319-3-giulio.benetti@benettiengineering.com>
+References: <20210503111350.2933319-1-giulio.benetti@benettiengineering.com>
+ <20210503111350.2933319-3-giulio.benetti@benettiengineering.com>
+Message-ID: <982098ed-c9d0-a15c-ca2b-5143d64e53e3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergey, thank you very much for the hint!
+Hi Giulio, All,
 
-> Some time ago I investigated a similar issue for stm32mp157c-dk2 board.
-> In my case error code was different, but behavior was similar to yours.
-> RFC patch and root cause analysis is available in buildroot patchwork:
->
-> https://patchwork.ozlabs.org/project/buildroot/patch/20210130204456.793098-1-geomatsi at gmail.com/
+Le 03/05/2021 ? 13:13, Giulio Benetti a ?crit?:
+> Add upstream backported patches that allows using -mcmodel=large gcc option
+> that in order allows fixing build failure due to binutils bug 21464:
+> https://sourceware.org/bugzilla/show_bug.cgi?id=21464
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  ...elocation-R_OR1K_GOT_AHI16-for-gotha.patch | 256 +++++++++
+>  ...K_GOT16-overflow-failures-in-presenc.patch |  61 +++
+>  ...ge-plt_relocs-when-generating-plt-en.patch | 500 ++++++++++++++++++
+>  ...elocation-R_OR1K_GOT_AHI16-for-gotha.patch | 256 +++++++++
+>  ...K_GOT16-overflow-failures-in-presenc.patch |  61 +++
+>  ...ge-plt_relocs-when-generating-plt-en.patch | 500 ++++++++++++++++++
+>  ...elocation-R_OR1K_GOT_AHI16-for-gotha.patch | 256 +++++++++
+>  ...K_GOT16-overflow-failures-in-presenc.patch |  61 +++
+>  ...ge-plt_relocs-when-generating-plt-en.patch | 500 ++++++++++++++++++
+>  ...elocation-R_OR1K_GOT_AHI16-for-gotha.patch | 256 +++++++++
+>  ...K_GOT16-overflow-failures-in-presenc.patch |  61 +++
+>  ...ge-plt_relocs-when-generating-plt-en.patch | 500 ++++++++++++++++++
+>  12 files changed, 3268 insertions(+)
+>  create mode 100644 package/binutils/2.32/0011-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+>  create mode 100644 package/binutils/2.32/0012-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+>  create mode 100644 package/binutils/2.32/0013-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+>  create mode 100644 package/binutils/2.34/0004-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+>  create mode 100644 package/binutils/2.34/0005-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+>  create mode 100644 package/binutils/2.34/0006-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+>  create mode 100644 package/binutils/2.35.2/0004-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+>  create mode 100644 package/binutils/2.35.2/0005-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+>  create mode 100644 package/binutils/2.35.2/0006-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+>  create mode 100644 package/binutils/2.36.1/0004-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+>  create mode 100644 package/binutils/2.36.1/0005-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+>  create mode 100644 package/binutils/2.36.1/0006-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+> 
 
-So the suggested solution is to:
-* create a separate 16K env partition by modifying genimage.cfg.template
-* tell u-boot to use this partition by patching stm32mp157a-dk1-u-boot.dtsi
-  with u-boot,mmc-env-partition = "env";
-* modifying extlinux.conf by setting root=/dev/mmcblk0p5
+> +   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
+> +-  unsigned insn4;
+> ++  unsigned output_insns[PLT_MAX_INSN_COUNT];
+> ++
+> ++  /* Copy instructions into the output buffer.  */
+> ++  for (size_t i = 0; i < insn_count; i++)
+> ++    output_insns[i] = insns[i];
+> + 
 
-Is my understanding correct?
+This syntax break with good old compilers :)
 
-Regards,
-Andrey.
+elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
+C99 or C11 mode
+   for (size_t i = 0; i < insn_count; i++)
+   ^
+
+See:
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/1325646298
+
+Best regards,
+Romain
