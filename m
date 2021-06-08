@@ -1,40 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jun 2021 09:13:12 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libnids: drop
- LIBNIDS_IGNORE_CVES
-Message-ID: <20210608064257.983128A437@busybox.osuosl.org>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 8 Jun 2021 10:44:38 +0300
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: allow building with
+ musl and uclibc
+In-Reply-To: <20210604211549.GJ168928@scaer>
+References: <20210526182416.2798443-1-aperez@igalia.com>
+ <20210604211549.GJ168928@scaer>
+Message-ID: <20210608104438.GB727453@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c659b358ae1efc16579ab1cd2e6b7cb47d4d2d2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+Hi,
 
-NVD database has been updated:
-https://nvd.nist.gov/vuln/search/results?form_type=Advanced&results_type=overview&seach_type=all&query=cpe:2.3:a:libnids_project:libnids:1.24:*:*:*:*:*:*:*
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 65c9ebcd90b3686e488c1d638ce5e664d0c18fae)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libnids/libnids.mk | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/package/libnids/libnids.mk b/package/libnids/libnids.mk
-index 4a9138b80e..3e36838c40 100644
---- a/package/libnids/libnids.mk
-+++ b/package/libnids/libnids.mk
-@@ -13,10 +13,6 @@ LIBNIDS_INSTALL_STAGING = YES
- LIBNIDS_DEPENDENCIES = host-pkgconf libpcap
- LIBNIDS_AUTORECONF = YES
+On Fri, 04 Jun 2021 23:15:49 +0200 "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
  
--# CVE-2010-0751 was fixed in libnids v1.24 but the NVD database is not
--# aware of the fix, ignore it until this is updated
--LIBNIDS_IGNORE_CVES += CVE-2010-0751
--
- # disable libnet if not available
- # Tests in configure.in expect --with-libnet=$build_dir
- # not an installation patch like in our context.
+> On 2021-05-26 21:24 +0300, Adrian Perez de Castro spake thusly:
+> > WebKitGTK 2.32.1 includes fixes for building with the Musl libc, which
+> > also makes it possible to use uClibc as well, therefore arrange
+> > dependencies to allow selecting the package any of the C libraries is in
+> > use. This is done by making the dependencies be more granular, basically
+> > following what the wpewebkit package does.
+> > 
+> > In order to make make it build against uClibc a small patch that has
+> > been submitted to the upstream's Bugzilla is needed.
+> > 
+> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> 
+> Applied to next, thanks.
+> 
+> Same tweaks as for the wpewebkit patch.
+
+Wonderful, thanks! \o/
+ 
+-Adrian
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210608/9ebb50f4/attachment.asc>
