@@ -1,33 +1,31 @@
-From: Edmundo Ferreira <fc.edmundo@gmail.com>
-Date: Tue,  8 Jun 2021 22:24:34 +0200
-Subject: [Buildroot] [PATCH 31/35] package/x265: fixes SITE since upstream
- repo was moved
-Message-ID: <20210608202434.10092-1-edmundo.ferreira@esa.int>
+From: Andrey Nechypurenko <andreynech@gmail.com>
+Date: Tue, 8 Jun 2021 22:55:47 +0200
+Subject: [Buildroot] BL2: Failed to load image (-80)
+In-Reply-To: <YL/KmfuuLHgmtIE+@curiosity>
+References: <CAOiXNkDSm5hf=WH5ECrVN_DkYk4KCwG46_0L6iWbpbXAW4wRig@mail.gmail.com>
+ <YL/KmfuuLHgmtIE+@curiosity>
+Message-ID: <CAOiXNkCykbPW8qkEhx_9VyoQnBRd=mxofDD4EX4c-o66XFCgpA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Edmundo Ferreira <fc.edmundo@gmail.com>
+Sergey, thank you very much for the hint!
 
-Signed-off-by: Edmundo Ferreira <fc.edmundo@gmail.com>
----
- package/x265/x265.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Some time ago I investigated a similar issue for stm32mp157c-dk2 board.
+> In my case error code was different, but behavior was similar to yours.
+> RFC patch and root cause analysis is available in buildroot patchwork:
+>
+> https://patchwork.ozlabs.org/project/buildroot/patch/20210130204456.793098-1-geomatsi at gmail.com/
 
-diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index 872753eea8..2704360626 100644
---- a/package/x265/x265.mk
-+++ b/package/x265/x265.mk
-@@ -6,7 +6,7 @@
- 
- X265_VERSION = 3.3
- X265_SOURCE = x265_$(X265_VERSION).tar.gz
--X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
-+X265_SITE = https://bitbucket.org/multicoreware/x265_git/downloads
- X265_LICENSE = GPL-2.0+
- X265_LICENSE_FILES = COPYING
- X265_CPE_ID_VENDOR = multicorewareinc
--- 
-2.31.1
+So the suggested solution is to:
+* create a separate 16K env partition by modifying genimage.cfg.template
+* tell u-boot to use this partition by patching stm32mp157a-dk1-u-boot.dtsi
+  with u-boot,mmc-env-partition = "env";
+* modifying extlinux.conf by setting root=/dev/mmcblk0p5
+
+Is my understanding correct?
+
+Regards,
+Andrey.
