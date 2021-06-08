@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 08 Jun 2021 09:12:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minizip: add
- MINIZIP_CPE_ID_VENDOR
-In-Reply-To: <20210523141925.1523106-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 23 May 2021 16:19:25 +0200")
-References: <20210523141925.1523106-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r1hcrfst.fsf@dell.be.48ers.dk>
+Date: Tue, 08 Jun 2021 09:12:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/minidlna: add CPE variables
+In-Reply-To: <20210523142411.1523429-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 23 May 2021 16:24:11 +0200")
+References: <20210523142411.1523429-1-fontaine.fabrice@gmail.com>
+Message-ID: <87mts0rfro.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > cpe:2.3:a:minizip_project:minizip is a valid CPE identifier for this
- > package:
+ > cpe:2.3:a:readymedia_project:readymedia is a valid CPE identifier for
+ > this package:
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aminizip_project%3Aminizip
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Areadymedia_project%3Areadymedia
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
