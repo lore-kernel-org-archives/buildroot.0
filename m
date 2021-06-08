@@ -1,31 +1,56 @@
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Tue, 8 Jun 2021 14:37:57 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/usbguard: new package
-In-Reply-To: <20210608123210.143113-2-kamel.bouhara@bootlin.com>
-References: <20210608123210.143113-1-kamel.bouhara@bootlin.com>
- <20210608123210.143113-2-kamel.bouhara@bootlin.com>
-Message-ID: <20210608143757.5818a039@xps13>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue,  8 Jun 2021 15:06:40 +0200
+Subject: [Buildroot] [PATCH 0/3] Fix gdb pretty printers for libstdcxx
+Message-ID: <20210608130644.10909-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Kamel,
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Kamel Bouhara <kamel.bouhara@bootlin.com> wrote on Tue,  8 Jun 2021
-14:32:10 +0200:
+Hello,
 
-> usbguard is a software framework to implement USB
-> device blacklisting and whitelisting based on their
-> attributes.
-> 
-> More info. on: https://usbguard.github.io/
-> 
-> Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
-> ---
+This series fixes the gdb pretty printers for libstdcxx, provided by gcc.
 
-Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Patch 1 fixes a segfault in gdb 9.2 when Python 3 support is enabled. The fix is
+already present in gdb 10.1+.
 
-Thanks,
-Miqu?l
+Patch 2 makes sure that the auto-load file provided by gcc for libstdcxx
+pretty-printers, is using valid paths, rather than the paths the external
+toolchain was built with.
+
+Finally, patch 3 makes sure that gdb will actually load the fixed auto-load
+file, by adding the buildroot sysroot as a 'safe path' in gdbinit.
+
+
+After this series, it suffices to start up gdb, load the buildroot-provided
+gdbinit file, and start debugging a binary. From the moment libstdcxx.so is
+loaded, gdb will automatically load the pretty-printer file. Printing C++ STL
+objects like std::map, std::vector, etc. will now be shown in the 'pretty'
+manner. In order to show the 'raw' object without pretty-printing, use the '/r'
+modifier to the 'print' command.
+
+Note: the pretty-printing logic is written in Python, so Python support for
+host-gdb needs to be enabled.
+
+Best regards,
+Thomas
+
+
+
+Thomas De Schampheleire (3):
+  package/gdb: fix gdb 9.2 segfault with Python 3.9 support
+  toolchain/toolchain-external: fixup gdb pretty-printer loader for
+    libstdcxx
+  toolchain: mark sysroot as 'safe' path for gdb auto-load
+
+ ...x-Python3.9-related-runtime-problems.patch | 227 ++++++++++++++++++
+ toolchain/helpers.mk                          |   3 +-
+ .../pkg-toolchain-external.mk                 |  21 ++
+ 3 files changed, 250 insertions(+), 1 deletion(-)
+ create mode 100644 package/gdb/9.2/0007-Fix-Python3.9-related-runtime-problems.patch
+
+-- 
+2.26.3
