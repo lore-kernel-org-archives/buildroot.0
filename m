@@ -1,44 +1,48 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue, 8 Jun 2021 22:52:57 +0300
-Subject: [Buildroot] BL2: Failed to load image (-80)
-In-Reply-To: <CAOiXNkDSm5hf=WH5ECrVN_DkYk4KCwG46_0L6iWbpbXAW4wRig@mail.gmail.com>
-References: <CAOiXNkDSm5hf=WH5ECrVN_DkYk4KCwG46_0L6iWbpbXAW4wRig@mail.gmail.com>
-Message-ID: <YL/KmfuuLHgmtIE+@curiosity>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue,  8 Jun 2021 21:55:15 +0200
+Subject: [Buildroot] [PATCH v1 2/2] package/iwd: bump version to 1.14
+In-Reply-To: <20210608195515.15261-1-ps.report@gmx.net>
+References: <20210608195515.15261-1-ps.report@gmx.net>
+Message-ID: <20210608195515.15261-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+For details see [1].
 
-Hello Andrey,
+[1] https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/ChangeLog
 
-> I am currently trying to add support for L-876e.A1 STM32MP1 board from Phytec.
-> 
-> https://www.phytec.de/en/produkte/single-board-computer/phyboard-sargas-stm32mp1/
-> https://www.phytec.de/cdocuments/?doc=d4PmEQ
-> 
-> My approach is to transfer parts (patches&Co.) from the provided Yocto
-> BSP and package them as required by Buildroot.
-> 
-> I reach the point where the boot process completes successfully and I
-> can log in to the shell. However, it works only once after flashing
-> the SD card. All the subsequent boots yield the error:
-> BL2: Failed to load image (-80)
-> and the boot process stopped there.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/iwd/iwd.hash | 2 +-
+ package/iwd/iwd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-...
-
-> But maybe there are other possible reasons. I would be thankful for
-> any hints on how I can find the reasons for this one-time-only boot
-> problem. Of course, when it works I will contribute it back to
-> Buildroot.
-
-Some time ago I investigated a similar issue for stm32mp157c-dk2 board.
-In my case error code was different, but behavior was similar to yours.
-RFC patch and root cause analysis is available in buildroot patchwork:
-
-https://patchwork.ozlabs.org/project/buildroot/patch/20210130204456.793098-1-geomatsi at gmail.com/
-
-Regards,
-Sergey
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index 7975b0b3ce..9decf459f9 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
+-sha256  b005f7ed0f0a96a2c6181c44560fc868533a18e7034bd4cb43ea0d40c21b4e7a  iwd-1.13.tar.xz
++sha256  21be6ad59ba666ba1e50e01889d647472b9b2f96f4941123db036fd33c257f0b  iwd-1.14.tar.xz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index aaa07a25ba..171c96edcf 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IWD_VERSION = 1.13
++IWD_VERSION = 1.14
+ IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
+ IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
+ IWD_LICENSE = LGPL-2.1+
+-- 
+2.31.1
