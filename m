@@ -1,39 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jun 2021 09:11:41 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/netsurf: add
- NETSURF_CPE_ID_VENDOR
-Message-ID: <20210608064257.521998A437@busybox.osuosl.org>
+Date: Tue, 8 Jun 2021 08:10:59 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libical: add
+ LIBICAL_CPE_ID_VENDOR
+Message-ID: <20210608064256.E7A79886B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8805810c331db5a8d17f5eca01a1a0eaa3bf51f
+commit: https://git.buildroot.net/buildroot/commit/?id=1650cce4634d864d037bf651098d2932bb9b5793
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:netsurf-browser:netsurf is a valid CPE identifier for this
+cpe:2.3:a:libical_project:libical is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anetsurf-browser%3Anetsurf
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibical_project%3Alibical
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 22c5e1f847ceb05071a2de1b32bd9ba5e74e439e)
+(cherry picked from commit c95d3d8ab8f8c057cb57204419dd9b6445a92622)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/netsurf/netsurf.mk | 1 +
+ package/libical/libical.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
-index 5677b6946c..1064698c12 100644
---- a/package/netsurf/netsurf.mk
-+++ b/package/netsurf/netsurf.mk
-@@ -9,6 +9,7 @@ NETSURF_SOURCE = netsurf-all-$(NETSURF_VERSION).tar.gz
- NETSURF_SITE = http://download.netsurf-browser.org/netsurf/releases/source-full
- NETSURF_LICENSE = GPL-2.0
- NETSURF_LICENSE_FILES = netsurf/COPYING
-+NETSURF_CPE_ID_VENDOR = netsurf-browser
- # host-vim needed for the xxd utility
- NETSURF_DEPENDENCIES = expat jpeg libpng \
- 	host-bison host-flex host-gperf host-pkgconf host-vim
+diff --git a/package/libical/libical.mk b/package/libical/libical.mk
+index f9a266026e..afbbfd98c8 100644
+--- a/package/libical/libical.mk
++++ b/package/libical/libical.mk
+@@ -9,6 +9,7 @@ LIBICAL_SITE = https://github.com/libical/libical/releases/download/v$(LIBICAL_V
+ LIBICAL_INSTALL_STAGING = YES
+ LIBICAL_LICENSE = MPL-1.0 or LGPL-2.1
+ LIBICAL_LICENSE_FILES = LICENSE
++LIBICAL_CPE_ID_VENDOR = libical_project
+ 
+ # 0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
+ LIBICAL_IGNORE_CVES += CVE-2016-9584
