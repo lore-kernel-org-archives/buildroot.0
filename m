@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue,  8 Jun 2021 17:18:37 +0200
-Subject: [Buildroot] [PATCHv2 1/3] package/gdb: fix gdb 9.2 segfault with
- Python 3.9 support
+Date: Tue,  8 Jun 2021 17:18:38 +0200
+Subject: [Buildroot] [PATCHv2 2/3] toolchain/toolchain-external: fixup gdb
+ pretty-printer loader for libstdcxx
 In-Reply-To: <20210608151840.20917-1-patrickdepinguin@gmail.com>
 References: <20210608151840.20917-1-patrickdepinguin@gmail.com>
-Message-ID: <20210608151840.20917-2-patrickdepinguin@gmail.com>
+Message-ID: <20210608151840.20917-3-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,258 +13,71 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-When enabling Python 3 support in gdb 9.2, gdb segfaults at startup.
+gcc installs a libstdcxx-...so-gdb.py file that gdb will load automatically
+when it loads libstdcxx.so, via the mechanism described at [1].
 
-The issue is tracked back to following upstream gdb commit, present since
-gdb 10.1.
+However, the auto-load file installed by gcc contains hardcoded paths
+referring to the location where the (external) toolchain was built, which
+are normally not available.
 
-    commit c47bae859a5af0d95224d90000df0e529f7c5aa0
-    Author: Kevin Buettner <kevinb@redhat.com>
-    Date:   Wed May 27 20:05:40 2020 -0700
+Fix up the paths in the load file so that the pretty printers can be loaded
+automatically.
 
-        Fix Python3.9 related runtime problems
-        [...]
+Note that gdb will only auto-load the file if its location is marked as
+'safe'. A subsequent commit will take care of that.
 
-Backport this commit to 9.2 in Buildroot.
+Technically, there could be more than one load file, e.g. in lib and
+usr/lib, so fix them all. This was for example observed in
+BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64.
+In a very specific case with a local custom toolchain, there were actually
+two 'python' directories, which would break the sed command, so arbitrarily
+limit to the first one encountered.
+
+[1] https://sourceware.org/gdb/onlinedocs/gdb/objfile_002dgdbdotext-file.html
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- ...x-Python3.9-related-runtime-problems.patch | 227 ++++++++++++++++++
- 1 file changed, 227 insertions(+)
- create mode 100644 package/gdb/9.2/0007-Fix-Python3.9-related-runtime-problems.patch
+ .../pkg-toolchain-external.mk                 | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/package/gdb/9.2/0007-Fix-Python3.9-related-runtime-problems.patch b/package/gdb/9.2/0007-Fix-Python3.9-related-runtime-problems.patch
-new file mode 100644
-index 0000000000..89b0cdc4a0
---- /dev/null
-+++ b/package/gdb/9.2/0007-Fix-Python3.9-related-runtime-problems.patch
-@@ -0,0 +1,227 @@
-+From c47bae859a5af0d95224d90000df0e529f7c5aa0 Mon Sep 17 00:00:00 2001
-+From: Kevin Buettner <kevinb@redhat.com>
-+Date: Wed, 27 May 2020 20:05:40 -0700
-+Subject: [PATCH] Fix Python3.9 related runtime problems
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 6d91cb5d1e..d7fb93ee20 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -485,6 +485,26 @@ define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
+ 	fi
+ endef
+ 
++# GCC installs a libstdcxx-...so-gdb.py file that gdb will load automatically,
++# but it contains hardcoded paths referring to the location where the (external)
++# toolchain was built. Fix up these paths so that the pretty printers can be
++# loaded automatically.
++# By default, the pretty printers are installed in
++# $(datadir)/gcc-$(gcc_version)/python but this could have been overwritten with
++# the gcc configure option: --with-python-dir. We thus have to search the
++# correct path first.
++define TOOLCHAIN_EXTERNAL_FIXUP_PRETTY_PRINTER_LOADER
++	$(Q)loadfiles=$$(find $(STAGING_DIR) -name 'libstdc++.so*-gdb.py' 2>/dev/null); \
++	pythondir=$$(find $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR) -path '*/libstdcxx/__init__.py' 2>/dev/null | xargs dirname | xargs dirname | head -n1); \
++	if [ -n "$$loadfiles" ] && [ -n "$$pythondir" ]; then \
++		echo "Fixing up hardcoded paths in GDB pretty-printer auto-load file(s) for libstdcxx: $$loadfiles"; \
++		sed -ri \
++			-e 's%^libdir\s*=.*%libdir = "$(STAGING_DIR)/lib"%' \
++			-e "s%^pythondir\s*=.*%pythondir = '$$pythondir'%" \
++			$$loadfiles; \
++	fi
++endef
 +
-+Python3.9b1 is now available on Rawhide.  GDB w/ Python 3.9 support
-+can be built using the configure switch -with-python=/usr/bin/python3.9.
-+
-+Attempting to run gdb/Python3.9 segfaults on startup:
-+
-+    #0  0x00007ffff7b0582c in PyEval_ReleaseLock () from /lib64/libpython3.9.so.1.0
-+    #1  0x000000000069ccbf in do_start_initialization ()
-+	at worktree-test1/gdb/python/python.c:1789
-+    #2  _initialize_python ()
-+	at worktree-test1/gdb/python/python.c:1877
-+    #3  0x00000000007afb0a in initialize_all_files () at init.c:237
-+    ...
-+
-+Consulting the the documentation...
-+
-+https://docs.python.org/3/c-api/init.html
-+
-+...we find that PyEval_ReleaseLock() has been deprecated since version
-+3.2.  It recommends using PyEval_SaveThread or PyEval_ReleaseThread()
-+instead.  In do_start_initialization, in gdb/python/python.c, we
-+can replace the calls to PyThreadState_Swap() and PyEval_ReleaseLock()
-+with a single call to PyEval_SaveThread.   (Thanks to Keith Seitz
-+for working this out.)
-+
-+With that in place, GDB gets a little bit further.  It still dies
-+on startup, but the backtrace is different:
-+
-+    #0  0x00007ffff7b04306 in PyOS_InterruptOccurred ()
-+       from /lib64/libpython3.9.so.1.0
-+    #1  0x0000000000576e86 in check_quit_flag ()
-+	at worktree-test1/gdb/extension.c:776
-+    #2  0x0000000000576f8a in set_active_ext_lang (now_active=now_active at entry=0x983c00 <extension_language_python>)
-+	at worktree-test1/gdb/extension.c:705
-+    #3  0x000000000069d399 in gdbpy_enter::gdbpy_enter (this=0x7fffffffd2d0,
-+	gdbarch=0x0, language=0x0)
-+	at worktree-test1/gdb/python/python.c:211
-+    #4  0x0000000000686e00 in python_new_inferior (inf=0xddeb10)
-+	at worktree-test1/gdb/python/py-inferior.c:251
-+    #5  0x00000000005d9fb9 in std::function<void (inferior*)>::operator()(inferior*) const (__args#0=<optimized out>, this=0xccad20)
-+	at /usr/include/c++/10/bits/std_function.h:617
-+    #6  gdb::observers::observable<inferior*>::notify (args#0=0xddeb10,
-+	this=<optimized out>)
-+	at worktree-test1/gdb/../gdbsupport/observable.h:106
-+    #7  add_inferior_silent (pid=0)
-+	at worktree-test1/gdb/inferior.c:113
-+    #8  0x00000000005dbcb8 in initialize_inferiors ()
-+	at worktree-test1/gdb/inferior.c:947
-+    ...
-+
-+We checked with some Python Developers and were told that we should
-+acquire the GIL prior to calling any Python C API function.  We
-+definitely don't have the GIL for calls of PyOS_InterruptOccurred().
-+
-+I moved class_gdbpy_gil earlier in the file and use it in
-+gdbpy_check_quit_flag() to acquire (and automatically release) the
-+GIL.
-+
-+With those changes in place, I was able to run to a GDB prompt.  But,
-+when trying to quit, it segfaulted again due to due to some other
-+problems with gdbpy_check_quit_flag():
-+
-+    Thread 1 "gdb" received signal SIGSEGV, Segmentation fault.
-+    0x00007ffff7bbab0c in new_threadstate () from /lib64/libpython3.9.so.1.0
-+    (top-gdb) bt 8
-+    #0  0x00007ffff7bbab0c in new_threadstate () from /lib64/libpython3.9.so.1.0
-+    #1  0x00007ffff7afa5ea in PyGILState_Ensure.cold ()
-+       from /lib64/libpython3.9.so.1.0
-+    #2  0x000000000069b58c in gdbpy_gil::gdbpy_gil (this=<synthetic pointer>)
-+	at worktree-test1/gdb/python/python.c:278
-+    #3  gdbpy_check_quit_flag (extlang=<optimized out>)
-+	at worktree-test1/gdb/python/python.c:278
-+    #4  0x0000000000576e96 in check_quit_flag ()
-+	at worktree-test1/gdb/extension.c:776
-+    #5  0x000000000057700c in restore_active_ext_lang (previous=0xe9c050)
-+	at worktree-test1/gdb/extension.c:729
-+    #6  0x000000000088913a in do_my_cleanups (
-+	pmy_chain=0xc31870 <final_cleanup_chain>,
-+	old_chain=0xae5720 <sentinel_cleanup>)
-+	at worktree-test1/gdbsupport/cleanups.cc:131
-+    #7  do_final_cleanups ()
-+	at worktree-test1/gdbsupport/cleanups.cc:143
-+
-+In this case, we're trying to call a Python C API function after
-+Py_Finalize() has been called from finalize_python().  I made
-+finalize_python set gdb_python_initialized to false and then cause
-+check_quit_flag() to return early when it's false.
-+
-+With these changes in place, GDB seems to be working again with
-+Python3.9b1.  I think it likely that there are other problems lurking.
-+I wouldn't be surprised to find that there are other calls into Python
-+where we don't first make sure that we have the GIL.  Further changes
-+may well be needed.
-+
-+I see no regressions testing on Rawhide using a GDB built with the
-+default Python version (3.8.3) versus one built using Python 3.9b1.
-+
-+I've also tested on Fedora 28, 29, 30, 31, and 32 (all x86_64) using
-+the default (though updated) system installed versions of Python on
-+those OSes.  This means that I've tested against Python versions
-+2.7.15, 2.7.17, 2.7.18, 3.7.7, 3.8.2, and 3.8.3.  In each case GDB
-+still builds without problem and shows no regressions after applying
-+this patch.
-+
-+gdb/ChangeLog:
-+
-+2020-MM-DD  Kevin Buettner  <kevinb@redhat.com>
-+	    Keith Seitz  <keiths@redhat.com>
-+
-+	* python/python.c (do_start_initialization): For Python 3.9 and
-+	later, call PyEval_SaveThread instead of PyEval_ReleaseLock.
-+	(class gdbpy_gil): Move to earlier in file.
-+	(finalize_python): Set gdb_python_initialized.
-+	(gdbpy_check_quit_flag): Acquire GIL via gdbpy_gil.  Return early
-+	when not initialized.
-+
-+
-+[import into Buildroot, removing ChangeLog change to avoid conflict]
-+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+
-+---
-+ gdb/ChangeLog       | 10 ++++++++
-+ gdb/python/python.c | 56 ++++++++++++++++++++++++---------------------
-+ 2 files changed, 40 insertions(+), 26 deletions(-)
-+
-+diff --git a/gdb/python/python.c b/gdb/python/python.c
-+index 67f362b852d..4bdd2201abc 100644
-+--- a/gdb/python/python.c
-++++ b/gdb/python/python.c
-+@@ -238,6 +238,30 @@ gdbpy_enter::~gdbpy_enter ()
-+   PyGILState_Release (m_state);
-+ }
-+ 
-++/* A helper class to save and restore the GIL, but without touching
-++   the other globals that are handled by gdbpy_enter.  */
-++
-++class gdbpy_gil
-++{
-++public:
-++
-++  gdbpy_gil ()
-++    : m_state (PyGILState_Ensure ())
-++  {
-++  }
-++
-++  ~gdbpy_gil ()
-++  {
-++    PyGILState_Release (m_state);
-++  }
-++
-++  DISABLE_COPY_AND_ASSIGN (gdbpy_gil);
-++
-++private:
-++
-++  PyGILState_STATE m_state;
-++};
-++
-+ /* Set the quit flag.  */
-+ 
-+ static void
-+@@ -251,6 +275,10 @@ gdbpy_set_quit_flag (const struct extension_language_defn *extlang)
-+ static int
-+ gdbpy_check_quit_flag (const struct extension_language_defn *extlang)
-+ {
-++  if (!gdb_python_initialized)
-++    return 0;
-++
-++  gdbpy_gil gil;
-+   return PyOS_InterruptOccurred ();
-+ }
-+ 
-+@@ -943,30 +971,6 @@ gdbpy_source_script (const struct extension_language_defn *extlang,
-+ 
-+ /* Posting and handling events.  */
-+ 
-+-/* A helper class to save and restore the GIL, but without touching
-+-   the other globals that are handled by gdbpy_enter.  */
-+-
-+-class gdbpy_gil
-+-{
-+-public:
-+-
-+-  gdbpy_gil ()
-+-    : m_state (PyGILState_Ensure ())
-+-  {
-+-  }
-+-
-+-  ~gdbpy_gil ()
-+-  {
-+-    PyGILState_Release (m_state);
-+-  }
-+-
-+-  DISABLE_COPY_AND_ASSIGN (gdbpy_gil);
-+-
-+-private:
-+-
-+-  PyGILState_STATE m_state;
-+-};
-+-
-+ /* A single event.  */
-+ struct gdbpy_event
-+ {
-+@@ -1616,6 +1620,7 @@ finalize_python (void *ignore)
-+ 
-+   Py_Finalize ();
-+ 
-++  gdb_python_initialized = false;
-+   restore_active_ext_lang (previous_active);
-+ }
-+ 
-+@@ -1785,8 +1790,7 @@ do_start_initialization ()
-+     return false;
-+ 
-+   /* Release the GIL while gdb runs.  */
-+-  PyThreadState_Swap (NULL);
-+-  PyEval_ReleaseLock ();
-++  PyEval_SaveThread ();
-+ 
-+   make_final_cleanup (finalize_python, NULL);
-+ 
-+-- 
-+2.26.3
-+
+ # uClibc-ng dynamic loader is called ld-uClibc.so.1, but gcc is not
+ # patched specifically for uClibc-ng, so it continues to generate
+ # binaries that expect the dynamic loader to be named ld-uClibc.so.0,
+@@ -589,6 +609,7 @@ define $(2)_INSTALL_STAGING_CMDS
+ 	$$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
+ 	$$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
+ 	$$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
++	$$(TOOLCHAIN_EXTERNAL_FIXUP_PRETTY_PRINTER_LOADER)
+ endef
+ 
+ # Even though we're installing things in both the staging, the host
 -- 
 2.26.3
