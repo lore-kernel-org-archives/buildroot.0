@@ -1,52 +1,68 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue,  8 Jun 2021 15:06:43 +0200
-Subject: [Buildroot] [PATCH 3/3] toolchain: mark sysroot as 'safe' path for
- gdb auto-load
-In-Reply-To: <20210608130644.10909-1-patrickdepinguin@gmail.com>
+Date: Tue, 8 Jun 2021 15:54:18 +0200
+Subject: [Buildroot] [PATCH 2/3] toolchain/toolchain-external: fixup gdb
+ pretty-printer loader for libstdcxx
+In-Reply-To: <20210608130644.10909-3-patrickdepinguin@gmail.com>
 References: <20210608130644.10909-1-patrickdepinguin@gmail.com>
-Message-ID: <20210608130644.10909-4-patrickdepinguin@gmail.com>
+ <20210608130644.10909-3-patrickdepinguin@gmail.com>
+Message-ID: <CAAXf6LVvDK6-jVo4a5kOo4MjvGSYrb5NBxZk2gwste-ZnuqVzQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+El mar, 8 jun 2021 a las 15:06, Thomas De Schampheleire
+(<patrickdepinguin@gmail.com>) escribi?:
+>
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>
+> gcc installs a libstdcxx-...so-gdb.py file that gdb will load automatically
+> when it loads libstdcxx.so, via the mechanism described at [1].
+>
+> However, the auto-load file installed by gcc contains hardcoded paths
+> referring to the location where the (external) toolchain was built, which
+> are normally not available.
+>
+> Fix up the paths in the load file so that the pretty printers can be loaded
+> automatically.
+>
+> Note that gdb will only auto-load the file if its location is marked as
+> 'safe'. A subsequent commit will take care of that.
+>
+> [1] https://sourceware.org/gdb/onlinedocs/gdb/objfile_002dgdbdotext-file.html
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  .../pkg-toolchain-external.mk                 | 21 +++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index 6d91cb5d1e..1b519d1832 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -485,6 +485,26 @@ define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
+>         fi
+>  endef
+>
+> +# GCC installs a libstdcxx-...so-gdb.py file that gdb will load automatically,
+> +# but it contains hardcoded paths referring to the location where the (external)
+> +# toolchain was built. Fix up these paths so that the pretty printers can be
+> +# loaded automatically.
+> +# By default, the pretty printers are installed in
+> +# $(datadir)/gcc-$(gcc_version)/python but this could have been overwritten with
+> +# the gcc configure option: --with-python-dir. We thus have to search the
+> +# correct path first.
+> +define TOOLCHAIN_EXTERNAL_FIXUP_PRETTY_PRINTER_LOADER
+> +       loadfile=$$(find $(STAGING_DIR) -name 'libstdc++.so*-gdb.py' 2>/dev/null); \
+> +       pythondir=$$(find $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR) -path '*/libstdcxx/__init__.py' 2>/dev/null | xargs dirname | xargs dirname); \
+> +       if [ -n "$$loadfile" ] && [ -n "$$pythondir" ]; then \
+> +               echo "Fixing up hardcoded paths in GDB pretty-printer auto-load file for libstdcxx: $$loadfile"; \
+> +               sed -ri \
+> +                       -e 's%^libdir\s*=.*%libdir = "$(STAGING_DIR)/lib"%' \
+> +                       -e "s%^pythondir\s*=.*%pythondir = '$$pythondir'%" \
+> +                       $$loadfile; \
 
-gdb can automatically load certain files as described in [1]. Such files
-could install pretty-printers for complex data structures.
-
-libstdcxx (C++ standard library) provided by gcc, is one example of a
-library for which such auto-load file is available. But there are other
-examples too, like libglib2.
-
-However, gdb will only auto-load files if the file is located in one of the
-locations treated as 'safe'. The Buildroot sysroot is not by default in that
-list.
-
-Provide a better debugging experience by adding the sysroot to the 'safe'
-list, via the gdbinit file prepared by Buildroot.
-
-[1] https://sourceware.org/gdb/onlinedocs/gdb/objfile_002dgdbdotext-file.html
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- toolchain/helpers.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 17bc159f3e..dfb2581ed5 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -483,7 +483,8 @@ check_toolchain_ssp = \
- #
- gen_gdbinit_file = \
- 	mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
--	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit
-+	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit ; \
-+	echo "add-auto-load-safe-path $(STAGING_DIR)" >> $(STAGING_DIR)/usr/share/buildroot/gdbinit
- 
- # Given a path, determine the relative prefix (../) needed to return to the
- # root level. Note that the last component is treated as a file component; use a
--- 
-2.26.3
+In one build I'm seeing a problem with this sed command, so I will
+need to double check it.
+I will get back to this...
