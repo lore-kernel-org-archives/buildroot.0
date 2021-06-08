@@ -1,43 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jun 2021 10:24:54 +0200
+Date: Tue, 8 Jun 2021 10:25:02 +0200
 Subject: [Buildroot] [git commit branch/2021.02.x] package/python-pillow:
- add xcb support
-Message-ID: <20210608075704.DDF5988390@busybox.osuosl.org>
+ add webpmux support
+Message-ID: <20210608075704.EACC47FE1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70f869e49fd753fb5af0c79cb06c4d1da7df04a5
+commit: https://git.buildroot.net/buildroot/commit/?id=e1f5ffc326dcd18f3ced85bc5b59d237f8b28ac4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-libxcb is an optional dependency since version 7.1.0 and
-https://github.com/python-pillow/Pillow/commit/3c39e6fcf6a11b18eec0d1c66710bcd35033d069
+webpmux is an optional dependency since version 2.2.0 and
+https://github.com/python-pillow/Pillow/commit/b4735f7829bb88c99071cd91b208aa6ffd2cba24
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: move into existing webp conditional block]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e1e0e275c6715bf2963bdcf32d7008321e525d1b)
+(cherry picked from commit a1f3e99f0e518d14a271fcc2f509f99bc032702d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pillow/python-pillow.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/python-pillow/python-pillow.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 3018758b48..ab52f38df1 100644
+index ab52f38df1..fd0c6ce862 100644
 --- a/package/python-pillow/python-pillow.mk
 +++ b/package/python-pillow/python-pillow.mk
-@@ -35,6 +35,13 @@ else
- PYTHON_PILLOW_BUILD_OPTS += --disable-lcms
+@@ -59,8 +59,13 @@ endif
+ ifeq ($(BR2_PACKAGE_WEBP),y)
+ PYTHON_PILLOW_DEPENDENCIES += webp
+ PYTHON_PILLOW_BUILD_OPTS += --enable-webp
++ifeq ($(BR2_PACKAGE_WEBP_DEMUX)$(BR2_PACKAGE_WEBP_MUX),yy)
++PYTHON_PILLOW_BUILD_OPTS += --enable-webpmux
+ else
+-PYTHON_PILLOW_BUILD_OPTS += --disable-webp
++PYTHON_PILLOW_BUILD_OPTS += --disable-webpmux
++endif
++else
++PYTHON_PILLOW_BUILD_OPTS += --disable-webp --disable-webpmux
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBXCB),y)
-+PYTHON_PILLOW_DEPENDENCIES += libxcb
-+PYTHON_PILLOW_BUILD_OPTS += --enable-xcb
-+else
-+PYTHON_PILLOW_BUILD_OPTS += --disable-xcb
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENJPEG),y)
- PYTHON_PILLOW_DEPENDENCIES += openjpeg
- PYTHON_PILLOW_BUILD_OPTS += --enable-jpeg2000
+ define PYTHON_PILLOW_BUILD_CMDS
