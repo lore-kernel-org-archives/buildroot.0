@@ -1,102 +1,64 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  9 Jun 2021 19:11:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: fix build
-Message-ID: <20210609171127.79897-1-fontaine.fabrice@gmail.com>
+From: Drew Fustini <drew@beagleboard.org>
+Date: Wed, 9 Jun 2021 10:42:34 -0700
+Subject: [Buildroot] [PATCH 1/3] beaglev: update to new starfive linux
+ and u-boot
+In-Reply-To: <CAOCHtYghkr-KNaQ3jyD3Z6xg-sn1f9kWZGNhbkWg4Mv=W-rk5g@mail.gmail.com>
+References: <20210609063834.2193864-1-drew@beagleboard.org>
+ <CAOCHtYghkr-KNaQ3jyD3Z6xg-sn1f9kWZGNhbkWg4Mv=W-rk5g@mail.gmail.com>
+Message-ID: <20210609174234.GA2234548@x1>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop 0002-meson.build-fix-build-with-uclibc-ng.patch which is not needed
-since 0dda1a44a0859fc15b318e493c151ca1d807ba24 which has been merged in
-master in commit 8d07baab43b5624ad6d73ee58f5a9d4ab8b27049
+On Wed, Jun 09, 2021 at 10:08:55AM -0500, Robert Nelson wrote:
+> On Wed, Jun 9, 2021 at 2:15 AM Drew Fustini <drew@beagleboard.org> wrote:
+> >
+> > Update the commit id for u-boot to include fixes from the starfive-tech
+> > u-boot repository:
+> >
+> > 494e5ef7b807 jh7100: Enable full 2M L2 cache
+> > 4571f5a4e1e4 vic7100: enable cache ways (L2 cache)
+> > abb06422a5cd Remove fdt_high and initrd_high for Starfive
+> > 93099a61c7b0 starfive: beaglev: Disable SIFIVE_CLINT and enable RISCV_TIMER
+> > bfb5abac3d1f Revert "riscv: Enable the SiFive CLINT block driver in S-Mode(VIC7100 ONLY)"
+> > 7b70e1d44ba9 defconfig: enable cache_wayenable for better performance
+> > 7c585978616b configs: earlycon=sbi is deprecated
+> >
+> > The commit abb06422a5cd ("Remove fdt_high and initrd_high for Starfive")
+> > has removed the need for buildroot to patch the fdt_addr_r address.
+> >
+> > Update linux from commit in the old 5.10 branch that Fedora image was
+> > using to head of esmil_starlight branch [1] which is currently based
+> > on 5.13-rc5 and represents the best kernel for this board [2].
+> >
+> > In addition, the updated kernel now has jh7100-beaglev-starlight.dtb so
+> > buildroot no longer needs to copy the dtb from u-boot.
+> >
+> > [1] https://github.com/starfive-tech/linux/tree/esmil_starlight
+> > [2] https://github.com/starfive-tech/linux/issues/26
+> >
+> > Signed-off-by: Drew Fustini <drew@beagleboard.org>
+> > ---
+> 
+> 
+> 
+> > +# HEAD of the 5.13 branch (esmil_starlight)
+> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,linux,83dba1f25dfc118cacec991c31a7a4cfa7405c89)/linux-83dba1f25dfc118cacec991c31a7a4cfa7405c89.tar.gz"
+> > +BR2_LINUX_KERNEL_DEFCONFIG="starlight"
+> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="starfive/jh7100-beaglev-starlight"
+> 
+> Careful, @Drew Fustini this branch get's rebased on every kernel rc..
+> Unless we manually create a tag, this sha will disappear next week..
 
-While at it, renumber
-0002-meson-fix-getrandom-detection-for-uclibc.patch to
-0001-meson-fix-getrandom-detection-for-uclibc.patch (patch number was
-wrong since its addition in commit
-b003cb5d16de9c92baba7dea7a6626c71cefc4fb) and also renumber remaining
-patch
+I do not believe the commit [1] will ever go away as long as the repo
+still exists. But to make sure, I created buildroot-20210609 tag [2] to
+represent what is being used to indicate what is being used in upstream
+buildroot.
 
-Fixes:
- - http://autobuild.buildroot.org/results/4d442c61b137ca1bd2dd32c6802ff0251d39e7a5
+-Drew
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-fix-getrandom-detection-for-uclibc.patch} |  0
- ...ch => 0002-fix-linking-with-latomic.patch} |  0
- ...meson.build-fix-build-with-uclibc-ng.patch | 52 -------------------
- 3 files changed, 52 deletions(-)
- rename package/pipewire/{0002-meson-fix-getrandom-detection-for-uclibc.patch => 0001-meson-fix-getrandom-detection-for-uclibc.patch} (100%)
- rename package/pipewire/{0003-fix-linking-with-latomic.patch => 0002-fix-linking-with-latomic.patch} (100%)
- delete mode 100644 package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
-
-diff --git a/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch b/package/pipewire/0001-meson-fix-getrandom-detection-for-uclibc.patch
-similarity index 100%
-rename from package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
-rename to package/pipewire/0001-meson-fix-getrandom-detection-for-uclibc.patch
-diff --git a/package/pipewire/0003-fix-linking-with-latomic.patch b/package/pipewire/0002-fix-linking-with-latomic.patch
-similarity index 100%
-rename from package/pipewire/0003-fix-linking-with-latomic.patch
-rename to package/pipewire/0002-fix-linking-with-latomic.patch
-diff --git a/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch b/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
-deleted file mode 100644
-index 36b14d3f16..0000000000
---- a/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From 8f1de87381d270a8f4e5927187ae0466a9c9504a Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 4 May 2021 22:56:54 +0200
--Subject: [PATCH] meson.build: fix build with uclibc-ng
--
--Build with uclib-ng fails since commit
--a4b0b9afe5a782a7f4a8fe153ecf51bcb0180ae3 on:
--
--FAILED: src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o
--/srv/storage/autobuild/run/instance-2/output-1/host/bin/mips64el-linux-gcc -Isrc/pipewire/libpipewire-0.3.so.0.326.0.p -Isrc/pipewire -I../src/pipewire -Isrc -I../src -I. -I.. -Ispa/include -I../spa/include -fdiagnostics-color=always -pipe -Wall -Winvalid-pch -Wextra -Wpedantic -std=gnu99 -O3 -fvisibility=hidden -Werror=suggest-attribute=format -Wsign-compare -Wpointer-arith -Wpointer-sign -Wformat -Wformat-security -Wimplicit-fallthrough -Wmissing-braces -Wtype-limits -Wvariadic-macros -Wno-missing-field-initializers -Wno-unused-parameter -Wno-pedantic -Wold-style-declaration -Wunused-result -DFASTPATH -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -pthread -DHAVE_CONFIG_H -D_GNU_SOURCE -D_POSIX_C_SOURCE -MD -MQ src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o -MF src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o.d -o src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o -c ../src/pipewire/impl-core.c
--../src/pipewire/impl-core.c:54:9: error: conflicting types for 'getrandom'
-- ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
--         ^~~~~~~~~
--In file included from ../src/pipewire/impl-core.c:34:
--/srv/storage/autobuild/run/instance-2/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:28:12: note: previous declaration of 'getrandom' was here
-- extern int getrandom(void *__buf, size_t count, unsigned int flags)
--            ^~~~~~~~~
--
--Fix this build failure by adding -D_GNU_SOURCE as getrandom is protected
--by:
--
--if defined __UCLIBC_LINUX_SPECIFIC__ && defined __USE_GNU
--
--Extracted from:
-- - https://github.com/wbx-github/uclibc-ng/blob/master/libc/sysdeps/linux/common/sys/random.h
--
--Fixes:
-- - http://autobuild.buildroot.org/results/a45f0ee009d90cef867dee4b1093225610fa10df
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/649]
-----
-- meson.build | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index 0a9963fb..11b63c08 100644
----- a/meson.build
--+++ b/meson.build
--@@ -274,7 +274,7 @@ if cc.has_function('memfd_create', prefix : '#include <sys/mman.h>', args : [ '-
--   cdata.set('HAVE_MEMFD_CREATE', 1)
-- endif
-- 
---if cc.has_function('getrandom', prefix : '#include <sys/random.h>')
--+if cc.has_function('getrandom', prefix : '#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
--   cdata.set('HAVE_GETRANDOM', 1)
-- endif
-- 
---- 
--2.30.2
--
--- 
-2.30.2
+[1] https://github.com/starfive-tech/linux/commit/83dba1f25dfc118cacec991c31a7a4cfa7405c89
+[2] https://github.com/starfive-tech/linux/releases/tag/buildroot-20210609
