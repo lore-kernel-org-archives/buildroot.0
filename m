@@ -1,37 +1,35 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Thu, 10 Jun 2021 01:03:56 +0300
-Subject: [Buildroot] [PATCH v2 01/28] boot/arm-trusted-firmware: option
- to disable stack protection
-In-Reply-To: <20210609234015.1de2583f@windsurf>
-References: <20210609200003.2866122-1-geomatsi@gmail.com>
- <20210609200003.2866122-2-geomatsi@gmail.com>
- <20210609234015.1de2583f@windsurf>
-Message-ID: <YME6zLv85ivVOkpi@curiosity>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Wed,  9 Jun 2021 16:48:19 -0700
+Subject: [Buildroot] [PATCH 1/1] mtd-utils-2.1.2: ubihealthd depends on
+ ubifs support
+In-Reply-To: <20210609234819.1860554-1-mmayer@broadcom.com>
+References: <20210609234819.1860554-1-mmayer@broadcom.com>
+Message-ID: <20210609234819.1860554-2-mmayer@broadcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+ubihealthd is only being built, if mtd-utils are being built
+--with-ubifs. Reflect that dependency within buildroot.
 
-> > +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DISABLE_SSP
-> > +	bool "Disable stack protection"
-> > +	help
-> > +	  Select this option to explicitly disable stack protection checks in GCC.
-> > +	  Such checks need to be disabled if ATF platform port does not implement
-> > +	  plat_get_stack_protector_canary() hook.
-> 
-> It's a bit annoying that we have to tell TF-A about this. If TF-A
-> doesn't implement plat_get_stack_protector_canary() for a certain
-> platform, why does it try to enable SSP ? It feels like something that
-> should be fixed in TF-A.
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+---
+ package/mtd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-TF-A does not attempt to enable those protection checks. This is
-controlled by its ENABLE_STACK_PROTECTOR build flag, which default
-value is 'none'. This is Buildroot who tries to enable TF-A stack
-protection checks depending on BR2_SSP_* toolchain features only:
-see arm-trusted-firmware.mk.
-
-Regards,
-Sergey
+diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+index c7ad3b3cdc9c..64a7ae19a7e2 100644
+--- a/package/mtd/Config.in
++++ b/package/mtd/Config.in
+@@ -139,6 +139,7 @@ config BR2_PACKAGE_MTD_UBIFORMAT
+ 
+ config BR2_PACKAGE_MTD_UBIHEALTHD
+ 	bool "ubihealthd"
++	depends on BR2_PACKAGE_MTD_UBIFS_UTILS
+ 	default y
+ 
+ config BR2_PACKAGE_MTD_UBIMKVOL
+-- 
+2.25.1
