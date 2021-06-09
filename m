@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed,  9 Jun 2021 22:59:49 +0300
-Subject: [Buildroot] [PATCH v2 14/28]
- configs/olimex_a64_olinuxino_defconfig: switch to mainline ATF
+Date: Wed,  9 Jun 2021 22:59:51 +0300
+Subject: [Buildroot] [PATCH v2 16/28] configs/pine64_sopine_defconfig:
+ switch to mainline ATF
 In-Reply-To: <20210609200003.2866122-1-geomatsi@gmail.com>
 References: <20210609200003.2866122-1-geomatsi@gmail.com>
-Message-ID: <20210609200003.2866122-15-geomatsi@gmail.com>
+Message-ID: <20210609200003.2866122-17-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,13 +17,13 @@ GCC stack protection, so make sure to disable this ATF feature.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- configs/olimex_a64_olinuxino_defconfig | 8 ++++----
+ configs/pine64_sopine_defconfig | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/olimex_a64_olinuxino_defconfig b/configs/olimex_a64_olinuxino_defconfig
-index e35c6014bd..a4169df564 100644
---- a/configs/olimex_a64_olinuxino_defconfig
-+++ b/configs/olimex_a64_olinuxino_defconfig
+diff --git a/configs/pine64_sopine_defconfig b/configs/pine64_sopine_defconfig
+index 6fa511477c..8dc0751108 100644
+--- a/configs/pine64_sopine_defconfig
++++ b/configs/pine64_sopine_defconfig
 @@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
  
  # Firmware
