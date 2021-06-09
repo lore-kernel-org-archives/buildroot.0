@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed,  9 Jun 2021 22:59:47 +0300
-Subject: [Buildroot] [PATCH v2 12/28]
- configs/friendlyarm_nanopi_neo_plus2_defconfig: switch to mainline ATF
+Date: Wed,  9 Jun 2021 22:59:46 +0300
+Subject: [Buildroot] [PATCH v2 11/28]
+ configs/friendlyarm_nanopi_neo2_defconfig: switch to mainline ATF
 In-Reply-To: <20210609200003.2866122-1-geomatsi@gmail.com>
 References: <20210609200003.2866122-1-geomatsi@gmail.com>
-Message-ID: <20210609200003.2866122-13-geomatsi@gmail.com>
+Message-ID: <20210609200003.2866122-12-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,14 +17,14 @@ GCC stack protection, so make sure to disable this ATF feature.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- configs/friendlyarm_nanopi_neo_plus2_defconfig | 8 ++++----
+ configs/friendlyarm_nanopi_neo2_defconfig | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/friendlyarm_nanopi_neo_plus2_defconfig b/configs/friendlyarm_nanopi_neo_plus2_defconfig
-index 461e468cb6..730ff3ee6f 100644
---- a/configs/friendlyarm_nanopi_neo_plus2_defconfig
-+++ b/configs/friendlyarm_nanopi_neo_plus2_defconfig
-@@ -8,10 +8,10 @@ BR2_ROOTFS_OVERLAY="board/friendlyarm/nanopi-neo-plus2/rootfs_overlay"
+diff --git a/configs/friendlyarm_nanopi_neo2_defconfig b/configs/friendlyarm_nanopi_neo2_defconfig
+index 9262737b88..90d96f9e28 100644
+--- a/configs/friendlyarm_nanopi_neo2_defconfig
++++ b/configs/friendlyarm_nanopi_neo2_defconfig
+@@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
  
  # Firmware
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
