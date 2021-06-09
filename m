@@ -1,258 +1,138 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed,  9 Jun 2021 18:27:53 +0200
-Subject: [Buildroot] [PATCH] package/binutils: fix building or1k with host
- gcc version < 5
+Date: Wed, 9 Jun 2021 18:50:02 +0200
+Subject: [Buildroot] [PATCH 2/9] package/binutils: add upstream
+ backported patches to support -mcmodel=large gcc option
 In-Reply-To: <4db92b61-32e1-f4c0-4986-99ab2b1da09d@gmail.com>
-References: <4db92b61-32e1-f4c0-4986-99ab2b1da09d@gmail.com>
-Message-ID: <20210609162753.1138390-1-giulio.benetti@benettiengineering.com>
+References: <20210503111350.2933319-1-giulio.benetti@benettiengineering.com>
+ <20210503111350.2933319-3-giulio.benetti@benettiengineering.com>
+ <982098ed-c9d0-a15c-ca2b-5143d64e53e3@gmail.com>
+ <407e6f16-a875-0e92-0f3b-df14368afb21@benettiengineering.com>
+ <4db92b61-32e1-f4c0-4986-99ab2b1da09d@gmail.com>
+Message-ID: <02a99332-7dfe-ae24-703d-979a98a6181a@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patches to fix building on hosts that provide gcc version < 5
-(i.e. 4.9), otherwise they fail due to missing default '-std=gnu11' option
-on variable declaration inside for loops.
+Hi Romain, All,
 
-The patch is pending upstream:
-https://sourceware.org/pipermail/binutils/2021-June/116884.html
+On 6/9/21 8:26 AM, Romain Naour wrote:
+> Hi Giulio,
+> 
+> Le 09/06/2021 ? 00:16, Giulio Benetti a ?crit?:
+>> Hi Romain,
+>>
+>> On 6/8/21 11:29 PM, Romain Naour wrote:
+>>> Hi Giulio, All,
+>>>
+>>> Le 03/05/2021 ? 13:13, Giulio Benetti a ?crit?:
+>>>> Add upstream backported patches that allows using -mcmodel=large gcc option
+>>>> that in order allows fixing build failure due to binutils bug 21464:
+>>>> https://sourceware.org/bugzilla/show_bug.cgi?id=21464
+>>>>
+>>>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>>> ---
+>>>>  ? ...elocation-R_OR1K_GOT_AHI16-for-gotha.patch | 256 +++++++++
+>>>>  ? ...K_GOT16-overflow-failures-in-presenc.patch |? 61 +++
+>>>>  ? ...ge-plt_relocs-when-generating-plt-en.patch | 500 ++++++++++++++++++
+>>>>  ? ...elocation-R_OR1K_GOT_AHI16-for-gotha.patch | 256 +++++++++
+>>>>  ? ...K_GOT16-overflow-failures-in-presenc.patch |? 61 +++
+>>>>  ? ...ge-plt_relocs-when-generating-plt-en.patch | 500 ++++++++++++++++++
+>>>>  ? ...elocation-R_OR1K_GOT_AHI16-for-gotha.patch | 256 +++++++++
+>>>>  ? ...K_GOT16-overflow-failures-in-presenc.patch |? 61 +++
+>>>>  ? ...ge-plt_relocs-when-generating-plt-en.patch | 500 ++++++++++++++++++
+>>>>  ? ...elocation-R_OR1K_GOT_AHI16-for-gotha.patch | 256 +++++++++
+>>>>  ? ...K_GOT16-overflow-failures-in-presenc.patch |? 61 +++
+>>>>  ? ...ge-plt_relocs-when-generating-plt-en.patch | 500 ++++++++++++++++++
+>>>>  ? 12 files changed, 3268 insertions(+)
+>>>>  ? create mode 100644
+>>>> package/binutils/2.32/0011-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+>>>>
+>>>>  ? create mode 100644
+>>>> package/binutils/2.32/0012-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+>>>>
+>>>>  ? create mode 100644
+>>>> package/binutils/2.32/0013-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+>>>>
+>>>>  ? create mode 100644
+>>>> package/binutils/2.34/0004-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+>>>>
+>>>>  ? create mode 100644
+>>>> package/binutils/2.34/0005-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+>>>>
+>>>>  ? create mode 100644
+>>>> package/binutils/2.34/0006-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+>>>>
+>>>>  ? create mode 100644
+>>>> package/binutils/2.35.2/0004-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+>>>>
+>>>>  ? create mode 100644
+>>>> package/binutils/2.35.2/0005-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+>>>>
+>>>>  ? create mode 100644
+>>>> package/binutils/2.35.2/0006-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+>>>>
+>>>>  ? create mode 100644
+>>>> package/binutils/2.36.1/0004-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+>>>>
+>>>>  ? create mode 100644
+>>>> package/binutils/2.36.1/0005-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+>>>>
+>>>>  ? create mode 100644
+>>>> package/binutils/2.36.1/0006-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+>>>>
+>>>>
+>>>
+>>>> +?? unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
+>>>> +-? unsigned insn4;
+>>>> ++? unsigned output_insns[PLT_MAX_INSN_COUNT];
+>>>> ++
+>>>> ++? /* Copy instructions into the output buffer.? */
+>>>> ++? for (size_t i = 0; i < insn_count; i++)
+>>>> ++??? output_insns[i] = insns[i];
+>>>> +
+>>>
+>>> This syntax break with good old compilers :)
+>>>
+>>> elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
+>>> C99 or C11 mode
+>>>  ??? for (size_t i = 0; i < insn_count; i++)
+>>>  ??? ^
+>>>
+>>> See:
+>>> https://gitlab.com/bootlin/toolchains-builder/-/jobs/1325646298
+>>
+>> Thanks for pointing, I didn't think about old host compiler. I'm going to fix it
+>> soon by patching actual patches initializing variable at the
+>> begin of functions.
+> 
+> Toolchain-builder use Debian 8 jessie to build the toolchain while Debian 9
+> stretch is used to run the Buildroot testsuite.
+> 
+> See, there is no problem to build the qemu_or1k_defconfig in gitlab using stretch:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/1307293494
+> 
+> The host gcc used by stretch is gcc 6 while it's gcc 4.9 for jessie, the default
+> mode for C is -std=gnu11 since gcc 5:
+> https://gcc.gnu.org/gcc-5/changes.html
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...or1k-fix-building-with-gcc-version-5.patch | 50 +++++++++++++++++++
- ...or1k-fix-building-with-gcc-version-5.patch | 50 +++++++++++++++++++
- ...or1k-fix-building-with-gcc-version-5.patch | 50 +++++++++++++++++++
- ...or1k-fix-building-with-gcc-version-5.patch | 50 +++++++++++++++++++
- 4 files changed, 200 insertions(+)
- create mode 100644 package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
- create mode 100644 package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
- create mode 100644 package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
- create mode 100644 package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+Here is the patch that fixes that issue [1]
 
-diff --git a/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-new file mode 100644
-index 0000000000..c3978e22fa
---- /dev/null
-+++ b/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-@@ -0,0 +1,50 @@
-+From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 9 Jun 2021 17:28:27 +0200
-+Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-+
-+Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-+an old compiler(i.e. gcc 4.9) build fails on:
-+```
-+elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-+C99 or C11 mode
-+    for (size_t i = 0; i < insn_count; i++)
-+    ^
-+```
-+
-+So let's declare `size_t i` at the top of the function instead of inside
-+for loop.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 4ae7f324d33..32063ab0289 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+ {
-+   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-+   unsigned output_insns[PLT_MAX_INSN_COUNT];
-++  size_t i;
-+ 
-+   /* Copy instructions into the output buffer.  */
-+-  for (size_t i = 0; i < insn_count; i++)
-++  for (i = 0; i < insn_count; i++)
-+     output_insns[i] = insns[i];
-+ 
-+   /* Honor the no-delay-slot setting.  */
-+@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+     }
-+ 
-+   /* Write out the output buffer.  */
-+-  for (size_t i = 0; i < (insn_count+1); i++)
-++  for (i = 0; i < (insn_count+1); i++)
-+     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-+ }
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-new file mode 100644
-index 0000000000..c3978e22fa
---- /dev/null
-+++ b/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-@@ -0,0 +1,50 @@
-+From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 9 Jun 2021 17:28:27 +0200
-+Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-+
-+Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-+an old compiler(i.e. gcc 4.9) build fails on:
-+```
-+elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-+C99 or C11 mode
-+    for (size_t i = 0; i < insn_count; i++)
-+    ^
-+```
-+
-+So let's declare `size_t i` at the top of the function instead of inside
-+for loop.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 4ae7f324d33..32063ab0289 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+ {
-+   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-+   unsigned output_insns[PLT_MAX_INSN_COUNT];
-++  size_t i;
-+ 
-+   /* Copy instructions into the output buffer.  */
-+-  for (size_t i = 0; i < insn_count; i++)
-++  for (i = 0; i < insn_count; i++)
-+     output_insns[i] = insns[i];
-+ 
-+   /* Honor the no-delay-slot setting.  */
-+@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+     }
-+ 
-+   /* Write out the output buffer.  */
-+-  for (size_t i = 0; i < (insn_count+1); i++)
-++  for (i = 0; i < (insn_count+1); i++)
-+     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-+ }
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-new file mode 100644
-index 0000000000..c3978e22fa
---- /dev/null
-+++ b/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-@@ -0,0 +1,50 @@
-+From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 9 Jun 2021 17:28:27 +0200
-+Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-+
-+Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-+an old compiler(i.e. gcc 4.9) build fails on:
-+```
-+elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-+C99 or C11 mode
-+    for (size_t i = 0; i < insn_count; i++)
-+    ^
-+```
-+
-+So let's declare `size_t i` at the top of the function instead of inside
-+for loop.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 4ae7f324d33..32063ab0289 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+ {
-+   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-+   unsigned output_insns[PLT_MAX_INSN_COUNT];
-++  size_t i;
-+ 
-+   /* Copy instructions into the output buffer.  */
-+-  for (size_t i = 0; i < insn_count; i++)
-++  for (i = 0; i < insn_count; i++)
-+     output_insns[i] = insns[i];
-+ 
-+   /* Honor the no-delay-slot setting.  */
-+@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+     }
-+ 
-+   /* Write out the output buffer.  */
-+-  for (size_t i = 0; i < (insn_count+1); i++)
-++  for (i = 0; i < (insn_count+1); i++)
-+     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-+ }
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-new file mode 100644
-index 0000000000..c3978e22fa
---- /dev/null
-+++ b/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-@@ -0,0 +1,50 @@
-+From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 9 Jun 2021 17:28:27 +0200
-+Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-+
-+Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-+an old compiler(i.e. gcc 4.9) build fails on:
-+```
-+elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-+C99 or C11 mode
-+    for (size_t i = 0; i < insn_count; i++)
-+    ^
-+```
-+
-+So let's declare `size_t i` at the top of the function instead of inside
-+for loop.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 4ae7f324d33..32063ab0289 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+ {
-+   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-+   unsigned output_insns[PLT_MAX_INSN_COUNT];
-++  size_t i;
-+ 
-+   /* Copy instructions into the output buffer.  */
-+-  for (size_t i = 0; i < insn_count; i++)
-++  for (i = 0; i < insn_count; i++)
-+     output_insns[i] = insns[i];
-+ 
-+   /* Honor the no-delay-slot setting.  */
-+@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+     }
-+ 
-+   /* Write out the output buffer.  */
-+-  for (size_t i = 0; i < (insn_count+1); i++)
-++  for (i = 0; i < (insn_count+1); i++)
-+     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-+ }
-+ 
-+-- 
-+2.25.1
-+
+I've tested it on Debian Jessie and it works fine(while before I've 
+encountered your same problem).
+
+It's pending upstream[2], this is why I've decided to add a new patch 
+instead of modifying the current one.
+
+Does it sound good for you?
+
+[1]: 
+https://patchwork.ozlabs.org/project/buildroot/patch/20210609162753.1138390-1-giulio.benetti at benettiengineering.com/
+
+[2]: https://sourceware.org/pipermail/binutils/2021-June/116884.html
+
+Best regards
 -- 
-2.25.1
+Giulio Benetti
+Benetti Engineering sas
