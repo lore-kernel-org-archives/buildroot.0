@@ -1,34 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Jun 2021 23:16:55 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/gdb: fix gdbserver build with m68k and uclibc
-In-Reply-To: <20210527055729.407660-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 27 May 2021 07:57:29 +0200")
-References: <20210527055729.407660-1-fontaine.fabrice@gmail.com>
-Message-ID: <87sg1qn3g8.fsf@dell.be.48ers.dk>
+Date: Wed, 09 Jun 2021 23:18:16 +0200
+Subject: [Buildroot] [git commit] package/libcurl: security bump to
+ version 7.77.0
+In-Reply-To: <20210528115121.CA5A187A45@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Fri, 28 May 2021 14:19:33 +0200")
+References: <20210528115121.CA5A187A45@busybox.osuosl.org>
+Message-ID: <87o8cen3dz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Allow to build gdbserver with m68k and uclibc. This patch is not needed
- > for version above 9.2 because build_gdbserver as been
- > moved to its own file since
- > https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=919adfe8409211c726c1d05b47ca59890ee648f1
+ > commit: https://git.buildroot.net/buildroot/commit/?id=eae15d62c6a857f43d6f21af9a30f38994b3efc5
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This new file (gdbserver/configure.srv) does not seem to be affected by
- > this issue
+ > Fixes the following security issues:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/f4d6d9d8418c0da48a3db4ad5a82e19bd16eae34
+ > - CVE-2021-22897: schannel cipher selection surprise
+ >   https://curl.se/docs/CVE-2021-22897.html
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Peter Korsgaard):
- >  - Handle m68*-*-uclinux* like m68*-*-linux*
+ > - CVE-2021-22898: TELNET stack contents disclosure
+ >   https://curl.se/docs/CVE-2021-22898.html
+
+ > - CVE-2021-22901: TLS session caching disaster
+ >   https://curl.se/docs/CVE-2021-22901.html
+
+ > Unconditionally disable the ldap(s) options.  These require external
+ > libraries, but the options were ignored if the needed libraries weren't
+ > available. This is now changed to be a fatal error since
+
+ > https://github.com/curl/curl/commit/dae382a1a1481a94b708c82d5aa9fa7253084160
+
+ > Additionally, add a post-7.77.0 upstream patch to fix compilation with
+ > bearssl.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > [yann.morin.1998 at free.fr: annotate the patch, that it is a backport]
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Committed to 2021.02.x, thanks.
 
