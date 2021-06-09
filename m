@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed,  9 Jun 2021 22:59:48 +0300
-Subject: [Buildroot] [PATCH v2 13/28] configs/amarula_a64_relic_defconfig:
- switch to mainline ATF
+Date: Wed,  9 Jun 2021 22:59:50 +0300
+Subject: [Buildroot] [PATCH v2 15/28] configs/pine64_defconfig: switch to
+ mainline ATF
 In-Reply-To: <20210609200003.2866122-1-geomatsi@gmail.com>
 References: <20210609200003.2866122-1-geomatsi@gmail.com>
-Message-ID: <20210609200003.2866122-14-geomatsi@gmail.com>
+Message-ID: <20210609200003.2866122-16-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,14 +17,14 @@ GCC stack protection, so make sure to disable this ATF feature.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- configs/amarula_a64_relic_defconfig | 8 ++++----
+ configs/pine64_defconfig | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/amarula_a64_relic_defconfig b/configs/amarula_a64_relic_defconfig
-index 304a3ef824..1e7943635d 100644
---- a/configs/amarula_a64_relic_defconfig
-+++ b/configs/amarula_a64_relic_defconfig
-@@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
+diff --git a/configs/pine64_defconfig b/configs/pine64_defconfig
+index 2bdb6f6ae1..57a56da0ec 100644
+--- a/configs/pine64_defconfig
++++ b/configs/pine64_defconfig
+@@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
  
  # Firmware
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
