@@ -1,80 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  9 Jun 2021 21:06:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/filemq: drop -Werror
-Message-ID: <20210609190639.282968-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 9 Jun 2021 21:16:49 +0200
+Subject: [Buildroot] [PATCH v5 0/5] Introduce bmap-tools as target +
+ host package
+In-Reply-To: <20210609205222.785b065d@windsurf>
+References: <20210607204221.124908-1-thomas.petazzoni@bootlin.com>
+ <6e9afcd08150926a669d4df1198461e0acc7f063.camel@orolia.com>
+ <20210609205222.785b065d@windsurf>
+Message-ID: <08bb8c91-0304-8613-492c-aa133412a1e3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop -Werror to fix build failure with -DNDEBUG raised since commit
-5a8c50fe05afacc3cbe8e7347e238da9f242fab0
+Hi Thomas, Nicolas,
 
-Fixes:
- - http://autobuild.buildroot.org/results/cf4c45ed7ae2c5090ac6ba967497e0d42d5c5224
+Le 09/06/2021 ? 20:52, Thomas Petazzoni a ?crit?:
+> Hello Nicolas,
+> 
+> On Wed, 09 Jun 2021 09:35:38 +0200
+> Nicolas Carrier <nicolas.carrier@orolia.com> wrote:
+> 
+>> The first error in the run log is:
+>>
+>> qemu-system-arm: Invalid SD card size: 60 MiB
+>> SD card size has to be a power of 2, e.g. 64 MiB.
+>>
+>> So I set a fixed image size of 64M.
+> 
+> This is weird, because all the ext2/3/4 test cases in our test
+> infrastructure also do not specify a size, and so they get the default
+> of 60 MiB.
+> 
+> Could you try:
+> 
+> ./support/testing/run-tests tests.fs.test_ext.TestExt4
+> 
+> and see if it works for you ?
+> 
+> Which version of Qemu are you using? I'm using 4.2.1.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-configure.ac-drop-Werror.patch       | 36 +++++++++++++++++++
- package/filemq/filemq.mk                      |  2 ++
- 2 files changed, 38 insertions(+)
- create mode 100644 package/filemq/0001-configure.ac-drop-Werror.patch
+We had the same problem after a qemu version bump to 5.1:
 
-diff --git a/package/filemq/0001-configure.ac-drop-Werror.patch b/package/filemq/0001-configure.ac-drop-Werror.patch
-new file mode 100644
-index 0000000000..30d22f3f16
---- /dev/null
-+++ b/package/filemq/0001-configure.ac-drop-Werror.patch
-@@ -0,0 +1,36 @@
-+From bb47bfcffcb7e7198a621c11a3764425044d128a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 9 Jun 2021 21:01:41 +0200
-+Subject: [PATCH] configure.ac: drop -Werror
-+
-+Drop -Werror to avoid the following build failure with -DNDEBUG:
-+
-+src/filemq_client.c:7:6: error: variable 'rc' set but not used [-Werror=unused-but-set-variable]
-+    7 |  int rc;
-+      |      ^~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/cf4c45ed7ae2c5090ac6ba967497e0d42d5c5224
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/zeromq/filemq/pull/81]
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 6e127f9..e925430 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -366,7 +366,7 @@ AC_C_BIGENDIAN
-+ 
-+ # These options are GNU compiler specific.
-+ if test "x$GCC" = "xyes"; then
-+-    CPPFLAGS="-pedantic -Werror -Wall -Wc++-compat ${CPPFLAGS}"
-++    CPPFLAGS="-pedantic -Wall -Wc++-compat ${CPPFLAGS}"
-+ fi
-+ 
-+ AM_CONDITIONAL(ENABLE_SHARED, test "x$enable_shared" = "xyes")
-+-- 
-+2.30.2
-+
-diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
-index 75d8bd992c..5947ccf980 100644
---- a/package/filemq/filemq.mk
-+++ b/package/filemq/filemq.mk
-@@ -13,6 +13,8 @@ FILEMQ_INSTALL_STAGING = YES
- FILEMQ_DEPENDENCIES = czmq openssl zeromq
- FILEMQ_LICENSE = MPL-2.0
- FILEMQ_LICENSE_FILES = LICENSE
-+# We're patching configure.ac
-+FILEMQ_AUTORECONF = YES
- 
- define FILEMQ_CREATE_CONFIG_DIR
- 	mkdir -p $(@D)/config
--- 
-2.30.2
+https://git.buildroot.net/buildroot/commit/?id=4bd2a317a7d6c3b3b19396a9459816da76b2c796
+
+Best regards,
+Romain
+
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
