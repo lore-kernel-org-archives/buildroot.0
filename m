@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed,  9 Jun 2021 22:59:56 +0300
-Subject: [Buildroot] [PATCH v2 21/28] configs/orangepi_prime_defconfig: bump
+Date: Wed,  9 Jun 2021 22:59:55 +0300
+Subject: [Buildroot] [PATCH v2 20/28] configs/orangepi_pc2_defconfig: bump
  BSP versions
 In-Reply-To: <20210609200003.2866122-1-geomatsi@gmail.com>
 References: <20210609200003.2866122-1-geomatsi@gmail.com>
-Message-ID: <20210609200003.2866122-22-geomatsi@gmail.com>
+Message-ID: <20210609200003.2866122-21-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,14 +29,14 @@ using custom U-Boot build options.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- board/orangepi/orangepi-prime/genimage.cfg | 10 ++--------
- configs/orangepi_prime_defconfig           | 13 ++++++-------
+ board/orangepi/orangepi-pc2/genimage.cfg | 10 ++--------
+ configs/orangepi_pc2_defconfig           | 13 ++++++-------
  2 files changed, 8 insertions(+), 15 deletions(-)
 
-diff --git a/board/orangepi/orangepi-prime/genimage.cfg b/board/orangepi/orangepi-prime/genimage.cfg
-index bb01ed9f10..be7e9d7908 100644
---- a/board/orangepi/orangepi-prime/genimage.cfg
-+++ b/board/orangepi/orangepi-prime/genimage.cfg
+diff --git a/board/orangepi/orangepi-pc2/genimage.cfg b/board/orangepi/orangepi-pc2/genimage.cfg
+index e10c67ffc3..c179efcc19 100644
+--- a/board/orangepi/orangepi-pc2/genimage.cfg
++++ b/board/orangepi/orangepi-pc2/genimage.cfg
 @@ -15,15 +15,9 @@ image sdcard.img {
  
  	partition spl {
@@ -55,10 +55,10 @@ index bb01ed9f10..be7e9d7908 100644
  	}
  
  	partition boot {
-diff --git a/configs/orangepi_prime_defconfig b/configs/orangepi_prime_defconfig
-index d79d764fec..270465cb79 100644
---- a/configs/orangepi_prime_defconfig
-+++ b/configs/orangepi_prime_defconfig
+diff --git a/configs/orangepi_pc2_defconfig b/configs/orangepi_pc2_defconfig
+index 3cd8bdb82b..acf5031e17 100644
+--- a/configs/orangepi_pc2_defconfig
++++ b/configs/orangepi_pc2_defconfig
 @@ -2,8 +2,7 @@ BR2_aarch64=y
  BR2_cortex_a53=y
  BR2_ARM_FPU_VFPV4=y
@@ -75,7 +75,7 @@ index d79d764fec..270465cb79 100644
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_prime"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc2"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
@@ -88,8 +88,8 @@ index d79d764fec..270465cb79 100644
 +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
  BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-prime/boot.cmd"
-@@ -33,7 +32,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-prime/b
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-pc2/boot.cmd"
+@@ -33,7 +32,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-pc2/boo
  # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
@@ -97,6 +97,6 @@ index d79d764fec..270465cb79 100644
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-prime"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-pc2"
 -- 
 2.31.1
