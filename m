@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed,  9 Jun 2021 22:59:43 +0300
-Subject: [Buildroot] [PATCH v2 08/28] configs/orangepi_prime_defconfig:
- switch to mainline ATF
+Date: Wed,  9 Jun 2021 22:59:44 +0300
+Subject: [Buildroot] [PATCH v2 09/28] configs/orangepi_win_defconfig: switch
+ to mainline ATF
 In-Reply-To: <20210609200003.2866122-1-geomatsi@gmail.com>
 References: <20210609200003.2866122-1-geomatsi@gmail.com>
-Message-ID: <20210609200003.2866122-9-geomatsi@gmail.com>
+Message-ID: <20210609200003.2866122-10-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,14 +17,14 @@ GCC stack protection, so make sure to disable this ATF feature.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- configs/orangepi_prime_defconfig | 8 ++++----
+ configs/orangepi_win_defconfig | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/orangepi_prime_defconfig b/configs/orangepi_prime_defconfig
-index f8f958c67b..d79d764fec 100644
---- a/configs/orangepi_prime_defconfig
-+++ b/configs/orangepi_prime_defconfig
-@@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+diff --git a/configs/orangepi_win_defconfig b/configs/orangepi_win_defconfig
+index 715ff3b711..882cfc360c 100644
+--- a/configs/orangepi_win_defconfig
++++ b/configs/orangepi_win_defconfig
+@@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
  
  # Firmware
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
