@@ -1,105 +1,44 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed,  9 Jun 2021 22:59:35 +0300
-Subject: [Buildroot] [PATCH v2 00/28] sunxi: use mainline
- arm-trusted-firmware
-Message-ID: <20210609200003.2866122-1-geomatsi@gmail.com>
+Date: Wed,  9 Jun 2021 22:59:37 +0300
+Subject: [Buildroot] [PATCH v2 02/28] support/testing: switch
+ TestATFAllwinner to mainline ATF
+In-Reply-To: <20210609200003.2866122-1-geomatsi@gmail.com>
+References: <20210609200003.2866122-1-geomatsi@gmail.com>
+Message-ID: <20210609200003.2866122-3-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Switch to mainline ATF that provides basic support for H5 and A64.
+Note that allwinner platform layer does not provide support for
+GCC stack protection, so make sure to disable this ATF feature.
 
-This is the second revision of the patch set that updates BSP on H5/A64
-sunxi boards. The following changes are suggested:
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
+ support/testing/tests/boot/test_atf.py | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-- introduce new ATF option to explicitly disable GCC stack protection
-  when platform does not support it
-- switch from early Allwinner ATF port to mainline ATF for all H6/A64 boards
-- bump Linux kernel version
-- bump U-Boot version
-  -- switch to combined u-boot-sunxi-with-spl.bin image
-  -- for now disable support for Allwinner SCP firmware
-
-Note that only ATF is modified for amarula_a64_relic_defconfig. That
-board uses vendor kernel from their github repo. I do not have any
-idea which tag/branch is better to use.
-
-Finally, let me re-iterate once again: I have only orangepi-zero-plus2
-board at my disposal. So only this board has been tested. For all the
-other boards only build tests have been completed. ATF provides only
-basic support for H5/A64 and SCP firmware is disabled, so I do not
-expect any surprises here. But still, any help with boot tests on
-other H5/A64 sunxi boards is more than welcome.
-
-Regards,
-Sergey
-
-v2:
-- as per Heiko Thiery suggestion, bump mainline ATF version to v2.5
-- cleanup commit messages: use 'mainline' instead of 'upstream'
-
-
-Sergey Matyukevich (28):
-  boot/arm-trusted-firmware: option to disable stack protection
-  support/testing: switch TestATFAllwinner to mainline ATF
-  support/testing/tests/boot/test_atf: update U-Boot in TestATFAllwinner
-  configs/orangepi_zero_plus2_defconfig: switch to mainline ATF
-  configs/bananapi_m64_defconfig: switch to mainline ATF
-  configs/orangepi_zero_plus_defconfig: switch to mainline ATF
-  configs/orangepi_pc2_defconfig: switch to mainline ATF
-  configs/orangepi_prime_defconfig: switch to mainline ATF
-  configs/orangepi_win_defconfig: switch to mainline ATF
-  configs/friendlyarm_nanopi_a64_defconfig: switch to mainline ATF
-  configs/friendlyarm_nanopi_neo2_defconfig: switch to mainline ATF
-  configs/friendlyarm_nanopi_neo_plus2_defconfig: switch to mainline ATF
-  configs/amarula_a64_relic_defconfig: switch to mainline ATF
-  configs/olimex_a64_olinuxino_defconfig: switch to mainline ATF
-  configs/pine64_defconfig: switch to mainline ATF
-  configs/pine64_sopine_defconfig: switch to mainline ATF
-  configs/orangepi-zero-plus2: bump BSP versions
-  configs/bananapi_m64_defconfig: bump BSP versions
-  configs/orangepi_zero_plus_defconfig: bump BSP versions
-  configs/orangepi_pc2_defconfig: bump BSP versions
-  configs/orangepi_prime_defconfig: bump BSP versions
-  configs/orangepi_win_defconfig: bump BSP versions
-  configs/friendlyarm_nanopi_a64_defconfig: bump BSP versions
-  configs/friendlyarm_nanopi_neo2_defconfig: bump BSP versions
-  configs/friendlyarm_nanopi_neo_plus2_defconfig: bump BSP versions
-  configs/olimex_a64_olinuxino_defconfig: bump BSP versions
-  configs/pine64_defconfig: bump BSP versions
-  configs/pine64_sopine_defconfig: bump BSP versions
-
- board/bananapi/bananapi-m64/genimage.cfg      | 10 ++------
- board/friendlyarm/nanopi-a64/genimage.cfg     | 10 ++------
- .../friendlyarm/nanopi-neo-plus2/genimage.cfg | 10 ++------
- board/friendlyarm/nanopi-neo2/genimage.cfg    | 10 ++------
- board/olimex/a64-olinuxino/genimage.cfg       | 10 ++------
- board/orangepi/orangepi-pc2/genimage.cfg      | 10 ++------
- board/orangepi/orangepi-prime/genimage.cfg    | 10 ++------
- board/orangepi/orangepi-win/genimage.cfg      | 10 ++------
- .../orangepi/orangepi-zero-plus/genimage.cfg  | 10 ++------
- .../orangepi/orangepi-zero-plus2/genimage.cfg | 10 ++------
- board/pine64/pine64/genimage.cfg              | 10 ++------
- board/pine64/sopine/genimage.cfg              | 10 ++------
- boot/arm-trusted-firmware/Config.in           |  7 ++++++
- .../arm-trusted-firmware.mk                   |  4 ++++
- configs/amarula_a64_relic_defconfig           |  8 +++----
- configs/bananapi_m64_defconfig                | 21 ++++++++---------
- configs/friendlyarm_nanopi_a64_defconfig      | 21 ++++++++---------
- configs/friendlyarm_nanopi_neo2_defconfig     | 21 ++++++++---------
- .../friendlyarm_nanopi_neo_plus2_defconfig    | 20 ++++++++--------
- configs/olimex_a64_olinuxino_defconfig        | 21 ++++++++---------
- configs/orangepi_pc2_defconfig                | 21 ++++++++---------
- configs/orangepi_prime_defconfig              | 21 ++++++++---------
- configs/orangepi_win_defconfig                | 23 ++++++++++---------
- configs/orangepi_zero_plus2_defconfig         | 19 ++++++++-------
- configs/orangepi_zero_plus_defconfig          | 19 ++++++++-------
- configs/pine64_defconfig                      | 22 +++++++++---------
- configs/pine64_sopine_defconfig               | 21 ++++++++---------
- support/testing/tests/boot/test_atf.py        | 16 ++++++-------
- 28 files changed, 168 insertions(+), 237 deletions(-)
-
+diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
+index e6c11aa742..868b13c9e6 100644
+--- a/support/testing/tests/boot/test_atf.py
++++ b/support/testing/tests/boot/test_atf.py
+@@ -33,10 +33,11 @@ class TestATFAllwinner(infra.basetest.BRTest):
+         BR2_TOOLCHAIN_EXTERNAL=y
+         BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+-        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+-        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_DISABLE_SSP=y
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+         BR2_TARGET_UBOOT=y
+         BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 -- 
 2.31.1
