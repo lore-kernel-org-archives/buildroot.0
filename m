@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed,  9 Jun 2021 22:59:58 +0300
-Subject: [Buildroot] [PATCH v2 23/28]
- configs/friendlyarm_nanopi_a64_defconfig: bump BSP versions
+Date: Wed,  9 Jun 2021 22:59:59 +0300
+Subject: [Buildroot] [PATCH v2 24/28]
+ configs/friendlyarm_nanopi_neo2_defconfig: bump BSP versions
 In-Reply-To: <20210609200003.2866122-1-geomatsi@gmail.com>
 References: <20210609200003.2866122-1-geomatsi@gmail.com>
-Message-ID: <20210609200003.2866122-24-geomatsi@gmail.com>
+Message-ID: <20210609200003.2866122-25-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,14 +29,14 @@ using custom U-Boot build options.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- board/friendlyarm/nanopi-a64/genimage.cfg | 10 ++--------
- configs/friendlyarm_nanopi_a64_defconfig  | 13 ++++++-------
+ board/friendlyarm/nanopi-neo2/genimage.cfg | 10 ++--------
+ configs/friendlyarm_nanopi_neo2_defconfig  | 13 ++++++-------
  2 files changed, 8 insertions(+), 15 deletions(-)
 
-diff --git a/board/friendlyarm/nanopi-a64/genimage.cfg b/board/friendlyarm/nanopi-a64/genimage.cfg
-index 66b6c5f461..778d89b2f6 100644
---- a/board/friendlyarm/nanopi-a64/genimage.cfg
-+++ b/board/friendlyarm/nanopi-a64/genimage.cfg
+diff --git a/board/friendlyarm/nanopi-neo2/genimage.cfg b/board/friendlyarm/nanopi-neo2/genimage.cfg
+index ebe123b758..c025289cb5 100644
+--- a/board/friendlyarm/nanopi-neo2/genimage.cfg
++++ b/board/friendlyarm/nanopi-neo2/genimage.cfg
 @@ -15,15 +15,9 @@ image sdcard.img {
  
  	partition spl {
@@ -55,10 +55,10 @@ index 66b6c5f461..778d89b2f6 100644
  	}
  
  	partition boot {
-diff --git a/configs/friendlyarm_nanopi_a64_defconfig b/configs/friendlyarm_nanopi_a64_defconfig
-index afb338e653..31e1491f1f 100644
---- a/configs/friendlyarm_nanopi_a64_defconfig
-+++ b/configs/friendlyarm_nanopi_a64_defconfig
+diff --git a/configs/friendlyarm_nanopi_neo2_defconfig b/configs/friendlyarm_nanopi_neo2_defconfig
+index 90d96f9e28..77136c26f0 100644
+--- a/configs/friendlyarm_nanopi_neo2_defconfig
++++ b/configs/friendlyarm_nanopi_neo2_defconfig
 @@ -2,8 +2,7 @@ BR2_aarch64=y
  BR2_cortex_a53=y
  BR2_ARM_FPU_VFPV4=y
@@ -69,13 +69,13 @@ index afb338e653..31e1491f1f 100644
  
  # Firmware
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-@@ -17,15 +16,15 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+@@ -17,15 +16,15 @@ R2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_a64"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo2"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
@@ -88,8 +88,8 @@ index afb338e653..31e1491f1f 100644
 +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
  BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-a64/boot.cmd"
-@@ -33,7 +32,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-a64/bo
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-neo2/boot.cmd"
+@@ -33,7 +32,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-neo2/b
  # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
@@ -97,6 +97,6 @@ index afb338e653..31e1491f1f 100644
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-nanopi-a64"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-nanopi-neo2"
 -- 
 2.31.1
