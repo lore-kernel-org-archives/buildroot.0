@@ -1,19 +1,19 @@
 From: Drew Fustini <drew@beagleboard.org>
-Date: Wed, 9 Jun 2021 10:42:34 -0700
+Date: Wed, 9 Jun 2021 10:49:37 -0700
 Subject: [Buildroot] [PATCH 1/3] beaglev: update to new starfive linux
  and u-boot
-In-Reply-To: <CAOCHtYghkr-KNaQ3jyD3Z6xg-sn1f9kWZGNhbkWg4Mv=W-rk5g@mail.gmail.com>
+In-Reply-To: <CAEUhbmXX-Qu-MHB_C3y=ECW4-uDqCS_KTbkS3kJzR3tcY3K1jw@mail.gmail.com>
 References: <20210609063834.2193864-1-drew@beagleboard.org>
- <CAOCHtYghkr-KNaQ3jyD3Z6xg-sn1f9kWZGNhbkWg4Mv=W-rk5g@mail.gmail.com>
-Message-ID: <20210609174234.GA2234548@x1>
+ <CAEUhbmXX-Qu-MHB_C3y=ECW4-uDqCS_KTbkS3kJzR3tcY3K1jw@mail.gmail.com>
+Message-ID: <20210609174937.GB2234548@x1>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 09, 2021 at 10:08:55AM -0500, Robert Nelson wrote:
-> On Wed, Jun 9, 2021 at 2:15 AM Drew Fustini <drew@beagleboard.org> wrote:
+On Wed, Jun 09, 2021 at 08:24:35PM +0800, Bin Meng wrote:
+> On Wed, Jun 9, 2021 at 3:15 PM Drew Fustini <drew@beagleboard.org> wrote:
 > >
 > > Update the commit id for u-boot to include fixes from the starfive-tech
 > > u-boot repository:
@@ -41,24 +41,34 @@ On Wed, Jun 09, 2021 at 10:08:55AM -0500, Robert Nelson wrote:
 > >
 > > Signed-off-by: Drew Fustini <drew@beagleboard.org>
 > > ---
+> >  board/beaglev/extlinux.conf                   |  2 +-
+> >  ...s-starfive-vic7100-adjust-fdt_addr_r.patch | 39 -------------------
+> >  board/beaglev/post-build.sh                   |  6 ---
+> >  configs/beaglev_defconfig                     | 15 +++----
+> >  4 files changed, 9 insertions(+), 53 deletions(-)
+> >  delete mode 100644 board/beaglev/patches/uboot/0001-include-configs-starfive-vic7100-adjust-fdt_addr_r.patch
+> >
 > 
+> Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
 > 
-> 
-> > +# HEAD of the 5.13 branch (esmil_starlight)
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,linux,83dba1f25dfc118cacec991c31a7a4cfa7405c89)/linux-83dba1f25dfc118cacec991c31a7a4cfa7405c89.tar.gz"
-> > +BR2_LINUX_KERNEL_DEFCONFIG="starlight"
-> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="starfive/jh7100-beaglev-starlight"
-> 
-> Careful, @Drew Fustini this branch get's rebased on every kernel rc..
-> Unless we manually create a tag, this sha will disappear next week..
+> No switch to upstream OpenSBI yet?
 
-I do not believe the commit [1] will ever go away as long as the repo
-still exists. But to make sure, I created buildroot-20210609 tag [2] to
-represent what is being used to indicate what is being used in upstream
+I attempted switching to upstream OpenSBI and generic platform but I
+could not get it to boot.  I do want to further troubleshoot that with
+you but, for now, I did not feel it is that important in the context of
 buildroot.
 
--Drew
+The urgency for this patch is to get buildroot pointing to the 5.13
+kernel as it has fixes for several problems in the older 5.10 kernel
+that buildroot currently points to.  A buildroot user looking at
+upstream right now would not know that we have moved on to 5.13.
 
-[1] https://github.com/starfive-tech/linux/commit/83dba1f25dfc118cacec991c31a7a4cfa7405c89
-[2] https://github.com/starfive-tech/linux/releases/tag/buildroot-20210609
+Another practical issue is that upstream OpensBI generates a much bigger
+fw_payload.bin.out. Commit 2524b0e [1] in starfive-tech/opensbi makes it
+easier for people doing uboot development as the xmodem transfer of
+fw_payload.bin.out is much faster.
+
+thanks,
+drew
+
+[1] https://github.com/starfive-tech/opensbi/commit/2524b0ecd8684b42bc7a4c69794f40f11cbbe2a5
