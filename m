@@ -1,82 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Jun 2021 22:54:26 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/boost: disable
- logs with riscv32
-Message-ID: <20210609202608.BF45181970@busybox.osuosl.org>
+Date: Wed, 9 Jun 2021 22:55:34 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/paho-mqtt-c:
+ security bump to version 1.3.9
+Message-ID: <20210609202608.CDDE88141E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbcf61a6d591ac97741a58c1ccc19938446c2ac1
+commit: https://git.buildroot.net/buildroot/commit/?id=0f35d6dca65f1eafe601982c4118f373da424cec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-boost logs can't be built with riscv32 because it unconditionally uses
-__NR_futex:
+Old security issue not fixed:
+https://github.com/eclipse/paho.mqtt.c/issues/1084
 
-libs/log/src/event.cpp: In member function 'void boost::log::v2_mt_posix::aux::futex_based_event::wait()':
-libs/log/src/event.cpp:38:29: error: '__NR_futex' was not declared in this scope
-   38 | #define BOOST_LOG_SYS_FUTEX __NR_futex
-      |                             ^~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/8c8135fd7c0517c66c9b3975c494da6d7934cc1b
+https://github.com/eclipse/paho.mqtt.c/milestone/16?closed=1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit d72350e62a0833e4d1527f4040da2063972bf9b3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 9dad1ef144077b92a8524a3311b1d598a306fdfb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/azmq/Config.in  | 3 +++
- package/boost/Config.in | 3 +++
- 2 files changed, 6 insertions(+)
+ package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
+ package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/azmq/Config.in b/package/azmq/Config.in
-index 37131a260a..6751d533a4 100644
---- a/package/azmq/Config.in
-+++ b/package/azmq/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_AZMQ
- 	bool "azmq"
-+	depends on !BR2_RISCV_32 # boost-log
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # boost-log
-@@ -22,9 +23,11 @@ config BR2_PACKAGE_AZMQ
- 	  https://github.com/zeromq/azmq
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
+index 5223757f0f..4cdedfbf9a 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.hash
++++ b/package/paho-mqtt-c/paho-mqtt-c.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  4920ff685344cdb0272568bc4414dcf48fcdfc4a98c78b1f3ca49c38417bf391  paho-mqtt-c-1.3.8.tar.gz
++sha256  386c9b5fa1cf6d0d516db12d57fd8f6a410dd0fdc5e9a2da870aae437a2535ed  paho-mqtt-c-1.3.9.tar.gz
+ sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
+ sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
+ sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index b9b4f217fb..68b58f2e02 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "azmq needs a toolchain w/ C++11, wchar and NPTL"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
- 		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
- 
- comment "azmq needs exception_ptr"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 9248c574f4..81b2b2727a 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -231,6 +231,7 @@ comment "boost-locale needs a toolchain not affected by GCC bug 64735"
- 
- config BR2_PACKAGE_BOOST_LOG
- 	bool "boost-log"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
-@@ -244,10 +245,12 @@ config BR2_PACKAGE_BOOST_LOG
- 	  Logging library.
- 
- comment "boost-log needs a toolchain w/ NPTL"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
- comment "boost-log needs a toolchain not affected by GCC bug 64735"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
- config BR2_PACKAGE_BOOST_MATH
+-PAHO_MQTT_C_VERSION = 1.3.8
++PAHO_MQTT_C_VERSION = 1.3.9
+ PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
+ PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
+ PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
