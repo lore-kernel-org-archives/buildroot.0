@@ -1,88 +1,80 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  9 Jun 2021 21:01:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Fix build for mips,
- 2nd attempt
-Message-ID: <20210609190141.996573-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  9 Jun 2021 21:06:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/filemq: drop -Werror
+Message-ID: <20210609190639.282968-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Drop -Werror to fix build failure with -DNDEBUG raised since commit
+5a8c50fe05afacc3cbe8e7347e238da9f242fab0
+
 Fixes:
-http://autobuild.buildroot.net/results/da0/da03909291e97c525eb1f53dfc743a1897f59d6e/
+ - http://autobuild.buildroot.org/results/cf4c45ed7ae2c5090ac6ba967497e0d42d5c5224
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ffmpeg/0003-libavutil-Fix-mips-build.patch | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ .../0001-configure.ac-drop-Werror.patch       | 36 +++++++++++++++++++
+ package/filemq/filemq.mk                      |  2 ++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 package/filemq/0001-configure.ac-drop-Werror.patch
 
-diff --git a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-index 7af01463e8..8b81e66981 100644
---- a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-+++ b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-@@ -8,7 +8,7 @@ Check for sys/auxv.h because not all toolchains contain this header.
- Fixes https://trac.ffmpeg.org/ticket/9138
+diff --git a/package/filemq/0001-configure.ac-drop-Werror.patch b/package/filemq/0001-configure.ac-drop-Werror.patch
+new file mode 100644
+index 0000000000..30d22f3f16
+--- /dev/null
++++ b/package/filemq/0001-configure.ac-drop-Werror.patch
+@@ -0,0 +1,36 @@
++From bb47bfcffcb7e7198a621c11a3764425044d128a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 9 Jun 2021 21:01:41 +0200
++Subject: [PATCH] configure.ac: drop -Werror
++
++Drop -Werror to avoid the following build failure with -DNDEBUG:
++
++src/filemq_client.c:7:6: error: variable 'rc' set but not used [-Werror=unused-but-set-variable]
++    7 |  int rc;
++      |      ^~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/cf4c45ed7ae2c5090ac6ba967497e0d42d5c5224
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/zeromq/filemq/pull/81]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 6e127f9..e925430 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -366,7 +366,7 @@ AC_C_BIGENDIAN
++ 
++ # These options are GNU compiler specific.
++ if test "x$GCC" = "xyes"; then
++-    CPPFLAGS="-pedantic -Werror -Wall -Wc++-compat ${CPPFLAGS}"
+++    CPPFLAGS="-pedantic -Wall -Wc++-compat ${CPPFLAGS}"
++ fi
++ 
++ AM_CONDITIONAL(ENABLE_SHARED, test "x$enable_shared" = "xyes")
++-- 
++2.30.2
++
+diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
+index 75d8bd992c..5947ccf980 100644
+--- a/package/filemq/filemq.mk
++++ b/package/filemq/filemq.mk
+@@ -13,6 +13,8 @@ FILEMQ_INSTALL_STAGING = YES
+ FILEMQ_DEPENDENCIES = czmq openssl zeromq
+ FILEMQ_LICENSE = MPL-2.0
+ FILEMQ_LICENSE_FILES = LICENSE
++# We're patching configure.ac
++FILEMQ_AUTORECONF = YES
  
- Patch sent upstream:
--http://ffmpeg.org/pipermail/ffmpeg-devel/2021-June/281037.html
-+http://ffmpeg.org/pipermail/ffmpeg-devel/2021-June/281272.html
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-@@ -17,7 +17,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-  2 files changed, 5 insertions(+), 3 deletions(-)
- 
- diff --git a/configure b/configure
--index 82367fd30d..b0154cb8b2 100755
-+index 6bfd98b384..773a7d516c 100755
- --- a/configure
- +++ b/configure
- @@ -2161,6 +2161,7 @@ HEADERS_LIST="
-@@ -28,7 +28,7 @@ index 82367fd30d..b0154cb8b2 100755
-      sys_param_h
-      sys_resource_h
-      sys_select_h
--@@ -6210,6 +6211,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
-+@@ -6218,6 +6219,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
-  check_headers windows.h
-  check_headers X11/extensions/XvMClib.h
-  check_headers asm/types.h
-@@ -37,7 +37,7 @@ index 82367fd30d..b0154cb8b2 100755
-  # it seems there are versions of clang in some distros that try to use the
-  # gcc headers, which explodes for stdatomic
- diff --git a/libavutil/mips/cpu.c b/libavutil/mips/cpu.c
--index 59619d54de..4738104cdd 100644
-+index 59619d54de..19196de50b 100644
- --- a/libavutil/mips/cpu.c
- +++ b/libavutil/mips/cpu.c
- @@ -19,7 +19,7 @@
-@@ -45,7 +45,7 @@ index 59619d54de..4738104cdd 100644
-  #include "libavutil/cpu_internal.h"
-  #include "config.h"
- -#if defined __linux__ || defined __ANDROID__
--+#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
-++#if (defined __linux__ || defined __ANDROID__) && HAVE_SYS_AUXV_H
-  #include <stdint.h>
-  #include <stdio.h>
-  #include <string.h>
-@@ -54,7 +54,7 @@ index 59619d54de..4738104cdd 100644
-  #endif
-  
- -#if defined __linux__ || defined __ANDROID__
--+#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
-++#if (defined __linux__ || defined __ANDROID__) && HAVE_SYS_AUXV_H
-  
-  #define HWCAP_LOONGSON_CPUCFG (1 << 14)
-  
-@@ -63,7 +63,7 @@ index 59619d54de..4738104cdd 100644
-  int ff_get_cpu_flags_mips(void)
-  {
- -#if defined __linux__ || defined __ANDROID__
--+#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
-++#if (defined __linux__ || defined __ANDROID__) && HAVE_SYS_AUXV_H
-      if (cpucfg_available())
-          return cpu_flags_cpucfg();
-      else
+ define FILEMQ_CREATE_CONFIG_DIR
+ 	mkdir -p $(@D)/config
 -- 
-2.29.2
+2.30.2
