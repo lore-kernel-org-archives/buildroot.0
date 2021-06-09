@@ -1,51 +1,123 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Jun 2021 22:56:31 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/mpv: security
- bump to version 0.33.1
-Message-ID: <20210609202608.D994B83B47@busybox.osuosl.org>
+Date: Wed, 9 Jun 2021 22:49:32 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libopenh264: fix
+ mips32 build
+Message-ID: <20210609202608.8B4197FCB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfbe193dc8667d72b9dfc5ce59d842b4fa593c58
+commit: https://git.buildroot.net/buildroot/commit/?id=2b054f52d72a259c1b02855e35487e83d8d174ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix CVE-2021-30145: A format string vulnerability in mpv through 0.33.0
-allows user-assisted remote attackers to achieve code execution via a
-crafted m3u playlist file.
+Fix build failure with mips32 which is raised since the addition of
+bootlin toolchains
 
-https://github.com/mpv-player/mpv/releases/tag/v0.33.1
+Fixes:
+ - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 34a387b5f68d2cc259d4fe641c128232edb6da62)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 52b875d3ac84c84c16fefe19cfec465697bffecb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpv/mpv.hash | 2 +-
- package/mpv/mpv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...common-inc-asmdefs_mmi.h-fix-mips32-build.patch | 89 ++++++++++++++++++++++
+ 1 file changed, 89 insertions(+)
 
-diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
-index 548a0f0159..0c7eb5f8a5 100644
---- a/package/mpv/mpv.hash
-+++ b/package/mpv/mpv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f1b9baf5dc2eeaf376597c28a6281facf6ed98ff3d567e3955c95bf2459520b4  mpv-0.33.0.tar.gz
-+sha256  100a116b9f23bdcda3a596e9f26be3a69f166a4f1d00910d1789b6571c46f3a9  mpv-0.33.1.tar.gz
- sha256  a99d7b0625a0566271aad6de694e52eafd566db024f9516720d526c680d3ee30  LICENSE.GPL
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index ca3b8c878a..5713b98e8e 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPV_VERSION = 0.33.0
-+MPV_VERSION = 0.33.1
- MPV_SITE = $(call github,mpv-player,mpv,v$(MPV_VERSION))
- MPV_DEPENDENCIES = \
- 	host-pkgconf ffmpeg libass zlib \
+diff --git a/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
+new file mode 100644
+index 0000000000..e11b1d13ef
+--- /dev/null
++++ b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
+@@ -0,0 +1,89 @@
++From c505f81e336088b6729a5407a03459f488353288 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 24 May 2021 22:54:01 +0200
++Subject: [PATCH] codec/common/inc/asmdefs_mmi.h: fix mips32 build
++
++Fix the following build failure on mips32 which is raised since version
++2.0.0 and
++https://github.com/cisco/openh264/commit/b13e5bceb18ebb93d0313b46aab4af6f480ca933:
++
++codec/common/mips/copy_mb_mmi.c: In function 'WelsCopy16x16_mmi':
++./codec/common/inc/asmdefs_mmi.h:293:21: error: '_ABI64' undeclared (first use in this function)
++  293 |    if (_MIPS_SIM == _ABI64)                                    \
++      |                     ^~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/cisco/openh264/pull/3384]
++---
++ codec/common/inc/asmdefs_mmi.h | 17 +++++++++++------
++ 1 file changed, 11 insertions(+), 6 deletions(-)
++
++diff --git a/codec/common/inc/asmdefs_mmi.h b/codec/common/inc/asmdefs_mmi.h
++index 69a7ae39..5d1aed93 100644
++--- a/codec/common/inc/asmdefs_mmi.h
+++++ b/codec/common/inc/asmdefs_mmi.h
++@@ -288,9 +288,9 @@
++ /**
++  * backup register
++  */
+++#if defined(_ABI64) && _MIPS_SIM == _ABI64
++ #define BACKUP_REG \
++    double __attribute__((aligned(16))) __back_temp[8];         \
++-   if (_MIPS_SIM == _ABI64)                                    \
++    __asm__ volatile (                                          \
++      "gssqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
++      "gssqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
++@@ -299,8 +299,10 @@
++      :                                                         \
++      : [temp]"r"(__back_temp)                                  \
++      : "memory"                                                \
++-   );                                                          \
++-  else                                                         \
+++   );
+++#else
+++#define BACKUP_REG \
+++   double __attribute__((aligned(16))) __back_temp[8];         \
++    __asm__ volatile (                                          \
++      "gssqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
++      "gssqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
++@@ -309,12 +311,13 @@
++      : [temp]"r"(__back_temp)                                  \
++      : "memory"                                                \
++    );
+++#endif
++ 
++ /**
++  * recover register
++  */
+++#if defined(_ABI64) && _MIPS_SIM == _ABI64
++ #define RECOVER_REG \
++-   if (_MIPS_SIM == _ABI64)                                    \
++    __asm__ volatile (                                          \
++      "gslqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
++      "gslqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
++@@ -323,8 +326,9 @@
++      :                                                         \
++      : [temp]"r"(__back_temp)                                  \
++      : "memory"                                                \
++-   );                                                          \
++-   else                                                        \
+++   );
+++#else
+++#define RECOVER_REG \
++    __asm__ volatile (                                          \
++      "gslqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
++      "gslqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
++@@ -333,6 +337,7 @@
++      : [temp]"r"(__back_temp)                                  \
++      : "memory"                                                \
++    );
+++#endif
++ 
++ # define OK             1
++ # define NOTOK          0
++-- 
++2.30.2
++
