@@ -1,123 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Jun 2021 22:49:32 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libopenh264: fix
- mips32 build
-Message-ID: <20210609202608.8B4197FCB4@busybox.osuosl.org>
+Date: Wed, 9 Jun 2021 22:45:57 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/pifmrds: always
+ link with -lm
+Message-ID: <20210609202608.6131B80FBE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b054f52d72a259c1b02855e35487e83d8d174ec
+commit: https://git.buildroot.net/buildroot/commit/?id=0b20376f67fd595ae0705c6c72b6c2eddcc90b51
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix build failure with mips32 which is raised since the addition of
-bootlin toolchains
+Commit 888546e5273d77d49bec564a515e85d7acee6bdd wrongly removed linking
+with -lm resulting in the following build failure:
+
+/home/buildroot/autobuild/run/instance-3/output-1/host/bin/arm-linux-gnueabihf-gcc  -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lsndfile
+/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/7.3.1/../../../../arm-linux-gnueabihf/bin/ld: fm_mpx.o: undefined reference to symbol 'cos@@GLIBC_2.4'
+/home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/lib/libm.so.6: error adding symbols: DSO missing from command line
 
 Fixes:
- - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
+ - http://autobuild.buildroot.org/results/b2a6e6fd77bf9071ce9f75fed1811be9ffe5366d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 52b875d3ac84c84c16fefe19cfec465697bffecb)
+(cherry picked from commit 8258081602cf0cacf182fccafdf2f437b1c3f5c5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...common-inc-asmdefs_mmi.h-fix-mips32-build.patch | 89 ++++++++++++++++++++++
- 1 file changed, 89 insertions(+)
+ package/pifmrds/0003-Makefile-fix-static-link.patch | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
-new file mode 100644
-index 0000000000..e11b1d13ef
---- /dev/null
-+++ b/package/libopenh264/0003-codec-common-inc-asmdefs_mmi.h-fix-mips32-build.patch
-@@ -0,0 +1,89 @@
-+From c505f81e336088b6729a5407a03459f488353288 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 24 May 2021 22:54:01 +0200
-+Subject: [PATCH] codec/common/inc/asmdefs_mmi.h: fix mips32 build
-+
-+Fix the following build failure on mips32 which is raised since version
-+2.0.0 and
-+https://github.com/cisco/openh264/commit/b13e5bceb18ebb93d0313b46aab4af6f480ca933:
-+
-+codec/common/mips/copy_mb_mmi.c: In function 'WelsCopy16x16_mmi':
-+./codec/common/inc/asmdefs_mmi.h:293:21: error: '_ABI64' undeclared (first use in this function)
-+  293 |    if (_MIPS_SIM == _ABI64)                                    \
-+      |                     ^~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/cisco/openh264/pull/3384]
-+---
-+ codec/common/inc/asmdefs_mmi.h | 17 +++++++++++------
-+ 1 file changed, 11 insertions(+), 6 deletions(-)
-+
-+diff --git a/codec/common/inc/asmdefs_mmi.h b/codec/common/inc/asmdefs_mmi.h
-+index 69a7ae39..5d1aed93 100644
-+--- a/codec/common/inc/asmdefs_mmi.h
-++++ b/codec/common/inc/asmdefs_mmi.h
-+@@ -288,9 +288,9 @@
-+ /**
-+  * backup register
-+  */
-++#if defined(_ABI64) && _MIPS_SIM == _ABI64
-+ #define BACKUP_REG \
-+    double __attribute__((aligned(16))) __back_temp[8];         \
-+-   if (_MIPS_SIM == _ABI64)                                    \
-+    __asm__ volatile (                                          \
-+      "gssqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
-+      "gssqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
-+@@ -299,8 +299,10 @@
-+      :                                                         \
-+      : [temp]"r"(__back_temp)                                  \
-+      : "memory"                                                \
-+-   );                                                          \
-+-  else                                                         \
-++   );
-++#else
-++#define BACKUP_REG \
-++   double __attribute__((aligned(16))) __back_temp[8];         \
-+    __asm__ volatile (                                          \
-+      "gssqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
-+      "gssqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
-+@@ -309,12 +311,13 @@
-+      : [temp]"r"(__back_temp)                                  \
-+      : "memory"                                                \
-+    );
-++#endif
-+ 
-+ /**
-+  * recover register
-+  */
-++#if defined(_ABI64) && _MIPS_SIM == _ABI64
-+ #define RECOVER_REG \
-+-   if (_MIPS_SIM == _ABI64)                                    \
-+    __asm__ volatile (                                          \
-+      "gslqc1       $f25,      $f24,       0x00(%[temp])  \n\t" \
-+      "gslqc1       $f27,      $f26,       0x10(%[temp])  \n\t" \
-+@@ -323,8 +326,9 @@
-+      :                                                         \
-+      : [temp]"r"(__back_temp)                                  \
-+      : "memory"                                                \
-+-   );                                                          \
-+-   else                                                        \
-++   );
-++#else
-++#define RECOVER_REG \
-+    __asm__ volatile (                                          \
-+      "gslqc1       $f22,      $f20,       0x00(%[temp])  \n\t" \
-+      "gslqc1       $f26,      $f24,       0x10(%[temp])  \n\t" \
-+@@ -333,6 +337,7 @@
-+      : [temp]"r"(__back_temp)                                  \
-+      : "memory"                                                \
-+    );
-++#endif
-+ 
-+ # define OK             1
-+ # define NOTOK          0
-+-- 
-+2.30.2
-+
+diff --git a/package/pifmrds/0003-Makefile-fix-static-link.patch b/package/pifmrds/0003-Makefile-fix-static-link.patch
+index 3bd91c981f..3832b77d59 100644
+--- a/package/pifmrds/0003-Makefile-fix-static-link.patch
++++ b/package/pifmrds/0003-Makefile-fix-static-link.patch
+@@ -15,11 +15,11 @@ diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pi
+  
+  app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
+ -	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
+-+	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o $(SNDFILE_LIBS)
+++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o $(SNDFILE_LIBS) -lm
+  
+  rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
+ -	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
+-+	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o $(SNDFILE_LIBS)
+++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o $(SNDFILE_LIBS) -lm
+  
+  rds.o: rds.c waveforms.h
+  	$(CC) $(CFLAGS) rds.c
