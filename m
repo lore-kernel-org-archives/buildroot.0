@@ -1,33 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 Jun 2021 23:36:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsoup: fix build with NLS
-In-Reply-To: <20210609210448.1267475-1-fontaine.fabrice@gmail.com>
-References: <20210609210448.1267475-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210609233616.4064c76c@windsurf>
+Date: Wed, 9 Jun 2021 23:40:15 +0200
+Subject: [Buildroot] [PATCH v2 01/28] boot/arm-trusted-firmware: option
+ to disable stack protection
+In-Reply-To: <20210609200003.2866122-2-geomatsi@gmail.com>
+References: <20210609200003.2866122-1-geomatsi@gmail.com>
+ <20210609200003.2866122-2-geomatsi@gmail.com>
+Message-ID: <20210609234015.1de2583f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  9 Jun 2021 23:04:48 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Wed,  9 Jun 2021 22:59:36 +0300
+Sergey Matyukevich <geomatsi@gmail.com> wrote:
 
-> Fix build failure with NLS raised since bump to version 2.72.0 in commit
-> 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1793753629d81476a3cd6fea40029cbd7de0206c
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libsoup/libsoup.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DISABLE_SSP
+> +	bool "Disable stack protection"
+> +	help
+> +	  Select this option to explicitly disable stack protection checks in GCC.
+> +	  Such checks need to be disabled if ATF platform port does not implement
+> +	  plat_get_stack_protector_canary() hook.
 
-Applied to master, thanks.
+It's a bit annoying that we have to tell TF-A about this. If TF-A
+doesn't implement plat_get_stack_protector_canary() for a certain
+platform, why does it try to enable SSP ? It feels like something that
+should be fixed in TF-A.
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
+Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
