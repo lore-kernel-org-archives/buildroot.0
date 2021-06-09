@@ -1,52 +1,38 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  9 Jun 2021 23:41:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libpsl: needs wchar
-Message-ID: <20210609214130.1593145-1-fontaine.fabrice@gmail.com>
+Date: Wed,  9 Jun 2021 23:54:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/netatalk: requires CAST and DES
+ support in openssl
+Message-ID: <20210609215422.1593908-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a dependency on wchar as both icu and libunistring needs wchar
+Enable CAST and DES in openssl to fix build failures raised since commit
+a83d41867c8d69a77d5cd0a665aa216af5340359
 
 Fixes:
- - http://autobuild.buildroot.org/results/704d8e6f8b78015180e5b12c132495425637430a
+ - http://autobuild.buildroot.org/results/b7347e3e4b828901dcb954f7cc37b712b80ac49b
+ - http://autobuild.buildroot.org/results/453c10ff24ef48f1340ec91412e504fe604033cf
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libpsl/Config.in  | 4 ++++
- package/libsoup/Config.in | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/netatalk/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libpsl/Config.in b/package/libpsl/Config.in
-index dd484799e7..de77ff8d10 100644
---- a/package/libpsl/Config.in
-+++ b/package/libpsl/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_LIBPSL
- 	bool "libpsl"
-+	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_LIBIDN2 if !BR2_PACKAGE_ICU && !BR2_PACKAGE_LIBIDN
- 	select BR2_PACKAGE_LIBUNISTRING if !BR2_PACKAGE_ICU
+diff --git a/package/netatalk/Config.in b/package/netatalk/Config.in
+index 1560a18747..9d0a8b2ec4 100644
+--- a/package/netatalk/Config.in
++++ b/package/netatalk/Config.in
+@@ -9,6 +9,8 @@ config BR2_PACKAGE_NETATALK
+ 	select BR2_PACKAGE_LIBEVENT
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBGPG_ERROR
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST if BR2_PACKAGE_LIBOPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
  	help
- 	  C library to handle the Public Suffix List of TLDs.
- 
- 	  https://github.com/rockdaboot/libpsl
-+
-+comment "libpsl needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index 47adfb33f2..0c0454c7c2 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBSOUP
- 	bool "libsoup"
--	depends on BR2_USE_WCHAR # glib2 and gnutls
-+	depends on BR2_USE_WCHAR # glib2, gnutls and libpsl
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	select BR2_PACKAGE_LIBXML2
+ 	  Netatalk can be used to turn a *NIX machine into an
+ 	  extremely high-performance and reliable file server for
 -- 
 2.30.2
