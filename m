@@ -1,49 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  9 Jun 2021 23:25:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsoup: always disable tls_check
-Message-ID: <20210609212503.1580411-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 9 Jun 2021 23:28:37 +0200
+Subject: [Buildroot] [git commit] package/libsoup: fix build with NLS
+Message-ID: <20210609205756.CC5A18C368@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Always disable tls_check to avoid the following build failure since bump to
-version 2.72.0 in commit 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da:
+commit: https://git.buildroot.net/buildroot/commit/?id=50fc126b8ecca747af1bb53f14fcb39b7b9965fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-../output-1/build/libsoup-2.72.0/meson.build:184:4: ERROR: Can not run test applications in this cross environment.
-
-tls_check will run code since
-https://gitlab.gnome.org/GNOME/libsoup/-/commit/5c45253243a2deca4880d4f614f2932373445cf9
+Fix build failure with NLS raised since bump to version 2.72.0 in commit
+8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da
 
 Fixes:
- - http://autobuild.buildroot.org/results/9e539dc7185cfb81f18438dd36357cb49ef23a5a
+ - http://autobuild.buildroot.org/results/1793753629d81476a3cd6fea40029cbd7de0206c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libsoup/libsoup.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/libsoup/libsoup.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index 2f63e9e85c..73c8c080c5 100644
+index 6711326711..2f63e9e85c 100644
 --- a/package/libsoup/libsoup.mk
 +++ b/package/libsoup/libsoup.mk
-@@ -30,6 +30,7 @@ LIBSOUP_CONF_OPTS = \
- 	-Dntlm=disabled \
- 	-Dsysprof=disabled \
- 	-Dtests=false \
-+	-Dtls_check=false \
- 	-Dvapi=disabled
+@@ -19,7 +19,10 @@ LIBSOUP_DEPENDENCIES = \
+ 	libglib2 \
+ 	libpsl \
+ 	libxml2 \
+-	sqlite
++	sqlite \
++	$(TARGET_NLS_DEPENDENCIES)
++
++LIBSOUP_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
  
- ifeq ($(BR2_PACKAGE_BROTLI),y)
-@@ -54,8 +55,6 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
- LIBSOUP_DEPENDENCIES += glib-networking
--else
--LIBSOUP_CONF_OPTS += -Dtls_check=false
- endif
- 
- $(eval $(meson-package))
--- 
-2.30.2
+ LIBSOUP_CONF_OPTS = \
+ 	-Dgssapi=disabled \
