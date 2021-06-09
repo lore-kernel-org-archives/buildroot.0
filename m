@@ -1,268 +1,102 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 9 Jun 2021 19:10:15 +0200
-Subject: [Buildroot] [PATCH] package/binutils: fix building or1k with
- host gcc version < 5
-In-Reply-To: <20210609162753.1138390-1-giulio.benetti@benettiengineering.com>
-References: <4db92b61-32e1-f4c0-4986-99ab2b1da09d@gmail.com>
- <20210609162753.1138390-1-giulio.benetti@benettiengineering.com>
-Message-ID: <2f086ddb-b50c-b914-4b3f-bbbf86f443bb@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  9 Jun 2021 19:11:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: fix build
+Message-ID: <20210609171127.79897-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Giulio,
+Drop 0002-meson.build-fix-build-with-uclibc-ng.patch which is not needed
+since 0dda1a44a0859fc15b318e493c151ca1d807ba24 which has been merged in
+master in commit 8d07baab43b5624ad6d73ee58f5a9d4ab8b27049
 
-Le 09/06/2021 ? 18:27, Giulio Benetti a ?crit?:
-> Add patches to fix building on hosts that provide gcc version < 5
-> (i.e. 4.9), otherwise they fail due to missing default '-std=gnu11' option
-> on variable declaration inside for loops.
-> 
-> The patch is pending upstream:
-> https://sourceware.org/pipermail/binutils/2021-June/116884.html
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+While at it, renumber
+0002-meson-fix-getrandom-detection-for-uclibc.patch to
+0001-meson-fix-getrandom-detection-for-uclibc.patch (patch number was
+wrong since its addition in commit
+b003cb5d16de9c92baba7dea7a6626c71cefc4fb) and also renumber remaining
+patch
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/4d442c61b137ca1bd2dd32c6802ff0251d39e7a5
 
-Best regards,
-Romain
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-fix-getrandom-detection-for-uclibc.patch} |  0
+ ...ch => 0002-fix-linking-with-latomic.patch} |  0
+ ...meson.build-fix-build-with-uclibc-ng.patch | 52 -------------------
+ 3 files changed, 52 deletions(-)
+ rename package/pipewire/{0002-meson-fix-getrandom-detection-for-uclibc.patch => 0001-meson-fix-getrandom-detection-for-uclibc.patch} (100%)
+ rename package/pipewire/{0003-fix-linking-with-latomic.patch => 0002-fix-linking-with-latomic.patch} (100%)
+ delete mode 100644 package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
 
-
-> ---
->  ...or1k-fix-building-with-gcc-version-5.patch | 50 +++++++++++++++++++
->  ...or1k-fix-building-with-gcc-version-5.patch | 50 +++++++++++++++++++
->  ...or1k-fix-building-with-gcc-version-5.patch | 50 +++++++++++++++++++
->  ...or1k-fix-building-with-gcc-version-5.patch | 50 +++++++++++++++++++
->  4 files changed, 200 insertions(+)
->  create mode 100644 package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
->  create mode 100644 package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
->  create mode 100644 package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
->  create mode 100644 package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-> 
-> diff --git a/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-> new file mode 100644
-> index 0000000000..c3978e22fa
-> --- /dev/null
-> +++ b/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-> @@ -0,0 +1,50 @@
-> +From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +Date: Wed, 9 Jun 2021 17:28:27 +0200
-> +Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-> +
-> +Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-> +an old compiler(i.e. gcc 4.9) build fails on:
-> +```
-> +elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-> +C99 or C11 mode
-> +    for (size_t i = 0; i < insn_count; i++)
-> +    ^
-> +```
-> +
-> +So let's declare `size_t i` at the top of the function instead of inside
-> +for loop.
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +---
-> + bfd/elf32-or1k.c | 5 +++--
-> + 1 file changed, 3 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-> +index 4ae7f324d33..32063ab0289 100644
-> +--- a/bfd/elf32-or1k.c
-> ++++ b/bfd/elf32-or1k.c
-> +@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-> + {
-> +   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-> +   unsigned output_insns[PLT_MAX_INSN_COUNT];
-> ++  size_t i;
-> + 
-> +   /* Copy instructions into the output buffer.  */
-> +-  for (size_t i = 0; i < insn_count; i++)
-> ++  for (i = 0; i < insn_count; i++)
-> +     output_insns[i] = insns[i];
-> + 
-> +   /* Honor the no-delay-slot setting.  */
-> +@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-> +     }
-> + 
-> +   /* Write out the output buffer.  */
-> +-  for (size_t i = 0; i < (insn_count+1); i++)
-> ++  for (i = 0; i < (insn_count+1); i++)
-> +     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-> + }
-> + 
-> +-- 
-> +2.25.1
-> +
-> diff --git a/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-> new file mode 100644
-> index 0000000000..c3978e22fa
-> --- /dev/null
-> +++ b/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-> @@ -0,0 +1,50 @@
-> +From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +Date: Wed, 9 Jun 2021 17:28:27 +0200
-> +Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-> +
-> +Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-> +an old compiler(i.e. gcc 4.9) build fails on:
-> +```
-> +elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-> +C99 or C11 mode
-> +    for (size_t i = 0; i < insn_count; i++)
-> +    ^
-> +```
-> +
-> +So let's declare `size_t i` at the top of the function instead of inside
-> +for loop.
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +---
-> + bfd/elf32-or1k.c | 5 +++--
-> + 1 file changed, 3 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-> +index 4ae7f324d33..32063ab0289 100644
-> +--- a/bfd/elf32-or1k.c
-> ++++ b/bfd/elf32-or1k.c
-> +@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-> + {
-> +   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-> +   unsigned output_insns[PLT_MAX_INSN_COUNT];
-> ++  size_t i;
-> + 
-> +   /* Copy instructions into the output buffer.  */
-> +-  for (size_t i = 0; i < insn_count; i++)
-> ++  for (i = 0; i < insn_count; i++)
-> +     output_insns[i] = insns[i];
-> + 
-> +   /* Honor the no-delay-slot setting.  */
-> +@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-> +     }
-> + 
-> +   /* Write out the output buffer.  */
-> +-  for (size_t i = 0; i < (insn_count+1); i++)
-> ++  for (i = 0; i < (insn_count+1); i++)
-> +     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-> + }
-> + 
-> +-- 
-> +2.25.1
-> +
-> diff --git a/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-> new file mode 100644
-> index 0000000000..c3978e22fa
-> --- /dev/null
-> +++ b/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-> @@ -0,0 +1,50 @@
-> +From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +Date: Wed, 9 Jun 2021 17:28:27 +0200
-> +Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-> +
-> +Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-> +an old compiler(i.e. gcc 4.9) build fails on:
-> +```
-> +elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-> +C99 or C11 mode
-> +    for (size_t i = 0; i < insn_count; i++)
-> +    ^
-> +```
-> +
-> +So let's declare `size_t i` at the top of the function instead of inside
-> +for loop.
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +---
-> + bfd/elf32-or1k.c | 5 +++--
-> + 1 file changed, 3 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-> +index 4ae7f324d33..32063ab0289 100644
-> +--- a/bfd/elf32-or1k.c
-> ++++ b/bfd/elf32-or1k.c
-> +@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-> + {
-> +   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-> +   unsigned output_insns[PLT_MAX_INSN_COUNT];
-> ++  size_t i;
-> + 
-> +   /* Copy instructions into the output buffer.  */
-> +-  for (size_t i = 0; i < insn_count; i++)
-> ++  for (i = 0; i < insn_count; i++)
-> +     output_insns[i] = insns[i];
-> + 
-> +   /* Honor the no-delay-slot setting.  */
-> +@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-> +     }
-> + 
-> +   /* Write out the output buffer.  */
-> +-  for (size_t i = 0; i < (insn_count+1); i++)
-> ++  for (i = 0; i < (insn_count+1); i++)
-> +     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-> + }
-> + 
-> +-- 
-> +2.25.1
-> +
-> diff --git a/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-> new file mode 100644
-> index 0000000000..c3978e22fa
-> --- /dev/null
-> +++ b/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-> @@ -0,0 +1,50 @@
-> +From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +Date: Wed, 9 Jun 2021 17:28:27 +0200
-> +Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-> +
-> +Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-> +an old compiler(i.e. gcc 4.9) build fails on:
-> +```
-> +elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-> +C99 or C11 mode
-> +    for (size_t i = 0; i < insn_count; i++)
-> +    ^
-> +```
-> +
-> +So let's declare `size_t i` at the top of the function instead of inside
-> +for loop.
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +---
-> + bfd/elf32-or1k.c | 5 +++--
-> + 1 file changed, 3 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-> +index 4ae7f324d33..32063ab0289 100644
-> +--- a/bfd/elf32-or1k.c
-> ++++ b/bfd/elf32-or1k.c
-> +@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-> + {
-> +   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-> +   unsigned output_insns[PLT_MAX_INSN_COUNT];
-> ++  size_t i;
-> + 
-> +   /* Copy instructions into the output buffer.  */
-> +-  for (size_t i = 0; i < insn_count; i++)
-> ++  for (i = 0; i < insn_count; i++)
-> +     output_insns[i] = insns[i];
-> + 
-> +   /* Honor the no-delay-slot setting.  */
-> +@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-> +     }
-> + 
-> +   /* Write out the output buffer.  */
-> +-  for (size_t i = 0; i < (insn_count+1); i++)
-> ++  for (i = 0; i < (insn_count+1); i++)
-> +     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-> + }
-> + 
-> +-- 
-> +2.25.1
-> +
-> 
+diff --git a/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch b/package/pipewire/0001-meson-fix-getrandom-detection-for-uclibc.patch
+similarity index 100%
+rename from package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
+rename to package/pipewire/0001-meson-fix-getrandom-detection-for-uclibc.patch
+diff --git a/package/pipewire/0003-fix-linking-with-latomic.patch b/package/pipewire/0002-fix-linking-with-latomic.patch
+similarity index 100%
+rename from package/pipewire/0003-fix-linking-with-latomic.patch
+rename to package/pipewire/0002-fix-linking-with-latomic.patch
+diff --git a/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch b/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
+deleted file mode 100644
+index 36b14d3f16..0000000000
+--- a/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 8f1de87381d270a8f4e5927187ae0466a9c9504a Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 4 May 2021 22:56:54 +0200
+-Subject: [PATCH] meson.build: fix build with uclibc-ng
+-
+-Build with uclib-ng fails since commit
+-a4b0b9afe5a782a7f4a8fe153ecf51bcb0180ae3 on:
+-
+-FAILED: src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o
+-/srv/storage/autobuild/run/instance-2/output-1/host/bin/mips64el-linux-gcc -Isrc/pipewire/libpipewire-0.3.so.0.326.0.p -Isrc/pipewire -I../src/pipewire -Isrc -I../src -I. -I.. -Ispa/include -I../spa/include -fdiagnostics-color=always -pipe -Wall -Winvalid-pch -Wextra -Wpedantic -std=gnu99 -O3 -fvisibility=hidden -Werror=suggest-attribute=format -Wsign-compare -Wpointer-arith -Wpointer-sign -Wformat -Wformat-security -Wimplicit-fallthrough -Wmissing-braces -Wtype-limits -Wvariadic-macros -Wno-missing-field-initializers -Wno-unused-parameter -Wno-pedantic -Wold-style-declaration -Wunused-result -DFASTPATH -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -pthread -DHAVE_CONFIG_H -D_GNU_SOURCE -D_POSIX_C_SOURCE -MD -MQ src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o -MF src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o.d -o src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o -c ../src/pipewire/impl-core.c
+-../src/pipewire/impl-core.c:54:9: error: conflicting types for 'getrandom'
+- ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
+-         ^~~~~~~~~
+-In file included from ../src/pipewire/impl-core.c:34:
+-/srv/storage/autobuild/run/instance-2/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:28:12: note: previous declaration of 'getrandom' was here
+- extern int getrandom(void *__buf, size_t count, unsigned int flags)
+-            ^~~~~~~~~
+-
+-Fix this build failure by adding -D_GNU_SOURCE as getrandom is protected
+-by:
+-
+-if defined __UCLIBC_LINUX_SPECIFIC__ && defined __USE_GNU
+-
+-Extracted from:
+- - https://github.com/wbx-github/uclibc-ng/blob/master/libc/sysdeps/linux/common/sys/random.h
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/a45f0ee009d90cef867dee4b1093225610fa10df
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/649]
+----
+- meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 0a9963fb..11b63c08 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -274,7 +274,7 @@ if cc.has_function('memfd_create', prefix : '#include <sys/mman.h>', args : [ '-
+-   cdata.set('HAVE_MEMFD_CREATE', 1)
+- endif
+- 
+--if cc.has_function('getrandom', prefix : '#include <sys/random.h>')
+-+if cc.has_function('getrandom', prefix : '#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
+-   cdata.set('HAVE_GETRANDOM', 1)
+- endif
+- 
+--- 
+-2.30.2
+-
+-- 
+2.30.2
