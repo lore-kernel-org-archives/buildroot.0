@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed,  9 Jun 2021 22:59:40 +0300
-Subject: [Buildroot] [PATCH v2 05/28] configs/bananapi_m64_defconfig: switch
- to mainline ATF
+Date: Wed,  9 Jun 2021 22:59:39 +0300
+Subject: [Buildroot] [PATCH v2 04/28] configs/orangepi_zero_plus2_defconfig:
+ switch to mainline ATF
 In-Reply-To: <20210609200003.2866122-1-geomatsi@gmail.com>
 References: <20210609200003.2866122-1-geomatsi@gmail.com>
-Message-ID: <20210609200003.2866122-6-geomatsi@gmail.com>
+Message-ID: <20210609200003.2866122-5-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,14 +17,14 @@ GCC stack protection, so make sure to disable this ATF feature.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- configs/bananapi_m64_defconfig | 8 ++++----
+ configs/orangepi_zero_plus2_defconfig | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/bananapi_m64_defconfig b/configs/bananapi_m64_defconfig
-index b93332ed21..12025d6e29 100644
---- a/configs/bananapi_m64_defconfig
-+++ b/configs/bananapi_m64_defconfig
-@@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
+index aa4c5c9413..b5f35da9b3 100644
+--- a/configs/orangepi_zero_plus2_defconfig
++++ b/configs/orangepi_zero_plus2_defconfig
+@@ -8,10 +8,10 @@ BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
  
  # Firmware
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
