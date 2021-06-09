@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed,  9 Jun 2021 23:00:01 +0300
-Subject: [Buildroot] [PATCH v2 26/28]
- configs/olimex_a64_olinuxino_defconfig: bump BSP versions
+Date: Wed,  9 Jun 2021 23:00:03 +0300
+Subject: [Buildroot] [PATCH v2 28/28] configs/pine64_sopine_defconfig: bump
+ BSP versions
 In-Reply-To: <20210609200003.2866122-1-geomatsi@gmail.com>
 References: <20210609200003.2866122-1-geomatsi@gmail.com>
-Message-ID: <20210609200003.2866122-27-geomatsi@gmail.com>
+Message-ID: <20210609200003.2866122-29-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,14 +29,14 @@ using custom U-Boot build options.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- board/olimex/a64-olinuxino/genimage.cfg | 10 ++--------
- configs/olimex_a64_olinuxino_defconfig  | 13 ++++++-------
+ board/pine64/sopine/genimage.cfg | 10 ++--------
+ configs/pine64_sopine_defconfig  | 13 ++++++-------
  2 files changed, 8 insertions(+), 15 deletions(-)
 
-diff --git a/board/olimex/a64-olinuxino/genimage.cfg b/board/olimex/a64-olinuxino/genimage.cfg
-index 328b68be19..0fe8c0283c 100644
---- a/board/olimex/a64-olinuxino/genimage.cfg
-+++ b/board/olimex/a64-olinuxino/genimage.cfg
+diff --git a/board/pine64/sopine/genimage.cfg b/board/pine64/sopine/genimage.cfg
+index 02ebe7ab9b..1f8c76c698 100644
+--- a/board/pine64/sopine/genimage.cfg
++++ b/board/pine64/sopine/genimage.cfg
 @@ -15,15 +15,9 @@ image sdcard.img {
  
  	partition spl {
@@ -55,10 +55,10 @@ index 328b68be19..0fe8c0283c 100644
  	}
  
  	partition boot {
-diff --git a/configs/olimex_a64_olinuxino_defconfig b/configs/olimex_a64_olinuxino_defconfig
-index a4169df564..1b348c47d6 100644
---- a/configs/olimex_a64_olinuxino_defconfig
-+++ b/configs/olimex_a64_olinuxino_defconfig
+diff --git a/configs/pine64_sopine_defconfig b/configs/pine64_sopine_defconfig
+index 8dc0751108..5bbe743e0e 100644
+--- a/configs/pine64_sopine_defconfig
++++ b/configs/pine64_sopine_defconfig
 @@ -2,8 +2,7 @@ BR2_aarch64=y
  BR2_cortex_a53=y
  BR2_ARM_FPU_VFPV4=y
@@ -75,7 +75,7 @@ index a4169df564..1b348c47d6 100644
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="a64-olinuxino"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sopine_baseboard"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
@@ -88,8 +88,8 @@ index a4169df564..1b348c47d6 100644
 +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
  BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/olimex/a64-olinuxino/boot.cmd"
-@@ -33,7 +32,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/olimex/a64-olinuxino/boot
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/pine64/sopine/boot.cmd"
+@@ -33,7 +32,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/pine64/sopine/boot.cmd"
  # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
@@ -97,6 +97,6 @@ index a4169df564..1b348c47d6 100644
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-olinuxino"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-sopine-baseboard"
 -- 
 2.31.1
