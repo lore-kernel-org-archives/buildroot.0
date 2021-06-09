@@ -1,50 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  9 Jun 2021 22:28:42 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] package/filemq: bump to
- af4768dcaf2fcb8083a32bad107a22ecb7a5d954
-Message-ID: <20210609202842.861825-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 09 Jun 2021 22:48:10 +0200
+Subject: [Buildroot] [git commit] package/pifmrds: always link with -lm
+In-Reply-To: <20210525193010.7159F7FA7C@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Tue, 25 May 2021 21:29:59 +0200")
+References: <20210525193010.7159F7FA7C@busybox.osuosl.org>
+Message-ID: <87v96mojcl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bump will drop -Werror to fix build failure with -DNDEBUG raised
-since commit 5a8c50fe05afacc3cbe8e7347e238da9f242fab0
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/cf4c45ed7ae2c5090ac6ba967497e0d42d5c5224
+ > commit: https://git.buildroot.net/buildroot/commit/?id=8258081602cf0cacf182fccafdf2f437b1c3f5c5
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Bump version now than PR has been merged upstream
+ > Commit 888546e5273d77d49bec564a515e85d7acee6bdd wrongly removed linking
+ > with -lm resulting in the following build failure:
 
- package/filemq/filemq.hash | 2 +-
- package/filemq/filemq.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > /home/buildroot/autobuild/run/instance-3/output-1/host/bin/arm-linux-gnueabihf-gcc  -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lsndfile
+ > /home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/7.3.1/../../../../arm-linux-gnueabihf/bin/ld: fm_mpx.o: undefined reference to symbol 'cos@@GLIBC_2.4'
+ > /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/lib/libm.so.6: error adding symbols: DSO missing from command line
 
-diff --git a/package/filemq/filemq.hash b/package/filemq/filemq.hash
-index 611d19208e..cf81eb4f50 100644
---- a/package/filemq/filemq.hash
-+++ b/package/filemq/filemq.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f3764e1adacfbf7fd09fb9c553e796a80d8159f1ace689fb68307afbc1746d4c  filemq-8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0.tar.gz
-+sha256  bdec8584a181e1c9a1d9be567768bcf8c3f7132ea701dd1829f74370c6536991  filemq-af4768dcaf2fcb8083a32bad107a22ecb7a5d954.tar.gz
- sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  LICENSE
-diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
-index 75d8bd992c..665d6da212 100644
---- a/package/filemq/filemq.mk
-+++ b/package/filemq/filemq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FILEMQ_VERSION = 8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0
-+FILEMQ_VERSION = af4768dcaf2fcb8083a32bad107a22ecb7a5d954
- FILEMQ_SITE = $(call github,zeromq,filemq,$(FILEMQ_VERSION))
- 
- FILEMQ_AUTORECONF = YES
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/b2a6e6fd77bf9071ce9f75fed1811be9ffe5366d
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed to 2021.02.x, thanks.
+
 -- 
-2.30.2
+Bye, Peter Korsgaard
