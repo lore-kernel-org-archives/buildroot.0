@@ -1,25 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Jun 2021 22:49:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libopenh264: fix mips32 build
-In-Reply-To: <20210524210529.353499-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 24 May 2021 23:05:29 +0200")
-References: <20210524210529.353499-1-fontaine.fabrice@gmail.com>
-Message-ID: <87im2moj9z.fsf@dell.be.48ers.dk>
+Date: Wed, 09 Jun 2021 22:52:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: select missing
+ multimedia deps
+In-Reply-To: <20210519213827.1291299-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Thu, 20 May 2021 00:38:27 +0300")
+References: <20210519213827.1291299-1-aperez@igalia.com>
+Message-ID: <87eedaoj4v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
- > Fix build failure with mips32 which is raised since the addition of
- > bootlin toolchains
+ > Select a few missing multimedia related dependencies:
+ > - BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT is needed for
+ >   "autoaudiosink"; not having this element can cause a crash as
+ >   it is used unconditionally.
+ > - BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA and
+ >   BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX are needed for
+ >   WebM video playback.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/cba3e9d0fd061cc3a92cb732bcdc2c7b66dbf6cb
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
 Committed to 2021.02.x, thanks.
 
