@@ -1,38 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  9 Jun 2021 23:54:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/netatalk: requires CAST and DES
- support in openssl
-Message-ID: <20210609215422.1593908-1-fontaine.fabrice@gmail.com>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Thu, 10 Jun 2021 01:03:56 +0300
+Subject: [Buildroot] [PATCH v2 01/28] boot/arm-trusted-firmware: option
+ to disable stack protection
+In-Reply-To: <20210609234015.1de2583f@windsurf>
+References: <20210609200003.2866122-1-geomatsi@gmail.com>
+ <20210609200003.2866122-2-geomatsi@gmail.com>
+ <20210609234015.1de2583f@windsurf>
+Message-ID: <YME6zLv85ivVOkpi@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable CAST and DES in openssl to fix build failures raised since commit
-a83d41867c8d69a77d5cd0a665aa216af5340359
+Hello Thomas,
 
-Fixes:
- - http://autobuild.buildroot.org/results/b7347e3e4b828901dcb954f7cc37b712b80ac49b
- - http://autobuild.buildroot.org/results/453c10ff24ef48f1340ec91412e504fe604033cf
+> > +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DISABLE_SSP
+> > +	bool "Disable stack protection"
+> > +	help
+> > +	  Select this option to explicitly disable stack protection checks in GCC.
+> > +	  Such checks need to be disabled if ATF platform port does not implement
+> > +	  plat_get_stack_protector_canary() hook.
+> 
+> It's a bit annoying that we have to tell TF-A about this. If TF-A
+> doesn't implement plat_get_stack_protector_canary() for a certain
+> platform, why does it try to enable SSP ? It feels like something that
+> should be fixed in TF-A.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/netatalk/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+TF-A does not attempt to enable those protection checks. This is
+controlled by its ENABLE_STACK_PROTECTOR build flag, which default
+value is 'none'. This is Buildroot who tries to enable TF-A stack
+protection checks depending on BR2_SSP_* toolchain features only:
+see arm-trusted-firmware.mk.
 
-diff --git a/package/netatalk/Config.in b/package/netatalk/Config.in
-index 1560a18747..9d0a8b2ec4 100644
---- a/package/netatalk/Config.in
-+++ b/package/netatalk/Config.in
-@@ -9,6 +9,8 @@ config BR2_PACKAGE_NETATALK
- 	select BR2_PACKAGE_LIBEVENT
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBGPG_ERROR
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  Netatalk can be used to turn a *NIX machine into an
- 	  extremely high-performance and reliable file server for
--- 
-2.30.2
+Regards,
+Sergey
