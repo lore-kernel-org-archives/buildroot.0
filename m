@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed,  9 Jun 2021 22:59:53 +0300
-Subject: [Buildroot] [PATCH v2 18/28] configs/bananapi_m64_defconfig: bump
- BSP versions
+Date: Wed,  9 Jun 2021 22:59:54 +0300
+Subject: [Buildroot] [PATCH v2 19/28] configs/orangepi_zero_plus_defconfig:
+ bump BSP versions
 In-Reply-To: <20210609200003.2866122-1-geomatsi@gmail.com>
 References: <20210609200003.2866122-1-geomatsi@gmail.com>
-Message-ID: <20210609200003.2866122-19-geomatsi@gmail.com>
+Message-ID: <20210609200003.2866122-20-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,14 +29,14 @@ using custom U-Boot build options.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- board/bananapi/bananapi-m64/genimage.cfg | 10 ++--------
- configs/bananapi_m64_defconfig           | 13 ++++++-------
- 2 files changed, 8 insertions(+), 15 deletions(-)
+ board/orangepi/orangepi-zero-plus/genimage.cfg | 10 ++--------
+ configs/orangepi_zero_plus_defconfig           | 11 +++++------
+ 2 files changed, 7 insertions(+), 14 deletions(-)
 
-diff --git a/board/bananapi/bananapi-m64/genimage.cfg b/board/bananapi/bananapi-m64/genimage.cfg
-index 9730d8faac..dcd57f8f97 100644
---- a/board/bananapi/bananapi-m64/genimage.cfg
-+++ b/board/bananapi/bananapi-m64/genimage.cfg
+diff --git a/board/orangepi/orangepi-zero-plus/genimage.cfg b/board/orangepi/orangepi-zero-plus/genimage.cfg
+index ec15898ddd..13f42533ca 100644
+--- a/board/orangepi/orangepi-zero-plus/genimage.cfg
++++ b/board/orangepi/orangepi-zero-plus/genimage.cfg
 @@ -15,15 +15,9 @@ image sdcard.img {
  
  	partition spl {
@@ -55,29 +55,28 @@ index 9730d8faac..dcd57f8f97 100644
  	}
  
  	partition boot {
-diff --git a/configs/bananapi_m64_defconfig b/configs/bananapi_m64_defconfig
-index 12025d6e29..70975886ec 100644
---- a/configs/bananapi_m64_defconfig
-+++ b/configs/bananapi_m64_defconfig
-@@ -2,8 +2,7 @@ BR2_aarch64=y
+diff --git a/configs/orangepi_zero_plus_defconfig b/configs/orangepi_zero_plus_defconfig
+index 790dfff276..76dbbcdb6d 100644
+--- a/configs/orangepi_zero_plus_defconfig
++++ b/configs/orangepi_zero_plus_defconfig
+@@ -2,7 +2,7 @@ BR2_aarch64=y
  BR2_cortex_a53=y
  BR2_ARM_FPU_VFPV4=y
  
--# Linux headers same as kernel, a 5.0 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_SYSTEM_DHCP="eth0"
  
- # Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-@@ -17,15 +16,15 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+@@ -18,16 +18,15 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero_plus"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
  BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
 -BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
@@ -88,15 +87,15 @@ index 12025d6e29..70975886ec 100644
 +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
  BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m64/boot.cmd"
-@@ -33,7 +32,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m64/boo
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-plus/boot.cmd"
+@@ -35,7 +34,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-pl
  # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.19"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-bananapi-m64"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-zero-plus"
 -- 
 2.31.1
