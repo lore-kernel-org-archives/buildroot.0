@@ -1,48 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed,  9 Jun 2021 10:16:20 +0200
-Subject: [Buildroot] [PATCH] docs/website: change wording about training
- provided by Bootlin
-Message-ID: <20210609081620.427629-1-thomas.petazzoni@bootlin.com>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Wed, 09 Jun 2021 10:31:30 +0200
+Subject: [Buildroot] [PATCH v5 0/5] Introduce bmap-tools as target +
+ host package
+In-Reply-To: <20210609095022.4f59aa2f@windsurf>
+References: <20210607204221.124908-1-thomas.petazzoni@bootlin.com>
+ <6e9afcd08150926a669d4df1198461e0acc7f063.camel@orolia.com>
+ <20210609095022.4f59aa2f@windsurf>
+Message-ID: <c36d6e9234c92cc4b17697073c2b70d5243d562e.camel@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As suggested by Yann, let's avoid announcing the exact date of the
-next course, as it gets outdated very often. Instead, use a more
-generic wording and simply point to a Bootlin page that has all the
-details.
+> Thanks a lot for the testing! I'll double check, but I believe the
+> tests were working here. But of course, I've done quite a bit of back
+> and forth, so let's double check :)
+> 
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/website/docs.html | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+For the 64M thing, maybe a difference in qemu versions?
+I'm using debian bullseye (11) and my qemu version is:
+$ qemu-system-arm  --version
+QEMU emulator version 5.2.0 (Debian 1:5.2+dfsg-10)
+Copyright (c) 2003-2020 Fabrice Bellard and the QEMU Project developers
 
-diff --git a/docs/website/docs.html b/docs/website/docs.html
-index e8d8138565..85b005004d 100644
---- a/docs/website/docs.html
-+++ b/docs/website/docs.html
-@@ -108,14 +108,13 @@
- 	  </div>
- 
- 	  <div class="panel panel-default">
--	    <div class="panel-heading">Public training course</div>
-+	    <div class="panel-heading">Public online training course</div>
- 	    <div class="panel-body">
--	      The next online public training course on Buildroot
--	      organized
--	      by <a href="https://www.bootlin.com">Bootlin</a> will
--	      take place from May 31 to June 4, 2021, with Thomas Petazzoni as
--	      trainer. <a href="https://bootlin.com/training/buildroot/">Infos</a>
--	      and <a href="https://www.eventbrite.com/e/bootlin-embedded-linux-development-with-buildroot-training-seminar-tickets-145276318379">registration</a>.
-+	      Regular online training courses, available to individual
-+	      registration, are proposed by Bootlin, with Thomas
-+	      Petazzoni as
-+	      trainer. See <a href="https://bootlin.com/training/buildroot/">next
-+	      dates and registration details</a>.
- 	    </div>
- 	  </div>
- 	</div>
--- 
-2.31.1
+About the timeout, I bet it was due to the work load, because I can't
+reproduce it today, when the activity on my machine is low.
+That said, the execution times range between 13s to 16s which makes me
+say that the orinigal 20s limit was maybe too optimistic.
+Maybe 60 seconds is not strictly required, but at least something like
+40s would be safer.
+
+> > And I have a question, is keeping python 2 compatibility still
+> > required? Shouldn't we get rid of this test? It'd save quite an
+> > amount
+> > of CPU time :)
+> 
+> python2 is already marked deprecated in BR, and we're more and more
+> thinking of getting rid of it. I think this may happen in the near
+> future.
+> 
+> Best regards,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
