@@ -1,10 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed,  9 Jun 2021 22:59:46 +0300
-Subject: [Buildroot] [PATCH v2 11/28]
- configs/friendlyarm_nanopi_neo2_defconfig: switch to mainline ATF
+Date: Wed,  9 Jun 2021 22:59:45 +0300
+Subject: [Buildroot] [PATCH v2 10/28]
+ configs/friendlyarm_nanopi_a64_defconfig: switch to mainline ATF
 In-Reply-To: <20210609200003.2866122-1-geomatsi@gmail.com>
 References: <20210609200003.2866122-1-geomatsi@gmail.com>
-Message-ID: <20210609200003.2866122-12-geomatsi@gmail.com>
+Message-ID: <20210609200003.2866122-11-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,13 +17,13 @@ GCC stack protection, so make sure to disable this ATF feature.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- configs/friendlyarm_nanopi_neo2_defconfig | 8 ++++----
+ configs/friendlyarm_nanopi_a64_defconfig | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/friendlyarm_nanopi_neo2_defconfig b/configs/friendlyarm_nanopi_neo2_defconfig
-index 9262737b88..90d96f9e28 100644
---- a/configs/friendlyarm_nanopi_neo2_defconfig
-+++ b/configs/friendlyarm_nanopi_neo2_defconfig
+diff --git a/configs/friendlyarm_nanopi_a64_defconfig b/configs/friendlyarm_nanopi_a64_defconfig
+index 4df22b2a2f..afb338e653 100644
+--- a/configs/friendlyarm_nanopi_a64_defconfig
++++ b/configs/friendlyarm_nanopi_a64_defconfig
 @@ -7,10 +7,10 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
  
  # Firmware
@@ -36,7 +36,7 @@ index 9262737b88..90d96f9e28 100644
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_DISABLE_SSP=y
- R2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
  
  # Bootloader
 -- 
