@@ -1,60 +1,258 @@
-From: Robert Nelson <robertcnelson@gmail.com>
-Date: Wed, 9 Jun 2021 10:08:55 -0500
-Subject: [Buildroot] [PATCH 1/3] beaglev: update to new starfive linux
- and u-boot
-In-Reply-To: <20210609063834.2193864-1-drew@beagleboard.org>
-References: <20210609063834.2193864-1-drew@beagleboard.org>
-Message-ID: <CAOCHtYghkr-KNaQ3jyD3Z6xg-sn1f9kWZGNhbkWg4Mv=W-rk5g@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed,  9 Jun 2021 18:27:53 +0200
+Subject: [Buildroot] [PATCH] package/binutils: fix building or1k with host
+ gcc version < 5
+In-Reply-To: <4db92b61-32e1-f4c0-4986-99ab2b1da09d@gmail.com>
+References: <4db92b61-32e1-f4c0-4986-99ab2b1da09d@gmail.com>
+Message-ID: <20210609162753.1138390-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 9, 2021 at 2:15 AM Drew Fustini <drew@beagleboard.org> wrote:
->
-> Update the commit id for u-boot to include fixes from the starfive-tech
-> u-boot repository:
->
-> 494e5ef7b807 jh7100: Enable full 2M L2 cache
-> 4571f5a4e1e4 vic7100: enable cache ways (L2 cache)
-> abb06422a5cd Remove fdt_high and initrd_high for Starfive
-> 93099a61c7b0 starfive: beaglev: Disable SIFIVE_CLINT and enable RISCV_TIMER
-> bfb5abac3d1f Revert "riscv: Enable the SiFive CLINT block driver in S-Mode(VIC7100 ONLY)"
-> 7b70e1d44ba9 defconfig: enable cache_wayenable for better performance
-> 7c585978616b configs: earlycon=sbi is deprecated
->
-> The commit abb06422a5cd ("Remove fdt_high and initrd_high for Starfive")
-> has removed the need for buildroot to patch the fdt_addr_r address.
->
-> Update linux from commit in the old 5.10 branch that Fedora image was
-> using to head of esmil_starlight branch [1] which is currently based
-> on 5.13-rc5 and represents the best kernel for this board [2].
->
-> In addition, the updated kernel now has jh7100-beaglev-starlight.dtb so
-> buildroot no longer needs to copy the dtb from u-boot.
->
-> [1] https://github.com/starfive-tech/linux/tree/esmil_starlight
-> [2] https://github.com/starfive-tech/linux/issues/26
->
-> Signed-off-by: Drew Fustini <drew@beagleboard.org>
-> ---
+Add patches to fix building on hosts that provide gcc version < 5
+(i.e. 4.9), otherwise they fail due to missing default '-std=gnu11' option
+on variable declaration inside for loops.
 
+The patch is pending upstream:
+https://sourceware.org/pipermail/binutils/2021-June/116884.html
 
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ ...or1k-fix-building-with-gcc-version-5.patch | 50 +++++++++++++++++++
+ ...or1k-fix-building-with-gcc-version-5.patch | 50 +++++++++++++++++++
+ ...or1k-fix-building-with-gcc-version-5.patch | 50 +++++++++++++++++++
+ ...or1k-fix-building-with-gcc-version-5.patch | 50 +++++++++++++++++++
+ 4 files changed, 200 insertions(+)
+ create mode 100644 package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+ create mode 100644 package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+ create mode 100644 package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+ create mode 100644 package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
 
-> +# HEAD of the 5.13 branch (esmil_starlight)
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,linux,83dba1f25dfc118cacec991c31a7a4cfa7405c89)/linux-83dba1f25dfc118cacec991c31a7a4cfa7405c89.tar.gz"
-> +BR2_LINUX_KERNEL_DEFCONFIG="starlight"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="starfive/jh7100-beaglev-starlight"
-
-Careful, @Drew Fustini this branch get's rebased on every kernel rc..
-Unless we manually create a tag, this sha will disappear next week..
-
-https://github.com/starfive-tech/linux/tree/esmil_starlight
-
-Regards,
-
+diff --git a/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+new file mode 100644
+index 0000000000..c3978e22fa
+--- /dev/null
++++ b/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+@@ -0,0 +1,50 @@
++From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 9 Jun 2021 17:28:27 +0200
++Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
++
++Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
++an old compiler(i.e. gcc 4.9) build fails on:
++```
++elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
++C99 or C11 mode
++    for (size_t i = 0; i < insn_count; i++)
++    ^
++```
++
++So let's declare `size_t i` at the top of the function instead of inside
++for loop.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 4ae7f324d33..32063ab0289 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++ {
++   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
++   unsigned output_insns[PLT_MAX_INSN_COUNT];
+++  size_t i;
++ 
++   /* Copy instructions into the output buffer.  */
++-  for (size_t i = 0; i < insn_count; i++)
+++  for (i = 0; i < insn_count; i++)
++     output_insns[i] = insns[i];
++ 
++   /* Honor the no-delay-slot setting.  */
++@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++     }
++ 
++   /* Write out the output buffer.  */
++-  for (size_t i = 0; i < (insn_count+1); i++)
+++  for (i = 0; i < (insn_count+1); i++)
++     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
++ }
++ 
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+new file mode 100644
+index 0000000000..c3978e22fa
+--- /dev/null
++++ b/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+@@ -0,0 +1,50 @@
++From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 9 Jun 2021 17:28:27 +0200
++Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
++
++Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
++an old compiler(i.e. gcc 4.9) build fails on:
++```
++elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
++C99 or C11 mode
++    for (size_t i = 0; i < insn_count; i++)
++    ^
++```
++
++So let's declare `size_t i` at the top of the function instead of inside
++for loop.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 4ae7f324d33..32063ab0289 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++ {
++   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
++   unsigned output_insns[PLT_MAX_INSN_COUNT];
+++  size_t i;
++ 
++   /* Copy instructions into the output buffer.  */
++-  for (size_t i = 0; i < insn_count; i++)
+++  for (i = 0; i < insn_count; i++)
++     output_insns[i] = insns[i];
++ 
++   /* Honor the no-delay-slot setting.  */
++@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++     }
++ 
++   /* Write out the output buffer.  */
++-  for (size_t i = 0; i < (insn_count+1); i++)
+++  for (i = 0; i < (insn_count+1); i++)
++     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
++ }
++ 
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+new file mode 100644
+index 0000000000..c3978e22fa
+--- /dev/null
++++ b/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+@@ -0,0 +1,50 @@
++From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 9 Jun 2021 17:28:27 +0200
++Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
++
++Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
++an old compiler(i.e. gcc 4.9) build fails on:
++```
++elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
++C99 or C11 mode
++    for (size_t i = 0; i < insn_count; i++)
++    ^
++```
++
++So let's declare `size_t i` at the top of the function instead of inside
++for loop.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 4ae7f324d33..32063ab0289 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++ {
++   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
++   unsigned output_insns[PLT_MAX_INSN_COUNT];
+++  size_t i;
++ 
++   /* Copy instructions into the output buffer.  */
++-  for (size_t i = 0; i < insn_count; i++)
+++  for (i = 0; i < insn_count; i++)
++     output_insns[i] = insns[i];
++ 
++   /* Honor the no-delay-slot setting.  */
++@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++     }
++ 
++   /* Write out the output buffer.  */
++-  for (size_t i = 0; i < (insn_count+1); i++)
+++  for (i = 0; i < (insn_count+1); i++)
++     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
++ }
++ 
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+new file mode 100644
+index 0000000000..c3978e22fa
+--- /dev/null
++++ b/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+@@ -0,0 +1,50 @@
++From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 9 Jun 2021 17:28:27 +0200
++Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
++
++Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
++an old compiler(i.e. gcc 4.9) build fails on:
++```
++elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
++C99 or C11 mode
++    for (size_t i = 0; i < insn_count; i++)
++    ^
++```
++
++So let's declare `size_t i` at the top of the function instead of inside
++for loop.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 4ae7f324d33..32063ab0289 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++ {
++   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
++   unsigned output_insns[PLT_MAX_INSN_COUNT];
+++  size_t i;
++ 
++   /* Copy instructions into the output buffer.  */
++-  for (size_t i = 0; i < insn_count; i++)
+++  for (i = 0; i < insn_count; i++)
++     output_insns[i] = insns[i];
++ 
++   /* Honor the no-delay-slot setting.  */
++@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++     }
++ 
++   /* Write out the output buffer.  */
++-  for (size_t i = 0; i < (insn_count+1); i++)
+++  for (i = 0; i < (insn_count+1); i++)
++     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
++ }
++ 
++-- 
++2.25.1
++
 -- 
-Robert Nelson
-https://rcn-ee.com/
+2.25.1
