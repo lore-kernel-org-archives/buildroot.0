@@ -1,43 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 22:15:55 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/odb: fix build
- with gcc 11
-Message-ID: <20210610194753.D7A438C9FB@busybox.osuosl.org>
+Date: Thu, 10 Jun 2021 22:15:01 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/efibootmgr: fix
+ comment
+Message-ID: <20210610194753.CD2838132C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a2437870b9fb3fd9d9047f5e618a554134783a8
+commit: https://git.buildroot.net/buildroot/commit/?id=f92c96915eb70f0aba3a93a153ce916d3ab70762
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Add -std=c++11 to fix the following build failure with gcc 11:
+Building efibootmgr with a musl toolchain is possible.
 
-/data/buildroot-autobuilder/instance-0/output-1/host/include/cutl/shared-ptr/base.hxx:34:41: error: ISO C++17 does not allow dynamic exception specifications
-   34 | operator new (std::size_t, cutl::share) throw (std::bad_alloc);
-      |                                         ^~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/9cbb8be7a1d8ac5913fbc5e2a78c4c45b5daf8e2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ac9855e761443dee4f9d461b83e12443d37e8678)
+(cherry picked from commit b7d6149b681d4bf4eccdbafe7deee394e075f607)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/odb/odb.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/efibootmgr/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/odb/odb.mk b/package/odb/odb.mk
-index 11086471e6..85c7ccb8bb 100644
---- a/package/odb/odb.mk
-+++ b/package/odb/odb.mk
-@@ -11,6 +11,7 @@ ODB_SITE = https://www.codesynthesis.com/download/odb/$(ODB_VERSION_MAJOR)
- ODB_LICENSE = GPL-3.0
- ODB_LICENSE_FILES = LICENSE
- HOST_ODB_DEPENDENCIES = host-libcutl
-+HOST_ODB_CONF_ENV = CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
+diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
+index d31f9b13ee..98ff71c996 100644
+--- a/package/efibootmgr/Config.in
++++ b/package/efibootmgr/Config.in
+@@ -15,7 +15,7 @@ config BR2_PACKAGE_EFIBOOTMGR
  
- # Prevent odb from trying to install the gcc plugin into the hosts
- # gcc plugin directory. Instead, this will install the gcc plugin
+ 	  https://github.com/rhboot/efibootmgr
+ 
+-comment "efibootmgr needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
++comment "efibootmgr needs a toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
+ 	depends on BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
