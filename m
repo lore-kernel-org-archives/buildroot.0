@@ -1,139 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 22:12:32 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/apache: security
- bump version to 2.4.48
-Message-ID: <20210610194753.B539D8132C@busybox.osuosl.org>
+Date: Thu, 10 Jun 2021 22:16:39 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/gptfdisk:
+ security bump version to 1.0.7
+Message-ID: <20210610194753.E38FA7FF07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9c25c425722b180067857d832bc84a80ef5e7a4
+commit: https://git.buildroot.net/buildroot/commit/?id=ea0a8d3ffda623e1280a43478b8e84b85d56181d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Changelog: https://downloads.apache.org/httpd/CHANGES_2.4.48
+Release notes:
+https://sourceforge.net/p/gptfdisk/code/ci/master/tree/NEWS
 
-Fixes CVE-2021-31618:
-mod_http2: Fix a potential NULL pointer dereference [Ivan Zhakov]
+Version 1.0.6 fixes CVE-2020-0256 & CVE-2021-0308.
 
-Removed patch 0004 which is included in upstream release.
+Removed md5 hash.
+
+Rebased patch due to upstream commit
+https://sourceforge.net/p/gptfdisk/code/ci/6180deb472c302c47f4d4acff8f2123d10824364/#diff-3
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 351122979b2841560f0e3e5278e183579daa1419)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 75d5e8fb9cd68388f1ae2f3724fef988b0fb4b70)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...c-ap_log_pid-Use-a-temporary-file-then-re.patch | 77 ----------------------
- package/apache/apache.hash                         |  4 +-
- package/apache/apache.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 80 deletions(-)
+ ...0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch | 2 +-
+ package/gptfdisk/gptfdisk.hash                                     | 7 +++----
+ package/gptfdisk/gptfdisk.mk                                       | 2 +-
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/apache/0004-server-log.c-ap_log_pid-Use-a-temporary-file-then-re.patch b/package/apache/0004-server-log.c-ap_log_pid-Use-a-temporary-file-then-re.patch
-deleted file mode 100644
-index af3cd47a30..0000000000
---- a/package/apache/0004-server-log.c-ap_log_pid-Use-a-temporary-file-then-re.patch
-+++ /dev/null
-@@ -1,77 +0,0 @@
--From 5b95d256387b45fbe33f7ee7890ae35afdd5c371 Mon Sep 17 00:00:00 2001
--From: Joe Orton <jorton@apache.org>
--Date: Fri, 13 Mar 2020 14:34:18 +0000
--Subject: [PATCH] * server/log.c (ap_log_pid): Use a temporary file, then
-- rename once   successfully written; also add error checking.  Avoids startup 
--  failures if a previous httpd invocation crashed while writing the   pidfile.
--
--Submitted by: Nicolas Carrier <carrier.nicolas0 gmail.com>, jorton
--Github: closes #100, closes #69
--PR: 63140
--
--git-svn-id: https://svn.apache.org/repos/asf/httpd/httpd/trunk at 1875153 13f79535-47bb-0310-9956-ffa450edef68
--Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
-----
-- server/log.c | 33 ++++++++++++++++++++++++++-------
-- 1 file changed, 26 insertions(+), 7 deletions(-)
--
--diff --git a/server/log.c b/server/log.c
--index f0bde6e4b8..8d54b4e057 100644
----- a/server/log.c
--+++ b/server/log.c
--@@ -1598,6 +1598,9 @@ AP_DECLARE(void) ap_log_pid(apr_pool_t *p, const char *filename)
--     pid_t mypid;
--     apr_status_t rv;
--     const char *fname;
--+    char *temp_fname;
--+    apr_fileperms_t perms;
--+    char pidstr[64];
-- 
--     if (!filename) {
--         return;
--@@ -1626,19 +1629,35 @@ AP_DECLARE(void) ap_log_pid(apr_pool_t *p, const char *filename)
--                       fname);
--     }
-- 
---    if ((rv = apr_file_open(&pid_file, fname,
---                            APR_WRITE | APR_CREATE | APR_TRUNCATE,
---                            APR_UREAD | APR_UWRITE | APR_GREAD | APR_WREAD, p))
---        != APR_SUCCESS) {
--+    temp_fname = apr_pstrcat(p, fname, ".XXXXXX", NULL);
--+    rv = apr_file_mktemp(&pid_file, temp_fname,
--+                         APR_FOPEN_WRITE | APR_FOPEN_CREATE | APR_FOPEN_TRUNCATE, p);
--+    if (rv != APR_SUCCESS) {
--         ap_log_error(APLOG_MARK, APLOG_ERR, rv, NULL, APLOGNO(00099)
---                     "could not create %s", fname);
--+                     "could not create %s", temp_fname);
--         ap_log_error(APLOG_MARK, APLOG_ERR, 0, NULL, APLOGNO(00100)
--                      "%s: could not log pid to file %s",
--                      ap_server_argv0, fname);
--         exit(1);
--     }
---    apr_file_printf(pid_file, "%" APR_PID_T_FMT APR_EOL_STR, mypid);
---    apr_file_close(pid_file);
--+
--+    apr_snprintf(pidstr, sizeof pidstr, "%" APR_PID_T_FMT APR_EOL_STR, mypid);
--+
--+    perms = APR_UREAD | APR_UWRITE | APR_GREAD | APR_WREAD;
--+    rv = apr_file_perms_set(temp_fname, perms);    
--+    if (rv == APR_SUCCESS)
--+        rv = apr_file_write_full(pid_file, pidstr, strlen(pidstr), NULL);
--+    if (rv == APR_SUCCESS)
--+        rv = apr_file_close(pid_file);
--+    if (rv == APR_SUCCESS)
--+        rv = apr_file_rename(temp_fname, fname, p);
--+    if (rv != APR_SUCCESS) {
--+        ap_log_error(APLOG_MARK, APLOG_ERR, rv, NULL, APLOGNO(10231)
--+                     "%s: Failed creating pid file %s",
--+                     ap_server_argv0, temp_fname);
--+        exit(1);
--+    }
--+
--     saved_pid = mypid;
-- }
-- 
---- 
--2.25.2
--
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index bd3f6ac7ba..c03934b40a 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,5 +1,5 @@
- # From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.{sha256,sha512}
--sha256  740eddf6e1c641992b22359cabc66e6325868c3c5e2e3f98faf349b61ecf41ea  httpd-2.4.46.tar.bz2
--sha512  5936784bb662e9d8a4f7fe38b70c043b468114d931cd10ea831bfe74461ea5856b64f88f42c567ab791fc8907640a99884ba4b6a600f86d661781812735b6f13  httpd-2.4.46.tar.bz2
-+sha256  1bc826e7b2e88108c7e4bf43c026636f77a41d849cfb667aa7b5c0b86dbf966c  httpd-2.4.48.tar.bz2
-+sha512  6c250626f1e7d10428a92d984fd48ff841effcc8705f7816ab71b681bbd51d0012ad158dcd13763fe7d630311f2de258b27574603140d648be42796ab8326724  httpd-2.4.48.tar.bz2
+diff --git a/package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch b/package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch
+index 518639387a..02f954531a 100644
+--- a/package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch
++++ b/package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch
+@@ -29,7 +29,7 @@ index 1b18cf2..4ebfde1 100644
+  #include <iostream>
+  #include <string>
+  #include <sstream>
+--#ifdef __APPLE__
++-#if defined (__APPLE__) || (__FreeBSD__)
+  #include <ncurses.h>
+ -#else
+ -#include <ncursesw/ncurses.h>
+diff --git a/package/gptfdisk/gptfdisk.hash b/package/gptfdisk/gptfdisk.hash
+index bff17dcc21..7894f2187d 100644
+--- a/package/gptfdisk/gptfdisk.hash
++++ b/package/gptfdisk/gptfdisk.hash
+@@ -1,6 +1,5 @@
+-# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.5/
+-md5  58dac67c85e46ca87b587231549aefe6  gptfdisk-1.0.5.tar.gz
+-sha1  b642aa628cbc9fa63e9a73dad5acc588042527ac  gptfdisk-1.0.5.tar.gz
++# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.7/
++sha1  406ab2596e1911c916dce677ce7e903076d94c6d  gptfdisk-1.0.7.tar.gz
  # Locally computed
- sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 6b9d18ac00..7dbd1a4512 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
+-sha256  0e7d3987cd0488ecaf4b48761bc97f40b1dc089e5ff53c4b37abe30bc67dcb2f  gptfdisk-1.0.5.tar.gz
++sha256  754004b7f85b279287c7ac3c0469b1d7e0eae043a97a2e587b0560ca5f3828c0  gptfdisk-1.0.7.tar.gz
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index e848837b76..d92a527105 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APACHE_VERSION = 2.4.46
-+APACHE_VERSION = 2.4.48
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+-GPTFDISK_VERSION = 1.0.5
++GPTFDISK_VERSION = 1.0.7
+ GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
+ GPTFDISK_LICENSE = GPL-2.0+
+ GPTFDISK_LICENSE_FILES = COPYING
