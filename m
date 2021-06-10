@@ -1,22 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 22:12:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iftop: fix static build
-In-Reply-To: <20210602062550.818231-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 2 Jun 2021 08:25:50 +0200")
-References: <20210602062550.818231-1-fontaine.fabrice@gmail.com>
-Message-ID: <87y2bhiinj.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Jun 2021 22:12:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apache: security bump version
+ to 2.4.48
+In-Reply-To: <20210602151034.84953-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 2 Jun 2021 17:10:34 +0200")
+References: <20210602151034.84953-1-bernd.kuhls@t-online.de>
+Message-ID: <87tum5iimd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/eb53ff6b031c654daec57050dec376b5c9134a81
+ > Changelog: https://downloads.apache.org/httpd/CHANGES_2.4.48
+ > Fixes CVE-2021-31618:
+ > mod_http2: Fix a potential NULL pointer dereference [Ivan Zhakov]
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Removed patch 0004 which is included in upstream release.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2021.02.x, thanks.
 
