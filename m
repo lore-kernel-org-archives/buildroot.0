@@ -1,53 +1,52 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu, 10 Jun 2021 21:39:34 +0300
-Subject: [Buildroot] [PATCH 1/1] package/libfuse3: bump to version 3.10.4
-Message-ID: <20210610183934.100570-1-asafka7@gmail.com>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Thu, 10 Jun 2021 11:56:43 -0700
+Subject: [Buildroot] [PATCH 1/1] mtd-utils-2.1.2: ubihealthd depends on
+ ubifs support
+In-Reply-To: <CAEyMn7Z8NzQxdGWE59vRoJG3uS5xcNt9pqhArthgTvh_zA76vA@mail.gmail.com>
+References: <20210609234819.1860554-1-mmayer@broadcom.com>
+ <20210609234819.1860554-2-mmayer@broadcom.com>
+ <CAEyMn7Z8NzQxdGWE59vRoJG3uS5xcNt9pqhArthgTvh_zA76vA@mail.gmail.com>
+Message-ID: <CAGt4E5spf8eE7x_y7k3-vP4zCL4+R8oK58RMoMUWHGkOkLwkdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From this version, tests can be disabled, so we pass
-"tests=false" as a Meson option.
+On Wed, 9 Jun 2021 at 21:36, Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/libfuse3/libfuse3.hash | 2 +-
- package/libfuse3/libfuse3.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+> > ubihealthd is only being built, if mtd-utils are being built
+> > --with-ubifs. Reflect that dependency within buildroot.
+> >
+>
+> This seems to fix the issue reported to the commiter:
+> http://lists.busybox.net/pipermail/buildroot/2021-June/311951.html
 
-diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-index 49c71f402f..0414264bf8 100644
---- a/package/libfuse3/libfuse3.hash
-+++ b/package/libfuse3/libfuse3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  c32527782cef620df58b162aa29901d1fb13253b029375d5860a2253a810344e  libfuse3-3.10.3.tar.gz
-+sha256  bfcb2520fd83db29e9fefd57d3abd5285f38ad484739aeee8e03fbec9b2d984a  libfuse3-3.10.4.tar.gz
- sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-index b1624ba887..fc747c5bfd 100644
---- a/package/libfuse3/libfuse3.mk
-+++ b/package/libfuse3/libfuse3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFUSE3_VERSION = 3.10.3
-+LIBFUSE3_VERSION = 3.10.4
- LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
- LIBFUSE3_LICENSE = LGPL-2.1
- LIBFUSE3_LICENSE_FILES = LICENSE
-@@ -15,7 +15,8 @@ LIBFUSE3_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- LIBFUSE3_CONF_OPTS = \
- 	-Dexamples=false \
- 	-Dudevrulesdir=/lib/udev/rules.d \
--	-Duseroot=false
-+	-Duseroot=false \
-+	-Dtests=false
- 
- define LIBFUSE3_DEVICES
- 	/dev/fuse  c  666  0  0  10  229  0  0  -
--- 
-2.30.2
+Yes, it does look like it would address this issue. Have you been able
+to confirm that it addresses the problem? If so, can you reply with a
+Tested-by?
+
+Thanks,
+-Markus
+
+> > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+> > ---
+> >  package/mtd/Config.in | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+> > index c7ad3b3cdc9c..64a7ae19a7e2 100644
+> > --- a/package/mtd/Config.in
+> > +++ b/package/mtd/Config.in
+> > @@ -139,6 +139,7 @@ config BR2_PACKAGE_MTD_UBIFORMAT
+> >
+> >  config BR2_PACKAGE_MTD_UBIHEALTHD
+> >         bool "ubihealthd"
+> > +       depends on BR2_PACKAGE_MTD_UBIFS_UTILS
+> >         default y
+> >
+> >  config BR2_PACKAGE_MTD_UBIMKVOL
+>
+> Thanks
+> --
+> Heiko
