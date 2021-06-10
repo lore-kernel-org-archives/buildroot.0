@@ -1,43 +1,130 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 10:28:00 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libcutl: fix
- build with gcc 11
-Message-ID: <20210610075846.A42A58CA06@busybox.osuosl.org>
+Date: Thu, 10 Jun 2021 10:27:03 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] uclibc: powerpc: fix
+ PIE/PIC builds with secureplt enabled by default
+Message-ID: <20210610075846.890BF8CA9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=772d18692a8f762096b677e9aac1609379cfc204
+commit: https://git.buildroot.net/buildroot/commit/?id=03f030bfeda4b922a7ae71220de0260bb0c5ab77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Add -std=c++11 to fix the following build failure with gcc 11:
+Apply the fix provided by Yann Sionneau when secureplt is enabled
+by default by gcc compiler along with PIE/PIC options.
 
-In file included from shared-ptr/base.cxx:5:
-../cutl/shared-ptr/base.hxx:34:41: error: ISO C++17 does not allow dynamic exception specifications
-   34 | operator new (std::size_t, cutl::share) throw (std::bad_alloc);
-      |                                         ^~~~~
+"For the secure PLT to work in PIC, the r30 register needs to point to the GOT"
 
 Fixes:
- - http://autobuild.buildroot.org/results/60a39d402a0d051c92aa11421b7a14f7729a0380
+[qemu_ppc_e500mc_defconfig] https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661606
+[qemu_ppc_g3beige_defconfig] https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661607
+[qemu_ppc_mac99_defconfig] https://gitlab.com/buildroot.org/buildroot/-/jobs/1255661609
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Yann Sionneau <yann@sionneau.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 4d6ca0a8acac3509f1008799f3a72d3490572e16)
+(cherry picked from commit 826d350fc345273c56b8f3059aef2aac93181107)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcutl/libcutl.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...-PIE-PIC-builds-with-newer-gcc-binutils-w.patch | 91 ++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
 
-diff --git a/package/libcutl/libcutl.mk b/package/libcutl/libcutl.mk
-index 49c05e6019..2b704ad3b8 100644
---- a/package/libcutl/libcutl.mk
-+++ b/package/libcutl/libcutl.mk
-@@ -11,5 +11,6 @@ LIBCUTL_SITE = https://www.codesynthesis.com/download/libcutl/$(LIBCUTL_VERSION_
- LIBCUTL_INSTALL_STAGING = YES
- LIBCUTL_LICENSE = MIT
- LIBCUTL_LICENSE_FILES = LICENSE
-+HOST_LIBCUTL_CONF_ENV = CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
- 
- $(eval $(host-autotools-package))
+diff --git a/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch b/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch
+new file mode 100644
+index 0000000000..040699df83
+--- /dev/null
++++ b/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch
+@@ -0,0 +1,91 @@
++From 6c95eccff5eb43c8c3ad865d3b1316b7952cc58e Mon Sep 17 00:00:00 2001
++From: Yann Sionneau <yann@sionneau.net>
++Date: Fri, 28 May 2021 08:59:58 +0200
++Subject: [PATCH] powerpc: fix PIE/PIC builds with newer gcc/binutils which use
++ secureplt by default
++
++This patch fixes segfault of all user space processes (including init, which caused a panic) on recent buildroot powerpc32 builds.
++
++The issue has been reported by Romain Naour in this thread: https://mailman.uclibc-ng.org/pipermail/devel/2021-May/002068.html
++
++Recent buildroot toolchain enables secure PLT in powerpc gcc.
++The latter will then supply -msecure-plt to gas invocations by default.
++Recent buildroot also enables PIE by default.
++
++For the secure PLT to work in PIC, the r30 register needs to point to the GOT.
++Old "bss plt" was just a one-instruction-wide PLT slot, pointed-to by a R_PPC_JMP_SLOT relocation, which was written on-the-fly to contain a branch instruction to the correct address. It therefore had to stay writable+executable, which you generally want to avoid for security reasons.
++New secure PLT only contains read-only code which loads the branch address from the writable GOT.
++
++Note: secure PLT without PIC does not need r30 to be set. Because offset between plt stub code and got is known at link-time. In this case the PLT entry looks like:
++1009b3e0 <__uClibc_main@plt>:
++1009b3e0:       3d 60 10 0e     lis     r11,4110
++1009b3e4:       81 6b 03 74     lwz     r11,884(r11)
++1009b3e8:       7d 69 03 a6     mtctr   r11
++1009b3ec:       4e 80 04 20     bctr
++
++Whereas secure PLT with PIC - offset between plt and got is unknown at link-time - looks like this:
++000af800 <00000000.plt_pic32.__uClibc_main>:
++   af800:       81 7e 03 80     lwz     r11,896(r30)
++   af804:       7d 69 03 a6     mtctr   r11
++   af808:       4e 80 04 20     bctr
++   af80c:       60 00 00 00     nop
++
++Upstream status: Pending:
++https://mailman.uclibc-ng.org/pipermail/devel/2021-May/002091.html
++
++Signed-off-by: Yann Sionneau <yann@sionneau.net>
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ Rules.mak                         | 3 ++-
++ ldso/ldso/powerpc/dl-startup.h    | 3 +++
++ libc/sysdeps/linux/powerpc/crt1.S | 4 ++++
++ 3 files changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/Rules.mak b/Rules.mak
++index 10f88b3de..60ac59b85 100644
++--- a/Rules.mak
+++++ b/Rules.mak
++@@ -477,9 +477,10 @@ ifeq ($(TARGET_ARCH),powerpc)
++ 	PICFLAG:=-fpic
++ 	PIEFLAG_NAME:=-fpie
++ 	PPC_HAS_REL16:=$(shell printf "\t.text\n\taddis 11,30,_GLOBAL_OFFSET_TABLE_-. at ha\n" | $(CC) -c -x assembler -o /dev/null -  2> /dev/null && echo -n y || echo -n n)
+++	PPC_HAS_SECUREPLT:=$(shell $(CC) --verbose 2>&1 | grep -- --enable-secureplt > /dev/null && echo -n y || echo -n n)
+++	CPU_CFLAGS-$(PPC_HAS_SECUREPLT) += -DPPC_HAS_SECUREPLT
++ 	CPU_CFLAGS-$(PPC_HAS_REL16)+= -DHAVE_ASM_PPC_REL16
++ 	CPU_CFLAGS-$(CONFIG_E500) += "-D__NO_MATH_INLINES"
++-
++ endif
++ 
++ ifeq ($(TARGET_ARCH),bfin)
++diff --git a/ldso/ldso/powerpc/dl-startup.h b/ldso/ldso/powerpc/dl-startup.h
++index 8b2a517e2..7749395eb 100644
++--- a/ldso/ldso/powerpc/dl-startup.h
+++++ b/ldso/ldso/powerpc/dl-startup.h
++@@ -25,6 +25,9 @@ __asm__(
++ #else
++     "	bl	_GLOBAL_OFFSET_TABLE_-4 at local\n" /*  Put our GOT pointer in r31, */
++     "	mflr	31\n"
+++#endif
+++#ifdef PPC_HAS_SECUREPLT
+++    "   mr      30,31\n"
++ #endif
++     "	addi	1,1,16\n" /* Restore SP */
++     "	lwz	7,_dl_skip_args at got(31)\n" /* load EA of _dl_skip_args */
++diff --git a/libc/sysdeps/linux/powerpc/crt1.S b/libc/sysdeps/linux/powerpc/crt1.S
++index 27bfc5a5a..3f5d056c0 100644
++--- a/libc/sysdeps/linux/powerpc/crt1.S
+++++ b/libc/sysdeps/linux/powerpc/crt1.S
++@@ -56,6 +56,10 @@ _start:
++ # else
++ 	bl	_GLOBAL_OFFSET_TABLE_-4 at local
++ 	mflr	r31
+++# endif
+++	/* in PIC/PIE, plt stubs need r30 to point to the GOT if using secure-plt */
+++# ifdef PPC_HAS_SECUREPLT
+++	mr	30,31
++ # endif
++ #endif
++ 	/* Set up the small data pointer in r13.  */
++-- 
++2.31.1
++
