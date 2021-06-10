@@ -1,25 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 10:27:34 +0200
-Subject: [Buildroot] [PATCH] package/i2c-tools: add
- I2C_TOOLS_CPE_ID_VENDOR
-In-Reply-To: <20210601111551.4155-1-heiko.thiery@gmail.com> (Heiko Thiery's
- message of "Tue, 1 Jun 2021 13:15:52 +0200")
-References: <20210601111551.4155-1-heiko.thiery@gmail.com>
-Message-ID: <87v96mktu1.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Jun 2021 10:28:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcutl: fix build with gcc 11
+In-Reply-To: <2b76e346-7c35-70de-3dd3-cfaa385f51ce@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 1 Jun 2021 22:00:48 +0200")
+References: <20210530081404.3086770-1-fontaine.fabrice@gmail.com>
+ <2b76e346-7c35-70de-3dd3-cfaa385f51ce@mind.be>
+Message-ID: <87pmwuktsc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > cpe:2.3:a:i2c-tools_project:i2c-tools is a valid CPE identifier for this
- > package:
-
- > https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ai2c-tools_project%3Ai2c-tools
-
- > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+ > On 30/05/2021 10:14, Fabrice Fontaine wrote:
+ >> Add -std=c++11 to fix the following build failure with gcc 11:
+ >> 
+ >> In file included from shared-ptr/base.cxx:5:
+ >> ../cutl/shared-ptr/base.hxx:34:41: error: ISO C++17 does not allow dynamic exception specifications
+ >> 34 | operator new (std::size_t, cutl::share) throw (std::bad_alloc);
+ >> |                                         ^~~~~
+ >> 
+ >> Fixes:
+ >> - http://autobuild.buildroot.org/results/60a39d402a0d051c92aa11421b7a14f7729a0380
+ >> 
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2021.02.x, thanks.
 
