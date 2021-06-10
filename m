@@ -1,65 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 10:19:14 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/hostapd: add
- upstream patch to fix CVE-2021-27803
-Message-ID: <20210610075846.6ED948CA02@busybox.osuosl.org>
+Date: Thu, 10 Jun 2021 10:27:24 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/i2c-tools: add
+ I2C_TOOLS_CPE_ID_VENDOR
+Message-ID: <20210610075846.96FD086F32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4bde640c653f9a67906bdd402fb38e0d98e5161
+commit: https://git.buildroot.net/buildroot/commit/?id=c31386b070f6aa58325d7b8047df7b81b0bbf20a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes the following:
+cpe:2.3:a:i2c-tools_project:i2c-tools is a valid CPE identifier for this
+package:
 
-- CVE-2021-27803: A vulnerability was discovered in how p2p/p2p_pd.c in
-wpa_supplicant before 2.10 processes P2P (Wi-Fi Direct) provision
-discovery requests. It could result in denial of service or other impact
-(potentially execution of arbitrary code), for an attacker within radio
-range.
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ai2c-tools_project%3Ai2c-tools
 
-Signed-off-by: Sam Voss <sam.voss@collins.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 93b8d601bc208f7f3ac6a2c496590bcc25cc7b46)
+(cherry picked from commit 9584765654c8e71842ad516b5979b3d7f396370f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hostapd/hostapd.hash | 1 +
- package/hostapd/hostapd.mk   | 6 +++++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ package/i2c-tools/i2c-tools.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
-index e2f76c12d9..9ac5f4b392 100644
---- a/package/hostapd/hostapd.hash
-+++ b/package/hostapd/hostapd.hash
-@@ -3,4 +3,5 @@ sha256  881d7d6a90b2428479288d64233151448f8990ab4958e0ecaca7eeb3c9db2bd7  hostap
- sha256  2d9a5b9d616f1b4aa4a22b967cee866e2f69b798b0b46803a7928c8559842bd7  0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch
- sha256  49feb35a5276279b465f6836d6fa2c6b34d94dc979e8b840d1918865c04260de  0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch
- sha256  a8212a2d89a5bab2824d22b6047e7740553df163114fcec94832bfa9c5c5d78a  0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch
-+sha256  7f40cfec5faf5e927ea9028ab9392cd118685bde7229ad24210caf0a8f6e9611  0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
- sha256  9da5dd0776da266b180b915e460ff75c6ff729aca1196ab396529510f24f3761  README
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 8eff92eb1e..8820254f89 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -11,7 +11,8 @@ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
- HOSTAPD_PATCH = \
- 	https://w1.fi/security/2020-1/0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch \
- 	https://w1.fi/security/2020-1/0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch \
--	https://w1.fi/security/2020-1/0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch
-+	https://w1.fi/security/2020-1/0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch \
-+	https://w1.fi/security/2021-1/0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
- HOSTAPD_DEPENDENCIES = host-pkgconf
- HOSTAPD_CFLAGS = $(TARGET_CFLAGS)
- HOSTAPD_LICENSE = BSD-3-Clause
-@@ -26,6 +27,9 @@ HOSTAPD_IGNORE_CVES += CVE-2020-12695
- # 0002-ASN.1-Validate-DigestAlgorithmIdentifier-parameters.patch
- HOSTAPD_IGNORE_CVES += CVE-2021-30004
- 
-+# 0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
-+HOSTAPD_IGNORE_CVES += CVE-2021-27803
-+
- HOSTAPD_CPE_ID_VENDOR = w1.fi
- HOSTAPD_CONFIG_SET =
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index c1770cf636..8936f6c4f6 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -9,6 +9,7 @@ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.xz
+ I2C_TOOLS_SITE = https://www.kernel.org/pub/software/utils/i2c-tools
+ I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus), LGPL-2.1+ (libi2c)
+ I2C_TOOLS_LICENSE_FILES = COPYING COPYING.LGPL README
++I2C_TOOLS_CPE_ID_VENDOR = i2c-tools_project
+ I2C_TOOLS_MAKE_OPTS = EXTRA=eeprog
+ I2C_TOOLS_INSTALL_STAGING = YES
  
