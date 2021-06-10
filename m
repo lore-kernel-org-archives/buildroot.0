@@ -1,76 +1,150 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Wed,  9 Jun 2021 16:48:18 -0700
-Subject: [Buildroot] [PATCH 0/1] mtd-utils-2.1.2: ubihealthd depends on
- ubifs support
-Message-ID: <20210609234819.1860554-1-mmayer@broadcom.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed,  9 Jun 2021 20:06:32 -0600
+Subject: [Buildroot] [PATCH 1/1] pkg-rust: new infrastructure
+Message-ID: <20210610020632.236282-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Add a new infrastructure to ease the development of packages that use
+rust's cargo as their build system.
 
-With the enabling of ubihealthd, we are experiencing a new build
-failure.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/Makefile.in |   1 +
+ package/pkg-rust.mk | 113 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 114 insertions(+)
+ create mode 100644 package/pkg-rust.mk
 
-https://git.buildroot.net/buildroot/commit/?id=77a0167155c3
-
-Here is what is happening:
-
->>> mtd 2.1.2 Installing to target
-[...]
-/usr/bin/install -D -m 0755
-  /home/mmayer/Development/br-current/output/arm64/build/mtd-2.1.2/ubiformat
-  /home/mmayer/Development/br-current/output/arm64/target/usr/sbin/ubiformat
-/usr/bin/install -D -m 0755
-  /home/mmayer/Development/br-current/output/arm64/build/mtd-2.1.2/ubihealthd
-  /home/mmayer/Development/br-current/output/arm64/target/usr/sbin/ubihealthd
-/usr/bin/install: cannot stat
-  '/home/mmayer/Development/br-current/output/arm64/build/mtd-2.1.2/ubihealthd':
-  No such file or directory
-make[1]: *** [package/pkg-generic.mk:341:
-/home/mmayer/Development/br-current/output/arm64/build/mtd-2.1.2/.stamp_target_installed]
-Error 1
-make: *** [Makefile:27: _all] Error 2
-
-The problem is the following:
-
-1. We are building with BR2_PACKAGE_MTD_UBIFS_UTILS unset and,
-therefore, with --without-ubifs.
-
-2. Building without ubifs leads to "configure" setting its internal
-variable need_getrandom="no", which trickles down through the autoconf
-environment.
-
-3. Without getrandom, ubihealthd is not being built
-?
-From mtd-2.1.2/ubi-utils/Makemodule.am:
-
-?49 if WITH_GETRANDOM
-?50 UBI_BINS += ubihealthd
-?51 endif
-
-The mtd-utils package is consistent within itself. Everything works as
-long as "make install" is being called, because it won't try to install
-ubihealthd, unless it also built it. However, Buildroot has its own
-install routine. It thinks ubihealthd is enabled and has been built.
-Therefore, it tries to install it -- which doesn't work if
-BR2_PACKAGE_MTD_UBIFS_UTILS is unset.
-
-This patch mirrors the --with-ubifs -> ubihealthd dependency within
-Buildroot. In my tests, it worked either way. It will built and install
-ubihealthd (when BR2_PACKAGE_MTD_MKFSUBIFS=y) or it will skip building
-and installing ubihealthd (when BR2_PACKAGE_MTD_MKFSUBIFS is unset).
-
-Thanks,
--Markus
-
-Markus Mayer (1):
-  mtd-utils-2.1.2: ubihealthd depends on ubifs support
-
- package/mtd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 955e6a8e8c..c4fb6a3cb1 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -434,3 +434,4 @@ include package/pkg-waf.mk
+ include package/pkg-golang.mk
+ include package/pkg-meson.mk
+ include package/pkg-qmake.mk
++include package/pkg-rust.mk
+diff --git a/package/pkg-rust.mk b/package/pkg-rust.mk
+new file mode 100644
+index 0000000000..3906fc12b4
+--- /dev/null
++++ b/package/pkg-rust.mk
+@@ -0,0 +1,113 @@
++################################################################################
++# Rust package infrastructure
++#
++# This file implements an infrastructure that eases development of
++# package .mk files for Rust packages. It should be used for all
++# packages that use Rust as their build system.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++# In terms of implementation, this Rust infrastructure requires
++# the .mk file to only specify metadata information about the
++# package: name, version, download URL, etc.
++#
++# We still allow the package .mk file to override what the different
++# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
++# already defined, it is used as the list of commands to perform to
++# build the package, instead of the default Rust behaviour. The
++# package can also define some post operation hooks.
++#
++################################################################################
++
++CARGO = $(HOST_DIR)/bin/cargo
++
++RUSTC_TARGET_TRIPLE = $(subst -,_,$(call UPPERCASE,$(RUSTC_TARGET_NAME)))
++
++PKG_RUST_CARGO_ENV = \
++	CARGO_HOME=$(HOST_DIR)/share/cargo \
++	CARGO_BUILD_TARGET=$(RUSTC_TARGET_NAME) \
++	CARGO_INSTALL_ROOT=$(TARGET_DIR)/usr \
++	CARGO_TARGET_$(RUSTC_TARGET_TRIPLE)_LINKER=$(notdir $(TARGET_CROSS))gcc
++
++HOST_PKG_RUST_CARGO_ENV = \
++	CARGO_HOME=$(HOST_DIR)/share/cargo \
++	CARGO_INSTALL_ROOT=$(HOST_DIR) \
++	RUSTFLAGS="$(addprefix -C link-args=,$(HOST_LDFLAGS))"
++
++ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
++PKG_RUST_CARGO_OPTS = --debug
++else
++PKG_RUST_CARGO_OPTS = --release
++endif
++
++################################################################################
++# inner-rust-package -- defines how the configuration, compilation and
++# installation of a Rust package should be done, implements a few hooks to
++# tune the build process and calls the generic package infrastructure to
++# generate the necessary make targets
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including a HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++################################################################################
++
++define inner-rust-package
++
++$(2)_DEPENDENCIES += host-rustc
++
++#
++# Build step. Only define it if not already defined by the package .mk
++# file.
++#
++ifndef $(2)_BUILD_CMDS
++ifeq ($(4),target)
++define $(2)_BUILD_CMDS
++	$$(TARGET_MAKE_ENV) $$(PKG_RUST_CARGO_ENV) \
++		$$(CARGO) build $$(PKG_RUST_CARGO_OPTS) $$($$(PKG)_RUST_CARGO_OPTS) --manifest-path=$$($$(PKG)_BUILDDIR)/Cargo.toml
++endef
++else
++define $(2)_BUILD_CMDS
++	$$(HOST_MAKE_ENV) $$(HOST_PKG_RUST_CARGO_ENV) \
++		$$(CARGO) build $$(PKG_RUST_CARGO_OPTS) $$($$(PKG)_RUST_CARGO_OPTS) --manifest-path=$$($$(PKG)_BUILDDIR)/Cargo.toml
++endef
++endif
++endif
++
++#
++# Host installation step. Only define it if not already defined by the
++# package .mk file.
++#
++ifndef $(2)_INSTALL_CMDS
++define $(2)_INSTALL_CMDS
++	$$(HOST_MAKE_ENV) $$(HOST_PKG_RUST_CARGO_ENV) \
++		$$(CARGO) install --offline --frozen --path $$($$(PKG)_BUILDDIR)
++endef
++endif
++
++#
++# Target installation step. Only define it if not already defined by
++# the package .mk file.
++#
++ifndef $(2)_INSTALL_TARGET_CMDS
++define $(2)_INSTALL_TARGET_CMDS
++	$$(TARGET_MAKE_ENV) $$(PKG_RUST_CARGO_ENV) \
++		$$(CARGO) install --offline --frozen --path $$($$(PKG)_BUILDDIR)
++endef
++endif
++
++# Call the generic package infrastructure to generate the necessary
++# make targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
++
++endef
++
++################################################################################
++# rust-package -- the target generator macro for Rust packages
++################################################################################
++
++rust-package = $(call inner-rust-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++host-rust-package = $(call inner-rust-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
 -- 
 2.25.1
