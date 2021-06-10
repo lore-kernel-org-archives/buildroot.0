@@ -1,45 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 22:51:57 +0200
-Subject: [Buildroot] [PATCH] package/go: security bump to version 1.16.5
-In-Reply-To: <87lf7nxbx7.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sun, 06 Jun 2021 17:14:44 +0200")
-References: <20210606115018.13237-1-peter@korsgaard.com>
- <87lf7nxbx7.fsf@dell.be.48ers.dk>
-Message-ID: <87a6nxh28i.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Jun 2021 22:52:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mimic: fix static build with
+ gcc 10
+In-Reply-To: <20210606173804.38810-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 6 Jun 2021 19:38:04 +0200")
+References: <20210606173804.38810-1-fontaine.fabrice@gmail.com>
+Message-ID: <875yylh26x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
- >> Fixes the following security issues:
- >> - CVE-2021-33195: The LookupCNAME, LookupSRV, LookupMX, LookupNS, and
- >> LookupAddr functions in net, and their respective methods on the Resolver
- >> type may return arbitrary values retrieved from DNS which do not follow
- >> the established RFC 1035 rules for domain names.  If these names are used
- >> without further sanitization, for instance unsafely included in HTML, they
- >> may allow for injection of unexpected content.  Note that LookupTXT may
- >> still return arbitrary values that could require sanitization before
- >> further use
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- >> - CVE-2021-33196: The NewReader and OpenReader functions in archive/zip can
- >> cause a panic or an unrecoverable fatal error when reading an archive that
- >> claims to contain a large number of files, regardless of its actual size
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/bee20bbfa4fa64ed8704bfb9586d5a3148f39fdf
 
- >> - CVE-2021-33197: ReverseProxy in net/http/httputil could be made to forward
- >> certain hop-by-hop headers, including Connection.  In case the target of
- >> the ReverseProxy was itself a reverse proxy, this would let an attacker
- >> drop arbitrary headers, including those set by the ReverseProxy.Director
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- >> - CVE-2021-33198: The SetString and UnmarshalText methods of math/big.Rat
- >> may cause a panic or an unrecoverable fatal error if passed inputs with
- >> very large exponents
-
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-For 2021.02.x I have instead bumped to 1.15.13, which contains the same
-security fixes.
+Committed to 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
