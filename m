@@ -1,82 +1,77 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 10 Jun 2021 07:34:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsoup: always disable
- tls_check
-In-Reply-To: <20210610063627.GD135851@momiji>
-References: <20210609212503.1580411-1-fontaine.fabrice@gmail.com>
- <20210610063627.GD135851@momiji>
-Message-ID: <CAPi7W82QYMwJGjfKJ0c-gqw8gvPLBEBUpEwMrD4FX4OVHEvNuQ@mail.gmail.com>
+Date: Thu, 10 Jun 2021 07:46:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix build with gcc 4.8
+Message-ID: <20210610054613.1711860-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fix build failure with gcc 4.8 which is raised since bump to version 3.2
+in commit b7ff47516ea01436c53b4d1e2b7a5b595ef3ed80
 
-Le jeu. 10 juin 2021 ? 05:36, Adrian Perez de Castro
-<aperez@igalia.com> a ?crit :
->
-> Hi,
->
-> On Wed, 09 Jun 2021 23:25:03 +0200 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> > Always disable tls_check to avoid the following build failure since bump to
-> > version 2.72.0 in commit 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da:
-> >
-> > ../output-1/build/libsoup-2.72.0/meson.build:184:4: ERROR: Can not run test applications in this cross environment.
-> >
-> > tls_check will run code since
-> > https://gitlab.gnome.org/GNOME/libsoup/-/commit/5c45253243a2deca4880d4f614f2932373445cf9
->
-> I wonder how this check passed locally when doing test builds of the update
-> before submitting the patch (I did a few cross-builds targeting 64-bit ARM)
-> ?\_(?)_/?
-I assume that BR2_PACKAGE_LIBSOUP_SSL was not set in your tests.
-However, I'm now wondering if we should also drop BR2_PACKAGE_LIBSOUP_SSL.
-From my understanding, glib-networking is a runtime dependency that
-was only needed at compile-time to pass tls_check.
->
-> At any rate, it's good to disable the test unconditionally.
->
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/9e539dc7185cfb81f18438dd36357cb49ef23a5a
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
->
-> > ---
-> >  package/libsoup/libsoup.mk | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-> > index 2f63e9e85c..73c8c080c5 100644
-> > --- a/package/libsoup/libsoup.mk
-> > +++ b/package/libsoup/libsoup.mk
-> > @@ -30,6 +30,7 @@ LIBSOUP_CONF_OPTS = \
-> >       -Dntlm=disabled \
-> >       -Dsysprof=disabled \
-> >       -Dtests=false \
-> > +     -Dtls_check=false \
-> >       -Dvapi=disabled
-> >
-> >  ifeq ($(BR2_PACKAGE_BROTLI),y)
-> > @@ -54,8 +55,6 @@ endif
-> >
-> >  ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
-> >  LIBSOUP_DEPENDENCIES += glib-networking
-> > -else
-> > -LIBSOUP_CONF_OPTS += -Dtls_check=false
-> >  endif
-> >
-> >  $(eval $(meson-package))
-> > --
-> > 2.30.2
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-Best Regards,
+Fixes:
+ - http://autobuild.buildroot.org/results/37eb0952a763256fbf6ef3c668f6c95fbdf2dd35
 
-Fabrice
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...s-getseuser.c-fix-build-with-gcc-4.8.patch | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch
+
+diff --git a/package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch b/package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch
+new file mode 100644
+index 0000000000..645e84b236
+--- /dev/null
++++ b/package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,47 @@
++From 5c4ddfc88f0a7f10a5e9edddbdbe8e8ef1f9945e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 10 Jun 2021 07:38:02 +0200
++Subject: [PATCH] libselinux/utils/getseuser.c: fix build with gcc 4.8
++
++Fix the following build failure with gcc 4.8 which is raised since
++version 3.2 and
++https://github.com/SELinuxProject/selinux/commit/156dd0de5cad31e7d437c64e11a8aef027f0a691
++
++getseuser.c:53:2: error: 'for' loop initial declarations are only allowed in C99 mode
++  for (int i = 0; i < n; i++)
++  ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/37eb0952a763256fbf6ef3c668f6c95fbdf2dd35
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/SELinuxProject/selinux/pull/289]
++---
++ libselinux/utils/getseuser.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/utils/getseuser.c b/utils/getseuser.c
++index ce1b7b27..34f2e887 100644
++--- a/utils/getseuser.c
+++++ b/utils/getseuser.c
++@@ -9,7 +9,7 @@ int main(int argc, char **argv)
++ {
++ 	char *seuser = NULL, *level = NULL;
++ 	char **contextlist;
++-	int rc, n;
+++	int rc, n, i;
++ 
++ 	if (argc != 3) {
++ 		fprintf(stderr, "usage:  %s linuxuser fromcon\n", argv[0]);
++@@ -50,7 +50,7 @@ int main(int argc, char **argv)
++ 	if (n == 0)
++ 		printf("no valid context found\n");
++ 
++-	for (int i = 0; i < n; i++)
+++	for (i = 0; i < n; i++)
++ 		printf("Context %d\t%s\n", i, contextlist[i]);
++ 
++ 	freeconary(contextlist);
++-- 
++2.30.2
++
+-- 
+2.30.2
