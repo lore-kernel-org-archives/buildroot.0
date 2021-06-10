@@ -1,59 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 22:26:50 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/mono-gtksharp3:
- fix build with latest mono
-Message-ID: <20210610202819.716AE8B82B@busybox.osuosl.org>
+Date: Thu, 10 Jun 2021 22:53:20 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] DEVELOPPERS: remove
+ Chakra Divi
+Message-ID: <20210610202819.9E5538157B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2d3ba46028088826dae6c0fce317fe63dbed3e9
+commit: https://git.buildroot.net/buildroot/commit/?id=2554b5fc9e2c104518d3212431f2d6a8e8bb5fd7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix build failure with latest mono which is raised since commit
-4c8a285b6e35c4028341f874760bfa9226ebff94
+The domain for their email is now a parking-site, and mails are not
+delivered anymore.
 
-Fixes:
- - http://autobuild.buildroot.org/results/ff3edfe406f00a29429d2fa4258af12c87e5fb96
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 11e8ced584068ce0e15ea6b1af117aa12d423126)
+(cherry picked from commit 48235e6fc5f9f452b7b48fd7f2297093c4dd16ea)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-Mono-compilation-error-branch.patch       | 25 ++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ DEVELOPERS | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch b/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
-new file mode 100644
-index 0000000000..0d52401b4a
---- /dev/null
-+++ b/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
-@@ -0,0 +1,25 @@
-+From fe18352a4bc9f0cf3b6cf63b8cc03c5d6e41863b Mon Sep 17 00:00:00 2001
-+From: plprevost <plprevost@sii.fr>
-+Date: Wed, 12 May 2021 16:46:16 +0200
-+Subject: [PATCH] refs issue:#298 Fix mono compilation errors
-+
-+[Retrieved from:
-+https://github.com/mono/gtk-sharp/pull/299/commits/fe18352a4bc9f0cf3b6cf63b8cc03c5d6e41863b]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ sample/test/TestRange.cs | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/sample/test/TestRange.cs b/sample/test/TestRange.cs
-+index 82fb81105..8727c9a77 100644
-+--- a/sample/test/TestRange.cs
-++++ b/sample/test/TestRange.cs
-+@@ -8,7 +8,7 @@
-+ 
-+ using System;
-+ 
-+-using Gtk;
-++using Gtk; using Range = Gtk.Range;
-+ 
-+ namespace WidgetViewer {
-+ 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 31a0a8a699..a5b3256262 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -492,16 +492,6 @@ F:	package/libsvg-cairo/
+ N:	C??dric Ch??pied <cedric.chepied@gmail.com>
+ F:	package/znc/
+ 
+-N:	Chakra Divi <chakra@openedev.com>
+-F:	board/friendlyarm/nanopi-m1
+-F:	board/friendlyarm/nanopi-m1-plus
+-F:	board/olimex/a13_olinuxino
+-F:	board/orangepi/orangepi-plus
+-F:	configs/friendlyarm_nanopi_m1_defconfig
+-F:	configs/friendlyarm_nanopi_m1_plus_defconfig
+-F:	configs/olimex_a13_olinuxino_defconfig
+-F:	configs/orangepi_plus_defconfig
+-
+ N:	Chris Packham <judge.packham@gmail.com>
+ F:	package/coremark/
+ F:	package/coremark-pro/
