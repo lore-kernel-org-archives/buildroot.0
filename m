@@ -1,56 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 10:47:24 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/vlc: disable on
- riscv32
-Message-ID: <20210610081742.A7E6A86F8B@busybox.osuosl.org>
+Date: Thu, 10 Jun 2021 10:44:42 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libkcapi: fix
+ build on riscv32
+Message-ID: <20210610081742.79E1781807@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c45b795ead9fde471211780516c3ebc30deffb1
+commit: https://git.buildroot.net/buildroot/commit/?id=2e9947610478c257674373fe4f1373d03f9437b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-vlc unconditionally uses __NR_futex resulting in the following build
-failure on riscv32:
+Fix the following build failure on riscv32:
 
-linux/thread.c:53:20: error: '__NR_futex' undeclared (first use in this function)
-   53 |     return syscall(__NR_futex, addr, op, val, to, addr2, val3);
-      |                    ^~~~~~~~~~
-
-A patch that fixes this was submitted upstream, but rejected [1].
+lib/internal.h:331:20: error: '__NR_io_getevents' undeclared (first use in this function); did you mean 'io_getevents'?
+  331 |     return syscall(__NR_io_getevents, ctx, min, max, events, timeout);
+      |                    ^~~~~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/be0f2243919d7a052b33118d8a901c922f8d88e7
+ - http://autobuild.buildroot.org/results/c828d4330a8888fe8db4299dc2f20759947f329f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-[1] https://patches.videolan.org/patch/30581/
-
-(cherry picked from commit cc86b866ac8ddfe41679334526040f5426fa25b1)
+(cherry picked from commit 5a075b47a86e4e2b147256bd946c9cfd1d3bc15e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vlc/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ ...use-of-__NR_io_getevents-when-not-defined.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index 96ff8f2fcb..964b7660af 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_VLC
- 	bool "vlc"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
-@@ -23,6 +24,7 @@ config BR2_PACKAGE_VLC_OPENCV3_BACKEND
- 	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
- 
- comment "vlc needs a toolchain w/ C++, dynamic library, wchar, threads, gcc >= 4.9, headers >= 3.7"
-+	depends on !BR2_RISCV_32
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS \
- 		|| !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
+diff --git a/package/libkcapi/0001-Disable-use-of-__NR_io_getevents-when-not-defined.patch b/package/libkcapi/0001-Disable-use-of-__NR_io_getevents-when-not-defined.patch
+new file mode 100644
+index 0000000000..20aa75b741
+--- /dev/null
++++ b/package/libkcapi/0001-Disable-use-of-__NR_io_getevents-when-not-defined.patch
+@@ -0,0 +1,42 @@
++From 455c4938f5822c017c7ff79dd2dca638b6410923 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Sun, 15 Nov 2020 18:05:48 -0800
++Subject: [PATCH] Disable use of __NR_io_getevents when not defined
++
++Architectures like riscv32 do not define this syscall, therefore return
++ENOSYS on such architectures
++
++Upstream-Status: Pending
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Stephan Mueller <smueller@chronox.de>
++[Retrieved from:
++https://github.com/smuellerDD/libkcapi/commit/455c4938f5822c017c7ff79dd2dca638b6410923]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/internal.h | 11 +++++++++--
++ 1 file changed, 9 insertions(+), 2 deletions(-)
++
++diff --git a/lib/internal.h b/lib/internal.h
++index 1237827..f765461 100644
++--- a/lib/internal.h
+++++ b/lib/internal.h
++@@ -325,10 +325,17 @@ static inline int io_submit(aio_context_t ctx, long n,  struct iocb **iocb)
++     return syscall(__NR_io_submit, ctx, n, iocb);
++ }
++ 
++-static inline int io_getevents(aio_context_t ctx, long min, long max,
++-            struct io_event *events, struct timespec *timeout)
+++static inline int io_getevents(__attribute__((unused)) aio_context_t ctx,
+++            __attribute__((unused)) long min,
+++            __attribute__((unused)) long max,
+++            __attribute__((unused)) struct io_event *events,
+++            __attribute__((unused)) struct timespec *timeout)
++ {
+++#ifdef __NR_io_getevents
++     return syscall(__NR_io_getevents, ctx, min, max, events, timeout);
+++#else
+++    return -ENOSYS;
+++#endif
++ }
++ 
++ /************************************************************
