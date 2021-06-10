@@ -1,31 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 08:37:59 +0200
-Subject: [Buildroot] [PATCH] package/dhcp: security bump to version
- 4.4.2-P1
-In-Reply-To: <20210530084457.24417-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 30 May 2021 10:44:57 +0200")
-References: <20210530084457.24417-1-peter@korsgaard.com>
-Message-ID: <878s3imdh4.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Jun 2021 08:32:16 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/strace: xtensa
+ needs headers >= 5.0
+Message-ID: <20210610060726.03AD18CA17@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=27f2c517ccbc9c52f01f8589852160bb2547be17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Fixes the following security issue:
- > - CVE-2021-25217: A buffer overrun in lease file parsing code can be used to
- >   exploit a common vulnerability shared by dhcpd and dhclient
+xtensa support needs user_pt_regs since version 5.6 and
+https://github.com/strace/strace/commit/2429c69961e2598902bded9c02dd601b362b66b4
 
- > For details, see the advisory:
- > https://kb.isc.org/docs/cve-2021-25217
+However user_pt_regs is only available since kernel 5.0 and
+https://github.com/torvalds/linux/commit/06fbac8e8971f2fa526e189304dd95ee62f39dbe
 
- > Update the LICENSE hash for a change of copyright years.
+Fixes:
+ - http://autobuild.buildroot.org/results/c6c4fb3b9098c5fc5dbe4415e2a9757fc775b746
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit fb25c95a0b88c63e2b2376a22ee906ca1f714d04)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/strace/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Committed to 2021.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/strace/Config.in b/package/strace/Config.in
+index 5b33dad392..c394d4c398 100644
+--- a/package/strace/Config.in
++++ b/package/strace/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_STRACE
+ 	bool "strace"
+ 	# needs at least kernel headers 4.0 on nios2
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
++	# needs at least kernel headers 5.0 on xtensa
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_xtensa
+ 	depends on !BR2_nds32 && !BR2_RISCV_32
+ 	help
+ 	  A useful diagnostic, instructional, and debugging tool.
+@@ -16,3 +18,7 @@ config BR2_PACKAGE_STRACE
+ comment "strace needs a toolchain w/ headers >= 4.0 on nios2"
+ 	depends on BR2_nios2
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++
++comment "strace needs a toolchain w/ headers >= 5.0 on xtensa"
++	depends on BR2_xtensa
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
