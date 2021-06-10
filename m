@@ -1,42 +1,105 @@
-From: Voss, Samuel M                            Collins <sam.voss@collins.com>
-Date: Thu, 10 Jun 2021 20:14:45 +0000
-Subject: [Buildroot] [External] Re: [PATCH] package/hostapd: add
- upstream patch to fix CVE-2021-27803
-In-Reply-To: <87y2bnxyds.fsf@dell.be.48ers.dk>
-References: <20210601180915.14897-1-sam.voss@collins.com>
- <20210601200043.GA168928@scaer>
- <11b326bb-8425-7615-f4bc-ce380dcadbf8@mind.be>
- <87y2bnxyds.fsf@dell.be.48ers.dk>
-Message-ID: <DM2P110MB01073B48544B9028B3CD934485359@DM2P110MB0107.NAMP110.PROD.OUTLOOK.COM>
+From: Sebastien Bourdelin <sebastien.bourdelin@gmail.com>
+Date: Thu, 10 Jun 2021 23:34:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qemu: drop no-pie patch
+Message-ID: <20210610213450.1211724-1-sebastien.bourdelin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+This commit removes the no-pie patch as it is part of qemu 6.0.0.
 
->-----Original Message-----
->From: Peter Korsgaard <jacmet@gmail.com> On Behalf Of Peter Korsgaard
->Sent: Sunday, June 06, 2021 2:10 AM
->To: Arnout Vandecappelle <arnout@mind.be>
->Cc: Yann E. MORIN <yann.morin.1998@free.fr>; Voss, Samuel M Collins <sam.voss@collins.com>; Weber, Matthew L Collins <Matthew.Weber@collins.com>; Sergey Matyukevich <geomatsi@gmail.com>; buildroot at buildroot.org
->Subject: [External] Re: [PATCH] package/hostapd: add upstream patch to fix CVE-2021-27803
->
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
->
->Hi,
->
-> >> Could you look at providing a patch to wpa_supplicant for  >> CVE-2021-27803, please?
->
-> >  Peter already applied it in 9ada4eb2f1c3d67ee49f6f5466738bcd821fc647, at the  > time there was no CVE yet. Fabrice later added the exception for CVE-2021-27803  > in 1a7cf592a834357c5777e452f0b7ab7652e7d389.
->
->Indeed. I did not add it to hostapd at the time, as the issue (to my reading at least) is specific to wpa_supplicant.
->
->Why are we adding it to hostapd here? Just for consistency?
+Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@gmail.com>
+---
+ ...-no-pie-is-no-functional-linker-flag.patch | 79 -------------------
+ 1 file changed, 79 deletions(-)
+ delete mode 100644 package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
 
-Ultimately it was added because it was identified as a CVE against this version of the package, and a patch was available for it. It came up during CVE discovery on one of our products so I sent the patch accordingly.
-
-I didn't personally take the onus to establish whether it was exploitable, just that it was reported as vulnerable.
-
-Sam
+diff --git a/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch b/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
+deleted file mode 100644
+index 6a21949157..0000000000
+--- a/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
++++ /dev/null
+@@ -1,79 +0,0 @@
+-From bbd2d5a8120771ec59b86a80a1f51884e0a26e53 Mon Sep 17 00:00:00 2001
+-From: Christian Ehrhardt <christian.ehrhardt@canonical.com>
+-Date: Mon, 14 Dec 2020 16:09:38 +0100
+-Subject: [PATCH] build: -no-pie is no functional linker flag
+-
+-Recent binutils changes dropping unsupported options [1] caused a build
+-issue in regard to the optionroms.
+-
+-  ld -m elf_i386 -T /<<PKGBUILDDIR>>/pc-bios/optionrom//flat.lds -no-pie \
+-    -s -o multiboot.img multiboot.o
+-  ld.bfd: Error: unable to disambiguate: -no-pie (did you mean --no-pie ?)
+-
+-This isn't really a regression in ld.bfd, filing the bug upstream
+-revealed that this never worked as a ld flag [2] - in fact it seems we
+-were by accident setting --nmagic).
+-
+-Since it never had the wanted effect this usage of LDFLAGS_NOPIE, should be
+-droppable without any effect. This also is the only use-case of LDFLAGS_NOPIE
+-in .mak, therefore we can also remove it from being added there.
+-
+-[1]: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=983d925d
+-[2]: https://sourceware.org/bugzilla/show_bug.cgi?id=27050#c5
+-
+-Signed-off-by: Christian Ehrhardt <christian.ehrhardt@canonical.com>
+-Message-Id: <20201214150938.1297512-1-christian.ehrhardt@canonical.com>
+-Cc: qemu-stable at nongnu.org
+-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+-
+-[Retrieved from:
+-https://gitlab.com/qemu-project/qemu/-/commit/bbd2d5a8120771ec59b86a80a1f51884e0a26e53]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- configure                  | 3 ---
+- pc-bios/optionrom/Makefile | 1 -
+- 2 files changed, 4 deletions(-)
+-
+-diff --git a/configure b/configure
+-index cb21108d34..c228f7c21e 100755
+---- a/configure
+-+++ b/configure
+-@@ -2137,7 +2137,6 @@ EOF
+- # Check we support --no-pie first; we will need this for building ROMs.
+- if compile_prog "-Werror -fno-pie" "-no-pie"; then
+-   CFLAGS_NOPIE="-fno-pie"
+--  LDFLAGS_NOPIE="-no-pie"
+- fi
+- 
+- if test "$static" = "yes"; then
+-@@ -2153,7 +2152,6 @@ if test "$static" = "yes"; then
+-   fi
+- elif test "$pie" = "no"; then
+-   CONFIGURE_CFLAGS="$CFLAGS_NOPIE $CONFIGURE_CFLAGS"
+--  CONFIGURE_LDFLAGS="$LDFLAGS_NOPIE $CONFIGURE_LDFLAGS"
+- elif compile_prog "-Werror -fPIE -DPIE" "-pie"; then
+-   CONFIGURE_CFLAGS="-fPIE -DPIE $CONFIGURE_CFLAGS"
+-   CONFIGURE_LDFLAGS="-pie $CONFIGURE_LDFLAGS"
+-@@ -6714,7 +6712,6 @@ echo "QEMU_CXXFLAGS=$QEMU_CXXFLAGS" >> $config_host_mak
+- echo "GLIB_CFLAGS=$glib_cflags" >> $config_host_mak
+- echo "GLIB_LIBS=$glib_libs" >> $config_host_mak
+- echo "QEMU_LDFLAGS=$QEMU_LDFLAGS" >> $config_host_mak
+--echo "LDFLAGS_NOPIE=$LDFLAGS_NOPIE" >> $config_host_mak
+- echo "LD_I386_EMULATION=$ld_i386_emulation" >> $config_host_mak
+- echo "EXESUF=$EXESUF" >> $config_host_mak
+- echo "HOST_DSOSUF=$HOST_DSOSUF" >> $config_host_mak
+-diff --git a/pc-bios/optionrom/Makefile b/pc-bios/optionrom/Makefile
+-index 084fc10f05..30771f8d17 100644
+---- a/pc-bios/optionrom/Makefile
+-+++ b/pc-bios/optionrom/Makefile
+-@@ -41,7 +41,6 @@ override CFLAGS += $(call cc-option, $(Wa)-32)
+- 
+- LD_I386_EMULATION ?= elf_i386
+- override LDFLAGS = -m $(LD_I386_EMULATION) -T $(SRC_DIR)/flat.lds
+--override LDFLAGS += $(LDFLAGS_NOPIE)
+- 
+- all: multiboot.bin linuxboot.bin linuxboot_dma.bin kvmvapic.bin pvh.bin
+- 
+--- 
+-GitLab
+-
+-- 
+2.31.1
