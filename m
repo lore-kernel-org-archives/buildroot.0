@@ -1,105 +1,73 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 10 Jun 2021 20:58:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/memcached: disable tests
-Message-ID: <20210610185846.37863-1-fontaine.fabrice@gmail.com>
+Date: Thu, 10 Jun 2021 21:03:13 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libsoup: always disable tls_check
+Message-ID: <20210610190313.38683-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable tests to avoid the following build failure with -DNDEBUG which
-is raised since commit 5a8c50fe05afacc3cbe8e7347e238da9f242fab0
+Always disable tls_check to avoid the following build failure since bump to
+version 2.72.0 in commit 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da:
 
-/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: testapp.o: in function `cache_redzone_test':
-(.text+0x2f48): undefined reference to `cache_error'
+../output-1/build/libsoup-2.72.0/meson.build:184:4: ERROR: Can not run test applications in this cross environment.
+
+Indeed, tls_check will run code since
+https://gitlab.gnome.org/GNOME/libsoup/-/commit/5c45253243a2deca4880d4f614f2932373445cf9
+
+While at it, also drop glib-networking build-time dependency
 
 Fixes:
- - http://autobuild.buildroot.org/results/c4ddd86bd4b74ba4e4857ee38e3a95bb9b019093
+ - http://autobuild.buildroot.org/results/9e539dc7185cfb81f18438dd36357cb49ef23a5a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-configure.ac-add-disable-tests.patch | 57 +++++++++++++++++++
- package/memcached/memcached.mk                |  3 +
- 2 files changed, 60 insertions(+)
- create mode 100644 package/memcached/0001-configure.ac-add-disable-tests.patch
+Changes v1 -> v2:
+ - Drop glib-networking build-time dependency
 
-diff --git a/package/memcached/0001-configure.ac-add-disable-tests.patch b/package/memcached/0001-configure.ac-add-disable-tests.patch
-new file mode 100644
-index 0000000000..bbe73b7292
---- /dev/null
-+++ b/package/memcached/0001-configure.ac-add-disable-tests.patch
-@@ -0,0 +1,57 @@
-+From c57efbce382bde6901859b79b222abfc9c3e1a87 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 10 Jun 2021 20:38:07 +0200
-+Subject: [PATCH] configure.ac: add --disable-tests
-+
-+Add --disable-tests to avoid the following build failure with -DNDEBUG:
-+
-+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: testapp.o: in function `cache_redzone_test':
-+(.text+0x2f48): undefined reference to `cache_error'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/c4ddd86bd4b74ba4e4857ee38e3a95bb9b019093
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Makefile.am  | 2 ++
-+ configure.ac | 4 ++++
-+ 2 files changed, 6 insertions(+)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 8ea4841..1d730b6 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,6 +1,8 @@
-+ bin_PROGRAMS = memcached
-+ pkginclude_HEADERS = protocol_binary.h
-++if ENABLE_TESTS
-+ noinst_PROGRAMS = memcached-debug sizes testapp timedrun
-++endif
-+ 
-+ BUILT_SOURCES=
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index f497101..441d55b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -115,6 +115,9 @@ AC_ARG_ENABLE(static,
-+ AC_ARG_ENABLE(unix_socket,
-+   [AS_HELP_STRING([--disable-unix-socket], [Disable unix domain socket])])
-+ 
-++AC_ARG_ENABLE(tests,
-++  [AS_HELP_STRING([--disable-tests], [Disable tests])],,enable_tests=yes)
-++
-+ dnl **********************************************************************
-+ dnl DETECT_SASL_CB_GETCONF
-+ dnl
-+@@ -231,6 +234,7 @@ AM_CONDITIONAL([ENABLE_TLS],[test "$enable_tls" = "yes"])
-+ AM_CONDITIONAL([ENABLE_ASAN],[test "$enable_asan" = "yes"])
-+ AM_CONDITIONAL([ENABLE_STATIC],[test "$enable_static" = "yes"])
-+ AM_CONDITIONAL([DISABLE_UNIX_SOCKET],[test "$enable_unix_socket" = "no"])
-++AM_CONDITIONAL([ENABLE_TESTS],[test "$enable_tests" = "yes"])
-+ 
-+ 
-+ AC_SUBST(DTRACE)
-+-- 
-+2.30.2
-+
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 1c695411cd..2c5a77b906 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -12,6 +12,9 @@ MEMCACHED_CONF_OPTS = --disable-coverage
- MEMCACHED_LICENSE = BSD-3-Clause
- MEMCACHED_LICENSE_FILES = COPYING
- MEMCACHED_CPE_ID_VENDOR = memcached
-+# We're patching configure.ac
-+MEMCACHED_AUTORECONF = YES
-+MEMCACHED_CONF_OPTS = --disable-tests
+ package/libsoup/Config.in  | 4 ++--
+ package/libsoup/libsoup.mk | 7 +------
+ 2 files changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+index 47adfb33f2..82ff077b8c 100644
+--- a/package/libsoup/Config.in
++++ b/package/libsoup/Config.in
+@@ -24,8 +24,8 @@ config BR2_PACKAGE_LIBSOUP_GNOME
+ config BR2_PACKAGE_LIBSOUP_SSL
+ 	bool "https support"
+ 	depends on !BR2_STATIC_LIBS # glib-networking, gnutls
+-	select BR2_PACKAGE_GLIB_NETWORKING
+-	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_GLIB_NETWORKING # runtime
++	select BR2_PACKAGE_GNUTLS # runtime
+ 	help
+ 	  Enable HTTPS (SSL) support.
  
- ifeq ($(BR2_ENDIAN),"BIG")
- MEMCACHED_CONF_ENV += ac_cv_c_endian=big
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 2f63e9e85c..964488f430 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -30,6 +30,7 @@ LIBSOUP_CONF_OPTS = \
+ 	-Dntlm=disabled \
+ 	-Dsysprof=disabled \
+ 	-Dtests=false \
++	-Dtls_check=false \
+ 	-Dvapi=disabled
+ 
+ ifeq ($(BR2_PACKAGE_BROTLI),y)
+@@ -52,10 +53,4 @@ else
+ LIBSOUP_CONF_OPTS += -Dgnome=false
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
+-LIBSOUP_DEPENDENCIES += glib-networking
+-else
+-LIBSOUP_CONF_OPTS += -Dtls_check=false
+-endif
+-
+ $(eval $(meson-package))
 -- 
 2.30.2
