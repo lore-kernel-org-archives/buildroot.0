@@ -1,93 +1,82 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 10 Jun 2021 22:25:13 +0300
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libsoup: always disable tls_check
-In-Reply-To: <20210610190313.38683-1-fontaine.fabrice@gmail.com>
-References: <20210610190313.38683-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210610222513.GB358606@momiji>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Thu, 10 Jun 2021 22:26:32 +0300
+Subject: [Buildroot] [PATCH v2 01/28] boot/arm-trusted-firmware: option
+ to disable stack protection
+In-Reply-To: <CAEyMn7aqWF6ki5H-Uv_rGezusRwP3oKrba2zj31OAeb-ribsQQ@mail.gmail.com>
+References: <20210609200003.2866122-1-geomatsi@gmail.com>
+ <20210609200003.2866122-2-geomatsi@gmail.com>
+ <20210609234015.1de2583f@windsurf> <YME6zLv85ivVOkpi@curiosity>
+ <CAEyMn7aqWF6ki5H-Uv_rGezusRwP3oKrba2zj31OAeb-ribsQQ@mail.gmail.com>
+Message-ID: <YMJnaP4PBxaOxAyU@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Thomas, Heiko
 
-On Thu, 10 Jun 2021 21:03:13 +0200 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> Always disable tls_check to avoid the following build failure since bump to
-> version 2.72.0 in commit 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da:
+> > > > +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DISABLE_SSP
+> > > > +   bool "Disable stack protection"
+> > > > +   help
+> > > > +     Select this option to explicitly disable stack protection checks in GCC.
+> > > > +     Such checks need to be disabled if ATF platform port does not implement
+> > > > +     plat_get_stack_protector_canary() hook.
+> > >
+> > > It's a bit annoying that we have to tell TF-A about this. If TF-A
+> > > doesn't implement plat_get_stack_protector_canary() for a certain
+> > > platform, why does it try to enable SSP ? It feels like something that
+> > > should be fixed in TF-A.
+> >
+> > TF-A does not attempt to enable those protection checks. This is
+> > controlled by its ENABLE_STACK_PROTECTOR build flag, which default
+> > value is 'none'. This is Buildroot who tries to enable TF-A stack
+> > protection checks depending on BR2_SSP_* toolchain features only:
+> > see arm-trusted-firmware.mk.
 > 
-> ../output-1/build/libsoup-2.72.0/meson.build:184:4: ERROR: Can not run test applications in this cross environment.
+> with commit 810ba387 we enabled SSP by default. And in the ATF
+> makefile we map that setting to atf ENABLE_STACK_PROTECTOR setting. As
+> this we force to use SSP in atf. But you're right this should be
+> handled in the TF-A stack. I tried to get some feedback from the TF-A
+> guys [1] but there is no helpful answer. So for now I think it is a
+> quick solution to make it possible to disable SSP for ATF like that.
 > 
-> Indeed, tls_check will run code since
-> https://gitlab.gnome.org/GNOME/libsoup/-/commit/5c45253243a2deca4880d4f614f2932373445cf9
+> On the other hand, does it make any sense at all to automatically take
+> over the SSP setting from the compiler options?
 > 
-> While at it, also drop glib-networking build-time dependency
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/9e539dc7185cfb81f18438dd36357cb49ef23a5a
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> [1] https://lists.trustedfirmware.org/pipermail/tf-a/2021-May/001152.html
 
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+I would also agree that it might not be always convenient to automatically
+infer TF-A SSP settings from the compiler options. Imagine the case when
+secure memory constraints become an issue and all the extra features
+need to be tuned or disabled in order to shrink TF-A firmware image.
 
-> ---
-> Changes v1 -> v2:
->  - Drop glib-networking build-time dependency
-> 
->  package/libsoup/Config.in  | 4 ++--
->  package/libsoup/libsoup.mk | 7 +------
->  2 files changed, 3 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-> index 47adfb33f2..82ff077b8c 100644
-> --- a/package/libsoup/Config.in
-> +++ b/package/libsoup/Config.in
-> @@ -24,8 +24,8 @@ config BR2_PACKAGE_LIBSOUP_GNOME
->  config BR2_PACKAGE_LIBSOUP_SSL
->  	bool "https support"
->  	depends on !BR2_STATIC_LIBS # glib-networking, gnutls
-> -	select BR2_PACKAGE_GLIB_NETWORKING
-> -	select BR2_PACKAGE_GNUTLS
-> +	select BR2_PACKAGE_GLIB_NETWORKING # runtime
-> +	select BR2_PACKAGE_GNUTLS # runtime
->  	help
->  	  Enable HTTPS (SSL) support.
->  
-> diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-> index 2f63e9e85c..964488f430 100644
-> --- a/package/libsoup/libsoup.mk
-> +++ b/package/libsoup/libsoup.mk
-> @@ -30,6 +30,7 @@ LIBSOUP_CONF_OPTS = \
->  	-Dntlm=disabled \
->  	-Dsysprof=disabled \
->  	-Dtests=false \
-> +	-Dtls_check=false \
->  	-Dvapi=disabled
->  
->  ifeq ($(BR2_PACKAGE_BROTLI),y)
-> @@ -52,10 +53,4 @@ else
->  LIBSOUP_CONF_OPTS += -Dgnome=false
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
-> -LIBSOUP_DEPENDENCIES += glib-networking
-> -else
-> -LIBSOUP_CONF_OPTS += -Dtls_check=false
-> -endif
-> -
->  $(eval $(meson-package))
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210610/c18dd66b/attachment.asc>
+So what if we leave the right to choose to the user ? I mean something
+like the following menu in TF-A Config.in:
+
+choice
+        prompt "TF-A GCC stack protection"
+        help
+          Select TF-A GCC stack protection. Note that for all values
+	  other than 'none' the plat_get_stack_protector_canary()
+	  platform hook needs to be implemented.
+
+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_NONE
+        bool "none"
+
+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_DEFAULT
+        bool "default"
+        depends on BR2_SSP_REGULAR
+
+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_STRONG
+        bool "strong"
+        depends on BR2_SSP_STRONG
+
+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_ALL
+        bool "all"
+        depends on BR2_SSP_ALL
+
+endchoice
+
+Regards,
+Sergey
