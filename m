@@ -1,66 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 22:48:55 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/go: security bump
- to version 1.15.13
-Message-ID: <20210610202819.801D28157B@busybox.osuosl.org>
+Date: Thu, 10 Jun 2021 22:26:50 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mono-gtksharp3:
+ fix build with latest mono
+Message-ID: <20210610202819.716AE8B82B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d297e54ccf02419bac4484041d99c9cf42e92f17
+commit: https://git.buildroot.net/buildroot/commit/?id=c2d3ba46028088826dae6c0fce317fe63dbed3e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes the following security issues:
+Fix build failure with latest mono which is raised since commit
+4c8a285b6e35c4028341f874760bfa9226ebff94
 
-- CVE-2021-33195: The LookupCNAME, LookupSRV, LookupMX, LookupNS, and
-  LookupAddr functions in net, and their respective methods on the Resolver
-  type may return arbitrary values retrieved from DNS which do not follow
-  the established RFC 1035 rules for domain names.  If these names are used
-  without further sanitization, for instance unsafely included in HTML, they
-  may allow for injection of unexpected content.  Note that LookupTXT may
-  still return arbitrary values that could require sanitization before
-  further use
+Fixes:
+ - http://autobuild.buildroot.org/results/ff3edfe406f00a29429d2fa4258af12c87e5fb96
 
-- CVE-2021-33196: The NewReader and OpenReader functions in archive/zip can
-  cause a panic or an unrecoverable fatal error when reading an archive that
-  claims to contain a large number of files, regardless of its actual size
-
-- CVE-2021-33197: ReverseProxy in net/http/httputil could be made to forward
-  certain hop-by-hop headers, including Connection.  In case the target of
-  the ReverseProxy was itself a reverse proxy, this would let an attacker
-  drop arbitrary headers, including those set by the ReverseProxy.Director
-
-- CVE-2021-33198: The SetString and UnmarshalText methods of math/big.Rat
-  may cause a panic or an unrecoverable fatal error if passed inputs with
-  very large exponents
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 11e8ced584068ce0e15ea6b1af117aa12d423126)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0002-Mono-compilation-error-branch.patch       | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 500ae02cc2..e077d55441 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  1c6911937df4a277fa74e7b7efc3d08594498c4c4adc0b6c4ae3566137528091  go1.15.12.src.tar.gz
-+sha256  99069e7223479cce4553f84f874b9345f6f4045f27cf5089489b546da619a244  go1.15.13.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 639fc401b6..3d1dcf02d7 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.15.12
-+GO_VERSION = 1.15.13
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+diff --git a/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch b/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
+new file mode 100644
+index 0000000000..0d52401b4a
+--- /dev/null
++++ b/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
+@@ -0,0 +1,25 @@
++From fe18352a4bc9f0cf3b6cf63b8cc03c5d6e41863b Mon Sep 17 00:00:00 2001
++From: plprevost <plprevost@sii.fr>
++Date: Wed, 12 May 2021 16:46:16 +0200
++Subject: [PATCH] refs issue:#298 Fix mono compilation errors
++
++[Retrieved from:
++https://github.com/mono/gtk-sharp/pull/299/commits/fe18352a4bc9f0cf3b6cf63b8cc03c5d6e41863b]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ sample/test/TestRange.cs | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/sample/test/TestRange.cs b/sample/test/TestRange.cs
++index 82fb81105..8727c9a77 100644
++--- a/sample/test/TestRange.cs
+++++ b/sample/test/TestRange.cs
++@@ -8,7 +8,7 @@
++ 
++ using System;
++ 
++-using Gtk;
+++using Gtk; using Range = Gtk.Range;
++ 
++ namespace WidgetViewer {
++ 
