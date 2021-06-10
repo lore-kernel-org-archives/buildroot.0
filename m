@@ -1,23 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 22:52:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mimic: fix static build with
- gcc 10
-In-Reply-To: <20210606173804.38810-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 6 Jun 2021 19:38:04 +0200")
-References: <20210606173804.38810-1-fontaine.fabrice@gmail.com>
-Message-ID: <875yylh26x.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Jun 2021 22:53:59 +0200
+Subject: [Buildroot] [git commit] DEVELOPPERS: remove Chakra Divi
+In-Reply-To: <20210606203508.9FBA18B734@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sun, 6 Jun 2021 23:05:19 +0200")
+References: <20210606203508.9FBA18B734@busybox.osuosl.org>
+Message-ID: <871r99h254.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/bee20bbfa4fa64ed8704bfb9586d5a3148f39fdf
+ > commit:
+ > https://git.buildroot.net/buildroot/commit/?id=48235e6fc5f9f452b7b48fd7f2297093c4dd16ea
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > The domain for their email is now a parking-site, and mails are not
+ > delivered anymore.
+
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Committed to 2021.02.x, thanks.
 
