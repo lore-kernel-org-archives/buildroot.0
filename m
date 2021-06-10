@@ -1,35 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Jun 2021 17:37:03 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2021-04-11
-In-Reply-To: <CAFOYHZC23wcnW0-y=fyiP2x6M2B5CEyFEzJDeWJq_Pw5BuRbkg@mail.gmail.com>
-References: <6073d64f.1c69fb81.9d11e.7f35SMTPIN_ADDED_MISSING@mx.google.com>
- <CAFOYHZC23wcnW0-y=fyiP2x6M2B5CEyFEzJDeWJq_Pw5BuRbkg@mail.gmail.com>
-Message-ID: <20210610173703.31d33d97@windsurf>
+From: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
+Date: Thu, 10 Jun 2021 18:10:08 +0200
+Subject: [Buildroot] [PATCH v2] package/iperf3: bump to version 3.10.1
+Message-ID: <20210610161008.norcnwoe3ej3txav@zenon.in.qult.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Chris,
+Update LICENSE hash; copyright year update.
 
-On Mon, 12 Apr 2021 20:37:46 +1200
-Chris Packham <judge.packham@gmail.com> wrote:
+Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
+---
+ package/iperf3/iperf3.hash | 6 +++---
+ package/iperf3/iperf3.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> I've managed to get the CVE updated to say "This flaw affects
-> syslog-ng versions prior to and including 2.0.9"[1] but I'm still
-> getting these notifications. Is there something else that needs to
-> happen now? Actually nist[2] seems to know it's been modified so it
-> may be a case of hurry up and wait.
-
-If I look up at https://nvd.nist.gov/vuln/detail/CVE-2008-5110, the
-list of known affected software configurations is still
-cpe:2.3:a:oneidentity:syslog-ng:-:*:*:*:*:*:*:*, which means "all known
-versions.
-
-Thomas
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index fa9d54f404..c96d68cd99 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.es.net/pub/iperf/iperf-3.9.tar.gz.sha256
+-sha256	24b63a26382325f759f11d421779a937b63ca1bc17c44587d2fcfedab60ac038  iperf-3.9.tar.gz
++# From https://downloads.es.net/pub/iperf/iperf-3.10.1.tar.gz.sha256
++sha256  03bc9760cc54a245191d46bfc8edaf8a4750f0e87abca6764486972044d6715a  iperf-3.10.1.tar.gz
+ # Locally computed
+-sha256	9ef73096bdd5209dd979bfa1fec70aeb42a7255d2df3aec423642aa92d5e9f40  LICENSE
++sha256  0e1cb1921904626f0d3e86cacc0e28333140f0f9957267cff0b9d185645743ed  LICENSE
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 7d20b86e78..8c57c61fce 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPERF3_VERSION = 3.9
++IPERF3_VERSION = 3.10.1
+ IPERF3_SITE = https://downloads.es.net/pub/iperf
+ IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
