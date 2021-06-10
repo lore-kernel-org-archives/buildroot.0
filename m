@@ -1,82 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 22:11:52 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/iftop: fix static
- build
-Message-ID: <20210610194753.A79B486F8D@busybox.osuosl.org>
+Date: Thu, 10 Jun 2021 22:17:08 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] DEVELOPERS: add Bernd
+ Kuhls to gptfdisk package
+Message-ID: <20210610194753.EE2E386F8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73b5894c909fe0b660d323b4b59882eae4ce2274
+commit: https://git.buildroot.net/buildroot/commit/?id=f5a37bd892f6ae935502127b855d1bb299e532fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/eb53ff6b031c654daec57050dec376b5c9134a81
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 16600cde239a39c3d13b66271d0c3b3238f858cf)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit db19b4ebe4e415a6302c44e1a587cee7bd815f8d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...2-Rename-pcap_filter-to-iftop_pcap_filter.patch | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/iftop/0002-Rename-pcap_filter-to-iftop_pcap_filter.patch b/package/iftop/0002-Rename-pcap_filter-to-iftop_pcap_filter.patch
-new file mode 100644
-index 0000000000..92eedccab7
---- /dev/null
-+++ b/package/iftop/0002-Rename-pcap_filter-to-iftop_pcap_filter.patch
-@@ -0,0 +1,51 @@
-+From 64a185ce2017e4523f4bc39a36c7aebd6d68549a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 2 Jun 2021 08:21:04 +0200
-+Subject: [PATCH] Rename pcap_filter to iftop_pcap_filter
-+
-+Rename pcap_filter to iftop_pcap_filter to fix the following static
-+build failure:
-+
-+/home/buildroot/autobuild/run/instance-3/output-1/host/bin/riscv64-linux-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static   -static -o iftop addr_hash.o edline.o hash.o iftop.o ns_hash.o options.o resolver.o screenfilter.o serv_hash.o sorted_list.o threadprof.o ui_common.o ui.o tui.o util.o addrs_ioctl.o addrs_dlpi.o dlcommon.o stringmap.o cfgfile.o vector.o  -lpcap -lpcap -L/home/buildroot/autobuild/run/instance-3/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/bin/../../../../bin/../riscv64-buildroot-linux-musl/sysroot/usr/lib -lnl-genl-3 -lnl-3 -lpthread   -lcurses
-+/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv64-buildroot-linux-musl/10.2.0/../../../../riscv64-buildroot-linux-musl/bin/ld: /home/buildroot/autobuild/run/instance-3/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/bin/../../../../bin/../riscv64-buildroot-linux-musl/sysroot/usr/lib/libpcap.a(bpf_filter.o): in function `pcap_filter':
-+bpf_filter.c:(.text+0x4a8): multiple definition of `pcap_filter'; iftop.o:iftop.c:(.bss+0x1a8): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/eb53ff6b031c654daec57050dec376b5c9134a81
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ iftop.c      | 6 +++---
-+ 1 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/iftop.c b/iftop.c
-+index aaec6aa..f89eee3 100644
-+--- a/iftop.c
-++++ b/iftop.c
-+@@ -74,7 +74,7 @@ int history_len = 1;
-+ pthread_mutex_t tick_mutex;
-+ 
-+ pcap_t* pd; /* pcap descriptor */
-+-struct bpf_program pcap_filter;
-++struct bpf_program iftop_pcap_filter;
-+ pcap_handler packet_handler;
-+ 
-+ sig_atomic_t foad;
-+@@ -679,12 +679,12 @@ char *set_filter_code(const char *filter) {
-+         sprintf(x, "(%s) and (ip or ip6)", filter);
-+     } else
-+         x = xstrdup("ip or ip6");
-+-    if (pcap_compile(pd, &pcap_filter, x, 1, 0) == -1) {
-++    if (pcap_compile(pd, &iftop_pcap_filter, x, 1, 0) == -1) {
-+         xfree(x);
-+         return pcap_geterr(pd);
-+     }
-+     xfree(x);
-+-    if (pcap_setfilter(pd, &pcap_filter) == -1)
-++    if (pcap_setfilter(pd, &iftop_pcap_filter) == -1)
-+         return pcap_geterr(pd);
-+     else
-+         return NULL;
-+-- 
-+2.30.2
-+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index edbd7d0da2..31a0a8a699 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -332,6 +332,7 @@ F:	package/gkrellm/
+ F:	package/gli/
+ F:	package/glmark2/
+ F:	package/gpsd/
++F:	package/gptfdisk/
+ F:	package/hdparm/
+ F:	package/inih/
+ F:	package/intel-gmmlib/
