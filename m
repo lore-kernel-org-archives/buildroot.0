@@ -1,54 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Jun 2021 16:10:21 +0200
-Subject: [Buildroot] [PATCH v2 01/28] boot/arm-trusted-firmware: option
- to disable stack protection
-In-Reply-To: <YME6zLv85ivVOkpi@curiosity>
-References: <20210609200003.2866122-1-geomatsi@gmail.com>
- <20210609200003.2866122-2-geomatsi@gmail.com>
- <20210609234015.1de2583f@windsurf> <YME6zLv85ivVOkpi@curiosity>
-Message-ID: <20210610161021.3fd9db8a@windsurf>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 10 Jun 2021 17:11:02 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libsoup: always disable
+ tls_check
+In-Reply-To: <CAPi7W82cZOizvhsrHM6AZN4qE8Hfti+2e0W0HGOpcEYvVssjzQ@mail.gmail.com>
+References: <20210609212503.1580411-1-fontaine.fabrice@gmail.com>
+ <20210610063627.GD135851@momiji>
+ <CAPi7W82QYMwJGjfKJ0c-gqw8gvPLBEBUpEwMrD4FX4OVHEvNuQ@mail.gmail.com>
+ <20210610162103.GB319559@momiji>
+ <CAPi7W82cZOizvhsrHM6AZN4qE8Hfti+2e0W0HGOpcEYvVssjzQ@mail.gmail.com>
+Message-ID: <20210610171102.GB319945@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Thu, 10 Jun 2021 01:03:56 +0300
-Sergey Matyukevich <geomatsi@gmail.com> wrote:
-
-> > It's a bit annoying that we have to tell TF-A about this. If TF-A
-> > doesn't implement plat_get_stack_protector_canary() for a certain
-> > platform, why does it try to enable SSP ? It feels like something that
-> > should be fixed in TF-A.  
+On Thu, 10 Jun 2021 15:39:54 +0200 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> Hi Adrian,
 > 
-> TF-A does not attempt to enable those protection checks. This is
-> controlled by its ENABLE_STACK_PROTECTOR build flag, which default
-> value is 'none'. This is Buildroot who tries to enable TF-A stack
-> protection checks depending on BR2_SSP_* toolchain features only:
-> see arm-trusted-firmware.mk.
+> Le jeu. 10 juin 2021 ? 15:21, Adrian Perez de Castro
+> <aperez@igalia.com> a ?crit :
+> >
+> > On Thu, 10 Jun 2021 07:34:40 +0200 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> > > Hi,
+> > >
+> > > Le jeu. 10 juin 2021 ? 05:36, Adrian Perez de Castro
+> > > <aperez@igalia.com> a ?crit :
+> > > >
+> > > > Hi,
+> > > >
+> > > > On Wed, 09 Jun 2021 23:25:03 +0200 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> > > > > Always disable tls_check to avoid the following build failure since bump to
+> > > > > version 2.72.0 in commit 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da:
+> > > > >
+> > > > > ../output-1/build/libsoup-2.72.0/meson.build:184:4: ERROR: Can not run test applications in this cross environment.
+> > > > >
+> > > > > tls_check will run code since
+> > > > > https://gitlab.gnome.org/GNOME/libsoup/-/commit/5c45253243a2deca4880d4f614f2932373445cf9
+> > > >
+> > > > I wonder how this check passed locally when doing test builds of the update
+> > > > before submitting the patch (I did a few cross-builds targeting 64-bit ARM)
+> > > > ?\_(?)_/?
+> > >
+> > > I assume that BR2_PACKAGE_LIBSOUP_SSL was not set in your tests.
+> > > However, I'm now wondering if we should also drop BR2_PACKAGE_LIBSOUP_SSL.
+> > > From my understanding, glib-networking is a runtime dependency that
+> > > was only needed at compile-time to pass tls_check.
+> >
+> > I still had the ?.config? file around... You are right actually, I did not
+> > have BR2_PACKAGE_LIBSOUP_SSL enabled. My bad.
+> >
+> > It is true that glib-networking is a pure runtime dependency, and not even
+> > needed at build time at all, except for the sanity check that can be turned
+> > off with -Dtls_check=false. The actual GTlsConnection types are defined in
+> > GLib itself, but to avoid linking any particular TLS implementation (which
+> > might result in accidental license incompatibilities) the actual
+> > implementation is inside glib-networking, which is a plug-in for GLib.
+> > Currently it's possible to build glib-networking against both GnuTLS and
+> > OpenSSL, but the latter is newer and less battle tested, which is the reason
+> > why I have not yet sent a patch to allow building against OpenSSL ;-)
+> >
+> > I do not have much of an opinion about removing BR2_PACKAGE_LIBSOUP_SSL;
+> > probably it's fine to remove the check for it in ?libsoup.mk?, but I would
+> > still leave the option in ?Config.in? to make sure that glib-networking will
+> > be built and installed. Otherwise I am afraid that we may get people reporting
+> > that TLS does not work with GLib sockets, and it will turned out that they
+> > forgot to enable building glib-networking.
+> >
+> > How does the above approach sound?
+> I like your approach.
+> I'll send a v2 to only remove the build-time dependency on
+> glib-networking but I'll keep the option and so a run-time dependency
+> on glib-networking.
 
-I think:
+Wonderful, thanks!
 
-ifeq ($(BR2_SSP_REGULAR),y)
-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=default
-else ifeq ($(BR2_SSP_STRONG),y)
-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=strong
-else ifeq ($(BR2_SSP_ALL),y)
-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=all
-endif
-
-is probably not great. BR2_SSP_* should really only affect user-space
-code, IMO. For bare-metal/bootloader code, handling SSP really requires
-special support, so we should probably not force it.
-
-That being said, it's a bit weird for TF-A to provide that
-ENABLE_STACK_PROTECTOR option in a way that doesn't build/work on all
-platforms.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-Adrian
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210610/5b8c9a2a/attachment.asc>
