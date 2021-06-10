@@ -1,94 +1,73 @@
-From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Thu, 10 Jun 2021 15:15:33 +0200
-Subject: [Buildroot] [PATCH v5 0/5] Introduce bmap-tools as target +
- host package
-In-Reply-To: <20210610143130.0ab608d7@windsurf>
-References: <20210607204221.124908-1-thomas.petazzoni@bootlin.com>
- <6e9afcd08150926a669d4df1198461e0acc7f063.camel@orolia.com>
- <20210609205222.785b065d@windsurf>
- <08bb8c91-0304-8613-492c-aa133412a1e3@gmail.com>
- <ba7a6ec514891b5494d6232db9513443514ed1fc.camel@orolia.com>
- <20210610143130.0ab608d7@windsurf>
-Message-ID: <9e736e28253f719f333e481692847c714eeef970.camel@orolia.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 10 Jun 2021 16:21:03 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libsoup: always disable
+ tls_check
+In-Reply-To: <CAPi7W82QYMwJGjfKJ0c-gqw8gvPLBEBUpEwMrD4FX4OVHEvNuQ@mail.gmail.com>
+References: <20210609212503.1580411-1-fontaine.fabrice@gmail.com>
+ <20210610063627.GD135851@momiji>
+ <CAPi7W82QYMwJGjfKJ0c-gqw8gvPLBEBUpEwMrD4FX4OVHEvNuQ@mail.gmail.com>
+Message-ID: <20210610162103.GB319559@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok,
-So I ran the test and this time, it failed as expected :)
+On Thu, 10 Jun 2021 07:34:40 +0200 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> Hi,
+> 
+> Le jeu. 10 juin 2021 ? 05:36, Adrian Perez de Castro
+> <aperez@igalia.com> a ?crit :
+> >
+> > Hi,
+> >
+> > On Wed, 09 Jun 2021 23:25:03 +0200 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> > > Always disable tls_check to avoid the following build failure since bump to
+> > > version 2.72.0 in commit 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da:
+> > >
+> > > ../output-1/build/libsoup-2.72.0/meson.build:184:4: ERROR: Can not run test applications in this cross environment.
+> > >
+> > > tls_check will run code since
+> > > https://gitlab.gnome.org/GNOME/libsoup/-/commit/5c45253243a2deca4880d4f614f2932373445cf9
+> >
+> > I wonder how this check passed locally when doing test builds of the update
+> > before submitting the patch (I did a few cross-builds targeting 64-bit ARM)
+> > ?\_(?)_/?
+>
+> I assume that BR2_PACKAGE_LIBSOUP_SSL was not set in your tests.
+> However, I'm now wondering if we should also drop BR2_PACKAGE_LIBSOUP_SSL.
+> From my understanding, glib-networking is a runtime dependency that
+> was only needed at compile-time to pass tls_check.
 
-buildroot$ tail -f tests/TestExt3-run.log
-> starting qemu with 'qemu-system-arm -serial stdio -display none -m
-256 -drive
-file=/home/ncarrier/workspace/buildroot/tests/TestExt3/images/rootfs.ex
-t3,if=sd -dtb /home/ncarrier/workspace/buildroot/dl/vexpress-v2p-ca9-
-5.10.7.dtb -M vexpress-a9 -kernel
-/home/ncarrier/workspace/buildroot/dl/kernel-vexpress-5.10.7 -append
-root=/dev/mmcblk0 rootfstype=ext3 console=ttyAMA0'
-WARNING: Image format was not specified for
-'/home/ncarrier/workspace/buildroot/tests/TestExt3/images/rootfs.ext3'
-and probing guessed raw.
-         Automatically detecting the format is dangerous for raw
-images, write operations on block 0 will be restricted.
-         Specify the 'raw' format explicitly to remove the
-restrictions.
-qemu-system-arm: Invalid SD card size: 60 MiB
-SD card size has to be a power of 2, e.g. 64 MiB.
-You can resize disk images with 'qemu-img resize <imagefile> <new-
-size>'
-(note that this will lose data if you make the image smaller than it
-currently is).
+I still had the ?.config? file around... You are right actually, I did not
+have BR2_PACKAGE_LIBSOUP_SSL enabled. My bad.
 
+It is true that glib-networking is a pure runtime dependency, and not even
+needed at build time at all, except for the sanity check that can be turned
+off with -Dtls_check=false. The actual GTlsConnection types are defined in
+GLib itself, but to avoid linking any particular TLS implementation (which
+might result in accidental license incompatibilities) the actual
+implementation is inside glib-networking, which is a plug-in for GLib.
+Currently it's possible to build glib-networking against both GnuTLS and
+OpenSSL, but the latter is newer and less battle tested, which is the reason
+why I have not yet sent a patch to allow building against OpenSSL ;-)
 
-On Thu, 2021-06-10 at 14:31 +0200, Thomas Petazzoni wrote:
-> CAUTION: This email originated from outside of the organization.
-> Do not click links or open attachments unless you recognize the
-> sender and know the content is safe.
-> 
-> Hello Nicolas,
-> 
-> On Thu, 10 Jun 2021 09:39:43 +0200
-> Nicolas Carrier <nicolas.carrier@orolia.com> wrote:
-> 
-> > Sure,
-> > 
-> > My qemu version is:
-> > $ qemu-system-arm? --version
-> > QEMU emulator version 5.2.0 (Debian 1:5.2+dfsg-10)
-> > 
-> > The Ext4 test passes:
-> > $ ./support/testing/run-tests tests.fs.test_ext.TestExt4 -o tests -
-> > d dl
-> > 09:03:31 TestExt4???????????????????????????????? Starting
-> > 09:03:34 TestExt4???????????????????????????????? Building
-> > ah09:08:12 TestExt4???????????????????????????????? Building done
-> > Downloading to /home/ncarrier/workspace/buildroot/dl/tmp_43sbo0r
-> > Renaming from /home/ncarrier/workspace/buildroot/dl/tmp_43sbo0r to
-> > /home/ncarrier/workspace/buildroot/dl/kernel-vexpress-5.10.7
-> > Downloading to /home/ncarrier/workspace/buildroot/dl/tmpnj5e2uiw
-> > Renaming from /home/ncarrier/workspace/buildroot/dl/tmpnj5e2uiw to
-> > /home/ncarrier/workspace/buildroot/dl/vexpress-v2p-ca9-5.10.7.dtb
-> > 09:08:20 TestExt4???????????????????????????????? Cleaning up
-> > .
-> > -------------------------------------------------------------------
-> > ---
-> > Ran 1 test in 289.374s
-> > 
-> > OK
-> > 
-> > But its file system image has a size of 16M which _is_ a power of
-> > two:
-> 
-> Sorry, I picked the wrong test. Could you try the Ext3 tests, i.e
-> tests.fs.test_ext.TestExt3 ? This one doesn't specify a size, so it
-> should fallback to the default, which is 60MB.
-> 
-> Best regards,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+I do not have much of an opinion about removing BR2_PACKAGE_LIBSOUP_SSL;
+probably it's fine to remove the check for it in ?libsoup.mk?, but I would
+still leave the option in ?Config.in? to make sure that glib-networking will
+be built and installed. Otherwise I am afraid that we may get people reporting
+that TLS does not work with GLib sockets, and it will turned out that they
+forgot to enable building glib-networking.
+
+How does the above approach sound?
+
+Cheers,
+-Adrian
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210610/ad18576d/attachment.asc>
