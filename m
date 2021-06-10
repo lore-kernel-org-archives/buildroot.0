@@ -1,60 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 10:29:10 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libesmtp: move
- SITE to s.b.n
-Message-ID: <20210610075846.E8C628CA9F@busybox.osuosl.org>
+Date: Thu, 10 Jun 2021 10:43:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcamera: fix build on sparc v8
+In-Reply-To: <20210527200354.478341-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 27 May 2021 22:03:54 +0200")
+References: <20210527200354.478341-1-fontaine.fabrice@gmail.com>
+Message-ID: <87czsukt2w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f73e2b821b7a007bce118715e79795a579754ef7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-The original site is gone, and the author is no longer providing
-tarballs:
+ > Fix build failure with sparc v8 which is raised since commit
+ > bd9b7b092cf34dc065a4b40268c18a9fe319f5e4 due to
+ > https://git.linuxtv.org/libcamera.git/commit/?id=a8310248fc26cc1e1b791af5e9394c1d20bee269
 
-  https://libesmtp.github.io/notes.html
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/d0726b2253f1f3d006e057f3b32c646c4b9b5f7a
 
-Change website link to the current official page.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/d788315bf708c31e14ba5fb35dccf94753d5f78a/
-http://autobuild.buildroot.net/results/83bfdd8e5f897b4d4be81c4c16106feb4e17bd50/
+Committed to 2021.02.x, thanks.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 1410cbd1638e1629454feda719fe9ea6473e941b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libesmtp/Config.in   | 2 +-
- package/libesmtp/libesmtp.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libesmtp/Config.in b/package/libesmtp/Config.in
-index f3ed521d22..db2dc8ec9c 100644
---- a/package/libesmtp/Config.in
-+++ b/package/libesmtp/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBESMTP
- 	help
- 	  Library for sending emails through SMTP.
- 
--	  http://brianstafford.info/libesmtp
-+	  https://libesmtp.github.io
- 
- comment "libesmtp needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/libesmtp/libesmtp.mk b/package/libesmtp/libesmtp.mk
-index dcffaceddc..1f5cdec191 100644
---- a/package/libesmtp/libesmtp.mk
-+++ b/package/libesmtp/libesmtp.mk
-@@ -6,7 +6,7 @@
- 
- LIBESMTP_VERSION = 1.0.6
- LIBESMTP_SOURCE = libesmtp-$(LIBESMTP_VERSION).tar.bz2
--LIBESMTP_SITE = http://brianstafford.info/libesmtp
-+LIBESMTP_SITE = http://sources.buildroot.net/libesmtp
- LIBESMTP_INSTALL_STAGING = YES
- LIBESMTP_CONFIG_SCRIPTS = libesmtp-config
- LIBESMTP_DEPENDENCIES = $(if $(BR2_PACKAGE_OPENSSL),openssl)
+-- 
+Bye, Peter Korsgaard
