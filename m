@@ -1,34 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 22:17:08 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] DEVELOPERS: add Bernd
- Kuhls to gptfdisk package
-Message-ID: <20210610194753.EE2E386F8D@busybox.osuosl.org>
+Date: Thu, 10 Jun 2021 22:09:52 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/netperf: move
+ SITE so s.b.o
+Message-ID: <20210610194753.8DB018D205@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5a37bd892f6ae935502127b855d1bb299e532fc
+commit: https://git.buildroot.net/buildroot/commit/?id=96acbda894938583a387d895ce1e0c24c8de3e87
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit db19b4ebe4e415a6302c44e1a587cee7bd815f8d)
+The original site is gone.
+
+Fixes:
+http://autobuild.buildroot.net/results/8d4a2ef5a7f50ea21b844d6cf806bb83016ae17b/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 7cf8adc03999a39a9b80a4612b5f14baae73ce5c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/netperf/netperf.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index edbd7d0da2..31a0a8a699 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -332,6 +332,7 @@ F:	package/gkrellm/
- F:	package/gli/
- F:	package/glmark2/
- F:	package/gpsd/
-+F:	package/gptfdisk/
- F:	package/hdparm/
- F:	package/inih/
- F:	package/intel-gmmlib/
+diff --git a/package/netperf/netperf.mk b/package/netperf/netperf.mk
+index 8b2280830f..85f6bce033 100644
+--- a/package/netperf/netperf.mk
++++ b/package/netperf/netperf.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NETPERF_VERSION = 2.7.0
+-NETPERF_SITE = ftp://ftp.netperf.org/netperf
++NETPERF_SITE = http://sources.buildroot.org/netperf
+ NETPERF_SOURCE = netperf-$(NETPERF_VERSION).tar.bz2
+ # gcc 5+ defaults to gnu99 which breaks netperf
+ NETPERF_CONF_ENV = \
