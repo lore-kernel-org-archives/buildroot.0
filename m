@@ -1,105 +1,55 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@gmail.com>
-Date: Thu, 10 Jun 2021 23:34:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qemu: drop no-pie patch
-Message-ID: <20210610213450.1211724-1-sebastien.bourdelin@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 10 Jun 2021 23:47:30 +0200
+Subject: [Buildroot] [PATCH] package/mpg123: bump version to 1.25.15
+Message-ID: <20210610214731.27343-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit removes the no-pie patch as it is part of qemu 6.0.0.
+Bugfix release. From the release notes:
 
-Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@gmail.com>
+Some backports of important fixes to the 1.25 series, for very conservative
+people.
+
+libmpg123: Backport bit reservoir CRC fix from 1.26
+libmpg123: Backport part2_3_length regression fix (bug 312).
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-no-pie-is-no-functional-linker-flag.patch | 79 -------------------
- 1 file changed, 79 deletions(-)
- delete mode 100644 package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
+ package/mpg123/mpg123.hash | 8 ++++----
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch b/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
-deleted file mode 100644
-index 6a21949157..0000000000
---- a/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
-+++ /dev/null
-@@ -1,79 +0,0 @@
--From bbd2d5a8120771ec59b86a80a1f51884e0a26e53 Mon Sep 17 00:00:00 2001
--From: Christian Ehrhardt <christian.ehrhardt@canonical.com>
--Date: Mon, 14 Dec 2020 16:09:38 +0100
--Subject: [PATCH] build: -no-pie is no functional linker flag
--
--Recent binutils changes dropping unsupported options [1] caused a build
--issue in regard to the optionroms.
--
--  ld -m elf_i386 -T /<<PKGBUILDDIR>>/pc-bios/optionrom//flat.lds -no-pie \
--    -s -o multiboot.img multiboot.o
--  ld.bfd: Error: unable to disambiguate: -no-pie (did you mean --no-pie ?)
--
--This isn't really a regression in ld.bfd, filing the bug upstream
--revealed that this never worked as a ld flag [2] - in fact it seems we
--were by accident setting --nmagic).
--
--Since it never had the wanted effect this usage of LDFLAGS_NOPIE, should be
--droppable without any effect. This also is the only use-case of LDFLAGS_NOPIE
--in .mak, therefore we can also remove it from being added there.
--
--[1]: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=983d925d
--[2]: https://sourceware.org/bugzilla/show_bug.cgi?id=27050#c5
--
--Signed-off-by: Christian Ehrhardt <christian.ehrhardt@canonical.com>
--Message-Id: <20201214150938.1297512-1-christian.ehrhardt@canonical.com>
--Cc: qemu-stable at nongnu.org
--Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
--
--[Retrieved from:
--https://gitlab.com/qemu-project/qemu/-/commit/bbd2d5a8120771ec59b86a80a1f51884e0a26e53]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure                  | 3 ---
-- pc-bios/optionrom/Makefile | 1 -
-- 2 files changed, 4 deletions(-)
--
--diff --git a/configure b/configure
--index cb21108d34..c228f7c21e 100755
----- a/configure
--+++ b/configure
--@@ -2137,7 +2137,6 @@ EOF
-- # Check we support --no-pie first; we will need this for building ROMs.
-- if compile_prog "-Werror -fno-pie" "-no-pie"; then
--   CFLAGS_NOPIE="-fno-pie"
---  LDFLAGS_NOPIE="-no-pie"
-- fi
-- 
-- if test "$static" = "yes"; then
--@@ -2153,7 +2152,6 @@ if test "$static" = "yes"; then
--   fi
-- elif test "$pie" = "no"; then
--   CONFIGURE_CFLAGS="$CFLAGS_NOPIE $CONFIGURE_CFLAGS"
---  CONFIGURE_LDFLAGS="$LDFLAGS_NOPIE $CONFIGURE_LDFLAGS"
-- elif compile_prog "-Werror -fPIE -DPIE" "-pie"; then
--   CONFIGURE_CFLAGS="-fPIE -DPIE $CONFIGURE_CFLAGS"
--   CONFIGURE_LDFLAGS="-pie $CONFIGURE_LDFLAGS"
--@@ -6714,7 +6712,6 @@ echo "QEMU_CXXFLAGS=$QEMU_CXXFLAGS" >> $config_host_mak
-- echo "GLIB_CFLAGS=$glib_cflags" >> $config_host_mak
-- echo "GLIB_LIBS=$glib_libs" >> $config_host_mak
-- echo "QEMU_LDFLAGS=$QEMU_LDFLAGS" >> $config_host_mak
---echo "LDFLAGS_NOPIE=$LDFLAGS_NOPIE" >> $config_host_mak
-- echo "LD_I386_EMULATION=$ld_i386_emulation" >> $config_host_mak
-- echo "EXESUF=$EXESUF" >> $config_host_mak
-- echo "HOST_DSOSUF=$HOST_DSOSUF" >> $config_host_mak
--diff --git a/pc-bios/optionrom/Makefile b/pc-bios/optionrom/Makefile
--index 084fc10f05..30771f8d17 100644
----- a/pc-bios/optionrom/Makefile
--+++ b/pc-bios/optionrom/Makefile
--@@ -41,7 +41,6 @@ override CFLAGS += $(call cc-option, $(Wa)-32)
-- 
-- LD_I386_EMULATION ?= elf_i386
-- override LDFLAGS = -m $(LD_I386_EMULATION) -T $(SRC_DIR)/flat.lds
---override LDFLAGS += $(LDFLAGS_NOPIE)
-- 
-- all: multiboot.bin linuxboot.bin linuxboot_dma.bin kvmvapic.bin pvh.bin
-- 
---- 
--GitLab
--
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index 02c40ad086..e5fb09b46a 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.13/
+-sha1 2b6428dc563c56fb1374191d1244c8ac928e4d89  mpg123-1.25.13.tar.bz2
+-md5 294a6c30546504ec3d0deac2b2ea22be  mpg123-1.25.13.tar.bz2
++# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.15/
++sha1  286fcb83afad3ecbfea60434d3ee1b6d7f41bb7c  mpg123-1.25.15.tar.bz2
++md5  9a050d4b3573661c606f8095a3f34ca3  mpg123-1.25.15.tar.bz2
+ # Locally calculated
+-sha256 90306848359c793fd43b9906e52201df18775742dc3c81c06ab67a806509890a  mpg123-1.25.13.tar.bz2
++sha256  503a76d82d97f1a6513bbeb284e460a99fb17ef80f23a661d8fc026ce6adcbbc  mpg123-1.25.15.tar.bz2
+ # License file
+ sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 588a4ffc32..9aa9cd1c10 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPG123_VERSION = 1.25.13
++MPG123_VERSION = 1.25.15
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
 -- 
-2.31.1
+2.20.1
