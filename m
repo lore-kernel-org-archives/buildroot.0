@@ -1,57 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 08:37:51 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/dhcp: security
- bump to version 4.4.2-P1
-Message-ID: <20210610060726.273CA81050@busybox.osuosl.org>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Thu, 10 Jun 2021 09:39:43 +0200
+Subject: [Buildroot] [PATCH v5 0/5] Introduce bmap-tools as target +
+ host package
+In-Reply-To: <08bb8c91-0304-8613-492c-aa133412a1e3@gmail.com>
+References: <20210607204221.124908-1-thomas.petazzoni@bootlin.com>
+ <6e9afcd08150926a669d4df1198461e0acc7f063.camel@orolia.com>
+ <20210609205222.785b065d@windsurf>
+ <08bb8c91-0304-8613-492c-aa133412a1e3@gmail.com>
+Message-ID: <ba7a6ec514891b5494d6232db9513443514ed1fc.camel@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d15b37d492a7e1a55a0d4c1994daffd78bf975d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+Sure,
 
-Fixes the following security issue:
+My qemu version is:
+$ qemu-system-arm  --version
+QEMU emulator version 5.2.0 (Debian 1:5.2+dfsg-10)
 
-- CVE-2021-25217: A buffer overrun in lease file parsing code can be used to
-  exploit a common vulnerability shared by dhcpd and dhclient
+The Ext4 test passes:
+$ ./support/testing/run-tests tests.fs.test_ext.TestExt4 -o tests -d dl
+09:03:31 TestExt4                                 Starting
+09:03:34 TestExt4                                 Building
+ah09:08:12 TestExt4                                 Building done
+Downloading to /home/ncarrier/workspace/buildroot/dl/tmp_43sbo0r
+Renaming from /home/ncarrier/workspace/buildroot/dl/tmp_43sbo0r to
+/home/ncarrier/workspace/buildroot/dl/kernel-vexpress-5.10.7
+Downloading to /home/ncarrier/workspace/buildroot/dl/tmpnj5e2uiw
+Renaming from /home/ncarrier/workspace/buildroot/dl/tmpnj5e2uiw to
+/home/ncarrier/workspace/buildroot/dl/vexpress-v2p-ca9-5.10.7.dtb
+09:08:20 TestExt4                                 Cleaning up
+.
+----------------------------------------------------------------------
+Ran 1 test in 289.374s
 
-For details, see the advisory:
-https://kb.isc.org/docs/cve-2021-25217
+OK
 
-Update the LICENSE hash for a change of copyright years.
+But its file system image has a size of 16M which _is_ a power of two:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cebf2b91b3e46efb8ca1fd3f092544fb158909d8)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dhcp/dhcp.hash | 6 +++---
- package/dhcp/dhcp.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+BR2_TARGET_ROOTFS_EXT2_SIZE="16384"
 
-diff --git a/package/dhcp/dhcp.hash b/package/dhcp/dhcp.hash
-index 92ecdfec58..ec7c4fe58d 100644
---- a/package/dhcp/dhcp.hash
-+++ b/package/dhcp/dhcp.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/dhcp/4.4.2/dhcp-4.4.2.tar.gz.sha256.asc
--sha256  1a7ccd64a16e5e68f7b5e0f527fd07240a2892ea53fe245620f4f5f607004521  dhcp-4.4.2.tar.gz
-+# Verified from https://ftp.isc.org/isc/dhcp/4.4.2-P1/dhcp-4.4.2-P1.tar.gz.sha256.asc
-+sha256  b05e04337539545a8faa0d6ac518defc61a07e5aec66a857f455e7f218c85a1a  dhcp-4.4.2-P1.tar.gz
- # Locally calculated
--sha256  89e7b0661134cc118bdcdeb87ff0493d544bc5723c9ca6616fa05f03539738af  LICENSE
-+sha256  9961fce0d83a6229b9084cdadedfa723a53274c63af610c9adb61b607e0f5a76  LICENSE
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index db58870f88..1edb3c5e99 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DHCP_VERSION = 4.4.2
-+DHCP_VERSION = 4.4.2-P1
- DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
- DHCP_INSTALL_STAGING = YES
- DHCP_LICENSE = MPL-2.0
+On Wed, 2021-06-09 at 21:16 +0200, Romain Naour wrote:
+> CAUTION: This email originated from outside of the organization.
+> Do not click links or open attachments unless you recognize the
+> sender and know the content is safe.
+> 
+> Hi Thomas, Nicolas,
+> 
+> Le 09/06/2021 ? 20:52, Thomas Petazzoni a ?crit :
+> > Hello Nicolas,
+> > 
+> > On Wed, 09 Jun 2021 09:35:38 +0200
+> > Nicolas Carrier <nicolas.carrier@orolia.com> wrote:
+> > 
+> > > The first error in the run log is:
+> > > 
+> > > qemu-system-arm: Invalid SD card size: 60 MiB
+> > > SD card size has to be a power of 2, e.g. 64 MiB.
+> > > 
+> > > So I set a fixed image size of 64M.
+> > 
+> > This is weird, because all the ext2/3/4 test cases in our test
+> > infrastructure also do not specify a size, and so they get the
+> > default
+> > of 60 MiB.
+> > 
+> > Could you try:
+> > 
+> > ./support/testing/run-tests tests.fs.test_ext.TestExt4
+> > 
+> > and see if it works for you ?
+> > 
+> > Which version of Qemu are you using? I'm using 4.2.1.
+> 
+> We had the same problem after a qemu version bump to 5.1:
+> 
+> https://git.buildroot.net/buildroot/commit/?id=4bd2a317a7d6c3b3b19396a9459816da76b2c796
+> 
+> Best regards,
+> Romain
+> 
+> 
+> > 
+> > Best regards,
+> > 
+> > Thomas
+> > 
+> 
