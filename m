@@ -1,58 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 22:52:41 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/mimic: fix static
- build with gcc 10
-Message-ID: <20210610202819.8E8018B82B@busybox.osuosl.org>
+Date: Thu, 10 Jun 2021 22:48:55 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/go: security bump
+ to version 1.15.13
+Message-ID: <20210610202819.801D28157B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01d6d1fa924348029b88a12e00f9cd88b37324e7
+commit: https://git.buildroot.net/buildroot/commit/?id=d297e54ccf02419bac4484041d99c9cf42e92f17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/bee20bbfa4fa64ed8704bfb9586d5a3148f39fdf
+Fixes the following security issues:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1c3e0f95bcaa3fe3a787abac4401c5a4c2860ef6)
+- CVE-2021-33195: The LookupCNAME, LookupSRV, LookupMX, LookupNS, and
+  LookupAddr functions in net, and their respective methods on the Resolver
+  type may return arbitrary values retrieved from DNS which do not follow
+  the established RFC 1035 rules for domain names.  If these names are used
+  without further sanitization, for instance unsafely included in HTML, they
+  may allow for injection of unexpected content.  Note that LookupTXT may
+  still return arbitrary values that could require sanitization before
+  further use
+
+- CVE-2021-33196: The NewReader and OpenReader functions in archive/zip can
+  cause a panic or an unrecoverable fatal error when reading an archive that
+  claims to contain a large number of files, regardless of its actual size
+
+- CVE-2021-33197: ReverseProxy in net/http/httputil could be made to forward
+  certain hop-by-hop headers, including Connection.  In case the target of
+  the ReverseProxy was itself a reverse proxy, this would let an attacker
+  drop arbitrary headers, including those set by the ReverseProxy.Director
+
+- CVE-2021-33198: The SetString and UnmarshalText methods of math/big.Rat
+  may cause a panic or an unrecoverable fatal error if passed inputs with
+  very large exponents
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-linking-on-gcc-10.2.0-or-newer.patch  | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch b/package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch
-new file mode 100644
-index 0000000000..ea02bf587e
---- /dev/null
-+++ b/package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch
-@@ -0,0 +1,27 @@
-+From 77b36eaeb2c38eba571b8db7e9bb0fd507774e6d Mon Sep 17 00:00:00 2001
-+From: Kris Gesling <kris.gesling@mycroft.ai>
-+Date: Tue, 11 May 2021 09:15:22 +0930
-+Subject: [PATCH] Fix linking on gcc 10.2.0 or newer
-+
-+Co-authored-by: MichaelSabal <michaelsabal@users.noreply.github.com>
-+
-+[Retrieved from:
-+https://github.com/MycroftAI/mimic1/commit/77b36eaeb2c38eba571b8db7e9bb0fd507774e6d]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lang/cmu_indic_lang/cmu_indic_lang.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lang/cmu_indic_lang/cmu_indic_lang.h b/lang/cmu_indic_lang/cmu_indic_lang.h
-+index 75ee46c..83e2afa 100644
-+--- a/lang/cmu_indic_lang/cmu_indic_lang.h
-++++ b/lang/cmu_indic_lang/cmu_indic_lang.h
-+@@ -51,7 +51,7 @@ void cmu_indic_lang_init(cst_voice *v);
-+ extern const cst_phoneset cmu_indic_phoneset;
-+ extern const cst_cart cmu_indic_phrasing_cart; 
-+ 
-+-const cst_regex * const cst_rx_not_indic;
-++extern const cst_regex * const cst_rx_not_indic;
-+ 
-+ #ifdef __cplusplus
-+ } /* extern "C" */
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 500ae02cc2..e077d55441 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  1c6911937df4a277fa74e7b7efc3d08594498c4c4adc0b6c4ae3566137528091  go1.15.12.src.tar.gz
++sha256  99069e7223479cce4553f84f874b9345f6f4045f27cf5089489b546da619a244  go1.15.13.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 639fc401b6..3d1dcf02d7 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.15.12
++GO_VERSION = 1.15.13
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
