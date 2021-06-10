@@ -1,102 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jun 2021 22:22:11 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/intel-mediadriver: disable -Werror
-Message-ID: <20210610195452.96FDF8C5B8@busybox.osuosl.org>
+Date: Thu, 10 Jun 2021 22:23:46 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/qt5/qt5base: fix
+ build with gcc 11
+Message-ID: <20210610195452.A60568152B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21fe73646d1f27bf793ce25681e94938c2733504
+commit: https://git.buildroot.net/buildroot/commit/?id=4f1a05c2fc0b646558bb90fe2357be35a0947b6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Disable -Werror to avoid the following build failure:
+Fix the following build failure with gcc 11:
 
-<command-line>: error: "_FORTIFY_SOURCE" redefined [-Werror]
-
-MEDIA_BUILD_FATAL_WARNINGS option is available since version 18.2.0 and
-https://github.com/intel/media-driver/commit/6932fc0ffb8228245052528820adafb6743f7482
+/data/buildroot-autobuilder/instance-0/output-1/build/qt5base-5.15.2/include/QtCore/../../src/corelib/global/qfloat16.h:300:7: error: 'numeric_limits' is not a class template
+  300 | class numeric_limits<QT_PREPEND_NAMESPACE(qfloat16)> : public numeric_limits<float>
+      |       ^~~~~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/52638d95312e464626d1c4047b3b26d4f57a1cd2
+ - http://autobuild.buildroot.org/results/9a7a987af40b8408ccdfcae4890008c7090b41a1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e93eaf7248d62e5e79a3b0e46de7483094a276d8)
+(cherry picked from commit 128901c80a58924c9e7a16465e30474eaa9fe3b0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ux-CMakelists.txt-respect-MEDIA_BUILD_FAT.patch | 51 ++++++++++++++++++++++
- package/intel-mediadriver/intel-mediadriver.mk     |  1 +
- 2 files changed, 52 insertions(+)
+ ...0006-Fix-build-with-GCC-11-include-limits.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/package/intel-mediadriver/0003-cmrtlib-linux-CMakelists.txt-respect-MEDIA_BUILD_FAT.patch b/package/intel-mediadriver/0003-cmrtlib-linux-CMakelists.txt-respect-MEDIA_BUILD_FAT.patch
+diff --git a/package/qt5/qt5base/0006-Fix-build-with-GCC-11-include-limits.patch b/package/qt5/qt5base/0006-Fix-build-with-GCC-11-include-limits.patch
 new file mode 100644
-index 0000000000..bc7a27f4d0
+index 0000000000..f014a160d5
 --- /dev/null
-+++ b/package/intel-mediadriver/0003-cmrtlib-linux-CMakelists.txt-respect-MEDIA_BUILD_FAT.patch
-@@ -0,0 +1,51 @@
-+From f09fddd6763aca237f19417de05a1f5de7f51d40 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 5 Jun 2021 16:57:32 +0200
-+Subject: [PATCH] cmrtlib/linux/CMakelists.txt: respect
-+ MEDIA_BUILD_FATAL_WARNINGS
++++ b/package/qt5/qt5base/0006-Fix-build-with-GCC-11-include-limits.patch
+@@ -0,0 +1,53 @@
++From 9c56d4da2ff631a8c1c30475bd792f6c86bda53c Mon Sep 17 00:00:00 2001
++From: Thiago Macieira <thiago.macieira@intel.com>
++Date: Mon, 18 Jan 2021 07:40:54 -0800
++Subject: [PATCH] Fix build with GCC 11: include <limits>
 +
-+Respect MEDIA_BUILD_FATAL_WARNINGS to avoid the following build failure
-+when the user provides _FORTIFY_SOURCE:
++Fixes: QTBUG-90395
++Pick-to: 6.0
++Change-Id: Iecc74d2000eb40dfbe7bfffd165b5dd3708b7a40
++Reviewed-by: Edward Welbourne <edward.welbourne@qt.io>
 +
-+In file included from /home/buildroot/autobuild/instance-0/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/dlfcn.h:22,
-+                 from /home/buildroot/autobuild/instance-0/output-1/build/intel-mediadriver-19.4.0r/cmrtlib/linux/../linux/share/cm_include.h:30,
-+                 from /home/buildroot/autobuild/instance-0/output-1/build/intel-mediadriver-19.4.0r/cmrtlib/agnostic/share/cm_printf_host.cpp:23:
-+/home/buildroot/autobuild/instance-0/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/features.h:397:4: error: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror=cpp]
-+  397 | #  warning _FORTIFY_SOURCE requires compiling with optimization (-O)
-+      |    ^~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/52638d95312e464626d1c4047b3b26d4f57a1cd2
-+
++[Retrieved (and backported) from:
++https://github.com/qt/qtbase/commit/9c56d4da2ff631a8c1c30475bd792f6c86bda53c]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/intel/media-driver/pull/1203]
 +---
-+ cmrtlib/linux/CMakeLists.txt | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
++ src/corelib/global/qendian.h  | 6 ++++--
++ src/corelib/global/qfloat16.h | 1 +
++ 2 files changed, 5 insertions(+), 2 deletions(-)
 +
-+diff --git a/cmrtlib/linux/CMakeLists.txt b/cmrtlib/linux/CMakeLists.txt
-+index 7a0193a8..65f71cee 100644
-+--- a/cmrtlib/linux/CMakeLists.txt
-++++ b/cmrtlib/linux/CMakeLists.txt
-+@@ -32,12 +32,16 @@ else()
++diff --git a/src/corelib/global/qendian.h b/src/corelib/global/qendian.h
++index 99b529f17cd..c874c5e47ab 100644
++--- a/src/corelib/global/qendian.h
+++++ b/src/corelib/global/qendian.h
++@@ -1,7 +1,7 @@
++ /****************************************************************************
++ **
++-** Copyright (C) 2016 The Qt Company Ltd.
++-** Copyright (C) 2016 Intel Corporation.
+++** Copyright (C) 2021 The Qt Company Ltd.
+++** Copyright (C) 2021 Intel Corporation.
++ ** Contact: https://www.qt.io/licensing/
++ **
++ ** This file is part of the QtCore module of the Qt Toolkit.
++@@ -44,6 +44,8 @@
++ #include <QtCore/qfloat16.h>
++ #include <QtCore/qglobal.h>
 + 
-+ # Set up compile options that will be used for the Linux build
-+ if(CMAKE_COMPILER_IS_GNUCC)
-+-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4.1 -std=c++11 -fPIC -fpermissive -Werror")
-++    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4.1 -std=c++11 -fPIC -fpermissive")
-+     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fno-strict-aliasing ")
-+     set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -D__DEBUG -O0")
-+-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse4.1 -std=c++11 -fPIC -fpermissive -Werror")
-++    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse4.1 -std=c++11 -fPIC -fpermissive")
-+     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-strict-aliasing")
-+     set(CMAKE_C_FLAGS_DEBUG   "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -D__DEBUG -O0")
-++    if(MEDIA_BUILD_FATAL_WARNINGS)
-++        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS} -Werror")
-++        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS} -Werror")
-++    endif()
-+ 
-+    set(GCC_SECURE_LINK_FLAGS "-z relro -z now")
-+    set(CMAKE_SKIP_RPATH ON)
-+-- 
-+2.30.2
+++#include <limits>
+++
++ // include stdlib.h and hope that it defines __GLIBC__ for glibc-based systems
++ #include <stdlib.h>
++ #include <string.h>
++diff --git a/src/corelib/global/qfloat16.h b/src/corelib/global/qfloat16.h
++index e9477d2ecec..a25fac28862 100644
++--- a/src/corelib/global/qfloat16.h
+++++ b/src/corelib/global/qfloat16.h
++@@ -44,6 +44,7 @@
 +
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 963e4b8f9c..01423b9611 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -23,6 +23,7 @@ INTEL_MEDIADRIVER_SUPPORTS_IN_SOURCE_BUILD = NO
- 
- INTEL_MEDIADRIVER_CONF_OPTS = \
- 	-DINSTALL_DRIVER_SYSCONF=OFF \
-+	-DMEDIA_BUILD_FATAL_WARNINGS=OFF \
- 	-DMEDIA_RUN_TEST_SUITE=OFF
- 
- $(eval $(cmake-package))
++ #include <QtCore/qglobal.h>
++ #include <QtCore/qmetatype.h>
+++#include <limits>
++ #include <string.h>
++ 
++ #if defined(QT_COMPILER_SUPPORTS_F16C) && defined(__AVX2__) && !defined(__F16C__)
