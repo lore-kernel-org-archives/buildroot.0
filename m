@@ -1,59 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Jun 2021 13:50:06 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/mpg123: bump
- version to 1.25.15
-Message-ID: <20210611112837.6BB9A814C4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 11 Jun 2021 14:00:11 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/usbguard: new package
+In-Reply-To: <YMNIDqVHSAbiNRzp@kb-xps>
+References: <20210608123210.143113-1-kamel.bouhara@bootlin.com>
+ <20210608123210.143113-2-kamel.bouhara@bootlin.com>
+ <20210608143757.5818a039@xps13> <20210611123703.18b71cbb@xps13>
+ <YMNIDqVHSAbiNRzp@kb-xps>
+Message-ID: <20210611140011.41d00060@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d767da70407c9032d33637b4d7188feaff0f054
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+On Fri, 11 Jun 2021 13:25:02 +0200
+Kamel Bouhara <kamel.bouhara@bootlin.com> wrote:
 
-Bugfix release. From the release notes:
+> > [0600] /etc/usbguard/rules.conf:
+> > allow *:*
+> >  
+> 
+> I think that having to default configuration in
+> /etc/usbguard/rules.conf is not expected as the rules are generated
+> using the "usbguard generate-policy" command.
 
-Some backports of important fixes to the 1.25 series, for very conservative
-people.
+It is not really great to have to run a tool on the target to generate
+the rules. The goal of Buildroot is to build the whole system, and the
+rootfs might be read-only.
 
-libmpg123: Backport bit reservoir CRC fix from 1.26
-libmpg123: Backport part2_3_length regression fix (bug 312).
+> Maybe we shall just warn users that there is no configuration file at
+> boot before starting the daemon ?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d495593de17e04ed36094fa899f0710dfbbc9f01)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mpg123/mpg123.hash | 8 ++++----
- package/mpg123/mpg123.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Not really Buildroot's design principle. We like to have a default
+basic configuration that does something minimally useful. So either
+accept all USB devices, or reject all USB devices, for example.
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index 02c40ad086..e5fb09b46a 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.13/
--sha1 2b6428dc563c56fb1374191d1244c8ac928e4d89  mpg123-1.25.13.tar.bz2
--md5 294a6c30546504ec3d0deac2b2ea22be  mpg123-1.25.13.tar.bz2
-+# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.15/
-+sha1  286fcb83afad3ecbfea60434d3ee1b6d7f41bb7c  mpg123-1.25.15.tar.bz2
-+md5  9a050d4b3573661c606f8095a3f34ca3  mpg123-1.25.15.tar.bz2
- # Locally calculated
--sha256 90306848359c793fd43b9906e52201df18775742dc3c81c06ab67a806509890a  mpg123-1.25.13.tar.bz2
-+sha256  503a76d82d97f1a6513bbeb284e460a99fb17ef80f23a661d8fc026ce6adcbbc  mpg123-1.25.15.tar.bz2
- # License file
- sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 588a4ffc32..9aa9cd1c10 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPG123_VERSION = 1.25.13
-+MPG123_VERSION = 1.25.15
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
