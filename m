@@ -1,58 +1,83 @@
-From: =?UTF-8?B?6Z+p56OK?= <hanlei_acoin@163.com>
-Date: Fri, 11 Jun 2021 16:40:14 +0800 (GMT+08:00)
-Subject: [Buildroot] error building busybox usring Buildroot
-Message-ID: <77263d8f.6c2e.179fa3a9882.Coremail.hanlei_acoin@163.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 11 Jun 2021 12:03:08 +0200
+Subject: [Buildroot] [PATCH] package/squid: security bump to version 4.15
+Message-ID: <20210611100308.386-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hello?all?
-    I'm currently using BuildRoot to build a nice integrated development environment.
-    
+Fixes the following security issues:
 
-    Basic information is as follows:
+- CVE-2021-28651: Denial of Service in URN processing
+  Due to a buffer management bug Squid is vulnerable to a Denial of service
+  attack against the server it is operating on.
 
-        ARCH: mips
+  This attack is limited to proxies which attempt to resolve a "urn:"
+  resource identifier.  Support for this resolving is enabled by default in
+  all Squid.
 
-        CROSS compiler ver : 5.4.0  , is external
+  https://github.com/squid-cache/squid/security/advisories/GHSA-ch36-9jhx-phm4
 
-        Buildroot ver : Latest stable release: 2021.05
+- CVE-2021-28652: Denial of Service issue in Cache Manager
+  Due to an incorrect parser validation bug Squid is vulnerable to a Denial
+  of Service attack against the Cache Manager API.
 
+  https://github.com/squid-cache/squid/security/advisories/GHSA-m47m-9hvw-7447
 
+- CVE-2021-28662: Denial of Service in HTTP Response Processing
+  Due to an input validation bug Squid is vulnerable to a Denial of Service
+  against all clients using the proxy.
 
+  https://github.com/squid-cache/squid/security/advisories/GHSA-jjq6-mh2h-g39h
 
+- CVE-2021-31806, CVE-2021-31807, CVE-2021-31808: Multiple Issues in HTTP
+  Range header
+  Due to an incorrect input validation bug Squid is vulnerable to
+  a Denial of Service attack against all clients using the proxy.
 
+  https://github.com/squid-cache/squid/security/advisories/GHSA-pxwq-f3qr-w2xf
 
-    An error occurred when I went to the BusyBox Building:
+- CVE-2021-33620: Denial of Service in HTTP Response processing
+  Due to an input validation bug Squid is vulnerable to a Denial of Service
+  against all clients using the proxy.
 
-        Toolschain/Ingenic/mips-gcc540-glibc222-64bit-r3.3.0/lib/gcc/mips-linux-gnu/5.4.0/include-fixed/uclibc/soft-float/limits.h:168:61: fatal error: limits.h: No such file or directory
+  https://github.com/squid-cache/squid/security/advisories/GHSA-572g-rvwr-6c7f
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-
-    Oddly, this is correct when I compile BusyBox directly from the command line in the same directory  
-
-
-    I wonder if the parameter Settings in buildroot are causing this error, but I can't confirm where.
-    
-
-Please see the attachment for the detailed log.
-
-Thanks! 
-
-
-| |
-??
-|
-|
-hanlei_acoin at 163.com
-|
-???????????
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210611/1ae3d7ed/attachment.html>
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: buildroot_busybox_log.txt
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210611/1ae3d7ed/attachment.txt>
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index a2aaba5fd5..12a9e5d293 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v4/squid-4.14.tar.xz.asc
+-md5  7d9ba82703cd770b2ede169a0c1de94a  squid-4.14.tar.xz
+-sha1  71ae13a845a6a7ffc69ce11086ea3e427625bc08  squid-4.14.tar.xz
++# From http://www.squid-cache.org/Versions/v4/squid-4.15.tar.xz.asc
++md5  a593de9dc888dfeca4f1f7db2cd7d3b9  squid-4.15.tar.xz
++sha1  60bda34ba39657e2d870c8c1d2acece8a69c3075  squid-4.15.tar.xz
+ # Locally calculated
+-sha256  f1097daa6434897c159bc100978b51347c0339041610845d0afa128151729ffc  squid-4.14.tar.xz
++sha256  b693a4e5ab2811a8a854f60de0a62afbbf3a952bb1d047952c9ae01321f84a25  squid-4.15.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 7e6865f8ed..b23a8d26ed 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQUID_VERSION = 4.14
++SQUID_VERSION = 4.15
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v4
+ SQUID_LICENSE = GPL-2.0+
+-- 
+2.20.1
