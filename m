@@ -1,35 +1,59 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 11 Jun 2021 11:50:29 +0000
-Subject: [Buildroot] [Bug 13831] mesa3d - kmsro driver requires dri3
-In-Reply-To: <bug-13831-163@https.bugs.busybox.net/>
-References: <bug-13831-163@https.bugs.busybox.net/>
-Message-ID: <bug-13831-163-lF4Epsxth1@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 11 Jun 2021 13:50:12 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mpg123: bump
+ version to 1.25.15
+Message-ID: <20210611112829.2A8D180FB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13831
+commit: https://git.buildroot.net/buildroot/commit/?id=38cf5e6719ab888c74957bc5809a2ea31c71612b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Erico Nunes <nunes.erico@gmail.com> changed:
+Bugfix release. From the release notes:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |nunes.erico at gmail.com,
-                   |                            |ps.report at gmx.net
+Some backports of important fixes to the 1.25 series, for very conservative
+people.
 
---- Comment #1 from Erico Nunes <nunes.erico@gmail.com> ---
-FYI we added a check in the mesa meson configuration to prevent this:
-https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/11305
+libmpg123: Backport bit reservoir CRC fix from 1.26
+libmpg123: Backport part2_3_length regression fix (bug 312).
 
-And there might be more changes in
-https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/11318 proposing to
-remove the option to manually disable dri3 at all.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d495593de17e04ed36094fa899f0710dfbbc9f01)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mpg123/mpg123.hash | 8 ++++----
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-I see that Peter Seiderer had some pending patches related to this in the list
-so adding him in Cc here.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index 02c40ad086..e5fb09b46a 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.13/
+-sha1 2b6428dc563c56fb1374191d1244c8ac928e4d89  mpg123-1.25.13.tar.bz2
+-md5 294a6c30546504ec3d0deac2b2ea22be  mpg123-1.25.13.tar.bz2
++# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.15/
++sha1  286fcb83afad3ecbfea60434d3ee1b6d7f41bb7c  mpg123-1.25.15.tar.bz2
++md5  9a050d4b3573661c606f8095a3f34ca3  mpg123-1.25.15.tar.bz2
+ # Locally calculated
+-sha256 90306848359c793fd43b9906e52201df18775742dc3c81c06ab67a806509890a  mpg123-1.25.13.tar.bz2
++sha256  503a76d82d97f1a6513bbeb284e460a99fb17ef80f23a661d8fc026ce6adcbbc  mpg123-1.25.15.tar.bz2
+ # License file
+ sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 588a4ffc32..9aa9cd1c10 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPG123_VERSION = 1.25.13
++MPG123_VERSION = 1.25.15
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
