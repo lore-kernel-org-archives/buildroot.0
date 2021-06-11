@@ -1,28 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Jun 2021 12:05:50 +0200
-Subject: [Buildroot] [PATCH] package/mpg123: bump version to 1.25.15
-In-Reply-To: <20210610214731.27343-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 10 Jun 2021 23:47:30 +0200")
-References: <20210610214731.27343-1-peter@korsgaard.com>
-Message-ID: <87sg1og1hd.fsf@dell.be.48ers.dk>
+Date: Fri, 11 Jun 2021 12:05:41 +0200
+Subject: [Buildroot] [git commit] package/mpg123: bump version to 1.25.15
+Message-ID: <20210611093512.61BE683A37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d495593de17e04ed36094fa899f0710dfbbc9f01
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Bugfix release. From the release notes:
- > Some backports of important fixes to the 1.25 series, for very conservative
- > people.
+Bugfix release. From the release notes:
 
- > libmpg123: Backport bit reservoir CRC fix from 1.26
- > libmpg123: Backport part2_3_length regression fix (bug 312).
+Some backports of important fixes to the 1.25 series, for very conservative
+people.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+libmpg123: Backport bit reservoir CRC fix from 1.26
+libmpg123: Backport part2_3_length regression fix (bug 312).
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mpg123/mpg123.hash | 8 ++++----
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index 02c40ad086..e5fb09b46a 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.13/
+-sha1 2b6428dc563c56fb1374191d1244c8ac928e4d89  mpg123-1.25.13.tar.bz2
+-md5 294a6c30546504ec3d0deac2b2ea22be  mpg123-1.25.13.tar.bz2
++# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.15/
++sha1  286fcb83afad3ecbfea60434d3ee1b6d7f41bb7c  mpg123-1.25.15.tar.bz2
++md5  9a050d4b3573661c606f8095a3f34ca3  mpg123-1.25.15.tar.bz2
+ # Locally calculated
+-sha256 90306848359c793fd43b9906e52201df18775742dc3c81c06ab67a806509890a  mpg123-1.25.13.tar.bz2
++sha256  503a76d82d97f1a6513bbeb284e460a99fb17ef80f23a661d8fc026ce6adcbbc  mpg123-1.25.15.tar.bz2
+ # License file
+ sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 588a4ffc32..9aa9cd1c10 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPG123_VERSION = 1.25.13
++MPG123_VERSION = 1.25.15
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
