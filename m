@@ -1,38 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Jun 2021 10:16:35 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/putty: Ignore
- CVE-2021-33500
-Message-ID: <20210611074624.4E7498789D@busybox.osuosl.org>
+From: =?UTF-8?B?6Z+p56OK?= <hanlei_acoin@163.com>
+Date: Fri, 11 Jun 2021 16:40:14 +0800 (GMT+08:00)
+Subject: [Buildroot] error building busybox usring Buildroot
+Message-ID: <77263d8f.6c2e.179fa3a9882.Coremail.hanlei_acoin@163.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01063c4291a7300285ad9ec044b94968dd6c2d09
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+hello?all?
+    I'm currently using BuildRoot to build a nice integrated development environment.
+    
 
-Since putty is only affected by this CVE on Windows, ignore it in the
-stable branch.  Branch master is not affected anymore already, due to
-newer version which got fixed.
+    Basic information is as follows:
 
-Signed-off-by: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/putty/putty.mk | 3 +++
- 1 file changed, 3 insertions(+)
+        ARCH: mips
 
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index c40cac9dc5..8a494d4e54 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
-@@ -12,6 +12,9 @@ PUTTY_CPE_ID_VENDOR = putty
- PUTTY_CONF_OPTS = --disable-gtktest
- PUTTY_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-error"
- 
-+# Windows only, fixed for Windows with 0.75
-+PUTTY_IGNORE_CVES += CVE-2021-33500
-+
- ifeq ($(BR2_PACKAGE_LIBGTK2),y)
- PUTTY_CONF_OPTS += --with-gtk=2
- PUTTY_DEPENDENCIES += libgtk2
+        CROSS compiler ver : 5.4.0  , is external
+
+        Buildroot ver : Latest stable release: 2021.05
+
+
+
+
+
+
+    An error occurred when I went to the BusyBox Building:
+
+        Toolschain/Ingenic/mips-gcc540-glibc222-64bit-r3.3.0/lib/gcc/mips-linux-gnu/5.4.0/include-fixed/uclibc/soft-float/limits.h:168:61: fatal error: limits.h: No such file or directory
+
+
+
+    Oddly, this is correct when I compile BusyBox directly from the command line in the same directory  
+
+
+    I wonder if the parameter Settings in buildroot are causing this error, but I can't confirm where.
+    
+
+Please see the attachment for the detailed log.
+
+Thanks! 
+
+
+| |
+??
+|
+|
+hanlei_acoin at 163.com
+|
+???????????
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210611/1ae3d7ed/attachment.html>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: buildroot_busybox_log.txt
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210611/1ae3d7ed/attachment.txt>
