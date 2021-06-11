@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Jun 2021 13:50:12 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/mpg123: bump
+Date: Fri, 11 Jun 2021 13:50:06 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/mpg123: bump
  version to 1.25.15
-Message-ID: <20210611112829.2A8D180FB4@busybox.osuosl.org>
+Message-ID: <20210611112837.6BB9A814C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38cf5e6719ab888c74957bc5809a2ea31c71612b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2d767da70407c9032d33637b4d7188feaff0f054
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 Bugfix release. From the release notes:
 
