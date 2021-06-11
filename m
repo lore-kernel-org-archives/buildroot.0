@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B67D6C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:46:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCC0FC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:46:54 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2F8A960F9C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:46:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2F8A960F9C
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 84E7960231
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:46:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 84E7960231
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 080FD40592;
-	Tue,  3 Aug 2021 21:46:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63343405B1;
+	Tue,  3 Aug 2021 21:46:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iCepfdGeblCd; Tue,  3 Aug 2021 21:46:41 +0000 (UTC)
+	with ESMTP id mNikgbGvrimt; Tue,  3 Aug 2021 21:46:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FB794059A;
-	Tue,  3 Aug 2021 21:46:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 415AB1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95EC94059D;
+	Tue,  3 Aug 2021 21:46:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 16CAC1BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4E15940261
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A543F608B1
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nuI-KLlNiNZj for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IIretbztyIoR for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A723540235
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E46666063A
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id F22A3843F5; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id 3AB6D85F62; Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Jun 2021 18:34:26 +0200
+Date: Fri, 11 Jun 2021 14:11:14 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b7a5b9d06d484700fc4fcbd354f2c15e0422688c
-X-Git-Newrev: dc97260606d41fed2d1f8effc09cff7352440395
+X-Git-Oldrev: d495593de17e04ed36094fa899f0710dfbbc9f01
+X-Git-Newrev: d94c42b93e3f8daddcf80b9be2b7b51fe456337b
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210950.F22A3843F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ltp-testsuite: bump
- version to 20210524
+Message-Id: <20210803210949.3AB6D85F62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/squid: security bump
+ to version 4.15
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,46 +70,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc97260606d41fed2d1f8effc09cff7352440395
+commit: https://git.buildroot.net/buildroot/commit/?id=d94c42b93e3f8daddcf80b9be2b7b51fe456337b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add locally computed sha256 (+ keep sha1 from github checksum file).
+Fixes the following security issues:
 
-sysinfo.h fix patch is still needed (until Buildroot MUSL toolchain gets
-updated).
+- CVE-2021-28651: Denial of Service in URN processing
+  Due to a buffer management bug Squid is vulnerable to a Denial of service
+  attack against the server it is operating on.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  This attack is limited to proxies which attempt to resolve a "urn:"
+  resource identifier.  Support for this resolving is enabled by default in
+  all Squid.
+
+  https://github.com/squid-cache/squid/security/advisories/GHSA-ch36-9jhx-phm4
+
+- CVE-2021-28652: Denial of Service issue in Cache Manager
+  Due to an incorrect parser validation bug Squid is vulnerable to a Denial
+  of Service attack against the Cache Manager API.
+
+  https://github.com/squid-cache/squid/security/advisories/GHSA-m47m-9hvw-7447
+
+- CVE-2021-28662: Denial of Service in HTTP Response Processing
+  Due to an input validation bug Squid is vulnerable to a Denial of Service
+  against all clients using the proxy.
+
+  https://github.com/squid-cache/squid/security/advisories/GHSA-jjq6-mh2h-g39h
+
+- CVE-2021-31806, CVE-2021-31807, CVE-2021-31808: Multiple Issues in HTTP
+  Range header
+  Due to an incorrect input validation bug Squid is vulnerable to
+  a Denial of Service attack against all clients using the proxy.
+
+  https://github.com/squid-cache/squid/security/advisories/GHSA-pxwq-f3qr-w2xf
+
+- CVE-2021-33620: Denial of Service in HTTP Response processing
+  Due to an input validation bug Squid is vulnerable to a Denial of Service
+  against all clients using the proxy.
+
+  https://github.com/squid-cache/squid/security/advisories/GHSA-572g-rvwr-6c7f
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ltp-testsuite/ltp-testsuite.hash | 5 +++--
- package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-index f0b2c89704..ed2a50cd4f 100644
---- a/package/ltp-testsuite/ltp-testsuite.hash
-+++ b/package/ltp-testsuite/ltp-testsuite.hash
-@@ -1,4 +1,5 @@
--# From: https://github.com/linux-test-project/ltp/releases/download/20210121/ltp-full-20210121.tar.xz.sha1
--sha1 ac9c1c711aed4319c5fbd0b665d36f75236a4ec2  ltp-full-20210121.tar.xz
-+# From: https://github.com/linux-test-project/ltp/releases/download/20210524/ltp-full-20210524.tar.xz.sha1
-+sha1 08d84f8ac3ba0c800f3070768c651703869105d7  ltp-full-20210524.tar.xz
- # Locally computed
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index a2aaba5fd5..12a9e5d293 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v4/squid-4.14.tar.xz.asc
+-md5  7d9ba82703cd770b2ede169a0c1de94a  squid-4.14.tar.xz
+-sha1  71ae13a845a6a7ffc69ce11086ea3e427625bc08  squid-4.14.tar.xz
++# From http://www.squid-cache.org/Versions/v4/squid-4.15.tar.xz.asc
++md5  a593de9dc888dfeca4f1f7db2cd7d3b9  squid-4.15.tar.xz
++sha1  60bda34ba39657e2d870c8c1d2acece8a69c3075  squid-4.15.tar.xz
+ # Locally calculated
+-sha256  f1097daa6434897c159bc100978b51347c0339041610845d0afa128151729ffc  squid-4.14.tar.xz
++sha256  b693a4e5ab2811a8a854f60de0a62afbbf3a952bb1d047952c9ae01321f84a25  squid-4.15.tar.xz
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  831678c64b85a8c24957c71632752537b2266890f2d2f352da9ed0ec45458189  ltp-full-20210524.tar.xz
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 978d01b7a6..badd161d5a 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 7e6865f8ed..b23a8d26ed 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LTP_TESTSUITE_VERSION = 20210121
-+LTP_TESTSUITE_VERSION = 20210524
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- 
+-SQUID_VERSION = 4.14
++SQUID_VERSION = 4.15
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v4
+ SQUID_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
