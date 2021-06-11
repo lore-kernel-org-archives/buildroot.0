@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Jun 2021 15:07:47 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/squid: security
+Date: Fri, 11 Jun 2021 15:08:02 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/squid: security
  bump to version 4.15
-Message-ID: <20210611123703.7B76A8A684@busybox.osuosl.org>
+Message-ID: <20210611123712.E85238CA4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0d489dcf8836480ee9322f2efd5d262888f967a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7237c18281f2c6498075d6c32546e731c2a89b2c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 Fixes the following security issues:
 
