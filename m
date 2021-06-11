@@ -1,66 +1,35 @@
-From: Kamel Bouhara <kamel.bouhara@bootlin.com>
-Date: Fri, 11 Jun 2021 13:25:02 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/usbguard: new package
-In-Reply-To: <20210611123703.18b71cbb@xps13>
-References: <20210608123210.143113-1-kamel.bouhara@bootlin.com>
- <20210608123210.143113-2-kamel.bouhara@bootlin.com>
- <20210608143757.5818a039@xps13> <20210611123703.18b71cbb@xps13>
-Message-ID: <YMNIDqVHSAbiNRzp@kb-xps>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 11 Jun 2021 11:50:29 +0000
+Subject: [Buildroot] [Bug 13831] mesa3d - kmsro driver requires dri3
+In-Reply-To: <bug-13831-163@https.bugs.busybox.net/>
+References: <bug-13831-163@https.bugs.busybox.net/>
+Message-ID: <bug-13831-163-lF4Epsxth1@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 11, 2021 at 12:37:03PM +0200, Miquel Raynal wrote:
-> Hello,
->
+https://bugs.busybox.net/show_bug.cgi?id=13831
 
-Hello Miquel,
+Erico Nunes <nunes.erico@gmail.com> changed:
 
-> Miquel Raynal <miquel.raynal@bootlin.com> wrote on Tue, 8 Jun 2021
-> 14:37:57 +0200:
->
-> > Hi Kamel,
-> >
-> > Kamel Bouhara <kamel.bouhara@bootlin.com> wrote on Tue,  8 Jun 2021
-> > 14:32:10 +0200:
-> >
-> > > usbguard is a software framework to implement USB
-> > > device blacklisting and whitelisting based on their
-> > > attributes.
-> > >
-> > > More info. on: https://usbguard.github.io/
-> > >
-> > > Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
-> > > ---
-> >
-> > Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
->
-> It looks like by default, an empty configuration file will prevent
-> any USB device to be authorized. I don't know if this behavior is
-> acceptable or not, I would advice to create a default "allow
-> everything" policy that the user can overload by adding the following
-> file to the recipe:
->
-> [0600] /etc/usbguard/rules.conf:
-> allow *:*
->
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |nunes.erico at gmail.com,
+                   |                            |ps.report at gmx.net
 
-I think that having to default configuration in
-/etc/usbguard/rules.conf is not expected as the rules are generated
-using the "usbguard generate-policy" command.
+--- Comment #1 from Erico Nunes <nunes.erico@gmail.com> ---
+FYI we added a check in the mesa meson configuration to prevent this:
+https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/11305
 
-Maybe we shall just warn users that there is no configuration file at
-boot before starting the daemon ?
+And there might be more changes in
+https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/11318 proposing to
+remove the option to manually disable dri3 at all.
 
-Regards,
-Kamel
+I see that Peter Seiderer had some pending patches related to this in the list
+so adding him in Cc here.
 
-> Thanks,
-> Miqu?l
-
---
-Kamel Bouhara, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
