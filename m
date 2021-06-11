@@ -1,44 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 Jun 2021 14:00:11 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/usbguard: new package
-In-Reply-To: <YMNIDqVHSAbiNRzp@kb-xps>
-References: <20210608123210.143113-1-kamel.bouhara@bootlin.com>
- <20210608123210.143113-2-kamel.bouhara@bootlin.com>
- <20210608143757.5818a039@xps13> <20210611123703.18b71cbb@xps13>
- <YMNIDqVHSAbiNRzp@kb-xps>
-Message-ID: <20210611140011.41d00060@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 11 Jun 2021 14:11:14 +0200
+Subject: [Buildroot] [git commit] package/squid: security bump to version
+ 4.15
+Message-ID: <20210611114029.C13788D231@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 11 Jun 2021 13:25:02 +0200
-Kamel Bouhara <kamel.bouhara@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d94c42b93e3f8daddcf80b9be2b7b51fe456337b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > [0600] /etc/usbguard/rules.conf:
-> > allow *:*
-> >  
-> 
-> I think that having to default configuration in
-> /etc/usbguard/rules.conf is not expected as the rules are generated
-> using the "usbguard generate-policy" command.
+Fixes the following security issues:
 
-It is not really great to have to run a tool on the target to generate
-the rules. The goal of Buildroot is to build the whole system, and the
-rootfs might be read-only.
+- CVE-2021-28651: Denial of Service in URN processing
+  Due to a buffer management bug Squid is vulnerable to a Denial of service
+  attack against the server it is operating on.
 
-> Maybe we shall just warn users that there is no configuration file at
-> boot before starting the daemon ?
+  This attack is limited to proxies which attempt to resolve a "urn:"
+  resource identifier.  Support for this resolving is enabled by default in
+  all Squid.
 
-Not really Buildroot's design principle. We like to have a default
-basic configuration that does something minimally useful. So either
-accept all USB devices, or reject all USB devices, for example.
+  https://github.com/squid-cache/squid/security/advisories/GHSA-ch36-9jhx-phm4
 
-Best regards,
+- CVE-2021-28652: Denial of Service issue in Cache Manager
+  Due to an incorrect parser validation bug Squid is vulnerable to a Denial
+  of Service attack against the Cache Manager API.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  https://github.com/squid-cache/squid/security/advisories/GHSA-m47m-9hvw-7447
+
+- CVE-2021-28662: Denial of Service in HTTP Response Processing
+  Due to an input validation bug Squid is vulnerable to a Denial of Service
+  against all clients using the proxy.
+
+  https://github.com/squid-cache/squid/security/advisories/GHSA-jjq6-mh2h-g39h
+
+- CVE-2021-31806, CVE-2021-31807, CVE-2021-31808: Multiple Issues in HTTP
+  Range header
+  Due to an incorrect input validation bug Squid is vulnerable to
+  a Denial of Service attack against all clients using the proxy.
+
+  https://github.com/squid-cache/squid/security/advisories/GHSA-pxwq-f3qr-w2xf
+
+- CVE-2021-33620: Denial of Service in HTTP Response processing
+  Due to an input validation bug Squid is vulnerable to a Denial of Service
+  against all clients using the proxy.
+
+  https://github.com/squid-cache/squid/security/advisories/GHSA-572g-rvwr-6c7f
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index a2aaba5fd5..12a9e5d293 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v4/squid-4.14.tar.xz.asc
+-md5  7d9ba82703cd770b2ede169a0c1de94a  squid-4.14.tar.xz
+-sha1  71ae13a845a6a7ffc69ce11086ea3e427625bc08  squid-4.14.tar.xz
++# From http://www.squid-cache.org/Versions/v4/squid-4.15.tar.xz.asc
++md5  a593de9dc888dfeca4f1f7db2cd7d3b9  squid-4.15.tar.xz
++sha1  60bda34ba39657e2d870c8c1d2acece8a69c3075  squid-4.15.tar.xz
+ # Locally calculated
+-sha256  f1097daa6434897c159bc100978b51347c0339041610845d0afa128151729ffc  squid-4.14.tar.xz
++sha256  b693a4e5ab2811a8a854f60de0a62afbbf3a952bb1d047952c9ae01321f84a25  squid-4.15.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 7e6865f8ed..b23a8d26ed 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQUID_VERSION = 4.14
++SQUID_VERSION = 4.15
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v4
+ SQUID_LICENSE = GPL-2.0+
