@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1324C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:00:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74E5EC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:00:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8861D60F41
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:00:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8861D60F41
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 2C60060238
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:00:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C60060238
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F951405C5;
-	Tue,  3 Aug 2021 23:00:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2FB040526;
+	Tue,  3 Aug 2021 23:00:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S40RUM4KHLuP; Tue,  3 Aug 2021 23:00:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UEzdTX37OIhg; Tue,  3 Aug 2021 23:00:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A36E3406A1;
-	Tue,  3 Aug 2021 23:00:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED78E404D1;
+	Tue,  3 Aug 2021 23:00:25 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 265561BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:12:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 17ACD1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:12:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 994784061A
+ by smtp2.osuosl.org (Postfix) with ESMTP id D060540621
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qPLaMoOthIFu for <buildroot@lists.busybox.net>;
+ with ESMTP id O56dh-s_BB_A for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E30CB40621
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7194F4061E
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 2F265843F5; Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id AF6EF873E2; Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 11 Jun 2021 12:05:41 +0200
+Date: Sat, 12 Jun 2021 14:32:03 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 50fc126b8ecca747af1bb53f14fcb39b7b9965fd
-X-Git-Newrev: d495593de17e04ed36094fa899f0710dfbbc9f01
+X-Git-Oldrev: 26fe934fd27de5fa1ce6b482cbfe4cfcebbb0972
+X-Git-Newrev: d0603d853b78c3029cad4150389f8786b5f3e7c2
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210949.2F265843F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mpg123: bump version
- to 1.25.15
+Message-Id: <20210803210949.AF6EF873E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/openvpn: requires DES
+ support in openssl
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,52 +70,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d495593de17e04ed36094fa899f0710dfbbc9f01
+commit: https://git.buildroot.net/buildroot/commit/?id=d0603d853b78c3029cad4150389f8786b5f3e7c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bugfix release. From the release notes:
+Enable DES in openssl to fix build failure raised since commit
+a83d41867c8d69a77d5cd0a665aa216af5340359
 
-Some backports of important fixes to the 1.25 series, for very conservative
-people.
+Fixes:
+ - http://autobuild.buildroot.org/results/a371f455d9550cb1593b5e349278082001245178
 
-libmpg123: Backport bit reservoir CRC fix from 1.26
-libmpg123: Backport part2_3_length regression fix (bug 312).
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mpg123/mpg123.hash | 8 ++++----
- package/mpg123/mpg123.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/openvpn/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index 02c40ad086..e5fb09b46a 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.13/
--sha1 2b6428dc563c56fb1374191d1244c8ac928e4d89  mpg123-1.25.13.tar.bz2
--md5 294a6c30546504ec3d0deac2b2ea22be  mpg123-1.25.13.tar.bz2
-+# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.15/
-+sha1  286fcb83afad3ecbfea60434d3ee1b6d7f41bb7c  mpg123-1.25.15.tar.bz2
-+md5  9a050d4b3573661c606f8095a3f34ca3  mpg123-1.25.15.tar.bz2
- # Locally calculated
--sha256 90306848359c793fd43b9906e52201df18775742dc3c81c06ab67a806509890a  mpg123-1.25.13.tar.bz2
-+sha256  503a76d82d97f1a6513bbeb284e460a99fb17ef80f23a661d8fc026ce6adcbbc  mpg123-1.25.15.tar.bz2
- # License file
- sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 588a4ffc32..9aa9cd1c10 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPG123_VERSION = 1.25.13
-+MPG123_VERSION = 1.25.15
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
+diff --git a/package/openvpn/Config.in b/package/openvpn/Config.in
+index 3f4a617fb7..cd8b1db996 100644
+--- a/package/openvpn/Config.in
++++ b/package/openvpn/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENVPN
+ 	bool "openvpn"
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  OpenVPN is a full-featured SSL VPN solution which can
+ 	  accomodate a wide range of configurations, including road
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
