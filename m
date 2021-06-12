@@ -1,68 +1,187 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 12 Jun 2021 21:35:00 +0300
-Subject: [Buildroot] [PATCH 1/1] package/{libuv,
- uvw}: bump to versions 1.41.0, 2.9.0_libuv_v1.41
-Message-ID: <20210612183500.399503-1-asafka7@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 12 Jun 2021 12:37:29 -0600
+Subject: [Buildroot] [External] [PATCH 1/1] pkg-rust: new infrastructure
+In-Reply-To: <DM2P110MB010772EB0988EFB9B464695A85359@DM2P110MB0107.NAMP110.PROD.OUTLOOK.COM>
+References: <20210610020632.236282-1-james.hilliard1@gmail.com>
+ <DM2P110MB010772EB0988EFB9B464695A85359@DM2P110MB0107.NAMP110.PROD.OUTLOOK.COM>
+Message-ID: <CADvTj4qPg1cjkVELhi0BnYp=7yG+NPKP_0v=0rQd1swY8m-UaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LICENSE change: bump year 2020 to 2021.
+On Thu, Jun 10, 2021 at 2:11 PM Voss, Samuel M Collins
+<sam.voss@collins.com> wrote:
+>
+> Hi James,
+>
+> >-----Original Message-----
+> >From: buildroot <buildroot-bounces@busybox.net> On Behalf Of James Hilliard
+> >Sent: Wednesday, June 09, 2021 9:07 PM
+> >To: buildroot at buildroot.org
+> >Cc: James Hilliard <james.hilliard1@gmail.com>
+> >Subject: [External] [Buildroot] [PATCH 1/1] pkg-rust: new infrastructure
+> >
+> >Add a new infrastructure to ease the development of packages that use
+> >rust's cargo as their build system.
+>
+> Thanks for digging into this, great to see more interest in bringing rust into the ecosystem. There has been some previous efforts[1] which are in differing levels of readiness.
+>
+> You may wish to look into these, as I believe there is some overlap between the patch sets. I linked the latest, but there are more to be found too.
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- package/uvw/uvw.hash     | 4 ++--
- package/uvw/uvw.mk       | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+Yeah, probably best to get those merged first, I'll rebase this after,
+I was mostly testing to see if just using env variables instead of a
+cargo config file was a viable approach for configuring cargo
+properly. From my understanding cargo can generally be configured with
+env variables alone.
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index c682affae7..042dd9dc34 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  70fe1c9ba4f2c509e8166c0ca2351000237da573bb6c82092339207a9715ba6b  libuv-1.40.0.tar.gz
-+sha256  6cfeb5f4bab271462b4a2cc77d4ecec847fdbdc26b72019c27ae21509e6f94fa  libuv-1.41.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 403a049037..d3c58d4dd4 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -6,7 +6,7 @@
- 
- # When bumping libuv, check if a new version of uvw is available
- # and bump it too.
--LIBUV_VERSION = 1.40.0
-+LIBUV_VERSION = 1.41.0
- LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
-diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
-index ba8c7b893d..2aeb4732cd 100644
---- a/package/uvw/uvw.hash
-+++ b/package/uvw/uvw.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  aa5769f5b9ba50de72ab02a8f8acf298b4aa9ceaef07992418a13a0fa119ce7d  uvw-2.8.0_libuv_v1.40.tar.gz
--sha256  755b2f245af22830c15b60c54469c0d92fbed42009b0d0074cec4b3959905757  LICENSE
-+sha256  dd610cb1626b8a7779ed251584bcc0362fb98fcee13e699680f61828a1ba55de  uvw-2.9.0_libuv_v1.41.tar.gz
-+sha256  5de32af2469480cf3261c9781962e0887366666ba8ee1f4a32c386c77fc50c88  LICENSE
-diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
-index f152d9f1cf..96375926d9 100644
---- a/package/uvw/uvw.mk
-+++ b/package/uvw/uvw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UVW_VERSION = 2.8.0_libuv_v1.40
-+UVW_VERSION = 2.9.0_libuv_v1.41
- UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
- UVW_INSTALL_STAGING = YES
- UVW_INSTALL_TARGET = NO
--- 
-2.30.2
+>
+> Sam
+>
+> 1: http://patchwork.ozlabs.org/project/buildroot/list/?series=221371&state=*
+>
+> >
+> >Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> >---
+> > package/Makefile.in |   1 +
+> > package/pkg-rust.mk | 113 ++++++++++++++++++++++++++++++++++++++++++++
+> > 2 files changed, 114 insertions(+)
+> > create mode 100644 package/pkg-rust.mk
+> >
+> >diff --git a/package/Makefile.in b/package/Makefile.in
+> >index 955e6a8e8c..c4fb6a3cb1 100644
+> >--- a/package/Makefile.in
+> >+++ b/package/Makefile.in
+> >@@ -434,3 +434,4 @@ include package/pkg-waf.mk
+> > include package/pkg-golang.mk
+> > include package/pkg-meson.mk
+> > include package/pkg-qmake.mk
+> >+include package/pkg-rust.mk
+> >diff --git a/package/pkg-rust.mk b/package/pkg-rust.mk
+> >new file mode 100644
+> >index 0000000000..3906fc12b4
+> >--- /dev/null
+> >+++ b/package/pkg-rust.mk
+> >@@ -0,0 +1,113 @@
+> >+################################################################################
+> >+# Rust package infrastructure
+> >+#
+> >+# This file implements an infrastructure that eases development of
+> >+# package .mk files for Rust packages. It should be used for all
+> >+# packages that use Rust as their build system.
+> >+#
+> >+# See the Buildroot documentation for details on the usage of this
+> >+# infrastructure
+> >+#
+> >+# In terms of implementation, this Rust infrastructure requires
+> >+# the .mk file to only specify metadata information about the
+> >+# package: name, version, download URL, etc.
+> >+#
+> >+# We still allow the package .mk file to override what the different
+> >+# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
+> >+# already defined, it is used as the list of commands to perform to
+> >+# build the package, instead of the default Rust behaviour. The
+> >+# package can also define some post operation hooks.
+> >+#
+> >+################################################################################
+> >+
+> >+CARGO = $(HOST_DIR)/bin/cargo
+> >+
+> >+RUSTC_TARGET_TRIPLE = $(subst -,_,$(call UPPERCASE,$(RUSTC_TARGET_NAME)))
+> >+
+> >+PKG_RUST_CARGO_ENV = \
+> >+??????CARGO_HOME=$(HOST_DIR)/share/cargo \
+> >+??????CARGO_BUILD_TARGET=$(RUSTC_TARGET_NAME) \
+> >+??????CARGO_INSTALL_ROOT=$(TARGET_DIR)/usr \
+> >+??????CARGO_TARGET_$(RUSTC_TARGET_TRIPLE)_LINKER=$(notdir $(TARGET_CROSS))gcc
+> >+
+> >+HOST_PKG_RUST_CARGO_ENV = \
+> >+??????CARGO_HOME=$(HOST_DIR)/share/cargo \
+> >+??????CARGO_INSTALL_ROOT=$(HOST_DIR) \
+> >+??????RUSTFLAGS="$(addprefix -C link-args=,$(HOST_LDFLAGS))"
+> >+
+> >+ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
+> >+PKG_RUST_CARGO_OPTS = --debug
+> >+else
+> >+PKG_RUST_CARGO_OPTS = --release
+> >+endif
+> >+
+> >+################################################################################
+> >+# inner-rust-package -- defines how the configuration, compilation and
+> >+# installation of a Rust package should be done, implements a few hooks to
+> >+# tune the build process and calls the generic package infrastructure to
+> >+# generate the necessary make targets
+> >+#
+> >+#  argument 1 is the lowercase package name
+> >+#  argument 2 is the uppercase package name, including a HOST_ prefix
+> >+#             for host packages
+> >+#  argument 3 is the uppercase package name, without the HOST_ prefix
+> >+#             for host packages
+> >+#  argument 4 is the type (target or host)
+> >+################################################################################
+> >+
+> >+define inner-rust-package
+> >+
+> >+$(2)_DEPENDENCIES += host-rustc
+> >+
+> >+#
+> >+# Build step. Only define it if not already defined by the package .mk
+> >+# file.
+> >+#
+> >+ifndef $(2)_BUILD_CMDS
+> >+ifeq ($(4),target)
+> >+define $(2)_BUILD_CMDS
+> >+??????$$(TARGET_MAKE_ENV) $$(PKG_RUST_CARGO_ENV) \
+> >+??????????????$$(CARGO) build $$(PKG_RUST_CARGO_OPTS) $$($$(PKG)_RUST_CARGO_OPTS) --manifest-path=$$($$(PKG)_BUILDDIR)/Cargo.toml
+> >+endef
+> >+else
+> >+define $(2)_BUILD_CMDS
+> >+??????$$(HOST_MAKE_ENV) $$(HOST_PKG_RUST_CARGO_ENV) \
+> >+??????????????$$(CARGO) build $$(PKG_RUST_CARGO_OPTS) $$($$(PKG)_RUST_CARGO_OPTS) --manifest-path=$$($$(PKG)_BUILDDIR)/Cargo.toml
+> >+endef
+> >+endif
+> >+endif
+> >+
+> >+#
+> >+# Host installation step. Only define it if not already defined by the
+> >+# package .mk file.
+> >+#
+> >+ifndef $(2)_INSTALL_CMDS
+> >+define $(2)_INSTALL_CMDS
+> >+??????$$(HOST_MAKE_ENV) $$(HOST_PKG_RUST_CARGO_ENV) \
+> >+??????????????$$(CARGO) install --offline --frozen --path $$($$(PKG)_BUILDDIR)
+> >+endef
+> >+endif
+> >+
+> >+#
+> >+# Target installation step. Only define it if not already defined by
+> >+# the package .mk file.
+> >+#
+> >+ifndef $(2)_INSTALL_TARGET_CMDS
+> >+define $(2)_INSTALL_TARGET_CMDS
+> >+??????$$(TARGET_MAKE_ENV) $$(PKG_RUST_CARGO_ENV) \
+> >+??????????????$$(CARGO) install --offline --frozen --path $$($$(PKG)_BUILDDIR)
+> >+endef
+> >+endif
+> >+
+> >+# Call the generic package infrastructure to generate the necessary
+> >+# make targets
+> >+$(call inner-generic-package,$(1),$(2),$(3),$(4))
+> >+
+> >+endef
+> >+
+> >+################################################################################
+> >+# rust-package -- the target generator macro for Rust packages
+> >+################################################################################
+> >+
+> >+rust-package = $(call inner-rust-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
+> >+host-rust-package = $(call inner-rust-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
+> >--
+> >2.25.1
+> >
+> >_______________________________________________
+> >buildroot mailing list
+> >buildroot at busybox.net
+> >https://urldefense.com/v3/__http://lists.busybox.net/mailman/listinfo/buildroot__;!!MvWE!QexAynmm9OiOcSWKCv_ttzGuz9LcnLCGjz_R7rvmHVags54BwN2Zs8i4d7t2LN4$
+> >
