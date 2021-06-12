@@ -1,95 +1,66 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 13 Jun 2021 00:30:10 +0200
-Subject: [Buildroot] [PATCH v1 1/2] package/mesa3d: add config option for
- DRI3 support
-Message-ID: <20210612223011.26118-1-ps.report@gmx.net>
+Date: Sun, 13 Jun 2021 00:32:43 +0200
+Subject: [Buildroot] [PATCH v1 1/2] package/mpg123: bump version to
+ 1.25.15
+In-Reply-To: <20210612222749.25669-1-ps.report@gmx.net>
+References: <20210612222749.25669-1-ps.report@gmx.net>
+Message-ID: <20210613003243.455de325@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add config option for DRI3 support and use it instead
-of DRI3 enable/disable logic in *.mk file.
+Forget this one (send by mistake - git format-patch master -2 vs.
+git format patch -2), sorry for the noise...
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/mesa3d/Config.in |  8 ++++++++
- package/mesa3d/mesa3d.mk | 12 +++++++-----
- 2 files changed, 15 insertions(+), 5 deletions(-)
+Regards,
+Peter
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index d1b3af2054..36acd9758c 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -16,6 +16,11 @@ menuconfig BR2_PACKAGE_MESA3D
- 
- if BR2_PACKAGE_MESA3D
- 
-+config BR2_PACKAGE_MESA3D_DRI3
-+	bool "Enable DRI3 support"
-+	help
-+	  Enable DRI3 support.
-+
- # Some Gallium driver needs libelf when built with LLVM support
- config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
- 	bool
-@@ -65,6 +70,8 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
- 		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
- 		!BR2_PACKAGE_MESA3D_OPENGL_EGL && \
- 		!BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
-+	select BR2_PACKAGE_MESA3D_DRI3 if \
-+		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
- 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
- 		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
- 
-@@ -359,6 +366,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
- 	depends on BR2_PACKAGE_XORG7 # xorgproto
-+	select BR2_PACKAGE_MESA3D_DRI3
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	select BR2_PACKAGE_XORGPROTO
- 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 5c5f8a33f3..da6e55bf93 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -35,6 +35,12 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
- MESA3D_CONF_OPTS += -Db_asneeded=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI3),y)
-+MESA3D_CONF_OPTS += -Ddri3=enabled
-+else
-+MESA3D_CONF_OPTS += -Ddri3=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
- MESA3D_DEPENDENCIES += host-llvm llvm
- MESA3D_MESON_EXTRA_BINARIES += llvm-config='$(STAGING_DIR)/usr/bin/llvm-config'
-@@ -122,13 +128,10 @@ endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
- MESA3D_CONF_OPTS += \
--	-Ddri-drivers= -Ddri3=disabled
-+	-Ddri-drivers=
- else
- ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
- MESA3D_DEPENDENCIES += xlib_libxshmfence
--MESA3D_CONF_OPTS += -Ddri3=enabled
--else
--MESA3D_CONF_OPTS += -Ddri3=disabled
- endif
- MESA3D_CONF_OPTS += \
- 	-Dshared-glapi=enabled \
-@@ -142,7 +145,6 @@ MESA3D_CONF_OPTS += \
- else
- MESA3D_DEPENDENCIES += xlib_libxshmfence
- MESA3D_CONF_OPTS += \
--	-Ddri3=enabled \
- 	-Dvulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
- endif
- 
--- 
-2.31.1
+On Sun, 13 Jun 2021 00:27:48 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+
+> From: Peter Korsgaard <peter@korsgaard.com>
+>
+> Bugfix release. From the release notes:
+>
+> Some backports of important fixes to the 1.25 series, for very conservative
+> people.
+>
+> libmpg123: Backport bit reservoir CRC fix from 1.26
+> libmpg123: Backport part2_3_length regression fix (bug 312).
+>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/mpg123/mpg123.hash | 8 ++++----
+>  package/mpg123/mpg123.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+> index 02c40ad086..e5fb09b46a 100644
+> --- a/package/mpg123/mpg123.hash
+> +++ b/package/mpg123/mpg123.hash
+> @@ -1,7 +1,7 @@
+> -# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.13/
+> -sha1 2b6428dc563c56fb1374191d1244c8ac928e4d89  mpg123-1.25.13.tar.bz2
+> -md5 294a6c30546504ec3d0deac2b2ea22be  mpg123-1.25.13.tar.bz2
+> +# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.15/
+> +sha1  286fcb83afad3ecbfea60434d3ee1b6d7f41bb7c  mpg123-1.25.15.tar.bz2
+> +md5  9a050d4b3573661c606f8095a3f34ca3  mpg123-1.25.15.tar.bz2
+>  # Locally calculated
+> -sha256 90306848359c793fd43b9906e52201df18775742dc3c81c06ab67a806509890a  mpg123-1.25.13.tar.bz2
+> +sha256  503a76d82d97f1a6513bbeb284e460a99fb17ef80f23a661d8fc026ce6adcbbc  mpg123-1.25.15.tar.bz2
+>  # License file
+>  sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+> diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+> index 588a4ffc32..9aa9cd1c10 100644
+> --- a/package/mpg123/mpg123.mk
+> +++ b/package/mpg123/mpg123.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -MPG123_VERSION = 1.25.13
+> +MPG123_VERSION = 1.25.15
+>  MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+>  MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+>  MPG123_CONF_OPTS = --disable-lfs-alias
