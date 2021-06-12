@@ -1,7 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 13 Jun 2021 00:27:48 +0200
-Subject: [Buildroot] [PATCH v1 1/2] package/mpg123: bump version to 1.25.15
-Message-ID: <20210612222749.25669-1-ps.report@gmx.net>
+Date: Sun, 13 Jun 2021 00:27:49 +0200
+Subject: [Buildroot] [PATCH v1 2/2] package/squid: security bump to version
+ 4.15
+In-Reply-To: <20210612222749.25669-1-ps.report@gmx.net>
+References: <20210612222749.25669-1-ps.report@gmx.net>
+Message-ID: <20210612222749.25669-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,48 +13,76 @@ To: buildroot@busybox.net
 
 From: Peter Korsgaard <peter@korsgaard.com>
 
-Bugfix release. From the release notes:
+Fixes the following security issues:
 
-Some backports of important fixes to the 1.25 series, for very conservative
-people.
+- CVE-2021-28651: Denial of Service in URN processing
+  Due to a buffer management bug Squid is vulnerable to a Denial of service
+  attack against the server it is operating on.
 
-libmpg123: Backport bit reservoir CRC fix from 1.26
-libmpg123: Backport part2_3_length regression fix (bug 312).
+  This attack is limited to proxies which attempt to resolve a "urn:"
+  resource identifier.  Support for this resolving is enabled by default in
+  all Squid.
+
+  https://github.com/squid-cache/squid/security/advisories/GHSA-ch36-9jhx-phm4
+
+- CVE-2021-28652: Denial of Service issue in Cache Manager
+  Due to an incorrect parser validation bug Squid is vulnerable to a Denial
+  of Service attack against the Cache Manager API.
+
+  https://github.com/squid-cache/squid/security/advisories/GHSA-m47m-9hvw-7447
+
+- CVE-2021-28662: Denial of Service in HTTP Response Processing
+  Due to an input validation bug Squid is vulnerable to a Denial of Service
+  against all clients using the proxy.
+
+  https://github.com/squid-cache/squid/security/advisories/GHSA-jjq6-mh2h-g39h
+
+- CVE-2021-31806, CVE-2021-31807, CVE-2021-31808: Multiple Issues in HTTP
+  Range header
+  Due to an incorrect input validation bug Squid is vulnerable to
+  a Denial of Service attack against all clients using the proxy.
+
+  https://github.com/squid-cache/squid/security/advisories/GHSA-pxwq-f3qr-w2xf
+
+- CVE-2021-33620: Denial of Service in HTTP Response processing
+  Due to an input validation bug Squid is vulnerable to a Denial of Service
+  against all clients using the proxy.
+
+  https://github.com/squid-cache/squid/security/advisories/GHSA-572g-rvwr-6c7f
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpg123/mpg123.hash | 8 ++++----
- package/mpg123/mpg123.mk   | 2 +-
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index 02c40ad086..e5fb09b46a 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.13/
--sha1 2b6428dc563c56fb1374191d1244c8ac928e4d89  mpg123-1.25.13.tar.bz2
--md5 294a6c30546504ec3d0deac2b2ea22be  mpg123-1.25.13.tar.bz2
-+# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.15/
-+sha1  286fcb83afad3ecbfea60434d3ee1b6d7f41bb7c  mpg123-1.25.15.tar.bz2
-+md5  9a050d4b3573661c606f8095a3f34ca3  mpg123-1.25.15.tar.bz2
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index a2aaba5fd5..12a9e5d293 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v4/squid-4.14.tar.xz.asc
+-md5  7d9ba82703cd770b2ede169a0c1de94a  squid-4.14.tar.xz
+-sha1  71ae13a845a6a7ffc69ce11086ea3e427625bc08  squid-4.14.tar.xz
++# From http://www.squid-cache.org/Versions/v4/squid-4.15.tar.xz.asc
++md5  a593de9dc888dfeca4f1f7db2cd7d3b9  squid-4.15.tar.xz
++sha1  60bda34ba39657e2d870c8c1d2acece8a69c3075  squid-4.15.tar.xz
  # Locally calculated
--sha256 90306848359c793fd43b9906e52201df18775742dc3c81c06ab67a806509890a  mpg123-1.25.13.tar.bz2
-+sha256  503a76d82d97f1a6513bbeb284e460a99fb17ef80f23a661d8fc026ce6adcbbc  mpg123-1.25.15.tar.bz2
- # License file
- sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 588a4ffc32..9aa9cd1c10 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
+-sha256  f1097daa6434897c159bc100978b51347c0339041610845d0afa128151729ffc  squid-4.14.tar.xz
++sha256  b693a4e5ab2811a8a854f60de0a62afbbf3a952bb1d047952c9ae01321f84a25  squid-4.15.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 7e6865f8ed..b23a8d26ed 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPG123_VERSION = 1.25.13
-+MPG123_VERSION = 1.25.15
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
+-SQUID_VERSION = 4.14
++SQUID_VERSION = 4.15
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v4
+ SQUID_LICENSE = GPL-2.0+
 -- 
 2.31.1
