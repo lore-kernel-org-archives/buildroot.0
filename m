@@ -1,88 +1,201 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 13 Jun 2021 00:27:49 +0200
-Subject: [Buildroot] [PATCH v1 2/2] package/squid: security bump to version
- 4.15
-In-Reply-To: <20210612222749.25669-1-ps.report@gmx.net>
-References: <20210612222749.25669-1-ps.report@gmx.net>
-Message-ID: <20210612222749.25669-2-ps.report@gmx.net>
+Date: Sun, 13 Jun 2021 00:30:11 +0200
+Subject: [Buildroot] [PATCH v1 2/2] package/mesa3d: gallium/kmsro drivers
+ require dri3 for X11
+In-Reply-To: <20210612223011.26118-1-ps.report@gmx.net>
+References: <20210612223011.26118-1-ps.report@gmx.net>
+Message-ID: <20210612223011.26118-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Peter Korsgaard <peter@korsgaard.com>
+- add upstream patch 0005-meson-kmsro-require-dri3-for-X11.patch
+  ([1])
 
-Fixes the following security issues:
+- simplfy libxshmfence dependency, always depend on it if selected
 
-- CVE-2021-28651: Denial of Service in URN processing
-  Due to a buffer management bug Squid is vulnerable to a Denial of service
-  attack against the server it is operating on.
+- select BR2_PACKAGE_MESA3D_DRI3 for all gallium/kmsro drivers in case
+  X11 is selected, see meson.build:
 
-  This attack is limited to proxies which attempt to resolve a "urn:"
-  resource identifier.  Support for this resolving is enabled by default in
-  all Squid.
+  240 with_gallium_kmsro = with_gallium_v3d or with_gallium_vc4 or with_gallium_etnaviv or with_gallium_panfrost or with_gallium_lima or with_gallium_freedreno
+  [...]
+  524 if with_gallium_kmsro and (with_platform_x11 and not with_dri3)
+  525   error('kmsro requires dri3 for X11 support')
+  526 endif
 
-  https://github.com/squid-cache/squid/security/advisories/GHSA-ch36-9jhx-phm4
+- select BR2_PACKAGE_XLIB_LIBXSHMFENCE for all gallium/kmsro drivers in case
+  X11 is selected, see meson.build:
 
-- CVE-2021-28652: Denial of Service issue in Cache Manager
-  Due to an incorrect parser validation bug Squid is vulnerable to a Denial
-  of Service attack against the Cache Manager API.
+  1897     if with_dri3
+  [...]
+  1907       dep_xshmfence = dependency('xshmfence', version : '>= 1.1')
 
-  https://github.com/squid-cache/squid/security/advisories/GHSA-m47m-9hvw-7447
+Fixes:
 
-- CVE-2021-28662: Denial of Service in HTTP Response Processing
-  Due to an input validation bug Squid is vulnerable to a Denial of Service
-  against all clients using the proxy.
+  - https://bugs.busybox.net/show_bug.cgi?id=13831
 
-  https://github.com/squid-cache/squid/security/advisories/GHSA-jjq6-mh2h-g39h
+[1] https://gitlab.freedesktop.org/mesa/mesa/-/commit/479bda78480d472e1f311bf0ea5b5fafb47ac7ba
 
-- CVE-2021-31806, CVE-2021-31807, CVE-2021-31808: Multiple Issues in HTTP
-  Range header
-  Due to an incorrect input validation bug Squid is vulnerable to
-  a Denial of Service attack against all clients using the proxy.
-
-  https://github.com/squid-cache/squid/security/advisories/GHSA-pxwq-f3qr-w2xf
-
-- CVE-2021-33620: Denial of Service in HTTP Response processing
-  Due to an input validation bug Squid is vulnerable to a Denial of Service
-  against all clients using the proxy.
-
-  https://github.com/squid-cache/squid/security/advisories/GHSA-572g-rvwr-6c7f
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/squid/squid.hash | 8 ++++----
- package/squid/squid.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...005-meson-kmsro-require-dri3-for-X11.patch | 42 +++++++++++++++++++
+ package/mesa3d/Config.in                      | 18 ++++++++
+ package/mesa3d/mesa3d.mk                      |  8 ++--
+ 3 files changed, 64 insertions(+), 4 deletions(-)
+ create mode 100644 package/mesa3d/0005-meson-kmsro-require-dri3-for-X11.patch
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index a2aaba5fd5..12a9e5d293 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v4/squid-4.14.tar.xz.asc
--md5  7d9ba82703cd770b2ede169a0c1de94a  squid-4.14.tar.xz
--sha1  71ae13a845a6a7ffc69ce11086ea3e427625bc08  squid-4.14.tar.xz
-+# From http://www.squid-cache.org/Versions/v4/squid-4.15.tar.xz.asc
-+md5  a593de9dc888dfeca4f1f7db2cd7d3b9  squid-4.15.tar.xz
-+sha1  60bda34ba39657e2d870c8c1d2acece8a69c3075  squid-4.15.tar.xz
- # Locally calculated
--sha256  f1097daa6434897c159bc100978b51347c0339041610845d0afa128151729ffc  squid-4.14.tar.xz
-+sha256  b693a4e5ab2811a8a854f60de0a62afbbf3a952bb1d047952c9ae01321f84a25  squid-4.15.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 7e6865f8ed..b23a8d26ed 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mesa3d/0005-meson-kmsro-require-dri3-for-X11.patch b/package/mesa3d/0005-meson-kmsro-require-dri3-for-X11.patch
+new file mode 100644
+index 0000000000..e20078b712
+--- /dev/null
++++ b/package/mesa3d/0005-meson-kmsro-require-dri3-for-X11.patch
+@@ -0,0 +1,42 @@
++From 945f32f09a010407035582712109d616dae31f6d Mon Sep 17 00:00:00 2001
++From: Erico Nunes <nunes.erico@gmail.com>
++Date: Thu, 10 Jun 2021 21:20:28 +0200
++Subject: [PATCH] meson: kmsro: require dri3 for X11
++
++The current implementation in kmsro relies on buffer sharing using
++WINSYS_HANDLE_TYPE_FD, which in x11 is only used by default when dri3
++is enabled.
++Since the current implementation will not work without it, we can
++prevent user error by checking that it is not disabled at configuration
++time.
++
++Closes #4861
++
++Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
++Reviewed-by: Adam Jackson <ajax@redhat.com>
++Reviewed-by: Eric Engestrom <eric@engestrom.ch>
++Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/11305>
++[Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/commit/479bda78480d472e1f311bf0ea5b5fafb47ac7ba.patch]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ meson.build | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/meson.build b/meson.build
++index e1e94e7..37b8868 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -521,6 +521,10 @@ if with_dri
++   endif
++ endif
++ 
+++if with_gallium_kmsro and (with_platform_x11 and not with_dri3)
+++  error('kmsro requires dri3 for X11 support')
+++endif
+++
++ _vdpau = get_option('gallium-vdpau')
++ if _vdpau == 'true'
++   _vdpau = 'enabled'
++-- 
++2.31.1
++
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 36acd9758c..c8af2a17cb 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -105,7 +105,10 @@ comment "Gallium drivers"
  
--SQUID_VERSION = 4.14
-+SQUID_VERSION = 4.15
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v4
- SQUID_LICENSE = GPL-2.0+
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+ 	bool "Gallium Etnaviv driver"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBDRM_ETNAVIV
+ 	help
+ 	  Mesa driver for Vivante GPUs.
+@@ -118,7 +121,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
+ 	# can't see is just spurious. However, that dependency is about
+ 	# the toolchain having sync4 primitives, which is always a given
+ 	# for arm/aarch64.
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBDRM_FREEDRENO
+ 	help
+ 	  Mesa driver for Freedreno GPUs.
+@@ -145,7 +151,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
+ 	bool "Gallium lima driver"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+ 	help
+ 	  Mesa driver for ARM Mali Utgard GPUs.
+ 
+@@ -160,7 +169,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
+ 	bool "Gallium panfrost driver"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+ 	help
+ 	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
+ 
+@@ -247,7 +259,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
+ 	bool "Gallium v3d driver"
+ 	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBDRM_VC4
+ 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	help
+@@ -261,7 +276,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+ 	bool "Gallium vc4 driver"
+ 	depends on BR2_arm || BR2_aarch64
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBDRM_VC4
+ 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	help
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index da6e55bf93..290295255a 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -29,6 +29,10 @@ MESA3D_CONF_OPTS = \
+ 	-Dgallium-omx=disabled \
+ 	-Dpower8=disabled
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
++MESA3D_DEPENDENCIES += xlib_libxshmfence
++endif
++
+ # Codesourcery ARM 2014.05 fail to link libmesa_dri_drivers.so with --as-needed linker
+ # flag due to a linker bug between binutils 2.24 and 2.25 (2.24.51.20140217).
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
+@@ -130,9 +134,6 @@ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+ MESA3D_CONF_OPTS += \
+ 	-Ddri-drivers=
+ else
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
+-MESA3D_DEPENDENCIES += xlib_libxshmfence
+-endif
+ MESA3D_CONF_OPTS += \
+ 	-Dshared-glapi=enabled \
+ 	-Dglx-direct=true \
+@@ -143,7 +144,6 @@ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
+ MESA3D_CONF_OPTS += \
+ 	-Dvulkan-drivers=
+ else
+-MESA3D_DEPENDENCIES += xlib_libxshmfence
+ MESA3D_CONF_OPTS += \
+ 	-Dvulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
+ endif
 -- 
 2.31.1
