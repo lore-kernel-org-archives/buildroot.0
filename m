@@ -1,33 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 12 Jun 2021 17:19:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pymupdf: fix tarball name
- for sha256
-Message-ID: <20210612151908.542978-1-fontaine.fabrice@gmail.com>
+Date: Sat, 12 Jun 2021 17:20:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mupdf: add MUPDF_CPE_ID_VENDOR
+Message-ID: <20210612152003.543086-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix tarball name for sha256 which is wrong since the addition of the
-package in commit 71f7fc8a27af383d3307945bf6e880491cb74bd4
+cpe:2.3:a:artifex:mupdf is a valid CPE identifier for this package:
 
-While at it, also update indentation to 2 spaces
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aartifex%3Amupdf
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-pymupdf/python-pymupdf.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/mupdf/mupdf.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-pymupdf/python-pymupdf.hash b/package/python-pymupdf/python-pymupdf.hash
-index 6729c6b91b..a5a53997cd 100644
---- a/package/python-pymupdf/python-pymupdf.hash
-+++ b/package/python-pymupdf/python-pymupdf.hash
-@@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/pymupdf/json
--md5	0e924bbb7364ba63df65d33fee9656f0  PyMuPDF-1.16.0.tar.gz
--sha256	1a6cc5b8b0fb9aa16bfa453fdfed445398f00d2556e78d90ba54cdce8d900857  python-pymupdf-1.16.0.tar.gz
-+md5  0e924bbb7364ba63df65d33fee9656f0  PyMuPDF-1.16.0.tar.gz
-+sha256  1a6cc5b8b0fb9aa16bfa453fdfed445398f00d2556e78d90ba54cdce8d900857  PyMuPDF-1.16.0.tar.gz
+diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
+index 5a905f7903..78dacd214c 100644
+--- a/package/mupdf/mupdf.mk
++++ b/package/mupdf/mupdf.mk
+@@ -10,6 +10,7 @@ MUPDF_SOURCE = mupdf-$(MUPDF_VERSION)-source.tar.gz
+ MUPDF_SITE = https://mupdf.com/downloads/archive
+ MUPDF_LICENSE = AGPL-3.0+
+ MUPDF_LICENSE_FILES = COPYING
++MUPDF_CPE_ID_VENDOR = artifex
+ MUPDF_INSTALL_STAGING = YES
+ MUPDF_DEPENDENCIES = \
+ 	freetype \
 -- 
 2.30.2
