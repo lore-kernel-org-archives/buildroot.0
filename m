@@ -1,89 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 12 Jun 2021 16:54:50 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] {linux,
- linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 10, 11, 12}.x series
-Message-ID: <20210612142446.9233D87A1A@busybox.osuosl.org>
+Date: Sat, 12 Jun 2021 16:58:31 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] Update for 2021.02.3
+Message-ID: <20210612142852.B8E688B73A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a3fcd6c7886fa5d75c103d75c5180e91e3ebd01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5293208a57ce78f9fc958704d7df52f28532cde6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7f4429dd907868bcbe09ebcfb4aa40f77b3d5acc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 16 ++++++++--------
- package/linux-headers/Config.in.host | 16 ++++++++--------
- 3 files changed, 17 insertions(+), 17 deletions(-)
+ CHANGES                  | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 48 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c893c8dc82..035699663c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -125,7 +125,7 @@ endif
+diff --git a/CHANGES b/CHANGES
+index 35f8fbec01..80c0125b80 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,48 @@
++2021.02.3, released June 12th, 2021
++
++	Important / security related fixes.
++
++	CPE meta data has been added for a large number of packages
++
++	Updated/fixed packages: acpid, apache, apcupsd, assimp, bird,
++	bitcoin, blktrace, boost, capnproto, chrony, dc3dd, dhcp,
++	directfb, dmalloc, docker-engine, ebtables, efibootmgr,
++	enlightenment, enscript, environment-setup, exempi, expat,
++	findutils, flatcc, fluidsynth, frr, gdb, go, gptfdisk, grpc,
++	gst1-plugins-bad, gst1-rtsp-server, gstreamer1, gupnp,
++	hostapd, hwloc, i2c-tools, iftop, imagemagick, imx-gpu-viv,
++	intel-mediadriver, intel-microcode, jquery-validation,
++	keepalived, kodi, less, libcamera, libcurl, libcutl, libesmtp,
++	libeXosip2, libffi, libfuse, libfuse3, libgeos, libgtk2,
++	libgtk3, libical, libidn, libidn2, libkcapi, libldns, libmms,
++	libmodbus, libmspack, libnids, libopenh264, liboping, libraw,
++	librelp, libsamplerate, libtirpc, libusb, libuv, libxcb,
++	libxml2, libxslt, live555, llvm, lmbench, localedef,
++	lttng-tools, lvm2, lz4, mesa3d, mimic, mini-snmpd, minidlna,
++	minissdpd, minizip, mono-gtksharp3, mpg123, mpv, msmtp, musl,
++	mutt, nasm, nbd, netperf, netsurf, nginx, odb, opencv3,
++	openssh, opentyrian, oprofile, p7zip, paho-mqtt-c, perl,
++	php-imagick, pifmrds, picocom, pigz, pngquant, poco,
++	postgresql, prosody, proxychains-ng, pulseaudio, putty, pwgen,
++	python-autobahn, python-bluezero, python-engineio,
++	python-keyring, python-pillow, python-requests, python-tqdm,
++	qemu, qpdf, qt5base, redis, refpolicy, rt-tests, runc,
++	shellinabox, squid, strace, supervisor, synergy, taglib,
++	tclap, terminology, thermald, tini, tinyproxy, tinyxml2,
++	tpm2-tss, uclibc, udisks, uhd, unscd, vlc, waylandpp,
++	webkitgtk, weston, wireshark, wpa_supplicant, wpewebkit,
++	xlib_libdmx, xlib_libFS, xlib_libICE, xlib_libX11,
++	xlib_libXcursor, xlib_libXdmcp, xlib_libXext, xlib_libXfixes,
++	xlib_libXfont2, xlib_libXinerama, xlib_libXpm, xlib_libXres,
++	xlib_libXt, xlib_libXtst, xlib_libXxf86dga, xlib_libXxf86vm,
++	xterm
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#13781: isc dhcp-server package don't create file /usr/bin/dhcpd
++	#13801: toolchainfile.cmake CMAKE_BUILD_TYPE
++	#13806: Building host-localedef fails on fedora 34/gcc 11
++
+ 2021.02.2, released May 12th, 2021
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.12.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.12.10" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.182-cip45" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.165-cip41-rt18" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 6a103e31a9..d7493545ef 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  5a60feee8492732a6aa8c46b9412563959945b4d7b0d27223f15ede2f84b6873  linux-5.12.4.tar.xz
--sha256  366ba5bb00be28b604aac630c4f64301063892f27353b299177c396af0ad877f  linux-5.11.21.tar.xz
--sha256  a8d5e3309dafc484eb70f94747a6efffa29a79bae651ae126333e913c00be077  linux-5.10.37.tar.xz
--sha256  71e7decf1e8149a8aed88d30df4f2a62a6c6b168111de6b261685ac7c0ecb2a0  linux-5.4.119.tar.xz
-+sha256  c8d499fc53ed14838994ec2f51591ae40d64cce68559cd897be8acbeeee7630f  linux-5.12.10.tar.xz
-+sha256  11027c6114eb916edbcc37897226fb6263b2931911d2d5093550473ce1a57600  linux-5.11.22.tar.xz
-+sha256  83b81e433ba2f8ee143064fb163699ee857e26dd789006bc1e9edf1ccd0bd403  linux-5.10.43.tar.xz
-+sha256  17ee750a4aeb1c883d721e730d1f7e2855124585e2f47766864a1359a7ebe33c  linux-5.4.125.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  6817ad26e1621bfad48d08b638f66c5933e89c7c8c00d43195b2e0ae260233eb  linux-4.4.268.tar.xz
--sha256  5b66f6ce0137fb8d81004bcf2f1e3cbe01c38aab74268656c4ba015c1ccd762a  linux-4.9.268.tar.xz
--sha256  1dc19361f6970bc94cc62be066702483db9cbd3d63f3089a8c90dabfced74369  linux-4.14.232.tar.xz
--sha256  6f9c2aee8553129d2bdbab646bbf7e88c2a5c38c0b1450f2e728831681bfc85d  linux-4.19.190.tar.xz
-+sha256  d13fa552be602825c443fcca90d6bdd72f4ebef809889ef015dba4593d3224ab  linux-4.4.272.tar.xz
-+sha256  f8bf0c390ae40ca736e104f10f744446bc534bf87ba1b6dbb2b7c9a8bece1058  linux-4.9.272.tar.xz
-+sha256  e4eae297a6fefefd8ce4781d98178a7c1ee51ca0a4c8a7e46e61b121fbab8b2a  linux-4.14.236.tar.xz
-+sha256  aaaebdccf599f77148fe170642fa7dc2452cf994b5cbbb4d39cab9e7f4058896  linux-4.19.194.tar.xz
- # Locally computed
- sha256  9f1de83c5c2bb582a33bd4ee892d45671901cd06af9dc159f0f499f1b5265b20  linux-cip-4.19.182-cip45.tar.gz
- sha256  0eeba6d6ecc45cf8f16458842b64d22e7064b9de9c31c11d1c395b08a47e3855  linux-cip-4.19.165-cip41-rt18.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b68567deeb..8eb12c545c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -362,14 +362,14 @@ endchoice
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 83e90317e9..7e896e9077 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.268"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.268"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.232"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.190"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.119"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.37"	if BR2_KERNEL_HEADERS_5_10
--	default "5.11.21"	if BR2_KERNEL_HEADERS_5_11
--	default "5.12.4"	if BR2_KERNEL_HEADERS_5_12
-+	default "4.4.272"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.272"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.236"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.194"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.125"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.43"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.11.22"	if BR2_KERNEL_HEADERS_5_11
-+	default "5.12.10"	if BR2_KERNEL_HEADERS_5_12
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ # Set and export the version string
+-export BR2_VERSION := 2021.02.2
++export BR2_VERSION := 2021.02.3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1620810000
++BR2_VERSION_EPOCH = 1623509900
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 3c1f55033d..303e266c68 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2021.02.2'
++RELEASE='2021.02.3'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
