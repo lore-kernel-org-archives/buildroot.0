@@ -1,29 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 12 Jun 2021 16:35:00 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{4, 10, 11, 12}.x series
-In-Reply-To: <CAOMZO5CtwFkZJoKWPxz9jzcRkfmWGoBvJYWJgq=41G1voGZqhA@mail.gmail.com>
- (Fabio Estevam's message of "Sat, 12 Jun 2021 08:49:16 -0300")
-References: <20210612114342.10118-1-peter@korsgaard.com>
- <CAOMZO5CtwFkZJoKWPxz9jzcRkfmWGoBvJYWJgq=41G1voGZqhA@mail.gmail.com>
-Message-ID: <87lf7fducr.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 12 Jun 2021 16:38:35 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/edk2: add EDK2_CPE_ID_VENDOR
+Message-ID: <20210612143835.522308-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+cpe:2.3:a:tianocore:edk2 is a valid CPE identifier for this package:
 
- > Hi Peter,
- > On Sat, Jun 12, 2021 at 8:44 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atianocore%3Aedk2
 
- >> +sha256  11027c6114eb916edbcc37897226fb6263b2931911d2d5093550473ce1a57600  linux-5.11.22.tar.xz
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ boot/edk2/edk2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > 5.11 is marked as EOL at kernel.org. Shouldn't it be removed from here?
-
-I kept it here for an easier backport to 2021.05.x, but it could/should
-indeed be dropped from master, either now or when we add 5.13.
-
+diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+index 903fdfb89e..fabd0c5b45 100644
+--- a/boot/edk2/edk2.mk
++++ b/boot/edk2/edk2.mk
+@@ -9,6 +9,7 @@ EDK2_SITE = https://github.com/tianocore/edk2
+ EDK2_SITE_METHOD = git
+ EDK2_LICENSE = BSD-2-Clause
+ EDK2_LICENSE_FILE = License.txt
++EDK2_CPE_ID_VENDOR = tianocore
+ EDK2_DEPENDENCIES = edk2-platforms host-python3 host-acpica host-util-linux
+ EDK2_INSTALL_TARGET = NO
+ EDK2_INSTALL_IMAGES = YES
 -- 
-Bye, Peter Korsgaard
+2.30.2
