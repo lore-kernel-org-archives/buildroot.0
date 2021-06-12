@@ -1,36 +1,36 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 12 Jun 2021 23:36:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/znc: requires blowfish support in
+Date: Sat, 12 Jun 2021 23:38:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libkrb5: requires DES support in
  openssl
-Message-ID: <20210612213624.654663-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210612213827.654832-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable blowfish in openssl to fix build failure raised since commit
+Enable DES in openssl to fix build failure raised since commit
 a83d41867c8d69a77d5cd0a665aa216af5340359
 
 Fixes:
- - http://autobuild.buildroot.org/results/600f2b09da919d511df87d3f19fea71149c1260c
+ - http://autobuild.buildroot.org/results/d73b477bd2064aee076f9debfd8d3346c63ba657
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/znc/Config.in | 1 +
+ package/libkrb5/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/znc/Config.in b/package/znc/Config.in
-index 4fc7bbb95b..915b5f632c 100644
---- a/package/znc/Config.in
-+++ b/package/znc/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_ZNC
+diff --git a/package/libkrb5/Config.in b/package/libkrb5/Config.in
+index 2e24c87229..39b5733b47 100644
+--- a/package/libkrb5/Config.in
++++ b/package/libkrb5/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBKRB5
+ 	# needs fork()
+ 	depends on BR2_USE_MMU
  	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH if BR2_PACKAGE_LIBOPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
  	help
- 	  Advanced IRC bouncer
- 
+ 	  Kerberos is a system for authenticating users and services
+ 	  on a network. Kerberos is a trusted third-party service.
 -- 
 2.30.2
