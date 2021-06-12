@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Jun 2021 14:33:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vtun: requires blowfish support
+Date: Sat, 12 Jun 2021 14:34:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: requires DES support
  in openssl
-In-Reply-To: <20210612114954.52566-1-fontaine.fabrice@gmail.com>
-References: <20210612114954.52566-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210612123336.GX168928@scaer>
+In-Reply-To: <20210612121140.64414-1-fontaine.fabrice@gmail.com>
+References: <20210612121140.64414-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210612123455.GY168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,39 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-06-12 13:49 +0200, Fabrice Fontaine spake thusly:
-> Enable blowfish in openssl to fix build failure raised since commit
+On 2021-06-12 14:11 +0200, Fabrice Fontaine spake thusly:
+> Enable DES in openssl to fix build failure raised since commit
 > a83d41867c8d69a77d5cd0a665aa216af5340359
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/38f6b92ead5861c2e15ca768acea9742ad4e0fec
+>  - http://autobuild.buildroot.org/results/a371f455d9550cb1593b5e349278082001245178
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/vtun/Config.in | 1 +
+>  package/openvpn/Config.in | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/vtun/Config.in b/package/vtun/Config.in
-> index d63e7c76ef..bf399c0709 100644
-> --- a/package/vtun/Config.in
-> +++ b/package/vtun/Config.in
+> diff --git a/package/openvpn/Config.in b/package/openvpn/Config.in
+> index 3f4a617fb7..81c09c84c2 100644
+> --- a/package/openvpn/Config.in
+> +++ b/package/openvpn/Config.in
 > @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_VTUN
->  	bool "vtun"
+>  config BR2_PACKAGE_OPENVPN
+>  	bool "openvpn"
 >  	depends on BR2_USE_MMU # fork()
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH if BR2_PACKAGE_LIBOPENSSL
+> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
 
-I've moved that closer and after to where we select openssl itself,
-otherwise it can be a bit confusing...
+I've moved that just after we select openssl, otherwise it is a bit
+illogical to select options before selecting the package...
 
 Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
->  	select BR2_PACKAGE_LZO
->  	select BR2_PACKAGE_OPENSSL
->  	select BR2_PACKAGE_ZLIB
+>  	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
+>  	help
+>  	  OpenVPN is a full-featured SSL VPN solution which can
 > -- 
 > 2.30.2
 > 
