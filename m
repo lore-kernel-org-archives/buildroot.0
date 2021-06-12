@@ -1,56 +1,38 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Sat, 12 Jun 2021 15:18:40 +0200
-Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2021.05.0
-Message-ID: <20210612131840.217711-1-b.bilas@grinn-global.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 12 Jun 2021 15:32:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/softether: requires DES,
+ MD4 and RC4 support in openssl
+Message-ID: <20210612133222.482124-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Enable DES, MD4 and RC4 in openssl to fix build failure raised since
+commit a83d41867c8d69a77d5cd0a665aa216af5340359
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 03d9a272d0..86181d7929 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2021.01.0"
-+	bool "2021.05.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2021.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2021.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index e6f8234a4d..b4a2b96c98 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,8 +1,8 @@
--# From https://www.barebox.org/download/barebox-2021.01.0.tar.bz2.md5
--md5  e81e7cd6bc2629e7fcdeaddf59c324c3  barebox-2021.01.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2021.05.0.tar.bz2.md5
-+md5  be859cfa667f73765708924e13b99839  barebox-2021.05.0.tar.bz2
- 
- # Locally calculated
--sha256  b39501db1c701b05f862973d8aed628cab0e611421cbaadae8b5262311551ff9  barebox-2021.01.0.tar.bz2
-+sha256  3444b5e5b4d2873d83372aeb3ef99d044e47e9c7b9d6f95cdc091339001ca42b  barebox-2021.05.0.tar.bz2
- 
- # License files, locally computed
- sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
+Fixes:
+ - http://autobuild.buildroot.org/results/ce601fb26d143e03adb39c41f2fdfca3b3191127
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/softether/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/softether/Config.in b/package/softether/Config.in
+index bfb45b0315..b195bcf99a 100644
+--- a/package/softether/Config.in
++++ b/package/softether/Config.in
+@@ -6,6 +6,9 @@ config BR2_PACKAGE_SOFTETHER
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_READLINE
+ 	help
+ 	  The SoftEther Server is a fully integrated implementation of
 -- 
-2.32.0
+2.30.2
