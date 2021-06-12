@@ -1,47 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 12 Jun 2021 17:43:05 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python-flatbuffers: bump to version
- 2.0
-In-Reply-To: <20210612154305.545978-1-fontaine.fabrice@gmail.com>
-References: <20210612154305.545978-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210612154305.545978-2-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sat, 12 Jun 2021 19:35:13 +0200
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.67
+Message-ID: <20210612173513.2253959-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-flatbuffers/python-flatbuffers.hash | 4 ++--
- package/python-flatbuffers/python-flatbuffers.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Note: NSS 3.67(like NSS 3.66) requires NSPR 4.31.
+Release Notes (not yet available, but should eventually land):
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.67_release_notes
 
-diff --git a/package/python-flatbuffers/python-flatbuffers.hash b/package/python-flatbuffers/python-flatbuffers.hash
-index ba7df6babc..a27d94160a 100644
---- a/package/python-flatbuffers/python-flatbuffers.hash
-+++ b/package/python-flatbuffers/python-flatbuffers.hash
-@@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/flatbuffers/json
--md5  b9a5b8dfbbb4751788529310118ea6db  flatbuffers-1.12.tar.gz
--sha256  63bb9a722d5e373701913e226135b28a6f6ac200d5cc7b4d919fa38d73b44610  flatbuffers-1.12.tar.gz
-+md5  b2ce60d9a7c1f8a2ddac6d49a1b700a4  flatbuffers-2.0.tar.gz
-+sha256  12158ab0272375eab8db2d663ae97370c33f152b27801fa6024e1d6105fd4dd2  flatbuffers-2.0.tar.gz
-diff --git a/package/python-flatbuffers/python-flatbuffers.mk b/package/python-flatbuffers/python-flatbuffers.mk
-index 33bb57ddf3..705dc0ad5a 100644
---- a/package/python-flatbuffers/python-flatbuffers.mk
-+++ b/package/python-flatbuffers/python-flatbuffers.mk
-@@ -4,9 +4,9 @@
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 7b27d859b2..3fdb0af6ca 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_66_RTM/src/SHA256SUMS
+-sha256  89a79e3a756cf0ac9ba645f4d4c0fc58d4133134401fb0b6c8a74c420bb4cdc9  nss-3.66.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_67_RTM/src/SHA256SUMS
++sha256  f6549a9148cd27b394b40c77fa73111d5ea23cdb51d796665de1b7458f88ce7f  nss-3.67.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index c5398c2959..32b4c379c7 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_FLATBUFFERS_VERSION = 1.12
-+PYTHON_FLATBUFFERS_VERSION = 2.0
- PYTHON_FLATBUFFERS_SOURCE = flatbuffers-$(PYTHON_FLATBUFFERS_VERSION).tar.gz
--PYTHON_FLATBUFFERS_SITE = https://files.pythonhosted.org/packages/4d/c4/7b995ab9bf0c7eaf10c386d29a03408dfcf72648df4102b1f18896c3aeea
-+PYTHON_FLATBUFFERS_SITE = https://files.pythonhosted.org/packages/10/41/09e9ab2134895b82466fada08b69b800f9a724bc81fcca3d4474ce48ffce
- PYTHON_FLATBUFFERS_LICENSE = Apache-2.0
- PYTHON_FLATBUFFERS_SETUP_TYPE = setuptools
- 
+-LIBNSS_VERSION = 3.66
++LIBNSS_VERSION = 3.67
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-2.30.2
+2.25.1
