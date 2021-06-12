@@ -1,233 +1,43 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 12 Jun 2021 11:40:10 +0200
-Subject: [Buildroot] [PATCH 1/6] board/qemu/sparc64-sun4u: avoid gcc-11
- warning to build the kernel
-Message-ID: <20210612094015.6792-1-romain.naour@gmail.com>
+Date: Sat, 12 Jun 2021 11:40:11 +0200
+Subject: [Buildroot] [PATCH 2/6] toolchain/Config.in: add
+ BR2_TOOLCHAIN_GCC_AT_LEAST_11 blind option
+In-Reply-To: <20210612094015.6792-1-romain.naour@gmail.com>
+References: <20210612094015.6792-1-romain.naour@gmail.com>
+Message-ID: <20210612094015.6792-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc-11 warns about what appears to be an out-of-range array access but
-stop the build due to -Werror added to cflags:
-
-arch/sparc/kernel/mdesc.c: In function 'mdesc_node_by_name':
-arch/sparc/kernel/mdesc.c:647:22: error: 'strcmp' reading 1 or more bytes from a region of size 0 [-Werror=stringop-overread]
-  647 |                 if (!strcmp(names + ep[ret].name_offset, name))
-      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-arch/sparc/kernel/mdesc.c:77:33: note: at offset 16 into source object 'mdesc' of size 16
-   77 |         struct mdesc_hdr        mdesc;
-      |                                 ^~~~~
-arch/sparc/kernel/mdesc.c: In function 'mdesc_get_property':
-arch/sparc/kernel/mdesc.c:692:22: error: 'strcmp' reading 1 or more bytes from a region of size 0 [-Werror=stringop-overread]
-  692 |                 if (!strcmp(names + ep->name_offset, name)) {
-      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-arch/sparc/kernel/mdesc.c:77:33: note: at offset 16 into source object 'mdesc' of size 16
-   77 |         struct mdesc_hdr        mdesc;
-      |                                 ^~~~~
-arch/sparc/kernel/mdesc.c: In function 'mdesc_next_arc':
-arch/sparc/kernel/mdesc.c:719:21: error: 'strcmp' reading 1 or more bytes from a region of size 0 [-Werror=stringop-overread]
-  719 |                 if (strcmp(names + ep->name_offset, arc_type))
-      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-arch/sparc/kernel/mdesc.c:77:33: note: at offset 16 into source object 'mdesc' of size 16
-   77 |         struct mdesc_hdr        mdesc;
-      |                                 ^~~~~
-cc1: all warnings being treated as errors
-
-The issue was initially reported to gcc [1] where it was analized.
-As suggested, change the struct mdesc_elem * accesses from the end
-of mdesc to those from the beginning of the data array.
-
-Update the prototype of node_block(), name_block() and data_block()
-since the code really seems to want to do is to compute the address
-somewhere into the chunk pointed to by hp.
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100262
-
-Upstream status: Pending
-https://www.spinics.net/lists/sparclinux/msg26385.html
+In order to add gcc 11 support for internal and external toolchain in
+follow-up commits, introduce BR2_TOOLCHAIN_GCC_AT_LEAST_11 symbol.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...ringop-overread-warning-to-access-Ma.patch | 154 ++++++++++++++++++
- configs/qemu_sparc64_sun4u_defconfig          |   3 +
- 2 files changed, 157 insertions(+)
- create mode 100644 board/qemu/sparc64-sun4u/patches/linux/0001-sparc64-avoid-stringop-overread-warning-to-access-Ma.patch
+ toolchain/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/board/qemu/sparc64-sun4u/patches/linux/0001-sparc64-avoid-stringop-overread-warning-to-access-Ma.patch b/board/qemu/sparc64-sun4u/patches/linux/0001-sparc64-avoid-stringop-overread-warning-to-access-Ma.patch
-new file mode 100644
-index 0000000000..c02704696d
---- /dev/null
-+++ b/board/qemu/sparc64-sun4u/patches/linux/0001-sparc64-avoid-stringop-overread-warning-to-access-Ma.patch
-@@ -0,0 +1,154 @@
-+From 82d91965519c20639c24aadd022b2859461562bc Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Tue, 27 Apr 2021 14:54:28 +0200
-+Subject: [PATCH] sparc64: avoid stringop-overread warning to access Machine
-+ description datas
-+
-+gcc-11 warns about what appears to be an out-of-range array access but
-+stop the build due to -Werror added to cflags:
-+
-+arch/sparc/kernel/mdesc.c: In function 'mdesc_node_by_name':
-+arch/sparc/kernel/mdesc.c:647:22: error: 'strcmp' reading 1 or more bytes from a region of size 0 [-Werror=stringop-overread]
-+  647 |                 if (!strcmp(names + ep[ret].name_offset, name))
-+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+arch/sparc/kernel/mdesc.c:77:33: note: at offset 16 into source object 'mdesc' of size 16
-+   77 |         struct mdesc_hdr        mdesc;
-+      |                                 ^~~~~
-+arch/sparc/kernel/mdesc.c: In function 'mdesc_get_property':
-+arch/sparc/kernel/mdesc.c:692:22: error: 'strcmp' reading 1 or more bytes from a region of size 0 [-Werror=stringop-overread]
-+  692 |                 if (!strcmp(names + ep->name_offset, name)) {
-+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+arch/sparc/kernel/mdesc.c:77:33: note: at offset 16 into source object 'mdesc' of size 16
-+   77 |         struct mdesc_hdr        mdesc;
-+      |                                 ^~~~~
-+arch/sparc/kernel/mdesc.c: In function 'mdesc_next_arc':
-+arch/sparc/kernel/mdesc.c:719:21: error: 'strcmp' reading 1 or more bytes from a region of size 0 [-Werror=stringop-overread]
-+  719 |                 if (strcmp(names + ep->name_offset, arc_type))
-+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+arch/sparc/kernel/mdesc.c:77:33: note: at offset 16 into source object 'mdesc' of size 16
-+   77 |         struct mdesc_hdr        mdesc;
-+      |                                 ^~~~~
-+cc1: all warnings being treated as errors
-+
-+The issue was initially reported to gcc [1] where it was analized.
-+As suggested, change the struct mdesc_elem * accesses from the end
-+of mdesc to those from the beginning of the data array.
-+
-+Update the prototype of node_block(), name_block() and data_block()
-+since the code really seems to want to do is to compute the address
-+somewhere into the chunk pointed to by hp.
-+
-+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100262
-+
-+Upstream status: Pending 
-+https://www.spinics.net/lists/sparclinux/msg26385.html
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ arch/sparc/kernel/mdesc.c | 37 +++++++++++++++++++++----------------
-+ 1 file changed, 21 insertions(+), 16 deletions(-)
-+
-+diff --git a/arch/sparc/kernel/mdesc.c b/arch/sparc/kernel/mdesc.c
-+index 8e645ddac58e..3403555aa1e2 100644
-+--- a/arch/sparc/kernel/mdesc.c
-++++ b/arch/sparc/kernel/mdesc.c
-+@@ -75,6 +75,7 @@ struct mdesc_handle {
-+ 	refcount_t		refcnt;
-+ 	unsigned int		handle_size;
-+ 	struct mdesc_hdr	mdesc;
-++	char			data[];
-+ };
-+ 
-+ typedef int (*mdesc_node_info_get_f)(struct mdesc_handle *, u64,
-+@@ -610,26 +611,30 @@ int mdesc_get_node_info(struct mdesc_handle *hp, u64 node,
-+ }
-+ EXPORT_SYMBOL(mdesc_get_node_info);
-+ 
-+-static struct mdesc_elem *node_block(struct mdesc_hdr *mdesc)
-++static struct mdesc_elem *node_block(struct mdesc_handle *hp)
-+ {
-+-	return (struct mdesc_elem *) (mdesc + 1);
-++	return (struct mdesc_elem *) hp + offsetof(struct mdesc_handle, data);
-+ }
-+ 
-+-static void *name_block(struct mdesc_hdr *mdesc)
-++static void *name_block(struct mdesc_handle *hp)
-+ {
-+-	return ((void *) node_block(mdesc)) + mdesc->node_sz;
-++	struct mdesc_hdr *mdesc = &hp->mdesc;
-++
-++	return ((void *) node_block(hp)) + mdesc->node_sz;
-+ }
-+ 
-+-static void *data_block(struct mdesc_hdr *mdesc)
-++static void *data_block(struct mdesc_handle *hp)
-+ {
-+-	return ((void *) name_block(mdesc)) + mdesc->name_sz;
-++	struct mdesc_hdr *mdesc = &hp->mdesc;
-++
-++	return ((void *) name_block(hp)) + mdesc->name_sz;
-+ }
-+ 
-+ u64 mdesc_node_by_name(struct mdesc_handle *hp,
-+ 		       u64 from_node, const char *name)
-+ {
-+-	struct mdesc_elem *ep = node_block(&hp->mdesc);
-+-	const char *names = name_block(&hp->mdesc);
-++	struct mdesc_elem *ep = node_block(hp);
-++	const char *names = name_block(hp);
-+ 	u64 last_node = hp->mdesc.node_sz / 16;
-+ 	u64 ret;
-+ 
-+@@ -657,15 +662,15 @@ EXPORT_SYMBOL(mdesc_node_by_name);
-+ const void *mdesc_get_property(struct mdesc_handle *hp, u64 node,
-+ 			       const char *name, int *lenp)
-+ {
-+-	const char *names = name_block(&hp->mdesc);
-++	const char *names = name_block(hp);
-+ 	u64 last_node = hp->mdesc.node_sz / 16;
-+-	void *data = data_block(&hp->mdesc);
-++	void *data = data_block(hp);
-+ 	struct mdesc_elem *ep;
-+ 
-+ 	if (node == MDESC_NODE_NULL || node >= last_node)
-+ 		return NULL;
-+ 
-+-	ep = node_block(&hp->mdesc) + node;
-++	ep = node_block(hp) + node;
-+ 	ep++;
-+ 	for (; ep->tag != MD_NODE_END; ep++) {
-+ 		void *val = NULL;
-+@@ -702,8 +707,8 @@ EXPORT_SYMBOL(mdesc_get_property);
-+ 
-+ u64 mdesc_next_arc(struct mdesc_handle *hp, u64 from, const char *arc_type)
-+ {
-+-	struct mdesc_elem *ep, *base = node_block(&hp->mdesc);
-+-	const char *names = name_block(&hp->mdesc);
-++	struct mdesc_elem *ep, *base = node_block(hp);
-++	const char *names = name_block(hp);
-+ 	u64 last_node = hp->mdesc.node_sz / 16;
-+ 
-+ 	if (from == MDESC_NODE_NULL || from >= last_node)
-+@@ -728,7 +733,7 @@ EXPORT_SYMBOL(mdesc_next_arc);
-+ 
-+ u64 mdesc_arc_target(struct mdesc_handle *hp, u64 arc)
-+ {
-+-	struct mdesc_elem *ep, *base = node_block(&hp->mdesc);
-++	struct mdesc_elem *ep, *base = node_block(hp);
-+ 
-+ 	ep = base + arc;
-+ 
-+@@ -738,8 +743,8 @@ EXPORT_SYMBOL(mdesc_arc_target);
-+ 
-+ const char *mdesc_node_name(struct mdesc_handle *hp, u64 node)
-+ {
-+-	struct mdesc_elem *ep, *base = node_block(&hp->mdesc);
-+-	const char *names = name_block(&hp->mdesc);
-++	struct mdesc_elem *ep, *base = node_block(hp);
-++	const char *names = name_block(hp);
-+ 	u64 last_node = hp->mdesc.node_sz / 16;
-+ 
-+ 	if (node == MDESC_NODE_NULL || node >= last_node)
-+-- 
-+2.30.2
-+
-diff --git a/configs/qemu_sparc64_sun4u_defconfig b/configs/qemu_sparc64_sun4u_defconfig
-index cff0c2968a..6a999298eb 100644
---- a/configs/qemu_sparc64_sun4u_defconfig
-+++ b/configs/qemu_sparc64_sun4u_defconfig
-@@ -2,6 +2,9 @@
- BR2_sparc64=y
- BR2_sparc_v9=y
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 0181ef07de..fe327b9f46 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -630,10 +630,15 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 	bool
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
  
-+# Patches
-+BR2_GLOBAL_PATCH_DIR="board/qemu/sparc64-sun4u/patches"
++config BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
 +
- # System
- BR2_SYSTEM_DHCP="eth0"
- 
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_GCC_AT_LEAST
+ 	string
++	default "11"	if BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 	default "10"	if BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 	default "9"	if BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 	default "8"	if BR2_TOOLCHAIN_GCC_AT_LEAST_8
 -- 
 2.31.1
