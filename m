@@ -1,36 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 12 Jun 2021 23:47:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pppd: requires DES support in
- openssl
-Message-ID: <20210612214720.655521-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 12 Jun 2021 23:47:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/heirloom-mailx: add CPE
+ variables
+In-Reply-To: <20210612212834.636625-1-fontaine.fabrice@gmail.com>
+References: <20210612212834.636625-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210612214734.GJ168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable DES in openssl to fix build failure raised since commit
-a83d41867c8d69a77d5cd0a665aa216af5340359
+Fabrice, All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/3cd38e6dfd5f94f0bd1689e7db4ea1d723dd2a80
+On 2021-06-12 23:28 +0200, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:heirloom:mailx is a valid CPE identifier for this package:
+> 
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aheirloom%3Amailx
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/pppd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Applied to master, thanks.
 
-diff --git a/package/pppd/Config.in b/package/pppd/Config.in
-index 7db5674bf1..3e7759c87c 100644
---- a/package/pppd/Config.in
-+++ b/package/pppd/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_PPPD
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # Use __P() macro all over the tree
- 	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_OPENSSL if BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  An implementation of the Point-to-point protocol.
- 
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/heirloom-mailx/heirloom-mailx.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
+> index 2f7e635e0f..b3cece0cfc 100644
+> --- a/package/heirloom-mailx/heirloom-mailx.mk
+> +++ b/package/heirloom-mailx/heirloom-mailx.mk
+> @@ -9,6 +9,8 @@ HEIRLOOM_MAILX_SOURCE = heirloom-mailx_$(HEIRLOOM_MAILX_VERSION).orig.tar.gz
+>  HEIRLOOM_MAILX_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/h/heirloom-mailx
+>  HEIRLOOM_MAILX_LICENSE = BSD-4-Clause, Bellcore (base64), OpenVision (imap_gssapi), RSA Data Security (md5), Network Working Group (hmac), MPL-1.1 (nss)
+>  HEIRLOOM_MAILX_LICENSE_FILES = COPYING
+> +HEIRLOOM_MAILX_CPE_ID_VENDOR = heirloom
+> +HEIRLOOM_MAILX_CPE_ID_PRODUCT = mailx
+>  
+>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
+>  HEIRLOOM_MAILX_DEPENDENCIES += openssl
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.30.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
