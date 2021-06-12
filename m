@@ -1,45 +1,70 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 12 Jun 2021 23:49:17 +0200
-Subject: [Buildroot] [PATCH] package/lua-testmore: bump to version 0.3.6
-Message-ID: <20210612214917.2876816-1-francois.perrad@gadz.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 12 Jun 2021 23:50:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libkrb5: requires DES support
+ in openssl
+In-Reply-To: <20210612213827.654832-1-fontaine.fabrice@gmail.com>
+References: <20210612213827.654832-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210612215054.GL168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-diff COPYRIGHT:
-- Copyright (C) 2009-2018 Francois Perrad.
-+ Copyright (C) 2009-2021 Francois Perrad.
+Fabrice, All,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua-testmore/lua-testmore.hash | 4 ++--
- package/lua-testmore/lua-testmore.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2021-06-12 23:38 +0200, Fabrice Fontaine spake thusly:
+> Enable DES in openssl to fix build failure raised since commit
+> a83d41867c8d69a77d5cd0a665aa216af5340359
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/d73b477bd2064aee076f9debfd8d3346c63ba657
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libkrb5/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libkrb5/Config.in b/package/libkrb5/Config.in
+> index 2e24c87229..39b5733b47 100644
+> --- a/package/libkrb5/Config.in
+> +++ b/package/libkrb5/Config.in
+> @@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBKRB5
+>  	# needs fork()
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_STATIC_LIBS
+> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
 
-diff --git a/package/lua-testmore/lua-testmore.hash b/package/lua-testmore/lua-testmore.hash
-index 752fc17f7..4ff577e52 100644
---- a/package/lua-testmore/lua-testmore.hash
-+++ b/package/lua-testmore/lua-testmore.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 4875103611683b13fdd0bc3658c0cbe302b4db491043a03ea002726810d371c5  lua-testmore-0.3.5-2.src.rock
--sha256 0fa63370a149eda33e25987dd63bd096a616a3e47d2cfc45ca2fd66e8d2bfb35  lua-TestMore-0.3.5/COPYRIGHT
-+sha256 b3e57955888aba3974d6f5a21219214e2803a38e4623671f7d9d9e0f1851e608  lua-testmore-0.3.6-1.src.rock
-+sha256 37a3afb014325b98f0ad919cb40bc9d5a948120e5260e75b9d00c198d350da6d  lua-TestMore-0.3.6/COPYRIGHT
-diff --git a/package/lua-testmore/lua-testmore.mk b/package/lua-testmore/lua-testmore.mk
-index 5d6dc053a..e3cc7b7bd 100644
---- a/package/lua-testmore/lua-testmore.mk
-+++ b/package/lua-testmore/lua-testmore.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_TESTMORE_VERSION = 0.3.5-2
-+LUA_TESTMORE_VERSION = 0.3.6-1
- LUA_TESTMORE_NAME_UPSTREAM = lua-TestMore
- LUA_TESTMORE_LICENSE = MIT
- LUA_TESTMORE_LICENSE_FILES = $(LUA_TESTMORE_SUBDIR)/COPYRIGHT
+This one I have not applied on purpose: libkrb5 does not depend on
+openssl at all in its .mk file, neither conditionally or
+unconditionally.
+
+So adding a select to a libopenssl option is confusing.
+
+Contrary to the earlier perl-crypt-openssl-rsa that I fixed, libkrb5
+looks a bit more involved: it is not obvious if openssl is mandatory
+or not. And it is too late for me tonight to investigate furhte. ;-)
+
+Could you please have a look and respin a series to fix both?
+
+Regards,
+Yann E. MORIN.
+
+>  	help
+>  	  Kerberos is a system for authenticating users and services
+>  	  on a network. Kerberos is a trusted third-party service.
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.30.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
