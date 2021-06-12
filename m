@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Jun 2021 14:28:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/netatalk: requires CAST and DES
- support in openssl
-In-Reply-To: <20210609215422.1593908-1-fontaine.fabrice@gmail.com>
-References: <20210609215422.1593908-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210612122818.GS168928@scaer>
+Date: Sat, 12 Jun 2021 14:28:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rhash: requires RMD160 support
+ in openssl
+In-Reply-To: <20210609213046.1591967-1-fontaine.fabrice@gmail.com>
+References: <20210609213046.1591967-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210612122836.GT168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,35 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-06-09 23:54 +0200, Fabrice Fontaine spake thusly:
-> Enable CAST and DES in openssl to fix build failures raised since commit
+On 2021-06-09 23:30 +0200, Fabrice Fontaine spake thusly:
+> Enable RMD160 in openssl to fix build failure raised since commit
 > a83d41867c8d69a77d5cd0a665aa216af5340359
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/b7347e3e4b828901dcb954f7cc37b712b80ac49b
->  - http://autobuild.buildroot.org/results/453c10ff24ef48f1340ec91412e504fe604033cf
+>  - http://autobuild.buildroot.org/results/e3733ad25de55616b2eafff0b489aea2bee65e06
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/netatalk/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/netatalk/Config.in b/package/netatalk/Config.in
-> index 1560a18747..9d0a8b2ec4 100644
-> --- a/package/netatalk/Config.in
-> +++ b/package/netatalk/Config.in
-> @@ -9,6 +9,8 @@ config BR2_PACKAGE_NETATALK
->  	select BR2_PACKAGE_LIBEVENT
->  	select BR2_PACKAGE_LIBGCRYPT
->  	select BR2_PACKAGE_LIBGPG_ERROR
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST if BR2_PACKAGE_LIBOPENSSL
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
 
-I've moved those 'select' closer to where openssl is itself selected,
-otherwise it is a bit confusion...
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
+> ---
+>  package/rhash/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/rhash/Config.in b/package/rhash/Config.in
+> index 2ddcb00feb..35ccb3833e 100644
+> --- a/package/rhash/Config.in
+> +++ b/package/rhash/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_RHASH
+>  	bool "rhash"
+> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
 >  	help
->  	  Netatalk can be used to turn a *NIX machine into an
->  	  extremely high-performance and reliable file server for
+>  	  LibRHash is a professional, portable, thread-safe C library
+>  	  for computing a wide variety of hash sums, such as CRC32,
 > -- 
 > 2.30.2
 > 
