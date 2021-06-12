@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Jun 2021 23:47:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/heirloom-mailx: add CPE
- variables
-In-Reply-To: <20210612212834.636625-1-fontaine.fabrice@gmail.com>
-References: <20210612212834.636625-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210612214734.GJ168928@scaer>
+Date: Sat, 12 Jun 2021 23:47:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/znc: requires blowfish support
+ in openssl
+In-Reply-To: <20210612213624.654663-1-fontaine.fabrice@gmail.com>
+References: <20210612213624.654663-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210612214751.GK168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,12 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-06-12 23:28 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:heirloom:mailx is a valid CPE identifier for this package:
+On 2021-06-12 23:36 +0200, Fabrice Fontaine spake thusly:
+> Enable blowfish in openssl to fix build failure raised since commit
+> a83d41867c8d69a77d5cd0a665aa216af5340359
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aheirloom%3Amailx
+> Fixes:
+>  - http://autobuild.buildroot.org/results/600f2b09da919d511df87d3f19fea71149c1260c
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -26,22 +28,21 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/heirloom-mailx/heirloom-mailx.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/znc/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
-> index 2f7e635e0f..b3cece0cfc 100644
-> --- a/package/heirloom-mailx/heirloom-mailx.mk
-> +++ b/package/heirloom-mailx/heirloom-mailx.mk
-> @@ -9,6 +9,8 @@ HEIRLOOM_MAILX_SOURCE = heirloom-mailx_$(HEIRLOOM_MAILX_VERSION).orig.tar.gz
->  HEIRLOOM_MAILX_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/h/heirloom-mailx
->  HEIRLOOM_MAILX_LICENSE = BSD-4-Clause, Bellcore (base64), OpenVision (imap_gssapi), RSA Data Security (md5), Network Working Group (hmac), MPL-1.1 (nss)
->  HEIRLOOM_MAILX_LICENSE_FILES = COPYING
-> +HEIRLOOM_MAILX_CPE_ID_VENDOR = heirloom
-> +HEIRLOOM_MAILX_CPE_ID_PRODUCT = mailx
+> diff --git a/package/znc/Config.in b/package/znc/Config.in
+> index 4fc7bbb95b..915b5f632c 100644
+> --- a/package/znc/Config.in
+> +++ b/package/znc/Config.in
+> @@ -5,6 +5,7 @@ config BR2_PACKAGE_ZNC
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH if BR2_PACKAGE_LIBOPENSSL
+>  	help
+>  	  Advanced IRC bouncer
 >  
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->  HEIRLOOM_MAILX_DEPENDENCIES += openssl
 > -- 
 > 2.30.2
 > 
