@@ -1,39 +1,36 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 12 Jun 2021 15:46:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/safeclib: disable -Werror
-Message-ID: <20210612134604.519029-1-fontaine.fabrice@gmail.com>
+Date: Sat, 12 Jun 2021 15:52:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/perl-net-ssleay: requires RMD160
+ support in openssl
+Message-ID: <20210612135233.519344-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set WARN_CFLAGS to an empty value to avoid the following build failure
-with -DNDEBUG which is raised since commit
-5a8c50fe05afacc3cbe8e7347e238da9f242fab0
-
-In file included from ./mem/safe_mem_constraint.h:38,
-                 from mem/safe_mem_constraint.c:33:
-./safeclib_private.h:38: error: "NDEBUG" redefined [-Werror]
+Enable RMD160 in openssl to fix build failure raised since commit
+a83d41867c8d69a77d5cd0a665aa216af5340359
 
 Fixes:
- - http://autobuild.buildroot.org/results/942/942b7e9a56a2eb285a64ac0df4910db70c39b49d/build-end.log
+ - http://autobuild.buildroot.org/results/c17e37e50d2f6c7a26a9d993ae822e312f7b1f21
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/safeclib/safeclib.mk | 1 +
+ package/perl-net-ssleay/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/safeclib/safeclib.mk b/package/safeclib/safeclib.mk
-index 3af8fbb167..73e0f36bfa 100644
---- a/package/safeclib/safeclib.mk
-+++ b/package/safeclib/safeclib.mk
-@@ -11,5 +11,6 @@ SAFECLIB_SOURCE = libsafec-$(SAFECLIB_VERSION).0-gad76c7.tar.bz2
- SAFECLIB_LICENSE = MIT
- SAFECLIB_LICENSE_FILES = COPYING
- SAFECLIB_INSTALL_STAGING = YES
-+SAFECLIB_MAKE_OPTS = WARN_CFLAGS=""
+diff --git a/package/perl-net-ssleay/Config.in b/package/perl-net-ssleay/Config.in
+index 6998553ef8..d699e6671d 100644
+--- a/package/perl-net-ssleay/Config.in
++++ b/package/perl-net-ssleay/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PERL_NET_SSLEAY
+ 	bool "perl-net-ssleay"
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  Perl extension for using OpenSSL.
  
- $(eval $(autotools-package))
 -- 
 2.30.2
