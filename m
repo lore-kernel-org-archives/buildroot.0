@@ -1,56 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 12 Jun 2021 16:17:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libbpf: add
- BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
-Message-ID: <20210612141714.520748-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 12 Jun 2021 16:22:02 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/connman: security
+ bump to 1.40
+Message-ID: <20210612135109.3B44B814CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libbpf does not support all architectures, for example ARM is not
-supported resulting in the following build failure:
+commit: https://git.buildroot.net/buildroot/commit/?id=2ca0a9fca24008c2584af2189db0f7668fa56f87
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-bpf.c:53:4: error: #error __NR_bpf not defined. libbpf does not support your arch.
- #  error __NR_bpf not defined. libbpf does not support your arch.
-    ^
+Fix CVE-2021-33833 which is a stack buffer overflow in dnsproxy.
 
-Fixes:
- - http://autobuild.buildroot.org/results/288d54100a2e736195a3a04a9e2e035d02ea5c16
+Release notes:
+https://lore.kernel.org/connman/20210610113503.ob45lhssqy5hk4ki at beryllium.lan/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e5d9af8de0d84ef9d9a0bb9c4a85e7802da4baed)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libbpf/Config.in | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ package/connman/connman.hash | 2 +-
+ package/connman/connman.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libbpf/Config.in b/package/libbpf/Config.in
-index c5b24c5eb5..9eadf0254a 100644
---- a/package/libbpf/Config.in
-+++ b/package/libbpf/Config.in
-@@ -1,5 +1,15 @@
-+config BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
-+	bool
-+	# see src/bpf.c
-+	default y if BR2_arc
-+	default y if BR2_aarch64 || BR2_aarch64_be
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_sparc || BR2_sparc64
-+	default y if BR2_s390x
-+
- config BR2_PACKAGE_LIBBPF
- 	bool "libbpf"
-+	depends on BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
-@@ -15,6 +25,7 @@ config BR2_PACKAGE_LIBBPF
- 	  https://github.com/libbpf/libbpf
+diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+index 338e1919de..797448337c 100644
+--- a/package/connman/connman.hash
++++ b/package/connman/connman.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+-sha256  9f62a7169b7491c670a1ff2e335b0d966308fb2f62e285c781105eb90f181af3  connman-1.39.tar.xz
++sha256  1a57ae7ce234aa3a1744aac3be5c2121d98dce999440ef8ab9cc4edfd5edcb12  connman-1.40.tar.xz
+ # Locally computed
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 77073f984e..0355426e92 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "libbpf needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
-+	depends on BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
--- 
-2.30.2
+-CONNMAN_VERSION = 1.39
++CONNMAN_VERSION = 1.40
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
