@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Jun 2021 23:40:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/heirloom-mailx: requires DES
- and RC2 support in openssl
-In-Reply-To: <20210612210400.546894-1-fontaine.fabrice@gmail.com>
-References: <20210612210400.546894-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210612214051.GH168928@scaer>
+Date: Sat, 12 Jun 2021 23:41:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libfreefare: requires DES
+ support in openssl
+In-Reply-To: <20210612212209.636197-1-fontaine.fabrice@gmail.com>
+References: <20210612212209.636197-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210612214104.GI168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,12 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-06-12 23:04 +0200, Fabrice Fontaine spake thusly:
-> Enable DES and RC2 in openssl to fix build failure raised since commit
+On 2021-06-12 23:22 +0200, Fabrice Fontaine spake thusly:
+> Enable DES in openssl to fix build failure raised since commit
 > a83d41867c8d69a77d5cd0a665aa216af5340359
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/2da419416da0cc34b65c89aa966b327640a177e2
+>  - http://autobuild.buildroot.org/results/889ac8e5799e5b48c5964592acefb67feec1c021
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -28,22 +28,21 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/heirloom-mailx/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/libfreefare/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/heirloom-mailx/Config.in b/package/heirloom-mailx/Config.in
-> index 87664b489e..c5b0bcbea7 100644
-> --- a/package/heirloom-mailx/Config.in
-> +++ b/package/heirloom-mailx/Config.in
-> @@ -3,6 +3,8 @@ config BR2_PACKAGE_HEIRLOOM_MAILX
->  	# uses fork()
->  	depends on BR2_USE_MMU
->  	depends on !BR2_STATIC_LIBS
+> diff --git a/package/libfreefare/Config.in b/package/libfreefare/Config.in
+> index b330b2256a..574787e83b 100644
+> --- a/package/libfreefare/Config.in
+> +++ b/package/libfreefare/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_LIBFREEFARE
+>  	bool "libfreefare"
+>  	select BR2_PACKAGE_OPENSSL
 > +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2 if BR2_PACKAGE_LIBOPENSSL
+>  	select BR2_PACKAGE_LIBNFC
 >  	help
->  	  Heirloom mailx (previously known as nail) is a mail user
->  	  agent for Unix systems.
+>  	  Library for high level manipulation of MIFARE cards.
 > -- 
 > 2.30.2
 > 
