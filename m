@@ -1,60 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Jun 2021 23:13:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/perl-net-ssleay: requires
- RMD160 support in openssl
-In-Reply-To: <20210612135233.519344-1-fontaine.fabrice@gmail.com>
-References: <20210612135233.519344-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210612211353.GC168928@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 12 Jun 2021 23:15:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/seatd: disable -Werror
+Message-ID: <20210612211502.594066-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Disable -Werror to avoid the following build failure which is raised
+since the addition of the package in commit
+daae31149017cbf8b03634cfc56da132f7e1ad83
 
-On 2021-06-12 15:52 +0200, Fabrice Fontaine spake thusly:
-> Enable RMD160 in openssl to fix build failure raised since commit
-> a83d41867c8d69a77d5cd0a665aa216af5340359
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c17e37e50d2f6c7a26a9d993ae822e312f7b1f21
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+../seatd/seat.c: In function 'seat_activate_device':
+../seatd/seat.c:374:48: error: unused parameter 'client' [-Werror=unused-parameter]
+  374 | static int seat_activate_device(struct client *client, struct seat_device *seat_device) {
+      |                                 ~~~~~~~~~~~~~~~^~~~~~
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/0ec925aab23d83c52684f5fea7a4395c93a674c4
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/seatd/seatd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> ---
->  package/perl-net-ssleay/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/perl-net-ssleay/Config.in b/package/perl-net-ssleay/Config.in
-> index 6998553ef8..d699e6671d 100644
-> --- a/package/perl-net-ssleay/Config.in
-> +++ b/package/perl-net-ssleay/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_PERL_NET_SSLEAY
->  	bool "perl-net-ssleay"
->  	depends on !BR2_STATIC_LIBS
->  	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
->  	help
->  	  Perl extension for using OpenSSL.
->  
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
+index 2abcefbfaa..bf582f0d1d 100644
+--- a/package/seatd/seatd.mk
++++ b/package/seatd/seatd.mk
+@@ -13,7 +13,8 @@ SEATD_INSTALL_STAGING = YES
+ 
+ SEATD_CONF_OPTS += \
+ 	-Dman-pages=disabled \
+-	-Dexamples=disabled
++	-Dexamples=disabled \
++	-Dwerror=false
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
+ SEATD_CONF_OPTS += -Dlogind=enabled
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
