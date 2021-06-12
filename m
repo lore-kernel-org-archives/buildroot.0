@@ -1,32 +1,56 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 12 Jun 2021 15:11:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/thrift: drop unrecognized option
-Message-ID: <20210612131129.413827-1-fontaine.fabrice@gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sat, 12 Jun 2021 15:18:40 +0200
+Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2021.05.0
+Message-ID: <20210612131840.217711-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WITH_QT4 has been dropped since version 0.13.0 and
-https://github.com/apache/thrift/commit/17355425429274e7971fff39d7e45279cdf550fa
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/thrift/thrift.mk | 1 -
- 1 file changed, 1 deletion(-)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-index 0f2a8eb071..544eb97323 100644
---- a/package/thrift/thrift.mk
-+++ b/package/thrift/thrift.mk
-@@ -20,7 +20,6 @@ THRIFT_COMMON_CONF_OPTS = -DBUILD_TUTORIALS=OFF \
- 	-DBUILD_TESTING=OFF \
- 	-DWITH_PYTHON=OFF \
- 	-DWITH_JAVA=OFF \
--	-DWITH_QT4=OFF \
- 	-DWITH_QT5=OFF
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 03d9a272d0..86181d7929 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
- THRIFT_CONF_OPTS = $(THRIFT_COMMON_CONF_OPTS) -DBUILD_COMPILER=OFF
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2021.01.0"
++	bool "2021.05.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2021.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2021.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index e6f8234a4d..b4a2b96c98 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,8 +1,8 @@
+-# From https://www.barebox.org/download/barebox-2021.01.0.tar.bz2.md5
+-md5  e81e7cd6bc2629e7fcdeaddf59c324c3  barebox-2021.01.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2021.05.0.tar.bz2.md5
++md5  be859cfa667f73765708924e13b99839  barebox-2021.05.0.tar.bz2
+ 
+ # Locally calculated
+-sha256  b39501db1c701b05f862973d8aed628cab0e611421cbaadae8b5262311551ff9  barebox-2021.01.0.tar.bz2
++sha256  3444b5e5b4d2873d83372aeb3ef99d044e47e9c7b9d6f95cdc091339001ca42b  barebox-2021.05.0.tar.bz2
+ 
+ # License files, locally computed
+ sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
 -- 
-2.30.2
+2.32.0
