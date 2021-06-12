@@ -1,51 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 12 Jun 2021 16:21:55 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/connman: security
- bump to 1.40
-Message-ID: <20210612135146.F36A186D8A@busybox.osuosl.org>
+Date: Sat, 12 Jun 2021 16:26:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rsync: fix CVE-2020-14387
+In-Reply-To: <20210612120210.53537-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 12 Jun 2021 14:02:10 +0200")
+References: <20210612120210.53537-1-fontaine.fabrice@gmail.com>
+Message-ID: <87wnqzduqb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c7d6cc337307d8198f31c0ed8e20e73fbcb6417
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fix CVE-2021-33833 which is a stack buffer overflow in dnsproxy.
+ > A flaw was found in rsync in versions since 3.2.0pre1. Rsync improperly
+ > validates certificate with host mismatch vulnerability. A remote,
+ > unauthenticated attacker could exploit the flaw by performing a
+ > man-in-the-middle attack using a valid certificate for another hostname
+ > which could compromise confidentiality and integrity of data transmitted
+ > using rsync-ssl. The highest threat from this vulnerability is to data
+ > confidentiality and integrity. This flaw affects rsync versions before
+ > 3.2.4.
 
-Release notes:
-https://lore.kernel.org/connman/20210610113503.ob45lhssqy5hk4ki at beryllium.lan/
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  ...n-the-certificate-when-using-openssl.patch | 29 +++++++++++++++++++
+ >  package/rsync/rsync.mk                        |  2 ++
+ >  2 files changed, 31 insertions(+)
+ >  create mode 100644 package/rsync/0001-rsync-ssl-Verify-the-hostname-in-the-certificate-when-using-openssl.patch
 
-Signed-off-by: John Keeping <john@metanate.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e5d9af8de0d84ef9d9a0bb9c4a85e7802da4baed)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/connman/connman.hash | 2 +-
- package/connman/connman.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index 338e1919de..797448337c 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256  9f62a7169b7491c670a1ff2e335b0d966308fb2f62e285c781105eb90f181af3  connman-1.39.tar.xz
-+sha256  1a57ae7ce234aa3a1744aac3be5c2121d98dce999440ef8ab9cc4edfd5edcb12  connman-1.40.tar.xz
- # Locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 77073f984e..0355426e92 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ > diff --git a/package/rsync/0001-rsync-ssl-Verify-the-hostname-in-the-certificate-when-using-openssl.patch b/package/rsync/0001-rsync-ssl-Verify-the-hostname-in-the-certificate-when-using-openssl.patch
+ > new file mode 100644
+ > index 0000000000..13edeff944
+ > --- /dev/null
+ > +++ b/package/rsync/0001-rsync-ssl-Verify-the-hostname-in-the-certificate-when-using-openssl.patch
+ > @@ -0,0 +1,29 @@
+ > +From c3f7414c450faaf6a8281cc4a4403529aeb7d859 Mon Sep 17 00:00:00 2001
+ > +From: Matt McCutchen <matt@mattmccutchen.net>
+ > +Date: Wed, 26 Aug 2020 12:16:08 -0400
+ > +Subject: [PATCH] rsync-ssl: Verify the hostname in the certificate when using
+ > + openssl.
+ > +
+ > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > +[Retrieved from:
+ > +https://git.samba.org/?p=rsync.git;a=commitdiff;h=c3f7414c450faaf6a8281cc4a4403529aeb7d859]
+ > +---
+ > + rsync-ssl | 2 +-
+ > + 1 file changed, 1 insertion(+), 1 deletion(-)
+ > +
+ > +diff --git a/rsync-ssl b/rsync-ssl
+ > +index 8101975a..46701af1 100755
+ > +--- a/rsync-ssl
+ > ++++ b/rsync-ssl
+ > +@@ -129,7 +129,7 @@ function rsync_ssl_helper {
+ > +     fi
+ > + 
+ > +     if [[ $RSYNC_SSL_TYPE == openssl ]]; then
+ > +-	exec $RSYNC_SSL_OPENSSL s_client $caopt $certopt -quiet -verify_quiet -servername $hostname -connect $hostname:$port
+ > ++	exec $RSYNC_SSL_OPENSSL s_client $caopt $certopt -quiet -verify_quiet -servername $hostname -verify_hostname $hostname -connect $hostname:$port
+ > +     elif [[ $RSYNC_SSL_TYPE == gnutls ]]; then
+ > + 	exec $RSYNC_SSL_GNUTLS --logfile=/dev/null $gnutls_cert_opt $gnutls_opts $hostname:$port
+ > +     else
+ > +-- 
+ > +2.25.1
+ > +
+ > diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+ > index 3ebf3a6883..32e5827739 100644
+ > --- a/package/rsync/rsync.mk
+ > +++ b/package/rsync/rsync.mk
+ > @@ -20,6 +20,8 @@ RSYNC_CONF_OPTS = \
+ >  	--disable-lz4 \
+ >  	--disable-asm
  
--CONNMAN_VERSION = 1.39
-+CONNMAN_VERSION = 1.40
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+ > +RSYNC_IGNORE_CVES += CVE-2020-14387
+
+Committed after adding a
+
+# 0001-rsync-ssl-Verify-the-hostname-in-the-certificate-when-using-openssl.patch 
+
+Comment in front of this, thanks.
+
+-- 
+Bye, Peter Korsgaard
