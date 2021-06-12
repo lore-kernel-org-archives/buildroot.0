@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Jun 2021 14:27:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mender: requires MD4 and RMD160
+Date: Sat, 12 Jun 2021 14:28:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/netatalk: requires CAST and DES
  support in openssl
-In-Reply-To: <20210612112722.3632-1-fontaine.fabrice@gmail.com>
-References: <20210612112722.3632-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210612122711.GR168928@scaer>
+In-Reply-To: <20210609215422.1593908-1-fontaine.fabrice@gmail.com>
+References: <20210609215422.1593908-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210612122818.GS168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,39 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-06-12 13:27 +0200, Fabrice Fontaine spake thusly:
-> Enable MD4 and RMD160 in openssl to fix build failure raised since
-> commit a83d41867c8d69a77d5cd0a665aa216af5340359
+On 2021-06-09 23:54 +0200, Fabrice Fontaine spake thusly:
+> Enable CAST and DES in openssl to fix build failures raised since commit
+> a83d41867c8d69a77d5cd0a665aa216af5340359
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/0b9ad028609f7e3e4eddd4439deaf7b3aa1d1273
+>  - http://autobuild.buildroot.org/results/b7347e3e4b828901dcb954f7cc37b712b80ac49b
+>  - http://autobuild.buildroot.org/results/453c10ff24ef48f1340ec91412e504fe604033cf
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/netatalk/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/netatalk/Config.in b/package/netatalk/Config.in
+> index 1560a18747..9d0a8b2ec4 100644
+> --- a/package/netatalk/Config.in
+> +++ b/package/netatalk/Config.in
+> @@ -9,6 +9,8 @@ config BR2_PACKAGE_NETATALK
+>  	select BR2_PACKAGE_LIBEVENT
+>  	select BR2_PACKAGE_LIBGCRYPT
+>  	select BR2_PACKAGE_LIBGPG_ERROR
+> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST if BR2_PACKAGE_LIBOPENSSL
+> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
 
-Applied to master, thanks.
+I've moved those 'select' closer to where openssl is itself selected,
+otherwise it is a bit confusion...
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/mender/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/mender/Config.in b/package/mender/Config.in
-> index 5ac8bb1676..cccb46361b 100644
-> --- a/package/mender/Config.in
-> +++ b/package/mender/Config.in
-> @@ -4,6 +4,8 @@ config BR2_PACKAGE_MENDER
->  	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
 >  	help
->  	  Mender is an open source over-the-air (OTA) software updater
->  	  for embedded Linux devices. Mender comprises a client
+>  	  Netatalk can be used to turn a *NIX machine into an
+>  	  extremely high-performance and reliable file server for
 > -- 
 > 2.30.2
 > 
