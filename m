@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Jun 2021 14:32:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtorrent: requires RC4
- support in openssl
-In-Reply-To: <20210609165837.78559-1-fontaine.fabrice@gmail.com>
-References: <20210609165837.78559-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210612123231.GV168928@scaer>
+Date: Sat, 12 Jun 2021 14:32:50 +0200
+Subject: [Buildroot] [PATCH/next] package/freerdp: needs rc4 from
+ libopenssl
+In-Reply-To: <20210606075932.1242642-1-yann.morin.1998@free.fr>
+References: <20210606075932.1242642-1-yann.morin.1998@free.fr>
+Message-ID: <20210612123250.GW168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,11 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-06-09 18:58 +0200, Fabrice Fontaine spake thusly:
-> Enable RC4 in openssl to fix build failure raised since commit
-> a83d41867c8d69a77d5cd0a665aa216af5340359
-> 
+On 2021-06-06 09:59 +0200, Yann E. MORIN spake thusly:
 > Fixes:
->  - http://autobuild.buildroot.org/results/c909fedb5f59d8a434a3bde469155ff550615e3c
+>     http://autobuild.buildroot.org/results/b21b21a66bef2bc09231e475037a8f9be5584fa4/
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Applied to master, thanks.
 
@@ -28,28 +25,24 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/libtorrent/Config.in | 1 +
+>  package/freerdp/Config.in | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/libtorrent/Config.in b/package/libtorrent/Config.in
-> index 4787f9c60d..de6487a758 100644
-> --- a/package/libtorrent/Config.in
-> +++ b/package/libtorrent/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBTORRENT
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
->  	select BR2_PACKAGE_ZLIB
+> diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+> index 5705ce0e0c..14c5f98671 100644
+> --- a/package/freerdp/Config.in
+> +++ b/package/freerdp/Config.in
+> @@ -10,6 +10,7 @@ config BR2_PACKAGE_FREERDP
+>  	depends on BR2_USE_MMU # libglib2
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	select BR2_PACKAGE_OPENSSL
 > +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
+>  	select BR2_PACKAGE_ZLIB
+>  	select BR2_PACKAGE_LIBGLIB2
 >  	help
->  	  BitTorrent library written in C++ for *nix
->  
 > -- 
-> 2.30.2
+> 2.25.1
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
