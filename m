@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Jun 2021 14:26:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/netsnmp: requires DES support
- in openssl
-In-Reply-To: <20210612113707.3995-1-fontaine.fabrice@gmail.com>
-References: <20210612113707.3995-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210612122659.GQ168928@scaer>
+Date: Sat, 12 Jun 2021 14:27:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mender: requires MD4 and RMD160
+ support in openssl
+In-Reply-To: <20210612112722.3632-1-fontaine.fabrice@gmail.com>
+References: <20210612112722.3632-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210612122711.GR168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,12 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-06-12 13:37 +0200, Fabrice Fontaine spake thusly:
-> Enable DES in openssl to fix build failure raised since commit
-> a83d41867c8d69a77d5cd0a665aa216af5340359
+On 2021-06-12 13:27 +0200, Fabrice Fontaine spake thusly:
+> Enable MD4 and RMD160 in openssl to fix build failure raised since
+> commit a83d41867c8d69a77d5cd0a665aa216af5340359
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/76ddd42cfecc596e431490747e3a32b937f95a17
+>  - http://autobuild.buildroot.org/results/0b9ad028609f7e3e4eddd4439deaf7b3aa1d1273
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -28,21 +28,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/netsnmp/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  package/mender/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
-> index f22e38b335..dff0f18bee 100644
-> --- a/package/netsnmp/Config.in
-> +++ b/package/netsnmp/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_NETSNMP
->  	bool "netsnmp"
->  	depends on BR2_USE_MMU # fork()
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+> diff --git a/package/mender/Config.in b/package/mender/Config.in
+> index 5ac8bb1676..cccb46361b 100644
+> --- a/package/mender/Config.in
+> +++ b/package/mender/Config.in
+> @@ -4,6 +4,8 @@ config BR2_PACKAGE_MENDER
+>  	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
+> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
 >  	help
->  	  Suite of applications used to implement SNMP v1, SNMP v2c, and
->  	  SNMP v3 using both IPv4 and IPv6.
+>  	  Mender is an open source over-the-air (OTA) software updater
+>  	  for embedded Linux devices. Mender comprises a client
 > -- 
 > 2.30.2
 > 
