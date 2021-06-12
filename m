@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Jun 2021 14:28:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rhash: requires RMD160 support
- in openssl
-In-Reply-To: <20210609213046.1591967-1-fontaine.fabrice@gmail.com>
-References: <20210609213046.1591967-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210612122836.GT168928@scaer>
+Date: Sat, 12 Jun 2021 14:29:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/transmission: requires RC4
+ support in openssl
+In-Reply-To: <20210609195257.451055-1-fontaine.fabrice@gmail.com>
+References: <20210609195257.451055-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210612122929.GU168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,39 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-06-09 23:30 +0200, Fabrice Fontaine spake thusly:
-> Enable RMD160 in openssl to fix build failure raised since commit
+On 2021-06-09 21:52 +0200, Fabrice Fontaine spake thusly:
+> Enable RC4 in openssl to fix build failure raised since commit
 > a83d41867c8d69a77d5cd0a665aa216af5340359
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/e3733ad25de55616b2eafff0b489aea2bee65e06
+>  - http://autobuild.buildroot.org/results/c658beb245cbf06786aa4155c7649c3e1a613e39
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/transmission/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/transmission/Config.in b/package/transmission/Config.in
+> index dac4d1b330..28831d1a3c 100644
+> --- a/package/transmission/Config.in
+> +++ b/package/transmission/Config.in
+> @@ -6,6 +6,7 @@ config BR2_PACKAGE_TRANSMISSION
+>  	select BR2_PACKAGE_OPENSSL
+>  	select BR2_PACKAGE_LIBCURL
+>  	select BR2_PACKAGE_LIBEVENT
+> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
+
+I've moved this 'select' closer to where openssl is selected, otherwise
+it is a bit confusing...
 
 Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/rhash/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/rhash/Config.in b/package/rhash/Config.in
-> index 2ddcb00feb..35ccb3833e 100644
-> --- a/package/rhash/Config.in
-> +++ b/package/rhash/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_RHASH
->  	bool "rhash"
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
 >  	help
->  	  LibRHash is a professional, portable, thread-safe C library
->  	  for computing a wide variety of hash sums, such as CRC32,
+>  	  Transmission is a cross-platform BitTorrent client.
+>  
 > -- 
 > 2.30.2
 > 
