@@ -1,36 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Jun 2021 23:44:06 +0200
-Subject: [Buildroot] [git commit] package/heirloom-mailx: add CPE variables
-Message-ID: <20210612211620.3E0BE885A9@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 12 Jun 2021 23:47:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pppd: requires DES support in
+ openssl
+Message-ID: <20210612214720.655521-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cc45ca6539fd28b18fe820432d3c580ec2bac8d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Enable DES in openssl to fix build failure raised since commit
+a83d41867c8d69a77d5cd0a665aa216af5340359
 
-cpe:2.3:a:heirloom:mailx is a valid CPE identifier for this package:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aheirloom%3Amailx
+Fixes:
+ - http://autobuild.buildroot.org/results/3cd38e6dfd5f94f0bd1689e7db4ea1d723dd2a80
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/heirloom-mailx/heirloom-mailx.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/pppd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
-index 2f7e635e0f..b3cece0cfc 100644
---- a/package/heirloom-mailx/heirloom-mailx.mk
-+++ b/package/heirloom-mailx/heirloom-mailx.mk
-@@ -9,6 +9,8 @@ HEIRLOOM_MAILX_SOURCE = heirloom-mailx_$(HEIRLOOM_MAILX_VERSION).orig.tar.gz
- HEIRLOOM_MAILX_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/h/heirloom-mailx
- HEIRLOOM_MAILX_LICENSE = BSD-4-Clause, Bellcore (base64), OpenVision (imap_gssapi), RSA Data Security (md5), Network Working Group (hmac), MPL-1.1 (nss)
- HEIRLOOM_MAILX_LICENSE_FILES = COPYING
-+HEIRLOOM_MAILX_CPE_ID_VENDOR = heirloom
-+HEIRLOOM_MAILX_CPE_ID_PRODUCT = mailx
+diff --git a/package/pppd/Config.in b/package/pppd/Config.in
+index 7db5674bf1..3e7759c87c 100644
+--- a/package/pppd/Config.in
++++ b/package/pppd/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_PPPD
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # Use __P() macro all over the tree
+ 	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_OPENSSL if BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  An implementation of the Point-to-point protocol.
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- HEIRLOOM_MAILX_DEPENDENCIES += openssl
+-- 
+2.30.2
