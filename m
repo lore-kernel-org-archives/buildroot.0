@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C150BC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:02:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94676C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:02:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 812AA60F8F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:02:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 812AA60F8F
+	by mail.kernel.org (Postfix) with ESMTPS id 57BC860F93
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:02:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 57BC860F93
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4F3EE404D6;
-	Tue,  3 Aug 2021 23:02:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C3834157D;
+	Tue,  3 Aug 2021 23:02:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g1Y0VhryDtGx; Tue,  3 Aug 2021 23:02:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j668CpCJHcee; Tue,  3 Aug 2021 23:02:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 38CDD4056C;
-	Tue,  3 Aug 2021 23:02:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E8B740210;
+	Tue,  3 Aug 2021 23:02:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C6A451BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A41401BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A43C4061C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D26540645
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hFP6EX8AZp2e for <buildroot@lists.busybox.net>;
+ with ESMTP id YLih-uWfWgtZ for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F156A40625
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 08ACA40626
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 40DEB85D40; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+ id 5E93285C5F; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 12 Jun 2021 23:44:06 +0200
+Date: Sun, 13 Jun 2021 09:26:13 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f40ffd17fcf94bd5e745425960f8fe737014ba13
-X-Git-Newrev: 3cc45ca6539fd28b18fe820432d3c580ec2bac8d
+X-Git-Oldrev: 17a0eb0efc6325472c1a326f16651ffd57ae2874
+X-Git-Newrev: ab7312a3f90c65f2171bf85dcdff590c8de227ee
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210950.40DEB85D40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/heirloom-mailx: add
- CPE variables
+Message-Id: <20210803210950.5E93285C5F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/snmppp: requires DES
+ support in openssl
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,32 +70,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cc45ca6539fd28b18fe820432d3c580ec2bac8d
+commit: https://git.buildroot.net/buildroot/commit/?id=ab7312a3f90c65f2171bf85dcdff590c8de227ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:heirloom:mailx is a valid CPE identifier for this package:
+Enable DES in openssl to fix build failure raised since commit
+a83d41867c8d69a77d5cd0a665aa216af5340359
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aheirloom%3Amailx
+Fixes:
+ - http://autobuild.buildroot.org/results/2aece7e503d36ebee2bce526f11b2400b9df761e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/heirloom-mailx/heirloom-mailx.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/snmppp/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
-index 2f7e635e0f..b3cece0cfc 100644
---- a/package/heirloom-mailx/heirloom-mailx.mk
-+++ b/package/heirloom-mailx/heirloom-mailx.mk
-@@ -9,6 +9,8 @@ HEIRLOOM_MAILX_SOURCE = heirloom-mailx_$(HEIRLOOM_MAILX_VERSION).orig.tar.gz
- HEIRLOOM_MAILX_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/h/heirloom-mailx
- HEIRLOOM_MAILX_LICENSE = BSD-4-Clause, Bellcore (base64), OpenVision (imap_gssapi), RSA Data Security (md5), Network Working Group (hmac), MPL-1.1 (nss)
- HEIRLOOM_MAILX_LICENSE_FILES = COPYING
-+HEIRLOOM_MAILX_CPE_ID_VENDOR = heirloom
-+HEIRLOOM_MAILX_CPE_ID_PRODUCT = mailx
+diff --git a/package/snmppp/Config.in b/package/snmppp/Config.in
+index de1a09ca4b..1f05f53f9f 100644
+--- a/package/snmppp/Config.in
++++ b/package/snmppp/Config.in
+@@ -23,6 +23,7 @@ config BR2_PACKAGE_SNMPPP_SNMPV3
+ 	default y
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  Enable optional support for SNMP++. This selects OpenSSL.
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- HEIRLOOM_MAILX_DEPENDENCIES += openssl
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
