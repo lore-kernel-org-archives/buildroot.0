@@ -1,61 +1,25 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Jun 2021 22:07:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/botan: requires RC4 and RMD160
- support in openssl
-In-Reply-To: <20210613152338.1538090-1-fontaine.fabrice@gmail.com>
-References: <20210613152338.1538090-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210613200739.GA168928@scaer>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 13 Jun 2021 20:23:58 +0000
+Subject: [Buildroot] [Bug 13841] qtwebengine5 build issue with pkgconf
+In-Reply-To: <bug-13841-163@https.bugs.busybox.net/>
+References: <bug-13841-163@https.bugs.busybox.net/>
+Message-ID: <bug-13841-163-mnymUiCdqG@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+https://bugs.busybox.net/show_bug.cgi?id=13841
 
-On 2021-06-13 17:23 +0200, Fabrice Fontaine spake thusly:
-> Enable RC4 and RMD160 in openssl to fix build failure raised since
-> commit a83d41867c8d69a77d5cd0a665aa216af5340359
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/795671a39b754747725b09cf0e196defd6b0e59a
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+--- Comment #2 from Peter Seiderer <ps.report@gmx.net> ---
+Thanks for the bug report, but sorry, no unknown failure...., and no
+easy/perfect solution to fix it yet, see [1] for discussion (and workaround
+patch)...
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/botan/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/botan/Config.in b/package/botan/Config.in
-> index 95367b9000..341fa7c622 100644
-> --- a/package/botan/Config.in
-> +++ b/package/botan/Config.in
-> @@ -20,6 +20,8 @@ config BR2_PACKAGE_BOTAN
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
->  	select BR2_PACKAGE_BOOST_FILESYSTEM if BR2_PACKAGE_BOOST
->  	select BR2_PACKAGE_BOOST_SYSTEM if BR2_PACKAGE_BOOST
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
->  	help
->  	  Botan is a crypto library for C++
->  
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+[1]
+https://patchwork.ozlabs.org/project/buildroot/patch/20201221203952.22168-3-ps.report at gmx.net/
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+You are receiving this mail because:
+You are on the CC list for the bug.
