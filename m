@@ -1,208 +1,58 @@
-From: Juergen Stuber <juergen@jstuber.net>
-Date: Sat, 12 Jun 2021 21:23:37 +0200
-Subject: [Buildroot] [External] [PATCH 1/1] pkg-rust: new infrastructure
-In-Reply-To: <CADvTj4qPg1cjkVELhi0BnYp=7yG+NPKP_0v=0rQd1swY8m-UaA@mail.gmail.com>
-References: <20210610020632.236282-1-james.hilliard1@gmail.com>
- <DM2P110MB010772EB0988EFB9B464695A85359@DM2P110MB0107.NAMP110.PROD.OUTLOOK.COM>
- <CADvTj4qPg1cjkVELhi0BnYp=7yG+NPKP_0v=0rQd1swY8m-UaA@mail.gmail.com>
-Message-ID: <20210612212322.0927ef2f@sju.home.jstuber.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 13 Jun 2021 09:14:56 +0200
+Subject: [Buildroot] [PATCH 1/1] Allow users to specifiy a hash file to
+ verify custom linux kernels and custom kernel headers
+In-Reply-To: <20210612210627.GZ168928@scaer>
+References: <BN8PR11MB3666996FFEB3B0DCA11CDD6CFF349@BN8PR11MB3666.namprd11.prod.outlook.com>
+ <20210612210627.GZ168928@scaer>
+Message-ID: <20210613091456.1e4edd9a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi James, all,
+Hello,
 
-On Sat, 12 Jun 2021 12:37:29 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
-> On Thu, Jun 10, 2021 at 2:11 PM Voss, Samuel M Collins
-> <sam.voss@collins.com> wrote:
-> >
-> > Hi James,
-> >  
-> > >-----Original Message-----
-> > >From: buildroot <buildroot-bounces@busybox.net> On Behalf Of James
-> > >Hilliard Sent: Wednesday, June 09, 2021 9:07 PM
-> > >To: buildroot at buildroot.org
-> > >Cc: James Hilliard <james.hilliard1@gmail.com>
-> > >Subject: [External] [Buildroot] [PATCH 1/1] pkg-rust: new
-> > >infrastructure
-> > >
-> > >Add a new infrastructure to ease the development of packages that
-> > >use rust's cargo as their build system.  
-> >
-> > Thanks for digging into this, great to see more interest in
-> > bringing rust into the ecosystem. There has been some previous
-> > efforts[1] which are in differing levels of readiness.
-> >
-> > You may wish to look into these, as I believe there is some overlap
-> > between the patch sets. I linked the latest, but there are more to
-> > be found too.  
-> 
-> Yeah, probably best to get those merged first, I'll rebase this after,
-> I was mostly testing to see if just using env variables instead of a
-> cargo config file was a viable approach for configuring cargo
-> properly. From my understanding cargo can generally be configured with
-> env variables alone.
+On Sat, 12 Jun 2021 23:06:27 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-The advantage of env variables is that they take precedence over config
-files.  I had some trouble with a config file in my home directory that
-specified a different linker, and was found before the buildroot one.
+> However, I think this patch makes the feature really too-specific to
+> just the kernel (and its headers). Instead, I think we will want
+> something that can be used to check hashes for other packages where the
+> version can be specified:
 
+I totally agree with this, and wanted to reply the same to Ian's patch.
 
-J?rgen
+>     +config BR2_EXTRA_HASH_FILES
+>     +	string "Paths to files containing extra packages hashes"
+>     +	help
+>     +	  Set to a space-separated list of file paths to use to check
+>     +	  packages hashes against.
 
+However, I am wondering if we shouldn't be doing something even more
+generic.
 
-> >
-> > Sam
-> >
-> > 1:
-> > http://patchwork.ozlabs.org/project/buildroot/list/?series=221371&state=* 
-> > >
-> > >Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > >---
-> > > package/Makefile.in |   1 +
-> > > package/pkg-rust.mk | 113
-> > > ++++++++++++++++++++++++++++++++++++++++++++ 2 files changed, 114
-> > > insertions(+) create mode 100644 package/pkg-rust.mk
-> > >
-> > >diff --git a/package/Makefile.in b/package/Makefile.in
-> > >index 955e6a8e8c..c4fb6a3cb1 100644
-> > >--- a/package/Makefile.in
-> > >+++ b/package/Makefile.in
-> > >@@ -434,3 +434,4 @@ include package/pkg-waf.mk
-> > > include package/pkg-golang.mk
-> > > include package/pkg-meson.mk
-> > > include package/pkg-qmake.mk
-> > >+include package/pkg-rust.mk
-> > >diff --git a/package/pkg-rust.mk b/package/pkg-rust.mk
-> > >new file mode 100644
-> > >index 0000000000..3906fc12b4
-> > >--- /dev/null
-> > >+++ b/package/pkg-rust.mk
-> > >@@ -0,0 +1,113 @@
-> > >+################################################################################
-> > >+# Rust package infrastructure
-> > >+#
-> > >+# This file implements an infrastructure that eases development of
-> > >+# package .mk files for Rust packages. It should be used for all
-> > >+# packages that use Rust as their build system.
-> > >+#
-> > >+# See the Buildroot documentation for details on the usage of this
-> > >+# infrastructure
-> > >+#
-> > >+# In terms of implementation, this Rust infrastructure requires
-> > >+# the .mk file to only specify metadata information about the
-> > >+# package: name, version, download URL, etc.
-> > >+#
-> > >+# We still allow the package .mk file to override what the
-> > >different +# steps are doing, if needed. For example, if
-> > ><PKG>_BUILD_CMDS is +# already defined, it is used as the list of
-> > >commands to perform to +# build the package, instead of the
-> > >default Rust behaviour. The +# package can also define some post
-> > >operation hooks. +#
-> > >+################################################################################
-> > >+
-> > >+CARGO = $(HOST_DIR)/bin/cargo
-> > >+
-> > >+RUSTC_TARGET_TRIPLE = $(subst -,_,$(call
-> > >UPPERCASE,$(RUSTC_TARGET_NAME))) +
-> > >+PKG_RUST_CARGO_ENV = \
-> > >+??????CARGO_HOME=$(HOST_DIR)/share/cargo \
-> > >+??????CARGO_BUILD_TARGET=$(RUSTC_TARGET_NAME) \
-> > >+??????CARGO_INSTALL_ROOT=$(TARGET_DIR)/usr \
-> > >+??????CARGO_TARGET_$(RUSTC_TARGET_TRIPLE)_LINKER=$(notdir
-> > >$(TARGET_CROSS))gcc +
-> > >+HOST_PKG_RUST_CARGO_ENV = \
-> > >+??????CARGO_HOME=$(HOST_DIR)/share/cargo \
-> > >+??????CARGO_INSTALL_ROOT=$(HOST_DIR) \
-> > >+??????RUSTFLAGS="$(addprefix -C link-args=,$(HOST_LDFLAGS))"
-> > >+
-> > >+ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
-> > >+PKG_RUST_CARGO_OPTS = --debug
-> > >+else
-> > >+PKG_RUST_CARGO_OPTS = --release
-> > >+endif
-> > >+
-> > >+################################################################################
-> > >+# inner-rust-package -- defines how the configuration,
-> > >compilation and +# installation of a Rust package should be done,
-> > >implements a few hooks to +# tune the build process and calls the
-> > >generic package infrastructure to +# generate the necessary make
-> > >targets +#
-> > >+#  argument 1 is the lowercase package name
-> > >+#  argument 2 is the uppercase package name, including a HOST_
-> > >prefix +#             for host packages
-> > >+#  argument 3 is the uppercase package name, without the HOST_
-> > >prefix +#             for host packages
-> > >+#  argument 4 is the type (target or host)
-> > >+################################################################################
-> > >+
-> > >+define inner-rust-package
-> > >+
-> > >+$(2)_DEPENDENCIES += host-rustc
-> > >+
-> > >+#
-> > >+# Build step. Only define it if not already defined by the
-> > >package .mk +# file.
-> > >+#
-> > >+ifndef $(2)_BUILD_CMDS
-> > >+ifeq ($(4),target)
-> > >+define $(2)_BUILD_CMDS
-> > >+??????$$(TARGET_MAKE_ENV) $$(PKG_RUST_CARGO_ENV) \
-> > >+??????????????$$(CARGO) build $$(PKG_RUST_CARGO_OPTS)
-> > >$$($$(PKG)_RUST_CARGO_OPTS)
-> > >--manifest-path=$$($$(PKG)_BUILDDIR)/Cargo.toml +endef +else
-> > >+define $(2)_BUILD_CMDS
-> > >+??????$$(HOST_MAKE_ENV) $$(HOST_PKG_RUST_CARGO_ENV) \
-> > >+??????????????$$(CARGO) build $$(PKG_RUST_CARGO_OPTS)
-> > >$$($$(PKG)_RUST_CARGO_OPTS)
-> > >--manifest-path=$$($$(PKG)_BUILDDIR)/Cargo.toml +endef +endif
-> > >+endif
-> > >+
-> > >+#
-> > >+# Host installation step. Only define it if not already defined
-> > >by the +# package .mk file.
-> > >+#
-> > >+ifndef $(2)_INSTALL_CMDS
-> > >+define $(2)_INSTALL_CMDS
-> > >+??????$$(HOST_MAKE_ENV) $$(HOST_PKG_RUST_CARGO_ENV) \
-> > >+??????????????$$(CARGO) install --offline --frozen --path
-> > >$$($$(PKG)_BUILDDIR) +endef
-> > >+endif
-> > >+
-> > >+#
-> > >+# Target installation step. Only define it if not already defined
-> > >by +# the package .mk file.
-> > >+#
-> > >+ifndef $(2)_INSTALL_TARGET_CMDS
-> > >+define $(2)_INSTALL_TARGET_CMDS
-> > >+??????$$(TARGET_MAKE_ENV) $$(PKG_RUST_CARGO_ENV) \
-> > >+??????????????$$(CARGO) install --offline --frozen --path
-> > >$$($$(PKG)_BUILDDIR) +endef
-> > >+endif
-> > >+
-> > >+# Call the generic package infrastructure to generate the
-> > >necessary +# make targets
-> > >+$(call inner-generic-package,$(1),$(2),$(3),$(4))
-> > >+
-> > >+endef
-> > >+
-> > >+################################################################################
-> > >+# rust-package -- the target generator macro for Rust packages
-> > >+################################################################################
-> > >+
-> > >+rust-package = $(call inner-rust-package,$(pkgname),$(call
-> > >UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-> > >+host-rust-package = $(call
-> > >inner-rust-package,host-$(pkgname),$(call
-> > >UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host) --
-> > >2.25.1
+We already have the BR2_GLOBAL_PATCH_DIRECTORIES option to add custom
+patches to package.
 
+Here we have a proposal to address the case of hash files for those
+packages where a custom version can be specified. But for such
+packages, we also have other aspects that are not nicely handled today:
+
+ * The license files + their hashes.
+
+ * The CPE ID information, as the version of such packages (typically
+   some random Git commit or tag) doesn't allow proper matching with
+   the CPE database version.
+
+Shouldn't we have these requirements in mind as well when trying to
+come up with a solution ?
+
+Best regards,
+
+Thomas
 -- 
-J?rgen Stuber <juergen@jstuber.net>
-http://www.jstuber.net/
-Tel: +49-208-304 20 50
-Mobil: +49-178-39 39 628
-1B78 A579 E159 2A85 67BB  1314 C083 224B 0F9C DA21
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
