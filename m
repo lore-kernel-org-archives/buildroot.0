@@ -1,47 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Jun 2021 21:06:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-typing: bump to version
- 3.10.0.0
-Message-ID: <20210613190642.1553435-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Jun 2021 21:58:05 +0200
+Subject: [Buildroot] [git commit] package/bitcoin: unset the NDEBUG flag
+Message-ID: <20210613192725.B01ED8D491@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-typing/python-typing.hash | 4 ++--
- package/python-typing/python-typing.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=f098aff4792a0e792bda4d7d1ec22a5af1381d83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python-typing/python-typing.hash b/package/python-typing/python-typing.hash
-index 438ecb0727..f587eb7bfa 100644
---- a/package/python-typing/python-typing.hash
-+++ b/package/python-typing/python-typing.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/typing/json
--md5  276296e7b6b617d4f8b5e8874f240bd4  typing-3.7.4.3.tar.gz
--sha256  1187fb9c82fd670d10aa07bbb6cfcfe4bdda42d6fab8d5134f04e8c4d0b71cc9  typing-3.7.4.3.tar.gz
-+md5  d6dd450cfe0c8c6547eef09a0491775d  typing-3.10.0.0.tar.gz
-+sha256  13b4ad211f54ddbf93e5901a9967b1e07720c1d1b78d596ac6a439641aa1b130  typing-3.10.0.0.tar.gz
- # Locally computed sha256 checksums
- sha256  ff17ce94e102024deb68773eb1cc74ca76da4e658f373531f0ac22d68a6bb1ad  LICENSE
-diff --git a/package/python-typing/python-typing.mk b/package/python-typing/python-typing.mk
-index efb2196286..dd1d8f29b5 100644
---- a/package/python-typing/python-typing.mk
-+++ b/package/python-typing/python-typing.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_TYPING_VERSION = 3.7.4.3
-+PYTHON_TYPING_VERSION = 3.10.0.0
- PYTHON_TYPING_SOURCE = typing-$(PYTHON_TYPING_VERSION).tar.gz
--PYTHON_TYPING_SITE = https://files.pythonhosted.org/packages/05/d9/6eebe19d46bd05360c9a9aae822e67a80f9242aabbfc58b641b957546607
-+PYTHON_TYPING_SITE = https://files.pythonhosted.org/packages/b0/1b/835d4431805939d2996f8772aca1d2313a57e8860fec0e48e8e7dfe3a477
- PYTHON_TYPING_SETUP_TYPE = setuptools
- PYTHON_TYPING_LICENSE = Python-2.0, others
- PYTHON_TYPING_LICENSE_FILES = LICENSE
--- 
-2.30.2
+Since https://git.buildroot.net/buildroot/commit/?id=5a8c50fe05afacc3cbe8e7347e238da9f242fab0
+all packages are now built with NDEBUG, which broke Bitcoin builds.
+
+Bitcoin is using assert(...) extensively with the assumption of it
+never being a noop at runtime. So we cannot build with NDEBUG.
+See: https://github.com/bitcoin/bitcoin/blob/0.21/src/compat/assumptions.h
+
+Fixes:
+    http://autobuild.buildroot.org/results/83b/83b6dc0b97b19888fb1187bbbca485961e58ce90/
+    and so many more...
+
+Signed-off-by: Dick Olsson <hi@senzilla.io>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/bitcoin/bitcoin.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
+index 142521835c..f485e4ee5c 100644
+--- a/package/bitcoin/bitcoin.mk
++++ b/package/bitcoin/bitcoin.mk
+@@ -13,6 +13,12 @@ BITCOIN_CPE_ID_VENDOR = bitcoin
+ BITCOIN_CPE_ID_PRODUCT = bitcoin_core
+ BITCOIN_DEPENDENCIES = host-pkgconf boost libevent
+ BITCOIN_MAKE_ENV = BITCOIN_GENBUILD_NO_GIT=1
++# Bitcoin is using assert(...) extensively with the assumption of it
++# never being a noop at runtime. So we cannot build with NDEBUG.
++BITCOIN_CONF_ENV = \
++	CPPFLAGS="$(TARGET_CPPFLAGS) -UNDEBUG" \
++	CFLAGS="$(TARGET_CFLAGS) -UNDEBUG" \
++	CXXFLAGS="$(TARGET_CXXFLAGS) -UNDEBUG"
+ BITCOIN_CONF_OPTS = \
+ 	--disable-bench \
+ 	--disable-wallet \
