@@ -1,51 +1,91 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 13 Jun 2021 18:34:26 +0200
-Subject: [Buildroot] [git commit] package/ltp-testsuite: bump version to
- 20210524
-Message-ID: <20210613160439.C45A5817D5@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 13 Jun 2021 18:41:46 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/2] package/libkrb5: add openssl optional dependency
+In-Reply-To: <20210613160845.GQ168928@scaer>
+References: <20210613091044.877789-1-fontaine.fabrice@gmail.com>
+ <20210613160845.GQ168928@scaer>
+Message-ID: <CAPi7W814yuL914ME3zQr-u2DpJmm52UUgL1VPjn7930+CF=7fg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc97260606d41fed2d1f8effc09cff7352440395
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann,
 
-Add locally computed sha256 (+ keep sha1 from github checksum file).
+Le dim. 13 juin 2021 ? 18:08, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+>
+> Fabrice, All,
+>
+> On 2021-06-13 11:10 +0200, Fabrice Fontaine spake thusly:
+> > openssl is an optional dependency which is enabled by default since at
+> > least 2007 and
+> > https://github.com/krb5/krb5/commit/4c17f25c0f106ec8e3aad2cee4e7a24f66b5a65d
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Applied to master, thanks.
+>
+> I squashed the two commits together, because selecting the openssl
+> options is really just part of fixing the openssl dependency of libkrb5.
+Perhaps, it would have been better to keep them separate as Peter will
+probably only want to backport the first patch to 2020.xx and 2021.xx
+branches?
+>
+> Thank you! :-)
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > ---
+> > Changes v1 -> v2 (after review of Yann E. Morin):
+> >  - Add openssl optional dependency
+> >
+> >  package/libkrb5/libkrb5.mk | 15 +++++++++++++++
+> >  1 file changed, 15 insertions(+)
+> >
+> > diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+> > index e4f3fa4186..794cedd33c 100644
+> > --- a/package/libkrb5/libkrb5.mk
+> > +++ b/package/libkrb5/libkrb5.mk
+> > @@ -41,6 +41,21 @@ else
+> >  LIBKRB5_CONF_OPTS += --without-ldap
+> >  endif
+> >
+> > +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> > +LIBKRB5_CONF_OPTS += \
+> > +     --enable-pkinit \
+> > +     --with-crypto-impl=openssl \
+> > +     --with-spake-openssl \
+> > +     --with-tls-impl=openssl
+> > +LIBKRB5_DEPENDENCIES += openssl
+> > +else
+> > +LIBKRB5_CONF_OPTS += \
+> > +     --disable-pkinit \
+> > +     --with-crypto-impl=builtin \
+> > +     --without-spake-openssl \
+> > +     --without-tls-impl
+> > +endif
+> > +
+> >  ifeq ($(BR2_PACKAGE_LIBEDIT),y)
+> >  LIBKRB5_CONF_OPTS += --with-libedit
+> >  LIBKRB5_DEPENDENCIES += host-pkgconf libedit
+> > --
+> > 2.30.2
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+Best Regards,
 
-sysinfo.h fix patch is still needed (until Buildroot MUSL toolchain gets
-updated).
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/ltp-testsuite/ltp-testsuite.hash | 5 +++--
- package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-index f0b2c89704..ed2a50cd4f 100644
---- a/package/ltp-testsuite/ltp-testsuite.hash
-+++ b/package/ltp-testsuite/ltp-testsuite.hash
-@@ -1,4 +1,5 @@
--# From: https://github.com/linux-test-project/ltp/releases/download/20210121/ltp-full-20210121.tar.xz.sha1
--sha1 ac9c1c711aed4319c5fbd0b665d36f75236a4ec2  ltp-full-20210121.tar.xz
-+# From: https://github.com/linux-test-project/ltp/releases/download/20210524/ltp-full-20210524.tar.xz.sha1
-+sha1 08d84f8ac3ba0c800f3070768c651703869105d7  ltp-full-20210524.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  831678c64b85a8c24957c71632752537b2266890f2d2f352da9ed0ec45458189  ltp-full-20210524.tar.xz
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 978d01b7a6..badd161d5a 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LTP_TESTSUITE_VERSION = 20210121
-+LTP_TESTSUITE_VERSION = 20210524
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- 
+Fabrice
