@@ -1,68 +1,120 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Jun 2021 11:13:56 +0200
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/thrift: security bump to version 0.14.1
-In-Reply-To: <20210613091356.877947-1-fontaine.fabrice@gmail.com>
-References: <20210613091356.877947-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210613091356.877947-2-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 13 Jun 2021 11:25:36 +0200
+Subject: [Buildroot] [PATCH v1 1/2] package/mesa3d: add config option
+ for DRI3 support
+In-Reply-To: <20210612223011.26118-1-ps.report@gmx.net>
+References: <20210612223011.26118-1-ps.report@gmx.net>
+Message-ID: <689f1497-624c-01b3-d69a-97a5efd01740@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2020-13949: In Apache Thrift 0.9.3 to 0.13.0, malicious RPC
-clients could send short messages which would result in a large memory
-allocation, potentially leading to denial of service.
+ Hi Peter,
 
-- Disable javascript and nodejs which have been added with
-  https://github.com/apache/thrift/commit/61d502075bf5da10331c201f604acdfefc4d5edc
-- Update hash of LICENSE, license for windows-specific files added:
-  https://github.com/apache/thrift/commit/98854c48744f20b3f551817273ed502835477f09
+On 13/06/2021 00:30, Peter Seiderer wrote:
+> Add config option for DRI3 support and use it instead
+> of DRI3 enable/disable logic in *.mk file.
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/mesa3d/Config.in |  8 ++++++++
+>  package/mesa3d/mesa3d.mk | 12 +++++++-----
+>  2 files changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index d1b3af2054..36acd9758c 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -16,6 +16,11 @@ menuconfig BR2_PACKAGE_MESA3D
+>  
+>  if BR2_PACKAGE_MESA3D
+>  
+> +config BR2_PACKAGE_MESA3D_DRI3
+> +	bool "Enable DRI3 support"
 
-https://github.com/apache/thrift/blob/v0.14.1/CHANGES.md
+ Does it make sense to have this as a user-selectable option? Wouldn't it be
+better to make this a blind option? (The latter has the advantage that we can
+easily refactor it later, without legacy handling and stuff.)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/thrift/thrift.hash | 6 +++---
- package/thrift/thrift.mk   | 4 +++-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ I just did a build with just DRI3 selected and it didn't install anything to
+target or staging. This suggests that the option isn't useful on its own.
 
-diff --git a/package/thrift/thrift.hash b/package/thrift/thrift.hash
-index f342dc348d..20d6baeace 100644
---- a/package/thrift/thrift.hash
-+++ b/package/thrift/thrift.hash
-@@ -1,4 +1,4 @@
--# From https://www.apache.org/dist/thrift/0.13.0/thrift-0.13.0.tar.gz.sha256
--sha256  7ad348b88033af46ce49148097afe354d513c1fca7c607b59c33ebb6064b5179  thrift-0.13.0.tar.gz
-+# From https://www.apache.org/dist/thrift/0.14.1/thrift-0.14.1.tar.gz.sha256
-+sha256  13da5e1cd9c8a3bb89778c0337cc57eb0c29b08f3090b41cf6ab78594b410ca5  thrift-0.14.1.tar.gz
- # License files, locally calculated
--sha256  23df881cec3192d1f4474633c14eb2ec30a45b84f8daeb82b9de5d2bd3ac8218  LICENSE
-+sha256  d315e6cdedc07c478de6992027bfb66f220886c6216fd7e9885ced30c3703646  LICENSE
-diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-index 544eb97323..c36efce2ed 100644
---- a/package/thrift/thrift.mk
-+++ b/package/thrift/thrift.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--THRIFT_VERSION = 0.13.0
-+THRIFT_VERSION = 0.14.1
- THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(THRIFT_VERSION)
- THRIFT_LICENSE = Apache-2.0
- THRIFT_LICENSE_FILES = LICENSE
-@@ -18,8 +18,10 @@ HOST_THRIFT_DEPENDENCIES = host-bison host-boost \
- 
- THRIFT_COMMON_CONF_OPTS = -DBUILD_TUTORIALS=OFF \
- 	-DBUILD_TESTING=OFF \
-+	-DWITH_NODEJS=OFF \
- 	-DWITH_PYTHON=OFF \
- 	-DWITH_JAVA=OFF \
-+	-DWITH_JAVASCRIPT=OFF \
- 	-DWITH_QT5=OFF
- 
- THRIFT_CONF_OPTS = $(THRIFT_COMMON_CONF_OPTS) -DBUILD_COMPILER=OFF
--- 
-2.30.2
+ More importantly: have you checked that DRI3 doesn't have any dependencies of
+itself? Check the meson files to see if there are dependencies that are implied
+directly by dri3 (i.e., maybe the xshmfence dependency comes from dri3 rather
+than the individual dri driver). Those things should be moved around as well,
+similar how they are put in BR2_PACKAGE_MESA3D_DRI_DRIVER instead of the
+individual drivers.
+
+
+ Series marked as Changes Requested.
+
+ Regards,
+ Arnout
+
+> +	help
+> +	  Enable DRI3 support.
+> +
+>  # Some Gallium driver needs libelf when built with LLVM support
+>  config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
+>  	bool
+> @@ -65,6 +70,8 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+>  		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
+>  		!BR2_PACKAGE_MESA3D_OPENGL_EGL && \
+>  		!BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
+> +	select BR2_PACKAGE_MESA3D_DRI3 if \
+> +		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
+>  	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
+>  		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
+>  
+> @@ -359,6 +366,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
+>  	depends on BR2_PACKAGE_XORG7 # xorgproto
+> +	select BR2_PACKAGE_MESA3D_DRI3
+>  	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+>  	select BR2_PACKAGE_XORGPROTO
+>  	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 5c5f8a33f3..da6e55bf93 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -35,6 +35,12 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
+>  MESA3D_CONF_OPTS += -Db_asneeded=false
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_MESA3D_DRI3),y)
+> +MESA3D_CONF_OPTS += -Ddri3=enabled
+> +else
+> +MESA3D_CONF_OPTS += -Ddri3=disabled
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
+>  MESA3D_DEPENDENCIES += host-llvm llvm
+>  MESA3D_MESON_EXTRA_BINARIES += llvm-config='$(STAGING_DIR)/usr/bin/llvm-config'
+> @@ -122,13 +128,10 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+>  MESA3D_CONF_OPTS += \
+> -	-Ddri-drivers= -Ddri3=disabled
+> +	-Ddri-drivers=
+>  else
+>  ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
+>  MESA3D_DEPENDENCIES += xlib_libxshmfence
+> -MESA3D_CONF_OPTS += -Ddri3=enabled
+> -else
+> -MESA3D_CONF_OPTS += -Ddri3=disabled
+>  endif
+>  MESA3D_CONF_OPTS += \
+>  	-Dshared-glapi=enabled \
+> @@ -142,7 +145,6 @@ MESA3D_CONF_OPTS += \
+>  else
+>  MESA3D_DEPENDENCIES += xlib_libxshmfence
+>  MESA3D_CONF_OPTS += \
+> -	-Ddri3=enabled \
+>  	-Dvulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
+>  endif
+>  
+> 
