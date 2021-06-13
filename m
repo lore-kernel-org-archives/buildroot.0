@@ -1,61 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Jun 2021 18:51:29 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/fb-test-app: bump version to
- 1.3.1 and update project URL
-In-Reply-To: <20210524193234.8606-1-andriy.shevchenko@linux.intel.com>
-References: <20210524193234.8606-1-andriy.shevchenko@linux.intel.com>
-Message-ID: <7153d2ec-dd6d-ebee-a8a2-f81db89fcf6a@mind.be>
+From: Dick Olsson <hi@senzilla.io>
+Date: Sun, 13 Jun 2021 18:04:18 +0000
+Subject: [Buildroot] [PATCH v2 1/1] package/bitcoin: unset the NDEBUG flag
+In-Reply-To: <20210612095128.GP168928@scaer>
+References: <eIIz4qpp1iCjP9F8wSbhB85GxfrjYh4LnxsTUDodko@cp4-web-032.plabs.ch>
+ <20210612095128.GP168928@scaer>
+Message-ID: <7BrB5BpT0ZaF06BaFbfImRciKqjCUY2Q31FS4bWjc@cp4-web-036.plabs.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since https://git.buildroot.net/buildroot/commit/?id=5a8c50fe05afacc3cbe8e7347e238da9f242fab0
+all packages are now built with NDEBUG, which broke Bitcoin builds.
 
+Bitcoin is using assert(...) extensively with the assumption of it
+never being a noop at runtime. So we cannot build with NDEBUG.
+See: https://github.com/bitcoin/bitcoin/blob/0.21/src/compat/assumptions.h
 
-On 24/05/2021 21:32, Andy Shevchenko wrote:
-> - bump version to 1.1.1
-> - update project URL
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Dick Olsson <hi@senzilla.io>
 
- Applied to master, thanks.
+---
 
- Since you've actually taken over the package (and hopefully will continue
-maintaining it for some time, and not simply delete it like prpplague did),
-perhaps you can add yourself to DEVELOPERS for it?
+Revision 2:
 
- Regards,
- Arnout
+- Fixed review item by Yann
+- Properly include all target flags
+---
+ package/bitcoin/bitcoin.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-
-> ---
->  package/fb-test-app/fb-test-app.hash | 2 +-
->  package/fb-test-app/fb-test-app.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/fb-test-app/fb-test-app.hash b/package/fb-test-app/fb-test-app.hash
-> index 06611db7998e..3068caf278df 100644
-> --- a/package/fb-test-app/fb-test-app.hash
-> +++ b/package/fb-test-app/fb-test-app.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  6baf6b45968d0bb9a5527c6c4bf18661e9f9eb9be973a6d1952c38168c90d58f  fb-test-app-rosetta-1.1.0.tar.gz
-> +sha256  45d490ed78a6e4425d9a760e81e99dc503af01704e17ab5bf186b87a31c5e3db  fb-test-app-rosetta-1.1.1.tar.gz
->  sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-> diff --git a/package/fb-test-app/fb-test-app.mk b/package/fb-test-app/fb-test-app.mk
-> index 1ab7b2f219ab..1be59a4207cb 100644
-> --- a/package/fb-test-app/fb-test-app.mk
-> +++ b/package/fb-test-app/fb-test-app.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -FB_TEST_APP_VERSION = rosetta-1.1.0
-> -FB_TEST_APP_SITE = $(call github,prpplague,fb-test-app,$(FB_TEST_APP_VERSION))
-> +FB_TEST_APP_VERSION = rosetta-1.1.1
-> +FB_TEST_APP_SITE = $(call github,andy-shev,fb-test-app,$(FB_TEST_APP_VERSION))
->  FB_TEST_APP_LICENSE = GPL-2.0
->  FB_TEST_APP_LICENSE_FILES = COPYING
->  
-> 
+diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
+index 5f1684879c..5b2613e2f9 100644
+--- a/package/bitcoin/bitcoin.mk
++++ b/package/bitcoin/bitcoin.mk
+@@ -13,6 +13,12 @@ BITCOIN_CPE_ID_VENDOR = bitcoin
+ BITCOIN_CPE_ID_PRODUCT = bitcoin_core
+ BITCOIN_DEPENDENCIES = host-pkgconf boost libevent
+ BITCOIN_MAKE_ENV = BITCOIN_GENBUILD_NO_GIT=1
++# Bitcoin is using assert(...) extensively with the assumption of it
++# never being a noop at runtime. So we cannot build with NDEBUG.
++BITCOIN_CONF_ENV = \
++        CPPFLAGS="$(TARGET_CPPFLAGS) -UNDEBUG" \
++        CFLAGS="$(TARGET_CFLAGS) -UNDEBUG" \
++        CXXFLAGS="$(TARGET_CXXFLAGS) -UNDEBUG"
+ BITCOIN_CONF_OPTS = \
+ 	--disable-bench \
+ 	--disable-wallet \
+-- 
+2.30.2
