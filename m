@@ -1,49 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Jun 2021 12:07:32 +0200
-Subject: [Buildroot] [PATCH next] package/gnutls: disable tests
-In-Reply-To: <6a855a1d0fd3bd8f4bd59d87e349ab52ea501eab.1622736642.git.baruch@tkos.co.il>
-References: <6a855a1d0fd3bd8f4bd59d87e349ab52ea501eab.1622736642.git.baruch@tkos.co.il>
-Message-ID: <f7d9d514-2788-9564-c51c-1936ced22f19@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 13 Jun 2021 12:09:52 +0200
+Subject: [Buildroot] [git commit] package/gdb: enable nios2
+Message-ID: <20210613094322.5C28A80FFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=8eac45e6cf59491dde4a1deac888b0db89ccd5cf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+It turn out that gdb/gdbserver support for nios2 is available since 7.7 release, since commit [1] [2].
 
-On 03/06/2021 18:10, Baruch Siach wrote:
-> Tests can't build with NDEBUG is defined. Since commit 5a8c50fe05afa
-> ("core: enable 'NDEBUG' unless BR2_ENABLE_RUNTIME_DEBUG is set") NDEBUG
-> is defined on !BR2_ENABLE_RUNTIME_DEBUG. Just disable tests.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/9ec31793484a69c14a66b7338d795089c07b9937/
-> http://autobuild.buildroot.net/results/6ef8f1534237f2df4cff0a0bc0364fe9a46a5343/
-> http://autobuild.buildroot.net/results/05ff156687138627f244ca3f6cb58f1ce7d127c4/
-> 
-> Cc: Matt Weber <matthew.weber@collins.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[1] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=a1217d97c4b0449d052fad3d2df2ab58b48f918c
+[2] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=68f5f83833e21b8c8466fe852b403b81db227ce4
 
- Applied to master, thanks.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/gdb/Config.in      | 1 -
+ package/gdb/Config.in.host | 1 -
+ 2 files changed, 2 deletions(-)
 
- Regards,
- Arnout
-
-> ---
->  package/gnutls/gnutls.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-> index 14855bcebc8f..6fc9ffad0b3f 100644
-> --- a/package/gnutls/gnutls.mk
-> +++ b/package/gnutls/gnutls.mk
-> @@ -23,6 +23,7 @@ GNUTLS_CONF_OPTS = \
->  	--disable-guile \
->  	--disable-libdane \
->  	--disable-rpath \
-> +	--disable-tests \
->  	--enable-local-libopts \
->  	--enable-openssl-compatibility \
->  	--with-librt-prefix=$(STAGING_DIR) \
-> 
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index b1aa5e47d9..262740fc4c 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	default y
+ 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+ 	depends on !BR2_microblaze
+-	depends on !BR2_nios2
+ 	depends on !BR2_or1k
+ 	depends on !BR2_nds32
+ 
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 9ac939ec1e..07e75b2c0e 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
+ 	default y
+ 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+ 	depends on !BR2_microblaze
+-	depends on !BR2_nios2
+ 	depends on !BR2_or1k
+ 	depends on !BR2_riscv
+ 	depends on !BR2_nds32
