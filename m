@@ -1,50 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 13 Jun 2021 12:11:42 +0300
-Subject: [Buildroot] Buildroot issue since 9 June 2021 ?
-In-Reply-To: <CACaKL1wUo0VwDyXi--E6n-sdpbTtrzdr3XDdfHjgn4TV1D5=2w@mail.gmail.com>
-References: <CACaKL1wUo0VwDyXi--E6n-sdpbTtrzdr3XDdfHjgn4TV1D5=2w@mail.gmail.com>
-Message-ID: <87lf7e9lip.fsf@tarshish>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 13 Jun 2021 11:13:55 +0200
+Subject: [Buildroot] [PATCH v2, 1/2] package/thrift: drop unrecognized option
+Message-ID: <20210613091356.877947-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jacques,
+WITH_QT4 has been dropped since version 0.13.0 and
+https://github.com/apache/thrift/commit/17355425429274e7971fff39d7e45279cdf550fa
 
-On Sun, Jun 13 2021, Jacques Samoun wrote:
-> i noticed that, since Thurday 9th June, my BR based project could not build
-> anymore.
-> It seems that I was able to build till tag "2021.05" (and all the rc's
-> before) but not anymore since then.
->
-> My build fails on package MTD 2.1.2, where it could not install to target
->
-> /bin/install -D -m 0755
-> /home/jsadva/work/buildroot/output/build/mtd-2.1.2/ubihealthd
-> /home/jsadva/buildroot/output/target/usr/sbin/ubihealthd
-> /bin/install: cannot stat
-> '/home/jsadva/work/buildroot/output/build/mtd-2.1.2/ubihealthd': No such
-> file or directory
-> make[1]: *** [package/pkg-generic.mk:341:
-> /home/jsadva/work/buildroot/output/build/mtd-2.1.2/.stamp_target_installed]
-> Error 1
->
-> Of course, the buildroot "pull" is the only change to my environment,
-> everything else unchanged (out of tree building)
-> In the bug tracker, i saw a recently logged issue which is quite similar.
->
-> Has somebody faced this recently ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Add security bump
 
-You might want to try this patch:
+ package/thrift/thrift.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-  http://patchwork.ozlabs.org/project/buildroot/patch/20210609234819.1860554-2-mmayer at broadcom.com/
-
-Or just enable BR2_PACKAGE_MTD_UBIFS_UTILS.
-
-baruch
-
+diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
+index 0f2a8eb071..544eb97323 100644
+--- a/package/thrift/thrift.mk
++++ b/package/thrift/thrift.mk
+@@ -20,7 +20,6 @@ THRIFT_COMMON_CONF_OPTS = -DBUILD_TUTORIALS=OFF \
+ 	-DBUILD_TESTING=OFF \
+ 	-DWITH_PYTHON=OFF \
+ 	-DWITH_JAVA=OFF \
+-	-DWITH_QT4=OFF \
+ 	-DWITH_QT5=OFF
+ 
+ THRIFT_CONF_OPTS = $(THRIFT_COMMON_CONF_OPTS) -DBUILD_COMPILER=OFF
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.30.2
