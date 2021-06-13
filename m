@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D49DC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:53:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24A02C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:54:11 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4E10B60724
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:53:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4E10B60724
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id C28BF603E7
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:54:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C28BF603E7
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1FE44400C3;
-	Tue,  3 Aug 2021 21:53:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 947AC40480;
+	Tue,  3 Aug 2021 21:54:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iPoFl0bQkHxS; Tue,  3 Aug 2021 21:53:54 +0000 (UTC)
+	with ESMTP id XDkPngU9bPXk; Tue,  3 Aug 2021 21:54:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D8FC4404A8;
-	Tue,  3 Aug 2021 21:53:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6532B1BF349
+	by smtp2.osuosl.org (Postfix) with ESMTP id 75190404B4;
+	Tue,  3 Aug 2021 21:54:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 66C641BF9AA
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 97FA040249
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 156AE608BF
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uUjob0dqubHf for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EVztDT3DCavC for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF15A40235
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E2AD6063A
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4501B87B09; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id B951488523; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 3 Jul 2021 21:56:47 +0200
+Date: Sun, 13 Jun 2021 12:09:52 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8f891c2e41616bacf215c49329146ef9981ea4ca
-X-Git-Newrev: a4b5622a34ce89eae23005801ff60833145b60ac
+X-Git-Oldrev: bf32928bbb03adaa6844bac159a7855c1bffeb7f
+X-Git-Newrev: 8eac45e6cf59491dde4a1deac888b0db89ccd5cf
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210958.4501B87B09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/php-memcached: bump
- version to 3.1.5
+Message-Id: <20210803210950.B951488523@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gdb: enable nios2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,43 +69,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4b5622a34ce89eae23005801ff60833145b60ac
+commit: https://git.buildroot.net/buildroot/commit/?id=8eac45e6cf59491dde4a1deac888b0db89ccd5cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/php-memcached/php-memcached.hash | 8 ++++----
- package/php-memcached/php-memcached.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+It turn out that gdb/gdbserver support for nios2 is available since 7.7 release, since commit [1] [2].
 
-diff --git a/package/php-memcached/php-memcached.hash b/package/php-memcached/php-memcached.hash
-index dd294f466a..7e918c17f6 100644
---- a/package/php-memcached/php-memcached.hash
-+++ b/package/php-memcached/php-memcached.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 20786213ff92cd7ebdb0d0ac10dde1e9580a2f84296618b666654fd76ea307d4  memcached-3.1.3.tgz
--sha256 24e8e3a9529204ead9422fa17cf3ddd75d292a8763b87fdb20591964f2e6ebe0  LICENSE
--sha256 a453a7a272fbd24105b39959f76996d50dad80b22d1c310f6c67f74f62ae4054  fastlz/LICENSE
--sha256 bba8cb50c660842c5ca459c5004395bdef8f01c1b64f97a9978f1053f173cb82  g_fmt.h
-+sha256  b288e45f839593e16c4d8508b241de51a86df4f7322153e6becb9e1c819021fd  memcached-3.1.5.tgz
-+sha256  24e8e3a9529204ead9422fa17cf3ddd75d292a8763b87fdb20591964f2e6ebe0  LICENSE
-+sha256  a453a7a272fbd24105b39959f76996d50dad80b22d1c310f6c67f74f62ae4054  fastlz/LICENSE
-+sha256  bba8cb50c660842c5ca459c5004395bdef8f01c1b64f97a9978f1053f173cb82  g_fmt.h
-diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
-index 4607d099f3..068fbb786b 100644
---- a/package/php-memcached/php-memcached.mk
-+++ b/package/php-memcached/php-memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+[1] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=a1217d97c4b0449d052fad3d2df2ab58b48f918c
+[2] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=68f5f83833e21b8c8466fe852b403b81db227ce4
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/gdb/Config.in      | 1 -
+ package/gdb/Config.in.host | 1 -
+ 2 files changed, 2 deletions(-)
+
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index b1aa5e47d9..262740fc4c 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	default y
+ 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+ 	depends on !BR2_microblaze
+-	depends on !BR2_nios2
+ 	depends on !BR2_or1k
+ 	depends on !BR2_nds32
  
--PHP_MEMCACHED_VERSION = 3.1.3
-+PHP_MEMCACHED_VERSION = 3.1.5
- PHP_MEMCACHED_SOURCE = memcached-$(PHP_MEMCACHED_VERSION).tgz
- PHP_MEMCACHED_SITE = https://pecl.php.net/get
- PHP_MEMCACHED_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 9ac939ec1e..07e75b2c0e 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
+ 	default y
+ 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+ 	depends on !BR2_microblaze
+-	depends on !BR2_nios2
+ 	depends on !BR2_or1k
+ 	depends on !BR2_riscv
+ 	depends on !BR2_nds32
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
