@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5DA4C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:03:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C597AC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:03:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A782A60F93
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:03:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A782A60F93
+	by mail.kernel.org (Postfix) with ESMTPS id 0F46E60F8F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:03:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0F46E60F8F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 824F6421E3;
-	Tue,  3 Aug 2021 23:03:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D57FC405A8;
+	Tue,  3 Aug 2021 23:03:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dmIJsc6QlFzb; Tue,  3 Aug 2021 23:03:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8QU3bRRP5zJX; Tue,  3 Aug 2021 23:03:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3CE141591;
-	Tue,  3 Aug 2021 23:03:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 018CA405A6;
+	Tue,  3 Aug 2021 23:03:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1AD481BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3251A1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D57FF4064C
+ by smtp2.osuosl.org (Postfix) with ESMTP id E92E940651
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 15NMu4mKhmHQ for <buildroot@lists.busybox.net>;
+ with ESMTP id SIxss8NKNKbN for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4DDEF4062C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D2444062E
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 96302873E2; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+ id AD295873E2; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 13 Jun 2021 11:57:36 +0200
+Date: Sun, 13 Jun 2021 12:01:48 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a8c7e406f6d5a65d0e8f731f0c24ffebe0b18c16
-X-Git-Newrev: 5123d665186ef77c8ce001b6718abecda4ef7250
+X-Git-Oldrev: ea02ac3e061b36da1bfc0277b1f84126cd96328f
+X-Git-Newrev: bf32928bbb03adaa6844bac159a7855c1bffeb7f
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210950.96302873E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: add Giulio Benetti
- to udisks package
+Message-Id: <20210803210950.AD295873E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gnutls: disable tests
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,27 +69,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5123d665186ef77c8ce001b6718abecda4ef7250
+commit: https://git.buildroot.net/buildroot/commit/?id=bf32928bbb03adaa6844bac159a7855c1bffeb7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Tests can't build with NDEBUG is defined. Since commit 5a8c50fe05afa
+("core: enable 'NDEBUG' unless BR2_ENABLE_RUNTIME_DEBUG is set") NDEBUG
+is defined on !BR2_ENABLE_RUNTIME_DEBUG. Just disable tests.
+
+Fixes:
+http://autobuild.buildroot.net/results/9ec31793484a69c14a66b7338d795089c07b9937/
+http://autobuild.buildroot.net/results/6ef8f1534237f2df4cff0a0bc0364fe9a46a5343/
+http://autobuild.buildroot.net/results/05ff156687138627f244ca3f6cb58f1ce7d127c4/
+
+Cc: Matt Weber <matthew.weber@collins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- DEVELOPERS | 1 +
+ package/gnutls/gnutls.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0ab898d94d..70cc5b239d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1049,6 +1049,7 @@ F:	package/minicom/
- F:	package/nfs-utils/
- F:	package/sunxi-mali-mainline/
- F:	package/sunxi-mali-mainline-driver/
-+F:	package/udisks/
- 
- N:	Gregory Dymarek <gregd72002@gmail.com>
- F:	package/ding-libs/
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 14855bcebc..6fc9ffad0b 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -23,6 +23,7 @@ GNUTLS_CONF_OPTS = \
+ 	--disable-guile \
+ 	--disable-libdane \
+ 	--disable-rpath \
++	--disable-tests \
+ 	--enable-local-libopts \
+ 	--enable-openssl-compatibility \
+ 	--with-librt-prefix=$(STAGING_DIR) \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
