@@ -2,56 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C597AC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:03:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C15B1C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:04:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0F46E60F8F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:03:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0F46E60F8F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id DE2F260F8F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:04:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DE2F260F8F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D57FC405A8;
-	Tue,  3 Aug 2021 23:03:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A975A83C32;
+	Tue,  3 Aug 2021 23:04:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8QU3bRRP5zJX; Tue,  3 Aug 2021 23:03:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OwNjr3KOPomF; Tue,  3 Aug 2021 23:04:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 018CA405A6;
-	Tue,  3 Aug 2021 23:03:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1892A83C19;
+	Tue,  3 Aug 2021 23:04:10 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3251A1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 102691BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E92E940651
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C9F740652
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SIxss8NKNKbN for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
+ with ESMTP id svbHv_hltbSe for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D2444062E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 91A2140608
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id AD295873E2; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id D85D9868B1; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 13 Jun 2021 12:01:48 +0200
+Date: Sun, 13 Jun 2021 14:34:04 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ea02ac3e061b36da1bfc0277b1f84126cd96328f
-X-Git-Newrev: bf32928bbb03adaa6844bac159a7855c1bffeb7f
+X-Git-Oldrev: 4de251ea41d109601ce84317b477a83f52629c15
+X-Git-Newrev: 7a15b79728a738665f65bd39c8b085d6b04375c9
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210950.AD295873E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gnutls: disable tests
+Message-Id: <20210803210950.D85D9868B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] mtd-utils-2.1.2: ubihealthd
+ depends on ubifs support
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,37 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf32928bbb03adaa6844bac159a7855c1bffeb7f
+commit: https://git.buildroot.net/buildroot/commit/?id=7a15b79728a738665f65bd39c8b085d6b04375c9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Tests can't build with NDEBUG is defined. Since commit 5a8c50fe05afa
-("core: enable 'NDEBUG' unless BR2_ENABLE_RUNTIME_DEBUG is set") NDEBUG
-is defined on !BR2_ENABLE_RUNTIME_DEBUG. Just disable tests.
+ubihealthd is only being built, if mtd-utils are being built
+--with-ubifs. Reflect that dependency within buildroot.
 
-Fixes:
-http://autobuild.buildroot.net/results/9ec31793484a69c14a66b7338d795089c07b9937/
-http://autobuild.buildroot.net/results/6ef8f1534237f2df4cff0a0bc0364fe9a46a5343/
-http://autobuild.buildroot.net/results/05ff156687138627f244ca3f6cb58f1ce7d127c4/
-
-Cc: Matt Weber <matthew.weber@collins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+[yann.morin.1998@free.fr: fix check-package]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gnutls/gnutls.mk | 1 +
+ package/mtd/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 14855bcebc..6fc9ffad0b 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -23,6 +23,7 @@ GNUTLS_CONF_OPTS = \
- 	--disable-guile \
- 	--disable-libdane \
- 	--disable-rpath \
-+	--disable-tests \
- 	--enable-local-libopts \
- 	--enable-openssl-compatibility \
- 	--with-librt-prefix=$(STAGING_DIR) \
+diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+index c7ad3b3cdc..26b7797718 100644
+--- a/package/mtd/Config.in
++++ b/package/mtd/Config.in
+@@ -140,6 +140,7 @@ config BR2_PACKAGE_MTD_UBIFORMAT
+ config BR2_PACKAGE_MTD_UBIHEALTHD
+ 	bool "ubihealthd"
+ 	default y
++	depends on BR2_PACKAGE_MTD_UBIFS_UTILS
+ 
+ config BR2_PACKAGE_MTD_UBIMKVOL
+ 	bool "ubimkvol"
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
