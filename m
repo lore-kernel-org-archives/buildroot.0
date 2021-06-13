@@ -1,45 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 13 Jun 2021 13:25:33 +0000
-Subject: [Buildroot] [Bug 13836] package build failure when target install
- set to no on pkg-generic pkg types
-In-Reply-To: <bug-13836-163@https.bugs.busybox.net/>
-References: <bug-13836-163@https.bugs.busybox.net/>
-Message-ID: <bug-13836-163-54SI0f84hV@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 13 Jun 2021 16:14:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/luvi: requires DES support in
+ openssl
+Message-ID: <20210613141421.1390478-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13836
+Enable DES in openssl to fix build failure raised since commit
+a83d41867c8d69a77d5cd0a665aa216af5340359
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Matt, All,
+Fixes:
+ - http://autobuild.buildroot.org/results/d8452e2de1bd866953d3bb0cb951e9f877f9a6e0
 
-I was thinking a proper solution to the issue would be something
-along the lines of:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/luvi/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-```diff
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 9fbc63d19e..5e53d008e1 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1120,6 +1120,12 @@ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- # configuration
- ifeq ($$($$($(2)_KCONFIG_VAR)),y)
-
-+ifeq ($$($(2)_TYPE),target)
-+ifeq ($$(filter YES,$$($(2)_INSTALL_STAGING) $$($(2)_INSTALL_IMAGES)
-$$($(2)_INSTALL_TARGET)),)
-+$$(error $(1) does not install anything anywhere)
-+endif
-+endif
-+
- # Ensure the calling package is the declared provider for all the virtual
- # packages it claims to be an implementation of.
- ifneq ($$($(2)_PROVIDES),)
-```
-
+diff --git a/package/luvi/Config.in b/package/luvi/Config.in
+index c9fd417394..6e96f85f32 100644
+--- a/package/luvi/Config.in
++++ b/package/luvi/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_LUVI
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_LUV
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  A project in-between luv and luvit. The goal of this is to
+ 	  make building luvit and derivatives much easier.
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.30.2
