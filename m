@@ -1,112 +1,124 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 13 Jun 2021 17:42:39 +0200
-Subject: [Buildroot] [PATCH 1/2] package/lua-zlib: new package
-Message-ID: <20210613154240.2877974-1-francois.perrad@gadz.org>
+Date: Sun, 13 Jun 2021 17:42:40 +0200
+Subject: [Buildroot] [PATCH 2/2] package/lzlib: remove it
+In-Reply-To: <20210613154240.2877974-1-francois.perrad@gadz.org>
+References: <20210613154240.2877974-1-francois.perrad@gadz.org>
+Message-ID: <20210613154240.2877974-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this module is compatible with lzlib (which is no longer maintained).
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                             |  1 +
- package/lua-zlib/Config.in                    | 10 ++++++++
- package/lua-zlib/lua-zlib.hash                |  2 ++
- package/lua-zlib/lua-zlib.mk                  | 12 +++++++++
- .../testing/tests/package/test_lua_zlib.py    | 25 +++++++++++++++++++
- 5 files changed, 50 insertions(+)
- create mode 100644 package/lua-zlib/Config.in
- create mode 100644 package/lua-zlib/lua-zlib.hash
- create mode 100644 package/lua-zlib/lua-zlib.mk
- create mode 100644 support/testing/tests/package/test_lua_zlib.py
+ Config.in.legacy                            |  7 +++++++
+ package/Config.in                           |  1 -
+ package/lzlib/Config.in                     | 10 ----------
+ package/lzlib/lzlib.hash                    |  3 ---
+ package/lzlib/lzlib.mk                      | 15 ---------------
+ support/testing/tests/package/test_lzlib.py | 14 --------------
+ 6 files changed, 7 insertions(+), 43 deletions(-)
+ delete mode 100644 package/lzlib/Config.in
+ delete mode 100644 package/lzlib/lzlib.hash
+ delete mode 100644 package/lzlib/lzlib.mk
+ delete mode 100644 support/testing/tests/package/test_lzlib.py
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index a0c1a6898..adfacecd3 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -236,6 +236,13 @@ config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
+ 	  of the official Kodi github repo and its build is broken
+ 	  with Kodi 19.x, so it was removed.
+ 
++config BR2_PACKAGE_LZLIB
++	bool "lzlib package was removed"
++	select BR2_PACKAGE_LUA_ZLIB
++	select BR2_LEGACY
++	help
++	  The lzlib package was removed, use lua-zlib instead.
++
+ comment "Legacy options removed in 2021.02"
+ 
+ config BR2_PACKAGE_MPD_AUDIOFILE
 diff --git a/package/Config.in b/package/Config.in
-index 82b28d283..1abfd787f 100644
+index 1abfd787f..66978ec45 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -689,6 +689,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-testmore/Config.in"
- 	source "package/lua-utf8/Config.in"
- 	source "package/lua-valua/Config.in"
-+	source "package/lua-zlib/Config.in"
- 	source "package/luabitop/Config.in"
- 	source "package/luadbi/Config.in"
- 	source "package/luadbi-sqlite3/Config.in"
-diff --git a/package/lua-zlib/Config.in b/package/lua-zlib/Config.in
-new file mode 100644
-index 000000000..ffdb4a8e6
---- /dev/null
-+++ b/package/lua-zlib/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LUA_ZLIB
-+	bool "lua-zlib"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Simple streaming interface to zlib for Lua.
-+	  Consists of two functions: inflate and deflate.
-+	  Both functions return "stream functions" (takes a buffer
-+	  of input and returns a buffer of output).
-+
-+	  https://github.com/brimworks/lua-zlib
-diff --git a/package/lua-zlib/lua-zlib.hash b/package/lua-zlib/lua-zlib.hash
-new file mode 100644
-index 000000000..8c108b39a
---- /dev/null
-+++ b/package/lua-zlib/lua-zlib.hash
-@@ -0,0 +1,2 @@
-+# computed by luarocks/buildroot
-+sha256 42436ba2b78c9a2d515d6da59ceb12cdea7f84c9ce3c859d91addb42badd4061  lua-zlib-1.2-0.src.rock
-diff --git a/package/lua-zlib/lua-zlib.mk b/package/lua-zlib/lua-zlib.mk
-new file mode 100644
-index 000000000..23e2a8ae3
---- /dev/null
-+++ b/package/lua-zlib/lua-zlib.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# lua-zlib
-+#
-+################################################################################
-+
-+LUA_ZLIB_VERSION = 1.2-0
-+LUA_ZLIB_SUBDIR = lua-zlib
-+LUA_ZLIB_LICENSE = MIT
-+LUA_ZLIB_DEPENDENCIES = zlib
-+
-+$(eval $(luarocks-package))
-diff --git a/support/testing/tests/package/test_lua_zlib.py b/support/testing/tests/package/test_lua_zlib.py
-new file mode 100644
-index 000000000..6089daa2e
---- /dev/null
-+++ b/support/testing/tests/package/test_lua_zlib.py
-@@ -0,0 +1,25 @@
-+from tests.package.test_lua import TestLuaBase
-+
-+
-+class TestLuaLuazlib(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUA=y
-+        BR2_PACKAGE_LUA_ZLIB=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("zlib")
-+
-+
-+class TestLuajitLuazlib(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUAJIT=y
-+        BR2_PACKAGE_LUA_ZLIB=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("zlib")
+@@ -708,7 +708,6 @@ menu "Lua libraries/modules"
+ 	source "package/lutok/Config.in"
+ 	source "package/luv/Config.in"
+ 	source "package/luvi/Config.in"
+-	source "package/lzlib/Config.in"
+ 	source "package/orbit/Config.in"
+ 	source "package/rings/Config.in"
+ 	source "package/turbolua/Config.in"
+diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
+deleted file mode 100644
+index 59a2e6d5c..000000000
+--- a/package/lzlib/Config.in
++++ /dev/null
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_LZLIB
+-	bool "lzlib"
+-	depends on BR2_PACKAGE_LUA
+-	select BR2_PACKAGE_ZLIB
+-	help
+-	  This package provides a library to access zlib library
+-	  functions and also to read/write gzip files using an
+-	  interface similar to the base io package.
+-
+-	  https://github.com/LuaDist/lzlib
+diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
+deleted file mode 100644
+index 4bb4c52c8..000000000
+--- a/package/lzlib/lzlib.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  cbb0cac5825e940b4ea2f31a336d2aaf6db39847d456920afd8e443804420dbb  lzlib-0.4.3.tar.gz
+-sha256  f817d4a37077e94e9adf379f46ba5cc0b68775d7add2bbd5b2ca68ba140ad5bb  lzlib.c
+diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
+deleted file mode 100644
+index 74624d501..000000000
+--- a/package/lzlib/lzlib.mk
++++ /dev/null
+@@ -1,15 +0,0 @@
+-################################################################################
+-#
+-# lzlib
+-#
+-################################################################################
+-
+-LZLIB_VERSION = 0.4.3
+-LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
+-LZLIB_DEPENDENCIES = lua zlib
+-LZLIB_LICENSE = MIT
+-LZLIB_LICENSE_FILES = lzlib.c
+-LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
+-	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
+-
+-$(eval $(cmake-package))
+diff --git a/support/testing/tests/package/test_lzlib.py b/support/testing/tests/package/test_lzlib.py
+deleted file mode 100644
+index 84e767913..000000000
+--- a/support/testing/tests/package/test_lzlib.py
++++ /dev/null
+@@ -1,14 +0,0 @@
+-from tests.package.test_lua import TestLuaBase
+-
+-
+-class TestLuaLzlib(TestLuaBase):
+-    config = TestLuaBase.config + \
+-        """
+-        BR2_PACKAGE_LUA=y
+-        BR2_PACKAGE_LZLIB=y
+-        """
+-
+-    def test_run(self):
+-        self.login()
+-        self.module_test("zlib")
+-        self.module_test("gzip")
 -- 
 2.30.2
