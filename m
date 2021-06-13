@@ -1,120 +1,228 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Jun 2021 11:25:36 +0200
-Subject: [Buildroot] [PATCH v1 1/2] package/mesa3d: add config option
- for DRI3 support
-In-Reply-To: <20210612223011.26118-1-ps.report@gmx.net>
+Date: Sun, 13 Jun 2021 11:33:52 +0200
+Subject: [Buildroot] [PATCH v1 2/2] package/mesa3d: gallium/kmsro
+ drivers require dri3 for X11
+In-Reply-To: <20210612223011.26118-2-ps.report@gmx.net>
 References: <20210612223011.26118-1-ps.report@gmx.net>
-Message-ID: <689f1497-624c-01b3-d69a-97a5efd01740@mind.be>
+ <20210612223011.26118-2-ps.report@gmx.net>
+Message-ID: <d7dd816f-fe5a-3cc5-0edc-a894bb7bb66e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Peter,
+
 
 On 13/06/2021 00:30, Peter Seiderer wrote:
-> Add config option for DRI3 support and use it instead
-> of DRI3 enable/disable logic in *.mk file.
+> - add upstream patch 0005-meson-kmsro-require-dri3-for-X11.patch
+>   ([1])
+> 
+> - simplfy libxshmfence dependency, always depend on it if selected
+
+ Maybe that should be done in a separate commit, with a better explanation why.
+
+> 
+> - select BR2_PACKAGE_MESA3D_DRI3 for all gallium/kmsro drivers in case
+>   X11 is selected, see meson.build:
+> 
+>   240 with_gallium_kmsro = with_gallium_v3d or with_gallium_vc4 or with_gallium_etnaviv or with_gallium_panfrost or with_gallium_lima or with_gallium_freedreno
+>   [...]
+>   524 if with_gallium_kmsro and (with_platform_x11 and not with_dri3)
+>   525   error('kmsro requires dri3 for X11 support')
+>   526 endif
+
+ Now *that's* an excellent explanation!
+
+> 
+> - select BR2_PACKAGE_XLIB_LIBXSHMFENCE for all gallium/kmsro drivers in case
+>   X11 is selected, see meson.build:
+> 
+>   1897     if with_dri3
+>   [...]
+>   1907       dep_xshmfence = dependency('xshmfence', version : '>= 1.1')
+
+ nitpick: I don't see the "in case X11 is selected" part in the quoted code.
+
+> 
+> Fixes:
+> 
+>   - https://bugs.busybox.net/show_bug.cgi?id=13831
+> 
+> [1] https://gitlab.freedesktop.org/mesa/mesa/-/commit/479bda78480d472e1f311bf0ea5b5fafb47ac7ba
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/mesa3d/Config.in |  8 ++++++++
->  package/mesa3d/mesa3d.mk | 12 +++++++-----
->  2 files changed, 15 insertions(+), 5 deletions(-)
+>  ...005-meson-kmsro-require-dri3-for-X11.patch | 42 +++++++++++++++++++
+>  package/mesa3d/Config.in                      | 18 ++++++++
+>  package/mesa3d/mesa3d.mk                      |  8 ++--
+>  3 files changed, 64 insertions(+), 4 deletions(-)
+>  create mode 100644 package/mesa3d/0005-meson-kmsro-require-dri3-for-X11.patch
 > 
+> diff --git a/package/mesa3d/0005-meson-kmsro-require-dri3-for-X11.patch b/package/mesa3d/0005-meson-kmsro-require-dri3-for-X11.patch
+> new file mode 100644
+> index 0000000000..e20078b712
+> --- /dev/null
+> +++ b/package/mesa3d/0005-meson-kmsro-require-dri3-for-X11.patch
+> @@ -0,0 +1,42 @@
+> +From 945f32f09a010407035582712109d616dae31f6d Mon Sep 17 00:00:00 2001
+> +From: Erico Nunes <nunes.erico@gmail.com>
+> +Date: Thu, 10 Jun 2021 21:20:28 +0200
+> +Subject: [PATCH] meson: kmsro: require dri3 for X11
+> +
+> +The current implementation in kmsro relies on buffer sharing using
+> +WINSYS_HANDLE_TYPE_FD, which in x11 is only used by default when dri3
+> +is enabled.
+> +Since the current implementation will not work without it, we can
+> +prevent user error by checking that it is not disabled at configuration
+> +time.
+> +
+> +Closes #4861
+> +
+> +Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+> +Reviewed-by: Adam Jackson <ajax@redhat.com>
+> +Reviewed-by: Eric Engestrom <eric@engestrom.ch>
+> +Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/11305>
+> +[Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/commit/479bda78480d472e1f311bf0ea5b5fafb47ac7ba.patch]
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + meson.build | 4 ++++
+> + 1 file changed, 4 insertions(+)
+> +
+> +diff --git a/meson.build b/meson.build
+> +index e1e94e7..37b8868 100644
+> +--- a/meson.build
+> ++++ b/meson.build
+> +@@ -521,6 +521,10 @@ if with_dri
+> +   endif
+> + endif
+> + 
+> ++if with_gallium_kmsro and (with_platform_x11 and not with_dri3)
+> ++  error('kmsro requires dri3 for X11 support')
+> ++endif
+> ++
+> + _vdpau = get_option('gallium-vdpau')
+> + if _vdpau == 'true'
+> +   _vdpau = 'enabled'
+> +-- 
+> +2.31.1
+> +
 > diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index d1b3af2054..36acd9758c 100644
+> index 36acd9758c..c8af2a17cb 100644
 > --- a/package/mesa3d/Config.in
 > +++ b/package/mesa3d/Config.in
-> @@ -16,6 +16,11 @@ menuconfig BR2_PACKAGE_MESA3D
+> @@ -105,7 +105,10 @@ comment "Gallium drivers"
 >  
->  if BR2_PACKAGE_MESA3D
+>  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+>  	bool "Gallium Etnaviv driver"
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+>  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+
+ Given the quoted code above, I think all of these should be moved to
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER. The "depends on" would have to be copied, not
+moved. Having it in the BR2_PACKAGE_MESA3D_GALLIUM_DRIVER is kind of redundant,
+but it serves as a reminder to people adding gallium drivers that they need to
+copy that dependency.
+
+>  	select BR2_PACKAGE_LIBDRM_ETNAVIV
+>  	help
+>  	  Mesa driver for Vivante GPUs.
+> @@ -118,7 +121,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
+>  	# can't see is just spurious. However, that dependency is about
+>  	# the toolchain having sync4 primitives, which is always a given
+>  	# for arm/aarch64.
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+>  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+>  	select BR2_PACKAGE_LIBDRM_FREEDRENO
+>  	help
+>  	  Mesa driver for Freedreno GPUs.
+> @@ -145,7 +151,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
 >  
-> +config BR2_PACKAGE_MESA3D_DRI3
-> +	bool "Enable DRI3 support"
+>  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
+>  	bool "Gallium lima driver"
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+>  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+>  	help
+>  	  Mesa driver for ARM Mali Utgard GPUs.
+>  
+> @@ -160,7 +169,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+>  
+>  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
+>  	bool "Gallium panfrost driver"
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+>  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
 
- Does it make sense to have this as a user-selectable option? Wouldn't it be
-better to make this a blind option? (The latter has the advantage that we can
-easily refactor it later, without legacy handling and stuff.)
+ This, for example, makes me suspect that the libxshmfence select should really
+be part of DRI3.
 
- I just did a build with just DRI3 selected and it didn't install anything to
-target or staging. This suggests that the option isn't useful on its own.
-
- More importantly: have you checked that DRI3 doesn't have any dependencies of
-itself? Check the meson files to see if there are dependencies that are implied
-directly by dri3 (i.e., maybe the xshmfence dependency comes from dri3 rather
-than the individual dri driver). Those things should be moved around as well,
-similar how they are put in BR2_PACKAGE_MESA3D_DRI_DRIVER instead of the
-individual drivers.
-
-
- Series marked as Changes Requested.
 
  Regards,
  Arnout
 
-> +	help
-> +	  Enable DRI3 support.
-> +
->  # Some Gallium driver needs libelf when built with LLVM support
->  config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
->  	bool
-> @@ -65,6 +70,8 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
->  		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
->  		!BR2_PACKAGE_MESA3D_OPENGL_EGL && \
->  		!BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
-> +	select BR2_PACKAGE_MESA3D_DRI3 if \
-> +		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
->  	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
->  		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
+>  	help
+>  	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
 >  
-> @@ -359,6 +366,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
->  	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
->  	depends on BR2_PACKAGE_XORG7 # xorgproto
-> +	select BR2_PACKAGE_MESA3D_DRI3
->  	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
->  	select BR2_PACKAGE_XORGPROTO
->  	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
+> @@ -247,7 +259,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
+>  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
+>  	bool "Gallium v3d driver"
+>  	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+>  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+>  	select BR2_PACKAGE_LIBDRM_VC4
+>  	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+>  	help
+> @@ -261,7 +276,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
+>  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+>  	bool "Gallium vc4 driver"
+>  	depends on BR2_arm || BR2_aarch64
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+>  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+>  	select BR2_PACKAGE_LIBDRM_VC4
+>  	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+>  	help
 > diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index 5c5f8a33f3..da6e55bf93 100644
+> index da6e55bf93..290295255a 100644
 > --- a/package/mesa3d/mesa3d.mk
 > +++ b/package/mesa3d/mesa3d.mk
-> @@ -35,6 +35,12 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
->  MESA3D_CONF_OPTS += -Db_asneeded=false
->  endif
+> @@ -29,6 +29,10 @@ MESA3D_CONF_OPTS = \
+>  	-Dgallium-omx=disabled \
+>  	-Dpower8=disabled
 >  
-> +ifeq ($(BR2_PACKAGE_MESA3D_DRI3),y)
-> +MESA3D_CONF_OPTS += -Ddri3=enabled
-> +else
-> +MESA3D_CONF_OPTS += -Ddri3=disabled
+> +ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
+> +MESA3D_DEPENDENCIES += xlib_libxshmfence
 > +endif
 > +
->  ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
->  MESA3D_DEPENDENCIES += host-llvm llvm
->  MESA3D_MESON_EXTRA_BINARIES += llvm-config='$(STAGING_DIR)/usr/bin/llvm-config'
-> @@ -122,13 +128,10 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+>  # Codesourcery ARM 2014.05 fail to link libmesa_dri_drivers.so with --as-needed linker
+>  # flag due to a linker bug between binutils 2.24 and 2.25 (2.24.51.20140217).
+>  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
+> @@ -130,9 +134,6 @@ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
 >  MESA3D_CONF_OPTS += \
-> -	-Ddri-drivers= -Ddri3=disabled
-> +	-Ddri-drivers=
+>  	-Ddri-drivers=
 >  else
->  ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
->  MESA3D_DEPENDENCIES += xlib_libxshmfence
-> -MESA3D_CONF_OPTS += -Ddri3=enabled
-> -else
-> -MESA3D_CONF_OPTS += -Ddri3=disabled
->  endif
+> -ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
+> -MESA3D_DEPENDENCIES += xlib_libxshmfence
+> -endif
 >  MESA3D_CONF_OPTS += \
 >  	-Dshared-glapi=enabled \
-> @@ -142,7 +145,6 @@ MESA3D_CONF_OPTS += \
->  else
->  MESA3D_DEPENDENCIES += xlib_libxshmfence
+>  	-Dglx-direct=true \
+> @@ -143,7 +144,6 @@ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
 >  MESA3D_CONF_OPTS += \
-> -	-Ddri3=enabled \
+>  	-Dvulkan-drivers=
+>  else
+> -MESA3D_DEPENDENCIES += xlib_libxshmfence
+>  MESA3D_CONF_OPTS += \
 >  	-Dvulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
 >  endif
->  
 > 
