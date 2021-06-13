@@ -1,39 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Jun 2021 22:02:54 +0200
-Subject: [Buildroot] [git commit] package/botan: requires RC4 and RMD160
+Date: Sun, 13 Jun 2021 22:06:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/proftpd: requires RMD160
  support in openssl
-Message-ID: <20210613193436.841C38D4FA@busybox.osuosl.org>
+In-Reply-To: <20210613093944.878452-1-fontaine.fabrice@gmail.com>
+References: <20210613093944.878452-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210613200628.GV168928@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=617c76b9586a57efed895a79cd4c1e5d720bdff7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-Enable RC4 and RMD160 in openssl to fix build failure raised since
-commit a83d41867c8d69a77d5cd0a665aa216af5340359
+On 2021-06-13 11:39 +0200, Fabrice Fontaine spake thusly:
+> Enable RMD160 in openssl to fix build failure raised since commit
+> a83d41867c8d69a77d5cd0a665aa216af5340359
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/4c3e7a77d8d6c326135fe467bfcae627df4a9b9b
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/795671a39b754747725b09cf0e196defd6b0e59a
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/botan/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/botan/Config.in b/package/botan/Config.in
-index 95367b9000..341fa7c622 100644
---- a/package/botan/Config.in
-+++ b/package/botan/Config.in
-@@ -20,6 +20,8 @@ config BR2_PACKAGE_BOTAN
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	select BR2_PACKAGE_BOOST_FILESYSTEM if BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_SYSTEM if BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  Botan is a crypto library for C++
- 
+> ---
+>  package/proftpd/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+> index 4898f49dd2..83094028a0 100644
+> --- a/package/proftpd/Config.in
+> +++ b/package/proftpd/Config.in
+> @@ -29,6 +29,7 @@ config BR2_PACKAGE_PROFTPD_MOD_REDIS
+>  config BR2_PACKAGE_PROFTPD_MOD_SFTP
+>  	bool "mod_sftp support"
+>  	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
+>  	help
+>  	  Compile ProFTPD with mod_sftp support
+>  
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
