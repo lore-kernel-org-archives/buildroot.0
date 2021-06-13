@@ -1,36 +1,84 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Jun 2021 16:14:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/luvi: requires DES support in
- openssl
-Message-ID: <20210613141421.1390478-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Jun 2021 16:32:07 +0200
+Subject: [Buildroot] [PATCH] core/pkg-generic: fix instrumentation for
+ packages that install nowhere
+Message-ID: <20210613143207.2445691-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable DES in openssl to fix build failure raised since commit
-a83d41867c8d69a77d5cd0a665aa216af5340359
+A (target [0]) package can independently declare installing in various
+locations: target, staging, or images. The default is to only install
+in target.
 
-Fixes:
- - http://autobuild.buildroot.org/results/d8452e2de1bd866953d3bb0cb951e9f877f9a6e0
+When a package opts out from installing to target, but does not opts
+in to install in any other location, the package is not downloaded,
+extracted, patched, configured, nor built at all. As a consequence, none
+of the per-step instrumentation is not executed, specifically the
+listing of files before/after the package sequence.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Down the line, the package infra does not cope well with that situation,
+because the gathering-install step, the one that synchronises all the
+optional target, staging, or images install steps, still gets run.
+
+And as #13836 shows, this does not go well:
+
+    /bin/sh: /home/tbuild/myboard/build/foo/.files-list.after: No such file or directory
+    make[1]: *** [/home/tbuild/myboard/build/foo/.stamp_installed] Error 1
+    make: *** [_all] Error 2
+
+So, we should have ensured that the gathering-install step itself
+depends on the build step, which would have solved the issue.
+
+However, this bug really illustrates a more fundamental issue: does it
+even make sense to have a package that installs nothing in any location?
+Indeed, why even bother with that package to begin with if it will not
+provide anything at all?
+
+It turns out that yes, this makes sense. We have some packages, that
+do not install anything at all, and do not even build anything; they are
+there just to ensure that we can download something that will ultimately
+be used by another package. This is the case for example for packages
+that provide linux extensions, like aufs [1].
+
+Additionally, some ugly out-of-tree packages could conceivably install
+things during the build (or even configure!) steps. That's not unheard
+of... [2]
+
+So, the solution is to ensure that the gathering-install step does
+depend on the build step, to trigger the proper dependency chain and
+have the instrumentation hooks properly run even in that degenerate
+case.
+
+Fixes: #13836
+
+[0] a host package can't opt out of installing anything.
+[1] that one is actually missing AUFS_INSTALL_TARGET = NO, so this
+    hides the issue.
+[2] even us are not 100% clean on that topic: gcc will install files in
+    staging and target as part of the same step (not the build, granted,
+    but still...)
+
+Reported-by: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luvi/Config.in | 1 +
+ package/pkg-generic.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/luvi/Config.in b/package/luvi/Config.in
-index c9fd417394..6e96f85f32 100644
---- a/package/luvi/Config.in
-+++ b/package/luvi/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_LUVI
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
- 	select BR2_PACKAGE_LIBUV
- 	select BR2_PACKAGE_LUV
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  A project in-between luv and luvit. The goal of this is to
- 	  make building luvit and derivatives much easier.
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 9fbc63d19e..45589bcbb4 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -826,6 +826,7 @@ endif
+ # human-friendly targets and target sequencing
+ $(1):			$(1)-install
+ $(1)-install:		$$($(2)_TARGET_INSTALL)
++$$($(2)_TARGET_INSTALL): $$($(2)_TARGET_BUILD)
+ 
+ ifeq ($$($(2)_TYPE),host)
+ $$($(2)_TARGET_INSTALL): $$($(2)_TARGET_INSTALL_HOST)
 -- 
-2.30.2
+2.25.1
