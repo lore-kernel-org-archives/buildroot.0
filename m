@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Jun 2021 12:14:44 +0200
-Subject: [Buildroot] [PATCH for-next] package/gdb: enable nios2
-In-Reply-To: <20210606131331.235096-1-romain.naour@gmail.com>
-References: <20210606131331.235096-1-romain.naour@gmail.com>
-Message-ID: <f238dbe1-54f5-c80f-cb07-a8186b2adcf3@mind.be>
+Date: Sun, 13 Jun 2021 12:16:00 +0200
+Subject: [Buildroot] [PATCH for-next 2/2] package/gdb: improve gdb
+ version choice comment
+In-Reply-To: <20210606150351.423542-2-romain.naour@gmail.com>
+References: <20210606150351.423542-1-romain.naour@gmail.com>
+ <20210606150351.423542-2-romain.naour@gmail.com>
+Message-ID: <aa5da7a9-4489-27e6-717f-9deeb16b87ad@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +14,17 @@ To: buildroot@busybox.net
 
 
 
-On 06/06/2021 15:13, Romain Naour wrote:
-> It turn out that gdb/gdbserver support for nios2 is available since 7.7 release, since commit [1] [2].
+On 06/06/2021 17:03, Romain Naour wrote:
+> The comment has been introduced by commit [1] where the latest
+> gdb version has been used when cross-gdb is not enabled.
 > 
-> [1] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=a1217d97c4b0449d052fad3d2df2ab58b48f918c
-> [2] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=68f5f83833e21b8c8466fe852b403b81db227ce4
+> But since then the gdb package doesn't use the latest gdb version when
+> cross-gdb is not enabled. It's the "stable" version.
+> 
+> [1] https://git.buildroot.net/buildroot/commit/?id=fda818390b5e6a585608f4523356eafa0c587f53
 > 
 > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Applied to master, thanks.
 
@@ -26,35 +32,20 @@ On 06/06/2021 15:13, Romain Naour wrote:
  Arnout
 
 > ---
-> git tag --contains a1217d97c4b0449d052fad3d2df2ab58b48f918c
-> returns gdb-7.7-release tag as the oldest containing this commit.
-> ---
->  package/gdb/Config.in      | 1 -
->  package/gdb/Config.in.host | 1 -
->  2 files changed, 2 deletions(-)
+>  package/gdb/Config.in.host | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-> index b1aa5e47d9..262740fc4c 100644
-> --- a/package/gdb/Config.in
-> +++ b/package/gdb/Config.in
-> @@ -3,7 +3,6 @@ config BR2_PACKAGE_GDB_ARCH_SUPPORTS
->  	default y
->  	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
->  	depends on !BR2_microblaze
-> -	depends on !BR2_nios2
->  	depends on !BR2_or1k
->  	depends on !BR2_nds32
->  
 > diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-> index 9ac939ec1e..07e75b2c0e 100644
+> index 5aead236d0..6e807b33ed 100644
 > --- a/package/gdb/Config.in.host
 > +++ b/package/gdb/Config.in.host
-> @@ -3,7 +3,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
->  	default y
->  	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
->  	depends on !BR2_microblaze
-> -	depends on !BR2_nios2
->  	depends on !BR2_or1k
->  	depends on !BR2_riscv
->  	depends on !BR2_nds32
+> @@ -82,7 +82,7 @@ endchoice
+>  
+>  endif
+>  
+> -# If cross-gdb is not enabled, the latest working version is chosen.
+> +# If cross-gdb is not enabled, the latest stable version is chosen.
+>  config BR2_GDB_VERSION
+>  	string
+>  	default "arc-2020.09-release-gdb" if BR2_arc
 > 
