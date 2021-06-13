@@ -1,9 +1,7 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 13 Jun 2021 17:42:40 +0200
-Subject: [Buildroot] [PATCH 2/2] package/lzlib: remove it
-In-Reply-To: <20210613154240.2877974-1-francois.perrad@gadz.org>
-References: <20210613154240.2877974-1-francois.perrad@gadz.org>
-Message-ID: <20210613154240.2877974-2-francois.perrad@gadz.org>
+Date: Sun, 13 Jun 2021 17:42:53 +0200
+Subject: [Buildroot] [PATCH] package/lua-lunix: new package
+Message-ID: <20210613154253.2878028-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,113 +10,134 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- Config.in.legacy                            |  7 +++++++
- package/Config.in                           |  1 -
- package/lzlib/Config.in                     | 10 ----------
- package/lzlib/lzlib.hash                    |  3 ---
- package/lzlib/lzlib.mk                      | 15 ---------------
- support/testing/tests/package/test_lzlib.py | 14 --------------
- 6 files changed, 7 insertions(+), 43 deletions(-)
- delete mode 100644 package/lzlib/Config.in
- delete mode 100644 package/lzlib/lzlib.hash
- delete mode 100644 package/lzlib/lzlib.mk
- delete mode 100644 support/testing/tests/package/test_lzlib.py
+ package/Config.in                             |  1 +
+ package/lua-lunix/0001-fix-with-uClibc.patch  | 26 +++++++++++++++++++
+ package/lua-lunix/Config.in                   |  6 +++++
+ package/lua-lunix/lua-lunix.hash              |  3 +++
+ package/lua-lunix/lua-lunix.mk                | 14 ++++++++++
+ .../testing/tests/package/test_lua_lunix.py   | 25 ++++++++++++++++++
+ 6 files changed, 75 insertions(+)
+ create mode 100644 package/lua-lunix/0001-fix-with-uClibc.patch
+ create mode 100644 package/lua-lunix/Config.in
+ create mode 100644 package/lua-lunix/lua-lunix.hash
+ create mode 100644 package/lua-lunix/lua-lunix.mk
+ create mode 100644 support/testing/tests/package/test_lua_lunix.py
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a0c1a6898..adfacecd3 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -236,6 +236,13 @@ config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
- 	  of the official Kodi github repo and its build is broken
- 	  with Kodi 19.x, so it was removed.
- 
-+config BR2_PACKAGE_LZLIB
-+	bool "lzlib package was removed"
-+	select BR2_PACKAGE_LUA_ZLIB
-+	select BR2_LEGACY
-+	help
-+	  The lzlib package was removed, use lua-zlib instead.
-+
- comment "Legacy options removed in 2021.02"
- 
- config BR2_PACKAGE_MPD_AUDIOFILE
 diff --git a/package/Config.in b/package/Config.in
-index 1abfd787f..66978ec45 100644
+index c59833700..c3fcfda74 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -708,7 +708,6 @@ menu "Lua libraries/modules"
- 	source "package/lutok/Config.in"
- 	source "package/luv/Config.in"
- 	source "package/luvi/Config.in"
--	source "package/lzlib/Config.in"
- 	source "package/orbit/Config.in"
- 	source "package/rings/Config.in"
- 	source "package/turbolua/Config.in"
-diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
-deleted file mode 100644
-index 59a2e6d5c..000000000
---- a/package/lzlib/Config.in
-+++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_LZLIB
--	bool "lzlib"
--	depends on BR2_PACKAGE_LUA
--	select BR2_PACKAGE_ZLIB
--	help
--	  This package provides a library to access zlib library
--	  functions and also to read/write gzip files using an
--	  interface similar to the base io package.
--
--	  https://github.com/LuaDist/lzlib
-diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
-deleted file mode 100644
-index 4bb4c52c8..000000000
---- a/package/lzlib/lzlib.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  cbb0cac5825e940b4ea2f31a336d2aaf6db39847d456920afd8e443804420dbb  lzlib-0.4.3.tar.gz
--sha256  f817d4a37077e94e9adf379f46ba5cc0b68775d7add2bbd5b2ca68ba140ad5bb  lzlib.c
-diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
-deleted file mode 100644
-index 74624d501..000000000
---- a/package/lzlib/lzlib.mk
-+++ /dev/null
-@@ -1,15 +0,0 @@
--################################################################################
--#
--# lzlib
--#
--################################################################################
--
--LZLIB_VERSION = 0.4.3
--LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
--LZLIB_DEPENDENCIES = lua zlib
--LZLIB_LICENSE = MIT
--LZLIB_LICENSE_FILES = lzlib.c
--LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
--	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
--
--$(eval $(cmake-package))
-diff --git a/support/testing/tests/package/test_lzlib.py b/support/testing/tests/package/test_lzlib.py
-deleted file mode 100644
-index 84e767913..000000000
---- a/support/testing/tests/package/test_lzlib.py
-+++ /dev/null
-@@ -1,14 +0,0 @@
--from tests.package.test_lua import TestLuaBase
--
--
--class TestLuaLzlib(TestLuaBase):
--    config = TestLuaBase.config + \
--        """
--        BR2_PACKAGE_LUA=y
--        BR2_PACKAGE_LZLIB=y
--        """
--
--    def test_run(self):
--        self.login()
--        self.module_test("zlib")
--        self.module_test("gzip")
+@@ -674,6 +674,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-livr-extra/Config.in"
+ 	source "package/lua-lpeg-patterns/Config.in"
+ 	source "package/lua-lunitx/Config.in"
++	source "package/lua-lunix/Config.in"
+ 	source "package/lua-lyaml/Config.in"
+ 	source "package/lua-markdown/Config.in"
+ 	source "package/lua-messagepack/Config.in"
+diff --git a/package/lua-lunix/0001-fix-with-uClibc.patch b/package/lua-lunix/0001-fix-with-uClibc.patch
+new file mode 100644
+index 000000000..f95de1b2e
+--- /dev/null
++++ b/package/lua-lunix/0001-fix-with-uClibc.patch
+@@ -0,0 +1,26 @@
++From ee41d97a80b978f54941ac6857c00b8a8f28de24 Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Sun, 6 Jun 2021 17:55:06 +0200
++Subject: [PATCH] fix with uClibc
++
++there is no sys_siglist
++---
++ lunix-rel-20170920/src/unix.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lunix-rel-20170920/src/unix.c b/lunix-rel-20170920/src/unix.c
++index 5f3a70a..e561ab2 100644
++--- a/lunix-rel-20170920/src/unix.c
+++++ b/lunix-rel-20170920/src/unix.c
++@@ -438,7 +438,7 @@
++ #endif
++ 
++ #ifndef HAVE_SYS_SIGLIST
++-#define HAVE_SYS_SIGLIST (!MUSL_MAYBE && !__sun && !_AIX)
+++#define HAVE_SYS_SIGLIST (!MUSL_MAYBE && !__sun && !_AIX && !__UCLIBC__)
++ #endif
++ 
++ #ifndef HAVE_UNLINKAT
++-- 
++2.30.2
++
+diff --git a/package/lua-lunix/Config.in b/package/lua-lunix/Config.in
+new file mode 100644
+index 000000000..ca9325a15
+--- /dev/null
++++ b/package/lua-lunix/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LUA_LUNIX
++	bool "lua-lunix"
++	help
++	  lunix is a bindings library module to common Unix system APIs.
++
++	  http://25thandclement.com/~william/projects/lunix.html
+diff --git a/package/lua-lunix/lua-lunix.hash b/package/lua-lunix/lua-lunix.hash
+new file mode 100644
+index 000000000..3cbf3481b
+--- /dev/null
++++ b/package/lua-lunix/lua-lunix.hash
+@@ -0,0 +1,3 @@
++# computed by luarocks/buildroot
++sha256 4a4007b394ae884e18e9d0319ea584e8b4a682d7bf8fa5b99c7eea9baf1e5ed6  lunix-20170920-1.src.rock
++sha256 9b74be104d59caa45bf3321ebe771f9cc7874209261a93f1cf971ceca44fbe03  lunix-rel-20170920/LICENSE
+diff --git a/package/lua-lunix/lua-lunix.mk b/package/lua-lunix/lua-lunix.mk
+new file mode 100644
+index 000000000..28cb2dc41
+--- /dev/null
++++ b/package/lua-lunix/lua-lunix.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# lua-lunix
++#
++################################################################################
++
++LUA_LUNIX_VERSION_UPSTREAM = 20170920
++LUA_LUNIX_VERSION = $(LUA_LUNIX_VERSION_UPSTREAM)-1
++LUA_LUNIX_NAME_UPSTREAM = lunix
++LUA_LUNIX_SUBDIR = lunix-rel-$(LUA_LUNIX_VERSION_UPSTREAM)
++LUA_LUNIX_LICENSE = MIT
++LUA_LUNIX_LICENSE_FILES = $(LUA_LUNIX_SUBDIR)/LICENSE
++
++$(eval $(luarocks-package))
+diff --git a/support/testing/tests/package/test_lua_lunix.py b/support/testing/tests/package/test_lua_lunix.py
+new file mode 100644
+index 000000000..ae0e3b260
+--- /dev/null
++++ b/support/testing/tests/package/test_lua_lunix.py
+@@ -0,0 +1,25 @@
++from tests.package.test_lua import TestLuaBase
++
++
++class TestLuaLunix(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUA=y
++        BR2_PACKAGE_LUA_LUNIX=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("unix")
++
++
++class TestLuajitLunix(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUAJIT=y
++        BR2_PACKAGE_LUA_LUNIX=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("unix")
 -- 
 2.30.2
