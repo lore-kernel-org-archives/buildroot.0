@@ -1,60 +1,230 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 13 Jun 2021 12:54:25 +0200
-Subject: [Buildroot] [PATCH for-next 1/2] package/gdb: enable gdbserver
- support for riscv
-In-Reply-To: <1efe6486-bcd9-3ddb-accd-1149c42ffc09@mind.be>
-References: <20210606150351.423542-1-romain.naour@gmail.com>
- <1efe6486-bcd9-3ddb-accd-1149c42ffc09@mind.be>
-Message-ID: <70ccde1c-f12f-fc1c-dec1-b1556ad76a5f@gmail.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Sun, 13 Jun 2021 14:25:25 +0200
+Subject: [Buildroot] [PATCH] board: Add support for terasic DE10 Nano
+Message-ID: <20210613122525.22499-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Le 13/06/2021 ? 12:19, Arnout Vandecappelle a ?crit?:
-> 
-> 
-> On 06/06/2021 17:03, Romain Naour wrote:
->> It turn out that gdbserver support for riscv is available since 10.1 release, since commit [1]
->>
->> When BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS is not enabled, gdb will use the stable version (9.x)
->> where gdbserver for riscv is not available.
->>
->> When BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS enabled, only allow gdb 10.1 in version choice and
->> allow enabling gdbserver for the target.
-> 
->  Instead of all this complexity, I think it would be easier to just force gdb to
-> version 10 on riscv:
-> 
-> config BR2_GDB_VERSION
->         string
->         default "arc-2020.09-release-gdb" if BR2_arc
->         default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
->         default "8.3.1"    if BR2_GDB_VERSION_8_3
->         default "9.2"      if BR2_GDB_VERSION_9_2 || (!BR2_PACKAGE_HOST_GDB &&
-> !BR2_riscv)
->         default "10.1"     if BR2_GDB_VERSION_10 || (!BR2_PACKAGE_HOST_GDB &&
-> BR2_riscv)
->         depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
-> 
->  IMHO that will make the maintainance easier going forward: when 10 becomes the
-> default, we can simply drop the riscv condition and nothing more needs to be done.
+Terasic DE10 Nano is an SoCFPGA cycloneV based board.
+References:
+- https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=205&No=1046
+- https://rocketboards.org/foswiki/Documentation/DE10NanoDevelopmentBoard
 
-I was not sure about restrict the gdb version for riscv just because gdb 10.1
-can provide gdbserver.
+Note:
+- there is no dts in kernel (mainline or intel), but since DE0 Nano Soc is
+  similar, the corresponding dts is usually used
+- Board integration in barebox is recent there is no tag with this support,
+  this why an commit hash is used.
 
-Alistair, is it ok for you if we only provide gdb 10.1 ?
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ .../de10nano_cyclone5/barebox-env/boot/mmc    |  8 +++
+ .../barebox-env/init/automount                |  5 ++
+ .../barebox-env/nv/boot.default               |  1 +
+ .../barebox-env/nv/linux.bootargs.console     |  1 +
+ board/terasic/de10nano_cyclone5/genimage.cfg  | 57 +++++++++++++++++++
+ board/terasic/de10nano_cyclone5/readme.txt    | 42 ++++++++++++++
+ configs/terasic_de10nano_cyclone5_defconfig   | 31 ++++++++++
+ 7 files changed, 145 insertions(+)
+ create mode 100644 board/terasic/de10nano_cyclone5/barebox-env/boot/mmc
+ create mode 100644 board/terasic/de10nano_cyclone5/barebox-env/init/automount
+ create mode 100644 board/terasic/de10nano_cyclone5/barebox-env/nv/boot.default
+ create mode 100644 board/terasic/de10nano_cyclone5/barebox-env/nv/linux.bootargs.console
+ create mode 100644 board/terasic/de10nano_cyclone5/genimage.cfg
+ create mode 100644 board/terasic/de10nano_cyclone5/readme.txt
+ create mode 100644 configs/terasic_de10nano_cyclone5_defconfig
 
-Best regards,
-Romain
-
-
-> 
->  Marked as Changes Requested.
-> 
->  Regards,
->  Arnout
-> 
+diff --git a/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc b/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc
+new file mode 100644
+index 0000000000..fed2b0b45d
+--- /dev/null
++++ b/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc
+@@ -0,0 +1,8 @@
++#!/bin/sh
++
++global.bootm.oftree="/boot/socfpga_cyclone5_de0_nano_soc.dtb"
++global.bootm.image="/boot/zImage"
++
++#bootargs-ip
++
++global.linux.bootargs.dyn.root="root=/dev/mmcblk0p3 rw rootwait"
+diff --git a/board/terasic/de10nano_cyclone5/barebox-env/init/automount b/board/terasic/de10nano_cyclone5/barebox-env/init/automount
+new file mode 100644
+index 0000000000..4092ecbaec
+--- /dev/null
++++ b/board/terasic/de10nano_cyclone5/barebox-env/init/automount
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++# SD card slot, first partition
++mkdir -p /mnt/mmcblk0p2
++automount -d /mnt/mmcblk0p2 'mount /dev/mmc0.1 /mnt/mmcblk0p2'
+diff --git a/board/terasic/de10nano_cyclone5/barebox-env/nv/boot.default b/board/terasic/de10nano_cyclone5/barebox-env/nv/boot.default
+new file mode 100644
+index 0000000000..61f529d69a
+--- /dev/null
++++ b/board/terasic/de10nano_cyclone5/barebox-env/nv/boot.default
+@@ -0,0 +1 @@
++mmc
+diff --git a/board/terasic/de10nano_cyclone5/barebox-env/nv/linux.bootargs.console b/board/terasic/de10nano_cyclone5/barebox-env/nv/linux.bootargs.console
+new file mode 100644
+index 0000000000..476b1fbe49
+--- /dev/null
++++ b/board/terasic/de10nano_cyclone5/barebox-env/nv/linux.bootargs.console
+@@ -0,0 +1 @@
++console=ttyS0,115200
+diff --git a/board/terasic/de10nano_cyclone5/genimage.cfg b/board/terasic/de10nano_cyclone5/genimage.cfg
+new file mode 100644
+index 0000000000..3261c62741
+--- /dev/null
++++ b/board/terasic/de10nano_cyclone5/genimage.cfg
+@@ -0,0 +1,57 @@
++image boot.vfat {
++	vfat {
++		file zImage {
++            image = "zImage"
++        }
++
++        file socfpga_cyclone5_de0_nano_soc.dtb {
++            image = "socfpga_cyclone5_de0_nano_soc.dtb"
++        }
++
++        file barebox.bin {
++            image = "barebox-socfpga-de10_nano.img"
++        }
++
++        file barebox.env {
++            image = "barebox-env"
++        }
++	}
++	size = 8M
++}
++
++image boot.img {
++	hdimage {
++		partition-table = "no"
++	}
++
++	partition spl {
++		in-partition-table = "no"
++		image = "barebox-socfpga-de10_nano-xload.img"
++		offset = 0
++		size = 64k
++	}
++
++	size = 1M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition spl {
++		partition-type = 0xa2
++		image = "boot.img"
++	}
++
++	partition boot {
++		partition-type = 0xc
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext2"
++		size = 500M
++	}
++}
+diff --git a/board/terasic/de10nano_cyclone5/readme.txt b/board/terasic/de10nano_cyclone5/readme.txt
+new file mode 100644
+index 0000000000..c5aafef320
+--- /dev/null
++++ b/board/terasic/de10nano_cyclone5/readme.txt
+@@ -0,0 +1,42 @@
++Terasic DE10 Nano Development Board
++
++Intro
++=====
++
++More information about this board can be found here:
++https://rocketboards.org/foswiki/Documentation/DE10NanoDevelopmentBoard
++
++Build
++=====
++
++First, load socrates config for buildroot
++
++    make terasic_de10nano_cyclone5_defconfig
++
++Build everything
++
++    make
++
++Following files will be generated in output/images
++
++.
++??? barebox-env
++??? barebox-socfpga-de10_nano.img
++??? barebox-socfpga-de10_nano-xload.img
++??? boot.img
++??? boot.vfat
++??? rootfs.ext2
++??? rootfs.ext4 -> rootfs.ext2
++??? rootfs.tar
++??? sdcard.img
++??? socfpga_cyclone5_de0_nano_soc.dtb
++??? zImage
++
++Creating bootable SD card
++=========================
++
++Simply invoke
++
++dd if=output/images/sdcard.img of=/dev/sdX
++
++Where X is your SD card device (not partition)
+diff --git a/configs/terasic_de10nano_cyclone5_defconfig b/configs/terasic_de10nano_cyclone5_defconfig
+new file mode 100644
+index 0000000000..85e7d15298
+--- /dev/null
++++ b/configs/terasic_de10nano_cyclone5_defconfig
+@@ -0,0 +1,31 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++BR2_ARM_FPU_NEON=y
++BR2_KERNEL_HEADERS_5_11=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/terasic/de10nano_cyclone5/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/altera-opensource/linux-socfpga.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-5.11_21.06.01_pr"
++BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="socfpga_cyclone5_de0_nano_soc"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_BAREBOX=y
++BR2_TARGET_BAREBOX_CUSTOM_GIT=y
++BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL="git://git.pengutronix.de/barebox"
++BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION="ac0d216bd657d044ea7aa22b7f2138752f3c6629"
++BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="socfpga"
++BR2_TARGET_BAREBOX_IMAGE_FILE="images/barebox-socfpga-de10_nano.img"
++BR2_TARGET_BAREBOX_CUSTOM_ENV=y
++BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH="board/terasic/de10nano_cyclone5/barebox-env"
++BR2_TARGET_BAREBOX_AUX=y
++BR2_TARGET_BAREBOX_AUX_BOARD_DEFCONFIG="socfpga-xload-2"
++BR2_TARGET_BAREBOX_AUX_IMAGE_FILE="images/barebox-socfpga-de10_nano-xload.img"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
+-- 
+2.31.1
