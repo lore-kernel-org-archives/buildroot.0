@@ -1,42 +1,107 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 13 Jun 2021 12:15:47 +0200
-Subject: [Buildroot] [git commit] package/gdb: improve gdb version choice
- comment
-Message-ID: <20210613094506.45A518B876@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 13 Jun 2021 12:19:41 +0200
+Subject: [Buildroot] [PATCH for-next 1/2] package/gdb: enable gdbserver
+ support for riscv
+In-Reply-To: <20210606150351.423542-1-romain.naour@gmail.com>
+References: <20210606150351.423542-1-romain.naour@gmail.com>
+Message-ID: <1efe6486-bcd9-3ddb-accd-1149c42ffc09@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4de251ea41d109601ce84317b477a83f52629c15
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The comment has been introduced by commit [1] where the latest
-gdb version has been used when cross-gdb is not enabled.
 
-But since then the gdb package doesn't use the latest gdb version when
-cross-gdb is not enabled. It's the "stable" version.
+On 06/06/2021 17:03, Romain Naour wrote:
+> It turn out that gdbserver support for riscv is available since 10.1 release, since commit [1]
+> 
+> When BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS is not enabled, gdb will use the stable version (9.x)
+> where gdbserver for riscv is not available.
+> 
+> When BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS enabled, only allow gdb 10.1 in version choice and
+> allow enabling gdbserver for the target.
 
-[1] https://git.buildroot.net/buildroot/commit/?id=fda818390b5e6a585608f4523356eafa0c587f53
+ Instead of all this complexity, I think it would be easier to just force gdb to
+version 10 on riscv:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/gdb/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+config BR2_GDB_VERSION
+        string
+        default "arc-2020.09-release-gdb" if BR2_arc
+        default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
+        default "8.3.1"    if BR2_GDB_VERSION_8_3
+        default "9.2"      if BR2_GDB_VERSION_9_2 || (!BR2_PACKAGE_HOST_GDB &&
+!BR2_riscv)
+        default "10.1"     if BR2_GDB_VERSION_10 || (!BR2_PACKAGE_HOST_GDB &&
+BR2_riscv)
+        depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 07e75b2c0e..21e6b34caa 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -81,7 +81,7 @@ endchoice
- 
- endif
- 
--# If cross-gdb is not enabled, the latest working version is chosen.
-+# If cross-gdb is not enabled, the latest stable version is chosen.
- config BR2_GDB_VERSION
- 	string
- 	default "arc-2020.09-release-gdb" if BR2_arc
+ IMHO that will make the maintainance easier going forward: when 10 becomes the
+default, we can simply drop the riscv condition and nothing more needs to be done.
+
+ Marked as Changes Requested.
+
+ Regards,
+ Arnout
+
+> 
+> [1] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=bf84f7066626c78884436e1c39fb60f04c665f21
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> git tag --contains bf84f7066626c78884436e1c39fb60f04c665f21
+> returns gdb-10.1-release tag as the oldest containing this commit.
+> ---
+>  package/gdb/Config.in      | 6 +++---
+>  package/gdb/Config.in.host | 3 ++-
+>  2 files changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+> index 262740fc4c..68a24e0b36 100644
+> --- a/package/gdb/Config.in
+> +++ b/package/gdb/Config.in
+> @@ -19,8 +19,8 @@ config BR2_PACKAGE_GDB
+>  	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> -	# no gdbserver on riscv
+> -	select BR2_PACKAGE_GDB_DEBUGGER if BR2_riscv
+> +	# no gdbserver on riscv until 10.1 release
+> +	select BR2_PACKAGE_GDB_DEBUGGER if BR2_riscv && !BR2_GDB_VERSION_10
+>  	# When the external toolchain gdbserver is copied to the
+>  	# target, we don't allow building a separate gdbserver. The
+>  	# one from the external toolchain should be used.
+> @@ -47,7 +47,7 @@ if BR2_PACKAGE_GDB
+>  config BR2_PACKAGE_GDB_SERVER
+>  	bool "gdbserver"
+>  	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+> -	depends on !BR2_riscv
+> +	depends on !BR2_riscv || BR2_riscv && BR2_GDB_VERSION_10
+>  	help
+>  	  Build the gdbserver stub to run on the target.
+>  	  A full gdb is needed to debug the progam.
+> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+> index 07e75b2c0e..5aead236d0 100644
+> --- a/package/gdb/Config.in.host
+> +++ b/package/gdb/Config.in.host
+> @@ -4,7 +4,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
+>  	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+>  	depends on !BR2_microblaze
+>  	depends on !BR2_or1k
+> -	depends on !BR2_riscv
+>  	depends on !BR2_nds32
+>  
+>  comment "Host GDB Options"
+> @@ -70,9 +69,11 @@ choice
+>  
+>  config BR2_GDB_VERSION_8_3
+>  	bool "gdb 8.3.x"
+> +	depends on !BR2_riscv
+>  
+>  config BR2_GDB_VERSION_9_2
+>  	bool "gdb 9.2.x"
+> +	depends on !BR2_riscv
+>  
+>  config BR2_GDB_VERSION_10
+>  	bool "gdb 10.x"
+> 
