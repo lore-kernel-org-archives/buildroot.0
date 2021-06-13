@@ -1,25 +1,61 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 13 Jun 2021 20:23:58 +0000
-Subject: [Buildroot] [Bug 13841] qtwebengine5 build issue with pkgconf
-In-Reply-To: <bug-13841-163@https.bugs.busybox.net/>
-References: <bug-13841-163@https.bugs.busybox.net/>
-Message-ID: <bug-13841-163-mnymUiCdqG@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 13 Jun 2021 23:00:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtasn1: security bump to version
+ 4.17.0
+Message-ID: <20210613210013.1565385-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13841
+- Fix some clang issues due to illegal pointers, thanks to Stefan Weil.
+- Fix memory leak caught by oss-fuzz, thanks to Dmitry Baryshkov.
+- Fix bugs unveiled by Static Analysis, reported by Simo Sorce.
 
---- Comment #2 from Peter Seiderer <ps.report@gmx.net> ---
-Thanks for the bug report, but sorry, no unknown failure...., and no
-easy/perfect solution to fix it yet, see [1] for discussion (and workaround
-patch)...
+- LICENSE has been renamed to COPYING since
+  https://gitlab.com/gnutls/libtasn1/-/commit/a72a8d1ef13436bf8916097f11c3fc90f07ba911
 
-[1]
-https://patchwork.ozlabs.org/project/buildroot/patch/20201221203952.22168-3-ps.report at gmx.net/
+https://gitlab.com/gnutls/libtasn1/-/blob/v4.17.0/NEWS
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libtasn1/libtasn1.hash | 6 +++---
+ package/libtasn1/libtasn1.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
+index 93cfa1a68b..fc3610b965 100644
+--- a/package/libtasn1/libtasn1.hash
++++ b/package/libtasn1/libtasn1.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.16.0.tar.gz.sig
+-sha256  0e0fb0903839117cb6e3b56e68222771bebf22ad7fc2295a0ed7d576e8d4329d  libtasn1-4.16.0.tar.gz
++# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.17.0.tar.gz.sig
++sha256  ece7551cea7922b8e10d7ebc70bc2248d1fdd73351646a2d6a8d68a9421c45a5  libtasn1-4.17.0.tar.gz
+ # Locally calculated
+-sha256  7446831f659f7ebfd8d497acc7f05dfa8e31c6cb6ba1b45df33d4895ab80f5a6  LICENSE
++sha256  7446831f659f7ebfd8d497acc7f05dfa8e31c6cb6ba1b45df33d4895ab80f5a6  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  doc/COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index a354716824..d9d14fde83 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBTASN1_VERSION = 4.16.0
++LIBTASN1_VERSION = 4.17.0
+ LIBTASN1_SITE = $(BR2_GNU_MIRROR)/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison host-pkgconf
+ LIBTASN1_LICENSE = GPL-3.0+ (tests, tools), LGPL-2.1+ (library)
+-LIBTASN1_LICENSE_FILES = LICENSE doc/COPYING doc/COPYING.LESSER
++LIBTASN1_LICENSE_FILES = COPYING doc/COPYING doc/COPYING.LESSER
+ LIBTASN1_CPE_ID_VENDOR = gnu
+ LIBTASN1_INSTALL_STAGING = YES
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.30.2
