@@ -1,12 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Jun 2021 18:33:37 +0200
-Subject: [Buildroot] [PATCH for-next 1/2] package/gdb: enable gdbserver
- support for riscv
-In-Reply-To: <70ccde1c-f12f-fc1c-dec1-b1556ad76a5f@gmail.com>
-References: <20210606150351.423542-1-romain.naour@gmail.com>
- <1efe6486-bcd9-3ddb-accd-1149c42ffc09@mind.be>
- <70ccde1c-f12f-fc1c-dec1-b1556ad76a5f@gmail.com>
-Message-ID: <4138f0fa-a6b7-310e-3376-9d951d97a2dc@mind.be>
+Date: Sun, 13 Jun 2021 18:35:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: bump version to
+ 20210524
+In-Reply-To: <20210524180552.17283-1-petr.vorel@gmail.com>
+References: <20210524180552.17283-1-petr.vorel@gmail.com>
+Message-ID: <3f2ba203-bd4e-aa64-67e3-a472d82d3d8a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,67 +13,47 @@ To: buildroot@busybox.net
 
 
 
-On 13/06/2021 12:54, Romain Naour wrote:
-> Hello Arnout,
+On 24/05/2021 20:05, Petr Vorel wrote:
+> Add locally computed sha256 (+ keep sha1 from github checksum file).
 > 
-> Le 13/06/2021 ? 12:19, Arnout Vandecappelle a ?crit?:
->>
->>
->> On 06/06/2021 17:03, Romain Naour wrote:
->>> It turn out that gdbserver support for riscv is available since 10.1 release, since commit [1]
->>>
->>> When BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS is not enabled, gdb will use the stable version (9.x)
->>> where gdbserver for riscv is not available.
->>>
->>> When BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS enabled, only allow gdb 10.1 in version choice and
->>> allow enabling gdbserver for the target.
->>
->>  Instead of all this complexity, I think it would be easier to just force gdb to
->> version 10 on riscv:
->>
->> config BR2_GDB_VERSION
->>         string
->>         default "arc-2020.09-release-gdb" if BR2_arc
->>         default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
->>         default "8.3.1"    if BR2_GDB_VERSION_8_3
->>         default "9.2"      if BR2_GDB_VERSION_9_2 || (!BR2_PACKAGE_HOST_GDB &&
->> !BR2_riscv)
->>         default "10.1"     if BR2_GDB_VERSION_10 || (!BR2_PACKAGE_HOST_GDB &&
->> BR2_riscv)
->>         depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
->>
->>  IMHO that will make the maintainance easier going forward: when 10 becomes the
->> default, we can simply drop the riscv condition and nothing more needs to be done.
+> sysinfo.h fix patch is still needed (until Buildroot MUSL toolchain gets
+> updated).
 > 
-> I was not sure about restrict the gdb version for riscv just because gdb 10.1
-> can provide gdbserver.
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
- Wow, hang on, I apparently misunderstood something here...
-
- Now I see... It's just gdbserver that wasn't available before 10.1.
-gdb-on-target was already available.. In that case, my simplification doesn't
-apply indeed.
-
- Although... My suggestion just means that for riscv, we always use gdb 10.1 (on
-target) instead of gdb 9. I don't see a big problem with that. Note that for gdb
-for target, we never had a version selection. So the only thing that happens is
-that riscv now already uses a gdb 10 on target, while the rest will only start
-using gdb 10 on target a few months from now when gdb 11 is released. Honestly,
-I think that's fine.
+ Applied to master, thanks.
 
  Regards,
  Arnout
 
+> ---
+>  package/ltp-testsuite/ltp-testsuite.hash | 5 +++--
+>  package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 > 
-> Alistair, is it ok for you if we only provide gdb 10.1 ?
+> diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+> index f0b2c89704..ed2a50cd4f 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.hash
+> +++ b/package/ltp-testsuite/ltp-testsuite.hash
+> @@ -1,4 +1,5 @@
+> -# From: https://github.com/linux-test-project/ltp/releases/download/20210121/ltp-full-20210121.tar.xz.sha1
+> -sha1 ac9c1c711aed4319c5fbd0b665d36f75236a4ec2  ltp-full-20210121.tar.xz
+> +# From: https://github.com/linux-test-project/ltp/releases/download/20210524/ltp-full-20210524.tar.xz.sha1
+> +sha1 08d84f8ac3ba0c800f3070768c651703869105d7  ltp-full-20210524.tar.xz
+>  # Locally computed
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> +sha256  831678c64b85a8c24957c71632752537b2266890f2d2f352da9ed0ec45458189  ltp-full-20210524.tar.xz
+> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> index 43ee134d1c..f3f6c74fcc 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.mk
+> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LTP_TESTSUITE_VERSION = 20210121
+> +LTP_TESTSUITE_VERSION = 20210524
+>  LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+>  LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+>  
 > 
-> Best regards,
-> Romain
-> 
-> 
->>
->>  Marked as Changes Requested.
->>
->>  Regards,
->>  Arnout
->>
