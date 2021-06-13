@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BFA4C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:04:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B5CDC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:04:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 392D660F70
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:04:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 392D660F70
+	by mail.kernel.org (Postfix) with ESMTPS id 4BB4F60F93
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:04:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4BB4F60F93
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0602D4011D;
-	Tue,  3 Aug 2021 23:04:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2619C605BF;
+	Tue,  3 Aug 2021 23:04:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r3_3ZAh1CZkS; Tue,  3 Aug 2021 23:04:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uRr-WAA4PXUP; Tue,  3 Aug 2021 23:04:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F3A5421E5;
-	Tue,  3 Aug 2021 23:04:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C79A605BB;
+	Tue,  3 Aug 2021 23:04:34 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1912D1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 24E411BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 42C6D40654
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4346F40655
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iGug_CU2gLmF for <buildroot@lists.busybox.net>;
+ with ESMTP id LnTY_mX_UG38 for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7126740633
+ by smtp2.osuosl.org (Postfix) with ESMTP id E13A74063C
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C7C7E873E2; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+ id 3FEA9873E2; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 13 Jun 2021 12:15:47 +0200
+Date: Sun, 13 Jun 2021 18:43:45 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8eac45e6cf59491dde4a1deac888b0db89ccd5cf
-X-Git-Newrev: 4de251ea41d109601ce84317b477a83f52629c15
+X-Git-Oldrev: 4428c5bc2f25df600a028945d30ac60b93886c65
+X-Git-Newrev: 72fdd27b87942ac7f99730afe02b58638d105677
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210950.C7C7E873E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gdb: improve gdb
- version choice comment
+Message-Id: <20210803210951.3FEA9873E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fb-test-app: bump
+ version to 1.3.1 and update project URL
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,37 +70,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4de251ea41d109601ce84317b477a83f52629c15
+commit: https://git.buildroot.net/buildroot/commit/?id=72fdd27b87942ac7f99730afe02b58638d105677
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The comment has been introduced by commit [1] where the latest
-gdb version has been used when cross-gdb is not enabled.
+- bump version to 1.1.1
+- update project URL
 
-But since then the gdb package doesn't use the latest gdb version when
-cross-gdb is not enabled. It's the "stable" version.
-
-[1] https://git.buildroot.net/buildroot/commit/?id=fda818390b5e6a585608f4523356eafa0c587f53
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gdb/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/fb-test-app/fb-test-app.hash | 2 +-
+ package/fb-test-app/fb-test-app.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 07e75b2c0e..21e6b34caa 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -81,7 +81,7 @@ endchoice
+diff --git a/package/fb-test-app/fb-test-app.hash b/package/fb-test-app/fb-test-app.hash
+index 06611db799..3068caf278 100644
+--- a/package/fb-test-app/fb-test-app.hash
++++ b/package/fb-test-app/fb-test-app.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6baf6b45968d0bb9a5527c6c4bf18661e9f9eb9be973a6d1952c38168c90d58f  fb-test-app-rosetta-1.1.0.tar.gz
++sha256  45d490ed78a6e4425d9a760e81e99dc503af01704e17ab5bf186b87a31c5e3db  fb-test-app-rosetta-1.1.1.tar.gz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/fb-test-app/fb-test-app.mk b/package/fb-test-app/fb-test-app.mk
+index 1ab7b2f219..1be59a4207 100644
+--- a/package/fb-test-app/fb-test-app.mk
++++ b/package/fb-test-app/fb-test-app.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- endif
+-FB_TEST_APP_VERSION = rosetta-1.1.0
+-FB_TEST_APP_SITE = $(call github,prpplague,fb-test-app,$(FB_TEST_APP_VERSION))
++FB_TEST_APP_VERSION = rosetta-1.1.1
++FB_TEST_APP_SITE = $(call github,andy-shev,fb-test-app,$(FB_TEST_APP_VERSION))
+ FB_TEST_APP_LICENSE = GPL-2.0
+ FB_TEST_APP_LICENSE_FILES = COPYING
  
--# If cross-gdb is not enabled, the latest working version is chosen.
-+# If cross-gdb is not enabled, the latest stable version is chosen.
- config BR2_GDB_VERSION
- 	string
- 	default "arc-2020.09-release-gdb" if BR2_arc
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
