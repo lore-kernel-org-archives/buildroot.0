@@ -1,77 +1,82 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 13 Jun 2021 13:00:05 +0300
-Subject: [Buildroot] Buildroot issue since 9 June 2021 ?
-In-Reply-To: <CACaKL1zA=yzvbKu7eSDiZ7hx_M2BnfPw+pMZ8+sB=FiAzse+8Q@mail.gmail.com>
-References: <CACaKL1wUo0VwDyXi--E6n-sdpbTtrzdr3XDdfHjgn4TV1D5=2w@mail.gmail.com>
- <87lf7e9lip.fsf@tarshish>
- <CACaKL1zA=yzvbKu7eSDiZ7hx_M2BnfPw+pMZ8+sB=FiAzse+8Q@mail.gmail.com>
-Message-ID: <87fsxm9ja2.fsf@tarshish>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 13 Jun 2021 11:57:47 +0200
+Subject: [Buildroot] [git commit] package/daemon: fix build without
+ BR2_ENABLE_RUNTIME_DEBUG
+Message-ID: <20210613093141.4668788591@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jacques,
+commit: https://git.buildroot.net/buildroot/commit/?id=ea02ac3e061b36da1bfc0277b1f84126cd96328f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Jun 13 2021, Jacques Samoun wrote:
-> Brilliant,
-> I applied manually the patch and it allowed to come over this !
-> Then, it failed a bit further with another package (daemon) but i think i
-> managed to fix this as well.
+Since commit 5a8c50fe05afa ("core: enable 'NDEBUG' unless
+BR2_ENABLE_RUNTIME_DEBUG is set"), NDEBUG is defined in compile flags
+when BR2_ENABLE_RUNTIME_DEBUG is not enabled. Add a patch to make the
+daemon package build with NDEBUG as it should.
 
-For the daemon build failure there is another pending patch:
+Fixes:
+http://autobuild.buildroot.net/results/995ef1b5d9fce05881b2a41025916fa45b68a9bc/
+http://autobuild.buildroot.net/results/98cd9fb348d6cfe676667205b1f79ec2cd1490de/
+http://autobuild.buildroot.net/results/a7c51e6f59656d8c1e1c82a7129a670a68eb8a62/
 
-  http://patchwork.ozlabs.org/project/buildroot/patch/59a8a19501b670fa04f4db4a5b36c318d61c8795.1622722953.git.baruch at tkos.co.il/
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .../0002-Fix-build-with-NDEBUG-defined.patch       | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-> Thank you,
-> Jacques
-> PS: also from Yokneam :)
-
-Currently working from Maale Gilboa (home).
-
-baruch
-
-> On Sun, Jun 13, 2021 at 12:11 PM Baruch Siach <baruch@tkos.co.il> wrote:
->
->> Hi Jacques,
->>
->> On Sun, Jun 13 2021, Jacques Samoun wrote:
->> > i noticed that, since Thurday 9th June, my BR based project could not
->> build
->> > anymore.
->> > It seems that I was able to build till tag "2021.05" (and all the rc's
->> > before) but not anymore since then.
->> >
->> > My build fails on package MTD 2.1.2, where it could not install to target
->> >
->> > /bin/install -D -m 0755
->> > /home/jsadva/work/buildroot/output/build/mtd-2.1.2/ubihealthd
->> > /home/jsadva/buildroot/output/target/usr/sbin/ubihealthd
->> > /bin/install: cannot stat
->> > '/home/jsadva/work/buildroot/output/build/mtd-2.1.2/ubihealthd': No such
->> > file or directory
->> > make[1]: *** [package/pkg-generic.mk:341:
->> >
->> /home/jsadva/work/buildroot/output/build/mtd-2.1.2/.stamp_target_installed]
->> > Error 1
->> >
->> > Of course, the buildroot "pull" is the only change to my environment,
->> > everything else unchanged (out of tree building)
->> > In the bug tracker, i saw a recently logged issue which is quite similar.
->> >
->> > Has somebody faced this recently ?
->>
->> You might want to try this patch:
->>
->>
->> http://patchwork.ozlabs.org/project/buildroot/patch/20210609234819.1860554-2-mmayer at broadcom.com/
->>
->> Or just enable BR2_PACKAGE_MTD_UBIFS_UTILS.
->>
->> baruch
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/daemon/0002-Fix-build-with-NDEBUG-defined.patch b/package/daemon/0002-Fix-build-with-NDEBUG-defined.patch
+new file mode 100644
+index 0000000000..e99e9d8ed7
+--- /dev/null
++++ b/package/daemon/0002-Fix-build-with-NDEBUG-defined.patch
+@@ -0,0 +1,46 @@
++From fc84d8d572ffcecb533fd6d6d025abea12ce027e Mon Sep 17 00:00:00 2001
++Message-Id: <fc84d8d572ffcecb533fd6d6d025abea12ce027e.1622722814.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Thu, 3 Jun 2021 15:01:10 +0300
++Subject: [PATCH] Fix build with NDEBUG defined
++
++Build with NDEBUG fails because the debug() macro becomes empty. This
++creates invalid syntax with the debug() call is the only statement in
++the body of a 'for' loop.
++
++This fixes build failures like:
++
++daemon.c: In function 'show':
++daemon.c:3607:2: error: expected expression before '}' token
++  }
++  ^
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/raforg/daemon/pull/3
++
++ libslack/err.h | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/libslack/err.h b/libslack/err.h
++index 106bdb01e074..7acfbe46d60a 100644
++--- a/libslack/err.h
+++++ b/libslack/err.h
++@@ -40,10 +40,10 @@
++ #undef check
++ 
++ #ifdef NDEBUG
++-#define debug(args)
++-#define vdebug(args)
++-#define debugsys(args)
++-#define vdebugsys(args)
+++#define debug(args) do {} while (0);
+++#define vdebug(args) do {} while (0);
+++#define debugsys(args) do {} while (0);
+++#define vdebugsys(args) do {} while (0);
++ #define check(cond, mesg) (void_cast(0))
++ #else
++ #define debug(args) debugf args;
++-- 
++2.30.2
++
