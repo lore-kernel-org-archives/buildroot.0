@@ -1,100 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Jun 2021 10:46:14 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2021.02.3
-Message-ID: <20210613081541.0524E7F88D@busybox.osuosl.org>
+Date: Sun, 13 Jun 2021 10:42:59 +0200
+Subject: [Buildroot] [git commit] Update for 2021.02.3
+Message-ID: <20210613081540.ECE3D812BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbce7265515ab28b177e97fa655bd1f51eb1254e
+commit: https://git.buildroot.net/buildroot/commit/?id=339810921beb1899e93caedd0f0b6a27e1aa760b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5293208a57ce78f9fc958704d7df52f28532cde6)
+[Peter: drop Makefile change]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 540b973e13..d9ed3e6e61 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/CHANGES b/CHANGES
+index c7ae5fbfc3..91487cc058 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -144,6 +144,51 @@
+ 	#13751: libopenssl (static): huge drop in performance in newer ..
+ 	#13771: package htop has undeclared dependency on host python
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2021.02.2</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2021.02.3</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2021.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2021.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2021.02.2.tar.gz">buildroot-2021.02.2.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2021.02.2.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2021.02.3.tar.gz">buildroot-2021.02.3.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2021.02.3.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2021.02.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.02.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2021.02.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.02.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2021.02.2.tar.bz2">buildroot-2021.02.2.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2021.02.2.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2021.02.3.tar.bz2">buildroot-2021.02.3.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2021.02.3.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index f2eef15c31..9c8e63c852 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2021.02.3 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>12 June 2021</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2021.02.3 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2021.02.2 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.02.3">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2021-June/312591.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2021.02.3.tar.bz2">2021.02.3 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2021.02.3, released June 12th, 2021
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	CPE meta data has been added for a large number of packages
++
++	Updated/fixed packages: acpid, apache, apcupsd, assimp, bird,
++	bitcoin, blktrace, boost, capnproto, chrony, dc3dd, dhcp,
++	directfb, dmalloc, docker-engine, ebtables, efibootmgr,
++	enlightenment, enscript, environment-setup, exempi, expat,
++	findutils, flatcc, fluidsynth, frr, gdb, go, gptfdisk, grpc,
++	gst1-plugins-bad, gst1-rtsp-server, gstreamer1, gupnp,
++	hostapd, hwloc, i2c-tools, iftop, imagemagick, imx-gpu-viv,
++	intel-mediadriver, intel-microcode, jquery-validation,
++	keepalived, kodi, less, libcamera, libcurl, libcutl, libesmtp,
++	libeXosip2, libffi, libfuse, libfuse3, libgeos, libgtk2,
++	libgtk3, libical, libidn, libidn2, libkcapi, libldns, libmms,
++	libmodbus, libmspack, libnids, libopenh264, liboping, libraw,
++	librelp, libsamplerate, libtirpc, libusb, libuv, libxcb,
++	libxml2, libxslt, live555, llvm, lmbench, localedef,
++	lttng-tools, lvm2, lz4, mesa3d, mimic, mini-snmpd, minidlna,
++	minissdpd, minizip, mono-gtksharp3, mpg123, mpv, msmtp, musl,
++	mutt, nasm, nbd, netperf, netsurf, nginx, odb, opencv3,
++	openssh, opentyrian, oprofile, p7zip, paho-mqtt-c, perl,
++	php-imagick, pifmrds, picocom, pigz, pngquant, poco,
++	postgresql, prosody, proxychains-ng, pulseaudio, putty, pwgen,
++	python-autobahn, python-bluezero, python-engineio,
++	python-keyring, python-pillow, python-requests, python-tqdm,
++	qemu, qpdf, qt5base, redis, refpolicy, rt-tests, runc,
++	shellinabox, squid, strace, supervisor, synergy, taglib,
++	tclap, terminology, thermald, tini, tinyproxy, tinyxml2,
++	tpm2-tss, uclibc, udisks, uhd, unscd, vlc, waylandpp,
++	webkitgtk, weston, wireshark, wpa_supplicant, wpewebkit,
++	xlib_libdmx, xlib_libFS, xlib_libICE, xlib_libX11,
++	xlib_libXcursor, xlib_libXdmcp, xlib_libXext, xlib_libXfixes,
++	xlib_libXfont2, xlib_libXinerama, xlib_libXpm, xlib_libXres,
++	xlib_libXt, xlib_libXtst, xlib_libXxf86dga, xlib_libXxf86vm,
++	xterm
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#13781: isc dhcp-server package don't create file /usr/bin/dhcpd
++	#13801: toolchainfile.cmake CMAKE_BUILD_TYPE
++	#13806: Building host-localedef fails on fedora 34/gcc 11
++
+ 2021.02.2, released May 12th, 2021
+ 
+ 	Important / security related fixes.
