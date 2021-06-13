@@ -1,63 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Jun 2021 09:31:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pppd: requires DES support in
- openssl
-In-Reply-To: <20210612214720.655521-1-fontaine.fabrice@gmail.com>
-References: <20210612214720.655521-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210613073135.GO168928@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 13 Jun 2021 10:46:14 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2021.02.3
+Message-ID: <20210613081541.0524E7F88D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=dbce7265515ab28b177e97fa655bd1f51eb1254e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-06-12 23:47 +0200, Fabrice Fontaine spake thusly:
-> Enable DES in openssl to fix build failure raised since commit
-> a83d41867c8d69a77d5cd0a665aa216af5340359
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/3cd38e6dfd5f94f0bd1689e7db4ea1d723dd2a80
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/pppd/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/pppd/Config.in b/package/pppd/Config.in
-> index 7db5674bf1..3e7759c87c 100644
-> --- a/package/pppd/Config.in
-> +++ b/package/pppd/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_PPPD
->  	depends on !BR2_TOOLCHAIN_USES_MUSL # Use __P() macro all over the tree
->  	depends on BR2_USE_MMU
->  	select BR2_PACKAGE_OPENSSL if BR2_TOOLCHAIN_USES_GLIBC
-> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-That is not sufficient: the openssl is only selected for glibc-based
-toolchains, so we should not enable the option otherwise.
-
-Applied to master with the above fixed, thanks.
-
-Regards,
-Yann E. MORIN.
-
->  	help
->  	  An implementation of the Point-to-point protocol.
->  
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 540b973e13..d9ed3e6e61 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
+ 
+-      <h3 style="text-align: center;">Latest long term support release: <b>2021.02.2</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2021.02.3</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2021.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2021.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2021.02.2.tar.gz">buildroot-2021.02.2.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2021.02.2.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2021.02.3.tar.gz">buildroot-2021.02.3.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2021.02.3.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2021.02.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2021.02.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2021.02.2.tar.bz2">buildroot-2021.02.2.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2021.02.2.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2021.02.3.tar.bz2">buildroot-2021.02.3.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2021.02.3.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index f2eef15c31..9c8e63c852 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2021.02.3 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>12 June 2021</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2021.02.3 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2021.02.2 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.02.3">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2021-June/312591.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2021.02.3.tar.bz2">2021.02.3 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
