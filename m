@@ -1,31 +1,40 @@
-From: D. Olsson <hi@senzilla.io>
-Date: Mon, 14 Jun 2021 10:06:34 +0000
-Subject: [Buildroot] [PATCH v3 1/1] package/bitcoin: unset the NDEBUG
- flag
-In-Reply-To: <20210613195850.GT168928@scaer>
-References: <ZbTvPhursXFsHDblON1mtNTQnG937Il2N0wYa3ReI@cp4-web-037.plabs.ch>
- <20210613195850.GT168928@scaer>
-Message-ID: <ZTnoZb2MMbi5Z7xbG_3OKXXEj07hBkAAiKJqWo8-ke0zvQ3NE7ETdQHmw4oDe6M6YEnyDdQxIGltbNk15VM_w7hY-F7CQq8U-rG5VWRj7Uk=@senzilla.io>
+From: John Keeping <john@metanate.com>
+Date: Mon, 14 Jun 2021 11:42:10 +0100
+Subject: [Buildroot] [PATCH] package/cryptsetup: fix tmpfiles.d setup
+Message-ID: <20210614104210.2100899-1-john@metanate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+The configure script uses pkg-config to detect the location of
+tmpfiles.d but imposes an unspecified ordering dependency with systemd.
+Instead of relying on systemd being built before cryptsetup, set the
+directory path explcitly, and ensure it is not set when systemd-tmpfiles
+is disabled.
 
-On Sunday, June 13th, 2021 at 9:58 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ package/cryptsetup/cryptsetup.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
->> Signed-off-by: Dick Olsson hi at senzilla.io
-> Applied to master, thanks.
->
-> Regards,
-> Yann E. MORIN.
-
-Should we apply this to the 'next' branch as well?
-The bitcoin build is currently broken there.
-But I'm not sure exactly how the 'master' and 'next'
-branches are managed?
-
-Cheers,
-D. Olsson
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index cd5883d0b4..eee84a7958 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -33,6 +33,12 @@ else
+ CRYPTSETUP_CONF_OPTS += --with-crypto_backend=kernel
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
++CRYPTSETUP_CONF_OPTS += --with-tmpfilesdir=/usr/lib/tmpfiles.d
++else
++CRYPTSETUP_CONF_OPTS += --with-tmpfilesdir=no
++endif
++
+ HOST_CRYPTSETUP_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-lvm2 \
+-- 
+2.32.0
