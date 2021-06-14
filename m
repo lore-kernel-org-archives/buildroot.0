@@ -1,265 +1,315 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 14 Jun 2021 23:47:38 +0200
-Subject: [Buildroot] [PATCH v1 2/2] package/mesa3d: gallium/kmsro
- drivers require dri3 for X11
-In-Reply-To: <d7dd816f-fe5a-3cc5-0edc-a894bb7bb66e@mind.be>
-References: <20210612223011.26118-1-ps.report@gmx.net>
- <20210612223011.26118-2-ps.report@gmx.net>
- <d7dd816f-fe5a-3cc5-0edc-a894bb7bb66e@mind.be>
-Message-ID: <20210614234738.5ef2e6a5@gmx.net>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 14 Jun 2021 23:47:39 +0200
+Subject: [Buildroot] [PATCH v2 5/5] package/zstd: Add option for cli
+ binary
+In-Reply-To: <1c5020ee-d779-2c8d-e6ea-2bc6e7bd2d9f@mind.be>
+References: <20210525172652.821351-1-nolange79@gmail.com>
+ <20210525172652.821351-5-nolange79@gmail.com>
+ <CAAXf6LUvCxZ_o2T0puJZ8ybDOyh20303-tXWLsgh3HNqt_OvrQ@mail.gmail.com>
+ <CADYdroPhUpEKwZhKWH7kw8VjDQxN5yXiRrS3CXMP59Dzj4dvLg@mail.gmail.com>
+ <1c5020ee-d779-2c8d-e6ea-2bc6e7bd2d9f@mind.be>
+Message-ID: <CADYdroPnDVLtebqbg3CshBxyQmTsNCOJzZ_h4uyt4Y8sH04aeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
-
-On Sun, 13 Jun 2021 11:33:52 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
-
-> On 13/06/2021 00:30, Peter Seiderer wrote:
-> > - add upstream patch 0005-meson-kmsro-require-dri3-for-X11.patch
-> >   ([1])
-> >
-> > - simplfy libxshmfence dependency, always depend on it if selected
+Am Mo., 14. Juni 2021 um 22:20 Uhr schrieb Arnout Vandecappelle
+<arnout@mind.be>:
 >
->  Maybe that should be done in a separate commit, with a better explanation why.
+>
+>
+> On 01/06/2021 11:20, Norbert Lange wrote:
+> > Am Mo., 31. Mai 2021 um 17:02 Uhr schrieb Thomas De Schampheleire
+> > <patrickdepinguin@gmail.com>:
+> >>
+> >> Hello,
+> >>
+> >> El mar, 25 may 2021 a las 19:28, Norbert Lange (<nolange79@gmail.com>) escribi?:
+> >>>
+> >>> There are a couple of targets to build the cli tool with less
+> >>> features (no legacy-support, benchmarking),
+> >>> or dynamically linked to the library.
+> >>>
+> >>> Add an option to choose the variant.
+> >>>
+> >>> To allow the installation step to pick the variant, it
+> >>> has to be copied to the normal location.
+> >>>
+> >>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> >>> ---
+> >>>  package/zstd/Config.in | 21 +++++++++++++++++++++
+> >>>  package/zstd/zstd.mk   |  9 ++++++++-
+> >>>  2 files changed, 29 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/package/zstd/Config.in b/package/zstd/Config.in
+> >>> index 9fa70c65cc..0d2ab84771 100644
+> >>> --- a/package/zstd/Config.in
+> >>> +++ b/package/zstd/Config.in
+> >>> @@ -10,3 +10,24 @@ config BR2_PACKAGE_ZSTD
+> >>>           compression formats
+> >>>
+> >>>           https://facebook.github.io/zstd
+> >>> +
+> >>> +if BR2_PACKAGE_ZSTD
+> >>> +
+> >>> +choice
+> >>> +       prompt "Executable flavor"
+> >>> +       help
+> >>> +         Pick between variants of the zstd tool.
+> >>> +
+> >>> +config BR2_PACKAGE_ZSTD_PROG_DEFAULT
+> >>> +       bool "Default build (static, full-featured)"
+> >>> +
+> >>> +config BR2_PACKAGE_ZSTD_PROG_DYNAMIC
+> >>> +       bool "Dynamic build (needs library with identical version)"
+> >>> +       depends on !BR2_STATIC_LIBS
+> >>
+> >> Is there a reason not to make this one the default, instead of the
+> >> static variant?
+> >
+> > Hello.
+> >
+> > Gradual change, as gambit to get the patches upstreamed faster =)
+> > I agree, dynamic should be default.
+>
+>  Adding config options is not very likely to get patches upstreamed faster :-)
 
-- simplfy libxshmfence dependency, always depend on it if selected to avoid
-  code duplication in the mk file
-
-Hope this explanation is better?
-
-First considered an separate patch, but the it would only reduce the duplication
-at two places...., but with this patch adding more libxshmfence at more
-places it makes more sense..., but can extract as as separate patch?
+Damnit, thought having a choice is easier than figuring out which one
+should be used =)
 
 >
 > >
-> > - select BR2_PACKAGE_MESA3D_DRI3 for all gallium/kmsro drivers in case
-> >   X11 is selected, see meson.build:
+> >> From my point of view, the PROG_DYNAMIC has as main advantage a
+> >> reduction in rootfs size, since zstd is quite large and with the
+> >> static version duplicating part of the shared object.
+> >>
+> >> Earlier I sent a patch for this (exact implementation was still based
+> >> on v1.4.9 and sending of the update patch was pending the new 1.5.0
+> >> release), see:
+> >> http://patchwork.ozlabs.org/project/buildroot/patch/20201204095703.4714-1-patrickdepinguin at gmail.com/
+> >>
+> >> In context of Buildroot, the expectation is that one builds the entire
+> >> thing in one go. This means that binary and library will be from the
+> >> same version anyway.
+> >> In that sense, the option description may be confusing.
+> >>
+> >> In fact, I even wonder if it is needed to provide the PROG_DEFAULT at
+> >> all. If shared libraries are supported, I see no reason why one would
+> >> like a static version of the binary.
 > >
-> >   240 with_gallium_kmsro = with_gallium_v3d or with_gallium_vc4 or with_gallium_etnaviv or with_gallium_panfrost or with_gallium_lima or with_gallium_freedreno
-> >   [...]
-> >   524 if with_gallium_kmsro and (with_platform_x11 and not with_dri3)
-> >   525   error('kmsro requires dri3 for X11 support')
-> >   526 endif
+> > upstream treats DSO and programs separately, the static binary could
+> > have some more flags not available for DSO which seem to be considered
+> > less configurable.
 >
->  Now *that's* an excellent explanation!
+>  I looked at the source and simply see no way how this is even possible - the
+> command line argument parsing is entirely in the source files in the program
+> directory, and there are no different -D options for zstd-dll...
 >
-> >
-> > - select BR2_PACKAGE_XLIB_LIBXSHMFENCE for all gallium/kmsro drivers in case
-> >   X11 is selected, see meson.build:
-> >
-
-  1873 if with_platform_x11
-  [...]
-  1894   if with_any_vk or with_egl or (with_glx == 'dri' and with_dri_platform ==      'drm')
-  [...]
-
-> >   1897     if with_dri3
-> >   [...]
-> >   1907       dep_xshmfence = dependency('xshmfence', version : '>= 1.1')
+> > Some time ago I had to use the static library cause some features
+> > where only available there.
 >
->  nitpick: I don't see the "in case X11 is selected" part in the quoted code.
+>  Maybe that was in the past and is no longer the case?
 
-Will fix in next patch iteration...
+Its still the case, see lib/README.md and the macro ZSTD_STATIC_LINKING_ONLY,
+probably less than some time ago.
+
+The statically program build could be using those extra features too.
 
 >
-> >
-> > Fixes:
-> >
-> >   - https://bugs.busybox.net/show_bug.cgi?id=13831
-> >
-> > [1] https://gitlab.freedesktop.org/mesa/mesa/-/commit/479bda78480d472e1f311bf0ea5b5fafb47ac7ba
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  ...005-meson-kmsro-require-dri3-for-X11.patch | 42 +++++++++++++++++++
-> >  package/mesa3d/Config.in                      | 18 ++++++++
-> >  package/mesa3d/mesa3d.mk                      |  8 ++--
-> >  3 files changed, 64 insertions(+), 4 deletions(-)
-> >  create mode 100644 package/mesa3d/0005-meson-kmsro-require-dri3-for-X11.patch
-> >
-> > diff --git a/package/mesa3d/0005-meson-kmsro-require-dri3-for-X11.patch b/package/mesa3d/0005-meson-kmsro-require-dri3-for-X11.patch
-> > new file mode 100644
-> > index 0000000000..e20078b712
-> > --- /dev/null
-> > +++ b/package/mesa3d/0005-meson-kmsro-require-dri3-for-X11.patch
-> > @@ -0,0 +1,42 @@
-> > +From 945f32f09a010407035582712109d616dae31f6d Mon Sep 17 00:00:00 2001
-> > +From: Erico Nunes <nunes.erico@gmail.com>
-> > +Date: Thu, 10 Jun 2021 21:20:28 +0200
-> > +Subject: [PATCH] meson: kmsro: require dri3 for X11
-> > +
-> > +The current implementation in kmsro relies on buffer sharing using
-> > +WINSYS_HANDLE_TYPE_FD, which in x11 is only used by default when dri3
-> > +is enabled.
-> > +Since the current implementation will not work without it, we can
-> > +prevent user error by checking that it is not disabled at configuration
-> > +time.
-> > +
-> > +Closes #4861
-> > +
-> > +Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-> > +Reviewed-by: Adam Jackson <ajax@redhat.com>
-> > +Reviewed-by: Eric Engestrom <eric@engestrom.ch>
-> > +Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/11305>
-> > +[Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/commit/479bda78480d472e1f311bf0ea5b5fafb47ac7ba.patch]
-> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > +---
-> > + meson.build | 4 ++++
-> > + 1 file changed, 4 insertions(+)
-> > +
-> > +diff --git a/meson.build b/meson.build
-> > +index e1e94e7..37b8868 100644
-> > +--- a/meson.build
-> > ++++ b/meson.build
-> > +@@ -521,6 +521,10 @@ if with_dri
-> > +   endif
-> > + endif
-> > +
-> > ++if with_gallium_kmsro and (with_platform_x11 and not with_dri3)
-> > ++  error('kmsro requires dri3 for X11 support')
-> > ++endif
-> > ++
-> > + _vdpau = get_option('gallium-vdpau')
-> > + if _vdpau == 'true'
-> > +   _vdpau = 'enabled'
-> > +--
-> > +2.31.1
-> > +
-> > diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> > index 36acd9758c..c8af2a17cb 100644
-> > --- a/package/mesa3d/Config.in
-> > +++ b/package/mesa3d/Config.in
-> > @@ -105,7 +105,10 @@ comment "Gallium drivers"
-> >
-> >  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
-> >  	bool "Gallium Etnaviv driver"
-> > +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
-> >  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> > +	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
-> > +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+>  Note BTW that zstd programs don't use the static library - they (re)build the
+> source files directly. That's how it's possible that the static library has no
+> thread support while the programs do have thread support.
+
+there is the static library, dynamic library and the tool,
+so there are 3 sets of options possible.
+
 >
->  Given the quoted code above, I think all of these should be moved to
-> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER. The "depends on" would have to be copied, not
-> moved. Having it in the BR2_PACKAGE_MESA3D_GALLIUM_DRIVER is kind of redundant,
-> but it serves as a reminder to people adding gallium drivers that they need to
-> copy that dependency.
 >
-> >  	select BR2_PACKAGE_LIBDRM_ETNAVIV
-> >  	help
-> >  	  Mesa driver for Vivante GPUs.
-> > @@ -118,7 +121,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
-> >  	# can't see is just spurious. However, that dependency is about
-> >  	# the toolchain having sync4 primitives, which is always a given
-> >  	# for arm/aarch64.
-> > +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
-> >  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> > +	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
-> > +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
-> >  	select BR2_PACKAGE_LIBDRM_FREEDRENO
-> >  	help
-> >  	  Mesa driver for Freedreno GPUs.
-> > @@ -145,7 +151,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
-> >
-> >  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
-> >  	bool "Gallium lima driver"
-> > +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
-> >  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> > +	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
-> > +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
-> >  	help
-> >  	  Mesa driver for ARM Mali Utgard GPUs.
-> >
-> > @@ -160,7 +169,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
-> >
-> >  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
-> >  	bool "Gallium panfrost driver"
-> > +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
-> >  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> > +	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
-> > +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
+> > Also despite expectation, you cant for example just build zstd (static)
+> > without multiple packages automatically linking to libzstd.
 >
->  This, for example, makes me suspect that the libxshmfence select should really
-> be part of DRI3.
+>  What you're saying is: if you enable zstd in Buildroot, it will build and
+> install the library, and this will cause other packages to link with it, right?
 
-As far as I read the meson.build file there is at least one place where dri3 is
-required without X11...., and (at least for an older version) the libxshmfence
-dependency was not triggered by DRI3 but by GLX, see [1]...
+Yes
 
-The other advantage is that the new added depends is near the new added select...
+>
+> > (not easy to change now...)
+>
+>  It's not *that* difficult to change...
+>
+> 1. Add an option BR2_PACKAGE_ZSTD_LIB (default to y because that's the legacy
+> situation).
+> 2. Update all "optional dependencies" op libzstd to check BR2_PACKAGE_ZSTD_LIB
+> instead.
 
-Regards,
-Peter
+Yeah, touching multiple packages, given how long some of my patches
+linger around that sounds like fun to rebase every few months.
+Probably easy if you have write permissions ;)
 
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20210110222833.26301-5-ps.report at gmx.net/
+>
+>
+> > For that youd need to stich together 2 runs.
+>
+>  Er, what?
+
+I'd mean pick a buildroot config, enable zstd, pick the static zstd
+tool from there
+disable zstd, clean rebuild, merge that with the zstd tool from before.
+Then you can have the static/small zstd tool and nothing links to libzstd.
+
+>
+>
+> >> So I would reduce this patch to two options:
+> >>
+> >> - standard build
+> >> - small build
+>
+>  Which is actually just a single option: full build (default y). Note that we
+> don't want "small build" as a boolean option, because that makes it impossible
+> for another package to select the full build (you can't "select
+> !BR2_PACKAGE_ZSTD_PROG_SMALL). We've been hit by this a couple of times already
+> in the past.
+>
+>
+> >> and depending on the options BR2_STATIC_LIBS / SHARED_STATIC_LIBS the
+> >> 'standard build' would result in a dynamically-linked object or a
+> >> static one.
+> >
+> > Sounds reasonable.
+> >
+> >>
+> >>> +
+> >>> +config BR2_PACKAGE_ZSTD_PROG_SMALL
+> >>> +       bool "Small build (static, less features)"
+> >>> +
+> >>> +endchoice
+> >>> +
+> >>> +endif
+> >>> diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+> >>> index a9499df4d0..ecad26e0df 100644
+> >>> --- a/package/zstd/zstd.mk
+> >>> +++ b/package/zstd/zstd.mk
+> >>> @@ -48,6 +48,11 @@ endif
+> >>>  ZSTD_OPTS += "MOREFLAGS=$(ZSTD_OPTS_MOREFLAGS)"
+> >>>
+> >>>  ZSTD_BUILD_PROG_TARGET := zstd-release
+> >>> +ifeq ($(BR2_PACKAGE_ZSTD_PROG_DYNAMIC),y)
+> >>> +ZSTD_BUILD_PROG_TARGET := zstd-dll
+> >>> +else ifeq ($(BR2_PACKAGE_ZSTD_PROG_SMALL),y)
+> >>> +ZSTD_BUILD_PROG_TARGET := zstd-small
+> >>> +endif
+> >>
+> >> We don't generally use := in Buildroot, unless really needed. These
+> >> assignments could just be '='.
+> >
+> > Ok
+> >
+> >>
+> >>>
+> >>>  # Since v1.5.0 the dynamic library is built for
+> >>>  # multithreading, while the static library is not.
+> >>> @@ -78,7 +83,9 @@ define ZSTD_BUILD_CMDS
+> >>>         $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> >>>                 -C $(@D)/lib $(addsuffix -release,$(ZSTD_BUILD_LIBS) libzstd.pc)
+> >>>         $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> >>> -               -C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET)
+> >>> +               -C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET) && \
+> >>> +       { [ ! -e $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) ] || \
+>
+>  Am I crazy or is this actually saying
+>
+>        { [ -e $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) ] && \
+>
+> ?
+>
+>  However, wouldn't it be more logical to do
+>
+>        { [ ! -e $(@D)/programs/zstd ] && \
+
+That would fail and stop the build if zstd exists (which is the case
+for zstd-release and zstd-dll but not for zstd-small,
+zstd-decompress).
+ie. the build either creates $(@D)/programs/zstd or
+$(@D)/programs/$(ZSTD_BUILD_PROG_TARGET)
+
+The code that correctly succeeds
+when $(@D)/programs/zstd exists or a link to $(ZSTD_BUILD_PROG_TARGET)
+can be made is:
+
+[ ! -e $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) ] || \
+  ln -f $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) $(@D)/programs/zstd
+
+or
+
+[ -e $(@D)/programs/zstd ] || \
+  ln -f $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) $(@D)/programs/zstd
+
+>
+> >>> +               ln -f $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) $(@D)/programs/zstd; }
+> >>
+> >> I find this code not particularly readable.
+> >> Why does the group need to be continued with '&&' ? If you don't do
+> >> that, a failure in the make will stop right there, which is fine.
+> >> This together with the use of the || shorthand, especially with the
+> >> negated condition, is not obvious.
+> >
+> > Ok
+> >
+> >> Also, this hardlink is only actually needed for the 'zstd-small' case,
+> >> because both 'zstd-release' and 'zstd-dll' just generate a binary
+> >> called 'zstd'. In the latter cases, the [ ] condition will be false,
+> >> and nothing to be done.>>
+> >> So I would consider to leave the original make untouched and use
+> >> following instead:
+> >>
+> >>
+> >> ifeq ($(BR2_PACKAGE_ZSTD_PROG_SMALL),y)
+> >> define ZSTD_HARDLINK_BUILD_PROG_TARGET
+> >>         ln -f $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) $(@D)/programs/zstd
+> >> endef
+> >> ZSTD_POST_BUILD_HOOKS += ZSTD_HARDLINK_BUILD_PROG_TARGET
+> >> endif
+> >
+> > I disagree here, there are multiple variants aside of -small, like a
+> > decompress-only build,
+> > and I'd not want to depend on upstream behaviors whether a variant is
+> > "in-place" of zstd
+> > or as extra file.
+> > Even if its not gonna be supported officially there's value in locally
+> > using "zstd-decompress"
+> > and things just work.
+> >
+> > Arguably with zstd-dll largely fixing the main issue (filesize) those
+> > variants are less tempting.
+>
+>  So in conclusion, I think there should be just one config option
+> BR2_PACKAGE_ZSTD_PROG_FULL (default y) which builds zstd-dll if !static and
+> zstd-release if static.
+
+hmm, so then we don't need a config?
+I mean zstd-small only has an advantage if no libzstd is used
+(zstd-dll is smaller). At least as it it now,
+perhaps config options with some macros from lib/README.md would make
+more sense...
+
+>
+>
+> >
+> > Norbert
+> > (Waiting for some more feedback and possibly upstreaming  part of the
+> > series before rerolling)
+>
+>  Good plan :-)
+
+Procrastination is a super-power.
+
+Norbert
+
 >
 >
 >  Regards,
 >  Arnout
 >
-> >  	help
-> >  	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
-> >
-> > @@ -247,7 +259,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
-> >  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
-> >  	bool "Gallium v3d driver"
-> >  	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
-> > +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
-> >  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> > +	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
-> > +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
-> >  	select BR2_PACKAGE_LIBDRM_VC4
-> >  	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-> >  	help
-> > @@ -261,7 +276,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
-> >  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
-> >  	bool "Gallium vc4 driver"
-> >  	depends on BR2_arm || BR2_aarch64
-> > +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
-> >  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> > +	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
-> > +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
-> >  	select BR2_PACKAGE_LIBDRM_VC4
-> >  	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-> >  	help
-> > diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> > index da6e55bf93..290295255a 100644
-> > --- a/package/mesa3d/mesa3d.mk
-> > +++ b/package/mesa3d/mesa3d.mk
-> > @@ -29,6 +29,10 @@ MESA3D_CONF_OPTS = \
-> >  	-Dgallium-omx=disabled \
-> >  	-Dpower8=disabled
-> >
-> > +ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
-> > +MESA3D_DEPENDENCIES += xlib_libxshmfence
-> > +endif
-> > +
-> >  # Codesourcery ARM 2014.05 fail to link libmesa_dri_drivers.so with --as-needed linker
-> >  # flag due to a linker bug between binutils 2.24 and 2.25 (2.24.51.20140217).
-> >  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
-> > @@ -130,9 +134,6 @@ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
-> >  MESA3D_CONF_OPTS += \
-> >  	-Ddri-drivers=
-> >  else
-> > -ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
-> > -MESA3D_DEPENDENCIES += xlib_libxshmfence
-> > -endif
-> >  MESA3D_CONF_OPTS += \
-> >  	-Dshared-glapi=enabled \
-> >  	-Dglx-direct=true \
-> > @@ -143,7 +144,6 @@ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
-> >  MESA3D_CONF_OPTS += \
-> >  	-Dvulkan-drivers=
-> >  else
-> > -MESA3D_DEPENDENCIES += xlib_libxshmfence
-> >  MESA3D_CONF_OPTS += \
-> >  	-Dvulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
-> >  endif
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
