@@ -1,58 +1,40 @@
-From: Kamel Bouhara <kamel.bouhara@bootlin.com>
-Date: Mon, 14 Jun 2021 09:08:47 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/usbguard: new package
-In-Reply-To: <20210611140011.41d00060@windsurf>
-References: <20210608123210.143113-1-kamel.bouhara@bootlin.com>
- <20210608123210.143113-2-kamel.bouhara@bootlin.com>
- <20210608143757.5818a039@xps13> <20210611123703.18b71cbb@xps13>
- <YMNIDqVHSAbiNRzp@kb-xps> <20210611140011.41d00060@windsurf>
-Message-ID: <YMcAf1f3uN6IdFYs@kb-xps>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon, 14 Jun 2021 07:34:17 +0000
+Subject: [Buildroot] [PATCH 1/1] package/mpd: bump to version 0.22.8
+Message-ID: <20210614073417.144397-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 11, 2021 at 02:00:11PM +0200, Thomas Petazzoni wrote:
-> On Fri, 11 Jun 2021 13:25:02 +0200
-> Kamel Bouhara <kamel.bouhara@bootlin.com> wrote:
->
-> > > [0600] /etc/usbguard/rules.conf:
-> > > allow *:*
-> > >
-> >
-> > I think that having to default configuration in
-> > /etc/usbguard/rules.conf is not expected as the rules are generated
-> > using the "usbguard generate-policy" command.
->
-> It is not really great to have to run a tool on the target to generate
-> the rules. The goal of Buildroot is to build the whole system, and the
-> rootfs might be read-only.
->
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Indeed.
-
-> > Maybe we shall just warn users that there is no configuration file at
-> > boot before starting the daemon ?
->
-> Not really Buildroot's design principle. We like to have a default
-> basic configuration that does something minimally useful. So either
-> accept all USB devices, or reject all USB devices, for example.
-
-OK, let's add it in v3 then.
-
-Thanks,
-Kamel
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
---
-Kamel Bouhara, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 4c3b49823b..1079ccf367 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  2be149a4895c3cb613477f8cf1193593e3d8a1d38a75ffa7d32da8c8316a4d5e  mpd-0.22.6.tar.xz
++sha256  9617ed08c9ffafcf5f925819251f6b90df3f4f73cf2838c41033e1962104286d  mpd-0.22.8.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 06dc7e15d7..8e4576a103 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.22
+-MPD_VERSION = $(MPD_VERSION_MAJOR).6
++MPD_VERSION = $(MPD_VERSION_MAJOR).8
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
+-- 
+2.32.0
