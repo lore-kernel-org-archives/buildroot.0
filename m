@@ -1,40 +1,47 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 14 Jun 2021 07:34:17 +0000
-Subject: [Buildroot] [PATCH 1/1] package/mpd: bump to version 0.22.8
-Message-ID: <20210614073417.144397-1-joerg.krause@embedded.rocks>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Mon, 14 Jun 2021 19:58:12 +1200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2021-04-11
+In-Reply-To: <20210610173703.31d33d97@windsurf>
+References: <6073d64f.1c69fb81.9d11e.7f35SMTPIN_ADDED_MISSING@mx.google.com>
+ <CAFOYHZC23wcnW0-y=fyiP2x6M2B5CEyFEzJDeWJq_Pw5BuRbkg@mail.gmail.com>
+ <20210610173703.31d33d97@windsurf>
+Message-ID: <CAFOYHZB_RK=hJaTBOoTi3=pxwo_fsx=kTRfEWm0uo8XJ5EbUGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri, Jun 11, 2021 at 3:37 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Chris,
+>
+> On Mon, 12 Apr 2021 20:37:46 +1200
+> Chris Packham <judge.packham@gmail.com> wrote:
+>
+> > I've managed to get the CVE updated to say "This flaw affects
+> > syslog-ng versions prior to and including 2.0.9"[1] but I'm still
+> > getting these notifications. Is there something else that needs to
+> > happen now? Actually nist[2] seems to know it's been modified so it
+> > may be a case of hurry up and wait.
+>
+> If I look up at https://nvd.nist.gov/vuln/detail/CVE-2008-5110, the
+> list of known affected software configurations is still
+> cpe:2.3:a:oneidentity:syslog-ng:-:*:*:*:*:*:*:*, which means "all known
+> versions.
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 4c3b49823b..1079ccf367 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  2be149a4895c3cb613477f8cf1193593e3d8a1d38a75ffa7d32da8c8316a4d5e  mpd-0.22.6.tar.xz
-+sha256  9617ed08c9ffafcf5f925819251f6b90df3f4f73cf2838c41033e1962104286d  mpd-0.22.8.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 06dc7e15d7..8e4576a103 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.22
--MPD_VERSION = $(MPD_VERSION_MAJOR).6
-+MPD_VERSION = $(MPD_VERSION_MAJOR).8
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
--- 
-2.32.0
+After some effort the description was updated to say "This flaw
+affects syslog-ng versions prior to and including 2.0.9.". But the cpe
+entry hasn't been updated (if I understand correctly the reporter
+controls the description but nist controls the configurations). The
+CVE entry does now say that it has been modified since it was last
+analyzed so I'm not sure how/when that will happen.
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
