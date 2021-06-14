@@ -1,189 +1,84 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 14 Jun 2021 23:04:55 +0200
-Subject: [Buildroot] [PATCH v2 3/5] package/zstd: rework build and
- install
-In-Reply-To: <3fe56d17-b886-e63b-d366-1e524c895b6b@mind.be>
-References: <20210525172652.821351-1-nolange79@gmail.com>
- <20210525172652.821351-3-nolange79@gmail.com>
- <3fe56d17-b886-e63b-d366-1e524c895b6b@mind.be>
-Message-ID: <CADYdroN_jRv7Y5Yf2hPFjqq5jBqaSjr2X9drabbtEkDw7kMcWg@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 14 Jun 2021 23:11:15 +0200
+Subject: [Buildroot] [PATCH v1 1/4] package/libxmlrpc: bump version to
+ 1.51.07
+In-Reply-To: <20210614204749.10693-1-ps.report@gmx.net>
+References: <20210614204749.10693-1-ps.report@gmx.net>
+Message-ID: <20210614231115.7de15c4b@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mo., 14. Juni 2021 um 21:50 Uhr schrieb Arnout Vandecappelle
-<arnout@mind.be>:
->
->  Hi Norbert,
->
-> On 25/05/2021 19:26, Norbert Lange wrote:
-> > 1.5.0 uses Threads by default for cli tool and DSO,
-> > the build now does the same unless:
-> >
-> > If only static libraries are build, then build
-> > that library like the DSO is normally built.
-> >
-> > This should ensure that programs requsting the DSO
-> > will always get the multithreaded version.
->
->  I don't understand what this patch is trying to do...
->
->  Before this patch, in the threads case, the build would be done with threads
-> both for the program (HAVE_THREAD=1) and the libraries (-mt appended). For the
-> no-threads case, the build is done without threads support for both the program
-> (HAVE_THREAD=0) and the shared&static libraries (no -mt appended) - except that
-> since 1.5.0, the shared library will be built with thread support which will
-> probably result in a build failure.
+CC: Alvaro G. M <alvaro.gamez@hazent.com>
 
-I would want the static library to be built without threads (like upstream).
-the expectation should be:
+Regards,
+Peter
 
-1) gcc ... -llibzstd
-    pickup the DSO, with multithread support
-2) gcc ... ../usr/lib/libzstd.a
-    pickup the static library without multithread support
 
-in case there are no shared libraries, 1) will use the static library
-instead, so it should be compiled like the DSO normally would.
-in case there are no static libraries, 2) plainly wont work
+Note:
 
-For the program, the Makefile should be able to determine whether
-threads are available or not.
+Original sent with
 
->
->  So as far as I can see, the only thing that needs to be done is:
->
-> ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
-> else
-> ZSTD_BUILD_LIBS := $(addsuffix -nomt,$(ZSTD_BUILD_LIBS))
-> endif
->
->
->  You patch, however, builds the static library with thread support if no dynamic
-> library is built, and without thread support if a dynamic library is built. This
-> makes no sense whatsoever to me...
->
->
->  Can you clarify the reasoning?
+	git send-email --suppress-cc=self --to buildroot at buildroot.org --cc "Alvaro G. M <alvaro.gamez@hazent.com>" v1-0001-package-libxmlrpc-bump-version-to-1.51.07.patch
 
-I hope I did. Might be that I don't understand the build failures you
-are talking about,
-does the zstd package fail, or some user of libzstd?
+But the CC entry for Alvaro did not make it through the mailing list despite the
+send log:
 
+	OK. Log says:
+	Server: mail.gmx.net
+	MAIL FROM:<ps.report@gmx.net>
+	RCPT TO:<buildroot@buildroot.org>
+	RCPT TO:<alvaro.gamez@hazent.com>
+	From: Peter Seiderer <ps.report@gmx.net>
+	To: buildroot at buildroot.org
+	Cc: "Alvaro G . M" <alvaro.gamez@hazent.com>
+	Subject: [PATCH v1 1/4] package/libxmlrpc: bump version to 1.51.07
+	Date: Mon, 14 Jun 2021 22:47:46 +0200
+	Message-Id: <20210614204749.10693-1-ps.report@gmx.net>
+	X-Mailer: git-send-email 2.31.1
+	MIME-Version: 1.0
+	Content-Transfer-Encoding: base64
+
+Same happened yesterday with the 'package/mesa3d: add config option for DRI3
+support' patch series missing the last CC to Erico Nunes...
+
+
+On Mon, 14 Jun 2021 22:47:46 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+
+> Changelog ([1]):
 >
->  For now, I've marked the patch as Changes Requested. Since I did apply the
-> first patch, we will probably start seeing build failures on nothreads, so we'll
-> need a fix soonish...
-
-Sure, I should get a mail as commit author!?
-
-Norbert
-
+>   - Abyss: fix bug: wild memory reference when server times out waiting for
+>     request header. Introduced with Release 1.44 (December 2015).
 >
->  Regards,
->  Arnout
+> [1] http://xmlrpc-c.sourceforge.net/change_super_stable.html
 >
-> >
-> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> >
-> > ---
-> > v1->v2:
-> > *   rebased against upstream/master
-> >
-> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> > ---
-> >  package/zstd/zstd.mk | 52 ++++++++++++++++++++++++++++----------------
-> >  1 file changed, 33 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-> > index 2a876376a2..a7a5ba4e50 100644
-> > --- a/package/zstd/zstd.mk
-> > +++ b/package/zstd/zstd.mk
-> > @@ -12,6 +12,8 @@ ZSTD_LICENSE_FILES = LICENSE COPYING
-> >  ZSTD_CPE_ID_VENDOR = facebook
-> >  ZSTD_CPE_ID_PRODUCT = zstandard
-> >
-> > +ZSTD_OPTS += PREFIX=/usr
-> > +
-> >  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> >  ZSTD_OPTS += HAVE_THREAD=1
-> >  else
-> > @@ -39,43 +41,55 @@ else
-> >  ZSTD_OPTS += HAVE_LZ4=0
-> >  endif
-> >
-> > -ifeq ($(BR2_STATIC_LIBS),y)
-> > -ZSTD_BUILD_LIBS = libzstd.a
-> > -ZSTD_INSTALL_LIBS = install-static
-> > -else ifeq ($(BR2_SHARED_LIBS),y)
-> > -ZSTD_BUILD_LIBS = libzstd
-> > -ZSTD_INSTALL_LIBS = install-shared
-> > +ZSTD_BUILD_PROG_TARGET := zstd-release
-> > +
-> > +# Since v1.5.0 the dynamic library is built for
-> > +# multithreading, while the static library is not.
-> > +#
-> > +# Keep those defaults, unless Buildroot is not
-> > +# providing the dynamic library and the
-> > +# static library will be automatically used instead.
-> > +ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-> > +ZSTD_INSTALL_LIBS += install-static
-> > +ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-> > +# Use the static lib as replacement for the mt dynlib
-> > +ZSTD_BUILD_LIBS += libzstd.a-mt
-> >  else
-> > -ZSTD_BUILD_LIBS = libzstd.a libzstd
-> > -ZSTD_INSTALL_LIBS = install-static install-shared
-> > +ZSTD_BUILD_LIBS += libzstd.a-nomt
-> > +endif
-> >  endif
-> >
-> > -# The HAVE_THREAD flag is read by the 'programs' makefile but not by  the 'lib'
-> > -# one. Building a multi-threaded binary with a library (which defaults to
-> > -# single-threaded) gives a runtime error when compressing files.
-> > -# The 'lib' makefile provides specific '%-mt' targets for this purpose.
-> > +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-> > +ZSTD_INSTALL_LIBS += install-shared
-> >  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> > -ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
-> > +ZSTD_BUILD_LIBS += libzstd-mt
-> > +else
-> > +ZSTD_BUILD_LIBS += libzstd-nomt
-> > +endif
-> >  endif
-> >
-> >  define ZSTD_BUILD_CMDS
-> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-> > -             -C $(@D)/lib $(ZSTD_BUILD_LIBS)
-> > +             -C $(@D)/lib $(addsuffix -release,$(ZSTD_BUILD_LIBS) libzstd.pc)
-> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-> > -             -C $(@D) zstd
-> > +             -C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET)
-> >  endef
-> >
-> >  define ZSTD_INSTALL_STAGING_CMDS
-> > +     [ -e $(@D)/programs/zstd ] && [ -e $(@D)/lib/libzstd.pc ]
-> > +     $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-> > +             -C $(@D)/lib DESTDIR=$(STAGING_DIR) $(ZSTD_INSTALL_LIBS) \
-> > +             install-pc install-includes
-> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-> > -             DESTDIR=$(STAGING_DIR) PREFIX=/usr -C $(@D)/lib \
-> > -             install-pc install-includes $(ZSTD_INSTALL_LIBS)
-> > +             -C $(@D)/programs DESTDIR=$(STAGING_DIR) install
-> >  endef
-> >
-> >  define ZSTD_INSTALL_TARGET_CMDS
-> > +     [ -e $(@D)/programs/zstd ]
-> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-> > -             DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
-> > +             -C $(@D)/lib DESTDIR=$(TARGET_DIR) $(ZSTD_INSTALL_LIBS)
-> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-> > -             DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/lib $(ZSTD_INSTALL_LIBS)
-> > +             -C $(@D)/programs DESTDIR=$(TARGET_DIR) install
-> >  endef
-> >
-> >  HOST_ZSTD_OPTS += PREFIX=$(HOST_DIR)
-> >
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/libxmlrpc/libxmlrpc.hash | 2 +-
+>  package/libxmlrpc/libxmlrpc.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/libxmlrpc/libxmlrpc.hash b/package/libxmlrpc/libxmlrpc.hash
+> index 13e3b0b534..7034773204 100644
+> --- a/package/libxmlrpc/libxmlrpc.hash
+> +++ b/package/libxmlrpc/libxmlrpc.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256  06dcd87d9c88374559369ffbe83b3139cf41418c1a2d03f20e08808085f89fd0  xmlrpc-c-1.51.06.tgz
+> +sha256  84d20ae33f927582f821d61c0b9194aefbf1d7924590a13fa9da5ae1698aded9  xmlrpc-c-1.51.07.tgz
+>  sha256  db7a6d3f187b218c3534010a83424c6bcdef88e6a0b6b1aa3a8762238bd642e6  doc/COPYING
+> diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+> index c74d8a854c..0871b6e710 100644
+> --- a/package/libxmlrpc/libxmlrpc.mk
+> +++ b/package/libxmlrpc/libxmlrpc.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -LIBXMLRPC_VERSION = 1.51.06
+> +LIBXMLRPC_VERSION = 1.51.07
+>  LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
+>  LIBXMLRPC_SITE = http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/$(LIBXMLRPC_VERSION)
+>  LIBXMLRPC_LICENSE = BSD-3-Clause (xml-rpc main code and abyss web server), BSD like (lib/expat), Python 1.5.2 license (parts of xmlrpc_base64.c)
