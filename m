@@ -1,54 +1,45 @@
-From: Andreas Ziegler <br015@umbiko.net>
-Date: Mon, 14 Jun 2021 09:22:23 +0000
-Subject: [Buildroot] NDEBUG breaks compilation of GCC 10
-Message-ID: <7b2a93a6d61d07972023890ac6d90032@umbiko.net>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Mon, 14 Jun 2021 22:00:22 +1200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2021-04-11
+In-Reply-To: <20210614104545.39c42d14@windsurf>
+References: <6073d64f.1c69fb81.9d11e.7f35SMTPIN_ADDED_MISSING@mx.google.com>
+ <CAFOYHZC23wcnW0-y=fyiP2x6M2B5CEyFEzJDeWJq_Pw5BuRbkg@mail.gmail.com>
+ <20210610173703.31d33d97@windsurf>
+ <CAFOYHZB_RK=hJaTBOoTi3=pxwo_fsx=kTRfEWm0uo8XJ5EbUGg@mail.gmail.com>
+ <20210614104545.39c42d14@windsurf>
+Message-ID: <CAFOYHZBJjN25cB7=2cu5qzJOYZVtik+ANuQE6XZLio2RokmXDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+On Mon, Jun 14, 2021 at 8:45 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Chris,
+>
+> On Mon, 14 Jun 2021 19:58:12 +1200
+> Chris Packham <judge.packham@gmail.com> wrote:
+>
+> > After some effort the description was updated to say "This flaw
+> > affects syslog-ng versions prior to and including 2.0.9.". But the cpe
+> > entry hasn't been updated (if I understand correctly the reporter
+> > controls the description but nist controls the configurations). The
+> > CVE entry does now say that it has been modified since it was last
+> > analyzed so I'm not sure how/when that will happen.
+>
+> How did you contact the NVD maintainers? Because I contacted them a few
+> weeks ago about some CVE details, and they fixed up like a few days
+> later.
+>
 
-I seem to attract all the corner cases :-(
+Via the contact form. Then got bumped onto redhat who updated the
+description. I guess I could try again.
 
-After the merge with the recent 'next' branch, compilation of GCC10 
-breaks in the gcc-final step.
-
-musl/assert.h:
-
-	#ifdef NDEBUG
-	#define	assert(x) (void)0
-	#else
-	#define assert(x) ((void)((x) || (__assert_fail(#x, __FILE__, __LINE__, 
-__func__),0)))
-	#endif
-
-gcc/libgomp/target.c:
-
-	{
-	  struct target_mem_desc *k_tgt = k->tgt;
-	  bool is_tgt_unmapped = gomp_remove_var (devicep, k);
-	  /* It would be bad if TGT got unmapped while we're still iterating
-	     over its LIST_COUNT, and also expect to use it in the following
-	     code.  */
-	  assert (!is_tgt_unmapped
-		  || k_tgt != tgt);
-	}
-
-Build log:
-../../../libgomp/target.c: In function ?gomp_unmap_vars_internal?:
-../../../libgomp/target.c:1474:9: error: unused variable 
-?is_tgt_unmapped? [-Werror=unused-variable]
-  1474 |    bool is_tgt_unmapped = gomp_remove_var (devicep, k);
-       |         ^~~~~~~~~~~~~~~
-../../../libgomp/target.c:1473:28: error: unused variable ?k_tgt? 
-[-Werror=unused-variable]
-  1473 |    struct target_mem_desc *k_tgt = k->tgt;
-       |                            ^~~~~
-
-Introducing -Wno-error=unused-variable seems to help, but maybe there is 
-a better solution?
-
-Kind regards,
-Andreas
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
