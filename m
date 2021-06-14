@@ -1,37 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Jun 2021 10:45:45 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2021-04-11
-In-Reply-To: <CAFOYHZB_RK=hJaTBOoTi3=pxwo_fsx=kTRfEWm0uo8XJ5EbUGg@mail.gmail.com>
-References: <6073d64f.1c69fb81.9d11e.7f35SMTPIN_ADDED_MISSING@mx.google.com>
- <CAFOYHZC23wcnW0-y=fyiP2x6M2B5CEyFEzJDeWJq_Pw5BuRbkg@mail.gmail.com>
- <20210610173703.31d33d97@windsurf>
- <CAFOYHZB_RK=hJaTBOoTi3=pxwo_fsx=kTRfEWm0uo8XJ5EbUGg@mail.gmail.com>
-Message-ID: <20210614104545.39c42d14@windsurf>
+From: Eugen.Hristev at microchip.com <Eugen.Hristev@microchip.com>
+Date: Mon, 14 Jun 2021 09:01:06 +0000
+Subject: [Buildroot] [PATCH 1/3] boot/at91bootstrap3: add support for
+ at91bootstrap 4.x series
+In-Reply-To: <c41d4467-2901-7b32-96cd-4d7d63753223@microchip.com>
+References: <20210518213749.144355-1-thomas.petazzoni@bootlin.com>
+ <20210518213749.144355-2-thomas.petazzoni@bootlin.com>
+ <20210519093323.GL2268078@scaer>
+ <20210519120237.52ddc109@windsurf.orange-hotspot>
+ <223d3cbf-f1cb-4bdc-aff6-f766e428da33@microchip.com>
+ <20210519142051.6e84a675@windsurf.orange-hotspot>
+ <c41d4467-2901-7b32-96cd-4d7d63753223@microchip.com>
+Message-ID: <ae8d98c6-dce4-5342-1f15-39b2be3fa31c@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Chris,
+On 5/19/21 3:29 PM, Eugen Hristev - M18282 wrote:
+> On 5/19/21 3:20 PM, Thomas Petazzoni wrote:
+>> Hello Eugen,
+>>
+>> On Wed, 19 May 2021 11:36:56 +0000
+>> <Eugen.Hristev@microchip.com> wrote:
+>>
+>>> Thank you for taking care of this. You could have given me more feedback
+>>> on my previous patch set so I would have changed it, if you felt like
+>>> it, but now it's done, we can move forward, which is good.
+>>
+>> Agreed, but sometimes the comments/ideas only come when really you
+>> apply the patch, and you mess up with the code to figure out the most
+>> appropriate way. Also, it was a way of avoiding another back-and-forth
+>> with another iteration. I discussed the patch series yesterday with the
+>> other BR maintainers, respin a series, and it got applied today.
+>> Problem solved :-)
+>>
+>> (To the exception of the mistake you spotted in PATCH 3/3, of course!).
+>>
+>>> I will add a LICENSE file in the repo soon.
+>>
+>> That would be awesome. Could you add it to both the 3.x and the 4.x
+>> branches ? It would be nice to have another release on the 3.x branch
+>> that includes the LICENSE file.
+> 
+> Yes, I would do it for both branches. We have to agree on the format of
+> the LICENSE first.
 
-On Mon, 14 Jun 2021 19:58:12 +1200
-Chris Packham <judge.packham@gmail.com> wrote:
+Hello Thomas,
 
-> After some effort the description was updated to say "This flaw
-> affects syslog-ng versions prior to and including 2.0.9.". But the cpe
-> entry hasn't been updated (if I understand correctly the reporter
-> controls the description but nist controls the configurations). The
-> CVE entry does now say that it has been modified since it was last
-> analyzed so I'm not sure how/when that will happen.
+Do you know of some easy way (a script) to parse the source files and 
+remove current header and add SPDX headers ?
+We are considering selecting the SPDX way of licensing the files.
 
-How did you contact the NVD maintainers? Because I contacted them a few
-weeks ago about some CVE details, and they fixed up like a few days
-later.
+Thanks,
+Eugen
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> 
+> There will be probably a 3.10.3 at some point. There are many patches
+> yet on top of 3.10.2
+> 
+> I am sending now a v4 for the ICP board configs.
+> 
+> Eugen
+> 
+>>
+>> Thanks!
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, co-owner and CEO, Bootlin
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
+>>
+> 
