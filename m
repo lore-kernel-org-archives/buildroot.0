@@ -1,38 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Jun 2021 14:28:44 +0200
-Subject: [Buildroot] [PATCH 1/3] boot/at91bootstrap3: add support for
- at91bootstrap 4.x series
-In-Reply-To: <ae8d98c6-dce4-5342-1f15-39b2be3fa31c@microchip.com>
-References: <20210518213749.144355-1-thomas.petazzoni@bootlin.com>
- <20210518213749.144355-2-thomas.petazzoni@bootlin.com>
- <20210519093323.GL2268078@scaer>
- <20210519120237.52ddc109@windsurf.orange-hotspot>
- <223d3cbf-f1cb-4bdc-aff6-f766e428da33@microchip.com>
- <20210519142051.6e84a675@windsurf.orange-hotspot>
- <c41d4467-2901-7b32-96cd-4d7d63753223@microchip.com>
- <ae8d98c6-dce4-5342-1f15-39b2be3fa31c@microchip.com>
-Message-ID: <20210614142844.4bc28161@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Jun 2021 18:21:21 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/bitcoin: unset the NDEBUG
+ flag
+In-Reply-To: <ZTnoZb2MMbi5Z7xbG_3OKXXEj07hBkAAiKJqWo8-ke0zvQ3NE7ETdQHmw4oDe6M6YEnyDdQxIGltbNk15VM_w7hY-F7CQq8U-rG5VWRj7Uk=@senzilla.io>
+References: <ZbTvPhursXFsHDblON1mtNTQnG937Il2N0wYa3ReI@cp4-web-037.plabs.ch>
+ <20210613195850.GT168928@scaer>
+ <ZTnoZb2MMbi5Z7xbG_3OKXXEj07hBkAAiKJqWo8-ke0zvQ3NE7ETdQHmw4oDe6M6YEnyDdQxIGltbNk15VM_w7hY-F7CQq8U-rG5VWRj7Uk=@senzilla.io>
+Message-ID: <20210614162121.GA2610983@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Jun 2021 09:01:06 +0000
-<Eugen.Hristev@microchip.com> wrote:
+Dick, All,
 
-> Do you know of some easy way (a script) to parse the source files and 
-> remove current header and add SPDX headers ?
-> We are considering selecting the SPDX way of licensing the files.
+On 2021-06-14 10:06 +0000, D. Olsson spake thusly:
+> On Sunday, June 13th, 2021 at 9:58 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >> Signed-off-by: Dick Olsson hi at senzilla.io
+> > Applied to master, thanks.
+> Should we apply this to the 'next' branch as well?
+> The bitcoin build is currently broken there.
 
-I don't know of any tool doing that, but I also never had the need or
-researched something like that, so perhaps there is some tooling
-available, but I'm not sure.
+Branch 'next' is closed; it has been merged back into master with commit
+8d07baab43, dated 2021-06-07.
 
-Best regards,
+> But I'm not sure exactly how the 'master' and 'next'
+> branches are managed?
 
-Thomas
+https://buildroot.org/downloads/manual/manual.html#RELENG
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
