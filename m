@@ -1,61 +1,31 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Jun 2021 22:03:20 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/fb-test-app: Add myself to
- DEVELOPERS
-In-Reply-To: <20210614111444.65703-1-andriy.shevchenko@linux.intel.com>
-References: <20210614111444.65703-1-andriy.shevchenko@linux.intel.com>
-Message-ID: <20210614200320.GE2610983@scaer>
+Date: Mon, 14 Jun 2021 22:06:28 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself for cegui
+Message-ID: <20210614193555.6F4F08B85D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andy, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=19727355cb9ddfd1c0dfc985246eff7fd0d92e54
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-06-14 14:14 +0300, Andy Shevchenko spake thusly:
-> Add myself to DEVELOPERS as maintainer of fb-test-app.
-> 
-> Suggested-by: Arnout Vandecappelle <arnout@mind.be>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thank you for adopting this package! ?
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  DEVELOPERS | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index a90ad1c354c3..103a86d7c359 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -181,6 +181,9 @@ F:	package/sshguard/
->  F:	package/sunwait/
->  F:	package/sysdig/
->  
-> +N:	Andy Shevchenko <andy.shevchenko@gmail.com>
-> +F:	package/fb-test-app/
-> +
->  N:	Anisse Astier <anisse@astier.eu>
->  F:	package/go/
->  F:	package/nghttp2/
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4663046973..0c7072d845 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -267,6 +267,7 @@ F:	package/python-canopen/
+ N:	Bartosz Bilas <b.bilas@grinn-global.com>
+ F:	board/stmicroelectronics/stm32mp157a-dk1/
+ F:	configs/stm32mp157a_dk1_defconfig
++F:	package/cegui/
+ F:	package/log4qt/
+ F:	package/python-esptool/
+ F:	package/python-pyaes/
