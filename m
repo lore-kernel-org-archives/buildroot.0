@@ -1,217 +1,189 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 14 Jun 2021 22:49:00 +0200
-Subject: [Buildroot] [PATCH v4,2/2] package/snort3: new package
-In-Reply-To: <40d197ce-e1b9-1b23-269f-a365fe3fe6c1@mind.be>
-References: <20210425172223.3091025-1-fontaine.fabrice@gmail.com>
- <20210425172223.3091025-2-fontaine.fabrice@gmail.com>
- <40d197ce-e1b9-1b23-269f-a365fe3fe6c1@mind.be>
-Message-ID: <CAPi7W80jG9hkjY7BTm=xGUJWdGtG=dz9vSPe+zTQ_zF_pgVM2A@mail.gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 14 Jun 2021 23:04:55 +0200
+Subject: [Buildroot] [PATCH v2 3/5] package/zstd: rework build and
+ install
+In-Reply-To: <3fe56d17-b886-e63b-d366-1e524c895b6b@mind.be>
+References: <20210525172652.821351-1-nolange79@gmail.com>
+ <20210525172652.821351-3-nolange79@gmail.com>
+ <3fe56d17-b886-e63b-d366-1e524c895b6b@mind.be>
+Message-ID: <CADYdroN_jRv7Y5Yf2hPFjqq5jBqaSjr2X9drabbtEkDw7kMcWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lun. 14 juin 2021 ? 22:39, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+Am Mo., 14. Juni 2021 um 21:50 Uhr schrieb Arnout Vandecappelle
+<arnout@mind.be>:
 >
+>  Hi Norbert,
 >
->
-> On 25/04/2021 19:22, Fabrice Fontaine wrote:
-> > Snort 3 is the next generation Snort IPS (Intrusion
-> > Prevention System).
+> On 25/05/2021 19:26, Norbert Lange wrote:
+> > 1.5.0 uses Threads by default for cli tool and DSO,
+> > the build now does the same unless:
 > >
-> >  - Support multiple packet processing threads
-> >  - Shared configuration and attribute table
-> >  - Use a simple, scriptable configuration
-> >  - Make key components pluggable
-> >  - Autodetect services for portless configuration
-> >  - Support sticky buffers in rules
-> >  - Autogenerate reference documentation
-> >  - Provide better cross platform support
+> > If only static libraries are build, then build
+> > that library like the DSO is normally built.
 > >
-> > https://www.snort.org/snort3
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > This should ensure that programs requsting the DSO
+> > will always get the multithreaded version.
 >
->  Applied both to master, thanks.
+>  I don't understand what this patch is trying to do...
 >
->  Was there a reason you didn't carry Heiko's Reviewed-by? I don't think you
-> changed that much, did you?
-Indeed, I should have carried it.
+>  Before this patch, in the threads case, the build would be done with threads
+> both for the program (HAVE_THREAD=1) and the libraries (-mt appended). For the
+> no-threads case, the build is done without threads support for both the program
+> (HAVE_THREAD=0) and the shared&static libraries (no -mt appended) - except that
+> since 1.5.0, the shared library will be built with thread support which will
+> probably result in a build failure.
+
+I would want the static library to be built without threads (like upstream).
+the expectation should be:
+
+1) gcc ... -llibzstd
+    pickup the DSO, with multithread support
+2) gcc ... ../usr/lib/libzstd.a
+    pickup the static library without multithread support
+
+in case there are no shared libraries, 1) will use the static library
+instead, so it should be compiled like the DSO normally would.
+in case there are no static libraries, 2) plainly wont work
+
+For the program, the Makefile should be able to determine whether
+threads are available or not.
+
+>
+>  So as far as I can see, the only thing that needs to be done is:
+>
+> ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
+> else
+> ZSTD_BUILD_LIBS := $(addsuffix -nomt,$(ZSTD_BUILD_LIBS))
+> endif
+>
+>
+>  You patch, however, builds the static library with thread support if no dynamic
+> library is built, and without thread support if a dynamic library is built. This
+> makes no sense whatsoever to me...
+>
+>
+>  Can you clarify the reasoning?
+
+I hope I did. Might be that I don't understand the build failures you
+are talking about,
+does the zstd package fail, or some user of libzstd?
+
+>
+>  For now, I've marked the patch as Changes Requested. Since I did apply the
+> first patch, we will probably start seeing build failures on nothreads, so we'll
+> need a fix soonish...
+
+Sure, I should get a mail as commit author!?
+
+Norbert
+
 >
 >  Regards,
 >  Arnout
 >
+> >
+> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> >
 > > ---
-> > Changes v3 -> v4:
-> >  - Bump to latest upstream version
-> >  - Add new flex dependency
+> > v1->v2:
+> > *   rebased against upstream/master
 > >
-> > Changes v2 -> v3 (after review of Heiko Thiery):
-> >  - Bump to latest upstream version (and so drop patches)
-> >  - Update indentation of hash file to two spaces)
+> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> > ---
+> >  package/zstd/zstd.mk | 52 ++++++++++++++++++++++++++++----------------
+> >  1 file changed, 33 insertions(+), 19 deletions(-)
 > >
-> > Changes v1 -> v2:
-> >  - Fix duplicate "depends on" error in Config.in
+> > diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+> > index 2a876376a2..a7a5ba4e50 100644
+> > --- a/package/zstd/zstd.mk
+> > +++ b/package/zstd/zstd.mk
+> > @@ -12,6 +12,8 @@ ZSTD_LICENSE_FILES = LICENSE COPYING
+> >  ZSTD_CPE_ID_VENDOR = facebook
+> >  ZSTD_CPE_ID_PRODUCT = zstandard
 > >
-> >  DEVELOPERS                 |  1 +
-> >  package/Config.in          |  1 +
-> >  package/snort3/Config.in   | 42 ++++++++++++++++++++++++++++
-> >  package/snort3/snort3.hash |  6 ++++
-> >  package/snort3/snort3.mk   | 57 ++++++++++++++++++++++++++++++++++++++
-> >  5 files changed, 107 insertions(+)
-> >  create mode 100644 package/snort3/Config.in
-> >  create mode 100644 package/snort3/snort3.hash
-> >  create mode 100644 package/snort3/snort3.mk
+> > +ZSTD_OPTS += PREFIX=/usr
+> > +
+> >  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> >  ZSTD_OPTS += HAVE_THREAD=1
+> >  else
+> > @@ -39,43 +41,55 @@ else
+> >  ZSTD_OPTS += HAVE_LZ4=0
+> >  endif
 > >
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 664337561f..a72ddc9740 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -905,6 +905,7 @@ F:        package/python-yatl/
-> >  F:   package/rocksdb/
-> >  F:   package/rygel/
-> >  F:   package/safeclib/
-> > +F:   package/snort3/
-> >  F:   package/suricata/
-> >  F:   package/tinycbor/
-> >  F:   package/tinydtls/
-> > diff --git a/package/Config.in b/package/Config.in
-> > index c30a1603e3..c3379b2376 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -2279,6 +2279,7 @@ endif
-> >       source "package/sngrep/Config.in"
-> >       source "package/snmpclitools/Config.in"
-> >       source "package/snort/Config.in"
-> > +     source "package/snort3/Config.in"
-> >       source "package/socat/Config.in"
-> >       source "package/socketcand/Config.in"
-> >       source "package/softether/Config.in"
-> > diff --git a/package/snort3/Config.in b/package/snort3/Config.in
-> > new file mode 100644
-> > index 0000000000..75923c3c20
-> > --- /dev/null
-> > +++ b/package/snort3/Config.in
-> > @@ -0,0 +1,42 @@
-> > +config BR2_PACKAGE_SNORT3
-> > +     bool "snort3"
-> > +     depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
-> > +     depends on !(BR2_PACKAGE_DAQ || BR2_PACKAGE_SNORT)
-> > +     depends on BR2_USE_MMU # fork()
-> > +     depends on BR2_INSTALL_LIBSTDCPP
-> > +     depends on !BR2_STATIC_LIBS # daq3
-> > +     depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # hwloc
-> > +     depends on BR2_USE_WCHAR
-> > +     select BR2_PACKAGE_DAQ3
-> > +     select BR2_PACKAGE_FLEX
-> > +     select BR2_PACKAGE_HWLOC
-> > +     select BR2_PACKAGE_LIBDNET
-> > +     select BR2_PACKAGE_LIBPCAP
-> > +     select BR2_PACKAGE_LUAJIT
-> > +     select BR2_PACKAGE_PCRE
-> > +     select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> > +     select BR2_PACKAGE_OPENSSL
-> > +     select BR2_PACKAGE_ZLIB
-> > +     help
-> > +       Snort 3 is the next generation Snort IPS (Intrusion
-> > +       Prevention System).
+> > -ifeq ($(BR2_STATIC_LIBS),y)
+> > -ZSTD_BUILD_LIBS = libzstd.a
+> > -ZSTD_INSTALL_LIBS = install-static
+> > -else ifeq ($(BR2_SHARED_LIBS),y)
+> > -ZSTD_BUILD_LIBS = libzstd
+> > -ZSTD_INSTALL_LIBS = install-shared
+> > +ZSTD_BUILD_PROG_TARGET := zstd-release
 > > +
-> > +       - Support multiple packet processing threads
-> > +       - Shared configuration and attribute table
-> > +       - Use a simple, scriptable configuration
-> > +       - Make key components pluggable
-> > +       - Autodetect services for portless configuration
-> > +       - Support sticky buffers in rules
-> > +       - Autogenerate reference documentation
-> > +       - Provide better cross platform support
-> > +
-> > +       https://www.snort.org/snort3
-> > +
-> > +comment "snort3 needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 4.9"
-> > +     depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-> > +     depends on !(BR2_PACKAGE_DAQ || BR2_PACKAGE_SNORT)
-> > +     depends on BR2_USE_MMU
-> > +     depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-> > +             BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
-> > +             !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> > diff --git a/package/snort3/snort3.hash b/package/snort3/snort3.hash
-> > new file mode 100644
-> > index 0000000000..48eddd74c9
-> > --- /dev/null
-> > +++ b/package/snort3/snort3.hash
-> > @@ -0,0 +1,6 @@
-> > +# Locally computed:
-> > +sha256  a68af8ea46a038dfb0ad489e8d11dee62a3e63cb4a639f6bb4fac4ded955fe11  snort3-3.1.4.0.tar.gz
-> > +
-> > +# Hash for license files:
-> > +sha256  3f1cbfb20bb2c608e1a474421880d08b8cba6abb00ab7736d22c481d71656a6d  COPYING
-> > +sha256  f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
-> > diff --git a/package/snort3/snort3.mk b/package/snort3/snort3.mk
-> > new file mode 100644
-> > index 0000000000..1c49da8ec0
-> > --- /dev/null
-> > +++ b/package/snort3/snort3.mk
-> > @@ -0,0 +1,57 @@
-> > +################################################################################
+> > +# Since v1.5.0 the dynamic library is built for
+> > +# multithreading, while the static library is not.
 > > +#
-> > +# snort3
-> > +#
-> > +################################################################################
-> > +
-> > +SNORT3_VERSION = 3.1.4.0
-> > +SNORT3_SITE = $(call github,snort3,snort3,$(SNORT3_VERSION))
-> > +SNORT3_LICENSE = GPL-2.0
-> > +SNORT3_LICENSE_FILES = COPYING LICENSE
-> > +
-> > +SNORT3_DEPENDENCIES = \
-> > +     host-pkgconf daq3 flex hwloc libdnet libpcap luajit openssl pcre zlib
-> > +
-> > +SNORT3_CONF_OPTS = \
-> > +     -DENABLE_GDB=OFF \
-> > +     -DENABLE_STATIC_DAQ=OFF \
-> > +     -DMAKE_DOC=OFF
-> > +
-> > +ifeq ($(BR2_PACKAGE_FLATBUFFERS),y)
-> > +SNORT3_DEPENDENCIES += flatbuffers
-> > +SNORT3_CONF_OPTS += -DHAVE_FLATBUFFERS=ON
-> > +else
-> > +SNORT3_CONF_OPTS += -DHAVE_FLATBUFFERS=OFF
+> > +# Keep those defaults, unless Buildroot is not
+> > +# providing the dynamic library and the
+> > +# static library will be automatically used instead.
+> > +ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+> > +ZSTD_INSTALL_LIBS += install-static
+> > +ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+> > +# Use the static lib as replacement for the mt dynlib
+> > +ZSTD_BUILD_LIBS += libzstd.a-mt
+> >  else
+> > -ZSTD_BUILD_LIBS = libzstd.a libzstd
+> > -ZSTD_INSTALL_LIBS = install-static install-shared
+> > +ZSTD_BUILD_LIBS += libzstd.a-nomt
 > > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_LIBICONV),y)
-> > +SNORT3_DEPENDENCIES += libiconv
-> > +SNORT3_CONF_OPTS += -DHAVE_ICONV=ON
-> > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-> > +SNORT3_DEPENDENCIES += libtirpc
-> > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_SAFECLIB),y)
-> > +SNORT3_DEPENDENCIES += safeclib
-> > +SNORT3_CONF_OPTS += -DENABLE_SAFEC=ON
-> > +else
-> > +SNORT3_CONF_OPTS += -DENABLE_SAFEC=OFF
-> > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
-> > +SNORT3_DEPENDENCIES += util-linux
-> > +SNORT3_CONF_OPTS += -DHAVE_UUID=ON
-> > +else
-> > +SNORT3_CONF_OPTS += -DHAVE_UUID=OFF
-> > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_XZ),y)
-> > +SNORT3_DEPENDENCIES += xz
-> > +SNORT3_CONF_OPTS += -DHAVE_LZMA=ON
-> > +else
-> > +SNORT3_CONF_OPTS += -DHAVE_LZMA=OFF
-> > +endif
-> > +
-> > +$(eval $(cmake-package))
+> >  endif
 > >
-Best Regards,
-
-Fabrice
+> > -# The HAVE_THREAD flag is read by the 'programs' makefile but not by  the 'lib'
+> > -# one. Building a multi-threaded binary with a library (which defaults to
+> > -# single-threaded) gives a runtime error when compressing files.
+> > -# The 'lib' makefile provides specific '%-mt' targets for this purpose.
+> > +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+> > +ZSTD_INSTALL_LIBS += install-shared
+> >  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> > -ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
+> > +ZSTD_BUILD_LIBS += libzstd-mt
+> > +else
+> > +ZSTD_BUILD_LIBS += libzstd-nomt
+> > +endif
+> >  endif
+> >
+> >  define ZSTD_BUILD_CMDS
+> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > -             -C $(@D)/lib $(ZSTD_BUILD_LIBS)
+> > +             -C $(@D)/lib $(addsuffix -release,$(ZSTD_BUILD_LIBS) libzstd.pc)
+> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > -             -C $(@D) zstd
+> > +             -C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET)
+> >  endef
+> >
+> >  define ZSTD_INSTALL_STAGING_CMDS
+> > +     [ -e $(@D)/programs/zstd ] && [ -e $(@D)/lib/libzstd.pc ]
+> > +     $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > +             -C $(@D)/lib DESTDIR=$(STAGING_DIR) $(ZSTD_INSTALL_LIBS) \
+> > +             install-pc install-includes
+> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > -             DESTDIR=$(STAGING_DIR) PREFIX=/usr -C $(@D)/lib \
+> > -             install-pc install-includes $(ZSTD_INSTALL_LIBS)
+> > +             -C $(@D)/programs DESTDIR=$(STAGING_DIR) install
+> >  endef
+> >
+> >  define ZSTD_INSTALL_TARGET_CMDS
+> > +     [ -e $(@D)/programs/zstd ]
+> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > -             DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
+> > +             -C $(@D)/lib DESTDIR=$(TARGET_DIR) $(ZSTD_INSTALL_LIBS)
+> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > -             DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/lib $(ZSTD_INSTALL_LIBS)
+> > +             -C $(@D)/programs DESTDIR=$(TARGET_DIR) install
+> >  endef
+> >
+> >  HOST_ZSTD_OPTS += PREFIX=$(HOST_DIR)
+> >
