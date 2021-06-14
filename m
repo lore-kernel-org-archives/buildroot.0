@@ -1,32 +1,35 @@
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Mon, 14 Jun 2021 14:13:27 +0300
-Subject: [Buildroot] [PATCH v1 1/1] package/fb-test-app: bump version to
- 1.3.1 and update project URL
-In-Reply-To: <7153d2ec-dd6d-ebee-a8a2-f81db89fcf6a@mind.be>
-References: <20210524193234.8606-1-andriy.shevchenko@linux.intel.com>
- <7153d2ec-dd6d-ebee-a8a2-f81db89fcf6a@mind.be>
-Message-ID: <YMc51/HaOfAijQM0@smile.fi.intel.com>
+Date: Mon, 14 Jun 2021 14:14:44 +0300
+Subject: [Buildroot] [PATCH v1 1/1] package/fb-test-app: Add myself to
+ DEVELOPERS
+Message-ID: <20210614111444.65703-1-andriy.shevchenko@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jun 13, 2021 at 06:51:29PM +0200, Arnout Vandecappelle wrote:
-> On 24/05/2021 21:32, Andy Shevchenko wrote:
-> > - bump version to 1.1.1
-> > - update project URL
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
->  Applied to master, thanks.
-> 
->  Since you've actually taken over the package (and hopefully will continue
-> maintaining it for some time, and not simply delete it like prpplague did),
-> perhaps you can add yourself to DEVELOPERS for it?
+Add myself to DEVELOPERS as maintainer of fb-test-app.
 
-Sure. I'm about to send it.
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a90ad1c354c3..103a86d7c359 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -181,6 +181,9 @@ F:	package/sshguard/
+ F:	package/sunwait/
+ F:	package/sysdig/
+ 
++N:	Andy Shevchenko <andy.shevchenko@gmail.com>
++F:	package/fb-test-app/
++
+ N:	Anisse Astier <anisse@astier.eu>
+ F:	package/go/
+ F:	package/nghttp2/
 -- 
-With Best Regards,
-Andy Shevchenko
+2.30.2
