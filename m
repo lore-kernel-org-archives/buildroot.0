@@ -1,29 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Jun 2021 14:01:07 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2021-04-11
-In-Reply-To: <CAFOYHZBJjN25cB7=2cu5qzJOYZVtik+ANuQE6XZLio2RokmXDA@mail.gmail.com>
-References: <6073d64f.1c69fb81.9d11e.7f35SMTPIN_ADDED_MISSING@mx.google.com>
- <CAFOYHZC23wcnW0-y=fyiP2x6M2B5CEyFEzJDeWJq_Pw5BuRbkg@mail.gmail.com>
- <20210610173703.31d33d97@windsurf>
- <CAFOYHZB_RK=hJaTBOoTi3=pxwo_fsx=kTRfEWm0uo8XJ5EbUGg@mail.gmail.com>
- <20210614104545.39c42d14@windsurf>
- <CAFOYHZBJjN25cB7=2cu5qzJOYZVtik+ANuQE6XZLio2RokmXDA@mail.gmail.com>
-Message-ID: <20210614140107.119609c7@windsurf>
+Date: Mon, 14 Jun 2021 14:28:44 +0200
+Subject: [Buildroot] [PATCH 1/3] boot/at91bootstrap3: add support for
+ at91bootstrap 4.x series
+In-Reply-To: <ae8d98c6-dce4-5342-1f15-39b2be3fa31c@microchip.com>
+References: <20210518213749.144355-1-thomas.petazzoni@bootlin.com>
+ <20210518213749.144355-2-thomas.petazzoni@bootlin.com>
+ <20210519093323.GL2268078@scaer>
+ <20210519120237.52ddc109@windsurf.orange-hotspot>
+ <223d3cbf-f1cb-4bdc-aff6-f766e428da33@microchip.com>
+ <20210519142051.6e84a675@windsurf.orange-hotspot>
+ <c41d4467-2901-7b32-96cd-4d7d63753223@microchip.com>
+ <ae8d98c6-dce4-5342-1f15-39b2be3fa31c@microchip.com>
+Message-ID: <20210614142844.4bc28161@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Jun 2021 22:00:22 +1200
-Chris Packham <judge.packham@gmail.com> wrote:
+On Mon, 14 Jun 2021 09:01:06 +0000
+<Eugen.Hristev@microchip.com> wrote:
 
-> Via the contact form. Then got bumped onto redhat who updated the
-> description. I guess I could try again.
+> Do you know of some easy way (a script) to parse the source files and 
+> remove current header and add SPDX headers ?
+> We are considering selecting the SPDX way of licensing the files.
 
-I contacted them over e-mail, got an answer the next day pretty much in
-the entire discussion.
+I don't know of any tool doing that, but I also never had the need or
+researched something like that, so perhaps there is some tooling
+available, but I'm not sure.
+
+Best regards,
 
 Thomas
 -- 
