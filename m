@@ -1,87 +1,159 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 14 Jun 2021 21:25:16 +0200
-Subject: [Buildroot] [PATCH 1/3] boot/at91bootstrap3: add support for
- at91bootstrap 4.x series
-In-Reply-To: <ae8d98c6-dce4-5342-1f15-39b2be3fa31c@microchip.com>
-References: <20210518213749.144355-1-thomas.petazzoni@bootlin.com>
- <20210518213749.144355-2-thomas.petazzoni@bootlin.com>
- <20210519093323.GL2268078@scaer>
- <20210519120237.52ddc109@windsurf.orange-hotspot>
- <223d3cbf-f1cb-4bdc-aff6-f766e428da33@microchip.com>
- <20210519142051.6e84a675@windsurf.orange-hotspot>
- <c41d4467-2901-7b32-96cd-4d7d63753223@microchip.com>
- <ae8d98c6-dce4-5342-1f15-39b2be3fa31c@microchip.com>
-Message-ID: <9c4119ca-96a6-24a7-f993-32068ce1165f@mind.be>
+Date: Mon, 14 Jun 2021 21:50:51 +0200
+Subject: [Buildroot] [PATCH v2 3/5] package/zstd: rework build and
+ install
+In-Reply-To: <20210525172652.821351-3-nolange79@gmail.com>
+References: <20210525172652.821351-1-nolange79@gmail.com>
+ <20210525172652.821351-3-nolange79@gmail.com>
+Message-ID: <3fe56d17-b886-e63b-d366-1e524c895b6b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Norbert,
 
-
-On 14/06/2021 11:01, Eugen.Hristev--- via buildroot wrote:
-> On 5/19/21 3:29 PM, Eugen Hristev - M18282 wrote:
->> On 5/19/21 3:20 PM, Thomas Petazzoni wrote:
->>> Hello Eugen,
->>>
->>> On Wed, 19 May 2021 11:36:56 +0000
->>> <Eugen.Hristev@microchip.com> wrote:
->>>
-[snip]
->>>> I will add a LICENSE file in the repo soon.
->>>
->>> That would be awesome. Could you add it to both the 3.x and the 4.x
->>> branches ? It would be nice to have another release on the 3.x branch
->>> that includes the LICENSE file.
->>
->> Yes, I would do it for both branches. We have to agree on the format of
->> the LICENSE first.
+On 25/05/2021 19:26, Norbert Lange wrote:
+> 1.5.0 uses Threads by default for cli tool and DSO,
+> the build now does the same unless:
 > 
-> Hello Thomas,
+> If only static libraries are build, then build
+> that library like the DSO is normally built.
 > 
-> Do you know of some easy way (a script) to parse the source files and 
-> remove current header and add SPDX headers ?
-> We are considering selecting the SPDX way of licensing the files.
+> This should ensure that programs requsting the DSO
+> will always get the multithreaded version.
 
- I believe the REUSE tool [1] is able to add license headers to files. However,
-I don't think it will remove the existing license blurb...
+ I don't understand what this patch is trying to do...
 
- You could check with the kernel developers how they did the mass replacement. E.g.:
+ Before this patch, in the threads case, the build would be done with threads
+both for the program (HAVE_THREAD=1) and the libraries (-mt appended). For the
+no-threads case, the build is done without threads support for both the program
+(HAVE_THREAD=0) and the shared&static libraries (no -mt appended) - except that
+since 1.5.0, the shared library will be built with thread support which will
+probably result in a build failure.
 
-commit d2912cb15bdda8ba4a5dd73396ad62641af2f520
-Author: Thomas Gleixner <tglx@linutronix.de>
-Date:   Tue Jun 4 10:11:33 2019
+ So as far as I can see, the only thing that needs to be done is:
 
-    treewide: Replace GPLv2 boilerplate/reference with SPDX - rule 500
-
-    Based on 2 normalized pattern(s):
-
-      this program is free software you can redistribute it and or modify
-      it under the terms of the gnu general public license version 2 as
-      published by the free software foundation
-
-      this program is free software you can redistribute it and or modify
-      it under the terms of the gnu general public license version 2 as
-      published by the free software foundation #
-
-    extracted by the scancode license scanner the SPDX license identifier
-
-      GPL-2.0-only
-
-    has been chosen to replace the boilerplate/reference in 4122 file(s).
-
-    Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-    Reviewed-by: Enrico Weigelt <info@metux.net>
-    Reviewed-by: Kate Stewart <kstewart@linuxfoundation.org>
-    Reviewed-by: Allison Randal <allison@lohutok.net>
-    Cc: linux-spdx at vger.kernel.org
-    Link: https://lkml.kernel.org/r/20190604081206.933168790 at linutronix.de
-    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
+else
+ZSTD_BUILD_LIBS := $(addsuffix -nomt,$(ZSTD_BUILD_LIBS))
+endif
 
 
+ You patch, however, builds the static library with thread support if no dynamic
+library is built, and without thread support if a dynamic library is built. This
+makes no sense whatsoever to me...
+
+
+ Can you clarify the reasoning?
+
+ For now, I've marked the patch as Changes Requested. Since I did apply the
+first patch, we will probably start seeing build failures on nothreads, so we'll
+need a fix soonish...
 
  Regards,
  Arnout
 
-[snip]
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> 
+> ---
+> v1->v2:
+> *   rebased against upstream/master
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/zstd/zstd.mk | 52 ++++++++++++++++++++++++++++----------------
+>  1 file changed, 33 insertions(+), 19 deletions(-)
+> 
+> diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+> index 2a876376a2..a7a5ba4e50 100644
+> --- a/package/zstd/zstd.mk
+> +++ b/package/zstd/zstd.mk
+> @@ -12,6 +12,8 @@ ZSTD_LICENSE_FILES = LICENSE COPYING
+>  ZSTD_CPE_ID_VENDOR = facebook
+>  ZSTD_CPE_ID_PRODUCT = zstandard
+>  
+> +ZSTD_OPTS += PREFIX=/usr
+> +
+>  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+>  ZSTD_OPTS += HAVE_THREAD=1
+>  else
+> @@ -39,43 +41,55 @@ else
+>  ZSTD_OPTS += HAVE_LZ4=0
+>  endif
+>  
+> -ifeq ($(BR2_STATIC_LIBS),y)
+> -ZSTD_BUILD_LIBS = libzstd.a
+> -ZSTD_INSTALL_LIBS = install-static
+> -else ifeq ($(BR2_SHARED_LIBS),y)
+> -ZSTD_BUILD_LIBS = libzstd
+> -ZSTD_INSTALL_LIBS = install-shared
+> +ZSTD_BUILD_PROG_TARGET := zstd-release
+> +
+> +# Since v1.5.0 the dynamic library is built for
+> +# multithreading, while the static library is not.
+> +#
+> +# Keep those defaults, unless Buildroot is not
+> +# providing the dynamic library and the
+> +# static library will be automatically used instead.
+> +ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+> +ZSTD_INSTALL_LIBS += install-static
+> +ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+> +# Use the static lib as replacement for the mt dynlib
+> +ZSTD_BUILD_LIBS += libzstd.a-mt
+>  else
+> -ZSTD_BUILD_LIBS = libzstd.a libzstd
+> -ZSTD_INSTALL_LIBS = install-static install-shared
+> +ZSTD_BUILD_LIBS += libzstd.a-nomt
+> +endif
+>  endif
+>  
+> -# The HAVE_THREAD flag is read by the 'programs' makefile but not by  the 'lib'
+> -# one. Building a multi-threaded binary with a library (which defaults to
+> -# single-threaded) gives a runtime error when compressing files.
+> -# The 'lib' makefile provides specific '%-mt' targets for this purpose.
+> +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+> +ZSTD_INSTALL_LIBS += install-shared
+>  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> -ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
+> +ZSTD_BUILD_LIBS += libzstd-mt
+> +else
+> +ZSTD_BUILD_LIBS += libzstd-nomt
+> +endif
+>  endif
+>  
+>  define ZSTD_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> -		-C $(@D)/lib $(ZSTD_BUILD_LIBS)
+> +		-C $(@D)/lib $(addsuffix -release,$(ZSTD_BUILD_LIBS) libzstd.pc)
+>  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> -		-C $(@D) zstd
+> +		-C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET)
+>  endef
+>  
+>  define ZSTD_INSTALL_STAGING_CMDS
+> +	[ -e $(@D)/programs/zstd ] && [ -e $(@D)/lib/libzstd.pc ]
+> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> +		-C $(@D)/lib DESTDIR=$(STAGING_DIR) $(ZSTD_INSTALL_LIBS) \
+> +		install-pc install-includes
+>  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> -		DESTDIR=$(STAGING_DIR) PREFIX=/usr -C $(@D)/lib \
+> -		install-pc install-includes $(ZSTD_INSTALL_LIBS)
+> +		-C $(@D)/programs DESTDIR=$(STAGING_DIR) install
+>  endef
+>  
+>  define ZSTD_INSTALL_TARGET_CMDS
+> +	[ -e $(@D)/programs/zstd ]
+>  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> -		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
+> +		-C $(@D)/lib DESTDIR=$(TARGET_DIR) $(ZSTD_INSTALL_LIBS)
+>  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> -		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/lib $(ZSTD_INSTALL_LIBS)
+> +		-C $(@D)/programs DESTDIR=$(TARGET_DIR) install
+>  endef
+>  
+>  HOST_ZSTD_OPTS += PREFIX=$(HOST_DIR)
+> 
