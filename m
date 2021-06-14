@@ -1,47 +1,77 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Jun 2021 21:55:34 +0200
-Subject: [Buildroot] [git commit] package/perl-libwww-perl: bump to version
- 6.54
-Message-ID: <20210614192528.605D082A89@busybox.osuosl.org>
+Date: Mon, 14 Jun 2021 21:56:57 +0200
+Subject: [Buildroot] [PATCH 1/6] package/perl-convert-asn1: bump to
+ version 0.31
+In-Reply-To: <20210607175604.2850795-1-francois.perrad@gadz.org>
+References: <20210607175604.2850795-1-francois.perrad@gadz.org>
+Message-ID: <20210614195657.GC2610983@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=368c74f7e134435244ebcb959639840960645710
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fran?ois, All,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
- package/perl-libwww-perl/perl-libwww-perl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2021-06-07 19:55 +0200, Francois Perrad spake thusly:
+> diff LICENSE:
+> - This software is copyright (c) 2014 by Graham Barr.
+> + This software is copyright (c) 2021 by Graham Barr.
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
-index 8081e127f8..d04fb96999 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.hash
-+++ b/package/perl-libwww-perl/perl-libwww-perl.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  33fdb6415018b8bf94242cace1b06479  libwww-perl-6.53.tar.gz
--sha256  9cbb7c688416a20c1aba9a32568504af1143ced58b572c502a1b2fb8a500f535  libwww-perl-6.53.tar.gz
-+md5  aea3e2a207b128371db0ef0f86229667  libwww-perl-6.54.tar.gz
-+sha256  76917708bd91fbb15eb5eece25ddd2ed1fa65a5b6b05a3ab2a7facce17dfc81d  libwww-perl-6.54.tar.gz
- 
- # computed by scancpan
- sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENSE
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
-index d96035e42f..877ab9b365 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.mk
-+++ b/package/perl-libwww-perl/perl-libwww-perl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_LIBWWW_PERL_VERSION = 6.53
-+PERL_LIBWWW_PERL_VERSION = 6.54
- PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
- PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
+Series of 6 patches: applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/perl-convert-asn1/perl-convert-asn1.hash | 6 +++---
+>  package/perl-convert-asn1/perl-convert-asn1.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/perl-convert-asn1/perl-convert-asn1.hash b/package/perl-convert-asn1/perl-convert-asn1.hash
+> index 4fd7d3eb6..eb7973c31 100644
+> --- a/package/perl-convert-asn1/perl-convert-asn1.hash
+> +++ b/package/perl-convert-asn1/perl-convert-asn1.hash
+> @@ -1,6 +1,6 @@
+>  # retrieved by scancpan from http://cpan.metacpan.org/
+> -md5    68723e96be0b258a9e20480276e8a62c Convert-ASN1-0.27.tar.gz
+> -sha256 74a4a78ae0c5e973100ac0a8f203a110f76fb047b79dae4fc1fd7d6814d3d58a Convert-ASN1-0.27.tar.gz
+> +md5  1e12b263a5042804bb1c59ddce899876  Convert-ASN1-0.31.tar.gz
+> +sha256  6fe4c1ba744c3a8212bf2c9b2703d93530acc153435cf2f93633540b439fbbeb  Convert-ASN1-0.31.tar.gz
+>  
+>  # computed by scancpan
+> -sha256 4ef46cc39d9e2b4c767503457a1f8fda5bcf9c0c164923e2a54a3863209cf237 LICENSE
+> +sha256  db9e46a932b02253c8bddc05a44a0c1c6979627190afb2251dd76462dd370d79  LICENSE
+> diff --git a/package/perl-convert-asn1/perl-convert-asn1.mk b/package/perl-convert-asn1/perl-convert-asn1.mk
+> index b6ba76a7e..c39fe3412 100644
+> --- a/package/perl-convert-asn1/perl-convert-asn1.mk
+> +++ b/package/perl-convert-asn1/perl-convert-asn1.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -PERL_CONVERT_ASN1_VERSION = 0.27
+> +PERL_CONVERT_ASN1_VERSION = 0.31
+>  PERL_CONVERT_ASN1_SOURCE = Convert-ASN1-$(PERL_CONVERT_ASN1_VERSION).tar.gz
+> -PERL_CONVERT_ASN1_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GB/GBARR
+> +PERL_CONVERT_ASN1_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TI/TIMLEGGE
+>  PERL_CONVERT_ASN1_LICENSE = Artistic or GPL-1.0+
+>  PERL_CONVERT_ASN1_LICENSE_FILES = LICENSE
+>  PERL_CONVERT_ASN1_DISTNAME = Convert-ASN1
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
