@@ -1,75 +1,54 @@
-From: Eugen.Hristev at microchip.com <Eugen.Hristev@microchip.com>
-Date: Mon, 14 Jun 2021 09:01:06 +0000
-Subject: [Buildroot] [PATCH 1/3] boot/at91bootstrap3: add support for
- at91bootstrap 4.x series
-In-Reply-To: <c41d4467-2901-7b32-96cd-4d7d63753223@microchip.com>
-References: <20210518213749.144355-1-thomas.petazzoni@bootlin.com>
- <20210518213749.144355-2-thomas.petazzoni@bootlin.com>
- <20210519093323.GL2268078@scaer>
- <20210519120237.52ddc109@windsurf.orange-hotspot>
- <223d3cbf-f1cb-4bdc-aff6-f766e428da33@microchip.com>
- <20210519142051.6e84a675@windsurf.orange-hotspot>
- <c41d4467-2901-7b32-96cd-4d7d63753223@microchip.com>
-Message-ID: <ae8d98c6-dce4-5342-1f15-39b2be3fa31c@microchip.com>
+From: Andreas Ziegler <br015@umbiko.net>
+Date: Mon, 14 Jun 2021 09:22:23 +0000
+Subject: [Buildroot] NDEBUG breaks compilation of GCC 10
+Message-ID: <7b2a93a6d61d07972023890ac6d90032@umbiko.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 5/19/21 3:29 PM, Eugen Hristev - M18282 wrote:
-> On 5/19/21 3:20 PM, Thomas Petazzoni wrote:
->> Hello Eugen,
->>
->> On Wed, 19 May 2021 11:36:56 +0000
->> <Eugen.Hristev@microchip.com> wrote:
->>
->>> Thank you for taking care of this. You could have given me more feedback
->>> on my previous patch set so I would have changed it, if you felt like
->>> it, but now it's done, we can move forward, which is good.
->>
->> Agreed, but sometimes the comments/ideas only come when really you
->> apply the patch, and you mess up with the code to figure out the most
->> appropriate way. Also, it was a way of avoiding another back-and-forth
->> with another iteration. I discussed the patch series yesterday with the
->> other BR maintainers, respin a series, and it got applied today.
->> Problem solved :-)
->>
->> (To the exception of the mistake you spotted in PATCH 3/3, of course!).
->>
->>> I will add a LICENSE file in the repo soon.
->>
->> That would be awesome. Could you add it to both the 3.x and the 4.x
->> branches ? It would be nice to have another release on the 3.x branch
->> that includes the LICENSE file.
-> 
-> Yes, I would do it for both branches. We have to agree on the format of
-> the LICENSE first.
+Dear all,
 
-Hello Thomas,
+I seem to attract all the corner cases :-(
 
-Do you know of some easy way (a script) to parse the source files and 
-remove current header and add SPDX headers ?
-We are considering selecting the SPDX way of licensing the files.
+After the merge with the recent 'next' branch, compilation of GCC10 
+breaks in the gcc-final step.
 
-Thanks,
-Eugen
+musl/assert.h:
 
-> 
-> There will be probably a 3.10.3 at some point. There are many patches
-> yet on top of 3.10.2
-> 
-> I am sending now a v4 for the ICP board configs.
-> 
-> Eugen
-> 
->>
->> Thanks!
->>
->> Thomas
->> --
->> Thomas Petazzoni, co-owner and CEO, Bootlin
->> Embedded Linux and Kernel engineering
->> https://bootlin.com
->>
-> 
+	#ifdef NDEBUG
+	#define	assert(x) (void)0
+	#else
+	#define assert(x) ((void)((x) || (__assert_fail(#x, __FILE__, __LINE__, 
+__func__),0)))
+	#endif
+
+gcc/libgomp/target.c:
+
+	{
+	  struct target_mem_desc *k_tgt = k->tgt;
+	  bool is_tgt_unmapped = gomp_remove_var (devicep, k);
+	  /* It would be bad if TGT got unmapped while we're still iterating
+	     over its LIST_COUNT, and also expect to use it in the following
+	     code.  */
+	  assert (!is_tgt_unmapped
+		  || k_tgt != tgt);
+	}
+
+Build log:
+../../../libgomp/target.c: In function ?gomp_unmap_vars_internal?:
+../../../libgomp/target.c:1474:9: error: unused variable 
+?is_tgt_unmapped? [-Werror=unused-variable]
+  1474 |    bool is_tgt_unmapped = gomp_remove_var (devicep, k);
+       |         ^~~~~~~~~~~~~~~
+../../../libgomp/target.c:1473:28: error: unused variable ?k_tgt? 
+[-Werror=unused-variable]
+  1473 |    struct target_mem_desc *k_tgt = k->tgt;
+       |                            ^~~~~
+
+Introducing -Wno-error=unused-variable seems to help, but maybe there is 
+a better solution?
+
+Kind regards,
+Andreas
