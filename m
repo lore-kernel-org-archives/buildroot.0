@@ -1,171 +1,168 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Jun 2021 22:27:44 +0200
-Subject: [Buildroot] [PATCH 2/2] package/lzlib: remove it
-In-Reply-To: <20210613154240.2877974-2-francois.perrad@gadz.org>
-References: <20210613154240.2877974-1-francois.perrad@gadz.org>
- <20210613154240.2877974-2-francois.perrad@gadz.org>
-Message-ID: <20210614202744.GI2610983@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 14 Jun 2021 22:29:24 +0200
+Subject: [Buildroot] [PATCH] package/bluez5_utils: Clean up descriptions
+In-Reply-To: <20210421131724.471288-1-buildroot@heine.tech>
+References: <20210421131724.471288-1-buildroot@heine.tech>
+Message-ID: <abc02a22-b641-a5b9-867a-d8a4bdabcb80@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
 
-On 2021-06-13 17:42 +0200, Francois Perrad spake thusly:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Removing a package should dully explained in the commit log.
+On 21/04/2021 15:17, Michael Nosthoff via buildroot wrote:
+> The descriptions in this package have grown pretty confusing over time.
+> Try to make this a bit more consistent and up-to-date.
+> 
+> * drop references to old kernel versions not supported by BR anymore
+> * Remove "Bluez 5.x" string from options
+> * consistently use the term "plugin" (plugins implement profiles)
+> * make mentioned profile appreviations upper-case
+> * make descriptions closer to the ones in BlueZ Readme [0]
+> * make clear that "tests" refers to the python test scripts
+> 
+> [0] https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/README?h=5.58
+> 
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-lua-zlib that you taunt as a replcement, adertises that it is not 100%
-percent compatible:
 
-    https://github.com/brimworks/lua-zlib/blob/master/README#L172
+ Applied to master, thanks.
 
-    NOTE: This library ships with an "lzlib" compatibility shim.
-    However, the following things are not compatible:
+ I made two more changes:
 
-     * zlib.version() in lzlib returns a string, but this library
-       returns a numeric tuple (see above).
+- removed 5.x from the prompt and main help text as well;
+- spell as BlueZ in the main help text.
 
-     * zlib.{adler,crc}32() in lzlib returns the {adler,crc}32
-       initial value, however if this value is used with calls
-       to adler32 it works in compatibility mode.
-
-Furthermore, this limited comp[atibility can only be achieved if a
-package requests it:
-
-    To use this shim add the -DLZLIB_COMPAT compiler flag.
-
-So, lua-zlib is not a drop-in replacement for lzlib.
-
-As such, we can't remove lzlib (yet).
-
-Regards,
-Yann E. MORIN.
+ Regards,
+ Arnout
 
 > ---
->  Config.in.legacy                            |  7 +++++++
->  package/Config.in                           |  1 -
->  package/lzlib/Config.in                     | 10 ----------
->  package/lzlib/lzlib.hash                    |  3 ---
->  package/lzlib/lzlib.mk                      | 15 ---------------
->  support/testing/tests/package/test_lzlib.py | 14 --------------
->  6 files changed, 7 insertions(+), 43 deletions(-)
->  delete mode 100644 package/lzlib/Config.in
->  delete mode 100644 package/lzlib/lzlib.hash
->  delete mode 100644 package/lzlib/lzlib.mk
->  delete mode 100644 support/testing/tests/package/test_lzlib.py
+>  package/bluez5_utils/Config.in | 45 ++++++++++++++++------------------
+>  1 file changed, 21 insertions(+), 24 deletions(-)
 > 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index a0c1a6898..adfacecd3 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -236,6 +236,13 @@ config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
->  	  of the official Kodi github repo and its build is broken
->  	  with Kodi 19.x, so it was removed.
+> diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+> index 016a16c4c5..f79155997a 100644
+> --- a/package/bluez5_utils/Config.in
+> +++ b/package/bluez5_utils/Config.in
+> @@ -11,13 +11,8 @@ config BR2_PACKAGE_BLUEZ5_UTILS
+>  	help
+>  	  bluez utils version 5.x
 >  
-> +config BR2_PACKAGE_LZLIB
-> +	bool "lzlib package was removed"
-> +	select BR2_PACKAGE_LUA_ZLIB
-> +	select BR2_LEGACY
-> +	help
-> +	  The lzlib package was removed, use lua-zlib instead.
-> +
->  comment "Legacy options removed in 2021.02"
+> -	  With this release BlueZ only supports the new Bluetooth
+> -	  Management kernel interface (introduced in Linux 3.4).
+> -
+> -	  For Low Energy support at least kernel version 3.5 is
+> -	  needed.
+> -
+> -	  The API is not backward compatible with BlueZ 4.
+> +	  Provides Stack, Library and Tooling for Bluetooth Classic
+> +	  and Bluetooth LE.
 >  
->  config BR2_PACKAGE_MPD_AUDIOFILE
-> diff --git a/package/Config.in b/package/Config.in
-> index 1abfd787f..66978ec45 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -708,7 +708,6 @@ menu "Lua libraries/modules"
->  	source "package/lutok/Config.in"
->  	source "package/luv/Config.in"
->  	source "package/luvi/Config.in"
-> -	source "package/lzlib/Config.in"
->  	source "package/orbit/Config.in"
->  	source "package/rings/Config.in"
->  	source "package/turbolua/Config.in"
-> diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
-> deleted file mode 100644
-> index 59a2e6d5c..000000000
-> --- a/package/lzlib/Config.in
-> +++ /dev/null
-> @@ -1,10 +0,0 @@
-> -config BR2_PACKAGE_LZLIB
-> -	bool "lzlib"
-> -	depends on BR2_PACKAGE_LUA
-> -	select BR2_PACKAGE_ZLIB
-> -	help
-> -	  This package provides a library to access zlib library
-> -	  functions and also to read/write gzip files using an
-> -	  interface similar to the base io package.
-> -
-> -	  https://github.com/LuaDist/lzlib
-> diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
-> deleted file mode 100644
-> index 4bb4c52c8..000000000
-> --- a/package/lzlib/lzlib.hash
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -# Locally calculated
-> -sha256  cbb0cac5825e940b4ea2f31a336d2aaf6db39847d456920afd8e443804420dbb  lzlib-0.4.3.tar.gz
-> -sha256  f817d4a37077e94e9adf379f46ba5cc0b68775d7add2bbd5b2ca68ba140ad5bb  lzlib.c
-> diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
-> deleted file mode 100644
-> index 74624d501..000000000
-> --- a/package/lzlib/lzlib.mk
-> +++ /dev/null
-> @@ -1,15 +0,0 @@
-> -################################################################################
-> -#
-> -# lzlib
-> -#
-> -################################################################################
-> -
-> -LZLIB_VERSION = 0.4.3
-> -LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
-> -LZLIB_DEPENDENCIES = lua zlib
-> -LZLIB_LICENSE = MIT
-> -LZLIB_LICENSE_FILES = lzlib.c
-> -LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
-> -	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
-> -
-> -$(eval $(cmake-package))
-> diff --git a/support/testing/tests/package/test_lzlib.py b/support/testing/tests/package/test_lzlib.py
-> deleted file mode 100644
-> index 84e767913..000000000
-> --- a/support/testing/tests/package/test_lzlib.py
-> +++ /dev/null
-> @@ -1,14 +0,0 @@
-> -from tests.package.test_lua import TestLuaBase
-> -
-> -
-> -class TestLuaLzlib(TestLuaBase):
-> -    config = TestLuaBase.config + \
-> -        """
-> -        BR2_PACKAGE_LUA=y
-> -        BR2_PACKAGE_LZLIB=y
-> -        """
-> -
-> -    def test_run(self):
-> -        self.login()
-> -        self.module_test("zlib")
-> -        self.module_test("gzip")
-> -- 
-> 2.30.2
+>  	  Bluez utils will use systemd and/or udev if enabled.
+>  
+> @@ -31,7 +26,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS_OBEX
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	select BR2_PACKAGE_LIBICAL
+>  	help
+> -	  Enable the OBEX support in Bluez 5.x.
+> +	  Enable OBEX support.
+>  
+>  comment "OBEX support needs a toolchain w/ C++"
+>  	depends on !BR2_INSTALL_LIBSTDCPP
+> @@ -40,75 +35,77 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+>  	bool "build CLI client"
+>  	select BR2_PACKAGE_READLINE
+>  	help
+> -	  Enable the Bluez 5.x command line client.
+> +	  Build the command line client "bluetoothctl".
+>  
+>  config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
+> -	bool "install deprecated tool"
+> +	bool "install deprecated tools"
+>  	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+>  	help
+> -	  Build BlueZ 5.x deprecated tools. These currently include:
+> +	  Build deprecated tools. These currently include:
+>  	  hciattach, hciconfig, hcitool, hcidump, rfcomm, sdptool,
+>  	  ciptool, gatttool.
+>  
+>  config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+> -	bool "build experimental obexd plugin"
+> +	bool "build experimental tools"
+>  	help
+> -	  Build BlueZ 5.x experimental Nokia OBEX PC Suite plugin
+> +	  Build experimental tools. This is currently only the
+> +	  "Nokia OBEX PC Suite tool". So, only if OBEX support is
+> +	  enabled this option has an effect.
+>  
+>  config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
+>  	bool "build health plugin"
+>  	help
+> -	  Build BlueZ 5.x health plugin
+> +	  Build plugin for health profiles.
+>  
+>  config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH
+> -	bool "build mesh profile"
+> +	bool "build mesh plugin"
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
+>  	select BR2_PACKAGE_ELL
+>  	select BR2_PACKAGE_JSON_C
+>  	select BR2_PACKAGE_READLINE
+>  	help
+> -	  Build BlueZ 5.x mesh plugin
+> +	  Build plugin for Mesh support.
+>  
+>  comment "mesh profile needs a toolchain w/ headers >= 4.12"
+>  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+>  
+>  config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI
+> -	bool "build midi profile"
+> +	bool "build midi plugin"
+>  	select BR2_PACKAGE_ALSA_LIB
+>  	select BR2_PACKAGE_ALSA_LIB_SEQ
+>  	help
+> -	  Build BlueZ 5.x midi plugin
+> +	  Build MIDI support via ALSA sequencer.
+>  
+>  config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NFC
+>  	bool "build nfc plugin"
+>  	help
+> -	  Build BlueZ 5.x nfc plugin
+> +	  Build plugin for NFC pairing.
+>  
+>  config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SAP
+>  	bool "build sap plugin"
+>  	help
+> -	  Build BlueZ 5.x sap plugin
+> +	  Build plugin for SAP profile.
+>  
+>  config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SIXAXIS
+>  	bool "build sixaxis plugin"
+>  	depends on BR2_PACKAGE_HAS_UDEV
+>  	help
+> -	  Build BlueZ 5.x sixaxis plugin (support Sony Dualshock
+> +	  Build sixaxis plugin (support Sony Dualshock
+>  	  controller)
+>  
+>  comment "sixaxis plugin needs udev /dev management"
+>  	depends on !BR2_PACKAGE_HAS_UDEV
+>  
+>  config BR2_PACKAGE_BLUEZ5_UTILS_TEST
+> -	bool "build tests"
+> +	bool "install test scripts"
+>  	help
+> -	  Build BlueZ 5.x tests
+> +	  Install the python test scripts from the "test" directory.
+>  
+>  config BR2_PACKAGE_BLUEZ5_UTILS_TOOLS_HID2HCI
+>  	bool "build hid2hci tool"
+>  	depends on BR2_PACKAGE_HAS_UDEV
+>  	help
+> -	  Build BlueZ 5.x hid2hci tool
+> +	  Build hid2hci tool
+>  
+>  comment "hid2hci tool needs udev /dev management"
+>  	depends on !BR2_PACKAGE_HAS_UDEV
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
