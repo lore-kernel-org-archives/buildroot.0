@@ -1,42 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Jun 2021 18:21:21 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/bitcoin: unset the NDEBUG
- flag
-In-Reply-To: <ZTnoZb2MMbi5Z7xbG_3OKXXEj07hBkAAiKJqWo8-ke0zvQ3NE7ETdQHmw4oDe6M6YEnyDdQxIGltbNk15VM_w7hY-F7CQq8U-rG5VWRj7Uk=@senzilla.io>
-References: <ZbTvPhursXFsHDblON1mtNTQnG937Il2N0wYa3ReI@cp4-web-037.plabs.ch>
- <20210613195850.GT168928@scaer>
- <ZTnoZb2MMbi5Z7xbG_3OKXXEj07hBkAAiKJqWo8-ke0zvQ3NE7ETdQHmw4oDe6M6YEnyDdQxIGltbNk15VM_w7hY-F7CQq8U-rG5VWRj7Uk=@senzilla.io>
-Message-ID: <20210614162121.GA2610983@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 14 Jun 2021 19:33:38 +0200
+Subject: [Buildroot] [PATCH 1/2] package/tor: security bump version to
+ 0.4.5.9
+Message-ID: <20210614173339.669718-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dick, All,
+Release notes: https://blog.torproject.org/node/2041
 
-On 2021-06-14 10:06 +0000, D. Olsson spake thusly:
-> On Sunday, June 13th, 2021 at 9:58 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >> Signed-off-by: Dick Olsson hi at senzilla.io
-> > Applied to master, thanks.
-> Should we apply this to the 'next' branch as well?
-> The bitcoin build is currently broken there.
+Fixes CVE-2021-34548 (TROVE-2021-003), TROVE-2021-004, CVE-2021-34549
+(TROVE-2021-005) & CVE-2021-34550 (TROVE-2021-006).
 
-Branch 'next' is closed; it has been merged back into master with commit
-8d07baab43, dated 2021-06-07.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+Created an extra patch for easier backporting.
 
-> But I'm not sure exactly how the 'master' and 'next'
-> branches are managed?
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-https://buildroot.org/downloads/manual/manual.html#RELENG
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index dd20bbc92e..8622281c2c 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  57ded091e8bcdcebb0013fe7ef4a4439827cb169358c7874fd05fa00d813e227  tor-0.4.5.8.tar.gz
++sha256  f304e456102ed26c39e5f16ece2115585398cdb4e67455139c86ea43cdf70856  tor-0.4.5.9.tar.gz
+ sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 4a16967d42..e7e791a10a 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.4.5.8
++TOR_VERSION = 0.4.5.9
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
