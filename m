@@ -1,184 +1,171 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 14 Jun 2021 22:21:39 +0200
-Subject: [Buildroot] [PATCH for-next] package/libiec61850: bump to
- version 1.5.0
-In-Reply-To: <20210525120341.35774-1-romain.naour@smile.fr>
-References: <20210525120341.35774-1-romain.naour@smile.fr>
-Message-ID: <5b012ad9-c2e4-44ca-0edc-e99dd5d1496a@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Jun 2021 22:27:44 +0200
+Subject: [Buildroot] [PATCH 2/2] package/lzlib: remove it
+In-Reply-To: <20210613154240.2877974-2-francois.perrad@gadz.org>
+References: <20210613154240.2877974-1-francois.perrad@gadz.org>
+ <20210613154240.2877974-2-francois.perrad@gadz.org>
+Message-ID: <20210614202744.GI2610983@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fran?ois, All,
 
+On 2021-06-13 17:42 +0200, Francois Perrad spake thusly:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-On 25/05/2021 14:03, Romain Naour wrote:
-> Remove all upstream patches
-> Remove IGNORE_CVES for CVE-2020-15158
-> 
-> Build tested:
-> https://gitlab.com/kubu93/buildroot/-/pipelines/309037705
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Removing a package should dully explained in the commit log.
 
- Applied to master, thanks.
+lua-zlib that you taunt as a replcement, adertises that it is not 100%
+percent compatible:
 
- Regards,
- Arnout
+    https://github.com/brimworks/lua-zlib/blob/master/README#L172
+
+    NOTE: This library ships with an "lzlib" compatibility shim.
+    However, the following things are not compatible:
+
+     * zlib.version() in lzlib returns a string, but this library
+       returns a numeric tuple (see above).
+
+     * zlib.{adler,crc}32() in lzlib returns the {adler,crc}32
+       initial value, however if this value is used with calls
+       to adler32 it works in compatibility mode.
+
+Furthermore, this limited comp[atibility can only be achieved if a
+package requests it:
+
+    To use this shim add the -DLZLIB_COMPAT compiler flag.
+
+So, lua-zlib is not a drop-in replacement for lzlib.
+
+As such, we can't remove lzlib (yet).
+
+Regards,
+Yann E. MORIN.
 
 > ---
-> test-pkg config:
-> BR2_PACKAGE_LIBIEC61850=y
-> ---
->  ...001-use-poll.h-instead-of-sys-poll.h.patch | 33 -------------------
->  ...linux-Add-missing-include-sys-time.h.patch | 32 ------------------
->  ...uffer-overflow-when-handling-message.patch | 27 ---------------
->  package/libiec61850/libiec61850.hash          |  2 +-
->  package/libiec61850/libiec61850.mk            |  5 +--
->  5 files changed, 2 insertions(+), 97 deletions(-)
->  delete mode 100644 package/libiec61850/0001-use-poll.h-instead-of-sys-poll.h.patch
->  delete mode 100644 package/libiec61850/0002-serial_port_linux-Add-missing-include-sys-time.h.patch
->  delete mode 100644 package/libiec61850/0003-COTP-fixed-possible-heap-buffer-overflow-when-handling-message.patch
+>  Config.in.legacy                            |  7 +++++++
+>  package/Config.in                           |  1 -
+>  package/lzlib/Config.in                     | 10 ----------
+>  package/lzlib/lzlib.hash                    |  3 ---
+>  package/lzlib/lzlib.mk                      | 15 ---------------
+>  support/testing/tests/package/test_lzlib.py | 14 --------------
+>  6 files changed, 7 insertions(+), 43 deletions(-)
+>  delete mode 100644 package/lzlib/Config.in
+>  delete mode 100644 package/lzlib/lzlib.hash
+>  delete mode 100644 package/lzlib/lzlib.mk
+>  delete mode 100644 support/testing/tests/package/test_lzlib.py
 > 
-> diff --git a/package/libiec61850/0001-use-poll.h-instead-of-sys-poll.h.patch b/package/libiec61850/0001-use-poll.h-instead-of-sys-poll.h.patch
-> deleted file mode 100644
-> index a04473d218..0000000000
-> --- a/package/libiec61850/0001-use-poll.h-instead-of-sys-poll.h.patch
-> +++ /dev/null
-> @@ -1,33 +0,0 @@
-> -From 4cad505fc98240eb66eaabfae61a9694f8158dda Mon Sep 17 00:00:00 2001
-> -From: Romain Naour <romain.naour@smile.fr>
-> -Date: Tue, 7 Apr 2020 20:58:37 +0200
-> -Subject: [PATCH] use <poll.h> instead of <sys/poll.h>
-> -
-> -The manpage of poll(2) states that the prototype of poll is defined
-> -in <poll.h>. Use that header file instead of <sys/poll.h> to allow
-> -compilation against musl-libc.
-> -
-> -Upstream status: Pending
-> -https://github.com/mz-automation/libiec61850/pull/228
-> -
-> -Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ----
-> - hal/ethernet/linux/ethernet_linux.c | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/hal/ethernet/linux/ethernet_linux.c b/hal/ethernet/linux/ethernet_linux.c
-> -index c3ab2e2..9aa5c28 100644
-> ---- a/hal/ethernet/linux/ethernet_linux.c
-> -+++ b/hal/ethernet/linux/ethernet_linux.c
-> -@@ -23,7 +23,7 @@
-> - 
-> - #include <sys/socket.h>
-> - #include <sys/ioctl.h>
-> --#include <sys/poll.h>
-> -+#include <poll.h>
-> - #include <linux/if_packet.h>
-> - #include <linux/if_ether.h>
-> - #include <linux/if_arp.h>
-> --- 
-> -2.21.1
-> -
-> diff --git a/package/libiec61850/0002-serial_port_linux-Add-missing-include-sys-time.h.patch b/package/libiec61850/0002-serial_port_linux-Add-missing-include-sys-time.h.patch
-> deleted file mode 100644
-> index e1b8ca15b3..0000000000
-> --- a/package/libiec61850/0002-serial_port_linux-Add-missing-include-sys-time.h.patch
-> +++ /dev/null
-> @@ -1,32 +0,0 @@
-> -From 661405eb6066b67dfe51d5ff9635e29f86bdd238 Mon Sep 17 00:00:00 2001
-> -From: Romain Naour <romain.naour@smile.fr>
-> -Date: Tue, 7 Apr 2020 21:02:54 +0200
-> -Subject: [PATCH] serial_port_linux: Add missing include sys/time.h
-> -
-> -POSIX says `struct timeval` is defined if <sys/time.h> is included.
-> -
-> -Adding this header allow to build against musl-libc.
-> -
-> -Upstream status: Pending
-> -https://github.com/mz-automation/libiec61850/pull/228
-> -
-> -Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ----
-> - hal/serial/linux/serial_port_linux.c | 1 +
-> - 1 file changed, 1 insertion(+)
-> -
-> -diff --git a/hal/serial/linux/serial_port_linux.c b/hal/serial/linux/serial_port_linux.c
-> -index e6308c0..15e5794 100644
-> ---- a/hal/serial/linux/serial_port_linux.c
-> -+++ b/hal/serial/linux/serial_port_linux.c
-> -@@ -29,6 +29,7 @@
-> - #include <termios.h>
-> - #include <fcntl.h>
-> - #include <unistd.h>
-> -+#include <sys/time.h>
-> - 
-> - #include "hal_serial.h"
-> - #include "hal_time.h"
-> --- 
-> -2.21.1
-> -
-> diff --git a/package/libiec61850/0003-COTP-fixed-possible-heap-buffer-overflow-when-handling-message.patch b/package/libiec61850/0003-COTP-fixed-possible-heap-buffer-overflow-when-handling-message.patch
-> deleted file mode 100644
-> index 88048555b7..0000000000
-> --- a/package/libiec61850/0003-COTP-fixed-possible-heap-buffer-overflow-when-handling-message.patch
-> +++ /dev/null
-> @@ -1,27 +0,0 @@
-> -From 033ab5b6488250c8c3b838f25a7cbc3e099230bb Mon Sep 17 00:00:00 2001
-> -From: Michael Zillgith <michael.zillgith@mz-automation.de>
-> -Date: Wed, 12 Aug 2020 07:25:37 +0200
-> -Subject: [PATCH] - COTP: fixed possible heap buffer overflow when handling
-> - message with invalid (zero) value in length field (#250)
-> -
-> -[Retrieved from:
-> -https://github.com/mz-automation/libiec61850/commit/033ab5b6488250c8c3b838f25a7cbc3e099230bb]
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ----
-> - src/mms/iso_cotp/cotp.c | 3 +++
-> - 1 file changed, 3 insertions(+)
-> -
-> -diff --git a/src/mms/iso_cotp/cotp.c b/src/mms/iso_cotp/cotp.c
-> -index cbb34b36..8c37d262 100644
-> ---- a/src/mms/iso_cotp/cotp.c
-> -+++ b/src/mms/iso_cotp/cotp.c
-> -@@ -720,6 +720,9 @@ CotpConnection_readToTpktBuffer(CotpConnection* self)
-> -             goto exit_waiting;
-> -     }
-> - 
-> -+    if (self->packetSize <= bufPos)
-> -+        goto exit_error;
-> -+
-> -     readBytes = readFromSocket(self, buffer + bufPos, self->packetSize - bufPos);
-> - 
-> -     if (readBytes < 0)
-> diff --git a/package/libiec61850/libiec61850.hash b/package/libiec61850/libiec61850.hash
-> index 5739a5d8c9..3a024be7c6 100644
-> --- a/package/libiec61850/libiec61850.hash
-> +++ b/package/libiec61850/libiec61850.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  d0630cd5b7ac67a2d286b0ad574ff1c9074c96be33b9d5a300cd69e89429abbe  libiec61850-1.4.2.1.tar.gz
-> +sha256  7b832c195ae9f42faa1ccfe1b82b9ff187103155ce45aaca08881be98459d164  libiec61850-1.5.0.tar.gz
->  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-> diff --git a/package/libiec61850/libiec61850.mk b/package/libiec61850/libiec61850.mk
-> index 4f82451eb8..6da782ad39 100644
-> --- a/package/libiec61850/libiec61850.mk
-> +++ b/package/libiec61850/libiec61850.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index a0c1a6898..adfacecd3 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -236,6 +236,13 @@ config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
+>  	  of the official Kodi github repo and its build is broken
+>  	  with Kodi 19.x, so it was removed.
 >  
-> -LIBIEC61850_VERSION = 1.4.2.1
-> +LIBIEC61850_VERSION = 1.5.0
->  LIBIEC61850_SITE = $(call github,mz-automation,libiec61850,v$(LIBIEC61850_VERSION))
->  LIBIEC61850_INSTALL_STAGING = YES
->  LIBIEC61850_LICENSE = GPL-3.0+
-> @@ -12,7 +12,4 @@ LIBIEC61850_LICENSE_FILES = COPYING
->  LIBIEC61850_CPE_ID_VENDOR = mz-automation
->  LIBIEC61850_CONF_OPTS = -DBUILD_PYTHON_BINDINGS=OFF
+> +config BR2_PACKAGE_LZLIB
+> +	bool "lzlib package was removed"
+> +	select BR2_PACKAGE_LUA_ZLIB
+> +	select BR2_LEGACY
+> +	help
+> +	  The lzlib package was removed, use lua-zlib instead.
+> +
+>  comment "Legacy options removed in 2021.02"
 >  
-> -# 0003-COTP-fixed-possible-heap-buffer-overflow-when-handling-message.patch
-> -LIBIEC61850_IGNORE_CVES += CVE-2020-15158
+>  config BR2_PACKAGE_MPD_AUDIOFILE
+> diff --git a/package/Config.in b/package/Config.in
+> index 1abfd787f..66978ec45 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -708,7 +708,6 @@ menu "Lua libraries/modules"
+>  	source "package/lutok/Config.in"
+>  	source "package/luv/Config.in"
+>  	source "package/luvi/Config.in"
+> -	source "package/lzlib/Config.in"
+>  	source "package/orbit/Config.in"
+>  	source "package/rings/Config.in"
+>  	source "package/turbolua/Config.in"
+> diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
+> deleted file mode 100644
+> index 59a2e6d5c..000000000
+> --- a/package/lzlib/Config.in
+> +++ /dev/null
+> @@ -1,10 +0,0 @@
+> -config BR2_PACKAGE_LZLIB
+> -	bool "lzlib"
+> -	depends on BR2_PACKAGE_LUA
+> -	select BR2_PACKAGE_ZLIB
+> -	help
+> -	  This package provides a library to access zlib library
+> -	  functions and also to read/write gzip files using an
+> -	  interface similar to the base io package.
 > -
->  $(eval $(cmake-package))
+> -	  https://github.com/LuaDist/lzlib
+> diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
+> deleted file mode 100644
+> index 4bb4c52c8..000000000
+> --- a/package/lzlib/lzlib.hash
+> +++ /dev/null
+> @@ -1,3 +0,0 @@
+> -# Locally calculated
+> -sha256  cbb0cac5825e940b4ea2f31a336d2aaf6db39847d456920afd8e443804420dbb  lzlib-0.4.3.tar.gz
+> -sha256  f817d4a37077e94e9adf379f46ba5cc0b68775d7add2bbd5b2ca68ba140ad5bb  lzlib.c
+> diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
+> deleted file mode 100644
+> index 74624d501..000000000
+> --- a/package/lzlib/lzlib.mk
+> +++ /dev/null
+> @@ -1,15 +0,0 @@
+> -################################################################################
+> -#
+> -# lzlib
+> -#
+> -################################################################################
+> -
+> -LZLIB_VERSION = 0.4.3
+> -LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
+> -LZLIB_DEPENDENCIES = lua zlib
+> -LZLIB_LICENSE = MIT
+> -LZLIB_LICENSE_FILES = lzlib.c
+> -LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
+> -	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
+> -
+> -$(eval $(cmake-package))
+> diff --git a/support/testing/tests/package/test_lzlib.py b/support/testing/tests/package/test_lzlib.py
+> deleted file mode 100644
+> index 84e767913..000000000
+> --- a/support/testing/tests/package/test_lzlib.py
+> +++ /dev/null
+> @@ -1,14 +0,0 @@
+> -from tests.package.test_lua import TestLuaBase
+> -
+> -
+> -class TestLuaLzlib(TestLuaBase):
+> -    config = TestLuaBase.config + \
+> -        """
+> -        BR2_PACKAGE_LUA=y
+> -        BR2_PACKAGE_LZLIB=y
+> -        """
+> -
+> -    def test_run(self):
+> -        self.login()
+> -        self.module_test("zlib")
+> -        self.module_test("gzip")
+> -- 
+> 2.30.2
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
