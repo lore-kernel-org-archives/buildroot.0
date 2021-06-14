@@ -1,86 +1,251 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Jun 2021 22:17:33 +0200
-Subject: [Buildroot] [PATCH] package/intel-microcode: security bump to
- version 20210608
-In-Reply-To: <20210613211011.23696-1-peter@korsgaard.com>
-References: <20210613211011.23696-1-peter@korsgaard.com>
-Message-ID: <20210614201733.GH2610983@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 14 Jun 2021 22:20:31 +0200
+Subject: [Buildroot] [PATCH v2 5/5] package/zstd: Add option for cli
+ binary
+In-Reply-To: <CADYdroPhUpEKwZhKWH7kw8VjDQxN5yXiRrS3CXMP59Dzj4dvLg@mail.gmail.com>
+References: <20210525172652.821351-1-nolange79@gmail.com>
+ <20210525172652.821351-5-nolange79@gmail.com>
+ <CAAXf6LUvCxZ_o2T0puJZ8ybDOyh20303-tXWLsgh3HNqt_OvrQ@mail.gmail.com>
+ <CADYdroPhUpEKwZhKWH7kw8VjDQxN5yXiRrS3CXMP59Dzj4dvLg@mail.gmail.com>
+Message-ID: <1c5020ee-d779-2c8d-e6ea-2bc6e7bd2d9f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
 
-On 2021-06-13 23:10 +0200, Peter Korsgaard spake thusly:
-> Fixes the following security issues:
-> 
-> - CVE-2020-24489: A potential security vulnerability in some Intel?
->   Virtualization Technology for Directed I/0 (VT-d) products may allow
->   escalation of privilege.  Intel is releasing firmware updates to mitigate
->   this potential vulnerability.
->   https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00442.html
-> 
-> - CVE-2020-24511: Potential security vulnerabilities in some Intel?
->   Processors may allow information disclosure.  Intel is releasing firmware
->   updates to mitigate these potential vulnerabilities.
->   https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00464.html
-> 
-> - CVE-2020-24513: A potential security vulnerability in some Intel Atom?
->   Processors may allow information disclosure.  Intel is releasing firmware
->   updates to mitigate this potential vulnerability.
->   https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00465.html
-> 
-> For more details, see the release notes:
-> https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20210608
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/intel-microcode/intel-microcode.hash | 2 +-
->  package/intel-microcode/intel-microcode.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On 01/06/2021 11:20, Norbert Lange wrote:
+> Am Mo., 31. Mai 2021 um 17:02 Uhr schrieb Thomas De Schampheleire
+> <patrickdepinguin@gmail.com>:
+>>
+>> Hello,
+>>
+>> El mar, 25 may 2021 a las 19:28, Norbert Lange (<nolange79@gmail.com>) escribi?:
+>>>
+>>> There are a couple of targets to build the cli tool with less
+>>> features (no legacy-support, benchmarking),
+>>> or dynamically linked to the library.
+>>>
+>>> Add an option to choose the variant.
+>>>
+>>> To allow the installation step to pick the variant, it
+>>> has to be copied to the normal location.
+>>>
+>>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>>> ---
+>>>  package/zstd/Config.in | 21 +++++++++++++++++++++
+>>>  package/zstd/zstd.mk   |  9 ++++++++-
+>>>  2 files changed, 29 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/package/zstd/Config.in b/package/zstd/Config.in
+>>> index 9fa70c65cc..0d2ab84771 100644
+>>> --- a/package/zstd/Config.in
+>>> +++ b/package/zstd/Config.in
+>>> @@ -10,3 +10,24 @@ config BR2_PACKAGE_ZSTD
+>>>           compression formats
+>>>
+>>>           https://facebook.github.io/zstd
+>>> +
+>>> +if BR2_PACKAGE_ZSTD
+>>> +
+>>> +choice
+>>> +       prompt "Executable flavor"
+>>> +       help
+>>> +         Pick between variants of the zstd tool.
+>>> +
+>>> +config BR2_PACKAGE_ZSTD_PROG_DEFAULT
+>>> +       bool "Default build (static, full-featured)"
+>>> +
+>>> +config BR2_PACKAGE_ZSTD_PROG_DYNAMIC
+>>> +       bool "Dynamic build (needs library with identical version)"
+>>> +       depends on !BR2_STATIC_LIBS
+>>
+>> Is there a reason not to make this one the default, instead of the
+>> static variant?
 > 
-> diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-> index 23191d9531..6687d4c0eb 100644
-> --- a/package/intel-microcode/intel-microcode.hash
-> +++ b/package/intel-microcode/intel-microcode.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  b855c81f78705f35341248a0603aa1a6e199ca7f59cd425e061b579329aa9eaa  intel-microcode-20210216.tar.gz
-> +sha256  fd85b6b769efd029dec6a2c07106fd18fb4dcb548b7bc4cde09295a8344ef6d7  intel-microcode-20210608.tar.gz
->  sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
-> diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-> index 2089003880..af7f6fa804 100644
-> --- a/package/intel-microcode/intel-microcode.mk
-> +++ b/package/intel-microcode/intel-microcode.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -INTEL_MICROCODE_VERSION = 20210216
-> +INTEL_MICROCODE_VERSION = 20210608
->  INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
->  INTEL_MICROCODE_LICENSE = PROPRIETARY
->  INTEL_MICROCODE_LICENSE_FILES = license
-> -- 
-> 2.20.1
+> Hello.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Gradual change, as gambit to get the patches upstreamed faster =)
+> I agree, dynamic should be default.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ Adding config options is not very likely to get patches upstreamed faster :-)
+
+> 
+>> From my point of view, the PROG_DYNAMIC has as main advantage a
+>> reduction in rootfs size, since zstd is quite large and with the
+>> static version duplicating part of the shared object.
+>>
+>> Earlier I sent a patch for this (exact implementation was still based
+>> on v1.4.9 and sending of the update patch was pending the new 1.5.0
+>> release), see:
+>> http://patchwork.ozlabs.org/project/buildroot/patch/20201204095703.4714-1-patrickdepinguin at gmail.com/
+>>
+>> In context of Buildroot, the expectation is that one builds the entire
+>> thing in one go. This means that binary and library will be from the
+>> same version anyway.
+>> In that sense, the option description may be confusing.
+>>
+>> In fact, I even wonder if it is needed to provide the PROG_DEFAULT at
+>> all. If shared libraries are supported, I see no reason why one would
+>> like a static version of the binary.
+> 
+> upstream treats DSO and programs separately, the static binary could
+> have some more flags not available for DSO which seem to be considered
+> less configurable.
+
+ I looked at the source and simply see no way how this is even possible - the
+command line argument parsing is entirely in the source files in the program
+directory, and there are no different -D options for zstd-dll...
+
+> Some time ago I had to use the static library cause some features
+> where only available there.
+
+ Maybe that was in the past and is no longer the case?
+
+ Note BTW that zstd programs don't use the static library - they (re)build the
+source files directly. That's how it's possible that the static library has no
+thread support while the programs do have thread support.
+
+
+> Also despite expectation, you cant for example just build zstd (static)
+> without multiple packages automatically linking to libzstd.
+
+ What you're saying is: if you enable zstd in Buildroot, it will build and
+install the library, and this will cause other packages to link with it, right?
+
+> (not easy to change now...)
+
+ It's not *that* difficult to change...
+
+1. Add an option BR2_PACKAGE_ZSTD_LIB (default to y because that's the legacy
+situation).
+2. Update all "optional dependencies" op libzstd to check BR2_PACKAGE_ZSTD_LIB
+instead.
+
+
+> For that youd need to stich together 2 runs.
+
+ Er, what?
+
+
+>> So I would reduce this patch to two options:
+>>
+>> - standard build
+>> - small build
+
+ Which is actually just a single option: full build (default y). Note that we
+don't want "small build" as a boolean option, because that makes it impossible
+for another package to select the full build (you can't "select
+!BR2_PACKAGE_ZSTD_PROG_SMALL). We've been hit by this a couple of times already
+in the past.
+
+
+>> and depending on the options BR2_STATIC_LIBS / SHARED_STATIC_LIBS the
+>> 'standard build' would result in a dynamically-linked object or a
+>> static one.
+> 
+> Sounds reasonable.
+> 
+>>
+>>> +
+>>> +config BR2_PACKAGE_ZSTD_PROG_SMALL
+>>> +       bool "Small build (static, less features)"
+>>> +
+>>> +endchoice
+>>> +
+>>> +endif
+>>> diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+>>> index a9499df4d0..ecad26e0df 100644
+>>> --- a/package/zstd/zstd.mk
+>>> +++ b/package/zstd/zstd.mk
+>>> @@ -48,6 +48,11 @@ endif
+>>>  ZSTD_OPTS += "MOREFLAGS=$(ZSTD_OPTS_MOREFLAGS)"
+>>>
+>>>  ZSTD_BUILD_PROG_TARGET := zstd-release
+>>> +ifeq ($(BR2_PACKAGE_ZSTD_PROG_DYNAMIC),y)
+>>> +ZSTD_BUILD_PROG_TARGET := zstd-dll
+>>> +else ifeq ($(BR2_PACKAGE_ZSTD_PROG_SMALL),y)
+>>> +ZSTD_BUILD_PROG_TARGET := zstd-small
+>>> +endif
+>>
+>> We don't generally use := in Buildroot, unless really needed. These
+>> assignments could just be '='.
+> 
+> Ok
+> 
+>>
+>>>
+>>>  # Since v1.5.0 the dynamic library is built for
+>>>  # multithreading, while the static library is not.
+>>> @@ -78,7 +83,9 @@ define ZSTD_BUILD_CMDS
+>>>         $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+>>>                 -C $(@D)/lib $(addsuffix -release,$(ZSTD_BUILD_LIBS) libzstd.pc)
+>>>         $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+>>> -               -C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET)
+>>> +               -C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET) && \
+>>> +       { [ ! -e $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) ] || \
+
+ Am I crazy or is this actually saying
+
+       { [ -e $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) ] && \
+
+?
+
+ However, wouldn't it be more logical to do
+
+       { [ ! -e $(@D)/programs/zstd ] && \
+
+>>> +               ln -f $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) $(@D)/programs/zstd; }
+>>
+>> I find this code not particularly readable.
+>> Why does the group need to be continued with '&&' ? If you don't do
+>> that, a failure in the make will stop right there, which is fine.
+>> This together with the use of the || shorthand, especially with the
+>> negated condition, is not obvious.
+> 
+> Ok
+>
+>> Also, this hardlink is only actually needed for the 'zstd-small' case,
+>> because both 'zstd-release' and 'zstd-dll' just generate a binary
+>> called 'zstd'. In the latter cases, the [ ] condition will be false,
+>> and nothing to be done.>>
+>> So I would consider to leave the original make untouched and use
+>> following instead:
+>>
+>>
+>> ifeq ($(BR2_PACKAGE_ZSTD_PROG_SMALL),y)
+>> define ZSTD_HARDLINK_BUILD_PROG_TARGET
+>>         ln -f $(@D)/programs/$(ZSTD_BUILD_PROG_TARGET) $(@D)/programs/zstd
+>> endef
+>> ZSTD_POST_BUILD_HOOKS += ZSTD_HARDLINK_BUILD_PROG_TARGET
+>> endif
+> 
+> I disagree here, there are multiple variants aside of -small, like a
+> decompress-only build,
+> and I'd not want to depend on upstream behaviors whether a variant is
+> "in-place" of zstd
+> or as extra file.
+> Even if its not gonna be supported officially there's value in locally
+> using "zstd-decompress"
+> and things just work.
+> 
+> Arguably with zstd-dll largely fixing the main issue (filesize) those
+> variants are less tempting.
+
+ So in conclusion, I think there should be just one config option
+BR2_PACKAGE_ZSTD_PROG_FULL (default y) which builds zstd-dll if !static and
+zstd-release if static.
+
+
+> 
+> Norbert
+> (Waiting for some more feedback and possibly upstreaming  part of the
+> series before rerolling)
+
+ Good plan :-)
+
+
+ Regards,
+ Arnout
