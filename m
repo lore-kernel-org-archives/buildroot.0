@@ -1,47 +1,40 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 14 Jun 2021 19:58:12 +1200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2021-04-11
-In-Reply-To: <20210610173703.31d33d97@windsurf>
-References: <6073d64f.1c69fb81.9d11e.7f35SMTPIN_ADDED_MISSING@mx.google.com>
- <CAFOYHZC23wcnW0-y=fyiP2x6M2B5CEyFEzJDeWJq_Pw5BuRbkg@mail.gmail.com>
- <20210610173703.31d33d97@windsurf>
-Message-ID: <CAFOYHZB_RK=hJaTBOoTi3=pxwo_fsx=kTRfEWm0uo8XJ5EbUGg@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon, 14 Jun 2021 08:25:57 +0000
+Subject: [Buildroot] [PATCH 1/1] package/gerbera: bump to version 1.8.2
+Message-ID: <20210614082557.265387-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 11, 2021 at 3:37 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Chris,
->
-> On Mon, 12 Apr 2021 20:37:46 +1200
-> Chris Packham <judge.packham@gmail.com> wrote:
->
-> > I've managed to get the CVE updated to say "This flaw affects
-> > syslog-ng versions prior to and including 2.0.9"[1] but I'm still
-> > getting these notifications. Is there something else that needs to
-> > happen now? Actually nist[2] seems to know it's been modified so it
-> > may be a case of hurry up and wait.
->
-> If I look up at https://nvd.nist.gov/vuln/detail/CVE-2008-5110, the
-> list of known affected software configurations is still
-> cpe:2.3:a:oneidentity:syslog-ng:-:*:*:*:*:*:*:*, which means "all known
-> versions.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/gerbera/gerbera.hash | 2 +-
+ package/gerbera/gerbera.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-After some effort the description was updated to say "This flaw
-affects syslog-ng versions prior to and including 2.0.9.". But the cpe
-entry hasn't been updated (if I understand correctly the reporter
-controls the description but nist controls the configurations). The
-CVE entry does now say that it has been modified since it was last
-analyzed so I'm not sure how/when that will happen.
-
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
+index ab3dda917c..ed856bbf62 100644
+--- a/package/gerbera/gerbera.hash
++++ b/package/gerbera/gerbera.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  66f49ee30e53c36e08ce56a724f84bde8350001d3b9309f8e62a34f38446b619  gerbera-1.8.1.tar.gz
++sha256  b1e5591515f05a46de052ef4d95a2bb3387e96f565a5ce7abb6a77dbe581f09a  gerbera-1.8.2.tar.gz
+ sha256  cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6  LICENSE.md
+diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
+index 9627209d60..d6251912ac 100644
+--- a/package/gerbera/gerbera.mk
++++ b/package/gerbera/gerbera.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GERBERA_VERSION = 1.8.1
++GERBERA_VERSION = 1.8.2
+ GERBERA_SITE = $(call github,gerbera,gerbera,v$(GERBERA_VERSION))
+ GERBERA_LICENSE = GPL-2.0
+ GERBERA_LICENSE_FILES = LICENSE.md
+-- 
+2.32.0
