@@ -1,45 +1,31 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 14 Jun 2021 22:00:22 +1200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2021-04-11
-In-Reply-To: <20210614104545.39c42d14@windsurf>
-References: <6073d64f.1c69fb81.9d11e.7f35SMTPIN_ADDED_MISSING@mx.google.com>
- <CAFOYHZC23wcnW0-y=fyiP2x6M2B5CEyFEzJDeWJq_Pw5BuRbkg@mail.gmail.com>
- <20210610173703.31d33d97@windsurf>
- <CAFOYHZB_RK=hJaTBOoTi3=pxwo_fsx=kTRfEWm0uo8XJ5EbUGg@mail.gmail.com>
- <20210614104545.39c42d14@windsurf>
-Message-ID: <CAFOYHZBJjN25cB7=2cu5qzJOYZVtik+ANuQE6XZLio2RokmXDA@mail.gmail.com>
+From: D. Olsson <hi@senzilla.io>
+Date: Mon, 14 Jun 2021 10:06:34 +0000
+Subject: [Buildroot] [PATCH v3 1/1] package/bitcoin: unset the NDEBUG
+ flag
+In-Reply-To: <20210613195850.GT168928@scaer>
+References: <ZbTvPhursXFsHDblON1mtNTQnG937Il2N0wYa3ReI@cp4-web-037.plabs.ch>
+ <20210613195850.GT168928@scaer>
+Message-ID: <ZTnoZb2MMbi5Z7xbG_3OKXXEj07hBkAAiKJqWo8-ke0zvQ3NE7ETdQHmw4oDe6M6YEnyDdQxIGltbNk15VM_w7hY-F7CQq8U-rG5VWRj7Uk=@senzilla.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 14, 2021 at 8:45 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Chris,
->
-> On Mon, 14 Jun 2021 19:58:12 +1200
-> Chris Packham <judge.packham@gmail.com> wrote:
->
-> > After some effort the description was updated to say "This flaw
-> > affects syslog-ng versions prior to and including 2.0.9.". But the cpe
-> > entry hasn't been updated (if I understand correctly the reporter
-> > controls the description but nist controls the configurations). The
-> > CVE entry does now say that it has been modified since it was last
-> > analyzed so I'm not sure how/when that will happen.
->
-> How did you contact the NVD maintainers? Because I contacted them a few
-> weeks ago about some CVE details, and they fixed up like a few days
-> later.
->
+Hi Yann,
 
-Via the contact form. Then got bumped onto redhat who updated the
-description. I guess I could try again.
+On Sunday, June 13th, 2021 at 9:58 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+>> Signed-off-by: Dick Olsson hi at senzilla.io
+> Applied to master, thanks.
+>
+> Regards,
+> Yann E. MORIN.
+
+Should we apply this to the 'next' branch as well?
+The bitcoin build is currently broken there.
+But I'm not sure exactly how the 'master' and 'next'
+branches are managed?
+
+Cheers,
+D. Olsson
