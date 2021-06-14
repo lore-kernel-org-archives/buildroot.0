@@ -1,69 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 14 Jun 2021 21:56:09 +0200
-Subject: [Buildroot] [PATCH v2 4/5] package/zstd: Change Build options
-In-Reply-To: <20210525172652.821351-4-nolange79@gmail.com>
-References: <20210525172652.821351-1-nolange79@gmail.com>
- <20210525172652.821351-4-nolange79@gmail.com>
-Message-ID: <64e73966-309c-8cca-4a29-1bc09ee348fb@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Jun 2021 21:55:32 +0200
+Subject: [Buildroot] [git commit] package/perl-io-socket-ssl: bump to
+ version 2.071
+Message-ID: <20210614192528.52DE98D57B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=07ec544a17ad808bcdb86504bc7b7bd6ef55083d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
+ package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 25/05/2021 19:26, Norbert Lange wrote:
-> Disable the legacy format, these are just needed for
-> decompressing files created with pre-release version.
-> 
-> Use Buildroot's setting for optimization, zstd's build system
-> overrides CFLAGS, but MOREFLAGS can override again.
-> Quick tests show that using -O2 (like buildroot)
-> is actually a little faster than -O3 on x86_64 Atoms.
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/zstd/zstd.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-> index a7a5ba4e50..a9499df4d0 100644
-> --- a/package/zstd/zstd.mk
-> +++ b/package/zstd/zstd.mk
-> @@ -13,6 +13,10 @@ ZSTD_CPE_ID_VENDOR = facebook
->  ZSTD_CPE_ID_PRODUCT = zstandard
->  
->  ZSTD_OPTS += PREFIX=/usr
-> +ZSTD_OPTS += ZSTD_LEGACY_SUPPORT=0
-> +
-> +# zstd will append -O3 after $(CFLAGS), use MOREFLAGS to override again
-> +ZSTD_OPTS_MOREFLAGS += $(TARGET_OPTIMIZATION)
-
- Wouldn't it make more sense to apply *all* buildroot's flags here, i.e.
-
-ZSTD_OPTS += MOREFLAGS="$(TARGET_CFLAGS)"
-
-
-(also note:
- - intermediate variable ZSTD_OPTS_MOREFLAGS is not needed for anything;
- - we usually quote only the "$(TARGET_CFLAGS)" part, not including the
-MOREFLAGS= part)
-
-
- Regards,
- Arnout
-
->  
->  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
->  ZSTD_OPTS += HAVE_THREAD=1
-> @@ -41,6 +45,8 @@ else
->  ZSTD_OPTS += HAVE_LZ4=0
->  endif
->  
-> +ZSTD_OPTS += "MOREFLAGS=$(ZSTD_OPTS_MOREFLAGS)"
-> +
->  ZSTD_BUILD_PROG_TARGET := zstd-release
->  
->  # Since v1.5.0 the dynamic library is built for
-> 
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+index 076e145acd..4f2a6811bd 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  3c8df96b5249c02025e2eb48596c213b  IO-Socket-SSL-2.070.tar.gz
+-sha256  876fe09763e7a474519431aff248cb1f1abaf070d6bdc791f60bf9abe781cd3b  IO-Socket-SSL-2.070.tar.gz
++md5  3e33497ba43be5adce1f980437253172  IO-Socket-SSL-2.071.tar.gz
++sha256  40da40948ecc9c787ed39c95715872679eebfd54243721174993a2003e32ab0a  IO-Socket-SSL-2.071.tar.gz
+ 
+ # computed by scancpan
+ sha256  090aff5421fd55a9dceeaf6c612c36360402e8d29c1284aef88c87be565ce032  README
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+index 1751bef0e4..45f7683058 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_IO_SOCKET_SSL_VERSION = 2.070
++PERL_IO_SOCKET_SSL_VERSION = 2.071
+ PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
+ PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
+ PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPL-1.0+
