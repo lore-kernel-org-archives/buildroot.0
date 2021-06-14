@@ -1,84 +1,84 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 14 Jun 2021 23:11:15 +0200
-Subject: [Buildroot] [PATCH v1 1/4] package/libxmlrpc: bump version to
- 1.51.07
-In-Reply-To: <20210614204749.10693-1-ps.report@gmx.net>
-References: <20210614204749.10693-1-ps.report@gmx.net>
-Message-ID: <20210614231115.7de15c4b@gmx.net>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 14 Jun 2021 23:19:02 +0200
+Subject: [Buildroot] [PATCH v2 4/5] package/zstd: Change Build options
+In-Reply-To: <64e73966-309c-8cca-4a29-1bc09ee348fb@mind.be>
+References: <20210525172652.821351-1-nolange79@gmail.com>
+ <20210525172652.821351-4-nolange79@gmail.com>
+ <64e73966-309c-8cca-4a29-1bc09ee348fb@mind.be>
+Message-ID: <CADYdroO-zWNqE4TX6kAk4yh67wzLMT4LpZVV-yZ=-YLKRHMMag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CC: Alvaro G. M <alvaro.gamez@hazent.com>
-
-Regards,
-Peter
-
-
-Note:
-
-Original sent with
-
-	git send-email --suppress-cc=self --to buildroot at buildroot.org --cc "Alvaro G. M <alvaro.gamez@hazent.com>" v1-0001-package-libxmlrpc-bump-version-to-1.51.07.patch
-
-But the CC entry for Alvaro did not make it through the mailing list despite the
-send log:
-
-	OK. Log says:
-	Server: mail.gmx.net
-	MAIL FROM:<ps.report@gmx.net>
-	RCPT TO:<buildroot@buildroot.org>
-	RCPT TO:<alvaro.gamez@hazent.com>
-	From: Peter Seiderer <ps.report@gmx.net>
-	To: buildroot at buildroot.org
-	Cc: "Alvaro G . M" <alvaro.gamez@hazent.com>
-	Subject: [PATCH v1 1/4] package/libxmlrpc: bump version to 1.51.07
-	Date: Mon, 14 Jun 2021 22:47:46 +0200
-	Message-Id: <20210614204749.10693-1-ps.report@gmx.net>
-	X-Mailer: git-send-email 2.31.1
-	MIME-Version: 1.0
-	Content-Transfer-Encoding: base64
-
-Same happened yesterday with the 'package/mesa3d: add config option for DRI3
-support' patch series missing the last CC to Erico Nunes...
-
-
-On Mon, 14 Jun 2021 22:47:46 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
-
-> Changelog ([1]):
+Am Mo., 14. Juni 2021 um 21:56 Uhr schrieb Arnout Vandecappelle
+<arnout@mind.be>:
 >
->   - Abyss: fix bug: wild memory reference when server times out waiting for
->     request header. Introduced with Release 1.44 (December 2015).
 >
-> [1] http://xmlrpc-c.sourceforge.net/change_super_stable.html
 >
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/libxmlrpc/libxmlrpc.hash | 2 +-
->  package/libxmlrpc/libxmlrpc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> On 25/05/2021 19:26, Norbert Lange wrote:
+> > Disable the legacy format, these are just needed for
+> > decompressing files created with pre-release version.
+> >
+> > Use Buildroot's setting for optimization, zstd's build system
+> > overrides CFLAGS, but MOREFLAGS can override again.
+> > Quick tests show that using -O2 (like buildroot)
+> > is actually a little faster than -O3 on x86_64 Atoms.
+> >
+> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> > ---
+> >  package/zstd/zstd.mk | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+> > index a7a5ba4e50..a9499df4d0 100644
+> > --- a/package/zstd/zstd.mk
+> > +++ b/package/zstd/zstd.mk
+> > @@ -13,6 +13,10 @@ ZSTD_CPE_ID_VENDOR = facebook
+> >  ZSTD_CPE_ID_PRODUCT = zstandard
+> >
+> >  ZSTD_OPTS += PREFIX=/usr
+> > +ZSTD_OPTS += ZSTD_LEGACY_SUPPORT=0
+> > +
+> > +# zstd will append -O3 after $(CFLAGS), use MOREFLAGS to override again
+> > +ZSTD_OPTS_MOREFLAGS += $(TARGET_OPTIMIZATION)
 >
-> diff --git a/package/libxmlrpc/libxmlrpc.hash b/package/libxmlrpc/libxmlrpc.hash
-> index 13e3b0b534..7034773204 100644
-> --- a/package/libxmlrpc/libxmlrpc.hash
-> +++ b/package/libxmlrpc/libxmlrpc.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  06dcd87d9c88374559369ffbe83b3139cf41418c1a2d03f20e08808085f89fd0  xmlrpc-c-1.51.06.tgz
-> +sha256  84d20ae33f927582f821d61c0b9194aefbf1d7924590a13fa9da5ae1698aded9  xmlrpc-c-1.51.07.tgz
->  sha256  db7a6d3f187b218c3534010a83424c6bcdef88e6a0b6b1aa3a8762238bd642e6  doc/COPYING
-> diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
-> index c74d8a854c..0871b6e710 100644
-> --- a/package/libxmlrpc/libxmlrpc.mk
-> +++ b/package/libxmlrpc/libxmlrpc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+>  Wouldn't it make more sense to apply *all* buildroot's flags here, i.e.
 >
-> -LIBXMLRPC_VERSION = 1.51.06
-> +LIBXMLRPC_VERSION = 1.51.07
->  LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
->  LIBXMLRPC_SITE = http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/$(LIBXMLRPC_VERSION)
->  LIBXMLRPC_LICENSE = BSD-3-Clause (xml-rpc main code and abyss web server), BSD like (lib/expat), Python 1.5.2 license (parts of xmlrpc_base64.c)
+> ZSTD_OPTS += MOREFLAGS="$(TARGET_CFLAGS)"
+
+The CFLAGS are already picked up from the environment,
+the package normally should be able to add options on top.
+
+>
+> (also note:
+>  - intermediate variable ZSTD_OPTS_MOREFLAGS is not needed for anything;
+
+Not yet. There are a couple of interesting options available with macros,
+ex. ZSTD_LIB_MINIFY. see lib/README.md
+But I think ill cut that out for now.
+
+>  - we usually quote only the "$(TARGET_CFLAGS)" part, not including the
+> MOREFLAGS= part)
+
+OK.
+
+>
+>
+>  Regards,
+>  Arnout
+>
+> >
+> >  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> >  ZSTD_OPTS += HAVE_THREAD=1
+> > @@ -41,6 +45,8 @@ else
+> >  ZSTD_OPTS += HAVE_LZ4=0
+> >  endif
+> >
+> > +ZSTD_OPTS += "MOREFLAGS=$(ZSTD_OPTS_MOREFLAGS)"
+> > +
+> >  ZSTD_BUILD_PROG_TARGET := zstd-release
+> >
+> >  # Since v1.5.0 the dynamic library is built for
+> >
