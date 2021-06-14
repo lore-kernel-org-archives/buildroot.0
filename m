@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1317EC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:09:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98D43C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:09:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D823E60F70
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:09:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D823E60F70
+	by mail.kernel.org (Postfix) with ESMTPS id 5E58660D07
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:09:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5E58660D07
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4D9F82548;
-	Tue,  3 Aug 2021 23:09:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37A63401FF;
+	Tue,  3 Aug 2021 23:09:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bSrWE1Kt2pFc; Tue,  3 Aug 2021 23:09:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6At6MipI2fob; Tue,  3 Aug 2021 23:09:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 014A6824E3;
-	Tue,  3 Aug 2021 23:09:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A4D340215;
+	Tue,  3 Aug 2021 23:09:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9A0B81BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5AE811BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 513874066E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D1CE404DA
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7I8_hh2_hesT for <buildroot@lists.busybox.net>;
+ with ESMTP id lIFBwLhuvJ0P for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4433C40624
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EBF3C40643
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8112F873E2; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
+ id 4C2DE86016; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 15 Jun 2021 13:25:18 +0200
+Date: Mon, 14 Jun 2021 22:25:50 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b4fd87f9938efa5ce0b45dfec5505cf62e5d7e42
-X-Git-Newrev: 6e75a990ae35580800f24f3ddc4573c6bc38fa05
+X-Git-Oldrev: 51cc28485e17127807c5e511e02e2f087d32e8c6
+X-Git-Newrev: 371f2aa0edf233aa3a9eeee2e7be0920a46a0040
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210952.8112F873E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/daq3: new package
+Message-Id: <20210803210952.4C2DE86016@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bluez5_utils: Clean up
+ descriptions
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,131 +70,166 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e75a990ae35580800f24f3ddc4573c6bc38fa05
+commit: https://git.buildroot.net/buildroot/commit/?id=371f2aa0edf233aa3a9eeee2e7be0920a46a0040
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add daq3 package to be able to add the snort3 package.
+The descriptions in this package have grown pretty confusing over time.
+Try to make this a bit more consistent and up-to-date.
 
-daq3 is not compatatible with snort as daq_load_modules has been removed
+* drop references to old kernel versions not supported by BR anymore
+* Remove "Bluez 5.x" string from options
+* consistently use the term "plugin" (plugins implement profiles)
+* make mentioned profile appreviations upper-case
+* make descriptions closer to the ones in BlueZ Readme [0]
+* make clear that "tests" refers to the python test scripts
 
-daq3 package has been created from the daq package, here is a summary of
-the changes:
-- Drop patch (not needed anymore)
-- Enable parallel build as there is no more tokdefs.h
-- Drop libdnet dependency
-- Drop host-bison and host-flex dependencies
-- Drop libpcap workarounds
-- ipq module dropped since version 3.0.0-alpha1 and
-  https://github.com/snort3/libdaq/commit/80c62799a936118c80894bf91f396c8aa8ba45a6
-- Add LICENSE file (same content than COPYING)
-- Update hash of COPYING (project name and GPLv2 text updated with
-  https://github.com/snort3/libdaq/commit/46e8722da230082a5728175270ea3c04432d1af0)
-- Add a dependency on gcc 4.9 for {t,u}h_{d,s}port that are protected on
-  glibc by _FAVOR_BSD (and so !defined _GNU_SOURCE) until version 2.19:
-  https://sourceware.org/git/?p=glibc.git;a=commit;h=7011c2622fe3e10a29dbe74f06aaebd07710127d
+[0] https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/README?h=5.58
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Arnout:
+ - remove more 5.x references;
+ - Use official spelling BlueZ in main help text]
 ---
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/daq3/Config.in | 14 ++++++++++++++
- package/daq3/daq3.hash |  6 ++++++
- package/daq3/daq3.mk   | 30 ++++++++++++++++++++++++++++++
- 5 files changed, 52 insertions(+)
+ package/bluez5_utils/Config.in | 51 ++++++++++++++++++++----------------------
+ 1 file changed, 24 insertions(+), 27 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0c7072d845..327ffb9447 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -845,6 +845,7 @@ F:	package/belle-sip/
- F:	package/belr/
- F:	package/boinc/
- F:	package/cairo/
-+F:	package/daq3/
- F:	package/duktape/
- F:	package/expat/
- F:	package/flatbuffers/
-diff --git a/package/Config.in b/package/Config.in
-index 388f8c1f05..89d8dd10d1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1732,6 +1732,7 @@ menu "Networking"
- 	source "package/curlpp/Config.in"
- 	source "package/czmq/Config.in"
- 	source "package/daq/Config.in"
-+	source "package/daq3/Config.in"
- 	source "package/davici/Config.in"
- 	source "package/enet/Config.in"
- 	source "package/filemq/Config.in"
-diff --git a/package/daq3/Config.in b/package/daq3/Config.in
-new file mode 100644
-index 0000000000..ad7d55db5b
---- /dev/null
-+++ b/package/daq3/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_DAQ3
-+	bool "daq3"
-+	depends on !BR2_PACKAGE_DAQ
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	help
-+	  DAQ is a Data Acquisition library for packet I/O from the
-+	  Snort project.
-+
-+	  https://www.snort.org
-+
-+comment "daq3 needs a toolchain w/ dynamic library, gcc >= 4.9"
-+	depends on !BR2_PACKAGE_DAQ
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/daq3/daq3.hash b/package/daq3/daq3.hash
-new file mode 100644
-index 0000000000..33ad2e388b
---- /dev/null
-+++ b/package/daq3/daq3.hash
-@@ -0,0 +1,6 @@
-+# Locally computed:
-+sha256  920344f5c98ac68b401d1bc92ebaed78b0d15779b0480c213db279d0a60acc32  daq3-3.0.3.tar.gz
-+
-+# Hash for license files:
-+sha256  64601289158eddad72cb4de72652f9e64dc886942c910b38ddee93ba13b0db26  COPYING
-+sha256  64601289158eddad72cb4de72652f9e64dc886942c910b38ddee93ba13b0db26  LICENSE
-diff --git a/package/daq3/daq3.mk b/package/daq3/daq3.mk
-new file mode 100644
-index 0000000000..a0493031d8
---- /dev/null
-+++ b/package/daq3/daq3.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# daq3
-+#
-+################################################################################
-+
-+DAQ3_VERSION = 3.0.3
-+DAQ3_SITE = $(call github,snort3,libdaq,v$(DAQ3_VERSION))
-+DAQ3_LICENSE = GPL-2.0
-+DAQ3_LICENSE_FILES = COPYING LICENSE
-+DAQ3_INSTALL_STAGING = YES
-+DAQ3_DEPENDENCIES = host-pkgconf
-+# From git
-+DAQ3_AUTORECONF = YES
-+
-+ifeq ($(BR2_PACKAGE_LIBNETFILTER_QUEUE),y)
-+DAQ3_DEPENDENCIES += libnetfilter_queue
-+DAQ3_CONF_OPTS += --enable-nfq-module
-+else
-+DAQ3_CONF_OPTS += --disable-nfq-module
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPCAP),y)
-+DAQ3_DEPENDENCIES += libpcap
-+DAQ3_CONF_OPTS += --enable-pcap-module
-+else
-+DAQ3_CONF_OPTS += --disable-pcap-module
-+endif
-+
-+$(eval $(autotools-package))
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 016a16c4c5..2c8625a66d 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_BLUEZ5_UTILS
+-	bool "bluez-utils 5.x"
++	bool "bluez-utils"
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus
+@@ -9,17 +9,12 @@ config BR2_PACKAGE_BLUEZ5_UTILS
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+-	  bluez utils version 5.x
++	  BlueZ utils
+ 
+-	  With this release BlueZ only supports the new Bluetooth
+-	  Management kernel interface (introduced in Linux 3.4).
++	  Provides Stack, Library and Tooling for Bluetooth Classic
++	  and Bluetooth LE.
+ 
+-	  For Low Energy support at least kernel version 3.5 is
+-	  needed.
+-
+-	  The API is not backward compatible with BlueZ 4.
+-
+-	  Bluez utils will use systemd and/or udev if enabled.
++	  BlueZ utils will use systemd and/or udev if enabled.
+ 
+ 	  http://www.bluez.org
+ 	  http://www.kernel.org/pub/linux/bluetooth
+@@ -31,7 +26,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS_OBEX
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_LIBICAL
+ 	help
+-	  Enable the OBEX support in Bluez 5.x.
++	  Enable OBEX support.
+ 
+ comment "OBEX support needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+@@ -40,75 +35,77 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+ 	bool "build CLI client"
+ 	select BR2_PACKAGE_READLINE
+ 	help
+-	  Enable the Bluez 5.x command line client.
++	  Build the command line client "bluetoothctl".
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
+-	bool "install deprecated tool"
++	bool "install deprecated tools"
+ 	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+ 	help
+-	  Build BlueZ 5.x deprecated tools. These currently include:
++	  Build deprecated tools. These currently include:
+ 	  hciattach, hciconfig, hcitool, hcidump, rfcomm, sdptool,
+ 	  ciptool, gatttool.
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+-	bool "build experimental obexd plugin"
++	bool "build experimental tools"
+ 	help
+-	  Build BlueZ 5.x experimental Nokia OBEX PC Suite plugin
++	  Build experimental tools. This is currently only the
++	  "Nokia OBEX PC Suite tool". So, only if OBEX support is
++	  enabled this option has an effect.
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
+ 	bool "build health plugin"
+ 	help
+-	  Build BlueZ 5.x health plugin
++	  Build plugin for health profiles.
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH
+-	bool "build mesh profile"
++	bool "build mesh plugin"
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
+ 	select BR2_PACKAGE_ELL
+ 	select BR2_PACKAGE_JSON_C
+ 	select BR2_PACKAGE_READLINE
+ 	help
+-	  Build BlueZ 5.x mesh plugin
++	  Build plugin for Mesh support.
+ 
+ comment "mesh profile needs a toolchain w/ headers >= 4.12"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI
+-	bool "build midi profile"
++	bool "build midi plugin"
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_ALSA_LIB_SEQ
+ 	help
+-	  Build BlueZ 5.x midi plugin
++	  Build MIDI support via ALSA sequencer.
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NFC
+ 	bool "build nfc plugin"
+ 	help
+-	  Build BlueZ 5.x nfc plugin
++	  Build plugin for NFC pairing.
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SAP
+ 	bool "build sap plugin"
+ 	help
+-	  Build BlueZ 5.x sap plugin
++	  Build plugin for SAP profile.
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SIXAXIS
+ 	bool "build sixaxis plugin"
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	help
+-	  Build BlueZ 5.x sixaxis plugin (support Sony Dualshock
++	  Build sixaxis plugin (support Sony Dualshock
+ 	  controller)
+ 
+ comment "sixaxis plugin needs udev /dev management"
+ 	depends on !BR2_PACKAGE_HAS_UDEV
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_TEST
+-	bool "build tests"
++	bool "install test scripts"
+ 	help
+-	  Build BlueZ 5.x tests
++	  Install the python test scripts from the "test" directory.
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_TOOLS_HID2HCI
+ 	bool "build hid2hci tool"
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	help
+-	  Build BlueZ 5.x hid2hci tool
++	  Build hid2hci tool
+ 
+ comment "hid2hci tool needs udev /dev management"
+ 	depends on !BR2_PACKAGE_HAS_UDEV
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
