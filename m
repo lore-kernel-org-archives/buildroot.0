@@ -1,43 +1,40 @@
-From: Weber, Matthew L                            Collins <Matthew.Weber@collins.com>
-Date: Tue, 15 Jun 2021 19:40:32 +0000
-Subject: [Buildroot] [External] [PATCH] core/pkg-generic: fix
- instrumentation for packages that install nowhere
-In-Reply-To: <20210613143207.2445691-1-yann.morin.1998@free.fr>
-References: <20210613143207.2445691-1-yann.morin.1998@free.fr>
-Message-ID: <DM2P110MB0105D1560BC1E8EC48F2F8AAF2309@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Tue, 15 Jun 2021 21:45:36 +0200
+Subject: [Buildroot] [PATCH] package/cegui: disable Python SWIG extension
+ modules when OpenGL renderer is disabled
+Message-ID: <20210615194536.265246-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Those modules need OpenGL renderer so disable them when it's missing.
 
-> From: Yann E. MORIN <yann.morin.1998@gmail.com> on behalf of Yann E. MORIN <yann.morin.1998@free.fr>
-> Sent: Sunday, June 13, 2021 9:32 AM
-> To: buildroot at buildroot.org <buildroot@buildroot.org>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>; Weber, Matthew L Collins <Matthew.Weber@collins.com>; Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Subject: [External] [PATCH] core/pkg-generic: fix instrumentation for packages that install nowhere 
-> ?
-> A (target [0]) package can independently declare installing in various
-> locations: target, staging, or images. The default is to only install
-> in target.
-> 
+Fixes:
+ - http://autobuild.buildroot.net/results/592/592fcffb226c8b44ada5fa3cdb8ab15c627f29dc/
+ - http://autobuild.buildroot.net/results/9ad/9ad768b7e2a3c59833e03986c245f2f4b5d25dcd/
 
-[snip]
+  and more...
 
->
-> Fixes: #13836
->
-> [0] a host package can't opt out of installing anything.
-> [1] that one is actually missing AUFS_INSTALL_TARGET = NO, so this
-> ??? hides the issue.
-> [2] even us are not 100% clean on that topic: gcc will install files in
-> ??? staging and target as part of the same step (not the build, granted,
-> ??? but still...)
->
-> Reported-by: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
+ package/cegui/cegui.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Tested-by: Matthew Weber <matthew.weber@collins.com
+diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+index 747ebbb953..c5ff45818e 100644
+--- a/package/cegui/cegui.mk
++++ b/package/cegui/cegui.mk
+@@ -38,7 +38,8 @@ CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=ON -DCEGUI_USE_GLEW=OFF \
+ else
+ CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=OFF -DCEGUI_USE_GLEW=OFF \
+ 	-DCEGUI_BUILD_RENDERER_OPENGL=OFF \
+-	-DCEGUI_BUILD_RENDERER_OPENGL3=OFF
++	-DCEGUI_BUILD_RENDERER_OPENGL3=OFF \
++	-DCEGUI_BUILD_PYTHON_MODULES_SWIG=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_EXPAT),y)
+-- 
+2.32.0
