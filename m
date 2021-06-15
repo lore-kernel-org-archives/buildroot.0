@@ -1,135 +1,204 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 15 Jun 2021 13:25:18 +0200
-Subject: [Buildroot] [git commit] package/daq3: new package
-Message-ID: <20210615105448.284128D483@busybox.osuosl.org>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 15 Jun 2021 13:30:09 +0200
+Subject: [Buildroot] [PATCH 2/2] package/lzlib: remove it
+In-Reply-To: <20210614202744.GI2610983@scaer>
+References: <20210613154240.2877974-1-francois.perrad@gadz.org>
+ <20210613154240.2877974-2-francois.perrad@gadz.org>
+ <20210614202744.GI2610983@scaer>
+Message-ID: <CAB0FRss2s6ZcTpfojjcwYCKHUqi457u5o26BGOViKM4_bUuXXg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e75a990ae35580800f24f3ddc4573c6bc38fa05
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le lun. 14 juin 2021 ? 22:27, Yann E. MORIN <yann.morin.1998@free.fr> a
+?crit :
 
-Add daq3 package to be able to add the snort3 package.
+> Fran?ois, All,
+>
+> On 2021-06-13 17:42 +0200, Francois Perrad spake thusly:
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> Removing a package should dully explained in the commit log.
+>
+> lua-zlib that you taunt as a replcement, adertises that it is not 100%
+> percent compatible:
+>
+>     https://github.com/brimworks/lua-zlib/blob/master/README#L172
+>
+>     NOTE: This library ships with an "lzlib" compatibility shim.
+>     However, the following things are not compatible:
+>
+>      * zlib.version() in lzlib returns a string, but this library
+>        returns a numeric tuple (see above).
+>
+>      * zlib.{adler,crc}32() in lzlib returns the {adler,crc}32
+>        initial value, however if this value is used with calls
+>        to adler32 it works in compatibility mode.
+>
+> Furthermore, this limited comp[atibility can only be achieved if a
+> package requests it:
+>
+>     To use this shim add the -DLZLIB_COMPAT compiler flag.
+>
+>
+This is done by the rockspec:
+see
+https://github.com/brimworks/lua-zlib/blob/master/rockspecs/lua-zlib-1.2-0.rockspec#L33
 
-daq3 is not compatatible with snort as daq_load_modules has been removed
+Fran?ois
 
-daq3 package has been created from the daq package, here is a summary of
-the changes:
-- Drop patch (not needed anymore)
-- Enable parallel build as there is no more tokdefs.h
-- Drop libdnet dependency
-- Drop host-bison and host-flex dependencies
-- Drop libpcap workarounds
-- ipq module dropped since version 3.0.0-alpha1 and
-  https://github.com/snort3/libdaq/commit/80c62799a936118c80894bf91f396c8aa8ba45a6
-- Add LICENSE file (same content than COPYING)
-- Update hash of COPYING (project name and GPLv2 text updated with
-  https://github.com/snort3/libdaq/commit/46e8722da230082a5728175270ea3c04432d1af0)
-- Add a dependency on gcc 4.9 for {t,u}h_{d,s}port that are protected on
-  glibc by _FAVOR_BSD (and so !defined _GNU_SOURCE) until version 2.19:
-  https://sourceware.org/git/?p=glibc.git;a=commit;h=7011c2622fe3e10a29dbe74f06aaebd07710127d
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/daq3/Config.in | 14 ++++++++++++++
- package/daq3/daq3.hash |  6 ++++++
- package/daq3/daq3.mk   | 30 ++++++++++++++++++++++++++++++
- 5 files changed, 52 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0c7072d845..327ffb9447 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -845,6 +845,7 @@ F:	package/belle-sip/
- F:	package/belr/
- F:	package/boinc/
- F:	package/cairo/
-+F:	package/daq3/
- F:	package/duktape/
- F:	package/expat/
- F:	package/flatbuffers/
-diff --git a/package/Config.in b/package/Config.in
-index 388f8c1f05..89d8dd10d1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1732,6 +1732,7 @@ menu "Networking"
- 	source "package/curlpp/Config.in"
- 	source "package/czmq/Config.in"
- 	source "package/daq/Config.in"
-+	source "package/daq3/Config.in"
- 	source "package/davici/Config.in"
- 	source "package/enet/Config.in"
- 	source "package/filemq/Config.in"
-diff --git a/package/daq3/Config.in b/package/daq3/Config.in
-new file mode 100644
-index 0000000000..ad7d55db5b
---- /dev/null
-+++ b/package/daq3/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_DAQ3
-+	bool "daq3"
-+	depends on !BR2_PACKAGE_DAQ
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	help
-+	  DAQ is a Data Acquisition library for packet I/O from the
-+	  Snort project.
-+
-+	  https://www.snort.org
-+
-+comment "daq3 needs a toolchain w/ dynamic library, gcc >= 4.9"
-+	depends on !BR2_PACKAGE_DAQ
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/daq3/daq3.hash b/package/daq3/daq3.hash
-new file mode 100644
-index 0000000000..33ad2e388b
---- /dev/null
-+++ b/package/daq3/daq3.hash
-@@ -0,0 +1,6 @@
-+# Locally computed:
-+sha256  920344f5c98ac68b401d1bc92ebaed78b0d15779b0480c213db279d0a60acc32  daq3-3.0.3.tar.gz
-+
-+# Hash for license files:
-+sha256  64601289158eddad72cb4de72652f9e64dc886942c910b38ddee93ba13b0db26  COPYING
-+sha256  64601289158eddad72cb4de72652f9e64dc886942c910b38ddee93ba13b0db26  LICENSE
-diff --git a/package/daq3/daq3.mk b/package/daq3/daq3.mk
-new file mode 100644
-index 0000000000..a0493031d8
---- /dev/null
-+++ b/package/daq3/daq3.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# daq3
-+#
-+################################################################################
-+
-+DAQ3_VERSION = 3.0.3
-+DAQ3_SITE = $(call github,snort3,libdaq,v$(DAQ3_VERSION))
-+DAQ3_LICENSE = GPL-2.0
-+DAQ3_LICENSE_FILES = COPYING LICENSE
-+DAQ3_INSTALL_STAGING = YES
-+DAQ3_DEPENDENCIES = host-pkgconf
-+# From git
-+DAQ3_AUTORECONF = YES
-+
-+ifeq ($(BR2_PACKAGE_LIBNETFILTER_QUEUE),y)
-+DAQ3_DEPENDENCIES += libnetfilter_queue
-+DAQ3_CONF_OPTS += --enable-nfq-module
-+else
-+DAQ3_CONF_OPTS += --disable-nfq-module
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPCAP),y)
-+DAQ3_DEPENDENCIES += libpcap
-+DAQ3_CONF_OPTS += --enable-pcap-module
-+else
-+DAQ3_CONF_OPTS += --disable-pcap-module
-+endif
-+
-+$(eval $(autotools-package))
+> So, lua-zlib is not a drop-in replacement for lzlib.
+>
+> As such, we can't remove lzlib (yet).
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > ---
+> >  Config.in.legacy                            |  7 +++++++
+> >  package/Config.in                           |  1 -
+> >  package/lzlib/Config.in                     | 10 ----------
+> >  package/lzlib/lzlib.hash                    |  3 ---
+> >  package/lzlib/lzlib.mk                      | 15 ---------------
+> >  support/testing/tests/package/test_lzlib.py | 14 --------------
+> >  6 files changed, 7 insertions(+), 43 deletions(-)
+> >  delete mode 100644 package/lzlib/Config.in
+> >  delete mode 100644 package/lzlib/lzlib.hash
+> >  delete mode 100644 package/lzlib/lzlib.mk
+> >  delete mode 100644 support/testing/tests/package/test_lzlib.py
+> >
+> > diff --git a/Config.in.legacy b/Config.in.legacy
+> > index a0c1a6898..adfacecd3 100644
+> > --- a/Config.in.legacy
+> > +++ b/Config.in.legacy
+> > @@ -236,6 +236,13 @@ config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
+> >         of the official Kodi github repo and its build is broken
+> >         with Kodi 19.x, so it was removed.
+> >
+> > +config BR2_PACKAGE_LZLIB
+> > +     bool "lzlib package was removed"
+> > +     select BR2_PACKAGE_LUA_ZLIB
+> > +     select BR2_LEGACY
+> > +     help
+> > +       The lzlib package was removed, use lua-zlib instead.
+> > +
+> >  comment "Legacy options removed in 2021.02"
+> >
+> >  config BR2_PACKAGE_MPD_AUDIOFILE
+> > diff --git a/package/Config.in b/package/Config.in
+> > index 1abfd787f..66978ec45 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -708,7 +708,6 @@ menu "Lua libraries/modules"
+> >       source "package/lutok/Config.in"
+> >       source "package/luv/Config.in"
+> >       source "package/luvi/Config.in"
+> > -     source "package/lzlib/Config.in"
+> >       source "package/orbit/Config.in"
+> >       source "package/rings/Config.in"
+> >       source "package/turbolua/Config.in"
+> > diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
+> > deleted file mode 100644
+> > index 59a2e6d5c..000000000
+> > --- a/package/lzlib/Config.in
+> > +++ /dev/null
+> > @@ -1,10 +0,0 @@
+> > -config BR2_PACKAGE_LZLIB
+> > -     bool "lzlib"
+> > -     depends on BR2_PACKAGE_LUA
+> > -     select BR2_PACKAGE_ZLIB
+> > -     help
+> > -       This package provides a library to access zlib library
+> > -       functions and also to read/write gzip files using an
+> > -       interface similar to the base io package.
+> > -
+> > -       https://github.com/LuaDist/lzlib
+> > diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
+> > deleted file mode 100644
+> > index 4bb4c52c8..000000000
+> > --- a/package/lzlib/lzlib.hash
+> > +++ /dev/null
+> > @@ -1,3 +0,0 @@
+> > -# Locally calculated
+> > -sha256
+> cbb0cac5825e940b4ea2f31a336d2aaf6db39847d456920afd8e443804420dbb
+> lzlib-0.4.3.tar.gz
+> > -sha256
+> f817d4a37077e94e9adf379f46ba5cc0b68775d7add2bbd5b2ca68ba140ad5bb  lzlib.c
+> > diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
+> > deleted file mode 100644
+> > index 74624d501..000000000
+> > --- a/package/lzlib/lzlib.mk
+> > +++ /dev/null
+> > @@ -1,15 +0,0 @@
+> >
+> -################################################################################
+> > -#
+> > -# lzlib
+> > -#
+> >
+> -################################################################################
+> > -
+> > -LZLIB_VERSION = 0.4.3
+> > -LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
+> > -LZLIB_DEPENDENCIES = lua zlib
+> > -LZLIB_LICENSE = MIT
+> > -LZLIB_LICENSE_FILES = lzlib.c
+> > -LZLIB_CONF_OPTS =
+> -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
+> > -     -DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
+> > -
+> > -$(eval $(cmake-package))
+> > diff --git a/support/testing/tests/package/test_lzlib.py
+> b/support/testing/tests/package/test_lzlib.py
+> > deleted file mode 100644
+> > index 84e767913..000000000
+> > --- a/support/testing/tests/package/test_lzlib.py
+> > +++ /dev/null
+> > @@ -1,14 +0,0 @@
+> > -from tests.package.test_lua import TestLuaBase
+> > -
+> > -
+> > -class TestLuaLzlib(TestLuaBase):
+> > -    config = TestLuaBase.config + \
+> > -        """
+> > -        BR2_PACKAGE_LUA=y
+> > -        BR2_PACKAGE_LZLIB=y
+> > -        """
+> > -
+> > -    def test_run(self):
+> > -        self.login()
+> > -        self.module_test("zlib")
+> > -        self.module_test("gzip")
+> > --
+> > 2.30.2
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210615/32707a4f/attachment.html>
