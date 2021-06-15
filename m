@@ -1,204 +1,78 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 15 Jun 2021 13:30:09 +0200
-Subject: [Buildroot] [PATCH 2/2] package/lzlib: remove it
-In-Reply-To: <20210614202744.GI2610983@scaer>
-References: <20210613154240.2877974-1-francois.perrad@gadz.org>
- <20210613154240.2877974-2-francois.perrad@gadz.org>
- <20210614202744.GI2610983@scaer>
-Message-ID: <CAB0FRss2s6ZcTpfojjcwYCKHUqi457u5o26BGOViKM4_bUuXXg@mail.gmail.com>
+From: Stefan <buildroot-list_21@green-sparklet.de>
+Date: Tue, 15 Jun 2021 15:55:54 +0200
+Subject: [Buildroot] [PATCH] docs/manual/adding-packages-cargo.txt: re-add
+ FOO_CARGO_MODE variable
+Message-ID: <2e60c4dc-6a6f-7124-c512-2b4495482f4c@green-sparklet.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lun. 14 juin 2021 ? 22:27, Yann E. MORIN <yann.morin.1998@free.fr> a
-?crit :
+FOO_CARGO_MODE is needed for FOO_BIN_DIR, example wouldn't work without.
+Fabrice Fontaine is correct that carco has no 'debug' profile, but default 'dev' profile builds into 'debug' directory. That's where we have to pick up files for install.
 
-> Fran?ois, All,
->
-> On 2021-06-13 17:42 +0200, Francois Perrad spake thusly:
-> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->
-> Removing a package should dully explained in the commit log.
->
-> lua-zlib that you taunt as a replcement, adertises that it is not 100%
-> percent compatible:
->
->     https://github.com/brimworks/lua-zlib/blob/master/README#L172
->
->     NOTE: This library ships with an "lzlib" compatibility shim.
->     However, the following things are not compatible:
->
->      * zlib.version() in lzlib returns a string, but this library
->        returns a numeric tuple (see above).
->
->      * zlib.{adler,crc}32() in lzlib returns the {adler,crc}32
->        initial value, however if this value is used with calls
->        to adler32 it works in compatibility mode.
->
-> Furthermore, this limited comp[atibility can only be achieved if a
-> package requests it:
->
->     To use this shim add the -DLZLIB_COMPAT compiler flag.
->
->
-This is done by the rockspec:
-see
-https://github.com/brimworks/lua-zlib/blob/master/rockspecs/lua-zlib-1.2-0.rockspec#L33
+Signed-off-by: Stefan G?nsler <buildroot-git_21@green-sparklet.de>
+---
+ docs/manual/adding-packages-cargo.txt | 41 ++++++++++++++-------------
+ 1 file changed, 21 insertions(+), 20 deletions(-)
 
-Fran?ois
+diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
+index 8fcc80bcc6..8cbd641d65 100644
+--- a/docs/manual/adding-packages-cargo.txt
++++ b/docs/manual/adding-packages-cargo.txt
+@@ -47,31 +47,32 @@ package. Let's start with an example:
+ 13: FOO_DEPENDENCIES = host-rustc
+ 14:
+ 15: FOO_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+-16:
+-17: FOO_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(FOO_CARGO_MODE)
+-18:
+-19: FOO_CARGO_OPTS = \
+-20:    $(if $(BR2_ENABLE_DEBUG),,--release) \
+-21:    --target=$(RUSTC_TARGET_NAME) \
+-22:    --manifest-path=$(@D)/Cargo.toml
+-23:
+-24: define FOO_BUILD_CMDS
+-25:    $(TARGET_MAKE_ENV) $(FOO_CARGO_ENV) \
+-26:            cargo build $(FOO_CARGO_OPTS)
+-27: endef
+-28:
+-29: define FOO_INSTALL_TARGET_CMDS
+-30:    $(INSTALL) -D -m 0755 $(@D)/$(FOO_BIN_DIR)/foo \
+-31:            $(TARGET_DIR)/usr/bin/foo
+-32: endef
+-33:
+-34: $(eval $(generic-package))
++16: FOO_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
++17:
++18: FOO_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(FOO_CARGO_MODE)
++19:
++20: FOO_CARGO_OPTS = \
++21:    $(if $(BR2_ENABLE_DEBUG),,--release) \
++22:    --target=$(RUSTC_TARGET_NAME) \
++23:    --manifest-path=$(@D)/Cargo.toml
++24:
++25: define FOO_BUILD_CMDS
++26:    $(TARGET_MAKE_ENV) $(FOO_CARGO_ENV) \
++27:            cargo build $(FOO_CARGO_OPTS)
++28: endef
++29:
++30: define FOO_INSTALL_TARGET_CMDS
++31:    $(INSTALL) -D -m 0755 $(@D)/$(FOO_BIN_DIR)/foo \
++32:            $(TARGET_DIR)/usr/bin/foo
++33: endef
++34:
++35: $(eval $(generic-package))
+ --------------------------------
 
+ The Makefile starts with the definition of the standard variables for package
+ declaration (lines 7 to 11).
 
-> So, lua-zlib is not a drop-in replacement for lzlib.
->
-> As such, we can't remove lzlib (yet).
->
-> Regards,
-> Yann E. MORIN.
->
-> > ---
-> >  Config.in.legacy                            |  7 +++++++
-> >  package/Config.in                           |  1 -
-> >  package/lzlib/Config.in                     | 10 ----------
-> >  package/lzlib/lzlib.hash                    |  3 ---
-> >  package/lzlib/lzlib.mk                      | 15 ---------------
-> >  support/testing/tests/package/test_lzlib.py | 14 --------------
-> >  6 files changed, 7 insertions(+), 43 deletions(-)
-> >  delete mode 100644 package/lzlib/Config.in
-> >  delete mode 100644 package/lzlib/lzlib.hash
-> >  delete mode 100644 package/lzlib/lzlib.mk
-> >  delete mode 100644 support/testing/tests/package/test_lzlib.py
-> >
-> > diff --git a/Config.in.legacy b/Config.in.legacy
-> > index a0c1a6898..adfacecd3 100644
-> > --- a/Config.in.legacy
-> > +++ b/Config.in.legacy
-> > @@ -236,6 +236,13 @@ config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
-> >         of the official Kodi github repo and its build is broken
-> >         with Kodi 19.x, so it was removed.
-> >
-> > +config BR2_PACKAGE_LZLIB
-> > +     bool "lzlib package was removed"
-> > +     select BR2_PACKAGE_LUA_ZLIB
-> > +     select BR2_LEGACY
-> > +     help
-> > +       The lzlib package was removed, use lua-zlib instead.
-> > +
-> >  comment "Legacy options removed in 2021.02"
-> >
-> >  config BR2_PACKAGE_MPD_AUDIOFILE
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 1abfd787f..66978ec45 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -708,7 +708,6 @@ menu "Lua libraries/modules"
-> >       source "package/lutok/Config.in"
-> >       source "package/luv/Config.in"
-> >       source "package/luvi/Config.in"
-> > -     source "package/lzlib/Config.in"
-> >       source "package/orbit/Config.in"
-> >       source "package/rings/Config.in"
-> >       source "package/turbolua/Config.in"
-> > diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
-> > deleted file mode 100644
-> > index 59a2e6d5c..000000000
-> > --- a/package/lzlib/Config.in
-> > +++ /dev/null
-> > @@ -1,10 +0,0 @@
-> > -config BR2_PACKAGE_LZLIB
-> > -     bool "lzlib"
-> > -     depends on BR2_PACKAGE_LUA
-> > -     select BR2_PACKAGE_ZLIB
-> > -     help
-> > -       This package provides a library to access zlib library
-> > -       functions and also to read/write gzip files using an
-> > -       interface similar to the base io package.
-> > -
-> > -       https://github.com/LuaDist/lzlib
-> > diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
-> > deleted file mode 100644
-> > index 4bb4c52c8..000000000
-> > --- a/package/lzlib/lzlib.hash
-> > +++ /dev/null
-> > @@ -1,3 +0,0 @@
-> > -# Locally calculated
-> > -sha256
-> cbb0cac5825e940b4ea2f31a336d2aaf6db39847d456920afd8e443804420dbb
-> lzlib-0.4.3.tar.gz
-> > -sha256
-> f817d4a37077e94e9adf379f46ba5cc0b68775d7add2bbd5b2ca68ba140ad5bb  lzlib.c
-> > diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
-> > deleted file mode 100644
-> > index 74624d501..000000000
-> > --- a/package/lzlib/lzlib.mk
-> > +++ /dev/null
-> > @@ -1,15 +0,0 @@
-> >
-> -################################################################################
-> > -#
-> > -# lzlib
-> > -#
-> >
-> -################################################################################
-> > -
-> > -LZLIB_VERSION = 0.4.3
-> > -LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
-> > -LZLIB_DEPENDENCIES = lua zlib
-> > -LZLIB_LICENSE = MIT
-> > -LZLIB_LICENSE_FILES = lzlib.c
-> > -LZLIB_CONF_OPTS =
-> -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
-> > -     -DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
-> > -
-> > -$(eval $(cmake-package))
-> > diff --git a/support/testing/tests/package/test_lzlib.py
-> b/support/testing/tests/package/test_lzlib.py
-> > deleted file mode 100644
-> > index 84e767913..000000000
-> > --- a/support/testing/tests/package/test_lzlib.py
-> > +++ /dev/null
-> > @@ -1,14 +0,0 @@
-> > -from tests.package.test_lua import TestLuaBase
-> > -
-> > -
-> > -class TestLuaLzlib(TestLuaBase):
-> > -    config = TestLuaBase.config + \
-> > -        """
-> > -        BR2_PACKAGE_LUA=y
-> > -        BR2_PACKAGE_LZLIB=y
-> > -        """
-> > -
-> > -    def test_run(self):
-> > -        self.login()
-> > -        self.module_test("zlib")
-> > -        self.module_test("gzip")
-> > --
-> > 2.30.2
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210615/32707a4f/attachment.html>
+-As seen in line 34, it is based on the
++As seen in line 35, it is based on the
+ xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
+ the variables required by this particular infrastructure, where Cargo is
+ invoked:
+--
+2.32.0.windows.1
