@@ -1,12 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Jun 2021 22:19:11 +0200
-Subject: [Buildroot] [PATCH v1 1/2] package/mesa3d: add config option
- for DRI3 support
-In-Reply-To: <20210614235410.636c5e27@gmx.net>
-References: <20210612223011.26118-1-ps.report@gmx.net>
- <689f1497-624c-01b3-d69a-97a5efd01740@mind.be>
- <20210614235410.636c5e27@gmx.net>
-Message-ID: <091fecfd-f83c-291c-76ed-75d3b2a496d6@mind.be>
+Date: Tue, 15 Jun 2021 22:31:33 +0200
+Subject: [Buildroot] [PATCH v2 3/5] package/zstd: rework build and
+ install
+In-Reply-To: <CADYdroN_jRv7Y5Yf2hPFjqq5jBqaSjr2X9drabbtEkDw7kMcWg@mail.gmail.com>
+References: <20210525172652.821351-1-nolange79@gmail.com>
+ <20210525172652.821351-3-nolange79@gmail.com>
+ <3fe56d17-b886-e63b-d366-1e524c895b6b@mind.be>
+ <CADYdroN_jRv7Y5Yf2hPFjqq5jBqaSjr2X9drabbtEkDw7kMcWg@mail.gmail.com>
+Message-ID: <21114cdb-c993-63bc-a9d6-4eec90f71954@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,175 +16,221 @@ To: buildroot@busybox.net
 
 
 
-On 14/06/2021 23:54, Peter Seiderer wrote:
-> Hello Arnout,
-> 
-> On Sun, 13 Jun 2021 11:25:36 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
->>  Hi Peter,
+On 14/06/2021 23:04, Norbert Lange wrote:
+> Am Mo., 14. Juni 2021 um 21:50 Uhr schrieb Arnout Vandecappelle
+> <arnout@mind.be>:
 >>
->> On 13/06/2021 00:30, Peter Seiderer wrote:
->>> Add config option for DRI3 support and use it instead
->>> of DRI3 enable/disable logic in *.mk file.
->>>
->>> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->>> ---
->>>  package/mesa3d/Config.in |  8 ++++++++
->>>  package/mesa3d/mesa3d.mk | 12 +++++++-----
->>>  2 files changed, 15 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
->>> index d1b3af2054..36acd9758c 100644
->>> --- a/package/mesa3d/Config.in
->>> +++ b/package/mesa3d/Config.in
->>> @@ -16,6 +16,11 @@ menuconfig BR2_PACKAGE_MESA3D
->>>
->>>  if BR2_PACKAGE_MESA3D
->>>
->>> +config BR2_PACKAGE_MESA3D_DRI3
->>> +	bool "Enable DRI3 support"
+>>  Hi Norbert,
 >>
->>  Does it make sense to have this as a user-selectable option? Wouldn't it be
->> better to make this a blind option? (The latter has the advantage that we can
->> easily refactor it later, without legacy handling and stuff.)
+>> On 25/05/2021 19:26, Norbert Lange wrote:
+>>> 1.5.0 uses Threads by default for cli tool and DSO,
+>>> the build now does the same unless:
+>>>
+>>> If only static libraries are build, then build
+>>> that library like the DSO is normally built.
+>>>
+>>> This should ensure that programs requsting the DSO
+>>> will always get the multithreaded version.
+>>
+>>  I don't understand what this patch is trying to do...
+>>
+>>  Before this patch, in the threads case, the build would be done with threads
+>> both for the program (HAVE_THREAD=1) and the libraries (-mt appended). For the
+>> no-threads case, the build is done without threads support for both the program
+>> (HAVE_THREAD=0) and the shared&static libraries (no -mt appended) - except that
+>> since 1.5.0, the shared library will be built with thread support which will
+>> probably result in a build failure.
 > 
-> As it is an feature option exposed by mesa3d I believe it makes sense...
+> I would want the static library to be built without threads (like upstream).
 
- I think putting "option exposed by mesa3d" and "make sense" in the same
-sentence is a bit of a stretch :-) The proper thing for mesa3d to do would be to
-enable dri3 automatically if a driver needs it. That we have to pass it
-explicitly is just silly IMHO.
+ I'm afraid that "like upstream" is not a great argument if upstream does crazy
+stuff (which is definitely the case in zstd).
 
-
->>  I just did a build with just DRI3 selected and it didn't install anything to
->> target or staging. This suggests that the option isn't useful on its own.
+> the expectation should be:
 > 
-> Same for numerous other options in buildroot which enable/disable compile time
-> feature include in packages, see e.g. the BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5,
-> BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2, ... and many others...
+> 1) gcc ... -llibzstd
+>     pickup the DSO, with multithread support
 
- BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5 *will* install libcrypto to staging and
-target, so I fail to see your point.
+ This should actually be:
 
- What I'm saying is: having it as a user-visible option only makes sense if a
-user can do something with that option. Since mesa3d doesn't install anything
-when dri3 is selected, I suspect that it's useless as a user-visible option. And
-as I wrote, making it user-visible has a cost: it means that changing/removing
-the option later becomes more difficult (legacy handling and all that).
+    pickup the library (shared or static, depending on BR2_STATIC_LIBS), which
+always has multithread support.
 
- Of course, I could still be wrong. Maybe dri3 does something useful. But to me
-it looks more like the shared-glapi option, that is meaningless by itself but
-that enables a subsystem that is required by some drivers.
+ This one is OK and makes sense.
 
 
->>  More importantly: have you checked that DRI3 doesn't have any dependencies of
->> itself? Check the meson files to see if there are dependencies that are implied
->> directly by dri3 (i.e., maybe the xshmfence dependency comes from dri3 rather
->> than the individual dri driver). Those things should be moved around as well,
->> similar how they are put in BR2_PACKAGE_MESA3D_DRI_DRIVER instead of the
->> individual drivers.
+> 2) gcc ... ../usr/lib/libzstd.a
+>     pickup the static library without multithread support
+
+ This should actually be:
+
+    pickup the static library which has multithread support if
+BR2_STATIC_LIBS=y, else it doesn't have multithread support.
+
+ That weird condition makes no sense to me. It means that your application (if
+it is multithreaded) will work fine if BR2_SHARED_STATIC=y and break if you set
+BR2_STATIC_LIBS=y.
+
+ But OK, your point is that if you link explicitly with the static library, you
+should assume that it doesn't have thread support (although sometimes it *does*
+have thread support, but who cares?).
+
+
+> in case there are no shared libraries, 1) will use the static library
+> instead, so it should be compiled like the DSO normally would.
+> in case there are no static libraries, 2) plainly wont work
 > 
-> But this mimics the mesa3d internal logic (without an mesa3d exposed feature
-> option)....
+> For the program, the Makefile should be able to determine whether
+> threads are available or not.
+> 
+>>
+>>  So as far as I can see, the only thing that needs to be done is:
+>>
+>> ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+>> ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
+>> else
+>> ZSTD_BUILD_LIBS := $(addsuffix -nomt,$(ZSTD_BUILD_LIBS))
+>> endif
+>>
+>>
+>>  You patch, however, builds the static library with thread support if no dynamic
+>> library is built, and without thread support if a dynamic library is built. This
+>> makes no sense whatsoever to me...
+>>
+>>
+>>  Can you clarify the reasoning?
+> 
+> I hope I did. Might be that I don't understand the build failures you
+> are talking about,
+> does the zstd package fail, or some user of libzstd?
 
- I'm not sure what you mean. What I mean is: in meson.build there is:
+ I expect the zstd package to start failing, because it will no try to build the
+multithread version on toolchains where threads are not available.
 
-if with_platform_x11
-...
-  if (with_egl or
-      with_dri3 or (
-      with_gallium_vdpau or with_gallium_xvmc or with_gallium_xa or
-      with_gallium_omx != 'disabled'))
-    dep_xcb_xfixes = dependency('xcb-xfixes')
-  endif
+ But I'm apparently wrong - there are failures of zstd, but for a different
+reason [1].
 
+> 
+>>
+>>  For now, I've marked the patch as Changes Requested. Since I did apply the
+>> first patch, we will probably start seeing build failures on nothreads, so we'll
+>> need a fix soonish...
+> 
+> Sure, I should get a mail as commit author!?
 
- This means, IMHO, that in Config.in we need:
-
-config BR2_PACKAGE_MESA3D_DRI3
-	bool
-	depends on ...
-	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
-
-and there are a bunch more like that.
+ You would if you add the package to yourself in DEVELOPERS.
 
 
  Regards,
  Arnout
 
+[1] http://autobuild.buildroot.net/?reason=zstd%
+
 > 
-> Regards,
-> Peter
+> Norbert
 > 
->>
->>
->>  Series marked as Changes Requested.
 >>
 >>  Regards,
 >>  Arnout
 >>
->>> +	help
->>> +	  Enable DRI3 support.
->>> +
->>>  # Some Gallium driver needs libelf when built with LLVM support
->>>  config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
->>>  	bool
->>> @@ -65,6 +70,8 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
->>>  		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
->>>  		!BR2_PACKAGE_MESA3D_OPENGL_EGL && \
->>>  		!BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
->>> +	select BR2_PACKAGE_MESA3D_DRI3 if \
->>> +		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
->>>  	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
->>>  		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
 >>>
->>> @@ -359,6 +366,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
->>>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
->>>  	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
->>>  	depends on BR2_PACKAGE_XORG7 # xorgproto
->>> +	select BR2_PACKAGE_MESA3D_DRI3
->>>  	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
->>>  	select BR2_PACKAGE_XORGPROTO
->>>  	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
->>> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
->>> index 5c5f8a33f3..da6e55bf93 100644
->>> --- a/package/mesa3d/mesa3d.mk
->>> +++ b/package/mesa3d/mesa3d.mk
->>> @@ -35,6 +35,12 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
->>>  MESA3D_CONF_OPTS += -Db_asneeded=false
+>>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>>>
+>>> ---
+>>> v1->v2:
+>>> *   rebased against upstream/master
+>>>
+>>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>>> ---
+>>>  package/zstd/zstd.mk | 52 ++++++++++++++++++++++++++++----------------
+>>>  1 file changed, 33 insertions(+), 19 deletions(-)
+>>>
+>>> diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+>>> index 2a876376a2..a7a5ba4e50 100644
+>>> --- a/package/zstd/zstd.mk
+>>> +++ b/package/zstd/zstd.mk
+>>> @@ -12,6 +12,8 @@ ZSTD_LICENSE_FILES = LICENSE COPYING
+>>>  ZSTD_CPE_ID_VENDOR = facebook
+>>>  ZSTD_CPE_ID_PRODUCT = zstandard
+>>>
+>>> +ZSTD_OPTS += PREFIX=/usr
+>>> +
+>>>  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+>>>  ZSTD_OPTS += HAVE_THREAD=1
+>>>  else
+>>> @@ -39,43 +41,55 @@ else
+>>>  ZSTD_OPTS += HAVE_LZ4=0
 >>>  endif
 >>>
->>> +ifeq ($(BR2_PACKAGE_MESA3D_DRI3),y)
->>> +MESA3D_CONF_OPTS += -Ddri3=enabled
->>> +else
->>> +MESA3D_CONF_OPTS += -Ddri3=disabled
+>>> -ifeq ($(BR2_STATIC_LIBS),y)
+>>> -ZSTD_BUILD_LIBS = libzstd.a
+>>> -ZSTD_INSTALL_LIBS = install-static
+>>> -else ifeq ($(BR2_SHARED_LIBS),y)
+>>> -ZSTD_BUILD_LIBS = libzstd
+>>> -ZSTD_INSTALL_LIBS = install-shared
+>>> +ZSTD_BUILD_PROG_TARGET := zstd-release
+>>> +
+>>> +# Since v1.5.0 the dynamic library is built for
+>>> +# multithreading, while the static library is not.
+>>> +#
+>>> +# Keep those defaults, unless Buildroot is not
+>>> +# providing the dynamic library and the
+>>> +# static library will be automatically used instead.
+>>> +ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+>>> +ZSTD_INSTALL_LIBS += install-static
+>>> +ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+>>> +# Use the static lib as replacement for the mt dynlib
+>>> +ZSTD_BUILD_LIBS += libzstd.a-mt
+>>>  else
+>>> -ZSTD_BUILD_LIBS = libzstd.a libzstd
+>>> -ZSTD_INSTALL_LIBS = install-static install-shared
+>>> +ZSTD_BUILD_LIBS += libzstd.a-nomt
 >>> +endif
->>> +
->>>  ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
->>>  MESA3D_DEPENDENCIES += host-llvm llvm
->>>  MESA3D_MESON_EXTRA_BINARIES += llvm-config='$(STAGING_DIR)/usr/bin/llvm-config'
->>> @@ -122,13 +128,10 @@ endif
->>>
->>>  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
->>>  MESA3D_CONF_OPTS += \
->>> -	-Ddri-drivers= -Ddri3=disabled
->>> +	-Ddri-drivers=
->>>  else
->>>  ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
->>>  MESA3D_DEPENDENCIES += xlib_libxshmfence
->>> -MESA3D_CONF_OPTS += -Ddri3=enabled
->>> -else
->>> -MESA3D_CONF_OPTS += -Ddri3=disabled
->>>  endif
->>>  MESA3D_CONF_OPTS += \
->>>  	-Dshared-glapi=enabled \
->>> @@ -142,7 +145,6 @@ MESA3D_CONF_OPTS += \
->>>  else
->>>  MESA3D_DEPENDENCIES += xlib_libxshmfence
->>>  MESA3D_CONF_OPTS += \
->>> -	-Ddri3=enabled \
->>>  	-Dvulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
 >>>  endif
 >>>
+>>> -# The HAVE_THREAD flag is read by the 'programs' makefile but not by  the 'lib'
+>>> -# one. Building a multi-threaded binary with a library (which defaults to
+>>> -# single-threaded) gives a runtime error when compressing files.
+>>> -# The 'lib' makefile provides specific '%-mt' targets for this purpose.
+>>> +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+>>> +ZSTD_INSTALL_LIBS += install-shared
+>>>  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+>>> -ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
+>>> +ZSTD_BUILD_LIBS += libzstd-mt
+>>> +else
+>>> +ZSTD_BUILD_LIBS += libzstd-nomt
+>>> +endif
+>>>  endif
 >>>
-> 
+>>>  define ZSTD_BUILD_CMDS
+>>>       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+>>> -             -C $(@D)/lib $(ZSTD_BUILD_LIBS)
+>>> +             -C $(@D)/lib $(addsuffix -release,$(ZSTD_BUILD_LIBS) libzstd.pc)
+>>>       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+>>> -             -C $(@D) zstd
+>>> +             -C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET)
+>>>  endef
+>>>
+>>>  define ZSTD_INSTALL_STAGING_CMDS
+>>> +     [ -e $(@D)/programs/zstd ] && [ -e $(@D)/lib/libzstd.pc ]
+>>> +     $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+>>> +             -C $(@D)/lib DESTDIR=$(STAGING_DIR) $(ZSTD_INSTALL_LIBS) \
+>>> +             install-pc install-includes
+>>>       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+>>> -             DESTDIR=$(STAGING_DIR) PREFIX=/usr -C $(@D)/lib \
+>>> -             install-pc install-includes $(ZSTD_INSTALL_LIBS)
+>>> +             -C $(@D)/programs DESTDIR=$(STAGING_DIR) install
+>>>  endef
+>>>
+>>>  define ZSTD_INSTALL_TARGET_CMDS
+>>> +     [ -e $(@D)/programs/zstd ]
+>>>       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+>>> -             DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
+>>> +             -C $(@D)/lib DESTDIR=$(TARGET_DIR) $(ZSTD_INSTALL_LIBS)
+>>>       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+>>> -             DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/lib $(ZSTD_INSTALL_LIBS)
+>>> +             -C $(@D)/programs DESTDIR=$(TARGET_DIR) install
+>>>  endef
+>>>
+>>>  HOST_ZSTD_OPTS += PREFIX=$(HOST_DIR)
+>>>
