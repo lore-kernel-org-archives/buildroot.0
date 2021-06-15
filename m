@@ -1,54 +1,189 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Jun 2021 21:48:27 +0200
-Subject: [Buildroot] [PATCH 2/2] package/lzlib: remove it
-In-Reply-To: <CAB0FRss2s6ZcTpfojjcwYCKHUqi457u5o26BGOViKM4_bUuXXg@mail.gmail.com>
-References: <20210613154240.2877974-1-francois.perrad@gadz.org>
- <20210613154240.2877974-2-francois.perrad@gadz.org>
- <20210614202744.GI2610983@scaer>
- <CAB0FRss2s6ZcTpfojjcwYCKHUqi457u5o26BGOViKM4_bUuXXg@mail.gmail.com>
-Message-ID: <20210615194827.GM2610983@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 15 Jun 2021 22:19:11 +0200
+Subject: [Buildroot] [PATCH v1 1/2] package/mesa3d: add config option
+ for DRI3 support
+In-Reply-To: <20210614235410.636c5e27@gmx.net>
+References: <20210612223011.26118-1-ps.report@gmx.net>
+ <689f1497-624c-01b3-d69a-97a5efd01740@mind.be>
+ <20210614235410.636c5e27@gmx.net>
+Message-ID: <091fecfd-f83c-291c-76ed-75d3b2a496d6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
 
-On 2021-06-15 13:30 +0200, Fran?ois Perrad spake thusly:
-> Le?lun. 14 juin 2021 ??22:27, Yann E. MORIN < [1]yann.morin.1998@free.fr> a ?crit?:
->   On 2021-06-13 17:42 +0200, Francois Perrad spake thusly:
->   > Signed-off-by: Francois Perrad < [2]francois.perrad@gadz.org>
->   Removing a package should dully explained in the commit log.
->   lua-zlib that you taunt as a replcement, adertises that it is not 100%
->   percent compatible:
-[--SNIP--]
->   ? ? To use this shim add the -DLZLIB_COMPAT compiler flag.
+
+On 14/06/2021 23:54, Peter Seiderer wrote:
+> Hello Arnout,
 > 
-> This is done by the rockspec:
-> see [4]https://github.com/brimworks/lua-zlib/blob/master/rockspecs/lua-zlib-1.2-0.rockspec#L33
+> On Sun, 13 Jun 2021 11:25:36 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+> 
+>>  Hi Peter,
+>>
+>> On 13/06/2021 00:30, Peter Seiderer wrote:
+>>> Add config option for DRI3 support and use it instead
+>>> of DRI3 enable/disable logic in *.mk file.
+>>>
+>>> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>>> ---
+>>>  package/mesa3d/Config.in |  8 ++++++++
+>>>  package/mesa3d/mesa3d.mk | 12 +++++++-----
+>>>  2 files changed, 15 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+>>> index d1b3af2054..36acd9758c 100644
+>>> --- a/package/mesa3d/Config.in
+>>> +++ b/package/mesa3d/Config.in
+>>> @@ -16,6 +16,11 @@ menuconfig BR2_PACKAGE_MESA3D
+>>>
+>>>  if BR2_PACKAGE_MESA3D
+>>>
+>>> +config BR2_PACKAGE_MESA3D_DRI3
+>>> +	bool "Enable DRI3 support"
+>>
+>>  Does it make sense to have this as a user-selectable option? Wouldn't it be
+>> better to make this a blind option? (The latter has the advantage that we can
+>> easily refactor it later, without legacy handling and stuff.)
+> 
+> As it is an feature option exposed by mesa3d I believe it makes sense...
 
-So, this is the kind of information that should be part of the commit
-log, for example (e.g.: the rockspec file for lua-zlib automatically
-enables this legacy shim, so packages autoamtically inherit it).
+ I think putting "option exposed by mesa3d" and "make sense" in the same
+sentence is a bit of a stretch :-) The proper thing for mesa3d to do would be to
+enable dri3 automatically if a driver needs it. That we have to pass it
+explicitly is just silly IMHO.
 
-However, this is still not a drop-in replacement, because parts of the
-API return different types than lzlib did.
 
-So, if some packages really need that part, they can't use lua-zlib.
+>>  I just did a build with just DRI3 selected and it didn't install anything to
+>> target or staging. This suggests that the option isn't useful on its own.
+> 
+> Same for numerous other options in buildroot which enable/disable compile time
+> feature include in packages, see e.g. the BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5,
+> BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2, ... and many others...
 
-Additionally, it is still OK to keep an old package in the tree, at
-least as long as there is no drop-in-replacement, or that there are
-still in-tree users, and as long as it does not cause any build
-failure, that is not much an issue...
+ BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5 *will* install libcrypto to staging and
+target, so I fail to see your point.
 
-Regards,
-Yann E. MORIN.
+ What I'm saying is: having it as a user-visible option only makes sense if a
+user can do something with that option. Since mesa3d doesn't install anything
+when dri3 is selected, I suspect that it's useless as a user-visible option. And
+as I wrote, making it user-visible has a cost: it means that changing/removing
+the option later becomes more difficult (legacy handling and all that).
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ Of course, I could still be wrong. Maybe dri3 does something useful. But to me
+it looks more like the shared-glapi option, that is meaningless by itself but
+that enables a subsystem that is required by some drivers.
+
+
+>>  More importantly: have you checked that DRI3 doesn't have any dependencies of
+>> itself? Check the meson files to see if there are dependencies that are implied
+>> directly by dri3 (i.e., maybe the xshmfence dependency comes from dri3 rather
+>> than the individual dri driver). Those things should be moved around as well,
+>> similar how they are put in BR2_PACKAGE_MESA3D_DRI_DRIVER instead of the
+>> individual drivers.
+> 
+> But this mimics the mesa3d internal logic (without an mesa3d exposed feature
+> option)....
+
+ I'm not sure what you mean. What I mean is: in meson.build there is:
+
+if with_platform_x11
+...
+  if (with_egl or
+      with_dri3 or (
+      with_gallium_vdpau or with_gallium_xvmc or with_gallium_xa or
+      with_gallium_omx != 'disabled'))
+    dep_xcb_xfixes = dependency('xcb-xfixes')
+  endif
+
+
+ This means, IMHO, that in Config.in we need:
+
+config BR2_PACKAGE_MESA3D_DRI3
+	bool
+	depends on ...
+	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
+
+and there are a bunch more like that.
+
+
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> Peter
+> 
+>>
+>>
+>>  Series marked as Changes Requested.
+>>
+>>  Regards,
+>>  Arnout
+>>
+>>> +	help
+>>> +	  Enable DRI3 support.
+>>> +
+>>>  # Some Gallium driver needs libelf when built with LLVM support
+>>>  config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
+>>>  	bool
+>>> @@ -65,6 +70,8 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+>>>  		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
+>>>  		!BR2_PACKAGE_MESA3D_OPENGL_EGL && \
+>>>  		!BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
+>>> +	select BR2_PACKAGE_MESA3D_DRI3 if \
+>>> +		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
+>>>  	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
+>>>  		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
+>>>
+>>> @@ -359,6 +366,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+>>>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
+>>>  	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
+>>>  	depends on BR2_PACKAGE_XORG7 # xorgproto
+>>> +	select BR2_PACKAGE_MESA3D_DRI3
+>>>  	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+>>>  	select BR2_PACKAGE_XORGPROTO
+>>>  	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
+>>> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+>>> index 5c5f8a33f3..da6e55bf93 100644
+>>> --- a/package/mesa3d/mesa3d.mk
+>>> +++ b/package/mesa3d/mesa3d.mk
+>>> @@ -35,6 +35,12 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
+>>>  MESA3D_CONF_OPTS += -Db_asneeded=false
+>>>  endif
+>>>
+>>> +ifeq ($(BR2_PACKAGE_MESA3D_DRI3),y)
+>>> +MESA3D_CONF_OPTS += -Ddri3=enabled
+>>> +else
+>>> +MESA3D_CONF_OPTS += -Ddri3=disabled
+>>> +endif
+>>> +
+>>>  ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
+>>>  MESA3D_DEPENDENCIES += host-llvm llvm
+>>>  MESA3D_MESON_EXTRA_BINARIES += llvm-config='$(STAGING_DIR)/usr/bin/llvm-config'
+>>> @@ -122,13 +128,10 @@ endif
+>>>
+>>>  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+>>>  MESA3D_CONF_OPTS += \
+>>> -	-Ddri-drivers= -Ddri3=disabled
+>>> +	-Ddri-drivers=
+>>>  else
+>>>  ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
+>>>  MESA3D_DEPENDENCIES += xlib_libxshmfence
+>>> -MESA3D_CONF_OPTS += -Ddri3=enabled
+>>> -else
+>>> -MESA3D_CONF_OPTS += -Ddri3=disabled
+>>>  endif
+>>>  MESA3D_CONF_OPTS += \
+>>>  	-Dshared-glapi=enabled \
+>>> @@ -142,7 +145,6 @@ MESA3D_CONF_OPTS += \
+>>>  else
+>>>  MESA3D_DEPENDENCIES += xlib_libxshmfence
+>>>  MESA3D_CONF_OPTS += \
+>>> -	-Ddri3=enabled \
+>>>  	-Dvulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
+>>>  endif
+>>>
+>>>
+> 
