@@ -1,11 +1,11 @@
 From: Bin Meng <bmeng.cn@gmail.com>
-Date: Tue, 15 Jun 2021 15:47:31 +0800
-Subject: [Buildroot] [PATCH 1/4] boot/uboot: introduce
- BR2_TARGET_UBOOT_FORMAT_DTB
-In-Reply-To: <20210615001750.421889-2-drew@beagleboard.org>
+Date: Tue, 15 Jun 2021 15:47:34 +0800
+Subject: [Buildroot] [PATCH 2/4] boot/opensbi: introduce
+ BR2_TARGET_OPENSBI_FW_FDT_PATH
+In-Reply-To: <20210615001750.421889-3-drew@beagleboard.org>
 References: <20210615001750.421889-1-drew@beagleboard.org>
- <20210615001750.421889-2-drew@beagleboard.org>
-Message-ID: <CAEUhbmVsk4+2dCse5BH7tQP1SFy-riztZmft7YtxTfcO_uanHA@mail.gmail.com>
+ <20210615001750.421889-3-drew@beagleboard.org>
+Message-ID: <CAEUhbmW4i9jxkH4NR0_nn-FVfFwXd_7+57u7N0WimSP_46p-xg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -30,17 +30,15 @@ nits: U-Boot
 >
 > [1] https://github.com/lentinj/u-boot/blob/master/doc/README.fdt-control
 
-Please use the official U-Boot github URL, instead of a fork.
-
-https://github.com/u-boot/u-boot
+Please use the official U-Boot github URL: https://github.com/u-boot/u-boot
 
 > [2] https://github.com/riscv/opensbi/blob/master/docs/firmware/fw.md
 >
 > Signed-off-by: Drew Fustini <drew@beagleboard.org>
 > ---
->  boot/uboot/Config.in | 3 +++
->  boot/uboot/uboot.mk  | 4 ++++
->  2 files changed, 7 insertions(+)
+>  boot/opensbi/Config.in  | 10 ++++++++++
+>  boot/opensbi/opensbi.mk |  3 +++
+>  2 files changed, 13 insertions(+)
 >
 
 Otherwise,
