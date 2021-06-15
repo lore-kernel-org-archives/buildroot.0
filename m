@@ -1,46 +1,39 @@
-From: Hubert Lacote <hubert.lacote@gmail.com>
-Date: Tue, 15 Jun 2021 16:03:02 +0200
-Subject: [Buildroot] [PATCH] package/gawk: create awk symlink for host-gawk
-Message-ID: <20210615140302.2485993-1-hubert.lacote@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 15 Jun 2021 15:05:42 +0000
+Subject: [Buildroot] [Bug 13851] New: timespec on 32bit systems requires
+ some toolchain header minimums if using a kernel over 5.6+
+Message-ID: <bug-13851-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Hubert Lacote <hubert.lacote@youview.com>
+https://bugs.busybox.net/show_bug.cgi?id=13851
 
-This is to make sure that host packages that depend on `host-gawk` and that use
-`awk` end up using `gawk`, instead of the `awk` symlink installed on the host
-system.
+            Bug ID: 13851
+           Summary: timespec on 32bit systems requires some toolchain
+                    header minimums if using a kernel over 5.6+
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: matthew.weber at rockwellcollins.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-On recent Debian-based distributions, `awk` is still symlinked to `mawk` [1].
+The header mismatch seems like a dependency Buildroot could check to prevent
+hidden time bugs where the kernel/glibc are all good(kernel 5.6+ and Glibc
+2.32+), but someone uses old toolchain headers < 5.6 resulting in the
+application using a 32bit timespec@runtime.
 
-[1] https://bugs.launchpad.net/ubuntu/+source/mawk/+bug/1841654
+https://stackoverflow.com/questions/14361651/is-there-any-way-to-get-64-bit-time-t-in-32-bit-programs-in-linux/60709400#60709400
 
-Signed-off-by: Hubert Lacote <hubert.lacote@youview.com>
-Co-authored-by: Hubert Lacote <hubert.lacote@youview.com>
-Co-authored-by: Vicente Olivert Riera <vincent.olivert.riera@youview.com>
----
- package/gawk/gawk.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 16906f6f93..ab7088e90e 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -33,6 +33,12 @@ endif
- 
- HOST_GAWK_CONF_OPTS = --without-readline --without-mpfr
- 
-+define HOST_GAWK_CREATE_SYMLINK
-+	ln -sf gawk $(HOST_DIR)/usr/bin/awk
-+endef
-+
-+HOST_GAWK_POST_INSTALL_HOOKS += HOST_GAWK_CREATE_SYMLINK
-+
- define GAWK_CREATE_SYMLINK
- 	ln -sf gawk $(TARGET_DIR)/usr/bin/awk
- endef
 -- 
-2.25.1
+You are receiving this mail because:
+You are on the CC list for the bug.
