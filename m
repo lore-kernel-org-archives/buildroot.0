@@ -1,40 +1,54 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Tue, 15 Jun 2021 21:45:36 +0200
-Subject: [Buildroot] [PATCH] package/cegui: disable Python SWIG extension
- modules when OpenGL renderer is disabled
-Message-ID: <20210615194536.265246-1-b.bilas@grinn-global.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 15 Jun 2021 21:48:27 +0200
+Subject: [Buildroot] [PATCH 2/2] package/lzlib: remove it
+In-Reply-To: <CAB0FRss2s6ZcTpfojjcwYCKHUqi457u5o26BGOViKM4_bUuXXg@mail.gmail.com>
+References: <20210613154240.2877974-1-francois.perrad@gadz.org>
+ <20210613154240.2877974-2-francois.perrad@gadz.org>
+ <20210614202744.GI2610983@scaer>
+ <CAB0FRss2s6ZcTpfojjcwYCKHUqi457u5o26BGOViKM4_bUuXXg@mail.gmail.com>
+Message-ID: <20210615194827.GM2610983@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Those modules need OpenGL renderer so disable them when it's missing.
+Fran?ois, All,
 
-Fixes:
- - http://autobuild.buildroot.net/results/592/592fcffb226c8b44ada5fa3cdb8ab15c627f29dc/
- - http://autobuild.buildroot.net/results/9ad/9ad768b7e2a3c59833e03986c245f2f4b5d25dcd/
+On 2021-06-15 13:30 +0200, Fran?ois Perrad spake thusly:
+> Le?lun. 14 juin 2021 ??22:27, Yann E. MORIN < [1]yann.morin.1998@free.fr> a ?crit?:
+>   On 2021-06-13 17:42 +0200, Francois Perrad spake thusly:
+>   > Signed-off-by: Francois Perrad < [2]francois.perrad@gadz.org>
+>   Removing a package should dully explained in the commit log.
+>   lua-zlib that you taunt as a replcement, adertises that it is not 100%
+>   percent compatible:
+[--SNIP--]
+>   ? ? To use this shim add the -DLZLIB_COMPAT compiler flag.
+> 
+> This is done by the rockspec:
+> see [4]https://github.com/brimworks/lua-zlib/blob/master/rockspecs/lua-zlib-1.2-0.rockspec#L33
 
-  and more...
+So, this is the kind of information that should be part of the commit
+log, for example (e.g.: the rockspec file for lua-zlib automatically
+enables this legacy shim, so packages autoamtically inherit it).
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- package/cegui/cegui.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+However, this is still not a drop-in replacement, because parts of the
+API return different types than lzlib did.
 
-diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
-index 747ebbb953..c5ff45818e 100644
---- a/package/cegui/cegui.mk
-+++ b/package/cegui/cegui.mk
-@@ -38,7 +38,8 @@ CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=ON -DCEGUI_USE_GLEW=OFF \
- else
- CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=OFF -DCEGUI_USE_GLEW=OFF \
- 	-DCEGUI_BUILD_RENDERER_OPENGL=OFF \
--	-DCEGUI_BUILD_RENDERER_OPENGL3=OFF
-+	-DCEGUI_BUILD_RENDERER_OPENGL3=OFF \
-+	-DCEGUI_BUILD_PYTHON_MODULES_SWIG=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_EXPAT),y)
+So, if some packages really need that part, they can't use lua-zlib.
+
+Additionally, it is still OK to keep an old package in the tree, at
+least as long as there is no drop-in-replacement, or that there are
+still in-tree users, and as long as it does not cause any build
+failure, that is not much an issue...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.32.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
