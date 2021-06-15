@@ -1,97 +1,122 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Tue, 15 Jun 2021 18:07:18 +1000
-Subject: [Buildroot] [PATCH for-next 1/2] package/gdb: enable gdbserver
- support for riscv
-In-Reply-To: <4138f0fa-a6b7-310e-3376-9d951d97a2dc@mind.be>
-References: <20210606150351.423542-1-romain.naour@gmail.com>
- <1efe6486-bcd9-3ddb-accd-1149c42ffc09@mind.be>
- <70ccde1c-f12f-fc1c-dec1-b1556ad76a5f@gmail.com>
- <4138f0fa-a6b7-310e-3376-9d951d97a2dc@mind.be>
-Message-ID: <CAKmqyKPfz+itnJURZFYn=3jswCOOo7gTrCMJoMsmdZXF6XA8PQ@mail.gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Tue, 15 Jun 2021 12:35:46 +0200
+Subject: [Buildroot] [PATCH v3 1/3] package/zstd: rework build and install
+Message-ID: <20210615103549.271478-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 14, 2021 at 2:33 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 13/06/2021 12:54, Romain Naour wrote:
-> > Hello Arnout,
-> >
-> > Le 13/06/2021 ? 12:19, Arnout Vandecappelle a ?crit :
-> >>
-> >>
-> >> On 06/06/2021 17:03, Romain Naour wrote:
-> >>> It turn out that gdbserver support for riscv is available since 10.1 release, since commit [1]
-> >>>
-> >>> When BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS is not enabled, gdb will use the stable version (9.x)
-> >>> where gdbserver for riscv is not available.
-> >>>
-> >>> When BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS enabled, only allow gdb 10.1 in version choice and
-> >>> allow enabling gdbserver for the target.
-> >>
-> >>  Instead of all this complexity, I think it would be easier to just force gdb to
-> >> version 10 on riscv:
-> >>
-> >> config BR2_GDB_VERSION
-> >>         string
-> >>         default "arc-2020.09-release-gdb" if BR2_arc
-> >>         default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
-> >>         default "8.3.1"    if BR2_GDB_VERSION_8_3
-> >>         default "9.2"      if BR2_GDB_VERSION_9_2 || (!BR2_PACKAGE_HOST_GDB &&
-> >> !BR2_riscv)
-> >>         default "10.1"     if BR2_GDB_VERSION_10 || (!BR2_PACKAGE_HOST_GDB &&
-> >> BR2_riscv)
-> >>         depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
-> >>
-> >>  IMHO that will make the maintainance easier going forward: when 10 becomes the
-> >> default, we can simply drop the riscv condition and nothing more needs to be done.
-> >
-> > I was not sure about restrict the gdb version for riscv just because gdb 10.1
-> > can provide gdbserver.
->
->  Wow, hang on, I apparently misunderstood something here...
->
->  Now I see... It's just gdbserver that wasn't available before 10.1.
-> gdb-on-target was already available.. In that case, my simplification doesn't
-> apply indeed.
->
->  Although... My suggestion just means that for riscv, we always use gdb 10.1 (on
-> target) instead of gdb 9. I don't see a big problem with that. Note that for gdb
-> for target, we never had a version selection. So the only thing that happens is
-> that riscv now already uses a gdb 10 on target, while the rest will only start
-> using gdb 10 on target a few months from now when gdb 11 is released. Honestly,
-> I think that's fine.
+1.5.0 uses Threads by default for cli tool and DSO,
+the build now does the same unless:
 
-Agreed. I think it's best to just support GDB 10.1.
+If only static libraries are build, then build
+that library like the DSO is normally built.
 
->
->  Regards,
->  Arnout
->
-> >
-> > Alistair, is it ok for you if we only provide gdb 10.1 ?
+This should ensure that programs requsting the DSO
+will always get the multithreaded version.
 
-Yep! I think that's the best plan of action here. From memory GDB 10.1
-has some useful fixes for RISC-V anyway.
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 
-Alistair
+---
+v2->v3:
+*   use normal = for assignment
+v1->v2:
+*   rebased against upstream/master
 
-> >
-> > Best regards,
-> > Romain
-> >
-> >
-> >>
-> >>  Marked as Changes Requested.
-> >>
-> >>  Regards,
-> >>  Arnout
-> >>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+ package/zstd/zstd.mk | 52 ++++++++++++++++++++++++++++----------------
+ 1 file changed, 33 insertions(+), 19 deletions(-)
+
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index 2a876376a2..95f25ebfa4 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -12,6 +12,8 @@ ZSTD_LICENSE_FILES = LICENSE COPYING
+ ZSTD_CPE_ID_VENDOR = facebook
+ ZSTD_CPE_ID_PRODUCT = zstandard
+ 
++ZSTD_OPTS += PREFIX=/usr
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ ZSTD_OPTS += HAVE_THREAD=1
+ else
+@@ -39,43 +41,55 @@ else
+ ZSTD_OPTS += HAVE_LZ4=0
+ endif
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-ZSTD_BUILD_LIBS = libzstd.a
+-ZSTD_INSTALL_LIBS = install-static
+-else ifeq ($(BR2_SHARED_LIBS),y)
+-ZSTD_BUILD_LIBS = libzstd
+-ZSTD_INSTALL_LIBS = install-shared
++ZSTD_BUILD_PROG_TARGET = zstd-release
++
++# Since v1.5.0 the dynamic library is built for
++# multithreading, while the static library is not.
++#
++# Keep those defaults, unless Buildroot is not
++# providing the dynamic library and the
++# static library will be automatically used instead.
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++ZSTD_INSTALL_LIBS += install-static
++ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
++# Use the static lib as replacement for the mt dynlib
++ZSTD_BUILD_LIBS += libzstd.a-mt
+ else
+-ZSTD_BUILD_LIBS = libzstd.a libzstd
+-ZSTD_INSTALL_LIBS = install-static install-shared
++ZSTD_BUILD_LIBS += libzstd.a-nomt
++endif
+ endif
+ 
+-# The HAVE_THREAD flag is read by the 'programs' makefile but not by  the 'lib'
+-# one. Building a multi-threaded binary with a library (which defaults to
+-# single-threaded) gives a runtime error when compressing files.
+-# The 'lib' makefile provides specific '%-mt' targets for this purpose.
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++ZSTD_INSTALL_LIBS += install-shared
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
++ZSTD_BUILD_LIBS += libzstd-mt
++else
++ZSTD_BUILD_LIBS += libzstd-nomt
++endif
+ endif
+ 
+ define ZSTD_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+-		-C $(@D)/lib $(ZSTD_BUILD_LIBS)
++		-C $(@D)/lib $(addsuffix -release,$(ZSTD_BUILD_LIBS) libzstd.pc)
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+-		-C $(@D) zstd
++		-C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET)
+ endef
+ 
+ define ZSTD_INSTALL_STAGING_CMDS
++	[ -e $(@D)/programs/zstd ] && [ -e $(@D)/lib/libzstd.pc ]
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
++		-C $(@D)/lib DESTDIR=$(STAGING_DIR) $(ZSTD_INSTALL_LIBS) \
++		install-pc install-includes
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+-		DESTDIR=$(STAGING_DIR) PREFIX=/usr -C $(@D)/lib \
+-		install-pc install-includes $(ZSTD_INSTALL_LIBS)
++		-C $(@D)/programs DESTDIR=$(STAGING_DIR) install
+ endef
+ 
+ define ZSTD_INSTALL_TARGET_CMDS
++	[ -e $(@D)/programs/zstd ]
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+-		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
++		-C $(@D)/lib DESTDIR=$(TARGET_DIR) $(ZSTD_INSTALL_LIBS)
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+-		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/lib $(ZSTD_INSTALL_LIBS)
++		-C $(@D)/programs DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ HOST_ZSTD_OPTS += PREFIX=$(HOST_DIR)
+-- 
+2.30.2
