@@ -1,73 +1,96 @@
 From: Alistair Francis <alistair23@gmail.com>
-Date: Tue, 15 Jun 2021 17:57:14 +1000
-Subject: [Buildroot] [PATCH 4/4] configs/beaglev: switch to upstream
- opensbi generic platform
-In-Reply-To: <20210615001750.421889-5-drew@beagleboard.org>
-References: <20210615001750.421889-1-drew@beagleboard.org>
- <20210615001750.421889-5-drew@beagleboard.org>
-Message-ID: <CAKmqyKNo9HQrjrtm=Uqn51W+v8E5K0c_CZ-0j5zuf-Vx_iP5Fg@mail.gmail.com>
+Date: Tue, 15 Jun 2021 18:07:18 +1000
+Subject: [Buildroot] [PATCH for-next 1/2] package/gdb: enable gdbserver
+ support for riscv
+In-Reply-To: <4138f0fa-a6b7-310e-3376-9d951d97a2dc@mind.be>
+References: <20210606150351.423542-1-romain.naour@gmail.com>
+ <1efe6486-bcd9-3ddb-accd-1149c42ffc09@mind.be>
+ <70ccde1c-f12f-fc1c-dec1-b1556ad76a5f@gmail.com>
+ <4138f0fa-a6b7-310e-3376-9d951d97a2dc@mind.be>
+Message-ID: <CAKmqyKPfz+itnJURZFYn=3jswCOOo7gTrCMJoMsmdZXF6XA8PQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 15, 2021 at 10:19 AM Drew Fustini <drew@beagleboard.org> wrote:
+On Mon, Jun 14, 2021 at 2:33 AM Arnout Vandecappelle <arnout@mind.be> wrote:
 >
-> Switch from the starfive-tech opensbi to upstream repo and use generic
-> platform now that it supports the console uart [1]. This landed after
-> the 0.9 release [2], so the current head of master branch is used [3].
 >
-> FW_FDT_PATH is set to u-boot.dtb so that the device tree from u-boot
-> will be included in the OpenSBI build [4]. Note that u-boot must have
-> CONFIG_OF_SEPARATE enabled for u-boot to build u-boot.dtb [5].
 >
-> [1] https://github.com/riscv/opensbi/commit/e822b7504df0583a6a227d51cb7da8ea9fc79c0a
-> [2] https://github.com/riscv/opensbi/commit/234ed8e427f4d92903123199f6590d144e0d9351
-> [3] https://github.com/riscv/opensbi/commit/79f9b4220ffa7f74356054be25d450d7958bf16c
-> [4] https://github.com/riscv/opensbi/blob/master/docs/firmware/fw.md
-> [5] https://github.com/lentinj/u-boot/blob/master/doc/README.fdt-control
+> On 13/06/2021 12:54, Romain Naour wrote:
+> > Hello Arnout,
+> >
+> > Le 13/06/2021 ? 12:19, Arnout Vandecappelle a ?crit :
+> >>
+> >>
+> >> On 06/06/2021 17:03, Romain Naour wrote:
+> >>> It turn out that gdbserver support for riscv is available since 10.1 release, since commit [1]
+> >>>
+> >>> When BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS is not enabled, gdb will use the stable version (9.x)
+> >>> where gdbserver for riscv is not available.
+> >>>
+> >>> When BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS enabled, only allow gdb 10.1 in version choice and
+> >>> allow enabling gdbserver for the target.
+> >>
+> >>  Instead of all this complexity, I think it would be easier to just force gdb to
+> >> version 10 on riscv:
+> >>
+> >> config BR2_GDB_VERSION
+> >>         string
+> >>         default "arc-2020.09-release-gdb" if BR2_arc
+> >>         default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
+> >>         default "8.3.1"    if BR2_GDB_VERSION_8_3
+> >>         default "9.2"      if BR2_GDB_VERSION_9_2 || (!BR2_PACKAGE_HOST_GDB &&
+> >> !BR2_riscv)
+> >>         default "10.1"     if BR2_GDB_VERSION_10 || (!BR2_PACKAGE_HOST_GDB &&
+> >> BR2_riscv)
+> >>         depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+> >>
+> >>  IMHO that will make the maintainance easier going forward: when 10 becomes the
+> >> default, we can simply drop the riscv condition and nothing more needs to be done.
+> >
+> > I was not sure about restrict the gdb version for riscv just because gdb 10.1
+> > can provide gdbserver.
 >
-> Signed-off-by: Drew Fustini <drew@beagleboard.org>
+>  Wow, hang on, I apparently misunderstood something here...
+>
+>  Now I see... It's just gdbserver that wasn't available before 10.1.
+> gdb-on-target was already available.. In that case, my simplification doesn't
+> apply indeed.
+>
+>  Although... My suggestion just means that for riscv, we always use gdb 10.1 (on
+> target) instead of gdb 9. I don't see a big problem with that. Note that for gdb
+> for target, we never had a version selection. So the only thing that happens is
+> that riscv now already uses a gdb 10 on target, while the rest will only start
+> using gdb 10 on target a few months from now when gdb 11 is released. Honestly,
+> I think that's fine.
 
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+Agreed. I think it's best to just support GDB 10.1.
+
+>
+>  Regards,
+>  Arnout
+>
+> >
+> > Alistair, is it ok for you if we only provide gdb 10.1 ?
+
+Yep! I think that's the best plan of action here. From memory GDB 10.1
+has some useful fixes for RISC-V anyway.
 
 Alistair
 
-> ---
->  configs/beaglev_defconfig | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/configs/beaglev_defconfig b/configs/beaglev_defconfig
-> index fcbea2cdec86..29e3a52be36c 100644
-> --- a/configs/beaglev_defconfig
-> +++ b/configs/beaglev_defconfig
-> @@ -23,17 +23,19 @@ BR2_TARGET_BEAGLEV_DDRINIT=y
->  BR2_TARGET_BEAGLEV_SECONDBOOT=y
->  BR2_TARGET_OPENSBI=y
->  BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
-> -# HEAD of the Fedora branch
-> -BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,opensbi,2524b0ecd8684b42bc7a4c69794f40f11cbbe2a5)/opensbi-2524b0ecd8684b42bc7a4c69794f40f11cbbe2a5.tar.gz"
-> -BR2_TARGET_OPENSBI_PLAT="starfive/vic7100"
-> +# upstream opensbi master branch
-> +BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,riscv,opensbi,79f9b4220ffa7f74356054be25d450d7958bf16c)/opensbi-79f9b4220ffa7f74356054be25d450d7958bf16c.tar.gz"
-> +BR2_TARGET_OPENSBI_PLAT="generic"
->  # BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG is not set
->  # BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
->  BR2_TARGET_OPENSBI_UBOOT_PAYLOAD=y
-> +BR2_TARGET_OPENSBI_FW_FDT_PATH=y
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
->  # HEAD of the starfive-tech:Fedora_VIC_7100_2021.04 branch
->  BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,u-boot,64ead5b83959da8eb87b6963843addf5942e6ed4)/uboot-64ead5b83959da8eb87b6963843addf5942e6ed4.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="starfive_vic7100_beagle_v_smode"
-> +BR2_TARGET_UBOOT_FORMAT_DTB=y
->  BR2_PACKAGE_HOST_GENIMAGE=y
->  BR2_PACKAGE_HOST_JH71XX_TOOLS=y
-> --
-> 2.27.0
->
+> >
+> > Best regards,
+> > Romain
+> >
+> >
+> >>
+> >>  Marked as Changes Requested.
+> >>
+> >>  Regards,
+> >>  Arnout
+> >>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
