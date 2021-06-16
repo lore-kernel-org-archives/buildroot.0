@@ -1,314 +1,176 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 17 Jun 2021 00:21:58 +0200
-Subject: [Buildroot] [PATCH v1 1/2] package/mesa3d: add config option
- for DRI3 support
-In-Reply-To: <e0375ab9-8bff-a9ba-be00-4141d69a8eab@mind.be>
-References: <20210612223011.26118-1-ps.report@gmx.net>
- <689f1497-624c-01b3-d69a-97a5efd01740@mind.be>
- <20210614235410.636c5e27@gmx.net>
- <091fecfd-f83c-291c-76ed-75d3b2a496d6@mind.be>
- <20210616215447.3c84c29c@gmx.net>
- <e0375ab9-8bff-a9ba-be00-4141d69a8eab@mind.be>
-Message-ID: <20210617002158.7b461309@gmx.net>
+From: C Larbi <pkl2000us@gmail.com>
+Date: Wed, 16 Jun 2021 22:26:49 +0000
+Subject: [Buildroot] [webkitgtk / cairo] Accelerated rendering on
+ raspberry pi 4
+In-Reply-To: <CANVomh93QK+vg=7D83+qU_503HxCtx8aR5qTiu40QQ49Mb4ugg@mail.gmail.com>
+References: <CANVomh-dtsmg-oDwP8=uMmPWqcKA9hm7ReZ=wMiZoEn=-pOmWw@mail.gmail.com>
+ <20210616202638.74242b4a@gmx.net> <20210617001925.GB58049@momiji>
+ <CANVomh93QK+vg=7D83+qU_503HxCtx8aR5qTiu40QQ49Mb4ugg@mail.gmail.com>
+Message-ID: <CANVomh_Spf+e-Q2Kdj-EFARjVe5V62otRXx2H8hpx0ky9_socQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 16 Jun 2021 23:50:41 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+Also, i have to mention that i get similar results on my desktop using
+GNOME web.
 
-> On 16/06/2021 21:54, Peter Seiderer wrote:
-> > Hello Arnout,
-> >
-> > On Tue, 15 Jun 2021 22:19:11 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >
-> >> On 14/06/2021 23:54, Peter Seiderer wrote:
-> >>> Hello Arnout,
-> >>>
-> >>> On Sun, 13 Jun 2021 11:25:36 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>>
-> >>>>  Hi Peter,
-> >>>>
-> >>>> On 13/06/2021 00:30, Peter Seiderer wrote:
-> >>>>> Add config option for DRI3 support and use it instead
-> >>>>> of DRI3 enable/disable logic in *.mk file.
-> >>>>>
-> >>>>> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> >>>>> ---
-> >>>>>  package/mesa3d/Config.in |  8 ++++++++
-> >>>>>  package/mesa3d/mesa3d.mk | 12 +++++++-----
-> >>>>>  2 files changed, 15 insertions(+), 5 deletions(-)
-> >>>>>
-> >>>>> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> >>>>> index d1b3af2054..36acd9758c 100644
-> >>>>> --- a/package/mesa3d/Config.in
-> >>>>> +++ b/package/mesa3d/Config.in
-> >>>>> @@ -16,6 +16,11 @@ menuconfig BR2_PACKAGE_MESA3D
-> >>>>>
-> >>>>>  if BR2_PACKAGE_MESA3D
-> >>>>>
-> >>>>> +config BR2_PACKAGE_MESA3D_DRI3
-> >>>>> +	bool "Enable DRI3 support"
-> >>>>
-> >>>>  Does it make sense to have this as a user-selectable option? Wouldn't it be
-> >>>> better to make this a blind option? (The latter has the advantage that we can
-> >>>> easily refactor it later, without legacy handling and stuff.)
-> >>>
-> >>> As it is an feature option exposed by mesa3d I believe it makes sense...
-> >>
-> >>  I think putting "option exposed by mesa3d" and "make sense" in the same
-> >> sentence is a bit of a stretch :-) The proper thing for mesa3d to do would be to
-> >> enable dri3 automatically if a driver needs it. That we have to pass it
-> >> explicitly is just silly IMHO.
-> >>
-> >>
-> >>>>  I just did a build with just DRI3 selected and it didn't install anything to
-> >>>> target or staging. This suggests that the option isn't useful on its own.
-> >>>
-> >>> Same for numerous other options in buildroot which enable/disable compile time
-> >>> feature include in packages, see e.g. the BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5,
-> >>> BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2, ... and many others...
-> >>
-> >>  BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5 *will* install libcrypto to staging and
-> >> target, so I fail to see your point.
-> >
-> > With:
-> >
-> > BR2_PACKAGE_OPENSSL=y
-> > BR2_PACKAGE_LIBOPENSSL=y
-> > BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH="linux-aarch64"
-> > # BR2_PACKAGE_LIBOPENSSL_BIN is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENGINES is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5 is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2 is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_MD2 is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2 is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2 is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_IDEA is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_SEED is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_DES is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_WHIRLPOOL is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL2 is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL3 is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_WEAK_SSL is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST is not set
-> > # BR2_PACKAGE_LIBOPENSSL_UNSECURE is not set
-> > # BR2_PACKAGE_LIBOPENSSL_DYNAMIC_ENGINE is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENABLE_COMP is not set
-> >
-> > 	$ grep libcrypto build/libopenssl-1.1.1k/.files-list.txt
-> > libopenssl,./usr/lib/libcrypto.so.1.1
-> > libopenssl,./usr/lib/libcrypto.a
-> > libopenssl,./usr/lib/libcrypto.so
-> > libopenssl,./usr/lib/pkgconfig/libcrypto.pc
-> >
-> >
-> > With:
-> >
-> > BR2_PACKAGE_OPENSSL=y
-> > BR2_PACKAGE_LIBOPENSSL=y
-> > BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH="linux-aarch64"
-> > # BR2_PACKAGE_LIBOPENSSL_BIN is not set
-> > # BR2_PACKAGE_LIBOPENSSL_ENGINES is not set
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_MD2=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_IDEA=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_SEED=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_DES=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_WHIRLPOOL=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL2=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL3=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_WEAK_SSL=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK=y
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST=y
-> > # BR2_PACKAGE_LIBOPENSSL_UNSECURE is not set
-> > # BR2_PACKAGE_LIBOPENSSL_DYNAMIC_ENGINE is not set
-> > BR2_PACKAGE_LIBOPENSSL_ENABLE_COMP=y
-> >
-> > 	$ grep libcrypto build/libopenssl-1.1.1k/.files-list.txt
-> > libopenssl,./usr/lib/libcrypto.so.1.1
-> > libopenssl,./usr/lib/libcrypto.a
-> > libopenssl,./usr/lib/libcrypto.so
-> > libopenssl,./usr/lib/pkgconfig/libcrypto.pc
-> >
-> >
-> > I would describe the _ENABLE_... options as enabling/disabling (compile time)
-> > features of libcrypto...
+i zoom in and out, and performance of my animations improve (both JS and
+CSS)
+
+This is weird behaviour if you ask me
+
+
+On Wed, 16 Jun 2021 at 22:19, C Larbi <pkl2000us@gmail.com> wrote:
+
+> Thank you all for the feedback.
 >
->  Exactly: by enabling the RC4 option, something additional gets built into
-> libcrypto. But I think the dri3 option doesn't really enable anything at all...
-
-If an option does not enable anything why is it needed, why does it make a difference?
-
+> Peter, i was talking about the "--enable-egl" switch.
 >
-> - dri3 enabled but none of the drivers using it enabled: has no effect on what
-> is installed to taret/staging (i.e. anything that does get installed is exactly
-> the same as without that optoin.
-
-??? See above about feature option..., and why should disable/enable make
-a runtime difference, see original bug report [1], [2]...
-
+> >>One caveat, though: accelerated compositing may not be triggered by all
+> >>web pages in WebKitGTK, but for example is always enabled in the WPE
+> port.
 >
-> - dri3 not enabled but one of the drivers using it is enabled: build fails.
-
-No build failure... only a runtime failure, see original bug report [1], [2]...
-
-Regards,
-Peter
-
-[1] https://bugs.busybox.net/show_bug.cgi?id=13831
-[2] https://gitlab.freedesktop.org/mesa/mesa/-/issues/4861
-
+> Interesting you mentioned this Adrian !
 >
->  I'm not sure of this, but I suspect this is the case. that's why I suspect that
-> it makes no sense as a user-visible option:
+> I have some what made some progress. After hours trying to figure out what
+> was the issue, i started experimenting with the Minibrowser that comes
+> bundled with webkitgtk.
 >
-> >>  What I'm saying is: having it as a user-visible option only makes sense if a
-> >> user can do something with that option. Since mesa3d doesn't install anything
-> >> when dri3 is selected, I suspect that it's useless as a user-visible option. And
-> >> as I wrote, making it user-visible has a cost: it means that changing/removing
-> >> the option later becomes more difficult (legacy handling and all that).
+> At first i was getting similar poor performance just like launching my
+> webgtk application. Then some "magic" happened when i tried to zoom out of
+> the webpage. All of a sudden the latency issue improved !
+>
+> I would say it is about 20% below the results i had on my desktop computer
+> (which is a big improvement from what i had beforeon the pi)
+>
+> Is this the triggering you were talking about ?
+> Shouldn't there be an option to have this on always ?
+>
+> Anyway, i am okay for now because i can work around programmatically
+> adjusting the zoom from my application.
+>
+> Maybe this is a bug, but what do i know.
+> Hopefully my work around can help someone
+>
+> Regards and thanks again for your help
+>
+> Cerezo
 >
 >
->  Regards,
->  Arnout
 >
-> >>
-> >>  Of course, I could still be wrong. Maybe dri3 does something useful. But to me
-> >> it looks more like the shared-glapi option, that is meaningless by itself but
-> >> that enables a subsystem that is required by some drivers.
-> >>
-> >>
-> >>>>  More importantly: have you checked that DRI3 doesn't have any dependencies of
-> >>>> itself? Check the meson files to see if there are dependencies that are implied
-> >>>> directly by dri3 (i.e., maybe the xshmfence dependency comes from dri3 rather
-> >>>> than the individual dri driver). Those things should be moved around as well,
-> >>>> similar how they are put in BR2_PACKAGE_MESA3D_DRI_DRIVER instead of the
-> >>>> individual drivers.
-> >>>
-> >>> But this mimics the mesa3d internal logic (without an mesa3d exposed feature
-> >>> option)....
-> >>
-> >>  I'm not sure what you mean. What I mean is: in meson.build there is:
-> >>
-> >> if with_platform_x11
-> >> ...
-> >>   if (with_egl or
-> >>       with_dri3 or (
-> >>       with_gallium_vdpau or with_gallium_xvmc or with_gallium_xa or
-> >>       with_gallium_omx != 'disabled'))
-> >>     dep_xcb_xfixes = dependency('xcb-xfixes')
-> >>   endif
-> >>
-> >>
-> >>  This means, IMHO, that in Config.in we need:
-> >>
-> >> config BR2_PACKAGE_MESA3D_DRI3
-> >> 	bool
-> >> 	depends on ...
-> >> 	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
-> >>
-> >> and there are a bunch more like that.
-> >>
-> >>
-> >>  Regards,
-> >>  Arnout
-> >>
-> >>>
-> >>> Regards,
-> >>> Peter
-> >>>
-> >>>>
-> >>>>
-> >>>>  Series marked as Changes Requested.
-> >>>>
-> >>>>  Regards,
-> >>>>  Arnout
-> >>>>
-> >>>>> +	help
-> >>>>> +	  Enable DRI3 support.
-> >>>>> +
-> >>>>>  # Some Gallium driver needs libelf when built with LLVM support
-> >>>>>  config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
-> >>>>>  	bool
-> >>>>> @@ -65,6 +70,8 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
-> >>>>>  		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
-> >>>>>  		!BR2_PACKAGE_MESA3D_OPENGL_EGL && \
-> >>>>>  		!BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
-> >>>>> +	select BR2_PACKAGE_MESA3D_DRI3 if \
-> >>>>> +		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
-> >>>>>  	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
-> >>>>>  		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
-> >>>>>
-> >>>>> @@ -359,6 +366,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
-> >>>>>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
-> >>>>>  	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
-> >>>>>  	depends on BR2_PACKAGE_XORG7 # xorgproto
-> >>>>> +	select BR2_PACKAGE_MESA3D_DRI3
-> >>>>>  	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
-> >>>>>  	select BR2_PACKAGE_XORGPROTO
-> >>>>>  	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
-> >>>>> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> >>>>> index 5c5f8a33f3..da6e55bf93 100644
-> >>>>> --- a/package/mesa3d/mesa3d.mk
-> >>>>> +++ b/package/mesa3d/mesa3d.mk
-> >>>>> @@ -35,6 +35,12 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
-> >>>>>  MESA3D_CONF_OPTS += -Db_asneeded=false
-> >>>>>  endif
-> >>>>>
-> >>>>> +ifeq ($(BR2_PACKAGE_MESA3D_DRI3),y)
-> >>>>> +MESA3D_CONF_OPTS += -Ddri3=enabled
-> >>>>> +else
-> >>>>> +MESA3D_CONF_OPTS += -Ddri3=disabled
-> >>>>> +endif
-> >>>>> +
-> >>>>>  ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
-> >>>>>  MESA3D_DEPENDENCIES += host-llvm llvm
-> >>>>>  MESA3D_MESON_EXTRA_BINARIES += llvm-config='$(STAGING_DIR)/usr/bin/llvm-config'
-> >>>>> @@ -122,13 +128,10 @@ endif
-> >>>>>
-> >>>>>  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
-> >>>>>  MESA3D_CONF_OPTS += \
-> >>>>> -	-Ddri-drivers= -Ddri3=disabled
-> >>>>> +	-Ddri-drivers=
-> >>>>>  else
-> >>>>>  ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
-> >>>>>  MESA3D_DEPENDENCIES += xlib_libxshmfence
-> >>>>> -MESA3D_CONF_OPTS += -Ddri3=enabled
-> >>>>> -else
-> >>>>> -MESA3D_CONF_OPTS += -Ddri3=disabled
-> >>>>>  endif
-> >>>>>  MESA3D_CONF_OPTS += \
-> >>>>>  	-Dshared-glapi=enabled \
-> >>>>> @@ -142,7 +145,6 @@ MESA3D_CONF_OPTS += \
-> >>>>>  else
-> >>>>>  MESA3D_DEPENDENCIES += xlib_libxshmfence
-> >>>>>  MESA3D_CONF_OPTS += \
-> >>>>> -	-Ddri3=enabled \
-> >>>>>  	-Dvulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
-> >>>>>  endif
-> >>>>>
-> >>>>>
-> >>>
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+> On Wed, 16 Jun 2021 at 21:19, Adrian Perez de Castro <aperez@igalia.com>
+> wrote:
+>
+>> Hi there,
+>>
+>> On Wed, 16 Jun 2021 20:26:38 +0200 Peter Seiderer <ps.report@gmx.net>
+>> wrote:
+>> > On Wed, 16 Jun 2021 10:54:19 +0000, C Larbi <pkl2000us@gmail.com>
+>> wrote:
+>> >
+>> > > I am working on a personal project to build a digital kiosk on a pi 4
+>> > > I am using webkitgtk on a wayland compositor.
+>> > >
+>> > > So far I have got the system up and running.
+>> > >
+>> > > But css and javascript effects produce poor performance (high latency
+>> and
+>> > > probably low FPS)
+>> > >
+>> > > I get garbled output on the display when I try to enforce hardware
+>> > > acceleration through WebKitSettings or using environment variables.
+>> > >
+>> > > This has left me suspecting an issue with cairo, open egl and es
+>> > >
+>> > > I did some research and found out cairo has an --enable-egl
+>> configuration
+>> > > parameter (which is not in the cairo.mk file).
+>> >
+>> > From package/cairo/cairo.mk:
+>> >
+>> >  91 # Can use GL or GLESv2 but not both
+>> >  92 ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+>> >  93 CAIRO_CONF_OPTS += --enable-gl --disable-glesv2
+>> >  94 CAIRO_DEPENDENCIES += libgl
+>> >  95 else
+>> >  96 ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+>> >  97 CAIRO_CONF_OPTS += --disable-gl --enable-glesv2
+>> >  98 CAIRO_DEPENDENCIES += libgles
+>> >  99 else
+>> > 100 CAIRO_CONF_OPTS += --disable-gl --disable-glesv2
+>> > 101 endif
+>> > 102 endif
+>>
+>> FWIW, WebKit does *not* use Cairo-GL at all, even if the support is built
+>> into Cairo. To give a very quick summary, this is what WebKit does for
+>> rendering:
+>>
+>>   1. Page elements are assigned a render layer; there can be one or more.
+>>   2. Each layer is divided in square tile.
+>>   3. Each tile is rasterized using Cairo, in the CPU.
+>>   4. Tiles are uploaded to the GPU as textures, then composited there.
+>>
+>> That way only tiles of layers with changes need to be repainted and
+>> re-uploaded. Operation that typically cause WebKit to put elements in
+>> new layers are CSS transforms: when the transform is applied (or
+>> animated),
+>> the corresponding layer can be manipulated entirely in the GPU (position,
+>> rotation, scaling, etc.)
+>>
+>> TL;DR: WebKit uses *both* software rendering and the GPU for compositing.
+>>
+>> One caveat, though: accelerated compositing may not be triggered by all
+>> web pages in WebKitGTK, but for example is always enabled in the WPE port.
+>>
+>> A quick way of knowing whether WebKit (both GTK and WPE ports) are indeed
+>> using the GPU is to load the ?poster circle? animation. It uses CSS 3D
+>> transforms and without hardware acceleration is terribly slow, and butter
+>> smooth (60 FPS, even on slow hardware) when the GPU is in use. You can
+>> find
+>> a version here:
+>>
+>>   https://people.igalia.com/aperez/poster-circle.html
+>>
+>> Another way is opening the ?webkit://gpu? URL and checking whether the
+>> OpenGL/GLES renderer is *not* one of Mesa's software renderers (swrast,
+>> llvmpipe, or swr).
+>>
+>> > > I applied this but still garbled output.
+>> > >
+>> > > I have tried different combinations of vc4-fkms-v3d, vc4-kms-v3-pi4,
+>> but
+>> > > still get the garbled output.
+>> >
+>> > Hard to say without more information (config file, etc.), please
+>> provide a (minimal)
+>> > config/defconfig and example (commands) how to reproduce your problem...
+>> >
+>> > Which buildroot version?
+>> >
+>> > > Will appreciate it if anyone can give me some pointers to a possible
+>> > > solution.
+>> > >
+>> > > NB: I was advised to switch to wpewebkit, but i had the same results
+>> when i
+>> > > used cog to load my web page
+>> >
+>> >
+>> > For hints on RPi4, cog and wpebkit see for example [1]...
+>>
+>> It's possible to use also ?cog --platform=drm ...? with the Mesa vc4/v3d
+>> drivers. In that case you will not need a Wayland compositor running, but
+>> this option is not as battle tested.
+>>
+>> I hope this helps.
+>>
+>> Cheers,
+>> -Adrian
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210616/95e14927/attachment-0001.html>
