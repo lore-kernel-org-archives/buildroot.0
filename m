@@ -1,10 +1,10 @@
 From: Drew Fustini <drew@beagleboard.org>
-Date: Tue, 15 Jun 2021 22:03:39 -0700
-Subject: [Buildroot] [PATCH v2 1/4] boot/uboot: introduce
- BR2_TARGET_UBOOT_FORMAT_DTB
+Date: Tue, 15 Jun 2021 22:03:41 -0700
+Subject: [Buildroot] [PATCH v2 2/4] boot/opensbi: introduce
+ BR2_TARGET_OPENSBI_FW_FDT_PATH
 In-Reply-To: <20210616050341.510702-1-drew@beagleboard.org>
 References: <20210616050341.510702-1-drew@beagleboard.org>
-Message-ID: <20210616050341.510702-2-drew@beagleboard.org>
+Message-ID: <20210616050341.510702-3-drew@beagleboard.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -27,38 +27,42 @@ Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
 Signed-off-by: Drew Fustini <drew@beagleboard.org>
 ---
- boot/uboot/Config.in | 3 +++
- boot/uboot/uboot.mk  | 4 ++++
- 2 files changed, 7 insertions(+)
+ boot/opensbi/Config.in  | 10 ++++++++++
+ boot/opensbi/opensbi.mk |  3 +++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 00c667412006..44a16d892a60 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -252,6 +252,9 @@ config BR2_TARGET_UBOOT_FORMAT_BIN
- 	bool "u-boot.bin"
- 	default y
+diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+index 632eeec88d77..bd4bd5ee6175 100644
+--- a/boot/opensbi/Config.in
++++ b/boot/opensbi/Config.in
+@@ -109,4 +109,14 @@ config BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
+ 	help
+ 	  Build OpenSBI with the U-Boot as a Payload.
  
-+config BR2_TARGET_UBOOT_FORMAT_DTB
-+	bool "u-boot.dtb"
++config BR2_TARGET_OPENSBI_FW_FDT_PATH
++	bool "Include U-Boot DTB in OpenSBI Payload"
++	depends on BR2_TARGET_OPENSBI_PLAT != ""
++	depends on BR2_TARGET_UBOOT
++	depends on BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
++	select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
++	help
++	  Build OpenSBI with FW_FDT_PATH set to $(BINARIES_DIR)/u-boot.dtb
++	  Note that CONFIG_OF_SEPARATE must be set in the u-boot kconfig.
 +
- config BR2_TARGET_UBOOT_FORMAT_DTB_BIN
- 	bool "u-boot-dtb.bin"
- 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index dbe82e65b17e..923fd0c1d46c 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -48,6 +48,10 @@ ifeq ($(BR2_TARGET_UBOOT_FORMAT_BIN),y)
- UBOOT_BINS += u-boot.bin
+ endif
+diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+index a525b8aea348..8e055633a82d 100644
+--- a/boot/opensbi/opensbi.mk
++++ b/boot/opensbi/opensbi.mk
+@@ -46,6 +46,9 @@ endif
+ ifeq ($(BR2_TARGET_OPENSBI_UBOOT_PAYLOAD),y)
+ OPENSBI_DEPENDENCIES += uboot
+ OPENSBI_MAKE_ENV += FW_PAYLOAD_PATH="$(BINARIES_DIR)/u-boot.bin"
++ifeq ($(BR2_TARGET_OPENSBI_FW_FDT_PATH),y)
++OPENSBI_MAKE_ENV += FW_FDT_PATH="$(BINARIES_DIR)/u-boot.dtb"
++endif
  endif
  
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB),y)
-+UBOOT_BINS += u-boot.dtb
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
- UBOOT_BINS += u-boot
- # To make elf usable for debuging on ARC use special target
+ define OPENSBI_BUILD_CMDS
 -- 
 2.27.0
