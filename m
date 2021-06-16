@@ -1,44 +1,64 @@
 From: Drew Fustini <drew@beagleboard.org>
-Date: Tue, 15 Jun 2021 22:03:37 -0700
-Subject: [Buildroot] [PATCH v2 0/4] beaglev: enable opensbi generic platform
-Message-ID: <20210616050341.510702-1-drew@beagleboard.org>
+Date: Tue, 15 Jun 2021 22:03:39 -0700
+Subject: [Buildroot] [PATCH v2 1/4] boot/uboot: introduce
+ BR2_TARGET_UBOOT_FORMAT_DTB
+In-Reply-To: <20210616050341.510702-1-drew@beagleboard.org>
+References: <20210616050341.510702-1-drew@beagleboard.org>
+Message-ID: <20210616050341.510702-2-drew@beagleboard.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce BR2_TARGET_UBOOT_FORMAT_DTB to copy u-boot.dtb [1] to
-BINARIES_DIR. This file can be used for FW_FDT_PATH [2] in OpenSBI build
-when BR2_TARGET_OPENSBI_FW_FDT_PATH is enabled.
+If U-Boot CONFIG_OF_SEPARATE is defined [1], then the device tree will
+be built and placed in a u-boot.dtb file alongside u-boot.bin.
 
-Update U-Boot in beaglev_defconfig to new commit in starfive-tech repo
-which enables CONFIG_OF_SEPARATE to build u-boot.dtb [3]. Finally switch
-to upstream OpenSBI repo and use generic platform now that it supports
-the console UART [4] on the BeagleV Starlight JH7100 board.
+When BR2_TARGET_UBOOT_FORMAT_DTB is enabled, buildroot will copy
+u-boot.dtb to $(BINARIES_DIR).
 
-[1] https://github.com/lentinj/u-boot/blob/master/doc/README.fdt-control
+This is useful for RISC-V platforms that want to build OpenSBI with an
+external DTB by using FW_FDT_PATH [2].
+
+[1] https://github.com/u-boot/u-boot/blob/master/doc/README.fdt-control
 [2] https://github.com/riscv/opensbi/blob/master/docs/firmware/fw.md
-[3] https://github.com/u-boot/u-boot/blob/master/doc/README.fdt-control
-[4] https://github.com/riscv/opensbi/commit/e822b7504df0583a6a227d51cb7da8ea9fc79c0a
 
-v2 fixes:
-- correct spelling to "U-Boot"
-- correct URL for README.fdt-control to U-Boot repo instead of fork
-- added Reviewed-by: for Bin Meng and Alistair Francis
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
+Signed-off-by: Drew Fustini <drew@beagleboard.org>
+---
+ boot/uboot/Config.in | 3 +++
+ boot/uboot/uboot.mk  | 4 ++++
+ 2 files changed, 7 insertions(+)
 
-Drew Fustini (4):
-  boot/uboot: introduce BR2_TARGET_UBOOT_FORMAT_DTB
-  boot/opensbi: introduce BR2_TARGET_OPENSBI_FW_FDT_PATH
-  configs/beaglev: update U-Boot to enable OF_SEPARATE
-  configs/beaglev: switch to upstream opensbi generic platform
-
- boot/opensbi/Config.in    | 10 ++++++++++
- boot/opensbi/opensbi.mk   |  3 +++
- boot/uboot/Config.in      |  3 +++
- boot/uboot/uboot.mk       |  4 ++++
- configs/beaglev_defconfig | 10 ++++++----
- 5 files changed, 26 insertions(+), 4 deletions(-)
-
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 00c667412006..44a16d892a60 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -252,6 +252,9 @@ config BR2_TARGET_UBOOT_FORMAT_BIN
+ 	bool "u-boot.bin"
+ 	default y
+ 
++config BR2_TARGET_UBOOT_FORMAT_DTB
++	bool "u-boot.dtb"
++
+ config BR2_TARGET_UBOOT_FORMAT_DTB_BIN
+ 	bool "u-boot-dtb.bin"
+ 
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index dbe82e65b17e..923fd0c1d46c 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -48,6 +48,10 @@ ifeq ($(BR2_TARGET_UBOOT_FORMAT_BIN),y)
+ UBOOT_BINS += u-boot.bin
+ endif
+ 
++ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB),y)
++UBOOT_BINS += u-boot.dtb
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
+ UBOOT_BINS += u-boot
+ # To make elf usable for debuging on ARC use special target
 -- 
 2.27.0
