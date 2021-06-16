@@ -1,48 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 16 Jun 2021 21:59:02 +0200
-Subject: [Buildroot] [External] [PATCH] core/pkg-generic: fix
- instrumentation for packages that install nowhere
-In-Reply-To: <DM2P110MB0105D1560BC1E8EC48F2F8AAF2309@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
-References: <20210613143207.2445691-1-yann.morin.1998@free.fr>
- <DM2P110MB0105D1560BC1E8EC48F2F8AAF2309@DM2P110MB0105.NAMP110.PROD.OUTLOOK.COM>
-Message-ID: <20210616195902.GR2610983@scaer>
+Date: Wed, 16 Jun 2021 22:09:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/weston: disable -NDEBUG
+In-Reply-To: <CADvTj4rXx_bo5vQbv83UUQhh3KvmbyUWV4e16v-bO1C5GHxZFA@mail.gmail.com>
+References: <20210615005534.4155014-1-james.hilliard1@gmail.com>
+ <20210616192238.GO2610983@scaer>
+ <CADvTj4rXx_bo5vQbv83UUQhh3KvmbyUWV4e16v-bO1C5GHxZFA@mail.gmail.com>
+Message-ID: <20210616200903.GS2610983@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew, All,
+James, All,
 
-On 2021-06-15 19:40 +0000, Weber, Matthew L                            Collins spake thusly:
-> > From: Yann E. MORIN <yann.morin.1998@gmail.com> on behalf of Yann E. MORIN <yann.morin.1998@free.fr>
-> > Sent: Sunday, June 13, 2021 9:32 AM
-> > To: buildroot at buildroot.org <buildroot@buildroot.org>
-> > Cc: Yann E. MORIN <yann.morin.1998@free.fr>; Weber, Matthew L Collins <Matthew.Weber@collins.com>; Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Subject: [External] [PATCH] core/pkg-generic: fix instrumentation for packages that install nowhere 
-> > ?
-> > A (target [0]) package can independently declare installing in various
-> > locations: target, staging, or images. The default is to only install
-> > in target.
-[--SNIP--]
-> > Fixes: #13836
+On 2021-06-16 13:48 -0600, James Hilliard spake thusly:
+> On Wed, Jun 16, 2021 at 1:22 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2021-06-14 18:55 -0600, James Hilliard spake thusly:
+> > > Fixes:
+> > > http://autobuild.buildroot.net/results/f42/f420890de1b52786f8cf5f2922b69c909162eaa1/
 > >
-> > [0] a host package can't opt out of installing anything.
-> > [1] that one is actually missing AUFS_INSTALL_TARGET = NO, so this
-> > ??? hides the issue.
-> > [2] even us are not 100% clean on that topic: gcc will install files in
-> > ??? staging and target as part of the same step (not the build, granted,
-> > ??? but still...)
-> >
-> > Reported-by: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Tested-by: Matthew Weber <matthew.weber@collins.com
+> > It is just tests that can't be built with -DNDEBUG. It would be a shame
+> > to have to build the whole thing without NDEBUG, just becuase of tests
+> > that are not usefull on the target...
+> Per upstream weston should not be built with -DNDEBUG since
+> weston relies on asserts for non-tests as well to catch certain fatal
+> conditions.
 
-Applied to master, thanks.
+That info should have been in the commit log. A pointer to upstream
+discussion about it would be a bonus.
+
+Can you respoin the patch, please?
+
+> > Is it possible to just disable building tests at all? Or if not, can't
+> > we just patch them out?
+> We could...however upstream recommended not to do that as it can make
+> tracing certain errors extremely difficult.
+
+OK, but having a way to disable tests would still be good, because
+basically, tests are useless on a product.
 
 Regards,
 Yann E. MORIN.
+
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > > ---
+> > >  package/weston/weston.mk | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+> > > index 8afe4bbab4..abafb3a6d9 100644
+> > > --- a/package/weston/weston.mk
+> > > +++ b/package/weston/weston.mk
+> > > @@ -19,6 +19,8 @@ WESTON_CONF_OPTS = \
+> > >       -Dcolor-management-colord=false \
+> > >       -Dremoting=false
+> > >
+> > > +WESTON_CFLAGS="$(TARGET_CFLAGS) -UNDEBUG"
+> > > +
+> > >  # Uses VIDIOC_EXPBUF, only available from 3.8+
+> > >  ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),y)
+> > >  WESTON_CONF_OPTS += -Dsimple-clients=dmabuf-v4l
+> > > --
+> > > 2.25.1
+> > >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> > --
+> > .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > '------------------------------^-------^------------------^--------------------'
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
