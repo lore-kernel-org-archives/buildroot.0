@@ -1,61 +1,108 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 16 Jun 2021 21:22:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/weston: disable -NDEBUG
-In-Reply-To: <20210615005534.4155014-1-james.hilliard1@gmail.com>
-References: <20210615005534.4155014-1-james.hilliard1@gmail.com>
-Message-ID: <20210616192238.GO2610983@scaer>
+Date: Wed, 16 Jun 2021 21:36:08 +0200
+Subject: [Buildroot] [git commit] package/weston: add configuration options
+ for weston shells
+Message-ID: <20210616190531.5B05B8132C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ffb525840cf583134111b112143238d58d14e7f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-06-14 18:55 -0600, James Hilliard spake thusly:
-> Fixes:
-> http://autobuild.buildroot.net/results/f42/f420890de1b52786f8cf5f2922b69c909162eaa1/
+Enable selection of used weston shells. By default all available
+shells are enabled to keep the old behavior. The new configuration
+options enable the user to select them individually.
 
-It is just tests that can't be built with -DNDEBUG. It would be a shame
-to have to build the whole thing without NDEBUG, just becuase of tests
-that are not usefull on the target...
+Signed-off-by: Martin Elshuber <martin.elshuber@theobroma-systems.com>
+[yann.morin.1998 at free.fr:
+  - ensure at least one shell is enabled; desktop arbitrarily chosen
+  - s/BR2_PACKAGE_WESTON_SHELL_SELECTED/BR2_PACKAGE_WESTON_HAS_SHELL/
+  - reword associated comment
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/weston/Config.in | 25 +++++++++++++++++++++++++
+ package/weston/weston.mk | 24 ++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+)
 
-Is it possible to just disable building tests at all? Or if not, can't
-we just patch them out?
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/weston/weston.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-> index 8afe4bbab4..abafb3a6d9 100644
-> --- a/package/weston/weston.mk
-> +++ b/package/weston/weston.mk
-> @@ -19,6 +19,8 @@ WESTON_CONF_OPTS = \
->  	-Dcolor-management-colord=false \
->  	-Dremoting=false
->  
-> +WESTON_CFLAGS="$(TARGET_CFLAGS) -UNDEBUG"
-> +
->  # Uses VIDIOC_EXPBUF, only available from 3.8+
->  ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),y)
->  WESTON_CONF_OPTS += -Dsimple-clients=dmabuf-v4l
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index d07eba4c9d..8f3dbc7931 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -20,6 +20,7 @@ config BR2_PACKAGE_WESTON
+ 	select BR2_PACKAGE_LIBDRM
+ 	# Runtime dependency
+ 	select BR2_PACKAGE_XKEYBOARD_CONFIG
++	select BR2_PACKAGE_WESTON_SHELL_DESKTOP if !BR2_PACKAGE_WESTON_HAS_SHELL
+ 	help
+ 	  Weston is the reference implementation of a Wayland
+ 	  compositor, and a useful compositor in its own right.
+@@ -119,6 +120,30 @@ config BR2_PACKAGE_WESTON_XWAYLAND
+ comment "XWayland support needs libepoxy and X.org enabled"
+ 	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
+ 
++# Weston needs at least one shell; this can be one of the bundled ones,
++# below, of from a third-party package, which should then select this.
++config BR2_PACKAGE_WESTON_HAS_SHELL
++	bool
++
++config BR2_PACKAGE_WESTON_SHELL_DESKTOP
++	bool "desktop shell"
++	default y
++
++config BR2_PACKAGE_WESTON_SHELL_FULLSCREEN
++	bool "fullscreen shell"
++	default y
++	select BR2_PACKAGE_WESTON_HAS_SHELL
++
++config BR2_PACKAGE_WESTON_SHELL_IVI
++	bool "ivi shell"
++	default y
++	select BR2_PACKAGE_WESTON_HAS_SHELL
++
++config BR2_PACKAGE_WESTON_SHELL_KIOSK
++	bool "kiosk shell"
++	default y
++	select BR2_PACKAGE_WESTON_HAS_SHELL
++
+ config BR2_PACKAGE_WESTON_DEMO_CLIENTS
+ 	bool "demo clients"
+ 	depends on BR2_USE_MMU # pango
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 8afe4bbab4..6dd5439291 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -133,6 +133,30 @@ else
+ WESTON_CONF_OPTS += -Dtest-junit-xml=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WESTON_SHELL_DESKTOP),y)
++WESTON_CONF_OPTS += -Dshell-desktop=true
++else
++WESTON_CONF_OPTS += -Dshell-desktop=false
++endif
++
++ifeq ($(BR2_PACKAGE_WESTON_SHELL_FULLSCREEN),y)
++WESTON_CONF_OPTS += -Dshell-fullscreen=true
++else
++WESTON_CONF_OPTS += -Dshell-fullscreen=false
++endif
++
++ifeq ($(BR2_PACKAGE_WESTON_SHELL_IVI),y)
++WESTON_CONF_OPTS += -Dshell-ivi=true
++else
++WESTON_CONF_OPTS += -Dshell-ivi=false
++endif
++
++ifeq ($(BR2_PACKAGE_WESTON_SHELL_KIOSK),y)
++WESTON_CONF_OPTS += -Dshell-kiosk=true
++else
++WESTON_CONF_OPTS += -Dshell-kiosk=false
++endif
++
+ ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
+ WESTON_CONF_OPTS += -Ddemo-clients=true
+ WESTON_DEPENDENCIES += pango
