@@ -1,94 +1,160 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 16 Jun 2021 23:58:47 +0200
-Subject: [Buildroot] [git commit] package/usbguard: new package
-In-Reply-To: <20210616211146.2B4B4815C8@busybox.osuosl.org>
-References: <20210616211146.2B4B4815C8@busybox.osuosl.org>
-Message-ID: <20210616235847.555dbf5b@windsurf>
+From: C Larbi <pkl2000us@gmail.com>
+Date: Wed, 16 Jun 2021 22:19:27 +0000
+Subject: [Buildroot] [webkitgtk / cairo] Accelerated rendering on
+ raspberry pi 4
+In-Reply-To: <20210617001925.GB58049@momiji>
+References: <CANVomh-dtsmg-oDwP8=uMmPWqcKA9hm7ReZ=wMiZoEn=-pOmWw@mail.gmail.com>
+ <20210616202638.74242b4a@gmx.net> <20210617001925.GB58049@momiji>
+Message-ID: <CANVomh93QK+vg=7D83+qU_503HxCtx8aR5qTiu40QQ49Mb4ugg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thank you all for the feedback.
 
-Didn't had the time to review the original patch, but here are some
-comments.
+Peter, i was talking about the "--enable-egl" switch.
 
-On Wed, 16 Jun 2021 23:38:54 +0200
-Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> wrote:
+>>One caveat, though: accelerated compositing may not be triggered by all
+>>web pages in WebKitGTK, but for example is always enabled in the WPE
+port.
 
-> +USBGUARD_VERSION = 1.0.0
-> +USBGUARD_SITE = https://github.com/USBGuard/usbguard/releases/download/usbguard-$(USBGUARD_VERSION)
-> +USBGUARD_LICENSE = GPL-2.0+
-> +USBGUARD_LICENSE_FILES = LICENSE
-> +USBGUARD_CONF_OPTS= --with-bundled-catch --with-bundled-pegtl \
-> +		    --disable-debug-build --without-dbus --without-polkit \
-> +		    --disable-seccomp --disable-umockdev --disable-systemd
+Interesting you mentioned this Adrian !
 
---disable-seccomp should go in the seccomp conditional below.
+I have some what made some progress. After hours trying to figure out what
+was the issue, i started experimenting with the Minibrowser that comes
+bundled with webkitgtk.
 
---disable-systemd should go in the systemd conditional below.
+At first i was getting similar poor performance just like launching my
+webgtk application. Then some "magic" happened when i tried to zoom out of
+the webpage. All of a sudden the latency issue improved !
 
-Nit: missing space before the "=" sign
+I would say it is about 20% below the results i had on my desktop computer
+(which is a big improvement from what i had beforeon the pi)
 
-> +
-> +USBGUARD_DEPENDENCIES += libqb protobuf
+Is this the triggering you were talking about ?
+Shouldn't there be an option to have this on always ?
 
-Should be a "=" sign.
+Anyway, i am okay for now because i can work around programmatically
+adjusting the zoom from my application.
 
-> +
-> +ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
-> +USBGUARD_CONF_OPTS += --with-crypto-library=openssl
-> +USBGUARD_DEPENDENCIES += libopenssl
-> +endif
-> +ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-> +USBGUARD_CONF_OPTS += --with-crypto-library=gcrypt
-> +USBGUARD_DEPENDENCIES += libgcrypt
-> +endif
-> +ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
-> +USBGUARD_CONF_OPTS += --with-crypto-library=sodium
-> +USBGUARD_DEPENDENCIES += libsodium
-> +endif
+Maybe this is a bug, but what do i know.
+Hopefully my work around can help someone
 
-Based on the --with-crypto-library= option name, it seems like these
-are mutually exclusive choice, so it should be a chain of if .. else
-ifeq ... else ifeq ... else ifeq ... endif.
+Regards and thanks again for your help
 
-> +
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +USBGUARD_CONF_OPTS += --enable-systemd
-> +USBGUARD_DEPENDENCIES += systemd
+Cerezo
 
-else
-USBGUARD_CONF_OPTS += --disable-systemd
 
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-> +USBGUARD_CONF_OPTS += --enable-seccomp
-> +USBGUARD_DEPENDENCIES += libseccomp
 
-else
-USBGUARD_CONF_OPTS += --disable-seccomp
 
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
-> +USBGUARD_CONF_OPTS += --enable-libcapng
-> +USBGUARD_DEPENDENCIES += libcap-ng
 
-else
-USBGUARD_CONF_OPTS += --disable-libcapng
+On Wed, 16 Jun 2021 at 21:19, Adrian Perez de Castro <aperez@igalia.com>
+wrote:
 
-> +endif
-
-Also, I think it should have been good to explain why we are using
-bundled versions of "catch" and "pegtl", as we normally don't like
-bundled libraries in Buildroot packaging.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Hi there,
+>
+> On Wed, 16 Jun 2021 20:26:38 +0200 Peter Seiderer <ps.report@gmx.net>
+> wrote:
+> > On Wed, 16 Jun 2021 10:54:19 +0000, C Larbi <pkl2000us@gmail.com> wrote:
+> >
+> > > I am working on a personal project to build a digital kiosk on a pi 4
+> > > I am using webkitgtk on a wayland compositor.
+> > >
+> > > So far I have got the system up and running.
+> > >
+> > > But css and javascript effects produce poor performance (high latency
+> and
+> > > probably low FPS)
+> > >
+> > > I get garbled output on the display when I try to enforce hardware
+> > > acceleration through WebKitSettings or using environment variables.
+> > >
+> > > This has left me suspecting an issue with cairo, open egl and es
+> > >
+> > > I did some research and found out cairo has an --enable-egl
+> configuration
+> > > parameter (which is not in the cairo.mk file).
+> >
+> > From package/cairo/cairo.mk:
+> >
+> >  91 # Can use GL or GLESv2 but not both
+> >  92 ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+> >  93 CAIRO_CONF_OPTS += --enable-gl --disable-glesv2
+> >  94 CAIRO_DEPENDENCIES += libgl
+> >  95 else
+> >  96 ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+> >  97 CAIRO_CONF_OPTS += --disable-gl --enable-glesv2
+> >  98 CAIRO_DEPENDENCIES += libgles
+> >  99 else
+> > 100 CAIRO_CONF_OPTS += --disable-gl --disable-glesv2
+> > 101 endif
+> > 102 endif
+>
+> FWIW, WebKit does *not* use Cairo-GL at all, even if the support is built
+> into Cairo. To give a very quick summary, this is what WebKit does for
+> rendering:
+>
+>   1. Page elements are assigned a render layer; there can be one or more.
+>   2. Each layer is divided in square tile.
+>   3. Each tile is rasterized using Cairo, in the CPU.
+>   4. Tiles are uploaded to the GPU as textures, then composited there.
+>
+> That way only tiles of layers with changes need to be repainted and
+> re-uploaded. Operation that typically cause WebKit to put elements in
+> new layers are CSS transforms: when the transform is applied (or animated),
+> the corresponding layer can be manipulated entirely in the GPU (position,
+> rotation, scaling, etc.)
+>
+> TL;DR: WebKit uses *both* software rendering and the GPU for compositing.
+>
+> One caveat, though: accelerated compositing may not be triggered by all
+> web pages in WebKitGTK, but for example is always enabled in the WPE port.
+>
+> A quick way of knowing whether WebKit (both GTK and WPE ports) are indeed
+> using the GPU is to load the ?poster circle? animation. It uses CSS 3D
+> transforms and without hardware acceleration is terribly slow, and butter
+> smooth (60 FPS, even on slow hardware) when the GPU is in use. You can find
+> a version here:
+>
+>   https://people.igalia.com/aperez/poster-circle.html
+>
+> Another way is opening the ?webkit://gpu? URL and checking whether the
+> OpenGL/GLES renderer is *not* one of Mesa's software renderers (swrast,
+> llvmpipe, or swr).
+>
+> > > I applied this but still garbled output.
+> > >
+> > > I have tried different combinations of vc4-fkms-v3d, vc4-kms-v3-pi4,
+> but
+> > > still get the garbled output.
+> >
+> > Hard to say without more information (config file, etc.), please provide
+> a (minimal)
+> > config/defconfig and example (commands) how to reproduce your problem...
+> >
+> > Which buildroot version?
+> >
+> > > Will appreciate it if anyone can give me some pointers to a possible
+> > > solution.
+> > >
+> > > NB: I was advised to switch to wpewebkit, but i had the same results
+> when i
+> > > used cog to load my web page
+> >
+> >
+> > For hints on RPi4, cog and wpebkit see for example [1]...
+>
+> It's possible to use also ?cog --platform=drm ...? with the Mesa vc4/v3d
+> drivers. In that case you will not need a Wayland compositor running, but
+> this option is not as battle tested.
+>
+> I hope this helps.
+>
+> Cheers,
+> -Adrian
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210616/3a22e671/attachment.html>
