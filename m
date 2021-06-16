@@ -1,100 +1,49 @@
-From: Martin Elshuber <martin.elshuber@theobroma-systems.com>
-Date: Wed, 16 Jun 2021 14:42:02 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/weston: add configuration
- options for weston shells
-Message-ID: <20210616124201.1345632-1-martin.elshuber@theobroma-systems.com>
+From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Date: Wed, 16 Jun 2021 17:25:39 +0300
+Subject: [Buildroot] [PATCH] package/tinyproxy: bump to version 1.11.0
+Message-ID: <20210616142539.4017-1-alexander.i.mukhin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable selection of used weston shells. By default all available
-shells are enabled to keep the old behavior. The new configuration
-options enable the user to select them individually.
+Also, since tinyproxy no longer uses a2x, remove its explicit disabling.
 
-Signed-off-by: Martin Elshuber <martin.elshuber@theobroma-systems.com>
+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
 ---
-Changes v1->v2:
- - Show comment if no shell is selected
-Signed-off-by: Martin Elshuber <martin.elshuber@theobroma-systems.com>
----
- package/weston/Config.in | 27 +++++++++++++++++++++++++++
- package/weston/weston.mk | 24 ++++++++++++++++++++++++
- 2 files changed, 51 insertions(+)
+ package/tinyproxy/tinyproxy.hash | 3 ++-
+ package/tinyproxy/tinyproxy.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index d07eba4c9d..bd6b0fdbff 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -119,6 +119,33 @@ config BR2_PACKAGE_WESTON_XWAYLAND
- comment "XWayland support needs libepoxy and X.org enabled"
- 	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
+diff --git a/package/tinyproxy/tinyproxy.hash b/package/tinyproxy/tinyproxy.hash
+index 8096741597..8c58b98ca2 100644
+--- a/package/tinyproxy/tinyproxy.hash
++++ b/package/tinyproxy/tinyproxy.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/tinyproxy/tinyproxy/releases/tag/1.11.0
++sha256  c1ec81cfc4c551d2c24e0227a5aeeaad8723bd9a39b61cd729e516b82eaa3f32  tinyproxy-1.11.0.tar.xz
+ # locally computed
+-sha256  a23a8f647f622f01e51b93fa882ea5a15c20e026d45c3aafa81ec579e464daf7  tinyproxy-1.10.0.tar.bz2
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/tinyproxy/tinyproxy.mk b/package/tinyproxy/tinyproxy.mk
+index 326bfa8b88..3930e90d72 100644
+--- a/package/tinyproxy/tinyproxy.mk
++++ b/package/tinyproxy/tinyproxy.mk
+@@ -4,12 +4,11 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_WESTON_SHELL_DESKTOP
-+	bool "desktop shell"
-+	default y
-+	select BR2_PACKAGE_WESTON_SHELL_SELECTED
-+
-+config BR2_PACKAGE_WESTON_SHELL_FULLSCREEN
-+	bool "fullscreen shell"
-+	default y
-+	select BR2_PACKAGE_WESTON_SHELL_SELECTED
-+
-+config BR2_PACKAGE_WESTON_SHELL_IVI
-+	bool "ivi shell"
-+	default y
-+	select BR2_PACKAGE_WESTON_SHELL_SELECTED
-+
-+config BR2_PACKAGE_WESTON_SHELL_KIOSK
-+	bool "kiosk shell"
-+	default y
-+	select BR2_PACKAGE_WESTON_SHELL_SELECTED
-+
-+# Hidden option selected by any westen shell
-+config BR2_PACKAGE_WESTON_SHELL_SELECTED
-+	bool
-+
-+comment "Warning: Weston needs at least one shell selected"
-+	depends on !BR2_PACKAGE_WESTON_SHELL_SELECTED
-+
- config BR2_PACKAGE_WESTON_DEMO_CLIENTS
- 	bool "demo clients"
- 	depends on BR2_USE_MMU # pango
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 8afe4bbab4..6dd5439291 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -133,6 +133,30 @@ else
- WESTON_CONF_OPTS += -Dtest-junit-xml=false
- endif
+-TINYPROXY_VERSION = 1.10.0
++TINYPROXY_VERSION = 1.11.0
+ TINYPROXY_SITE = https://github.com/tinyproxy/tinyproxy/releases/download/$(TINYPROXY_VERSION)
+-TINYPROXY_SOURCE = tinyproxy-$(TINYPROXY_VERSION).tar.bz2
++TINYPROXY_SOURCE = tinyproxy-$(TINYPROXY_VERSION).tar.xz
+ TINYPROXY_LICENSE = GPL-2.0+
+ TINYPROXY_LICENSE_FILES = COPYING
+ TINYPROXY_CPE_ID_VENDOR = tinyproxy_project
+-TINYPROXY_CONF_ENV = ac_cv_path_A2X=no
  
-+ifeq ($(BR2_PACKAGE_WESTON_SHELL_DESKTOP),y)
-+WESTON_CONF_OPTS += -Dshell-desktop=true
-+else
-+WESTON_CONF_OPTS += -Dshell-desktop=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WESTON_SHELL_FULLSCREEN),y)
-+WESTON_CONF_OPTS += -Dshell-fullscreen=true
-+else
-+WESTON_CONF_OPTS += -Dshell-fullscreen=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WESTON_SHELL_IVI),y)
-+WESTON_CONF_OPTS += -Dshell-ivi=true
-+else
-+WESTON_CONF_OPTS += -Dshell-ivi=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WESTON_SHELL_KIOSK),y)
-+WESTON_CONF_OPTS += -Dshell-kiosk=true
-+else
-+WESTON_CONF_OPTS += -Dshell-kiosk=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
- WESTON_CONF_OPTS += -Ddemo-clients=true
- WESTON_DEPENDENCIES += pango
+ $(eval $(autotools-package))
 -- 
-2.30.2
+2.20.1
