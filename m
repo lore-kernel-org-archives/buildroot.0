@@ -2,56 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E781C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:08:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73E34C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:09:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B78D860F70
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:08:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B78D860F70
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 2EBFC60F93
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:09:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2EBFC60F93
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9611441620;
-	Tue,  3 Aug 2021 23:08:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09A0D605C3;
+	Tue,  3 Aug 2021 23:09:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fdU_qIrQndRh; Tue,  3 Aug 2021 23:08:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QDa35UwurhFS; Tue,  3 Aug 2021 23:09:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B5F5F41612;
-	Tue,  3 Aug 2021 23:08:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EF226066F;
+	Tue,  3 Aug 2021 23:09:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3D2101BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1C1BA1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 331B94064A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3AF48404D4
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O0NA_BNyHzRv for <buildroot@lists.busybox.net>;
+ with ESMTP id 2JWIXvprP7gx for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 39850404D4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68B67404DA
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8ECAB8674F; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id BCA3D8674F; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 15 Jun 2021 13:25:43 +0200
+Date: Wed, 16 Jun 2021 21:54:54 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6e75a990ae35580800f24f3ddc4573c6bc38fa05
-X-Git-Newrev: a7bf844813e2527267cb0a98eb73a0e4bdf04f99
+X-Git-Oldrev: 54d0a7cc1828c05719e14170e88811b21cffd82e
+X-Git-Newrev: ee5e14ff17fda761784feda2f887b6fbde5355e5
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210952.8ECAB8674F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/snort3: new package
+Message-Id: <20210803210952.BCA3D8674F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] core/pkg-generic: fix
+ instrumentation for packages that install nowhere
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,181 +70,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7bf844813e2527267cb0a98eb73a0e4bdf04f99
+commit: https://git.buildroot.net/buildroot/commit/?id=ee5e14ff17fda761784feda2f887b6fbde5355e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Snort 3 is the next generation Snort IPS (Intrusion
-Prevention System).
+A (target [0]) package can independently declare installing in various
+locations: target, staging, or images. The default is to only install
+in target.
 
- - Support multiple packet processing threads
- - Shared configuration and attribute table
- - Use a simple, scriptable configuration
- - Make key components pluggable
- - Autodetect services for portless configuration
- - Support sticky buffers in rules
- - Autogenerate reference documentation
- - Provide better cross platform support
+When a package opts out from installing to target, but does not opts
+in to install in any other location, the package is not downloaded,
+extracted, patched, configured, nor built at all. As a consequence, none
+of the per-step instrumentation is executed, specifically the listing
+of files before/after the package sequence.
 
-https://www.snort.org/snort3
+Down the line, the package infra does not cope well with that situation,
+because the gathering-install step, the one that synchronises all the
+optional target, staging, or images install steps, still gets run.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+And as #13836 shows, this does not go well:
+
+    /bin/sh: /home/tbuild/myboard/build/foo/.files-list.after: No such file or directory
+    make[1]: *** [/home/tbuild/myboard/build/foo/.stamp_installed] Error 1
+    make: *** [_all] Error 2
+
+So, we should have ensured that the gathering-install step itself
+depends on the build step, which would have solved the issue.
+
+However, this bug really illustrates a more fundamental issue: does it
+even make sense to have a package that installs nothing in any location?
+Indeed, why even bother with that package to begin with if it will not
+provide anything at all?
+
+It turns out that yes, this makes sense. We have some packages, that
+do not install anything at all, and do not even build anything; they are
+there just to ensure that we can download something that will ultimately
+be used by another package. This is the case for example for packages
+that provide linux extensions, like aufs [1].
+
+Additionally, some ugly out-of-tree packages could conceivably install
+things during the build (or even configure!) steps. That's not unheard
+of... [2]
+
+So, the solution is to ensure that the gathering-install step does
+depend on the build step, to trigger the proper dependency chain and
+have the instrumentation hooks properly run even in that degenerate
+case.
+
+Fixes: #13836
+
+[0] a host package can't opt out of installing anything.
+[1] that one is actually missing AUFS_INSTALL_TARGET = NO, so this
+    hides the issue.
+[2] even us are not 100% clean on that topic: gcc will install files in
+    staging and target as part of the same step (not the build, granted,
+    but still...)
+
+Reported-by: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Matthew Weber <matthew.weber@collins.com
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/snort3/Config.in   | 42 ++++++++++++++++++++++++++++++++++
- package/snort3/snort3.hash |  6 +++++
- package/snort3/snort3.mk   | 57 ++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 107 insertions(+)
+ package/pkg-generic.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 327ffb9447..2031a40e14 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -912,6 +912,7 @@ F:	package/python-yatl/
- F:	package/rocksdb/
- F:	package/rygel/
- F:	package/safeclib/
-+F:	package/snort3/
- F:	package/suricata/
- F:	package/tinycbor/
- F:	package/tinydtls/
-diff --git a/package/Config.in b/package/Config.in
-index 89d8dd10d1..4cdf796ad9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2284,6 +2284,7 @@ endif
- 	source "package/sngrep/Config.in"
- 	source "package/snmpclitools/Config.in"
- 	source "package/snort/Config.in"
-+	source "package/snort3/Config.in"
- 	source "package/socat/Config.in"
- 	source "package/socketcand/Config.in"
- 	source "package/softether/Config.in"
-diff --git a/package/snort3/Config.in b/package/snort3/Config.in
-new file mode 100644
-index 0000000000..75923c3c20
---- /dev/null
-+++ b/package/snort3/Config.in
-@@ -0,0 +1,42 @@
-+config BR2_PACKAGE_SNORT3
-+	bool "snort3"
-+	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
-+	depends on !(BR2_PACKAGE_DAQ || BR2_PACKAGE_SNORT)
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # daq3
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # hwloc
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_DAQ3
-+	select BR2_PACKAGE_FLEX
-+	select BR2_PACKAGE_HWLOC
-+	select BR2_PACKAGE_LIBDNET
-+	select BR2_PACKAGE_LIBPCAP
-+	select BR2_PACKAGE_LUAJIT
-+	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Snort 3 is the next generation Snort IPS (Intrusion
-+	  Prevention System).
-+
-+	  - Support multiple packet processing threads
-+	  - Shared configuration and attribute table
-+	  - Use a simple, scriptable configuration
-+	  - Make key components pluggable
-+	  - Autodetect services for portless configuration
-+	  - Support sticky buffers in rules
-+	  - Autogenerate reference documentation
-+	  - Provide better cross platform support
-+
-+	  https://www.snort.org/snort3
-+
-+comment "snort3 needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 4.9"
-+	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on !(BR2_PACKAGE_DAQ || BR2_PACKAGE_SNORT)
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/snort3/snort3.hash b/package/snort3/snort3.hash
-new file mode 100644
-index 0000000000..48eddd74c9
---- /dev/null
-+++ b/package/snort3/snort3.hash
-@@ -0,0 +1,6 @@
-+# Locally computed:
-+sha256  a68af8ea46a038dfb0ad489e8d11dee62a3e63cb4a639f6bb4fac4ded955fe11  snort3-3.1.4.0.tar.gz
-+
-+# Hash for license files:
-+sha256  3f1cbfb20bb2c608e1a474421880d08b8cba6abb00ab7736d22c481d71656a6d  COPYING
-+sha256  f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
-diff --git a/package/snort3/snort3.mk b/package/snort3/snort3.mk
-new file mode 100644
-index 0000000000..1c49da8ec0
---- /dev/null
-+++ b/package/snort3/snort3.mk
-@@ -0,0 +1,57 @@
-+################################################################################
-+#
-+# snort3
-+#
-+################################################################################
-+
-+SNORT3_VERSION = 3.1.4.0
-+SNORT3_SITE = $(call github,snort3,snort3,$(SNORT3_VERSION))
-+SNORT3_LICENSE = GPL-2.0
-+SNORT3_LICENSE_FILES = COPYING LICENSE
-+
-+SNORT3_DEPENDENCIES = \
-+	host-pkgconf daq3 flex hwloc libdnet libpcap luajit openssl pcre zlib
-+
-+SNORT3_CONF_OPTS = \
-+	-DENABLE_GDB=OFF \
-+	-DENABLE_STATIC_DAQ=OFF \
-+	-DMAKE_DOC=OFF
-+
-+ifeq ($(BR2_PACKAGE_FLATBUFFERS),y)
-+SNORT3_DEPENDENCIES += flatbuffers
-+SNORT3_CONF_OPTS += -DHAVE_FLATBUFFERS=ON
-+else
-+SNORT3_CONF_OPTS += -DHAVE_FLATBUFFERS=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+SNORT3_DEPENDENCIES += libiconv
-+SNORT3_CONF_OPTS += -DHAVE_ICONV=ON
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-+SNORT3_DEPENDENCIES += libtirpc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SAFECLIB),y)
-+SNORT3_DEPENDENCIES += safeclib
-+SNORT3_CONF_OPTS += -DENABLE_SAFEC=ON
-+else
-+SNORT3_CONF_OPTS += -DENABLE_SAFEC=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
-+SNORT3_DEPENDENCIES += util-linux
-+SNORT3_CONF_OPTS += -DHAVE_UUID=ON
-+else
-+SNORT3_CONF_OPTS += -DHAVE_UUID=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+SNORT3_DEPENDENCIES += xz
-+SNORT3_CONF_OPTS += -DHAVE_LZMA=ON
-+else
-+SNORT3_CONF_OPTS += -DHAVE_LZMA=OFF
-+endif
-+
-+$(eval $(cmake-package))
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 9fbc63d19e..45589bcbb4 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -826,6 +826,7 @@ endif
+ # human-friendly targets and target sequencing
+ $(1):			$(1)-install
+ $(1)-install:		$$($(2)_TARGET_INSTALL)
++$$($(2)_TARGET_INSTALL): $$($(2)_TARGET_BUILD)
+ 
+ ifeq ($$($(2)_TYPE),host)
+ $$($(2)_TARGET_INSTALL): $$($(2)_TARGET_INSTALL_HOST)
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
