@@ -1,44 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 16 Jun 2021 20:54:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/snort3: bump to version 3.1.6.0
-Message-ID: <20210616185447.554354-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 16 Jun 2021 21:06:39 +0200
+Subject: [Buildroot] [git commit] package/lvm2: default standard install to y
+Message-ID: <20210616183600.5A1DC8D483@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/snort3/snort3/blob/3.1.6.0/ChangeLog
+commit: https://git.buildroot.net/buildroot/commit/?id=6d758f59e65c33b067076cdb89a8404d5471c7ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Until commit 5c07dfcc1a52e2804011574a3e022523a20546c8
+BR2_PACKAGE_LVM2_STANDARD_INSTALL would default to y. Indeed, the
+default read:
+
+      default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
+
+Since the legacy symbol is normally not selected, this defaults to y.
+
+Commit 5c07dfcc1a52e2804011574a3e022523a20546c8 inadvertedly removed the
+entire line instead of just the condition.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=13846
+For-stable: 2021.02, 2021.05
+Cc: dominique.tronche at atos.net
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/snort3/snort3.hash | 2 +-
- package/snort3/snort3.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lvm2/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/snort3/snort3.hash b/package/snort3/snort3.hash
-index 48eddd74c9..c31e258ef2 100644
---- a/package/snort3/snort3.hash
-+++ b/package/snort3/snort3.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  a68af8ea46a038dfb0ad489e8d11dee62a3e63cb4a639f6bb4fac4ded955fe11  snort3-3.1.4.0.tar.gz
-+sha256  4f7852898eaac48a7cfaff61c79a3c3a5a86a54db9d2a7d5b758297bf52f1f12  snort3-3.1.6.0.tar.gz
+diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+index 317027929e..cc740dd40c 100644
+--- a/package/lvm2/Config.in
++++ b/package/lvm2/Config.in
+@@ -26,6 +26,7 @@ if BR2_PACKAGE_LVM2
  
- # Hash for license files:
- sha256  3f1cbfb20bb2c608e1a474421880d08b8cba6abb00ab7736d22c481d71656a6d  COPYING
-diff --git a/package/snort3/snort3.mk b/package/snort3/snort3.mk
-index 1c49da8ec0..aabc89e165 100644
---- a/package/snort3/snort3.mk
-+++ b/package/snort3/snort3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNORT3_VERSION = 3.1.4.0
-+SNORT3_VERSION = 3.1.6.0
- SNORT3_SITE = $(call github,snort3,snort3,$(SNORT3_VERSION))
- SNORT3_LICENSE = GPL-2.0
- SNORT3_LICENSE_FILES = COPYING LICENSE
--- 
-2.30.2
+ config BR2_PACKAGE_LVM2_STANDARD_INSTALL
+ 	bool "standard install instead of only dmsetup"
++	default y
+ 	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	help
