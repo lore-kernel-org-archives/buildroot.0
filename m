@@ -1,116 +1,93 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 17 Jun 2021 00:19:25 +0300
-Subject: [Buildroot] [webkitgtk / cairo] Accelerated rendering on
- raspberry pi 4
-In-Reply-To: <20210616202638.74242b4a@gmx.net>
-References: <CANVomh-dtsmg-oDwP8=uMmPWqcKA9hm7ReZ=wMiZoEn=-pOmWw@mail.gmail.com>
- <20210616202638.74242b4a@gmx.net>
-Message-ID: <20210617001925.GB58049@momiji>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 16 Jun 2021 22:52:31 +0200
+Subject: [Buildroot] Trouble with u-boot on a ZynqMP board
+In-Reply-To: <CAM+bi4s4Nueb96Xyo5dY7vwDhJO1xFnzcdrky5U3qsBBNf8EHQ@mail.gmail.com>
+References: <CAM+bi4s4Nueb96Xyo5dY7vwDhJO1xFnzcdrky5U3qsBBNf8EHQ@mail.gmail.com>
+Message-ID: <1ae87e6c-9b70-9492-6efd-b67d06d91433@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi there,
+Hi Alvaro,
 
-On Wed, 16 Jun 2021 20:26:38 +0200 Peter Seiderer <ps.report@gmx.net> wrote:
-> On Wed, 16 Jun 2021 10:54:19 +0000, C Larbi <pkl2000us@gmail.com> wrote:
+On 15/06/21 09:50, Alvaro Gamez wrote:
+> Hi!
 > 
-> > I am working on a personal project to build a digital kiosk on a pi 4
-> > I am using webkitgtk on a wayland compositor.
-> > 
-> > So far I have got the system up and running.
-> > 
-> > But css and javascript effects produce poor performance (high latency and
-> > probably low FPS)
-> > 
-> > I get garbled output on the display when I try to enforce hardware
-> > acceleration through WebKitSettings or using environment variables.
-> > 
-> > This has left me suspecting an issue with cairo, open egl and es
-> > 
-> > I did some research and found out cairo has an --enable-egl configuration
-> > parameter (which is not in the cairo.mk file).
+> I'm trying to use buildroot to generate a system for the Digilent
+> Genesys board, which is based on the zynqmp SOC. Thanks to the
+> wonderful job of Luca and others, it should be pretty straightforward,
+> but I'm having trouble getting it to boot, and I was hoping I could
+> get some guidance on what to do next.
+
+Thanks for your appreciation! However I must say setting up zynqmp
+booting is never straightforward... :-/
+
+> I'm using buildroot version 2021.05, with u-boot version 2021.04,
+> which has latest patches that should allow booting completely via
+> u-boot, without using Xilinx' FSBL
 > 
-> From package/cairo/cairo.mk:
+> I'm using Digient's reference design to generate configuration object
+> pm_cfg_obj.c and PSU init file psu_init_gpl.c, which shall be fed to
+> u-boot. Alongside these files, I'm make buildroot download a generic
+> PMU firmware built by Luca at
+> https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/master/bin/pmufw-v2018.3.bin
+> and here is the relevant configuration:
 > 
->  91 # Can use GL or GLESv2 but not both
->  92 ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
->  93 CAIRO_CONF_OPTS += --enable-gl --disable-glesv2
->  94 CAIRO_DEPENDENCIES += libgl
->  95 else
->  96 ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
->  97 CAIRO_CONF_OPTS += --disable-gl --enable-glesv2
->  98 CAIRO_DEPENDENCIES += libgles
->  99 else
-> 100 CAIRO_CONF_OPTS += --disable-gl --disable-glesv2
-> 101 endif
-> 102 endif
-
-FWIW, WebKit does *not* use Cairo-GL at all, even if the support is built
-into Cairo. To give a very quick summary, this is what WebKit does for
-rendering:
-
-  1. Page elements are assigned a render layer; there can be one or more.
-  2. Each layer is divided in square tile.
-  3. Each tile is rasterized using Cairo, in the CPU.
-  4. Tiles are uploaded to the GPU as textures, then composited there.
-
-That way only tiles of layers with changes need to be repainted and
-re-uploaded. Operation that typically cause WebKit to put elements in
-new layers are CSS transforms: when the transform is applied (or animated),
-the corresponding layer can be manipulated entirely in the GPU (position,
-rotation, scaling, etc.)
-
-TL;DR: WebKit uses *both* software rendering and the GPU for compositing.
-
-One caveat, though: accelerated compositing may not be triggered by all
-web pages in WebKitGTK, but for example is always enabled in the WPE port.
-
-A quick way of knowing whether WebKit (both GTK and WPE ports) are indeed
-using the GPU is to load the ?poster circle? animation. It uses CSS 3D
-transforms and without hardware acceleration is terribly slow, and butter
-smooth (60 FPS, even on slow hardware) when the GPU is in use. You can find
-a version here:
-
-  https://people.igalia.com/aperez/poster-circle.html
-
-Another way is opening the ?webkit://gpu? URL and checking whether the
-OpenGL/GLES renderer is *not* one of Mesa's software renderers (swrast,
-llvmpipe, or swr).
-
-> > I applied this but still garbled output.
-> > 
-> > I have tried different combinations of vc4-fkms-v3d, vc4-kms-v3-pi4, but
-> > still get the garbled output.
+> BR2_TARGET_UBOOT=y
+> BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG=y
+> BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL_Genesys_PATH)/uboot_defconfig"
+> BR2_TARGET_UBOOT_NEEDS_DTC=y
+> BR2_TARGET_UBOOT_SPL=y
+> BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+> BR2_TARGET_UBOOT_ZYNQMP=y
+> BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/master/bin/pmufw-v2018.3.bin"
+> BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="/tmp/pm_cfg_obj.c"
+> BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE="/tmp/psu_init_gpl.c"
+> BR2_TARGET_UBOOT_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_Genesys_PATH)/orig.dts"
 > 
-> Hard to say without more information (config file, etc.), please provide a (minimal)
-> config/defconfig and example (commands) how to reproduce your problem...
+> To provide Arm Trusted Firmware, I'm passing buildroot the same
+> configuration as already exists on configs/zynqmp_zcu106_defconfig
+> which is:
 > 
-> Which buildroot version?
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.5"
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
 > 
-> > Will appreciate it if anyone can give me some pointers to a possible
-> > solution.
-> > 
-> > NB: I was advised to switch to wpewebkit, but i had the same results when i
-> > used cog to load my web page
+> The device tree I'm using is extracted from Digilent's kernel image,
+> so it should be correct, although I had to manually patch u-boot to
+> include my "orig.dtb" as a target of dtb-$(CONFIG_ARCH_ZYNQMP)
 > 
+> So, it is assumption that this should make u-boot prompt appear after
+> power up, but I must be wrong because nothing appears at all on the
+> serial console.
 > 
-> For hints on RPi4, cog and wpebkit see for example [1]...
+> Provided image by Digilent follows the Xilinx' booting workflow, so
+> only a BOOT.BIN file is on the sdcard which includes xilinx' FSBL, PMU
+> firmware with configuration object, u-boot, kernel, device tree, etc,
+> so at least I know that the board is fine as this firmware works
+> flawlessly. I also was able to load the kernel and device tree as
+> built by buildroot over this instance of u-boot, so at least I can
+> load my own kernel, but I can't progress deeper than that.
 
-It's possible to use also ?cog --platform=drm ...? with the Mesa vc4/v3d
-drivers. In that case you will not need a Wayland compositor running, but
-this option is not as battle tested.
+I can't point out a specific potential cause for your problem. I would
+expect to see at least the U-Boot SPL prompt. You might want to enable
+some debug outputs in the pmufw code to see it it starts at least.
 
-I hope this helps.
+I haven't been working on zynqmp recently but back at the times
+(2018~2019) one needed to have the various booting components "in sync",
+expecially pmufw, U-Boot and SPL or FSBL. I don't remember whether ATF
+was critical too in that respect. By "in sync" I mean the major version
+number (the year) should be the same.
 
-Cheers,
--Adrian
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210617/befaebd5/attachment.asc>
+Here you are using a 2018 pmufw and 2021 U-Boot so you muight want to
+build a more recent pmufw and see if you get any improvements.
+
+I'm afraid I cannot be more helpful at the moment.
+
+-- 
+Luca
