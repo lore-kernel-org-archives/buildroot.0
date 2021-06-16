@@ -1,49 +1,39 @@
-From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Date: Wed, 16 Jun 2021 17:25:39 +0300
-Subject: [Buildroot] [PATCH] package/tinyproxy: bump to version 1.11.0
-Message-ID: <20210616142539.4017-1-alexander.i.mukhin@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 16 Jun 2021 18:05:06 +0200
+Subject: [Buildroot] [PATCH] package/libressl: fix openssldir setting to
+ match openssl
+Message-ID: <20210616160507.11223-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also, since tinyproxy no longer uses a2x, remove its explicit disabling.
+libressl defaults to $prefix/etc/ssl for its "openssldir" setting, E.G.
+the location where configuration files and certificates are searched:
 
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+openssl version -d
+OPENSSLDIR: "/usr/etc/ssl"
+
+Change it to /etc/ssl so it matches openssl and the expectations of packages
+dealing with certificates (ca-certificates, libcurl, p11-kit)
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tinyproxy/tinyproxy.hash | 3 ++-
- package/tinyproxy/tinyproxy.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libressl/libressl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/tinyproxy/tinyproxy.hash b/package/tinyproxy/tinyproxy.hash
-index 8096741597..8c58b98ca2 100644
---- a/package/tinyproxy/tinyproxy.hash
-+++ b/package/tinyproxy/tinyproxy.hash
-@@ -1,3 +1,4 @@
-+# From https://github.com/tinyproxy/tinyproxy/releases/tag/1.11.0
-+sha256  c1ec81cfc4c551d2c24e0227a5aeeaad8723bd9a39b61cd729e516b82eaa3f32  tinyproxy-1.11.0.tar.xz
- # locally computed
--sha256  a23a8f647f622f01e51b93fa882ea5a15c20e026d45c3aafa81ec579e464daf7  tinyproxy-1.10.0.tar.bz2
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/tinyproxy/tinyproxy.mk b/package/tinyproxy/tinyproxy.mk
-index 326bfa8b88..3930e90d72 100644
---- a/package/tinyproxy/tinyproxy.mk
-+++ b/package/tinyproxy/tinyproxy.mk
-@@ -4,12 +4,11 @@
- #
- ################################################################################
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index ad345ba3f0..d09df8f40f 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -10,6 +10,7 @@ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code
+ LIBRESSL_LICENSE_FILES = COPYING
+ LIBRESSL_CPE_ID_VENDOR = openbsd
+ LIBRESSL_INSTALL_STAGING = YES
++LIBRESSL_CONF_OPTS = -DOPENSSLDIR="/etc/ssl"
  
--TINYPROXY_VERSION = 1.10.0
-+TINYPROXY_VERSION = 1.11.0
- TINYPROXY_SITE = https://github.com/tinyproxy/tinyproxy/releases/download/$(TINYPROXY_VERSION)
--TINYPROXY_SOURCE = tinyproxy-$(TINYPROXY_VERSION).tar.bz2
-+TINYPROXY_SOURCE = tinyproxy-$(TINYPROXY_VERSION).tar.xz
- TINYPROXY_LICENSE = GPL-2.0+
- TINYPROXY_LICENSE_FILES = COPYING
- TINYPROXY_CPE_ID_VENDOR = tinyproxy_project
--TINYPROXY_CONF_ENV = ac_cv_path_A2X=no
- 
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBRESSL_BIN),)
+ define LIBRESSL_REMOVE_BIN
 -- 
 2.20.1
