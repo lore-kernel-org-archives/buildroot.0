@@ -1,39 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Jun 2021 18:05:06 +0200
-Subject: [Buildroot] [PATCH] package/libressl: fix openssldir setting to
- match openssl
-Message-ID: <20210616160507.11223-1-peter@korsgaard.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 16 Jun 2021 19:33:03 +0200
+Subject: [Buildroot] [PATCH] package/lvm2: default standard install to y
+Message-ID: <20210616173303.2234867-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libressl defaults to $prefix/etc/ssl for its "openssldir" setting, E.G.
-the location where configuration files and certificates are searched:
+Until commit 5c07dfcc1a52e2804011574a3e022523a20546c8
+BR2_PACKAGE_LVM2_STANDARD_INSTALL would default to y. Indeed, the
+default read:
 
-openssl version -d
-OPENSSLDIR: "/usr/etc/ssl"
+      default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
 
-Change it to /etc/ssl so it matches openssl and the expectations of packages
-dealing with certificates (ca-certificates, libcurl, p11-kit)
+Since the legacy symbol is normally not selected, this defaults to y.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Commit 5c07dfcc1a52e2804011574a3e022523a20546c8 inadvertedly removed the
+entire line instead of just the condition.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=13846
+For-stable: 2021.02, 2021.05
+Cc: dominique.tronche at atos.net
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+--
+As an experiment, I added the For-stable tag (which I invented myself).
+Peter, is this useful? Should we propose this in the documentation?
 ---
- package/libressl/libressl.mk | 1 +
+ package/lvm2/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index ad345ba3f0..d09df8f40f 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -10,6 +10,7 @@ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code
- LIBRESSL_LICENSE_FILES = COPYING
- LIBRESSL_CPE_ID_VENDOR = openbsd
- LIBRESSL_INSTALL_STAGING = YES
-+LIBRESSL_CONF_OPTS = -DOPENSSLDIR="/etc/ssl"
+diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+index 317027929e..cc740dd40c 100644
+--- a/package/lvm2/Config.in
++++ b/package/lvm2/Config.in
+@@ -26,6 +26,7 @@ if BR2_PACKAGE_LVM2
  
- ifeq ($(BR2_PACKAGE_LIBRESSL_BIN),)
- define LIBRESSL_REMOVE_BIN
+ config BR2_PACKAGE_LVM2_STANDARD_INSTALL
+ 	bool "standard install instead of only dmsetup"
++	default y
+ 	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	help
 -- 
-2.20.1
+2.31.1
