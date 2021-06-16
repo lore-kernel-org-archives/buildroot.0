@@ -2,56 +2,56 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CC6EC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:01:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C7C5C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:01:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A532D60ED6
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:01:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A532D60ED6
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 987C360ED6
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:01:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 987C360ED6
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8220B83B33;
-	Tue,  3 Aug 2021 22:01:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6822940502;
+	Tue,  3 Aug 2021 22:01:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KGkBCvb0m9PX; Tue,  3 Aug 2021 22:01:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VoPGrCQRpPEa; Tue,  3 Aug 2021 22:01:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7220783B17;
-	Tue,  3 Aug 2021 22:01:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 407E01BF9AA
+	by smtp4.osuosl.org (Postfix) with ESMTP id B07F5404D4;
+	Tue,  3 Aug 2021 22:01:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CDC71BF9C1
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 16B7A40489
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 427DB6067E
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MJnYBUQBddDj for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CEYkdMbRvOLJ for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6D2C400C7
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 89EE1608C5
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 36C1887BB7; Tue,  3 Aug 2021 21:09:39 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id D44DF8674F; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 16 May 2021 18:30:45 +0200
+Date: Wed, 16 Jun 2021 23:11:20 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 00cb0f00fa6c5e992097c6cb6188da4606bac7a9
-X-Git-Newrev: c5e9b02251990589a278a54737f2ca691707905c
+X-Git-Oldrev: 04a0094f0ef0778d1f3c4056ac0005218126147e
+X-Git-Newrev: 22864d570dd18d78a77dedab8fbcc5e0122c0acc
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210939.36C1887BB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/kodi: add CPE variables
+Message-Id: <20210803210952.D44DF8674F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libqb: new package
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,39 +69,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5e9b02251990589a278a54737f2ca691707905c
+commit: https://git.buildroot.net/buildroot/commit/?id=22864d570dd18d78a77dedab8fbcc5e0122c0acc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:kodi:kodi is a valid CPE identifier for this package:
+libqb is a library providing features for client-server architecture,
+such as logging, tracing, inter-process communication (IPC) and polling.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akodi%3Akodi
+see: https://github.com/ClusterLabs/libqb
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kodi/kodi.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/libqb/Config.in  |  7 +++++++
+ package/libqb/libqb.hash |  3 +++
+ package/libqb/libqb.mk   | 15 +++++++++++++++
+ 5 files changed, 27 insertions(+)
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 47d3bd75c5..a5c9db1d7e 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -6,10 +6,14 @@
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2031a40e14..f2047380e3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1503,6 +1503,7 @@ F:	package/dtach/
+ N:	Kamel Bouhara <kamel.bouhara@gmail.com>
+ F:	package/libodb-boost/
+ F:	package/libodb-mysql/
++F:	package/libqb/
  
- # When updating the version, please also update kodi-jsonschemabuilder
- # and kodi-texturepacker
--KODI_VERSION = 19.1-Matrix
-+KODI_VERSION_MAJOR = 19.1
-+KODI_VERSION_NAME = Matrix
-+KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
- KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
- KODI_LICENSE = GPL-2.0
- KODI_LICENSE_FILES = LICENSE.md
-+KODI_CPE_ID_VENDOR = kodi
-+KODI_CPE_ID_VERSION = $(KODI_VERSION_MAJOR)
- # needed for binary addons
- KODI_INSTALL_STAGING = YES
- # kodi recommends building out-of-source
+ N:	Karoly Kasza <kaszak@gmail.com>
+ F:	package/irqbalance/
+diff --git a/package/Config.in b/package/Config.in
+index 4cdf796ad9..6e6a9e5784 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1939,6 +1939,7 @@ menu "Other"
+ 	source "package/libpthread-stubs/Config.in"
+ 	source "package/libpthsem/Config.in"
+ 	source "package/libpwquality/Config.in"
++	source "package/libqb/Config.in"
+ 	source "package/libseccomp/Config.in"
+ 	source "package/libsigc/Config.in"
+ 	source "package/libsigsegv/Config.in"
+diff --git a/package/libqb/Config.in b/package/libqb/Config.in
+new file mode 100644
+index 0000000000..4ab010ca50
+--- /dev/null
++++ b/package/libqb/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBQB
++	bool "libqb"
++	select BR2_PACKAGE_LIBXML2
++	help
++	  Library for client-server applications
++
++	  https://github.com/ClusterLabs/libqb
+diff --git a/package/libqb/libqb.hash b/package/libqb/libqb.hash
+new file mode 100644
+index 0000000000..0a01a9bbb5
+--- /dev/null
++++ b/package/libqb/libqb.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  f72769c66479c51ac176b56837637b29d200f9dad40d23c5fdcb10f3a53ab1e4  libqb-2.0.2.tar.gz
++sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
+diff --git a/package/libqb/libqb.mk b/package/libqb/libqb.mk
+new file mode 100644
+index 0000000000..9da6d7f900
+--- /dev/null
++++ b/package/libqb/libqb.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libqb
++#
++################################################################################
++
++LIBQB_VERSION = 2.0.2
++LIBQB_SITE = $(call github,ClusterLabs,libqb,v$(LIBQB_VERSION))
++LIBQB_LICENSE = LGPL-2.1+
++LIBQB_LICENSE_FILES = COPYING
++LIBQB_INSTALL_STAGING = YES
++LIBQB_AUTORECONF = YES
++LIBQB_DEPENDENCIES = libxml2
++
++$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
