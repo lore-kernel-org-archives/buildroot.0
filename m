@@ -1,53 +1,44 @@
-From: Andreas Ziegler <br015@umbiko.net>
-Date: Thu, 17 Jun 2021 13:18:59 +0000
-Subject: [Buildroot] [PATCH 1/1] package/mpd: bump to version 0.22.8
-In-Reply-To: <mailman.13.1623672003.114803.buildroot@busybox.net>
-References: <mailman.13.1623672003.114803.buildroot@busybox.net>
-Message-ID: <7a136148501173cffabf5ddbb2744c75@umbiko.net>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 17 Jun 2021 13:51:00 -0300
+Subject: [Buildroot] [PATCH] package/civetweb: bump to version 1.14
+Message-ID: <20210617165100.68127-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested on these platforms:
-   i386/geode
-   i386/intel (build only)
-   x86_64/intel (build only)
-   aarch64/cortex-a72
+Bump to version 1.14:
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-Tested-by: Andreas Ziegler <br015@umbiko.net>
+https://github.com/civetweb/civetweb/releases/tag/v1.14
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
-  package/mpd/mpd.hash | 2 +-
-  package/mpd/mpd.mk   | 2 +-
-  2 files changed, 2 insertions(+), 2 deletions(-)
+ package/civetweb/civetweb.hash | 2 +-
+ package/civetweb/civetweb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 4c3b49823b..1079ccf367 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
+diff --git a/package/civetweb/civetweb.hash b/package/civetweb/civetweb.hash
+index cf9d6768320d..96e4aa105be8 100644
+--- a/package/civetweb/civetweb.hash
++++ b/package/civetweb/civetweb.hash
 @@ -1,3 +1,3 @@
-  # Locally calculated after checking pgp signature
--sha256 2be149a4895c3cb613477f8cf1193593e3d8a1d38a75ffa7d32da8c8316a4d5e 
-mpd-0.22.6.tar.xz
-+sha256 9617ed08c9ffafcf5f925819251f6b90df3f4f73cf2838c41033e1962104286d 
-mpd-0.22.8.tar.xz
-  sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6 
-COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 06dc7e15d7..8e4576a103 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
-
-################################################################################
-
-  MPD_VERSION_MAJOR = 0.22
--MPD_VERSION = $(MPD_VERSION_MAJOR).6
-+MPD_VERSION = $(MPD_VERSION_MAJOR).8
-  MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
-  MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
-  MPD_DEPENDENCIES = host-pkgconf boost
+ # Locally calculated
+-sha256  a7ccc76c2f1b5f4e8d855eb328ed542f8fe3b882a6da868781799a98f4acdedc  civetweb-1.13.tar.gz
++sha256  d02d7ab091c8b4edf21fc13a03c6db08a8a8b8605e35e0073251b9d88443c653  civetweb-1.14.tar.gz
+ sha256  291622dfbbf4fb35829726fbe97177b7227c0d4d6392b350660af73af4f86df8  LICENSE.md
+diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
+index 94fbb4f9d815..40841285ef39 100644
+--- a/package/civetweb/civetweb.mk
++++ b/package/civetweb/civetweb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CIVETWEB_VERSION = 1.13
++CIVETWEB_VERSION = 1.14
+ CIVETWEB_SITE = $(call github,civetweb,civetweb,v$(CIVETWEB_VERSION))
+ CIVETWEB_LICENSE = MIT
+ CIVETWEB_LICENSE_FILES = LICENSE.md
 -- 
-2.32.0
+2.25.1
