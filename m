@@ -1,56 +1,89 @@
-From: Titouan Christophe <titouanchristophe@gmail.com>
-Date: Thu, 17 Jun 2021 23:36:08 +0200
-Subject: [Buildroot] [PATCH for 2021.02.x 1/1] package/redis: security bump
- to v6.0.14
-Message-ID: <20210617213608.30066-1-titouanchristophe@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 17 Jun 2021 23:42:13 +0200
+Subject: [Buildroot] [PATCHv2] package/gdb: enable gdbserver support for
+ riscv
+Message-ID: <20210617214213.75840-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the release notes:
-================================================================================
-Redis 6.0.14 Released Tue July 1 12:00:00 IST 2021
-================================================================================
+It turn out that gdbserver support for riscv is available since 10.1 release, since commit [1].
 
-Upgrade urgency: SECURITY, Contains fixes to security issues that affect
-authenticated client connections. MODERATE otherwise.
+Restrict the gdb version choice for riscv to 10.1 for simplicity [2].
 
-Fix integer overflow in STRALGO LCS (CVE-2021-32625)
+[1] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=bf84f7066626c78884436e1c39fb60f04c665f21
+[2] http://lists.busybox.net/pipermail/buildroot/2021-June/312681.html
 
-Read the full release notes on:
-https://github.com/redis/redis/blob/6.0.14/00-RELEASENOTES
-
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Alistair Francis <alistair.francis@wdc.com>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+git tag --contains bf84f7066626c78884436e1c39fb60f04c665f21
+returns gdb-10.1-release tag as the oldest containing this commit.
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index d9f1281aaa..15b55eb501 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  3049763f4553ddd5a69552f41da3dd7dde9fbc524dbb15e517fee24cc73b790c  redis-6.0.13.tar.gz
-+sha256  c3e60c928b183ca9fe8e878936a6f8ba99e0441b9b6e04d2412a750ea576c649  redis-6.0.14.tar.gz
+v2: restrict the version choice (Arnout)
+---
+ package/gdb/Config.in      | 3 ---
+ package/gdb/Config.in.host | 9 ++++++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 262740fc4c..246748131e 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -19,8 +19,6 @@ config BR2_PACKAGE_GDB
+ 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	# no gdbserver on riscv
+-	select BR2_PACKAGE_GDB_DEBUGGER if BR2_riscv
+ 	# When the external toolchain gdbserver is copied to the
+ 	# target, we don't allow building a separate gdbserver. The
+ 	# one from the external toolchain should be used.
+@@ -47,7 +45,6 @@ if BR2_PACKAGE_GDB
+ config BR2_PACKAGE_GDB_SERVER
+ 	bool "gdbserver"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+-	depends on !BR2_riscv
+ 	help
+ 	  Build the gdbserver stub to run on the target.
+ 	  A full gdb is needed to debug the progam.
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 21e6b34caa..9814f3a79b 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
+ 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+ 	depends on !BR2_microblaze
+ 	depends on !BR2_or1k
+-	depends on !BR2_riscv
+ 	depends on !BR2_nds32
  
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index b70692ac79..925279274c 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ comment "Host GDB Options"
+@@ -70,9 +69,13 @@ choice
  
--REDIS_VERSION = 6.0.13
-+REDIS_VERSION = 6.0.14
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+ config BR2_GDB_VERSION_8_3
+ 	bool "gdb 8.3.x"
++	# gdbserver support missing
++	depends on !BR2_riscv
+ 
+ config BR2_GDB_VERSION_9_2
+ 	bool "gdb 9.2.x"
++	# gdbserver support missing
++	depends on !BR2_riscv
+ 
+ config BR2_GDB_VERSION_10
+ 	bool "gdb 10.x"
+@@ -87,6 +90,6 @@ config BR2_GDB_VERSION
+ 	default "arc-2020.09-release-gdb" if BR2_arc
+ 	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
+ 	default "8.3.1"    if BR2_GDB_VERSION_8_3
+-	default "9.2"      if BR2_GDB_VERSION_9_2 || !BR2_PACKAGE_HOST_GDB
+-	default "10.1"	   if BR2_GDB_VERSION_10
++	default "9.2"      if BR2_GDB_VERSION_9_2 || (!BR2_PACKAGE_HOST_GDB && !BR2_riscv)
++	default "10.1"	   if BR2_GDB_VERSION_10 || (!BR2_PACKAGE_HOST_GDB && BR2_riscv)
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
 -- 
-2.25.3
+2.31.1
