@@ -1,45 +1,41 @@
-From: Andreas Ziegler <br015@umbiko.net>
-Date: Thu, 17 Jun 2021 14:19:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gcc: undefine NDEBUG directive
-Message-ID: <20210617121943.800180-1-br015@umbiko.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 17 Jun 2021 14:43:19 +0200
+Subject: [Buildroot] [PATCH] package/lvm2: default standard install to y
+In-Reply-To: <20210616173303.2234867-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Wed, 16 Jun 2021 19:33:03 +0200")
+References: <20210616173303.2234867-1-arnout@mind.be>
+Message-ID: <877disd5lk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GCC performs internal consistency checks that can be controlled with --enable-checking, but not completely removed for all stages of the build. One of these checks uses the assert macro from <assert.h>  Defining NDEBUG removes the assertion code, which is not anticipated in the gcc code. 
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Undefine the NDEBUG flag for package/gcc to preserve assertions. 
+ > Until commit 5c07dfcc1a52e2804011574a3e022523a20546c8
+ > BR2_PACKAGE_LVM2_STANDARD_INSTALL would default to y. Indeed, the
+ > default read:
 
-This fixes the following error during build of GCC 10:
+ >       default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
 
-../../../libgomp/target.c: In function ?gomp_unmap_vars_internal?:
-../../../libgomp/target.c:1474:9: error: unused variable ?is_tgt_unmapped? [-Werror=unused-variable]
- 1474 |    bool is_tgt_unmapped = gomp_remove_var (devicep, k);
-      |         ^~~~~~~~~~~~~~~
-../../../libgomp/target.c:1473:28: error: unused variable ?k_tgt? [-Werror=unused-variable]
- 1473 |    struct target_mem_desc *k_tgt = k->tgt;
-      |                            ^~~~~
+ > Since the legacy symbol is normally not selected, this defaults to y.
 
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
----
- package/gcc/gcc.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > Commit 5c07dfcc1a52e2804011574a3e022523a20546c8 inadvertedly removed the
+ > entire line instead of just the condition.
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index ed9b93e50f..4ee32c03a7 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -90,7 +90,8 @@ HOST_GCC_COMMON_CONF_OPTS = \
- HOST_GCC_COMMON_CONF_ENV = \
- 	MAKEINFO=missing
- 
--GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
-+# gcc should not be built with NDEBUG enabled
-+GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS) -UNDEBUG
- GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
- 
- # used to fix ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: 'st.st_mode' may be used uninitialized in this function [-Werror=maybe-uninitialized]
+ > Fixes: https://bugs.busybox.net/show_bug.cgi?id=13846
+ > For-stable: 2021.02, 2021.05
+ > Cc: dominique.tronche at atos.net
+ > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > --
+ > As an experiment, I added the For-stable tag (which I invented myself).
+ > Peter, is this useful? Should we propose this in the documentation?
+
+It could be. Typically just mentioning that this is a fix and/or CC me
+is enough, but it cannot hurt certainly.
+
 -- 
-2.25.1
+Bye, Peter Korsgaard
