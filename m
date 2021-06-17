@@ -1,105 +1,122 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 17 Jun 2021 10:04:36 +0200
-Subject: [Buildroot] [git commit] package/usbguard: new package
-In-Reply-To: <20210616235847.555dbf5b@windsurf>
-References: <20210616211146.2B4B4815C8@busybox.osuosl.org>
- <20210616235847.555dbf5b@windsurf>
-Message-ID: <421bdad0-017d-b249-551f-c16cd9f830ca@mind.be>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Thu, 17 Jun 2021 11:14:50 +0200
+Subject: [Buildroot] [PATCH v3 1/3] package/zstd: rework build and install
+Message-ID: <20210617091456.272611-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+1.5.0 uses Threads by default for cli tool and DSO,
+the build now does the same unless:
 
+If only static libraries are build, then build
+that library like the DSO is normally built.
 
-On 16/06/2021 23:58, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Didn't had the time to review the original patch, but here are some
-> comments.
+This should ensure that programs requsting the DSO
+will always get the multithreaded version.
 
- Oops, seems I did a very sucky review myself...
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 
-> 
-> On Wed, 16 Jun 2021 23:38:54 +0200
-> Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> wrote:
-> 
->> +USBGUARD_VERSION = 1.0.0
->> +USBGUARD_SITE = https://github.com/USBGuard/usbguard/releases/download/usbguard-$(USBGUARD_VERSION)
->> +USBGUARD_LICENSE = GPL-2.0+
->> +USBGUARD_LICENSE_FILES = LICENSE
->> +USBGUARD_CONF_OPTS= --with-bundled-catch --with-bundled-pegtl \
->> +		    --disable-debug-build --without-dbus --without-polkit \
->> +		    --disable-seccomp --disable-umockdev --disable-systemd
-> 
-> --disable-seccomp should go in the seccomp conditional below.
-> 
-> --disable-systemd should go in the systemd conditional below.
-> 
-> Nit: missing space before the "=" sign
+---
+v2->v3:
+*   use normal = for assignment
+v1->v2:
+*   rebased against upstream/master
 
- Hm, check-package should have caught this... I'll look into an update of
-check-package.
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+ package/zstd/zstd.mk | 52 ++++++++++++++++++++++++++++----------------
+ 1 file changed, 33 insertions(+), 19 deletions(-)
 
-
- Regards,
- Arnout
-
->> +
->> +USBGUARD_DEPENDENCIES += libqb protobuf
-> 
-> Should be a "=" sign.
-> 
->> +
->> +ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
->> +USBGUARD_CONF_OPTS += --with-crypto-library=openssl
->> +USBGUARD_DEPENDENCIES += libopenssl
->> +endif
->> +ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
->> +USBGUARD_CONF_OPTS += --with-crypto-library=gcrypt
->> +USBGUARD_DEPENDENCIES += libgcrypt
->> +endif
->> +ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
->> +USBGUARD_CONF_OPTS += --with-crypto-library=sodium
->> +USBGUARD_DEPENDENCIES += libsodium
->> +endif
-> 
-> Based on the --with-crypto-library= option name, it seems like these
-> are mutually exclusive choice, so it should be a chain of if .. else
-> ifeq ... else ifeq ... else ifeq ... endif.
-> 
->> +
->> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
->> +USBGUARD_CONF_OPTS += --enable-systemd
->> +USBGUARD_DEPENDENCIES += systemd
-> 
-> else
-> USBGUARD_CONF_OPTS += --disable-systemd
-> 
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
->> +USBGUARD_CONF_OPTS += --enable-seccomp
->> +USBGUARD_DEPENDENCIES += libseccomp
-> 
-> else
-> USBGUARD_CONF_OPTS += --disable-seccomp
-> 
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
->> +USBGUARD_CONF_OPTS += --enable-libcapng
->> +USBGUARD_DEPENDENCIES += libcap-ng
-> 
-> else
-> USBGUARD_CONF_OPTS += --disable-libcapng
-> 
->> +endif
-> 
-> Also, I think it should have been good to explain why we are using
-> bundled versions of "catch" and "pegtl", as we normally don't like
-> bundled libraries in Buildroot packaging.
-> 
-> Thomas
-> 
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index 2a876376a2..95f25ebfa4 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -12,6 +12,8 @@ ZSTD_LICENSE_FILES = LICENSE COPYING
+ ZSTD_CPE_ID_VENDOR = facebook
+ ZSTD_CPE_ID_PRODUCT = zstandard
+ 
++ZSTD_OPTS += PREFIX=/usr
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ ZSTD_OPTS += HAVE_THREAD=1
+ else
+@@ -39,43 +41,55 @@ else
+ ZSTD_OPTS += HAVE_LZ4=0
+ endif
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-ZSTD_BUILD_LIBS = libzstd.a
+-ZSTD_INSTALL_LIBS = install-static
+-else ifeq ($(BR2_SHARED_LIBS),y)
+-ZSTD_BUILD_LIBS = libzstd
+-ZSTD_INSTALL_LIBS = install-shared
++ZSTD_BUILD_PROG_TARGET = zstd-release
++
++# Since v1.5.0 the dynamic library is built for
++# multithreading, while the static library is not.
++#
++# Keep those defaults, unless Buildroot is not
++# providing the dynamic library and the
++# static library will be automatically used instead.
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++ZSTD_INSTALL_LIBS += install-static
++ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
++# Use the static lib as replacement for the mt dynlib
++ZSTD_BUILD_LIBS += libzstd.a-mt
+ else
+-ZSTD_BUILD_LIBS = libzstd.a libzstd
+-ZSTD_INSTALL_LIBS = install-static install-shared
++ZSTD_BUILD_LIBS += libzstd.a-nomt
++endif
+ endif
+ 
+-# The HAVE_THREAD flag is read by the 'programs' makefile but not by  the 'lib'
+-# one. Building a multi-threaded binary with a library (which defaults to
+-# single-threaded) gives a runtime error when compressing files.
+-# The 'lib' makefile provides specific '%-mt' targets for this purpose.
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++ZSTD_INSTALL_LIBS += install-shared
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
++ZSTD_BUILD_LIBS += libzstd-mt
++else
++ZSTD_BUILD_LIBS += libzstd-nomt
++endif
+ endif
+ 
+ define ZSTD_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+-		-C $(@D)/lib $(ZSTD_BUILD_LIBS)
++		-C $(@D)/lib $(addsuffix -release,$(ZSTD_BUILD_LIBS) libzstd.pc)
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+-		-C $(@D) zstd
++		-C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET)
+ endef
+ 
+ define ZSTD_INSTALL_STAGING_CMDS
++	[ -e $(@D)/programs/zstd ] && [ -e $(@D)/lib/libzstd.pc ]
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
++		-C $(@D)/lib DESTDIR=$(STAGING_DIR) $(ZSTD_INSTALL_LIBS) \
++		install-pc install-includes
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+-		DESTDIR=$(STAGING_DIR) PREFIX=/usr -C $(@D)/lib \
+-		install-pc install-includes $(ZSTD_INSTALL_LIBS)
++		-C $(@D)/programs DESTDIR=$(STAGING_DIR) install
+ endef
+ 
+ define ZSTD_INSTALL_TARGET_CMDS
++	[ -e $(@D)/programs/zstd ]
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+-		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
++		-C $(@D)/lib DESTDIR=$(TARGET_DIR) $(ZSTD_INSTALL_LIBS)
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+-		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/lib $(ZSTD_INSTALL_LIBS)
++		-C $(@D)/programs DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ HOST_ZSTD_OPTS += PREFIX=$(HOST_DIR)
+-- 
+2.30.2
