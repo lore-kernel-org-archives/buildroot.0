@@ -1,176 +1,32 @@
-From: C Larbi <pkl2000us@gmail.com>
-Date: Wed, 16 Jun 2021 22:26:49 +0000
-Subject: [Buildroot] [webkitgtk / cairo] Accelerated rendering on
- raspberry pi 4
-In-Reply-To: <CANVomh93QK+vg=7D83+qU_503HxCtx8aR5qTiu40QQ49Mb4ugg@mail.gmail.com>
-References: <CANVomh-dtsmg-oDwP8=uMmPWqcKA9hm7ReZ=wMiZoEn=-pOmWw@mail.gmail.com>
- <20210616202638.74242b4a@gmx.net> <20210617001925.GB58049@momiji>
- <CANVomh93QK+vg=7D83+qU_503HxCtx8aR5qTiu40QQ49Mb4ugg@mail.gmail.com>
-Message-ID: <CANVomh_Spf+e-Q2Kdj-EFARjVe5V62otRXx2H8hpx0ky9_socQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 17 Jun 2021 02:32:20 +0000
+Subject: [Buildroot] [Bug 13661] host-python2 build fails on aarch64
+In-Reply-To: <bug-13661-163@https.bugs.busybox.net/>
+References: <bug-13661-163@https.bugs.busybox.net/>
+Message-ID: <bug-13661-163-BSRs8M1ItA@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also, i have to mention that i get similar results on my desktop using
-GNOME web.
+https://bugs.busybox.net/show_bug.cgi?id=13661
 
-i zoom in and out, and performance of my animations improve (both JS and
-CSS)
+Christian Stewart <christian@paral.in> changed:
 
-This is weird behaviour if you ask me
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |REOPENED
+         Resolution|WORKSFORME                  |---
 
+--- Comment #2 from Christian Stewart <christian@paral.in> ---
+https://github.com/skiffos/SkiffOS/issues/142
 
-On Wed, 16 Jun 2021 at 22:19, C Larbi <pkl2000us@gmail.com> wrote:
+According to some users attempting to build with Arm64 machines using Ubuntu as
+the host (for Buildroot) against latest 2021.02.3,
 
-> Thank you all for the feedback.
->
-> Peter, i was talking about the "--enable-egl" switch.
->
-> >>One caveat, though: accelerated compositing may not be triggered by all
-> >>web pages in WebKitGTK, but for example is always enabled in the WPE
-> port.
->
-> Interesting you mentioned this Adrian !
->
-> I have some what made some progress. After hours trying to figure out what
-> was the issue, i started experimenting with the Minibrowser that comes
-> bundled with webkitgtk.
->
-> At first i was getting similar poor performance just like launching my
-> webgtk application. Then some "magic" happened when i tried to zoom out of
-> the webpage. All of a sudden the latency issue improved !
->
-> I would say it is about 20% below the results i had on my desktop computer
-> (which is a big improvement from what i had beforeon the pi)
->
-> Is this the triggering you were talking about ?
-> Shouldn't there be an option to have this on always ?
->
-> Anyway, i am okay for now because i can work around programmatically
-> adjusting the zoom from my application.
->
-> Maybe this is a bug, but what do i know.
-> Hopefully my work around can help someone
->
-> Regards and thanks again for your help
->
-> Cerezo
->
->
->
->
->
-> On Wed, 16 Jun 2021 at 21:19, Adrian Perez de Castro <aperez@igalia.com>
-> wrote:
->
->> Hi there,
->>
->> On Wed, 16 Jun 2021 20:26:38 +0200 Peter Seiderer <ps.report@gmx.net>
->> wrote:
->> > On Wed, 16 Jun 2021 10:54:19 +0000, C Larbi <pkl2000us@gmail.com>
->> wrote:
->> >
->> > > I am working on a personal project to build a digital kiosk on a pi 4
->> > > I am using webkitgtk on a wayland compositor.
->> > >
->> > > So far I have got the system up and running.
->> > >
->> > > But css and javascript effects produce poor performance (high latency
->> and
->> > > probably low FPS)
->> > >
->> > > I get garbled output on the display when I try to enforce hardware
->> > > acceleration through WebKitSettings or using environment variables.
->> > >
->> > > This has left me suspecting an issue with cairo, open egl and es
->> > >
->> > > I did some research and found out cairo has an --enable-egl
->> configuration
->> > > parameter (which is not in the cairo.mk file).
->> >
->> > From package/cairo/cairo.mk:
->> >
->> >  91 # Can use GL or GLESv2 but not both
->> >  92 ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
->> >  93 CAIRO_CONF_OPTS += --enable-gl --disable-glesv2
->> >  94 CAIRO_DEPENDENCIES += libgl
->> >  95 else
->> >  96 ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
->> >  97 CAIRO_CONF_OPTS += --disable-gl --enable-glesv2
->> >  98 CAIRO_DEPENDENCIES += libgles
->> >  99 else
->> > 100 CAIRO_CONF_OPTS += --disable-gl --disable-glesv2
->> > 101 endif
->> > 102 endif
->>
->> FWIW, WebKit does *not* use Cairo-GL at all, even if the support is built
->> into Cairo. To give a very quick summary, this is what WebKit does for
->> rendering:
->>
->>   1. Page elements are assigned a render layer; there can be one or more.
->>   2. Each layer is divided in square tile.
->>   3. Each tile is rasterized using Cairo, in the CPU.
->>   4. Tiles are uploaded to the GPU as textures, then composited there.
->>
->> That way only tiles of layers with changes need to be repainted and
->> re-uploaded. Operation that typically cause WebKit to put elements in
->> new layers are CSS transforms: when the transform is applied (or
->> animated),
->> the corresponding layer can be manipulated entirely in the GPU (position,
->> rotation, scaling, etc.)
->>
->> TL;DR: WebKit uses *both* software rendering and the GPU for compositing.
->>
->> One caveat, though: accelerated compositing may not be triggered by all
->> web pages in WebKitGTK, but for example is always enabled in the WPE port.
->>
->> A quick way of knowing whether WebKit (both GTK and WPE ports) are indeed
->> using the GPU is to load the ?poster circle? animation. It uses CSS 3D
->> transforms and without hardware acceleration is terribly slow, and butter
->> smooth (60 FPS, even on slow hardware) when the GPU is in use. You can
->> find
->> a version here:
->>
->>   https://people.igalia.com/aperez/poster-circle.html
->>
->> Another way is opening the ?webkit://gpu? URL and checking whether the
->> OpenGL/GLES renderer is *not* one of Mesa's software renderers (swrast,
->> llvmpipe, or swr).
->>
->> > > I applied this but still garbled output.
->> > >
->> > > I have tried different combinations of vc4-fkms-v3d, vc4-kms-v3-pi4,
->> but
->> > > still get the garbled output.
->> >
->> > Hard to say without more information (config file, etc.), please
->> provide a (minimal)
->> > config/defconfig and example (commands) how to reproduce your problem...
->> >
->> > Which buildroot version?
->> >
->> > > Will appreciate it if anyone can give me some pointers to a possible
->> > > solution.
->> > >
->> > > NB: I was advised to switch to wpewebkit, but i had the same results
->> when i
->> > > used cog to load my web page
->> >
->> >
->> > For hints on RPi4, cog and wpebkit see for example [1]...
->>
->> It's possible to use also ?cog --platform=drm ...? with the Mesa vc4/v3d
->> drivers. In that case you will not need a Wayland compositor running, but
->> this option is not as battle tested.
->>
->> I hope this helps.
->>
->> Cheers,
->> -Adrian
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210616/95e14927/attachment-0001.html>
+This issue is still present - host-python fails to build.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
