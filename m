@@ -1,38 +1,28 @@
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Fri, 18 Jun 2021 11:47:10 +0200
-Subject: [Buildroot] [PATCH] package/usbguard: enforce the right permissions
- on the configuration file
-Message-ID: <20210618094710.2248743-1-miquel.raynal@bootlin.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 18 Jun 2021 18:29:14 +0000
+Subject: [Buildroot] [Bug 13661] host-python2 build fails on aarch64
+In-Reply-To: <bug-13661-163@https.bugs.busybox.net/>
+References: <bug-13661-163@https.bugs.busybox.net/>
+Message-ID: <bug-13661-163-htjansdti4@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Only 0600 rights are allowed for the rules.conf. This file is read when the
-usbguard daemon starts and will prevent it to run otherwise.
+https://bugs.busybox.net/show_bug.cgi?id=13661
 
-As Git only tracks the executable bit, setting the right permissions in the
-package makefile is the cleanest solution, in particular when providing this
-file from a rootfs overlay.
+--- Comment #4 from Erico Nunes <nunes.erico@gmail.com> ---
+Created attachment 9006
+  --> https://bugs.busybox.net/attachment.cgi?id=9006&action=edit
+0001-python-use-system-libffi-for-host-python.patch
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
- package/usbguard/usbguard.mk | 3 +++
- 1 file changed, 3 insertions(+)
+I remember seeing this a while back. I looked a bit into the problem back then
+and solved it with the attached patch.
+I never went around to fully testing it and submitting it to the list.
+If it solves the problem for you, feel free to take it and submit it to the
+list.
 
-diff --git a/package/usbguard/usbguard.mk b/package/usbguard/usbguard.mk
-index 0626a7cc88..ea1be0dc48 100644
---- a/package/usbguard/usbguard.mk
-+++ b/package/usbguard/usbguard.mk
-@@ -47,5 +47,8 @@ define USBGUARD_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S20usbguard
- endef
- 
-+define USBGUARD_PERMISSIONS
-+	/etc/usbguard/rules.conf f 0600 0 0 - - - - -
-+endef
- 
- $(eval $(autotools-package))
 -- 
-2.27.0
+You are receiving this mail because:
+You are on the CC list for the bug.
