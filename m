@@ -1,45 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 19 Jun 2021 19:21:48 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libndp: bump to version 1.8
-In-Reply-To: <20210619172148.295788-1-fontaine.fabrice@gmail.com>
-References: <20210619172148.295788-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210619172148.295788-2-fontaine.fabrice@gmail.com>
+Date: Sat, 19 Jun 2021 22:38:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libqb: add LIBQB_CPE_ID_VENDOR
+Message-ID: <20210619203809.387843-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
+cpe:2.3:a:clusterlabs:libqb is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aclusterlabs%3Alibqb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libndp/libndp.hash | 4 ++--
- package/libndp/libndp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libqb/libqb.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libndp/libndp.hash b/package/libndp/libndp.hash
-index 8d4b6ef524..389e0ba5fc 100644
---- a/package/libndp/libndp.hash
-+++ b/package/libndp/libndp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 44be73630ee785ed9f571f9aaaeba0e1d375fa337fd841270034c813b5b0e6fd  libndp-1.7.tar.gz
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-+sha256  c3ea76e253def89869651686a827da75b56896fe94fabd87d8c14b1d4588fd05  libndp-1.8.tar.gz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libndp/libndp.mk b/package/libndp/libndp.mk
-index eb1f7f0c80..db1de7b81c 100644
---- a/package/libndp/libndp.mk
-+++ b/package/libndp/libndp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNDP_VERSION = 1.7
-+LIBNDP_VERSION = 1.8
- LIBNDP_SITE = $(call github,jpirko,libndp,v$(LIBNDP_VERSION))
- LIBNDP_LICENSE = LGPL-2.1+
- LIBNDP_LICENSE_FILES = COPYING
+diff --git a/package/libqb/libqb.mk b/package/libqb/libqb.mk
+index 9da6d7f900..a0d97d5eb8 100644
+--- a/package/libqb/libqb.mk
++++ b/package/libqb/libqb.mk
+@@ -8,6 +8,7 @@ LIBQB_VERSION = 2.0.2
+ LIBQB_SITE = $(call github,ClusterLabs,libqb,v$(LIBQB_VERSION))
+ LIBQB_LICENSE = LGPL-2.1+
+ LIBQB_LICENSE_FILES = COPYING
++LIBQB_CPE_ID_VENDOR = clusterlabs
+ LIBQB_INSTALL_STAGING = YES
+ LIBQB_AUTORECONF = YES
+ LIBQB_DEPENDENCIES = libxml2
 -- 
 2.30.2
