@@ -1,103 +1,91 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Jun 2021 11:02:08 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/tor: bump version to 0.4.6.5
-In-Reply-To: <20210620090208.205080-1-bernd.kuhls@t-online.de>
-References: <20210620090208.205080-1-bernd.kuhls@t-online.de>
-Message-ID: <20210620090208.205080-2-bernd.kuhls@t-online.de>
+Date: Sun, 20 Jun 2021 11:09:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi: enable optional vaapi support
+ also for OpenGLES
+Message-ID: <20210620090900.205406-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://blog.torproject.org/node/2041
+Upstream commit
+https://github.com/xbmc/xbmc/commit/c638987dd8181765f975763cb643d6869a3f661b
 
-Added upstream patch to fix compilation with older compilers.
+removed the dependency to x11 support in libva keeping only libdrm as
+dependency. This commit will enable the usage of libva with Kodi's
+OpenGLES render system.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: Added upstream patch to fix compilation with older compilers.
+ Config.in.legacy       |  8 ++++++++
+ package/kodi/Config.in | 18 ------------------
+ package/kodi/kodi.mk   |  5 ++---
+ 3 files changed, 10 insertions(+), 21 deletions(-)
 
- ...0002-Fix-compilation-on-systems-with.patch | 47 +++++++++++++++++++
- package/tor/tor.hash                          |  2 +-
- package/tor/tor.mk                            |  2 +-
- 3 files changed, 49 insertions(+), 2 deletions(-)
- create mode 100644 package/tor/0002-Fix-compilation-on-systems-with.patch
-
-diff --git a/package/tor/0002-Fix-compilation-on-systems-with.patch b/package/tor/0002-Fix-compilation-on-systems-with.patch
-new file mode 100644
-index 0000000000..3598a16588
---- /dev/null
-+++ b/package/tor/0002-Fix-compilation-on-systems-with.patch
-@@ -0,0 +1,47 @@
-+From 2c00ad36cd6808423821fc32a072a7f16e8509e5 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Alexander=20F=C3=A6r=C3=B8y?= <ahf@torproject.org>
-+Date: Thu, 10 Jun 2021 20:04:13 +0000
-+Subject: [PATCH] Fix compilation on systems with older compilers.
-+
-+This patch fixes a build error with GCC 7.x which doesn't seem to accept
-+const int's as constants in macro initialization.
-+
-+See: tpo/core/tor#40410
-+
-+Downloaded from upstream commit
-+https://gitlab.torproject.org/tpo/core/tor/-/commit/2c00ad36cd6808423821fc32a072a7f16e8509e5
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ changes/ticket40410               | 4 ++++
-+ src/feature/dirclient/dirclient.c | 3 +--
-+ 2 files changed, 5 insertions(+), 2 deletions(-)
-+ create mode 100644 changes/ticket40410
-+
-+diff --git a/changes/ticket40410 b/changes/ticket40410
-+new file mode 100644
-+index 0000000000..90d6f4be63
-+--- /dev/null
-++++ b/changes/ticket40410
-+@@ -0,0 +1,4 @@
-++  o Minor bugfixes (compilation):
-++    - Fix a compilation error when trying to build Tor with a compiler that
-++      does not support expanding statitically initialized const values in
-++      macro's. Fixes bug 40410; bugfix on 0.4.6.5.
-+diff --git a/src/feature/dirclient/dirclient.c b/src/feature/dirclient/dirclient.c
-+index 79ec518c25..fd677d33fe 100644
-+--- a/src/feature/dirclient/dirclient.c
-++++ b/src/feature/dirclient/dirclient.c
-+@@ -1873,8 +1873,7 @@ dir_client_decompress_response_body(char **bodyp, size_t *bodylenp,
-+   /* If we're pretty sure that we have a compressed directory, and
-+    * we didn't manage to uncompress it, then warn and bail. */
-+   if (!plausible && !new_body) {
-+-    const int LOG_INTERVAL = 3600;
-+-    static ratelim_t warning_limit = RATELIM_INIT(LOG_INTERVAL);
-++    static ratelim_t warning_limit = RATELIM_INIT(60 * 60);
-+     log_fn_ratelim(&warning_limit, LOG_WARN, LD_HTTP,
-+            "Unable to decompress HTTP body (tried %s%s%s, on %s).",
-+            description1,
-+-- 
-+GitLab
-+
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 8622281c2c..800acee2f5 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f304e456102ed26c39e5f16ece2115585398cdb4e67455139c86ea43cdf70856  tor-0.4.5.9.tar.gz
-+sha256  7b6d354e0d9791eace4b51e92211909308297b7aa257993937163d7ee0694cf9  tor-0.4.6.5.tar.gz
- sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index e7e791a10a..e0db278fb9 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index a0c1a6898f..c10f9c5223 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
  
--TOR_VERSION = 0.4.5.9
-+TOR_VERSION = 0.4.6.5
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+ comment "Legacy options removed in 2021.05"
+ 
++config BR2_PACKAGE_KODI_LIBVA
++	bool "kodi option to add libva support removed"
++	select BR2_LEGACY
++	help
++	  Kodi still has support for libva if the package is enabled but
++	  the kodi-specific dependencies limiting libva support to non-
++	  OPENGLES platforms were removed including this option.
++
+ config BR2_PACKAGE_UDISKS_LVM2
+ 	bool "udisks lvm2 support removed"
+ 	select BR2_LEGACY
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index f4cfc6380c..f702ae841a 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -238,24 +238,6 @@ config BR2_PACKAGE_KODI_LIBUSB
+ 	help
+ 	  Enable libusb support.
+ 
+-config BR2_PACKAGE_KODI_LIBVA
+-	bool "va"
+-	depends on \
+-		BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM || \
+-		BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND || \
+-		(BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11 && \
+-			BR2_PACKAGE_KODI_RENDER_SYSTEM_GL)
+-	select BR2_PACKAGE_LIBVA
+-	help
+-	  Enable libva support.
+-
+-comment "libva support needs platform 'gbm', 'Wayland' or 'X11/OpenGL'"
+-	depends on \
+-		!BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM && \
+-		!BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND && \
+-		(!BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11 || \
+-			!BR2_PACKAGE_KODI_RENDER_SYSTEM_GL)
+-
+ config BR2_PACKAGE_KODI_LIBVDPAU
+ 	bool "vdpau"
+ 	depends on BR2_PACKAGE_KODI_PLATFORM_X11 && \
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index a5c9db1d7e..6f020b58b8 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -315,9 +315,8 @@ ifeq ($(BR2_PACKAGE_LIRC_TOOLS),y)
+ KODI_DEPENDENCIES += lirc-tools
+ endif
+ 
+-# kodi needs libva & libva-glx
+-ifeq ($(BR2_PACKAGE_KODI_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
+-KODI_DEPENDENCIES += mesa3d libva
++ifeq ($(BR2_PACKAGE_LIBVA),y)
++KODI_DEPENDENCIES += libva
+ KODI_CONF_OPTS += -DENABLE_VAAPI=ON
+ else
+ KODI_CONF_OPTS += -DENABLE_VAAPI=OFF
 -- 
 2.30.2
