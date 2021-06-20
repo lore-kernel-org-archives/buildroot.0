@@ -1,32 +1,62 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 20 Jun 2021 15:10:49 -0300
-Subject: [Buildroot] [PATCH 1/1] configs: remove mesa3d kmsro-related
- options
-In-Reply-To: <20210620083630.5813-1-bernd.kuhls@t-online.de>
-References: <20210620083630.5813-1-bernd.kuhls@t-online.de>
-Message-ID: <CAOMZO5AOie9mouxGY+P1KzJAALSe+TXK1=mZCvtm2EW14qb6YQ@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 20 Jun 2021 20:23:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gcc: undefine NDEBUG directive
+In-Reply-To: <20210617121943.800180-1-br015@umbiko.net>
+References: <20210617121943.800180-1-br015@umbiko.net>
+Message-ID: <ef698263-7720-7db2-8f4b-7d1cf1e4fbe9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Hello Andreas,
 
-On Sun, Jun 20, 2021 at 5:37 AM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
->
-> Removed kmsro-related options, these are now handled by the mesa3d
-> build system:
-> https://cgit.freedesktop.org/mesa/mesa/commit/?id=70813c1c13b99cb029c8fa3537163650bdd17b6d
->
-> The removal commit of the buildroot option
-> https://git.buildroot.net/buildroot/commit/package/mesa3d?id=d51736f47296e3681cdb610765c73424272d42db
->
-> forgot to update the defconfigs, fixes
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/1354066565
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Le 17/06/2021 ? 14:19, Andreas Ziegler a ?crit?:
+> GCC performs internal consistency checks that can be controlled with --enable-checking, but not completely removed for all stages of the build. One of these checks uses the assert macro from <assert.h>  Defining NDEBUG removes the assertion code, which is not anticipated in the gcc code. 
+> 
+> Undefine the NDEBUG flag for package/gcc to preserve assertions. 
+> 
+> This fixes the following error during build of GCC 10:
+> 
+> ../../../libgomp/target.c: In function ?gomp_unmap_vars_internal?:
+> ../../../libgomp/target.c:1474:9: error: unused variable ?is_tgt_unmapped? [-Werror=unused-variable]
+>  1474 |    bool is_tgt_unmapped = gomp_remove_var (devicep, k);
+>       |         ^~~~~~~~~~~~~~~
+> ../../../libgomp/target.c:1473:28: error: unused variable ?k_tgt? [-Werror=unused-variable]
+>  1473 |    struct target_mem_desc *k_tgt = k->tgt;
+>       |                            ^~~~~
 
-Thanks for the fix:
+It seems an error related to Werror being enabled.
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Usually we prefer disable Werror while building a package in Buildroot because
+any package can trigger new warning with the latest compiler.
+
+Maybe we can use -Wno-error not just when BR2_ENABLE_DEBUG is set:
+
+https://git.buildroot.net/buildroot/commit/?id=dcaf6e75acb4d21c2c31c70b054dac8d18710fcb
+
+Best regards,
+Romain
+
+> 
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+> ---
+>  package/gcc/gcc.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index ed9b93e50f..4ee32c03a7 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -90,7 +90,8 @@ HOST_GCC_COMMON_CONF_OPTS = \
+>  HOST_GCC_COMMON_CONF_ENV = \
+>  	MAKEINFO=missing
+>  
+> -GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+> +# gcc should not be built with NDEBUG enabled
+> +GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS) -UNDEBUG
+>  GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+>  
+>  # used to fix ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: 'st.st_mode' may be used uninitialized in this function [-Werror=maybe-uninitialized]
+> 
