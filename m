@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 666AAC432BE
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:03:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46370C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:04:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 34B8560F9C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:03:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 34B8560F9C
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id EBE4960F9C
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:04:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EBE4960F9C
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F141340357;
-	Tue,  3 Aug 2021 22:03:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2EC5605C0;
+	Tue,  3 Aug 2021 22:04:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l0eFidWdXGiv; Tue,  3 Aug 2021 22:03:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jKlzEERKnzo5; Tue,  3 Aug 2021 22:04:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DDC994022E;
-	Tue,  3 Aug 2021 22:03:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1EA181BF9AA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27141605CB;
+	Tue,  3 Aug 2021 22:04:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 93ED61BF349
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D3BE404F5
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 30589608D0
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LQNAwTg6uELn for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1ahSTK8kS3J0 for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 458D1404F2
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E3116085C
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8EAA88B43C; Tue,  3 Aug 2021 21:09:39 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id C4AF0864A8; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 16 May 2021 19:28:12 +0200
+Date: Sun, 20 Jun 2021 18:27:11 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f7b286594930963e439f12572174ea4082a23fa7
-X-Git-Newrev: 442b21f8cbda99576e9e77475bfdcbdc64283dff
+X-Git-Oldrev: cc1c8c3bb1ca4a1f1d2978f3cc100d292c70db8b
+X-Git-Newrev: 12551386027dd559554bc70e1c6b644f9af37016
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210939.8EAA88B43C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libuv: add
- LIBUV_CPE_ID_VENDOR
+Message-Id: <20210803210953.C4AF0864A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/filemq: bump to
+ af4768dcaf2fcb8083a32bad107a22ecb7a5d954
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,31 +70,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=442b21f8cbda99576e9e77475bfdcbdc64283dff
+commit: https://git.buildroot.net/buildroot/commit/?id=12551386027dd559554bc70e1c6b644f9af37016
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:libuv:libuv is a valid CPE identifier for this package:
+This bump will drop -Werror to fix build failure with -DNDEBUG raised
+since commit 5a8c50fe05afacc3cbe8e7347e238da9f242fab0
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibuv%3Alibuv
+Fixes:
+ - http://autobuild.buildroot.org/results/cf4c45ed7ae2c5090ac6ba967497e0d42d5c5224
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libuv/libuv.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/filemq/filemq.hash | 2 +-
+ package/filemq/filemq.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 5876ab8935..403a049037 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -13,6 +13,7 @@ LIBUV_INSTALL_STAGING = YES
- LIBUV_AUTORECONF = YES
- LIBUV_LICENSE = BSD-2-Clause, BSD-3-Clause, ISC, MIT
- LIBUV_LICENSE_FILES = LICENSE
-+LIBUV_CPE_ID_VENDOR = libuv
+diff --git a/package/filemq/filemq.hash b/package/filemq/filemq.hash
+index 611d19208e..cf81eb4f50 100644
+--- a/package/filemq/filemq.hash
++++ b/package/filemq/filemq.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f3764e1adacfbf7fd09fb9c553e796a80d8159f1ace689fb68307afbc1746d4c  filemq-8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0.tar.gz
++sha256  bdec8584a181e1c9a1d9be567768bcf8c3f7132ea701dd1829f74370c6536991  filemq-af4768dcaf2fcb8083a32bad107a22ecb7a5d954.tar.gz
+ sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  LICENSE
+diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
+index 75d8bd992c..665d6da212 100644
+--- a/package/filemq/filemq.mk
++++ b/package/filemq/filemq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Upstream needs tests to be run sequentially. This is the default in
- # automake 1.11 and before, but not starting in 1.12. To maintain
+-FILEMQ_VERSION = 8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0
++FILEMQ_VERSION = af4768dcaf2fcb8083a32bad107a22ecb7a5d954
+ FILEMQ_SITE = $(call github,zeromq,filemq,$(FILEMQ_VERSION))
+ 
+ FILEMQ_AUTORECONF = YES
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
