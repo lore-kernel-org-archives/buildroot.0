@@ -1,49 +1,83 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 20 Jun 2021 18:27:11 +0200
-Subject: [Buildroot] [git commit] package/filemq: bump to
- af4768dcaf2fcb8083a32bad107a22ecb7a5d954
-Message-ID: <20210620155803.5E13F8B2DB@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 20 Jun 2021 18:37:11 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libsoup: always disable tls_check
+In-Reply-To: <20210610190313.38683-1-fontaine.fabrice@gmail.com>
+References: <20210610190313.38683-1-fontaine.fabrice@gmail.com>
+Message-ID: <b7d23ad4-29ea-7027-7f24-30bbbb5bbabe@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12551386027dd559554bc70e1c6b644f9af37016
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This bump will drop -Werror to fix build failure with -DNDEBUG raised
-since commit 5a8c50fe05afacc3cbe8e7347e238da9f242fab0
 
-Fixes:
- - http://autobuild.buildroot.org/results/cf4c45ed7ae2c5090ac6ba967497e0d42d5c5224
+On 10/06/2021 21:03, Fabrice Fontaine wrote:
+> Always disable tls_check to avoid the following build failure since bump to
+> version 2.72.0 in commit 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da:
+> 
+> ../output-1/build/libsoup-2.72.0/meson.build:184:4: ERROR: Can not run test applications in this cross environment.
+> 
+> Indeed, tls_check will run code since
+> https://gitlab.gnome.org/GNOME/libsoup/-/commit/5c45253243a2deca4880d4f614f2932373445cf9
+> 
+> While at it, also drop glib-networking build-time dependency
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/9e539dc7185cfb81f18438dd36357cb49ef23a5a
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/filemq/filemq.hash | 2 +-
- package/filemq/filemq.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Applied to master, thanks. I did extend the commit message a little.
 
-diff --git a/package/filemq/filemq.hash b/package/filemq/filemq.hash
-index 611d19208e..cf81eb4f50 100644
---- a/package/filemq/filemq.hash
-+++ b/package/filemq/filemq.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f3764e1adacfbf7fd09fb9c553e796a80d8159f1ace689fb68307afbc1746d4c  filemq-8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0.tar.gz
-+sha256  bdec8584a181e1c9a1d9be567768bcf8c3f7132ea701dd1829f74370c6536991  filemq-af4768dcaf2fcb8083a32bad107a22ecb7a5d954.tar.gz
- sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  LICENSE
-diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
-index 75d8bd992c..665d6da212 100644
---- a/package/filemq/filemq.mk
-+++ b/package/filemq/filemq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FILEMQ_VERSION = 8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0
-+FILEMQ_VERSION = af4768dcaf2fcb8083a32bad107a22ecb7a5d954
- FILEMQ_SITE = $(call github,zeromq,filemq,$(FILEMQ_VERSION))
- 
- FILEMQ_AUTORECONF = YES
+ Regards,
+ Arnout
+
+> ---
+> Changes v1 -> v2:
+>  - Drop glib-networking build-time dependency
+> 
+>  package/libsoup/Config.in  | 4 ++--
+>  package/libsoup/libsoup.mk | 7 +------
+>  2 files changed, 3 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+> index 47adfb33f2..82ff077b8c 100644
+> --- a/package/libsoup/Config.in
+> +++ b/package/libsoup/Config.in
+> @@ -24,8 +24,8 @@ config BR2_PACKAGE_LIBSOUP_GNOME
+>  config BR2_PACKAGE_LIBSOUP_SSL
+>  	bool "https support"
+>  	depends on !BR2_STATIC_LIBS # glib-networking, gnutls
+> -	select BR2_PACKAGE_GLIB_NETWORKING
+> -	select BR2_PACKAGE_GNUTLS
+> +	select BR2_PACKAGE_GLIB_NETWORKING # runtime
+> +	select BR2_PACKAGE_GNUTLS # runtime
+>  	help
+>  	  Enable HTTPS (SSL) support.
+>  
+> diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+> index 2f63e9e85c..964488f430 100644
+> --- a/package/libsoup/libsoup.mk
+> +++ b/package/libsoup/libsoup.mk
+> @@ -30,6 +30,7 @@ LIBSOUP_CONF_OPTS = \
+>  	-Dntlm=disabled \
+>  	-Dsysprof=disabled \
+>  	-Dtests=false \
+> +	-Dtls_check=false \
+>  	-Dvapi=disabled
+>  
+>  ifeq ($(BR2_PACKAGE_BROTLI),y)
+> @@ -52,10 +53,4 @@ else
+>  LIBSOUP_CONF_OPTS += -Dgnome=false
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
+> -LIBSOUP_DEPENDENCIES += glib-networking
+> -else
+> -LIBSOUP_CONF_OPTS += -Dtls_check=false
+> -endif
+> -
+>  $(eval $(meson-package))
+> 
