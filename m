@@ -1,111 +1,129 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 20 Jun 2021 14:40:23 +0200
-Subject: [Buildroot] [git commit] package/python-rpi-ws281x: Bump to version
- 4.3.0
-Message-ID: <20210620121033.11EEB8D4F9@busybox.osuosl.org>
+Date: Sun, 20 Jun 2021 14:37:17 +0200
+Subject: [Buildroot] [git commit] package/docker-engine: bump version to
+ 20.10.7
+Message-ID: <20210620121032.E675A8D6F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5df29a2444d1c64e590c19c72d435ac146968e2
+commit: https://git.buildroot.net/buildroot/commit/?id=49df5080079e7e6fc7330e91f249004d018c4c9b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove 0001-ws2811.c-fix-build-with-gcc-4.8.patch,
-it has been merged upstream.
+Drop upstreamed patch fix-port-forwarding-with-ipv6.
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Upstream commit: d29a55c6c344a536089d6b1bcd92be9cdea20641
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Tested-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../0001-ws2811.c-fix-build-with-gcc-4.8.patch     | 51 ----------------------
- package/python-rpi-ws281x/python-rpi-ws281x.hash   |  4 +-
- package/python-rpi-ws281x/python-rpi-ws281x.mk     |  4 +-
- 3 files changed, 4 insertions(+), 55 deletions(-)
+ ...1-fix-port-forwarding-with-ipv6.disable-1.patch | 74 ----------------------
+ package/docker-engine/docker-engine.hash           |  2 +-
+ package/docker-engine/docker-engine.mk             |  2 +-
+ 3 files changed, 2 insertions(+), 76 deletions(-)
 
-diff --git a/package/python-rpi-ws281x/0001-ws2811.c-fix-build-with-gcc-4.8.patch b/package/python-rpi-ws281x/0001-ws2811.c-fix-build-with-gcc-4.8.patch
+diff --git a/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch b/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch
 deleted file mode 100644
-index 9b534ac67a..0000000000
---- a/package/python-rpi-ws281x/0001-ws2811.c-fix-build-with-gcc-4.8.patch
+index c5161ef0db..0000000000
+--- a/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch
 +++ /dev/null
-@@ -1,51 +0,0 @@
--From 8faa5c2fb2b04b4fb062255aa807abafc50bff66 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 3 Apr 2021 10:27:20 +0200
--Subject: [PATCH] ws2811.c: fix build with gcc 4.8
+@@ -1,74 +0,0 @@
+-From 7b9c2905883df5171fda10a364a81b8c6176c8e2 Mon Sep 17 00:00:00 2001
+-From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+-Date: Mon, 26 Apr 2021 15:28:40 +0900
+-Subject: [PATCH] fix port forwarding with ipv6.disable=1
 -
--Fix the following build failure with gcc 4.8 (which has been added by
--commit 391f6e856d28510bd9ae4efd3a166da7f73613ab):
+-Make `docker run -p 80:80` functional again on environments with kernel boot parameter `ipv6.disable=1`.
 -
--lib/ws2811.c: In function 'ws2811_set_custom_gamma_factor':
--lib/ws2811.c:1289:5: error: 'for' loop initial declarations are only allowed in C99 mode
--     for (int chan = 0; chan < RPI_PWM_CHANNELS; chan++)
--     ^
--lib/ws2811.c:1289:5: note: use option -std=c99 or -std=gnu99 to compile your code
--lib/ws2811.c:1295:11: error: 'for' loop initial declarations are only allowed in C99 mode
--           for(int counter = 0; counter < 256; counter++)
--           ^
+-Fix moby/moby issue 42288
 -
--Fixes:
-- - http://autobuild.buildroot.org/results/3d037922484bfc45d0f985f87b38f20c5a4ab064
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/jgarff/rpi_ws281x/commit/0814bae544f0184ab1600bc2660486874eef5970]
+-Signed-off-by: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+-[Upstream: https://github.com/moby/libnetwork/pull/2635,
+-           https://github.com/moby/moby/pull/42322]
+-[Rework path/drop test for docker-engine]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ----
-- ws2811.c | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
+- vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go | 31 +++++++++++++++++++++++++++++++
+- 1 file changed, 35 insertions(+), 0 deletion(-)
 -
--diff --git a/ws2811.c b/ws2811.c
--index f5cdebd..6482796 100644
----- a/lib/ws2811.c
--+++ b/lib/ws2811.c
--@@ -1286,13 +1286,14 @@ const char * ws2811_get_return_t_str(const ws2811_return_t state)
+-diff --git a/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go b/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
+-index 946130ec..17bf36f9 100644
+---- a/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
+-+++ b/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
+-@@ -5,6 +5,7 @@ import (
+- 	"errors"
+- 	"fmt"
+- 	"net"
+-+	"sync"
 - 
-- void ws2811_set_custom_gamma_factor(ws2811_t *ws2811, double gamma_factor)
-- {
---    for (int chan = 0; chan < RPI_PWM_CHANNELS; chan++)
--+    int chan, counter;
--+    for (chan = 0; chan < RPI_PWM_CHANNELS; chan++)
--     {
--         ws2811_channel_t *channel = &ws2811->channel[chan];
+- 	"github.com/docker/libnetwork/types"
+- 	"github.com/ishidawataru/sctp"
+-@@ -50,6 +51,13 @@ func (n *bridgeNetwork) allocatePortsInternal(bindings []types.PortBinding, cont
+- 			bs = append(bs, bIPv4)
+- 		}
 - 
--         if (channel->gamma)
--         {
---          for(int counter = 0; counter < 256; counter++)
--+          for(counter = 0; counter < 256; counter++)
--           {
+-+		// skip adding implicit v6 addr, when the kernel was booted with `ipv6.disable=1`
+-+		// https://github.com/moby/moby/issues/42288
+-+		isV6Binding := c.HostIP != nil && c.HostIP.To4() == nil
+-+		if !isV6Binding && !IsV6Listenable() {
+-+			continue
+-+		}
+-+
+- 		// Allocate IPv6 Port mappings
+- 		// If the container has no IPv6 address, allow proxying host IPv6 traffic to it
+- 		// by setting up the binding with the IPv4 interface if the userland proxy is enabled
+-@@ -211,3 +219,26 @@ func (n *bridgeNetwork) releasePort(bnd types.PortBinding) error {
 - 
--              channel->gamma[counter] = (gamma_factor > 0)? (int)(pow((float)counter / (float)255.00, gamma_factor) * 255.00 + 0.5) : counter;
+- 	return portmapper.Unmap(host)
+- }
+-+
+-+var (
+-+	v6ListenableCached bool
+-+	v6ListenableOnce   sync.Once
+-+)
+-+
+-+// IsV6Listenable returns true when `[::1]:0` is listenable.
+-+// IsV6Listenable returns false mostly when the kernel was booted with `ipv6.disable=1` option.
+-+func IsV6Listenable() bool {
+-+	v6ListenableOnce.Do(func() {
+-+		ln, err := net.Listen("tcp6", "[::1]:0")
+-+		if err != nil {
+-+			// When the kernel was booted with `ipv6.disable=1`,
+-+			// we get err "listen tcp6 [::1]:0: socket: address family not supported by protocol"
+-+			// https://github.com/moby/moby/issues/42288
+-+			logrus.Debugf("port_mapping: v6Listenable=false (%v)", err)
+-+		} else {
+-+			v6ListenableCached = true
+-+			ln.Close()
+-+		}
+-+	})
+-+	return v6ListenableCached
+-+}
 --- 
--2.30.2
+-2.20.1
 -
-diff --git a/package/python-rpi-ws281x/python-rpi-ws281x.hash b/package/python-rpi-ws281x/python-rpi-ws281x.hash
-index cb021a821d..06b2d18607 100644
---- a/package/python-rpi-ws281x/python-rpi-ws281x.hash
-+++ b/package/python-rpi-ws281x/python-rpi-ws281x.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/rpi-ws281x/json
--md5  5da00a092ac3755c4913f5a53451744b  rpi_ws281x-4.2.6.tar.gz
--sha256  65a9918fbdd9df1ac612ccc1a385d4a550f1bc74cc6bbf6b9035ad26dc41b3ce  rpi_ws281x-4.2.6.tar.gz
-+md5  333dacfc58058d5f485f9af74551c70e  rpi_ws281x-4.3.0.tar.gz
-+sha256  0b9549687ab7117acbc4bac0e92742fd2c8290fd204514d72fed91c06ba2e805  rpi_ws281x-4.3.0.tar.gz
- # Locally computed sha256 checksums
- sha256  7bbf6337c1eee7169579e6acd398f31ea274dfa3a1689ab7e654ca3585d5a8a9  LICENSE
- sha256  7bbf6337c1eee7169579e6acd398f31ea274dfa3a1689ab7e654ca3585d5a8a9  lib/LICENSE
-diff --git a/package/python-rpi-ws281x/python-rpi-ws281x.mk b/package/python-rpi-ws281x/python-rpi-ws281x.mk
-index b8ba119919..b711039615 100644
---- a/package/python-rpi-ws281x/python-rpi-ws281x.mk
-+++ b/package/python-rpi-ws281x/python-rpi-ws281x.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 6c55b9a9b9..d07ca33307 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fd7f5571b1f64f26b5ca520a3e1fefb33c190f3732b931051c23a76bdba5000e  docker-engine-20.10.6.tar.gz
++sha256  b80142035de46904605fb7b8f18075cd94154f8c3d67ff346ea554d1e9d579b9  docker-engine-20.10.7.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 10ecbf603a..372717775b 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_RPI_WS281X_VERSION = 4.2.6
-+PYTHON_RPI_WS281X_VERSION = 4.3.0
- PYTHON_RPI_WS281X_SOURCE = rpi_ws281x-$(PYTHON_RPI_WS281X_VERSION).tar.gz
--PYTHON_RPI_WS281X_SITE = https://files.pythonhosted.org/packages/7f/1e/ea9ff56d9823fc55c79748630ffe0ceb30f619c9218743050bbf96d08704
-+PYTHON_RPI_WS281X_SITE = https://files.pythonhosted.org/packages/cd/b3/eb7ac93376952f165577707ec756f40c9537ed53c59fcbc3290c357370e0
- PYTHON_RPI_WS281X_SETUP_TYPE = setuptools
- PYTHON_RPI_WS281X_LICENSE = BSD-2-Clause
- PYTHON_RPI_WS281X_LICENSE_FILES = LICENSE lib/LICENSE
+-DOCKER_ENGINE_VERSION = 20.10.6
++DOCKER_ENGINE_VERSION = 20.10.7
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
