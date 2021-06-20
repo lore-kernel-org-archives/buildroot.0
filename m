@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B1AAC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:11:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8634FC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:12:06 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 39E9A60EC0
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:11:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 39E9A60EC0
+	by mail.kernel.org (Postfix) with ESMTPS id 37E8960F56
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:12:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 37E8960F56
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 174E283D2F;
-	Tue,  3 Aug 2021 23:11:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1469C83D61;
+	Tue,  3 Aug 2021 23:12:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dT1fGDVhfuwr; Tue,  3 Aug 2021 23:11:52 +0000 (UTC)
+	with ESMTP id mT22Ji2YHImK; Tue,  3 Aug 2021 23:12:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 521BE83D16;
-	Tue,  3 Aug 2021 23:11:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8BBEA83D4E;
+	Tue,  3 Aug 2021 23:12:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B5C9C1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C77EA1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5312B4067A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 73E824067C
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3Olh7JJBEXcj for <buildroot@lists.busybox.net>;
+ with ESMTP id AXYhzBfkllTR for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 31477404DC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 445CA40608
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7367E866AF; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+ id 9C4F186EB0; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 20 Jun 2021 15:49:14 +0200
+Date: Sun, 20 Jun 2021 18:15:50 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4d85defa7103aadc74223868fb83ed0bed144f4d
-X-Git-Newrev: c42a9f19fac4596d9db89e489fd176894de29df5
+X-Git-Oldrev: 1f1d536e7e373a42b0f3d8af4711abfcf8959805
+X-Git-Newrev: 026d447c2c2a3b0092c45c2afa3d17284aa31276
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210953.7367E866AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qemu: remove upstream
- patch
+Message-Id: <20210803210953.9C4F186EB0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pipewire: remove
+ already-applied patch and renumber
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,104 +70,96 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c42a9f19fac4596d9db89e489fd176894de29df5
+commit: https://git.buildroot.net/buildroot/commit/?id=026d447c2c2a3b0092c45c2afa3d17284aa31276
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch is already merged in qemu 6.0.0.
+Drop 0002-meson.build-fix-build-with-uclibc-ng.patch which is not needed
+since 0dda1a44a0859fc15b318e493c151ca1d807ba24 which has been merged in
+master in commit 8d07baab43b5624ad6d73ee58f5a9d4ab8b27049
+
+While at it, renumber
+0002-meson-fix-getrandom-detection-for-uclibc.patch to
+0001-meson-fix-getrandom-detection-for-uclibc.patch (patch number was
+wrong since its addition in commit
+b003cb5d16de9c92baba7dea7a6626c71cefc4fb) and also renumber remaining
+patch
 
 Fixes:
-http://autobuild.buildroot.net/results/aaa/aaabd63d0903819fb55d08852cef34c497cb57e6
+ - http://autobuild.buildroot.org/results/4d442c61b137ca1bd2dd32c6802ff0251d39e7a5
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...build-no-pie-is-no-functional-linker-flag.patch | 79 ----------------------
- 1 file changed, 79 deletions(-)
+ ...meson-fix-getrandom-detection-for-uclibc.patch} |  0
+ ...c.patch => 0002-fix-linking-with-latomic.patch} |  0
+ ...0002-meson.build-fix-build-with-uclibc-ng.patch | 52 ----------------------
+ 3 files changed, 52 deletions(-)
 
-diff --git a/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch b/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
+diff --git a/package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch b/package/pipewire/0001-meson-fix-getrandom-detection-for-uclibc.patch
+similarity index 100%
+rename from package/pipewire/0002-meson-fix-getrandom-detection-for-uclibc.patch
+rename to package/pipewire/0001-meson-fix-getrandom-detection-for-uclibc.patch
+diff --git a/package/pipewire/0003-fix-linking-with-latomic.patch b/package/pipewire/0002-fix-linking-with-latomic.patch
+similarity index 100%
+rename from package/pipewire/0003-fix-linking-with-latomic.patch
+rename to package/pipewire/0002-fix-linking-with-latomic.patch
+diff --git a/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch b/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
 deleted file mode 100644
-index 6a21949157..0000000000
---- a/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
+index 36b14d3f16..0000000000
+--- a/package/pipewire/0002-meson.build-fix-build-with-uclibc-ng.patch
 +++ /dev/null
-@@ -1,79 +0,0 @@
--From bbd2d5a8120771ec59b86a80a1f51884e0a26e53 Mon Sep 17 00:00:00 2001
--From: Christian Ehrhardt <christian.ehrhardt@canonical.com>
--Date: Mon, 14 Dec 2020 16:09:38 +0100
--Subject: [PATCH] build: -no-pie is no functional linker flag
+@@ -1,52 +0,0 @@
+-From 8f1de87381d270a8f4e5927187ae0466a9c9504a Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 4 May 2021 22:56:54 +0200
+-Subject: [PATCH] meson.build: fix build with uclibc-ng
 -
--Recent binutils changes dropping unsupported options [1] caused a build
--issue in regard to the optionroms.
+-Build with uclib-ng fails since commit
+-a4b0b9afe5a782a7f4a8fe153ecf51bcb0180ae3 on:
 -
--  ld -m elf_i386 -T /<<PKGBUILDDIR>>/pc-bios/optionrom//flat.lds -no-pie \
--    -s -o multiboot.img multiboot.o
--  ld.bfd: Error: unable to disambiguate: -no-pie (did you mean --no-pie ?)
+-FAILED: src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o
+-/srv/storage/autobuild/run/instance-2/output-1/host/bin/mips64el-linux-gcc -Isrc/pipewire/libpipewire-0.3.so.0.326.0.p -Isrc/pipewire -I../src/pipewire -Isrc -I../src -I. -I.. -Ispa/include -I../spa/include -fdiagnostics-color=always -pipe -Wall -Winvalid-pch -Wextra -Wpedantic -std=gnu99 -O3 -fvisibility=hidden -Werror=suggest-attribute=format -Wsign-compare -Wpointer-arith -Wpointer-sign -Wformat -Wformat-security -Wimplicit-fallthrough -Wmissing-braces -Wtype-limits -Wvariadic-macros -Wno-missing-field-initializers -Wno-unused-parameter -Wno-pedantic -Wold-style-declaration -Wunused-result -DFASTPATH -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -pthread -DHAVE_CONFIG_H -D_GNU_SOURCE -D_POSIX_C_SOURCE -MD -MQ src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o -MF src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o.d -o src/pipewire/libpipewire-0.3.so.0.326.0.p/impl-core.c.o -c ../src/pipewire/impl-core.c
+-../src/pipewire/impl-core.c:54:9: error: conflicting types for 'getrandom'
+- ssize_t getrandom(void *buf, size_t buflen, unsigned int flags) {
+-         ^~~~~~~~~
+-In file included from ../src/pipewire/impl-core.c:34:
+-/srv/storage/autobuild/run/instance-2/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:28:12: note: previous declaration of 'getrandom' was here
+- extern int getrandom(void *__buf, size_t count, unsigned int flags)
+-            ^~~~~~~~~
 -
--This isn't really a regression in ld.bfd, filing the bug upstream
--revealed that this never worked as a ld flag [2] - in fact it seems we
--were by accident setting --nmagic).
+-Fix this build failure by adding -D_GNU_SOURCE as getrandom is protected
+-by:
 -
--Since it never had the wanted effect this usage of LDFLAGS_NOPIE, should be
--droppable without any effect. This also is the only use-case of LDFLAGS_NOPIE
--in .mak, therefore we can also remove it from being added there.
+-if defined __UCLIBC_LINUX_SPECIFIC__ && defined __USE_GNU
 -
--[1]: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=983d925d
--[2]: https://sourceware.org/bugzilla/show_bug.cgi?id=27050#c5
+-Extracted from:
+- - https://github.com/wbx-github/uclibc-ng/blob/master/libc/sysdeps/linux/common/sys/random.h
 -
--Signed-off-by: Christian Ehrhardt <christian.ehrhardt@canonical.com>
--Message-Id: <20201214150938.1297512-1-christian.ehrhardt@canonical.com>
--Cc: qemu-stable@nongnu.org
--Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+-Fixes:
+- - http://autobuild.buildroot.org/results/a45f0ee009d90cef867dee4b1093225610fa10df
 -
--[Retrieved from:
--https://gitlab.com/qemu-project/qemu/-/commit/bbd2d5a8120771ec59b86a80a1f51884e0a26e53]
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/649]
 ----
-- configure                  | 3 ---
-- pc-bios/optionrom/Makefile | 1 -
-- 2 files changed, 4 deletions(-)
+- meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/configure b/configure
--index cb21108d34..c228f7c21e 100755
----- a/configure
--+++ b/configure
--@@ -2137,7 +2137,6 @@ EOF
-- # Check we support --no-pie first; we will need this for building ROMs.
-- if compile_prog "-Werror -fno-pie" "-no-pie"; then
--   CFLAGS_NOPIE="-fno-pie"
---  LDFLAGS_NOPIE="-no-pie"
-- fi
+-diff --git a/meson.build b/meson.build
+-index 0a9963fb..11b63c08 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -274,7 +274,7 @@ if cc.has_function('memfd_create', prefix : '#include <sys/mman.h>', args : [ '-
+-   cdata.set('HAVE_MEMFD_CREATE', 1)
+- endif
 - 
-- if test "$static" = "yes"; then
--@@ -2153,7 +2152,6 @@ if test "$static" = "yes"; then
--   fi
-- elif test "$pie" = "no"; then
--   CONFIGURE_CFLAGS="$CFLAGS_NOPIE $CONFIGURE_CFLAGS"
---  CONFIGURE_LDFLAGS="$LDFLAGS_NOPIE $CONFIGURE_LDFLAGS"
-- elif compile_prog "-Werror -fPIE -DPIE" "-pie"; then
--   CONFIGURE_CFLAGS="-fPIE -DPIE $CONFIGURE_CFLAGS"
--   CONFIGURE_LDFLAGS="-pie $CONFIGURE_LDFLAGS"
--@@ -6714,7 +6712,6 @@ echo "QEMU_CXXFLAGS=$QEMU_CXXFLAGS" >> $config_host_mak
-- echo "GLIB_CFLAGS=$glib_cflags" >> $config_host_mak
-- echo "GLIB_LIBS=$glib_libs" >> $config_host_mak
-- echo "QEMU_LDFLAGS=$QEMU_LDFLAGS" >> $config_host_mak
---echo "LDFLAGS_NOPIE=$LDFLAGS_NOPIE" >> $config_host_mak
-- echo "LD_I386_EMULATION=$ld_i386_emulation" >> $config_host_mak
-- echo "EXESUF=$EXESUF" >> $config_host_mak
-- echo "HOST_DSOSUF=$HOST_DSOSUF" >> $config_host_mak
--diff --git a/pc-bios/optionrom/Makefile b/pc-bios/optionrom/Makefile
--index 084fc10f05..30771f8d17 100644
----- a/pc-bios/optionrom/Makefile
--+++ b/pc-bios/optionrom/Makefile
--@@ -41,7 +41,6 @@ override CFLAGS += $(call cc-option, $(Wa)-32)
-- 
-- LD_I386_EMULATION ?= elf_i386
-- override LDFLAGS = -m $(LD_I386_EMULATION) -T $(SRC_DIR)/flat.lds
---override LDFLAGS += $(LDFLAGS_NOPIE)
-- 
-- all: multiboot.bin linuxboot.bin linuxboot_dma.bin kvmvapic.bin pvh.bin
+--if cc.has_function('getrandom', prefix : '#include <sys/random.h>')
+-+if cc.has_function('getrandom', prefix : '#include <sys/random.h>', args : [ '-D_GNU_SOURCE' ])
+-   cdata.set('HAVE_GETRANDOM', 1)
+- endif
 - 
 --- 
--GitLab
+-2.30.2
 -
 _______________________________________________
 buildroot mailing list
