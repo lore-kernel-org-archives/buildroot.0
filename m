@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 880F4C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:11:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3811AC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:11:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4AD3160F56
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:11:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4AD3160F56
+	by mail.kernel.org (Postfix) with ESMTPS id D778560F58
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:11:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D778560F58
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 245F183D1E;
-	Tue,  3 Aug 2021 23:11:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B2E2360866;
+	Tue,  3 Aug 2021 23:11:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L62leHY5B09F; Tue,  3 Aug 2021 23:11:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FGPk7QKqE_3g; Tue,  3 Aug 2021 23:11:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4385483D21;
-	Tue,  3 Aug 2021 23:11:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D570F60884;
+	Tue,  3 Aug 2021 23:11:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7E7961BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8EEAB1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0455140671
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3D0C640676
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Oywx0B-2PcMT for <buildroot@lists.busybox.net>;
+ with ESMTP id 4LLa-YjlxFCx for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 397BF4062E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41F5C40653
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7E26D84545; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+ id 8AE5686434; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 20 Jun 2021 15:53:54 +0200
+Date: Sun, 20 Jun 2021 15:54:49 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c42a9f19fac4596d9db89e489fd176894de29df5
-X-Git-Newrev: cc128b2d50e2c16ad9b50bb8712956308e6173b7
+X-Git-Oldrev: cc128b2d50e2c16ad9b50bb8712956308e6173b7
+X-Git-Newrev: 1f1d536e7e373a42b0f3d8af4711abfcf8959805
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210953.7E26D84545@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libpsl: needs wchar
+Message-Id: <20210803210953.8AE5686434@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pdbg: fix build with
+ -DNDEBUG
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,51 +70,183 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc128b2d50e2c16ad9b50bb8712956308e6173b7
+commit: https://git.buildroot.net/buildroot/commit/?id=1f1d536e7e373a42b0f3d8af4711abfcf8959805
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a dependency on wchar as both icu and libunistring needs wchar
+Fix build failure with -DNDEBUG raised since commit
+5a8c50fe05afacc3cbe8e7347e238da9f242fab0
 
 Fixes:
- - http://autobuild.buildroot.org/results/704d8e6f8b78015180e5b12c132495425637430a
+ - http://autobuild.buildroot.org/results/9d90ede1ff7425cbb25b95aed3bf8d27ced865a4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libpsl/Config.in  | 4 ++++
- package/libsoup/Config.in | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ .../pdbg/0001-build-Fix-build-with-DNDEBUG.patch   | 78 ++++++++++++++++++++++
+ .../pdbg/0002-build-Fix-build-with-DNDEBUG.patch   | 71 ++++++++++++++++++++
+ 2 files changed, 149 insertions(+)
 
-diff --git a/package/libpsl/Config.in b/package/libpsl/Config.in
-index dd484799e7..a4cbce6b43 100644
---- a/package/libpsl/Config.in
-+++ b/package/libpsl/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_LIBPSL
- 	bool "libpsl"
-+	depends on BR2_USE_WCHAR # libunistring, icu
- 	select BR2_PACKAGE_LIBIDN2 if !BR2_PACKAGE_ICU && !BR2_PACKAGE_LIBIDN
- 	select BR2_PACKAGE_LIBUNISTRING if !BR2_PACKAGE_ICU
- 	help
- 	  C library to handle the Public Suffix List of TLDs.
- 
- 	  https://github.com/rockdaboot/libpsl
+diff --git a/package/pdbg/0001-build-Fix-build-with-DNDEBUG.patch b/package/pdbg/0001-build-Fix-build-with-DNDEBUG.patch
+new file mode 100644
+index 0000000000..fba5d38693
+--- /dev/null
++++ b/package/pdbg/0001-build-Fix-build-with-DNDEBUG.patch
+@@ -0,0 +1,78 @@
++From 9b4276d33c8637ca912911e720d6c760812a769b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 9 Jun 2021 21:15:31 +0200
++Subject: [PATCH] build: Fix build with -DNDEBUG
 +
-+comment "libpsl needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index 47adfb33f2..0c0454c7c2 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBSOUP
- 	bool "libsoup"
--	depends on BR2_USE_WCHAR # glib2 and gnutls
-+	depends on BR2_USE_WCHAR # glib2, gnutls and libpsl
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	select BR2_PACKAGE_LIBXML2
++Fix the following build failures with -DNDEBUG:
++
++libpdbg/adu.c: In function 'blog2':
++libpdbg/adu.c:112:1: error: control reaches end of non-void function [-Werror=return-type]
++  112 | }
++      | ^
++  CC       libpdbg/libpdbg_la-chip.lo
++  CC       libpdbg/libpdbg_la-cronus.lo
++libpdbg/cfam.c: In function 'cfam_hmfsi_probe':
++libpdbg/cfam.c:325:13: error: 'port' is used uninitialized in this function [-Werror=uninitialized]
++  325 |  value |= 1 << (31 - port);
++      |           ~~^~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/9d90ede1ff7425cbb25b95aed3bf8d27ced865a4
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Reviewed-by: Amitay Isaacs <amitay@ozlabs.org>
++[Retrieved from:
++https://github.com/open-power/pdbg/commit/9b4276d33c8637ca912911e720d6c760812a769b]
++---
++ libpdbg/adu.c    | 3 ++-
++ libpdbg/device.c | 2 +-
++ src/mem.c        | 2 +-
++ 3 files changed, 4 insertions(+), 3 deletions(-)
++
++diff --git a/libpdbg/adu.c b/libpdbg/adu.c
++index 6358e7a3f..7ee15c350 100644
++--- a/libpdbg/adu.c
+++++ b/libpdbg/adu.c
++@@ -15,6 +15,7 @@
++  */
++ #include <stdio.h>
++ #include <stdint.h>
+++#include <stdlib.h>
++ #include <string.h>
++ #include <inttypes.h>
++ 
++@@ -107,7 +108,7 @@ uint8_t blog2(uint8_t x)
++ 	case 64:
++ 		return 6;
++ 	default:
++-		assert(0);
+++		abort();
++ 	}
++ }
++ 
++diff --git a/libpdbg/device.c b/libpdbg/device.c
++index 8884baa45..502ca38ab 100644
++--- a/libpdbg/device.c
+++++ b/libpdbg/device.c
++@@ -501,7 +501,7 @@ static enum pdbg_target_status str_to_status(const char *status)
++ 	else if (!strcmp(status, "unknown"))
++ 		return PDBG_TARGET_UNKNOWN;
++ 	else
++-		assert(0);
+++		abort();
++ }
++ 
++ static int dt_expand_node(struct pdbg_target *node, void *fdt, int fdt_node)
++diff --git a/src/mem.c b/src/mem.c
++index 99a673f36..878ac029a 100644
++--- a/src/mem.c
+++++ b/src/mem.c
++@@ -166,7 +166,7 @@ OPTCMD_DEFINE_CMD_WITH_FLAGS(getmemio, getmemio, (ADDRESS, DATA, BLOCK_SIZE),
++ static int _putmem(const char *mem_prefix, uint64_t addr, uint8_t block_size, bool ci)
++ {
++ 	uint8_t *buf;
++-	size_t buflen;
+++	size_t buflen = 0;
++ 	int rc, count = 0;
++ 	struct pdbg_target *target;
++ 
+diff --git a/package/pdbg/0002-build-Fix-build-with-DNDEBUG.patch b/package/pdbg/0002-build-Fix-build-with-DNDEBUG.patch
+new file mode 100644
+index 0000000000..323a87d779
+--- /dev/null
++++ b/package/pdbg/0002-build-Fix-build-with-DNDEBUG.patch
+@@ -0,0 +1,71 @@
++From cd1a44bac413e8a6bc2572720153cc5e703762e1 Mon Sep 17 00:00:00 2001
++From: Amitay Isaacs <amitay@ozlabs.org>
++Date: Fri, 11 Jun 2021 15:27:29 +1000
++Subject: [PATCH] build: Fix build with -DNDEBUG
++
++Signed-off-by: Amitay Isaacs <amitay@ozlabs.org>
++[Retrieved from:
++https://github.com/open-power/pdbg/commit/cd1a44bac413e8a6bc2572720153cc5e703762e1]
++---
++ libpdbg/cfam.c   | 6 +++++-
++ libpdbg/device.c | 9 ++++++---
++ 2 files changed, 11 insertions(+), 4 deletions(-)
++
++diff --git a/libpdbg/cfam.c b/libpdbg/cfam.c
++index ffe69296e..976ce5a6d 100644
++--- a/libpdbg/cfam.c
+++++ b/libpdbg/cfam.c
++@@ -17,6 +17,7 @@
++  */
++ #include <unistd.h>
++ #include <stdio.h>
+++#include <stdlib.h>
++ #include <inttypes.h>
++ 
++ #include "hwunit.h"
++@@ -320,7 +321,10 @@ static int cfam_hmfsi_probe(struct pdbg_target *target)
++ 	int rc;
++ 
++ 	/* Enable the port in the upstream control register */
++-	assert(!(pdbg_target_u32_property(target, "port", &port)));
+++	if (pdbg_target_u32_property(target, "port", &port)) {
+++		PR_ERROR("Attribute port not defined for %s\n", pdbg_target_path(target));
+++		abort();
+++	}
++ 	fsi_read(fsi_parent, 0x3404, &value);
++ 	value |= 1 << (31 - port);
++ 	if ((rc = fsi_write(fsi_parent, 0x3404, value))) {
++diff --git a/libpdbg/device.c b/libpdbg/device.c
++index 502ca38ab..ab821d387 100644
++--- a/libpdbg/device.c
+++++ b/libpdbg/device.c
++@@ -417,7 +417,7 @@ static const void *dt_require_property(struct pdbg_target *node,
++ 
++ 		prerror("DT: Missing required property %s/%s\n",
++ 			path, name);
++-		assert(false);
+++		abort();
++ 	}
++ 	if (wanted_len >= 0 && len != wanted_len) {
++ 		const char *path = dt_get_path(node);
++@@ -426,7 +426,7 @@ static const void *dt_require_property(struct pdbg_target *node,
++ 			path, name);
++ 		prerror("DT: Expected len: %d got len: %zu\n",
++ 			wanted_len, len);
++-		assert(false);
+++		abort();
++ 	}
++ 
++ 	if (prop_len) {
++@@ -604,7 +604,10 @@ uint64_t pdbg_target_address(struct pdbg_target *target, uint64_t *out_size)
++ 
++ 	p = dt_require_property(target, "reg", -1, &len);
++ 	n = (na + ns) * sizeof(u32);
++-	assert(n <= len);
+++	if (n > len) {
+++		PR_ERROR("Invalid reg value for %s\n", pdbg_target_path(target));
+++		abort();
+++	}
++ 	if (out_size)
++ 		*out_size = dt_get_number(p + na * sizeof(u32), ns);
++ 	return dt_get_number(p, na);
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
