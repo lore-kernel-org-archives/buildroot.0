@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Jun 2021 18:37:11 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libsoup: always disable tls_check
-In-Reply-To: <20210610190313.38683-1-fontaine.fabrice@gmail.com>
-References: <20210610190313.38683-1-fontaine.fabrice@gmail.com>
-Message-ID: <b7d23ad4-29ea-7027-7f24-30bbbb5bbabe@mind.be>
+Date: Sun, 20 Jun 2021 18:37:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libfuse3: bump to version 3.10.4
+In-Reply-To: <20210610183934.100570-1-asafka7@gmail.com>
+References: <20210610183934.100570-1-asafka7@gmail.com>
+Message-ID: <de8df30d-5027-6d2c-ffa0-2a29688f48e9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,71 +12,52 @@ To: buildroot@busybox.net
 
 
 
-On 10/06/2021 21:03, Fabrice Fontaine wrote:
-> Always disable tls_check to avoid the following build failure since bump to
-> version 2.72.0 in commit 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da:
+On 10/06/2021 20:39, Asaf Kahlon wrote:
+> From this version, tests can be disabled, so we pass
+> "tests=false" as a Meson option.
 > 
-> ../output-1/build/libsoup-2.72.0/meson.build:184:4: ERROR: Can not run test applications in this cross environment.
-> 
-> Indeed, tls_check will run code since
-> https://gitlab.gnome.org/GNOME/libsoup/-/commit/5c45253243a2deca4880d4f614f2932373445cf9
-> 
-> While at it, also drop glib-networking build-time dependency
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/9e539dc7185cfb81f18438dd36357cb49ef23a5a
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
- Applied to master, thanks. I did extend the commit message a little.
+ Applied to master, thanks.
 
  Regards,
  Arnout
 
 > ---
-> Changes v1 -> v2:
->  - Drop glib-networking build-time dependency
+>  package/libfuse3/libfuse3.hash | 2 +-
+>  package/libfuse3/libfuse3.mk   | 5 +++--
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 > 
->  package/libsoup/Config.in  | 4 ++--
->  package/libsoup/libsoup.mk | 7 +------
->  2 files changed, 3 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-> index 47adfb33f2..82ff077b8c 100644
-> --- a/package/libsoup/Config.in
-> +++ b/package/libsoup/Config.in
-> @@ -24,8 +24,8 @@ config BR2_PACKAGE_LIBSOUP_GNOME
->  config BR2_PACKAGE_LIBSOUP_SSL
->  	bool "https support"
->  	depends on !BR2_STATIC_LIBS # glib-networking, gnutls
-> -	select BR2_PACKAGE_GLIB_NETWORKING
-> -	select BR2_PACKAGE_GNUTLS
-> +	select BR2_PACKAGE_GLIB_NETWORKING # runtime
-> +	select BR2_PACKAGE_GNUTLS # runtime
->  	help
->  	  Enable HTTPS (SSL) support.
+> diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
+> index 49c71f402f..0414264bf8 100644
+> --- a/package/libfuse3/libfuse3.hash
+> +++ b/package/libfuse3/libfuse3.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated sha256 checksums
+> -sha256  c32527782cef620df58b162aa29901d1fb13253b029375d5860a2253a810344e  libfuse3-3.10.3.tar.gz
+> +sha256  bfcb2520fd83db29e9fefd57d3abd5285f38ad484739aeee8e03fbec9b2d984a  libfuse3-3.10.4.tar.gz
+>  sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
+> diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
+> index b1624ba887..fc747c5bfd 100644
+> --- a/package/libfuse3/libfuse3.mk
+> +++ b/package/libfuse3/libfuse3.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-> index 2f63e9e85c..964488f430 100644
-> --- a/package/libsoup/libsoup.mk
-> +++ b/package/libsoup/libsoup.mk
-> @@ -30,6 +30,7 @@ LIBSOUP_CONF_OPTS = \
->  	-Dntlm=disabled \
->  	-Dsysprof=disabled \
->  	-Dtests=false \
-> +	-Dtls_check=false \
->  	-Dvapi=disabled
+> -LIBFUSE3_VERSION = 3.10.3
+> +LIBFUSE3_VERSION = 3.10.4
+>  LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
+>  LIBFUSE3_LICENSE = LGPL-2.1
+>  LIBFUSE3_LICENSE_FILES = LICENSE
+> @@ -15,7 +15,8 @@ LIBFUSE3_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+>  LIBFUSE3_CONF_OPTS = \
+>  	-Dexamples=false \
+>  	-Dudevrulesdir=/lib/udev/rules.d \
+> -	-Duseroot=false
+> +	-Duseroot=false \
+> +	-Dtests=false
 >  
->  ifeq ($(BR2_PACKAGE_BROTLI),y)
-> @@ -52,10 +53,4 @@ else
->  LIBSOUP_CONF_OPTS += -Dgnome=false
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
-> -LIBSOUP_DEPENDENCIES += glib-networking
-> -else
-> -LIBSOUP_CONF_OPTS += -Dtls_check=false
-> -endif
-> -
->  $(eval $(meson-package))
+>  define LIBFUSE3_DEVICES
+>  	/dev/fuse  c  666  0  0  10  229  0  0  -
 > 
