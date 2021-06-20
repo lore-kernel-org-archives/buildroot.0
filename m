@@ -1,61 +1,95 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 20 Jun 2021 18:21:14 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/perl-crypt-openssl-rsa: add missing dependency to openssl
-Message-ID: <20210620155205.671308B7C8@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 20 Jun 2021 18:20:11 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: Fix build for mips,
+ 2nd attempt
+Message-ID: <20210620155329.AE0F7815E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72d29a742bd4eec11b52bf47deb4672c62f953c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f5c0c74ebe1ce91fa12073f7c9f5652befa31541
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-perl-crypt-openssl-rsa inherits the dependency on openssl indirectly
-from perl-crypt-openssl-random. Hwvere, perl-crypt-openssl-rsa needs
-the openssl libraries for itself, so it must explicitly depend on it.
+The patch introduced in commit
+uses "defined(HAVE_SYS_AUXV_H)". However, ffmpeg configure is not GNU
+autoconf, and it defines the symbol to 0 when not found. Use
+HAVE_SYS_AUXV_H without defined() instead.
 
-So far, this was totally unconsequential, but since commit a83d41867c8d
-(package/libopenssl: add option to enable some features), features can
-be configured out, of which RMD160 that perl-crypt-openssl-rsa needs.
-If we were to add the select to that option (in a followup commit),
-without a dependency to openssl, that would be very confusing in the
-future.
+Fixes:
+http://autobuild.buildroot.net/results/da0/da03909291e97c525eb1f53dfc743a1897f59d6e/
 
-So, add the explicit dependency now.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7c636d9c6601538920f6e46955168f41b458a287)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/perl-crypt-openssl-rsa/Config.in                 | 1 +
- package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/ffmpeg/0003-libavutil-Fix-mips-build.patch | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/perl-crypt-openssl-rsa/Config.in b/package/perl-crypt-openssl-rsa/Config.in
-index e58a921bcb..e2c0131345 100644
---- a/package/perl-crypt-openssl-rsa/Config.in
-+++ b/package/perl-crypt-openssl-rsa/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PERL_CRYPT_OPENSSL_RSA
- 	bool "perl-crypt-openssl-rsa"
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PERL_CRYPT_OPENSSL_RANDOM # runtime
- 	help
- 	  RSA encoding and decoding, using the openSSL libraries.
-diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
-index b161523421..23fd1ac381 100644
---- a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
-+++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
-@@ -9,7 +9,8 @@ PERL_CRYPT_OPENSSL_RSA_SOURCE = Crypt-OpenSSL-RSA-$(PERL_CRYPT_OPENSSL_RSA_VERSI
- PERL_CRYPT_OPENSSL_RSA_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
- PERL_CRYPT_OPENSSL_RSA_DEPENDENCIES = \
- 	host-perl-crypt-openssl-guess \
--	perl-crypt-openssl-random
-+	perl-crypt-openssl-random \
-+	openssl
- PERL_CRYPT_OPENSSL_RSA_LICENSE = Artistic or GPL-1.0+
- PERL_CRYPT_OPENSSL_RSA_LICENSE_FILES = LICENSE
- PERL_CRYPT_OPENSSL_RSA_DISTNAME = Crypt-OpenSSL-RSA
+diff --git a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
+index 7af01463e8..8b81e66981 100644
+--- a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
++++ b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
+@@ -8,7 +8,7 @@ Check for sys/auxv.h because not all toolchains contain this header.
+ Fixes https://trac.ffmpeg.org/ticket/9138
+ 
+ Patch sent upstream:
+-http://ffmpeg.org/pipermail/ffmpeg-devel/2021-June/281037.html
++http://ffmpeg.org/pipermail/ffmpeg-devel/2021-June/281272.html
+ 
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+@@ -17,7 +17,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  2 files changed, 5 insertions(+), 3 deletions(-)
+ 
+ diff --git a/configure b/configure
+-index 82367fd30d..b0154cb8b2 100755
++index 6bfd98b384..773a7d516c 100755
+ --- a/configure
+ +++ b/configure
+ @@ -2161,6 +2161,7 @@ HEADERS_LIST="
+@@ -28,7 +28,7 @@ index 82367fd30d..b0154cb8b2 100755
+      sys_param_h
+      sys_resource_h
+      sys_select_h
+-@@ -6210,6 +6211,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
++@@ -6218,6 +6219,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
+  check_headers windows.h
+  check_headers X11/extensions/XvMClib.h
+  check_headers asm/types.h
+@@ -37,7 +37,7 @@ index 82367fd30d..b0154cb8b2 100755
+  # it seems there are versions of clang in some distros that try to use the
+  # gcc headers, which explodes for stdatomic
+ diff --git a/libavutil/mips/cpu.c b/libavutil/mips/cpu.c
+-index 59619d54de..4738104cdd 100644
++index 59619d54de..19196de50b 100644
+ --- a/libavutil/mips/cpu.c
+ +++ b/libavutil/mips/cpu.c
+ @@ -19,7 +19,7 @@
+@@ -45,7 +45,7 @@ index 59619d54de..4738104cdd 100644
+  #include "libavutil/cpu_internal.h"
+  #include "config.h"
+ -#if defined __linux__ || defined __ANDROID__
+-+#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
+++#if (defined __linux__ || defined __ANDROID__) && HAVE_SYS_AUXV_H
+  #include <stdint.h>
+  #include <stdio.h>
+  #include <string.h>
+@@ -54,7 +54,7 @@ index 59619d54de..4738104cdd 100644
+  #endif
+  
+ -#if defined __linux__ || defined __ANDROID__
+-+#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
+++#if (defined __linux__ || defined __ANDROID__) && HAVE_SYS_AUXV_H
+  
+  #define HWCAP_LOONGSON_CPUCFG (1 << 14)
+  
+@@ -63,7 +63,7 @@ index 59619d54de..4738104cdd 100644
+  int ff_get_cpu_flags_mips(void)
+  {
+ -#if defined __linux__ || defined __ANDROID__
+-+#if (defined __linux__ || defined __ANDROID__) && defined(HAVE_SYS_AUXV_H)
+++#if (defined __linux__ || defined __ANDROID__) && HAVE_SYS_AUXV_H
+      if (cpucfg_available())
+          return cpu_flags_cpucfg();
+      else
