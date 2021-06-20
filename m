@@ -1,77 +1,63 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 20 Jun 2021 18:33:54 +0200
-Subject: [Buildroot] [git commit] package/libsoup: always disable tls_check
-Message-ID: <20210620160629.3E8BA812E5@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 20 Jun 2021 18:39:25 +0200
+Subject: [Buildroot] [PATCH 1/1] wpebackend-fdo: bump to version 1.10.0
+In-Reply-To: <20210611144418.450231-1-aperez@igalia.com>
+References: <20210611144418.450231-1-aperez@igalia.com>
+Message-ID: <a73b4fd2-e819-24bb-5b78-b6fe8e88a2b7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13c30bc923f61744cfec33eb6feffb52019beab2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Always disable tls_check to avoid the following build failure since bump to
-version 2.72.0 in commit 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da:
 
-../output-1/build/libsoup-2.72.0/meson.build:184:4: ERROR: Can not run test applications in this cross environment.
+On 11/06/2021 16:44, Adrian Perez de Castro wrote:
+> This version change does not include functional changes over 1.9.92, but
+> it is slated as stable (hence the even second version number). Release
+> notes:
+> 
+>   https://wpewebkit.org/release/wpebackend-fdo-1.10.0.html
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-Indeed, tls_check will run code since
-https://gitlab.gnome.org/GNOME/libsoup/-/commit/5c45253243a2deca4880d4f614f2932373445cf9
+ Applied to master, thanks.
 
-That is the only thing that this option does: it runs code to check that
-libgio is built with TLS support.
+ Regards,
+ Arnout
 
-While at it, also drop glib-networking build-time dependency
-
-Also mark gnutls as a runtime dependency (it already was used as such).
-
-Fixes:
- - http://autobuild.buildroot.org/results/9e539dc7185cfb81f18438dd36357cb49ef23a5a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/libsoup/Config.in  | 4 ++--
- package/libsoup/libsoup.mk | 7 +------
- 2 files changed, 3 insertions(+), 8 deletions(-)
-
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index 0c0454c7c2..02e8e8b578 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -24,8 +24,8 @@ config BR2_PACKAGE_LIBSOUP_GNOME
- config BR2_PACKAGE_LIBSOUP_SSL
- 	bool "https support"
- 	depends on !BR2_STATIC_LIBS # glib-networking, gnutls
--	select BR2_PACKAGE_GLIB_NETWORKING
--	select BR2_PACKAGE_GNUTLS
-+	select BR2_PACKAGE_GLIB_NETWORKING # runtime
-+	select BR2_PACKAGE_GNUTLS # runtime
- 	help
- 	  Enable HTTPS (SSL) support.
- 
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index 2f63e9e85c..964488f430 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -30,6 +30,7 @@ LIBSOUP_CONF_OPTS = \
- 	-Dntlm=disabled \
- 	-Dsysprof=disabled \
- 	-Dtests=false \
-+	-Dtls_check=false \
- 	-Dvapi=disabled
- 
- ifeq ($(BR2_PACKAGE_BROTLI),y)
-@@ -52,10 +53,4 @@ else
- LIBSOUP_CONF_OPTS += -Dgnome=false
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
--LIBSOUP_DEPENDENCIES += glib-networking
--else
--LIBSOUP_CONF_OPTS += -Dtls_check=false
--endif
--
- $(eval $(meson-package))
+> ---
+>  package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+>  package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
+> index 28d6c36938..f280024b28 100644
+> --- a/package/wpebackend-fdo/wpebackend-fdo.hash
+> +++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+> @@ -1,7 +1,7 @@
+> -# From https://wpewebkit.org/releases/wpebackend-fdo-1.9.92.tar.xz.sums
+> -md5  5c2f7fab6623e0964bc0d1b4a01719f0  wpebackend-fdo-1.9.92.tar.xz
+> -sha1  d07fdfec0df53c57e3ed36a1efffecf30d1b418c  wpebackend-fdo-1.9.92.tar.xz
+> -sha256  fc5b388a91d6f2c22803e1a21a6759a314b4539e5169c6e272bfc953a05fbb85  wpebackend-fdo-1.9.92.tar.xz
+> +# From https://wpewebkit.org/releases/wpebackend-fdo-1.10.0.tar.xz.sums
+> +md5  306adbb0c66dc753e1794c83b7a2682b  wpebackend-fdo-1.10.0.tar.xz
+> +sha1  bf71718a213c6511dea278ade5ce90967d181995  wpebackend-fdo-1.10.0.tar.xz
+> +sha256  b89dfd3500a4dec711132cd7bff72599e67d56a419d000730e14bb99547509cc  wpebackend-fdo-1.10.0.tar.xz
+>  
+>  # Hashes for license files:
+>  sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
+> diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
+> index 4979dad8f9..72f0ad9019 100644
+> --- a/package/wpebackend-fdo/wpebackend-fdo.mk
+> +++ b/package/wpebackend-fdo/wpebackend-fdo.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -WPEBACKEND_FDO_VERSION = 1.9.92
+> +WPEBACKEND_FDO_VERSION = 1.10.0
+>  WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
+>  WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+>  WPEBACKEND_FDO_INSTALL_STAGING = YES
+> 
