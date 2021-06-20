@@ -1,129 +1,45 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 20 Jun 2021 14:37:17 +0200
-Subject: [Buildroot] [git commit] package/docker-engine: bump version to
- 20.10.7
-Message-ID: <20210620121032.E675A8D6F6@busybox.osuosl.org>
+Date: Sun, 20 Jun 2021 14:36:27 +0200
+Subject: [Buildroot] [git commit] package/batman-adv: bump to version 2021.1
+Message-ID: <20210620121032.CC3208D4F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49df5080079e7e6fc7330e91f249004d018c4c9b
+commit: https://git.buildroot.net/buildroot/commit/?id=de41a7040c6eb6e795269ed183d9aaa565745ef2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop upstreamed patch fix-port-forwarding-with-ipv6.
-
-Upstream commit: d29a55c6c344a536089d6b1bcd92be9cdea20641
-
 Signed-off-by: Christian Stewart <christian@paral.in>
-Tested-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...1-fix-port-forwarding-with-ipv6.disable-1.patch | 74 ----------------------
- package/docker-engine/docker-engine.hash           |  2 +-
- package/docker-engine/docker-engine.mk             |  2 +-
- 3 files changed, 2 insertions(+), 76 deletions(-)
+ package/batman-adv/batman-adv.hash | 4 ++--
+ package/batman-adv/batman-adv.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch b/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch
-deleted file mode 100644
-index c5161ef0db..0000000000
---- a/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch
-+++ /dev/null
-@@ -1,74 +0,0 @@
--From 7b9c2905883df5171fda10a364a81b8c6176c8e2 Mon Sep 17 00:00:00 2001
--From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
--Date: Mon, 26 Apr 2021 15:28:40 +0900
--Subject: [PATCH] fix port forwarding with ipv6.disable=1
--
--Make `docker run -p 80:80` functional again on environments with kernel boot parameter `ipv6.disable=1`.
--
--Fix moby/moby issue 42288
--
--Signed-off-by: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
--[Upstream: https://github.com/moby/libnetwork/pull/2635,
--           https://github.com/moby/moby/pull/42322]
--[Rework path/drop test for docker-engine]
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go | 31 +++++++++++++++++++++++++++++++
-- 1 file changed, 35 insertions(+), 0 deletion(-)
--
--diff --git a/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go b/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
--index 946130ec..17bf36f9 100644
----- a/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
--+++ b/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
--@@ -5,6 +5,7 @@ import (
-- 	"errors"
-- 	"fmt"
-- 	"net"
--+	"sync"
-- 
-- 	"github.com/docker/libnetwork/types"
-- 	"github.com/ishidawataru/sctp"
--@@ -50,6 +51,13 @@ func (n *bridgeNetwork) allocatePortsInternal(bindings []types.PortBinding, cont
-- 			bs = append(bs, bIPv4)
-- 		}
-- 
--+		// skip adding implicit v6 addr, when the kernel was booted with `ipv6.disable=1`
--+		// https://github.com/moby/moby/issues/42288
--+		isV6Binding := c.HostIP != nil && c.HostIP.To4() == nil
--+		if !isV6Binding && !IsV6Listenable() {
--+			continue
--+		}
--+
-- 		// Allocate IPv6 Port mappings
-- 		// If the container has no IPv6 address, allow proxying host IPv6 traffic to it
-- 		// by setting up the binding with the IPv4 interface if the userland proxy is enabled
--@@ -211,3 +219,26 @@ func (n *bridgeNetwork) releasePort(bnd types.PortBinding) error {
-- 
-- 	return portmapper.Unmap(host)
-- }
--+
--+var (
--+	v6ListenableCached bool
--+	v6ListenableOnce   sync.Once
--+)
--+
--+// IsV6Listenable returns true when `[::1]:0` is listenable.
--+// IsV6Listenable returns false mostly when the kernel was booted with `ipv6.disable=1` option.
--+func IsV6Listenable() bool {
--+	v6ListenableOnce.Do(func() {
--+		ln, err := net.Listen("tcp6", "[::1]:0")
--+		if err != nil {
--+			// When the kernel was booted with `ipv6.disable=1`,
--+			// we get err "listen tcp6 [::1]:0: socket: address family not supported by protocol"
--+			// https://github.com/moby/moby/issues/42288
--+			logrus.Debugf("port_mapping: v6Listenable=false (%v)", err)
--+		} else {
--+			v6ListenableCached = true
--+			ln.Close()
--+		}
--+	})
--+	return v6ListenableCached
--+}
---- 
--2.20.1
--
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 6c55b9a9b9..d07ca33307 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  fd7f5571b1f64f26b5ca520a3e1fefb33c190f3732b931051c23a76bdba5000e  docker-engine-20.10.6.tar.gz
-+sha256  b80142035de46904605fb7b8f18075cd94154f8c3d67ff346ea554d1e9d579b9  docker-engine-20.10.7.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 10ecbf603a..372717775b 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
+index 2422723f40..f81df11000 100644
+--- a/package/batman-adv/batman-adv.hash
++++ b/package/batman-adv/batman-adv.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.0/batman-adv-2021.0.tar.gz.sha1
+-sha1  7edd4dfb9434f80adf791990d4e383c7ef80a256  batman-adv-2021.0.tar.gz
++# From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.1/batman-adv-2021.1.tar.gz.sha1
++sha1  27a0dc7cb74b868bc0ab52794ecedd0448f0fb61  batman-adv-2021.1.tar.gz
+ 
+ # Hash for license files
+ sha256  5a989ba580897268373bd516b87b588061f344af773a0f6b038a3d8d2af028a1  batman-adv-2021.0.tar.gz
+diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
+index cb802d6939..e58ac85bef 100644
+--- a/package/batman-adv/batman-adv.mk
++++ b/package/batman-adv/batman-adv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = 20.10.6
-+DOCKER_ENGINE_VERSION = 20.10.7
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+-BATMAN_ADV_VERSION = 2021.0
++BATMAN_ADV_VERSION = 2021.1
+ BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
+ BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
+ BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
