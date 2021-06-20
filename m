@@ -1,39 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 20 Jun 2021 18:21:28 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/heirloom-mailx:
- add CPE variables
-Message-ID: <20210620155205.742B98DC37@busybox.osuosl.org>
+Date: Sun, 20 Jun 2021 18:21:14 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ package/perl-crypt-openssl-rsa: add missing dependency to openssl
+Message-ID: <20210620155205.671308B7C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ecf41316c97165a10e66e4bc2748b9566bca0251
+commit: https://git.buildroot.net/buildroot/commit/?id=72d29a742bd4eec11b52bf47deb4672c62f953c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:heirloom:mailx is a valid CPE identifier for this package:
+perl-crypt-openssl-rsa inherits the dependency on openssl indirectly
+from perl-crypt-openssl-random. Hwvere, perl-crypt-openssl-rsa needs
+the openssl libraries for itself, so it must explicitly depend on it.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aheirloom%3Amailx
+So far, this was totally unconsequential, but since commit a83d41867c8d
+(package/libopenssl: add option to enable some features), features can
+be configured out, of which RMD160 that perl-crypt-openssl-rsa needs.
+If we were to add the select to that option (in a followup commit),
+without a dependency to openssl, that would be very confusing in the
+future.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+So, add the explicit dependency now.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3cc45ca6539fd28b18fe820432d3c580ec2bac8d)
+(cherry picked from commit 7c636d9c6601538920f6e46955168f41b458a287)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/heirloom-mailx/heirloom-mailx.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/perl-crypt-openssl-rsa/Config.in                 | 1 +
+ package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
-index 2f7e635e0f..b3cece0cfc 100644
---- a/package/heirloom-mailx/heirloom-mailx.mk
-+++ b/package/heirloom-mailx/heirloom-mailx.mk
-@@ -9,6 +9,8 @@ HEIRLOOM_MAILX_SOURCE = heirloom-mailx_$(HEIRLOOM_MAILX_VERSION).orig.tar.gz
- HEIRLOOM_MAILX_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/h/heirloom-mailx
- HEIRLOOM_MAILX_LICENSE = BSD-4-Clause, Bellcore (base64), OpenVision (imap_gssapi), RSA Data Security (md5), Network Working Group (hmac), MPL-1.1 (nss)
- HEIRLOOM_MAILX_LICENSE_FILES = COPYING
-+HEIRLOOM_MAILX_CPE_ID_VENDOR = heirloom
-+HEIRLOOM_MAILX_CPE_ID_PRODUCT = mailx
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- HEIRLOOM_MAILX_DEPENDENCIES += openssl
+diff --git a/package/perl-crypt-openssl-rsa/Config.in b/package/perl-crypt-openssl-rsa/Config.in
+index e58a921bcb..e2c0131345 100644
+--- a/package/perl-crypt-openssl-rsa/Config.in
++++ b/package/perl-crypt-openssl-rsa/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PERL_CRYPT_OPENSSL_RSA
+ 	bool "perl-crypt-openssl-rsa"
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PERL_CRYPT_OPENSSL_RANDOM # runtime
+ 	help
+ 	  RSA encoding and decoding, using the openSSL libraries.
+diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
+index b161523421..23fd1ac381 100644
+--- a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
++++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
+@@ -9,7 +9,8 @@ PERL_CRYPT_OPENSSL_RSA_SOURCE = Crypt-OpenSSL-RSA-$(PERL_CRYPT_OPENSSL_RSA_VERSI
+ PERL_CRYPT_OPENSSL_RSA_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
+ PERL_CRYPT_OPENSSL_RSA_DEPENDENCIES = \
+ 	host-perl-crypt-openssl-guess \
+-	perl-crypt-openssl-random
++	perl-crypt-openssl-random \
++	openssl
+ PERL_CRYPT_OPENSSL_RSA_LICENSE = Artistic or GPL-1.0+
+ PERL_CRYPT_OPENSSL_RSA_LICENSE_FILES = LICENSE
+ PERL_CRYPT_OPENSSL_RSA_DISTNAME = Crypt-OpenSSL-RSA
