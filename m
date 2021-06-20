@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 20 Jun 2021 18:23:00 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/heirloom-mailx:
+Date: Sun, 20 Jun 2021 18:21:28 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/heirloom-mailx:
  add CPE variables
-Message-ID: <20210620155158.277B18144E@busybox.osuosl.org>
+Message-ID: <20210620155205.742B98DC37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09aa72640bd1f838605a0e04d5b06f7f82b4a0af
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ecf41316c97165a10e66e4bc2748b9566bca0251
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 cpe:2.3:a:heirloom:mailx is a valid CPE identifier for this package:
 
