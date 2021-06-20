@@ -1,56 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Jun 2021 14:53:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnuplot: bump version to 5.4.2
-In-Reply-To: <20210607082451.17896-1-mf@go-sys.de>
-References: <20210607082451.17896-1-mf@go-sys.de>
-Message-ID: <6c9f2941-c7ed-adff-b415-ea2a075295c6@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 20 Jun 2021 14:42:58 +0200
+Subject: [Buildroot] [git commit] package/lualdap: bump to version 1.3.0
+Message-ID: <20210620122523.A84367FE1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=db39783b64a4435dc35464d08bc841331794c52d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/lualdap/lualdap.hash | 2 +-
+ package/lualdap/lualdap.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 07/06/2021 10:24, Michael Fischer wrote:
-> Signed-off-by: Michael Fischer <mf@go-sys.de>
-
- Applied to master, thanks.
-
- Regards,
- Arnout
-
-> ---
->  package/gnuplot/gnuplot.hash | 8 ++++----
->  package/gnuplot/gnuplot.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
-> index 9770185c21..84e71d79a7 100644
-> --- a/package/gnuplot/gnuplot.hash
-> +++ b/package/gnuplot/gnuplot.hash
-> @@ -1,6 +1,6 @@
-> -# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.1/
-> -md5  80f75b684f1175d36cd6908ff1ceb588  gnuplot-5.4.1.tar.gz
-> -sha1  bb1cd34f8ec0357eccef70122f0fd531ced5dd29  gnuplot-5.4.1.tar.gz
-> +# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.2/
-> +md5  2050ca477199a591543bc968aba7d899  gnuplot-5.4.2.tar.gz
-> +sha1  2e076b29f38bfcb841cb5eb3377fd1a469ced1ac  gnuplot-5.4.2.tar.gz
->  # Locally computed
-> -sha256  6b690485567eaeb938c26936e5e0681cf70c856d273cc2c45fabf64d8bc6590e  gnuplot-5.4.1.tar.gz
-> +sha256  e57c75e1318133951d32a83bcdc4aff17fed28722c4e71f2305cfc2ae1cae7ba  gnuplot-5.4.2.tar.gz
->  sha256  895928ec0735cca1c8cec42656c7e314a065d0242813bb8693c0c1bf61fd4e4d  Copyright
-> diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
-> index 9a72a47144..436d3e5f92 100644
-> --- a/package/gnuplot/gnuplot.mk
-> +++ b/package/gnuplot/gnuplot.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -GNUPLOT_VERSION = 5.4.1
-> +GNUPLOT_VERSION = 5.4.2
->  GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
->  GNUPLOT_LICENSE = gnuplot license (open source)
->  GNUPLOT_LICENSE_FILES = Copyright
-> 
+diff --git a/package/lualdap/lualdap.hash b/package/lualdap/lualdap.hash
+index 488deb4e16..a65260b132 100644
+--- a/package/lualdap/lualdap.hash
++++ b/package/lualdap/lualdap.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 0fcd82a77b20f7cee00050b63b4241d462564421bbd464f6fd0c1bebc62bff32  lualdap-1.2.6-1.src.rock
++sha256 49c253f540187c61850c856b8e70e45dca904b81720a760f6a94e4eb474958ad  lualdap-1.3.0-1.src.rock
+ sha256 b9b75da18d1e1147ec47bff508ffdce831da07dc371891b9057cf1c422660af4  lualdap/docs/license.md
+diff --git a/package/lualdap/lualdap.mk b/package/lualdap/lualdap.mk
+index acfcbdfc68..5dfba8b7a4 100644
+--- a/package/lualdap/lualdap.mk
++++ b/package/lualdap/lualdap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUALDAP_VERSION = 1.2.6-1
++LUALDAP_VERSION = 1.3.0-1
+ LUALDAP_SUBDIR = lualdap
+ LUALDAP_LICENSE = MIT
+ LUALDAP_LICENSE_FILES = $(LUALDAP_SUBDIR)/docs/license.md
