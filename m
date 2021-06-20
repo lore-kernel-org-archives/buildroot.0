@@ -1,42 +1,60 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 20 Jun 2021 18:26:16 +0200
-Subject: [Buildroot] [git commit] package/openswan: disable -Werror
-Message-ID: <20210620155524.D538D8DAD8@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 20 Jun 2021 18:29:12 +0200
+Subject: [Buildroot] [PATCH v2, 1/1] package/filemq: bump to
+ af4768dcaf2fcb8083a32bad107a22ecb7a5d954
+In-Reply-To: <20210609202842.861825-1-fontaine.fabrice@gmail.com>
+References: <20210609202842.861825-1-fontaine.fabrice@gmail.com>
+Message-ID: <9572da9c-f4db-7093-171f-e3ea623ea193@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc1c8c3bb1ca4a1f1d2978f3cc100d292c70db8b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Disable -Werror to avoid the following build failure with -DNDEBUG
-raised since commit 5a8c50fe05afacc3cbe8e7347e238da9f242fab0
 
-/srv/storage/autobuild/run/instance-2/output-1/build/openswan-3.0.0/programs/rsasigkey/rsasigkey.c:524:6: error: variable 'success' set but not used [-Werror=unused-but-set-variable]
-  524 |  int success;
-      |      ^~~~~~~
+On 09/06/2021 22:28, Fabrice Fontaine wrote:
+> This bump will drop -Werror to fix build failure with -DNDEBUG raised
+> since commit 5a8c50fe05afacc3cbe8e7347e238da9f242fab0
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/cf4c45ed7ae2c5090ac6ba967497e0d42d5c5224
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/327a0f2b8f0c51bcbb3edb1c3671870d593e93b9
+ Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/openswan/openswan.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Regards,
+ Arnout
 
-diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
-index 7f083f695d..bb56e4516c 100644
---- a/package/openswan/openswan.mk
-+++ b/package/openswan/openswan.mk
-@@ -15,7 +15,7 @@ OPENSWAN_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" POD2MAN="" XMLTO="" \
- 	USERCOMPILE="$(TARGET_CFLAGS) $(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),-fPIE)" \
- 	USERLINK="$(TARGET_LDFLAGS) $(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),-fPIE)" \
- 	INC_USRLOCAL=/usr USE_KLIPS=false USE_MAST=false USE_NM=false \
--	USE_NOMANINSTALL=true
-+	USE_NOMANINSTALL=true WERROR=""
- 
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- OPENSWAN_DEPENDENCIES += libcurl
+> ---
+> Changes v1 -> v2:
+>  - Bump version now than PR has been merged upstream
+> 
+>  package/filemq/filemq.hash | 2 +-
+>  package/filemq/filemq.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/filemq/filemq.hash b/package/filemq/filemq.hash
+> index 611d19208e..cf81eb4f50 100644
+> --- a/package/filemq/filemq.hash
+> +++ b/package/filemq/filemq.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  f3764e1adacfbf7fd09fb9c553e796a80d8159f1ace689fb68307afbc1746d4c  filemq-8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0.tar.gz
+> +sha256  bdec8584a181e1c9a1d9be567768bcf8c3f7132ea701dd1829f74370c6536991  filemq-af4768dcaf2fcb8083a32bad107a22ecb7a5d954.tar.gz
+>  sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  LICENSE
+> diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
+> index 75d8bd992c..665d6da212 100644
+> --- a/package/filemq/filemq.mk
+> +++ b/package/filemq/filemq.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -FILEMQ_VERSION = 8940f34e0f1c8f25c1c693ed8db069f58fbc5ad0
+> +FILEMQ_VERSION = af4768dcaf2fcb8083a32bad107a22ecb7a5d954
+>  FILEMQ_SITE = $(call github,zeromq,filemq,$(FILEMQ_VERSION))
+>  
+>  FILEMQ_AUTORECONF = YES
+> 
