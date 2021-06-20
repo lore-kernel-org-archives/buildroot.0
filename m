@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98D43C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:09:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B89E1C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:09:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5E58660D07
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:09:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5E58660D07
+	by mail.kernel.org (Postfix) with ESMTPS id 5A14E60D07
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:09:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5A14E60D07
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37A63401FF;
-	Tue,  3 Aug 2021 23:09:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 23B2C403FF;
+	Tue,  3 Aug 2021 23:09:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6At6MipI2fob; Tue,  3 Aug 2021 23:09:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3QNGB47m6fnB; Tue,  3 Aug 2021 23:09:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A4D340215;
-	Tue,  3 Aug 2021 23:09:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E9351404E0;
+	Tue,  3 Aug 2021 23:09:56 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5AE811BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0C0E01BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4D1CE404DA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5129A4066D
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lIFBwLhuvJ0P for <buildroot@lists.busybox.net>;
+ with ESMTP id LEHSOXrKnBmQ for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EBF3C40643
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C5D3240634
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4C2DE86016; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
+ id 137938674F; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 14 Jun 2021 22:25:50 +0200
+Date: Sun, 20 Jun 2021 14:37:17 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 51cc28485e17127807c5e511e02e2f087d32e8c6
-X-Git-Newrev: 371f2aa0edf233aa3a9eeee2e7be0920a46a0040
+X-Git-Oldrev: 05eb8e396f59c455f48fc80b12bf49c05a49e85b
+X-Git-Newrev: 49df5080079e7e6fc7330e91f249004d018c4c9b
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210952.4C2DE86016@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bluez5_utils: Clean up
- descriptions
+Message-Id: <20210803210953.137938674F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/docker-engine: bump
+ version to 20.10.7
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,166 +70,124 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=371f2aa0edf233aa3a9eeee2e7be0920a46a0040
+commit: https://git.buildroot.net/buildroot/commit/?id=49df5080079e7e6fc7330e91f249004d018c4c9b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The descriptions in this package have grown pretty confusing over time.
-Try to make this a bit more consistent and up-to-date.
+Drop upstreamed patch fix-port-forwarding-with-ipv6.
 
-* drop references to old kernel versions not supported by BR anymore
-* Remove "Bluez 5.x" string from options
-* consistently use the term "plugin" (plugins implement profiles)
-* make mentioned profile appreviations upper-case
-* make descriptions closer to the ones in BlueZ Readme [0]
-* make clear that "tests" refers to the python test scripts
+Upstream commit: d29a55c6c344a536089d6b1bcd92be9cdea20641
 
-[0] https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/README?h=5.58
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Christian Stewart <christian@paral.in>
+Tested-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Arnout:
- - remove more 5.x references;
- - Use official spelling BlueZ in main help text]
 ---
- package/bluez5_utils/Config.in | 51 ++++++++++++++++++++----------------------
- 1 file changed, 24 insertions(+), 27 deletions(-)
+ ...1-fix-port-forwarding-with-ipv6.disable-1.patch | 74 ----------------------
+ package/docker-engine/docker-engine.hash           |  2 +-
+ package/docker-engine/docker-engine.mk             |  2 +-
+ 3 files changed, 2 insertions(+), 76 deletions(-)
 
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index 016a16c4c5..2c8625a66d 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_BLUEZ5_UTILS
--	bool "bluez-utils 5.x"
-+	bool "bluez-utils"
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus
-@@ -9,17 +9,12 @@ config BR2_PACKAGE_BLUEZ5_UTILS
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
--	  bluez utils version 5.x
-+	  BlueZ utils
- 
--	  With this release BlueZ only supports the new Bluetooth
--	  Management kernel interface (introduced in Linux 3.4).
-+	  Provides Stack, Library and Tooling for Bluetooth Classic
-+	  and Bluetooth LE.
- 
--	  For Low Energy support at least kernel version 3.5 is
--	  needed.
+diff --git a/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch b/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch
+deleted file mode 100644
+index c5161ef0db..0000000000
+--- a/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch
++++ /dev/null
+@@ -1,74 +0,0 @@
+-From 7b9c2905883df5171fda10a364a81b8c6176c8e2 Mon Sep 17 00:00:00 2001
+-From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+-Date: Mon, 26 Apr 2021 15:28:40 +0900
+-Subject: [PATCH] fix port forwarding with ipv6.disable=1
 -
--	  The API is not backward compatible with BlueZ 4.
+-Make `docker run -p 80:80` functional again on environments with kernel boot parameter `ipv6.disable=1`.
 -
--	  Bluez utils will use systemd and/or udev if enabled.
-+	  BlueZ utils will use systemd and/or udev if enabled.
+-Fix moby/moby issue 42288
+-
+-Signed-off-by: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+-[Upstream: https://github.com/moby/libnetwork/pull/2635,
+-           https://github.com/moby/moby/pull/42322]
+-[Rework path/drop test for docker-engine]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go | 31 +++++++++++++++++++++++++++++++
+- 1 file changed, 35 insertions(+), 0 deletion(-)
+-
+-diff --git a/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go b/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
+-index 946130ec..17bf36f9 100644
+---- a/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
+-+++ b/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
+-@@ -5,6 +5,7 @@ import (
+- 	"errors"
+- 	"fmt"
+- 	"net"
+-+	"sync"
+- 
+- 	"github.com/docker/libnetwork/types"
+- 	"github.com/ishidawataru/sctp"
+-@@ -50,6 +51,13 @@ func (n *bridgeNetwork) allocatePortsInternal(bindings []types.PortBinding, cont
+- 			bs = append(bs, bIPv4)
+- 		}
+- 
+-+		// skip adding implicit v6 addr, when the kernel was booted with `ipv6.disable=1`
+-+		// https://github.com/moby/moby/issues/42288
+-+		isV6Binding := c.HostIP != nil && c.HostIP.To4() == nil
+-+		if !isV6Binding && !IsV6Listenable() {
+-+			continue
+-+		}
+-+
+- 		// Allocate IPv6 Port mappings
+- 		// If the container has no IPv6 address, allow proxying host IPv6 traffic to it
+- 		// by setting up the binding with the IPv4 interface if the userland proxy is enabled
+-@@ -211,3 +219,26 @@ func (n *bridgeNetwork) releasePort(bnd types.PortBinding) error {
+- 
+- 	return portmapper.Unmap(host)
+- }
+-+
+-+var (
+-+	v6ListenableCached bool
+-+	v6ListenableOnce   sync.Once
+-+)
+-+
+-+// IsV6Listenable returns true when `[::1]:0` is listenable.
+-+// IsV6Listenable returns false mostly when the kernel was booted with `ipv6.disable=1` option.
+-+func IsV6Listenable() bool {
+-+	v6ListenableOnce.Do(func() {
+-+		ln, err := net.Listen("tcp6", "[::1]:0")
+-+		if err != nil {
+-+			// When the kernel was booted with `ipv6.disable=1`,
+-+			// we get err "listen tcp6 [::1]:0: socket: address family not supported by protocol"
+-+			// https://github.com/moby/moby/issues/42288
+-+			logrus.Debugf("port_mapping: v6Listenable=false (%v)", err)
+-+		} else {
+-+			v6ListenableCached = true
+-+			ln.Close()
+-+		}
+-+	})
+-+	return v6ListenableCached
+-+}
+--- 
+-2.20.1
+-
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 6c55b9a9b9..d07ca33307 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fd7f5571b1f64f26b5ca520a3e1fefb33c190f3732b931051c23a76bdba5000e  docker-engine-20.10.6.tar.gz
++sha256  b80142035de46904605fb7b8f18075cd94154f8c3d67ff346ea554d1e9d579b9  docker-engine-20.10.7.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 10ecbf603a..372717775b 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://www.bluez.org
- 	  http://www.kernel.org/pub/linux/bluetooth
-@@ -31,7 +26,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS_OBEX
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBICAL
- 	help
--	  Enable the OBEX support in Bluez 5.x.
-+	  Enable OBEX support.
+-DOCKER_ENGINE_VERSION = 20.10.6
++DOCKER_ENGINE_VERSION = 20.10.7
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
  
- comment "OBEX support needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-@@ -40,75 +35,77 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
- 	bool "build CLI client"
- 	select BR2_PACKAGE_READLINE
- 	help
--	  Enable the Bluez 5.x command line client.
-+	  Build the command line client "bluetoothctl".
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
--	bool "install deprecated tool"
-+	bool "install deprecated tools"
- 	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
- 	help
--	  Build BlueZ 5.x deprecated tools. These currently include:
-+	  Build deprecated tools. These currently include:
- 	  hciattach, hciconfig, hcitool, hcidump, rfcomm, sdptool,
- 	  ciptool, gatttool.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
--	bool "build experimental obexd plugin"
-+	bool "build experimental tools"
- 	help
--	  Build BlueZ 5.x experimental Nokia OBEX PC Suite plugin
-+	  Build experimental tools. This is currently only the
-+	  "Nokia OBEX PC Suite tool". So, only if OBEX support is
-+	  enabled this option has an effect.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
- 	bool "build health plugin"
- 	help
--	  Build BlueZ 5.x health plugin
-+	  Build plugin for health profiles.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH
--	bool "build mesh profile"
-+	bool "build mesh plugin"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
- 	select BR2_PACKAGE_ELL
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_READLINE
- 	help
--	  Build BlueZ 5.x mesh plugin
-+	  Build plugin for Mesh support.
- 
- comment "mesh profile needs a toolchain w/ headers >= 4.12"
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI
--	bool "build midi profile"
-+	bool "build midi plugin"
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_ALSA_LIB_SEQ
- 	help
--	  Build BlueZ 5.x midi plugin
-+	  Build MIDI support via ALSA sequencer.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NFC
- 	bool "build nfc plugin"
- 	help
--	  Build BlueZ 5.x nfc plugin
-+	  Build plugin for NFC pairing.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SAP
- 	bool "build sap plugin"
- 	help
--	  Build BlueZ 5.x sap plugin
-+	  Build plugin for SAP profile.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SIXAXIS
- 	bool "build sixaxis plugin"
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	help
--	  Build BlueZ 5.x sixaxis plugin (support Sony Dualshock
-+	  Build sixaxis plugin (support Sony Dualshock
- 	  controller)
- 
- comment "sixaxis plugin needs udev /dev management"
- 	depends on !BR2_PACKAGE_HAS_UDEV
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_TEST
--	bool "build tests"
-+	bool "install test scripts"
- 	help
--	  Build BlueZ 5.x tests
-+	  Install the python test scripts from the "test" directory.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_TOOLS_HID2HCI
- 	bool "build hid2hci tool"
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	help
--	  Build BlueZ 5.x hid2hci tool
-+	  Build hid2hci tool
- 
- comment "hid2hci tool needs udev /dev management"
- 	depends on !BR2_PACKAGE_HAS_UDEV
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
