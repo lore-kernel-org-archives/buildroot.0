@@ -1,91 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Jun 2021 11:09:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi: enable optional vaapi support
- also for OpenGLES
-Message-ID: <20210620090900.205406-1-bernd.kuhls@t-online.de>
+Date: Sun, 20 Jun 2021 11:14:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.5.3
+Message-ID: <20210620091451.217360-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream commit
-https://github.com/xbmc/xbmc/commit/c638987dd8181765f975763cb643d6869a3f661b
+Release note:
+https://forums.openvpn.net/viewtopic.php?f=20&t=32497
 
-removed the dependency to x11 support in libva keeping only libdrm as
-dependency. This commit will enable the usage of libva with Kodi's
-OpenGLES render system.
+CVE-2021-3606 fixed by this release is only relevant for Windows.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy       |  8 ++++++++
- package/kodi/Config.in | 18 ------------------
- package/kodi/kodi.mk   |  5 ++---
- 3 files changed, 10 insertions(+), 21 deletions(-)
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a0c1a6898f..c10f9c5223 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 36f90ff111..1d365eeab4 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256  b12743836901f365efaf82ab2493967e1b21c21eb43ce9a8da1002a17c9c1dc8  openvpn-2.5.2.tar.xz
++sha256  fb6a9943c603a1951ca13e9267653f8dd650c02f84bccd2b9d20f06a4c9c9a7e  openvpn-2.5.3.tar.xz
+ sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 9b3802fd80..c07f8b4ff5 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2021.05"
- 
-+config BR2_PACKAGE_KODI_LIBVA
-+	bool "kodi option to add libva support removed"
-+	select BR2_LEGACY
-+	help
-+	  Kodi still has support for libva if the package is enabled but
-+	  the kodi-specific dependencies limiting libva support to non-
-+	  OPENGLES platforms were removed including this option.
-+
- config BR2_PACKAGE_UDISKS_LVM2
- 	bool "udisks lvm2 support removed"
- 	select BR2_LEGACY
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index f4cfc6380c..f702ae841a 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -238,24 +238,6 @@ config BR2_PACKAGE_KODI_LIBUSB
- 	help
- 	  Enable libusb support.
- 
--config BR2_PACKAGE_KODI_LIBVA
--	bool "va"
--	depends on \
--		BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM || \
--		BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND || \
--		(BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11 && \
--			BR2_PACKAGE_KODI_RENDER_SYSTEM_GL)
--	select BR2_PACKAGE_LIBVA
--	help
--	  Enable libva support.
--
--comment "libva support needs platform 'gbm', 'Wayland' or 'X11/OpenGL'"
--	depends on \
--		!BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM && \
--		!BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND && \
--		(!BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11 || \
--			!BR2_PACKAGE_KODI_RENDER_SYSTEM_GL)
--
- config BR2_PACKAGE_KODI_LIBVDPAU
- 	bool "vdpau"
- 	depends on BR2_PACKAGE_KODI_PLATFORM_X11 && \
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index a5c9db1d7e..6f020b58b8 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -315,9 +315,8 @@ ifeq ($(BR2_PACKAGE_LIRC_TOOLS),y)
- KODI_DEPENDENCIES += lirc-tools
- endif
- 
--# kodi needs libva & libva-glx
--ifeq ($(BR2_PACKAGE_KODI_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
--KODI_DEPENDENCIES += mesa3d libva
-+ifeq ($(BR2_PACKAGE_LIBVA),y)
-+KODI_DEPENDENCIES += libva
- KODI_CONF_OPTS += -DENABLE_VAAPI=ON
- else
- KODI_CONF_OPTS += -DENABLE_VAAPI=OFF
+-OPENVPN_VERSION = 2.5.2
++OPENVPN_VERSION = 2.5.3
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf
 -- 
 2.30.2
