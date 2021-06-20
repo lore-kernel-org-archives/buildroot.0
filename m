@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Jun 2021 18:37:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libfuse3: bump to version 3.10.4
-In-Reply-To: <20210610183934.100570-1-asafka7@gmail.com>
-References: <20210610183934.100570-1-asafka7@gmail.com>
-Message-ID: <de8df30d-5027-6d2c-ffa0-2a29688f48e9@mind.be>
+Date: Sun, 20 Jun 2021 18:37:52 +0200
+Subject: [Buildroot] [PATCH v2] package/iperf3: bump to version 3.10.1
+In-Reply-To: <20210610161008.norcnwoe3ej3txav@zenon.in.qult.net>
+References: <20210610161008.norcnwoe3ej3txav@zenon.in.qult.net>
+Message-ID: <ef5b1c6f-d4e6-c0e6-693f-ad382e4a9dd3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,10 @@ To: buildroot@busybox.net
 
 
 
-On 10/06/2021 20:39, Asaf Kahlon wrote:
-> From this version, tests can be disabled, so we pass
-> "tests=false" as a Meson option.
+On 10/06/2021 18:10, Ignacy Gaw?dzki wrote:
+> Update LICENSE hash; copyright year update.
 > 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
 
  Applied to master, thanks.
 
@@ -24,40 +23,33 @@ On 10/06/2021 20:39, Asaf Kahlon wrote:
  Arnout
 
 > ---
->  package/libfuse3/libfuse3.hash | 2 +-
->  package/libfuse3/libfuse3.mk   | 5 +++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
+>  package/iperf3/iperf3.hash | 6 +++---
+>  package/iperf3/iperf3.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-> index 49c71f402f..0414264bf8 100644
-> --- a/package/libfuse3/libfuse3.hash
-> +++ b/package/libfuse3/libfuse3.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated sha256 checksums
-> -sha256  c32527782cef620df58b162aa29901d1fb13253b029375d5860a2253a810344e  libfuse3-3.10.3.tar.gz
-> +sha256  bfcb2520fd83db29e9fefd57d3abd5285f38ad484739aeee8e03fbec9b2d984a  libfuse3-3.10.4.tar.gz
->  sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-> diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-> index b1624ba887..fc747c5bfd 100644
-> --- a/package/libfuse3/libfuse3.mk
-> +++ b/package/libfuse3/libfuse3.mk
+> diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+> index fa9d54f404..c96d68cd99 100644
+> --- a/package/iperf3/iperf3.hash
+> +++ b/package/iperf3/iperf3.hash
+> @@ -1,4 +1,4 @@
+> -# From https://downloads.es.net/pub/iperf/iperf-3.9.tar.gz.sha256
+> -sha256	24b63a26382325f759f11d421779a937b63ca1bc17c44587d2fcfedab60ac038  iperf-3.9.tar.gz
+> +# From https://downloads.es.net/pub/iperf/iperf-3.10.1.tar.gz.sha256
+> +sha256  03bc9760cc54a245191d46bfc8edaf8a4750f0e87abca6764486972044d6715a  iperf-3.10.1.tar.gz
+>  # Locally computed
+> -sha256	9ef73096bdd5209dd979bfa1fec70aeb42a7255d2df3aec423642aa92d5e9f40  LICENSE
+> +sha256  0e1cb1921904626f0d3e86cacc0e28333140f0f9957267cff0b9d185645743ed  LICENSE
+> diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+> index 7d20b86e78..8c57c61fce 100644
+> --- a/package/iperf3/iperf3.mk
+> +++ b/package/iperf3/iperf3.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -LIBFUSE3_VERSION = 3.10.3
-> +LIBFUSE3_VERSION = 3.10.4
->  LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
->  LIBFUSE3_LICENSE = LGPL-2.1
->  LIBFUSE3_LICENSE_FILES = LICENSE
-> @@ -15,7 +15,8 @@ LIBFUSE3_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
->  LIBFUSE3_CONF_OPTS = \
->  	-Dexamples=false \
->  	-Dudevrulesdir=/lib/udev/rules.d \
-> -	-Duseroot=false
-> +	-Duseroot=false \
-> +	-Dtests=false
->  
->  define LIBFUSE3_DEVICES
->  	/dev/fuse  c  666  0  0  10  229  0  0  -
+> -IPERF3_VERSION = 3.9
+> +IPERF3_VERSION = 3.10.1
+>  IPERF3_SITE = https://downloads.es.net/pub/iperf
+>  IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+>  IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
 > 
