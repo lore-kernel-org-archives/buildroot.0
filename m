@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Jun 2021 14:40:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/batman-adv: bump to version
- 2021.1
-In-Reply-To: <20210607055749.1466644-1-christian@paral.in>
-References: <20210607055749.1466644-1-christian@paral.in>
-Message-ID: <39e5d3e7-1fac-1ca0-cdae-b4fbb5f4768d@mind.be>
+Date: Sun, 20 Jun 2021 14:40:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fuse-overlayfs: bump to version
+ 1.5.0
+In-Reply-To: <20210607060158.1471289-1-christian@paral.in>
+References: <20210607060158.1471289-1-christian@paral.in>
+Message-ID: <9f472621-ed5c-d5ee-bc51-f004a6c67298@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ To: buildroot@busybox.net
 
 
 
-On 07/06/2021 07:57, Christian Stewart wrote:
+On 07/06/2021 08:01, Christian Stewart wrote:
 > Signed-off-by: Christian Stewart <christian@paral.in>
 
  Applied to master, thanks.
@@ -22,33 +22,31 @@ On 07/06/2021 07:57, Christian Stewart wrote:
  Arnout
 
 > ---
->  package/batman-adv/batman-adv.hash | 4 ++--
->  package/batman-adv/batman-adv.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/fuse-overlayfs/fuse-overlayfs.hash | 2 +-
+>  package/fuse-overlayfs/fuse-overlayfs.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
-> index 2422723f40..f81df11000 100644
-> --- a/package/batman-adv/batman-adv.hash
-> +++ b/package/batman-adv/batman-adv.hash
-> @@ -1,5 +1,5 @@
-> -# From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.0/batman-adv-2021.0.tar.gz.sha1
-> -sha1  7edd4dfb9434f80adf791990d4e383c7ef80a256  batman-adv-2021.0.tar.gz
-> +# From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.1/batman-adv-2021.1.tar.gz.sha1
-> +sha1  27a0dc7cb74b868bc0ab52794ecedd0448f0fb61  batman-adv-2021.1.tar.gz
->  
->  # Hash for license files
->  sha256  5a989ba580897268373bd516b87b588061f344af773a0f6b038a3d8d2af028a1  batman-adv-2021.0.tar.gz
-> diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
-> index cb802d6939..e58ac85bef 100644
-> --- a/package/batman-adv/batman-adv.mk
-> +++ b/package/batman-adv/batman-adv.mk
+> diff --git a/package/fuse-overlayfs/fuse-overlayfs.hash b/package/fuse-overlayfs/fuse-overlayfs.hash
+> index 9770ee0d3f..f9473c154a 100644
+> --- a/package/fuse-overlayfs/fuse-overlayfs.hash
+> +++ b/package/fuse-overlayfs/fuse-overlayfs.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed
+> -sha256  7e5666aef4f2047e6a5202d6438b08c2d314dba5b40e431014e7dbb8168d9018  fuse-overlayfs-1.4.0.tar.gz
+> +sha256  6c81b65b71067b303aaa9871f512c2cabc23e2b793f19c6c854d01a492b5a923  fuse-overlayfs-1.5.0.tar.gz
+>  # Locally computed
+>  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+> diff --git a/package/fuse-overlayfs/fuse-overlayfs.mk b/package/fuse-overlayfs/fuse-overlayfs.mk
+> index 707cacce03..0ad7dbc51d 100644
+> --- a/package/fuse-overlayfs/fuse-overlayfs.mk
+> +++ b/package/fuse-overlayfs/fuse-overlayfs.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -BATMAN_ADV_VERSION = 2021.0
-> +BATMAN_ADV_VERSION = 2021.1
->  BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
->  BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
->  BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
+> -FUSE_OVERLAYFS_VERSION = 1.4.0
+> +FUSE_OVERLAYFS_VERSION = 1.5.0
+>  FUSE_OVERLAYFS_SITE = $(call github,containers,fuse-overlayfs,v$(FUSE_OVERLAYFS_VERSION))
+>  FUSE_OVERLAYFS_LICENSE = GPL-3.0
+>  FUSE_OVERLAYFS_LICENSE_FILES = COPYING
 > 
