@@ -1,109 +1,64 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 20 Jun 2021 15:49:14 +0200
-Subject: [Buildroot] [git commit] package/qemu: remove upstream patch
-Message-ID: <20210620132047.1B20C8B824@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 20 Jun 2021 15:54:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libpsl: needs wchar
+In-Reply-To: <20210609214130.1593145-1-fontaine.fabrice@gmail.com>
+References: <20210609214130.1593145-1-fontaine.fabrice@gmail.com>
+Message-ID: <609834c4-14ce-b79c-e794-c949996da186@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c42a9f19fac4596d9db89e489fd176894de29df5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch is already merged in qemu 6.0.0.
 
-Fixes:
-http://autobuild.buildroot.net/results/aaa/aaabd63d0903819fb55d08852cef34c497cb57e6
+On 09/06/2021 23:41, Fabrice Fontaine wrote:
+> Add a dependency on wchar as both icu and libunistring needs wchar
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/704d8e6f8b78015180e5b12c132495425637430a
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libpsl/Config.in  | 4 ++++
+>  package/libsoup/Config.in | 2 +-
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/libpsl/Config.in b/package/libpsl/Config.in
+> index dd484799e7..de77ff8d10 100644
+> --- a/package/libpsl/Config.in
+> +++ b/package/libpsl/Config.in
+> @@ -1,8 +1,12 @@
+>  config BR2_PACKAGE_LIBPSL
+>  	bool "libpsl"
+> +	depends on BR2_USE_WCHAR
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...build-no-pie-is-no-functional-linker-flag.patch | 79 ----------------------
- 1 file changed, 79 deletions(-)
+ I added a comment # libunistring, icu
 
-diff --git a/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch b/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
-deleted file mode 100644
-index 6a21949157..0000000000
---- a/package/qemu/0005-build-no-pie-is-no-functional-linker-flag.patch
-+++ /dev/null
-@@ -1,79 +0,0 @@
--From bbd2d5a8120771ec59b86a80a1f51884e0a26e53 Mon Sep 17 00:00:00 2001
--From: Christian Ehrhardt <christian.ehrhardt@canonical.com>
--Date: Mon, 14 Dec 2020 16:09:38 +0100
--Subject: [PATCH] build: -no-pie is no functional linker flag
--
--Recent binutils changes dropping unsupported options [1] caused a build
--issue in regard to the optionroms.
--
--  ld -m elf_i386 -T /<<PKGBUILDDIR>>/pc-bios/optionrom//flat.lds -no-pie \
--    -s -o multiboot.img multiboot.o
--  ld.bfd: Error: unable to disambiguate: -no-pie (did you mean --no-pie ?)
--
--This isn't really a regression in ld.bfd, filing the bug upstream
--revealed that this never worked as a ld flag [2] - in fact it seems we
--were by accident setting --nmagic).
--
--Since it never had the wanted effect this usage of LDFLAGS_NOPIE, should be
--droppable without any effect. This also is the only use-case of LDFLAGS_NOPIE
--in .mak, therefore we can also remove it from being added there.
--
--[1]: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=983d925d
--[2]: https://sourceware.org/bugzilla/show_bug.cgi?id=27050#c5
--
--Signed-off-by: Christian Ehrhardt <christian.ehrhardt@canonical.com>
--Message-Id: <20201214150938.1297512-1-christian.ehrhardt@canonical.com>
--Cc: qemu-stable at nongnu.org
--Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
--
--[Retrieved from:
--https://gitlab.com/qemu-project/qemu/-/commit/bbd2d5a8120771ec59b86a80a1f51884e0a26e53]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure                  | 3 ---
-- pc-bios/optionrom/Makefile | 1 -
-- 2 files changed, 4 deletions(-)
--
--diff --git a/configure b/configure
--index cb21108d34..c228f7c21e 100755
----- a/configure
--+++ b/configure
--@@ -2137,7 +2137,6 @@ EOF
-- # Check we support --no-pie first; we will need this for building ROMs.
-- if compile_prog "-Werror -fno-pie" "-no-pie"; then
--   CFLAGS_NOPIE="-fno-pie"
---  LDFLAGS_NOPIE="-no-pie"
-- fi
-- 
-- if test "$static" = "yes"; then
--@@ -2153,7 +2152,6 @@ if test "$static" = "yes"; then
--   fi
-- elif test "$pie" = "no"; then
--   CONFIGURE_CFLAGS="$CFLAGS_NOPIE $CONFIGURE_CFLAGS"
---  CONFIGURE_LDFLAGS="$LDFLAGS_NOPIE $CONFIGURE_LDFLAGS"
-- elif compile_prog "-Werror -fPIE -DPIE" "-pie"; then
--   CONFIGURE_CFLAGS="-fPIE -DPIE $CONFIGURE_CFLAGS"
--   CONFIGURE_LDFLAGS="-pie $CONFIGURE_LDFLAGS"
--@@ -6714,7 +6712,6 @@ echo "QEMU_CXXFLAGS=$QEMU_CXXFLAGS" >> $config_host_mak
-- echo "GLIB_CFLAGS=$glib_cflags" >> $config_host_mak
-- echo "GLIB_LIBS=$glib_libs" >> $config_host_mak
-- echo "QEMU_LDFLAGS=$QEMU_LDFLAGS" >> $config_host_mak
---echo "LDFLAGS_NOPIE=$LDFLAGS_NOPIE" >> $config_host_mak
-- echo "LD_I386_EMULATION=$ld_i386_emulation" >> $config_host_mak
-- echo "EXESUF=$EXESUF" >> $config_host_mak
-- echo "HOST_DSOSUF=$HOST_DSOSUF" >> $config_host_mak
--diff --git a/pc-bios/optionrom/Makefile b/pc-bios/optionrom/Makefile
--index 084fc10f05..30771f8d17 100644
----- a/pc-bios/optionrom/Makefile
--+++ b/pc-bios/optionrom/Makefile
--@@ -41,7 +41,6 @@ override CFLAGS += $(call cc-option, $(Wa)-32)
-- 
-- LD_I386_EMULATION ?= elf_i386
-- override LDFLAGS = -m $(LD_I386_EMULATION) -T $(SRC_DIR)/flat.lds
---override LDFLAGS += $(LDFLAGS_NOPIE)
-- 
-- all: multiboot.bin linuxboot.bin linuxboot_dma.bin kvmvapic.bin pvh.bin
-- 
---- 
--GitLab
--
+ Applied to master, thanks.
+
+ Regards,
+ Arnout
+
+>  	select BR2_PACKAGE_LIBIDN2 if !BR2_PACKAGE_ICU && !BR2_PACKAGE_LIBIDN
+>  	select BR2_PACKAGE_LIBUNISTRING if !BR2_PACKAGE_ICU
+>  	help
+>  	  C library to handle the Public Suffix List of TLDs.
+>  
+>  	  https://github.com/rockdaboot/libpsl
+> +
+> +comment "libpsl needs a toolchain w/ wchar"
+> +	depends on !BR2_USE_WCHAR
+> diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+> index 47adfb33f2..0c0454c7c2 100644
+> --- a/package/libsoup/Config.in
+> +++ b/package/libsoup/Config.in
+> @@ -1,6 +1,6 @@
+>  config BR2_PACKAGE_LIBSOUP
+>  	bool "libsoup"
+> -	depends on BR2_USE_WCHAR # glib2 and gnutls
+> +	depends on BR2_USE_WCHAR # glib2, gnutls and libpsl
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+>  	depends on BR2_USE_MMU # glib2
+>  	select BR2_PACKAGE_LIBXML2
+> 
