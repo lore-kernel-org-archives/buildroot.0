@@ -1,45 +1,30 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Jun 2021 15:57:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pdbg: fix build with -DNDEBUG
-In-Reply-To: <20210611063921.212274-1-fontaine.fabrice@gmail.com>
-References: <20210611063921.212274-1-fontaine.fabrice@gmail.com>
-Message-ID: <0588351d-443c-6354-7d74-ac836201a8ee@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 20 Jun 2021 16:11:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rsync: fix CVE-2020-14387
+In-Reply-To: <87wnqzduqb.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sat, 12 Jun 2021 16:26:52 +0200")
+References: <20210612120210.53537-1-fontaine.fabrice@gmail.com>
+ <87wnqzduqb.fsf@dell.be.48ers.dk>
+Message-ID: <87y2b4bp8l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
+Hi,
 
-On 11/06/2021 08:39, Fabrice Fontaine wrote:
-> Fix build failure with -DNDEBUG raised since commit
-> 5a8c50fe05afacc3cbe8e7347e238da9f242fab0
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/9d90ede1ff7425cbb25b95aed3bf8d27ced865a4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> +RSYNC_IGNORE_CVES += CVE-2020-14387
 
- Applied to master, thanks.
+ > Committed after adding a
 
-[snip]
-> diff --git a/package/pdbg/0002-build-Fix-build-with-DNDEBUG.patch b/package/pdbg/0002-build-Fix-build-with-DNDEBUG.patch
-> new file mode 100644
-> index 0000000000..323a87d779
-> --- /dev/null
-> +++ b/package/pdbg/0002-build-Fix-build-with-DNDEBUG.patch
-> @@ -0,0 +1,71 @@
-> +From cd1a44bac413e8a6bc2572720153cc5e703762e1 Mon Sep 17 00:00:00 2001
-> +From: Amitay Isaacs <amitay@ozlabs.org>
-> +Date: Fri, 11 Jun 2021 15:27:29 +1000
-> +Subject: [PATCH] build: Fix build with -DNDEBUG
-> +
-> +Signed-off-by: Amitay Isaacs <amitay@ozlabs.org>
-> +[Retrieved from:
-> +https://github.com/open-power/pdbg/commit/cd1a44bac413e8a6bc2572720153cc5e703762e1]
+ > # 0001-rsync-ssl-Verify-the-hostname-in-the-certificate-when-using-openssl.patch 
 
- I took the liberty of adding your signoff here.
+ > Comment in front of this, thanks.
 
- Regards,
- Arnout
+Committed to 2021.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
