@@ -1,38 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Jun 2021 18:17:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: fix build
-In-Reply-To: <20210609171127.79897-1-fontaine.fabrice@gmail.com>
-References: <20210609171127.79897-1-fontaine.fabrice@gmail.com>
-Message-ID: <e0acf3f6-5dff-30b2-d1a3-6b9c5c09dafa@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 20 Jun 2021 18:20:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tor: unset the NDEBUG flag
+Message-ID: <20210620162030.1149816-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+For details see:
+https://gitlab.torproject.org/tpo/core/tor/-/blob/main/src/lib/log/util_bug.h#L56
 
+Fixes:
+http://autobuild.buildroot.net/results/aab/aabc7fd3093b1a7f08de8d06a1875eb5d231be4c/
 
-On 09/06/2021 19:11, Fabrice Fontaine wrote:
-> Drop 0002-meson.build-fix-build-with-uclibc-ng.patch which is not needed
-> since 0dda1a44a0859fc15b318e493c151ca1d807ba24 which has been merged in
-> master in commit 8d07baab43b5624ad6d73ee58f5a9d4ab8b27049
-> 
-> While at it, renumber
-> 0002-meson-fix-getrandom-detection-for-uclibc.patch to
-> 0001-meson-fix-getrandom-detection-for-uclibc.patch (patch number was
-> wrong since its addition in commit
-> b003cb5d16de9c92baba7dea7a6626c71cefc4fb) and also renumber remaining
-> patch
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/4d442c61b137ca1bd2dd32c6802ff0251d39e7a5
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tor/tor.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
- Applied to master, thanks.
-
- I took the subject line from Asaf's submission, however: "package/pipewire:
-remove already-applied patch and renumber". Much better than "fix build".
-
- Regards,
- Arnout
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index e0db278fb9..fca272f836 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -62,6 +62,9 @@ endif
+ # uses gnu extensions
+ TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ 
++# tor does not support building with NDEBUG enabled
++TOR_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -UNDEBUG"
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ TOR_CONF_ENV += LIBS=-latomic
+ endif
+-- 
+2.30.2
