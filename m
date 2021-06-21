@@ -1,42 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Jun 2021 22:25:46 +0200
-Subject: [Buildroot] [PATCH 4/4] support/testing/tests/fs/test_ext: add
- missing "format" option for Qemu
-In-Reply-To: <20210621202547.360391-1-thomas.petazzoni@bootlin.com>
-References: <20210621202547.360391-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210621202547.360391-4-thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 21 Jun 2021 22:33:48 +0200
+Subject: [Buildroot] Gstreamer1.18 build static option
+In-Reply-To: <20210621202438.518c144c@gmx.net>
+References: <CALM_QrXzearvsRtm_QikCF1atAWiKsqBAFhGPUHYcbMQqkM3RA@mail.gmail.com>
+ <20210621202438.518c144c@gmx.net>
+Message-ID: <8af50a20-0e95-9bb9-8abf-82608b37d811@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Will avoid the following warning:
 
-   WARNING: Image format was not specified for
-   '/home/thomas/projets/outputs/TestExt3/images/rootfs.ext3' and
-   probing guessed raw. Automatically detecting the format is
-   dangerous for raw images, write operations on block 0 will be
-   restricted. Specify the 'raw' format explicitly to remove the
-   restrictions.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/testing/tests/fs/test_ext.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 21/06/2021 20:24, Peter Seiderer wrote:
+> Hello Ratheendran,
+> 
+> On Mon, 21 Jun 2021 13:05:45 +0530, Ratheendran R <ratheendran.s@gmail.com> wrote:
+> 
+>> Hi All,
+>>
+>>
+>> I am looking for the option to build gstreamer statically and linking with
+>> our webrtc plugin.
+> 
+> There are no per-package options in buildroot to select static or dynamic
+> linking...
+> 
+>>
+>>  looks like it is not supported on buildroot 2020.x, let me know if this
+>> working on any of the buildroot versions.please share the details or
+>> workaround if exists.
+> 
+> Only a global one, take a look at 'make menuconfig' and 'Build options' -->
+> 'libraries' --> 'staic only'/'shared only'/'both static and shared'....
 
-diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
-index 0fe8af7e6d..2a6e0c4274 100644
---- a/support/testing/tests/fs/test_ext.py
-+++ b/support/testing/tests/fs/test_ext.py
-@@ -31,7 +31,7 @@ def boot_img_and_check_fs_type(emulator, builddir, fs_type):
-                   kernel="builtin",
-                   kernel_cmdline=["root=/dev/mmcblk0",
-                                   "rootfstype={}".format(fs_type)],
--                  options=["-drive", "file={},if=sd".format(img)])
-+                  options=["-drive", "file={},if=sd,format=raw".format(img)])
-     emulator.login()
-     _, exit_code = emulator.run(CHECK_FS_TYPE_CMD.format(fs_type))
-     return exit_code
--- 
-2.31.1
+ Note that static-only is not available with glibc, you need to use musl or
+uClibc for that.
+
+ Also, static-only will link *everything* statically, which (for bigger systems)
+will usually result in a huge footprint.
+
+ I would suggest to use 'both static and shared'. Unfortunately, that won't
+work: GStreamer uses meson as build system, and meson doesn't support building
+both shared and static libraries at the same time, so you'll get only the shared
+library.
+
+ A workaround that some people use is to have two buildroot configurations: one
+which is static-only and where you build the static libraries, and a second one
+that copies the files from the first one as external toolchain, so the static
+libraries are available. That's a hack that half-works, but it could be useful
+for you.
+
+ Regards,
+ Arnout
+
+> But not sure if gstreamer will honor your selection as you expect it (personally
+> do only use/test the shared case)...
+> 
+> Regards,
+> Peter
+> 
+> 
+>>
+>>
+>> thanks in advance
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
