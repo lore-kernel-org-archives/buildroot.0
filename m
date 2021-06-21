@@ -1,147 +1,111 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 20 Jun 2021 22:56:07 +0200
-Subject: [Buildroot] [RFC v1 2/2] package/nrlsmf: new package
-In-Reply-To: <20210620205607.25904-1-ps.report@gmx.net>
-References: <20210620205607.25904-1-ps.report@gmx.net>
-Message-ID: <20210620205607.25904-2-ps.report@gmx.net>
+From: Andreas Ziegler <br015@umbiko.net>
+Date: Mon, 21 Jun 2021 04:49:50 +0000
+Subject: [Buildroot] [PATCH 1/1] package/gcc: undefine NDEBUG directive
+In-Reply-To: <ef698263-7720-7db2-8f4b-7d1cf1e4fbe9@gmail.com>
+References: <20210617121943.800180-1-br015@umbiko.net>
+ <ef698263-7720-7db2-8f4b-7d1cf1e4fbe9@gmail.com>
+Message-ID: <f62466d58c976ffb7a267bbc3e20f6ce@umbiko.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- use src-nrlsmf-with-protolib-1.1b2a.tgz download (instead of plain
-  git one) with bundled protolib as nrlsmf does not compile with an
-  up to date protolib version
+Bonjour Romain,
 
-- needs thread support (pthread.h)
+On 2021-06-20 18:23, Romain Naour wrote:
+> Hello Andreas,
+> 
+> Le 17/06/2021 ? 14:19, Andreas Ziegler a ?crit?:
+>> GCC performs internal consistency checks that can be controlled with 
+>> --enable-checking, but not completely removed for all stages of the 
+>> build. One of these checks uses the assert macro from <assert.h>  
+>> Defining NDEBUG removes the assertion code, which is not anticipated 
+>> in the gcc code.
+>> 
+>> Undefine the NDEBUG flag for package/gcc to preserve assertions.
+>> 
+>> This fixes the following error during build of GCC 10:
+>> 
+>> ../../../libgomp/target.c: In function ?gomp_unmap_vars_internal?:
+>> ../../../libgomp/target.c:1474:9: error: unused variable 
+>> ?is_tgt_unmapped? [-Werror=unused-variable]
+>>  1474 |    bool is_tgt_unmapped = gomp_remove_var (devicep, k);
+>>       |         ^~~~~~~~~~~~~~~
+>> ../../../libgomp/target.c:1473:28: error: unused variable ?k_tgt? 
+>> [-Werror=unused-variable]
+>>  1473 |    struct target_mem_desc *k_tgt = k->tgt;
+>>       |                            ^~~~~
+> 
+> It seems an error related to Werror being enabled.
+> 
+> Usually we prefer disable Werror while building a package in Buildroot 
+> because
+> any package can trigger new warning with the latest compiler.
 
-- select BR2_PACKAGE_IPTABLES_LIBIPQ to gain access to
-  header linux/netfilter_ipv4/ip_queue.h
+Using -Wno-error was my first idea, though I would have preferred to 
+just disable the actual error: -Werror=unused-variable. I posted a 
+question an the mailing list
 
-- overwrite CFLAGS to re-add nrlsmf specific include paths and
-  defines (taken from unix/Makefile.common and unix/Makefile.linux)
+https://marc.info/?l=buildroot&m=162366255526973&w=2
 
-- add -fpmerissive to avoid build error
+After receiving no answer, I did some more research:
 
-- overwrite SYSTEM_LIBS to avoid libpcap linking
+-- gcc does not use NDEBUG consistently, but relies on assertions to 
+monitor some internal structures. These assertions, but not the code,  
+are disabled via the C library when NDEBUG is set.
 
-- overwrite CC to link usign g++ (instead of gcc, fixes linking
-  error because of missing C++ libs)
+-- The build process explicitly sets -Werror in some phases.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/nrlsmf/Config.in   | 15 ++++++++++++++
- package/nrlsmf/nrlsmf.hash |  3 +++
- package/nrlsmf/nrlsmf.mk   | 42 ++++++++++++++++++++++++++++++++++++++
- 5 files changed, 62 insertions(+)
- create mode 100644 package/nrlsmf/Config.in
- create mode 100644 package/nrlsmf/nrlsmf.hash
- create mode 100644 package/nrlsmf/nrlsmf.mk
+-- For enabling and disabling individual internal checks and assertions, 
+configure options exist:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f6621e9670..2761d6ccfa 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2148,6 +2148,7 @@ F:	package/iwd/
- F:	package/libevdev/
- F:	package/libuev/
- F:	package/log4cplus/
-+F:	package/nrlsmf/
- F:	package/postgresql/
- F:	package/python-colorzero/
- F:	package/python-flask-wtf/
-diff --git a/package/Config.in b/package/Config.in
-index cb8ece4919..c340ae515f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2232,6 +2232,7 @@ endif
- 	source "package/nload/Config.in"
- 	source "package/nmap/Config.in"
- 	source "package/noip/Config.in"
-+	source "package/nrlsmf/Config.in"
- 	source "package/ntp/Config.in"
- 	source "package/nuttcp/Config.in"
- 	source "package/odhcp6c/Config.in"
-diff --git a/package/nrlsmf/Config.in b/package/nrlsmf/Config.in
-new file mode 100644
-index 0000000000..61feba2ef6
---- /dev/null
-+++ b/package/nrlsmf/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_NRLSMF
-+	bool "nrlsmf"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_IPTABLES
-+	select BR2_PACKAGE_IPTABLES_LIBIPQ # header linux/netfilter_ipv4/ip_queue.h
-+	help
-+	  The NRL Simplified Multicast Forwarding (nrlsmf) project is a
-+	  user-space software implementation of the forwarding engine
-+	  for Simplified Multicast Forwarding (SMF, RFC 6621).
-+
-+	  https://www.nrl.navy.mil/Our-Work/Areas-of-Research/Information-Technology/NCS/SMF
-+
-+comment "nrlsmf needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/nrlsmf/nrlsmf.hash b/package/nrlsmf/nrlsmf.hash
-new file mode 100644
-index 0000000000..9d066c6f0c
---- /dev/null
-+++ b/package/nrlsmf/nrlsmf.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  d72f0ea8d12d19ee30cbbbf96bcfc9d5f57c4e2d11fe0e336a4e8005fef7c5b0  src-nrlsmf-with-protolib-1.1b2a.tgz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/nrlsmf/nrlsmf.mk b/package/nrlsmf/nrlsmf.mk
-new file mode 100644
-index 0000000000..554291c880
---- /dev/null
-+++ b/package/nrlsmf/nrlsmf.mk
-@@ -0,0 +1,42 @@
-+################################################################################
-+#
-+# nrlsmf
-+#
-+################################################################################
-+
-+NRLSMF_VERSION = 1.1b2a
-+#NRLSMF_SITE = $(call github,USNavalResearchLaboratory,nrlsmf,v$(NRLSMF_VERSION))
-+NRLSMF_SOURCE = src-nrlsmf-with-protolib-$(NRLSMF_VERSION).tgz
-+NRLSMF_SITE = https://github.com/USNavalResearchLaboratory/nrlsmf/releases/download/v$(NRLSMF_VERSION)
-+NRLSMF_LICENSE = BSD-2-Clause (protolib)
-+NRLSMF_DEPENDENCIES = iptables
-+
-+NRLSMF_CFLAGS = \
-+	-I$(@D)/unix \
-+	-I$(@D)/common \
-+	-I$(@D)/protolib/common \
-+	-I$(@D)/protolib/manet \
-+	-DMNE_SUPPORT \
-+	-DUNIX \
-+	-DLINUX \
-+	-DHAVE_IPV6 \
-+	-DHAVE_GETLOGIN \
-+	-DHAVE_LOCKF \
-+	-DHAVE_OLD_SIGNALHANDLER \
-+	-DHAVE_DIRFD \
-+	-DHAVE_ASSERT \
-+	-DNO_SCM_RIGHTS \
-+	-DHAVE_SCHED \
-+	-fpermissive
-+
-+define NRLSMF_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/unix -f Makefile.linux \
-+		CFLAGS="$(NRLSMF_TARGET_CFLAGS) $(NRLSMF_CFLAGS)" \
-+		CC="$(TARGET_CXX)" SYSTEM_LIBS="-ldl" all
-+endef
-+
-+define NRLSMF_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/unix/nrlsmf $(TARGET_DIR)/usr/bin/nrlsmf
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.31.1
+--enable-werror
+--disable-werror
+--enable-checking
+--disable-checking
+--disable-stage1-checking
+--enable-stage1-checking
+
+So my recommendation is to remove NDEBUG, not suppress the error 
+message. This is the least invasive option.
+
+> Maybe we can use -Wno-error not just when BR2_ENABLE_DEBUG is set:
+> 
+> https://git.buildroot.net/buildroot/commit/?id=dcaf6e75acb4d21c2c31c70b054dac8d18710fcb
+
+I have seen this, but would not recommend disabling errors overall to 
+catch one specific error that manifests. -Wno-error=maybe-uninitialized 
+might have been more elegant ...
+
+Kind regards,
+Andreas
+
+
+> Best regards,
+> Romain
+> 
+>> 
+>> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+>> ---
+>>  package/gcc/gcc.mk | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+>> index ed9b93e50f..4ee32c03a7 100644
+>> --- a/package/gcc/gcc.mk
+>> +++ b/package/gcc/gcc.mk
+>> @@ -90,7 +90,8 @@ HOST_GCC_COMMON_CONF_OPTS = \
+>>  HOST_GCC_COMMON_CONF_ENV = \
+>>  	MAKEINFO=missing
+>> 
+>> -GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+>> +# gcc should not be built with NDEBUG enabled
+>> +GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS) -UNDEBUG
+>>  GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+>> 
+>>  # used to fix 
+>> ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: 
+>> error: 'st.st_mode' may be used uninitialized in this function 
+>> [-Werror=maybe-uninitialized]
+>> 
