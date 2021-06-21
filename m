@@ -1,39 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Jun 2021 21:45:48 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x]
- package/python-dataproperty: drop python-six dependency
-Message-ID: <20210621194110.2B7E38D322@busybox.osuosl.org>
+Date: Mon, 21 Jun 2021 21:58:43 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/lvm2: default
+ standard install to y
+Message-ID: <20210621194110.36F877FB97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e2fecfdc45387c274135e15969a709da4440e3c
+commit: https://git.buildroot.net/buildroot/commit/?id=b4a1b40380ef3eb43506a705487507ee5614fd0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-python-six is not a dependency since drop of python 2 in version 0.47.0:
-https://github.com/thombashi/DataProperty/commit/d3fdde41af0151e2f04a3a79bea1fb33a28a98f7
+Until commit 5c07dfcc1a52e2804011574a3e022523a20546c8
+BR2_PACKAGE_LVM2_STANDARD_INSTALL would default to y. Indeed, the
+default read:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+      default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
+
+Since the legacy symbol is normally not selected, this defaults to y.
+
+Commit 5c07dfcc1a52e2804011574a3e022523a20546c8 inadvertedly removed the
+entire line instead of just the condition.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=13846
+For-stable: 2021.02, 2021.05
+Cc: dominique.tronche at atos.net
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 37d3d24cc26d584d9772775afd4282019b7eb287)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 6d758f59e65c33b067076cdb89a8404d5471c7ae)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-dataproperty/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/lvm2/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-dataproperty/Config.in b/package/python-dataproperty/Config.in
-index 2c5da40ff2..3de9cc685e 100644
---- a/package/python-dataproperty/Config.in
-+++ b/package/python-dataproperty/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_PYTHON_DATAPROPERTY
- 	bool "python-dataproperty"
--	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder
-+	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
--	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
+diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+index 317027929e..cc740dd40c 100644
+--- a/package/lvm2/Config.in
++++ b/package/lvm2/Config.in
+@@ -26,6 +26,7 @@ if BR2_PACKAGE_LVM2
+ 
+ config BR2_PACKAGE_LVM2_STANDARD_INSTALL
+ 	bool "standard install instead of only dmsetup"
++	default y
+ 	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
  	help
- 	  Python library for extract property from data.
