@@ -1,73 +1,80 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 21 Jun 2021 22:33:48 +0200
-Subject: [Buildroot] Gstreamer1.18 build static option
-In-Reply-To: <20210621202438.518c144c@gmx.net>
-References: <CALM_QrXzearvsRtm_QikCF1atAWiKsqBAFhGPUHYcbMQqkM3RA@mail.gmail.com>
- <20210621202438.518c144c@gmx.net>
-Message-ID: <8af50a20-0e95-9bb9-8abf-82608b37d811@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 21 Jun 2021 22:34:55 +0200
+Subject: [Buildroot] [PATCH 2/2]
+ support/testing/tests/package/test_python_augeas: new test
+In-Reply-To: <20210621203456.361929-1-thomas.petazzoni@bootlin.com>
+References: <20210621203456.361929-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20210621203456.361929-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                          |  4 ++++
+ .../testing/tests/package/sample_python_augeas.py   |  9 +++++++++
+ support/testing/tests/package/test_python_augeas.py | 13 +++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_augeas.py
+ create mode 100644 support/testing/tests/package/test_python_augeas.py
 
-
-On 21/06/2021 20:24, Peter Seiderer wrote:
-> Hello Ratheendran,
-> 
-> On Mon, 21 Jun 2021 13:05:45 +0530, Ratheendran R <ratheendran.s@gmail.com> wrote:
-> 
->> Hi All,
->>
->>
->> I am looking for the option to build gstreamer statically and linking with
->> our webrtc plugin.
-> 
-> There are no per-package options in buildroot to select static or dynamic
-> linking...
-> 
->>
->>  looks like it is not supported on buildroot 2020.x, let me know if this
->> working on any of the buildroot versions.please share the details or
->> workaround if exists.
-> 
-> Only a global one, take a look at 'make menuconfig' and 'Build options' -->
-> 'libraries' --> 'staic only'/'shared only'/'both static and shared'....
-
- Note that static-only is not available with glibc, you need to use musl or
-uClibc for that.
-
- Also, static-only will link *everything* statically, which (for bigger systems)
-will usually result in a huge footprint.
-
- I would suggest to use 'both static and shared'. Unfortunately, that won't
-work: GStreamer uses meson as build system, and meson doesn't support building
-both shared and static libraries at the same time, so you'll get only the shared
-library.
-
- A workaround that some people use is to have two buildroot configurations: one
-which is static-only and where you build the static libraries, and a second one
-that copies the files from the first one as external toolchain, so the static
-libraries are available. That's a hack that half-works, but it could be useful
-for you.
-
- Regards,
- Arnout
-
-> But not sure if gstreamer will honor your selection as you expect it (personally
-> do only use/test the shared case)...
-> 
-> Regards,
-> Peter
-> 
-> 
->>
->>
->> thanks in advance
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 06d311a085..9ff590978c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1987,6 +1987,8 @@ F:	configs/galileo_defconfig
+ N:	Nicolas Carrier <nicolas.carrier@orolia.com>
+ F:	package/php-xdebug/
+ F:	package/python-augeas/
++F:	support/testing/tests/package/sample_python_augeas.py
++F:	support/testing/tests/package/test_python_augeas.py
+ 
+ N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+ F:	package/libgit2/
+@@ -2687,6 +2689,8 @@ F:	package/squashfs/
+ F:	package/wayland/
+ F:	package/weston/
+ F:	support/testing/tests/boot/test_syslinux.py
++F:	support/testing/tests/package/sample_python_augeas.py
++F:	support/testing/tests/package/test_python_augeas.py
+ F:	toolchain/
+ 
+ N:	Timo Ketola <timo.ketola@exertus.fi>
+diff --git a/support/testing/tests/package/sample_python_augeas.py b/support/testing/tests/package/sample_python_augeas.py
+new file mode 100644
+index 0000000000..d62afa564e
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_augeas.py
+@@ -0,0 +1,9 @@
++import augeas
++
++a = augeas.Augeas(root="/")
++hosts = a.match("/files/etc/hosts/*")
++assert(hosts is not None)
++assert(len(hosts) == 2)
++
++assert(a.get("/files/etc/hosts/1/ipaddr") == "127.0.0.1")
++assert(a.get("/files/etc/hosts/1/canonical") == "localhost")
+diff --git a/support/testing/tests/package/test_python_augeas.py b/support/testing/tests/package/test_python_augeas.py
+new file mode 100644
+index 0000000000..c1424668d6
+--- /dev/null
++++ b/support/testing/tests/package/test_python_augeas.py
+@@ -0,0 +1,13 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonAugeas(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_AUGEAS=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_AUGEAS=y
++        """
++    sample_scripts = ["tests/package/sample_python_augeas.py"]
++    timeout = 60
+-- 
+2.31.1
