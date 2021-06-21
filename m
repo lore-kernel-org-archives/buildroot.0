@@ -1,222 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Jun 2021 22:34:54 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-augeas: new package
-Message-ID: <20210621203456.361929-1-thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 21 Jun 2021 22:42:18 +0200
+Subject: [Buildroot] [PATCH 00/15] Overwritten file detection and fixes,
+ one more step to TLP build
+In-Reply-To: <20210621141130.48654-1-herve.codina@bootlin.com>
+References: <20210621141130.48654-1-herve.codina@bootlin.com>
+Message-ID: <13355d25-40f1-5132-fdeb-d95308bab71a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We backport an upstream patch that fixes the loading of the native
-library by the FFI logic. Without this, "import augeas" doesn't work
-as it goes into the ctypes.utils.find_library() logic that tries to
-use a compiler on the target to find the augeas native library.
+ Hi Herve?,
 
-Based on initial work from Nicolas Carrier <nicolas.carrier@orolia.com>
+ Great that someone is picking thuis up!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                    |   2 +
- package/Config.in                             |   1 +
- ...-Use-CFFI-in-out-of-line-API-mode-49.patch | 101 ++++++++++++++++++
- package/python-augeas/Config.in               |   8 ++
- package/python-augeas/python-augeas.hash      |   3 +
- package/python-augeas/python-augeas.mk        |  21 ++++
- 6 files changed, 136 insertions(+)
- create mode 100644 package/python-augeas/0001-Use-CFFI-in-out-of-line-API-mode-49.patch
- create mode 100644 package/python-augeas/Config.in
- create mode 100644 package/python-augeas/python-augeas.hash
- create mode 100644 package/python-augeas/python-augeas.mk
+On 21/06/2021 16:11, Herve Codina wrote:
+> Hi,
+> 
+> This series fixes some issues in the TLP build feature.
+> The starting point was the work done by Thomas Petazzoni on overwrites
+> detection (PATCH 1).
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f6621e9670..06d311a085 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1986,6 +1986,7 @@ F:	configs/galileo_defconfig
- 
- N:	Nicolas Carrier <nicolas.carrier@orolia.com>
- F:	package/php-xdebug/
-+F:	package/python-augeas/
- 
- N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
- F:	package/libgit2/
-@@ -2672,6 +2673,7 @@ F:	package/pkg-autotools.mk
- F:	package/pkg-generic.mk
- F:	package/python/
- F:	package/python3/
-+F:	package/python-augeas/
- F:	package/python-mad/
- F:	package/python-serial/
- F:	package/qextserialport/
-diff --git a/package/Config.in b/package/Config.in
-index cb8ece4919..35e6d4d493 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -908,6 +908,7 @@ menu "External python modules"
- 	source "package/python-async-lru/Config.in"
- 	source "package/python-async-timeout/Config.in"
- 	source "package/python-attrs/Config.in"
-+	source "package/python-augeas/Config.in"
- 	source "package/python-autobahn/Config.in"
- 	source "package/python-automat/Config.in"
- 	source "package/python-avro/Config.in"
-diff --git a/package/python-augeas/0001-Use-CFFI-in-out-of-line-API-mode-49.patch b/package/python-augeas/0001-Use-CFFI-in-out-of-line-API-mode-49.patch
-new file mode 100644
-index 0000000000..da9093d723
---- /dev/null
-+++ b/package/python-augeas/0001-Use-CFFI-in-out-of-line-API-mode-49.patch
-@@ -0,0 +1,101 @@
-+From 9de73fefbe83c74840a93c039258845c49271b9b Mon Sep 17 00:00:00 2001
-+From: Jeffery To <jeffery.to@gmail.com>
-+Date: Sun, 8 Nov 2020 21:51:09 +0800
-+Subject: [PATCH] Use CFFI in out-of-line API mode (#49)
-+
-+Currently, ffi.py is called during setup to generate augeas.py; this
-+file would normally be used for out-of-line ABI mode. ffi.py is also
-+imported at run-time, instead of the generated augeas.py, and used in
-+in-line ABI mode.
-+
-+This changes usage of CFFI to out-of-line API mode (CFFI's "main mode of
-+usage"): ffi.py is called during setup to generate _augeas.abi3.so (a C
-+extension module); this generated module is imported at run-time.
-+
-+With this change, the headers/development files for augeas (i.e.
-+libaugeas-dev on Debian, augeas-devel on Fedora, etc.) and the C
-+compiler are required for build/setup. (These were not necessary
-+previously.)
-+
-+Closes https://github.com/hercules-team/python-augeas/issues/48.
-+
-+Upstream: commit 712c2028568df7760bc98d95577e35709078bfea
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ augeas/__init__.py |  2 +-
-+ augeas/ffi.py      | 27 ++++++++++++++++++++++-----
-+ setup.py           |  1 +
-+ 3 files changed, 24 insertions(+), 6 deletions(-)
-+
-+diff --git a/augeas/__init__.py b/augeas/__init__.py
-+index 9bd97bf..1c0f580 100644
-+--- a/augeas/__init__.py
-++++ b/augeas/__init__.py
-+@@ -32,7 +32,7 @@ format and the transformation into a tree.
-+ 
-+ from sys import version_info as _pyver
-+ 
-+-from augeas.ffi import ffi, lib
-++from _augeas import ffi, lib
-+ 
-+ __author__ = "Nathaniel McCallum <nathaniel@natemccallum.com>"
-+ __credits__ = """Jeff Schroeder <jeffschroeder@computer.org>
-+diff --git a/augeas/ffi.py b/augeas/ffi.py
-+index a24daf5..1931764 100644
-+--- a/augeas/ffi.py
-++++ b/augeas/ffi.py
-+@@ -1,9 +1,28 @@
-++import os
-++import subprocess
-++
-+ from cffi import FFI
-+ 
-++def get_include_dirs():
-++    XML2_CONFIG = os.environ.get('XML2_CONFIG', 'xml2-config')
-++    PKG_CONFIG = os.environ.get('PKG_CONFIG', 'pkg-config')
-++    try:
-++        stdout = subprocess.check_output([XML2_CONFIG, '--cflags'])
-++    except (OSError, subprocess.CalledProcessError):
-++        try:
-++            stdout = subprocess.check_output([PKG_CONFIG, '--cflags', 'libxml-2.0'])
-++        except (OSError, subprocess.CalledProcessError):
-++            stdout = b''
-++    cflags = stdout.decode('utf-8').split()
-++    return [cflag[2:] for cflag in cflags if cflag.startswith('-I')]
-++
-+ ffi = FFI()
-+-ffi.set_source("augeas",
-+-               None,
-+-               libraries=['augeas'])
-++ffi.set_source("_augeas",
-++               """
-++               #include <augeas.h>
-++               """,
-++               libraries=['augeas'],
-++               include_dirs=get_include_dirs())
-+ 
-+ ffi.cdef("""
-+ typedef struct augeas augeas;
-+@@ -44,7 +63,5 @@ const char *aug_error_details(augeas *aug);
-+ void free(void *);
-+ """)
-+ 
-+-lib = ffi.dlopen("augeas")
-+-
-+ if __name__ == "__main__":
-+     ffi.compile(verbose=True)
-+diff --git a/setup.py b/setup.py
-+index 7d55877..17f9516 100755
-+--- a/setup.py
-++++ b/setup.py
-+@@ -22,6 +22,7 @@ setup(name=name,
-+       setup_requires=["cffi>=1.0.0"],
-+       cffi_modules=["augeas/ffi.py:ffi"],
-+       install_requires=["cffi>=1.0.0"],
-++      zip_safe=False,
-+       url="http://augeas.net/",
-+       classifiers=[
-+           "Programming Language :: Python :: 2.7",
-+-- 
-+2.31.1
-+
-diff --git a/package/python-augeas/Config.in b/package/python-augeas/Config.in
-new file mode 100644
-index 0000000000..3503a83b3b
---- /dev/null
-+++ b/package/python-augeas/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_AUGEAS
-+	bool "python-augeas"
-+	depends on BR2_PACKAGE_AUGEAS
-+	select BR2_PACKAGE_PYTHON_CFFI # runtime
-+	help
-+	  Pure python bindings for Augeas.
-+
-+	  https://github.com/hercules-team/python-augeas
-diff --git a/package/python-augeas/python-augeas.hash b/package/python-augeas/python-augeas.hash
-new file mode 100644
-index 0000000000..f4f4209875
---- /dev/null
-+++ b/package/python-augeas/python-augeas.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  1a1d2cdaf2ad4c091ed5ec7976c52d16e14ecfbf40b1bdcaced2465255fb0f87  python-augeas-1.1.0.tar.gz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/python-augeas/python-augeas.mk b/package/python-augeas/python-augeas.mk
-new file mode 100644
-index 0000000000..7adaa84f49
---- /dev/null
-+++ b/package/python-augeas/python-augeas.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# python-augeas
-+#
-+################################################################################
-+
-+PYTHON_AUGEAS_VERSION = 1.1.0
-+PYTHON_AUGEAS_SITE = $(call github,hercules-team,python-augeas,v$(PYTHON_AUGEAS_VERSION))
-+PYTHON_AUGEAS_SETUP_TYPE = setuptools
-+PYTHON_AUGEAS_LICENSE = LGPL-2.1+
-+PYTHON_AUGEAS_LICENSE_FILES = COPYING
-+PYTHON_AUGEAS_DEPENDENCIES = augeas host-python-cffi host-pkgconf
-+# This will tell python-augeas to not call xml2-config, and instead
-+# use pkg-config to find libxml2. libxml2 is an indirect dependency of
-+# augeas, which is why it's not in our dependencies. It's odd that
-+# python-augeas searches for libxml2, but that's what it
-+# does. Question asked in the pull request at
-+# https://github.com/hercules-team/python-augeas/pull/49.
-+PYTHON_AUGEAS_ENV = XML2_CONFIG=/bin/false
-+
-+$(eval $(python-package))
--- 
-2.31.1
+ I've marked [1] as Changes Requested.
+
+ However, it seems the tests [2][3][4] are missing from this series. Could you
+include them next time you post it?
+
+> Based on this work, this series fixes some overwrites, introduces and uses
+> <PKG>_PER_PACKAGE_TWEAK_HOOKS. This variable is used to collect specific
+> per-package path tweaks needed by per-package build.
+> With this tweaks collected in this variable, they can be re-applied
+> when they are needed (<pkg>_{reconfigure,rebuild,reinstall}).
+
+ That's excellent!
+
+
+> It also reworks the final {HOST,TARGET}_DIR rsync.
+> For each packages only files generated by the package are rsynced (PATCH 13).
+> This is done using an exclusion list computed in (PATCH 12).
+> In order to avoid modifications performed in target-finalize step to be seen
+> as overwrites on next build, the final {HOST,TARGET}_DIR do not contain any
+> hardlink anymore and are a full copy of expected files and directories (PATCH 14).
+
+ Hm, that will have quite the impact on disk size, no? In non-PPS builds,
+HOST_DIR is typically about 1/3 of the total size (the other 2/3 is BUILD_DIR,
+the rest is negligible). By doing a non-hardlinked copy, the size of HOST_DIR is
+basically going to double, right?
+
+ I still think it's acceptable, but it's something to take into account...
+
+
+> The last patch (PATCH 15) fixes <pkg>_{reconfigure,rebuild,reinstall} recreating
+> per-package {HOST,TARGET}_DIR from scratch.
+> Indeed, for a given package, re-generating the same file is detected as an overwrite.
+> The simplest way to avoid this is to fully discard previous per-package {HOST,TARGET}_DIR
+> directory and recreate them.
+
+ +1 to that!
+
+
+> To have a TLP build fully fonctionnal, several things are still missing:
+>   - Be sure that all buildroot packages do not perform any overwrites.
+
+ I guess that's easy: increase the chance of PER_PACKAGE enabled in
+genrandconfig, and see what happens to the autobuilders. Or is there anything
+else missing?
+
+>   - Undo tweak stuff that have be done for per-package build (fixup-libtool-files,
+>     fixup-python-files, <PKG>_PER_PACKAGE_TWEAK_HOOKS) after collecting files
+>     in final {HOST,STAGING}_DIR.
+>     This mainly means reverting .../per-package/xxxxx/... path to point to
+>     the correct ones in final {HOST,STAGING}_DIR.
+> 
+> I hope this series will help in TLP build feature.
+
+
+ Regards,
+ Arnout
+
+[1]
+https://patchwork.ozlabs.org/project/buildroot/patch/20200430095249.782597-9-thomas.petazzoni at bootlin.com/
+[2]
+https://patchwork.ozlabs.org/project/buildroot/patch/20200430095249.782597-10-thomas.petazzoni at bootlin.com/
+[3]
+https://patchwork.ozlabs.org/project/buildroot/patch/20200430095249.782597-11-thomas.petazzoni at bootlin.com/
+[4]
+https://patchwork.ozlabs.org/project/buildroot/patch/20200430095249.782597-12-thomas.petazzoni at bootlin.com/
+
+
+
+> 
+> Best regards,
+> Herv? Codina
+> 
+> Herve Codina (14):
+>   package/e2fsprogs: fix fsck overwrite in HOST_DIR
+>   package/pkg-generic.mk: Remove Info documents dir entry
+>   package/pkg-generic.mk: Fix .la files overwrite detection
+>   package/pkg-generic.mk: Perform .la files fixup in per-package
+>     HOST_DIR
+>   package/pkg-generic.mk: Introduce <PKG>_PER_PACKAGE_TWEAK_HOOKS
+>   package/apr-util: Use <PKG>_PER_PACKAGE_TWEAK_HOOKS
+>   package/apache: Move APACHE_FIXUP_APR_LIBTOOL to
+>     <PKG>_PER_PACKAGE_TWEAK_HOOKS
+>   package/pkg-python: Remove _sysconfigdata*.pyc files when
+>     _sysconfigdata*.py are changed
+>   package/pkg-generic.mk: Move python fixup to generic package
+>     infrastructure
+>   package/owfs: Remove Python sysconfigdata fixup
+>   package/pkg-generic.mk: Generate final rsync exclude file list
+>   Makefile: Rsync global {TARGET,HOST}_DIR using exclusion file list
+>   Makefile: Breaks hardlinks in global {TARGET,HOST}_DIR on per-package
+>     build
+>   package/pkg-generic.mk: Fix per-package
+>     <pkg>-{reconfigure,rebuild,reinstall}
+> 
+> Thomas Petazzoni (1):
+>   package/pkg-generic.mk: detect files overwritten in TARGET_DIR and
+>     HOST_DIR
+> 
+>  Makefile                       |  24 +++++++-
+>  package/apache/apache.mk       |   2 +-
+>  package/apr-util/apr-util.mk   |  12 ++--
+>  package/e2fsprogs/e2fsprogs.mk |   1 +
+>  package/owfs/owfs.mk           |   9 ---
+>  package/pkg-generic.mk         | 103 ++++++++++++++++++++++++++++++++-
+>  package/pkg-python.mk          |  10 ----
+>  7 files changed, 134 insertions(+), 27 deletions(-)
+> 
