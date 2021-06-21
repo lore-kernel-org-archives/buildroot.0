@@ -1,45 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 21 Jun 2021 21:46:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/clamav: bump version to 0.103.3
-Message-ID: <20210621194653.172466-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 21 Jun 2021 21:59:22 +0200
+Subject: [Buildroot] [PATCH] package/lvm2: default standard install to y
+In-Reply-To: <877disd5lk.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Thu, 17 Jun 2021 14:43:19 +0200")
+References: <20210616173303.2234867-1-arnout@mind.be>
+ <877disd5lk.fsf@dell.be.48ers.dk>
+Message-ID: <87mtrj7zvp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://blog.clamav.net/2021/06/clamav-01033-patch-release.html
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+ >> Until commit 5c07dfcc1a52e2804011574a3e022523a20546c8
+ >> BR2_PACKAGE_LVM2_STANDARD_INSTALL would default to y. Indeed, the
+ >> default read:
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 679240985b..a2ed115d24 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  d4b5d0ac666262e423a326fb54778caa7c69624d6c3f9542895feb8478271bd2  clamav-0.103.2.tar.gz
-+sha256  9f6e3d18449f3d1a3992771d696685249dfa12736fe2b2929858f2c7d8276ae9  clamav-0.103.3.tar.gz
- sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 6ab473ab88..eec0e2955c 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLAMAV_VERSION = 0.103.2
-+CLAMAV_VERSION = 0.103.3
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+ >> default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
+
+ >> Since the legacy symbol is normally not selected, this defaults to y.
+
+ >> Commit 5c07dfcc1a52e2804011574a3e022523a20546c8 inadvertedly removed the
+ >> entire line instead of just the condition.
+
+ >> Fixes: https://bugs.busybox.net/show_bug.cgi?id=13846
+ >> For-stable: 2021.02, 2021.05
+ >> Cc: dominique.tronche at atos.net
+ >> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+ >> Cc: Peter Korsgaard <peter@korsgaard.com>
+ >> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ >> --
+ >> As an experiment, I added the For-stable tag (which I invented myself).
+ >> Peter, is this useful? Should we propose this in the documentation?
+
+ > It could be. Typically just mentioning that this is a fix and/or CC me
+ > is enough, but it cannot hurt certainly.
+
+Committed to 2021.02.x and 2021.05.x, thanks.
+
 -- 
-2.30.2
+Bye, Peter Korsgaard
