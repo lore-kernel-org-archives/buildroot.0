@@ -1,42 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Jun 2021 22:52:54 +0200
-Subject: [Buildroot] [PATCH 02/15] package/e2fsprogs: fix fsck overwrite
- in HOST_DIR
-In-Reply-To: <20210621141130.48654-3-herve.codina@bootlin.com>
+Date: Mon, 21 Jun 2021 22:54:11 +0200
+Subject: [Buildroot] [PATCH 04/15] package/pkg-generic.mk: Fix .la files
+ overwrite detection
+In-Reply-To: <20210621141130.48654-5-herve.codina@bootlin.com>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
- <20210621141130.48654-3-herve.codina@bootlin.com>
-Message-ID: <20210621225254.5ad3e48b@windsurf>
+ <20210621141130.48654-5-herve.codina@bootlin.com>
+Message-ID: <20210621225411.1c5280f0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 21 Jun 2021 16:11:17 +0200
+On Mon, 21 Jun 2021 16:11:19 +0200
 Herve Codina <herve.codina@bootlin.com> wrote:
 
-> host-e2fsprog overwrites fsck program and some man related files
-> previously installed by host-util-linux.
-
-"The host-e2fsprogs package overwrites the fsck program and some
-manpages previously installed by the host-util-linux package".
-
+> During per-package build, original .la files are modified by
+> fixup-libtool-files calls.
+> But since fixup-libtool-files modifies files using sed --in-place,
+> these modification are done using a temporary file and a call to
+> rename. Rename breaks the hardlink to the original file and leave the
+> temporary file in per-package TARGET dir.
+> As the original file is not modified, this is no longer considered as
+> an overwrite.
 > 
-> This patch simply disable fsck in host-e2fsprog.
+> To fix this detection, this patch simply considers the what is done
 
-disableS
+"the what" -> "that what"
 
-host-e2fsprogs
-
-> host-e2fsprog is used to build final ext{2,3,4} images.
-
-host-e2fsprogs
-
-> The missing host-e2fsprog fsck tool (filesystem integrity check
-
-host-e2fsprogs
-
-> tool) in HOST_DIR should not lead to issues.
+> by fixup-libtool-files is part of the original snapshot used to
+> detect overwrites. And so, the original snapshot is taken after
+> fixup-libtool-files call.
 > 
 > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
@@ -44,25 +38,7 @@ With that:
 
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-> ---
->  package/e2fsprogs/e2fsprogs.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-> index 0a69690e2f..bd147e737e 100644
-> --- a/package/e2fsprogs/e2fsprogs.mk
-> +++ b/package/e2fsprogs/e2fsprogs.mk
-> @@ -27,6 +27,7 @@ HOST_E2FSPROGS_CONF_OPTS = \
->  	--disable-defrag \
->  	--disable-e2initrd-helper \
->  	--disable-fuse2fs \
-> +	--disable-fsck \
->  	--disable-libblkid \
->  	--disable-libuuid \
->  	--disable-testio-debug \
-
-
-
+Thomas
 -- 
 Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering
