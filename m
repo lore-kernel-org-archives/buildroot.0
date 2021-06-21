@@ -1,34 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Jun 2021 20:36:42 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] DEVELOPERS: add Giulio
- Benetti to udisks package
-Message-ID: <20210621190355.D359F814EF@busybox.osuosl.org>
+Date: Mon, 21 Jun 2021 21:33:01 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/fb-test-app: Add
+ myself to DEVELOPERS
+Message-ID: <20210621190356.309EB8B37D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f8d2ea1f7bdd3b8936c8a9c4c24dc4f3685b047
+commit: https://git.buildroot.net/buildroot/commit/?id=b27c4e8643c7b83456bc51df485615771af33dda
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 5123d665186ef77c8ce001b6718abecda4ef7250)
+Add myself to DEVELOPERS as maintainer of fb-test-app.
+
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit b805e9d53656d8f2b999a651a6941f8a39dffbef)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a5b3256262..a1fd95a779 100644
+index a1fd95a779..68ea78d7b8 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1030,6 +1030,7 @@ F:	package/minicom/
- F:	package/nfs-utils/
- F:	package/sunxi-mali-mainline/
- F:	package/sunxi-mali-mainline-driver/
-+F:	package/udisks/
+@@ -180,6 +180,9 @@ F:	package/sshguard/
+ F:	package/sunwait/
+ F:	package/sysdig/
  
- N:	Gregory Dymarek <gregd72002@gmail.com>
- F:	package/ding-libs/
++N:	Andy Shevchenko <andy.shevchenko@gmail.com>
++F:	package/fb-test-app/
++
+ N:	Anisse Astier <anisse@astier.eu>
+ F:	package/go/
+ F:	package/nghttp2/
