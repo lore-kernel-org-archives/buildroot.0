@@ -1,47 +1,74 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 21 Jun 2021 07:26:30 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ell: bump version to 0.41
-Message-ID: <20210621052631.134719-1-bernd.kuhls@t-online.de>
+Date: Mon, 21 Jun 2021 07:26:31 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/{bluez5_utils,
+ bluez5_utils-headers}: bump to version 5.59
+In-Reply-To: <20210621052631.134719-1-bernd.kuhls@t-online.de>
+References: <20210621052631.134719-1-bernd.kuhls@t-online.de>
+Message-ID: <20210621052631.134719-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog
+Release notes:
+http://www.bluez.org/release-of-bluez-5-59/
 
-Needed for bluez5_utils bump to version 5.59.
+Added configure option --disable-manpages to avoid rst2man dependency
+introduced by this release.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ell/ell.hash | 2 +-
- package/ell/ell.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v2: no changes, included needed ell bump into patch series
 
-diff --git a/package/ell/ell.hash b/package/ell/ell.hash
-index 5f1cc7ddcb..2ff8889506 100644
---- a/package/ell/ell.hash
-+++ b/package/ell/ell.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
--sha256  653e2e139e23ed31e03c56c05f15321a9e818e2dca00a315c18d2c7b72f15d08  ell-0.39.tar.xz
-+sha256  4e8dba6c53cf152dbd0fd1dc3d4c7b04abf79e20a948895f85943e586870505c  ell-0.41.tar.xz
- 
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/ell/ell.mk b/package/ell/ell.mk
-index bd291c60db..ec31e68088 100644
---- a/package/ell/ell.mk
-+++ b/package/ell/ell.mk
-@@ -4,7 +4,7 @@
- #
+ package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
+ package/bluez5_utils/bluez5_utils.hash               | 2 +-
+ package/bluez5_utils/bluez5_utils.mk                 | 3 ++-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+index 1e8b6ad01a..66f9e5bde2 100644
+--- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
++++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--ELL_VERSION = 0.39
-+ELL_VERSION = 0.41
- ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
- ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
- ELL_LICENSE = LGPL-2.1+
+ # Keep the version and patches in sync with bluez5_utils
+-BLUEZ5_UTILS_HEADERS_VERSION = 5.58
++BLUEZ5_UTILS_HEADERS_VERSION = 5.59
+ BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index 01bcd2ac50..5fa79831a1 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  c8065e75a5eb67236849ef68a354b1700540305a8c88ef0a0fd6288f19daf1f1  bluez-5.58.tar.xz
++sha256  046b95b386d0bfb2a16311fe799d517ee7735045512d89902c4ed701db477316  bluez-5.59.tar.xz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 4c1575f69a..2e5bdd3ccb 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils-headers
+-BLUEZ5_UTILS_VERSION = 5.58
++BLUEZ5_UTILS_VERSION = 5.59
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
+@@ -23,6 +23,7 @@ BLUEZ5_UTILS_CONF_OPTS = \
+ 	--enable-tools \
+ 	--enable-library \
+ 	--disable-cups \
++	--disable-manpages \
+ 	--with-dbusconfdir=/etc
+ 
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_OBEX),y)
 -- 
 2.30.2
