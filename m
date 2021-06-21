@@ -1,74 +1,59 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 21 Jun 2021 07:26:31 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/{bluez5_utils,
- bluez5_utils-headers}: bump to version 5.59
-In-Reply-To: <20210621052631.134719-1-bernd.kuhls@t-online.de>
-References: <20210621052631.134719-1-bernd.kuhls@t-online.de>
-Message-ID: <20210621052631.134719-2-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 21 Jun 2021 07:47:44 +0200
+Subject: [Buildroot] [PATCH 2/5] package/libgcrypt: security bump to version
+ 1.9.3
+In-Reply-To: <20210621054747.218408-1-fontaine.fabrice@gmail.com>
+References: <20210621054747.218408-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210621054747.218408-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-http://www.bluez.org/release-of-bluez-5-59/
+Fix CVE-2021-33560: Libgcrypt before 1.8.8 and 1.9.x before 1.9.3
+mishandles ElGamal encryption because it lacks exponent blinding to
+address a side-channel attack against mpi_powm, and the window size is
+not chosen appropriately. (There is also an interoperability problem
+because the selection of the k integer value does not properly consider
+the differences between basic ElGamal encryption and generalized ElGamal
+encryption.) This, for example, affects use of ElGamal in OpenPGP.
 
-Added configure option --disable-manpages to avoid rst2man dependency
-introduced by this release.
+https://dev.gnupg.org/T5305
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-v2: no changes, included needed ell bump into patch series
+ package/libgcrypt/libgcrypt.hash | 6 +++---
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
- package/bluez5_utils/bluez5_utils.hash               | 2 +-
- package/bluez5_utils/bluez5_utils.mk                 | 3 ++-
- 3 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-index 1e8b6ad01a..66f9e5bde2 100644
---- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
-+++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 978ec8b294..26ec492e10 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,7 +1,7 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  29bd5d0a8f674d4521167dd518ef99b26d1e8f27  libgcrypt-1.9.2.tar.bz2
++sha1  6b18f453fee677078586279d96fb88e5df7b3f35  libgcrypt-1.9.3.tar.bz2
+ # Locally calculated after checking signature
+-# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.2.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.3.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256  b2c10d091513b271e47177274607b1ffba3d95b188bbfa8797f948aec9053c5a  libgcrypt-1.9.2.tar.bz2
++sha256  97ebe4f94e2f7e35b752194ce15a0f3c66324e0ff6af26659bbfb5ff2ec328fd  libgcrypt-1.9.3.tar.bz2
+ sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 9c1cd32acb..26be5d2f49 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # Keep the version and patches in sync with bluez5_utils
--BLUEZ5_UTILS_HEADERS_VERSION = 5.58
-+BLUEZ5_UTILS_HEADERS_VERSION = 5.59
- BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index 01bcd2ac50..5fa79831a1 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256  c8065e75a5eb67236849ef68a354b1700540305a8c88ef0a0fd6288f19daf1f1  bluez-5.58.tar.xz
-+sha256  046b95b386d0bfb2a16311fe799d517ee7735045512d89902c4ed701db477316  bluez-5.59.tar.xz
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 4c1575f69a..2e5bdd3ccb 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Keep the version and patches in sync with bluez5_utils-headers
--BLUEZ5_UTILS_VERSION = 5.58
-+BLUEZ5_UTILS_VERSION = 5.59
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
-@@ -23,6 +23,7 @@ BLUEZ5_UTILS_CONF_OPTS = \
- 	--enable-tools \
- 	--enable-library \
- 	--disable-cups \
-+	--disable-manpages \
- 	--with-dbusconfdir=/etc
- 
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_OBEX),y)
+-LIBGCRYPT_VERSION = 1.9.2
++LIBGCRYPT_VERSION = 1.9.3
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPL-2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
 -- 
 2.30.2
