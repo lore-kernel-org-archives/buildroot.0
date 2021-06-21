@@ -1,33 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Jun 2021 17:10:10 +0200
-Subject: [Buildroot] [PATCH 06/15] package/pkg-generic.mk: Introduce
- <PKG>_PER_PACKAGE_TWEAK_HOOKS
-In-Reply-To: <20210621141130.48654-7-herve.codina@bootlin.com>
+Date: Mon, 21 Jun 2021 17:12:02 +0200
+Subject: [Buildroot] [PATCH 09/15] package/pkg-python: Remove
+ _sysconfigdata*.pyc files when _sysconfigdata*.py are changed
+In-Reply-To: <20210621141130.48654-10-herve.codina@bootlin.com>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
- <20210621141130.48654-7-herve.codina@bootlin.com>
-Message-ID: <20210621171010.3c54ec24@windsurf>
+ <20210621141130.48654-10-herve.codina@bootlin.com>
+Message-ID: <20210621171202.2362cb27@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 21 Jun 2021 16:11:21 +0200
+On Mon, 21 Jun 2021 16:11:24 +0200
 Herve Codina <herve.codina@bootlin.com> wrote:
 
-> This hook will be used by package infrastucture or some packages to tweak
-> external files (ie files not provides by the package itself) when we build
-> with BR2_PER_PACKAGE_DIRECTORIES set.
+> In order to avoid _sysconfigdata*.pyc overwrites when they are generated based on
+> _sysconfigdata*.py changes, this commit simply removes _sysconfigdata*.pyc
+> whenever _sysconfigdata*.py are changed.
 > 
-> This allows to have these tweaks in a specific hook instead of
-> <PKG>_POST_CONFIGURE_HOOK. And so we can call these specific tweaks
-> whenever we need them.
+> As they are removed, overwrite detection will no longer trig and coherency between
+> the two files (.py and .pyc) is ensured.
 > 
 > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> ---
+>  package/pkg-python.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+> index 59a48e5a87..b3fde77da5 100644
+> --- a/package/pkg-python.mk
+> +++ b/package/pkg-python.mk
+> @@ -96,7 +96,9 @@ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+>  define PKG_PYTHON_FIXUP_SYSCONFIGDATA
+>  	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+>  		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
+> -		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g"
+> +		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g" ;\
 
-I think this commit log needs an explanation as to why this is
-necessary, i.e why isn't the current solution of POST_CONFIGURE_HOOKS
-working.
+The semicolon + backslash is not needed, these two commands can (I
+believe) be executed as separate shell commands.
+
+> +	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+> +		-name "_sysconfigdata*.pyc" -print0 | xargs -0 -r rm -f
+
+Do we need a --no-run-if-empty on the xargs ? Or perhaps it should be
+using find directly, i.e:
+
+	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+		-name "_sysconfigdata*.pyc" -exec rm -f {} \;
+
+(or something like that)
 
 Thanks!
 
