@@ -1,48 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Jun 2021 21:23:02 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/pango: bump to
- version 1.48.4
-Message-ID: <20210621190356.263948876F@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 21 Jun 2021 21:42:31 +0200
+Subject: [Buildroot] [PATCH 2/2] package/dovecot-pigeonhole: security bump
+ version to 0.5.15
+In-Reply-To: <20210621194231.108481-1-bernd.kuhls@t-online.de>
+References: <20210621194231.108481-1-bernd.kuhls@t-online.de>
+Message-ID: <20210621194231.108481-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5793fdfdc3efd1506484b23a4ff8bfefe9dd2d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+Fixes CVE-2020-28200:
+https://dovecot.org/pipermail/dovecot-news/2021-June/000460.html
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 4428c5bc2f25df600a028945d30ac60b93886c65)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2021-June/000458.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/pango/pango.hash | 4 ++--
- package/pango/pango.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index a672b7cfaf..3d6167058e 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.48/pango-1.48.0.sha256sum
--sha256  391f26f3341c2d7053e0fb26a956bd42360dadd825efe7088b1e9340a65e74e6  pango-1.48.0.tar.xz
-+# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.48/pango-1.48.4.sha256sum
-+sha256  418913fb062071a075846244989d4a67aa5c80bf0eae8ee4555a092fd566a37a  pango-1.48.4.tar.xz
- 
- # Locally computed
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 803e46f193..cc09e3a64d 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index cf3ebdbf54..58444ab7e8 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,3 +1,3 @@
+ # Locally computed after checking signature
+-sha256  68ca0f78a3caa6b090a469f45c395c44cf16da8fcb3345755b1ca436c9ffb2d2  dovecot-2.3-pigeonhole-0.5.14.tar.gz
++sha256  e1498f50cef74c351a57474cc423b008627ab1ab60724b859283ead6d00550d0  dovecot-2.3-pigeonhole-0.5.15.tar.gz
+ sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 35a1e1ef52..c0bef6bedc 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PANGO_VERSION_MAJOR = 1.48
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).0
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).4
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
+-DOVECOT_PIGEONHOLE_VERSION = 0.5.14
++DOVECOT_PIGEONHOLE_VERSION = 0.5.15
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
+ DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
+-- 
+2.30.2
