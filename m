@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Jun 2021 22:17:31 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] core/pkg-generic: fix
+Date: Mon, 21 Jun 2021 22:17:25 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] core/pkg-generic: fix
  instrumentation for packages that install nowhere
-Message-ID: <20210621201128.43B277F87A@busybox.osuosl.org>
+Message-ID: <20210621201134.DD31B8D301@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed30898f90c5f5510c4eaac42e32521882bf26b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2af1be9404b3b6317a85221f2c8dbdf93b8ea0d5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 A (target [0]) package can independently declare installing in various
 locations: target, staging, or images. The default is to only install
