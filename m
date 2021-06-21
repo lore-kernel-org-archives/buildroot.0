@@ -1,63 +1,44 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sun, 20 Jun 2021 22:53:51 -0700
-Subject: [Buildroot] [PATCH v1 1/1] python: use system libffi for host-python
-Message-ID: <20210621055351.3958011-1-christian@paral.in>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 21 Jun 2021 08:15:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive: bump
+ version to 2.6.17
+Message-ID: <20210621061502.457800-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Erico Nunes <nunes.erico@gmail.com>
+Changelog:
+https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
 
-python2 contains a bundled copy of libffi which is currently out of sync with
-the latest libffi release. There is an option to use a system libffi, buildroot
-already uses it for the target python2 build and for python3. In python3, the
-bundled copy doesn't exist anymore and the system-provided libffi is required.
-
-The bundled copy currently fails to build on aarch64 host due to a missing
-definition of AARCH64_CALL_CONTEXT_SIZE. This define was removed from the
-headers in recent libffi releases and the host compiler might be including the
-system headers before the bundled headers.
-
-To solve this and since buildroot already relies on system libffi for target
-python2 and python3 anyway, switch host python2 to use system libffi.
-
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-Reviewed-by: Christian Stewart <christian@paral.in>
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+ .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-v1:
-
-Submitted on behalf of author from BugZilla:
-
-https://bugs.busybox.net/show_bug.cgi?id=13661#c4
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/python/python.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/python/python.mk b/package/python/python.mk
-index f4f9f8563b..ae99f382f9 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -24,6 +24,7 @@ HOST_PYTHON_CONF_OPTS += \
- 	--disable-sqlite3 \
- 	--disable-tk \
- 	--with-expat=system \
-+	--with-system-ffi \
- 	--disable-curses \
- 	--disable-codecs-cjk \
- 	--disable-nis \
-@@ -56,7 +57,7 @@ HOST_PYTHON_MAKE = $(MAKE1)
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index f3a4bf9ec3..c74f2de9c7 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  49b9971973a8df16faa2a7a46d81156484a27c98930eae56dad12d466910db13  kodi-inputstream-adaptive-2.6.16-Matrix.tar.gz
++sha256  e8cae619332e269736e95f336279e4d76e36d52714060472d6a07028bdf05a81  kodi-inputstream-adaptive-2.6.17-Matrix.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 1ffc6bc25a..70b1b55f9f 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- PYTHON_DEPENDENCIES = host-python libffi $(TARGET_NLS_DEPENDENCIES)
- 
--HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
-+HOST_PYTHON_DEPENDENCIES = host-expat host-libffi host-zlib
- 
- ifeq ($(BR2_PACKAGE_HOST_PYTHON_SSL),y)
- HOST_PYTHON_DEPENDENCIES += host-openssl
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.16-Matrix
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.17-Matrix
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
 -- 
-2.32.0
+2.30.2
