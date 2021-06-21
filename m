@@ -1,41 +1,56 @@
 From: Herve Codina <herve.codina@bootlin.com>
-Date: Mon, 21 Jun 2021 16:11:17 +0200
-Subject: [Buildroot] [PATCH 02/15] package/e2fsprogs: fix fsck overwrite in
- HOST_DIR
+Date: Mon, 21 Jun 2021 16:11:18 +0200
+Subject: [Buildroot] [PATCH 03/15] package/pkg-generic.mk: Remove Info
+ documents dir entry
 In-Reply-To: <20210621141130.48654-1-herve.codina@bootlin.com>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
-Message-ID: <20210621141130.48654-3-herve.codina@bootlin.com>
+Message-ID: <20210621141130.48654-4-herve.codina@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-e2fsprog overwrites fsck program and some man related files
-previously installed by host-util-linux.
+Some packages (autotools for instance) install documentation
+files using install-info. This program adds an entry in
+the Info directory file (share/info/dir) and this causes
+TARGET_DIR and/or HOST_DIR overwrite.
 
-This patch simply disable fsck in host-e2fsprog.
-
-host-e2fsprog is used to build final ext{2,3,4} images.
-The missing host-e2fsprog fsck tool (filesystem integrity check
-tool) in HOST_DIR should not lead to issues.
+In order to avoid this overwrite this patch removes the Info
+directory file right after any installation.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- package/e2fsprogs/e2fsprogs.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-generic.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 0a69690e2f..bd147e737e 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -27,6 +27,7 @@ HOST_E2FSPROGS_CONF_OPTS = \
- 	--disable-defrag \
- 	--disable-e2initrd-helper \
- 	--disable-fuse2fs \
-+	--disable-fsck \
- 	--disable-libblkid \
- 	--disable-libuuid \
- 	--disable-testio-debug \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index bb9ff4150a..2499c94746 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -280,6 +280,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
++	$(Q) rm -f $(HOST_DIR)/share/info/dir
+ 	@$(call step_end,install-host)
+ 	$(Q)touch $@
+ 
+@@ -309,6 +310,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_STAGING_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
++	$(Q) rm -f $(STAGING_DIR)/share/info/dir
+ 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+ 		$(call MESSAGE,"Fixing package configuration files") ;\
+ 			$(SED)  "s,$(HOST_DIR), at HOST_DIR@,g" \
+@@ -368,6 +370,7 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+ 		$(or $($(PKG)_INSTALL_INIT_OPENRC), \
+ 			$($(PKG)_INSTALL_INIT_SYSV)))
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
++	$(Q) rm -f $(TARGET_DIR)/share/info/dir
+ 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+ 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
+ 	fi
 -- 
 2.31.1
