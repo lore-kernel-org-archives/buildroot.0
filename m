@@ -1,37 +1,42 @@
 From: Herve Codina <herve.codina@bootlin.com>
-Date: Mon, 21 Jun 2021 16:11:23 +0200
-Subject: [Buildroot] [PATCH 08/15] package/apache: Move
- APACHE_FIXUP_APR_LIBTOOL to <PKG>_PER_PACKAGE_TWEAK_HOOKS
+Date: Mon, 21 Jun 2021 16:11:24 +0200
+Subject: [Buildroot] [PATCH 09/15] package/pkg-python: Remove
+ _sysconfigdata*.pyc files when _sysconfigdata*.py are changed
 In-Reply-To: <20210621141130.48654-1-herve.codina@bootlin.com>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
-Message-ID: <20210621141130.48654-9-herve.codina@bootlin.com>
+Message-ID: <20210621141130.48654-10-herve.codina@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-APACHE_FIXUP_APR_LIBTOOL tweaks files for per package directory build.
-This is typically the kind of operation expected to be in
-<PKG>_PER_PACKAGE_TWEAK_HOOKS
+In order to avoid _sysconfigdata*.pyc overwrites when they are generated based on
+_sysconfigdata*.py changes, this commit simply removes _sysconfigdata*.pyc
+whenever _sysconfigdata*.py are changed.
+
+As they are removed, overwrite detection will no longer trig and coherency between
+the two files (.py and .pyc) is ensured.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- package/apache/apache.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pkg-python.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 7dbd1a4512..f496333174 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -23,7 +23,7 @@ define APACHE_FIXUP_APR_LIBTOOL
- 	$(SED) "s@$(PER_PACKAGE_DIR)/[^/]\+/@$(PER_PACKAGE_DIR)/apache/@g" \
- 		$(STAGING_DIR)/usr/build-1/libtool
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 59a48e5a87..b3fde77da5 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -96,7 +96,9 @@ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+ define PKG_PYTHON_FIXUP_SYSCONFIGDATA
+ 	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+ 		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
+-		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g"
++		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g" ;\
++	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
++		-name "_sysconfigdata*.pyc" -print0 | xargs -0 -r rm -f
  endef
--APACHE_POST_CONFIGURE_HOOKS += APACHE_FIXUP_APR_LIBTOOL
-+APACHE_PER_PACKAGE_TWEAK_HOOKS += APACHE_FIXUP_APR_LIBTOOL
  endif
  
- APACHE_CONF_ENV= \
 -- 
 2.31.1
