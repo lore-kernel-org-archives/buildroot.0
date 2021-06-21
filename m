@@ -1,173 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Jun 2021 21:43:49 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/bluez5_utils:
- Clean up descriptions
-Message-ID: <20210621194110.1D93B7FB97@busybox.osuosl.org>
+Date: Mon, 21 Jun 2021 22:18:49 +0200
+Subject: [Buildroot] [PATCH] core/pkg-generic: fix instrumentation for
+ packages that install nowhere
+In-Reply-To: <20210613143207.2445691-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 13 Jun 2021 16:32:07 +0200")
+References: <20210613143207.2445691-1-yann.morin.1998@free.fr>
+Message-ID: <87im277yza.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62b077fde1ef2973781481f371706bd7bd53575f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-The descriptions in this package have grown pretty confusing over time.
-Try to make this a bit more consistent and up-to-date.
+ > A (target [0]) package can independently declare installing in various
+ > locations: target, staging, or images. The default is to only install
+ > in target.
 
-* drop references to old kernel versions not supported by BR anymore
-* Remove "Bluez 5.x" string from options
-* consistently use the term "plugin" (plugins implement profiles)
-* make mentioned profile appreviations upper-case
-* make descriptions closer to the ones in BlueZ Readme [0]
-* make clear that "tests" refers to the python test scripts
+ > When a package opts out from installing to target, but does not opts
+ > in to install in any other location, the package is not downloaded,
+ > extracted, patched, configured, nor built at all. As a consequence, none
+ > of the per-step instrumentation is not executed, specifically the
+ > listing of files before/after the package sequence.
 
-[0] https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/README?h=5.58
+ > Down the line, the package infra does not cope well with that situation,
+ > because the gathering-install step, the one that synchronises all the
+ > optional target, staging, or images install steps, still gets run.
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Arnout:
- - remove more 5.x references;
- - Use official spelling BlueZ in main help text]
-(cherry picked from commit 371f2aa0edf233aa3a9eeee2e7be0920a46a0040)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bluez5_utils/Config.in | 51 ++++++++++++++++++++----------------------
- 1 file changed, 24 insertions(+), 27 deletions(-)
+ > And as #13836 shows, this does not go well:
 
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index 016a16c4c5..2c8625a66d 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_BLUEZ5_UTILS
--	bool "bluez-utils 5.x"
-+	bool "bluez-utils"
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus
-@@ -9,17 +9,12 @@ config BR2_PACKAGE_BLUEZ5_UTILS
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
--	  bluez utils version 5.x
-+	  BlueZ utils
- 
--	  With this release BlueZ only supports the new Bluetooth
--	  Management kernel interface (introduced in Linux 3.4).
-+	  Provides Stack, Library and Tooling for Bluetooth Classic
-+	  and Bluetooth LE.
- 
--	  For Low Energy support at least kernel version 3.5 is
--	  needed.
--
--	  The API is not backward compatible with BlueZ 4.
--
--	  Bluez utils will use systemd and/or udev if enabled.
-+	  BlueZ utils will use systemd and/or udev if enabled.
- 
- 	  http://www.bluez.org
- 	  http://www.kernel.org/pub/linux/bluetooth
-@@ -31,7 +26,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS_OBEX
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBICAL
- 	help
--	  Enable the OBEX support in Bluez 5.x.
-+	  Enable OBEX support.
- 
- comment "OBEX support needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-@@ -40,75 +35,77 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
- 	bool "build CLI client"
- 	select BR2_PACKAGE_READLINE
- 	help
--	  Enable the Bluez 5.x command line client.
-+	  Build the command line client "bluetoothctl".
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
--	bool "install deprecated tool"
-+	bool "install deprecated tools"
- 	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
- 	help
--	  Build BlueZ 5.x deprecated tools. These currently include:
-+	  Build deprecated tools. These currently include:
- 	  hciattach, hciconfig, hcitool, hcidump, rfcomm, sdptool,
- 	  ciptool, gatttool.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
--	bool "build experimental obexd plugin"
-+	bool "build experimental tools"
- 	help
--	  Build BlueZ 5.x experimental Nokia OBEX PC Suite plugin
-+	  Build experimental tools. This is currently only the
-+	  "Nokia OBEX PC Suite tool". So, only if OBEX support is
-+	  enabled this option has an effect.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
- 	bool "build health plugin"
- 	help
--	  Build BlueZ 5.x health plugin
-+	  Build plugin for health profiles.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH
--	bool "build mesh profile"
-+	bool "build mesh plugin"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
- 	select BR2_PACKAGE_ELL
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_READLINE
- 	help
--	  Build BlueZ 5.x mesh plugin
-+	  Build plugin for Mesh support.
- 
- comment "mesh profile needs a toolchain w/ headers >= 4.12"
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI
--	bool "build midi profile"
-+	bool "build midi plugin"
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_ALSA_LIB_SEQ
- 	help
--	  Build BlueZ 5.x midi plugin
-+	  Build MIDI support via ALSA sequencer.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NFC
- 	bool "build nfc plugin"
- 	help
--	  Build BlueZ 5.x nfc plugin
-+	  Build plugin for NFC pairing.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SAP
- 	bool "build sap plugin"
- 	help
--	  Build BlueZ 5.x sap plugin
-+	  Build plugin for SAP profile.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SIXAXIS
- 	bool "build sixaxis plugin"
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	help
--	  Build BlueZ 5.x sixaxis plugin (support Sony Dualshock
-+	  Build sixaxis plugin (support Sony Dualshock
- 	  controller)
- 
- comment "sixaxis plugin needs udev /dev management"
- 	depends on !BR2_PACKAGE_HAS_UDEV
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_TEST
--	bool "build tests"
-+	bool "install test scripts"
- 	help
--	  Build BlueZ 5.x tests
-+	  Install the python test scripts from the "test" directory.
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_TOOLS_HID2HCI
- 	bool "build hid2hci tool"
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	help
--	  Build BlueZ 5.x hid2hci tool
-+	  Build hid2hci tool
- 
- comment "hid2hci tool needs udev /dev management"
- 	depends on !BR2_PACKAGE_HAS_UDEV
+ >     /bin/sh: /home/tbuild/myboard/build/foo/.files-list.after: No such file or directory
+ >     make[1]: *** [/home/tbuild/myboard/build/foo/.stamp_installed] Error 1
+ >     make: *** [_all] Error 2
+
+ > So, we should have ensured that the gathering-install step itself
+ > depends on the build step, which would have solved the issue.
+
+ > However, this bug really illustrates a more fundamental issue: does it
+ > even make sense to have a package that installs nothing in any location?
+ > Indeed, why even bother with that package to begin with if it will not
+ > provide anything at all?
+
+ > It turns out that yes, this makes sense. We have some packages, that
+ > do not install anything at all, and do not even build anything; they are
+ > there just to ensure that we can download something that will ultimately
+ > be used by another package. This is the case for example for packages
+ > that provide linux extensions, like aufs [1].
+
+ > Additionally, some ugly out-of-tree packages could conceivably install
+ > things during the build (or even configure!) steps. That's not unheard
+ > of... [2]
+
+ > So, the solution is to ensure that the gathering-install step does
+ > depend on the build step, to trigger the proper dependency chain and
+ > have the instrumentation hooks properly run even in that degenerate
+ > case.
+
+ > Fixes: #13836
+
+ > [0] a host package can't opt out of installing anything.
+ > [1] that one is actually missing AUFS_INSTALL_TARGET = NO, so this
+ >     hides the issue.
+ > [2] even us are not 100% clean on that topic: gcc will install files in
+ >     staging and target as part of the same step (not the build, granted,
+ >     but still...)
+
+ > Reported-by: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2021.02.x and 2021.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
