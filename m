@@ -1,54 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 21 Jun 2021 21:42:30 +0200
-Subject: [Buildroot] [PATCH 1/2] package/dovecot: security bump version to
- 2.3.15
-Message-ID: <20210621194231.108481-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 21 Jun 2021 21:44:22 +0200
+Subject: [Buildroot] [PATCH] package/bluez5_utils: Clean up descriptions
+In-Reply-To: <20210421131724.471288-1-buildroot@heine.tech> (Michael Nosthoff
+ via buildroot's message of "Wed, 21 Apr 2021 15:17:23 +0200")
+References: <20210421131724.471288-1-buildroot@heine.tech>
+Message-ID: <87v96780kp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes several security bugs:
+>>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@busybox.net> writes:
 
-CVE-2021-29157
-- https://dovecot.org/pipermail/dovecot-news/2021-June/000461.html
+ > The descriptions in this package have grown pretty confusing over time.
+ > Try to make this a bit more consistent and up-to-date.
 
-CVE-2021-33515
-- https://dovecot.org/pipermail/dovecot-news/2021-June/000462.html
+ > * drop references to old kernel versions not supported by BR anymore
+ > * Remove "Bluez 5.x" string from options
+ > * consistently use the term "plugin" (plugins implement profiles)
+ > * make mentioned profile appreviations upper-case
+ > * make descriptions closer to the ones in BlueZ Readme [0]
+ > * make clear that "tests" refers to the python test scripts
 
-Release notes:
-https://dovecot.org/pipermail/dovecot-news/2021-June/000457.html
+ > [0] https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/README?h=5.58
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index edb9d20e6d..cd314cf0dd 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256  c8b3d7f3af1e558a3ff0f970309d4013a4d3ce136f8c02a53a3b05f345b9a34a  dovecot-2.3.14.tar.gz
-+sha256  21bbdd5d45957a99133de8b7e71813ecb73d9476c89dfc63479e9102b3553590  dovecot-2.3.15.tar.gz
- sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index a38cf1941a..93d04fc8a1 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).14
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).15
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+Committed to 2021.02.x and 2021.05.x, thanks.
+
 -- 
-2.30.2
+Bye, Peter Korsgaard
