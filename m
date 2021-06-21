@@ -1,60 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Jun 2021 21:07:10 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libkrb5: add
- openssl optional dependency
-Message-ID: <20210621190356.071CE8B37D@busybox.osuosl.org>
+Date: Mon, 21 Jun 2021 21:23:02 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/pango: bump to
+ version 1.48.4
+Message-ID: <20210621190356.263948876F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c1c2735c487f8324a9f3e1ea984f0b15ad1be5c
+commit: https://git.buildroot.net/buildroot/commit/?id=c5793fdfdc3efd1506484b23a4ff8bfefe9dd2d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-openssl is an optional dependency which is enabled by default since at
-least 2007 and
-https://github.com/krb5/krb5/commit/4c17f25c0f106ec8e3aad2cee4e7a24f66b5a65d
-
-Enable DES, MD4 and RC4 in openssl to fix build failure raised since
-commit a83d41867c8d69a77d5cd0a665aa216af5340359
-
-Fixes:
- - http://autobuild.buildroot.org/results/d73b477bd2064aee076f9debfd8d3346c63ba657
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998 at free.fr: squash the two commits together]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b7a5b9d06d484700fc4fcbd354f2c15e0422688c)
-[Peter: drop openssl options]
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 4428c5bc2f25df600a028945d30ac60b93886c65)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libkrb5/libkrb5.mk | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ package/pango/pango.hash | 4 ++--
+ package/pango/pango.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-index e4f3fa4186..794cedd33c 100644
---- a/package/libkrb5/libkrb5.mk
-+++ b/package/libkrb5/libkrb5.mk
-@@ -41,6 +41,21 @@ else
- LIBKRB5_CONF_OPTS += --without-ldap
- endif
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index a672b7cfaf..3d6167058e 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.48/pango-1.48.0.sha256sum
+-sha256  391f26f3341c2d7053e0fb26a956bd42360dadd825efe7088b1e9340a65e74e6  pango-1.48.0.tar.xz
++# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.48/pango-1.48.4.sha256sum
++sha256  418913fb062071a075846244989d4a67aa5c80bf0eae8ee4555a092fd566a37a  pango-1.48.4.tar.xz
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LIBKRB5_CONF_OPTS += \
-+	--enable-pkinit \
-+	--with-crypto-impl=openssl \
-+	--with-spake-openssl \
-+	--with-tls-impl=openssl
-+LIBKRB5_DEPENDENCIES += openssl
-+else
-+LIBKRB5_CONF_OPTS += \
-+	--disable-pkinit \
-+	--with-crypto-impl=builtin \
-+	--without-spake-openssl \
-+	--without-tls-impl
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBEDIT),y)
- LIBKRB5_CONF_OPTS += --with-libedit
- LIBKRB5_DEPENDENCIES += host-pkgconf libedit
+ # Locally computed
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 803e46f193..cc09e3a64d 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PANGO_VERSION_MAJOR = 1.48
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).0
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).4
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_INSTALL_STAGING = YES
