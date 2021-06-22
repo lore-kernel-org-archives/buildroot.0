@@ -1,116 +1,120 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Tue, 22 Jun 2021 07:58:22 +0200
-Subject: [Buildroot] Trouble with u-boot on a ZynqMP board
-In-Reply-To: <1ae87e6c-9b70-9492-6efd-b67d06d91433@lucaceresoli.net>
-References: <CAM+bi4s4Nueb96Xyo5dY7vwDhJO1xFnzcdrky5U3qsBBNf8EHQ@mail.gmail.com>
- <1ae87e6c-9b70-9492-6efd-b67d06d91433@lucaceresoli.net>
-Message-ID: <CAM+bi4sU71gkigZ_-T-AXKYtqYOA1cn+0bU=_TiThf94K2C4yQ@mail.gmail.com>
+From: Herve Codina <herve.codina@bootlin.com>
+Date: Tue, 22 Jun 2021 09:40:52 +0200
+Subject: [Buildroot] [PATCH 01/15] package/pkg-generic.mk: detect files
+ overwritten in TARGET_DIR and HOST_DIR
+In-Reply-To: <20210621213140.GA44262@scaer>
+References: <20210621141130.48654-1-herve.codina@bootlin.com>
+ <20210621141130.48654-2-herve.codina@bootlin.com>
+ <20210621213140.GA44262@scaer>
+Message-ID: <20210622094052.01c0a074@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Luca
 
-El mi?, 16 jun 2021 a las 22:52, Luca Ceresoli
-(<luca@lucaceresoli.net>) escribi?:
->
-> Hi Alvaro,
->
-> On 15/06/21 09:50, Alvaro Gamez wrote:
-> > Hi!
-> >
-> > I'm trying to use buildroot to generate a system for the Digilent
-> > Genesys board, which is based on the zynqmp SOC. Thanks to the
-> > wonderful job of Luca and others, it should be pretty straightforward,
-> > but I'm having trouble getting it to boot, and I was hoping I could
-> > get some guidance on what to do next.
->
-> Thanks for your appreciation! However I must say setting up zynqmp
-> booting is never straightforward... :-/
+Hi,
 
-Yeah, tell me about it :)
+On Mon, 21 Jun 2021 23:31:40 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
->
-> > I'm using buildroot version 2021.05, with u-boot version 2021.04,
-> > which has latest patches that should allow booting completely via
-> > u-boot, without using Xilinx' FSBL
-> >
-> > I'm using Digient's reference design to generate configuration object
-> > pm_cfg_obj.c and PSU init file psu_init_gpl.c, which shall be fed to
-> > u-boot. Alongside these files, I'm make buildroot download a generic
-> > PMU firmware built by Luca at
-> > https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/master/bin/pmufw-v2018.3.bin
-> > and here is the relevant configuration:
-> >
-> > BR2_TARGET_UBOOT=y
-> > BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG=y
-> > BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL_Genesys_PATH)/uboot_defconfig"
-> > BR2_TARGET_UBOOT_NEEDS_DTC=y
-> > BR2_TARGET_UBOOT_SPL=y
-> > BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
-> > BR2_TARGET_UBOOT_ZYNQMP=y
-> > BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/master/bin/pmufw-v2018.3.bin"
-> > BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="/tmp/pm_cfg_obj.c"
-> > BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE="/tmp/psu_init_gpl.c"
-> > BR2_TARGET_UBOOT_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_Genesys_PATH)/orig.dts"
-> >
-> > To provide Arm Trusted Firmware, I'm passing buildroot the same
-> > configuration as already exists on configs/zynqmp_zcu106_defconfig
-> > which is:
-> >
-> > BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
-> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.5"
-> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
-> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
-> >
-> > The device tree I'm using is extracted from Digilent's kernel image,
-> > so it should be correct, although I had to manually patch u-boot to
-> > include my "orig.dtb" as a target of dtb-$(CONFIG_ARCH_ZYNQMP)
-> >
-> > So, it is assumption that this should make u-boot prompt appear after
-> > power up, but I must be wrong because nothing appears at all on the
-> > serial console.
-> >
-> > Provided image by Digilent follows the Xilinx' booting workflow, so
-> > only a BOOT.BIN file is on the sdcard which includes xilinx' FSBL, PMU
-> > firmware with configuration object, u-boot, kernel, device tree, etc,
-> > so at least I know that the board is fine as this firmware works
-> > flawlessly. I also was able to load the kernel and device tree as
-> > built by buildroot over this instance of u-boot, so at least I can
-> > load my own kernel, but I can't progress deeper than that.
->
-> I can't point out a specific potential cause for your problem. I would
-> expect to see at least the U-Boot SPL prompt. You might want to enable
-> some debug outputs in the pmufw code to see it it starts at least.
+[...]
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>  
+> 
+> From here...
+> 
+> > This commit is retreived from Thomas's work.
+> > The first version was discussed
+> > https://patchwork.ozlabs.org/project/buildroot/patch/20200430095249.782597-9-thomas.petazzoni at bootlin.com/
+> > This new version was not already submitted by Thomas or I missed it.  
+> 
+> ... to here: this should have been a post-commit note, after the ---
+> line...
+> 
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> > ---  
+> 
+> ... here.
+> 
+> Additionally, it would have been nice to summarise the changes made
+> between the original submission and htis new one, and how the previous
+> review was handled.
 
-I'm going all crazy about configuring U-Boot and my headache is noticeable now.
-Won't you happen to have a working u-boot with SPL defconfig that works on any
-particular zynqmp board?
+I moved the note after a '---' line and added:
 
-> I haven't been working on zynqmp recently but back at the times
-> (2018~2019) one needed to have the various booting components "in sync",
-> expecially pmufw, U-Boot and SPL or FSBL. I don't remember whether ATF
-> was critical too in that respect. By "in sync" I mean the major version
-> number (the year) should be the same.
->
-> Here you are using a 2018 pmufw and 2021 U-Boot so you muight want to
-> build a more recent pmufw and see if you get any improvements.
+   Compared to the first version, this patch has an improved commit message and
+   generates the md5sum snapshot using
+     'find -L $(1) -type f -print0 | xargs -0 -r md5sum > $($(PKG)_DIR)/.files$(2).md5;'
+   instead of
+     'cd $(1); LC_ALL=C find . -type f -exec md5sum {} \; > $($(PKG)_DIR)/.files$(2).md5'
 
-Great, that's a nice idea, thank you!
+> 
+> >  package/pkg-generic.mk | 23 +++++++++++++++++++++++
+> >  1 file changed, 23 insertions(+)
+> > 
+> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> > index 45589bcbb4..bb9ff4150a 100644
+> > --- a/package/pkg-generic.mk
+> > +++ b/package/pkg-generic.mk
+> > @@ -102,6 +102,25 @@ define fixup-libtool-files
+> >  endef
+> >  endif
+> >  
+> > +# Functions to detect overwritten files
+> > +
+> > +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> > +# $(1): base directory to search in
+> > +# $(2): suffix of file (optional)
+> > +define pkg_detect_overwrite_before
+> > +	LC_ALL=C find $(1) -type f -print0 | xargs -0 -r md5sum > $($(PKG)_DIR)/.files$(2).md5;
+> > +endef
+> > +
+> > +# $(1): base directory to search in
+> > +# $(2): suffix of file (optional)
+> > +define pkg_detect_overwrite_after
+> > +	if test -s $($(PKG)_DIR)/.files$(2).md5 ; then \
+> > +		LC_ALL=C md5sum --quiet -c $($(PKG)_DIR)/.files$(2).md5 || \
+> > +		{ echo "ERROR: package $($(PKG)_NAME) has overwritten files installed by a previous package, aborting."; exit 1; } ; \
+> > +	fi
+> > +endef
+> > +endif  
+> 
+> And now I see that only part of the problem is handled; it only tries
+> and detect files which content changes; it does not account for files
+> which type did change. I.e. a symlink that was onverted over to a file,
+> or the other way around.
+> 
+> So I think we could change the pkg_detect_overwrite_before macro thusly;
+> 
+>     LC_ALL=C find -L $(1) -type f -print0 |...
 
->
-> I'm afraid I cannot be more helpful at the moment.
->
-> --
-> Luca
+I added '-L' option.
 
-Thanks for your time anyhow, and for your previous work on all this!
+> 
+> That should cover both cases, with just the esception that a symlink is
+> replaced with a file of the same content (or the other way around).
+> There's just a little quirk, though:
+> 
+>     find: File system loop detected; ?host/usr? is part of the same file
+>     system loop as ?host?.
+> 
+> Meh, that's starting to be a bit hairy... We can just ignore it
+> explicitly, maybe? For merged-usr in target, we should not have that
+> problem, but there is still the option for a custom skeleton, where
+> people could provide it as well...
+> 
+> So, to summarise: this patch does not cover all cases, but it is still
+> acceptable, and brings in the necessary infra that we can later extend
+> should the need arises.
+> 
 
-Best regards!
+Ok, v2 with the changes I mentioned will be sent.
+
+Thanks for the review,
+Herv? Codina
 
 -- 
-?lvaro G?mez Machado
+Herv? Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
