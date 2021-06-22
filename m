@@ -1,81 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 22 Jun 2021 12:12:02 +0200
-Subject: [Buildroot] [PATCH 05/15] package/pkg-generic.mk: Perform .la
- files fixup in per-package HOST_DIR
-In-Reply-To: <20210621141130.48654-6-herve.codina@bootlin.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 22 Jun 2021 12:12:20 +0200
+Subject: [Buildroot] [PATCH 04/15] package/pkg-generic.mk: Fix .la files
+ overwrite detection
+In-Reply-To: <20210622095609.GD44262@scaer>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
- <20210621141130.48654-6-herve.codina@bootlin.com>
-Message-ID: <20210622101202.GE44262@scaer>
+ <20210621141130.48654-5-herve.codina@bootlin.com>
+ <20210621214223.GC44262@scaer>
+ <20210622113124.7cf2dde1@bootlin.com>
+ <20210622095609.GD44262@scaer>
+Message-ID: <20210622121220.5d4520e2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Herv?, All,
+On Tue, 22 Jun 2021 11:56:09 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On 2021-06-21 16:11 +0200, Herve Codina spake thusly:
-> fixup-libtool-files was called on per-package STAGING_DIR.
-> Some host-xxxx packages have their .la files with directories
-> pointing outside their own per-package directory.
+> Sorry, but this patch (4/15) is fixing an issue introduced by the first
+> patch, with:
+
+I agree in principle. But here, it's really a new requirement that we
+are adding on packages, and we *know* that even with Herv? patches
+there will be some other packages that will need fixing.
+
+So to me it's not really like introducing a regression in a patch, and
+fixing it later.
+
+> > What about the others issues
+> > detected ? Squash also together with the first patch ? I think it will
+> > produce a huge patch quite complicate to understand even with all individual
+> > commit message squashed.  
 > 
-> This commit, calling fixup-libtool-files on HOST_DIR, fixes this
-> issue.
+> Ideally, I would say a series should first fix the issues, then
+> introduce the tooling.
 
-Usually, I don't much like that we have a fix for some theoretical bug,
-but in this case I think it just does make sense.
+No, please keep one series, but having the fixes *before* we introduce
+the check. And as stated above, the fixes will not fix all problems,
+they will only fix the problems we know about. More problems will be
+detected by the autobuilders thanks to the overwrite check.
 
-And because a .la file is only used to find the libraries at link time,
-not runtime, this is has most probably gone unnoticed because, at build
-time, the libraries are present in the out-of-package tree, and are
-present at runtime in the per-package tree...
-
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->  package/pkg-generic.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> > However, that being said, I can squash this patch (Fix .la files overwrite
+> > detection) with the 1st one (detect files overwritten in TARGET_DIR and
+> > HOST_DIR) if you still think it will be better.  
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index f9564831cc..e437050175 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -97,7 +97,8 @@ endif
->  # $2: staging directory of the package
->  ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
->  define fixup-libtool-files
-> -	$(Q)find $(2)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
-> +	$(Q)find $(2) \( -path '$(2)/lib*' -o -path '$(2)/usr/lib*' \) \
-> +		-name "*.la" | xargs --no-run-if-empty \
->  		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$(1)/:g"
+> Yes, I still think that it is better.
 
-While at it, can you switch over to using find's -print0 and xarg's -0 ?
+No, please don't squash, have fixes added before the overwrite check
+instead.
 
->  endef
->  endif
-> @@ -254,6 +255,7 @@ $(BUILD_DIR)/%/.stamp_configured:
->  	@$(call pkg_size_before,$(TARGET_DIR))
->  	@$(call pkg_size_before,$(STAGING_DIR),-staging)
->  	@$(call pkg_size_before,$(HOST_DIR),-host)
-> +	$(call fixup-libtool-files,$(NAME),$(HOST_DIR))
->  	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
-
-Regards,
-Yann E. MORIN.
-
->  	@$(call pkg_detect_overwrite_before,$(TARGET_DIR))
->  	@$(call pkg_detect_overwrite_before,$(HOST_DIR),-host)
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
