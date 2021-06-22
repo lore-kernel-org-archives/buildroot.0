@@ -1,73 +1,47 @@
-From: Herve Codina <herve.codina@bootlin.com>
-Date: Tue, 22 Jun 2021 11:31:24 +0200
-Subject: [Buildroot] [PATCH 04/15] package/pkg-generic.mk: Fix .la files
- overwrite detection
-In-Reply-To: <20210621214223.GC44262@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 22 Jun 2021 11:34:06 +0200
+Subject: [Buildroot] [PATCH 03/15] package/pkg-generic.mk: Remove Info
+ documents dir entry
+In-Reply-To: <20210622104343.0c5ea063@bootlin.com>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
- <20210621141130.48654-5-herve.codina@bootlin.com>
- <20210621214223.GC44262@scaer>
-Message-ID: <20210622113124.7cf2dde1@bootlin.com>
+ <20210621141130.48654-4-herve.codina@bootlin.com>
+ <20210621225120.536cd758@windsurf>
+ <20210622104343.0c5ea063@bootlin.com>
+Message-ID: <20210622113406.11234e26@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Tue, 22 Jun 2021 10:43:43 +0200
+Herve Codina <herve.codina@bootlin.com> wrote:
 
-On Mon, 21 Jun 2021 23:42:23 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-
-> On 2021-06-21 16:11 +0200, Herve Codina spake thusly:
-> > During per-package build, original .la files are modified by
-> > fixup-libtool-files calls.
-> > But since fixup-libtool-files modifies files using sed --in-place,
-> > these modification are done using a temporary file and a call to
-> > rename. Rename breaks the hardlink to the original file and leave the
-> > temporary file in per-package TARGET dir.
-> > As the original file is not modified, this is no longer considered as
-> > an overwrite.
+> > However, I'm not a huge fan of having this right in the middle of the
+> > infrastructure. It feels like a small detail that gets handled in the
+> > middle of super generic infrastructure code.
 > > 
-> > To fix this detection, this patch simply considers the what is done
-> > by fixup-libtool-files is part of the original snapshot used to
-> > detect overwrites. And so, the original snapshot is taken after
-> > fixup-libtool-files call.  
+> > The issue is that I don't really have a good alternative proposal :-/  
 > 
-> Then this should be squashed together with the first patch, to avoid
-> introducing the issue just to fix it a few patches down the series.
-> 
-> You should however add a note about that in the commit log of the first
-> patch, of course, to explain why the overwrite ifnra is inserted after
-> the .la tweaks.
-> 
-> So, I agree with the explanations, which make sense, but I disagree that
-> it should be a separate patch...
-> 
+> Maybe using a macro defined closed to fixup-libtool-files and calling
+> this macro here instead of '$(Q)rm ...' will help.
+> Do you think it will be better ?
 
-Well, I have seen this when I created the patches.
-I kept them separate because on the first patch, I introduced the tool
-to check the overwrites and i would like it to take its snapshot as soon
-as possible in the build sequence (ie right after collecting dependencies
-files and taking snapshots for current package statistics).
-Then I fixed the issue seen by the overwrites detection and I put at the
-same level fixing host-e2fsprogs, fixing .la files or a bit later fixing
-python with one patch per fix to detail (or try to detail) the issue and
-the way I fixed it.
+Either a macro, or a list of files that are removed, perhaps?
 
-Squashing the 2 patches leads to one patch that introduces the tool and
-fixes one of the issues detected by the tool. What about the others issues
-detected ? Squash also together with the first patch ? I think it will
-produce a huge patch quite complicate to understand even with all individual
-commit message squashed.
+> This add a little complexity in overwrite detection (filter out) and
+> I prefer having overwrite detection quite stupid. It checks for
+> overwrites without any exception.
+> Adding exception now in the detection mechanism is opening the door to
+> more and more exceptions.
 
-However, that being said, I can squash this patch (Fix .la files overwrite
-detection) with the 1st one (detect files overwritten in TARGET_DIR and
-HOST_DIR) if you still think it will be better.
+Yes, I understand your argument. As I stated: I'm also not sure which
+solution to propose here. I was just not a big fan of this removal of
+one specific file, there, in the middle of a highly generic piece of
+infrastructure.
 
-Regards,
-Herv? Codina
-
+Thomas
 -- 
-Herv? Codina, Bootlin
+Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
