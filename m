@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Jun 2021 13:15:43 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/gcc: bump to
+Date: Tue, 22 Jun 2021 22:59:26 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/gcc: bump to
  version 9.4.0
-Message-ID: <20210622213719.B67DA8B2DB@busybox.osuosl.org>
+Message-ID: <20210622213727.4265E815DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fd0c98a51c03c8cbc6bce05543ac4ee5f0ff2a8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=59bd73cb99bfdcade74e393776d9541f19d46d4c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Remove upstream patches
 Reorder remaining patches
@@ -23,6 +23,7 @@ https://gitlab.com/kubu93/buildroot/-/pipelines/315291768
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 (cherry picked from commit ebda5414d33b11e4e49c9300d50fd24cb840b41c)
+[Peter: drop or1k patch updates]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  .../9.3.0/0001-xtensa-fix-PR-target-91880.patch    | 50 -------------
@@ -30,11 +31,9 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  ...-Fix-issue-with-set_got-clobbering-LR-r9.patch} |  4 +-
  ...REENTRANT-for-OpenRISC-when-pthread-is-p.patch} |  6 +-
  ...-target-92095-internal-error-with-O1-mcp.patch} | 28 ++++----
- ...-Add-mcmodel-option-to-handle-large-GOTs.patch} | 12 ++--
- ...-Use-cmodel-large-when-building-crtstuff.patch} |  8 +--
  package/gcc/Config.in.host                         |  2 +-
  package/gcc/gcc.hash                               |  4 +-
- 9 files changed, 32 insertions(+), 163 deletions(-)
+ 7 files changed, 22 insertions(+), 153 deletions(-)
 
 diff --git a/package/gcc/9.3.0/0001-xtensa-fix-PR-target-91880.patch b/package/gcc/9.3.0/0001-xtensa-fix-PR-target-91880.patch
 deleted file mode 100644
@@ -344,90 +343,6 @@ index 8ed281e981..0c69de93be 100644
   #include <stdint.h>
  -- 
 -2.25.4
-+2.31.1
- 
-diff --git a/package/gcc/9.3.0/0006-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch b/package/gcc/9.4.0/0004-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-similarity index 96%
-rename from package/gcc/9.3.0/0006-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-rename to package/gcc/9.4.0/0004-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-index 60dd7f78ea..894411f394 100644
---- a/package/gcc/9.3.0/0006-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-+++ b/package/gcc/9.4.0/0004-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-@@ -1,4 +1,4 @@
--From 1af3ab7fc3e4f2ae835c976486e8af0762674af3 Mon Sep 17 00:00:00 2001
-+From 90b202b59fa2bdb68314a23471b32d3e16602bc8 Mon Sep 17 00:00:00 2001
- From: Stafford Horne <shorne@gmail.com>
- Date: Sun, 2 May 2021 06:11:44 +0900
- Subject: [PATCH] or1k: Add mcmodel option to handle large GOTs
-@@ -104,7 +104,7 @@ index fc10fcfabde..df67d72b139 100644
-    reloc_type type = RTYPE_DIRECT;
-  
- diff --git a/gcc/config/or1k/or1k.h b/gcc/config/or1k/or1k.h
--index 6dda230f217..858f30743b7 100644
-+index feee702d89c..dbaf0d0fe4c 100644
- --- a/gcc/config/or1k/or1k.h
- +++ b/gcc/config/or1k/or1k.h
- @@ -21,6 +21,8 @@
-@@ -166,10 +166,10 @@ index 7bdbd842dd4..116524c3441 100644
-  Target RejectNegative Mask(CMOV)
-  Allows generation of binaries which use the l.cmov instruction.  If your target
- diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
--index 0ab6c9c6449..0904b2b5a41 100644
-+index 7b5f6e03d9f..683c64417af 100644
- --- a/gcc/doc/invoke.texi
- +++ b/gcc/doc/invoke.texi
--@@ -1030,7 +1030,9 @@ Objective-C and Objective-C++ Dialects}.
-+@@ -1032,7 +1032,9 @@ Objective-C and Objective-C++ Dialects}.
-  @emph{OpenRISC Options}
-  @gccoptlist{-mboard=@var{name}  -mnewlib  -mhard-mul  -mhard-div @gol
-  -msoft-mul  -msoft-div @gol
-@@ -180,7 +180,7 @@ index 0ab6c9c6449..0904b2b5a41 100644
-  
-  @emph{PDP-11 Options}
-  @gccoptlist{-mfpu  -msoft-float  -mac0  -mno-ac0  -m40  -m45  -m10 @gol
--@@ -27408,6 +27410,15 @@ MWAITX, SHA, CLZERO, AES, PCL_MUL, CX16, MOVBE, MMX, SSE, SSE2, SSE3, SSE4A,
-+@@ -27462,6 +27464,15 @@ MWAITX, SHA, CLZERO, AES, PCL_MUL, CX16, MOVBE, MMX, SSE, SSE2, SSE3, SSE4A,
-  SSSE3, SSE4.1, SSE4.2, ABM, XSAVEC, XSAVES, CLFLUSHOPT, POPCNT, and 64-bit
-  instruction set extensions.)
-  
-@@ -197,5 +197,5 @@ index 0ab6c9c6449..0904b2b5a41 100644
-  @item btver1
-  CPUs based on AMD Family 14h cores with x86-64 instruction set support.  (This
- -- 
--2.25.1
-+2.31.1
- 
-diff --git a/package/gcc/9.3.0/0007-or1k-Use-cmodel-large-when-building-crtstuff.patch b/package/gcc/9.4.0/0005-or1k-Use-cmodel-large-when-building-crtstuff.patch
-similarity index 93%
-rename from package/gcc/9.3.0/0007-or1k-Use-cmodel-large-when-building-crtstuff.patch
-rename to package/gcc/9.4.0/0005-or1k-Use-cmodel-large-when-building-crtstuff.patch
-index 673847fd88..69d143349a 100644
---- a/package/gcc/9.3.0/0007-or1k-Use-cmodel-large-when-building-crtstuff.patch
-+++ b/package/gcc/9.4.0/0005-or1k-Use-cmodel-large-when-building-crtstuff.patch
-@@ -1,4 +1,4 @@
--From b540f7b916ba7cf2059b84c5cc8d08c67ebe9a0b Mon Sep 17 00:00:00 2001
-+From d64a757040fe36b0d9dc65d24107c656f66bc8e5 Mon Sep 17 00:00:00 2001
- From: Stafford Horne <shorne@gmail.com>
- Date: Sun, 2 May 2021 06:11:45 +0900
- Subject: [PATCH] or1k: Use cmodel=large when building crtstuff
-@@ -29,10 +29,10 @@ Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-  create mode 100644 libgcc/config/or1k/t-crtstuff
- 
- diff --git a/libgcc/config.host b/libgcc/config.host
--index 0f15fda3612..0c21d384e6f 100644
-+index bdbf77a3e62..bfb45a90630 100644
- --- a/libgcc/config.host
- +++ b/libgcc/config.host
--@@ -1051,12 +1051,12 @@ nios2-*-*)
-+@@ -1061,12 +1061,12 @@ nios2-*-*)
-  	extra_parts="$extra_parts crti.o crtn.o"
-  	;;
-  or1k-*-linux*)
-@@ -56,5 +56,5 @@ index 00000000000..dcae7f3498e
- +# Compile crtbeginS.o and crtendS.o with -mcmodel=large
- +CRTSTUFF_T_CFLAGS_S += -mcmodel=large
- -- 
--2.25.1
 +2.31.1
  
 diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
