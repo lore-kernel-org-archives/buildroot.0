@@ -1,13 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 22 Jun 2021 22:50:40 +0200
-Subject: [Buildroot] [PATCH 09/15] package/pkg-python: Remove
- _sysconfigdata*.pyc files when _sysconfigdata*.py are changed
-In-Reply-To: <20210622195211.4bafd222@bootlin.com>
+Date: Tue, 22 Jun 2021 23:01:03 +0200
+Subject: [Buildroot] [PATCH 10/15] package/pkg-generic.mk: Move python
+ fixup to generic package infrastructure
+In-Reply-To: <20210621141130.48654-11-herve.codina@bootlin.com>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
- <20210621141130.48654-10-herve.codina@bootlin.com>
- <20210621171202.2362cb27@windsurf>
- <20210622195211.4bafd222@bootlin.com>
-Message-ID: <20210622205040.GM44262@scaer>
+ <20210621141130.48654-11-herve.codina@bootlin.com>
+Message-ID: <20210622210103.GN44262@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,72 +14,106 @@ To: buildroot@busybox.net
 
 Herv?, All,
 
-On 2021-06-22 19:52 +0200, Herve Codina spake thusly:
-> On Mon, 21 Jun 2021 17:12:02 +0200
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> > On Mon, 21 Jun 2021 16:11:24 +0200
-> > Herve Codina <herve.codina@bootlin.com> wrote:
-> > > In order to avoid _sysconfigdata*.pyc overwrites when they are generated based on
-> > > _sysconfigdata*.py changes, this commit simply removes _sysconfigdata*.pyc
-> > > whenever _sysconfigdata*.py are changed.
-> > > 
-> > > As they are removed, overwrite detection will no longer trig and coherency between
-> > > the two files (.py and .pyc) is ensured.
-> > > 
-> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > > ---
-> > >  package/pkg-python.mk | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-> > > index 59a48e5a87..b3fde77da5 100644
-> > > --- a/package/pkg-python.mk
-> > > +++ b/package/pkg-python.mk
-> > > @@ -96,7 +96,9 @@ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-> > >  define PKG_PYTHON_FIXUP_SYSCONFIGDATA
-> > >  	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
-> > >  		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
-> > > -		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g"
-> > > +		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g" ;\  
-[--SNIP--]
-> > > +	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
-> > > +		-name "_sysconfigdata*.pyc" -print0 | xargs -0 -r rm -f  
-> > Do we need a --no-run-if-empty on the xargs ? Or perhaps it should be
-> It is cleaner to avoid running rm is there is nothing to remove.
-> So, I prefer keeping the xargs -r option.
+On 2021-06-21 16:11 +0200, Herve Codina spake thusly:
+> Fixing _sysconfigdata*.{py,pyc} was previously done by python package
+> infrastructure. Some packages use python stuff without using python
+> package infrastructure.
+> These packages perform overwrites and need the specific python fixup
+> to fix them.
 > 
-> > using find directly, i.e:
-> > 
-> > 	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
-> > 		-name "_sysconfigdata*.pyc" -exec rm -f {} \;
-> > 
-> > (or something like that)
+> In order to be sure to fix all of these packages, the python fixup
+> is moved to the generic package infrastructure and applied to all
+> packages.
+> This follows the same principle as for the .la libtool files fixup.
 > 
-> Using "-exec rm -f {} \;" will lead to start as many rm as there are files
-> to remove whereas xargs will run only one rm.
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> ---
+>  package/pkg-generic.mk | 17 +++++++++++++++++
+>  package/pkg-python.mk  | 12 ------------
+>  2 files changed, 17 insertions(+), 12 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 4069d2cf3c..918e2381af 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -103,6 +103,21 @@ define fixup-libtool-files
+>  endef
+>  endif
+>  
+> +# Make sure python _sysconfigdata*.py files only reference the current
+> +# per-package directory.
+> +
+> +# $1: package name (lower case)
+> +# $2: staging or host directory of the package
+> +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> +define fixup-python-files
+> +	$(Q)find $(2) \( -path '$(2)/lib/python*' -o -path '$(2)/usr/lib/python*' \) \
+> +		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
+> +		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$(1)/:g" ;\
+> +	find $(2) \( -path '$(2)/lib/python*' -o -path '$(2)/usr/lib/python*' \) \
+> +		-name "_sysconfigdata*.pyc" -print0 | xargs -0 -r rm -f
+> +endef
+> +endif
+> +
+>  # Functions to detect overwritten files
+>  
+>  ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> @@ -257,6 +272,8 @@ $(BUILD_DIR)/%/.stamp_configured:
+>  	@$(call pkg_size_before,$(HOST_DIR),-host)
+>  	$(call fixup-libtool-files,$(NAME),$(HOST_DIR))
+>  	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
+> +	$(call fixup-python-files,$(NAME),$(HOST_DIR))
+> +	$(call fixup-python-files,$(NAME),$(STAGING_DIR))
+>  	$(foreach hook,$($(PKG)_PER_PACKAGE_TWEAK_HOOKS),$(call $(hook))$(sep))
 
-So, 1: wrong. xargs may have to exec more than one rm if there are too
-many arguments, or the command line is too long. But of course, this is
-inconsequential, because even on a huge build, this would be just a few
-exec instead of tens of thousands.
+So, earlier in the series, you introduced _PER_PACKAGE_TWEAK_HOOKS (or
+whatever the name it will eventually bear), stating that infras could
+set it, but here  you are not taking the chance to demonstrate this,
+and instead you are inserting the python fixups in an ad-hoc way.
 
-And 2: why not using find's -delete option to begin with:
+Which also illustrates that the libtool fixups should be converted to
+the _PER_PACKAGE_TWEAK_HOOKS, probably...
 
-    find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
-        -name "_sysconfigdata*.pyc" -delete
-
-There, not even a pipe, or an exec of anything else...
+Otherwise, this is a good change.
 
 Regards,
 Yann E. MORIN.
 
-> 
-> Herv?
-> 
+>  	@$(call pkg_detect_overwrite_before,$(TARGET_DIR))
+>  	@$(call pkg_detect_overwrite_before,$(HOST_DIR),-host)
+> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+> index b3fde77da5..e6b81bdfd3 100644
+> --- a/package/pkg-python.mk
+> +++ b/package/pkg-python.mk
+> @@ -92,16 +92,6 @@ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+>  	--root=/ \
+>  	--single-version-externally-managed
+>  
+> -ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> -define PKG_PYTHON_FIXUP_SYSCONFIGDATA
+> -	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+> -		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
+> -		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g" ;\
+> -	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+> -		-name "_sysconfigdata*.pyc" -print0 | xargs -0 -r rm -f
+> -endef
+> -endif
+> -
+>  ################################################################################
+>  # inner-python-package -- defines how the configuration, compilation
+>  # and installation of a Python package should be done, implements a
+> @@ -246,8 +236,6 @@ $(2)_PYTHON_INTERPRETER = $$(HOST_DIR)/bin/$$($(2)_NEEDS_HOST_PYTHON)
+>  endif
+>  endif
+>  
+> -$(2)_PRE_CONFIGURE_HOOKS += PKG_PYTHON_FIXUP_SYSCONFIGDATA
+> -
+>  #
+>  # Build step. Only define it if not already defined by the package .mk
+>  # file.
 > -- 
-> Herv? Codina, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> 2.31.1
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
