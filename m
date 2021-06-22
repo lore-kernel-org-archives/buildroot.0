@@ -1,57 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Jun 2021 12:12:20 +0200
-Subject: [Buildroot] [PATCH 04/15] package/pkg-generic.mk: Fix .la files
- overwrite detection
-In-Reply-To: <20210622095609.GD44262@scaer>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 22 Jun 2021 12:24:33 +0200
+Subject: [Buildroot] [PATCH 01/15] package/pkg-generic.mk: detect files
+ overwritten in TARGET_DIR and HOST_DIR
+In-Reply-To: <e866365b-6244-303a-62d7-1cb00fda8897@green-communications.fr>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
- <20210621141130.48654-5-herve.codina@bootlin.com>
- <20210621214223.GC44262@scaer>
- <20210622113124.7cf2dde1@bootlin.com>
- <20210622095609.GD44262@scaer>
-Message-ID: <20210622121220.5d4520e2@windsurf>
+ <20210621141130.48654-2-herve.codina@bootlin.com>
+ <20210621213140.GA44262@scaer>
+ <20210622094052.01c0a074@bootlin.com>
+ <20210622113003.7cbf0136@windsurf>
+ <e866365b-6244-303a-62d7-1cb00fda8897@green-communications.fr>
+Message-ID: <20210622102433.GF44262@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 22 Jun 2021 11:56:09 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Nicolas, All,
 
-> Sorry, but this patch (4/15) is fixing an issue introduced by the first
-> patch, with:
+On 2021-06-22 11:57 +0200, Nicolas Cavallari spake thusly:
+> On 22/06/2021 11:30, Thomas Petazzoni wrote:
+> >On Tue, 22 Jun 2021 09:40:52 +0200
+> >Herve Codina <herve.codina@bootlin.com> wrote:
+> >
+> >>    Compared to the first version, this patch has an improved commit message and
+> >>    generates the md5sum snapshot using
+> >>      'find -L $(1) -type f -print0 | xargs -0 -r md5sum > $($(PKG)_DIR)/.files$(2).md5;'
+> >
+> >But is this better ? Due to not cd-ing into the directory, you will
+> >have full absolute paths in the .md5 file,
 
-I agree in principle. But here, it's really a new requirement that we
-are adding on packages, and we *know* that even with Herv? patches
-there will be some other packages that will need fixing.
+But is that even an issue? Those paths are only used for one per-package
+directory; they do not follow files around into another package's ppd.
 
-So to me it's not really like introducing a regression in a patch, and
-fixing it later.
+So, relative or absolute, we don't much care.
 
-> > What about the others issues
-> > detected ? Squash also together with the first patch ? I think it will
-> > produce a huge patch quite complicate to understand even with all individual
-> > commit message squashed.  
-> 
-> Ideally, I would say a series should first fix the issues, then
-> introduce the tooling.
+> >and adding LC_ALL=C is quite
+> >customary too.
 
-No, please keep one series, but having the fixes *before* we introduce
-the check. And as stated above, the fixes will not fix all problems,
-they will only fix the problems we know about. More problems will be
-detected by the autobuilders thanks to the overwrite check.
+In this case, do we also even care or need it? I pretty sure the output
+of find is not sorted at all; it most probably depend on the order of
+dentries in the directory, and those have absolutely no ordering
+guarantee...
 
-> > However, that being said, I can squash this patch (Fix .la files overwrite
-> > detection) with the 1st one (detect files overwritten in TARGET_DIR and
-> > HOST_DIR) if you still think it will be better.  
-> 
-> Yes, I still think that it is better.
+Note that if you really want to use LC_ALL, passing it in front of 'find'
+will not make LC_ALL available to anythin after the pipeline, so you'd
+still have xargs (and md5sum) run without it...
 
-No, please don't squash, have fixes added before the overwrite check
-instead.
+> > Ditto for using | xargs instead of -exec.
+> xargs will run only start one md5sum process if the command line size
+> permits it, whereas "-exec md5sum {} ;" will start one md5sum per file.
 
-Thomas
+Agreed. But I think this is exactly what Thomas suggested to use, right?
+
+> An alternative is "-exec md5sum {} +", which is essentially xargs-like.
+
+I once used that in the past, and it breaks on non-GNU find, because '+'
+is a GNUism. So I think using xargs is still better.
+
+Regards,
+Yann E. MORIN.
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
