@@ -1,57 +1,69 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 21 Jun 2021 18:41:17 -0700
-Subject: [Buildroot] [PATCH v1 1/1] package/go-bootstrap: bump to version
- 1.4-bootstrap-20171003
-Message-ID: <20210622014117.2378875-1-christian@paral.in>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 22 Jun 2021 01:52:26 +0000
+Subject: [Buildroot] [Bug 13866] New: host-go: not supported on arm64 hosts
+Message-ID: <bug-13866-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://golang.org/doc/install/source#bootstrapFromSource
+https://bugs.busybox.net/show_bug.cgi?id=13866
 
-All Go compiler versions > 1.4.x (old) are written in Go, and require a existing
-compiled Go version to use to build from source. Buildroot uses a 1.4.x version
-in the "go-bootstrap" package to build a C-based Go compiler, and then uses that
-compiler to build the main "host-go" compiler.
+            Bug ID: 13866
+           Summary: host-go: not supported on arm64 hosts
+           Product: buildroot
+           Version: unspecified
+          Hardware: Other
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: christian at paral.in
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-This commit updates to the latest 1.4.x go-bootstrap branch version recommended
-in the documentation, which includes more compatibility fixes.
+All Go compiler versions > 1.4.x (old) are written in Go, and require a
+existing compiled Go version to use to build from source.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/go-bootstrap/go-bootstrap.hash | 2 +-
- package/go-bootstrap/go-bootstrap.mk   | 8 +++++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
+https://golang.org/doc/install/source#bootstrapFromSource
 
-diff --git a/package/go-bootstrap/go-bootstrap.hash b/package/go-bootstrap/go-bootstrap.hash
-index 03fd7d571f..0f186a5d55 100644
---- a/package/go-bootstrap/go-bootstrap.hash
-+++ b/package/go-bootstrap/go-bootstrap.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  9947fc705b0b841b5938c48b22dc33e9647ec0752bae66e50278df4f23f64959  go1.4.3.src.tar.gz
-+sha256  f4ff5b5eb3a3cae1c993723f3eab519c5bae18866b5e5f96fe1102f0cb5c3e52  go1.4-bootstrap-20171003.tar.gz
- sha256  dd26a7abddd02e2d0aba97805b31f248ef7835d9e10da289b22e3b8ab78b324d  LICENSE
-diff --git a/package/go-bootstrap/go-bootstrap.mk b/package/go-bootstrap/go-bootstrap.mk
-index 6710e31561..71696a1540 100644
---- a/package/go-bootstrap/go-bootstrap.mk
-+++ b/package/go-bootstrap/go-bootstrap.mk
-@@ -4,9 +4,11 @@
- #
- ################################################################################
- 
--GO_BOOTSTRAP_VERSION = 1.4.3
--GO_BOOTSTRAP_SITE = https://storage.googleapis.com/golang
--GO_BOOTSTRAP_SOURCE = go$(GO_BOOTSTRAP_VERSION).src.tar.gz
-+# Use last C-based Go compiler: v1.4.x
-+# See https://golang.org/doc/install/source#bootstrapFromSource
-+GO_BOOTSTRAP_VERSION = 1.4-bootstrap-20171003
-+GO_BOOTSTRAP_SITE = https://dl.google.com/go
-+GO_BOOTSTRAP_SOURCE = go$(GO_BOOTSTRAP_VERSION).tar.gz
- 
- GO_BOOTSTRAP_LICENSE = BSD-3-Clause
- GO_BOOTSTRAP_LICENSE_FILES = LICENSE
+The process for "bootstrapping" the Go compiler in Buildroot is:
+
+1. Compile a C/C++ cross-compiler (gcc) as the host toolchain.
+2. Build go-bootstrap (which is Go 1.4.x and written in C)
+3. Build go 1.16.x (written in Go) using go-bootstrap.
+
+The problem is that step 2 - build go-bootstrap - does not work on 64-bit arm.
+The Go compiler from 1.4.x is compatible with x86, x86_64, and arm (32 bit)
+only.
+
+This means that arm64 host machines will skip building Go and all go-based
+packages like Docker.
+
+Due to BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
+
+The best fix to this for Buildroot is to continue using go-bootstrap on x86_64
+or arm32 platforms (when BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS is set).
+This is the most flexible option in terms of supporting third-party toolchains
+to bootstrap Go.
+
+Support for gccgo (the Go compiler built-in to GCC 5 and greater) should be
+added with a conditional flag for the Buildroot toolchain (which would set
+--enable-languages=go).
+
+If the compiler supports gccgo (toolchain sets GCCGO_SUPPORTS) flag, and
+GO_BOOTSTRAP_ARCH_SUPPORTS is false, then the host-go package should use the
+toolchain Gccgo to compile the Go compiler.
+
+The toolchain gccgo would install a "go" binary into the host tree provided by
+gcc. (This binary is drop-in compatible with the normal Go compiler).
+
+The Go compiler can then be instructed to use gccgo by simply setting
+$GOROOT_BOOTSTRAP to host/usr.
+
 -- 
-2.32.0
+You are receiving this mail because:
+You are on the CC list for the bug.
