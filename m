@@ -1,45 +1,131 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Jun 2021 11:04:06 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/docker-cli: bump
- version to 20.10.7
-Message-ID: <20210622104239.E331E86D18@busybox.osuosl.org>
+Date: Tue, 22 Jun 2021 11:04:00 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/docker-engine:
+ bump version to 20.10.7
+Message-ID: <20210622104239.D45147F9A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ef20134a70e4f68de14d7cf4275faa390604318
+commit: https://git.buildroot.net/buildroot/commit/?id=7f0dc9a32eaf4bec23dd641e755520ab0af5edf5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
+Drop upstreamed patch fix-port-forwarding-with-ipv6.
+
+Upstream commit: d29a55c6c344a536089d6b1bcd92be9cdea20641
+
 Signed-off-by: Christian Stewart <christian@paral.in>
+Tested-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit c6a4d7bed8d7cd6f0124111d974fd35d281e7a49)
+(cherry picked from commit 49df5080079e7e6fc7330e91f249004d018c4c9b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...1-fix-port-forwarding-with-ipv6.disable-1.patch | 74 ----------------------
+ package/docker-engine/docker-engine.hash           |  2 +-
+ package/docker-engine/docker-engine.mk             |  2 +-
+ 3 files changed, 2 insertions(+), 76 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index bb3444c270..6d380c2fd8 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
+diff --git a/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch b/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch
+deleted file mode 100644
+index c5161ef0db..0000000000
+--- a/package/docker-engine/0001-fix-port-forwarding-with-ipv6.disable-1.patch
++++ /dev/null
+@@ -1,74 +0,0 @@
+-From 7b9c2905883df5171fda10a364a81b8c6176c8e2 Mon Sep 17 00:00:00 2001
+-From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+-Date: Mon, 26 Apr 2021 15:28:40 +0900
+-Subject: [PATCH] fix port forwarding with ipv6.disable=1
+-
+-Make `docker run -p 80:80` functional again on environments with kernel boot parameter `ipv6.disable=1`.
+-
+-Fix moby/moby issue 42288
+-
+-Signed-off-by: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+-[Upstream: https://github.com/moby/libnetwork/pull/2635,
+-           https://github.com/moby/moby/pull/42322]
+-[Rework path/drop test for docker-engine]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go | 31 +++++++++++++++++++++++++++++++
+- 1 file changed, 35 insertions(+), 0 deletion(-)
+-
+-diff --git a/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go b/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
+-index 946130ec..17bf36f9 100644
+---- a/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
+-+++ b/vendor/github.com/docker/libnetwork/drivers/bridge/port_mapping.go
+-@@ -5,6 +5,7 @@ import (
+- 	"errors"
+- 	"fmt"
+- 	"net"
+-+	"sync"
+- 
+- 	"github.com/docker/libnetwork/types"
+- 	"github.com/ishidawataru/sctp"
+-@@ -50,6 +51,13 @@ func (n *bridgeNetwork) allocatePortsInternal(bindings []types.PortBinding, cont
+- 			bs = append(bs, bIPv4)
+- 		}
+- 
+-+		// skip adding implicit v6 addr, when the kernel was booted with `ipv6.disable=1`
+-+		// https://github.com/moby/moby/issues/42288
+-+		isV6Binding := c.HostIP != nil && c.HostIP.To4() == nil
+-+		if !isV6Binding && !IsV6Listenable() {
+-+			continue
+-+		}
+-+
+- 		// Allocate IPv6 Port mappings
+- 		// If the container has no IPv6 address, allow proxying host IPv6 traffic to it
+- 		// by setting up the binding with the IPv4 interface if the userland proxy is enabled
+-@@ -211,3 +219,26 @@ func (n *bridgeNetwork) releasePort(bnd types.PortBinding) error {
+- 
+- 	return portmapper.Unmap(host)
+- }
+-+
+-+var (
+-+	v6ListenableCached bool
+-+	v6ListenableOnce   sync.Once
+-+)
+-+
+-+// IsV6Listenable returns true when `[::1]:0` is listenable.
+-+// IsV6Listenable returns false mostly when the kernel was booted with `ipv6.disable=1` option.
+-+func IsV6Listenable() bool {
+-+	v6ListenableOnce.Do(func() {
+-+		ln, err := net.Listen("tcp6", "[::1]:0")
+-+		if err != nil {
+-+			// When the kernel was booted with `ipv6.disable=1`,
+-+			// we get err "listen tcp6 [::1]:0: socket: address family not supported by protocol"
+-+			// https://github.com/moby/moby/issues/42288
+-+			logrus.Debugf("port_mapping: v6Listenable=false (%v)", err)
+-+		} else {
+-+			v6ListenableCached = true
+-+			ln.Close()
+-+		}
+-+	})
+-+	return v6ListenableCached
+-+}
+--- 
+-2.20.1
+-
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 6c55b9a9b9..d07ca33307 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  eda53b96ab83a59502df2e5e00ab7ee867243259407ef454be55e695303c1113  docker-cli-20.10.6.tar.gz
-+sha256  0a7848b1b5031483de075433506d0448ddf834368d9c73770e453e0b89b49747  docker-cli-20.10.7.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 9c3690e4c3..24fd26a8c6 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
+-sha256  fd7f5571b1f64f26b5ca520a3e1fefb33c190f3732b931051c23a76bdba5000e  docker-engine-20.10.6.tar.gz
++sha256  b80142035de46904605fb7b8f18075cd94154f8c3d67ff346ea554d1e9d579b9  docker-engine-20.10.7.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 10ecbf603a..372717775b 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CLI_VERSION = 20.10.6
-+DOCKER_CLI_VERSION = 20.10.7
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+-DOCKER_ENGINE_VERSION = 20.10.6
++DOCKER_ENGINE_VERSION = 20.10.7
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
  
- DOCKER_CLI_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE = Apache-2.0
