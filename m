@@ -1,108 +1,99 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 22 Jun 2021 22:18:18 +0200
-Subject: [Buildroot] [PATCH 03/15] package/pkg-generic.mk: Remove Info
- documents dir entry
-In-Reply-To: <20210622113406.11234e26@windsurf>
+Date: Tue, 22 Jun 2021 22:39:09 +0200
+Subject: [Buildroot] [PATCH 06/15] package/pkg-generic.mk: Introduce
+ <PKG>_PER_PACKAGE_TWEAK_HOOKS
+In-Reply-To: <20210621141130.48654-7-herve.codina@bootlin.com>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
- <20210621141130.48654-4-herve.codina@bootlin.com>
- <20210621225120.536cd758@windsurf>
- <20210622104343.0c5ea063@bootlin.com>
- <20210622113406.11234e26@windsurf>
-Message-ID: <20210622201818.GI44262@scaer>
+ <20210621141130.48654-7-herve.codina@bootlin.com>
+Message-ID: <20210622203909.GJ44262@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Herv?, All,
+Herv?, All,
 
-On 2021-06-22 11:34 +0200, Thomas Petazzoni spake thusly:
-> On Tue, 22 Jun 2021 10:43:43 +0200
-> Herve Codina <herve.codina@bootlin.com> wrote:
-> > > However, I'm not a huge fan of having this right in the middle of the
-> > > infrastructure. It feels like a small detail that gets handled in the
-> > > middle of super generic infrastructure code.
-> > > 
-> > > The issue is that I don't really have a good alternative proposal :-/  
-
-I too am not too fond of this, but I don't have an obvious better
-solution in mind...
-
-> > Maybe using a macro defined closed to fixup-libtool-files and calling
-> > this macro here instead of '$(Q)rm ...' will help.
-> > Do you think it will be better ?
+On 2021-06-21 16:11 +0200, Herve Codina spake thusly:
+> This hook will be used by package infrastucture or some packages to tweak
+> external files (ie files not provides by the package itself) when we build
+> with BR2_PER_PACKAGE_DIRECTORIES set.
 > 
-> Either a macro, or a list of files that are removed, perhaps?
+> This allows to have these tweaks in a specific hook instead of
+> <PKG>_POST_CONFIGURE_HOOK. And so we can call these specific tweaks
+> whenever we need them.
 
-I think a list+macro would be a better solution.
+I'm a bit confused, because those new hooks are even before
+_PRE_CONFIGURE_HOOKS, so smeantically, they are different from
+_POST_CONFIGURE_HOOKS...
 
-Alternatively, we could append to post-install hooks, like we do for
-pre-configure hooks in the autotools infra for autoreconf et al., for
-example...
+So I fail to see how this articulates with POST_CONFIGURE_HOOKS.
+Looking at the next patch, about apr-utils, does not explain why the
+existing apr-utils fixups need to change, with this new hooks...
 
-    # Outside generic-package-inner:
+Ah, yes, yes, now I see. OK, so here's a suggestion for a commit log:
 
-    # $1: base directory (target, staging, host)
-    define remove-conflicting-useless-files
-        $(Q)$(RM) -rf $(patsubst %, $(1)/%, $($(PKG)_DROP_FILES_OR_DIRS))
-    endef
-    define REMOVE_CONFLICTING_USELESS_FILES_IN_HOST
-        $(call remove-conflicting-useless-files,$(HOST_DIR))
-    endef
-    define REMOVE_CONFLICTING_USELESS_FILES_IN_STAGING
-        $(call remove-conflicting-useless-files,$(STAGING_DIR))
-    endef
-    define REMOVE_CONFLICTING_USELESS_FILES_IN_TARGET
-        $(call remove-conflicting-useless-files,$(TARGET_DIR))
-    endef
+    package/pkg-generic: add early pre-configure hooks
 
+    Currently, when a package needs to modify files it inherits from its
+    dependencies, because they contain paths, we can only do that in a
+    pre- or post-configure hook.
 
-    # In generic-package-inner:
+    However, whatever is done as part of those hooks, will be accounted
+    to the package itself, and thus will trigger file-overwrite detection.
 
-    $(2)_DROP_FILES_OR_DIRS += /share/info/dir
+    So, we need a way to be able to actually modify files before we
+    start monitoring for them.
 
-    # For host packages:
-    $(2)_POST_INSTALL_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_HOST
+    We introduce a new set of hooks that an individual package can set,
+    or that a package infra can set, and that are called right before
+    we snapshot the state of target, and host (to which staging belongs),
 
-    # For target packages:
-    $(2)_POST_INSTALL_STAGING_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_STAGING
-    $(2)_POST_INSTALL_TARGET_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_TARGET
-
-This way, it also paves the way to add other hooks to actually fix some
-files instead of removing them...
-
-For example, assume that packages (e.g. 'wonders') can register
-themselves against another package (e.g. 'manager') by appending a
-line to a text file, like so (over-simplified, of course):
-
-    echo "name=wonders path=/usr/lib/wonders/v42" >>/usr/share/manager/registry
-
-Then we could have a hook that detects that, extracts the delta
-installed by the package, stash that somewhere in staging, and have a
-target-finalise hook that aggregates all the packages in the end.
-
-> > This add a little complexity in overwrite detection (filter out) and
-> > I prefer having overwrite detection quite stupid. It checks for
-> > overwrites without any exception.
-> > Adding exception now in the detection mechanism is opening the door to
-> > more and more exceptions.
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> ---
+>  package/pkg-generic.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Yes, I understand your argument. As I stated: I'm also not sure which
-> solution to propose here. I was just not a big fan of this removal of
-> one specific file, there, in the middle of a highly generic piece of
-> infrastructure.
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index e437050175..4069d2cf3c 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -257,6 +257,7 @@ $(BUILD_DIR)/%/.stamp_configured:
+>  	@$(call pkg_size_before,$(HOST_DIR),-host)
+>  	$(call fixup-libtool-files,$(NAME),$(HOST_DIR))
+>  	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
+> +	$(foreach hook,$($(PKG)_PER_PACKAGE_TWEAK_HOOKS),$(call $(hook))$(sep))
 
-Yes, this bothered me too...
+I am going to bikeshed on the naming of this variable (which is a good
+sing that I am pretty much OK with the feature).
+
+I think $(2)_EARLY_PRE_CONFIGURE_HOOKS is more sensible.
+
+>  	@$(call pkg_detect_overwrite_before,$(TARGET_DIR))
+>  	@$(call pkg_detect_overwrite_before,$(HOST_DIR),-host)
+>  	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+> @@ -844,6 +845,7 @@ $(2)_PRE_LEGAL_INFO_HOOKS       ?=
+>  $(2)_POST_LEGAL_INFO_HOOKS      ?=
+>  $(2)_TARGET_FINALIZE_HOOKS      ?=
+>  $(2)_ROOTFS_PRE_CMD_HOOKS       ?=
+> +$(2)_PER_PACKAGE_TWEAK_HOOKS    ?=
+
+Actually, this is totally useless: if the variable is unset, this would
+set it to empty, which for 'make' is totally identical (an unset
+variable can be expanded, and the expansion is the emopty string).
+
+I know you are just adhering to existing code, and so you should indeed
+keep it for the next series, but a cleanup in the infra would be welcome
+too! ;-)
 
 Regards,
 Yann E. MORIN.
 
-> Thomas
+>  ifeq ($$($(2)_TYPE),target)
+>  ifneq ($$(HOST_$(2)_KCONFIG_VAR),)
 > -- 
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> 2.31.1
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
