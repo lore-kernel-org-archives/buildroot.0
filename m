@@ -1,37 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Jun 2021 11:30:03 +0200
-Subject: [Buildroot] [PATCH 01/15] package/pkg-generic.mk: detect files
- overwritten in TARGET_DIR and HOST_DIR
-In-Reply-To: <20210622094052.01c0a074@bootlin.com>
+From: Herve Codina <herve.codina@bootlin.com>
+Date: Tue, 22 Jun 2021 11:31:24 +0200
+Subject: [Buildroot] [PATCH 04/15] package/pkg-generic.mk: Fix .la files
+ overwrite detection
+In-Reply-To: <20210621214223.GC44262@scaer>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
- <20210621141130.48654-2-herve.codina@bootlin.com>
- <20210621213140.GA44262@scaer>
- <20210622094052.01c0a074@bootlin.com>
-Message-ID: <20210622113003.7cbf0136@windsurf>
+ <20210621141130.48654-5-herve.codina@bootlin.com>
+ <20210621214223.GC44262@scaer>
+Message-ID: <20210622113124.7cf2dde1@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 22 Jun 2021 09:40:52 +0200
-Herve Codina <herve.codina@bootlin.com> wrote:
+Hi,
 
->    Compared to the first version, this patch has an improved commit message and
->    generates the md5sum snapshot using
->      'find -L $(1) -type f -print0 | xargs -0 -r md5sum > $($(PKG)_DIR)/.files$(2).md5;'
+On Mon, 21 Jun 2021 23:42:23 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-But is this better ? Due to not cd-ing into the directory, you will
-have full absolute paths in the .md5 file, and adding LC_ALL=C is quite
-customary too. Ditto for using | xargs instead of -exec.
+> On 2021-06-21 16:11 +0200, Herve Codina spake thusly:
+> > During per-package build, original .la files are modified by
+> > fixup-libtool-files calls.
+> > But since fixup-libtool-files modifies files using sed --in-place,
+> > these modification are done using a temporary file and a call to
+> > rename. Rename breaks the hardlink to the original file and leave the
+> > temporary file in per-package TARGET dir.
+> > As the original file is not modified, this is no longer considered as
+> > an overwrite.
+> > 
+> > To fix this detection, this patch simply considers the what is done
+> > by fixup-libtool-files is part of the original snapshot used to
+> > detect overwrites. And so, the original snapshot is taken after
+> > fixup-libtool-files call.  
+> 
+> Then this should be squashed together with the first patch, to avoid
+> introducing the issue just to fix it a few patches down the series.
+> 
+> You should however add a note about that in the commit log of the first
+> patch, of course, to explain why the overwrite ifnra is inserted after
+> the .la tweaks.
+> 
+> So, I agree with the explanations, which make sense, but I disagree that
+> it should be a separate patch...
+> 
 
->    instead of
->      'cd $(1); LC_ALL=C find . -type f -exec md5sum {} \; > $($(PKG)_DIR)/.files$(2).md5'
+Well, I have seen this when I created the patches.
+I kept them separate because on the first patch, I introduced the tool
+to check the overwrites and i would like it to take its snapshot as soon
+as possible in the build sequence (ie right after collecting dependencies
+files and taking snapshots for current package statistics).
+Then I fixed the issue seen by the overwrites detection and I put at the
+same level fixing host-e2fsprogs, fixing .la files or a bit later fixing
+python with one patch per fix to detail (or try to detail) the issue and
+the way I fixed it.
 
-All in all this version, looked better. Any reason for the change ?
+Squashing the 2 patches leads to one patch that introduces the tool and
+fixes one of the issues detected by the tool. What about the others issues
+detected ? Squash also together with the first patch ? I think it will
+produce a huge patch quite complicate to understand even with all individual
+commit message squashed.
 
-Thomas
+However, that being said, I can squash this patch (Fix .la files overwrite
+detection) with the 1st one (detect files overwritten in TARGET_DIR and
+HOST_DIR) if you still think it will be better.
+
+Regards,
+Herv? Codina
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
+Herv? Codina, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
