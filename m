@@ -1,44 +1,69 @@
-From: Geoff Levand <geoff@infradead.org>
-Date: Tue, 22 Jun 2021 06:45:39 -0700
-Subject: [Buildroot] [PATCH 2/2] package/flannel: bump version to 0.14.0
-In-Reply-To: <cover.1623643496.git.geoff@infradead.org>
-References: <cover.1623643496.git.geoff@infradead.org>
-Message-ID: <759f8767-368e-07de-9432-ffc03d1ecf0b@infradead.org>
+From: Herve Codina <herve.codina@bootlin.com>
+Date: Tue, 22 Jun 2021 18:26:45 +0200
+Subject: [Buildroot] [PATCH 02/15] package/e2fsprogs: fix fsck overwrite
+ in HOST_DIR
+In-Reply-To: <20210621225254.5ad3e48b@windsurf>
+References: <20210621141130.48654-1-herve.codina@bootlin.com>
+ <20210621141130.48654-3-herve.codina@bootlin.com>
+ <20210621225254.5ad3e48b@windsurf>
+Message-ID: <20210622182645.5a59f8f3@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump flannel version from 0.12.0 to 0.14.0.
+Hi,
 
-Signed-off-by: Geoff Levand <geoff@infradead.org>
----
- package/flannel/flannel.hash | 2 +-
- package/flannel/flannel.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 21 Jun 2021 22:52:54 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
-index 8195140f8e..0d0f75e6b4 100644
---- a/package/flannel/flannel.hash
-+++ b/package/flannel/flannel.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 7375318b288bcff733aabfe1a1007d478cb9091cdaffe68c8253ddd93bc070ed v0.12.0.tar.gz
-+sha256 e17164db3b158d13ce5e40bb7b233790cb186762d929fa4f626baf586d4d63ca v0.14.0.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
-diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
-index a8a3c7a3cd..231cf90dfd 100644
---- a/package/flannel/flannel.mk
-+++ b/package/flannel/flannel.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLANNEL_VERSION = 0.12.0
-+FLANNEL_VERSION = 0.14.0
- FLANNEL_SITE = https://github.com/flannel-io/flannel/archive
- FLANNEL_SOURCE = v$(FLANNEL_VERSION).tar.gz
- 
+> On Mon, 21 Jun 2021 16:11:17 +0200
+> Herve Codina <herve.codina@bootlin.com> wrote:
+> 
+> > host-e2fsprog overwrites fsck program and some man related files
+> > previously installed by host-util-linux.  
+> 
+> "The host-e2fsprogs package overwrites the fsck program and some
+> manpages previously installed by the host-util-linux package".
+> 
+
+Ok, changed
+
+> > 
+> > This patch simply disable fsck in host-e2fsprog.  
+> 
+> disableS
+> 
+> host-e2fsprogs
+
+Changed and s/host-e2fsprog/host-e2fsprogs/g
+
+> 
+> > host-e2fsprog is used to build final ext{2,3,4} images.  
+> 
+> host-e2fsprogs
+> 
+> > The missing host-e2fsprog fsck tool (filesystem integrity check  
+> 
+> host-e2fsprogs
+> 
+> > tool) in HOST_DIR should not lead to issues.
+> > 
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>  
+> 
+> With that:
+> 
+> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Added.
+I will remove this Reviewed-by in my v2 patch if more modifications are needed
+for this patch.
+
+Thanks for the review,
+Herv? Codina
+
 -- 
-2.25.1
+Herv? Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
