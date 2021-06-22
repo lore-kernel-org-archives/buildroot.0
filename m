@@ -1,11 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 22 Jun 2021 22:43:15 +0200
-Subject: [Buildroot] [PATCH 08/15] package/apache: Move
- APACHE_FIXUP_APR_LIBTOOL to <PKG>_PER_PACKAGE_TWEAK_HOOKS
-In-Reply-To: <20210621141130.48654-9-herve.codina@bootlin.com>
+Date: Tue, 22 Jun 2021 22:50:40 +0200
+Subject: [Buildroot] [PATCH 09/15] package/pkg-python: Remove
+ _sysconfigdata*.pyc files when _sysconfigdata*.py are changed
+In-Reply-To: <20210622195211.4bafd222@bootlin.com>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
- <20210621141130.48654-9-herve.codina@bootlin.com>
-Message-ID: <20210622204315.GL44262@scaer>
+ <20210621141130.48654-10-herve.codina@bootlin.com>
+ <20210621171202.2362cb27@windsurf>
+ <20210622195211.4bafd222@bootlin.com>
+Message-ID: <20210622205040.GM44262@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,40 +16,72 @@ To: buildroot@busybox.net
 
 Herv?, All,
 
-On 2021-06-21 16:11 +0200, Herve Codina spake thusly:
-> APACHE_FIXUP_APR_LIBTOOL tweaks files for per package directory build.
-> This is typically the kind of operation expected to be in
-> <PKG>_PER_PACKAGE_TWEAK_HOOKS
+On 2021-06-22 19:52 +0200, Herve Codina spake thusly:
+> On Mon, 21 Jun 2021 17:12:02 +0200
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> > On Mon, 21 Jun 2021 16:11:24 +0200
+> > Herve Codina <herve.codina@bootlin.com> wrote:
+> > > In order to avoid _sysconfigdata*.pyc overwrites when they are generated based on
+> > > _sysconfigdata*.py changes, this commit simply removes _sysconfigdata*.pyc
+> > > whenever _sysconfigdata*.py are changed.
+> > > 
+> > > As they are removed, overwrite detection will no longer trig and coherency between
+> > > the two files (.py and .pyc) is ensured.
+> > > 
+> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> > > ---
+> > >  package/pkg-python.mk | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+> > > index 59a48e5a87..b3fde77da5 100644
+> > > --- a/package/pkg-python.mk
+> > > +++ b/package/pkg-python.mk
+> > > @@ -96,7 +96,9 @@ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> > >  define PKG_PYTHON_FIXUP_SYSCONFIGDATA
+> > >  	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+> > >  		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
+> > > -		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g"
+> > > +		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g" ;\  
+[--SNIP--]
+> > > +	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+> > > +		-name "_sysconfigdata*.pyc" -print0 | xargs -0 -r rm -f  
+> > Do we need a --no-run-if-empty on the xargs ? Or perhaps it should be
+> It is cleaner to avoid running rm is there is nothing to remove.
+> So, I prefer keeping the xargs -r option.
 > 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->  package/apache/apache.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> > using find directly, i.e:
+> > 
+> > 	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+> > 		-name "_sysconfigdata*.pyc" -exec rm -f {} \;
+> > 
+> > (or something like that)
 > 
-> diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-> index 7dbd1a4512..f496333174 100644
-> --- a/package/apache/apache.mk
-> +++ b/package/apache/apache.mk
-> @@ -23,7 +23,7 @@ define APACHE_FIXUP_APR_LIBTOOL
->  	$(SED) "s@$(PER_PACKAGE_DIR)/[^/]\+/@$(PER_PACKAGE_DIR)/apache/@g" \
->  		$(STAGING_DIR)/usr/build-1/libtool
->  endef
-> -APACHE_POST_CONFIGURE_HOOKS += APACHE_FIXUP_APR_LIBTOOL
-> +APACHE_PER_PACKAGE_TWEAK_HOOKS += APACHE_FIXUP_APR_LIBTOOL
+> Using "-exec rm -f {} \;" will lead to start as many rm as there are files
+> to remove whereas xargs will run only one rm.
 
-Same, with the variable name:
+So, 1: wrong. xargs may have to exec more than one rm if there are too
+many arguments, or the command line is too long. But of course, this is
+inconsequential, because even on a huge build, this would be just a few
+exec instead of tens of thousands.
 
-    Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+And 2: why not using find's -delete option to begin with:
+
+    find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+        -name "_sysconfigdata*.pyc" -delete
+
+There, not even a pipe, or an exec of anything else...
 
 Regards,
 Yann E. MORIN.
 
->  endif
->  
->  APACHE_CONF_ENV= \
-> -- 
-> 2.31.1
 > 
+> Herv?
+> 
+> -- 
+> Herv? Codina, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
