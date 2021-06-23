@@ -1,35 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jun 2021 09:13:27 +0200
-Subject: [Buildroot] [git commit] configs/stm32f469_disco: add host {dosfs,
- m}tools
-Message-ID: <20210623064206.ABAAB8D322@busybox.osuosl.org>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Wed, 23 Jun 2021 19:58:14 +1200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2021-04-11
+In-Reply-To: <20210610173703.31d33d97@windsurf>
+References: <6073d64f.1c69fb81.9d11e.7f35SMTPIN_ADDED_MISSING@mx.google.com>
+ <CAFOYHZC23wcnW0-y=fyiP2x6M2B5CEyFEzJDeWJq_Pw5BuRbkg@mail.gmail.com>
+ <20210610173703.31d33d97@windsurf>
+Message-ID: <CAFOYHZDy-M73QAExEKQrqMcFh8-uB3PtymMYRe--Q08Gzge-xQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6dd9e246a7b497819fd34595835d61c635d993f6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 11 Jun 2021, 3:37 AM Thomas Petazzoni, <thomas.petazzoni@bootlin.com>
+wrote:
 
-Commit 04a0094f0ef077 (configs/stm32f469_disco: fix kernel bootup) changed
-the defconfig to build a vfat image, but forgot to add dosfstools/mtools
-host utilities needed for this.
+> Hello Chris,
+>
+> On Mon, 12 Apr 2021 20:37:46 +1200
+> Chris Packham <judge.packham@gmail.com> wrote:
+>
+> > I've managed to get the CVE updated to say "This flaw affects
+> > syslog-ng versions prior to and including 2.0.9"[1] but I'm still
+> > getting these notifications. Is there something else that needs to
+> > happen now? Actually nist[2] seems to know it's been modified so it
+> > may be a case of hurry up and wait.
+>
+> If I look up at https://nvd.nist.gov/vuln/detail/CVE-2008-5110, the
+> list of known affected software configurations is still
+> cpe:2.3:a:oneidentity:syslog-ng:-:*:*:*:*:*:*:*, which means "all known
+> versions.
+>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/stm32f469_disco_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/configs/stm32f469_disco_defconfig b/configs/stm32f469_disco_defconfig
-index c537197ff6..e538a664e2 100644
---- a/configs/stm32f469_disco_defconfig
-+++ b/configs/stm32f469_disco_defconfig
-@@ -19,5 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f469-discovery"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
- BR2_PACKAGE_HOST_OPENOCD=y
+I've been in touch with the nvd maintainers and it looks like the nvd entry
+has been updated.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210623/79d1b3fb/attachment.html>
