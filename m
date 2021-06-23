@@ -1,32 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jun 2021 08:33:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openswan: disable -Werror
-In-Reply-To: <20210609201419.625739-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 9 Jun 2021 22:14:19 +0200")
-References: <20210609201419.625739-1-fontaine.fabrice@gmail.com>
-Message-ID: <87czsd6qfy.fsf@dell.be.48ers.dk>
+Date: Wed, 23 Jun 2021 08:36:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libfuse3: bump to version 3.10.4
+In-Reply-To: <20210610183934.100570-1-asafka7@gmail.com> (Asaf Kahlon's
+ message of "Thu, 10 Jun 2021 21:39:34 +0300")
+References: <20210610183934.100570-1-asafka7@gmail.com>
+Message-ID: <878s316qap.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
- > Disable -Werror to avoid the following build failure with -DNDEBUG
- > raised since commit 5a8c50fe05afacc3cbe8e7347e238da9f242fab0
+ > From this version, tests can be disabled, so we pass
+ > "tests=false" as a Meson option.
 
- > /srv/storage/autobuild/run/instance-2/output-1/build/openswan-3.0.0/programs/rsasigkey/rsasigkey.c:524:6: error: variable 'success' set but not used [-Werror=unused-but-set-variable]
- >   524 |  int success;
- >       |      ^~~~~~~
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/327a0f2b8f0c51bcbb3edb1c3671870d593e93b9
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-While not strictly needed for 2021.02.x / 2021.05.x as they don't have
-the NDEBUG logic, I still backported it to get rid of -Werror.
+Committed to 2021.02.x and 2021.05.x given the small amount of
+changes/fixes, thanks.
 
 -- 
 Bye, Peter Korsgaard
