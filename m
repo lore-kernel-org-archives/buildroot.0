@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36EC7C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:14:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 833EBC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:14:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F385160EC0
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:14:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F385160EC0
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 2B14560F56
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:14:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2B14560F56
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF41E82512;
-	Tue,  3 Aug 2021 23:14:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 08F5A600CC;
+	Tue,  3 Aug 2021 23:14:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xp_ouDtLrACA; Tue,  3 Aug 2021 23:14:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2q4Aw2BcT4px; Tue,  3 Aug 2021 23:14:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E00682503;
-	Tue,  3 Aug 2021 23:14:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 623A760866;
+	Tue,  3 Aug 2021 23:14:45 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1894D1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 29C701BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5421C4062B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4DC504068D
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sOzacGHLIzNY for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
+ with ESMTP id 3khV1AnfnCsZ for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DEEA7404CC
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D84140662
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3D605864A8; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id AE370845E7; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Jun 2021 18:43:46 +0200
+Date: Wed, 23 Jun 2021 09:03:38 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cc0630763d4e69abe2e8e950b21472f4bc6dc348
-X-Git-Newrev: 2ab88dac293aed5adf2504e8b182f9d8a306b935
+X-Git-Oldrev: bcace429426ee91aac56f3dcc33b69e22141d384
+X-Git-Newrev: 7c69da6295627dabcbfd6ec0faf3bc6b8d9410d7
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210954.3D605864A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gcc: add support for
- gcc 11
+Message-Id: <20210803210954.AE370845E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-django:
+ security bump to version 3.2.4
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,75 +70,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ab88dac293aed5adf2504e8b182f9d8a306b935
+commit: https://git.buildroot.net/buildroot/commit/?id=7c69da6295627dabcbfd6ec0faf3bc6b8d9410d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Disable sparc architecture for gcc 11 due to an recent gcc change
-that broke uClibc-ng. The change was reverted by the patch
-0005-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
-for gcc 8.4, 9.3 and 10.1 but stop maintaining it for newer gcc
-releases.
+Django 3.2.4 fixes two security issues and several bugs in 3.2.3.
+- CVE-2021-33203: Potential directory traversal via ``admindocs``
+- CVE-2021-33571: Possible indeterminate SSRF, RFI, and LFI attacks
+  since validators accepted leading zeros in IPv4 addresses
 
-Rutime tested:
-https://gitlab.com/kubu93/buildroot/-/pipelines/318043235
+https://github.com/django/django/blob/3.2.4/docs/releases/3.2.4.txt
 
-https://gcc.gnu.org/gcc-11/changes.html
-https://gcc.gnu.org/gcc-11/porting_to.html
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/Config.in.host | 16 ++++++++++++++++
- package/gcc/gcc.hash       |  2 ++
- 2 files changed, 18 insertions(+)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index a68bdc1b84..e44eea1355 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -50,6 +50,21 @@ config BR2_GCC_VERSION_10_X
- 	depends on !BR2_csky
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 1c7d7b8841..fe91740f5f 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  43784c090a8805605e3d0b768cd21cb2  Django-3.2.2.tar.gz
+-sha256  0a1d195ad65c52bf275b8277b3d49680bd1137a5f55039a806f25f6b9752ce3d  Django-3.2.2.tar.gz
++md5  2f30db9154efb8c9ed891781d29fae2a  Django-3.2.4.tar.gz
++sha256  66c9d8db8cc6fe938a28b7887c1596e42d522e27618562517cc8929eb7e7f296  Django-3.2.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 0e36a530a9..81a3c8b8f3 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
-+config BR2_GCC_VERSION_11_X
-+	bool "gcc 11.x"
-+	# powerpc spe support has been deprecated since gcc 8.x.
-+	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
-+	depends on !BR2_powerpc_SPE
-+	# C-SKY sk610 needs abiv1, which is not supported in
-+	# upstream gcc. C-SKY gcc upstream support not tested
-+	# with upstream binutils and glibc.
-+	depends on !BR2_csky
-+	# uClibc-ng broken on sparc due to recent gcc changes
-+	# that need to be reverted since gcc 8.4, 9.3 and 10.1.
-+	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
-+	depends on !BR2_sparc
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
-+
- endchoice
- 
- # libcilkrts was introduced in gcc 4.9 and removed in gcc 8.x
-@@ -75,6 +90,7 @@ config BR2_GCC_VERSION
- 	default "8.4.0"     if BR2_GCC_VERSION_8_X
- 	default "9.4.0"     if BR2_GCC_VERSION_9_X
- 	default "10.3.0"    if BR2_GCC_VERSION_10_X
-+	default "11.1.0"    if BR2_GCC_VERSION_11_X
- 	default "arc-2020.09-release" if BR2_GCC_VERSION_ARC
- 	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
- 
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 668f4b9f44..0f7ff9dbf7 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -4,6 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
- sha512  dfd3500bf21784b8351a522d53463cf362ede66b0bc302edf350bb44e94418497a8b4b797b6af8ca9b2eeb746b3b115d9c3698381b989546e9151b4496415624  gcc-9.4.0.tar.xz
- # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-10.3.0/sha512.sum
- sha512  2b2dd7453d48a398c29eaebd1422b70341001b8c90a62aee51e83344e7fdd8a8e45f82a4a9165bd7edc76dada912c932f4b6632c5636760fec4c5d7e402b3f86  gcc-10.3.0.tar.xz
-+# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-11.1.0/sha512.sum
-+sha512  fd6bba0f67ff48069d03073d1a9b5e896383b1cfc9dde008e868e60a9ec5014a837d56af0ecbf467b3fb9b37ec74a676e819a18b44393a0a3c4280175b5d7ad8  gcc-11.1.0.tar.xz
- 
- # Locally calculated (fetched from Github)
- sha512  b0853e2b1c5998044392023fa653e399e74118c46e616504ac59e1a2cf27620f94434767ce06b6cf4ca3dfb57f81d6eda92752befaf095ea5e564a9181b4659c  gcc-arc-2020.09-release.tar.gz
+-PYTHON_DJANGO_VERSION = 3.2.2
++PYTHON_DJANGO_VERSION = 3.2.4
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/da/24/e2e6e534464f8e0bd010401f06d2cfc773141776d2952d6418d01c97f12c
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/27/94/123b3a95e9965819a3d30d36da6fc12ddff83bcfb0099f3e15437347480a
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
