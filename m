@@ -1,47 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jun 2021 09:04:37 +0200
-Subject: [Buildroot] [git commit] package/clamav: bump version to 0.103.3
-Message-ID: <20210623063326.163198DA67@busybox.osuosl.org>
+Date: Wed, 23 Jun 2021 09:04:02 +0200
+Subject: [Buildroot] [git commit] package/dovecot: security bump version to
+ 2.3.15
+Message-ID: <20210623063325.ECE7B86B04@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3950ab9bc7439ec6eb35dfdc5b36da038ae2ce50
+commit: https://git.buildroot.net/buildroot/commit/?id=c711012fa5aea8c3cb9f6fb2470d7b9be849db40
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes several security bugs:
+
+CVE-2021-29157
+- https://dovecot.org/pipermail/dovecot-news/2021-June/000461.html
+
+CVE-2021-33515
+- https://dovecot.org/pipermail/dovecot-news/2021-June/000462.html
+
 Release notes:
-https://blog.clamav.net/2021/06/clamav-01033-patch-release.html
+https://dovecot.org/pipermail/dovecot-news/2021-June/000457.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 679240985b..a2ed115d24 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index edb9d20e6d..cd314cf0dd 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
 @@ -1,5 +1,5 @@
- # Locally calculated
--sha256  d4b5d0ac666262e423a326fb54778caa7c69624d6c3f9542895feb8478271bd2  clamav-0.103.2.tar.gz
-+sha256  9f6e3d18449f3d1a3992771d696685249dfa12736fe2b2929858f2c7d8276ae9  clamav-0.103.3.tar.gz
- sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 6ab473ab88..eec0e2955c 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally computed after checking signature
+-sha256  c8b3d7f3af1e558a3ff0f970309d4013a4d3ce136f8c02a53a3b05f345b9a34a  dovecot-2.3.14.tar.gz
++sha256  21bbdd5d45957a99133de8b7e71813ecb73d9476c89dfc63479e9102b3553590  dovecot-2.3.15.tar.gz
+ sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index a38cf1941a..93d04fc8a1 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--CLAMAV_VERSION = 0.103.2
-+CLAMAV_VERSION = 0.103.3
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).14
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).15
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
