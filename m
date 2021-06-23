@@ -1,37 +1,47 @@
-From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Wed, 23 Jun 2021 10:39:27 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5: Fix sporadic build failure during
- top-level parallel build
-Message-ID: <20210623083927.8278-1-anaumann@ultratronik.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 23 Jun 2021 12:05:01 +0300
+Subject: [Buildroot] [PATCH 1/1] package/gesftpserver: Add host-python
+ as dependency
+In-Reply-To: <20210623083634.8158-1-anaumann@ultratronik.de>
+References: <20210623083634.8158-1-anaumann@ultratronik.de>
+Message-ID: <87tulp7xz6.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using top level parallel build, independent qt5 packages may be
-built in parallel. Because of their staging dirs being hardlinked, they
-all use the same qt.conf file to manipulate during configure, while
-another qt5 package might already use it. This leads to weird build failures
-because the folders qmake is using are diverted in erratic ways.
-Fix this by actually recreating a non-shared qt.conf file for every package.
+Hi Andreas,
 
-Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
----
- package/qt5/qt5.mk | 1 +
- 1 file changed, 1 insertion(+)
+On Wed, Jun 23 2021, Andreas Naumann wrote:
+> gesftpserver needs python for the configure step.
+>
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+> ---
+>  package/gesftpserver/gesftpserver.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/gesftpserver/gesftpserver.mk b/package/gesftpserver/gesftpserver.mk
+> index 85511a3c97..c67fdb3f79 100644
+> --- a/package/gesftpserver/gesftpserver.mk
+> +++ b/package/gesftpserver/gesftpserver.mk
+> @@ -19,7 +19,7 @@ GESFTPSERVER_CPE_ID_PRODUCT = sftpserver
+>  GESFTPSERVER_CONF_ENV = LIBS=-lpthread
+>  
+>  # overwrite openssh version if enabled
+> -GESFTPSERVER_DEPENDENCIES += \
+> +GESFTPSERVER_DEPENDENCIES += host-python \
 
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index db6ccd2b42..3ffb7b0063 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -15,6 +15,7 @@ include $(sort $(wildcard package/qt5/*/*.mk))
- # compiled into the Qt library. We need it to make "qmake" relocatable and
- # tweak the per-package install pathes
- define QT5_INSTALL_QT_CONF
-+	rm -f $(HOST_DIR)/bin/qt.conf
- 	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
- 		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
- endef
+Does host-python3 also work? We would probably drop python2 in the near
+future.
+
+baruch
+
+>  	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
+>  	$(if $(BR2_PACKAGE_OPENSSH),openssh)
+
+
 -- 
-2.32.0
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
