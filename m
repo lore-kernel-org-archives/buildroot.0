@@ -1,57 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jun 2021 09:03:38 +0200
-Subject: [Buildroot] [git commit] package/python-django: security bump to
- version 3.2.4
-Message-ID: <20210623063325.E145C88323@busybox.osuosl.org>
+Date: Wed, 23 Jun 2021 09:04:14 +0200
+Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: security bump
+ version to 0.5.15
+Message-ID: <20210623063326.0879D88323@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c69da6295627dabcbfd6ec0faf3bc6b8d9410d7
+commit: https://git.buildroot.net/buildroot/commit/?id=1a55fedb48f83173611db3f6dc2e140cd33c1dd8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Django 3.2.4 fixes two security issues and several bugs in 3.2.3.
-- CVE-2021-33203: Potential directory traversal via ``admindocs``
-- CVE-2021-33571: Possible indeterminate SSRF, RFI, and LFI attacks
-  since validators accepted leading zeros in IPv4 addresses
+Fixes CVE-2020-28200:
+https://dovecot.org/pipermail/dovecot-news/2021-June/000460.html
 
-https://github.com/django/django/blob/3.2.4/docs/releases/3.2.4.txt
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2021-June/000458.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 1c7d7b8841..fe91740f5f 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  43784c090a8805605e3d0b768cd21cb2  Django-3.2.2.tar.gz
--sha256  0a1d195ad65c52bf275b8277b3d49680bd1137a5f55039a806f25f6b9752ce3d  Django-3.2.2.tar.gz
-+md5  2f30db9154efb8c9ed891781d29fae2a  Django-3.2.4.tar.gz
-+sha256  66c9d8db8cc6fe938a28b7887c1596e42d522e27618562517cc8929eb7e7f296  Django-3.2.4.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 0e36a530a9..81a3c8b8f3 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index cf3ebdbf54..58444ab7e8 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,3 +1,3 @@
+ # Locally computed after checking signature
+-sha256  68ca0f78a3caa6b090a469f45c395c44cf16da8fcb3345755b1ca436c9ffb2d2  dovecot-2.3-pigeonhole-0.5.14.tar.gz
++sha256  e1498f50cef74c351a57474cc423b008627ab1ab60724b859283ead6d00550d0  dovecot-2.3-pigeonhole-0.5.15.tar.gz
+ sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 35a1e1ef52..c0bef6bedc 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 3.2.2
-+PYTHON_DJANGO_VERSION = 3.2.4
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/da/24/e2e6e534464f8e0bd010401f06d2cfc773141776d2952d6418d01c97f12c
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/27/94/123b3a95e9965819a3d30d36da6fc12ddff83bcfb0099f3e15437347480a
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+-DOVECOT_PIGEONHOLE_VERSION = 0.5.14
++DOVECOT_PIGEONHOLE_VERSION = 0.5.15
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
+ DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
