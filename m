@@ -1,40 +1,33 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Wed, 23 Jun 2021 19:58:14 +1200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2021-04-11
-In-Reply-To: <20210610173703.31d33d97@windsurf>
-References: <6073d64f.1c69fb81.9d11e.7f35SMTPIN_ADDED_MISSING@mx.google.com>
- <CAFOYHZC23wcnW0-y=fyiP2x6M2B5CEyFEzJDeWJq_Pw5BuRbkg@mail.gmail.com>
- <20210610173703.31d33d97@windsurf>
-Message-ID: <CAFOYHZDy-M73QAExEKQrqMcFh8-uB3PtymMYRe--Q08Gzge-xQ@mail.gmail.com>
+From: Andreas Naumann <anaumann@ultratronik.de>
+Date: Wed, 23 Jun 2021 10:36:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gesftpserver: Add host-python as
+ dependency
+Message-ID: <20210623083634.8158-1-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 11 Jun 2021, 3:37 AM Thomas Petazzoni, <thomas.petazzoni@bootlin.com>
-wrote:
+gesftpserver needs python for the configure step.
 
-> Hello Chris,
->
-> On Mon, 12 Apr 2021 20:37:46 +1200
-> Chris Packham <judge.packham@gmail.com> wrote:
->
-> > I've managed to get the CVE updated to say "This flaw affects
-> > syslog-ng versions prior to and including 2.0.9"[1] but I'm still
-> > getting these notifications. Is there something else that needs to
-> > happen now? Actually nist[2] seems to know it's been modified so it
-> > may be a case of hurry up and wait.
->
-> If I look up at https://nvd.nist.gov/vuln/detail/CVE-2008-5110, the
-> list of known affected software configurations is still
-> cpe:2.3:a:oneidentity:syslog-ng:-:*:*:*:*:*:*:*, which means "all known
-> versions.
->
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+---
+ package/gesftpserver/gesftpserver.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I've been in touch with the nvd maintainers and it looks like the nvd entry
-has been updated.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210623/79d1b3fb/attachment.html>
+diff --git a/package/gesftpserver/gesftpserver.mk b/package/gesftpserver/gesftpserver.mk
+index 85511a3c97..c67fdb3f79 100644
+--- a/package/gesftpserver/gesftpserver.mk
++++ b/package/gesftpserver/gesftpserver.mk
+@@ -19,7 +19,7 @@ GESFTPSERVER_CPE_ID_PRODUCT = sftpserver
+ GESFTPSERVER_CONF_ENV = LIBS=-lpthread
+ 
+ # overwrite openssh version if enabled
+-GESFTPSERVER_DEPENDENCIES += \
++GESFTPSERVER_DEPENDENCIES += host-python \
+ 	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
+ 	$(if $(BR2_PACKAGE_OPENSSH),openssh)
+ 
+-- 
+2.32.0
