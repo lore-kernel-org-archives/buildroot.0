@@ -1,56 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jun 2021 09:04:02 +0200
-Subject: [Buildroot] [git commit] package/dovecot: security bump version to
- 2.3.15
-Message-ID: <20210623063325.ECE7B86B04@busybox.osuosl.org>
+Date: Wed, 23 Jun 2021 09:05:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mosquitto: security bump to
+ v2.0.11
+In-Reply-To: <20210621085307.105631-1-titouanchristophe@gmail.com> (Titouan
+ Christophe's message of "Mon, 21 Jun 2021 10:53:07 +0200")
+References: <20210621085307.105631-1-titouanchristophe@gmail.com>
+Message-ID: <875yy55ad8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c711012fa5aea8c3cb9f6fb2470d7b9be849db40
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Titouan" == Titouan Christophe <titouanchristophe@gmail.com> writes:
 
-Fixes several security bugs:
+ > Versions 2.0.11 and 1.6.15 of Mosquitto has been released.
+ > These are a security and bugfix releases.
 
-CVE-2021-29157
-- https://dovecot.org/pipermail/dovecot-news/2021-June/000461.html
+ > Read the full announcement on the blog:
+ > https://mosquitto.org/blog/2021/06/version-2-0-11-released/
 
-CVE-2021-33515
-- https://dovecot.org/pipermail/dovecot-news/2021-June/000462.html
+ > Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 
-Release notes:
-https://dovecot.org/pipermail/dovecot-news/2021-June/000457.html
+Committed, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index edb9d20e6d..cd314cf0dd 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256  c8b3d7f3af1e558a3ff0f970309d4013a4d3ce136f8c02a53a3b05f345b9a34a  dovecot-2.3.14.tar.gz
-+sha256  21bbdd5d45957a99133de8b7e71813ecb73d9476c89dfc63479e9102b3553590  dovecot-2.3.15.tar.gz
- sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index a38cf1941a..93d04fc8a1 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).14
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).15
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+-- 
+Bye, Peter Korsgaard
