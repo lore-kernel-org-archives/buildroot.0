@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jun 2021 08:32:03 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/openswan: disable
+Date: Wed, 23 Jun 2021 08:32:10 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/openswan: disable
  -Werror
-Message-ID: <20210623060723.7E6518E076@busybox.osuosl.org>
+Message-ID: <20210623060732.631938DAD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fd0f40bfbabc972a3d874fbc43a77bf0ec84e90
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=06f9da4013b200c3a2b16b78ee178714610a8e7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 Disable -Werror to avoid the following build failure with -DNDEBUG
 raised since commit 5a8c50fe05afacc3cbe8e7347e238da9f242fab0
