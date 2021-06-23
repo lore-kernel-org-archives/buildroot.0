@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63D7AC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:07:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC56BC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:08:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2C6E060187
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:07:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C6E060187
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 6143460187
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:08:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6143460187
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 098DE60747;
-	Tue,  3 Aug 2021 22:07:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B06C83083;
+	Tue,  3 Aug 2021 22:08:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2Od8ZNQX-b21; Tue,  3 Aug 2021 22:07:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jDGsuIJlI07M; Tue,  3 Aug 2021 22:08:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 61A9F606DA;
-	Tue,  3 Aug 2021 22:07:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 647591BF9AA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8778183A94;
+	Tue,  3 Aug 2021 22:08:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D8CF1BF349
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8CF1E40533
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 50E8D60860
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fxlh4Yma57kq for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hghiNj7NUvKw for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1159F4046D
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B2727608CE
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 541E38399D; Tue,  3 Aug 2021 21:09:40 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 0855F8827E; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 18 May 2021 13:04:23 +0200
+Date: Wed, 23 Jun 2021 09:09:34 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0a2942afae8e096a38421798c2082c34f9535d0a
-X-Git-Newrev: 6e780387b4a901f243c85b5fb1dd0d12e4f0b23b
+X-Git-Oldrev: efa4f3d0b4e8ca0a9d3008a68b5cfaaf690ed2ed
+X-Git-Newrev: d56fa94092c0ba2014febd9da34547a2ffcf3de1
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210940.541E38399D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libtirpc: bump version
- to 1.3.2
+Message-Id: <20210803210955.0855F8827E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/redis: security bump
+ to v6.2.4
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,41 +70,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e780387b4a901f243c85b5fb1dd0d12e4f0b23b
+commit: https://git.buildroot.net/buildroot/commit/?id=d56fa94092c0ba2014febd9da34547a2ffcf3de1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libtirpc/libtirpc.hash | 4 ++--
- package/libtirpc/libtirpc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+From the release notes:
+================================================================================
+Redis 6.2.4 Released Tue July 1 12:00:00 IST 2021
+================================================================================
 
-diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-index 337593bbe2..56c1d9de3f 100644
---- a/package/libtirpc/libtirpc.hash
-+++ b/package/libtirpc/libtirpc.hash
+Upgrade urgency: SECURITY, Contains fixes to security issues that affect
+authenticated client connections. MODERATE otherwise.
+Fix integer overflow in STRALGO LCS (CVE-2021-32625)
+
+Read the whole release note on:
+https://github.com/redis/redis/blob/6.2.4/00-RELEASENOTES
+
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 06e6884d85..f5e5827dab 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
 @@ -1,5 +1,5 @@
- # From sourceforge's info on download page:
--sha1  882eaf4c13f0cafb83afd96cd2855638f978d755  libtirpc-1.3.1.tar.bz2
-+sha1  51d75be0e5acc094a888f40042b23e128d163cb5  libtirpc-1.3.2.tar.bz2
- # Locally computed
--sha256  245895caf066bec5e3d4375942c8cb4366adad184c29c618d97f724ea309ee17  libtirpc-1.3.1.tar.bz2
-+sha256  e24eb88b8ce7db3b7ca6eb80115dd1284abc5ec32a8deccfed2224fc2532b9fd  libtirpc-1.3.2.tar.bz2
- sha256  17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  COPYING
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index 0f44aaffb6..2678c144e9 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  98ed7d532b5e9671f5df0825bb71f0f37483a16546364049384c63db8764512b  redis-6.2.3.tar.gz
++sha256  ba32c406a10fc2c09426e2be2787d74ff204eb3a2e496d87cff76a476b6ae16e  redis-6.2.4.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index cea2d3b237..4e16b346c1 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTIRPC_VERSION = 1.3.1
-+LIBTIRPC_VERSION = 1.3.2
- LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
- LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
- LIBTIRPC_LICENSE = BSD-3-Clause
+-REDIS_VERSION = 6.2.3
++REDIS_VERSION = 6.2.4
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
