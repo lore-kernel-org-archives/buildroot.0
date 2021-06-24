@@ -1,35 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 24 Jun 2021 22:53:29 +0200
-Subject: [Buildroot] [PATCH 00/15] Overwritten file detection and fixes,
- one more step to TLP build
-In-Reply-To: <20210621141130.48654-1-herve.codina@bootlin.com>
-References: <20210621141130.48654-1-herve.codina@bootlin.com>
-Message-ID: <20210624205329.GE2852@scaer>
+Date: Thu, 24 Jun 2021 23:25:05 +0200
+Subject: [Buildroot] [PATCH v2 00/28] sunxi: use mainline
+ arm-trusted-firmware
+In-Reply-To: <YMJp/rvETuvzWPSL@curiosity>
+References: <20210609200003.2866122-1-geomatsi@gmail.com>
+ <20210610152205.451e1374@windsurf> <YMJp/rvETuvzWPSL@curiosity>
+Message-ID: <20210624212505.GF2852@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Herv?, All,
+Sergey, All,
 
-On 2021-06-21 16:11 +0200, Herve Codina spake thusly:
-> This series fixes some issues in the TLP build feature.
-> The starting point was the work done by Thomas Petazzoni on overwrites
-> detection (PATCH 1).
-[--SNIP--]
+On 2021-06-10 22:37 +0300, Sergey Matyukevich spake thusly:
+> > Thanks a lot for this work! See below some comments/doubts, though.
+> > 
+> > On Wed,  9 Jun 2021 22:59:35 +0300
+> > Sergey Matyukevich <geomatsi@gmail.com> wrote:
+> > 
+> > > Finally, let me re-iterate once again: I have only orangepi-zero-plus2
+> > > board at my disposal. So only this board has been tested. For all the
+> > > other boards only build tests have been completed. ATF provides only
+> > > basic support for H5/A64 and SCP firmware is disabled, so I do not
+> > > expect any surprises here. But still, any help with boot tests on
+> > > other H5/A64 sunxi boards is more than welcome.
+> > 
+> > Then, I'm not sure of the approach. Indeed, the defconfigs are really
+> > meant to be configurations that have been tested on HW. If we start
+> > changing them without testing them on HW, their purpose kind of goes
+> > away. What is your plan here? Wait for the initial submitters to
+> > confirm that the change is OK and working on HW ? It might take a
+> > while. Or should we give up on that promise that all defconfigs have
+> > been tested on HW ?
+> 
+> I believe that promise should be kept. My plan is to wait for a while
+> and to collect feedback from the boards submitters/maintainers, if any. 
+> In the meantime we can come to the decision on TF-A stack protection.
+> Then, final version of the patch set will include only tested boards.
 
-Thanks for working on this complex topic. :-)
+I haven't seen a single reply from the board custodians, so I'm marking
+this whole series as rejected for now. If you have some of these boards
+available on your desk, it would be great to respin a shorter series
+just for those boards you could test against.
 
-I'm now done with my review; I may have missed details of lesser
-importance, so we'll deal with those later; Thomas also provided some
-feedback. I see that you have already taken initial reviews into
-account, and that you seem nicely on track for a v2.
+I've just left the first patch as pending, though, because there is
+still something to be done about the issue.
 
-As such, I've marked this entire series as "changes requested" in
-patchwork.
-
-Can you add me in Cc of the full series when you later respin, please?
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
