@@ -1,33 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jun 2021 09:23:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/redis: security bump to v6.2.4
-In-Reply-To: <20210617212459.11452-1-titouanchristophe@gmail.com> (Titouan
- Christophe's message of "Thu, 17 Jun 2021 23:24:59 +0200")
-References: <20210617212459.11452-1-titouanchristophe@gmail.com>
-Message-ID: <87fsx74tgd.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Jun 2021 09:15:32 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libressl: fix
+ openssldir setting to match openssl
+Message-ID: <20210624065154.480DD8E065@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouanchristophe@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ab13372ea656a26c9afb194768d9d5130d0392ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > From the release notes:
- > ================================================================================
- > Redis 6.2.4 Released Tue July 1 12:00:00 IST 2021
- > ================================================================================
+libressl defaults to $prefix/etc/ssl for its "openssldir" setting, E.G.
+the location where configuration files and certificates are searched:
 
- > Upgrade urgency: SECURITY, Contains fixes to security issues that affect
- > authenticated client connections. MODERATE otherwise.
- > Fix integer overflow in STRALGO LCS (CVE-2021-32625)
+openssl version -d
+OPENSSLDIR: "/usr/etc/ssl"
 
- > Read the whole release note on:
- > https://github.com/redis/redis/blob/6.2.4/00-RELEASENOTES
+Change it to /etc/ssl so it matches openssl and the expectations of packages
+dealing with certificates (ca-certificates, libcurl, p11-kit)
 
- > Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b0f0b4c4bc2fd1dd12c54ad555614f354d1b98dc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libressl/libressl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed to 2021.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index ad345ba3f0..d09df8f40f 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -10,6 +10,7 @@ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code
+ LIBRESSL_LICENSE_FILES = COPYING
+ LIBRESSL_CPE_ID_VENDOR = openbsd
+ LIBRESSL_INSTALL_STAGING = YES
++LIBRESSL_CONF_OPTS = -DOPENSSLDIR="/etc/ssl"
+ 
+ ifeq ($(BR2_PACKAGE_LIBRESSL_BIN),)
+ define LIBRESSL_REMOVE_BIN
