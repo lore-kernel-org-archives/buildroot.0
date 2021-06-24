@@ -1,41 +1,50 @@
-From: Joseph Burt <caseorum@gmail.com>
-Date: Thu, 24 Jun 2021 14:10:23 +0000
-Subject: [Buildroot] [PATCH 1/1] package/qemu: disable NDEBUG
-Message-ID: <20210624141023.61171-1-caseorum@gmail.com>
+From: Herve Codina <herve.codina@bootlin.com>
+Date: Thu, 24 Jun 2021 16:13:56 +0200
+Subject: [Buildroot] [PATCH 02/15] package/e2fsprogs: fix fsck overwrite
+ in HOST_DIR
+In-Reply-To: <20210622194024.GH44262@scaer>
+References: <20210621141130.48654-1-herve.codina@bootlin.com>
+ <20210621141130.48654-3-herve.codina@bootlin.com>
+ <20210622194024.GH44262@scaer>
+Message-ID: <20210624161356.327254c8@fedora>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-QEMU cannot build with NDEBUG defined.
+On Tue, 22 Jun 2021 21:40:24 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Signed-off-by: Joseph Burt <caseorum@gmail.com>
----
- package/qemu/qemu.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Herv?, All,
+> 
+> On 2021-06-21 16:11 +0200, Herve Codina spake thusly:
+> > host-e2fsprog overwrites fsck program and some man related files
+> > previously installed by host-util-linux.
+> > 
+> > This patch simply disable fsck in host-e2fsprog.
+> > 
+> > host-e2fsprog is used to build final ext{2,3,4} images.
+> > The missing host-e2fsprog fsck tool (filesystem integrity check
+> > tool) in HOST_DIR should not lead to issues.  
+> 
+> And the target variant is not susceptible to that issue, because
+> e2fsprogs' fsck depends on !BR2_PACKAGE_UTIL_LINUX_FSCK. So we're clean
+> there.
+> 
+> Except for the comments by Thomas, you can carry my:
+> 
+>     Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> 
+> when you respin this patch.
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 470c285f16..c397b8883b 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -160,7 +160,7 @@ define QEMU_CONFIGURE_CMDS
- 	unset TARGET_DIR; \
- 	cd $(@D); \
- 		LIBS='$(QEMU_LIBS)' \
--		$(TARGET_CONFIGURE_OPTS) \
-+		$(filter-out -DNDEBUG,$(TARGET_CONFIGURE_OPTS)) \
- 		$(TARGET_CONFIGURE_ARGS) \
- 		CPP="$(TARGET_CC) -E" \
- 		$(QEMU_VARS) \
-@@ -327,7 +327,7 @@ endif
- # call the compiler.
- define HOST_QEMU_CONFIGURE_CMDS
- 	unset TARGET_DIR; \
--	cd $(@D); $(HOST_CONFIGURE_OPTS) CPP="$(HOSTCC) -E" \
-+	cd $(@D); $(filter-out -DNDEBUG,$(HOST_CONFIGURE_OPTS)) CPP="$(HOSTCC) -E" \
- 		./configure \
- 		--target-list="$(HOST_QEMU_TARGETS)" \
- 		--prefix="$(HOST_DIR)" \
+Ok,
+Reviewed-by added.
+
+Thanks for the review,
+Herv?
+
 -- 
-2.32.0
+Herv? Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
