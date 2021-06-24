@@ -1,14 +1,15 @@
 From: Herve Codina <herve.codina@bootlin.com>
-Date: Thu, 24 Jun 2021 17:03:33 +0200
-Subject: [Buildroot] [PATCH 03/15] package/pkg-generic.mk: Remove Info
- documents dir entry
-In-Reply-To: <20210622201818.GI44262@scaer>
+Date: Thu, 24 Jun 2021 17:44:50 +0200
+Subject: [Buildroot] [PATCH 04/15] package/pkg-generic.mk: Fix .la files
+ overwrite detection
+In-Reply-To: <20210622103039.GG44262@scaer>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
- <20210621141130.48654-4-herve.codina@bootlin.com>
- <20210621225120.536cd758@windsurf>
- <20210622104343.0c5ea063@bootlin.com>
- <20210622113406.11234e26@windsurf> <20210622201818.GI44262@scaer>
-Message-ID: <20210624170333.44765dee@fedora>
+ <20210621141130.48654-5-herve.codina@bootlin.com>
+ <20210621214223.GC44262@scaer>
+ <20210622113124.7cf2dde1@bootlin.com>
+ <20210622095609.GD44262@scaer> <20210622121220.5d4520e2@windsurf>
+ <20210622103039.GG44262@scaer>
+Message-ID: <20210624174450.24fb83d4@fedora>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,62 +18,80 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Tue, 22 Jun 2021 22:18:18 +0200
+On Tue, 22 Jun 2021 12:30:39 +0200
 "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> I think a list+macro would be a better solution.
+> On 2021-06-22 12:12 +0200, Thomas Petazzoni spake thusly:
+> > On Tue, 22 Jun 2021 11:56:09 +0200
+> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:  
+> > > Sorry, but this patch (4/15) is fixing an issue introduced by the first
+> > > patch, with:  
+> > I agree in principle. But here, it's really a new requirement that we
+> > are adding on packages, and we *know* that even with Herv? patches
+> > there will be some other packages that will need fixing.  
 > 
-> Alternatively, we could append to post-install hooks, like we do for
-> pre-configure hooks in the autotools infra for autoreconf et al., for
-> example...
+> Sorry, but this patch is fixing the infra, not the packages.
 > 
->     # Outside generic-package-inner:
+> > So to me it's not really like introducing a regression in a patch, and
+> > fixing it later.  
 > 
->     # $1: base directory (target, staging, host)
->     define remove-conflicting-useless-files
->         $(Q)$(RM) -rf $(patsubst %, $(1)/%, $($(PKG)_DROP_FILES_OR_DIRS))
->     endef
->     define REMOVE_CONFLICTING_USELESS_FILES_IN_HOST
->         $(call remove-conflicting-useless-files,$(HOST_DIR))
->     endef
->     define REMOVE_CONFLICTING_USELESS_FILES_IN_STAGING
->         $(call remove-conflicting-useless-files,$(STAGING_DIR))
->     endef
->     define REMOVE_CONFLICTING_USELESS_FILES_IN_TARGET
->         $(call remove-conflicting-useless-files,$(TARGET_DIR))
->     endef
+> I never said it was a regression. ;-)
 > 
+> > > > What about the others issues
+> > > > detected ? Squash also together with the first patch ? I think it will
+> > > > produce a huge patch quite complicate to understand even with all individual
+> > > > commit message squashed.    
+> > > 
+> > > Ideally, I would say a series should first fix the issues, then
+> > > introduce the tooling.  
+> > 
+> > No, please keep one series, but having the fixes *before* we introduce
+> > the check.  
 > 
->     # In generic-package-inner:
+> Exactly; I never said to split the series into two series. It should
+> still be one.
 > 
->     $(2)_DROP_FILES_OR_DIRS += /share/info/dir
+> > And as stated above, the fixes will not fix all problems,
+> > they will only fix the problems we know about. More problems will be
+> > detected by the autobuilders thanks to the overwrite check.  
 > 
->     # For host packages:
->     $(2)_POST_INSTALL_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_HOST
+> And this is totally OK. [0]
 > 
->     # For target packages:
->     $(2)_POST_INSTALL_STAGING_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_STAGING
->     $(2)_POST_INSTALL_TARGET_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_TARGET
+> > > > However, that being said, I can squash this patch (Fix .la files overwrite
+> > > > detection) with the 1st one (detect files overwritten in TARGET_DIR and
+> > > > HOST_DIR) if you still think it will be better.    
+> > > 
+> > > Yes, I still think that it is better.  
+> > 
+> > No, please don't squash, have fixes added before the overwrite check
+> > instead.  
 > 
-> This way, it also paves the way to add other hooks to actually fix some
-> files instead of removing them...
-> 
-> For example, assume that packages (e.g. 'wonders') can register
-> themselves against another package (e.g. 'manager') by appending a
-> line to a text file, like so (over-simplified, of course):
-> 
->     echo "name=wonders path=/usr/lib/wonders/v42" >>/usr/share/manager/registry
-> 
-> Then we could have a hook that detects that, extracts the delta
-> installed by the package, stash that somewhere in staging, and have a
-> target-finalise hook that aggregates all the packages in the end.
+> Well, I still disagree, because this patch really fixes an issue
+> introduced *in the infra* by the first patch.
 > 
 
-I like this solution.
+Well, my bad.
 
-If it is okay for everyone, I will rework my patch accordingly.
+I think that the better thing to do is to fully rework the history.
+First fixing overwrites and then introducing the overwrite detection tooling
+(ie the actual PATCH 1 will be moved just before actual PATCH 12 and so
+actual PATCH 4 simply disappears).
 
-Thomas, your opinion ?
+The patch introducing the tooling will explain in its commit message
+why the calls to fixup-libtool-files and fixup-python-files are performed
+before taking the overwrite snapshot and why it is safe (sed --in-place).
+
+The variable <PKG>_PER_PACKAGE_TWEAK_HOOKS (or other name) will be introduced
+before the tooling. The patches changing some packages to use this variable
+(move tweaks from <PKG>_POST_CONFIGURE_HOOKS to <PKG>_PER_PACKAGE_TWEAK_HOOKS)
+will also be introduced before the tooling even if these changes really make
+sense after the tooling introduction.
+Indeed, the notion of action done before taking the overwrite detection
+snapshot (<PKG>_PER_PACKAGE_TWEAK_HOOKS) and action done after
+(<PKG>_PRE_CONFIGURE_HOOKS, configure and <PKG>_POST_CONFIGURE_HOOKS)
+makes sense only with the overwrite detection tool.
+
+Is that seem better for everyone ?
 
 
 Regards,
