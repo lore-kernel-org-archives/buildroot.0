@@ -1,49 +1,47 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Thu, 24 Jun 2021 14:34:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gesftpserver: Add host-python
- as dependency
-In-Reply-To: <87h7ho4xfh.fsf@dell.be.48ers.dk>
-References: <20210623083634.8158-1-anaumann@ultratronik.de>
- <87tulp7xz6.fsf@tarshish> <87lf7053fw.fsf@dell.be.48ers.dk>
- <04d2fb31-bc6c-4811-b8dc-6f9bf992fa95@andin.de>
- <557bdc53-6245-0d80-9a2e-0ed0187abb3a@andin.de>
- <87h7ho4xfh.fsf@dell.be.48ers.dk>
-Message-ID: <5b24a0cc-e788-4d49-af73-69cb177d58a0@andin.de>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Thu, 24 Jun 2021 07:47:37 -0500
+Subject: [Buildroot] [PATCH 1/2] package/opkg: bump to version 0.4.5
+Message-ID: <20210624124739.30531-1-ryanbarnett3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Along with version bump, update hash file to two space format and
+switch to HTTPS URL.
 
-On 23.06.21 13:45, Peter Korsgaard wrote:
->>>>>> "Andreas" == Andreas Naumann <dev@andin.de> writes:
-> 
-> Hi,
-> 
->   >> Ok, i didnt look why Python is needed. Also, I never saw the problem
->   >> until using per-package build. So buildtime-wise it's not a problem
->   >> in my case because we pull in host-python for some other package
->   >> anyway.
->   >>
->   >> I will check if I can get rid of the tests though.
-> 
->   > ... The configure script does not provide an option to skip test, so I
->   > could patch the configure script or somehow fake that python is there
->   > even if it doesnt. Both solutions seem not very elegant to so if you
->   > agree I'd just repost the patch with host-python3 as dependency.
-> 
-> A simple hack would just to pass rjk_cv_python24=true in
-> GESFTPSERVER_CONF_ENV.
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+---
+ package/opkg/opkg.hash | 4 ++--
+ package/opkg/opkg.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-just send v2 with your suggestion, but slightly altered because telling 
-configure that Python is not there also works.
-
-regards,
-Andreas
-
-> 
-> The tests themselves are afaik only executed if you run 'make check'
-> (which we don't).
-> 
+diff --git a/package/opkg/opkg.hash b/package/opkg/opkg.hash
+index b1ead67a11..b0c0ba6574 100644
+--- a/package/opkg/opkg.hash
++++ b/package/opkg/opkg.hash
+@@ -1,4 +1,4 @@
+ # From http://downloads.yoctoproject.org/releases/opkg/SHA256SUMS
+-sha256 86887852c43457edfff9d8b6d9520f3f1cdd55f25eb600a6eb31e1c4e151e106  opkg-0.4.2.tar.gz
++sha256  a1214a75fa34fb9228db8da47308e0e711b1c93fd8938cf164c10fd28eb50f1e  opkg-0.4.5.tar.gz
+ # Locally calculated
+-sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+index e25e51b9e6..501edcf8af 100644
+--- a/package/opkg/opkg.mk
++++ b/package/opkg/opkg.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-OPKG_VERSION = 0.4.2
+-OPKG_SITE = http://downloads.yoctoproject.org/releases/opkg
++OPKG_VERSION = 0.4.5
++OPKG_SITE = https://downloads.yoctoproject.org/releases/opkg
+ OPKG_DEPENDENCIES = host-pkgconf libarchive
+ OPKG_LICENSE = GPL-2.0+
+ OPKG_LICENSE_FILES = COPYING
+-- 
+2.25.1
