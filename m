@@ -1,104 +1,98 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Thu, 24 Jun 2021 07:47:38 -0500
-Subject: [Buildroot] [PATCH 2/2] package/opkg-utils: bump to version 0.4.5
-In-Reply-To: <20210624124739.30531-1-ryanbarnett3@gmail.com>
-References: <20210624124739.30531-1-ryanbarnett3@gmail.com>
-Message-ID: <20210624124739.30531-2-ryanbarnett3@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 24 Jun 2021 14:57:03 +0200
+Subject: [Buildroot] [PATCH] support/scripts/pkg-stats: add infra_coinfig to
+ json_output
+Message-ID: <20210624125702.22106-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch URL to HTTPS address for git repository.
+When we use the statistics output to generate a CVE/CPE customer report
+showing whether a product is affected by CVEs, we are primarily interested
+in whether they are relevant to the target system. Currently we cannot see
+if the package is configured for the build (infra==host) and/or the
+target system (infra==target).
 
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Therefore, in case of a given configuration, this information is also
+stored in the JSON output.
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- ...-seperate-manpages-and-utils-install.patch | 50 -------------------
- package/opkg-utils/opkg-utils.hash            |  2 +-
- package/opkg-utils/opkg-utils.mk              |  4 +-
- 3 files changed, 3 insertions(+), 53 deletions(-)
- delete mode 100644 package/opkg-utils/0001-Makefile-seperate-manpages-and-utils-install.patch
+ support/scripts/pkg-stats | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
 
-diff --git a/package/opkg-utils/0001-Makefile-seperate-manpages-and-utils-install.patch b/package/opkg-utils/0001-Makefile-seperate-manpages-and-utils-install.patch
-deleted file mode 100644
-index 140187ca3a..0000000000
---- a/package/opkg-utils/0001-Makefile-seperate-manpages-and-utils-install.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 74ccbee0f798822041dba5c6564df62a0c60d86b Mon Sep 17 00:00:00 2001
--From: Ryan Barnett <ryanbarnett3@gmail.com>
--Date: Mon, 22 Feb 2021 07:09:34 -0600
--Subject: Makefile: separate manpages and utils install
--
--The installation of opkg-build man page introduces a host dependency
--on perl for the pod2man package to generate the man page.
--
--To allow the opkg-utils scripts to be installed separately from the
--manpages, break apart the install step into two install steps:
--install-utils and install-docs
--
--Backported from: 74ccbee0f798822041dba5c6564df62a0c60d86b
--
--CC: Christian Hermann <mail@hermannch.dev>
--Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
--Signed-off-by: Alex Stewart <alex.stewart@ni.com>
--Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-----
-- Makefile | 8 ++++++--
-- 1 file changed, 6 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 4049654..fe96d5a 100644
----- a/Makefile
--+++ b/Makefile
--@@ -27,9 +27,11 @@ mandir ?= $(PREFIX)/man
-- 
-- all: $(UTILS) $(MANPAGES)
-- 
---install: all
--+install-utils: $(UTILS)
-- 	install -d $(DESTDIR)$(bindir)
-- 	install -m 755 $(UTILS) $(DESTDIR)$(bindir)
--+
--+install-docs: $(MANPAGES)
-- 	install -d $(DESTDIR)$(mandir)
-- 	for m in $(MANPAGES); \
-- 	do \
--@@ -37,4 +39,6 @@ install: all
-- 		install -m 644 "$$m" $(DESTDIR)$(mandir)/man$${m##*.}; \
-- 	done
-- 
---.PHONY: install all
--+install: install-utils install-docs
--+
--+.PHONY: install install-utils install-docs all
---- 
--cgit v1.2.2-1-g5e49
--
-diff --git a/package/opkg-utils/opkg-utils.hash b/package/opkg-utils/opkg-utils.hash
-index 779852d9c0..29671f9609 100644
---- a/package/opkg-utils/opkg-utils.hash
-+++ b/package/opkg-utils/opkg-utils.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  552c074630b6d6b39a32a35243fb34d7c5888b8a4f18118abb4daf92d0e847f2  opkg-utils-0.4.3-br1.tar.gz
-+sha256  e0fcaab51bff2149bd6560fb4238319d502dd99b581f66763d702e75c224736d  opkg-utils-0.4.5-br1.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
-index cdffd6f1c4..369a4586e8 100644
---- a/package/opkg-utils/opkg-utils.mk
-+++ b/package/opkg-utils/opkg-utils.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index cc91d13167..f4dd034bd9 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -89,6 +89,7 @@ class Package:
+         self.path = path
+         self.pkg_path = os.path.dirname(path)
+         self.infras = None
++        self.infra_config = None
+         self.license = None
+         self.has_license = False
+         self.has_license_files = False
+@@ -146,9 +147,9 @@ class Package:
+             return False
+         return True
  
--OPKG_UTILS_VERSION = 0.4.3
--OPKG_UTILS_SITE = http://git.yoctoproject.org/git/opkg-utils
-+OPKG_UTILS_VERSION = 0.4.5
-+OPKG_UTILS_SITE = https://git.yoctoproject.org/git/opkg-utils
- OPKG_UTILS_SITE_METHOD = git
- OPKG_UTILS_LICENSE = GPL-2.0+
- OPKG_UTILS_LICENSE_FILES = COPYING
+-    def set_infra(self):
++    def set_infra(self, config_info):
+         """
+-        Fills in the .infras field
++        Fills in the .infras and ..infra_config fields
+         """
+         self.infras = list()
+         with open(os.path.join(brpath, self.path), 'r') as f:
+@@ -163,6 +164,13 @@ class Package:
+                 else:
+                     self.infras.append(("target", infra))
+ 
++        if config_info:
++            for pkg_name in config_info:
++                if config_info[pkg_name]['name'] == self.name:
++                    if self.infra_config == None:
++                        self.infra_config = list()
++                    self.infra_config.append(config_info[pkg_name]['type'])
++
+     def set_license(self):
+         """
+         Fills in the .status['license'] and .status['license-files'] fields
+@@ -369,8 +377,8 @@ def get_pkglist(npackages, package_list):
+ 
+ def get_config_packages():
+     cmd = ["make", "--no-print-directory", "show-info"]
+-    js = json.loads(subprocess.check_output(cmd))
+-    return set([v["name"] for v in js.values()])
++    config_info = json.loads(subprocess.check_output(cmd))
++    return (config_info, set([v["name"] for v in config_info.values()]))
+ 
+ 
+ def package_init_make_info():
+@@ -1115,10 +1123,11 @@ def __main__():
+     if args.nvd_path:
+         import cve as cvecheck
+ 
++    config_info = None
+     if args.packages:
+         package_list = args.packages.split(",")
+     elif args.configpackages:
+-        package_list = get_config_packages()
++        (config_info, package_list) = get_config_packages()
+     else:
+         package_list = None
+     date = datetime.datetime.utcnow()
+@@ -1137,7 +1146,7 @@ def __main__():
+     package_init_make_info()
+     print("Getting package details ...")
+     for pkg in packages:
+-        pkg.set_infra()
++        pkg.set_infra(config_info)
+         pkg.set_license()
+         pkg.set_hash_info()
+         pkg.set_patch_count()
 -- 
-2.25.1
+2.30.0
