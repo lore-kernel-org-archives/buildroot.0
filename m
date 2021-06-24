@@ -1,56 +1,124 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jun 2021 09:16:05 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/wireshark:
- security bump to version 3.4.6
-Message-ID: <20210624065154.756038E153@busybox.osuosl.org>
+Date: Thu, 24 Jun 2021 09:18:19 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/exiv2: security
+ bump to version 0.27.4
+Message-ID: <20210624065154.73CEE8E155@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=048a6279c7e070a81abaa86ff2fe9b7c704ea6f0
+commit: https://git.buildroot.net/buildroot/commit/?id=a5b2216213ec5285fecb015863e65a9cec956a54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix CVE-2021-22222: Infinite loop in DVB-S2-BB dissector in Wireshark
-3.4.0 to 3.4.5 allows denial of service via packet injection or crafted
-capture file
+Fix 12 security issues including CVE-2021-3482, CVE-2021-29457,
+CVE-2021-29458, CVE-2021-29463, CVE-2021-29464, CVE-2021-29470,
+CVE-2021-29473, CVE-2021-29623 and CVE-2021-32617
 
-https://www.wireshark.org/security/wnpa-sec-2021-05.html
+- Use official tarball
+- Drop patch (already in version)
+- Update indentation in hash file (two spaces)
+
+https://github.com/Exiv2/exiv2/releases/tag/v0.27.4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5cf85208407cc5aba16fc2ac17b2c3610e22ae08)
+(cherry picked from commit bcace429426ee91aac56f3dcc33b69e22141d384)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...lerFlags.cmake-properly-detect-availabili.patch | 58 ----------------------
+ package/exiv2/exiv2.hash                           |  4 +-
+ package/exiv2/exiv2.mk                             |  5 +-
+ 3 files changed, 5 insertions(+), 62 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 57290b9060..ddb0f1954a 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.5.txt
--sha1  d01a9b5f58206fb458fe9fc2dac88ad0ea7152ce  wireshark-3.4.5.tar.xz
--sha256  de1aafd100a1e1207c850d180e97dd91ab8da0f5eb6beec545f725cdb145d333  wireshark-3.4.5.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.6.txt
-+sha1  20596183210daeb0070ae43716529caf81c6187a  wireshark-3.4.6.tar.xz
-+sha256  12a678208f8cb009e6b9d96026e41a6ef03c7ad086b9e1029f42053b249b4628  wireshark-3.4.6.tar.xz
- 
+diff --git a/package/exiv2/0001-cmake-compilerFlags.cmake-properly-detect-availabili.patch b/package/exiv2/0001-cmake-compilerFlags.cmake-properly-detect-availabili.patch
+deleted file mode 100644
+index 7b9fa48815..0000000000
+--- a/package/exiv2/0001-cmake-compilerFlags.cmake-properly-detect-availabili.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From 2f6d2e5795382f0d6e22f5aea52e8104110d24ad Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Sun, 19 Jul 2020 16:29:15 +0200
+-Subject: [PATCH] cmake/compilerFlags.cmake: properly detect availability of
+- flags
+-
+-Instead of relying on fragile and complex logic to decide if a
+-compiler flag is available or not, use the check_c_compiler_flag()
+-macro provided by the CMake standard library.
+-
+-This for example avoids using -fcf-protection on architectures that
+-don't support this option.
+-
+-[Upstream: https://github.com/Exiv2/exiv2/pull/1252. The submitted
+-patch is slightly different than this one, due to other changes
+-between 0.27.3 and master.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- cmake/compilerFlags.cmake | 18 +++++++++++-------
+- 1 file changed, 11 insertions(+), 7 deletions(-)
+-
+-diff --git a/cmake/compilerFlags.cmake b/cmake/compilerFlags.cmake
+-index 0418aa61..be430977 100644
+---- a/cmake/compilerFlags.cmake
+-+++ b/cmake/compilerFlags.cmake
+-@@ -1,4 +1,5 @@
+- # These flags applies to exiv2lib, the applications, and to the xmp code
+-+include(CheckCCompilerFlag)
+- 
+- if ( MINGW OR UNIX OR MSYS ) # MINGW, Linux, APPLE, CYGWIN
+-     if (${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
+-@@ -25,13 +26,16 @@ if ( MINGW OR UNIX OR MSYS ) # MINGW, Linux, APPLE, CYGWIN
+- 
+-         # This fails under Fedora, MinGW GCC 8.3.0 and CYGWIN/MSYS 9.3.0
+-         if (NOT (MINGW OR CMAKE_HOST_SOLARIS OR CYGWIN OR MSYS) )
+--            if (COMPILER_IS_GCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 8.0)
+--                add_compile_options(-fstack-clash-protection -fcf-protection)
+--            endif()
+--
+--            if( (COMPILER_IS_GCC   AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 5.0) # Not in GCC 4.8
+--            OR  (COMPILER_IS_CLANG AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 3.7) # Not in Clang 3.4.2
+--            )
+-+            check_c_compiler_flag(-fstack-clash-protection HAS_FSTACK_CLASH_PROTECTION)
+-+            check_c_compiler_flag(-fcf-protection HAS_FCF_PROTECTION)
+-+            check_c_compiler_flag(-fstack-protector-strong HAS_FSTACK_PROTECTOR_STRONG)
+-+            if(HAS_FSTACK_CLASH_PROTECTION)
+-+                add_compile_options(-fstack-clash-protection)
+-+            endif()
+-+            if(GCC_HAS_FCF_PROTECTION)
+-+                add_compile_options(-fcf-protection)
+-+            endif()
+-+            if(GCC_HAS_FSTACK_PROTECTOR_STRONG)
+-                 add_compile_options(-fstack-protector-strong)
+-             endif()
+-         endif()
+---- 
+-2.26.2
+-
+diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
+index 94ab4ac638..c9af674a51 100644
+--- a/package/exiv2/exiv2.hash
++++ b/package/exiv2/exiv2.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 3d656cf349..8b0ab4bfbe 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
+-sha256 6398bc743c32b85b2cb2a604273b8c90aa4eb0fd7c1700bf66cbb2712b4f00c1 exiv2-0.27.3.tar.gz
+-sha256 a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66 COPYING
++sha256  84366dba7c162af9a7603bcd6c16f40fe0e9af294ba2fd2f66ffffb9fbec904e  exiv2-0.27.4-Source.tar.gz
++sha256  a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66  COPYING
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+index 3d4cf41731..52bf03fc63 100644
+--- a/package/exiv2/exiv2.mk
++++ b/package/exiv2/exiv2.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 3.4.5
-+WIRESHARK_VERSION = 3.4.6
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+-EXIV2_VERSION = 0.27.3
+-EXIV2_SITE = $(call github,Exiv2,exiv2,v$(EXIV2_VERSION))
++EXIV2_VERSION = 0.27.4
++EXIV2_SOURCE = exiv2-$(EXIV2_VERSION)-Source.tar.gz
++EXIV2_SITE = https://exiv2.org/builds
+ EXIV2_INSTALL_STAGING = YES
+ EXIV2_LICENSE = GPL-2.0+
+ EXIV2_LICENSE_FILES = COPYING
