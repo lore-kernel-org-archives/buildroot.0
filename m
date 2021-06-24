@@ -1,70 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 24 Jun 2021 18:18:40 +0200
-Subject: [Buildroot] [PATCH 01/15] package/pkg-generic.mk: detect files
- overwritten in TARGET_DIR and HOST_DIR
-In-Reply-To: <20210624160922.5c3ba9dd@fedora>
+From: Herve Codina <herve.codina@bootlin.com>
+Date: Thu, 24 Jun 2021 18:20:52 +0200
+Subject: [Buildroot] [PATCH 05/15] package/pkg-generic.mk: Perform .la
+ files fixup in per-package HOST_DIR
+In-Reply-To: <20210622101202.GE44262@scaer>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
- <20210621141130.48654-2-herve.codina@bootlin.com>
- <20210621213140.GA44262@scaer>
- <20210622094052.01c0a074@bootlin.com>
- <20210622113003.7cbf0136@windsurf>
- <e866365b-6244-303a-62d7-1cb00fda8897@green-communications.fr>
- <20210622102433.GF44262@scaer> <20210624160922.5c3ba9dd@fedora>
-Message-ID: <20210624161840.GA1126048@scaer>
+ <20210621141130.48654-6-herve.codina@bootlin.com>
+ <20210622101202.GE44262@scaer>
+Message-ID: <20210624182052.3550be4e@fedora>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Herv?, All,
+Hi,
 
-On 2021-06-24 16:09 +0200, Herve Codina spake thusly:
-> On Tue, 22 Jun 2021 12:24:33 +0200
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> Well, according to the different exchanges,
+On Tue, 22 Jun 2021 12:12:02 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+
+> >  # $2: staging directory of the package
+> >  ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> >  define fixup-libtool-files
+> > -	$(Q)find $(2)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
+> > +	$(Q)find $(2) \( -path '$(2)/lib*' -o -path '$(2)/usr/lib*' \) \
+> > +		-name "*.la" | xargs --no-run-if-empty \
+> >  		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$(1)/:g"  
 > 
-> I think I can remove LC_ALL (we don't care about any order), and I keep
-> '... | xargs -0 -r md5sum'.
-> 'cd' is not needed (we do not care about absolute or relative path).
-> 
-> So, the snapshot is taken using:
-> find -L $(1) -type f -print0 | xargs -0 -r md5sum > $($(PKG)_DIR)/.files$(2).md5;
+> While at it, can you switch over to using find's -print0 and xarg's -0 ?
 
-I spoke about -L as a suggestion to follow and monitor symlinks.
-However, as I said, that does not work, at least for host/, because it
-will emit a warning about a directory loop. Also, there is no telling
-what users will install i their target/ and we may have a similar
-situation for target/.
+Yes, changed.
 
-This warning is not nice as it will happen for each and every packages.
-
-So, drop -L. At the very least, we have the infrastructure in place, and
-we can extend it later should we need additional details.
-
-But now that I think about it, the entry-changed-to-omething-else case
-is already covered by the existing instrumenttion, as part of the
-pkg_size_before/after hooks (find's %y printf directive)
-
-So, yes, just drop the -L.
-
-> and the detection is done using:
-> md5sum --quiet -c $($(PKG)_DIR)/.files$(2).md5
-> 
-> Is that ok for everyone ?
-
-Except for -L, yes, this is a proper summary from my point if view.
-
-Thanks! :-)
+I will also change PATCH 10 of this series. Same construction in fixup-python-files
+same sanction.
 
 Regards,
-Yann E. MORIN.
+Herv?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Herv? Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
