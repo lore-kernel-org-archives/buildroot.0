@@ -1,129 +1,59 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 24 Jun 2021 14:39:40 +0300
-Subject: [Buildroot] [PATCH] package/daemon: bump to version 0.8
-Message-ID: <ee602ffcc307dffea6df5d7df388fa2cc6df33a0.1624534780.git.baruch@tkos.co.il>
+From: Alexander Dahl <post@lespocky.de>
+Date: Thu, 24 Jun 2021 13:50:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libqmi: bump version to 1.28.6
+In-Reply-To: <20210624091248.7318-1-mf@go-sys.de>
+References: <20210624091248.7318-1-mf@go-sys.de>
+Message-ID: <20210624115005.fjsasggqdtl5knju@falbala.internal.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patch.
+Hei hei,
 
-Add another patch to fix build with musl.
+On Thu, Jun 24, 2021 at 11:12:48AM +0200, Michael Fischer wrote:
+> Signed-off-by: Michael Fischer <mf@go-sys.de>
+> ---
+>  package/libqmi/libqmi.hash | 2 +-
+>  package/libqmi/libqmi.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+> index 2720a8236d..0bfc63f4a4 100644
+> --- a/package/libqmi/libqmi.hash
+> +++ b/package/libqmi/libqmi.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed:
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+> -sha256  3b14cd2ab5221a7adbb39fed16ef697538ea1c79308821ad2d19b505e1daaea0  libqmi-1.28.4.tar.xz
+> +sha256  cbb890893de1dee06ea5ebdac2d22f0469314a6f93f15f61f2f1206a1c9ae5fd  libqmi-1.28.6.tar.xz
+> diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+> index 278c0116be..35a41e5bd0 100644
+> --- a/package/libqmi/libqmi.mk
+> +++ b/package/libqmi/libqmi.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBQMI_VERSION = 1.28.4
+> +LIBQMI_VERSION = 1.28.6
+>  LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+>  LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+>  LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
 
-Update COPYING hash because of date change.
+Reviewed-by: Alexander Dahl <post@lespocky.de>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...aemon-fix-build-with-musl-libc-again.patch | 46 +++++++++++++++++++
- package/daemon/0001-fix-musl.patch            | 18 --------
- package/daemon/daemon.hash                    |  4 +-
- package/daemon/daemon.mk                      |  2 +-
- 4 files changed, 49 insertions(+), 21 deletions(-)
- create mode 100644 package/daemon/0001-daemon-fix-build-with-musl-libc-again.patch
- delete mode 100644 package/daemon/0001-fix-musl.patch
-
-diff --git a/package/daemon/0001-daemon-fix-build-with-musl-libc-again.patch b/package/daemon/0001-daemon-fix-build-with-musl-libc-again.patch
-new file mode 100644
-index 000000000000..48d95f122fe7
---- /dev/null
-+++ b/package/daemon/0001-daemon-fix-build-with-musl-libc-again.patch
-@@ -0,0 +1,46 @@
-+From b879e6886498fdd147287bffdf5867378c7f3299 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Thu, 24 Jun 2021 14:28:10 +0300
-+Subject: [PATCH] daemon: fix build with musl libc (again)
-+
-+Commit 6b28c54dd95b3 added HAVE_SYS_TTYDEFAULTS_H to guard
-+sys/ttydefaults.h include. This breaks musl libc build because
-+HAVE_SYS_TTYDEFAULTS_H is not defined until config.h is included.
-+
-+Move sys/ttydefaults.h include below config.h
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/raforg/daemon/pull/4
-+
-+ daemon.c | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/daemon.c b/daemon.c
-+index 5c5ef2cb86df..f88a0d49bf84 100644
-+--- a/daemon.c
-++++ b/daemon.c
-+@@ -1011,9 +1011,6 @@ I<elogind(8)>
-+ #ifdef _RESTORE_POSIX_SOURCE
-+ #define _POSIX_SOURCE
-+ #endif
-+-#ifdef HAVE_SYS_TTYDEFAULTS_H /* For CEOF in musl libc (Linux only) */
-+-#include <sys/ttydefaults.h>
-+-#endif
-+ #include <dirent.h>
-+ #include <sys/wait.h>
-+ #include <sys/stat.h>
-+@@ -1037,6 +1034,10 @@ I<elogind(8)>
-+ #include <systemd/sd-login.h>
-+ #endif
-+ 
-++#ifdef HAVE_SYS_TTYDEFAULTS_H /* For CEOF in musl libc (Linux only) */
-++#include <sys/ttydefaults.h>
-++#endif
-++
-+ /* Configuration file entries */
-+ 
-+ typedef struct Config Config;
-+-- 
-+2.30.2
-+
-diff --git a/package/daemon/0001-fix-musl.patch b/package/daemon/0001-fix-musl.patch
-deleted file mode 100644
-index 5ebb645973f0..000000000000
---- a/package/daemon/0001-fix-musl.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--daemon: fix build with musl
--
--musl requires the ttydefaults.h to be included explicitly for CEOF.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--
--diff -Nuar daemon-0.6.4-orig/daemon.c daemon-0.6.4/daemon.c
----- daemon-0.6.4-orig/daemon.c	2010-06-12 16:37:00.000000000 +0300
--+++ daemon-0.6.4/daemon.c	2017-05-01 22:02:17.721413468 +0300
--@@ -864,6 +864,7 @@
-- #ifdef _RESTORE_POSIX_SOURCE
-- #define _POSIX_SOURCE
-- #endif
--+#include <sys/ttydefaults.h>
-- #include <dirent.h>
-- #include <sys/wait.h>
-- #include <sys/stat.h>
-diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
-index ec7451a81ec1..c490f715487f 100644
---- a/package/daemon/daemon.hash
-+++ b/package/daemon/daemon.hash
-@@ -1,5 +1,5 @@
- # From http://www.libslack.org/daemon/
--sha256  ba1f6dc87532c852bfb8f436179cd661c3458ff898f67767c414123198626dfd  daemon-0.7.1.tar.gz
-+sha256  74f12e6d4b3c85632489bd08431d3d997bc17264bf57b7202384f2e809cff596  daemon-0.8.tar.gz
- # Locally calculated
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
--sha256  cbac6eb0e1f7f95826966c7903939d591092a7f7d7726862946cb49096e8497d  COPYING
-+sha256  91329bb9be4ae0b7800081fa054e9bb760c60005b26958c1fb8461bc66bcd998  COPYING
-diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
-index 91f77dd24a97..96a163e597e6 100644
---- a/package/daemon/daemon.mk
-+++ b/package/daemon/daemon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DAEMON_VERSION = 0.7.1
-+DAEMON_VERSION = 0.8
- DAEMON_SITE = http://libslack.org/daemon/download
- DAEMON_LICENSE = GPL-2.0+
- DAEMON_LICENSE_FILES = LICENSE COPYING
 -- 
-2.30.2
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210624/529cffed/attachment.asc>
