@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jun 2021 09:16:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to
- version 3.4.6
-In-Reply-To: <20210616062113.452781-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 16 Jun 2021 08:21:13 +0200")
-References: <20210616062113.452781-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a6nf68by.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Jun 2021 09:19:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/exiv2: security bump to version
+ 0.27.4
+In-Reply-To: <20210616054829.233943-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 16 Jun 2021 07:48:29 +0200")
+References: <20210616054829.233943-1-fontaine.fabrice@gmail.com>
+Message-ID: <875yy3686x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +14,15 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix CVE-2021-22222: Infinite loop in DVB-S2-BB dissector in Wireshark
- > 3.4.0 to 3.4.5 allows denial of service via packet injection or crafted
- > capture file
+ > Fix 12 security issues including CVE-2021-3482, CVE-2021-29457,
+ > CVE-2021-29458, CVE-2021-29463, CVE-2021-29464, CVE-2021-29470,
+ > CVE-2021-29473, CVE-2021-29623 and CVE-2021-32617
 
- > https://www.wireshark.org/security/wnpa-sec-2021-05.html
+ > - Use official tarball
+ > - Drop patch (already in version)
+ > - Update indentation in hash file (two spaces)
+
+ > https://github.com/Exiv2/exiv2/releases/tag/v0.27.4
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
