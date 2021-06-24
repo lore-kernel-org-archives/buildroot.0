@@ -1,59 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jun 2021 09:20:03 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/python-django:
- security bump to version 3.2.4
-Message-ID: <20210624065201.032098E065@busybox.osuosl.org>
+Date: Thu, 24 Jun 2021 09:22:13 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/redis: security
+ bump to v6.2.4
+Message-ID: <20210624065201.3CE518DC69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d0c5c212b37bc1a93378cdf16529eb4831cea3d
+commit: https://git.buildroot.net/buildroot/commit/?id=1da76785f8d2cd13c4662e2305f6794dbcc42cca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Django 3.2.4 fixes two security issues and several bugs in 3.2.3.
-- CVE-2021-33203: Potential directory traversal via ``admindocs``
-- CVE-2021-33571: Possible indeterminate SSRF, RFI, and LFI attacks
-  since validators accepted leading zeros in IPv4 addresses
+From the release notes:
+================================================================================
+Redis 6.2.4 Released Tue July 1 12:00:00 IST 2021
+================================================================================
 
-https://github.com/django/django/blob/3.2.4/docs/releases/3.2.4.txt
+Upgrade urgency: SECURITY, Contains fixes to security issues that affect
+authenticated client connections. MODERATE otherwise.
+Fix integer overflow in STRALGO LCS (CVE-2021-32625)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Read the whole release note on:
+https://github.com/redis/redis/blob/6.2.4/00-RELEASENOTES
+
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7c69da6295627dabcbfd6ec0faf3bc6b8d9410d7)
+(cherry picked from commit d56fa94092c0ba2014febd9da34547a2ffcf3de1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 1c7d7b8841..fe91740f5f 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 06e6884d85..f5e5827dab 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  43784c090a8805605e3d0b768cd21cb2  Django-3.2.2.tar.gz
--sha256  0a1d195ad65c52bf275b8277b3d49680bd1137a5f55039a806f25f6b9752ce3d  Django-3.2.2.tar.gz
-+md5  2f30db9154efb8c9ed891781d29fae2a  Django-3.2.4.tar.gz
-+sha256  66c9d8db8cc6fe938a28b7887c1596e42d522e27618562517cc8929eb7e7f296  Django-3.2.4.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 0e36a530a9..81a3c8b8f3 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  98ed7d532b5e9671f5df0825bb71f0f37483a16546364049384c63db8764512b  redis-6.2.3.tar.gz
++sha256  ba32c406a10fc2c09426e2be2787d74ff204eb3a2e496d87cff76a476b6ae16e  redis-6.2.4.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index cea2d3b237..4e16b346c1 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 3.2.2
-+PYTHON_DJANGO_VERSION = 3.2.4
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/da/24/e2e6e534464f8e0bd010401f06d2cfc773141776d2952d6418d01c97f12c
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/27/94/123b3a95e9965819a3d30d36da6fc12ddff83bcfb0099f3e15437347480a
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+-REDIS_VERSION = 6.2.3
++REDIS_VERSION = 6.2.4
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
