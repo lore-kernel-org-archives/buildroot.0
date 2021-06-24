@@ -2,57 +2,56 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C33C5C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:37:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 802D5C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:37:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8BBA760524
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:37:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8BBA760524
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 3F02760F8F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:37:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3F02760F8F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B035607E4;
-	Tue,  3 Aug 2021 21:37:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 13A56400C7;
+	Tue,  3 Aug 2021 21:37:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tFqWgk7eE794; Tue,  3 Aug 2021 21:37:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GlOtWnoXsTvk; Tue,  3 Aug 2021 21:37:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC395605E0;
-	Tue,  3 Aug 2021 21:37:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 33DE51BF9C2
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 18A2540179;
+	Tue,  3 Aug 2021 21:37:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1865F1BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 655AF40538
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B807D83AB4
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fe-dpMTWueE1 for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N51V9DZtVqXO for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A0ED9404BC
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1377E835A6
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id EBB48843F5; Tue,  3 Aug 2021 21:09:46 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id 5DF3A81042; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 1 Jun 2021 22:08:29 +0200
+Date: Thu, 24 Jun 2021 23:27:56 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 20a4c7a7f6d5c4ceb60a6e597c40c3da54616146
-X-Git-Newrev: 1410cbd1638e1629454feda719fe9ea6473e941b
+X-Git-Oldrev: 1e5afb3955336bcdddf23b9135c6d30e1ef77a85
+X-Git-Newrev: 4d46a18555ad5c024b6d5fb28cf6f3cc0b2b0d5b
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210946.EBB48843F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libesmtp: move SITE to
- s.b.n
+Message-Id: <20210803210955.5DF3A81042@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/weston: disable -NDEBUG
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,53 +69,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1410cbd1638e1629454feda719fe9ea6473e941b
+commit: https://git.buildroot.net/buildroot/commit/?id=4d46a18555ad5c024b6d5fb28cf6f3cc0b2b0d5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The original site is gone, and the author is no longer providing
-tarballs:
-
-  https://libesmtp.github.io/notes.html
-
-Change website link to the current official page.
+Per upstream -NDEBUG should not be set for any builds:
+https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/643#note_958356
 
 Fixes:
-http://autobuild.buildroot.net/results/d788315bf708c31e14ba5fb35dccf94753d5f78a/
-http://autobuild.buildroot.net/results/83bfdd8e5f897b4d4be81c4c16106feb4e17bd50/
+http://autobuild.buildroot.net/results/f42/f420890de1b52786f8cf5f2922b69c909162eaa1/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libesmtp/Config.in   | 2 +-
- package/libesmtp/libesmtp.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/weston/weston.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libesmtp/Config.in b/package/libesmtp/Config.in
-index f3ed521d22..db2dc8ec9c 100644
---- a/package/libesmtp/Config.in
-+++ b/package/libesmtp/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBESMTP
- 	help
- 	  Library for sending emails through SMTP.
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 69ee11d23c..0a4a661e48 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -19,6 +19,8 @@ WESTON_CONF_OPTS = \
+ 	-Dcolor-management-colord=false \
+ 	-Dremoting=false
  
--	  http://brianstafford.info/libesmtp
-+	  https://libesmtp.github.io
- 
- comment "libesmtp needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/libesmtp/libesmtp.mk b/package/libesmtp/libesmtp.mk
-index dcffaceddc..1f5cdec191 100644
---- a/package/libesmtp/libesmtp.mk
-+++ b/package/libesmtp/libesmtp.mk
-@@ -6,7 +6,7 @@
- 
- LIBESMTP_VERSION = 1.0.6
- LIBESMTP_SOURCE = libesmtp-$(LIBESMTP_VERSION).tar.bz2
--LIBESMTP_SITE = http://brianstafford.info/libesmtp
-+LIBESMTP_SITE = http://sources.buildroot.net/libesmtp
- LIBESMTP_INSTALL_STAGING = YES
- LIBESMTP_CONFIG_SCRIPTS = libesmtp-config
- LIBESMTP_DEPENDENCIES = $(if $(BR2_PACKAGE_OPENSSL),openssl)
++WESTON_CFLAGS="$(TARGET_CFLAGS) -UNDEBUG"
++
+ # Uses VIDIOC_EXPBUF, only available from 3.8+
+ ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),y)
+ WESTON_CONF_OPTS += -Dsimple-clients=dmabuf-v4l
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
