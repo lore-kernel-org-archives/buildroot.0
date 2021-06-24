@@ -1,46 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jun 2021 09:27:53 +0200
-Subject: [Buildroot] [git commit] package/php: bump version to 7.4.20
-Message-ID: <20210624065713.086468E148@busybox.osuosl.org>
+From: Michael Fischer <mf@go-sys.de>
+Date: Thu, 24 Jun 2021 11:12:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libqmi: bump version to 1.28.6
+Message-ID: <20210624091248.7318-1-mf@go-sys.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f42a500e41ff294aaed3800b159d0cc4b966d999
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.20
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Michael Fischer <mf@go-sys.de>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 3fb0d09d32..d91d6aec66 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  6c17172c4a411ccb694d9752de899bb63c72a0a3ebe5089116bc13658a1467b2  php-7.4.19.tar.xz
-+sha256  1fa46ca6790d780bf2cb48961df65f0ca3640c4533f0bca743cd61b71cb66335  php-7.4.20.tar.xz
- 
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 73553e0395..3e422c5ac1 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index 2720a8236d..0bfc63f4a4 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-sha256  3b14cd2ab5221a7adbb39fed16ef697538ea1c79308821ad2d19b505e1daaea0  libqmi-1.28.4.tar.xz
++sha256  cbb890893de1dee06ea5ebdac2d22f0469314a6f93f15f61f2f1206a1c9ae5fd  libqmi-1.28.6.tar.xz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 278c0116be..35a41e5bd0 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.4.19
-+PHP_VERSION = 7.4.20
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-LIBQMI_VERSION = 1.28.4
++LIBQMI_VERSION = 1.28.6
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+-- 
+2.20.1
