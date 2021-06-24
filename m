@@ -1,66 +1,44 @@
-From: =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?= <salvador.joseluis@gmail.com>
-Date: Thu, 24 Jun 2021 11:56:35 +0200
-Subject: [Buildroot] [PATCH] package/zfs: Bump version to 2.0.5
-Message-ID: <20210624095633.880499-1-salvador.joseluis@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 24 Jun 2021 13:55:34 +0300
+Subject: [Buildroot] [PATCH 1/2] package/libpcap: bump to version 1.10.1
+Message-ID: <4b481c4db9adfd8660b6de8a4b92c3774542ff78.1624532135.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jos? Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/zfs/zfs.hash                      | 4 ++--
- package/zfs/zfs.mk                        | 2 +-
- support/testing/tests/package/test_zfs.py | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/libpcap/libpcap.hash | 4 ++--
+ package/libpcap/libpcap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
-index 5a0c43d366..7f4f5a59f8 100644
---- a/package/zfs/zfs.hash
-+++ b/package/zfs/zfs.hash
-@@ -1,5 +1,5 @@
--# Locally calculated
--sha256  7d1344c5433b91823f02c2e40b33d181fa6faf286bea5591f4b1965f23d45f6c  zfs-2.0.4.tar.gz
-+# From https://github.com/openzfs/zfs/releases/download/zfs-2.0.5/zfs-2.0.5.sha256.asc
-+sha256  3a17498d704ebf4c5d7231660f6fb44ae07a1545519f567452a4270851a86ec9  zfs-2.0.5.tar.gz
+diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
+index e70d071294a5..84c8e405df5a 100644
+--- a/package/libpcap/libpcap.hash
++++ b/package/libpcap/libpcap.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.tcpdump.org/release/libpcap-1.10.0.tar.gz.sig
+-sha256  8d12b42623eeefee872f123bd0dc85d535b00df4d42e865f993c40f7bfc92b1e  libpcap-1.10.0.tar.gz
++# https://www.tcpdump.org/release/libpcap-1.10.1.tar.gz.sig
++sha256  ed285f4accaf05344f90975757b3dbfe772ba41d1c401c2648b7fa45b711bdd4  libpcap-1.10.1.tar.gz
  
- # Hash for license files:
- sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
-diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
-index c8e33a7b1a..3b1afb419a 100644
---- a/package/zfs/zfs.mk
-+++ b/package/zfs/zfs.mk
+ # Hash for license file:
+ sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 24215ebed54b..1e02ec56e046 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZFS_VERSION = 2.0.4
-+ZFS_VERSION = 2.0.5
- ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
- ZFS_LICENSE = CDDL
- ZFS_LICENSE_FILES = LICENSE COPYRIGHT
-diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
-index e5f5526faf..772a66c1e4 100644
---- a/support/testing/tests/package/test_zfs.py
-+++ b/support/testing/tests/package/test_zfs.py
-@@ -13,7 +13,7 @@ class TestZfsGlibc(infra.basetest.BRTest):
-         BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.23"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.13"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
-         BR2_PACKAGE_ZFS=y
-@@ -70,7 +70,7 @@ class TestZfsUclibc(infra.basetest.BRTest):
-         BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.23"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.13"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
-         BR2_PACKAGE_ZFS=y
+-LIBPCAP_VERSION = 1.10.0
++LIBPCAP_VERSION = 1.10.1
+ LIBPCAP_SITE = https://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3-Clause
+ LIBPCAP_LICENSE_FILES = LICENSE
 -- 
-2.32.0
+2.30.2
