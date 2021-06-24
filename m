@@ -1,59 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jun 2021 09:22:13 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/redis: security
- bump to v6.2.4
-Message-ID: <20210624065201.3CE518DC69@busybox.osuosl.org>
+Date: Thu, 24 Jun 2021 09:21:15 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/mosquitto:
+ security bump to v2.0.11
+Message-ID: <20210624065201.2E5038E065@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1da76785f8d2cd13c4662e2305f6794dbcc42cca
+commit: https://git.buildroot.net/buildroot/commit/?id=f94735696b4681b60f00770caa2946cd562a90d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-From the release notes:
-================================================================================
-Redis 6.2.4 Released Tue July 1 12:00:00 IST 2021
-================================================================================
+Versions 2.0.11 and 1.6.15 of Mosquitto has been released.
+These are a security and bugfix releases.
 
-Upgrade urgency: SECURITY, Contains fixes to security issues that affect
-authenticated client connections. MODERATE otherwise.
-Fix integer overflow in STRALGO LCS (CVE-2021-32625)
-
-Read the whole release note on:
-https://github.com/redis/redis/blob/6.2.4/00-RELEASENOTES
+Read the full announcement on the blog:
+https://mosquitto.org/blog/2021/06/version-2-0-11-released/
 
 Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d56fa94092c0ba2014febd9da34547a2ffcf3de1)
+(cherry picked from commit efa4f3d0b4e8ca0a9d3008a68b5cfaaf690ed2ed)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mosquitto/mosquitto.hash | 4 ++--
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 06e6884d85..f5e5827dab 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  98ed7d532b5e9671f5df0825bb71f0f37483a16546364049384c63db8764512b  redis-6.2.3.tar.gz
-+sha256  ba32c406a10fc2c09426e2be2787d74ff204eb3a2e496d87cff76a476b6ae16e  redis-6.2.4.tar.gz
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index aa052979ff..baa2a90c5a 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking gpg signature
+-# from https://mosquitto.org/files/source/mosquitto-2.0.10.tar.gz.asc
+-sha256  0188f7b21b91d6d80e992b8d6116ba851468b3bd154030e8a003ed28fb6f4a44  mosquitto-2.0.10.tar.gz
++# from https://mosquitto.org/files/source/mosquitto-2.0.11.tar.gz.asc
++sha256  7b36a7198bce85cf31b132f5c6ee36dcf5dadf86fb768501eb1e11ce95d4f78a  mosquitto-2.0.11.tar.gz
  
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index cea2d3b237..4e16b346c1 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
+ # License files
+ sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 7820e8fea5..52f9c98733 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--REDIS_VERSION = 6.2.3
-+REDIS_VERSION = 6.2.4
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+-MOSQUITTO_VERSION = 2.0.10
++MOSQUITTO_VERSION = 2.0.11
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
