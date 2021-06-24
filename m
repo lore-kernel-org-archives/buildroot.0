@@ -1,29 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jun 2021 09:15:55 +0200
-Subject: [Buildroot] [PATCH] package/libressl: fix openssldir setting to
- match openssl
-In-Reply-To: <20210616160507.11223-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 16 Jun 2021 18:05:06 +0200")
-References: <20210616160507.11223-1-peter@korsgaard.com>
-Message-ID: <87eecr68d0.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Jun 2021 09:16:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to
+ version 3.4.6
+In-Reply-To: <20210616062113.452781-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 16 Jun 2021 08:21:13 +0200")
+References: <20210616062113.452781-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a6nf68by.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > libressl defaults to $prefix/etc/ssl for its "openssldir" setting, E.G.
- > the location where configuration files and certificates are searched:
+ > Fix CVE-2021-22222: Infinite loop in DVB-S2-BB dissector in Wireshark
+ > 3.4.0 to 3.4.5 allows denial of service via packet injection or crafted
+ > capture file
 
- > openssl version -d
- > OPENSSLDIR: "/usr/etc/ssl"
+ > https://www.wireshark.org/security/wnpa-sec-2021-05.html
 
- > Change it to /etc/ssl so it matches openssl and the expectations of packages
- > dealing with certificates (ca-certificates, libcurl, p11-kit)
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2021.02.x and 2021.05.x, thanks.
 
