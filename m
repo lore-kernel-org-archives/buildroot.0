@@ -1,131 +1,80 @@
-From: Herve Codina <herve.codina@bootlin.com>
-Date: Fri, 25 Jun 2021 16:00:53 +0200
-Subject: [Buildroot] [PATCH 15/15] package/pkg-generic.mk: Fix
- per-package <pkg>-{reconfigure, rebuild, reinstall}
-In-Reply-To: <20210624204442.GD2852@scaer>
+From: Andreas Naumann <dev@andin.de>
+Date: Fri, 25 Jun 2021 16:55:44 +0200
+Subject: [Buildroot] [PATCH 00/15] Overwritten file detection and fixes,
+ one more step to TLP build
+In-Reply-To: <20210625151330.35f3adc8@fedora>
 References: <20210621141130.48654-1-herve.codina@bootlin.com>
- <20210621141130.48654-16-herve.codina@bootlin.com>
- <20210624204442.GD2852@scaer>
-Message-ID: <20210625160053.2330864c@fedora>
+ <eb439d88-83c0-3ba6-5b1f-33fc011837c0@andin.de>
+ <20210625151330.35f3adc8@fedora>
+Message-ID: <b1d0c5a5-f76f-e38e-0257-1300f6a30eab@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 24 Jun 2021 22:44:42 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Hi Herve,
 
-> Herv?, All,
+On 25.06.21 15:13, Herve Codina wrote:
+> Hi,
 > 
-> On 2021-06-21 16:11 +0200, Herve Codina spake thusly:
-> > Many overwrites are detected on <pkg>-{reconfigure,rebuild,reinstall}.
-> > Indeed, files previously installed by a package were detected as
-> > overwritten on next reconfigure, rebuild or reinstall.
-> > 
-> > To avoid this, we recreate per-package host and target dir from
-> > scratch as it was done during the first configure step.
-> > 
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > ---
-> >  package/pkg-generic.mk | 26 ++++++++++++++++++++++++++
-> >  1 file changed, 26 insertions(+)
-> > 
-> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > index 546370af7a..0aafd865ad 100644
-> > --- a/package/pkg-generic.mk
-> > +++ b/package/pkg-generic.mk
-> > @@ -470,6 +470,13 @@ define pkg-graph-depends
-> >  		$$(GRAPHS_DIR)/$$(@).dot
-> >  endef
-> >  
-> > +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-> > +define empty-per-package-directory
-> > +	rm -rf $(HOST_DIR) $(TARGET_DIR)
-> > +	mkdir -p $(HOST_DIR) $(TARGET_DIR)
-> > +endef
-> > +endif
-> > +
-> >  ################################################################################
-> >  # inner-generic-package -- generates the make targets needed to build a
-> >  # generic package
-> > @@ -1072,6 +1079,25 @@ endif
-> >  			rm -f $$($(2)_TARGET_INSTALL_TARGET)
-> >  			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
-> >  			rm -f $$($(2)_TARGET_INSTALL_HOST)
-> > +			$$(call empty-per-package-directory)
-> > +			$$(call prepare-per-package-directory,$$($(2)_FINAL_DOWNLOAD_DEPENDENCIES))
-> > +			$$(call prepare-per-package-directory,$$($(2)_FINAL_EXTRACT_DEPENDENCIES))
-> > +			$$(call prepare-per-package-directory,$$($(2)_FINAL_DEPENDENCIES))
-> > +			@$$(call pkg_final_rsync_before,$$(TARGET_DIR))
-> > +			@$$(call pkg_final_rsync_before,$$(HOST_DIR),-host)
-> > +			@$$(call pkg_size_before,$$(TARGET_DIR))
-> > +			@$$(call pkg_size_before,$$(STAGING_DIR),-staging)
-> > +			@$$(call pkg_size_before,$$(HOST_DIR),-host)
-> > +			$$(call fixup-libtool-files,$$(NAME),$$(HOST_DIR))
-> > +			$$(call fixup-libtool-files,$$(NAME),$$(STAGING_DIR))
-> > +			$$(call fixup-python-files,$$(NAME),$$(HOST_DIR))
-> > +			$$(call fixup-python-files,$$(NAME),$$(STAGING_DIR))
-> > +			$$(foreach hook,$$($(2)_PER_PACKAGE_TWEAK_HOOKS),$$(call $$(hook))$$(sep))
-> > +			@$$(call pkg_detect_overwrite_before,$$(TARGET_DIR))
-> > +			@$$(call pkg_detect_overwrite_before,$$(HOST_DIR),-host)  
+> On Fri, 25 Jun 2021 11:08:43 +0200
+> Andreas Naumann <dev@andin.de> wrote:
 > 
-> I don;t like this duplication, because it will inevitably diverge. And
-> already, it is different: rather than rely on $(PKG)_FINAL_DEPENDENCIES)
-> and a single call to prepare-per-package-directory, there are now three
-> calls to prepare-per-package-directory with three types of depenencies.
+>> after a long time I have recently picked up playing with TLP build
+>> again. As part of that I found a problem in qt5 where I sent a patch two
+>> days ago "qt5: Fix sporadic build failure during top-level parallel
+>> build" which is caused by manipulation of the hard-linked qt.conf in
+>> HOST_DIR from different qt5 packages.
+>>
+>> Now I see your promising set, but the matter is quite complex and so I
+>> wonder if the "overwritten file detection" would a) uncover the qt.conf
+>> problem and b)if your patch series somehow fixes it in a generic way?
+>>
+>>
+> 
+> I quickly looked at your patch and it looks like an overwrite issue.
+> 
+> Your patch:
+> ---- 8< ----
+>   # compiled into the Qt library. We need it to make "qmake" relocatable and
+>   # tweak the per-package install pathes
+>   define QT5_INSTALL_QT_CONF
+> +	rm -f $(HOST_DIR)/bin/qt.conf
+>   	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
+>   		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
+>   endef
+> ---- 8< ----
+> 
+> This overwrite is done by sed whose output is redirected $(HOST_DIR)/bin/qt.conf
+> 
+> With TLP this overwite leads to package A seeing modification done by package B
+> 
+> Without your patch and with overwrite detection present in my series
+> the overwrite should be detected and the build stopped.
+> 
+> My series do not contains any fixes for this specific Qt5 overwrite.
+> This is a concrete example of what I said still missing ...
 
-The basic sequence (out of <pkg>_{reconfigure, rebuild, reinstall} is:
-.stamp_downloaded
-  -> call prepare-per-package-directory with <PKG>_FINAL_DOWNLOAD_DEPENDENCIES
-.stamp_extracted
-  -> call prepare-per-package-directory with <PKG>_FINAL_EXTRACT_DEPENDENCIES
-.stamp_configured
-  -> call prepare-per-package-directory with <PKG>_FINAL_FINAL_DEPENDENCIES
+Thank you for the confirmation.
 
-Here, I wanted to recreate host and target dir with all dependencies as they
-were at previous .stamp_configure and so did the 3 calls.
+> 
+> Your 'rm' breaks the hardlink and so the following sed does not perform
+> overwrite anymore.
+> That's the correct fix.
+> 
+> To go further with interactions with my current series still ongoing and not ready
+> to be merged, the entire macro (QT5_INSTALL_QT_CONF) should be moved to
+> <PKG>_PER_PACKAGE_TWEAK_HOOKS and QT5_QT_CONF_FIXUP is no more needed.
+
+Ok, I'll try to catch the point when your set is accepted and the repost 
+an updated version.
+
+
+have a nice weekend,
+Andreas
 
 
 > 
-> Why can't we comonalise this into a big macro that gets expanded twise,
-> once in the original $(BUILD_DIR)/%/.stamp_configured rule, and once
-> here?
-
-Excluding call to prepare-per-package-directory as they are not the same.
-
-What name for this macro ? PREPARE_PRE_CONFIGURE ?
-
+> Herv?
 > 
-> This would also termendously help into factorising this away and into
-> its own $(1)-prepare step, eventually.
-> 
-> > +$(1)-clean-for-reinstall: PKG=$(2)
-> > +$(1)-clean-for-reinstall: NAME=$(1)  
-> 
-> Please move those two right before the actual rule (i.e. just before
-> line 991 in mastr as of today.
-
-Done
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> >  $(1)-reinstall:		$(1)-clean-for-reinstall $(1)
-> >  
-> > -- 
-> > 2.31.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot  
-> 
-
-
-
--- 
-Herv? Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
