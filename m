@@ -1,53 +1,67 @@
-From: Andreas Hilse <andreas.hilse@googlemail.com>
-Date: Fri, 25 Jun 2021 13:42:51 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/grub2: workaround breakage with -O2,
- -O3 build
-Message-ID: <20210625114251.1762419-1-andreas.hilse@googlemail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 25 Jun 2021 13:45:29 +0200
+Subject: [Buildroot] [PATCH]
+ support/config-fragments/autobuild/br-arm-internal-glibc: update to
+ bleeding edge components
+In-Reply-To: <20210621210820.364630-1-thomas.petazzoni@bootlin.com>
+References: <20210621210820.364630-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20210625114529.GA104638@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When grub2 (i386-pc) is built with -O2 or -O3 it is unable to boot
-and the system will reboot in a loop.
+Thomas, All,
 
-Tony Battersby has bisected [0] the error down to this security bugfix:
-boot/grub2/0132-kern-parser-Fix-a-stack-buffer-overflow.patch
-There is also a bug report by Peter Seiderer about this [1].
+On 2021-06-21 23:08 +0200, Thomas Petazzoni spake thusly:
+> The br-arm-internal-glibc.config is generally used as a configuration
+> to test the bleeding edge versions of components. However, it has been
+> lagging behind somewhat, so let's bring it up-to-date:
+> 
+>  - Binutils 2.36.x
+>  - GCC 11.x
+> 
+> Let the fun begin in the autobuilders!
 
-As discussed on the mailing list [2], this patch introduces a workaround
-in the grub2.mk overriding the global optimization settings with -Os
-which results in a booting system.
+Wee!
 
-References:
-[0] https://savannah.gnu.org/bugs/?60458
-[1] https://bugs.busybox.net/show_bug.cgi?id=13586
-[2] http://lists.busybox.net/pipermail/buildroot/2021-May/311524.html
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Signed-off-by: Andreas Hilse <andreas.hilse@googlemail.com>
----
- boot/grub2/grub2.mk | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index af16ee91e1..52e9199ae9 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -118,9 +118,11 @@ HOST_GRUB2_CONF_ENV = \
- GRUB2_CONF_ENV = \
- 	CPP="$(TARGET_CC) -E" \
- 	TARGET_CC="$(TARGET_CC)" \
--	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
--	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS) -fno-stack-protector" \
--	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
-+	CFLAGS="$(TARGET_CFLAGS) -Os" \
-+	TARGET_CFLAGS="$(TARGET_CFLAGS) -Os" \
-+	CPPFLAGS="$(TARGET_CPPFLAGS) -Os -fno-stack-protector" \
-+	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS) -Os -fno-stack-protector" \
-+	TARGET_LDFLAGS="$(TARGET_LDFLAGS) -Os" \
- 	TARGET_NM="$(TARGET_NM)" \
- 	TARGET_OBJCOPY="$(TARGET_OBJCOPY)" \
- 	TARGET_STRIP="$(TARGET_CROSS)strip"
+Regards,
+Yann E. MORIN.
+
+> ---
+>  .../config-fragments/autobuild/br-arm-internal-glibc.config   | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/support/config-fragments/autobuild/br-arm-internal-glibc.config b/support/config-fragments/autobuild/br-arm-internal-glibc.config
+> index ea6df7fbd9..fb930cbef7 100644
+> --- a/support/config-fragments/autobuild/br-arm-internal-glibc.config
+> +++ b/support/config-fragments/autobuild/br-arm-internal-glibc.config
+> @@ -1,6 +1,6 @@
+>  BR2_arm=y
+>  BR2_cortex_a8=y
+>  BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> -BR2_BINUTILS_VERSION_2_34_X=y
+> -BR2_GCC_VERSION_10_X=y
+> +BR2_BINUTILS_VERSION_2_36_X=y
+> +BR2_GCC_VERSION_11_X=y
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> -- 
+> 2.31.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
