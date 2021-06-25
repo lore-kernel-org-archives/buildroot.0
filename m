@@ -1,53 +1,60 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Fri, 25 Jun 2021 22:33:13 +0300
-Subject: [Buildroot] [PATCH v3 0/5] allwinner: arm64: use mainline TF-A
-Message-ID: <20210625193318.635449-1-geomatsi@gmail.com>
+Date: Fri, 25 Jun 2021 22:33:16 +0300
+Subject: [Buildroot] [PATCH v3 3/5] support/testing/tests/boot/test_atf:
+ update U-Boot in TestATFAllwinner
+In-Reply-To: <20210625193318.635449-1-geomatsi@gmail.com>
+References: <20210625193318.635449-1-geomatsi@gmail.com>
+Message-ID: <20210625193318.635449-4-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Bump U-Boot version in TestATFAllwinner. Updating U-Boot version to
+2021.04 requires the following two changes.
 
-This is the 3rd revision of the patch set that replaces custom fork with
-mainline TF-A in Allwinner H5/A64 BSPs. The changes include:
+First, after switching to binman, u-boot.itb is no more generated for
+64-bit sunxi boards. Combined u-boot-sunxi-with-spl.bin image should
+be used instead. This image contains SPL, U-Boot, and FIT image,
+where FIT image contains other binaries such as BL31 and SCP.
 
-- introduce TF-A selection menu to explicitly chose GCC stack protection
-- switch from custom port to mainline TF-A in orangepi-zero-pluse2 BSP
-- bump Linux kernel version
-- bump U-Boot version
-  -- switch to combined u-boot-sunxi-with-spl.bin image
-  -- for now disable support for Allwinner SCP firmware
+Second, new U-Boot enables support for System Control Processor (SCP)
+firmware. SCP firmware is included by default into FIT image in the
+combined u-boot-sunxi-with-spl.bin binary. When SCP is not available
+or not needed, it should be explicitly disabled by pointing to an
+empty file. Support for Allwinner SCP firmware is not yet available
+neither in Buildroot nor in mainline kernel. So disable it for now
+using custom U-Boot build options.
 
-So far I have got no feedback from the boards custodians. So this time
-I only keep the board that I can test myself: orangepi-zero-plus2.
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
+ support/testing/tests/boot/test_atf.py | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-Regards,
-Sergey
-
-v3:
-- rework TF-A stack protection approach: add selection menu
-- only keep the board that I can test: orangepi-zero-plus2
-- cleanup commit messages: TF-A instead of ATF
-
-v2:
-- as per Heiko Thiery suggestion, bump mainline ATF version to v2.5
-- cleanup commit messages: use 'mainline' instead of 'upstream'
-
-Sergey Matyukevich (5):
-  boot/arm-trusted-firmware: enable stack protection level selection
-  support/testing: switch TestATFAllwinner to mainline TF-A
-  support/testing/tests/boot/test_atf: update U-Boot in TestATFAllwinner
-  configs/orangepi_zero_plus2_defconfig: switch to mainline TF-A
-  configs/orangepi-zero-plus2: bump BSP versions
-
- .../orangepi/orangepi-zero-plus2/genimage.cfg | 10 ++-----
- boot/arm-trusted-firmware/Config.in           | 26 +++++++++++++++++++
- .../arm-trusted-firmware.mk                   |  8 +++---
- configs/orangepi_zero_plus2_defconfig         | 19 +++++++-------
- support/testing/tests/boot/test_atf.py        | 16 ++++++------
- 5 files changed, 50 insertions(+), 29 deletions(-)
-
+diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
+index 8c29fbd594..915e0a5093 100644
+--- a/support/testing/tests/boot/test_atf.py
++++ b/support/testing/tests/boot/test_atf.py
+@@ -42,16 +42,15 @@ class TestATFAllwinner(infra.basetest.BRTest):
+         BR2_TARGET_UBOOT=y
+         BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+         BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
++        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
+         BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
+         BR2_TARGET_UBOOT_NEEDS_DTC=y
+         BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+         BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+         BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+-        BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-        BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+         BR2_TARGET_UBOOT_SPL=y
+-        BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
++        BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++        BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
+         """
+ 
+     def test_run(self):
 -- 
 2.32.0
