@@ -1,101 +1,86 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Fri, 25 Jun 2021 22:33:18 +0300
-Subject: [Buildroot] [PATCH v3 5/5] configs/orangepi-zero-plus2: bump BSP
- versions
-In-Reply-To: <20210625193318.635449-1-geomatsi@gmail.com>
-References: <20210625193318.635449-1-geomatsi@gmail.com>
-Message-ID: <20210625193318.635449-6-geomatsi@gmail.com>
+From: Gao Xiang <hsiangkao@aol.com>
+Date: Sat, 26 Jun 2021 06:05:06 +0800
+Subject: [Buildroot] [PATCH] package/erofs-utils: bump version to 1.3
+References: <20210625220506.2968-1-hsiangkao.ref@aol.com>
+Message-ID: <20210625220506.2968-1-hsiangkao@aol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot and Linux kernel versions. Updating U-Boot to 2021.04
-requires the following two changes.
+- new upstream version (mainly add big pcluster support);
+- add 0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch [1].
 
-First, after switching to binman, u-boot.itb is no more generated for
-64-bit sunxi boards. Combined u-boot-sunxi-with-spl.bin image should
-be used instead. This image contains SPL, U-Boot, and FIT image,
-where FIT image contains other binaries such as BL31 and SCP.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/patch/?id=7ab34000c672adca90388a8fcb1f70a7d391d35c
 
-Second, new U-Boot enables support for System Control Processor (SCP)
-firmware. SCP firmware is included by default into FIT image in the
-combined u-boot-sunxi-with-spl.bin binary. When SCP is not available
-or not needed, it should be explicitly disabled by pointing to an
-empty file. Support for Allwinner SCP firmware is not yet available
-neither in Buildroot nor in mainline kernel. So disable it for now
-using custom U-Boot build options.
-
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Gao Xiang <hsiangkao@aol.com>
 ---
- board/orangepi/orangepi-zero-plus2/genimage.cfg | 10 ++--------
- configs/orangepi_zero_plus2_defconfig           | 11 +++++------
- 2 files changed, 7 insertions(+), 14 deletions(-)
+ ...age-only-install-erofsfuse.1-with-th.patch | 32 +++++++++++++++++++
+ package/erofs-utils/erofs-utils.hash          |  2 +-
+ package/erofs-utils/erofs-utils.mk            |  2 +-
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+ create mode 100644 package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch
 
-diff --git a/board/orangepi/orangepi-zero-plus2/genimage.cfg b/board/orangepi/orangepi-zero-plus2/genimage.cfg
-index 98ebf5b475..255acdbecb 100644
---- a/board/orangepi/orangepi-zero-plus2/genimage.cfg
-+++ b/board/orangepi/orangepi-zero-plus2/genimage.cfg
-@@ -19,15 +19,9 @@ image sdcard.img {
+diff --git a/package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch b/package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch
+new file mode 100644
+index 000000000000..0aa99d5324d0
+--- /dev/null
++++ b/package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch
+@@ -0,0 +1,32 @@
++From 7ab34000c672adca90388a8fcb1f70a7d391d35c Mon Sep 17 00:00:00 2001
++From: David Michael <fedora.dm0@gmail.com>
++Date: Thu, 3 Jun 2021 16:18:57 -0400
++Subject: [PATCH] erofs-utils: manpage: only install erofsfuse.1 with the
++ command
++
++Link: https://lore.kernel.org/r/87lf7q3dn2.fsf at gmail.com
++Reviewed-by: Gao Xiang <xiang@kernel.org>
++Signed-off-by: David Michael <fedora.dm0@gmail.com>
++Signed-off-by: Gao Xiang <xiang@kernel.org>
++---
++ man/Makefile.am | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/man/Makefile.am b/man/Makefile.am
++index ffcf6f81c255..0df947b6fbf7 100644
++--- a/man/Makefile.am
+++++ b/man/Makefile.am
++@@ -1,5 +1,9 @@
++ # SPDX-License-Identifier: GPL-2.0+
++ # Makefile.am
++ 
++-dist_man_MANS = mkfs.erofs.1 erofsfuse.1
+++dist_man_MANS = mkfs.erofs.1
++ 
+++EXTRA_DIST = erofsfuse.1
+++if ENABLE_FUSE
+++man_MANS = erofsfuse.1
+++endif
++-- 
++2.20.1
++
+diff --git a/package/erofs-utils/erofs-utils.hash b/package/erofs-utils/erofs-utils.hash
+index 0de52d28a906..8bbb0885689b 100644
+--- a/package/erofs-utils/erofs-utils.hash
++++ b/package/erofs-utils/erofs-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6b2ea15c3b092bd9a3abd966f78bc01c6caacb94022643ff34cf69893ee04e84  erofs-utils-1.2.1.tar.gz
++sha256  132635740039bbe76d743aea72378bfae30dbf034e123929f5d794198d4c0b12  erofs-utils-1.3.tar.gz
+ sha256  feee3b3157dcdf78d4f50edefbd5dd7adf8b6d52c11bfaaa746a85a373256713  COPYING
+diff --git a/package/erofs-utils/erofs-utils.mk b/package/erofs-utils/erofs-utils.mk
+index 5d547148b204..e35470b02edc 100644
+--- a/package/erofs-utils/erofs-utils.mk
++++ b/package/erofs-utils/erofs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	partition spl {
- 		in-partition-table = "no"
--		image = "sunxi-spl.bin"
-+		image = "u-boot-sunxi-with-spl.bin"
- 		offset = 8192
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot.itb"
--		offset = 40K
--		size = 1024000 # 1MB - 40K + 16K(GPT)
-+		size = 1056768 # 1MB - 8K + 16K(GPT)
- 	}
- 
- 	partition boot {
-diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
-index 203d86e7fc..75ddbf1b55 100644
---- a/configs/orangepi_zero_plus2_defconfig
-+++ b/configs/orangepi_zero_plus2_defconfig
-@@ -2,7 +2,7 @@ BR2_aarch64=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_VFPV4=y
- 
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
- 
-@@ -18,16 +18,15 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero_plus2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
- BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-plus2/boot.cmd"
-@@ -35,7 +34,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-pl
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.10"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.10"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-zero-plus2"
+-EROFS_UTILS_VERSION = 1.2.1
++EROFS_UTILS_VERSION = 1.3
+ EROFS_UTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot
+ EROFS_UTILS_LICENSE = GPL-2.0+
+ EROFS_UTILS_LICENSE_FILES = COPYING
 -- 
-2.32.0
+2.20.1
