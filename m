@@ -1,80 +1,53 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Fri, 25 Jun 2021 16:55:44 +0200
-Subject: [Buildroot] [PATCH 00/15] Overwritten file detection and fixes,
- one more step to TLP build
-In-Reply-To: <20210625151330.35f3adc8@fedora>
-References: <20210621141130.48654-1-herve.codina@bootlin.com>
- <eb439d88-83c0-3ba6-5b1f-33fc011837c0@andin.de>
- <20210625151330.35f3adc8@fedora>
-Message-ID: <b1d0c5a5-f76f-e38e-0257-1300f6a30eab@andin.de>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Fri, 25 Jun 2021 22:33:13 +0300
+Subject: [Buildroot] [PATCH v3 0/5] allwinner: arm64: use mainline TF-A
+Message-ID: <20210625193318.635449-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Herve,
+Hi all,
 
-On 25.06.21 15:13, Herve Codina wrote:
-> Hi,
-> 
-> On Fri, 25 Jun 2021 11:08:43 +0200
-> Andreas Naumann <dev@andin.de> wrote:
-> 
->> after a long time I have recently picked up playing with TLP build
->> again. As part of that I found a problem in qt5 where I sent a patch two
->> days ago "qt5: Fix sporadic build failure during top-level parallel
->> build" which is caused by manipulation of the hard-linked qt.conf in
->> HOST_DIR from different qt5 packages.
->>
->> Now I see your promising set, but the matter is quite complex and so I
->> wonder if the "overwritten file detection" would a) uncover the qt.conf
->> problem and b)if your patch series somehow fixes it in a generic way?
->>
->>
-> 
-> I quickly looked at your patch and it looks like an overwrite issue.
-> 
-> Your patch:
-> ---- 8< ----
->   # compiled into the Qt library. We need it to make "qmake" relocatable and
->   # tweak the per-package install pathes
->   define QT5_INSTALL_QT_CONF
-> +	rm -f $(HOST_DIR)/bin/qt.conf
->   	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
->   		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
->   endef
-> ---- 8< ----
-> 
-> This overwrite is done by sed whose output is redirected $(HOST_DIR)/bin/qt.conf
-> 
-> With TLP this overwite leads to package A seeing modification done by package B
-> 
-> Without your patch and with overwrite detection present in my series
-> the overwrite should be detected and the build stopped.
-> 
-> My series do not contains any fixes for this specific Qt5 overwrite.
-> This is a concrete example of what I said still missing ...
+This is the 3rd revision of the patch set that replaces custom fork with
+mainline TF-A in Allwinner H5/A64 BSPs. The changes include:
 
-Thank you for the confirmation.
+- introduce TF-A selection menu to explicitly chose GCC stack protection
+- switch from custom port to mainline TF-A in orangepi-zero-pluse2 BSP
+- bump Linux kernel version
+- bump U-Boot version
+  -- switch to combined u-boot-sunxi-with-spl.bin image
+  -- for now disable support for Allwinner SCP firmware
 
-> 
-> Your 'rm' breaks the hardlink and so the following sed does not perform
-> overwrite anymore.
-> That's the correct fix.
-> 
-> To go further with interactions with my current series still ongoing and not ready
-> to be merged, the entire macro (QT5_INSTALL_QT_CONF) should be moved to
-> <PKG>_PER_PACKAGE_TWEAK_HOOKS and QT5_QT_CONF_FIXUP is no more needed.
+So far I have got no feedback from the boards custodians. So this time
+I only keep the board that I can test myself: orangepi-zero-plus2.
 
-Ok, I'll try to catch the point when your set is accepted and the repost 
-an updated version.
+Regards,
+Sergey
 
+v3:
+- rework TF-A stack protection approach: add selection menu
+- only keep the board that I can test: orangepi-zero-plus2
+- cleanup commit messages: TF-A instead of ATF
 
-have a nice weekend,
-Andreas
+v2:
+- as per Heiko Thiery suggestion, bump mainline ATF version to v2.5
+- cleanup commit messages: use 'mainline' instead of 'upstream'
 
+Sergey Matyukevich (5):
+  boot/arm-trusted-firmware: enable stack protection level selection
+  support/testing: switch TestATFAllwinner to mainline TF-A
+  support/testing/tests/boot/test_atf: update U-Boot in TestATFAllwinner
+  configs/orangepi_zero_plus2_defconfig: switch to mainline TF-A
+  configs/orangepi-zero-plus2: bump BSP versions
 
-> 
-> Herv?
-> 
+ .../orangepi/orangepi-zero-plus2/genimage.cfg | 10 ++-----
+ boot/arm-trusted-firmware/Config.in           | 26 +++++++++++++++++++
+ .../arm-trusted-firmware.mk                   |  8 +++---
+ configs/orangepi_zero_plus2_defconfig         | 19 +++++++-------
+ support/testing/tests/boot/test_atf.py        | 16 ++++++------
+ 5 files changed, 50 insertions(+), 29 deletions(-)
+
+-- 
+2.32.0
