@@ -1,46 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 25 Jun 2021 08:07:24 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libva-utils: bump version to 2.12.0
-Message-ID: <20210625060725.449924-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 25 Jun 2021 08:51:21 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-augeas: new package
+In-Reply-To: <20210624215353.GI2852@scaer>
+References: <20210621203456.361929-1-thomas.petazzoni@bootlin.com>
+ <20210624215353.GI2852@scaer>
+Message-ID: <20210625085121.3c682b60@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://github.com/intel/libva-utils/blob/master/NEWS
+On Thu, 24 Jun 2021 23:53:53 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libva-utils/libva-utils.hash | 6 +++---
- package/libva-utils/libva-utils.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> > +PYTHON_AUGEAS_VERSION = 1.1.0
+> > +PYTHON_AUGEAS_SITE = $(call github,hercules-team,python-augeas,v$(PYTHON_AUGEAS_VERSION))
+> > +PYTHON_AUGEAS_SETUP_TYPE = setuptools
+> > +PYTHON_AUGEAS_LICENSE = LGPL-2.1+
+> > +PYTHON_AUGEAS_LICENSE_FILES = COPYING
+> > +PYTHON_AUGEAS_DEPENDENCIES = augeas host-python-cffi host-pkgconf
+> > +# This will tell python-augeas to not call xml2-config, and instead
+> > +# use pkg-config to find libxml2. libxml2 is an indirect dependency of
+> > +# augeas, which is why it's not in our dependencies. It's odd that
+> > +# python-augeas searches for libxml2, but that's what it
+> > +# does. Question asked in the pull request at
+> > +# https://github.com/hercules-team/python-augeas/pull/49.  
+> 
+> They've now replied, and I am not sure I followed... Augeas' .pc does
+> not yield libxml2' CFLAGS, because it is a Requires.Private.
+> 
+> So, why does python-augeas need the CFLAGS from libxml2?
 
-diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
-index 23d1c7677f..967c350373 100644
---- a/package/libva-utils/libva-utils.hash
-+++ b/package/libva-utils/libva-utils.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/intel/libva-utils/releases/download/2.11.1/libva-utils-2.11.1.tar.bz2.sha1sum
--sha1  89988122f76e8c0b3645006b60dfdbd9a3ae2e8c  libva-utils-2.11.1.tar.bz2
-+# From https://github.com/intel/libva-utils/releases/download/2.12.0/libva-utils-2.12.0.tar.bz2.sha1sum
-+sha1  734ad8d4e39bf90b5670224272489f1745024ae2  libva-utils-2.12.0.tar.bz2
- # Locally computed
--sha256  9e5a6138869c79bdc0cd0598b6a6763110360f301e7294e5270704cb38bf53fb  libva-utils-2.11.1.tar.bz2
-+sha256  bbe49e68fbdf379acc769e4c1680a76be3e2b48020ca320edafaf7235b62cc44  libva-utils-2.12.0.tar.bz2
- sha256  c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
-diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-index 181af30337..c75091c7c7 100644
---- a/package/libva-utils/libva-utils.mk
-+++ b/package/libva-utils/libva-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVA_UTILS_VERSION = 2.11.1
-+LIBVA_UTILS_VERSION = 2.12.0
- LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
- LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
- LIBVA_UTILS_LICENSE = MIT
+Yeah, I was also confused by their reply, and didn't investigate
+further at this point.
+
+Thanks for looking at the patch and merging!
+
+Thomas
 -- 
-2.30.2
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
