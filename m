@@ -1,87 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Jun 2021 13:59:55 +0200
-Subject: [Buildroot] [git commit] package/bmap-tools: enable host package
-Message-ID: <20210625115307.B90DC800B4@busybox.osuosl.org>
+Date: Fri, 25 Jun 2021 14:24:34 +0200
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_bmap_tools: add test for host bmap-tools
+Message-ID: <20210625115307.E5DEF800B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=047a9d9eaa254616a44ae9edebf611ab16453922
+commit: https://git.buildroot.net/buildroot/commit/?id=81d1c6cf288f6ad76235557d5a6220f4cbaa79c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-bmaptool allows to drastically reduce the amount of data to transfer
-when writing to an SD card. Example with a 544 MiB sdcard.img:
-
-$ bmaptool create sdcard.img > sdcard.bmap
-$ gzip sdcard.img
-$ bmaptool copy sdcard.img.gz /dev/sdc
-bmaptool: info: discovered bmap file 'sdcard.bmap'
-bmaptool: info: block map format version 2.0
-bmaptool: info: 139265 blocks of size 4096 (544.0 MiB), mapped 23918 blocks (93.4 MiB or 17.2%)
-bmaptool: info: copying image 'sdcard.img.gz' to block device '/dev/sdc' using bmap file 'sdcard.bmap'
-bmaptool: info: 100% copied
-bmaptool: info: synchronizing '/dev/sdc'
-bmaptool: info: copying time: 7.7s, copying speed 12.1 MiB/sec
-
-So it means that instead of writing 544 MiB, only 93.4 MiB had to be
-written.
-
-In terms of implementation details, compared to the target bmap-tools
-package, there are fewer "selects" that are needed because:
-
- - The dependency on setuptools is not needed, because the package
-   uses the setuptools SETUP_TYPE, so host-python-setuptools is
-   already a build dependency.
-
- - host-python and host-python3 are always built with Expat XML
-   support.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998 at free.fr: check the two files are identical]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/Config.in.host            |  1 +
- package/bmap-tools/Config.in.host | 12 ++++++++++++
- package/bmap-tools/bmap-tools.mk  |  1 +
- 3 files changed, 14 insertions(+)
+ support/testing/tests/package/test_bmap_tools.py | 32 ++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 064c98af3d..8d443ea255 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -5,6 +5,7 @@ menu "Host utilities"
- 	source "package/android-tools/Config.in.host"
- 	source "package/asn1c/Config.in.host"
- 	source "package/babeltrace2/Config.in.host"
-+	source "package/bmap-tools/Config.in.host"
- 	source "package/btrfs-progs/Config.in.host"
- 	source "package/cbootimage/Config.in.host"
- 	source "package/checkpolicy/Config.in.host"
-diff --git a/package/bmap-tools/Config.in.host b/package/bmap-tools/Config.in.host
-new file mode 100644
-index 0000000000..a20829030d
---- /dev/null
-+++ b/package/bmap-tools/Config.in.host
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_HOST_BMAP_TOOLS
-+	bool "host bmap-tools"
-+	select BR2_PACKAGE_HOST_PYTHON_SIX # runtime
-+	help
-+	  Tool to flash image files to block devices using the block map
-+	  bmaptool is a generic tool for creating the block map (bmap)
-+	  for a file, and copying files using the block map. The idea is
-+	  that large file containing unused blocks, like raw system
-+	  image files, can be copied or flashed a lot faster with
-+	  bmaptool than with traditional tools like "dd" or "cp".
-+
-+	  https://github.com/intel/bmap-tools
-diff --git a/package/bmap-tools/bmap-tools.mk b/package/bmap-tools/bmap-tools.mk
-index c8b41c225f..32399ca151 100644
---- a/package/bmap-tools/bmap-tools.mk
-+++ b/package/bmap-tools/bmap-tools.mk
-@@ -11,3 +11,4 @@ BMAP_TOOLS_LICENSE_FILES = COPYING
- BMAP_TOOLS_SETUP_TYPE = setuptools
+diff --git a/support/testing/tests/package/test_bmap_tools.py b/support/testing/tests/package/test_bmap_tools.py
+index e8802fc057..5b4e5dcd3f 100644
+--- a/support/testing/tests/package/test_bmap_tools.py
++++ b/support/testing/tests/package/test_bmap_tools.py
+@@ -1,5 +1,6 @@
+ import os
+ import infra
++import subprocess
  
- $(eval $(python-package))
-+$(eval $(host-python-package))
+ from infra.basetest import BRTest
+ 
+@@ -59,3 +60,34 @@ class TestPy3BmapTools(TestBmapTools):
+         """
+         BR2_PACKAGE_PYTHON3=y
+         """
++
++
++class TestHostBmapTools(BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_HOST_BMAP_TOOLS=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_TARGET_ROOTFS_EXT2=y
++        """
++
++    def test_run(self):
++        bmap_x = os.path.join(self.b.builddir, "host", "bin", "bmaptool")
++        src_f = os.path.join(self.b.builddir, "images", "rootfs.ext2")
++        dst_f = os.path.join(self.b.builddir, "images", "rootfs.ext2.copy")
++        map_f = os.path.join(self.b.builddir, "images", "rootfs.ext2.bmap")
++
++        ret = subprocess.call([bmap_x, "create", "-o", map_f, src_f],
++                              stdout=self.b.logfile,
++                              stderr=self.b.logfile)
++        self.assertEqual(ret, 0)
++
++        ret = subprocess.call([bmap_x, "copy", src_f, dst_f],
++                              stdout=self.b.logfile,
++                              stderr=self.b.logfile)
++        self.assertEqual(ret, 0)
++
++        with open(src_f, 'rb') as f:
++            src = f.read()
++        with open(dst_f, 'rb') as f:
++            dst = f.read()
++        self.assertEqual(src, dst)
