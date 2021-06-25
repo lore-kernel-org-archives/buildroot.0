@@ -1,39 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Jun 2021 14:45:09 +0200
-Subject: [Buildroot] [PATCH v6 1/5] package/bmap-tools: new package
-In-Reply-To: <20210625123514.GB104638@scaer>
+Date: Fri, 25 Jun 2021 14:46:28 +0200
+Subject: [Buildroot] [PATCH v6 4/5]
+ support/testing/tests/package/test_bmap_tools: new test
+In-Reply-To: <20210625123657.GE104638@scaer>
 References: <20210621210111.363433-1-thomas.petazzoni@bootlin.com>
- <20210621210111.363433-2-thomas.petazzoni@bootlin.com>
- <20210625123514.GB104638@scaer>
-Message-ID: <20210625144509.5b5ea897@windsurf>
+ <20210621210111.363433-5-thomas.petazzoni@bootlin.com>
+ <20210625123657.GE104638@scaer>
+Message-ID: <20210625144628.5d5cdcb0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 25 Jun 2021 14:35:14 +0200
+On Fri, 25 Jun 2021 14:36:57 +0200
 "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> I am not too sure what bmap provides over 'dd conv=sparse'...
+> > +# do a test copy of the file system image
+> > +bmaptool create -o disk.img.bmap disk.img
+> > +bmaptool copy disk.img copy.img  
 > 
-> dd has a blocking size, which can be adjusted to the underlying device,
-> and does not need the input file to actually be sparse (i.e. any
-> block-aligned runs of zeroes will not be transfered)...
+> It is sad that the copy was not actually tested to be identical to the
+> original, so I added:
 > 
-> Also, we have seen in the past that not writing zero-blocks on the
-> destination device, can lead to filesystem corruption, because all-zero
-> filesystem metadata suddenly may no longer be all-zero...
+>     cmp disk.img copy.img
+> 
+> and applied to master, thanks.
 
-Well, this is precisely avoided by bmaptools I believe. bmaptools is
-not about skipping zeroes, it's about skipping holes in sparse files.
-So if a filesystem utility has explicitly written a huge amount of
-zeroes, it's not a hole in the file, and therefore they will be written
-as expected by bmaptools.
-
-And with that, there are no risk: block filesystems do not make
-assumptions about the state of the data they have not explicitly
-written/initialized at the time of mkfs.
+Good point, thanks for the change!
 
 Thomas
 -- 
