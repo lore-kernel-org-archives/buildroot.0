@@ -1,132 +1,135 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Jun 2021 14:24:22 +0200
-Subject: [Buildroot] [git commit]
- support/testing/tests/package/test_bmap_tools: new test
-Message-ID: <20210625115307.D6EC68E227@busybox.osuosl.org>
+Date: Fri, 25 Jun 2021 13:59:33 +0200
+Subject: [Buildroot] [git commit] package/bmap-tools: new package
+Message-ID: <20210625115307.B082A8E24F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1023f742b8e4213685b9e4efe23f75885482fd8d
+commit: https://git.buildroot.net/buildroot/commit/?id=6bccac75ea3f8cd66bcde3747067add14b0c4f2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch implements a simple test in which a dummy file system image
-is created, then `bmaptool create` and `bmaptool copy` are used to copy
-it to another file.
-
 Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
-[Thomas: several reworks, add myself to DEVELOPERS]
+[Thomas: numerous reworks, add myself in DEVELOPERS]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998 at free.fr: check the two files are identical]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                         |  2 +
- support/testing/tests/package/sample_bmap_tools.sh | 16 ++++++
- support/testing/tests/package/test_bmap_tools.py   | 61 ++++++++++++++++++++++
- 3 files changed, 79 insertions(+)
+ DEVELOPERS                         |  2 ++
+ package/Config.in                  |  1 +
+ package/bmap-tools/Config.in       | 44 ++++++++++++++++++++++++++++++++++++++
+ package/bmap-tools/bmap-tools.hash |  3 +++
+ package/bmap-tools/bmap-tools.mk   | 13 +++++++++++
+ 5 files changed, 63 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 1b5df54386..98dde8773b 100644
+index 9ff590978c..1b5df54386 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1988,7 +1988,9 @@ N:	Nicolas Carrier <nicolas.carrier@orolia.com>
- F:	package/bmap-tools/
+@@ -1985,6 +1985,7 @@ F:	board/intel/galileo/
+ F:	configs/galileo_defconfig
+ 
+ N:	Nicolas Carrier <nicolas.carrier@orolia.com>
++F:	package/bmap-tools/
  F:	package/php-xdebug/
  F:	package/python-augeas/
-+F:	support/testing/tests/package/sample_bmap_tools.sh
  F:	support/testing/tests/package/sample_python_augeas.py
-+F:	support/testing/tests/package/test_bmap_tools.py
- F:	support/testing/tests/package/test_python_augeas.py
- 
- N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-diff --git a/support/testing/tests/package/sample_bmap_tools.sh b/support/testing/tests/package/sample_bmap_tools.sh
-new file mode 100755
-index 0000000000..08605b3b99
---- /dev/null
-+++ b/support/testing/tests/package/sample_bmap_tools.sh
-@@ -0,0 +1,16 @@
-+#!/bin/sh
-+# simple test which creates a dummy file system image, then use bmaptool create
-+# and bmaptool copy to copy it to another file
-+
-+set -xeu
-+
-+# create the necessary test files
-+dd if=/dev/zero of=disk.img bs=2M count=1
-+mkfs.ext4 disk.img
-+fallocate -d disk.img
-+dd if=/dev/zero of=copy.img bs=2M count=1
-+
-+# do a test copy of the file system image
-+bmaptool create -o disk.img.bmap disk.img
-+bmaptool copy disk.img copy.img
-+cmp disk.img copy.img
-diff --git a/support/testing/tests/package/test_bmap_tools.py b/support/testing/tests/package/test_bmap_tools.py
+@@ -2638,6 +2639,7 @@ F:	configs/stm32mp157c_dk2_defconfig
+ F:	package/android-tools/
+ F:	package/b43-firmware/
+ F:	package/b43-fwcutter/
++F:	package/bmap-tools/
+ F:	package/c-periphery/
+ F:	package/cdrkit/
+ F:	package/cifs-utils/
+diff --git a/package/Config.in b/package/Config.in
+index 35e6d4d493..22947edf2c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -196,6 +196,7 @@ menu "Filesystem and flash utilities"
+ 	source "package/aufs/Config.in"
+ 	source "package/aufs-util/Config.in"
+ 	source "package/autofs/Config.in"
++	source "package/bmap-tools/Config.in"
+ 	source "package/btrfs-progs/Config.in"
+ 	source "package/cifs-utils/Config.in"
+ 	source "package/cpio/Config.in"
+diff --git a/package/bmap-tools/Config.in b/package/bmap-tools/Config.in
 new file mode 100644
-index 0000000000..e8802fc057
+index 0000000000..83b4d92786
 --- /dev/null
-+++ b/support/testing/tests/package/test_bmap_tools.py
-@@ -0,0 +1,61 @@
-+import os
-+import infra
++++ b/package/bmap-tools/Config.in
+@@ -0,0 +1,44 @@
++config BR2_PACKAGE_BMAP_TOOLS
++	bool "bmap-tools"
++	depends on BR2_PACKAGE_PYTHON3 || BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime, pkg_resources
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	help
++	  Tool to flash image files to block devices using the block map
++	  bmaptool is a generic tool for creating the block map (bmap)
++	  for a file, and copying files using the block map. The idea is
++	  that large file containing unused blocks, like raw system
++	  image files, can be copied or flashed a lot faster with
++	  bmaptool than with traditional tools like "dd" or "cp".
 +
-+from infra.basetest import BRTest
++	  Relevant optional dependencies:
 +
++	  - Busybox compiled with CONFIG_BZIP2, or BR2_PACKAGE_BZIP2,
++	    to support bz2 compressed images
 +
-+class TestBmapTools(BRTest):
-+    __test__ = False
-+    sample_script = "tests/package/sample_bmap_tools.sh"
-+    copy_script = 'tests/package/copy-sample-script-to-target.sh'
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a8=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_PACKAGE_BMAP_TOOLS=y
-+        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
-+        BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="65536"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_PACKAGE_UTIL_LINUX=y
-+        BR2_PACKAGE_UTIL_LINUX_FALLOCATE=y
-+        BR2_PACKAGE_E2FSPROGS=y
-+        BR2_PACKAGE_UTIL_LINUX_LIBUUID=y
-+        """.format(infra.filepath(copy_script),
-+                   infra.filepath(sample_script))
-+    timeout = 60
++	  - BR2_PACKAGE_PIGZ for optimized gzip decompression
 +
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           kernel_cmdline=["root=/dev/mmcblk0",
-+                                           "rootfstype=ext4"],
-+                           options=["-drive", "file={},if=sd,format=raw".format(img)])
-+        self.emulator.login()
++	  - Busybox compiled with CONFIG_LZOP, or BR2_PACKAGE_LZOP, to
++	    support lzo compressed images.
 +
-+    def test_run(self):
-+        self.login()
-+        cmd = "/root/{}".format(os.path.basename(self.sample_script))
-+        _, exit_code = self.emulator.run(cmd, timeout=20)
-+        self.assertEqual(exit_code, 0)
++	  - BR2_PACKAGE_ZIP to support zip compressed images
 +
++	  - BR2_PACKAGE_LZ4 to support lz4 compressed images
 +
-+class TestPy2BmapTools(TestBmapTools):
-+    __test__ = True
-+    config = TestBmapTools.config + \
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        """
++	  - BR2_PACKAGE_ZSTD to support zstd compressed images
 +
++	  - Busybox compiled CONFIG_FEATURE_SEAMLESS_* or
++	    BR2_PACKAGE_TAR to support tar compressed images
 +
-+class TestPy3BmapTools(TestBmapTools):
-+    __test__ = True
-+    config = TestBmapTools.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        """
++	  - BR2_PACKAGE_OPENSSH to retrieve images over SSH.
++
++	  - BR2_PACKAGE_SSHPASS to retrieve images over SSH if
++	    password authentication is used.
++
++	  Image signature verification is not supported as
++	  python-gpgme is not available. Optimized bzip2 decompression
++	  is not supported as pbzip2 is not available.
++
++	  https://github.com/intel/bmap-tools
+diff --git a/package/bmap-tools/bmap-tools.hash b/package/bmap-tools/bmap-tools.hash
+new file mode 100644
+index 0000000000..82a570ecac
+--- /dev/null
++++ b/package/bmap-tools/bmap-tools.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  0658afb972e7221aa16fece3f84e29e5102e901c929253d7fb6040bde28243f7  bmap-tools-3.6.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/bmap-tools/bmap-tools.mk b/package/bmap-tools/bmap-tools.mk
+new file mode 100644
+index 0000000000..c8b41c225f
+--- /dev/null
++++ b/package/bmap-tools/bmap-tools.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# bmap-tools
++#
++################################################################################
++
++BMAP_TOOLS_VERSION = 3.6
++BMAP_TOOLS_SITE = $(call github,intel,bmap-tools,v$(BMAP_TOOLS_VERSION))
++BMAP_TOOLS_LICENSE = GPL-2.0
++BMAP_TOOLS_LICENSE_FILES = COPYING
++BMAP_TOOLS_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
