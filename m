@@ -1,44 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Jun 2021 08:51:21 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-augeas: new package
-In-Reply-To: <20210624215353.GI2852@scaer>
-References: <20210621203456.361929-1-thomas.petazzoni@bootlin.com>
- <20210624215353.GI2852@scaer>
-Message-ID: <20210625085121.3c682b60@windsurf>
+From: Herve Codina <herve.codina@bootlin.com>
+Date: Fri, 25 Jun 2021 09:15:48 +0200
+Subject: [Buildroot] [PATCH 06/15] package/pkg-generic.mk: Introduce
+ <PKG>_PER_PACKAGE_TWEAK_HOOKS
+In-Reply-To: <20210623144020.4f187c53@windsurf>
+References: <20210621141130.48654-1-herve.codina@bootlin.com>
+ <20210621141130.48654-7-herve.codina@bootlin.com>
+ <20210622203909.GJ44262@scaer> <20210623144020.4f187c53@windsurf>
+Message-ID: <20210625091548.6d88bc00@fedora>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 24 Jun 2021 23:53:53 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Hi,
 
-> > +PYTHON_AUGEAS_VERSION = 1.1.0
-> > +PYTHON_AUGEAS_SITE = $(call github,hercules-team,python-augeas,v$(PYTHON_AUGEAS_VERSION))
-> > +PYTHON_AUGEAS_SETUP_TYPE = setuptools
-> > +PYTHON_AUGEAS_LICENSE = LGPL-2.1+
-> > +PYTHON_AUGEAS_LICENSE_FILES = COPYING
-> > +PYTHON_AUGEAS_DEPENDENCIES = augeas host-python-cffi host-pkgconf
-> > +# This will tell python-augeas to not call xml2-config, and instead
-> > +# use pkg-config to find libxml2. libxml2 is an indirect dependency of
-> > +# augeas, which is why it's not in our dependencies. It's odd that
-> > +# python-augeas searches for libxml2, but that's what it
-> > +# does. Question asked in the pull request at
-> > +# https://github.com/hercules-team/python-augeas/pull/49.  
+On Wed, 23 Jun 2021 14:40:20 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+
+> On Tue, 22 Jun 2021 22:39:09 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 > 
-> They've now replied, and I am not sure I followed... Augeas' .pc does
-> not yield libxml2' CFLAGS, because it is a Requires.Private.
+> > Ah, yes, yes, now I see. OK, so here's a suggestion for a commit log:
+> > 
+> >     package/pkg-generic: add early pre-configure hooks
+> > 
+> >     Currently, when a package needs to modify files it inherits from its
+> >     dependencies, because they contain paths, we can only do that in a
+> >     pre- or post-configure hook.
+> > 
+> >     However, whatever is done as part of those hooks, will be accounted
+> >     to the package itself, and thus will trigger file-overwrite detection.
+> > 
+> >     So, we need a way to be able to actually modify files before we
+> >     start monitoring for them.  
 > 
-> So, why does python-augeas need the CFLAGS from libxml2?
+> "before we start monitoring changes in those files".
+> 
+> >     We introduce a new set of hooks that an individual package can set,
+> >     or that a package infra can set, and that are called right before
+> >     we snapshot the state of target, and host (to which staging belongs),  
+> 
+> But yes, you've perfectly understood the problem being solved here!
+> 
 
-Yeah, I was also confused by their reply, and didn't investigate
-further at this point.
+This will be the new commit log.
 
-Thanks for looking at the patch and merging!
+Herv?
 
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
+Herv? Codina, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
