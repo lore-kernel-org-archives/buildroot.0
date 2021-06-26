@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Jun 2021 17:18:30 +0200
-Subject: [Buildroot] [PATCH v3 3/5] support/testing/tests/boot/test_atf:
- update U-Boot in TestATFAllwinner
-In-Reply-To: <20210625193318.635449-4-geomatsi@gmail.com>
+Date: Sat, 26 Jun 2021 17:19:56 +0200
+Subject: [Buildroot] [PATCH v3 4/5]
+ configs/orangepi_zero_plus2_defconfig: switch to mainline TF-A
+In-Reply-To: <20210625193318.635449-5-geomatsi@gmail.com>
 References: <20210625193318.635449-1-geomatsi@gmail.com>
- <20210625193318.635449-4-geomatsi@gmail.com>
-Message-ID: <20210626151830.GK104638@scaer>
+ <20210625193318.635449-5-geomatsi@gmail.com>
+Message-ID: <20210626151956.GL104638@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,57 +15,43 @@ To: buildroot@busybox.net
 Sergey, All,
 
 On 2021-06-25 22:33 +0300, Sergey Matyukevich spake thusly:
-> Bump U-Boot version in TestATFAllwinner. Updating U-Boot version to
-> 2021.04 requires the following two changes.
-> 
-> First, after switching to binman, u-boot.itb is no more generated for
-> 64-bit sunxi boards. Combined u-boot-sunxi-with-spl.bin image should
-> be used instead. This image contains SPL, U-Boot, and FIT image,
-> where FIT image contains other binaries such as BL31 and SCP.
-> 
-> Second, new U-Boot enables support for System Control Processor (SCP)
-> firmware. SCP firmware is included by default into FIT image in the
-> combined u-boot-sunxi-with-spl.bin binary. When SCP is not available
-> or not needed, it should be explicitly disabled by pointing to an
-> empty file. Support for Allwinner SCP firmware is not yet available
-> neither in Buildroot nor in mainline kernel. So disable it for now
-> using custom U-Boot build options.
-> 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> Switch to mainline TF-A that provides basic support for H5 and A64.
+> Note that Allwinner platform layer in TF-A does not provide support
+> for GCC stack protection, so make sure to disable this TF-A feature.
 
-Applied to master, thanks.
+Actually, this was not needed at all, because the toolchain used by this
+defconfig does not support SSP to begin with. So I dropped both this
+part of the commit log, and the option (which was renamed anyway).
+
+Applied to master, with the above changes, thanks.
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 > ---
->  support/testing/tests/boot/test_atf.py | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+>  configs/orangepi_zero_plus2_defconfig | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
-> index 8c29fbd594..915e0a5093 100644
-> --- a/support/testing/tests/boot/test_atf.py
-> +++ b/support/testing/tests/boot/test_atf.py
-> @@ -42,16 +42,15 @@ class TestATFAllwinner(infra.basetest.BRTest):
->          BR2_TARGET_UBOOT=y
->          BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->          BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-> +        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
->          BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
->          BR2_TARGET_UBOOT_NEEDS_DTC=y
->          BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
->          BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
->          BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-> -        BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> -        BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
->          BR2_TARGET_UBOOT_SPL=y
-> -        BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
-> +        BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-> +        BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
->          """
+> diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
+> index aa4c5c9413..203d86e7fc 100644
+> --- a/configs/orangepi_zero_plus2_defconfig
+> +++ b/configs/orangepi_zero_plus2_defconfig
+> @@ -8,10 +8,10 @@ BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
 >  
->      def test_run(self):
+>  # Firmware
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_NONE=y
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+>  
+>  # Bootloader
 > -- 
 > 2.32.0
 > 
