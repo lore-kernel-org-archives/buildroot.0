@@ -1,43 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Jun 2021 15:03:16 +0200
-Subject: [Buildroot] [git commit] package/gesftpserver: fix build without
- Python
-Message-ID: <20210626123120.1FA99801B3@busybox.osuosl.org>
+Date: Sat, 26 Jun 2021 15:04:24 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libpcap: bump to version 1.10.1
+In-Reply-To: <4b481c4db9adfd8660b6de8a4b92c3774542ff78.1624532135.git.baruch@tkos.co.il>
+References: <4b481c4db9adfd8660b6de8a4b92c3774542ff78.1624532135.git.baruch@tkos.co.il>
+Message-ID: <20210626150424.7ab4f58c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=422fd73fadfbe33523e1687f90bbfecd3f7ab5d5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 24 Jun 2021 13:55:34 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-The build of gesftserver in an environment without Python fails with:
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/libpcap/libpcap.hash | 4 ++--
+>  package/libpcap/libpcap.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-checking for Python 2.4 or better... configure: error: cannot find Python 2.4 or better
+Both applied, thanks!
 
-However, it turns out that Python is only needed for tests, which we
-don't run/use in Buildroot, so we can safely build gesftpserver
-without Python.
-
-Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gesftpserver/gesftpserver.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/gesftpserver/gesftpserver.mk b/package/gesftpserver/gesftpserver.mk
-index 85511a3c97..20ad92d25a 100644
---- a/package/gesftpserver/gesftpserver.mk
-+++ b/package/gesftpserver/gesftpserver.mk
-@@ -23,6 +23,10 @@ GESFTPSERVER_DEPENDENCIES += \
- 	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
- 	$(if $(BR2_PACKAGE_OPENSSH),openssh)
- 
-+# Python on the host is only used for tests, which we don't use in
-+# Buildroot
-+GESFTPSERVER_CONF_ENV += rjk_cv_python24=false
-+
- # openssh/dropbear looks here
- define GESFTPSERVER_ADD_SYMLINK
- 	ln -sf gesftpserver $(TARGET_DIR)/usr/libexec/sftp-server
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
