@@ -1,101 +1,98 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Jun 2021 17:10:42 +0200
-Subject: [Buildroot] [git commit] configs/orangepi-zero-plus2: bump BSP
- versions
-Message-ID: <20210626144011.BB8A78E368@busybox.osuosl.org>
+Date: Sat, 26 Jun 2021 17:10:25 +0200
+Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: add SSP option
+Message-ID: <20210626144011.82B4C8113D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f579afc3930506311068a6f2575a487a5bc8c8e1
+commit: https://git.buildroot.net/buildroot/commit/?id=cf176128ec4ad60c29c8828cab1887f69edb9473
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump U-Boot and Linux kernel versions. Updating U-Boot to 2021.04
-requires the following two changes.
+Buildroot sets appropriate ENABLE_STACK_PROTECTOR build flag value based
+on the toolchain global BR2_SSP_* options, and all packages are built
+with that setting.
 
-First, after switching to binman, u-boot.itb is no more generated for
-64-bit sunxi boards. Combined u-boot-sunxi-with-spl.bin image should
-be used instead. This image contains SPL, U-Boot, and FIT image,
-where FIT image contains other binaries such as BL31 and SCP.
+However it might not be always convenient to automatically infer TF-A
+stack protection from the toolchain features. For instance, secure
+memory constraints may become an issue and all the extra TF-A features
+need to be tuned or disabled in order to shrink TF-A firmware image.
 
-Second, new U-Boot enables support for System Control Processor (SCP)
-firmware. SCP firmware is included by default into FIT image in the
-combined u-boot-sunxi-with-spl.bin binary. When SCP is not available
-or not needed, it should be explicitly disabled by pointing to an
-empty file. Support for Allwinner SCP firmware is not yet available
-neither in Buildroot nor in mainline kernel. So disable it for now
-using custom U-Boot build options.
+Besides, for any value other than "none", TF-A platform specific hook
+'plat_get_stack_protector_canary' must be implemented. However this hook
+is not implemented by all the platforms supported by TF-A. For instance,
+Allwinner currently does not provide such a hook.
+
+Add an new option that a user can toggle to enable or disable SSP in
+their ATF build. If enabled, the SSP level is automatically inherited
+from the global setting.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+[yann.morin.1998 at free.fr: simplify logic with a single boolean]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/orangepi/orangepi-zero-plus2/genimage.cfg | 10 ++--------
- configs/orangepi_zero_plus2_defconfig           | 11 +++++------
- 2 files changed, 7 insertions(+), 14 deletions(-)
+ boot/arm-trusted-firmware/Config.in               | 21 +++++++++++++++++++++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 11 ++---------
+ 2 files changed, 23 insertions(+), 9 deletions(-)
 
-diff --git a/board/orangepi/orangepi-zero-plus2/genimage.cfg b/board/orangepi/orangepi-zero-plus2/genimage.cfg
-index 98ebf5b475..255acdbecb 100644
---- a/board/orangepi/orangepi-zero-plus2/genimage.cfg
-+++ b/board/orangepi/orangepi-zero-plus2/genimage.cfg
-@@ -19,15 +19,9 @@ image sdcard.img {
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index a5a8c5bfc3..981873fce5 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -188,4 +188,25 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN
+ 	  Select this option if your ATF board configuration requires
+ 	  an ARM32 bare metal toolchain to be available.
  
- 	partition spl {
- 		in-partition-table = "no"
--		image = "sunxi-spl.bin"
-+		image = "u-boot-sunxi-with-spl.bin"
- 		offset = 8192
--	}
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP
++	bool "Build with SSP"
++	depends on BR2_TOOLCHAIN_HAS_SSP
++	depends on !BR2_SSP_NONE
++	default y
++	help
++	  Say 'y' here if you want to build ATF with SSP.
++
++	  Your board must have SSP support in ATF: it must have an
++	  implementation for plat_get_stack_protector_canary().
++
++	  If you say 'y', the SSP level will be the level selected
++	  by the global SSP setting.
++
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_LEVEL
++	string
++	default "none"    if !BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP
++	default "default" if BR2_SSP_REGULAR
++	default "strong"  if BR2_SSP_STRONG
++	default "all"     if BR2_SSP_ALL
++
+ endif
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 279658712b..1f08f5dabb 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -51,7 +51,8 @@ endif
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES)) \
+-	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM)
++	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM) \
++	ENABLE_STACK_PROTECTOR=$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_LEVEL))
+ 
+ ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARM_ARCH_MAJOR=7
+@@ -109,14 +110,6 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
+ ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
+ endif
+ 
+-ifeq ($(BR2_SSP_REGULAR),y)
+-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=default
+-else ifeq ($(BR2_SSP_STRONG),y)
+-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=strong
+-else ifeq ($(BR2_SSP_ALL),y)
+-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=all
+-endif
 -
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot.itb"
--		offset = 40K
--		size = 1024000 # 1MB - 40K + 16K(GPT)
-+		size = 1056768 # 1MB - 8K + 16K(GPT)
- 	}
+ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
  
- 	partition boot {
-diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
-index 3085dfe08c..da2d3b4178 100644
---- a/configs/orangepi_zero_plus2_defconfig
-+++ b/configs/orangepi_zero_plus2_defconfig
-@@ -2,7 +2,7 @@ BR2_aarch64=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_VFPV4=y
- 
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
- 
-@@ -17,16 +17,15 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero_plus2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
- BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-plus2/boot.cmd"
-@@ -34,7 +33,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-pl
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.10"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.10"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-zero-plus2"
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
