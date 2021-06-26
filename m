@@ -1,85 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Jun 2021 22:16:40 +0200
-Subject: [Buildroot] [git commit] support/testing/tests: fix tests to use
- infra.img_round_power2()
-Message-ID: <20210626194802.05C46813F6@busybox.osuosl.org>
+Date: Sat, 26 Jun 2021 22:17:07 +0200
+Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: fix coding-style
+Message-ID: <20210626194802.400588E436@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abe32cfdf0dda17af10d290fe1cb33c0fc60a076
+commit: https://git.buildroot.net/buildroot/commit/?id=11fffded3c575839504d19d14803840901985b67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-All the tests that are using if=sd as a Qemu options are changed to
-use infra.img_round_power2() instead of simply extending the size of
-the image to the next MB boundary, which is not longer sufficient with
-Qemu >= 5.1.
+Fix coding style issue introduced in cf176128ec4a (boot/arm-trusted-firmware:
+add SSP option)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998 at free.fr: drop now-useless imports]
+Fixes: cf176128ec4ad60c29c8828cab1887f69edb9473
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/tests/core/test_file_capabilities.py | 3 +--
- support/testing/tests/fs/test_squashfs.py            | 3 +--
- support/testing/tests/init/base.py                   | 3 +--
- 3 files changed, 3 insertions(+), 6 deletions(-)
+ boot/arm-trusted-firmware/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/core/test_file_capabilities.py b/support/testing/tests/core/test_file_capabilities.py
-index b9ece18d7b..d797769ddd 100644
---- a/support/testing/tests/core/test_file_capabilities.py
-+++ b/support/testing/tests/core/test_file_capabilities.py
-@@ -1,5 +1,4 @@
- import os
--import subprocess
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index 981873fce5..7e46a10270 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -190,9 +190,9 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN
  
- import infra.basetest
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP
+ 	bool "Build with SSP"
++	default y
+ 	depends on BR2_TOOLCHAIN_HAS_SSP
+ 	depends on !BR2_SSP_NONE
+-	default y
+ 	help
+ 	  Say 'y' here if you want to build ATF with SSP.
  
-@@ -28,7 +27,7 @@ class TestFileCapabilities(infra.basetest.BRTest):
- 
-     def test_run(self):
-         img = os.path.join(self.builddir, "images", "rootfs.squashfs")
--        subprocess.call(["truncate", "-s", "%1M", img])
-+        infra.img_round_power2(img)
- 
-         self.emulator.boot(arch="armv7",
-                            kernel=os.path.join(self.builddir, "images", "zImage"),
-diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
-index 3e58a12ab7..745f93ee55 100644
---- a/support/testing/tests/fs/test_squashfs.py
-+++ b/support/testing/tests/fs/test_squashfs.py
-@@ -1,5 +1,4 @@
- import os
--import subprocess
- 
- import infra.basetest
- 
-@@ -22,7 +21,7 @@ class TestSquashfs(infra.basetest.BRTest):
-         self.assertEqual(out[3], "Compression lz4")
- 
-         img = os.path.join(self.builddir, "images", "rootfs.squashfs")
--        subprocess.call(["truncate", "-s", "%1M", img])
-+        infra.img_round_power2(img)
- 
-         self.emulator.boot(arch="armv7",
-                            kernel="builtin",
-diff --git a/support/testing/tests/init/base.py b/support/testing/tests/init/base.py
-index 80f7731ba3..6a85b87783 100644
---- a/support/testing/tests/init/base.py
-+++ b/support/testing/tests/init/base.py
-@@ -1,5 +1,4 @@
- import os
--import subprocess
- import infra.basetest
- 
- 
-@@ -7,7 +6,7 @@ class InitSystemBase(infra.basetest.BRTest):
- 
-     def start_emulator(self, fs_type, kernel=None, dtb=None, init=None):
-         img = os.path.join(self.builddir, "images", "rootfs.{}".format(fs_type))
--        subprocess.call(["truncate", "-s", "%1M", img])
-+        infra.img_round_power2(img)
- 
-         options = ["-drive",
-                    "file={},if=sd,format=raw".format(img),
