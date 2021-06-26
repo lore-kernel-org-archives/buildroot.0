@@ -1,48 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Jun 2021 14:33:35 +0200
-Subject: [Buildroot] [git commit] package/libva-utils: bump version to 2.12.0
-Message-ID: <20210626120142.D0FA88E144@busybox.osuosl.org>
+Date: Sat, 26 Jun 2021 14:33:42 +0200
+Subject: [Buildroot] [git commit] package/libva: bump version to 2.12.0
+Message-ID: <20210626120142.E02578025E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6daccd82066a1c223cbaf3c07e67704fc22411de
+commit: https://git.buildroot.net/buildroot/commit/?id=55bd2a7068b8d9b350e3562a752151e9c24c9031
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://github.com/intel/libva-utils/blob/master/NEWS
+Release notes: https://github.com/intel/libva/blob/master/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libva-utils/libva-utils.hash | 6 +++---
- package/libva-utils/libva-utils.mk   | 2 +-
+ package/libva/libva.hash | 6 +++---
+ package/libva/libva.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
-index 23d1c7677f..967c350373 100644
---- a/package/libva-utils/libva-utils.hash
-+++ b/package/libva-utils/libva-utils.hash
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 60ab284d86..b6531b2c57 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
 @@ -1,5 +1,5 @@
--# From https://github.com/intel/libva-utils/releases/download/2.11.1/libva-utils-2.11.1.tar.bz2.sha1sum
--sha1  89988122f76e8c0b3645006b60dfdbd9a3ae2e8c  libva-utils-2.11.1.tar.bz2
-+# From https://github.com/intel/libva-utils/releases/download/2.12.0/libva-utils-2.12.0.tar.bz2.sha1sum
-+sha1  734ad8d4e39bf90b5670224272489f1745024ae2  libva-utils-2.12.0.tar.bz2
+-# From https://github.com/intel/libva/releases/download/2.11.0/libva-2.11.0.tar.bz2.sha1sum
+-sha1  35baa7667e8a51ca3d481786095469d38cacfb2f  libva-2.11.0.tar.bz2
++# From https://github.com/intel/libva/releases/download/2.12.0/libva-2.12.0.tar.bz2.sha1sum
++sha1  9704197d1d909d727f2e180672d287070576a923  libva-2.12.0.tar.bz2
  # Locally computed
--sha256  9e5a6138869c79bdc0cd0598b6a6763110360f301e7294e5270704cb38bf53fb  libva-utils-2.11.1.tar.bz2
-+sha256  bbe49e68fbdf379acc769e4c1680a76be3e2b48020ca320edafaf7235b62cc44  libva-utils-2.12.0.tar.bz2
- sha256  c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
-diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-index 181af30337..c75091c7c7 100644
---- a/package/libva-utils/libva-utils.mk
-+++ b/package/libva-utils/libva-utils.mk
+-sha256  6e361117038b571ad4741d38c9280db8c140b17e76e8c01fc7a4d608d3ed7d5d  libva-2.11.0.tar.bz2
++sha256  d3f4873715077a8c969c9bfe4ba8455a133353176be0ffe0c41ffd4155c9a8c8  libva-2.12.0.tar.bz2
+ sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index f24a504445..70cf4fee91 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_UTILS_VERSION = 2.11.1
-+LIBVA_UTILS_VERSION = 2.12.0
- LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
- LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
- LIBVA_UTILS_LICENSE = MIT
+-LIBVA_VERSION = 2.11.0
++LIBVA_VERSION = 2.12.0
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
+ LIBVA_LICENSE = MIT
