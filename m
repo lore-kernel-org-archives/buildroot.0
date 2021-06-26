@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Jun 2021 14:53:41 +0200
-Subject: [Buildroot] [git commit] package/tcpdump: bump to version 4.99.1
-Message-ID: <20210626123120.01FCC80288@busybox.osuosl.org>
+Date: Sat, 26 Jun 2021 15:03:16 +0200
+Subject: [Buildroot] [git commit] package/gesftpserver: fix build without
+ Python
+Message-ID: <20210626123120.1FA99801B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f8e7b388589888704f84dc17bb8d1146de668ab
+commit: https://git.buildroot.net/buildroot/commit/?id=422fd73fadfbe33523e1687f90bbfecd3f7ab5d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+The build of gesftserver in an environment without Python fails with:
+
+checking for Python 2.4 or better... configure: error: cannot find Python 2.4 or better
+
+However, it turns out that Python is only needed for tests, which we
+don't run/use in Buildroot, so we can safely build gesftpserver
+without Python.
+
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tcpdump/tcpdump.hash | 4 ++--
- package/tcpdump/tcpdump.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gesftpserver/gesftpserver.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-index 4aea5b7cb5..1990aa797b 100644
---- a/package/tcpdump/tcpdump.hash
-+++ b/package/tcpdump/tcpdump.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature at
--# https://www.tcpdump.org/release/tcpdump-4.99.0.tar.gz.sig
-+# https://www.tcpdump.org/release/tcpdump-4.99.1.tar.gz.sig
- # using key 1F166A5742ABB9E0249A8D30E089DEF1D9C15D0D
--sha256  8cf2f17a9528774a7b41060323be8b73f76024f7778f59c34efa65d49d80b842  tcpdump-4.99.0.tar.gz
-+sha256  79b36985fb2703146618d87c4acde3e068b91c553fb93f021a337f175fd10ebe  tcpdump-4.99.1.tar.gz
- sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index c562034a4e..7741c3b58e 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gesftpserver/gesftpserver.mk b/package/gesftpserver/gesftpserver.mk
+index 85511a3c97..20ad92d25a 100644
+--- a/package/gesftpserver/gesftpserver.mk
++++ b/package/gesftpserver/gesftpserver.mk
+@@ -23,6 +23,10 @@ GESFTPSERVER_DEPENDENCIES += \
+ 	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
+ 	$(if $(BR2_PACKAGE_OPENSSH),openssh)
  
--TCPDUMP_VERSION = 4.99.0
-+TCPDUMP_VERSION = 4.99.1
- TCPDUMP_SITE = https://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3-Clause
- TCPDUMP_LICENSE_FILES = LICENSE
++# Python on the host is only used for tests, which we don't use in
++# Buildroot
++GESFTPSERVER_CONF_ENV += rjk_cv_python24=false
++
+ # openssh/dropbear looks here
+ define GESFTPSERVER_ADD_SYMLINK
+ 	ln -sf gesftpserver $(TARGET_DIR)/usr/libexec/sftp-server
