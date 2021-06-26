@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Jun 2021 17:19:56 +0200
-Subject: [Buildroot] [PATCH v3 4/5]
- configs/orangepi_zero_plus2_defconfig: switch to mainline TF-A
-In-Reply-To: <20210625193318.635449-5-geomatsi@gmail.com>
+Date: Sat, 26 Jun 2021 17:20:12 +0200
+Subject: [Buildroot] [PATCH v3 5/5] configs/orangepi-zero-plus2: bump
+ BSP versions
+In-Reply-To: <20210625193318.635449-6-geomatsi@gmail.com>
 References: <20210625193318.635449-1-geomatsi@gmail.com>
- <20210625193318.635449-5-geomatsi@gmail.com>
-Message-ID: <20210626151956.GL104638@scaer>
+ <20210625193318.635449-6-geomatsi@gmail.com>
+Message-ID: <20210626152012.GM104638@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,43 +15,98 @@ To: buildroot@busybox.net
 Sergey, All,
 
 On 2021-06-25 22:33 +0300, Sergey Matyukevich spake thusly:
-> Switch to mainline TF-A that provides basic support for H5 and A64.
-> Note that Allwinner platform layer in TF-A does not provide support
-> for GCC stack protection, so make sure to disable this TF-A feature.
+> Bump U-Boot and Linux kernel versions. Updating U-Boot to 2021.04
+> requires the following two changes.
+> 
+> First, after switching to binman, u-boot.itb is no more generated for
+> 64-bit sunxi boards. Combined u-boot-sunxi-with-spl.bin image should
+> be used instead. This image contains SPL, U-Boot, and FIT image,
+> where FIT image contains other binaries such as BL31 and SCP.
+> 
+> Second, new U-Boot enables support for System Control Processor (SCP)
+> firmware. SCP firmware is included by default into FIT image in the
+> combined u-boot-sunxi-with-spl.bin binary. When SCP is not available
+> or not needed, it should be explicitly disabled by pointing to an
+> empty file. Support for Allwinner SCP firmware is not yet available
+> neither in Buildroot nor in mainline kernel. So disable it for now
+> using custom U-Boot build options.
+> 
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
-Actually, this was not needed at all, because the toolchain used by this
-defconfig does not support SSP to begin with. So I dropped both this
-part of the commit log, and the option (which was renamed anyway).
-
-Applied to master, with the above changes, thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 > ---
->  configs/orangepi_zero_plus2_defconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  board/orangepi/orangepi-zero-plus2/genimage.cfg | 10 ++--------
+>  configs/orangepi_zero_plus2_defconfig           | 11 +++++------
+>  2 files changed, 7 insertions(+), 14 deletions(-)
 > 
+> diff --git a/board/orangepi/orangepi-zero-plus2/genimage.cfg b/board/orangepi/orangepi-zero-plus2/genimage.cfg
+> index 98ebf5b475..255acdbecb 100644
+> --- a/board/orangepi/orangepi-zero-plus2/genimage.cfg
+> +++ b/board/orangepi/orangepi-zero-plus2/genimage.cfg
+> @@ -19,15 +19,9 @@ image sdcard.img {
+>  
+>  	partition spl {
+>  		in-partition-table = "no"
+> -		image = "sunxi-spl.bin"
+> +		image = "u-boot-sunxi-with-spl.bin"
+>  		offset = 8192
+> -	}
+> -
+> -	partition u-boot {
+> -		in-partition-table = "no"
+> -		image = "u-boot.itb"
+> -		offset = 40K
+> -		size = 1024000 # 1MB - 40K + 16K(GPT)
+> +		size = 1056768 # 1MB - 8K + 16K(GPT)
+>  	}
+>  
+>  	partition boot {
 > diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
-> index aa4c5c9413..203d86e7fc 100644
+> index 203d86e7fc..75ddbf1b55 100644
 > --- a/configs/orangepi_zero_plus2_defconfig
 > +++ b/configs/orangepi_zero_plus2_defconfig
-> @@ -8,10 +8,10 @@ BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
+> @@ -2,7 +2,7 @@ BR2_aarch64=y
+>  BR2_cortex_a53=y
+>  BR2_ARM_FPU_VFPV4=y
 >  
->  # Firmware
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_NONE=y
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
+>  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+>  BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
 >  
->  # Bootloader
+> @@ -18,16 +18,15 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero_plus2"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+>  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+>  BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+> -BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> -BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+>  BR2_TARGET_UBOOT_SPL=y
+> -BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
+> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+> +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
+>  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+>  BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+>  BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-plus2/boot.cmd"
+> @@ -35,7 +34,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-pl
+>  # Kernel
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.10"
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.10"
+>  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-zero-plus2"
 > -- 
 > 2.32.0
 > 
