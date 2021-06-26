@@ -1,48 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Jun 2021 14:33:42 +0200
-Subject: [Buildroot] [git commit] package/libva: bump version to 2.12.0
-Message-ID: <20210626120142.E02578025E@busybox.osuosl.org>
+Date: Sat, 26 Jun 2021 14:34:36 +0200
+Subject: [Buildroot] [git commit] package/resiprocate: enable DES in openssl
+Message-ID: <20210626120233.585EB81412@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55bd2a7068b8d9b350e3562a752151e9c24c9031
+commit: https://git.buildroot.net/buildroot/commit/?id=56b9276ce85e113a191b76deae37c7c662a76a05
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://github.com/intel/libva/blob/master/NEWS
+resiprocate security backend assumes that if openssl is enabled that
+it provides DES support. However DES support in openssl has become
+optional since  commit a83d418 ("package/libopenssl: add option to
+enable some features").
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Select openssl DES support in wpa_supplicant Kconfig to avoid build
+failures.
+
+Fixes:
+http://autobuild.buildroot.net/results/f7def0d5706f9e6ab97accc4eaa5f512a11bcb4c
+
+Signed-off-by: Ryan Barnett <ryan.barnett@collins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libva/libva.hash | 6 +++---
- package/libva/libva.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/resiprocate/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 60ab284d86..b6531b2c57 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/intel/libva/releases/download/2.11.0/libva-2.11.0.tar.bz2.sha1sum
--sha1  35baa7667e8a51ca3d481786095469d38cacfb2f  libva-2.11.0.tar.bz2
-+# From https://github.com/intel/libva/releases/download/2.12.0/libva-2.12.0.tar.bz2.sha1sum
-+sha1  9704197d1d909d727f2e180672d287070576a923  libva-2.12.0.tar.bz2
- # Locally computed
--sha256  6e361117038b571ad4741d38c9280db8c140b17e76e8c01fc7a4d608d3ed7d5d  libva-2.11.0.tar.bz2
-+sha256  d3f4873715077a8c969c9bfe4ba8455a133353176be0ffe0c41ffd4155c9a8c8  libva-2.12.0.tar.bz2
- sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index f24a504445..70cf4fee91 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVA_VERSION = 2.11.0
-+LIBVA_VERSION = 2.12.0
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
- LIBVA_LICENSE = MIT
+diff --git a/package/resiprocate/Config.in b/package/resiprocate/Config.in
+index 509c11ffda..7561b7c86c 100644
+--- a/package/resiprocate/Config.in
++++ b/package/resiprocate/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_RESIPROCATE
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_C_ARES
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  reSIProcate is a framework that aims to fully implement the
+ 	  SIP protocol in first class C++. It is intended for use in
