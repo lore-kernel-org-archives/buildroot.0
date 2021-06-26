@@ -1,28 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Jun 2021 14:34:56 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libva-utils: bump version to
- 2.12.0
-In-Reply-To: <20210625060725.449924-1-bernd.kuhls@t-online.de>
-References: <20210625060725.449924-1-bernd.kuhls@t-online.de>
-Message-ID: <20210626143456.77772aa3@windsurf>
+Date: Sat, 26 Jun 2021 14:35:02 +0200
+Subject: [Buildroot] [PATCH] package/resiprocate: enable DES in openssl
+In-Reply-To: <20210624140813.206308-1-ryanbarnett3@gmail.com>
+References: <20210624140813.206308-1-ryanbarnett3@gmail.com>
+Message-ID: <20210626143502.5ac2f2b8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 25 Jun 2021 08:07:24 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Thu, 24 Jun 2021 09:08:13 -0500
+Ryan Barnett <ryanbarnett3@gmail.com> wrote:
 
-> Release notes: https://github.com/intel/libva-utils/blob/master/NEWS
+> From: Ryan Barnett <ryan.barnett@collins.com>
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> resiprocate security backend assumes that if openssl is enabled that
+> it provides DES support. However DES support in openssl has become
+> optional since  commit a83d418 ("package/libopenssl: add option to
+> enable some features").
+> 
+> Select openssl DES support in wpa_supplicant Kconfig to avoid build
+> failures.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/f7def0d5706f9e6ab97accc4eaa5f512a11bcb4c
+> 
+> Signed-off-by: Ryan Barnett <ryan.barnett@collins.com>
 > ---
->  package/libva-utils/libva-utils.hash | 6 +++---
->  package/libva-utils/libva-utils.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/resiprocate/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-Both applied to master, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
