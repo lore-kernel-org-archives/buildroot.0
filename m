@@ -1,42 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Jun 2021 22:17:07 +0200
-Subject: [Buildroot] [git commit] support/testing/tests/fs/test_ext: add
- missing "format" option for Qemu
-Message-ID: <20210626194802.2CA3E812F2@busybox.osuosl.org>
+Date: Sat, 26 Jun 2021 22:16:40 +0200
+Subject: [Buildroot] [git commit] support/testing/tests: fix tests to use
+ infra.img_round_power2()
+Message-ID: <20210626194802.05C46813F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f37e811cd1b25d2be6aecc3a3bf185a0bb3cdb1c
+commit: https://git.buildroot.net/buildroot/commit/?id=abe32cfdf0dda17af10d290fe1cb33c0fc60a076
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Will avoid the following warning:
-
-   WARNING: Image format was not specified for
-   '/home/thomas/projets/outputs/TestExt3/images/rootfs.ext3' and
-   probing guessed raw. Automatically detecting the format is
-   dangerous for raw images, write operations on block 0 will be
-   restricted. Specify the 'raw' format explicitly to remove the
-   restrictions.
+All the tests that are using if=sd as a Qemu options are changed to
+use infra.img_round_power2() instead of simply extending the size of
+the image to the next MB boundary, which is not longer sufficient with
+Qemu >= 5.1.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998 at free.fr: drop now-useless imports]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/tests/fs/test_ext.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/core/test_file_capabilities.py | 3 +--
+ support/testing/tests/fs/test_squashfs.py            | 3 +--
+ support/testing/tests/init/base.py                   | 3 +--
+ 3 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
-index 0fe8af7e6d..2a6e0c4274 100644
---- a/support/testing/tests/fs/test_ext.py
-+++ b/support/testing/tests/fs/test_ext.py
-@@ -31,7 +31,7 @@ def boot_img_and_check_fs_type(emulator, builddir, fs_type):
-                   kernel="builtin",
-                   kernel_cmdline=["root=/dev/mmcblk0",
-                                   "rootfstype={}".format(fs_type)],
--                  options=["-drive", "file={},if=sd".format(img)])
-+                  options=["-drive", "file={},if=sd,format=raw".format(img)])
-     emulator.login()
-     _, exit_code = emulator.run(CHECK_FS_TYPE_CMD.format(fs_type))
-     return exit_code
+diff --git a/support/testing/tests/core/test_file_capabilities.py b/support/testing/tests/core/test_file_capabilities.py
+index b9ece18d7b..d797769ddd 100644
+--- a/support/testing/tests/core/test_file_capabilities.py
++++ b/support/testing/tests/core/test_file_capabilities.py
+@@ -1,5 +1,4 @@
+ import os
+-import subprocess
+ 
+ import infra.basetest
+ 
+@@ -28,7 +27,7 @@ class TestFileCapabilities(infra.basetest.BRTest):
+ 
+     def test_run(self):
+         img = os.path.join(self.builddir, "images", "rootfs.squashfs")
+-        subprocess.call(["truncate", "-s", "%1M", img])
++        infra.img_round_power2(img)
+ 
+         self.emulator.boot(arch="armv7",
+                            kernel=os.path.join(self.builddir, "images", "zImage"),
+diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
+index 3e58a12ab7..745f93ee55 100644
+--- a/support/testing/tests/fs/test_squashfs.py
++++ b/support/testing/tests/fs/test_squashfs.py
+@@ -1,5 +1,4 @@
+ import os
+-import subprocess
+ 
+ import infra.basetest
+ 
+@@ -22,7 +21,7 @@ class TestSquashfs(infra.basetest.BRTest):
+         self.assertEqual(out[3], "Compression lz4")
+ 
+         img = os.path.join(self.builddir, "images", "rootfs.squashfs")
+-        subprocess.call(["truncate", "-s", "%1M", img])
++        infra.img_round_power2(img)
+ 
+         self.emulator.boot(arch="armv7",
+                            kernel="builtin",
+diff --git a/support/testing/tests/init/base.py b/support/testing/tests/init/base.py
+index 80f7731ba3..6a85b87783 100644
+--- a/support/testing/tests/init/base.py
++++ b/support/testing/tests/init/base.py
+@@ -1,5 +1,4 @@
+ import os
+-import subprocess
+ import infra.basetest
+ 
+ 
+@@ -7,7 +6,7 @@ class InitSystemBase(infra.basetest.BRTest):
+ 
+     def start_emulator(self, fs_type, kernel=None, dtb=None, init=None):
+         img = os.path.join(self.builddir, "images", "rootfs.{}".format(fs_type))
+-        subprocess.call(["truncate", "-s", "%1M", img])
++        infra.img_round_power2(img)
+ 
+         options = ["-drive",
+                    "file={},if=sd,format=raw".format(img),
