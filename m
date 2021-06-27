@@ -1,50 +1,75 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Jun 2021 08:19:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: bump version to 3.0.16
-Message-ID: <20210627061935.273446-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 27 Jun 2021 08:53:50 +0200
+Subject: [Buildroot] [PATCH] support/tests: fix squashfs test
+Message-ID: <20210627065350.23826-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://www.videolan.org/vlc/releases/3.0.16.html
+Commit 3cf2782906d5 (support/testing/infra/emulator.py: update pre-built
+kernels) bumped the default kernels used by the testing infra.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+However, the newer armv7 kernel (at least) no longer has support for
+lz4-compressed squashfs filesystems.
+
+This nreaks the squashfs test:
+
+    Filesystem uses "lz4" compression. This is not supported
+    List of all partitions:
+    1f00          131072 mtdblock0
+     (driver?)
+    1f01           32768 mtdblock1
+     (driver?)
+    b300            2048 mmcblk0
+     driver: mmcblk
+    No filesystem could mount root, tried:
+     squashfs
+
+    Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(179,0)
+
+Updating the kernel again is a little cumbersome, while fixing the
+actual test is relatively trivial, so this is what we do: we switch
+over to lzo, which is supported by the new kernel:
+
+    # zcat /proc/config.gz |grep SQUA
+    CONFIG_SQUASHFS=y
+    CONFIG_SQUASHFS_ZLIB=y
+    # CONFIG_SQUASHFS_LZ4 is not set
+    CONFIG_SQUASHFS_LZO=y
+    # CONFIG_SQUASHFS_XZ is not set
+
+Fixes: 3cf2782906d5cc05a3966c25518d2ce01f11afc8
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vlc/vlc.hash | 8 ++++----
- package/vlc/vlc.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ support/testing/tests/fs/test_squashfs.py | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 396c3a2ab1..468ec7df35 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,7 +1,7 @@
--# From https://get.videolan.org/vlc/3.0.14/vlc-3.0.14.tar.xz.sha256
--sha256  49b93e5b33deaa37060e6b24a98200cad70c407947f14eb2a8b6a0c64d8535a6  vlc-3.0.14.tar.xz
--# From https://get.videolan.org/vlc/3.0.14/vlc-3.0.14.tar.xz.sha1
--sha1  8a8613f16a9053668d7a7dcfa1e6d8be93af3e89  vlc-3.0.14.tar.xz
-+# From https://get.videolan.org/vlc/3.0.16/vlc-3.0.16.tar.xz.sha256
-+sha256  ffae35fc64f625c175571d2346bc5f6207be99762517f15423e74f18399410f6  vlc-3.0.16.tar.xz
-+# From https://get.videolan.org/vlc/3.0.16/vlc-3.0.16.tar.xz.sha1
-+sha1  e22ac839a09b5ead8992ae6aa8ea886364283e6a  vlc-3.0.16.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index c1e190099e..06fc650f6f 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
+index 745f93ee55..a914f5aac7 100644
+--- a/support/testing/tests/fs/test_squashfs.py
++++ b/support/testing/tests/fs/test_squashfs.py
+@@ -7,8 +7,7 @@ class TestSquashfs(infra.basetest.BRTest):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
+         BR2_TARGET_ROOTFS_SQUASHFS=y
+-        # BR2_TARGET_ROOTFS_SQUASHFS4_GZIP is not set
+-        BR2_TARGET_ROOTFS_SQUASHFS4_LZ4=y
++        BR2_TARGET_ROOTFS_SQUASHFS4_LZO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
+         """
  
--VLC_VERSION = 3.0.14
-+VLC_VERSION = 3.0.16
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+@@ -18,7 +17,7 @@ class TestSquashfs(infra.basetest.BRTest):
+         out = out.splitlines()
+         self.assertEqual(out[0],
+                          "Found a valid SQUASHFS 4:0 superblock on images/rootfs.squashfs.")
+-        self.assertEqual(out[3], "Compression lz4")
++        self.assertEqual(out[3], "Compression lzo")
+ 
+         img = os.path.join(self.builddir, "images", "rootfs.squashfs")
+         infra.img_round_power2(img)
 -- 
-2.30.2
+2.25.1
