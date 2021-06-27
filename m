@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Jun 2021 08:18:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/stellarium: bump version to 0.21.1
-Message-ID: <20210627061805.273240-1-bernd.kuhls@t-online.de>
+Date: Sun, 27 Jun 2021 08:19:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: bump version to 3.0.16
+Message-ID: <20210627061935.273446-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,38 +9,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Release notes:
-http://stellarium.org/release/2021/06/24/stellarium-0.21.1.html
+https://www.videolan.org/vlc/releases/3.0.16.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/stellarium/stellarium.hash | 4 ++--
- package/stellarium/stellarium.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/vlc/vlc.hash | 8 ++++----
+ package/vlc/vlc.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
-index b5290acc72..3bd1e6b3f2 100644
---- a/package/stellarium/stellarium.hash
-+++ b/package/stellarium/stellarium.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/Stellarium/stellarium/releases
--sha1  0ada184a15729abb1b02490cb92d055ff3b61d7e   stellarium-0.21.0.tar.gz
--sha256  977fcd6776a47d34b1646727853d15968a1410c34c8ba1b3e5cfbf24b5126f13  stellarium-0.21.0.tar.gz
-+sha1  cc0b2c450ecead1481317f6038512a6a52d32001  stellarium-0.21.1.tar.gz
-+sha256  072309c6bc48233b39884ae558b23764d0e08eabd96b014b53d780be11a33211  stellarium-0.21.1.tar.gz
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index 396c3a2ab1..468ec7df35 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,7 +1,7 @@
+-# From https://get.videolan.org/vlc/3.0.14/vlc-3.0.14.tar.xz.sha256
+-sha256  49b93e5b33deaa37060e6b24a98200cad70c407947f14eb2a8b6a0c64d8535a6  vlc-3.0.14.tar.xz
+-# From https://get.videolan.org/vlc/3.0.14/vlc-3.0.14.tar.xz.sha1
+-sha1  8a8613f16a9053668d7a7dcfa1e6d8be93af3e89  vlc-3.0.14.tar.xz
++# From https://get.videolan.org/vlc/3.0.16/vlc-3.0.16.tar.xz.sha256
++sha256  ffae35fc64f625c175571d2346bc5f6207be99762517f15423e74f18399410f6  vlc-3.0.16.tar.xz
++# From https://get.videolan.org/vlc/3.0.16/vlc-3.0.16.tar.xz.sha1
++sha1  e22ac839a09b5ead8992ae6aa8ea886364283e6a  vlc-3.0.16.tar.xz
  # Locally computed
- sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
-diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-index 936a07c4b3..20e0e9ffec 100644
---- a/package/stellarium/stellarium.mk
-+++ b/package/stellarium/stellarium.mk
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index c1e190099e..06fc650f6f 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STELLARIUM_VERSION = 0.21.0
-+STELLARIUM_VERSION = 0.21.1
- STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
- STELLARIUM_LICENSE = GPL-2.0+
- STELLARIUM_LICENSE_FILES = COPYING
+-VLC_VERSION = 3.0.14
++VLC_VERSION = 3.0.16
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
 -- 
 2.30.2
