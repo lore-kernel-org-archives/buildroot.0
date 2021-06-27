@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEA8CC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:59:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B2B3C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:59:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7B86160F94
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:59:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7B86160F94
+	by mail.kernel.org (Postfix) with ESMTPS id 25E1960F94
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:59:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 25E1960F94
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 47B5D4064E;
-	Tue,  3 Aug 2021 23:59:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2DCA60AA0;
+	Tue,  3 Aug 2021 23:59:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GYlFE2079dKT; Tue,  3 Aug 2021 23:59:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tmUI91VKlv1v; Tue,  3 Aug 2021 23:59:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5EAED405F6;
-	Tue,  3 Aug 2021 23:59:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 644F4600BB;
+	Tue,  3 Aug 2021 23:59:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AB2261BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:14:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1DD4F1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:14:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A9203406AE
+ by smtp2.osuosl.org (Postfix) with ESMTP id A9308406AD
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tbcfi904sc4I for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:07 +0000 (UTC)
+ with ESMTP id Si-a5hpJT3av for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CA44640686
+ by smtp2.osuosl.org (Postfix) with ESMTP id B83C14067E
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 1DEEE8827E; Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
+ id 0797E860D3; Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 29 Jun 2021 21:17:05 +0200
+Date: Sun, 27 Jun 2021 17:54:58 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 59db11c7c445ef8662163a80997aa71f760a0359
-X-Git-Newrev: ccff6bff09438d5a88c70fdebd5d80201fe9de50
+X-Git-Oldrev: e7f0408f496fbbfac8663c76d308b9f691e19e4a
+X-Git-Newrev: b31f7bc9587170855cd99769db87a5fb32b6724b
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210957.1DEEE8827E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fb-test-app: Install
- fb-test-string
+Message-Id: <20210803210957.0797E860D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] python: use system libffi for
+ host-python
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,30 +70,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ccff6bff09438d5a88c70fdebd5d80201fe9de50
+commit: https://git.buildroot.net/buildroot/commit/?id=b31f7bc9587170855cd99769db87a5fb32b6724b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-fb-test-app suite provides a simple app to draw text on a given frame buffer.
-Install it as well.
+python2 contains a bundled copy of libffi which is currently out of sync with
+the latest libffi release. There is an option to use a system libffi, buildroot
+already uses it for the target python2 build and for python3. In python3, the
+bundled copy doesn't exist anymore and the system-provided libffi is required.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+The bundled copy currently fails to build on aarch64 host due to a missing
+definition of AARCH64_CALL_CONTEXT_SIZE. This define was removed from the
+headers in recent libffi releases and the host compiler might be including the
+system headers before the bundled headers.
+
+To solve this and since buildroot already relies on system libffi for target
+python2 and python3 anyway, switch host python2 to use system libffi.
+
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Reviewed-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/fb-test-app/fb-test-app.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python/python.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/fb-test-app/fb-test-app.mk b/package/fb-test-app/fb-test-app.mk
-index 1be59a4207..f6e949015e 100644
---- a/package/fb-test-app/fb-test-app.mk
-+++ b/package/fb-test-app/fb-test-app.mk
-@@ -18,6 +18,7 @@ define FB_TEST_APP_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/rect $(TARGET_DIR)/usr/bin/fb-test-rect
- 	$(INSTALL) -D -m 0755 $(@D)/fb-test $(TARGET_DIR)/usr/bin/fb-test
- 	$(INSTALL) -D -m 0755 $(@D)/offset $(TARGET_DIR)/usr/bin/fb-test-offset
-+	$(INSTALL) -D -m 0755 $(@D)/fb-string $(TARGET_DIR)/usr/bin/fb-test-string
- endef
+diff --git a/package/python/python.mk b/package/python/python.mk
+index f4f9f8563b..ae99f382f9 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -24,6 +24,7 @@ HOST_PYTHON_CONF_OPTS += \
+ 	--disable-sqlite3 \
+ 	--disable-tk \
+ 	--with-expat=system \
++	--with-system-ffi \
+ 	--disable-curses \
+ 	--disable-codecs-cjk \
+ 	--disable-nis \
+@@ -56,7 +57,7 @@ HOST_PYTHON_MAKE = $(MAKE1)
  
- $(eval $(generic-package))
+ PYTHON_DEPENDENCIES = host-python libffi $(TARGET_NLS_DEPENDENCIES)
+ 
+-HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
++HOST_PYTHON_DEPENDENCIES = host-expat host-libffi host-zlib
+ 
+ ifeq ($(BR2_PACKAGE_HOST_PYTHON_SSL),y)
+ HOST_PYTHON_DEPENDENCIES += host-openssl
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
