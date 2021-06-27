@@ -1,31 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Jun 2021 17:56:52 +0200
-Subject: [Buildroot] [PATCH 1/2 v4] support/misc/gitlab-ci.yml.in
-In-Reply-To: <2dc3c5c61d8476256770c8f4b38bf687caa7ff59.1624802988.git.yann.morin.1998@free.fr>
-References: <cover.1624802988.git.yann.morin.1998@free.fr>
- <2dc3c5c61d8476256770c8f4b38bf687caa7ff59.1624802988.git.yann.morin.1998@free.fr>
-Message-ID: <20210627175652.2329f942@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 27 Jun 2021 15:57:43 +0000
+Subject: [Buildroot] [Bug 13661] host-python2 build fails on aarch64
+In-Reply-To: <bug-13661-163@https.bugs.busybox.net/>
+References: <bug-13661-163@https.bugs.busybox.net/>
+Message-ID: <bug-13661-163-IJqCDF1OYF@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=13661
 
-On Sun, 27 Jun 2021 16:09:58 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-> From: Romain Naour <romain.naour@gmail.com>
-> 
-> In a followup commit, the make command used to log and display the last
-> lines on error will be used in another job.
-> Factorize it by introducing .run_make template.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|REOPENED                    |RESOLVED
+         Resolution|---                         |FIXED
+                 CC|                            |yann.morin.1998 at free.fr
 
-The commit title.. is missing a commit title :-)
+--- Comment #6 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Christian, All,
 
-Thomas
+Thanks for the report.
+
+We believe this is now fixed with the patch you submitted, and which was just
+appiled as of commit b31f7bc958.
+
+Thank you!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
