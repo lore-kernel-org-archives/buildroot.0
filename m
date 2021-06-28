@@ -1,54 +1,52 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 28 Jun 2021 09:16:07 -0700
-Subject: [Buildroot] [PATCH 2/5] package/nginx: add stream_set_module support
+Date: Mon, 28 Jun 2021 09:16:08 -0700
+Subject: [Buildroot] [PATCH 3/5] package/nginx-naxsi: bump version to 1.3
 In-Reply-To: <20210628161610.3197763-1-aduskett@gmail.com>
 References: <20210628161610.3197763-1-aduskett@gmail.com>
-Message-ID: <20210628161610.3197763-3-aduskett@gmail.com>
+Message-ID: <20210628161610.3197763-4-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a new module in 1.20
+Other changes:
+  - Change license to GPL-3.0
+  - Change license file to LICENSE
+  - Update license hash in nginx-naxsi.hash
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/nginx/Config.in | 6 ++++++
- package/nginx/nginx.mk  | 4 ++++
- 2 files changed, 10 insertions(+)
+ package/nginx-naxsi/nginx-naxsi.hash | 4 ++--
+ package/nginx-naxsi/nginx-naxsi.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index 6ae790a949..1200b2bf4c 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -339,6 +339,12 @@ config BR2_PACKAGE_NGINX_STREAM_REALIP_MODULE
- 	help
- 	  Enable ngx_stream_realip_module
+diff --git a/package/nginx-naxsi/nginx-naxsi.hash b/package/nginx-naxsi/nginx-naxsi.hash
+index 1f289c56cd..bd3fcd1ae9 100644
+--- a/package/nginx-naxsi/nginx-naxsi.hash
++++ b/package/nginx-naxsi/nginx-naxsi.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	0a66dcadd32432460fab180be9f2efe24e911e3798917b2787ee710e02901eb4	nginx-naxsi-0.56.tar.gz
+-sha256	046812ddc8f250f85b5d6e04218c185849c618b309271ef9d8b01e92c6f7a6ac	naxsi_src/naxsi_json.c
++sha256  439c8677372d2597b4360bbcc10bc86490de1fc75695b193ad5df154a214d628  nginx-naxsi-1.3.tar.gz
++sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+diff --git a/package/nginx-naxsi/nginx-naxsi.mk b/package/nginx-naxsi/nginx-naxsi.mk
+index 7cfa94a5d4..3de1f684f9 100644
+--- a/package/nginx-naxsi/nginx-naxsi.mk
++++ b/package/nginx-naxsi/nginx-naxsi.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_NGINX_STREAM_SET_MODULE
-+	bool "ngx_stream_set_module"
-+	default y
-+	help
-+	  Enable ngx_stream_set_module
-+
- config BR2_PACKAGE_NGINX_STREAM_SSL_MODULE
- 	bool "ngx_stream_ssl_module"
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index c68811e276..616ada9000 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -235,6 +235,10 @@ ifeq ($(BR2_PACKAGE_NGINX_STREAM_REALIP_MODULE),y)
- NGINX_CONF_OPTS += --with-stream_realip_module
- endif
+-NGINX_NAXSI_VERSION = 0.56
++NGINX_NAXSI_VERSION = 1.3
+ NGINX_NAXSI_SITE = $(call github,nbs-system,naxsi,$(NGINX_NAXSI_VERSION))
+-NGINX_NAXSI_LICENSE = GPL-2.0+ with OpenSSL exception
+-NGINX_NAXSI_LICENSE_FILES = naxsi_src/naxsi_json.c
++NGINX_NAXSI_LICENSE = GPL-3.0 with OpenSSL exception
++NGINX_NAXSI_LICENSE_FILES = LICENSE
  
-+ifeq ($(BR2_PACKAGE_NGINX_STREAM_SET_MODULE),)
-+NGINX_CONF_OPTS += --without-stream_set_module
-+endif
-+
- ifeq ($(BR2_PACKAGE_NGINX_STREAM_SSL_MODULE),y)
- NGINX_DEPENDENCIES += openssl
- NGINX_CONF_OPTS += --with-stream_ssl_module
+ $(eval $(generic-package))
 -- 
 2.31.1
