@@ -1,63 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Jun 2021 22:15:12 +0200
-Subject: [Buildroot] [PATCH 1/4 v5] support/misc/gitlab-ci.yml.in:
- templatise the make command
+Date: Mon, 28 Jun 2021 22:15:13 +0200
+Subject: [Buildroot] [PATCH 2/4 v5] utils/test-pkg: remove configurations
+ that are skipped
 In-Reply-To: <cover.1624911306.git.yann.morin.1998@free.fr>
 References: <cover.1624911306.git.yann.morin.1998@free.fr>
-Message-ID: <b507b09b429bd11c2cb524055e53e9cb9c128942.1624911306.git.yann.morin.1998@free.fr>
+Message-ID: <5734b04e93f6ce2212a81963d8a0e79500f942c3.1624911306.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Romain Naour <romain.naour@gmail.com>
+When the config fragment provided by the user is not usable with a
+specific toolchain configuration, the resulting .config file was kept
+around.
 
-In a followup commit, the make command used to log and display the last
-lines on error will be used in another job.
-Factorize it by introducing .run_make template.
+In a follow up commit, we'll need to know, from outside test-pkg, if a
+specific configuration was indeed usable or not.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+So, unless if the user actually requested to keep the build directories,
+remove the .config file when it contains a configration that would be
+skipped.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- support/misc/gitlab-ci.yml.in | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-index fcfff5c6aa..1ee3772154 100644
---- a/support/misc/gitlab-ci.yml.in
-+++ b/support/misc/gitlab-ci.yml.in
-@@ -26,20 +26,24 @@
-         paths:
-             - .config
- 
-+.run_make: &run_make
-+    |
-+      make O=${OUTPUT_DIR} > >(tee build.log |grep '>>>') 2>&1 || {
-+          echo 'Failed build last output'
-+          tail -200 build.log
-+          exit 1
-+      }
-+
- .defconfig_base:
-     before_script:
-         - DEFCONFIG_NAME=${CI_JOB_NAME}
-+        - OUTPUT_DIR=output
-     script:
-         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
-         - make ${DEFCONFIG_NAME}
-         - ./support/scripts/check-dotconfig.py .config ./configs/${DEFCONFIG_NAME}
-         - echo 'Build buildroot'
--        - |
--            make > >(tee build.log |grep '>>>') 2>&1 || {
--                echo 'Failed build last output'
--                tail -200 build.log
--                exit 1
--            }
-+        - *run_make
-         - |
-             ./support/scripts/boot-qemu-image.py "${DEFCONFIG_NAME}" > >(tee runtime-test.log) 2>&1 || {
-                 echo 'Failed runtime test last output'
+---
+v5: new patch
+---
+ utils/test-pkg | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/utils/test-pkg b/utils/test-pkg
+index a317d8c17a..54c6c5e8fe 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -161,6 +161,10 @@ build_one() {
+     # done in the same locale.
+     comm -23 <(sort "${cfg}") <(sort "${dir}/.config") >"${dir}/missing.config"
+     if [ -s "${dir}/missing.config" ]; then
++        if [ ${keep} -ne 1 ]; then
++            # Invalid configuration, drop it
++            rm -f "${dir}/.config"
++        fi
+         return 1
+     fi
+     # Remove file, it's empty anyway.
 -- 
 2.25.1
