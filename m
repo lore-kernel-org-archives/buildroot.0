@@ -1,47 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 Jun 2021 14:15:14 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2021-06-27
-In-Reply-To: <CAHp75VfAoLq1HEDdh+3ZNhrF-+upsQN1cPu8z3+4jMG6caEQ=Q@mail.gmail.com>
-References: <60d962ee.1c69fb81.dd5ce.3e2dSMTPIN_ADDED_MISSING@mx.google.com>
- <CAHp75VfAoLq1HEDdh+3ZNhrF-+upsQN1cPu8z3+4jMG6caEQ=Q@mail.gmail.com>
-Message-ID: <20210628141514.67c4957b@windsurf>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Mon, 28 Jun 2021 16:08:16 +0300
+Subject: [Buildroot] [PATCH v1 1/1] package/fb-test-app: Move 'rosetta'
+ prefix from VERSION to SITE
+Message-ID: <20210628130816.29769-1-andriy.shevchenko@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andy,
+Move 'rosetta' prefix from VERSION to SITE to have version be
+in a standard format.
 
-On Mon, 28 Jun 2021 12:11:03 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ package/fb-test-app/fb-test-app.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> >              name              | found by |        link to release-monitoring.org        |   version    |   upstream
-> > -------------------------------+----------+----------------------------------------------+--------------+--------------
-> >                    fb-test-app |  DISTRO  | https://release-monitoring.org/project/206162 | rosetta-1... | 1.0.0  
-> 
-> Anything I should do?
-
-Yes:
-
- (1) Change the release-monitoring.org entry so that it drops the
-     "rosetta-" prefix from the version numbers, and ask the
-     release-monitoring.org maintainers to refresh the fb-test-app
-     entry.
-
- (2) Change the Buildroot fb-test-app package to not have "rosetta-" in
-     the <pkg>_VERSION variable, but only in the <pkg>_SITE variable. You
-     will find lots of other github-fetched packages in this situation,
-     for example:
-
-AZMQ_VERSION = 1.0.2
-AZMQ_SITE = $(call github,zeromq,azmq,v$(AZMQ_VERSION))
-
-Best regards,
-
-Thomas
+diff --git a/package/fb-test-app/fb-test-app.mk b/package/fb-test-app/fb-test-app.mk
+index f6e949015ef8..89d533ab15b4 100644
+--- a/package/fb-test-app/fb-test-app.mk
++++ b/package/fb-test-app/fb-test-app.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-FB_TEST_APP_VERSION = rosetta-1.1.1
+-FB_TEST_APP_SITE = $(call github,andy-shev,fb-test-app,$(FB_TEST_APP_VERSION))
++FB_TEST_APP_VERSION = 1.1.1
++FB_TEST_APP_SITE = $(call github,andy-shev,fb-test-app,rosetta-$(FB_TEST_APP_VERSION))
+ FB_TEST_APP_LICENSE = GPL-2.0
+ FB_TEST_APP_LICENSE_FILES = COPYING
+ 
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.2
