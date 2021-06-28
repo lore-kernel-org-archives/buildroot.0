@@ -1,7 +1,7 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 28 Jun 2021 11:53:51 +0200
-Subject: [Buildroot] [PATCH] package/python-markdown: Bump version to 3.3.4
-Message-ID: <20210628095351.1416546-1-gwenj@trabucayre.com>
+Date: Mon, 28 Jun 2021 11:54:30 +0200
+Subject: [Buildroot] [PATCH] package/python-remi: Bump version to 2021.3.2
+Message-ID: <20210628095430.1416684-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,33 @@ From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/python-markdown/python-markdown.hash | 4 ++--
- package/python-markdown/python-markdown.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-remi/python-remi.hash | 2 +-
+ package/python-remi/python-remi.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
-index 4d54ce9243..b64ac77be0 100644
---- a/package/python-markdown/python-markdown.hash
-+++ b/package/python-markdown/python-markdown.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markdown/json
--md5  7a894dc55992b37cdbcba5c4049455fc  Markdown-3.2.1.tar.gz
--sha256  90fee683eeabe1a92e149f7ba74e5ccdc81cd397bd6c516d93a8da0ef90b6902  Markdown-3.2.1.tar.gz
-+md5  b6833c6326e9164ee0c662218a75e7f0  Markdown-3.3.4.tar.gz
-+sha256  31b5b491868dcc87d6c24b7e3d19a0d730d59d3e46f4eea6430a321bed387a49  Markdown-3.3.4.tar.gz
- # Locally computed sha256
- sha256  6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
-diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
-index 1f352fd7f1..801360d778 100644
---- a/package/python-markdown/python-markdown.mk
-+++ b/package/python-markdown/python-markdown.mk
+diff --git a/package/python-remi/python-remi.hash b/package/python-remi/python-remi.hash
+index 832bf915ab..4e1786a952 100644
+--- a/package/python-remi/python-remi.hash
++++ b/package/python-remi/python-remi.hash
+@@ -1,2 +1,2 @@
+ # sha256 from https://pypi.org/pypi/remi/json
+-sha256  2a32658146b63d33a88aff7362679873c9df9e42a9e651c9e6642da834b3cca1  remi-2020.11.20.tar.gz
++sha256  c8691f007dc30b91013131b6aded3521c17ef8ec9fdd152a0ad481b8cb793f14  remi-2021.3.2.tar.gz
+diff --git a/package/python-remi/python-remi.mk b/package/python-remi/python-remi.mk
+index 5666733986..609e127cf0 100644
+--- a/package/python-remi/python-remi.mk
++++ b/package/python-remi/python-remi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MARKDOWN_VERSION = 3.2.1
-+PYTHON_MARKDOWN_VERSION = 3.3.4
- PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
--PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/98/79/ce6984767cb9478e6818bd0994283db55c423d733cc62a88a3ffb8581e11
-+PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/49/02/37bd82ae255bb4dfef97a4b32d95906187b7a7a74970761fca1360c4ba22
- PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
- PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
- PYTHON_MARKDOWN_SETUP_TYPE = setuptools
+-PYTHON_REMI_VERSION = 2020.11.20
++PYTHON_REMI_VERSION = 2021.3.2
+ PYTHON_REMI_SOURCE = remi-$(PYTHON_REMI_VERSION).tar.gz
+-PYTHON_REMI_SITE = https://files.pythonhosted.org/packages/47/45/3110334859199be84d9b230fd31e2333b4c69832e15facc0868bed2aa3f3
++PYTHON_REMI_SITE = https://files.pythonhosted.org/packages/c0/99/94bd825cf8baee369b959f76c802a51ccc69d4d62ec113e26db4835f710c
+ PYTHON_REMI_LICENSE = Apache-2.0
+ PYTHON_REMI_SETUP_TYPE = setuptools
+ 
 -- 
 2.20.1
