@@ -1,50 +1,44 @@
-From: Eugen.Hristev at microchip.com <Eugen.Hristev@microchip.com>
-Date: Mon, 28 Jun 2021 09:11:12 +0000
-Subject: [Buildroot] Question on users and ssh access
-In-Reply-To: <37078d3b-031f-8643-e200-62300beb1ae4@inbox.ru>
-References: <82f467ec-fbb3-9e87-be88-b5b51fc9b632@microchip.com>
- <37078d3b-031f-8643-e200-62300beb1ae4@inbox.ru>
-Message-ID: <09afc5e8-3f75-8776-fee1-cf4c63cfb0ed@microchip.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Mon, 28 Jun 2021 11:51:59 +0200
+Subject: [Buildroot] [PATCH] package/matio: Bump version to 1.5.21
+Message-ID: <20210628095159.1416239-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 6/28/21 12:06 PM, Maxim Kochetkov via buildroot wrote:
-> 28.06.2021 11:55, Eugen.Hristev--- via buildroot wrote:
->> Hello everyone,
->>
->> Maybe you can help me with a small matter related to user accounts in
->> Buildroot ?
->>
->> By default the /home directory does not exist, thus when using adduser
->> to create a user, the creation of /home/foo fails ... and this causes
->> login with ssh to the user impossible due to lack of home dir.
->>
->> Any recommendation on how to solve this ? It is preferred to set a
->> password for root for ssh access (as root has /root as home) ? or add a
->> post-script to create the /home in the rootfs ?
->>
->> Thanks !
->> Eugen
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
-> 
-> Try this:
-> https://buildroot.org/downloads/manual/manual.html#customize-users
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Thanks, but I do not wish to have new default users for the buildroot 
-image (at compile time).
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/matio/matio.hash | 4 ++--
+ package/matio/matio.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I wish the user who flashes the buildroot image can create new users on 
-demand, without the problem that adduser fails in creating their home 
-directory
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/matio/matio.hash b/package/matio/matio.hash
+index 55e57338c8..619a63ac1d 100644
+--- a/package/matio/matio.hash
++++ b/package/matio/matio.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/projects/matio/files/matio/1.5.18/
+-sha512  c43e562a101348d64139a056f28bce37c59c6667d701200255ccf9d8b6adf7a92ae9c11c8d921ec8a652cdc81c5de9ab247907279c54c52905adfd65bc3fb90f  matio-1.5.18.tar.gz
++# From https://sourceforge.net/projects/matio/files/matio/1.5.21/
++sha512  b00bcad807e6a7e10afa656eb77a0e3e9fb08d9cecc3e94ba41ef91ce60367d6686e6d387a874bbb83eb2f895d4a97caac554a70e7f5f6f5cb750052702d411c  matio-1.5.21.tar.gz
+ # Locally computed
+ sha256  19494e9c9154a5e3f834e99d65fab0653b84280df7c98d1886a98d2bd28369c1  COPYING
+diff --git a/package/matio/matio.mk b/package/matio/matio.mk
+index 0ebba13435..236466d4d9 100644
+--- a/package/matio/matio.mk
++++ b/package/matio/matio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MATIO_VERSION = 1.5.18
++MATIO_VERSION = 1.5.21
+ MATIO_SITE = http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
+ MATIO_LICENSE = BSD-2-Clause
+ MATIO_LICENSE_FILES = COPYING
+-- 
+2.20.1
