@@ -1,48 +1,48 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Mon, 28 Jun 2021 19:01:04 +0300
-Subject: [Buildroot] [PATCH v2 1/1] package/fb-test-app: Move 'rosetta'
- prefix from VERSION to SITE
-Message-ID: <20210628160104.8793-1-andriy.shevchenko@linux.intel.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 28 Jun 2021 09:16:05 -0700
+Subject: [Buildroot] [PATCH 0/5] nginx updates
+Message-ID: <20210628161610.3197763-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move 'rosetta' prefix from VERSION to SITE to have version be
-in a standard format.
+Just some nginx maintnence.
 
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: fixed hash file as well (Thomas)
- package/fb-test-app/fb-test-app.hash | 2 +-
- package/fb-test-app/fb-test-app.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Changes include:
+  - Update nginx to the latest LTS release.
+  - Update nginx naxsi, dav-ext, and modsecurity.
 
-diff --git a/package/fb-test-app/fb-test-app.hash b/package/fb-test-app/fb-test-app.hash
-index 3068caf278df..ff7730ef8dc6 100644
---- a/package/fb-test-app/fb-test-app.hash
-+++ b/package/fb-test-app/fb-test-app.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  45d490ed78a6e4425d9a760e81e99dc503af01704e17ab5bf186b87a31c5e3db  fb-test-app-rosetta-1.1.1.tar.gz
-+sha256  45d490ed78a6e4425d9a760e81e99dc503af01704e17ab5bf186b87a31c5e3db  fb-test-app-1.1.1.tar.gz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/fb-test-app/fb-test-app.mk b/package/fb-test-app/fb-test-app.mk
-index f6e949015ef8..89d533ab15b4 100644
---- a/package/fb-test-app/fb-test-app.mk
-+++ b/package/fb-test-app/fb-test-app.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--FB_TEST_APP_VERSION = rosetta-1.1.1
--FB_TEST_APP_SITE = $(call github,andy-shev,fb-test-app,$(FB_TEST_APP_VERSION))
-+FB_TEST_APP_VERSION = 1.1.1
-+FB_TEST_APP_SITE = $(call github,andy-shev,fb-test-app,rosetta-$(FB_TEST_APP_VERSION))
- FB_TEST_APP_LICENSE = GPL-2.0
- FB_TEST_APP_LICENSE_FILES = COPYING
- 
+The nginx-upload package also has updates, however, the current nginx-upload url
+points to a fork of nginx-upload-module. The official project URL is fdintino
+not vkholodkov. Should this be changed to fdintino and the version changed to
+4423994c7d8fb491d95867f6af968585d949e7a9?
+
+Adam
+
+Adam Duskett (5):
+  package/nginx: bump version to 1.20.1
+  package/nginx: add stream_set_module support
+  package/nginx-naxsi: bump version to 1.3
+  package/nginx-dav-ext: bump version to 3.0.0
+  package/nginx-modsecurity: bump to  version 1.0.2
+
+ package/nginx-dav-ext/nginx-dav-ext.hash      |  4 +-
+ package/nginx-dav-ext/nginx-dav-ext.mk        |  2 +-
+ .../nginx-modsecurity/nginx-modsecurity.hash  |  6 +--
+ .../nginx-modsecurity/nginx-modsecurity.mk    |  2 +-
+ package/nginx-naxsi/nginx-naxsi.hash          |  4 +-
+ package/nginx-naxsi/nginx-naxsi.mk            |  6 +--
+ ...ture_run_force_result-for-each-featu.patch | 40 ++++++++-----------
+ ...ake-sys_nerr-guessing-cross-friendly.patch | 27 ++++++-------
+ ...to-os-linux-fix-build-with-libxcrypt.patch |  2 +-
+ ...ff-by-one-write-in-ngx_resolver_copy.patch | 40 -------------------
+ package/nginx/Config.in                       |  6 +++
+ package/nginx/nginx.hash                      |  4 +-
+ package/nginx/nginx.mk                        |  6 ++-
+ 13 files changed, 55 insertions(+), 94 deletions(-)
+ delete mode 100644 package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
+
 -- 
-2.30.2
+2.31.1
