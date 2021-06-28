@@ -1,58 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 28 Jun 2021 22:15:12 +0200
-Subject: [Buildroot] [PATCH 0/4 v5] gitlab-ci: allow running test-pkg
- (branch yem/test-pkg-in-gitlab-ci)
-Message-ID: <cover.1624911306.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 1/4 v5] support/misc/gitlab-ci.yml.in:
+ templatise the make command
+In-Reply-To: <cover.1624911306.git.yann.morin.1998@free.fr>
+References: <cover.1624911306.git.yann.morin.1998@free.fr>
+Message-ID: <b507b09b429bd11c2cb524055e53e9cb9c128942.1624911306.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Romain Naour <romain.naour@gmail.com>
 
-This series is a respin of the previous work by Romain:
-    http://lists.busybox.net/pipermail/buildroot/2021-June/thread.html#313369
+In a followup commit, the make command used to log and display the last
+lines on error will be used in another job.
+Factorize it by introducing .run_make template.
 
-Yann has done quite some extensive rework, so much so that it is not
-sane to apply without further review.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/misc/gitlab-ci.yml.in | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-So, the big changes from Romain's work, are:
-  - introduce new mode for utils/test-pkg, to only prepare the
-    configuration but niot build them,
-  - support/scripts/generate-gitlab-ci-yml generates the yaml blurb from
-    the valid configurations
-  - an empty config fragment is now an error
-  - a config fragment that yields no test is also an error
-  - some eye-candy and code-styles in the shell scripts...
-
-See a pipeline generated with this branch:
-
-    https://gitlab.com/ymorin/buildroot/-/pipelines/328074297
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Romain Naour (2):
-      support/misc/gitlab-ci.yml.in: templatise the make command
-      utils/test-pkg: add gitlab-ci support
-
-Yann E. MORIN (2):
-      utils/test-pkg: remove configurations that are skipped
-      utils/test-pkg: add mode to only prepare .config files
-
- .gitlab-ci.yml                         |  5 +++++
- support/misc/gitlab-ci.yml.in          | 38 ++++++++++++++++++++++++++++------
- support/scripts/generate-gitlab-ci-yml | 27 +++++++++++++++++++++++-
- utils/test-pkg                         | 26 +++++++++++++++++++----
- 4 files changed, 85 insertions(+), 11 deletions(-)
-
+diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+index fcfff5c6aa..1ee3772154 100644
+--- a/support/misc/gitlab-ci.yml.in
++++ b/support/misc/gitlab-ci.yml.in
+@@ -26,20 +26,24 @@
+         paths:
+             - .config
+ 
++.run_make: &run_make
++    |
++      make O=${OUTPUT_DIR} > >(tee build.log |grep '>>>') 2>&1 || {
++          echo 'Failed build last output'
++          tail -200 build.log
++          exit 1
++      }
++
+ .defconfig_base:
+     before_script:
+         - DEFCONFIG_NAME=${CI_JOB_NAME}
++        - OUTPUT_DIR=output
+     script:
+         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
+         - make ${DEFCONFIG_NAME}
+         - ./support/scripts/check-dotconfig.py .config ./configs/${DEFCONFIG_NAME}
+         - echo 'Build buildroot'
+-        - |
+-            make > >(tee build.log |grep '>>>') 2>&1 || {
+-                echo 'Failed build last output'
+-                tail -200 build.log
+-                exit 1
+-            }
++        - *run_make
+         - |
+             ./support/scripts/boot-qemu-image.py "${DEFCONFIG_NAME}" > >(tee runtime-test.log) 2>&1 || {
+                 echo 'Failed runtime test last output'
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
