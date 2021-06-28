@@ -1,46 +1,46 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 28 Jun 2021 09:16:09 -0700
-Subject: [Buildroot] [PATCH 4/5] package/nginx-dav-ext: bump version to 3.0.0
+Date: Mon, 28 Jun 2021 09:16:10 -0700
+Subject: [Buildroot] [PATCH 5/5] package/nginx-modsecurity: bump to version
+ 1.0.2
 In-Reply-To: <20210628161610.3197763-1-aduskett@gmail.com>
 References: <20210628161610.3197763-1-aduskett@gmail.com>
-Message-ID: <20210628161610.3197763-5-aduskett@gmail.com>
+Message-ID: <20210628161610.3197763-6-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Other changes:
-  - Update license hash due to year changes
-
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/nginx-dav-ext/nginx-dav-ext.hash | 4 ++--
- package/nginx-dav-ext/nginx-dav-ext.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nginx-modsecurity/nginx-modsecurity.hash | 6 +++---
+ package/nginx-modsecurity/nginx-modsecurity.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/nginx-dav-ext/nginx-dav-ext.hash b/package/nginx-dav-ext/nginx-dav-ext.hash
-index fbed87f0c0..07deab08db 100644
---- a/package/nginx-dav-ext/nginx-dav-ext.hash
-+++ b/package/nginx-dav-ext/nginx-dav-ext.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 6b004eed8ea16ad8de4d304027bf0413cc323a95914e58625a7dc066481aae3a  nginx-dav-ext-0.1.0.tar.gz
--sha256 40581cf424621965adaf1461e97129520ff4fcfb62ed9965ec6fd50b7f4ddfca  LICENSE
-+sha256 d2499d94d82d4e4eac8425d799e52883131ae86a956524040ff2fd230ef9f859  nginx-dav-ext-3.0.0.tar.gz
-+sha256 e377bb81e5024682a66438306e8ff9541d843d3831e480aec2f58eb8d83e48de  LICENSE
-diff --git a/package/nginx-dav-ext/nginx-dav-ext.mk b/package/nginx-dav-ext/nginx-dav-ext.mk
-index 695287ee2c..1b3071851a 100644
---- a/package/nginx-dav-ext/nginx-dav-ext.mk
-+++ b/package/nginx-dav-ext/nginx-dav-ext.mk
+diff --git a/package/nginx-modsecurity/nginx-modsecurity.hash b/package/nginx-modsecurity/nginx-modsecurity.hash
+index d2dd266ac1..fbaf1ca239 100644
+--- a/package/nginx-modsecurity/nginx-modsecurity.hash
++++ b/package/nginx-modsecurity/nginx-modsecurity.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v1.0.1/modsecurity-nginx-v1.0.1.tar.gz.sha256
+-sha256 def45a8db5bc9da14765eda75363457209a86c89538ccf5bfbd3aa02fa10833c modsecurity-nginx-v1.0.1.tar.gz
++# From https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v1.0.2/modsecurity-nginx-v1.0.2.tar.gz.sha256
++sha256  41a6660c50508c60df59f8f09c444d18ef8112a4c118cdc791a3992390b78c32  modsecurity-nginx-v1.0.2.tar.gz
+ # Localy calculated
+-sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4 LICENSE
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/nginx-modsecurity/nginx-modsecurity.mk b/package/nginx-modsecurity/nginx-modsecurity.mk
+index 6d33403d66..90ef8ecd51 100644
+--- a/package/nginx-modsecurity/nginx-modsecurity.mk
++++ b/package/nginx-modsecurity/nginx-modsecurity.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGINX_DAV_EXT_VERSION = 0.1.0
-+NGINX_DAV_EXT_VERSION = 3.0.0
- NGINX_DAV_EXT_SITE = $(call github,arut,nginx-dav-ext-module,v$(NGINX_DAV_EXT_VERSION))
- NGINX_DAV_EXT_LICENSE = BSD-2-Clause
- NGINX_DAV_EXT_LICENSE_FILES = LICENSE
+-NGINX_MODSECURITY_VERSION = 1.0.1
++NGINX_MODSECURITY_VERSION = 1.0.2
+ NGINX_MODSECURITY_SOURCE = modsecurity-nginx-v$(NGINX_MODSECURITY_VERSION).tar.gz
+ NGINX_MODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v$(NGINX_MODSECURITY_VERSION)
+ NGINX_MODSECURITY_LICENSE = Apache-2.0
 -- 
 2.31.1
