@@ -1,78 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jun 2021 22:05:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/portaudio: bump to version
- v190700_20210406
-In-Reply-To: <20210628062225.134790-1-joerg.krause@embedded.rocks>
-References: <20210628062225.134790-1-joerg.krause@embedded.rocks>
-Message-ID: <20210629200535.GP2829@scaer>
+Date: Tue, 29 Jun 2021 22:17:44 +0200
+Subject: [Buildroot] [PATCH 3/5] package/nginx-naxsi: bump version to 1.3
+In-Reply-To: <20210628161610.3197763-4-aduskett@gmail.com>
+References: <20210628161610.3197763-1-aduskett@gmail.com>
+ <20210628161610.3197763-4-aduskett@gmail.com>
+Message-ID: <20210629201744.GQ2829@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg, All,
+Adam, All,
 
-On 2021-06-28 06:22 +0000, J?rg Krause spake thusly:
-> Note, that the download URL has changed for the new release.
+On 2021-06-28 09:16 -0700, Adam Duskett spake thusly:
+> Other changes:
+>   - Change license to GPL-3.0
+>   - Change license file to LICENSE
+>   - Update license hash in nginx-naxsi.hash
 > 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
 > ---
->  package/portaudio/portaudio.hash | 2 +-
->  package/portaudio/portaudio.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/nginx-naxsi/nginx-naxsi.hash | 4 ++--
+>  package/nginx-naxsi/nginx-naxsi.mk   | 6 +++---
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/portaudio/portaudio.hash b/package/portaudio/portaudio.hash
-> index 903d760ce0..ba3c506f18 100644
-> --- a/package/portaudio/portaudio.hash
-> +++ b/package/portaudio/portaudio.hash
+> diff --git a/package/nginx-naxsi/nginx-naxsi.hash b/package/nginx-naxsi/nginx-naxsi.hash
+> index 1f289c56cd..bd3fcd1ae9 100644
+> --- a/package/nginx-naxsi/nginx-naxsi.hash
+> +++ b/package/nginx-naxsi/nginx-naxsi.hash
 > @@ -1,3 +1,3 @@
 >  # Locally calculated
-> -sha256  f5a21d7dcd6ee84397446fa1fa1a0675bb2e8a4a6dceb4305a8404698d8d1513  pa_stable_v190600_20161030.tgz
-> +sha256  47efbf42c77c19a05d22e627d42873e991ec0c1357219c0d74ce6a2948cb2def  pa_stable_v190700_20210406.tgz
->  sha256  ec52a1952d701f94e5135719a47376da4ee0b4a0201f1cafb49f61db6480ac3d  LICENSE.txt
-> diff --git a/package/portaudio/portaudio.mk b/package/portaudio/portaudio.mk
-> index 0cf754c7d5..cc3f34cae8 100644
-> --- a/package/portaudio/portaudio.mk
-> +++ b/package/portaudio/portaudio.mk
-> @@ -4,8 +4,8 @@
+> -sha256	0a66dcadd32432460fab180be9f2efe24e911e3798917b2787ee710e02901eb4	nginx-naxsi-0.56.tar.gz
+> -sha256	046812ddc8f250f85b5d6e04218c185849c618b309271ef9d8b01e92c6f7a6ac	naxsi_src/naxsi_json.c
+> +sha256  439c8677372d2597b4360bbcc10bc86490de1fc75695b193ad5df154a214d628  nginx-naxsi-1.3.tar.gz
+> +sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+> diff --git a/package/nginx-naxsi/nginx-naxsi.mk b/package/nginx-naxsi/nginx-naxsi.mk
+> index 7cfa94a5d4..3de1f684f9 100644
+> --- a/package/nginx-naxsi/nginx-naxsi.mk
+> +++ b/package/nginx-naxsi/nginx-naxsi.mk
+> @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
 >  
-> -PORTAUDIO_VERSION = v190600_20161030
-> -PORTAUDIO_SITE = http://www.portaudio.com/archives
-> +PORTAUDIO_VERSION = v190700_20210406
-> +PORTAUDIO_SITE = http://files.portaudio.com/archives
->  PORTAUDIO_SOURCE = pa_stable_$(PORTAUDIO_VERSION).tgz
+> -NGINX_NAXSI_VERSION = 0.56
+> +NGINX_NAXSI_VERSION = 1.3
+>  NGINX_NAXSI_SITE = $(call github,nbs-system,naxsi,$(NGINX_NAXSI_VERSION))
+> -NGINX_NAXSI_LICENSE = GPL-2.0+ with OpenSSL exception
+> -NGINX_NAXSI_LICENSE_FILES = naxsi_src/naxsi_json.c
+> +NGINX_NAXSI_LICENSE = GPL-3.0 with OpenSSL exception
 
-I've taken the opportunity to move the 'v' out of _VERSION and into
-_SOURCE, so that we have a version string that look more like the
-others...
+Where did you see the OpennSSL exception?
 
-Although the real version for portaudio is 19.7.0, and 190700_20210406
-is only the version of the source archive...
+There is also part of bundled code that is BSD-3c, in
+naxsi_src/ext/libinjection
 
-All that, to see if there was an entry in the NVD for portaudio, and
-there is, but the only CVE there is misclassified, as it affects
-portaudio-rs (a rust port of portaudio):
+> +NGINX_NAXSI_LICENSE_FILES = LICENSE
 
-    https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:portaudio_project:portaudio
+... and so we'd need naxsi_src/ext/libinjection/COPYING axs well.
 
-So if we wanted to add CPE info for it, we'd have to play some tricks
-with the version anyway...
+Also, from README:
 
-So... Applied to master, with the 'v' moved around, thanks.
+    [Naxsi] depends on libpcre for its regexp support
 
-Would you care to have a look into adding the CPE info in a followup
-patch, please? ;-)
+So maybe a dependency on libpcre (or libpcre2?) is missing?
 
 Regards,
 Yann E. MORIN.
 
->  PORTAUDIO_INSTALL_STAGING = YES
->  PORTAUDIO_MAKE = $(MAKE1)
+>  $(eval $(generic-package))
 > -- 
-> 2.32.0
+> 2.31.1
 > 
 > _______________________________________________
 > buildroot mailing list
