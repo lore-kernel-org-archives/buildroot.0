@@ -1,100 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jun 2021 22:30:41 +0200
-Subject: [Buildroot] [PATCH] package/erofs-utils: bump version to 1.3
-In-Reply-To: <20210625220506.2968-1-hsiangkao@aol.com>
-References: <20210625220506.2968-1-hsiangkao.ref@aol.com>
- <20210625220506.2968-1-hsiangkao@aol.com>
-Message-ID: <20210629203041.GV2829@scaer>
+Date: Tue, 29 Jun 2021 22:31:32 +0200
+Subject: [Buildroot] [PATCH 1/2] package/opkg: bump to version 0.4.5
+In-Reply-To: <20210624124739.30531-1-ryanbarnett3@gmail.com>
+References: <20210624124739.30531-1-ryanbarnett3@gmail.com>
+Message-ID: <20210629203132.GW2829@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gao, All,
+Ryan, All,
 
-On 2021-06-26 06:05 +0800, Gao Xiang via buildroot spake thusly:
-> - new upstream version (mainly add big pcluster support);
-> - add 0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch [1].
+On 2021-06-24 07:47 -0500, Ryan Barnett spake thusly:
+> Along with version bump, update hash file to two space format and
+> switch to HTTPS URL.
 > 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/patch/?id=7ab34000c672adca90388a8fcb1f70a7d391d35c
-> 
-> Signed-off-by: Gao Xiang <hsiangkao@aol.com>
+> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 
-Applied to master, thanks.
+Both applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  ...age-only-install-erofsfuse.1-with-th.patch | 32 +++++++++++++++++++
->  package/erofs-utils/erofs-utils.hash          |  2 +-
->  package/erofs-utils/erofs-utils.mk            |  2 +-
->  3 files changed, 34 insertions(+), 2 deletions(-)
->  create mode 100644 package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch
+>  package/opkg/opkg.hash | 4 ++--
+>  package/opkg/opkg.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch b/package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch
-> new file mode 100644
-> index 000000000000..0aa99d5324d0
-> --- /dev/null
-> +++ b/package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch
-> @@ -0,0 +1,32 @@
-> +From 7ab34000c672adca90388a8fcb1f70a7d391d35c Mon Sep 17 00:00:00 2001
-> +From: David Michael <fedora.dm0@gmail.com>
-> +Date: Thu, 3 Jun 2021 16:18:57 -0400
-> +Subject: [PATCH] erofs-utils: manpage: only install erofsfuse.1 with the
-> + command
-> +
-> +Link: https://lore.kernel.org/r/87lf7q3dn2.fsf at gmail.com
-> +Reviewed-by: Gao Xiang <xiang@kernel.org>
-> +Signed-off-by: David Michael <fedora.dm0@gmail.com>
-> +Signed-off-by: Gao Xiang <xiang@kernel.org>
-> +---
-> + man/Makefile.am | 6 +++++-
-> + 1 file changed, 5 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/man/Makefile.am b/man/Makefile.am
-> +index ffcf6f81c255..0df947b6fbf7 100644
-> +--- a/man/Makefile.am
-> ++++ b/man/Makefile.am
-> +@@ -1,5 +1,9 @@
-> + # SPDX-License-Identifier: GPL-2.0+
-> + # Makefile.am
-> + 
-> +-dist_man_MANS = mkfs.erofs.1 erofsfuse.1
-> ++dist_man_MANS = mkfs.erofs.1
-> + 
-> ++EXTRA_DIST = erofsfuse.1
-> ++if ENABLE_FUSE
-> ++man_MANS = erofsfuse.1
-> ++endif
-> +-- 
-> +2.20.1
-> +
-> diff --git a/package/erofs-utils/erofs-utils.hash b/package/erofs-utils/erofs-utils.hash
-> index 0de52d28a906..8bbb0885689b 100644
-> --- a/package/erofs-utils/erofs-utils.hash
-> +++ b/package/erofs-utils/erofs-utils.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  6b2ea15c3b092bd9a3abd966f78bc01c6caacb94022643ff34cf69893ee04e84  erofs-utils-1.2.1.tar.gz
-> +sha256  132635740039bbe76d743aea72378bfae30dbf034e123929f5d794198d4c0b12  erofs-utils-1.3.tar.gz
->  sha256  feee3b3157dcdf78d4f50edefbd5dd7adf8b6d52c11bfaaa746a85a373256713  COPYING
-> diff --git a/package/erofs-utils/erofs-utils.mk b/package/erofs-utils/erofs-utils.mk
-> index 5d547148b204..e35470b02edc 100644
-> --- a/package/erofs-utils/erofs-utils.mk
-> +++ b/package/erofs-utils/erofs-utils.mk
-> @@ -4,7 +4,7 @@
+> diff --git a/package/opkg/opkg.hash b/package/opkg/opkg.hash
+> index b1ead67a11..b0c0ba6574 100644
+> --- a/package/opkg/opkg.hash
+> +++ b/package/opkg/opkg.hash
+> @@ -1,4 +1,4 @@
+>  # From http://downloads.yoctoproject.org/releases/opkg/SHA256SUMS
+> -sha256 86887852c43457edfff9d8b6d9520f3f1cdd55f25eb600a6eb31e1c4e151e106  opkg-0.4.2.tar.gz
+> +sha256  a1214a75fa34fb9228db8da47308e0e711b1c93fd8938cf164c10fd28eb50f1e  opkg-0.4.5.tar.gz
+>  # Locally calculated
+> -sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+> +sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+> diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+> index e25e51b9e6..501edcf8af 100644
+> --- a/package/opkg/opkg.mk
+> +++ b/package/opkg/opkg.mk
+> @@ -4,8 +4,8 @@
 >  #
 >  ################################################################################
 >  
-> -EROFS_UTILS_VERSION = 1.2.1
-> +EROFS_UTILS_VERSION = 1.3
->  EROFS_UTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot
->  EROFS_UTILS_LICENSE = GPL-2.0+
->  EROFS_UTILS_LICENSE_FILES = COPYING
+> -OPKG_VERSION = 0.4.2
+> -OPKG_SITE = http://downloads.yoctoproject.org/releases/opkg
+> +OPKG_VERSION = 0.4.5
+> +OPKG_SITE = https://downloads.yoctoproject.org/releases/opkg
+>  OPKG_DEPENDENCIES = host-pkgconf libarchive
+>  OPKG_LICENSE = GPL-2.0+
+>  OPKG_LICENSE_FILES = COPYING
 > -- 
-> 2.20.1
+> 2.25.1
 > 
 > _______________________________________________
 > buildroot mailing list
