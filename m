@@ -1,1109 +1,639 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 29 Jun 2021 09:50:48 -0700
-Subject: [Buildroot] [PATCH 05/11] package/php-ssh2: bump version to 1.3.1
+Date: Tue, 29 Jun 2021 09:50:51 -0700
+Subject: [Buildroot] [PATCH 08/11] package/php-zmq: add upstream php8
+ compatibility patches
 In-Reply-To: <20210629165054.3831930-1-aduskett@gmail.com>
 References: <20210629165054.3831930-1-aduskett@gmail.com>
-Message-ID: <20210629165054.3831930-5-aduskett@gmail.com>
+Message-ID: <20210629165054.3831930-8-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Other changes:
-  - Remove both upstream patches
+These patches are necessary for compiling against php8. These patches also
+retain the ability to compile against PHP7.2 and should be removed during the
+next version bump.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- ...fix-php_url-fields-usage-for-PHP-7-3.patch | 302 -------
- ...estored-commented-reference-counting.patch | 746 ------------------
- package/php-ssh2/php-ssh2.hash                |   2 +-
- package/php-ssh2/php-ssh2.mk                  |   2 +-
- 4 files changed, 2 insertions(+), 1050 deletions(-)
- delete mode 100644 package/php-ssh2/0001-fix-php_url-fields-usage-for-PHP-7-3.patch
- delete mode 100644 package/php-ssh2/0002-dstogov-Fixed-PHP7-port-Restored-commented-reference-counting.patch
+ ...1-PHP-7.3-compatibility-and-bugfixes.patch | 271 ------------------
+ .../0001-updates-for-php7.4-and-php8.0.patch  | 230 +++++++++++++++
+ package/php-zmq/0002-fix-for-php-7.3.patch    |  43 +++
+ .../php-zmq/0003-fix-for-php-8.0.0beta2.patch |  40 +++
+ 4 files changed, 313 insertions(+), 271 deletions(-)
+ delete mode 100644 package/php-zmq/0001-PHP-7.3-compatibility-and-bugfixes.patch
+ create mode 100644 package/php-zmq/0001-updates-for-php7.4-and-php8.0.patch
+ create mode 100644 package/php-zmq/0002-fix-for-php-7.3.patch
+ create mode 100644 package/php-zmq/0003-fix-for-php-8.0.0beta2.patch
 
-diff --git a/package/php-ssh2/0001-fix-php_url-fields-usage-for-PHP-7-3.patch b/package/php-ssh2/0001-fix-php_url-fields-usage-for-PHP-7-3.patch
+diff --git a/package/php-zmq/0001-PHP-7.3-compatibility-and-bugfixes.patch b/package/php-zmq/0001-PHP-7.3-compatibility-and-bugfixes.patch
 deleted file mode 100644
-index afc5de9915..0000000000
---- a/package/php-ssh2/0001-fix-php_url-fields-usage-for-PHP-7-3.patch
+index 83cdb04530..0000000000
+--- a/package/php-zmq/0001-PHP-7.3-compatibility-and-bugfixes.patch
 +++ /dev/null
-@@ -1,302 +0,0 @@
--From a8835aab2c15e794fce13bd927295719e384ad2d Mon Sep 17 00:00:00 2001
--From: Remi Collet <remi@php.net>
--Date: Thu, 28 Jun 2018 07:10:35 +0200
--Subject: [PATCH] fix php_url fields usage for PHP 7.3
+@@ -1,271 +0,0 @@
+-From 6ea688eff5157785267d2b671cf62d296288847f Mon Sep 17 00:00:00 2001
+-From: Alex/AT <alex@alex-at.net>
+-Date: Mon, 10 Dec 2018 06:02:27 +0300
+-Subject: [PATCH] PHP 7.3 compatibility and bugfixes
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/php/pecl-networking-ssh2/commit/a8835aab2c15e794fce13bd927295719e384ad2d]
+-- Define new GC_ADDREF/DELREF/SET_REFCOUNT macros for older PHP versions and use them instead of direct GC reference counter access
+-
+-- Fixup all necessary 'long' type parameters to 'zend_long', PHP 7.3 makes it mandatory, also fixup some direct function implementations to accept the same
+-
+-- In php_zmq_recv(), zend_string_init() was wrongly called with third parameter as '1', marking new string with IS_STR_PERSISTENT, this caused heap corruption and/or segfaults with PHP 7.3 and could possibly cause other sorts of bugs under any 7.x version
+-  With ZVAL_STRINGL macro, this last '1' parameter meant to copy the string and was seemingly erroneously moved to zend_string_init(). zend_string_init() copies string by default, and last parameter has totally different meaning here
+-
+-- In poll(), flag ZVAL separation on passed arrays (PHP 7.3 makes it mandatory)
+-
+-- Test 19 (exception on connect callback with forced reference parameter): skip on PHP 7.1 and higher, PHP >= 7.1 started to fallback to passing argument by value instead of failing
+-
+-- Test 21 (warning generation from callback): it is ok, but PHP 7.3 uses 'int' instead of 'integer' for constants, so allow any word in place of the word 'integer'
+-
+-[Frank: backport from upstream PR https://github.com/mkoppanen/php-zmq/pull/195]
+-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ----
-- php_ssh2.h            |  8 +++++++
-- ssh2_fopen_wrappers.c | 55 +++++++++++++++++++++++++++----------------
-- ssh2_sftp.c           | 20 ++++++++--------
-- 3 files changed, 53 insertions(+), 30 deletions(-)
+- php_zmq.h                               |  6 ++++
+- tests/019-callbackinvalidsignature.phpt |  3 +-
+- tests/021-callbackwarning.phpt          |  2 +-
+- zmq.c                                   | 40 ++++++++++++-------------
+- zmq_sockopt.c                           |  4 +--
+- 5 files changed, 30 insertions(+), 25 deletions(-)
 -
--diff --git a/php_ssh2.h b/php_ssh2.h
--index 734b795..d010ff9 100644
----- a/php_ssh2.h
--+++ b/php_ssh2.h
--@@ -166,6 +166,14 @@ extern php_stream_wrapper php_ssh2_sftp_wrapper;
-- extern int le_ssh2_session;
-- extern int le_ssh2_sftp;
+-diff --git a/php_zmq.h b/php_zmq.h
+-index ef50bfb..3833967 100644
+---- a/php_zmq.h
+-+++ b/php_zmq.h
+-@@ -44,6 +44,12 @@
+- 
+- #include "php.h"
 - 
 -+#if PHP_VERSION_ID < 70300
--+#define SSH2_URL_STR(a) (a)
--+#define SSH2_URL_LEN(a) strlen(a)
--+#else
--+#define SSH2_URL_STR(a) ZSTR_VAL(a)
--+#define SSH2_URL_LEN(a) ZSTR_LEN(a)
+-+#define GC_ADDREF(p)              ++GC_REFCOUNT(p)
+-+#define GC_DELREF(p)              --GC_REFCOUNT(p)
+-+#define GC_SET_REFCOUNT(p, rc)    GC_REFCOUNT(p) = rc
 -+#endif
 -+
-- #endif	/* PHP_SSH2_H */
+- extern zend_module_entry zmq_module_entry;
+- #define phpext_zmq_ptr &zmq_module_entry
 - 
+-diff --git a/tests/019-callbackinvalidsignature.phpt b/tests/019-callbackinvalidsignature.phpt
+-index 753de31..b5bb20c 100644
+---- a/tests/019-callbackinvalidsignature.phpt
+-+++ b/tests/019-callbackinvalidsignature.phpt
+-@@ -1,7 +1,8 @@
+- --TEST--
+- Test callback edge-cases
+- --SKIPIF--
+--<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+-+<?php require_once(dirname(__FILE__) . '/skipif.inc');
+-+if (PHP_VERSION_ID >= 70100) die("skip PHP 7.1 and higher fallback to passing argument by value even when forced to reference"); ?>
+- --FILE--
+- <?php
+- 
+-diff --git a/tests/021-callbackwarning.phpt b/tests/021-callbackwarning.phpt
+-index 435743e..eba2ecf 100644
+---- a/tests/021-callbackwarning.phpt
+-+++ b/tests/021-callbackwarning.phpt
+-@@ -13,5 +13,5 @@ function generate_warning($a, $b)
+- $socket = new ZMQSocket(new ZMQContext(), ZMQ::SOCKET_REQ, 'persistent_socket', 'generate_warning');
+- 
+- --EXPECTF--
+--Warning: in_array() expects parameter 2 to be array, integer given in %s on line %d
+-+Warning: in_array() expects parameter 2 to be array, %s given in %s on line %d
+- 
+-diff --git a/zmq.c b/zmq.c
+-index 942e69b..57ebd11 100644
+---- a/zmq.c
+-+++ b/zmq.c
+-@@ -235,7 +235,7 @@ php_zmq_context *php_zmq_context_get(zend_long io_threads, zend_bool is_persiste
+- 		le.type = php_zmq_context_list_entry();
+- 		le.ptr  = context;
+- 
+--		GC_REFCOUNT(&le) = 1;
+-+		GC_SET_REFCOUNT(&le, 1);
+- 
+- 		/* plist_key is not a persistent allocated key, thus we use str_update here */
+- 		if (zend_hash_str_update_mem(&EG(persistent_list), plist_key->val, plist_key->len, &le, sizeof(le)) == NULL) {
+-@@ -369,7 +369,7 @@ PHP_METHOD(zmq, curvekeypair)
+- PHP_METHOD(zmqcontext, __construct)
+- {
+- 	php_zmq_context_object *intern;
+--	long io_threads = 1;
+-+	zend_long io_threads = 1;
+- 	zend_bool is_persistent = 1;
+- 
+- 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "|lb", &io_threads, &is_persistent) == FAILURE) {
+-@@ -495,7 +495,7 @@ PHP_METHOD(zmqcontext, getOpt)
+- 	Create a new zmq socket
+- */
+- static
+--php_zmq_socket *php_zmq_socket_new(php_zmq_context *context, int type, zend_bool is_persistent)
+-+php_zmq_socket *php_zmq_socket_new(php_zmq_context *context, zend_long type, zend_bool is_persistent)
+- {
+- 	php_zmq_socket *zmq_sock;
+- 
+-@@ -503,7 +503,7 @@ php_zmq_socket *php_zmq_socket_new(php_zmq_context *context, int type, zend_bool
+- 	zmq_sock->z_socket    = zmq_socket(context->z_ctx, type);
+- 	zmq_sock->pid         = getpid();
+- 	zmq_sock->ctx         = context;
+--    zmq_sock->socket_type = type;
+-+	zmq_sock->socket_type = type;
+- 
+- 	if (!zmq_sock->z_socket) {
+- 		pefree(zmq_sock, is_persistent);
+-@@ -535,7 +535,7 @@ void php_zmq_socket_store(php_zmq_socket *zmq_sock_p, zend_long type, zend_strin
+- 	le.type = php_zmq_socket_list_entry();
+- 	le.ptr  = zmq_sock_p;
+- 
+--	GC_REFCOUNT(&le) = 1;
+-+	GC_SET_REFCOUNT(&le, 1);
+- 
+- 	plist_key = php_zmq_socket_plist_key(type, persistent_id, use_shared_ctx);
+- 
+-@@ -796,7 +796,7 @@ PHP_METHOD(zmqsocket, __construct)
+- 
+- /* {{{ static zend_bool php_zmq_send(php_zmq_socket_object *intern, char *message_param, long flags)
+- */
+--static zend_bool php_zmq_send(php_zmq_socket_object *intern, zend_string *message_param, long flags)
+-+static zend_bool php_zmq_send(php_zmq_socket_object *intern, zend_string *message_param, zend_long flags)
+- {
+- 	int rc, errno_;
+- 	zmq_msg_t message;
+-@@ -828,7 +828,7 @@ static void php_zmq_sendmsg_impl(INTERNAL_FUNCTION_PARAMETERS)
+- {
+- 	php_zmq_socket_object *intern;
+- 	zend_string *message_param;
+--	long flags = 0;
+-+	zend_long flags = 0;
+- 	zend_bool ret;
+- 
+- 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "S|l", &message_param, &flags) == FAILURE) {
+-@@ -890,7 +890,7 @@ PHP_METHOD(zmqsocket, sendmulti)
+- 	zval *messages;
+- 	php_zmq_socket_object *intern;
+- 	int to_send, ret = 0;
+--	long flags = 0;
+-+	zend_long flags = 0;
+- 
+- 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "a|l", &messages, &flags) == FAILURE) {
+- 		return;
+-@@ -910,7 +910,7 @@ PHP_METHOD(zmqsocket, sendmulti)
+- /* {{{ static zend_bool php_zmq_recv(php_zmq_socket_object *intern, long flags, zval *return_value)
+- */
+- static
+--zend_string *php_zmq_recv(php_zmq_socket_object *intern, long flags)
+-+zend_string *php_zmq_recv(php_zmq_socket_object *intern, zend_long flags)
+- {
+- 	int rc, errno_;
+- 	zmq_msg_t message;
+-@@ -933,7 +933,7 @@ zend_string *php_zmq_recv(php_zmq_socket_object *intern, long flags)
+- 		return NULL;
+- 	}
+- 
+--	str = zend_string_init(zmq_msg_data(&message), zmq_msg_size(&message), 1);
+-+	str = zend_string_init(zmq_msg_data(&message), zmq_msg_size(&message), 0);
+- 	zmq_msg_close(&message);
+- 	return str;
+- }
+-@@ -943,7 +943,7 @@ static void php_zmq_recvmsg_impl(INTERNAL_FUNCTION_PARAMETERS)
+- {
+- 	zend_string *str = NULL;
+- 	php_zmq_socket_object *intern;
+--	long flags = 0;
+-+	zend_long flags = 0;
+- 
+- 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "|l", &flags) == FAILURE) {
+- 		return;
+-@@ -974,7 +974,7 @@ PHP_METHOD(zmqsocket, recvmulti)
+- {
+- 	php_zmq_socket_object *intern;
+- 	size_t value_len;
+--	long flags = 0;
+-+	zend_long flags = 0;
+- #if ZMQ_VERSION_MAJOR < 3
+- 	int64_t value;
+- #else
+-@@ -1303,7 +1303,7 @@ PHP_METHOD(zmqpoll, add)
+- {
+- 	php_zmq_poll_object *intern;
+- 	zval *object;
+--	long events;
+-+	zend_long events;
+- 	int error;
+- 	zend_string *key;
+- 
+-@@ -1423,10 +1423,10 @@ PHP_METHOD(zmqpoll, poll)
+- 	php_zmq_poll_object *intern;
+- 	zval *r_array, *w_array;
+- 
+--	long timeout = -1;
+-+	zend_long timeout = -1;
+- 	int rc;
+- 
+--	if (zend_parse_parameters(ZEND_NUM_ARGS(), "a!a!|l", &r_array, &w_array, &timeout) == FAILURE) {
+-+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "a!/a!/|l", &r_array, &w_array, &timeout) == FAILURE) {
+- 		return;
+- 	}
+- 
+-@@ -1592,7 +1592,7 @@ void s_clear_device_callback (php_zmq_device_cb_t *cb)
+- }
+- 
+- static
+--void s_init_device_callback (php_zmq_device_cb_t *cb, zend_fcall_info *fci, zend_fcall_info_cache *fci_cache, long timeout, zval *user_data)
+-+void s_init_device_callback (php_zmq_device_cb_t *cb, zend_fcall_info *fci, zend_fcall_info_cache *fci_cache, zend_long timeout, zval *user_data)
+- {
+- 	memcpy (&cb->fci, fci, sizeof (zend_fcall_info));
+- 	memcpy (&cb->fci_cache, fci_cache, sizeof (zend_fcall_info_cache));
+-@@ -1615,7 +1615,7 @@ void s_init_device_callback (php_zmq_device_cb_t *cb, zend_fcall_info *fci, zend
+- PHP_METHOD(zmqdevice, setidletimeout)
+- {
+- 	php_zmq_device_object *intern;
+--	long timeout;
+-+	zend_long timeout;
+- 
+- 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &timeout) == FAILURE) {
+- 		return;
+-@@ -1644,7 +1644,7 @@ PHP_METHOD(zmqdevice, getidletimeout)
+- PHP_METHOD(zmqdevice, settimertimeout)
+- {
+- 	php_zmq_device_object *intern;
+--	long timeout;
+-+	zend_long timeout;
+- 
+- 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &timeout) == FAILURE) {
+- 		return;
+-@@ -1676,7 +1676,7 @@ PHP_METHOD(zmqdevice, setidlecallback)
+- 	zval *user_data = NULL;
+- 	zend_fcall_info fci;
+- 	zend_fcall_info_cache fci_cache;
+--	long timeout = 0;
+-+	zend_long timeout = 0;
+- 
+- 	if (ZEND_NUM_ARGS() == 2) {
+- 		php_error_docref(NULL, E_DEPRECATED, "The signature for setIdleCallback has changed, please update your code");
+-@@ -1718,7 +1718,7 @@ PHP_METHOD(zmqdevice, settimercallback)
+- 	zval *user_data = NULL;
+- 	zend_fcall_info fci;
+- 	zend_fcall_info_cache fci_cache;
+--	long timeout;
+-+	zend_long timeout;
+- 
+- 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "fl|z!", &fci, &fci_cache, &timeout, &user_data) == FAILURE) {
+- 		return;
+-diff --git a/zmq_sockopt.c b/zmq_sockopt.c
+-index 1357032..3a00421 100644
+---- a/zmq_sockopt.c
+-+++ b/zmq_sockopt.c
+-@@ -1,5 +1,3 @@
+--
+--
 - /*
--diff --git a/ssh2_fopen_wrappers.c b/ssh2_fopen_wrappers.c
--index 2f96ca4..f2f3475 100644
----- a/ssh2_fopen_wrappers.c
--+++ b/ssh2_fopen_wrappers.c
--@@ -215,7 +215,7 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 	php_url *resource;
-- 	zval *methods = NULL, *callbacks = NULL, zsession, *tmpzval;
-- 	zend_long resource_id;
---	char *h, *s, *username = NULL, *password = NULL, *pubkey_file = NULL, *privkey_file = NULL;
--+	char *h, *username = NULL, *password = NULL, *pubkey_file = NULL, *privkey_file = NULL;
-- 	int username_len = 0, password_len = 0;
+- +-----------------------------------------------------------------------------------+
+- |  ZMQ extension for PHP                                                            |
+-@@ -2033,7 +2031,7 @@ PHP_METHOD(zmqsocket, getsockopt)
+- PHP_METHOD(zmqsocket, setsockopt)
+- {
+-     php_zmq_socket_object *intern;
+--    long key;
+-+    zend_long key;
+-     zval *zv;
 - 
-- 	h = strstr(path, "Resource id #");
--@@ -233,13 +233,13 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 		return NULL;
-- 	}
-- 
---	if (strncmp(resource->scheme, "ssh2.", sizeof("ssh2.") - 1)) {
--+	if (strncmp(SSH2_URL_STR(resource->scheme), "ssh2.", sizeof("ssh2.") - 1)) {
-- 		/* Not an ssh wrapper */
-- 		php_url_free(resource);
-- 		return NULL;
-- 	}
-- 
---	if (strcmp(resource->scheme + sizeof("ssh2.") - 1, type)) {
--+	if (strcmp(SSH2_URL_STR(resource->scheme) + sizeof("ssh2.") - 1, type)) {
-- 		/* Wrong ssh2. wrapper type */
-- 		php_url_free(resource);
-- 		return NULL;
--@@ -253,13 +253,27 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 		Find resource->path in the path string, then copy the entire string from the original path.
-- 		This includes ?query#fragment in the path string
-- 	*/
--+// TODO copy seems uneeded
--+#if PHP_VERSION_ID < 70300
--+	{
--+	char * s;
--+
-- 	s = resource->path;
-- 	resource->path = estrdup(strstr(path, resource->path));
-- 	efree(s);
--+	}
--+#else
--+	{
--+	zend_string *tmp;
--+
--+	tmp = resource->path;
--+	resource->path = zend_string_init(ZSTR_VAL(resource->path), ZSTR_LEN(resource->path), 0);
--+	zend_string_release(tmp);
--+	}
--+#endif
-- 
-- 	/* Look for a resource ID to reuse a session */
---	s = resource->host;
---	if (is_numeric_string(s, strlen(s), &resource_id, NULL, 0) == IS_LONG) {
--+	if (is_numeric_string(SSH2_URL_STR(resource->host), SSH2_URL_LEN(resource->host), &resource_id, NULL, 0) == IS_LONG) {
-- 		php_ssh2_sftp_data *sftp_data;
-- 		zval *zresource;
-- 
--@@ -309,7 +323,7 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 	}
-- 
-- 	/* Fallback on finding it in the context */
---	if (resource->host[0] == 0 && context && psftp &&
--+	if (SSH2_URL_STR(resource->host)[0] == 0 && context && psftp &&
-- 		(tmpzval = php_stream_context_get_option(context, "ssh2", "sftp")) != NULL &&
-- 		Z_TYPE_P(tmpzval) == IS_RESOURCE) {
-- 		php_ssh2_sftp_data *sftp_data;
--@@ -323,7 +337,7 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 			return resource;
-- 		}
-- 	}
---	if (resource->host[0] == 0 && context &&
--+	if (SSH2_URL_STR(resource->host)[0] == 0 && context &&
-- 		(tmpzval = php_stream_context_get_option(context, "ssh2", "session")) != NULL &&
-- 		Z_TYPE_P(tmpzval) == IS_RESOURCE) {
-- 		session = (LIBSSH2_SESSION *)zend_fetch_resource(Z_RES_P(tmpzval), PHP_SSH2_SESSION_RES_NAME, le_ssh2_session);
--@@ -399,19 +413,19 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 	}
-- 
-- 	if (resource->user) {
---		int len = strlen(resource->user);
--+		int len = SSH2_URL_LEN(resource->user);
-- 
-- 		if (len) {
---			username = resource->user;
--+			username = SSH2_URL_STR(resource->user);
-- 			username_len = len;
-- 		}
-- 	}
-- 
-- 	if (resource->pass) {
---		int len = strlen(resource->pass);
--+		int len = SSH2_URL_LEN(resource->pass);
-- 
-- 		if (len) {
---			password = resource->pass;
--+			password = SSH2_URL_STR(resource->pass);
-- 			password_len = len;
-- 		}
-- 	}
--@@ -422,7 +436,7 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 		return NULL;
-- 	}
-- 
---	session = php_ssh2_session_connect(resource->host, resource->port, methods, callbacks);
--+	session = php_ssh2_session_connect(SSH2_URL_STR(resource->host), resource->port, methods, callbacks);
-- 	if (!session) {
-- 		/* Unable to connect! */
-- 		php_url_free(resource);
--@@ -482,6 +496,7 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 		*psftp = sftp;
-- 	}
-- 
--+	//TODO may be undefined
-- 	*presource_id = Z_LVAL(zsession);
-- 	*psession = session;
-- 
--@@ -527,7 +542,7 @@ static php_stream *php_ssh2_shell_open(LIBSSH2_SESSION *session, int resource_id
-- 					zval_copy_ctor(&copyval);
-- 					convert_to_string(&copyval);
-- 					if (libssh2_channel_setenv_ex(channel, key->val, key->len, Z_STRVAL(copyval), Z_STRLEN(copyval))) {
---						php_error_docref(NULL, E_WARNING, "Failed setting %s=%s on remote end", key, Z_STRVAL(copyval));
--+						php_error_docref(NULL, E_WARNING, "Failed setting %s=%s on remote end", ZSTR_VAL(key), Z_STRVAL(copyval));
-- 					}
-- 					zval_dtor(&copyval);
-- 				}
--@@ -631,7 +646,7 @@ static php_stream *php_ssh2_fopen_wrapper_shell(php_stream_wrapper *wrapper, con
-- 		zval_ptr_dtor(&copyval);
-- 	}
-- 
---	s = resource->path ? resource->path : NULL;
--+	s = resource->path ? SSH2_URL_STR(resource->path) : NULL;
-- 
-- 	if (s && s[0] == '/') {
-- 		/* Terminal type encoded into URL overrides context terminal type */
--@@ -766,7 +781,7 @@ static php_stream *php_ssh2_exec_command(LIBSSH2_SESSION *session, int resource_
-- 					zval_copy_ctor(&copyval);
-- 					convert_to_string(&copyval);
-- 					if (libssh2_channel_setenv_ex(channel, key->val, key->len, Z_STRVAL(copyval), Z_STRLEN(copyval))) {
---						php_error_docref(NULL, E_WARNING, "Failed setting %s=%s on remote end", key, Z_STRVAL(copyval));
--+						php_error_docref(NULL, E_WARNING, "Failed setting %s=%s on remote end", ZSTR_VAL(key), Z_STRVAL(copyval));
-- 					}
-- 					zval_dtor(&copyval);
-- 				}
--@@ -878,7 +893,7 @@ static php_stream *php_ssh2_fopen_wrapper_exec(php_stream_wrapper *wrapper, cons
-- 		zval_ptr_dtor(copyval);
-- 	}
-- 
---	stream = php_ssh2_exec_command(session, resource_id, resource->path + 1, terminal, terminal_len, environment, width, height, type);
--+	stream = php_ssh2_exec_command(session, resource_id, SSH2_URL_STR(resource->path) + 1, terminal, terminal_len, environment, width, height, type);
-- 	if (!stream) {
-- 		// TODO Sean-Der
-- 		//zend_list_delete(resource_id);
--@@ -1021,7 +1036,7 @@ static php_stream *php_ssh2_fopen_wrapper_scp(php_stream_wrapper *wrapper, const
-- 		return NULL;
-- 	}
-- 
---	stream = php_ssh2_scp_xfer(session, resource_id, resource->path);
--+	stream = php_ssh2_scp_xfer(session, resource_id, SSH2_URL_STR(resource->path));
-- 	if (!stream) {
-- 		//TODO Sean-Der
-- 		//zend_list_delete(resource_id);
--@@ -1147,7 +1162,7 @@ PHP_FUNCTION(ssh2_scp_send)
-- 		char *error_msg = NULL;
-- 
-- 		last_error = libssh2_session_last_error(session, &error_msg, NULL, 0);
---		php_error_docref(NULL, E_WARNING, "Failure creating remote file: %s", error_msg);
--+		php_error_docref(NULL, E_WARNING, "Failure creating remote file: %s (%d)", error_msg, last_error);
-- 		php_stream_close(local_file);
-- 		RETURN_FALSE;
-- 	}
--@@ -1262,10 +1277,10 @@ static php_stream *php_ssh2_fopen_wrapper_tunnel(php_stream_wrapper *wrapper, co
-- 		return NULL;
-- 	}
-- 
---	if (resource->path && resource->path[0] == '/') {
--+	if (resource->path && SSH2_URL_STR(resource->path)[0] == '/') {
-- 		char *colon;
-- 
---		host = resource->path + 1;
--+		host = SSH2_URL_STR(resource->path) + 1;
-- 		if (*host == '[') {
-- 			/* IPv6 Encapsulated Format */
-- 			host++;
--diff --git a/ssh2_sftp.c b/ssh2_sftp.c
--index 13f89f0..6332be8 100644
----- a/ssh2_sftp.c
--+++ b/ssh2_sftp.c
--@@ -238,7 +238,7 @@ static php_stream *php_ssh2_sftp_stream_opener(php_stream_wrapper *wrapper, cons
-- 
-- 	flags = php_ssh2_parse_fopen_modes((char *)mode);
-- 
---	handle = libssh2_sftp_open(sftp, resource->path, flags, perms);
--+	handle = libssh2_sftp_open(sftp, SSH2_URL_STR(resource->path), flags, perms);
-- 	if (!handle) {
-- 		php_error_docref(NULL, E_WARNING, "Unable to open %s on remote host", filename);
-- 		php_url_free(resource);
--@@ -341,7 +341,7 @@ static php_stream *php_ssh2_sftp_dirstream_opener(php_stream_wrapper *wrapper, c
-- 		return NULL;
-- 	}
-- 
---	handle = libssh2_sftp_opendir(sftp, resource->path);
--+	handle = libssh2_sftp_opendir(sftp, SSH2_URL_STR(resource->path));
-- 	if (!handle) {
-- 		php_error_docref(NULL, E_WARNING, "Unable to open %s on remote host", filename);
-- 		php_url_free(resource);
--@@ -386,7 +386,7 @@ static int php_ssh2_sftp_urlstat(php_stream_wrapper *wrapper, const char *url, i
-- 		return -1;
-- 	}
-- 
---	if (libssh2_sftp_stat_ex(sftp, resource->path, strlen(resource->path),
--+	if (libssh2_sftp_stat_ex(sftp, SSH2_URL_STR(resource->path), SSH2_URL_LEN(resource->path),
-- 		(flags & PHP_STREAM_URL_STAT_LINK) ? LIBSSH2_SFTP_LSTAT : LIBSSH2_SFTP_STAT, &attrs)) {
-- 		php_url_free(resource);
-- 		//zend_list_delete(sftp_rsrcid);
--@@ -420,7 +420,7 @@ static int php_ssh2_sftp_unlink(php_stream_wrapper *wrapper, const char *url, in
-- 		return 0;
-- 	}
-- 
---	result = libssh2_sftp_unlink(sftp, resource->path);
--+	result = libssh2_sftp_unlink(sftp, SSH2_URL_STR(resource->path));
-- 	php_url_free(resource);
-- 
-- 	//zend_list_delete(sftp_rsrcid);
--@@ -462,7 +462,7 @@ static int php_ssh2_sftp_rename(php_stream_wrapper *wrapper, const char *url_fro
-- 		return 0;
-- 	}
-- 
---	result = libssh2_sftp_rename(sftp, resource->path, resource_to->path);
--+	result = libssh2_sftp_rename(sftp, SSH2_URL_STR(resource->path), SSH2_URL_STR(resource_to->path));
-- 	php_url_free(resource);
-- 	php_url_free(resource_to);
-- 
--@@ -493,13 +493,13 @@ static int php_ssh2_sftp_mkdir(php_stream_wrapper *wrapper, const char *url, int
-- 
-- 	if (options & PHP_STREAM_MKDIR_RECURSIVE) {
-- 		/* Just attempt to make every directory, some will fail, but we only care about the last success/failure */
---		char *p = resource->path;
--+		char *p = SSH2_URL_STR(resource->path);
-- 		while ((p = strchr(p + 1, '/'))) {
---			libssh2_sftp_mkdir_ex(sftp, resource->path, p - resource->path, mode);
--+			libssh2_sftp_mkdir_ex(sftp, SSH2_URL_STR(resource->path), p - SSH2_URL_STR(resource->path), mode);
-- 		}
-- 	}
-- 
---	result = libssh2_sftp_mkdir(sftp, resource->path, mode);
--+	result = libssh2_sftp_mkdir(sftp, SSH2_URL_STR(resource->path), mode);
-- 	php_url_free(resource);
-- 
-- 	//zend_list_delete(sftp_rsrcid);
--@@ -527,7 +527,7 @@ static int php_ssh2_sftp_rmdir(php_stream_wrapper *wrapper, const char *url, int
-- 		return 0;
-- 	}
-- 
---	result = libssh2_sftp_rmdir(sftp, resource->path);
--+	result = libssh2_sftp_rmdir(sftp, SSH2_URL_STR(resource->path));
-- 	php_url_free(resource);
-- 
-- 	//zend_list_delete(sftp_rsrcid);
--@@ -836,7 +836,7 @@ PHP_FUNCTION(ssh2_sftp_readlink)
-- 	}
-- 
-- 	if ((targ_len = libssh2_sftp_symlink_ex(data->sftp, link->val, link->len, targ, 8192, LIBSSH2_SFTP_READLINK)) < 0) {
---		php_error_docref(NULL, E_WARNING, "Unable to read link '%s'", link);
--+		php_error_docref(NULL, E_WARNING, "Unable to read link '%s'", ZSTR_VAL(link));
-- 		RETURN_FALSE;
-- 	}
-- 
-diff --git a/package/php-ssh2/0002-dstogov-Fixed-PHP7-port-Restored-commented-reference-counting.patch b/package/php-ssh2/0002-dstogov-Fixed-PHP7-port-Restored-commented-reference-counting.patch
-deleted file mode 100644
-index d6d62947f7..0000000000
---- a/package/php-ssh2/0002-dstogov-Fixed-PHP7-port-Restored-commented-reference-counting.patch
-+++ /dev/null
-@@ -1,746 +0,0 @@
--From 073067ba96ac99ed5696d27f13ca6c8124986e74 Mon Sep 17 00:00:00 2001
--From: Jan-E <github@ehrhardt.nl>
--Date: Thu, 28 Jun 2018 08:43:48 +0200
--Subject: [PATCH] @dstogov Fixed PHP7 port. Restored commented reference
-- counting.
+-     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lz/", &key, &zv) == FAILURE) {
+--- 
+-2.17.1
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/php/pecl-networking-ssh2/commit/073067ba96ac99ed5696d27f13ca6c8124986e74]
-----
-- php_ssh2.h            |  14 ++---
-- ssh2.c                |  26 ++++-----
-- ssh2_fopen_wrappers.c | 129 ++++++++++++++++++------------------------
-- ssh2_sftp.c           |  59 +++++++++----------
-- 4 files changed, 102 insertions(+), 126 deletions(-)
--
--diff --git a/php_ssh2.h b/php_ssh2.h
--index d010ff9..2bbaa26 100644
----- a/php_ssh2.h
--+++ b/php_ssh2.h
--@@ -73,14 +73,14 @@ typedef struct _php_ssh2_sftp_data {
-- 	LIBSSH2_SESSION *session;
-- 	LIBSSH2_SFTP *sftp;
-- 
---	int session_rsrcid;
--+	zend_resource *session_rsrc;
-- } php_ssh2_sftp_data;
-- 
-- typedef struct _php_ssh2_listener_data {
-- 	LIBSSH2_SESSION *session;
-- 	LIBSSH2_LISTENER *listener;
-- 
---	int session_rsrcid;
--+	zend_resource *session_rsrc;
-- } php_ssh2_listener_data;
-- 
-- #include "libssh2_publickey.h"
--@@ -89,7 +89,7 @@ typedef struct _php_ssh2_pkey_subsys_data {
-- 	LIBSSH2_SESSION *session;
-- 	LIBSSH2_PUBLICKEY *pkey;
-- 
---	int session_rsrcid;
--+	zend_resource *session_rsrc;
-- } php_ssh2_pkey_subsys_data;
-- 
-- #define SSH2_FETCH_NONAUTHENTICATED_SESSION(session, zsession) \
--@@ -118,8 +118,8 @@ typedef struct _php_ssh2_channel_data {
-- 	char is_blocking;
-- 	long timeout;
-- 
---	/* Resource ID */
---	int session_rsrcid;
--+	/* Resource */
--+	zend_resource *session_rsrc;
-- 
-- 	/* Allow one stream to be closed while the other is kept open */
-- 	unsigned char *refcount;
--@@ -151,8 +151,8 @@ PHP_FUNCTION(ssh2_sftp_realpath);
-- LIBSSH2_SESSION *php_ssh2_session_connect(char *host, int port, zval *methods, zval *callbacks);
-- void php_ssh2_sftp_dtor(zend_resource *rsrc);
-- php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stream_context *context,
---											LIBSSH2_SESSION **psession, int *presource_id,
---											LIBSSH2_SFTP **psftp, int *psftp_rsrcid);
--+											LIBSSH2_SESSION **psession, zend_resource **presource,
--+											LIBSSH2_SFTP **psftp, zend_resource **psftp_rsrc);
-- 
-- extern php_stream_ops php_ssh2_channel_stream_ops;
-- 
--diff --git a/ssh2.c b/ssh2.c
--index e73867e..849766b 100644
----- a/ssh2.c
--+++ b/ssh2.c
--@@ -772,9 +772,8 @@ PHP_FUNCTION(ssh2_forward_listen)
-- 
-- 	data = emalloc(sizeof(php_ssh2_listener_data));
-- 	data->session = session;
---	data->session_rsrcid = Z_LVAL_P(zsession);
---	//TODO Sean-Der
---	//zend_list_addref(data->session_rsrcid);
--+	data->session_rsrc = Z_RES_P(zsession);
--+	Z_ADDREF_P(zsession);
-- 	data->listener = listener;
-- 
-- 	RETURN_RES(zend_register_resource(data, le_ssh2_listener));
--@@ -810,7 +809,7 @@ PHP_FUNCTION(ssh2_forward_accept)
-- 	channel_data->channel = channel;
-- 	channel_data->streamid = 0;
-- 	channel_data->is_blocking = 0;
---	channel_data->session_rsrcid = data->session_rsrcid;
--+	channel_data->session_rsrc = data->session_rsrc;
-- 	channel_data->refcount = NULL;
-- 
-- 	stream = php_stream_alloc(&php_ssh2_channel_stream_ops, channel_data, 0, "r+");
--@@ -820,8 +819,12 @@ PHP_FUNCTION(ssh2_forward_accept)
-- 		libssh2_channel_free(channel);
-- 		RETURN_FALSE;
-- 	}
---	//TODO Sean-Der
---	//zend_list_addref(channel_data->session_rsrcid);
--+
--+#if PHP_VERSION_ID < 70300
--+	GC_REFCOUNT(channel_data->session_rsrc)++;
--+#else
--+	GC_ADDREF(channel_data->session_rsrc);
--+#endif
-- 
-- 	php_stream_to_zval(stream, return_value);
-- }
--@@ -975,9 +978,8 @@ PHP_FUNCTION(ssh2_publickey_init)
-- 
-- 	data = emalloc(sizeof(php_ssh2_pkey_subsys_data));
-- 	data->session = session;
---	data->session_rsrcid = Z_RES_P(zsession)->handle;
---	//TODO Sean-Der
---	//zend_list_addref(data->session_rsrcid);
--+	data->session_rsrc = Z_RES_P(zsession);
--+	Z_ADDREF_P(zsession);
-- 	data->pkey = pkey;
-- 
-- 	RETURN_RES(zend_register_resource(data, le_ssh2_pkey_subsys));
--@@ -1280,8 +1282,7 @@ static void php_ssh2_listener_dtor(zend_resource *rsrc)
-- 	LIBSSH2_LISTENER *listener = data->listener;
-- 
-- 	libssh2_channel_forward_cancel(listener);
---	// TODO Sean-Der
---	//zend_list_delete(data->session_rsrcid);
--+	zend_list_delete(data->session_rsrc);
-- 	efree(data);
-- }
-- 
--@@ -1291,8 +1292,7 @@ static void php_ssh2_pkey_subsys_dtor(zend_resource *rsrc)
-- 	LIBSSH2_PUBLICKEY *pkey = data->pkey;
-- 
-- 	libssh2_publickey_shutdown(pkey);
---	// TODO Sean-Der
---	//zend_list_delete(data->session_rsrcid);
--+	zend_list_delete(data->session_rsrc);
-- 	efree(data);
-- }
-- 
--diff --git a/ssh2_fopen_wrappers.c b/ssh2_fopen_wrappers.c
--index f2f3475..c4eb9dc 100644
----- a/ssh2_fopen_wrappers.c
--+++ b/ssh2_fopen_wrappers.c
--@@ -47,11 +47,9 @@ static size_t php_ssh2_channel_stream_write(php_stream *stream, const char *buf,
-- 	php_ssh2_channel_data *abstract = (php_ssh2_channel_data*)stream->abstract;
-- 	size_t writestate;
-- 	LIBSSH2_SESSION *session;
---	zval *zresource;
-- 
-- 	libssh2_channel_set_blocking(abstract->channel, abstract->is_blocking);
---	zresource = php_ssh2_zval_from_resource_handle(abstract->session_rsrcid);
---	session = (LIBSSH2_SESSION *)zend_fetch_resource(Z_RES_P(zresource), PHP_SSH2_SESSION_RES_NAME, le_ssh2_session);
--+	session = (LIBSSH2_SESSION *)zend_fetch_resource(abstract->session_rsrc, PHP_SSH2_SESSION_RES_NAME, le_ssh2_session);
-- 
-- 
-- 
--@@ -90,12 +88,10 @@ static size_t php_ssh2_channel_stream_read(php_stream *stream, char *buf, size_t
-- 	php_ssh2_channel_data *abstract = (php_ssh2_channel_data*)stream->abstract;
-- 	ssize_t readstate;
-- 	LIBSSH2_SESSION *session;
---	zval *zresource;
-- 
-- 	stream->eof = libssh2_channel_eof(abstract->channel);
-- 	libssh2_channel_set_blocking(abstract->channel, abstract->is_blocking);
---	zresource = php_ssh2_zval_from_resource_handle(abstract->session_rsrcid);
---	session = (LIBSSH2_SESSION *)zend_fetch_resource(Z_RES_P(zresource), PHP_SSH2_SESSION_RES_NAME, le_ssh2_session);
--+	session = (LIBSSH2_SESSION *)zend_fetch_resource(abstract->session_rsrc, PHP_SSH2_SESSION_RES_NAME, le_ssh2_session);
-- 
-- #ifdef PHP_SSH2_SESSION_TIMEOUT
-- 	if (abstract->is_blocking) {
--@@ -137,8 +133,7 @@ static int php_ssh2_channel_stream_close(php_stream *stream, int close_handle)
-- 		}
-- 		libssh2_channel_eof(abstract->channel);
-- 		libssh2_channel_free(abstract->channel);
---		//TODO Sean-Der
---		//zend_list_delete(abstract->session_rsrcid);
--+		zend_list_delete(abstract->session_rsrc);
-- 	}
-- 	efree(abstract);
-- 
--@@ -207,8 +202,8 @@ php_stream_ops php_ssh2_channel_stream_ops = {
--  * Parse an ssh2.*:// path
--  */
-- php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stream_context *context,
---											LIBSSH2_SESSION **psession, int *presource_id,
---											LIBSSH2_SFTP **psftp, int *psftp_rsrcid)
--+											LIBSSH2_SESSION **psession, zend_resource **presource,
--+											LIBSSH2_SFTP **psftp, zend_resource **psftp_rsrc)
-- {
-- 	php_ssh2_sftp_data *sftp_data = NULL;
-- 	LIBSSH2_SESSION *session;
--@@ -283,11 +278,10 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 			sftp_data = (php_ssh2_sftp_data *)zend_fetch_resource(Z_RES_P(zresource), PHP_SSH2_SFTP_RES_NAME, le_ssh2_sftp);
-- 			if (sftp_data) {
-- 				/* Want the sftp layer */
---				//TODO Sean-Der
---				//zend_list_addref(resource_id);
---				*psftp_rsrcid = resource_id;
--+				Z_ADDREF_P(zresource);
--+				*psftp_rsrc = Z_RES_P(zresource);
-- 				*psftp = sftp_data->sftp;
---				*presource_id = sftp_data->session_rsrcid;
--+				*presource = sftp_data->session_rsrc;
-- 				*psession = sftp_data->session;
-- 				return resource;
-- 			}
--@@ -305,18 +299,16 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 				sftp_data = emalloc(sizeof(php_ssh2_sftp_data));
-- 				sftp_data->sftp = sftp;
-- 				sftp_data->session = session;
---				sftp_data->session_rsrcid = resource_id;
---				//TODO Sean-Der
---				//zend_list_addref(resource_id);
---				*psftp_rsrcid = zend_register_resource(sftp_data, le_ssh2_sftp)->handle;
--+				sftp_data->session_rsrc = Z_RES_P(zresource);
--+				Z_ADDREF_P(zresource);
--+				*psftp_rsrc = zend_register_resource(sftp_data, le_ssh2_sftp);
-- 				*psftp = sftp;
---				*presource_id = resource_id;
--+				*presource = Z_RES_P(zresource);
-- 				*psession = session;
-- 				return resource;
-- 			}
---			//TODO Sean-Der
---			//zend_list_addref(resource_id);
---			*presource_id = resource_id;
--+			Z_ADDREF_P(zresource);
--+			*presource = Z_RES_P(zresource);
-- 			*psession = session;
-- 			return resource;
-- 		}
--@@ -330,9 +322,9 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 		sftp_data = (php_ssh2_sftp_data *)zend_fetch_resource(Z_RES_P(tmpzval), PHP_SSH2_SFTP_RES_NAME, le_ssh2_sftp);
-- 		if (sftp_data) {
-- 			Z_ADDREF_P(tmpzval);
---			*psftp_rsrcid = Z_LVAL_P(tmpzval);
--+			*psftp_rsrc = Z_RES_P(tmpzval);
-- 			*psftp = sftp_data->sftp;
---			*presource_id = sftp_data->session_rsrcid;
--+			*presource = sftp_data->session_rsrc;
-- 			*psession = sftp_data->session;
-- 			return resource;
-- 		}
--@@ -354,17 +346,17 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 				sftp_data = emalloc(sizeof(php_ssh2_sftp_data));
-- 				sftp_data->sftp = sftp;
-- 				sftp_data->session = session;
---				sftp_data->session_rsrcid = Z_LVAL_P(tmpzval);
--+				sftp_data->session_rsrc = Z_RES_P(tmpzval);
-- 				Z_ADDREF_P(tmpzval);
---				*psftp_rsrcid = zend_register_resource(sftp_data, le_ssh2_sftp)->handle;
--+				*psftp_rsrc = zend_register_resource(sftp_data, le_ssh2_sftp);
-- 				*psftp = sftp;
---				*presource_id = Z_RES_P(tmpzval)->handle;
--+				*presource = Z_RES_P(tmpzval);
-- 				*psession = session;
-- 				return resource;
-- 			}
-- 			Z_ADDREF_P(tmpzval);
-- 			*psession = session;
---			*presource_id = Z_LVAL_P(tmpzval);
--+			*presource = Z_RES_P(tmpzval);
-- 			return resource;
-- 		}
-- 	}
--@@ -465,8 +457,7 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 
-- 	/* Auth failure */
-- 	php_url_free(resource);
---	//TODO Sean-Der
---	//zend_list_delete(Z_LVAL(zsession));
--+	zend_list_delete(Z_RES(zsession));
-- 	return NULL;
-- 
-- session_authed:
--@@ -480,24 +471,22 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- 		sftp = libssh2_sftp_init(session);
-- 		if (!sftp) {
-- 			php_url_free(resource);
---			//TODO Sean-Der
---			//zend_list_delete(Z_LVAL(zsession));
--+			zend_list_delete(Z_RES(zsession));
-- 			return NULL;
-- 		}
-- 
-- 		sftp_data = emalloc(sizeof(php_ssh2_sftp_data));
-- 		sftp_data->session = session;
-- 		sftp_data->sftp = sftp;
---		sftp_data->session_rsrcid = Z_LVAL(zsession);
--+		sftp_data->session_rsrc = Z_RES(zsession);
-- 
-- 		//TODO Sean-Der
-- 		//ZEND_REGISTER_RESOURCE(sftp_data, le_ssh2_sftp);
---		*psftp_rsrcid = Z_LVAL(zsftp);
--+		*psftp_rsrc = Z_RES(zsftp);
-- 		*psftp = sftp;
-- 	}
-- 
---	//TODO may be undefined
---	*presource_id = Z_LVAL(zsession);
--+	*presource = Z_RES(zsession);
-- 	*psession = session;
-- 
-- 	return resource;
--@@ -511,7 +500,7 @@ php_url *php_ssh2_fopen_wraper_parse_path(const char *path, char *type, php_stre
-- /* {{{ php_ssh2_shell_open
--  * Make a stream from a session
--  */
---static php_stream *php_ssh2_shell_open(LIBSSH2_SESSION *session, int resource_id, char *term, int term_len, zval *environment, long width, long height, long type)
--+static php_stream *php_ssh2_shell_open(LIBSSH2_SESSION *session, zend_resource *resource, char *term, int term_len, zval *environment, long width, long height, long type)
-- {
-- 	LIBSSH2_CHANNEL *channel;
-- 	php_ssh2_channel_data *channel_data;
--@@ -578,7 +567,7 @@ static php_stream *php_ssh2_shell_open(LIBSSH2_SESSION *session, int resource_id
-- 	channel_data->streamid = 0;
-- 	channel_data->is_blocking = 0;
-- 	channel_data->timeout = 0;
---	channel_data->session_rsrcid = resource_id;
--+	channel_data->session_rsrc = resource;
-- 	channel_data->refcount = NULL;
-- 
-- 	stream = php_stream_alloc(&php_ssh2_channel_stream_ops, channel_data, 0, "r+");
--@@ -599,11 +588,12 @@ static php_stream *php_ssh2_fopen_wrapper_shell(php_stream_wrapper *wrapper, con
-- 	zend_long width = PHP_SSH2_DEFAULT_TERM_WIDTH;
-- 	zend_long height = PHP_SSH2_DEFAULT_TERM_HEIGHT;
-- 	zend_long type = PHP_SSH2_DEFAULT_TERM_UNIT;
---	int resource_id = 0, terminal_len = sizeof(PHP_SSH2_DEFAULT_TERMINAL) - 1;
--+	zend_resource *rsrc = NULL;
--+	int terminal_len = sizeof(PHP_SSH2_DEFAULT_TERMINAL) - 1;
-- 	php_url *resource;
-- 	char *s;
-- 
---	resource = php_ssh2_fopen_wraper_parse_path(path, "shell", context, &session, &resource_id, NULL, NULL);
--+	resource = php_ssh2_fopen_wraper_parse_path(path, "shell", context, &session, &rsrc, NULL, NULL);
-- 	if (!resource || !session) {
-- 		return NULL;
-- 	}
--@@ -677,10 +667,9 @@ static php_stream *php_ssh2_fopen_wrapper_shell(php_stream_wrapper *wrapper, con
-- 	/* TODO: Accept resolution and environment vars as URL style parameters
-- 	 * ssh2.shell://hostorresource/terminal/99x99c?envvar=envval&envvar=envval....
-- 	 */
---	stream = php_ssh2_shell_open(session, resource_id, terminal, terminal_len, environment, width, height, type);
--+	stream = php_ssh2_shell_open(session, rsrc, terminal, terminal_len, environment, width, height, type);
-- 	if (!stream) {
---		//TODO Sean-Der
---		//zend_list_delete(resource_id);
--+		zend_list_delete(rsrc);
-- 	}
-- 	php_url_free(resource);
-- 
--@@ -730,7 +719,7 @@ PHP_FUNCTION(ssh2_shell)
-- 
-- 	SSH2_FETCH_AUTHENTICATED_SESSION(session, zsession);
-- 
---	stream = php_ssh2_shell_open(session, Z_RES_P(zsession)->handle, term, term_len, environment, width, height, type);
--+	stream = php_ssh2_shell_open(session, Z_RES_P(zsession), term, term_len, environment, width, height, type);
-- 	if (!stream) {
-- 		RETURN_FALSE;
-- 	}
--@@ -749,7 +738,7 @@ PHP_FUNCTION(ssh2_shell)
-- /* {{{ php_ssh2_exec_command
--  * Make a stream from a session
--  */
---static php_stream *php_ssh2_exec_command(LIBSSH2_SESSION *session, int resource_id, char *command, char *term, int term_len, zval *environment, long width, long height, long type)
--+static php_stream *php_ssh2_exec_command(LIBSSH2_SESSION *session, zend_resource *rsrc, char *command, char *term, int term_len, zval *environment, long width, long height, long type)
-- {
-- 	LIBSSH2_CHANNEL *channel;
-- 	php_ssh2_channel_data *channel_data;
--@@ -819,7 +808,7 @@ static php_stream *php_ssh2_exec_command(LIBSSH2_SESSION *session, int resource_
-- 	channel_data->streamid = 0;
-- 	channel_data->is_blocking = 0;
-- 	channel_data->timeout = 0;
---	channel_data->session_rsrcid = resource_id;
--+	channel_data->session_rsrc = rsrc;
-- 	channel_data->refcount = NULL;
-- 
-- 	stream = php_stream_alloc(&php_ssh2_channel_stream_ops, channel_data, 0, "r+");
--@@ -836,7 +825,7 @@ static php_stream *php_ssh2_fopen_wrapper_exec(php_stream_wrapper *wrapper, cons
-- 	LIBSSH2_SESSION *session = NULL;
-- 	php_stream *stream;
-- 	zval *tmpzval, *environment = NULL;
---	int resource_id = 0;
--+	zend_resource *rsrc = NULL;
-- 	php_url *resource;
-- 	char *terminal = NULL;
-- 	int terminal_len = 0;
--@@ -844,14 +833,13 @@ static php_stream *php_ssh2_fopen_wrapper_exec(php_stream_wrapper *wrapper, cons
-- 	long height = PHP_SSH2_DEFAULT_TERM_HEIGHT;
-- 	long type = PHP_SSH2_DEFAULT_TERM_UNIT;
-- 
---	resource = php_ssh2_fopen_wraper_parse_path(path, "exec", context, &session, &resource_id, NULL, NULL);
--+	resource = php_ssh2_fopen_wraper_parse_path(path, "exec", context, &session, &rsrc, NULL, NULL);
-- 	if (!resource || !session) {
-- 		return NULL;
-- 	}
-- 	if (!resource->path) {
-- 		php_url_free(resource);
---		//TODO Sean-Der
---		//zend_list_delete(resource_id);
--+		zend_list_delete(rsrc);
-- 		return NULL;
-- 	}
-- 
--@@ -893,10 +881,9 @@ static php_stream *php_ssh2_fopen_wrapper_exec(php_stream_wrapper *wrapper, cons
-- 		zval_ptr_dtor(copyval);
-- 	}
-- 
---	stream = php_ssh2_exec_command(session, resource_id, SSH2_URL_STR(resource->path) + 1, terminal, terminal_len, environment, width, height, type);
--+	stream = php_ssh2_exec_command(session, rsrc, SSH2_URL_STR(resource->path) + 1, terminal, terminal_len, environment, width, height, type);
-- 	if (!stream) {
---		// TODO Sean-Der
---		//zend_list_delete(resource_id);
--+		zend_list_delete(rsrc);
-- 	}
-- 	php_url_free(resource);
-- 
--@@ -963,7 +950,7 @@ PHP_FUNCTION(ssh2_exec)
-- 
-- 	SSH2_FETCH_AUTHENTICATED_SESSION(session, zsession);
-- 
---	stream = php_ssh2_exec_command(session, Z_RES_P(zsession)->handle, command, term, term_len, environment, width, height, type);
--+	stream = php_ssh2_exec_command(session, Z_RES_P(zsession), command, term, term_len, environment, width, height, type);
-- 	if (!stream) {
-- 		RETURN_FALSE;
-- 	}
--@@ -982,7 +969,7 @@ PHP_FUNCTION(ssh2_exec)
-- /* {{{ php_ssh2_scp_xfer
--  * Make a stream from a session
--  */
---static php_stream *php_ssh2_scp_xfer(LIBSSH2_SESSION *session, int resource_id, char *filename)
--+static php_stream *php_ssh2_scp_xfer(LIBSSH2_SESSION *session, zend_resource *rsrc, char *filename)
-- {
-- 	LIBSSH2_CHANNEL *channel;
-- 	php_ssh2_channel_data *channel_data;
--@@ -1002,7 +989,7 @@ static php_stream *php_ssh2_scp_xfer(LIBSSH2_SESSION *session, int resource_id,
-- 	channel_data->streamid = 0;
-- 	channel_data->is_blocking = 0;
-- 	channel_data->timeout = 0;
---	channel_data->session_rsrcid = resource_id;
--+	channel_data->session_rsrc = rsrc;
-- 	channel_data->refcount = NULL;
-- 
-- 	stream = php_stream_alloc(&php_ssh2_channel_stream_ops, channel_data, 0, "r");
--@@ -1018,28 +1005,26 @@ static php_stream *php_ssh2_fopen_wrapper_scp(php_stream_wrapper *wrapper, const
-- {
-- 	LIBSSH2_SESSION *session = NULL;
-- 	php_stream *stream;
---	int resource_id = 0;
--+	zend_resource *rsrc = NULL;
-- 	php_url *resource;
-- 
-- 	if (strchr(mode, '+') || strchr(mode, 'a') || strchr(mode, 'w')) {
-- 		return NULL;
-- 	}
-- 
---	resource = php_ssh2_fopen_wraper_parse_path(path, "scp", context, &session, &resource_id, NULL, NULL);
--+	resource = php_ssh2_fopen_wraper_parse_path(path, "scp", context, &session, &rsrc, NULL, NULL);
-- 	if (!resource || !session) {
-- 		return NULL;
-- 	}
-- 	if (!resource->path) {
-- 		php_url_free(resource);
---		//TODO Sean-Der
---		//zend_list_delete(resource_id);
--+		zend_list_delete(rsrc);
-- 		return NULL;
-- 	}
-- 
---	stream = php_ssh2_scp_xfer(session, resource_id, SSH2_URL_STR(resource->path));
--+	stream = php_ssh2_scp_xfer(session, rsrc, SSH2_URL_STR(resource->path));
-- 	if (!stream) {
---		//TODO Sean-Der
---		//zend_list_delete(resource_id);
--+		zend_list_delete(rsrc);
-- 	}
-- 	php_url_free(resource);
-- 
--@@ -1231,7 +1216,7 @@ PHP_FUNCTION(ssh2_scp_send)
-- /* {{{ php_ssh2_direct_tcpip
--  * Make a stream from a session
--  */
---static php_stream *php_ssh2_direct_tcpip(LIBSSH2_SESSION *session, int resource_id, char *host, int port)
--+static php_stream *php_ssh2_direct_tcpip(LIBSSH2_SESSION *session, zend_resource *rsrc, char *host, int port)
-- {
-- 	LIBSSH2_CHANNEL *channel;
-- 	php_ssh2_channel_data *channel_data;
--@@ -1251,7 +1236,7 @@ static php_stream *php_ssh2_direct_tcpip(LIBSSH2_SESSION *session, int resource_
-- 	channel_data->streamid = 0;
-- 	channel_data->is_blocking = 0;
-- 	channel_data->timeout = 0;
---	channel_data->session_rsrcid = resource_id;
--+	channel_data->session_rsrc = rsrc;
-- 	channel_data->refcount = NULL;
-- 
-- 	stream = php_stream_alloc(&php_ssh2_channel_stream_ops, channel_data, 0, "r+");
--@@ -1270,9 +1255,9 @@ static php_stream *php_ssh2_fopen_wrapper_tunnel(php_stream_wrapper *wrapper, co
-- 	php_url *resource;
-- 	char *host = NULL;
-- 	int port = 0;
---	int resource_id = 0;
--+	zend_resource *rsrc;
-- 
---	resource = php_ssh2_fopen_wraper_parse_path(path, "tunnel", context, &session, &resource_id, NULL, NULL);
--+	resource = php_ssh2_fopen_wraper_parse_path(path, "tunnel", context, &session, &rsrc, NULL, NULL);
-- 	if (!resource || !session) {
-- 		return NULL;
-- 	}
--@@ -1303,15 +1288,13 @@ static php_stream *php_ssh2_fopen_wrapper_tunnel(php_stream_wrapper *wrapper, co
-- 	if ((port <= 0) || (port > 65535) || !host || (strlen(host) == 0)) {
-- 		/* Invalid connection criteria */
-- 		php_url_free(resource);
---		//TODO Sean-Der
---		//zend_list_delete(resource_id);
--+		zend_list_delete(rsrc);
-- 		return NULL;
-- 	}
-- 
---	stream = php_ssh2_direct_tcpip(session, resource_id, host, port);
--+	stream = php_ssh2_direct_tcpip(session, rsrc, host, port);
-- 	if (!stream) {
---		// TODO Sean-Der
---		//zend_list_delete(resource_id);
--+		zend_list_delete(rsrc);
-- 	}
-- 	php_url_free(resource);
-- 
--@@ -1352,7 +1335,7 @@ PHP_FUNCTION(ssh2_tunnel)
-- 
-- 	SSH2_FETCH_AUTHENTICATED_SESSION(session, zsession);
-- 
---	stream = php_ssh2_direct_tcpip(session, Z_RES_P(zsession)->handle, host, port);
--+	stream = php_ssh2_direct_tcpip(session, Z_RES_P(zsession), host, port);
-- 	if (!stream) {
-- 		RETURN_FALSE;
-- 	}
--diff --git a/ssh2_sftp.c b/ssh2_sftp.c
--index 6332be8..256fc70 100644
----- a/ssh2_sftp.c
--+++ b/ssh2_sftp.c
--@@ -40,8 +40,7 @@ void php_ssh2_sftp_dtor(zend_resource *rsrc)
-- 
-- 	libssh2_sftp_shutdown(data->sftp);
-- 
---	// TODO Sean-Der
---	//zend_list_delete(data->session_rsrcid);
--+	zend_list_delete(data->session_rsrc);
-- 
-- 	efree(data);
-- }
--@@ -50,7 +49,7 @@ void php_ssh2_sftp_dtor(zend_resource *rsrc)
--    * SFTP File Ops *
--    ***************** */
-- 
---inline unsigned long php_ssh2_parse_fopen_modes(char *openmode) {
--+unsigned long php_ssh2_parse_fopen_modes(char *openmode) {
-- 	unsigned long flags = 0;
-- 
-- 	if (strchr(openmode, 'a')) {
--@@ -101,7 +100,7 @@ inline int php_ssh2_sftp_attr2ssb(php_stream_statbuf *ssb, LIBSSH2_SFTP_ATTRIBUT
-- typedef struct _php_ssh2_sftp_handle_data {
-- 	LIBSSH2_SFTP_HANDLE *handle;
-- 
---	long sftp_rsrcid;
--+	zend_resource *sftp_rsrc;
-- } php_ssh2_sftp_handle_data;
-- 
-- /* {{{ php_ssh2_sftp_stream_write
--@@ -139,8 +138,7 @@ static int php_ssh2_sftp_stream_close(php_stream *stream, int close_handle)
-- 	php_ssh2_sftp_handle_data *data = (php_ssh2_sftp_handle_data*)stream->abstract;
-- 
-- 	libssh2_sftp_close(data->handle);
---	//TODO Sean-Der
---	//zend_list_delete(data->sftp_rsrcid);
--+	zend_list_delete(data->sftp_rsrc);
-- 	efree(data);
-- 
-- 	return 0;
--@@ -226,12 +224,12 @@ static php_stream *php_ssh2_sftp_stream_opener(php_stream_wrapper *wrapper, cons
-- 	LIBSSH2_SFTP *sftp = NULL;
-- 	LIBSSH2_SFTP_HANDLE *handle;
-- 	php_stream *stream;
---	int resource_id = 0, sftp_rsrcid = 0;
--+	zend_resource *rsrc = NULL, *sftp_rsrc = NULL;
-- 	php_url *resource;
-- 	unsigned long flags;
-- 	long perms = 0644;
-- 
---	resource = php_ssh2_fopen_wraper_parse_path(filename, "sftp", context, &session, &resource_id, &sftp, &sftp_rsrcid);
--+	resource = php_ssh2_fopen_wraper_parse_path(filename, "sftp", context, &session, &rsrc, &sftp, &sftp_rsrc);
-- 	if (!resource || !session || !sftp) {
-- 		return NULL;
-- 	}
--@@ -242,20 +240,18 @@ static php_stream *php_ssh2_sftp_stream_opener(php_stream_wrapper *wrapper, cons
-- 	if (!handle) {
-- 		php_error_docref(NULL, E_WARNING, "Unable to open %s on remote host", filename);
-- 		php_url_free(resource);
---		//TODO Sean-Der
---		//zend_list_delete(sftp_rsrcid);
--+		zend_list_delete(sftp_rsrc);
-- 		return NULL;
-- 	}
-- 
-- 	data = emalloc(sizeof(php_ssh2_sftp_handle_data));
-- 	data->handle = handle;
---	data->sftp_rsrcid = sftp_rsrcid;
--+	data->sftp_rsrc = sftp_rsrc;
-- 
-- 	stream = php_stream_alloc(&php_ssh2_sftp_stream_ops, data, 0, mode);
-- 	if (!stream) {
-- 		libssh2_sftp_close(handle);
---		// TODO Sean-Der
---		//zend_list_delete(sftp_rsrcid);
--+		zend_list_delete(sftp_rsrc);
-- 		efree(data);
-- 	}
-- 	php_url_free(resource);
--@@ -303,8 +299,7 @@ static int php_ssh2_sftp_dirstream_close(php_stream *stream, int close_handle)
-- 	php_ssh2_sftp_handle_data *data = (php_ssh2_sftp_handle_data*)stream->abstract;
-- 
-- 	libssh2_sftp_close(data->handle);
---	//TODO Sean_der
---	//zend_list_delete(data->sftp_rsrcid);
--+	zend_list_delete(data->sftp_rsrc);
-- 	efree(data);
-- 
-- 	return 0;
--@@ -333,10 +328,10 @@ static php_stream *php_ssh2_sftp_dirstream_opener(php_stream_wrapper *wrapper, c
-- 	LIBSSH2_SFTP *sftp = NULL;
-- 	LIBSSH2_SFTP_HANDLE *handle;
-- 	php_stream *stream;
---	int resource_id = 0, sftp_rsrcid = 0;
--+	zend_resource *rsrc = NULL, *sftp_rsrc = NULL;
-- 	php_url *resource;
-- 
---	resource = php_ssh2_fopen_wraper_parse_path(filename, "sftp", context, &session, &resource_id, &sftp, &sftp_rsrcid);
--+	resource = php_ssh2_fopen_wraper_parse_path(filename, "sftp", context, &session, &rsrc, &sftp, &sftp_rsrc);
-- 	if (!resource || !session || !sftp) {
-- 		return NULL;
-- 	}
--@@ -345,20 +340,18 @@ static php_stream *php_ssh2_sftp_dirstream_opener(php_stream_wrapper *wrapper, c
-- 	if (!handle) {
-- 		php_error_docref(NULL, E_WARNING, "Unable to open %s on remote host", filename);
-- 		php_url_free(resource);
---		//TODO Sean-Der
---		//zend_list_delete(sftp_rsrcid);
--+		zend_list_delete(sftp_rsrc);
-- 		return NULL;
-- 	}
-- 
-- 	data = emalloc(sizeof(php_ssh2_sftp_handle_data));
-- 	data->handle = handle;
---	data->sftp_rsrcid = sftp_rsrcid;
--+	data->sftp_rsrc = sftp_rsrc;
-- 
-- 	stream = php_stream_alloc(&php_ssh2_sftp_dirstream_ops, data, 0, mode);
-- 	if (!stream) {
-- 		libssh2_sftp_close(handle);
---		//TODO Sean-Der
---		//zend_list_delete(sftp_rsrcid);
--+		zend_list_delete(sftp_rsrc);
-- 		efree(data);
-- 	}
-- 	php_url_free(resource);
--@@ -378,10 +371,10 @@ static int php_ssh2_sftp_urlstat(php_stream_wrapper *wrapper, const char *url, i
-- 	LIBSSH2_SFTP_ATTRIBUTES attrs;
-- 	LIBSSH2_SESSION *session = NULL;
-- 	LIBSSH2_SFTP *sftp = NULL;
---	int resource_id = 0, sftp_rsrcid = 0;
--+	zend_resource *rsrc = NULL, *sftp_rsrc = NULL;
-- 	php_url *resource;
-- 
---	resource = php_ssh2_fopen_wraper_parse_path(url, "sftp", context, &session, &resource_id, &sftp, &sftp_rsrcid);
--+	resource = php_ssh2_fopen_wraper_parse_path(url, "sftp", context, &session, &rsrc, &sftp, &sftp_rsrc);
-- 	if (!resource || !session || !sftp || !resource->path) {
-- 		return -1;
-- 	}
--@@ -408,11 +401,11 @@ static int php_ssh2_sftp_unlink(php_stream_wrapper *wrapper, const char *url, in
-- {
-- 	LIBSSH2_SESSION *session = NULL;
-- 	LIBSSH2_SFTP *sftp = NULL;
---	int resource_id = 0, sftp_rsrcid = 0;
--+	zend_resource *rsrc = NULL, *sftp_rsrc = NULL;
-- 	php_url *resource;
-- 	int result;
-- 
---	resource = php_ssh2_fopen_wraper_parse_path(url, "sftp", context, &session, &resource_id, &sftp, &sftp_rsrcid);
--+	resource = php_ssh2_fopen_wraper_parse_path(url, "sftp", context, &session, &rsrc, &sftp, &sftp_rsrc);
-- 	if (!resource || !session || !sftp || !resource->path) {
-- 		if (resource) {
-- 			php_url_free(resource);
--@@ -436,7 +429,7 @@ static int php_ssh2_sftp_rename(php_stream_wrapper *wrapper, const char *url_fro
-- {
-- 	LIBSSH2_SESSION *session = NULL;
-- 	LIBSSH2_SFTP *sftp = NULL;
---	int resource_id = 0, sftp_rsrcid = 0;
--+	zend_resource *rsrc = NULL, *sftp_rsrc = NULL;
-- 	php_url *resource, *resource_to;
-- 	int result;
-- 
--@@ -453,7 +446,7 @@ static int php_ssh2_sftp_rename(php_stream_wrapper *wrapper, const char *url_fro
-- 		return 0;
-- 	}
-- 
---	resource = php_ssh2_fopen_wraper_parse_path(url_from, "sftp", context, &session, &resource_id, &sftp, &sftp_rsrcid);
--+	resource = php_ssh2_fopen_wraper_parse_path(url_from, "sftp", context, &session, &rsrc, &sftp, &sftp_rsrc);
-- 	if (!resource || !session || !sftp || !resource->path) {
-- 		if (resource) {
-- 			php_url_free(resource);
--@@ -479,11 +472,11 @@ static int php_ssh2_sftp_mkdir(php_stream_wrapper *wrapper, const char *url, int
-- {
-- 	LIBSSH2_SESSION *session = NULL;
-- 	LIBSSH2_SFTP *sftp = NULL;
---	int resource_id = 0, sftp_rsrcid = 0;
--+	zend_resource *rsrc = NULL, *sftp_rsrc = NULL;
-- 	php_url *resource;
-- 	int result;
-- 
---	resource = php_ssh2_fopen_wraper_parse_path(url, "sftp", context, &session, &resource_id, &sftp, &sftp_rsrcid);
--+	resource = php_ssh2_fopen_wraper_parse_path(url, "sftp", context, &session, &rsrc, &sftp, &sftp_rsrc);
-- 	if (!resource || !session || !sftp || !resource->path) {
-- 		if (resource) {
-- 			php_url_free(resource);
--@@ -515,11 +508,11 @@ static int php_ssh2_sftp_rmdir(php_stream_wrapper *wrapper, const char *url, int
-- {
-- 	LIBSSH2_SESSION *session = NULL;
-- 	LIBSSH2_SFTP *sftp = NULL;
---	int resource_id = 0, sftp_rsrcid = 0;
--+	zend_resource *rsrc = NULL, *sftp_rsrc = NULL;
-- 	php_url *resource;
-- 	int result;
-- 
---	resource = php_ssh2_fopen_wraper_parse_path(url, "sftp", context, &session, &resource_id, &sftp, &sftp_rsrcid);
--+	resource = php_ssh2_fopen_wraper_parse_path(url, "sftp", context, &session, &rsrc, &sftp, &sftp_rsrc);
-- 	if (!resource || !session || !sftp || !resource->path) {
-- 		if (resource) {
-- 			php_url_free(resource);
--@@ -591,7 +584,7 @@ PHP_FUNCTION(ssh2_sftp)
-- 	data = emalloc(sizeof(php_ssh2_sftp_data));
-- 	data->session = session;
-- 	data->sftp = sftp;
---	data->session_rsrcid = Z_RES_P(zsession)->handle;
--+	data->session_rsrc = Z_RES_P(zsession);
-- 	Z_ADDREF_P(zsession);
-- 
-- 	RETURN_RES(zend_register_resource(data, le_ssh2_sftp));
-diff --git a/package/php-ssh2/php-ssh2.hash b/package/php-ssh2/php-ssh2.hash
-index 36e04f471f..3fbb0b24c8 100644
---- a/package/php-ssh2/php-ssh2.hash
-+++ b/package/php-ssh2/php-ssh2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  87618d6a0981afe8c24b36d6b38c21a0aa0237b62e60347d0170bd86b51f79fb  ssh2-1.1.2.tgz
-+sha256  9093a1f8d24dc65836027b0e239c50de8d5eaebf8396bc3331fdd38c5d69afd9  ssh2-1.3.1.tgz
- sha256  ac7c56f1e416ce6e60abcf26269395128bc9e5a2e4f3293e5dcc124aac606508  LICENSE
-diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
-index c9c13010dd..b79ac04179 100644
---- a/package/php-ssh2/php-ssh2.mk
-+++ b/package/php-ssh2/php-ssh2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_SSH2_VERSION = 1.1.2
-+PHP_SSH2_VERSION = 1.3.1
- PHP_SSH2_SOURCE = ssh2-$(PHP_SSH2_VERSION).tgz
- PHP_SSH2_SITE = https://pecl.php.net/get
- PHP_SSH2_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+diff --git a/package/php-zmq/0001-updates-for-php7.4-and-php8.0.patch b/package/php-zmq/0001-updates-for-php7.4-and-php8.0.patch
+new file mode 100644
+index 0000000000..3c286e3923
+--- /dev/null
++++ b/package/php-zmq/0001-updates-for-php7.4-and-php8.0.patch
+@@ -0,0 +1,230 @@
++From 4ad1b33e095924bd4ccf79295999dd54edaaac37 Mon Sep 17 00:00:00 2001
++From: Luca Boccassi <luca.boccassi@gmail.com>
++Date: Thu, 5 Mar 2020 22:51:22 +0000
++Subject: [PATCH] updates for php7.4 and php8.0 (#212)
++
++From upstream commit: 4ad1b33e095924bd4ccf79295999dd54edaaac37
++
++* travisci: enabled php7.4 and php8.0
++
++* updates for php7.4 and php8.0
++
++- travisci enabled php7.4 and php8.0
++- removed now unused references to TSRMLS_*
++  These flags were mostly already removed from the
++  php7 codebase but some instances were still present.
++  With php8 these produce compile errors.
++- fix tests for php8 and php7.4
++  New TypeErrors now get handled correctly in the test cases.
++- fix memory corruption in zmq.c
++  The conflicting line causes memory leaks on other php
++  version and causes a segfault on php8 and php7.4
++  The error was provocable with test case
++  021-callbackwarning.phpt. After removing of the line
++  valgrind showed no memory leak, so this line was probably
++  redundant. Also if you compare with zmqsocket constructor
++  this line is also not present.
++
++Signed-off-by: Luca Boccassi <luca.boccassi@gmail.com>
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ php_zmq_private.h                  |  4 ++--
++ tests/016-callbackinvalidargs.phpt |  4 ++++
++ tests/022-highwatermark.phpt       |  6 +++---
++ tests/bug_gh_43.phpt               | 25 +++++++++++++++++--------
++ zmq.c                              |  1 -
++ zmq_device.c                       | 14 +++++++-------
++ zmq_sockopt.c                      |  2 +-
++ 7 files changed, 34 insertions(+), 22 deletions(-)
++
++diff --git a/php_zmq_private.h b/php_zmq_private.h
++index 49630e9..2e5cd3b 100644
++--- a/php_zmq_private.h
+++++ b/php_zmq_private.h
++@@ -156,9 +156,9 @@ typedef struct _php_zmq_device_object  {
++ 
++ #define PHP_ZMQ_ERROR_HANDLING_INIT() zend_error_handling error_handling;
++ 
++-#define PHP_ZMQ_ERROR_HANDLING_THROW() zend_replace_error_handling(EH_THROW, php_zmq_socket_exception_sc_entry, &error_handling TSRMLS_CC);
+++#define PHP_ZMQ_ERROR_HANDLING_THROW() zend_replace_error_handling(EH_THROW, php_zmq_socket_exception_sc_entry, &error_handling);
++ 
++-#define PHP_ZMQ_ERROR_HANDLING_RESTORE() zend_restore_error_handling(&error_handling TSRMLS_CC);
+++#define PHP_ZMQ_ERROR_HANDLING_RESTORE() zend_restore_error_handling(&error_handling);
++ 
++ /* Compatibility macros between zeromq 2.x and 3.x */
++ #ifndef ZMQ_DONTWAIT
++diff --git a/tests/016-callbackinvalidargs.phpt b/tests/016-callbackinvalidargs.phpt
++index a940e41..6bd0e75 100644
++--- a/tests/016-callbackinvalidargs.phpt
+++++ b/tests/016-callbackinvalidargs.phpt
++@@ -10,6 +10,8 @@ try {
++ 	echo "Fail\n";
++ } catch (ZMQSocketException $e) {
++ 	echo "OK\n";
+++} catch (TypeError $e) {
+++ 	echo "OK\n"; // on PHP8
++ }
++ 
++ try {
++@@ -18,6 +20,8 @@ try {
++ 	echo "Fail\n";
++ } catch (ZMQSocketException $e) {
++ 	echo "OK\n";
+++} catch (TypeError $e) {
+++ 	echo "OK\n"; // on PHP8
++ }
++ 
++ --EXPECT--
++diff --git a/tests/022-highwatermark.phpt b/tests/022-highwatermark.phpt
++index 84be509..c1ff703 100644
++--- a/tests/022-highwatermark.phpt
+++++ b/tests/022-highwatermark.phpt
++@@ -1,11 +1,11 @@
++ --TEST--
++ Test that high-watermark works
++ --SKIPIF--
++-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
++-
+++<?php
+++require_once(dirname(__FILE__) . '/skipif.inc');
++ if (!defined('ZMQ::SOCKOPT_LINGER'))
++     die ("Skip Not compiled against new enough version");
++-
+++?>
++ --FILE--
++ <?php
++ 
++diff --git a/tests/bug_gh_43.phpt b/tests/bug_gh_43.phpt
++index bdc274a..923d074 100644
++--- a/tests/bug_gh_43.phpt
+++++ b/tests/bug_gh_43.phpt
++@@ -7,16 +7,25 @@ Test for Github issue #43
++ --FILE--
++ <?php
++ 
+++error_reporting(0);
+++
++ $context = new ZMQContext (1, false);
++ 
++ $sock1 = new ZMQSocket ($context, ZMQ::SOCKET_PUB);
++ $sock2 = new ZMQSocket ($context, ZMQ::SOCKET_SUB);
++ 
++-$device = new ZMQDevice ($sock1, $sock1, $sock1, $sock1);
++-
++-echo "OK";
++-?>
++-
++---EXPECTF--
++-Warning: ZMQDevice::__construct() expects at most 3 parameters, 4 given in %s/bug_gh_43.php on line %d
++-OK
++\ No newline at end of file
+++try {
+++    $device = new ZMQDevice ($sock1, $sock1, $sock1, $sock1);
+++    // on PHP7 and lower
+++    $lastError = error_get_last();
+++    if(strpos($lastError['message'], 'ZMQDevice::__construct() expects at most 3 parameters, 4 given') !== false)
+++     	echo "OK\n";
+++    else{
+++        echo "FAIL\n";
+++        print_r($lastError);
+++    }
+++}catch(TypeError $e){
+++ 	echo "OK\n"; // on PHP8
+++}
+++--EXPECT--
+++OK
++diff --git a/zmq.c b/zmq.c
++index 942e69b..66196ea 100644
++--- a/zmq.c
+++++ b/zmq.c
++@@ -687,7 +687,6 @@ PHP_METHOD(zmqcontext, getsocket)
++ 			if (!php_zmq_connect_callback(return_value, &fci, &fci_cache, persistent_id)) {
++ 				php_zmq_socket_destroy(socket);
++ 				interns->socket = NULL;
++-				zval_dtor(return_value);
++ 				return;
++ 			}
++ 		}
++diff --git a/zmq_device.c b/zmq_device.c
++index c7415c1..534f966 100644
++--- a/zmq_device.c
+++++ b/zmq_device.c
++@@ -41,7 +41,7 @@
++ ZEND_EXTERN_MODULE_GLOBALS(php_zmq)
++ 
++ static
++-zend_bool s_invoke_device_cb (php_zmq_device_cb_t *cb, uint64_t current_ts TSRMLS_DC)
+++zend_bool s_invoke_device_cb (php_zmq_device_cb_t *cb, uint64_t current_ts)
++ {
++ 	zend_bool retval = 0;
++ 	zval params[1];
++@@ -59,7 +59,7 @@ zend_bool s_invoke_device_cb (php_zmq_device_cb_t *cb, uint64_t current_ts TSRML
++ 	if (zend_call_function(&(cb->fci), &(cb->fci_cache)) == FAILURE) {
++ 		if (!EG(exception)) {
++ 			char *func_name = php_zmq_printable_func(&cb->fci, &cb->fci_cache);
++-			zend_throw_exception_ex(php_zmq_device_exception_sc_entry_get (), 0 TSRMLS_CC, "Failed to invoke device callback %s()", func_name);
+++			zend_throw_exception_ex(php_zmq_device_exception_sc_entry_get (), 0, "Failed to invoke device callback %s()", func_name);
++ 			zval_ptr_dtor(&params[0]);
++ 			efree(func_name);
++ 		}
++@@ -94,7 +94,7 @@ int s_capture_message (void *socket, zmq_msg_t *msg, int more)
++ }
++ 
++ static
++-int s_calculate_timeout (php_zmq_device_object *intern TSRMLS_DC)
+++int s_calculate_timeout (php_zmq_device_object *intern)
++ {
++ 	int timeout = -1;
++ 	uint64_t current = php_zmq_clock (ZMQ_G (clock_ctx));
++@@ -131,7 +131,7 @@ int s_calculate_timeout (php_zmq_device_object *intern TSRMLS_DC)
++ }
++ 
++ 
++-zend_bool php_zmq_device (php_zmq_device_object *intern TSRMLS_DC)
+++zend_bool php_zmq_device (php_zmq_device_object *intern)
++ {
++ 	int errno_;
++ 	uint64_t last_message_received;
++@@ -186,7 +186,7 @@ zend_bool php_zmq_device (php_zmq_device_object *intern TSRMLS_DC)
++ 		uint64_t current_ts = 0;
++ 
++ 		/* Calculate poll_timeout based on idle / timer cb */
++-		int timeout = s_calculate_timeout (intern TSRMLS_CC);
+++		int timeout = s_calculate_timeout (intern);
++ 
++ 		rc = zmq_poll(&items [0], 2, timeout);
++ 		if (rc < 0) {
++@@ -205,7 +205,7 @@ zend_bool php_zmq_device (php_zmq_device_object *intern TSRMLS_DC)
++ 		if (intern->timer_cb.initialized && intern->timer_cb.timeout > 0) {
++ 			/* Is it timer to call the timer ? */
++ 			if (intern->timer_cb.scheduled_at <= current_ts) {
++-				if (!s_invoke_device_cb (&intern->timer_cb, current_ts TSRMLS_CC)) {
+++				if (!s_invoke_device_cb (&intern->timer_cb, current_ts)) {
++ 					zmq_msg_close (&msg);
++ 					return 1;
++ 				}
++@@ -217,7 +217,7 @@ zend_bool php_zmq_device (php_zmq_device_object *intern TSRMLS_DC)
++ 			/* Is it timer to call the idle callback ? */
++ 			if ((current_ts - last_message_received) >= intern->idle_cb.timeout &&
++ 				intern->idle_cb.scheduled_at <= current_ts) {
++-				if (!s_invoke_device_cb (&intern->idle_cb, current_ts TSRMLS_CC)) {
+++				if (!s_invoke_device_cb (&intern->idle_cb, current_ts)) {
++ 					zmq_msg_close (&msg);
++ 					return 1;
++ 				}
++diff --git a/zmq_sockopt.c b/zmq_sockopt.c
++index 1357032..14b59f0 100644
++--- a/zmq_sockopt.c
+++++ b/zmq_sockopt.c
++@@ -2036,7 +2036,7 @@ PHP_METHOD(zmqsocket, setsockopt)
++     long key;
++     zval *zv;
++ 
++-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lz/", &key, &zv) == FAILURE) {
+++    if (zend_parse_parameters(ZEND_NUM_ARGS(), "lz/", &key, &zv) == FAILURE) {
++         return;
++     }
++ 
++-- 
++2.31.1
++
+diff --git a/package/php-zmq/0002-fix-for-php-7.3.patch b/package/php-zmq/0002-fix-for-php-7.3.patch
+new file mode 100644
+index 0000000000..3ca87582cb
+--- /dev/null
++++ b/package/php-zmq/0002-fix-for-php-7.3.patch
+@@ -0,0 +1,43 @@
++From e0db82c3286da81fa8945894dd10125a528299e4 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Gr=C3=A9gory=20PLANCHAT?=
++ <gplanchat@users.noreply.github.com>
++Date: Wed, 8 Jul 2020 10:09:38 +0200
++Subject: [PATCH] Fix for PHP 7.3 (#215)
++
++Co-authored-by: Remi Collet <remi@remirepo.net>
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ zmq.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/zmq.c b/zmq.c
++index 66196ea..879704f 100644
++--- a/zmq.c
+++++ b/zmq.c
++@@ -235,7 +235,11 @@ php_zmq_context *php_zmq_context_get(zend_long io_threads, zend_bool is_persiste
++ 		le.type = php_zmq_context_list_entry();
++ 		le.ptr  = context;
++ 
+++#if PHP_VERSION_ID < 70300
++ 		GC_REFCOUNT(&le) = 1;
+++#else
+++		GC_SET_REFCOUNT(&le, 1);
+++#endif
++ 
++ 		/* plist_key is not a persistent allocated key, thus we use str_update here */
++ 		if (zend_hash_str_update_mem(&EG(persistent_list), plist_key->val, plist_key->len, &le, sizeof(le)) == NULL) {
++@@ -535,7 +539,11 @@ void php_zmq_socket_store(php_zmq_socket *zmq_sock_p, zend_long type, zend_strin
++ 	le.type = php_zmq_socket_list_entry();
++ 	le.ptr  = zmq_sock_p;
++ 
+++#if PHP_VERSION_ID < 70300
++ 	GC_REFCOUNT(&le) = 1;
+++#else
+++	GC_SET_REFCOUNT(&le, 1);
+++#endif
++ 
++ 	plist_key = php_zmq_socket_plist_key(type, persistent_id, use_shared_ctx);
++ 
++-- 
++2.31.1
++
+diff --git a/package/php-zmq/0003-fix-for-php-8.0.0beta2.patch b/package/php-zmq/0003-fix-for-php-8.0.0beta2.patch
+new file mode 100644
+index 0000000000..c5aab16ab7
+--- /dev/null
++++ b/package/php-zmq/0003-fix-for-php-8.0.0beta2.patch
+@@ -0,0 +1,40 @@
++From f0993f1fe973c4d359323ad1897ed7aa74f7e015 Mon Sep 17 00:00:00 2001
++From: Remi Collet <remi@remirepo.net>
++Date: Mon, 24 Aug 2020 15:55:54 +0200
++Subject: [PATCH] fix for PHP 8.0.0beta2
++
++Signed-off-by: Remi Collet <remi@remirepo.net>
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ zmq.c        | 2 ++
++ zmq_device.c | 2 ++
++ 2 files changed, 4 insertions(+)
++
++diff --git a/zmq.c b/zmq.c
++index 89902f9..bd2401d 100644
++--- a/zmq.c
+++++ b/zmq.c
++@@ -621,7 +621,9 @@ zend_bool php_zmq_connect_callback(zval *socket, zend_fcall_info *fci, zend_fcal
++ 	fci->params         = params;
++ 	fci->param_count    = 2;
++ 	fci->retval         = &retval;
+++#if PHP_VERSION_ID < 80000
++ 	fci->no_separation  = 1;
+++#endif
++ 
++ 	if (zend_call_function(fci, fci_cache) == FAILURE) {
++ 		if (!EG(exception)) {
++diff --git a/zmq_device.c b/zmq_device.c
++index 534f966..1c6aa3e 100644
++--- a/zmq_device.c
+++++ b/zmq_device.c
++@@ -53,7 +53,9 @@ zend_bool s_invoke_device_cb (php_zmq_device_cb_t *cb, uint64_t current_ts)
++ 	cb->fci.param_count = 1;
++ 
++ 	/* Call the cb */
+++#if PHP_VERSION_ID < 80000
++ 	cb->fci.no_separation  = 1;
+++#endif
++ 	cb->fci.retval         = &fc_retval;
++ 
++ 	if (zend_call_function(&(cb->fci), &(cb->fci_cache)) == FAILURE) {
 -- 
 2.31.1
