@@ -1,154 +1,72 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 29 Jun 2021 20:31:25 +0200
-Subject: [Buildroot] [PATCH 1/2] {linux, linux-headers}: add version 5.13
-In-Reply-To: <20210628110943.13930-1-michael@walle.cc>
-References: <20210628110943.13930-1-michael@walle.cc>
-Message-ID: <CAEyMn7bQJF4V8RoWNShy8qjJjXxy+45KZRa4q1oe-NaYe3yKfQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 29 Jun 2021 21:17:58 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/fb-test-app: Move 'rosetta'
+ prefix from VERSION to SITE
+In-Reply-To: <20210628160104.8793-1-andriy.shevchenko@linux.intel.com>
+References: <20210628160104.8793-1-andriy.shevchenko@linux.intel.com>
+Message-ID: <20210629191758.GF2829@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Michael,
+Andy, All,
 
-Am Mo., 28. Juni 2021 um 13:17 Uhr schrieb Michael Walle <michael@walle.cc>:
->
-> Signed-off-by: Michael Walle <michael@walle.cc>
+On 2021-06-28 19:01 +0300, Andy Shevchenko spake thusly:
+> Move 'rosetta' prefix from VERSION to SITE to have version be
+> in a standard format.
+> 
+> Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
 
 > ---
->  linux/Config.in                                     |  4 ++--
->  linux/linux.hash                                    |  1 +
->  package/linux-headers/Config.in.host                | 13 +++++++++++--
->  toolchain/Config.in                                 |  5 +++++
->  .../toolchain-external-custom/Config.in.options     |  6 +++++-
->  5 files changed, 24 insertions(+), 5 deletions(-)
->
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 035699663c..0c3cf5db5f 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -28,7 +28,7 @@ choice
->         prompt "Kernel version"
->
->  config BR2_LINUX_KERNEL_LATEST_VERSION
-> -       bool "Latest version (5.12)"
-> +       bool "Latest version (5.13)"
->
->  config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
->         bool "Latest CIP SLTS version (4.19.182-cip45)"
-> @@ -125,7 +125,7 @@ endif
->
->  config BR2_LINUX_KERNEL_VERSION
->         string
-> -       default "5.12.10" if BR2_LINUX_KERNEL_LATEST_VERSION
-> +       default "5.13" if BR2_LINUX_KERNEL_LATEST_VERSION
->         default "4.19.182-cip45" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
->         default "4.19.165-cip41-rt18" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
->         default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-> diff --git a/linux/linux.hash b/linux/linux.hash
-> index d7493545ef..ddd680a2d5 100644
-> --- a/linux/linux.hash
-> +++ b/linux/linux.hash
-> @@ -1,4 +1,5 @@
->  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
-> +sha256  3f6baa97f37518439f51df2e4f3d65a822ca5ff016aa8e60d2cc53b95a6c89d9  linux-5.13.tar.xz
->  sha256  c8d499fc53ed14838994ec2f51591ae40d64cce68559cd897be8acbeeee7630f  linux-5.12.10.tar.xz
->  sha256  11027c6114eb916edbcc37897226fb6263b2931911d2d5093550473ce1a57600  linux-5.11.22.tar.xz
->  sha256  83b81e433ba2f8ee143064fb163699ee857e26dd789006bc1e9edf1ccd0bd403  linux-5.10.43.tar.xz
-> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> index 8eb12c545c..33e3ee3b58 100644
-> --- a/package/linux-headers/Config.in.host
-> +++ b/package/linux-headers/Config.in.host
-> @@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
->  choice
->         prompt "Kernel Headers"
->         default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
-> -       default BR2_KERNEL_HEADERS_5_12
-> +       default BR2_KERNEL_HEADERS_5_13
->         help
->           Select the kernel version to get headers from.
->
-> @@ -65,6 +65,10 @@ config BR2_KERNEL_HEADERS_5_11
->  config BR2_KERNEL_HEADERS_5_12
->         bool "Linux 5.12.x kernel headers"
->         select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
-> +
-> +config BR2_KERNEL_HEADERS_5_13
-> +       bool "Linux 5.13.x kernel headers"
-> +       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_13
->         select BR2_KERNEL_HEADERS_LATEST
->
->  config BR2_KERNEL_HEADERS_VERSION
-> @@ -139,8 +143,12 @@ choice
->           If your kernel headers are more recent than the latest version
->           in the choice, then select the latest version.
->
-> +config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13
-> +       bool "5.13.x or later"
-> +       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_13
-> +
->  config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12
-> -       bool "5.12.x or later"
-> +       bool "5.12.x"
->         select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
->
->  config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_11
-> @@ -370,6 +378,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
->         default "5.10.43"       if BR2_KERNEL_HEADERS_5_10
->         default "5.11.22"       if BR2_KERNEL_HEADERS_5_11
->         default "5.12.10"       if BR2_KERNEL_HEADERS_5_12
-> +       default "5.13"          if BR2_KERNEL_HEADERS_5_13
->         default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
->         default "custom"        if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
->         default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index fe327b9f46..03375e0c52 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -510,6 +510,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
->  config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
->         bool
->         select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
-> +
-> +config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_13
-> +       bool
-> +       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
->         select BR2_TOOLCHAIN_HEADERS_LATEST
->
->  # This should be selected by the latest version, above, to indicate that
-> @@ -523,6 +527,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
->  # stops affecting a value on the first matching default.
->  config BR2_TOOLCHAIN_HEADERS_AT_LEAST
->         string
-> +       default "5.13" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_13
->         default "5.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
->         default "5.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
->         default "5.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-> diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-> index 4a3345e4a5..bc4561f3f7 100644
-> --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-> +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-> @@ -123,8 +123,12 @@ choice
->           If your toolchain uses headers newer than the latest version
->           in the choice, then select the latest version.
->
-> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_13
-> +       bool "5.13.x or later"
-> +       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_13
-> +
->  config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_12
-> -       bool "5.12.x or later"
-> +       bool "5.12.x"
->         select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
->
->  config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_11
-> --
-> 2.20.1
->
+> v2: fixed hash file as well (Thomas)
+>  package/fb-test-app/fb-test-app.hash | 2 +-
+>  package/fb-test-app/fb-test-app.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/fb-test-app/fb-test-app.hash b/package/fb-test-app/fb-test-app.hash
+> index 3068caf278df..ff7730ef8dc6 100644
+> --- a/package/fb-test-app/fb-test-app.hash
+> +++ b/package/fb-test-app/fb-test-app.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  45d490ed78a6e4425d9a760e81e99dc503af01704e17ab5bf186b87a31c5e3db  fb-test-app-rosetta-1.1.1.tar.gz
+> +sha256  45d490ed78a6e4425d9a760e81e99dc503af01704e17ab5bf186b87a31c5e3db  fb-test-app-1.1.1.tar.gz
+>  sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+> diff --git a/package/fb-test-app/fb-test-app.mk b/package/fb-test-app/fb-test-app.mk
+> index f6e949015ef8..89d533ab15b4 100644
+> --- a/package/fb-test-app/fb-test-app.mk
+> +++ b/package/fb-test-app/fb-test-app.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -FB_TEST_APP_VERSION = rosetta-1.1.1
+> -FB_TEST_APP_SITE = $(call github,andy-shev,fb-test-app,$(FB_TEST_APP_VERSION))
+> +FB_TEST_APP_VERSION = 1.1.1
+> +FB_TEST_APP_SITE = $(call github,andy-shev,fb-test-app,rosetta-$(FB_TEST_APP_VERSION))
+>  FB_TEST_APP_LICENSE = GPL-2.0
+>  FB_TEST_APP_LICENSE_FILES = COPYING
+>  
+> -- 
+> 2.30.2
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
