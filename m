@@ -1,122 +1,238 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Tue, 29 Jun 2021 11:19:36 +0200
-Subject: [Buildroot] Trouble with u-boot on a ZynqMP board
-In-Reply-To: <07bd6c4b-ad67-bf4c-b32c-aff2d5d7637b@lucaceresoli.net>
-References: <CAM+bi4s4Nueb96Xyo5dY7vwDhJO1xFnzcdrky5U3qsBBNf8EHQ@mail.gmail.com>
- <1ae87e6c-9b70-9492-6efd-b67d06d91433@lucaceresoli.net>
- <CAM+bi4sU71gkigZ_-T-AXKYtqYOA1cn+0bU=_TiThf94K2C4yQ@mail.gmail.com>
- <62bea3e6-dfdd-d230-e833-80775f065f83@lucaceresoli.net>
- <07bd6c4b-ad67-bf4c-b32c-aff2d5d7637b@lucaceresoli.net>
-Message-ID: <CAM+bi4syAU=jhC9VqE5eqfK5aO-c3ErfS2nUoXAz7AYPLAOCTg@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Tue, 29 Jun 2021 12:06:31 +0200
+Subject: [Buildroot] [PATCH] configs/kontron_pitx_imx8m: new defconfig
+Message-ID: <20210629100630.1963-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Luca,
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ DEVELOPERS                             |  2 +
+ board/kontron/pitx-imx8m/boot.cmd      |  8 +++
+ board/kontron/pitx-imx8m/genimage.cfg  | 16 ++++++
+ board/kontron/pitx-imx8m/post-build.sh |  4 ++
+ board/kontron/pitx-imx8m/post-image.sh |  4 ++
+ board/kontron/pitx-imx8m/readme.txt    | 74 ++++++++++++++++++++++++++
+ configs/kontron_pitx_imx8m_defconfig   | 54 +++++++++++++++++++
+ 7 files changed, 162 insertions(+)
+ create mode 100644 board/kontron/pitx-imx8m/boot.cmd
+ create mode 100644 board/kontron/pitx-imx8m/genimage.cfg
+ create mode 100755 board/kontron/pitx-imx8m/post-build.sh
+ create mode 100755 board/kontron/pitx-imx8m/post-image.sh
+ create mode 100644 board/kontron/pitx-imx8m/readme.txt
+ create mode 100644 configs/kontron_pitx_imx8m_defconfig
 
-El lun, 28 jun 2021 a las 18:47, Luca Ceresoli
-(<luca@lucaceresoli.net>) escribi?:
->
-> Hi Alvaro,
->
-> On 24/06/21 23:51, Luca Ceresoli wrote:
-> [...]
-> >>> I haven't been working on zynqmp recently but back at the times
-> >>> (2018~2019) one needed to have the various booting components "in sync",
-> >>> expecially pmufw, U-Boot and SPL or FSBL. I don't remember whether ATF
-> >>> was critical too in that respect. By "in sync" I mean the major version
-> >>> number (the year) should be the same.
-> >>>
-> >>> Here you are using a 2018 pmufw and 2021 U-Boot so you muight want to
-> >>> build a more recent pmufw and see if you get any improvements.
-> >>
-> >> Great, that's a nice idea, thank you!
-> >
-> > Try that, which seems to be required:
-> > https://forums.xilinx.com/t5/Embedded-Linux/problem-on-u-boot-quot-Synchronous-Abort-quot-handler-esr/m-p/1060937/highlight/true#M39206
->
-> Did you make any progress?
-
-Thanks for asking and continuing with your help! Indeed I did, just a
-couple hours ago. I am now able to run U-Boot SPL, which runs
-U-boot, which is able to reprogram the FPGA, and boot linux!
-
-I started from scratch since I was accumulating lots of different tries and,
-either I or the computer were about to go crazy, so I reset everything
-and carefully crafted the final buildroot and u-boot configurations. I was
-able to use your pmufw 2018 version.
-
-I need to finish a few things before, but I want to send a patch to add this
-configuration as board/digilent/genesys-zu/ , which I hope to send in some
-moment during the next few days.
-
-> I was able to build and test more recent versions of pmufw (2019.2 amd
-> 2020.1) and pushed them to [0]. They are tested and working. Not sure
-> it's useful, but that's what I can provide at the moment.
-
-Great, thanks a lot! I will try them too and will use either the
-latest or the one that
-matches the kernel I'm using, but it looks that it's not a requirement
-to have all
-pieces of software running the same version
-
-I was wondering... there are lots of boards and SoCs which fit
-different types of
-processors, of different architectures. Wouldn't it be nice if
-buildroot itself could
-compile additional firmware, such as pmufw? Its toolchain for microblaze should
-be able to, but then Buildroot for zynqpm would need three toolchains: arm64,
-host and microblaze. It's probably too much and probably out of scope for a
-"root filesystem generator".
-
-Thanks again, best regards!
-
-
-> I generated them with an unmodified zynqmp-pmufw-builder. You can do the
-> same to generate similar images but with debug messages enabled. Here's
-> a dirty patch to apply to the 'embeddedsw' submodule to enable _lots_ of
-> messages:
->
-> ----------------------------8<----------------------------
-> diff --git a/lib/sw_apps/zynqmp_pmufw/src/pm_common.h
-> b/lib/sw_apps/zynqmp_pmufw/src/pm_common.h
-> index 1bed98e76630..3a06a15b62dc 100644
-> --- a/lib/sw_apps/zynqmp_pmufw/src/pm_common.h
-> +++ b/lib/sw_apps/zynqmp_pmufw/src/pm_common.h
-> @@ -52,6 +52,7 @@ typedef struct PmNode PmNode;
->  #define PM_ERROR       2U
->  #define PM_WARNING     3U
->  #define PM_INFO                4U
-> +#define PM_LOG_LEVEL 4U /////////////////////////////////
->
->  #if defined(PM_LOG_LEVEL) && (PM_LOG_LEVEL >= PM_INFO)
->         #define PmInfo(...)     pm_printf(__VA_ARGS__)
-> diff --git a/lib/sw_apps/zynqmp_pmufw/src/xpfw_config.h
-> b/lib/sw_apps/zynqmp_pmufw/src/xpfw_config.h
-> index 4816a2dfd06b..2420a7a47493 100644
-> --- a/lib/sw_apps/zynqmp_pmufw/src/xpfw_config.h
-> +++ b/lib/sw_apps/zynqmp_pmufw/src/xpfw_config.h
-> @@ -17,8 +17,8 @@ extern "C" {
->
->  /* PMUFW print levels */
->  #define XPFW_PRINT_VAL (1U)
-> -#define XPFW_DEBUG_ERROR_VAL (0U)
-> -#define XPFW_DEBUG_DETAILED_VAL (0U)
-> +#define XPFW_DEBUG_ERROR_VAL (1U)
-> +#define XPFW_DEBUG_DETAILED_VAL (1U)
->
->  /**
->   * PMUFW Debug options
-> ----------------------------8<----------------------------
->
-> [0] https://github.com/lucaceresoli/zynqmp-pmufw-binaries/
->
-> --
-> Luca
-
-
-
---
-?lvaro G?mez Machado
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2031a40e14..aba7a50e9d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1121,6 +1121,8 @@ F:	package/python-sip/
+ F:	package/uhd/
+ 
+ N:	Heiko Thiery <heiko.thiery@gmail.com>
++F:	board/kontron/pitx-imx8m/
++F:	configs/kontron_pitx_imx8m_defconfig
+ F:	package/altera-stapl/
+ F:	package/ipmitool/
+ F:	package/libnetconf2/
+diff --git a/board/kontron/pitx-imx8m/boot.cmd b/board/kontron/pitx-imx8m/boot.cmd
+new file mode 100644
+index 0000000000..4d89235392
+--- /dev/null
++++ b/board/kontron/pitx-imx8m/boot.cmd
+@@ -0,0 +1,8 @@
++echo "Root File Sytem on MMC${devnum}"
++setenv rootfs /dev/mmcblk${devnum}p1
++setenv bootargs root=${rootfs} rootwait rw ${extrabootargs}
++
++load ${devtype} ${devnum} ${kernel_addr_r} boot/Image
++load ${devtype} ${devnum} ${fdt_addr_r} boot/imx8mq-kontron-pitx-imx8m.dtb
++
++booti ${kernel_addr_r} - ${fdt_addr_r}
+diff --git a/board/kontron/pitx-imx8m/genimage.cfg b/board/kontron/pitx-imx8m/genimage.cfg
+new file mode 100644
+index 0000000000..c335b0c026
+--- /dev/null
++++ b/board/kontron/pitx-imx8m/genimage.cfg
+@@ -0,0 +1,16 @@
++image sdcard.img {
++	hdimage {
++	}
++
++	partition imx-boot {
++		in-partition-table = "no"
++		image = "imx8-boot-sd.bin"
++		offset = 33k
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		offset = 8M
++	}
++}
+diff --git a/board/kontron/pitx-imx8m/post-build.sh b/board/kontron/pitx-imx8m/post-build.sh
+new file mode 100755
+index 0000000000..4574221fe5
+--- /dev/null
++++ b/board/kontron/pitx-imx8m/post-build.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++
++mkdir -p $TARGET_DIR/boot/
++cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
+diff --git a/board/kontron/pitx-imx8m/post-image.sh b/board/kontron/pitx-imx8m/post-image.sh
+new file mode 100755
+index 0000000000..66351f250f
+--- /dev/null
++++ b/board/kontron/pitx-imx8m/post-image.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++
++support/scripts/genimage.sh -c $(dirname $0)/genimage.cfg
++exit $?
+diff --git a/board/kontron/pitx-imx8m/readme.txt b/board/kontron/pitx-imx8m/readme.txt
+new file mode 100644
+index 0000000000..7c85dd4377
+--- /dev/null
++++ b/board/kontron/pitx-imx8m/readme.txt
+@@ -0,0 +1,74 @@
++Kontron pitx-imx8m
++==================
++
++https://www.kontron.com/produkte/pitx-imx8m/p155258
++
++
++How to build it
++===============
++
++Configure buildroot:
++
++  $ make kontron_pitx_imx8m_defconfig
++
++Change settings to fit your needs (optional):
++
++  $ make menuconfig
++
++Compile everything and buildr the rootfs image:
++
++  $ make
++
++
++Result of the build
++===================
++
++After building, the output/images directory contains:
++
++  output/images/
++    ??? bl31.bin
++    ??? boot.scr
++    ??? ddr_fw.bin
++    ??? Image
++    ??? imx8-boot-sd.bin
++    ??? imx8mq-kontron-pitx-imx8m.dtb
++    ??? lpddr4_pmu_train_fw.bin
++    ??? rootfs.ext2
++    ??? rootfs.ext4 -> rootfs.ext2
++    ??? rootfs.tar
++    ??? sdcard.img
++    ??? signed_hdmi_imx8m.bin
++    ??? u-boot.bin
++    ??? u-boot.itb
++    ??? u-boot-nodtb.bin
++    ??? u-boot-spl.bin
++    ??? u-boot-spl-ddr.bin
++
++
++Flashing the SD card image
++==========================
++
++To install the image on a SDCard simply copy sdcard.img to the storage (e.g. SD, eMMC)
++
++  $ sudo dd if=output/images/sdcard.img of=<your-sd-device>
++
++
++Preparing the board
++===================
++
++ * Connect a serial line to the board
++ * Insert the SD card
++ * Make sure the boot source selection DIP switches are set correctly
++  * SW1 1-4 OFF
++  * SW1 2-3 OFF
++ * Power-up the board
++
++
++Booting the board
++=================
++
++By default the bootloader will search for the first valid image, starting
++with the internal eMMC. To make sure the bootloader loads bootscript from
++the correct location (SD card) set the boot_targets environment variable:
++
++  $ setenv boot_targets mmc1
+diff --git a/configs/kontron_pitx_imx8m_defconfig b/configs/kontron_pitx_imx8m_defconfig
+new file mode 100644
+index 0000000000..4053e1e398
+--- /dev/null
++++ b/configs/kontron_pitx_imx8m_defconfig
+@@ -0,0 +1,54 @@
++# Architecture
++BR2_aarch64=y
++BR2_ARM_FPU_VFPV3=y
++
++# System
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/kontron/pitx-imx8m/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/kontron/pitx-imx8m/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/pitx-imx8mq.dtb"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-kontron-pitx-imx8m"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
++
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y
++BR2_PACKAGE_FIRMWARE_IMX=y
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++
++# Bootloader
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://gitlab.kontron.com/imx/u-boot-imx/-/archive/PITX-IMX8M-R12/u-boot-imx-PITX-IMX8M-R12.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pitx-imx8m"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
++BR2_TARGET_UBOOT_SPL=y
++
++# Required host tools to create the SD/eMMC image
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_IMX_MKIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/kontron/pitx-imx8m/boot.cmd"
+-- 
+2.30.0
