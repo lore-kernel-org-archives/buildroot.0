@@ -1,10 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 29 Jun 2021 09:50:47 -0700
-Subject: [Buildroot] [PATCH 04/11] package/php-memcached: bump version to
- 3.1.5
+Date: Tue, 29 Jun 2021 09:50:49 -0700
+Subject: [Buildroot] [PATCH 06/11] package/php-xdebug: bump version to 3.0.4
 In-Reply-To: <20210629165054.3831930-1-aduskett@gmail.com>
 References: <20210629165054.3831930-1-aduskett@gmail.com>
-Message-ID: <20210629165054.3831930-4-aduskett@gmail.com>
+Message-ID: <20210629165054.3831930-6-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/php-memcached/php-memcached.hash | 8 ++++----
- package/php-memcached/php-memcached.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/php-xdebug/php-xdebug.hash | 4 ++--
+ package/php-xdebug/php-xdebug.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/php-memcached/php-memcached.hash b/package/php-memcached/php-memcached.hash
-index dd294f466a..7e918c17f6 100644
---- a/package/php-memcached/php-memcached.hash
-+++ b/package/php-memcached/php-memcached.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 20786213ff92cd7ebdb0d0ac10dde1e9580a2f84296618b666654fd76ea307d4  memcached-3.1.3.tgz
--sha256 24e8e3a9529204ead9422fa17cf3ddd75d292a8763b87fdb20591964f2e6ebe0  LICENSE
--sha256 a453a7a272fbd24105b39959f76996d50dad80b22d1c310f6c67f74f62ae4054  fastlz/LICENSE
--sha256 bba8cb50c660842c5ca459c5004395bdef8f01c1b64f97a9978f1053f173cb82  g_fmt.h
-+sha256  b288e45f839593e16c4d8508b241de51a86df4f7322153e6becb9e1c819021fd  memcached-3.1.5.tgz
-+sha256  24e8e3a9529204ead9422fa17cf3ddd75d292a8763b87fdb20591964f2e6ebe0  LICENSE
-+sha256  a453a7a272fbd24105b39959f76996d50dad80b22d1c310f6c67f74f62ae4054  fastlz/LICENSE
-+sha256  bba8cb50c660842c5ca459c5004395bdef8f01c1b64f97a9978f1053f173cb82  g_fmt.h
-diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
-index 4607d099f3..068fbb786b 100644
---- a/package/php-memcached/php-memcached.mk
-+++ b/package/php-memcached/php-memcached.mk
+diff --git a/package/php-xdebug/php-xdebug.hash b/package/php-xdebug/php-xdebug.hash
+index 8b90352ebf..72bfac67ce 100644
+--- a/package/php-xdebug/php-xdebug.hash
++++ b/package/php-xdebug/php-xdebug.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 ef479ee1a3da3f933e0d046ca8cd0c14601f29b2c0c41cc60c9388546a4e0272  LICENSE
+-sha256 e330c5ccb77890b06dd7bf093567051450b2438b79fed8e7e6c4834278d46092  php-xdebug-2.9.6.tar.gz
++sha256  7e4f28fc65c8b535de43b6d2ec57429476a6de1d53c4d440a9108ae8d28e01f4  php-xdebug-3.0.4.tar.gz
++sha256  ef479ee1a3da3f933e0d046ca8cd0c14601f29b2c0c41cc60c9388546a4e0272  LICENSE
+diff --git a/package/php-xdebug/php-xdebug.mk b/package/php-xdebug/php-xdebug.mk
+index ab6ade4cb1..18ebc32592 100644
+--- a/package/php-xdebug/php-xdebug.mk
++++ b/package/php-xdebug/php-xdebug.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_MEMCACHED_VERSION = 3.1.3
-+PHP_MEMCACHED_VERSION = 3.1.5
- PHP_MEMCACHED_SOURCE = memcached-$(PHP_MEMCACHED_VERSION).tgz
- PHP_MEMCACHED_SITE = https://pecl.php.net/get
- PHP_MEMCACHED_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-PHP_XDEBUG_VERSION = 2.9.6
++PHP_XDEBUG_VERSION = 3.0.4
+ PHP_XDEBUG_SITE = $(call github,xdebug,xdebug,$(PHP_XDEBUG_VERSION))
+ PHP_XDEBUG_INSTALL_STAGING = YES
+ PHP_XDEBUG_LICENSE = Xdebug License (PHP-3.0-like)
 -- 
 2.31.1
