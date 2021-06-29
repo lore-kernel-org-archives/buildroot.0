@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F566C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:01:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDBFAC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:01:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C0E896103C
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:01:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C0E896103C
+	by mail.kernel.org (Postfix) with ESMTPS id 9BEA161078
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:01:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9BEA161078
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CC25422A9;
-	Wed,  4 Aug 2021 00:01:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 737FF8427E;
+	Wed,  4 Aug 2021 00:01:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C5NXO3YiKVvx; Wed,  4 Aug 2021 00:01:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7FR1PuHIDEsK; Wed,  4 Aug 2021 00:01:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BC98422B7;
-	Wed,  4 Aug 2021 00:01:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 888A184158;
+	Wed,  4 Aug 2021 00:01:22 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9839D1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:14:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9E6451BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:14:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 823EA4060A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 954A840617
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TIDfdo7t4YQ1 for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
+ with ESMTP id rBiFcRf2IzsJ for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 664BC4067B
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5C844065A
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id B926F87B09; Tue,  3 Aug 2021 21:09:56 +0000 (UTC)
+ id 49942860D3; Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 26 Jun 2021 17:41:10 +0200
+Date: Tue, 29 Jun 2021 21:27:58 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f579afc3930506311068a6f2575a487a5bc8c8e1
-X-Git-Newrev: afc1ed4d5152e0f6e724e6986a1d12c8001b94fe
+X-Git-Oldrev: a7ca24784a8d5248eee24462b7148f121405845e
+X-Git-Newrev: 4c9bc44534f6739ade2f55fe04a96f1024f76681
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210956.B926F87B09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/testing: use
- .assertRunOk() when possible
+Message-Id: <20210803210957.49942860D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/kontron_pitx_imx8m:
+ new defconfig
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,483 +65,247 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4747657733413262041=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afc1ed4d5152e0f6e724e6986a1d12c8001b94fe
+--===============4747657733413262041==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=4c9bc44534f6739ade2f55fe04a96f1024f76681
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The BRTest() class implements an assertRunOk() method that does the
-very common work of running a command inside the emulator, and
-checking that it is successful.
-
-This commit changes all locations where this .assertRunOk() method can
-be used, instead of open-coding the same logic.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+[yann.morin.1998@free.fr: drop "exit $?" in post-image.sh]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/tests/fs/test_f2fs.py               |  3 +--
- support/testing/tests/fs/test_jffs2.py              |  3 +--
- support/testing/tests/fs/test_squashfs.py           |  3 +--
- support/testing/tests/init/base.py                  |  6 ++----
- support/testing/tests/init/test_none.py             |  3 +--
- support/testing/tests/init/test_systemd.py          |  3 +--
- support/testing/tests/package/test_atop.py          |  6 ++----
- support/testing/tests/package/test_bmap_tools.py    |  3 +--
- .../testing/tests/package/test_docker_compose.py    |  3 +--
- support/testing/tests/package/test_dropbear.py      |  6 ++----
- support/testing/tests/package/test_lua.py           |  3 +--
- support/testing/tests/package/test_netdata.py       |  3 +--
- support/testing/tests/package/test_openssh.py       |  6 ++----
- support/testing/tests/package/test_opkg.py          | 12 ++++--------
- support/testing/tests/package/test_perl.py          |  3 +--
- support/testing/tests/package/test_python.py        | 12 ++++--------
- support/testing/tests/package/test_python_pytest.py |  3 +--
- .../tests/package/test_python_pytest_asyncio.py     |  3 +--
- support/testing/tests/package/test_redis.py         |  3 +--
- support/testing/tests/package/test_rust.py          |  6 ++----
- support/testing/tests/package/test_s6_rc.py         | 21 ++++++++++-----------
- support/testing/tests/package/test_sudo.py          |  6 ++----
- support/testing/tests/package/test_syslog_ng.py     | 10 ++++------
- support/testing/tests/package/test_tmux.py          | 12 ++++--------
- 24 files changed, 51 insertions(+), 91 deletions(-)
+ DEVELOPERS                             |  2 +
+ board/kontron/pitx-imx8m/boot.cmd      |  8 ++++
+ board/kontron/pitx-imx8m/genimage.cfg  | 16 ++++++++
+ board/kontron/pitx-imx8m/post-build.sh |  4 ++
+ board/kontron/pitx-imx8m/post-image.sh |  3 ++
+ board/kontron/pitx-imx8m/readme.txt    | 74 ++++++++++++++++++++++++++++++++++
+ configs/kontron_pitx_imx8m_defconfig   | 54 +++++++++++++++++++++++++
+ 7 files changed, 161 insertions(+)
 
-diff --git a/support/testing/tests/fs/test_f2fs.py b/support/testing/tests/fs/test_f2fs.py
-index 950d4cf25b..e6872f39c1 100644
---- a/support/testing/tests/fs/test_f2fs.py
-+++ b/support/testing/tests/fs/test_f2fs.py
-@@ -44,5 +44,4 @@ class TestF2FS(infra.basetest.BRTest):
-                            options=options)
-         self.emulator.login()
-         cmd = "mount | grep '/dev/root on / type f2fs'"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
-diff --git a/support/testing/tests/fs/test_jffs2.py b/support/testing/tests/fs/test_jffs2.py
-index f5066ff01f..f595e408d5 100644
---- a/support/testing/tests/fs/test_jffs2.py
-+++ b/support/testing/tests/fs/test_jffs2.py
-@@ -41,5 +41,4 @@ class TestJffs2(infra.basetest.BRTest):
-                            options=["-drive", "file={},if=pflash".format(img)])
-         self.emulator.login()
-         cmd = "mount | grep '/dev/root on / type jffs2'"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
-diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
-index 234f4944be..3e58a12ab7 100644
---- a/support/testing/tests/fs/test_squashfs.py
-+++ b/support/testing/tests/fs/test_squashfs.py
-@@ -32,5 +32,4 @@ class TestSquashfs(infra.basetest.BRTest):
-         self.emulator.login()
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 98dde8773b..2a69f88299 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1121,6 +1121,8 @@ F:	package/python-sip/
+ F:	package/uhd/
  
-         cmd = "mount | grep '/dev/root on / type squashfs'"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
-diff --git a/support/testing/tests/init/base.py b/support/testing/tests/init/base.py
-index 75cfbe9c59..80f7731ba3 100644
---- a/support/testing/tests/init/base.py
-+++ b/support/testing/tests/init/base.py
-@@ -39,10 +39,8 @@ class InitSystemBase(infra.basetest.BRTest):
- 
-     def check_init(self, path):
-         cmd = "cmp /proc/1/exe {}".format(path)
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-     def check_network(self, interface, exitCode=0):
-         cmd = "ip addr show {} |grep inet".format(interface)
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, exitCode)
-+        self.assertRunOk(cmd)
-diff --git a/support/testing/tests/init/test_none.py b/support/testing/tests/init/test_none.py
-index 5b9b4e43f1..fc4a46efd9 100644
---- a/support/testing/tests/init/test_none.py
-+++ b/support/testing/tests/init/test_none.py
-@@ -27,7 +27,6 @@ class TestInitSystemNone(InitSystemBase):
-         self.assertEqual(exit_code, 0)
-         self.assertEqual(out[0], "1")
- 
--        _, exit_code = self.emulator.run("mount -t proc none /proc")
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk("mount -t proc none /proc")
- 
-         self.check_init("/bin/sh")
-diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
-index c0ef5e1202..b553f69a48 100644
---- a/support/testing/tests/init/test_systemd.py
-+++ b/support/testing/tests/init/test_systemd.py
-@@ -29,8 +29,7 @@ class InitSystemSystemdBase(InitSystemBase):
-         self.assertEqual(len(output), 0)
- 
-         # Test we can reach the DBus daemon
--        _, exit_code = self.emulator.run("busctl --no-pager")
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk("busctl --no-pager")
- 
-         # Test we can read at least one line from the journal
-         output, _ = self.emulator.run("journalctl --no-pager --lines 1 --quiet")
-diff --git a/support/testing/tests/package/test_atop.py b/support/testing/tests/package/test_atop.py
-index 1da1ac7cc4..5a96684799 100644
---- a/support/testing/tests/package/test_atop.py
-+++ b/support/testing/tests/package/test_atop.py
-@@ -33,9 +33,7 @@ class TestAtop(infra.basetest.BRTest):
-         self.emulator.login()
- 
-         cmd = "atop -V | grep '^Version'"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-         cmd = "atop -a 1 2 | grep '% *atop *$'"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
-diff --git a/support/testing/tests/package/test_bmap_tools.py b/support/testing/tests/package/test_bmap_tools.py
-index 5b4e5dcd3f..baa23154f8 100644
---- a/support/testing/tests/package/test_bmap_tools.py
-+++ b/support/testing/tests/package/test_bmap_tools.py
-@@ -42,8 +42,7 @@ class TestBmapTools(BRTest):
-     def test_run(self):
-         self.login()
-         cmd = "/root/{}".format(os.path.basename(self.sample_script))
--        _, exit_code = self.emulator.run(cmd, timeout=20)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd, timeout=20)
- 
- 
- class TestPy2BmapTools(TestBmapTools):
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 737dbf393c..142ac95d03 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -37,8 +37,7 @@ class TestDockerCompose(infra.basetest.BRTest):
- 
-     def docker_test(self):
-         # will download container if not available, which may take some time
--        _, exit_code = self.emulator.run('docker run --rm -p 8888:8888 busybox:latest /bin/true', 120)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk('docker run --rm -p 8888:8888 busybox:latest /bin/true', 120)
- 
-     def docker_compose_test(self):
-         # will download container if not available, which may take some time
-diff --git a/support/testing/tests/package/test_dropbear.py b/support/testing/tests/package/test_dropbear.py
-index bfec8701f2..2dd9070231 100644
---- a/support/testing/tests/package/test_dropbear.py
-+++ b/support/testing/tests/package/test_dropbear.py
-@@ -24,9 +24,7 @@ class TestDropbear(infra.basetest.BRTest):
-                                     "-net", "user"])
-         self.emulator.login(self.passwd)
-         cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:22"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-         cmd = "sshpass -p {} ssh -y localhost /bin/true".format(self.passwd)
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
-diff --git a/support/testing/tests/package/test_lua.py b/support/testing/tests/package/test_lua.py
-index 66ae85c999..573ae01005 100644
---- a/support/testing/tests/package/test_lua.py
-+++ b/support/testing/tests/package/test_lua.py
-@@ -31,8 +31,7 @@ class TestLuaBase(infra.basetest.BRTest):
- 
-     def module_test(self, module, script="a=1"):
-         cmd = "lua -l {} -e '{}'".format(module, script)
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
- 
- class TestLua(TestLuaBase):
-diff --git a/support/testing/tests/package/test_netdata.py b/support/testing/tests/package/test_netdata.py
-index 7418b762a4..6b616398d3 100644
---- a/support/testing/tests/package/test_netdata.py
-+++ b/support/testing/tests/package/test_netdata.py
-@@ -19,5 +19,4 @@ class TestNetdata(infra.basetest.BRTest):
-         self.emulator.login()
- 
-         cmd = "wget localhost:19999 -O - | grep '<title>netdata dashboard</title>'"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
-diff --git a/support/testing/tests/package/test_openssh.py b/support/testing/tests/package/test_openssh.py
-index 2ae5030d5d..490147f86f 100644
---- a/support/testing/tests/package/test_openssh.py
-+++ b/support/testing/tests/package/test_openssh.py
-@@ -25,12 +25,10 @@ class TestOpensshBase(infra.basetest.BRTest):
-         self.emulator.login(self.passwd)
- 
-         cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:22"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-         cmd = "sshpass -p {} ssh -oStrictHostKeyChecking=no localhost /bin/true".format(self.passwd)
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
- 
- class TestOpenSshuClibc(TestOpensshBase):
-diff --git a/support/testing/tests/package/test_opkg.py b/support/testing/tests/package/test_opkg.py
-index aa93708223..e47879cad6 100644
---- a/support/testing/tests/package/test_opkg.py
-+++ b/support/testing/tests/package/test_opkg.py
-@@ -33,23 +33,19 @@ class TestOpkg(infra.basetest.BRTest):
-         # and prerm scripting provided in the package archive.
- 
-         cmd = "opkg install example-snmpd-package_1.0_arm.ipk"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-         cmd = "opkg list-installed | grep example-snmpd-package"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-         # Check that postinst script ran to start the services
-         cmd = "ps aux | grep [s]nmpd"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-         # If successful, the prerm script ran to stop the service prior to
-         # the removal of the service scripting and files
-         cmd = "opkg remove example-snmpd-package"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-         # Verify after package removal that the services is not
-         # running, but let's give it some time to really stop
-diff --git a/support/testing/tests/package/test_perl.py b/support/testing/tests/package/test_perl.py
-index 37e7390a4b..ae3f105919 100644
---- a/support/testing/tests/package/test_perl.py
-+++ b/support/testing/tests/package/test_perl.py
-@@ -19,8 +19,7 @@ class TestPerlBase(infra.basetest.BRTest):
- 
-     def module_test(self, module, script="1"):
-         cmd = "perl -M{} -e '{}'".format(module, script)
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
- 
- class TestPerl(TestPerlBase):
-diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
-index bcd363ad1e..60da8765c4 100644
---- a/support/testing/tests/package/test_python.py
-+++ b/support/testing/tests/package/test_python.py
-@@ -20,21 +20,18 @@ class TestPythonBase(infra.basetest.BRTest):
- 
-     def version_test(self, version, timeout=-1):
-         cmd = self.interpreter + " --version 2>&1 | grep '^{}'".format(version)
--        _, exit_code = self.emulator.run(cmd, timeout)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd, timeout)
- 
-     def math_floor_test(self, timeout=-1):
-         cmd = self.interpreter + " -c 'import math; math.floor(12.3)'"
--        _, exit_code = self.emulator.run(cmd, timeout)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd, timeout)
- 
-     def libc_time_test(self, timeout=-1):
-         cmd = self.interpreter + " -c 'from __future__ import print_function;"
-         cmd += "import ctypes;"
-         cmd += "libc = ctypes.cdll.LoadLibrary(\"libc.so.1\");"
-         cmd += "print(libc.time(None))'"
--        _, exit_code = self.emulator.run(cmd, timeout)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd, timeout)
- 
-     def zlib_test(self, timeout=-1):
-         cmd = self.interpreter + " -c 'import zlib'"
-@@ -116,8 +113,7 @@ class TestPythonPackageBase(TestPythonBase):
-         """Run each script previously added to the image."""
-         for script in self.sample_scripts:
-             cmd = self.interpreter + " " + os.path.basename(script)
--            _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
--            self.assertEqual(exit_code, 0)
-+            self.assertRunOk(cmd, timeout=self.timeout)
- 
-     def test_run(self):
-         self.login()
-diff --git a/support/testing/tests/package/test_python_pytest.py b/support/testing/tests/package/test_python_pytest.py
-index 7fa7e44018..1a631adfd3 100644
---- a/support/testing/tests/package/test_python_pytest.py
-+++ b/support/testing/tests/package/test_python_pytest.py
-@@ -15,5 +15,4 @@ class TestPythonPy3Pytest(TestPythonPackageBase):
-     def run_sample_scripts(self):
-         for script in self.sample_scripts:
-             cmd = self.interpreter + " -m pytest " + os.path.basename(script)
--            _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
--            self.assertEqual(exit_code, 0)
-+            self.assertRunOk(cmd, timeout=self.timeout)
-diff --git a/support/testing/tests/package/test_python_pytest_asyncio.py b/support/testing/tests/package/test_python_pytest_asyncio.py
-index caf034be7b..e09abf2abb 100644
---- a/support/testing/tests/package/test_python_pytest_asyncio.py
-+++ b/support/testing/tests/package/test_python_pytest_asyncio.py
-@@ -16,5 +16,4 @@ class TestPythonPy3PytestAsyncio(TestPythonPackageBase):
-     def run_sample_scripts(self):
-         for script in self.sample_scripts:
-             cmd = self.interpreter + " -m pytest " + os.path.basename(script)
--            _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
--            self.assertEqual(exit_code, 0)
-+            self.assertRunOk(cmd, timeout=self.timeout)
-diff --git a/support/testing/tests/package/test_redis.py b/support/testing/tests/package/test_redis.py
-index d79998514e..2a333f46ad 100644
---- a/support/testing/tests/package/test_redis.py
-+++ b/support/testing/tests/package/test_redis.py
-@@ -16,8 +16,7 @@ class TestRedis(infra.basetest.BRTest):
-                            options=["-initrd", cpio_file])
-         self.emulator.login()
- 
--        _, exit_code = self.emulator.run("redis-cli SET hello world")
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk("redis-cli SET hello world")
- 
-         output, exit_code = self.emulator.run("redis-cli GET hello")
-         self.assertEqual(exit_code, 0)
-diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-index 15bb93dd97..cd5dccf8e1 100644
---- a/support/testing/tests/package/test_rust.py
-+++ b/support/testing/tests/package/test_rust.py
-@@ -79,8 +79,7 @@ class TestRustBin(TestRustBase):
-     def test_run(self):
-         self.build_test_prog()
-         self.login()
--        _, exit_code = self.emulator.run(self.crate)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(self.crate)
- 
- 
- class TestRust(TestRustBase):
-@@ -108,5 +107,4 @@ class TestRust(TestRustBase):
-     def test_run(self):
-         self.build_test_prog()
-         self.login()
--        _, exit_code = self.emulator.run(self.crate)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(self.crate)
-diff --git a/support/testing/tests/package/test_s6_rc.py b/support/testing/tests/package/test_s6_rc.py
-index 8d375efe88..7551ba7b98 100644
---- a/support/testing/tests/package/test_s6_rc.py
-+++ b/support/testing/tests/package/test_s6_rc.py
-@@ -22,19 +22,18 @@ class TestS6Rc(infra.basetest.BRTest):
-         self.assertEqual(exit_code, 100)
- 
-         # Set up two service directories with a dependency
--        self.emulator.run("mkdir -p source/testsv1")
--        self.emulator.run("mkdir -p source/testsv2")
--        self.emulator.run("echo oneshot > source/testsv1/type")
--        self.emulator.run("echo oneshot > source/testsv2/type")
--        self.emulator.run("echo 'echo foo' > source/testsv1/up")
--        self.emulator.run("echo 'echo bar' > source/testsv2/up")
--        self.emulator.run("echo testsv1 > source/testsv2/dependencies")
--        self.emulator.run("chmod +x source/testsv1/up")
--        self.emulator.run("chmod +x source/testsv2/up")
-+        self.assertRunOk("mkdir -p source/testsv1")
-+        self.assertRunOk("mkdir -p source/testsv2")
-+        self.assertRunOk("echo oneshot > source/testsv1/type")
-+        self.assertRunOk("echo oneshot > source/testsv2/type")
-+        self.assertRunOk("echo 'echo foo' > source/testsv1/up")
-+        self.assertRunOk("echo 'echo bar' > source/testsv2/up")
-+        self.assertRunOk("echo testsv1 > source/testsv2/dependencies")
-+        self.assertRunOk("chmod +x source/testsv1/up")
-+        self.assertRunOk("chmod +x source/testsv2/up")
- 
-         # Compile the service database
--        _, exit_code = self.emulator.run("s6-rc-compile compiled source")
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk("s6-rc-compile compiled source")
- 
-         # Inspect dependencies
-         cmd = "s6-rc-db -c compiled -d dependencies testsv1"
-diff --git a/support/testing/tests/package/test_sudo.py b/support/testing/tests/package/test_sudo.py
-index f9d0a6f301..daba28a1ea 100644
---- a/support/testing/tests/package/test_sudo.py
-+++ b/support/testing/tests/package/test_sudo.py
-@@ -22,11 +22,9 @@ class TestSudo(infra.basetest.BRTest):
-         # -h    set home directory
-         # -H    don't create home directory
-         # -s    set shell
--        _, exit_code = self.emulator.run("adduser -D -h /tmp -H -s /bin/sh sudotest")
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk("adduser -D -h /tmp -H -s /bin/sh sudotest")
- 
--        _, exit_code = self.emulator.run("echo 'sudotest ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers")
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk("echo 'sudotest ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers")
- 
-         output, exit_code = self.emulator.run("su - sudotest -c 'echo hello world'")
-         self.assertEqual(output, ["hello world"])
-diff --git a/support/testing/tests/package/test_syslog_ng.py b/support/testing/tests/package/test_syslog_ng.py
-index 3fb0be5fb8..153c9f73e5 100644
---- a/support/testing/tests/package/test_syslog_ng.py
-+++ b/support/testing/tests/package/test_syslog_ng.py
-@@ -20,19 +20,17 @@ class TestSyslogNg(infra.basetest.BRTest):
-         self.emulator.login()
- 
-         cmd = "grep 'syslog-ng starting' /var/log/messages"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-         cmd = "logger my-message && "
-         cmd += "sleep 1 && "
-         cmd += "grep my-message /var/log/messages"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-         cmd = "syslog-ng-ctl reload && "
-         cmd += "sleep 1"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
+ N:	Heiko Thiery <heiko.thiery@gmail.com>
++F:	board/kontron/pitx-imx8m/
++F:	configs/kontron_pitx_imx8m_defconfig
+ F:	package/altera-stapl/
+ F:	package/ipmitool/
+ F:	package/libnetconf2/
+diff --git a/board/kontron/pitx-imx8m/boot.cmd b/board/kontron/pitx-imx8m/boot.cmd
+new file mode 100644
+index 0000000000..4d89235392
+--- /dev/null
++++ b/board/kontron/pitx-imx8m/boot.cmd
+@@ -0,0 +1,8 @@
++echo "Root File Sytem on MMC${devnum}"
++setenv rootfs /dev/mmcblk${devnum}p1
++setenv bootargs root=${rootfs} rootwait rw ${extrabootargs}
 +
-         cmd = "grep -i 'syslog-ng.*warning' /var/log/messages"
-         _, exit_code = self.emulator.run(cmd)
-         self.assertEqual(exit_code, 1)
-diff --git a/support/testing/tests/package/test_tmux.py b/support/testing/tests/package/test_tmux.py
-index b31854cab3..7a10b7a2b0 100644
---- a/support/testing/tests/package/test_tmux.py
-+++ b/support/testing/tests/package/test_tmux.py
-@@ -19,20 +19,16 @@ class TestTmux(infra.basetest.BRTest):
-         self.emulator.login()
- 
-         cmd = "tmux -V"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-         cmd = "tmux -C </dev/null"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-         cmd = "tmux split"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-         cmd = "tmux new-window"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+        self.assertRunOk(cmd)
- 
-         cmd = "tmux list-windows"
-         output, exit_code = self.emulator.run(cmd)
++load ${devtype} ${devnum} ${kernel_addr_r} boot/Image
++load ${devtype} ${devnum} ${fdt_addr_r} boot/imx8mq-kontron-pitx-imx8m.dtb
++
++booti ${kernel_addr_r} - ${fdt_addr_r}
+diff --git a/board/kontron/pitx-imx8m/genimage.cfg b/board/kontron/pitx-imx8m/genimage.cfg
+new file mode 100644
+index 0000000000..c335b0c026
+--- /dev/null
++++ b/board/kontron/pitx-imx8m/genimage.cfg
+@@ -0,0 +1,16 @@
++image sdcard.img {
++	hdimage {
++	}
++
++	partition imx-boot {
++		in-partition-table = "no"
++		image = "imx8-boot-sd.bin"
++		offset = 33k
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		offset = 8M
++	}
++}
+diff --git a/board/kontron/pitx-imx8m/post-build.sh b/board/kontron/pitx-imx8m/post-build.sh
+new file mode 100755
+index 0000000000..4574221fe5
+--- /dev/null
++++ b/board/kontron/pitx-imx8m/post-build.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++
++mkdir -p $TARGET_DIR/boot/
++cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
+diff --git a/board/kontron/pitx-imx8m/post-image.sh b/board/kontron/pitx-imx8m/post-image.sh
+new file mode 100755
+index 0000000000..564211c829
+--- /dev/null
++++ b/board/kontron/pitx-imx8m/post-image.sh
+@@ -0,0 +1,3 @@
++#!/bin/sh
++
++support/scripts/genimage.sh -c $(dirname $0)/genimage.cfg
+diff --git a/board/kontron/pitx-imx8m/readme.txt b/board/kontron/pitx-imx8m/readme.txt
+new file mode 100644
+index 0000000000..7c85dd4377
+--- /dev/null
++++ b/board/kontron/pitx-imx8m/readme.txt
+@@ -0,0 +1,74 @@
++Kontron pitx-imx8m
++==================
++
++https://www.kontron.com/produkte/pitx-imx8m/p155258
++
++
++How to build it
++===============
++
++Configure buildroot:
++
++  $ make kontron_pitx_imx8m_defconfig
++
++Change settings to fit your needs (optional):
++
++  $ make menuconfig
++
++Compile everything and buildr the rootfs image:
++
++  $ make
++
++
++Result of the build
++===================
++
++After building, the output/images directory contains:
++
++  output/images/
++    ├── bl31.bin
++    ├── boot.scr
++    ├── ddr_fw.bin
++    ├── Image
++    ├── imx8-boot-sd.bin
++    ├── imx8mq-kontron-pitx-imx8m.dtb
++    ├── lpddr4_pmu_train_fw.bin
++    ├── rootfs.ext2
++    ├── rootfs.ext4 -> rootfs.ext2
++    ├── rootfs.tar
++    ├── sdcard.img
++    ├── signed_hdmi_imx8m.bin
++    ├── u-boot.bin
++    ├── u-boot.itb
++    ├── u-boot-nodtb.bin
++    ├── u-boot-spl.bin
++    └── u-boot-spl-ddr.bin
++
++
++Flashing the SD card image
++==========================
++
++To install the image on a SDCard simply copy sdcard.img to the storage (e.g. SD, eMMC)
++
++  $ sudo dd if=output/images/sdcard.img of=<your-sd-device>
++
++
++Preparing the board
++===================
++
++ * Connect a serial line to the board
++ * Insert the SD card
++ * Make sure the boot source selection DIP switches are set correctly
++  * SW1 1-4 OFF
++  * SW1 2-3 OFF
++ * Power-up the board
++
++
++Booting the board
++=================
++
++By default the bootloader will search for the first valid image, starting
++with the internal eMMC. To make sure the bootloader loads bootscript from
++the correct location (SD card) set the boot_targets environment variable:
++
++  $ setenv boot_targets mmc1
+diff --git a/configs/kontron_pitx_imx8m_defconfig b/configs/kontron_pitx_imx8m_defconfig
+new file mode 100644
+index 0000000000..4053e1e398
+--- /dev/null
++++ b/configs/kontron_pitx_imx8m_defconfig
+@@ -0,0 +1,54 @@
++# Architecture
++BR2_aarch64=y
++BR2_ARM_FPU_VFPV3=y
++
++# System
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/kontron/pitx-imx8m/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/kontron/pitx-imx8m/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/pitx-imx8mq.dtb"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-kontron-pitx-imx8m"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
++
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y
++BR2_PACKAGE_FIRMWARE_IMX=y
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++
++# Bootloader
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://gitlab.kontron.com/imx/u-boot-imx/-/archive/PITX-IMX8M-R12/u-boot-imx-PITX-IMX8M-R12.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pitx-imx8m"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
++BR2_TARGET_UBOOT_SPL=y
++
++# Required host tools to create the SD/eMMC image
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_IMX_MKIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/kontron/pitx-imx8m/boot.cmd"
+
+--===============4747657733413262041==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============4747657733413262041==--
