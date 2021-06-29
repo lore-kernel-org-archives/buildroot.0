@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68794C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:43:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 470EAC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:43:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 336F76103C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:43:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 336F76103C
+	by mail.kernel.org (Postfix) with ESMTPS id 1357E61050
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:43:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1357E61050
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 003EC400E7;
-	Tue,  3 Aug 2021 21:43:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E13C740476;
+	Tue,  3 Aug 2021 21:43:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IFrFYnjrpgdA; Tue,  3 Aug 2021 21:43:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gJ_PX5ZEg2B1; Tue,  3 Aug 2021 21:43:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 078E7400C6;
-	Tue,  3 Aug 2021 21:43:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 138161BF9C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4379C4045A;
+	Tue,  3 Aug 2021 21:43:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A06E1BF349
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 84D0E60883
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C3BB183AB5
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UuqhWKobbcDG for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f-2Bo_eOaVsh for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D2B7360890
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A44383A9F
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 366F3864A8; Tue,  3 Aug 2021 21:09:48 +0000 (UTC)
+ id 54EBA860D3; Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 6 Jun 2021 09:32:31 +0200
+Date: Tue, 29 Jun 2021 21:40:10 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6f63917485b109dc050aee65c9b98b1cb814b350
-X-Git-Newrev: 0054fb6345ae09ce565ebae8273c224ff9364aa8
+X-Git-Oldrev: 4c9bc44534f6739ade2f55fe04a96f1024f76681
+X-Git-Newrev: d3bc7f9e661986ec4a150890028173e40d2c79eb
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210948.366F3864A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/minnowboard_max-graphical_defconfig: unbreak X11/mesa
+Message-Id: <20210803210957.54EBA860D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-markdown: Bump
+ version to 3.3.4
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,56 +70,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0054fb6345ae09ce565ebae8273c224ff9364aa8
+commit: https://git.buildroot.net/buildroot/commit/?id=d3bc7f9e661986ec4a150890028173e40d2c79eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/1297337965
-
-Commit 15a2f9b819806d38a7d8172a2 (package/{mesa3d, mesa3d-headers}: bump
-version to 21.0.2) marked BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST as legacy,
-but forgot to update the defconfig.  The SW rasterizer isn't really needed
-with the Intel GPU, so just drop it.
-
-In addition, X11 now needs some help with loading the modules in the correct
-order, similar to how it was done for the test in commit 4a3639bad01a
-(support/testing: test_glxinfo load X11 modules in the right order).
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../fs-overlay-graphical/etc/X11/xorg.conf.d/01-modules.conf  | 11 +++++++++++
- configs/minnowboard_max-graphical_defconfig                   |  1 -
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/python-markdown/python-markdown.hash | 4 ++--
+ package/python-markdown/python-markdown.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/minnowboard/fs-overlay-graphical/etc/X11/xorg.conf.d/01-modules.conf b/board/minnowboard/fs-overlay-graphical/etc/X11/xorg.conf.d/01-modules.conf
-new file mode 100644
-index 0000000000..91659baa65
---- /dev/null
-+++ b/board/minnowboard/fs-overlay-graphical/etc/X11/xorg.conf.d/01-modules.conf
-@@ -0,0 +1,11 @@
-+
-+# Xorg does not implement real dynamic linking and requires that its
-+# modules get loaded in the right order.
-+# https://forums.gentoo.org/viewtopic-p-8245578.html#8245578
-+Section "Module"
-+   Load "vgahw"
-+   Load "fb"
-+   Load "shadowfb"
-+   Load "int10"
-+   Load "vbe"
-+EndSection
-diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
-index 3b769ca6e7..051c7584dc 100644
---- a/configs/minnowboard_max-graphical_defconfig
-+++ b/configs/minnowboard_max-graphical_defconfig
-@@ -40,7 +40,6 @@ BR2_PACKAGE_ALSA_UTILS_APLAY=y
- BR2_PACKAGE_GLMARK2=y
- BR2_PACKAGE_MESA3D_DEMOS=y
- BR2_PACKAGE_MESA3D=y
--BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
- BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
- BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
+index 4d54ce9243..b64ac77be0 100644
+--- a/package/python-markdown/python-markdown.hash
++++ b/package/python-markdown/python-markdown.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/markdown/json
+-md5  7a894dc55992b37cdbcba5c4049455fc  Markdown-3.2.1.tar.gz
+-sha256  90fee683eeabe1a92e149f7ba74e5ccdc81cd397bd6c516d93a8da0ef90b6902  Markdown-3.2.1.tar.gz
++md5  b6833c6326e9164ee0c662218a75e7f0  Markdown-3.3.4.tar.gz
++sha256  31b5b491868dcc87d6c24b7e3d19a0d730d59d3e46f4eea6430a321bed387a49  Markdown-3.3.4.tar.gz
+ # Locally computed sha256
+ sha256  6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
+diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
+index 1f352fd7f1..801360d778 100644
+--- a/package/python-markdown/python-markdown.mk
++++ b/package/python-markdown/python-markdown.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
+-PYTHON_MARKDOWN_VERSION = 3.2.1
++PYTHON_MARKDOWN_VERSION = 3.3.4
+ PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
+-PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/98/79/ce6984767cb9478e6818bd0994283db55c423d733cc62a88a3ffb8581e11
++PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/49/02/37bd82ae255bb4dfef97a4b32d95906187b7a7a74970761fca1360c4ba22
+ PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
+ PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
+ PYTHON_MARKDOWN_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
