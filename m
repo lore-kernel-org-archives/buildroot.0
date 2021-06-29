@@ -1,238 +1,67 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 29 Jun 2021 12:06:31 +0200
-Subject: [Buildroot] [PATCH] configs/kontron_pitx_imx8m: new defconfig
-Message-ID: <20210629100630.1963-1-heiko.thiery@gmail.com>
+From: =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+Date: Tue, 29 Jun 2021 14:47:35 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: fix uboot build
+In-Reply-To: <20210628202656.GD2829@scaer>
+References: <20210204170446.15188-1-kory.maincent@bootlin.com>
+ <20210316230852.298db3b5@windsurf.home>
+ <20210325173459.7d902f53@kmaincent-XPS-13-7390>
+ <20210628202656.GD2829@scaer>
+Message-ID: <20210629144735.334477ec@kmaincent-XPS-13-7390>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- DEVELOPERS                             |  2 +
- board/kontron/pitx-imx8m/boot.cmd      |  8 +++
- board/kontron/pitx-imx8m/genimage.cfg  | 16 ++++++
- board/kontron/pitx-imx8m/post-build.sh |  4 ++
- board/kontron/pitx-imx8m/post-image.sh |  4 ++
- board/kontron/pitx-imx8m/readme.txt    | 74 ++++++++++++++++++++++++++
- configs/kontron_pitx_imx8m_defconfig   | 54 +++++++++++++++++++
- 7 files changed, 162 insertions(+)
- create mode 100644 board/kontron/pitx-imx8m/boot.cmd
- create mode 100644 board/kontron/pitx-imx8m/genimage.cfg
- create mode 100755 board/kontron/pitx-imx8m/post-build.sh
- create mode 100755 board/kontron/pitx-imx8m/post-image.sh
- create mode 100644 board/kontron/pitx-imx8m/readme.txt
- create mode 100644 configs/kontron_pitx_imx8m_defconfig
+Hello Yann,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2031a40e14..aba7a50e9d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1121,6 +1121,8 @@ F:	package/python-sip/
- F:	package/uhd/
- 
- N:	Heiko Thiery <heiko.thiery@gmail.com>
-+F:	board/kontron/pitx-imx8m/
-+F:	configs/kontron_pitx_imx8m_defconfig
- F:	package/altera-stapl/
- F:	package/ipmitool/
- F:	package/libnetconf2/
-diff --git a/board/kontron/pitx-imx8m/boot.cmd b/board/kontron/pitx-imx8m/boot.cmd
-new file mode 100644
-index 0000000000..4d89235392
---- /dev/null
-+++ b/board/kontron/pitx-imx8m/boot.cmd
-@@ -0,0 +1,8 @@
-+echo "Root File Sytem on MMC${devnum}"
-+setenv rootfs /dev/mmcblk${devnum}p1
-+setenv bootargs root=${rootfs} rootwait rw ${extrabootargs}
-+
-+load ${devtype} ${devnum} ${kernel_addr_r} boot/Image
-+load ${devtype} ${devnum} ${fdt_addr_r} boot/imx8mq-kontron-pitx-imx8m.dtb
-+
-+booti ${kernel_addr_r} - ${fdt_addr_r}
-diff --git a/board/kontron/pitx-imx8m/genimage.cfg b/board/kontron/pitx-imx8m/genimage.cfg
-new file mode 100644
-index 0000000000..c335b0c026
---- /dev/null
-+++ b/board/kontron/pitx-imx8m/genimage.cfg
-@@ -0,0 +1,16 @@
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition imx-boot {
-+		in-partition-table = "no"
-+		image = "imx8-boot-sd.bin"
-+		offset = 33k
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		offset = 8M
-+	}
-+}
-diff --git a/board/kontron/pitx-imx8m/post-build.sh b/board/kontron/pitx-imx8m/post-build.sh
-new file mode 100755
-index 0000000000..4574221fe5
---- /dev/null
-+++ b/board/kontron/pitx-imx8m/post-build.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+
-+mkdir -p $TARGET_DIR/boot/
-+cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-diff --git a/board/kontron/pitx-imx8m/post-image.sh b/board/kontron/pitx-imx8m/post-image.sh
-new file mode 100755
-index 0000000000..66351f250f
---- /dev/null
-+++ b/board/kontron/pitx-imx8m/post-image.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+
-+support/scripts/genimage.sh -c $(dirname $0)/genimage.cfg
-+exit $?
-diff --git a/board/kontron/pitx-imx8m/readme.txt b/board/kontron/pitx-imx8m/readme.txt
-new file mode 100644
-index 0000000000..7c85dd4377
---- /dev/null
-+++ b/board/kontron/pitx-imx8m/readme.txt
-@@ -0,0 +1,74 @@
-+Kontron pitx-imx8m
-+==================
-+
-+https://www.kontron.com/produkte/pitx-imx8m/p155258
-+
-+
-+How to build it
-+===============
-+
-+Configure buildroot:
-+
-+  $ make kontron_pitx_imx8m_defconfig
-+
-+Change settings to fit your needs (optional):
-+
-+  $ make menuconfig
-+
-+Compile everything and buildr the rootfs image:
-+
-+  $ make
-+
-+
-+Result of the build
-+===================
-+
-+After building, the output/images directory contains:
-+
-+  output/images/
-+    ??? bl31.bin
-+    ??? boot.scr
-+    ??? ddr_fw.bin
-+    ??? Image
-+    ??? imx8-boot-sd.bin
-+    ??? imx8mq-kontron-pitx-imx8m.dtb
-+    ??? lpddr4_pmu_train_fw.bin
-+    ??? rootfs.ext2
-+    ??? rootfs.ext4 -> rootfs.ext2
-+    ??? rootfs.tar
-+    ??? sdcard.img
-+    ??? signed_hdmi_imx8m.bin
-+    ??? u-boot.bin
-+    ??? u-boot.itb
-+    ??? u-boot-nodtb.bin
-+    ??? u-boot-spl.bin
-+    ??? u-boot-spl-ddr.bin
-+
-+
-+Flashing the SD card image
-+==========================
-+
-+To install the image on a SDCard simply copy sdcard.img to the storage (e.g. SD, eMMC)
-+
-+  $ sudo dd if=output/images/sdcard.img of=<your-sd-device>
-+
-+
-+Preparing the board
-+===================
-+
-+ * Connect a serial line to the board
-+ * Insert the SD card
-+ * Make sure the boot source selection DIP switches are set correctly
-+  * SW1 1-4 OFF
-+  * SW1 2-3 OFF
-+ * Power-up the board
-+
-+
-+Booting the board
-+=================
-+
-+By default the bootloader will search for the first valid image, starting
-+with the internal eMMC. To make sure the bootloader loads bootscript from
-+the correct location (SD card) set the boot_targets environment variable:
-+
-+  $ setenv boot_targets mmc1
-diff --git a/configs/kontron_pitx_imx8m_defconfig b/configs/kontron_pitx_imx8m_defconfig
-new file mode 100644
-index 0000000000..4053e1e398
---- /dev/null
-+++ b/configs/kontron_pitx_imx8m_defconfig
-@@ -0,0 +1,54 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_ARM_FPU_VFPV3=y
-+
-+# System
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/kontron/pitx-imx8m/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/kontron/pitx-imx8m/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/pitx-imx8mq.dtb"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-kontron-pitx-imx8m"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
-+
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
-+
-+# Filesystem / image
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+
-+# Bootloader
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://gitlab.kontron.com/imx/u-boot-imx/-/archive/PITX-IMX8M-R12/u-boot-imx-PITX-IMX8M-R12.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pitx-imx8m"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
-+BR2_TARGET_UBOOT_SPL=y
-+
-+# Required host tools to create the SD/eMMC image
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_IMX_MKIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/kontron/pitx-imx8m/boot.cmd"
--- 
-2.30.0
+On Mon, 28 Jun 2021 22:26:56 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+
+> K?ry, All,
+> 
+> On 2021-03-25 17:34 +0100, K?ry Maincent spake thusly:
+> > On Tue, 16 Mar 2021 23:08:52 +0100
+> > Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:  
+> > > On Thu,  4 Feb 2021 18:04:46 +0100
+> > > Kory Maincent <kory.maincent@bootlin.com> wrote:  
+> > > > The make all command run the tools/makefile on the process.
+> > > > This makefile use "pkg-config" command to support static link.
+> > > > The issue is the use of pkg-config configured for crosscompiling
+> > > > to build binaries tools for host architecture.
+> > > > To fix it, I copied the behavior of QtWebengine by using a pkg-config
+> > > > executable preconfigured for host.
+> > > > 
+> > > > Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>    
+> > > Thanks for the patch. It would require a better commit title though, as
+> > > "fix uboot build" is very vague.  
+> > Ok I will change it for v2.  
+> 
+> > > After discussing with Yann E. Morin on IRC, could you try this change
+> > > instead:
+> > > 
+> > > 	$(TARGET_CONFIGURE_OPTS) \
+> > > 	        PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+> > >         	PKG_CONFIG_SYSROOT_DIR="/" \
+> > > 	        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+> > > 	        PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+> > > 	        PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
+> > > 
+> > > The reasoning is that U-Boot anyway only uses pkg-config for host
+> > > tools, so we could just as well pass those environment variables when
+> > > building U-Boot.
+> > > 
+> > > Could you try this out?  
+> > 
+> > This change works well, the build of U-boot ends properly.  
+> 
+> I don't seem to have seen a v2 of this patch. Do you plan on sending it
+> soonish? ;-)
+
+Sorry, I put it aside for a time.
+I need to finish the test case asked by Thomas, I will try to find time to do
+it soon.
+
+Regards
+
+K?ry
