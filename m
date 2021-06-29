@@ -1,155 +1,97 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jun 2021 22:41:00 +0200
-Subject: [Buildroot] [PATCH] package/daemon: bump to version 0.8
-In-Reply-To: <ee602ffcc307dffea6df5d7df388fa2cc6df33a0.1624534780.git.baruch@tkos.co.il>
-References: <ee602ffcc307dffea6df5d7df388fa2cc6df33a0.1624534780.git.baruch@tkos.co.il>
-Message-ID: <20210629204100.GX2829@scaer>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 29 Jun 2021 23:32:08 +0200
+Subject: [Buildroot] Trouble with u-boot on a ZynqMP board
+In-Reply-To: <CAM+bi4syAU=jhC9VqE5eqfK5aO-c3ErfS2nUoXAz7AYPLAOCTg@mail.gmail.com>
+References: <CAM+bi4s4Nueb96Xyo5dY7vwDhJO1xFnzcdrky5U3qsBBNf8EHQ@mail.gmail.com>
+ <1ae87e6c-9b70-9492-6efd-b67d06d91433@lucaceresoli.net>
+ <CAM+bi4sU71gkigZ_-T-AXKYtqYOA1cn+0bU=_TiThf94K2C4yQ@mail.gmail.com>
+ <62bea3e6-dfdd-d230-e833-80775f065f83@lucaceresoli.net>
+ <07bd6c4b-ad67-bf4c-b32c-aff2d5d7637b@lucaceresoli.net>
+ <CAM+bi4syAU=jhC9VqE5eqfK5aO-c3ErfS2nUoXAz7AYPLAOCTg@mail.gmail.com>
+Message-ID: <b277f25a-c56a-f414-8cc2-5ba5ba7435d5@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Hi Alvaro,
 
-On 2021-06-24 14:39 +0300, Baruch Siach spake thusly:
-> Drop upstream patch.
+On 29/06/21 11:19, Alvaro Gamez wrote:
+> Hi Luca,
 > 
-> Add another patch to fix build with musl.
+> El lun, 28 jun 2021 a las 18:47, Luca Ceresoli
+> (<luca@lucaceresoli.net>) escribi?:
+>>
+>> Hi Alvaro,
+>>
+>> On 24/06/21 23:51, Luca Ceresoli wrote:
+>> [...]
+>>>>> I haven't been working on zynqmp recently but back at the times
+>>>>> (2018~2019) one needed to have the various booting components "in sync",
+>>>>> expecially pmufw, U-Boot and SPL or FSBL. I don't remember whether ATF
+>>>>> was critical too in that respect. By "in sync" I mean the major version
+>>>>> number (the year) should be the same.
+>>>>>
+>>>>> Here you are using a 2018 pmufw and 2021 U-Boot so you muight want to
+>>>>> build a more recent pmufw and see if you get any improvements.
+>>>>
+>>>> Great, that's a nice idea, thank you!
+>>>
+>>> Try that, which seems to be required:
+>>> https://forums.xilinx.com/t5/Embedded-Linux/problem-on-u-boot-quot-Synchronous-Abort-quot-handler-esr/m-p/1060937/highlight/true#M39206
+>>
+>> Did you make any progress?
 > 
-> Update COPYING hash because of date change.
+> Thanks for asking and continuing with your help! Indeed I did, just a
+> couple hours ago. I am now able to run U-Boot SPL, which runs
+> U-boot, which is able to reprogram the FPGA, and boot linux!
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...aemon-fix-build-with-musl-libc-again.patch | 46 +++++++++++++++++++
->  package/daemon/0001-fix-musl.patch            | 18 --------
->  package/daemon/daemon.hash                    |  4 +-
->  package/daemon/daemon.mk                      |  2 +-
->  4 files changed, 49 insertions(+), 21 deletions(-)
->  create mode 100644 package/daemon/0001-daemon-fix-build-with-musl-libc-again.patch
->  delete mode 100644 package/daemon/0001-fix-musl.patch
-> 
-> diff --git a/package/daemon/0001-daemon-fix-build-with-musl-libc-again.patch b/package/daemon/0001-daemon-fix-build-with-musl-libc-again.patch
-> new file mode 100644
-> index 000000000000..48d95f122fe7
-> --- /dev/null
-> +++ b/package/daemon/0001-daemon-fix-build-with-musl-libc-again.patch
-> @@ -0,0 +1,46 @@
-> +From b879e6886498fdd147287bffdf5867378c7f3299 Mon Sep 17 00:00:00 2001
-> +From: Baruch Siach <baruch@tkos.co.il>
-> +Date: Thu, 24 Jun 2021 14:28:10 +0300
-> +Subject: [PATCH] daemon: fix build with musl libc (again)
-> +
-> +Commit 6b28c54dd95b3 added HAVE_SYS_TTYDEFAULTS_H to guard
-> +sys/ttydefaults.h include. This breaks musl libc build because
-> +HAVE_SYS_TTYDEFAULTS_H is not defined until config.h is included.
-> +
-> +Move sys/ttydefaults.h include below config.h
-> +
-> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> +---
-> +Upstream status: https://github.com/raforg/daemon/pull/4
-> +
-> + daemon.c | 7 ++++---
-> + 1 file changed, 4 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/daemon.c b/daemon.c
-> +index 5c5ef2cb86df..f88a0d49bf84 100644
-> +--- a/daemon.c
-> ++++ b/daemon.c
-> +@@ -1011,9 +1011,6 @@ I<elogind(8)>
-> + #ifdef _RESTORE_POSIX_SOURCE
-> + #define _POSIX_SOURCE
-> + #endif
-> +-#ifdef HAVE_SYS_TTYDEFAULTS_H /* For CEOF in musl libc (Linux only) */
-> +-#include <sys/ttydefaults.h>
-> +-#endif
-> + #include <dirent.h>
-> + #include <sys/wait.h>
-> + #include <sys/stat.h>
-> +@@ -1037,6 +1034,10 @@ I<elogind(8)>
-> + #include <systemd/sd-login.h>
-> + #endif
-> + 
-> ++#ifdef HAVE_SYS_TTYDEFAULTS_H /* For CEOF in musl libc (Linux only) */
-> ++#include <sys/ttydefaults.h>
-> ++#endif
+> I started from scratch since I was accumulating lots of different tries and,
+> either I or the computer were about to go crazy, so I reset everything
+> and carefully crafted the final buildroot and u-boot configurations. I was
+> able to use your pmufw 2018 version.
 
-I would have instead moved config.h before all other includes...
-But oh well...
+Cool! I can feel your relief feeling now. ;)
 
-Applied to master, thanks.
+> I need to finish a few things before, but I want to send a patch to add this
+> configuration as board/digilent/genesys-zu/ , which I hope to send in some
+> moment during the next few days.
 
-Regards,
-Yann E. MORIN.
+Yes, please do so!
+Don't forget to Cc: me.
 
-> + /* Configuration file entries */
-> + 
-> + typedef struct Config Config;
-> +-- 
-> +2.30.2
-> +
-> diff --git a/package/daemon/0001-fix-musl.patch b/package/daemon/0001-fix-musl.patch
-> deleted file mode 100644
-> index 5ebb645973f0..000000000000
-> --- a/package/daemon/0001-fix-musl.patch
-> +++ /dev/null
-> @@ -1,18 +0,0 @@
-> -daemon: fix build with musl
-> -
-> -musl requires the ttydefaults.h to be included explicitly for CEOF.
-> -
-> -Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ----
-> -
-> -diff -Nuar daemon-0.6.4-orig/daemon.c daemon-0.6.4/daemon.c
-> ---- daemon-0.6.4-orig/daemon.c	2010-06-12 16:37:00.000000000 +0300
-> -+++ daemon-0.6.4/daemon.c	2017-05-01 22:02:17.721413468 +0300
-> -@@ -864,6 +864,7 @@
-> - #ifdef _RESTORE_POSIX_SOURCE
-> - #define _POSIX_SOURCE
-> - #endif
-> -+#include <sys/ttydefaults.h>
-> - #include <dirent.h>
-> - #include <sys/wait.h>
-> - #include <sys/stat.h>
-> diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
-> index ec7451a81ec1..c490f715487f 100644
-> --- a/package/daemon/daemon.hash
-> +++ b/package/daemon/daemon.hash
-> @@ -1,5 +1,5 @@
->  # From http://www.libslack.org/daemon/
-> -sha256  ba1f6dc87532c852bfb8f436179cd661c3458ff898f67767c414123198626dfd  daemon-0.7.1.tar.gz
-> +sha256  74f12e6d4b3c85632489bd08431d3d997bc17264bf57b7202384f2e809cff596  daemon-0.8.tar.gz
->  # Locally calculated
->  sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
-> -sha256  cbac6eb0e1f7f95826966c7903939d591092a7f7d7726862946cb49096e8497d  COPYING
-> +sha256  91329bb9be4ae0b7800081fa054e9bb760c60005b26958c1fb8461bc66bcd998  COPYING
-> diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
-> index 91f77dd24a97..96a163e597e6 100644
-> --- a/package/daemon/daemon.mk
-> +++ b/package/daemon/daemon.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -DAEMON_VERSION = 0.7.1
-> +DAEMON_VERSION = 0.8
->  DAEMON_SITE = http://libslack.org/daemon/download
->  DAEMON_LICENSE = GPL-2.0+
->  DAEMON_LICENSE_FILES = LICENSE COPYING
-> -- 
-> 2.30.2
+>> I was able to build and test more recent versions of pmufw (2019.2 amd
+>> 2020.1) and pushed them to [0]. They are tested and working. Not sure
+>> it's useful, but that's what I can provide at the moment.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Great, thanks a lot! I will try them too and will use either the
+> latest or the one that
+> matches the kernel I'm using, but it looks that it's not a requirement
+> to have all
+> pieces of software running the same version
+
+I think these pieces of firmware have grown more stable recently than
+they used to be in early zynqmp era when I have been working on them.
+Thus mixing them is now possible, and it's OK until it works. But I
+still would start with versions from the same year when starting from
+scratch as it's what Xilinx is testing IIUC, so it has more probability
+of success.
+
+> I was wondering... there are lots of boards and SoCs which fit
+> different types of
+> processors, of different architectures. Wouldn't it be nice if
+> buildroot itself could
+> compile additional firmware, such as pmufw? Its toolchain for microblaze should
+> be able to, but then Buildroot for zynqpm would need three toolchains: arm64,
+> host and microblaze. It's probably too much and probably out of scope for a
+> "root filesystem generator".
+
+I agree it would be out of scope, Buildroot is not really meant to build
+a single firmware. The complexity of the zyqmp-pmufw-builder script
+confirms that pmufw needs very little to build.
+
+Enjoy to fun part of zynqmp hacking now!
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Luca
