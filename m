@@ -1,9 +1,10 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 29 Jun 2021 09:50:46 -0700
-Subject: [Buildroot] [PATCH 03/11] package/php-imagick: bump version to 3.5.0
+Date: Tue, 29 Jun 2021 09:50:47 -0700
+Subject: [Buildroot] [PATCH 04/11] package/php-memcached: bump version to
+ 3.1.5
 In-Reply-To: <20210629165054.3831930-1-aduskett@gmail.com>
 References: <20210629165054.3831930-1-aduskett@gmail.com>
-Message-ID: <20210629165054.3831930-3-aduskett@gmail.com>
+Message-ID: <20210629165054.3831930-4-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +13,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/php-imagick/php-imagick.hash | 2 +-
- package/php-imagick/php-imagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/php-memcached/php-memcached.hash | 8 ++++----
+ package/php-memcached/php-memcached.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/php-imagick/php-imagick.hash b/package/php-imagick/php-imagick.hash
-index 8b62ed1d9a..e915808585 100644
---- a/package/php-imagick/php-imagick.hash
-+++ b/package/php-imagick/php-imagick.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/php-memcached/php-memcached.hash b/package/php-memcached/php-memcached.hash
+index dd294f466a..7e918c17f6 100644
+--- a/package/php-memcached/php-memcached.hash
++++ b/package/php-memcached/php-memcached.hash
+@@ -1,5 +1,5 @@
  # Locally calculated
--sha256  1f3c5b5eeaa02800ad22f506cd100e8889a66b2ec937e192eaaa30d74562567c  imagick-3.4.3.tgz
-+sha256  795db7c36fbacd3d33a4f53ff2d38584c846e80a04dcd04c55e9e46c28f5d229  imagick-3.5.0.tgz
- sha256  b6e00df9cb3b91977c0d64a7c4db48cb6f5041f6eeda6583c236775f70a35b78  LICENSE
-diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
-index 6fb43de0ca..2dc055f0b3 100644
---- a/package/php-imagick/php-imagick.mk
-+++ b/package/php-imagick/php-imagick.mk
+-sha256 20786213ff92cd7ebdb0d0ac10dde1e9580a2f84296618b666654fd76ea307d4  memcached-3.1.3.tgz
+-sha256 24e8e3a9529204ead9422fa17cf3ddd75d292a8763b87fdb20591964f2e6ebe0  LICENSE
+-sha256 a453a7a272fbd24105b39959f76996d50dad80b22d1c310f6c67f74f62ae4054  fastlz/LICENSE
+-sha256 bba8cb50c660842c5ca459c5004395bdef8f01c1b64f97a9978f1053f173cb82  g_fmt.h
++sha256  b288e45f839593e16c4d8508b241de51a86df4f7322153e6becb9e1c819021fd  memcached-3.1.5.tgz
++sha256  24e8e3a9529204ead9422fa17cf3ddd75d292a8763b87fdb20591964f2e6ebe0  LICENSE
++sha256  a453a7a272fbd24105b39959f76996d50dad80b22d1c310f6c67f74f62ae4054  fastlz/LICENSE
++sha256  bba8cb50c660842c5ca459c5004395bdef8f01c1b64f97a9978f1053f173cb82  g_fmt.h
+diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
+index 4607d099f3..068fbb786b 100644
+--- a/package/php-memcached/php-memcached.mk
++++ b/package/php-memcached/php-memcached.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_IMAGICK_VERSION = 3.4.3
-+PHP_IMAGICK_VERSION = 3.5.0
- PHP_IMAGICK_SOURCE = imagick-$(PHP_IMAGICK_VERSION).tgz
- PHP_IMAGICK_SITE = http://pecl.php.net/get
- PHP_IMAGICK_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-PHP_MEMCACHED_VERSION = 3.1.3
++PHP_MEMCACHED_VERSION = 3.1.5
+ PHP_MEMCACHED_SOURCE = memcached-$(PHP_MEMCACHED_VERSION).tgz
+ PHP_MEMCACHED_SITE = https://pecl.php.net/get
+ PHP_MEMCACHED_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
 -- 
 2.31.1
