@@ -1,23 +1,25 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jun 2021 22:30:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/stellarium: bump version to
- 0.21.1
-In-Reply-To: <20210627061805.273240-1-bernd.kuhls@t-online.de>
-References: <20210627061805.273240-1-bernd.kuhls@t-online.de>
-Message-ID: <20210629203021.GU2829@scaer>
+Date: Tue, 29 Jun 2021 22:30:41 +0200
+Subject: [Buildroot] [PATCH] package/erofs-utils: bump version to 1.3
+In-Reply-To: <20210625220506.2968-1-hsiangkao@aol.com>
+References: <20210625220506.2968-1-hsiangkao.ref@aol.com>
+ <20210625220506.2968-1-hsiangkao@aol.com>
+Message-ID: <20210629203041.GV2829@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Gao, All,
 
-On 2021-06-27 08:18 +0200, Bernd Kuhls spake thusly:
-> Release notes:
-> http://stellarium.org/release/2021/06/24/stellarium-0.21.1.html
+On 2021-06-26 06:05 +0800, Gao Xiang via buildroot spake thusly:
+> - new upstream version (mainly add big pcluster support);
+> - add 0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch [1].
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/patch/?id=7ab34000c672adca90388a8fcb1f70a7d391d35c
+> 
+> Signed-off-by: Gao Xiang <hsiangkao@aol.com>
 
 Applied to master, thanks.
 
@@ -25,37 +27,74 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/stellarium/stellarium.hash | 4 ++--
->  package/stellarium/stellarium.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  ...age-only-install-erofsfuse.1-with-th.patch | 32 +++++++++++++++++++
+>  package/erofs-utils/erofs-utils.hash          |  2 +-
+>  package/erofs-utils/erofs-utils.mk            |  2 +-
+>  3 files changed, 34 insertions(+), 2 deletions(-)
+>  create mode 100644 package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch
 > 
-> diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
-> index b5290acc72..3bd1e6b3f2 100644
-> --- a/package/stellarium/stellarium.hash
-> +++ b/package/stellarium/stellarium.hash
-> @@ -1,5 +1,5 @@
->  # From https://github.com/Stellarium/stellarium/releases
-> -sha1  0ada184a15729abb1b02490cb92d055ff3b61d7e   stellarium-0.21.0.tar.gz
-> -sha256  977fcd6776a47d34b1646727853d15968a1410c34c8ba1b3e5cfbf24b5126f13  stellarium-0.21.0.tar.gz
-> +sha1  cc0b2c450ecead1481317f6038512a6a52d32001  stellarium-0.21.1.tar.gz
-> +sha256  072309c6bc48233b39884ae558b23764d0e08eabd96b014b53d780be11a33211  stellarium-0.21.1.tar.gz
+> diff --git a/package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch b/package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch
+> new file mode 100644
+> index 000000000000..0aa99d5324d0
+> --- /dev/null
+> +++ b/package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch
+> @@ -0,0 +1,32 @@
+> +From 7ab34000c672adca90388a8fcb1f70a7d391d35c Mon Sep 17 00:00:00 2001
+> +From: David Michael <fedora.dm0@gmail.com>
+> +Date: Thu, 3 Jun 2021 16:18:57 -0400
+> +Subject: [PATCH] erofs-utils: manpage: only install erofsfuse.1 with the
+> + command
+> +
+> +Link: https://lore.kernel.org/r/87lf7q3dn2.fsf at gmail.com
+> +Reviewed-by: Gao Xiang <xiang@kernel.org>
+> +Signed-off-by: David Michael <fedora.dm0@gmail.com>
+> +Signed-off-by: Gao Xiang <xiang@kernel.org>
+> +---
+> + man/Makefile.am | 6 +++++-
+> + 1 file changed, 5 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/man/Makefile.am b/man/Makefile.am
+> +index ffcf6f81c255..0df947b6fbf7 100644
+> +--- a/man/Makefile.am
+> ++++ b/man/Makefile.am
+> +@@ -1,5 +1,9 @@
+> + # SPDX-License-Identifier: GPL-2.0+
+> + # Makefile.am
+> + 
+> +-dist_man_MANS = mkfs.erofs.1 erofsfuse.1
+> ++dist_man_MANS = mkfs.erofs.1
+> + 
+> ++EXTRA_DIST = erofsfuse.1
+> ++if ENABLE_FUSE
+> ++man_MANS = erofsfuse.1
+> ++endif
+> +-- 
+> +2.20.1
+> +
+> diff --git a/package/erofs-utils/erofs-utils.hash b/package/erofs-utils/erofs-utils.hash
+> index 0de52d28a906..8bbb0885689b 100644
+> --- a/package/erofs-utils/erofs-utils.hash
+> +++ b/package/erofs-utils/erofs-utils.hash
+> @@ -1,3 +1,3 @@
 >  # Locally computed
->  sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
-> diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-> index 936a07c4b3..20e0e9ffec 100644
-> --- a/package/stellarium/stellarium.mk
-> +++ b/package/stellarium/stellarium.mk
+> -sha256  6b2ea15c3b092bd9a3abd966f78bc01c6caacb94022643ff34cf69893ee04e84  erofs-utils-1.2.1.tar.gz
+> +sha256  132635740039bbe76d743aea72378bfae30dbf034e123929f5d794198d4c0b12  erofs-utils-1.3.tar.gz
+>  sha256  feee3b3157dcdf78d4f50edefbd5dd7adf8b6d52c11bfaaa746a85a373256713  COPYING
+> diff --git a/package/erofs-utils/erofs-utils.mk b/package/erofs-utils/erofs-utils.mk
+> index 5d547148b204..e35470b02edc 100644
+> --- a/package/erofs-utils/erofs-utils.mk
+> +++ b/package/erofs-utils/erofs-utils.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -STELLARIUM_VERSION = 0.21.0
-> +STELLARIUM_VERSION = 0.21.1
->  STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
->  STELLARIUM_LICENSE = GPL-2.0+
->  STELLARIUM_LICENSE_FILES = COPYING
+> -EROFS_UTILS_VERSION = 1.2.1
+> +EROFS_UTILS_VERSION = 1.3
+>  EROFS_UTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot
+>  EROFS_UTILS_LICENSE = GPL-2.0+
+>  EROFS_UTILS_LICENSE_FILES = COPYING
 > -- 
-> 2.30.2
+> 2.20.1
 > 
 > _______________________________________________
 > buildroot mailing list
