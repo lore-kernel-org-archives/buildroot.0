@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Jun 2021 22:17:44 +0200
-Subject: [Buildroot] [PATCH 3/5] package/nginx-naxsi: bump version to 1.3
-In-Reply-To: <20210628161610.3197763-4-aduskett@gmail.com>
+Date: Tue, 29 Jun 2021 22:20:50 +0200
+Subject: [Buildroot] [PATCH 0/5] nginx updates
+In-Reply-To: <20210628161610.3197763-1-aduskett@gmail.com>
 References: <20210628161610.3197763-1-aduskett@gmail.com>
- <20210628161610.3197763-4-aduskett@gmail.com>
-Message-ID: <20210629201744.GQ2829@scaer>
+Message-ID: <20210629202050.GR2829@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,61 +13,56 @@ To: buildroot@busybox.net
 Adam, All,
 
 On 2021-06-28 09:16 -0700, Adam Duskett spake thusly:
-> Other changes:
->   - Change license to GPL-3.0
->   - Change license file to LICENSE
->   - Update license hash in nginx-naxsi.hash
+> Just some nginx maintnence.
+
+Yeah, welcome to the world of typoes. You'll see, we live very well
+with them! ;-)
+
+> Changes include:
+>   - Update nginx to the latest LTS release.
+>   - Update nginx naxsi, dav-ext, and modsecurity.
 > 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/nginx-naxsi/nginx-naxsi.hash | 4 ++--
->  package/nginx-naxsi/nginx-naxsi.mk   | 6 +++---
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/nginx-naxsi/nginx-naxsi.hash b/package/nginx-naxsi/nginx-naxsi.hash
-> index 1f289c56cd..bd3fcd1ae9 100644
-> --- a/package/nginx-naxsi/nginx-naxsi.hash
-> +++ b/package/nginx-naxsi/nginx-naxsi.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256	0a66dcadd32432460fab180be9f2efe24e911e3798917b2787ee710e02901eb4	nginx-naxsi-0.56.tar.gz
-> -sha256	046812ddc8f250f85b5d6e04218c185849c618b309271ef9d8b01e92c6f7a6ac	naxsi_src/naxsi_json.c
-> +sha256  439c8677372d2597b4360bbcc10bc86490de1fc75695b193ad5df154a214d628  nginx-naxsi-1.3.tar.gz
-> +sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
-> diff --git a/package/nginx-naxsi/nginx-naxsi.mk b/package/nginx-naxsi/nginx-naxsi.mk
-> index 7cfa94a5d4..3de1f684f9 100644
-> --- a/package/nginx-naxsi/nginx-naxsi.mk
-> +++ b/package/nginx-naxsi/nginx-naxsi.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -NGINX_NAXSI_VERSION = 0.56
-> +NGINX_NAXSI_VERSION = 1.3
->  NGINX_NAXSI_SITE = $(call github,nbs-system,naxsi,$(NGINX_NAXSI_VERSION))
-> -NGINX_NAXSI_LICENSE = GPL-2.0+ with OpenSSL exception
-> -NGINX_NAXSI_LICENSE_FILES = naxsi_src/naxsi_json.c
-> +NGINX_NAXSI_LICENSE = GPL-3.0 with OpenSSL exception
+> The nginx-upload package also has updates, however, the current nginx-upload url
+> points to a fork of nginx-upload-module. The official project URL is fdintino
+> not vkholodkov. Should this be changed to fdintino and the version changed to
+> 4423994c7d8fb491d95867f6af968585d949e7a9?
 
-Where did you see the OpennSSL exception?
+Given the explanations by Roberts, I think it would be a good idea to
+switch back to the official repo, yes.
 
-There is also part of bundled code that is BSD-3c, in
-naxsi_src/ext/libinjection
+Also, given Baruch review and mine, I've marked the series as changes
+requested.
 
-> +NGINX_NAXSI_LICENSE_FILES = LICENSE
-
-... and so we'd need naxsi_src/ext/libinjection/COPYING axs well.
-
-Also, from README:
-
-    [Naxsi] depends on libpcre for its regexp support
-
-So maybe a dependency on libpcre (or libpcre2?) is missing?
+Thanks!
 
 Regards,
 Yann E. MORIN.
 
->  $(eval $(generic-package))
+> Adam
+> 
+> Adam Duskett (5):
+>   package/nginx: bump version to 1.20.1
+>   package/nginx: add stream_set_module support
+>   package/nginx-naxsi: bump version to 1.3
+>   package/nginx-dav-ext: bump version to 3.0.0
+>   package/nginx-modsecurity: bump to  version 1.0.2
+> 
+>  package/nginx-dav-ext/nginx-dav-ext.hash      |  4 +-
+>  package/nginx-dav-ext/nginx-dav-ext.mk        |  2 +-
+>  .../nginx-modsecurity/nginx-modsecurity.hash  |  6 +--
+>  .../nginx-modsecurity/nginx-modsecurity.mk    |  2 +-
+>  package/nginx-naxsi/nginx-naxsi.hash          |  4 +-
+>  package/nginx-naxsi/nginx-naxsi.mk            |  6 +--
+>  ...ture_run_force_result-for-each-featu.patch | 40 ++++++++-----------
+>  ...ake-sys_nerr-guessing-cross-friendly.patch | 27 ++++++-------
+>  ...to-os-linux-fix-build-with-libxcrypt.patch |  2 +-
+>  ...ff-by-one-write-in-ngx_resolver_copy.patch | 40 -------------------
+>  package/nginx/Config.in                       |  6 +++
+>  package/nginx/nginx.hash                      |  4 +-
+>  package/nginx/nginx.mk                        |  6 ++-
+>  13 files changed, 55 insertions(+), 94 deletions(-)
+>  delete mode 100644 package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
+> 
 > -- 
 > 2.31.1
 > 
