@@ -1,82 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 30 Jun 2021 17:24:56 +0200
-Subject: [Buildroot] [PATCH 1/3] package/intel-gmmlib: bump version to 21.2.1
-Message-ID: <20210630152458.123355-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 30 Jun 2021 18:31:32 +0200
+Subject: [Buildroot] [git commit] package/matio: Bump version to 1.5.21
+Message-ID: <20210630155919.485C48E5FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added patch to remove hardening-related flags.
+commit: https://git.buildroot.net/buildroot/commit/?id=4047e10ed6e20492bae572d4929eaa5d67eed746
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated license hash due to upstream commit
-https://github.com/intel/gmmlib/commit/9253eb8b949515d2a5030f99163a35567fe81838
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0001-Drop-hardening-related-flags.patch   | 28 +++++++++++++++++++
- package/intel-gmmlib/intel-gmmlib.hash        |  4 +--
- package/intel-gmmlib/intel-gmmlib.mk          |  2 +-
- 3 files changed, 31 insertions(+), 3 deletions(-)
- create mode 100644 package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
+ package/matio/matio.hash | 6 +++---
+ package/matio/matio.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch b/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
-new file mode 100644
-index 0000000000..581afd9066
---- /dev/null
-+++ b/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
-@@ -0,0 +1,28 @@
-+From 1528980ee15e9589a7e27ec6d12a33cd8aab57b4 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Tue, 8 Jun 2021 07:51:40 +0200
-+Subject: [PATCH] Drop hardening-related flags
-+
-+These will be set by Buildroot depending on toolchain capabilities and
-+global Buildroot options.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ Source/GmmLib/Linux.cmake | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/Source/GmmLib/Linux.cmake b/Source/GmmLib/Linux.cmake
-+index 1a09bc4..b28fc1b 100644
-+--- a/Source/GmmLib/Linux.cmake
-++++ b/Source/GmmLib/Linux.cmake
-+@@ -62,7 +62,6 @@ SET (GMMLIB_COMPILER_FLAGS_COMMON
-+     -DUSE_SSE3
-+     -DUSE_SSSE3
-+     # Other common flags
-+-    -fstack-protector
-+     -fdata-sections
-+     -ffunction-sections
-+     -fmessage-length=0
-+-- 
-+2.29.2
-+
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-index 1e8baba6c7..2f50646677 100644
---- a/package/intel-gmmlib/intel-gmmlib.hash
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/matio/matio.hash b/package/matio/matio.hash
+index 55e57338c8..4dd05dee07 100644
+--- a/package/matio/matio.hash
++++ b/package/matio/matio.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/projects/matio/files/matio/1.5.18/
+-sha512  c43e562a101348d64139a056f28bce37c59c6667d701200255ccf9d8b6adf7a92ae9c11c8d921ec8a652cdc81c5de9ab247907279c54c52905adfd65bc3fb90f  matio-1.5.18.tar.gz
++# From https://sourceforge.net/projects/matio/files/matio/1.5.21/
++sha512  b00bcad807e6a7e10afa656eb77a0e3e9fb08d9cecc3e94ba41ef91ce60367d6686e6d387a874bbb83eb2f895d4a97caac554a70e7f5f6f5cb750052702d411c  matio-1.5.21.tar.gz
  # Locally computed
--sha256 bb874b41c499abb8f6253b1834e93a02ed9744de71f2503ee9cd4100af7c1860  intel-gmmlib-19.4.1.tar.gz
--sha256 b61d639c5d84ec710ffcf5600ac92f8a4ace66670c1f9bd921f3bde671d36033  LICENSE.md
-+sha256  912cd86e4cb564b6fa549d69a28b72b9cdcb5a3eab9320955ed70ac37381fc2f  intel-gmmlib-21.2.1.tar.gz
-+sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-index 517fc09131..451eec7287 100644
---- a/package/intel-gmmlib/intel-gmmlib.mk
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
+-sha256  19494e9c9154a5e3f834e99d65fab0653b84280df7c98d1886a98d2bd28369c1  COPYING
++sha256  69143d4a8f1933022bb909327df1ce812dd2420ed57949812dd8f370856bf2a1  COPYING
+diff --git a/package/matio/matio.mk b/package/matio/matio.mk
+index 0ebba13435..236466d4d9 100644
+--- a/package/matio/matio.mk
++++ b/package/matio/matio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_GMMLIB_VERSION = 19.4.1
-+INTEL_GMMLIB_VERSION = 21.2.1
- INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
- INTEL_GMMLIB_LICENSE = MIT
- INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
--- 
-2.30.2
+-MATIO_VERSION = 1.5.18
++MATIO_VERSION = 1.5.21
+ MATIO_SITE = http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
+ MATIO_LICENSE = BSD-2-Clause
+ MATIO_LICENSE_FILES = COPYING
