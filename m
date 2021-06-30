@@ -1,70 +1,165 @@
-From: Kory Maincent <kory.maincent@bootlin.com>
-Date: Wed, 30 Jun 2021 11:02:47 +0200
-Subject: [Buildroot] [PATCH v2] boot/uboot: fix uboot building host tools on
- x86 architecture
-Message-ID: <20210630090247.1035893-1-kory.maincent@bootlin.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Wed, 30 Jun 2021 14:22:45 +0200
+Subject: [Buildroot] [RESEND PATCH v3] package/armadillo: allows to select
+ between clapack, lapack or openblas
+Message-ID: <20210630122245.1791249-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The make all command run the tools/makefile on the process.
-This makefile use "pkg-config" command to support static link.
-The issue is the use of pkg-config configured for crosscompiling
-to build binaries tools for host architecture.
-To fix it, I add pkg-config environment variable to configure it for host.
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Add a test to avoid future regress on the build of U-boot.
+armadillo can use clapack, lapack or openblas as BLAS provider and clapack or
+lapack as LAPACK provider.
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+This patch
+- adds hidden variable to check dependencies/requirement for each of them
+- a choice to select wich implementation to use for blas and lapack.
+
+Choices are required since applications, potentially, needs explicitly lapack or clapack.
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- boot/uboot/uboot.mk                           |  5 +++++
- .../package/test_uboot_openssl_pkgconfig.py   | 20 +++++++++++++++++++
- 2 files changed, 25 insertions(+)
- create mode 100644 support/testing/tests/package/test_uboot_openssl_pkgconfig.py
+Changes v2 -> v3:
+- drop all default statements for choice (Thomas)
+- add explicit -l since blas libary is called liblas for (c)lapack and
+  libopenblas for openblas (Thomas)
+- add a choice for lapack selection between lapack, clapack or none
+Changes v1 -> v2:
+- add openblas as blas provider
+---
+ package/armadillo/Config.in    | 66 ++++++++++++++++++++++++++++++++--
+ package/armadillo/armadillo.mk | 29 ++++++++++++++-
+ 2 files changed, 91 insertions(+), 4 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index dbe82e65b1..5186e6071e 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -307,6 +307,11 @@ define UBOOT_BUILD_CMDS
- 		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
- 	)
- 	$(TARGET_CONFIGURE_OPTS) \
-+	        PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+		PKG_CONFIG_SYSROOT_DIR="/" \
-+	        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-+	        PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-+	        PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig" \
- 		$(UBOOT_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
- 		$(UBOOT_MAKE_TARGET)
- 	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
-diff --git a/support/testing/tests/package/test_uboot_openssl_pkgconfig.py b/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
-new file mode 100644
-index 0000000000..557b665b26
---- /dev/null
-+++ b/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
-@@ -0,0 +1,20 @@
-+import os
+diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
+index b2b61a3233..816b45be96 100644
+--- a/package/armadillo/Config.in
++++ b/package/armadillo/Config.in
+@@ -1,3 +1,15 @@
++config BR2_PACKAGE_ARMADILLO_CLAPACK_SUPPORTS
++	bool
++	default y
++	depends on !BR2_m68k_cf
++	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC
 +
-+import infra.basetest
++config BR2_PACKAGE_ARMADILLO_LAPACK_SUPPORTS
++	bool
++	default y
++	depends on BR2_TOOLCHAIN_HAS_FORTRAN
++	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
 +
+ comment "armadillo needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_powerpc
+@@ -10,11 +22,59 @@ comment "armadillo needs a glibc toolchain w/ C++"
+ config BR2_PACKAGE_ARMADILLO
+ 	bool "armadillo"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC # clapack
+-	depends on !BR2_m68k_cf # clapack
+-	select BR2_PACKAGE_CLAPACK
++	depends on BR2_PACKAGE_ARMADILLO_CLAPACK_SUPPORTS || \
++		BR2_PACKAGE_ARMADILLO_LAPACK_SUPPORTS || \
++		BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
+ 	help
+ 	  Armadillo: An Open Source C++ Linear Algebra Library for
+ 	  Fast Prototyping and Computationally Intensive Experiments.
+ 
+ 	  http://arma.sourceforge.net/
 +
-+class TestUbootOpensslPkgConfig(infra.basetest.BRTest):
-+    config = infra.basetest.MINIMAL_CONFIG + \
-+        """
-+        BR2_x86_64=y
-+        BR2_x86_atom=y
-+        BR2_PACKAGE_OPENSSL=y
-+        BR2_TARGET_UBOOT=y
-+        BR2_TARGET_UBOOT_BOARD_DEFCONFIG="efi-x86_payload64"
-+        BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+        BR2_PACKAGE_HOST_PKGCONF=y
-+        """
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "u-boot.bin")
-+        self.assertTrue(os.path.exists(img))
++if BR2_PACKAGE_ARMADILLO
 +
++choice
++	prompt "blas library"
++	help
++	  Selects blas library to use
++
++config BR2_PACKAGE_ARMADILLO_BLAS_LAPACK
++	bool "lapack"
++	depends on BR2_PACKAGE_ARMADILLO_LAPACK_SUPPORTS
++	select BR2_PACKAGE_LAPACK
++
++config BR2_PACKAGE_ARMADILLO_BLAS_CLAPACK
++	bool "clapack"
++	depends on BR2_PACKAGE_ARMADILLO_CLAPACK_SUPPORTS
++	select BR2_PACKAGE_CLAPACK
++
++config BR2_PACKAGE_ARMADILLO_BLAS_OPENBLAS
++	bool "openblas"
++	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
++	select BR2_PACKAGE_OPENBLAS
++
++endchoice
++
++choice
++	prompt "lapack library"
++	help
++	  Selects lapack library to use
++
++config BR2_PACKAGE_ARMADILLO_LAPACK_LAPACK
++	bool "lapack"
++	depends on BR2_PACKAGE_ARMADILLO_LAPACK_SUPPORTS
++	depends on !BR2_PACKAGE_ARMADILLO_BLAS_CLAPACK
++	select BR2_PACKAGE_LAPACK
++
++config BR2_PACKAGE_ARMADILLO_LAPACK_CLAPACK
++	bool "clapack"
++	depends on BR2_PACKAGE_ARMADILLO_CLAPACK_SUPPORTS
++	depends on !BR2_PACKAGE_ARMADILLO_BLAS_LAPACK
++	select BR2_PACKAGE_CLAPACK
++
++config BR2_PACKAGE_ARMADILLO_LAPACK_NONE
++	bool "none"
++
++endchoice
++
++endif
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 624b842ef6..bae27774d7 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -7,11 +7,38 @@
+ ARMADILLO_VERSION = 9.900.2
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+-ARMADILLO_DEPENDENCIES = clapack
+ ARMADILLO_INSTALL_STAGING = YES
+ ARMADILLO_LICENSE = Apache-2.0
+ ARMADILLO_LICENSE_FILES = LICENSE.txt
+ 
+ ARMADILLO_CONF_OPTS = -DDETECT_HDF5=false
+ 
++# blas support may be provided by lapack, clapack or openblas
++# blas library from (c)lapack is libblas.a, libopenblas.a otherwise
++ARMADILLO_CONF_OPTS += -DBLAS_FOUND=ON
++ifeq ($(BR2_PACKAGE_ARMADILLO_OPENBLAS),y)
++ARMADILLO_CONF_OPTS += -DBLAS_LIBRARIES=-lopenblas
++ARMADILLO_DEPENDENCIES = openblas
++else
++ARMADILLO_CONF_OPTS += -DBLAS_LIBRARIES=-lblas
++ifeq ($(BR2_PACKAGE_ARMADILLO_CLAPACK), y)
++ARMADILLO_DEPENDENCIES = clapack
++else
++ARMADILLO_DEPENDENCIES = lapack
++endif
++endif
++
++# lapack support may be provided by lapack or clapack
++# but not by openblas
++ifeq ($(BR2_PACKAGE_LAPACK_NONE),y)
++ARMADILLO_CONF_OPTS += -DLAPACK_FOUND=OFF
++else
++ARMADILLO_CONF_OPTS += -DLAPACK_FOUND=ON
++ifeq ($(BR2_PACKAGE_ARMADILLO_LAPACK_LAPACK),y)
++ARMADILLO_DEPENDENCIES += lapack
++else ifeq ($(BR2_PACKAGE_ARMADILLO_LAPACK_CLAPACK), y)
++ARMADILLO_DEPENDENCIES += clapack
++endif
++endif
++
+ $(eval $(cmake-package))
 -- 
-2.25.1
+2.20.1
