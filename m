@@ -1,92 +1,75 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 30 Jun 2021 10:40:56 -0700
-Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix build with gcc
- 4.8
-In-Reply-To: <20210610054613.1711860-1-fontaine.fabrice@gmail.com>
-References: <20210610054613.1711860-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAFSsvmrfGxjT86YOvkvq-8ciNdr1cJrr6RiXp1cz+mAu6146BA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 30 Jun 2021 22:45:18 +0200
+Subject: [Buildroot] [git commit] boot/uboot: fix uboot building host tools
+ on x86 architecture
+Message-ID: <20210630203304.23D1B8E619@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All;
+commit: https://git.buildroot.net/buildroot/commit/?id=2eaa6d0f36291f49ab56a734a4851a6ffe8e8803
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tested-by: Adam Duskett <aduskett@gmail.com>
+The make all command run the tools/makefile on the process.
+This makefile use "pkg-config" command to support static link.
+The issue is the use of pkg-config configured for crosscompiling
+to build binaries tools for host architecture.
+To fix it, I add pkg-config environment variable to configure it for host.
 
-On Wed, Jun 9, 2021 at 10:46 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Fix build failure with gcc 4.8 which is raised since bump to version 3.2
-> in commit b7ff47516ea01436c53b4d1e2b7a5b595ef3ed80
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/37eb0952a763256fbf6ef3c668f6c95fbdf2dd35
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...s-getseuser.c-fix-build-with-gcc-4.8.patch | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch
->
-> diff --git a/package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch b/package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch
-> new file mode 100644
-> index 0000000000..645e84b236
-> --- /dev/null
-> +++ b/package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch
-> @@ -0,0 +1,47 @@
-> +From 5c4ddfc88f0a7f10a5e9edddbdbe8e8ef1f9945e Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Thu, 10 Jun 2021 07:38:02 +0200
-> +Subject: [PATCH] libselinux/utils/getseuser.c: fix build with gcc 4.8
-> +
-> +Fix the following build failure with gcc 4.8 which is raised since
-> +version 3.2 and
-> +https://github.com/SELinuxProject/selinux/commit/156dd0de5cad31e7d437c64e11a8aef027f0a691
-> +
-> +getseuser.c:53:2: error: 'for' loop initial declarations are only allowed in C99 mode
-> +  for (int i = 0; i < n; i++)
-> +  ^
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/37eb0952a763256fbf6ef3c668f6c95fbdf2dd35
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/SELinuxProject/selinux/pull/289]
-> +---
-> + libselinux/utils/getseuser.c | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/utils/getseuser.c b/utils/getseuser.c
-> +index ce1b7b27..34f2e887 100644
-> +--- a/utils/getseuser.c
-> ++++ b/utils/getseuser.c
-> +@@ -9,7 +9,7 @@ int main(int argc, char **argv)
-> + {
-> +       char *seuser = NULL, *level = NULL;
-> +       char **contextlist;
-> +-      int rc, n;
-> ++      int rc, n, i;
-> +
-> +       if (argc != 3) {
-> +               fprintf(stderr, "usage:  %s linuxuser fromcon\n", argv[0]);
-> +@@ -50,7 +50,7 @@ int main(int argc, char **argv)
-> +       if (n == 0)
-> +               printf("no valid context found\n");
-> +
-> +-      for (int i = 0; i < n; i++)
-> ++      for (i = 0; i < n; i++)
-> +               printf("Context %d\t%s\n", i, contextlist[i]);
-> +
-> +       freeconary(contextlist);
-> +--
-> +2.30.2
-> +
-> --
-> 2.30.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Add a test to avoid future regress on the build of U-boot.
+
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+[yann.morin.1998 at free.fr:
+  - fix mixed space-TAB indentation
+  - fix check-package
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/uboot/uboot.mk                                  |  5 +++++
+ .../tests/package/test_uboot_openssl_pkgconfig.py    | 20 ++++++++++++++++++++
+ 2 files changed, 25 insertions(+)
+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index dbe82e65b1..a7eaedb06f 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -307,6 +307,11 @@ define UBOOT_BUILD_CMDS
+ 		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
+ 	)
+ 	$(TARGET_CONFIGURE_OPTS) \
++		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++		PKG_CONFIG_SYSROOT_DIR="/" \
++		PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
++		PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
++		PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig" \
+ 		$(UBOOT_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
+ 		$(UBOOT_MAKE_TARGET)
+ 	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
+diff --git a/support/testing/tests/package/test_uboot_openssl_pkgconfig.py b/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
+new file mode 100644
+index 0000000000..de2d83f5b8
+--- /dev/null
++++ b/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
+@@ -0,0 +1,20 @@
++import os
++
++import infra.basetest
++
++
++class TestUbootOpensslPkgConfig(infra.basetest.BRTest):
++    config = infra.basetest.MINIMAL_CONFIG + \
++        """
++        BR2_x86_64=y
++        BR2_x86_atom=y
++        BR2_PACKAGE_OPENSSL=y
++        BR2_TARGET_UBOOT=y
++        BR2_TARGET_UBOOT_BOARD_DEFCONFIG="efi-x86_payload64"
++        BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++        BR2_PACKAGE_HOST_PKGCONF=y
++        """
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "u-boot.bin")
++        self.assertTrue(os.path.exists(img))
