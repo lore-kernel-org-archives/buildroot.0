@@ -1,44 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Jun 2021 23:16:15 +0200
-Subject: [Buildroot] [PATCH 0/5] nginx updates
-In-Reply-To: <a44b24ab6d4af719790f5b6e03821a64ed93f23f.camel@calian.com>
-References: <20210628161610.3197763-1-aduskett@gmail.com>
- <a44b24ab6d4af719790f5b6e03821a64ed93f23f.camel@calian.com>
-Message-ID: <20210630211615.GB2829@scaer>
+Date: Wed, 30 Jun 2021 23:37:01 +0200
+Subject: [Buildroot] [git commit] boot/grub2: workaround breakage with -O2,
+ -O3 build
+Message-ID: <20210630210555.963578E623@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Robert, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=7cb51d4843caaa9144270d92f86e60d8b5a2a1ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-06-28 18:02 +0000, Robert Hancock via buildroot spake thusly:
-> On Mon, 2021-06-28 at 09:16 -0700, Adam Duskett wrote:
-> > Just some nginx maintnence.
-[--SNIP--]
-> > The nginx-upload package also has updates, however, the current nginx-upload
-> > url
-> > points to a fork of nginx-upload-module. The official project URL is fdintino
-> > not vkholodkov. Should this be changed to fdintino and the version changed to
-> > 4423994c7d8fb491d95867f6af968585d949e7a9?
-> 
-> I believe at one point the fdintino repository was quite behind and was missing
-> a bunch of features like HTTP/2 support that were in the vkholodkov fork. It
-> looks like the vkholodkov version is only 1 commit ahead of fdintino right now
-> however, so we might be able to switch to the "official" version.
+When grub2 (i386-pc) is built with -O2 or -O3 it is unable to boot
+and the system will reboot in a loop.
 
-Thanks for the explanations. :-)
+Tony Battersby has bisected [0] the error down to this security bugfix:
+boot/grub2/0132-kern-parser-Fix-a-stack-buffer-overflow.patch
+There is also a bug report by Peter Seiderer about this [1].
 
-Would you be willing to send a patch doing the switch, then?
+As discussed on the mailing list [2], this patch introduces a workaround
+in the grub2.mk overriding the global optimization settings with -Os
+which results in a booting system.
 
-Regards,
-Yann E. MORIN.
+References:
+[0] https://savannah.gnu.org/bugs/?60458
+[1] https://bugs.busybox.net/show_bug.cgi?id=13586
+[2] http://lists.busybox.net/pipermail/buildroot/2021-May/311524.html
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Andreas Hilse <andreas.hilse@googlemail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/grub2/grub2.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index af16ee91e1..52e9199ae9 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -118,9 +118,11 @@ HOST_GRUB2_CONF_ENV = \
+ GRUB2_CONF_ENV = \
+ 	CPP="$(TARGET_CC) -E" \
+ 	TARGET_CC="$(TARGET_CC)" \
+-	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+-	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS) -fno-stack-protector" \
+-	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
++	CFLAGS="$(TARGET_CFLAGS) -Os" \
++	TARGET_CFLAGS="$(TARGET_CFLAGS) -Os" \
++	CPPFLAGS="$(TARGET_CPPFLAGS) -Os -fno-stack-protector" \
++	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS) -Os -fno-stack-protector" \
++	TARGET_LDFLAGS="$(TARGET_LDFLAGS) -Os" \
+ 	TARGET_NM="$(TARGET_NM)" \
+ 	TARGET_OBJCOPY="$(TARGET_OBJCOPY)" \
+ 	TARGET_STRIP="$(TARGET_CROSS)strip"
