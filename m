@@ -1,165 +1,71 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed, 30 Jun 2021 14:22:45 +0200
-Subject: [Buildroot] [RESEND PATCH v3] package/armadillo: allows to select
- between clapack, lapack or openblas
-Message-ID: <20210630122245.1791249-1-gwenj@trabucayre.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 30 Jun 2021 17:24:58 +0200
+Subject: [Buildroot] [PATCH 3/3] package/intel-mediasdk: bump version to
+ 21.2.2
+In-Reply-To: <20210630152458.123355-1-bernd.kuhls@t-online.de>
+References: <20210630152458.123355-1-bernd.kuhls@t-online.de>
+Message-ID: <20210630152458.123355-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Removed dependency to X.org following changes in intel-mediadriver.
+Reformatted hashes.
 
-armadillo can use clapack, lapack or openblas as BLAS provider and clapack or
-lapack as LAPACK provider.
-
-This patch
-- adds hidden variable to check dependencies/requirement for each of them
-- a choice to select wich implementation to use for blas and lapack.
-
-Choices are required since applications, potentially, needs explicitly lapack or clapack.
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v2 -> v3:
-- drop all default statements for choice (Thomas)
-- add explicit -l since blas libary is called liblas for (c)lapack and
-  libopenblas for openblas (Thomas)
-- add a choice for lapack selection between lapack, clapack or none
-Changes v1 -> v2:
-- add openblas as blas provider
----
- package/armadillo/Config.in    | 66 ++++++++++++++++++++++++++++++++--
- package/armadillo/armadillo.mk | 29 ++++++++++++++-
- 2 files changed, 91 insertions(+), 4 deletions(-)
+ package/intel-mediasdk/Config.in           | 5 -----
+ package/intel-mediasdk/intel-mediasdk.hash | 4 ++--
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
-index b2b61a3233..816b45be96 100644
---- a/package/armadillo/Config.in
-+++ b/package/armadillo/Config.in
-@@ -1,3 +1,15 @@
-+config BR2_PACKAGE_ARMADILLO_CLAPACK_SUPPORTS
-+	bool
-+	default y
-+	depends on !BR2_m68k_cf
-+	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC
-+
-+config BR2_PACKAGE_ARMADILLO_LAPACK_SUPPORTS
-+	bool
-+	default y
-+	depends on BR2_TOOLCHAIN_HAS_FORTRAN
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
-+
- comment "armadillo needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_powerpc
-@@ -10,11 +22,59 @@ comment "armadillo needs a glibc toolchain w/ C++"
- config BR2_PACKAGE_ARMADILLO
- 	bool "armadillo"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC # clapack
--	depends on !BR2_m68k_cf # clapack
--	select BR2_PACKAGE_CLAPACK
-+	depends on BR2_PACKAGE_ARMADILLO_CLAPACK_SUPPORTS || \
-+		BR2_PACKAGE_ARMADILLO_LAPACK_SUPPORTS || \
-+		BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
+diff --git a/package/intel-mediasdk/Config.in b/package/intel-mediasdk/Config.in
+index 05293d7604..c1f609e3f8 100644
+--- a/package/intel-mediasdk/Config.in
++++ b/package/intel-mediasdk/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_INTEL_MEDIASDK
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # intel-mediadriver
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # intel-mediadriver
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # intel-mediadriver
+-	depends on BR2_PACKAGE_XORG7  # intel-mediadriver
+ 	select BR2_PACKAGE_INTEL_MEDIADRIVER
+ 	select BR2_PACKAGE_LIBDRM_INTEL
  	help
- 	  Armadillo: An Open Source C++ Linear Algebra Library for
- 	  Fast Prototyping and Computationally Intensive Experiments.
+@@ -21,10 +20,6 @@ config BR2_PACKAGE_INTEL_MEDIASDK
  
- 	  http://arma.sourceforge.net/
-+
-+if BR2_PACKAGE_ARMADILLO
-+
-+choice
-+	prompt "blas library"
-+	help
-+	  Selects blas library to use
-+
-+config BR2_PACKAGE_ARMADILLO_BLAS_LAPACK
-+	bool "lapack"
-+	depends on BR2_PACKAGE_ARMADILLO_LAPACK_SUPPORTS
-+	select BR2_PACKAGE_LAPACK
-+
-+config BR2_PACKAGE_ARMADILLO_BLAS_CLAPACK
-+	bool "clapack"
-+	depends on BR2_PACKAGE_ARMADILLO_CLAPACK_SUPPORTS
-+	select BR2_PACKAGE_CLAPACK
-+
-+config BR2_PACKAGE_ARMADILLO_BLAS_OPENBLAS
-+	bool "openblas"
-+	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
-+	select BR2_PACKAGE_OPENBLAS
-+
-+endchoice
-+
-+choice
-+	prompt "lapack library"
-+	help
-+	  Selects lapack library to use
-+
-+config BR2_PACKAGE_ARMADILLO_LAPACK_LAPACK
-+	bool "lapack"
-+	depends on BR2_PACKAGE_ARMADILLO_LAPACK_SUPPORTS
-+	depends on !BR2_PACKAGE_ARMADILLO_BLAS_CLAPACK
-+	select BR2_PACKAGE_LAPACK
-+
-+config BR2_PACKAGE_ARMADILLO_LAPACK_CLAPACK
-+	bool "clapack"
-+	depends on BR2_PACKAGE_ARMADILLO_CLAPACK_SUPPORTS
-+	depends on !BR2_PACKAGE_ARMADILLO_BLAS_LAPACK
-+	select BR2_PACKAGE_CLAPACK
-+
-+config BR2_PACKAGE_ARMADILLO_LAPACK_NONE
-+	bool "none"
-+
-+endchoice
-+
-+endif
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index 624b842ef6..bae27774d7 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -7,11 +7,38 @@
- ARMADILLO_VERSION = 9.900.2
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
--ARMADILLO_DEPENDENCIES = clapack
- ARMADILLO_INSTALL_STAGING = YES
- ARMADILLO_LICENSE = Apache-2.0
- ARMADILLO_LICENSE_FILES = LICENSE.txt
+ 	  http://mediasdk.intel.com/
  
- ARMADILLO_CONF_OPTS = -DDETECT_HDF5=false
+-comment "intel-mediasdk needs X.org"
+-	depends on BR2_x86_64 && BR2_TOOLCHAIN_HAS_SYNC_1
+-	depends on !BR2_PACKAGE_XORG7
+-
+ comment "intel-mediasdk needs a toolchain w/ dynamic library, C++, NPTL"
+ 	depends on BR2_x86_64 && BR2_TOOLCHAIN_HAS_SYNC_1
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index 103c8bb52d..27cfdda08d 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 289a40ffe73dc291461d97edf452bdc622f76e52666483fd1eb4f131d2921cd1  intel-mediasdk-19.4.0.tar.gz
+-sha256 dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
++sha256  f7750bd3a307d796e71a3d4ebb16a730b2e9364669513e110e9ec59af159b4cd  intel-mediasdk-21.2.2.tar.gz
++sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index 5467c96380..c3412d622d 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# blas support may be provided by lapack, clapack or openblas
-+# blas library from (c)lapack is libblas.a, libopenblas.a otherwise
-+ARMADILLO_CONF_OPTS += -DBLAS_FOUND=ON
-+ifeq ($(BR2_PACKAGE_ARMADILLO_OPENBLAS),y)
-+ARMADILLO_CONF_OPTS += -DBLAS_LIBRARIES=-lopenblas
-+ARMADILLO_DEPENDENCIES = openblas
-+else
-+ARMADILLO_CONF_OPTS += -DBLAS_LIBRARIES=-lblas
-+ifeq ($(BR2_PACKAGE_ARMADILLO_CLAPACK), y)
-+ARMADILLO_DEPENDENCIES = clapack
-+else
-+ARMADILLO_DEPENDENCIES = lapack
-+endif
-+endif
-+
-+# lapack support may be provided by lapack or clapack
-+# but not by openblas
-+ifeq ($(BR2_PACKAGE_LAPACK_NONE),y)
-+ARMADILLO_CONF_OPTS += -DLAPACK_FOUND=OFF
-+else
-+ARMADILLO_CONF_OPTS += -DLAPACK_FOUND=ON
-+ifeq ($(BR2_PACKAGE_ARMADILLO_LAPACK_LAPACK),y)
-+ARMADILLO_DEPENDENCIES += lapack
-+else ifeq ($(BR2_PACKAGE_ARMADILLO_LAPACK_CLAPACK), y)
-+ARMADILLO_DEPENDENCIES += clapack
-+endif
-+endif
-+
- $(eval $(cmake-package))
+-INTEL_MEDIASDK_VERSION = 19.4.0
++INTEL_MEDIASDK_VERSION = 21.2.2
+ INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 -- 
-2.20.1
+2.30.2
