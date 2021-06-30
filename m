@@ -1,105 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Jun 2021 23:07:27 +0200
-Subject: [Buildroot] [PATCH v2] boot/uboot: fix uboot building host
- tools on x86 architecture
-In-Reply-To: <20210630090247.1035893-1-kory.maincent@bootlin.com>
-References: <20210630090247.1035893-1-kory.maincent@bootlin.com>
-Message-ID: <20210630210727.GZ2829@scaer>
+Date: Wed, 30 Jun 2021 23:07:40 +0200
+Subject: [Buildroot] [git commit] package/libselinux: fix build with gcc 4.8
+Message-ID: <20210630203529.84EB98E61E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-K?ry, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=95c09d121987ef3503beacc088d2b21f8566f1f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-06-30 11:02 +0200, Kory Maincent spake thusly:
-> The make all command run the tools/makefile on the process.
-> This makefile use "pkg-config" command to support static link.
-> The issue is the use of pkg-config configured for crosscompiling
-> to build binaries tools for host architecture.
-> To fix it, I add pkg-config environment variable to configure it for host.
-> 
-> Add a test to avoid future regress on the build of U-boot.
-> 
-> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-> ---
->  boot/uboot/uboot.mk                           |  5 +++++
->  .../package/test_uboot_openssl_pkgconfig.py   | 20 +++++++++++++++++++
->  2 files changed, 25 insertions(+)
->  create mode 100644 support/testing/tests/package/test_uboot_openssl_pkgconfig.py
-> 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index dbe82e65b1..5186e6071e 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -307,6 +307,11 @@ define UBOOT_BUILD_CMDS
->  		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
->  	)
->  	$(TARGET_CONFIGURE_OPTS) \
-> +	        PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-> +		PKG_CONFIG_SYSROOT_DIR="/" \
-> +	        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-> +	        PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-> +	        PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig" \
+Fix build failure with gcc 4.8 which is raised since bump to version 3.2
+in commit b7ff47516ea01436c53b4d1e2b7a5b595ef3ed80
 
-Mixed TABs-n-spaces indentation, I've fixed that when applying.
+Fixes:
+ - http://autobuild.buildroot.org/results/37eb0952a763256fbf6ef3c668f6c95fbdf2dd35
 
-Weird that 'make check-package' did not catch it...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Tested-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...-utils-getseuser.c-fix-build-with-gcc-4.8.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
->  		$(UBOOT_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
->  		$(UBOOT_MAKE_TARGET)
->  	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
-> diff --git a/support/testing/tests/package/test_uboot_openssl_pkgconfig.py b/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
-> new file mode 100644
-> index 0000000000..557b665b26
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
-> @@ -0,0 +1,20 @@
-> +import os
-> +
-> +import infra.basetest
-> +
-> +
-> +class TestUbootOpensslPkgConfig(infra.basetest.BRTest):
-> +    config = infra.basetest.MINIMAL_CONFIG + \
-> +        """
-> +        BR2_x86_64=y
-> +        BR2_x86_atom=y
-> +        BR2_PACKAGE_OPENSSL=y
-> +        BR2_TARGET_UBOOT=y
-> +        BR2_TARGET_UBOOT_BOARD_DEFCONFIG="efi-x86_payload64"
-> +        BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-> +        BR2_PACKAGE_HOST_PKGCONF=y
-> +        """
-> +    def test_run(self):
-> +        img = os.path.join(self.builddir, "images", "u-boot.bin")
-> +        self.assertTrue(os.path.exists(img))
-> +
-
-    $ make check-package
-    support/testing/tests/package/test_uboot_openssl_pkgconfig.py:17:5: E301 expected 1 blank line, found 0
-    support/testing/tests/package/test_uboot_openssl_pkgconfig.py:20:1: W391 blank line at end of file
-    1     E301 expected 1 blank line, found 0
-    1     W391 blank line at end of file
-
-I've also fixed those, and applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch b/package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch
+new file mode 100644
+index 0000000000..645e84b236
+--- /dev/null
++++ b/package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,47 @@
++From 5c4ddfc88f0a7f10a5e9edddbdbe8e8ef1f9945e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 10 Jun 2021 07:38:02 +0200
++Subject: [PATCH] libselinux/utils/getseuser.c: fix build with gcc 4.8
++
++Fix the following build failure with gcc 4.8 which is raised since
++version 3.2 and
++https://github.com/SELinuxProject/selinux/commit/156dd0de5cad31e7d437c64e11a8aef027f0a691
++
++getseuser.c:53:2: error: 'for' loop initial declarations are only allowed in C99 mode
++  for (int i = 0; i < n; i++)
++  ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/37eb0952a763256fbf6ef3c668f6c95fbdf2dd35
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/SELinuxProject/selinux/pull/289]
++---
++ libselinux/utils/getseuser.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/utils/getseuser.c b/utils/getseuser.c
++index ce1b7b27..34f2e887 100644
++--- a/utils/getseuser.c
+++++ b/utils/getseuser.c
++@@ -9,7 +9,7 @@ int main(int argc, char **argv)
++ {
++ 	char *seuser = NULL, *level = NULL;
++ 	char **contextlist;
++-	int rc, n;
+++	int rc, n, i;
++ 
++ 	if (argc != 3) {
++ 		fprintf(stderr, "usage:  %s linuxuser fromcon\n", argv[0]);
++@@ -50,7 +50,7 @@ int main(int argc, char **argv)
++ 	if (n == 0)
++ 		printf("no valid context found\n");
++ 
++-	for (int i = 0; i < n; i++)
+++	for (i = 0; i < n; i++)
++ 		printf("Context %d\t%s\n", i, contextlist[i]);
++ 
++ 	freeconary(contextlist);
++-- 
++2.30.2
++
