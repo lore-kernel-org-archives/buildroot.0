@@ -1,66 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 14 Jul 2021 19:05:13 +0200
-Subject: [Buildroot] [PATCH] boot/uboot: fix uboot build failure with
- UBOOT_CUSTOM_DTS_PATH on uboot version >= 2020.x
-In-Reply-To: <20210209201303.195093-1-giulio.benetti@benettiengineering.com>
-References: <20210209201303.195093-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210714170513.GB12203@scaer>
+From: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
+Date: Thu, 1 Jul 2021 00:28:31 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mupdf: new package.
+In-Reply-To: <d5c3870f-a7a3-da10-6fdd-eb588df78d18@mind.be>
+References: <20200207093705.32687-1-raphael.melotte@essensium.com>
+ <20200207093705.32687-2-raphael.melotte@essensium.com>
+ <d5c3870f-a7a3-da10-6fdd-eb588df78d18@mind.be>
+Message-ID: <ae75dda3-caac-3194-4117-8069df7c800a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giulio, All,
 
-(sorry, I sent the previous reply too fast...)
+On 5/26/21 10:05 PM, Arnout Vandecappelle wrote:
+>   Applied to next with some changes.
 
-On 2021-02-09 21:13 +0100, Giulio Benetti spake thusly:
-> Starting from version 2020.x uboot can't build .dts files not listed in
-> dts/Makefile leading to a build failure when trying to pass a .dts file to
-> UBOOT_CUSTOM_DTS_PATH. So let's prepend that file(s) to dts/Makefile if
-> UBOOT_CUSTOM_DTS_PATH is used.
+Thanks a lot for the fixups and the merge!
+
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  boot/uboot/uboot.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+>   Did you send this patch upstream?
 > 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 2478a2a1e9..a5ad101d68 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -303,6 +303,11 @@ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
->  UBOOT_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
->  
->  define UBOOT_BUILD_CMDS
-> +	$(if $(UBOOT_CUSTOM_DTS_PATH),
-> +		$(Q)$(SED) \
-> +		'1s;^;dtb-y += $(subst .dts,.dtb,$(call notdir,$(UBOOT_CUSTOM_DTS_PATH)))\n;' \
-> +		$(@D)/arch/$(UBOOT_ARCH)/dts/Makefile
-> +	)
->  	$(if $(UBOOT_CUSTOM_DTS_PATH),
 
-Even if this is going to change: why did you duplicate the condition,
-ather than inject the sed call in the cisting conditional block?
+Not originally, but now I did ([1]), thanks for the reminder.
 
-Regards,
-Yann E. MORIN.
-
->  		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
->  	)
-> -- 
-> 2.25.1
+>   You'll get weekly mails to remind you to update to 1.18.0 :-)
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+For some reason I don't, even though release-monitoring knows about 1.18.0...
+
+> 
+>   There's also a significantly smaller .xz. We prefer that.
+> 
+
+Okay, I'll take it into account for 1.18.0.
+
+> 
+>   I guess it would be OK to use GLUT if freeglut is selected, so maybe this
+> should be put inside ifneq ($(BR2_PACKAGE_FREEGLUT),y) ?
+> 
+
+Okay, I'll do that.
+
+
+Thanks,
+
+Rapha?l
+
+[1]: https://github.com/ArtifexSoftware/mupdf/pull/25
