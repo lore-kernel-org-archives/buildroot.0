@@ -1,129 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  1 Jul 2021 22:38:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/slirp: security bump to version
- 4.6.1
-Message-ID: <20210701203842.470599-1-fontaine.fabrice@gmail.com>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Fri,  2 Jul 2021 00:00:03 +0300
+Subject: [Buildroot] [PATCH 1/4] configs/stm32mp157c_dk2: bump BSP versions
+In-Reply-To: <20210701210006.1171347-1-geomatsi@gmail.com>
+References: <20210701210006.1171347-1-geomatsi@gmail.com>
+Message-ID: <20210701210006.1171347-2-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mtod()-related buffer overflows (CVE-2021-3592 #44, CVE-2021-3593 #45,
-CVE-2021-3594 #47, CVE-2021-3595 #46).
+Update Linux kernel, U-Boot, and TF-A versions.
 
-Drop patch (already in version)
-
-https://gitlab.freedesktop.org/slirp/libslirp/-/blob/v4.6.1/CHANGELOG.md
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- ...t_len-before-reading-protocol-header.patch | 60 -------------------
- package/slirp/slirp.hash                      |  2 +-
- package/slirp/slirp.mk                        |  9 +--
- 3 files changed, 3 insertions(+), 68 deletions(-)
- delete mode 100644 package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch
+ configs/stm32mp157c_dk2_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch b/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch
-deleted file mode 100644
-index 4046144712..0000000000
---- a/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch
-+++ /dev/null
-@@ -1,60 +0,0 @@
--From 2e1dcbc0c2af64fcb17009eaf2ceedd81be2b27f Mon Sep 17 00:00:00 2001
--From: Prasad J Pandit <pjp@fedoraproject.org>
--Date: Thu, 26 Nov 2020 19:27:06 +0530
--Subject: [PATCH] slirp: check pkt_len before reading protocol header
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--While processing ARP/NCSI packets in 'arp_input' or 'ncsi_input'
--routines, ensure that pkt_len is large enough to accommodate the
--respective protocol headers, lest it should do an OOB access.
--Add check to avoid it.
--
--CVE-2020-29129 CVE-2020-29130
--  QEMU: slirp: out-of-bounds access while processing ARP/NCSI packets
-- -> https://www.openwall.com/lists/oss-security/2020/11/27/1
--
--Reported-by: Qiuhao Li <Qiuhao.Li@outlook.com>
--Signed-off-by: Prasad J Pandit <pjp@fedoraproject.org>
--Message-Id: <20201126135706.273950-1-ppandit@redhat.com>
--Reviewed-by: Marc-Andr? Lureau <marcandre.lureau@redhat.com>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/ncsi.c  | 4 ++++
-- src/slirp.c | 4 ++++
-- 2 files changed, 8 insertions(+)
--
--diff --git a/src/ncsi.c b/src/ncsi.c
--index 3c1dfef..75dcc08 100644
----- a/src/ncsi.c
--+++ b/src/ncsi.c
--@@ -148,6 +148,10 @@ void ncsi_input(Slirp *slirp, const uint8_t *pkt, int pkt_len)
--     uint32_t checksum;
--     uint32_t *pchecksum;
-- 
--+    if (pkt_len < ETH_HLEN + sizeof(struct ncsi_pkt_hdr)) {
--+        return; /* packet too short */
--+    }
--+
--     memset(ncsi_reply, 0, sizeof(ncsi_reply));
-- 
--     memset(reh->h_dest, 0xff, ETH_ALEN);
--diff --git a/src/slirp.c b/src/slirp.c
--index 9bead0c..abb6f9a 100644
----- a/src/slirp.c
--+++ b/src/slirp.c
--@@ -860,6 +860,10 @@ static void arp_input(Slirp *slirp, const uint8_t *pkt, int pkt_len)
--         return;
--     }
-- 
--+    if (pkt_len < ETH_HLEN + sizeof(struct slirp_arphdr)) {
--+        return; /* packet too short */
--+    }
--+
--     ar_op = ntohs(ah->ar_op);
--     switch (ar_op) {
--     case ARPOP_REQUEST:
---- 
--2.20.1
--
-diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
-index fe295b3bfb..326b2ad246 100644
---- a/package/slirp/slirp.hash
-+++ b/package/slirp/slirp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  388b4b08a8cc0996cc5155cb027a097dc1a7f2cfe84b1121496608ab5366cc48  libslirp-4.3.1.tar.xz
-+sha256  b8a22ac4d601ba16122a67827c0f4361785d4d283f21ff8ed48d4aa1e7693477  libslirp-4.6.1.tar.xz
- sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index ff92c60517..43d2c520e9 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
-@@ -4,11 +4,9 @@
- #
- ################################################################################
- 
--SLIRP_VERSION = 4.3.1
-+SLIRP_VERSION = 4.6.1
- SLIRP_SOURCE = libslirp-$(SLIRP_VERSION).tar.xz
--# Other "official" tarballs don't ship .tarball-version resulting in a build
--# failure: https://gitlab.freedesktop.org/slirp/libslirp/-/issues/24
--SLIRP_SITE = https://elmarco.fedorapeople.org
-+SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/uploads/83b199ea6fcdfc0c243dfde8546ee4c9
- SLIRP_LICENSE = BSD-3-Clause
- SLIRP_LICENSE_FILES = COPYRIGHT
- SLIRP_CPE_ID_VENDOR = libslirp_project
-@@ -16,7 +14,4 @@ SLIRP_CPE_ID_PRODUCT = libslirp
- SLIRP_INSTALL_STAGING = YES
- SLIRP_DEPENDENCIES = libglib2
- 
--# 0001-slirp-check-pkt_len-before-reading-protocol-header.patch
--SLIRP_IGNORE_CVES += CVE-2020-29129 CVE-2020-29130
--
- $(eval $(meson-package))
+diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+index 50d875749b..6fea63d427 100644
+--- a/configs/stm32mp157c_dk2_defconfig
++++ b/configs/stm32mp157c_dk2_defconfig
+@@ -1,11 +1,11 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
+ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.10"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-dk2.dtb"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
+@@ -25,7 +25,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config"
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
 -- 
-2.30.2
+2.32.0
