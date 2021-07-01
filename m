@@ -1,59 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  1 Jul 2021 17:54:07 +0300
-Subject: [Buildroot] [PATCH] package/openocd: require wchar for the xds110
- driver
-Message-ID: <acbeaaffd34a068b66bde44fd96046faf2096c04.1625151247.git.baruch@tkos.co.il>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu,  1 Jul 2021 10:14:54 -0700
+Subject: [Buildroot] [PATCH 1/1] package/libressl: bump version to 3.3.3
+Message-ID: <20210701171454.36440-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The xds110 driver requires wchar, and is enabled by default. Make sure
-to disable xds110 when wchar support is missing.
-
-Fixes:
-http://autobuild.buildroot.net/results/530bfe22ff509cf4ebfdf99a183312a1053f505f/
-http://autobuild.buildroot.net/results/956538a0a6029137db19cce30dc340e2e30dd166/
-http://autobuild.buildroot.net/results/ae7da2ce1389ece44a4ca65108fee02e318df7b3/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/openocd/Config.in  | 9 +++++++++
- package/openocd/openocd.mk | 1 +
- 2 files changed, 10 insertions(+)
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-index f2e79f29fe10..ac4feb9a6e4b 100644
---- a/package/openocd/Config.in
-+++ b/package/openocd/Config.in
-@@ -144,6 +144,15 @@ config BR2_PACKAGE_OPENOCD_ARMEW
- 	  Enable building support for the Olimex ARM-JTAG-EW
- 	  Programmer (default is auto)
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 9f216bf2f1..5f6b22aede 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  798a65fd61d385e09d559810cdfa46512f8def5919264cfef241a7b086ce7cfe  libressl-3.2.5.tar.gz
++sha256  a471565b36ccd1a70d0bd7d37c6e95c43a26a62829b487d9d2cdebfe58be3066  libressl-3.3.3.tar.gz
+ # Locally computed
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index d09df8f40f..f1f5e1974d 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_OPENOCD_XDS110
-+	bool "TI XDS110 Debug Probe"
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
-+	select BR2_PACKAGE_LIBUSB
-+	help
-+	  Enable building support for the TI XDS110 Debug Probe.
-+
- config BR2_PACKAGE_OPENOCD_PARPORT
- 	bool "pc parallel port driver"
- 	help
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index b74426ff4701..9f53ae3ee390 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -49,6 +49,7 @@ OPENOCD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_OPENOCD_VSLLINK),--enable-vsllink,--disable-vsllink) \
- 	$(if $(BR2_PACKAGE_OPENOCD_USBPROG),--enable-usbprog,--disable-usbprog) \
- 	$(if $(BR2_PACKAGE_OPENOCD_RLINK),--enable-rlink,--disable-rlink) \
-+	$(if $(BR2_PACKAGE_OPENOCD_XDS110),--enable-xds110,--disable-xds110) \
- 	$(if $(BR2_PACKAGE_OPENOCD_ARMEW),--enable-armjtagew,--disable-armjtagew) \
- 	$(if $(BR2_PACKAGE_OPENOCD_CMSIS_DAP),--enable-cmsis-dap,--disable-cmsis-dap) \
- 	$(if $(BR2_PACKAGE_OPENOCD_PARPORT),--enable-parport,--disable-parport) \
+-LIBRESSL_VERSION = 3.2.5
++LIBRESSL_VERSION = 3.3.3
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
 -- 
-2.30.2
+2.31.1
