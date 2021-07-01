@@ -1,78 +1,66 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Fri,  2 Jul 2021 00:00:06 +0300
-Subject: [Buildroot] [PATCH 4/4] stm32mp157c_dk2: fix U-Boot corruption on
- the first boot
-In-Reply-To: <20210701210006.1171347-1-geomatsi@gmail.com>
-References: <20210701210006.1171347-1-geomatsi@gmail.com>
-Message-ID: <20210701210006.1171347-5-geomatsi@gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 1 Jul 2021 14:41:11 -0700
+Subject: [Buildroot] [PATCH 1/1] package/seatd: disable -Werror
+In-Reply-To: <20210613125724.GB577852@momiji>
+References: <20210612211502.594066-1-fontaine.fabrice@gmail.com>
+ <20210613125724.GB577852@momiji>
+Message-ID: <CAFSsvmp6pNJw53m4cNRdOXOMJLpx+3+aBotWfTQgnJi+YACnfQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Both trusted and basic images successfully boot only once. Subsequent
-boot attempts fail to reach U-Boot. The root cause turns out to be in
-U-Boot corruption during the first boot. The stm32mp1 U-Boot stores its
-environment at the end of GPT partition named 'ssbl' since v2020.10-rc2.
-However Buildroot genimage template for stm32mp157 boards creates 'ssbl'
-partition w/o extra space for U-Boot primary and redundant environments.
-Add post-build script that appends placeholder for environment to U-Boot
-image.
+All;
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
----
- .../common/stm32mp157/post-build.sh              | 16 ++++++++++++++++
- configs/stm32mp157c_dk2_basic_defconfig          |  1 +
- configs/stm32mp157c_dk2_trusted_defconfig        |  1 +
- 3 files changed, 18 insertions(+)
- create mode 100755 board/stmicroelectronics/common/stm32mp157/post-build.sh
+Tested-by: Adam Duskett <aduskett@gmail.com>
 
-diff --git a/board/stmicroelectronics/common/stm32mp157/post-build.sh b/board/stmicroelectronics/common/stm32mp157/post-build.sh
-new file mode 100755
-index 0000000000..5c59a3f6bb
---- /dev/null
-+++ b/board/stmicroelectronics/common/stm32mp157/post-build.sh
-@@ -0,0 +1,16 @@
-+#!/bin/sh
-+
-+set -u
-+set -e
-+
-+cd "$BINARIES_DIR"
-+
-+dd if=/dev/zero of=env.bin bs=16384 count=1
-+
-+if [ -f u-boot.stm32 ]; then
-+	cat env.bin >> u-boot.stm32
-+fi
-+
-+if [ -f u-boot.img ]; then
-+	cat env.bin >> u-boot.img
-+fi
-diff --git a/configs/stm32mp157c_dk2_basic_defconfig b/configs/stm32mp157c_dk2_basic_defconfig
-index 153540ddc1..7976b248ad 100644
---- a/configs/stm32mp157c_dk2_basic_defconfig
-+++ b/configs/stm32mp157c_dk2_basic_defconfig
-@@ -2,6 +2,7 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-diff --git a/configs/stm32mp157c_dk2_trusted_defconfig b/configs/stm32mp157c_dk2_trusted_defconfig
-index a4bff897e5..c987a2b66e 100644
---- a/configs/stm32mp157c_dk2_trusted_defconfig
-+++ b/configs/stm32mp157c_dk2_trusted_defconfig
-@@ -2,6 +2,7 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--- 
-2.32.0
+On Sun, Jun 13, 2021 at 2:58 AM Adrian Perez de Castro
+<aperez@igalia.com> wrote:
+>
+> On Sat, 12 Jun 2021 23:15:02 +0200 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> > Disable -Werror to avoid the following build failure which is raised
+> > since the addition of the package in commit
+> > daae31149017cbf8b03634cfc56da132f7e1ad83
+> >
+> > ../seatd/seat.c: In function 'seat_activate_device':
+> > ../seatd/seat.c:374:48: error: unused parameter 'client' [-Werror=unused-parameter]
+> >   374 | static int seat_activate_device(struct client *client, struct seat_device *seat_device) {
+> >       |                                 ~~~~~~~~~~~~~~~^~~~~~
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/0ec925aab23d83c52684f5fea7a4395c93a674c4
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+>
+> > ---
+> >  package/seatd/seatd.mk | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
+> > index 2abcefbfaa..bf582f0d1d 100644
+> > --- a/package/seatd/seatd.mk
+> > +++ b/package/seatd/seatd.mk
+> > @@ -13,7 +13,8 @@ SEATD_INSTALL_STAGING = YES
+> >
+> >  SEATD_CONF_OPTS += \
+> >       -Dman-pages=disabled \
+> > -     -Dexamples=disabled
+> > +     -Dexamples=disabled \
+> > +     -Dwerror=false
+> >
+> >  ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
+> >  SEATD_CONF_OPTS += -Dlogind=enabled
+> > --
+> > 2.30.2
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
