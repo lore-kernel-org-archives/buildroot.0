@@ -1,54 +1,59 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 01 Jul 2021 10:24:19 +0000
-Subject: [Buildroot] [Bug 13886] New: How To Set Up Suddenlink Email
- Settings On Android?
-Message-ID: <bug-13886-163@https.bugs.busybox.net/>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  1 Jul 2021 17:54:07 +0300
+Subject: [Buildroot] [PATCH] package/openocd: require wchar for the xds110
+ driver
+Message-ID: <acbeaaffd34a068b66bde44fd96046faf2096c04.1625151247.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13886
+The xds110 driver requires wchar, and is enabled by default. Make sure
+to disable xds110 when wchar support is missing.
 
-            Bug ID: 13886
-           Summary: How To Set Up Suddenlink Email Settings On Android?
-           Product: buildroot
-           Version: 2021.02.3
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: smith8395john at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Fixes:
+http://autobuild.buildroot.net/results/530bfe22ff509cf4ebfdf99a183312a1053f505f/
+http://autobuild.buildroot.net/results/956538a0a6029137db19cce30dc340e2e30dd166/
+http://autobuild.buildroot.net/results/ae7da2ce1389ece44a4ca65108fee02e318df7b3/
 
-Setting up Suddenlink.net email manually on Android can seem a bit daunting.
-But with the help of the below steps, you can get done with it without any
-trouble.
-Open Mail app on your Android.
-Select Add Account and Enter your email credentials.
-Now click on the Manual Setup option.
-You need to select IMAP as your account type.
-Enter the Suddenlink email settings for IMAP in the given fields.
-Incoming Server: imap.suddenlink.net
-Security type: SSL/TLS (Accept all certificates)
-Port: 993
-Once you have entered all the IMAP settings correctly, hit the Next button.
-On the next page, you need to configure Suddenlink Outgoing server settings as
-follows:
-Outgoing (SMTP) server: smtp.suddenlink.net
-Security Type: SSL/TLS (Accept all certificates)
-Port: 465
-Outgoing (SMTP) Roaming Server - Security Type: SSL/TLS, Port:587
-Verify the outgoing server settings and hit the Next button.
-At last, click on Done to finish the setup.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/openocd/Config.in  | 9 +++++++++
+ package/openocd/openocd.mk | 1 +
+ 2 files changed, 10 insertions(+)
 
-https://www.emailsupport.us/blog/suddenlink-email-settings/
-
+diff --git a/package/openocd/Config.in b/package/openocd/Config.in
+index f2e79f29fe10..ac4feb9a6e4b 100644
+--- a/package/openocd/Config.in
++++ b/package/openocd/Config.in
+@@ -144,6 +144,15 @@ config BR2_PACKAGE_OPENOCD_ARMEW
+ 	  Enable building support for the Olimex ARM-JTAG-EW
+ 	  Programmer (default is auto)
+ 
++config BR2_PACKAGE_OPENOCD_XDS110
++	bool "TI XDS110 Debug Probe"
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
++	select BR2_PACKAGE_LIBUSB
++	help
++	  Enable building support for the TI XDS110 Debug Probe.
++
+ config BR2_PACKAGE_OPENOCD_PARPORT
+ 	bool "pc parallel port driver"
+ 	help
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+index b74426ff4701..9f53ae3ee390 100644
+--- a/package/openocd/openocd.mk
++++ b/package/openocd/openocd.mk
+@@ -49,6 +49,7 @@ OPENOCD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_OPENOCD_VSLLINK),--enable-vsllink,--disable-vsllink) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_USBPROG),--enable-usbprog,--disable-usbprog) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_RLINK),--enable-rlink,--disable-rlink) \
++	$(if $(BR2_PACKAGE_OPENOCD_XDS110),--enable-xds110,--disable-xds110) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_ARMEW),--enable-armjtagew,--disable-armjtagew) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_CMSIS_DAP),--enable-cmsis-dap,--disable-cmsis-dap) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_PARPORT),--enable-parport,--disable-parport) \
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.30.2
