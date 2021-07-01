@@ -1,57 +1,58 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Fri,  2 Jul 2021 00:00:03 +0300
-Subject: [Buildroot] [PATCH 1/4] configs/stm32mp157c_dk2: bump BSP versions
-In-Reply-To: <20210701210006.1171347-1-geomatsi@gmail.com>
-References: <20210701210006.1171347-1-geomatsi@gmail.com>
-Message-ID: <20210701210006.1171347-2-geomatsi@gmail.com>
+Date: Fri,  2 Jul 2021 00:00:02 +0300
+Subject: [Buildroot] [PATCH 0/4] stm32mp157c-dk2: non-trusted config and bsp
+ updates
+Message-ID: <20210701210006.1171347-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update Linux kernel, U-Boot, and TF-A versions.
+Hi all,
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
----
- configs/stm32mp157c_dk2_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+This patch series introduces several updates for stm32mp157c-dk2:
+- update BSP: bump Linux, U-Boot, TF-A versions
+- introduce basic (non-trusted) image configuration
+- remove u-boot config fragment that disables watchdog
 
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index 50d875749b..6fea63d427 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -1,11 +1,11 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.10"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-dk2.dtb"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
-@@ -25,7 +25,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+The stm32mp157c-dk2 images with updated U-Boot have an issue: they
+successully boot only once. Previously I have already attempted to
+fix this problem: see
+https://patchwork.ozlabs.org/project/buildroot/patch/20210130204456.793098-1-geomatsi at gmail.com/
+
+However previous root cause analysis was not correct. Saving U-Boot
+environment indeed changes 'ssbl' partition checksum. But this is
+not the reason of TF-A complaints. In fact U-Boot corrupts its own
+image when it saves environment at the end of 'ssbl' partition.
+So it is necessary to reserve space at the end of 'ssbl' partition
+for both primary and redundant U-Boot environments. For this purpose
+post-build script is added that appends placeholder for environment
+to U-Boot image.
+
+Regards,
+Sergey
+
+
+Sergey Matyukevich (4):
+  configs/stm32mp157c_dk2: bump BSP versions
+  stm32mp157c_dk2: add non-trusted configuration
+  stm32mp157c_dk2: remove uboot config fragment
+  stm32mp157c_dk2: fix U-Boot corruption on the first boot
+
+ DEVELOPERS                                    |  4 ++-
+ .../common/stm32mp157/genimage.cfg.template   |  6 ++--
+ .../common/stm32mp157/post-build.sh           | 16 +++++++++
+ .../common/stm32mp157/post-image.sh           | 35 +++++++++++++++----
+ .../stm32mp157c-dk2/readme.txt                |  7 +++-
+ .../stm32mp157c-dk2/uboot-fragment.config     |  1 -
+ configs/stm32mp157c_dk2_basic_defconfig       | 28 +++++++++++++++
+ ...nfig => stm32mp157c_dk2_trusted_defconfig} | 10 +++---
+ 8 files changed, 89 insertions(+), 18 deletions(-)
+ create mode 100755 board/stmicroelectronics/common/stm32mp157/post-build.sh
+ delete mode 100644 board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config
+ create mode 100644 configs/stm32mp157c_dk2_basic_defconfig
+ rename configs/{stm32mp157c_dk2_defconfig => stm32mp157c_dk2_trusted_defconfig} (80%)
+
 -- 
 2.32.0
