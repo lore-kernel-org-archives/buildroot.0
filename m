@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 01 Jul 2021 19:39:13 +0000
+Date: Thu, 01 Jul 2021 19:39:30 +0000
 Subject: [Buildroot] [Bug 13886] How To Set Up Suddenlink Email Settings On
  Android?
 In-Reply-To: <bug-13886-163@https.bugs.busybox.net/>
 References: <bug-13886-163@https.bugs.busybox.net/>
-Message-ID: <bug-13886-163-pgvg67t1Vv@https.bugs.busybox.net/>
+Message-ID: <bug-13886-163-YRh2tLoMlt@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,9 +17,8 @@ Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |INVALID
-                 CC|                            |yann.morin.1998 at free.fr
+                 CC|buildroot at uclibc.org,       |
+                   |yann.morin.1998 at free.fr     |
 
 -- 
 You are receiving this mail because:
