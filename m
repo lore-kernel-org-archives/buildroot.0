@@ -1,66 +1,62 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 1 Jul 2021 14:41:11 -0700
-Subject: [Buildroot] [PATCH 1/1] package/seatd: disable -Werror
-In-Reply-To: <20210613125724.GB577852@momiji>
-References: <20210612211502.594066-1-fontaine.fabrice@gmail.com>
- <20210613125724.GB577852@momiji>
-Message-ID: <CAFSsvmp6pNJw53m4cNRdOXOMJLpx+3+aBotWfTQgnJi+YACnfQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  2 Jul 2021 00:26:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/keepalived: fix build with kernel
+ >= 5.13
+Message-ID: <20210701222638.810809-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All;
+Fixes:
+ - http://autobuild.buildroot.org/results/9a93d7d76b0a4319c29fbf7b5986bcc78539ae8b
 
-Tested-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-core-Fix-compiling-on-RHEL-9.patch   | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/keepalived/0001-core-Fix-compiling-on-RHEL-9.patch
 
-On Sun, Jun 13, 2021 at 2:58 AM Adrian Perez de Castro
-<aperez@igalia.com> wrote:
->
-> On Sat, 12 Jun 2021 23:15:02 +0200 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> > Disable -Werror to avoid the following build failure which is raised
-> > since the addition of the package in commit
-> > daae31149017cbf8b03634cfc56da132f7e1ad83
-> >
-> > ../seatd/seat.c: In function 'seat_activate_device':
-> > ../seatd/seat.c:374:48: error: unused parameter 'client' [-Werror=unused-parameter]
-> >   374 | static int seat_activate_device(struct client *client, struct seat_device *seat_device) {
-> >       |                                 ~~~~~~~~~~~~~~~^~~~~~
-> >
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/0ec925aab23d83c52684f5fea7a4395c93a674c4
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
->
-> > ---
-> >  package/seatd/seatd.mk | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
-> > index 2abcefbfaa..bf582f0d1d 100644
-> > --- a/package/seatd/seatd.mk
-> > +++ b/package/seatd/seatd.mk
-> > @@ -13,7 +13,8 @@ SEATD_INSTALL_STAGING = YES
-> >
-> >  SEATD_CONF_OPTS += \
-> >       -Dman-pages=disabled \
-> > -     -Dexamples=disabled
-> > +     -Dexamples=disabled \
-> > +     -Dwerror=false
-> >
-> >  ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
-> >  SEATD_CONF_OPTS += -Dlogind=enabled
-> > --
-> > 2.30.2
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/keepalived/0001-core-Fix-compiling-on-RHEL-9.patch b/package/keepalived/0001-core-Fix-compiling-on-RHEL-9.patch
+new file mode 100644
+index 0000000000..39134fcc35
+--- /dev/null
++++ b/package/keepalived/0001-core-Fix-compiling-on-RHEL-9.patch
+@@ -0,0 +1,34 @@
++From 3fd0c21e4f63ac0a52b5d7a09575f0f364972e4d Mon Sep 17 00:00:00 2001
++From: Quentin Armitage <quentin@armitage.org.uk>
++Date: Tue, 8 Jun 2021 08:57:45 +0100
++Subject: [PATCH] core: Fix compiling on RHEL 9
++
++Signed-off-by: Quentin Armitage <quentin@armitage.org.uk>
++
++[Retrieved from:
++https://github.com/acassen/keepalived/commit/3fd0c21e4f63ac0a52b5d7a09575f0f364972e4d]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ keepalived/core/layer4.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/keepalived/core/layer4.c b/keepalived/core/layer4.c
++index d2cc971a3..fdca04913 100644
++--- a/keepalived/core/layer4.c
+++++ b/keepalived/core/layer4.c
++@@ -27,13 +27,14 @@
++ #include <errno.h>
++ #include <unistd.h>
++ #include <fcntl.h>
+++#include <netinet/in.h>
+++#include <net/if.h>
++ #include <linux/icmp.h>
++ #include <linux/icmpv6.h>
++ #ifdef ERRQUEUE_NEEDS_SYS_TIME
++ #include <sys/time.h>
++ #endif
++ #include <linux/errqueue.h>
++-#include <netinet/in.h>
++ 
++ #include "layer4.h"
++ #include "logger.h"
+-- 
+2.30.2
