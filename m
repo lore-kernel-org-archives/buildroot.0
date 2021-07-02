@@ -1,68 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  2 Jul 2021 19:07:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xen: fix build with -DNDEBUG
-Message-ID: <20210702170742.891023-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri,  2 Jul 2021 19:21:01 +0200
+Subject: [Buildroot] [PATCH v1] package/libdrm: bump version to 2.4.107
+Message-ID: <20210702172101.17142-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build failure with -DNDEBUG raised since commit
-5a8c50fe05afacc3cbe8e7347e238da9f242fab0
+- update license file hash (xf86drm.c, license unrelated source code
+  changes [1], [2], [3], [4], [5])
 
-Fixes:
- - http://autobuild.buildroot.org/results/66573ad0abc4244c0dfeac8b684a7bfcc31c0d4d
+For details see [6].
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[1] https://cgit.freedesktop.org/mesa/drm/commit/?id=67e911977fbe1f444045f59028c149a04ba29566
+[2] https://cgit.freedesktop.org/mesa/drm/commit/?id=a04b674887586bf05594abaf7c55fd8d630898db
+[3] https://cgit.freedesktop.org/mesa/drm/commit/?id=99a0522aef04e08c6e0be7a7a020f12c51d24c47
+[4] https://cgit.freedesktop.org/mesa/drm/commit/?id=9ae8f17d563a81212ca2f61a3427ed559c105644
+[5] https://cgit.freedesktop.org/mesa/drm/commit/?id=65d89398081b33b7498bccaee6915e977f589ec2
+[6] https://lists.freedesktop.org/archives/dri-devel/2021-July/313594.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- .../xen/0002-xen-Makefile-drop-Werror.patch   | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/xen/0002-xen-Makefile-drop-Werror.patch
+ package/libdrm/libdrm.hash | 8 ++++----
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/xen/0002-xen-Makefile-drop-Werror.patch b/package/xen/0002-xen-Makefile-drop-Werror.patch
-new file mode 100644
-index 0000000000..f3f13dae8f
---- /dev/null
-+++ b/package/xen/0002-xen-Makefile-drop-Werror.patch
-@@ -0,0 +1,38 @@
-+From e87870cf2645a4dafeea6afce290c6e6574c37ea Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 2 Jul 2021 19:00:30 +0200
-+Subject: [PATCH] xen/Makefile: drop -Werror
-+
-+Drop -Werror to avoid the following build failure with -DNDEBUG:
-+
-+In file included from <command-line>:0:0:
-+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/xen-4.14.2/xen/include/xen/config.h:94:0: error: "NDEBUG" redefined [-Werror]
-+ #define NDEBUG
-+
-+<command-line>:0:0: note: this is the location of the previous definition
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/66573ad0abc4244c0dfeac8b684a7bfcc31c0d4d
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to xen-devel at lists.xenproject.org]
-+---
-+ xen/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/xen/Makefile b/xen/Makefile
-+index 89879fad4c..cf9f83b1fb 100644
-+--- a/xen/Makefile
-++++ b/xen/Makefile
-+@@ -210,7 +210,7 @@ CFLAGS += -fomit-frame-pointer
-+ endif
-+ 
-+ CFLAGS += -nostdinc -fno-builtin -fno-common
-+-CFLAGS += -Werror -Wredundant-decls -Wno-pointer-arith
-++CFLAGS += -Wredundant-decls -Wno-pointer-arith
-+ $(call cc-option-add,CFLAGS,CC,-Wvla)
-+ CFLAGS += -pipe -D__XEN__ -include $(BASEDIR)/include/xen/config.h
-+ CFLAGS-$(CONFIG_DEBUG_INFO) += -g
-+-- 
-+2.30.2
-+
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 079675824a..d3f35b3de0 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2021-May/307025.html
+-sha256  92d8ac54429b171e087e61c2894dc5399fe6a549b1fbba09fa6a3cb9d4e57bd4  libdrm-2.4.106.tar.xz
+-sha512  33140e579906ab54b716149056af500c628ce41cd9ae3b0c33496693d2f5903fbcfccee8a942dd1560e1591111ed240da42612d5af5e75558db6f6a85d14617d  libdrm-2.4.106.tar.xz
++# From https://lists.freedesktop.org/archives/dri-devel/2021-July/313594.html
++sha256  c554cef03b033636a975543eab363cc19081cb464595d3da1ec129f87370f888  libdrm-2.4.107.tar.xz
++sha512  c7542ba15c4c934519a6a1f3cb1ec21effa820a805a030d0175313bb1cc796cd311f39596ead883f9f251679d701e262894c5a297d5cf45093c80a6cd818def0  libdrm-2.4.107.tar.xz
+ 
+ # Hash for license file
+-sha256  a69e38953c20a88845cc739c05dd604da4c977844b872e126c91a0ca2e1385b7  xf86drm.c
++sha256  7e952c6666ed17c99f91ee7af13c688b8769b0feaf6f4558bf6ad3e07512e1e6  xf86drm.c
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index f18df27687..c15be3e671 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.106
++LIBDRM_VERSION = 2.4.107
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 -- 
-2.30.2
+2.32.0
