@@ -1,52 +1,68 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 2 Jul 2021 08:25:27 -0700
-Subject: [Buildroot] [PATCH 0/5] nginx updates
-In-Reply-To: <20210630211615.GB2829@scaer>
-References: <20210628161610.3197763-1-aduskett@gmail.com>
- <a44b24ab6d4af719790f5b6e03821a64ed93f23f.camel@calian.com>
- <20210630211615.GB2829@scaer>
-Message-ID: <CAFSsvmo8dz9EVkLBaoKPr2Z=DnDZk3zSC_FdOe4p3E60NYwuCg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  2 Jul 2021 19:07:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xen: fix build with -DNDEBUG
+Message-ID: <20210702170742.891023-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After the v2 patch series is approved (or marked as Changed requested)
-I can also update nginx-upload.
+Fix build failure with -DNDEBUG raised since commit
+5a8c50fe05afacc3cbe8e7347e238da9f242fab0
 
-Adam
+Fixes:
+ - http://autobuild.buildroot.org/results/66573ad0abc4244c0dfeac8b684a7bfcc31c0d4d
 
-On Wed, Jun 30, 2021 at 2:16 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Robert, All,
->
-> On 2021-06-28 18:02 +0000, Robert Hancock via buildroot spake thusly:
-> > On Mon, 2021-06-28 at 09:16 -0700, Adam Duskett wrote:
-> > > Just some nginx maintnence.
-> [--SNIP--]
-> > > The nginx-upload package also has updates, however, the current nginx-upload
-> > > url
-> > > points to a fork of nginx-upload-module. The official project URL is fdintino
-> > > not vkholodkov. Should this be changed to fdintino and the version changed to
-> > > 4423994c7d8fb491d95867f6af968585d949e7a9?
-> >
-> > I believe at one point the fdintino repository was quite behind and was missing
-> > a bunch of features like HTTP/2 support that were in the vkholodkov fork. It
-> > looks like the vkholodkov version is only 1 commit ahead of fdintino right now
-> > however, so we might be able to switch to the "official" version.
->
-> Thanks for the explanations. :-)
->
-> Would you be willing to send a patch doing the switch, then?
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../xen/0002-xen-Makefile-drop-Werror.patch   | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/xen/0002-xen-Makefile-drop-Werror.patch
+
+diff --git a/package/xen/0002-xen-Makefile-drop-Werror.patch b/package/xen/0002-xen-Makefile-drop-Werror.patch
+new file mode 100644
+index 0000000000..f3f13dae8f
+--- /dev/null
++++ b/package/xen/0002-xen-Makefile-drop-Werror.patch
+@@ -0,0 +1,38 @@
++From e87870cf2645a4dafeea6afce290c6e6574c37ea Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 2 Jul 2021 19:00:30 +0200
++Subject: [PATCH] xen/Makefile: drop -Werror
++
++Drop -Werror to avoid the following build failure with -DNDEBUG:
++
++In file included from <command-line>:0:0:
++/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/xen-4.14.2/xen/include/xen/config.h:94:0: error: "NDEBUG" redefined [-Werror]
++ #define NDEBUG
++
++<command-line>:0:0: note: this is the location of the previous definition
++
++Fixes:
++ - http://autobuild.buildroot.org/results/66573ad0abc4244c0dfeac8b684a7bfcc31c0d4d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to xen-devel at lists.xenproject.org]
++---
++ xen/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/xen/Makefile b/xen/Makefile
++index 89879fad4c..cf9f83b1fb 100644
++--- a/xen/Makefile
+++++ b/xen/Makefile
++@@ -210,7 +210,7 @@ CFLAGS += -fomit-frame-pointer
++ endif
++ 
++ CFLAGS += -nostdinc -fno-builtin -fno-common
++-CFLAGS += -Werror -Wredundant-decls -Wno-pointer-arith
+++CFLAGS += -Wredundant-decls -Wno-pointer-arith
++ $(call cc-option-add,CFLAGS,CC,-Wvla)
++ CFLAGS += -pipe -D__XEN__ -include $(BASEDIR)/include/xen/config.h
++ CFLAGS-$(CONFIG_DEBUG_INFO) += -g
++-- 
++2.30.2
++
+-- 
+2.30.2
