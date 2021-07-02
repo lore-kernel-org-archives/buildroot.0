@@ -1,82 +1,147 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 2 Jul 2021 22:36:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gcc: fix libsanitizer in gcc
- 11.1, 10.3 for linux 5.13
-In-Reply-To: <20210701084718.1788688-1-fido_max@inbox.ru>
-References: <20210701084718.1788688-1-fido_max@inbox.ru>
-Message-ID: <8c5393e4-4686-3186-8de9-85c35166e9ef@gmail.com>
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Date: Fri, 2 Jul 2021 23:10:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/capnproto: fix build on riscv32
+In-Reply-To: <f46b99ad-b713-3fff-5b55-3f15300bd4ce@mind.be>
+References: <20210527210402.555334-1-fontaine.fabrice@gmail.com>
+ <20210528065949.GA2170022@sunra>
+ <CAPi7W83+pf05_ssNVpaY=mEOpr4MNA4DVX5m+0RViDfig91mwA@mail.gmail.com>
+ <f46b99ad-b713-3fff-5b55-3f15300bd4ce@mind.be>
+Message-ID: <YN+A1hGJE7YjTd/F@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Maxim,
+Hi,
 
-Le 01/07/2021 ? 10:47, Maxim Kochetkov via buildroot a ?crit?:
-> Starting from 5.13 Cyclades async mux support is dropped from linux kernel:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f76edd8f7ce06cdff2fe5b6b39a49644c684a161
+I'm very late to the pary but this patch should not be applied, in BR or
+upstream.
+
+On 28/05/2021 16:17:03+0200, Arnout Vandecappelle wrote:
+>  That patch looks OK to me:
 > 
-> But gcc's libsanitizer uses <linux/cyclades.h> header.
-> This issue is fixed by:
-> https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=745dae5923aba02982563481d75a21595df22ff8
+> +/* 32bit architectures with 64bit time_t do not define __NR_futex syscall */
+> +#if !defined(SYS_futex) && defined(SYS_futex_time64)
+> +#define SYS_futex SYS_futex_time64
+> +#endif
 > 
-> Right now just gcc 9.4.0 has this commit and 8.4.0 is proposed to be deleted.
-> So we need to add this patch for 10.3 and 11.1 to fix build with linux kernel 5.13.
+>  The comment was "this patch won't work if the userspace ABI uses the
+> 64-bit time_t on a 32-bit ISA that did start with 32-bit time_t" - but that's
+> not true. On a 32-bit ISA that did start with 32-bit time_t, SYS_futex will be
+> defined (or SYS_foo is not properly exported by libc and then SYS_futex_time64
+> isn't defined either).
+> 
+>  To be really safe, you should maybe also check that __TIMESIZE == 64 [1] - but
+> that may break on musl or uClibc.
+> 
 
-Indeed, but can you use the patch that has been backported to releases/gcc-10
-stable branch after gcc 10.3 release:
+Not defining __NR_futex was done on purpose, to ensure applications
+would break at compile time. With that patch applied, you make it harder
+to properly fix and provide an upgrade path for 32b platforms that had a
+32b time_t. The whole goal was to have the applications check
+sizeof(time_t). The patch works but it is hiding the issue under the rug
+and everything will break silently in 2038 instead of breaking now at
+compile time.
 
-https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=a7e72b282177fbaa6a852324641c871313d326da
+>  Or even better of course would be to patch all code to use the __time64_t
+> instead of time_t everywhere, independent of __TIMESIZE. But even then you'd
+> need fallback to time_t for old libc/kernel.
+> 
 
-Same for gcc-11:
-
-https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=2b40941d23b1570cdd90083b58fa0f66aa58c86e
-
-The patch from master branch doesn't apply cleanly, they are some "Hunk".
+Exactly, the solution, is simply to check sizeof(time_t).
 
 > 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-> ---
->  ...04-Remove-cyclades-from-libsanitizer.patch | 123 ++++++++++++++++++
->  ...01-Remove-cyclades-from-libsanitizer.patch | 123 ++++++++++++++++++
->  2 files changed, 246 insertions(+)
->  create mode 100644 package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch
->  create mode 100644 package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch
+>  Regards,
+>  Arnout
 > 
-> diff --git a/package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch b/package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch
-> new file mode 100644
-> index 0000000000..d686fd7cc5
-> --- /dev/null
-> +++ b/package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch
-> @@ -0,0 +1,123 @@
-> +From 745dae5923aba02982563481d75a21595df22ff8 Mon Sep 17 00:00:00 2001
-> +From: Tamar Christina <tamar.christina@arm.com>
-> +Date: Fri, 21 May 2021 10:30:59 +0100
-> +Subject: [PATCH] libsanitizer: Remove cyclades from libsanitizer
-> +
-> +The Linux kernel has removed the interface to cyclades from
-> +the latest kernel headers[1] due to them being orphaned for the
-> +past 13 years.
-> +
-> +libsanitizer uses this header when compiling against glibc, but
-> +glibcs itself doesn't seem to have any references to cyclades.
-> +
-> +Further more it seems that the driver is broken in the kernel and
-> +the firmware doesn't seem to be available anymore.
-> +
-> +As such since this is breaking the build of libsanitizer (and so the
-> +GCC bootstrap[2]) I propose to remove this.
-> +
-> +[1] https://lkml.org/lkml/2021/3/2/153
-> +[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100379
-> +
-> +(cherry picked from commit f7c5351552387bd43f6ca3631016d7f0dfe0f135)
+> 
+> [1]
+> https://www.gnu.org/software/libc/manual/html_node/64_002dbit-time-symbol-handling.html
+> 
+> 
+> 
+> 
+> 
+> > So another option would be to just disable capnproto on riscv32.
+> >>
+> >> Given that this exact patch is also applied upstream, your patch below seems fine
+> >> to me.
+> >>
+> >> Cheers,
+> >>
+> >> Koen
+> >>
+> >> On Thu, May 27, 2021 at 11:04:02PM +0200, Fabrice Fontaine wrote:
+> >>> Fixes:
+> >>>  - http://autobuild.buildroot.org/results/1c1cd4775241ee57d878cad5c978413d4b4a8736
+> >>>
+> >>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >>> ---
+> >>>  ...it-architectures-using-64-bit-time_t.patch | 37 +++++++++++++++++++
+> >>>  1 file changed, 37 insertions(+)
+> >>>  create mode 100644 package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
+> >>>
+> >>> diff --git a/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
+> >>> new file mode 100644
+> >>> index 0000000000..ce70ab8f29
+> >>> --- /dev/null
+> >>> +++ b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
+> >>> @@ -0,0 +1,37 @@
+> >>> +From e2a05a19e9dc51287e19cc9f11fd91449219e361 Mon Sep 17 00:00:00 2001
+> >>> +From: Khem Raj <raj.khem@gmail.com>
+> >>> +Date: Sun, 15 Nov 2020 12:10:28 -0800
+> >>> +Subject: [PATCH] mutex: Fix build on 32-bit architectures using 64-bit time_t
+> >>> +
+> >>> +mutex code uses SYS_futex, which it expects from system C library.
+> >>> +in glibc (/usr/include/bits/syscall.h defines it in terms of of NR_futex)
+> >>> +rv32 is using 64bit time_t from get go unlike other 32bit architectures
+> >>> +in glibc, therefore it wont have NR_futex defined but just NR_futex_time64
+> >>> +this aliases it to NR_futex so that SYS_futex is then defined for rv32
+> >>> +
+> >>> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
+> >>> +[Retrieved from:
+> >>> +https://github.com/capnproto/capnproto/commit/e2a05a19e9dc51287e19cc9f11fd91449219e361]
+> >>> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >>> +---
+> >>> + c++/src/kj/mutex.c++ | 6 ++++++
+> >>> + 1 file changed, 6 insertions(+)
+> >>> +
+> >>> +diff --git a/c++/src/kj/mutex.c++ b/c++/src/kj/mutex.c++
+> >>> +index c81cead7b..e1594b117 100644
+> >>> +--- a/c++/src/kj/mutex.c++
+> >>> ++++ b/c++/src/kj/mutex.c++
+> >>> +@@ -39,7 +39,13 @@
+> >>> +
+> >>> + #ifndef SYS_futex
+> >>> + // Missing on Android/Bionic.
+> >>> ++#ifdef __NR_futex
+> >>> + #define SYS_futex __NR_futex
+> >>> ++#elif defined(SYS_futex_time64)
+> >>> ++#define SYS_futex SYS_futex_time64
+> >>> ++#else
+> >>> ++#error "Need working SYS_futex"
+> >>> ++#endif
+> >>> + #endif
+> >>> +
+> >>> + #ifndef FUTEX_WAIT_PRIVATE
+> >>> --
+> >>> 2.30.2
+> >>>
+> > Best Regards,
+> > 
+> > Fabrice
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-The upstream commit refer to a hash that come from llvm project, there is no
-such commit in gcc repository:
-
-https://github.com/llvm/llvm-project/commit/f7c5351552387bd43f6ca3631016d7f0dfe0f135
-
-Best regards,
-Romain
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
