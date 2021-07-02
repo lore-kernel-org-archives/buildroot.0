@@ -1,147 +1,134 @@
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Date: Fri, 2 Jul 2021 23:10:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/capnproto: fix build on riscv32
-In-Reply-To: <f46b99ad-b713-3fff-5b55-3f15300bd4ce@mind.be>
-References: <20210527210402.555334-1-fontaine.fabrice@gmail.com>
- <20210528065949.GA2170022@sunra>
- <CAPi7W83+pf05_ssNVpaY=mEOpr4MNA4DVX5m+0RViDfig91mwA@mail.gmail.com>
- <f46b99ad-b713-3fff-5b55-3f15300bd4ce@mind.be>
-Message-ID: <YN+A1hGJE7YjTd/F@piout.net>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 3 Jul 2021 00:09:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: fix build with gcc
+ 11
+In-Reply-To: <c5801345-6ed7-6c12-52e6-9f6c35f44ec1@grinn-global.com>
+References: <20210702080247.211116-1-fido_max@inbox.ru>
+ <c5801345-6ed7-6c12-52e6-9f6c35f44ec1@grinn-global.com>
+Message-ID: <20210703000905.680afb9e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Bartosz, Maxim,
 
-I'm very late to the pary but this patch should not be applied, in BR or
-upstream.
+On Fri, 2 Jul 2021 10:15:42 +0200, Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-On 28/05/2021 16:17:03+0200, Arnout Vandecappelle wrote:
->  That patch looks OK to me:
+> Hello Maxim,
 > 
-> +/* 32bit architectures with 64bit time_t do not define __NR_futex syscall */
-> +#if !defined(SYS_futex) && defined(SYS_futex_time64)
-> +#define SYS_futex SYS_futex_time64
-> +#endif
+> I was about to send the same patch but it turned out that there are more 
+> files that have missing includes of this header such as 
+> qoffsetstringarray_p.h, see below:
 > 
->  The comment was "this patch won't work if the userspace ABI uses the
-> 64-bit time_t on a 32-bit ISA that did start with 32-bit time_t" - but that's
-> not true. On a 32-bit ISA that did start with 32-bit time_t, SYS_futex will be
-> defined (or SYS_foo is not properly exported by libc and then SYS_futex_time64
-> isn't defined either).
+> ../../../include/QtCore/5.15.2/QtCore/private/../../../../../src/corelib/tools/qoffsetstringarray_p.h:70:22: 
+> error: ?numeric_limits? is not a member of ?std?
+>  ?? 70 |???????? Last <= std::numeric_limits<quint8>::max(),
+>  ????? |????????????????????? ^~~~~~~~~~~~~~
+> ../../../include/QtCore/5.15.2/QtCore/private/../../../../../src/corelib/tools/qoffsetstringarray_p.h:70:43: 
+> error: wrong number of template arguments (1, should be 3)
+>  ?? 70 |???????? Last <= std::numeric_limits<quint8>::max(),
 > 
->  To be really safe, you should maybe also check that __TIMESIZE == 64 [1] - but
-> that may break on musl or uClibc.
-> 
+> Maybe it would be better to combine all of these patches that fix build 
+> for gcc11 into one patch and rebase it when something new will occur?
 
-Not defining __NR_futex was done on purpose, to ensure applications
-would break at compile time. With that patch applied, you make it harder
-to properly fix and provide an upgrade path for 32b platforms that had a
-32b time_t. The whole goal was to have the applications check
-sizeof(time_t). The patch works but it is hiding the issue under the rug
-and everything will break silently in 2038 instead of breaking now at
-compile time.
+Disagree here, prefer one package patch per upstream patch as it is easier to
+keep track of the upstream relation/credits etc.
 
->  Or even better of course would be to patch all code to use the __time64_t
-> instead of time_t everywhere, independent of __TIMESIZE. But even then you'd
-> need fallback to time_t for old libc/kernel.
-> 
+This one seems sufficient to fix the qt6base host-gcc-11 compile, so this one
+has a justification on its own right and you can add my
 
-Exactly, the solution, is simply to check sizeof(time_t).
+Tested-by: Peter Seiderer <ps.report@gmx.net>
+
+@Bartek: You see more compile failures? Host-build/Host-gcc-11 related ones
+or target-build/target-gcc-11 related ones? Feel free to add related
+patches/fixes...
+
+Regards,
+Peter
+
 
 > 
->  Regards,
->  Arnout
-> 
-> 
-> [1]
-> https://www.gnu.org/software/libc/manual/html_node/64_002dbit-time-symbol-handling.html
-> 
-> 
-> 
-> 
-> 
-> > So another option would be to just disable capnproto on riscv32.
-> >>
-> >> Given that this exact patch is also applied upstream, your patch below seems fine
-> >> to me.
-> >>
-> >> Cheers,
-> >>
-> >> Koen
-> >>
-> >> On Thu, May 27, 2021 at 11:04:02PM +0200, Fabrice Fontaine wrote:
-> >>> Fixes:
-> >>>  - http://autobuild.buildroot.org/results/1c1cd4775241ee57d878cad5c978413d4b4a8736
-> >>>
-> >>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >>> ---
-> >>>  ...it-architectures-using-64-bit-time_t.patch | 37 +++++++++++++++++++
-> >>>  1 file changed, 37 insertions(+)
-> >>>  create mode 100644 package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
-> >>>
-> >>> diff --git a/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
-> >>> new file mode 100644
-> >>> index 0000000000..ce70ab8f29
-> >>> --- /dev/null
-> >>> +++ b/package/capnproto/0001-mutex-Fix-build-on-32-bit-architectures-using-64-bit-time_t.patch
-> >>> @@ -0,0 +1,37 @@
-> >>> +From e2a05a19e9dc51287e19cc9f11fd91449219e361 Mon Sep 17 00:00:00 2001
-> >>> +From: Khem Raj <raj.khem@gmail.com>
-> >>> +Date: Sun, 15 Nov 2020 12:10:28 -0800
-> >>> +Subject: [PATCH] mutex: Fix build on 32-bit architectures using 64-bit time_t
-> >>> +
-> >>> +mutex code uses SYS_futex, which it expects from system C library.
-> >>> +in glibc (/usr/include/bits/syscall.h defines it in terms of of NR_futex)
-> >>> +rv32 is using 64bit time_t from get go unlike other 32bit architectures
-> >>> +in glibc, therefore it wont have NR_futex defined but just NR_futex_time64
-> >>> +this aliases it to NR_futex so that SYS_futex is then defined for rv32
-> >>> +
-> >>> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
-> >>> +[Retrieved from:
-> >>> +https://github.com/capnproto/capnproto/commit/e2a05a19e9dc51287e19cc9f11fd91449219e361]
-> >>> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >>> +---
-> >>> + c++/src/kj/mutex.c++ | 6 ++++++
-> >>> + 1 file changed, 6 insertions(+)
-> >>> +
-> >>> +diff --git a/c++/src/kj/mutex.c++ b/c++/src/kj/mutex.c++
-> >>> +index c81cead7b..e1594b117 100644
-> >>> +--- a/c++/src/kj/mutex.c++
-> >>> ++++ b/c++/src/kj/mutex.c++
-> >>> +@@ -39,7 +39,13 @@
-> >>> +
-> >>> + #ifndef SYS_futex
-> >>> + // Missing on Android/Bionic.
-> >>> ++#ifdef __NR_futex
-> >>> + #define SYS_futex __NR_futex
-> >>> ++#elif defined(SYS_futex_time64)
-> >>> ++#define SYS_futex SYS_futex_time64
-> >>> ++#else
-> >>> ++#error "Need working SYS_futex"
-> >>> ++#endif
-> >>> + #endif
-> >>> +
-> >>> + #ifndef FUTEX_WAIT_PRIVATE
-> >>> --
-> >>> 2.30.2
-> >>>
-> > Best Regards,
-> > 
-> > Fabrice
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Best
+> Bartek
+> On 02.07.2021 10:02, Maxim Kochetkov via buildroot wrote:
+> > Fix the following build failure with gcc 11:
+> >
+> > text/qbytearraymatcher.h:103:38: error: 'numeric_limits' is not a member of 'std'
+> >    103 |         const auto uchar_max = (std::numeric_limits<uchar>::max)();
+> >        |                                      ^~~~~~~~~~~~~~
+> >
+> > Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> > ---
+> >   .../qt5base/0007-Build-fixes-for-GCC-11.patch | 61 +++++++++++++++++++
+> >   1 file changed, 61 insertions(+)
+> >   create mode 100644 package/qt5/qt5base/0007-Build-fixes-for-GCC-11.patch
+> >
+> > diff --git a/package/qt5/qt5base/0007-Build-fixes-for-GCC-11.patch b/package/qt5/qt5base/0007-Build-fixes-for-GCC-11.patch
+> > new file mode 100644
+> > index 0000000000..0a7eda478e
+> > --- /dev/null
+> > +++ b/package/qt5/qt5base/0007-Build-fixes-for-GCC-11.patch
+> > @@ -0,0 +1,61 @@
+> > +From 7f4717b06cacc1a74d5c63dcb41b32e9e2224f4f Mon Sep 17 00:00:00 2001
+> > +From: Ville Voutilainen <ville.voutilainen@qt.io>
+> > +Date: Mon, 18 Jan 2021 09:58:17 +0200
+> > +Subject: [PATCH 1/1] Build fixes for GCC 11
+> > +
+> > +Task-number: QTBUG-89977
+> > +Change-Id: Ic1b7ddbffb8a0a00f8c621d09a868f1d94a52c21
+> > +Reviewed-by: Lars Knoll <lars.knoll@qt.io>
+> > +Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+> > +[Retrieved (and backported) from:
+> > +https://github.com/qt/qtbase/commit/813a928c7c3cf98670b6043149880ed5c955efb9]
+> > +Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> > +---
+> > + src/corelib/text/qbytearraymatcher.h     | 2 ++
+> > + src/corelib/tools/qsharedpointer_impl.h  | 3 ---
+> > + src/plugins/platforms/xcb/qxcbwindow.cpp | 2 +-
+> > + 3 files changed, 3 insertions(+), 4 deletions(-)
+> > +
+> > +diff --git a/src/corelib/text/qbytearraymatcher.h b/src/corelib/text/qbytearraymatcher.h
+> > +index 0eedfc1d20..f5f9bef7b8 100644
+> > +--- a/src/corelib/text/qbytearraymatcher.h
+> > ++++ b/src/corelib/text/qbytearraymatcher.h
+> > +@@ -42,6 +42,8 @@
+> > +
+> > + #include <QtCore/qbytearray.h>
+> > +
+> > ++#include <limits>
+> > ++
+> > + QT_BEGIN_NAMESPACE
+> > +
+> > +
+> > +diff --git a/src/corelib/tools/qsharedpointer_impl.h b/src/corelib/tools/qsharedpointer_impl.h
+> > +index 790c187cb9..4aee98af53 100644
+> > +--- a/src/corelib/tools/qsharedpointer_impl.h
+> > ++++ b/src/corelib/tools/qsharedpointer_impl.h
+> > +@@ -155,9 +155,6 @@ namespace QtSharedPointer {
+> > + #endif
+> > +         inline void checkQObjectShared(...) { }
+> > +         inline void setQObjectShared(...) { }
+> > +-
+> > +-        inline void operator delete(void *ptr) { ::operator delete(ptr); }
+> > +-        inline void operator delete(void *, void *) { }
+> > +     };
+> > +     // sizeof(ExternalRefCountData) = 12 (32-bit) / 16 (64-bit)
+> > +
+> > +diff --git a/src/plugins/platforms/xcb/qxcbwindow.cpp b/src/plugins/platforms/xcb/qxcbwindow.cpp
+> > +index 9e7e1a5572..f0866a90ac 100644
+> > +--- a/src/plugins/platforms/xcb/qxcbwindow.cpp
+> > ++++ b/src/plugins/platforms/xcb/qxcbwindow.cpp
+> > +@@ -698,7 +698,7 @@ void QXcbWindow::show()
+> > +         if (isTransient(window())) {
+> > +             const QWindow *tp = window()->transientParent();
+> > +             if (tp && tp->handle())
+> > +-                transientXcbParent = static_cast<const QXcbWindow *>(tp->handle())->winId();
+> > ++                transientXcbParent = tp->handle()->winId();
+> > +             // Default to client leader if there is no transient parent, else modal dialogs can
+> > +             // be hidden by their parents.
+> > +             if (!transientXcbParent)
+> > +--
+> > +2.31.1
+> > +  
