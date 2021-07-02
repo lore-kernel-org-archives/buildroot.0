@@ -1,50 +1,82 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  2 Jul 2021 21:25:48 +0200
-Subject: [Buildroot] [PATCH 2/2] package/suricata: security bump to version
- 6.0.3
-In-Reply-To: <20210702192548.956881-1-fontaine.fabrice@gmail.com>
-References: <20210702192548.956881-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210702192548.956881-2-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 2 Jul 2021 22:36:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gcc: fix libsanitizer in gcc
+ 11.1, 10.3 for linux 5.13
+In-Reply-To: <20210701084718.1788688-1-fido_max@inbox.ru>
+References: <20210701084718.1788688-1-fido_max@inbox.ru>
+Message-ID: <8c5393e4-4686-3186-8de9-85c35166e9ef@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Various security, performance, accuracy and stability issues have been
-fixed, including a critical evasion assigned CVE-2021-35063.
+Hello Maxim,
 
-https://forum.suricata.io/t/suricata-6-0-3-and-5-0-7-released/1489
+Le 01/07/2021 ? 10:47, Maxim Kochetkov via buildroot a ?crit?:
+> Starting from 5.13 Cyclades async mux support is dropped from linux kernel:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f76edd8f7ce06cdff2fe5b6b39a49644c684a161
+> 
+> But gcc's libsanitizer uses <linux/cyclades.h> header.
+> This issue is fixed by:
+> https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=745dae5923aba02982563481d75a21595df22ff8
+> 
+> Right now just gcc 9.4.0 has this commit and 8.4.0 is proposed to be deleted.
+> So we need to add this patch for 10.3 and 11.1 to fix build with linux kernel 5.13.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/suricata/suricata.hash | 2 +-
- package/suricata/suricata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Indeed, but can you use the patch that has been backported to releases/gcc-10
+stable branch after gcc 10.3 release:
 
-diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
-index 8395177811..74cc7435cb 100644
---- a/package/suricata/suricata.hash
-+++ b/package/suricata/suricata.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  5e4647a07cb31b5d6d0049972a45375c137de908a964a44e2d6d231fa3ad4b52  suricata-6.0.2.tar.gz
-+sha256  daf134bb2d7c980035e9ae60f7aaf313323a809340009f26e48110ccde81f602  suricata-6.0.3.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index a7a6e10c03..566243e688 100644
---- a/package/suricata/suricata.mk
-+++ b/package/suricata/suricata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SURICATA_VERSION = 6.0.2
-+SURICATA_VERSION = 6.0.3
- SURICATA_SITE = https://www.openinfosecfoundation.org/download
- SURICATA_LICENSE = GPL-2.0
- SURICATA_LICENSE_FILES = COPYING LICENSE
--- 
-2.30.2
+https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=a7e72b282177fbaa6a852324641c871313d326da
+
+Same for gcc-11:
+
+https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=2b40941d23b1570cdd90083b58fa0f66aa58c86e
+
+The patch from master branch doesn't apply cleanly, they are some "Hunk".
+
+> 
+> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> ---
+>  ...04-Remove-cyclades-from-libsanitizer.patch | 123 ++++++++++++++++++
+>  ...01-Remove-cyclades-from-libsanitizer.patch | 123 ++++++++++++++++++
+>  2 files changed, 246 insertions(+)
+>  create mode 100644 package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch
+>  create mode 100644 package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch
+> 
+> diff --git a/package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch b/package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch
+> new file mode 100644
+> index 0000000000..d686fd7cc5
+> --- /dev/null
+> +++ b/package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch
+> @@ -0,0 +1,123 @@
+> +From 745dae5923aba02982563481d75a21595df22ff8 Mon Sep 17 00:00:00 2001
+> +From: Tamar Christina <tamar.christina@arm.com>
+> +Date: Fri, 21 May 2021 10:30:59 +0100
+> +Subject: [PATCH] libsanitizer: Remove cyclades from libsanitizer
+> +
+> +The Linux kernel has removed the interface to cyclades from
+> +the latest kernel headers[1] due to them being orphaned for the
+> +past 13 years.
+> +
+> +libsanitizer uses this header when compiling against glibc, but
+> +glibcs itself doesn't seem to have any references to cyclades.
+> +
+> +Further more it seems that the driver is broken in the kernel and
+> +the firmware doesn't seem to be available anymore.
+> +
+> +As such since this is breaking the build of libsanitizer (and so the
+> +GCC bootstrap[2]) I propose to remove this.
+> +
+> +[1] https://lkml.org/lkml/2021/3/2/153
+> +[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100379
+> +
+> +(cherry picked from commit f7c5351552387bd43f6ca3631016d7f0dfe0f135)
+
+The upstream commit refer to a hash that come from llvm project, there is no
+such commit in gcc repository:
+
+https://github.com/llvm/llvm-project/commit/f7c5351552387bd43f6ca3631016d7f0dfe0f135
+
+Best regards,
+Romain
