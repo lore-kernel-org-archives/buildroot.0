@@ -1,45 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Jul 2021 22:32:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tpm2-tools: security bump to
- version 4.3.2
-In-Reply-To: <20210621202218.706458-1-fontaine.fabrice@gmail.com>
-References: <20210621202218.706458-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210703223250.1c0c1239@windsurf>
+Date: Sat, 3 Jul 2021 22:40:18 +0200
+Subject: [Buildroot] [git commit] package/openpgm: fix link for 32-bit x86
+Message-ID: <20210703201938.ADC3D8F054@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 21 Jun 2021 22:22:18 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=745d1a00230d87bff80578fbd044fbc0a5c03bf5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Fix CVE-2021-3565: A flaw was found in tpm2-tools in versions before
->   5.1.1 and before 4.3.2. tpm2_import used a fixed AES key for the inner
->   wrapper, potentially allowing a MITM attacker to unwrap the inner
->   portion and reveal the key being imported. The highest threat from
->   this vulnerability is to data confidentiality.
-> - LICENSE moved in doc directory since
->   https://github.com/tpm2-software/tpm2-tools/commit/23aa5dca660f596b2ad89542d5100bd4ef0c871a
->   and hash updated due to the following line added with
->   https://github.com/tpm2-software/tpm2-tools/commit/305011b2a7d091740fa01dbfbd27a48a76f670f7
->   Copyright 2019      Fraunhofer SIT sponsored by Infineon Technologies AG
-> - libuuid and wchar (for mbstate_t) are mandatory since version 4.2 and
->   https://github.com/tpm2-software/tpm2-tools/commit/eca77c1419617a8e2d6d8008bac716878b0c27ca
-> 
-> https://github.com/tpm2-software/tpm2-tools/blob/4.3.2/doc/CHANGELOG.md
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/tpm2-tools/Config.in       | 7 +++++--
->  package/tpm2-tools/tpm2-tools.hash | 4 ++--
->  package/tpm2-tools/tpm2-tools.mk   | 6 +++---
->  3 files changed, 10 insertions(+), 7 deletions(-)
+Add upstream patch fixing link with libpgm on build for x86 32-bit.
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/80254e61dc55bc07b16b3b66710946c71b9d53bb/
+http://autobuild.buildroot.net/results/7bce71db86df8ba204153e0ab5022fb5ace9a6e5/
+http://autobuild.buildroot.net/results/24a0aaff8f46953d015218a60da2c9856152eea3/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Alexander Lukichev <alexander.lukichev@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...pgm-checksum.c-fix-build-with-32-bits-MMX.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+
+diff --git a/package/openpgm/0002-openpgm-pgm-checksum.c-fix-build-with-32-bits-MMX.patch b/package/openpgm/0002-openpgm-pgm-checksum.c-fix-build-with-32-bits-MMX.patch
+new file mode 100644
+index 0000000000..a04dc7dba9
+--- /dev/null
++++ b/package/openpgm/0002-openpgm-pgm-checksum.c-fix-build-with-32-bits-MMX.patch
+@@ -0,0 +1,41 @@
++From b7fa865fa6b06d97d424c500fd1c4bc44c096359 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 1 Nov 2020 22:46:18 +0100
++Subject: [PATCH] openpgm/pgm/checksum.c: fix build with 32 bits MMX
++
++Build with i386-pentium-mmx or i686 is broken since version 5-3-128 and
++https://github.com/steve-o/openpgm/commit/b276dc15be5d4e6e1143b9de25d09f63f9c85135
++because _mm_cvtm64_si64 is undefined resulting in the following build
++failure for example on zeromq:
++
++/srv/storage/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/8.3.0/../../../../i586-buildroot-linux-musl/bin/ld: /srv/storage/autobuild/run/instance-3/output-1/host/i586-buildroot-linux-musl/sysroot/usr/lib32/libpgm-5.3.so.0: undefined reference to `_mm_cvtm64_si64'
++
++So use the fallback if __x86_64__ is not defined
++
++Fixes:
++ - http://autobuild.buildroot.org/results/01d9be37e8a743307128f53f41785654c9971e1a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit b7fa865fa6b06d97d424c500fd1c4bc44c096359
++
++ openpgm/pgm/checksum.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/openpgm/pgm/checksum.c b/openpgm/pgm/checksum.c
++index fef89bce237c..8d8dd3f32305 100644
++--- a/openpgm/pgm/checksum.c
+++++ b/openpgm/pgm/checksum.c
++@@ -948,7 +948,7 @@ do_csumcpy_mmx (
++ 
++ 		sum = _mm_add_pi32 (sum, lo);
++ 		sum = _mm_add_pi32 (sum, hi);
++-#if 1
+++#if defined(__x86_64__)
++ 		*(int64_t*)dst = _mm_cvtm64_si64 (tmp);
++ #else		
++ 		((int*)dst)[1] = _mm_cvtsi64_si32 (tmp);
++-- 
++2.30.2
++
