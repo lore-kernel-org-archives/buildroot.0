@@ -2,57 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 213FBC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:05:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7301C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:05:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DBCAE61050
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:05:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DBCAE61050
+	by mail.kernel.org (Postfix) with ESMTPS id A26A7610CC
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:05:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A26A7610CC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B490B842BE;
-	Wed,  4 Aug 2021 00:05:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 739B9404E3;
+	Wed,  4 Aug 2021 00:05:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yth9RAI-YoRB; Wed,  4 Aug 2021 00:05:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 204vOurlLqnn; Wed,  4 Aug 2021 00:05:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18CDE84158;
-	Wed,  4 Aug 2021 00:05:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 31F5B4052E;
+	Wed,  4 Aug 2021 00:05:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 328751BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 43C6C1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4EFA40E66
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7B4040E68
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sL4GuDFH1Jz6 for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
+ with ESMTP id 4sEGBpeYFzxk for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1D4BB40678
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CC47540647
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7238382926; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
+ id 256FD87B09; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 3 Jul 2021 23:31:55 +0200
+Date: Sat, 3 Jul 2021 23:11:56 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 61f6d0a8abf98d3e2565e19575b1b3d462e3a7ac
-X-Git-Newrev: 692852975bbce85d708007425a0e937f9b3a5364
+X-Git-Oldrev: 8bfdc2663de713776e35becc6a183ac529093b5c
+X-Git-Newrev: 7b1524beef11cddd66a39a195dab565cb4a7b317
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210959.7238382926@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/stm32mp157c_dk2: bump
- TF-A, Linux, U-Boot versions
+Message-Id: <20210803210959.256FD87B09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libgpg-error: bump to
+ version 1.42
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,51 +70,168 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=692852975bbce85d708007425a0e937f9b3a5364
+commit: https://git.buildroot.net/buildroot/commit/?id=7b1524beef11cddd66a39a195dab565cb4a7b317
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Drop patch (not needed since
+https://dev.gnupg.org/rE1fb90a7da186ee2ee098a666f6f3a35bb1720e59)
+
+https://dev.gnupg.org/T5194
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/stm32mp157c_dk2_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ .../0001-build-Fix-disable-threads.patch           | 39 ++++++++++++++++
+ ...01-configure.ac-fix-build-without-threads.patch | 54 ----------------------
+ package/libgpg-error/libgpg-error.hash             |  6 +--
+ package/libgpg-error/libgpg-error.mk               |  4 +-
+ 4 files changed, 43 insertions(+), 60 deletions(-)
 
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index 50d875749b..6fea63d427 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -1,11 +1,11 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.10"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-dk2.dtb"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
-@@ -25,7 +25,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+diff --git a/package/libgpg-error/0001-build-Fix-disable-threads.patch b/package/libgpg-error/0001-build-Fix-disable-threads.patch
+new file mode 100644
+index 0000000000..2d101aad9b
+--- /dev/null
++++ b/package/libgpg-error/0001-build-Fix-disable-threads.patch
+@@ -0,0 +1,39 @@
++From 220a427b4f997ef6af1b2d4e82ef1dc96e0cd6ff Mon Sep 17 00:00:00 2001
++From: NIIBE Yutaka <gniibe@fsij.org>
++Date: Mon, 21 Jun 2021 12:16:20 +0900
++Subject: [PATCH] build: Fix --disable-threads.
++
++* src/gen-lock-obj.sh: Fix generating '}}}'.
++
++--
++
++GnuPG-bug-id: 5495
++Reported-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Fixes-commit: 1fb90a7da186ee2ee098a666f6f3a35bb1720e59
++Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
++[Retrieved from:
++https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commit;h=220a427b4f997ef6af1b2d4e82ef1dc96e0cd6ff]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/gen-lock-obj.sh | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/gen-lock-obj.sh b/src/gen-lock-obj.sh
++index 258eec6..014667f 100755
++--- a/src/gen-lock-obj.sh
+++++ b/src/gen-lock-obj.sh
++@@ -121,10 +121,10 @@ while test "$i" -lt $ac_mtx_size; do
++     fi
++     i=$(( i + 1 ))
++ done
+++echo '}}}'
++ fi
++ 
++ cat <<'EOF'
++-}}}
++ ##
++ ## Local Variables:
++ ## mode: c
++-- 
++2.11.0
++
+diff --git a/package/libgpg-error/0001-configure.ac-fix-build-without-threads.patch b/package/libgpg-error/0001-configure.ac-fix-build-without-threads.patch
+deleted file mode 100644
+index 5f5147e0df..0000000000
+--- a/package/libgpg-error/0001-configure.ac-fix-build-without-threads.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From 77c89f62f106d88ef2b5963f4a13755c337c793d Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 15 Feb 2021 07:56:29 +0100
+-Subject: [PATCH] configure.ac: fix build without threads
+-
+-Cross-compilation of libgpg-error fails on toolchain without threads
+-since commit 988211d3d4c1f3d5cfa6b460210f65ab636763b5,
+-9ee011259f819a3cf50fe7019fa4366dbc437e0e and
+-50e62b36ea01ed25d12c443088b85d4f41a2b3e1
+-
+-Indeed, since that time, libgpg-error assumes that pthread.h is always
+-available resulting in the following error at configure time:
+-
+-checking for arm-unknown-linux-gnueabi-objdump... (cached) /tmp/instance-1/output-1/host/bin/arm-linux-objdump
+-conftest.c:1:10: fatal error: pthread.h: No such file or directory
+-    1 | #include <pthread.h>
+-      |          ^~~~~~~~~~~
+-compilation terminated.
+-configure: generated src/lock-obj-pub.native.h using arm-unknown-linux-gnueabi-objdump and gawk
+-checking whether to enable log_clock... no
+-
+-This error will in turn results in a build failure because
+-"Can't determine mutex size" is echoed by gen-lock-obj.sh:
+-
+-In file included from strsource-sym.c:27:
+-./gpg-error.h:1115:4: warning: missing terminating ' character
+- 1115 | Can't determine mutex size
+-      |    ^
+-
+-Full build log:
+-http://autobuild.buildroot.org/results/334/3344c96e5627a9327b0eabe0b27f34490bbabc0d/build-end.log
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://dev.gnupg.org/T5296]
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index b9a2a3e..15d9fdc 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -599,7 +599,7 @@ if test x$cross_compiling = xyes; then
+-   case $host in
+-     *-*-linux*)
+-     AC_CHECK_TOOL(OBJDUMP, [objdump])
+--    if test -n "$OBJDUMP"; then
+-+    if test -n "$OBJDUMP" -a x"$gl_use_threads" != xno; then
+-       lock_obj_h_generated=yes
+-       if test ! -d src; then mkdir src; fi
+-       LOCK_ABI_VERSION=1 host=$host host_alias=$host_alias \
+--- 
+-2.30.0
+-
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index 315c0965cf..4e124941cd 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
+@@ -1,10 +1,10 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  66d6270511a48bac0bf347330e7a12c62f3a1ab4  libgpg-error-1.41.tar.bz2
++sha1  5e620d71fc24d287a7ac2460b1d819074bb8b9bb  libgpg-error-1.42.tar.bz2
+ 
+ # Locally calculated after checking pgp signature
+-# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.41.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.42.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256  64b078b45ac3c3003d7e352a5e05318880a5778c42331ce1ef33d1a0d9922742  libgpg-error-1.41.tar.bz2
++sha256  fc07e70f6c615f8c4f590a8e37a9b8dd2e2ca1e9408f8e60459c67452b925e23  libgpg-error-1.42.tar.bz2
+ # Locally calculated
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 1b35e5c8f0..babcbdaded 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPG_ERROR_VERSION = 1.41
++LIBGPG_ERROR_VERSION = 1.42
+ LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
+ LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
+@@ -15,8 +15,6 @@ LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
+ LIBGPG_ERROR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ LIBGPG_ERROR_CONF_OPTS = --disable-tests \
+ 		--host=$(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG)
+-# We're patching configure.ac
+-LIBGPG_ERROR_AUTORECONF= YES
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ LIBGPG_ERROR_CONF_OPTS += --enable-threads
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
