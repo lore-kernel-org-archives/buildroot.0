@@ -1,47 +1,43 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  4 Jul 2021 00:18:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/findutils: bump to version 4.8.0
-Message-ID: <20210703221844.2129803-1-fontaine.fabrice@gmail.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Sun, 4 Jul 2021 10:24:27 +1200
+Subject: [Buildroot] [PATCH] package/syslog-ng: Bump to 3.32.1
+In-Reply-To: <20210703220538.40eb4b56@windsurf>
+References: <20210621081231.31335-1-judge.packham@gmail.com>
+ <20210703220538.40eb4b56@windsurf>
+Message-ID: <CAFOYHZD0JnV284EAU-f2ZN3ER34Cmx79Bv0FW-Z1Nv_sBt1P4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
+On Sun, 4 Jul 2021, 8:05 AM Thomas Petazzoni, <thomas.petazzoni@bootlin.com>
+wrote:
 
-https://git.savannah.gnu.org/cgit/findutils.git/tree/NEWS?h=v4.8.0
+> On Mon, 21 Jun 2021 20:12:31 +1200
+> Chris Packham <judge.packham@gmail.com> wrote:
+>
+> > https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-3.32.1
+> >
+> > Signed-off-by: Chris Packham <judge.packham@gmail.com>
+> > ---
+> >  package/syslog-ng/syslog-ng.hash | 2 +-
+> >  package/syslog-ng/syslog-ng.mk   | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> I think you forgot the syslog-ng.conf update, so I did that as well,
+> and applied your patch. Thanks!
+>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/findutils/findutils.hash | 4 ++--
- package/findutils/findutils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Yeah I did. Thanks for catching that.
 
-diff --git a/package/findutils/findutils.hash b/package/findutils/findutils.hash
-index 392c62d254..26dbe59181 100644
---- a/package/findutils/findutils.hash
-+++ b/package/findutils/findutils.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	c5fefbdf9858f7e4feb86f036e1247a54c79fc2d8e4b7064d5aaa1f47dfa789a	findutils-4.7.0.tar.xz
-+sha256  57127b7e97d91282c6ace556378d5455a9509898297e46e10443016ea1387164  findutils-4.8.0.tar.xz
- 
- # Hash for license file
--sha256	3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986	COPYING
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/findutils/findutils.mk b/package/findutils/findutils.mk
-index a16f827166..918591c53f 100644
---- a/package/findutils/findutils.mk
-+++ b/package/findutils/findutils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FINDUTILS_VERSION = 4.7.0
-+FINDUTILS_VERSION = 4.8.0
- FINDUTILS_SOURCE = findutils-$(FINDUTILS_VERSION).tar.xz
- FINDUTILS_SITE = $(BR2_GNU_MIRROR)/findutils
- FINDUTILS_LICENSE = GPL-3.0+
--- 
-2.30.2
+
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210704/c33fea04/attachment.html>
