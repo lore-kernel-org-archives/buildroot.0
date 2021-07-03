@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Jul 2021 21:56:44 +0200
-Subject: [Buildroot] [git commit] package/php-amqp: bump version to 1.10.2
-Message-ID: <20210703192906.6E6FB8F175@busybox.osuosl.org>
+Date: Sat, 3 Jul 2021 21:56:50 +0200
+Subject: [Buildroot] [git commit] package/php-yaml: bump version to 2.2.1
+Message-ID: <20210703192906.BC01D8F175@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdeaec513cc374a655b97d1f6bdb24bec0e74be9
+commit: https://git.buildroot.net/buildroot/commit/?id=d2ab6c4b366417ed5cd72b701e5a538ed1cf8130
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php-amqp/php-amqp.hash | 4 ++--
- package/php-amqp/php-amqp.mk   | 2 +-
+ package/php-yaml/php-yaml.hash | 4 ++--
+ package/php-yaml/php-yaml.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/php-amqp/php-amqp.hash b/package/php-amqp/php-amqp.hash
-index c061efabb9..bce8ac0c9a 100644
---- a/package/php-amqp/php-amqp.hash
-+++ b/package/php-amqp/php-amqp.hash
+diff --git a/package/php-yaml/php-yaml.hash b/package/php-yaml/php-yaml.hash
+index c29c3e66ad..e4f31cdad9 100644
+--- a/package/php-yaml/php-yaml.hash
++++ b/package/php-yaml/php-yaml.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256 b66b8b8264749cb7a69ae4d09665dad1559b6c4f01430206c8e4187bcd8c782d  amqp-1.9.4.tgz
--sha256 ecd004e9ae3fcf54896b562d5e8008e36041f2620076effd58e5f4187299cee8  LICENSE
-+sha256  0ebc61052eb12406dddf5eabfe8749a12d52c566816b8aab04fb9916d0c26ed2  amqp-1.10.2.tgz
-+sha256  ecd004e9ae3fcf54896b562d5e8008e36041f2620076effd58e5f4187299cee8  LICENSE
-diff --git a/package/php-amqp/php-amqp.mk b/package/php-amqp/php-amqp.mk
-index c808ecdbd6..981f8274a9 100644
---- a/package/php-amqp/php-amqp.mk
-+++ b/package/php-amqp/php-amqp.mk
+-sha256 9786b0386e648f12cc18a038358bd57bee4906e350a2e9ab776d6a5f18fc6680  yaml-2.0.4.tgz
+-sha256 68d9700294396c72089bfc7bf38a5b3654a53ae415f3bd37768848c14e86f338  LICENSE
++sha256  e17ad04e752e25fd099bddd2df9d26dfef183c8d00c4179bc9d7a2e1c97d7819  yaml-2.2.1.tgz
++sha256  68d9700294396c72089bfc7bf38a5b3654a53ae415f3bd37768848c14e86f338  LICENSE
+diff --git a/package/php-yaml/php-yaml.mk b/package/php-yaml/php-yaml.mk
+index e23d897978..ba16c9ac62 100644
+--- a/package/php-yaml/php-yaml.mk
++++ b/package/php-yaml/php-yaml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_AMQP_VERSION = 1.9.4
-+PHP_AMQP_VERSION = 1.10.2
- PHP_AMQP_SOURCE = amqp-$(PHP_AMQP_VERSION).tgz
- PHP_AMQP_SITE = https://pecl.php.net/get
- PHP_AMQP_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-PHP_YAML_VERSION = 2.0.4
++PHP_YAML_VERSION = 2.2.1
+ PHP_YAML_SOURCE = yaml-$(PHP_YAML_VERSION).tgz
+ PHP_YAML_SITE = https://pecl.php.net/get
+ PHP_YAML_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
