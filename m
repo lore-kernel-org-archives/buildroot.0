@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5662C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:53:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D49DC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:53:55 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A042260724
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:53:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A042260724
+	by mail.kernel.org (Postfix) with ESMTPS id 4E10B60724
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 21:53:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4E10B60724
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 73EBC40179;
-	Tue,  3 Aug 2021 21:53:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1FE44400C3;
+	Tue,  3 Aug 2021 21:53:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HnptmMy9m4Dd; Tue,  3 Aug 2021 21:53:40 +0000 (UTC)
+	with ESMTP id iPoFl0bQkHxS; Tue,  3 Aug 2021 21:53:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FEDA400CE;
-	Tue,  3 Aug 2021 21:53:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 282601BF9AA
+	by smtp2.osuosl.org (Postfix) with ESMTP id D8FC4404A8;
+	Tue,  3 Aug 2021 21:53:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6532B1BF349
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4D2AC8354D
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97FA040249
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3FvMqpklfBvG for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uUjob0dqubHf for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A755383AC1
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF15A40235
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id F22308B3ED; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
+ id 4501B87B09; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 15 Jul 2021 21:45:19 +0200
+Date: Sat, 3 Jul 2021 21:56:47 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1f77fce9664b9bc866bc4d4dd47eb03a00e630be
-X-Git-Newrev: c56b529931247fd3b73740b51c5708bdb4391921
+X-Git-Oldrev: 8f891c2e41616bacf215c49329146ef9981ea4ca
+X-Git-Newrev: a4b5622a34ce89eae23005801ff60833145b60ac
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211001.F22308B3ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: Change my name
+Message-Id: <20210803210958.4501B87B09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/php-memcached: bump
+ version to 3.1.5
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,50 +65,49 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3617143339286123599=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
---===============3617143339286123599==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=c56b529931247fd3b73740b51c5708bdb4391921
+commit: https://git.buildroot.net/buildroot/commit/?id=a4b5622a34ce89eae23005801ff60833145b60ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-And remove myself from freescale related parts
-
-Signed-off-by: André Zwing <nerv@dawncrow.de>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ package/php-memcached/php-memcached.hash | 8 ++++----
+ package/php-memcached/php-memcached.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2a69f88299..58c11543b7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -124,10 +124,7 @@ F:	package/python-docopt/
- N:	Anders Darander <anders@chargestorm.se>
- F:	package/ktap/
+diff --git a/package/php-memcached/php-memcached.hash b/package/php-memcached/php-memcached.hash
+index dd294f466a..7e918c17f6 100644
+--- a/package/php-memcached/php-memcached.hash
++++ b/package/php-memcached/php-memcached.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 20786213ff92cd7ebdb0d0ac10dde1e9580a2f84296618b666654fd76ea307d4  memcached-3.1.3.tgz
+-sha256 24e8e3a9529204ead9422fa17cf3ddd75d292a8763b87fdb20591964f2e6ebe0  LICENSE
+-sha256 a453a7a272fbd24105b39959f76996d50dad80b22d1c310f6c67f74f62ae4054  fastlz/LICENSE
+-sha256 bba8cb50c660842c5ca459c5004395bdef8f01c1b64f97a9978f1053f173cb82  g_fmt.h
++sha256  b288e45f839593e16c4d8508b241de51a86df4f7322153e6becb9e1c819021fd  memcached-3.1.5.tgz
++sha256  24e8e3a9529204ead9422fa17cf3ddd75d292a8763b87fdb20591964f2e6ebe0  LICENSE
++sha256  a453a7a272fbd24105b39959f76996d50dad80b22d1c310f6c67f74f62ae4054  fastlz/LICENSE
++sha256  bba8cb50c660842c5ca459c5004395bdef8f01c1b64f97a9978f1053f173cb82  g_fmt.h
+diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
+index 4607d099f3..068fbb786b 100644
+--- a/package/php-memcached/php-memcached.mk
++++ b/package/php-memcached/php-memcached.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--N:	André Hentschel <nerv@dawncrow.de>
--F:	board/freescale/imx8qxpmek/
--F:	configs/freescale_imx8qxpmek_defconfig
--F:	package/freescale-imx/imx-sc-firmware/
-+N:	André Zwing <nerv@dawncrow.de>
- F:	package/libkrb5/
- F:	package/openal/
- F:	package/p7zip/
-
---===============3617143339286123599==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-PHP_MEMCACHED_VERSION = 3.1.3
++PHP_MEMCACHED_VERSION = 3.1.5
+ PHP_MEMCACHED_SOURCE = memcached-$(PHP_MEMCACHED_VERSION).tgz
+ PHP_MEMCACHED_SITE = https://pecl.php.net/get
+ PHP_MEMCACHED_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
-
---===============3617143339286123599==--
