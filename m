@@ -2,57 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 505A6C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:04:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BD75C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:04:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 14E9261050
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:04:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 14E9261050
+	by mail.kernel.org (Postfix) with ESMTPS id 61DD5610CC
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:04:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 61DD5610CC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E6C0F83A43;
-	Wed,  4 Aug 2021 00:04:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F7BF415AC;
+	Wed,  4 Aug 2021 00:04:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xuBO8Om4Ti_a; Wed,  4 Aug 2021 00:04:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jM8uCXvv7GMX; Wed,  4 Aug 2021 00:04:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B4C383D36;
-	Wed,  4 Aug 2021 00:04:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89A684069B;
+	Wed,  4 Aug 2021 00:04:53 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1B3B71BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:14:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5E3DB1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:14:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 555E640699
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5562A406A0
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fTkOHurj853Y for <buildroot@lists.busybox.net>;
+ with ESMTP id 0bx_tYUYf6e1 for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D447A4069D
+ by smtp2.osuosl.org (Postfix) with ESMTP id B656A4069B
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3423182926; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
+ id 171B882926; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 3 Jul 2021 23:12:05 +0200
+Date: Sat, 3 Jul 2021 22:59:27 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7b1524beef11cddd66a39a195dab565cb4a7b317
-X-Git-Newrev: 878b57ca3b80d63106ec1398932d2e0ebd18c0c7
+X-Git-Oldrev: 42a58a9bcb0789d52742f36e15f773514fa6b40c
+X-Git-Newrev: 8bfdc2663de713776e35becc6a183ac529093b5c
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210959.3423182926@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libgcrypt: security
- bump to version 1.9.3
+Message-Id: <20210803210959.171B882926@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/intel-mediasdk: bump
+ version to 21.2.2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,54 +70,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=878b57ca3b80d63106ec1398932d2e0ebd18c0c7
+commit: https://git.buildroot.net/buildroot/commit/?id=8bfdc2663de713776e35becc6a183ac529093b5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix CVE-2021-33560: Libgcrypt before 1.8.8 and 1.9.x before 1.9.3
-mishandles ElGamal encryption because it lacks exponent blinding to
-address a side-channel attack against mpi_powm, and the window size is
-not chosen appropriately. (There is also an interoperability problem
-because the selection of the k integer value does not properly consider
-the differences between basic ElGamal encryption and generalized ElGamal
-encryption.) This, for example, affects use of ElGamal in OpenPGP.
+Removed dependency to X.org following changes in intel-mediadriver.
+Reformatted hashes.
 
-https://dev.gnupg.org/T5305
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgcrypt/libgcrypt.hash | 6 +++---
- package/libgcrypt/libgcrypt.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/intel-mediasdk/Config.in           | 5 -----
+ package/intel-mediasdk/intel-mediasdk.hash | 4 ++--
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 978ec8b294..26ec492e10 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,7 +1,7 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  29bd5d0a8f674d4521167dd518ef99b26d1e8f27  libgcrypt-1.9.2.tar.bz2
-+sha1  6b18f453fee677078586279d96fb88e5df7b3f35  libgcrypt-1.9.3.tar.bz2
- # Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.2.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.3.tar.bz2.sig
- # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256  b2c10d091513b271e47177274607b1ffba3d95b188bbfa8797f948aec9053c5a  libgcrypt-1.9.2.tar.bz2
-+sha256  97ebe4f94e2f7e35b752194ce15a0f3c66324e0ff6af26659bbfb5ff2ec328fd  libgcrypt-1.9.3.tar.bz2
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 9c1cd32acb..26be5d2f49 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
+diff --git a/package/intel-mediasdk/Config.in b/package/intel-mediasdk/Config.in
+index 05293d7604..c1f609e3f8 100644
+--- a/package/intel-mediasdk/Config.in
++++ b/package/intel-mediasdk/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_INTEL_MEDIASDK
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # intel-mediadriver
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # intel-mediadriver
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # intel-mediadriver
+-	depends on BR2_PACKAGE_XORG7  # intel-mediadriver
+ 	select BR2_PACKAGE_INTEL_MEDIADRIVER
+ 	select BR2_PACKAGE_LIBDRM_INTEL
+ 	help
+@@ -21,10 +20,6 @@ config BR2_PACKAGE_INTEL_MEDIASDK
+ 
+ 	  http://mediasdk.intel.com/
+ 
+-comment "intel-mediasdk needs X.org"
+-	depends on BR2_x86_64 && BR2_TOOLCHAIN_HAS_SYNC_1
+-	depends on !BR2_PACKAGE_XORG7
+-
+ comment "intel-mediasdk needs a toolchain w/ dynamic library, C++, NPTL"
+ 	depends on BR2_x86_64 && BR2_TOOLCHAIN_HAS_SYNC_1
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index 103c8bb52d..27cfdda08d 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 289a40ffe73dc291461d97edf452bdc622f76e52666483fd1eb4f131d2921cd1  intel-mediasdk-19.4.0.tar.gz
+-sha256 dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
++sha256  f7750bd3a307d796e71a3d4ebb16a730b2e9364669513e110e9ec59af159b4cd  intel-mediasdk-21.2.2.tar.gz
++sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index 5467c96380..c3412d622d 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGCRYPT_VERSION = 1.9.2
-+LIBGCRYPT_VERSION = 1.9.3
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+-INTEL_MEDIASDK_VERSION = 19.4.0
++INTEL_MEDIASDK_VERSION = 21.2.2
+ INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
