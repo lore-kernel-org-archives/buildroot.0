@@ -1,32 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat,  3 Jul 2021 21:40:00 +0200
-Subject: [Buildroot] [PATCH 2/2] Makefile: document the <pkg>-reinstall
- target
-In-Reply-To: <20210703194001.693553-1-thomas.petazzoni@bootlin.com>
-References: <20210703194001.693553-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210703194001.693553-2-thomas.petazzoni@bootlin.com>
+Date: Sat, 3 Jul 2021 21:56:44 +0200
+Subject: [Buildroot] [git commit] package/php-amqp: bump version to 1.10.2
+Message-ID: <20210703192906.6E6FB8F175@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=fdeaec513cc374a655b97d1f6bdb24bec0e74be9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ package/php-amqp/php-amqp.hash | 4 ++--
+ package/php-amqp/php-amqp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 472af5a318..74c238cb20 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1151,6 +1151,7 @@ help:
- 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
- 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
- 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
-+	@echo '  <pkg>-reinstall        - Restart the build from the install step'
- 	$(foreach p,$(HELP_PACKAGES), \
- 		@echo $(sep) \
- 		@echo '$($(p)_NAME):' $(sep) \
--- 
-2.31.1
+diff --git a/package/php-amqp/php-amqp.hash b/package/php-amqp/php-amqp.hash
+index c061efabb9..bce8ac0c9a 100644
+--- a/package/php-amqp/php-amqp.hash
++++ b/package/php-amqp/php-amqp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b66b8b8264749cb7a69ae4d09665dad1559b6c4f01430206c8e4187bcd8c782d  amqp-1.9.4.tgz
+-sha256 ecd004e9ae3fcf54896b562d5e8008e36041f2620076effd58e5f4187299cee8  LICENSE
++sha256  0ebc61052eb12406dddf5eabfe8749a12d52c566816b8aab04fb9916d0c26ed2  amqp-1.10.2.tgz
++sha256  ecd004e9ae3fcf54896b562d5e8008e36041f2620076effd58e5f4187299cee8  LICENSE
+diff --git a/package/php-amqp/php-amqp.mk b/package/php-amqp/php-amqp.mk
+index c808ecdbd6..981f8274a9 100644
+--- a/package/php-amqp/php-amqp.mk
++++ b/package/php-amqp/php-amqp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_AMQP_VERSION = 1.9.4
++PHP_AMQP_VERSION = 1.10.2
+ PHP_AMQP_SOURCE = amqp-$(PHP_AMQP_VERSION).tgz
+ PHP_AMQP_SITE = https://pecl.php.net/get
+ PHP_AMQP_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
