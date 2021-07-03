@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78164C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:21:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D54DC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:21:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3D96E600EF
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:21:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3D96E600EF
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 1E3E860F93
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:21:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1E3E860F93
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 098E740539;
-	Tue,  3 Aug 2021 23:21:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB91C60A66;
+	Tue,  3 Aug 2021 23:21:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nARGtkeepC6K; Tue,  3 Aug 2021 23:21:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PfKwCoIt9WAf; Tue,  3 Aug 2021 23:21:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B521B405A8;
-	Tue,  3 Aug 2021 23:21:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4946360A3B;
+	Tue,  3 Aug 2021 23:21:32 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 99C551BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:14:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1B8991BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93D3C40670
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8DC6E40E73
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2welKHqDCykB for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
+ with ESMTP id 2gs83HmGGsk0 for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99BEB40608
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 723DF40660
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id F0D09860D3; Tue,  3 Aug 2021 21:09:56 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id C75AB86A84; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Jun 2021 11:50:01 +0200
+Date: Sat, 3 Jul 2021 23:37:44 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 11fffded3c575839504d19d14803840901985b67
-X-Git-Newrev: e7f0408f496fbbfac8663c76d308b9f691e19e4a
+X-Git-Oldrev: 787eb6901a3c8777a484dca9b558486f3ca0e1b9
+X-Git-Newrev: 3d86f7f14157895801b7279ac49fa98ad8d12d19
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210956.F0D09860D3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/tests: fix squashfs
- test
+Message-Id: <20210803210959.C75AB86A84@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rpi-userland: bump
+ version to 97bc818
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,78 +70,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7f0408f496fbbfac8663c76d308b9f691e19e4a
+commit: https://git.buildroot.net/buildroot/commit/?id=3d86f7f14157895801b7279ac49fa98ad8d12d19
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 3cf2782906d5 (support/testing/infra/emulator.py: update pre-built
-kernels) bumped the default kernels used by the testing infra.
-
-However, the newer armv7 kernel (at least) no longer has support for
-lz4-compressed squashfs filesystems.
-
-This breaks the squashfs test:
-
-    Filesystem uses "lz4" compression. This is not supported
-    List of all partitions:
-    1f00          131072 mtdblock0
-     (driver?)
-    1f01           32768 mtdblock1
-     (driver?)
-    b300            2048 mmcblk0
-     driver: mmcblk
-    No filesystem could mount root, tried:
-     squashfs
-
-    Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(179,0)
-
-Updating the kernel again is a little bit cumbersome, while fixing the
-actual test is relatively trivial, so this is what we do: we switch
-over to lzo, which is supported by the new kernel:
-
-    # zcat /proc/config.gz |grep SQUA
-    CONFIG_SQUASHFS=y
-    CONFIG_SQUASHFS_ZLIB=y
-    # CONFIG_SQUASHFS_LZ4 is not set
-    CONFIG_SQUASHFS_LZO=y
-    # CONFIG_SQUASHFS_XZ is not set
-
-While at it, also drop the superfluous line disabling gzip compression:
-it is part of a choice, so enabling one (lzo here) forcibly disables the
-others (of which gzip).
-
-Fixes: 3cf2782906d5cc05a3966c25518d2ce01f11afc8
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/fs/test_squashfs.py | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/rpi-userland/rpi-userland.hash | 2 +-
+ package/rpi-userland/rpi-userland.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
-index 745f93ee55..a914f5aac7 100644
---- a/support/testing/tests/fs/test_squashfs.py
-+++ b/support/testing/tests/fs/test_squashfs.py
-@@ -7,8 +7,7 @@ class TestSquashfs(infra.basetest.BRTest):
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-         """
-         BR2_TARGET_ROOTFS_SQUASHFS=y
--        # BR2_TARGET_ROOTFS_SQUASHFS4_GZIP is not set
--        BR2_TARGET_ROOTFS_SQUASHFS4_LZ4=y
-+        BR2_TARGET_ROOTFS_SQUASHFS4_LZO=y
-         # BR2_TARGET_ROOTFS_TAR is not set
-         """
+diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
+index 91f1f0a964..4a0a8cb9d0 100644
+--- a/package/rpi-userland/rpi-userland.hash
++++ b/package/rpi-userland/rpi-userland.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  61b5c22789bf3d7e2725588529bc417275be47071b76e701673ea26963c20328  rpi-userland-45a0022ac64b4d0788def3c5230c972430f6fc23.tar.gz
++sha256  d67def03931215f41b741aed5a3a1bc2bd62fa33f5cc14692e9a4d65f2e0ea27  rpi-userland-97bc8180ad682b004ea224d1db7b8e108eda4397.tar.gz
+ sha256  bee6f1249175683d8610651706e1aa7dffcbfd3f9c4c05bc1e5ab34f313c2db5  LICENCE
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 4e57fbadbf..4f249d7bb8 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -18,7 +17,7 @@ class TestSquashfs(infra.basetest.BRTest):
-         out = out.splitlines()
-         self.assertEqual(out[0],
-                          "Found a valid SQUASHFS 4:0 superblock on images/rootfs.squashfs.")
--        self.assertEqual(out[3], "Compression lz4")
-+        self.assertEqual(out[3], "Compression lzo")
- 
-         img = os.path.join(self.builddir, "images", "rootfs.squashfs")
-         infra.img_round_power2(img)
+-RPI_USERLAND_VERSION = 45a0022ac64b4d0788def3c5230c972430f6fc23
++RPI_USERLAND_VERSION = 97bc8180ad682b004ea224d1db7b8e108eda4397
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3-Clause
+ RPI_USERLAND_LICENSE_FILES = LICENCE
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
