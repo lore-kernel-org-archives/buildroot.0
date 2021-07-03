@@ -1,51 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Jul 2021 22:58:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/postgis: bump version to 3.1.2
-In-Reply-To: <20210623043120.11900-1-fido_max@inbox.ru>
-References: <20210623043120.11900-1-fido_max@inbox.ru>
-Message-ID: <20210703225803.0431fa60@windsurf>
+Date: Sat, 3 Jul 2021 22:58:29 +0200
+Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
+ 21.2.1
+Message-ID: <20210703202716.9A5E38870F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 23 Jun 2021 07:31:20 +0300
-Maxim Kochetkov via buildroot <buildroot@busybox.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=534f4d6c68d80ca53bb8d19216fae2d1ecb1b2ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> PostGIS 3.1.2
-> 2021/05/21
-> 
->  * Bug Fixes
-> 
->   - #4871, TopoGeometry::geometry cast returns NULL for empty
->            TopoGeometry objects (Sandro Santilli)
->   - #4826, postgis_tiger_geocoder Better answers when no zip is provided
->            (Regina Obe)
->   - #4817, handle more complex compound coordinate dystems (Paul Ramsey)
->   - #4842, Only do axis flips on CRS that have a "Lat" as the first column (Paul Ramsey)
->   - Support recent Proj versions that have removed pj_get_release (Paul Ramsey)
->   - #4835, Adjust tolerance for geodetic calculations (Paul Ramsey)
->   - #4840, Improper conversion of negative geographic azimuth to positive (Paul Ramsey)
->   - #4853, DBSCAN cluster not formed when recordset length equal to minPoints (Dan Baston)
->   - #4863, Update bboxes after scale/affine coordinate changes (Paul Ramsey)
->   - #4876, Fix raster issues related to PostgreSQL 14 tablefunc changes
->            (Paul Ramsey, Regina Obe)
->   - #4877, mingw64 PostGIS / PostgreSQL 14 compile (Regina Obe, Tom Lane)
->   - #4838, Update to support Tiger 2020 (Regina Obe)
->   - #4890, Change Proj cache lifetime to last as long as connection (Paul Ramsey)
->   - #4845, Add Pg14 build support (Paul Ramsey)
-> 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-> ---
->  package/postgis/postgis.hash | 2 +-
->  package/postgis/postgis.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Added patch to remove hardening-related flags.
 
-Applied to master, thanks.
+Updated license hash due to upstream commit
+https://github.com/intel/gmmlib/commit/9253eb8b949515d2a5030f99163a35567fe81838
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Drop-hardening-related-flags.patch        | 28 ++++++++++++++++++++++
+ package/intel-gmmlib/intel-gmmlib.hash             |  4 ++--
+ package/intel-gmmlib/intel-gmmlib.mk               |  2 +-
+ 3 files changed, 31 insertions(+), 3 deletions(-)
+
+diff --git a/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch b/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
+new file mode 100644
+index 0000000000..581afd9066
+--- /dev/null
++++ b/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
+@@ -0,0 +1,28 @@
++From 1528980ee15e9589a7e27ec6d12a33cd8aab57b4 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Tue, 8 Jun 2021 07:51:40 +0200
++Subject: [PATCH] Drop hardening-related flags
++
++These will be set by Buildroot depending on toolchain capabilities and
++global Buildroot options.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ Source/GmmLib/Linux.cmake | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/Source/GmmLib/Linux.cmake b/Source/GmmLib/Linux.cmake
++index 1a09bc4..b28fc1b 100644
++--- a/Source/GmmLib/Linux.cmake
+++++ b/Source/GmmLib/Linux.cmake
++@@ -62,7 +62,6 @@ SET (GMMLIB_COMPILER_FLAGS_COMMON
++     -DUSE_SSE3
++     -DUSE_SSSE3
++     # Other common flags
++-    -fstack-protector
++     -fdata-sections
++     -ffunction-sections
++     -fmessage-length=0
++-- 
++2.29.2
++
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index 1e8baba6c7..2f50646677 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 bb874b41c499abb8f6253b1834e93a02ed9744de71f2503ee9cd4100af7c1860  intel-gmmlib-19.4.1.tar.gz
+-sha256 b61d639c5d84ec710ffcf5600ac92f8a4ace66670c1f9bd921f3bde671d36033  LICENSE.md
++sha256  912cd86e4cb564b6fa549d69a28b72b9cdcb5a3eab9320955ed70ac37381fc2f  intel-gmmlib-21.2.1.tar.gz
++sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 517fc09131..451eec7287 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_GMMLIB_VERSION = 19.4.1
++INTEL_GMMLIB_VERSION = 21.2.1
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
