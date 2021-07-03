@@ -2,58 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70B7DC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:02:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D04E0C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:02:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 39927610CC
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:02:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 39927610CC
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 77BF16103C
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:02:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 77BF16103C
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0EC71842E5;
-	Wed,  4 Aug 2021 00:02:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C855423A0;
+	Wed,  4 Aug 2021 00:02:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1t3mbuiI4yKP; Wed,  4 Aug 2021 00:02:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 55XJ03AJ0gfg; Wed,  4 Aug 2021 00:02:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 477AD842B4;
-	Wed,  4 Aug 2021 00:02:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9EB3142374;
+	Wed,  4 Aug 2021 00:02:49 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EAEC61BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:14:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4E58F1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:14:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CADF74068B
+ by smtp2.osuosl.org (Postfix) with ESMTP id E0EA640E4A
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l0DsbTwPXrot for <buildroot@lists.busybox.net>;
+ with ESMTP id EzrUli-C2gGI for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A37D40688
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB8EF4068C
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id B50B5860D3; Tue,  3 Aug 2021 21:09:57 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 2BE97860D3; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 29 Jun 2021 22:25:44 +0200
+Date: Sat, 3 Jul 2021 21:56:45 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9265f1e8ac21bf867edb22710e4602192e479c84
-X-Git-Newrev: 7fe6b75b590edcdff5f0284bd91c35624f3e7eeb
+X-Git-Oldrev: fdeaec513cc374a655b97d1f6bdb24bec0e74be9
+X-Git-Newrev: 20ecd9c94222ef20b7804084acefb472b8e5deaf
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210957.B50B5860D3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/erofs-utils: bump
- version to 1.3
+Message-Id: <20210803210958.2BE97860D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/php-gnupg: bump
+ version to 1.5.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,82 +70,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fe6b75b590edcdff5f0284bd91c35624f3e7eeb
+commit: https://git.buildroot.net/buildroot/commit/?id=20ecd9c94222ef20b7804084acefb472b8e5deaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- new upstream version (mainly add big pcluster support);
-- add 0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch [1].
+Other changes:
+  - Change --with-gnupg=$(STAGING_DIR)/usr/include to
+  --with-gnupg=$(STAGING_DIR)/usr as the make system appends /include to the
+    gnupgp path now.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/patch/?id=7ab34000c672adca90388a8fcb1f70a7d391d35c
-
-Signed-off-by: Gao Xiang <hsiangkao@aol.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-manpage-only-install-erofsfuse.1-with-th.patch | 32 ++++++++++++++++++++++
- package/erofs-utils/erofs-utils.hash               |  2 +-
- package/erofs-utils/erofs-utils.mk                 |  2 +-
- 3 files changed, 34 insertions(+), 2 deletions(-)
+ package/php-gnupg/php-gnupg.hash | 2 +-
+ package/php-gnupg/php-gnupg.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch b/package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch
-new file mode 100644
-index 0000000000..0aa99d5324
---- /dev/null
-+++ b/package/erofs-utils/0001-erofs-utils-manpage-only-install-erofsfuse.1-with-th.patch
-@@ -0,0 +1,32 @@
-+From 7ab34000c672adca90388a8fcb1f70a7d391d35c Mon Sep 17 00:00:00 2001
-+From: David Michael <fedora.dm0@gmail.com>
-+Date: Thu, 3 Jun 2021 16:18:57 -0400
-+Subject: [PATCH] erofs-utils: manpage: only install erofsfuse.1 with the
-+ command
-+
-+Link: https://lore.kernel.org/r/87lf7q3dn2.fsf@gmail.com
-+Reviewed-by: Gao Xiang <xiang@kernel.org>
-+Signed-off-by: David Michael <fedora.dm0@gmail.com>
-+Signed-off-by: Gao Xiang <xiang@kernel.org>
-+---
-+ man/Makefile.am | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/man/Makefile.am b/man/Makefile.am
-+index ffcf6f81c255..0df947b6fbf7 100644
-+--- a/man/Makefile.am
-++++ b/man/Makefile.am
-+@@ -1,5 +1,9 @@
-+ # SPDX-License-Identifier: GPL-2.0+
-+ # Makefile.am
-+ 
-+-dist_man_MANS = mkfs.erofs.1 erofsfuse.1
-++dist_man_MANS = mkfs.erofs.1
-+ 
-++EXTRA_DIST = erofsfuse.1
-++if ENABLE_FUSE
-++man_MANS = erofsfuse.1
-++endif
-+-- 
-+2.20.1
-+
-diff --git a/package/erofs-utils/erofs-utils.hash b/package/erofs-utils/erofs-utils.hash
-index 0de52d28a9..8bbb088568 100644
---- a/package/erofs-utils/erofs-utils.hash
-+++ b/package/erofs-utils/erofs-utils.hash
+diff --git a/package/php-gnupg/php-gnupg.hash b/package/php-gnupg/php-gnupg.hash
+index 8d142cdaaf..99ffe87f46 100644
+--- a/package/php-gnupg/php-gnupg.hash
++++ b/package/php-gnupg/php-gnupg.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  6b2ea15c3b092bd9a3abd966f78bc01c6caacb94022643ff34cf69893ee04e84  erofs-utils-1.2.1.tar.gz
-+sha256  132635740039bbe76d743aea72378bfae30dbf034e123929f5d794198d4c0b12  erofs-utils-1.3.tar.gz
- sha256  feee3b3157dcdf78d4f50edefbd5dd7adf8b6d52c11bfaaa746a85a373256713  COPYING
-diff --git a/package/erofs-utils/erofs-utils.mk b/package/erofs-utils/erofs-utils.mk
-index 5d547148b2..e35470b02e 100644
---- a/package/erofs-utils/erofs-utils.mk
-+++ b/package/erofs-utils/erofs-utils.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256  35e16bee11345a7d6bf57bea3cadf45e371ad1ed4e0218b0c06f6f637e4e1772  gnupg-1.4.0.tgz
++sha256  d4f5f79aa483908f3df08e5b343ea3593c6d725b9ed2103e30242627659e0a64  gnupg-1.5.0.tgz
+ sha256  da1136d4d9326317cbd320dadddf7e9b4b4edffd973eb083cb7b9754fb6a15d9  LICENSE
+diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
+index ae0a781154..a89f0978af 100644
+--- a/package/php-gnupg/php-gnupg.mk
++++ b/package/php-gnupg/php-gnupg.mk
+@@ -4,13 +4,13 @@
  #
  ################################################################################
  
--EROFS_UTILS_VERSION = 1.2.1
-+EROFS_UTILS_VERSION = 1.3
- EROFS_UTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot
- EROFS_UTILS_LICENSE = GPL-2.0+
- EROFS_UTILS_LICENSE_FILES = COPYING
+-PHP_GNUPG_VERSION = 1.4.0
++PHP_GNUPG_VERSION = 1.5.0
+ PHP_GNUPG_SOURCE = gnupg-$(PHP_GNUPG_VERSION).tgz
+ PHP_GNUPG_SITE = https://pecl.php.net/get
+ # phpize does the autoconf magic
+ PHP_GNUPG_DEPENDENCIES = php libgpgme host-autoconf host-pkgconf
+ PHP_GNUPG_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-	--with-gnupg=$(STAGING_DIR)/usr/include --with-gpg=/usr/bin/gpg
++	--with-gnupg=$(STAGING_DIR)/usr --with-gpg=/usr/bin/gpg
+ PHP_GNUPG_LICENSE = BSD-2-Clause
+ PHP_GNUPG_LICENSE_FILES = LICENSE
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
