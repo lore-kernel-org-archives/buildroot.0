@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFA47C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:03:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 560F7C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:04:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 85A87610CC
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:03:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 85A87610CC
+	by mail.kernel.org (Postfix) with ESMTPS id 1950A610CC
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:04:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1950A610CC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63342423F3;
-	Wed,  4 Aug 2021 00:03:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E31D342399;
+	Wed,  4 Aug 2021 00:04:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b92n8bZaX27r; Wed,  4 Aug 2021 00:03:52 +0000 (UTC)
+	with ESMTP id cvofu-3rqu3r; Wed,  4 Aug 2021 00:04:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83E6D423EF;
-	Wed,  4 Aug 2021 00:03:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1033C423E1;
+	Wed,  4 Aug 2021 00:04:04 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 142601BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:14:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1AB4C1BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:14:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1ED5640481
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2491D40E61
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I6SxmAAR6qyf for <buildroot@lists.busybox.net>;
+ with ESMTP id zD3q783JFyZt for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70A4D40699
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7ED240625
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C2DC187B09; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
+ id EFB0387B09; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 3 Jul 2021 22:32:33 +0200
+Date: Sat, 3 Jul 2021 22:58:29 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1b4aa6442abc299d19829670eaf69420f5e119cf
-X-Git-Newrev: 91aa6efa8588bf7617cc4a640eb55052b524ceb7
+X-Git-Oldrev: 547069999170dec4ad9a50d50e73444a7e9e90d2
+X-Git-Newrev: 534f4d6c68d80ca53bb8d19216fae2d1ecb1b2ec
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210958.C2DC187B09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/tpm2-tools: security
- bump to version 4.3.2
+Message-Id: <20210803210958.EFB0387B09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/intel-gmmlib: bump
+ version to 21.2.1
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,86 +70,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91aa6efa8588bf7617cc4a640eb55052b524ceb7
+commit: https://git.buildroot.net/buildroot/commit/?id=534f4d6c68d80ca53bb8d19216fae2d1ecb1b2ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Fix CVE-2021-3565: A flaw was found in tpm2-tools in versions before
-  5.1.1 and before 4.3.2. tpm2_import used a fixed AES key for the inner
-  wrapper, potentially allowing a MITM attacker to unwrap the inner
-  portion and reveal the key being imported. The highest threat from
-  this vulnerability is to data confidentiality.
-- LICENSE moved in doc directory since
-  https://github.com/tpm2-software/tpm2-tools/commit/23aa5dca660f596b2ad89542d5100bd4ef0c871a
-  and hash updated due to the following line added with
-  https://github.com/tpm2-software/tpm2-tools/commit/305011b2a7d091740fa01dbfbd27a48a76f670f7
-  Copyright 2019      Fraunhofer SIT sponsored by Infineon Technologies AG
-- libuuid and wchar (for mbstate_t) are mandatory since version 4.2 and
-  https://github.com/tpm2-software/tpm2-tools/commit/eca77c1419617a8e2d6d8008bac716878b0c27ca
+Added patch to remove hardening-related flags.
 
-https://github.com/tpm2-software/tpm2-tools/blob/4.3.2/doc/CHANGELOG.md
+Updated license hash due to upstream commit
+https://github.com/intel/gmmlib/commit/9253eb8b949515d2a5030f99163a35567fe81838
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tpm2-tools/Config.in       | 7 +++++--
- package/tpm2-tools/tpm2-tools.hash | 4 ++--
- package/tpm2-tools/tpm2-tools.mk   | 6 +++---
- 3 files changed, 10 insertions(+), 7 deletions(-)
+ .../0001-Drop-hardening-related-flags.patch        | 28 ++++++++++++++++++++++
+ package/intel-gmmlib/intel-gmmlib.hash             |  4 ++--
+ package/intel-gmmlib/intel-gmmlib.mk               |  2 +-
+ 3 files changed, 31 insertions(+), 3 deletions(-)
 
-diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
-index 35ca63bf64..cbdfeb6801 100644
---- a/package/tpm2-tools/Config.in
-+++ b/package/tpm2-tools/Config.in
-@@ -1,9 +1,12 @@
- config BR2_PACKAGE_TPM2_TOOLS
- 	bool "tpm2-tools"
- 	depends on !BR2_STATIC_LIBS # tpm2-tss
-+	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_TPM2_TSS
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	help
- 	  TPM (Trusted Platform Module) 2.0 CLI tools based on system
- 	  API of TPM2-TSS. These tools can be used to manage keys,
-@@ -18,5 +21,5 @@ config BR2_PACKAGE_TPM2_TOOLS
- 
- 	  https://github.com/tpm2-software/tpm2-tools
- 
--comment "tpm2-tools needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "tpm2-tools needs a toolchain w/ dynamic library, wchar"
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
-diff --git a/package/tpm2-tools/tpm2-tools.hash b/package/tpm2-tools/tpm2-tools.hash
-index dd55834825..bfb7e9b220 100644
---- a/package/tpm2-tools/tpm2-tools.hash
-+++ b/package/tpm2-tools/tpm2-tools.hash
+diff --git a/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch b/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
+new file mode 100644
+index 0000000000..581afd9066
+--- /dev/null
++++ b/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
+@@ -0,0 +1,28 @@
++From 1528980ee15e9589a7e27ec6d12a33cd8aab57b4 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Tue, 8 Jun 2021 07:51:40 +0200
++Subject: [PATCH] Drop hardening-related flags
++
++These will be set by Buildroot depending on toolchain capabilities and
++global Buildroot options.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ Source/GmmLib/Linux.cmake | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/Source/GmmLib/Linux.cmake b/Source/GmmLib/Linux.cmake
++index 1a09bc4..b28fc1b 100644
++--- a/Source/GmmLib/Linux.cmake
+++++ b/Source/GmmLib/Linux.cmake
++@@ -62,7 +62,6 @@ SET (GMMLIB_COMPILER_FLAGS_COMMON
++     -DUSE_SSE3
++     -DUSE_SSSE3
++     # Other common flags
++-    -fstack-protector
++     -fdata-sections
++     -ffunction-sections
++     -fmessage-length=0
++-- 
++2.29.2
++
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index 1e8baba6c7..2f50646677 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  175472b63d1e047c2ad38314d06c36bd734ae37e0c6abfa2a804c0d6eb3f2936  tpm2-tools-4.1.2.tar.gz
--sha256  e10dce74279166bf7bc463eb6e462c2025bceb3e50cadfe865d92c1c3dc0bb21  LICENSE
-+sha256  e2802d4093a24b2c65b1f913d0f4c68eadde9b8fd8a9b7a3b17a6e50765e8350  tpm2-tools-4.3.2.tar.gz
-+sha256  f6995d52c8b8e4d2c3bace7fc9c330a77a90d808166fbad4d7ead7e8ba2fc66c  doc/LICENSE
-diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
-index 83be53d54b..e83db416aa 100644
---- a/package/tpm2-tools/tpm2-tools.mk
-+++ b/package/tpm2-tools/tpm2-tools.mk
-@@ -4,11 +4,11 @@
+ # Locally computed
+-sha256 bb874b41c499abb8f6253b1834e93a02ed9744de71f2503ee9cd4100af7c1860  intel-gmmlib-19.4.1.tar.gz
+-sha256 b61d639c5d84ec710ffcf5600ac92f8a4ace66670c1f9bd921f3bde671d36033  LICENSE.md
++sha256  912cd86e4cb564b6fa549d69a28b72b9cdcb5a3eab9320955ed70ac37381fc2f  intel-gmmlib-21.2.1.tar.gz
++sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 517fc09131..451eec7287 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TPM2_TOOLS_VERSION = 4.1.2
-+TPM2_TOOLS_VERSION = 4.3.2
- TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
- TPM2_TOOLS_LICENSE = BSD-3-Clause
--TPM2_TOOLS_LICENSE_FILES = LICENSE
--TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf
-+TPM2_TOOLS_LICENSE_FILES = doc/LICENSE
-+TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf util-linux
- 
- # -fstack-protector-all and FORTIFY_SOURCE=2 is used by
- # default. Disable that so the BR2_SSP_* / BR2_FORTIFY_SOURCE_* options
+-INTEL_GMMLIB_VERSION = 19.4.1
++INTEL_GMMLIB_VERSION = 21.2.1
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
