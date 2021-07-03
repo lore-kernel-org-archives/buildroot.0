@@ -1,105 +1,79 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 3 Jul 2021 11:21:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 21.1.4
-In-Reply-To: <20210701050152.3239-1-bernd.kuhls@t-online.de>
-References: <20210701050152.3239-1-bernd.kuhls@t-online.de>
-Message-ID: <20210703112122.5bf24a6f@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 3 Jul 2021 14:21:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/capnproto: fix build on riscv32
+In-Reply-To: <YN+A1hGJE7YjTd/F@piout.net>
+References: <20210527210402.555334-1-fontaine.fabrice@gmail.com>
+ <20210528065949.GA2170022@sunra>
+ <CAPi7W83+pf05_ssNVpaY=mEOpr4MNA4DVX5m+0RViDfig91mwA@mail.gmail.com>
+ <f46b99ad-b713-3fff-5b55-3f15300bd4ce@mind.be> <YN+A1hGJE7YjTd/F@piout.net>
+Message-ID: <590fdb2c-a1b9-c0f2-b693-ed8057c9ecbd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
 
-On Thu,  1 Jul 2021 07:01:52 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Release notes:
-> - 21.1.2
->   https://lists.freedesktop.org/archives/mesa-announce/2021-June/000632.html
-> - 21.1.3
->   https://lists.freedesktop.org/archives/mesa-announce/2021-June/000633.html
-> - 21.1.4
->   https://lists.freedesktop.org/archives/mesa-announce/2021-June/000635.html
+On 02/07/2021 23:10, Alexandre Belloni wrote:
+> Hi,
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
->  package/mesa3d/mesa3d.hash               | 6 +++---
->  package/mesa3d/mesa3d.mk                 | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
+> I'm very late to the pary but this patch should not be applied, in BR or
+> upstream.
 > 
-> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-> index 960bd83344..4b3b6a0989 100644
-> --- a/package/mesa3d-headers/mesa3d-headers.mk
-> +++ b/package/mesa3d-headers/mesa3d-headers.mk
-> @@ -12,7 +12,7 @@ endif
->  
->  # Not possible to directly refer to mesa3d variables, because of
->  # first/second expansion trickery...
-> -MESA3D_HEADERS_VERSION = 21.1.1
-> +MESA3D_HEADERS_VERSION = 21.1.4
->  MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
->  MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+> On 28/05/2021 16:17:03+0200, Arnout Vandecappelle wrote:
+>>  That patch looks OK to me:
+>>
+>> +/* 32bit architectures with 64bit time_t do not define __NR_futex syscall */
+>> +#if !defined(SYS_futex) && defined(SYS_futex_time64)
+>> +#define SYS_futex SYS_futex_time64
+>> +#endif
+>>
+>>  The comment was "this patch won't work if the userspace ABI uses the
+>> 64-bit time_t on a 32-bit ISA that did start with 32-bit time_t" - but that's
+>> not true. On a 32-bit ISA that did start with 32-bit time_t, SYS_futex will be
+>> defined (or SYS_foo is not properly exported by libc and then SYS_futex_time64
+>> isn't defined either).
+>>
+>>  To be really safe, you should maybe also check that __TIMESIZE == 64 [1] - but
+>> that may break on musl or uClibc.
+>>
+> 
+> Not defining __NR_futex was done on purpose, to ensure applications
+> would break at compile time. With that patch applied, you make it harder
+> to properly fix and provide an upgrade path for 32b platforms that had a
+> 32b time_t.
 
-  >>> mesa3d 21.1.4 Downloading
-  wget --passive-ftp -nd -t 3 -O '.../build/.mesa-21.1.4.tar.xz.DdTHlK/output' 'https://mesa.freedesktop.org/archive/mesa-21.1.4.tar.xz' 
-  --2021-07-03 10:16:07--  https://mesa.freedesktop.org/archive/mesa-21.1.4.tar.xz
-  Resolving mesa.freedesktop.org (mesa.freedesktop.org)... 147.75.198.156
-  Connecting to mesa.freedesktop.org (mesa.freedesktop.org)|147.75.198.156|:443... connected.
-  HTTP request sent, awaiting response... 301 Moved Permanently
-  Location: https://archive.mesa3d.org//mesa-21.1.4.tar.xz [following]
-  --2021-07-03 10:16:08--  https://archive.mesa3d.org//mesa-21.1.4.tar.xz
-  Resolving archive.mesa3d.org (archive.mesa3d.org)... 2610:10:20:722:a800:ff:feda:470f, 131.252.210.176
-  Connecting to archive.mesa3d.org (archive.mesa3d.org)|2610:10:20:722:a800:ff:feda:470f|:443... connected.
-  HTTP request sent, awaiting response... 200 OK
-  Length: 15254812 (15M) [application/x-xz]
-  Saving to: ?.../build/.mesa-21.1.4.tar.xz.DdTHlK/output?
+ That's a good reasoning for not accepting the patch in upstream capnproto, but
+I don't see this as a problem for Buildroot.
 
-  /home/... 100%[===================>]  14,55M  4,15MB/s    in 4,3s    
+ I *think* your point is that capnproto is broken for 32-bit platforms with a
+libc that sets TIMESIZE to 64 - but that was already broken before this patch,
+the patch just doesn't fix it. I still claim that this fix is acceptable to
+support 32-bit platforms that never had 32-bit time_t.
 
-  2021-07-03 10:16:13 (3,39 MB/s) - ?/.../build/.mesa-21.1.4.tar.xz.DdTHlK/output? saved [15254812/15254812]
-
-  mesa-21.1.4.tar.xz: OK (sha256: 1f177f44098164b65731c5ded4c928fd58b14f6c9d2087aa0e37bc79bf79e90b)
-  mesa-21.1.4.tar.xz: OK (sha512: 1f4e2d8ba2c3c02bad5468687752d7e87d6e79c4a0e6ec4b2741a57fb270d18ae4712aaa07a9e09a2d3348540f5a26cdbe05464cd52adb8df1e2e28a581b2b53)
-
-
-Time to update the download site to https://archive.mesa3d.org ?
-
-With or without this change you can add my:
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
+ Even then though - if libc sets TIMESIZE to 64, I would expect it will also
+undef SYS_futex, no? So the patch actually still works, because SYS_futex_time64
+would be used like it should be. Can you give a concrete example of when it breaks?
 
 
->  MESA3D_HEADERS_DL_SUBDIR = mesa3d
-> diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-> index 9548f8d170..fa83e2a2b5 100644
-> --- a/package/mesa3d/mesa3d.hash
-> +++ b/package/mesa3d/mesa3d.hash
-> @@ -1,6 +1,6 @@
-> -# From https://lists.freedesktop.org/archives/mesa-announce/2021-May/000631.html
-> -sha256  eec25ea379054e8911bc5de816aeb50f581b5b708414725003d2f00386b38dd2  mesa-21.1.1.tar.xz
-> -sha512  79d0e2b0e1e590e7f36a082df3584010a553af0b3060bd2d3a7ace700ac7a8d1b7734ba67f2e193dd441434eeec74a16e0dbcbf8c15061b5dd5d6a1feca73d62  mesa-21.1.1.tar.xz
-> +# From https://lists.freedesktop.org/archives/mesa-announce/2021-June/000635.html
-> +sha256 1f177f44098164b65731c5ded4c928fd58b14f6c9d2087aa0e37bc79bf79e90b  mesa-21.1.4.tar.xz
-> +sha512 1f4e2d8ba2c3c02bad5468687752d7e87d6e79c4a0e6ec4b2741a57fb270d18ae4712aaa07a9e09a2d3348540f5a26cdbe05464cd52adb8df1e2e28a581b2b53  mesa-21.1.4.tar.xz
->  
->  # License
->  sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index a30b4aff31..8e1b813da2 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  # When updating the version, please also update mesa3d-headers
-> -MESA3D_VERSION = 21.1.1
-> +MESA3D_VERSION = 21.1.4
->  MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
->  MESA3D_SITE = https://mesa.freedesktop.org/archive
->  MESA3D_LICENSE = MIT, SGI, Khronos
+> The whole goal was to have the applications check
+> sizeof(time_t).
+
+> The patch works but it is hiding the issue under the rug
+> and everything will break silently in 2038 instead of breaking now at
+> compile time.
+> 
+>>  Or even better of course would be to patch all code to use the __time64_t
+>> instead of time_t everywhere, independent of __TIMESIZE. But even then you'd
+>> need fallback to time_t for old libc/kernel.
+>>
+> 
+> Exactly, the solution, is simply to check sizeof(time_t).
+
+ I don't get how that should be done (can't use sizeof in a #if as far as I
+know), but I'm sure you'll point me to the patch you sent to capnproto that
+shows it :-)
+
+ Regards,
+ Arnout
