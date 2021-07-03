@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BA10C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:24:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8472AC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:24:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5C57960187
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:24:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5C57960187
+	by mail.kernel.org (Postfix) with ESMTPS id 441DA60187
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:24:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 441DA60187
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35703605BF;
-	Tue,  3 Aug 2021 23:24:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1602F82FF9;
+	Tue,  3 Aug 2021 23:24:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O6dBdz5nJjQP; Tue,  3 Aug 2021 23:24:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6yO9X8jhMphc; Tue,  3 Aug 2021 23:24:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 445AA605C0;
-	Tue,  3 Aug 2021 23:24:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1C7E83B0B;
+	Tue,  3 Aug 2021 23:24:55 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 459A31BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4643E1BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 350A440E8B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3819040E47
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KJx_iWyvLtUM for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
+ with ESMTP id 1K512mpeyQlm for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA97F40552
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3ADDC4063B
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id EC4EE86A84; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
+ id 92560860D3; Tue,  3 Aug 2021 21:09:58 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 4 Jul 2021 16:17:01 +0200
+Date: Sat, 3 Jul 2021 21:56:54 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4899d9ec1b03370cbb4a8eecff3a6556dcc3e2e5
-X-Git-Newrev: 0f01b69885c43a0e48f3a6604793e4cd4a8da2e6
+X-Git-Oldrev: f08975d1e48c697fe334414ca3d3488c79fc6dd5
+X-Git-Newrev: f16aa4ed9d46622811c2a976d3087fe0da653cae
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210959.EC4EE86A84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python3: bump version
- to 3.9.6
+Message-Id: <20210803210958.92560860D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/php-amqp: add add
+ upstream php8 compatibility patches
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,777 +70,1350 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f01b69885c43a0e48f3a6604793e4cd4a8da2e6
+commit: https://git.buildroot.net/buildroot/commit/?id=f16aa4ed9d46622811c2a976d3087fe0da653cae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Other changes:
-  - Rename 0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch to
-    0035-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch, as to not
-    overlap with 0034-Add-an-option-to-disable-the-berkeleydb-module.patch
+These patches are necessary for compiling against php8. These patches also
+retain the ability to compile against PHP7.2
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Make-the-build-of-pyc-files-conditional.patch     |  6 +++---
- ...able-buggy_getaddrinfo-configure-test-when-cross-.patch |  2 +-
- ...-infrastructure-to-disable-the-build-of-certain-e.patch | 10 +++++-----
- .../0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch |  2 +-
- package/python3/0006-Don-t-add-multiarch-paths.patch       |  2 +-
- package/python3/0007-Abort-on-failed-module-build.patch    |  2 +-
- ...rride-system-locale-and-set-to-default-when-addin.patch |  2 +-
- .../0012-Add-importlib-fix-for-PEP-3147-issue.patch        |  6 +++---
- ...-an-option-to-disable-installation-of-test-module.patch |  6 +++---
- package/python3/0014-Add-an-option-to-disable-pydoc.patch  | 12 ++++++------
- .../python3/0015-Add-an-option-to-disable-lib2to3.patch    | 14 +++++++-------
- .../0016-Add-option-to-disable-the-sqlite3-module.patch    |  8 ++++----
- .../0017-Add-an-option-to-disable-the-tk-module.patch      |  8 ++++----
- .../0018-Add-an-option-to-disable-the-curses-module.patch  |  6 +++---
- package/python3/0019-Add-an-option-to-disable-expat.patch  |  8 ++++----
- .../python3/0020-Add-an-option-to-disable-CJK-codecs.patch |  2 +-
- package/python3/0021-Add-an-option-to-disable-NIS.patch    |  2 +-
- .../0022-Add-an-option-to-disable-unicodedata.patch        |  2 +-
- package/python3/0023-Add-an-option-to-disable-IDLE.patch   | 10 +++++-----
- .../python3/0024-Add-an-option-to-disable-decimal.patch    |  4 ++--
- ...5-Add-an-option-to-disable-the-ossaudiodev-module.patch |  2 +-
- .../0026-Add-an-option-to-disable-openssl-support.patch    |  2 +-
- ...0027-Add-an-option-to-disable-the-readline-module.patch |  2 +-
- ...-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch |  2 +-
- .../python3/0030-Fix-cross-compiling-the-uuid-module.patch |  2 +-
- .../0031-Add-an-option-to-disable-uuid-module.patch        |  2 +-
- ...figure.ac-fixup-CC-print-multiarch-output-for-mus.patch |  2 +-
- ...34-Add-an-option-to-disable-the-berkeleydb-module.patch |  2 +-
- ...crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch} |  0
- package/python3/python3.hash                               |  6 +++---
- package/python3/python3.mk                                 |  2 +-
- 31 files changed, 69 insertions(+), 69 deletions(-)
+ .../0001-add-build-support-for-php-8.patch         |   54 +
+ package/php-amqp/0002-more-work-for-php-8.patch    | 1265 ++++++++++++++++++++
+ 2 files changed, 1319 insertions(+)
 
-diff --git a/package/python3/0001-Make-the-build-of-pyc-files-conditional.patch b/package/python3/0001-Make-the-build-of-pyc-files-conditional.patch
-index 5eb296c6d8..44902725d7 100644
---- a/package/python3/0001-Make-the-build-of-pyc-files-conditional.patch
-+++ b/package/python3/0001-Make-the-build-of-pyc-files-conditional.patch
-@@ -18,7 +18,7 @@ diff --git a/Makefile.pre.in b/Makefile.pre.in
- index 77f91e72b1..0c809f3d8a 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -1528,6 +1528,7 @@ libinstall:	build_all $(srcdir)/Modules/xxmodule.c
-+@@ -1550,6 +1550,7 @@ libinstall:	build_all $(srcdir)/Modules/xxmodule.c
-  		$(INSTALL_DATA) $(srcdir)/Modules/xxmodule.c \
-  			$(DESTDIR)$(LIBDEST)/distutils/tests ; \
-  	fi
-@@ -26,7 +26,7 @@ index 77f91e72b1..0c809f3d8a 100644
-  	-PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
-  		$(PYTHON_FOR_BUILD) -Wi $(DESTDIR)$(LIBDEST)/compileall.py \
-  		-j0 -d $(LIBDEST) -f \
--@@ -1555,6 +1556,7 @@ libinstall:	build_all $(srcdir)/Modules/xxmodule.c
-+@@ -1577,6 +1578,7 @@ libinstall:	build_all $(srcdir)/Modules/xxmodule.c
-  		$(PYTHON_FOR_BUILD) -Wi -OO $(DESTDIR)$(LIBDEST)/compileall.py \
-  		-j0 -d $(LIBDEST)/site-packages -f \
-  		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
-@@ -38,7 +38,7 @@ diff --git a/configure.ac b/configure.ac
- index d60f05251a..1ee5a09588 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -1112,6 +1112,12 @@ fi
-+@@ -1121,6 +1121,12 @@ fi
-  
-  AC_MSG_CHECKING(LDLIBRARY)
-  
-diff --git a/package/python3/0002-Disable-buggy_getaddrinfo-configure-test-when-cross-.patch b/package/python3/0002-Disable-buggy_getaddrinfo-configure-test-when-cross-.patch
-index c291d14460..00177814cc 100644
---- a/package/python3/0002-Disable-buggy_getaddrinfo-configure-test-when-cross-.patch
-+++ b/package/python3/0002-Disable-buggy_getaddrinfo-configure-test-when-cross-.patch
-@@ -13,7 +13,7 @@ diff --git a/configure.ac b/configure.ac
- index 1ee5a09588..c2445edc88 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -4175,7 +4175,7 @@ fi
-+@@ -4210,7 +4210,7 @@ fi
-  
-  AC_MSG_RESULT($ac_cv_buggy_getaddrinfo)
-  
-diff --git a/package/python3/0003-Add-infrastructure-to-disable-the-build-of-certain-e.patch b/package/python3/0003-Add-infrastructure-to-disable-the-build-of-certain-e.patch
-index b0dcce7d77..7cccc588e9 100644
---- a/package/python3/0003-Add-infrastructure-to-disable-the-build-of-certain-e.patch
-+++ b/package/python3/0003-Add-infrastructure-to-disable-the-build-of-certain-e.patch
-@@ -47,7 +47,7 @@ diff --git a/Makefile.pre.in b/Makefile.pre.in
- index 0c809f3d8a..7c3dde8dd4 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -213,6 +213,8 @@ FILEMODE=	644
-+@@ -216,6 +216,8 @@ FILEMODE=	644
-  # configure script arguments
-  CONFIG_ARGS=	@CONFIG_ARGS@
-  
-@@ -56,7 +56,7 @@ index 0c809f3d8a..7c3dde8dd4 100644
-  
-  # Subdirectories with code
-  SRCDIRS= 	@SRCDIRS@
--@@ -629,6 +631,7 @@ sharedmods: $(BUILDPYTHON) pybuilddir.txt Modules/_math.o
-+@@ -632,6 +634,7 @@ sharedmods: $(BUILDPYTHON) pybuilddir.txt Modules/_math.o
-  	esac; \
-  	echo "$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
-  		_TCLTK_INCLUDES='$(TCLTK_INCLUDES)' _TCLTK_LIBS='$(TCLTK_LIBS)' \
-@@ -64,7 +64,7 @@ index 0c809f3d8a..7c3dde8dd4 100644
-  		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build"; \
-  	$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
-  		_TCLTK_INCLUDES='$(TCLTK_INCLUDES)' _TCLTK_LIBS='$(TCLTK_LIBS)' \
--@@ -1674,7 +1677,8 @@ libainstall:	@DEF_MAKE_RULE@ python-config
-+@@ -1696,7 +1699,8 @@ libainstall:	@DEF_MAKE_RULE@ python-config
-  # Install the dynamically loadable modules
-  # This goes into $(exec_prefix)
-  sharedinstall: sharedmods
-@@ -78,7 +78,7 @@ diff --git a/configure.ac b/configure.ac
- index c2445edc88..73d66167de 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3052,6 +3052,8 @@ LIBS="$withval $LIBS"
-+@@ -3081,6 +3081,8 @@ LIBS="$withval $LIBS"
-  
-  PKG_PROG_PKG_CONFIG
-  
-@@ -91,7 +91,7 @@ diff --git a/setup.py b/setup.py
- index 770866bca7..b6c829b3a5 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -43,7 +43,10 @@ from distutils.spawn import find_executable
-+@@ -44,7 +44,10 @@ from distutils.spawn import find_executable
-  TEST_EXTENSIONS = True
-  
-  # This global variable is used to hold the list of modules to be disabled.
-diff --git a/package/python3/0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch b/package/python3/0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch
-index 83c88ff399..c5abcfd786 100644
---- a/package/python3/0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch
-+++ b/package/python3/0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch
-@@ -12,7 +12,7 @@ diff --git a/setup.py b/setup.py
- index b6c829b3a5..ec3ba60607 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -1056,12 +1056,9 @@ class PyBuildExt(build_ext):
-+@@ -1041,12 +1041,9 @@ class PyBuildExt(build_ext):
-                  pass # Issue 7384: Already linked against curses or tinfo.
-              elif curses_library:
-                  readline_libs.append(curses_library)
-diff --git a/package/python3/0006-Don-t-add-multiarch-paths.patch b/package/python3/0006-Don-t-add-multiarch-paths.patch
-index f55238d0c4..bb861612b1 100644
---- a/package/python3/0006-Don-t-add-multiarch-paths.patch
-+++ b/package/python3/0006-Don-t-add-multiarch-paths.patch
-@@ -20,7 +20,7 @@ diff --git a/setup.py b/setup.py
- index ec3ba60607..e27620035c 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -749,10 +749,10 @@ class PyBuildExt(build_ext):
-+@@ -734,10 +734,10 @@ class PyBuildExt(build_ext):
-          if not CROSS_COMPILING:
-              add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
-              add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
-diff --git a/package/python3/0007-Abort-on-failed-module-build.patch b/package/python3/0007-Abort-on-failed-module-build.patch
-index 0e96e7522a..856fcaac21 100644
---- a/package/python3/0007-Abort-on-failed-module-build.patch
-+++ b/package/python3/0007-Abort-on-failed-module-build.patch
-@@ -17,7 +17,7 @@ diff --git a/setup.py b/setup.py
- index e27620035c..d3f0e663f2 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -539,6 +539,7 @@ class PyBuildExt(build_ext):
-+@@ -524,6 +524,7 @@ class PyBuildExt(build_ext):
-              print("Failed to build these modules:")
-              print_three_column(failed)
-              print()
-diff --git a/package/python3/0011-Override-system-locale-and-set-to-default-when-addin.patch b/package/python3/0011-Override-system-locale-and-set-to-default-when-addin.patch
-index 57f1bb5a2f..8b0d4f4c4d 100644
---- a/package/python3/0011-Override-system-locale-and-set-to-default-when-addin.patch
-+++ b/package/python3/0011-Override-system-locale-and-set-to-default-when-addin.patch
-@@ -25,7 +25,7 @@ diff --git a/setup.py b/setup.py
- index d3f0e663f2..926c16f58f 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -695,7 +695,7 @@ class PyBuildExt(build_ext):
-+@@ -680,7 +680,7 @@ class PyBuildExt(build_ext):
-          tmpfile = os.path.join(self.build_temp, 'ccpaths')
-          if not os.path.exists(self.build_temp):
-              os.makedirs(self.build_temp)
-diff --git a/package/python3/0012-Add-importlib-fix-for-PEP-3147-issue.patch b/package/python3/0012-Add-importlib-fix-for-PEP-3147-issue.patch
-index 42dfa0d693..7a885303cb 100644
---- a/package/python3/0012-Add-importlib-fix-for-PEP-3147-issue.patch
-+++ b/package/python3/0012-Add-importlib-fix-for-PEP-3147-issue.patch
-@@ -28,7 +28,7 @@ diff --git a/Lib/importlib/_bootstrap_external.py b/Lib/importlib/_bootstrap_ext
- index 25a3f8c0e0..2cb9a9aa52 100644
- --- a/Lib/importlib/_bootstrap_external.py
- +++ b/Lib/importlib/_bootstrap_external.py
--@@ -313,8 +313,6 @@ def cache_from_source(path, debug_override=None, *, optimization=None):
-+@@ -373,8 +373,6 @@ def cache_from_source(path, debug_override=None, *, optimization=None):
-      a True value is the same as setting 'optimization' to the empty string
-      while a False value is equivalent to setting 'optimization' to '1'.
-  
-@@ -37,7 +37,7 @@ index 25a3f8c0e0..2cb9a9aa52 100644
-      """
-      if debug_override is not None:
-          _warnings.warn('the debug_override parameter is deprecated; use '
--@@ -326,10 +324,7 @@ def cache_from_source(path, debug_override=None, *, optimization=None):
-+@@ -386,10 +384,7 @@ def cache_from_source(path, debug_override=None, *, optimization=None):
-      path = _os.fspath(path)
-      head, tail = _path_split(path)
-      base, sep, rest = tail.rpartition('.')
-@@ -49,7 +49,7 @@ index 25a3f8c0e0..2cb9a9aa52 100644
-      if optimization is None:
-          if sys.flags.optimize == 0:
-              optimization = ''
--@@ -366,46 +361,17 @@ def cache_from_source(path, debug_override=None, *, optimization=None):
-+@@ -426,46 +421,17 @@ def cache_from_source(path, debug_override=None, *, optimization=None):
-              head.lstrip(path_separators),
-              filename,
-          )
-diff --git a/package/python3/0013-Add-an-option-to-disable-installation-of-test-module.patch b/package/python3/0013-Add-an-option-to-disable-installation-of-test-module.patch
-index b3380fd53f..8c1b989361 100644
---- a/package/python3/0013-Add-an-option-to-disable-installation-of-test-module.patch
-+++ b/package/python3/0013-Add-an-option-to-disable-installation-of-test-module.patch
-@@ -21,7 +21,7 @@ diff --git a/Makefile.pre.in b/Makefile.pre.in
- index 7c3dde8dd4..204f293d53 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -1385,8 +1385,29 @@ maninstall:	altmaninstall
-+@@ -1406,8 +1406,29 @@ maninstall:	altmaninstall
-  
-  # Install the library
-  XMLLIBSUBDIRS=  xml xml/dom xml/etree xml/parsers xml/sax
-@@ -53,7 +53,7 @@ index 7c3dde8dd4..204f293d53 100644
-  		test/audiodata \
-  		test/capath test/data \
-  		test/cjkencodings test/decimaltestdata \
--@@ -1446,28 +1467,25 @@ LIBSUBDIRS=	tkinter tkinter/test tkinter/test/test_tkinter \
-+@@ -1468,28 +1489,25 @@ LIBSUBDIRS=	tkinter tkinter/test tkinter/test/test_tkinter \
-  		test/test_importlib/zipdata02 \
-  		test/test_zoneinfo test/test_zoneinfo/data \
-  		test/ziptestdata \
-@@ -100,7 +100,7 @@ diff --git a/configure.ac b/configure.ac
- index 73d66167de..92e28d02ee 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3329,6 +3329,11 @@ if test "$posix_threads" = "yes"; then
-+@@ -3358,6 +3358,11 @@ if test "$posix_threads" = "yes"; then
-        AC_CHECK_FUNCS(pthread_getcpuclockid)
-  fi
-  
-diff --git a/package/python3/0014-Add-an-option-to-disable-pydoc.patch b/package/python3/0014-Add-an-option-to-disable-pydoc.patch
-index abb86ea07b..0c928a0bb2 100644
---- a/package/python3/0014-Add-an-option-to-disable-pydoc.patch
-+++ b/package/python3/0014-Add-an-option-to-disable-pydoc.patch
-@@ -20,7 +20,7 @@ diff --git a/Makefile.pre.in b/Makefile.pre.in
- index 204f293d53..63e3df0470 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -1357,7 +1357,9 @@ bininstall: altbininstall
-+@@ -1374,7 +1374,9 @@ bininstall: altbininstall
-  	-rm -f $(DESTDIR)$(BINDIR)/idle3
-  	(cd $(DESTDIR)$(BINDIR); $(LN) -s idle$(VERSION) idle3)
-  	-rm -f $(DESTDIR)$(BINDIR)/pydoc3
-@@ -30,7 +30,7 @@ index 204f293d53..63e3df0470 100644
-  	-rm -f $(DESTDIR)$(BINDIR)/2to3
-  	(cd $(DESTDIR)$(BINDIR); $(LN) -s 2to3-$(VERSION) 2to3)
-  	if test "x$(LIPO_32BIT_FLAGS)" != "x" ; then \
--@@ -1403,7 +1405,7 @@ LIBSUBDIRS=	tkinter site-packages \
-+@@ -1424,7 +1426,7 @@ LIBSUBDIRS=	tkinter site-packages \
-  		multiprocessing multiprocessing/dummy \
-  		unittest \
-  		venv venv/scripts venv/scripts/common venv/scripts/posix \
-@@ -39,7 +39,7 @@ index 204f293d53..63e3df0470 100644
-  		zoneinfo
-  
-  TESTSUBDIRS=	tkinter/test tkinter/test/test_tkinter \
--@@ -1486,6 +1488,10 @@ ifeq (@TEST_MODULES@,yes)
-+@@ -1508,6 +1510,10 @@ ifeq (@TEST_MODULES@,yes)
-  LIBSUBDIRS += $(TESTSUBDIRS)
-  endif
-  
-@@ -54,7 +54,7 @@ diff --git a/configure.ac b/configure.ac
- index 92e28d02ee..174ed85a7c 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3329,6 +3329,12 @@ if test "$posix_threads" = "yes"; then
-+@@ -3358,6 +3358,12 @@ if test "$posix_threads" = "yes"; then
-        AC_CHECK_FUNCS(pthread_getcpuclockid)
-  fi
-  
-@@ -71,7 +71,7 @@ diff --git a/setup.py b/setup.py
- index 926c16f58f..1fc5fac90c 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -2586,6 +2586,12 @@ def main():
-+@@ -2565,6 +2565,12 @@ def main():
-      # turn off warnings when deprecated modules are imported
-      import warnings
-      warnings.filterwarnings("ignore",category=DeprecationWarning)
-@@ -84,7 +84,7 @@ index 926c16f58f..1fc5fac90c 100644
-      setup(# PyPI Metadata (PEP 301)
-            name = "Python",
-            version = sys.version.split()[0],
--@@ -2610,8 +2616,7 @@ def main():
-+@@ -2589,8 +2595,7 @@ def main():
-            # If you change the scripts installed here, you also need to
-            # check the PyBuildScripts command above, and change the links
-            # created by the bininstall target in Makefile.pre.in
-diff --git a/package/python3/0015-Add-an-option-to-disable-lib2to3.patch b/package/python3/0015-Add-an-option-to-disable-lib2to3.patch
-index 5cec11a00a..fe94cdfded 100644
---- a/package/python3/0015-Add-an-option-to-disable-lib2to3.patch
-+++ b/package/python3/0015-Add-an-option-to-disable-lib2to3.patch
-@@ -20,7 +20,7 @@ diff --git a/Makefile.pre.in b/Makefile.pre.in
- index 63e3df0470..8b7de12999 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -1361,7 +1361,9 @@ ifeq (@PYDOC@,yes)
-+@@ -1378,7 +1378,9 @@ ifeq (@PYDOC@,yes)
-  	(cd $(DESTDIR)$(BINDIR); $(LN) -s pydoc$(VERSION) pydoc3)
-  endif
-  	-rm -f $(DESTDIR)$(BINDIR)/2to3
-@@ -30,7 +30,7 @@ index 63e3df0470..8b7de12999 100644
-  	if test "x$(LIPO_32BIT_FLAGS)" != "x" ; then \
-  		rm -f $(DESTDIR)$(BINDIR)/python3-32$(EXE); \
-  		(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)-32$(EXE) python3-32$(EXE)) \
--@@ -1396,7 +1398,6 @@ LIBSUBDIRS=	tkinter site-packages \
-+@@ -1417,7 +1419,6 @@ LIBSUBDIRS=	tkinter site-packages \
-  		html json http dbm xmlrpc \
-  		sqlite3 \
-  		logging csv wsgiref urllib \
-@@ -38,7 +38,7 @@ index 63e3df0470..8b7de12999 100644
-  		ctypes ctypes/macholib \
-  		idlelib idlelib/Icons \
-  		distutils distutils/command $(XMLLIBSUBDIRS) \
--@@ -1473,9 +1474,6 @@ TESTSUBDIRS=	tkinter/test tkinter/test/test_tkinter \
-+@@ -1495,9 +1496,6 @@ TESTSUBDIRS=	tkinter/test tkinter/test/test_tkinter \
-  		test/test_email test/test_email/data \
-  		test/test_json \
-  		sqlite3/test \
-@@ -48,7 +48,7 @@ index 63e3df0470..8b7de12999 100644
-  		ctypes/test \
-  		idlelib/idle_test \
-  		distutils/tests \
--@@ -1484,6 +1482,14 @@ TESTSUBDIRS=	tkinter/test tkinter/test/test_tkinter \
-+@@ -1506,6 +1504,14 @@ TESTSUBDIRS=	tkinter/test tkinter/test/test_tkinter \
-  		test/test_tools test/test_warnings test/test_warnings/data \
-  		unittest/test unittest/test/testmock
-  
-@@ -63,7 +63,7 @@ index 63e3df0470..8b7de12999 100644
-  ifeq (@TEST_MODULES@,yes)
-  LIBSUBDIRS += $(TESTSUBDIRS)
-  endif
--@@ -1584,10 +1590,12 @@ ifeq (@PYC_BUILD@,yes)
-+@@ -1606,10 +1612,12 @@ ifeq (@PYC_BUILD@,yes)
-  		-j0 -d $(LIBDEST)/site-packages -f \
-  		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
-  endif
-@@ -80,7 +80,7 @@ diff --git a/configure.ac b/configure.ac
- index 174ed85a7c..f1f5e9a7b0 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3341,6 +3341,12 @@ AC_ARG_ENABLE(test-modules,
-+@@ -3370,6 +3370,12 @@ AC_ARG_ENABLE(test-modules,
-  	AS_HELP_STRING([--disable-test-modules], [disable test modules]),
-  	[ TEST_MODULES="${enableval}" ], [ TEST_MODULES=yes ])
-  
-@@ -97,7 +97,7 @@ diff --git a/setup.py b/setup.py
- index 1fc5fac90c..4063d7ffa5 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -2587,10 +2587,11 @@ def main():
-+@@ -2566,10 +2566,11 @@ def main():
-      import warnings
-      warnings.filterwarnings("ignore",category=DeprecationWarning)
-  
-diff --git a/package/python3/0016-Add-option-to-disable-the-sqlite3-module.patch b/package/python3/0016-Add-option-to-disable-the-sqlite3-module.patch
-index 47ee112e27..d6c9bccd45 100644
---- a/package/python3/0016-Add-option-to-disable-the-sqlite3-module.patch
-+++ b/package/python3/0016-Add-option-to-disable-the-sqlite3-module.patch
-@@ -16,7 +16,7 @@ diff --git a/Makefile.pre.in b/Makefile.pre.in
- index 8b7de12999..d826d8ac4b 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -1396,7 +1396,6 @@ LIBSUBDIRS=	tkinter site-packages \
-+@@ -1417,7 +1417,6 @@ LIBSUBDIRS=	tkinter site-packages \
-  		email email/mime \
-  		ensurepip ensurepip/_bundled \
-  		html json http dbm xmlrpc \
-@@ -24,7 +24,7 @@ index 8b7de12999..d826d8ac4b 100644
-  		logging csv wsgiref urllib \
-  		ctypes ctypes/macholib \
-  		idlelib idlelib/Icons \
--@@ -1473,7 +1472,6 @@ TESTSUBDIRS=	tkinter/test tkinter/test/test_tkinter \
-+@@ -1495,7 +1494,6 @@ TESTSUBDIRS=	tkinter/test tkinter/test/test_tkinter \
-  		test/test_asyncio \
-  		test/test_email test/test_email/data \
-  		test/test_json \
-@@ -32,7 +32,7 @@ index 8b7de12999..d826d8ac4b 100644
-  		ctypes/test \
-  		idlelib/idle_test \
-  		distutils/tests \
--@@ -1490,6 +1488,11 @@ TESTSUBDIRS += lib2to3/tests			\
-+@@ -1512,6 +1510,11 @@ TESTSUBDIRS += lib2to3/tests			\
-  	lib2to3/tests/data/fixers/myfixes
-  endif
-  
-@@ -48,7 +48,7 @@ diff --git a/configure.ac b/configure.ac
- index f1f5e9a7b0..8b5c65974c 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3329,6 +3329,15 @@ if test "$posix_threads" = "yes"; then
-+@@ -3358,6 +3358,15 @@ if test "$posix_threads" = "yes"; then
-        AC_CHECK_FUNCS(pthread_getcpuclockid)
-  fi
-  
-diff --git a/package/python3/0017-Add-an-option-to-disable-the-tk-module.patch b/package/python3/0017-Add-an-option-to-disable-the-tk-module.patch
-index 132fd17386..b798eb56a5 100644
---- a/package/python3/0017-Add-an-option-to-disable-the-tk-module.patch
-+++ b/package/python3/0017-Add-an-option-to-disable-the-tk-module.patch
-@@ -16,7 +16,7 @@ diff --git a/Makefile.pre.in b/Makefile.pre.in
- index d826d8ac4b..dc84384680 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -1390,7 +1390,7 @@ maninstall:	altmaninstall
-+@@ -1411,7 +1411,7 @@ maninstall:	altmaninstall
-  # Install the library
-  XMLLIBSUBDIRS=  xml xml/dom xml/etree xml/parsers xml/sax
-  
-@@ -25,7 +25,7 @@ index d826d8ac4b..dc84384680 100644
-  		asyncio \
-  		collections concurrent concurrent/futures encodings \
-  		email email/mime \
--@@ -1408,8 +1408,7 @@ LIBSUBDIRS=	tkinter site-packages \
-+@@ -1429,8 +1429,7 @@ LIBSUBDIRS=	tkinter site-packages \
-  		curses \
-  		zoneinfo
-  
-@@ -35,7 +35,7 @@ index d826d8ac4b..dc84384680 100644
-  		test/audiodata \
-  		test/capath test/data \
-  		test/cjkencodings test/decimaltestdata \
--@@ -1480,6 +1479,12 @@ TESTSUBDIRS=	tkinter/test tkinter/test/test_tkinter \
-+@@ -1502,6 +1501,12 @@ TESTSUBDIRS=	tkinter/test tkinter/test/test_tkinter \
-  		test/test_tools test/test_warnings test/test_warnings/data \
-  		unittest/test unittest/test/testmock
-  
-@@ -52,7 +52,7 @@ diff --git a/configure.ac b/configure.ac
- index 8b5c65974c..4c72dae960 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3338,6 +3338,15 @@ if test "$SQLITE3" = "no" ; then
-+@@ -3367,6 +3367,15 @@ if test "$SQLITE3" = "no" ; then
-     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _sqlite3"
-  fi
-  
-diff --git a/package/python3/0018-Add-an-option-to-disable-the-curses-module.patch b/package/python3/0018-Add-an-option-to-disable-the-curses-module.patch
-index d51267bbf0..93dfac26ec 100644
---- a/package/python3/0018-Add-an-option-to-disable-the-curses-module.patch
-+++ b/package/python3/0018-Add-an-option-to-disable-the-curses-module.patch
-@@ -16,7 +16,7 @@ diff --git a/Makefile.pre.in b/Makefile.pre.in
- index dc84384680..2a82f3308f 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -1405,7 +1405,6 @@ LIBSUBDIRS=	site-packages \
-+@@ -1426,7 +1426,6 @@ LIBSUBDIRS=	site-packages \
-  		multiprocessing multiprocessing/dummy \
-  		unittest \
-  		venv venv/scripts venv/scripts/common venv/scripts/posix \
-@@ -24,7 +24,7 @@ index dc84384680..2a82f3308f 100644
-  		zoneinfo
-  
-  TESTSUBDIRS=	test \
--@@ -1485,6 +1484,10 @@ TESTSUBDIRS += tkinter/test tkinter/test/test_tkinter \
-+@@ -1507,6 +1506,10 @@ TESTSUBDIRS += tkinter/test tkinter/test/test_tkinter \
-  	tkinter/test/test_ttk
-  endif
-  
-@@ -39,7 +39,7 @@ diff --git a/configure.ac b/configure.ac
- index 4c72dae960..acd98381a3 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3347,6 +3347,15 @@ if test "$TK" = "no"; then
-+@@ -3376,6 +3376,15 @@ if test "$TK" = "no"; then
-     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _tkinter"
-  fi
-  
-diff --git a/package/python3/0019-Add-an-option-to-disable-expat.patch b/package/python3/0019-Add-an-option-to-disable-expat.patch
-index af6e1ebcc1..e7349058c8 100644
---- a/package/python3/0019-Add-an-option-to-disable-expat.patch
-+++ b/package/python3/0019-Add-an-option-to-disable-expat.patch
-@@ -23,7 +23,7 @@ diff --git a/Makefile.pre.in b/Makefile.pre.in
- index 2a82f3308f..e678c8817e 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -1399,7 +1399,7 @@ LIBSUBDIRS=	site-packages \
-+@@ -1420,7 +1420,7 @@ LIBSUBDIRS=	site-packages \
-  		logging csv wsgiref urllib \
-  		ctypes ctypes/macholib \
-  		idlelib idlelib/Icons \
-@@ -32,7 +32,7 @@ index 2a82f3308f..e678c8817e 100644
-  		importlib \
-  		turtledemo \
-  		multiprocessing multiprocessing/dummy \
--@@ -1488,6 +1488,10 @@ ifeq (@CURSES@,yes)
-+@@ -1510,6 +1510,10 @@ ifeq (@CURSES@,yes)
-  LIBSUBDIRS += curses
-  endif
-  
-@@ -47,7 +47,7 @@ diff --git a/configure.ac b/configure.ac
- index acd98381a3..9ef0ecd42f 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3055,13 +3055,21 @@ PKG_PROG_PKG_CONFIG
-+@@ -3084,13 +3084,21 @@ PKG_PROG_PKG_CONFIG
-  AC_SUBST(DISABLED_EXTENSIONS)
-  
-  # Check for use of the system expat library
-@@ -78,7 +78,7 @@ diff --git a/setup.py b/setup.py
- index 4063d7ffa5..211a160f29 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -1681,7 +1681,7 @@ class PyBuildExt(build_ext):
-+@@ -1666,7 +1666,7 @@ class PyBuildExt(build_ext):
-          #
-          # More information on Expat can be found at www.libexpat.org.
-          #
-diff --git a/package/python3/0020-Add-an-option-to-disable-CJK-codecs.patch b/package/python3/0020-Add-an-option-to-disable-CJK-codecs.patch
-index ede78c9b1e..4e22543096 100644
---- a/package/python3/0020-Add-an-option-to-disable-CJK-codecs.patch
-+++ b/package/python3/0020-Add-an-option-to-disable-CJK-codecs.patch
-@@ -12,7 +12,7 @@ diff --git a/configure.ac b/configure.ac
- index 9ef0ecd42f..18e6fd70a0 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3346,6 +3346,12 @@ if test "$SQLITE3" = "no" ; then
-+@@ -3375,6 +3375,12 @@ if test "$SQLITE3" = "no" ; then
-     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _sqlite3"
-  fi
-  
-diff --git a/package/python3/0021-Add-an-option-to-disable-NIS.patch b/package/python3/0021-Add-an-option-to-disable-NIS.patch
-index b2668c6eb2..9cd54df180 100644
---- a/package/python3/0021-Add-an-option-to-disable-NIS.patch
-+++ b/package/python3/0021-Add-an-option-to-disable-NIS.patch
-@@ -15,7 +15,7 @@ diff --git a/configure.ac b/configure.ac
- index 18e6fd70a0..46d2a8131e 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3352,6 +3352,12 @@ AC_ARG_ENABLE(codecs-cjk,
-+@@ -3381,6 +3381,12 @@ AC_ARG_ENABLE(codecs-cjk,
-  		DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _codecs_kr _codecs_jp _codecs_cn _codecs_tw _codecs_hk _codecs_iso2022"
-  	fi])
-  
-diff --git a/package/python3/0022-Add-an-option-to-disable-unicodedata.patch b/package/python3/0022-Add-an-option-to-disable-unicodedata.patch
-index 7a0157fd71..2ddf606a70 100644
---- a/package/python3/0022-Add-an-option-to-disable-unicodedata.patch
-+++ b/package/python3/0022-Add-an-option-to-disable-unicodedata.patch
-@@ -12,7 +12,7 @@ diff --git a/configure.ac b/configure.ac
- index 46d2a8131e..5844e3b73f 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3358,6 +3358,12 @@ AC_ARG_ENABLE(nis,
-+@@ -3387,6 +3387,12 @@ AC_ARG_ENABLE(nis,
-      	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} nis"
-    	  fi])
-  
-diff --git a/package/python3/0023-Add-an-option-to-disable-IDLE.patch b/package/python3/0023-Add-an-option-to-disable-IDLE.patch
-index 0611e3a347..0e35eea699 100644
---- a/package/python3/0023-Add-an-option-to-disable-IDLE.patch
-+++ b/package/python3/0023-Add-an-option-to-disable-IDLE.patch
-@@ -19,7 +19,7 @@ diff --git a/Makefile.pre.in b/Makefile.pre.in
- index e678c8817e..1148bd8708 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -1355,7 +1355,9 @@ bininstall: altbininstall
-+@@ -1372,7 +1372,9 @@ bininstall: altbininstall
-  	-rm -f $(DESTDIR)$(LIBPC)/python3-embed.pc
-  	(cd $(DESTDIR)$(LIBPC); $(LN) -s python-$(VERSION)-embed.pc python3-embed.pc)
-  	-rm -f $(DESTDIR)$(BINDIR)/idle3
-@@ -29,7 +29,7 @@ index e678c8817e..1148bd8708 100644
-  	-rm -f $(DESTDIR)$(BINDIR)/pydoc3
-  ifeq (@PYDOC@,yes)
-  	(cd $(DESTDIR)$(BINDIR); $(LN) -s pydoc$(VERSION) pydoc3)
--@@ -1398,7 +1400,6 @@ LIBSUBDIRS=	site-packages \
-+@@ -1419,7 +1421,6 @@ LIBSUBDIRS=	site-packages \
-  		html json http dbm xmlrpc \
-  		logging csv wsgiref urllib \
-  		ctypes ctypes/macholib \
-@@ -37,7 +37,7 @@ index e678c8817e..1148bd8708 100644
-  		distutils distutils/command \
-  		importlib \
-  		turtledemo \
--@@ -1492,6 +1493,10 @@ ifeq (@EXPAT@,yes)
-+@@ -1514,6 +1515,10 @@ ifeq (@EXPAT@,yes)
-  LIBSUBDIRS += $(XMLLIBSUBDIRS)
-  endif
-  
-@@ -52,7 +52,7 @@ diff --git a/configure.ac b/configure.ac
- index 5844e3b73f..7bd4623ccd 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3400,6 +3400,12 @@ AC_ARG_ENABLE(lib2to3,
-+@@ -3429,6 +3429,12 @@ AC_ARG_ENABLE(lib2to3,
-  	AS_HELP_STRING([--disable-lib2to3], [disable lib2to3]),
-  	[ LIB2TO3="${enableval}" ], [ LIB2TO3=yes ])
-  
-@@ -69,7 +69,7 @@ diff --git a/setup.py b/setup.py
- index 211a160f29..c4ee989ba3 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -2587,11 +2587,13 @@ def main():
-+@@ -2566,11 +2566,13 @@ def main():
-      import warnings
-      warnings.filterwarnings("ignore",category=DeprecationWarning)
-  
-diff --git a/package/python3/0024-Add-an-option-to-disable-decimal.patch b/package/python3/0024-Add-an-option-to-disable-decimal.patch
-index 438b76b91f..b5a12f7f38 100644
---- a/package/python3/0024-Add-an-option-to-disable-decimal.patch
-+++ b/package/python3/0024-Add-an-option-to-disable-decimal.patch
-@@ -22,7 +22,7 @@ diff --git a/configure.ac b/configure.ac
- index 7bd4623ccd..e513ef6a20 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3106,13 +3106,20 @@ fi
-+@@ -3135,13 +3135,20 @@ fi
-  AC_SUBST(LIBFFI_INCLUDEDIR)
-  
-  # Check for use of the system libmpdec library
-@@ -52,7 +52,7 @@ diff --git a/setup.py b/setup.py
- index c4ee989ba3..3d0c74bb7f 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -2221,7 +2221,7 @@ class PyBuildExt(build_ext):
-+@@ -2195,7 +2195,7 @@ class PyBuildExt(build_ext):
-          # Stefan Krah's _decimal module
-          extra_compile_args = []
-          undef_macros = []
-diff --git a/package/python3/0025-Add-an-option-to-disable-the-ossaudiodev-module.patch b/package/python3/0025-Add-an-option-to-disable-the-ossaudiodev-module.patch
-index 8a792c1fac..0f68a08356 100644
---- a/package/python3/0025-Add-an-option-to-disable-the-ossaudiodev-module.patch
-+++ b/package/python3/0025-Add-an-option-to-disable-the-ossaudiodev-module.patch
-@@ -12,7 +12,7 @@ diff --git a/configure.ac b/configure.ac
- index e513ef6a20..c07505e89e 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3136,6 +3136,12 @@ fi
-+@@ -3165,6 +3165,12 @@ fi
-  
-  AC_MSG_RESULT($with_decimal_contextvar)
-  
-diff --git a/package/python3/0026-Add-an-option-to-disable-openssl-support.patch b/package/python3/0026-Add-an-option-to-disable-openssl-support.patch
-index d9e9d13f31..44d1d3d6b3 100644
---- a/package/python3/0026-Add-an-option-to-disable-openssl-support.patch
-+++ b/package/python3/0026-Add-an-option-to-disable-openssl-support.patch
-@@ -12,7 +12,7 @@ diff --git a/configure.ac b/configure.ac
- index c07505e89e..612e32faf5 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3377,6 +3377,12 @@ AC_ARG_ENABLE(unicodedata,
-+@@ -3406,6 +3406,12 @@ AC_ARG_ENABLE(unicodedata,
-      	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} unicodedata"
-    	  fi])
-  
-diff --git a/package/python3/0027-Add-an-option-to-disable-the-readline-module.patch b/package/python3/0027-Add-an-option-to-disable-the-readline-module.patch
-index 2324ffdcf2..1597a2a560 100644
---- a/package/python3/0027-Add-an-option-to-disable-the-readline-module.patch
-+++ b/package/python3/0027-Add-an-option-to-disable-the-readline-module.patch
-@@ -12,7 +12,7 @@ diff --git a/configure.ac b/configure.ac
- index 612e32faf5..2a6aaeff60 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3383,6 +3383,12 @@ AC_ARG_ENABLE(openssl,
-+@@ -3412,6 +3412,12 @@ AC_ARG_ENABLE(openssl,
-  	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl _ssl _hashlib"
-  	  fi])
-  
-diff --git a/package/python3/0028-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch b/package/python3/0028-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch
-index 04d0ab31bf..a1d2ef3255 100644
---- a/package/python3/0028-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch
-+++ b/package/python3/0028-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch
-@@ -12,7 +12,7 @@ diff --git a/configure.ac b/configure.ac
- index 2a6aaeff60..21479bbd7d 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3389,6 +3389,24 @@ AC_ARG_ENABLE(readline,
-+@@ -3418,6 +3418,24 @@ AC_ARG_ENABLE(readline,
-  	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} readline"
-  	  fi])
-  
-diff --git a/package/python3/0030-Fix-cross-compiling-the-uuid-module.patch b/package/python3/0030-Fix-cross-compiling-the-uuid-module.patch
-index 806801b2b9..1bf5fc6db4 100644
---- a/package/python3/0030-Fix-cross-compiling-the-uuid-module.patch
-+++ b/package/python3/0030-Fix-cross-compiling-the-uuid-module.patch
-@@ -23,7 +23,7 @@ diff --git a/setup.py b/setup.py
- index 3d0c74bb7f..c7be85f352 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -1779,7 +1779,8 @@ class PyBuildExt(build_ext):
-+@@ -1764,7 +1764,8 @@ class PyBuildExt(build_ext):
-  
-      def detect_uuid(self):
-          # Build the _uuid module if possible
-diff --git a/package/python3/0031-Add-an-option-to-disable-uuid-module.patch b/package/python3/0031-Add-an-option-to-disable-uuid-module.patch
-index 6ea57d2cde..92b24b211d 100644
---- a/package/python3/0031-Add-an-option-to-disable-uuid-module.patch
-+++ b/package/python3/0031-Add-an-option-to-disable-uuid-module.patch
-@@ -12,7 +12,7 @@ diff --git a/configure.ac b/configure.ac
- index 21479bbd7d..615c16aced 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3425,6 +3425,15 @@ if test "$CURSES" = "no"; then
-+@@ -3454,6 +3454,15 @@ if test "$CURSES" = "no"; then
-     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _curses _curses_panel"
-  fi
-  
-diff --git a/package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch b/package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
-index 304a595fce..f70990b254 100644
---- a/package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
-+++ b/package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
-@@ -32,7 +32,7 @@ diff --git a/configure.ac b/configure.ac
- index 615c16aced..241298e6cf 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -718,7 +718,9 @@ then
-+@@ -727,7 +727,9 @@ then
-  fi
-  
-  
-diff --git a/package/python3/0034-Add-an-option-to-disable-the-berkeleydb-module.patch b/package/python3/0034-Add-an-option-to-disable-the-berkeleydb-module.patch
-index f763fcaa82..a4e8baf4dd 100644
---- a/package/python3/0034-Add-an-option-to-disable-the-berkeleydb-module.patch
-+++ b/package/python3/0034-Add-an-option-to-disable-the-berkeleydb-module.patch
-@@ -12,7 +12,7 @@ diff --git a/configure.ac b/configure.ac
- index 72c1d86e82..8c3912d237 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -3326,6 +3326,12 @@ if test "$UUID" = "no"; then
-+@@ -3465,6 +3465,12 @@ if test "$UUID" = "no"; then
-     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _uuid"
-  fi
-  
-diff --git a/package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch b/package/python3/0035-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-similarity index 100%
-rename from package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-rename to package/python3/0035-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 78571b5e0b..36e89a0678 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-395/
--md5  71f7ada6bec9cdbf4538adc326120cfd  Python-3.9.5.tar.xz
-+# From https://www.python.org/downloads/release/python-396/
-+md5  ecc29a7688f86e550d29dba2ee66cf80  Python-3.9.6.tar.xz
- # Locally computed
--sha256  0c5a140665436ec3dbfbb79e2dfb6d192655f26ef4a29aeffcb6d1820d716d83  Python-3.9.5.tar.xz
-+sha256  397920af33efc5b97f2e0b57e91923512ef89fc5b3c1d21dbfc8c4828ce0108a  Python-3.9.6.tar.xz
- sha256  599826df92bfdcd2702eac691072498bb096c55af04ee984cf90f70ed77b5a70  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 991e24a440..d491a4c800 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON3_VERSION_MAJOR = 3.9
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+diff --git a/package/php-amqp/0001-add-build-support-for-php-8.patch b/package/php-amqp/0001-add-build-support-for-php-8.patch
+new file mode 100644
+index 0000000000..6fe09ad3bd
+--- /dev/null
++++ b/package/php-amqp/0001-add-build-support-for-php-8.patch
+@@ -0,0 +1,54 @@
++From 96cd5cb5eddd3db2faaa3643dad2fe4677d7c438 Mon Sep 17 00:00:00 2001
++From: mmokhi <mokhi64@gmail.com>
++Date: Thu, 30 Jul 2020 11:25:33 +0200
++Subject: [PATCH] Add build support for PHP8.0 (#381)
++
++From upstream commit: 96cd5cb5eddd3db2faaa3643dad2fe4677d7c438
++
++Signed-off-by: mmokhi <mokhi64@gmail.com>
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ amqp_envelope.h |  7 +++++++
++ php7_support.h  | 11 +++++++++++
++ 2 files changed, 18 insertions(+)
++
++diff --git a/amqp_envelope.h b/amqp_envelope.h
++index e63a3a5..e315682 100644
++--- a/amqp_envelope.h
+++++ b/amqp_envelope.h
++@@ -20,6 +20,13 @@
++   | - Jonathan Tansavatdi                                                |
++   +----------------------------------------------------------------------+
++ */
+++
+++#if PHP_MAJOR_VERSION >= 7
+++        #include "php7_support.h"
+++#else
+++        #include "php5_support.h"
+++#endif
+++
++ extern zend_class_entry *amqp_envelope_class_entry;
++ 
++ void convert_amqp_envelope_to_zval(amqp_envelope_t *amqp_envelope, zval *envelope TSRMLS_DC);
++diff --git a/php7_support.h b/php7_support.h
++index 47ce983..c9e8f5b 100644
++--- a/php7_support.h
+++++ b/php7_support.h
++@@ -101,6 +101,17 @@ typedef zval PHP5to7_zend_resource_le_t;
++ 
++ #define PHP5to7_ZEND_ACC_FINAL_CLASS ZEND_ACC_FINAL
++ 
+++/* Small change to let it build after a major internal change for php8.0
+++ * More info:
+++ * https://github.com/php/php-src/blob/php-8.0.0alpha3/UPGRADING.INTERNALS#L47
+++ */
+++#if PHP_MAJOR_VERSION >= 8
+++# define TSRMLS_DC
+++# define TSRMLS_D
+++# define TSRMLS_CC
+++# define TSRMLS_C
+++# endif
+++
++ #endif //PHP_AMQP_PHP7_SUPPORT_H
++ 
++ /*
+diff --git a/package/php-amqp/0002-more-work-for-php-8.patch b/package/php-amqp/0002-more-work-for-php-8.patch
+new file mode 100644
+index 0000000000..3651f5a0d3
+--- /dev/null
++++ b/package/php-amqp/0002-more-work-for-php-8.patch
+@@ -0,0 +1,1265 @@
++From df1241852b359cf12c346beaa68de202257efdf1 Mon Sep 17 00:00:00 2001
++From: Remi Collet <remi@remirepo.net>
++Date: Wed, 9 Dec 2020 17:00:46 +0100
++Subject: [PATCH] more work for PHP 8 (#383)
++
++* more work for PHP 8
++
++* split test
++
++Signed-off-by: Remi Collet <remi@remirepo.net>
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ amqp_basic_properties.c       |  84 +++++++++++++--------------
++ amqp_channel.c                |  49 +++++++++-------
++ amqp_connection.c             | 106 +++++++++++++++++-----------------
++ amqp_connection_resource.c    |  12 ++--
++ amqp_decimal.c                |   8 +--
++ amqp_envelope.c               |  12 ++--
++ amqp_exchange.c               |  22 +++----
++ amqp_queue.c                  |  38 ++++++------
++ amqp_timestamp.c              |   6 +-
++ amqp_type.c                   |   6 +-
++ php5_support.h                |   2 +
++ php7_support.h                |   9 +++
++ php_amqp.h                    |   8 +--
++ tests/amqptimestamp.phpt      |   4 +-
++ tests/amqptimestamp_php8.phpt |  60 +++++++++++++++++++
++ tests/bug_61533.phpt          |   2 +-
++ 16 files changed, 254 insertions(+), 174 deletions(-)
++ create mode 100644 tests/amqptimestamp_php8.phpt
++
++diff --git a/amqp_basic_properties.c b/amqp_basic_properties.c
++index 69b813e..5375f44 100644
++--- a/amqp_basic_properties.c
+++++ b/amqp_basic_properties.c
++@@ -70,7 +70,7 @@ void php_amqp_basic_properties_set_empty_headers(zval *obj TSRMLS_DC) {
++     PHP5to7_MAYBE_INIT(headers);
++     PHP5to7_ARRAY_INIT(headers);
++ 
++-    zend_update_property(this_ce, obj, ZEND_STRL("headers"), PHP5to7_MAYBE_PTR(headers) TSRMLS_CC);
+++    zend_update_property(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("headers"), PHP5to7_MAYBE_PTR(headers) TSRMLS_CC);
++ 
++     PHP5to7_MAYBE_DESTROY(headers);
++ }
++@@ -118,29 +118,29 @@ static PHP_METHOD(AMQPBasicProperties, __construct) {
++                              ) == FAILURE) {
++         return;
++     }
++-    zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("content_type"), content_type, content_type_len TSRMLS_CC);
++-    zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("content_encoding"), content_encoding, content_encoding_len TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("content_type"), content_type, content_type_len TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("content_encoding"), content_encoding, content_encoding_len TSRMLS_CC);
++ 
++     if (headers != NULL) {
++-        zend_update_property(this_ce, getThis(), ZEND_STRL("headers"), headers TSRMLS_CC);
+++        zend_update_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("headers"), headers TSRMLS_CC);
++     } else {
++         php_amqp_basic_properties_set_empty_headers(getThis() TSRMLS_CC);
++     }
++ 
++-    zend_update_property_long(this_ce, getThis(), ZEND_STRL("delivery_mode"), delivery_mode TSRMLS_CC);
++-    zend_update_property_long(this_ce, getThis(), ZEND_STRL("priority"), priority TSRMLS_CC);
+++    zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("delivery_mode"), delivery_mode TSRMLS_CC);
+++    zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("priority"), priority TSRMLS_CC);
++ 
++-    zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("correlation_id"), correlation_id, correlation_id_len TSRMLS_CC);
++-    zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("reply_to"), reply_to, reply_to_len TSRMLS_CC);
++-    zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("expiration"), expiration, expiration_len TSRMLS_CC);
++-    zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("message_id"), message_id, message_id_len TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("correlation_id"), correlation_id, correlation_id_len TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("reply_to"), reply_to, reply_to_len TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("expiration"), expiration, expiration_len TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("message_id"), message_id, message_id_len TSRMLS_CC);
++ 
++-    zend_update_property_long(this_ce, getThis(), ZEND_STRL("timestamp"), timestamp TSRMLS_CC);
+++    zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("timestamp"), timestamp TSRMLS_CC);
++ 
++-    zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("type"), type, type_len TSRMLS_CC);
++-    zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("user_id"), user_id, user_id_len TSRMLS_CC);
++-    zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("app_id"), app_id, app_id_len TSRMLS_CC);
++-    zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("cluster_id"), cluster_id, cluster_id_len TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("type"), type, type_len TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("user_id"), user_id, user_id_len TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("app_id"), app_id, app_id_len TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("cluster_id"), cluster_id, cluster_id_len TSRMLS_CC);
++ }
++ /* }}} */
++ 
++@@ -460,7 +460,7 @@ void parse_amqp_table(amqp_table_t *table, zval *result TSRMLS_DC) {
++ 				object_init_ex(PHP5to7_MAYBE_PTR(value), amqp_timestamp_class_entry);
++ 
++ 				zend_call_method_with_1_params(
++-						&value,
+++						PHP5to8_OBJ_PROP(&value),
++ 						amqp_timestamp_class_entry,
++ 						NULL,
++ 						"__construct",
++@@ -488,7 +488,7 @@ void parse_amqp_table(amqp_table_t *table, zval *result TSRMLS_DC) {
++                 object_init_ex(PHP5to7_MAYBE_PTR(value), amqp_decimal_class_entry);
++ 
++                 zend_call_method_with_2_params(
++-                        &value,
+++                        PHP5to8_OBJ_PROP(&value),
++                         amqp_decimal_class_entry,
++                         NULL,
++                         "__construct",
++@@ -525,93 +525,93 @@ void php_amqp_basic_properties_extract(amqp_basic_properties_t *p, zval *obj TSR
++     PHP5to7_ARRAY_INIT(headers);
++ 
++     if (p->_flags & AMQP_BASIC_CONTENT_TYPE_FLAG) {
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("content_type"), (const char *) p->content_type.bytes, (PHP5to7_param_str_len_type_t) p->content_type.len TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("content_type"), (const char *) p->content_type.bytes, (PHP5to7_param_str_len_type_t) p->content_type.len TSRMLS_CC);
++     } else {
++         /* BC */
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("content_type"), "", 0 TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("content_type"), "", 0 TSRMLS_CC);
++     }
++ 
++     if (p->_flags & AMQP_BASIC_CONTENT_ENCODING_FLAG) {
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("content_encoding"), (const char *) p->content_encoding.bytes, (PHP5to7_param_str_len_type_t) p->content_encoding.len TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("content_encoding"), (const char *) p->content_encoding.bytes, (PHP5to7_param_str_len_type_t) p->content_encoding.len TSRMLS_CC);
++     } else {
++         /* BC */
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("content_encoding"), "", 0 TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("content_encoding"), "", 0 TSRMLS_CC);
++     }
++ 
++     if (p->_flags & AMQP_BASIC_HEADERS_FLAG) {
++         parse_amqp_table(&(p->headers), PHP5to7_MAYBE_PTR(headers) TSRMLS_CC);
++     }
++ 
++-    zend_update_property(this_ce, obj, ZEND_STRL("headers"), PHP5to7_MAYBE_PTR(headers) TSRMLS_CC);
+++    zend_update_property(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("headers"), PHP5to7_MAYBE_PTR(headers) TSRMLS_CC);
++ 
++     if (p->_flags & AMQP_BASIC_DELIVERY_MODE_FLAG) {
++-        zend_update_property_long(this_ce, obj, ZEND_STRL("delivery_mode"), (PHP5to7_param_long_type_t) p->delivery_mode TSRMLS_CC);
+++        zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("delivery_mode"), (PHP5to7_param_long_type_t) p->delivery_mode TSRMLS_CC);
++     } else {
++         /* BC */
++-        zend_update_property_long(this_ce, obj, ZEND_STRL("delivery_mode"), AMQP_DELIVERY_NONPERSISTENT TSRMLS_CC);
+++        zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("delivery_mode"), AMQP_DELIVERY_NONPERSISTENT TSRMLS_CC);
++     }
++ 
++     if (p->_flags & AMQP_BASIC_PRIORITY_FLAG) {
++-        zend_update_property_long(this_ce, obj, ZEND_STRL("priority"), (PHP5to7_param_long_type_t) p->priority TSRMLS_CC);
+++        zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("priority"), (PHP5to7_param_long_type_t) p->priority TSRMLS_CC);
++     } else {
++         /* BC */
++-        zend_update_property_long(this_ce, obj, ZEND_STRL("priority"), 0 TSRMLS_CC);
+++        zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("priority"), 0 TSRMLS_CC);
++     }
++ 
++     if (p->_flags & AMQP_BASIC_CORRELATION_ID_FLAG) {
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("correlation_id"), (const char *) p->correlation_id.bytes, (PHP5to7_param_str_len_type_t) p->correlation_id.len TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("correlation_id"), (const char *) p->correlation_id.bytes, (PHP5to7_param_str_len_type_t) p->correlation_id.len TSRMLS_CC);
++     } else {
++         /* BC */
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("correlation_id"), "", 0 TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("correlation_id"), "", 0 TSRMLS_CC);
++     }
++ 
++     if (p->_flags & AMQP_BASIC_REPLY_TO_FLAG) {
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("reply_to"), (const char *) p->reply_to.bytes, (PHP5to7_param_str_len_type_t) p->reply_to.len TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("reply_to"), (const char *) p->reply_to.bytes, (PHP5to7_param_str_len_type_t) p->reply_to.len TSRMLS_CC);
++     } else {
++         /* BC */
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("reply_to"), "", 0 TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("reply_to"), "", 0 TSRMLS_CC);
++     }
++ 
++     if (p->_flags & AMQP_BASIC_EXPIRATION_FLAG) {
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("expiration"), (const char *) p->expiration.bytes, (PHP5to7_param_str_len_type_t) p->expiration.len TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("expiration"), (const char *) p->expiration.bytes, (PHP5to7_param_str_len_type_t) p->expiration.len TSRMLS_CC);
++     } else {
++         /* BC */
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("expiration"), "", 0 TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("expiration"), "", 0 TSRMLS_CC);
++     }
++ 
++     if (p->_flags & AMQP_BASIC_MESSAGE_ID_FLAG) {
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("message_id"), (const char *) p->message_id.bytes, (PHP5to7_param_str_len_type_t) p->message_id.len TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("message_id"), (const char *) p->message_id.bytes, (PHP5to7_param_str_len_type_t) p->message_id.len TSRMLS_CC);
++     } else {
++         /* BC */
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("message_id"), "", 0 TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("message_id"), "", 0 TSRMLS_CC);
++     }
++ 
++     if (p->_flags & AMQP_BASIC_TIMESTAMP_FLAG) {
++-        zend_update_property_long(this_ce, obj, ZEND_STRL("timestamp"), (PHP5to7_param_long_type_t) p->timestamp TSRMLS_CC);
+++        zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("timestamp"), (PHP5to7_param_long_type_t) p->timestamp TSRMLS_CC);
++     } else {
++         /* BC */
++-        zend_update_property_long(this_ce, obj, ZEND_STRL("timestamp"), 0 TSRMLS_CC);
+++        zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("timestamp"), 0 TSRMLS_CC);
++     }
++ 
++     if (p->_flags & AMQP_BASIC_TYPE_FLAG) {
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("type"), (const char *) p->type.bytes, (PHP5to7_param_str_len_type_t) p->type.len TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("type"), (const char *) p->type.bytes, (PHP5to7_param_str_len_type_t) p->type.len TSRMLS_CC);
++     } else {
++         /* BC */
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("type"), "", 0 TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("type"), "", 0 TSRMLS_CC);
++     }
++ 
++     if (p->_flags & AMQP_BASIC_USER_ID_FLAG) {
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("user_id"), (const char *) p->user_id.bytes, (PHP5to7_param_str_len_type_t) p->user_id.len TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("user_id"), (const char *) p->user_id.bytes, (PHP5to7_param_str_len_type_t) p->user_id.len TSRMLS_CC);
++     } else {
++         /* BC */
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("user_id"), "", 0 TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("user_id"), "", 0 TSRMLS_CC);
++     }
++ 
++     if (p->_flags & AMQP_BASIC_APP_ID_FLAG) {
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("app_id"), (const char *) p->app_id.bytes, (PHP5to7_param_str_len_type_t) p->app_id.len TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("app_id"), (const char *) p->app_id.bytes, (PHP5to7_param_str_len_type_t) p->app_id.len TSRMLS_CC);
++     } else {
++         /* BC */
++-        zend_update_property_stringl(this_ce, obj, ZEND_STRL("app_id"), "", 0 TSRMLS_CC);
+++        zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(obj), ZEND_STRL("app_id"), "", 0 TSRMLS_CC);
++     }
++ 
++     PHP5to7_MAYBE_DESTROY(headers);
++diff --git a/amqp_channel.c b/amqp_channel.c
++index ef9552a..493c6d3 100644
++--- a/amqp_channel.c
+++++ b/amqp_channel.c
++@@ -152,10 +152,15 @@ static zval * php_amqp_get_fci_gc_data(zend_fcall_info *fci, zval *gc_data) {
++ 	return gc_data;
++ }
++ 
+++#if PHP_MAJOR_VERSION < 8
++ static HashTable *amqp_channel_gc(zval *object, zval **table, int *n) /* {{{ */
++ {
++-	amqp_channel_object *channel = PHP_AMQP_GET_CHANNEL(object);
++-
+++    amqp_channel_object *channel = PHP_AMQP_GET_CHANNEL(object);
+++#else
+++static HashTable *amqp_channel_gc(zend_object *object, zval **table, int *n) /* {{{ */
+++{
+++	amqp_channel_object *channel = php_amqp_channel_object_fetch(object);
+++#endif
++ 	int basic_return_cnt = php_amqp_get_fci_gc_data_count(&channel->callbacks.basic_return.fci);
++ 	int basic_ack_cnt    = php_amqp_get_fci_gc_data_count(&channel->callbacks.basic_ack.fci);
++ 	int basic_nack_cnt   = php_amqp_get_fci_gc_data_count(&channel->callbacks.basic_nack.fci);
++@@ -249,7 +254,7 @@ static HashTable *amqp_channel_gc(zval *object, zval ***table, int *n TSRMLS_DC)
++ 	*table = channel->gc_data;
++ 	*n     = cnt;
++ 
++-	return zend_std_get_properties(object TSRMLS_CC);
+++	return zend_std_get_properties(PHP5to8_OBJ_PROP(object) TSRMLS_CC);
++ } /* }}} */
++ 
++ #endif
++@@ -331,7 +336,7 @@ static PHP_METHOD(amqp_channel_class, __construct)
++ 	amqp_connection_object *connection;
++ 
++ 	/* Parse out the method parameters */
++-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &connection_object) == FAILURE) {
+++	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &connection_object, amqp_connection_class_entry) == FAILURE) {
++ 		zend_throw_exception(amqp_channel_exception_class_entry, "Parameter must be an instance of AMQPConnection.", 0 TSRMLS_CC);
++ 		RETURN_NULL();
++ 	}
++@@ -341,7 +346,7 @@ static PHP_METHOD(amqp_channel_class, __construct)
++ 	PHP5to7_MAYBE_INIT(consumers);
++ 	PHP5to7_ARRAY_INIT(consumers);
++ 
++-	zend_update_property(this_ce, getThis(), ZEND_STRL("consumers"), PHP5to7_MAYBE_PTR(consumers) TSRMLS_CC);
+++	zend_update_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("consumers"), PHP5to7_MAYBE_PTR(consumers) TSRMLS_CC);
++ 
++ 	PHP5to7_MAYBE_DESTROY(consumers);
++ 
++@@ -351,16 +356,16 @@ static PHP_METHOD(amqp_channel_class, __construct)
++ #endif
++ 
++ 	/* Set the prefetch count */
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("prefetch_count"), INI_INT("amqp.prefetch_count") TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("prefetch_count"), INI_INT("amqp.prefetch_count") TSRMLS_CC);
++ 
++ 	/* Set the prefetch size */
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("prefetch_size"), INI_INT("amqp.prefetch_size") TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("prefetch_size"), INI_INT("amqp.prefetch_size") TSRMLS_CC);
++ 
++ 	/* Set the global prefetch count */
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("global_prefetch_count"), INI_INT("amqp.global_prefetch_count") TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("global_prefetch_count"), INI_INT("amqp.global_prefetch_count") TSRMLS_CC);
++ 
++ 	/* Set the global prefetch size */
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("global_prefetch_size"), INI_INT("amqp.global_prefetch_size") TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("global_prefetch_size"), INI_INT("amqp.global_prefetch_size") TSRMLS_CC);
++ 
++ 	/* Pull out and verify the connection */
++ 	connection = PHP_AMQP_GET_CONNECTION(connection_object);
++@@ -376,7 +381,7 @@ static PHP_METHOD(amqp_channel_class, __construct)
++ 		return;
++ 	}
++ 
++-	zend_update_property(this_ce, getThis(), ZEND_STRL("connection"), connection_object TSRMLS_CC);
+++	zend_update_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("connection"), connection_object TSRMLS_CC);
++ 
++ 	channel_resource = (amqp_channel_resource*)ecalloc(1, sizeof(amqp_channel_resource));
++ 	channel->channel_resource = channel_resource;
++@@ -580,8 +585,8 @@ static PHP_METHOD(amqp_channel_class, setPrefetchCount)
++ 	}
++ 
++ 	/* Set the prefetch count - the implication is to disable the size */
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("prefetch_count"), prefetch_count TSRMLS_CC);
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("prefetch_size"), 0 TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("prefetch_count"), prefetch_count TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("prefetch_size"), 0 TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -659,8 +664,8 @@ static PHP_METHOD(amqp_channel_class, setPrefetchSize)
++ 	}
++ 
++ 	/* Set the prefetch size - the implication is to disable the count */
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("prefetch_count"), 0 TSRMLS_CC);
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("prefetch_size"), prefetch_size TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("prefetch_count"), 0 TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("prefetch_size"), prefetch_size TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -715,8 +720,8 @@ static PHP_METHOD(amqp_channel_class, setGlobalPrefetchCount)
++ 	}
++ 
++ 	/* Set the global prefetch count - the implication is to disable the size */
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("global_prefetch_count"), global_prefetch_count TSRMLS_CC);
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("global_prefetch_size"), 0 TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("global_prefetch_count"), global_prefetch_count TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("global_prefetch_size"), 0 TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -771,8 +776,8 @@ static PHP_METHOD(amqp_channel_class, setGlobalPrefetchSize)
++ 	}
++ 
++ 	/* Set the global prefetch size - the implication is to disable the count */
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("global_prefetch_count"), 0 TSRMLS_CC);
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("global_prefetch_size"), global_prefetch_size TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("global_prefetch_count"), 0 TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("global_prefetch_size"), global_prefetch_size TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -808,11 +813,11 @@ static PHP_METHOD(amqp_channel_class, qos)
++ 
++ 	/* Set the prefetch size and prefetch count */
++ 	if (global) {
++-		zend_update_property_long(this_ce, getThis(), ZEND_STRL("global_prefetch_size"), prefetch_size TSRMLS_CC);
++-		zend_update_property_long(this_ce, getThis(), ZEND_STRL("global_prefetch_count"), prefetch_count TSRMLS_CC);
+++		zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("global_prefetch_size"), prefetch_size TSRMLS_CC);
+++		zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("global_prefetch_count"), prefetch_count TSRMLS_CC);
++ 	} else {
++-		zend_update_property_long(this_ce, getThis(), ZEND_STRL("prefetch_size"), prefetch_size TSRMLS_CC);
++-		zend_update_property_long(this_ce, getThis(), ZEND_STRL("prefetch_count"), prefetch_count TSRMLS_CC);
+++		zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("prefetch_size"), prefetch_size TSRMLS_CC);
+++		zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("prefetch_count"), prefetch_count TSRMLS_CC);
++ 	}
++ 
++ 	/* If we are already connected, set the new prefetch count */
++diff --git a/amqp_connection.c b/amqp_connection.c
++index 5891a4f..466501a 100644
++--- a/amqp_connection.c
+++++ b/amqp_connection.c
++@@ -68,9 +68,9 @@ zend_object_handlers amqp_connection_object_handlers;
++ 		convert_to_string(PHP5to7_MAYBE_DEREF(zdata)); \
++ 	} \
++ 	if (zdata && Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) > 0) { \
++-		zend_update_property_string(this_ce, getThis(), ZEND_STRL(name), Z_STRVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC); \
+++		zend_update_property_string(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL(name), Z_STRVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC); \
++ 	} else { \
++-		zend_update_property_string(this_ce, getThis(), ZEND_STRL(name), INI_STR("amqp." name) TSRMLS_CC); \
+++		zend_update_property_string(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL(name), INI_STR("amqp." name) TSRMLS_CC); \
++ 	}
++ 
++ #define PHP_AMQP_EXTRACT_CONNECTION_BOOL(name) \
++@@ -80,9 +80,9 @@ zend_object_handlers amqp_connection_object_handlers;
++ 		convert_to_long(PHP5to7_MAYBE_DEREF(zdata)); \
++ 	} \
++ 	if (zdata) { \
++-		zend_update_property_bool(this_ce, getThis(), ZEND_STRL(name), Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC); \
+++		zend_update_property_bool(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL(name), Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC); \
++ 	} else { \
++-		zend_update_property_bool(this_ce, getThis(), ZEND_STRL(name), INI_INT("amqp." name) TSRMLS_CC); \
+++		zend_update_property_bool(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL(name), INI_INT("amqp." name) TSRMLS_CC); \
++ 	}
++ 
++ static int php_amqp_connection_resource_deleter(PHP5to7_zend_resource_le_t *el, amqp_connection_resource *connection_resource TSRMLS_DC)
++@@ -344,13 +344,13 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 	/* Validate the given login */
++ 	if (zdata && Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) > 0) {
++ 		if (Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) < 128) {
++-			zend_update_property(this_ce, getThis(), ZEND_STRL("login"), PHP5to7_MAYBE_DEREF(zdata)TSRMLS_CC);
+++			zend_update_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("login"), PHP5to7_MAYBE_DEREF(zdata)TSRMLS_CC);
++ 		} else {
++ 			zend_throw_exception(amqp_connection_exception_class_entry, "Parameter 'login' exceeds 128 character limit.", 0 TSRMLS_CC);
++ 			return;
++ 		}
++ 	} else {
++-		zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("login"), INI_STR("amqp.login"), (PHP5to7_param_str_len_type_t) (strlen(INI_STR("amqp.login")) > 128 ? 128 : strlen(INI_STR("amqp.login"))) TSRMLS_CC);
+++		zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("login"), INI_STR("amqp.login"), (PHP5to7_param_str_len_type_t) (strlen(INI_STR("amqp.login")) > 128 ? 128 : strlen(INI_STR("amqp.login"))) TSRMLS_CC);
++ 	}
++ 
++ 	/* Pull the password out of the $params array */
++@@ -362,13 +362,13 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 	/* Validate the given password */
++ 	if (zdata && Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) > 0) {
++ 		if (Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) < 128) {
++-			zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("password"), Z_STRVAL_P(PHP5to7_MAYBE_DEREF(zdata)), Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++			zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("password"), Z_STRVAL_P(PHP5to7_MAYBE_DEREF(zdata)), Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 		} else {
++ 			zend_throw_exception(amqp_connection_exception_class_entry, "Parameter 'password' exceeds 128 character limit.", 0 TSRMLS_CC);
++ 			return;
++ 		}
++ 	} else {
++-		zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("password"), INI_STR("amqp.password"), (PHP5to7_param_str_len_type_t) (strlen(INI_STR("amqp.password")) > 128 ? 128 : strlen(INI_STR("amqp.password"))) TSRMLS_CC);
+++		zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("password"), INI_STR("amqp.password"), (PHP5to7_param_str_len_type_t) (strlen(INI_STR("amqp.password")) > 128 ? 128 : strlen(INI_STR("amqp.password"))) TSRMLS_CC);
++ 	}
++ 
++ 	/* Pull the host out of the $params array */
++@@ -380,13 +380,13 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 	/* Validate the given host */
++ 	if (zdata && Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) > 0) {
++ 		if (Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) < 128) {
++-			zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("host"), Z_STRVAL_P(PHP5to7_MAYBE_DEREF(zdata)), Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++			zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("host"), Z_STRVAL_P(PHP5to7_MAYBE_DEREF(zdata)), Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 		} else {
++ 			zend_throw_exception(amqp_connection_exception_class_entry, "Parameter 'host' exceeds 128 character limit.", 0 TSRMLS_CC);
++ 			return;
++ 		}
++ 	} else {
++-		zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("host"), INI_STR("amqp.host"), (PHP5to7_param_str_len_type_t) (strlen(INI_STR("amqp.host")) > 128 ? 128 : strlen(INI_STR("amqp.host"))) TSRMLS_CC);
+++		zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("host"), INI_STR("amqp.host"), (PHP5to7_param_str_len_type_t) (strlen(INI_STR("amqp.host")) > 128 ? 128 : strlen(INI_STR("amqp.host"))) TSRMLS_CC);
++ 	}
++ 
++ 	/* Pull the vhost out of the $params array */
++@@ -398,25 +398,25 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 	/* Validate the given vhost */
++ 	if (zdata && Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) > 0) {
++ 		if (Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) < 128) {
++-			zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("vhost"), Z_STRVAL_P(PHP5to7_MAYBE_DEREF(zdata)), Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++			zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("vhost"), Z_STRVAL_P(PHP5to7_MAYBE_DEREF(zdata)), Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 		} else {
++ 			zend_throw_exception(amqp_connection_exception_class_entry, "Parameter 'vhost' exceeds 128 character limit.", 0 TSRMLS_CC);
++ 			return;
++ 		}
++ 	} else {
++-		zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("vhost"), INI_STR("amqp.vhost"), (PHP5to7_param_str_len_type_t) (strlen(INI_STR("amqp.vhost")) > 128 ? 128 : strlen(INI_STR("amqp.vhost"))) TSRMLS_CC);
+++		zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("vhost"), INI_STR("amqp.vhost"), (PHP5to7_param_str_len_type_t) (strlen(INI_STR("amqp.vhost")) > 128 ? 128 : strlen(INI_STR("amqp.vhost"))) TSRMLS_CC);
++ 
++ 	}
++ 
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("port"), INI_INT("amqp.port") TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("port"), INI_INT("amqp.port") TSRMLS_CC);
++ 
++ 	if (ini_arr && PHP5to7_ZEND_HASH_FIND(HASH_OF(ini_arr), "port", sizeof("port"), zdata)) {
++ 		SEPARATE_ZVAL(zdata);
++ 		convert_to_long(PHP5to7_MAYBE_DEREF(zdata));
++-		zend_update_property_long(this_ce, getThis(), ZEND_STRL("port"), Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++		zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("port"), Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 	}
++ 
++-	zend_update_property_double(this_ce, getThis(), ZEND_STRL("read_timeout"), INI_FLT("amqp.read_timeout") TSRMLS_CC);
+++	zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("read_timeout"), INI_FLT("amqp.read_timeout") TSRMLS_CC);
++ 
++ 	if (ini_arr && PHP5to7_ZEND_HASH_FIND(HASH_OF(ini_arr), "read_timeout", sizeof("read_timeout"), zdata)) {
++ 		SEPARATE_ZVAL(zdata);
++@@ -424,7 +424,7 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 		if (Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) < 0) {
++ 			zend_throw_exception(amqp_connection_exception_class_entry, "Parameter 'read_timeout' must be greater than or equal to zero.", 0 TSRMLS_CC);
++ 		} else {
++-			zend_update_property_double(this_ce, getThis(), ZEND_STRL("read_timeout"), Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++			zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("read_timeout"), Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 		}
++ 
++ 		if (ini_arr && PHP5to7_ZEND_HASH_FIND(HASH_OF(ini_arr), "timeout", sizeof("timeout"), zdata)) {
++@@ -441,7 +441,7 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 		if (Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) < 0) {
++ 			zend_throw_exception(amqp_connection_exception_class_entry, "Parameter 'timeout' must be greater than or equal to zero.", 0 TSRMLS_CC);
++ 		} else {
++-			zend_update_property_double(this_ce, getThis(), ZEND_STRL("read_timeout"), Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++			zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("read_timeout"), Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 		}
++ 	} else {
++ 
++@@ -450,17 +450,17 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 			php_error_docref(NULL TSRMLS_CC, E_DEPRECATED, "INI setting 'amqp.timeout' is deprecated; use 'amqp.read_timeout' instead");
++ 
++ 			if (strcmp(DEFAULT_READ_TIMEOUT, INI_STR("amqp.read_timeout")) == 0) {
++-				zend_update_property_double(this_ce, getThis(), ZEND_STRL("read_timeout"), INI_FLT("amqp.timeout") TSRMLS_CC);
+++				zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("read_timeout"), INI_FLT("amqp.timeout") TSRMLS_CC);
++ 			} else {
++ 				php_error_docref(NULL TSRMLS_CC, E_NOTICE, "INI setting 'amqp.read_timeout' will be used instead of 'amqp.timeout'");
++-				zend_update_property_double(this_ce, getThis(), ZEND_STRL("read_timeout"), INI_FLT("amqp.read_timeout") TSRMLS_CC);
+++				zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("read_timeout"), INI_FLT("amqp.read_timeout") TSRMLS_CC);
++ 			}
++ 		} else {
++-			zend_update_property_double(this_ce, getThis(), ZEND_STRL("read_timeout"), INI_FLT("amqp.read_timeout") TSRMLS_CC);
+++			zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("read_timeout"), INI_FLT("amqp.read_timeout") TSRMLS_CC);
++ 		}
++ 	}
++ 
++-	zend_update_property_double(this_ce, getThis(), ZEND_STRL("write_timeout"), INI_FLT("amqp.write_timeout") TSRMLS_CC);
+++	zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("write_timeout"), INI_FLT("amqp.write_timeout") TSRMLS_CC);
++ 
++ 	if (ini_arr && PHP5to7_ZEND_HASH_FIND(HASH_OF(ini_arr), "write_timeout", sizeof("write_timeout"), zdata)) {
++ 		SEPARATE_ZVAL(zdata);
++@@ -468,11 +468,11 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 		if (Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) < 0) {
++ 			zend_throw_exception(amqp_connection_exception_class_entry, "Parameter 'write_timeout' must be greater than or equal to zero.", 0 TSRMLS_CC);
++ 		} else {
++-			zend_update_property_double(this_ce, getThis(), ZEND_STRL("write_timeout"), Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++			zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("write_timeout"), Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 		}
++ 	}
++ 
++-	zend_update_property_double(this_ce, getThis(), ZEND_STRL("rpc_timeout"), INI_FLT("amqp.rpc_timeout") TSRMLS_CC);
+++	zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("rpc_timeout"), INI_FLT("amqp.rpc_timeout") TSRMLS_CC);
++ 
++ 	if (ini_arr && PHP5to7_ZEND_HASH_FIND(HASH_OF(ini_arr), "rpc_timeout", sizeof("rpc_timeout"), zdata)) {
++ 		SEPARATE_ZVAL(zdata);
++@@ -480,11 +480,11 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 		if (Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) < 0) {
++ 			zend_throw_exception(amqp_connection_exception_class_entry, "Parameter 'rpc_timeout' must be greater than or equal to zero.", 0 TSRMLS_CC);
++ 		} else {
++-			zend_update_property_double(this_ce, getThis(), ZEND_STRL("rpc_timeout"), Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++			zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("rpc_timeout"), Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 		}
++ 	}
++ 
++-	zend_update_property_double(this_ce, getThis(), ZEND_STRL("connect_timeout"), INI_FLT("amqp.connect_timeout") TSRMLS_CC);
+++	zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("connect_timeout"), INI_FLT("amqp.connect_timeout") TSRMLS_CC);
++ 
++ 	if (ini_arr && PHP5to7_ZEND_HASH_FIND(HASH_OF(ini_arr), "connect_timeout", sizeof("connect_timeout"), zdata)) {
++ 		SEPARATE_ZVAL(zdata);
++@@ -492,12 +492,12 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 		if (Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) < 0) {
++ 			zend_throw_exception(amqp_connection_exception_class_entry, "Parameter 'connect_timeout' must be greater than or equal to zero.", 0 TSRMLS_CC);
++ 		} else {
++-			zend_update_property_double(this_ce, getThis(), ZEND_STRL("connect_timeout"), Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++			zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("connect_timeout"), Z_DVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 
++ 		}
++ 	}
++ 
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("channel_max"), INI_INT("amqp.channel_max") TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("channel_max"), INI_INT("amqp.channel_max") TSRMLS_CC);
++ 
++ 	if (ini_arr && PHP5to7_ZEND_HASH_FIND(HASH_OF(ini_arr), "channel_max", sizeof("channel_max"), zdata)) {
++ 		SEPARATE_ZVAL(zdata);
++@@ -506,14 +506,14 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 			zend_throw_exception(amqp_connection_exception_class_entry, "Parameter 'channel_max' is out of range.", 0 TSRMLS_CC);
++ 		} else {
++ 			if(Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) == 0) {
++-				zend_update_property_long(this_ce, getThis(), ZEND_STRL("channel_max"), PHP_AMQP_DEFAULT_CHANNEL_MAX TSRMLS_CC);
+++				zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("channel_max"), PHP_AMQP_DEFAULT_CHANNEL_MAX TSRMLS_CC);
++ 			} else {
++-				zend_update_property_long(this_ce, getThis(), ZEND_STRL("channel_max"), Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++				zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("channel_max"), Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 			}
++ 		}
++ 	}
++ 
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("frame_max"), INI_INT("amqp.frame_max") TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("frame_max"), INI_INT("amqp.frame_max") TSRMLS_CC);
++ 
++ 	if (ini_arr && PHP5to7_ZEND_HASH_FIND(HASH_OF(ini_arr), "frame_max", sizeof("frame_max"), zdata)) {
++ 		SEPARATE_ZVAL(zdata);
++@@ -522,14 +522,14 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 			zend_throw_exception(amqp_connection_exception_class_entry, "Parameter 'frame_max' is out of range.", 0 TSRMLS_CC);
++ 		} else {
++ 			if(Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) == 0) {
++-				zend_update_property_long(this_ce, getThis(), ZEND_STRL("frame_max"), PHP_AMQP_DEFAULT_FRAME_MAX TSRMLS_CC);
+++				zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("frame_max"), PHP_AMQP_DEFAULT_FRAME_MAX TSRMLS_CC);
++ 			} else {
++-				zend_update_property_long(this_ce, getThis(), ZEND_STRL("frame_max"), Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++				zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("frame_max"), Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 			}
++ 		}
++ 	}
++ 
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("heartbeat"), INI_INT("amqp.heartbeat") TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("heartbeat"), INI_INT("amqp.heartbeat") TSRMLS_CC);
++ 
++ 	if (ini_arr && PHP5to7_ZEND_HASH_FIND(HASH_OF(ini_arr), "heartbeat", sizeof("heartbeat"), zdata)) {
++ 		SEPARATE_ZVAL(zdata);
++@@ -537,16 +537,16 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 		if (Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) < 0 || Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) > PHP_AMQP_MAX_HEARTBEAT) {
++ 			zend_throw_exception(amqp_connection_exception_class_entry, "Parameter 'heartbeat' is out of range.", 0 TSRMLS_CC);
++ 		} else {
++-			zend_update_property_long(this_ce, getThis(), ZEND_STRL("heartbeat"), Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++			zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("heartbeat"), Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 		}
++ 	}
++ 
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("sasl_method"), INI_INT("amqp.sasl_method") TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("sasl_method"), INI_INT("amqp.sasl_method") TSRMLS_CC);
++ 
++ 	if (ini_arr && PHP5to7_ZEND_HASH_FIND(HASH_OF(ini_arr), "sasl_method", sizeof("sasl_method"), zdata)) {
++ 		SEPARATE_ZVAL(zdata);
++ 		convert_to_long(PHP5to7_MAYBE_DEREF(zdata));
++-		zend_update_property_long(this_ce, getThis(), ZEND_STRL("sasl_method"), Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++		zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("sasl_method"), Z_LVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 	}
++ 
++ 
++@@ -563,7 +563,7 @@ static PHP_METHOD(amqp_connection_class, __construct)
++ 		convert_to_string(PHP5to7_MAYBE_DEREF(zdata));
++ 	}
++ 	if (zdata && Z_STRLEN_P(PHP5to7_MAYBE_DEREF(zdata)) > 0) {
++-		zend_update_property_string(this_ce, getThis(), ZEND_STRL("connection_name"), Z_STRVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
+++		zend_update_property_string(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("connection_name"), Z_STRVAL_P(PHP5to7_MAYBE_DEREF(zdata)) TSRMLS_CC);
++ 	}
++ }
++ /* }}} */
++@@ -789,7 +789,7 @@ static PHP_METHOD(amqp_connection_class, setLogin)
++ 		return;
++ 	}
++ 
++-	zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("login"), login, login_len TSRMLS_CC);
+++	zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("login"), login, login_len TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -823,7 +823,7 @@ static PHP_METHOD(amqp_connection_class, setPassword)
++ 		return;
++ 	}
++ 
++-	zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("password"), password, password_len TSRMLS_CC);
+++	zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("password"), password, password_len TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -858,7 +858,7 @@ static PHP_METHOD(amqp_connection_class, setHost)
++ 		return;
++ 	}
++ 
++-	zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("host"), host, host_len TSRMLS_CC);
+++	zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("host"), host, host_len TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -910,7 +910,7 @@ static PHP_METHOD(amqp_connection_class, setPort)
++ 		return;
++ 	}
++ 
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("port"), port TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("port"), port TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -943,7 +943,7 @@ static PHP_METHOD(amqp_connection_class, setVhost)
++ 		return;
++ 	}
++ 
++-	zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("vhost"), vhost, vhost_len TSRMLS_CC);
+++	zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("vhost"), vhost, vhost_len TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -986,7 +986,7 @@ static PHP_METHOD(amqp_connection_class, setTimeout)
++ 	/* Get the connection object out of the store */
++ 	connection = PHP_AMQP_GET_CONNECTION(getThis());
++ 
++-	zend_update_property_double(this_ce, getThis(), ZEND_STRL("read_timeout"), read_timeout TSRMLS_CC);
+++	zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("read_timeout"), read_timeout TSRMLS_CC);
++ 
++ 	if (connection->connection_resource && connection->connection_resource->is_connected) {
++ 		if (php_amqp_set_resource_read_timeout(connection->connection_resource, read_timeout TSRMLS_CC) == 0) {
++@@ -1032,7 +1032,7 @@ static PHP_METHOD(amqp_connection_class, setReadTimeout)
++ 	/* Get the connection object out of the store */
++ 	connection = PHP_AMQP_GET_CONNECTION(getThis());
++ 
++-	zend_update_property_double(this_ce, getThis(), ZEND_STRL("read_timeout"), read_timeout TSRMLS_CC);
+++	zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("read_timeout"), read_timeout TSRMLS_CC);
++ 
++ 	if (connection->connection_resource && connection->connection_resource->is_connected) {
++ 		if (php_amqp_set_resource_read_timeout(connection->connection_resource, read_timeout TSRMLS_CC) == 0) {
++@@ -1078,7 +1078,7 @@ static PHP_METHOD(amqp_connection_class, setWriteTimeout)
++ 	/* Get the connection object out of the store */
++ 	connection = PHP_AMQP_GET_CONNECTION(getThis());
++ 
++-	zend_update_property_double(this_ce, getThis(), ZEND_STRL("write_timeout"), write_timeout TSRMLS_CC);
+++	zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("write_timeout"), write_timeout TSRMLS_CC);
++ 
++ 	if (connection->connection_resource && connection->connection_resource->is_connected) {
++ 		if (php_amqp_set_resource_write_timeout(connection->connection_resource, write_timeout TSRMLS_CC) == 0) {
++@@ -1124,7 +1124,7 @@ static PHP_METHOD(amqp_connection_class, setRpcTimeout)
++ 	/* Get the connection object out of the store */
++ 	connection = PHP_AMQP_GET_CONNECTION(getThis());
++ 
++-	zend_update_property_double(this_ce, getThis(), ZEND_STRL("rpc_timeout"), rpc_timeout TSRMLS_CC);
+++	zend_update_property_double(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("rpc_timeout"), rpc_timeout TSRMLS_CC);
++ 
++ 	if (connection->connection_resource && connection->connection_resource->is_connected) {
++ 		if (php_amqp_set_resource_rpc_timeout(connection->connection_resource, rpc_timeout TSRMLS_CC) == 0) {
++@@ -1255,7 +1255,7 @@ static PHP_METHOD(amqp_connection_class, setCACert)
++ 		return;
++ 	}
++ 
++-	zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("cacert"), str, str_len TSRMLS_CC);
+++	zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("cacert"), str, str_len TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -1279,7 +1279,7 @@ static PHP_METHOD(amqp_connection_class, setCert)
++ 		return;
++ 	}
++ 
++-	zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("cert"), str, str_len TSRMLS_CC);
+++	zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("cert"), str, str_len TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -1303,7 +1303,7 @@ static PHP_METHOD(amqp_connection_class, setKey)
++ 		return;
++ 	}
++ 
++-	zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("key"), str, str_len TSRMLS_CC);
+++	zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("key"), str, str_len TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -1328,7 +1328,7 @@ static PHP_METHOD(amqp_connection_class, setVerify)
++ 		return;
++ 	}
++ 
++-	zend_update_property_bool(this_ce, getThis(), ZEND_STRL("verify"), verify TSRMLS_CC);
+++	zend_update_property_bool(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("verify"), verify TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -1361,7 +1361,7 @@ static PHP_METHOD(amqp_connection_class, setSaslMethod)
++ 		return;
++ 	}
++ 
++-	zend_update_property_long(this_ce, getThis(), ZEND_STRL("sasl_method"), method TSRMLS_CC);
+++	zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("sasl_method"), method TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -1385,9 +1385,9 @@ static PHP_METHOD(amqp_connection_class, setConnectionName)
++ 		return;
++ 	}
++ 	if (str == NULL) {
++-		zend_update_property_null(this_ce, getThis(), ZEND_STRL("connection_name") TSRMLS_CC);
+++		zend_update_property_null(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("connection_name") TSRMLS_CC);
++ 	} else {
++-		zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("connection_name"), str, str_len TSRMLS_CC);
+++		zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("connection_name"), str, str_len TSRMLS_CC);
++ 	}
++ 
++ 
++diff --git a/amqp_connection_resource.c b/amqp_connection_resource.c
++index 7e20a5c..b0e065a 100644
++--- a/amqp_connection_resource.c
+++++ b/amqp_connection_resource.c
++@@ -112,15 +112,15 @@ static void php_amqp_close_connection_from_server(amqp_rpc_reply_t reply, char *
++ 
++ 	if (!reply.reply.id) {
++ 		PHP_AMQP_G(error_code) = -1;
++-		spprintf(message, 0, "Server connection error: %d, message: %s",
++-				 PHP_AMQP_G(error_code),
+++		spprintf(message, 0, "Server connection error: %ld, message: %s",
+++				 (long)PHP_AMQP_G(error_code),
++ 				 "unexpected response"
++ 		);
++ 	} else {
++ 		PHP_AMQP_G(error_code) = m->reply_code;
++ 		spprintf(message, 0, "Server connection error: %d, message: %.*s",
++ 				 m->reply_code,
++-				 (PHP5to7_param_str_len_type_t) m->reply_text.len,
+++				 (int) m->reply_text.len,
++ 				 (char *) m->reply_text.bytes
++ 		);
++ 	}
++@@ -156,15 +156,15 @@ static void php_amqp_close_channel_from_server(amqp_rpc_reply_t reply, char **me
++ 
++ 	if (!reply.reply.id) {
++ 		PHP_AMQP_G(error_code) = -1;
++-		spprintf(message, 0, "Server channel error: %d, message: %s",
++-				 PHP_AMQP_G(error_code),
+++		spprintf(message, 0, "Server channel error: %ld, message: %s",
+++				 (long)PHP_AMQP_G(error_code),
++ 				 "unexpected response"
++ 		);
++ 	} else {
++ 		PHP_AMQP_G(error_code) = m->reply_code;
++ 		spprintf(message, 0, "Server channel error: %d, message: %.*s",
++ 			m->reply_code,
++-			(PHP5to7_param_str_len_type_t) m->reply_text.len,
+++			(int) m->reply_text.len,
++ 			(char *)m->reply_text.bytes
++ 		);
++ 	}
++diff --git a/amqp_decimal.c b/amqp_decimal.c
++index 83c9f20..8fd92c1 100644
++--- a/amqp_decimal.c
+++++ b/amqp_decimal.c
++@@ -53,7 +53,7 @@ static PHP_METHOD(amqp_decimal_class, __construct)
++ 	}
++ 
++ 	if (exponent > AMQP_DECIMAL_EXPONENT_MAX) {
++-		zend_throw_exception_ex(amqp_value_exception_class_entry, 0 TSRMLS_CC, "Decimal exponent value must be less than %u.", AMQP_DECIMAL_EXPONENT_MAX);
+++		zend_throw_exception_ex(amqp_value_exception_class_entry, 0 TSRMLS_CC, "Decimal exponent value must be less than %u.", (unsigned)AMQP_DECIMAL_EXPONENT_MAX);
++ 		return;
++ 	}
++     if (significand < AMQP_DECIMAL_SIGNIFICAND_MIN) {
++@@ -62,12 +62,12 @@ static PHP_METHOD(amqp_decimal_class, __construct)
++     }
++ 
++     if (significand > AMQP_DECIMAL_SIGNIFICAND_MAX) {
++-        zend_throw_exception_ex(amqp_value_exception_class_entry, 0 TSRMLS_CC, "Decimal significand value must be less than %u.", AMQP_DECIMAL_SIGNIFICAND_MAX);
+++        zend_throw_exception_ex(amqp_value_exception_class_entry, 0 TSRMLS_CC, "Decimal significand value must be less than %u.", (unsigned)AMQP_DECIMAL_SIGNIFICAND_MAX);
++         return;
++     }
++ 
++-    zend_update_property_long(this_ce, getThis(), ZEND_STRL("exponent"), exponent TSRMLS_CC);
++-    zend_update_property_long(this_ce, getThis(), ZEND_STRL("significand"), significand TSRMLS_CC);
+++    zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("exponent"), exponent TSRMLS_CC);
+++    zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("significand"), significand TSRMLS_CC);
++ }
++ /* }}} */
++ 
++diff --git a/amqp_envelope.c b/amqp_envelope.c
++index 8127bed..b7a7a45 100644
++--- a/amqp_envelope.c
+++++ b/amqp_envelope.c
++@@ -67,13 +67,13 @@ void convert_amqp_envelope_to_zval(amqp_envelope_t *amqp_envelope, zval *envelop
++     amqp_basic_properties_t *p = &amqp_envelope->message.properties;
++     amqp_message_t *message = &amqp_envelope->message;
++ 
++-    zend_update_property_stringl(this_ce, envelope, ZEND_STRL("body"), (const char *) message->body.bytes, (PHP5to7_param_str_len_type_t) message->body.len TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(envelope), ZEND_STRL("body"), (const char *) message->body.bytes, (PHP5to7_param_str_len_type_t) message->body.len TSRMLS_CC);
++ 
++-    zend_update_property_stringl(this_ce, envelope, ZEND_STRL("consumer_tag"), (const char *) amqp_envelope->consumer_tag.bytes, (PHP5to7_param_str_len_type_t) amqp_envelope->consumer_tag.len TSRMLS_CC);
++-    zend_update_property_long(this_ce, envelope, ZEND_STRL("delivery_tag"), (PHP5to7_param_long_type_t) amqp_envelope->delivery_tag TSRMLS_CC);
++-    zend_update_property_bool(this_ce, envelope, ZEND_STRL("is_redelivery"), (PHP5to7_param_long_type_t) amqp_envelope->redelivered TSRMLS_CC);
++-    zend_update_property_stringl(this_ce, envelope, ZEND_STRL("exchange_name"), (const char *) amqp_envelope->exchange.bytes, (PHP5to7_param_str_len_type_t) amqp_envelope->exchange.len TSRMLS_CC);
++-    zend_update_property_stringl(this_ce, envelope, ZEND_STRL("routing_key"), (const char *) amqp_envelope->routing_key.bytes, (PHP5to7_param_str_len_type_t) amqp_envelope->routing_key.len TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(envelope), ZEND_STRL("consumer_tag"), (const char *) amqp_envelope->consumer_tag.bytes, (PHP5to7_param_str_len_type_t) amqp_envelope->consumer_tag.len TSRMLS_CC);
+++    zend_update_property_long(this_ce, PHP5to8_OBJ_PROP(envelope), ZEND_STRL("delivery_tag"), (PHP5to7_param_long_type_t) amqp_envelope->delivery_tag TSRMLS_CC);
+++    zend_update_property_bool(this_ce, PHP5to8_OBJ_PROP(envelope), ZEND_STRL("is_redelivery"), (PHP5to7_param_long_type_t) amqp_envelope->redelivered TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(envelope), ZEND_STRL("exchange_name"), (const char *) amqp_envelope->exchange.bytes, (PHP5to7_param_str_len_type_t) amqp_envelope->exchange.len TSRMLS_CC);
+++    zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(envelope), ZEND_STRL("routing_key"), (const char *) amqp_envelope->routing_key.bytes, (PHP5to7_param_str_len_type_t) amqp_envelope->routing_key.len TSRMLS_CC);
++ 
++     php_amqp_basic_properties_extract(p, envelope TSRMLS_CC);
++ }
++diff --git a/amqp_exchange.c b/amqp_exchange.c
++index 4f80d3b..4bfe397 100644
++--- a/amqp_exchange.c
+++++ b/amqp_exchange.c
++@@ -65,20 +65,20 @@ static PHP_METHOD(amqp_exchange_class, __construct)
++ 	zval *channelObj;
++ 	amqp_channel_resource *channel_resource;
++ 
++-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &channelObj) == FAILURE) {
+++	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &channelObj, amqp_channel_class_entry) == FAILURE) {
++ 		return;
++ 	}
++ 
++ 	PHP5to7_MAYBE_INIT(arguments);
++ 	PHP5to7_ARRAY_INIT(arguments);
++-	zend_update_property(this_ce, getThis(), ZEND_STRL("arguments"), PHP5to7_MAYBE_PTR(arguments) TSRMLS_CC);
+++	zend_update_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("arguments"), PHP5to7_MAYBE_PTR(arguments) TSRMLS_CC);
++ 	PHP5to7_MAYBE_DESTROY(arguments);
++ 
++ 	channel_resource = PHP_AMQP_GET_CHANNEL_RESOURCE(channelObj);
++ 	PHP_AMQP_VERIFY_CHANNEL_RESOURCE(channel_resource, "Could not create exchange.");
++ 
++-	zend_update_property(this_ce, getThis(), ZEND_STRL("channel"), channelObj TSRMLS_CC);
++-	zend_update_property(this_ce, getThis(), ZEND_STRL("connection"), PHP_AMQP_READ_OBJ_PROP(amqp_channel_class_entry, channelObj, "connection") TSRMLS_CC);
+++	zend_update_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("channel"), channelObj TSRMLS_CC);
+++	zend_update_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("connection"), PHP_AMQP_READ_OBJ_PROP(amqp_channel_class_entry, channelObj, "connection") TSRMLS_CC);
++ }
++ /* }}} */
++ 
++@@ -119,7 +119,7 @@ static PHP_METHOD(amqp_exchange_class, setName)
++ 	}
++ 
++ 	/* Set the exchange name */
++-	zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("name"), name, name_len TSRMLS_CC);
+++	zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("name"), name, name_len TSRMLS_CC);
++ }
++ /* }}} */
++ 
++@@ -168,10 +168,10 @@ static PHP_METHOD(amqp_exchange_class, setFlags)
++ 	/* Set the flags based on the bitmask we were given */
++ 	flagBitmask = flagBitmask ? flagBitmask & PHP_AMQP_EXCHANGE_FLAGS : flagBitmask;
++ 
++-	zend_update_property_bool(this_ce, getThis(), ZEND_STRL("passive"), IS_PASSIVE(flagBitmask) TSRMLS_CC);
++-	zend_update_property_bool(this_ce, getThis(), ZEND_STRL("durable"), IS_DURABLE(flagBitmask) TSRMLS_CC);
++-	zend_update_property_bool(this_ce, getThis(), ZEND_STRL("auto_delete"), IS_AUTODELETE(flagBitmask) TSRMLS_CC);
++-	zend_update_property_bool(this_ce, getThis(), ZEND_STRL("internal"), IS_INTERNAL(flagBitmask) TSRMLS_CC);
+++	zend_update_property_bool(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("passive"), IS_PASSIVE(flagBitmask) TSRMLS_CC);
+++	zend_update_property_bool(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("durable"), IS_DURABLE(flagBitmask) TSRMLS_CC);
+++	zend_update_property_bool(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("auto_delete"), IS_AUTODELETE(flagBitmask) TSRMLS_CC);
+++	zend_update_property_bool(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("internal"), IS_INTERNAL(flagBitmask) TSRMLS_CC);
++ }
++ /* }}} */
++ 
++@@ -204,7 +204,7 @@ static PHP_METHOD(amqp_exchange_class, setType)
++ 		return;
++ 	}
++ 
++-	zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("type"), type, type_len TSRMLS_CC);
+++	zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("type"), type, type_len TSRMLS_CC);
++ }
++ /* }}} */
++ 
++@@ -273,7 +273,7 @@ static PHP_METHOD(amqp_exchange_class, setArguments)
++ 		return;
++ 	}
++ 
++-	zend_update_property(this_ce, getThis(), ZEND_STRL("arguments"), zvalArguments TSRMLS_CC);
+++	zend_update_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("arguments"), zvalArguments TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++diff --git a/amqp_queue.c b/amqp_queue.c
++index c13629c..eeba144 100644
++--- a/amqp_queue.c
+++++ b/amqp_queue.c
++@@ -68,20 +68,20 @@ static PHP_METHOD(amqp_queue_class, __construct)
++ 	zval *channelObj;
++ 	amqp_channel_resource *channel_resource;
++ 
++-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &channelObj) == FAILURE) {
+++	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &channelObj, amqp_channel_class_entry) == FAILURE) {
++ 		return;
++ 	}
++ 
++ 	PHP5to7_MAYBE_INIT(arguments);
++ 	PHP5to7_ARRAY_INIT(arguments);
++-	zend_update_property(this_ce, getThis(), ZEND_STRL("arguments"), PHP5to7_MAYBE_PTR(arguments) TSRMLS_CC);
+++	zend_update_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("arguments"), PHP5to7_MAYBE_PTR(arguments) TSRMLS_CC);
++ 	PHP5to7_MAYBE_DESTROY(arguments);
++ 
++ 	channel_resource = PHP_AMQP_GET_CHANNEL_RESOURCE(channelObj);
++ 	PHP_AMQP_VERIFY_CHANNEL_RESOURCE(channel_resource, "Could not create queue.");
++ 
++-	zend_update_property(this_ce, getThis(), ZEND_STRL("channel"), channelObj TSRMLS_CC);
++-	zend_update_property(this_ce, getThis(), ZEND_STRL("connection"), PHP_AMQP_READ_OBJ_PROP(amqp_channel_class_entry, channelObj, "connection") TSRMLS_CC);
+++	zend_update_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("channel"), channelObj TSRMLS_CC);
+++	zend_update_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("connection"), PHP_AMQP_READ_OBJ_PROP(amqp_channel_class_entry, channelObj, "connection") TSRMLS_CC);
++ 
++ }
++ /* }}} */
++@@ -122,7 +122,7 @@ static PHP_METHOD(amqp_queue_class, setName)
++ 	}
++ 
++ 	/* Set the queue name */
++-	zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("name"), name, name_len TSRMLS_CC);
+++	zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("name"), name, name_len TSRMLS_CC);
++ 
++ 	/* BC */
++ 	RETURN_TRUE;
++@@ -175,10 +175,10 @@ static PHP_METHOD(amqp_queue_class, setFlags)
++ 	/* Set the flags based on the bitmask we were given */
++ 	flagBitmask = flagBitmask ? flagBitmask & PHP_AMQP_QUEUE_FLAGS : flagBitmask;
++ 
++-	zend_update_property_bool(this_ce, getThis(), ZEND_STRL("passive"), IS_PASSIVE(flagBitmask) TSRMLS_CC);
++-	zend_update_property_bool(this_ce, getThis(), ZEND_STRL("durable"), IS_DURABLE(flagBitmask) TSRMLS_CC);
++-	zend_update_property_bool(this_ce, getThis(), ZEND_STRL("exclusive"), IS_EXCLUSIVE(flagBitmask) TSRMLS_CC);
++-	zend_update_property_bool(this_ce, getThis(), ZEND_STRL("auto_delete"), IS_AUTODELETE(flagBitmask) TSRMLS_CC);
+++	zend_update_property_bool(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("passive"), IS_PASSIVE(flagBitmask) TSRMLS_CC);
+++	zend_update_property_bool(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("durable"), IS_DURABLE(flagBitmask) TSRMLS_CC);
+++	zend_update_property_bool(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("exclusive"), IS_EXCLUSIVE(flagBitmask) TSRMLS_CC);
+++	zend_update_property_bool(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("auto_delete"), IS_AUTODELETE(flagBitmask) TSRMLS_CC);
++ 
++ 	/* BC */
++ 	RETURN_TRUE;
++@@ -250,7 +250,7 @@ static PHP_METHOD(amqp_queue_class, setArguments)
++ 		return;
++ 	}
++ 
++-	zend_update_property(this_ce, getThis(), ZEND_STRL("arguments"), zvalArguments TSRMLS_CC);
+++	zend_update_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("arguments"), zvalArguments TSRMLS_CC);
++ 
++ 	RETURN_TRUE;
++ }
++@@ -342,7 +342,7 @@ static PHP_METHOD(amqp_queue_class, declareQueue)
++ 
++ 	/* Set the queue name, in case it is an autogenerated queue name */
++ 	name = php_amqp_type_amqp_bytes_to_char(r->queue);
++-	zend_update_property_string(this_ce, getThis(), ZEND_STRL("name"), name TSRMLS_CC);
+++	zend_update_property_string(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("name"), name TSRMLS_CC);
++ 	efree(name);
++ 
++ 	php_amqp_maybe_release_buffers_on_channel(channel_resource->connection_resource, channel_resource);
++@@ -525,7 +525,7 @@ static PHP_METHOD(amqp_queue_class, consume)
++ 	}
++ 
++ 	zval *channel_zv = PHP_AMQP_READ_THIS_PROP("channel");
++-	zval *consumers = zend_read_property(amqp_channel_class_entry, channel_zv, ZEND_STRL("consumers"), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC);
+++	zval *consumers = zend_read_property(amqp_channel_class_entry, PHP5to8_OBJ_PROP(channel_zv), ZEND_STRL("consumers"), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC);
++ 
++ 	if (IS_ARRAY != Z_TYPE_P(consumers)) {
++ 		zend_throw_exception(amqp_queue_exception_class_entry, "Invalid channel consumers, forgot to call channel constructor?", 0 TSRMLS_CC);
++@@ -594,7 +594,7 @@ static PHP_METHOD(amqp_queue_class, consume)
++ 		efree(key);
++ 
++ 		/* Set the consumer tag name, in case it is an autogenerated consumer tag name */
++-		zend_update_property_stringl(this_ce, getThis(), ZEND_STRL("consumer_tag"), (const char *) r->consumer_tag.bytes, (PHP5to7_param_str_len_type_t) r->consumer_tag.len TSRMLS_CC);
+++		zend_update_property_stringl(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("consumer_tag"), (const char *) r->consumer_tag.bytes, (PHP5to7_param_str_len_type_t) r->consumer_tag.len TSRMLS_CC);
++ 	}
++ 
++ 	if (!ZEND_FCI_INITIALIZED(fci)) {
++@@ -674,7 +674,7 @@ static PHP_METHOD(amqp_queue_class, consume)
++ 		current_channel_zv = current_channel_resource->parent->this_ptr;
++ #endif
++ 
++-		consumers = zend_read_property(amqp_channel_class_entry, PHP5to7_MAYBE_PTR(current_channel_zv), ZEND_STRL("consumers"), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC);
+++		consumers = zend_read_property(amqp_channel_class_entry, PHP5to8_OBJ_PROP(PHP5to7_MAYBE_PTR(current_channel_zv)), ZEND_STRL("consumers"), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC);
++ 
++ 		if (IS_ARRAY != Z_TYPE_P(consumers)) {
++ 			zend_throw_exception(amqp_queue_exception_class_entry, "Invalid channel consumers, forgot to call channel constructor?", 0 TSRMLS_CC);
++@@ -689,8 +689,8 @@ static PHP_METHOD(amqp_queue_class, consume)
++ 			PHP5to7_zval_t exception PHP5to7_MAYBE_SET_TO_NULL;
++ 			PHP5to7_MAYBE_INIT(exception);
++ 			object_init_ex(PHP5to7_MAYBE_PTR(exception), amqp_envelope_exception_class_entry);
++-		    zend_update_property_string(zend_exception_get_default(TSRMLS_C), PHP5to7_MAYBE_PTR(exception),  ZEND_STRL("message"), "Orphaned envelope" TSRMLS_CC);
++-			zend_update_property(amqp_envelope_exception_class_entry, PHP5to7_MAYBE_PTR(exception), ZEND_STRL("envelope"), PHP5to7_MAYBE_PTR(message) TSRMLS_CC);
+++		    zend_update_property_string(zend_exception_get_default(TSRMLS_C), PHP5to8_OBJ_PROP(PHP5to7_MAYBE_PTR(exception)),  ZEND_STRL("message"), "Orphaned envelope" TSRMLS_CC);
+++			zend_update_property(amqp_envelope_exception_class_entry, PHP5to8_OBJ_PROP(PHP5to7_MAYBE_PTR(exception)), ZEND_STRL("envelope"), PHP5to7_MAYBE_PTR(message) TSRMLS_CC);
++ 
++ 			zend_throw_exception_object(PHP5to7_MAYBE_PTR(exception) TSRMLS_CC);
++ 
++@@ -946,7 +946,7 @@ static PHP_METHOD(amqp_queue_class, cancel)
++ 	}
++ 
++ 	zval *channel_zv = PHP_AMQP_READ_THIS_PROP("channel");
++-	zval *consumers = zend_read_property(amqp_channel_class_entry, channel_zv, ZEND_STRL("consumers"), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC);
+++	zval *consumers = zend_read_property(amqp_channel_class_entry, PHP5to8_OBJ_PROP(channel_zv), ZEND_STRL("consumers"), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC);
++ 	zend_bool has_consumer_tag = (zend_bool) (IS_STRING == Z_TYPE_P(PHP_AMQP_READ_THIS_PROP("consumer_tag")));
++ 
++ 	if (IS_ARRAY != Z_TYPE_P(consumers)) {
++@@ -977,8 +977,8 @@ static PHP_METHOD(amqp_queue_class, cancel)
++ 		return;
++ 	}
++ 
++-	if (!consumer_tag_len || has_consumer_tag && strcmp(consumer_tag, PHP_AMQP_READ_THIS_PROP_STR("consumer_tag")) != 0) {
++-		zend_update_property_null(this_ce, getThis(), ZEND_STRL("consumer_tag") TSRMLS_CC);
+++	if (!consumer_tag_len || (has_consumer_tag && strcmp(consumer_tag, PHP_AMQP_READ_THIS_PROP_STR("consumer_tag")) != 0)) {
+++		zend_update_property_null(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("consumer_tag") TSRMLS_CC);
++ 	}
++ 
++     char *key;
++diff --git a/amqp_timestamp.c b/amqp_timestamp.c
++index d9eec39..ed07ab6 100644
++--- a/amqp_timestamp.c
+++++ b/amqp_timestamp.c
++@@ -61,7 +61,7 @@ static PHP_METHOD(amqp_timestamp_class, __construct)
++ 	#if PHP_MAJOR_VERSION >= 7
++ 		zend_string *str;
++ 		str = _php_math_number_format_ex(timestamp, 0, "", 0, "", 0);
++-		zend_update_property_str(this_ce, getThis(), ZEND_STRL("timestamp"), str);
+++		zend_update_property_str(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL("timestamp"), str);
++         zend_string_delref(str);
++ 	#else
++ 		char *str;
++@@ -104,7 +104,11 @@ ZEND_END_ARG_INFO()
++ ZEND_BEGIN_ARG_INFO_EX(arginfo_amqp_timestamp_class_getTimestamp, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
++ ZEND_END_ARG_INFO()
++ 
+++#if PHP_MAJOR_VERSION < 8
++ ZEND_BEGIN_ARG_INFO_EX(arginfo_amqp_timestamp_class_toString, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
+++#else
+++ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_amqp_timestamp_class_toString, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, IS_STRING, 0)
+++#endif
++ ZEND_END_ARG_INFO()
++ 
++ zend_function_entry amqp_timestamp_class_functions[] = {
++diff --git a/amqp_type.c b/amqp_type.c
++index fb87727..5f1ab91 100644
++--- a/amqp_type.c
+++++ b/amqp_type.c
++@@ -250,7 +250,7 @@ zend_bool php_amqp_type_internal_convert_php_to_amqp_field_value(zval *value, am
++ 			if (instanceof_function(Z_OBJCE_P(value), amqp_timestamp_class_entry TSRMLS_CC)) {
++                 PHP5to7_zval_t result_zv PHP5to7_MAYBE_SET_TO_NULL;
++ 
++-                zend_call_method_with_0_params(PHP5to7_MAYBE_PARAM_PTR(value), amqp_timestamp_class_entry, NULL, "gettimestamp", &result_zv);
+++                zend_call_method_with_0_params(PHP5to8_OBJ_PROP(PHP5to7_MAYBE_PARAM_PTR(value)), amqp_timestamp_class_entry, NULL, "gettimestamp", &result_zv);
++ 
++                 field->kind = AMQP_FIELD_KIND_TIMESTAMP;
++                 field->value.u64 = strtoimax(Z_STRVAL(PHP5to7_MAYBE_DEREF(result_zv)), NULL, 10);
++@@ -262,11 +262,11 @@ zend_bool php_amqp_type_internal_convert_php_to_amqp_field_value(zval *value, am
++ 				field->kind = AMQP_FIELD_KIND_DECIMAL;
++ 				PHP5to7_zval_t result_zv PHP5to7_MAYBE_SET_TO_NULL;
++ 
++-				zend_call_method_with_0_params(PHP5to7_MAYBE_PARAM_PTR(value), amqp_decimal_class_entry, NULL, "getexponent", &result_zv);
+++				zend_call_method_with_0_params(PHP5to8_OBJ_PROP(PHP5to7_MAYBE_PARAM_PTR(value)), amqp_decimal_class_entry, NULL, "getexponent", &result_zv);
++ 				field->value.decimal.decimals = (uint8_t)Z_LVAL(PHP5to7_MAYBE_DEREF(result_zv));
++ 				PHP5to7_MAYBE_DESTROY(result_zv);
++ 
++-				zend_call_method_with_0_params(PHP5to7_MAYBE_PARAM_PTR(value), amqp_decimal_class_entry, NULL, "getsignificand", &result_zv);
+++				zend_call_method_with_0_params(PHP5to8_OBJ_PROP(PHP5to7_MAYBE_PARAM_PTR(value)), amqp_decimal_class_entry, NULL, "getsignificand", &result_zv);
++ 				field->value.decimal.value = (uint32_t)Z_LVAL(PHP5to7_MAYBE_DEREF(result_zv));
++ 
++ 				PHP5to7_MAYBE_DESTROY(result_zv);
++diff --git a/php5_support.h b/php5_support.h
++index 5c57620..25c2d96 100644
++--- a/php5_support.h
+++++ b/php5_support.h
++@@ -109,6 +109,8 @@ typedef zend_rsrc_list_entry PHP5to7_zend_resource_le_t;
++ #define ZEND_ULONG_FMT "%" PRIu64
++ #define PHP5to7_ZEND_ACC_FINAL_CLASS ZEND_ACC_FINAL_CLASS
++ 
+++#define PHP5to8_OBJ_PROP(zv) (zv)
+++
++ #endif //PHP_AMQP_PHP5_SUPPORT_H
++ 
++ /*
++diff --git a/php7_support.h b/php7_support.h
++index c9e8f5b..0dbd6b2 100644
++--- a/php7_support.h
+++++ b/php7_support.h
++@@ -101,15 +101,24 @@ typedef zval PHP5to7_zend_resource_le_t;
++ 
++ #define PHP5to7_ZEND_ACC_FINAL_CLASS ZEND_ACC_FINAL
++ 
+++
++ /* Small change to let it build after a major internal change for php8.0
++  * More info:
++  * https://github.com/php/php-src/blob/php-8.0.0alpha3/UPGRADING.INTERNALS#L47
++  */
++ #if PHP_MAJOR_VERSION >= 8
+++
++ # define TSRMLS_DC
++ # define TSRMLS_D
++ # define TSRMLS_CC
++ # define TSRMLS_C
+++
+++#define PHP5to8_OBJ_PROP(zv) Z_OBJ_P(zv)
+++
+++#else
+++
+++#define PHP5to8_OBJ_PROP(zv) (zv)
+++
++ # endif
++ 
++ #endif //PHP_AMQP_PHP7_SUPPORT_H
++diff --git a/php_amqp.h b/php_amqp.h
++index 752edd7..686741d 100644
++--- a/php_amqp.h
+++++ b/php_amqp.h
++@@ -221,14 +221,14 @@ struct _amqp_connection_object {
++ #define PHP_AMQP_NOPARAMS() if (zend_parse_parameters_none() == FAILURE) { return; }
++ 
++ #define PHP_AMQP_RETURN_THIS_PROP(prop_name) \
++-    zval * _zv = zend_read_property(this_ce, getThis(), ZEND_STRL(prop_name), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC); \
+++    zval * _zv = zend_read_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL(prop_name), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC); \
++     RETURN_ZVAL(_zv, 1, 0);
++ 
++-#define PHP_AMQP_READ_OBJ_PROP(cls, obj, name) zend_read_property((cls), (obj), ZEND_STRL(name), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC)
+++#define PHP_AMQP_READ_OBJ_PROP(cls, obj, name) zend_read_property((cls), PHP5to8_OBJ_PROP(obj), ZEND_STRL(name), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC)
++ #define PHP_AMQP_READ_OBJ_PROP_DOUBLE(cls, obj, name) Z_DVAL_P(PHP_AMQP_READ_OBJ_PROP((cls), (obj), (name)))
++ 
++-#define PHP_AMQP_READ_THIS_PROP_CE(name, ce) zend_read_property((ce), getThis(), ZEND_STRL(name), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC)
++-#define PHP_AMQP_READ_THIS_PROP(name) zend_read_property(this_ce, getThis(), ZEND_STRL(name), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC)
+++#define PHP_AMQP_READ_THIS_PROP_CE(name, ce) zend_read_property((ce), PHP5to8_OBJ_PROP(getThis()), ZEND_STRL(name), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC)
+++#define PHP_AMQP_READ_THIS_PROP(name) zend_read_property(this_ce, PHP5to8_OBJ_PROP(getThis()), ZEND_STRL(name), 0 PHP5to7_READ_PROP_RV_PARAM_CC TSRMLS_CC)
++ #define PHP_AMQP_READ_THIS_PROP_BOOL(name) Z_BVAL_P(PHP_AMQP_READ_THIS_PROP(name))
++ #define PHP_AMQP_READ_THIS_PROP_STR(name) Z_STRVAL_P(PHP_AMQP_READ_THIS_PROP(name))
++ #define PHP_AMQP_READ_THIS_PROP_STRLEN(name) (Z_TYPE_P(PHP_AMQP_READ_THIS_PROP(name)) == IS_STRING ? Z_STRLEN_P(PHP_AMQP_READ_THIS_PROP(name)) : 0)
++diff --git a/tests/amqptimestamp.phpt b/tests/amqptimestamp.phpt
++index 9835883..6424f8b 100644
++--- a/tests/amqptimestamp.phpt
+++++ b/tests/amqptimestamp.phpt
++@@ -2,7 +2,7 @@
++ AMQPTimestamp
++ --SKIPIF--
++ <?php
++-if (!extension_loaded("amqp") || version_compare(PHP_VERSION, '5.3', '<')) {
+++if (!extension_loaded("amqp") || version_compare(PHP_VERSION, '5.3', '<') || version_compare(PHP_VERSION, '8.0', '>')) {
++   print "skip";
++ }
++ --FILE--
++@@ -52,4 +52,4 @@ bool(true)
++ string(20) "18446744073709551616"
++ string(1) "0"
++ 
++-==END==
++\ No newline at end of file
+++==END==
++diff --git a/tests/amqptimestamp_php8.phpt b/tests/amqptimestamp_php8.phpt
++new file mode 100644
++index 0000000..dabecc5
++--- /dev/null
+++++ b/tests/amqptimestamp_php8.phpt
++@@ -0,0 +1,60 @@
+++--TEST--
+++AMQPTimestamp
+++--SKIPIF--
+++<?php
+++if (!extension_loaded("amqp") || version_compare(PHP_VERSION, '8.0', '<')) {
+++  print "skip";
+++}
+++--FILE--
+++<?php
+++
+++$timestamp = new AMQPTimestamp(100000);
+++var_dump($timestamp->getTimestamp(), (string) $timestamp);
+++
+++$timestamp = new AMQPTimestamp(100000.1);
+++var_dump($timestamp->getTimestamp(), (string) $timestamp);
+++
+++try {
+++	new AMQPTimestamp();
+++} catch(ArgumentCountError $e) {
+++	echo $e->getMessage() . "\n";
+++}
+++try {
+++	new AMQPTimestamp("string");
+++} catch(TypeError $e) {
+++	echo $e->getMessage() . "\n";
+++}
+++
+++try {
+++    new AMQPTimestamp(AMQPTimestamp::MIN - 1);
+++} catch (AMQPValueException $e) {
+++    echo $e->getMessage() . "\n";
+++}
+++
+++try {
+++    new AMQPTimestamp(INF);
+++} catch (AMQPValueException $e) {
+++    echo $e->getMessage() . "\n";
+++}
+++
+++var_dump((new ReflectionClass("AMQPTimestamp"))->isFinal());
+++
+++var_dump(AMQPTimestamp::MAX);
+++var_dump(AMQPTimestamp::MIN);
+++?>
+++
+++==END==
+++--EXPECTF--
+++string(6) "100000"
+++string(6) "100000"
+++string(6) "100000"
+++string(6) "100000"
+++AMQPTimestamp::__construct() expects exactly 1 parameter, 0 given
+++AMQPTimestamp::__construct(): Argument #1 ($timestamp) must be of type float, string given
+++The timestamp parameter must be greater than 0.
+++The timestamp parameter must be less than 18446744073709551616.
+++bool(true)
+++string(20) "18446744073709551616"
+++string(1) "0"
+++
+++==END==
++diff --git a/tests/bug_61533.phpt b/tests/bug_61533.phpt
++index ecb5213..f53c315 100644
++--- a/tests/bug_61533.phpt
+++++ b/tests/bug_61533.phpt
++@@ -21,4 +21,4 @@ try {
++ 
++ ?>
++ --EXPECTF--
++-%s: Argument 1 passed to AMQPQueue::__construct() must be an instance of AMQPChannel, instance of AMQPConnection given%s
+++%s AMQPChannel%s AMQPConnection%s
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
