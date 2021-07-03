@@ -1,207 +1,105 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat,  3 Jul 2021 00:42:03 -0600
-Subject: [Buildroot] [PATCH 1/1] package/swupdate: bump to version 2021.04
-Message-ID: <20210703064203.280935-1-james.hilliard1@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 3 Jul 2021 11:21:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 21.1.4
+In-Reply-To: <20210701050152.3239-1-bernd.kuhls@t-online.de>
+References: <20210701050152.3239-1-bernd.kuhls@t-online.de>
+Message-ID: <20210703112122.5bf24a6f@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patches that are now upstream
+Hello Bernd,
 
-License update details
+On Thu,  1 Jul 2021 07:01:52 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-LICENSES/BSD-1-Clause.txt:
-https://github.com/sbabic/swupdate/commit/e419b06b497ee627b05cbc33d4b4df064137d0de
+> Release notes:
+> - 21.1.2
+>   https://lists.freedesktop.org/archives/mesa-announce/2021-June/000632.html
+> - 21.1.3
+>   https://lists.freedesktop.org/archives/mesa-announce/2021-June/000633.html
+> - 21.1.4
+>   https://lists.freedesktop.org/archives/mesa-announce/2021-June/000635.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+>  package/mesa3d/mesa3d.hash               | 6 +++---
+>  package/mesa3d/mesa3d.mk                 | 2 +-
+>  3 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+> index 960bd83344..4b3b6a0989 100644
+> --- a/package/mesa3d-headers/mesa3d-headers.mk
+> +++ b/package/mesa3d-headers/mesa3d-headers.mk
+> @@ -12,7 +12,7 @@ endif
+>  
+>  # Not possible to directly refer to mesa3d variables, because of
+>  # first/second expansion trickery...
+> -MESA3D_HEADERS_VERSION = 21.1.1
+> +MESA3D_HEADERS_VERSION = 21.1.4
+>  MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+>  MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
 
-LICENSES/BSD-2-Clause.txt:
-https://github.com/sbabic/swupdate/commit/32c1f98eaca69e362be074197f84a59d994c0876
+  >>> mesa3d 21.1.4 Downloading
+  wget --passive-ftp -nd -t 3 -O '.../build/.mesa-21.1.4.tar.xz.DdTHlK/output' 'https://mesa.freedesktop.org/archive/mesa-21.1.4.tar.xz' 
+  --2021-07-03 10:16:07--  https://mesa.freedesktop.org/archive/mesa-21.1.4.tar.xz
+  Resolving mesa.freedesktop.org (mesa.freedesktop.org)... 147.75.198.156
+  Connecting to mesa.freedesktop.org (mesa.freedesktop.org)|147.75.198.156|:443... connected.
+  HTTP request sent, awaiting response... 301 Moved Permanently
+  Location: https://archive.mesa3d.org//mesa-21.1.4.tar.xz [following]
+  --2021-07-03 10:16:08--  https://archive.mesa3d.org//mesa-21.1.4.tar.xz
+  Resolving archive.mesa3d.org (archive.mesa3d.org)... 2610:10:20:722:a800:ff:feda:470f, 131.252.210.176
+  Connecting to archive.mesa3d.org (archive.mesa3d.org)|2610:10:20:722:a800:ff:feda:470f|:443... connected.
+  HTTP request sent, awaiting response... 200 OK
+  Length: 15254812 (15M) [application/x-xz]
+  Saving to: ?.../build/.mesa-21.1.4.tar.xz.DdTHlK/output?
 
-LICENSES/BSD-3-Clause.txt:
-https://github.com/sbabic/swupdate/commit/32c1f98eaca69e362be074197f84a59d994c0876
+  /home/... 100%[===================>]  14,55M  4,15MB/s    in 4,3s    
 
-LICENSES/CC0-1.0.txt:
-https://github.com/sbabic/swupdate/commit/7c3630f572e6d00d7c51b7c4925494c7a822aef9
+  2021-07-03 10:16:13 (3,39 MB/s) - ?/.../build/.mesa-21.1.4.tar.xz.DdTHlK/output? saved [15254812/15254812]
 
-LICENSES/CC-BY-ND-4.0.txt:
-https://github.com/sbabic/swupdate/commit/b66db00c56f9960e9983e1a6d36eef4f151124a8
+  mesa-21.1.4.tar.xz: OK (sha256: 1f177f44098164b65731c5ded4c928fd58b14f6c9d2087aa0e37bc79bf79e90b)
+  mesa-21.1.4.tar.xz: OK (sha512: 1f4e2d8ba2c3c02bad5468687752d7e87d6e79c4a0e6ec4b2741a57fb270d18ae4712aaa07a9e09a2d3348540f5a26cdbe05464cd52adb8df1e2e28a581b2b53)
 
-LICENSES/GPL-2.0-only.txt:
-https://github.com/sbabic/swupdate/commit/af2cc98b44cc6a066c0be4511406294e9113e4b1
 
-LICENSES/GPL-2.0-or-later.txt:
-https://github.com/sbabic/swupdate/commit/11af069b85475f5bcaa094261259a6b40e363986
+Time to update the download site to https://archive.mesa3d.org ?
 
-LICENSES/ISC.txt:
-https://github.com/sbabic/swupdate/commit/6500f1e89a097bd12d0ac42f6c7cc7ee284a6e17
+With or without this change you can add my:
 
-LICENSES/LGPL-2.1-or-later.txt:
-https://github.com/sbabic/swupdate/commit/4ef88a9df89ddd445597ef49309563d29cb72607
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 
-LICENSES/LicenseRef-OpenSSL-Exception.txt:
-https://github.com/sbabic/swupdate/commit/2f513d117c5948ca9d950bbb82f05e8e38cbab50
+Regards,
+Peter
 
-LICENSES/MIT.txt:
-https://github.com/sbabic/swupdate/commit/c1bad02cb93ff9bc616029cd27318134d36cfacb
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...rce-kernel-to-reread-partition-table.patch | 32 ------------
- ...-Shellscript-stops-before-completing.patch | 52 -------------------
- package/swupdate/swupdate.hash                | 17 ++++--
- package/swupdate/swupdate.mk                  | 17 ++++--
- 4 files changed, 25 insertions(+), 93 deletions(-)
- delete mode 100644 package/swupdate/0001-diskpart-force-kernel-to-reread-partition-table.patch
- delete mode 100644 package/swupdate/0002-Shellscript-stops-before-completing.patch
-
-diff --git a/package/swupdate/0001-diskpart-force-kernel-to-reread-partition-table.patch b/package/swupdate/0001-diskpart-force-kernel-to-reread-partition-table.patch
-deleted file mode 100644
-index 5964d1b96f..0000000000
---- a/package/swupdate/0001-diskpart-force-kernel-to-reread-partition-table.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 305a7a5a74a612801d9df2b2efc86dd952b8c4e7 Mon Sep 17 00:00:00 2001
--From: Stefano Babic <sbabic@denx.de>
--Date: Tue, 9 Jun 2020 13:58:06 +0000
--Subject: [PATCH] diskpart: force kernel to reread partition table
--
--After writing a partition table to disk, the kernel should be informed
--(like the partconf tool does), else it is not possible to install images
--in the new created partitions.
--
--Signed-off-by: Stefano Babic <sbabic@denx.de>
--Signed-off-by: Joris Offouga <offougajoris@gmail.com>
-----
-- handlers/diskpart_handler.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/handlers/diskpart_handler.c b/handlers/diskpart_handler.c
--index 16adc17..372412b 100644
----- a/handlers/diskpart_handler.c
--+++ b/handlers/diskpart_handler.c
--@@ -273,7 +273,8 @@ static int diskpart(struct img_type *img,
-- 	/*
-- 	 * Everything done, write into disk
-- 	 */
---	ret = fdisk_write_disklabel(cxt);
--+	ret = fdisk_write_disklabel(cxt) |
--+		fdisk_reread_partition_table(cxt);
-- 
-- handler_exit:
-- 	if (fdisk_deassign_device(cxt, 0))
---- 
--2.25.1
--
-diff --git a/package/swupdate/0002-Shellscript-stops-before-completing.patch b/package/swupdate/0002-Shellscript-stops-before-completing.patch
-deleted file mode 100644
-index d91438893b..0000000000
---- a/package/swupdate/0002-Shellscript-stops-before-completing.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From bd08e45d7b25f06da2fc6dc824146b471db5f1f4 Mon Sep 17 00:00:00 2001
--From: Stefano Babic <sbabic@denx.de>
--Date: Tue, 16 Jun 2020 10:29:55 +0200
--Subject: [PATCH] Shellscript stops before completing
--
--Commit 8fb94d7 reworks the way shell script are called, redirecting
--stdout and stderr to SWUpdate. A shell script runs then in a child
--process. Under some circumstances, SWUpdate closes the forked process
--before the child process completes.
--
--Be sure that the child process has terminated before to go on.
--
--Signed-off-by: Stefano Babic <sbabic@denx.de>
--Reported-by: Piotr Piwko <piotr.piwko@gmail.com>
--Tested-by: Piotr Piwko <piotr.piwko@gmail.com>
--Signed-off-by: Joris Offouga <offougajoris@gmail.com>
-----
-- core/pctl.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/core/pctl.c b/core/pctl.c
--index 8b1c667..01ad540 100644
----- a/core/pctl.c
--+++ b/core/pctl.c
--@@ -263,6 +263,7 @@ int run_system_cmd(const char *cmd)
-- 		}
-- 	} else {
-- 		int fds[2];
--+		pid_t w;
-- 
-- 		close(stdoutpipe[PIPE_WRITE]);
-- 		close(stderrpipe[PIPE_WRITE]);
--@@ -276,7 +277,6 @@ int run_system_cmd(const char *cmd)
-- 		 * and from stderr (of the child process) as ERROR
-- 		 */
-- 		do {
---			pid_t w;
-- 			int n1 = 0;
-- 			struct timeval tv;
-- 			fd_set readfds;
--@@ -373,7 +373,7 @@ int run_system_cmd(const char *cmd)
-- 					}
-- 				}
-- 			} while (ret > 0 && n1 > 0);
---		} while (!WIFEXITED(wstatus));
--+		} while (w != process_id);
-- 
-- 		close(stdoutpipe[PIPE_READ]);
-- 		close(stderrpipe[PIPE_READ]);
---- 
--2.25.1
--
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index 40f978d225..8bfbc7c8b9 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,6 +1,13 @@
- # Locally calculated
--sha256  132df2ff1ad41c7aabd0fbef6a23d28607cbd5cad52aab050c4822977a107486  swupdate-2020.04.tar.gz
--sha256  43492b377cf2fb67942d1dd231146bd4e6578646ad13ef289297c9dd75cbc478  Licenses/Exceptions
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
--sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  Licenses/mit.txt
-+sha256  5afe78ae94e869bcb911d8592251641cdab80096d8e5149d483054ea49f9aab8  swupdate-2021.04.tar.gz
-+sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
-+sha256  3139f288c2e4cbe4a8c0e8c13c82661f3c798d446e1fbbc27a48a69aa7b4ec0d  LICENSES/BSD-2-Clause.txt
-+sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
-+sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
-+sha256  6e4efcb1952c7976d3fae93b802c591384c4f50949225a802adf41bc266fa3e6  LICENSES/CC-BY-ND-4.0.txt
-+sha256  5d51b52a40391a26cbb2accf5dc5d1c165de49a022d9d5efb50b22204d2682ec  LICENSES/GPL-2.0-only.txt
-+sha256  43fd695e9b198a9a4997cc2d02e10d26cae937e2c4930b9eff9c6d349c85cd32  LICENSES/GPL-2.0-or-later.txt
-+sha256  492e801f1b0632185431472f148885a4fe8e990b10da57b4986a8bcf140a5374  LICENSES/ISC.txt
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
-+sha256  43492b377cf2fb67942d1dd231146bd4e6578646ad13ef289297c9dd75cbc478  LICENSES/LicenseRef-OpenSSL-Exception.txt
-+sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSES/MIT.txt
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index d96a0c2e07..cc59a7d85c 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -4,11 +4,20 @@
- #
- ################################################################################
- 
--SWUPDATE_VERSION = 2020.04
-+SWUPDATE_VERSION = 2021.04
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
--SWUPDATE_LICENSE = GPL-2.0+ with OpenSSL exception, LGPL-2.1+, MIT
--SWUPDATE_LICENSE_FILES = Licenses/Exceptions Licenses/gpl-2.0.txt \
--	Licenses/lgpl-2.1.txt Licenses/mit.txt
-+SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+ with OpenSSL exception, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-2-Clause, BSD-3-Clause, CC0-1.0, CC-BY-ND-4.0
-+SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
-+	LICENSES/BSD-2-Clause.txt \
-+	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/CC0-1.0.txt \
-+	LICENSES/CC-BY-ND-4.0.txt \
-+	LICENSES/GPL-2.0-only.txt \
-+	LICENSES/GPL-2.0-or-later.txt \
-+	LICENSES/ISC.txt \
-+	LICENSES/LGPL-2.1-or-later.txt \
-+	LICENSES/LicenseRef-OpenSSL-Exception.txt \
-+	LICENSES/MIT.txt
- 
- # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
- # available in all external toolchains, and use CC for linking. Ensure
--- 
-2.25.1
+>  MESA3D_HEADERS_DL_SUBDIR = mesa3d
+> diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+> index 9548f8d170..fa83e2a2b5 100644
+> --- a/package/mesa3d/mesa3d.hash
+> +++ b/package/mesa3d/mesa3d.hash
+> @@ -1,6 +1,6 @@
+> -# From https://lists.freedesktop.org/archives/mesa-announce/2021-May/000631.html
+> -sha256  eec25ea379054e8911bc5de816aeb50f581b5b708414725003d2f00386b38dd2  mesa-21.1.1.tar.xz
+> -sha512  79d0e2b0e1e590e7f36a082df3584010a553af0b3060bd2d3a7ace700ac7a8d1b7734ba67f2e193dd441434eeec74a16e0dbcbf8c15061b5dd5d6a1feca73d62  mesa-21.1.1.tar.xz
+> +# From https://lists.freedesktop.org/archives/mesa-announce/2021-June/000635.html
+> +sha256 1f177f44098164b65731c5ded4c928fd58b14f6c9d2087aa0e37bc79bf79e90b  mesa-21.1.4.tar.xz
+> +sha512 1f4e2d8ba2c3c02bad5468687752d7e87d6e79c4a0e6ec4b2741a57fb270d18ae4712aaa07a9e09a2d3348540f5a26cdbe05464cd52adb8df1e2e28a581b2b53  mesa-21.1.4.tar.xz
+>  
+>  # License
+>  sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index a30b4aff31..8e1b813da2 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  # When updating the version, please also update mesa3d-headers
+> -MESA3D_VERSION = 21.1.1
+> +MESA3D_VERSION = 21.1.4
+>  MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+>  MESA3D_SITE = https://mesa.freedesktop.org/archive
+>  MESA3D_LICENSE = MIT, SGI, Khronos
