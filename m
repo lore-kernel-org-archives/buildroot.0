@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Jul 2021 23:35:41 +0200
-Subject: [Buildroot] [PATCH] package/openocd: require wchar for the
- xds110 driver
-In-Reply-To: <acbeaaffd34a068b66bde44fd96046faf2096c04.1625151247.git.baruch@tkos.co.il>
-References: <acbeaaffd34a068b66bde44fd96046faf2096c04.1625151247.git.baruch@tkos.co.il>
-Message-ID: <20210703233541.03ec56ec@windsurf>
+Date: Sat, 3 Jul 2021 23:35:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openocd: add XDS110 option
+In-Reply-To: <20210613144722.1461597-1-fontaine.fabrice@gmail.com>
+References: <20210613144722.1461597-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210703233558.19235a80@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  1 Jul 2021 17:54:07 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+On Sun, 13 Jun 2021 16:47:22 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> The xds110 driver requires wchar, and is enabled by default. Make sure
-> to disable xds110 when wchar support is missing.
+> XDS110 is available (and enabled by default) since version 0.11.0 and
+> https://github.com/ntfreak/openocd/commit/2ba27e2f3edd37e5dce4b2a231d2ae84c14cb59a
+> 
+> It raises the following build failure without wchar:
+> 
+> /home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/9.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: src/.libs/libopenocd.a(src_jtag_drivers_libocdjtagdrivers_la-xds110.o): in function `xds110_handle_serial_command':
+> xds110.c:(.text+0x368): undefined reference to `mbstowcs'
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/530bfe22ff509cf4ebfdf99a183312a1053f505f/
-> http://autobuild.buildroot.net/results/956538a0a6029137db19cce30dc340e2e30dd166/
-> http://autobuild.buildroot.net/results/ae7da2ce1389ece44a4ca65108fee02e318df7b3/
+>  - http://autobuild.buildroot.org/results/4536ed9124e77547c5e29f710fcafccc17b80a05
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/openocd/Config.in  | 9 +++++++++
->  package/openocd/openocd.mk | 1 +
->  2 files changed, 10 insertions(+)
+>  package/openocd/Config.in  | 14 ++++++++++++++
+>  package/openocd/openocd.mk |  1 +
+>  2 files changed, 15 insertions(+)
 
-Applied to master, thanks.
+Sorry, I am seeing your change just now, and in the mean time applied a
+similar change from Baruch.
 
 Thomas
 -- 
