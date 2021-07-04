@@ -1,29 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Jul 2021 11:09:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/blktrace: bump to version 1.3.0
-In-Reply-To: <20210703220424.2033844-1-fontaine.fabrice@gmail.com>
-References: <20210703220424.2033844-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210704110950.1a3735c6@windsurf>
+Date: Sun, 4 Jul 2021 11:09:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/findutils: bump to version 4.8.0
+In-Reply-To: <20210703221844.2129803-1-fontaine.fabrice@gmail.com>
+References: <20210703221844.2129803-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210704110954.7dbfa3b6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  4 Jul 2021 00:04:24 +0200
+On Sun,  4 Jul 2021 00:18:44 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> - Use tar.bz2 tarball
-> - Update indentation in hash file (two spaces)
-> - Drop patch (already in version)
+> Update indentation in hash file (two spaces)
+> 
+> https://git.savannah.gnu.org/cgit/findutils.git/tree/NEWS?h=v4.8.0
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...devno-use-PATH_MAX-to-avoid-overflow.patch | 146 ------------------
->  package/blktrace/blktrace.hash                |   6 +-
->  package/blktrace/blktrace.mk                  |   6 +-
->  3 files changed, 5 insertions(+), 153 deletions(-)
->  delete mode 100644 package/blktrace/0001-btt-make-device-devno-use-PATH_MAX-to-avoid-overflow.patch
+>  package/findutils/findutils.hash | 4 ++--
+>  package/findutils/findutils.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
