@@ -1,47 +1,53 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sun,  4 Jul 2021 18:45:15 +0300
-Subject: [Buildroot] [PATCH v2 2/2] stm32mp157c_dk2: remove uboot config
- fragment
-In-Reply-To: <20210704154515.431798-1-geomatsi@gmail.com>
-References: <20210704154515.431798-1-geomatsi@gmail.com>
-Message-ID: <20210704154515.431798-3-geomatsi@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  4 Jul 2021 17:48:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/usbguard: disable on musl
+Message-ID: <20210704154848.3401838-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Running stm32mp1 watchdog is properly recognized and handled by kernel
-watchdog framework since Linux v5.6. For details see the Linux commit
-85fdc63fe256 ("drivers: watchdog: stm32_iwdg: set WDOG_HW_RUNNING at
-probe"). So U-Boot config fragment can be safely removed without
-adding userspace watchdog daemon.
+usbguard doesn't build on musl because it uses GNU version of strerror_r
+as well as basename resulting in the following build failure:
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+In file included from ./src/Library/public/usbguard/Rule.hpp:24,
+                 from src/CLI/usbguard-rule-parser.cpp:23:
+./src/Library/public/usbguard/Exception.hpp: In static member function 'static std::string usbguard::ErrnoException::reasonFromErrno(int)':
+./src/Library/public/usbguard/Exception.hpp:129:72: error: no matching function for call to 'std::__cxx11::basic_string<char>::basic_string(int)'
+  129 |       return std::string(strerror_r(errno_value, buffer, sizeof buffer));
+      |
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ac1fd7b8c7bd65c73a9213a40c5ed1c39204dab0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config | 1 -
- configs/stm32mp157c_dk2_defconfig                              | 1 -
- 2 files changed, 2 deletions(-)
- delete mode 100644 board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config
+ package/usbguard/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config b/board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config
-deleted file mode 100644
-index a278ce9e23..0000000000
---- a/board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config
-+++ /dev/null
-@@ -1 +0,0 @@
--# CONFIG_STM32MP_WATCHDOG is not set
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index 6fea63d427..a4bff897e5 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -27,7 +27,6 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
--BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_STM32=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157c-dk2"
+diff --git a/package/usbguard/Config.in b/package/usbguard/Config.in
+index 34e24a2156..58ee5c4b25 100644
+--- a/package/usbguard/Config.in
++++ b/package/usbguard/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_USBGUARD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libqb, protobuf
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
+ 	depends on !BR2_STATIC_LIBS # libqb, protobuf
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_PROTOBUF
+ 	select BR2_PACKAGE_LIBQB
+ 	help
+@@ -16,7 +17,8 @@ config BR2_PACKAGE_USBGUARD
+ 
+ 	  https://usbguard.github.io/
+ 
+-comment "usbguard needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
++comment "usbguard needs a glibc or uClibc toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
++		|| BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
 -- 
-2.32.0
+2.30.2
