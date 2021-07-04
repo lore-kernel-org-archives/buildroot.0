@@ -1,102 +1,91 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Jul 2021 21:52:36 +0200
-Subject: [Buildroot] [PATCHv4 02/16] core: enable 'NDEBUG' unless
- BR2_ENABLE_RUNTIME_DEBUG is set
-In-Reply-To: <41d1f1e1-02b7-52e4-f1b6-ab3378af96b8@mind.be>
-References: <20210601143422.25064-1-patrickdepinguin@gmail.com>
- <20210601143422.25064-3-patrickdepinguin@gmail.com>
- <20210704111539.3ce01855@windsurf>
- <41d1f1e1-02b7-52e4-f1b6-ab3378af96b8@mind.be>
-Message-ID: <20210704195236.GE2521@scaer>
+Date: Sun, 4 Jul 2021 21:54:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xen: fix build with -DNDEBUG
+In-Reply-To: <20210702170742.891023-1-fontaine.fabrice@gmail.com>
+References: <20210702170742.891023-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210704195416.GF2521@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Peter, Thomas?, All,
+Fabrice, All,
 
-On 2021-07-04 16:58 +0200, Arnout Vandecappelle spake thusly:
-> On 04/07/2021 11:15, Thomas Petazzoni wrote:
-> > On Tue,  1 Jun 2021 16:34:07 +0200
-> > Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
-> >> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >> The 'assert' statement in glibc honors the 'NDEBUG' preprocessor macro: if
-> >> it is set, then the assert statement is compiled away.
-> >> Define this 'NDEBUG' macro when BR2_ENABLE_RUNTIME_DEBUG is disabled (the
-> >> default case).
-> > So, I would like to challenge whether this change is really a good
-> > idea.
->  In practice, the build failures are mostly due to variables that become unused
-> because the assert() is gone, and that triggers -Werror.
-[--SNIP--]
->  I don't think it's very likely that this happens, but indeed it's possibly. You
-> just have to "optimise":
->     bool result = f();
->     assert(result);
-> into
->     assert(f());
-> and you get hit by this issue...
-
-And this is way too easy an optimisation to do. ;-)
-
-> > Yes, ideally, assert() should only be used to verify expressions that
-> > have no side effects. But practically speaking, I am not sure how many
-> > programmers are really aware of the fact that assert() expressions
-> > should not have side effects, because assert() can be disabled by
-> > defining NDEBUG.
->  Well, packages that use meson or CMake *do* get NDEBUG set (because that's done
-> by the release variants), so those packages at least seem to behave sanely...
-
->  That said:
+On 2021-07-02 19:07 +0200, Fabrice Fontaine spake thusly:
+> Fix build failure with -DNDEBUG raised since commit
+> 5a8c50fe05afacc3cbe8e7347e238da9f242fab0
 > 
-> > I believe this change is too dangerous,
+> Fixes:
+>  - http://autobuild.buildroot.org/results/66573ad0abc4244c0dfeac8b684a7bfcc31c0d4d
 > 
->  This is definitely true. So I also think reverting it is the safest option.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-I've now done so: I reverted the change itself, and reverted the two
-packages that had workarounds for this;
+We are now no longer setting NDEBUG in the infra; see a1c7cff1a081.
 
-    fc0fb99f0307  Revert "package/weston: disable -NDEBUG"
-    1aa3cb109067  Revert "package/bitcoin: unset the NDEBUG flag"
-    a1c7cff1a081  Revert "core: enable 'NDEBUG' unless BR2_ENABLE_RUNTIME_DEBUG is set"
+So this patch is no longer needed; I've marked it as rejected.
 
-The other NDEBUG-related changes, I have left in the tree:
-
-    b7939fe2a0b1  core: introduce BR2_ENABLE_RUNTIME_DEBUG
-        => used by meson and cmake
-
-    61c5e0319c5  package/pkg-cmake.mk: determine CMAKE_BUILD_TYPE depending on BR2_ENABLE_RUNTIME_DEBUG
-        => see commit log for details
-
-    fb12adbb761  package/sofia-sip: correct passing of '--enable-ndebug'
-    0993954814e  package/sofia-sip: don't set 'NDEBUG' explicitly
-        => the first was a fix; the second drops an explicit handling
-           maybe we could revert 0993954814e, but I don't see the point
-
-    ea02ac3e061  package/daemon: fix build without BR2_ENABLE_RUNTIME_DEBUG
-        => very similar fix accepted upstream, so we will drop the patch
-           when we bump
-
-    bf32928bbb0  package/gnutls: disable tests
-        => we still want to disable tests even without NDEBUG
-
-    1f1d536e7e3  package/pdbg: fix build with -DNDEBUG
-    932f6a0a2ad  package/pdbg: Bump version to v3.3
-        => a patch we had was accepted upstream, and we updated the
-           version
-
-    cc1c8c3bb1c  package/openswan: disable -Werror
-        => we still want to disable Werror even without NDEBUG
-
-    12551386027  package/filemq: bump to af4768dcaf2fcb8083a32bad107a22ecb7a5d954
-        => is a version bump anyway
-
-I will now reply to the individual pending patches telated to NDEBUG,
-and reject them.
+Thanks!
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  .../xen/0002-xen-Makefile-drop-Werror.patch   | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/xen/0002-xen-Makefile-drop-Werror.patch
+> 
+> diff --git a/package/xen/0002-xen-Makefile-drop-Werror.patch b/package/xen/0002-xen-Makefile-drop-Werror.patch
+> new file mode 100644
+> index 0000000000..f3f13dae8f
+> --- /dev/null
+> +++ b/package/xen/0002-xen-Makefile-drop-Werror.patch
+> @@ -0,0 +1,38 @@
+> +From e87870cf2645a4dafeea6afce290c6e6574c37ea Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Fri, 2 Jul 2021 19:00:30 +0200
+> +Subject: [PATCH] xen/Makefile: drop -Werror
+> +
+> +Drop -Werror to avoid the following build failure with -DNDEBUG:
+> +
+> +In file included from <command-line>:0:0:
+> +/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/xen-4.14.2/xen/include/xen/config.h:94:0: error: "NDEBUG" redefined [-Werror]
+> + #define NDEBUG
+> +
+> +<command-line>:0:0: note: this is the location of the previous definition
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/66573ad0abc4244c0dfeac8b684a7bfcc31c0d4d
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: sent to xen-devel at lists.xenproject.org]
+> +---
+> + xen/Makefile | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/xen/Makefile b/xen/Makefile
+> +index 89879fad4c..cf9f83b1fb 100644
+> +--- a/xen/Makefile
+> ++++ b/xen/Makefile
+> +@@ -210,7 +210,7 @@ CFLAGS += -fomit-frame-pointer
+> + endif
+> + 
+> + CFLAGS += -nostdinc -fno-builtin -fno-common
+> +-CFLAGS += -Werror -Wredundant-decls -Wno-pointer-arith
+> ++CFLAGS += -Wredundant-decls -Wno-pointer-arith
+> + $(call cc-option-add,CFLAGS,CC,-Wvla)
+> + CFLAGS += -pipe -D__XEN__ -include $(BASEDIR)/include/xen/config.h
+> + CFLAGS-$(CONFIG_DEBUG_INFO) += -g
+> +-- 
+> +2.30.2
+> +
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
