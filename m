@@ -1,39 +1,45 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sun, 4 Jul 2021 18:30:44 +0300
-Subject: [Buildroot] [PATCH 2/4] stm32mp157c_dk2: add non-trusted
- configuration
-In-Reply-To: <20210703231606.7afe27a0@windsurf>
-References: <20210701210006.1171347-1-geomatsi@gmail.com>
- <20210701210006.1171347-3-geomatsi@gmail.com>
- <20210703231606.7afe27a0@windsurf>
-Message-ID: <YOHUJKmUgSmiMxRV@curiosity>
+Date: Sun,  4 Jul 2021 18:45:13 +0300
+Subject: [Buildroot] [PATCH v2 0/2] stm32mp157c-dk2: bsp updates and fixes
+Message-ID: <20210704154515.431798-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hi all,
 
-> > The stm32mp157 supports two different boot chains. Trusted boot chain uses
-> > TF-A firmare as FSBL and U-Boot as SSBL. Basic boot chain uses U-Boot SPL
-> > as FSBL and U-Boot as SSBL. Available stm32mp157c_dk2_defconfig provides
-> > image with trusted boot chain. This commit renames existing defconfig and
-> > adds another defconfig for basic boot chain. Genimage template and
-> > post-image script are modified to use appropriate FSBL and SSBL
-> > to support both build configurations.
-> 
-> Could you comment on the motivation to also support the non-trusted
-> boot chain? ST is no longer supporting the non-trusted configuration.
-> Of course, while we don't have to strictly follow vendor-defined
-> rules/decision, there's the question of what is the benefit of the
-> non-trusted version, and if it's worth the effort having support for
-> both configurations as Buildroot defconfigs.
+This is the second revision of the patch series that introduces several
+updates and fixes for stm32mp157c-dk2:
 
-Well, nothing specific. It just occured to me that there are not so many
-boards supporting both TF-A and SPL boot options. But if vendor no
-longer supports that configuration, then indeed that effort does not
-make a lot of sense. I will drop that in v2.
+- update BSP: bump Linux, U-Boot, TF-A versions (applied from v1)
+- remove u-boot config fragment that disables watchdog
+- fix U-Boot corruption
+
+BSP update part of the series has been already applied. Besides, Thomas
+noted that non-trusted configuration is no longer supported by vendor,
+so this part has been dropped completely. Finally, a more simple and
+straightforward approach has been implemented to fix U-Boot corruption.
 
 Regards,
 Sergey
+
+
+v2:
+- drop non-trusted configuration
+- simplify U-Boot corruption fix: specify larger ssbl size
+
+
+Sergey Matyukevich (2):
+  board/stm32mp157c-dk2: fix U-Boot corruption on the first boot
+  stm32mp157c_dk2: remove uboot config fragment
+
+ board/stmicroelectronics/common/stm32mp157/genimage.cfg.template | 1 +
+ board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config   | 1 -
+ configs/stm32mp157c_dk2_defconfig                                | 1 -
+ 3 files changed, 1 insertion(+), 2 deletions(-)
+ delete mode 100644 board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config
+
+-- 
+2.32.0
