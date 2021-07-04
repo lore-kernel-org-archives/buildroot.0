@@ -1,45 +1,41 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sun,  4 Jul 2021 18:45:13 +0300
-Subject: [Buildroot] [PATCH v2 0/2] stm32mp157c-dk2: bsp updates and fixes
-Message-ID: <20210704154515.431798-1-geomatsi@gmail.com>
+Date: Sun,  4 Jul 2021 18:45:14 +0300
+Subject: [Buildroot] [PATCH v2 1/2] board/stm32mp157c-dk2: fix U-Boot
+ corruption on the first boot
+In-Reply-To: <20210704154515.431798-1-geomatsi@gmail.com>
+References: <20210704154515.431798-1-geomatsi@gmail.com>
+Message-ID: <20210704154515.431798-2-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+The stm32mp157c-dk2 image successfully boots only once. Subsequent boot
+attempts fail to reach U-Boot. The root cause turns out to be in U-Boot
+corruption during the first boot. The stm32mp1 U-Boot stores its
+environment at the end of GPT partition named 'ssbl' since v2020.10-rc2.
+However Buildroot genimage template for stm32mp157 boards creates 'ssbl'
+partition w/o extra space for U-Boot primary and redundant environments.
+This patch explicitly specifies 'ssbl' partition size that should be
+enough for both u-boot.stm32 image (~1M) and both environments (16K).
 
-This is the second revision of the patch series that introduces several
-updates and fixes for stm32mp157c-dk2:
-
-- update BSP: bump Linux, U-Boot, TF-A versions (applied from v1)
-- remove u-boot config fragment that disables watchdog
-- fix U-Boot corruption
-
-BSP update part of the series has been already applied. Besides, Thomas
-noted that non-trusted configuration is no longer supported by vendor,
-so this part has been dropped completely. Finally, a more simple and
-straightforward approach has been implemented to fix U-Boot corruption.
-
-Regards,
-Sergey
-
-
-v2:
-- drop non-trusted configuration
-- simplify U-Boot corruption fix: specify larger ssbl size
-
-
-Sergey Matyukevich (2):
-  board/stm32mp157c-dk2: fix U-Boot corruption on the first boot
-  stm32mp157c_dk2: remove uboot config fragment
-
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
  board/stmicroelectronics/common/stm32mp157/genimage.cfg.template | 1 +
- board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config   | 1 -
- configs/stm32mp157c_dk2_defconfig                                | 1 -
- 3 files changed, 1 insertion(+), 2 deletions(-)
- delete mode 100644 board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config
+ 1 file changed, 1 insertion(+)
 
+diff --git a/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template b/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
+index f341c19f2f..03fba8daf0 100644
+--- a/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
++++ b/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
+@@ -13,6 +13,7 @@ image sdcard.img {
+ 
+ 	partition ssbl {
+ 		image = "u-boot.stm32"
++		size = 2M
+ 	}
+ 
+ 	partition rootfs {
 -- 
 2.32.0
