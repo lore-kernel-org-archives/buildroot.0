@@ -1,42 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Jul 2021 22:37:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xmrig: bump version to 6.13.1
-Message-ID: <20210704203743.80554-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  4 Jul 2021 22:51:12 +0200
+Subject: [Buildroot] [PATCH 1/1] Config.in.legacy: create 2021.08
+Message-ID: <20210704205112.3410146-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://github.com/xmrig/xmrig/blob/master/CHANGELOG.md
+Commit 469c11c516959375f6caddde178adbdcdc5d9887 wrongly added a new
+option to 2021.05 which has been released, move it to 2021.08
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/xmrig/xmrig.hash | 2 +-
- package/xmrig/xmrig.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in.legacy | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
-index c80bdd6621..199959690f 100644
---- a/package/xmrig/xmrig.hash
-+++ b/package/xmrig/xmrig.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7570030c4b3e257bda190a100dc59f78b74c823af7561222a99b296f5e7b1ac2  xmrig-6.12.1.tar.gz
-+sha256  c444e53f8692ad10e0daa73df57892cf9a066d20fe25db377022cd481b1440ad  xmrig-6.13.1.tar.gz
- sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
-diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
-index 2202d875c5..b8a3957d54 100644
---- a/package/xmrig/xmrig.mk
-+++ b/package/xmrig/xmrig.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index bcbb625edb..1049d7af3c 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -144,7 +144,7 @@ endif
  
--XMRIG_VERSION = 6.12.1
-+XMRIG_VERSION = 6.13.1
- XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
- XMRIG_LICENSE = GPL-3.0+
- XMRIG_LICENSE_FILES = LICENSE
+ ###############################################################################
+ 
+-comment "Legacy options removed in 2021.05"
++comment "Legacy options removed in 2021.08"
+ 
+ config BR2_PACKAGE_PHP_EXT_XMLRPC
+ 	bool "PHP XMLRPC extension removed"
+@@ -153,6 +153,8 @@ config BR2_PACKAGE_PHP_EXT_XMLRPC
+ 	  The XMLRPC php extension was removed.
+ 	  See: https://wiki.php.net/rfc/unbundle_xmlprc
+ 
++comment "Legacy options removed in 2021.05"
++
+ config BR2_PACKAGE_UDISKS_LVM2
+ 	bool "udisks lvm2 support removed"
+ 	select BR2_LEGACY
 -- 
 2.30.2
