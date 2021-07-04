@@ -1,25 +1,21 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Jul 2021 21:54:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xen: fix build with -DNDEBUG
-In-Reply-To: <20210702170742.891023-1-fontaine.fabrice@gmail.com>
-References: <20210702170742.891023-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210704195416.GF2521@scaer>
+Date: Sun, 4 Jul 2021 21:54:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qemu: disable NDEBUG
+In-Reply-To: <20210624141023.61171-1-caseorum@gmail.com>
+References: <20210624141023.61171-1-caseorum@gmail.com>
+Message-ID: <20210704195445.GG2521@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Joseph, All,
 
-On 2021-07-02 19:07 +0200, Fabrice Fontaine spake thusly:
-> Fix build failure with -DNDEBUG raised since commit
-> 5a8c50fe05afacc3cbe8e7347e238da9f242fab0
+On 2021-06-24 14:10 +0000, Joseph Burt spake thusly:
+> QEMU cannot build with NDEBUG defined.
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/66573ad0abc4244c0dfeac8b684a7bfcc31c0d4d
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Joseph Burt <caseorum@gmail.com>
 
 We are now no longer setting NDEBUG in the infra; see a1c7cff1a081.
 
@@ -31,56 +27,33 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  .../xen/0002-xen-Makefile-drop-Werror.patch   | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/xen/0002-xen-Makefile-drop-Werror.patch
+>  package/qemu/qemu.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/xen/0002-xen-Makefile-drop-Werror.patch b/package/xen/0002-xen-Makefile-drop-Werror.patch
-> new file mode 100644
-> index 0000000000..f3f13dae8f
-> --- /dev/null
-> +++ b/package/xen/0002-xen-Makefile-drop-Werror.patch
-> @@ -0,0 +1,38 @@
-> +From e87870cf2645a4dafeea6afce290c6e6574c37ea Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Fri, 2 Jul 2021 19:00:30 +0200
-> +Subject: [PATCH] xen/Makefile: drop -Werror
-> +
-> +Drop -Werror to avoid the following build failure with -DNDEBUG:
-> +
-> +In file included from <command-line>:0:0:
-> +/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/xen-4.14.2/xen/include/xen/config.h:94:0: error: "NDEBUG" redefined [-Werror]
-> + #define NDEBUG
-> +
-> +<command-line>:0:0: note: this is the location of the previous definition
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/66573ad0abc4244c0dfeac8b684a7bfcc31c0d4d
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: sent to xen-devel at lists.xenproject.org]
-> +---
-> + xen/Makefile | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/xen/Makefile b/xen/Makefile
-> +index 89879fad4c..cf9f83b1fb 100644
-> +--- a/xen/Makefile
-> ++++ b/xen/Makefile
-> +@@ -210,7 +210,7 @@ CFLAGS += -fomit-frame-pointer
-> + endif
-> + 
-> + CFLAGS += -nostdinc -fno-builtin -fno-common
-> +-CFLAGS += -Werror -Wredundant-decls -Wno-pointer-arith
-> ++CFLAGS += -Wredundant-decls -Wno-pointer-arith
-> + $(call cc-option-add,CFLAGS,CC,-Wvla)
-> + CFLAGS += -pipe -D__XEN__ -include $(BASEDIR)/include/xen/config.h
-> + CFLAGS-$(CONFIG_DEBUG_INFO) += -g
-> +-- 
-> +2.30.2
-> +
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index 470c285f16..c397b8883b 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -160,7 +160,7 @@ define QEMU_CONFIGURE_CMDS
+>  	unset TARGET_DIR; \
+>  	cd $(@D); \
+>  		LIBS='$(QEMU_LIBS)' \
+> -		$(TARGET_CONFIGURE_OPTS) \
+> +		$(filter-out -DNDEBUG,$(TARGET_CONFIGURE_OPTS)) \
+>  		$(TARGET_CONFIGURE_ARGS) \
+>  		CPP="$(TARGET_CC) -E" \
+>  		$(QEMU_VARS) \
+> @@ -327,7 +327,7 @@ endif
+>  # call the compiler.
+>  define HOST_QEMU_CONFIGURE_CMDS
+>  	unset TARGET_DIR; \
+> -	cd $(@D); $(HOST_CONFIGURE_OPTS) CPP="$(HOSTCC) -E" \
+> +	cd $(@D); $(filter-out -DNDEBUG,$(HOST_CONFIGURE_OPTS)) CPP="$(HOSTCC) -E" \
+>  		./configure \
+>  		--target-list="$(HOST_QEMU_TARGETS)" \
+>  		--prefix="$(HOST_DIR)" \
 > -- 
-> 2.30.2
+> 2.32.0
 > 
 > _______________________________________________
 > buildroot mailing list
