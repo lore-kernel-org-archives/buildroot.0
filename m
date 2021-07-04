@@ -1,63 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Jul 2021 21:58:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gcc: undefine NDEBUG directive
-In-Reply-To: <20210617121943.800180-1-br015@umbiko.net>
-References: <20210617121943.800180-1-br015@umbiko.net>
-Message-ID: <20210704195817.GK2521@scaer>
+Date: Sun, 4 Jul 2021 22:04:51 +0200
+Subject: [Buildroot] [PATCH 1/1] utils/scanpypi: search LICENSE.MD
+In-Reply-To: <20210704193859.3406196-1-fontaine.fabrice@gmail.com>
+References: <20210704193859.3406196-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210704200451.GL2521@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andreas, All,
+Fabrice, All,
 
-On 2021-06-17 14:19 +0200, Andreas Ziegler spake thusly:
-> GCC performs internal consistency checks that can be controlled with --enable-checking, but not completely removed for all stages of the build. One of these checks uses the assert macro from <assert.h>  Defining NDEBUG removes the assertion code, which is not anticipated in the gcc code. 
+On 2021-07-04 21:38 +0200, Fabrice Fontaine spake thusly:
+> Some packages such as python-idna has a LICENSE.md file:
+> https://github.com/kjd/idna/blob/master/LICENSE.md
 > 
-> Undefine the NDEBUG flag for package/gcc to preserve assertions. 
-> 
-> This fixes the following error during build of GCC 10:
-> 
-> ../../../libgomp/target.c: In function ?gomp_unmap_vars_internal?:
-> ../../../libgomp/target.c:1474:9: error: unused variable ?is_tgt_unmapped? [-Werror=unused-variable]
->  1474 |    bool is_tgt_unmapped = gomp_remove_var (devicep, k);
->       |         ^~~~~~~~~~~~~~~
-> ../../../libgomp/target.c:1473:28: error: unused variable ?k_tgt? [-Werror=unused-variable]
->  1473 |    struct target_mem_desc *k_tgt = k->tgt;
->       |                            ^~~~~
-> 
-> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-We are now no longer setting NDEBUG in the infra; see a1c7cff1a081.
+Applied to master, thanks.
 
-So this patch is no longer needed; I've marked it as rejected.
-
-Thanks!
+Note that the python-idna we have still lists LICENSE.rst. Maybe a
+version bump is in the works? ;-)
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/gcc/gcc.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  utils/scanpypi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index ed9b93e50f..4ee32c03a7 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -90,7 +90,8 @@ HOST_GCC_COMMON_CONF_OPTS = \
->  HOST_GCC_COMMON_CONF_ENV = \
->  	MAKEINFO=missing
+> diff --git a/utils/scanpypi b/utils/scanpypi
+> index 47c7c00c60..8327fc3fc5 100755
+> --- a/utils/scanpypi
+> +++ b/utils/scanpypi
+> @@ -495,8 +495,8 @@ class BuildrootPackage():
+>          """
+>          lines = []
 >  
-> -GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
-> +# gcc should not be built with NDEBUG enabled
-> +GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS) -UNDEBUG
->  GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+> -        filenames = ['LICENCE', 'LICENSE', 'LICENSE.RST', 'LICENSE.TXT',
+> -                     'COPYING', 'COPYING.TXT']
+> +        filenames = ['LICENCE', 'LICENSE', 'LICENSE.MD', 'LICENSE.RST',
+> +                     'LICENSE.TXT', 'COPYING', 'COPYING.TXT']
+>          self.license_files = list(find_file_upper_case(filenames, self.tmp_extract))
 >  
->  # used to fix ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: 'st.st_mode' may be used uninitialized in this function [-Werror=maybe-uninitialized]
+>          lines.append(self.__get_license_names(self.license_files))
 > -- 
-> 2.25.1
+> 2.30.2
 > 
 > _______________________________________________
 > buildroot mailing list
