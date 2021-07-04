@@ -1,47 +1,68 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Jul 2021 19:17:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gptfdisk: bump version to 1.0.8
-Message-ID: <20210704171734.67620-1-bernd.kuhls@t-online.de>
+Date: Sun,  4 Jul 2021 19:23:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/hdparm: bump version to 9.62
+Message-ID: <20210704172345.69453-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://sourceforge.net/p/gptfdisk/code/ci/master/tree/NEWS
+Updated project site (old site was not updated since 2010) and package
+help text.
+
+Removed md5 hash.
+
+Switched _SITE to https.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gptfdisk/gptfdisk.hash | 6 +++---
- package/gptfdisk/gptfdisk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/hdparm/Config.in   | 4 ++--
+ package/hdparm/hdparm.hash | 7 +++----
+ package/hdparm/hdparm.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/gptfdisk/gptfdisk.hash b/package/gptfdisk/gptfdisk.hash
-index 7894f2187d..caded358ec 100644
---- a/package/gptfdisk/gptfdisk.hash
-+++ b/package/gptfdisk/gptfdisk.hash
-@@ -1,5 +1,5 @@
--# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.7/
--sha1  406ab2596e1911c916dce677ce7e903076d94c6d  gptfdisk-1.0.7.tar.gz
-+# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.8/
-+sha1  c8824e779056158fa32887e415f5399a8646c3c5  gptfdisk-1.0.8.tar.gz
+diff --git a/package/hdparm/Config.in b/package/hdparm/Config.in
+index 52385b18ce..17ecb65ce9 100644
+--- a/package/hdparm/Config.in
++++ b/package/hdparm/Config.in
+@@ -2,6 +2,6 @@ config BR2_PACKAGE_HDPARM
+ 	bool "hdparm"
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	help
+-	  hdparm - get/set hard disk parameters for Linux IDE drives.
++	  hdparm - get/set ATA/SATA drive parameters under Linux
+ 
+-	  http://www.ibiblio.org/pub/Linux/system/hardware/
++	  https://sourceforge.net/projects/hdparm/
+diff --git a/package/hdparm/hdparm.hash b/package/hdparm/hdparm.hash
+index b35da45273..b37826caf2 100644
+--- a/package/hdparm/hdparm.hash
++++ b/package/hdparm/hdparm.hash
+@@ -1,6 +1,5 @@
+-# From http://sourceforge.net/projects/hdparm/files/hdparm/
+-md5  25a791d47236c58801f8b27074f3ef93  hdparm-9.60.tar.gz
+-sha1  f15378cf533f79dbbc040cd77183137d24292ecc  hdparm-9.60.tar.gz
++# From https://sourceforge.net/projects/hdparm/files/hdparm/
++sha1  100b9a5551b71d87b446b415d56c5d45ac41d131  hdparm-9.62.tar.gz
  # Locally computed
--sha256  754004b7f85b279287c7ac3c0469b1d7e0eae043a97a2e587b0560ca5f3828c0  gptfdisk-1.0.7.tar.gz
-+sha256  95d19856f004dabc4b8c342b2612e8d0a9eebdd52004297188369f152e9dc6df  gptfdisk-1.0.8.tar.gz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
-index d92a527105..9869975f51 100644
---- a/package/gptfdisk/gptfdisk.mk
-+++ b/package/gptfdisk/gptfdisk.mk
-@@ -4,7 +4,7 @@
+-sha256  8397739c73e44d5ab96c4aef28fa9c0147276d53a1b5657ce04c4565cf6635cc  hdparm-9.60.tar.gz
++sha256  2c0f9d75cdbeda928a25a128cd3d0b7120445ec0910c0b29d4c1038ed1be777f  hdparm-9.62.tar.gz
+ sha256  eae572b06d2733f5c65fbe81680ce2b8a109afee2bdd1a161343c772af0e82e1  LICENSE.TXT
+diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
+index d9470ef7f5..6a71c14fa7 100644
+--- a/package/hdparm/hdparm.mk
++++ b/package/hdparm/hdparm.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--GPTFDISK_VERSION = 1.0.7
-+GPTFDISK_VERSION = 1.0.8
- GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
- GPTFDISK_LICENSE = GPL-2.0+
- GPTFDISK_LICENSE_FILES = COPYING
+-HDPARM_VERSION = 9.60
+-HDPARM_SITE = http://downloads.sourceforge.net/project/hdparm/hdparm
++HDPARM_VERSION = 9.62
++HDPARM_SITE = https://downloads.sourceforge.net/project/hdparm/hdparm
+ HDPARM_LICENSE = BSD-Style
+ HDPARM_LICENSE_FILES = LICENSE.TXT
+ 
 -- 
 2.30.2
