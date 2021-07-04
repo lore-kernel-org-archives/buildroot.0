@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Jul 2021 19:23:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/hdparm: bump version to 9.62
-Message-ID: <20210704172345.69453-1-bernd.kuhls@t-online.de>
+Date: Sun,  4 Jul 2021 19:26:49 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/hdparm: bump version to 9.62
+Message-ID: <20210704172649.69529-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +15,14 @@ Removed md5 hash.
 
 Switched _SITE to https.
 
+Release notes:
+https://sourceforge.net/p/hdparm/news/2021/04/hdparm-961-is-released/
+https://sourceforge.net/p/hdparm/news/2021/05/hdparm-962-is-released/
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v2: added release notes
+
  package/hdparm/Config.in   | 4 ++--
  package/hdparm/hdparm.hash | 7 +++----
  package/hdparm/hdparm.mk   | 4 ++--
