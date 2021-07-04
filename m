@@ -1,21 +1,28 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Jul 2021 21:54:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qemu: disable NDEBUG
-In-Reply-To: <20210624141023.61171-1-caseorum@gmail.com>
-References: <20210624141023.61171-1-caseorum@gmail.com>
-Message-ID: <20210704195445.GG2521@scaer>
+Date: Sun, 4 Jul 2021 21:55:09 +0200
+Subject: [Buildroot] [PATCH] package/casync: undefine NDEBUG
+In-Reply-To: <54a8f6820a221cc3ba2446fedfd57743f742550f.1624512487.git.baruch@tkos.co.il>
+References: <54a8f6820a221cc3ba2446fedfd57743f742550f.1624512487.git.baruch@tkos.co.il>
+Message-ID: <20210704195509.GH2521@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joseph, All,
+Baruch, All,
 
-On 2021-06-24 14:10 +0000, Joseph Burt spake thusly:
-> QEMU cannot build with NDEBUG defined.
+On 2021-06-24 08:28 +0300, Baruch Siach spake thusly:
+> The casync code relies on assert() calls being non-empty. Undefine
+> NDEBUG to override BR2_ENABLE_RUNTIME_DEBUG not being set.
 > 
-> Signed-off-by: Joseph Burt <caseorum@gmail.com>
+> Fixes:
+> http://autobuild.buildroot.net/results/4c69f45a41462564382f667f5e97b78b49c97759/
+> http://autobuild.buildroot.net/results/778a94f63c8e9f805badb5c8ff040dcfc5c193e7/
+> http://autobuild.buildroot.net/results/d4c23639747dafcded4e28602ccbe48d102c385b/
+> 
+> Cc: Yair Ben Avraham <yairba@protonmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 We are now no longer setting NDEBUG in the infra; see a1c7cff1a081.
 
@@ -27,33 +34,25 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/qemu/qemu.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/casync/casync.mk | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index 470c285f16..c397b8883b 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -160,7 +160,7 @@ define QEMU_CONFIGURE_CMDS
->  	unset TARGET_DIR; \
->  	cd $(@D); \
->  		LIBS='$(QEMU_LIBS)' \
-> -		$(TARGET_CONFIGURE_OPTS) \
-> +		$(filter-out -DNDEBUG,$(TARGET_CONFIGURE_OPTS)) \
->  		$(TARGET_CONFIGURE_ARGS) \
->  		CPP="$(TARGET_CC) -E" \
->  		$(QEMU_VARS) \
-> @@ -327,7 +327,7 @@ endif
->  # call the compiler.
->  define HOST_QEMU_CONFIGURE_CMDS
->  	unset TARGET_DIR; \
-> -	cd $(@D); $(HOST_CONFIGURE_OPTS) CPP="$(HOSTCC) -E" \
-> +	cd $(@D); $(filter-out -DNDEBUG,$(HOST_CONFIGURE_OPTS)) CPP="$(HOSTCC) -E" \
->  		./configure \
->  		--target-list="$(HOST_QEMU_TARGETS)" \
->  		--prefix="$(HOST_DIR)" \
+> diff --git a/package/casync/casync.mk b/package/casync/casync.mk
+> index d74cb1bfe85d..e161c7bbc6d3 100644
+> --- a/package/casync/casync.mk
+> +++ b/package/casync/casync.mk
+> @@ -12,6 +12,9 @@ CASYNC_DEPENDENCIES = acl libcurl openssl
+>  
+>  CASYNC_CONF_OPTS = -Dman=false -Doss-fuzz=false -Dllvm-fuzz=false
+>  
+> +# Code relies on assert(false) calls
+> +CASYNC_CFLAGS = $(TARGET_CFLAGS) -UNDEBUG
+> +
+>  ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
+>  CASYNC_DEPENDENCIES += bash-completion
+>  # The default path is correct, leave it as-is
 > -- 
-> 2.32.0
+> 2.30.2
 > 
 > _______________________________________________
 > buildroot mailing list
