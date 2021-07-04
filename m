@@ -1,37 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Jul 2021 21:57:45 +0200
-Subject: [Buildroot] [PATCH v1 2/2] package/sane-backends: fix NDEBUG
- compile (missing PDBG before pixma_dbg)
-In-Reply-To: <20210618183150.618-2-ps.report@gmx.net>
-References: <20210618183150.618-1-ps.report@gmx.net>
- <20210618183150.618-2-ps.report@gmx.net>
-Message-ID: <20210704195745.GJ2521@scaer>
+Date: Sun, 4 Jul 2021 21:58:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gcc: undefine NDEBUG directive
+In-Reply-To: <20210617121943.800180-1-br015@umbiko.net>
+References: <20210617121943.800180-1-br015@umbiko.net>
+Message-ID: <20210704195817.GK2521@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Andreas, All,
 
-On 2021-06-18 20:31 +0200, Peter Seiderer spake thusly:
-> Add patch to add missing PDBG before pixma_dbg.
+On 2021-06-17 14:19 +0200, Andreas Ziegler spake thusly:
+> GCC performs internal consistency checks that can be controlled with --enable-checking, but not completely removed for all stages of the build. One of these checks uses the assert macro from <assert.h>  Defining NDEBUG removes the assertion code, which is not anticipated in the gcc code. 
 > 
-> Fixes:
+> Undefine the NDEBUG flag for package/gcc to preserve assertions. 
 > 
->   - http://autobuild.buildroot.net/results/88f4ea971875b1a5eb88662326d9343341eaaea2
+> This fixes the following error during build of GCC 10:
 > 
->   .../host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/9.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: ./.libs/libpixma.a(libpixma_la-pixma_common.o): in function `sanei_pixma_read_image':
->   pixma_common.c:(.text+0xc05): undefined reference to `DBG'
->   .../host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/9.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: pixma_common.c:(.text+0xc38): undefined reference to `DBG'
->   .../host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/9.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: pixma_common.c:(.text+0xcbf): undefined reference to `DBG'
+> ../../../libgomp/target.c: In function ?gomp_unmap_vars_internal?:
+> ../../../libgomp/target.c:1474:9: error: unused variable ?is_tgt_unmapped? [-Werror=unused-variable]
+>  1474 |    bool is_tgt_unmapped = gomp_remove_var (devicep, k);
+>       |         ^~~~~~~~~~~~~~~
+> ../../../libgomp/target.c:1473:28: error: unused variable ?k_tgt? [-Werror=unused-variable]
+>  1473 |    struct target_mem_desc *k_tgt = k->tgt;
+>       |                            ^~~~~
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 
 We are now no longer setting NDEBUG in the infra; see a1c7cff1a081.
 
-So this patch is no longer needed; I've marked it as rejected (but we
-will get it next time we update sane-backends).
+So this patch is no longer needed; I've marked it as rejected.
 
 Thanks!
 
@@ -39,65 +39,25 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  ...ackend-pixma-fix-compile-with-NDEBUG.patch | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 package/sane-backends/0006-backend-pixma-fix-compile-with-NDEBUG.patch
+>  package/gcc/gcc.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/sane-backends/0006-backend-pixma-fix-compile-with-NDEBUG.patch b/package/sane-backends/0006-backend-pixma-fix-compile-with-NDEBUG.patch
-> new file mode 100644
-> index 0000000000..2213cdb9b5
-> --- /dev/null
-> +++ b/package/sane-backends/0006-backend-pixma-fix-compile-with-NDEBUG.patch
-> @@ -0,0 +1,47 @@
-> +From b1021e09e435e6c727303b9bfa2f69eb8fcf958a Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Fri, 18 Jun 2021 20:10:02 +0200
-> +Subject: [PATCH] backend/pixma: fix compile with NDEBUG
-> +
-> +Fixes:
-> +
-> +  .../host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/9.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: ./.libs/libpixma.a(libpixma_la-pixma_common.o): in function `sanei_pixma_read_image':
-> +pixma_common.c:(.text+0xc05): undefined reference to `DBG'
-> +  .../host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/9.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: pixma_common.c:(.text+0xc38): undefined reference to `DBG'
-> +  .../host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/9.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: pixma_common.c:(.text+0xcbf): undefined reference to `DBG'
-> +
-> +[Upstream: https://gitlab.com/sane-project/backends/-/merge_requests/638]
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + backend/pixma/pixma_common.c | 10 +++++-----
-> + 1 file changed, 5 insertions(+), 5 deletions(-)
-> +
-> +diff --git a/backend/pixma/pixma_common.c b/backend/pixma/pixma_common.c
-> +index 6bce4bce9..24912b863 100644
-> +--- a/backend/pixma/pixma_common.c
-> ++++ b/backend/pixma/pixma_common.c
-> +@@ -968,16 +968,16 @@ pixma_read_image (pixma_t * s, void *buf, unsigned len)
-> +               s->last_source = s->param->source;
-> +               if ((s->cur_image_size != s->param->image_size) && !s->param->mode_jpeg)
-> +                 {
-> +-                  pixma_dbg (1, "WARNING:image size mismatches\n");
-> +-                  pixma_dbg (1,
-> ++                  PDBG (pixma_dbg (1, "WARNING:image size mismatches\n"));
-> ++                  PDBG (pixma_dbg (1,
-> +                        "    %"PRIu64" expected (%d lines) but %"PRIu64" received (%"PRIu64" lines)\n",
-> +                        s->param->image_size, s->param->h,
-> +                        s->cur_image_size,
-> +-                       s->cur_image_size / s->param->line_size);
-> ++                       s->cur_image_size / s->param->line_size));
-> +                   if ((s->cur_image_size % s->param->line_size) != 0)
-> +                     {
-> +-                      pixma_dbg (1,
-> +-                     "BUG:received data not multiple of line_size\n");
-> ++                      PDBG (pixma_dbg (1,
-> ++                           "BUG:received data not multiple of line_size\n"));
-> +                     }
-> +                 }
-> +               if ((s->cur_image_size < s->param->image_size) && !s->param->mode_jpeg)
-> +-- 
-> +2.31.1
-> +
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index ed9b93e50f..4ee32c03a7 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -90,7 +90,8 @@ HOST_GCC_COMMON_CONF_OPTS = \
+>  HOST_GCC_COMMON_CONF_ENV = \
+>  	MAKEINFO=missing
+>  
+> -GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+> +# gcc should not be built with NDEBUG enabled
+> +GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS) -UNDEBUG
+>  GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+>  
+>  # used to fix ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: 'st.st_mode' may be used uninitialized in this function [-Werror=maybe-uninitialized]
 > -- 
-> 2.31.1
+> 2.25.1
 > 
 > _______________________________________________
 > buildroot mailing list
