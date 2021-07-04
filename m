@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  4 Jul 2021 14:41:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-asn1crypto: bump to version
- 1.4.0
-Message-ID: <20210704124121.3278760-1-fontaine.fabrice@gmail.com>
+Date: Sun,  4 Jul 2021 14:45:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-m2crypto: bump to version
+ 0.38.0
+Message-ID: <20210704124535.3279143-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,42 +11,41 @@ To: buildroot@busybox.net
 
 Update indentation in hash file (two spaces)
 
-https://github.com/wbond/asn1crypto/blob/1.4.0/changelog.md
+https://gitlab.com/m2crypto/m2crypto/-/tags/0.38.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-asn1crypto/python-asn1crypto.hash | 6 +++---
- package/python-asn1crypto/python-asn1crypto.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-m2crypto/python-m2crypto.hash | 4 ++--
+ package/python-m2crypto/python-m2crypto.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-asn1crypto/python-asn1crypto.hash b/package/python-asn1crypto/python-asn1crypto.hash
-index b00474bdcd..fb2da94ed5 100644
---- a/package/python-asn1crypto/python-asn1crypto.hash
-+++ b/package/python-asn1crypto/python-asn1crypto.hash
+diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python-m2crypto/python-m2crypto.hash
+index 1ccc786f51..879f232565 100644
+--- a/package/python-m2crypto/python-m2crypto.hash
++++ b/package/python-m2crypto/python-m2crypto.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asn1crypto/json
--md5	daad112940181917e3ff169b47b9bd9a  asn1crypto-1.3.0.tar.gz
--sha256	5a215cb8dc12f892244e3a113fe05397ee23c5c4ca7a69cd6e69811755efc42d  asn1crypto-1.3.0.tar.gz
-+md5  00bf5b72d37778e62cc73b1d8909ae27  asn1crypto-1.4.0.tar.gz
-+sha256  f4f6e119474e58e04a2b1af817eb585b4fd72bdd89b998624712b5c99be7641c  asn1crypto-1.4.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/m2crypto/json
+-md5 1f3095440092ca5e54007d1f3fa2562a M2Crypto-0.37.1.tar.gz
+-sha256 e4e42f068b78ccbf113e5d0a72ae5f480f6c3ace4940b91e4fff5598cfff6fb3 M2Crypto-0.37.1.tar.gz
++md5  8f39bfac730b6567e0c2179d15318c60  M2Crypto-0.38.0.tar.gz
++sha256  99f2260a30901c949a8dc6d5f82cd5312ffb8abc92e76633baf231bbbcb2decb  M2Crypto-0.38.0.tar.gz
  # Locally computed sha256 checksums
--sha256	a88480656ec98943fb04344f6a477ee74062896f3ddb1a6f99e5f05f0109a286  LICENSE
-+sha256  a88480656ec98943fb04344f6a477ee74062896f3ddb1a6f99e5f05f0109a286  LICENSE
-diff --git a/package/python-asn1crypto/python-asn1crypto.mk b/package/python-asn1crypto/python-asn1crypto.mk
-index 2d8d384cca..af4e43b3d0 100644
---- a/package/python-asn1crypto/python-asn1crypto.mk
-+++ b/package/python-asn1crypto/python-asn1crypto.mk
+ sha256  4eca478396f4b2b020729a111fce3f096456d74500bfd8f2b0388c3c69f997c0  LICENCE
+diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
+index 995c5cd626..02ad76d3f4 100644
+--- a/package/python-m2crypto/python-m2crypto.mk
++++ b/package/python-m2crypto/python-m2crypto.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASN1CRYPTO_VERSION = 1.3.0
-+PYTHON_ASN1CRYPTO_VERSION = 1.4.0
- PYTHON_ASN1CRYPTO_SOURCE = asn1crypto-$(PYTHON_ASN1CRYPTO_VERSION).tar.gz
--PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/9f/3d/8beae739ed8c1c8f00ceac0ab6b0e97299b42da869e24cf82851b27a9123
-+PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/6b/b4/42f0e52ac2184a8abb31f0a6f98111ceee1aac0b473cee063882436e0e09
- PYTHON_ASN1CRYPTO_SETUP_TYPE = setuptools
- PYTHON_ASN1CRYPTO_LICENSE = MIT
- PYTHON_ASN1CRYPTO_LICENSE_FILES = LICENSE
+-PYTHON_M2CRYPTO_VERSION = 0.37.1
++PYTHON_M2CRYPTO_VERSION = 0.38.0
+ PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
+-PYTHON_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/aa/36/9fef97358e378c1d3bd567c4e8f8ca0428a8d7e869852cef445ee6da91fd
++PYTHON_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/2c/52/c35ec79dd97a8ecf6b2bbd651df528abb47705def774a4a15b99977274e8
+ PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
+ PYTHON_M2CRYPTO_LICENSE = MIT
+ PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
 -- 
 2.30.2
