@@ -1,165 +1,86 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Sun, 4 Jul 2021 10:43:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: fix build with gcc
- 11
-In-Reply-To: <20210703001231.79d3cd0a@gmx.net>
-References: <20210702080247.211116-1-fido_max@inbox.ru>
- <c5801345-6ed7-6c12-52e6-9f6c35f44ec1@grinn-global.com>
- <20210703000905.680afb9e@gmx.net> <20210703001231.79d3cd0a@gmx.net>
-Message-ID: <ff5506f7-2a2b-a174-f287-bd04e5ce6dc3@grinn-global.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 4 Jul 2021 11:07:37 +0200
+Subject: [Buildroot] python2, polkit, duktape, spidermonkey,
+ and Buildroot
+In-Reply-To: <CAFSsvmrPc6r1hAgj=gFQLM_1LCMG9h57afodCNTem0YpycnGWA@mail.gmail.com>
+References: <CAFSsvmrPc6r1hAgj=gFQLM_1LCMG9h57afodCNTem0YpycnGWA@mail.gmail.com>
+Message-ID: <20210704110737.15d4e764@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Hello,
 
-On 03.07.2021 00:12, Peter Seiderer wrote:
-> Hello Maxim,
->
-> one nitpick, see below...
->
-> On Sat, 3 Jul 2021 00:09:05 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
->
->> Hello Bartosz, Maxim,
->>
->> On Fri, 2 Jul 2021 10:15:42 +0200, Bartosz Bilas <b.bilas@grinn-global.com> wrote:
->>
->>> Hello Maxim,
->>>
->>> I was about to send the same patch but it turned out that there are more
->>> files that have missing includes of this header such as
->>> qoffsetstringarray_p.h, see below:
->>>
->>> ../../../include/QtCore/5.15.2/QtCore/private/../../../../../src/corelib/tools/qoffsetstringarray_p.h:70:22:
->>> error: ?numeric_limits? is not a member of ?std?
->>>   ?? 70 |???????? Last <= std::numeric_limits<quint8>::max(),
->>>   ????? |????????????????????? ^~~~~~~~~~~~~~
->>> ../../../include/QtCore/5.15.2/QtCore/private/../../../../../src/corelib/tools/qoffsetstringarray_p.h:70:43:
->>> error: wrong number of template arguments (1, should be 3)
->>>   ?? 70 |???????? Last <= std::numeric_limits<quint8>::max(),
->>>
->>> Maybe it would be better to combine all of these patches that fix build
->>> for gcc11 into one patch and rebase it when something new will occur?
->> Disagree here, prefer one package patch per upstream patch as it is easier to
->> keep track of the upstream relation/credits etc.
-Ok but in that case we'll have N patches named 0001-fix-build-for-gcc11, 
-0002-fix-build-for-gcc11 etc... but if you are ok with it I can deal 
-with it either ;)
->>
->> This one seems sufficient to fix the qt6base host-gcc-11 compile, so this one
->> has a justification on its own right and you can add my
->>
->> Tested-by: Peter Seiderer <ps.report@gmx.net>
->>
->> @Bartek: You see more compile failures? Host-build/Host-gcc-11 related ones
->> or target-build/target-gcc-11 related ones? Feel free to add related
->> patches/fixes...
+On Sat, 3 Jul 2021 19:28:37 -0700
+Adam Duskett <aduskett@gmail.com> wrote:
 
-Except that one that I've sent recently I don't see any more compile 
-failures.
+> The Polkit package currently requires Spidermonkey which in turn
+> requires Python2.
+> There has been a pending patch for quite some time to enable ducktape
+> as an alternative javascript engine which can be found here:
+> https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/35
 
-Best
-Bartek
->>
->> Regards,
->> Peter
->>
->>
->>> Best
->>> Bartek
->>> On 02.07.2021 10:02, Maxim Kochetkov via buildroot wrote:
->>>> Fix the following build failure with gcc 11:
->>>>
->>>> text/qbytearraymatcher.h:103:38: error: 'numeric_limits' is not a member of 'std'
->>>>     103 |         const auto uchar_max = (std::numeric_limits<uchar>::max)();
->>>>         |                                      ^~~~~~~~~~~~~~
->>>>
->>>> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
->>>> ---
->>>>    .../qt5base/0007-Build-fixes-for-GCC-11.patch | 61 +++++++++++++++++++
->>>>    1 file changed, 61 insertions(+)
->>>>    create mode 100644 package/qt5/qt5base/0007-Build-fixes-for-GCC-11.patch
->>>>
->>>> diff --git a/package/qt5/qt5base/0007-Build-fixes-for-GCC-11.patch b/package/qt5/qt5base/0007-Build-fixes-for-GCC-11.patch
->>>> new file mode 100644
->>>> index 0000000000..0a7eda478e
->>>> --- /dev/null
->>>> +++ b/package/qt5/qt5base/0007-Build-fixes-for-GCC-11.patch
->>>> @@ -0,0 +1,61 @@
->>>> +From 7f4717b06cacc1a74d5c63dcb41b32e9e2224f4f Mon Sep 17 00:00:00 2001
->>>> +From: Ville Voutilainen <ville.voutilainen@qt.io>
->>>> +Date: Mon, 18 Jan 2021 09:58:17 +0200
->>>> +Subject: [PATCH 1/1] Build fixes for GCC 11
-> check-package complains:
->
-> 	ackage/qt5/qt5base/0007-Build-fixes-for-GCC-11.patch:4: generate your patches with 'git format-patch -N'
->
-> Patch subject should be '[PATCH] ...'...
->
-> Regards,
-> Peter
->
->
->>>> +
->>>> +Task-number: QTBUG-89977
->>>> +Change-Id: Ic1b7ddbffb8a0a00f8c621d09a868f1d94a52c21
->>>> +Reviewed-by: Lars Knoll <lars.knoll@qt.io>
->>>> +Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
->>>> +[Retrieved (and backported) from:
->>>> +https://github.com/qt/qtbase/commit/813a928c7c3cf98670b6043149880ed5c955efb9]
->>>> +Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
->>>> +---
->>>> + src/corelib/text/qbytearraymatcher.h     | 2 ++
->>>> + src/corelib/tools/qsharedpointer_impl.h  | 3 ---
->>>> + src/plugins/platforms/xcb/qxcbwindow.cpp | 2 +-
->>>> + 3 files changed, 3 insertions(+), 4 deletions(-)
->>>> +
->>>> +diff --git a/src/corelib/text/qbytearraymatcher.h b/src/corelib/text/qbytearraymatcher.h
->>>> +index 0eedfc1d20..f5f9bef7b8 100644
->>>> +--- a/src/corelib/text/qbytearraymatcher.h
->>>> ++++ b/src/corelib/text/qbytearraymatcher.h
->>>> +@@ -42,6 +42,8 @@
->>>> +
->>>> + #include <QtCore/qbytearray.h>
->>>> +
->>>> ++#include <limits>
->>>> ++
->>>> + QT_BEGIN_NAMESPACE
->>>> +
->>>> +
->>>> +diff --git a/src/corelib/tools/qsharedpointer_impl.h b/src/corelib/tools/qsharedpointer_impl.h
->>>> +index 790c187cb9..4aee98af53 100644
->>>> +--- a/src/corelib/tools/qsharedpointer_impl.h
->>>> ++++ b/src/corelib/tools/qsharedpointer_impl.h
->>>> +@@ -155,9 +155,6 @@ namespace QtSharedPointer {
->>>> + #endif
->>>> +         inline void checkQObjectShared(...) { }
->>>> +         inline void setQObjectShared(...) { }
->>>> +-
->>>> +-        inline void operator delete(void *ptr) { ::operator delete(ptr); }
->>>> +-        inline void operator delete(void *, void *) { }
->>>> +     };
->>>> +     // sizeof(ExternalRefCountData) = 12 (32-bit) / 16 (64-bit)
->>>> +
->>>> +diff --git a/src/plugins/platforms/xcb/qxcbwindow.cpp b/src/plugins/platforms/xcb/qxcbwindow.cpp
->>>> +index 9e7e1a5572..f0866a90ac 100644
->>>> +--- a/src/plugins/platforms/xcb/qxcbwindow.cpp
->>>> ++++ b/src/plugins/platforms/xcb/qxcbwindow.cpp
->>>> +@@ -698,7 +698,7 @@ void QXcbWindow::show()
->>>> +         if (isTransient(window())) {
->>>> +             const QWindow *tp = window()->transientParent();
->>>> +             if (tp && tp->handle())
->>>> +-                transientXcbParent = static_cast<const QXcbWindow *>(tp->handle())->winId();
->>>> ++                transientXcbParent = tp->handle()->winId();
->>>> +             // Default to client leader if there is no transient parent, else modal dialogs can
->>>> +             // be hidden by their parents.
->>>> +             if (!transientXcbParent)
->>>> +--
->>>> +2.31.1
->>>> +
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+As I am subscribed to notifications on this merge request, I have been
+following the intermittent discussions taking place on this topic. And
+indeed, discussions have been sparse, and the polkit maintainers
+reaction has not been very supportive, it even feels like they're
+trying to find every possible argument or small issue to not merge the
+duktape integration. <sarcasm> Somehow they must have taken too much
+inspiration from the Buildroot maintainers :-) </sarcasm>
+
+> I hoped that the maintainers would be more responsive to such a patch
+> and hoped to wait for a new version of polkit with duktape as an
+> optional backend. However, there seems to be no urgency by the
+> maintainers of polkit.
+> 
+> This is now a problem.
+> 
+> Spidermonkey, apart from being huge, slow to compile, and a 20MB
+> shared library (stripped!), which polkit currently requires, relies on
+> Python2, which as we all know is EOL. Furthermore, python2 is
+> deprecated in Buildroot, and there is a wiki page on  elinux
+> (https://elinux.org/Buildroot:Python2Packages) with a list of packages
+> that still require python2.
+
+spidermonkey is definitely a nightmare.
+
+> The question I am proposing is this:
+> Would the buildroot maintainers (and the heavy users I know which I
+> included on the list) be against a patch series that:
+>  - Updates polkit to 0.119
+>  - Changed the build system to meson (autotools can't detect C++17 and
+> meson works, so it's the path of least resistance.)
+>   - Add the ducktape patch from above with a slight refactor for the
+> new commits (Small changes)
+>   - Drop the spidermonkey package completely and of course, update the
+> packages that depend on polkit
+
+Considering how long this has been on-going and how messy the
+spidermonkey stuff is, I would definitely be OK to make an exception
+here, and have those patches on polkit in Buildroot.
+
+But perhaps it would make sense to have a polkit-duktape project on
+Github/Gitlab, which forks polkit, and regularly rebases the duktape
+integration on top of newer polkit releases? Considering the interest
+from other distributions/build systems, this fork could potentially be
+used by others, and the mere existence of this fork would be another
+pressure on the polkit maintainers to finally act on this.
+
+> Let me know your thoughts. If we decide that such a patch would be
+> accepted into upstream I will submit one to the mailing list!
+
+Please submit, but also consider the idea of having a polkit-duktape
+project up on Github/Gitlab, that could be a useful alternative.
+
+Thanks for your work on this, it would definitely be great to no longer
+have polkit be this massively heavy beast that it is today.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
