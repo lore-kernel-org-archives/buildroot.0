@@ -1,128 +1,52 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  4 Jul 2021 14:32:06 +0200
-Subject: [Buildroot] [PATCH 2/2] package/granite: bump to version 6.0.0
-In-Reply-To: <20210704123206.3278173-1-fontaine.fabrice@gmail.com>
-References: <20210704123206.3278173-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210704123206.3278173-2-fontaine.fabrice@gmail.com>
+Date: Sun,  4 Jul 2021 14:41:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-asn1crypto: bump to version
+ 1.4.0
+Message-ID: <20210704124121.3278760-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch (already in version)
+Update indentation in hash file (two spaces)
 
-https://github.com/elementary/granite/releases/tag/6.0.0
-https://github.com/elementary/granite/releases/tag/5.5.0
+https://github.com/wbond/asn1crypto/blob/1.4.0/changelog.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-meson-add-introspection-option.patch | 73 -------------------
- package/granite/granite.hash                  |  2 +-
- package/granite/granite.mk                    |  2 +-
- 3 files changed, 2 insertions(+), 75 deletions(-)
- delete mode 100644 package/granite/0001-meson-add-introspection-option.patch
+ package/python-asn1crypto/python-asn1crypto.hash | 6 +++---
+ package/python-asn1crypto/python-asn1crypto.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/granite/0001-meson-add-introspection-option.patch b/package/granite/0001-meson-add-introspection-option.patch
-deleted file mode 100644
-index 4b32fb13c3..0000000000
---- a/package/granite/0001-meson-add-introspection-option.patch
-+++ /dev/null
-@@ -1,73 +0,0 @@
--From 4d5ddcdb9c03d4e829fe7080e497a00f0b379eff Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 14 Jun 2020 17:33:31 +0200
--Subject: [PATCH] meson: add introspection option
--
--This will allow the user to build granite without gobject-introspection
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/elementary/granite/pull/410]
-----
-- lib/meson.build   | 38 ++++++++++++++++++++------------------
-- meson_options.txt |  1 +
-- 2 files changed, 21 insertions(+), 18 deletions(-)
--
--diff --git a/lib/meson.build b/lib/meson.build
--index a9fc4ed4..770feeb5 100644
----- a/lib/meson.build
--+++ b/lib/meson.build
--@@ -98,24 +98,26 @@ install_data(
--     install_dir: include_dir
-- )
-- 
---# typelib generation isn't automated yet
---g_ir_compiler = find_program('g-ir-compiler')
---custom_target(
---    granite_typelib,
---    command: [
---        g_ir_compiler,
---        '--shared-library',
---        '@PLAINNAME@',
---        '--output',
---        '@OUTPUT@',
---        join_paths(meson.current_build_dir(), granite_gir),
---    ],
---    input: libgranite,
---    output: granite_typelib,
---    depends: libgranite,
---    install: true,
---    install_dir: join_paths(get_option('libdir'), 'girepository-1.0'),
---)
--+if get_option('introspection')
--+    # typelib generation isn't automated yet
--+    g_ir_compiler = find_program('g-ir-compiler')
--+    custom_target(
--+        granite_typelib,
--+        command: [
--+            g_ir_compiler,
--+            '--shared-library',
--+            '@PLAINNAME@',
--+            '--output',
--+            '@OUTPUT@',
--+            join_paths(meson.current_build_dir(), granite_gir),
--+        ],
--+        input: libgranite,
--+        output: granite_typelib,
--+        depends: libgranite,
--+        install: true,
--+        install_dir: join_paths(get_option('libdir'), 'girepository-1.0'),
--+    )
--+endif
-- 
-- libgranite_dep = declare_dependency(
--     link_with: libgranite,
--diff --git a/meson_options.txt b/meson_options.txt
--index 9d9f62e9..bd1a1d6f 100644
----- a/meson_options.txt
--+++ b/meson_options.txt
--@@ -1 +1,2 @@
-- option('documentation', type: 'boolean', value: false, description: 'generate documentation with gtk-doc and valadoc')
--+option('introspection', type: 'boolean', value: true, description: 'Whether to build introspection files')
---- 
--2.26.2
--
-diff --git a/package/granite/granite.hash b/package/granite/granite.hash
-index 5378b30cba..a91f468b49 100644
---- a/package/granite/granite.hash
-+++ b/package/granite/granite.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  8194031cac3b87d84a3fab9c30270485ce73f8b8ec23f26c9152b6859c8a18fd  granite-5.4.0.tar.gz
-+sha256  c62d8d29e8bb59a5fa2d9006a9c13196aea9159410a7c86e3d51fa10d0f9dcc0  granite-6.0.0.tar.gz
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
-diff --git a/package/granite/granite.mk b/package/granite/granite.mk
-index 037113f715..71dfbf4c03 100644
---- a/package/granite/granite.mk
-+++ b/package/granite/granite.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-asn1crypto/python-asn1crypto.hash b/package/python-asn1crypto/python-asn1crypto.hash
+index b00474bdcd..fb2da94ed5 100644
+--- a/package/python-asn1crypto/python-asn1crypto.hash
++++ b/package/python-asn1crypto/python-asn1crypto.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/asn1crypto/json
+-md5	daad112940181917e3ff169b47b9bd9a  asn1crypto-1.3.0.tar.gz
+-sha256	5a215cb8dc12f892244e3a113fe05397ee23c5c4ca7a69cd6e69811755efc42d  asn1crypto-1.3.0.tar.gz
++md5  00bf5b72d37778e62cc73b1d8909ae27  asn1crypto-1.4.0.tar.gz
++sha256  f4f6e119474e58e04a2b1af817eb585b4fd72bdd89b998624712b5c99be7641c  asn1crypto-1.4.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	a88480656ec98943fb04344f6a477ee74062896f3ddb1a6f99e5f05f0109a286  LICENSE
++sha256  a88480656ec98943fb04344f6a477ee74062896f3ddb1a6f99e5f05f0109a286  LICENSE
+diff --git a/package/python-asn1crypto/python-asn1crypto.mk b/package/python-asn1crypto/python-asn1crypto.mk
+index 2d8d384cca..af4e43b3d0 100644
+--- a/package/python-asn1crypto/python-asn1crypto.mk
++++ b/package/python-asn1crypto/python-asn1crypto.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--GRANITE_VERSION = 5.4.0
-+GRANITE_VERSION = 6.0.0
- GRANITE_SITE = $(call github,elementary,granite,$(GRANITE_VERSION))
- GRANITE_DEPENDENCIES = \
- 	host-pkgconf \
+-PYTHON_ASN1CRYPTO_VERSION = 1.3.0
++PYTHON_ASN1CRYPTO_VERSION = 1.4.0
+ PYTHON_ASN1CRYPTO_SOURCE = asn1crypto-$(PYTHON_ASN1CRYPTO_VERSION).tar.gz
+-PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/9f/3d/8beae739ed8c1c8f00ceac0ab6b0e97299b42da869e24cf82851b27a9123
++PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/6b/b4/42f0e52ac2184a8abb31f0a6f98111ceee1aac0b473cee063882436e0e09
+ PYTHON_ASN1CRYPTO_SETUP_TYPE = setuptools
+ PYTHON_ASN1CRYPTO_LICENSE = MIT
+ PYTHON_ASN1CRYPTO_LICENSE_FILES = LICENSE
 -- 
 2.30.2
