@@ -1,108 +1,119 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 4 Jul 2021 16:58:24 +0200
-Subject: [Buildroot] [PATCHv4 02/16] core: enable 'NDEBUG' unless
- BR2_ENABLE_RUNTIME_DEBUG is set
-In-Reply-To: <20210704111539.3ce01855@windsurf>
-References: <20210601143422.25064-1-patrickdepinguin@gmail.com>
- <20210601143422.25064-3-patrickdepinguin@gmail.com>
- <20210704111539.3ce01855@windsurf>
-Message-ID: <41d1f1e1-02b7-52e4-f1b6-ab3378af96b8@mind.be>
+Date: Sun, 4 Jul 2021 17:11:25 +0200
+Subject: [Buildroot] Buildroot way to populate additional partition
+In-Reply-To: <CAOiXNkBX7rM5oLqEEjGJb7Z613=A3g7tK+jJNjOt3e3JosGBpQ@mail.gmail.com>
+References: <CAOiXNkBX7rM5oLqEEjGJb7Z613=A3g7tK+jJNjOt3e3JosGBpQ@mail.gmail.com>
+Message-ID: <30ad3d8a-cc28-4630-bdcd-2d246670e771@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Andrey,
 
-
-On 04/07/2021 11:15, Thomas Petazzoni wrote:
-> Hello,
+On 02/07/2021 15:04, Andrey Nechypurenko wrote:
+> Hi Buildrooters,
 > 
-> On Tue,  1 Jun 2021 16:34:07 +0200
-> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+> I am building a system where rootfs should be read-only. However, it
+> should be possible to store user data (application specific data, wifi
+> configurations, etc.). For these purposes, I decided to use overlayfs.
+> In particular, Buildroot is configured not to remount rootfs with
+> read/write permission and /etc /var and /home should be mounted using
+> overlayfs with the upper filesystem located on the separate writable
+> partition. Here is how my fstab looks like:
 > 
->> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->>
->> The 'assert' statement in glibc honors the 'NDEBUG' preprocessor macro: if
->> it is set, then the assert statement is compiled away.
->>
->> Define this 'NDEBUG' macro when BR2_ENABLE_RUNTIME_DEBUG is disabled (the
->> default case).
->>
->> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> # <file system>    <mount pt>    <type>    <options>    <dump>    <pass>
+> /dev/root    /        ext4    ro,noauto    0    1
+> proc        /proc        proc    defaults    0    0
+> devpts        /dev/pts    devpts
+> defaults,gid=5,mode=620,ptmxmode=0666    0    0
+> tmpfs        /dev/shm    tmpfs    mode=0777    0    0
+> tmpfs        /tmp        tmpfs    mode=1777    0    0
+> tmpfs        /run        tmpfs    mode=0755,nosuid,nodev    0    0
+> sysfs        /sys        sysfs    defaults    0    0
+> /dev/mmcblk0p6    /overlay    ext4    rw        0    1
+> overlay        /etc        overlay
+> lowerdir=/etc,upperdir=/overlay/etc,workdir=/overlay/work_etc    0
+> 2
+> overlay        /var        overlay
+> lowerdir=/var,upperdir=/overlay/var,workdir=/overlay/work_var    0
+> 2
+> overlay        /home        overlay
+> lowerdir=/home,upperdir=/overlay/home,workdir=/overlay/work_home    0
 > 
-> So, I would like to challenge whether this change is really a good
-> idea.
-
- I'm the one who originally proposed this (I think) so I better pipe up.
-
-
-> Since this has been merged, we had to add a significant number of
-> patches to undefine NDEBUG.
+> And this is my genimage.cfg.template:
+> image sdcard.img {
+>     hdimage {
+>         gpt = "true"    }
+>     partition fsbl1 {
+>         image = "%ATFBIN%"    }
+>     partition fsbl2 {
+>         image = "%ATFBIN%"    }
+>     partition ssbl {
+>         image = "u-boot.stm32"    }
+>     partition env {
+>         size = 16K    }
+>     partition rootfs {
+>         image = "rootfs.ext4"
+>         bootable = "yes"    }
+>     partition data {
+>         image = "data.img"    }
+> }
+> image data.img {
+>     name = "data"
+>     ext4 {
+>         label = "data"
+>         features = "extents,uninit_bg,dir_index,has_journal,filetype"
+>     }
+>     size = 32M
+> }
 > 
-> The manpage of assert() tells us:
+> Here is a data partition created with ext4 data.img and is a target
+> for user data via overlayfs.
 > 
->        If  the  macro  NDEBUG is defined at the moment <assert.h> was last in?
->        cluded, the macro assert() generates no code, and hence does nothing at
->        all.   It  is not recommended to define NDEBUG if using assert() to de?
->        tect error conditions since the software may  behave  non-deterministi?
->        cally.
+> As you can see from fstab, there should be a set of directories
+> pre-created on the data partition:
+> /etc, /work_etc, /var, /work_var, /home and /work_home. And this is my
+> problem currently - I do not know how to pre-create them during the
+> build in a Buildroot-way.
 
- In practice, the build failures are mostly due to variables that become unused
-because the assert() is gone, and that triggers -Werror.
+ There is not really a "Buildroot-way" to do this.
 
+ I've used two different approaches in the past:
 
-> So there is a clear recommandation to *not* define NDEBUG if assert is
-> used to detect error conditions. And later on, it also says:
-> 
-> BUGS
->        assert() is implemented as a macro; if the expression tested has  side-
->        effects, program behavior will be different depending on whether NDEBUG
->        is defined.  This may create Heisenbugs which go away when debugging is
->        turned on.
-> 
-> We have catched a number of packages where defining NDEBUG is causing
-> build issues, but I am worried about those packages where it doesn't
-> cause build issues, but assert() is used to run something that has
-> side-effects, and where the issue would only be visible at runtime.
+1. In the post-build script, create the directories etc. in some temporary
+location and create the "data" filesystem by hand before calling genimage.
+Actually, if you don't use genimage.sh, you can simply use the --rootpath option
+of genimage to point to the data directory (so for the "data" image you would
+sent mountpoint to /).
 
- I don't think it's very likely that this happens, but indeed it's possibly. You
-just have to "optimise":
+2. Create an init script to populate the data partition. This requires bypassing
+fstab and instead manually mounting the overlays as part of that init script.
+The advantage of this approach is that you can do "factory reset" by simply
+formatting the data partition.
 
-    bool result = f();
-    assert(result);
-
-into
-
-    assert(f());
-
-and you get hit by this issue...
-
-
-> Yes, ideally, assert() should only be used to verify expressions that
-> have no side effects. But practically speaking, I am not sure how many
-> programmers are really aware of the fact that assert() expressions
-> should not have side effects, because assert() can be disabled by
-> defining NDEBUG.
-
- Well, packages that use meson or CMake *do* get NDEBUG set (because that's done
-by the release variants), so those packages at least seem to behave sanely...
-
- That said:
-
-> I believe this change is too dangerous,
-
- This is definitely true. So I also think reverting it is the safest option.
+I suspect that there's a systemd way to do the second option with tmpfiles and
+such without requiring an init script.
 
 
  Regards,
  Arnout
 
-
-> has caused a number of build
-> breakage + can cause run-time breakage that is difficult to predict.
 > 
-> What do you think ?
+> I understand that the primary way to customize the rootfs is using
+> Buildroot's overlays. However, since I am not specifying the mount
+> point for data partition (because it should be mounted with
+> overlayfs), I have no idea how to pre-create directories mentioned
+> above. Even though I can probably find some hack-ish way to do it (for
+> example by mounting data.img and modify it before the final image will
+> be created) I am wondering what is the right way [tm] to do it with
+> Buildroot.
 > 
-> Thomas
+> Thank you,
+> Andrey.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
