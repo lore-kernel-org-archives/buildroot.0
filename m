@@ -1,74 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Jul 2021 19:26:49 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/hdparm: bump version to 9.62
-Message-ID: <20210704172649.69529-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  4 Jul 2021 21:38:59 +0200
+Subject: [Buildroot] [PATCH 1/1] utils/scanpypi: search LICENSE.MD
+Message-ID: <20210704193859.3406196-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated project site (old site was not updated since 2010) and package
-help text.
+Some packages such as python-idna has a LICENSE.md file:
+https://github.com/kjd/idna/blob/master/LICENSE.md
 
-Removed md5 hash.
-
-Switched _SITE to https.
-
-Release notes:
-https://sourceforge.net/p/hdparm/news/2021/04/hdparm-961-is-released/
-https://sourceforge.net/p/hdparm/news/2021/05/hdparm-962-is-released/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-v2: added release notes
+ utils/scanpypi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- package/hdparm/Config.in   | 4 ++--
- package/hdparm/hdparm.hash | 7 +++----
- package/hdparm/hdparm.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 8 deletions(-)
-
-diff --git a/package/hdparm/Config.in b/package/hdparm/Config.in
-index 52385b18ce..17ecb65ce9 100644
---- a/package/hdparm/Config.in
-+++ b/package/hdparm/Config.in
-@@ -2,6 +2,6 @@ config BR2_PACKAGE_HDPARM
- 	bool "hdparm"
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	help
--	  hdparm - get/set hard disk parameters for Linux IDE drives.
-+	  hdparm - get/set ATA/SATA drive parameters under Linux
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 47c7c00c60..8327fc3fc5 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -495,8 +495,8 @@ class BuildrootPackage():
+         """
+         lines = []
  
--	  http://www.ibiblio.org/pub/Linux/system/hardware/
-+	  https://sourceforge.net/projects/hdparm/
-diff --git a/package/hdparm/hdparm.hash b/package/hdparm/hdparm.hash
-index b35da45273..b37826caf2 100644
---- a/package/hdparm/hdparm.hash
-+++ b/package/hdparm/hdparm.hash
-@@ -1,6 +1,5 @@
--# From http://sourceforge.net/projects/hdparm/files/hdparm/
--md5  25a791d47236c58801f8b27074f3ef93  hdparm-9.60.tar.gz
--sha1  f15378cf533f79dbbc040cd77183137d24292ecc  hdparm-9.60.tar.gz
-+# From https://sourceforge.net/projects/hdparm/files/hdparm/
-+sha1  100b9a5551b71d87b446b415d56c5d45ac41d131  hdparm-9.62.tar.gz
- # Locally computed
--sha256  8397739c73e44d5ab96c4aef28fa9c0147276d53a1b5657ce04c4565cf6635cc  hdparm-9.60.tar.gz
-+sha256  2c0f9d75cdbeda928a25a128cd3d0b7120445ec0910c0b29d4c1038ed1be777f  hdparm-9.62.tar.gz
- sha256  eae572b06d2733f5c65fbe81680ce2b8a109afee2bdd1a161343c772af0e82e1  LICENSE.TXT
-diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
-index d9470ef7f5..6a71c14fa7 100644
---- a/package/hdparm/hdparm.mk
-+++ b/package/hdparm/hdparm.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+-        filenames = ['LICENCE', 'LICENSE', 'LICENSE.RST', 'LICENSE.TXT',
+-                     'COPYING', 'COPYING.TXT']
++        filenames = ['LICENCE', 'LICENSE', 'LICENSE.MD', 'LICENSE.RST',
++                     'LICENSE.TXT', 'COPYING', 'COPYING.TXT']
+         self.license_files = list(find_file_upper_case(filenames, self.tmp_extract))
  
--HDPARM_VERSION = 9.60
--HDPARM_SITE = http://downloads.sourceforge.net/project/hdparm/hdparm
-+HDPARM_VERSION = 9.62
-+HDPARM_SITE = https://downloads.sourceforge.net/project/hdparm/hdparm
- HDPARM_LICENSE = BSD-Style
- HDPARM_LICENSE_FILES = LICENSE.TXT
- 
+         lines.append(self.__get_license_names(self.license_files))
 -- 
 2.30.2
