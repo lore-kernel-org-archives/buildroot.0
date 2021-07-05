@@ -1,42 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  4 Jul 2021 22:51:12 +0200
-Subject: [Buildroot] [PATCH 1/1] Config.in.legacy: create 2021.08
-Message-ID: <20210704205112.3410146-1-fontaine.fabrice@gmail.com>
+Date: Mon,  5 Jul 2021 07:14:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/syslog-ng: fix tarball hash
+Message-ID: <20210705051445.3496122-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 469c11c516959375f6caddde178adbdcdc5d9887 wrongly added a new
-option to 2021.05 which has been released, move it to 2021.08
+Tarball hash added by commit 1054a7aaa238253db8b60e4a520a66ad9e1b1eb1 is
+wrong
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1ed64d9a2a707cbd06f9d2af29101b70b668bc06
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- Config.in.legacy | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/syslog-ng/syslog-ng.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index bcbb625edb..1049d7af3c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,7 +144,7 @@ endif
- 
- ###############################################################################
- 
--comment "Legacy options removed in 2021.05"
-+comment "Legacy options removed in 2021.08"
- 
- config BR2_PACKAGE_PHP_EXT_XMLRPC
- 	bool "PHP XMLRPC extension removed"
-@@ -153,6 +153,8 @@ config BR2_PACKAGE_PHP_EXT_XMLRPC
- 	  The XMLRPC php extension was removed.
- 	  See: https://wiki.php.net/rfc/unbundle_xmlprc
- 
-+comment "Legacy options removed in 2021.05"
-+
- config BR2_PACKAGE_UDISKS_LVM2
- 	bool "udisks lvm2 support removed"
- 	select BR2_LEGACY
+diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+index 8ed6042eed..d25eb4f69b 100644
+--- a/package/syslog-ng/syslog-ng.hash
++++ b/package/syslog-ng/syslog-ng.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5  syslog-ng-3.32.1.tar.gz
++sha256  19e3b76552d82c71c04230526925402c9f05fa5e6ea19b912b061850929b712d  syslog-ng-3.32.1.tar.gz
+ sha256  e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b  COPYING
+ sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
 -- 
 2.30.2
