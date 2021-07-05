@@ -1,41 +1,46 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Mon,  5 Jul 2021 22:34:40 +0200
-Subject: [Buildroot] [PATCH] package/libabseil-cpp: bump to version
- 20210324.2
-Message-ID: <20210705203444.33381-1-buildroot@heine.tech>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  5 Jul 2021 22:45:44 +0200
+Subject: [Buildroot] [PATCH 05/17] package/kodi-pvr-hdhomerun: bump version
+ to 7.1.1-Matrix
+In-Reply-To: <20210705204556.20874-1-bernd.kuhls@t-online.de>
+References: <20210705204556.20874-1-bernd.kuhls@t-online.de>
+Message-ID: <20210705204556.20874-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Changelog:
+https://github.com/kodi-pvr/pvr.hdhomerun/blob/Matrix/pvr.hdhomerun/changelog.txt
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libabseil-cpp/libabseil-cpp.hash | 2 +-
- package/libabseil-cpp/libabseil-cpp.mk   | 2 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash | 2 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
-index b176043566..6429f5e9bf 100644
---- a/package/libabseil-cpp/libabseil-cpp.hash
-+++ b/package/libabseil-cpp/libabseil-cpp.hash
+diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
+index c506502874..cfd2f272f8 100644
+--- a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
++++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  ebe2ad1480d27383e4bf4211e2ca2ef312d5e6a09eba869fd2e8a5c5d553ded2  libabseil-cpp-20200923.3.tar.gz
-+sha256  59b862f50e710277f8ede96f083a5bb8d7c9595376146838b9580be90374ee1f  libabseil-cpp-20210324.2.tar.gz
- sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
-diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
-index d614a5e5fc..7646cf0ecd 100644
---- a/package/libabseil-cpp/libabseil-cpp.mk
-+++ b/package/libabseil-cpp/libabseil-cpp.mk
+-sha256  a31587e00d58efb72aadba3ad1bd67c08332feef0d558e0eeb6fda7c81bf93e8  kodi-pvr-hdhomerun-7.1.0-Matrix.tar.gz
++sha256  90a44fb73b471813c9ca99b802b5a119287c9d7fde705ae215d9f59bb8da9830  kodi-pvr-hdhomerun-7.1.1-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
+index 110576120f..53197c49c2 100644
+--- a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
++++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBABSEIL_CPP_VERSION = 20200923.3
-+LIBABSEIL_CPP_VERSION = 20210324.2
- LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
- LIBABSEIL_CPP_LICENSE = Apache-2.0
- LIBABSEIL_CPP_LICENSE_FILES = LICENSE
+-KODI_PVR_HDHOMERUN_VERSION = 7.1.0-Matrix
++KODI_PVR_HDHOMERUN_VERSION = 7.1.1-Matrix
+ KODI_PVR_HDHOMERUN_SITE = $(call github,kodi-pvr,pvr.hdhomerun,$(KODI_PVR_HDHOMERUN_VERSION))
+ KODI_PVR_HDHOMERUN_LICENSE = GPL-2.0+
+ KODI_PVR_HDHOMERUN_LICENSE_FILES = LICENSE.md
 -- 
-2.32.0
+2.30.2
