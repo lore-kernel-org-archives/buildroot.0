@@ -1,287 +1,90 @@
 From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Mon,  5 Jul 2021 15:51:39 +0300
-Subject: [Buildroot] [PATCH v2] package/gcc: fix libsanitizer in gcc 11.1,
- 10.3 for linux 5.13
-Message-ID: <20210705125139.1516789-1-fido_max@inbox.ru>
+Date: Mon,  5 Jul 2021 16:15:53 +0300
+Subject: [Buildroot] [PATCH v2] package/qt5/qt5base: fix build with gcc 11
+Message-ID: <20210705131553.1517949-1-fido_max@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Starting from 5.13 Cyclades async mux support is dropped from linux kernel:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f76edd8f7ce06cdff2fe5b6b39a49644c684a161
+Fix the following build failure with gcc 11:
 
-But gcc's libsanitizer uses <linux/cyclades.h> header.
-This issue is fixed by:
-https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=745dae5923aba02982563481d75a21595df22ff8
-
-Right now just gcc 9.4.0 has this commit and 8.4.0 is proposed to be deleted.
-So we need to add this patch for 10.3 and 11.1 to fix build with linux kernel 5.13.
+text/qbytearraymatcher.h:103:38: error: 'numeric_limits' is not a member of 'std'
+  103 |         const auto uchar_max = (std::numeric_limits<uchar>::max)();
+      |                                      ^~~~~~~~~~~~~~
 
 Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- ...er-Remove-cyclades-from-libsanitizer.patch | 123 ++++++++++++++++++
- ...er-Remove-cyclades-from-libsanitizer.patch | 123 ++++++++++++++++++
- 2 files changed, 246 insertions(+)
- create mode 100644 package/gcc/10.3.0/0004-libsanitizer-Remove-cyclades-from-libsanitizer.patch
- create mode 100644 package/gcc/11.1.0/0001-libsanitizer-Remove-cyclades-from-libsanitizer.patch
+ .../qt5base/0007-Build-fixes-for-GCC-11.patch | 62 +++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+ create mode 100644 package/qt5/qt5base/0007-Build-fixes-for-GCC-11.patch
 
-diff --git a/package/gcc/10.3.0/0004-libsanitizer-Remove-cyclades-from-libsanitizer.patch b/package/gcc/10.3.0/0004-libsanitizer-Remove-cyclades-from-libsanitizer.patch
+diff --git a/package/qt5/qt5base/0007-Build-fixes-for-GCC-11.patch b/package/qt5/qt5base/0007-Build-fixes-for-GCC-11.patch
 new file mode 100644
-index 0000000000..da979a309f
+index 0000000000..789983a81e
 --- /dev/null
-+++ b/package/gcc/10.3.0/0004-libsanitizer-Remove-cyclades-from-libsanitizer.patch
-@@ -0,0 +1,123 @@
-+From a7e72b282177fbaa6a852324641c871313d326da Mon Sep 17 00:00:00 2001
-+From: Tamar Christina <tamar.christina@arm.com>
-+Date: Fri, 21 May 2021 10:30:59 +0100
-+Subject: [PATCH] libsanitizer: Remove cyclades from libsanitizer
++++ b/package/qt5/qt5base/0007-Build-fixes-for-GCC-11.patch
+@@ -0,0 +1,62 @@
++From e4b1895bc8d02060d41a203f8503402f7a396de5 Mon Sep 17 00:00:00 2001
++From: Ville Voutilainen <ville.voutilainen@qt.io>
++Date: Mon, 18 Jan 2021 09:58:17 +0200
++Subject: [PATCH] Build fixes for GCC 11
 +
-+The Linux kernel has removed the interface to cyclades from
-+the latest kernel headers[1] due to them being orphaned for the
-+past 13 years.
-+
-+libsanitizer uses this header when compiling against glibc, but
-+glibcs itself doesn't seem to have any references to cyclades.
-+
-+Further more it seems that the driver is broken in the kernel and
-+the firmware doesn't seem to be available anymore.
-+
-+As such since this is breaking the build of libsanitizer (and so the
-+GCC bootstrap[2]) I propose to remove this.
-+
-+[1] https://lkml.org/lkml/2021/3/2/153
-+[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100379
-+
-+libsanitizer/ChangeLog:
-+
-+	PR sanitizer/100379
-+	* sanitizer_common/sanitizer_common_interceptors_ioctl.inc: Cherry-pick
-+	llvm-project revision f7c5351552387bd43f6ca3631016d7f0dfe0f135.
-+	* sanitizer_common/sanitizer_platform_limits_posix.cpp: Likewise.
-+	* sanitizer_common/sanitizer_platform_limits_posix.h: Likewise.
-+
-+(cherry picked from commit 745dae5923aba02982563481d75a21595df22ff8)
++Task-number: QTBUG-89977
++Change-Id: Ic1b7ddbffb8a0a00f8c621d09a868f1d94a52c21
++Reviewed-by: Lars Knoll <lars.knoll@qt.io>
++Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
++[Retrieved (and backported) from:
++https://github.com/qt/qtbase/commit/813a928c7c3cf98670b6043149880ed5c955efb9]
++Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
++Tested-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ .../sanitizer_common_interceptors_ioctl.inc           |  9 ---------
-+ .../sanitizer_platform_limits_posix.cpp               | 11 -----------
-+ .../sanitizer_platform_limits_posix.h                 | 10 ----------
-+ 3 files changed, 30 deletions(-)
++ src/corelib/text/qbytearraymatcher.h     | 2 ++
++ src/corelib/tools/qsharedpointer_impl.h  | 3 ---
++ src/plugins/platforms/xcb/qxcbwindow.cpp | 2 +-
++ 3 files changed, 3 insertions(+), 4 deletions(-)
 +
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
-+index 490a04b2181..42e43a04441 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
-++++ b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
-+@@ -366,15 +366,6 @@ static void ioctl_table_fill() {
++diff --git a/src/corelib/text/qbytearraymatcher.h b/src/corelib/text/qbytearraymatcher.h
++index 0eedfc1d20..f5f9bef7b8 100644
++--- a/src/corelib/text/qbytearraymatcher.h
+++++ b/src/corelib/text/qbytearraymatcher.h
++@@ -42,6 +42,8 @@
 + 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+   // _(SIOCDEVPLIP, WRITE, struct_ifreq_sz); // the same as EQL_ENSLAVE
-+-  _(CYGETDEFTHRESH, WRITE, sizeof(int));
-+-  _(CYGETDEFTIMEOUT, WRITE, sizeof(int));
-+-  _(CYGETMON, WRITE, struct_cyclades_monitor_sz);
-+-  _(CYGETTHRESH, WRITE, sizeof(int));
-+-  _(CYGETTIMEOUT, WRITE, sizeof(int));
-+-  _(CYSETDEFTHRESH, NONE, 0);
-+-  _(CYSETDEFTIMEOUT, NONE, 0);
-+-  _(CYSETTHRESH, NONE, 0);
-+-  _(CYSETTIMEOUT, NONE, 0);
-+   _(EQL_EMANCIPATE, WRITE, struct_ifreq_sz);
-+   _(EQL_ENSLAVE, WRITE, struct_ifreq_sz);
-+   _(EQL_GETMASTRCFG, WRITE, struct_ifreq_sz);
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+index aa845df4dde..badf6a401cc 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+@@ -130,7 +130,6 @@ typedef struct user_fpregs elf_fpregset_t;
-+ # include <sys/procfs.h>
++ #include <QtCore/qbytearray.h>
++ 
+++#include <limits>
+++
++ QT_BEGIN_NAMESPACE
++ 
++ 
++diff --git a/src/corelib/tools/qsharedpointer_impl.h b/src/corelib/tools/qsharedpointer_impl.h
++index 790c187cb9..4aee98af53 100644
++--- a/src/corelib/tools/qsharedpointer_impl.h
+++++ b/src/corelib/tools/qsharedpointer_impl.h
++@@ -155,9 +155,6 @@ namespace QtSharedPointer {
 + #endif
-+ #include <sys/user.h>
-+-#include <linux/cyclades.h>
-+ #include <linux/if_eql.h>
-+ #include <linux/if_plip.h>
-+ #include <linux/lp.h>
-+@@ -443,7 +442,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
++         inline void checkQObjectShared(...) { }
++         inline void setQObjectShared(...) { }
++-
++-        inline void operator delete(void *ptr) { ::operator delete(ptr); }
++-        inline void operator delete(void *, void *) { }
++     };
++     // sizeof(ExternalRefCountData) = 12 (32-bit) / 16 (64-bit)
 + 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+   unsigned struct_ax25_parms_struct_sz = sizeof(struct ax25_parms_struct);
-+-  unsigned struct_cyclades_monitor_sz = sizeof(struct cyclades_monitor);
-+ #if EV_VERSION > (0x010000)
-+   unsigned struct_input_keymap_entry_sz = sizeof(struct input_keymap_entry);
-+ #else
-+@@ -809,15 +807,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
-+ #endif // SANITIZER_LINUX
-+ 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+-  unsigned IOCTL_CYGETDEFTHRESH = CYGETDEFTHRESH;
-+-  unsigned IOCTL_CYGETDEFTIMEOUT = CYGETDEFTIMEOUT;
-+-  unsigned IOCTL_CYGETMON = CYGETMON;
-+-  unsigned IOCTL_CYGETTHRESH = CYGETTHRESH;
-+-  unsigned IOCTL_CYGETTIMEOUT = CYGETTIMEOUT;
-+-  unsigned IOCTL_CYSETDEFTHRESH = CYSETDEFTHRESH;
-+-  unsigned IOCTL_CYSETDEFTIMEOUT = CYSETDEFTIMEOUT;
-+-  unsigned IOCTL_CYSETTHRESH = CYSETTHRESH;
-+-  unsigned IOCTL_CYSETTIMEOUT = CYSETTIMEOUT;
-+   unsigned IOCTL_EQL_EMANCIPATE = EQL_EMANCIPATE;
-+   unsigned IOCTL_EQL_ENSLAVE = EQL_ENSLAVE;
-+   unsigned IOCTL_EQL_GETMASTRCFG = EQL_GETMASTRCFG;
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-+index d82fd5e4005..dc6423bc297 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-+@@ -974,7 +974,6 @@ extern unsigned struct_vt_mode_sz;
-+ 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+ extern unsigned struct_ax25_parms_struct_sz;
-+-extern unsigned struct_cyclades_monitor_sz;
-+ extern unsigned struct_input_keymap_entry_sz;
-+ extern unsigned struct_ipx_config_data_sz;
-+ extern unsigned struct_kbdiacrs_sz;
-+@@ -1319,15 +1318,6 @@ extern unsigned IOCTL_VT_WAITACTIVE;
-+ #endif  // SANITIZER_LINUX
-+ 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+-extern unsigned IOCTL_CYGETDEFTHRESH;
-+-extern unsigned IOCTL_CYGETDEFTIMEOUT;
-+-extern unsigned IOCTL_CYGETMON;
-+-extern unsigned IOCTL_CYGETTHRESH;
-+-extern unsigned IOCTL_CYGETTIMEOUT;
-+-extern unsigned IOCTL_CYSETDEFTHRESH;
-+-extern unsigned IOCTL_CYSETDEFTIMEOUT;
-+-extern unsigned IOCTL_CYSETTHRESH;
-+-extern unsigned IOCTL_CYSETTIMEOUT;
-+ extern unsigned IOCTL_EQL_EMANCIPATE;
-+ extern unsigned IOCTL_EQL_ENSLAVE;
-+ extern unsigned IOCTL_EQL_GETMASTRCFG;
-+-- 
-+2.31.1
-+
-diff --git a/package/gcc/11.1.0/0001-libsanitizer-Remove-cyclades-from-libsanitizer.patch b/package/gcc/11.1.0/0001-libsanitizer-Remove-cyclades-from-libsanitizer.patch
-new file mode 100644
-index 0000000000..78208d7348
---- /dev/null
-+++ b/package/gcc/11.1.0/0001-libsanitizer-Remove-cyclades-from-libsanitizer.patch
-@@ -0,0 +1,123 @@
-+From 2bf34b9f4e446bf9be7f04458058dd5319fb396e Mon Sep 17 00:00:00 2001
-+From: Tamar Christina <tamar.christina@arm.com>
-+Date: Fri, 21 May 2021 10:30:59 +0100
-+Subject: [PATCH] libsanitizer: Remove cyclades from libsanitizer
-+
-+The Linux kernel has removed the interface to cyclades from
-+the latest kernel headers[1] due to them being orphaned for the
-+past 13 years.
-+
-+libsanitizer uses this header when compiling against glibc, but
-+glibcs itself doesn't seem to have any references to cyclades.
-+
-+Further more it seems that the driver is broken in the kernel and
-+the firmware doesn't seem to be available anymore.
-+
-+As such since this is breaking the build of libsanitizer (and so the
-+GCC bootstrap[2]) I propose to remove this.
-+
-+[1] https://lkml.org/lkml/2021/3/2/153
-+[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100379
-+
-+libsanitizer/ChangeLog:
-+
-+	PR sanitizer/100379
-+	* sanitizer_common/sanitizer_common_interceptors_ioctl.inc: Cherry-pick
-+	llvm-project revision f7c5351552387bd43f6ca3631016d7f0dfe0f135.
-+	* sanitizer_common/sanitizer_platform_limits_posix.cpp: Likewise.
-+	* sanitizer_common/sanitizer_platform_limits_posix.h: Likewise.
-+
-+(cherry picked from commit 745dae5923aba02982563481d75a21595df22ff8)
-+---
-+ .../sanitizer_common_interceptors_ioctl.inc           |  9 ---------
-+ .../sanitizer_platform_limits_posix.cpp               | 11 -----------
-+ .../sanitizer_platform_limits_posix.h                 | 10 ----------
-+ 3 files changed, 30 deletions(-)
-+
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
-+index 490a04b2181..42e43a04441 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
-++++ b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
-+@@ -366,15 +366,6 @@ static void ioctl_table_fill() {
-+ 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+   // _(SIOCDEVPLIP, WRITE, struct_ifreq_sz); // the same as EQL_ENSLAVE
-+-  _(CYGETDEFTHRESH, WRITE, sizeof(int));
-+-  _(CYGETDEFTIMEOUT, WRITE, sizeof(int));
-+-  _(CYGETMON, WRITE, struct_cyclades_monitor_sz);
-+-  _(CYGETTHRESH, WRITE, sizeof(int));
-+-  _(CYGETTIMEOUT, WRITE, sizeof(int));
-+-  _(CYSETDEFTHRESH, NONE, 0);
-+-  _(CYSETDEFTIMEOUT, NONE, 0);
-+-  _(CYSETTHRESH, NONE, 0);
-+-  _(CYSETTIMEOUT, NONE, 0);
-+   _(EQL_EMANCIPATE, WRITE, struct_ifreq_sz);
-+   _(EQL_ENSLAVE, WRITE, struct_ifreq_sz);
-+   _(EQL_GETMASTRCFG, WRITE, struct_ifreq_sz);
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+index 1427cec48c4..025e575b5bc 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+@@ -131,7 +131,6 @@ typedef struct user_fpregs elf_fpregset_t;
-+ # include <sys/procfs.h>
-+ #endif
-+ #include <sys/user.h>
-+-#include <linux/cyclades.h>
-+ #include <linux/if_eql.h>
-+ #include <linux/if_plip.h>
-+ #include <linux/lp.h>
-+@@ -449,7 +448,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
-+ 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+   unsigned struct_ax25_parms_struct_sz = sizeof(struct ax25_parms_struct);
-+-  unsigned struct_cyclades_monitor_sz = sizeof(struct cyclades_monitor);
-+ #if EV_VERSION > (0x010000)
-+   unsigned struct_input_keymap_entry_sz = sizeof(struct input_keymap_entry);
-+ #else
-+@@ -815,15 +813,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
-+ #endif // SANITIZER_LINUX
-+ 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+-  unsigned IOCTL_CYGETDEFTHRESH = CYGETDEFTHRESH;
-+-  unsigned IOCTL_CYGETDEFTIMEOUT = CYGETDEFTIMEOUT;
-+-  unsigned IOCTL_CYGETMON = CYGETMON;
-+-  unsigned IOCTL_CYGETTHRESH = CYGETTHRESH;
-+-  unsigned IOCTL_CYGETTIMEOUT = CYGETTIMEOUT;
-+-  unsigned IOCTL_CYSETDEFTHRESH = CYSETDEFTHRESH;
-+-  unsigned IOCTL_CYSETDEFTIMEOUT = CYSETDEFTIMEOUT;
-+-  unsigned IOCTL_CYSETTHRESH = CYSETTHRESH;
-+-  unsigned IOCTL_CYSETTIMEOUT = CYSETTIMEOUT;
-+   unsigned IOCTL_EQL_EMANCIPATE = EQL_EMANCIPATE;
-+   unsigned IOCTL_EQL_ENSLAVE = EQL_ENSLAVE;
-+   unsigned IOCTL_EQL_GETMASTRCFG = EQL_GETMASTRCFG;
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-+index 0812039b038..83861105a50 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
-+@@ -981,7 +981,6 @@ extern unsigned struct_vt_mode_sz;
-+ 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+ extern unsigned struct_ax25_parms_struct_sz;
-+-extern unsigned struct_cyclades_monitor_sz;
-+ extern unsigned struct_input_keymap_entry_sz;
-+ extern unsigned struct_ipx_config_data_sz;
-+ extern unsigned struct_kbdiacrs_sz;
-+@@ -1326,15 +1325,6 @@ extern unsigned IOCTL_VT_WAITACTIVE;
-+ #endif  // SANITIZER_LINUX
-+ 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+-extern unsigned IOCTL_CYGETDEFTHRESH;
-+-extern unsigned IOCTL_CYGETDEFTIMEOUT;
-+-extern unsigned IOCTL_CYGETMON;
-+-extern unsigned IOCTL_CYGETTHRESH;
-+-extern unsigned IOCTL_CYGETTIMEOUT;
-+-extern unsigned IOCTL_CYSETDEFTHRESH;
-+-extern unsigned IOCTL_CYSETDEFTIMEOUT;
-+-extern unsigned IOCTL_CYSETTHRESH;
-+-extern unsigned IOCTL_CYSETTIMEOUT;
-+ extern unsigned IOCTL_EQL_EMANCIPATE;
-+ extern unsigned IOCTL_EQL_ENSLAVE;
-+ extern unsigned IOCTL_EQL_GETMASTRCFG;
++diff --git a/src/plugins/platforms/xcb/qxcbwindow.cpp b/src/plugins/platforms/xcb/qxcbwindow.cpp
++index 9e7e1a5572..f0866a90ac 100644
++--- a/src/plugins/platforms/xcb/qxcbwindow.cpp
+++++ b/src/plugins/platforms/xcb/qxcbwindow.cpp
++@@ -698,7 +698,7 @@ void QXcbWindow::show()
++         if (isTransient(window())) {
++             const QWindow *tp = window()->transientParent();
++             if (tp && tp->handle())
++-                transientXcbParent = static_cast<const QXcbWindow *>(tp->handle())->winId();
+++                transientXcbParent = tp->handle()->winId();
++             // Default to client leader if there is no transient parent, else modal dialogs can
++             // be hidden by their parents.
++             if (!transientXcbParent)
 +-- 
 +2.31.1
 +
