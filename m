@@ -1,104 +1,40 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  5 Jul 2021 21:15:33 +0200
-Subject: [Buildroot] [PATCH v1] package/rtl8812au-aircrack-ng: new package
-Message-ID: <20210705191533.29763-1-ps.report@gmx.net>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Mon,  5 Jul 2021 22:31:26 +0200
+Subject: [Buildroot] [PATCH] package/re2: bump version to 2021-06-01
+Message-ID: <20210705203125.33092-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add rtl8812au-aircrack-ng (alternative to rtl8821au), recommended
-e.g. for Alfa cards ([1]) and as opposed to rtl8821au does not crash
-in case of configured for IBSS mode and supports iw set freq command in
-monitor mode.
-
-[1] https://docs.alfa.com.tw/Support/Linux/RTL8811AU
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/rtl8812au-aircrack-ng/Config.in        | 10 ++++++++++
- .../rtl8812au-aircrack-ng.hash                 |  3 +++
- .../rtl8812au-aircrack-ng.mk                   | 18 ++++++++++++++++++
- 5 files changed, 33 insertions(+)
- create mode 100644 package/rtl8812au-aircrack-ng/Config.in
- create mode 100644 package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
- create mode 100644 package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
+ package/re2/re2.hash | 2 +-
+ package/re2/re2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2a69f88299..8a897bfeab 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2164,6 +2164,7 @@ F:	package/qt5/
- F:	package/quotatool/
- F:	package/racehound/
- F:	package/redir/
-+F:	package/rtl8812au-aircrack-ng/
- F:	package/uredir/
- F:	package/wayland-utils/
+diff --git a/package/re2/re2.hash b/package/re2/re2.hash
+index a2ed659b64..abe8a4bbea 100644
+--- a/package/re2/re2.hash
++++ b/package/re2/re2.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  1396ab50c06c1a8885fb68bf49a5ecfd989163015fd96699a180d6414937f33f  re2-2021-02-02.tar.gz
++sha256  26155e050b10b5969e986dab35654247a3b1b295e0532880b5a9c13c0a700ceb  re2-2021-06-01.tar.gz
+ sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
+diff --git a/package/re2/re2.mk b/package/re2/re2.mk
+index 028079cb55..f6772a10dd 100644
+--- a/package/re2/re2.mk
++++ b/package/re2/re2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/Config.in b/package/Config.in
-index 22947edf2c..faa01d8e4f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -549,6 +549,7 @@ endmenu
- 	source "package/rtl8189fs/Config.in"
- 	source "package/rtl8723bs/Config.in"
- 	source "package/rtl8723bu/Config.in"
-+	source "package/rtl8812au-aircrack-ng/Config.in"
- 	source "package/rtl8821au/Config.in"
- 	source "package/sane-backends/Config.in"
- 	source "package/sdparm/Config.in"
-diff --git a/package/rtl8812au-aircrack-ng/Config.in b/package/rtl8812au-aircrack-ng/Config.in
-new file mode 100644
-index 0000000000..cf2e5003d2
---- /dev/null
-+++ b/package/rtl8812au-aircrack-ng/Config.in
-@@ -0,0 +1,10 @@
-+comment "rtl8812au needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_RTL8812AU_AIRCRACK_NG
-+	bool "rtl8812au-aircrack-ng"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  rtl8812au wifi driver (aircrack-ng repository)
-+
-+	  https://github.com/aircrack-ng/rtl8812au
-diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-new file mode 100644
-index 0000000000..5503b4f22e
---- /dev/null
-+++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  2c5d8286a00273343fc10d0e16afc52e788ac73b7df57c8159e58a40707f61da  rtl8812au-aircrack-ng-b8167e66b4ac046b3b76c2c40008d84528e91594.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-new file mode 100644
-index 0000000000..d42d953496
---- /dev/null
-+++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# rtl8812au-aircrack-ng
-+#
-+################################################################################
-+
-+RTL8812AU_AIRCRACK_NG_VERSION = b8167e66b4ac046b3b76c2c40008d84528e91594
-+RTL8812AU_AIRCRACK_NG_SITE = $(call github,aircrack-ng,rtl8812au,$(RTL8812AU_AIRCRACK_NG_VERSION))
-+RTL8812AU_AIRCRACK_NG_LICENSE = GPL-2.0
-+RTL8812AU_AIRCRACK_NG_LICENSE_FILES = LICENSE
-+
-+RTL8812AU_AIRCRACK_NG_MODULE_MAKE_OPTS = \
-+	CONFIG_88XXAU=m \
-+	KVER=$(LINUX_VERSION_PROBED) \
-+	USER_EXTRA_CFLAGS="-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN"
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
+-RE2_VERSION = 2021-02-02
++RE2_VERSION = 2021-06-01
+ RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
+ RE2_LICENSE = BSD-3-Clause
+ RE2_LICENSE_FILES = LICENSE
 -- 
 2.32.0
