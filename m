@@ -1,10 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  5 Jul 2021 22:45:52 +0200
-Subject: [Buildroot] [PATCH 13/17] package/kodi-pvr-vbox: bump version to
- 8.1.2-Matrix
-In-Reply-To: <20210705204556.20874-1-bernd.kuhls@t-online.de>
-References: <20210705204556.20874-1-bernd.kuhls@t-online.de>
-Message-ID: <20210705204556.20874-13-bernd.kuhls@t-online.de>
+Date: Mon,  5 Jul 2021 22:45:40 +0200
+Subject: [Buildroot] [PATCH 01/17] package/kodi-pvr-argustv: bump version to
+ 7.1.2-Matrix
+Message-ID: <20210705204556.20874-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +10,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Changelog:
-https://github.com/kodi-pvr/pvr.vbox/blob/Matrix/pvr.vbox/changelog.txt
+https://github.com/kodi-pvr/pvr.argustv/blob/Matrix/pvr.argustv/changelog.txt
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-vbox/kodi-pvr-vbox.hash | 2 +-
- package/kodi-pvr-vbox/kodi-pvr-vbox.mk   | 2 +-
+ package/kodi-pvr-argustv/kodi-pvr-argustv.hash | 2 +-
+ package/kodi-pvr-argustv/kodi-pvr-argustv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
-index dc186f63f1..cf8c449b73 100644
---- a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
-+++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
+diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
+index 3024d8e65f..f2927dd1b6 100644
+--- a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
++++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  b30548dfbf892f7bedbf191b5a9d93fa978fb794f897268876a1e607518e15af  kodi-pvr-vbox-8.1.0-Matrix.tar.gz
-+sha256  b53943101401b97e6a3f63f7e4d3bffc78d892329b8fd9ef5cfb0833277456ea  kodi-pvr-vbox-8.1.2-Matrix.tar.gz
+-sha256  d91f195c4a91af893231d03a887a340900c4e515597ea059ee6b9e6444717fc9  kodi-pvr-argustv-7.1.0-Matrix.tar.gz
++sha256  4f6aaa28ff3437246a5cd77988076af55405a2689ddc0f8c48663423a9fc933b  kodi-pvr-argustv-7.1.2-Matrix.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-index 9ce667d496..56ed870a53 100644
---- a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-+++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
+diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
+index 2d5d62a539..c5f85e221b 100644
+--- a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
++++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_VBOX_VERSION = 8.1.0-Matrix
-+KODI_PVR_VBOX_VERSION = 8.1.2-Matrix
- KODI_PVR_VBOX_SITE = $(call github,kodi-pvr,pvr.vbox,$(KODI_PVR_VBOX_VERSION))
- KODI_PVR_VBOX_LICENSE = GPL-2.0+
- KODI_PVR_VBOX_LICENSE_FILES = LICENSE.md
+-KODI_PVR_ARGUSTV_VERSION = 7.1.0-Matrix
++KODI_PVR_ARGUSTV_VERSION = 7.1.2-Matrix
+ KODI_PVR_ARGUSTV_SITE = $(call github,kodi-pvr,pvr.argustv,$(KODI_PVR_ARGUSTV_VERSION))
+ KODI_PVR_ARGUSTV_LICENSE = GPL-2.0+
+ KODI_PVR_ARGUSTV_LICENSE_FILES = LICENSE.md
 -- 
 2.30.2
