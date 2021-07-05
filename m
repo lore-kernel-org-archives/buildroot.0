@@ -1,46 +1,55 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  5 Jul 2021 22:45:56 +0200
-Subject: [Buildroot] [PATCH 17/17] package/kodi-inputstream-ffmpegdirect:
- bump version to 1.21.4-Matrix
-In-Reply-To: <20210705204556.20874-1-bernd.kuhls@t-online.de>
-References: <20210705204556.20874-1-bernd.kuhls@t-online.de>
-Message-ID: <20210705204556.20874-17-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  5 Jul 2021 23:14:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-urllib3: security bump to
+ version 1.26.6
+Message-ID: <20210705211453.3518832-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/inputstream.ffmpegdirect/changelog.txt
+Fix CVE-2021-33503: An issue was discovered in urllib3 before 1.26.5.
+When provided with a URL containing many @ characters in the authority
+component, the authority regular expression exhibits catastrophic
+backtracking, causing a denial of service if a URL were passed as a
+parameter or redirected to via an HTTP redirect.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+https://github.com/urllib3/urllib3/blob/1.26.6/CHANGES.rst
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../kodi-inputstream-ffmpegdirect.hash                          | 2 +-
- .../kodi-inputstream-ffmpegdirect.mk                            | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-urllib3/python-urllib3.hash | 4 ++--
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-index c36994b461..66efc7ead2 100644
---- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-+++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f871010d3f62c4f5c1a294c898802a0ef8456e3e9eb96f7cd69be07916981a6b  kodi-inputstream-ffmpegdirect-1.21.3-Matrix.tar.gz
-+sha256  a26811689d5ada1254ab1e91d9148a7e6b4b87d227772daff2d98a4ba961bc76  kodi-inputstream-ffmpegdirect-1.21.4-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-index 4e6ec11398..792c4801d2 100644
---- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-+++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index 820156b4ca..288d986e7c 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/urllib3/json
+-md5  e2a2039e22fc29b751e26b7042e8db2f  urllib3-1.26.4.tar.gz
+-sha256  e7b021f7241115872f92f43c6508082facffbd1c048e3c6e2bb9c2a157e28937  urllib3-1.26.4.tar.gz
++md5  3a88ec3bcb761ca23df2c3583949be37  urllib3-1.26.6.tar.gz
++sha256  f57b4c16c62fa2760b7e3d97c35b255512fb6b59a259730f36ba32ce9f8e342f  urllib3-1.26.6.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c37bf186e27cf9dbe9619e55edfe3cea7b30091ceb3da63c7dacbe0e6d77907b  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index d5a04163f9..775986d516 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.21.3-Matrix
-+KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.21.4-Matrix
- KODI_INPUTSTREAM_FFMPEGDIRECT_SITE = $(call github,xbmc,inputstream.ffmpegdirect,$(KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION))
- KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE_FILES = LICENSE.md
+-PYTHON_URLLIB3_VERSION = 1.26.4
++PYTHON_URLLIB3_VERSION = 1.26.6
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/cb/cf/871177f1fc795c6c10787bc0e1f27bb6cf7b81dbde399fd35860472cecbc
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/4f/5a/597ef5911cb8919efe4d86206aa8b2658616d676a7088f0825ca08bd7cb8
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_CPE_ID_VENDOR = python
 -- 
 2.30.2
