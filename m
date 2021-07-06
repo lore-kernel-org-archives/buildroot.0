@@ -1,51 +1,55 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Tue,  6 Jul 2021 09:21:50 +0200
-Subject: [Buildroot] [PATCH] package/{protobuf,
- python-protobuf}: bump to version 3.17.3
-Message-ID: <20210706072154.35222-1-buildroot@heine.tech>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Tue,  6 Jul 2021 11:15:01 +0200
+Subject: [Buildroot] [PATCH] package/linuxptp: security bump version to 3.1.1
+Message-ID: <20210706091500.3236-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+This fixes the following CVEs:
+ - CVE-2021-3570 linuxptp: missing length check of forwarded messages
+ - CVE-2021-3571 linuxptp: wrong length of one-step follow-up in transparent clock
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 6818b6f83a..2a65156cb3 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  84d30a78cae000be164ac6b973ee1dc0664669d63685dfbcf96f058c50456f19  protobuf-cpp-3.17.0.tar.gz
-+sha256  51cec99f108b83422b7af1170afd7aeb2dd77d2bcbb7b6bad1f92509e9ccf8cb  protobuf-cpp-3.17.3.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 7ba99d2c4b..492917c5e8 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 3.17.0
-+PROTOBUF_VERSION = 3.17.3
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index 3ed9de739a..8eca476884 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3011bfbc18d1c695ee393cb0dc1042282cfa33ef6573fe82732aefc9f7286121  protobuf-python-3.17.0.tar.gz
-+sha256  3253c6d17ec0bb6f6382e555cf5ca0a9ffab8d81b691f100f96ce9f5e753018e  protobuf-python-3.17.3.tar.gz
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+See mailing list post for details: https://sourceforge.net/p/linuxptp/mailman/message/37315519/
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ package/linuxptp/linuxptp.hash | 8 ++++----
+ package/linuxptp/linuxptp.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/linuxptp/linuxptp.hash b/package/linuxptp/linuxptp.hash
+index 4f8a1f89fc..a5479b0ebc 100644
+--- a/package/linuxptp/linuxptp.hash
++++ b/package/linuxptp/linuxptp.hash
+@@ -1,9 +1,9 @@
+-# From https://sourceforge.net/projects/linuxptp/files/v3.0/
+-sha1  9a3869dbd322252c9a6bc0dbdfe8941586810a7f  linuxptp-3.1.tgz
+-md5  2264cb69c9af947028835c12c89a7572  linuxptp-3.1.tgz
++# From https://sourceforge.net/projects/linuxptp/files/v3.1.1/
++sha1  f905eabc6fd0f03c6a353f9c4ba188a3bd1b774c  linuxptp-3.1.1.tgz
++md5  3b79ab5e77c5b5cf06bc1c8350d405bb  linuxptp-3.1.1.tgz
+ 
+ # Locally computed:
+-sha256  f58f5b11cf14dc7c4f7c9efdfb27190e43d02cf20c3525f6639edac10528ce7d  linuxptp-3.1.tgz
++sha256  94d6855f9b7f2d8e9b0ca6d384e3fae6226ce6fc012dbad02608bdef3be1c0d9  linuxptp-3.1.1.tgz
+ 
+ # Hash for license file:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
+index f91be921af..da23631d20 100644
+--- a/package/linuxptp/linuxptp.mk
++++ b/package/linuxptp/linuxptp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUXPTP_VERSION = 3.1
++LINUXPTP_VERSION = 3.1.1
+ LINUXPTP_SOURCE = linuxptp-$(LINUXPTP_VERSION).tgz
+ LINUXPTP_SITE = http://downloads.sourceforge.net/linuxptp
+ LINUXPTP_LICENSE = GPL-2.0+
 -- 
-2.32.0
+2.30.0
