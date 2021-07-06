@@ -1,95 +1,159 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 6 Jul 2021 22:35:12 +0300
-Subject: [Buildroot] [PATCH 1/1] package/libsoup: fix build with gcc 4.8
-In-Reply-To: <20210701202147.466600-1-fontaine.fabrice@gmail.com>
-References: <20210701202147.466600-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210706223512.GB7470@momiji>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 6 Jul 2021 21:50:48 +0200
+Subject: [Buildroot] [PATCH v2 08/18] package/pkg-generic.mk: move
+ python fixup to generic package infrastructure
+In-Reply-To: <20210706142501.951345-9-herve.codina@bootlin.com>
+References: <20210706142501.951345-1-herve.codina@bootlin.com>
+ <20210706142501.951345-9-herve.codina@bootlin.com>
+Message-ID: <20210706195048.GO2521@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 01 Jul 2021 22:21:47 +0200 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> Fix build failure with gcc 4.8 which is raised since bump to version
-> 2.72.0 in commit 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da:
-> 
-> In file included from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/resolv.h:65:0,
->                  from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/glib-2.0/gio/gnetworking.h:40,
->                  from ../libsoup/soup-address.c:14:
-> /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/arpa/nameser.h:115:2: error: unknown type name 'u_char'
->   const u_char *_msg, *_eom;
->   ^
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/56b9cb987e25b99d6fed16c537552f47c3376f21
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Herv?, All,
 
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-
+On 2021-07-06 16:24 +0200, Herve Codina spake thusly:
+> Fixing _sysconfigdata*.{py,pyc} was previously done by python package
+> infrastructure. Some packages use python stuff without using python
+> package infrastructure.
+> These packages perform overwrites and need the specific python fixup
+> to fix them.
+> 
+> In order to be sure to fix all of these packages, the python fixup
+> is moved to the generic package infrastructure and applied to all
+> packages.
+> This follows the same principle as for the .la libtool files fixup.
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 > ---
->  .../0001-meson.build-set-c_std-to-gnu99.patch | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
+> Changes v1 to v2:
+>  - Used '... -print0 | xargs -0 -r ...' construction.
+>  - Used '-deleted' to remove files.
 > 
-> diff --git a/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch b/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
-> new file mode 100644
-> index 0000000000..5a85e05de7
-> --- /dev/null
-> +++ b/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
-> @@ -0,0 +1,40 @@
-> +From 5c3d431bdb094c59997f2a23e31e83f815ab667c Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Thu, 1 Jul 2021 22:09:23 +0200
-> +Subject: [PATCH] meson.build: set c_std to gnu99
+>  package/pkg-generic.mk | 17 +++++++++++++++++
+>  package/pkg-python.mk  | 12 ------------
+>  2 files changed, 17 insertions(+), 12 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 6fbd4006da..8c19522fd8 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -103,6 +103,21 @@ define fixup-libtool-files
+>  endef
+>  endif
+>  
+> +# Make sure python _sysconfigdata*.py files only reference the current
+> +# per-package directory.
 > +
-> +Set c_std to gnu99 to avoid the following build failure with gcc 4.8:
+> +# $1: package name (lower case)
+> +# $2: staging or host directory of the package
+> +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> +define fixup-python-files
+> +	$(Q)find $(2) \( -path '$(2)/lib/python*' -o -path '$(2)/usr/lib/python*' \) \
+> +		-name "_sysconfigdata*.py" -print0 | xargs -0 --no-run-if-empty \
+> +		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$(1)/:g"
+> +	$(Q)find $(2) \( -path '$(2)/lib/python*' -o -path '$(2)/usr/lib/python*' \) \
+> +		-name "_sysconfigdata*.pyc" -delete
+
+Those two find commands are not equivalent to the original ones.
+
+Before, we had:
+    find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* [...]
+
+After, we'd have, after replacing $(2):
+    find $(HOST_DIR) \( -path '$(HOST_DIR)/lib/python*' -o -path '$(HOST_DIR)/usr/lib/python*' \) [...]
+    find $(STAGING_DIR) \( -path '$(STAGING_DIR)/lib/python*' -o -path '$(STAGING_DIR)/usr/lib/python*' \) [...]
+
+So this is slightly different... I don't get why you needed to duplicate
+the calls, calling the macro twice... And even then, it would have still
+been simpler to pass the two locations as starting points to find:
+
+    find $(HOST_DIR)/lib/python* $(HOST_DIR)/usr/lib/python* [...]
+    find $(STAGING_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* [...]
+
+But really, $(HOST_DIR)/usr is just a symlink to . so there is no reason
+to search it. Also, previously $(STAGING_DIR)/lib/ was not in the search
+list, but now it is...
+
+> +endef
+> +endif
 > +
-> +In file included from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/resolv.h:65:0,
-> +                 from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/glib-2.0/gio/gnetworking.h:40,
-> +                 from ../libsoup/soup-address.c:14:
-> +/tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/arpa/nameser.h:115:2: error: unknown type name 'u_char'
-> +  const u_char *_msg, *_eom;
-> +  ^
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/56b9cb987e25b99d6fed16c537552f47c3376f21
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status:
-> +https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/241]
-> +---
-> + meson.build | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index 4dfd8c15..a5ebc63a 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -3,7 +3,7 @@ project('libsoup', 'c',
-> +         version: '2.72.0',
-> +         meson_version : '>= 0.50',
-> +         license : 'LGPL2',
-> +-        default_options : 'c_std=c99')
-> ++        default_options : 'c_std=gnu99')
-> + 
-> + gnome = import('gnome')
-> + 
-> +-- 
-> +2.30.2
-> +
+>  # Functions to collect statistics about installed files
+>  
+>  # $(1): base directory to search in
+> @@ -254,6 +269,8 @@ $(BUILD_DIR)/%/.stamp_configured:
+>  	@$(call pkg_size_before,$(HOST_DIR),-host)
+>  	$(call fixup-libtool-files,$(NAME),$(HOST_DIR))
+>  	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
+> +	$(call fixup-python-files,$(NAME),$(HOST_DIR))
+> +	$(call fixup-python-files,$(NAME),$(STAGING_DIR))
+>  	$(foreach hook,$($(PKG)_POST_PREPARE_HOOKS),$(call $(hook))$(sep))
+
+Even if the libtool fixups are not moved to the new _POST_PREPARE_HOOKS,
+I still find it sad that we do not leverage those new hooks for the new
+fixups... :-/
+
+But since I said "OK-ish" in my previous review, I am going to stand by
+it. A little reluctantly still... :-/
+
+But then, re-reading the above about the two find commands: if you had
+just moved the macro out of pkg-python.mk and into here, and just added:
+    $(2)_POST_PREPARE_HOOKS += PKG_PYTHON_FIXUP_SYSCONFIGDATA
+
+Then that would have been much simpler: 1) you would not have changed
+the breadth of the search, and 2) you would have used the new hooks.
+
+Oh, but you need the package name, that is passed as $(1)? No problem,
+it is already available as $($(PKG)_NAME), like was done in the original
+fixup macro (see below).
+
+>  	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+>  	$($(PKG)_CONFIGURE_CMDS)
+> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+> index 1e4fd5ba33..e6b81bdfd3 100644
+> --- a/package/pkg-python.mk
+> +++ b/package/pkg-python.mk
+> @@ -92,16 +92,6 @@ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+>  	--root=/ \
+>  	--single-version-externally-managed
+>  
+> -ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> -define PKG_PYTHON_FIXUP_SYSCONFIGDATA
+> -	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+> -		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
+> -		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g"
+> -	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+> -		-name "_sysconfigdata*.pyc" -delete
+> -endef
+> -endif
+> -
+>  ################################################################################
+>  # inner-python-package -- defines how the configuration, compilation
+>  # and installation of a Python package should be done, implements a
+> @@ -246,8 +236,6 @@ $(2)_PYTHON_INTERPRETER = $$(HOST_DIR)/bin/$$($(2)_NEEDS_HOST_PYTHON)
+>  endif
+>  endif
+>  
+> -$(2)_PRE_CONFIGURE_HOOKS += PKG_PYTHON_FIXUP_SYSCONFIGDATA
+
+See here: the fixup macro was already a hook! ;-)
+
+Regards,
+Yann E. MORIN.
+
+>  #
+>  # Build step. Only define it if not already defined by the package .mk
+>  # file.
 > -- 
-> 2.30.2
+> 2.31.1
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210706/434acd00/attachment.asc>
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
