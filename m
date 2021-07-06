@@ -1,83 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 6 Jul 2021 22:45:45 +0200
-Subject: [Buildroot] [git commit] package/pkg-generic.mk: Remove Info
- documents dir entry
-Message-ID: <20210706204015.10C9795464@busybox.osuosl.org>
+Date: Tue, 6 Jul 2021 22:53:26 +0200
+Subject: [Buildroot] [git commit] package/apache: move
+ APACHE_FIXUP_APR_LIBTOOL to post-prepare hook
+Message-ID: <20210706204015.382CA92C93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8898380984ff93c6064d971ba9282a5d1c0e81f
+commit: https://git.buildroot.net/buildroot/commit/?id=6bfe74433aef3fb26f3d08777a78a78e5e6d7f3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some packages (autotools for instance) install documentation
-files using install-info. This program adds an entry in
-the Info directory file (share/info/dir) and this causes
-TARGET_DIR and/or HOST_DIR overwrite.
-
-In order to avoid this overwrite this patch removes the Info
-directory file right after any installation.
-
-In order to be as generic as possible, this patch introduces
-a new tooling to remove useless and conflicting files based
-on the file and/or directory list <PKG>_DROP_FILES_OR_DIRS.
-share/info/dir file is added for every packages in this list.
+APACHE_FIXUP_APR_LIBTOOL tweaks files for per package directory build.
+This is typically the kind of operation expected to be in
+post-prepare hook.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-[yann.morin.1998 at free.fr:
-  - don't expand when nothing to remove
-  - do not add '/' between $(1) and % as files' paths are
-    already absolute
-]
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-generic.mk | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ package/apache/apache.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 45589bcbb4..7afcd05de9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -135,6 +135,23 @@ define check_bin_arch
- 		-a $(BR2_READELF_ARCH_NAME)
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 7dbd1a4512..dc66cd660e 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -23,7 +23,7 @@ define APACHE_FIXUP_APR_LIBTOOL
+ 	$(SED) "s@$(PER_PACKAGE_DIR)/[^/]\+/@$(PER_PACKAGE_DIR)/apache/@g" \
+ 		$(STAGING_DIR)/usr/build-1/libtool
  endef
- 
-+# Functions to remove conflicting and useless files
-+
-+# $1: base directory (target, staging, host)
-+define remove-conflicting-useless-files
-+	$(if $(strip $($(PKG)_DROP_FILES_OR_DIRS)),
-+		$(Q)$(RM) -rf $(patsubst %, $(1)%, $($(PKG)_DROP_FILES_OR_DIRS)))
-+endef
-+define REMOVE_CONFLICTING_USELESS_FILES_IN_HOST
-+	$(call remove-conflicting-useless-files,$(HOST_DIR))
-+endef
-+define REMOVE_CONFLICTING_USELESS_FILES_IN_STAGING
-+	$(call remove-conflicting-useless-files,$(STAGING_DIR))
-+endef
-+define REMOVE_CONFLICTING_USELESS_FILES_IN_TARGET
-+	$(call remove-conflicting-useless-files,$(TARGET_DIR))
-+endef
-+
- ################################################################################
- # Implicit targets -- produce a stamp file for each step of a package build
- ################################################################################
-@@ -823,6 +840,16 @@ $$(error "Package $(1) defines host variant before target variant!")
- endif
+-APACHE_POST_CONFIGURE_HOOKS += APACHE_FIXUP_APR_LIBTOOL
++APACHE_POST_PREPARE_HOOKS += APACHE_FIXUP_APR_LIBTOOL
  endif
  
-+# Globaly remove following conflicting and useless files
-+$(2)_DROP_FILES_OR_DIRS += /share/info/dir
-+
-+ifeq ($$($(2)_TYPE),host)
-+$(2)_POST_INSTALL_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_HOST
-+else
-+$(2)_POST_INSTALL_STAGING_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_STAGING
-+$(2)_POST_INSTALL_TARGET_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_TARGET
-+endif
-+
- # human-friendly targets and target sequencing
- $(1):			$(1)-install
- $(1)-install:		$$($(2)_TARGET_INSTALL)
+ APACHE_CONF_ENV= \
