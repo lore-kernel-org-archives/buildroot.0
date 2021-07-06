@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D86EC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:23:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFAD9C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:23:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1F0D460F94
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:23:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1F0D460F94
+	by mail.kernel.org (Postfix) with ESMTPS id 92B1A60F93
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:23:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 92B1A60F93
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9F55415C9;
-	Tue,  3 Aug 2021 23:23:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 64C9640581;
+	Tue,  3 Aug 2021 23:23:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LXMdlMdtlzsn; Tue,  3 Aug 2021 23:23:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zRvBE6-Zm4lR; Tue,  3 Aug 2021 23:23:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48D334159F;
-	Tue,  3 Aug 2021 23:23:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 794194057E;
+	Tue,  3 Aug 2021 23:23:51 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 192911BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 056231BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7AF4240E7C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9E99740E7D
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XIkZiZmpJ1N6 for <buildroot@lists.busybox.net>;
+ with ESMTP id 2UlEo4MezebM for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 44BE3406B4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 42D81406B3
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7FC298B3ED; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
+ id 8B4DF87F55; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 6 Jul 2021 22:53:26 +0200
+Date: Tue, 6 Jul 2021 22:53:42 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ead700f87c957bcbe6f64f3cc5a2d9d07e9ee67a
-X-Git-Newrev: 6bfe74433aef3fb26f3d08777a78a78e5e6d7f3c
+X-Git-Oldrev: 6bfe74433aef3fb26f3d08777a78a78e5e6d7f3c
+X-Git-Newrev: 836528f03eb89fdc64432f7a7470145ddf553b8c
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211000.7FC298B3ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/apache: move
- APACHE_FIXUP_APR_LIBTOOL to post-prepare hook
+Message-Id: <20210803211000.8B4DF87F55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pkg-python: invalidate
+ precompiled _sysconfigdata*.pyc
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,33 +70,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bfe74433aef3fb26f3d08777a78a78e5e6d7f3c
+commit: https://git.buildroot.net/buildroot/commit/?id=836528f03eb89fdc64432f7a7470145ddf553b8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-APACHE_FIXUP_APR_LIBTOOL tweaks files for per package directory build.
-This is typically the kind of operation expected to be in
-post-prepare hook.
+For per-package directories, we fixup the _sysconfigdata*.py files, so
+that they get proper path pointing to the current package's direcotry
+structure.
+
+However, the corresponding, pre-compiled blobs _sysconfigdata*.pyc were
+left around, and thus are inconsistent with their source. They might
+also be regenerated when a package would install a python module; this
+regeneration would trigger the soon-to-be-introduced overwrite
+detection.
+
+This commit simply removes _sysconfigdata*.pyc files; they will anyway
+be regenerated by the PYTHON{,3}_CREATE_PYC_FILES target finalize hooks.
+This is an efficient way to guarantee the consistency between the source
+and precompiled versions, and to not trigger the overwrite detection.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+[yann.morin.1998@free.frs: reword the commit log]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/apache/apache.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pkg-python.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 7dbd1a4512..dc66cd660e 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -23,7 +23,7 @@ define APACHE_FIXUP_APR_LIBTOOL
- 	$(SED) "s@$(PER_PACKAGE_DIR)/[^/]\+/@$(PER_PACKAGE_DIR)/apache/@g" \
- 		$(STAGING_DIR)/usr/build-1/libtool
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 59a48e5a87..1e4fd5ba33 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -97,6 +97,8 @@ define PKG_PYTHON_FIXUP_SYSCONFIGDATA
+ 	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+ 		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
+ 		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g"
++	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
++		-name "_sysconfigdata*.pyc" -delete
  endef
--APACHE_POST_CONFIGURE_HOOKS += APACHE_FIXUP_APR_LIBTOOL
-+APACHE_POST_PREPARE_HOOKS += APACHE_FIXUP_APR_LIBTOOL
  endif
  
- APACHE_CONF_ENV= \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
