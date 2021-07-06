@@ -1,48 +1,80 @@
 From: Herve Codina <herve.codina@bootlin.com>
-Date: Tue,  6 Jul 2021 16:24:44 +0200
-Subject: [Buildroot] [PATCH v2 01/18] package/e2fsprogs: fix fsck overwrite
- in HOST_DIR
+Date: Tue,  6 Jul 2021 16:24:45 +0200
+Subject: [Buildroot] [PATCH v2 02/18] package/pkg-generic.mk: Remove Info
+ documents dir entry
 In-Reply-To: <20210706142501.951345-1-herve.codina@bootlin.com>
 References: <20210706142501.951345-1-herve.codina@bootlin.com>
-Message-ID: <20210706142501.951345-2-herve.codina@bootlin.com>
+Message-ID: <20210706142501.951345-3-herve.codina@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-e2fsprogs package overwrites the fsck program and some
-manpages previously installed by host-util-linux package.
+Some packages (autotools for instance) install documentation
+files using install-info. This program adds an entry in
+the Info directory file (share/info/dir) and this causes
+TARGET_DIR and/or HOST_DIR overwrite.
 
-This patch simply disables fsck in host-e2fsprogs.
+In order to avoid this overwrite this patch removes the Info
+directory file right after any installation.
 
-host-e2fsprogs is used to build final ext{2,3,4} images.
-The missing host-e2fsprogs fsck tool (filesystem integrity check
-tool) in HOST_DIR should not lead to issues.
+In order to be as generic as possible, this patch introduces
+a new tooling to remove useless and conflicting files based
+on the file and/or directory list <PKG>_DROP_FILES_OR_DIRS.
+share/info/dir file is added for every packages in this list.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
 Changes v1 to v2:
- - Fixed commit message typos
- - Added 'Reviewed-by: Thomas Petazzoni'
- - Added 'Reviewed-by: Yann E. MORIN'
+ - Reworked adding <PKG>_DROP_FILES_OR_DIRS and associated tooling.
 
- package/e2fsprogs/e2fsprogs.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-generic.mk | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 0a69690e2f..bd147e737e 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -27,6 +27,7 @@ HOST_E2FSPROGS_CONF_OPTS = \
- 	--disable-defrag \
- 	--disable-e2initrd-helper \
- 	--disable-fuse2fs \
-+	--disable-fsck \
- 	--disable-libblkid \
- 	--disable-libuuid \
- 	--disable-testio-debug \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 45589bcbb4..05b2095664 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -135,6 +135,22 @@ define check_bin_arch
+ 		-a $(BR2_READELF_ARCH_NAME)
+ endef
+ 
++# Functions to remove conflicting and useless files
++
++# $1: base directory (target, staging, host)
++define remove-conflicting-useless-files
++	$(Q)$(RM) -rf $(patsubst %, $(1)/%, $($(PKG)_DROP_FILES_OR_DIRS))
++endef
++define REMOVE_CONFLICTING_USELESS_FILES_IN_HOST
++	$(call remove-conflicting-useless-files,$(HOST_DIR))
++endef
++define REMOVE_CONFLICTING_USELESS_FILES_IN_STAGING
++	$(call remove-conflicting-useless-files,$(STAGING_DIR))
++endef
++define REMOVE_CONFLICTING_USELESS_FILES_IN_TARGET
++	$(call remove-conflicting-useless-files,$(TARGET_DIR))
++endef
++
+ ################################################################################
+ # Implicit targets -- produce a stamp file for each step of a package build
+ ################################################################################
+@@ -823,6 +839,16 @@ $$(error "Package $(1) defines host variant before target variant!")
+ endif
+ endif
+ 
++# Globaly remove following conflicting and useless files
++$(2)_DROP_FILES_OR_DIRS += /share/info/dir
++
++ifeq ($$($(2)_TYPE),host)
++$(2)_POST_INSTALL_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_HOST
++else
++$(2)_POST_INSTALL_STAGING_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_STAGING
++$(2)_POST_INSTALL_TARGET_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_TARGET
++endif
++
+ # human-friendly targets and target sequencing
+ $(1):			$(1)-install
+ $(1)-install:		$$($(2)_TARGET_INSTALL)
 -- 
 2.31.1
