@@ -1,80 +1,52 @@
 From: Herve Codina <herve.codina@bootlin.com>
-Date: Tue,  6 Jul 2021 16:24:45 +0200
-Subject: [Buildroot] [PATCH v2 02/18] package/pkg-generic.mk: Remove Info
- documents dir entry
+Date: Tue,  6 Jul 2021 16:24:46 +0200
+Subject: [Buildroot] [PATCH v2 03/18] package/pkg-generic.mk: perform .la
+ files fixup in per-package HOST_DIR
 In-Reply-To: <20210706142501.951345-1-herve.codina@bootlin.com>
 References: <20210706142501.951345-1-herve.codina@bootlin.com>
-Message-ID: <20210706142501.951345-3-herve.codina@bootlin.com>
+Message-ID: <20210706142501.951345-4-herve.codina@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages (autotools for instance) install documentation
-files using install-info. This program adds an entry in
-the Info directory file (share/info/dir) and this causes
-TARGET_DIR and/or HOST_DIR overwrite.
+fixup-libtool-files was called on per-package STAGING_DIR.
+Some host-xxxx packages have their .la files with directories
+pointing outside their own per-package directory.
 
-In order to avoid this overwrite this patch removes the Info
-directory file right after any installation.
-
-In order to be as generic as possible, this patch introduces
-a new tooling to remove useless and conflicting files based
-on the file and/or directory list <PKG>_DROP_FILES_OR_DIRS.
-share/info/dir file is added for every packages in this list.
+This commit, calling fixup-libtool-files on HOST_DIR, fixes this
+issue.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
 Changes v1 to v2:
- - Reworked adding <PKG>_DROP_FILES_OR_DIRS and associated tooling.
+ - Used '... -print0 | xargs -0 -r ...' construction.
 
- package/pkg-generic.mk | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ package/pkg-generic.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 45589bcbb4..05b2095664 100644
+index 05b2095664..88707e2f8d 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -135,6 +135,22 @@ define check_bin_arch
- 		-a $(BR2_READELF_ARCH_NAME)
+@@ -97,7 +97,8 @@ endif
+ # $2: staging directory of the package
+ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+ define fixup-libtool-files
+-	$(Q)find $(2)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
++	$(Q)find $(2) \( -path '$(2)/lib*' -o -path '$(2)/usr/lib*' \) \
++		-name "*.la" -print0 | xargs -0 --no-run-if-empty \
+ 		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$(1)/:g"
  endef
- 
-+# Functions to remove conflicting and useless files
-+
-+# $1: base directory (target, staging, host)
-+define remove-conflicting-useless-files
-+	$(Q)$(RM) -rf $(patsubst %, $(1)/%, $($(PKG)_DROP_FILES_OR_DIRS))
-+endef
-+define REMOVE_CONFLICTING_USELESS_FILES_IN_HOST
-+	$(call remove-conflicting-useless-files,$(HOST_DIR))
-+endef
-+define REMOVE_CONFLICTING_USELESS_FILES_IN_STAGING
-+	$(call remove-conflicting-useless-files,$(STAGING_DIR))
-+endef
-+define REMOVE_CONFLICTING_USELESS_FILES_IN_TARGET
-+	$(call remove-conflicting-useless-files,$(TARGET_DIR))
-+endef
-+
- ################################################################################
- # Implicit targets -- produce a stamp file for each step of a package build
- ################################################################################
-@@ -823,6 +839,16 @@ $$(error "Package $(1) defines host variant before target variant!")
  endif
- endif
- 
-+# Globaly remove following conflicting and useless files
-+$(2)_DROP_FILES_OR_DIRS += /share/info/dir
-+
-+ifeq ($$($(2)_TYPE),host)
-+$(2)_POST_INSTALL_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_HOST
-+else
-+$(2)_POST_INSTALL_STAGING_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_STAGING
-+$(2)_POST_INSTALL_TARGET_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_TARGET
-+endif
-+
- # human-friendly targets and target sequencing
- $(1):			$(1)-install
- $(1)-install:		$$($(2)_TARGET_INSTALL)
+@@ -251,6 +252,7 @@ $(BUILD_DIR)/%/.stamp_configured:
+ 	@$(call pkg_size_before,$(TARGET_DIR))
+ 	@$(call pkg_size_before,$(STAGING_DIR),-staging)
+ 	@$(call pkg_size_before,$(HOST_DIR),-host)
++	$(call fixup-libtool-files,$(NAME),$(HOST_DIR))
+ 	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
+ 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+ 	$($(PKG)_CONFIGURE_CMDS)
 -- 
 2.31.1
