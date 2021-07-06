@@ -1,146 +1,96 @@
-From: Mirza Kapetanovic <mirza.kapetanovic@gmail.com>
-Date: Mon, 5 Jul 2021 14:29:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: fix env image help
- text
-In-Reply-To: <20210627104420.GA2829@scaer>
-References: <20210625091900.811972-1-mirza.kapetanovic@gmail.com>
- <20210627104420.GA2829@scaer>
-Message-ID: <CAK5Fhos4Gce9CC=tpsnvSDJxFb0PtUR5VMtct4MxsJy2pBsFPA@mail.gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 6 Jul 2021 22:35:12 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libsoup: fix build with gcc 4.8
+In-Reply-To: <20210701202147.466600-1-fontaine.fabrice@gmail.com>
+References: <20210701202147.466600-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210706223512.GB7470@momiji>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20210705122953.3ESe9dJxUbdwE5nxdC8bFWEwrTUQ_rIP39BJnS9IrEw@z>
+Message-ID: <20210706193512.LyMEfO6xYtmYEHz31aRpmkA-eoovyn_kPBOdhE4c17w@z>
 
-I created a new patch with your suggestions, now it concatenates the file
-before passing it to the env tool. I thought I was replying to this thread
-when I sent the patch, but it seems I ended up creating a separate patch
-(patchwork link:
-http://patchwork.ozlabs.org/project/buildroot/patch/20210705121933.1055057-1-mirza.kapetanovic at gmail.com),
-let me know if I need to change fix that somehow.
+On Thu, 01 Jul 2021 22:21:47 +0200 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> Fix build failure with gcc 4.8 which is raised since bump to version
+> 2.72.0 in commit 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da:
+> 
+> In file included from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/resolv.h:65:0,
+>                  from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/glib-2.0/gio/gnetworking.h:40,
+>                  from ../libsoup/soup-address.c:14:
+> /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/arpa/nameser.h:115:2: error: unknown type name 'u_char'
+>   const u_char *_msg, *_eom;
+>   ^
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/56b9cb987e25b99d6fed16c537552f47c3376f21
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-On Sun, 27 Jun 2021 at 12:44, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 
-> Mirza, All,
->
-> On 2021-06-25 11:19 +0200, Mirza Kapetanovic spake thusly:
-> > BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE is passed almost as is to
-> mkenvimage
-> > which, looking at the help text and source code of the tool, doesn't
-> seem to support
-> > mulitple files as input.
-> >
-> > I tried providing multiple files (space separated) and only the last
-> file was included
-> > in the resulting environment image.
->
-> Can't we instead make that possible?
->
-> For example, this (totally untested) patch should be a step in that
-> direction, I think:
->
->     diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/
-> uboot-tools.mk
->     index 8963d6182e..d4392e47bf 100644
->     --- a/package/uboot-tools/uboot-tools.mk
->     +++ b/package/uboot-tools/uboot-tools.mk
->     @@ -116,7 +116,7 @@ endif
->
->      ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE),y)
->
->     -UBOOT_TOOLS_GENERATE_ENV_FILE = $(call
-> qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE))
->     +UBOOT_TOOLS_ENV_FILE_SOURCES = $(call
-> qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE))
->
->      # If BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE is left empty, we
->      # will use the default environment provided in the U-Boot build
->     @@ -130,7 +130,7 @@ HOST_UBOOT_TOOLS_DEPENDENCIES += uboot
->
->      # Handle the case where BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE
->      # is left empty, use the default U-Boot environment.
->     -ifeq ($(UBOOT_TOOLS_GENERATE_ENV_FILE),)
->     +ifeq ($(UBOOT_TOOLS_ENV_FILE_SOURCES),)
->      UBOOT_TOOLS_GENERATE_ENV_FILE = $(@D)/boot-env-defaults.txt
->      define HOST_UBOOT_TOOLS_GENERATE_ENV_DEFAULTS
->         CROSS_COMPILE="$(TARGET_CROSS)" \
->     @@ -138,7 +138,13 @@ define HOST_UBOOT_TOOLS_GENERATE_ENV_DEFAULTS
->                 $(UBOOT_SRCDIR) \
->                 > $(UBOOT_TOOLS_GENERATE_ENV_FILE)
->      endef
->     -endif # UBOOT_TOOLS_GENERATE_ENV_FILE
->     +else
->     +UBOOT_TOOLS_GENERATE_ENV_FILE = $(@D)/boot-env-buildroot.txt
->     +define HOST_UBOOT_TOOLS_GENERATE_ENV_DEFAULTS
->     +   cat $(UBOOT_TOOLS_ENV_FILE_SOURCES) \
->     +           > $(UBOOT_TOOLS_GENERATE_ENV_FILE)
->     +endef
->     +endif # UBOOT_TOOLS_ENV_FILE_SOURCE
->      endif # BR2_TARGET_UBOOT
->
->      ifeq ($(BR_BUILDING),y)
->
-> As I said: totally untested... I can already see that it is broken for
-> the case where uboot is not enabled, so this definitely needs a little
-> bit more of thinking...
->
-> Can you look into that, please?
->
-> Regards,
-> Yann E. MORIN.
->
-> > Signed-off-by: Mirza Kapetanovic <mirza.kapetanovic@gmail.com>
-> > ---
-> >  package/uboot-tools/Config.in.host | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/package/uboot-tools/Config.in.host
-> b/package/uboot-tools/Config.in.host
-> > index 431cc8631d..7e5c5084c0 100644
-> > --- a/package/uboot-tools/Config.in.host
-> > +++ b/package/uboot-tools/Config.in.host
-> > @@ -56,15 +56,13 @@ config BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE
-> >  if BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE
-> >
-> >  config BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE
-> > -     string "Source files for environment"
-> > +     string "Source file for environment"
-> >       default BR2_TARGET_UBOOT_ENVIMAGE_SOURCE if
-> BR2_TARGET_UBOOT_ENVIMAGE_SOURCE != "" # legacy
-> >       help
-> > -       Text files describing the environment. Files should have
-> > +       Text file describing the environment. File should have
-> >         lines of the form var=value, one per line. Blank lines and
-> >         lines starting with a # are ignored.
-> >
-> > -       Multiple source files are concatenated in the order listed.
-> > -
-> >         Leave empty to generate image from compiled-in env if a U-boot
-> >         target build is configured (BR2_TARGET_UBOOT)
-> >
-> > --
-> > 2.25.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
+> ---
+>  .../0001-meson.build-set-c_std-to-gnu99.patch | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
+> 
+> diff --git a/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch b/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
+> new file mode 100644
+> index 0000000000..5a85e05de7
+> --- /dev/null
+> +++ b/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
+> @@ -0,0 +1,40 @@
+> +From 5c3d431bdb094c59997f2a23e31e83f815ab667c Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Thu, 1 Jul 2021 22:09:23 +0200
+> +Subject: [PATCH] meson.build: set c_std to gnu99
+> +
+> +Set c_std to gnu99 to avoid the following build failure with gcc 4.8:
+> +
+> +In file included from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/resolv.h:65:0,
+> +                 from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/glib-2.0/gio/gnetworking.h:40,
+> +                 from ../libsoup/soup-address.c:14:
+> +/tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/arpa/nameser.h:115:2: error: unknown type name 'u_char'
+> +  const u_char *_msg, *_eom;
+> +  ^
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/56b9cb987e25b99d6fed16c537552f47c3376f21
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status:
+> +https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/241]
+> +---
+> + meson.build | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/meson.build b/meson.build
+> +index 4dfd8c15..a5ebc63a 100644
+> +--- a/meson.build
+> ++++ b/meson.build
+> +@@ -3,7 +3,7 @@ project('libsoup', 'c',
+> +         version: '2.72.0',
+> +         meson_version : '>= 0.50',
+> +         license : 'LGPL2',
+> +-        default_options : 'c_std=c99')
+> ++        default_options : 'c_std=gnu99')
+> + 
+> + gnome = import('gnome')
+> + 
+> +-- 
+> +2.30.2
+> +
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210705/c9cd7e29/attachment-0002.html>
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210706/434acd00/attachment-0002.asc>
