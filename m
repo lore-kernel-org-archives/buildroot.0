@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC2AFC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:07:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96107C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:07:15 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 891DE61037
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:07:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 891DE61037
+	by mail.kernel.org (Postfix) with ESMTPS id 638926103C
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:07:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 638926103C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FF354241F;
-	Wed,  4 Aug 2021 00:07:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C8F54244C;
+	Wed,  4 Aug 2021 00:07:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8gBBLCJUUEcd; Wed,  4 Aug 2021 00:07:01 +0000 (UTC)
+	with ESMTP id mteGaQglcjoP; Wed,  4 Aug 2021 00:07:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE5C442427;
-	Wed,  4 Aug 2021 00:07:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9ECD742446;
+	Wed,  4 Aug 2021 00:07:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 030491BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5DD851BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B0E440E72
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE18C40E83
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k-pUeLbe3FS6 for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
+ with ESMTP id j8QQIvVnDPMK for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9611D4067D
+ by smtp2.osuosl.org (Postfix) with ESMTP id E32DB40686
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id DD65F87F55; Tue,  3 Aug 2021 21:09:59 +0000 (UTC)
+ id 4406486A84; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 4 Jul 2021 10:06:43 +0200
+Date: Tue, 6 Jul 2021 22:44:34 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fab6a64b52cdd92e0d20331c4ec5eff9f293429a
-X-Git-Newrev: 4899d9ec1b03370cbb4a8eecff3a6556dcc3e2e5
+X-Git-Oldrev: 60aa896904c0d8a07d6fbbf7e90b7f9efd196678
+X-Git-Newrev: 7b7c8cc67280c3ee8ec79d4e381519b18386bd8c
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210959.DD65F87F55@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Makefile: document the
- <pkg>-reinstall target
+Message-Id: <20210803211000.4406486A84@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/e2fsprogs: fix fsck
+ overwrite in HOST_DIR
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,27 +70,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4899d9ec1b03370cbb4a8eecff3a6556dcc3e2e5
+commit: https://git.buildroot.net/buildroot/commit/?id=7b7c8cc67280c3ee8ec79d4e381519b18386bd8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+host-e2fsprogs package overwrites the fsck program and some
+manpages previously installed by host-util-linux package.
+
+This patch simply disables fsck in host-e2fsprogs.
+
+host-e2fsprogs is used to build final ext{2,3,4} images.
+The missing host-e2fsprogs fsck tool (filesystem integrity check
+tool) in HOST_DIR should not lead to issues.
+
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Makefile | 1 +
+ package/e2fsprogs/e2fsprogs.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Makefile b/Makefile
-index 472af5a318..74c238cb20 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1151,6 +1151,7 @@ help:
- 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
- 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
- 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
-+	@echo '  <pkg>-reinstall        - Restart the build from the install step'
- 	$(foreach p,$(HELP_PACKAGES), \
- 		@echo $(sep) \
- 		@echo '$($(p)_NAME):' $(sep) \
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 0a69690e2f..bd147e737e 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -27,6 +27,7 @@ HOST_E2FSPROGS_CONF_OPTS = \
+ 	--disable-defrag \
+ 	--disable-e2initrd-helper \
+ 	--disable-fuse2fs \
++	--disable-fsck \
+ 	--disable-libblkid \
+ 	--disable-libuuid \
+ 	--disable-testio-debug \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
