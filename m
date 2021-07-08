@@ -1,48 +1,67 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu,  8 Jul 2021 17:12:34 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-pycares: bump to version
- 4.0.0
-Message-ID: <20210708231234.3173658-1-james.hilliard1@gmail.com>
+Date: Thu,  8 Jul 2021 17:19:38 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-cchardet: bump to version
+ 2.1.7
+Message-ID: <20210708231938.3543330-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Python 2 is no longer supported.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pycares/python-pycares.hash | 6 +++---
- package/python-pycares/python-pycares.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-cchardet/Config.in            | 2 ++
+ package/python-cchardet/python-cchardet.hash | 4 ++--
+ package/python-cchardet/python-cchardet.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
-index c8c46175dc..7f749938a1 100644
---- a/package/python-pycares/python-pycares.hash
-+++ b/package/python-pycares/python-pycares.hash
+diff --git a/package/python-cchardet/Config.in b/package/python-cchardet/Config.in
+index 74153126fb..0f8645aafe 100644
+--- a/package/python-cchardet/Config.in
++++ b/package/python-cchardet/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_CCHARDET
+ 	bool "python-cchardet"
++	depends on BR2_PACKAGE_PYTHON3
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  cChardet is high speed universal character encoding
+@@ -8,4 +9,5 @@ config BR2_PACKAGE_PYTHON_CCHARDET
+ 	  https://github.com/PyYoshi/cChardet
+ 
+ comment "python-cchardet needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_PYTHON3
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-cchardet/python-cchardet.hash b/package/python-cchardet/python-cchardet.hash
+index 960801f889..1ecfd6fa95 100644
+--- a/package/python-cchardet/python-cchardet.hash
++++ b/package/python-cchardet/python-cchardet.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pycares/json
--md5	8ac802d79b318efa27d3a9949d0604d1  pycares-3.1.1.tar.gz
--sha256	18dfd4fd300f570d6c4536c1d987b7b7673b2a9d14346592c5d6ed716df0d104  pycares-3.1.1.tar.gz
-+md5  5908c5762f08d07310f081aa2d8397a2  pycares-4.0.0.tar.gz
-+sha256  d0154fc5753b088758fbec9bc137e1b24bb84fc0c6a09725c8bac25a342311cd  pycares-4.0.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cchardet/json
+-md5  ee884e2c7762e56e8a0600aa34ad4fa3  cchardet-2.1.6.tar.gz
+-sha256  b76afb2059ad69eab576949980a17413c1e9e5a5624abf9e43542d8853f146b3  cchardet-2.1.6.tar.gz
++md5  8a76472ad09c68c12069203ea9348ee3  cchardet-2.1.7.tar.gz
++sha256  c428b6336545053c2589f6caf24ea32276c6664cb86db817e03a94c60afa0eaf  cchardet-2.1.7.tar.gz
  # Locally computed sha256 checksums
--sha256	427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
-+sha256  427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
-diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
-index dea34f82bf..b0abb1a41a 100644
---- a/package/python-pycares/python-pycares.mk
-+++ b/package/python-pycares/python-pycares.mk
+ sha256  107a29ccdd2d778aa2df5462f85dddfa099059abd22e064e07ec2cc9bafc37cd  COPYING
+diff --git a/package/python-cchardet/python-cchardet.mk b/package/python-cchardet/python-cchardet.mk
+index 78daf6075e..396e9d6c53 100644
+--- a/package/python-cchardet/python-cchardet.mk
++++ b/package/python-cchardet/python-cchardet.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYCARES_VERSION = 3.1.1
-+PYTHON_PYCARES_VERSION = 4.0.0
- PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
--PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/4e/09/f49ef1c4b6a5ad50fc08a8acd015f1938594dd7a6b4a6a96d049d9bbec7d
-+PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/25/5a/ed8cc3340b7e83a5e572b5d27387a968a7e52b1e3c269442076ca902b7ba
- PYTHON_PYCARES_SETUP_TYPE = setuptools
- PYTHON_PYCARES_LICENSE = MIT
- PYTHON_PYCARES_LICENSE_FILES = LICENSE
+-PYTHON_CCHARDET_VERSION = 2.1.6
++PYTHON_CCHARDET_VERSION = 2.1.7
+ PYTHON_CCHARDET_SOURCE = cchardet-$(PYTHON_CCHARDET_VERSION).tar.gz
+-PYTHON_CCHARDET_SITE = https://files.pythonhosted.org/packages/41/e6/2e2184a3bc887bfb6e6b97aef5e94af9b8de43806ce14b023ddbbcb0b30d
++PYTHON_CCHARDET_SITE = https://files.pythonhosted.org/packages/a8/5d/090c9f0312b7988a9433246c9cf0b566b1ae1374368cfb8ac897218a4f65
+ PYTHON_CCHARDET_SETUP_TYPE = setuptools
+ PYTHON_CCHARDET_LICENSE = MPL-1.1
+ PYTHON_CCHARDET_LICENSE_FILES = COPYING
 -- 
 2.25.1
