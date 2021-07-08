@@ -1,76 +1,67 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu,  8 Jul 2021 05:16:27 -0600
-Subject: [Buildroot] [PATCH 1/1] package/{chrony, ntp,
- openntpd}: turn off DNSSEC validation
-Message-ID: <20210708111627.3795182-1-james.hilliard1@gmail.com>
+Date: Thu,  8 Jul 2021 06:41:25 -0600
+Subject: [Buildroot] [PATCH v2 1/1] package/systemd: bump to version 249
+Message-ID: <20210708124125.72124-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have a chicken and egg problem: validation of DNSSEC signatures
-doesn't work without a correct clock, but to set the correct clock we
-need to contact NTP servers which requires resolving a hostname, which
-would normally require DNSSEC validation.
-
-Let's break the cycle by excluding NTP hostname resolution from
-validation for now.
-
-Details:
-https://github.com/systemd/systemd/commit/abf4e5c1d3ad767bc0ed67883e8e4d916af095ec
+Add new host-python3-jinja2 dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/chrony/chrony.service | 4 ++++
- package/ntp/ntpd.service      | 4 ++++
- package/openntpd/ntpd.service | 4 ++++
- 3 files changed, 12 insertions(+)
+Changes v1 -> v2:
+  - add host-python3-jinja2 host-systemd dependency
+---
+ package/systemd/systemd.hash | 4 ++--
+ package/systemd/systemd.mk   | 6 ++++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/chrony/chrony.service b/package/chrony/chrony.service
-index 325b63c492..210122cf5d 100644
---- a/package/chrony/chrony.service
-+++ b/package/chrony/chrony.service
-@@ -4,6 +4,10 @@ After=syslog.target network.target
- Conflicts=systemd-timesyncd.service
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 20cd922259..82741d1996 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,6 +1,6 @@
+ # sha256 locally computed
+-sha256  2869986e219a8dfc96cc0dffac66e0c13bb70a89e16b85a3948876c146cfa3e0  systemd-247.3.tar.gz
++sha256  0d9d45140e95f2d0ee79005ccf867f2706976c30391b932a8c3b9b198a801fad  systemd-249.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+-sha256  6f22d19d35b00f35e0444e0bc9139e6d3bdf7277978f89c4e175e37b18c43f3d  README
++sha256  f5645b4b846479859d6618fa7a5a1722681aa7fc43c1e45f8bf8e1fe5738d618  README
+ sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  tools/chromiumos/LICENSE
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 74c561e67e..0706ea7212 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- [Service]
-+# Turn off DNSSEC validation for hostname look-ups, since those need the
-+# correct time to work, but we likely won't acquire that without NTP. Let's
-+# break this chicken-and-egg cycle here.
-+Environment=SYSTEMD_NSS_RESOLVE_VALIDATE=0
- ExecStart=/usr/sbin/chronyd -n
- Restart=always
+-SYSTEMD_VERSION = 247.3
++SYSTEMD_VERSION = 249
+ SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
+@@ -14,6 +14,7 @@ SYSTEMD_DEPENDENCIES = \
+ 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
+ 	$(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
+ 	host-gperf \
++	host-python3-jinja2 \
+ 	kmod \
+ 	libcap \
+ 	util-linux-libs \
+@@ -717,7 +718,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
+ 	host-util-linux \
+ 	host-patchelf \
+ 	host-libcap \
+-	host-gperf
++	host-gperf \
++	host-python3-jinja2
  
-diff --git a/package/ntp/ntpd.service b/package/ntp/ntpd.service
-index 7964c5389b..9a0f4c6dbf 100644
---- a/package/ntp/ntpd.service
-+++ b/package/ntp/ntpd.service
-@@ -5,6 +5,10 @@ After=network.target
- [Service]
- Type=forking
- PIDFile=/run/ntpd.pid
-+# Turn off DNSSEC validation for hostname look-ups, since those need the
-+# correct time to work, but we likely won't acquire that without NTP. Let's
-+# break this chicken-and-egg cycle here.
-+Environment=SYSTEMD_NSS_RESOLVE_VALIDATE=0
- ExecStart=/usr/sbin/ntpd -g -p /run/ntpd.pid
+ HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
  
- [Install]
-diff --git a/package/openntpd/ntpd.service b/package/openntpd/ntpd.service
-index a4ffa7318c..c2924b0c5c 100644
---- a/package/openntpd/ntpd.service
-+++ b/package/openntpd/ntpd.service
-@@ -5,6 +5,10 @@ Conflicts=systemd-timesyncd.service
- 
- [Service]
- Type=simple
-+# Turn off DNSSEC validation for hostname look-ups, since those need the
-+# correct time to work, but we likely won't acquire that without NTP. Let's
-+# break this chicken-and-egg cycle here.
-+Environment=SYSTEMD_NSS_RESOLVE_VALIDATE=0
- ExecStart=/usr/sbin/ntpd -s -d
- 
- [Install]
 -- 
 2.25.1
