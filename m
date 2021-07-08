@@ -1,7 +1,7 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu,  8 Jul 2021 11:06:25 -0600
-Subject: [Buildroot] [PATCH v3 1/1] package/systemd: bump to version 249
-Message-ID: <20210708170625.1746560-1-james.hilliard1@gmail.com>
+Date: Thu,  8 Jul 2021 11:13:56 -0600
+Subject: [Buildroot] [PATCH v4 1/1] package/systemd: bump to version 249
+Message-ID: <20210708171356.2241457-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,6 +16,8 @@ Add new host-python3-jinja2 dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
+Changes v3 -> v4:
+  - add transient user/groups nsswitch.conf support
 Changes v2 -> v3:
   - add oomd and sysext configuration options
 Changes v1 -> v2:
@@ -23,8 +25,8 @@ Changes v1 -> v2:
 ---
  package/systemd/Config.in    | 25 +++++++++++++++++++++++++
  package/systemd/systemd.hash |  4 ++--
- package/systemd/systemd.mk   | 20 ++++++++++++++++++--
- 3 files changed, 45 insertions(+), 4 deletions(-)
+ package/systemd/systemd.mk   | 22 ++++++++++++++++++++--
+ 3 files changed, 47 insertions(+), 4 deletions(-)
 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
 index d658308213..709a5c4d61 100644
@@ -83,7 +85,7 @@ index 20cd922259..82741d1996 100644
 +sha256  f5645b4b846479859d6618fa7a5a1722681aa7fc43c1e45f8bf8e1fe5738d618  README
  sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  tools/chromiumos/LICENSE
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 74c561e67e..cffd47baed 100644
+index 74c561e67e..5562703a89 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
 @@ -4,7 +4,7 @@
@@ -129,7 +131,16 @@ index 74c561e67e..cffd47baed 100644
  ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
  SYSTEMD_CONF_OPTS += -Dnetworkd=true
  SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - systemd Network Management
-@@ -663,11 +676,13 @@ HOST_SYSTEMD_CONF_OPTS = \
+@@ -543,6 +556,8 @@ endef
+ define SYSTEMD_INSTALL_NSSCONFIG_HOOK
+ 	$(SED) '/^passwd:/ {/systemd/! s/$$/ systemd/}' \
+ 		-e '/^group:/ {/systemd/! s/$$/ [SUCCESS=merge] systemd/}' \
++		-e '/^shadow:/ {/systemd/! s/$$/ systemd/}' \
++		-e '/^gshadow:/ {/systemd/! s/$$/ systemd/}' \
+ 		$(if $(BR2_PACKAGE_SYSTEMD_RESOLVED), \
+ 			-e '/^hosts:/ s/[[:space:]]*mymachines//' \
+ 			-e '/^hosts:/ {/resolve/! s/files/files resolve [!UNAVAIL=return]/}' ) \
+@@ -663,11 +678,13 @@ HOST_SYSTEMD_CONF_OPTS = \
  	-Drepart=false \
  	-Dcoredump=false \
  	-Dpstore=false \
@@ -143,7 +154,7 @@ index 74c561e67e..cffd47baed 100644
  	-Duserdb=false \
  	-Dhomed=false \
  	-Dnetworkd=false \
-@@ -717,7 +732,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
+@@ -717,7 +734,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
  	host-util-linux \
  	host-patchelf \
  	host-libcap \
