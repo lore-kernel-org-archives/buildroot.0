@@ -1,50 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 8 Jul 2021 22:33:28 +0200
-Subject: [Buildroot] [git commit] Revert "package/pkg-python: invalidate
- precompiled _sysconfigdata*.pyc"
-Message-ID: <20210708200918.1BC9595441@busybox.osuosl.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu,  8 Jul 2021 15:16:43 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp: bump to version
+ 3.7.4.post0
+Message-ID: <20210708211643.2882679-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b928074e2d83f5b873bf1ba381b212dfad9bf207
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This causes build failure for the first host python package get built,
-because the $(STAGING_DIR)/usr/lib/python* may not yet exist by tht
-time, so find will whine and fail.
-
-This was was alrady the case for the existing find call, a few lines
-above, but that was ignored as find is a left-hand-side of a pipe, so
-its return code was ignored.
-
-Fixes:
-    http://autobuild.buildroot.org/results/860a188bd270c59b1fee2f56f31e73689f0e4979/build-end.log
-
-... where we can see the two find error messages, but only the second
-one causes the breakage.
-
-This reverts commit 836528f03eb89fdc64432f7a7470145ddf553b8c.
-
-Reported-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Herve Codina <herve.codina@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/pkg-python.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/python-aiohttp/python-aiohttp.hash | 4 ++--
+ package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 1e4fd5ba33..59a48e5a87 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -97,8 +97,6 @@ define PKG_PYTHON_FIXUP_SYSCONFIGDATA
- 	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
- 		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
- 		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g"
--	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
--		-name "_sysconfigdata*.pyc" -delete
- endef
- endif
+diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
+index db7dfd6b15..bdcb72a695 100644
+--- a/package/python-aiohttp/python-aiohttp.hash
++++ b/package/python-aiohttp/python-aiohttp.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp/json
+-md5  586eb4e4dcb1e41242ede0c5bcfd4014  aiohttp-3.7.4.tar.gz
+-sha256  5d84ecc73141d0a0d61ece0742bb7ff5751b0657dab8405f899d3ceb104cc7de  aiohttp-3.7.4.tar.gz
++md5  7052a8e9877921d73da98d2b18c9a145  aiohttp-3.7.4.post0.tar.gz
++sha256  493d3299ebe5f5a7c66b9819eacdcfbbaaf1a8e84911ddffcdc48888497afecf  aiohttp-3.7.4.post0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  96627bed0ad08e9b2efa9f4e04e80837cd0550e7694a0fec33b1dab2550282ab  LICENSE.txt
+diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+index e878ac1a55..ef0ce8b635 100644
+--- a/package/python-aiohttp/python-aiohttp.mk
++++ b/package/python-aiohttp/python-aiohttp.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
+-PYTHON_AIOHTTP_VERSION = 3.7.4
++PYTHON_AIOHTTP_VERSION = 3.7.4.post0
+ PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
+-PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/7a/95/eb60aaad7943e18c9d091de93c9b0b5ed40aa67c7d5e3c5ee9b36f100a38
++PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/99/f5/90ede947a3ce2d6de1614799f5fea4e93c19b6520a59dc5d2f64123b032f
+ PYTHON_AIOHTTP_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
+-- 
+2.25.1
