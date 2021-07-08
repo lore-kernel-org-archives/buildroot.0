@@ -1,135 +1,101 @@
-From: Herve Codina <herve.codina@bootlin.com>
-Date: Thu, 8 Jul 2021 17:38:34 +0200
-Subject: [Buildroot] [PATCH v2 08/18] package/pkg-generic.mk: move
- python fixup to generic package infrastructure
-In-Reply-To: <20210707201257.GB410642@scaer>
-References: <20210706142501.951345-1-herve.codina@bootlin.com>
- <20210706142501.951345-9-herve.codina@bootlin.com>
- <20210706195048.GO2521@scaer> <20210707134828.7feafbd2@bootlin.com>
- <f809847a-151a-18d2-ff5d-302b60677e45@mind.be>
- <20210707144915.2db26f79@bootlin.com>
- <20210707201257.GB410642@scaer>
-Message-ID: <20210708173834.04a84dbc@bootlin.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Thu, 8 Jul 2021 17:48:03 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/systemd: bump to version 249
+In-Reply-To: <20210708124125.72124-1-james.hilliard1@gmail.com>
+References: <20210708124125.72124-1-james.hilliard1@gmail.com>
+Message-ID: <CADYdroOtDghPOKm9Yf-o0ih-uCDWzJUE_URGGaU1aqzKJBWTGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Am Do., 8. Juli 2021 um 14:41 Uhr schrieb James Hilliard
+<james.hilliard1@gmail.com>:
+>
+> Add new host-python3-jinja2 dependency.
+>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - add host-python3-jinja2 host-systemd dependency
+> ---
+>  package/systemd/systemd.hash | 4 ++--
+>  package/systemd/systemd.mk   | 6 ++++--
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+> index 20cd922259..82741d1996 100644
+> --- a/package/systemd/systemd.hash
+> +++ b/package/systemd/systemd.hash
+> @@ -1,6 +1,6 @@
+>  # sha256 locally computed
+> -sha256  2869986e219a8dfc96cc0dffac66e0c13bb70a89e16b85a3948876c146cfa3e0  systemd-247.3.tar.gz
+> +sha256  0d9d45140e95f2d0ee79005ccf867f2706976c30391b932a8c3b9b198a801fad  systemd-249.tar.gz
+>  sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+>  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+> -sha256  6f22d19d35b00f35e0444e0bc9139e6d3bdf7277978f89c4e175e37b18c43f3d  README
+> +sha256  f5645b4b846479859d6618fa7a5a1722681aa7fc43c1e45f8bf8e1fe5738d618  README
+>  sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  tools/chromiumos/LICENSE
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 74c561e67e..0706ea7212 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -SYSTEMD_VERSION = 247.3
+> +SYSTEMD_VERSION = 249
+>  SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+>  SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+>  SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
+> @@ -14,6 +14,7 @@ SYSTEMD_DEPENDENCIES = \
+>         $(BR2_COREUTILS_HOST_DEPENDENCY) \
+>         $(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
+>         host-gperf \
+> +       host-python3-jinja2 \
+>         kmod \
+>         libcap \
+>         util-linux-libs \
+> @@ -717,7 +718,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
+>         host-util-linux \
+>         host-patchelf \
+>         host-libcap \
+> -       host-gperf
+> +       host-gperf \
+> +       host-python3-jinja2
+>
+>  HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
+>
+> --
+> 2.25.1
+>
 
-On Wed, 7 Jul 2021 22:12:57 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Hi James,
 
-> Herv?, Arnout, All,
-> 
-> On 2021-07-07 14:49 +0200, Herve Codina spake thusly:
-> > On Wed, 7 Jul 2021 14:21:16 +0200
-> > Arnout Vandecappelle <arnout@mind.be> wrote:  
-> > > > These finds are now called for all packages and .../lib/python* can be not
-> > > > present. In this case, find fails.    
-> 
-> OK, I see.
-> 
-> However, the commit log was lacking these explanations, because the
-> change is not simply "the python fixup is moved to the generic package
-> infrastructure", because the fixups had to be adapted.
-> 
-> > >  A simpler way of doing that would be:
-> > > 	$(if $(wildcard $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*),
-> > > 		$(Q)find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*  
-> > I think this does not solve the problem.
-> > find fails if at least one of the 2 paths are not present.
-> > 
-> > Something like this (not tested) is needed.
-> > 
-> > 	$(if $(wildcard $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*),
-> >  		$(Q)find $(wildcard $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*)  
-> 
-> Yes, this would keep the pre-existing behaviour.
-> 
-> However, I think the traditional way we usually do that would be with a
-> foreach:
-> 
->     $(foreach dir, $(wildcard $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*), \
->         $(Q)find $(dir) -name "_sysconfigdata*.py" -print0 \
->         |xargs -0 --no-run-if-empty \
->             $(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g"
->         $(Q)find $(dir) -name "_sysconfigdata*.pyc" -delete
->     )
-> 
-> And thus you're back to a basic, non-parameterised macro that can be
-> used as a POST_PREPARE_HOOK. Wee! :-)
-> 
-> Note: optimisation: we should be able to use a single find call to do
-> both, though:
-> 
->     $(foreach dir, $(wildcard $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*), \
->         $(Q)find $(dir) \( -name "_sysconfigdata*.pyc" -delete \) \
->             -o \( -name "_sysconfigdata*.py" -print0 \) \
->         |xargs -0 --no-run-if-empty \
->             $(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g'
->     )
-> 
-> Maybe the groupings '\( ... \)' are superfluous. Adapt appropriately...
-> 
+Two points:
 
-I tried this kind of things and I ran into trouble with $(wildcard ...)
-Indeed, $(wildcard ...) does not see my directories.
-A simple 'ls $(HOST_DIR)/lib/python*' just before $(foreach dir, $(wildcard ...), ...)
-lists the directory.
+v248 came with 2 new options: oomd and sysext,
+those should be disabled for the host build and probably
+configurable for the target.
 
-Suppose this stupid package:
----- 8< -----
-define TLP_PKGA_INSTALL_TARGET_CMDS
-	echo "$$(date)" > $(TARGET_DIR)/pkga1
-	echo "$$(date)" > $(TARGET_DIR)/pkga2
-	mkdir -p $(TARGET_DIR)/foo/bla
-	touch $(TARGET_DIR)/foo/bla/file1
-	touch $(TARGET_DIR)/foo/bla/file2
-endef
+v249 supports creating transient user/groups with password,
+this requires adaption in nsswitch.conf:
 
-define TLP_PKGA_LIST_CMD
-	echo "ls:" && ls $(TARGET_DIR)/foo/* || true
-	echo "wildcard: $(wildcard $(TARGET_DIR)/foo/*)"
-endef
+@@ -581,6 +581,8 @@ endef
+ define SYSTEMD_INSTALL_NSSCONFIG_HOOK
+        $(SED) '/^passwd:/ {/systemd/! s/$$/ systemd/}' \
+                -e '/^group:/ {/systemd/! s/$$/ [SUCCESS=merge] systemd/}' \
++               -e '/^shadow:/ {/systemd/! s/$$/ systemd/}' \
++               -e '/^gshadow:/ {/systemd/! s/$$/ systemd/}' \
+                $(if $(BR2_PACKAGE_SYSTEMD_RESOLVED), \
+                        -e '/^hosts:/ s/[[:space:]]*mymachines//' \
+                        -e '/^hosts:/ {/resolve/! s/files/files
+resolve [!UNAVAIL=return]/}' ) \
 
-TLP_PKGA_PRE_INSTALL_TARGET_HOOKS += TLP_PKGA_LIST_CMD
-TLP_PKGA_POST_INSTALL_TARGET_HOOKS += TLP_PKGA_LIST_CMD
+Other than that, looks fine. But TBH I usually wait a couple point
+releases before
+using systemd in production.
 
-
-$(eval $(generic-package))
----- 8< -----
-
-'make pkg' leads to:
-	>>> pkg  Installing to target
-	echo "ls:" && ls /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/foo/* || true
-	ls:
-	ls: cannot access '/home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/foo/*': No such file or directory
-	echo "wildcard: "
-	wildcard: 
-	echo "$(date)" > /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/pkga1
-	echo "$(date)" > /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/pkga2
-	mkdir -p /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/foo/bla
-	touch /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/foo/bla/file1
-	touch /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/foo/bla/file2
-	echo "ls:" && ls /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/foo/* || true
-	ls:
-	file1  file2
-	echo "wildcard: "
-	wildcard: 
-
-$(wildcard ...) uses internal make caching.
-Depending on when it is called related to make internal caching updates, it can
-lead to unexpected results.
-
-In the example provided, make cannot known that $(TARGET_DIR)/foo/bla was updated by
-TLP_PKGA_INSTALL_TARGET_CMDS and so it didn't update its internal caching.
-$(wildcard ...) does not see the new files.
-
-Herve
-
--- 
-Herv? Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Norbert
