@@ -1,47 +1,123 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu,  8 Jul 2021 15:16:43 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp: bump to version
- 3.7.4.post0
-Message-ID: <20210708211643.2882679-1-james.hilliard1@gmail.com>
+Date: Thu,  8 Jul 2021 17:03:00 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-bcrypt: bump to version 3.2.0
+Message-ID: <20210708230300.2578770-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Python 2 is no longer supported, depend on python3 and propagate
+reverse dependency.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-aiohttp/python-aiohttp.hash | 4 ++--
- package/python-aiohttp/python-aiohttp.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/docker-compose/Config.in         | 7 ++-----
+ package/python-bcrypt/Config.in          | 2 +-
+ package/python-bcrypt/python-bcrypt.hash | 6 +++---
+ package/python-bcrypt/python-bcrypt.mk   | 4 ++--
+ package/python-paramiko/Config.in        | 5 +++--
+ package/python-pysftp/Config.in          | 1 +
+ 6 files changed, 12 insertions(+), 13 deletions(-)
 
-diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-index db7dfd6b15..bdcb72a695 100644
---- a/package/python-aiohttp/python-aiohttp.hash
-+++ b/package/python-aiohttp/python-aiohttp.hash
+diff --git a/package/docker-compose/Config.in b/package/docker-compose/Config.in
+index 74af8e03d5..8e16b60521 100644
+--- a/package/docker-compose/Config.in
++++ b/package/docker-compose/Config.in
+@@ -1,15 +1,12 @@
+ config BR2_PACKAGE_DOCKER_COMPOSE
+ 	bool "docker-compose"
++	depends on !BR2_PACKAGE_PYTHON # python-paramiko -> python-bcrypt
+ 	depends on BR2_USE_MMU # python
+ 	depends on BR2_USE_WCHAR # python
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # python
+ 	depends on !BR2_STATIC_LIBS # python
+ 	depends on BR2_INSTALL_LIBSTDCPP # python-paramiko -> python-cryptography
+-	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+-	select BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME \
+-	       if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_CACHED_PROPERTY # runtime
+ 	select BR2_PACKAGE_PYTHON_DOCOPT # runtime
+ 	select BR2_PACKAGE_PYTHON_PARAMIKO # runtime
+diff --git a/package/python-bcrypt/Config.in b/package/python-bcrypt/Config.in
+index 4fa6c31a9e..81becad322 100644
+--- a/package/python-bcrypt/Config.in
++++ b/package/python-bcrypt/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_BCRYPT
+ 	bool "python-bcrypt"
++	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_CFFI # runtime
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+ 	  Modern password hashing for your software and your servers.
+ 
+diff --git a/package/python-bcrypt/python-bcrypt.hash b/package/python-bcrypt/python-bcrypt.hash
+index a9c070f2e1..b1970d8684 100644
+--- a/package/python-bcrypt/python-bcrypt.hash
++++ b/package/python-bcrypt/python-bcrypt.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp/json
--md5  586eb4e4dcb1e41242ede0c5bcfd4014  aiohttp-3.7.4.tar.gz
--sha256  5d84ecc73141d0a0d61ece0742bb7ff5751b0657dab8405f899d3ceb104cc7de  aiohttp-3.7.4.tar.gz
-+md5  7052a8e9877921d73da98d2b18c9a145  aiohttp-3.7.4.post0.tar.gz
-+sha256  493d3299ebe5f5a7c66b9819eacdcfbbaaf1a8e84911ddffcdc48888497afecf  aiohttp-3.7.4.post0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/bcrypt/json
+-md5	5d6f93b575ce52470af37a8e7dce76fe  bcrypt-3.1.7.tar.gz
+-sha256	0b0069c752ec14172c5f78208f1863d7ad6755a6fae6fe76ec2c80d13be41e42  bcrypt-3.1.7.tar.gz
++md5  fe31390dab603728f756cd3d6830c80a  bcrypt-3.2.0.tar.gz
++sha256  5b93c1726e50a93a033c36e5ca7fdcd29a5c7395af50a6892f5d9e7c6cfbfb29  bcrypt-3.2.0.tar.gz
  # Locally computed sha256 checksums
- sha256  96627bed0ad08e9b2efa9f4e04e80837cd0550e7694a0fec33b1dab2550282ab  LICENSE.txt
-diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-index e878ac1a55..ef0ce8b635 100644
---- a/package/python-aiohttp/python-aiohttp.mk
-+++ b/package/python-aiohttp/python-aiohttp.mk
+-sha256	8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90  LICENSE
++sha256  8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90  LICENSE
+diff --git a/package/python-bcrypt/python-bcrypt.mk b/package/python-bcrypt/python-bcrypt.mk
+index 381d003475..ad770cc974 100644
+--- a/package/python-bcrypt/python-bcrypt.mk
++++ b/package/python-bcrypt/python-bcrypt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_VERSION = 3.7.4
-+PYTHON_AIOHTTP_VERSION = 3.7.4.post0
- PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
--PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/7a/95/eb60aaad7943e18c9d091de93c9b0b5ed40aa67c7d5e3c5ee9b36f100a38
-+PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/99/f5/90ede947a3ce2d6de1614799f5fea4e93c19b6520a59dc5d2f64123b032f
- PYTHON_AIOHTTP_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
+-PYTHON_BCRYPT_VERSION = 3.1.7
++PYTHON_BCRYPT_VERSION = 3.2.0
+ PYTHON_BCRYPT_SOURCE = bcrypt-$(PYTHON_BCRYPT_VERSION).tar.gz
+-PYTHON_BCRYPT_SITE = https://files.pythonhosted.org/packages/fa/aa/025a3ab62469b5167bc397837c9ffc486c42a97ef12ceaa6699d8f5a5416
++PYTHON_BCRYPT_SITE = https://files.pythonhosted.org/packages/d8/ba/21c475ead997ee21502d30f76fd93ad8d5858d19a3fad7cd153de698c4dd
+ PYTHON_BCRYPT_SETUP_TYPE = setuptools
+ PYTHON_BCRYPT_LICENSE = Apache-2.0
+ PYTHON_BCRYPT_LICENSE_FILES = LICENSE
+diff --git a/package/python-paramiko/Config.in b/package/python-paramiko/Config.in
+index 993c84ef4d..4b8495d76d 100644
+--- a/package/python-paramiko/Config.in
++++ b/package/python-paramiko/Config.in
+@@ -1,15 +1,16 @@
+ config BR2_PACKAGE_PYTHON_PARAMIKO
+ 	bool "python-paramiko"
++	depends on BR2_PACKAGE_PYTHON3 # python-bcrypt
+ 	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography
+ 	select BR2_PACKAGE_PYTHON_BCRYPT # runtime
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+ 	select BR2_PACKAGE_PYTHON_PYNACL # runtime
+-	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
+ 	help
+ 	  SSH2 protocol library.
+ 
+ 	  https://github.com/paramiko/paramiko/
+ 
+ comment "python-paramiko needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_PYTHON3
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-pysftp/Config.in b/package/python-pysftp/Config.in
+index 06f883f602..de2d2df63d 100644
+--- a/package/python-pysftp/Config.in
++++ b/package/python-pysftp/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYSFTP
+ 	bool "python-pysftp"
++	depends on BR2_PACKAGE_PYTHON3 # python-paramiko -> python-bcrypt
+ 	select BR2_PACKAGE_PYTHON_PARAMIKO # runtime
+ 	help
+ 	  A friendly face on SFTP.
 -- 
 2.25.1
