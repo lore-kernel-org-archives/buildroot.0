@@ -1,480 +1,196 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  7 Jul 2021 22:42:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-idna: bump to version 3.2
-Message-ID: <20210707204238.414214-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 08 Jul 2021 05:53:10 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-07-07
+Message-ID: <20210708055315.32469401E5@smtp2.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Python 2 is not supported since version 3.0 so update all reverse
-  dependencies and remove python-coherence
-- License file name and its hash is updated due to:
-  https://github.com/kjd/idna/commit/e7338bce90683246c480ddebd55b7682371389ed
-  https://github.com/kjd/idna/commit/537aa99d4440b0f8a6178818350f27fcaab046ee
+Hello,
 
-https://github.com/kjd/idna/blob/v3.2/HISTORY.rst
+Autobuild statistics for 2021-07-07
+===================================
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- Config.in.legacy                              |  7 +++++
- package/Config.in                             |  1 -
- package/docker-compose/Config.in              | 14 ++++-----
- .../0001-Fix-twisted-detection.patch          | 29 -------------------
- package/python-coherence/Config.in            | 10 -------
- .../python-coherence/python-coherence.hash    |  3 --
- package/python-coherence/python-coherence.mk  | 13 ---------
- package/python-cryptography/Config.in         | 10 ++-----
- package/python-docker/Config.in               |  8 ++---
- package/python-hyperlink/Config.in            |  1 +
- package/python-ibmiotf/Config.in              |  4 +--
- package/python-idna/Config.in                 |  4 +--
- package/python-idna/python-idna.hash          |  6 ++--
- package/python-idna/python-idna.mk            |  6 ++--
- package/python-influxdb/Config.in             |  1 +
- package/python-mwclient/Config.in             |  1 +
- package/python-paramiko/Config.in             |  4 +--
- package/python-pyopenssl/Config.in            |  1 +
- package/python-pysftp/Config.in               |  1 +
- package/python-requests-oauthlib/Config.in    |  1 +
- package/python-requests-toolbelt/Config.in    |  1 +
- package/python-requests/Config.in             |  8 ++---
- package/python-service-identity/Config.in     |  2 +-
- package/python-treq/Config.in                 |  1 +
- package/python-twisted/Config.in              |  1 +
- package/python-txdbus/Config.in               |  1 +
- package/python-txtorcon/Config.in             |  2 +-
- 27 files changed, 45 insertions(+), 96 deletions(-)
- delete mode 100644 package/python-coherence/0001-Fix-twisted-detection.patch
- delete mode 100644 package/python-coherence/Config.in
- delete mode 100644 package/python-coherence/python-coherence.hash
- delete mode 100644 package/python-coherence/python-coherence.mk
+      branch |  OK | NOK | TIM | TOT |
+  2021.02.x  | 23  |  4  |  0  | 27  |
+  2021.05.x  | 23  |  7  |  0  | 30  |
+    master   | 59  | 81  |  0  | 140 |
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 1049d7af3c..0d245c2979 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2021.08"
- 
-+config BR2_PACKAGE_PYTHON_COHERENCE
-+	bool "python-coherence package removed"
-+	select BR2_LEGACY
-+	help
-+	  This package has been removed as it can't be built anymore due to
-+	  python-twisted being now incompatible with python 2.
-+
- config BR2_PACKAGE_PHP_EXT_XMLRPC
- 	bool "PHP XMLRPC extension removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 9d4c3d0a46..919c6ce504 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -946,7 +946,6 @@ menu "External python modules"
- 	source "package/python-cheroot/Config.in"
- 	source "package/python-cherrypy/Config.in"
- 	source "package/python-click/Config.in"
--	source "package/python-coherence/Config.in"
- 	source "package/python-colorama/Config.in"
- 	source "package/python-colorlog/Config.in"
- 	source "package/python-colorzero/Config.in"
-diff --git a/package/docker-compose/Config.in b/package/docker-compose/Config.in
-index 74af8e03d5..6dba63d48c 100644
---- a/package/docker-compose/Config.in
-+++ b/package/docker-compose/Config.in
-@@ -1,15 +1,11 @@
- config BR2_PACKAGE_DOCKER_COMPOSE
- 	bool "docker-compose"
--	depends on BR2_USE_MMU # python
--	depends on BR2_USE_WCHAR # python
--	depends on BR2_TOOLCHAIN_HAS_THREADS # python
--	depends on !BR2_STATIC_LIBS # python
-+	depends on BR2_PACKAGE_PYTHON3 # python-paramiko -> python-cryptography -> python-idna
-+	depends on BR2_USE_MMU # python3
-+	depends on BR2_USE_WCHAR # python3
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
-+	depends on !BR2_STATIC_LIBS # python3
- 	depends on BR2_INSTALL_LIBSTDCPP # python-paramiko -> python-cryptography
--	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME \
--	       if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_CACHED_PROPERTY # runtime
- 	select BR2_PACKAGE_PYTHON_DOCOPT # runtime
- 	select BR2_PACKAGE_PYTHON_PARAMIKO # runtime
-diff --git a/package/python-coherence/0001-Fix-twisted-detection.patch b/package/python-coherence/0001-Fix-twisted-detection.patch
-deleted file mode 100644
-index c0e51b9e31..0000000000
---- a/package/python-coherence/0001-Fix-twisted-detection.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 3cf8d89cbb44b5c7a0693d0b5d665e68acc3927c Mon Sep 17 00:00:00 2001
--From: Thomas Klausner <wiz@NetBSD.org>
--Date: Tue, 10 May 2016 00:14:33 +0200
--Subject: [PATCH] Fix twisted detection.
--
--Addresses https://github.com/coherence-project/Coherence/issues/25
--
--Signed-off-by: Thomas Klausner <wiz@NetBSD.org>
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-----
-- coherence/__init__.py | 2 --
-- 1 file changed, 2 deletions(-)
--
--diff --git a/coherence/__init__.py b/coherence/__init__.py
--index 2e4e8f1..4c4d73d 100644
----- a/coherence/__init__.py
--+++ b/coherence/__init__.py
--@@ -24,8 +24,6 @@ try:
--     if twisted_version < Version("twisted", 2, 5, 0):
--         raise ImportError("Twisted >= 2.5 is required. Please install it.")
-- 
---    if twisted_web_version < Version("twisted.web", 2, 5, 0):
---        raise ImportError("Twisted.Web >= 2.5 is required. Please install it")
-- except ImportError, exc:
--     # log error to stderr, might be useful for debugging purpose
--     for arg in exc.args:
---- 
--2.8.1
--
-diff --git a/package/python-coherence/Config.in b/package/python-coherence/Config.in
-deleted file mode 100644
-index 0f50080e67..0000000000
---- a/package/python-coherence/Config.in
-+++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_PYTHON_COHERENCE
--	bool "python-coherence"
--	depends on BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON_TWISTED
--	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE
--	select BR2_PACKAGE_PYTHON_PYASN1
--	help
--	  A DLNA/UPnP Media Server and Framework for the Digital Living.
--
--	  https://github.com/coherence-project/Coherence
-diff --git a/package/python-coherence/python-coherence.hash b/package/python-coherence/python-coherence.hash
-deleted file mode 100644
-index 3c2d45b537..0000000000
---- a/package/python-coherence/python-coherence.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed:
--sha256  97c8b700b3fe73d48eacb259008f410d6567e5d7d1b8e96386f8cc2422135ca5  python-coherence-b7856985fd496689ca1f9024925ae737297c00d1.tar.gz
--sha256  7713ed8484b4d3364c7f6f2c02aed427b06a0159b1f77aecf907d47016812e81  LICENCE
-diff --git a/package/python-coherence/python-coherence.mk b/package/python-coherence/python-coherence.mk
-deleted file mode 100644
-index 24da7f70a7..0000000000
---- a/package/python-coherence/python-coherence.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# python-coherence
--#
--################################################################################
--
--PYTHON_COHERENCE_VERSION = b7856985fd496689ca1f9024925ae737297c00d1
--PYTHON_COHERENCE_SITE = $(call github,coherence-project,Coherence,$(PYTHON_COHERENCE_VERSION))
--PYTHON_COHERENCE_SETUP_TYPE = setuptools
--PYTHON_COHERENCE_LICENSE = MIT
--PYTHON_COHERENCE_LICENSE_FILES = LICENCE
--
--$(eval $(python-package))
-diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
-index d1c2917ea9..5a2e6da900 100644
---- a/package/python-cryptography/Config.in
-+++ b/package/python-cryptography/Config.in
-@@ -1,19 +1,15 @@
- config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
- 	bool "python-cryptography"
-+	depends on BR2_PACKAGE_PYTHON3 # python-idna
- 	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PYTHON_CFFI # runtime
--	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
--	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_ASN1CRYPTO # runtime
--	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
--	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON3_SSL # runtime
- 	help
- 	  cryptography is a package designed to expose cryptographic
- 	  primitives and recipes to Python developers.
-diff --git a/package/python-docker/Config.in b/package/python-docker/Config.in
-index df5e4887f4..41b4aacd5e 100644
---- a/package/python-docker/Config.in
-+++ b/package/python-docker/Config.in
-@@ -1,10 +1,8 @@
- config BR2_PACKAGE_PYTHON_DOCKER
- 	bool "python-docker"
--	# docker-engine may be running on another host, so no dependency
--	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
--	select BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME \
--	       if BR2_PACKAGE_PYTHON # runtime
-+	depends on BR2_PACKAGE_PYTHON3 # python-requests -> python-idna
-+	# docker-engine may be running on another host, so no other dependency
-+	select BR2_PACKAGE_PYTHON3_SSL # runtime
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_WEBSOCKET_CLIENT # runtime
-diff --git a/package/python-hyperlink/Config.in b/package/python-hyperlink/Config.in
-index 8dad0af19a..3a85e6f461 100644
---- a/package/python-hyperlink/Config.in
-+++ b/package/python-hyperlink/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_HYPERLINK
- 	bool "python-hyperlink"
-+	depends on BR2_PACKAGE_PYTHON3 # python-idna
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
- 	help
- 	  A featureful, correct URL for Python.
-diff --git a/package/python-ibmiotf/Config.in b/package/python-ibmiotf/Config.in
-index 0f5f75be5e..3f3f7e1965 100644
---- a/package/python-ibmiotf/Config.in
-+++ b/package/python-ibmiotf/Config.in
-@@ -1,12 +1,12 @@
- config BR2_PACKAGE_PYTHON_IBMIOTF
- 	bool "python-ibmiotf"
-+	depends on BR2_PACKAGE_PYTHON3 # python-requests -> python-idna
- 	select BR2_PACKAGE_PYTHON_ISO8601 # runtime
- 	select BR2_PACKAGE_PYTHON_PAHO_MQTT # runtime
- 	select BR2_PACKAGE_PYTHON_PYTZ # runtime
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
- 	select BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT # runtime
--	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON3_SSL # runtime
- 	help
- 	  Python Client for IBM Watson IoT Platform.
- 
-diff --git a/package/python-idna/Config.in b/package/python-idna/Config.in
-index e3e548d493..3df634f9bf 100644
---- a/package/python-idna/Config.in
-+++ b/package/python-idna/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PYTHON_IDNA
- 	bool "python-idna"
--	select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON3_UNICODEDATA
- 	help
- 	  A library to support the Internationalised Domain Names in
- 	  Applications (IDNA) protocol as specified in RFC 5891. This
-diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
-index c5f7378fda..08a7be9d56 100644
---- a/package/python-idna/python-idna.hash
-+++ b/package/python-idna/python-idna.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/idna/json
--md5  7a910c706db30d758f377db2762c0f9a  idna-2.10.tar.gz
--sha256  b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6  idna-2.10.tar.gz
-+md5  08ea8e2ce09e522424e872409c221138  idna-3.2.tar.gz
-+sha256  467fbad99067910785144ce333826c71fb0e63a425657295239737f7ecd125f3  idna-3.2.tar.gz
- # Locally computed sha256 checksums
--sha256  412014420d2473dba06117c3d4d9e0eecaa6dde0ca30cd951f4ec2be39426f32  LICENSE.rst
-+sha256  a2d6e4d940bd24dbe7b9645cde19a9792cc51db7ae0d5acd301ac860caa3e836  LICENSE.md
-diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
-index b4d9839e29..7314d85493 100644
---- a/package/python-idna/python-idna.mk
-+++ b/package/python-idna/python-idna.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_IDNA_VERSION = 2.10
-+PYTHON_IDNA_VERSION = 3.2
- PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
--PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/ea/b7/e0e3c1c467636186c39925827be42f16fee389dc404ac29e930e9136be70
-+PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/cb/38/4c4d00ddfa48abe616d7e572e02a04273603db446975ab46bbcd36552005
- PYTHON_IDNA_LICENSE = BSD-3-Clause
--PYTHON_IDNA_LICENSE_FILES = LICENSE.rst
-+PYTHON_IDNA_LICENSE_FILES = LICENSE.md
- PYTHON_IDNA_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
-diff --git a/package/python-influxdb/Config.in b/package/python-influxdb/Config.in
-index 6ebbd4aa9c..48c300f90d 100644
---- a/package/python-influxdb/Config.in
-+++ b/package/python-influxdb/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_INFLUXDB
- 	bool "python-influxdb"
-+	depends on BR2_PACKAGE_PYTHON3 # python-requests -> python-idna
- 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
- 	select BR2_PACKAGE_PYTHON_MSGPACK # runtime
- 	select BR2_PACKAGE_PYTHON_PYTZ # runtime
-diff --git a/package/python-mwclient/Config.in b/package/python-mwclient/Config.in
-index dc93e6c0df..1af60fdcd0 100644
---- a/package/python-mwclient/Config.in
-+++ b/package/python-mwclient/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_MWCLIENT
- 	bool "python-mwclient"
-+	depends on BR2_PACKAGE_PYTHON3 # python-requests-oauthlib -> python-requests -> python-idna
- 	select BR2_PACKAGE_PYTHON_REQUESTS_OAUTHLIB # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
-diff --git a/package/python-paramiko/Config.in b/package/python-paramiko/Config.in
-index 993c84ef4d..fdc0049232 100644
---- a/package/python-paramiko/Config.in
-+++ b/package/python-paramiko/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_PYTHON_PARAMIKO
- 	bool "python-paramiko"
-+	depends on BR2_PACKAGE_PYTHON3 # python-cryptography -> python-idna
- 	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography
- 	select BR2_PACKAGE_PYTHON_BCRYPT # runtime
- 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
- 	select BR2_PACKAGE_PYTHON_PYNACL # runtime
--	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
- 	help
- 	  SSH2 protocol library.
- 
-diff --git a/package/python-pyopenssl/Config.in b/package/python-pyopenssl/Config.in
-index c32e211e17..95630f2461 100644
---- a/package/python-pyopenssl/Config.in
-+++ b/package/python-pyopenssl/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYOPENSSL
- 	bool "python-pyopenssl"
-+	depends on BR2_PACKAGE_PYTHON3 # python-cryptography -> python-idna
- 	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography
- 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
-diff --git a/package/python-pysftp/Config.in b/package/python-pysftp/Config.in
-index 06f883f602..de172313c8 100644
---- a/package/python-pysftp/Config.in
-+++ b/package/python-pysftp/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYSFTP
- 	bool "python-pysftp"
-+	depends on BR2_PACKAGE_PYTHON3 # python-paramiko -> python-cryptography -> python-idna
- 	select BR2_PACKAGE_PYTHON_PARAMIKO # runtime
- 	help
- 	  A friendly face on SFTP.
-diff --git a/package/python-requests-oauthlib/Config.in b/package/python-requests-oauthlib/Config.in
-index 85283b209c..2510644bd1 100644
---- a/package/python-requests-oauthlib/Config.in
-+++ b/package/python-requests-oauthlib/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_REQUESTS_OAUTHLIB
- 	bool "python-requests-oauthlib"
-+	depends on BR2_PACKAGE_PYTHON3 # python-requests -> python-idna
- 	select BR2_PACKAGE_PYTHON_OAUTHLIB # runtime
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
- 	help
-diff --git a/package/python-requests-toolbelt/Config.in b/package/python-requests-toolbelt/Config.in
-index ba2b95152e..47141c2c8a 100644
---- a/package/python-requests-toolbelt/Config.in
-+++ b/package/python-requests-toolbelt/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT
- 	bool "python-requests-toolbelt"
-+	depends on BR2_PACKAGE_PYTHON3 # python-requests -> python-idna
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
- 	help
- 	  A utility belt for advanced users of python-requests.
-diff --git a/package/python-requests/Config.in b/package/python-requests/Config.in
-index 30158b8d25..c798156613 100644
---- a/package/python-requests/Config.in
-+++ b/package/python-requests/Config.in
-@@ -1,14 +1,12 @@
- config BR2_PACKAGE_PYTHON_REQUESTS
- 	bool "python-requests"
-+	depends on BR2_PACKAGE_PYTHON3 # python-idna
- 	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
- 	select BR2_PACKAGE_PYTHON_CHARDET # runtime
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
- 	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
--	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
--	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON3_SSL # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
- 	help
- 	  Requests is an Apache2 Licensed HTTP library, written in
- 	  Python, for human beings.
-diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
-index 0260ab4010..cac1c06912 100644
---- a/package/python-service-identity/Config.in
-+++ b/package/python-service-identity/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
- 	bool "python-service-identity"
-+	depends on BR2_PACKAGE_PYTHON3 # python-pyopenssl -> python-cryptography -> python-idna
- 	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
- 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
- 	select BR2_PACKAGE_PYTHON_CHARACTERISTIC # runtime
--	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
- 	select BR2_PACKAGE_PYTHON_PYASN1_MODULES # runtime
- 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
-diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
-index 23056e72d2..47719f92bf 100644
---- a/package/python-treq/Config.in
-+++ b/package/python-treq/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_TREQ
- 	bool "python-treq"
-+	depends on BR2_PACKAGE_PYTHON3 # python-idna
- 	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
- 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
-diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
-index 4e24a3f71a..805a1aa345 100644
---- a/package/python-twisted/Config.in
-+++ b/package/python-twisted/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_TWISTED
- 	bool "python-twisted"
-+	depends on BR2_PACKAGE_PYTHON3 # python-hyperlink -> python-idna
- 	select BR2_PACKAGE_PYTHON_INCREMENTAL
- 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
- 	select BR2_PACKAGE_PYTHON_AUTOMAT # runtime
-diff --git a/package/python-txdbus/Config.in b/package/python-txdbus/Config.in
-index f38bbf93f0..c7de322f91 100644
---- a/package/python-txdbus/Config.in
-+++ b/package/python-txdbus/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_TXDBUS
- 	bool "python-txdbus"
-+	depends on BR2_PACKAGE_PYTHON3 # python-twisted -> python-cryptography -> python-idna
- 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
-diff --git a/package/python-txtorcon/Config.in b/package/python-txtorcon/Config.in
-index 4f91e7b048..9677eb4da8 100644
---- a/package/python-txtorcon/Config.in
-+++ b/package/python-txtorcon/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_PYTHON_TXTORCON
- 	bool "python-txtorcon"
-+	depends on BR2_PACKAGE_PYTHON3 # python-idna
- 	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl, python-service-identity
- 	select BR2_PACKAGE_PYTHON_AUTOMAT # runtime
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
- 	select BR2_PACKAGE_PYTHON_INCREMENTAL # runtime
--	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
- 	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
- 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
+Classification of failures by reason for master
+-----------------------------------------------
+
+cegui-00b4e1fe174da53b7ed72... | 14
+                   seatd-0.5.0 | 6 
+                qt5base-5.15.2 | 5 
+             libsndfile-1.0.31 | 4 
+                       unknown | 4 
+                  exiv2-0.27.4 | 3 
+                   gssdp-1.2.3 | 3 
+               host-qemu-6.0.0 | 3 
+                 mesa3d-21.1.1 | 3 
+                    qemu-6.0.0 | 3 
+              tpm2-tools-4.3.2 | 3 
+         host-gcc-final-10.3.0 | 2 
+host-python3-setuptools-44.0.0 | 2 
+        host-sentry-cli-1.57.0 | 2 
+              keepalived-2.1.4 | 2 
+                libsoup-2.72.0 | 2 
+               apcupsd-3.14.14 | 1 
+               capnproto-0.8.0 | 1 
+                 dc3dd-7.2.641 | 1 
+            erlang-jiffy-1.0.6 | 1 
+                    gcr-3.34.0 | 1 
+  gobject-introspection-1.68.0 | 1 
+          gstreamer1-mm-1.10.0 | 1 
+                harfbuzz-2.8.1 | 1 
+              host-scons-3.1.2 | 1 
+                libnice-0.1.16 | 1 
+                   libqb-2.0.2 | 1 
+                  mupdf-1.16.0 | 1 
+                 openmpi-4.0.0 | 1 
+                      poke-1.2 | 1 
+                   sdl2-2.0.14 | 1 
+              syslog-ng-3.32.1 | 1 
+tvheadend-dbaa0f850394af8ab... | 1 
+                 x11vnc-0.9.16 | 1 
+                  zeromq-4.3.4 | 1 
+                    zstd-1.5.0 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   sparc     |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/72b81db2f49a4fb5bd3a4cdb49228c3c456a0d52 |     
+  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/a0f51e8987ef50c8c8e0573a12c5a2b1815b363a |     
+  mips64el   | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/e48df5edf5326979dc50ce7f654ec422f19f9d68 |     
+ powerpc64   | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/ac679bd4991abb9aa1c36019964599ff62651280 |     
+    arm      | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/26b7aa4eabe8eb5afdcfa6d9305eecf533ac0643 |     
+microblazeel | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/44578b06717394038a7e253f60a56f5137f5891d |     
+   nios2     | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/8c9d0491a80e672fe079815c2f4cf4b1378579ee |     
+  riscv32    | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/2e6e9744c845f195fd96c7affd9bd49d8c349559 |     
+    m68k     | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/02f8ecfd87184cd09df7219a4ff88291cd24e7c8 |     
+    arm      | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/991f461113afaa3272f6ca1ddf6f47b9258a07f8 |     
+    arm      | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/d0add30b030d7a355cda325d5999df25b1bc3e88 |     
+  aarch64    | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/d05d198a26fdd28b8f06a4667045648fc76910da |     
+    arm      | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/0b13067ce55c1a07722d41b2e15dce4480496241 |     
+    arm      | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/d63526098eac256d940072350dae04bc7615d6d2 |     
+ aarch64_be  | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/4e294bf4b98a66dc1668c32b0842349c1ba93713 |     
+  sparc64    | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/fae2c11ce8c2bce305c048958f18c6709add0104 |     
+    arc      |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/479a1ebc766ed1146cd6dc517e3fe2fe29f01742 | ORPH
+   x86_64    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/5ecbfd4604aa93dc8c7e983dd771b17ccdc42559 |     
+    i686     |          exiv2-0.27.4          | NOK | http://autobuild.buildroot.net/results/5b070f37499ebc5d3989f341bf5d082702ef8259 |     
+  powerpc    |          exiv2-0.27.4          | NOK | http://autobuild.buildroot.net/results/03299aecb2308219428825b75f7e1694f660655f |     
+    i686     |          exiv2-0.27.4          | NOK | http://autobuild.buildroot.net/results/c8cbf0ccf0521540f85bbc794fc92ea2d0706a60 |     
+ powerpc64   |           gcr-3.34.0           | NOK | http://autobuild.buildroot.net/results/32bd3103693ac2a4c67a483c326e9f6c11e4ab4a | ORPH
+   x86_64    |  gobject-introspection-1.68.0  | NOK | http://autobuild.buildroot.net/results/6a9f8b0b7c89715d10518e392d6497e339317907 | ORPH
+  aarch64    |          gssdp-1.2.3           | NOK | http://autobuild.buildroot.net/results/3d06ac22a03c73e6fed4648d4f23536f7494f67f |     
+  riscv32    |          gssdp-1.2.3           | NOK | http://autobuild.buildroot.net/results/0245f6334dd028542b02e2e2a1da458fe9ed4fa3 |     
+  aarch64    |          gssdp-1.2.3           | NOK | http://autobuild.buildroot.net/results/7d4cd1f64e288eccda50e654936ebd5bfb11b554 |     
+    mips     |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/6ce110a340fe3ece0367c729f203124d6c1a8a07 | ORPH
+    arm      |         harfbuzz-2.8.1         | NOK | http://autobuild.buildroot.net/results/b622d4a01258ac8be938efdf3e82b184a6817faa | ORPH
+   s390x     |     host-gcc-final-10.3.0      | NOK | http://autobuild.buildroot.net/results/b62a7918e0387fb8d3987e539b85818e93063165 |     
+   s390x     |     host-gcc-final-10.3.0      | NOK | http://autobuild.buildroot.net/results/272d3d45e5fa9ee739f65dbcc9fb793257897032 |     
+    arm      | host-python3-setuptools-44.0.0 | NOK | http://autobuild.buildroot.net/results/860a188bd270c59b1fee2f56f31e73689f0e4979 |     
+  riscv32    | host-python3-setuptools-44.0.0 | NOK | http://autobuild.buildroot.net/results/21984defe62ece73a925ebb8bf1db62aec39c834 |     
+  riscv32    |        host-qemu-6.0.0         | NOK | http://autobuild.buildroot.net/results/23f5d24fac777d9d17779fb551b31e5789a3c7ff |     
+  aarch64    |        host-qemu-6.0.0         | NOK | http://autobuild.buildroot.net/results/9609957a9dec6ed8eb00fe32ebb51ca34c069085 |     
+    i586     |        host-qemu-6.0.0         | NOK | http://autobuild.buildroot.net/results/b0d8746d40698fdbe38dcdc4cda75dc1f2860c1f |     
+    arm      |        host-scons-3.1.2        | NOK | http://autobuild.buildroot.net/results/8e8ae17432753d81a3daeece66781e6b8b38859f |     
+    mips     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/40c8c924ca30f5f14dbb314584611db81e9dd3ef |     
+  riscv64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/1ec4b20ab1976ee996aa97aa878e9ff13f5fdf28 |     
+    arc      |        keepalived-2.1.4        | NOK | http://autobuild.buildroot.net/results/fa10123a13ad95d7309127357871f888dc8c9b25 |     
+    arm      |        keepalived-2.1.4        | NOK | http://autobuild.buildroot.net/results/6e6edd7cd84dae3255c4f786bf098910bbd2c711 |     
+   nios2     |         libnice-0.1.16         | NOK | http://autobuild.buildroot.net/results/1cba7aa233e19472a69ffc2d8f7324d363a22deb |     
+    arm      |          libqb-2.0.2           | NOK | http://autobuild.buildroot.net/results/8ae8e3f4a59b0f44820161fdbaaaa989f8d6f771 |     
+  powerpc    |       libsndfile-1.0.31        | NOK | http://autobuild.buildroot.net/results/54662aa3b88a4394ca09e600d1a7288c2093f85f |     
+microblazeel |       libsndfile-1.0.31        | NOK | http://autobuild.buildroot.net/results/e5fe1bec69d190b2d033936fe16ad30df3c6149b |     
+    arm      |       libsndfile-1.0.31        | NOK | http://autobuild.buildroot.net/results/11796ef1ec8b47e027358967d778ec3eaf0a3d41 |     
+microblazeel |       libsndfile-1.0.31        | NOK | http://autobuild.buildroot.net/results/227b4edbfcc9162d64bec92bd7bc1f8e6a59d052 |     
+    arm      |         libsoup-2.72.0         | NOK | http://autobuild.buildroot.net/results/937f545583a96062b291a78c6c5bc3281e20dc27 |     
+    arm      |         libsoup-2.72.0         | NOK | http://autobuild.buildroot.net/results/44ac4ee02108c57ba3f0db4937ff72843e7c93b1 |     
+    mips     |         mesa3d-21.1.1          | NOK | http://autobuild.buildroot.net/results/98556eb579fc6ed21caaeb968b78fe20d57bd3b2 |     
+    arm      |         mesa3d-21.1.1          | NOK | http://autobuild.buildroot.net/results/8193db3885f9085fef632e98c5cca872c7974615 |     
+    sh4      |         mesa3d-21.1.1          | NOK | http://autobuild.buildroot.net/results/fd76670dcbd8b8af26e43ead7315edc491b1c8de |     
+   xtensa    |          mupdf-1.16.0          | NOK | http://autobuild.buildroot.net/results/17523c90fb1b8212156248d690b2be64701e602a |     
+   mipsel    |         openmpi-4.0.0          | NOK | http://autobuild.buildroot.net/results/18b18f70c4d914a96df2a764e99941d196a0e82c | ORPH
+   x86_64    |            poke-1.2            | NOK | http://autobuild.buildroot.net/results/021f4ef0a4fecf4a1af6f1c26804d0de0f8dc92c |     
+   x86_64    |           qemu-6.0.0           | NOK | http://autobuild.buildroot.net/results/16e5f4cf6d9c1e381242b4483d88231ce27b1959 |     
+    arm      |           qemu-6.0.0           | NOK | http://autobuild.buildroot.net/results/acf9706400352a38a90facec6b574b900ded0c15 |     
+    mips     |           qemu-6.0.0           | NOK | http://autobuild.buildroot.net/results/7a8f5efa9b50d48958bb9c42e7e0baef318cda21 |     
+    arm      |         qt5base-5.15.2         | NOK | http://autobuild.buildroot.net/results/2c28bcd3204444a40a3549415237756e1f7f5668 |     
+    mips     |         qt5base-5.15.2         | NOK | http://autobuild.buildroot.net/results/41c5389f0304acb00772de8e22a456c986484b70 |     
+powerpc64le  |         qt5base-5.15.2         | NOK | http://autobuild.buildroot.net/results/75a5d8690b6a67b5eeeb3351df35d1bcd91a18b6 |     
+   sparc     |         qt5base-5.15.2         | NOK | http://autobuild.buildroot.net/results/db71752b2a9289dddb9dcb01c2c6151e99df93b7 |     
+  mips64el   |         qt5base-5.15.2         | NOK | http://autobuild.buildroot.net/results/502ae54b0ee1cc7edf5e2e7f3b4acff155d0d763 |     
+  mips64el   |          sdl2-2.0.14           | NOK | http://autobuild.buildroot.net/results/01d389d36fabfed30c11a20115f6841b51fb9105 |     
+    arm      |          seatd-0.5.0           | NOK | http://autobuild.buildroot.net/results/b8817d47bf963975639ec2fcea7deefb2cc6b1c1 |     
+    arm      |          seatd-0.5.0           | NOK | http://autobuild.buildroot.net/results/1d671e2a4a48b5eb2c8dbb2c1e2defdac439a4ec |     
+  powerpc    |          seatd-0.5.0           | NOK | http://autobuild.buildroot.net/results/3ebf3c7eb8d8d24050304d3be37b44a8f3a65a14 |     
+  riscv64    |          seatd-0.5.0           | NOK | http://autobuild.buildroot.net/results/636b2afdd9f063b2681f96fc4ebc38a452d815ae |     
+    arc      |          seatd-0.5.0           | NOK | http://autobuild.buildroot.net/results/1575e71ad85071b4c562d963aa260ee560135168 |     
+    arm      |          seatd-0.5.0           | NOK | http://autobuild.buildroot.net/results/9ea22f97d9a9099cdf8df962f74c39cfb6aac64f |     
+    arc      |        syslog-ng-3.32.1        | NOK | http://autobuild.buildroot.net/results/c7a3bcdac378c41c404164c8d41793c71871a2ae |     
+    m68k     |        tpm2-tools-4.3.2        | NOK | http://autobuild.buildroot.net/results/1d6e69995199e8e0a21e3d612c039309c188b760 | ORPH
+   sparc     |        tpm2-tools-4.3.2        | NOK | http://autobuild.buildroot.net/results/2bd45601156c45b1ee285eeb747a921968bc9259 | ORPH
+  powerpc    |        tpm2-tools-4.3.2        | NOK | http://autobuild.buildroot.net/results/b9f29935a11eace6f065f048a37b1526d7d7de99 | ORPH
+    arc      | tvheadend-dbaa0f850394af8ab... | NOK | http://autobuild.buildroot.net/results/22a7657537b2d1e3e66a586d9d715ef73f77ba00 |     
+ aarch64_be  |            unknown             | NOK | http://autobuild.buildroot.net/results/1b58cada3998a5a798a9fd781847fe292fdc27bb |     
+microblazeel |            unknown             | NOK | http://autobuild.buildroot.net/results/3cfeab95180d087e9082653ddc817c24a87cba7f |     
+ aarch64_be  |            unknown             | NOK | http://autobuild.buildroot.net/results/641fabe1b0cc0b13ed3500a57429ca0e0dedd886 |     
+   xtensa    |            unknown             | NOK | http://autobuild.buildroot.net/results/27a6b241074fcbf3ef1598ecb3541073956eabd0 |     
+  nds32le    |         x11vnc-0.9.16          | NOK | http://autobuild.buildroot.net/results/1872c9ce57490455946679efcc654bd111fd3d7b |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/d6d0fb7da75ab4648bae581c4b0dadd0e48f15c3 |     
+    arm      |           zstd-1.5.0           | NOK | http://autobuild.buildroot.net/results/875107898a7b389767056080ac15b3b32a33b5e5 |     
+
+
+Classification of failures by reason for 2021.02.x
+--------------------------------------------------
+
+  gobject-introspection-1.64.1 | 1 
+                 granite-5.4.0 | 1 
+             util-linux-2.36.1 | 1 
+                  zeromq-4.3.4 | 1 
+
+
+Detail of failures for 2021.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   s390x     |  gobject-introspection-1.64.1  | NOK | http://autobuild.buildroot.net/results/a8821004a899957d4743f8a684ba02b79410432f | ORPH
+    arm      |         granite-5.4.0          | NOK | http://autobuild.buildroot.net/results/21858813f68aad3f85553cc3e5d50fd02cb31418 | ORPH
+  riscv32    |       util-linux-2.36.1        | NOK | http://autobuild.buildroot.net/results/e609fe91ef16fa867efa458c49deab70a4a08cf8 | ORPH
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/26f2b3743c2932143229bd4fe783dc594ae4cdfd |     
+
+
+Classification of failures by reason for 2021.05.x
+--------------------------------------------------
+
+                  exiv2-0.27.4 | 2 
+        host-sentry-cli-1.57.0 | 2 
+               pipewire-0.3.26 | 1 
+                 pixman-0.40.0 | 1 
+             qt5wayland-5.15.2 | 1 
+
+
+Detail of failures for 2021.05.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  powerpc    |          exiv2-0.27.4          | NOK | http://autobuild.buildroot.net/results/ae6ffdfc95f93d36d0576569ea59c03c7f6b5054 |     
+    m68k     |          exiv2-0.27.4          | NOK | http://autobuild.buildroot.net/results/2f48220cd1dc7232bce0d817385b89f117080f39 |     
+microblazeel |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/4126dd113a8aad8788a64d253a74125ebcd468f7 |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/59f5db6c55ce8170d3d8a682b29669d1de5af2de |     
+   x86_64    |        pipewire-0.3.26         | NOK | http://autobuild.buildroot.net/results/2ad5ab77706d4e793a4390afea4cf4a925707471 |     
+    sh4      |         pixman-0.40.0          | NOK | http://autobuild.buildroot.net/results/a70c86f41b215643a30d211b9ed414a3ebec8ec5 |     
+  aarch64    |       qt5wayland-5.15.2        | NOK | http://autobuild.buildroot.net/results/668bc68f75f74481b7cd50fbca861e757ecff894 |     
+
+
+
 -- 
-2.30.2
+http://autobuild.buildroot.net
