@@ -1,131 +1,135 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Thu,  8 Jul 2021 16:59:46 +0200
-Subject: [Buildroot] [PATCH] package/gtest: bump to version 1.11.0
-Message-ID: <20210708145946.854654-1-nolange79@gmail.com>
+From: Herve Codina <herve.codina@bootlin.com>
+Date: Thu, 8 Jul 2021 17:38:34 +0200
+Subject: [Buildroot] [PATCH v2 08/18] package/pkg-generic.mk: move
+ python fixup to generic package infrastructure
+In-Reply-To: <20210707201257.GB410642@scaer>
+References: <20210706142501.951345-1-herve.codina@bootlin.com>
+ <20210706142501.951345-9-herve.codina@bootlin.com>
+ <20210706195048.GO2521@scaer> <20210707134828.7feafbd2@bootlin.com>
+ <f809847a-151a-18d2-ff5d-302b60677e45@mind.be>
+ <20210707144915.2db26f79@bootlin.com>
+ <20210707201257.GB410642@scaer>
+Message-ID: <20210708173834.04a84dbc@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Python is removed as dependency.
-gtest uses python for self-tests which are not run by buildroot,
-and the remaining scripts are not used by the build, and aren't
-maintained or supported.
+Hi,
 
-Special handling for gtest-config and gmock-config is removed aswell,
-the CMake Buildsystem now does take care of those.
+On Wed, 7 Jul 2021 22:12:57 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Installation of the python gmock generator scripts is conditional upon
-host-python[3]. Since this is one of the unsupported + unmaintained
-scripts, installation probably should be gutted completely.
+> Herv?, Arnout, All,
+> 
+> On 2021-07-07 14:49 +0200, Herve Codina spake thusly:
+> > On Wed, 7 Jul 2021 14:21:16 +0200
+> > Arnout Vandecappelle <arnout@mind.be> wrote:  
+> > > > These finds are now called for all packages and .../lib/python* can be not
+> > > > present. In this case, find fails.    
+> 
+> OK, I see.
+> 
+> However, the commit log was lacking these explanations, because the
+> change is not simply "the python fixup is moved to the generic package
+> infrastructure", because the fixups had to be adapted.
+> 
+> > >  A simpler way of doing that would be:
+> > > 	$(if $(wildcard $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*),
+> > > 		$(Q)find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*  
+> > I think this does not solve the problem.
+> > find fails if at least one of the 2 paths are not present.
+> > 
+> > Something like this (not tested) is needed.
+> > 
+> > 	$(if $(wildcard $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*),
+> >  		$(Q)find $(wildcard $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*)  
+> 
+> Yes, this would keep the pre-existing behaviour.
+> 
+> However, I think the traditional way we usually do that would be with a
+> foreach:
+> 
+>     $(foreach dir, $(wildcard $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*), \
+>         $(Q)find $(dir) -name "_sysconfigdata*.py" -print0 \
+>         |xargs -0 --no-run-if-empty \
+>             $(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g"
+>         $(Q)find $(dir) -name "_sysconfigdata*.pyc" -delete
+>     )
+> 
+> And thus you're back to a basic, non-parameterised macro that can be
+> used as a POST_PREPARE_HOOK. Wee! :-)
+> 
+> Note: optimisation: we should be able to use a single find call to do
+> both, though:
+> 
+>     $(foreach dir, $(wildcard $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*), \
+>         $(Q)find $(dir) \( -name "_sysconfigdata*.pyc" -delete \) \
+>             -o \( -name "_sysconfigdata*.py" -print0 \) \
+>         |xargs -0 --no-run-if-empty \
+>             $(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g'
+>     )
+> 
+> Maybe the groupings '\( ... \)' are superfluous. Adapt appropriately...
+> 
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- package/gtest/gtest.hash |  4 +--
- package/gtest/gtest.mk   | 53 ++++++----------------------------------
- 2 files changed, 10 insertions(+), 47 deletions(-)
+I tried this kind of things and I ran into trouble with $(wildcard ...)
+Indeed, $(wildcard ...) does not see my directories.
+A simple 'ls $(HOST_DIR)/lib/python*' just before $(foreach dir, $(wildcard ...), ...)
+lists the directory.
 
-diff --git a/package/gtest/gtest.hash b/package/gtest/gtest.hash
-index 082c597780..d21fea7142 100644
---- a/package/gtest/gtest.hash
-+++ b/package/gtest/gtest.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	9dc9157a9a1551ec7a7e43daea9a694a0bb5fb8bec81235d8a1e6ef64c716dcb	gtest-1.10.0.tar.gz
--sha256	9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138	googletest/LICENSE
-+sha256  b4870bf121ff7795ba20d20bcdd8627b8e088f2d1dab299a031c1034eddc93d5  gtest-1.11.0.tar.gz
-+sha256  9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  LICENSE
-diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
-index f8b2339d7e..994f63ec2d 100644
---- a/package/gtest/gtest.mk
-+++ b/package/gtest/gtest.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GTEST_VERSION = 1.10.0
-+GTEST_VERSION = 1.11.0
- GTEST_SITE = $(call github,google,googletest,release-$(GTEST_VERSION))
- GTEST_INSTALL_STAGING = YES
- GTEST_INSTALL_TARGET = NO
-@@ -20,15 +20,12 @@ endif
- HOST_GTEST_LICENSE = Apache-2.0
- HOST_GTEST_LICENSE_FILES = googlemock/scripts/generator/LICENSE
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
--HOST_GTEST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
--HOST_GTEST_DEPENDENCIES += host-python3
--else
--HOST_GTEST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
--HOST_GTEST_DEPENDENCIES += host-python
--endif
--
- HOST_GTEST_GMOCK_PYTHONPATH = \
--	$(HOST_DIR)/lib/python$(HOST_GTEST_PYTHON_VERSION)/site-packages
-+	$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
-+else ifeq ($(BR2_PACKAGE_PYTHON),y)
-+HOST_GTEST_GMOCK_PYTHONPATH = \
-+	$(HOST_DIR)/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+endif
- 
- # While it is possible to build gtest as shared library, using this gtest shared
- # library requires to set some special configure option in the project using
-@@ -48,54 +45,20 @@ endif
- 
- GTEST_CONF_OPTS += -DBUILD_GTEST=ON
- 
--# Generate the gtest-config script manually, since the CMake build system is
--# not doing it.
--define GTEST_INSTALL_GTEST_CONFIG
--	sed 's%@PACKAGE_TARNAME@%gtest%;\
--		s%@PACKAGE_VERSION@%$(GTEST_VERSION)%;\
--		s%@prefix@%$(STAGING_DIR)/usr%;\
--		s%@exec_prefix@%$(STAGING_DIR)/usr%;\
--		s%@libdir@%$(STAGING_DIR)/usr/lib%;\
--		s%@includedir@%$(STAGING_DIR)/usr/include%;\
--		s%@bindir@%$(STAGING_DIR)/usr/bin%;\
--		s%@PTHREAD_CFLAGS@%%;\
--		s%@PTHREAD_LIBS@%-lpthread%;' \
--		$(@D)/googletest/scripts/gtest-config.in \
--		> $(STAGING_DIR)/usr/bin/gtest-config
--	chmod +x $(STAGING_DIR)/usr/bin/gtest-config
--endef
--GTEST_POST_INSTALL_STAGING_HOOKS = GTEST_INSTALL_GTEST_CONFIG
--
- ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
- GTEST_CONF_OPTS += -DBUILD_GMOCK=ON
--
--# Generate the gmock-config script manually, since the CMake build system is
--# not doing it.
--define GTEST_INSTALL_GMOCK_CONFIG
--	sed 's%@PACKAGE_TARNAME@%gmock%;\
--		s%@PACKAGE_VERSION@%$(GTEST_VERSION)%;\
--		s%@prefix@%$(STAGING_DIR)/usr%;\
--		s%@exec_prefix@%$(STAGING_DIR)/usr%;\
--		s%@libdir@%$(STAGING_DIR)/usr/lib%;\
--		s%@includedir@%$(STAGING_DIR)/usr/include%;\
--		s%@bindir@%$(STAGING_DIR)/usr/bin%;\
--		s%@PTHREAD_CFLAGS@%%;\
--		s%@PTHREAD_LIBS@%-lpthread%;' \
--		$(@D)/googlemock/scripts/gmock-config.in \
--		> $(STAGING_DIR)/usr/bin/gmock-config
--	chmod +x $(STAGING_DIR)/usr/bin/gmock-config
--endef
--GTEST_POST_INSTALL_STAGING_HOOKS += GTEST_INSTALL_GMOCK_CONFIG
- else
- GTEST_CONF_OPTS += -DBUILD_GMOCK=OFF
- endif
- 
-+ifneq ($(HOST_GTEST_GMOCK_PYTHONPATH),)
- define HOST_GTEST_INSTALL_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/googlemock/scripts/generator/gmock_gen.py \
- 		$(HOST_DIR)/bin/gmock_gen
- 	cp -rp $(@D)/googlemock/scripts/generator/cpp \
- 		$(HOST_GTEST_GMOCK_PYTHONPATH)
- endef
-+endif
- 
- $(eval $(cmake-package))
- # The host package does not build anything, just installs gmock_gen stuff, so
+Suppose this stupid package:
+---- 8< -----
+define TLP_PKGA_INSTALL_TARGET_CMDS
+	echo "$$(date)" > $(TARGET_DIR)/pkga1
+	echo "$$(date)" > $(TARGET_DIR)/pkga2
+	mkdir -p $(TARGET_DIR)/foo/bla
+	touch $(TARGET_DIR)/foo/bla/file1
+	touch $(TARGET_DIR)/foo/bla/file2
+endef
+
+define TLP_PKGA_LIST_CMD
+	echo "ls:" && ls $(TARGET_DIR)/foo/* || true
+	echo "wildcard: $(wildcard $(TARGET_DIR)/foo/*)"
+endef
+
+TLP_PKGA_PRE_INSTALL_TARGET_HOOKS += TLP_PKGA_LIST_CMD
+TLP_PKGA_POST_INSTALL_TARGET_HOOKS += TLP_PKGA_LIST_CMD
+
+
+$(eval $(generic-package))
+---- 8< -----
+
+'make pkg' leads to:
+	>>> pkg  Installing to target
+	echo "ls:" && ls /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/foo/* || true
+	ls:
+	ls: cannot access '/home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/foo/*': No such file or directory
+	echo "wildcard: "
+	wildcard: 
+	echo "$(date)" > /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/pkga1
+	echo "$(date)" > /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/pkga2
+	mkdir -p /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/foo/bla
+	touch /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/foo/bla/file1
+	touch /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/foo/bla/file2
+	echo "ls:" && ls /home/hcodina/project/nagra/buildroot/output/per-package/tlp_pkga/target/foo/* || true
+	ls:
+	file1  file2
+	echo "wildcard: "
+	wildcard: 
+
+$(wildcard ...) uses internal make caching.
+Depending on when it is called related to make internal caching updates, it can
+lead to unexpected results.
+
+In the example provided, make cannot known that $(TARGET_DIR)/foo/bla was updated by
+TLP_PKGA_INSTALL_TARGET_CMDS and so it didn't update its internal caching.
+$(wildcard ...) does not see the new files.
+
+Herve
+
 -- 
-2.30.2
+Herv? Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
