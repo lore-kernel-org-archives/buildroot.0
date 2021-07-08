@@ -1,67 +1,131 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu,  8 Jul 2021 06:41:25 -0600
-Subject: [Buildroot] [PATCH v2 1/1] package/systemd: bump to version 249
-Message-ID: <20210708124125.72124-1-james.hilliard1@gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Thu,  8 Jul 2021 16:59:46 +0200
+Subject: [Buildroot] [PATCH] package/gtest: bump to version 1.11.0
+Message-ID: <20210708145946.854654-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add new host-python3-jinja2 dependency.
+Python is removed as dependency.
+gtest uses python for self-tests which are not run by buildroot,
+and the remaining scripts are not used by the build, and aren't
+maintained or supported.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - add host-python3-jinja2 host-systemd dependency
----
- package/systemd/systemd.hash | 4 ++--
- package/systemd/systemd.mk   | 6 ++++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+Special handling for gtest-config and gmock-config is removed aswell,
+the CMake Buildsystem now does take care of those.
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 20cd922259..82741d1996 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,6 +1,6 @@
- # sha256 locally computed
--sha256  2869986e219a8dfc96cc0dffac66e0c13bb70a89e16b85a3948876c146cfa3e0  systemd-247.3.tar.gz
-+sha256  0d9d45140e95f2d0ee79005ccf867f2706976c30391b932a8c3b9b198a801fad  systemd-249.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
--sha256  6f22d19d35b00f35e0444e0bc9139e6d3bdf7277978f89c4e175e37b18c43f3d  README
-+sha256  f5645b4b846479859d6618fa7a5a1722681aa7fc43c1e45f8bf8e1fe5738d618  README
- sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  tools/chromiumos/LICENSE
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 74c561e67e..0706ea7212 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
+Installation of the python gmock generator scripts is conditional upon
+host-python[3]. Since this is one of the unsupported + unmaintained
+scripts, installation probably should be gutted completely.
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+ package/gtest/gtest.hash |  4 +--
+ package/gtest/gtest.mk   | 53 ++++++----------------------------------
+ 2 files changed, 10 insertions(+), 47 deletions(-)
+
+diff --git a/package/gtest/gtest.hash b/package/gtest/gtest.hash
+index 082c597780..d21fea7142 100644
+--- a/package/gtest/gtest.hash
++++ b/package/gtest/gtest.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	9dc9157a9a1551ec7a7e43daea9a694a0bb5fb8bec81235d8a1e6ef64c716dcb	gtest-1.10.0.tar.gz
+-sha256	9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138	googletest/LICENSE
++sha256  b4870bf121ff7795ba20d20bcdd8627b8e088f2d1dab299a031c1034eddc93d5  gtest-1.11.0.tar.gz
++sha256  9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  LICENSE
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+index f8b2339d7e..994f63ec2d 100644
+--- a/package/gtest/gtest.mk
++++ b/package/gtest/gtest.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSTEMD_VERSION = 247.3
-+SYSTEMD_VERSION = 249
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
-@@ -14,6 +14,7 @@ SYSTEMD_DEPENDENCIES = \
- 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
- 	$(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
- 	host-gperf \
-+	host-python3-jinja2 \
- 	kmod \
- 	libcap \
- 	util-linux-libs \
-@@ -717,7 +718,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
- 	host-util-linux \
- 	host-patchelf \
- 	host-libcap \
--	host-gperf
-+	host-gperf \
-+	host-python3-jinja2
+-GTEST_VERSION = 1.10.0
++GTEST_VERSION = 1.11.0
+ GTEST_SITE = $(call github,google,googletest,release-$(GTEST_VERSION))
+ GTEST_INSTALL_STAGING = YES
+ GTEST_INSTALL_TARGET = NO
+@@ -20,15 +20,12 @@ endif
+ HOST_GTEST_LICENSE = Apache-2.0
+ HOST_GTEST_LICENSE_FILES = googlemock/scripts/generator/LICENSE
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-HOST_GTEST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
+-HOST_GTEST_DEPENDENCIES += host-python3
+-else
+-HOST_GTEST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
+-HOST_GTEST_DEPENDENCIES += host-python
+-endif
+-
+ HOST_GTEST_GMOCK_PYTHONPATH = \
+-	$(HOST_DIR)/lib/python$(HOST_GTEST_PYTHON_VERSION)/site-packages
++	$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
++else ifeq ($(BR2_PACKAGE_PYTHON),y)
++HOST_GTEST_GMOCK_PYTHONPATH = \
++	$(HOST_DIR)/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++endif
  
- HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
+ # While it is possible to build gtest as shared library, using this gtest shared
+ # library requires to set some special configure option in the project using
+@@ -48,54 +45,20 @@ endif
  
+ GTEST_CONF_OPTS += -DBUILD_GTEST=ON
+ 
+-# Generate the gtest-config script manually, since the CMake build system is
+-# not doing it.
+-define GTEST_INSTALL_GTEST_CONFIG
+-	sed 's%@PACKAGE_TARNAME@%gtest%;\
+-		s%@PACKAGE_VERSION@%$(GTEST_VERSION)%;\
+-		s%@prefix@%$(STAGING_DIR)/usr%;\
+-		s%@exec_prefix@%$(STAGING_DIR)/usr%;\
+-		s%@libdir@%$(STAGING_DIR)/usr/lib%;\
+-		s%@includedir@%$(STAGING_DIR)/usr/include%;\
+-		s%@bindir@%$(STAGING_DIR)/usr/bin%;\
+-		s%@PTHREAD_CFLAGS@%%;\
+-		s%@PTHREAD_LIBS@%-lpthread%;' \
+-		$(@D)/googletest/scripts/gtest-config.in \
+-		> $(STAGING_DIR)/usr/bin/gtest-config
+-	chmod +x $(STAGING_DIR)/usr/bin/gtest-config
+-endef
+-GTEST_POST_INSTALL_STAGING_HOOKS = GTEST_INSTALL_GTEST_CONFIG
+-
+ ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
+ GTEST_CONF_OPTS += -DBUILD_GMOCK=ON
+-
+-# Generate the gmock-config script manually, since the CMake build system is
+-# not doing it.
+-define GTEST_INSTALL_GMOCK_CONFIG
+-	sed 's%@PACKAGE_TARNAME@%gmock%;\
+-		s%@PACKAGE_VERSION@%$(GTEST_VERSION)%;\
+-		s%@prefix@%$(STAGING_DIR)/usr%;\
+-		s%@exec_prefix@%$(STAGING_DIR)/usr%;\
+-		s%@libdir@%$(STAGING_DIR)/usr/lib%;\
+-		s%@includedir@%$(STAGING_DIR)/usr/include%;\
+-		s%@bindir@%$(STAGING_DIR)/usr/bin%;\
+-		s%@PTHREAD_CFLAGS@%%;\
+-		s%@PTHREAD_LIBS@%-lpthread%;' \
+-		$(@D)/googlemock/scripts/gmock-config.in \
+-		> $(STAGING_DIR)/usr/bin/gmock-config
+-	chmod +x $(STAGING_DIR)/usr/bin/gmock-config
+-endef
+-GTEST_POST_INSTALL_STAGING_HOOKS += GTEST_INSTALL_GMOCK_CONFIG
+ else
+ GTEST_CONF_OPTS += -DBUILD_GMOCK=OFF
+ endif
+ 
++ifneq ($(HOST_GTEST_GMOCK_PYTHONPATH),)
+ define HOST_GTEST_INSTALL_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/googlemock/scripts/generator/gmock_gen.py \
+ 		$(HOST_DIR)/bin/gmock_gen
+ 	cp -rp $(@D)/googlemock/scripts/generator/cpp \
+ 		$(HOST_GTEST_GMOCK_PYTHONPATH)
+ endef
++endif
+ 
+ $(eval $(cmake-package))
+ # The host package does not build anything, just installs gmock_gen stuff, so
 -- 
-2.25.1
+2.30.2
