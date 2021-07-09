@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Jul 2021 22:47:21 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/php: bump version
+Date: Fri, 9 Jul 2021 22:47:27 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/php: bump version
  to 7.4.20
-Message-ID: <20210709201645.C215492DFB@busybox.osuosl.org>
+Message-ID: <20210709201652.112D1954A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23e60dd565b31e8a93efb538a065fe0ffaed9945
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0d94978371bc482369c78d5059efcd2abf665a69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Changelog: https://www.php.net/ChangeLog-7.php#7.4.20
 
