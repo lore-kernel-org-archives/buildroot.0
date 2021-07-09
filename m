@@ -1,98 +1,86 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Fri,  9 Jul 2021 11:07:27 +0200
-Subject: [Buildroot] [PATCH 2/3] package/systemd: Update description and
- kernel options
+Date: Fri,  9 Jul 2021 11:07:28 +0200
+Subject: [Buildroot] [PATCH 3/3] package/systemd: always enable
+ systemd-tmpfilesd
 In-Reply-To: <20210709090729.280632-1-nolange79@gmail.com>
 References: <20210709090729.280632-1-nolange79@gmail.com>
-Message-ID: <20210709090729.280632-2-nolange79@gmail.com>
+Message-ID: <20210709090729.280632-3-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-realign the configuration to the README.
+this tool and service is pretty much expected to be enabled,
+making this a certainty will enable future improvements.
 
-enable CONFIG_AUTOFS_FS (kernel >= 4.18) aswell the someday
-to be removed CONFIG_AUTOFS4_FS option.
+remove the related BR2_PACKAGE_SYSTEMD Config option tree-wide.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/systemd/Config.in  | 20 +++++++++++++++-----
- package/systemd/systemd.mk | 16 ++++++++++++----
- 2 files changed, 27 insertions(+), 9 deletions(-)
+ package/dhcp/Config.in     |  1 -
+ package/systemd/Config.in  | 11 -----------
+ package/systemd/systemd.mk |  7 +------
+ 3 files changed, 1 insertion(+), 18 deletions(-)
 
+diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
+index e6e70908dd..515040c612 100644
+--- a/package/dhcp/Config.in
++++ b/package/dhcp/Config.in
+@@ -13,7 +13,6 @@ if BR2_PACKAGE_DHCP
+ 
+ config BR2_PACKAGE_DHCP_SERVER
+ 	bool "dhcp server"
+-	select BR2_PACKAGE_SYSTEMD_TMPFILES if BR2_PACKAGE_SYSTEMD
+ 	help
+ 	  DHCP server from the ISC DHCP distribution.
+ 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index d658308213..94c5c47c7e 100644
+index 94c5c47c7e..1e9a9f042c 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -22,7 +22,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	depends on !BR2_STATIC_LIBS # kmod
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_TOOLCHAIN_HAS_SSP
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
- 	select BR2_PACKAGE_HAS_UDEV
-@@ -51,13 +51,23 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	  an elaborate transactional dependency-based service control
- 	  logic.  It can work as a drop-in replacement for sysvinit.
+@@ -465,17 +465,6 @@ config BR2_PACKAGE_SYSTEMD_TIMESYNCD
  
--	  Systemd requires a Linux kernel >= 3.0 with the following
-+	  Systemd requires a Linux kernel >= 3.13 with the following
- 	  options enabled:
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-timesyncd.html
  
--	  - CONFIG_CGROUPS
-+	  - CONFIG_DEVTMPFS
-+	  - CONFIG_CGROUPS (it is OK to disable all controllers)
- 	  - CONFIG_INOTIFY_USER
--	  - CONFIG_FHANDLE
--	  - CONFIG_AUTOFS4_FS
-+	  - CONFIG_SIGNALFD
-+	  - CONFIG_TIMERFD
-+	  - CONFIG_EPOLL
-+	  - CONFIG_UNIX (it requires CONFIG_NET, but every other flag in it is not necessary)
-+	  - CONFIG_SYSFS
-+	  - CONFIG_PROC_FS
-+	  - CONFIG_FHANDLE (libudev, mount and bind mount handling)
-+
-+	  - CONFIG_NET_NS (needed by PrivateNetwork=, used in some systemd units)
-+
-+	  - CONFIG_AUTOFS_FS / CONFIG_AUTOFS4_FS
- 	  - CONFIG_TMPFS_POSIX_ACL
- 	  - CONFIG_TMPFS_XATTR
- 
+-config BR2_PACKAGE_SYSTEMD_TMPFILES
+-	bool "enable tmpfiles support"
+-	default y
+-	help
+-	  systemd-tmpfiles creates, deletes, and cleans up volatile
+-	  and temporary files and directories, based on the
+-	  configuration file format and location specified in
+-	  tmpfiles.d(5).
+-
+-	  http://www.freedesktop.org/software/systemd/man/systemd-tmpfiles.html
+-
+ config BR2_PACKAGE_SYSTEMD_USERDB
+ 	bool "enable userdb daemon"
+ 	help
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1a25a0b8c1..0fb1c8b068 100644
+index 0fb1c8b068..af139a3304 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -630,14 +630,22 @@ SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
- SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
+@@ -48,6 +48,7 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dsysvrcnd-path= \
+ 	-Dtelinit-path= \
+ 	-Dtests=false \
++	-Dtmpfiles=true \
+ 	-Dumount-path=/usr/bin/umount \
+ 	-Dutmp=false
  
- define SYSTEMD_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_EPOLL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_SIGNALFD)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_TIMERFD)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_PROC_FS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_EPOLL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_UNIX)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_SYSFS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PROC_FS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE)
-+
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_NS)
-+
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_SYSFS_DEPRECATED)
-+
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS_FS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS4_FS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_ACL)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_XATTR)
+@@ -300,12 +301,6 @@ else
+ SYSTEMD_CONF_OPTS += -Dquotacheck=false
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
+-SYSTEMD_CONF_OPTS += -Dtmpfiles=true
+-else
+-SYSTEMD_CONF_OPTS += -Dtmpfiles=false
+-endif
+-
+ ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
+ SYSTEMD_CONF_OPTS += -Dsysusers=true
+ else
 -- 
 2.30.2
