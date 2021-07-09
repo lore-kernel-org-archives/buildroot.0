@@ -1,124 +1,194 @@
-From: Herve Codina <herve.codina@bootlin.com>
-Date: Fri, 9 Jul 2021 08:48:20 +0200
-Subject: [Buildroot] [PATCH v2 08/18] package/pkg-generic.mk: move
- python fixup to generic package infrastructure
-In-Reply-To: <20210708202623.GC410642@scaer>
-References: <20210706142501.951345-1-herve.codina@bootlin.com>
- <20210706142501.951345-9-herve.codina@bootlin.com>
- <20210706195048.GO2521@scaer> <20210707134828.7feafbd2@bootlin.com>
- <f809847a-151a-18d2-ff5d-302b60677e45@mind.be>
- <20210707144915.2db26f79@bootlin.com>
- <20210707201257.GB410642@scaer>
- <20210708173834.04a84dbc@bootlin.com>
- <20210708202623.GC410642@scaer>
-Message-ID: <20210709084820.37830e5f@bootlin.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Fri, 9 Jul 2021 10:19:34 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/systemd: bump to version 249
+In-Reply-To: <20210708171356.2241457-1-james.hilliard1@gmail.com>
+References: <20210708171356.2241457-1-james.hilliard1@gmail.com>
+Message-ID: <CADYdroOqtyTwPekUbfr2nOa5ViTWGw4S8qZD=JpCECe4tcQwTw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 8 Jul 2021 22:26:23 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Am Do., 8. Juli 2021 um 19:14 Uhr schrieb James Hilliard
+<james.hilliard1@gmail.com>:
+>
+> Add config option for systemd-sysext.
+>
+> Add config option for systemd-oomd.
+>
+> Add new host-python3-jinja2 dependency.
+>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+> Changes v3 -> v4:
+>   - add transient user/groups nsswitch.conf support
+> Changes v2 -> v3:
+>   - add oomd and sysext configuration options
+> Changes v1 -> v2:
+>   - add host-python3-jinja2 host-systemd dependency
+> ---
+>  package/systemd/Config.in    | 25 +++++++++++++++++++++++++
+>  package/systemd/systemd.hash |  4 ++--
+>  package/systemd/systemd.mk   | 22 ++++++++++++++++++++--
+>  3 files changed, 47 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index d658308213..709a5c4d61 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -318,6 +318,16 @@ config BR2_PACKAGE_SYSTEMD_NETWORKD
+>
+>           http://www.freedesktop.org/software/systemd/man/systemd-networkd.html
+>
+> +config BR2_PACKAGE_SYSTEMD_OOMD
+> +       bool "enable out-of-memory killer"
+> +       default y
 
-> Herv?, All,
-> 
-> On 2021-07-08 17:38 +0200, Herve Codina spake thusly:
-> > On Wed, 7 Jul 2021 22:12:57 +0200
-> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:  
-> [--SNIP--]
-> > > Note: optimisation: we should be able to use a single find call to do
-> > > both, though:
-> > > 
-> > >     $(foreach dir, $(wildcard $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*), \
-> > >         $(Q)find $(dir) \( -name "_sysconfigdata*.pyc" -delete \) \
-> > >             -o \( -name "_sysconfigdata*.py" -print0 \) \
-> > >         |xargs -0 --no-run-if-empty \
-> > >             $(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g'
-> > >     )  
-> [--SNIP--]
-> > I tried this kind of things and I ran into trouble with $(wildcard ...)
-> > Indeed, $(wildcard ...) does not see my directories.
-> > A simple 'ls $(HOST_DIR)/lib/python*' just before $(foreach dir, $(wildcard ...), ...)
-> > lists the directory.
-[...]
-> It is not caching. The issue is when variables (or calls to functions)
-> are evaluated.
-> 
-> In makefile, the evaluation is done for a full recipe at once, not for
-> each line to be executed.
-> 
-> HOOKS, pre or post, are part of the same recipe and the corresponding
-> CMDS, so all three (pre hooks, cmds, and post hooks) are evaluated at
-> the same time, even before any single line of the recipe if executed.
-> 
-> So given this trivial Makefile:
-> 
->     $ cat Makefile
->     all:
->         @touch toto
->         @echo '"toto is $(wildcard toto)"'
-> 
->     $ make
->     "toto is "
->     $ make
->     "toto is toto"
-> 
+My take is that buildroot should aim to be minimal, and from the manual,
+there are 2 preconditions for this service:
 
-Thanks for this explanation.
+1) A Kernel with PSI enabled (that means atleast 4.20).
+2) full unified cgroup hierarchy, but currently buildroot sets
+'-Ddefault-hierarchy=hybrid'
 
-> So, in the end, with all these back-n-forth, and combining all the
-> explanations, we sould be able to complete the macro with:
-> 
->     # Can't use $(foreach d, $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*, ...)
->     # because those directories may be created in the same recipe this
->     # macro wil be expanded in.
->     # Additionally, either or both may be missing, which would make find
->     # whine and fail.
->     # So we just use HOST_DIR as a starting point, and filter on the two
->     # directories of interest.
->     define FIXUP_PYTHON_SYSCONFIGDATA
->         $(Q)find $(HOST_DIR) \
->             \( -path '$(HOST_DIR)/lib/python*' -o -path '$(STAGING_DIR)/usr/lib/python*' \) \
->             \(    \( -name "_sysconfigdata*.pyc" -delete \) \
->                -o \( -name "_sysconfigdata*.py" -print0 \) \) \
->         |xargs -0 --no-run-if-empty \
->             $(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g'
->     endef
-> 
-> And then, in inner-genenric-package:
-> 
->     $(2)_POST_PREPARE_HOOKS += FIXUP_PYTHON_SYSCONFIGDATA
-> 
-> And then the commit log will need to have all the details why we use
-> this trick, and probably also a small comment above the macro defintion,
-> to explain it too.
-> 
-> Not that STAGING_DIR is not a starting point for find, because it is
-> below HOST_DIR, so we will eventually search STAGING_DIR.
 
-Right, I will try this one.
+2) should be remedied by setting -Ddefault-hierarchy=unified which has
+been the default for a while,
+   and some longterm holdovers like docker finally support it.
+   condition would be a kernel >= 4.2
 
-> 
-> Oh, and a final note: the existing hook is already sliently broken!
-> Indeed, if either $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*
-> is mising, find whines and fails. However, the breakage is ignored,
-> because find is on the left-hand side of a pipe, so its exit status is
-> ignored.
-> 
-> But of course, this is no longer the case with the new find that was
-> added by the previous commit, which really is the commit that introduces
-> the issues of find failing when a directory was missing, not this commit
-> specifically. I suppose you did not notice, because the prvious commit
-> was not tested on its own (and I can understand that, for I do that very
-> often too). But now autobuilders have caught it (and user have started
-> to notice too)...
+I would be fine with leaving it off by default for now, and fixing
+this up in following patches
+(as I am not sure which way to solve this will be accepted in BR).
 
-You right, I tested my first version of the patch (with the pipe) and missed
-the issue introduced by removing the pipe in v2.
-Indeed, I tested the whole series not each patches.
+> +       help
+> +         systemd-oomd is a system service that uses cgroups-v2 and
+> +         pressure stall information (PSI) to monitor and take action
+> +         on processes before an OOM occurs in kernel space.
+> +
+> +         https://www.freedesktop.org/software/systemd/man/systemd-oomd.html
+> +
+>  config BR2_PACKAGE_SYSTEMD_POLKIT
+>         bool "enable polkit support"
+>         depends on BR2_HOST_GCC_AT_LEAST_4_9 # polkit
+> @@ -424,6 +434,21 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
+>           When this feature is enabled, Systemd mounts smackfs and
+>           manages security labels for sockets.
+>
+> +config BR2_PACKAGE_SYSTEMD_SYSEXT
+> +       bool "enable sysext support"
+> +       help
+> +         systemd-sysext activates/deactivates system extension images.
+> +
+> +         System extension images may ? dynamically at runtime ? extend
+> +         the /usr/ and /opt/ directory hierarchies with additional files.
+> +
+> +         This is particularly useful on immutable system images where a
+> +         /usr/ and/or /opt/ hierarchy residing on a read-only file system
+> +         shall be extended temporarily at runtime without making any
+> +         persistent modifications.
+> +
+> +         https://www.freedesktop.org/software/systemd/man/systemd-sysext.html
+> +
+>  config BR2_PACKAGE_SYSTEMD_SYSUSERS
+>         bool "enable sysusers support"
+>         help
+> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+> index 20cd922259..82741d1996 100644
+> --- a/package/systemd/systemd.hash
+> +++ b/package/systemd/systemd.hash
+> @@ -1,6 +1,6 @@
+>  # sha256 locally computed
+> -sha256  2869986e219a8dfc96cc0dffac66e0c13bb70a89e16b85a3948876c146cfa3e0  systemd-247.3.tar.gz
+> +sha256  0d9d45140e95f2d0ee79005ccf867f2706976c30391b932a8c3b9b198a801fad  systemd-249.tar.gz
+>  sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+>  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+> -sha256  6f22d19d35b00f35e0444e0bc9139e6d3bdf7277978f89c4e175e37b18c43f3d  README
+> +sha256  f5645b4b846479859d6618fa7a5a1722681aa7fc43c1e45f8bf8e1fe5738d618  README
+>  sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  tools/chromiumos/LICENSE
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 74c561e67e..5562703a89 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -SYSTEMD_VERSION = 247.3
+> +SYSTEMD_VERSION = 249
+>  SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+>  SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+>  SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
+> @@ -14,6 +14,7 @@ SYSTEMD_DEPENDENCIES = \
+>         $(BR2_COREUTILS_HOST_DEPENDENCY) \
+>         $(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
+>         host-gperf \
+> +       host-python3-jinja2 \
+>         kmod \
+>         libcap \
+>         util-linux-libs \
+> @@ -411,6 +412,12 @@ else
+>  SYSTEMD_CONF_OPTS += -Dpstore=false
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_SYSTEMD_OOMD),y)
+> +SYSTEMD_CONF_OPTS += -Doomd=true
+> +else
+> +SYSTEMD_CONF_OPTS += -Doomd=false
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_SYSTEMD_POLKIT),y)
+>  SYSTEMD_CONF_OPTS += -Dpolkit=true
+>  SYSTEMD_DEPENDENCIES += polkit
+> @@ -424,6 +431,12 @@ else
+>  SYSTEMD_CONF_OPTS += -Dportabled=false
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_SYSTEMD_SYSEXT),y)
+> +SYSTEMD_CONF_OPTS += -Dsysext=true
+> +else
+> +SYSTEMD_CONF_OPTS += -Dsysext=false
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
+>  SYSTEMD_CONF_OPTS += -Dnetworkd=true
+>  SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - systemd Network Management
+> @@ -543,6 +556,8 @@ endef
+>  define SYSTEMD_INSTALL_NSSCONFIG_HOOK
+>         $(SED) '/^passwd:/ {/systemd/! s/$$/ systemd/}' \
+>                 -e '/^group:/ {/systemd/! s/$$/ [SUCCESS=merge] systemd/}' \
+> +               -e '/^shadow:/ {/systemd/! s/$$/ systemd/}' \
+> +               -e '/^gshadow:/ {/systemd/! s/$$/ systemd/}' \
+>                 $(if $(BR2_PACKAGE_SYSTEMD_RESOLVED), \
+>                         -e '/^hosts:/ s/[[:space:]]*mymachines//' \
+>                         -e '/^hosts:/ {/resolve/! s/files/files resolve [!UNAVAIL=return]/}' ) \
+> @@ -663,11 +678,13 @@ HOST_SYSTEMD_CONF_OPTS = \
+>         -Drepart=false \
+>         -Dcoredump=false \
+>         -Dpstore=false \
+> +       -Doomd=false \
+>         -Dlogind=false \
+>         -Dhostnamed=false \
+>         -Dlocaled=false \
+>         -Dmachined=false \
+>         -Dportabled=false \
+> +       -Dsysext=false \
+>         -Duserdb=false \
+>         -Dhomed=false \
+>         -Dnetworkd=false \
+> @@ -717,7 +734,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
+>         host-util-linux \
+>         host-patchelf \
+>         host-libcap \
+> -       host-gperf
+> +       host-gperf \
+> +       host-python3-jinja2
+>
+>  HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
+>
+> --
+> 2.25.1
+>
 
--- 
-Herv? Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Norbert
