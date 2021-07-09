@@ -1,69 +1,51 @@
 From: Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Fri,  9 Jul 2021 21:21:56 +0200
-Subject: [Buildroot] [PATCH] configs/stm32mp157a_dk1: bump TF-A, Linux,
- U-Boot versions
-Message-ID: <20210709192156.8030-1-texier.pj2@gmail.com>
+Date: Fri, 9 Jul 2021 21:24:57 +0200
+Subject: [Buildroot] [PATCH v2 1/2] board/stm32mp157c-dk2: fix U-Boot
+ corruption on the first boot
+In-Reply-To: <20210704154515.431798-2-geomatsi@gmail.com>
+References: <20210704154515.431798-1-geomatsi@gmail.com>
+ <20210704154515.431798-2-geomatsi@gmail.com>
+Message-ID: <28c67abf-3ac7-5301-de56-bf505e089a3e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Runtime tested:
+Hi Sergey,
 
-NOTICE:  Model: STMicroelectronics STM32MP157A-DK1 Discovery Board
-NOTICE:  Board: MB1272 Var1.0 Rev.C-01
-...
-U-Boot 2021.07 (Jul 09 2021 - 20:53:05 +0200)
-...
-Starting kernel ...
+Le 04/07/2021 ? 17:45, Sergey Matyukevich a ?crit?:
+> The stm32mp157c-dk2 image successfully boots only once. Subsequent boot
+> attempts fail to reach U-Boot. The root cause turns out to be in U-Boot
+> corruption during the first boot. The stm32mp1 U-Boot stores its
+> environment at the end of GPT partition named 'ssbl' since v2020.10-rc2.
+> However Buildroot genimage template for stm32mp157 boards creates 'ssbl'
+> partition w/o extra space for U-Boot primary and redundant environments.
+> This patch explicitly specifies 'ssbl' partition size that should be
+> enough for both u-boot.stm32 image (~1M) and both environments (16K).
+> 
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
-[    0.000000] Booting Linux on physical CPU 0x0
-[    0.000000] Linux version 5.13.0 ...
-...
-Welcome to Buildroot
-buildroot login:
+Tested-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 
-Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
----
- configs/stm32mp157a_dk1_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> ---
+>   board/stmicroelectronics/common/stm32mp157/genimage.cfg.template | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template b/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
+> index f341c19f2f..03fba8daf0 100644
+> --- a/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
+> +++ b/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
+> @@ -13,6 +13,7 @@ image sdcard.img {
+>   
+>   	partition ssbl {
+>   		image = "u-boot.stm32"
+> +		size = 2M
+>   	}
+>   
+>   	partition rootfs {
+> 
 
-diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
-index 6883aaba7b..bdb99c8663 100644
---- a/configs/stm32mp157a_dk1_defconfig
-+++ b/configs/stm32mp157a_dk1_defconfig
-@@ -1,11 +1,11 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157a-dk1/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-dk1.dtb"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
-@@ -25,7 +25,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157a-dk1/uboot-fragment.config"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
--- 
-2.17.1
+Thanks !
+--
+Pierre-Jean Texier
