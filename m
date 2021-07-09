@@ -1,51 +1,69 @@
 From: Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Fri,  9 Jul 2021 21:19:35 +0200
-Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2021.07
-Message-ID: <20210709191935.7796-1-texier.pj2@gmail.com>
+Date: Fri,  9 Jul 2021 21:21:56 +0200
+Subject: [Buildroot] [PATCH] configs/stm32mp157a_dk1: bump TF-A, Linux,
+ U-Boot versions
+Message-ID: <20210709192156.8030-1-texier.pj2@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See: https://lists.denx.de/pipermail/u-boot/2021-July/453729.html
+Runtime tested:
+
+NOTICE:  Model: STMicroelectronics STM32MP157A-DK1 Discovery Board
+NOTICE:  Board: MB1272 Var1.0 Rev.C-01
+...
+U-Boot 2021.07 (Jul 09 2021 - 20:53:05 +0200)
+...
+Starting kernel ...
+
+[    0.000000] Booting Linux on physical CPU 0x0
+[    0.000000] Linux version 5.13.0 ...
+...
+Welcome to Buildroot
+buildroot login:
 
 Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 ---
- boot/uboot/Config.in  | 4 ++--
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/stm32mp157a_dk1_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 00c6674120..58e0a85803 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -41,7 +41,7 @@ choice
- 	  Select the specific U-Boot version you want to use
- 
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2021.04"
-+	bool "2021.07"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -85,7 +85,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2021.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2021.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index 9a0b0cb6b0..5a48926ebe 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  0d438b1bb5cceb57a18ea2de4a0d51f7be5b05b98717df05938636e0aadfe11a  u-boot-2021.04.tar.bz2
-+sha256  312b7eeae44581d1362c3a3f02c28d806647756c82ba8c72241c7cdbe68ba77e  u-boot-2021.07.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
+index 6883aaba7b..bdb99c8663 100644
+--- a/configs/stm32mp157a_dk1_defconfig
++++ b/configs/stm32mp157a_dk1_defconfig
+@@ -1,11 +1,11 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
+ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157a-dk1/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-dk1.dtb"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
+@@ -25,7 +25,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157a-dk1/uboot-fragment.config"
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
 -- 
 2.17.1
