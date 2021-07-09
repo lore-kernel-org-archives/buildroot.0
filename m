@@ -1,10 +1,9 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 9 Jul 2021 17:21:52 -0300
-Subject: [Buildroot] [PATCH] configs/warp7: bump Kernel and U-Boot
- version
-In-Reply-To: <20210709200432.18989-1-texier.pj2@gmail.com>
-References: <20210709200432.18989-1-texier.pj2@gmail.com>
-Message-ID: <CAOMZO5DurBq0sus0XoLghf=T2Q2k6zf54t+4mK5G-MgUj1iMVQ@mail.gmail.com>
+Date: Fri, 9 Jul 2021 17:25:10 -0300
+Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2021.07
+In-Reply-To: <20210709191935.7796-1-texier.pj2@gmail.com>
+References: <20210709191935.7796-1-texier.pj2@gmail.com>
+Message-ID: <CAOMZO5ATurhtVc8_6giQtHubvAbAei7nvCQ_XkbMsyxegUx0pw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +12,13 @@ To: buildroot@busybox.net
 
 Hi Pierre-Jean,
 
-On Fri, Jul 9, 2021 at 5:04 PM Pierre-Jean Texier <texier.pj2@gmail.com> wrote:
+On Fri, Jul 9, 2021 at 4:20 PM Pierre-Jean Texier <texier.pj2@gmail.com> wrote:
 >
-> Bump U-Boot to 2021.07 and kernel to version 5.13
+> See: https://lists.denx.de/pipermail/u-boot/2021-July/453729.html
 >
 > Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 
-Thanks for the patch:
-
+Patch looks good, thanks:
 Reviewed-by: Fabio Estevam <festevam@gmail.com>
+
+Maybe it is a good idea to bump uboot-tools to 2021.07 as well.
