@@ -1,32 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Jul 2021 22:49:37 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/tor: security bump version
- to 0.4.5.9
-In-Reply-To: <871r8r4gk7.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Thu, 24 Jun 2021 14:01:44 +0200")
-References: <20210620090208.205080-1-bernd.kuhls@t-online.de>
- <871r8r4gk7.fsf@dell.be.48ers.dk>
-Message-ID: <87mtqvyzz2.fsf@dell.be.48ers.dk>
+Date: Fri, 9 Jul 2021 22:49:26 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/tor: security
+ bump version to 0.4.5.9
+Message-ID: <20210709201645.CE403848C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e785cba7d363877064eb07ff9f59182ed4c5be32
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
- >> Release notes: https://blog.torproject.org/node/2041
- >> Fixes CVE-2021-34548 (TROVE-2021-003), TROVE-2021-004, CVE-2021-34549
- >> (TROVE-2021-005) & CVE-2021-34550 (TROVE-2021-006).
+Release notes: https://blog.torproject.org/node/2041
 
- >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- >> ---
- >> v2: no changes
+Fixes CVE-2021-34548 (TROVE-2021-003), TROVE-2021-004, CVE-2021-34549
+(TROVE-2021-005) & CVE-2021-34550 (TROVE-2021-006).
 
- > Committed, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d1a445621e8f2f5b96e7814e152bf8b237ea28a5)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2021.02.x and 2021.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index dd20bbc92e..8622281c2c 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  57ded091e8bcdcebb0013fe7ef4a4439827cb169358c7874fd05fa00d813e227  tor-0.4.5.8.tar.gz
++sha256  f304e456102ed26c39e5f16ece2115585398cdb4e67455139c86ea43cdf70856  tor-0.4.5.9.tar.gz
+ sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 4a16967d42..e7e791a10a 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.4.5.8
++TOR_VERSION = 0.4.5.9
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
