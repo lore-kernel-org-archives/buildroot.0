@@ -1,86 +1,57 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Fri,  9 Jul 2021 11:07:28 +0200
-Subject: [Buildroot] [PATCH 3/3] package/systemd: always enable
- systemd-tmpfilesd
-In-Reply-To: <20210709090729.280632-1-nolange79@gmail.com>
-References: <20210709090729.280632-1-nolange79@gmail.com>
-Message-ID: <20210709090729.280632-3-nolange79@gmail.com>
+From: Kory Maincent <kory.maincent@bootlin.com>
+Date: Fri,  9 Jul 2021 11:49:24 +0200
+Subject: [Buildroot] [PATCH 1/2] boot/arm-trusted-firmware: Update FIP image
+ generation with BL33_CFG option
+Message-ID: <20210709094925.1605675-1-kory.maincent@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this tool and service is pretty much expected to be enabled,
-making this a certainty will enable future improvements.
+Update the FIP image generation by adding the BL33_CFG parameter.
+This is needed for the ST version of ATF.
 
-remove the related BR2_PACKAGE_SYSTEMD Config option tree-wide.
-
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 ---
- package/dhcp/Config.in     |  1 -
- package/systemd/Config.in  | 11 -----------
- package/systemd/systemd.mk |  7 +------
- 3 files changed, 1 insertion(+), 18 deletions(-)
+ boot/arm-trusted-firmware/Config.in               | 9 +++++++++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 ++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
-index e6e70908dd..515040c612 100644
---- a/package/dhcp/Config.in
-+++ b/package/dhcp/Config.in
-@@ -13,7 +13,6 @@ if BR2_PACKAGE_DHCP
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index 7e46a10270..80f6161597 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -133,6 +133,15 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
+ 	  Name of the U-Boot BL33 image to include in ATF, it must
+ 	  have been installed to BINARIES_DIR by the U-Boot package.
  
- config BR2_PACKAGE_DHCP_SERVER
- 	bool "dhcp server"
--	select BR2_PACKAGE_SYSTEMD_TMPFILES if BR2_PACKAGE_SYSTEMD
- 	help
- 	  DHCP server from the ISC DHCP distribution.
- 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 94c5c47c7e..1e9a9f042c 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -465,17 +465,6 @@ config BR2_PACKAGE_SYSTEMD_TIMESYNCD
- 
- 	  http://www.freedesktop.org/software/systemd/man/systemd-timesyncd.html
- 
--config BR2_PACKAGE_SYSTEMD_TMPFILES
--	bool "enable tmpfiles support"
--	default y
--	help
--	  systemd-tmpfiles creates, deletes, and cleans up volatile
--	  and temporary files and directories, based on the
--	  configuration file format and location specified in
--	  tmpfiles.d(5).
--
--	  http://www.freedesktop.org/software/systemd/man/systemd-tmpfiles.html
--
- config BR2_PACKAGE_SYSTEMD_USERDB
- 	bool "enable userdb daemon"
- 	help
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 0fb1c8b068..af139a3304 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -48,6 +48,7 @@ SYSTEMD_CONF_OPTS += \
- 	-Dsysvrcnd-path= \
- 	-Dtelinit-path= \
- 	-Dtests=false \
-+	-Dtmpfiles=true \
- 	-Dumount-path=/usr/bin/umount \
- 	-Dutmp=false
- 
-@@ -300,12 +301,6 @@ else
- SYSTEMD_CONF_OPTS += -Dquotacheck=false
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE_CFG
++	string "U-Boot BL33 image devicetree name"
++	default ""
++	help
++	  Name of the U-Boot BL33 image devicetree to include in ATF.
++	  It must have been installed to BINARIES_DIR by the U-Boot
++	  package.
++	  Needed for the stm32mp1 platform.
++
  endif
  
--ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
--SYSTEMD_CONF_OPTS += -Dtmpfiles=true
--else
--SYSTEMD_CONF_OPTS += -Dtmpfiles=false
--endif
--
- ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
- SYSTEMD_CONF_OPTS += -Dsysusers=true
- else
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 1f08f5dabb..9fc8b51a80 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -92,6 +92,10 @@ endif
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33),y)
+ ARM_TRUSTED_FIRMWARE_UBOOT_BIN = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE))
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_UBOOT_BIN)
++ARM_TRUSTED_FIRMWARE_UBOOT_BIN_CFG = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE_CFG))
++ifneq ($(ARM_TRUSTED_FIRMWARE_UBOOT_BIN_CFG),)
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33_CFG=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_UBOOT_BIN_CFG)
++endif
+ ARM_TRUSTED_FIRMWARE_DEPENDENCIES += uboot
+ endif
+ 
 -- 
-2.30.2
+2.25.1
