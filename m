@@ -1,57 +1,61 @@
 From: Kory Maincent <kory.maincent@bootlin.com>
-Date: Fri,  9 Jul 2021 11:49:24 +0200
-Subject: [Buildroot] [PATCH 1/2] boot/arm-trusted-firmware: Update FIP image
- generation with BL33_CFG option
-Message-ID: <20210709094925.1605675-1-kory.maincent@bootlin.com>
+Date: Fri,  9 Jul 2021 11:49:25 +0200
+Subject: [Buildroot] [PATCH 2/2] boot/arm-trusted-firmware: Add
+ out-of-source ATF device tree support
+In-Reply-To: <20210709094925.1605675-1-kory.maincent@bootlin.com>
+References: <20210709094925.1605675-1-kory.maincent@bootlin.com>
+Message-ID: <20210709094925.1605675-2-kory.maincent@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the FIP image generation by adding the BL33_CFG parameter.
-This is needed for the ST version of ATF.
+Similarly to Uboot, this patch adds the ability to copy in and build
+out-of-source device tree sources during an ATF build.
 
 Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 ---
  boot/arm-trusted-firmware/Config.in               | 9 +++++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 ++++
- 2 files changed, 13 insertions(+)
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 5 +++++
+ 2 files changed, 14 insertions(+)
 
 diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 7e46a10270..80f6161597 100644
+index 80f6161597..7bd289137b 100644
 --- a/boot/arm-trusted-firmware/Config.in
 +++ b/boot/arm-trusted-firmware/Config.in
-@@ -133,6 +133,15 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
- 	  Name of the U-Boot BL33 image to include in ATF, it must
- 	  have been installed to BINARIES_DIR by the U-Boot package.
+@@ -68,6 +68,15 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM
+ 	help
+ 	  Target plaform to build for.
  
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE_CFG
-+	string "U-Boot BL33 image devicetree name"
-+	default ""
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH
++	string "Device Tree Source file paths"
 +	help
-+	  Name of the U-Boot BL33 image devicetree to include in ATF.
-+	  It must have been installed to BINARIES_DIR by the U-Boot
-+	  package.
-+	  Needed for the stm32mp1 platform.
++	  Space-separated list of paths to device tree source files
++	  that will be copied to fdts/ before starting the build.
 +
- endif
- 
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33
++	  To use this device tree source file, the ATF configuration
++	  file must refer to it.
++
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP
+ 	bool "Build FIP image"
+ 	help
 diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 1f08f5dabb..9fc8b51a80 100644
+index 9fc8b51a80..e902c1aca9 100644
 --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
 +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -92,6 +92,10 @@ endif
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33),y)
- ARM_TRUSTED_FIRMWARE_UBOOT_BIN = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE))
- ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_UBOOT_BIN)
-+ARM_TRUSTED_FIRMWARE_UBOOT_BIN_CFG = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE_CFG))
-+ifneq ($(ARM_TRUSTED_FIRMWARE_UBOOT_BIN_CFG),)
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33_CFG=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_UBOOT_BIN_CFG)
-+endif
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += uboot
- endif
+@@ -166,7 +166,12 @@ endif
+ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += \
+ 	$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS))
  
++ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH))
++
+ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
++	$(if $(ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH),
++		cp -f $(ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH) $(@D)/fdts/
++	)
+ 	$(ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL)
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
+ 		$(ARM_TRUSTED_FIRMWARE_MAKE_TARGETS)
 -- 
 2.25.1
