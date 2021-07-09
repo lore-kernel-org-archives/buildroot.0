@@ -1,51 +1,52 @@
 From: Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Fri, 9 Jul 2021 21:24:57 +0200
-Subject: [Buildroot] [PATCH v2 1/2] board/stm32mp157c-dk2: fix U-Boot
- corruption on the first boot
-In-Reply-To: <20210704154515.431798-2-geomatsi@gmail.com>
-References: <20210704154515.431798-1-geomatsi@gmail.com>
- <20210704154515.431798-2-geomatsi@gmail.com>
-Message-ID: <28c67abf-3ac7-5301-de56-bf505e089a3e@gmail.com>
+Date: Fri,  9 Jul 2021 22:04:32 +0200
+Subject: [Buildroot] [PATCH] configs/warp7: bump Kernel and U-Boot version
+Message-ID: <20210709200432.18989-1-texier.pj2@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sergey,
+Bump U-Boot to 2021.07 and kernel to version 5.13
 
-Le 04/07/2021 ? 17:45, Sergey Matyukevich a ?crit?:
-> The stm32mp157c-dk2 image successfully boots only once. Subsequent boot
-> attempts fail to reach U-Boot. The root cause turns out to be in U-Boot
-> corruption during the first boot. The stm32mp1 U-Boot stores its
-> environment at the end of GPT partition named 'ssbl' since v2020.10-rc2.
-> However Buildroot genimage template for stm32mp157 boards creates 'ssbl'
-> partition w/o extra space for U-Boot primary and redundant environments.
-> This patch explicitly specifies 'ssbl' partition size that should be
-> enough for both u-boot.stm32 image (~1M) and both environments (16K).
-> 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+---
+ configs/warp7_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Tested-by: Pierre-Jean Texier <texier.pj2@gmail.com>
-
-> ---
->   board/stmicroelectronics/common/stm32mp157/genimage.cfg.template | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template b/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
-> index f341c19f2f..03fba8daf0 100644
-> --- a/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
-> +++ b/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
-> @@ -13,6 +13,7 @@ image sdcard.img {
->   
->   	partition ssbl {
->   		image = "u-boot.stm32"
-> +		size = 2M
->   	}
->   
->   	partition rootfs {
-> 
-
-Thanks !
---
-Pierre-Jean Texier
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index 5f9d973663..23ae4c2257 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 5.8 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
++# Linux headers same as kernel, a 5.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+ 
+ # wifi firmware for brcm43430
+-- 
+2.17.1
