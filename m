@@ -1,51 +1,95 @@
 From: Damien Le Moal <damien.lemoal@wdc.com>
-Date: Fri,  9 Jul 2021 15:36:35 +0900
-Subject: [Buildroot] [PATCH 3/9] package make: build RISC-V nommu builds as
- linux
+Date: Fri,  9 Jul 2021 15:36:37 +0900
+Subject: [Buildroot] [PATCH 5/9] board: Add Sipeed MAIX-Go support
 In-Reply-To: <20210709063641.277005-1-damien.lemoal@wdc.com>
 References: <20210709063641.277005-1-damien.lemoal@wdc.com>
-Message-ID: <20210709063641.277005-4-damien.lemoal@wdc.com>
+Message-ID: <20210709063641.277005-6-damien.lemoal@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Christoph Hellwig <hch@lst.de>
-
-Using *-uclinux-* seems like an only partially followed convention.
-And at least for RISC-V gcc doesn't know about uclinux tuples, so
-switch back to the normal Linux one for now.
-
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-
-[Damien]
-* Make the change conditional on BR2_riscv arch being "y".
+Add two configuration files to support the RISC-V Canaan K210 SoC based
+Sipeed MAIX-Go board. These configurations are similar to the Sipeed
+MAIX-bit board configurations, differing only by the built-in device
+tree used.
 
 Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 ---
- package/Makefile.in | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ board/sipeed/maix-go/linux-dtb.config   |  2 ++
+ configs/sipeed_maix_go_defconfig        | 23 +++++++++++++++++++++++
+ configs/sipeed_maix_go_sdcard_defconfig | 23 +++++++++++++++++++++++
+ 3 files changed, 48 insertions(+)
+ create mode 100644 board/sipeed/maix-go/linux-dtb.config
+ create mode 100644 configs/sipeed_maix_go_defconfig
+ create mode 100644 configs/sipeed_maix_go_sdcard_defconfig
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 86db62ba5b..a5eeb00872 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -39,9 +39,14 @@ endif
- # Compute GNU_TARGET_NAME
- GNU_TARGET_NAME = $(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
- 
--# FLAT binary format needs uclinux
-+# FLAT binary format needs uclinux, except RISC-V which needs
-+# the regular linux name.
- ifeq ($(BR2_BINFMT_FLAT),y)
-+ifeq ($(BR2_riscv),y)
-+TARGET_OS = linux
-+else
- TARGET_OS = uclinux
-+endif
- else
- TARGET_OS = linux
- endif
+diff --git a/board/sipeed/maix-go/linux-dtb.config b/board/sipeed/maix-go/linux-dtb.config
+new file mode 100644
+index 0000000000..ea8c30e266
+--- /dev/null
++++ b/board/sipeed/maix-go/linux-dtb.config
+@@ -0,0 +1,2 @@
++CONFIG_SOC_CANAAN_K210_DTB_BUILTIN=y
++CONFIG_SOC_CANAAN_K210_DTB_SOURCE="sipeed_maix_go"
+diff --git a/configs/sipeed_maix_go_defconfig b/configs/sipeed_maix_go_defconfig
+new file mode 100644
+index 0000000000..c5df26340f
+--- /dev/null
++++ b/configs/sipeed_maix_go_defconfig
+@@ -0,0 +1,23 @@
++BR2_riscv=y
++# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
++BR2_KERNEL_HEADERS_5_13=y
++# BR2_UCLIBC_INSTALL_UTILS is not set
++BR2_GCC_VERSION_11_X=y
++BR2_GCC_ENABLE_LTO=y
++BR2_PACKAGE_HOST_ELF2FLT=y
++# BR2_USE_MMU is not set
++BR2_TARGET_GENERIC_HOSTNAME=""
++BR2_INIT_NONE=y
++BR2_ROOTFS_MERGED_USR=y
++BR2_SYSTEM_DEFAULT_PATH="/bin:/sbin:/usr/bin:/usr/sbin"
++BR2_ROOTFS_OVERLAY="board/canaan/k210-common/rootfs_overlay"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-go/linux-dtb.config"
++BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
++BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
++BR2_PACKAGE_BUSYBOX_CONFIG="board/canaan/k210-common/busybox-tiny-initramfs.config"
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
++BR2_TARGET_ROOTFS_INITRAMFS=y
++# BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/configs/sipeed_maix_go_sdcard_defconfig b/configs/sipeed_maix_go_sdcard_defconfig
+new file mode 100644
+index 0000000000..dcea0a6044
+--- /dev/null
++++ b/configs/sipeed_maix_go_sdcard_defconfig
+@@ -0,0 +1,23 @@
++BR2_riscv=y
++# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
++BR2_KERNEL_HEADERS_5_13=y
++# BR2_UCLIBC_INSTALL_UTILS is not set
++BR2_GCC_VERSION_11_X=y
++BR2_GCC_ENABLE_LTO=y
++BR2_PACKAGE_HOST_ELF2FLT=y
++# BR2_USE_MMU is not set
++BR2_TARGET_GENERIC_HOSTNAME=""
++BR2_INIT_NONE=y
++BR2_ROOTFS_MERGED_USR=y
++BR2_SYSTEM_DEFAULT_PATH="/bin:/sbin:/usr/bin:/usr/sbin"
++BR2_ROOTFS_OVERLAY="board/canaan/k210-common/rootfs_overlay"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-go/linux-dtb.config"
++BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
++BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
 -- 
 2.31.1
