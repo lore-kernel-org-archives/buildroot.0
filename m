@@ -1,32 +1,33 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 10 Jul 2021 18:57:22 +0200
-Subject: [Buildroot] BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM
-In-Reply-To: <CAKAnv4HGYt2Oz8BdsWA3RaZK-UO3qckbSX95W68oKRXDPy5fHg@mail.gmail.com>
-References: <CAKAnv4HGYt2Oz8BdsWA3RaZK-UO3qckbSX95W68oKRXDPy5fHg@mail.gmail.com>
-Message-ID: <58A8CA1D-00D4-439B-8783-4B2B684F5F29@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 10 Jul 2021 19:22:54 +0200
+Subject: [Buildroot] [PATCH] package/gawk: create awk symlink for
+ host-gawk
+In-Reply-To: <20210615140302.2485993-1-hubert.lacote@gmail.com> (Hubert
+ Lacote's message of "Tue, 15 Jun 2021 16:03:02 +0200")
+References: <20210615140302.2485993-1-hubert.lacote@gmail.com>
+Message-ID: <87im1iytg1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ivan!
+>>>>> "Hubert" == Hubert Lacote <hubert.lacote@gmail.com> writes:
 
-bouncing to the buildroot list..
-Should be possible I'd say but folks here will know that in more detail.
-thanks,
+ > From: Hubert Lacote <hubert.lacote@youview.com>
+ > This is to make sure that host packages that depend on `host-gawk` and that use
+ > `awk` end up using `gawk`, instead of the `awk` symlink installed on the host
+ > system.
 
-On 8 July 2021 13:55:21 CEST, Ivan Riabtsov <ivriabtsov@gmail.com> wrote:
->Hello everybody. I am building a filesystem for embedded hardware
->using buildroot version 2018.02.4. I am building kernel 5.10.48, in
->the dump system the maximum version of variable
->BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM is 4_15. Is it possible to build
->a normal filesystem using the
->BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15 variable and 5.10 kernel? I
->do not want to take a fresh build of buildroot, because my patches for
->buildroot are only for version 2018.02.4 and I do not know if they
->will work for a more recent version. Thank you for your response.
->_______________________________________________
->busybox mailing list
->busybox at busybox.net
->http://lists.busybox.net/mailman/listinfo/busybox
+ > On recent Debian-based distributions, `awk` is still symlinked to `mawk` [1].
+
+ > [1] https://bugs.launchpad.net/ubuntu/+source/mawk/+bug/1841654
+
+ > Signed-off-by: Hubert Lacote <hubert.lacote@youview.com>
+ > Co-authored-by: Hubert Lacote <hubert.lacote@youview.com>
+ > Co-authored-by: Vicente Olivert Riera <vincent.olivert.riera@youview.com>
+
+Committed to 2021.02.x and 2021.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
