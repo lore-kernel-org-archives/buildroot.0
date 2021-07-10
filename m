@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Jul 2021 19:21:53 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/gawk: create awk
+Date: Sat, 10 Jul 2021 19:21:47 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/gawk: create awk
  symlink for host-gawk
-Message-ID: <20210710165209.B229695433@busybox.osuosl.org>
+Message-ID: <20210710165217.19AE795440@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4368ab465c3561b864c63bfed001610b3b04d9eb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e16bb3a0da4317814d0926f41b6e5f8b4016f44d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 This is to make sure that host packages that depend on `host-gawk` and that use
 `awk` end up using `gawk`, instead of the `awk` symlink installed on the host
