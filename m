@@ -1,41 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 10 Jul 2021 17:54:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qemu: virtfs needs system
-Message-ID: <20210710155409.1333292-1-fontaine.fabrice@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 10 Jul 2021 17:58:38 +0200
+Subject: [Buildroot] [PATCH] package/libgtk3: bump to version 3.24.29
+Message-ID: <20210710155838.76712-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-build of qemu with virtfs but without system fails since bump to version
-6.0.0 in commit	6b86c9335fc3ff381878156c6243454d4b688df9:
-
-../meson.build:1077:6: ERROR: Problem encountered: virtio-9p (virtfs) needs system emulation support
-
-Indeed virtfs needs system support since switch to meson in
-https://gitlab.com/qemu-project/qemu/-/commit/69202b406e3a42621a063c3afe80f580d343f59e
-
-Fixes:
- - http://autobuild.buildroot.org/results/ee4b2bbc08c58dc972d285eafa43b7ad6586f270
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/qemu/Config.in.host | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libgtk3/0001-no-gtk-doc.patch | 2 +-
+ package/libgtk3/libgtk3.hash          | 4 ++--
+ package/libgtk3/libgtk3.mk            | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index 3163797067..c176001396 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -82,6 +82,8 @@ config BR2_PACKAGE_HOST_QEMU_VDE2
+diff --git a/package/libgtk3/0001-no-gtk-doc.patch b/package/libgtk3/0001-no-gtk-doc.patch
+index db15c6cba..e1d320802 100644
+--- a/package/libgtk3/0001-no-gtk-doc.patch
++++ b/package/libgtk3/0001-no-gtk-doc.patch
+@@ -14,7 +14,7 @@ Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
  
- config BR2_PACKAGE_HOST_QEMU_VIRTFS
- 	bool "Virtual filesystem support"
-+	depends on BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
- 	help
- 	  Enables support for virtual filesystem in Qemu allowing
- 	  shared filesystem between Qemu and its emulated target.
+ --- a/gtk-doc.make
+ +++ b/gtk-doc.make
+-@@ -299,7 +299,7 @@
++@@ -300,7 +300,7 @@
+  #
+  # Require gtk-doc when making dist
+  #
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 22cf16dad..d5638780d 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.24.sha256sum
+-sha256  cc9d4367c55b724832f6b09ab85481738ea456871f0381768a6a99335a98378a  gtk+-3.24.24.tar.xz
++# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.29.sha256sum
++sha256  f57ec4ade8f15cab0c23a80dcaee85b876e70a8823d9105f067ce335a8268caa  gtk+-3.24.29.tar.xz
+ 
+ # Hash for license file:
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 9ece409ba..0c40bff80 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGTK3_VERSION_MAJOR = 3.24
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).24
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).29
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
 -- 
 2.30.2
