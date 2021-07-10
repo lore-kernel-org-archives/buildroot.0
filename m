@@ -1,67 +1,42 @@
 From: Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Sat, 10 Jul 2021 20:41:17 +0200
-Subject: [Buildroot] [PATCH] configs/imx7dpico: bump Kernel and U-Boot
- version
-In-Reply-To: <CAOMZO5CdGhGW3AHHPakLrT04sMyxEioJhaSEoXL6zDiCeuuu0g@mail.gmail.com>
-References: <20210710182137.3720-1-texier.pj2@gmail.com>
- <CAOMZO5CcUz8YQT6qtDc4BUy3zZE_h1+GRNK45CYinnZ-DqGfxg@mail.gmail.com>
- <CAOMZO5CdGhGW3AHHPakLrT04sMyxEioJhaSEoXL6zDiCeuuu0g@mail.gmail.com>
-Message-ID: <031dd078-d64c-56b6-418d-443d18feb9c7@gmail.com>
+Date: Sat, 10 Jul 2021 21:15:50 +0200
+Subject: [Buildroot] [PATCH] package/fbgrab: bump to version 1.5
+Message-ID: <20210710191550.13589-1-texier.pj2@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio,
+See changelog: https://github.com/GunnarMonell/fbgrab/releases/tag/1.5
 
-Le 10/07/2021 ? 20:30, Fabio Estevam a ?crit?:
-> Hi Pierre-Jean,
-> 
-> On Sat, Jul 10, 2021 at 3:27 PM Fabio Estevam <festevam@gmail.com> wrote:
->>
->> On Sat, Jul 10, 2021 at 3:21 PM Pierre-Jean Texier <texier.pj2@gmail.com> wrote:
->>>
->>> Bump U-Boot to 2021.07 and kernel to version 5.13
->>>
->>> Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
->>
->> Thanks for the patch:
->>
->> Reviewed-by: Fabio Estevam <festevam@gmail.com>
-> 
-> I forgot to ask: shouldn't we pass a extlinux.conf file so that it can
-> boot by default now
-> as it uses distro boot in U-Boot?
+Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+---
+ package/fbgrab/fbgrab.hash | 2 +-
+ package/fbgrab/fbgrab.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-In fact, extlinux file is already used for this board, introduced by
-Joris in commit 40c5aa ("configs/imx7dpico: Bump Linux and U-Boot") [1]
-
-See boot sequence after:
-
-U-Boot 2021.07 (Jul 10 2021 - 20:04:17 +0200)
-
-CPU:   Freescale i.MX7D rev1.2 1000 MHz (running at 792 MHz)
-CPU:   Commercial temperature grade (0C to 95C) at 40C
-Reset cause: POR
-Model: TechNexion PICO-IMX7D Board and PI baseboard
-Board: i.MX7D PICOSOM
-<...>
-mmc0(part 0) is current device
-Scanning mmc 0:1...
-Found /boot/extlinux/extlinux.conf
-Retrieving file: /boot/extlinux/extlinux.conf
-159 bytes read in 1 ms (155.3 KiB/s)
-1:	imx7d-pico-buildroot
-Retrieving file: /boot/zImage
-9701104 bytes read in 219 ms (42.2 MiB/s)
-append: root=PARTUUID=00000000-01 rootwait rw console=ttymxc4,115200
-Retrieving file: /boot/imx7d-pico-pi.dtb
-
-
-Thanks for the review !
-
-[1] - 
-https://git.buildroot.net/buildroot/commit/board/technexion/imx7dpico/rootfs_overlay/boot/extlinux?id=40c5aa50cf6a26b4697bb0c9bd671d89a53edf5f
+diff --git a/package/fbgrab/fbgrab.hash b/package/fbgrab/fbgrab.hash
+index 4d9a6b97d4..8cd1ff1518 100644
+--- a/package/fbgrab/fbgrab.hash
++++ b/package/fbgrab/fbgrab.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  62d7aa82138ac36db0921832f3b5267b4cffc0dc22c8701857ebcb997960a32e  fbgrab-1.4.tar.gz
++sha256  0202a9c4fb430eee4d8f566d09ab5f6e35c50804a192ba106046e54eb886f8f1  fbgrab-1.5.tar.gz
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
+diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
+index 1ae03ae43f..693c4c282d 100644
+--- a/package/fbgrab/fbgrab.mk
++++ b/package/fbgrab/fbgrab.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FBGRAB_VERSION = 1.4
++FBGRAB_VERSION = 1.5
+ FBGRAB_SITE = $(call github,GunnarMonell,fbgrab,$(FBGRAB_VERSION))
+ FBGRAB_DEPENDENCIES = libpng
+ FBGRAB_LICENSE = GPL-2.0
 -- 
-Pierre-Jean Texier
+2.17.1
