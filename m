@@ -1,38 +1,56 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 10 Jul 2021 11:32:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11vnc: requires blowfish,
- RC4 and RMD160 support in openssl
-Message-ID: <20210710093232.1164634-1-fontaine.fabrice@gmail.com>
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Sat, 10 Jul 2021 13:41:52 +0200
+Subject: [Buildroot] [PATCH 0/1] Add support for teamd/libteam
+Message-ID: <20210710114153.369531-1-troglobit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable blowfish, RC4 and RMD160 in openssl to fix build failure raised since
-commit a83d41867c8d69a77d5cd0a665aa216af5340359
+Hi!
 
-Fixes:
- - http://autobuild.buildroot.org/results/1872c9ce57490455946679efcc654bd111fd3d7b
+This patch adds support for teamd/libteam to Buildroot.  A few musl libc
+patches have been backported from project's master branch at
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/x11vnc/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+https://github.com/jpirko/libteam/
 
-diff --git a/package/x11vnc/Config.in b/package/x11vnc/Config.in
-index 9e91a11ad1..d2639fce1e 100644
---- a/package/x11vnc/Config.in
-+++ b/package/x11vnc/Config.in
-@@ -7,6 +7,9 @@ config BR2_PACKAGE_X11VNC
- 	select BR2_PACKAGE_XLIB_LIBXT
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  VNC server for X11 display
- 
+Basic tests pass:
+
+$ ./utils/check-package package/libteam/*
+187 lines processed
+0 warnings generated
+
+$ ./utils/test-pkg -c libteam.config -p libteam
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: SKIPPED
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                            sourcery-arm [6/6]: OK
+6 builds, 1 skipped, 0 build failed, 0 legal-info failed
+
+Best regards
+ /Joachim
+
+Joachim Wiberg (1):
+  package/libteam: new package
+
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ .../0001-revert-disregard-current-state.patch | 51 +++++++++++++++++++
+ .../0002-fix-build-on-openwrt-musl-libc.patch | 41 +++++++++++++++
+ ...3-increase-wait-time-for-daemon-kill.patch | 37 ++++++++++++++
+ package/libteam/Config.in                     | 20 ++++++++
+ package/libteam/libteam.hash                  |  3 ++
+ package/libteam/libteam.mk                    | 22 ++++++++
+ 8 files changed, 176 insertions(+)
+ create mode 100644 package/libteam/0001-revert-disregard-current-state.patch
+ create mode 100644 package/libteam/0002-fix-build-on-openwrt-musl-libc.patch
+ create mode 100644 package/libteam/0003-increase-wait-time-for-daemon-kill.patch
+ create mode 100644 package/libteam/Config.in
+ create mode 100644 package/libteam/libteam.hash
+ create mode 100644 package/libteam/libteam.mk
+
 -- 
-2.30.2
+2.25.1
