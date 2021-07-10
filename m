@@ -1,63 +1,53 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 10 Jul 2021 19:18:00 +0200
-Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump Linux
- and U-Boot versions
-Message-ID: <20210710171800.297401-1-francois.perrad@gadz.org>
+From: Pierre-Jean Texier <texier.pj2@gmail.com>
+Date: Sat, 10 Jul 2021 20:21:37 +0200
+Subject: [Buildroot] [PATCH] configs/imx7dpico: bump Kernel and U-Boot
+ version
+Message-ID: <20210710182137.3720-1-texier.pj2@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
- configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Bump U-Boot to 2021.07 and kernel to version 5.13
 
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index 150e0a144..d149f04bf 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
+Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+---
+ configs/imx7dpico_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/configs/imx7dpico_defconfig b/configs/imx7dpico_defconfig
+index a3c2af1641..c6ea04b683 100644
+--- a/configs/imx7dpico_defconfig
++++ b/configs/imx7dpico_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 5.7 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
++# Linux headers same as kernel, a 5.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc4"
+@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc4"
+ # kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.27"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.48"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-pico-pi"
+@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_TARGET_UBOOT_BOARDNAME="pico-pi-imx7d"
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 4f4a6b1fc..8d759ca98 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.27"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.48"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+ 
+ # wifi firmware for brcm43439
 -- 
-2.30.2
+2.17.1
