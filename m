@@ -1,39 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Jul 2021 19:23:41 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/gesftpserver: Fix
- per-package build without Python
-In-Reply-To: <20210626150516.41f5ccd8@windsurf> (Thomas Petazzoni's message of
- "Sat, 26 Jun 2021 15:05:16 +0200")
-References: <20210624123237.23997-1-anaumann@ultratronik.de>
- <20210626150516.41f5ccd8@windsurf>
-Message-ID: <875yxgzrvm.fsf@dell.be.48ers.dk>
+Date: Sun, 11 Jul 2021 19:23:01 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/gesftpserver: fix
+ build without Python
+Message-ID: <20210711165031.A32EA95498@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=61023ef6ffd045b9d275c5551789c6b9f338745e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
- > On Thu, 24 Jun 2021 14:32:37 +0200
- > Andreas Naumann <anaumann@ultratronik.de> wrote:
+The build of gesftserver in an environment without Python fails with:
 
- >> When building per-package in an environment without Python, the gesftpserver
- >> configure script dies when looking for Python support.
- >> The configure script is happy (doesnt check and wont error out) when being
- >> told that Python is not available, so we hack around this by setting the
- >> appropriate env variable.
- >> 
- >> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+checking for Python 2.4 or better... configure: error: cannot find Python 2.4 or better
 
- > Thanks, but the issue is not at all related to per-package. In an
- > environment without Python, gesftpserver fails to build, even with
- > BR2_PER_PACKAGE_DIRECTORIES disabled.
+However, it turns out that Python is only needed for tests, which we
+don't run/use in Buildroot, so we can safely build gesftpserver
+without Python.
 
- > So I've applied after rewriting the commit log, and adding a comment
- > inside the .mk file.
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 422fd73fadfbe33523e1687f90bbfecd3f7ab5d5)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gesftpserver/gesftpserver.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Committed to 2021.02.x and 2021.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gesftpserver/gesftpserver.mk b/package/gesftpserver/gesftpserver.mk
+index 85511a3c97..20ad92d25a 100644
+--- a/package/gesftpserver/gesftpserver.mk
++++ b/package/gesftpserver/gesftpserver.mk
+@@ -23,6 +23,10 @@ GESFTPSERVER_DEPENDENCIES += \
+ 	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
+ 	$(if $(BR2_PACKAGE_OPENSSH),openssh)
+ 
++# Python on the host is only used for tests, which we don't use in
++# Buildroot
++GESFTPSERVER_CONF_ENV += rjk_cv_python24=false
++
+ # openssh/dropbear looks here
+ define GESFTPSERVER_ADD_SYMLINK
+ 	ln -sf gesftpserver $(TARGET_DIR)/usr/libexec/sftp-server
