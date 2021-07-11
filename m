@@ -1,106 +1,59 @@
-From: Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Sun, 11 Jul 2021 14:19:29 +0200
-Subject: [Buildroot] [PATCH] package/sbc: bump to version 1.5
-Message-ID: <20210711121929.24767-1-texier.pj2@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 11 Jul 2021 09:44:26 -0300
+Subject: [Buildroot] [PATCH] configs/imx7dpico: bump Kernel and U-Boot
+ version
+In-Reply-To: <031dd078-d64c-56b6-418d-443d18feb9c7@gmail.com>
+References: <20210710182137.3720-1-texier.pj2@gmail.com>
+ <CAOMZO5CcUz8YQT6qtDc4BUy3zZE_h1+GRNK45CYinnZ-DqGfxg@mail.gmail.com>
+ <CAOMZO5CdGhGW3AHHPakLrT04sMyxEioJhaSEoXL6zDiCeuuu0g@mail.gmail.com>
+ <031dd078-d64c-56b6-418d-443d18feb9c7@gmail.com>
+Message-ID: <CAOMZO5BUPBnpXcTbt8+Sfa_ULYMeTkRD-cEsLeKUV+ZFhYJvAw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need to backport a commit to fix a build failure on non-x86.
+Hi Pierre-Jean,
 
-Also update hash file formatting (2 spaces)
+On Sat, Jul 10, 2021 at 3:41 PM Pierre-Jean Texier <texier.pj2@gmail.com> wrote:
 
-Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
----
- ...-sbc_primitives-Fix-build-on-non-x86.patch | 49 +++++++++++++++++++
- package/sbc/sbc.hash                          |  6 +--
- package/sbc/sbc.mk                            |  2 +-
- 3 files changed, 53 insertions(+), 4 deletions(-)
- create mode 100644 package/sbc/0001-sbc_primitives-Fix-build-on-non-x86.patch
+> In fact, extlinux file is already used for this board, introduced by
+> Joris in commit 40c5aa ("configs/imx7dpico: Bump Linux and U-Boot") [1]
 
-diff --git a/package/sbc/0001-sbc_primitives-Fix-build-on-non-x86.patch b/package/sbc/0001-sbc_primitives-Fix-build-on-non-x86.patch
-new file mode 100644
-index 0000000000..3ed73ebd88
---- /dev/null
-+++ b/package/sbc/0001-sbc_primitives-Fix-build-on-non-x86.patch
-@@ -0,0 +1,49 @@
-+From 909a9bdf7ab143e1f0baaf9736baebd3cd79aacf Mon Sep 17 00:00:00 2001
-+From: Marius Bakke <marius@gnu.org>
-+Date: Tue, 22 Dec 2020 11:04:26 +0000
-+Subject: [PATCH] sbc_primitives: Fix build on non-x86.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Don't call __builtin_cpu_init unless targeting i386 or x86_64.
-+Otherwise we get an error at link time:
-+
-+  CC       sbc/sbc_primitives.lo
-+sbc/sbc_primitives.c: In function ?sbc_init_primitives_x86?:
-+sbc/sbc_primitives.c:596:2: warning: implicit declaration of function ?__builtin_cpu_init?; did you mean ?__builtin_irint?? [-Wimplicit-function-declaration]
-+[...]
-+  CCLD     src/sbcdec
-+ld: sbc/.libs/libsbc-private.a(sbc_primitives.o): in function `sbc_init_primitives':
-+sbc_primitives.c:(.text+0x3a30): undefined reference to `__builtin_cpu_init'
-+
-+Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
-+[Upstream status: backport from upstream commit 909a9bdf7ab143e1f0baaf9736baebd3cd79aacf]
-+
-+---
-+ sbc/sbc_primitives.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/sbc/sbc_primitives.c b/sbc/sbc_primitives.c
-+index 97a75be..09c214a 100644
-+--- a/sbc/sbc_primitives.c
-++++ b/sbc/sbc_primitives.c
-+@@ -593,6 +593,7 @@ static int sbc_calc_scalefactors_j(
-+ 
-+ static void sbc_init_primitives_x86(struct sbc_encoder_state *state)
-+ {
-++#if defined(__x86_64__) || defined(__i386__)
-+ 	__builtin_cpu_init();
-+ 
-+ #ifdef SBC_BUILD_WITH_MMX_SUPPORT
-+@@ -604,6 +605,7 @@ static void sbc_init_primitives_x86(struct sbc_encoder_state *state)
-+ 	if (__builtin_cpu_supports("sse4.2"))
-+ 		sbc_init_primitives_sse(state);
-+ #endif
-++#endif
-+ }
-+ 
-+ /*
-+-- 
-+2.17.1
-+
-diff --git a/package/sbc/sbc.hash b/package/sbc/sbc.hash
-index d703f23437..beb3b232a8 100644
---- a/package/sbc/sbc.hash
-+++ b/package/sbc/sbc.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc
--sha256	518bf46e6bb3dc808a95e1eabad26fdebe8a099c1e781c27ed7fca6c2f4a54c9	sbc-1.4.tar.xz
-+sha256  0cbad69823a99e8421fe0700e8cf9eeb8fa0c1ad28e8dbc2182b3353507931d2  sbc-1.5.tar.xz
- 
- # sha256 locally computed
--sha256	b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259	COPYING
--sha256	ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5	COPYING.LIB
-+sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-+sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/sbc/sbc.mk b/package/sbc/sbc.mk
-index 73e4aceb85..af5cf291a3 100644
---- a/package/sbc/sbc.mk
-+++ b/package/sbc/sbc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SBC_VERSION = 1.4
-+SBC_VERSION = 1.5
- SBC_SOURCE = sbc-$(SBC_VERSION).tar.xz
- SBC_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- SBC_INSTALL_STAGING = YES
--- 
-2.17.1
+Ah, I got confused. It is imx7d-sdb board that misses extlinux.conf.
+
+I will add extlinux.conf for imx7-sdb.
+
+Thanks
+
+
+
+> See boot sequence after:
+>
+> U-Boot 2021.07 (Jul 10 2021 - 20:04:17 +0200)
+>
+> CPU:   Freescale i.MX7D rev1.2 1000 MHz (running at 792 MHz)
+> CPU:   Commercial temperature grade (0C to 95C) at 40C
+> Reset cause: POR
+> Model: TechNexion PICO-IMX7D Board and PI baseboard
+> Board: i.MX7D PICOSOM
+> <...>
+> mmc0(part 0) is current device
+> Scanning mmc 0:1...
+> Found /boot/extlinux/extlinux.conf
+> Retrieving file: /boot/extlinux/extlinux.conf
+> 159 bytes read in 1 ms (155.3 KiB/s)
+> 1:      imx7d-pico-buildroot
+> Retrieving file: /boot/zImage
+> 9701104 bytes read in 219 ms (42.2 MiB/s)
+> append: root=PARTUUID=00000000-01 rootwait rw console=ttymxc4,115200
+> Retrieving file: /boot/imx7d-pico-pi.dtb
+>
+>
+> Thanks for the review !
+>
+> [1] -
+> https://git.buildroot.net/buildroot/commit/board/technexion/imx7dpico/rootfs_overlay/boot/extlinux?id=40c5aa50cf6a26b4697bb0c9bd671d89a53edf5f
+> --
+> Pierre-Jean Texier
