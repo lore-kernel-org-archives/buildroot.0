@@ -1,59 +1,124 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 11 Jul 2021 09:44:26 -0300
-Subject: [Buildroot] [PATCH] configs/imx7dpico: bump Kernel and U-Boot
- version
-In-Reply-To: <031dd078-d64c-56b6-418d-443d18feb9c7@gmail.com>
-References: <20210710182137.3720-1-texier.pj2@gmail.com>
- <CAOMZO5CcUz8YQT6qtDc4BUy3zZE_h1+GRNK45CYinnZ-DqGfxg@mail.gmail.com>
- <CAOMZO5CdGhGW3AHHPakLrT04sMyxEioJhaSEoXL6zDiCeuuu0g@mail.gmail.com>
- <031dd078-d64c-56b6-418d-443d18feb9c7@gmail.com>
-Message-ID: <CAOMZO5BUPBnpXcTbt8+Sfa_ULYMeTkRD-cEsLeKUV+ZFhYJvAw@mail.gmail.com>
+Date: Sun, 11 Jul 2021 09:48:23 -0300
+Subject: [Buildroot] [PATCH 1/2] board/wandboard: Switch to extlinux.conf
+Message-ID: <20210711124824.1025887-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Pierre-Jean,
+Currently wandboard uses a custom boot.scr.txt script
+and custom image generation scripts, genimage.cfg and 
+post-build.sh.
 
-On Sat, Jul 10, 2021 at 3:41 PM Pierre-Jean Texier <texier.pj2@gmail.com> wrote:
+Switch to using the more standard extlinux.conf solution
+and remove the custom scripts in favor of the standard
+board/freescale/common/imx/post-image.sh one.
 
-> In fact, extlinux file is already used for this board, introduced by
-> Joris in commit 40c5aa ("configs/imx7dpico: Bump Linux and U-Boot") [1]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ board/wandboard/boot.scr.txt                  |  7 ----
+ board/wandboard/genimage.cfg                  | 32 -------------------
+ board/wandboard/post-build.sh                 |  8 -----
+ .../boot/extlinux/extlinux.conf               |  4 +++
+ configs/wandboard_defconfig                   |  5 ++-
+ 5 files changed, 6 insertions(+), 50 deletions(-)
+ delete mode 100644 board/wandboard/boot.scr.txt
+ delete mode 100644 board/wandboard/genimage.cfg
+ delete mode 100755 board/wandboard/post-build.sh
+ create mode 100644 board/wandboard/rootfs_overlay/boot/extlinux/extlinux.conf
 
-Ah, I got confused. It is imx7d-sdb board that misses extlinux.conf.
-
-I will add extlinux.conf for imx7-sdb.
-
-Thanks
-
-
-
-> See boot sequence after:
->
-> U-Boot 2021.07 (Jul 10 2021 - 20:04:17 +0200)
->
-> CPU:   Freescale i.MX7D rev1.2 1000 MHz (running at 792 MHz)
-> CPU:   Commercial temperature grade (0C to 95C) at 40C
-> Reset cause: POR
-> Model: TechNexion PICO-IMX7D Board and PI baseboard
-> Board: i.MX7D PICOSOM
-> <...>
-> mmc0(part 0) is current device
-> Scanning mmc 0:1...
-> Found /boot/extlinux/extlinux.conf
-> Retrieving file: /boot/extlinux/extlinux.conf
-> 159 bytes read in 1 ms (155.3 KiB/s)
-> 1:      imx7d-pico-buildroot
-> Retrieving file: /boot/zImage
-> 9701104 bytes read in 219 ms (42.2 MiB/s)
-> append: root=PARTUUID=00000000-01 rootwait rw console=ttymxc4,115200
-> Retrieving file: /boot/imx7d-pico-pi.dtb
->
->
-> Thanks for the review !
->
-> [1] -
-> https://git.buildroot.net/buildroot/commit/board/technexion/imx7dpico/rootfs_overlay/boot/extlinux?id=40c5aa50cf6a26b4697bb0c9bd671d89a53edf5f
-> --
-> Pierre-Jean Texier
+diff --git a/board/wandboard/boot.scr.txt b/board/wandboard/boot.scr.txt
+deleted file mode 100644
+index 7a8aa4bd5475..000000000000
+--- a/board/wandboard/boot.scr.txt
++++ /dev/null
+@@ -1,7 +0,0 @@
+-setenv finduuid "part uuid mmc 0:1 uuid"
+-run finduuid
+-run findfdt
+-setenv bootargs "console=ttymxc0,115200 root=PARTUUID=${uuid} rootwait rootfstype=ext4"
+-load mmc 0:1 ${fdt_addr} boot/${fdtfile}
+-load mmc 0:1 ${loadaddr} boot/zImage
+-bootz ${loadaddr} - ${fdt_addr}
+diff --git a/board/wandboard/genimage.cfg b/board/wandboard/genimage.cfg
+deleted file mode 100644
+index ad4a6a55d56d..000000000000
+--- a/board/wandboard/genimage.cfg
++++ /dev/null
+@@ -1,32 +0,0 @@
+-# Minimal SD card image for the Wandboard
+-#
+-# The SD card must have at least 1 MB free at the beginning.
+-# U-Boot and its environment are dumped as is.
+-# A single root filesystem partition is required (Ext4 in this case).
+-#
+-# For details about the layout, see:
+-# http://wiki.wandboard.org/index.php/Boot-process
+-
+-image sdcard.img {
+-  hdimage {
+-  }
+-
+-  partition spl {
+-    in-partition-table = "no"
+-    image = "SPL"
+-    offset = 1024
+-  }
+-
+-  partition u-boot {
+-    in-partition-table = "no"
+-    image = "u-boot.img"
+-    offset = 70656
+-  }
+-
+-  partition rootfs {
+-    partition-type = 0x83
+-    image = "rootfs.ext4"
+-    offset = 1M
+-    size = 512M
+-  }
+-}
+diff --git a/board/wandboard/post-build.sh b/board/wandboard/post-build.sh
+deleted file mode 100755
+index 6ddc1137022d..000000000000
+--- a/board/wandboard/post-build.sh
++++ /dev/null
+@@ -1,8 +0,0 @@
+-#!/bin/sh
+-
+-BOARD_DIR="$(dirname $0)"
+-
+-install -d -m 755 $TARGET_DIR/boot
+-
+-$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
+-	-n "boot script" -d $BOARD_DIR/boot.scr.txt $TARGET_DIR/boot/boot.scr
+diff --git a/board/wandboard/rootfs_overlay/boot/extlinux/extlinux.conf b/board/wandboard/rootfs_overlay/boot/extlinux/extlinux.conf
+new file mode 100644
+index 000000000000..e3b90660c0e4
+--- /dev/null
++++ b/board/wandboard/rootfs_overlay/boot/extlinux/extlinux.conf
+@@ -0,0 +1,4 @@
++Label imx6qdl-wandboard Buildroot
++	kernel ../zImage
++	fdtdir ../
++	append root=PARTUUID=${uuid} rootwait rw console=${console},${baudrate} 
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index 7915248cf106..37628ea403b0 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -12,9 +12,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ 
+ # Image
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/wandboard/genimage.cfg"
++BR2_ROOTFS_OVERLAY="board/wandboard/rootfs_overlay"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ 
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+-- 
+2.25.1
