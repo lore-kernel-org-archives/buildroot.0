@@ -1,41 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Jul 2021 15:28:59 +0200
-Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: drop Yann Cardaillac
-In-Reply-To: <20210712132900.1263430-1-thomas.petazzoni@bootlin.com>
-References: <20210712132900.1263430-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210712132900.1263430-2-thomas.petazzoni@bootlin.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 11 Jul 2021 19:03:59 +0200
+Subject: [Buildroot] [PATCH] configs/mx6cubox: bump Linux and U-Boot versions
+Message-ID: <20210711170359.306730-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Unfortunately, this e-mail is boucing:
-
-<ycardaillac@sepro-group.com>: host
-    seprogroup-com01c.mail.protection.outlook.com[104.47.9.36] said: 550 5.4.1
-    Recipient address rejected: Access denied. AS(201806281)
-    [VE1EUR03FT036.eop-EUR03.prod.protection.outlook.com] (in reply to RCPT TO
-    command)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ configs/mx6cubox_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ae049140f4..d5ed4afc8e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2787,9 +2787,6 @@ F:	package/casync/
- F:	package/gloox/
- F:	package/tpm2-pkcs11/
- 
--N:	Yann CARDAILLAC <ycardaillac@sepro-group.com>
--F:	package/open62541/
--
- N:	Yann E. MORIN <yann.morin.1998@free.fr>
- F:	board/friendlyarm/nanopi-neo/
- F:	configs/friendlyarm_nanopi_neo_defconfig
+diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
+index ae2353582..24226ba30 100644
+--- a/configs/mx6cubox_defconfig
++++ b/configs/mx6cubox_defconfig
+@@ -17,7 +17,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.48"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-cubox-i imx6dl-cubox-i-emmc-som-v15 imx6dl-cubox-i-som-v15 imx6dl-hummingboard imx6dl-hummingboard-emmc-som-v15 imx6dl-hummingboard-som-v15 imx6q-cubox-i imx6q-cubox-i-emmc-som-v15 imx6q-cubox-i-som-v15 imx6q-hummingboard imx6q-hummingboard-emmc-som-v15 imx6q-hummingboard-som-v15"
+@@ -32,7 +32,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx6cuboxi"
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -- 
-2.31.1
+2.30.2
