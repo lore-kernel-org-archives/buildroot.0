@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Jul 2021 19:23:01 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/gesftpserver: fix
+Date: Sun, 11 Jul 2021 19:22:55 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/gesftpserver: fix
  build without Python
-Message-ID: <20210711165031.A32EA95498@busybox.osuosl.org>
+Message-ID: <20210711165110.DB4BF95493@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61023ef6ffd045b9d275c5551789c6b9f338745e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ac6fd3705949a6d49936ff14e3424695a184e1bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 The build of gesftserver in an environment without Python fails with:
 
