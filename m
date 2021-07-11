@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Jul 2021 19:26:48 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/busybox: bump
+Date: Sun, 11 Jul 2021 19:26:41 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/busybox: bump
  version to 1.33.1
-Message-ID: <20210711165330.2853F9530B@busybox.osuosl.org>
+Message-ID: <20210711165337.36A5C954A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cbe7d139ad041c6905d848d9731059f9176db28
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fe7cc8ba8f3820d63b6b1c70d5dfa10d8c929ace
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 patch 0003: already applied upstream
 patch 0004: already applied upstream
