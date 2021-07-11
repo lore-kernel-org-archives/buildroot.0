@@ -1,75 +1,106 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Jul 2021 09:05:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{bluez5_utils,
- bluez5_utils-headers}: bump to version 5.60
-Message-ID: <20210711070521.242040-1-bernd.kuhls@t-online.de>
+From: Pierre-Jean Texier <texier.pj2@gmail.com>
+Date: Sun, 11 Jul 2021 14:19:29 +0200
+Subject: [Buildroot] [PATCH] package/sbc: bump to version 1.5
+Message-ID: <20210711121929.24767-1-texier.pj2@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-http://www.bluez.org/release-of-bluez-5-59/
-http://www.bluez.org/release-of-bluez-5-60/
+We need to backport a commit to fix a build failure on non-x86.
 
-Added configure option to disable manpages to avoid rst2man dependency
-introduced by version 5.59.
+Also update hash file formatting (2 spaces)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 ---
-depends on ell 0.41:
-http://patchwork.ozlabs.org/project/buildroot/patch/20210621052631.134719-1-bernd.kuhls at t-online.de/
+ ...-sbc_primitives-Fix-build-on-non-x86.patch | 49 +++++++++++++++++++
+ package/sbc/sbc.hash                          |  6 +--
+ package/sbc/sbc.mk                            |  2 +-
+ 3 files changed, 53 insertions(+), 4 deletions(-)
+ create mode 100644 package/sbc/0001-sbc_primitives-Fix-build-on-non-x86.patch
 
- package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
- package/bluez5_utils/bluez5_utils.hash               | 3 ++-
- package/bluez5_utils/bluez5_utils.mk                 | 3 ++-
- 3 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-index 1e8b6ad01a..815cf4b160 100644
---- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
-+++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/sbc/0001-sbc_primitives-Fix-build-on-non-x86.patch b/package/sbc/0001-sbc_primitives-Fix-build-on-non-x86.patch
+new file mode 100644
+index 0000000000..3ed73ebd88
+--- /dev/null
++++ b/package/sbc/0001-sbc_primitives-Fix-build-on-non-x86.patch
+@@ -0,0 +1,49 @@
++From 909a9bdf7ab143e1f0baaf9736baebd3cd79aacf Mon Sep 17 00:00:00 2001
++From: Marius Bakke <marius@gnu.org>
++Date: Tue, 22 Dec 2020 11:04:26 +0000
++Subject: [PATCH] sbc_primitives: Fix build on non-x86.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Don't call __builtin_cpu_init unless targeting i386 or x86_64.
++Otherwise we get an error at link time:
++
++  CC       sbc/sbc_primitives.lo
++sbc/sbc_primitives.c: In function ?sbc_init_primitives_x86?:
++sbc/sbc_primitives.c:596:2: warning: implicit declaration of function ?__builtin_cpu_init?; did you mean ?__builtin_irint?? [-Wimplicit-function-declaration]
++[...]
++  CCLD     src/sbcdec
++ld: sbc/.libs/libsbc-private.a(sbc_primitives.o): in function `sbc_init_primitives':
++sbc_primitives.c:(.text+0x3a30): undefined reference to `__builtin_cpu_init'
++
++Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
++[Upstream status: backport from upstream commit 909a9bdf7ab143e1f0baaf9736baebd3cd79aacf]
++
++---
++ sbc/sbc_primitives.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/sbc/sbc_primitives.c b/sbc/sbc_primitives.c
++index 97a75be..09c214a 100644
++--- a/sbc/sbc_primitives.c
+++++ b/sbc/sbc_primitives.c
++@@ -593,6 +593,7 @@ static int sbc_calc_scalefactors_j(
++ 
++ static void sbc_init_primitives_x86(struct sbc_encoder_state *state)
++ {
+++#if defined(__x86_64__) || defined(__i386__)
++ 	__builtin_cpu_init();
++ 
++ #ifdef SBC_BUILD_WITH_MMX_SUPPORT
++@@ -604,6 +605,7 @@ static void sbc_init_primitives_x86(struct sbc_encoder_state *state)
++ 	if (__builtin_cpu_supports("sse4.2"))
++ 		sbc_init_primitives_sse(state);
++ #endif
+++#endif
++ }
++ 
++ /*
++-- 
++2.17.1
++
+diff --git a/package/sbc/sbc.hash b/package/sbc/sbc.hash
+index d703f23437..beb3b232a8 100644
+--- a/package/sbc/sbc.hash
++++ b/package/sbc/sbc.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc
+-sha256	518bf46e6bb3dc808a95e1eabad26fdebe8a099c1e781c27ed7fca6c2f4a54c9	sbc-1.4.tar.xz
++sha256  0cbad69823a99e8421fe0700e8cf9eeb8fa0c1ad28e8dbc2182b3353507931d2  sbc-1.5.tar.xz
+ 
+ # sha256 locally computed
+-sha256	b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259	COPYING
+-sha256	ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5	COPYING.LIB
++sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
++sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/sbc/sbc.mk b/package/sbc/sbc.mk
+index 73e4aceb85..af5cf291a3 100644
+--- a/package/sbc/sbc.mk
++++ b/package/sbc/sbc.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # Keep the version and patches in sync with bluez5_utils
--BLUEZ5_UTILS_HEADERS_VERSION = 5.58
-+BLUEZ5_UTILS_HEADERS_VERSION = 5.60
- BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index 01bcd2ac50..117f39cc93 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256  c8065e75a5eb67236849ef68a354b1700540305a8c88ef0a0fd6288f19daf1f1  bluez-5.58.tar.xz
-+sha256  710999580d01ee59ec585e5e7c07fd94eddedc001aa26fe7464c546f9d945304  bluez-5.60.tar.xz
-+# Locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 4c1575f69a..3bd3f5490d 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Keep the version and patches in sync with bluez5_utils-headers
--BLUEZ5_UTILS_VERSION = 5.58
-+BLUEZ5_UTILS_VERSION = 5.60
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
-@@ -23,6 +23,7 @@ BLUEZ5_UTILS_CONF_OPTS = \
- 	--enable-tools \
- 	--enable-library \
- 	--disable-cups \
-+	--disable-manpages \
- 	--with-dbusconfdir=/etc
- 
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_OBEX),y)
+-SBC_VERSION = 1.4
++SBC_VERSION = 1.5
+ SBC_SOURCE = sbc-$(SBC_VERSION).tar.xz
+ SBC_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ SBC_INSTALL_STAGING = YES
 -- 
-2.30.2
+2.17.1
