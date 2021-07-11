@@ -1,55 +1,53 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 11 Jul 2021 17:19:54 -0300
-Subject: [Buildroot] [PATCH 3/3] configs/imx7d-sdb: Bump U-Boot and kernel
- versions
-In-Reply-To: <20210711201954.2142662-1-festevam@gmail.com>
-References: <20210711201954.2142662-1-festevam@gmail.com>
-Message-ID: <20210711201954.2142662-3-festevam@gmail.com>
+From: Corentin Labbe <clabbe@baylibre.com>
+Date: Sun, 11 Jul 2021 20:27:29 +0000
+Subject: [Buildroot] [PATCH 1/1] package/armbian-firmware: add option to
+ install AP6212 firmware
+Message-ID: <20210711202729.2072853-1-clabbe@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot to 2021.07 and kernel to 5.13 version.
+This WiFi/BT chip is used on some Allwinner based boards like BananaPI M3.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- configs/imx7d-sdb_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/armbian-firmware/Config.in           | 5 +++++
+ package/armbian-firmware/armbian-firmware.mk | 7 +++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/configs/imx7d-sdb_defconfig b/configs/imx7d-sdb_defconfig
-index 0c34f6e6dfea..8ee5e1fc4015 100644
---- a/configs/imx7d-sdb_defconfig
-+++ b/configs/imx7d-sdb_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/package/armbian-firmware/Config.in b/package/armbian-firmware/Config.in
+index 7c5f6ba193..5c3e93abaa 100644
+--- a/package/armbian-firmware/Config.in
++++ b/package/armbian-firmware/Config.in
+@@ -23,4 +23,9 @@ config BR2_PACKAGE_ARMBIAN_FIRMWARE_XR819
+ 	help
+ 	  Firmware files for XR819 WiFi SDIO chip.
  
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.13 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
++config BR2_PACKAGE_ARMBIAN_FIRMWARE_BRCM43XXX
++	bool "BRCM43XXX WiFi/BT"
++	help
++	  Firmware files for BRCM43XXX AP6212 WiFi/BT combo chip.
++
+ endif
+diff --git a/package/armbian-firmware/armbian-firmware.mk b/package/armbian-firmware/armbian-firmware.mk
+index 0ed069025d..dab3890cdd 100644
+--- a/package/armbian-firmware/armbian-firmware.mk
++++ b/package/armbian-firmware/armbian-firmware.mk
+@@ -29,6 +29,13 @@ ARMBIAN_FIRMWARE_FILES += \
+ 	xr819/sdd_xr819.bin
+ endif
  
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
-@@ -23,7 +23,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
- BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
- 
- # Filesystem
++# AP6212 WiFi/BT combo firmware
++ifeq ($(BR2_PACKAGE_ARMBIAN_FIRMWARE_BRCM43XXX),y)
++ARMBIAN_FIRMWARE_FILES += \
++	brcm/brcmfmac43430-sdio.txt \
++	brcm/brcmfmac43430a0-sdio.txt
++endif
++
+ ifneq ($(ARMBIAN_FIRMWARE_FILES),)
+ define ARMBIAN_FIRMWARE_INSTALL_FILES
+ 	cd $(@D) && \
 -- 
 2.25.1
