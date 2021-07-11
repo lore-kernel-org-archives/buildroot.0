@@ -1,53 +1,44 @@
-From: Corentin Labbe <clabbe@baylibre.com>
-Date: Sun, 11 Jul 2021 20:27:29 +0000
-Subject: [Buildroot] [PATCH 1/1] package/armbian-firmware: add option to
- install AP6212 firmware
-Message-ID: <20210711202729.2072853-1-clabbe@baylibre.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 11 Jul 2021 22:44:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-iptvsimple: bump version
+ to 7.6.8-Matrix
+Message-ID: <20210711204458.19960-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This WiFi/BT chip is used on some Allwinner based boards like BananaPI M3.
+Changelog:
+https://github.com/kodi-pvr/pvr.iptvsimple/blob/Matrix/pvr.iptvsimple/changelog.txt
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/armbian-firmware/Config.in           | 5 +++++
- package/armbian-firmware/armbian-firmware.mk | 7 +++++++
- 2 files changed, 12 insertions(+)
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/armbian-firmware/Config.in b/package/armbian-firmware/Config.in
-index 7c5f6ba193..5c3e93abaa 100644
---- a/package/armbian-firmware/Config.in
-+++ b/package/armbian-firmware/Config.in
-@@ -23,4 +23,9 @@ config BR2_PACKAGE_ARMBIAN_FIRMWARE_XR819
- 	help
- 	  Firmware files for XR819 WiFi SDIO chip.
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 495565ef46..4a0cf75b7e 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  2b46ab509e26fb4a60759e78f9f13808f5bb2c67a03a62c58ebcadb31c26e6e1  kodi-pvr-iptvsimple-7.6.5-Matrix.tar.gz
++sha256  7285b3d80dd65111588251f76bb5c840dd18666cdcc9760a65f5ff9c4f8529df  kodi-pvr-iptvsimple-7.6.8-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index 03b96a1a7d..b3cf50c399 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_ARMBIAN_FIRMWARE_BRCM43XXX
-+	bool "BRCM43XXX WiFi/BT"
-+	help
-+	  Firmware files for BRCM43XXX AP6212 WiFi/BT combo chip.
-+
- endif
-diff --git a/package/armbian-firmware/armbian-firmware.mk b/package/armbian-firmware/armbian-firmware.mk
-index 0ed069025d..dab3890cdd 100644
---- a/package/armbian-firmware/armbian-firmware.mk
-+++ b/package/armbian-firmware/armbian-firmware.mk
-@@ -29,6 +29,13 @@ ARMBIAN_FIRMWARE_FILES += \
- 	xr819/sdd_xr819.bin
- endif
- 
-+# AP6212 WiFi/BT combo firmware
-+ifeq ($(BR2_PACKAGE_ARMBIAN_FIRMWARE_BRCM43XXX),y)
-+ARMBIAN_FIRMWARE_FILES += \
-+	brcm/brcmfmac43430-sdio.txt \
-+	brcm/brcmfmac43430a0-sdio.txt
-+endif
-+
- ifneq ($(ARMBIAN_FIRMWARE_FILES),)
- define ARMBIAN_FIRMWARE_INSTALL_FILES
- 	cd $(@D) && \
+-KODI_PVR_IPTVSIMPLE_VERSION = 7.6.5-Matrix
++KODI_PVR_IPTVSIMPLE_VERSION = 7.6.8-Matrix
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
 -- 
-2.25.1
+2.30.2
