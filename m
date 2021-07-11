@@ -1,55 +1,45 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 11 Jul 2021 09:48:24 -0300
-Subject: [Buildroot] [PATCH 2/2] configs/wandboard: Bump U-Boot and kernel
- versions
-In-Reply-To: <20210711124824.1025887-1-festevam@gmail.com>
-References: <20210711124824.1025887-1-festevam@gmail.com>
-Message-ID: <20210711124824.1025887-2-festevam@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 11 Jul 2021 12:02:11 +0200
+Subject: [Buildroot] [PATCH] package/lua-rotas: bump to version 0.2.1
+Message-ID: <20210711100211.306267-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot to 2021.07 and kernel to 5.13 version.
+diff COPYPRIGHT:
+-Copyright (C) 2018-2019 Francois Perrad.
++Copyright (C) 2018-2021 Francois Perrad.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- configs/wandboard_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/lua-rotas/lua-rotas.hash | 4 ++--
+ package/lua-rotas/lua-rotas.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
-index 37628ea403b0..0966719d486b 100644
---- a/configs/wandboard_defconfig
-+++ b/configs/wandboard_defconfig
-@@ -5,8 +5,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
+diff --git a/package/lua-rotas/lua-rotas.hash b/package/lua-rotas/lua-rotas.hash
+index 6f8d0df41..2633f3b72 100644
+--- a/package/lua-rotas/lua-rotas.hash
++++ b/package/lua-rotas/lua-rotas.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 be47e72ec703ffc319fe4fd539b531bbe8a8c0c52e0cc9774273028f1599a0cf  lua-rotas-0.2.0-1.src.rock
+-sha256 4a7fdc0e44509d79c9bf18560cfb98368f70bb3832abe07e3cdba5c06466b0bb  lua-Rotas-0.2.0/COPYRIGHT
++sha256 a947026be3552cbf676a0cef36a618111712257d306cbd9d340ed8895a4cbd2b  lua-rotas-0.2.1-1.src.rock
++sha256 ac8bb87b7b5e803ae27510b9c6fd284f1b00e741258bc59fc78d3bc107d96fbb  lua-Rotas-0.2.1/COPYRIGHT
+diff --git a/package/lua-rotas/lua-rotas.mk b/package/lua-rotas/lua-rotas.mk
+index 6ace963a4..84d6c9a58 100644
+--- a/package/lua-rotas/lua-rotas.mk
++++ b/package/lua-rotas/lua-rotas.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 5.12 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
-+# Linux headers same as kernel, a 5.13 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -23,7 +23,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="wandboard"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
-@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
+-LUA_ROTAS_VERSION = 0.2.0-1
++LUA_ROTAS_VERSION = 0.2.1-1
+ LUA_ROTAS_NAME_UPSTREAM = lua-Rotas
+ LUA_ROTAS_LICENSE = MIT
+ LUA_ROTAS_LICENSE_FILES = $(LUA_ROTAS_SUBDIR)/COPYRIGHT
 -- 
-2.25.1
+2.30.2
