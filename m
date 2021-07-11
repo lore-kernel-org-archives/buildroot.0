@@ -1,35 +1,49 @@
-From: =?UTF-8?q?Andr=C3=A9=20Zwing?= <nerv@dawncrow.de>
-Date: Sun, 11 Jul 2021 19:03:30 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: Change my name
-Message-ID: <20210711170330.3026360-1-nerv@dawncrow.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 11 Jul 2021 19:22:09 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/libpcap: bump to
+ version 1.10.1
+Message-ID: <20210711164853.DB9A195485@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And remove myself from freescale related parts
+commit: https://git.buildroot.net/buildroot/commit/?id=6c062f54d18b5850eb158357b550b2a9f454cb07
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Signed-off-by: Andr? Zwing <nerv@dawncrow.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a9ee2de773a14b36a4e759f1cbaed8a7bebf9a6c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ package/libpcap/libpcap.hash | 4 ++--
+ package/libpcap/libpcap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2a69f88299..58c11543b7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -124,10 +124,7 @@ F:	package/python-docopt/
- N:	Anders Darander <anders@chargestorm.se>
- F:	package/ktap/
+diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
+index e70d071294..84c8e405df 100644
+--- a/package/libpcap/libpcap.hash
++++ b/package/libpcap/libpcap.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.tcpdump.org/release/libpcap-1.10.0.tar.gz.sig
+-sha256  8d12b42623eeefee872f123bd0dc85d535b00df4d42e865f993c40f7bfc92b1e  libpcap-1.10.0.tar.gz
++# https://www.tcpdump.org/release/libpcap-1.10.1.tar.gz.sig
++sha256  ed285f4accaf05344f90975757b3dbfe772ba41d1c401c2648b7fa45b711bdd4  libpcap-1.10.1.tar.gz
  
--N:	Andr? Hentschel <nerv@dawncrow.de>
--F:	board/freescale/imx8qxpmek/
--F:	configs/freescale_imx8qxpmek_defconfig
--F:	package/freescale-imx/imx-sc-firmware/
-+N:	Andr? Zwing <nerv@dawncrow.de>
- F:	package/libkrb5/
- F:	package/openal/
- F:	package/p7zip/
--- 
-2.25.1
+ # Hash for license file:
+ sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 24215ebed5..1e02ec56e0 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPCAP_VERSION = 1.10.0
++LIBPCAP_VERSION = 1.10.1
+ LIBPCAP_SITE = https://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3-Clause
+ LIBPCAP_LICENSE_FILES = LICENSE
