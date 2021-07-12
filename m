@@ -1,48 +1,84 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 12 Jul 2021 13:20:43 +1000
-Subject: [Buildroot] [PATCH 1/9] arch/config: Make RISC-V MMU optional
-In-Reply-To: <20210709063641.277005-2-damien.lemoal@wdc.com>
-References: <20210709063641.277005-1-damien.lemoal@wdc.com>
- <20210709063641.277005-2-damien.lemoal@wdc.com>
-Message-ID: <CAKmqyKOZxBNBM0SLAQu3EDs3tJ436-C6m8Z+NV2yViNRsCHTOw@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 11 Jul 2021 22:35:34 -0600
+Subject: [Buildroot] [PATCH 1/1] package/rpcbind: use upstream systemd
+ service files
+Message-ID: <20210712043534.3849257-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 9, 2021 at 4:37 PM Damien Le Moal <damien.lemoal@wdc.com> wrote:
->
-> Linux supports No-MMU RISC-V since kernel version 5.8. Make MMU optional
-> to enable building for RISC-V boards that do not have one.
->
-> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+The overriden service files appear to have compatibility issues
+with upstream rpcbind, don't replace the bundled service files.
 
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+We need to build with --enable-warmstarts as this is required
+by the systemd service files.
 
-Alistair
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/rpcbind/rpcbind.mk      | 10 ++--------
+ package/rpcbind/rpcbind.service | 10 ----------
+ package/rpcbind/rpcbind.socket  |  8 --------
+ 3 files changed, 2 insertions(+), 26 deletions(-)
+ delete mode 100644 package/rpcbind/rpcbind.service
+ delete mode 100644 package/rpcbind/rpcbind.socket
 
-> ---
->  arch/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/Config.in b/arch/Config.in
-> index 1853e26bb4..82d3b01980 100644
-> --- a/arch/Config.in
-> +++ b/arch/Config.in
-> @@ -210,7 +210,7 @@ config BR2_powerpc64le
->
->  config BR2_riscv
->         bool "RISCV"
-> -       select BR2_ARCH_HAS_MMU_MANDATORY
-> +       select BR2_ARCH_HAS_MMU_OPTIONAL
->         select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
->         help
->           RISC-V is an open, free Instruction Set Architecture created
-> --
-> 2.31.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index d9f25e698e..725075f962 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -17,19 +17,13 @@ RPCBIND_DEPENDENCIES += libtirpc host-pkgconf
+ RPCBIND_CONF_OPTS += --with-rpcuser=root
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+-RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
++RPCBIND_CONF_OPTS += --enable-warmstarts \
++	--with-systemdsystemunitdir=/usr/lib/systemd/system
+ RPCBIND_DEPENDENCIES += systemd
+ else
+ RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
+ endif
+ 
+-define RPCBIND_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -m 0644 -D package/rpcbind/rpcbind.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.service
+-	$(INSTALL) -m 0644 -D package/rpcbind/rpcbind.socket \
+-		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.socket
+-endef
+-
+ define RPCBIND_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
+ 		$(TARGET_DIR)/etc/init.d/S30rpcbind
+diff --git a/package/rpcbind/rpcbind.service b/package/rpcbind/rpcbind.service
+deleted file mode 100644
+index e41931df4a..0000000000
+--- a/package/rpcbind/rpcbind.service
++++ /dev/null
+@@ -1,10 +0,0 @@
+-[Unit]
+-Description=RPC bind service
+-Requires=rpcbind.socket
+-
+-[Service]
+-Type=forking
+-ExecStart=/usr/sbin/rpcbind
+-
+-[Install]
+-Also=rpcbind.socket
+diff --git a/package/rpcbind/rpcbind.socket b/package/rpcbind/rpcbind.socket
+deleted file mode 100644
+index d63c1d9720..0000000000
+--- a/package/rpcbind/rpcbind.socket
++++ /dev/null
+@@ -1,8 +0,0 @@
+-[Unit]
+-Description=RPCbind Server Activation Socket
+-
+-[Socket]
+-ListenStream=/var/run/rpcbind.sock
+-
+-[Install]
+-WantedBy=sockets.target
+-- 
+2.25.1
