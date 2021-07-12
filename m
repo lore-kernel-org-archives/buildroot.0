@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Jul 2021 23:04:32 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/tpm2-tools:
+Date: Mon, 12 Jul 2021 23:03:07 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/tpm2-tools:
  backport CVE-2021-3565 security fix
-Message-ID: <20210712203149.3EEFF954FE@busybox.osuosl.org>
+Message-ID: <20210712203157.1D9C295502@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18c59c32a09074c1a1883226c816d756888884db
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=39a628ca44f6bdbb8d434556013ce8056fcf78fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 Fixes CVE-2021-3565: A flaw was found in tpm2-tools in versions before 5.1.1
 and before 4.3.2.  tpm2_import used a fixed AES key for the inner wrapper,
