@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Jul 2021 10:16:24 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x]
+Date: Mon, 12 Jul 2021 10:15:56 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x]
  boot/arm-trusted-firmware: add SSP option
-Message-ID: <20210712075033.08A21954C3@busybox.osuosl.org>
+Message-ID: <20210712075038.67C79954CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=940deafe7a2303935d31219afda0fb5ea90d47ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dc82fb995877e5d03ca4cd1328020ca043741888
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Buildroot sets appropriate ENABLE_STACK_PROTECTOR build flag value based
 on the toolchain global BR2_SSP_* options, and all packages are built
