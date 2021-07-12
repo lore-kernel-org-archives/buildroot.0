@@ -1,78 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Jul 2021 23:03:07 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/tpm2-tools:
- backport CVE-2021-3565 security fix
-Message-ID: <20210712203157.1D9C295502@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 12 Jul 2021 23:07:21 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: fix uboot build failure with
+ UBOOT_CUSTOM_DTS_PATH on uboot version >= 2020.x
+In-Reply-To: <ad1b10c3-b36f-78fe-624d-4f1bb6068944@benettiengineering.com>
+References: <ad1b10c3-b36f-78fe-624d-4f1bb6068944@benettiengineering.com>
+Message-ID: <0B9D01C4-2FB5-42EC-B4F1-087B2BD6A93A@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39a628ca44f6bdbb8d434556013ce8056fcf78fb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+Ping again
 
-Fixes CVE-2021-3565: A flaw was found in tpm2-tools in versions before 5.1.1
-and before 4.3.2.  tpm2_import used a fixed AES key for the inner wrapper,
-potentially allowing a MITM attacker to unwrap the inner portion and reveal
-the key being imported.  The highest threat from this vulnerability is to
-data confidentiality.
+Giulio
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...m2_import-fix-fixed-AES-key-CVE-2021-3565.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
-
-diff --git a/package/tpm2-tools/0001-tpm2_import-fix-fixed-AES-key-CVE-2021-3565.patch b/package/tpm2-tools/0001-tpm2_import-fix-fixed-AES-key-CVE-2021-3565.patch
-new file mode 100644
-index 0000000000..c0a433251f
---- /dev/null
-+++ b/package/tpm2-tools/0001-tpm2_import-fix-fixed-AES-key-CVE-2021-3565.patch
-@@ -0,0 +1,47 @@
-+From c069e4f179d5e6653a84fb236816c375dca82515 Mon Sep 17 00:00:00 2001
-+From: William Roberts <william.c.roberts@intel.com>
-+Date: Fri, 21 May 2021 12:22:31 -0500
-+Subject: [PATCH] tpm2_import: fix fixed AES key CVE-2021-3565
-+
-+tpm2_import used a fixed AES key for the inner wrapper, which means that
-+a MITM attack would be able to unwrap the imported key. Even the
-+use of an encrypted session will not prevent this. The TPM only
-+encrypts the first parameter which is the fixed symmetric key.
-+
-+To fix this, ensure the key size is 16 bytes or bigger and use
-+OpenSSL to generate a secure random AES key.
-+
-+Fixes: #2738
-+
-+Signed-off-by: William Roberts <william.c.roberts@intel.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ tools/tpm2_import.c | 12 +++++++++++-
-+ 1 file changed, 11 insertions(+), 1 deletion(-)
-+
-+diff --git a/tools/tpm2_import.c b/tools/tpm2_import.c
-+index cfb6f207..f44326c8 100644
-+--- a/tools/tpm2_import.c
-++++ b/tools/tpm2_import.c
-+@@ -118,7 +118,17 @@ static tool_rc key_import(ESYS_CONTEXT *ectx, TPM2B_PUBLIC *parent_pub,
-+     TPM2B_DATA enc_sensitive_key = {
-+         .size = parent_pub->publicArea.parameters.rsaDetail.symmetric.keyBits.sym / 8
-+     };
-+-    memset(enc_sensitive_key.buffer, 0xFF, enc_sensitive_key.size);
-++
-++    if(enc_sensitive_key.size < 16) {
-++        LOG_ERR("Calculated wrapping keysize is less than 16 bytes, got: %u", enc_sensitive_key.size);
-++        return tool_rc_general_error;
-++    }
-++
-++    int ossl_rc = RAND_bytes(enc_sensitive_key.buffer, enc_sensitive_key.size);
-++    if (ossl_rc != 1) {
-++        LOG_ERR("RAND_bytes failed: %s", ERR_error_string(ERR_get_error(), NULL));
-++        return tool_rc_general_error;
-++    }
-+ 
-+     /*
-+      * Calculate the object name.
-+-- 
-+2.20.1
-+
+> Il giorno 27 mar 2021, alle ore 23:34, Giulio Benetti <giulio.benetti@benettiengineering.com> ha scritto:
+> 
+> ?Hi All,
+> 
+>> On 2/9/21 9:13 PM, Giulio Benetti wrote:
+>> Starting from version 2020.x uboot can't build .dts files not listed in
+>> dts/Makefile leading to a build failure when trying to pass a .dts file to
+>> UBOOT_CUSTOM_DTS_PATH. So let's prepend that file(s) to dts/Makefile if
+>> UBOOT_CUSTOM_DTS_PATH is used.
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>>  boot/uboot/uboot.mk | 5 +++++
+>>  1 file changed, 5 insertions(+)
+>> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+>> index 2478a2a1e9..a5ad101d68 100644
+>> --- a/boot/uboot/uboot.mk
+>> +++ b/boot/uboot/uboot.mk
+>> @@ -303,6 +303,11 @@ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+>>  UBOOT_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
+>>    define UBOOT_BUILD_CMDS
+>> +    $(if $(UBOOT_CUSTOM_DTS_PATH),
+>> +        $(Q)$(SED) \
+>> +        '1s;^;dtb-y += $(subst .dts,.dtb,$(call notdir,$(UBOOT_CUSTOM_DTS_PATH)))\n;' \
+>> +        $(@D)/arch/$(UBOOT_ARCH)/dts/Makefile
+>> +    )
+>>      $(if $(UBOOT_CUSTOM_DTS_PATH),
+>>          cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
+>>      )
+> 
+> Any new about this patch? It's essential to build an external u-boot dts after u-boot 2020.x
+> 
+> Kind regards
+> -- 
+> Giulio Benetti
+> Benetti Engineering sas
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
