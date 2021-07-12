@@ -1,20 +1,20 @@
 From: Alistair Francis <alistair23@gmail.com>
-Date: Tue, 13 Jul 2021 08:16:10 +1000
-Subject: [Buildroot] [PATCH 5/9] board: Add Sipeed MAIX-Go support
-In-Reply-To: <20210709063641.277005-6-damien.lemoal@wdc.com>
+Date: Tue, 13 Jul 2021 08:41:17 +1000
+Subject: [Buildroot] [PATCH 6/9] board: Add Sipeed MAIXDUINO support
+In-Reply-To: <20210709063641.277005-7-damien.lemoal@wdc.com>
 References: <20210709063641.277005-1-damien.lemoal@wdc.com>
- <20210709063641.277005-6-damien.lemoal@wdc.com>
-Message-ID: <CAKmqyKOA-AkMGD-yJJ=hmL0WzZsGmCeEJp9juBCaEbTkuHmtEg@mail.gmail.com>
+ <20210709063641.277005-7-damien.lemoal@wdc.com>
+Message-ID: <CAKmqyKPWqXeZ56WpjwqwUtO5x_DZ52pVptYmygR1Qr01+7CsNQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 9, 2021 at 4:37 PM Damien Le Moal <damien.lemoal@wdc.com> wrote:
+On Fri, Jul 9, 2021 at 4:38 PM Damien Le Moal <damien.lemoal@wdc.com> wrote:
 >
 > Add two configuration files to support the RISC-V Canaan K210 SoC based
-> Sipeed MAIX-Go board. These configurations are similar to the Sipeed
+> Sipeed MAIXDUINO board. These configurations are similar to the Sipeed
 > MAIX-bit board configurations, differing only by the built-in device
 > tree used.
 >
@@ -25,27 +25,27 @@ Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Alistair
 
 > ---
->  board/sipeed/maix-go/linux-dtb.config   |  2 ++
->  configs/sipeed_maix_go_defconfig        | 23 +++++++++++++++++++++++
->  configs/sipeed_maix_go_sdcard_defconfig | 23 +++++++++++++++++++++++
+>  board/sipeed/maixduino/linux-dtb.config   |  2 ++
+>  configs/sipeed_maixduino_defconfig        | 23 +++++++++++++++++++++++
+>  configs/sipeed_maixduino_sdcard_defconfig | 23 +++++++++++++++++++++++
 >  3 files changed, 48 insertions(+)
->  create mode 100644 board/sipeed/maix-go/linux-dtb.config
->  create mode 100644 configs/sipeed_maix_go_defconfig
->  create mode 100644 configs/sipeed_maix_go_sdcard_defconfig
+>  create mode 100644 board/sipeed/maixduino/linux-dtb.config
+>  create mode 100644 configs/sipeed_maixduino_defconfig
+>  create mode 100644 configs/sipeed_maixduino_sdcard_defconfig
 >
-> diff --git a/board/sipeed/maix-go/linux-dtb.config b/board/sipeed/maix-go/linux-dtb.config
+> diff --git a/board/sipeed/maixduino/linux-dtb.config b/board/sipeed/maixduino/linux-dtb.config
 > new file mode 100644
-> index 0000000000..ea8c30e266
+> index 0000000000..049a2550c5
 > --- /dev/null
-> +++ b/board/sipeed/maix-go/linux-dtb.config
+> +++ b/board/sipeed/maixduino/linux-dtb.config
 > @@ -0,0 +1,2 @@
 > +CONFIG_SOC_CANAAN_K210_DTB_BUILTIN=y
-> +CONFIG_SOC_CANAAN_K210_DTB_SOURCE="sipeed_maix_go"
-> diff --git a/configs/sipeed_maix_go_defconfig b/configs/sipeed_maix_go_defconfig
+> +CONFIG_SOC_CANAAN_K210_DTB_SOURCE="sipeed_maixduino"
+> diff --git a/configs/sipeed_maixduino_defconfig b/configs/sipeed_maixduino_defconfig
 > new file mode 100644
-> index 0000000000..c5df26340f
+> index 0000000000..b95cbfc5ba
 > --- /dev/null
-> +++ b/configs/sipeed_maix_go_defconfig
+> +++ b/configs/sipeed_maixduino_defconfig
 > @@ -0,0 +1,23 @@
 > +BR2_riscv=y
 > +# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
@@ -62,7 +62,7 @@ Alistair
 > +BR2_ROOTFS_OVERLAY="board/canaan/k210-common/rootfs_overlay"
 > +BR2_LINUX_KERNEL=y
 > +BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
-> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-go/linux-dtb.config"
+> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maixduino/linux-dtb.config"
 > +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 > +BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
 > +BR2_PACKAGE_BUSYBOX_CONFIG="board/canaan/k210-common/busybox-tiny-initramfs.config"
@@ -70,11 +70,11 @@ Alistair
 > +# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
 > +BR2_TARGET_ROOTFS_INITRAMFS=y
 > +# BR2_TARGET_ROOTFS_TAR is not set
-> diff --git a/configs/sipeed_maix_go_sdcard_defconfig b/configs/sipeed_maix_go_sdcard_defconfig
+> diff --git a/configs/sipeed_maixduino_sdcard_defconfig b/configs/sipeed_maixduino_sdcard_defconfig
 > new file mode 100644
-> index 0000000000..dcea0a6044
+> index 0000000000..c8a1d98d28
 > --- /dev/null
-> +++ b/configs/sipeed_maix_go_sdcard_defconfig
+> +++ b/configs/sipeed_maixduino_sdcard_defconfig
 > @@ -0,0 +1,23 @@
 > +BR2_riscv=y
 > +# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
@@ -91,7 +91,7 @@ Alistair
 > +BR2_ROOTFS_OVERLAY="board/canaan/k210-common/rootfs_overlay"
 > +BR2_LINUX_KERNEL=y
 > +BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
-> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-go/linux-dtb.config"
+> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maixduino/linux-dtb.config"
 > +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 > +BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
 > +BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
