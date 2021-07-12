@@ -1,55 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Jul 2021 22:14:02 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/vlc: bump version
- to 3.0.16
-Message-ID: <20210712194110.BF2A0954EB@busybox.osuosl.org>
+Date: Mon, 12 Jul 2021 22:35:13 +0200
+Subject: [Buildroot] [PATCH v2] boot/uboot: fix uboot building host
+ tools on x86 architecture
+In-Reply-To: <20210630210727.GZ2829@scaer> (Yann E. MORIN's message of "Wed,
+ 30 Jun 2021 23:07:27 +0200")
+References: <20210630090247.1035893-1-kory.maincent@bootlin.com>
+ <20210630210727.GZ2829@scaer>
+Message-ID: <877dhvxoce.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=950eb0cf17efc607d5a98d0f3fe16e1efe8366d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Release notes:
-https://www.videolan.org/vlc/releases/3.0.16.html
+ > K?ry, All,
+ > On 2021-06-30 11:02 +0200, Kory Maincent spake thusly:
+ >> The make all command run the tools/makefile on the process.
+ >> This makefile use "pkg-config" command to support static link.
+ >> The issue is the use of pkg-config configured for crosscompiling
+ >> to build binaries tools for host architecture.
+ >> To fix it, I add pkg-config environment variable to configure it for host.
+ >> 
+ >> Add a test to avoid future regress on the build of U-boot.
+ >> 
+ >> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+ >> ---
+ >> boot/uboot/uboot.mk                           |  5 +++++
+ >> .../package/test_uboot_openssl_pkgconfig.py   | 20 +++++++++++++++++++
+ >> 2 files changed, 25 insertions(+)
+ >> create mode 100644 support/testing/tests/package/test_uboot_openssl_pkgconfig.py
+ >> 
+ >> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+ >> index dbe82e65b1..5186e6071e 100644
+ >> --- a/boot/uboot/uboot.mk
+ >> +++ b/boot/uboot/uboot.mk
+ >> @@ -307,6 +307,11 @@ define UBOOT_BUILD_CMDS
+ >> cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
+ >> )
+ >> $(TARGET_CONFIGURE_OPTS) \
+ >> +	        PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ >> +		PKG_CONFIG_SYSROOT_DIR="/" \
+ >> +	        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+ >> +	        PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+ >> +	        PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig" \
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a5585d5509bf8ff0ab7fefbb5d476cb7aa133fdd)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/vlc/vlc.hash | 8 ++++----
- package/vlc/vlc.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ > Mixed TABs-n-spaces indentation, I've fixed that when applying.
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 396c3a2ab1..468ec7df35 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,7 +1,7 @@
--# From https://get.videolan.org/vlc/3.0.14/vlc-3.0.14.tar.xz.sha256
--sha256  49b93e5b33deaa37060e6b24a98200cad70c407947f14eb2a8b6a0c64d8535a6  vlc-3.0.14.tar.xz
--# From https://get.videolan.org/vlc/3.0.14/vlc-3.0.14.tar.xz.sha1
--sha1  8a8613f16a9053668d7a7dcfa1e6d8be93af3e89  vlc-3.0.14.tar.xz
-+# From https://get.videolan.org/vlc/3.0.16/vlc-3.0.16.tar.xz.sha256
-+sha256  ffae35fc64f625c175571d2346bc5f6207be99762517f15423e74f18399410f6  vlc-3.0.16.tar.xz
-+# From https://get.videolan.org/vlc/3.0.16/vlc-3.0.16.tar.xz.sha1
-+sha1  e22ac839a09b5ead8992ae6aa8ea886364283e6a  vlc-3.0.16.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index c1e190099e..06fc650f6f 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VLC_VERSION = 3.0.14
-+VLC_VERSION = 3.0.16
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+Hmm, shouldn't we then add host-pkgconf to UBOOT_DEPENDENCIES so things
+are not broken when it isn't available?
+
+
+ >> +class TestUbootOpensslPkgConfig(infra.basetest.BRTest):
+ >> +    config = infra.basetest.MINIMAL_CONFIG + \
+ >> +        """
+ >> +        BR2_x86_64=y
+ >> +        BR2_x86_atom=y
+ >> +        BR2_PACKAGE_OPENSSL=y
+ >> +        BR2_TARGET_UBOOT=y
+ >> +        BR2_TARGET_UBOOT_BOARD_DEFCONFIG="efi-x86_payload64"
+ >> +        BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ >> +        BR2_PACKAGE_HOST_PKGCONF=y
+
+And then drop it from here?
+
+-- 
+Bye, Peter Korsgaard
