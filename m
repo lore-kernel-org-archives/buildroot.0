@@ -1,31 +1,37 @@
-From: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
-Date: Mon, 12 Jul 2021 11:55:57 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: update Christophe Priouzeau
- e-mail address
-Message-ID: <20210712095557.22387-1-christophe.priouzeau@foss.st.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 12 Jul 2021 12:45:00 +0200
+Subject: [Buildroot] [PATCH 0/1] Fix last OpenRisc binutils bug
+Message-ID: <20210712104501.2276261-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
----
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch adds patches for all 4 binutils version we have and fixes a
+binutils bug who shows up while building package openal. It's been
+suggested upstream and it's pending:
+https://sourceware.org/pipermail/binutils/2021-July/117334.html
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9c7dd312f7..0ea5cfa14a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -525,7 +525,7 @@ F:	package/rtl8821au/
- F:	package/runc/
- F:	package/tini/
- 
--N:	Christophe Priouzeau <christophe.priouzeau@st.com>
-+N:	Christophe Priouzeau <christophe.priouzeau@foss.st.com>
- F:	board/stmicroelectronics/stm32f429-disco/
- F:	board/stmicroelectronics/stm32f469-disco/
- F:	configs/stm32f429_disco_defconfig
+With this last binutils bug fix, new external toolchain can be built
+(i.e. Bootlin ones) and after that we can consider Buildroot toolchains
+and external toolchains with all OpenRisc's patches applied bug-free.
+
+I've built and re-built openal package with binutils 2.32, 2.34, 2.35.2,
+2.36.1 without and with this patch succesfully.
+
+Giulio Benetti (1):
+  package/binutils: fix linker assert on OpenRisc
+
+ ...tive-relocation-against-dynamic-on-P.patch | 59 +++++++++++++++++++
+ ...tive-relocation-against-dynamic-on-P.patch | 59 +++++++++++++++++++
+ ...tive-relocation-against-dynamic-on-P.patch | 59 +++++++++++++++++++
+ ...tive-relocation-against-dynamic-on-P.patch | 59 +++++++++++++++++++
+ 4 files changed, 236 insertions(+)
+ create mode 100644 package/binutils/2.32/0015-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+ create mode 100644 package/binutils/2.34/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+ create mode 100644 package/binutils/2.35.2/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+ create mode 100644 package/binutils/2.36.1/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+
 -- 
 2.25.1
