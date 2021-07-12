@@ -1,27 +1,121 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Jul 2021 22:52:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libconfig: bump to version 1.7.3
-In-Reply-To: <20210621190127.251960-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 21 Jun 2021 21:01:27 +0200")
-References: <20210621190127.251960-1-fontaine.fabrice@gmail.com>
-Message-ID: <87y2abw8yu.fsf@dell.be.48ers.dk>
+Date: Mon, 12 Jul 2021 22:52:25 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/libconfig: bump
+ to version 1.7.3
+Message-ID: <20210712201919.4429F954DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2d63e13608b1027e4cd62e36b2f4f558c16ee3e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
- > - Drop patch (already in version)
- > - Use --disable-tests which is available since
- >   https://github.com/hyperrealm/libconfig/commit/7e2c1e6ac1f7c80a60c77bf1842edd112fe72188
+- Drop patch (already in version)
+- Use --disable-tests which is available since
+  https://github.com/hyperrealm/libconfig/commit/7e2c1e6ac1f7c80a60c77bf1842edd112fe72188
 
- > https://github.com/hyperrealm/libconfig/releases/tag/v1.7.3
+https://github.com/hyperrealm/libconfig/releases/tag/v1.7.3
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 1b4aa6442abc299d19829670eaf69420f5e119cf)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../libconfig/0001-Add-disable-doc-option.patch    | 54 ----------------------
+ package/libconfig/libconfig.hash                   |  2 +-
+ package/libconfig/libconfig.mk                     |  8 ++--
+ 3 files changed, 4 insertions(+), 60 deletions(-)
 
-Committed to 2021.02.x and 2021.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libconfig/0001-Add-disable-doc-option.patch b/package/libconfig/0001-Add-disable-doc-option.patch
+deleted file mode 100644
+index ac323eba24..0000000000
+--- a/package/libconfig/0001-Add-disable-doc-option.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From a0301bde126c2b08b50e789fd025a8c513c914c3 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 28 Apr 2018 19:15:22 +0200
+-Subject: [PATCH] Add --disable-doc option
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- Makefile.am  |  6 +++++-
+- configure.ac | 12 ++++++++++++
+- 2 files changed, 17 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 50ef4fa..e94d3ec 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -1,7 +1,11 @@
+- 
+- ACLOCAL_AMFLAGS = -I m4
+- 
+--SUBDIRS = lib doc tinytest tests
+-+SUBDIRS = lib tinytest tests
+-+
+-+if BUILDDOC
+-+SUBDIRS += doc
+-+endif
+- 
+- if BUILDEXAMPLES
+- SUBDIRS += examples
+-diff --git a/configure.ac b/configure.ac
+-index 62c5c56..8a14855 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -99,6 +99,18 @@ docxx=yes
+- 
+- AM_CONDITIONAL(BUILDCXX, test x$docxx = xyes)
+- 
+-+dodoc=yes
+-+
+-+AC_ARG_ENABLE(doc,
+-+AS_HELP_STRING([--disable-doc], [Disable building of the documentation]),
+-+[if test "$enableval" = "no"; then dodoc="no"; fi],
+-+[
+-+dodoc=yes
+-+]
+-+)
+-+
+-+AM_CONDITIONAL(BUILDDOC, test x$dodoc = xyes)
+-+
+- doexamples=yes
+- 
+- AC_ARG_ENABLE(examples,
+--- 
+-2.14.1
+-
+diff --git a/package/libconfig/libconfig.hash b/package/libconfig/libconfig.hash
+index e056a17de3..d359301d6f 100644
+--- a/package/libconfig/libconfig.hash
++++ b/package/libconfig/libconfig.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  f67ac44099916ae260a6c9e290a90809e7d782d96cdd462cac656ebc5b685726  libconfig-1.7.2.tar.gz
++sha256  545166d6cac037744381d1e9cc5a5405094e7bfad16a411699bcff40bbb31ee7  libconfig-1.7.3.tar.gz
+ sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING.LIB
+diff --git a/package/libconfig/libconfig.mk b/package/libconfig/libconfig.mk
+index a127f9bcc8..6cdf603185 100644
+--- a/package/libconfig/libconfig.mk
++++ b/package/libconfig/libconfig.mk
+@@ -4,14 +4,12 @@
+ #
+ ################################################################################
+ 
+-LIBCONFIG_VERSION = 1.7.2
+-LIBCONFIG_SITE = $(call github,hyperrealm,libconfig,v$(LIBCONFIG_VERSION))
++LIBCONFIG_VERSION = 1.7.3
++LIBCONFIG_SITE = https://github.com/hyperrealm/libconfig/releases/download/v$(LIBCONFIG_VERSION)
+ LIBCONFIG_LICENSE = LGPL-2.1+
+ LIBCONFIG_LICENSE_FILES = COPYING.LIB
+ LIBCONFIG_INSTALL_STAGING = YES
+-# From git
+-LIBCONFIG_AUTORECONF = YES
+-LIBCONFIG_CONF_OPTS = --disable-examples
++LIBCONFIG_CONF_OPTS = --disable-examples --disable-tests
+ 
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ LIBCONFIG_CONF_OPTS += --disable-cxx
