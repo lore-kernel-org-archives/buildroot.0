@@ -1,69 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Jul 2021 22:35:13 +0200
-Subject: [Buildroot] [PATCH v2] boot/uboot: fix uboot building host
- tools on x86 architecture
-In-Reply-To: <20210630210727.GZ2829@scaer> (Yann E. MORIN's message of "Wed,
- 30 Jun 2021 23:07:27 +0200")
-References: <20210630090247.1035893-1-kory.maincent@bootlin.com>
- <20210630210727.GZ2829@scaer>
-Message-ID: <877dhvxoce.fsf@dell.be.48ers.dk>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Mon, 12 Jul 2021 22:43:12 +0200
+Subject: [Buildroot] [RFC] board/mx6cubox: Switch to extlinux.conf
+In-Reply-To: <CAOMZO5Dw6=v5ndry8AWgmx0iX_kFDsKPVeqRAhAbLEscuAfAEQ@mail.gmail.com>
+References: <20210712162703.2937572-1-festevam@gmail.com>
+ <CAB0FRstB6+32=F-JmTs4RS70A3uUt0feCa9VtF3rgX2GD1tOjw@mail.gmail.com>
+ <CAOMZO5Dw6=v5ndry8AWgmx0iX_kFDsKPVeqRAhAbLEscuAfAEQ@mail.gmail.com>
+Message-ID: <CAB0FRsvr-Cre6ZvOCY7NR+ccy_o9JrQaGeKkC=nQ1gYVFFzY3g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Le lun. 12 juil. 2021 ? 22:03, Fabio Estevam <festevam@gmail.com> a ?crit :
 
- > K?ry, All,
- > On 2021-06-30 11:02 +0200, Kory Maincent spake thusly:
- >> The make all command run the tools/makefile on the process.
- >> This makefile use "pkg-config" command to support static link.
- >> The issue is the use of pkg-config configured for crosscompiling
- >> to build binaries tools for host architecture.
- >> To fix it, I add pkg-config environment variable to configure it for host.
- >> 
- >> Add a test to avoid future regress on the build of U-boot.
- >> 
- >> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
- >> ---
- >> boot/uboot/uboot.mk                           |  5 +++++
- >> .../package/test_uboot_openssl_pkgconfig.py   | 20 +++++++++++++++++++
- >> 2 files changed, 25 insertions(+)
- >> create mode 100644 support/testing/tests/package/test_uboot_openssl_pkgconfig.py
- >> 
- >> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
- >> index dbe82e65b1..5186e6071e 100644
- >> --- a/boot/uboot/uboot.mk
- >> +++ b/boot/uboot/uboot.mk
- >> @@ -307,6 +307,11 @@ define UBOOT_BUILD_CMDS
- >> cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
- >> )
- >> $(TARGET_CONFIGURE_OPTS) \
- >> +	        PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- >> +		PKG_CONFIG_SYSROOT_DIR="/" \
- >> +	        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
- >> +	        PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
- >> +	        PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig" \
+> Hi Fran?ois,
+>
+> On Mon, Jul 12, 2021 at 4:55 PM Fran?ois Perrad
+> <francois.perrad@gadz.org> wrote:
+>
+> > Hi Fabio,
+> >
+> > Currently, I got a kernel panic after:
+> > [    6.761962] VFS: Cannot open root device "PARTUUID=" or
+> unknown-block(0,0): error -6
+> > [    6.899508] Kernel panic - not syncing: VFS: Unable to mount root fs
+> on unknown-block(0,0)
+> >
+> > looks like, ${uuid} was not correct.
+> > boot.scr.txt starts with:
+> >     setenv finduuid "part uuid mmc 1:1 uuid"
+> >     run finduuid
+>
+> Thanks for testing.
+>
+> It seems that this change in U-Boot would fix it:
+>
+> --- a/include/configs/mx6cuboxi.h
+> +++ b/include/configs/mx6cuboxi.h
+> @@ -57,7 +57,7 @@
+>         "console=" CONSOLE_DEV ",115200\0" \
+>         "bootm_size=0x10000000\0" \
+>         "mmcdev=" __stringify(CONFIG_SYS_MMC_ENV_DEV) "\0" \
+> -       "finduuid=part uuid mmc 0:1 uuid\0" \
+> +       "finduuid=part uuid mmc 1:1 uuid\0" \
+>         "update_sd_firmware=" \
+>                 "if test ${ip_dyn} = yes; then " \
+>                         "setenv get_cmd dhcp; " \
+>
+> If possible, could you please manually change finduuid in the U-Boot
+> prompt?
+>
+> => setenv finduuid 'part uuid mmc 1:1 uuid'
+> => saveenv
+> => reset
+>
+>
+OK fixed within interactive mode.
 
- > Mixed TABs-n-spaces indentation, I've fixed that when applying.
+after fully booted:
+    # cat /boot/extlinux/extlinux.conf
+    Label imx6qdl-cubox Buildroot
+            kernel ../zImage
+            fdtdir ../
+            append root=PARTUUID=${uuid} rootwait rw
+console=${console},${baudrate}
 
-Hmm, shouldn't we then add host-pkgconf to UBOOT_DEPENDENCIES so things
-are not broken when it isn't available?
+Fran?ois
 
-
- >> +class TestUbootOpensslPkgConfig(infra.basetest.BRTest):
- >> +    config = infra.basetest.MINIMAL_CONFIG + \
- >> +        """
- >> +        BR2_x86_64=y
- >> +        BR2_x86_atom=y
- >> +        BR2_PACKAGE_OPENSSL=y
- >> +        BR2_TARGET_UBOOT=y
- >> +        BR2_TARGET_UBOOT_BOARD_DEFCONFIG="efi-x86_payload64"
- >> +        BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- >> +        BR2_PACKAGE_HOST_PKGCONF=y
-
-And then drop it from here?
-
--- 
-Bye, Peter Korsgaard
+Thanks,
+>
+> Fabio Estevam
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210712/c60939d2/attachment.html>
