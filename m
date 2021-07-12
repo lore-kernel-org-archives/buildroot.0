@@ -1,28 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Jul 2021 10:17:37 +0200
-Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: fix
- coding-style
-In-Reply-To: <20210626194802.400588E436@busybox.osuosl.org> (Yann E. MORIN's
- message of "Sat, 26 Jun 2021 22:17:07 +0200")
-References: <20210626194802.400588E436@busybox.osuosl.org>
-Message-ID: <87o8b8x7xa.fsf@dell.be.48ers.dk>
+Date: Mon, 12 Jul 2021 10:22:44 +0200
+Subject: [Buildroot] [PATCH v1 1/1] python: use system libffi for
+ host-python
+In-Reply-To: <20210621055351.3958011-1-christian@paral.in> (Christian
+ Stewart's message of "Sun, 20 Jun 2021 22:53:51 -0700")
+References: <20210621055351.3958011-1-christian@paral.in>
+Message-ID: <87k0lwx7or.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=11fffded3c575839504d19d14803840901985b67
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > From: Erico Nunes <nunes.erico@gmail.com>
+ > python2 contains a bundled copy of libffi which is currently out of sync with
+ > the latest libffi release. There is an option to use a system libffi, buildroot
+ > already uses it for the target python2 build and for python3. In python3, the
+ > bundled copy doesn't exist anymore and the system-provided libffi is required.
 
- > Fix coding style issue introduced in cf176128ec4a (boot/arm-trusted-firmware:
- > add SSP option)
+ > The bundled copy currently fails to build on aarch64 host due to a missing
+ > definition of AARCH64_CALL_CONTEXT_SIZE. This define was removed from the
+ > headers in recent libffi releases and the host compiler might be including the
+ > system headers before the bundled headers.
 
- > Fixes: cf176128ec4ad60c29c8828cab1887f69edb9473
+ > To solve this and since buildroot already relies on system libffi for target
+ > python2 and python3 anyway, switch host python2 to use system libffi.
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+ > Reviewed-by: Christian Stewart <christian@paral.in>
 
 Committed to 2021.02.x and 2021.05.x, thanks.
 
