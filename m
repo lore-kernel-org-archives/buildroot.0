@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Jul 2021 22:52:25 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/libconfig: bump
+Date: Mon, 12 Jul 2021 22:52:17 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libconfig: bump
  to version 1.7.3
-Message-ID: <20210712201919.4429F954DD@busybox.osuosl.org>
+Message-ID: <20210712201926.7B68C92F58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d63e13608b1027e4cd62e36b2f4f558c16ee3e4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=941160a0a2211917f9322f083df51ae2f3f2e400
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 - Drop patch (already in version)
 - Use --disable-tests which is available since
