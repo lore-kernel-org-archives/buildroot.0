@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Jul 2021 22:46:20 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] boot/grub2: workaround
+Date: Mon, 12 Jul 2021 22:45:58 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] boot/grub2: workaround
  breakage with -O2, -O3 build
-Message-ID: <20210712201256.DB52995441@busybox.osuosl.org>
+Message-ID: <20210712201303.DF900954F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef2a07f8c6060eef20c8b95bf694db388f6d8f06
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=860c15087d06dd57b9f34ec79f48de8e6aabe1ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 When grub2 (i386-pc) is built with -O2 or -O3 it is unable to boot
 and the system will reboot in a loop.
