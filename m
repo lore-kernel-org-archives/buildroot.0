@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Jul 2021 22:14:12 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/vlc: bump version
+Date: Mon, 12 Jul 2021 22:14:02 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/vlc: bump version
  to 3.0.16
-Message-ID: <20210712194100.A1682954E0@busybox.osuosl.org>
+Message-ID: <20210712194110.BF2A0954EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7726b331ef6075f9ef8da6ecb09effa505e80725
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=950eb0cf17efc607d5a98d0f3fe16e1efe8366d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Release notes:
 https://www.videolan.org/vlc/releases/3.0.16.html
