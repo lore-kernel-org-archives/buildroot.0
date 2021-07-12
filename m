@@ -1,42 +1,66 @@
-From: Yair Ben-Avraham <yairba@protonmail.com>
-Date: Mon, 12 Jul 2021 07:43:51 +0000
-Subject: [Buildroot] [PATCH] package/tpm2-pkcs11: bump version to 1.6.0
-In-Reply-To: <RehKnYdIppFz1OmXjdyv70Ih-Zv9yCyN4qCHBqFZWNIzQIrS67SR2FSeTgcTJ1iHo8Iy2N_bTjVRyrQV54oNXTAyaygA_XjuHPBKeC8gqFI=@protonmail.com>
-References: <RehKnYdIppFz1OmXjdyv70Ih-Zv9yCyN4qCHBqFZWNIzQIrS67SR2FSeTgcTJ1iHo8Iy2N_bTjVRyrQV54oNXTAyaygA_XjuHPBKeC8gqFI=@protonmail.com>
-Message-ID: <ITXjEqHVuAgihlyVzfMVWXaHsw2ZxWhptfJNhUvAT5gFdG0XKHcLI6a2QA-x48W0HEf0_Urd109HomtGk77O1V7vdvgmkCZaJsxfUcI4DaQ=@protonmail.com>
+From: Timo Ketola <timo.ketola@exertus.fi>
+Date: Mon, 12 Jul 2021 11:13:32 +0300
+Subject: [Buildroot] [PATCH] package/fbgrab: bump to version 1.5
+In-Reply-To: <20210710191550.13589-1-texier.pj2@gmail.com>
+References: <20210710191550.13589-1-texier.pj2@gmail.com>
+Message-ID: <af7f6691-ce89-7047-10e2-e2d4c5bd5d5e@exertus.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
----
- package/tpm2-pkcs11/tpm2-pkcs11.hash | 2 +-
- package/tpm2-pkcs11/tpm2-pkcs11.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 10.7.2021 22.15, Pierre-Jean Texier wrote:
+> See changelog: https://github.com/GunnarMonell/fbgrab/releases/tag/1.5
+> 
+> Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 
-diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.hash b/package/tpm2-pkcs11/tpm2-pkcs11.hash
-index 16dd9166ba..18a225d5a9 100644
---- a/package/tpm2-pkcs11/tpm2-pkcs11.hash
-+++ b/package/tpm2-pkcs11/tpm2-pkcs11.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  13425c34358ec798d333743099b9aec5e42f6a4653c4c0e40eb075681f369687  tpm2-pkcs11-1.5.0.tar.gz
-+sha256  61e2849c07acb4acbf756bdd6a9fe44f9475343256fa0bdc966b77321169c125  tpm2-pkcs11-1.6.0.tar.gz
- sha256  793aa007f793458434d7cc60b1c827053a399308658b32fcaa6023802adc22e1  LICENSE
-diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.mk b/package/tpm2-pkcs11/tpm2-pkcs11.mk
-index 3acce07745..b26ce374e8 100644
---- a/package/tpm2-pkcs11/tpm2-pkcs11.mk
-+++ b/package/tpm2-pkcs11/tpm2-pkcs11.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Tested-by: Timo Ketola <timo.ketola@exertus.fi>
+Acked-by: Timo Ketola <timo.ketola@exertus.fi>
 
--TPM2_PKCS11_VERSION = 1.5.0
-+TPM2_PKCS11_VERSION = 1.6.0
- TPM2_PKCS11_SITE = https://github.com/tpm2-software/tpm2-pkcs11/releases/download/$(TPM2_PKCS11_VERSION)
- TPM2_PKCS11_LICENSE = BSD-2-Clause
- TPM2_PKCS11_LICENSE_FILES = LICENSE
---
-2.20.1
+Thanks for taking care of this.
+
+> ---
+>  package/fbgrab/fbgrab.hash | 2 +-
+>  package/fbgrab/fbgrab.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/fbgrab/fbgrab.hash b/package/fbgrab/fbgrab.hash
+> index 4d9a6b97d4..8cd1ff1518 100644
+> --- a/package/fbgrab/fbgrab.hash
+> +++ b/package/fbgrab/fbgrab.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  62d7aa82138ac36db0921832f3b5267b4cffc0dc22c8701857ebcb997960a32e  fbgrab-1.4.tar.gz
+> +sha256  0202a9c4fb430eee4d8f566d09ab5f6e35c50804a192ba106046e54eb886f8f1  fbgrab-1.5.tar.gz
+>  sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
+> diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
+> index 1ae03ae43f..693c4c282d 100644
+> --- a/package/fbgrab/fbgrab.mk
+> +++ b/package/fbgrab/fbgrab.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -FBGRAB_VERSION = 1.4
+> +FBGRAB_VERSION = 1.5
+>  FBGRAB_SITE = $(call github,GunnarMonell,fbgrab,$(FBGRAB_VERSION))
+>  FBGRAB_DEPENDENCIES = libpng
+>  FBGRAB_LICENSE = GPL-2.0
+> 
+
+-- 
+Create smart solutions with us!
+
++------------------------------------------------+
+| Timo Ketola            | Exertus Oy            |
+| Specialist,            | Kampusranta 9C        |
+|       FW & Electronics | 60320 Sein?joki       |
+| +358 40 5311 244       | Finland               |
+| timo.ketola at exertus.fi | http://www.exertus.fi |
++------------------------+-----------------------+
+| /"\                                            |
+| \ / ASCII RIBBON CAMPAIGN AGAINST HTML MAIL    |
+|  X  http://www.asciiribbon.org/                |
+| / \                                            |
++------------------------------------------------+
