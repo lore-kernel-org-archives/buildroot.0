@@ -1,37 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Jul 2021 10:22:44 +0200
-Subject: [Buildroot] [PATCH v1 1/1] python: use system libffi for
- host-python
-In-Reply-To: <20210621055351.3958011-1-christian@paral.in> (Christian
- Stewart's message of "Sun, 20 Jun 2021 22:53:51 -0700")
-References: <20210621055351.3958011-1-christian@paral.in>
-Message-ID: <87k0lwx7or.fsf@dell.be.48ers.dk>
+Date: Mon, 12 Jul 2021 10:16:27 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x]
+ boot/arm-trusted-firmware: fix coding-style
+Message-ID: <20210712075033.0F81A95236@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9a44ef99aadea07311f05f721277d09cc83ccb95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
- > From: Erico Nunes <nunes.erico@gmail.com>
- > python2 contains a bundled copy of libffi which is currently out of sync with
- > the latest libffi release. There is an option to use a system libffi, buildroot
- > already uses it for the target python2 build and for python3. In python3, the
- > bundled copy doesn't exist anymore and the system-provided libffi is required.
+Fix coding style issue introduced in cf176128ec4a (boot/arm-trusted-firmware:
+add SSP option)
 
- > The bundled copy currently fails to build on aarch64 host due to a missing
- > definition of AARCH64_CALL_CONTEXT_SIZE. This define was removed from the
- > headers in recent libffi releases and the host compiler might be including the
- > system headers before the bundled headers.
+Fixes: cf176128ec4ad60c29c8828cab1887f69edb9473
 
- > To solve this and since buildroot already relies on system libffi for target
- > python2 and python3 anyway, switch host python2 to use system libffi.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 11fffded3c575839504d19d14803840901985b67)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/arm-trusted-firmware/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
- > Reviewed-by: Christian Stewart <christian@paral.in>
-
-Committed to 2021.02.x and 2021.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index d2535b2f17..26c12670dc 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -177,9 +177,9 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN
+ 
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP
+ 	bool "Build with SSP"
++	default y
+ 	depends on BR2_TOOLCHAIN_HAS_SSP
+ 	depends on !BR2_SSP_NONE
+-	default y
+ 	help
+ 	  Say 'y' here if you want to build ATF with SSP.
+ 
