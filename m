@@ -1,17 +1,17 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon, 12 Jul 2021 22:19:11 +0300
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: bump to version 2.32.2
-Message-ID: <20210712191911.2148537-1-aperez@igalia.com>
+Date: Mon, 12 Jul 2021 22:24:34 +0300
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version 2.32.2
+Message-ID: <20210712192434.2229658-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bugfix release, mainly solves a few issues with input events and a
-few crashes. Release notes:
+Bugfix release, mainly solves a few issues with input events,
+drag-and-drop, and a few crashes. Release notes:
 
-  https://wpewebkit.org/release/wpewebkit-2.32.2.html
+  https://webkitgtk.org/2021/07/09/webkitgtk2.32.2-released.html
 
 The patch for building against uClibc has been included in this release,
 therefore "0001-Support-building-against-uClibc.patch" is removed.
@@ -19,15 +19,15 @@ therefore "0001-Support-building-against-uClibc.patch" is removed.
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
  ...0001-Support-building-against-uClibc.patch | 82 -------------------
- package/wpewebkit/wpewebkit.hash              |  8 +-
- package/wpewebkit/wpewebkit.mk                |  2 +-
+ package/webkitgtk/webkitgtk.hash              |  8 +-
+ package/webkitgtk/webkitgtk.mk                |  2 +-
  3 files changed, 5 insertions(+), 87 deletions(-)
- delete mode 100644 package/wpewebkit/0001-Support-building-against-uClibc.patch
+ delete mode 100644 package/webkitgtk/0001-Support-building-against-uClibc.patch
 
-diff --git a/package/wpewebkit/0001-Support-building-against-uClibc.patch b/package/wpewebkit/0001-Support-building-against-uClibc.patch
+diff --git a/package/webkitgtk/0001-Support-building-against-uClibc.patch b/package/webkitgtk/0001-Support-building-against-uClibc.patch
 deleted file mode 100644
 index 7c0918a195..0000000000
---- a/package/wpewebkit/0001-Support-building-against-uClibc.patch
+--- a/package/webkitgtk/0001-Support-building-against-uClibc.patch
 +++ /dev/null
 @@ -1,82 +0,0 @@
 -From 624d3b6a99778443e35fb260bef50a3969df9215 Mon Sep 17 00:00:00 2001
@@ -112,34 +112,34 @@ index 7c0918a195..0000000000
 --- 
 -2.31.1
 -
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 0c8c6dba6f..28e3feae90 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index d8bfa60fb8..dd950bbabe 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
 @@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.32.1.tar.xz.sums
--md5  1dd3f56b8eba16266166d757acb979fc  wpewebkit-2.32.1.tar.xz
--sha1  c5b3a48d886375a6982dd2dc5c9cc2f92f5a9690  wpewebkit-2.32.1.tar.xz
--sha256  7b6b39a12ccf3f84da4cc6ac59e02fbe328f7476eaeb9c23de9b9288c2c2f39c  wpewebkit-2.32.1.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.32.2.tar.xz.sums
-+md5  a6624736150045a54037457416820b19  wpewebkit-2.32.2.tar.xz
-+sha1  7b41a49f97b4cb458b6896623a02f4861cbcf728  wpewebkit-2.32.2.tar.xz
-+sha256  2f0ebef0395a5a9e37a8609093f86140f74504f9954f97799b95f5dfbe186739  wpewebkit-2.32.2.tar.xz
+-# From https://webkitgtk.org/releases/webkitgtk-2.32.1.tar.xz.sums
+-md5  b12790ae1209e1d5848aeb4fb70994db  webkitgtk-2.32.1.tar.xz
+-sha1  c8c507d3c98c891ea5bfcfb6407320959dc77a2b  webkitgtk-2.32.1.tar.xz
+-sha256  136117317f70f66486f71b8edf5e46f8776403c5d8a296e914b11a36ef836917  webkitgtk-2.32.1.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.32.2.tar.xz.sums
++md5  6dbf813fefd79c551be47b1312f27cec  webkitgtk-2.32.2.tar.xz
++sha1  958777627972b18501e5520d0aba9e274a2b151f  webkitgtk-2.32.2.tar.xz
++sha256  1790f86975bdef957ba9a12fc09202de8f55c885ee38467afc50d2bdb7a6c5cd  webkitgtk-2.32.2.tar.xz
  
  # Hashes for license files:
  sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 39424a26fa..339dedd49b 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index bee0d4f885..c3fbedf654 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.32.1
-+WPEWEBKIT_VERSION = 2.32.2
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-WEBKITGTK_VERSION = 2.32.1
++WEBKITGTK_VERSION = 2.32.2
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 -- 
 2.32.0
