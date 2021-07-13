@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Jul 2021 23:39:08 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/libgcrypt:
+Date: Tue, 13 Jul 2021 23:39:02 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libgcrypt:
  security bump to version 1.9.3
-Message-ID: <20210713212530.606D08B447@busybox.osuosl.org>
+Message-ID: <20210713212537.E7D6C8B4AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66597f8dfe4bdd27dcfeef5e4d26d24aec7642c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3e694ca0043e232d89b8a77318b776c3cc94f826
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Fix CVE-2021-33560: Libgcrypt before 1.8.8 and 1.9.x before 1.9.3
 mishandles ElGamal encryption because it lacks exponent blinding to
