@@ -1,42 +1,55 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 13 Jul 2021 15:53:54 +0200
-Subject: [Buildroot] [PATCH] package/pango: bump to version 1.48.7
-Message-ID: <20210713135354.1196171-1-francois.perrad@gadz.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 13 Jul 2021 20:39:52 +0300
+Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 2.8.2
+In-Reply-To: <20210713135305.1196063-1-francois.perrad@gadz.org>
+References: <20210713135305.1196063-1-francois.perrad@gadz.org>
+Message-ID: <87v95et8nr.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/pango/pango.hash | 2 +-
- package/pango/pango.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Francois,
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 3d6167058..94568a68e 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,5 +1,5 @@
- # From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.48/pango-1.48.4.sha256sum
--sha256  418913fb062071a075846244989d4a67aa5c80bf0eae8ee4555a092fd566a37a  pango-1.48.4.tar.xz
-+sha256  28a82f6a6cab60aa3b75a90f04197ead2d311fa8fe8b7bfdf8666e2781d506dc  pango-1.48.7.tar.xz
- 
- # Locally computed
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index cc09e3a64..2a4a9f49d 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PANGO_VERSION_MAJOR = 1.48
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).4
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).7
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
+On Tue, Jul 13 2021, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/harfbuzz/harfbuzz.hash | 4 ++--
+>  package/harfbuzz/harfbuzz.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+> index ad81b34fd..774b3104a 100644
+> --- a/package/harfbuzz/harfbuzz.hash
+> +++ b/package/harfbuzz/harfbuzz.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256  4124f663ec4bf4e294d9cf230668370b4249a48ff34deaf0f06e8fc82d891300  harfbuzz-2.8.1.tar.xz
+> -sha256  beb3f017ceb41387667f78237a7cecf84defa0ed257c505894663d6a9f13211b  COPYING
+> +sha256  d58461395ce28b9dc03903254374dd70c38c8c28c5046db123c08f7ab9417be7  harfbuzz-2.8.2.tar.xz
+> +sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
+
+Why is the COPYING hash change?
+
+baruch
+
+> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+> index 60cc8b724..f327a95eb 100644
+> --- a/package/harfbuzz/harfbuzz.mk
+> +++ b/package/harfbuzz/harfbuzz.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -HARFBUZZ_VERSION = 2.8.1
+> +HARFBUZZ_VERSION = 2.8.2
+>  HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+>  HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+>  HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+
+
 -- 
-2.30.2
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
