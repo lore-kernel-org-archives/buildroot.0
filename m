@@ -1,27 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Jul 2021 23:34:59 +0200
-Subject: [Buildroot] [PATCH] package/openpgm: fix link for 32-bit x86
-In-Reply-To: <1e611fcaedd4a6f29ddf12f9d685d9a29c578d3e.1624608332.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 25 Jun 2021 11:05:32 +0300")
-References: <1e611fcaedd4a6f29ddf12f9d685d9a29c578d3e.1624608332.git.baruch@tkos.co.il>
-Message-ID: <87o8b5x5h8.fsf@dell.be.48ers.dk>
+Date: Tue, 13 Jul 2021 23:39:18 +0200
+Subject: [Buildroot] [PATCH 2/5] package/libgcrypt: security bump to
+ version 1.9.3
+In-Reply-To: <20210621054747.218408-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 21 Jun 2021 07:47:44 +0200")
+References: <20210621054747.218408-1-fontaine.fabrice@gmail.com>
+ <20210621054747.218408-2-fontaine.fabrice@gmail.com>
+Message-ID: <87k0ltx5a1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Add upstream patch fixing link with libpgm on build for x86 32-bit.
- > Fixes:
- > http://autobuild.buildroot.net/results/80254e61dc55bc07b16b3b66710946c71b9d53bb/
- > http://autobuild.buildroot.net/results/7bce71db86df8ba204153e0ab5022fb5ace9a6e5/
- > http://autobuild.buildroot.net/results/24a0aaff8f46953d015218a60da2c9856152eea3/
+ > Fix CVE-2021-33560: Libgcrypt before 1.8.8 and 1.9.x before 1.9.3
+ > mishandles ElGamal encryption because it lacks exponent blinding to
+ > address a side-channel attack against mpi_powm, and the window size is
+ > not chosen appropriately. (There is also an interoperability problem
+ > because the selection of the k integer value does not properly consider
+ > the differences between basic ElGamal encryption and generalized ElGamal
+ > encryption.) This, for example, affects use of ElGamal in OpenPGP.
 
- > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > Cc: Alexander Lukichev <alexander.lukichev@gmail.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > https://dev.gnupg.org/T5305
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2021.02.x and 2021.05.x, thanks.
 
