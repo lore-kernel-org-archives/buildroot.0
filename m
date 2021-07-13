@@ -1,99 +1,52 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 13 Jul 2021 21:13:59 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/apg: new package
-Message-ID: <20210713191359.858920-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 13 Jul 2021 21:20:19 +0200
+Subject: [Buildroot] [PATCH 1/3] beaglev: update to new starfive linux
+ and u-boot
+In-Reply-To: <20210609063834.2193864-1-drew@beagleboard.org>
+References: <20210609063834.2193864-1-drew@beagleboard.org>
+Message-ID: <6f3c7e9e-f770-3224-38fe-d14e72673abd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: fixed license, added dot to help text (Yegor)
 
- DEVELOPERS            |  1 +
- package/Config.in     |  1 +
- package/apg/Config.in |  6 ++++++
- package/apg/apg.hash  |  3 +++
- package/apg/apg.mk    | 21 +++++++++++++++++++++
- 5 files changed, 32 insertions(+)
- create mode 100644 package/apg/Config.in
- create mode 100644 package/apg/apg.hash
- create mode 100644 package/apg/apg.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 15ea800f4b..4eb76e0fe1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -314,6 +314,7 @@ N:	Bernd Kuhls <bernd.kuhls@t-online.de>
- F:	package/alsa-lib/
- F:	package/alsa-utils/
- F:	package/apache/
-+F:	package/apg/
- F:	package/apr/
- F:	package/apr-util/
- F:	package/bcg729/
-diff --git a/package/Config.in b/package/Config.in
-index 1a8ba3c23c..f5fb97f3cd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2400,6 +2400,7 @@ comment "Shells"
- 	source "package/mksh/Config.in"
- 	source "package/zsh/Config.in"
- comment "Utilities"
-+	source "package/apg/Config.in"
- 	source "package/at/Config.in"
- 	source "package/bash-completion/Config.in"
- 	source "package/ccrypt/Config.in"
-diff --git a/package/apg/Config.in b/package/apg/Config.in
-new file mode 100644
-index 0000000000..94c286a178
---- /dev/null
-+++ b/package/apg/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_APG
-+	bool "apg"
-+	help
-+	  Automated Password Generator (APG).
-+
-+	  https://github.com/wilx/apg
-diff --git a/package/apg/apg.hash b/package/apg/apg.hash
-new file mode 100644
-index 0000000000..5532289a68
---- /dev/null
-+++ b/package/apg/apg.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  89539aa734a47d68124fca5ba7acbe559edc5003b6791f5200ef9e706dd00fe9  apg-2.3.0b.tar.gz
-+sha256  5d0c892ea452c3828f1e311637cde4e3a04eb6431554308b3fcdac8c1b330168  COPYING
-diff --git a/package/apg/apg.mk b/package/apg/apg.mk
-new file mode 100644
-index 0000000000..ac4dce77f9
---- /dev/null
-+++ b/package/apg/apg.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# apg
-+#
-+################################################################################
-+
-+APG_VERSION = 2.3.0b
-+APG_SITE = $(call github,wilx,apg,v$(APG_VERSION))
-+APG_LICENSE = BSD-3-Clause
-+APG_LICENSE_FILES = COPYING
-+
-+define APG_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(APG_CFLAGS)" \
-+		-C $(@D)
-+endef
-+
-+define APG_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/apg $(TARGET_DIR)/usr/bin/apg
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.30.2
+On 09/06/2021 08:38, Drew Fustini wrote:
+> Update the commit id for u-boot to include fixes from the starfive-tech
+> u-boot repository:
+> 
+> 494e5ef7b807 jh7100: Enable full 2M L2 cache
+> 4571f5a4e1e4 vic7100: enable cache ways (L2 cache)
+> abb06422a5cd Remove fdt_high and initrd_high for Starfive
+> 93099a61c7b0 starfive: beaglev: Disable SIFIVE_CLINT and enable RISCV_TIMER
+> bfb5abac3d1f Revert "riscv: Enable the SiFive CLINT block driver in S-Mode(VIC7100 ONLY)"
+> 7b70e1d44ba9 defconfig: enable cache_wayenable for better performance
+> 7c585978616b configs: earlycon=sbi is deprecated
+> 
+> The commit abb06422a5cd ("Remove fdt_high and initrd_high for Starfive")
+> has removed the need for buildroot to patch the fdt_addr_r address.
+> 
+> Update linux from commit in the old 5.10 branch that Fedora image was 
+> using to head of esmil_starlight branch [1] which is currently based 
+> on 5.13-rc5 and represents the best kernel for this board [2].
+> 
+> In addition, the updated kernel now has jh7100-beaglev-starlight.dtb so
+> buildroot no longer needs to copy the dtb from u-boot.
+> 
+> [1] https://github.com/starfive-tech/linux/tree/esmil_starlight
+> [2] https://github.com/starfive-tech/linux/issues/26
+> 
+> Signed-off-by: Drew Fustini <drew@beagleboard.org>
+
+ Series applied to master, thanks.
+
+ I've added a comment to refer to the tag you added to the linux repo, and I
+changed the commit message of the other two to make it explicit in the Subject
+line that it's a version bump.
+
+ Regards,
+ Arnout
+
+[snip]
