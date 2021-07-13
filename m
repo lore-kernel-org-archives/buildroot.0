@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Jul 2021 22:40:40 +0200
-Subject: [Buildroot] [PATCH/next 1/3] package/libdvdread: bump version
- to 6.1.2
-In-Reply-To: <20210606075103.699369-1-bernd.kuhls@t-online.de>
-References: <20210606075103.699369-1-bernd.kuhls@t-online.de>
-Message-ID: <b700988d-bc7b-aa71-428a-e058eb2f3ed0@mind.be>
+Date: Tue, 13 Jul 2021 22:40:55 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libass: bump version to
+ 0.15.1
+In-Reply-To: <20210606080341.766569-1-bernd.kuhls@t-online.de>
+References: <20210606080341.766569-1-bernd.kuhls@t-online.de>
+Message-ID: <9a96de2f-77f3-2f8f-930f-0d11ea5c8938@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,54 +13,41 @@ To: buildroot@busybox.net
 
 
 
-On 06/06/2021 09:51, Bernd Kuhls wrote:
-> Release notes:
-> https://code.videolan.org/videolan/libdvdread/-/blob/master/NEWS
-> 
-> Removed md5 hash, reformatted hashes.
+On 06/06/2021 10:03, Bernd Kuhls wrote:
+> Release notes: https://github.com/libass/libass/releases/tag/0.15.1
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- Series applied to master, thanks.
+ Applied to master, thanks.
 
  Regards,
  Arnout
 
 > ---
->  package/libdvdread/libdvdread.hash | 12 +++++-------
->  package/libdvdread/libdvdread.mk   |  2 +-
->  2 files changed, 6 insertions(+), 8 deletions(-)
+>  package/libass/libass.hash | 2 +-
+>  package/libass/libass.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/libdvdread/libdvdread.hash b/package/libdvdread/libdvdread.hash
-> index 00066619ce..de9afcfa30 100644
-> --- a/package/libdvdread/libdvdread.hash
-> +++ b/package/libdvdread/libdvdread.hash
-> @@ -1,9 +1,7 @@
-> -# From http://download.videolan.org/pub/videolan/libdvdread/6.1.1/libdvdread-6.1.1.tar.bz2.md5
-> -md5 09c7423568fb679279fd2a2bc6b10b6e libdvdread-6.1.1.tar.bz2
-> -# From http://download.videolan.org/pub/videolan/libdvdread/6.1.1/libdvdread-6.1.1.tar.bz2.sha1
-> -sha1 d2e5056de89fb5fed478c0af5a72e8b781d0c396 libdvdread-6.1.1.tar.bz2
-> -# From http://download.videolan.org/pub/videolan/libdvdread/6.1.1/libdvdread-6.1.1.tar.bz2.sha256
-> -sha256 3e357309a17c5be3731385b9eabda6b7e3fa010f46022a06f104553bf8e21796 libdvdread-6.1.1.tar.bz2
-> +# From http://download.videolan.org/pub/videolan/libdvdread/6.1.2/libdvdread-6.1.2.tar.bz2.sha1
-> +sha1  789d0780fbdcd7d6dadf0fda3d4a4b6198c16393  libdvdread-6.1.2.tar.bz2
-> +# From http://download.videolan.org/pub/videolan/libdvdread/6.1.2/libdvdread-6.1.2.tar.bz2.sha256
-> +sha256  cc190f553758ced7571859e301f802cb4821f164d02bfacfd320c14a4e0da763  libdvdread-6.1.2.tar.bz2
->  
->  # Hash for license file:
-> -sha256	d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572	COPYING
-> +sha256  d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572  COPYING
-> diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
-> index aa91d3162a..9ddb6721c7 100644
-> --- a/package/libdvdread/libdvdread.mk
-> +++ b/package/libdvdread/libdvdread.mk
+> diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+> index cd3c3af61c..882bc456ae 100644
+> --- a/package/libass/libass.hash
+> +++ b/package/libass/libass.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256  9f09230c9a0aa68ef7aa6a9e2ab709ca957020f842e52c5b2e52b801a7d9e833  libass-0.15.0.tar.xz
+> +sha256  1cdd39c9d007b06e737e7738004d7f38cf9b1e92843f37307b24e7ff63ab8e53  libass-0.15.1.tar.xz
+>  sha256  f7e30699d02798351e7f839e3d3bfeb29ce65e44efa7735c225464c4fd7dfe9c  COPYING
+> diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+> index 48e70a52c5..515f87c686 100644
+> --- a/package/libass/libass.mk
+> +++ b/package/libass/libass.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -LIBDVDREAD_VERSION = 6.1.1
-> +LIBDVDREAD_VERSION = 6.1.2
->  LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.bz2
->  LIBDVDREAD_SITE = http://www.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_VERSION)
->  LIBDVDREAD_INSTALL_STAGING = YES
+> -LIBASS_VERSION = 0.15.0
+> +LIBASS_VERSION = 0.15.1
+>  LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+>  # Do not use the github helper here, the generated tarball is *NOT*
+>  # the same as the one uploaded by upstream for the release.
 > 
