@@ -1,47 +1,53 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 13 Jul 2021 21:47:19 +0200
-Subject: [Buildroot] [git commit] package/seatd: disable -Werror
-Message-ID: <20210713191510.2FEE69555D@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 13 Jul 2021 21:52:19 +0200
+Subject: [Buildroot] [PATCH 1/6] rtl8189fs: bump revision to 62c31d57
+In-Reply-To: <20210613161926.2790763-2-geomatsi@gmail.com>
+References: <20210613161926.2790763-1-geomatsi@gmail.com>
+ <20210613161926.2790763-2-geomatsi@gmail.com>
+Message-ID: <c3cf13da-889c-ff39-bbc1-49b5b3a6967e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=464fb90793516c8d8e5c25b6531773b33aa4d676
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Disable -Werror to avoid the following build failure which is raised
-since the addition of the package in commit
-daae31149017cbf8b03634cfc56da132f7e1ad83
 
-../seatd/seat.c: In function 'seat_activate_device':
-../seatd/seat.c:374:48: error: unused parameter 'client' [-Werror=unused-parameter]
-  374 | static int seat_activate_device(struct client *client, struct seat_device *seat_device) {
-      |                                 ~~~~~~~~~~~~~~~^~~~~~
+On 13/06/2021 18:19, Sergey Matyukevich wrote:
+> Update out-of-tree driver to make it work with Linux kernel v5.12.
+> 
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> ---
+>  package/rtl8189fs/rtl8189fs.hash | 2 +-
+>  package/rtl8189fs/rtl8189fs.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
+> index f1524a6fcc..f5279d2b2c 100644
+> --- a/package/rtl8189fs/rtl8189fs.hash
+> +++ b/package/rtl8189fs/rtl8189fs.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated
+> -sha256 f3f8bcc1e75f095350f12c36f7b8af88eebf3913d4bc921083489f1758cb5068 rtl8189fs-54bd6808e38f213126e7d6447ae9d80c656179f3.tar.gz
+> +sha256 7d425e18ebc427b3df5ff31185b4dc29c6bfd54f8e167f57c2254cea341a26c6	rtl8189fs-62c31d577c385316bb99107f60e63169dacc37db.tar.gz
 
-Fixes:
- - http://autobuild.buildroot.org/results/0ec925aab23d83c52684f5fea7a4395c93a674c4
+ The different fields here should be separated by two spaces, not a mix of tabs
+and spaces. I fixed that and applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-Tested-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/seatd/seatd.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Regards,
+ Arnout
 
-diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
-index 2abcefbfaa..bf582f0d1d 100644
---- a/package/seatd/seatd.mk
-+++ b/package/seatd/seatd.mk
-@@ -13,7 +13,8 @@ SEATD_INSTALL_STAGING = YES
- 
- SEATD_CONF_OPTS += \
- 	-Dman-pages=disabled \
--	-Dexamples=disabled
-+	-Dexamples=disabled \
-+	-Dwerror=false
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
- SEATD_CONF_OPTS += -Dlogind=enabled
+> diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
+> index 39122bc786..4112b135ad 100644
+> --- a/package/rtl8189fs/rtl8189fs.mk
+> +++ b/package/rtl8189fs/rtl8189fs.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -RTL8189FS_VERSION = 54bd6808e38f213126e7d6447ae9d80c656179f3
+> +RTL8189FS_VERSION = 62c31d577c385316bb99107f60e63169dacc37db
+>  RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
+>  RTL8189FS_LICENSE = GPL-2.0
+>  
+> 
