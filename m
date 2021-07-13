@@ -1,53 +1,46 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 13 Jul 2021 22:38:44 +0200
-Subject: [Buildroot] [git commit] package/libdvdcss: bump version to 1.4.3
-Message-ID: <20210713200743.1ACED9567B@busybox.osuosl.org>
+Date: Tue, 13 Jul 2021 22:39:40 +0200
+Subject: [Buildroot] [git commit] package/libmicrohttpd: bump version to
+ 0.9.73
+Message-ID: <20210713200743.3252B9567B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c398b16a9ccc2b4b3e4687726a68aa4a2555dfda
+commit: https://git.buildroot.net/buildroot/commit/?id=9a8b5ac4ec77ad6cde329886694aedefd05662a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://code.videolan.org/videolan/libdvdcss/-/blob/master/NEWS
-
-Added sha1 hash, reformatted hashes.
+https://lists.gnu.org/archive/html/libmicrohttpd/2021-04/msg00000.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libdvdcss/libdvdcss.hash | 8 +++++---
- package/libdvdcss/libdvdcss.mk   | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdvdcss/libdvdcss.hash b/package/libdvdcss/libdvdcss.hash
-index 1e1b03ed20..4d20f19efc 100644
---- a/package/libdvdcss/libdvdcss.hash
-+++ b/package/libdvdcss/libdvdcss.hash
-@@ -1,5 +1,7 @@
--# From http://download.videolan.org/pub/videolan/libdvdcss/1.4.2/libdvdcss-1.4.2.tar.bz2.sha256
--sha256	78c2ed77ec9c0d8fbed7bf7d3abc82068b8864be494cfad165821377ff3f2575	libdvdcss-1.4.2.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libdvdcss/1.4.3/libdvdcss-1.4.3.tar.bz2.sha1
-+sha1  fcea8b2749ead8183636e48300bea8791abc79ee  libdvdcss-1.4.3.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libdvdcss/1.4.3/libdvdcss-1.4.3.tar.bz2.sha256
-+sha256  233cc92f5dc01c5d3a96f5b3582be7d5cee5a35a52d3a08158745d3d86070079  libdvdcss-1.4.3.tar.bz2
- 
- # Hash for license file:
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/libdvdcss/libdvdcss.mk b/package/libdvdcss/libdvdcss.mk
-index 0593d556e1..f4d721771f 100644
---- a/package/libdvdcss/libdvdcss.mk
-+++ b/package/libdvdcss/libdvdcss.mk
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index e92032a216..c9d4d25c78 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  0ae825f8e0d7f41201fd44a0df1cf454c1cb0bc50fe9d59c26552260264c2ff8  libmicrohttpd-0.9.72.tar.gz
++sha256  a37b2f1b88fd1bfe74109586be463a434d34e773530fc2a74364cfcf734c032e  libmicrohttpd-0.9.73.tar.gz
+ sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 6eee597c34..ef9f114494 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDVDCSS_VERSION = 1.4.2
-+LIBDVDCSS_VERSION = 1.4.3
- LIBDVDCSS_SOURCE = libdvdcss-$(LIBDVDCSS_VERSION).tar.bz2
- LIBDVDCSS_SITE = http://www.videolan.org/pub/videolan/libdvdcss/$(LIBDVDCSS_VERSION)
- LIBDVDCSS_INSTALL_STAGING = YES
+-LIBMICROHTTPD_VERSION = 0.9.72
++LIBMICROHTTPD_VERSION = 0.9.73
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_CPE_ID_VENDOR = gnu
