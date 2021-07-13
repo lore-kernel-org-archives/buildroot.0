@@ -1,7 +1,7 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 13 Jul 2021 13:20:42 +0200
-Subject: [Buildroot] [PATCH] package/nano: bump to version 5.8
-Message-ID: <20210713112042.1157671-1-francois.perrad@gadz.org>
+Date: Tue, 13 Jul 2021 13:20:53 +0200
+Subject: [Buildroot] [PATCH] package/spi-tools: bump to version 1.0.0
+Message-ID: <20210713112053.1157725-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,34 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/spi-tools/spi-tools.hash | 2 +-
+ package/spi-tools/spi-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 532a68e0c..277f22401 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v5/nano-5.7.tar.xz.asc
-+# https://www.nano-editor.org/dist/v5/nano-5.8.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256  d4b181cc2ec11def3711b4649e34f2be7a668e70ab506860514031d069cccafa  nano-5.7.tar.xz
-+sha256  e43b63db2f78336e2aa123e8d015dbabc1720a15361714bfd4b1bb4e5e87768c  nano-5.8.tar.xz
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 39d9be12b..2a20eca21 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/spi-tools/spi-tools.hash b/package/spi-tools/spi-tools.hash
+index 771f86e4c..a1ef4c2b9 100644
+--- a/package/spi-tools/spi-tools.hash
++++ b/package/spi-tools/spi-tools.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  319ad6ab296111109ea4a820e216cef392429295de7e10e76f7146677337cf09  spi-tools-0.8.6.tar.gz
++sha256  5eb24670461dcf2c58471114dc69b5204dab1c0cc5053878f6de79503bd8cc9f  spi-tools-1.0.0.tar.gz
+ sha256  a01259a1b522cf0de95824f9860613b453153eebac468e96196d5d7dba84786c  LICENSE
+diff --git a/package/spi-tools/spi-tools.mk b/package/spi-tools/spi-tools.mk
+index b2dd4db3f..26d0dcf54 100644
+--- a/package/spi-tools/spi-tools.mk
++++ b/package/spi-tools/spi-tools.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NANO_VERSION_MAJOR = 5
--NANO_VERSION = $(NANO_VERSION_MAJOR).7
-+NANO_VERSION = $(NANO_VERSION_MAJOR).8
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-SPI_TOOLS_VERSION = 0.8.6
++SPI_TOOLS_VERSION = 1.0.0
+ SPI_TOOLS_SITE = $(call github,cpb-,spi-tools,$(SPI_TOOLS_VERSION))
+ # autoreconf must be run as specified in package documentation
+ SPI_TOOLS_AUTORECONF = YES
 -- 
 2.30.2
