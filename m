@@ -1,46 +1,85 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 13 Jul 2021 22:39:40 +0200
-Subject: [Buildroot] [git commit] package/libmicrohttpd: bump version to
- 0.9.73
-Message-ID: <20210713200743.3252B9567B@busybox.osuosl.org>
+Date: Tue, 13 Jul 2021 22:23:55 +0200
+Subject: [Buildroot] [git commit] package/efibootmgr: bump version to 17
+Message-ID: <20210713200742.EE94E95677@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a8b5ac4ec77ad6cde329886694aedefd05662a5
+commit: https://git.buildroot.net/buildroot/commit/?id=c928abbed3762709dc5accb476340cf91e84a3a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.gnu.org/archive/html/libmicrohttpd/2021-04/msg00000.html
+Add upstream patch to fix build error:
+
+efibootmgr.c:1541:15: error: conflicting types for ???efi_set_verbose???
+ 1541 |    extern int efi_set_verbose(int verbosity, FILE *errlog);
+
+Reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libmicrohttpd/libmicrohttpd.hash | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/efibootmgr/0002-remove-extra-decl.patch | 28 +++++++++++++++++++++++++
+ package/efibootmgr/efibootmgr.hash              |  4 ++--
+ package/efibootmgr/efibootmgr.mk                |  2 +-
+ 3 files changed, 31 insertions(+), 3 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index e92032a216..c9d4d25c78 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
+diff --git a/package/efibootmgr/0002-remove-extra-decl.patch b/package/efibootmgr/0002-remove-extra-decl.patch
+new file mode 100644
+index 0000000000..f838d50a20
+--- /dev/null
++++ b/package/efibootmgr/0002-remove-extra-decl.patch
+@@ -0,0 +1,28 @@
++From 99b578501643377e0b1994b2a068b790d189d5ad Mon Sep 17 00:00:00 2001
++From: Peter Jones <pjones@redhat.com>
++Date: Wed, 13 Jun 2018 09:41:01 -0400
++Subject: [PATCH] remove extra decl
++
++Downloaded from upstream commit
++https://github.com/rhboot/efibootmgr/commit/99b578501643377e0b1994b2a068b790d189d5ad
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/efibootmgr.c | 3 ---
++ 1 file changed, 3 deletions(-)
++
++diff --git a/src/efibootmgr.c b/src/efibootmgr.c
++index de38f01..4e1a680 100644
++--- a/src/efibootmgr.c
+++++ b/src/efibootmgr.c
++@@ -1536,9 +1536,6 @@ parse_opts(int argc, char **argv)
++ 					       "invalid numeric value %s\n",
++ 					       optarg);
++ 			}
++-                        /* XXX efivar-36 accidentally doesn't have a public
++-                         * header for this */
++-			extern int efi_set_verbose(int verbosity, FILE *errlog);
++ 			efi_set_verbose(opts.verbose - 2, stderr);
++ 			break;
++ 		case 'V':
+diff --git a/package/efibootmgr/efibootmgr.hash b/package/efibootmgr/efibootmgr.hash
+index b786a415a8..fdbc9a2732 100644
+--- a/package/efibootmgr/efibootmgr.hash
++++ b/package/efibootmgr/efibootmgr.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0ae825f8e0d7f41201fd44a0df1cf454c1cb0bc50fe9d59c26552260264c2ff8  libmicrohttpd-0.9.72.tar.gz
-+sha256  a37b2f1b88fd1bfe74109586be463a434d34e773530fc2a74364cfcf734c032e  libmicrohttpd-0.9.73.tar.gz
- sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 6eee597c34..ef9f114494 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
+ # locally computed hash
+-sha256 5a708b9690cdc631fd75d8f598128d20cad007e711b975b0143f9517c2dd1bf4  efibootmgr-15.tar.gz
+-sha256 dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
++sha256  22a95ebe0d5c9fb2915b3a100450f8f37484d1dbb8b296f55b343cc84f10397d  efibootmgr-17.tar.gz
++sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
+index 079a9b7281..7e09b5f659 100644
+--- a/package/efibootmgr/efibootmgr.mk
++++ b/package/efibootmgr/efibootmgr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMICROHTTPD_VERSION = 0.9.72
-+LIBMICROHTTPD_VERSION = 0.9.73
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_CPE_ID_VENDOR = gnu
+-EFIBOOTMGR_VERSION = 15
++EFIBOOTMGR_VERSION = 17
+ EFIBOOTMGR_SITE = $(call github,rhboot,efibootmgr,$(EFIBOOTMGR_VERSION))
+ EFIBOOTMGR_LICENSE = GPL-2.0+
+ EFIBOOTMGR_LICENSE_FILES = COPYING
