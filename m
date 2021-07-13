@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25864C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:19:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 206CEC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:19:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CAF5960720
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:19:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CAF5960720
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id B871F60EE8
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:19:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B871F60EE8
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A2CB2403FF;
-	Tue,  3 Aug 2021 22:19:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0QMrZrQH8BSY; Tue,  3 Aug 2021 22:19:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7696640463;
-	Tue,  3 Aug 2021 22:19:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 00AAF1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F1DA7835B1
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92929829B1;
+	Tue,  3 Aug 2021 22:19:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YWoitqaRKgZI for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id n0nFqUsPdRy9; Tue,  3 Aug 2021 22:19:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id DEC54829FE;
+	Tue,  3 Aug 2021 22:19:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FD4A1BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 459ED608D8
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:09 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ImIInHc-UZQH for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 41E1F83ABB
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A15F60904
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8C3D983FBA; Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id E2C2E87F55; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 23:27:02 +0200
+Date: Tue, 13 Jul 2021 21:40:35 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4f20ad546fd89e8e2dee7b40ebea9878e72d082f
-X-Git-Newrev: 2ce779f91819941c0b34a1d3821cad7575415b3e
+X-Git-Oldrev: 29b5fe6895dcf38eea51bc68baf7310950c4d401
+X-Git-Newrev: 99e9433237719c4938c472a4159f7de4cbedfced
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211018.8C3D983FBA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libnfnetlink: fix
- build on musl
+Message-Id: <20210803211000.E2C2E87F55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/flatbuffers: bump to
+ version 2.0.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,141 +70,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ce779f91819941c0b34a1d3821cad7575415b3e
+commit: https://git.buildroot.net/buildroot/commit/?id=99e9433237719c4938c472a4159f7de4cbedfced
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Include upstream patch to fix build failure with suricata raised since
-bump to version 6.0.3 in commit 4c429c3f8c322381991a58fcc37c01da9eb5e8a6
-
-Fixes:
- - http://autobuild.buildroot.org/results/0b960f40b5d7e4bb0c4ba20638fe66a9e0964ab3
+https://github.com/google/flatbuffers/releases/tag/v2.0.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../0002-include-Sync-with-kernel-headers.patch    | 114 +++++++++++++++++++++
- 1 file changed, 114 insertions(+)
+ package/flatbuffers/flatbuffers.hash | 2 +-
+ package/flatbuffers/flatbuffers.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnfnetlink/0002-include-Sync-with-kernel-headers.patch b/package/libnfnetlink/0002-include-Sync-with-kernel-headers.patch
-new file mode 100644
-index 0000000000..f9e9c2e2ea
---- /dev/null
-+++ b/package/libnfnetlink/0002-include-Sync-with-kernel-headers.patch
-@@ -0,0 +1,114 @@
-+From 7a1a07c0028a1c88cd7716a058697c552a563b24 Mon Sep 17 00:00:00 2001
-+From: Felix Janda <felix.janda@posteo.de>
-+Date: Sat, 16 May 2015 14:49:07 +0200
-+Subject: include: Sync with kernel headers
-+
-+Signed-off-by: Felix Janda <felix.janda@posteo.de>
-+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-+
-+[Retrieved from:
-+https://git.netfilter.org/libnfnetlink/commit/?id=7a1a07c0028a1c88cd7716a058697c552a563b24]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ include/libnfnetlink/linux_nfnetlink.h        | 44 ++++-----------------------
-+ include/libnfnetlink/linux_nfnetlink_compat.h | 12 ++++----
-+ 2 files changed, 12 insertions(+), 44 deletions(-)
-+
-+diff --git a/include/libnfnetlink/linux_nfnetlink.h b/include/libnfnetlink/linux_nfnetlink.h
-+index 76a8550..44a38d6 100644
-+--- a/include/libnfnetlink/linux_nfnetlink.h
-++++ b/include/libnfnetlink/linux_nfnetlink.h
-+@@ -25,9 +25,9 @@ enum nfnetlink_groups {
-+ /* General form of address family dependent message.
-+  */
-+ struct nfgenmsg {
-+-	u_int8_t  nfgen_family;		/* AF_xxx */
-+-	u_int8_t  version;		/* nfnetlink version */
-+-	u_int16_t    res_id;		/* resource id */
-++	__u8  nfgen_family;		/* AF_xxx */
-++	__u8  version;		/* nfnetlink version */
-++	__be16    res_id;		/* resource id */
-+ };
-+ 
-+ #define NFNETLINK_V0	0
-+@@ -46,40 +46,8 @@ struct nfgenmsg {
-+ #define NFNL_SUBSYS_CTNETLINK_EXP	2
-+ #define NFNL_SUBSYS_QUEUE		3
-+ #define NFNL_SUBSYS_ULOG		4
-+-#define NFNL_SUBSYS_COUNT		5
-++#define NFNL_SUBSYS_OSF			5
-++#define NFNL_SUBSYS_IPSET		6
-++#define NFNL_SUBSYS_COUNT		7
-+ 
-+-#ifdef __KERNEL__
-+-
-+-#include <linux/netlink.h>
-+-#include <linux/capability.h>
-+-#include <net/netlink.h>
-+-
-+-struct nfnl_callback
-+-{
-+-	int (*call)(struct sock *nl, struct sk_buff *skb, 
-+-		struct nlmsghdr *nlh, struct nlattr *cda[]);
-+-	const struct nla_policy *policy;	/* netlink attribute policy */
-+-	const u_int16_t attr_count;		/* number of nlattr's */
-+-};
-+-
-+-struct nfnetlink_subsystem
-+-{
-+-	const char *name;
-+-	__u8 subsys_id;			/* nfnetlink subsystem ID */
-+-	__u8 cb_count;			/* number of callbacks */
-+-	const struct nfnl_callback *cb;	/* callback for individual types */
-+-};
-+-
-+-extern int nfnetlink_subsys_register(const struct nfnetlink_subsystem *n);
-+-extern int nfnetlink_subsys_unregister(const struct nfnetlink_subsystem *n);
-+-
-+-extern int nfnetlink_has_listeners(unsigned int group);
-+-extern int nfnetlink_send(struct sk_buff *skb, u32 pid, unsigned group, 
-+-			  int echo);
-+-extern int nfnetlink_unicast(struct sk_buff *skb, u_int32_t pid, int flags);
-+-
-+-#define MODULE_ALIAS_NFNL_SUBSYS(subsys) \
-+-	MODULE_ALIAS("nfnetlink-subsys-" __stringify(subsys))
-+-
-+-#endif	/* __KERNEL__ */
-+ #endif	/* _NFNETLINK_H */
-+diff --git a/include/libnfnetlink/linux_nfnetlink_compat.h b/include/libnfnetlink/linux_nfnetlink_compat.h
-+index e145176..74b9e55 100644
-+--- a/include/libnfnetlink/linux_nfnetlink_compat.h
-++++ b/include/libnfnetlink/linux_nfnetlink_compat.h
-+@@ -1,6 +1,8 @@
-+ #ifndef _NFNETLINK_COMPAT_H
-+ #define _NFNETLINK_COMPAT_H
-+-#ifndef __KERNEL__
-++
-++#include <linux/types.h>
-++
-+ /* Old nfnetlink macros for userspace */
-+ 
-+ /* nfnetlink groups: Up to 32 maximum */
-+@@ -18,10 +20,9 @@
-+  * ! nfnetlink use the same attributes methods. - J. Schulist.
-+  */
-+ 
-+-struct nfattr
-+-{
-+-	u_int16_t nfa_len;
-+-	u_int16_t nfa_type;	/* we use 15 bits for the type, and the highest
-++struct nfattr {
-++	__u16 nfa_len;
-++	__u16 nfa_type;	/* we use 15 bits for the type, and the highest
-+ 				 * bit to indicate whether the payload is nested */
-+ };
-+ 
-+@@ -57,5 +58,4 @@ struct nfattr
-+         + NLMSG_ALIGN(sizeof(struct nfgenmsg))))
-+ #define NFM_PAYLOAD(n)  NLMSG_PAYLOAD(n, sizeof(struct nfgenmsg))
-+ 
-+-#endif /* ! __KERNEL__ */
-+ #endif /* _NFNETLINK_COMPAT_H */
-+-- 
-+cgit v1.2.3
-+
+diff --git a/package/flatbuffers/flatbuffers.hash b/package/flatbuffers/flatbuffers.hash
+index 82ef942799..b05b9e7b4b 100644
+--- a/package/flatbuffers/flatbuffers.hash
++++ b/package/flatbuffers/flatbuffers.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  62f2223fb9181d1d6338451375628975775f7522185266cd5296571ac152bc45  flatbuffers-1.12.0.tar.gz
++sha256  9ddb9031798f4f8754d00fca2f1a68ecf9d0f83dfac7239af1311e4fd9a565c4  flatbuffers-2.0.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/flatbuffers/flatbuffers.mk b/package/flatbuffers/flatbuffers.mk
+index 814751f30b..280834c2d4 100644
+--- a/package/flatbuffers/flatbuffers.mk
++++ b/package/flatbuffers/flatbuffers.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLATBUFFERS_VERSION = 1.12.0
++FLATBUFFERS_VERSION = 2.0.0
+ FLATBUFFERS_SITE = $(call github,google,flatbuffers,v$(FLATBUFFERS_VERSION))
+ FLATBUFFERS_LICENSE = Apache-2.0
+ FLATBUFFERS_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
