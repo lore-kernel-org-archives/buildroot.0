@@ -1,100 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 13 Jul 2021 18:10:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apg: new package
-Message-ID: <20210713161054.195583-1-bernd.kuhls@t-online.de>
+Date: Tue, 13 Jul 2021 18:18:42 +0200
+Subject: [Buildroot] [PATCH 2/2] package/kodi-pvr-dvbviewer: bump version to
+ 7.3.2-Matrix
+In-Reply-To: <20210713161842.199123-1-bernd.kuhls@t-online.de>
+References: <20210713161842.199123-1-bernd.kuhls@t-online.de>
+Message-ID: <20210713161842.199123-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Changelog:
+https://github.com/kodi-pvr/pvr.dvbviewer/blob/Matrix/pvr.dvbviewer/changelog.txt
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-test-pkg -a reports no errors:
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash | 2 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-45 builds, 0 skipped, 0 build failed, 0 legal-info failed
-
- DEVELOPERS            |  1 +
- package/Config.in     |  1 +
- package/apg/Config.in |  6 ++++++
- package/apg/apg.hash  |  3 +++
- package/apg/apg.mk    | 21 +++++++++++++++++++++
- 5 files changed, 32 insertions(+)
- create mode 100644 package/apg/Config.in
- create mode 100644 package/apg/apg.hash
- create mode 100644 package/apg/apg.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 15ea800f4b..4eb76e0fe1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -314,6 +314,7 @@ N:	Bernd Kuhls <bernd.kuhls@t-online.de>
- F:	package/alsa-lib/
- F:	package/alsa-utils/
- F:	package/apache/
-+F:	package/apg/
- F:	package/apr/
- F:	package/apr-util/
- F:	package/bcg729/
-diff --git a/package/Config.in b/package/Config.in
-index 1a8ba3c23c..f5fb97f3cd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2400,6 +2400,7 @@ comment "Shells"
- 	source "package/mksh/Config.in"
- 	source "package/zsh/Config.in"
- comment "Utilities"
-+	source "package/apg/Config.in"
- 	source "package/at/Config.in"
- 	source "package/bash-completion/Config.in"
- 	source "package/ccrypt/Config.in"
-diff --git a/package/apg/Config.in b/package/apg/Config.in
-new file mode 100644
-index 0000000000..b7f1ca0454
---- /dev/null
-+++ b/package/apg/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_APG
-+	bool "apg"
-+	help
-+	  Automated Password Generator (APG)
-+
-+	  https://github.com/wilx/apg
-diff --git a/package/apg/apg.hash b/package/apg/apg.hash
-new file mode 100644
-index 0000000000..5532289a68
---- /dev/null
-+++ b/package/apg/apg.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  89539aa734a47d68124fca5ba7acbe559edc5003b6791f5200ef9e706dd00fe9  apg-2.3.0b.tar.gz
-+sha256  5d0c892ea452c3828f1e311637cde4e3a04eb6431554308b3fcdac8c1b330168  COPYING
-diff --git a/package/apg/apg.mk b/package/apg/apg.mk
-new file mode 100644
-index 0000000000..8ab76ea923
---- /dev/null
-+++ b/package/apg/apg.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# apg
-+#
-+################################################################################
-+
-+APG_VERSION = 2.3.0b
-+APG_SITE = $(call github,wilx,apg,v$(APG_VERSION))
-+APG_LICENSE = BSD
-+APG_LICENSE_FILES = COPYING
-+
-+define APG_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(APG_CFLAGS)" \
-+		-C $(@D)
-+endef
-+
-+define APG_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/apg $(TARGET_DIR)/usr/bin/apg
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+index a2aac32bf3..637aa0551f 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  aa81c0a59c00aa13bc1ea3adc078e2910fde42bc86ad3a78ecefc6e4c3d5de59  kodi-pvr-dvbviewer-7.2.0-Matrix.tar.gz
++sha256  4c75f265e89b014d04f84341b384a7ec2419ab5353696c6d0acdcd7e713b7f60  kodi-pvr-dvbviewer-7.3.2-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+index cbc12ed9e5..9761f7192e 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_DVBVIEWER_VERSION = 7.2.0-Matrix
++KODI_PVR_DVBVIEWER_VERSION = 7.3.2-Matrix
+ KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
+ KODI_PVR_DVBVIEWER_LICENSE = GPL-2.0+
+ KODI_PVR_DVBVIEWER_LICENSE_FILES = LICENSE.md
 -- 
 2.30.2
