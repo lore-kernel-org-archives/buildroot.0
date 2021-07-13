@@ -1,78 +1,107 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 12 Jul 2021 22:43:12 +0200
-Subject: [Buildroot] [RFC] board/mx6cubox: Switch to extlinux.conf
-In-Reply-To: <CAOMZO5Dw6=v5ndry8AWgmx0iX_kFDsKPVeqRAhAbLEscuAfAEQ@mail.gmail.com>
-References: <20210712162703.2937572-1-festevam@gmail.com>
- <CAB0FRstB6+32=F-JmTs4RS70A3uUt0feCa9VtF3rgX2GD1tOjw@mail.gmail.com>
- <CAOMZO5Dw6=v5ndry8AWgmx0iX_kFDsKPVeqRAhAbLEscuAfAEQ@mail.gmail.com>
-Message-ID: <CAB0FRsvr-Cre6ZvOCY7NR+ccy_o9JrQaGeKkC=nQ1gYVFFzY3g@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue, 13 Jul 2021 11:27:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: enable nfsv4/nfsv4.1
+ support
+In-Reply-To: <CADvTj4pdAmg3icorf6nzQjEeRnfndg8tSUNd0jcX1DW9Fs-kSQ@mail.gmail.com>
+References: <CADvTj4pdAmg3icorf6nzQjEeRnfndg8tSUNd0jcX1DW9Fs-kSQ@mail.gmail.com>
+Message-ID: <EA3390AF-4FB4-4048-9156-0874FAF2A787@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20210712204312.Jlmrdlf-3ZyCih-_LFBSlICdv5-mH1WUmmjHlY-6y2I@z>
+Message-ID: <20210713092756.UD3HmNpvQcbuXXZQ0XcyuqktQdRKTXGZxiRok3Zu6fk@z>
 
-Le lun. 12 juil. 2021 ? 22:03, Fabio Estevam <festevam@gmail.com> a ?crit :
 
-> Hi Fran?ois,
->
-> On Mon, Jul 12, 2021 at 4:55 PM Fran?ois Perrad
-> <francois.perrad@gadz.org> wrote:
->
-> > Hi Fabio,
-> >
-> > Currently, I got a kernel panic after:
-> > [    6.761962] VFS: Cannot open root device "PARTUUID=" or
-> unknown-block(0,0): error -6
-> > [    6.899508] Kernel panic - not syncing: VFS: Unable to mount root fs
-> on unknown-block(0,0)
-> >
-> > looks like, ${uuid} was not correct.
-> > boot.scr.txt starts with:
-> >     setenv finduuid "part uuid mmc 1:1 uuid"
-> >     run finduuid
->
-> Thanks for testing.
->
-> It seems that this change in U-Boot would fix it:
->
-> --- a/include/configs/mx6cuboxi.h
-> +++ b/include/configs/mx6cuboxi.h
-> @@ -57,7 +57,7 @@
->         "console=" CONSOLE_DEV ",115200\0" \
->         "bootm_size=0x10000000\0" \
->         "mmcdev=" __stringify(CONFIG_SYS_MMC_ENV_DEV) "\0" \
-> -       "finduuid=part uuid mmc 0:1 uuid\0" \
-> +       "finduuid=part uuid mmc 1:1 uuid\0" \
->         "update_sd_firmware=" \
->                 "if test ${ip_dyn} = yes; then " \
->                         "setenv get_cmd dhcp; " \
->
-> If possible, could you please manually change finduuid in the U-Boot
-> prompt?
->
-> => setenv finduuid 'part uuid mmc 1:1 uuid'
-> => saveenv
-> => reset
->
->
-OK fixed within interactive mode.
+> Il giorno 13 lug 2021, alle ore 10:19, James Hilliard <james.hilliard1@gmail.com> ha scritto:
+> 
+> ?On Tue, Jul 13, 2021 at 2:03 AM Giulio Benetti
+> <giulio.benetti@benettiengineering.com> wrote:
+>> 
+>> Hello James,
+>> 
+>>>> Il giorno 13 lug 2021, alle ore 05:14, James Hilliard <james.hilliard1@gmail.com> ha scritto:
+>>> 
+>>> ?Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>>> ---
+>>> package/nfs-utils/Config.in    | 10 ++++++++++
+>>> package/nfs-utils/nfs-utils.mk |  9 +++++++--
+>>> 2 files changed, 17 insertions(+), 2 deletions(-)
+>>> 
+>>> diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
+>>> index da563db0f1..b736f6c973 100644
+>>> --- a/package/nfs-utils/Config.in
+>>> +++ b/package/nfs-utils/Config.in
+>>> @@ -14,6 +14,16 @@ config BR2_PACKAGE_NFS_UTILS
+>>> 
+>>> if BR2_PACKAGE_NFS_UTILS
+>>> 
+>>> +config BR2_PACKAGE_NFS_UTILS_NFSV4
+>>> +    bool "NFSv4/NFSv4.1"
+>>> +    depends on !BR2_STATIC_LIBS # keyutils, lvm2
+>>> +    select BR2_PACKAGE_KEYUTILS
+>>> +    select BR2_PACKAGE_LIBEVENT
+>>> +    select BR2_PACKAGE_LVM2
+>>> +    select BR2_PACKAGE_SQLITE
+>>> +    help
+>>> +      Enable NFSv4/NFSv4.1 support
+>>> +
+>>> config BR2_PACKAGE_NFS_UTILS_RPCDEBUG
+>>>   bool "rpcdebug"
+>>>   help
+>>> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+>>> index c384e939d8..2598f0908b 100644
+>>> --- a/package/nfs-utils/nfs-utils.mk
+>>> +++ b/package/nfs-utils/nfs-utils.mk
+>>> @@ -16,8 +16,6 @@ NFS_UTILS_AUTORECONF = YES
+>>> NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
+>>> 
+>>> NFS_UTILS_CONF_OPTS = \
+>>> -    --disable-nfsv4 \
+>>> -    --disable-nfsv41 \
+>> 
+>> Is this ^^^ what prevents uuid.h build error?
+> 
+> No idea, have some background on that issue?
 
-after fully booted:
-    # cat /boot/extlinux/extlinux.conf
-    Label imx6qdl-cubox Buildroot
-            kernel ../zImage
-            fdtdir ../
-            append root=PARTUUID=${uuid} rootwait rw
-console=${console},${baudrate}
+Yes, I had that issue on this commit:
 
-Fran?ois
+http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=blobdiff;f=support/export/v4root.c;h=c12a7d8562b22616fbc7840faf6719443dac64d3;hp=3654bd7c10c059d6a6ae32001ca979d671ef38f2;hb=c5528f40f9db5061e06dcf1f9b7fce5185b376c6;hpb=ed83085ff310fdc95badb06a26289efb70f99ccd
 
-Thanks,
->
-> Fabio Estevam
->
+But it seems that ?disable-nfsv4 avoid building it,
+so we should have no problem.
+
+Can you double check building with nfsv4 support and find it failing wi uuid.h? I don?t have time at the moment.
+
+Thanks a lot
+
+Giulio
+
+> 
+>> 
+>> Giulio
+>> 
+>>>   --disable-gss \
+>>>   --disable-uuid \
+>>>   --enable-tirpc \
+>>> @@ -46,6 +44,13 @@ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD) += usr/sbin/rpc.rquotad
+>>> NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_NFSD) += usr/sbin/exportfs \
+>>>   usr/sbin/rpc.mountd usr/sbin/rpc.nfsd usr/lib/systemd/system/nfs-server.service
+>>> 
+>>> +ifeq ($(BR2_PACKAGE_NFS_UTILS_NFSV4),y)
+>>> +NFS_UTILS_CONF_OPTS += --enable-nfsv4 --enable-nfsv41
+>>> +NFS_UTILS_DEPENDENCIES += keyutils libevent lvm2 sqlite
+>>> +else
+>>> +NFS_UTILS_CONF_OPTS += --disable-nfsv4 --disable-nfsv41
+>>> +endif
+>>> +
+>>> ifeq ($(BR2_PACKAGE_LIBCAP),y)
+>>> NFS_UTILS_CONF_OPTS += --enable-caps
+>>> NFS_UTILS_DEPENDENCIES += libcap
+>>> --
+>>> 2.25.1
+>>> 
+>> 
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210712/c60939d2/attachment-0002.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210713/a7baad5d/attachment-0002.html>
