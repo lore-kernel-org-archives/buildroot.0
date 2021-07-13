@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URI_NOVOWEL autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D4E5C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:26:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0312DC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:26:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 206AD60E78
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:26:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 206AD60E78
+	by mail.kernel.org (Postfix) with ESMTPS id C113F60F70
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:26:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C113F60F70
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E3854404FA;
-	Tue,  3 Aug 2021 23:26:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 986406086F;
+	Tue,  3 Aug 2021 23:26:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YWvkfFRZgDze; Tue,  3 Aug 2021 23:26:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8k89_PN96DNu; Tue,  3 Aug 2021 23:26:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EC27D40626;
-	Tue,  3 Aug 2021 23:26:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 053486061A;
+	Tue,  3 Aug 2021 23:26:26 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9D5A51BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AD9A41BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0960040E95
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1FBCB40480
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z7LqIk5EFU83 for <buildroot@lists.busybox.net>;
+ with ESMTP id m6eX8unO68Hl for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7680B40E52
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F04440E4E
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id BC8E787F55; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
+ id A59598827E; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 13 Jul 2021 22:39:40 +0200
+Date: Tue, 13 Jul 2021 22:38:44 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e3ad72a243990937bb52eb7ce21bbfc725286403
-X-Git-Newrev: 9a8b5ac4ec77ad6cde329886694aedefd05662a5
+X-Git-Oldrev: eaf7d9733bf0da075a1738186b55be25436796ec
+X-Git-Newrev: c398b16a9ccc2b4b3e4687726a68aa4a2555dfda
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211001.BC8E787F55@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libmicrohttpd: bump
- version to 0.9.73
+Message-Id: <20210803211001.A59598827E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libdvdcss: bump
+ version to 1.4.3
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,41 +70,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a8b5ac4ec77ad6cde329886694aedefd05662a5
+commit: https://git.buildroot.net/buildroot/commit/?id=c398b16a9ccc2b4b3e4687726a68aa4a2555dfda
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Release notes:
-https://lists.gnu.org/archive/html/libmicrohttpd/2021-04/msg00000.html
+https://code.videolan.org/videolan/libdvdcss/-/blob/master/NEWS
+
+Added sha1 hash, reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libmicrohttpd/libmicrohttpd.hash | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libdvdcss/libdvdcss.hash | 8 +++++---
+ package/libdvdcss/libdvdcss.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index e92032a216..c9d4d25c78 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0ae825f8e0d7f41201fd44a0df1cf454c1cb0bc50fe9d59c26552260264c2ff8  libmicrohttpd-0.9.72.tar.gz
-+sha256  a37b2f1b88fd1bfe74109586be463a434d34e773530fc2a74364cfcf734c032e  libmicrohttpd-0.9.73.tar.gz
- sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 6eee597c34..ef9f114494 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
+diff --git a/package/libdvdcss/libdvdcss.hash b/package/libdvdcss/libdvdcss.hash
+index 1e1b03ed20..4d20f19efc 100644
+--- a/package/libdvdcss/libdvdcss.hash
++++ b/package/libdvdcss/libdvdcss.hash
+@@ -1,5 +1,7 @@
+-# From http://download.videolan.org/pub/videolan/libdvdcss/1.4.2/libdvdcss-1.4.2.tar.bz2.sha256
+-sha256	78c2ed77ec9c0d8fbed7bf7d3abc82068b8864be494cfad165821377ff3f2575	libdvdcss-1.4.2.tar.bz2
++# From http://download.videolan.org/pub/videolan/libdvdcss/1.4.3/libdvdcss-1.4.3.tar.bz2.sha1
++sha1  fcea8b2749ead8183636e48300bea8791abc79ee  libdvdcss-1.4.3.tar.bz2
++# From http://download.videolan.org/pub/videolan/libdvdcss/1.4.3/libdvdcss-1.4.3.tar.bz2.sha256
++sha256  233cc92f5dc01c5d3a96f5b3582be7d5cee5a35a52d3a08158745d3d86070079  libdvdcss-1.4.3.tar.bz2
+ 
+ # Hash for license file:
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/libdvdcss/libdvdcss.mk b/package/libdvdcss/libdvdcss.mk
+index 0593d556e1..f4d721771f 100644
+--- a/package/libdvdcss/libdvdcss.mk
++++ b/package/libdvdcss/libdvdcss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMICROHTTPD_VERSION = 0.9.72
-+LIBMICROHTTPD_VERSION = 0.9.73
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_CPE_ID_VENDOR = gnu
+-LIBDVDCSS_VERSION = 1.4.2
++LIBDVDCSS_VERSION = 1.4.3
+ LIBDVDCSS_SOURCE = libdvdcss-$(LIBDVDCSS_VERSION).tar.bz2
+ LIBDVDCSS_SITE = http://www.videolan.org/pub/videolan/libdvdcss/$(LIBDVDCSS_VERSION)
+ LIBDVDCSS_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
