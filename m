@@ -1,132 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Jul 2021 23:43:33 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/slirp: security
- bump to version 4.6.1
-Message-ID: <20210713212538.05E7D8B4B8@busybox.osuosl.org>
+Date: Tue, 13 Jul 2021 23:34:32 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/openpgm: fix link
+ for 32-bit x86
+Message-ID: <20210713212537.D5A808B49B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9007aab188fe3991aa92d4fd59f59ad3451a78a
+commit: https://git.buildroot.net/buildroot/commit/?id=0aab6f94cc4bd3e40b1c0dffeda8757aaaa318eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-mtod()-related buffer overflows (CVE-2021-3592 #44, CVE-2021-3593 #45,
-CVE-2021-3594 #47, CVE-2021-3595 #46).
+Add upstream patch fixing link with libpgm on build for x86 32-bit.
 
-Drop patch (already in version)
+Fixes:
+http://autobuild.buildroot.net/results/80254e61dc55bc07b16b3b66710946c71b9d53bb/
+http://autobuild.buildroot.net/results/7bce71db86df8ba204153e0ab5022fb5ace9a6e5/
+http://autobuild.buildroot.net/results/24a0aaff8f46953d015218a60da2c9856152eea3/
 
-https://gitlab.freedesktop.org/slirp/libslirp/-/blob/v4.6.1/CHANGELOG.md
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Alexander Lukichev <alexander.lukichev@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 61f6d0a8abf98d3e2565e19575b1b3d462e3a7ac)
+(cherry picked from commit 745d1a00230d87bff80578fbd044fbc0a5c03bf5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ck-pkt_len-before-reading-protocol-header.patch | 60 ----------------------
- package/slirp/slirp.hash                           |  2 +-
- package/slirp/slirp.mk                             |  9 +---
- 3 files changed, 3 insertions(+), 68 deletions(-)
+ ...pgm-checksum.c-fix-build-with-32-bits-MMX.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch b/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch
-deleted file mode 100644
-index 4046144712..0000000000
---- a/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch
-+++ /dev/null
-@@ -1,60 +0,0 @@
--From 2e1dcbc0c2af64fcb17009eaf2ceedd81be2b27f Mon Sep 17 00:00:00 2001
--From: Prasad J Pandit <pjp@fedoraproject.org>
--Date: Thu, 26 Nov 2020 19:27:06 +0530
--Subject: [PATCH] slirp: check pkt_len before reading protocol header
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--While processing ARP/NCSI packets in 'arp_input' or 'ncsi_input'
--routines, ensure that pkt_len is large enough to accommodate the
--respective protocol headers, lest it should do an OOB access.
--Add check to avoid it.
--
--CVE-2020-29129 CVE-2020-29130
--  QEMU: slirp: out-of-bounds access while processing ARP/NCSI packets
-- -> https://www.openwall.com/lists/oss-security/2020/11/27/1
--
--Reported-by: Qiuhao Li <Qiuhao.Li@outlook.com>
--Signed-off-by: Prasad J Pandit <pjp@fedoraproject.org>
--Message-Id: <20201126135706.273950-1-ppandit@redhat.com>
--Reviewed-by: Marc-Andr?? Lureau <marcandre.lureau@redhat.com>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/ncsi.c  | 4 ++++
-- src/slirp.c | 4 ++++
-- 2 files changed, 8 insertions(+)
--
--diff --git a/src/ncsi.c b/src/ncsi.c
--index 3c1dfef..75dcc08 100644
----- a/src/ncsi.c
--+++ b/src/ncsi.c
--@@ -148,6 +148,10 @@ void ncsi_input(Slirp *slirp, const uint8_t *pkt, int pkt_len)
--     uint32_t checksum;
--     uint32_t *pchecksum;
-- 
--+    if (pkt_len < ETH_HLEN + sizeof(struct ncsi_pkt_hdr)) {
--+        return; /* packet too short */
--+    }
--+
--     memset(ncsi_reply, 0, sizeof(ncsi_reply));
-- 
--     memset(reh->h_dest, 0xff, ETH_ALEN);
--diff --git a/src/slirp.c b/src/slirp.c
--index 9bead0c..abb6f9a 100644
----- a/src/slirp.c
--+++ b/src/slirp.c
--@@ -860,6 +860,10 @@ static void arp_input(Slirp *slirp, const uint8_t *pkt, int pkt_len)
--         return;
--     }
-- 
--+    if (pkt_len < ETH_HLEN + sizeof(struct slirp_arphdr)) {
--+        return; /* packet too short */
--+    }
--+
--     ar_op = ntohs(ah->ar_op);
--     switch (ar_op) {
--     case ARPOP_REQUEST:
---- 
--2.20.1
--
-diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
-index fe295b3bfb..326b2ad246 100644
---- a/package/slirp/slirp.hash
-+++ b/package/slirp/slirp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  388b4b08a8cc0996cc5155cb027a097dc1a7f2cfe84b1121496608ab5366cc48  libslirp-4.3.1.tar.xz
-+sha256  b8a22ac4d601ba16122a67827c0f4361785d4d283f21ff8ed48d4aa1e7693477  libslirp-4.6.1.tar.xz
- sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index ff92c60517..43d2c520e9 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
-@@ -4,11 +4,9 @@
- #
- ################################################################################
- 
--SLIRP_VERSION = 4.3.1
-+SLIRP_VERSION = 4.6.1
- SLIRP_SOURCE = libslirp-$(SLIRP_VERSION).tar.xz
--# Other "official" tarballs don't ship .tarball-version resulting in a build
--# failure: https://gitlab.freedesktop.org/slirp/libslirp/-/issues/24
--SLIRP_SITE = https://elmarco.fedorapeople.org
-+SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/uploads/83b199ea6fcdfc0c243dfde8546ee4c9
- SLIRP_LICENSE = BSD-3-Clause
- SLIRP_LICENSE_FILES = COPYRIGHT
- SLIRP_CPE_ID_VENDOR = libslirp_project
-@@ -16,7 +14,4 @@ SLIRP_CPE_ID_PRODUCT = libslirp
- SLIRP_INSTALL_STAGING = YES
- SLIRP_DEPENDENCIES = libglib2
- 
--# 0001-slirp-check-pkt_len-before-reading-protocol-header.patch
--SLIRP_IGNORE_CVES += CVE-2020-29129 CVE-2020-29130
--
- $(eval $(meson-package))
+diff --git a/package/openpgm/0002-openpgm-pgm-checksum.c-fix-build-with-32-bits-MMX.patch b/package/openpgm/0002-openpgm-pgm-checksum.c-fix-build-with-32-bits-MMX.patch
+new file mode 100644
+index 0000000000..a04dc7dba9
+--- /dev/null
++++ b/package/openpgm/0002-openpgm-pgm-checksum.c-fix-build-with-32-bits-MMX.patch
+@@ -0,0 +1,41 @@
++From b7fa865fa6b06d97d424c500fd1c4bc44c096359 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 1 Nov 2020 22:46:18 +0100
++Subject: [PATCH] openpgm/pgm/checksum.c: fix build with 32 bits MMX
++
++Build with i386-pentium-mmx or i686 is broken since version 5-3-128 and
++https://github.com/steve-o/openpgm/commit/b276dc15be5d4e6e1143b9de25d09f63f9c85135
++because _mm_cvtm64_si64 is undefined resulting in the following build
++failure for example on zeromq:
++
++/srv/storage/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/8.3.0/../../../../i586-buildroot-linux-musl/bin/ld: /srv/storage/autobuild/run/instance-3/output-1/host/i586-buildroot-linux-musl/sysroot/usr/lib32/libpgm-5.3.so.0: undefined reference to `_mm_cvtm64_si64'
++
++So use the fallback if __x86_64__ is not defined
++
++Fixes:
++ - http://autobuild.buildroot.org/results/01d9be37e8a743307128f53f41785654c9971e1a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit b7fa865fa6b06d97d424c500fd1c4bc44c096359
++
++ openpgm/pgm/checksum.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/openpgm/pgm/checksum.c b/openpgm/pgm/checksum.c
++index fef89bce237c..8d8dd3f32305 100644
++--- a/openpgm/pgm/checksum.c
+++++ b/openpgm/pgm/checksum.c
++@@ -948,7 +948,7 @@ do_csumcpy_mmx (
++ 
++ 		sum = _mm_add_pi32 (sum, lo);
++ 		sum = _mm_add_pi32 (sum, hi);
++-#if 1
+++#if defined(__x86_64__)
++ 		*(int64_t*)dst = _mm_cvtm64_si64 (tmp);
++ #else		
++ 		((int*)dst)[1] = _mm_cvtsi64_si32 (tmp);
++-- 
++2.30.2
++
