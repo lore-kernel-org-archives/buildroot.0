@@ -1,29 +1,95 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Jul 2021 23:44:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/slirp: security bump to version
- 4.6.1
-In-Reply-To: <20210701203842.470599-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 1 Jul 2021 22:38:42 +0200")
-References: <20210701203842.470599-1-fontaine.fabrice@gmail.com>
-Message-ID: <87fswhx526.fsf@dell.be.48ers.dk>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 13 Jul 2021 23:50:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: enable nfsv4/nfsv4.1
+ support
+In-Reply-To: <EA3390AF-4FB4-4048-9156-0874FAF2A787@benettiengineering.com>
+References: <CADvTj4pdAmg3icorf6nzQjEeRnfndg8tSUNd0jcX1DW9Fs-kSQ@mail.gmail.com>
+ <EA3390AF-4FB4-4048-9156-0874FAF2A787@benettiengineering.com>
+Message-ID: <YO4KwsYMZ3FAW4Mo@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hi Giulio, all,
 
- > mtod()-related buffer overflows (CVE-2021-3592 #44, CVE-2021-3593 #45,
- > CVE-2021-3594 #47, CVE-2021-3595 #46).
+[Cc Thomas, Peter ]
 
- > Drop patch (already in version)
+> > Il giorno 13 lug 2021, alle ore 10:19, James Hilliard <james.hilliard1@gmail.com> ha scritto:
 
- > https://gitlab.freedesktop.org/slirp/libslirp/-/blob/v4.6.1/CHANGELOG.md
+> > ?On Tue, Jul 13, 2021 at 2:03 AM Giulio Benetti
+> > <giulio.benetti@benettiengineering.com> wrote:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >> Hello James,
 
-Committed to 2021.02.x and 2021.05.x, thanks.
+> >>>> Il giorno 13 lug 2021, alle ore 05:14, James Hilliard <james.hilliard1@gmail.com> ha scritto:
 
--- 
-Bye, Peter Korsgaard
+> >>> ?Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> >>> ---
+> >>> package/nfs-utils/Config.in    | 10 ++++++++++
+> >>> package/nfs-utils/nfs-utils.mk |  9 +++++++--
+> >>> 2 files changed, 17 insertions(+), 2 deletions(-)
+
+> >>> diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
+> >>> index da563db0f1..b736f6c973 100644
+> >>> --- a/package/nfs-utils/Config.in
+> >>> +++ b/package/nfs-utils/Config.in
+> >>> @@ -14,6 +14,16 @@ config BR2_PACKAGE_NFS_UTILS
+
+> >>> if BR2_PACKAGE_NFS_UTILS
+
+> >>> +config BR2_PACKAGE_NFS_UTILS_NFSV4
+> >>> +    bool "NFSv4/NFSv4.1"
+> >>> +    depends on !BR2_STATIC_LIBS # keyutils, lvm2
+> >>> +    select BR2_PACKAGE_KEYUTILS
+> >>> +    select BR2_PACKAGE_LIBEVENT
+> >>> +    select BR2_PACKAGE_LVM2
+> >>> +    select BR2_PACKAGE_SQLITE
+> >>> +    help
+> >>> +      Enable NFSv4/NFSv4.1 support
+> >>> +
+> >>> config BR2_PACKAGE_NFS_UTILS_RPCDEBUG
+> >>>   bool "rpcdebug"
+> >>>   help
+> >>> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+> >>> index c384e939d8..2598f0908b 100644
+> >>> --- a/package/nfs-utils/nfs-utils.mk
+> >>> +++ b/package/nfs-utils/nfs-utils.mk
+> >>> @@ -16,8 +16,6 @@ NFS_UTILS_AUTORECONF = YES
+> >>> NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
+
+> >>> NFS_UTILS_CONF_OPTS = \
+> >>> -    --disable-nfsv4 \
+> >>> -    --disable-nfsv41 \
+
+> >> Is this ^^^ what prevents uuid.h build error?
+
+> > No idea, have some background on that issue?
+
+> Yes, I had that issue on this commit:
+
+> http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=blobdiff;f=support/export/v4root.c;h=c12a7d8562b22616fbc7840faf6719443dac64d3;hp=3654bd7c10c059d6a6ae32001ca979d671ef38f2;hb=c5528f40f9db5061e06dcf1f9b7fce5185b376c6;hpb=ed83085ff310fdc95badb06a26289efb70f99ccd
+
+> But it seems that ?disable-nfsv4 avoid building it,
+> so we should have no problem.
+
+Can you be more specific how c5528f40 ("Fix NFSv4 export of tmpfs filesystems")
+affects Buildroot? Is it a problem with -luuid
+
+Anyway, we disabled nfsv4/nfsv4.1 from the start, I wonder why.
+@Thomas, @Peter: do you remember it?
+
+But generally good idea, thus:
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+
+> Can you double check building with nfsv4 support and find it failing wi uuid.h? I don?t have time at the moment.
+
+I'll try to test it this week.
+
+Kind regards,
+Petr
+
+> Thanks a lot
+
+> Giulio
