@@ -1,8 +1,7 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 12 Jul 2021 21:14:13 -0600
-Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: enable nfsv4/nfsv4.1
- support
-Message-ID: <20210713031413.1057793-1-james.hilliard1@gmail.com>
+Date: Mon, 12 Jul 2021 21:49:26 -0600
+Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: bump to version 2.5.4
+Message-ID: <20210713034926.2981657-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,57 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/nfs-utils/Config.in    | 10 ++++++++++
- package/nfs-utils/nfs-utils.mk |  9 +++++++--
- 2 files changed, 17 insertions(+), 2 deletions(-)
+ package/nfs-utils/nfs-utils.hash | 4 ++--
+ package/nfs-utils/nfs-utils.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index da563db0f1..b736f6c973 100644
---- a/package/nfs-utils/Config.in
-+++ b/package/nfs-utils/Config.in
-@@ -14,6 +14,16 @@ config BR2_PACKAGE_NFS_UTILS
- 
- if BR2_PACKAGE_NFS_UTILS
- 
-+config BR2_PACKAGE_NFS_UTILS_NFSV4
-+	bool "NFSv4/NFSv4.1"
-+	depends on !BR2_STATIC_LIBS # keyutils, lvm2
-+	select BR2_PACKAGE_KEYUTILS
-+	select BR2_PACKAGE_LIBEVENT
-+	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_SQLITE
-+	help
-+	  Enable NFSv4/NFSv4.1 support
-+
- config BR2_PACKAGE_NFS_UTILS_RPCDEBUG
- 	bool "rpcdebug"
- 	help
+diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
+index 25c11cb686..2073bebd8a 100644
+--- a/package/nfs-utils/nfs-utils.hash
++++ b/package/nfs-utils/nfs-utils.hash
+@@ -1,4 +1,4 @@
+-# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.5.3/sha256sums.asc
+-sha256  b54d6d8ea2ee62d64111278301ba4631b7bb19174e7f717a724fe5d463900c80  nfs-utils-2.5.3.tar.xz
++# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.5.4/sha256sums.asc
++sha256  51997d94e4c8bcef5456dd36a9ccc38e231207c4e9b6a9a2c108841e6aebe3dd  nfs-utils-2.5.4.tar.xz
+ # Locally computed
+ sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
 diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index c384e939d8..2598f0908b 100644
+index c384e939d8..d6408ee8f7 100644
 --- a/package/nfs-utils/nfs-utils.mk
 +++ b/package/nfs-utils/nfs-utils.mk
-@@ -16,8 +16,6 @@ NFS_UTILS_AUTORECONF = YES
- NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- NFS_UTILS_CONF_OPTS = \
--	--disable-nfsv4 \
--	--disable-nfsv41 \
- 	--disable-gss \
- 	--disable-uuid \
- 	--enable-tirpc \
-@@ -46,6 +44,13 @@ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD) += usr/sbin/rpc.rquotad
- NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_NFSD) += usr/sbin/exportfs \
- 	usr/sbin/rpc.mountd usr/sbin/rpc.nfsd usr/lib/systemd/system/nfs-server.service
- 
-+ifeq ($(BR2_PACKAGE_NFS_UTILS_NFSV4),y)
-+NFS_UTILS_CONF_OPTS += --enable-nfsv4 --enable-nfsv41
-+NFS_UTILS_DEPENDENCIES += keyutils libevent lvm2 sqlite
-+else
-+NFS_UTILS_CONF_OPTS += --disable-nfsv4 --disable-nfsv41
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- NFS_UTILS_CONF_OPTS += --enable-caps
- NFS_UTILS_DEPENDENCIES += libcap
+-NFS_UTILS_VERSION = 2.5.3
++NFS_UTILS_VERSION = 2.5.4
+ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+ NFS_UTILS_LICENSE = GPL-2.0+
 -- 
 2.25.1
