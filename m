@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD8CAC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:08:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23460C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:08:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6FEC361037
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:08:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6FEC361037
+	by mail.kernel.org (Postfix) with ESMTPS id DC60860F94
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:08:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DC60860F94
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C68060AE4;
-	Wed,  4 Aug 2021 00:08:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B330D42422;
+	Wed,  4 Aug 2021 00:08:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aUbFAUzB1_fm; Wed,  4 Aug 2021 00:08:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iO8GTPjHa4NL; Wed,  4 Aug 2021 00:08:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F23D60ADE;
-	Wed,  4 Aug 2021 00:08:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4A3242429;
+	Wed,  4 Aug 2021 00:08:27 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3E4F51BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2FBC71BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 208C640E88
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2331440E89
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o-6HfNty_GYz for <buildroot@lists.busybox.net>;
+ with ESMTP id AVS74e2amx3R for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A052F40E47
+ by smtp2.osuosl.org (Postfix) with ESMTP id D87BB406BC
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id EF5B886A84; Tue,  3 Aug 2021 21:10:00 +0000 (UTC)
+ id 279C487F55; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 13 Jul 2021 21:46:12 +0200
+Date: Tue, 13 Jul 2021 21:52:29 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 99e9433237719c4938c472a4159f7de4cbedfced
-X-Git-Newrev: dfea4a915c88cea8907ee84dba72438d3c4474cf
+X-Git-Oldrev: 5b88a0a57a9a590427d03719777c46f7ea5a6c43
+X-Git-Newrev: aeb320899fa46565e174846bb42dad71a4cdcb22
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211000.EF5B886A84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-flatbuffers:
- bump to version 2.0
+Message-Id: <20210803211001.279C487F55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] rtl8189fs: disable debug
+ messages
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,42 +70,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfea4a915c88cea8907ee84dba72438d3c4474cf
+commit: https://git.buildroot.net/buildroot/commit/?id=aeb320899fa46565e174846bb42dad71a4cdcb22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Debug messages in rtl8189fs are enabled by default. Add patch
+that disables debug messages to make driver less noisy.
+
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-flatbuffers/python-flatbuffers.hash | 4 ++--
- package/python-flatbuffers/python-flatbuffers.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-include-disable-debug-messages.patch      | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/package/python-flatbuffers/python-flatbuffers.hash b/package/python-flatbuffers/python-flatbuffers.hash
-index ba7df6babc..a27d94160a 100644
---- a/package/python-flatbuffers/python-flatbuffers.hash
-+++ b/package/python-flatbuffers/python-flatbuffers.hash
-@@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/flatbuffers/json
--md5  b9a5b8dfbbb4751788529310118ea6db  flatbuffers-1.12.tar.gz
--sha256  63bb9a722d5e373701913e226135b28a6f6ac200d5cc7b4d919fa38d73b44610  flatbuffers-1.12.tar.gz
-+md5  b2ce60d9a7c1f8a2ddac6d49a1b700a4  flatbuffers-2.0.tar.gz
-+sha256  12158ab0272375eab8db2d663ae97370c33f152b27801fa6024e1d6105fd4dd2  flatbuffers-2.0.tar.gz
-diff --git a/package/python-flatbuffers/python-flatbuffers.mk b/package/python-flatbuffers/python-flatbuffers.mk
-index 33bb57ddf3..705dc0ad5a 100644
---- a/package/python-flatbuffers/python-flatbuffers.mk
-+++ b/package/python-flatbuffers/python-flatbuffers.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_FLATBUFFERS_VERSION = 1.12
-+PYTHON_FLATBUFFERS_VERSION = 2.0
- PYTHON_FLATBUFFERS_SOURCE = flatbuffers-$(PYTHON_FLATBUFFERS_VERSION).tar.gz
--PYTHON_FLATBUFFERS_SITE = https://files.pythonhosted.org/packages/4d/c4/7b995ab9bf0c7eaf10c386d29a03408dfcf72648df4102b1f18896c3aeea
-+PYTHON_FLATBUFFERS_SITE = https://files.pythonhosted.org/packages/10/41/09e9ab2134895b82466fada08b69b800f9a724bc81fcca3d4474ce48ffce
- PYTHON_FLATBUFFERS_LICENSE = Apache-2.0
- PYTHON_FLATBUFFERS_SETUP_TYPE = setuptools
- 
+diff --git a/package/rtl8189fs/0001-include-disable-debug-messages.patch b/package/rtl8189fs/0001-include-disable-debug-messages.patch
+new file mode 100644
+index 0000000000..532982b1d3
+--- /dev/null
++++ b/package/rtl8189fs/0001-include-disable-debug-messages.patch
+@@ -0,0 +1,28 @@
++From 5d3a44ff1aeb8ace6e08df3cad16102aaac1ef09 Mon Sep 17 00:00:00 2001
++From: Sergey Matyukevich <geomatsi@gmail.com>
++Date: Sun, 13 Jun 2021 15:51:51 +0300
++Subject: [PATCH] include: disable debug messages
++
++Disable debug messages to make rtl8189fs driver less noisy.
++
++Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
++---
++ include/autoconf.h | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/include/autoconf.h b/include/autoconf.h
++index 44efe42..b5df57b 100644
++--- a/include/autoconf.h
+++++ b/include/autoconf.h
++@@ -224,8 +224,6 @@
++ /*
++  * Debug Related Config
++  */
++-#define CONFIG_DEBUG /* DBG_871X, etc... */
++-
++ #ifdef CONFIG_DEBUG
++ #define DBG	1	// for ODM & BTCOEX debug
++ //#define CONFIG_DEBUG_RTL871X /* RT_TRACE, RT_PRINT_DATA, _func_enter_, _func_exit_ */
++-- 
++2.32.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
