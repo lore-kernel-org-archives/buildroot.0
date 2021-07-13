@@ -1,7 +1,7 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 13 Jul 2021 15:53:05 +0200
-Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 2.8.2
-Message-ID: <20210713135305.1196063-1-francois.perrad@gadz.org>
+Date: Tue, 13 Jul 2021 15:53:44 +0200
+Subject: [Buildroot] [PATCH] package/nettle: bump to version 3.7.3
+Message-ID: <20210713135344.1196117-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
+ package/nettle/nettle.hash | 4 ++--
+ package/nettle/nettle.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index ad81b34fd..774b3104a 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4124f663ec4bf4e294d9cf230668370b4249a48ff34deaf0f06e8fc82d891300  harfbuzz-2.8.1.tar.xz
--sha256  beb3f017ceb41387667f78237a7cecf84defa0ed257c505894663d6a9f13211b  COPYING
-+sha256  d58461395ce28b9dc03903254374dd70c38c8c28c5046db123c08f7ab9417be7  harfbuzz-2.8.2.tar.xz
-+sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 60cc8b724..f327a95eb 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
+index 09652dcc8..cd32ad442 100644
+--- a/package/nettle/nettle.hash
++++ b/package/nettle/nettle.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/nettle/nettle-3.7.2.tar.gz.sig
+-sha256  8d2a604ef1cde4cd5fb77e422531ea25ad064679ff0adf956e78b3352e0ef162  nettle-3.7.2.tar.gz
++# https://ftp.gnu.org/gnu/nettle/nettle-3.7.3.tar.gz.sig
++sha256  661f5eb03f048a3b924c3a8ad2515d4068e40f67e774e8a26827658007e3bcf0  nettle-3.7.3.tar.gz
+ # Locally calculated
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSERv3
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index bf833eb27..3dbd0cb94 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 2.8.1
-+HARFBUZZ_VERSION = 2.8.2
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-NETTLE_VERSION = 3.7.2
++NETTLE_VERSION = 3.7.3
+ NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
+ NETTLE_DEPENDENCIES = gmp
+ NETTLE_INSTALL_STAGING = YES
 -- 
 2.30.2
