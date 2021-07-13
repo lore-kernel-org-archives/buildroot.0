@@ -1,58 +1,55 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 13 Jul 2021 21:29:49 +0200
-Subject: [Buildroot] [git commit] package/libbpf: add
- BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
-Message-ID: <20210713185629.699E393A47@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 13 Jul 2021 21:30:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tiff: bump to version 4.3.0
+In-Reply-To: <20210612144826.537946-1-fontaine.fabrice@gmail.com>
+References: <20210612144826.537946-1-fontaine.fabrice@gmail.com>
+Message-ID: <256fdf3d-7919-fa92-bcf3-ccdd445e2828@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f693354c30bd8251c05824c64299fb84182f45ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libbpf does not support all architectures, for example ARM is not
-supported resulting in the following build failure:
 
-bpf.c:53:4: error: #error __NR_bpf not defined. libbpf does not support your arch.
- #  error __NR_bpf not defined. libbpf does not support your arch.
-    ^
+On 12/06/2021 16:48, Fabrice Fontaine wrote:
+> Update indentation in hash file (two spaces)
+> 
+> https://gitlab.com/libtiff/libtiff/-/blob/v4.3.0/ChangeLog
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/288d54100a2e736195a3a04a9e2e035d02ea5c16
+ Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/libbpf/Config.in | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ Regards,
+ Arnout
 
-diff --git a/package/libbpf/Config.in b/package/libbpf/Config.in
-index c5b24c5eb5..9eadf0254a 100644
---- a/package/libbpf/Config.in
-+++ b/package/libbpf/Config.in
-@@ -1,5 +1,15 @@
-+config BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
-+	bool
-+	# see src/bpf.c
-+	default y if BR2_arc
-+	default y if BR2_aarch64 || BR2_aarch64_be
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_sparc || BR2_sparc64
-+	default y if BR2_s390x
-+
- config BR2_PACKAGE_LIBBPF
- 	bool "libbpf"
-+	depends on BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
-@@ -15,6 +25,7 @@ config BR2_PACKAGE_LIBBPF
- 	  https://github.com/libbpf/libbpf
- 
- comment "libbpf needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
-+	depends on BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+> ---
+>  package/tiff/tiff.hash | 4 ++--
+>  package/tiff/tiff.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
+> index 472ec40e55..ea08a1fc92 100644
+> --- a/package/tiff/tiff.hash
+> +++ b/package/tiff/tiff.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256 eb0484e568ead8fa23b513e9b0041df7e327f4ee2d22db5a533929dfc19633cb  tiff-4.2.0.tar.gz
+> -sha256 fbd6fed7938541d2c809c0826225fc85e551fdbfa8732b10f0c87e0847acafd7  COPYRIGHT
+> +sha256  0e46e5acb087ce7d1ac53cf4f56a09b221537fc86dfc5daaad1c2e89e1b37ac8  tiff-4.3.0.tar.gz
+> +sha256  fbd6fed7938541d2c809c0826225fc85e551fdbfa8732b10f0c87e0847acafd7  COPYRIGHT
+> diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+> index c3d8045144..f6c6de12c5 100644
+> --- a/package/tiff/tiff.mk
+> +++ b/package/tiff/tiff.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -TIFF_VERSION = 4.2.0
+> +TIFF_VERSION = 4.3.0
+>  TIFF_SITE = http://download.osgeo.org/libtiff
+>  TIFF_LICENSE = tiff license
+>  TIFF_LICENSE_FILES = COPYRIGHT
+> 
