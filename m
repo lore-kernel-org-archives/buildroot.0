@@ -1,57 +1,54 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 13 Jul 2021 22:38:03 +0200
-Subject: [Buildroot] [git commit] package/libdvdnav: bump version to 6.1.1
-Message-ID: <20210713200743.1073B9567D@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 13 Jul 2021 22:41:24 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libmicrohttpd: bump
+ version to 0.9.73
+In-Reply-To: <20210606080941.840370-1-bernd.kuhls@t-online.de>
+References: <20210606080941.840370-1-bernd.kuhls@t-online.de>
+Message-ID: <cfa607da-7b89-d13e-7511-9b79ad284e20@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eaf7d9733bf0da075a1738186b55be25436796ec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://code.videolan.org/videolan/libdvdnav/-/blob/master/ChangeLog
 
-Removed md5 hash, reformatted hashes.
+On 06/06/2021 10:09, Bernd Kuhls wrote:
+> Release notes:
+> https://lists.gnu.org/archive/html/libmicrohttpd/2021-04/msg00000.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/libdvdnav/libdvdnav.hash | 12 +++++-------
- package/libdvdnav/libdvdnav.mk   |  2 +-
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ Applied to master, thanks.
 
-diff --git a/package/libdvdnav/libdvdnav.hash b/package/libdvdnav/libdvdnav.hash
-index 04706b0bb9..61d64b8ee3 100644
---- a/package/libdvdnav/libdvdnav.hash
-+++ b/package/libdvdnav/libdvdnav.hash
-@@ -1,9 +1,7 @@
--# From http://download.videolan.org/pub/videolan/libdvdnav/6.1.0/libdvdnav-6.1.0.tar.bz2.md5
--md5 8817ac12c13644df6ba2091c2dcaeed3 libdvdnav-6.1.0.tar.bz2
--# From http://download.videolan.org/pub/videolan/libdvdnav/6.1.0/libdvdnav-6.1.0.tar.bz2.sha1
--sha1 b0597e9d11393e17b57f784c0dcba33a499e80b0 libdvdnav-6.1.0.tar.bz2
--# From http://download.videolan.org/pub/videolan/libdvdnav/6.1.0/libdvdnav-6.1.0.tar.bz2.sha256
--sha256 f697b15ea9f75e9f36bdf6ec3726308169f154e2b1e99865d0bbe823720cee5b libdvdnav-6.1.0.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libdvdnav/6.1.1/libdvdnav-6.1.1.tar.bz2.sha1
-+sha1  7ac76aa95d046db715763da23b7053b65cbc7540  libdvdnav-6.1.1.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libdvdnav/6.1.1/libdvdnav-6.1.1.tar.bz2.sha256
-+sha256  c191a7475947d323ff7680cf92c0fb1be8237701885f37656c64d04e98d18d48  libdvdnav-6.1.1.tar.bz2
- 
- # Hash for license file:
--sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/libdvdnav/libdvdnav.mk b/package/libdvdnav/libdvdnav.mk
-index c5bebd4926..e34c0710bc 100644
---- a/package/libdvdnav/libdvdnav.mk
-+++ b/package/libdvdnav/libdvdnav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDVDNAV_VERSION = 6.1.0
-+LIBDVDNAV_VERSION = 6.1.1
- LIBDVDNAV_SOURCE = libdvdnav-$(LIBDVDNAV_VERSION).tar.bz2
- LIBDVDNAV_SITE = http://www.videolan.org/pub/videolan/libdvdnav/$(LIBDVDNAV_VERSION)
- LIBDVDNAV_INSTALL_STAGING = YES
+ Regards,
+ Arnout
+
+> ---
+>  package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+>  package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+> index e92032a216..c9d4d25c78 100644
+> --- a/package/libmicrohttpd/libmicrohttpd.hash
+> +++ b/package/libmicrohttpd/libmicrohttpd.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  0ae825f8e0d7f41201fd44a0df1cf454c1cb0bc50fe9d59c26552260264c2ff8  libmicrohttpd-0.9.72.tar.gz
+> +sha256  a37b2f1b88fd1bfe74109586be463a434d34e773530fc2a74364cfcf734c032e  libmicrohttpd-0.9.73.tar.gz
+>  sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
+> diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+> index 6eee597c34..ef9f114494 100644
+> --- a/package/libmicrohttpd/libmicrohttpd.mk
+> +++ b/package/libmicrohttpd/libmicrohttpd.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBMICROHTTPD_VERSION = 0.9.72
+> +LIBMICROHTTPD_VERSION = 0.9.73
+>  LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+>  LIBMICROHTTPD_LICENSE_FILES = COPYING
+>  LIBMICROHTTPD_CPE_ID_VENDOR = gnu
+> 
