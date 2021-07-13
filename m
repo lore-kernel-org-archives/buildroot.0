@@ -1,58 +1,106 @@
-From: Patrick G. <pgeiem@protonmail.com>
-Date: Tue, 13 Jul 2021 08:29:59 +0000
-Subject: [Buildroot] [PATCH 1/1] package/gcnano-binaries: bump to version
- 6.4.3
-Message-ID: <BwTIMG2dlIPHQ8gnD4pEBqu_ZFaAB68eIBIQSL4hBxIKiOBYIy0ZulAnqlLsgHU6CI6a5n2-7gh08GtoLNHmobnYlDbSbmm0ixqkAT33FdA=@protonmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue, 13 Jul 2021 11:27:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: enable nfsv4/nfsv4.1
+ support
+In-Reply-To: <CADvTj4pdAmg3icorf6nzQjEeRnfndg8tSUNd0jcX1DW9Fs-kSQ@mail.gmail.com>
+References: <CADvTj4pdAmg3icorf6nzQjEeRnfndg8tSUNd0jcX1DW9Fs-kSQ@mail.gmail.com>
+Message-ID: <EA3390AF-4FB4-4048-9156-0874FAF2A787@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/STMicroelectronics/gcnano-binaries/
 
-Signed-off-by: Patrick Gerber <p.gerber@iemgroup.com>
----
- package/gcnano-binaries/gcnano-binaries.hash |  2 +-
- package/gcnano-binaries/gcnano-binaries.mk   | 10 +++++-----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+> Il giorno 13 lug 2021, alle ore 10:19, James Hilliard <james.hilliard1@gmail.com> ha scritto:
+> 
+> ?On Tue, Jul 13, 2021 at 2:03 AM Giulio Benetti
+> <giulio.benetti@benettiengineering.com> wrote:
+>> 
+>> Hello James,
+>> 
+>>>> Il giorno 13 lug 2021, alle ore 05:14, James Hilliard <james.hilliard1@gmail.com> ha scritto:
+>>> 
+>>> ?Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>>> ---
+>>> package/nfs-utils/Config.in    | 10 ++++++++++
+>>> package/nfs-utils/nfs-utils.mk |  9 +++++++--
+>>> 2 files changed, 17 insertions(+), 2 deletions(-)
+>>> 
+>>> diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
+>>> index da563db0f1..b736f6c973 100644
+>>> --- a/package/nfs-utils/Config.in
+>>> +++ b/package/nfs-utils/Config.in
+>>> @@ -14,6 +14,16 @@ config BR2_PACKAGE_NFS_UTILS
+>>> 
+>>> if BR2_PACKAGE_NFS_UTILS
+>>> 
+>>> +config BR2_PACKAGE_NFS_UTILS_NFSV4
+>>> +    bool "NFSv4/NFSv4.1"
+>>> +    depends on !BR2_STATIC_LIBS # keyutils, lvm2
+>>> +    select BR2_PACKAGE_KEYUTILS
+>>> +    select BR2_PACKAGE_LIBEVENT
+>>> +    select BR2_PACKAGE_LVM2
+>>> +    select BR2_PACKAGE_SQLITE
+>>> +    help
+>>> +      Enable NFSv4/NFSv4.1 support
+>>> +
+>>> config BR2_PACKAGE_NFS_UTILS_RPCDEBUG
+>>>   bool "rpcdebug"
+>>>   help
+>>> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+>>> index c384e939d8..2598f0908b 100644
+>>> --- a/package/nfs-utils/nfs-utils.mk
+>>> +++ b/package/nfs-utils/nfs-utils.mk
+>>> @@ -16,8 +16,6 @@ NFS_UTILS_AUTORECONF = YES
+>>> NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
+>>> 
+>>> NFS_UTILS_CONF_OPTS = \
+>>> -    --disable-nfsv4 \
+>>> -    --disable-nfsv41 \
+>> 
+>> Is this ^^^ what prevents uuid.h build error?
+> 
+> No idea, have some background on that issue?
 
-diff --git a/package/gcnano-binaries/gcnano-binaries.hash b/package/gcnano-binaries/gcnano-binaries.hash
-index e753f944a3..e3efc82fc5 100644
---- a/package/gcnano-binaries/gcnano-binaries.hash
-+++ b/package/gcnano-binaries/gcnano-binaries.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 255db9c58627f5f54fd15263647cc97a55927363fec42e7c8d7486170a65d84d  gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed.tar.gz
-+sha256 afec2ba2f524821452d561b56afd2fc241293ea4a6e8598d1663f58e5d16800f  gcnano-binaries-1534c3eaabb5ae545a8f97e95f853531365a13fc.tar.gz
- sha256 7d209718473d18f69f75adb7caf9cb5d4b0a31da068756aa011bea617de3dc57  EULA
-diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
-index b27571a08c..c2f5e06702 100644
---- a/package/gcnano-binaries/gcnano-binaries.mk
-+++ b/package/gcnano-binaries/gcnano-binaries.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+Yes, I had that issue on this commit:
 
--GCNANO_BINARIES_LIB_VERSION = 6.2.4
--GCNANO_BINARIES_DRIVER_VERSION = $(GCNANO_BINARIES_LIB_VERSION).p4
--GCNANO_BINARIES_USERLAND_VERSION = $(GCNANO_BINARIES_LIB_VERSION).p4-20190626
--GCNANO_BINARIES_VERSION = c01642ed5e18cf09ecd905af193e935cb3be95ed
-+GCNANO_BINARIES_LIB_VERSION = 6.4.3
-+GCNANO_BINARIES_DRIVER_VERSION = $(GCNANO_BINARIES_LIB_VERSION)
-+GCNANO_BINARIES_USERLAND_VERSION = $(GCNANO_BINARIES_LIB_VERSION)-20200902
-+GCNANO_BINARIES_VERSION = 1534c3eaabb5ae545a8f97e95f853531365a13fc
- GCNANO_BINARIES_SITE = $(call github,STMicroelectronics,gcnano-binaries,$(GCNANO_BINARIES_VERSION))
+http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=blobdiff;f=support/export/v4root.c;h=c12a7d8562b22616fbc7840faf6719443dac64d3;hp=3654bd7c10c059d6a6ae32001ca979d671ef38f2;hb=c5528f40f9db5061e06dcf1f9b7fce5185b376c6;hpb=ed83085ff310fdc95badb06a26289efb70f99ccd
 
- GCNANO_BINARIES_LICENSE = MIT, Vivante End User Software License Terms
-@@ -43,7 +43,7 @@ GCNANO_BINARIES_MODULE_MAKE_OPTS = \
- 	DEBUG=0
+But it seems that ?disable-nfsv4 avoid building it,
+so we should have no problem.
 
- GCNANO_BINARIES_LIBRARIES = \
--	gbm_viv libEGL libGAL libgbm libGLESv1_CM \
-+	libgbm_viv libEGL libGAL libgbm libGLESv1_CM \
- 	libGLESv2 libGLSLC libOpenVG libVSC
+Can you double check building with nfsv4 support and find it failing wi uuid.h? I don?t have time at the moment.
 
- GCNANO_BINARIES_USERLAND_SUBDIR = gcnano-userland-multi-$(GCNANO_BINARIES_USERLAND_VERSION)
---
-2.27.0
+Thanks a lot
+
+Giulio
+
+> 
+>> 
+>> Giulio
+>> 
+>>>   --disable-gss \
+>>>   --disable-uuid \
+>>>   --enable-tirpc \
+>>> @@ -46,6 +44,13 @@ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD) += usr/sbin/rpc.rquotad
+>>> NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_NFSD) += usr/sbin/exportfs \
+>>>   usr/sbin/rpc.mountd usr/sbin/rpc.nfsd usr/lib/systemd/system/nfs-server.service
+>>> 
+>>> +ifeq ($(BR2_PACKAGE_NFS_UTILS_NFSV4),y)
+>>> +NFS_UTILS_CONF_OPTS += --enable-nfsv4 --enable-nfsv41
+>>> +NFS_UTILS_DEPENDENCIES += keyutils libevent lvm2 sqlite
+>>> +else
+>>> +NFS_UTILS_CONF_OPTS += --disable-nfsv4 --disable-nfsv41
+>>> +endif
+>>> +
+>>> ifeq ($(BR2_PACKAGE_LIBCAP),y)
+>>> NFS_UTILS_CONF_OPTS += --enable-caps
+>>> NFS_UTILS_DEPENDENCIES += libcap
+>>> --
+>>> 2.25.1
+>>> 
+>> 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210713/a7baad5d/attachment.html>
