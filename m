@@ -1,32 +1,37 @@
-From: Bruno Marie <gameblabla@protonmail.com>
-Date: Mon, 12 Jul 2021 20:22:35 +0200
-Subject: [PATCH 1/1] package/mpg123: Remove disable-lfs-alias
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 14 Jul 2021 22:09:20 +0200
+Subject: [Buildroot] [git commit] package/e2fsprogs: fix fsck overwrite
+ in HOST_DIR
+In-Reply-To: <20210706204015.033CD95463@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Tue, 6 Jul 2021 22:44:34 +0200")
+References: <20210706204015.033CD95463@busybox.osuosl.org>
+Message-ID: <87czrkverz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20210712182235.71O4cq--26E-JyOFEgRGQ9FbDoPDUxYDb610e_-AWRw@z>
 
-disable-lfs-alias causes undefined references for apps that want to link against mpg123.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Bruno Marie <gameblabla@protonmail.com>
----
- package/mpg123/mpg123.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > commit: https://git.buildroot.net/buildroot/commit/?id=7b7c8cc67280c3ee8ec79d4e381519b18386bd8c
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 9aa9cd1c10..7362db2138 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -7,7 +7,7 @@
- MPG123_VERSION = 1.25.15
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
--MPG123_CONF_OPTS = --disable-lfs-alias
-+MPG123_CONF_OPTS =
- MPG123_INSTALL_STAGING = YES
- MPG123_LICENSE = LGPL-2.1
- MPG123_LICENSE_FILES = COPYING
---
-2.32.0
+ > host-e2fsprogs package overwrites the fsck program and some
+ > manpages previously installed by host-util-linux package.
+
+ > This patch simply disables fsck in host-e2fsprogs.
+
+ > host-e2fsprogs is used to build final ext{2,3,4} images.
+ > The missing host-e2fsprogs fsck tool (filesystem integrity check
+ > tool) in HOST_DIR should not lead to issues.
+
+ > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+ > Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Committed to 2021.02.x and 2021.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
