@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jul 2021 22:08:49 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/e2fsprogs: fix
+Date: Wed, 14 Jul 2021 22:08:39 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/e2fsprogs: fix
  fsck overwrite in HOST_DIR
-Message-ID: <20210714195531.734BB90E97@busybox.osuosl.org>
+Message-ID: <20210714195547.2CBDF90E9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b64055058a3baebc12a35dd29c1bda173ce517d3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6a3aa80b5b7be3a6da4bc67ce24354c9c7ce4760
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 host-e2fsprogs package overwrites the fsck program and some
 manpages previously installed by host-util-linux package.
@@ -32,7 +32,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index eb127b42d3..e40af73cce 100644
+index 0a69690e2f..bd147e737e 100644
 --- a/package/e2fsprogs/e2fsprogs.mk
 +++ b/package/e2fsprogs/e2fsprogs.mk
 @@ -27,6 +27,7 @@ HOST_E2FSPROGS_CONF_OPTS = \
