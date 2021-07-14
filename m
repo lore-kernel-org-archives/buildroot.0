@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jul 2021 10:07:53 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] utils/scanpypi: search
+Date: Wed, 14 Jul 2021 10:07:47 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] utils/scanpypi: search
  LICENSE.MD
-Message-ID: <20210714073441.CFA4C90E49@busybox.osuosl.org>
+Message-ID: <20210714073449.376718D1CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcc7f55a891e7e8f6a769e5aba5ca090811d914c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e81ef47e3ec350e1b97138ef74ddef767496040e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 Some packages such as python-idna has a LICENSE.md file:
 https://github.com/kjd/idna/blob/master/LICENSE.md
