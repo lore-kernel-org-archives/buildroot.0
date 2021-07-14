@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jul 2021 23:07:51 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/thrift: drop
+Date: Wed, 14 Jul 2021 23:07:58 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/thrift: drop
  unrecognized option
-Message-ID: <20210714203441.CC2DE90EA5@busybox.osuosl.org>
+Message-ID: <20210714203449.BE1E490EAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a921820198ebc3404c365bf473728997809ceca6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=62b2e7b506c14d25955eeccb748f50d30dc5e3de
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 WITH_QT4 has been dropped since version 0.13.0 and
 https://github.com/apache/thrift/commit/17355425429274e7971fff39d7e45279cdf550fa
