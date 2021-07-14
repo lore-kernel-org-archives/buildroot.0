@@ -1,38 +1,55 @@
-From: John Keeping <john@metanate.com>
-Date: Wed, 14 Jul 2021 15:51:32 +0100
-Subject: [Buildroot] [PATCH] board/raspberrypi: use kernel Bluetooth mode
-Message-ID: <20210714145132.533559-1-john@metanate.com>
+From: Gao Xiang <hsiangkao@aol.com>
+Date: Wed, 14 Jul 2021 22:55:28 +0800
+Subject: [Buildroot] [PATCH] fs/erofs: add big pcluster support
+References: <20210714145528.25255-1-hsiangkao.ref@aol.com>
+Message-ID: <20210714145528.25255-1-hsiangkao@aol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The default setting with miniuart-bt requires hciattach which is a
-deprecated utility in BlueZ.  Setting the krnbt parameter switches to
-the modern method of using serdev in the kernel removing the need for
-any userspace configuration to enable the Bluetooth controller.
+This enables EROFS big pcluster images for buildroot.
 
-This is documented as applying to all Raspberry Pi variants so just
-enable it globally.
-
-Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Gao Xiang <hsiangkao@aol.com>
 ---
- board/raspberrypi/post-image.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/erofs/Config.in | 10 ++++++++++
+ fs/erofs/erofs.mk  |  4 ++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-index 9dbd98ef9b..a6728c686e 100755
---- a/board/raspberrypi/post-image.sh
-+++ b/board/raspberrypi/post-image.sh
-@@ -16,7 +16,7 @@ do
- 			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+diff --git a/fs/erofs/Config.in b/fs/erofs/Config.in
+index d7360edeabfd..7619037c4775 100644
+--- a/fs/erofs/Config.in
++++ b/fs/erofs/Config.in
+@@ -11,4 +11,14 @@ config BR2_TARGET_ROOTFS_EROFS_LZ4HC
+ 	help
+ 	  Use lz4 high-compression to compress data in the filesystem.
  
- # fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
--dtoverlay=miniuart-bt
-+dtoverlay=miniuart-bt,krnbt=on
- __EOF__
- 		fi
- 		;;
++config BR2_TARGET_ROOTFS_EROFS_PCLUSTERSIZE
++	int "pcluster size"
++	default 0
++	help
++	  Specify the maximum size of physical cluster in bytes for
++	  the big pcluster feature in order to get much better
++	  compression ratios (thus better sequential read performance
++	  for common storage devices), which has been introduced since
++	  Linux 5.13.
++
+ endif # BR2_TARGET_ROOTFS_EROFS
+diff --git a/fs/erofs/erofs.mk b/fs/erofs/erofs.mk
+index 58559d483340..0e9d4401a939 100644
+--- a/fs/erofs/erofs.mk
++++ b/fs/erofs/erofs.mk
+@@ -10,6 +10,10 @@ ifeq ($(BR2_TARGET_ROOTFS_EROFS_LZ4HC),y)
+ ROOTFS_EROFS_ARGS += -zlz4hc
+ endif
+ 
++ifneq ($(BR2_TARGET_ROOTFS_EROFS_PCLUSTERSIZE),0)
++ROOTFS_EROFS_ARGS += -C$(strip $(BR2_TARGET_ROOTFS_EROFS_PCLUSTERSIZE))
++endif
++
+ define ROOTFS_EROFS_CMD
+ 	$(HOST_DIR)/bin/mkfs.erofs $(ROOTFS_EROFS_ARGS) $@ $(TARGET_DIR)
+ endef
 -- 
-2.32.0
+2.20.1
