@@ -1,24 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jul 2021 10:08:08 +0200
-Subject: [Buildroot] [PATCH 1/1] utils/scanpypi: search LICENSE.MD
-In-Reply-To: <20210704193859.3406196-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 4 Jul 2021 21:38:59 +0200")
-References: <20210704193859.3406196-1-fontaine.fabrice@gmail.com>
-Message-ID: <87wnptuxlj.fsf@dell.be.48ers.dk>
+Date: Wed, 14 Jul 2021 10:07:53 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] utils/scanpypi: search
+ LICENSE.MD
+Message-ID: <20210714073441.CFA4C90E49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fcc7f55a891e7e8f6a769e5aba5ca090811d914c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Some packages such as python-idna has a LICENSE.md file:
- > https://github.com/kjd/idna/blob/master/LICENSE.md
+Some packages such as python-idna has a LICENSE.md file:
+https://github.com/kjd/idna/blob/master/LICENSE.md
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 60aa896904c0d8a07d6fbbf7e90b7f9efd196678)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ utils/scanpypi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2021.02.x and 2021.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 47c7c00c60..8327fc3fc5 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -495,8 +495,8 @@ class BuildrootPackage():
+         """
+         lines = []
+ 
+-        filenames = ['LICENCE', 'LICENSE', 'LICENSE.RST', 'LICENSE.TXT',
+-                     'COPYING', 'COPYING.TXT']
++        filenames = ['LICENCE', 'LICENSE', 'LICENSE.MD', 'LICENSE.RST',
++                     'LICENSE.TXT', 'COPYING', 'COPYING.TXT']
+         self.license_files = list(find_file_upper_case(filenames, self.tmp_extract))
+ 
+         lines.append(self.__get_license_names(self.license_files))
