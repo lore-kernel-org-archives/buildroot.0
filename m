@@ -1,45 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jul 2021 22:08:39 +0200
-Subject: [Buildroot] [git commit branch/2021.05.x] package/e2fsprogs: fix
- fsck overwrite in HOST_DIR
-Message-ID: <20210714195547.2CBDF90E9E@busybox.osuosl.org>
+Date: Wed, 14 Jul 2021 23:07:51 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/thrift: drop
+ unrecognized option
+Message-ID: <20210714203441.CC2DE90EA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a3aa80b5b7be3a6da4bc67ce24354c9c7ce4760
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a921820198ebc3404c365bf473728997809ceca6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-host-e2fsprogs package overwrites the fsck program and some
-manpages previously installed by host-util-linux package.
+WITH_QT4 has been dropped since version 0.13.0 and
+https://github.com/apache/thrift/commit/17355425429274e7971fff39d7e45279cdf550fa
 
-This patch simply disables fsck in host-e2fsprogs.
-
-host-e2fsprogs is used to build final ext{2,3,4} images.
-The missing host-e2fsprogs fsck tool (filesystem integrity check
-tool) in HOST_DIR should not lead to issues.
-
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7b7c8cc67280c3ee8ec79d4e381519b18386bd8c)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 5675f09e584e124201451a0feee6e22d8ea2b84a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/e2fsprogs/e2fsprogs.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/thrift/thrift.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 0a69690e2f..bd147e737e 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -27,6 +27,7 @@ HOST_E2FSPROGS_CONF_OPTS = \
- 	--disable-defrag \
- 	--disable-e2initrd-helper \
- 	--disable-fuse2fs \
-+	--disable-fsck \
- 	--disable-libblkid \
- 	--disable-libuuid \
- 	--disable-testio-debug \
+diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
+index 0f2a8eb071..544eb97323 100644
+--- a/package/thrift/thrift.mk
++++ b/package/thrift/thrift.mk
+@@ -20,7 +20,6 @@ THRIFT_COMMON_CONF_OPTS = -DBUILD_TUTORIALS=OFF \
+ 	-DBUILD_TESTING=OFF \
+ 	-DWITH_PYTHON=OFF \
+ 	-DWITH_JAVA=OFF \
+-	-DWITH_QT4=OFF \
+ 	-DWITH_QT5=OFF
+ 
+ THRIFT_CONF_OPTS = $(THRIFT_COMMON_CONF_OPTS) -DBUILD_COMPILER=OFF
