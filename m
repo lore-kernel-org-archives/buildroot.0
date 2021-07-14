@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jul 2021 09:24:31 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python3: bump
+Date: Wed, 14 Jul 2021 09:24:07 +0200
+Subject: [Buildroot] [git commit branch/2021.05.x] package/python3: bump
  version to 3.9.6
-Message-ID: <20210714070117.133EC90E34@busybox.osuosl.org>
+Message-ID: <20210714070124.D708090E40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3489c7adb4fbb029604523566f73cf7e3f86411
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ee71797cafacf1b22f2a9fc918a59e6a77980a58
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
