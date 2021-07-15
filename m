@@ -1,71 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Jul 2021 22:39:23 +0200
-Subject: [Buildroot] [git commit] configs/stm32mp157a_dk1: bump TF-A, Linux,
- U-Boot versions
-Message-ID: <20210715200546.49C2E90F76@busybox.osuosl.org>
+Date: Thu, 15 Jul 2021 22:41:02 +0200
+Subject: [Buildroot] [git commit] package/nginx-modsecurity: drop unneeded
+ select on pcre
+Message-ID: <20210715200837.CB0D090FA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=531c22c202ed6a63345c14861d969e28e0c3120f
+commit: https://git.buildroot.net/buildroot/commit/?id=4f2629973aa762614b137aa7a56f2892ffb34871
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Runtime tested:
+Drop unneeded select on pcre which has been added by commit
+d35873ab0ce5921974239354f8c6e1b4ccc6e565
 
-NOTICE:  Model: STMicroelectronics STM32MP157A-DK1 Discovery Board
-NOTICE:  Board: MB1272 Var1.0 Rev.C-01
-...
-U-Boot 2021.07 (Jul 09 2021 - 20:53:05 +0200)
-...
-Starting kernel ...
-
-[    0.000000] Booting Linux on physical CPU 0x0
-[    0.000000] Linux version 5.13.0 ...
-...
-Welcome to Buildroot
-buildroot login:
-
-Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/stm32mp157a_dk1_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/nginx-modsecurity/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
-index 6883aaba7b..bdb99c8663 100644
---- a/configs/stm32mp157a_dk1_defconfig
-+++ b/configs/stm32mp157a_dk1_defconfig
-@@ -1,11 +1,11 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157a-dk1/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-dk1.dtb"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
-@@ -25,7 +25,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157a-dk1/uboot-fragment.config"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
+index 2af11eeee2..e754aab71e 100644
+--- a/package/nginx-modsecurity/Config.in
++++ b/package/nginx-modsecurity/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_NGINX_MODSECURITY
+ 	depends on BR2_INSTALL_LIBSTDCPP # libmodsecurity
+ 	depends on !BR2_STATIC_LIBS # libmodsecurity
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libmodsecurity
+-	select BR2_PACKAGE_PCRE # libmodsecurity
+ 	select BR2_PACKAGE_LIBMODSECURITY
+ 	help
+ 	  The ModSecurity-nginx connector is the connection
