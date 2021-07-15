@@ -1,24 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Jul 2021 21:45:29 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: Change my name
-In-Reply-To: <20210711170330.3026360-1-nerv@dawncrow.de>
-References: <20210711170330.3026360-1-nerv@dawncrow.de>
-Message-ID: <20210715214529.4857761c@windsurf>
+Date: Thu, 15 Jul 2021 21:45:59 +0200
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: update Christophe Priouzeau
+ e-mail address
+In-Reply-To: <20210712095557.22387-1-christophe.priouzeau@foss.st.com>
+References: <20210712095557.22387-1-christophe.priouzeau@foss.st.com>
+Message-ID: <20210715214559.3be8582d@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sun, 11 Jul 2021 19:03:30 +0200
-Andr? Zwing <nerv@dawncrow.de> wrote:
+On Mon, 12 Jul 2021 11:55:57 +0200
+Christophe Priouzeau <christophe.priouzeau@foss.st.com> wrote:
 
-> And remove myself from freescale related parts
-> 
-> Signed-off-by: Andr? Zwing <nerv@dawncrow.de>
+> Signed-off-by: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
 > ---
->  DEVELOPERS | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+>  DEVELOPERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
