@@ -1,23 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Jul 2021 23:16:56 +0200
-Subject: [Buildroot] [PATCH] package/can-utils: bump to version 2021.06.0
-In-Reply-To: <20210713112030.1157617-1-francois.perrad@gadz.org>
-References: <20210713112030.1157617-1-francois.perrad@gadz.org>
-Message-ID: <20210715231656.52959401@windsurf>
+Date: Thu, 15 Jul 2021 23:17:02 +0200
+Subject: [Buildroot] [PATCH] package/nano: bump to version 5.8
+In-Reply-To: <20210713112042.1157671-1-francois.perrad@gadz.org>
+References: <20210713112042.1157671-1-francois.perrad@gadz.org>
+Message-ID: <20210715231702.3b7612ec@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Tue, 13 Jul 2021 13:20:30 +0200
+On Tue, 13 Jul 2021 13:20:42 +0200
 Francois Perrad <fperrad@gmail.com> wrote:
 
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/can-utils/can-utils.hash | 2 +-
->  package/can-utils/can-utils.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/nano/nano.hash | 4 ++--
+>  package/nano/nano.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
