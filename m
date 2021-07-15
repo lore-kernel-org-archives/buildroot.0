@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DEB4C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:28:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74350C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:28:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 31B2260F9C
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:28:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 31B2260F9C
+	by mail.kernel.org (Postfix) with ESMTPS id 330CC60F94
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:28:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 330CC60F94
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D8AF83AF0;
-	Tue,  3 Aug 2021 23:28:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10B6A415DB;
+	Tue,  3 Aug 2021 23:28:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3jWJdmuVqiEN; Tue,  3 Aug 2021 23:28:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1SMoZ4DjtJk0; Tue,  3 Aug 2021 23:28:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6001683CC2;
-	Tue,  3 Aug 2021 23:28:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D1E7414A0;
+	Tue,  3 Aug 2021 23:28:31 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5204B1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 86F8E1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7DD3340EA1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D97740E53
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4ucnOIYFeytj for <buildroot@lists.busybox.net>;
+ with ESMTP id AZR1lqKd2eSR for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B257F40E5A
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF36F4069F
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 1533587F55; Tue,  3 Aug 2021 21:10:02 +0000 (UTC)
+ id 0AFD286A84; Tue,  3 Aug 2021 21:10:02 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 15 Jul 2021 21:46:15 +0200
+Date: Thu, 15 Jul 2021 21:45:55 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 84f81e193fe7f8e317b9482cdb71ab7eed44b44b
-X-Git-Newrev: d8c1a6733075b080c934b03af5da46b3d25c4850
+X-Git-Oldrev: c56b529931247fd3b73740b51c5708bdb4391921
+X-Git-Newrev: 84f81e193fe7f8e317b9482cdb71ab7eed44b44b
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211002.1533587F55@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: drop Jan Viktorin
+Message-Id: <20210803211002.0AFD286A84@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] DEVELOPERS: update Christophe
+ Priouzeau e-mail address
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,36 +70,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8c1a6733075b080c934b03af5da46b3d25c4850
+commit: https://git.buildroot.net/buildroot/commit/?id=84f81e193fe7f8e317b9482cdb71ab7eed44b44b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Unfortunately, his e-mail is bouncing:
-
-<viktorin@rehivetech.com>: host wes1-mx2.wedos.net[46.28.106.12] said: 550
-    5.2.1 <viktorin@rehivetech.com>: Recipient address rejected: mailbox
-    disabled - DEBUG: acc viktorin@rehivetech.com (in reply to RCPT TO command)
-
+Signed-off-by: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 5 -----
- 1 file changed, 5 deletions(-)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9546977568..554b559f6d 100644
+index 58c11543b7..9546977568 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1265,11 +1265,6 @@ F:	package/sysrepo/
- N:	Jan Pedersen <jp@jp-embedded.com>
- F:	package/zip/
+@@ -525,7 +525,7 @@ F:	package/rtl8821au/
+ F:	package/runc/
+ F:	package/tini/
  
--N:	Jan Viktorin <viktorin@rehivetech.com>
--F:	package/python-pexpect/
--F:	package/python-ptyprocess/
--F:	package/zynq-boot-bin/
--
- N:	Jarkko Sakkinen <jarkko.sakkinen@intel.com>
- F:	package/quota/
- 
+-N:	Christophe Priouzeau <christophe.priouzeau@st.com>
++N:	Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+ F:	board/stmicroelectronics/stm32f429-disco/
+ F:	board/stmicroelectronics/stm32f469-disco/
+ F:	configs/stm32f429_disco_defconfig
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
