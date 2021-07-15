@@ -1,70 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Jul 2021 08:47:26 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/thrift: security
- bump to version 0.14.1
-Message-ID: <20210715062057.7973090E64@busybox.osuosl.org>
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Thu, 15 Jul 2021 10:34:32 +0200
+Subject: [Buildroot] [PATCH v2 0/1] Add support for teamd/libteam
+Message-ID: <20210715083433.865943-1-troglobit@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb9692db82a54b4452c679aad334d1f222fdac08
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+Hi!
 
-Fix CVE-2020-13949: In Apache Thrift 0.9.3 to 0.13.0, malicious RPC
-clients could send short messages which would result in a large memory
-allocation, potentially leading to denial of service.
+This patch adds support for teamd/libteam to Buildroot.  A few musl libc
+related patches have been backported from project's master branch at
 
-- Disable javascript and nodejs which have been added with
-  https://github.com/apache/thrift/commit/61d502075bf5da10331c201f604acdfefc4d5edc
-- Update hash of LICENSE, license for windows-specific files added:
-  https://github.com/apache/thrift/commit/98854c48744f20b3f551817273ed502835477f09
+    https://github.com/jpirko/libteam/
 
-https://github.com/apache/thrift/blob/v0.14.1/CHANGES.md
+Basic tests pass:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 7ecbb956e2c6a6dd42126657e05e86072f3fc140)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+    $ ./utils/check-package package/libteam/*
+    187 lines processed
+    0 warnings generated
+
+    $ ./utils/test-pkg -c libteam.config -p libteam
+                        bootlin-armv5-uclibc [1/6]: OK
+                         bootlin-armv7-glibc [2/6]: OK
+                       bootlin-armv7m-uclibc [3/6]: SKIPPED
+                         bootlin-x86-64-musl [4/6]: OK
+                          br-arm-full-static [5/6]: OK
+                                sourcery-arm [6/6]: OK
+    6 builds, 1 skipped, 0 build failed, 0 legal-info failed
+
+
+Best regards
+ /Joachim
+
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+
 ---
- package/thrift/thrift.hash | 6 +++---
- package/thrift/thrift.mk   | 4 +++-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+v2: added missing libnl deps in libteam/Config.in (Yegor)
 
-diff --git a/package/thrift/thrift.hash b/package/thrift/thrift.hash
-index f342dc348d..20d6baeace 100644
---- a/package/thrift/thrift.hash
-+++ b/package/thrift/thrift.hash
-@@ -1,4 +1,4 @@
--# From https://www.apache.org/dist/thrift/0.13.0/thrift-0.13.0.tar.gz.sha256
--sha256  7ad348b88033af46ce49148097afe354d513c1fca7c607b59c33ebb6064b5179  thrift-0.13.0.tar.gz
-+# From https://www.apache.org/dist/thrift/0.14.1/thrift-0.14.1.tar.gz.sha256
-+sha256  13da5e1cd9c8a3bb89778c0337cc57eb0c29b08f3090b41cf6ab78594b410ca5  thrift-0.14.1.tar.gz
- # License files, locally calculated
--sha256  23df881cec3192d1f4474633c14eb2ec30a45b84f8daeb82b9de5d2bd3ac8218  LICENSE
-+sha256  d315e6cdedc07c478de6992027bfb66f220886c6216fd7e9885ced30c3703646  LICENSE
-diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-index 544eb97323..c36efce2ed 100644
---- a/package/thrift/thrift.mk
-+++ b/package/thrift/thrift.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--THRIFT_VERSION = 0.13.0
-+THRIFT_VERSION = 0.14.1
- THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(THRIFT_VERSION)
- THRIFT_LICENSE = Apache-2.0
- THRIFT_LICENSE_FILES = LICENSE
-@@ -18,8 +18,10 @@ HOST_THRIFT_DEPENDENCIES = host-bison host-boost \
- 
- THRIFT_COMMON_CONF_OPTS = -DBUILD_TUTORIALS=OFF \
- 	-DBUILD_TESTING=OFF \
-+	-DWITH_NODEJS=OFF \
- 	-DWITH_PYTHON=OFF \
- 	-DWITH_JAVA=OFF \
-+	-DWITH_JAVASCRIPT=OFF \
- 	-DWITH_QT5=OFF
- 
- THRIFT_CONF_OPTS = $(THRIFT_COMMON_CONF_OPTS) -DBUILD_COMPILER=OFF
+Joachim Wiberg (1):
+  package/libteam: new package
+
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ .../0001-revert-disregard-current-state.patch | 51 +++++++++++++++++++
+ .../0002-fix-build-on-openwrt-musl-libc.patch | 41 +++++++++++++++
+ ...3-increase-wait-time-for-daemon-kill.patch | 37 ++++++++++++++
+ package/libteam/Config.in                     | 26 ++++++++++
+ package/libteam/libteam.hash                  |  3 ++
+ package/libteam/libteam.mk                    | 22 ++++++++
+ 8 files changed, 182 insertions(+)
+ create mode 100644 package/libteam/0001-revert-disregard-current-state.patch
+ create mode 100644 package/libteam/0002-fix-build-on-openwrt-musl-libc.patch
+ create mode 100644 package/libteam/0003-increase-wait-time-for-daemon-kill.patch
+ create mode 100644 package/libteam/Config.in
+ create mode 100644 package/libteam/libteam.hash
+ create mode 100644 package/libteam/libteam.mk
+
+-- 
+2.25.1
