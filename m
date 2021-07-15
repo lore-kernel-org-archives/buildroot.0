@@ -1,31 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Jul 2021 22:42:38 +0200
-Subject: [Buildroot] [PATCH 1/3] package/nginx-modsecurity: drop
- unneeded select on pcre
-In-Reply-To: <20210714085346.2464634-1-fontaine.fabrice@gmail.com>
-References: <20210714085346.2464634-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210715224238.7600047d@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 15 Jul 2021 22:42:41 +0200
+Subject: [Buildroot] [git commit] package/nfs-utils: enable optional uuid
+ support
+Message-ID: <20210715200907.0463590FB1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Wed, 14 Jul 2021 10:53:44 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5acba5e41475f7b40c674a45593b1290d990237c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Drop unneeded select on pcre which has been added by commit
-> d35873ab0ce5921974239354f8c6e1b4ccc6e565
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/nginx-modsecurity/Config.in | 1 -
->  1 file changed, 1 deletion(-)
+Enable when libuuid and libblkid are available.
 
-Series applied. Thanks!
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/nfs-utils/nfs-utils.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index d6408ee8f7..80e6ad0ddc 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -19,7 +19,6 @@ NFS_UTILS_CONF_OPTS = \
+ 	--disable-nfsv4 \
+ 	--disable-nfsv41 \
+ 	--disable-gss \
+-	--disable-uuid \
+ 	--enable-tirpc \
+ 	--enable-ipv6 \
+ 	--without-tcp-wrappers \
+@@ -53,6 +52,13 @@ else
+ NFS_UTILS_CONF_OPTS += --disable-caps
+ endif
+ 
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID)$(BR2_PACKAGE_UTIL_LINUX_LIBUUID),yy)
++NFS_UTILS_CONF_OPTS += --enable-uuid
++NFS_UTILS_DEPENDENCIES += util-linux
++else
++NFS_UTILS_CONF_OPTS += --disable-uuid
++endif
++
+ define NFS_UTILS_INSTALL_FIXUP
+ 	cd $(TARGET_DIR) && rm -f $(NFS_UTILS_TARGETS_)
+ 	touch $(TARGET_DIR)/etc/exports
