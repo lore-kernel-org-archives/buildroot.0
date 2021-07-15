@@ -1,32 +1,56 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Fri, 16 Jul 2021 00:03:34 +0300
-Subject: [Buildroot] [PATCH v2 0/2] stm32mp157c-dk2: bsp updates and
- fixes
-In-Reply-To: <YPCgGotE4irI6hQG@curiosity>
-References: <20210704154515.431798-1-geomatsi@gmail.com>
- <20210715223741.57503db1@windsurf> <YPCgGotE4irI6hQG@curiosity>
-Message-ID: <YPCiphpd0+4hHY8M@curiosity>
+Date: Fri, 16 Jul 2021 00:06:27 +0300
+Subject: [Buildroot] [PATCH 2/2] configs/stm32mp157c_dk2: bump Linux and
+ U-Boot versions
+In-Reply-To: <20210715204746.22089-2-texier.pj2@gmail.com>
+References: <20210715204746.22089-1-texier.pj2@gmail.com>
+ <20210715204746.22089-2-texier.pj2@gmail.com>
+Message-ID: <YPCjU4bh/cgjZUy9@curiosity>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-> Hello Thomas, Pierre-Jean,
-> 
-> > > Sergey Matyukevich (2):
-> > >   board/stm32mp157c-dk2: fix U-Boot corruption on the first boot
-> > >   stm32mp157c_dk2: remove uboot config fragment
-> > 
-> > Both applied, thanks! As I mentioned in my reply to Pierre-Jean Texier,
-> > I would prefer if we could keep in sync the DK1 and DK2 configurations,
-> > so it'd be nice if you and Pierre-Jean could send the appropriate
-> > patches to bring them back in sync.
-> 
-> I don't have DK1 board at my disposal. But I can post the patches
-> if Pierre-Jean is ready to test them.
+Hi all,
 
-Too late =) Pierre-Jean has already posted all the expected patches.
+> Needed to keep both stm32mp157c_dk1 and stm32mp157c_dk2
+> aligned.
+> 
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+> ---
+>  configs/stm32mp157c_dk2_defconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+> index a4bff897e5..45205982d7 100644
+> --- a/configs/stm32mp157c_dk2_defconfig
+> +++ b/configs/stm32mp157c_dk2_defconfig
+> @@ -1,11 +1,11 @@
+>  BR2_arm=y
+>  BR2_cortex_a7=y
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
+>  BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.10"
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> @@ -25,7 +25,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
+>  # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+>  BR2_TARGET_UBOOT_FORMAT_STM32=y
 
-Regards,
-Sergey
+Reviewed-by: Sergey Matyukevich <geomatsi@gmail.com>
+
+Thanks !
