@@ -1,27 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Jul 2021 22:43:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-hts: bump version to
- 8.3.3-Matrix
-In-Reply-To: <20210713202911.862659-1-bernd.kuhls@t-online.de>
-References: <20210713202911.862659-1-bernd.kuhls@t-online.de>
-Message-ID: <20210715224351.1da16c96@windsurf>
+Date: Thu, 15 Jul 2021 22:43:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-django: security bump to
+ version 3.2.5
+In-Reply-To: <20210714085044.2455236-1-fontaine.fabrice@gmail.com>
+References: <20210714085044.2455236-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210715224359.13d9a0f4@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Tue, 13 Jul 2021 22:29:11 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Wed, 14 Jul 2021 10:50:44 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Changelog:
-> https://github.com/kodi-pvr/pvr.hts/blob/Matrix/pvr.hts/changelog.txt
+> Fix CVE-2021-35042: Django 3.1.x before 3.1.13 and 3.2.x before 3.2.5
+> allows QuerySet.order_by SQL injection if order_by is untrusted input
+> from a client of a web application.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> https://www.djangoproject.com/weblog/2021/jul/01/security-releases
+> https://docs.djangoproject.com/en/dev/releases/3.2.5
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
->  package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/python-django/python-django.hash | 4 ++--
+>  package/python-django/python-django.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
