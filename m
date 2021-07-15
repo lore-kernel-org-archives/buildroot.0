@@ -1,45 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Thu, 15 Jul 2021 23:14:42 +0200
-Subject: [Buildroot] [git commit] package/nano: bump to version 5.8
-Message-ID: <20210715204111.C05749103D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nettle: bump to version 3.7.3
+Message-ID: <20210715204111.D64379103C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4941d801c759fba8dedf607a28331c1443271432
+commit: https://git.buildroot.net/buildroot/commit/?id=2e5cb51680817b46ee8be39cb84a8d723c31f7e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
+ package/nettle/nettle.hash | 4 ++--
+ package/nettle/nettle.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 532a68e0c9..277f224014 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
+index 09652dcc8b..cd32ad442e 100644
+--- a/package/nettle/nettle.hash
++++ b/package/nettle/nettle.hash
+@@ -1,6 +1,6 @@
  # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v5/nano-5.7.tar.xz.asc
-+# https://www.nano-editor.org/dist/v5/nano-5.8.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256  d4b181cc2ec11def3711b4649e34f2be7a668e70ab506860514031d069cccafa  nano-5.7.tar.xz
-+sha256  e43b63db2f78336e2aa123e8d015dbabc1720a15361714bfd4b1bb4e5e87768c  nano-5.8.tar.xz
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 39d9be12ba..2a20eca210 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
+-# https://ftp.gnu.org/gnu/nettle/nettle-3.7.2.tar.gz.sig
+-sha256  8d2a604ef1cde4cd5fb77e422531ea25ad064679ff0adf956e78b3352e0ef162  nettle-3.7.2.tar.gz
++# https://ftp.gnu.org/gnu/nettle/nettle-3.7.3.tar.gz.sig
++sha256  661f5eb03f048a3b924c3a8ad2515d4068e40f67e774e8a26827658007e3bcf0  nettle-3.7.3.tar.gz
+ # Locally calculated
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSERv3
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index bf833eb27e..3dbd0cb94b 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NANO_VERSION_MAJOR = 5
--NANO_VERSION = $(NANO_VERSION_MAJOR).7
-+NANO_VERSION = $(NANO_VERSION_MAJOR).8
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-NETTLE_VERSION = 3.7.2
++NETTLE_VERSION = 3.7.3
+ NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
+ NETTLE_DEPENDENCIES = gmp
+ NETTLE_INSTALL_STAGING = YES
