@@ -1,30 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Jul 2021 21:52:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/syslog-ng: fix tarball hash
-In-Reply-To: <20210705051445.3496122-1-fontaine.fabrice@gmail.com>
-References: <20210705051445.3496122-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210715215245.024e7705@windsurf>
+Date: Thu, 15 Jul 2021 21:53:06 +0200
+Subject: [Buildroot] [PATCH] package/syslog-ng: Bump version to 3.33.1
+In-Reply-To: <20210714095802.12678-1-judge.packham@gmail.com>
+References: <20210714095802.12678-1-judge.packham@gmail.com>
+Message-ID: <20210715215306.5974aaf6@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Mon,  5 Jul 2021 07:14:45 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Wed, 14 Jul 2021 21:58:02 +1200
+Chris Packham <judge.packham@gmail.com> wrote:
 
-> Tarball hash added by commit 1054a7aaa238253db8b60e4a520a66ad9e1b1eb1 is
-> wrong
+> https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-3.33.1
+> https://github.com/syslog-ng/syslog-ng/compare/syslog-ng-3.32.1...syslog-ng-3.33.1
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1ed64d9a2a707cbd06f9d2af29101b70b668bc06
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Chris Packham <judge.packham@gmail.com>
 > ---
->  package/syslog-ng/syslog-ng.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> This applies on top of Fabrice's change which hasn't shown up in master yet
 
-Applied to master, thanks.
+Applied to master, thanks. This time, I verified the hash, and it does
+match the one I could get by downloading the tarball here :-)
+
+Thanks!
 
 Thomas
 -- 
