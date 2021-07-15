@@ -1,40 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Jul 2021 21:46:15 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: drop Jan Viktorin
-Message-ID: <20210715191242.14F168E564@busybox.osuosl.org>
+Date: Thu, 15 Jul 2021 21:45:55 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: update Christophe Priouzeau
+ e-mail address
+Message-ID: <20210715191242.04725810CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8c1a6733075b080c934b03af5da46b3d25c4850
+commit: https://git.buildroot.net/buildroot/commit/?id=84f81e193fe7f8e317b9482cdb71ab7eed44b44b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Unfortunately, his e-mail is bouncing:
-
-<viktorin@rehivetech.com>: host wes1-mx2.wedos.net[46.28.106.12] said: 550
-    5.2.1 <viktorin@rehivetech.com>: Recipient address rejected: mailbox
-    disabled - DEBUG: acc viktorin at rehivetech.com (in reply to RCPT TO command)
-
+Signed-off-by: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 5 -----
- 1 file changed, 5 deletions(-)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9546977568..554b559f6d 100644
+index 58c11543b7..9546977568 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1265,11 +1265,6 @@ F:	package/sysrepo/
- N:	Jan Pedersen <jp@jp-embedded.com>
- F:	package/zip/
+@@ -525,7 +525,7 @@ F:	package/rtl8821au/
+ F:	package/runc/
+ F:	package/tini/
  
--N:	Jan Viktorin <viktorin@rehivetech.com>
--F:	package/python-pexpect/
--F:	package/python-ptyprocess/
--F:	package/zynq-boot-bin/
--
- N:	Jarkko Sakkinen <jarkko.sakkinen@intel.com>
- F:	package/quota/
- 
+-N:	Christophe Priouzeau <christophe.priouzeau@st.com>
++N:	Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+ F:	board/stmicroelectronics/stm32f429-disco/
+ F:	board/stmicroelectronics/stm32f469-disco/
+ F:	configs/stm32f429_disco_defconfig
