@@ -1,46 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Thu, 15 Jul 2021 22:48:14 +0200
-Subject: [Buildroot] [git commit] package/kodi-pvr-dvbviewer: bump version
- to 7.3.3-Matrix
-Message-ID: <20210715201451.D819490FAF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-django: security bump to
+ version 3.2.5
+Message-ID: <20210715201451.CA96690FF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33f1e80eb1b86cbd7ce25ea73d437eac12d5e677
+commit: https://git.buildroot.net/buildroot/commit/?id=dd4e09e0e4a8d0daeff62a8998eed250a49e0bcf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/kodi-pvr/pvr.dvbviewer/blob/Matrix/pvr.dvbviewer/changelog.txt
+Fix CVE-2021-35042: Django 3.1.x before 3.1.13 and 3.2.x before 3.2.5
+allows QuerySet.order_by SQL injection if order_by is untrusted input
+from a client of a web application.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+https://www.djangoproject.com/weblog/2021/jul/01/security-releases
+https://docs.djangoproject.com/en/dev/releases/3.2.5
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash | 2 +-
- package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
-index a2aac32bf3..94db39898f 100644
---- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
-+++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  aa81c0a59c00aa13bc1ea3adc078e2910fde42bc86ad3a78ecefc6e4c3d5de59  kodi-pvr-dvbviewer-7.2.0-Matrix.tar.gz
-+sha256  d29108aca5bb22ede1613b9055cd5a8e684861b0086de96523c23e5d21de6143  kodi-pvr-dvbviewer-7.3.3-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-index cbc12ed9e5..efc8862bda 100644
---- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-+++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index fe91740f5f..2f5f96a501 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  2f30db9154efb8c9ed891781d29fae2a  Django-3.2.4.tar.gz
+-sha256  66c9d8db8cc6fe938a28b7887c1596e42d522e27618562517cc8929eb7e7f296  Django-3.2.4.tar.gz
++md5  46e306a5a775cace03a03d5a158ff767  Django-3.2.5.tar.gz
++sha256  3da05fea54fdec2315b54a563d5b59f3b4e2b1e69c3a5841dda35019c01855cd  Django-3.2.5.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 81a3c8b8f3..1603063beb 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PVR_DVBVIEWER_VERSION = 7.2.0-Matrix
-+KODI_PVR_DVBVIEWER_VERSION = 7.3.3-Matrix
- KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
- KODI_PVR_DVBVIEWER_LICENSE = GPL-2.0+
- KODI_PVR_DVBVIEWER_LICENSE_FILES = LICENSE.md
+-PYTHON_DJANGO_VERSION = 3.2.4
++PYTHON_DJANGO_VERSION = 3.2.5
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/27/94/123b3a95e9965819a3d30d36da6fc12ddff83bcfb0099f3e15437347480a
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/95/3b/468fa33908feefac03c0a773bd73bb8a1ab1fb4ee06e9dd62d24981f4603
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
