@@ -1,168 +1,36 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 14 Jul 2021 17:19:05 -0600
-Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: enable nfsv4/nfsv4.1
- support
-In-Reply-To: <EA3390AF-4FB4-4048-9156-0874FAF2A787@benettiengineering.com>
-References: <CADvTj4pdAmg3icorf6nzQjEeRnfndg8tSUNd0jcX1DW9Fs-kSQ@mail.gmail.com>
- <EA3390AF-4FB4-4048-9156-0874FAF2A787@benettiengineering.com>
-Message-ID: <CADvTj4qsw+XDgbY-3kRHC3pAGJdpbr0z+tusmVkmk+nkTZckQw@mail.gmail.com>
+From: Damien Le Moal <damien.lemoal@wdc.com>
+Date: Thu, 15 Jul 2021 09:48:35 +0900
+Subject: [Buildroot] [PATCH v2 1/9] arch/config: Make RISC-V MMU optional
+In-Reply-To: <20210715004843.337268-1-damien.lemoal@wdc.com>
+References: <20210715004843.337268-1-damien.lemoal@wdc.com>
+Message-ID: <20210715004843.337268-2-damien.lemoal@wdc.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Tue, Jul 13, 2021 at 3:28 AM Giulio Benetti
-<giulio.benetti@benettiengineering.com> wrote:
->
->
-> Il giorno 13 lug 2021, alle ore 10:19, James Hilliard <james.hilliard1@gmail.com> ha scritto:
->
-> ?On Tue, Jul 13, 2021 at 2:03 AM Giulio Benetti
-> <giulio.benetti@benettiengineering.com> wrote:
->
->
-> Hello James,
->
->
-> Il giorno 13 lug 2021, alle ore 05:14, James Hilliard <james.hilliard1@gmail.com> ha scritto:
->
->
-> ?Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->
-> ---
->
-> package/nfs-utils/Config.in    | 10 ++++++++++
->
-> package/nfs-utils/nfs-utils.mk |  9 +++++++--
->
-> 2 files changed, 17 insertions(+), 2 deletions(-)
->
->
-> diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
->
-> index da563db0f1..b736f6c973 100644
->
-> --- a/package/nfs-utils/Config.in
->
-> +++ b/package/nfs-utils/Config.in
->
-> @@ -14,6 +14,16 @@ config BR2_PACKAGE_NFS_UTILS
->
->
-> if BR2_PACKAGE_NFS_UTILS
->
->
-> +config BR2_PACKAGE_NFS_UTILS_NFSV4
->
-> +    bool "NFSv4/NFSv4.1"
->
-> +    depends on !BR2_STATIC_LIBS # keyutils, lvm2
->
-> +    select BR2_PACKAGE_KEYUTILS
->
-> +    select BR2_PACKAGE_LIBEVENT
->
-> +    select BR2_PACKAGE_LVM2
->
-> +    select BR2_PACKAGE_SQLITE
->
-> +    help
->
-> +      Enable NFSv4/NFSv4.1 support
->
-> +
->
-> config BR2_PACKAGE_NFS_UTILS_RPCDEBUG
->
->   bool "rpcdebug"
->
->   help
->
-> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
->
-> index c384e939d8..2598f0908b 100644
->
-> --- a/package/nfs-utils/nfs-utils.mk
->
-> +++ b/package/nfs-utils/nfs-utils.mk
->
-> @@ -16,8 +16,6 @@ NFS_UTILS_AUTORECONF = YES
->
-> NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
->
->
-> NFS_UTILS_CONF_OPTS = \
->
-> -    --disable-nfsv4 \
->
-> -    --disable-nfsv41 \
->
->
-> Is this ^^^ what prevents uuid.h build error?
->
->
-> No idea, have some background on that issue?
->
->
-> Yes, I had that issue on this commit:
->
-> http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=blobdiff;f=support/export/v4root.c;h=c12a7d8562b22616fbc7840faf6719443dac64d3;hp=3654bd7c10c059d6a6ae32001ca979d671ef38f2;hb=c5528f40f9db5061e06dcf1f9b7fce5185b376c6;hpb=ed83085ff310fdc95badb06a26289efb70f99ccd
->
-> But it seems that ?disable-nfsv4 avoid building it,
-> so we should have no problem.
->
-> Can you double check building with nfsv4 support and find it failing wi uuid.h? I don?t have time at the moment.
+Linux supports No-MMU RISC-V since kernel version 5.8. Make MMU optional
+to enable building for RISC-V boards that do not have one.
 
-I wasn't seeing a failure but I sent a patch enabling it when available here:
-https://patchwork.ozlabs.org/project/buildroot/patch/20210714231702.850078-1-james.hilliard1 at gmail.com/
+Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+---
+ arch/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> Thanks a lot
->
-> Giulio
->
->
->
-> Giulio
->
->
->   --disable-gss \
->
->   --disable-uuid \
->
->   --enable-tirpc \
->
-> @@ -46,6 +44,13 @@ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD) += usr/sbin/rpc.rquotad
->
-> NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_NFSD) += usr/sbin/exportfs \
->
->   usr/sbin/rpc.mountd usr/sbin/rpc.nfsd usr/lib/systemd/system/nfs-server.service
->
->
-> +ifeq ($(BR2_PACKAGE_NFS_UTILS_NFSV4),y)
->
-> +NFS_UTILS_CONF_OPTS += --enable-nfsv4 --enable-nfsv41
->
-> +NFS_UTILS_DEPENDENCIES += keyutils libevent lvm2 sqlite
->
-> +else
->
-> +NFS_UTILS_CONF_OPTS += --disable-nfsv4 --disable-nfsv41
->
-> +endif
->
-> +
->
-> ifeq ($(BR2_PACKAGE_LIBCAP),y)
->
-> NFS_UTILS_CONF_OPTS += --enable-caps
->
-> NFS_UTILS_DEPENDENCIES += libcap
->
-> --
->
-> 2.25.1
->
->
->
+diff --git a/arch/Config.in b/arch/Config.in
+index 1853e26bb4..82d3b01980 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -210,7 +210,7 @@ config BR2_powerpc64le
+ 
+ config BR2_riscv
+ 	bool "RISCV"
+-	select BR2_ARCH_HAS_MMU_MANDATORY
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	help
+ 	  RISC-V is an open, free Instruction Set Architecture created
+-- 
+2.31.1
