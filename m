@@ -1,44 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Thu, 15 Jul 2021 23:14:42 +0200
-Subject: [Buildroot] [git commit] package/pango: bump to version 1.48.7
-Message-ID: <20210715204111.DFFF89103D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/spi-tools: bump to version 1.0.0
+Message-ID: <20210715204111.CAED79103F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98caa3077bf780fc0d2cc0b978214fbf2f7fd2a2
+commit: https://git.buildroot.net/buildroot/commit/?id=f443272a1d3209d69d418029c706175566413860
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pango/pango.hash | 2 +-
- package/pango/pango.mk   | 2 +-
+ package/spi-tools/spi-tools.hash | 2 +-
+ package/spi-tools/spi-tools.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 3d6167058e..94568a68ef 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,5 +1,5 @@
- # From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.48/pango-1.48.4.sha256sum
--sha256  418913fb062071a075846244989d4a67aa5c80bf0eae8ee4555a092fd566a37a  pango-1.48.4.tar.xz
-+sha256  28a82f6a6cab60aa3b75a90f04197ead2d311fa8fe8b7bfdf8666e2781d506dc  pango-1.48.7.tar.xz
- 
- # Locally computed
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index cc09e3a64d..2a4a9f49da 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/spi-tools/spi-tools.hash b/package/spi-tools/spi-tools.hash
+index 771f86e4cd..a1ef4c2b9b 100644
+--- a/package/spi-tools/spi-tools.hash
++++ b/package/spi-tools/spi-tools.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  319ad6ab296111109ea4a820e216cef392429295de7e10e76f7146677337cf09  spi-tools-0.8.6.tar.gz
++sha256  5eb24670461dcf2c58471114dc69b5204dab1c0cc5053878f6de79503bd8cc9f  spi-tools-1.0.0.tar.gz
+ sha256  a01259a1b522cf0de95824f9860613b453153eebac468e96196d5d7dba84786c  LICENSE
+diff --git a/package/spi-tools/spi-tools.mk b/package/spi-tools/spi-tools.mk
+index b2dd4db3ff..26d0dcf546 100644
+--- a/package/spi-tools/spi-tools.mk
++++ b/package/spi-tools/spi-tools.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PANGO_VERSION_MAJOR = 1.48
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).4
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).7
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
+-SPI_TOOLS_VERSION = 0.8.6
++SPI_TOOLS_VERSION = 1.0.0
+ SPI_TOOLS_SITE = $(call github,cpb-,spi-tools,$(SPI_TOOLS_VERSION))
+ # autoreconf must be run as specified in package documentation
+ SPI_TOOLS_AUTORECONF = YES
