@@ -1,46 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Jul 2021 22:48:14 +0200
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
- version to 2.6.18
-Message-ID: <20210715201451.AEFE990FF5@busybox.osuosl.org>
+From: Pierre-Jean Texier <texier.pj2@gmail.com>
+Date: Thu, 15 Jul 2021 22:51:23 +0200
+Subject: [Buildroot] [PATCH] configs/stm32mp157a_dk1: bump TF-A, Linux,
+ U-Boot versions
+In-Reply-To: <20210715223645.4930fc60@windsurf>
+References: <20210709192156.8030-1-texier.pj2@gmail.com>
+ <20210715223645.4930fc60@windsurf>
+Message-ID: <0db7f843-2d9f-6a3e-c1cc-aac78e0febbb@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5751ebf004f679c8d1a3012d96e4c36157ccae1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas,
 
-Changelog:
-https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
+Le 15/07/2021 ? 22:36, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Fri,  9 Jul 2021 21:21:56 +0200
+> Pierre-Jean Texier <texier.pj2@gmail.com> wrote:
+> 
+>>   configs/stm32mp157a_dk1_defconfig | 8 ++++----
+>>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> Applied to master, thanks. However, could you sync with Sergey
+> Matyukevich <geomatsi@gmail.com> and ensure that the DK1 and DK2
+> configurations are aligned in terms of TF-A/U-Boot/Linux versions ?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks for the feedback, you're indeed right, fixed in [1]
+> 
+> Also, could you drop the U-Boot config fragment related to the
+> watchdog, like Sergey did for the DK2 ?
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index f3a4bf9ec3..6a552274fd 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  49b9971973a8df16faa2a7a46d81156484a27c98930eae56dad12d466910db13  kodi-inputstream-adaptive-2.6.16-Matrix.tar.gz
-+sha256  2b79136dfd9468dc4bdfd23725a5cb3bb62e0bb095ffe287bbe707099d977935  kodi-inputstream-adaptive-2.6.18-Matrix.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 1ffc6bc25a..f2fb3aca99 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.16-Matrix
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.18-Matrix
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+Sure, fixed in [2].
+
+Thanks !
+
+[1] - 
+http://patchwork.ozlabs.org/project/buildroot/patch/20210715204746.22089-2-texier.pj2 at gmail.com/
+[2] - 
+http://patchwork.ozlabs.org/project/buildroot/patch/20210715204746.22089-1-texier.pj2 at gmail.com/
+-- 
+Pierre-Jean Texier
