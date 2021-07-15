@@ -1,46 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 15 Jul 2021 16:58:21 +0200
-Subject: [Buildroot] [PATCH 5/5] package/kodi-visualisation-matrix: bump
- version to 1.0.1-Matrix
-In-Reply-To: <20210715145821.41754-1-bernd.kuhls@t-online.de>
-References: <20210715145821.41754-1-bernd.kuhls@t-online.de>
-Message-ID: <20210715145821.41754-5-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 15 Jul 2021 21:42:12 +0200
+Subject: [Buildroot] [git commit] package/lua-rotas: bump to version 0.2.1
+Message-ID: <20210715190840.BA618883A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Changelog:
-https://github.com/xbmc/visualization.matrix/blob/Matrix/visualization.matrix/changelog.txt
+commit: https://git.buildroot.net/buildroot/commit/?id=5633f2fb7a5e733d2900aa5a372b4de88ef767c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+diff COPYPRIGHT:
+-Copyright (C) 2018-2019 Francois Perrad.
++Copyright (C) 2018-2021 Francois Perrad.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../kodi-visualisation-matrix/kodi-visualisation-matrix.hash    | 2 +-
- package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lua-rotas/lua-rotas.hash | 4 ++--
+ package/lua-rotas/lua-rotas.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
-index 38b9311d6e..21bc6b072c 100644
---- a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
-+++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
+diff --git a/package/lua-rotas/lua-rotas.hash b/package/lua-rotas/lua-rotas.hash
+index 6f8d0df41e..2633f3b728 100644
+--- a/package/lua-rotas/lua-rotas.hash
++++ b/package/lua-rotas/lua-rotas.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  fc5c4790cbf957dbf8d504ae7c43eaeca122fde6423f1135029ff053135f8fd0  kodi-visualisation-matrix-1.0.0-Matrix.tar.gz
-+sha256  3a51499f60966abf75d2aec45e73d8f64322bb279bb9c4b0d6026e9f31d0fa4a  kodi-visualisation-matrix-1.0.1-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
-index 153c1c15b1..58a0e0dc24 100644
---- a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
-+++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
+ # computed by luarocks/buildroot
+-sha256 be47e72ec703ffc319fe4fd539b531bbe8a8c0c52e0cc9774273028f1599a0cf  lua-rotas-0.2.0-1.src.rock
+-sha256 4a7fdc0e44509d79c9bf18560cfb98368f70bb3832abe07e3cdba5c06466b0bb  lua-Rotas-0.2.0/COPYRIGHT
++sha256 a947026be3552cbf676a0cef36a618111712257d306cbd9d340ed8895a4cbd2b  lua-rotas-0.2.1-1.src.rock
++sha256 ac8bb87b7b5e803ae27510b9c6fd284f1b00e741258bc59fc78d3bc107d96fbb  lua-Rotas-0.2.1/COPYRIGHT
+diff --git a/package/lua-rotas/lua-rotas.mk b/package/lua-rotas/lua-rotas.mk
+index 6ace963a4b..84d6c9a582 100644
+--- a/package/lua-rotas/lua-rotas.mk
++++ b/package/lua-rotas/lua-rotas.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_MATRIX_VERSION = 1.0.0-Matrix
-+KODI_VISUALISATION_MATRIX_VERSION = 1.0.1-Matrix
- KODI_VISUALISATION_MATRIX_SITE = $(call github,xbmc,visualization.matrix,$(KODI_VISUALISATION_MATRIX_VERSION))
- KODI_VISUALISATION_MATRIX_LICENSE = GPL-2.0+
- KODI_VISUALISATION_MATRIX_LICENSE_FILES = LICENSE.md
--- 
-2.30.2
+-LUA_ROTAS_VERSION = 0.2.0-1
++LUA_ROTAS_VERSION = 0.2.1-1
+ LUA_ROTAS_NAME_UPSTREAM = lua-Rotas
+ LUA_ROTAS_LICENSE = MIT
+ LUA_ROTAS_LICENSE_FILES = $(LUA_ROTAS_SUBDIR)/COPYRIGHT
