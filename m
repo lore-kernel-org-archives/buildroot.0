@@ -1,13 +1,15 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 15 Jul 2021 16:42:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+Date: Thu, 15 Jul 2021 16:47:19 +0200
+Subject: [Buildroot] [PATCH v2] package/{mesa3d,
  mesa3d-headers}: bump version to 21.1.5
-Message-ID: <20210715144216.36232-1-bernd.kuhls@t-online.de>
+Message-ID: <20210715144719.36875-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+
+Switch site to https://archive.mesa3d.org
 
 Release notes:
 - 21.1.2
@@ -21,24 +23,29 @@ Release notes:
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+v2: switched site to https://archive.mesa3d.org (Peter Seiderer)
+
+ package/mesa3d-headers/mesa3d-headers.mk | 4 ++--
  package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/mesa3d/mesa3d.mk                 | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 960bd83344..1bb451a427 100644
+index 960bd83344..6cf50e23de 100644
 --- a/package/mesa3d-headers/mesa3d-headers.mk
 +++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+@@ -12,9 +12,9 @@ endif
  
  # Not possible to directly refer to mesa3d variables, because of
  # first/second expansion trickery...
 -MESA3D_HEADERS_VERSION = 21.1.1
 +MESA3D_HEADERS_VERSION = 21.1.5
  MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+-MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
++MESA3D_HEADERS_SITE = https://archive.mesa3d.org
  MESA3D_HEADERS_DL_SUBDIR = mesa3d
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+ MESA3D_HEADERS_LICENSE_FILES = docs/license.rst
 diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
 index 9548f8d170..bf744377e4 100644
 --- a/package/mesa3d/mesa3d.hash
@@ -54,17 +61,20 @@ index 9548f8d170..bf744377e4 100644
  # License
  sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index a30b4aff31..f61188aeee 100644
+index a30b4aff31..b38718bab5 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+@@ -5,9 +5,9 @@
  ################################################################################
  
  # When updating the version, please also update mesa3d-headers
 -MESA3D_VERSION = 21.1.1
 +MESA3D_VERSION = 21.1.5
  MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
+-MESA3D_SITE = https://mesa.freedesktop.org/archive
++MESA3D_SITE = https://archive.mesa3d.org
  MESA3D_LICENSE = MIT, SGI, Khronos
+ MESA3D_LICENSE_FILES = docs/license.rst
+ MESA3D_CPE_ID_VENDOR = mesa3d
 -- 
 2.30.2
