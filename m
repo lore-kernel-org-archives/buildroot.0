@@ -1,204 +1,42 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 15 Jul 2021 11:54:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: enable nfsv4/nfsv4.1
- support
-In-Reply-To: <CADvTj4qwD1Kavhn1ac5FkkgPHX0WAuTOw-=EeGf-0FCwzo=rrQ@mail.gmail.com>
-References: <A6DEB160-36E8-4E22-8315-2E3256DC07B0@benettiengineering.com>
- <22EC28E7-B209-41A5-BD4B-928196AEF5ED@benettiengineering.com>
- <CADvTj4qwD1Kavhn1ac5FkkgPHX0WAuTOw-=EeGf-0FCwzo=rrQ@mail.gmail.com>
-Message-ID: <54b58bae-7f69-8154-8d6b-97fe4c24df44@benettiengineering.com>
+From: Bernhard Petschina <bernhard.petschina@gmail.com>
+Date: Thu, 15 Jul 2021 14:56:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/stm32flash: bump to version 0.6
+Message-ID: <20210715125619.521764-1-bernhard.petschina@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hi James,
+Bump to latest official version.
 
-On 7/15/21 4:13 AM, James Hilliard wrote:
-> On Wed, Jul 14, 2021 at 7:42 PM Giulio Benetti
-> <giulio.benetti@benettiengineering.com> wrote:
->>
->>
->> Il giorno 15 lug 2021, alle ore 03:37, Giulio Benetti <giulio.benetti@benettiengineering.com> ha scritto:
->>
->> ?Hi Petr, James, All,
->>
->> Il giorno 13 lug 2021, alle ore 23:51, Petr Vorel <petr.vorel@gmail.com> ha scritto:
->>
->> ?Hi Giulio, all,
->>
->> [Cc Thomas, Peter ]
->>
->> Il giorno 13 lug 2021, alle ore 10:19, James Hilliard <james.hilliard1@gmail.com> ha scritto:
->>
->>
->> ?On Tue, Jul 13, 2021 at 2:03 AM Giulio Benetti
->>
->> <giulio.benetti@benettiengineering.com> wrote:
->>
->>
->> Hello James,
->>
->>
->> Il giorno 13 lug 2021, alle ore 05:14, James Hilliard <james.hilliard1@gmail.com> ha scritto:
->>
->>
->> ?Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->>
->> ---
->>
->> package/nfs-utils/Config.in    | 10 ++++++++++
->>
->> package/nfs-utils/nfs-utils.mk |  9 +++++++--
->>
->> 2 files changed, 17 insertions(+), 2 deletions(-)
->>
->>
->> diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
->>
->> index da563db0f1..b736f6c973 100644
->>
->> --- a/package/nfs-utils/Config.in
->>
->> +++ b/package/nfs-utils/Config.in
->>
->> @@ -14,6 +14,16 @@ config BR2_PACKAGE_NFS_UTILS
->>
->>
->> if BR2_PACKAGE_NFS_UTILS
->>
->>
->> +config BR2_PACKAGE_NFS_UTILS_NFSV4
->>
->> +    bool "NFSv4/NFSv4.1"
->>
->> +    depends on !BR2_STATIC_LIBS # keyutils, lvm2
->>
->> +    select BR2_PACKAGE_KEYUTILS
->>
->> +    select BR2_PACKAGE_LIBEVENT
->>
->> +    select BR2_PACKAGE_LVM2
->>
->> +    select BR2_PACKAGE_SQLITE
->>
->> +    help
->>
->> +      Enable NFSv4/NFSv4.1 support
->>
->> +
->>
->> config BR2_PACKAGE_NFS_UTILS_RPCDEBUG
->>
->>   bool "rpcdebug"
->>
->>   help
->>
->> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
->>
->> index c384e939d8..2598f0908b 100644
->>
->> --- a/package/nfs-utils/nfs-utils.mk
->>
->> +++ b/package/nfs-utils/nfs-utils.mk
->>
->> @@ -16,8 +16,6 @@ NFS_UTILS_AUTORECONF = YES
->>
->> NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
->>
->>
->> NFS_UTILS_CONF_OPTS = \
->>
->> -    --disable-nfsv4 \
->>
->> -    --disable-nfsv41 \
->>
->>
->> Is this ^^^ what prevents uuid.h build error?
->>
->>
->> No idea, have some background on that issue?
->>
->>
->> Yes, I had that issue on this commit:
->>
->>
->> http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=blobdiff;f=support/export/v4root.c;h=c12a7d8562b22616fbc7840faf6719443dac64d3;hp=3654bd7c10c059d6a6ae32001ca979d671ef38f2;hb=c5528f40f9db5061e06dcf1f9b7fce5185b376c6;hpb=ed83085ff310fdc95badb06a26289efb70f99ccd
->>
->>
->> But it seems that ?disable-nfsv4 avoid building it,
->>
->> so we should have no problem.
->>
->>
->> Can you be more specific how c5528f40 ("Fix NFSv4 export of tmpfs filesystems")
->> affects Buildroot? Is it a problem with -luuid
->>
->>
->> Yes, in nfs-utils ?disable-uuid options doesn?t take into account v4nfs that from that commit on
->> uses uuid. It only prevents bulding libblkid support that they still declare buggy here:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
->>
->>
->> Sorry wrong link, this is the right one:
->>
->> http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=blob;f=configure.ac;h=93520a8052bcbc2a4f57090f89f606d8aa76c801;hb=HEAD#l169
-> 
-> But isn't our libblkid new enough to not have the bug?
-> See the version check here:
-> http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=blob;f=aclocal/libblkid.m4;h=10824e9f58f1ae5164945f6baf14c000ba7949fd;hb=0ffef5f9a448013bcc551407134db84796fd2a4e#l13
-> 
+Signed-off-by: Bernhard Petschina <bernhard.petschina@gmail.com>
+---
+ package/stm32flash/stm32flash.hash | 2 +-
+ package/stm32flash/stm32flash.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Aah, my bad, I've interpreted --disable-uuid bad, sorry. Yes, then what 
-you're adding makes a lot of sense!
-
-Thank you
-Best regards
+diff --git a/package/stm32flash/stm32flash.hash b/package/stm32flash/stm32flash.hash
+index 1b06a8f0f0..514d71f823 100644
+--- a/package/stm32flash/stm32flash.hash
++++ b/package/stm32flash/stm32flash.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  42b7d63f6016bd75911cbb87fe85fbc4f98adf3ceecfe6d91f7956b31d18095f  stm32flash-3cebf121f7b32b9edfcb0d49f0fb43ccf33e5650-br1.tar.gz
++sha256  dec1a81a3ba85a61dfa39ec12e391ea16a8d431470f41d34413f7ab183da46ef  stm32flash-v0.6-br1.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  gpl-2.0.txt
+diff --git a/package/stm32flash/stm32flash.mk b/package/stm32flash/stm32flash.mk
+index a8ae9b01df..1c68a0ffbe 100644
+--- a/package/stm32flash/stm32flash.mk
++++ b/package/stm32flash/stm32flash.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STM32FLASH_VERSION = 3cebf121f7b32b9edfcb0d49f0fb43ccf33e5650
++STM32FLASH_VERSION = v0.6
+ STM32FLASH_SITE = git://git.code.sf.net/p/stm32flash/code
+ STM32FLASH_LICENSE = GPL-2.0+
+ STM32FLASH_LICENSE_FILES = gpl-2.0.txt
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
->>
->>
->>
->> Anyway, we disabled nfsv4/nfsv4.1 from the start, I wonder why.
->>
->>
->> As I see from James patch, he disables nfsv4 that is the part where uuid is required.
->> That is why it builds fine without uuid. If we want nfsv4 we need uuid, but then nfs-utile must be patched to make things more clear, but substituting ?disable-uuid with ?disable-libblkid
->> and using ?disable-uuid to remove the above commit code from building.
->>
->> Anyway what is supplied by James builds then, I didn?t try but it makes sense. So it depends if someone wants to create patches to send upstream like I?ve described(if it makes sense for you all of course.
->>
->> Best regards
->> Giulio
->>
->> @Thomas, @Peter: do you remember it?
->>
->> But generally good idea, thus:
->> Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
->>
->> Can you double check building with nfsv4 support and find it failing wi uuid.h? I don?t have time at the moment.
->>
->>
->> I'll try to test it this week.
->>
->> Kind regards,
->> Petr
->>
->> Thanks a lot
->>
->>
->> Giulio
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+2.30.2
