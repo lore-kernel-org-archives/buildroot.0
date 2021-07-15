@@ -1,91 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Jul 2021 23:08:27 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/nfs-utils: enable
- nfsv4/nfsv4.1 support
-In-Reply-To: <20210715031316.3325515-1-james.hilliard1@gmail.com>
-References: <20210715031316.3325515-1-james.hilliard1@gmail.com>
-Message-ID: <20210715210827.GF12203@scaer>
+From: Pierre-Jean Texier <texier.pj2@gmail.com>
+Date: Thu, 15 Jul 2021 23:11:00 +0200
+Subject: [Buildroot] [PATCH 2/2] configs/stm32mp157c_dk2: bump Linux and
+ U-Boot versions
+In-Reply-To: <YPCjU4bh/cgjZUy9@curiosity>
+References: <20210715204746.22089-1-texier.pj2@gmail.com>
+ <20210715204746.22089-2-texier.pj2@gmail.com> <YPCjU4bh/cgjZUy9@curiosity>
+Message-ID: <f835ed39-ea25-0f33-ca6d-abbfe46aef90@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-James, All,
+Hi Sergey,
 
-On 2021-07-14 21:13 -0600, James Hilliard spake thusly:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
-This patch, rebased on-top of UUID support, applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/nfs-utils/Config.in    | 10 ++++++++++
->  package/nfs-utils/nfs-utils.mk |  9 +++++++--
->  2 files changed, 17 insertions(+), 2 deletions(-)
+Le 15/07/2021 ? 23:06, Sergey Matyukevich a ?crit?:
+> Hi all,
 > 
-> diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-> index da563db0f1..b736f6c973 100644
-> --- a/package/nfs-utils/Config.in
-> +++ b/package/nfs-utils/Config.in
-> @@ -14,6 +14,16 @@ config BR2_PACKAGE_NFS_UTILS
->  
->  if BR2_PACKAGE_NFS_UTILS
->  
-> +config BR2_PACKAGE_NFS_UTILS_NFSV4
-> +	bool "NFSv4/NFSv4.1"
-> +	depends on !BR2_STATIC_LIBS # keyutils, lvm2
-> +	select BR2_PACKAGE_KEYUTILS
-> +	select BR2_PACKAGE_LIBEVENT
-> +	select BR2_PACKAGE_LVM2
-> +	select BR2_PACKAGE_SQLITE
-> +	help
-> +	  Enable NFSv4/NFSv4.1 support
-> +
->  config BR2_PACKAGE_NFS_UTILS_RPCDEBUG
->  	bool "rpcdebug"
->  	help
-> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-> index c384e939d8..2598f0908b 100644
-> --- a/package/nfs-utils/nfs-utils.mk
-> +++ b/package/nfs-utils/nfs-utils.mk
-> @@ -16,8 +16,6 @@ NFS_UTILS_AUTORECONF = YES
->  NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
->  
->  NFS_UTILS_CONF_OPTS = \
-> -	--disable-nfsv4 \
-> -	--disable-nfsv41 \
->  	--disable-gss \
->  	--disable-uuid \
->  	--enable-tirpc \
-> @@ -46,6 +44,13 @@ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD) += usr/sbin/rpc.rquotad
->  NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_NFSD) += usr/sbin/exportfs \
->  	usr/sbin/rpc.mountd usr/sbin/rpc.nfsd usr/lib/systemd/system/nfs-server.service
->  
-> +ifeq ($(BR2_PACKAGE_NFS_UTILS_NFSV4),y)
-> +NFS_UTILS_CONF_OPTS += --enable-nfsv4 --enable-nfsv41
-> +NFS_UTILS_DEPENDENCIES += keyutils libevent lvm2 sqlite
-> +else
-> +NFS_UTILS_CONF_OPTS += --disable-nfsv4 --disable-nfsv41
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBCAP),y)
->  NFS_UTILS_CONF_OPTS += --enable-caps
->  NFS_UTILS_DEPENDENCIES += libcap
-> -- 
-> 2.25.1
+>> Needed to keep both stm32mp157c_dk1 and stm32mp157c_dk2
+>> aligned.
+>>
+>> Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>> Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+>> ---
+>>   configs/stm32mp157c_dk2_defconfig | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+>> index a4bff897e5..45205982d7 100644
+>> --- a/configs/stm32mp157c_dk2_defconfig
+>> +++ b/configs/stm32mp157c_dk2_defconfig
+>> @@ -1,11 +1,11 @@
+>>   BR2_arm=y
+>>   BR2_cortex_a7=y
+>> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
+>> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
+>>   BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
+>>   BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+>>   BR2_LINUX_KERNEL=y
+>>   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.10"
+>> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
+>>   BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>>   BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
+>>   BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>> @@ -25,7 +25,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
+>>   BR2_TARGET_UBOOT=y
+>>   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>>   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+>> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
+>> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
+>>   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
+>>   # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+>>   BR2_TARGET_UBOOT_FORMAT_STM32=y
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Reviewed-by: Sergey Matyukevich <geomatsi@gmail.com>
+> 
+> Thanks !
+
+Thanks for the review !
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Pierre-Jean Texier
