@@ -1,51 +1,46 @@
-From: Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Thu, 15 Jul 2021 22:47:46 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/stm32mp157c_dk2: bump Linux and
- U-Boot versions
-In-Reply-To: <20210715204746.22089-1-texier.pj2@gmail.com>
-References: <20210715204746.22089-1-texier.pj2@gmail.com>
-Message-ID: <20210715204746.22089-2-texier.pj2@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 15 Jul 2021 22:48:14 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-dvbviewer: bump version
+ to 7.3.3-Matrix
+Message-ID: <20210715201451.D819490FAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Needed to keep both stm32mp157c_dk1 and stm32mp157c_dk2
-aligned.
+commit: https://git.buildroot.net/buildroot/commit/?id=33f1e80eb1b86cbd7ce25ea73d437eac12d5e677
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+Changelog:
+https://github.com/kodi-pvr/pvr.dvbviewer/blob/Matrix/pvr.dvbviewer/changelog.txt
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/stm32mp157c_dk2_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash | 2 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index a4bff897e5..45205982d7 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -1,11 +1,11 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.10"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -25,7 +25,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_STM32=y
--- 
-2.17.1
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+index a2aac32bf3..94db39898f 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  aa81c0a59c00aa13bc1ea3adc078e2910fde42bc86ad3a78ecefc6e4c3d5de59  kodi-pvr-dvbviewer-7.2.0-Matrix.tar.gz
++sha256  d29108aca5bb22ede1613b9055cd5a8e684861b0086de96523c23e5d21de6143  kodi-pvr-dvbviewer-7.3.3-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+index cbc12ed9e5..efc8862bda 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_DVBVIEWER_VERSION = 7.2.0-Matrix
++KODI_PVR_DVBVIEWER_VERSION = 7.3.3-Matrix
+ KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
+ KODI_PVR_DVBVIEWER_LICENSE = GPL-2.0+
+ KODI_PVR_DVBVIEWER_LICENSE_FILES = LICENSE.md
