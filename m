@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D08DAC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:32:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B257AC432BE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:32:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9883C60F70
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:32:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9883C60F70
+	by mail.kernel.org (Postfix) with ESMTPS id 7F69660EE8
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:32:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7F69660EE8
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A9B8421E9;
-	Tue,  3 Aug 2021 23:32:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4FEE5404D8;
+	Tue,  3 Aug 2021 23:32:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mnH93BkTw9bM; Tue,  3 Aug 2021 23:32:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id U2TeGKUlB56I; Tue,  3 Aug 2021 23:32:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C3F5041828;
-	Tue,  3 Aug 2021 23:32:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A1B7404F8;
+	Tue,  3 Aug 2021 23:32:53 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6C8D31BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:16:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0601E1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:16:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B07840EBD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4022F40EC0
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ms66B2isuTCM for <buildroot@lists.busybox.net>;
+ with ESMTP id wCXiupgBeWPV for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4025F40E6F
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0ACAF40E6C
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 84C3687F55; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
+ id 4E9DC87F55; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Jul 2021 22:47:59 +0200
+Date: Thu, 15 Jul 2021 23:14:42 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9cb0d2c725ee0b763f2f1be35eef64a2b593f69a
-X-Git-Newrev: d3b57258ac602752fc42914715c33326be22719c
+X-Git-Oldrev: f443272a1d3209d69d418029c706175566413860
+X-Git-Newrev: 2e5cb51680817b46ee8be39cb84a8d723c31f7e7
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211003.84C3687F55@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/imx7dpico: bump Kernel
- and U-Boot version
+Message-Id: <20210803211003.4E9DC87F55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nettle: bump to
+ version 3.7.3
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,51 +70,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3b57258ac602752fc42914715c33326be22719c
+commit: https://git.buildroot.net/buildroot/commit/?id=2e5cb51680817b46ee8be39cb84a8d723c31f7e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump U-Boot to 2021.07 and kernel to version 5.13
-
-Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/imx7dpico_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/nettle/nettle.hash | 4 ++--
+ package/nettle/nettle.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/imx7dpico_defconfig b/configs/imx7dpico_defconfig
-index a3c2af1641..c6ea04b683 100644
---- a/configs/imx7dpico_defconfig
-+++ b/configs/imx7dpico_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
+index 09652dcc8b..cd32ad442e 100644
+--- a/package/nettle/nettle.hash
++++ b/package/nettle/nettle.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/nettle/nettle-3.7.2.tar.gz.sig
+-sha256  8d2a604ef1cde4cd5fb77e422531ea25ad064679ff0adf956e78b3352e0ef162  nettle-3.7.2.tar.gz
++# https://ftp.gnu.org/gnu/nettle/nettle-3.7.3.tar.gz.sig
++sha256  661f5eb03f048a3b924c3a8ad2515d4068e40f67e774e8a26827658007e3bcf0  nettle-3.7.3.tar.gz
+ # Locally calculated
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSERv3
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index bf833eb27e..3dbd0cb94b 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 5.7 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
-+# Linux headers same as kernel, a 5.13 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc4"
-@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc4"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-pico-pi"
-@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
- BR2_TARGET_UBOOT_BOARDNAME="pico-pi-imx7d"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
- BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
- 
- # wifi firmware for brcm43439
+-NETTLE_VERSION = 3.7.2
++NETTLE_VERSION = 3.7.3
+ NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
+ NETTLE_DEPENDENCIES = gmp
+ NETTLE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
