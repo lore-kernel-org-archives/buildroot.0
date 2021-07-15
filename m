@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65819C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:32:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0659C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:32:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2E54660EE8
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:32:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2E54660EE8
+	by mail.kernel.org (Postfix) with ESMTPS id 600FE60EE8
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:32:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 600FE60EE8
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E8F7D40518;
-	Tue,  3 Aug 2021 23:32:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 37D3783E1A;
+	Tue,  3 Aug 2021 23:32:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k44bTPIdGE7G; Tue,  3 Aug 2021 23:32:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YaD6Ui8TXXeS; Tue,  3 Aug 2021 23:32:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D5C5404D8;
-	Tue,  3 Aug 2021 23:32:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7756783E16;
+	Tue,  3 Aug 2021 23:32:16 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6395C1BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:16:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 39BD61BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:16:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A40640EBC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3AB4D40E6A
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WYsqPeKQuZJt for <buildroot@lists.busybox.net>;
+ with ESMTP id LYiBTUbOdIjv for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2441740E6A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1582B40647
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7A55782A39; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
+ id 596778827E; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Jul 2021 22:47:38 +0200
+Date: Thu, 15 Jul 2021 23:14:42 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 767ed6b72e15e4f900a5b1356db1dfbf1579864f
-X-Git-Newrev: 9cb0d2c725ee0b763f2f1be35eef64a2b593f69a
+X-Git-Oldrev: 2e5cb51680817b46ee8be39cb84a8d723c31f7e7
+X-Git-Newrev: 98caa3077bf780fc0d2cc0b978214fbf2f7fd2a2
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211003.7A55782A39@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/olimex_a20_olinuxino_lime*: bump Linux and U-Boot versions
+Message-Id: <20210803211003.596778827E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pango: bump to version
+ 1.48.7
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,60 +70,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9cb0d2c725ee0b763f2f1be35eef64a2b593f69a
+commit: https://git.buildroot.net/buildroot/commit/?id=98caa3077bf780fc0d2cc0b978214fbf2f7fd2a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
- configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/pango/pango.hash | 2 +-
+ package/pango/pango.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index 150e0a1445..d149f04bfb 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.27"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.48"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 4f4a6b1fc9..8d759ca98a 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.27"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.48"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 3d6167058e..94568a68ef 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,5 +1,5 @@
+ # From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.48/pango-1.48.4.sha256sum
+-sha256  418913fb062071a075846244989d4a67aa5c80bf0eae8ee4555a092fd566a37a  pango-1.48.4.tar.xz
++sha256  28a82f6a6cab60aa3b75a90f04197ead2d311fa8fe8b7bfdf8666e2781d506dc  pango-1.48.7.tar.xz
+ 
+ # Locally computed
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index cc09e3a64d..2a4a9f49da 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PANGO_VERSION_MAJOR = 1.48
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).4
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).7
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
