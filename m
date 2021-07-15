@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D84B1C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:27:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 524B2C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:27:31 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9F11260F93
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:27:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9F11260F93
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 1738660F70
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:27:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1738660F70
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AB7A60A35;
-	Tue,  3 Aug 2021 23:27:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E99C960A66;
+	Tue,  3 Aug 2021 23:27:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 15yO6QPd9oCz; Tue,  3 Aug 2021 23:27:17 +0000 (UTC)
+	with ESMTP id kJ-e6aa_qs9w; Tue,  3 Aug 2021 23:27:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA1FD6066F;
-	Tue,  3 Aug 2021 23:27:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3282C6090A;
+	Tue,  3 Aug 2021 23:27:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B36541BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1446A1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:15:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 591114068C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 77BCE40E4C
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tt9tMVECy4P6 for <buildroot@lists.busybox.net>;
+ with ESMTP id sGrFWXbpcnPJ for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4CF3E40E4C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 964E340E55
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8EE8E82A39; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id DE14F8827E; Tue,  3 Aug 2021 21:10:01 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Jul 2021 22:27:44 +0200
+Date: Thu, 15 Jul 2021 21:42:12 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c928abbed3762709dc5accb476340cf91e84a3a6
-X-Git-Newrev: 99eb95fb47d220a2904eff86348ac3a0f6486ce9
+X-Git-Oldrev: 3fbeabd62012b5ce14dca2fcb9b6cf2d20419af0
+X-Git-Newrev: 5633f2fb7a5e733d2900aa5a372b4de88ef767c1
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211001.8EE8E82A39@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libdvdread: bump
- version to 6.1.2
+Message-Id: <20210803211001.DE14F8827E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lua-rotas: bump to
+ version 0.2.1
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,53 +70,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99eb95fb47d220a2904eff86348ac3a0f6486ce9
+commit: https://git.buildroot.net/buildroot/commit/?id=5633f2fb7a5e733d2900aa5a372b4de88ef767c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://code.videolan.org/videolan/libdvdread/-/blob/master/NEWS
+diff COPYPRIGHT:
+-Copyright (C) 2018-2019 Francois Perrad.
++Copyright (C) 2018-2021 Francois Perrad.
 
-Removed md5 hash, reformatted hashes.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libdvdread/libdvdread.hash | 12 +++++-------
- package/libdvdread/libdvdread.mk   |  2 +-
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/lua-rotas/lua-rotas.hash | 4 ++--
+ package/lua-rotas/lua-rotas.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libdvdread/libdvdread.hash b/package/libdvdread/libdvdread.hash
-index 00066619ce..de9afcfa30 100644
---- a/package/libdvdread/libdvdread.hash
-+++ b/package/libdvdread/libdvdread.hash
-@@ -1,9 +1,7 @@
--# From http://download.videolan.org/pub/videolan/libdvdread/6.1.1/libdvdread-6.1.1.tar.bz2.md5
--md5 09c7423568fb679279fd2a2bc6b10b6e libdvdread-6.1.1.tar.bz2
--# From http://download.videolan.org/pub/videolan/libdvdread/6.1.1/libdvdread-6.1.1.tar.bz2.sha1
--sha1 d2e5056de89fb5fed478c0af5a72e8b781d0c396 libdvdread-6.1.1.tar.bz2
--# From http://download.videolan.org/pub/videolan/libdvdread/6.1.1/libdvdread-6.1.1.tar.bz2.sha256
--sha256 3e357309a17c5be3731385b9eabda6b7e3fa010f46022a06f104553bf8e21796 libdvdread-6.1.1.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libdvdread/6.1.2/libdvdread-6.1.2.tar.bz2.sha1
-+sha1  789d0780fbdcd7d6dadf0fda3d4a4b6198c16393  libdvdread-6.1.2.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libdvdread/6.1.2/libdvdread-6.1.2.tar.bz2.sha256
-+sha256  cc190f553758ced7571859e301f802cb4821f164d02bfacfd320c14a4e0da763  libdvdread-6.1.2.tar.bz2
- 
- # Hash for license file:
--sha256	d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572	COPYING
-+sha256  d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572  COPYING
-diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
-index aa91d3162a..9ddb6721c7 100644
---- a/package/libdvdread/libdvdread.mk
-+++ b/package/libdvdread/libdvdread.mk
+diff --git a/package/lua-rotas/lua-rotas.hash b/package/lua-rotas/lua-rotas.hash
+index 6f8d0df41e..2633f3b728 100644
+--- a/package/lua-rotas/lua-rotas.hash
++++ b/package/lua-rotas/lua-rotas.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 be47e72ec703ffc319fe4fd539b531bbe8a8c0c52e0cc9774273028f1599a0cf  lua-rotas-0.2.0-1.src.rock
+-sha256 4a7fdc0e44509d79c9bf18560cfb98368f70bb3832abe07e3cdba5c06466b0bb  lua-Rotas-0.2.0/COPYRIGHT
++sha256 a947026be3552cbf676a0cef36a618111712257d306cbd9d340ed8895a4cbd2b  lua-rotas-0.2.1-1.src.rock
++sha256 ac8bb87b7b5e803ae27510b9c6fd284f1b00e741258bc59fc78d3bc107d96fbb  lua-Rotas-0.2.1/COPYRIGHT
+diff --git a/package/lua-rotas/lua-rotas.mk b/package/lua-rotas/lua-rotas.mk
+index 6ace963a4b..84d6c9a582 100644
+--- a/package/lua-rotas/lua-rotas.mk
++++ b/package/lua-rotas/lua-rotas.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDVDREAD_VERSION = 6.1.1
-+LIBDVDREAD_VERSION = 6.1.2
- LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.bz2
- LIBDVDREAD_SITE = http://www.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_VERSION)
- LIBDVDREAD_INSTALL_STAGING = YES
+-LUA_ROTAS_VERSION = 0.2.0-1
++LUA_ROTAS_VERSION = 0.2.1-1
+ LUA_ROTAS_NAME_UPSTREAM = lua-Rotas
+ LUA_ROTAS_LICENSE = MIT
+ LUA_ROTAS_LICENSE_FILES = $(LUA_ROTAS_SUBDIR)/COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
