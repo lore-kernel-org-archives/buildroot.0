@@ -1,36 +1,99 @@
 From: Damien Le Moal <damien.lemoal@wdc.com>
-Date: Thu, 15 Jul 2021 09:48:35 +0900
-Subject: [Buildroot] [PATCH v2 1/9] arch/config: Make RISC-V MMU optional
-In-Reply-To: <20210715004843.337268-1-damien.lemoal@wdc.com>
-References: <20210715004843.337268-1-damien.lemoal@wdc.com>
-Message-ID: <20210715004843.337268-2-damien.lemoal@wdc.com>
+Date: Thu, 15 Jul 2021 09:48:34 +0900
+Subject: [Buildroot] [PATCH v2 0/9] Add RISC-V NOMMU and Canaan K210 SoC
+ support
+Message-ID: <20210715004843.337268-1-damien.lemoal@wdc.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Linux supports No-MMU RISC-V since kernel version 5.8. Make MMU optional
-to enable building for RISC-V boards that do not have one.
+This series adds support for building RISC-V NOMMU kernel bootable
+images for boards using the Cannan Kendryte K210 SoC.
 
-Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
----
- arch/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The first patch makes MMU builds optional for RISC-V. The second patch
+enables RV64 support in elf2flt (patch sent to uclinux-dev). The third
+patch changes the base name of the toolchain to avoid build errors.
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 1853e26bb4..82d3b01980 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -210,7 +210,7 @@ config BR2_powerpc64le
- 
- config BR2_riscv
- 	bool "RISCV"
--	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- 	help
- 	  RISC-V is an open, free Instruction Set Architecture created
+The following 5 patches add default build configuration files for
+various boards: MAIX-bit, MAIX-go, MAIX-dock (Dan Dock) and MAIXDUINO
+from Sipeed and the Canaan KD233 development board.
+
+Finally, patch 9 documents how to build and install images for these
+boards.
+
+Changes from v1:
+* Rebased on latest master
+* Simplified patch 3 as suggested by Baruch
+* Fixed typos in documentation (patch 9)
+* Added reviewed-by tags
+
+Christoph Hellwig (2):
+  package/elf2flt: add RISC-V support
+  package make: build RISC-V nommu builds as linux
+
+Damien Le Moal (7):
+  arch/config: Make RISC-V MMU optional
+  board: Add Sipeed MAIX-bit support
+  board: Add Sipeed MAIX-Go support
+  board: Add Sipeed MAIXDUINO support
+  board: Add Sipeed MAIX-Dock support
+  board: Add Canaan KD233 support
+  board: Document Canaan K210 based boards support
+
+ arch/Config.in                                |    2 +-
+ board/canaan/k210-common/README.md            |  318 +++++
+ .../k210-common/busybox-tiny-initramfs.config | 1183 +++++++++++++++++
+ .../k210-common/rootfs_overlay/usr/sbin/init  |   26 +
+ board/canaan/kd233/README.md                  |    4 +
+ board/canaan/kd233/linux-dtb.config           |    2 +
+ board/sipeed/maix-bit/README.md               |    4 +
+ board/sipeed/maix-bit/linux-dtb.config        |    2 +
+ board/sipeed/maix-dock/README.md              |    4 +
+ board/sipeed/maix-dock/linux-dtb.config       |    2 +
+ board/sipeed/maix-go/README.md                |    4 +
+ board/sipeed/maix-go/linux-dtb.config         |    2 +
+ board/sipeed/maixduino/README.md              |    4 +
+ board/sipeed/maixduino/linux-dtb.config       |    2 +
+ configs/canaan_kd233_defconfig                |   23 +
+ configs/canaan_kd233_sdcard_defconfig         |   23 +
+ configs/sipeed_maix_bit_defconfig             |   23 +
+ configs/sipeed_maix_bit_sdcard_defconfig      |   23 +
+ configs/sipeed_maix_dock_defconfig            |   23 +
+ configs/sipeed_maix_dock_sdcard_defconfig     |   23 +
+ configs/sipeed_maix_go_defconfig              |   23 +
+ configs/sipeed_maix_go_sdcard_defconfig       |   23 +
+ configs/sipeed_maixduino_defconfig            |   23 +
+ configs/sipeed_maixduino_sdcard_defconfig     |   23 +
+ package/Makefile.in                           |    5 +-
+ .../0004-elf2flt-add-riscv-support.patch      |  293 ++++
+ package/elf2flt/Config.in.host                |    2 +-
+ 27 files changed, 2085 insertions(+), 4 deletions(-)
+ create mode 100644 board/canaan/k210-common/README.md
+ create mode 100644 board/canaan/k210-common/busybox-tiny-initramfs.config
+ create mode 100755 board/canaan/k210-common/rootfs_overlay/usr/sbin/init
+ create mode 100644 board/canaan/kd233/README.md
+ create mode 100644 board/canaan/kd233/linux-dtb.config
+ create mode 100644 board/sipeed/maix-bit/README.md
+ create mode 100644 board/sipeed/maix-bit/linux-dtb.config
+ create mode 100644 board/sipeed/maix-dock/README.md
+ create mode 100644 board/sipeed/maix-dock/linux-dtb.config
+ create mode 100644 board/sipeed/maix-go/README.md
+ create mode 100644 board/sipeed/maix-go/linux-dtb.config
+ create mode 100644 board/sipeed/maixduino/README.md
+ create mode 100644 board/sipeed/maixduino/linux-dtb.config
+ create mode 100644 configs/canaan_kd233_defconfig
+ create mode 100644 configs/canaan_kd233_sdcard_defconfig
+ create mode 100644 configs/sipeed_maix_bit_defconfig
+ create mode 100644 configs/sipeed_maix_bit_sdcard_defconfig
+ create mode 100644 configs/sipeed_maix_dock_defconfig
+ create mode 100644 configs/sipeed_maix_dock_sdcard_defconfig
+ create mode 100644 configs/sipeed_maix_go_defconfig
+ create mode 100644 configs/sipeed_maix_go_sdcard_defconfig
+ create mode 100644 configs/sipeed_maixduino_defconfig
+ create mode 100644 configs/sipeed_maixduino_sdcard_defconfig
+ create mode 100644 package/elf2flt/0004-elf2flt-add-riscv-support.patch
+
 -- 
 2.31.1
