@@ -1,29 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Jul 2021 21:45:08 +0200
-Subject: [Buildroot] [PATCH] package/sbc: bump to version 1.5
-In-Reply-To: <20210711121929.24767-1-texier.pj2@gmail.com>
-References: <20210711121929.24767-1-texier.pj2@gmail.com>
-Message-ID: <20210715214508.5350f202@windsurf>
+Date: Thu, 15 Jul 2021 21:45:29 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: Change my name
+In-Reply-To: <20210711170330.3026360-1-nerv@dawncrow.de>
+References: <20210711170330.3026360-1-nerv@dawncrow.de>
+Message-ID: <20210715214529.4857761c@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sun, 11 Jul 2021 14:19:29 +0200
-Pierre-Jean Texier <texier.pj2@gmail.com> wrote:
+On Sun, 11 Jul 2021 19:03:30 +0200
+Andr? Zwing <nerv@dawncrow.de> wrote:
 
-> We need to backport a commit to fix a build failure on non-x86.
+> And remove myself from freescale related parts
 > 
-> Also update hash file formatting (2 spaces)
-> 
-> Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+> Signed-off-by: Andr? Zwing <nerv@dawncrow.de>
 > ---
->  ...-sbc_primitives-Fix-build-on-non-x86.patch | 49 +++++++++++++++++++
->  package/sbc/sbc.hash                          |  6 +--
->  package/sbc/sbc.mk                            |  2 +-
->  3 files changed, 53 insertions(+), 4 deletions(-)
->  create mode 100644 package/sbc/0001-sbc_primitives-Fix-build-on-non-x86.patch
+>  DEVELOPERS | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 
 Applied to master, thanks.
 
