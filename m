@@ -1,60 +1,42 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Thu, 15 Jul 2021 14:45:05 +1000
-Subject: [Buildroot] [PATCH v2 3/9] package make: build RISC-V nommu
- builds as linux
-In-Reply-To: <20210715004843.337268-4-damien.lemoal@wdc.com>
-References: <20210715004843.337268-1-damien.lemoal@wdc.com>
- <20210715004843.337268-4-damien.lemoal@wdc.com>
-Message-ID: <CAKmqyKPT08es4_A6r+LjvfVf4ZCkzvtE7fDH2OASqrfHhw_fSA@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 14 Jul 2021 22:51:10 -0600
+Subject: [Buildroot] [PATCH 1/1] linux: bump 5.13 to 5.13.2
+Message-ID: <20210715045110.897992-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 15, 2021 at 10:51 AM Damien Le Moal <damien.lemoal@wdc.com> wrote:
->
-> From: Christoph Hellwig <hch@lst.de>
->
-> Using *-uclinux-* seems like an only partially followed convention.
-> And at least for RISC-V gcc doesn't know about uclinux tuples, so
-> switch back to the normal Linux one for now.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
->
-> [Damien]
-> * Make the change conditional on BR2_riscv arch being "y".
->
-> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ linux/Config.in  | 2 +-
+ linux/linux.hash | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
-
-Alistair
-
-> ---
->  package/Makefile.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 86db62ba5b..6de673a085 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -39,8 +39,9 @@ endif
->  # Compute GNU_TARGET_NAME
->  GNU_TARGET_NAME = $(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
->
-> -# FLAT binary format needs uclinux
-> -ifeq ($(BR2_BINFMT_FLAT),y)
-> +# FLAT binary format needs uclinux, except RISC-V which needs
-> +# the regular linux name.
-> +ifeq ($(BR2_BINFMT_FLAT):$(BR2_riscv),y:)
->  TARGET_OS = uclinux
->  else
->  TARGET_OS = linux
-> --
-> 2.31.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/linux/Config.in b/linux/Config.in
+index 0c3cf5db5f..6ace3f5ea4 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -125,7 +125,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.13" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.13.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.182-cip45" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.165-cip41-rt18" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index ddd680a2d5..6ca09fee4b 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  3f6baa97f37518439f51df2e4f3d65a822ca5ff016aa8e60d2cc53b95a6c89d9  linux-5.13.tar.xz
++sha256  c3940d09cfb629f8c140b7b098cf6356d60cd8043df6b17c1f004077269ca937  linux-5.13.2.tar.xz
+ sha256  c8d499fc53ed14838994ec2f51591ae40d64cce68559cd897be8acbeeee7630f  linux-5.12.10.tar.xz
+ sha256  11027c6114eb916edbcc37897226fb6263b2931911d2d5093550473ce1a57600  linux-5.11.22.tar.xz
+ sha256  83b81e433ba2f8ee143064fb163699ee857e26dd789006bc1e9edf1ccd0bd403  linux-5.10.43.tar.xz
+-- 
+2.25.1
