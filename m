@@ -1,64 +1,44 @@
-From: Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Thu, 15 Jul 2021 23:11:00 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/stm32mp157c_dk2: bump Linux and
- U-Boot versions
-In-Reply-To: <YPCjU4bh/cgjZUy9@curiosity>
-References: <20210715204746.22089-1-texier.pj2@gmail.com>
- <20210715204746.22089-2-texier.pj2@gmail.com> <YPCjU4bh/cgjZUy9@curiosity>
-Message-ID: <f835ed39-ea25-0f33-ca6d-abbfe46aef90@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 15 Jul 2021 23:14:42 +0200
+Subject: [Buildroot] [git commit] package/can-utils: bump to version
+ 2021.06.0
+Message-ID: <20210715204111.B650C9103C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hi Sergey,
+commit: https://git.buildroot.net/buildroot/commit/?id=9f7ce8e5cdbff7d5abdc04ef5f1c7d1684025d41
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 15/07/2021 ? 23:06, Sergey Matyukevich a ?crit?:
-> Hi all,
-> 
->> Needed to keep both stm32mp157c_dk1 and stm32mp157c_dk2
->> aligned.
->>
->> Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->> Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
->> ---
->>   configs/stm32mp157c_dk2_defconfig | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
->> index a4bff897e5..45205982d7 100644
->> --- a/configs/stm32mp157c_dk2_defconfig
->> +++ b/configs/stm32mp157c_dk2_defconfig
->> @@ -1,11 +1,11 @@
->>   BR2_arm=y
->>   BR2_cortex_a7=y
->> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
->> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
->>   BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
->>   BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
->>   BR2_LINUX_KERNEL=y
->>   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.10"
->> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
->>   BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->>   BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
->>   BR2_LINUX_KERNEL_DTS_SUPPORT=y
->> @@ -25,7 +25,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
->>   BR2_TARGET_UBOOT=y
->>   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->>   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
->> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
->> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
->>   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
->>   # BR2_TARGET_UBOOT_FORMAT_BIN is not set
->>   BR2_TARGET_UBOOT_FORMAT_STM32=y
-> 
-> Reviewed-by: Sergey Matyukevich <geomatsi@gmail.com>
-> 
-> Thanks !
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/can-utils/can-utils.hash | 2 +-
+ package/can-utils/can-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for the review !
-
--- 
-Pierre-Jean Texier
+diff --git a/package/can-utils/can-utils.hash b/package/can-utils/can-utils.hash
+index e3ff2c9dda..145d0a33e5 100644
+--- a/package/can-utils/can-utils.hash
++++ b/package/can-utils/can-utils.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  c5c22a00ce2ea7578d7617ac0affef8f47a349be58e708780d703b979f324a2b  can-utils-2020.12.0.tar.gz
++sha256  f7874457224c89f8b2eb55ab741935ddb7f1c9bc52de2642330b0799f89d1040  can-utils-2021.06.0.tar.gz
+ sha256  c3dc748f5e725cf5ed89784fe78e4ff1b05d309bf1e7ade4c572e8fde1b8406c  LICENSES/BSD-3-Clause
+ sha256  995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  LICENSES/GPL-2.0-only.txt
+diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
+index 8beb672ec2..1e7add0556 100644
+--- a/package/can-utils/can-utils.mk
++++ b/package/can-utils/can-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CAN_UTILS_VERSION = 2020.12.0
++CAN_UTILS_VERSION = 2021.06.0
+ CAN_UTILS_SITE = $(call github,linux-can,can-utils,v$(CAN_UTILS_VERSION))
+ CAN_UTILS_LICENSE = BSD-3-Clause or GPL-2.0
+ CAN_UTILS_LICENSE_FILES = LICENSES/BSD-3-Clause LICENSES/GPL-2.0-only.txt
