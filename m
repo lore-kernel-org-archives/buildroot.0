@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Jul 2021 22:43:48 +0200
-Subject: [Buildroot] [PATCH 1/2] package/kodi-inputstream-adaptive: bump
- version to 2.6.18
-In-Reply-To: <20210713161842.199123-1-bernd.kuhls@t-online.de>
-References: <20210713161842.199123-1-bernd.kuhls@t-online.de>
-Message-ID: <20210715224348.0da16638@windsurf>
+Date: Thu, 15 Jul 2021 22:43:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-hts: bump version to
+ 8.3.3-Matrix
+In-Reply-To: <20210713202911.862659-1-bernd.kuhls@t-online.de>
+References: <20210713202911.862659-1-bernd.kuhls@t-online.de>
+Message-ID: <20210715224351.1da16c96@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Tue, 13 Jul 2021 18:18:41 +0200
+On Tue, 13 Jul 2021 22:29:11 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
 > Changelog:
-> https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
+> https://github.com/kodi-pvr/pvr.hts/blob/Matrix/pvr.hts/changelog.txt
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
->  package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
+>  package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
+>  package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
