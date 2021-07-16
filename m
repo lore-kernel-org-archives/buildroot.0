@@ -1,60 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 22:52:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/binutils: fix linker assert on
- OpenRisc
-In-Reply-To: <20210712104501.2276261-2-giulio.benetti@benettiengineering.com>
-References: <20210712104501.2276261-1-giulio.benetti@benettiengineering.com>
- <20210712104501.2276261-2-giulio.benetti@benettiengineering.com>
-Message-ID: <20210716225253.68956897@windsurf>
+Date: Fri, 16 Jul 2021 22:53:34 +0200
+Subject: [Buildroot] [git commit] package/libmbim: bump to version 1.24.8
+Message-ID: <20210716202010.5F75F910AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Mon, 12 Jul 2021 12:45:01 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2519b17d849eb9afb6669b8c5b39de47894b1716
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> When building openal we were seeing the assert failure:
-> 
-> /home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
-> pc-relative relocation against dynamic symbol alSourcePausev
-> /home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
-> pc-relative relocation against dynamic symbol alSourceStopv
-> /home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
-> pc-relative relocation against dynamic symbol alSourceRewindv
-> /home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
-> pc-relative relocation against dynamic symbol alSourcePlayv
-> collect2: error: ld returned 1 exit status
-> 
-> So add patches to fix this binutils assert link failure on OpenRisc.
-> It's been suggested upstream and it's pending here:
-> https://sourceware.org/pipermail/binutils/2021-July/117334.html
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/c96/c96f2600f227d6c76114b9fbc41f74a57e40415a/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  ...tive-relocation-against-dynamic-on-P.patch | 59 +++++++++++++++++++
->  ...tive-relocation-against-dynamic-on-P.patch | 59 +++++++++++++++++++
->  ...tive-relocation-against-dynamic-on-P.patch | 59 +++++++++++++++++++
->  ...tive-relocation-against-dynamic-on-P.patch | 59 +++++++++++++++++++
->  4 files changed, 236 insertions(+)
->  create mode 100644 package/binutils/2.32/0015-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
->  create mode 100644 package/binutils/2.34/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
->  create mode 100644 package/binutils/2.35.2/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
->  create mode 100644 package/binutils/2.36.1/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+https://lists.freedesktop.org/archives/libmbim-devel/2021-June/001151.html
 
-Wow, thanks a lot for this work! Really amazing that you've been able
-to push this through!
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libmbim/libmbim.hash | 2 +-
+ package/libmbim/libmbim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, of course!
-
-Thanks again,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
+index b6a82e367d..2779be1e96 100644
+--- a/package/libmbim/libmbim.hash
++++ b/package/libmbim/libmbim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  760465caaa1ccd699c14290e9791da456d5300dd11ebf4c1486151033e875dfd  libmbim-1.24.6.tar.xz
++sha256  02590736163fff10e5732191fccc1b9920969616ddc59613a003052a116a3c25  libmbim-1.24.8.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index 175111381f..e21194ca20 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMBIM_VERSION = 1.24.6
++LIBMBIM_VERSION = 1.24.8
+ LIBMBIM_SITE = https://www.freedesktop.org/software/libmbim
+ LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
+ LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
