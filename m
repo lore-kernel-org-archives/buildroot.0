@@ -1,30 +1,302 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 22:49:23 +0200
-Subject: [Buildroot] [PATCH] package/fbgrab: bump to version 1.5
-In-Reply-To: <20210710191550.13589-1-texier.pj2@gmail.com>
-References: <20210710191550.13589-1-texier.pj2@gmail.com>
-Message-ID: <20210716224923.2b11e155@windsurf>
+Date: Fri, 16 Jul 2021 22:50:57 +0200
+Subject: [Buildroot] [git commit] package/binutils: fix linker assert on
+ OpenRisc
+Message-ID: <20210716201840.4999391098@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sat, 10 Jul 2021 21:15:50 +0200
-Pierre-Jean Texier <texier.pj2@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e3b3432fc0d9a960738a831a88572ac0124d3259
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> See changelog: https://github.com/GunnarMonell/fbgrab/releases/tag/1.5
-> 
-> Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
-> ---
->  package/fbgrab/fbgrab.hash | 2 +-
->  package/fbgrab/fbgrab.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+When building openal we were seeing the assert failure:
 
-Applied to master, thanks.
+/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
+pc-relative relocation against dynamic symbol alSourcePausev
+/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
+pc-relative relocation against dynamic symbol alSourceStopv
+/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
+pc-relative relocation against dynamic symbol alSourceRewindv
+/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
+pc-relative relocation against dynamic symbol alSourcePlayv
+collect2: error: ld returned 1 exit status
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+So add patches to fix this binutils assert link failure on OpenRisc.
+It's been suggested upstream and it's pending here:
+https://sourceware.org/pipermail/binutils/2021-July/117334.html
+
+Fixes:
+http://autobuild.buildroot.net/results/c96/c96f2600f227d6c76114b9fbc41f74a57e40415a/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-relative-relocation-against-dynamic-on-P.patch | 59 ++++++++++++++++++++++
+ ...-relative-relocation-against-dynamic-on-P.patch | 59 ++++++++++++++++++++++
+ ...-relative-relocation-against-dynamic-on-P.patch | 59 ++++++++++++++++++++++
+ ...-relative-relocation-against-dynamic-on-P.patch | 59 ++++++++++++++++++++++
+ 4 files changed, 236 insertions(+)
+
+diff --git a/package/binutils/2.32/0015-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch b/package/binutils/2.32/0015-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+new file mode 100644
+index 0000000000..585b97b2af
+--- /dev/null
++++ b/package/binutils/2.32/0015-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+@@ -0,0 +1,59 @@
++From 9af93e143a7fbdb75aa1ed37277f9250eb111628 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sat, 10 Jul 2021 17:57:34 +0200
++Subject: [PATCH] or1k: fix pc-relative relocation against dynamic on PC
++ relative 26 bit relocation
++
++When building openal we were seeing the assert failure:
++
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourcePausev
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourceStopv
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourceRewindv
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourcePlayv
++collect2: error: ld returned 1 exit status
++
++This happens because in R_OR1K_INSN_REL_26 case we can't reference local
++symbol as previously done but we need to make sure that calls to actual
++symbol always call the version of current object.
++
++bfd/Changelog:
++
++	* elf32-or1k.c (or1k_elf_relocate_section): use a separate entry
++	  in switch case R_OR1K_INSN_REL_26 where we need to check for
++	  !SYMBOL_CALLS_LOCAL() instead of !SYMBOL_REFERENCES_LOCAL().
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 12 ++++++++++++
++ 1 file changed, 12 insertions(+)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 4ae7f324d33..4f9092539f5 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -1543,6 +1543,18 @@ or1k_elf_relocate_section (bfd *output_bfd,
++ 	  break;
++ 
++ 	case R_OR1K_INSN_REL_26:
+++	  /* For a non-shared link, these will reference plt or call the
+++	     version of actual object.  */
+++	  if (bfd_link_pic (info) && !SYMBOL_CALLS_LOCAL (info, h))
+++	    {
+++	      _bfd_error_handler
+++		(_("%pB: pc-relative relocation against dynamic symbol %s"),
+++		 input_bfd, name);
+++	      ret_val = FALSE;
+++	      bfd_set_error (bfd_error_bad_value);
+++	    }
+++	  break;
+++
++ 	case R_OR1K_PCREL_PG21:
++ 	case R_OR1K_LO13:
++ 	case R_OR1K_SLO13:
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.34/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch b/package/binutils/2.34/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+new file mode 100644
+index 0000000000..585b97b2af
+--- /dev/null
++++ b/package/binutils/2.34/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+@@ -0,0 +1,59 @@
++From 9af93e143a7fbdb75aa1ed37277f9250eb111628 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sat, 10 Jul 2021 17:57:34 +0200
++Subject: [PATCH] or1k: fix pc-relative relocation against dynamic on PC
++ relative 26 bit relocation
++
++When building openal we were seeing the assert failure:
++
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourcePausev
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourceStopv
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourceRewindv
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourcePlayv
++collect2: error: ld returned 1 exit status
++
++This happens because in R_OR1K_INSN_REL_26 case we can't reference local
++symbol as previously done but we need to make sure that calls to actual
++symbol always call the version of current object.
++
++bfd/Changelog:
++
++	* elf32-or1k.c (or1k_elf_relocate_section): use a separate entry
++	  in switch case R_OR1K_INSN_REL_26 where we need to check for
++	  !SYMBOL_CALLS_LOCAL() instead of !SYMBOL_REFERENCES_LOCAL().
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 12 ++++++++++++
++ 1 file changed, 12 insertions(+)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 4ae7f324d33..4f9092539f5 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -1543,6 +1543,18 @@ or1k_elf_relocate_section (bfd *output_bfd,
++ 	  break;
++ 
++ 	case R_OR1K_INSN_REL_26:
+++	  /* For a non-shared link, these will reference plt or call the
+++	     version of actual object.  */
+++	  if (bfd_link_pic (info) && !SYMBOL_CALLS_LOCAL (info, h))
+++	    {
+++	      _bfd_error_handler
+++		(_("%pB: pc-relative relocation against dynamic symbol %s"),
+++		 input_bfd, name);
+++	      ret_val = FALSE;
+++	      bfd_set_error (bfd_error_bad_value);
+++	    }
+++	  break;
+++
++ 	case R_OR1K_PCREL_PG21:
++ 	case R_OR1K_LO13:
++ 	case R_OR1K_SLO13:
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.35.2/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch b/package/binutils/2.35.2/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+new file mode 100644
+index 0000000000..585b97b2af
+--- /dev/null
++++ b/package/binutils/2.35.2/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+@@ -0,0 +1,59 @@
++From 9af93e143a7fbdb75aa1ed37277f9250eb111628 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sat, 10 Jul 2021 17:57:34 +0200
++Subject: [PATCH] or1k: fix pc-relative relocation against dynamic on PC
++ relative 26 bit relocation
++
++When building openal we were seeing the assert failure:
++
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourcePausev
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourceStopv
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourceRewindv
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourcePlayv
++collect2: error: ld returned 1 exit status
++
++This happens because in R_OR1K_INSN_REL_26 case we can't reference local
++symbol as previously done but we need to make sure that calls to actual
++symbol always call the version of current object.
++
++bfd/Changelog:
++
++	* elf32-or1k.c (or1k_elf_relocate_section): use a separate entry
++	  in switch case R_OR1K_INSN_REL_26 where we need to check for
++	  !SYMBOL_CALLS_LOCAL() instead of !SYMBOL_REFERENCES_LOCAL().
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 12 ++++++++++++
++ 1 file changed, 12 insertions(+)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 4ae7f324d33..4f9092539f5 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -1543,6 +1543,18 @@ or1k_elf_relocate_section (bfd *output_bfd,
++ 	  break;
++ 
++ 	case R_OR1K_INSN_REL_26:
+++	  /* For a non-shared link, these will reference plt or call the
+++	     version of actual object.  */
+++	  if (bfd_link_pic (info) && !SYMBOL_CALLS_LOCAL (info, h))
+++	    {
+++	      _bfd_error_handler
+++		(_("%pB: pc-relative relocation against dynamic symbol %s"),
+++		 input_bfd, name);
+++	      ret_val = FALSE;
+++	      bfd_set_error (bfd_error_bad_value);
+++	    }
+++	  break;
+++
++ 	case R_OR1K_PCREL_PG21:
++ 	case R_OR1K_LO13:
++ 	case R_OR1K_SLO13:
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.36.1/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch b/package/binutils/2.36.1/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+new file mode 100644
+index 0000000000..585b97b2af
+--- /dev/null
++++ b/package/binutils/2.36.1/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+@@ -0,0 +1,59 @@
++From 9af93e143a7fbdb75aa1ed37277f9250eb111628 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sat, 10 Jul 2021 17:57:34 +0200
++Subject: [PATCH] or1k: fix pc-relative relocation against dynamic on PC
++ relative 26 bit relocation
++
++When building openal we were seeing the assert failure:
++
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourcePausev
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourceStopv
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourceRewindv
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourcePlayv
++collect2: error: ld returned 1 exit status
++
++This happens because in R_OR1K_INSN_REL_26 case we can't reference local
++symbol as previously done but we need to make sure that calls to actual
++symbol always call the version of current object.
++
++bfd/Changelog:
++
++	* elf32-or1k.c (or1k_elf_relocate_section): use a separate entry
++	  in switch case R_OR1K_INSN_REL_26 where we need to check for
++	  !SYMBOL_CALLS_LOCAL() instead of !SYMBOL_REFERENCES_LOCAL().
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 12 ++++++++++++
++ 1 file changed, 12 insertions(+)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 4ae7f324d33..4f9092539f5 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -1543,6 +1543,18 @@ or1k_elf_relocate_section (bfd *output_bfd,
++ 	  break;
++ 
++ 	case R_OR1K_INSN_REL_26:
+++	  /* For a non-shared link, these will reference plt or call the
+++	     version of actual object.  */
+++	  if (bfd_link_pic (info) && !SYMBOL_CALLS_LOCAL (info, h))
+++	    {
+++	      _bfd_error_handler
+++		(_("%pB: pc-relative relocation against dynamic symbol %s"),
+++		 input_bfd, name);
+++	      ret_val = FALSE;
+++	      bfd_set_error (bfd_error_bad_value);
+++	    }
+++	  break;
+++
++ 	case R_OR1K_PCREL_PG21:
++ 	case R_OR1K_LO13:
++ 	case R_OR1K_SLO13:
++-- 
++2.25.1
++
