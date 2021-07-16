@@ -1,7 +1,7 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 05:48:27 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-07-15
-Message-ID: <20210716054831.DF77660787@smtp3.osuosl.org>
+From: Michal Pluska <michal.pluska2@gmail.com>
+Date: Fri, 16 Jul 2021 14:53:50 +0200
+Subject: [Buildroot] rpi3_qt5we build issu
+Message-ID: <CAMBXMtbWu2e63Kb+MLfj7Jrh+NU6HpCBA86OKSqRXcyHu-M=VA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
@@ -10,148 +10,118 @@ Content-Transfer-Encoding: 7bit
 
 Hello,
 
-Autobuild statistics for 2021-07-15
-===================================
+I try to build this configuration: raspberrypi3_qt5we_defconfig; This patch
+had to be applied:
+https://patchwork.ozlabs.org/project/buildroot/patch/20201221203952.22168-3-ps.report at gmx.net/
 
-      branch |  OK | NOK | TIM | TOT |
-  2021.02.x  | 11  |  5  |  0  | 16  |
-  2021.05.x  |  9  |  4  |  0  | 13  |
-    master   | 35  | 49  |  0  | 84  |
+still I get following build error:
+../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/string_fortified.h:29:33:
+warning: ?void* __builtin_memcpy(void*, const void*, unsigned int)?
+specified bound between 4294967288 and 4294967295 exceeds maximum object
+size 2147483647 [-Wstringop-overflow=]
+   29 |   return __builtin___memcpy_chk (__dest, __src, __len, __bos0
+(__dest));
+      |
+ ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[14642/20194] CXX
+obj/content/browser/browser/browser_accessibility_state_impl.o
+FAILED: obj/content/browser/browser/browser_accessibility_state_impl.o
 
-Classification of failures by reason for master
------------------------------------------------
+What is still missing?
+I could repeat this build error on two machines...
 
-                  exiv2-0.27.4 | 4 
-         host-gcc-final-11.1.0 | 4 
-             libsndfile-1.0.31 | 4 
-cegui-00b4e1fe174da53b7ed72... | 3 
-         host-gcc-final-10.3.0 | 2 
-               host-qemu-6.0.0 | 2 
-                   libqb-2.0.2 | 2 
-                libsoup-2.72.0 | 2 
-                  polkit-0.116 | 2 
-                   seatd-0.5.0 | 2 
-                  zeromq-4.3.4 | 2 
-                    daq3-3.0.3 | 1 
-                 dc3dd-7.2.641 | 1 
-            erlang-jiffy-1.0.6 | 1 
-                   gconf-3.2.6 | 1 
-                    gcr-3.34.0 | 1 
-                   gssdp-1.2.3 | 1 
-                harfbuzz-2.8.1 | 1 
-                host-odb-2.4.0 | 1 
-        host-sentry-cli-1.57.0 | 1 
-              keepalived-2.1.4 | 1 
-                librsvg-2.50.5 | 1 
-          lua-lunix-20170920-1 | 1 
-                      poke-1.2 | 1 
-                    qemu-6.0.0 | 1 
-                 ripgrep-0.8.1 | 1 
-                suricata-6.0.2 | 1 
-              syslog-ng-3.32.1 | 1 
-              tpm2-tools-4.3.2 | 1 
-                   trinity-1.9 | 1 
-                       unknown | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  powerpc    | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/00211a33dc8d5e87ab49ddbd19caf4a80d70efd5 |     
-    arc      | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/187fe136f7b8e3420285bcd70670d74fb23cf70b |     
-    arm      | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/491da6132013856e69fb5f7df67737d647d342d8 |     
-    arm      |           daq3-3.0.3           | NOK | http://autobuild.buildroot.net/results/e2cec2fb348a1916fce86c873e08dff1a88ddf33 |     
-    arc      |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/fcd1a8e18ddfa18e0e75fb6cfb16c55e406e29fd | ORPH
-  aarch64    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/97fee5c29f007262a1d046a1b6621221ac6870e5 |     
-   sparc     |          exiv2-0.27.4          | NOK | http://autobuild.buildroot.net/results/23335b6a9e374650bae21835189a48b0513bf2a8 |     
-   xtensa    |          exiv2-0.27.4          | NOK | http://autobuild.buildroot.net/results/7b1915ecb3263b8ef975f6c5e99808c03752146c |     
-   xtensa    |          exiv2-0.27.4          | NOK | http://autobuild.buildroot.net/results/2745c2fc4c32a7002bb58263d566b4881f9a5b1f |     
-   xtensa    |          exiv2-0.27.4          | NOK | http://autobuild.buildroot.net/results/241bd32a4daa8c245ed7b8dd355bfc8cab2e644d |     
- powerpc64   |          gconf-3.2.6           | NOK | http://autobuild.buildroot.net/results/2e5b175536082524e090270015caf5ce6657d8cb |     
-powerpc64le  |           gcr-3.34.0           | NOK | http://autobuild.buildroot.net/results/34afff39ff1c759539f818a91aa57b5e1b7818f3 | ORPH
- powerpc64   |          gssdp-1.2.3           | NOK | http://autobuild.buildroot.net/results/a13f68837e46af748bcd5556752754c718e6b2ff |     
-    arm      |         harfbuzz-2.8.1         | NOK | http://autobuild.buildroot.net/results/b114760786434ad0997b7d288817751d643dd6b0 | ORPH
-   s390x     |     host-gcc-final-10.3.0      | NOK | http://autobuild.buildroot.net/results/08044f62191b93c53fd6b82024d397769f00f2ca |     
-   s390x     |     host-gcc-final-10.3.0      | NOK | http://autobuild.buildroot.net/results/5adf53f07b85de389bdb550d0509e0d65db466c7 |     
-    arm      |     host-gcc-final-11.1.0      | NOK | http://autobuild.buildroot.net/results/2befbb13e58f216f97cacdbd78d45583e34d047d |     
-    arm      |     host-gcc-final-11.1.0      | NOK | http://autobuild.buildroot.net/results/5748f8d2532d9029ed8e60cf68098c6e71a5f090 |     
-    arm      |     host-gcc-final-11.1.0      | NOK | http://autobuild.buildroot.net/results/c19810d79e8c9d6ce6f0b69ce5fc767a3a029367 |     
-    arm      |     host-gcc-final-11.1.0      | NOK | http://autobuild.buildroot.net/results/7e288ab620f86407a69d228e544f95b8190f2021 |     
-  powerpc    |         host-odb-2.4.0         | NOK | http://autobuild.buildroot.net/results/085fd94bc0c72130b57ba9e7d862fefb03469135 | ORPH
- powerpc64   |        host-qemu-6.0.0         | NOK | http://autobuild.buildroot.net/results/28ef8ebc0b48ebca14deb1b358c413a9c8d91196 |     
-  riscv64    |        host-qemu-6.0.0         | NOK | http://autobuild.buildroot.net/results/73acd74c384ff6acce19cd4eeab11a5f5e183cfa |     
-  riscv64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/5d4a468ca5467aa03ea82be2545eaf1c6cf6955a |     
-microblazeel |        keepalived-2.1.4        | NOK | http://autobuild.buildroot.net/results/35c914d58e59cf0f6732e1078c1e9e88647b2c47 |     
-  powerpc    |          libqb-2.0.2           | NOK | http://autobuild.buildroot.net/results/c4dafbdec934d2ef3a802540506f0354602dfa33 |     
-    arm      |          libqb-2.0.2           | NOK | http://autobuild.buildroot.net/results/5c60515817706d8e16b14408c928b768c59d2b92 |     
-    arm      |         librsvg-2.50.5         | NOK | http://autobuild.buildroot.net/results/dc6756ff67948d9d527281c9bacf7f85583a741d |     
-microblazeel |       libsndfile-1.0.31        | NOK | http://autobuild.buildroot.net/results/22ce25ceafa95f9c3bcc1200a3b450167c8baedf |     
-  powerpc    |       libsndfile-1.0.31        | NOK | http://autobuild.buildroot.net/results/3e3e3e166fbaeaecc5181bb7259de496d661413a |     
-    arm      |       libsndfile-1.0.31        | NOK | http://autobuild.buildroot.net/results/8182defa4dd5ff3bef8b4b1fde28915a720facdc |     
-  powerpc    |       libsndfile-1.0.31        | NOK | http://autobuild.buildroot.net/results/26d250ecb92152f9a52059a3f458a572c832f591 |     
-    arm      |         libsoup-2.72.0         | NOK | http://autobuild.buildroot.net/results/e9374c85b07fcb35bd1788fef33b3e07111fc156 |     
-    arm      |         libsoup-2.72.0         | NOK | http://autobuild.buildroot.net/results/bba6ab1205a01e878508e379498fb3da998a6386 |     
-    i586     |      lua-lunix-20170920-1      | NOK | http://autobuild.buildroot.net/results/7d192a0a1d58d258b77906cf936949b2f47373cd |     
-   x86_64    |            poke-1.2            | NOK | http://autobuild.buildroot.net/results/287b9f2b5037fc8e492f00e26f0edce3896b5981 |     
-  riscv32    |          polkit-0.116          | NOK | http://autobuild.buildroot.net/results/4072ee2550cee35093530999f5f62d81f1b2509e |     
-powerpc64le  |          polkit-0.116          | NOK | http://autobuild.buildroot.net/results/e609810786d992574fabb27406ed647631c24392 |     
- powerpc64   |           qemu-6.0.0           | NOK | http://autobuild.buildroot.net/results/5b37c41b2d0b265bb5332bcc83eddac55b13a4c1 |     
-  mips64el   |         ripgrep-0.8.1          | NOK | http://autobuild.buildroot.net/results/44128a56e360cf5be3f37e92e2e33891a0b3a3e6 |     
-    arc      |          seatd-0.5.0           | NOK | http://autobuild.buildroot.net/results/d32f420abded0303c0d64cf65cc316ef12b7bd59 |     
-  riscv64    |          seatd-0.5.0           | NOK | http://autobuild.buildroot.net/results/aeff4e98c4499043baa02e0f09e483cbc8239773 |     
-  mips64el   |         suricata-6.0.2         | NOK | http://autobuild.buildroot.net/results/27aeaf4b46e225024963c33640a340cdd2e72bf3 |     
-   nios2     |        syslog-ng-3.32.1        | NOK | http://autobuild.buildroot.net/results/e51dc8b8293b29319f098e664664d84ade2b9df5 |     
-microblazeel |        tpm2-tools-4.3.2        | NOK | http://autobuild.buildroot.net/results/b6343bbc0fb3ef37ac249cd0501e4587978f2b3a | ORPH
-  powerpc    |          trinity-1.9           | NOK | http://autobuild.buildroot.net/results/7df1bd48018f2d8302eb4ca2a901565a4ae1a360 | ORPH
- powerpc64   |            unknown             | NOK | http://autobuild.buildroot.net/results/cd7a067e5ac4c25c78b53cefb4da43338e045c00 |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/d7fba8941f2670d451bb17a01de22fe85a478be4 |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/6f47ef35fefcde1d7e735f3ba09a6b5fb7ea8582 |     
-
-
-Classification of failures by reason for 2021.02.x
---------------------------------------------------
-
-                   eigen-3.3.7 | 1 
-  gobject-introspection-1.64.1 | 1 
-        host-sentry-cli-1.57.0 | 1 
-                 mesa3d-20.3.5 | 1 
-    trace-cmd-trace-cmd-v2.9.1 | 1 
-
-
-Detail of failures for 2021.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |          eigen-3.3.7           | NOK | http://autobuild.buildroot.net/results/299744198fec36b7ffb9ea136d22ca2b25ffc610 |     
-   x86_64    |  gobject-introspection-1.64.1  | NOK | http://autobuild.buildroot.net/results/479473b6e66217af7867292f1f816edc187f6cac | ORPH
-    m68k     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/698fe3c66cc77b687ce91087d0c1493b5d3e968f |     
-    arm      |         mesa3d-20.3.5          | NOK | http://autobuild.buildroot.net/results/c784d0e2bb001e270ff6fb3ca4d8d0f56da00b63 |     
-  sparc64    |   trace-cmd-trace-cmd-v2.9.1   | NOK | http://autobuild.buildroot.net/results/aa16f767b3e1dbd63c5868fab7cf6a72b1835e15 |     
-
-
-Classification of failures by reason for 2021.05.x
---------------------------------------------------
-
-  gobject-introspection-1.64.1 | 1 
-                host-go-1.16.5 | 1 
-        host-sentry-cli-1.57.0 | 1 
-                    qemu-5.2.0 | 1 
-
-
-Detail of failures for 2021.05.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   s390x     |  gobject-introspection-1.64.1  | NOK | http://autobuild.buildroot.net/results/9c5ba54adbfcfd49d211365442bcce8eaa8cc743 | ORPH
-  mips64el   |         host-go-1.16.5         | NOK | http://autobuild.buildroot.net/results/81062d56178efc4b013648cf928ce78e3d289d50 |     
-  riscv64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/ab9927b604160098c185c8c0a7c79bd56e7ea4cc |     
-    i686     |           qemu-5.2.0           | NOK | http://autobuild.buildroot.net/results/a94de07626fc97823063ca9ebcfe3d64113f4679 |     
-
-
-
--- 
-http://autobuild.buildroot.net
+Kind Regards,
+Mipl
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210716/96450e74/attachment-0001.html>
+-------------- next part --------------
+[14614/20194] CXX obj/components/services/storage/public/mojom/mojom/indexed_db_control_test.mojom.o
+In file included from ../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/string.h:519,
+                 from /home/mipl/rpi3/buildroot/output/host/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/cstring:42,
+                 from ../../3rdparty/chromium/base/logging.h:12,
+                 from ../../3rdparty/chromium/base/memory/ref_counted.h:16,
+                 from ../../3rdparty/chromium/base/callback_internal.h:14,
+                 from ../../3rdparty/chromium/base/callback.h:15,
+                 from gen/components/services/storage/public/mojom/indexed_db_control_test.mojom.h:16,
+                 from gen/components/services/storage/public/mojom/indexed_db_control_test.mojom.cc:12:
+In function ?void* memcpy(void*, const void*, size_t)?,
+    inlined from ?static void mojo::internal::Serializer<mojo::StringDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, mojo::internal::Array_Data<char>::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const std::__cxx11::basic_string<char>]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/string_serialization.h:34:11,
+    inlined from ?static void mojo::internal::Serializer<mojo_base::mojom::FilePathDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, mojo_base::mojom::internal::FilePath_Data::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const base::FilePath]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16,
+    inlined from ?void storage::mojom::IndexedDBControlTest_GetFilePathForTesting_ProxyToResponder::Run(const base::FilePath&)? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16:
+../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/string_fortified.h:29:33: warning: ?void* __builtin_memcpy(void*, const void*, unsigned int)? specified bound between 4294967288 and 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
+   29 |   return __builtin___memcpy_chk (__dest, __src, __len, __bos0 (__dest));
+      |          ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function ?void* memcpy(void*, const void*, size_t)?,
+    inlined from ?static void mojo::internal::Serializer<mojo::StringDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, mojo::internal::Array_Data<char>::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const std::__cxx11::basic_string<char>]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/string_serialization.h:34:11,
+    inlined from ?static void mojo::internal::Serializer<mojo_base::mojom::FilePathDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, mojo_base::mojom::internal::FilePath_Data::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const base::FilePath]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16,
+    inlined from ?void storage::mojom::IndexedDBControlTest_GetPathForBlobForTesting_ProxyToResponder::Run(const base::FilePath&)? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16:
+../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/string_fortified.h:29:33: warning: ?void* __builtin_memcpy(void*, const void*, unsigned int)? specified bound between 4294967288 and 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
+   29 |   return __builtin___memcpy_chk (__dest, __src, __len, __bos0 (__dest));
+      |          ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function ?void* memcpy(void*, const void*, size_t)?,
+    inlined from ?static void mojo::internal::Serializer<mojo::StringDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, mojo::internal::Array_Data<char>::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const std::__cxx11::basic_string<char>]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/string_serialization.h:34:11,
+    inlined from ?static void mojo::internal::Serializer<mojo_base::mojom::FilePathDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, mojo_base::mojom::internal::FilePath_Data::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const base::FilePath]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16,
+    inlined from ?void storage::mojom::IndexedDBControlTest_GetBaseDataPathForTesting_ProxyToResponder::Run(const base::FilePath&)? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16:
+../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/string_fortified.h:29:33: warning: ?void* __builtin_memcpy(void*, const void*, unsigned int)? specified bound between 4294967288 and 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
+   29 |   return __builtin___memcpy_chk (__dest, __src, __len, __bos0 (__dest));
+      |          ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function ?void* memcpy(void*, const void*, size_t)?,
+    inlined from ?static void mojo::internal::Serializer<mojo::StringDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, mojo::internal::Array_Data<char>::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const std::__cxx11::basic_string<char>]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/string_serialization.h:34:11,
+    inlined from ?void storage::mojom::IndexedDBControlTest_GetDatabaseKeysForTesting_ProxyToResponder::Run(const string&, const string&)? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16:
+../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/string_fortified.h:29:33: warning: ?void* __builtin_memcpy(void*, const void*, unsigned int)? specified bound between 4294967288 and 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
+   29 |   return __builtin___memcpy_chk (__dest, __src, __len, __bos0 (__dest));
+      |          ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function ?void* memcpy(void*, const void*, size_t)?,
+    inlined from ?static void mojo::internal::Serializer<mojo::StringDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, mojo::internal::Array_Data<char>::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const std::__cxx11::basic_string<char>]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/string_serialization.h:34:11,
+    inlined from ?void storage::mojom::IndexedDBControlTest_GetDatabaseKeysForTesting_ProxyToResponder::Run(const string&, const string&)? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16:
+../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/string_fortified.h:29:33: warning: ?void* __builtin_memcpy(void*, const void*, unsigned int)? specified bound between 4294967288 and 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
+   29 |   return __builtin___memcpy_chk (__dest, __src, __len, __bos0 (__dest));
+      |          ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function ?void* memcpy(void*, const void*, size_t)?,
+    inlined from ?static void mojo::internal::Serializer<mojo::StringDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, mojo::internal::Array_Data<char>::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const std::__cxx11::basic_string<char>]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/string_serialization.h:34:11,
+    inlined from ?virtual void storage::mojom::IndexedDBControlTestProxy::WriteToIndexedDBForTesting(const url::Origin&, const string&, const string&, storage::mojom::IndexedDBControlTest::WriteToIndexedDBForTestingCallback)? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16:
+../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/string_fortified.h:29:33: warning: ?void* __builtin_memcpy(void*, const void*, unsigned int)? specified bound between 4294967288 and 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
+   29 |   return __builtin___memcpy_chk (__dest, __src, __len, __bos0 (__dest));
+      |          ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function ?void* memcpy(void*, const void*, size_t)?,
+    inlined from ?static void mojo::internal::Serializer<mojo::StringDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, mojo::internal::Array_Data<char>::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const std::__cxx11::basic_string<char>]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/string_serialization.h:34:11,
+    inlined from ?virtual void storage::mojom::IndexedDBControlTestProxy::WriteToIndexedDBForTesting(const url::Origin&, const string&, const string&, storage::mojom::IndexedDBControlTest::WriteToIndexedDBForTestingCallback)? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16:
+../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/string_fortified.h:29:33: warning: ?void* __builtin_memcpy(void*, const void*, unsigned int)? specified bound between 4294967288 and 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
+   29 |   return __builtin___memcpy_chk (__dest, __src, __len, __bos0 (__dest));
+      |          ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[14619/20194] CXX obj/components/services/storage/public/mojom/mojom/partition.mojom.o
+In file included from ../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/string.h:519,
+                 from /home/mipl/rpi3/buildroot/output/host/arm-buildroot-linux-gnueabihf/include/c++/9.3.0/cstring:42,
+                 from ../../3rdparty/chromium/base/logging.h:12,
+                 from ../../3rdparty/chromium/base/memory/ref_counted.h:16,
+                 from ../../3rdparty/chromium/base/callback_internal.h:14,
+                 from ../../3rdparty/chromium/base/callback.h:15,
+                 from gen/components/services/storage/public/mojom/partition.mojom.h:16,
+                 from gen/components/services/storage/public/mojom/partition.mojom.cc:12:
+In function ?void* memcpy(void*, const void*, size_t)?,
+    inlined from ?static void mojo::internal::Serializer<mojo::StringDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, mojo::internal::Array_Data<char>::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const std::__cxx11::basic_string<char>]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/string_serialization.h:34:11,
+    inlined from ?static void mojo::internal::Serializer<url::mojom::OriginDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, url::mojom::internal::Origin_Data::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const url::Origin]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16,
+    inlined from ?virtual void storage::mojom::PartitionProxy::BindOriginContext(const url::Origin&, mojo::PendingReceiver<storage::mojom::OriginContext>)? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16:
+../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/string_fortified.h:29:33: warning: ?void* __builtin_memcpy(void*, const void*, unsigned int)? specified bound between 4294967288 and 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
+   29 |   return __builtin___memcpy_chk (__dest, __src, __len, __bos0 (__dest));
+      |          ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function ?void* memcpy(void*, const void*, size_t)?,
+    inlined from ?static void mojo::internal::Serializer<mojo::StringDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, mojo::internal::Array_Data<char>::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const std::__cxx11::basic_string<char>]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/string_serialization.h:34:11,
+    inlined from ?static void mojo::internal::Serializer<url::mojom::OriginDataView, MaybeConstUserType>::Serialize(MaybeConstUserType&, mojo::internal::Buffer*, url::mojom::internal::Origin_Data::BufferWriter*, mojo::internal::SerializationContext*) [with MaybeConstUserType = const url::Origin]? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16,
+    inlined from ?virtual void storage::mojom::PartitionProxy::BindOriginContext(const url::Origin&, mojo::PendingReceiver<storage::mojom::OriginContext>)? at ../../3rdparty/chromium/mojo/public/cpp/bindings/lib/serialization_forward.h:44:16:
+../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/string_fortified.h:29:33: warning: ?void* __builtin_memcpy(void*, const void*, unsigned int)? specified bound between 4294967288 and 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
+   29 |   return __builtin___memcpy_chk (__dest, __src, __len, __bos0 (__dest));
+      |          ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[14642/20194] CXX obj/content/browser/browser/browser_accessibility_state_impl.o
+FAILED: obj/content/browser/browser/browser_accessibility_state_impl.o 
+/home/mipl/rpi3/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-g++ -MMD -MF obj/content/browser/browser/browser_accessibility_state_impl.o.d -DUSE_UDEV -DUSE_AURA=1 -DUSE_NSS_CERTS=1 -DUSE_OZONE=1 -DOFFICIAL_BUILD -DTOOLKIT_QT -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DNO_UNWIND_TABLES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DCR_SYSROOT_HASH=3fcc1d4e44127006318371002a0f421a4fde2ab4 -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DCONTENT_IMPLEMENTATION -DWEBP_EXTERN=extern -DVK_NO_PROTOTYPES -DUSE_EGL -DU_USING_ICU_NAMESPACE=0 -DU_ENABLE_DYLOAD=0 -DUSE_CHROMIUM_ICU=1 -DU_ENABLE_TRACING=1 -DU_ENABLE_RESOURCE_TRACING=0 -DU_STATIC_IMPLEMENTATION -DICU_UTIL_DATA_IMPL=ICU_UTIL_DATA_FILE -DUCHAR_TYPE=uint16_t -DGOOGLE_PROTOBUF_NO_RTTI -DGOOGLE_PROTOBUF_NO_STATIC_INITIALIZER -DHAVE_PTHREAD -DSK_CODEC_DECODES_PNG -DSK_CODEC_DECODES_WEBP -DSK_ENCODE_PNG -DSK_ENCODE_WEBP -DSK_USER_CONFIG_HEADER=\"../../skia/config/SkUserConfig.h\" -DSK_GL -DSK_CODEC_DECODES_JPEG -DSK_ENCODE_JPEG -DSK_USE_LIBGIFCODEC -DSK_VULKAN_HEADER=\"../../skia/config/SkVulkanConfig.h\" -DSK_VULKAN=1 -DSK_SUPPORT_GPU=1 -DSK_GPU_WORKAROUNDS_HEADER=\"gpu/config/gpu_driver_bug_workaround_autogen.h\" -DVK_NO_PROTOTYPES -DCRASHPAD_ZLIB_SOURCE_EXTERNAL -DLEVELDB_PLATFORM_CHROMIUM=1 -DLEVELDB_PLATFORM_CHROMIUM=1 -DWEBRTC_NON_STATIC_TRACE_EVENT_HANDLERS=0 -DWEBRTC_CHROMIUM_BUILD -DWEBRTC_POSIX -DWEBRTC_LINUX -DABSL_ALLOCATOR_NOTHROW=1 -DWEBRTC_USE_BUILTIN_ISAC_FIX=1 -DWEBRTC_USE_BUILTIN_ISAC_FLOAT=0 -DHAVE_SCTP -DNO_MAIN_THREAD_WRAPPING -DSQLITE_OMIT_ANALYZE -DSQLITE_OMIT_AUTOINIT -DSQLITE_OMIT_AUTORESET -DSQLITE_OMIT_COMPILEOPTION_DIAGS -DSQLITE_OMIT_COMPLETE -DSQLITE_OMIT_EXPLAIN -DSQLITE_OMIT_GET_TABLE -DSQLITE_DEFAULT_LOOKASIDE=0,0 -DSQLITE_OMIT_LOOKASIDE -DSQLITE_OMIT_TCL_VARIABLE -DSQLITE_OMIT_REINDEX -DSQLITE_OMIT_TRACE -DSQLITE_OMIT_UPSERT -DSQLITE_OMIT_WINDOWFUNC -DSQLITE_ENABLE_FTS3 -DSQLITE_DISABLE_FTS3_UNICODE -DSQLITE_DISABLE_FTS4_DEFERRED -DSQLITE_ENABLE_ICU -DSQLITE_SECURE_DELETE -DSQLITE_THREADSAFE=1 -DSQLITE_MAX_WORKER_THREADS=0 -DSQLITE_MAX_MMAP_SIZE=268435456 -DSQLITE_DEFAULT_FILE_PERMISSIONS=0600 -DSQLITE_DEFAULT_MEMSTATUS=1 -DSQLITE_DEFAULT_PAGE_SIZE=4096 -DSQLITE_DEFAULT_PCACHE_INITSZ=0 -DSQLITE_LIKE_DOESNT_MATCH_BLOBS -DSQLITE_OMIT_DEPRECATED -DSQLITE_OMIT_PROGRESS_CALLBACK -DSQLITE_OMIT_SHARED_CACHE -DSQLITE_USE_ALLOCA -DSQLITE_OMIT_DECLTYPE -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_HAVE_ISNAN -DSQLITE_ENABLE_BATCH_ATOMIC_WRITE -DSQLITE_TEMP_STORE=3 -DSQLITE_ENABLE_LOCKING_STYLE=0 -DPERFETTO_IMPLEMENTATION -DV8_DEPRECATION_WARNINGS -Igen -I../../3rdparty/chromium -Igen -I../../3rdparty/chromium/third_party/perfetto/include -Igen/third_party/perfetto/build_config -Igen/third_party/perfetto -Igen -I../../3rdparty/chromium/third_party/libwebp/src -Igen -I../../3rdparty/chromium/third_party/vulkan/include -I../../3rdparty/chromium/third_party/libyuv/include -Igen -I../../3rdparty/chromium/third_party/khronos -I../../3rdparty/chromium/gpu -Igen/third_party/dawn/src/include -I../../3rdparty/chromium/third_party/dawn/src/include -I../../3rdparty/chromium/third_party/jsoncpp/source/include -I../../3rdparty/chromium/third_party/jsoncpp/generated -Igen -I../../3rdparty/chromium/third_party/boringssl/src/include -I../../3rdparty/chromium/third_party/ced/src -I../../3rdparty/chromium/third_party/icu/source/common -I../../3rdparty/chromium/third_party/icu/source/i18n -I../../3rdparty/chromium/third_party/protobuf/src -I../../3rdparty/chromium/third_party/protobuf/src -Igen/protoc_out -I../../3rdparty/chromium/third_party/skia -I../../3rdparty/chromium/third_party/libgifcodec -I../../3rdparty/chromium/third_party/vulkan/include -I../../3rdparty/chromium/third_party/skia/third_party/vulkanmemoryallocator -I../../3rdparty/chromium/third_party/vulkan/include -I../../3rdparty/chromium/third_party/crashpad/crashpad -I../../3rdparty/chromium/third_party/crashpad/crashpad/compat/non_mac -I../../3rdparty/chromium/third_party/crashpad/crashpad/compat/linux -I../../3rdparty/chromium/third_party/crashpad/crashpad/compat/non_win -I../../3rdparty/chromium/third_party/zlib -I../../3rdparty/chromium/third_party/libwebm/source -I../../3rdparty/chromium/third_party/leveldatabase -I../../3rdparty/chromium/third_party/leveldatabase/src -I../../3rdparty/chromium/third_party/leveldatabase/src/include -I../../3rdparty/chromium/third_party/webrtc_overrides -I../../3rdparty/chromium/third_party/webrtc -Igen/third_party/webrtc -I../../3rdparty/chromium/third_party/abseil-cpp -Igen/third_party/metrics_proto -I../../3rdparty/chromium/third_party/perfetto -I../../3rdparty/chromium/third_party/perfetto/include -Igen/third_party/perfetto/build_config -Igen/third_party/perfetto -I../../3rdparty/chromium/v8/include -Igen/v8/include -I../../3rdparty/chromium/third_party/mesa_headers -I../../3rdparty/chromium/third_party/angle/src/common/third_party/base -Igen/angle -I../../3rdparty/chromium/third_party/angle/include -I../../3rdparty/chromium/third_party/brotli/include -I../../3rdparty/chromium/third_party/re2/src -fno-strict-aliasing --param=ssp-buffer-size=4 -fstack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -fPIC -pipe -pthread -march=armv7-a -mfloat-abi=hard -mtune=generic-armv7-a -mfpu=vfpv3-d16 -marm -Wall -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -Wno-psabi -Wno-unused-local-typedefs -Wno-maybe-uninitialized -Wno-deprecated-declarations -fno-delete-null-pointer-checks -Wno-comments -Wno-packed-not-aligned -Wno-dangling-else -Wno-missing-field-initializers -Wno-unused-parameter -O2 -fno-ident -fdata-sections -ffunction-sections -fno-omit-frame-pointer -g0 -fvisibility=hidden -I/home/mipl/rpi3/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/nss -I/home/mipl/rpi3/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/nspr -I/home/mipl/rpi3/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/dbus-1.0 -I/home/mipl/rpi3/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/dbus-1.0/include -std=gnu++14 -Wno-narrowing -Wno-class-memaccess -Wno-attributes -Wno-class-memaccess -Wno-subobject-linkage -Wno-invalid-offsetof -Wno-return-type -Wno-deprecated-copy -fno-exceptions -fno-rtti --sysroot=../../../../../host/arm-buildroot-linux-gnueabihf/sysroot -fvisibility-inlines-hidden -Wno-deprecated-declarations -c ../../3rdparty/chromium/content/browser/accessibility/browser_accessibility_state_impl.cc -o obj/content/browser/browser/browser_accessibility_state_impl.o
+arm-buildroot-linux-gnueabihf-g++.br_real: fatal error: Killed signal terminated program cc1plus
+compilation terminated.
+[14644/20194] CXX obj/content/browser/browser/storage_partition_impl.o
+ninja: build stopped: subcommand failed.
+make[5]: *** [Makefile.gn_run:360: run_ninja] Error 1
+make[4]: *** [Makefile:82: sub-gn_run-pro-make_first] Error 2
+make[3]: *** [Makefile:79: sub-core-make_first] Error 2
+make[2]: *** [Makefile:49: sub-src-make_first] Error 2
+make[1]: *** [package/pkg-generic.mk:250: /home/mipl/rpi3/buildroot/output/build/qt5webengine-5.15.2/.stamp_built] Error 2
