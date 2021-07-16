@@ -1,77 +1,253 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 16 Jul 2021 19:20:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: fix build with
- libmaxminddb
-Message-ID: <20210716172016.207663-1-fontaine.fabrice@gmail.com>
+Date: Fri, 16 Jul 2021 20:27:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/seatd: fix uclibc build
+Message-ID: <20210716182717.254552-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Build with libmaxminddb is broken since bump to version 3.0.5 in commit
-464d0be380c84ac7c3f1684e49153c3868280d7e because of
-https://github.com/SpiderLabs/ModSecurity/commit/785958f9b5089b918c7d054cbcc2fe4a3c7b3788
-
-So revert this commit until upstream answer to comment to
-https://github.com/SpiderLabs/ModSecurity/issues/2131
+Fix uclibc build which is broken since addition of the package in commit
+daae31149017cbf8b03634cfc56da132f7e1ad83
 
 Fixes:
- - http://autobuild.buildroot.org/results/4c639fd967faa06f8ae362bacd38f3409c47267c
+ - http://autobuild.buildroot.org/results/ad5020c5c1a7730f1ae82bf8215ed63df83421fe
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...Revert-Fix-maxminddb-link-on-FreeBSD.patch | 28 +++++++++++++++++++
- package/libmodsecurity/libmodsecurity.mk      |  2 ++
- 2 files changed, 30 insertions(+)
- create mode 100644 package/libmodsecurity/0001-Revert-Fix-maxminddb-link-on-FreeBSD.patch
+ package/seatd/0002-Add-no-op-session.patch | 223 +++++++++++++++++++++
+ 1 file changed, 223 insertions(+)
+ create mode 100644 package/seatd/0002-Add-no-op-session.patch
 
-diff --git a/package/libmodsecurity/0001-Revert-Fix-maxminddb-link-on-FreeBSD.patch b/package/libmodsecurity/0001-Revert-Fix-maxminddb-link-on-FreeBSD.patch
+diff --git a/package/seatd/0002-Add-no-op-session.patch b/package/seatd/0002-Add-no-op-session.patch
 new file mode 100644
-index 0000000000..9608e3d935
+index 0000000000..44798126d9
 --- /dev/null
-+++ b/package/libmodsecurity/0001-Revert-Fix-maxminddb-link-on-FreeBSD.patch
-@@ -0,0 +1,28 @@
-+From 6737dc133cb4811a000c02b4e0a92b72f0b220ee Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 16 Jul 2021 19:12:51 +0200
-+Subject: [PATCH] Revert "Fix maxminddb link on FreeBSD"
++++ b/package/seatd/0002-Add-no-op-session.patch
+@@ -0,0 +1,223 @@
++From 9a7824b7c3ff5c957632671e91454fc84fbcdda8 Mon Sep 17 00:00:00 2001
++From: Simon Ser <contact@emersion.fr>
++Date: Fri, 26 Mar 2021 10:05:12 +0100
++Subject: [PATCH] Add no-op session
 +
-+This reverts commit 785958f9b5089b918c7d054cbcc2fe4a3c7b3788.
++This is useful for headless testing, for instance with VKMS:
 +
++    modprobe vkms
++    export WLR_DRM_DEVICES=/dev/dri/card1
++    export WLR_BACKENDS=drm
++    export LIBSEAT_BACKEND=noop
++    sway
++
++We don't need any of the VT handling in this case.
++
++[Retrieved from:
++https://github.com/kennylevinsen/seatd/commit/9a7824b7c3ff5c957632671e91454fc84fbcdda8]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ build/libmaxmind.m4 | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ include/libseat.h      |   2 +
++ libseat/backend/noop.c | 135 +++++++++++++++++++++++++++++++++++++++++
++ libseat/libseat.c      |   5 ++
++ meson.build            |   2 +-
++ 4 files changed, 143 insertions(+), 1 deletion(-)
++ create mode 100644 libseat/backend/noop.c
 +
-+diff --git a/build/libmaxmind.m4 b/build/libmaxmind.m4
-+index 656fc250..02820b5a 100644
-+--- a/build/libmaxmind.m4
-++++ b/build/libmaxmind.m4
-+@@ -10,7 +10,7 @@ dnl  MAXMIND_VERSION
-+ AC_DEFUN([PROG_MAXMIND], [
++diff --git a/include/libseat.h b/include/libseat.h
++index 5375cd6..82098ea 100644
++--- a/include/libseat.h
+++++ b/include/libseat.h
++@@ -1,6 +1,8 @@
++ #ifndef _LIBSEAT_H
++ #define _LIBSEAT_H
 + 
-+ # Possible names for the maxmind library/package (pkg-config)
-+-MAXMIND_POSSIBLE_LIB_NAMES="maxminddb maxmind"
-++MAXMIND_POSSIBLE_LIB_NAMES="libmaxminddb maxminddb maxmind"
+++#include <stdarg.h>
+++
++ /*
++  * An opaque struct containing an opened seat, created by libseat_open_seat and
++  * destroyed by libseat_close_seat.
++diff --git a/libseat/backend/noop.c b/libseat/backend/noop.c
++new file mode 100644
++index 0000000..71d0224
++--- /dev/null
+++++ b/libseat/backend/noop.c
++@@ -0,0 +1,135 @@
+++#include <assert.h>
+++#include <errno.h>
+++#include <fcntl.h>
+++#include <poll.h>
+++#include <stdbool.h>
+++#include <stdlib.h>
+++#include <string.h>
+++#include <sys/socket.h>
+++#include <unistd.h>
+++
+++#include "backend.h"
+++#include "log.h"
+++
+++struct backend_noop {
+++	struct libseat base;
+++	struct libseat_seat_listener *seat_listener;
+++	void *seat_listener_data;
+++
+++	bool initial_setup;
+++	int sockets[2];
+++};
+++
+++extern const struct seat_impl noop_impl;
+++
+++static struct backend_noop *backend_noop_from_libseat_backend(struct libseat *base) {
+++	assert(base->impl == &noop_impl);
+++	return (struct backend_noop *)base;
+++}
+++
+++static void destroy(struct backend_noop *backend) {
+++	close(backend->sockets[0]);
+++	close(backend->sockets[1]);
+++	free(backend);
+++}
+++
+++static int close_seat(struct libseat *base) {
+++	struct backend_noop *backend = backend_noop_from_libseat_backend(base);
+++	destroy(backend);
+++	return 0;
+++}
+++
+++static int disable_seat(struct libseat *base) {
+++	(void)base;
+++	return 0;
+++}
+++
+++static const char *seat_name(struct libseat *base) {
+++	(void)base;
+++	return "noop";
+++}
+++
+++static int open_device(struct libseat *base, const char *path, int *fd) {
+++	(void)base;
+++
+++	int tmpfd = open(path, O_RDWR | O_CLOEXEC);
+++	if (tmpfd < 0) {
+++		log_errorf("Failed to open device: %s", strerror(errno));
+++		return -1;
+++	}
+++
+++	*fd = tmpfd;
+++	return tmpfd;
+++}
+++
+++static int close_device(struct libseat *base, int device_id) {
+++	(void)base;
+++	(void)device_id;
+++	return 0;
+++}
+++
+++static int switch_session(struct libseat *base, int s) {
+++	(void)base;
+++	(void)s;
+++	log_errorf("No-op backend cannot switch to session %d", s);
+++	return -1;
+++}
+++
+++static int get_fd(struct libseat *base) {
+++	struct backend_noop *backend = backend_noop_from_libseat_backend(base);
+++	return backend->sockets[0];
+++}
+++
+++static int dispatch_background(struct libseat *base, int timeout) {
+++	struct backend_noop *backend = backend_noop_from_libseat_backend(base);
+++
+++	if (backend->initial_setup) {
+++		backend->initial_setup = false;
+++		backend->seat_listener->enable_seat(&backend->base, backend->seat_listener_data);
+++	}
+++
+++	struct pollfd fd = {
+++		.fd = backend->sockets[0],
+++		.events = POLLIN,
+++	};
+++	if (poll(&fd, 1, timeout) < 0) {
+++		if (errno == EAGAIN || errno == EINTR) {
+++			return 0;
+++		} else {
+++			return -1;
+++		}
+++	}
+++
+++	return 0;
+++}
+++
+++static struct libseat *noop_open_seat(struct libseat_seat_listener *listener, void *data) {
+++	struct backend_noop *backend = calloc(1, sizeof(struct backend_noop));
+++	if (backend == NULL) {
+++		return NULL;
+++	}
+++
+++	if (socketpair(AF_UNIX, SOCK_STREAM, 0, backend->sockets) != 0) {
+++		log_errorf("socketpair() failed: %s", strerror(errno));
+++		free(backend);
+++		return NULL;
+++	}
+++
+++	backend->seat_listener = listener;
+++	backend->seat_listener_data = data;
+++	backend->base.impl = &noop_impl;
+++
+++	return &backend->base;
+++}
+++
+++const struct seat_impl noop_impl = {
+++	.open_seat = noop_open_seat,
+++	.disable_seat = disable_seat,
+++	.close_seat = close_seat,
+++	.seat_name = seat_name,
+++	.open_device = open_device,
+++	.close_device = close_device,
+++	.switch_session = switch_session,
+++	.get_fd = get_fd,
+++	.dispatch = dispatch_background,
+++};
++diff --git a/libseat/libseat.c b/libseat/libseat.c
++index b1e8bb2..a7e079c 100644
++--- a/libseat/libseat.c
+++++ b/libseat/libseat.c
++@@ -13,6 +13,7 @@
++ extern const struct seat_impl seatd_impl;
++ extern const struct seat_impl logind_impl;
++ extern const struct seat_impl builtin_impl;
+++extern const struct seat_impl noop_impl;
 + 
-+ # Possible extensions for the library
-+ MAXMIND_POSSIBLE_EXTENSIONS="so la sl dll dylib"
-+-- 
-+2.30.2
-+
-diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
-index b2637257b6..66e7e522a1 100644
---- a/package/libmodsecurity/libmodsecurity.mk
-+++ b/package/libmodsecurity/libmodsecurity.mk
-@@ -12,6 +12,8 @@ LIBMODSECURITY_LICENSE = Apache-2.0
- LIBMODSECURITY_LICENSE_FILES = LICENSE
- LIBMODSECURITY_CPE_ID_VENDOR = trustwave
- LIBMODSECURITY_CPE_ID_PRODUCT = modsecurity
-+# We're patching build/libmaxmind.m4
-+LIBMODSECURITY_AUTORECONF = YES
- 
- LIBMODSECURITY_DEPENDENCIES = pcre
- LIBMODSECURITY_CONF_OPTS = \
++ static const struct named_backend impls[] = {
++ #ifdef SEATD_ENABLED
++@@ -24,6 +25,7 @@ static const struct named_backend impls[] = {
++ #ifdef BUILTIN_ENABLED
++ 	{"builtin", &builtin_impl},
++ #endif
+++	{"noop", &noop_impl},
++ 	{NULL, NULL},
++ };
++ 
++@@ -62,6 +64,9 @@ struct libseat *libseat_open_seat(struct libseat_seat_listener *listener, void *
++ 
++ 	struct libseat *backend = NULL;
++ 	for (const struct named_backend *iter = impls; iter->backend != NULL; iter++) {
+++		if (iter->backend == &noop_impl) {
+++			continue;
+++		}
++ 		backend = iter->backend->open_seat(listener, data);
++ 		if (backend != NULL) {
++ 			log_infof("Seat opened with backend '%s'", iter->name);
++diff --git a/meson.build b/meson.build
++index f41b621..c3800ae 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -145,7 +145,7 @@ symbols_file = 'libseat/libseat.syms'
++ symbols_flag = '-Wl,--version-script, at 0@/@1@'.format(meson.current_source_dir(), symbols_file)
++ lib = library(
++ 	'seat', # This results in the library being called 'libseat'
++-	[ 'libseat/libseat.c' ],
+++	[ 'libseat/libseat.c', 'libseat/backend/noop.c' ],
++ 	soversion: libseat_soversion,
++ 	link_with: private_lib,
++ 	include_directories: [include_directories('.', 'include')],
 -- 
 2.30.2
