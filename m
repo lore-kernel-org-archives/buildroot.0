@@ -1,75 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 16 Jul 2021 23:23:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: needs uuid
-In-Reply-To: <20210716230617.135b52e1@windsurf>
-References: <20210716210106.342232-1-fontaine.fabrice@gmail.com>
- <20210716230617.135b52e1@windsurf>
-Message-ID: <CAPi7W8374pd7M0yWznR3iFSDbnGseaMND3Yg91djd0dgVyjJkw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 16 Jul 2021 23:25:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gcnano-binaries: bump to
+ version 6.4.3
+In-Reply-To: <BwTIMG2dlIPHQ8gnD4pEBqu_ZFaAB68eIBIQSL4hBxIKiOBYIy0ZulAnqlLsgHU6CI6a5n2-7gh08GtoLNHmobnYlDbSbmm0ixqkAT33FdA=@protonmail.com>
+References: <BwTIMG2dlIPHQ8gnD4pEBqu_ZFaAB68eIBIQSL4hBxIKiOBYIy0ZulAnqlLsgHU6CI6a5n2-7gh08GtoLNHmobnYlDbSbmm0ixqkAT33FdA=@protonmail.com>
+Message-ID: <20210716232556.5114f9ac@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Le ven. 16 juil. 2021 ? 23:06, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Fri, 16 Jul 2021 23:01:06 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > Build of nfs-utils without uuid is broken since bump to version 2.5.4 in
-> > commit 0ce30de72fb303768c5865949b8ce9260d0c43f5 because of
-> > http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commitdiff;h=c5528f40f9db5061e06dcf1f9b7fce5185b376c6
->
-> A bug should be reported upstream: the configure script should be
-> checking for the existence of libuuid, and not hardcode -luuid.
->
-> > -ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID)$(BR2_PACKAGE_UTIL_LINUX_LIBUUID),yy)
-> > +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
-> >  NFS_UTILS_CONF_OPTS += --enable-uuid
->
-> Why do they still have a --enable-uuid / --disable-uuid option if uuid
-> is now mandatory anyway ?
-Despite its name, the "uuid" flag enables or disable blkid support:
- 168 AC_ARG_ENABLE(uuid,
- 169         [AC_HELP_STRING([--disable-uuid],
- 170                 [Exclude uuid support to avoid buggy libblkid.
-@<:@default=no@:>@])],
- 171         if test "$enableval" = "yes" ; then choose_blkid=yes;
-else choose_blkid=no; fi,
- 172         choose_blkid=default)
+Hello Patrick,
 
- 403 if test "$choose_blkid" != no; then
- 404    AC_CHECK_LIB(blkid, blkid_get_library_version,
-[LIBBLKID="-lblkid"], AC_MSG_ERROR([libblkid needed]))
- 405    AC_CHECK_HEADER(blkid/blkid.h, , AC_MSG_ERROR([Cannot find
-libblkid header file blkid/blkid.h]))
- 406    AC_BLKID_VERS
- 407    if test $choose_blkid = yes; then
- 408       use_blkid=1
- 409       test $libblkid_cv_is_recent = no && AC_MSG_WARN([libblkid
-is old and may cause mountd to leak memory])
- 410    else
- 411       if test $libblkid_cv_is_recent = yes
- 412       then use_blkid=1
- 413       else use_blkid=0
- 414            AC_MSG_WARN([uuid support disabled as libblkid is too old])
- 415       fi
- 416     fi
- 417     AC_DEFINE_UNQUOTED(USE_BLKID, $use_blkid, [Define if you want
-to use blkid to find uuid of filesystems])
- 418 fi
->
-> It feels like the change from upstream is not quite complete :-/
-I'm not an expert of nfs-utils so I have no strong opinion but they
-decided to hardcode -luuid for exportd and mountd and the commit
-message seems to indicate that this change is intentional.
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+On Tue, 13 Jul 2021 08:29:59 +0000
+"Patrick G. via buildroot" <buildroot@busybox.net> wrote:
 
-Fabrice
+> https://github.com/STMicroelectronics/gcnano-binaries/
+> 
+> Signed-off-by: Patrick Gerber <p.gerber@iemgroup.com>
+
+Thanks a lot for this contribution. However, about two weeks before
+your patch, my colleague K?ry Maincent had already sent the same update
+and it has already been applied on June 28.
+
+However, your change and K?ry's are slightly different. K?ry had to
+split up the following variables:
+
++GCNANO_BINARIES_LIB_VERSION = 6.4
++GCNANO_BINARIES_LIB_REVISION = 3
+
+Could you test commit 59db11c7c445ef8662163a80997aa71f760a0359 and see
+if it works for you ?
+
+Thanks a lot,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
