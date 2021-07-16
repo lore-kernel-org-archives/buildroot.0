@@ -1,80 +1,36 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 16 Jul 2021 23:04:32 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libqb: needs threads and dynamic library
-Message-ID: <20210716210432.342503-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 16 Jul 2021 23:06:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: needs uuid
+In-Reply-To: <20210716210106.342232-1-fontaine.fabrice@gmail.com>
+References: <20210716210106.342232-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210716230617.135b52e1@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-libqb fails to build without threads or dynamic library since the
-addition of the package in commit
-22864d570dd18d78a77dedab8fbcc5e0122c0acc
+On Fri, 16 Jul 2021 23:01:06 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Also add ac_cv_prog_cc_c99=-std=gnu99 to fix build failure without wchar
+> Build of nfs-utils without uuid is broken since bump to version 2.5.4 in
+> commit 0ce30de72fb303768c5865949b8ce9260d0c43f5 because of
+> http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commitdiff;h=c5528f40f9db5061e06dcf1f9b7fce5185b376c6
 
-Fixes:
- - http://autobuild.buildroot.org/results/21c1b5d29da4949f4582056ab4e2335ec225d8d6
- - http://autobuild.buildroot.org/results/aa4df6364cdf3c862be13b6b738595f420ec6105
- - http://autobuild.buildroot.org/results/376d316094238ba7097e8bdc51960ba38532683a
+A bug should be reported upstream: the configure script should be
+checking for the existence of libuuid, and not hardcode -luuid.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Fix title (static -> dynamic)
+> -ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID)$(BR2_PACKAGE_UTIL_LINUX_LIBUUID),yy)
+> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
+>  NFS_UTILS_CONF_OPTS += --enable-uuid
 
- package/libqb/Config.in    | 5 +++++
- package/libqb/libqb.mk     | 4 ++++
- package/usbguard/Config.in | 4 ++--
- 3 files changed, 11 insertions(+), 2 deletions(-)
+Why do they still have a --enable-uuid / --disable-uuid option if uuid
+is now mandatory anyway ?
 
-diff --git a/package/libqb/Config.in b/package/libqb/Config.in
-index 4ab010ca50..e481835dfc 100644
---- a/package/libqb/Config.in
-+++ b/package/libqb/Config.in
-@@ -1,7 +1,12 @@
- config BR2_PACKAGE_LIBQB
- 	bool "libqb"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBXML2
- 	help
- 	  Library for client-server applications
- 
- 	  https://github.com/ClusterLabs/libqb
-+
-+comment "libqb needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libqb/libqb.mk b/package/libqb/libqb.mk
-index a0d97d5eb8..a9cf5e3fb9 100644
---- a/package/libqb/libqb.mk
-+++ b/package/libqb/libqb.mk
-@@ -13,4 +13,8 @@ LIBQB_INSTALL_STAGING = YES
- LIBQB_AUTORECONF = YES
- LIBQB_DEPENDENCIES = libxml2
- 
-+# ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
-+# provided by autoconf relies on wchar_t.
-+LIBQB_CONF_ENV = ac_cv_prog_cc_c99=-std=gnu99
-+
- $(eval $(autotools-package))
-diff --git a/package/usbguard/Config.in b/package/usbguard/Config.in
-index 582e9b3852..34e24a2156 100644
---- a/package/usbguard/Config.in
-+++ b/package/usbguard/Config.in
-@@ -2,9 +2,9 @@ config BR2_PACKAGE_USBGUARD
- 	bool "usbguard"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
--	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libqb, protobuf
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
--	depends on !BR2_STATIC_LIBS # protobuf
-+	depends on !BR2_STATIC_LIBS # libqb, protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_LIBQB
- 	help
+It feels like the change from upstream is not quite complete :-/
+
+Thomas
 -- 
-2.30.2
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
