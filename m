@@ -1,33 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 23:28:51 +0200
-Subject: [Buildroot] [PATCH 1/2] package/gcr: fix introspection option
-In-Reply-To: <20210714213115.2959939-1-fontaine.fabrice@gmail.com>
-References: <20210714213115.2959939-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210716232851.725eb1a1@windsurf>
+Date: Fri, 16 Jul 2021 23:29:05 +0200
+Subject: [Buildroot] [git commit] configs/warp7: bump Kernel and U-Boot
+ version
+Message-ID: <20210716205559.2482E911CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Wed, 14 Jul 2021 23:31:14 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bce4aa8a8bf0728e5f7bc2ee2ed4fbae80c721fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> introspection option was wrongly named --with-introspection instead of
-> --enable-introspection since commit
-> d4e7c720aa78dbe659db82f4eb38ff58ebae4c57:
-> 
-> configure: WARNING: unrecognized options: --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --with-introspection
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/gcr/gcr.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Bump U-Boot to 2021.07 and kernel to version 5.13
 
-Both applied, thanks!
+Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/warp7_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index 5f9d973663..23ae4c2257 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 5.8 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
++# Linux headers same as kernel, a 5.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+ 
+ # wifi firmware for brcm43430
