@@ -1,34 +1,35 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 16 Jul 2021 23:44:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linuxptp: add LINUXPTP_CPE_ID_VENDOR
-Message-ID: <20210716214444.344130-1-fontaine.fabrice@gmail.com>
+Date: Sat, 17 Jul 2021 00:00:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tpm2-tools: add
+ TPM2_TOOLS_CPE_ID_VENDOR
+Message-ID: <20210716220011.345184-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-cpe:2.3:a:linuxptp_project:linuxptp is a valid CPE identifier for this
-package:
+cpe:2.3:a:tpm2-tools_project:tpm2-tools is a valid CPE identifier for
+this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alinuxptp_project%3Alinuxptp
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atpm2-tools_project%3Atpm2-tools
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/linuxptp/linuxptp.mk | 1 +
+ package/tpm2-tools/tpm2-tools.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index f91be921af..9f6b9f5582 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
-@@ -9,6 +9,7 @@ LINUXPTP_SOURCE = linuxptp-$(LINUXPTP_VERSION).tgz
- LINUXPTP_SITE = http://downloads.sourceforge.net/linuxptp
- LINUXPTP_LICENSE = GPL-2.0+
- LINUXPTP_LICENSE_FILES = COPYING
-+LINUXPTP_CPE_ID_VENDOR = linuxptp_project
+diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
+index e83db416aa..584b4edb54 100644
+--- a/package/tpm2-tools/tpm2-tools.mk
++++ b/package/tpm2-tools/tpm2-tools.mk
+@@ -8,6 +8,7 @@ TPM2_TOOLS_VERSION = 4.3.2
+ TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
+ TPM2_TOOLS_LICENSE = BSD-3-Clause
+ TPM2_TOOLS_LICENSE_FILES = doc/LICENSE
++TPM2_TOOLS_CPE_ID_VENDOR = tpm2-tools_project
+ TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf util-linux
  
- LINUXPTP_MAKE_ENV = \
- 	$(TARGET_MAKE_ENV) \
+ # -fstack-protector-all and FORTIFY_SOURCE=2 is used by
 -- 
 2.30.2
