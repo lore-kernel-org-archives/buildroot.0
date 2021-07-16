@@ -1,25 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 22:49:11 +0200
-Subject: [Buildroot] [PATCH] configs/imx7dpico: bump Kernel and U-Boot
- version
-In-Reply-To: <20210710182137.3720-1-texier.pj2@gmail.com>
-References: <20210710182137.3720-1-texier.pj2@gmail.com>
-Message-ID: <20210716224911.330108b1@windsurf>
+Date: Fri, 16 Jul 2021 22:49:17 +0200
+Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump
+ Linux and U-Boot versions
+In-Reply-To: <20210710171800.297401-1-francois.perrad@gadz.org>
+References: <20210710171800.297401-1-francois.perrad@gadz.org>
+Message-ID: <20210716224917.4f3ab662@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sat, 10 Jul 2021 20:21:37 +0200
-Pierre-Jean Texier <texier.pj2@gmail.com> wrote:
+On Sat, 10 Jul 2021 19:18:00 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Bump U-Boot to 2021.07 and kernel to version 5.13
-> 
-> Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  configs/imx7dpico_defconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
+>  configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
