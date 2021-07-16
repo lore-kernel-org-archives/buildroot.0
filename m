@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C94EFC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:33:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF2A4C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:33:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8D06660F93
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:33:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8D06660F93
+	by mail.kernel.org (Postfix) with ESMTPS id 7760C60F93
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:33:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7760C60F93
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 661616FBF9;
-	Tue,  3 Aug 2021 23:33:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E15083E2B;
+	Tue,  3 Aug 2021 23:33:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vhOq10MmTSKR; Tue,  3 Aug 2021 23:33:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1MKGGHwesx-4; Tue,  3 Aug 2021 23:33:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A67726FBF7;
-	Tue,  3 Aug 2021 23:33:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9906E83E2A;
+	Tue,  3 Aug 2021 23:33:19 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0D58A1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:16:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4931F1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:16:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B8F040E6E
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1DEF40ECB
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oJMDpItMtZ0q for <buildroot@lists.busybox.net>;
+ with ESMTP id krIhiNFIlqqb for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 74C07406A6
+ by smtp2.osuosl.org (Postfix) with ESMTP id A2C6C40E77
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id CCE1E86A84; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
+ id F1AEB86A84; Tue,  3 Aug 2021 21:10:03 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Jul 2021 22:59:03 +0200
+Date: Fri, 16 Jul 2021 22:59:08 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c2db53caca63ea8fca17823e37d496774aefd477
-X-Git-Newrev: eae43a39d89d66547b20929395192fbf283be40d
+X-Git-Oldrev: e8b2a586b9adfeff2f21ce101a8557e209aebfd7
+X-Git-Newrev: 79f34e1b5830e370428abc73b7c1625f1f6f64db
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211003.CCE1E86A84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-aiohttp: bump
- to version 3.7.4.post0
+Message-Id: <20210803211003.F1AEB86A84@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pycares: bump
+ to version 4.0.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,44 +70,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eae43a39d89d66547b20929395192fbf283be40d
+commit: https://git.buildroot.net/buildroot/commit/?id=79f34e1b5830e370428abc73b7c1625f1f6f64db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-aiohttp/python-aiohttp.hash | 4 ++--
- package/python-aiohttp/python-aiohttp.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pycares/python-pycares.hash | 6 +++---
+ package/python-pycares/python-pycares.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-index db7dfd6b15..bdcb72a695 100644
---- a/package/python-aiohttp/python-aiohttp.hash
-+++ b/package/python-aiohttp/python-aiohttp.hash
+diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
+index c8c46175dc..7f749938a1 100644
+--- a/package/python-pycares/python-pycares.hash
++++ b/package/python-pycares/python-pycares.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp/json
--md5  586eb4e4dcb1e41242ede0c5bcfd4014  aiohttp-3.7.4.tar.gz
--sha256  5d84ecc73141d0a0d61ece0742bb7ff5751b0657dab8405f899d3ceb104cc7de  aiohttp-3.7.4.tar.gz
-+md5  7052a8e9877921d73da98d2b18c9a145  aiohttp-3.7.4.post0.tar.gz
-+sha256  493d3299ebe5f5a7c66b9819eacdcfbbaaf1a8e84911ddffcdc48888497afecf  aiohttp-3.7.4.post0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pycares/json
+-md5	8ac802d79b318efa27d3a9949d0604d1  pycares-3.1.1.tar.gz
+-sha256	18dfd4fd300f570d6c4536c1d987b7b7673b2a9d14346592c5d6ed716df0d104  pycares-3.1.1.tar.gz
++md5  5908c5762f08d07310f081aa2d8397a2  pycares-4.0.0.tar.gz
++sha256  d0154fc5753b088758fbec9bc137e1b24bb84fc0c6a09725c8bac25a342311cd  pycares-4.0.0.tar.gz
  # Locally computed sha256 checksums
- sha256  96627bed0ad08e9b2efa9f4e04e80837cd0550e7694a0fec33b1dab2550282ab  LICENSE.txt
-diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-index e878ac1a55..ef0ce8b635 100644
---- a/package/python-aiohttp/python-aiohttp.mk
-+++ b/package/python-aiohttp/python-aiohttp.mk
+-sha256	427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
++sha256  427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
+diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
+index dea34f82bf..b0abb1a41a 100644
+--- a/package/python-pycares/python-pycares.mk
++++ b/package/python-pycares/python-pycares.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_VERSION = 3.7.4
-+PYTHON_AIOHTTP_VERSION = 3.7.4.post0
- PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
--PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/7a/95/eb60aaad7943e18c9d091de93c9b0b5ed40aa67c7d5e3c5ee9b36f100a38
-+PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/99/f5/90ede947a3ce2d6de1614799f5fea4e93c19b6520a59dc5d2f64123b032f
- PYTHON_AIOHTTP_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
+-PYTHON_PYCARES_VERSION = 3.1.1
++PYTHON_PYCARES_VERSION = 4.0.0
+ PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
+-PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/4e/09/f49ef1c4b6a5ad50fc08a8acd015f1938594dd7a6b4a6a96d049d9bbec7d
++PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/25/5a/ed8cc3340b7e83a5e572b5d27387a968a7e52b1e3c269442076ca902b7ba
+ PYTHON_PYCARES_SETUP_TYPE = setuptools
+ PYTHON_PYCARES_LICENSE = MIT
+ PYTHON_PYCARES_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
