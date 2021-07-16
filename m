@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,PDS_BTC_ID,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8C26C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:08:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BA35C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:09:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B1D3B60FA0
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:08:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B1D3B60FA0
+	by mail.kernel.org (Postfix) with ESMTPS id 4398760F94
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:09:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4398760F94
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B58440175;
-	Wed,  4 Aug 2021 00:08:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D753608BC;
+	Wed,  4 Aug 2021 00:09:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C5ZcZyXc1mH7; Wed,  4 Aug 2021 00:08:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SLMEmRmLXrcI; Wed,  4 Aug 2021 00:09:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 685E540328;
-	Wed,  4 Aug 2021 00:08:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E463608EB;
+	Wed,  4 Aug 2021 00:09:06 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 128F81BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:16:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 104251BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:16:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7029940E57
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F51C4067D
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5Iosj0K2Ms4n for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
+ with ESMTP id ohOvm58p2dOt for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E16740475
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA881406AA
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 91CB885586; Tue,  3 Aug 2021 21:10:04 +0000 (UTC)
+ id 2E43687F55; Tue,  3 Aug 2021 21:10:04 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Jul 2021 23:26:19 +0200
+Date: Fri, 16 Jul 2021 22:59:15 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 487c7ba95db8097d206119868fd1187b656e3a9c
-X-Git-Newrev: 32b53a23e88c7a08d289e81b24b8430efe3b2fd9
+X-Git-Oldrev: 3809a8ee053500a421e139476176f7683a9e7af3
+X-Git-Newrev: 7e7fd652468750341d24b0b6b400480be1187a75
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211004.91CB885586@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wpewebkit: bump to
- version 2.32.2
+Message-Id: <20210803211004.2E43687F55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python{3}-cython: bump
+ to version 0.29.23
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,142 +70,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32b53a23e88c7a08d289e81b24b8430efe3b2fd9
+commit: https://git.buildroot.net/buildroot/commit/?id=7e7fd652468750341d24b0b6b400480be1187a75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bugfix release, mainly solves a few issues with input events and a
-few crashes. Release notes:
-
-  https://wpewebkit.org/release/wpewebkit-2.32.2.html
-
-The patch for building against uClibc has been included in this release,
-therefore "0001-Support-building-against-uClibc.patch" is removed.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Support-building-against-uClibc.patch     | 82 ----------------------
- package/wpewebkit/wpewebkit.hash                   |  8 +--
- package/wpewebkit/wpewebkit.mk                     |  2 +-
- 3 files changed, 5 insertions(+), 87 deletions(-)
+ package/python-cython/python-cython.hash | 4 ++--
+ package/python-cython/python-cython.mk   | 4 ++--
+ package/python3-cython/python3-cython.mk | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/wpewebkit/0001-Support-building-against-uClibc.patch b/package/wpewebkit/0001-Support-building-against-uClibc.patch
-deleted file mode 100644
-index 7c0918a195..0000000000
---- a/package/wpewebkit/0001-Support-building-against-uClibc.patch
-+++ /dev/null
-@@ -1,82 +0,0 @@
--From 624d3b6a99778443e35fb260bef50a3969df9215 Mon Sep 17 00:00:00 2001
--From: Adrian Perez de Castro <aperez@igalia.com>
--Date: Wed, 26 May 2021 01:24:59 +0300
--Subject: [PATCH] Support building against uClibc
-- https://bugs.webkit.org/show_bug.cgi?id=226244
--
--Reviewed by Michael Catanzaro.
--
--Source/JavaScriptCore:
--
--* assembler/MacroAssemblerARM64.cpp:
--(getauxval): Provide a fallback implementation of getauxval() for
--systems which do not provide <sys/auxv.h>, like those using uClibc
--as their C library.
--
--Source/WTF:
--
--* wtf/PlatformRegisters.h: Use the <sys/ucontext.h> header instead of
--<ucontext.h>, which is enough to gain access to the type definitions
--for CPU registers and is available on every libc. On the other hand,
--uClibc does not have <ucontext.h>, so this fixes the build in that
--case.
--
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--[Backport from upstream:
--  - https://bugs.webkit.org/show_bug.cgi?id=226244
--  - https://trac.webkit.org/changeset/278302 (current svn, soon legacy)
--  - https://commits.webkit.org/238339@main (future-proof for after the migration to git)
--]
--[yann.morin.1998@free.fr: add upstream commit refs]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- .../assembler/MacroAssemblerARM64.cpp          | 18 ++++++++++++++++++
-- Source/WTF/wtf/PlatformRegisters.h             |  2 +-
-- 2 files changed, 19 insertions(+), 1 deletion(-)
--
--diff --git a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
--index 9e5c5147ea0..d20e632d825 100644
----- a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
--+++ b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
--@@ -34,7 +34,25 @@
-- 
-- #if OS(LINUX)
-- #include <asm/hwcap.h>
--+#if __has_include(<sys/auxv.h>)
-- #include <sys/auxv.h>
--+#else
--+#include <linux/auxvec.h>
--+// Provide an implementation for C libraries which do not ship one.
--+static unsigned long getauxval(unsigned long type)
--+{
--+    char** env = environ;
--+    while (*env++) { /* no-op */ }
--+
--+    for (auto* auxv = reinterpret_cast<unsigned long*>(env); *auxv != AT_NULL; auxv += 2) {
--+        if (*auxv == type)
--+            return auxv[1];
--+    }
--+
--+    errno = ENOENT;
--+    return 0;
--+}
--+#endif
-- #endif
-- 
-- namespace JSC {
--diff --git a/Source/WTF/wtf/PlatformRegisters.h b/Source/WTF/wtf/PlatformRegisters.h
--index d26ef985169..e7f15b7eb62 100644
----- a/Source/WTF/wtf/PlatformRegisters.h
--+++ b/Source/WTF/wtf/PlatformRegisters.h
--@@ -35,7 +35,7 @@
-- #elif OS(WINDOWS)
-- #include <windows.h>
-- #else
---#include <ucontext.h>
--+#include <sys/ucontext.h>
-- #endif
-- 
-- namespace WTF {
---- 
--2.31.1
--
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 0c8c6dba6f..28e3feae90 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.32.1.tar.xz.sums
--md5  1dd3f56b8eba16266166d757acb979fc  wpewebkit-2.32.1.tar.xz
--sha1  c5b3a48d886375a6982dd2dc5c9cc2f92f5a9690  wpewebkit-2.32.1.tar.xz
--sha256  7b6b39a12ccf3f84da4cc6ac59e02fbe328f7476eaeb9c23de9b9288c2c2f39c  wpewebkit-2.32.1.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.32.2.tar.xz.sums
-+md5  a6624736150045a54037457416820b19  wpewebkit-2.32.2.tar.xz
-+sha1  7b41a49f97b4cb458b6896623a02f4861cbcf728  wpewebkit-2.32.2.tar.xz
-+sha256  2f0ebef0395a5a9e37a8609093f86140f74504f9954f97799b95f5dfbe186739  wpewebkit-2.32.2.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 39424a26fa..339dedd49b 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index 168d168838..04961ff03f 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5  12c5e45af71dcc6dff28cdcbcbef6f39  Cython-0.29.21.tar.gz
+-sha256  e57acb89bd55943c8d8bf813763d20b9099cc7165c0f16b707631a7654be9cad  Cython-0.29.21.tar.gz
++md5  82837814b8d72d353e16bb9344e914b1  Cython-0.29.23.tar.gz
++sha256  6a0d31452f0245daacb14c979c77e093eb1a546c760816b5eed0047686baad8e  Cython-0.29.23.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+ sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index c8dcf382ff..cf32fc19d1 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
+@@ -5,9 +5,9 @@
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.32.1
-+WPEWEBKIT_VERSION = 2.32.2
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+ # Please keep in sync with package/python3-cython/python3-cython.mk
+-PYTHON_CYTHON_VERSION = 0.29.21
++PYTHON_CYTHON_VERSION = 0.29.23
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/6c/9f/f501ba9d178aeb1f5bf7da1ad5619b207c90ac235d9859961c11829d0160
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/d9/cd/0d2d90b27219c07f68f1c25bcc7b02dd27639d2180add9d4b73e70945869
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+diff --git a/package/python3-cython/python3-cython.mk b/package/python3-cython/python3-cython.mk
+index 6e3bd1422a..2c65f1f1a4 100644
+--- a/package/python3-cython/python3-cython.mk
++++ b/package/python3-cython/python3-cython.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
+ 
+ # Please keep in sync with package/python-cython/python-cython.mk
+-PYTHON3_CYTHON_VERSION = 0.29.21
++PYTHON3_CYTHON_VERSION = 0.29.23
+ PYTHON3_CYTHON_SOURCE = Cython-$(PYTHON3_CYTHON_VERSION).tar.gz
+-PYTHON3_CYTHON_SITE = https://files.pythonhosted.org/packages/6c/9f/f501ba9d178aeb1f5bf7da1ad5619b207c90ac235d9859961c11829d0160
++PYTHON3_CYTHON_SITE = https://files.pythonhosted.org/packages/d9/cd/0d2d90b27219c07f68f1c25bcc7b02dd27639d2180add9d4b73e70945869
+ PYTHON3_CYTHON_SETUP_TYPE = setuptools
+ PYTHON3_CYTHON_LICENSE = Apache-2.0
+ PYTHON3_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
