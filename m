@@ -1,53 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 22:59:12 +0200
-Subject: [Buildroot] [git commit] package/python-certifi: bump to version
- 2021.5.30
-Message-ID: <20210716202900.F2C419111F@busybox.osuosl.org>
+Date: Fri, 16 Jul 2021 22:59:03 +0200
+Subject: [Buildroot] [git commit] package/python-aiohttp: bump to version
+ 3.7.4.post0
+Message-ID: <20210716202900.B431E9111A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5534404ef67d94d297aa904557553781b8e712a
+commit: https://git.buildroot.net/buildroot/commit/?id=eae43a39d89d66547b20929395192fbf283be40d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to typo fix:
-https://github.com/certifi/python-certifi/commit/c5311ad0533e78240f34b0e35451794d0e261d54
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-certifi/python-certifi.hash | 6 +++---
- package/python-certifi/python-certifi.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-aiohttp/python-aiohttp.hash | 4 ++--
+ package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index 7605672514..ae122ffc23 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
+diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
+index db7dfd6b15..bdcb72a695 100644
+--- a/package/python-aiohttp/python-aiohttp.hash
++++ b/package/python-aiohttp/python-aiohttp.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/certifi/json
--md5  522f9abe26e5d603a668d812aa6accca  certifi-2020.12.5.tar.gz
--sha256  1a4995114262bffbc2413b159f2a1a480c969de6e6eb13ee966d470af86af59c  certifi-2020.12.5.tar.gz
-+md5  4b38238b7305fcb3ffbc4368be4e8845  certifi-2021.5.30.tar.gz
-+sha256  2bbf76fd432960138b3ef6dda3dde0544f27cbf8546c458e60baf371917ba9ee  certifi-2021.5.30.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiohttp/json
+-md5  586eb4e4dcb1e41242ede0c5bcfd4014  aiohttp-3.7.4.tar.gz
+-sha256  5d84ecc73141d0a0d61ece0742bb7ff5751b0657dab8405f899d3ceb104cc7de  aiohttp-3.7.4.tar.gz
++md5  7052a8e9877921d73da98d2b18c9a145  aiohttp-3.7.4.post0.tar.gz
++sha256  493d3299ebe5f5a7c66b9819eacdcfbbaaf1a8e84911ddffcdc48888497afecf  aiohttp-3.7.4.post0.tar.gz
  # Locally computed sha256 checksums
--sha256  6a70a4bf6b010016d59a64b8ae4ad8dc7f5ef16f1fb453cc2ecd771c5a341131  LICENSE
-+sha256  be9d82f36112f87a7f1d74ecd4887e1467bbae8878a84004a00117b1e475a3e2  LICENSE
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index 4e4cbfdc81..7c63633a8d 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
+ sha256  96627bed0ad08e9b2efa9f4e04e80837cd0550e7694a0fec33b1dab2550282ab  LICENSE.txt
+diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+index e878ac1a55..ef0ce8b635 100644
+--- a/package/python-aiohttp/python-aiohttp.mk
++++ b/package/python-aiohttp/python-aiohttp.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CERTIFI_VERSION = 2020.12.5
-+PYTHON_CERTIFI_VERSION = 2021.5.30
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/06/a9/cd1fd8ee13f73a4d4f491ee219deeeae20afefa914dfb4c130cfc9dc397a
-+PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/6d/78/f8db8d57f520a54f0b8a438319c342c61c22759d8f9a1cd2e2180b5e5ea9
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+-PYTHON_AIOHTTP_VERSION = 3.7.4
++PYTHON_AIOHTTP_VERSION = 3.7.4.post0
+ PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
+-PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/7a/95/eb60aaad7943e18c9d091de93c9b0b5ed40aa67c7d5e3c5ee9b36f100a38
++PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/99/f5/90ede947a3ce2d6de1614799f5fea4e93c19b6520a59dc5d2f64123b032f
+ PYTHON_AIOHTTP_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
