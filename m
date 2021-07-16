@@ -1,52 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 23:15:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/network-manager: bump to
- version 1.33.1
-In-Reply-To: <20210716031025.1524809-1-james.hilliard1@gmail.com>
-References: <20210716031025.1524809-1-james.hilliard1@gmail.com>
-Message-ID: <20210716231503.48f47eea@windsurf>
+Date: Fri, 16 Jul 2021 23:15:15 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-vuplus: bump version to
+ 7.4.7-Matrix
+Message-ID: <20210716204133.5BC4B9113F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Thu, 15 Jul 2021 21:10:25 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=888b817e65ae20c552c41950ec6cbe986893c840
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> +NETWORK_MANAGER_VERSION_MAJOR = 1.33
+Changelog:
+https://github.com/kodi-pvr/pvr.vuplus/blob/Matrix/pvr.vuplus/changelog.txt
 
-Isn't 1.33 a development branch/release ?
-https://wiki.gnome.org/Projects/NetworkManager is not very clear when
-it says "Major NetworkManager releases are numbered 1.y.0, with y being
-an even number. For example, 1.0.0, 1.2.0, ..., 1.18.0. Minor stable
-releases are numbered 1.y.z, with y and z being even numbers. For
-example 1.4.2, 1.18.2.".
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 2 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-However, the NEWS file at
-https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/main/NEWS
-says:
-
-=============================================
-NetworkManager-1.34
-Overview of changes since NetworkManager-1.32
-=============================================
-
-This is a snapshot of NetworkManager development. The API is
-subject to change and not guaranteed to be compatible with
-the later release.
-USE AT YOUR OWN RISK.  NOT RECOMMENDED FOR PRODUCTION USE!
-
-So they don't even mention 1.33.
-
-Another point: as we're updating from 1.22 to 1.32 (potentially), is
-just a simple bump sufficient? Aren't there new options/features that
-should be taken into account ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+index 2c2c68e183..3c3a6b1bbc 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5fc5abbeef3735c87b4b1826b265932f60187fc60c6e47dd193e86c849f0eb49  kodi-pvr-vuplus-7.4.6-Matrix.tar.gz
++sha256  7c8c891b4e0e7c8334e5e5eca91a9868e6737e52df12213b888942f940572136  kodi-pvr-vuplus-7.4.7-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+index 691b2cb62f..5511f33153 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_VUPLUS_VERSION = 7.4.6-Matrix
++KODI_PVR_VUPLUS_VERSION = 7.4.7-Matrix
+ KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
+ KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
+ KODI_PVR_VUPLUS_LICENSE_FILES = LICENSE.md
