@@ -1,34 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 23:27:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version
- 2.32.2
-In-Reply-To: <20210712192434.2229658-1-aperez@igalia.com>
-References: <20210712192434.2229658-1-aperez@igalia.com>
-Message-ID: <20210716232704.11b7138a@windsurf>
+Date: Fri, 16 Jul 2021 23:27:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iproute2: bump version to 5.13.0
+In-Reply-To: <20210712201052.11911-1-petr.vorel@gmail.com>
+References: <20210712201052.11911-1-petr.vorel@gmail.com>
+Message-ID: <20210716232713.0f5f3637@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Mon, 12 Jul 2021 22:24:34 +0300
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+On Mon, 12 Jul 2021 22:10:52 +0200
+Petr Vorel <petr.vorel@gmail.com> wrote:
 
-> Bugfix release, mainly solves a few issues with input events,
-> drag-and-drop, and a few crashes. Release notes:
+> NOTE: 0001-lib-fs-fix-issue-when-name-open-_to_handle_at-is-not.patch
+> will be merged in 5.14.0.
 > 
->   https://webkitgtk.org/2021/07/09/webkitgtk2.32.2-released.html
-> 
-> The patch for building against uClibc has been included in this release,
-> therefore "0001-Support-building-against-uClibc.patch" is removed.
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
->  ...0001-Support-building-against-uClibc.patch | 82 -------------------
->  package/webkitgtk/webkitgtk.hash              |  8 +-
->  package/webkitgtk/webkitgtk.mk                |  2 +-
->  3 files changed, 5 insertions(+), 87 deletions(-)
->  delete mode 100644 package/webkitgtk/0001-Support-building-against-uClibc.patch
+> Hi,
 
 Applied to master, thanks.
 
