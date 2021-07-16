@@ -1,56 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 23:29:05 +0200
-Subject: [Buildroot] [git commit] configs/warp7: bump Kernel and U-Boot
- version
-Message-ID: <20210716205559.2482E911CB@busybox.osuosl.org>
+Date: Fri, 16 Jul 2021 23:28:59 +0200
+Subject: [Buildroot] [git commit] package/uboot-tools: bump to version
+ 2021.07
+Message-ID: <20210716205559.1BE7E911C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bce4aa8a8bf0728e5f7bc2ee2ed4fbae80c721fa
+commit: https://git.buildroot.net/buildroot/commit/?id=ec2289fbb7898c482a36623e281898a5f801867a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Bump U-Boot to 2021.07 and kernel to version 5.13
 
 Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 Reviewed-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/warp7_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/uboot-tools/uboot-tools.hash | 2 +-
+ package/uboot-tools/uboot-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
-index 5f9d973663..23ae4c2257 100644
---- a/configs/warp7_defconfig
-+++ b/configs/warp7_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
+index 9a0b0cb6b0..5a48926ebe 100644
+--- a/package/uboot-tools/uboot-tools.hash
++++ b/package/uboot-tools/uboot-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  0d438b1bb5cceb57a18ea2de4a0d51f7be5b05b98717df05938636e0aadfe11a  u-boot-2021.04.tar.bz2
++sha256  312b7eeae44581d1362c3a3f02c28d806647756c82ba8c72241c7cdbe68ba77e  u-boot-2021.07.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 8963d6182e..b378ab65f4 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 5.8 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
-+# Linux headers same as kernel, a 5.13 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
-@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="warp7"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
- BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
- 
- # wifi firmware for brcm43430
+-UBOOT_TOOLS_VERSION = 2021.04
++UBOOT_TOOLS_VERSION = 2021.07
+ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPL-2.0+
