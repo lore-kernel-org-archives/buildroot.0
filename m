@@ -1,8 +1,10 @@
 From: Alexey Neyman <stilor@att.net>
-Date: Fri, 16 Jul 2021 12:43:11 -0700
-Subject: [Buildroot] [PATCH 1/2] qemu: do not use deprecated option
-References: <bf5d0d0a-4f4b-d5c4-f109-2cff58def4a6.ref@att.net>
-Message-ID: <bf5d0d0a-4f4b-d5c4-f109-2cff58def4a6@att.net>
+Date: Fri, 16 Jul 2021 12:43:36 -0700
+Subject: [Buildroot] [PATCH 2/2] qemu: filter out long make options
+In-Reply-To: <fc1c119c-9e06-1925-e010-878627d2b067@att.net>
+References: <fc1c119c-9e06-1925-e010-878627d2b067.ref@att.net>
+ <fc1c119c-9e06-1925-e010-878627d2b067@att.net>
+Message-ID: <38dc3afc-069c-7481-5a52-fb0d9cf71e7b@att.net>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
@@ -14,8 +16,8 @@ Content-Transfer-Encoding: 7bit
 
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: 0001-qemu-do-not-use-deprecated-option.patch
+Name: 0002-qemu-filter-out-long-make-options.patch
 Type: text/x-patch
-Size: 952 bytes
+Size: 2014 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210716/4a50c63c/attachment-0001.bin>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210716/a98ad212/attachment-0001.bin>
