@@ -1,35 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Jul 2021 00:00:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tpm2-tools: add
- TPM2_TOOLS_CPE_ID_VENDOR
-Message-ID: <20210716220011.345184-1-fontaine.fabrice@gmail.com>
+Date: Sat, 17 Jul 2021 00:09:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtirpc: install rpc.h
+Message-ID: <20210716220941.347189-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-cpe:2.3:a:tpm2-tools_project:tpm2-tools is a valid CPE identifier for
-this package:
+Install rpc.h to avoid the following build failure with host-nfs-utils
+in version 2.5.4 raised since commit
+0ce30de72fb303768c5865949b8ce9260d0c43f5:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atpm2-tools_project%3Atpm2-tools
+checking rpc/rpc.h usability... no
+checking rpc/rpc.h presence... no
+checking for rpc/rpc.h... no
+configure: error: Header file rpc/rpc.h not found - maybe try building with --enable-tirpc
+
+This build failure is raised by
+http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=be7365239abf8556773b063730621967b9971708
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a5eaf19f58729c4c00a2131b6a0c378c0fc0effb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/tpm2-tools/tpm2-tools.mk | 1 +
+ package/libtirpc/libtirpc.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
-index e83db416aa..584b4edb54 100644
---- a/package/tpm2-tools/tpm2-tools.mk
-+++ b/package/tpm2-tools/tpm2-tools.mk
-@@ -8,6 +8,7 @@ TPM2_TOOLS_VERSION = 4.3.2
- TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
- TPM2_TOOLS_LICENSE = BSD-3-Clause
- TPM2_TOOLS_LICENSE_FILES = doc/LICENSE
-+TPM2_TOOLS_CPE_ID_VENDOR = tpm2-tools_project
- TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf util-linux
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+index 2678c144e9..8cdc453cd4 100644
+--- a/package/libtirpc/libtirpc.mk
++++ b/package/libtirpc/libtirpc.mk
+@@ -21,6 +21,7 @@ LIBTIRPC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DGQ"
+ LIBTIRPC_CONF_OPTS = --disable-gssapi
  
- # -fstack-protector-all and FORTIFY_SOURCE=2 is used by
+ define HOST_LIBTIRPC_INSTALL_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/tirpc/rpc/rpc.h $(HOST_DIR)/include/rpc/rpc.h
+ 	$(INSTALL) -D -m 0644 $(@D)/tirpc/rpc/types.h $(HOST_DIR)/include/rpc/types.h
+ 	$(INSTALL) -D -m 0644 $(@D)/tirpc/netconfig.h $(HOST_DIR)/include/netconfig.h
+ endef
 -- 
 2.30.2
