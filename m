@@ -1,40 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 23:17:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qpid-proton: bump to version
- 0.35.0
-In-Reply-To: <20210710142135.1328702-1-fontaine.fabrice@gmail.com>
-References: <20210710142135.1328702-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210716231708.0b8e64b0@windsurf>
+Date: Fri, 16 Jul 2021 23:18:35 +0200
+Subject: [Buildroot] [git commit] package/qemu: virtfs needs system
+Message-ID: <20210716204455.10E4691153@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sat, 10 Jul 2021 16:21:35 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9905fea69ee6682fdbb3c683efc9d9cdcd672ad9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Drop patches (already in version)
-> - host-python3 is mandatory since
->   https://github.com/apache/qpid-proton/commit/70ace037684f39c2d68681ef32302d38a9e06fac
-> 
-> https://qpid.apache.org/releases/qpid-proton-0.35.0/release-notes.html
-> https://qpid.apache.org/releases/qpid-proton-0.34.0/release-notes.html
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...r-epoll-internal.h-fix-build-on-musl.patch | 43 -------------
->  ...N-2355-Fix-build-with-DPROACTOR-none.patch | 61 -------------------
->  package/qpid-proton/qpid-proton.hash          |  4 +-
->  package/qpid-proton/qpid-proton.mk            |  6 +-
->  4 files changed, 5 insertions(+), 109 deletions(-)
->  delete mode 100644 package/qpid-proton/0001-c-src-proactor-epoll-internal.h-fix-build-on-musl.patch
->  delete mode 100644 package/qpid-proton/0002-PROTON-2355-Fix-build-with-DPROACTOR-none.patch
+build of qemu with virtfs but without system fails since bump to version
+6.0.0 in commit	6b86c9335fc3ff381878156c6243454d4b688df9:
 
-Applied to master, thanks.
+../meson.build:1077:6: ERROR: Problem encountered: virtio-9p (virtfs) needs system emulation support
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Indeed virtfs needs system support since switch to meson in
+https://gitlab.com/qemu-project/qemu/-/commit/69202b406e3a42621a063c3afe80f580d343f59e
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ee4b2bbc08c58dc972d285eafa43b7ad6586f270
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qemu/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index 3163797067..2dcf5631e5 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -82,6 +82,7 @@ config BR2_PACKAGE_HOST_QEMU_VDE2
+ 
+ config BR2_PACKAGE_HOST_QEMU_VIRTFS
+ 	bool "Virtual filesystem support"
++	depends on BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
+ 	help
+ 	  Enables support for virtual filesystem in Qemu allowing
+ 	  shared filesystem between Qemu and its emulated target.
