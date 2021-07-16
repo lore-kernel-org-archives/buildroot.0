@@ -1,27 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 23:09:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/stm32flash: bump to version 0.6
-In-Reply-To: <20210715125619.521764-1-bernhard.petschina@gmail.com>
-References: <20210715125619.521764-1-bernhard.petschina@gmail.com>
-Message-ID: <20210716230904.0cc74e4b@windsurf>
+Date: Fri, 16 Jul 2021 23:09:52 +0200
+Subject: [Buildroot] [PATCH v2 1/1] {linux,
+ linux-headers}: bump 5.13 to 5.13.2
+In-Reply-To: <20210716010020.3295725-1-james.hilliard1@gmail.com>
+References: <20210716010020.3295725-1-james.hilliard1@gmail.com>
+Message-ID: <20210716230952.38662412@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Thu, 15 Jul 2021 14:56:19 +0200
-Bernhard Petschina <bernhard.petschina@gmail.com> wrote:
+On Thu, 15 Jul 2021 19:00:20 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Bump to latest official version.
-> 
-> Signed-off-by: Bernhard Petschina <bernhard.petschina@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/stm32flash/stm32flash.hash | 2 +-
->  package/stm32flash/stm32flash.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Changes v1 -> v2:
+>   - also bump headers
+> ---
+>  linux/Config.in                      | 2 +-
+>  linux/linux.hash                     | 2 +-
+>  package/linux-headers/Config.in.host | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Thanks for new version, however I'm afraid this lacks an update to
+linux-headers.hash :-/
 
 Thomas
 -- 
