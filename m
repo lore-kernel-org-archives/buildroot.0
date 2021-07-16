@@ -1,50 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 23:32:20 +0200
-Subject: [Buildroot] [git commit] package/suricata: security bump to version
- 6.0.3
-Message-ID: <20210716205839.211BE91218@busybox.osuosl.org>
+Date: Fri, 16 Jul 2021 23:32:14 +0200
+Subject: [Buildroot] [git commit] package/libhtp: bump to version 0.5.38
+Message-ID: <20210716205839.11BC991217@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c429c3f8c322381991a58fcc37c01da9eb5e8a6
+commit: https://git.buildroot.net/buildroot/commit/?id=48c9adbe70846388bb20aa7a481cfb53fea9d0d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Various security, performance, accuracy and stability issues have been
-fixed, including a critical evasion assigned CVE-2021-35063.
-
-https://forum.suricata.io/t/suricata-6-0-3-and-5-0-7-released/1489
+https://github.com/OISF/libhtp/releases/tag/0.5.38
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/suricata/suricata.hash | 2 +-
- package/suricata/suricata.mk   | 2 +-
+ package/libhtp/libhtp.hash | 2 +-
+ package/libhtp/libhtp.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
-index 8395177811..74cc7435cb 100644
---- a/package/suricata/suricata.hash
-+++ b/package/suricata/suricata.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
+index 805cd4f1f3..91c20697df 100644
+--- a/package/libhtp/libhtp.hash
++++ b/package/libhtp/libhtp.hash
+@@ -1,3 +1,3 @@
  # Locally computed:
--sha256  5e4647a07cb31b5d6d0049972a45375c137de908a964a44e2d6d231fa3ad4b52  suricata-6.0.2.tar.gz
-+sha256  daf134bb2d7c980035e9ae60f7aaf313323a809340009f26e48110ccde81f602  suricata-6.0.3.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index ab8f27c313..ebeaa68d34 100644
---- a/package/suricata/suricata.mk
-+++ b/package/suricata/suricata.mk
+-sha256  0f8296ce9db815bbedc1c8a0b738dd25146fdaf910995a8c5f8e147799902b7e  libhtp-0.5.37.tar.gz
++sha256  8365f338fdf5ef0f3b37f3cb4e2670d218c843eccc42aa87119819c0f018ef39  libhtp-0.5.38.tar.gz
+ sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
+diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
+index 7520346031..982ffe81cb 100644
+--- a/package/libhtp/libhtp.mk
++++ b/package/libhtp/libhtp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SURICATA_VERSION = 6.0.2
-+SURICATA_VERSION = 6.0.3
- SURICATA_SITE = https://www.openinfosecfoundation.org/download
- SURICATA_LICENSE = GPL-2.0
- SURICATA_LICENSE_FILES = COPYING LICENSE
+-LIBHTP_VERSION = 0.5.37
++LIBHTP_VERSION = 0.5.38
+ LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
+ LIBHTP_LICENSE = BSD-3-Clause
+ LIBHTP_LICENSE_FILES = LICENSE
