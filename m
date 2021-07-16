@@ -1,61 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Jul 2021 23:29:17 +0200
-Subject: [Buildroot] [PATCH] boot/uboot: add missing dependency to
- host-pkgconf
-Message-ID: <20210715212917.484349-1-yann.morin.1998@free.fr>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu, 15 Jul 2021 18:55:51 -0600
+Subject: [Buildroot] [PATCH v3 1/2] package/libtirpc: Add optional GSSAPI
+ support
+Message-ID: <20210716005552.3295142-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Commit 2eaa6d0f3629 (boot/uboot: fix uboot building host tools on x86
-architecture) added use of $(PKG_CONFIG_HOST_BINARY), but forgot to add
-the corresponding build-ordr dependency.
-
-Add this missing depenency now.
-
-Additionally, the associated test had an explicit host pkgconf enbled in
-its configuration. This is superfluous now that uboot properly depends
-on host-pkgconf, so drop that from the test.
-
-Note: it hapenned to work, because host-pkgconf, when explicitly enabled
-in the configuration, and without per-package directories, would build
-before uboot and thus be available. This would fail with PPD, though,
-and thus would break for TLPB.
-
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Kory Maincent <kory.maincent@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- boot/uboot/uboot.mk                                           | 2 +-
- support/testing/tests/package/test_uboot_openssl_pkgconfig.py | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
+Changes v2 -> v3:
+  - use krb5-config instead of -lgssapi_krb5
+---
+ package/libtirpc/Config.in   | 8 ++++++++
+ package/libtirpc/libtirpc.mk | 8 +++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index a7eaedb06f..a8a8bedc01 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -17,7 +17,7 @@ UBOOT_CPE_ID_PRODUCT = u-boot
- UBOOT_INSTALL_IMAGES = YES
+diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
+index 2e9c939fa8..1899edefbf 100644
+--- a/package/libtirpc/Config.in
++++ b/package/libtirpc/Config.in
+@@ -7,5 +7,13 @@ config BR2_PACKAGE_LIBTIRPC
  
- # u-boot 2020.01+ needs make 4.0+
--UBOOT_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
-+UBOOT_DEPENDENCIES = host-pkgconf $(BR2_MAKE_HOST_DEPENDENCY)
- UBOOT_MAKE = $(BR2_MAKE)
+ 	  http://sourceforge.net/projects/libtirpc/
  
- ifeq ($(UBOOT_VERSION),custom)
-diff --git a/support/testing/tests/package/test_uboot_openssl_pkgconfig.py b/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
-index de2d83f5b8..55a45f44fc 100644
---- a/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
-+++ b/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
-@@ -12,7 +12,6 @@ class TestUbootOpensslPkgConfig(infra.basetest.BRTest):
-         BR2_TARGET_UBOOT=y
-         BR2_TARGET_UBOOT_BOARD_DEFCONFIG="efi-x86_payload64"
-         BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
--        BR2_PACKAGE_HOST_PKGCONF=y
-         """
++config BR2_PACKAGE_LIBTIRPC_GSS
++	bool "gss"
++	depends on BR2_USE_MMU # libkrb5
++	depends on BR2_PACKAGE_LIBTIRPC
++	select BR2_PACKAGE_LIBKRB5
++	help
++	  Enable GSSAPI support
++
+ comment "libtirpc needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+index 2678c144e9..fa14636e63 100644
+--- a/package/libtirpc/libtirpc.mk
++++ b/package/libtirpc/libtirpc.mk
+@@ -18,7 +18,13 @@ LIBTIRPC_AUTORECONF = YES
+ # getrpcby{number,name} are only provided if 'GQ' is defined
+ LIBTIRPC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DGQ"
  
-     def test_run(self):
+-LIBTIRPC_CONF_OPTS = --disable-gssapi
++ifeq ($(BR2_PACKAGE_LIBTIRPC_GSS),y)
++LIBTIRPC_CONF_ENV += KRB5_CONFIG=$(STAGING_DIR)/usr/bin/krb5-config
++LIBTIRPC_CONF_OPTS += --enable-gssapi
++LIBTIRPC_DEPENDENCIES += libkrb5
++else
++LIBTIRPC_CONF_OPTS += --disable-gssapi
++endif
+ 
+ define HOST_LIBTIRPC_INSTALL_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/tirpc/rpc/types.h $(HOST_DIR)/include/rpc/types.h
 -- 
 2.25.1
