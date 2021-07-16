@@ -1,41 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 23:21:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tftpd: fix static build
-In-Reply-To: <20210710084313.893425-1-fontaine.fabrice@gmail.com>
-References: <20210710084313.893425-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210716232144.7a9d3371@windsurf>
+Date: Fri, 16 Jul 2021 23:22:25 +0200
+Subject: [Buildroot] [git commit] package/libuhttpd: fix build with wolfssl
+Message-ID: <20210716204843.A1FA891163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=14e4f25483c56db94e7adcbcc2e3cac804d16073
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 10 Jul 2021 10:43:13 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Build with wolfssl is broken since bump to version 3.12.1 in commit
+4d85defa7103aadc74223868fb83ed0bed144f4d:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/913e8b75422c8beba60df5ea2e2c9e431364566e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0002-__progname-is-provided-by-libc.patch | 65 +++++++++++++++++++
->  1 file changed, 65 insertions(+)
->  create mode 100644 package/tftpd/0002-__progname-is-provided-by-libc.patch
+/data/buildroot-autobuilder/instance-0/output-1/build/libuhttpd-3.12.1/src/ssl/openssl.c: In function 'ssl_context_new':
+/data/buildroot-autobuilder/instance-0/output-1/build/libuhttpd-3.12.1/src/ssl/openssl.c:180:32: error: 'SSL_OP_NO_SSLv3' undeclared (first use in this function); did you mean 'WOLFSSL_OP_NO_SSLv3'?
+  180 |         SSL_CTX_set_options(c, SSL_OP_NO_SSLv3 | SSL_OP_NO_TLSv1 | SSL_OP_NO_TLSv1_1);
+      |                                ^~~~~~~~~~~~~~~
+      |                                WOLFSSL_OP_NO_SSLv3
 
-Thanks for the patch. However as usual, the question is: why is this
-suddenly happening? There hasn't been any recent update to the tftpd
-package, so why are we seeing this now? Or this an old issue we had
-never fixed?
+This build failure is raised by
+https://github.com/zhaojh329/libuhttpd/commit/0fb46935f0cd5f737c6f4e6053d62268aca793a7
+as since this commit, libuhttpd expects that SSL_OP_NO_xxx are defined
+by wolfssl
 
-All this investigation is necessary to know if the fix is needed on our
-LTS branch.
+Fixes:
+ - http://autobuild.buildroot.org/results/79e3fa697537f2e33863e490b74ec881993eae73
 
-Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libuhttpd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libuhttpd/Config.in b/package/libuhttpd/Config.in
+index 1ab39c5878..9159341d89 100644
+--- a/package/libuhttpd/Config.in
++++ b/package/libuhttpd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBUHTTPD
+ 	bool "libuhttpd"
+ 	select BR2_PACKAGE_LIBEV
++	select BR2_PACKAGE_WOLFSSL_ALL if BR2_PACKAGE_WOLFSSL
+ 	help
+ 	  A lightweight and fully asynchronous HTTP server
+ 	  library based on libev
