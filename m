@@ -1,24 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Jul 2021 22:49:02 +0200
-Subject: [Buildroot] [PATCH] package/libgtk3: bump to version 3.24.29
-In-Reply-To: <20210710155838.76712-1-francois.perrad@gadz.org>
-References: <20210710155838.76712-1-francois.perrad@gadz.org>
-Message-ID: <20210716224902.6139bbcf@windsurf>
+Date: Fri, 16 Jul 2021 22:49:11 +0200
+Subject: [Buildroot] [PATCH] configs/imx7dpico: bump Kernel and U-Boot
+ version
+In-Reply-To: <20210710182137.3720-1-texier.pj2@gmail.com>
+References: <20210710182137.3720-1-texier.pj2@gmail.com>
+Message-ID: <20210716224911.330108b1@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sat, 10 Jul 2021 17:58:38 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+On Sat, 10 Jul 2021 20:21:37 +0200
+Pierre-Jean Texier <texier.pj2@gmail.com> wrote:
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Bump U-Boot to 2021.07 and kernel to version 5.13
+> 
+> Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 > ---
->  package/libgtk3/0001-no-gtk-doc.patch | 2 +-
->  package/libgtk3/libgtk3.hash          | 4 ++--
->  package/libgtk3/libgtk3.mk            | 2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
+>  configs/imx7dpico_defconfig | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
