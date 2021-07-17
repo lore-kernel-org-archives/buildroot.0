@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Jul 2021 12:02:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/putty: fix CVE-2021-36367
-In-Reply-To: <20210717091619.674195-1-fontaine.fabrice@gmail.com>
-References: <20210717091619.674195-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210717100243.GO12203@scaer>
+Date: Sat, 17 Jul 2021 12:02:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/avahi: fix CVE-2021-36217
+In-Reply-To: <20210717093313.954035-1-fontaine.fabrice@gmail.com>
+References: <20210717093313.954035-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210717100257.GP12203@scaer>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
@@ -12,13 +12,10 @@ Content-Transfer-Encoding: 7bit
 
 Fabrice, All,
 
-On 2021-07-17 11:16 +0200, Fabrice Fontaine spake thusly:
-> PuTTY through 0.75 proceeds with establishing an SSH session even if it
-> has never sent a substantive authentication response. This makes it
-> easier for an attacker-controlled SSH server to present a later spoofed
-> authentication prompt (that the attacker can use to capture credential
-> data, and use that data for purposes that are undesired by the client
-> user).
+On 2021-07-17 11:33 +0200, Fabrice Fontaine spake thusly:
+> Avahi 0.8 allows a local denial of service (NULL pointer dereference and
+> daemon crash) against avahi-daemon via the D-Bus interface or a "ping
+> .local" command.
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -28,479 +25,183 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  ...o-reject-trivial-success-of-userauth.patch | 448 ++++++++++++++++++
->  package/putty/putty.mk                        |   3 +
->  2 files changed, 451 insertions(+)
->  create mode 100644 package/putty/0002-New-option-to-reject-trivial-success-of-userauth.patch
+>  ...01-Fix-NULL-pointer-crashes-from-175.patch | 152 ++++++++++++++++++
+>  package/avahi/avahi.mk                        |   3 +
+>  2 files changed, 155 insertions(+)
+>  create mode 100644 package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
 > 
-> diff --git a/package/putty/0002-New-option-to-reject-trivial-success-of-userauth.patch b/package/putty/0002-New-option-to-reject-trivial-success-of-userauth.patch
+> diff --git a/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch b/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
 > new file mode 100644
-> index 0000000000..83b93a346c
+> index 0000000000..7e191e8da7
 > --- /dev/null
-> +++ b/package/putty/0002-New-option-to-reject-trivial-success-of-userauth.patch
-> @@ -0,0 +1,448 @@
-> +From 1dc5659aa62848f0aeb5de7bd3839fecc7debefa Mon Sep 17 00:00:00 2001
-> +From: Simon Tatham <anakin@pobox.com>
-> +Date: Sat, 19 Jun 2021 15:39:15 +0100
-> +Subject: [PATCH] New option to reject 'trivial' success of userauth.
+> +++ b/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
+> @@ -0,0 +1,152 @@
+> +From 9d31939e55280a733d930b15ac9e4dda4497680c Mon Sep 17 00:00:00 2001
+> +From: Tommi Rantala <tommi.t.rantala@nokia.com>
+> +Date: Mon, 8 Feb 2021 11:04:43 +0200
+> +Subject: [PATCH] Fix NULL pointer crashes from #175
 > +
-> +Suggested by Manfred Kaiser, who also wrote most of this patch
-> +(although outlying parts, like documentation and SSH-1 support, are by
-> +me).
+> +avahi-daemon is crashing when running "ping .local".
+> +The crash is due to failing assertion from NULL pointer.
+> +Add missing NULL pointer checks to fix it.
 > +
-> +This is a second line of defence against the kind of spoofing attacks
-> +in which a malicious or compromised SSH server rushes the client
-> +through the userauth phase of SSH without actually requiring any auth
-> +inputs (passwords or signatures or whatever), and then at the start of
-> +the connection phase it presents something like a spoof prompt,
-> +intended to be taken for part of userauth by the user but in fact with
-> +some more sinister purpose.
-> +
-> +Our existing line of defence against this is the trust sigil system,
-> +and as far as I know, that's still working. This option allows a bit of
-> +extra defence in depth: if you don't expect your SSH server to
-> +trivially accept authentication in the first place, then enabling this
-> +option will cause PuTTY to disconnect if it unexpectedly does so,
-> +without the user having to spot the presence or absence of a fiddly
-> +little sigil anywhere.
-> +
-> +Several types of authentication count as 'trivial'. The obvious one is
-> +the SSH-2 "none" method, which clients always try first so that the
-> +failure message will tell them what else they can try, and which a
-> +server can instead accept in order to authenticate you unconditionally.
-> +But there are two other ways to do it that we know of: one is to run
-> +keyboard-interactive authentication and send an empty INFO_REQUEST
-> +packet containing no actual prompts for the user, and another even
-> +weirder one is to send USERAUTH_SUCCESS in response to the user's
-> +preliminary *offer* of a public key (instead of sending the usual PK_OK
-> +to request an actual signature from the key).
-> +
-> +This new option detects all of those, by clearing the 'is_trivial_auth'
-> +flag only when we send some kind of substantive authentication response
-> +(be it a password, a k-i prompt response, a signature, or a GSSAPI
-> +token). So even if there's a further path through the userauth maze we
-> +haven't spotted, that somehow avoids sending anything substantive, this
-> +strategy should still pick it up.
-> +
-> +(cherry picked from commit 5f5c710cf3704737e24ffceb2c918e412a2a674f)
+> +Introduced in #175 - merge commit 8f75a045709a780c8cf92a6a21e9d35b593bdecd
 > +
 > +[Retrieved from:
-> +https://git.tartarus.org/?p=simon/putty.git;a=commit;h=1dc5659aa62848f0aeb5de7bd3839fecc7debefa]
+> +https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c]
 > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > +---
-> + cmdline.c          |  8 ++++++++
-> + config.c           |  4 ++++
-> + doc/config.but     | 43 +++++++++++++++++++++++++++++++++++++++++++
-> + pscp.c             |  2 ++
-> + psftp.c            |  2 ++
-> + putty.h            |  1 +
-> + settings.c         |  2 ++
-> + ssh.c              |  4 +++-
-> + ssh1login.c        | 14 +++++++++++++-
-> + ssh2userauth.c     | 20 ++++++++++++++++----
-> + sshppl.h           |  2 +-
-> + unix/uxplink.c     |  2 ++
-> + windows/winhelp.h  |  1 +
-> + windows/winplink.c |  2 ++
-> + 14 files changed, 100 insertions(+), 7 deletions(-)
+> + avahi-core/browse-dns-server.c   | 5 ++++-
+> + avahi-core/browse-domain.c       | 5 ++++-
+> + avahi-core/browse-service-type.c | 3 +++
+> + avahi-core/browse-service.c      | 3 +++
+> + avahi-core/browse.c              | 3 +++
+> + avahi-core/resolve-address.c     | 5 ++++-
+> + avahi-core/resolve-host-name.c   | 5 ++++-
+> + avahi-core/resolve-service.c     | 5 ++++-
+> + 8 files changed, 29 insertions(+), 5 deletions(-)
 > +
-> +diff --git a/cmdline.c b/cmdline.c
-> +index 7ea5cacc..62d65e19 100644
-> +--- a/cmdline.c
-> ++++ b/cmdline.c
-> +@@ -598,6 +598,14 @@ int cmdline_process_param(const char *p, char *value,
-> +         SAVEABLE(0);
-> +         conf_set_bool(conf, CONF_tryagent, false);
-> +     }
+> +diff --git a/avahi-core/browse-dns-server.c b/avahi-core/browse-dns-server.c
+> +index 049752e9..c2d914fa 100644
+> +--- a/avahi-core/browse-dns-server.c
+> ++++ b/avahi-core/browse-dns-server.c
+> +@@ -343,7 +343,10 @@ AvahiSDNSServerBrowser *avahi_s_dns_server_browser_new(
+> +         AvahiSDNSServerBrowser* b;
+> + 
+> +         b = avahi_s_dns_server_browser_prepare(server, interface, protocol, domain, type, aprotocol, flags, callback, userdata);
+> ++        if (!b)
+> ++            return NULL;
 > ++
-> ++    if (!strcmp(p, "-no-trivial-auth")) {
-> ++        RETURN(1);
-> ++        UNAVAILABLE_IN(TOOLTYPE_NONNETWORK);
-> ++        SAVEABLE(0);
-> ++        conf_set_bool(conf, CONF_ssh_no_trivial_userauth, true);
-> ++    }
+> +         avahi_s_dns_server_browser_start(b);
+> + 
+> +         return b;
+> +-}
+> +\ No newline at end of file
+> ++}
+> +diff --git a/avahi-core/browse-domain.c b/avahi-core/browse-domain.c
+> +index f145d56a..06fa70c0 100644
+> +--- a/avahi-core/browse-domain.c
+> ++++ b/avahi-core/browse-domain.c
+> +@@ -253,7 +253,10 @@ AvahiSDomainBrowser *avahi_s_domain_browser_new(
+> +         AvahiSDomainBrowser *b;
+> + 
+> +         b = avahi_s_domain_browser_prepare(server, interface, protocol, domain, type, flags, callback, userdata);
+> ++        if (!b)
+> ++            return NULL;
 > ++
-> +     if (!strcmp(p, "-share")) {
-> +         RETURN(1);
-> +         UNAVAILABLE_IN(TOOLTYPE_NONNETWORK);
-> +diff --git a/config.c b/config.c
-> +index ca808511..b8348530 100644
-> +--- a/config.c
-> ++++ b/config.c
-> +@@ -2772,6 +2772,10 @@ void setup_config_box(struct controlbox *b, bool midsession,
-> +                           HELPCTX(ssh_auth_bypass),
-> +                           conf_checkbox_handler,
-> +                           I(CONF_ssh_no_userauth));
-> ++            ctrl_checkbox(s, "Disconnect if authentication succeeds trivially",
-> ++                          'n', HELPCTX(ssh_no_trivial_userauth),
-> ++                          conf_checkbox_handler,
-> ++                          I(CONF_ssh_no_trivial_userauth));
+> +         avahi_s_domain_browser_start(b);
 > + 
-> +             s = ctrl_getset(b, "Connection/SSH/Auth", "methods",
-> +                             "Authentication methods");
-> +diff --git a/doc/config.but b/doc/config.but
-> +index a00ae476..77313282 100644
-> +--- a/doc/config.but
-> ++++ b/doc/config.but
-> +@@ -2623,6 +2623,49 @@ interact with them.)
-> + This option only affects SSH-2 connections. SSH-1 connections always
-> + require an authentication step.
+> +         return b;
+> +-}
+> +\ No newline at end of file
+> ++}
+> +diff --git a/avahi-core/browse-service-type.c b/avahi-core/browse-service-type.c
+> +index fdd22dcd..b1fc7af8 100644
+> +--- a/avahi-core/browse-service-type.c
+> ++++ b/avahi-core/browse-service-type.c
+> +@@ -171,6 +171,9 @@ AvahiSServiceTypeBrowser *avahi_s_service_type_browser_new(
+> +         AvahiSServiceTypeBrowser *b;
 > + 
-> ++\S{config-ssh-notrivialauth} \q{Disconnect if authentication succeeds
-> ++trivially}
+> +         b = avahi_s_service_type_browser_prepare(server, interface, protocol, domain, flags, callback, userdata);
+> ++        if (!b)
+> ++            return NULL;
 > ++
-> ++This option causes PuTTY to abandon an SSH session and disconnect from
-> ++the server, if the server accepted authentication without ever having
-> ++asked for any kind of password or signature or token.
+> +         avahi_s_service_type_browser_start(b);
+> + 
+> +         return b;
+> +diff --git a/avahi-core/browse-service.c b/avahi-core/browse-service.c
+> +index 5531360c..63e0275a 100644
+> +--- a/avahi-core/browse-service.c
+> ++++ b/avahi-core/browse-service.c
+> +@@ -184,6 +184,9 @@ AvahiSServiceBrowser *avahi_s_service_browser_new(
+> +         AvahiSServiceBrowser *b;
+> + 
+> +         b = avahi_s_service_browser_prepare(server, interface, protocol, service_type, domain, flags, callback, userdata);
+> ++        if (!b)
+> ++            return NULL;
 > ++
-> ++This might be used as a security measure. There are some forms of
-> ++attack against an SSH client user which work by terminating the SSH
-> ++authentication stage early, and then doing something in the main part
-> ++of the SSH session which \e{looks} like part of the authentication,
-> ++but isn't really.
+> +         avahi_s_service_browser_start(b);
+> + 
+> +         return b;
+> +diff --git a/avahi-core/browse.c b/avahi-core/browse.c
+> +index 2941e579..e8a915e9 100644
+> +--- a/avahi-core/browse.c
+> ++++ b/avahi-core/browse.c
+> +@@ -634,6 +634,9 @@ AvahiSRecordBrowser *avahi_s_record_browser_new(
+> +         AvahiSRecordBrowser *b;
+> + 
+> +         b = avahi_s_record_browser_prepare(server, interface, protocol, key, flags, callback, userdata);
+> ++        if (!b)
+> ++            return NULL;
 > ++
-> ++For example, instead of demanding a signature from your public key,
-> ++for which PuTTY would ask for your key's passphrase, a compromised or
-> ++malicious server might allow you to log in with no signature or
-> ++password at all, and then print a message that \e{imitates} PuTTY's
-> ++request for your passphrase, in the hope that you would type it in.
-> ++(In fact, the passphrase for your public key should not be sent to any
-> ++server.)
+> +         avahi_s_record_browser_start_query(b);
+> + 
+> +         return b;
+> +diff --git a/avahi-core/resolve-address.c b/avahi-core/resolve-address.c
+> +index ac0b29b1..e61dd242 100644
+> +--- a/avahi-core/resolve-address.c
+> ++++ b/avahi-core/resolve-address.c
+> +@@ -286,7 +286,10 @@ AvahiSAddressResolver *avahi_s_address_resolver_new(
+> +         AvahiSAddressResolver *b;
+> + 
+> +         b = avahi_s_address_resolver_prepare(server, interface, protocol, address, flags, callback, userdata);
+> ++        if (!b)
+> ++            return NULL;
 > ++
-> ++PuTTY's main defence against attacks of this type is the \q{trust
-> ++sigil} system: messages in the PuTTY window that are truly originated
-> ++by PuTTY itself are shown next to a small copy of the PuTTY icon,
-> ++which the server cannot fake when it tries to imitate the same message
-> ++using terminal output.
+> +         avahi_s_address_resolver_start(b);
+> + 
+> +         return b;
+> +-}
+> +\ No newline at end of file
+> ++}
+> +diff --git a/avahi-core/resolve-host-name.c b/avahi-core/resolve-host-name.c
+> +index 808b0e72..4e8e5973 100644
+> +--- a/avahi-core/resolve-host-name.c
+> ++++ b/avahi-core/resolve-host-name.c
+> +@@ -318,7 +318,10 @@ AvahiSHostNameResolver *avahi_s_host_name_resolver_new(
+> +         AvahiSHostNameResolver *b;
+> + 
+> +         b = avahi_s_host_name_resolver_prepare(server, interface, protocol, host_name, aprotocol, flags, callback, userdata);
+> ++        if (!b)
+> ++            return NULL;
 > ++
-> ++However, if you think you might be at risk of this kind of thing
-> ++anyway (if you don't watch closely for the trust sigils, or if you
-> ++think you're at extra risk of one of your servers being malicious),
-> ++then you could enable this option as an extra defence. Then, if the
-> ++server tries any of these attacks involving letting you through the
-> ++authentication stage, PuTTY will disconnect from the server before it
-> ++can send a follow-up fake prompt or other type of attack.
+> +         avahi_s_host_name_resolver_start(b);
+> + 
+> +         return b;
+> +-}
+> +\ No newline at end of file
+> ++}
+> +diff --git a/avahi-core/resolve-service.c b/avahi-core/resolve-service.c
+> +index 66bf3cae..43771763 100644
+> +--- a/avahi-core/resolve-service.c
+> ++++ b/avahi-core/resolve-service.c
+> +@@ -519,7 +519,10 @@ AvahiSServiceResolver *avahi_s_service_resolver_new(
+> +         AvahiSServiceResolver *b;
+> + 
+> +         b = avahi_s_service_resolver_prepare(server, interface, protocol, name, type, domain, aprotocol, flags, callback, userdata);
+> ++        if (!b)
+> ++            return NULL;
 > ++
-> ++On the other hand, some servers \e{legitimately} let you through the
-> ++SSH authentication phase trivially, either because they are genuinely
-> ++public, or because the important authentication step happens during
-> ++the terminal session. (An example might be an SSH server that connects
-> ++you directly to the terminal login prompt of a legacy mainframe.) So
-> ++enabling this option might cause some kinds of session to stop
-> ++working. It's up to you.
-> ++
-> + \S{config-ssh-tryagent} \q{Attempt authentication using Pageant}
+> +         avahi_s_service_resolver_start(b);
 > + 
-> + If this option is enabled, then PuTTY will look for Pageant (the SSH
-> +diff --git a/pscp.c b/pscp.c
-> +index 0bfda92d..a11d1e18 100644
-> +--- a/pscp.c
-> ++++ b/pscp.c
-> +@@ -2203,6 +2203,8 @@ static void usage(void)
-> +     printf("  -i key    private key file for user authentication\n");
-> +     printf("  -noagent  disable use of Pageant\n");
-> +     printf("  -agent    enable use of Pageant\n");
-> ++    printf("  -no-trivial-auth\n");
-> ++    printf("            disconnect if SSH authentication succeeds trivially\n");
-> +     printf("  -hostkey keyid\n");
-> +     printf("            manually specify a host key (may be repeated)\n");
-> +     printf("  -batch    disable all interactive prompts\n");
-> +diff --git a/psftp.c b/psftp.c
-> +index 40cb73f5..c4b5374b 100644
-> +--- a/psftp.c
-> ++++ b/psftp.c
-> +@@ -2538,6 +2538,8 @@ static void usage(void)
-> +     printf("  -i key    private key file for user authentication\n");
-> +     printf("  -noagent  disable use of Pageant\n");
-> +     printf("  -agent    enable use of Pageant\n");
-> ++    printf("  -no-trivial-auth\n");
-> ++    printf("            disconnect if SSH authentication succeeds trivially\n");
-> +     printf("  -hostkey keyid\n");
-> +     printf("            manually specify a host key (may be repeated)\n");
-> +     printf("  -batch    disable all interactive prompts\n");
-> +diff --git a/putty.h b/putty.h
-> +index ef6f7a37..7789f217 100644
-> +--- a/putty.h
-> ++++ b/putty.h
-> +@@ -1428,6 +1428,7 @@ NORETURN void cleanup_exit(int);
-> +     X(INT, NONE, sshprot) \
-> +     X(BOOL, NONE, ssh2_des_cbc) /* "des-cbc" unrecommended SSH-2 cipher */ \
-> +     X(BOOL, NONE, ssh_no_userauth) /* bypass "ssh-userauth" (SSH-2 only) */ \
-> ++    X(BOOL, NONE, ssh_no_trivial_userauth) /* disable trivial types of auth */ \
-> +     X(BOOL, NONE, ssh_show_banner) /* show USERAUTH_BANNERs (SSH-2 only) */ \
-> +     X(BOOL, NONE, try_tis_auth) \
-> +     X(BOOL, NONE, try_ki_auth) \
-> +diff --git a/settings.c b/settings.c
-> +index 547af0dc..32a53c54 100644
-> +--- a/settings.c
-> ++++ b/settings.c
-> +@@ -609,6 +609,7 @@ void save_open_settings(settings_w *sesskey, Conf *conf)
-> + #endif
-> +     write_setting_s(sesskey, "RekeyBytes", conf_get_str(conf, CONF_ssh_rekey_data));
-> +     write_setting_b(sesskey, "SshNoAuth", conf_get_bool(conf, CONF_ssh_no_userauth));
-> ++    write_setting_b(sesskey, "SshNoTrivialAuth", conf_get_bool(conf, CONF_ssh_no_trivial_userauth));
-> +     write_setting_b(sesskey, "SshBanner", conf_get_bool(conf, CONF_ssh_show_banner));
-> +     write_setting_b(sesskey, "AuthTIS", conf_get_bool(conf, CONF_try_tis_auth));
-> +     write_setting_b(sesskey, "AuthKI", conf_get_bool(conf, CONF_try_ki_auth));
-> +@@ -1025,6 +1026,7 @@ void load_open_settings(settings_r *sesskey, Conf *conf)
-> +     gpps(sesskey, "LogHost", "", conf, CONF_loghost);
-> +     gppb(sesskey, "SSH2DES", false, conf, CONF_ssh2_des_cbc);
-> +     gppb(sesskey, "SshNoAuth", false, conf, CONF_ssh_no_userauth);
-> ++    gppb(sesskey, "SshNoTrivialAuth", false, conf, CONF_ssh_no_trivial_userauth);
-> +     gppb(sesskey, "SshBanner", true, conf, CONF_ssh_show_banner);
-> +     gppb(sesskey, "AuthTIS", false, conf, CONF_try_tis_auth);
-> +     gppb(sesskey, "AuthKI", true, conf, CONF_try_ki_auth);
-> +diff --git a/ssh.c b/ssh.c
-> +index 00a516ea..91e7e869 100644
-> +--- a/ssh.c
-> ++++ b/ssh.c
-> +@@ -254,7 +254,9 @@ static void ssh_got_ssh_version(struct ssh_version_receiver *rcv,
-> +                     connection_layer, ssh->savedhost, ssh->fullhostname,
-> +                     conf_get_filename(ssh->conf, CONF_keyfile),
-> +                     conf_get_bool(ssh->conf, CONF_ssh_show_banner),
-> +-                    conf_get_bool(ssh->conf, CONF_tryagent), username,
-> ++                    conf_get_bool(ssh->conf, CONF_tryagent),
-> ++                    conf_get_bool(ssh->conf, CONF_ssh_no_trivial_userauth),
-> ++                    username,
-> +                     conf_get_bool(ssh->conf, CONF_change_username),
-> +                     conf_get_bool(ssh->conf, CONF_try_ki_auth),
-> + #ifndef NO_GSSAPI
-> +diff --git a/ssh1login.c b/ssh1login.c
-> +index 8486cbf0..519838d7 100644
-> +--- a/ssh1login.c
-> ++++ b/ssh1login.c
-> +@@ -27,7 +27,7 @@ struct ssh1_login_state {
-> + 
-> +     char *savedhost;
-> +     int savedport;
-> +-    bool try_agent_auth;
-> ++    bool try_agent_auth, is_trivial_auth;
-> + 
-> +     int remote_protoflags;
-> +     int local_protoflags;
-> +@@ -105,6 +105,8 @@ PacketProtocolLayer *ssh1_login_new(
-> +     s->savedhost = dupstr(host);
-> +     s->savedport = port;
-> +     s->successor_layer = successor_layer;
-> ++    s->is_trivial_auth = true;
-> ++
-> +     return &s->ppl;
-> + }
-> + 
-> +@@ -645,6 +647,7 @@ static void ssh1_login_process_queue(PacketProtocolLayer *ppl)
-> +                                 s->ppl.bpp, SSH1_CMSG_AUTH_RSA_RESPONSE);
-> +                             put_data(pkt, ret + 5, 16);
-> +                             pq_push(s->ppl.out_pq, pkt);
-> ++                            s->is_trivial_auth = false;
-> +                             crMaybeWaitUntilV(
-> +                                 (pktin = ssh1_login_pop(s))
-> +                                 != NULL);
-> +@@ -814,6 +817,7 @@ static void ssh1_login_process_queue(PacketProtocolLayer *ppl)
-> +                         s->ppl.bpp, SSH1_CMSG_AUTH_RSA_RESPONSE);
-> +                     put_data(pkt, buffer, 16);
-> +                     pq_push(s->ppl.out_pq, pkt);
-> ++                    s->is_trivial_auth = false;
-> + 
-> +                     mp_free(challenge);
-> +                     mp_free(response);
-> +@@ -1105,6 +1109,7 @@ static void ssh1_login_process_queue(PacketProtocolLayer *ppl)
-> +             put_stringz(pkt, prompt_get_result_ref(s->cur_prompt->prompts[0]));
-> +             pq_push(s->ppl.out_pq, pkt);
-> +         }
-> ++        s->is_trivial_auth = false;
-> +         ppl_logevent("Sent password");
-> +         free_prompts(s->cur_prompt);
-> +         s->cur_prompt = NULL;
-> +@@ -1121,6 +1126,13 @@ static void ssh1_login_process_queue(PacketProtocolLayer *ppl)
-> +         }
-> +     }
-> + 
-> ++    if (conf_get_bool(s->conf, CONF_ssh_no_trivial_userauth) &&
-> ++        s->is_trivial_auth) {
-> ++        ssh_proto_error(s->ppl.ssh, "Authentication was trivial! "
-> ++                        "Abandoning session as specified in configuration.");
-> ++        return;
-> ++    }
-> ++
-> +     ppl_logevent("Authentication successful");
-> + 
-> +     if (conf_get_bool(s->conf, CONF_compression)) {
-> +diff --git a/ssh2userauth.c b/ssh2userauth.c
-> +index 01243baf..451d5abe 100644
-> +--- a/ssh2userauth.c
-> ++++ b/ssh2userauth.c
-> +@@ -28,7 +28,7 @@ struct ssh2_userauth_state {
-> + 
-> +     PacketProtocolLayer *transport_layer, *successor_layer;
-> +     Filename *keyfile;
-> +-    bool show_banner, tryagent, change_username;
-> ++    bool show_banner, tryagent, notrivialauth, change_username;
-> +     char *hostname, *fullhostname;
-> +     char *default_username;
-> +     bool try_ki_auth, try_gssapi_auth, try_gssapi_kex_auth, gssapi_fwd;
-> +@@ -82,6 +82,7 @@ struct ssh2_userauth_state {
-> +     int len;
-> +     PktOut *pktout;
-> +     bool want_user_input;
-> ++    bool is_trivial_auth;
-> + 
-> +     agent_pending_query *auth_agent_query;
-> +     bufchain banner;
-> +@@ -134,7 +135,7 @@ static const PacketProtocolLayerVtable ssh2_userauth_vtable = {
-> + PacketProtocolLayer *ssh2_userauth_new(
-> +     PacketProtocolLayer *successor_layer,
-> +     const char *hostname, const char *fullhostname,
-> +-    Filename *keyfile, bool show_banner, bool tryagent,
-> ++    Filename *keyfile, bool show_banner, bool tryagent, bool notrivialauth,
-> +     const char *default_username, bool change_username,
-> +     bool try_ki_auth, bool try_gssapi_auth, bool try_gssapi_kex_auth,
-> +     bool gssapi_fwd, struct ssh_connection_shared_gss_state *shgss)
-> +@@ -149,6 +150,7 @@ PacketProtocolLayer *ssh2_userauth_new(
-> +     s->keyfile = filename_copy(keyfile);
-> +     s->show_banner = show_banner;
-> +     s->tryagent = tryagent;
-> ++    s->notrivialauth = notrivialauth;
-> +     s->default_username = dupstr(default_username);
-> +     s->change_username = change_username;
-> +     s->try_ki_auth = try_ki_auth;
-> +@@ -157,6 +159,7 @@ PacketProtocolLayer *ssh2_userauth_new(
-> +     s->gssapi_fwd = gssapi_fwd;
-> +     s->shgss = shgss;
-> +     s->last_methods_string = strbuf_new();
-> ++    s->is_trivial_auth = true;
-> +     bufchain_init(&s->banner);
-> +     bufchain_sink_init(&s->banner_bs, &s->banner);
-> + 
-> +@@ -818,6 +821,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +                                 sigblob);
-> +                             pq_push(s->ppl.out_pq, s->pktout);
-> +                             s->type = AUTH_TYPE_PUBLICKEY;
-> ++                            s->is_trivial_auth = false;
-> +                         } else {
-> +                             ppl_logevent("Pageant refused signing request");
-> +                             ppl_printf("Pageant failed to "
-> +@@ -1038,6 +1042,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +                     ssh_key_free(key->key);
-> +                     sfree(key->comment);
-> +                     sfree(key);
-> ++                    s->is_trivial_auth = false;
-> +                 }
-> + 
-> + #ifndef NO_GSSAPI
-> +@@ -1169,6 +1174,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +                      * no longer says CONTINUE_NEEDED
-> +                      */
-> +                     if (s->gss_sndtok.length != 0) {
-> ++                        s->is_trivial_auth = false;
-> +                         s->pktout =
-> +                             ssh_bpp_new_pktout(
-> +                                 s->ppl.bpp, SSH2_MSG_USERAUTH_GSSAPI_TOKEN);
-> +@@ -1288,7 +1294,6 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +                  * Loop while the server continues to send INFO_REQUESTs.
-> +                  */
-> +                 while (pktin->type == SSH2_MSG_USERAUTH_INFO_REQUEST) {
-> +-
-> +                     ptrlen name, inst;
-> +                     strbuf *sb;
-> + 
-> +@@ -1308,6 +1313,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +                      */
-> +                     s->num_prompts = get_uint32(pktin);
-> +                     for (uint32_t i = 0; i < s->num_prompts; i++) {
-> ++                        s->is_trivial_auth = false;
-> +                         ptrlen prompt = get_string(pktin);
-> +                         bool echo = get_bool(pktin);
-> + 
-> +@@ -1472,7 +1478,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +                 pq_push_front(s->ppl.in_pq, pktin);
-> + 
-> +             } else if (s->can_passwd) {
-> +-
-> ++                s->is_trivial_auth = false;
-> +                 /*
-> +                  * Plain old password authentication.
-> +                  */
-> +@@ -1731,6 +1737,12 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +     }
-> + 
-> +   userauth_success:
-> ++    if (s->notrivialauth && s->is_trivial_auth) {
-> ++        ssh_proto_error(s->ppl.ssh, "Authentication was trivial! "
-> ++                        "Abandoning session as specified in configuration.");
-> ++        return;
-> ++    }
-> ++
-> +     /*
-> +      * We've just received USERAUTH_SUCCESS, and we haven't sent
-> +      * any packets since. Signal the transport layer to consider
-> +diff --git a/sshppl.h b/sshppl.h
-> +index b339d67c..2c1dbf42 100644
-> +--- a/sshppl.h
-> ++++ b/sshppl.h
-> +@@ -116,7 +116,7 @@ PacketProtocolLayer *ssh2_transport_new(
-> + PacketProtocolLayer *ssh2_userauth_new(
-> +     PacketProtocolLayer *successor_layer,
-> +     const char *hostname, const char *fullhostname,
-> +-    Filename *keyfile, bool show_banner, bool tryagent,
-> ++    Filename *keyfile, bool show_banner, bool tryagent, bool notrivialauth,
-> +     const char *default_username, bool change_username,
-> +     bool try_ki_auth,
-> +     bool try_gssapi_auth, bool try_gssapi_kex_auth,
-> +diff --git a/unix/uxplink.c b/unix/uxplink.c
-> +index 3e2a9b6b..240783f4 100644
-> +--- a/unix/uxplink.c
-> ++++ b/unix/uxplink.c
-> +@@ -527,6 +527,8 @@ static void usage(void)
-> +     printf("  -i key    private key file for user authentication\n");
-> +     printf("  -noagent  disable use of Pageant\n");
-> +     printf("  -agent    enable use of Pageant\n");
-> ++    printf("  -no-trivial-auth\n");
-> ++    printf("            disconnect if SSH authentication succeeds trivially\n");
-> +     printf("  -noshare  disable use of connection sharing\n");
-> +     printf("  -share    enable use of connection sharing\n");
-> +     printf("  -hostkey keyid\n");
-> +diff --git a/windows/winhelp.h b/windows/winhelp.h
-> +index ae5a7a7f..9011df45 100644
-> +--- a/windows/winhelp.h
-> ++++ b/windows/winhelp.h
-> +@@ -111,6 +111,7 @@
-> + #define WINHELP_CTX_ssh_kex_repeat "config-ssh-kex-rekey"
-> + #define WINHELP_CTX_ssh_kex_manual_hostkeys "config-ssh-kex-manual-hostkeys"
-> + #define WINHELP_CTX_ssh_auth_bypass "config-ssh-noauth"
-> ++#define WINHELP_CTX_ssh_no_trivial_userauth "config-ssh-notrivialauth"
-> + #define WINHELP_CTX_ssh_auth_banner "config-ssh-banner"
-> + #define WINHELP_CTX_ssh_auth_privkey "config-ssh-privkey"
-> + #define WINHELP_CTX_ssh_auth_agentfwd "config-ssh-agentfwd"
-> +diff --git a/windows/winplink.c b/windows/winplink.c
-> +index 9bda0712..58d43e6d 100644
-> +--- a/windows/winplink.c
-> ++++ b/windows/winplink.c
-> +@@ -149,6 +149,8 @@ static void usage(void)
-> +     printf("  -i key    private key file for user authentication\n");
-> +     printf("  -noagent  disable use of Pageant\n");
-> +     printf("  -agent    enable use of Pageant\n");
-> ++    printf("  -no-trivial-auth\n");
-> ++    printf("            disconnect if SSH authentication succeeds trivially\n");
-> +     printf("  -noshare  disable use of connection sharing\n");
-> +     printf("  -share    enable use of connection sharing\n");
-> +     printf("  -hostkey keyid\n");
-> +-- 
-> +2.20.1
-> +
-> diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-> index 1e5a89ea9f..a1c588a382 100644
-> --- a/package/putty/putty.mk
-> +++ b/package/putty/putty.mk
-> @@ -11,6 +11,9 @@ PUTTY_LICENSE_FILES = LICENCE
->  PUTTY_CPE_ID_VENDOR = putty
->  PUTTY_CONF_OPTS = --disable-gtktest
+> +         return b;
+> +-}
+> +\ No newline at end of file
+> ++}
+> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+> index 1d57aa14e2..9de6ebc4d2 100644
+> --- a/package/avahi/avahi.mk
+> +++ b/package/avahi/avahi.mk
+> @@ -16,6 +16,9 @@ AVAHI_INSTALL_STAGING = YES
+>  # part of the Debian packaging and not part of upstream avahi
+>  AVAHI_IGNORE_CVES += CVE-2021-26720
 >  
-> +# 0002-New-option-to-reject-trivial-success-of-userauth.patch
-> +PUTTY_IGNORE_CVES += CVE-2021-36367
+> +# 0001-Fix-NULL-pointer-crashes-from-175.patch
+> +AVAHI_IGNORE_CVES += CVE-2021-36217
 > +
->  ifeq ($(BR2_PACKAGE_LIBGTK2),y)
->  PUTTY_CONF_OPTS += --with-gtk=2
->  PUTTY_DEPENDENCIES += libgtk2
+>  AVAHI_CONF_ENV = \
+>  	avahi_cv_sys_cxx_works=yes \
+>  	DATADIRNAME=share
 > -- 
 > 2.30.2
 > 
