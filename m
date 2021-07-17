@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Jul 2021 11:39:54 +0200
-Subject: [Buildroot] [PATCH] relocate-sdk: Allow relocating to any
- location
-In-Reply-To: <20200328234945.12552-1-glex.spb@gmail.com>
-References: <20200328234945.12552-1-glex.spb@gmail.com>
-Message-ID: <20210717093954.GJ12203@scaer>
+Date: Sat, 17 Jul 2021 11:43:50 +0200
+Subject: [Buildroot] [PATCH v5 1/1] Makefile: Parallelize glibc locale
+ generation
+In-Reply-To: <20210103171525.2323323-1-glex.spb@gmail.com>
+References: <20210103171525.2323323-1-glex.spb@gmail.com>
+Message-ID: <20210717094350.GK12203@scaer>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
@@ -13,78 +13,136 @@ Content-Transfer-Encoding: 7bit
 
 Gleb, All,
 
-On 2020-03-28 23:49 +0000, Gleb Mazovetskiy spake thusly:
-> Previously, the script could only relocate to the current location.
++Peter, Thomas, Arnout: for review. I was too involved in setting up
+this change, so I am not in the best position to correctly review it.
 
-I am not sure to understand what you mean...
-
-The SDK can already be relocated to any location:
-
-    $ cd /path/to/anywhere
-    $ tar xf /path/to/sdk.tar
-    $ ./relocate-sdk
-
-> This caused issues for SDK maintainers, as the default target location
-> (e.g. /opt/my-sdk) would need to be created and the content copied
-> to it during the build process, which is error-prone.
-> 
-> With this change you can now pass a target location argument to
-> ./relocate-sdk.sh (this does not move the directory).
-
-I fail to see the purpose for that... If the SDK is not there, what is
-the point of relocating to a location where the SDK is not?
-
-Eventually, the user will have to either extract the SDK in the proper
-location, or move it there, so whether they are able to run the script
-prior to the move does not seem very interesting...
-
-So, I am far from convinced by this change... :-(
-
-Additionally, last time I had to touch on the SDK topic, I got seriously
-burnt, so I'd like that people that have a better grasp, the history, and
-some beliefs, in the SDK, look at that patch, please...
+Of course, if anyone else want to review/test this, they are welcome to
+do so!
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  support/misc/relocate-sdk.sh | 19 ++++++++++++-------
->  1 file changed, 12 insertions(+), 7 deletions(-)
+On 2021-01-03 17:15 +0000, Gleb Mazovetskiy spake thusly:
+> Parallelizes locale generation based on `BR2_JLEVEL` setting.
 > 
-> diff --git a/support/misc/relocate-sdk.sh b/support/misc/relocate-sdk.sh
-> index caabeaa6f6..981d272425 100755
-> --- a/support/misc/relocate-sdk.sh
-> +++ b/support/misc/relocate-sdk.sh
-> @@ -1,15 +1,20 @@
->  #!/bin/sh
-> -#
-> -if [ "$#" -ne 0 ]; then
-> -    echo "Run this script to relocate the buildroot SDK at that location"
+> Locale generation always runs during the finalize stage and can consume
+> a significant amount of time. Parallelizing it greatly reduces that time
+> on multi-core machines.
+> 
+> To parallelize it, we first invoke `localedef` for every locale in
+> parallel with the `--no-archive` option. This creates the intermediate
+> locale data instead of writing to the finally archive directly.
+> 
+> Then, we invoke `localedef` again once to create the archive from the
+> intermediate compiled locale data files.
+> 
+> We have to do it this way because `localedef` does not do any locking
+> when writing to the archive file, so calling it without `--no-archive`
+> concurrently could result in a corrupt archive file or an archive file
+> that is missing some locales.
+> 
+> Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+> ---
+>  Makefile                          | 29 +++++++---------------
+>  support/misc/gen-glibc-locales.mk | 41 +++++++++++++++++++++++++++++++
+>  2 files changed, 50 insertions(+), 20 deletions(-)
+>  create mode 100644 support/misc/gen-glibc-locales.mk
+> 
+> diff --git a/Makefile b/Makefile
+> index 4d334adcd6..dbeabf9e61 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -661,32 +661,21 @@ endef
+>  TARGET_FINALIZE_HOOKS += TOOLCHAIN_ECLIPSE_REGISTER
+>  endif
+>  
+> -# Generate locale data. Basically, we call the localedef program
+> -# (built by the host-localedef package) for each locale. The input
+> -# data comes preferably from the toolchain, or if the toolchain does
+> -# not have them (Linaro toolchains), we use the ones available on the
+> -# host machine.
+> +# Generate locale data.
+>  ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+>  GLIBC_GENERATE_LOCALES = $(call qstrip,$(BR2_GENERATE_LOCALE))
+>  ifneq ($(GLIBC_GENERATE_LOCALES),)
+>  PACKAGES += host-localedef
+>  
+>  define GENERATE_GLIBC_LOCALES
+> -	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
+> -	$(Q)for locale in $(GLIBC_GENERATE_LOCALES) ; do \
+> -		inputfile=`echo $${locale} | cut -f1 -d'.'` ; \
+> -		charmap=`echo $${locale} | cut -f2 -d'.' -s` ; \
+> -		if test -z "$${charmap}" ; then \
+> -			charmap="UTF-8" ; \
+> -		fi ; \
+> -		echo "Generating locale $${inputfile}.$${charmap}" ; \
+> -		I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
+> -		$(HOST_DIR)/bin/localedef \
+> -			--prefix=$(TARGET_DIR) \
+> -			--$(call LOWERCASE,$(BR2_ENDIAN))-endian \
+> -			-i $${inputfile} -f $${charmap} \
+> -			$${locale} ; \
+> -	done
+> +	$(TARGET_CONFIGURE_OPTS) \
+> +	$(MAKE) -j$(PARALLEL_JOBS) -f support/misc/gen-glibc-locales.mk \
+> +		HOST_DIR=$(HOST_DIR) \
+> +		TARGET_DIR=$(TARGET_DIR) \
+> +		STAGING_DIR=$(STAGING_DIR) \
+> +		ENDIAN=$(call LOWERCASE,$(BR2_ENDIAN)) \
+> +		LOCALES="$(GLIBC_GENERATE_LOCALES)" \
+> +		Q=$(Q)
+>  endef
+>  TARGET_FINALIZE_HOOKS += GENERATE_GLIBC_LOCALES
+>  endif
+> diff --git a/support/misc/gen-glibc-locales.mk b/support/misc/gen-glibc-locales.mk
+> new file mode 100644
+> index 0000000000..3db1e0dc11
+> --- /dev/null
+> +++ b/support/misc/gen-glibc-locales.mk
+> @@ -0,0 +1,41 @@
+> +# Generates glibc locale data for target.
 > +
-> +if [ "$#" -gt 1 ]; then
-> +    echo "Usage: $0 [path]"
-> +    echo "Run this script to relocate the buildroot SDK to the current location"
-> +    echo "If [path] is given, sets the location to [path] (without moving it)"
->      exit 1
->  fi
->  
-> -LOCFILE="share/buildroot/sdk-location"
-> -FILEPATH="$(readlink -f "$0")"
-> -NEWPATH="$(dirname "${FILEPATH}")"
-> +cd "$(dirname "$(readlink -f "$0")")"
-> +if [ "$#" -eq 1 ]; then
-> +    NEWPATH="$1"
-> +else
-> +    NEWPATH="${PWD}"
-> +fi
->  
-> -cd "${NEWPATH}"
-> +LOCFILE="share/buildroot/sdk-location"
->  if [ ! -r "${LOCFILE}" ]; then
->      echo "Previous location of the buildroot SDK not found!"
->      exit 1
+> +inputfile = $(firstword $(subst ., ,$(1)))
+> +charmap = $(or $(word 2,$(subst ., ,$(1))),UTF-8)
+> +
+> +# Packages all the generated locale data into the final archive.
+> +#
+> +# We sort the file names to produce consistent output regardless of
+> +# the `find` outputs order.
+> +$(TARGET_DIR)/usr/lib/locale/locale-archive: $(LOCALES)
+> +	$(Q)rm -f $(@)
+> +	$(Q)find $(TARGET_DIR)/usr/lib/locale/ -maxdepth 1 -mindepth 1 -type d -print0 \
+> +	| sort -z \
+> +	| xargs -0 \
+> +		$(HOST_DIR)/bin/localedef \
+> +			--prefix=$(TARGET_DIR) \
+> +			--$(ENDIAN)-endian \
+> +			--add-to-archive
+> +
+> +# Generates locale data for each locale.
+> +#
+> +# The input data comes preferably from the toolchain, or if the toolchain
+> +# does not have them (Linaro toolchains), we use the ones available on the
+> +# host machine.
+> +#
+> +# Uses `localedef`, which is built by the `host-localedef` package.
+> +$(LOCALES): | $(TARGET_DIR)/usr/lib/locale/
+> +	$(Q)echo "Generating locale $(@)"
+> +	$(Q)I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
+> +	$(HOST_DIR)/bin/localedef \
+> +		--prefix=$(TARGET_DIR) \
+> +		--$(ENDIAN)-endian \
+> +		--no-archive \
+> +		-i $(call inputfile,$(@)) \
+> +		-f $(call charmap,$(@)) \
+> +		$(@)
+> +
+> +.PHONY: $(LOCALES)
+> +
+> +$(TARGET_DIR)/usr/lib/locale/:
+> +	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
 > -- 
-> 2.20.1
+> 2.27.0
 > 
 > _______________________________________________
 > buildroot mailing list
