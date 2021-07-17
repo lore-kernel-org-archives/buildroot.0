@@ -1,46 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 Jul 2021 20:27:36 +0200
-Subject: [Buildroot] [PATCH 2/5] package/kodi-inputstream-ffmpegdirect: bump
- version to 1.21.7-Matrix
+Date: Sat, 17 Jul 2021 20:27:38 +0200
+Subject: [Buildroot] [PATCH 4/5] package/kodi-visualisation-starburst: bump
+ version to 19.0.0-Matrix
 In-Reply-To: <20210717182739.7558-1-bernd.kuhls@t-online.de>
 References: <20210717182739.7558-1-bernd.kuhls@t-online.de>
-Message-ID: <20210717182739.7558-2-bernd.kuhls@t-online.de>
+Message-ID: <20210717182739.7558-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Changelog:
-https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/inputstream.ffmpegdirect/changelog.txt
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-inputstream-ffmpegdirect.hash                          | 2 +-
- .../kodi-inputstream-ffmpegdirect.mk                            | 2 +-
+ .../kodi-visualisation-starburst.hash                           | 2 +-
+ .../kodi-visualisation-starburst.mk                             | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-index 01d2988c25..ba282caa8e 100644
---- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-+++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
+diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
+index b08da9788e..25026ef61e 100644
+--- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
++++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  72d07be3705820f264bf9b0942b0ba15f0a40a5867e976c15d017b408b4a122b  kodi-inputstream-ffmpegdirect-1.21.6-Matrix.tar.gz
-+sha256  73a21a8556c4270596f059ba26a77a071571ff87be670cddae25b61ee97617bb  kodi-inputstream-ffmpegdirect-1.21.7-Matrix.tar.gz
+-sha256  fb991924b8f9a4f86d81b28ec629c131d36364f82914098356184c9ef03e753e  kodi-visualisation-starburst-2.4.0-Matrix.tar.gz
++sha256  b610919fd181dac638cbcea3f88b01a0b3522941415fde8fab51a17a88f536e2  kodi-visualisation-starburst-19.0.0-Matrix.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-index b1673bed4a..cccc557694 100644
---- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-+++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
+diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
+index f19a82bf81..421b27d7d1 100644
+--- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
++++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.21.6-Matrix
-+KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.21.7-Matrix
- KODI_INPUTSTREAM_FFMPEGDIRECT_SITE = $(call github,xbmc,inputstream.ffmpegdirect,$(KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION))
- KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE_FILES = LICENSE.md
+-KODI_VISUALISATION_STARBURST_VERSION = 2.4.0-Matrix
++KODI_VISUALISATION_STARBURST_VERSION = 19.0.0-Matrix
+ KODI_VISUALISATION_STARBURST_SITE = $(call github,xbmc,visualization.starburst,$(KODI_VISUALISATION_STARBURST_VERSION))
+ KODI_VISUALISATION_STARBURST_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_STARBURST_LICENSE_FILES = LICENSE.md
 -- 
 2.30.2
