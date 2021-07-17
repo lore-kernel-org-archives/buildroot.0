@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BD97C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:35:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66FBBC432BE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:35:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4741560F70
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:35:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4741560F70
+	by mail.kernel.org (Postfix) with ESMTPS id 2041360F93
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:35:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2041360F93
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1FF5640137;
-	Tue,  3 Aug 2021 23:35:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA38183CBB;
+	Tue,  3 Aug 2021 23:35:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iQQvDDWI-Q40; Tue,  3 Aug 2021 23:35:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H6DWUOTJ2_Z6; Tue,  3 Aug 2021 23:35:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05476421FC;
-	Tue,  3 Aug 2021 23:35:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6111183C6E;
+	Tue,  3 Aug 2021 23:35:25 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1382E1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:16:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 255551BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:16:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EE4ED40EF6
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE69F40EF7
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ku6HCObOOw1E for <buildroot@lists.busybox.net>;
+ with ESMTP id FzlQIHwe9Rv2 for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6838540552
+ by smtp2.osuosl.org (Postfix) with ESMTP id 800B3406BC
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id B0EA787F55; Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
+ id C77D986A84; Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Jul 2021 10:08:19 +0200
+Date: Sat, 17 Jul 2021 10:10:06 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: aade2fd293fc8a13bc5665fa70a4002ddac9aae6
-X-Git-Newrev: f11128b779a7e285665902d09977f268b1bbee77
+X-Git-Oldrev: c64abc69349e28707a8861f0719edf65e7a91462
+X-Git-Newrev: 2170033bf68f1a34dc5d183d50e3f38d9779b6de
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211005.B0EA787F55@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libnice: bump to
- version 0.1.18
+Message-Id: <20210803211005.C77D986A84@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/duktape: add and
+ install a duktape.pc file
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,89 +70,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f11128b779a7e285665902d09977f268b1bbee77
+commit: https://git.buildroot.net/buildroot/commit/?id=2170033bf68f1a34dc5d183d50e3f38d9779b6de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Update indentation in hash file (two spaces)
-- Switch to meson-package
+Most distributions include a duktape.pc file bundled with the duktape
+development package. As the duktape source does not include a .pc file,
+add one to the package/duktape directory and install it to the staging
+directory. This is used by the polkit duktape patch later in the series.
 
-https://github.com/libnice/libnice/blob/0.1.18/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnice/libnice.hash |  8 ++++----
- package/libnice/libnice.mk   | 22 +++++++++++-----------
- 2 files changed, 15 insertions(+), 15 deletions(-)
+ package/duktape/duktape.mk    |  4 ++++
+ package/duktape/duktape.pc.in | 10 ++++++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/package/libnice/libnice.hash b/package/libnice/libnice.hash
-index 61be9517e3..55785cd5ff 100644
---- a/package/libnice/libnice.hash
-+++ b/package/libnice/libnice.hash
-@@ -1,7 +1,7 @@
- # Locally computed after checking pgp signature
--sha256 06b678066f94dde595a4291588ed27acd085ee73775b8c4e8399e28c01eeefdf libnice-0.1.16.tar.gz
-+sha256  5eabd25ba2b54e817699832826269241abaa1cf78f9b240d1435f936569273f4  libnice-0.1.18.tar.gz
+diff --git a/package/duktape/duktape.mk b/package/duktape/duktape.mk
+index aadd609248..89a6e451f5 100644
+--- a/package/duktape/duktape.mk
++++ b/package/duktape/duktape.mk
+@@ -19,6 +19,10 @@ endef
+ define DUKTAPE_INSTALL_STAGING_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f Makefile.sharedlibrary \
+ 		INSTALL_PREFIX=$(STAGING_DIR)/usr install
++	$(INSTALL) -D -m 0644 $(DUKTAPE_PKGDIR)/duktape.pc.in \
++		$(STAGING_DIR)/usr/lib/pkgconfig/duktape.pc
++	$(SED) 's/@VERSION@/$(DUKTAPE_VERSION)/g;' \
++		$(STAGING_DIR)/usr/lib/pkgconfig/duktape.pc
+ endef
  
- # Hash for license files:
--sha256 9246b2ee8b1db30cf03d5d9719ad8bb5edce1cadc85f8cfef319c23d24d950b5 COPYING
--sha256 3b3c75ae6c663c4f93987647eb5463d33dc1602a1aded3ac479773f2c3928e3a COPYING.MPL
--sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861 COPYING.LGPL
-+sha256  9246b2ee8b1db30cf03d5d9719ad8bb5edce1cadc85f8cfef319c23d24d950b5  COPYING
-+sha256  3b3c75ae6c663c4f93987647eb5463d33dc1602a1aded3ac479773f2c3928e3a  COPYING.MPL
-+sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LGPL
-diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
-index 8292250938..5889b24ba2 100644
---- a/package/libnice/libnice.mk
-+++ b/package/libnice/libnice.mk
-@@ -4,36 +4,36 @@
- #
- ################################################################################
- 
--LIBNICE_VERSION = 0.1.16
-+LIBNICE_VERSION = 0.1.18
- LIBNICE_SITE = http://nice.freedesktop.org/releases
- LIBNICE_LICENSE = MPL-1.1 or LGPL-2.1
- LIBNICE_LICENSE_FILES = COPYING COPYING.MPL COPYING.LGPL
- LIBNICE_DEPENDENCIES = libglib2 host-pkgconf
- LIBNICE_INSTALL_STAGING = YES
--LIBNICE_CONF_OPTS = --without-gstreamer-0.10
-+LIBNICE_CONF_OPTS = \
-+	-Dexamples=disabled \
-+	-Dtests=disabled
- 
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
--LIBNICE_CONF_OPTS += --with-crypto-library=gnutls
-+LIBNICE_CONF_OPTS += -Dcrypto-library=gnutls
- LIBNICE_DEPENDENCIES += gnutls
- else
--LIBNICE_CONF_OPTS += \
--	--with-crypto-library=openssl \
--	--with-openssl=$(STAGING_DIR)/usr
-+LIBNICE_CONF_OPTS += -Dcrypto-library=openssl
- LIBNICE_DEPENDENCIES += openssl
- endif
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--LIBNICE_CONF_OPTS += --enable-introspection
-+LIBNICE_CONF_OPTS += -Dintrospection=enabled
- LIBNICE_DEPENDENCIES += gobject-introspection
- else
--LIBNICE_CONF_OPTS += --disable-introspection
-+LIBNICE_CONF_OPTS += -Dintrospection=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
--LIBNICE_CONF_OPTS += --with-gstreamer
-+LIBNICE_CONF_OPTS += -Dgstreamer=enabled
- LIBNICE_DEPENDENCIES += gst1-plugins-base
- else
--LIBNICE_CONF_OPTS += --without-gstreamer
-+LIBNICE_CONF_OPTS += -Dgstreamer=disabled
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+ define DUKTAPE_INSTALL_TARGET_CMDS
+diff --git a/package/duktape/duktape.pc.in b/package/duktape/duktape.pc.in
+new file mode 100644
+index 0000000000..eaef5f6994
+--- /dev/null
++++ b/package/duktape/duktape.pc.in
+@@ -0,0 +1,10 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
++
++Name: duktape
++Description: Embeddable Javascript engine
++Version: @VERSION@
++Libs: -L${libdir} -lduktape
++Cflags: -I${includedir}/
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
