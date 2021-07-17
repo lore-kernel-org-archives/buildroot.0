@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 289FAC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:36:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A056AC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:36:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CD9FE60F93
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:36:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CD9FE60F93
+	by mail.kernel.org (Postfix) with ESMTPS id 41C7B60F70
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:36:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 41C7B60F70
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8EB142235;
-	Tue,  3 Aug 2021 23:36:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0D9FE404A8;
+	Tue,  3 Aug 2021 23:36:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oyhWXsO2t_eS; Tue,  3 Aug 2021 23:36:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id goG33oPGclqe; Tue,  3 Aug 2021 23:36:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5C344220C;
-	Tue,  3 Aug 2021 23:36:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA18740515;
+	Tue,  3 Aug 2021 23:36:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 422BA1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:16:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 531B01BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:16:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4598A40E85
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6010A40EF9
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ME6VOv98IJbs for <buildroot@lists.busybox.net>;
+ with ESMTP id X1FFpuvqvCBc for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE34140688
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9417040E8D
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 1EA7986A84; Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
+ id E84D187F55; Tue,  3 Aug 2021 21:10:05 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 17 Jul 2021 12:02:24 +0200
+Date: Sat, 17 Jul 2021 11:51:10 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1352b59eb2e48162af13d37287c00c23776b02bb
-X-Git-Newrev: dd7b9fa02bbac679540f50f69d175bac6af65904
+X-Git-Oldrev: 1cf3c394c7c40b1b093e4a77d5512d52ca3006e2
+X-Git-Newrev: dc1970260bed838022b4829da9e3bb75555e130e
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211006.1EA7986A84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/avahi: fix
- CVE-2021-36217
+Message-Id: <20210803211005.E84D187F55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/solarus: fix OpenGLES2
+ build
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,192 +70,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd7b9fa02bbac679540f50f69d175bac6af65904
+commit: https://git.buildroot.net/buildroot/commit/?id=dc1970260bed838022b4829da9e3bb75555e130e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Avahi 0.8 allows a local denial of service (NULL pointer dereference and
-daemon crash) against avahi-daemon via the D-Bus interface or a "ping
-.local" command.
+1. Adds a patch that fixes OpenGLES2 build
+   https://gitlab.com/solarus-games/solarus/-/merge_requests/1364
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+2. Updates Config.in and solarus.mk to support OpenGLES2
+
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+[yann.morin.1998@free.fr: renumber patch]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0001-Fix-NULL-pointer-crashes-from-175.patch   | 152 +++++++++++++++++++++
- package/avahi/avahi.mk                             |   3 +
- 2 files changed, 155 insertions(+)
+ .../0002-Add-a-basic-FindOpenGLES2.cmake.patch     | 48 ++++++++++++++++++++++
+ package/solarus/Config.in                          |  2 +-
+ package/solarus/solarus.mk                         |  9 +++-
+ 3 files changed, 57 insertions(+), 2 deletions(-)
 
-diff --git a/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch b/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
+diff --git a/package/solarus/0002-Add-a-basic-FindOpenGLES2.cmake.patch b/package/solarus/0002-Add-a-basic-FindOpenGLES2.cmake.patch
 new file mode 100644
-index 0000000000..7e191e8da7
+index 0000000000..59bf9e8cf4
 --- /dev/null
-+++ b/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
-@@ -0,0 +1,152 @@
-+From 9d31939e55280a733d930b15ac9e4dda4497680c Mon Sep 17 00:00:00 2001
-+From: Tommi Rantala <tommi.t.rantala@nokia.com>
-+Date: Mon, 8 Feb 2021 11:04:43 +0200
-+Subject: [PATCH] Fix NULL pointer crashes from #175
++++ b/package/solarus/0002-Add-a-basic-FindOpenGLES2.cmake.patch
+@@ -0,0 +1,48 @@
++From 2bf0e98f17d92fd86ee61be179e3cebe93f75ea7 Mon Sep 17 00:00:00 2001
++From: Gleb Mazovetskiy <glex.spb@gmail.com>
++Date: Sun, 3 Jan 2021 12:38:13 +0000
++Subject: [PATCH] Add a basic FindOpenGLES2.cmake
 +
-+avahi-daemon is crashing when running "ping .local".
-+The crash is due to failing assertion from NULL pointer.
-+Add missing NULL pointer checks to fix it.
-+
-+Introduced in #175 - merge commit 8f75a045709a780c8cf92a6a21e9d35b593bdecd
-+
-+[Retrieved from:
-+https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Fixes #1324
 +---
-+ avahi-core/browse-dns-server.c   | 5 ++++-
-+ avahi-core/browse-domain.c       | 5 ++++-
-+ avahi-core/browse-service-type.c | 3 +++
-+ avahi-core/browse-service.c      | 3 +++
-+ avahi-core/browse.c              | 3 +++
-+ avahi-core/resolve-address.c     | 5 ++++-
-+ avahi-core/resolve-host-name.c   | 5 ++++-
-+ avahi-core/resolve-service.c     | 5 ++++-
-+ 8 files changed, 29 insertions(+), 5 deletions(-)
++ cmake/modules/FindOpenGLES2.cmake | 28 ++++++++++++++++++++++++++++
++ 1 file changed, 28 insertions(+)
++ create mode 100644 cmake/modules/FindOpenGLES2.cmake
 +
-+diff --git a/avahi-core/browse-dns-server.c b/avahi-core/browse-dns-server.c
-+index 049752e9..c2d914fa 100644
-+--- a/avahi-core/browse-dns-server.c
-++++ b/avahi-core/browse-dns-server.c
-+@@ -343,7 +343,10 @@ AvahiSDNSServerBrowser *avahi_s_dns_server_browser_new(
-+         AvahiSDNSServerBrowser* b;
-+ 
-+         b = avahi_s_dns_server_browser_prepare(server, interface, protocol, domain, type, aprotocol, flags, callback, userdata);
-++        if (!b)
-++            return NULL;
++diff --git a/cmake/modules/FindOpenGLES2.cmake b/cmake/modules/FindOpenGLES2.cmake
++new file mode 100644
++index 000000000..70fd5e6f0
++--- /dev/null
+++++ b/cmake/modules/FindOpenGLES2.cmake
++@@ -0,0 +1,28 @@
+++# Try to find OpenGLES2. Once done this will define:
+++#     OPENGLES2_FOUND
+++#     OPENGLES2_INCLUDE_DIRS
+++#     OPENGLES2_LIBRARIES
+++#     OPENGLES2_DEFINITIONS
 ++
-+         avahi_s_dns_server_browser_start(b);
-+ 
-+         return b;
-+-}
-+\ No newline at end of file
-++}
-+diff --git a/avahi-core/browse-domain.c b/avahi-core/browse-domain.c
-+index f145d56a..06fa70c0 100644
-+--- a/avahi-core/browse-domain.c
-++++ b/avahi-core/browse-domain.c
-+@@ -253,7 +253,10 @@ AvahiSDomainBrowser *avahi_s_domain_browser_new(
-+         AvahiSDomainBrowser *b;
-+ 
-+         b = avahi_s_domain_browser_prepare(server, interface, protocol, domain, type, flags, callback, userdata);
-++        if (!b)
-++            return NULL;
+++find_package(PkgConfig QUIET)
 ++
-+         avahi_s_domain_browser_start(b);
-+ 
-+         return b;
-+-}
-+\ No newline at end of file
-++}
-+diff --git a/avahi-core/browse-service-type.c b/avahi-core/browse-service-type.c
-+index fdd22dcd..b1fc7af8 100644
-+--- a/avahi-core/browse-service-type.c
-++++ b/avahi-core/browse-service-type.c
-+@@ -171,6 +171,9 @@ AvahiSServiceTypeBrowser *avahi_s_service_type_browser_new(
-+         AvahiSServiceTypeBrowser *b;
-+ 
-+         b = avahi_s_service_type_browser_prepare(server, interface, protocol, domain, flags, callback, userdata);
-++        if (!b)
-++            return NULL;
+++pkg_check_modules(PC_OPENGLES2 glesv2)
 ++
-+         avahi_s_service_type_browser_start(b);
-+ 
-+         return b;
-+diff --git a/avahi-core/browse-service.c b/avahi-core/browse-service.c
-+index 5531360c..63e0275a 100644
-+--- a/avahi-core/browse-service.c
-++++ b/avahi-core/browse-service.c
-+@@ -184,6 +184,9 @@ AvahiSServiceBrowser *avahi_s_service_browser_new(
-+         AvahiSServiceBrowser *b;
-+ 
-+         b = avahi_s_service_browser_prepare(server, interface, protocol, service_type, domain, flags, callback, userdata);
-++        if (!b)
-++            return NULL;
+++if (PC_OPENGLES2_FOUND)
+++    set(OPENGLES2_DEFINITIONS ${PC_OPENGLES2_CFLAGS_OTHER})
+++endif ()
 ++
-+         avahi_s_service_browser_start(b);
-+ 
-+         return b;
-+diff --git a/avahi-core/browse.c b/avahi-core/browse.c
-+index 2941e579..e8a915e9 100644
-+--- a/avahi-core/browse.c
-++++ b/avahi-core/browse.c
-+@@ -634,6 +634,9 @@ AvahiSRecordBrowser *avahi_s_record_browser_new(
-+         AvahiSRecordBrowser *b;
-+ 
-+         b = avahi_s_record_browser_prepare(server, interface, protocol, key, flags, callback, userdata);
-++        if (!b)
-++            return NULL;
+++find_path(OPENGLES2_INCLUDE_DIRS NAMES GLES2/gl2.h
+++    HINTS ${PC_OPENGLES2_INCLUDEDIR} ${PC_OPENGLES2_INCLUDE_DIRS}
+++)
 ++
-+         avahi_s_record_browser_start_query(b);
-+ 
-+         return b;
-+diff --git a/avahi-core/resolve-address.c b/avahi-core/resolve-address.c
-+index ac0b29b1..e61dd242 100644
-+--- a/avahi-core/resolve-address.c
-++++ b/avahi-core/resolve-address.c
-+@@ -286,7 +286,10 @@ AvahiSAddressResolver *avahi_s_address_resolver_new(
-+         AvahiSAddressResolver *b;
-+ 
-+         b = avahi_s_address_resolver_prepare(server, interface, protocol, address, flags, callback, userdata);
-++        if (!b)
-++            return NULL;
+++set(OPENGLES2_NAMES ${OPENGLES2_NAMES} glesv2 GLESv2)
+++find_library(OPENGLES2_LIBRARIES NAMES ${OPENGLES2_NAMES}
+++    HINTS ${PC_OPENGLES2_LIBDIR} ${PC_OPENGLES2_LIBRARY_DIRS}
+++)
 ++
-+         avahi_s_address_resolver_start(b);
-+ 
-+         return b;
-+-}
-+\ No newline at end of file
-++}
-+diff --git a/avahi-core/resolve-host-name.c b/avahi-core/resolve-host-name.c
-+index 808b0e72..4e8e5973 100644
-+--- a/avahi-core/resolve-host-name.c
-++++ b/avahi-core/resolve-host-name.c
-+@@ -318,7 +318,10 @@ AvahiSHostNameResolver *avahi_s_host_name_resolver_new(
-+         AvahiSHostNameResolver *b;
-+ 
-+         b = avahi_s_host_name_resolver_prepare(server, interface, protocol, host_name, aprotocol, flags, callback, userdata);
-++        if (!b)
-++            return NULL;
+++include(FindPackageHandleStandardArgs)
+++find_package_handle_standard_args(OpenGLES2 REQUIRED_VARS OPENGLES2_INCLUDE_DIRS OPENGLES2_LIBRARIES
+++                                  FOUND_VAR OPENGLES2_FOUND)
 ++
-+         avahi_s_host_name_resolver_start(b);
-+ 
-+         return b;
-+-}
-+\ No newline at end of file
-++}
-+diff --git a/avahi-core/resolve-service.c b/avahi-core/resolve-service.c
-+index 66bf3cae..43771763 100644
-+--- a/avahi-core/resolve-service.c
-++++ b/avahi-core/resolve-service.c
-+@@ -519,7 +519,10 @@ AvahiSServiceResolver *avahi_s_service_resolver_new(
-+         AvahiSServiceResolver *b;
-+ 
-+         b = avahi_s_service_resolver_prepare(server, interface, protocol, name, type, domain, aprotocol, flags, callback, userdata);
-++        if (!b)
-++            return NULL;
-++
-+         avahi_s_service_resolver_start(b);
-+ 
-+         return b;
-+-}
-+\ No newline at end of file
-++}
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index b71fc189a0..9976df5357 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -15,6 +15,9 @@ AVAHI_INSTALL_STAGING = YES
- # part of the Debian packaging and not part of upstream avahi
- AVAHI_IGNORE_CVES += CVE-2021-26720
+++mark_as_advanced(OPENGLES2_INCLUDE_DIRS OPENGLES2_LIBRARIES)
++-- 
++2.27.0
++
+diff --git a/package/solarus/Config.in b/package/solarus/Config.in
+index b0f4121f6d..bcfa640890 100644
+--- a/package/solarus/Config.in
++++ b/package/solarus/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_SOLARUS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # openal
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
+ 	depends on !BR2_STATIC_LIBS # SDL2
+-	depends on BR2_PACKAGE_HAS_LIBGL
++	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_GLM
+ 	select BR2_PACKAGE_LIBMODPLUG
+ 	select BR2_PACKAGE_LIBOGG
+diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
+index 90cbf3e784..07d9af5248 100644
+--- a/package/solarus/solarus.mk
++++ b/package/solarus/solarus.mk
+@@ -16,7 +16,7 @@ SOLARUS_LICENSE_FILES = license.txt
+ # Install libsolarus.so
+ SOLARUS_INSTALL_STAGING = YES
  
-+# 0001-Fix-NULL-pointer-crashes-from-175.patch
-+AVAHI_IGNORE_CVES += CVE-2021-36217
+-SOLARUS_DEPENDENCIES = glm libgl libmodplug libogg libvorbis openal physfs \
++SOLARUS_DEPENDENCIES = glm libmodplug libogg libvorbis openal physfs \
+ 	sdl2 sdl2_image sdl2_ttf
+ 
+ # Disable launcher GUI (requires Qt5)
+@@ -24,6 +24,13 @@ SOLARUS_CONF_OPTS = \
+ 	-DSOLARUS_GUI=OFF \
+ 	-DSOLARUS_TESTS=OFF
+ 
++ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
++SOLARUS_DEPENDENCIES += libgl
++else
++SOLARUS_CONF_OPTS += -DSOLARUS_GL_ES=ON
++SOLARUS_DEPENDENCIES += libgles
++endif
 +
- AVAHI_CONF_ENV = \
- 	avahi_cv_sys_cxx_works=yes \
- 	DATADIRNAME=share
+ ifeq ($(BR2_PACKAGE_LUAJIT),y)
+ SOLARUS_CONF_OPTS += -DSOLARUS_USE_LUAJIT=ON
+ SOLARUS_DEPENDENCIES += luajit
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
