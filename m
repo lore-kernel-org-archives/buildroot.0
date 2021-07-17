@@ -1,35 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Jul 2021 23:24:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dovecot: ignore CVE-2016-4983
-Message-ID: <20210717212439.1146952-1-fontaine.fabrice@gmail.com>
+Date: Sat, 17 Jul 2021 23:48:53 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libuci: add LIBUCI_CPE_ID_VENDOR
+Message-ID: <20210717214854.1150900-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-CVE-2016-4983 is an issue in a postinstall script in the dovecot rpm,
-which is part of the Red Hat packaging and not part of upstream dovecot
+cpe:2.3:a:openwrt:libuci is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aopenwrt%3Alibuci
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dovecot/dovecot.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libuci/libuci.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 93d04fc8a1..cb1cc990a1 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -18,6 +18,10 @@ DOVECOT_DEPENDENCIES = \
- # add host-gettext for AM_ICONV macro
- DOVECOT_DEPENDENCIES += host-gettext
+diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
+index b7fd2ddb66..ae70b6f2af 100644
+--- a/package/libuci/libuci.mk
++++ b/package/libuci/libuci.mk
+@@ -9,6 +9,7 @@ LIBUCI_SITE = https://git.openwrt.org/project/uci.git
+ LIBUCI_SITE_METHOD = git
+ LIBUCI_LICENSE = LGPL-2.1, GPL-2.0 (tools)
+ LIBUCI_LICENSE_FILES = cli.c libuci.c
++LIBUCI_CPE_ID_VENDOR = openwrt
+ LIBUCI_INSTALL_STAGING = YES
+ LIBUCI_DEPENDENCIES = libubox
  
-+# CVE-2016-4983 is an issue in a postinstall script in the dovecot rpm, which
-+# is part of the Red Hat packaging and not part of upstream dovecot
-+DOVECOT_IGNORE_CVES += CVE-2016-4983
-+
- DOVECOT_CONF_ENV = \
- 	RPCGEN=__disable_RPCGEN_rquota \
- 	i_cv_epoll_works=yes \
 -- 
 2.30.2
