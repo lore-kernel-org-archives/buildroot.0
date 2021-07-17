@@ -1,36 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Jul 2021 11:53:45 +0200
-Subject: [Buildroot] [git commit] package/trinity: add TRINITY_CPE_ID_VENDOR
-Message-ID: <20210717092413.DECB49125E@busybox.osuosl.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 17 Jul 2021 04:01:08 -0600
+Subject: [Buildroot] [PATCH v2 1/1] {linux,
+ linux-headers}: bump 5.13 to 5.13.2
+In-Reply-To: <20210716230952.38662412@windsurf>
+References: <20210716010020.3295725-1-james.hilliard1@gmail.com>
+ <20210716230952.38662412@windsurf>
+Message-ID: <CADvTj4oUWPyQjasnxgfiGyWK4krMTb6y2bq1N3gwb-XciZK8RQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60ef5ab91001dbcaa03ac78e64e96274fe0d0399
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, Jul 16, 2021 at 3:09 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Thu, 15 Jul 2021 19:00:20 -0600
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> > Changes v1 -> v2:
+> >   - also bump headers
+> > ---
+> >  linux/Config.in                      | 2 +-
+> >  linux/linux.hash                     | 2 +-
+> >  package/linux-headers/Config.in.host | 2 +-
+> >  3 files changed, 3 insertions(+), 3 deletions(-)
+>
+> Thanks for new version, however I'm afraid this lacks an update to
+> linux-headers.hash :-/
 
-cpe:2.3:a:trinity_project:trinity is a valid CPE identifier for this
-package:
+Isn't that just a symlink?
+$ ls -laht package/linux-headers/linux-headers.hash
+lrwxrwxrwx 1 buildroot buildroot 22 Feb 24  2019
+package/linux-headers/linux-headers.hash -> ../../linux/linux.hash
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atrinity_project%3Atrinity
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/trinity/trinity.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
-index adf7d1455c..befb8de826 100644
---- a/package/trinity/trinity.mk
-+++ b/package/trinity/trinity.mk
-@@ -9,6 +9,7 @@ TRINITY_SITE = http://codemonkey.org.uk/projects/trinity
- TRINITY_SOURCE = trinity-$(TRINITY_VERSION).tar.xz
- TRINITY_LICENSE = GPL-2.0
- TRINITY_LICENSE_FILES = COPYING
-+TRINITY_CPE_ID_VENDOR = trinity_project
- 
- define TRINITY_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure)
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
