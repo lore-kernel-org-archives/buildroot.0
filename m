@@ -1,20 +1,20 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat, 17 Jul 2021 20:38:55 +0200
+Date: Sat, 17 Jul 2021 20:54:43 +0200
 Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: needs uuid
 In-Reply-To: <CAPi7W8374pd7M0yWznR3iFSDbnGseaMND3Yg91djd0dgVyjJkw@mail.gmail.com>
 References: <20210716210106.342232-1-fontaine.fabrice@gmail.com>
  <20210716230617.135b52e1@windsurf>
  <CAPi7W8374pd7M0yWznR3iFSDbnGseaMND3Yg91djd0dgVyjJkw@mail.gmail.com>
-Message-ID: <YPMjv1WxI7zjUgMN@pevik>
+Message-ID: <YPMnc22tcundvRmS@pevik>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hi all,
+Hi Fabrice,
 
-[Cc Steve and Neil]
+[Cc also James]
 
 > Le ven. 16 juil. 2021 ? 23:06, Thomas Petazzoni
 > <thomas.petazzoni@bootlin.com> a ?crit :
@@ -43,8 +43,6 @@ Hi all,
 >  171         if test "$enableval" = "yes" ; then choose_blkid=yes;
 > else choose_blkid=no; fi,
 >  172         choose_blkid=default)
-Yes I got confused by this as well. IMHO it'd be good to rename
---{enable,disable}-uuid to --{enable,disable}-blkid.
 
 >  403 if test "$choose_blkid" != no; then
 >  404    AC_CHECK_LIB(blkid, blkid_get_library_version,
@@ -72,12 +70,6 @@ Yes I got confused by this as well. IMHO it'd be good to rename
 > decided to hardcode -luuid for exportd and mountd and the commit
 > message seems to indicate that this change is intentional.
 
-That's how I understood it. IMHO buildroot should accept this fix.
-@Steve: it might be worth next time to mention new dependency in release notes.
-
-Kind regards,
-Petr
-
 > > Thomas
 > > --
 > > Thomas Petazzoni, co-owner and CEO, Bootlin
@@ -86,7 +78,10 @@ Petr
 > Best Regards,
 
 > Fabrice
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+
+Thanks for fixing this!
+
+Kind regards,
+Petr
