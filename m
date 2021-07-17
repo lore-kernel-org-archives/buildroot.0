@@ -1,31 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Jul 2021 12:47:40 +0200
-Subject: [Buildroot] [PATCH v2 1/1] {linux,
- linux-headers}: bump 5.13 to 5.13.2
-In-Reply-To: <CADvTj4oUWPyQjasnxgfiGyWK4krMTb6y2bq1N3gwb-XciZK8RQ@mail.gmail.com>
-References: <20210716010020.3295725-1-james.hilliard1@gmail.com>
- <20210716230952.38662412@windsurf>
- <CADvTj4oUWPyQjasnxgfiGyWK4krMTb6y2bq1N3gwb-XciZK8RQ@mail.gmail.com>
-Message-ID: <20210717124740.09cd503a@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 17 Jul 2021 13:18:29 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: add missing dependency to
+ host-pkgconf
+In-Reply-To: <20210715212917.484349-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Thu, 15 Jul 2021 23:29:17 +0200")
+References: <20210715212917.484349-1-yann.morin.1998@free.fr>
+Message-ID: <87sg0dtchm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sat, 17 Jul 2021 04:01:08 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-> Isn't that just a symlink?
-> $ ls -laht package/linux-headers/linux-headers.hash
-> lrwxrwxrwx 1 buildroot buildroot 22 Feb 24  2019
-> package/linux-headers/linux-headers.hash -> ../../linux/linux.hash
+ > Commit 2eaa6d0f3629 (boot/uboot: fix uboot building host tools on x86
+ > architecture) added use of $(PKG_CONFIG_HOST_BINARY), but forgot to add
+ > the corresponding build-ordr dependency.
 
-Meh, indeed. My bad, sorry for incorrectly reviewing your patch. I'll
-apply it. Sorry again :/
+ > Add this missing depenency now.
 
-Thomas
+ > Additionally, the associated test had an explicit host pkgconf enbled in
+ > its configuration. This is superfluous now that uboot properly depends
+ > on host-pkgconf, so drop that from the test.
+
+ > Note: it hapenned to work, because host-pkgconf, when explicitly enabled
+ > in the configuration, and without per-package directories, would build
+ > before uboot and thus be available. This would fail with PPD, though,
+ > and thus would break for TLPB.
+
+ > Reported-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Kory Maincent <kory.maincent@bootlin.com>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
