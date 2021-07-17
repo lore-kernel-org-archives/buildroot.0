@@ -1,53 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Jul 2021 16:02:44 +0200
-Subject: [Buildroot] [git commit] package/libtirpc: install full host package
-Message-ID: <20210717133254.47252912AC@busybox.osuosl.org>
+Date: Sat, 17 Jul 2021 16:05:25 +0200
+Subject: [Buildroot] [git commit] package/nfs-utils: fix build with libtirpc
+Message-ID: <20210717133254.413CB9123B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a5a9741e03e666204d577f82d29d93ba610381b
+commit: https://git.buildroot.net/buildroot/commit/?id=bdf0a924a7bfb28a4604bb18a4bb82b5fcc4cfb0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Install full host package for rpc.h and all other headers to avoid the
-following build failure with host-nfs-utils in version 2.5.4 raised
-since commit 0ce30de72fb303768c5865949b8ce9260d0c43f5:
-
-checking rpc/rpc.h usability... no
-checking rpc/rpc.h presence... no
-checking for rpc/rpc.h... no
-configure: error: Header file rpc/rpc.h not found - maybe try building with --enable-tirpc
-
-This build failure is raised by
-http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=be7365239abf8556773b063730621967b9971708
+Help nfs-utils to find the path of libtirpc
 
 Fixes:
  - http://autobuild.buildroot.org/results/a5eaf19f58729c4c00a2131b6a0c378c0fc0effb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr:
+  - take the opportunity to move HOST_NFS_UTILS_DEPENDENCIES
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libtirpc/libtirpc.mk | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ package/nfs-utils/nfs-utils.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index 2678c144e9..31be113965 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
-@@ -19,12 +19,7 @@ LIBTIRPC_AUTORECONF = YES
- LIBTIRPC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DGQ"
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index ab000e1ead..51a35028e2 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -23,7 +23,10 @@ NFS_UTILS_CONF_OPTS = \
+ 	--with-statedir=/run/nfs \
+ 	--with-rpcgen=$(HOST_DIR)/bin/rpcgen
  
- LIBTIRPC_CONF_OPTS = --disable-gssapi
--
--define HOST_LIBTIRPC_INSTALL_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/tirpc/rpc/types.h $(HOST_DIR)/include/rpc/types.h
--	$(INSTALL) -D -m 0644 $(@D)/tirpc/netconfig.h $(HOST_DIR)/include/netconfig.h
--endef
-+HOST_LIBTIRPC_CONF_OPTS = --disable-gssapi
++HOST_NFS_UTILS_DEPENDENCIES = host-pkgconf host-libtirpc
++
+ HOST_NFS_UTILS_CONF_OPTS = \
++	--enable-tirpc \
+ 	--disable-nfsv4 \
+ 	--disable-nfsv41 \
+ 	--disable-gss \
+@@ -32,10 +35,9 @@ HOST_NFS_UTILS_CONF_OPTS = \
+ 	--without-tcp-wrappers \
+ 	--with-statedir=/run/nfs \
+ 	--disable-caps \
+-	--disable-tirpc \
+ 	--without-systemd \
+-	--with-rpcgen=internal
+-HOST_NFS_UTILS_DEPENDENCIES = host-pkgconf host-libtirpc
++	--with-rpcgen=internal \
++	--with-tirpcinclude=$(HOST_DIR)/include/tirpc
  
- $(eval $(autotools-package))
--# We are only copying headers; no need for the autotools infrastructure
--$(eval $(host-generic-package))
-+$(eval $(host-autotools-package))
+ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPCDEBUG) += usr/sbin/rpcdebug
+ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_LOCKD) += usr/sbin/rpc.lockd
