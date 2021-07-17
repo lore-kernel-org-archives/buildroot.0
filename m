@@ -1,34 +1,126 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Jul 2021 11:00:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/trinity: add TRINITY_CPE_ID_VENDOR
-Message-ID: <20210717090037.670285-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 17 Jul 2021 11:11:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: fix build with
+ libmaxminddb
+In-Reply-To: <20210716172016.207663-1-fontaine.fabrice@gmail.com>
+References: <20210716172016.207663-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210717091140.GI12203@scaer>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-cpe:2.3:a:trinity_project:trinity is a valid CPE identifier for this
-package:
+Fabrice, All,
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atrinity_project%3Atrinity
+On 2021-07-16 19:20 +0200, Fabrice Fontaine spake thusly:
+> Build with libmaxminddb is broken since bump to version 3.0.5 in commit
+> 464d0be380c84ac7c3f1684e49153c3868280d7e because of
+> https://github.com/SpiderLabs/ModSecurity/commit/785958f9b5089b918c7d054cbcc2fe4a3c7b3788
+> 
+> So revert this commit until upstream answer to comment to
+> https://github.com/SpiderLabs/ModSecurity/issues/2131
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/4c639fd967faa06f8ae362bacd38f3409c47267c
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/trinity/trinity.mk | 1 +
- 1 file changed, 1 insertion(+)
+I was about to just push this, but the autoreconf spews out a lot of
+warning for out-of-tree builds:
 
-diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
-index adf7d1455c..befb8de826 100644
---- a/package/trinity/trinity.mk
-+++ b/package/trinity/trinity.mk
-@@ -9,6 +9,7 @@ TRINITY_SITE = http://codemonkey.org.uk/projects/trinity
- TRINITY_SOURCE = trinity-$(TRINITY_VERSION).tar.xz
- TRINITY_LICENSE = GPL-2.0
- TRINITY_LICENSE_FILES = COPYING
-+TRINITY_CPE_ID_VENDOR = trinity_project
- 
- define TRINITY_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure)
+    >>> libmodsecurity 3.0.5 Autoreconfiguring
+    fatal: not a git repository (or any of the parent directories): .git
+    [...x10...]
+    fatal: not a git repository (or any of the parent directories): .git
+    libtoolize: putting auxiliary files in '.'.
+    libtoolize: copying file './ltmain.sh'
+    libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'build'.
+    libtoolize: copying file 'build/libtool.m4'
+    libtoolize: copying file 'build/ltoptions.m4'
+    libtoolize: copying file 'build/ltsugar.m4'
+    libtoolize: copying file 'build/ltversion.m4'
+    libtoolize: copying file 'build/lt~obsolete.m4'
+    fatal: not a git repository (or any of the parent directories): .git
+    [...x18...]
+    fatal: not a git repository (or any of the parent directories): .git
+    configure.ac:50: installing './compile'
+    configure.ac:45: installing './missing'
+    examples/multiprocess_c/Makefile.am: installing './depcomp'
+
+Not sure yet what causes that, but this is not clean, and I'd prefer to
+know that it has no impact on libmodsecurity build.
+
+Could you please look into that?
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...Revert-Fix-maxminddb-link-on-FreeBSD.patch | 28 +++++++++++++++++++
+>  package/libmodsecurity/libmodsecurity.mk      |  2 ++
+>  2 files changed, 30 insertions(+)
+>  create mode 100644 package/libmodsecurity/0001-Revert-Fix-maxminddb-link-on-FreeBSD.patch
+> 
+> diff --git a/package/libmodsecurity/0001-Revert-Fix-maxminddb-link-on-FreeBSD.patch b/package/libmodsecurity/0001-Revert-Fix-maxminddb-link-on-FreeBSD.patch
+> new file mode 100644
+> index 0000000000..9608e3d935
+> --- /dev/null
+> +++ b/package/libmodsecurity/0001-Revert-Fix-maxminddb-link-on-FreeBSD.patch
+> @@ -0,0 +1,28 @@
+> +From 6737dc133cb4811a000c02b4e0a92b72f0b220ee Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Fri, 16 Jul 2021 19:12:51 +0200
+> +Subject: [PATCH] Revert "Fix maxminddb link on FreeBSD"
+> +
+> +This reverts commit 785958f9b5089b918c7d054cbcc2fe4a3c7b3788.
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + build/libmaxmind.m4 | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/build/libmaxmind.m4 b/build/libmaxmind.m4
+> +index 656fc250..02820b5a 100644
+> +--- a/build/libmaxmind.m4
+> ++++ b/build/libmaxmind.m4
+> +@@ -10,7 +10,7 @@ dnl  MAXMIND_VERSION
+> + AC_DEFUN([PROG_MAXMIND], [
+> + 
+> + # Possible names for the maxmind library/package (pkg-config)
+> +-MAXMIND_POSSIBLE_LIB_NAMES="maxminddb maxmind"
+> ++MAXMIND_POSSIBLE_LIB_NAMES="libmaxminddb maxminddb maxmind"
+> + 
+> + # Possible extensions for the library
+> + MAXMIND_POSSIBLE_EXTENSIONS="so la sl dll dylib"
+> +-- 
+> +2.30.2
+> +
+> diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+> index b2637257b6..66e7e522a1 100644
+> --- a/package/libmodsecurity/libmodsecurity.mk
+> +++ b/package/libmodsecurity/libmodsecurity.mk
+> @@ -12,6 +12,8 @@ LIBMODSECURITY_LICENSE = Apache-2.0
+>  LIBMODSECURITY_LICENSE_FILES = LICENSE
+>  LIBMODSECURITY_CPE_ID_VENDOR = trustwave
+>  LIBMODSECURITY_CPE_ID_PRODUCT = modsecurity
+> +# We're patching build/libmaxmind.m4
+> +LIBMODSECURITY_AUTORECONF = YES
+>  
+>  LIBMODSECURITY_DEPENDENCIES = pcre
+>  LIBMODSECURITY_CONF_OPTS = \
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.30.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
