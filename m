@@ -1,44 +1,196 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 17 Jul 2021 04:01:08 -0600
-Subject: [Buildroot] [PATCH v2 1/1] {linux,
- linux-headers}: bump 5.13 to 5.13.2
-In-Reply-To: <20210716230952.38662412@windsurf>
-References: <20210716010020.3295725-1-james.hilliard1@gmail.com>
- <20210716230952.38662412@windsurf>
-Message-ID: <CADvTj4oUWPyQjasnxgfiGyWK4krMTb6y2bq1N3gwb-XciZK8RQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 17 Jul 2021 12:02:24 +0200
+Subject: [Buildroot] [git commit] package/avahi: fix CVE-2021-36217
+Message-ID: <20210717092843.148669125D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Fri, Jul 16, 2021 at 3:09 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Thu, 15 Jul 2021 19:00:20 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> > Changes v1 -> v2:
-> >   - also bump headers
-> > ---
-> >  linux/Config.in                      | 2 +-
-> >  linux/linux.hash                     | 2 +-
-> >  package/linux-headers/Config.in.host | 2 +-
-> >  3 files changed, 3 insertions(+), 3 deletions(-)
->
-> Thanks for new version, however I'm afraid this lacks an update to
-> linux-headers.hash :-/
+commit: https://git.buildroot.net/buildroot/commit/?id=dd7b9fa02bbac679540f50f69d175bac6af65904
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Isn't that just a symlink?
-$ ls -laht package/linux-headers/linux-headers.hash
-lrwxrwxrwx 1 buildroot buildroot 22 Feb 24  2019
-package/linux-headers/linux-headers.hash -> ../../linux/linux.hash
+Avahi 0.8 allows a local denial of service (NULL pointer dereference and
+daemon crash) against avahi-daemon via the D-Bus interface or a "ping
+.local" command.
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0001-Fix-NULL-pointer-crashes-from-175.patch   | 152 +++++++++++++++++++++
+ package/avahi/avahi.mk                             |   3 +
+ 2 files changed, 155 insertions(+)
+
+diff --git a/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch b/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
+new file mode 100644
+index 0000000000..7e191e8da7
+--- /dev/null
++++ b/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
+@@ -0,0 +1,152 @@
++From 9d31939e55280a733d930b15ac9e4dda4497680c Mon Sep 17 00:00:00 2001
++From: Tommi Rantala <tommi.t.rantala@nokia.com>
++Date: Mon, 8 Feb 2021 11:04:43 +0200
++Subject: [PATCH] Fix NULL pointer crashes from #175
++
++avahi-daemon is crashing when running "ping .local".
++The crash is due to failing assertion from NULL pointer.
++Add missing NULL pointer checks to fix it.
++
++Introduced in #175 - merge commit 8f75a045709a780c8cf92a6a21e9d35b593bdecd
++
++[Retrieved from:
++https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ avahi-core/browse-dns-server.c   | 5 ++++-
++ avahi-core/browse-domain.c       | 5 ++++-
++ avahi-core/browse-service-type.c | 3 +++
++ avahi-core/browse-service.c      | 3 +++
++ avahi-core/browse.c              | 3 +++
++ avahi-core/resolve-address.c     | 5 ++++-
++ avahi-core/resolve-host-name.c   | 5 ++++-
++ avahi-core/resolve-service.c     | 5 ++++-
++ 8 files changed, 29 insertions(+), 5 deletions(-)
++
++diff --git a/avahi-core/browse-dns-server.c b/avahi-core/browse-dns-server.c
++index 049752e9..c2d914fa 100644
++--- a/avahi-core/browse-dns-server.c
+++++ b/avahi-core/browse-dns-server.c
++@@ -343,7 +343,10 @@ AvahiSDNSServerBrowser *avahi_s_dns_server_browser_new(
++         AvahiSDNSServerBrowser* b;
++ 
++         b = avahi_s_dns_server_browser_prepare(server, interface, protocol, domain, type, aprotocol, flags, callback, userdata);
+++        if (!b)
+++            return NULL;
+++
++         avahi_s_dns_server_browser_start(b);
++ 
++         return b;
++-}
++\ No newline at end of file
+++}
++diff --git a/avahi-core/browse-domain.c b/avahi-core/browse-domain.c
++index f145d56a..06fa70c0 100644
++--- a/avahi-core/browse-domain.c
+++++ b/avahi-core/browse-domain.c
++@@ -253,7 +253,10 @@ AvahiSDomainBrowser *avahi_s_domain_browser_new(
++         AvahiSDomainBrowser *b;
++ 
++         b = avahi_s_domain_browser_prepare(server, interface, protocol, domain, type, flags, callback, userdata);
+++        if (!b)
+++            return NULL;
+++
++         avahi_s_domain_browser_start(b);
++ 
++         return b;
++-}
++\ No newline at end of file
+++}
++diff --git a/avahi-core/browse-service-type.c b/avahi-core/browse-service-type.c
++index fdd22dcd..b1fc7af8 100644
++--- a/avahi-core/browse-service-type.c
+++++ b/avahi-core/browse-service-type.c
++@@ -171,6 +171,9 @@ AvahiSServiceTypeBrowser *avahi_s_service_type_browser_new(
++         AvahiSServiceTypeBrowser *b;
++ 
++         b = avahi_s_service_type_browser_prepare(server, interface, protocol, domain, flags, callback, userdata);
+++        if (!b)
+++            return NULL;
+++
++         avahi_s_service_type_browser_start(b);
++ 
++         return b;
++diff --git a/avahi-core/browse-service.c b/avahi-core/browse-service.c
++index 5531360c..63e0275a 100644
++--- a/avahi-core/browse-service.c
+++++ b/avahi-core/browse-service.c
++@@ -184,6 +184,9 @@ AvahiSServiceBrowser *avahi_s_service_browser_new(
++         AvahiSServiceBrowser *b;
++ 
++         b = avahi_s_service_browser_prepare(server, interface, protocol, service_type, domain, flags, callback, userdata);
+++        if (!b)
+++            return NULL;
+++
++         avahi_s_service_browser_start(b);
++ 
++         return b;
++diff --git a/avahi-core/browse.c b/avahi-core/browse.c
++index 2941e579..e8a915e9 100644
++--- a/avahi-core/browse.c
+++++ b/avahi-core/browse.c
++@@ -634,6 +634,9 @@ AvahiSRecordBrowser *avahi_s_record_browser_new(
++         AvahiSRecordBrowser *b;
++ 
++         b = avahi_s_record_browser_prepare(server, interface, protocol, key, flags, callback, userdata);
+++        if (!b)
+++            return NULL;
+++
++         avahi_s_record_browser_start_query(b);
++ 
++         return b;
++diff --git a/avahi-core/resolve-address.c b/avahi-core/resolve-address.c
++index ac0b29b1..e61dd242 100644
++--- a/avahi-core/resolve-address.c
+++++ b/avahi-core/resolve-address.c
++@@ -286,7 +286,10 @@ AvahiSAddressResolver *avahi_s_address_resolver_new(
++         AvahiSAddressResolver *b;
++ 
++         b = avahi_s_address_resolver_prepare(server, interface, protocol, address, flags, callback, userdata);
+++        if (!b)
+++            return NULL;
+++
++         avahi_s_address_resolver_start(b);
++ 
++         return b;
++-}
++\ No newline at end of file
+++}
++diff --git a/avahi-core/resolve-host-name.c b/avahi-core/resolve-host-name.c
++index 808b0e72..4e8e5973 100644
++--- a/avahi-core/resolve-host-name.c
+++++ b/avahi-core/resolve-host-name.c
++@@ -318,7 +318,10 @@ AvahiSHostNameResolver *avahi_s_host_name_resolver_new(
++         AvahiSHostNameResolver *b;
++ 
++         b = avahi_s_host_name_resolver_prepare(server, interface, protocol, host_name, aprotocol, flags, callback, userdata);
+++        if (!b)
+++            return NULL;
+++
++         avahi_s_host_name_resolver_start(b);
++ 
++         return b;
++-}
++\ No newline at end of file
+++}
++diff --git a/avahi-core/resolve-service.c b/avahi-core/resolve-service.c
++index 66bf3cae..43771763 100644
++--- a/avahi-core/resolve-service.c
+++++ b/avahi-core/resolve-service.c
++@@ -519,7 +519,10 @@ AvahiSServiceResolver *avahi_s_service_resolver_new(
++         AvahiSServiceResolver *b;
++ 
++         b = avahi_s_service_resolver_prepare(server, interface, protocol, name, type, domain, aprotocol, flags, callback, userdata);
+++        if (!b)
+++            return NULL;
+++
++         avahi_s_service_resolver_start(b);
++ 
++         return b;
++-}
++\ No newline at end of file
+++}
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index b71fc189a0..9976df5357 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -15,6 +15,9 @@ AVAHI_INSTALL_STAGING = YES
+ # part of the Debian packaging and not part of upstream avahi
+ AVAHI_IGNORE_CVES += CVE-2021-26720
+ 
++# 0001-Fix-NULL-pointer-crashes-from-175.patch
++AVAHI_IGNORE_CVES += CVE-2021-36217
++
+ AVAHI_CONF_ENV = \
+ 	avahi_cv_sys_cxx_works=yes \
+ 	DATADIRNAME=share
