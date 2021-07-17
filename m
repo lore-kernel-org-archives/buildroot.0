@@ -1,71 +1,56 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 18 Jul 2021 00:08:09 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5base: fix another gcc-11 compile
- failure
-Message-ID: <20210717220809.8654-1-ps.report@gmx.net>
+Date: Sun, 18 Jul 2021 00:22:42 +0200
+Subject: [Buildroot] [PATCH] board/raspberrypi: use kernel Bluetooth mode
+In-Reply-To: <20210714145132.533559-1-john@metanate.com>
+References: <20210714145132.533559-1-john@metanate.com>
+Message-ID: <20210718002242.4638b323@gmx.net>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-- add upstream patch fixing gcc-11 compile failure (missing
-  limits include)
+Hello John,
 
-Fixes:
+On Wed, 14 Jul 2021 15:51:32 +0100, John Keeping <john@metanate.com> wrote:
 
-  In file included from ../../../include/QtCore/5.15.2/QtCore/private/qoffsetstringarray_p.h:1,
-                   from ../../dbus/qdbuserror.cpp:44:
-  ../../../src/corelib/tools/qoffsetstringarray_p.h:70:22: error: ?numeric_limits? is not a member of ?std?
-     70 |         Last <= std::numeric_limits<quint8>::max(),
-        |                      ^~~~~~~~~~~~~~
-  ../../../src/corelib/tools/qoffsetstringarray_p.h:70:43: error: wrong number of template arguments (1, should be 3)
-     70 |         Last <= std::numeric_limits<quint8>::max(),
-        |                                           ^
+> The default setting with miniuart-bt requires hciattach which is a
+> deprecated utility in BlueZ.  Setting the krnbt parameter switches to
+> the modern method of using serdev in the kernel removing the need for
+> any userspace configuration to enable the Bluetooth controller.
+>
+> This is documented as applying to all Raspberry Pi variants so just
+> enable it globally.
+>
+> Signed-off-by: John Keeping <john@metanate.com>
+> ---
+>  board/raspberrypi/post-image.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+> index 9dbd98ef9b..a6728c686e 100755
+> --- a/board/raspberrypi/post-image.sh
+> +++ b/board/raspberrypi/post-image.sh
+> @@ -16,7 +16,7 @@ do
+>  			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+>
+>  # fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
+> -dtoverlay=miniuart-bt
+> +dtoverlay=miniuart-bt,krnbt=on
+>  __EOF__
+>  		fi
+>  		;;
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- .../0008-Add-missing-limits-include.patch     | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/qt5/qt5base/0008-Add-missing-limits-include.patch
+I fully understand the aim of your patch, but it is beyond the the minimal
+approach of the defconfigs (minimal as as starting point for own
+enhancements - startup and at minimum serial console access if possible,
+so even not all rpi defconfigs provide the DTB overlays) or as strong hint
+your enhancement would not match the comment line above the changed line...
 
-diff --git a/package/qt5/qt5base/0008-Add-missing-limits-include.patch b/package/qt5/qt5base/0008-Add-missing-limits-include.patch
-new file mode 100644
-index 0000000000..e489f2e551
---- /dev/null
-+++ b/package/qt5/qt5base/0008-Add-missing-limits-include.patch
-@@ -0,0 +1,32 @@
-+From 87a869a8404047240cccaa9f101351aeb9417a26 Mon Sep 17 00:00:00 2001
-+From: Nicolas Fella <nicolas.fella@kdab.com>
-+Date: Sun, 20 Jun 2021 17:36:41 +0200
-+Subject: [PATCH] Add missing limits include
-+
-+The code uses std::numeric_limits but is lacking the appropriate include
-+
-+Pick-to: 5.15 6.1 6.2
-+Change-Id: I41fa5ac4d8c4e06f35b5b1551ef2ad8417df80bd
-+Reviewed-by: Giuseppe D'Angelo <giuseppe.dangelo@kdab.com>
-+
-+[Upstream: https://code.qt.io/cgit/qt/qtbase.git/patch/?id=2b2b3155d9f6ba1e4f859741468fbc47db09292b]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ src/corelib/tools/qoffsetstringarray_p.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/corelib/tools/qoffsetstringarray_p.h b/src/corelib/tools/qoffsetstringarray_p.h
-+index 4dd9e960..e26a57ff 100644
-+--- a/src/corelib/tools/qoffsetstringarray_p.h
-++++ b/src/corelib/tools/qoffsetstringarray_p.h
-+@@ -55,6 +55,7 @@
-+ 
-+ #include <tuple>
-+ #include <array>
-++#include <limits>
-+ 
-+ QT_BEGIN_NAMESPACE
-+ 
-+-- 
-+2.32.0
-+
--- 
-2.32.0
+But for an alternative config.txt file handling (with better/easier support
+for cutomizations) see [1]...
+
+Regards,
+Peter
+
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20210321114002.31000-1-ps.report at gmx.net/
