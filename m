@@ -1,32 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Jul 2021 10:05:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/keepalived: fix build with
- kernel >= 5.13
-In-Reply-To: <20210701222638.810809-1-fontaine.fabrice@gmail.com>
-References: <20210701222638.810809-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210717100522.672aeda7@windsurf>
+Date: Sat, 17 Jul 2021 10:05:55 +0200
+Subject: [Buildroot] [git commit] package/php: requires DES support in
+ openssl
+Message-ID: <20210717073211.38E8A91153@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Fri,  2 Jul 2021 00:26:38 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2b2f635733999918d359d6cd611ef07c2ec4bacc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/9a93d7d76b0a4319c29fbf7b5986bcc78539ae8b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-core-Fix-compiling-on-RHEL-9.patch   | 34 +++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 package/keepalived/0001-core-Fix-compiling-on-RHEL-9.patch
+Enable DES in openssl to fix build failure raised since commit
+a83d41867c8d69a77d5cd0a665aa216af5340359
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/c10800fde50b123809557ed50e0a86acb59404a4
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/php/Config.ext | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 3a65f70b86..83bb3c481f 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -92,6 +92,7 @@ config BR2_PACKAGE_PHP_EXT_MCRYPT
+ config BR2_PACKAGE_PHP_EXT_OPENSSL
+ 	bool "openssl"
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
