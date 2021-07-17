@@ -1,33 +1,36 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Jul 2021 16:05:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/feh: add FEH_CPE_ID_VENDOR
-Message-ID: <20210717140513.996425-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 17 Jul 2021 16:01:36 +0200
+Subject: [Buildroot] [git commit] Revert "package/libtirpc: install rpc.h"
+Message-ID: <20210717133254.37232912AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-cpe:2.3:a:feh_project:feh is a valid CPE identifier for this package:
+commit: https://git.buildroot.net/buildroot/commit/?id=0f727fb51284a312aa3b35cdb633577959821bcf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afeh_project%3Afeh
+This reverts commit b991962993357092625e5b18d8203acd1e9b8b1f, which was
+incomplete and did not actually fix the issue it purported to fix, and
+we'll soon commit a proper fix.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: explain the reason for reverting]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/feh/feh.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libtirpc/libtirpc.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index df59e67d52..f27509330d 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -10,6 +10,7 @@ FEH_SITE = http://feh.finalrewind.org
- FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
- FEH_LICENSE = MIT
- FEH_LICENSE_FILES = COPYING
-+FEH_CPE_ID_VENDOR = feh_project
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+index 8cdc453cd4..2678c144e9 100644
+--- a/package/libtirpc/libtirpc.mk
++++ b/package/libtirpc/libtirpc.mk
+@@ -21,7 +21,6 @@ LIBTIRPC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DGQ"
+ LIBTIRPC_CONF_OPTS = --disable-gssapi
  
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- FEH_DEPENDENCIES += libcurl
--- 
-2.30.2
+ define HOST_LIBTIRPC_INSTALL_CMDS
+-	$(INSTALL) -D -m 0644 $(@D)/tirpc/rpc/rpc.h $(HOST_DIR)/include/rpc/rpc.h
+ 	$(INSTALL) -D -m 0644 $(@D)/tirpc/rpc/types.h $(HOST_DIR)/include/rpc/types.h
+ 	$(INSTALL) -D -m 0644 $(@D)/tirpc/netconfig.h $(HOST_DIR)/include/netconfig.h
+ endef
