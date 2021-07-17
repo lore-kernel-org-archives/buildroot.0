@@ -1,255 +1,228 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Jul 2021 16:50:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apitrace: bump to version 10.0
-Message-ID: <20210717145037.1005480-1-fontaine.fabrice@gmail.com>
+Date: Sat, 17 Jul 2021 17:11:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kismet: bump to version 2021-06-R1
+Message-ID: <20210717151159.1094518-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-- Drop all patches (already in version)
-- C++17 and gcc >= 7 is required since
-  https://github.com/apitrace/apitrace/commit/37c36e66b8cfa534797ca565c22e8c30923f35d4
-- Update indentation in hash file (two spaces)
+- Drop patches (already in version)
+- C++14 is mandatory since version 2021-05-R1 and
+  https://github.com/kismetwireless/kismet/commit/35fefe38054f40014aae7ade9eb80c1c7f7c6c30
+
+https://www.kismetwireless.net/release/kismet-2021-05-R1
+https://www.kismetwireless.net/release/kismet-2021-06-R1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-dlsym-Fix-build-under-uClibc.patch   |  31 ------
- ...t-libc-that-don-t-have-RTLD_DEEPBIND.patch |  25 -----
- ...eLists.txt-respect-BUILD_TESTING-OFF.patch | 104 ------------------
- package/apitrace/Config.in                    |   6 +-
- package/apitrace/apitrace.hash                |   4 +-
- package/apitrace/apitrace.mk                  |   2 +-
- 6 files changed, 6 insertions(+), 166 deletions(-)
- delete mode 100644 package/apitrace/0001-dlsym-Fix-build-under-uClibc.patch
- delete mode 100644 package/apitrace/0002-Support-libc-that-don-t-have-RTLD_DEEPBIND.patch
- delete mode 100644 package/apitrace/0003-CMakeLists.txt-respect-BUILD_TESTING-OFF.patch
+ ...to-read-database-values-as-long-long.patch | 28 --------
+ ...sio-Use-eventfd-function-with-uClibc.patch | 66 -------------------
+ package/kismet/Config.in                      | 18 ++---
+ package/kismet/kismet.hash                    |  2 +-
+ package/kismet/kismet.mk                      |  5 +-
+ 5 files changed, 11 insertions(+), 108 deletions(-)
+ delete mode 100644 package/kismet/0001-Add-getter-to-read-database-values-as-long-long.patch
+ delete mode 100644 package/kismet/0002-boost-asio-Use-eventfd-function-with-uClibc.patch
 
-diff --git a/package/apitrace/0001-dlsym-Fix-build-under-uClibc.patch b/package/apitrace/0001-dlsym-Fix-build-under-uClibc.patch
+diff --git a/package/kismet/0001-Add-getter-to-read-database-values-as-long-long.patch b/package/kismet/0001-Add-getter-to-read-database-values-as-long-long.patch
 deleted file mode 100644
-index bf47bba931..0000000000
---- a/package/apitrace/0001-dlsym-Fix-build-under-uClibc.patch
+index 564cba87bb..0000000000
+--- a/package/kismet/0001-Add-getter-to-read-database-values-as-long-long.patch
 +++ /dev/null
-@@ -1,31 +0,0 @@
--From 189a3b8397c61ba262a2221885e38dc514c59d94 Mon Sep 17 00:00:00 2001
--From: Paul Cercueil <paul@crapouillou.net>
--Date: Sat, 7 Dec 2019 00:00:57 +0100
--Subject: [PATCH] dlsym: Fix build under uClibc
+@@ -1,28 +0,0 @@
+-From 1d36faad18e34b43ac8ea3e7f6a44315f827a2db Mon Sep 17 00:00:00 2001
+-From: George Hopkins <george-hopkins@null.net>
+-Date: Mon, 4 Jan 2021 13:59:41 +0100
+-Subject: [PATCH] Add getter to read database values as long long
 -
--uClibc defines the __GLIBC__ macro too (I know, right?), so verify that
--__UCLIBC__ is not defined before we can use glibc-specific internal
--functions.
--
--Signed-off-by: Paul Cercueil <paul@crapouillou.net>
--Upstream: https://github.com/apitrace/apitrace/commit/189a3b8397c61ba262a2221885e38dc514c59d94
-----
-- wrappers/dlsym.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/wrappers/dlsym.cpp b/wrappers/dlsym.cpp
--index 2eda082a..5ab8465b 100644
----- a/wrappers/dlsym.cpp
--+++ b/wrappers/dlsym.cpp
--@@ -34,7 +34,7 @@
-- #include "os.hpp"
-- 
-- 
---#ifdef __GLIBC__
--+#if defined(__GLIBC__) && !defined(__UCLIBC__)
-- 
-- 
-- #include <dlfcn.h>
---- 
--2.24.0
--
-diff --git a/package/apitrace/0002-Support-libc-that-don-t-have-RTLD_DEEPBIND.patch b/package/apitrace/0002-Support-libc-that-don-t-have-RTLD_DEEPBIND.patch
-deleted file mode 100644
-index e34357428a..0000000000
---- a/package/apitrace/0002-Support-libc-that-don-t-have-RTLD_DEEPBIND.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From d495d15e20bf655afa3be62ada792e8dfc8d29b6 Mon Sep 17 00:00:00 2001
--From: Gleb Mazovetskiy <glex.spb@gmail.com>
--Date: Fri, 13 Dec 2019 13:39:19 +0000
--Subject: [PATCH] Support libc that don't have RTLD_DEEPBIND
--
--[Retrieved from: https://github.com/apitrace/apitrace/pull/646]
+-[Retrieved from:
+-https://github.com/kismetwireless/kismet/commit/1d36faad18e34b43ac8ea3e7f6a44315f827a2db]
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- dispatch/glproc_gl.cpp | 3 +++
-- 1 file changed, 3 insertions(+)
+- sqlite3_cpp11.cc | 5 +++++
+- 1 file changed, 5 insertions(+)
 -
--diff --git a/dispatch/glproc_gl.cpp b/dispatch/glproc_gl.cpp
--index 5d7903a0c..456fcc42e 100644
----- a/dispatch/glproc_gl.cpp
--+++ b/dispatch/glproc_gl.cpp
--@@ -148,6 +148,9 @@ _getPrivateProcAddress(const char *procName)
+-diff --git a/sqlite3_cpp11.cc b/sqlite3_cpp11.cc
+-index 7974bde8c..5c92dfa87 100644
+---- a/sqlite3_cpp11.cc
+-+++ b/sqlite3_cpp11.cc
+-@@ -411,6 +411,11 @@ namespace kissqlite3 {
+-         return (unsigned long) sqlite3_column_int64(stmt.get(), column);
+-     }
 - 
-- #else
-- 
--+#ifndef RTLD_DEEPBIND
--+#define RTLD_DEEPBIND 0
--+#endif
-- 
-- static inline void
-- logSymbol(const char *name, void *ptr) {
-diff --git a/package/apitrace/0003-CMakeLists.txt-respect-BUILD_TESTING-OFF.patch b/package/apitrace/0003-CMakeLists.txt-respect-BUILD_TESTING-OFF.patch
-deleted file mode 100644
-index 8cc1f8bb0b..0000000000
---- a/package/apitrace/0003-CMakeLists.txt-respect-BUILD_TESTING-OFF.patch
-+++ /dev/null
-@@ -1,104 +0,0 @@
--From 7f0f1e7e34f997eef697856804dd478b54bb365e Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 22 Dec 2020 10:45:21 +0100
--Subject: [PATCH] CMakeLists.txt: respect BUILD_TESTING=OFF
--
--Allow the user to disable unit tests through BUILD_TESTING=OFF:
--https://cmake.org/cmake/help/latest/command/enable_testing.html
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/apitrace/apitrace/pull/698]
-----
-- CMakeLists.txt           | 6 +++++-
-- gui/CMakeLists.txt       | 6 ++++--
-- lib/guids/CMakeLists.txt | 6 ++++--
-- lib/os/CMakeLists.txt    | 6 ++++--
-- lib/trace/CMakeLists.txt | 6 ++++--
-- 5 files changed, 21 insertions(+), 9 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 4a07f069..ee401887 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -41,6 +41,8 @@ option (ENABLE_FRAME_POINTER "Disable frame pointer omission" ON)
-- 
-- option (ENABLE_ASAN "Enable Address Sanitizer" OFF)
-- 
--+option (BUILD_TESTING "Enable unit tests" ON)
+-+    template<>
+-+    long long sqlite3_column_as(std::shared_ptr<sqlite3_stmt> stmt, unsigned int column) {
+-+        return (long long) sqlite3_column_int64(stmt.get(), column);
+-+    }
 -+
-- option (ENABLE_TESTS "Enable additional tests" OFF)
-- 
-- if (ANDROID)
--@@ -433,7 +435,9 @@ endmacro ()
-- # which subdirectory they are declared
-- set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-- 
---enable_testing ()
--+if (BUILD_TESTING)
--+    enable_testing ()
--+endif ()
-- if (CMAKE_CROSSCOMPILING)
--     add_custom_target (check)
-- elseif (DEFINED CMAKE_BUILD_TYPE)
--diff --git a/gui/CMakeLists.txt b/gui/CMakeLists.txt
--index 5baf3552..ad6ee501 100644
----- a/gui/CMakeLists.txt
--+++ b/gui/CMakeLists.txt
--@@ -13,8 +13,10 @@ add_library (qubjson STATIC
--     qubjson.cpp
-- )
-- 
---add_gtest (qubjson_test qubjson_test.cpp)
---target_link_libraries (qubjson_test qubjson)
--+if (BUILD_TESTING)
--+    add_gtest (qubjson_test qubjson_test.cpp)
--+    target_link_libraries (qubjson_test qubjson)
--+endif ()
-- 
-- set(qapitrace_SRCS
--    apisurface.cpp
--diff --git a/lib/guids/CMakeLists.txt b/lib/guids/CMakeLists.txt
--index ce0f86da..ea28a18f 100644
----- a/lib/guids/CMakeLists.txt
--+++ b/lib/guids/CMakeLists.txt
--@@ -5,5 +5,7 @@ add_library (guids STATIC
--     guids.hpp
-- )
-- 
---add_gtest (guids_test guids_test.cpp)
---target_link_libraries (guids_test guids)
--+if (BUILD_TESTING)
--+    add_gtest (guids_test guids_test.cpp)
--+    target_link_libraries (guids_test guids)
--+endif ()
--diff --git a/lib/os/CMakeLists.txt b/lib/os/CMakeLists.txt
--index 222411e0..b7134b57 100644
----- a/lib/os/CMakeLists.txt
--+++ b/lib/os/CMakeLists.txt
--@@ -36,5 +36,7 @@ if (APPLE)
--     )
-- endif ()
-- 
---add_gtest (os_thread_test os_thread_test.cpp)
---target_link_libraries (os_thread_test os)
--+if (BUILD_TESTING)
--+    add_gtest (os_thread_test os_thread_test.cpp)
--+    target_link_libraries (os_thread_test os)
--+endif ()
--diff --git a/lib/trace/CMakeLists.txt b/lib/trace/CMakeLists.txt
--index c68bd00f..d95df978 100644
----- a/lib/trace/CMakeLists.txt
--+++ b/lib/trace/CMakeLists.txt
--@@ -34,5 +34,7 @@ target_link_libraries (common
--     brotli_dec brotli_common
-- )
-- 
---add_gtest (trace_parser_flags_test trace_parser_flags_test.cpp)
---target_link_libraries (trace_parser_flags_test common)
--+if (BUILD_TESTING)
--+    add_gtest (trace_parser_flags_test trace_parser_flags_test.cpp)
--+    target_link_libraries (trace_parser_flags_test common)
--+endif ()
---- 
--2.29.2
+-     template<>
+-     unsigned long long sqlite3_column_as(std::shared_ptr<sqlite3_stmt> stmt, unsigned int column) {
+-         return (unsigned long long) sqlite3_column_int64(stmt.get(), column);
+diff --git a/package/kismet/0002-boost-asio-Use-eventfd-function-with-uClibc.patch b/package/kismet/0002-boost-asio-Use-eventfd-function-with-uClibc.patch
+deleted file mode 100644
+index eb5fb2ec21..0000000000
+--- a/package/kismet/0002-boost-asio-Use-eventfd-function-with-uClibc.patch
++++ /dev/null
+@@ -1,66 +0,0 @@
+-From 9330d34ced1d7d0e56d579bb55a9ed1286d324f0 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 4 Mar 2021 13:36:52 +0100
+-Subject: [PATCH] boost/asio: Use eventfd() function with uClibc
 -
-diff --git a/package/apitrace/Config.in b/package/apitrace/Config.in
-index 263eec5e7d..44bd696431 100644
---- a/package/apitrace/Config.in
-+++ b/package/apitrace/Config.in
-@@ -1,8 +1,8 @@
--comment "apitrace needs a toolchain w/ C++, wchar, dynamic library, threads, gcc >= 4.9"
-+comment "apitrace needs a toolchain w/ C++, wchar, dynamic library, threads, gcc >= 7"
+-Fix build with uclibc thanks to
+-https://github.com/boostorg/asio/commit/b2ee39aee0b186c5bcabb051b7a536ab1517616a
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/1c2885d75219aabadbb66ab66fe0dc4b4346ff1e
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/kismetwireless/kismet/commit/9330d34ced1d7d0e56d579bb55a9ed1286d324f0]
+----
+- .../asio/detail/impl/eventfd_select_interrupter.ipp  | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/boost/asio/detail/impl/eventfd_select_interrupter.ipp b/boost/asio/detail/impl/eventfd_select_interrupter.ipp
+-index 38d4b2a6..8bdb3c20 100644
+---- a/boost/asio/detail/impl/eventfd_select_interrupter.ipp
+-+++ b/boost/asio/detail/impl/eventfd_select_interrupter.ipp
+-@@ -23,11 +23,11 @@
+- #include <sys/stat.h>
+- #include <sys/types.h>
+- #include <fcntl.h>
+--#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
+-+#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
+- # include <asm/unistd.h>
+--#else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
+-+#else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
+- # include <sys/eventfd.h>
+--#endif // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
+-+#endif // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
+- #include <boost/asio/detail/cstdint.hpp>
+- #include <boost/asio/detail/eventfd_select_interrupter.hpp>
+- #include <boost/asio/detail/throw_error.hpp>
+-@@ -46,14 +46,14 @@ eventfd_select_interrupter::eventfd_select_interrupter()
+- 
+- void eventfd_select_interrupter::open_descriptors()
+- {
+--#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
+-+#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
+-   write_descriptor_ = read_descriptor_ = syscall(__NR_eventfd, 0);
+-   if (read_descriptor_ != -1)
+-   {
+-     ::fcntl(read_descriptor_, F_SETFL, O_NONBLOCK);
+-     ::fcntl(read_descriptor_, F_SETFD, FD_CLOEXEC);
+-   }
+--#else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
+-+#else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
+- # if defined(EFD_CLOEXEC) && defined(EFD_NONBLOCK)
+-   write_descriptor_ = read_descriptor_ =
+-     ::eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK);
+-@@ -70,7 +70,7 @@ void eventfd_select_interrupter::open_descriptors()
+-       ::fcntl(read_descriptor_, F_SETFD, FD_CLOEXEC);
+-     }
+-   }
+--#endif // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
+-+#endif // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
+- 
+-   if (read_descriptor_ == -1)
+-   {
+--- 
+-2.30.0
+-
+diff --git a/package/kismet/Config.in b/package/kismet/Config.in
+index d9f8ebe03d..961d5f230e 100644
+--- a/package/kismet/Config.in
++++ b/package/kismet/Config.in
+@@ -1,6 +1,8 @@
+-comment "kismet needs a toolchain w/ threads, C++"
++comment "kismet needs a toolchain w/ threads, C++, gcc >= 5"
  	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
  
- config BR2_PACKAGE_APITRACE
- 	bool "apitrace"
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_APITRACE
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+ config BR2_PACKAGE_KISMET
+@@ -9,6 +11,7 @@ config BR2_PACKAGE_KISMET
  	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_LIBPNG
-diff --git a/package/apitrace/apitrace.hash b/package/apitrace/apitrace.hash
-index 9479f06425..7ccf6cfbe1 100644
---- a/package/apitrace/apitrace.hash
-+++ b/package/apitrace/apitrace.hash
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf-c
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_PROTOBUF_C
+ 	select BR2_PACKAGE_SQLITE
+@@ -32,7 +35,6 @@ config BR2_PACKAGE_KISMET_PYTHON_TOOLS
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	depends on !BR2_STATIC_LIBS # protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+ 	select BR2_PACKAGE_PROTOBUF
+ 	select BR2_PACKAGE_PYTHON_NUMPY # runtime for RTLAMR and RTLADSB
+@@ -48,8 +50,8 @@ comment "python tools needs python3"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 
+-comment "python tools needs a glibc or musl toolchain w/ dynamic library, gcc >= 4.8"
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++comment "python tools needs a glibc or musl toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
+@@ -60,15 +62,13 @@ config BR2_PACKAGE_KISMET_SERVER
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_USE_WCHAR
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	select BR2_PACKAGE_PROTOBUF
+ 
+-comment "server needs a toolchain w/ dynamic library, wchar, gcc >= 4.8"
++comment "server needs a toolchain w/ dynamic library, wchar"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+-	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
+ 
+ comment "server needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/kismet/kismet.hash b/package/kismet/kismet.hash
+index 2b0baa1009..4c986a159b 100644
+--- a/package/kismet/kismet.hash
++++ b/package/kismet/kismet.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256 0eec81ba7d3799622336319785465a2982a0621898842517a07894d7e2aa18eb  apitrace-9.0.tar.gz
--sha256 7066bb1b787519c42f8278b77757c21de522cd97755cb30a22759ac401c62260  LICENSE
-+sha256  2e57d37af39369d7ce78666acb8afb1a49ec758f683a21077ec39eb0befae4ad  apitrace-10.0.tar.gz
-+sha256  7066bb1b787519c42f8278b77757c21de522cd97755cb30a22759ac401c62260  LICENSE
-diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
-index b962ac01d3..3656a5722b 100644
---- a/package/apitrace/apitrace.mk
-+++ b/package/apitrace/apitrace.mk
+ # Locally computed
+-sha256  52a8eddd560688693552bcd8ff033f662a1a57b47650d6434c5e2c6d83e2bb33  kismet-2020-12-R3.tar.xz
++sha256  f85939c9d32fa72d777db35c68af84c379171b94380acad0db7924f95a81bdaa  kismet-2021-06-R1.tar.xz
+ sha256  93c7f0d7e356b0abfb6f494ff3ea37f96abc84e9a5619b25d4e43f7553a55739  LICENSE
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 3a171af7b2..64f9501db8 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APITRACE_VERSION = 9.0
-+APITRACE_VERSION = 10.0
- APITRACE_SITE = $(call github,apitrace,apitrace,$(APITRACE_VERSION))
- APITRACE_LICENSE = MIT
- APITRACE_LICENSE_FILES = LICENSE
+-KISMET_VERSION = 2020-12-R3
++KISMET_VERSION = 2021-06-R1
+ KISMET_SOURCE = kismet-$(KISMET_VERSION).tar.xz
+ KISMET_SITE = http://www.kismetwireless.net/code
+ KISMET_DEPENDENCIES = \
+@@ -18,9 +18,6 @@ KISMET_DEPENDENCIES = \
+ KISMET_LICENSE = GPL-2.0+
+ KISMET_LICENSE_FILES = LICENSE
+ KISMET_SELINUX_MODULES = kismet
+-# Needed because tarball configure has not been rebuilt after
+-# https://github.com/kismetwireless/kismet/commit/e70968bcbca86dd448d619c40cdeaae8b7dcee98
+-KISMET_AUTORECONF = YES
+ 
+ KISMET_CONF_OPTS = --disable-debuglibs
+ 
 -- 
 2.30.2
