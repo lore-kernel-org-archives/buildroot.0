@@ -1,41 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Jul 2021 10:04:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsoup: fix build with gcc 4.8
-In-Reply-To: <20210701202147.466600-1-fontaine.fabrice@gmail.com>
-References: <20210701202147.466600-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210717100457.66e3ca8f@windsurf>
+Date: Sat, 17 Jul 2021 10:05:13 +0200
+Subject: [Buildroot] [git commit] package/keepalived: fix build with kernel
+ >= 5.13
+Message-ID: <20210717073130.C103891140@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Thu,  1 Jul 2021 22:21:47 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=db67c4fcff8c99c0efb91896648666cd1f891a6d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix build failure with gcc 4.8 which is raised since bump to version
-> 2.72.0 in commit 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da:
-> 
-> In file included from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/resolv.h:65:0,
->                  from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/glib-2.0/gio/gnetworking.h:40,
->                  from ../libsoup/soup-address.c:14:
-> /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/arpa/nameser.h:115:2: error: unknown type name 'u_char'
->   const u_char *_msg, *_eom;
->   ^
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/56b9cb987e25b99d6fed16c537552f47c3376f21
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-meson.build-set-c_std-to-gnu99.patch | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/9a93d7d76b0a4319c29fbf7b5986bcc78539ae8b
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Tested-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-core-Fix-compiling-on-RHEL-9.patch        | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/keepalived/0001-core-Fix-compiling-on-RHEL-9.patch b/package/keepalived/0001-core-Fix-compiling-on-RHEL-9.patch
+new file mode 100644
+index 0000000000..39134fcc35
+--- /dev/null
++++ b/package/keepalived/0001-core-Fix-compiling-on-RHEL-9.patch
+@@ -0,0 +1,34 @@
++From 3fd0c21e4f63ac0a52b5d7a09575f0f364972e4d Mon Sep 17 00:00:00 2001
++From: Quentin Armitage <quentin@armitage.org.uk>
++Date: Tue, 8 Jun 2021 08:57:45 +0100
++Subject: [PATCH] core: Fix compiling on RHEL 9
++
++Signed-off-by: Quentin Armitage <quentin@armitage.org.uk>
++
++[Retrieved from:
++https://github.com/acassen/keepalived/commit/3fd0c21e4f63ac0a52b5d7a09575f0f364972e4d]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ keepalived/core/layer4.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/keepalived/core/layer4.c b/keepalived/core/layer4.c
++index d2cc971a3..fdca04913 100644
++--- a/keepalived/core/layer4.c
+++++ b/keepalived/core/layer4.c
++@@ -27,13 +27,14 @@
++ #include <errno.h>
++ #include <unistd.h>
++ #include <fcntl.h>
+++#include <netinet/in.h>
+++#include <net/if.h>
++ #include <linux/icmp.h>
++ #include <linux/icmpv6.h>
++ #ifdef ERRQUEUE_NEEDS_SYS_TIME
++ #include <sys/time.h>
++ #endif
++ #include <linux/errqueue.h>
++-#include <netinet/in.h>
++ 
++ #include "layer4.h"
++ #include "logger.h"
