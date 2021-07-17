@@ -1,219 +1,135 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Jul 2021 12:02:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/avahi: fix CVE-2021-36217
-In-Reply-To: <20210717093313.954035-1-fontaine.fabrice@gmail.com>
-References: <20210717093313.954035-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210717100257.GP12203@scaer>
+From: Gleb Mazovetskiy <glex.spb@gmail.com>
+Date: Sat, 17 Jul 2021 11:08:03 +0100
+Subject: [Buildroot] [PATCH] relocate-sdk: Allow relocating to any
+ location
+In-Reply-To: <20210717093954.GJ12203@scaer>
+References: <20200328234945.12552-1-glex.spb@gmail.com>
+ <20210717093954.GJ12203@scaer>
+Message-ID: <CADjhFRDi9hOA7u9xinmPSuoWvNhyZDBErbfpSwpOO4o+Gh3v4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Fabrice, All,
+ This fixes a minor frustrating issue. It addresses the following scenario:
 
-On 2021-07-17 11:33 +0200, Fabrice Fontaine spake thusly:
-> Avahi 0.8 allows a local denial of service (NULL pointer dereference and
-> daemon crash) against avahi-daemon via the D-Bus interface or a "ping
-> .local" command.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+1. I'm the SDK maintainer. I tell users to unpack to a specific directory.
+E.g. /opt/mysdk.
+2. I build the SDK in such a way that the users do not need to run
+relocate-sdk.sh if they unpack to /opt/mysdk.
 
-Applied to master, thanks.
+The problem is with step 2: currently it requires the build process to move
+the SDK to /opt/mysdk, then run relocate-sdk.sh, before producing the final
+tarball.
+This is often problematic because on the SDK maintainer's machine,
+`/opt/mysdk` usually already exists and contains the latest stable release.
 
-Regards,
-Yann E. MORIN.
+With this new argument, the build process can be simplified for the SDK
+maintainer.
 
-> ---
->  ...01-Fix-NULL-pointer-crashes-from-175.patch | 152 ++++++++++++++++++
->  package/avahi/avahi.mk                        |   3 +
->  2 files changed, 155 insertions(+)
->  create mode 100644 package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
-> 
-> diff --git a/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch b/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
-> new file mode 100644
-> index 0000000000..7e191e8da7
-> --- /dev/null
-> +++ b/package/avahi/0001-Fix-NULL-pointer-crashes-from-175.patch
-> @@ -0,0 +1,152 @@
-> +From 9d31939e55280a733d930b15ac9e4dda4497680c Mon Sep 17 00:00:00 2001
-> +From: Tommi Rantala <tommi.t.rantala@nokia.com>
-> +Date: Mon, 8 Feb 2021 11:04:43 +0200
-> +Subject: [PATCH] Fix NULL pointer crashes from #175
-> +
-> +avahi-daemon is crashing when running "ping .local".
-> +The crash is due to failing assertion from NULL pointer.
-> +Add missing NULL pointer checks to fix it.
-> +
-> +Introduced in #175 - merge commit 8f75a045709a780c8cf92a6a21e9d35b593bdecd
-> +
-> +[Retrieved from:
-> +https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + avahi-core/browse-dns-server.c   | 5 ++++-
-> + avahi-core/browse-domain.c       | 5 ++++-
-> + avahi-core/browse-service-type.c | 3 +++
-> + avahi-core/browse-service.c      | 3 +++
-> + avahi-core/browse.c              | 3 +++
-> + avahi-core/resolve-address.c     | 5 ++++-
-> + avahi-core/resolve-host-name.c   | 5 ++++-
-> + avahi-core/resolve-service.c     | 5 ++++-
-> + 8 files changed, 29 insertions(+), 5 deletions(-)
-> +
-> +diff --git a/avahi-core/browse-dns-server.c b/avahi-core/browse-dns-server.c
-> +index 049752e9..c2d914fa 100644
-> +--- a/avahi-core/browse-dns-server.c
-> ++++ b/avahi-core/browse-dns-server.c
-> +@@ -343,7 +343,10 @@ AvahiSDNSServerBrowser *avahi_s_dns_server_browser_new(
-> +         AvahiSDNSServerBrowser* b;
-> + 
-> +         b = avahi_s_dns_server_browser_prepare(server, interface, protocol, domain, type, aprotocol, flags, callback, userdata);
-> ++        if (!b)
-> ++            return NULL;
-> ++
-> +         avahi_s_dns_server_browser_start(b);
-> + 
-> +         return b;
-> +-}
-> +\ No newline at end of file
-> ++}
-> +diff --git a/avahi-core/browse-domain.c b/avahi-core/browse-domain.c
-> +index f145d56a..06fa70c0 100644
-> +--- a/avahi-core/browse-domain.c
-> ++++ b/avahi-core/browse-domain.c
-> +@@ -253,7 +253,10 @@ AvahiSDomainBrowser *avahi_s_domain_browser_new(
-> +         AvahiSDomainBrowser *b;
-> + 
-> +         b = avahi_s_domain_browser_prepare(server, interface, protocol, domain, type, flags, callback, userdata);
-> ++        if (!b)
-> ++            return NULL;
-> ++
-> +         avahi_s_domain_browser_start(b);
-> + 
-> +         return b;
-> +-}
-> +\ No newline at end of file
-> ++}
-> +diff --git a/avahi-core/browse-service-type.c b/avahi-core/browse-service-type.c
-> +index fdd22dcd..b1fc7af8 100644
-> +--- a/avahi-core/browse-service-type.c
-> ++++ b/avahi-core/browse-service-type.c
-> +@@ -171,6 +171,9 @@ AvahiSServiceTypeBrowser *avahi_s_service_type_browser_new(
-> +         AvahiSServiceTypeBrowser *b;
-> + 
-> +         b = avahi_s_service_type_browser_prepare(server, interface, protocol, domain, flags, callback, userdata);
-> ++        if (!b)
-> ++            return NULL;
-> ++
-> +         avahi_s_service_type_browser_start(b);
-> + 
-> +         return b;
-> +diff --git a/avahi-core/browse-service.c b/avahi-core/browse-service.c
-> +index 5531360c..63e0275a 100644
-> +--- a/avahi-core/browse-service.c
-> ++++ b/avahi-core/browse-service.c
-> +@@ -184,6 +184,9 @@ AvahiSServiceBrowser *avahi_s_service_browser_new(
-> +         AvahiSServiceBrowser *b;
-> + 
-> +         b = avahi_s_service_browser_prepare(server, interface, protocol, service_type, domain, flags, callback, userdata);
-> ++        if (!b)
-> ++            return NULL;
-> ++
-> +         avahi_s_service_browser_start(b);
-> + 
-> +         return b;
-> +diff --git a/avahi-core/browse.c b/avahi-core/browse.c
-> +index 2941e579..e8a915e9 100644
-> +--- a/avahi-core/browse.c
-> ++++ b/avahi-core/browse.c
-> +@@ -634,6 +634,9 @@ AvahiSRecordBrowser *avahi_s_record_browser_new(
-> +         AvahiSRecordBrowser *b;
-> + 
-> +         b = avahi_s_record_browser_prepare(server, interface, protocol, key, flags, callback, userdata);
-> ++        if (!b)
-> ++            return NULL;
-> ++
-> +         avahi_s_record_browser_start_query(b);
-> + 
-> +         return b;
-> +diff --git a/avahi-core/resolve-address.c b/avahi-core/resolve-address.c
-> +index ac0b29b1..e61dd242 100644
-> +--- a/avahi-core/resolve-address.c
-> ++++ b/avahi-core/resolve-address.c
-> +@@ -286,7 +286,10 @@ AvahiSAddressResolver *avahi_s_address_resolver_new(
-> +         AvahiSAddressResolver *b;
-> + 
-> +         b = avahi_s_address_resolver_prepare(server, interface, protocol, address, flags, callback, userdata);
-> ++        if (!b)
-> ++            return NULL;
-> ++
-> +         avahi_s_address_resolver_start(b);
-> + 
-> +         return b;
-> +-}
-> +\ No newline at end of file
-> ++}
-> +diff --git a/avahi-core/resolve-host-name.c b/avahi-core/resolve-host-name.c
-> +index 808b0e72..4e8e5973 100644
-> +--- a/avahi-core/resolve-host-name.c
-> ++++ b/avahi-core/resolve-host-name.c
-> +@@ -318,7 +318,10 @@ AvahiSHostNameResolver *avahi_s_host_name_resolver_new(
-> +         AvahiSHostNameResolver *b;
-> + 
-> +         b = avahi_s_host_name_resolver_prepare(server, interface, protocol, host_name, aprotocol, flags, callback, userdata);
-> ++        if (!b)
-> ++            return NULL;
-> ++
-> +         avahi_s_host_name_resolver_start(b);
-> + 
-> +         return b;
-> +-}
-> +\ No newline at end of file
-> ++}
-> +diff --git a/avahi-core/resolve-service.c b/avahi-core/resolve-service.c
-> +index 66bf3cae..43771763 100644
-> +--- a/avahi-core/resolve-service.c
-> ++++ b/avahi-core/resolve-service.c
-> +@@ -519,7 +519,10 @@ AvahiSServiceResolver *avahi_s_service_resolver_new(
-> +         AvahiSServiceResolver *b;
-> + 
-> +         b = avahi_s_service_resolver_prepare(server, interface, protocol, name, type, domain, aprotocol, flags, callback, userdata);
-> ++        if (!b)
-> ++            return NULL;
-> ++
-> +         avahi_s_service_resolver_start(b);
-> + 
-> +         return b;
-> +-}
-> +\ No newline at end of file
-> ++}
-> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-> index 1d57aa14e2..9de6ebc4d2 100644
-> --- a/package/avahi/avahi.mk
-> +++ b/package/avahi/avahi.mk
-> @@ -16,6 +16,9 @@ AVAHI_INSTALL_STAGING = YES
->  # part of the Debian packaging and not part of upstream avahi
->  AVAHI_IGNORE_CVES += CVE-2021-26720
->  
-> +# 0001-Fix-NULL-pointer-crashes-from-175.patch
-> +AVAHI_IGNORE_CVES += CVE-2021-36217
-> +
->  AVAHI_CONF_ENV = \
->  	avahi_cv_sys_cxx_works=yes \
->  	DATADIRNAME=share
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+On Sat, Jul 17, 2021 at 10:39 AM Yann E. MORIN <yann.morin.1998@free.fr>
+wrote:
+
+> Gleb, All,
+>
+> On 2020-03-28 23:49 +0000, Gleb Mazovetskiy spake thusly:
+> > Previously, the script could only relocate to the current location.
+>
+> I am not sure to understand what you mean...
+>
+> The SDK can already be relocated to any location:
+>
+>     $ cd /path/to/anywhere
+>     $ tar xf /path/to/sdk.tar
+>     $ ./relocate-sdk
+>
+> > This caused issues for SDK maintainers, as the default target location
+> > (e.g. /opt/my-sdk) would need to be created and the content copied
+> > to it during the build process, which is error-prone.
+> >
+> > With this change you can now pass a target location argument to
+> > ./relocate-sdk.sh (this does not move the directory).
+>
+> I fail to see the purpose for that... If the SDK is not there, what is
+> the point of relocating to a location where the SDK is not?
+>
+> Eventually, the user will have to either extract the SDK in the proper
+> location, or move it there, so whether they are able to run the script
+> prior to the move does not seem very interesting...
+>
+> So, I am far from convinced by this change... :-(
+>
+> Additionally, last time I had to touch on the SDK topic, I got seriously
+> burnt, so I'd like that people that have a better grasp, the history, and
+> some beliefs, in the SDK, look at that patch, please...
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > ---
+> >  support/misc/relocate-sdk.sh | 19 ++++++++++++-------
+> >  1 file changed, 12 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/support/misc/relocate-sdk.sh b/support/misc/relocate-sdk.sh
+> > index caabeaa6f6..981d272425 100755
+> > --- a/support/misc/relocate-sdk.sh
+> > +++ b/support/misc/relocate-sdk.sh
+> > @@ -1,15 +1,20 @@
+> >  #!/bin/sh
+> > -#
+> > -if [ "$#" -ne 0 ]; then
+> > -    echo "Run this script to relocate the buildroot SDK at that
+> location"
+> > +
+> > +if [ "$#" -gt 1 ]; then
+> > +    echo "Usage: $0 [path]"
+> > +    echo "Run this script to relocate the buildroot SDK to the current
+> location"
+> > +    echo "If [path] is given, sets the location to [path] (without
+> moving it)"
+> >      exit 1
+> >  fi
+> >
+> > -LOCFILE="share/buildroot/sdk-location"
+> > -FILEPATH="$(readlink -f "$0")"
+> > -NEWPATH="$(dirname "${FILEPATH}")"
+> > +cd "$(dirname "$(readlink -f "$0")")"
+> > +if [ "$#" -eq 1 ]; then
+> > +    NEWPATH="$1"
+> > +else
+> > +    NEWPATH="${PWD}"
+> > +fi
+> >
+> > -cd "${NEWPATH}"
+> > +LOCFILE="share/buildroot/sdk-location"
+> >  if [ ! -r "${LOCFILE}" ]; then
+> >      echo "Previous location of the buildroot SDK not found!"
+> >      exit 1
+> > --
+> > 2.20.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210717/ecb3eb19/attachment-0001.html>
