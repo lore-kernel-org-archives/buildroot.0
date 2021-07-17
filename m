@@ -1,35 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Jul 2021 10:03:48 +0200
-Subject: [Buildroot] [PATCH v3] package/qt5/qt5base: fix build with gcc
- 11
-In-Reply-To: <20210706042902.6483-1-fido_max@inbox.ru>
-References: <20210706042902.6483-1-fido_max@inbox.ru>
-Message-ID: <20210717100348.4b734aca@windsurf>
+Date: Sat, 17 Jul 2021 10:04:50 +0200
+Subject: [Buildroot] [git commit] package/libsoup: fix build with gcc 4.8
+Message-ID: <20210717073105.189D291136@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Tue,  6 Jul 2021 07:29:02 +0300
-Maxim Kochetkov via buildroot <buildroot@busybox.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=32e085527f5ad988f1f37cd52de689f8f1a964b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix the following build failure with gcc 11:
-> 
-> text/qbytearraymatcher.h:103:38: error: 'numeric_limits' is not a member of 'std'
->   103 |         const auto uchar_max = (std::numeric_limits<uchar>::max)();
->       |                                      ^~~~~~~~~~~~~~
-> 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-> Tested-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v2 -> v3:
->   - Removed "Tested-by" from 0007-Build-fixes-for-GCC-11.patch
+Fix build failure with gcc 4.8 which is raised since bump to version
+2.72.0 in commit 8e5f7f1cfc8fd7a9d5270f6a9707eb9eecfd21da:
 
-Applied to master, thanks a lot!
+In file included from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/resolv.h:65:0,
+                 from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/glib-2.0/gio/gnetworking.h:40,
+                 from ../libsoup/soup-address.c:14:
+/tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/arpa/nameser.h:115:2: error: unknown type name 'u_char'
+  const u_char *_msg, *_eom;
+  ^
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/56b9cb987e25b99d6fed16c537552f47c3376f21
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-meson.build-set-c_std-to-gnu99.patch      | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+
+diff --git a/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch b/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
+new file mode 100644
+index 0000000000..5a85e05de7
+--- /dev/null
++++ b/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
+@@ -0,0 +1,40 @@
++From 5c3d431bdb094c59997f2a23e31e83f815ab667c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 1 Jul 2021 22:09:23 +0200
++Subject: [PATCH] meson.build: set c_std to gnu99
++
++Set c_std to gnu99 to avoid the following build failure with gcc 4.8:
++
++In file included from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/resolv.h:65:0,
++                 from /tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/glib-2.0/gio/gnetworking.h:40,
++                 from ../libsoup/soup-address.c:14:
++/tmp/instance-0/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/arpa/nameser.h:115:2: error: unknown type name 'u_char'
++  const u_char *_msg, *_eom;
++  ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/56b9cb987e25b99d6fed16c537552f47c3376f21
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/241]
++---
++ meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 4dfd8c15..a5ebc63a 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -3,7 +3,7 @@ project('libsoup', 'c',
++         version: '2.72.0',
++         meson_version : '>= 0.50',
++         license : 'LGPL2',
++-        default_options : 'c_std=c99')
+++        default_options : 'c_std=gnu99')
++ 
++ gnome = import('gnome')
++ 
++-- 
++2.30.2
++
