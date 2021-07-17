@@ -1,49 +1,43 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat, 17 Jul 2021 20:26:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtirpc: fix rpc.h install path
-In-Reply-To: <CAPi7W818B2yDd4Kh1jgb98gn0gK0kORPKtFPzmdxZcc_bqQ3BA@mail.gmail.com>
-References: <20210717133225.470326-1-james.hilliard1@gmail.com>
- <CAPi7W818B2yDd4Kh1jgb98gn0gK0kORPKtFPzmdxZcc_bqQ3BA@mail.gmail.com>
-Message-ID: <YPMg0s/UXMS9eMy4@pevik>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 17 Jul 2021 20:27:39 +0200
+Subject: [Buildroot] [PATCH 5/5] package/kodi-visualisation-waveform: bump
+ version to 19.0.0-Matrix
+In-Reply-To: <20210717182739.7558-1-bernd.kuhls@t-online.de>
+References: <20210717182739.7558-1-bernd.kuhls@t-online.de>
+Message-ID: <20210717182739.7558-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hi all,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../kodi-visualisation-waveform.hash                            | 2 +-
+ .../kodi-visualisation-waveform/kodi-visualisation-waveform.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Dear James,
-
-> Le sam. 17 juil. 2021 ? 15:32, James Hilliard
-> <james.hilliard1@gmail.com> a ?crit :
-
-> > When libtirpc installs rpc.h with autoconf it installs it to:
-> > $(HOST_DIR)/include/tirpc/rpc/rpc.h
-
-> > As this is the expected path we need to do the same.
-
-> > This should fix the previous attempt at fixing host-nfs-utils:
-> > b991962993357092625e5b18d8203acd1e9b8b1f
-> Thanks for trying to fix my mess but I think the issue is raised
-> because rpc.h is not self sufficient.
-> Here is an extract of
-> http://autobuild.buildroot.org/results/836/83648a39e960d8f4db0e86ddb48db4b7dd9f91cf//host-nfs-utils-2.5.4/config.log:
-
-> configure:19291: checking rpc/rpc.h usability
-> configure:19291: /usr/bin/gcc -c -O2
-> -I/home/buildroot/autobuild/run/instance-0/output-1/host/include
-> -I/home/buildroot/autobuild/run/instance-0/output-1/host/include
-> -D_GNU_SOURCE  conftest.c >&5
-> In file included from conftest.c:70:0:
-> /home/buildroot/autobuild/run/instance-0/output-1/host/include/rpc/rpc.h:70:61:
-> fatal error: rpc/rpcb_clnt.h: No such file or directory
->  #include <rpc/rpcb_clnt.h> /* rpcbind interface functions */
->                                                              ^
-> I sent a new serie here:
-> https://patchwork.ozlabs.org/project/buildroot/list/?series=253968
-
-Yes, this was a better approach, glad it was merged thank!
-
-Kind regards,
-Petr
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+index 1255b6ed75..465ce9005e 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  d9acf0a3758bfc4ee6fa492bcdcf8764519bbf0f1b6a3b10807b65a0d031e55e  kodi-visualisation-waveform-4.4.0-Matrix.tar.gz
++sha256  c0b20e5d5877c34be107df0db142d46def785acb7269e6525f39a511c5a8e030  kodi-visualisation-waveform-19.0.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+index 6c0ec3ac70..c66b47d60c 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_WAVEFORM_VERSION = 4.4.0-Matrix
++KODI_VISUALISATION_WAVEFORM_VERSION = 19.0.0-Matrix
+ KODI_VISUALISATION_WAVEFORM_SITE = $(call github,xbmc,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
+ KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = LICENSE.md
+-- 
+2.30.2
