@@ -1,38 +1,100 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Jul 2021 11:39:14 +0200
-Subject: [Buildroot] [PATCH v3,1/1] package/pcre2: add PCRE2_CPE_ID_VENDOR
-Message-ID: <20210717093914.954546-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 17 Jul 2021 11:39:54 +0200
+Subject: [Buildroot] [PATCH] relocate-sdk: Allow relocating to any
+ location
+In-Reply-To: <20200328234945.12552-1-glex.spb@gmail.com>
+References: <20200328234945.12552-1-glex.spb@gmail.com>
+Message-ID: <20210717093954.GJ12203@scaer>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-cpe:2.3:a:pcre:pcre2 is a valid CPE identifier for this package:
+Gleb, All,
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apcre%3Apcre2
+On 2020-03-28 23:49 +0000, Gleb Mazovetskiy spake thusly:
+> Previously, the script could only relocate to the current location.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v2 -> v3:
- - Fix title again (pcre -> pcre2)
-Changes v1 -> v2:
- - Fix title (PCRE -> PCRE2)
+I am not sure to understand what you mean...
 
- package/pcre2/pcre2.mk | 1 +
- 1 file changed, 1 insertion(+)
+The SDK can already be relocated to any location:
 
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-index 858ef59703..d02772650f 100644
---- a/package/pcre2/pcre2.mk
-+++ b/package/pcre2/pcre2.mk
-@@ -9,6 +9,7 @@ PCRE2_SITE = https://ftp.pcre.org/pub/pcre
- PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
- PCRE2_LICENSE = BSD-3-Clause
- PCRE2_LICENSE_FILES = LICENCE
-+PCRE2_CPE_ID_VENDOR = pcre
- PCRE2_INSTALL_STAGING = YES
- PCRE2_CONFIG_SCRIPTS = pcre2-config
- 
+    $ cd /path/to/anywhere
+    $ tar xf /path/to/sdk.tar
+    $ ./relocate-sdk
+
+> This caused issues for SDK maintainers, as the default target location
+> (e.g. /opt/my-sdk) would need to be created and the content copied
+> to it during the build process, which is error-prone.
+> 
+> With this change you can now pass a target location argument to
+> ./relocate-sdk.sh (this does not move the directory).
+
+I fail to see the purpose for that... If the SDK is not there, what is
+the point of relocating to a location where the SDK is not?
+
+Eventually, the user will have to either extract the SDK in the proper
+location, or move it there, so whether they are able to run the script
+prior to the move does not seem very interesting...
+
+So, I am far from convinced by this change... :-(
+
+Additionally, last time I had to touch on the SDK topic, I got seriously
+burnt, so I'd like that people that have a better grasp, the history, and
+some beliefs, in the SDK, look at that patch, please...
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  support/misc/relocate-sdk.sh | 19 ++++++++++++-------
+>  1 file changed, 12 insertions(+), 7 deletions(-)
+> 
+> diff --git a/support/misc/relocate-sdk.sh b/support/misc/relocate-sdk.sh
+> index caabeaa6f6..981d272425 100755
+> --- a/support/misc/relocate-sdk.sh
+> +++ b/support/misc/relocate-sdk.sh
+> @@ -1,15 +1,20 @@
+>  #!/bin/sh
+> -#
+> -if [ "$#" -ne 0 ]; then
+> -    echo "Run this script to relocate the buildroot SDK at that location"
+> +
+> +if [ "$#" -gt 1 ]; then
+> +    echo "Usage: $0 [path]"
+> +    echo "Run this script to relocate the buildroot SDK to the current location"
+> +    echo "If [path] is given, sets the location to [path] (without moving it)"
+>      exit 1
+>  fi
+>  
+> -LOCFILE="share/buildroot/sdk-location"
+> -FILEPATH="$(readlink -f "$0")"
+> -NEWPATH="$(dirname "${FILEPATH}")"
+> +cd "$(dirname "$(readlink -f "$0")")"
+> +if [ "$#" -eq 1 ]; then
+> +    NEWPATH="$1"
+> +else
+> +    NEWPATH="${PWD}"
+> +fi
+>  
+> -cd "${NEWPATH}"
+> +LOCFILE="share/buildroot/sdk-location"
+>  if [ ! -r "${LOCFILE}" ]; then
+>      echo "Previous location of the buildroot SDK not found!"
+>      exit 1
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.30.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
