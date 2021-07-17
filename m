@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5605FC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:26:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91505C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:26:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 18F9F60F22
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:26:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 18F9F60F22
+	by mail.kernel.org (Postfix) with ESMTPS id 3F1EC60F22
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:26:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3F1EC60F22
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1D2E40585;
-	Tue,  3 Aug 2021 22:26:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 114BB819B8;
+	Tue,  3 Aug 2021 22:26:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id diJSVGVm4UZd; Tue,  3 Aug 2021 22:26:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H3C118Iy43wT; Tue,  3 Aug 2021 22:26:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FC28405C2;
-	Tue,  3 Aug 2021 22:26:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0620F1BF9AA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87F2483BB3;
+	Tue,  3 Aug 2021 22:26:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4992A1BF349
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9EA3540595
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A829608FB
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 54hV_eIkeJvZ for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IeXBOhCFShs1 for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93CFB40430
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B265860838
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E865285F62; Tue,  3 Aug 2021 21:09:41 +0000 (UTC)
+ id 08BC786A84; Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 20 May 2021 09:19:32 +0200
+Date: Sat, 17 Jul 2021 11:53:48 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3d78dbace207b6b93416b27abcb85dbccde97a6b
-X-Git-Newrev: edb32a03b5f989c57dfef0a4a3f939a5c2bce63f
+X-Git-Oldrev: 60ef5ab91001dbcaa03ac78e64e96274fe0d0399
+X-Git-Newrev: c9bfe7b19efa18d3c23aaf2f42628ac48846c18c
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210941.E865285F62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libraw: depends on
- BR2_TOOLCHAIN_HAS_SYNC_4
+Message-Id: <20210803211006.08BC786A84@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pcre2: add
+ PCRE2_CPE_ID_VENDOR
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,56 +70,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=edb32a03b5f989c57dfef0a4a3f939a5c2bce63f
+commit: https://git.buildroot.net/buildroot/commit/?id=c9bfe7b19efa18d3c23aaf2f42628ac48846c18c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-libraw needs __sync_fetch_and_add since version 0.20.0 and
-https://github.com/LibRaw/LibRaw/commit/d1975cb0e055d2bfe58c9d845c9a3e57c346a2f9
+cpe:2.3:a:pcre:pcre2 is a valid CPE identifier for this package:
 
-This will fix the following build failure with imagemagick which is
-raised since commit 2f47cfade4b298350d056f6d9a7525b837e2ba23:
-
-/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libraw_r.so: undefined reference to `__sync_fetch_and_add_4'
-
-Fixes:
- - http://autobuild.buildroot.org/results/900df43bd418d2da0c3ec875db1c5564dd857e94
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apcre%3Apcre2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/efl/Config.in    | 1 +
- package/libraw/Config.in | 2 ++
- 2 files changed, 3 insertions(+)
+ package/pcre2/pcre2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 305d1469a7..05ded72cf7 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -258,6 +258,7 @@ config BR2_PACKAGE_EFL_WEBP
+diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
+index 858ef59703..d02772650f 100644
+--- a/package/pcre2/pcre2.mk
++++ b/package/pcre2/pcre2.mk
+@@ -9,6 +9,7 @@ PCRE2_SITE = https://ftp.pcre.org/pub/pcre
+ PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
+ PCRE2_LICENSE = BSD-3-Clause
+ PCRE2_LICENSE_FILES = LICENCE
++PCRE2_CPE_ID_VENDOR = pcre
+ PCRE2_INSTALL_STAGING = YES
+ PCRE2_CONFIG_SCRIPTS = pcre2-config
  
- config BR2_PACKAGE_EFL_LIBRAW
- 	bool "libraw loader"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libraw
- 	select BR2_PACKAGE_LIBRAW
- 	help
- 	  This option enables the Evas generic Libraw loader
-diff --git a/package/libraw/Config.in b/package/libraw/Config.in
-index de763cd36a..631123c2d3 100644
---- a/package/libraw/Config.in
-+++ b/package/libraw/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBRAW
- 	bool "libraw"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  libraw is a raw image manipulation library
-@@ -7,4 +8,5 @@ config BR2_PACKAGE_LIBRAW
- 	  http://www.libraw.org/
- 
- comment "libraw needs a toolchain w/ C++"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
