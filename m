@@ -1,57 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Jul 2021 16:10:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/feh: add FEH_CPE_ID_VENDOR
-In-Reply-To: <20210717140513.996425-1-fontaine.fabrice@gmail.com>
-References: <20210717140513.996425-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210717141001.GT12203@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 17 Jul 2021 16:33:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/darkhttpd: bump to version 0.13
+Message-ID: <20210717143307.999642-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Fabrice, All,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/darkhttpd/darkhttpd.hash | 4 ++--
+ package/darkhttpd/darkhttpd.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-On 2021-07-17 16:05 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:feh_project:feh is a valid CPE identifier for this package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afeh_project%3Afeh
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/feh/feh.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-> index df59e67d52..f27509330d 100644
-> --- a/package/feh/feh.mk
-> +++ b/package/feh/feh.mk
-> @@ -10,6 +10,7 @@ FEH_SITE = http://feh.finalrewind.org
->  FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
->  FEH_LICENSE = MIT
->  FEH_LICENSE_FILES = COPYING
-> +FEH_CPE_ID_VENDOR = feh_project
->  
->  ifeq ($(BR2_PACKAGE_LIBCURL),y)
->  FEH_DEPENDENCIES += libcurl
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/darkhttpd/darkhttpd.hash b/package/darkhttpd/darkhttpd.hash
+index b6618db89a..c6520ba5b2 100644
+--- a/package/darkhttpd/darkhttpd.hash
++++ b/package/darkhttpd/darkhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  a50417b622b32b5f421b3132cb94ebeff04f02c5fb87fba2e31147d23de50505  darkhttpd-1.12.tar.bz2
+-sha256  6e1a2e45d8dd3c8835222e3c82e5cccde8e60f02d55555910e18715ec5dc6d04  darkhttpd.c
++sha256  1d88c395ac79ca9365aa5af71afe4ad136a4ed45099ca398168d4a2014dc0fc2  darkhttpd-1.13.tar.gz
++sha256  3239739831a668d1273c0ef5ae1b2147e0f423288b16ed997d7e695cc7e0a6c9  darkhttpd.c
+diff --git a/package/darkhttpd/darkhttpd.mk b/package/darkhttpd/darkhttpd.mk
+index 4b65cffe60..56e5a6ecd6 100644
+--- a/package/darkhttpd/darkhttpd.mk
++++ b/package/darkhttpd/darkhttpd.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-DARKHTTPD_VERSION = 1.12
+-DARKHTTPD_SITE = https://unix4lyfe.org/darkhttpd
+-DARKHTTPD_SOURCE = darkhttpd-$(DARKHTTPD_VERSION).tar.bz2
++DARKHTTPD_VERSION = 1.13
++DARKHTTPD_SITE = $(call github,emikulic,darkhttpd,v$(DARKHTTPD_VERSION))
+ DARKHTTPD_LICENSE = MIT
+ DARKHTTPD_LICENSE_FILES = darkhttpd.c
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
