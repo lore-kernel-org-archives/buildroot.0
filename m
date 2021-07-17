@@ -1,121 +1,145 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Jul 2021 11:51:10 +0200
-Subject: [Buildroot] [git commit] package/solarus: fix OpenGLES2 build
-Message-ID: <20210717091742.556D191252@busybox.osuosl.org>
+Date: Sat, 17 Jul 2021 11:52:01 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/solarus: Fix OpenGLES2 build
+In-Reply-To: <20210104181251.69635-1-glex.spb@gmail.com>
+References: <20210104181251.69635-1-glex.spb@gmail.com>
+Message-ID: <20210717095201.GL12203@scaer>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc1970260bed838022b4829da9e3bb75555e130e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Gleb, All,
 
-1. Adds a patch that fixes OpenGLES2 build
-   https://gitlab.com/solarus-games/solarus/-/merge_requests/1364
+On 2021-01-04 18:12 +0000, Gleb Mazovetskiy spake thusly:
+> 1. Adds a patch that fixes OpenGLES2 build
+>    https://gitlab.com/solarus-games/solarus/-/merge_requests/1364
 
-2. Updates Config.in and solarus.mk to support OpenGLES2
+This has been lerged upstream, now.
 
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
-[yann.morin.1998 at free.fr: renumber patch]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../0002-Add-a-basic-FindOpenGLES2.cmake.patch     | 48 ++++++++++++++++++++++
- package/solarus/Config.in                          |  2 +-
- package/solarus/solarus.mk                         |  9 +++-
- 3 files changed, 57 insertions(+), 2 deletions(-)
+> 2. Updates Config.in and solarus.mk to support OpenGLES2
+> 
+> Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
 
-diff --git a/package/solarus/0002-Add-a-basic-FindOpenGLES2.cmake.patch b/package/solarus/0002-Add-a-basic-FindOpenGLES2.cmake.patch
-new file mode 100644
-index 0000000000..59bf9e8cf4
---- /dev/null
-+++ b/package/solarus/0002-Add-a-basic-FindOpenGLES2.cmake.patch
-@@ -0,0 +1,48 @@
-+From 2bf0e98f17d92fd86ee61be179e3cebe93f75ea7 Mon Sep 17 00:00:00 2001
-+From: Gleb Mazovetskiy <glex.spb@gmail.com>
-+Date: Sun, 3 Jan 2021 12:38:13 +0000
-+Subject: [PATCH] Add a basic FindOpenGLES2.cmake
-+
-+Fixes #1324
-+---
-+ cmake/modules/FindOpenGLES2.cmake | 28 ++++++++++++++++++++++++++++
-+ 1 file changed, 28 insertions(+)
-+ create mode 100644 cmake/modules/FindOpenGLES2.cmake
-+
-+diff --git a/cmake/modules/FindOpenGLES2.cmake b/cmake/modules/FindOpenGLES2.cmake
-+new file mode 100644
-+index 000000000..70fd5e6f0
-+--- /dev/null
-++++ b/cmake/modules/FindOpenGLES2.cmake
-+@@ -0,0 +1,28 @@
-++# Try to find OpenGLES2. Once done this will define:
-++#     OPENGLES2_FOUND
-++#     OPENGLES2_INCLUDE_DIRS
-++#     OPENGLES2_LIBRARIES
-++#     OPENGLES2_DEFINITIONS
-++
-++find_package(PkgConfig QUIET)
-++
-++pkg_check_modules(PC_OPENGLES2 glesv2)
-++
-++if (PC_OPENGLES2_FOUND)
-++    set(OPENGLES2_DEFINITIONS ${PC_OPENGLES2_CFLAGS_OTHER})
-++endif ()
-++
-++find_path(OPENGLES2_INCLUDE_DIRS NAMES GLES2/gl2.h
-++    HINTS ${PC_OPENGLES2_INCLUDEDIR} ${PC_OPENGLES2_INCLUDE_DIRS}
-++)
-++
-++set(OPENGLES2_NAMES ${OPENGLES2_NAMES} glesv2 GLESv2)
-++find_library(OPENGLES2_LIBRARIES NAMES ${OPENGLES2_NAMES}
-++    HINTS ${PC_OPENGLES2_LIBDIR} ${PC_OPENGLES2_LIBRARY_DIRS}
-++)
-++
-++include(FindPackageHandleStandardArgs)
-++find_package_handle_standard_args(OpenGLES2 REQUIRED_VARS OPENGLES2_INCLUDE_DIRS OPENGLES2_LIBRARIES
-++                                  FOUND_VAR OPENGLES2_FOUND)
-++
-++mark_as_advanced(OPENGLES2_INCLUDE_DIRS OPENGLES2_LIBRARIES)
-+-- 
-+2.27.0
-+
-diff --git a/package/solarus/Config.in b/package/solarus/Config.in
-index b0f4121f6d..bcfa640890 100644
---- a/package/solarus/Config.in
-+++ b/package/solarus/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_SOLARUS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # openal
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
- 	depends on !BR2_STATIC_LIBS # SDL2
--	depends on BR2_PACKAGE_HAS_LIBGL
-+	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_GLM
- 	select BR2_PACKAGE_LIBMODPLUG
- 	select BR2_PACKAGE_LIBOGG
-diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
-index 90cbf3e784..07d9af5248 100644
---- a/package/solarus/solarus.mk
-+++ b/package/solarus/solarus.mk
-@@ -16,7 +16,7 @@ SOLARUS_LICENSE_FILES = license.txt
- # Install libsolarus.so
- SOLARUS_INSTALL_STAGING = YES
- 
--SOLARUS_DEPENDENCIES = glm libgl libmodplug libogg libvorbis openal physfs \
-+SOLARUS_DEPENDENCIES = glm libmodplug libogg libvorbis openal physfs \
- 	sdl2 sdl2_image sdl2_ttf
- 
- # Disable launcher GUI (requires Qt5)
-@@ -24,6 +24,13 @@ SOLARUS_CONF_OPTS = \
- 	-DSOLARUS_GUI=OFF \
- 	-DSOLARUS_TESTS=OFF
- 
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
-+SOLARUS_DEPENDENCIES += libgl
-+else
-+SOLARUS_CONF_OPTS += -DSOLARUS_GL_ES=ON
-+SOLARUS_DEPENDENCIES += libgles
-+endif
-+
- ifeq ($(BR2_PACKAGE_LUAJIT),y)
- SOLARUS_CONF_OPTS += -DSOLARUS_USE_LUAJIT=ON
- SOLARUS_DEPENDENCIES += luajit
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...0001-Add-a-basic-FindOpenGLES2.cmake.patch | 48 +++++++++++++++++++
+>  package/solarus/Config.in                     |  2 +-
+>  package/solarus/solarus.mk                    |  9 +++-
+>  3 files changed, 57 insertions(+), 2 deletions(-)
+>  create mode 100644 package/solarus/0001-Add-a-basic-FindOpenGLES2.cmake.patch
+> 
+> diff --git a/package/solarus/0001-Add-a-basic-FindOpenGLES2.cmake.patch b/package/solarus/0001-Add-a-basic-FindOpenGLES2.cmake.patch
+> new file mode 100644
+> index 0000000000..59bf9e8cf4
+> --- /dev/null
+> +++ b/package/solarus/0001-Add-a-basic-FindOpenGLES2.cmake.patch
+> @@ -0,0 +1,48 @@
+> +From 2bf0e98f17d92fd86ee61be179e3cebe93f75ea7 Mon Sep 17 00:00:00 2001
+> +From: Gleb Mazovetskiy <glex.spb@gmail.com>
+> +Date: Sun, 3 Jan 2021 12:38:13 +0000
+> +Subject: [PATCH] Add a basic FindOpenGLES2.cmake
+> +
+> +Fixes #1324
+> +---
+> + cmake/modules/FindOpenGLES2.cmake | 28 ++++++++++++++++++++++++++++
+> + 1 file changed, 28 insertions(+)
+> + create mode 100644 cmake/modules/FindOpenGLES2.cmake
+> +
+> +diff --git a/cmake/modules/FindOpenGLES2.cmake b/cmake/modules/FindOpenGLES2.cmake
+> +new file mode 100644
+> +index 000000000..70fd5e6f0
+> +--- /dev/null
+> ++++ b/cmake/modules/FindOpenGLES2.cmake
+> +@@ -0,0 +1,28 @@
+> ++# Try to find OpenGLES2. Once done this will define:
+> ++#     OPENGLES2_FOUND
+> ++#     OPENGLES2_INCLUDE_DIRS
+> ++#     OPENGLES2_LIBRARIES
+> ++#     OPENGLES2_DEFINITIONS
+> ++
+> ++find_package(PkgConfig QUIET)
+> ++
+> ++pkg_check_modules(PC_OPENGLES2 glesv2)
+> ++
+> ++if (PC_OPENGLES2_FOUND)
+> ++    set(OPENGLES2_DEFINITIONS ${PC_OPENGLES2_CFLAGS_OTHER})
+> ++endif ()
+> ++
+> ++find_path(OPENGLES2_INCLUDE_DIRS NAMES GLES2/gl2.h
+> ++    HINTS ${PC_OPENGLES2_INCLUDEDIR} ${PC_OPENGLES2_INCLUDE_DIRS}
+> ++)
+> ++
+> ++set(OPENGLES2_NAMES ${OPENGLES2_NAMES} glesv2 GLESv2)
+> ++find_library(OPENGLES2_LIBRARIES NAMES ${OPENGLES2_NAMES}
+> ++    HINTS ${PC_OPENGLES2_LIBDIR} ${PC_OPENGLES2_LIBRARY_DIRS}
+> ++)
+> ++
+> ++include(FindPackageHandleStandardArgs)
+> ++find_package_handle_standard_args(OpenGLES2 REQUIRED_VARS OPENGLES2_INCLUDE_DIRS OPENGLES2_LIBRARIES
+> ++                                  FOUND_VAR OPENGLES2_FOUND)
+> ++
+> ++mark_as_advanced(OPENGLES2_INCLUDE_DIRS OPENGLES2_LIBRARIES)
+> +-- 
+> +2.27.0
+> +
+> diff --git a/package/solarus/Config.in b/package/solarus/Config.in
+> index b0f4121f6d..bcfa640890 100644
+> --- a/package/solarus/Config.in
+> +++ b/package/solarus/Config.in
+> @@ -6,7 +6,7 @@ config BR2_PACKAGE_SOLARUS
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # openal
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
+>  	depends on !BR2_STATIC_LIBS # SDL2
+> -	depends on BR2_PACKAGE_HAS_LIBGL
+> +	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
+>  	select BR2_PACKAGE_GLM
+>  	select BR2_PACKAGE_LIBMODPLUG
+>  	select BR2_PACKAGE_LIBOGG
+> diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
+> index 92e849ef02..c759d1c2ea 100644
+> --- a/package/solarus/solarus.mk
+> +++ b/package/solarus/solarus.mk
+> @@ -16,7 +16,7 @@ SOLARUS_LICENSE_FILES = license.txt
+>  # Install libsolarus.so
+>  SOLARUS_INSTALL_STAGING = YES
+>  
+> -SOLARUS_DEPENDENCIES = glm libgl libmodplug libogg libvorbis openal physfs \
+> +SOLARUS_DEPENDENCIES = glm libmodplug libogg libvorbis openal physfs \
+>  	sdl2 sdl2_image sdl2_ttf
+>  
+>  # Disable launcher GUI (requires Qt5)
+> @@ -24,6 +24,13 @@ SOLARUS_CONF_OPTS = \
+>  	-DSOLARUS_GUI=OFF \
+>  	-DSOLARUS_TESTS=OFF
+>  
+> +ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+> +SOLARUS_DEPENDENCIES += libgl
+> +else
+> +SOLARUS_CONF_OPTS += -DSOLARUS_GL_ES=ON
+> +SOLARUS_DEPENDENCIES += libgles
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LUAJIT),y)
+>  SOLARUS_CONF_OPTS += -DSOLARUS_USE_LUAJIT=ON
+>  SOLARUS_DEPENDENCIES += luajit
+> -- 
+> 2.27.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
