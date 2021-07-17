@@ -1,31 +1,67 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Jul 2021 00:13:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtipc: renumber patches
-Message-ID: <20210716221328.347351-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sat, 17 Jul 2021 02:27:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/binutils: fix linker assert on
+ OpenRisc
+In-Reply-To: <20210716225253.68956897@windsurf>
+References: <20210716225253.68956897@windsurf>
+Message-ID: <97814B7E-2587-443A-92A7-20E439521C84@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Commit 883a33ece55c6ef23c33a41196fddabadf140427 forgot to renumber
-remaining patches
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...01-Automatically-generate-XDR-header-files-from-.x-sour.patch} | 0
- ...02-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch} | 0
- 2 files changed, 0 insertions(+), 0 deletions(-)
- rename package/libtirpc/{0003-Automatically-generate-XDR-header-files-from-.x-sour.patch => 0001-Automatically-generate-XDR-header-files-from-.x-sour.patch} (100%)
- rename package/libtirpc/{0004-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch => 0002-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch} (100%)
+> Il giorno 16 lug 2021, alle ore 22:53, Thomas Petazzoni <thomas.petazzoni@bootlin.com> ha scritto:
+> 
+> ?On Mon, 12 Jul 2021 12:45:01 +0200
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+>> When building openal we were seeing the assert failure:
+>> 
+>> /home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
+>> pc-relative relocation against dynamic symbol alSourcePausev
+>> /home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
+>> pc-relative relocation against dynamic symbol alSourceStopv
+>> /home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
+>> pc-relative relocation against dynamic symbol alSourceRewindv
+>> /home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
+>> pc-relative relocation against dynamic symbol alSourcePlayv
+>> collect2: error: ld returned 1 exit status
+>> 
+>> So add patches to fix this binutils assert link failure on OpenRisc.
+>> It's been suggested upstream and it's pending here:
+>> https://sourceware.org/pipermail/binutils/2021-July/117334.html
+>> 
+>> Fixes:
+>> http://autobuild.buildroot.net/results/c96/c96f2600f227d6c76114b9fbc41f74a57e40415a/
+>> 
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>> ...tive-relocation-against-dynamic-on-P.patch | 59 +++++++++++++++++++
+>> ...tive-relocation-against-dynamic-on-P.patch | 59 +++++++++++++++++++
+>> ...tive-relocation-against-dynamic-on-P.patch | 59 +++++++++++++++++++
+>> ...tive-relocation-against-dynamic-on-P.patch | 59 +++++++++++++++++++
+>> 4 files changed, 236 insertions(+)
+>> create mode 100644 package/binutils/2.32/0015-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+>> create mode 100644 package/binutils/2.34/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+>> create mode 100644 package/binutils/2.35.2/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+>> create mode 100644 package/binutils/2.36.1/0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+> 
+> Wow, thanks a lot for this work! Really amazing that you've been able
+> to push this through!
 
-diff --git a/package/libtirpc/0003-Automatically-generate-XDR-header-files-from-.x-sour.patch b/package/libtirpc/0001-Automatically-generate-XDR-header-files-from-.x-sour.patch
-similarity index 100%
-rename from package/libtirpc/0003-Automatically-generate-XDR-header-files-from-.x-sour.patch
-rename to package/libtirpc/0001-Automatically-generate-XDR-header-files-from-.x-sour.patch
-diff --git a/package/libtirpc/0004-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch b/package/libtirpc/0002-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch
-similarity index 100%
-rename from package/libtirpc/0004-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch
-rename to package/libtirpc/0002-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch
--- 
-2.30.2
+I?m very happy about this. Fortunately I?ve suggested what to do on binutils otherwise it could take months :-) 
+
+Giulio
+
+> 
+> Applied to master, of course!
+> 
+> Thanks again,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
