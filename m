@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Jul 2021 11:34:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pcre: add PCRE_CPE_ID_VENDOR
-Message-ID: <20210717093408.954127-1-fontaine.fabrice@gmail.com>
+Date: Sat, 17 Jul 2021 11:37:12 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/pcre: add PCRE2_CPE_ID_VENDOR
+Message-ID: <20210717093712.954390-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
@@ -14,6 +14,9 @@ cpe:2.3:a:pcre:pcre2 is a valid CPE identifier for this package:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix title (PCRE -> PCRE2)
+
  package/pcre2/pcre2.mk | 1 +
  1 file changed, 1 insertion(+)
 
