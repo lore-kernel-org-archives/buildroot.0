@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Jul 2021 17:46:51 +0200
-Subject: [Buildroot] [PATCH v2 1/9] arch/config: Make RISC-V MMU optional
-In-Reply-To: <20210715004843.337268-2-damien.lemoal@wdc.com>
+Date: Sat, 17 Jul 2021 17:54:25 +0200
+Subject: [Buildroot] [PATCH v2 2/9] package/elf2flt: add RISC-V support
+In-Reply-To: <20210715004843.337268-3-damien.lemoal@wdc.com>
 References: <20210715004843.337268-1-damien.lemoal@wdc.com>
- <20210715004843.337268-2-damien.lemoal@wdc.com>
-Message-ID: <20210717154651.GU12203@scaer>
+ <20210715004843.337268-3-damien.lemoal@wdc.com>
+Message-ID: <20210717155425.GV12203@scaer>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
@@ -14,109 +14,95 @@ Content-Transfer-Encoding: 7bit
 Damien, All,
 
 On 2021-07-15 09:48 +0900, Damien Le Moal spake thusly:
-> Linux supports No-MMU RISC-V since kernel version 5.8. Make MMU optional
-> to enable building for RISC-V boards that do not have one.
+> From: Christoph Hellwig <hch@lst.de>
 > 
+> Enable selecting elf2flt for RISC-V no MMU builds and add support for
+> it.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 > Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
-> Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 > ---
->  arch/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../0004-elf2flt-add-riscv-support.patch      | 293 ++++++++++++++++++
+>  package/elf2flt/Config.in.host                |   2 +-
+>  2 files changed, 294 insertions(+), 1 deletion(-)
+>  create mode 100644 package/elf2flt/0004-elf2flt-add-riscv-support.patch
 > 
-> diff --git a/arch/Config.in b/arch/Config.in
-> index 1853e26bb4..82d3b01980 100644
-> --- a/arch/Config.in
-> +++ b/arch/Config.in
-> @@ -210,7 +210,7 @@ config BR2_powerpc64le
->  
->  config BR2_riscv
->  	bool "RISCV"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_ARCH_HAS_MMU_OPTIONAL
+> diff --git a/package/elf2flt/0004-elf2flt-add-riscv-support.patch b/package/elf2flt/0004-elf2flt-add-riscv-support.patch
+> new file mode 100644
+> index 0000000000..4a0bc6e4fa
+> --- /dev/null
+> +++ b/package/elf2flt/0004-elf2flt-add-riscv-support.patch
+> @@ -0,0 +1,293 @@
+> +From d096b496525e487b356ac180a7168c18703c1c43 Mon Sep 17 00:00:00 2001
+> +From: Christoph Hellwig <hch@lst.de>
+> +Date: Wed, 9 Sep 2020 17:31:33 +0900
+> +Subject: [PATCH] elf2flt: add riscv support
+> +
+> +We need a new linker script - riscv has a global_pointer and is
+> +very picky about some section ordering.
+> +
+> +Signed-off-by: Christoph Hellwig <hch@lst.de>
+> +Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 
-I am a bit confused with this: the elf2flt patch only adds support for
-riscv64 (excerpts):
+You should add a reference to the upstream PR:
+    https://github.com/uclinux-dev/elf2flt/pull/19
 
-    Makefile.in:
-    +else ifeq ($(strip $(CPU)),riscv64)
-and:
-    elf2flt.c:
-    +#elif defined(TARGET_riscv64)
-    +#include <elf/riscv.h>
-and:
-    +#elif defined(TARGET_riscv64)
-    +#define ARCH    "riscv64"
+> +---
+> + Makefile.in        |   4 +-
+> + elf2flt.c          |  22 +++++
+> + riscv64-elf2flt.ld | 198 +++++++++++++++++++++++++++++++++++++++++++++
+> + 3 files changed, 223 insertions(+), 1 deletion(-)
+> + create mode 100644 riscv64-elf2flt.ld
+> +
+> +diff --git a/Makefile.in b/Makefile.in
+> +index 0529c7f..121a2a7 100644
+> +--- a/Makefile.in
+> ++++ b/Makefile.in
+> +@@ -44,7 +44,9 @@ endif
+> + LDFILE= elf2flt.ld
+> + ifeq ($(strip $(CPU)),e1)
+> + SRC_LDFILE= $(srcdir)/$(CPU)-elf2flt.ld
+> +-else 
+> ++else ifeq ($(strip $(CPU)),riscv64)
+> ++SRC_LDFILE= $(srcdir)/$(CPU)-elf2flt.ld
 
-However, this change will make it possible to select noMMU for riscv32
-too... Is this supposed to be supported?
+Here: this looks like it really is specific to riscv64 only, and would
+not add support for riscv32...
 
-If not, then I think the following patch would be a better starting
-point to add noMMU support only for riscv64:
+> ++else
+> + SRC_LDFILE= elf2flt.ld
+> + endif
+> + 
+> +diff --git a/elf2flt.c b/elf2flt.c
+> +index 3bcf4fe..0adba12 100644
+> +--- a/elf2flt.c
+> ++++ b/elf2flt.c
+> +@@ -81,6 +81,8 @@ const char *elf2flt_progname;
+> + #include <elf/v850.h>
+> + #elif defined(TARGET_xtensa)
+> + #include <elf/xtensa.h>
+> ++#elif defined(TARGET_riscv64)
+> ++#include <elf/riscv.h>
 
-    diff --git a/arch/Config.in b/arch/Config.in
-    index 1853e26bb4..2e95b6e76c 100644
-    --- a/arch/Config.in
-    +++ b/arch/Config.in
-    @@ -210,7 +210,6 @@ config BR2_powerpc64le
-     
-     config BR2_riscv
-     	bool "RISCV"
-    -	select BR2_ARCH_HAS_MMU_MANDATORY
-     	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-     	help
-     	  RISC-V is an open, free Instruction Set Architecture created
-    diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
-    index 1fc20e5de7..e6436d7c39 100644
-    --- a/arch/Config.in.riscv
-    +++ b/arch/Config.in.riscv
-    @@ -71,10 +71,12 @@ choice
-     
-     config BR2_RISCV_32
-     	bool "32-bit"
-    +	select BR2_ARCH_HAS_MMU_MANDATORY
-     
-     config BR2_RISCV_64
-     	bool "64-bit"
-     	select BR2_ARCH_IS_64
-    +	select BR2_ARCH_HAS_MMU_OPTIONAL
-     
-     endchoice
-     
+Ditto.
 
-Also, the ordering is weird: first you allow a noMMU configuration, then
-you add support for it in elf2flt. If only the first patch (this one) is
-applied, and not the second (e.g. because there is an issue with it),
-then the build is broken.
+> + #endif
+> + 
+> + #if defined(__MINGW32__)
+> +@@ -123,6 +125,8 @@ const char *elf2flt_progname;
+> + #define ARCH	"nios2"
+> + #elif defined(TARGET_xtensa)
+> + #define ARCH	"xtensa"
+> ++#elif defined(TARGET_riscv64)
+> ++#define ARCH    "riscv64"
 
-Ditto with the patch to fix TARGET_OS.
+Ditto.
 
-The series should be bisectable, i.e. we should be able to apply number
-of the first patches without breaking the build.
-
-So, instead, I would think it is better to:
-
- 1. backport the elf2flt upstream support for riscv(64--only?)
- 2. fix TARGET_OS for noMMU riscv(64-only?)
- 3. allow selecting noMMU for riscv(64-only?)
-
-And I think that patches 2 and 3 could even be squashed together. But I
-am not opposed to having them separate either; do as you feel best.
-
-Also, I wil be replying to the elft2flt patch separately...
+And: TAB between ARCH and its value. ;-)
+(yes, I've read the review thread on github! ;-) )
 
 Regards,
 Yann E. MORIN.
-
->  	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
->  	help
->  	  RISC-V is an open, free Instruction Set Architecture created
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
