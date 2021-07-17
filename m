@@ -1,62 +1,42 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 17 Jul 2021 15:21:44 +0200
-Subject: [Buildroot] [PATCH] package/lua-lunix: fix build with musl
-Message-ID: <20210717132144.1503495-1-francois.perrad@gadz.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 17 Jul 2021 07:32:25 -0600
+Subject: [Buildroot] [PATCH 1/1] package/libtirpc: fix rpc.h install path
+Message-ID: <20210717133225.470326-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-see http://autobuild.buildroot.net/results/7d192a0a1d58d258b77906cf936949b2f47373cd/
+When libtirpc installs rpc.h with autoconf it installs it to:
+$(HOST_DIR)/include/tirpc/rpc/rpc.h
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+As this is the expected path we need to do the same.
+
+This should fix the previous attempt at fixing host-nfs-utils:
+b991962993357092625e5b18d8203acd1e9b8b1f
+
+Fixes:
+http://autobuild.buildroot.net/results/990/990b5e59bacea855c8fce4abb0902bc72422c067
+
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- .../0002-remove-link-with-librt.patch         | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/lua-lunix/0002-remove-link-with-librt.patch
+ package/libtirpc/libtirpc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lua-lunix/0002-remove-link-with-librt.patch b/package/lua-lunix/0002-remove-link-with-librt.patch
-new file mode 100644
-index 000000000..7b1c8ddd5
---- /dev/null
-+++ b/package/lua-lunix/0002-remove-link-with-librt.patch
-@@ -0,0 +1,36 @@
-+From aeaff83b9ae42547b8728edac000f3d41d5e44aa Mon Sep 17 00:00:00 2001
-+From: Francois Perrad <francois.perrad@gadz.org>
-+Date: Sat, 17 Jul 2021 13:21:38 +0200
-+Subject: [PATCH] remove link with librt
-+
-+librt is not available with musl
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+---
-+ lunix-rel-20170920/lunix-20170920-1.rockspec | 10 ----------
-+ 1 file changed, 10 deletions(-)
-+
-+diff --git a/lunix-rel-20170920/lunix-20170920-1.rockspec b/lunix-rel-20170920/lunix-20170920-1.rockspec
-+index 741179d..76cafeb 100644
-+--- a/lunix-rel-20170920/lunix-20170920-1.rockspec
-++++ b/lunix-rel-20170920/lunix-20170920-1.rockspec
-+@@ -26,16 +26,6 @@ build = {
-+ 		};
-+ 	};
-+ 	platforms = {
-+-		linux = {
-+-			modules = {
-+-				["unix"] = {
-+-					libraries = {
-+-						-- glibc <= 2.17 needs to link with librt
-+-						"rt";
-+-					};
-+-				};
-+-			};
-+-		};
-+ 		osx = {
-+ 			modules = {
-+ 				["unix"] = {
-+-- 
-+2.30.2
-+
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+index 8cdc453cd4..fd62ab1f85 100644
+--- a/package/libtirpc/libtirpc.mk
++++ b/package/libtirpc/libtirpc.mk
+@@ -21,7 +21,7 @@ LIBTIRPC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DGQ"
+ LIBTIRPC_CONF_OPTS = --disable-gssapi
+ 
+ define HOST_LIBTIRPC_INSTALL_CMDS
+-	$(INSTALL) -D -m 0644 $(@D)/tirpc/rpc/rpc.h $(HOST_DIR)/include/rpc/rpc.h
++	$(INSTALL) -D -m 0644 $(@D)/tirpc/rpc/rpc.h $(HOST_DIR)/include/tirpc/rpc/rpc.h
+ 	$(INSTALL) -D -m 0644 $(@D)/tirpc/rpc/types.h $(HOST_DIR)/include/rpc/types.h
+ 	$(INSTALL) -D -m 0644 $(@D)/tirpc/netconfig.h $(HOST_DIR)/include/netconfig.h
+ endef
 -- 
-2.30.2
+2.25.1
