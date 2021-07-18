@@ -1,33 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 22:39:35 +0200
-Subject: [Buildroot] [git commit] configs/qemu_s390x: bump kernel version to
- 5.10.41
-Message-ID: <20210718200548.77C2388292@busybox.osuosl.org>
+Date: Sun, 18 Jul 2021 22:40:20 +0200
+Subject: [Buildroot] [git commit] package/delve: bump to version 1.6.1
+Message-ID: <20210718200658.CE35E8829D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff9241c3c81fd994e106217e260131735544ce97
+commit: https://git.buildroot.net/buildroot/commit/?id=2e10364e3b9d86f67549d34987f3b4ed160f01b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/qemu_s390x_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/delve/delve.hash | 4 ++--
+ package/delve/delve.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
-index 4aed9d9ae5..ba8f3b2908 100644
---- a/configs/qemu_s390x_defconfig
-+++ b/configs/qemu_s390x_defconfig
-@@ -17,7 +17,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.41"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/s390x/patches"
+diff --git a/package/delve/delve.hash b/package/delve/delve.hash
+index e8bb9c37ad..3d117813c6 100644
+--- a/package/delve/delve.hash
++++ b/package/delve/delve.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f8bbaecdfc9d1ff6148900d3dea44b6dd06a7f0197be4e9a75c289b7f62682ab  delve-1.5.0.tar.gz
+-sha256	778864b990007e8cef6633f8c372dd05bac1fada6cf67b008afb1483f83b38f5  LICENSE
++sha256  e73f7fc063632268d3bdf53486aeafd98cceb8f86f4af56903dedfebaefe690d  delve-1.6.1.tar.gz
++sha256  778864b990007e8cef6633f8c372dd05bac1fada6cf67b008afb1483f83b38f5  LICENSE
+diff --git a/package/delve/delve.mk b/package/delve/delve.mk
+index f574bc5c08..6c346552a4 100644
+--- a/package/delve/delve.mk
++++ b/package/delve/delve.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DELVE_VERSION = 1.5.0
++DELVE_VERSION = 1.6.1
+ DELVE_SITE = $(call github,go-delve,delve,v$(DELVE_VERSION))
+ DELVE_LICENSE = MIT
+ DELVE_LICENSE_FILES = LICENSE
