@@ -1,37 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 22:15:59 +0200
-Subject: [Buildroot] [PATCH v2 3/4] configs/beaglev: update U-Boot to
- enable OF_SEPARATE
-In-Reply-To: <20210616050341.510702-4-drew@beagleboard.org>
+Date: Sun, 18 Jul 2021 22:16:39 +0200
+Subject: [Buildroot] [PATCH v2 4/4] configs/beaglev: switch to upstream
+ opensbi generic platform
+In-Reply-To: <20210616050341.510702-5-drew@beagleboard.org>
 References: <20210616050341.510702-1-drew@beagleboard.org>
- <20210616050341.510702-4-drew@beagleboard.org>
-Message-ID: <20210718221559.3d343c13@windsurf>
+ <20210616050341.510702-5-drew@beagleboard.org>
+Message-ID: <20210718221639.0e3fd4d0@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Tue, 15 Jun 2021 22:03:43 -0700
+On Tue, 15 Jun 2021 22:03:45 -0700
 Drew Fustini <drew@beagleboard.org> wrote:
 
-> Update commit ID of U-Boot to latest commit in starfive-tech repo [1]
-> which enables OF_SEPARATE [2].
-> 
-> [1] https://github.com/starfive-tech/u-boot/tree/Fedora_VIC_7100_2021.04
-> [2] https://github.com/starfive-tech/u-boot/commit/64ead5b83959da8eb87b6963843addf5942e6ed4
-> 
-> Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
-> Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
-> Signed-off-by: Drew Fustini <drew@beagleboard.org>
-> ---
->  configs/beaglev_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> +# upstream opensbi master branch
+> +BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,riscv,opensbi,79f9b4220ffa7f74356054be25d450d7958bf16c)/opensbi-79f9b4220ffa7f74356054be25d450d7958bf16c.tar.gz"
+> +BR2_TARGET_OPENSBI_PLAT="generic"
+>  # BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG is not set
+>  # BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
+>  BR2_TARGET_OPENSBI_UBOOT_PAYLOAD=y
+> +BR2_TARGET_OPENSBI_FW_FDT_PATH=y
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>  BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+>  # HEAD of the starfive-tech:Fedora_VIC_7100_2021.04 branch
+>  BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,u-boot,64ead5b83959da8eb87b6963843addf5942e6ed4)/uboot-64ead5b83959da8eb87b6963843addf5942e6ed4.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="starfive_vic7100_beagle_v_smode"
+> +BR2_TARGET_UBOOT_FORMAT_DTB=y
 
-Applied to master, thanks.
+This was no longer needed in the defconfig, as it is now implied by
+BR2_TARGET_OPENSBI_FW_FDT_PATH=y.
+
+Best regards,
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
+Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
