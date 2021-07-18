@@ -1,43 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 19:54:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vala: bump to version 0.52.4
-In-Reply-To: <20210703154822.2026244-1-fontaine.fabrice@gmail.com>
-References: <20210703154822.2026244-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210718195401.1a488d4e@windsurf>
+Date: Sun, 18 Jul 2021 19:55:39 +0200
+Subject: [Buildroot] [git commit] package/exiv2: fix build without SSP
+Message-ID: <20210718172146.D1A4588226@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sat,  3 Jul 2021 17:48:22 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b18d9d6191c3ca1f74115e6395ff8e9ee1b75b89
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Update patch
-> 
-> This will fix the following build failure with gssdp 1.2.3 which is
-> raised since commit 7a2f73e9930d3e46f1530aa865675439adc0e162:
-> 
-> FAILED: vala/gssdp-1.2.vapi
-> /home/buildroot/autobuild/run/instance-1/output-1/host/bin/vapigen --quiet --library=gssdp-1.2 --directory=/home/buildroot/autobuild/run/instance-1/output-1/build/gssdp-1.2.3/build/vala --pkg=gio-2.0 --pkg=libsoup-2.4 --metadatadir=/home/buildroot/autobuild/run/instance-1/output-1/build/gssdp-1.2.3/vala /home/buildroot/autobuild/run/instance-1/output-1/build/gssdp-1.2.3/build/libgssdp/GSSDP-1.2.gir
-> GSSDP-1.2.gir:1656.5-1656.29: error: unknown child element `docsection' in `namespace'
-> 
-> https://github.com/GNOME/vala/blob/0.52.4/NEWS
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e531029f75c8d6886f797b5bd01795d16f6848f3
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-dont-add-dirty-to-valac-version.patch  | 17 ++++++++++-------
->  package/vala/vala.hash                          |  4 ++--
->  package/vala/vala.mk                            |  4 ++--
->  3 files changed, 14 insertions(+), 11 deletions(-)
+Build without SSP fails since bump to version 0.27.4 in commit
+bcace429426ee91aac56f3dcc33b69e22141d384
 
-Applied to master, thanks.
+This is due to the fact that
+https://github.com/Exiv2/exiv2/commit/bbe0b70840cf28b7dd8c0b7e9bb1b741aeda2efd
+removed the wrong GCC_ prefix from HAS_FSTACK_PROTECTOR_STRONG variable
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/ae4635899124c602c70d2b342a76f95c34aa4a3d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...001-add-BUILD_WITH_STACK_PROTECTOR-option.patch | 52 ++++++++++++++++++++++
+ package/exiv2/exiv2.mk                             |  4 +-
+ 2 files changed, 55 insertions(+), 1 deletion(-)
+
+diff --git a/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch b/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch
+new file mode 100644
+index 0000000000..c82061661b
+--- /dev/null
++++ b/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch
+@@ -0,0 +1,52 @@
++From 8651c9f823ace70b6609b10aeef0c0740636b570 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 1 Jul 2021 19:31:25 +0200
++Subject: [PATCH] add BUILD_WITH_STACK_PROTECTOR option
++
++Add BUILD_WITH_STACK_PROTECTOR to avoid the following build failure with
++toolchains that don't support stack-protector:
++
++/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/9.3.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: utils.cpp:(.text._ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPcEEvT_S7_St20forward_iterator_tag[_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPcEEvT_S7_St20forward_iterator_tag]+0xd0): undefined reference to `__stack_chk_fail'
++
++Indeed, support for -fstack-protector-strong can't be detected through
++check_cxx_compiler_flag as some toolchains need to link with -lssp to
++enable SSP support
++
++Fixes:
++ - http://autobuild.buildroot.org/results/ae4635899124c602c70d2b342a76f95c34aa4a3d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/Exiv2/exiv2/pull/1756]
++---
++ CMakeLists.txt            | 1 +
++ cmake/compilerFlags.cmake | 2 +-
++ 2 files changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 9fe8b5f9..aabb3dca 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -52,6 +52,7 @@ mark_as_advanced(
++     EXIV2_TEAM_USE_SANITIZERS
++ )
++ 
+++option( BUILD_WITH_STACK_PROTECTOR    "Build with stack protector"                            ON )
++ option( BUILD_WITH_CCACHE             "Use ccache to speed up compilations"                   OFF )
++ option( BUILD_WITH_COVERAGE           "Add compiler flags to generate coverage stats"         OFF )
++ include(cmake/gcovr.cmake REQUIRED)
++diff --git a/cmake/compilerFlags.cmake b/cmake/compilerFlags.cmake
++index c8a85c59..20f6ac53 100644
++--- a/cmake/compilerFlags.cmake
+++++ b/cmake/compilerFlags.cmake
++@@ -44,7 +44,7 @@ if ( MINGW OR UNIX OR MSYS ) # MINGW, Linux, APPLE, CYGWIN
++             if(HAS_FCF_PROTECTION)
++                 add_compile_options(-fcf-protection)
++             endif()
++-            if(HAS_FSTACK_PROTECTOR_STRONG)
+++            if(BUILD_WITH_STACK_PROTECTOR AND HAS_FSTACK_PROTECTOR_STRONG)
++                 add_compile_options(-fstack-protector-strong)
++             endif()
++         endif()
++-- 
++2.30.2
++
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+index 52bf03fc63..33222e6381 100644
+--- a/package/exiv2/exiv2.mk
++++ b/package/exiv2/exiv2.mk
+@@ -12,7 +12,9 @@ EXIV2_LICENSE = GPL-2.0+
+ EXIV2_LICENSE_FILES = COPYING
+ EXIV2_CPE_ID_VENDOR = exiv2
+ 
+-EXIV2_CONF_OPTS += -DEXIV2_BUILD_SAMPLES=OFF
++EXIV2_CONF_OPTS += \
++	-DBUILD_WITH_STACK_PROTECTOR=OFF \
++	-DEXIV2_BUILD_SAMPLES=OFF
+ 
+ ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),y)
+ EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=ON
