@@ -1,95 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jul 2021 11:25:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: fix build with
- libmaxminddb
-In-Reply-To: <CAPi7W80Co6=hRO5p68v8+viKbW_CkFYo40ASPh=Fq+zq52d8aw@mail.gmail.com>
-References: <20210716172016.207663-1-fontaine.fabrice@gmail.com>
- <20210717091140.GI12203@scaer>
- <CAPi7W80_mm5p24UOGj9mhZYYU7eHtadzsVGrrBVScCWoehTAeQ@mail.gmail.com>
- <20210717203343.GX12203@scaer>
- <CAPi7W81riHMDFyu22nud+QCgjCgGY6ZAtKzSs+d1PGhPZsk+fQ@mail.gmail.com>
- <20210718080847.GC12203@scaer>
- <CAPi7W80Co6=hRO5p68v8+viKbW_CkFYo40ASPh=Fq+zq52d8aw@mail.gmail.com>
-Message-ID: <20210718092517.GD12203@scaer>
+Date: Sun, 18 Jul 2021 12:15:46 +0200
+Subject: [Buildroot] [git commit] package/nfs-utils: needs uuid
+Message-ID: <20210718094632.271AB912EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b2857786f1fdccac271b99c791080fdbf500d096
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-07-18 10:33 +0200, Fabrice Fontaine spake thusly:
-> Le dim. 18 juil. 2021 ? 10:08, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
-[--SNIP--]
-> > > >     diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
-> > > >     index b2637257b6..10338dad7c 100644
-> > > >     --- a/package/libmodsecurity/libmodsecurity.mk
-> > > >     +++ b/package/libmodsecurity/libmodsecurity.mk
-> > > >     @@ -14,6 +14,24 @@ LIBMODSECURITY_CPE_ID_VENDOR = trustwave
-> > > >      LIBMODSECURITY_CPE_ID_PRODUCT = modsecurity
-> > > >
-> > > >      LIBMODSECURITY_DEPENDENCIES = pcre
-> > > >     +
-> > > >     +# configure.ac will call git to get various version strings, from
-> > > >     +# libmodsecurity itself, but also from bundled dependencies, just
-> > > >     +# for the sake of siplaying them at the end of configure.
-> > > >     +# Fake a git that returns the version for libmodescurity, to quiesce
-> > > >     +# warnings...
-> > > >     +define LIBMODSECURITY_FAKE_GIT
-> > > >     +   $(Q)mkdir -p $(@D)/.buildroot
-> > > >     +   $(Q)printf '#!/usr/bin/env sh\necho "$(LIBMODSECURITY_VERSION)"\n' \
-> > > >     +           >$(@D)/.buildroot/git
-> > > >     +   @(Q)chmod 755 $(@D)/.buildroot/git
-> > > >     +endef
-> > > >     +LIBMODSECURITY_POST_EXTRACT_HOOKS += LIBMODSECURITY_FAKE_GIT
-> > > >     +
-> > > >     +# 0001-Revert-Fix-maxminddb-link-on-FreeBSD.patch
-> > > >     +LIBMODSECURITY_AUTORECONF = YES
-> > > >     +LIBMODSECURITY_AUTORECONF_ENV = PATH="$(@D)/.buildroot:$(BR_PATH)"
+Build of nfs-utils without uuid is broken since bump to version 2.5.4 in
+commit 0ce30de72fb303768c5865949b8ce9260d0c43f5: the --enable-uuid
+option is now ill-named, it now only checks for libblkid:
+    http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commitdiff;h=c5528f40f9db5061e06dcf1f9b7fce5185b376c6
 
-Becarefull here: BR_PATH is already quoted:
+Cleaning this up is upstream's role, though.
 
-    Makefile:478:BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
+Fixes:
+ - http://autobuild.buildroot.org/results/510b3425943f2e31b024c99b3552419a80c2f9f3
 
-How do other packages do? Hmm... It sems they usually do not quote
-anything, e.g.:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/nfs-utils/Config.in    | 2 ++
+ package/nfs-utils/nfs-utils.mk | 5 ++---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-    package/nodejs/nodejs.mk:91:            PATH=$(@D)/bin:$(BR_PATH)
-    package/qt5/qt5webkit/qt5webkit.mk:33:QT5WEBKIT_CONF_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
-
-So, no quoting...
-
-However, wireshark got it wrong:
-
-    package/wireshark/wireshark.mk:24:      PATH="$(@D)/bin:$(BR_PATH)"
-
-Regards,
-Yann E. MORIN.
-
-> > > >     +
-> > > >      LIBMODSECURITY_CONF_OPTS = \
-> > > >         --with-pcre="$(STAGING_DIR)/usr/bin/pcre-config" \
-> > > >         --disable-examples \
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
-> Best Regards,
-> 
-> Fabrice
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
+index b736f6c973..bd1e091331 100644
+--- a/package/nfs-utils/Config.in
++++ b/package/nfs-utils/Config.in
+@@ -7,6 +7,8 @@ config BR2_PACKAGE_NFS_UTILS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc, rpcbind
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_LIBTIRPC # IPv6 requires libtirpc
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  The NFS Linux kernel server.
+ 
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 51a35028e2..0b4bca4772 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -9,7 +9,7 @@ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+ NFS_UTILS_LICENSE = GPL-2.0+
+ NFS_UTILS_LICENSE_FILES = COPYING
+-NFS_UTILS_DEPENDENCIES = host-nfs-utils host-pkgconf libtirpc
++NFS_UTILS_DEPENDENCIES = host-nfs-utils host-pkgconf libtirpc util-linux
+ NFS_UTILS_CPE_ID_VENDOR = linux-nfs
+ NFS_UTILS_AUTORECONF = YES
+ 
+@@ -59,9 +59,8 @@ else
+ NFS_UTILS_CONF_OPTS += --disable-caps
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID)$(BR2_PACKAGE_UTIL_LINUX_LIBUUID),yy)
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
+ NFS_UTILS_CONF_OPTS += --enable-uuid
+-NFS_UTILS_DEPENDENCIES += util-linux
+ else
+ NFS_UTILS_CONF_OPTS += --disable-uuid
+ endif
