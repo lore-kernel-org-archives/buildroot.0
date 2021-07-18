@@ -1,38 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 13:59:34 +0200
-Subject: [Buildroot] [git commit] package/tvheadend: requires DES support in
- openssl
-Message-ID: <20210718112547.08AEF87F5E@busybox.osuosl.org>
+Date: Sun, 18 Jul 2021 14:00:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mtd: update lib{mtd, ubi}.h path
+In-Reply-To: <20210718083412.1904311-1-fontaine.fabrice@gmail.com>
+References: <20210718083412.1904311-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210718140058.47ac4d31@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=367e926678cf9e72fcb97012faa88fa24a79a937
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 18 Jul 2021 10:34:12 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Enable DES in openssl to fix build failure raised since commit
-a83d41867c8d69a77d5cd0a665aa216af5340359
+> Update lib{mtd,ubi}.h path to fix the following build failure raised
+> since bump of swupdate to version 2021.04 in commit
+> 2c6b0359c3b819fadb4437b2d780e95c32fdab21:
+> 
+> In file included from corelib/mtd-interface.c:21:
+> include/flash.h:13:10: fatal error: libmtd.h: No such file or directory
+>    13 | #include <libmtd.h>
+>       |          ^~~~~~~~~~
+> 
+> This build failure is raised because of
+> https://github.com/sbabic/swupdate/commit/0c672866d4a9fe8f0808b5d8a0afb95c13c4c138
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/d475bdb341d2afecf12e404dfa093e58221b9882
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/mtd/mtd.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Fixes:
-http://autobuild.buildroot.net/results/b22/b22469d96ce64b277e942046845284e6729b42af/
+Isn't there a chance for this to break other packages? Is it just
+swupdate that is using the MTD headers?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/tvheadend/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index da6dce50f3..c033b29819 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -12,6 +12,7 @@ menuconfig BR2_PACKAGE_TVHEADEND
- 	select BR2_PACKAGE_DTV_SCAN_TABLES
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	help
- 
- 	  Tvheadend is a TV streaming server for Linux supporting
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
