@@ -1,30 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 22:43:22 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/icu: bump version to 69-1
-In-Reply-To: <20210530111901.11327-1-bernd.kuhls@t-online.de>
-References: <20210530111901.11327-1-bernd.kuhls@t-online.de>
-Message-ID: <20210718224322.58415c9f@windsurf>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 18 Jul 2021 14:44:05 -0600
+Subject: [Buildroot] [PATCH v4 1/2] package/libtirpc: Add optional GSSAPI
+ support
+Message-ID: <20210718204406.899038-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sun, 30 May 2021 13:19:01 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v3 -> v4:
+  - rebase
+Changes v2 -> v3:
+  - use krb5-config instead of -lgssapi_krb5
+---
+ package/libtirpc/Config.in   | 8 ++++++++
+ package/libtirpc/libtirpc.mk | 8 +++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-> Release notes: http://site.icu-project.org/download/69
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/icu/icu.hash | 2 +-
->  package/icu/icu.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
+index 2e9c939fa8..1899edefbf 100644
+--- a/package/libtirpc/Config.in
++++ b/package/libtirpc/Config.in
+@@ -7,5 +7,13 @@ config BR2_PACKAGE_LIBTIRPC
+ 
+ 	  http://sourceforge.net/projects/libtirpc/
+ 
++config BR2_PACKAGE_LIBTIRPC_GSS
++	bool "gss"
++	depends on BR2_USE_MMU # libkrb5
++	depends on BR2_PACKAGE_LIBTIRPC
++	select BR2_PACKAGE_LIBKRB5
++	help
++	  Enable GSSAPI support
++
+ comment "libtirpc needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+index 31be113965..4b385b7003 100644
+--- a/package/libtirpc/libtirpc.mk
++++ b/package/libtirpc/libtirpc.mk
+@@ -18,7 +18,13 @@ LIBTIRPC_AUTORECONF = YES
+ # getrpcby{number,name} are only provided if 'GQ' is defined
+ LIBTIRPC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DGQ"
+ 
+-LIBTIRPC_CONF_OPTS = --disable-gssapi
++ifeq ($(BR2_PACKAGE_LIBTIRPC_GSS),y)
++LIBTIRPC_CONF_ENV += KRB5_CONFIG=$(STAGING_DIR)/usr/bin/krb5-config
++LIBTIRPC_CONF_OPTS += --enable-gssapi
++LIBTIRPC_DEPENDENCIES += libkrb5
++else
++LIBTIRPC_CONF_OPTS += --disable-gssapi
++endif
+ HOST_LIBTIRPC_CONF_OPTS = --disable-gssapi
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
