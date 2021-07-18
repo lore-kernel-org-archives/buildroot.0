@@ -1,87 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 13:54:38 +0200
-Subject: [Buildroot] [git commit] package/gdb: enable gdbserver support for
- riscv
-Message-ID: <20210718112343.602E286607@busybox.osuosl.org>
+Date: Sun, 18 Jul 2021 13:59:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libsndfile: fix c99 check
+In-Reply-To: <20210620180409.1167370-1-bernd.kuhls@t-online.de>
+References: <20210620180409.1167370-1-bernd.kuhls@t-online.de>
+Message-ID: <20210718135919.6af0e870@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ecd247ead22a6cfb87a4ffafc4be05201328aef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Bernd,
 
-It turn out that gdbserver support for riscv is available since 10.1 release, since commit [1].
+On Sun, 20 Jun 2021 20:04:09 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Restrict the gdb version choice for riscv to 10.1 for simplicity [2].
+> The check for c99 contains "include <wchar.h>" although the package
+> itself does not use wchar functions outside Windows-specific code.
+> This patch forces the detection of c99 for toolchains lacking wchar.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/62c/62c07e66491e2fcf32d3921f8286ec1293591194/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libsndfile/libsndfile.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-[1] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=bf84f7066626c78884436e1c39fb60f04c665f21
-[2] http://lists.busybox.net/pipermail/buildroot/2021-June/312681.html
+Thanks for the research and fix. However the commit log for fixes like
+this should always include some details about since when the problem is
+occurring and why. Indeed, we want to easily understand if the problem
+is applicable to our LTS branch.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Alistair Francis <alistair.francis@wdc.com>
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gdb/Config.in      | 3 ---
- package/gdb/Config.in.host | 9 ++++++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+In this case, I did the research: the problem didn't exist before the
+bump of libsndfile to 1.0.31. Since the bump to libsndfile to 1.0.31
+was done in June 2021, the LTS branch is not impacted.
 
-diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-index 262740fc4c..246748131e 100644
---- a/package/gdb/Config.in
-+++ b/package/gdb/Config.in
-@@ -19,8 +19,6 @@ config BR2_PACKAGE_GDB
- 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_INSTALL_LIBSTDCPP
--	# no gdbserver on riscv
--	select BR2_PACKAGE_GDB_DEBUGGER if BR2_riscv
- 	# When the external toolchain gdbserver is copied to the
- 	# target, we don't allow building a separate gdbserver. The
- 	# one from the external toolchain should be used.
-@@ -47,7 +45,6 @@ if BR2_PACKAGE_GDB
- config BR2_PACKAGE_GDB_SERVER
- 	bool "gdbserver"
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
--	depends on !BR2_riscv
- 	help
- 	  Build the gdbserver stub to run on the target.
- 	  A full gdb is needed to debug the progam.
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 21e6b34caa..9814f3a79b 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
- 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
- 	depends on !BR2_microblaze
- 	depends on !BR2_or1k
--	depends on !BR2_riscv
- 	depends on !BR2_nds32
- 
- comment "Host GDB Options"
-@@ -70,9 +69,13 @@ choice
- 
- config BR2_GDB_VERSION_8_3
- 	bool "gdb 8.3.x"
-+	# gdbserver support missing
-+	depends on !BR2_riscv
- 
- config BR2_GDB_VERSION_9_2
- 	bool "gdb 9.2.x"
-+	# gdbserver support missing
-+	depends on !BR2_riscv
- 
- config BR2_GDB_VERSION_10
- 	bool "gdb 10.x"
-@@ -87,6 +90,6 @@ config BR2_GDB_VERSION
- 	default "arc-2020.09-release-gdb" if BR2_arc
- 	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
- 	default "8.3.1"    if BR2_GDB_VERSION_8_3
--	default "9.2"      if BR2_GDB_VERSION_9_2 || !BR2_PACKAGE_HOST_GDB
--	default "10.1"	   if BR2_GDB_VERSION_10
-+	default "9.2"      if BR2_GDB_VERSION_9_2 || (!BR2_PACKAGE_HOST_GDB && !BR2_riscv)
-+	default "10.1"	   if BR2_GDB_VERSION_10 || (!BR2_PACKAGE_HOST_GDB && BR2_riscv)
- 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+I have amended the commit log with those details, but it would be good
+to have such details in your future commit logs :-)
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
