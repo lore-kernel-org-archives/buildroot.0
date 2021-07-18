@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AB1FC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:47:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33AE3C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:47:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C8A7660F93
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:47:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C8A7660F93
+	by mail.kernel.org (Postfix) with ESMTPS id E10B560F9C
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:47:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E10B560F9C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E59A60D4E;
-	Tue,  3 Aug 2021 23:47:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BCB1E83A96;
+	Tue,  3 Aug 2021 23:47:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CwX1OH2PEajC; Tue,  3 Aug 2021 23:47:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HdmzmWc2fdk2; Tue,  3 Aug 2021 23:47:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13AC460AA7;
-	Tue,  3 Aug 2021 23:47:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 234D083F84;
+	Tue,  3 Aug 2021 23:47:17 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 109451BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:17:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 082B51BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:17:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 15EB840515
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2EEC34069D
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w1gQnHurHjjl for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
+ with ESMTP id szxTW_1Jz34E for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DADF14069D
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4086B40EC4
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3AAC286AA7; Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
+ id 9323E87059; Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Jul 2021 22:28:08 +0200
+Date: Sun, 18 Jul 2021 23:23:15 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5540b789479c4b1a5b67c6ba35d3403da86f7f6c
-X-Git-Newrev: 747e2eed880b70c085bb93b34a6e1558ae49b6d0
+X-Git-Oldrev: 3f1013dca35929ed5fe398d47a32a3df9020a571
+X-Git-Newrev: c5348521f8924447dc5c4038a8d01d242a182651
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211008.3AAC286AA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/binutils: fix building
- or1k with host gcc version < 5
+Message-Id: <20210803211008.9323E87059@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/uacme: bump version to
+ 1.7.1
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,250 +70,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=747e2eed880b70c085bb93b34a6e1558ae49b6d0
+commit: https://git.buildroot.net/buildroot/commit/?id=c5348521f8924447dc5c4038a8d01d242a182651
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add patches to fix building on hosts that provide gcc version < 5
-(i.e. 4.9), otherwise they fail due to missing default '-std=gnu11' option
-on variable declaration inside for loops.
-
-The patch is pending upstream:
-https://sourceware.org/pipermail/binutils/2021-June/116884.html
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...lf32-or1k-fix-building-with-gcc-version-5.patch | 50 ++++++++++++++++++++++
- ...lf32-or1k-fix-building-with-gcc-version-5.patch | 50 ++++++++++++++++++++++
- ...lf32-or1k-fix-building-with-gcc-version-5.patch | 50 ++++++++++++++++++++++
- ...lf32-or1k-fix-building-with-gcc-version-5.patch | 50 ++++++++++++++++++++++
- 4 files changed, 200 insertions(+)
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-new file mode 100644
-index 0000000000..c3978e22fa
---- /dev/null
-+++ b/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-@@ -0,0 +1,50 @@
-+From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 9 Jun 2021 17:28:27 +0200
-+Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-+
-+Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-+an old compiler(i.e. gcc 4.9) build fails on:
-+```
-+elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-+C99 or C11 mode
-+    for (size_t i = 0; i < insn_count; i++)
-+    ^
-+```
-+
-+So let's declare `size_t i` at the top of the function instead of inside
-+for loop.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 4ae7f324d33..32063ab0289 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+ {
-+   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-+   unsigned output_insns[PLT_MAX_INSN_COUNT];
-++  size_t i;
-+ 
-+   /* Copy instructions into the output buffer.  */
-+-  for (size_t i = 0; i < insn_count; i++)
-++  for (i = 0; i < insn_count; i++)
-+     output_insns[i] = insns[i];
-+ 
-+   /* Honor the no-delay-slot setting.  */
-+@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+     }
-+ 
-+   /* Write out the output buffer.  */
-+-  for (size_t i = 0; i < (insn_count+1); i++)
-++  for (i = 0; i < (insn_count+1); i++)
-+     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-+ }
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-new file mode 100644
-index 0000000000..c3978e22fa
---- /dev/null
-+++ b/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-@@ -0,0 +1,50 @@
-+From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 9 Jun 2021 17:28:27 +0200
-+Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-+
-+Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-+an old compiler(i.e. gcc 4.9) build fails on:
-+```
-+elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-+C99 or C11 mode
-+    for (size_t i = 0; i < insn_count; i++)
-+    ^
-+```
-+
-+So let's declare `size_t i` at the top of the function instead of inside
-+for loop.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 4ae7f324d33..32063ab0289 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+ {
-+   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-+   unsigned output_insns[PLT_MAX_INSN_COUNT];
-++  size_t i;
-+ 
-+   /* Copy instructions into the output buffer.  */
-+-  for (size_t i = 0; i < insn_count; i++)
-++  for (i = 0; i < insn_count; i++)
-+     output_insns[i] = insns[i];
-+ 
-+   /* Honor the no-delay-slot setting.  */
-+@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+     }
-+ 
-+   /* Write out the output buffer.  */
-+-  for (size_t i = 0; i < (insn_count+1); i++)
-++  for (i = 0; i < (insn_count+1); i++)
-+     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-+ }
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-new file mode 100644
-index 0000000000..c3978e22fa
---- /dev/null
-+++ b/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-@@ -0,0 +1,50 @@
-+From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 9 Jun 2021 17:28:27 +0200
-+Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-+
-+Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-+an old compiler(i.e. gcc 4.9) build fails on:
-+```
-+elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-+C99 or C11 mode
-+    for (size_t i = 0; i < insn_count; i++)
-+    ^
-+```
-+
-+So let's declare `size_t i` at the top of the function instead of inside
-+for loop.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 4ae7f324d33..32063ab0289 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+ {
-+   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-+   unsigned output_insns[PLT_MAX_INSN_COUNT];
-++  size_t i;
-+ 
-+   /* Copy instructions into the output buffer.  */
-+-  for (size_t i = 0; i < insn_count; i++)
-++  for (i = 0; i < insn_count; i++)
-+     output_insns[i] = insns[i];
-+ 
-+   /* Honor the no-delay-slot setting.  */
-+@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+     }
-+ 
-+   /* Write out the output buffer.  */
-+-  for (size_t i = 0; i < (insn_count+1); i++)
-++  for (i = 0; i < (insn_count+1); i++)
-+     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-+ }
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-new file mode 100644
-index 0000000000..c3978e22fa
---- /dev/null
-+++ b/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-@@ -0,0 +1,50 @@
-+From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 9 Jun 2021 17:28:27 +0200
-+Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-+
-+Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-+an old compiler(i.e. gcc 4.9) build fails on:
-+```
-+elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-+C99 or C11 mode
-+    for (size_t i = 0; i < insn_count; i++)
-+    ^
-+```
-+
-+So let's declare `size_t i` at the top of the function instead of inside
-+for loop.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 4ae7f324d33..32063ab0289 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+ {
-+   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-+   unsigned output_insns[PLT_MAX_INSN_COUNT];
-++  size_t i;
-+ 
-+   /* Copy instructions into the output buffer.  */
-+-  for (size_t i = 0; i < insn_count; i++)
-++  for (i = 0; i < insn_count; i++)
-+     output_insns[i] = insns[i];
-+ 
-+   /* Honor the no-delay-slot setting.  */
-+@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+     }
-+ 
-+   /* Write out the output buffer.  */
-+-  for (size_t i = 0; i < (insn_count+1); i++)
-++  for (i = 0; i < (insn_count+1); i++)
-+     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-+ }
-+ 
-+-- 
-+2.25.1
-+
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index d0277c7322..4ae85c1c5c 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  3f3de5f456907558c4aa0db5654c618becb1b3e057ad217e180c8f72360e7841  uacme-1.4.1.tar.gz
++sha256  36027a587256cbaa86650cec2a5b3eb000480e1150bd83941565661b392625ac  uacme-1.7.1.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 975a965dd0..2be96d534e 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UACME_VERSION = 1.4.1
++UACME_VERSION = 1.7.1
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
