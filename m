@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 23:40:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libuci: add license files
-In-Reply-To: <20210718080418.1536430-1-fontaine.fabrice@gmail.com>
-References: <20210718080418.1536430-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210718234002.7974985c@windsurf>
+Date: Sun, 18 Jul 2021 23:40:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{bluez5_utils,
+ bluez5_utils-headers}: bump to version 5.60
+In-Reply-To: <20210711070521.242040-1-bernd.kuhls@t-online.de>
+References: <20210711070521.242040-1-bernd.kuhls@t-online.de>
+Message-ID: <20210718234014.7fa34a04@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sun, 18 Jul 2021 10:04:18 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun, 11 Jul 2021 09:05:21 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Release notes:
+> http://www.bluez.org/release-of-bluez-5-59/
+> http://www.bluez.org/release-of-bluez-5-60/
+> 
+> Added configure option to disable manpages to avoid rst2man dependency
+> introduced by version 5.59.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libuci/libuci.hash | 2 ++
->  package/libuci/libuci.mk   | 1 +
->  2 files changed, 3 insertions(+)
+> depends on ell 0.41:
+> http://patchwork.ozlabs.org/project/buildroot/patch/20210621052631.134719-1-bernd.kuhls at t-online.de/
 
-It's never great that we have to use source files as license files, as
-they often change for other reasons than licensing. I've applied, but
-perhaps it would be a good idea to suggest to upstream to add license
-files ?
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
