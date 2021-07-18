@@ -1,42 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 22:16:39 +0200
-Subject: [Buildroot] [PATCH v2 4/4] configs/beaglev: switch to upstream
- opensbi generic platform
-In-Reply-To: <20210616050341.510702-5-drew@beagleboard.org>
-References: <20210616050341.510702-1-drew@beagleboard.org>
- <20210616050341.510702-5-drew@beagleboard.org>
-Message-ID: <20210718221639.0e3fd4d0@windsurf>
+Date: Sun, 18 Jul 2021 22:17:22 +0200
+Subject: [Buildroot] [git commit] package/civetweb: fix license hash
+Message-ID: <20210718194332.2236A88257@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Tue, 15 Jun 2021 22:03:45 -0700
-Drew Fustini <drew@beagleboard.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d9762f470db97a7fab7175b90ee37d6148de69b0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> +# upstream opensbi master branch
-> +BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,riscv,opensbi,79f9b4220ffa7f74356054be25d450d7958bf16c)/opensbi-79f9b4220ffa7f74356054be25d450d7958bf16c.tar.gz"
-> +BR2_TARGET_OPENSBI_PLAT="generic"
->  # BR2_TARGET_OPENSBI_INSTALL_DYNAMIC_IMG is not set
->  # BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
->  BR2_TARGET_OPENSBI_UBOOT_PAYLOAD=y
-> +BR2_TARGET_OPENSBI_FW_FDT_PATH=y
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
->  # HEAD of the starfive-tech:Fedora_VIC_7100_2021.04 branch
->  BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,u-boot,64ead5b83959da8eb87b6963843addf5942e6ed4)/uboot-64ead5b83959da8eb87b6963843addf5942e6ed4.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="starfive_vic7100_beagle_v_smode"
-> +BR2_TARGET_UBOOT_FORMAT_DTB=y
+Commit b5ba0119e858f0bdc2683f15dd7758eb08ed1f6a forgot to update hash of
+LICENSE.md (update of LuaFileSystem and year with
+https://github.com/civetweb/civetweb/commit/1178ea98ccbf2247c35e33aa1e89e445a651fa01
+https://github.com/civetweb/civetweb/commit/a9fb075fd807bf359e749b4d5928aceda65efbd0)
 
-This was no longer needed in the defconfig, as it is now implied by
-BR2_TARGET_OPENSBI_FW_FDT_PATH=y.
+Fixes:
+ - No autobuilder failures yet
 
-Best regards,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/civetweb/civetweb.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/civetweb/civetweb.hash b/package/civetweb/civetweb.hash
+index 96e4aa105b..0295e74da6 100644
+--- a/package/civetweb/civetweb.hash
++++ b/package/civetweb/civetweb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  d02d7ab091c8b4edf21fc13a03c6db08a8a8b8605e35e0073251b9d88443c653  civetweb-1.14.tar.gz
+-sha256  291622dfbbf4fb35829726fbe97177b7227c0d4d6392b350660af73af4f86df8  LICENSE.md
++sha256  24d3d2aee56ae3cddcdf3392c1250877818108314233cf15f2bc9eb3ac298934  LICENSE.md
