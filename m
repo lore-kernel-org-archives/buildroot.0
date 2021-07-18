@@ -1,46 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 21:18:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tftpd: fix static build
-In-Reply-To: <20210718190136.GH12203@scaer>
-References: <20210710084313.893425-1-fontaine.fabrice@gmail.com>
- <20210716232144.7a9d3371@windsurf>
- <CAPi7W83fQbvzDfFGDMN4zh-VjfUCUZqQt2z_84Xe52-T_j3-oQ@mail.gmail.com>
- <20210718190136.GH12203@scaer>
-Message-ID: <20210718211829.6c4dc00b@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 18 Jul 2021 21:24:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/civetweb: fix license hash
+Message-ID: <20210718192428.2931594-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sun, 18 Jul 2021 21:01:36 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Commit b5ba0119e858f0bdc2683f15dd7758eb08ed1f6a forgot to update hash of
+LICENSE.md (update of LuaFileSystem and year with
+https://github.com/civetweb/civetweb/commit/1178ea98ccbf2247c35e33aa1e89e445a651fa01
+https://github.com/civetweb/civetweb/commit/a9fb075fd807bf359e749b4d5928aceda65efbd0)
 
-> > However, given that this is an upstream commit that was applied 7
-> > years ago, I think it is pretty safe to apply it to LTS.  
-> 
-> I was confused, because both commits (on tftpd and uClibc) are about 7
-> years old, so I was wondering which you were referring to...
-> 
-> But yes, you were rerferring to the tftpd commit. Which got me wondering
-> why we needed to apply a patch that have been applied upstream 7 years
-> ago. Why can't we just bump the version rather than backport patches?
-> 
-> Ah, tftpd hasn't had any new release for the past 10 years now, so *are*
-> up-to-date...
-> 
-> But then, yes, why can't we just switch to the latest commit in the git
-> tree, then, rather than backport the fix? Given that tftpd hasn't seen
-> any commit since 2015, we would not take too big a risk...
+Fixes:
+ - No autobuilder failures yet
 
-But besides that, I'm still confused as to why the problem happened
-only once in the autobuilders. It does happen with the powerpc/internal
-toolchain/static configuration that failed in the autobuilders, but
-doesn't fail with the pre-built br-arm-full-static toolchain, which
-also uses a statically-linked uClibc...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/civetweb/civetweb.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/civetweb/civetweb.hash b/package/civetweb/civetweb.hash
+index 96e4aa105b..0295e74da6 100644
+--- a/package/civetweb/civetweb.hash
++++ b/package/civetweb/civetweb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  d02d7ab091c8b4edf21fc13a03c6db08a8a8b8605e35e0073251b9d88443c653  civetweb-1.14.tar.gz
+-sha256  291622dfbbf4fb35829726fbe97177b7227c0d4d6392b350660af73af4f86df8  LICENSE.md
++sha256  24d3d2aee56ae3cddcdf3392c1250877818108314233cf15f2bc9eb3ac298934  LICENSE.md
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.2
