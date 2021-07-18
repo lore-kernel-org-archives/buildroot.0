@@ -1,33 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 23:21:46 +0200
-Subject: [Buildroot] [PATCH] package/python-pysmb: bump to version 1.2.7
-In-Reply-To: <20210531064754.15145-1-yegorslists@googlemail.com>
-References: <20210531064754.15145-1-yegorslists@googlemail.com>
-Message-ID: <20210718232146.6339ea58@windsurf>
+Date: Sun, 18 Jul 2021 23:22:23 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gqrx: Bump version to 2.14.4
+In-Reply-To: <20210701050101.23916-1-gwenj@trabucayre.com>
+References: <20210701050101.23916-1-gwenj@trabucayre.com>
+Message-ID: <20210718232223.6f3babb7@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Mon, 31 May 2021 08:47:54 +0200
-yegorslists--- via buildroot <buildroot@busybox.net> wrote:
+On Thu,  1 Jul 2021 07:01:00 +0200
+Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
 
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > 
-> Change download location to the project's page so that
-> we still can get *.tar.gz file instead of *.zip.
-> 
-> The LICENSE file has changed the copyright year from 2015
-> to 2020.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > ---
->  package/python-pysmb/python-pysmb.hash | 6 ++----
->  package/python-pysmb/python-pysmb.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 6 deletions(-)
+>  package/gqrx/gqrx.hash | 2 +-
+>  package/gqrx/gqrx.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Both applied. I've applied PATCH 2/2 first, as it's a fix, which is in
+fact needed before the bump.
+
+Thanks!
 
 Thomas
 -- 
