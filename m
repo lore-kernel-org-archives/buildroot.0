@@ -1,68 +1,99 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 18 Jul 2021 14:44:06 -0600
-Subject: [Buildroot] [PATCH v4 2/2] package/nfs-utils: Add optional GSS
- support
-In-Reply-To: <20210718204406.899038-1-james.hilliard1@gmail.com>
-References: <20210718204406.899038-1-james.hilliard1@gmail.com>
-Message-ID: <20210718204406.899038-2-james.hilliard1@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 18 Jul 2021 23:11:20 +0200
+Subject: [Buildroot] [PATCH/next v2 1/1] package/icu: Add support to
+ generate a subset of ICU data
+In-Reply-To: <20210601060608.5531-1-bernd.kuhls@t-online.de>
+References: <20210601060608.5531-1-bernd.kuhls@t-online.de>
+Message-ID: <20210718231120.76adc4e3@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/nfs-utils/Config.in    |  7 +++++++
- package/nfs-utils/nfs-utils.mk | 11 ++++++++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+Hello Bernd,
 
-diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index bd1e091331..f2997b9c91 100644
---- a/package/nfs-utils/Config.in
-+++ b/package/nfs-utils/Config.in
-@@ -26,6 +26,13 @@ config BR2_PACKAGE_NFS_UTILS_NFSV4
- 	help
- 	  Enable NFSv4/NFSv4.1 support
- 
-+config BR2_PACKAGE_NFS_UTILS_GSS
-+	bool "gss"
-+	depends on BR2_PACKAGE_NFS_UTILS_NFSV4
-+	select BR2_PACKAGE_LIBTIRPC_GSS
-+	help
-+	  Enable GSS support
-+
- config BR2_PACKAGE_NFS_UTILS_RPCDEBUG
- 	bool "rpcdebug"
- 	help
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 0b4bca4772..763dd57ace 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -16,7 +16,6 @@ NFS_UTILS_AUTORECONF = YES
- NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
- 
- NFS_UTILS_CONF_OPTS = \
--	--disable-gss \
- 	--enable-tirpc \
- 	--enable-ipv6 \
- 	--without-tcp-wrappers \
-@@ -52,6 +51,16 @@ else
- NFS_UTILS_CONF_OPTS += --disable-nfsv4 --disable-nfsv41
- endif
- 
-+ifeq ($(BR2_PACKAGE_NFS_UTILS_GSS),y)
-+NFS_UTILS_CONF_OPTS += \
-+	--enable-gss \
-+	--enable-svcgss \
-+	--with-krb5=$(STAGING_DIR)/usr
-+NFS_UTILS_DEPENDENCIES += libkrb5
-+else
-+NFS_UTILS_CONF_OPTS += --disable-gss --disable-svcgss
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- NFS_UTILS_CONF_OPTS += --enable-caps
- NFS_UTILS_DEPENDENCIES += libcap
+On Tue,  1 Jun 2021 08:06:08 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+
+> This would reduce the size of libicudata.so to 12M.
+> 
+> [1] https://github.com/unicode-org/icu/blob/master/docs/userguide/icu_data/buildtool.md
+
+This is really some good and useful contribution, but (as usual), I
+have a couple of questions/requests.
+
+> +config BR2_PACKAGE_ICU_DATA_FILTER_FILE
+> +	string "Path to custom data configuration file"
+> +	help
+> +	  The ICU Data Build Tool enables you to write a configuration
+> +	  file that specifies what features and locales to include in a
+> +	  custom data bundle:
+> +	  https://github.com/unicode-org/icu/blob/main/docs/userguide/icu_data/buildtool.md
+> +	  Leave empty to not use this functionality.
+
+We already have BR2_PACKAGE_ICU_CUSTOM_DATA_PATH which was also meant
+to allow building ICU with a smaller dataset, based on pre-compiled
+.dat file. It points to using http://apps.icu-project.org/datacustom/,
+which in fact seems to no longer exists, as it redirects to
+https://unicode-org.atlassian.net/browse/ICU-12977/, which says that
+the feature is no longer available since ICU 58.x.
+
+So I guess we should first drop BR2_PACKAGE_ICU_CUSTOM_DATA_PATH which
+is already unusable today.
+
+Then the second question is whether we can provide/generate some kind
+of default file in Buildroot that would in a default Buildroot
+configuration generate a more minimal ICU dataset. For example by
+building only the support for English ? Or based on the value of
+BR2_GENERATE_LOCALE ?
+
+I know this would break backward compatibility, but it would really
+make ICU a lot more reasonable in size for most of our users. Indeed,
+they are unlikely to know that they can reduce the size of ICU by using
+this new feature.
+
+> +ICU_DATA_FILTER_FILE = $(call qstrip,$(BR2_PACKAGE_ICU_DATA_FILTER_FILE))
+> +
+> +ifneq ($(ICU_DATA_FILTER_FILE),)
+> +HOST_ICU_DATA_SOURCE = $(subst src.tgz,data.zip,$(ICU_SOURCE))
+> +HOST_ICU_EXTRA_DOWNLOADS += $(HOST_ICU_SITE)/$(HOST_ICU_DATA_SOURCE)
+> +
+> +define HOST_ICU_EXTRACT_DATA
+> +	rm -rf $(@D)/$(HOST_ICU_SUBDIR)/data
+> +	$(UNZIP) $(ICU_DL_DIR)/$(HOST_ICU_DATA_SOURCE) -d $(@D)/$(HOST_ICU_SUBDIR)
+> +endef
+> +HOST_ICU_POST_EXTRACT_HOOKS += HOST_ICU_EXTRACT_DATA
+> +
+> +HOST_ICU_CONF_ENV = ICU_DATA_FILTER_FILE=$(ICU_DATA_FILTER_FILE)
+> +HOST_ICU_CONF_OPTS += --with-data-packaging=archive
+> +
+> +define ICU_COPY_CUSTOM_DATA
+> +	$(INSTALL) -D -m 644 $(HOST_ICU_DIR)/$(HOST_ICU_SUBDIR)/data/out/icudt$(ICU_VERSION_MAJOR)l.dat $(@D)/$(ICU_SUBDIR)/data/in/
+> +endef
+> +ICU_PRE_CONFIGURE_HOOKS += ICU_COPY_CUSTOM_DATA
+> +endif
+
+It took me quite some time to understand what was going on here. My
+understanding is as follows:
+
+ * In a normal build, the pre-compiled source/data/in/icudt69l.dat
+   provided in the ICU tarball is used.
+
+ * When a custom dataset needs to be generated thanks to your new
+   option, we need to download the source of this dataset as an extra
+   download for the host-icu package, replace the source/data/ subdir
+   with this source data set, and ask the host-icu package to generate
+   icudt69l.dat. Then the target icu package grabs this pre-compiled
+   icudt69l.dat.
+
+Is that correct ? If so, then I'd say it would be useful to add a
+comment above this code, as I find the logic to not be that trivial.
+
+Thanks!
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
