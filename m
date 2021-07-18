@@ -1,46 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 22:17:45 +0200
-Subject: [Buildroot] [git commit] package/kodi-pvr-vuplus: bump version to
- 7.4.9-Matrix
-Message-ID: <20210718194454.750908824F@busybox.osuosl.org>
+Date: Sun, 18 Jul 2021 22:19:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/civetweb: fix license hash
+In-Reply-To: <20210718192428.2931594-1-fontaine.fabrice@gmail.com>
+References: <20210718192428.2931594-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210718221904.44dc000c@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15f4e75e3a78e383fe79eb90697c96ea4e08dd8d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 18 Jul 2021 21:24:28 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Changelog:
-https://github.com/kodi-pvr/pvr.vuplus/blob/Matrix/pvr.vuplus/changelog.txt
+> Commit b5ba0119e858f0bdc2683f15dd7758eb08ed1f6a forgot to update hash of
+> LICENSE.md (update of LuaFileSystem and year with
+> https://github.com/civetweb/civetweb/commit/1178ea98ccbf2247c35e33aa1e89e445a651fa01
+> https://github.com/civetweb/civetweb/commit/a9fb075fd807bf359e749b4d5928aceda65efbd0)
+> 
+> Fixes:
+>  - No autobuilder failures yet
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/civetweb/civetweb.hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 2 +-
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-index 3c3a6b1bbc..502d3d4106 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  7c8c891b4e0e7c8334e5e5eca91a9868e6737e52df12213b888942f940572136  kodi-pvr-vuplus-7.4.7-Matrix.tar.gz
-+sha256  c6032c7b79e45a83523c6fb32a7b097e8c8fa81de76996babdd160b2288061a4  kodi-pvr-vuplus-7.4.9-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-index 5511f33153..ff2598f9bc 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_VUPLUS_VERSION = 7.4.7-Matrix
-+KODI_PVR_VUPLUS_VERSION = 7.4.9-Matrix
- KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
- KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
- KODI_PVR_VUPLUS_LICENSE_FILES = LICENSE.md
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
