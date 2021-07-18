@@ -1,33 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 22:35:51 +0200
-Subject: [Buildroot] [git commit] configs/raspberrypicm4io_64_defconfig: fix
- typo (missing '=y')
-Message-ID: <20210718200203.C4F4788290@busybox.osuosl.org>
+Date: Sun, 18 Jul 2021 22:36:09 +0200
+Subject: [Buildroot] [PATCH v1 1/2] configs/raspberrypicm4io_defconfig:
+ fix typo (missing '=y')
+In-Reply-To: <20210608194722.13951-1-ps.report@gmx.net>
+References: <20210608194722.13951-1-ps.report@gmx.net>
+Message-ID: <20210718223609.233d240d@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96886e0851dc568ddbed845bf3e47bbd70a891b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  8 Jun 2021 21:47:21 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/raspberrypicm4io_64_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  configs/raspberrypicm4io_defconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/raspberrypicm4io_64_defconfig b/configs/raspberrypicm4io_64_defconfig
-index 62512ad7c5..304428ec64 100644
---- a/configs/raspberrypicm4io_64_defconfig
-+++ b/configs/raspberrypicm4io_64_defconfig
-@@ -29,7 +29,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- 
- # Required tool to flash CM4 eMMC memory
--BR2_PACKAGE_HOST_RASPBERRYPI_USBBOOT
-+BR2_PACKAGE_HOST_RASPBERRYPI_USBBOOT=y
- 
- # Filesystem / image
- BR2_TARGET_ROOTFS_EXT2=y
+Both applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
