@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EAB1C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F352C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:26:49 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0DE3F60F22
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:26:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0DE3F60F22
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id CA20461029
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:26:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA20461029
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D4641404D9;
-	Tue,  3 Aug 2021 22:26:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 98798404F7;
+	Tue,  3 Aug 2021 22:26:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UGFOwdxfY4Aq; Tue,  3 Aug 2021 22:26:32 +0000 (UTC)
+	with ESMTP id 9al96kI2Osoh; Tue,  3 Aug 2021 22:26:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C974F404B4;
-	Tue,  3 Aug 2021 22:26:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 68E1A1BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E3E140533;
+	Tue,  3 Aug 2021 22:26:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EBCF1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 420D94044D
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CEC1B60838
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Xey0Rl5NW9It for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qAWT3_kOVp3M for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 92AB54039B
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 34F39608EB
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id DC09F81F12; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id 7FADE86A84; Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 18:12:21 +0200
+Date: Sun, 18 Jul 2021 09:52:00 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f7d79731d1c79bf53577f88b4620627045880de1
-X-Git-Newrev: b500d4731a66fa15dab4d2a10ea053d143421a56
+X-Git-Oldrev: 46273a8eb92171b3c70a6b2750549329a0d4ccba
+X-Git-Newrev: 948e71689a0dc900ad2afa026e9e80e78086c157
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211017.DC09F81F12@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mtd: update lib{mtd,
- ubi}.h path
+Message-Id: <20210803211006.7FADE86A84@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dovecot: ignore
+ CVE-2016-4983
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,45 +70,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b500d4731a66fa15dab4d2a10ea053d143421a56
+commit: https://git.buildroot.net/buildroot/commit/?id=948e71689a0dc900ad2afa026e9e80e78086c157
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Update lib{mtd,ubi}.h path to fix the following build failure raised
-since bump of swupdate to version 2021.04 in commit
-2c6b0359c3b819fadb4437b2d780e95c32fdab21:
-
-In file included from corelib/mtd-interface.c:21:
-include/flash.h:13:10: fatal error: libmtd.h: No such file or directory
-   13 | #include <libmtd.h>
-      |          ^~~~~~~~~~
-
-This build failure is raised because of
-https://github.com/sbabic/swupdate/commit/0c672866d4a9fe8f0808b5d8a0afb95c13c4c138
-
-Fixes:
- - http://autobuild.buildroot.org/results/d475bdb341d2afecf12e404dfa093e58221b9882
+CVE-2016-4983 is an issue in a postinstall script in the dovecot rpm,
+which is part of the Red Hat packaging and not part of upstream dovecot
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mtd/mtd.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/dovecot/dovecot.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 121dfa554b..189736b877 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -124,8 +124,8 @@ endef
- # Those libraries are not installed by "make install", but are needed
- # by other packages, such as swupdate.
- define MTD_INSTALL_LIBS
--	$(INSTALL) -D -m 0755 $(@D)/include/libmtd.h $(STAGING_DIR)/usr/include/mtd/libmtd.h
--	$(INSTALL) -D -m 0755 $(@D)/include/libubi.h $(STAGING_DIR)/usr/include/mtd/libubi.h
-+	$(INSTALL) -D -m 0755 $(@D)/include/libmtd.h $(STAGING_DIR)/usr/include/libmtd.h
-+	$(INSTALL) -D -m 0755 $(@D)/include/libubi.h $(STAGING_DIR)/usr/include/libubi.h
- 	$(INSTALL) -D -m 0755 $(@D)/include/mtd/ubi-media.h $(STAGING_DIR)/usr/include/mtd/ubi-media.h
- 	$(INSTALL) -D -m 0755 $(@D)/libmtd.a $(STAGING_DIR)/usr/lib/libmtd.a
- 	$(INSTALL) -D -m 0755 $(@D)/libubi.a $(STAGING_DIR)/usr/lib/libubi.a
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 93d04fc8a1..cb1cc990a1 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -18,6 +18,10 @@ DOVECOT_DEPENDENCIES = \
+ # add host-gettext for AM_ICONV macro
+ DOVECOT_DEPENDENCIES += host-gettext
+ 
++# CVE-2016-4983 is an issue in a postinstall script in the dovecot rpm, which
++# is part of the Red Hat packaging and not part of upstream dovecot
++DOVECOT_IGNORE_CVES += CVE-2016-4983
++
+ DOVECOT_CONF_ENV = \
+ 	RPCGEN=__disable_RPCGEN_rquota \
+ 	i_cv_epoll_works=yes \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
