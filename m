@@ -1,47 +1,32 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 18 Jul 2021 10:34:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mtd: update lib{mtd,ubi}.h path
-Message-ID: <20210718083412.1904311-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 18 Jul 2021 11:00:22 +0200
+Subject: [Buildroot] Using Intel TBB in Buildroot environment
+In-Reply-To: <SJ0PR08MB6542FA0233EE2F8E14C32938B8129@SJ0PR08MB6542.namprd08.prod.outlook.com>
+References: <SJ0PR08MB6542FA0233EE2F8E14C32938B8129@SJ0PR08MB6542.namprd08.prod.outlook.com>
+Message-ID: <20210718110022.5f319b04@gmx.net>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Update lib{mtd,ubi}.h path to fix the following build failure raised
-since bump of swupdate to version 2021.04 in commit
-2c6b0359c3b819fadb4437b2d780e95c32fdab21:
+Hello Scott,
 
-In file included from corelib/mtd-interface.c:21:
-include/flash.h:13:10: fatal error: libmtd.h: No such file or directory
-   13 | #include <libmtd.h>
-      |          ^~~~~~~~~~
+On Thu, 15 Jul 2021 20:39:00 +0000, Scott Bartolett <SBartolett@thorlabs.com> wrote:
 
-This build failure is raised because of
-https://github.com/sbabic/swupdate/commit/0c672866d4a9fe8f0808b5d8a0afb95c13c4c138
+> Hi all,
+>
+> Is it possible to use Intel Threading Building Blocks in a Buildroot environment?  I am having trouble compiling our application when I include the tbb library.  I have the application working fine running on Raspbian on a RPi.  But when I try to cross compile it for Buildroot I am getting undefined references to tbb::detail::*.  I am trying to use the same libraries that I used in Raspbian.  Do I need to recompile the libraries for buildroot?  If so, does anyone have any experience doing this?
 
-Fixes:
- - http://autobuild.buildroot.org/results/d475bdb341d2afecf12e404dfa093e58221b9882
+Not experience on this one, but your compile/link failure is hard to judge
+without further information what you are trying exactly, but in general
+integrating the used libraries/packages into the buildroot system seems
+the natural way to go, patches welcome ;-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mtd/mtd.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Regards,
+Peter
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 121dfa554b..189736b877 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -124,8 +124,8 @@ endef
- # Those libraries are not installed by "make install", but are needed
- # by other packages, such as swupdate.
- define MTD_INSTALL_LIBS
--	$(INSTALL) -D -m 0755 $(@D)/include/libmtd.h $(STAGING_DIR)/usr/include/mtd/libmtd.h
--	$(INSTALL) -D -m 0755 $(@D)/include/libubi.h $(STAGING_DIR)/usr/include/mtd/libubi.h
-+	$(INSTALL) -D -m 0755 $(@D)/include/libmtd.h $(STAGING_DIR)/usr/include/libmtd.h
-+	$(INSTALL) -D -m 0755 $(@D)/include/libubi.h $(STAGING_DIR)/usr/include/libubi.h
- 	$(INSTALL) -D -m 0755 $(@D)/include/mtd/ubi-media.h $(STAGING_DIR)/usr/include/mtd/ubi-media.h
- 	$(INSTALL) -D -m 0755 $(@D)/libmtd.a $(STAGING_DIR)/usr/lib/libmtd.a
- 	$(INSTALL) -D -m 0755 $(@D)/libubi.a $(STAGING_DIR)/usr/lib/libubi.a
--- 
-2.30.2
+>
+> Thanks,
+> Scott
+>
