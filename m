@@ -1,41 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 23:33:03 +0200
-Subject: [Buildroot] [git commit] package/mpv: add optional support for
- OpenGL DRM EGL Backend
-Message-ID: <20210718205920.C11CA88335@busybox.osuosl.org>
+Date: Sun, 18 Jul 2021 23:33:36 +0200
+Subject: [Buildroot] [PATCH 1/4] package/mpv: fix reproducible build
+ issues
+In-Reply-To: <20210618192237.808519-1-bernd.kuhls@t-online.de>
+References: <20210618192237.808519-1-bernd.kuhls@t-online.de>
+Message-ID: <20210718233336.414988c8@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=031df474c24f92757ac95ade572b90995ebdc6a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 18 Jun 2021 21:22:34 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Reference: https://github.com/mpv-player/mpv/blob/master/wscript#L571
+> Do not include the build date when creating reproducible builds.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mpv/mpv.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mpv/mpv.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Series applied, thanks!
 
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 877b84f63a..4292abb876 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -50,8 +50,13 @@ endif
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
- MPV_CONF_OPTS += --enable-gbm
- MPV_DEPENDENCIES += mesa3d
-+ifeq ($(BR2_PACKAGE_LIBDRM),y)
-+MPV_CONF_OPTS += --enable-egl-drm
-+else
-+MPV_CONF_OPTS += --disable-egl-drm
-+endif
- else
--MPV_CONF_OPTS += --disable-gbm
-+MPV_CONF_OPTS += --disable-gbm --disable-egl-drm
- endif
- 
- # jack support
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
