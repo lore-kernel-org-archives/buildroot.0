@@ -1,35 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 23:31:18 +0200
-Subject: [Buildroot] [PATCH] package/usbguard: enforce the right
- permissions on the configuration file
-In-Reply-To: <20210618094710.2248743-1-miquel.raynal@bootlin.com>
-References: <20210618094710.2248743-1-miquel.raynal@bootlin.com>
-Message-ID: <20210718233118.541401f5@windsurf>
+Date: Sun, 18 Jul 2021 23:31:31 +0200
+Subject: [Buildroot] [git commit] package/mpv: fix reproducible build issues
+Message-ID: <20210718205920.9D0E688333@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Fri, 18 Jun 2021 11:47:10 +0200
-Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=083b48194fc7d46278bb6c33355322bf02eaec47
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Only 0600 rights are allowed for the rules.conf. This file is read when the
-> usbguard daemon starts and will prevent it to run otherwise.
-> 
-> As Git only tracks the executable bit, setting the right permissions in the
-> package makefile is the cleanest solution, in particular when providing this
-> file from a rootfs overlay.
-> 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  package/usbguard/usbguard.mk | 3 +++
->  1 file changed, 3 insertions(+)
+Do not include the build date when creating reproducible builds.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mpv/mpv.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index 25ac783b52..30f377054f 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -28,6 +28,10 @@ MPV_CONF_OPTS = \
+ 	--disable-uchardet \
+ 	--disable-vapoursynth
+ 
++ifeq ($(BR2_REPRODUCIBLE),y)
++MPV_CONF_OPTS += --disable-build-date
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ MPV_CONF_OPTS += --disable-libmpv-shared --enable-libmpv-static
+ else
