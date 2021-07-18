@@ -1,95 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jul 2021 09:33:17 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5base: fix another gcc-11
- compile failure
-In-Reply-To: <20210717220809.8654-1-ps.report@gmx.net>
-References: <20210717220809.8654-1-ps.report@gmx.net>
-Message-ID: <20210718073317.GY12203@scaer>
+Date: Sun, 18 Jul 2021 09:44:57 +0200
+Subject: [Buildroot] [git commit] package/libuci: ignore CVE-2019-15513
+Message-ID: <20210718071254.31948912BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=46273a8eb92171b3c70a6b2750549329a0d4ccba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-07-18 00:08 +0200, Peter Seiderer spake thusly:
-> - add upstream patch fixing gcc-11 compile failure (missing
->   limits include)
-> 
-> Fixes:
-> 
->   In file included from ../../../include/QtCore/5.15.2/QtCore/private/qoffsetstringarray_p.h:1,
->                    from ../../dbus/qdbuserror.cpp:44:
->   ../../../src/corelib/tools/qoffsetstringarray_p.h:70:22: error: ?numeric_limits? is not a member of ?std?
->      70 |         Last <= std::numeric_limits<quint8>::max(),
->         |                      ^~~~~~~~~~~~~~
->   ../../../src/corelib/tools/qoffsetstringarray_p.h:70:43: error: wrong number of template arguments (1, should be 3)
->      70 |         Last <= std::numeric_limits<quint8>::max(),
->         |                                           ^
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+CVE-2019-15513 was fixed upstream in 2015 with commit
+19e29ffc15dbd958e8e6a648ee0982c68353516f, which is older than the commit
+we currently use in LIBUCI_VERSION.
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: reword comment and commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libuci/libuci.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../0008-Add-missing-limits-include.patch     | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/qt5/qt5base/0008-Add-missing-limits-include.patch
-> 
-> diff --git a/package/qt5/qt5base/0008-Add-missing-limits-include.patch b/package/qt5/qt5base/0008-Add-missing-limits-include.patch
-> new file mode 100644
-> index 0000000000..e489f2e551
-> --- /dev/null
-> +++ b/package/qt5/qt5base/0008-Add-missing-limits-include.patch
-> @@ -0,0 +1,32 @@
-> +From 87a869a8404047240cccaa9f101351aeb9417a26 Mon Sep 17 00:00:00 2001
-> +From: Nicolas Fella <nicolas.fella@kdab.com>
-> +Date: Sun, 20 Jun 2021 17:36:41 +0200
-> +Subject: [PATCH] Add missing limits include
-> +
-> +The code uses std::numeric_limits but is lacking the appropriate include
-> +
-> +Pick-to: 5.15 6.1 6.2
-> +Change-Id: I41fa5ac4d8c4e06f35b5b1551ef2ad8417df80bd
-> +Reviewed-by: Giuseppe D'Angelo <giuseppe.dangelo@kdab.com>
-> +
-> +[Upstream: https://code.qt.io/cgit/qt/qtbase.git/patch/?id=2b2b3155d9f6ba1e4f859741468fbc47db09292b]
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + src/corelib/tools/qoffsetstringarray_p.h | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/src/corelib/tools/qoffsetstringarray_p.h b/src/corelib/tools/qoffsetstringarray_p.h
-> +index 4dd9e960..e26a57ff 100644
-> +--- a/src/corelib/tools/qoffsetstringarray_p.h
-> ++++ b/src/corelib/tools/qoffsetstringarray_p.h
-> +@@ -55,6 +55,7 @@
-> + 
-> + #include <tuple>
-> + #include <array>
-> ++#include <limits>
-> + 
-> + QT_BEGIN_NAMESPACE
-> + 
-> +-- 
-> +2.32.0
-> +
-> -- 
-> 2.32.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
+index a8922a96e1..0d0b78036e 100644
+--- a/package/libuci/libuci.mk
++++ b/package/libuci/libuci.mk
+@@ -12,6 +12,9 @@ LIBUCI_CPE_ID_VENDOR = openwrt
+ LIBUCI_INSTALL_STAGING = YES
+ LIBUCI_DEPENDENCIES = libubox
+ 
++# Fixed in commit 19e29ffc15dbd958e8e6a648ee0982c68353516f, older than LIBUCI_VERSION
++LIBUCI_IGNORE_CVES += CVE-2019-15513
++
+ ifeq ($(BR2_PACKAGE_LUA_5_1),y)
+ LIBUCI_DEPENDENCIES += lua
+ LIBUCI_CONF_OPTS += -DBUILD_LUA=ON \
