@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50594C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:47:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D221EC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:47:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0045E60F93
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:47:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0045E60F93
+	by mail.kernel.org (Postfix) with ESMTPS id 8DCA960F9C
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:47:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8DCA960F9C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C214D4225A;
-	Tue,  3 Aug 2021 23:47:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 561654059E;
+	Tue,  3 Aug 2021 23:47:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SQ756IDZrOe9; Tue,  3 Aug 2021 23:47:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fVNmquZEm_Fu; Tue,  3 Aug 2021 23:47:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38C0842253;
-	Tue,  3 Aug 2021 23:47:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6F1144052E;
+	Tue,  3 Aug 2021 23:47:41 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 02AE41BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:17:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 129431BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:17:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C47440F3C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7C96940F3D
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1pXG-53LNAeL for <buildroot@lists.busybox.net>;
+ with ESMTP id M0XMadwdIz8H for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 489E540ECA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7018840EC5
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A000586AA7; Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
+ id C525D86AA7; Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Jul 2021 23:24:48 +0200
+Date: Sun, 18 Jul 2021 23:26:40 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c5348521f8924447dc5c4038a8d01d242a182651
-X-Git-Newrev: f6461f6fc8b1dcd505befa35ab3c2db388fb5461
+X-Git-Oldrev: 2f6cd888f4d0befd179693bb4f6d7f5d50e7864b
+X-Git-Newrev: a9f273b6730bbf027200ddd662748a26fcabb922
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211008.A000586AA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libndp: drop patch
+Message-Id: <20210803211008.C525D86AA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/flannel: bump version
+ to 0.14.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,55 +70,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6461f6fc8b1dcd505befa35ab3c2db388fb5461
+commit: https://git.buildroot.net/buildroot/commit/?id=a9f273b6730bbf027200ddd662748a26fcabb922
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Patch is not needed since bump to version 1.7 in commit
-6274f4191335cf8c9b88796f59da8af04e3abf7a and
-https://github.com/jpirko/libndp/commit/94e9a082d76414f82794b0c9817d0c24e3868275
+Bump flannel version from 0.12.0 to 0.14.0.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Geoff Levand <geoff@infradead.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libndp/0001-ndptool.c-Fix-musl-build.patch | 30 ----------------------
- 1 file changed, 30 deletions(-)
+ package/flannel/flannel.hash | 2 +-
+ package/flannel/flannel.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libndp/0001-ndptool.c-Fix-musl-build.patch b/package/libndp/0001-ndptool.c-Fix-musl-build.patch
-deleted file mode 100644
-index 547598c6ee..0000000000
---- a/package/libndp/0001-ndptool.c-Fix-musl-build.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 561f80b9a848be923f37bf1afedbecf92da3b2e7 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sat, 30 Jan 2016 16:36:39 +0100
--Subject: [PATCH 1/1] ndptool.c: Fix musl build
--
--Fixes a build issue with the musl C library
--http://autobuild.buildroot.net/results/d42/d42bebe51bbec38f131840b6bbefdc162f0ad194/build-end.log
--
--Patch sent upstream: https://github.com/jpirko/libndp/pull/7
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- utils/ndptool.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/utils/ndptool.c b/utils/ndptool.c
--index 04ec4e1..c6ef48c 100644
----- a/utils/ndptool.c
--+++ b/utils/ndptool.c
--@@ -27,6 +27,7 @@
-- #include <netinet/in.h>
-- #include <arpa/inet.h>
-- #include <errno.h>
--+#include <sys/select.h>
-- #include <ndp.h>
-- 
-- enum verbosity_level {
---- 
--2.7.0.rc3
--
+diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
+index 8195140f8e..0d0f75e6b4 100644
+--- a/package/flannel/flannel.hash
++++ b/package/flannel/flannel.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 7375318b288bcff733aabfe1a1007d478cb9091cdaffe68c8253ddd93bc070ed v0.12.0.tar.gz
++sha256 e17164db3b158d13ce5e40bb7b233790cb186762d929fa4f626baf586d4d63ca v0.14.0.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
+diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+index a8a3c7a3cd..231cf90dfd 100644
+--- a/package/flannel/flannel.mk
++++ b/package/flannel/flannel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLANNEL_VERSION = 0.12.0
++FLANNEL_VERSION = 0.14.0
+ FLANNEL_SITE = https://github.com/flannel-io/flannel/archive
+ FLANNEL_SOURCE = v$(FLANNEL_VERSION).tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
