@@ -1,32 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 14:02:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/trinity: fix build with kernel
- >= 5.13
-In-Reply-To: <20210717084825.669692-1-fontaine.fabrice@gmail.com>
-References: <20210717084825.669692-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210718140244.53e4bf76@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 18 Jul 2021 21:57:11 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libgudev: add gobject-introspection
+ optional dependency
+Message-ID: <20210718195712.3287050-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sat, 17 Jul 2021 10:48:25 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+gobject-introspection is an optional dependency (which is enabled by
+default) since at least version 219 and
+https://gitlab.gnome.org/GNOME/libgudev/-/commit/43a593b5b4097b887e49eaacafbc1337bd709718
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c58119baed8d7711da799e34a5ee1117f46b96f4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-ip-raw.c-fix-build-with-kernel-5.13.patch | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/trinity/0002-net-proto-ip-raw.c-fix-build-with-kernel-5.13.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/3bedc9fa3b14939825fb9cdebc6977057c3f6118
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libgudev/libgudev.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thomas
+diff --git a/package/libgudev/libgudev.mk b/package/libgudev/libgudev.mk
+index 63d592f9ac..9aa64c2c22 100644
+--- a/package/libgudev/libgudev.mk
++++ b/package/libgudev/libgudev.mk
+@@ -13,4 +13,11 @@ LIBGUDEV_LICENSE = LGPL-2.1+
+ LIBGUDEV_LICENSE_FILES = COPYING
+ LIBGUDEV_CONF_OPTS = --disable-umockdev
+ 
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++LIBGUDEV_CONF_OPTS += --enable-introspection
++LIBGUDEV_DEPENDENCIES += gobject-introspection
++else
++LIBGUDEV_CONF_OPTS += --disable-introspection
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.2
