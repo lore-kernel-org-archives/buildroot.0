@@ -1,42 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 23:42:30 +0200
-Subject: [Buildroot] [git commit] configs/mx6cubox: bump Linux and U-Boot
- versions
-Message-ID: <20210718210840.5172F868B2@busybox.osuosl.org>
+Date: Sun, 18 Jul 2021 23:42:54 +0200
+Subject: [Buildroot] [PATCH 1/2] board/wandboard: Switch to extlinux.conf
+In-Reply-To: <20210711124824.1025887-1-festevam@gmail.com>
+References: <20210711124824.1025887-1-festevam@gmail.com>
+Message-ID: <20210718234254.5a3e3cea@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42bbabdda2d0c1604c8bd4d2a407561121436617
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 11 Jul 2021 09:48:23 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/mx6cubox_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Currently wandboard uses a custom boot.scr.txt script
+> and custom image generation scripts, genimage.cfg and 
+> post-build.sh.
+> 
+> Switch to using the more standard extlinux.conf solution
+> and remove the custom scripts in favor of the standard
+> board/freescale/common/imx/post-image.sh one.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  board/wandboard/boot.scr.txt                  |  7 ----
+>  board/wandboard/genimage.cfg                  | 32 -------------------
+>  board/wandboard/post-build.sh                 |  8 -----
+>  .../boot/extlinux/extlinux.conf               |  4 +++
+>  configs/wandboard_defconfig                   |  5 ++-
+>  5 files changed, 6 insertions(+), 50 deletions(-)
+>  delete mode 100644 board/wandboard/boot.scr.txt
+>  delete mode 100644 board/wandboard/genimage.cfg
+>  delete mode 100755 board/wandboard/post-build.sh
+>  create mode 100644 board/wandboard/rootfs_overlay/boot/extlinux/extlinux.conf
 
-diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
-index ae23535824..24226ba30d 100644
---- a/configs/mx6cubox_defconfig
-+++ b/configs/mx6cubox_defconfig
-@@ -17,7 +17,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.27"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.48"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-cubox-i imx6dl-cubox-i-emmc-som-v15 imx6dl-cubox-i-som-v15 imx6dl-hummingboard imx6dl-hummingboard-emmc-som-v15 imx6dl-hummingboard-som-v15 imx6q-cubox-i imx6q-cubox-i-emmc-som-v15 imx6q-cubox-i-som-v15 imx6q-hummingboard imx6q-hummingboard-emmc-som-v15 imx6q-hummingboard-som-v15"
-@@ -32,7 +32,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx6cuboxi"
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+Both applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
