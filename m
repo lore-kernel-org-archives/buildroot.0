@@ -1,73 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jul 2021 14:51:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mtd: update lib{mtd, ubi}.h path
-In-Reply-To: <20210718140058.47ac4d31@windsurf>
-References: <20210718083412.1904311-1-fontaine.fabrice@gmail.com>
- <20210718140058.47ac4d31@windsurf>
-Message-ID: <20210718125136.GG12203@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 18 Jul 2021 19:52:23 +0200
+Subject: [Buildroot] [git commit] package/uboot-tools: concat files before
+ passing to env image tool
+Message-ID: <20210718171832.517B887FD6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d8f5a017b83265f96e154ac0e75ecb5a6fbdf8a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-07-18 14:00 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 18 Jul 2021 10:34:12 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> 
-> > Update lib{mtd,ubi}.h path to fix the following build failure raised
-> > since bump of swupdate to version 2021.04 in commit
-> > 2c6b0359c3b819fadb4437b2d780e95c32fdab21:
-> > 
-> > In file included from corelib/mtd-interface.c:21:
-> > include/flash.h:13:10: fatal error: libmtd.h: No such file or directory
-> >    13 | #include <libmtd.h>
-> >       |          ^~~~~~~~~~
-> > 
-> > This build failure is raised because of
-> > https://github.com/sbabic/swupdate/commit/0c672866d4a9fe8f0808b5d8a0afb95c13c4c138
-> > 
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/d475bdb341d2afecf12e404dfa093e58221b9882
-> > 
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/mtd/mtd.mk | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> Isn't there a chance for this to break other packages? Is it just
-> swupdate that is using the MTD headers?
+Fix BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE so that files are actually concatenated
+as described in the help text.
 
-Currently, in Buildroot, we havea few packages that depend on the 'mtd'
-package;
+Signed-off-by: Mirza Kapetanovic <mirza.kapetanovic@gmail.com>
+Reviewed-by: Matthew Weber <matthew.weber@collins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uboot-tools/uboot-tools.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-  - fs/kffs2/
-  - fs/ubifs/
-      both want the mtd tools
-
-  - busybox
-      installs mtd applets
-
-  - swupdate
-      needs the headers
-
-There are a few other refrences to '\<mtd\>', but none are about a build
-dependency.
-
-So, for Buildroot, only swupsdate seems to be impacted, indeed.
-
-Still, using headers internal to another package is not nice from
-swupdate...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index b378ab65f4..a87956d028 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -156,11 +156,12 @@ endif #BR_BUILDING
+ 
+ define HOST_UBOOT_TOOLS_GENERATE_ENVIMAGE
+ 	$(HOST_UBOOT_TOOLS_GENERATE_ENV_DEFAULTS)
+-	$(@D)/tools/mkenvimage -s $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE) \
++	cat $(UBOOT_TOOLS_GENERATE_ENV_FILE) | \
++		$(@D)/tools/mkenvimage -s $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE) \
+ 		$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_REDUNDANT),-r) \
+ 		$(if $(filter "BIG",$(BR2_ENDIAN)),-b) \
+ 		-o $(@D)/tools/uboot-env.bin \
+-		$(UBOOT_TOOLS_GENERATE_ENV_FILE)
++		-
+ endef
+ define HOST_UBOOT_TOOLS_INSTALL_ENVIMAGE
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/uboot-env.bin $(BINARIES_DIR)/uboot-env.bin
