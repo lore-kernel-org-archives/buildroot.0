@@ -1,28 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 23:23:32 +0200
-Subject: [Buildroot] [PATCH] package/uacme: bump version to 1.7.1
-In-Reply-To: <20210620121655.27242-1-nicola.dilieto@gmail.com>
-References: <20210620121655.27242-1-nicola.dilieto@gmail.com>
-Message-ID: <20210718232332.1a50de49@windsurf>
+Date: Sun, 18 Jul 2021 23:24:54 +0200
+Subject: [Buildroot] [git commit] package/libndp: bump to version 1.8
+Message-ID: <20210718205103.43B9882127@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sun, 20 Jun 2021 14:16:54 +0200
-Nicola Di Lieto <nicola.dilieto@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9cbbb19a6d636f081ee5ad70ff2c43ba469cf651
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
-> ---
->  package/uacme/uacme.hash | 2 +-
->  package/uacme/uacme.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Update indentation in hash file (two spaces)
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libndp/libndp.hash | 4 ++--
+ package/libndp/libndp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libndp/libndp.hash b/package/libndp/libndp.hash
+index 8d4b6ef524..389e0ba5fc 100644
+--- a/package/libndp/libndp.hash
++++ b/package/libndp/libndp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 44be73630ee785ed9f571f9aaaeba0e1d375fa337fd841270034c813b5b0e6fd  libndp-1.7.tar.gz
+-sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
++sha256  c3ea76e253def89869651686a827da75b56896fe94fabd87d8c14b1d4588fd05  libndp-1.8.tar.gz
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libndp/libndp.mk b/package/libndp/libndp.mk
+index eb1f7f0c80..db1de7b81c 100644
+--- a/package/libndp/libndp.mk
++++ b/package/libndp/libndp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNDP_VERSION = 1.7
++LIBNDP_VERSION = 1.8
+ LIBNDP_SITE = $(call github,jpirko,libndp,v$(LIBNDP_VERSION))
+ LIBNDP_LICENSE = LGPL-2.1+
+ LIBNDP_LICENSE_FILES = COPYING
