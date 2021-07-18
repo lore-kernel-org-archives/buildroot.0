@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 257F8C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:48:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 469D8C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:48:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C616660F93
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:48:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C616660F93
+	by mail.kernel.org (Postfix) with ESMTPS id 03A7D60F94
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:48:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 03A7D60F94
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1AC54226F;
-	Tue,  3 Aug 2021 23:48:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4A89841D2;
+	Tue,  3 Aug 2021 23:48:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d7904AUGX1k1; Tue,  3 Aug 2021 23:48:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G1MaTia8r7It; Tue,  3 Aug 2021 23:48:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 106B64225C;
-	Tue,  3 Aug 2021 23:48:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 471F884171;
+	Tue,  3 Aug 2021 23:48:19 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1E5FA1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:17:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 30C0C1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:17:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC54140F44
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 01D7440ECC
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v5ZBukjAonuI for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
+ with ESMTP id odO8KQ3WaOQP for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E3AF40EC7
+ by smtp2.osuosl.org (Postfix) with ESMTP id AAE9240EC9
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D76FA8B3ED; Tue,  3 Aug 2021 21:10:08 +0000 (UTC)
+ id 090DC8766C; Tue,  3 Aug 2021 21:10:09 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Jul 2021 23:28:00 +0200
+Date: Sun, 18 Jul 2021 23:31:31 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b5bab43e138a3a0faa71cb7fdf64814d60c36c9b
-X-Git-Newrev: e93cf29a702b9a778b851a158be7eff657f1e9a8
+X-Git-Oldrev: f0b1b5a7954566730a43ef6e3b687be5a9c4c3e2
+X-Git-Newrev: 083b48194fc7d46278bb6c33355322bf02eaec47
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211008.D76FA8B3ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wireless-regdb: bump
- version to 2021.04.21
+Message-Id: <20210803211009.090DC8766C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mpv: fix reproducible
+ build issues
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,39 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e93cf29a702b9a778b851a158be7eff657f1e9a8
+commit: https://git.buildroot.net/buildroot/commit/?id=083b48194fc7d46278bb6c33355322bf02eaec47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Do not include the build date when creating reproducible builds.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mpv/mpv.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 5403110be4..d941fc3b1a 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256  b4164490d82ff7b0086e812ac42ab27baf57be24324d4c0ee1c5dd6ba27f2a52  wireless-regdb-2020.11.20.tar.xz
-+sha256  9e4c02b2a9710df4dbdb327c39612e8cbbae6495987afeddaebab28c1ea3d8fa  wireless-regdb-2021.04.21.tar.xz
- # Locally computed
- sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 2f9e91df3e..49a3824ce8 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index 25ac783b52..30f377054f 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -28,6 +28,10 @@ MPV_CONF_OPTS = \
+ 	--disable-uchardet \
+ 	--disable-vapoursynth
  
--WIRELESS_REGDB_VERSION = 2020.11.20
-+WIRELESS_REGDB_VERSION = 2021.04.21
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
++ifeq ($(BR2_REPRODUCIBLE),y)
++MPV_CONF_OPTS += --disable-build-date
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ MPV_CONF_OPTS += --disable-libmpv-shared --enable-libmpv-static
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
