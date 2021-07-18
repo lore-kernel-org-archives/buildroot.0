@@ -1,59 +1,255 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 22:27:36 +0200
-Subject: [Buildroot] [PATCH] package/cegui: disable Python SWIG
- extension modules when OpenGL renderer is disabled
-In-Reply-To: <20210615194536.265246-1-b.bilas@grinn-global.com>
-References: <20210615194536.265246-1-b.bilas@grinn-global.com>
-Message-ID: <20210718222736.278b6c6f@windsurf>
+Date: Sun, 18 Jul 2021 22:28:08 +0200
+Subject: [Buildroot] [git commit] package/binutils: fix building or1k with
+ host gcc version < 5
+Message-ID: <20210718200044.19EA988280@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hello Bartosz,
+commit: https://git.buildroot.net/buildroot/commit/?id=747e2eed880b70c085bb93b34a6e1558ae49b6d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Jun 2021 21:45:36 +0200
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+Add patches to fix building on hosts that provide gcc version < 5
+(i.e. 4.9), otherwise they fail due to missing default '-std=gnu11' option
+on variable declaration inside for loops.
 
-> Those modules need OpenGL renderer so disable them when it's missing.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/592/592fcffb226c8b44ada5fa3cdb8ab15c627f29dc/
->  - http://autobuild.buildroot.net/results/9ad/9ad768b7e2a3c59833e03986c245f2f4b5d25dcd/
-> 
->   and more...
-> 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> ---
->  package/cegui/cegui.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
-> index 747ebbb953..c5ff45818e 100644
-> --- a/package/cegui/cegui.mk
-> +++ b/package/cegui/cegui.mk
-> @@ -38,7 +38,8 @@ CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=ON -DCEGUI_USE_GLEW=OFF \
->  else
->  CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=OFF -DCEGUI_USE_GLEW=OFF \
->  	-DCEGUI_BUILD_RENDERER_OPENGL=OFF \
-> -	-DCEGUI_BUILD_RENDERER_OPENGL3=OFF
-> +	-DCEGUI_BUILD_RENDERER_OPENGL3=OFF \
-> +	-DCEGUI_BUILD_PYTHON_MODULES_SWIG=OFF
+The patch is pending upstream:
+https://sourceware.org/pipermail/binutils/2021-June/116884.html
 
-Thanks for the patch, but shouldn't we set
--DCEGUI_BUILD_PYTHON_MODULES_SWIG=OFF unconditionally? Indeed, there is
-nothing in cegui.mk that ensures that Python/SWIG is available prior to
-the cegui build, i.e there is nothing in place to optionally build this
-Python SWIG extension.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...lf32-or1k-fix-building-with-gcc-version-5.patch | 50 ++++++++++++++++++++++
+ ...lf32-or1k-fix-building-with-gcc-version-5.patch | 50 ++++++++++++++++++++++
+ ...lf32-or1k-fix-building-with-gcc-version-5.patch | 50 ++++++++++++++++++++++
+ ...lf32-or1k-fix-building-with-gcc-version-5.patch | 50 ++++++++++++++++++++++
+ 4 files changed, 200 insertions(+)
 
-So if nobody uses it, we should rather disable it unconditionally. Do
-you agree ?
-
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+new file mode 100644
+index 0000000000..c3978e22fa
+--- /dev/null
++++ b/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+@@ -0,0 +1,50 @@
++From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 9 Jun 2021 17:28:27 +0200
++Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
++
++Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
++an old compiler(i.e. gcc 4.9) build fails on:
++```
++elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
++C99 or C11 mode
++    for (size_t i = 0; i < insn_count; i++)
++    ^
++```
++
++So let's declare `size_t i` at the top of the function instead of inside
++for loop.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 4ae7f324d33..32063ab0289 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++ {
++   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
++   unsigned output_insns[PLT_MAX_INSN_COUNT];
+++  size_t i;
++ 
++   /* Copy instructions into the output buffer.  */
++-  for (size_t i = 0; i < insn_count; i++)
+++  for (i = 0; i < insn_count; i++)
++     output_insns[i] = insns[i];
++ 
++   /* Honor the no-delay-slot setting.  */
++@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++     }
++ 
++   /* Write out the output buffer.  */
++-  for (size_t i = 0; i < (insn_count+1); i++)
+++  for (i = 0; i < (insn_count+1); i++)
++     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
++ }
++ 
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+new file mode 100644
+index 0000000000..c3978e22fa
+--- /dev/null
++++ b/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+@@ -0,0 +1,50 @@
++From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 9 Jun 2021 17:28:27 +0200
++Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
++
++Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
++an old compiler(i.e. gcc 4.9) build fails on:
++```
++elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
++C99 or C11 mode
++    for (size_t i = 0; i < insn_count; i++)
++    ^
++```
++
++So let's declare `size_t i` at the top of the function instead of inside
++for loop.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 4ae7f324d33..32063ab0289 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++ {
++   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
++   unsigned output_insns[PLT_MAX_INSN_COUNT];
+++  size_t i;
++ 
++   /* Copy instructions into the output buffer.  */
++-  for (size_t i = 0; i < insn_count; i++)
+++  for (i = 0; i < insn_count; i++)
++     output_insns[i] = insns[i];
++ 
++   /* Honor the no-delay-slot setting.  */
++@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++     }
++ 
++   /* Write out the output buffer.  */
++-  for (size_t i = 0; i < (insn_count+1); i++)
+++  for (i = 0; i < (insn_count+1); i++)
++     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
++ }
++ 
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+new file mode 100644
+index 0000000000..c3978e22fa
+--- /dev/null
++++ b/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+@@ -0,0 +1,50 @@
++From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 9 Jun 2021 17:28:27 +0200
++Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
++
++Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
++an old compiler(i.e. gcc 4.9) build fails on:
++```
++elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
++C99 or C11 mode
++    for (size_t i = 0; i < insn_count; i++)
++    ^
++```
++
++So let's declare `size_t i` at the top of the function instead of inside
++for loop.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 4ae7f324d33..32063ab0289 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++ {
++   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
++   unsigned output_insns[PLT_MAX_INSN_COUNT];
+++  size_t i;
++ 
++   /* Copy instructions into the output buffer.  */
++-  for (size_t i = 0; i < insn_count; i++)
+++  for (i = 0; i < insn_count; i++)
++     output_insns[i] = insns[i];
++ 
++   /* Honor the no-delay-slot setting.  */
++@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++     }
++ 
++   /* Write out the output buffer.  */
++-  for (size_t i = 0; i < (insn_count+1); i++)
+++  for (i = 0; i < (insn_count+1); i++)
++     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
++ }
++ 
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+new file mode 100644
+index 0000000000..c3978e22fa
+--- /dev/null
++++ b/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+@@ -0,0 +1,50 @@
++From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 9 Jun 2021 17:28:27 +0200
++Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
++
++Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
++an old compiler(i.e. gcc 4.9) build fails on:
++```
++elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
++C99 or C11 mode
++    for (size_t i = 0; i < insn_count; i++)
++    ^
++```
++
++So let's declare `size_t i` at the top of the function instead of inside
++for loop.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 4ae7f324d33..32063ab0289 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++ {
++   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
++   unsigned output_insns[PLT_MAX_INSN_COUNT];
+++  size_t i;
++ 
++   /* Copy instructions into the output buffer.  */
++-  for (size_t i = 0; i < insn_count; i++)
+++  for (i = 0; i < insn_count; i++)
++     output_insns[i] = insns[i];
++ 
++   /* Honor the no-delay-slot setting.  */
++@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++     }
++ 
++   /* Write out the output buffer.  */
++-  for (size_t i = 0; i < (insn_count+1); i++)
+++  for (i = 0; i < (insn_count+1); i++)
++     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
++ }
++ 
++-- 
++2.25.1
++
