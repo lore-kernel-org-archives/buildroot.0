@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	TVD_SPACE_RATIO autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E79EC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:39:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54641C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:39:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DC9BC61037
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:38:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DC9BC61037
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 1588260EFD
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:39:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1588260EFD
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9E8383DE6;
-	Tue,  3 Aug 2021 23:38:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6F6E42256;
+	Tue,  3 Aug 2021 23:39:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fI_guSCAF9gf; Tue,  3 Aug 2021 23:38:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oPWJ9bVySank; Tue,  3 Aug 2021 23:39:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DCFB83DE1;
-	Tue,  3 Aug 2021 23:38:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B8E542250;
+	Tue,  3 Aug 2021 23:39:10 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F202F1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:16:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 174311BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:17:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 587D740F0B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 564DB40F0A
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lEwQbdAmIQVT for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
+ with ESMTP id JHr5O9p3rKCF for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18D1C40E98
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7441E40E9C
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 6D3BF86A84; Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id BA1E687F55; Tue,  3 Aug 2021 21:10:06 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Jul 2021 09:42:59 +0200
+Date: Sun, 18 Jul 2021 12:24:24 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6202ba67b74e9de7099df8b98e3db8d33490996a
-X-Git-Newrev: 9852113fcd2cd0e98ee7222af5ed9dc2b1df42b9
+X-Git-Oldrev: 1d7fdf2f3c87fa5f2359dd03f8f94b70cdd8dac0
+X-Git-Newrev: 63935aef6f7a99d75ca0b8b4c42091537acdfc0a
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211006.6D3BF86A84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libuci: add
- LIBUCI_CPE_ID_VENDOR
+Message-Id: <20210803211006.BA1E687F55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-nextpvr: bump
+ version to 8.2.5-Matrix
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,31 +70,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9852113fcd2cd0e98ee7222af5ed9dc2b1df42b9
+commit: https://git.buildroot.net/buildroot/commit/?id=63935aef6f7a99d75ca0b8b4c42091537acdfc0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:openwrt:libuci is a valid CPE identifier for this package:
+Changelog:
+https://github.com/kodi-pvr/pvr.nextpvr/blob/Matrix/pvr.nextpvr/changelog.txt
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aopenwrt%3Alibuci
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libuci/libuci.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
-index fcfda95b3a..a8922a96e1 100644
---- a/package/libuci/libuci.mk
-+++ b/package/libuci/libuci.mk
-@@ -8,6 +8,7 @@ LIBUCI_VERSION = 52bbc99f69ea6f67b6fe264f424dac91bde5016c
- LIBUCI_SITE = https://git.openwrt.org/project/uci.git
- LIBUCI_SITE_METHOD = git
- LIBUCI_LICENSE = LGPL-2.1, GPL-2.0 (tools)
-+LIBUCI_CPE_ID_VENDOR = openwrt
- LIBUCI_INSTALL_STAGING = YES
- LIBUCI_DEPENDENCIES = libubox
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+index a6710948ce..9fcd2130ab 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f5f36c2da5c74af3af5be5f50ce1dccd3b3026ddfbf68cbb2962cc721874668d  kodi-pvr-nextpvr-8.2.3-Matrix.tar.gz
++sha256  5e8fb80f96daa658f1049a66be6d11aa055eca3f92e40f72f4c469767ca4504b  kodi-pvr-nextpvr-8.2.5-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+index 1446f932e6..dde911b51b 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-KODI_PVR_NEXTPVR_VERSION = 8.2.3-Matrix
++KODI_PVR_NEXTPVR_VERSION = 8.2.5-Matrix
+ KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
+ KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
+ KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
