@@ -1,25 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 22:36:09 +0200
-Subject: [Buildroot] [PATCH v1 1/2] configs/raspberrypicm4io_defconfig:
- fix typo (missing '=y')
-In-Reply-To: <20210608194722.13951-1-ps.report@gmx.net>
-References: <20210608194722.13951-1-ps.report@gmx.net>
-Message-ID: <20210718223609.233d240d@windsurf>
+Date: Sun, 18 Jul 2021 22:39:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rust: bump to version 1.52.1
+In-Reply-To: <20210529083710.2471632-1-fontaine.fabrice@gmail.com>
+References: <20210529083710.2471632-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210718223909.284ad634@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Tue,  8 Jun 2021 21:47:21 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+Hello Fabrice,
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+On Sat, 29 May 2021 10:37:10 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> This release disables incremental compilation, unless the user has
+> explicitly opted in via the newly added RUSTC_FORCE_INCREMENTAL=1
+> environment variable.
+> 
+> This is due to the widespread, and frequently occuring, breakage
+> encountered by Rust users due to newly enabled incremental verification
+> in 1.52.0.
+> 
+> https://github.com/rust-lang/rust/blob/1.52.1/RELEASES.md
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  configs/raspberrypicm4io_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/rust-bin/rust-bin.hash | 96 +++++++++++++++++-----------------
+>  package/rust-bin/rust-bin.mk   |  2 +-
+>  package/rust/rust.hash         |  6 +--
+>  package/rust/rust.mk           |  2 +-
+>  4 files changed, 53 insertions(+), 53 deletions(-)
 
-Both applied, thanks!
+Thanks, but it does not apply to master. It seems that your patch isn't
+based on top of d69d40c029dc7d8199b745eaee759d92b66c5d17 (from May 18).
+Could you refresh your patch? You will have to update a significant
+number of additional hashes in rust-bin.hash.
+
+Thanks!
 
 Thomas
 -- 
