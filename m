@@ -1,26 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 23:28:48 +0200
-Subject: [Buildroot] [PATCH v1] package/wireless-regdb: bump version to
- 2021.04.21
-In-Reply-To: <20210621062436.9477-1-ps.report@gmx.net>
-References: <20210621062436.9477-1-ps.report@gmx.net>
-Message-ID: <20210718232848.2b7a48f1@windsurf>
+Date: Sun, 18 Jul 2021 23:30:00 +0200
+Subject: [Buildroot] [PATCH 1/2] package/spice: security bump to version
+ 0.15.0
+In-Reply-To: <20210616061002.345235-1-fontaine.fabrice@gmail.com>
+References: <20210616061002.345235-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210718233000.7d0d08df@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Mon, 21 Jun 2021 08:24:36 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Wed, 16 Jun 2021 08:10:01 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Fix CVE-2021-20201: A flaw was found in spice in versions before
+> 0.14.92. A DoS tool might make it easier for remote attackers to cause a
+> denial of service (CPU consumption) by performing many renegotiations
+> within a single connection.
+> 
+> https://gitlab.freedesktop.org/spice/spice/-/tags/v0.15.0
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/wireless-regdb/wireless-regdb.hash | 2 +-
->  package/wireless-regdb/wireless-regdb.mk   | 2 +-
+>  package/spice/spice.hash | 2 +-
+>  package/spice/spice.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Both applied, thanks!
 
 Thomas
 -- 
