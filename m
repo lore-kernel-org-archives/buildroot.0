@@ -1,37 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 23:14:38 +0200
-Subject: [Buildroot] [git commit] package/gqrx: fix comment dependency in
- Config.in
-Message-ID: <20210718204101.3004E8354A@busybox.osuosl.org>
+Date: Sun, 18 Jul 2021 22:43:13 +0200
+Subject: [Buildroot] [git commit] package/python-pysmb: bump to version 1.2.7
+Message-ID: <20210718204101.22C4F882B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9512b08a4812c695f31c6f4925f4d78dca6ba68
+commit: https://git.buildroot.net/buildroot/commit/?id=6596e73adfaa37eaed95dad291b1ba6dd83a74b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-comment message for gqrx is always displayed. This is due to an invert
-dependency: GQRX depends on !BR2_STATIC_LIBS so comment must depends
-on BR2_STATIC_LIBS.
+Change download location to the project's page so that
+we still can get *.tar.gz file instead of *.zip.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+The LICENSE file has changed the copyright year from 2015
+to 2020.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gqrx/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-pysmb/python-pysmb.hash | 6 ++----
+ package/python-pysmb/python-pysmb.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-index af4d69381e..60942c36c8 100644
---- a/package/gqrx/Config.in
-+++ b/package/gqrx/Config.in
-@@ -3,7 +3,7 @@ comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_USE_WCHAR || !BR2_STATIC_LIBS
-+		!BR2_USE_WCHAR || BR2_STATIC_LIBS
+diff --git a/package/python-pysmb/python-pysmb.hash b/package/python-pysmb/python-pysmb.hash
+index 94ff33ea31..03713837fc 100644
+--- a/package/python-pysmb/python-pysmb.hash
++++ b/package/python-pysmb/python-pysmb.hash
+@@ -1,5 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/pysmb/json
+-md5 e6f9ce0032db528aae060f7019bd409c pysmb-1.1.19.tar.gz
+ # Locally computed
+-sha256  fa4e6b4a4f2afbfbd71e9179c491f8c77bc2ad19e0bc866d7c6cbfa9ae272602  pysmb-1.1.19.tar.gz
+-sha256  2b1a0a56543c1bda07f5583dddaf544442c139d3f46747d4700c7031ef354c14  LICENSE
++sha256  af9db2e99eaa01e87b0ebc10f87db7c630cc880c7ae3d9dd06f1e5313e82d5a2  pysmb-1.2.7.tar.gz
++sha256  8c487d5c10f024e44a9cf1df21d1fd28a80bd2dfddd9f1dcd109a47d721f497f  LICENSE
+diff --git a/package/python-pysmb/python-pysmb.mk b/package/python-pysmb/python-pysmb.mk
+index 1b4c18797a..89ff08e958 100644
+--- a/package/python-pysmb/python-pysmb.mk
++++ b/package/python-pysmb/python-pysmb.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- comment "gqrx needs qt5"
- 	depends on !BR2_PACKAGE_QT5
+-PYTHON_PYSMB_VERSION = 1.1.19
++PYTHON_PYSMB_VERSION = 1.2.7
+ PYTHON_PYSMB_SOURCE = pysmb-$(PYTHON_PYSMB_VERSION).tar.gz
+-PYTHON_PYSMB_SITE = https://pypi.python.org/packages/f9/e7/1fd7faaa946cc6b43ce85bb7a177b75a4718d9c5e291201fec00112b497c
++PYTHON_PYSMB_SITE = https://miketeo.net/files/Projects/pysmb
+ PYTHON_PYSMB_LICENSE = Libpng
+ PYTHON_PYSMB_LICENSE_FILES = LICENSE
+ PYTHON_PYSMB_SETUP_TYPE = setuptools
