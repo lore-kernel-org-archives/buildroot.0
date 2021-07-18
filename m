@@ -1,39 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 14:01:49 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libqb: needs threads and dynamic library
-In-Reply-To: <20210716210432.342503-1-fontaine.fabrice@gmail.com>
-References: <20210716210432.342503-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210718140149.530ca4e1@windsurf>
+Date: Sun, 18 Jul 2021 14:02:36 +0200
+Subject: [Buildroot] [git commit] package/trinity: fix build with kernel >=
+ 5.13
+Message-ID: <20210718112911.2468987F5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Fri, 16 Jul 2021 23:04:32 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2f0ae33afd371fa528d5872f62248d7b394794a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> libqb fails to build without threads or dynamic library since the
-> addition of the package in commit
-> 22864d570dd18d78a77dedab8fbcc5e0122c0acc
-> 
-> Also add ac_cv_prog_cc_c99=-std=gnu99 to fix build failure without wchar
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/21c1b5d29da4949f4582056ab4e2335ec225d8d6
->  - http://autobuild.buildroot.org/results/aa4df6364cdf3c862be13b6b738595f420ec6105
->  - http://autobuild.buildroot.org/results/376d316094238ba7097e8bdc51960ba38532683a
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2:
->  - Fix title (static -> dynamic)
+Fixes:
+ - http://autobuild.buildroot.org/results/c58119baed8d7711da799e34a5ee1117f46b96f4
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...proto-ip-raw.c-fix-build-with-kernel-5.13.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/trinity/0002-net-proto-ip-raw.c-fix-build-with-kernel-5.13.patch b/package/trinity/0002-net-proto-ip-raw.c-fix-build-with-kernel-5.13.patch
+new file mode 100644
+index 0000000000..4c747f41c9
+--- /dev/null
++++ b/package/trinity/0002-net-proto-ip-raw.c-fix-build-with-kernel-5.13.patch
+@@ -0,0 +1,37 @@
++From da65f0aa2bfcb4a2d9a77abfaa2955c6be3d37c9 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 17 Jul 2021 08:02:31 +0200
++Subject: [PATCH] net/proto-ip-raw.c: fix build with kernel >= 5.13
++
++Fix the following build failure with kernel >= 5.13:
++
++In file included from /home/buildroot/autobuild/instance-2/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/linux/icmp.h:23,
++                 from net/proto-ip-raw.c:1:
++/home/buildroot/autobuild/instance-2/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/netinet/in.h:33:5: error: redeclaration of enumerator 'IPPROTO_IP'
++   33 |     IPPROTO_IP = 0,    /* Dummy protocol for TCP.  */
++      |     ^~~~~~~~~~
++/home/buildroot/autobuild/instance-2/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/linux/in.h:29:3: note: previous definition of 'IPPROTO_IP' was here
++   29 |   IPPROTO_IP = 0,  /* Dummy protocol for TCP  */
++      |   ^~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/c58119baed8d7711da799e34a5ee1117f46b96f4
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/kernelslacker/trinity/pull/35]
++---
++ net/proto-ip-raw.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/net/proto-ip-raw.c b/net/proto-ip-raw.c
++index 95f2cb13..b407bb68 100644
++--- a/net/proto-ip-raw.c
+++++ b/net/proto-ip-raw.c
++@@ -1,3 +1,4 @@
+++#include <netinet/in.h>
++ #include <linux/icmp.h>
++ #include "net.h"
++ #include "trinity.h"
++-- 
++2.30.2
++
