@@ -1,45 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Jul 2021 22:15:51 +0200
-Subject: [Buildroot] [PATCH v2 2/4] boot/opensbi: introduce
- BR2_TARGET_OPENSBI_FW_FDT_PATH
-In-Reply-To: <20210616050341.510702-3-drew@beagleboard.org>
+Date: Sun, 18 Jul 2021 22:15:59 +0200
+Subject: [Buildroot] [PATCH v2 3/4] configs/beaglev: update U-Boot to
+ enable OF_SEPARATE
+In-Reply-To: <20210616050341.510702-4-drew@beagleboard.org>
 References: <20210616050341.510702-1-drew@beagleboard.org>
- <20210616050341.510702-3-drew@beagleboard.org>
-Message-ID: <20210718221551.30e3cf03@windsurf>
+ <20210616050341.510702-4-drew@beagleboard.org>
+Message-ID: <20210718221559.3d343c13@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hello,
-
-On Tue, 15 Jun 2021 22:03:41 -0700
+On Tue, 15 Jun 2021 22:03:43 -0700
 Drew Fustini <drew@beagleboard.org> wrote:
 
-> +config BR2_TARGET_OPENSBI_FW_FDT_PATH
-> +	bool "Include U-Boot DTB in OpenSBI Payload"
-> +	depends on BR2_TARGET_OPENSBI_PLAT != ""
-> +	depends on BR2_TARGET_UBOOT
+> Update commit ID of U-Boot to latest commit in starfive-tech repo [1]
+> which enables OF_SEPARATE [2].
+> 
+> [1] https://github.com/starfive-tech/u-boot/tree/Fedora_VIC_7100_2021.04
+> [2] https://github.com/starfive-tech/u-boot/commit/64ead5b83959da8eb87b6963843addf5942e6ed4
+> 
+> Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+> Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
+> Signed-off-by: Drew Fustini <drew@beagleboard.org>
+> ---
+>  configs/beaglev_defconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Both of these were not needed, as they are already part of
-BR2_TARGET_OPENSBI_UBOOT_PAYLOAD, which you depend on.
-
-> +	depends on BR2_TARGET_OPENSBI_UBOOT_PAYLOAD
-> +	select BR2_TARGET_OPENSBI_INSTALL_PAYLOAD_IMG
-
-This select was not needed, as it's already done by
-BR2_TARGET_OPENSBI_UBOOT_PAYLOAD, which you depend on.
-
-However, I've added a "select BR2_TARGET_UBOOT_FORMAT_DTB" to make sure
-u-boot.dtb gets installed in BINARIES_DIR.
-
-Applied with those changes.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
+Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
