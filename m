@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D118C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:55:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3325DC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:56:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5334861037
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:55:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5334861037
+	by mail.kernel.org (Postfix) with ESMTPS id 00CE860F93
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:56:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 00CE860F93
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E8C283E92;
-	Tue,  3 Aug 2021 23:55:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C813540634;
+	Tue,  3 Aug 2021 23:56:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bjI5ow-Kof9c; Tue,  3 Aug 2021 23:55:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0kINgVKIxzma; Tue,  3 Aug 2021 23:56:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 85FF883E5C;
-	Tue,  3 Aug 2021 23:55:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D32F540628;
+	Tue,  3 Aug 2021 23:56:04 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 469CA1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 49EE61BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0EE2940EF2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F4B740F76
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YRrRQWppFimT for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
+ with ESMTP id 1E38rcGQp_xD for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 733BA40EEE
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F5FD40EDE
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id BDEC6878D7; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
+ id E850A87059; Tue,  3 Aug 2021 21:10:09 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 21:24:35 +0200
+Date: Mon, 19 Jul 2021 23:08:31 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f0d270ccfb0a9b486ea5907f6e86c5d9c07f93e2
-X-Git-Newrev: 360d1aad84449c6a1993d8c7e469dc0cd35339a2
+X-Git-Oldrev: 9332ab86f8953a8710b9377d3fba46c986610254
+X-Git-Newrev: 0d97fe503d0902e0a6aae1014dc760f4496b7dce
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211010.BDEC6878D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/network-manager: bump
- to version 1.32.2
+Message-Id: <20210803211009.E850A87059@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/openal: bump to
+ version 1.21.1
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,59 +65,57 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4384635673920127952=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=360d1aad84449c6a1993d8c7e469dc0cd35339a2
+--===============4384635673920127952==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=0d97fe503d0902e0a6aae1014dc760f4496b7dce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: André Zwing <nerv@dawncrow.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/network-manager/network-manager.hash | 6 +++---
- package/network-manager/network-manager.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/openal/openal.hash | 2 +-
+ package/openal/openal.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index aef06dde2c..6efd697af4 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -1,6 +1,6 @@
--# From https://download.gnome.org/sources/NetworkManager/1.22/NetworkManager-1.22.16.sha256sum
--sha256  377aa053752eaa304b72c9906f9efcd9fbd5f7f6cb4cd4ad72425a68982cffc6  NetworkManager-1.22.16.tar.xz
-+# From https://download.gnome.org/sources/NetworkManager/1.32/NetworkManager-1.32.2.sha256sum
-+sha256  701d511067f757d0f92f412c98cdb49a74a6ba69448aabb1beadacbc171e3873  NetworkManager-1.32.2.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
--sha256  f0543c137bc0eece552d42642d1bab31707ca3b3663d9c7a81ac3b270a4780e7  CONTRIBUTING
-+sha256  65fd94885d3a5f468755e7cbe1334e56ef3a32b8a73980967fa9839c10514aa9  CONTRIBUTING.md
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 607c2b402b..fbd5b1c85c 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -4,15 +4,15 @@
+diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+index 1592dd56b5..3f1a574e3e 100644
+--- a/package/openal/openal.hash
++++ b/package/openal/openal.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  c32d10473457a8b545aab50070fe84be2b5b041e1f2099012777ee6be0057c13  openal-1.20.1.tar.gz
++sha256  8ac17e4e3b32c1af3d5508acfffb838640669b4274606b7892aa796ca9d7467f  openal-1.21.1.tar.gz
+ sha256  d808ce217e5b611854da622b57ec29fe545584c48bc5352fae72a4b6e5074a15  COPYING
+diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+index ed63abfb3f..a878e4847f 100644
+--- a/package/openal/openal.mk
++++ b/package/openal/openal.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--NETWORK_MANAGER_VERSION_MAJOR = 1.22
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).16
-+NETWORK_MANAGER_VERSION_MAJOR = 1.32
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
- NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
- 	libgcrypt wireless_tools util-linux host-intltool readline libndp
- NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
--NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING
-+NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING.md
- NETWORK_MANAGER_CPE_ID_VENDOR = gnome
- NETWORK_MANAGER_CPE_ID_PRODUCT = networkmanager
- NETWORK_MANAGER_SELINUX_MODULES = networkmanager
+-OPENAL_VERSION = 1.20.1
+-OPENAL_SITE = $(call github,kcat,openal-soft,openal-soft-$(OPENAL_VERSION))
++OPENAL_VERSION = 1.21.1
++OPENAL_SITE = $(call github,kcat,openal-soft,$(OPENAL_VERSION))
+ OPENAL_LICENSE = LGPL-2.0+
+ OPENAL_LICENSE_FILES = COPYING
+ OPENAL_INSTALL_STAGING = YES
+
+--===============4384635673920127952==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============4384635673920127952==--
