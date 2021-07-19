@@ -1,40 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Jul 2021 23:18:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/s390-tools: bump to version
- 2.17.0
-In-Reply-To: <20210719112648.367298-1-egorenar@linux.ibm.com>
-References: <20210719112648.367298-1-egorenar@linux.ibm.com>
-Message-ID: <20210719231835.0f31bbf1@windsurf>
+Date: Mon, 19 Jul 2021 23:18:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump to version 12.22.3
+In-Reply-To: <20210719100523.3553404-1-james.hilliard1@gmail.com>
+References: <20210719100523.3553404-1-james.hilliard1@gmail.com>
+Message-ID: <20210719231838.465faacf@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hello,
+On Mon, 19 Jul 2021 04:05:23 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-On Mon, 19 Jul 2021 13:26:48 +0200
-Alexander Egorenkov <egorenar@linux.ibm.com> wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/nodejs/nodejs.hash | 4 ++--
+>  package/nodejs/nodejs.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Fixes:
-> - https://release-monitoring.org/project/10714/
-> 
-> https://github.com/ibm-s390-linux/s390-tools/blob/v2.17.0/CHANGELOG.md
-> 
-> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-
-I've applied, with one minor change.
-
-> +Subject: [PATCH 1/2] cpumf/lshwc: Fix compile errors due to use of
-> + non-standard 32/64 bit types
-
-We want [PATCH], not [PATCH X/Y] in the patches added to package/<pkg>/
-folders. This is reported by "make check-package".
-
-I fixed that up when applying. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
+Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
