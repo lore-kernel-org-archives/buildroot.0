@@ -1,44 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Jul 2021 23:08:31 +0200
-Subject: [Buildroot] [git commit] package/libcap: bump to version 2.51
-Message-ID: <20210719203514.5A6258841D@busybox.osuosl.org>
+Date: Mon, 19 Jul 2021 23:03:12 +0200
+Subject: [Buildroot] [git commit] package/nodejs: bump to version 12.22.3
+Message-ID: <20210719203514.2E8BE8841D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bef89e381d0d698053a026d6a8cb0ded260bd074
+commit: https://git.buildroot.net/buildroot/commit/?id=e5db5a472e997bdf58ef0ddf370055b83287778a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcap/libcap.hash | 2 +-
- package/libcap/libcap.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcap/libcap.hash b/package/libcap/libcap.hash
-index de9de3514a..ec87a38df7 100644
---- a/package/libcap/libcap.hash
-+++ b/package/libcap/libcap.hash
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 1e03587715..d94942e7c0 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
 @@ -1,5 +1,5 @@
- # https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/sha256sums.asc
--sha256  e98bc4d93645082ec787730b0fd1a712b38882465c505777de17c338831ee181  libcap-2.49.tar.xz
-+sha256  6609f3ab7aebcc8f9277f53a577c657d9f3056d1352ea623da7fd7c0f00890f9  libcap-2.51.tar.xz
+-# From https://nodejs.org/dist/v12.22.1/SHASUMS256.txt
+-sha256  dd650df7773a6ed3e390320ba51ef33cba6499f0e9397709ea3d1debdcbcb989  node-v12.22.1.tar.xz
++# From https://nodejs.org/dist/v12.22.3/SHASUMS256.txt
++sha256  350211fae3a688f41889680c8efcf689353a2e36b62b9dc2b408340986857190  node-v12.22.3.tar.xz
  
- # Hash for license file:
- sha256  f58c80bcce8c929db39a23c32e924876e3311f3ffa54f66076c38056d38fa59b  License
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 34636a3a81..3dc09bd551 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
+ # Hash for license file
+ sha256  221417a7ca275112a5ac54639b36ee3c5184e74631ea1e1b01b701293b655190  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 108fce0926..2731a7c667 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCAP_VERSION = 2.49
-+LIBCAP_VERSION = 2.51
- LIBCAP_SITE = https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
- LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.xz
- LIBCAP_LICENSE = GPL-2.0 or BSD-3-Clause
+-NODEJS_VERSION = 12.22.1
++NODEJS_VERSION = 12.22.3
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
