@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB9E4C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:50:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A2B8C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:50:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7270961040
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:50:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7270961040
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 1549161050
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:50:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1549161050
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 47C5340328;
-	Tue,  3 Aug 2021 23:50:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF5F660641;
+	Tue,  3 Aug 2021 23:50:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RDs3eEjfytK0; Tue,  3 Aug 2021 23:50:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3n0eIauIkUBD; Tue,  3 Aug 2021 23:50:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03C9F4062F;
-	Tue,  3 Aug 2021 23:50:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 991E760A35;
+	Tue,  3 Aug 2021 23:50:39 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 077B81BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:17:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4DDD81BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:17:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3C9FA40E6F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5939B40F53
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bute9FP07MUJ for <buildroot@lists.busybox.net>;
+ with ESMTP id SRdqh3xFwOPb for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1888F40653
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2758F40ED2
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 61DEC87059; Tue,  3 Aug 2021 21:10:09 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 7BA9987059; Tue,  3 Aug 2021 21:10:09 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 18 Jul 2021 23:41:59 +0200
+Date: Mon, 19 Jul 2021 22:34:21 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 861775ebbe34d4548259e58a3af6b725c62a2a4b
-X-Git-Newrev: 1176ed86f5e27ea21ba80648356537e843c803ee
+X-Git-Oldrev: 42bbabdda2d0c1604c8bd4d2a407561121436617
+X-Git-Newrev: 90dfc0a59660020c21fdb5567e45d4edf3e66660
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211009.61DEC87059@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/wandboard: switch to
- extlinux.conf
+Message-Id: <20210803211009.7BA9987059@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] fs/erofs: add big pcluster
+ support
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,118 +70,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1176ed86f5e27ea21ba80648356537e843c803ee
+commit: https://git.buildroot.net/buildroot/commit/?id=90dfc0a59660020c21fdb5567e45d4edf3e66660
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently wandboard uses a custom boot.scr.txt script
-and custom image generation scripts, genimage.cfg and
-post-build.sh.
+This enables EROFS big pcluster images for buildroot.
 
-Switch to using the more standard extlinux.conf solution
-and remove the custom scripts in favor of the standard
-board/freescale/common/imx/post-image.sh one.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Gao Xiang <hsiangkao@aol.com>
+[yann.morin.1998@free.fr: must be a multiple of 4KiB]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/wandboard/boot.scr.txt                       |  7 -----
- board/wandboard/genimage.cfg                       | 32 ----------------------
- board/wandboard/post-build.sh                      |  8 ------
- .../rootfs_overlay/boot/extlinux/extlinux.conf     |  4 +++
- configs/wandboard_defconfig                        |  5 ++--
- 5 files changed, 6 insertions(+), 50 deletions(-)
+ fs/erofs/Config.in | 10 ++++++++++
+ fs/erofs/erofs.mk  |  4 ++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/board/wandboard/boot.scr.txt b/board/wandboard/boot.scr.txt
-deleted file mode 100644
-index 7a8aa4bd54..0000000000
---- a/board/wandboard/boot.scr.txt
-+++ /dev/null
-@@ -1,7 +0,0 @@
--setenv finduuid "part uuid mmc 0:1 uuid"
--run finduuid
--run findfdt
--setenv bootargs "console=ttymxc0,115200 root=PARTUUID=${uuid} rootwait rootfstype=ext4"
--load mmc 0:1 ${fdt_addr} boot/${fdtfile}
--load mmc 0:1 ${loadaddr} boot/zImage
--bootz ${loadaddr} - ${fdt_addr}
-diff --git a/board/wandboard/genimage.cfg b/board/wandboard/genimage.cfg
-deleted file mode 100644
-index ad4a6a55d5..0000000000
---- a/board/wandboard/genimage.cfg
-+++ /dev/null
-@@ -1,32 +0,0 @@
--# Minimal SD card image for the Wandboard
--#
--# The SD card must have at least 1 MB free at the beginning.
--# U-Boot and its environment are dumped as is.
--# A single root filesystem partition is required (Ext4 in this case).
--#
--# For details about the layout, see:
--# http://wiki.wandboard.org/index.php/Boot-process
--
--image sdcard.img {
--  hdimage {
--  }
--
--  partition spl {
--    in-partition-table = "no"
--    image = "SPL"
--    offset = 1024
--  }
--
--  partition u-boot {
--    in-partition-table = "no"
--    image = "u-boot.img"
--    offset = 70656
--  }
--
--  partition rootfs {
--    partition-type = 0x83
--    image = "rootfs.ext4"
--    offset = 1M
--    size = 512M
--  }
--}
-diff --git a/board/wandboard/post-build.sh b/board/wandboard/post-build.sh
-deleted file mode 100755
-index 6ddc113702..0000000000
---- a/board/wandboard/post-build.sh
-+++ /dev/null
-@@ -1,8 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--
--install -d -m 755 $TARGET_DIR/boot
--
--$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
--	-n "boot script" -d $BOARD_DIR/boot.scr.txt $TARGET_DIR/boot/boot.scr
-diff --git a/board/wandboard/rootfs_overlay/boot/extlinux/extlinux.conf b/board/wandboard/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..e3b90660c0
---- /dev/null
-+++ b/board/wandboard/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+Label imx6qdl-wandboard Buildroot
-+	kernel ../zImage
-+	fdtdir ../
-+	append root=PARTUUID=${uuid} rootwait rw console=${console},${baudrate} 
-diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
-index 7915248cf1..37628ea403 100644
---- a/configs/wandboard_defconfig
-+++ b/configs/wandboard_defconfig
-@@ -12,9 +12,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+diff --git a/fs/erofs/Config.in b/fs/erofs/Config.in
+index d7360edeab..e112572688 100644
+--- a/fs/erofs/Config.in
++++ b/fs/erofs/Config.in
+@@ -11,4 +11,14 @@ config BR2_TARGET_ROOTFS_EROFS_LZ4HC
+ 	help
+ 	  Use lz4 high-compression to compress data in the filesystem.
  
- # Image
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/wandboard/genimage.cfg"
-+BR2_ROOTFS_OVERLAY="board/wandboard/rootfs_overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
++config BR2_TARGET_ROOTFS_EROFS_PCLUSTERSIZE
++	int "pcluster size"
++	default 0
++	help
++	  Specify the maximum size of physical cluster in bytes, as a
++	  multiple of 4KiB, for the big pcluster feature in order to
++	  get much better compression ratios (thus better sequential
++	  read performance for common storage devices), which has been
++	  introduced since Linux 5.13.
++
+ endif # BR2_TARGET_ROOTFS_EROFS
+diff --git a/fs/erofs/erofs.mk b/fs/erofs/erofs.mk
+index 58559d4833..0e9d4401a9 100644
+--- a/fs/erofs/erofs.mk
++++ b/fs/erofs/erofs.mk
+@@ -10,6 +10,10 @@ ifeq ($(BR2_TARGET_ROOTFS_EROFS_LZ4HC),y)
+ ROOTFS_EROFS_ARGS += -zlz4hc
+ endif
  
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
++ifneq ($(BR2_TARGET_ROOTFS_EROFS_PCLUSTERSIZE),0)
++ROOTFS_EROFS_ARGS += -C$(strip $(BR2_TARGET_ROOTFS_EROFS_PCLUSTERSIZE))
++endif
++
+ define ROOTFS_EROFS_CMD
+ 	$(HOST_DIR)/bin/mkfs.erofs $(ROOTFS_EROFS_ARGS) $@ $(TARGET_DIR)
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
