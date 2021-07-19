@@ -1,72 +1,83 @@
-From: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
-Date: Mon, 19 Jul 2021 10:43:01 +0200
-Subject: [Buildroot] Fw: [RESEND,
- PATCH 2/2] configs/stm32f469_disco: add framebuffer test application
-In-Reply-To: <AM0PR10MB2817E905F5392BCEDF88E05EE3E19@AM0PR10MB2817.EURPRD10.PROD.OUTLOOK.COM>
-References: <20210716164243.17988-1-dariobin@libero.it>
- <20210716164243.17988-2-dariobin@libero.it>
- <AM0PR10MB2817E905F5392BCEDF88E05EE3E19@AM0PR10MB2817.EURPRD10.PROD.OUTLOOK.COM>
-Message-ID: <9fa31969-805a-c9cc-76df-3012a4794ddc@foss.st.com>
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Mon, 19 Jul 2021 11:38:14 +0200
+Subject: [Buildroot] [PATCH v3 0/1] Add support for teamd/libteam
+Message-ID: <20210719093815.2017764-1-troglobit@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Ok, for me.
+Hi everyone!
 
-Acked-by: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+Third time's a charm, I hope.  Here's the updated patch to add support
+for teamd/libteam in Buildroot.  As mentioned previously, a few musl
+libc related patches have been backported from project's master branch
+at
 
-Regards
-Christophe Priouzeau
-On 7/19/21 10:38 AM, Christophe PRIOUZEAU wrote:
-> 
-> 
-> ------------------------------------------------------------------------
-> *From:* Dario Binacchi <dariobin@libero.it>
-> *Sent:* Friday, July 16, 2021 6:42 PM
-> *To:* buildroot at buildroot.org <buildroot@buildroot.org>
-> *Cc:* Christophe PRIOUZEAU <christophe.priouzeau@st.com>; Dario Binacchi 
-> <dariobin@libero.it>
-> *Subject:* [RESEND, PATCH 2/2] configs/stm32f469_disco: add framebuffer 
-> test application
-> It's a test suite for Linux framebuffer. You can run, for example,
-> fb-test-rect that displays random rectangles on the screen. But first,
-> you need to enable the framebuffer:
-> 
-> ~ # echo 0 0 > /sys/class/graphics/fb0/pan
-> ~ # fb-test-rect
-> 
-> Signed-off-by: Dario Binacchi <dariobin@libero.it>
-Acked-by: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
-> ---
->  ?configs/stm32f469_disco_defconfig | 1 +
->  ?1 file changed, 1 insertion(+)
-> 
-> diff --git a/configs/stm32f469_disco_defconfig 
-> b/configs/stm32f469_disco_defconfig
-> index 1440aefd95..b6de6748a0 100644
-> --- a/configs/stm32f469_disco_defconfig
-> +++ b/configs/stm32f469_disco_defconfig
-> @@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="zImage"
->  ?BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  ?BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f469-disco"
->  ?BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
-> +BR2_PACKAGE_FB_TEST_APP=y
->  ?BR2_TARGET_ROOTFS_EXT2=y
->  ?BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
->  ?# BR2_TARGET_ROOTFS_TAR is not set
-> -- 
-> 2.17.1
-> 
-> 
-> ST Restricted
-> 
+    https://github.com/jpirko/libteam/
 
+This time the Config.in dependency handling is actually fixed.  I did
+not really understand it before.  Huge thanks to Yann and Yegor for
+patiently explaining it to me!
+
+I've also dropped the previously selected team modes, as suggested by
+Yann, and rearranged the directives in libteam.mk slightly.  Could not
+find any official CPE, so used the package name, as other packages do.
+
+Basic tests still pass, and as of v3 br-arm-full-static is now skipped,
+as expected:
+
+    $ ./utils/check-package package/libteam/*
+    199 lines processed
+    0 warnings generated
+
+    $ ./utils/test-pkg -c libteam.config -p libteam
+               bootlin-armv5-uclibc [1/6]: OK
+                bootlin-armv7-glibc [2/6]: OK
+              bootlin-armv7m-uclibc [3/6]: SKIPPED
+                bootlin-x86-64-musl [4/6]: OK
+                 br-arm-full-static [5/6]: SKIPPED
+                       sourcery-arm [6/6]: OK
+    6 builds, 2 skipped, 0 build failed, 0 legal-info failed
+
+
+Best regards
+ /Joachim
+
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+
+---
+v3:
+ - properly fix dependency handling
+ - update package comment, depends on mmu
+ - rearrange .mk slightly and add CPE vendor
+ - update team kernel deps
+ - drop team modes from kernel conf
+ - update help with info on team modes
+v2:
+ - added missing libnl deps in libteam/Config.in
+
+Joachim Wiberg (1):
+  package/libteam: new package
+
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ .../0001-revert-disregard-current-state.patch | 51 +++++++++++++++++++
+ .../0002-fix-build-on-openwrt-musl-libc.patch | 41 +++++++++++++++
+ ...3-increase-wait-time-for-daemon-kill.patch | 37 ++++++++++++++
+ package/libteam/Config.in                     | 30 +++++++++++
+ package/libteam/libteam.hash                  |  3 ++
+ package/libteam/libteam.mk                    | 24 +++++++++
+ 8 files changed, 188 insertions(+)
+ create mode 100644 package/libteam/0001-revert-disregard-current-state.patch
+ create mode 100644 package/libteam/0002-fix-build-on-openwrt-musl-libc.patch
+ create mode 100644 package/libteam/0003-increase-wait-time-for-daemon-kill.patch
+ create mode 100644 package/libteam/Config.in
+ create mode 100644 package/libteam/libteam.hash
+ create mode 100644 package/libteam/libteam.mk
 
 -- 
-Best regards / Cordialement,
-
-Christophe Priouzeau | Tel: +33 244027320
-STMicroelectronics
-ST online: www.st.com<http://www.st.com/>
+2.25.1
