@@ -1,47 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 19 Jul 2021 08:48:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.4.2
-Message-ID: <20210719064837.3450162-1-fontaine.fabrice@gmail.com>
+Date: Mon, 19 Jul 2021 08:57:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/i2pd: bump to version 2.38.0
+Message-ID: <20210719065703.3596976-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-http://git.haproxy.org/?p=haproxy-2.4.git;a=blob;f=CHANGELOG
+https://github.com/PurpleI2P/i2pd/blob/2.38.0/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/i2pd/i2pd.hash | 4 ++--
+ package/i2pd/i2pd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 66a6f40bda..849d362dc0 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.14.tar.gz.sha256
--sha256  6a9b702f04b07786f3e5878de8172a727acfdfdbc1cefe1c7a438df372f2fb61  haproxy-2.2.14.tar.gz
-+# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.2.tar.gz.sha256
-+sha256  edf9788f7f3411498e3d7b21777036b4dc14183e95c8e2ce7577baa0ea4ea2aa  haproxy-2.4.2.tar.gz
+diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
+index e9aa26d5de..da44d51e1b 100644
+--- a/package/i2pd/i2pd.hash
++++ b/package/i2pd/i2pd.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/PurpleI2P/i2pd/releases/download/2.37.0/SHA512SUMS
+-sha512  2cf785941b58563a575511ad2ef8b94ec20bfed10f1a4a06e82603f85c9b9586cf10740fcee0d962cd94bf6059c3950f68f2a0b96b55f1c6de23a7d49014d3e6  i2pd-2.37.0.tar.gz
++# From https://github.com/PurpleI2P/i2pd/releases/download/2.38.0/SHA512SUMS
++sha512  01e160394dc07621b3d236fcc13d78b46e109290f59dbb77f282c05f4d80fdfa01c9b062de5ca91d6d6e739beb8a5b6f731508b48d9483f1a132a93a71d88e6f  i2pd-2.38.0.tar.gz
  # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 768c0e2895..be3d4dbb5d 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -4,8 +4,8 @@
+ sha256  9c87aff490b272254d716475e3c4973f5f64af1d18f9f6962c1e61e252e1ad9a  LICENSE
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index 3aa5602172..e6df5ca34c 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HAPROXY_VERSION_MAJOR = 2.2
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).14
-+HAPROXY_VERSION_MAJOR = 2.4
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).2
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-I2PD_VERSION = 2.37.0
++I2PD_VERSION = 2.38.0
+ I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
+ I2PD_LICENSE = BSD-3-Clause
+ I2PD_LICENSE_FILES = LICENSE
 -- 
 2.30.2
