@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DAE9C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:52:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CAD5C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:52:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0054D61040
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:52:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0054D61040
+	by mail.kernel.org (Postfix) with ESMTPS id 615C060555
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:52:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 615C060555
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF9B5422A3;
-	Tue,  3 Aug 2021 23:52:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 38A8483EDD;
+	Tue,  3 Aug 2021 23:52:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R2zUVbAHtsGE; Tue,  3 Aug 2021 23:52:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XmEU3LNP0JCs; Tue,  3 Aug 2021 23:52:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D3A94229B;
-	Tue,  3 Aug 2021 23:52:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 921B983EC2;
+	Tue,  3 Aug 2021 23:52:20 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 109511BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1AAA71BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 570D740F5B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5570140E81
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NILuYd4lSoRU for <buildroot@lists.busybox.net>;
+ with ESMTP id JZqi5Eq-2NEi for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CFD0640EDA
+ by smtp2.osuosl.org (Postfix) with ESMTP id D685340EE3
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 2543387059; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
+ id 36D7F878D7; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 19 Jul 2021 23:32:32 +0200
+Date: Mon, 19 Jul 2021 23:32:39 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 54371c745c5727f2747fef95e62a07a0f3e803c0
-X-Git-Newrev: 63198aaa171a4da4587b3ea190809c0f509a1f56
+X-Git-Oldrev: 9936af92c47cf191befecb667f4a977104baad5d
+X-Git-Newrev: 0c357d90a939983fc54d7954a973732e8d6bda34
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211010.2543387059@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] imx/post-image.sh: support
- BR2_LINUX_KERNEL_INSTALL_TARGET=y for non-SPL
+Message-Id: <20210803211010.36D7F878D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/imx7d-sdb: bump U-Boot
+ and kernel versions
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,58 +70,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63198aaa171a4da4587b3ea190809c0f509a1f56
+commit: https://git.buildroot.net/buildroot/commit/?id=0c357d90a939983fc54d7954a973732e8d6bda34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, only SPL is supported when BR2_LINUX_KERNEL_INSTALL_TARGET=y
-is selected.
-
-Support non-SPL case too.
-
-This is needed for booting imx7d-sabresd, for example.
+Bump U-Boot to 2021.07 and kernel to 5.13 version.
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Reviewed-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../common/imx/genimage.cfg.template_no_boot_part         | 15 +++++++++++++++
- board/freescale/common/imx/post-image.sh                  |  2 ++
- 2 files changed, 17 insertions(+)
+ configs/imx7d-sdb_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/freescale/common/imx/genimage.cfg.template_no_boot_part b/board/freescale/common/imx/genimage.cfg.template_no_boot_part
-new file mode 100644
-index 0000000000..edc34d0fcd
---- /dev/null
-+++ b/board/freescale/common/imx/genimage.cfg.template_no_boot_part
-@@ -0,0 +1,15 @@
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition u-boot {
-+    in-partition-table = "no"
-+    image = "%UBOOTBIN%"
-+    offset = 1024
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext2"
-+  }
-+}
-diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index 0c2ef53dc6..3bb482debd 100755
---- a/board/freescale/common/imx/post-image.sh
-+++ b/board/freescale/common/imx/post-image.sh
-@@ -47,6 +47,8 @@ genimage_type()
- 	elif grep -Eq "^BR2_LINUX_KERNEL_INSTALL_TARGET=y$" ${BR2_CONFIG}; then
- 		if grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
- 		    echo "genimage.cfg.template_no_boot_part_spl"
-+		else
-+		    echo "genimage.cfg.template_no_boot_part"
- 		fi
- 	elif grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
- 		echo "genimage.cfg.template_spl"
+diff --git a/configs/imx7d-sdb_defconfig b/configs/imx7d-sdb_defconfig
+index 0c34f6e6df..8ee5e1fc40 100644
+--- a/configs/imx7d-sdb_defconfig
++++ b/configs/imx7d-sdb_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
+@@ -23,7 +23,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+ 
+ # Filesystem
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
