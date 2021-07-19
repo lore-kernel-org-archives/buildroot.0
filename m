@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FED2C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:51:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0BABC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:51:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F12A761029
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:51:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F12A761029
+	by mail.kernel.org (Postfix) with ESMTPS id 7E08461037
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:51:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7E08461037
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6B7483E5B;
-	Tue,  3 Aug 2021 23:51:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 52CCC4063A;
+	Tue,  3 Aug 2021 23:51:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WrF6tcI0ZxLc; Tue,  3 Aug 2021 23:51:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cOuA4k9Dr-eI; Tue,  3 Aug 2021 23:51:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0FEF183E35;
-	Tue,  3 Aug 2021 23:51:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B15F40633;
+	Tue,  3 Aug 2021 23:51:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 42D1D1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:17:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 033AD1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:17:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1C2240ED6
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B1B340F57
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s3qdrMkiG_dQ for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
+ with ESMTP id 8ubya0It6BSf for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3ECB540E7B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 52F2640ED9
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 852DA86AA7; Tue,  3 Aug 2021 21:10:09 +0000 (UTC)
+ id 9BD5986AA7; Tue,  3 Aug 2021 21:10:09 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 19 Jul 2021 23:03:00 +0200
+Date: Mon, 19 Jul 2021 23:03:04 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 90dfc0a59660020c21fdb5567e45d4edf3e66660
-X-Git-Newrev: 68753ed38dc0a32389987f1f7af2413312ee667e
+X-Git-Oldrev: d10d5f7fcd5d89a9589dce078941b03fc9eeffa6
+X-Git-Newrev: 94db182fca4056768c5975be2202b81aab37c2fc
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211009.852DA86AA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/apitrace: fix musl
- build
+Message-Id: <20210803211009.9BD5986AA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libidn2: bump to
+ version 2.3.1
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,67 +70,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68753ed38dc0a32389987f1f7af2413312ee667e
+commit: https://git.buildroot.net/buildroot/commit/?id=94db182fca4056768c5975be2202b81aab37c2fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-build on musl is broken since bump to version 10.0 in commit
-1d15817576b44c30eaa9bb8d1152934c6498b776
+Update indentation in hash file (two spaces)
 
-Fixes:
- - http://autobuild.buildroot.org/results/a10793d01efa3a1533ba37aa845b9ac2bb1dfb6b
+https://gitlab.com/libidn/libidn2/-/blob/v2.3.1/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...libbacktrace-backtrace-h-include-config.h.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ package/libidn2/libidn2.hash | 10 +++++-----
+ package/libidn2/libidn2.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/apitrace/0001-thirdparty-libbacktrace-backtrace-h-include-config.h.patch b/package/apitrace/0001-thirdparty-libbacktrace-backtrace-h-include-config.h.patch
-new file mode 100644
-index 0000000000..bc76e5e26b
---- /dev/null
-+++ b/package/apitrace/0001-thirdparty-libbacktrace-backtrace-h-include-config.h.patch
-@@ -0,0 +1,40 @@
-+From 36ff87a927092b4d62c587736d7684dea9c82e63 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 19 Jul 2021 08:27:48 +0200
-+Subject: [PATCH] thirdparty/libbacktrace/backtrace/h: include config.h
-+
-+Build on musl is broken since version 10.0 because the include on
-+config.h was removed by
-+https://github.com/apitrace/apitrace/commit/1544abf59d68d74977b8b692bea4d7468d65547b:
-+
-+In file included from /home/buildroot/autobuild/instance-3/output-1/build/apitrace-10.0/thirdparty/libbacktrace/testlib.c:40:
-+/home/buildroot/autobuild/instance-3/output-1/build/apitrace-10.0/thirdparty/libbacktrace/backtrace.h:53:10: fatal error: gstdint.h: No such file or directory
-+   53 | #include "gstdint.h"
-+      |          ^~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a10793d01efa3a1533ba37aa845b9ac2bb1dfb6b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not needed
-+(https://github.com/apitrace/apitrace/issues/755)]
-+---
-+ thirdparty/libbacktrace/backtrace.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/thirdparty/libbacktrace/backtrace.h b/thirdparty/libbacktrace/backtrace.h
-+index 2814763f..ab7679a0 100644
-+--- a/thirdparty/libbacktrace/backtrace.h
-++++ b/thirdparty/libbacktrace/backtrace.h
-+@@ -33,6 +33,8 @@ POSSIBILITY OF SUCH DAMAGE.  */
-+ #ifndef BACKTRACE_H
-+ #define BACKTRACE_H
-+ 
-++#include "config.h"
-++
-+ #include <stddef.h>
-+ #include <stdio.h>
-+ 
-+-- 
-+2.30.2
-+
+diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
+index 2d2fcdfd15..fb8b449d2a 100644
+--- a/package/libidn2/libidn2.hash
++++ b/package/libidn2/libidn2.hash
+@@ -1,8 +1,8 @@
+ # Calculated locally after checking signature
+-sha256	e1cb1db3d2e249a6a3eb6f0946777c2e892d5c5dc7bd91c74394fc3a01cab8b5	libidn2-2.3.0.tar.gz
++sha256  8af684943836b8b53965d5f5b6714ef13c26c91eaa36ce7d242e3d21f5d40f2d  libidn2-2.3.1.tar.gz
+ 
+ # Hash for license files:
+-sha256	73483f797a83373fca1b968c11785b98c4fc4803cdc7d3210811ca8b075d6d76	COPYING
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
+-sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LESSERv3
+-sha256	01d621eef165cf4d3d3dbb737aa0699178d94c6f18cf87e9dde6db3ca7790f46	COPYING.unicode
++sha256  73483f797a83373fca1b968c11785b98c4fc4803cdc7d3210811ca8b075d6d76  COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSERv3
++sha256  01d621eef165cf4d3d3dbb737aa0699178d94c6f18cf87e9dde6db3ca7790f46  COPYING.unicode
+diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
+index 4db302dbf4..a03d9378c7 100644
+--- a/package/libidn2/libidn2.mk
++++ b/package/libidn2/libidn2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBIDN2_VERSION = 2.3.0
++LIBIDN2_VERSION = 2.3.1
+ LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
+ LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
