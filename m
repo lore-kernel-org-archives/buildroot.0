@@ -1,44 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Jul 2021 23:36:07 +0200
-Subject: [Buildroot] [git commit] package/xmrig: bump version to 6.13.1
-Message-ID: <20210719210210.D8B9B88480@busybox.osuosl.org>
+Date: Mon, 19 Jul 2021 23:36:02 +0200
+Subject: [Buildroot] [git commit] package/hdparm: bump version to 9.62
+Message-ID: <20210719210210.CDE4288468@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66c9559d1622cf0e0fddf59aeb1e538caaaf94c0
+commit: https://git.buildroot.net/buildroot/commit/?id=ad0267f1a843db38d7d461774efb87a397612e61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/xmrig/xmrig/blob/master/CHANGELOG.md
+Updated project site (old site was not updated since 2010) and package
+help text.
+
+Removed md5 hash.
+
+Switched _SITE to https.
+
+Release notes:
+https://sourceforge.net/p/hdparm/news/2021/04/hdparm-961-is-released/
+https://sourceforge.net/p/hdparm/news/2021/05/hdparm-962-is-released/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xmrig/xmrig.hash | 2 +-
- package/xmrig/xmrig.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/hdparm/Config.in   | 4 ++--
+ package/hdparm/hdparm.hash | 7 +++----
+ package/hdparm/hdparm.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
-index c80bdd6621..199959690f 100644
---- a/package/xmrig/xmrig.hash
-+++ b/package/xmrig/xmrig.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7570030c4b3e257bda190a100dc59f78b74c823af7561222a99b296f5e7b1ac2  xmrig-6.12.1.tar.gz
-+sha256  c444e53f8692ad10e0daa73df57892cf9a066d20fe25db377022cd481b1440ad  xmrig-6.13.1.tar.gz
- sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
-diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
-index 2202d875c5..b8a3957d54 100644
---- a/package/xmrig/xmrig.mk
-+++ b/package/xmrig/xmrig.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/hdparm/Config.in b/package/hdparm/Config.in
+index 52385b18ce..17ecb65ce9 100644
+--- a/package/hdparm/Config.in
++++ b/package/hdparm/Config.in
+@@ -2,6 +2,6 @@ config BR2_PACKAGE_HDPARM
+ 	bool "hdparm"
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	help
+-	  hdparm - get/set hard disk parameters for Linux IDE drives.
++	  hdparm - get/set ATA/SATA drive parameters under Linux
+ 
+-	  http://www.ibiblio.org/pub/Linux/system/hardware/
++	  https://sourceforge.net/projects/hdparm/
+diff --git a/package/hdparm/hdparm.hash b/package/hdparm/hdparm.hash
+index b35da45273..b37826caf2 100644
+--- a/package/hdparm/hdparm.hash
++++ b/package/hdparm/hdparm.hash
+@@ -1,6 +1,5 @@
+-# From http://sourceforge.net/projects/hdparm/files/hdparm/
+-md5  25a791d47236c58801f8b27074f3ef93  hdparm-9.60.tar.gz
+-sha1  f15378cf533f79dbbc040cd77183137d24292ecc  hdparm-9.60.tar.gz
++# From https://sourceforge.net/projects/hdparm/files/hdparm/
++sha1  100b9a5551b71d87b446b415d56c5d45ac41d131  hdparm-9.62.tar.gz
+ # Locally computed
+-sha256  8397739c73e44d5ab96c4aef28fa9c0147276d53a1b5657ce04c4565cf6635cc  hdparm-9.60.tar.gz
++sha256  2c0f9d75cdbeda928a25a128cd3d0b7120445ec0910c0b29d4c1038ed1be777f  hdparm-9.62.tar.gz
+ sha256  eae572b06d2733f5c65fbe81680ce2b8a109afee2bdd1a161343c772af0e82e1  LICENSE.TXT
+diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
+index d9470ef7f5..6a71c14fa7 100644
+--- a/package/hdparm/hdparm.mk
++++ b/package/hdparm/hdparm.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XMRIG_VERSION = 6.12.1
-+XMRIG_VERSION = 6.13.1
- XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
- XMRIG_LICENSE = GPL-3.0+
- XMRIG_LICENSE_FILES = LICENSE
+-HDPARM_VERSION = 9.60
+-HDPARM_SITE = http://downloads.sourceforge.net/project/hdparm/hdparm
++HDPARM_VERSION = 9.62
++HDPARM_SITE = https://downloads.sourceforge.net/project/hdparm/hdparm
+ HDPARM_LICENSE = BSD-Style
+ HDPARM_LICENSE_FILES = LICENSE.TXT
+ 
