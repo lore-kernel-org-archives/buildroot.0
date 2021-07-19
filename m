@@ -1,70 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 19 Jul 2021 08:38:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apitrace: fix musl build
-Message-ID: <20210719063853.3433984-1-fontaine.fabrice@gmail.com>
+Date: Mon, 19 Jul 2021 08:42:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libidn: bump to version 1.37
+Message-ID: <20210719064226.3434817-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-build on musl is broken since bump to version 10.0 in commit
-1d15817576b44c30eaa9bb8d1152934c6498b776
-
-Fixes:
- - http://autobuild.buildroot.org/results/a10793d01efa3a1533ba37aa845b9ac2bb1dfb6b
+https://gitlab.com/libidn/libidn/-/blob/v1.37/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...cktrace-backtrace-h-include-config.h.patch | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/apitrace/0001-thirdparty-libbacktrace-backtrace-h-include-config.h.patch
+ package/libidn/libidn.hash | 2 +-
+ package/libidn/libidn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/apitrace/0001-thirdparty-libbacktrace-backtrace-h-include-config.h.patch b/package/apitrace/0001-thirdparty-libbacktrace-backtrace-h-include-config.h.patch
-new file mode 100644
-index 0000000000..bc76e5e26b
---- /dev/null
-+++ b/package/apitrace/0001-thirdparty-libbacktrace-backtrace-h-include-config.h.patch
-@@ -0,0 +1,40 @@
-+From 36ff87a927092b4d62c587736d7684dea9c82e63 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 19 Jul 2021 08:27:48 +0200
-+Subject: [PATCH] thirdparty/libbacktrace/backtrace/h: include config.h
-+
-+Build on musl is broken since version 10.0 because the include on
-+config.h was removed by
-+https://github.com/apitrace/apitrace/commit/1544abf59d68d74977b8b692bea4d7468d65547b:
-+
-+In file included from /home/buildroot/autobuild/instance-3/output-1/build/apitrace-10.0/thirdparty/libbacktrace/testlib.c:40:
-+/home/buildroot/autobuild/instance-3/output-1/build/apitrace-10.0/thirdparty/libbacktrace/backtrace.h:53:10: fatal error: gstdint.h: No such file or directory
-+   53 | #include "gstdint.h"
-+      |          ^~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a10793d01efa3a1533ba37aa845b9ac2bb1dfb6b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not needed
-+(https://github.com/apitrace/apitrace/issues/755)]
-+---
-+ thirdparty/libbacktrace/backtrace.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/thirdparty/libbacktrace/backtrace.h b/thirdparty/libbacktrace/backtrace.h
-+index 2814763f..ab7679a0 100644
-+--- a/thirdparty/libbacktrace/backtrace.h
-++++ b/thirdparty/libbacktrace/backtrace.h
-+@@ -33,6 +33,8 @@ POSSIBILITY OF SUCH DAMAGE.  */
-+ #ifndef BACKTRACE_H
-+ #define BACKTRACE_H
-+ 
-++#include "config.h"
-++
-+ #include <stddef.h>
-+ #include <stdio.h>
-+ 
-+-- 
-+2.30.2
-+
+diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
+index 0255a63950..6269465e1c 100644
+--- a/package/libidn/libidn.hash
++++ b/package/libidn/libidn.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  14b67108344d81ba844631640df77c9071d9fb0659b080326ff5424e86b14038  libidn-1.36.tar.gz
++sha256  3c8e970d5cd80a8cb56f59c61611535336343942e3f1c81b0190c69993a692c2  libidn-1.37.tar.gz
+ 
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index c49bbe098e..2180607a89 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBIDN_VERSION = 1.36
++LIBIDN_VERSION = 1.37
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no" MAKEINFO=true
 -- 
 2.30.2
