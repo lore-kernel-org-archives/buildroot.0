@@ -1,46 +1,136 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Jul 2021 23:03:08 +0200
-Subject: [Buildroot] [git commit] package/i2pd: bump to version 2.38.0
-Message-ID: <20210719203514.18EF388430@busybox.osuosl.org>
+Date: Mon, 19 Jul 2021 23:03:09 +0200
+Subject: [Buildroot] [git commit] package/nodejs: fix build with ICU 69
+Message-ID: <20210719203514.239B38765D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a244355fa842aa4b457ae64349008c73ab4cdc60
+commit: https://git.buildroot.net/buildroot/commit/?id=6507ac846cf82bb061ab1ca4575d62e2c9b5048e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/PurpleI2P/i2pd/blob/2.38.0/ChangeLog
+Fixes:
+../deps/v8/src/objects/js-list-format.cc: In static member function ???static v8::internal::MaybeHandle<v8::internal::JSListFormat> v8::internal::JSListFormat::New(v8::internal::Isolate*, v8::internal::Handle<v8::internal::Map>, v8::internal::Handle<v8::internal::Object>, v8::internal::Handle<v8::internal::Object>)???:
+../deps/v8/src/objects/js-list-format.cc:173:67: error: ???static icu::ListFormatter* icu::ListFormatter::createInstance(const icu::Locale&, const char*, UErrorCode&)??? is private within this context
+  173 |       icu_locale, GetIcuStyleString(style_enum, type_enum), status);
+      |                                                                   ^
+In file included from ../deps/v8/src/objects/js-list-format.cc:25:
+/home/buildroot/buildroot/output/per-package/host-icu/host/include/unicode/listformatter.h:267:27: note: declared private here
+  267 |     static ListFormatter* createInstance(const Locale& locale, const char* style, UErrorCode& errorCode);
+      |                           ^~~~~~~~~~~~~~
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/i2pd/i2pd.hash | 4 ++--
- package/i2pd/i2pd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nodejs/0002-Fix-build-with-ICU-68.patch | 101 ++++++++++++++++++++++++
+ 1 file changed, 101 insertions(+)
 
-diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
-index e9aa26d5de..da44d51e1b 100644
---- a/package/i2pd/i2pd.hash
-+++ b/package/i2pd/i2pd.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/PurpleI2P/i2pd/releases/download/2.37.0/SHA512SUMS
--sha512  2cf785941b58563a575511ad2ef8b94ec20bfed10f1a4a06e82603f85c9b9586cf10740fcee0d962cd94bf6059c3950f68f2a0b96b55f1c6de23a7d49014d3e6  i2pd-2.37.0.tar.gz
-+# From https://github.com/PurpleI2P/i2pd/releases/download/2.38.0/SHA512SUMS
-+sha512  01e160394dc07621b3d236fcc13d78b46e109290f59dbb77f282c05f4d80fdfa01c9b062de5ca91d6d6e739beb8a5b6f731508b48d9483f1a132a93a71d88e6f  i2pd-2.38.0.tar.gz
- # Locally computed:
- sha256  9c87aff490b272254d716475e3c4973f5f64af1d18f9f6962c1e61e252e1ad9a  LICENSE
-diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
-index 3aa5602172..e6df5ca34c 100644
---- a/package/i2pd/i2pd.mk
-+++ b/package/i2pd/i2pd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--I2PD_VERSION = 2.37.0
-+I2PD_VERSION = 2.38.0
- I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
- I2PD_LICENSE = BSD-3-Clause
- I2PD_LICENSE_FILES = LICENSE
+diff --git a/package/nodejs/0002-Fix-build-with-ICU-68.patch b/package/nodejs/0002-Fix-build-with-ICU-68.patch
+new file mode 100644
+index 0000000000..2d6ac010d2
+--- /dev/null
++++ b/package/nodejs/0002-Fix-build-with-ICU-68.patch
+@@ -0,0 +1,101 @@
++From 1504de672ec44080d08a97c479a23727a9c31d8b Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Mon, 19 Jul 2021 03:35:30 -0600
++Subject: [PATCH] Fix build with ICU >= 68.
++
++Adapted from:
++https://chromium-review.googlesource.com/c/v8/v8/+/2477751
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://github.com/nodejs/node/pull/39440]
++---
++ deps/v8/src/objects/js-list-format.cc | 32 +++++++++++++++++++++++++++
++ 1 file changed, 32 insertions(+)
++
++diff --git a/deps/v8/src/objects/js-list-format.cc b/deps/v8/src/objects/js-list-format.cc
++index 4f303b1874..2101f8e507 100644
++--- a/deps/v8/src/objects/js-list-format.cc
+++++ b/deps/v8/src/objects/js-list-format.cc
++@@ -29,6 +29,7 @@ namespace v8 {
++ namespace internal {
++ 
++ namespace {
+++#if U_ICU_VERSION_MAJOR_NUM < 68
++ const char* kStandard = "standard";
++ const char* kOr = "or";
++ const char* kUnit = "unit";
++@@ -41,8 +42,24 @@ const char* kUnitNarrow = "unit-narrow";
++ 
++ const char* GetIcuStyleString(JSListFormat::Style style,
++                               JSListFormat::Type type) {
+++#else
+++UListFormatterWidth GetIcuWidth(JSListFormat::Style style) {
+++  switch (style) {
+++    case JSListFormat::Style::LONG:
+++      return ULISTFMT_WIDTH_WIDE;
+++    case JSListFormat::Style::SHORT:
+++      return ULISTFMT_WIDTH_SHORT;
+++    case JSListFormat::Style::NARROW:
+++      return ULISTFMT_WIDTH_NARROW;
+++  }
+++  UNREACHABLE();
+++}
+++
+++UListFormatterType GetIcuType(JSListFormat::Type type) {
+++#endif
++   switch (type) {
++     case JSListFormat::Type::CONJUNCTION:
+++#if U_ICU_VERSION_MAJOR_NUM < 68
++       switch (style) {
++         case JSListFormat::Style::LONG:
++           return kStandard;
++@@ -51,7 +68,11 @@ const char* GetIcuStyleString(JSListFormat::Style style,
++         case JSListFormat::Style::NARROW:
++           return kStandardNarrow;
++       }
+++#else
+++      return ULISTFMT_TYPE_AND;
+++#endif
++     case JSListFormat::Type::DISJUNCTION:
+++#if U_ICU_VERSION_MAJOR_NUM < 68
++       switch (style) {
++         case JSListFormat::Style::LONG:
++           return kOr;
++@@ -60,7 +81,11 @@ const char* GetIcuStyleString(JSListFormat::Style style,
++         case JSListFormat::Style::NARROW:
++           return kOrNarrow;
++       }
+++#else
+++      return ULISTFMT_TYPE_OR;
+++#endif
++     case JSListFormat::Type::UNIT:
+++#if U_ICU_VERSION_MAJOR_NUM < 68
++       switch (style) {
++         case JSListFormat::Style::LONG:
++           return kUnit;
++@@ -69,6 +94,9 @@ const char* GetIcuStyleString(JSListFormat::Style style,
++         case JSListFormat::Style::NARROW:
++           return kUnitNarrow;
++       }
+++#else
+++      return ULISTFMT_TYPE_UNITS;
+++#endif
++   }
++   UNREACHABLE();
++ }
++@@ -170,7 +198,11 @@ MaybeHandle<JSListFormat> JSListFormat::New(Isolate* isolate, Handle<Map> map,
++   icu::Locale icu_locale = r.icu_locale;
++   UErrorCode status = U_ZERO_ERROR;
++   icu::ListFormatter* formatter = icu::ListFormatter::createInstance(
+++#if U_ICU_VERSION_MAJOR_NUM < 68
++       icu_locale, GetIcuStyleString(style_enum, type_enum), status);
+++#else
+++      icu_locale, GetIcuType(type_enum), GetIcuWidth(style_enum), status);
+++#endif
++   if (U_FAILURE(status)) {
++     delete formatter;
++     FATAL("Failed to create ICU list formatter, are ICU data files missing?");
++-- 
++2.25.1
++
