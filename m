@@ -1,55 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Jul 2021 23:03:04 +0200
-Subject: [Buildroot] [git commit] package/libidn2: bump to version 2.3.1
-Message-ID: <20210719203514.007838765D@busybox.osuosl.org>
+Date: Mon, 19 Jul 2021 23:08:31 +0200
+Subject: [Buildroot] [git commit] package/libcap: bump to version 2.51
+Message-ID: <20210719203514.5A6258841D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94db182fca4056768c5975be2202b81aab37c2fc
+commit: https://git.buildroot.net/buildroot/commit/?id=bef89e381d0d698053a026d6a8cb0ded260bd074
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
-
-https://gitlab.com/libidn/libidn2/-/blob/v2.3.1/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libidn2/libidn2.hash | 10 +++++-----
- package/libidn2/libidn2.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/libcap/libcap.hash | 2 +-
+ package/libcap/libcap.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
-index 2d2fcdfd15..fb8b449d2a 100644
---- a/package/libidn2/libidn2.hash
-+++ b/package/libidn2/libidn2.hash
-@@ -1,8 +1,8 @@
- # Calculated locally after checking signature
--sha256	e1cb1db3d2e249a6a3eb6f0946777c2e892d5c5dc7bd91c74394fc3a01cab8b5	libidn2-2.3.0.tar.gz
-+sha256  8af684943836b8b53965d5f5b6714ef13c26c91eaa36ce7d242e3d21f5d40f2d  libidn2-2.3.1.tar.gz
+diff --git a/package/libcap/libcap.hash b/package/libcap/libcap.hash
+index de9de3514a..ec87a38df7 100644
+--- a/package/libcap/libcap.hash
++++ b/package/libcap/libcap.hash
+@@ -1,5 +1,5 @@
+ # https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/sha256sums.asc
+-sha256  e98bc4d93645082ec787730b0fd1a712b38882465c505777de17c338831ee181  libcap-2.49.tar.xz
++sha256  6609f3ab7aebcc8f9277f53a577c657d9f3056d1352ea623da7fd7c0f00890f9  libcap-2.51.tar.xz
  
- # Hash for license files:
--sha256	73483f797a83373fca1b968c11785b98c4fc4803cdc7d3210811ca8b075d6d76	COPYING
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
--sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LESSERv3
--sha256	01d621eef165cf4d3d3dbb737aa0699178d94c6f18cf87e9dde6db3ca7790f46	COPYING.unicode
-+sha256  73483f797a83373fca1b968c11785b98c4fc4803cdc7d3210811ca8b075d6d76  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSERv3
-+sha256  01d621eef165cf4d3d3dbb737aa0699178d94c6f18cf87e9dde6db3ca7790f46  COPYING.unicode
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-index 4db302dbf4..a03d9378c7 100644
---- a/package/libidn2/libidn2.mk
-+++ b/package/libidn2/libidn2.mk
+ # Hash for license file:
+ sha256  f58c80bcce8c929db39a23c32e924876e3311f3ffa54f66076c38056d38fa59b  License
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 34636a3a81..3dc09bd551 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBIDN2_VERSION = 2.3.0
-+LIBIDN2_VERSION = 2.3.1
- LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
- LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
+-LIBCAP_VERSION = 2.49
++LIBCAP_VERSION = 2.51
+ LIBCAP_SITE = https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
+ LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.xz
+ LIBCAP_LICENSE = GPL-2.0 or BSD-3-Clause
