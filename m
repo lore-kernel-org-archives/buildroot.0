@@ -1,43 +1,42 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 19 Jul 2021 16:39:56 -0300
-Subject: [Buildroot] [PATCH] board/mx6cubox: Switch to extlinux.conf
-In-Reply-To: <CAB0FRsv3Wt=Hjon0FF+nqSh-HzNmsHbv8z12Cwbn+qK0N5DaSw@mail.gmail.com>
-References: <20210718222449.3622228-1-festevam@gmail.com>
- <CAB0FRsv3Wt=Hjon0FF+nqSh-HzNmsHbv8z12Cwbn+qK0N5DaSw@mail.gmail.com>
-Message-ID: <CAOMZO5DMf1TiOUuA4vASwOoYBYR+Lnyze-JWnJSYsgrCbH68JQ@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 19 Jul 2021 21:48:29 +0200
+Subject: [Buildroot] [PATCH] package/libcap: bump to version 2.51
+Message-ID: <20210719194829.2283756-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hi Fran?ois,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/libcap/libcap.hash | 2 +-
+ package/libcap/libcap.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, Jul 19, 2021 at 4:37 PM Fran?ois Perrad
-<francois.perrad@gadz.org> wrote:
-
-> Hello Fabio,
->
-> with this new version, the boot is OK,
-
-Thanks for testing.
-
-> but there still an issue with the console variable:
-> # cat /proc/cmdline
-> root=PARTUUID=00000000-01 rootwait rw console=ttymxc0,115200,115200
-
-Yes, I will fix this issue in mainline U-Boot too.
-
->> Is it safe to apply the U-Boot patch that changes the
->> mmc device for all cubox/hummingboard variants?
->>
->> If it is OK, then I will send it to U-Boot upstream.
->>
->
-> I think that the patch must be upstreamed.
-
-I will upstream it.
-
-Thanks,
-
-Fabio Estevam
+diff --git a/package/libcap/libcap.hash b/package/libcap/libcap.hash
+index de9de3514..ec87a38df 100644
+--- a/package/libcap/libcap.hash
++++ b/package/libcap/libcap.hash
+@@ -1,5 +1,5 @@
+ # https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/sha256sums.asc
+-sha256  e98bc4d93645082ec787730b0fd1a712b38882465c505777de17c338831ee181  libcap-2.49.tar.xz
++sha256  6609f3ab7aebcc8f9277f53a577c657d9f3056d1352ea623da7fd7c0f00890f9  libcap-2.51.tar.xz
+ 
+ # Hash for license file:
+ sha256  f58c80bcce8c929db39a23c32e924876e3311f3ffa54f66076c38056d38fa59b  License
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 34636a3a8..3dc09bd55 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCAP_VERSION = 2.49
++LIBCAP_VERSION = 2.51
+ LIBCAP_SITE = https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
+ LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.xz
+ LIBCAP_LICENSE = GPL-2.0 or BSD-3-Clause
+-- 
+2.30.2
