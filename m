@@ -1,95 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Jul 2021 09:46:31 +0200
-Subject: [Buildroot] [PATCH/next v2 1/1] package/icu: Add support to
- generate a subset of ICU data
-In-Reply-To: <05gfshxehp.ln2@ID-313208.user.individual.net>
-References: <20210601060608.5531-1-bernd.kuhls@t-online.de>
- <20210718231120.76adc4e3__4803.22810342244$1626642706$gmane$org@windsurf>
- <05gfshxehp.ln2@ID-313208.user.individual.net>
-Message-ID: <20210719094631.51970599@windsurf>
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Mon, 19 Jul 2021 09:53:51 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/libteam: new package
+In-Reply-To: <20210717170411.GW12203@scaer>
+References: <20210715083433.865943-1-troglobit@gmail.com>
+ <20210715083433.865943-2-troglobit@gmail.com> <20210717170411.GW12203@scaer>
+Message-ID: <87o8ayviwg.fsf@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hello Bernd,
 
-On Mon, 19 Jul 2021 07:45:36 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Hi Yann!
 
-> Yes, it is true that the upstream URL to create custum data files
-> http://apps.icu-project.org/datacustom/
-> no longer exists and no new data files can be created this way.
-> 
-> But our option BR2_PACKAGE_ICU_CUSTOM_DATA_PATH still works when using 
-> already existing data files to overwrite the tarball version of
-> icu/source/data/in/icudt69l.dat by ICU_POST_PATCH_HOOKS.
-> 
-> That's the reason why I did not touch this buildroot option because I 
-> focused on the new option. I do not have any objections to remove this 
-> option however.
+On Sat, Jul 17, 2021 at 19:04, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> On 2021-07-15 10:34 +0200, Joachim Wiberg spake thusly:
+>> [snip]
+>> Team devices require the following kernel config, the most common modes
+>> have been included to be enabled when this package is selected:
+>>     CONFIG_NET_TEAM=y
+> This also needs NETDEVICES and NET_CORE. Arguably, those two will most
+> probably be selected, but still...
 
-Since the website no longer exists and has never allowed creating
-custom datasets for recent versions of ICU, I doubt anybody has such as
-custom dataset pre-compiled, so I would be in favor of dropping the
-option.
+Ah, thanks or course!
 
-> Another idea just came up: What about changing my patch to a comma-
-> separated string option like BR2_PACKAGE_ICU_DATA_LANGUAGES with a 
-> default of "en" and icu.mk creates the corresponding json file during the 
-> build:
-> 
-> {
->   "localeFilter": {
->     "filterType": "language",
->     "includelist": [
->       "en"
->     ]
->   }
-> }
-> 
-> Users could then use this option to filter more languages are change it 
-> to an empty option which will provide the full data file, like today.
-> This way we would lose the more detailed filter possibilities offered by 
-> the icu build system but I guess most users would be happy just being 
-> able to filter languages.
+>>     CONFIG_NET_TEAM_MODE_ACTIVEBACKUP=y
+>>     CONFIG_NET_TEAM_MODE_LOADBALANCE=y
+> Is it really necessary to select those last two?
 
-This is unfortunately more "limiting" than the mechanism you propose
-today, which really provides the full flexibility allowed by the ICU
-custom dataset creation mechanism.
+I think least one mode should be enabled, but then I'm just focusing
+too much on my particular use-case (active-backup).
 
-Should we have a "choice" between 3 possibilities:
+> Load-balancing requires BPF, too, to load the BPF function that will do
+> the port selection.
 
- (1) A custom dataset created based on the list of locales enabled by
-     the user in the Buildroot configuration. This would be the default
-     possibility.
+True, so that one goes without saying.
 
- (2) The full dataset.
+> But I would really just leave it up to the user to enable whatever mode
+> they need/want; just enforce CONFIG_NET_TEAM=y (and NETDEVICES and
+> NET_CORE, of course).
 
- (3) A custom dataset based on a custom JSON file provided by the user,
-     for advanced configuration.
+Hmm, OK you're right.  We shouldn't guess what the user needs and this
+being an advanced component make that pretty clear.  Thank you!
 
-What do you think ?
+>> [snop]
+>> +++ b/package/libteam/Config.in
+>> @@ -0,0 +1,26 @@
+>> +config BR2_PACKAGE_LIBTEAM
+>> +	bool "libteam"
+>> +	depends on BR2_USE_MMU # fork()
+>> +	select BR2_PACKAGE_JANSSON
+>> +	select BR2_PACKAGE_LIBDAEMON
+>> +	select BR2_PACKAGE_LIBNL
+>> +	select BR2_PACKAGE_LIBNL_TOOLS
+> As noted by Yegor previopusly, you need to propagate the dependencies of
+> the packags you select;
+>     depends on BR2_TOOLCHAIN_HAS_THREADS  # libnl
+>     depends on !BR2_STATIC_LIBS  # libnl-tools
+>     select BR2_PACKAGE_LIBNL
+>     select BR2_PACKAGE_LIBNL_TOOLS
 
-> >  * When a custom dataset needs to be generated thanks to your new
-> >    option, we need to download the source of this dataset as an extra
-> >    download for the host-icu package, replace the source/data/ subdir
-> >    with this source data set, and ask the host-icu package to generate
-> >    icudt69l.dat. Then the target icu package grabs this pre-compiled
-> >    icudt69l.dat.  
-> 
-> Correct, you need host tools, which are configured using --with-data-
-> packaging=archive, to build a new data file which is then injected into 
-> the target package by ICU_PRE_CONFIGURE_HOOKS.
+Ahaa, now I'm finally starting to understand! :)
 
-Indeed, that's what I understood. As I mentioned, would be good to have
-this explained via a comment in the .mk file.
+>> +comment "libnl tools needs a toolchain w/ dynamic library"
+> This is not libnl, but libteam (the comment is about this package).
 
-Thanks a lot!
+Got it, that makes much more sense.  I really didn't get it
+the first time around.  Sorry for the mess.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>> +	depends on BR2_STATIC_LIBS
+> The comment should also depend on MMU, so that it is not visible when
+> MMU is not enabled.
+
+OK, fixing.
+
+>> +comment "libnl needs a toolchain w/ threads"
+>> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> Ditto, this is libteam, and it should also depend on MMU.
+
+Just read through a ton of other Config.in's, and I think I've got
+it now how depe?dencies and the user-friendly comment helper work.
+
+>> [snip]
+>> +LIBTEAM_VERSION = 1.31
+>> +LIBTEAM_SITE = $(call github,jpirko,libteam,v$(LIBTEAM_VERSION))
+>> +LIBTEAM_AUTORECONF = YES
+>> +LIBTEAM_LICENSE = LGPL-2.1+
+>> +LIBTEAM_LICENSE_FILES = COPYING
+>> +LIBTEAM_INSTALL_STAGING = YES
+>> +LIBTEAM_DEPENDENCIES = host-pkgconf jansson libdaemon libnl
+> Pet-peeve of mine, about the ordering:
+> This is enforced nowhere, is decribed nowhere, but it follows quite a
+> logical ordering and grouping:
+
+Thank you for taking the time to explain, it does indeed make sense,
+I will fix that too in v3.
+
+Cheers
+ /Joachim
