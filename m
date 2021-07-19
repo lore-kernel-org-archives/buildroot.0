@@ -1,56 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Jul 2021 23:32:39 +0200
-Subject: [Buildroot] [git commit] configs/imx7d-sdb: bump U-Boot and kernel
- versions
-Message-ID: <20210719205850.96F0D8846A@busybox.osuosl.org>
+Date: Mon, 19 Jul 2021 23:36:07 +0200
+Subject: [Buildroot] [git commit] package/xmrig: bump version to 6.13.1
+Message-ID: <20210719210210.D8B9B88480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c357d90a939983fc54d7954a973732e8d6bda34
+commit: https://git.buildroot.net/buildroot/commit/?id=66c9559d1622cf0e0fddf59aeb1e538caaaf94c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump U-Boot to 2021.07 and kernel to 5.13 version.
+Changelog: https://github.com/xmrig/xmrig/blob/master/CHANGELOG.md
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Reviewed-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/imx7d-sdb_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/xmrig/xmrig.hash | 2 +-
+ package/xmrig/xmrig.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/imx7d-sdb_defconfig b/configs/imx7d-sdb_defconfig
-index 0c34f6e6df..8ee5e1fc40 100644
---- a/configs/imx7d-sdb_defconfig
-+++ b/configs/imx7d-sdb_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
+index c80bdd6621..199959690f 100644
+--- a/package/xmrig/xmrig.hash
++++ b/package/xmrig/xmrig.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7570030c4b3e257bda190a100dc59f78b74c823af7561222a99b296f5e7b1ac2  xmrig-6.12.1.tar.gz
++sha256  c444e53f8692ad10e0daa73df57892cf9a066d20fe25db377022cd481b1440ad  xmrig-6.13.1.tar.gz
+ sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
+index 2202d875c5..b8a3957d54 100644
+--- a/package/xmrig/xmrig.mk
++++ b/package/xmrig/xmrig.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.13 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
-@@ -23,7 +23,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
- BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
- 
- # Filesystem
+-XMRIG_VERSION = 6.12.1
++XMRIG_VERSION = 6.13.1
+ XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
+ XMRIG_LICENSE = GPL-3.0+
+ XMRIG_LICENSE_FILES = LICENSE
