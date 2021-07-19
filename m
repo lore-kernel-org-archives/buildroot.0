@@ -1,63 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Jul 2021 23:32:32 +0200
-Subject: [Buildroot] [git commit] imx/post-image.sh: support
- BR2_LINUX_KERNEL_INSTALL_TARGET=y for non-SPL
-Message-ID: <20210719205850.7D27188469@busybox.osuosl.org>
+Date: Mon, 19 Jul 2021 23:32:36 +0200
+Subject: [Buildroot] [git commit] configs/imx7d-sdb: add extlinux.conf
+ support
+Message-ID: <20210719205850.876B785D7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63198aaa171a4da4587b3ea190809c0f509a1f56
+commit: https://git.buildroot.net/buildroot/commit/?id=9936af92c47cf191befecb667f4a977104baad5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, only SPL is supported when BR2_LINUX_KERNEL_INSTALL_TARGET=y
-is selected.
+imx7d-sdb has been converted to use disto boot in U-Boot.
 
-Support non-SPL case too.
-
-This is needed for booting imx7d-sabresd, for example.
+Add extlinux.conf support so that the board can boot correctly.
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Reviewed-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../common/imx/genimage.cfg.template_no_boot_part         | 15 +++++++++++++++
- board/freescale/common/imx/post-image.sh                  |  2 ++
- 2 files changed, 17 insertions(+)
+ board/freescale/imx7dsdb/rootfs_overlay/boot/extlinux/extlinux.conf | 4 ++++
+ configs/imx7d-sdb_defconfig                                         | 2 ++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/board/freescale/common/imx/genimage.cfg.template_no_boot_part b/board/freescale/common/imx/genimage.cfg.template_no_boot_part
+diff --git a/board/freescale/imx7dsdb/rootfs_overlay/boot/extlinux/extlinux.conf b/board/freescale/imx7dsdb/rootfs_overlay/boot/extlinux/extlinux.conf
 new file mode 100644
-index 0000000000..edc34d0fcd
+index 0000000000..d538b5d643
 --- /dev/null
-+++ b/board/freescale/common/imx/genimage.cfg.template_no_boot_part
-@@ -0,0 +1,15 @@
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition u-boot {
-+    in-partition-table = "no"
-+    image = "%UBOOTBIN%"
-+    offset = 1024
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext2"
-+  }
-+}
-diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index 0c2ef53dc6..3bb482debd 100755
---- a/board/freescale/common/imx/post-image.sh
-+++ b/board/freescale/common/imx/post-image.sh
-@@ -47,6 +47,8 @@ genimage_type()
- 	elif grep -Eq "^BR2_LINUX_KERNEL_INSTALL_TARGET=y$" ${BR2_CONFIG}; then
- 		if grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
- 		    echo "genimage.cfg.template_no_boot_part_spl"
-+		else
-+		    echo "genimage.cfg.template_no_boot_part"
- 		fi
- 	elif grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
- 		echo "genimage.cfg.template_spl"
++++ b/board/freescale/imx7dsdb/rootfs_overlay/boot/extlinux/extlinux.conf
+@@ -0,0 +1,4 @@
++Label imx7d-sabresd-buildroot
++  kernel /boot/zImage
++  devicetree /boot/imx7d-sdb.dtb
++  append root=PARTUUID=${uuid} rootwait rw console=${console},${baudrate}
+diff --git a/configs/imx7d-sdb_defconfig b/configs/imx7d-sdb_defconfig
+index 1a3494b4af..0c34f6e6df 100644
+--- a/configs/imx7d-sdb_defconfig
++++ b/configs/imx7d-sdb_defconfig
+@@ -17,6 +17,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ 
+ # U-Boot
+ BR2_TARGET_UBOOT=y
+@@ -26,6 +27,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+ 
+ # Filesystem
++BR2_ROOTFS_OVERLAY="board/freescale/imx7dsdb/rootfs_overlay"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
