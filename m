@@ -1,37 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Jul 2021 09:40:19 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] DEVELOPERS: Change my name
-Message-ID: <20210719070650.E33B4883B4@busybox.osuosl.org>
+Date: Mon, 19 Jul 2021 09:40:28 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] DEVELOPERS: drop Jan
+ Viktorin
+Message-ID: <20210719070650.EC28886C9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e00d7d787ffb7d3bf499a55b77075cf2e76c05d9
+commit: https://git.buildroot.net/buildroot/commit/?id=ffff19ffb8d8bdc6d671b47a33450b17dd01f81c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-And remove myself from freescale related parts
+Unfortunately, his e-mail is bouncing:
 
-Signed-off-by: Andr?? Zwing <nerv@dawncrow.de>
+<viktorin@rehivetech.com>: host wes1-mx2.wedos.net[46.28.106.12] said: 550
+    5.2.1 <viktorin@rehivetech.com>: Recipient address rejected: mailbox
+    disabled - DEBUG: acc viktorin at rehivetech.com (in reply to RCPT TO command)
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ DEVELOPERS | 5 -----
+ 1 file changed, 5 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 68ea78d7b8..13010cec21 100644
+index 4b3c04774e..cc71d9e4b6 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -122,10 +122,7 @@ F:	package/python-docopt/
- N:	Anders Darander <anders@chargestorm.se>
- F:	package/ktap/
+@@ -1239,11 +1239,6 @@ F:	package/sysrepo/
+ N:	Jan Pedersen <jp@jp-embedded.com>
+ F:	package/zip/
  
--N:	Andr?? Hentschel <nerv@dawncrow.de>
--F:	board/freescale/imx8qxpmek/
--F:	configs/freescale_imx8qxpmek_defconfig
--F:	package/freescale-imx/imx-sc-firmware/
-+N:	Andr?? Zwing <nerv@dawncrow.de>
- F:	package/libkrb5/
- F:	package/openal/
- F:	package/p7zip/
+-N:	Jan Viktorin <viktorin@rehivetech.com>
+-F:	package/python-pexpect/
+-F:	package/python-ptyprocess/
+-F:	package/zynq-boot-bin/
+-
+ N:	Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+ F:	package/quota/
+ 
