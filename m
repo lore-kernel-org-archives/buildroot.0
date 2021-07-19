@@ -1,53 +1,47 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 19 Jul 2021 08:44:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libidn2: bump to version 2.3.1
-Message-ID: <20210719064401.3435130-1-fontaine.fabrice@gmail.com>
+Date: Mon, 19 Jul 2021 08:48:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.4.2
+Message-ID: <20210719064837.3450162-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Update indentation in hash file (two spaces)
-
-https://gitlab.com/libidn/libidn2/-/blob/v2.3.1/NEWS
+http://git.haproxy.org/?p=haproxy-2.4.git;a=blob;f=CHANGELOG
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libidn2/libidn2.hash | 10 +++++-----
- package/libidn2/libidn2.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
-index 2d2fcdfd15..fb8b449d2a 100644
---- a/package/libidn2/libidn2.hash
-+++ b/package/libidn2/libidn2.hash
-@@ -1,8 +1,8 @@
- # Calculated locally after checking signature
--sha256	e1cb1db3d2e249a6a3eb6f0946777c2e892d5c5dc7bd91c74394fc3a01cab8b5	libidn2-2.3.0.tar.gz
-+sha256  8af684943836b8b53965d5f5b6714ef13c26c91eaa36ce7d242e3d21f5d40f2d  libidn2-2.3.1.tar.gz
- 
- # Hash for license files:
--sha256	73483f797a83373fca1b968c11785b98c4fc4803cdc7d3210811ca8b075d6d76	COPYING
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
--sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LESSERv3
--sha256	01d621eef165cf4d3d3dbb737aa0699178d94c6f18cf87e9dde6db3ca7790f46	COPYING.unicode
-+sha256  73483f797a83373fca1b968c11785b98c4fc4803cdc7d3210811ca8b075d6d76  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSERv3
-+sha256  01d621eef165cf4d3d3dbb737aa0699178d94c6f18cf87e9dde6db3ca7790f46  COPYING.unicode
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-index 4db302dbf4..a03d9378c7 100644
---- a/package/libidn2/libidn2.mk
-+++ b/package/libidn2/libidn2.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 66a6f40bda..849d362dc0 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.14.tar.gz.sha256
+-sha256  6a9b702f04b07786f3e5878de8172a727acfdfdbc1cefe1c7a438df372f2fb61  haproxy-2.2.14.tar.gz
++# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.2.tar.gz.sha256
++sha256  edf9788f7f3411498e3d7b21777036b4dc14183e95c8e2ce7577baa0ea4ea2aa  haproxy-2.4.2.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 768c0e2895..be3d4dbb5d 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBIDN2_VERSION = 2.3.0
-+LIBIDN2_VERSION = 2.3.1
- LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
- LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
+-HAPROXY_VERSION_MAJOR = 2.2
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).14
++HAPROXY_VERSION_MAJOR = 2.4
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).2
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 -- 
 2.30.2
