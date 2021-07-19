@@ -1,520 +1,204 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Mon, 19 Jul 2021 10:32:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/putty: fix CVE-2021-36367
-In-Reply-To: <20210717091619.674195-1-fontaine.fabrice@gmail.com>
-References: <20210717091619.674195-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210719083245.iz4jqaz7wc3x4wou@falbala.internal.home.lespocky.de>
+From: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+Date: Mon, 19 Jul 2021 10:42:11 +0200
+Subject: [Buildroot] [RESEND,
+ PATCH 1/2] configs/stm32f469_disco: enable Linux DRM support
+In-Reply-To: <AM0PR10MB281725F849F235E2E68BCF22E3E19@AM0PR10MB2817.EURPRD10.PROD.OUTLOOK.COM>
+References: <20210716164243.17988-1-dariobin@libero.it>
+ <AM0PR10MB281725F849F235E2E68BCF22E3E19@AM0PR10MB2817.EURPRD10.PROD.OUTLOOK.COM>
+Message-ID: <75375410-bac1-15cd-0348-860c6e961b1b@foss.st.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hello Fabrice,
+Ok, for me, just need to keep in memory to remove patch when the support 
+of kernel 5.14 will be present.
 
-thanks for your effort. I'm just scanning through my mails of the last
-days. Meanwhile putty 0.76 is released also containing that fix. I
-think we can bump to 0.76 for master and LTS, right? I can try to do
-that in the evening today.
+Acked-by: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+Regards
+Christophe Priouzeau
 
-Greets
-Alex
-
-On Sat, Jul 17, 2021 at 11:16:19AM +0200, Fabrice Fontaine wrote:
-> PuTTY through 0.75 proceeds with establishing an SSH session even if it
-> has never sent a substantive authentication response. This makes it
-> easier for an attacker-controlled SSH server to present a later spoofed
-> authentication prompt (that the attacker can use to capture credential
-> data, and use that data for purposes that are undesired by the client
-> user).
+On 7/19/21 10:37 AM, Christophe PRIOUZEAU wrote:
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ------------------------------------------------------------------------
+> *From:* Dario Binacchi <dariobin@libero.it>
+> *Sent:* Friday, July 16, 2021 6:42 PM
+> *To:* buildroot at buildroot.org <buildroot@buildroot.org>
+> *Cc:* Christophe PRIOUZEAU <christophe.priouzeau@st.com>; Dario Binacchi 
+> <dariobin@libero.it>
+> *Subject:* [RESEND, PATCH 1/2] configs/stm32f469_disco: enable Linux DRM 
+> support
+> The patch to be applied to the Kernel has been informally approved by
+> an ST maintainer as can be seen from [1] and [2].
+> 
+> After Linux boots, /dev/fb0 will be accessible. You can control the
+> brightness of the display after enabling the framebuffer by running the
+> following commands:
+> 
+> ~ # echo 0 0 > /sys/class/graphics/fb0/pan
+> ~ # echo 255 >/sys/class/backlight/40016c00.dsi.0/brightness
+> 
+> The brightness ranges from 0 to 255, as you can see running the
+> command:
+> 
+> ~ # cat /sys/class/backlight/40016c00.dsi.0/max_brightness
+> 
+> [1] https://lore.kernel.org/patchwork/patch/1450524/ 
+> <https://lore.kernel.org/patchwork/patch/1450524/>
+> [2] https://lore.kernel.org/patchwork/patch/1450964/ 
+> <https://lore.kernel.org/patchwork/patch/1450964/>
+> 
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+Acked-by: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
 > ---
->  ...o-reject-trivial-success-of-userauth.patch | 448 ++++++++++++++++++
->  package/putty/putty.mk                        |   3 +
->  2 files changed, 451 insertions(+)
->  create mode 100644 package/putty/0002-New-option-to-reject-trivial-success-of-userauth.patch
+>  ?.../stm32f469-disco/linux.fragment??????????? |? 7 +-
+>  ?...-post-divisor-setup-for-I2S-SAI-PLLs.patch | 86 +++++++++++++++++++
+>  ?configs/stm32f469_disco_defconfig???????????? |? 1 +
+>  ?3 files changed, 93 insertions(+), 1 deletion(-)
+>  ?create mode 100644 
+> board/stmicroelectronics/stm32f469-disco/patches/linux/0001-clk-stm32f4-fix-post-divisor-setup-for-I2S-SAI-PLLs.patch
 > 
-> diff --git a/package/putty/0002-New-option-to-reject-trivial-success-of-userauth.patch b/package/putty/0002-New-option-to-reject-trivial-success-of-userauth.patch
+> diff --git a/board/stmicroelectronics/stm32f469-disco/linux.fragment 
+> b/board/stmicroelectronics/stm32f469-disco/linux.fragment
+> index 90f5e8a8ff..ffa4d6205f 100644
+> --- a/board/stmicroelectronics/stm32f469-disco/linux.fragment
+> +++ b/board/stmicroelectronics/stm32f469-disco/linux.fragment
+> @@ -1 +1,6 @@
+> -# CONFIG_XIP_KERNEL is not set
+> \ No newline at end of file
+> +# CONFIG_XIP_KERNEL is not set
+> +CONFIG_DRM=y
+> +CONFIG_DRM_STM=y
+> +CONFIG_DRM_STM_DSI=y
+> +CONFIG_DRM_PANEL_ORISETECH_OTM8009A=y
+> +CONFIG_BACKLIGHT_CLASS_DEVICE=y
+> diff --git 
+> a/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-clk-stm32f4-fix-post-divisor-setup-for-I2S-SAI-PLLs.patch 
+> b/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-clk-stm32f4-fix-post-divisor-setup-for-I2S-SAI-PLLs.patch
 > new file mode 100644
-> index 0000000000..83b93a346c
+> index 0000000000..34e398b81d
 > --- /dev/null
-> +++ b/package/putty/0002-New-option-to-reject-trivial-success-of-userauth.patch
-> @@ -0,0 +1,448 @@
-> +From 1dc5659aa62848f0aeb5de7bd3839fecc7debefa Mon Sep 17 00:00:00 2001
-> +From: Simon Tatham <anakin@pobox.com>
-> +Date: Sat, 19 Jun 2021 15:39:15 +0100
-> +Subject: [PATCH] New option to reject 'trivial' success of userauth.
+> +++ 
+> b/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-clk-stm32f4-fix-post-divisor-setup-for-I2S-SAI-PLLs.patch
+> @@ -0,0 +1,86 @@
+> +From 463c3a0cbf18fd1bdd2c9a3c370c484b6cab97b5 Mon Sep 17 00:00:00 2001
+> +From: Dario Binacchi <dariobin@libero.it>
+> +Date: Mon, 21 Jun 2021 23:40:47 +0200
+> +Subject: [PATCH v2] clk: stm32f4: fix post divisor setup for I2S/SAI PLLs
 > +
-> +Suggested by Manfred Kaiser, who also wrote most of this patch
-> +(although outlying parts, like documentation and SSH-1 support, are by
-> +me).
+> +Enabling the framebuffer leads to a system hang. Running, as a debug
+> +hack, the store_pan() function in drivers/video/fbdev/core/fbsysfs.c
+> +without taking the console_lock, allows to see the crash backtrace on
+> +the serial line.
 > +
-> +This is a second line of defence against the kind of spoofing attacks
-> +in which a malicious or compromised SSH server rushes the client
-> +through the userauth phase of SSH without actually requiring any auth
-> +inputs (passwords or signatures or whatever), and then at the start of
-> +the connection phase it presents something like a spoof prompt,
-> +intended to be taken for part of userauth by the user but in fact with
-> +some more sinister purpose.
+> +~ # echo 0 0 > /sys/class/graphics/fb0/pan
 > +
-> +Our existing line of defence against this is the trust sigil system,
-> +and as far as I know, that's still working. This option allows a bit of
-> +extra defence in depth: if you don't expect your SSH server to
-> +trivially accept authentication in the first place, then enabling this
-> +option will cause PuTTY to disconnect if it unexpectedly does so,
-> +without the user having to spot the presence or absence of a fiddly
-> +little sigil anywhere.
+> +[??? 9.719414] Unhandled exception: IPSR = 00000005 LR = fffffff1
+> +[??? 9.726937] CPU: 0 PID: 49 Comm: sh Not tainted 5.13.0-rc5 #9
+> +[??? 9.733008] Hardware name: STM32 (Device Tree Support)
+> +[??? 9.738296] PC is at clk_gate_is_enabled+0x0/0x28
+> +[??? 9.743426] LR is at stm32f4_pll_div_set_rate+0xf/0x38
+> +[??? 9.748857] pc : [<0011e4be>]??? lr : [<0011f9e3>]??? psr: 0100000b
+> +[??? 9.755373] sp : 00bc7be0? ip : 00000000? fp : 001f3ac4
+> +[??? 9.760812] r10: 002610d0? r9 : 01efe920? r8 : 00540560
+> +[??? 9.766269] r7 : 02e7ddb0? r6 : 0173eed8? r5 : 00000000? r4 : 004027c0
+> +[??? 9.773081] r3 : 0011e4bf? r2 : 02e7ddb0? r1 : 0173eed8? r0 : 1d3267b8
+> +[??? 9.779911] xPSR: 0100000b
+> +[??? 9.782719] CPU: 0 PID: 49 Comm: sh Not tainted 5.13.0-rc5 #9
+> +[??? 9.788791] Hardware name: STM32 (Device Tree Support)
+> +[??? 9.794120] [<0000afa1>] (unwind_backtrace) from [<0000a33f>] 
+> (show_stack+0xb/0xc)
+> +[??? 9.802421] [<0000a33f>] (show_stack) from [<0000a8df>] 
+> (__invalid_entry+0x4b/0x4c)
 > +
-> +Several types of authentication count as 'trivial'. The obvious one is
-> +the SSH-2 "none" method, which clients always try first so that the
-> +failure message will tell them what else they can try, and which a
-> +server can instead accept in order to authenticate you unconditionally.
-> +But there are two other ways to do it that we know of: one is to run
-> +keyboard-interactive authentication and send an empty INFO_REQUEST
-> +packet containing no actual prompts for the user, and another even
-> +weirder one is to send USERAUTH_SUCCESS in response to the user's
-> +preliminary *offer* of a public key (instead of sending the usual PK_OK
-> +to request an actual signature from the key).
+> +The `pll_num' field in the post_div_data configuration contained a wrong
+> +value which also referenced an uninitialized hardware clock when
+> +clk_register_pll_div() was called.
 > +
-> +This new option detects all of those, by clearing the 'is_trivial_auth'
-> +flag only when we send some kind of substantive authentication response
-> +(be it a password, a k-i prompt response, a signature, or a GSSAPI
-> +token). So even if there's a further path through the userauth maze we
-> +haven't spotted, that somehow avoids sending anything substantive, this
-> +strategy should still pick it up.
+> +Fixes: 517633ef630e ("clk: stm32f4: Add post divisor for I2S & SAI PLLs")
+> +Signed-off-by: Dario Binacchi <dariobin@libero.it>
 > +
-> +(cherry picked from commit 5f5c710cf3704737e24ffceb2c918e412a2a674f)
-> +
-> +[Retrieved from:
-> +https://git.tartarus.org/?p=simon/putty.git;a=commit;h=1dc5659aa62848f0aeb5de7bd3839fecc7debefa]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > +---
-> + cmdline.c          |  8 ++++++++
-> + config.c           |  4 ++++
-> + doc/config.but     | 43 +++++++++++++++++++++++++++++++++++++++++++
-> + pscp.c             |  2 ++
-> + psftp.c            |  2 ++
-> + putty.h            |  1 +
-> + settings.c         |  2 ++
-> + ssh.c              |  4 +++-
-> + ssh1login.c        | 14 +++++++++++++-
-> + ssh2userauth.c     | 20 ++++++++++++++++----
-> + sshppl.h           |  2 +-
-> + unix/uxplink.c     |  2 ++
-> + windows/winhelp.h  |  1 +
-> + windows/winplink.c |  2 ++
-> + 14 files changed, 100 insertions(+), 7 deletions(-)
 > +
-> +diff --git a/cmdline.c b/cmdline.c
-> +index 7ea5cacc..62d65e19 100644
-> +--- a/cmdline.c
-> ++++ b/cmdline.c
-> +@@ -598,6 +598,14 @@ int cmdline_process_param(const char *p, char *value,
-> +         SAVEABLE(0);
-> +         conf_set_bool(conf, CONF_tryagent, false);
-> +     }
-> ++
-> ++    if (!strcmp(p, "-no-trivial-auth")) {
-> ++        RETURN(1);
-> ++        UNAVAILABLE_IN(TOOLTYPE_NONNETWORK);
-> ++        SAVEABLE(0);
-> ++        conf_set_bool(conf, CONF_ssh_no_trivial_userauth, true);
-> ++    }
-> ++
-> +     if (!strcmp(p, "-share")) {
-> +         RETURN(1);
-> +         UNAVAILABLE_IN(TOOLTYPE_NONNETWORK);
-> +diff --git a/config.c b/config.c
-> +index ca808511..b8348530 100644
-> +--- a/config.c
-> ++++ b/config.c
-> +@@ -2772,6 +2772,10 @@ void setup_config_box(struct controlbox *b, bool midsession,
-> +                           HELPCTX(ssh_auth_bypass),
-> +                           conf_checkbox_handler,
-> +                           I(CONF_ssh_no_userauth));
-> ++            ctrl_checkbox(s, "Disconnect if authentication succeeds trivially",
-> ++                          'n', HELPCTX(ssh_no_trivial_userauth),
-> ++                          conf_checkbox_handler,
-> ++                          I(CONF_ssh_no_trivial_userauth));
-> + 
-> +             s = ctrl_getset(b, "Connection/SSH/Auth", "methods",
-> +                             "Authentication methods");
-> +diff --git a/doc/config.but b/doc/config.but
-> +index a00ae476..77313282 100644
-> +--- a/doc/config.but
-> ++++ b/doc/config.but
-> +@@ -2623,6 +2623,49 @@ interact with them.)
-> + This option only affects SSH-2 connections. SSH-1 connections always
-> + require an authentication step.
-> + 
-> ++\S{config-ssh-notrivialauth} \q{Disconnect if authentication succeeds
-> ++trivially}
-> ++
-> ++This option causes PuTTY to abandon an SSH session and disconnect from
-> ++the server, if the server accepted authentication without ever having
-> ++asked for any kind of password or signature or token.
-> ++
-> ++This might be used as a security measure. There are some forms of
-> ++attack against an SSH client user which work by terminating the SSH
-> ++authentication stage early, and then doing something in the main part
-> ++of the SSH session which \e{looks} like part of the authentication,
-> ++but isn't really.
-> ++
-> ++For example, instead of demanding a signature from your public key,
-> ++for which PuTTY would ask for your key's passphrase, a compromised or
-> ++malicious server might allow you to log in with no signature or
-> ++password at all, and then print a message that \e{imitates} PuTTY's
-> ++request for your passphrase, in the hope that you would type it in.
-> ++(In fact, the passphrase for your public key should not be sent to any
-> ++server.)
-> ++
-> ++PuTTY's main defence against attacks of this type is the \q{trust
-> ++sigil} system: messages in the PuTTY window that are truly originated
-> ++by PuTTY itself are shown next to a small copy of the PuTTY icon,
-> ++which the server cannot fake when it tries to imitate the same message
-> ++using terminal output.
-> ++
-> ++However, if you think you might be at risk of this kind of thing
-> ++anyway (if you don't watch closely for the trust sigils, or if you
-> ++think you're at extra risk of one of your servers being malicious),
-> ++then you could enable this option as an extra defence. Then, if the
-> ++server tries any of these attacks involving letting you through the
-> ++authentication stage, PuTTY will disconnect from the server before it
-> ++can send a follow-up fake prompt or other type of attack.
-> ++
-> ++On the other hand, some servers \e{legitimately} let you through the
-> ++SSH authentication phase trivially, either because they are genuinely
-> ++public, or because the important authentication step happens during
-> ++the terminal session. (An example might be an SSH server that connects
-> ++you directly to the terminal login prompt of a legacy mainframe.) So
-> ++enabling this option might cause some kinds of session to stop
-> ++working. It's up to you.
-> ++
-> + \S{config-ssh-tryagent} \q{Attempt authentication using Pageant}
-> + 
-> + If this option is enabled, then PuTTY will look for Pageant (the SSH
-> +diff --git a/pscp.c b/pscp.c
-> +index 0bfda92d..a11d1e18 100644
-> +--- a/pscp.c
-> ++++ b/pscp.c
-> +@@ -2203,6 +2203,8 @@ static void usage(void)
-> +     printf("  -i key    private key file for user authentication\n");
-> +     printf("  -noagent  disable use of Pageant\n");
-> +     printf("  -agent    enable use of Pageant\n");
-> ++    printf("  -no-trivial-auth\n");
-> ++    printf("            disconnect if SSH authentication succeeds trivially\n");
-> +     printf("  -hostkey keyid\n");
-> +     printf("            manually specify a host key (may be repeated)\n");
-> +     printf("  -batch    disable all interactive prompts\n");
-> +diff --git a/psftp.c b/psftp.c
-> +index 40cb73f5..c4b5374b 100644
-> +--- a/psftp.c
-> ++++ b/psftp.c
-> +@@ -2538,6 +2538,8 @@ static void usage(void)
-> +     printf("  -i key    private key file for user authentication\n");
-> +     printf("  -noagent  disable use of Pageant\n");
-> +     printf("  -agent    enable use of Pageant\n");
-> ++    printf("  -no-trivial-auth\n");
-> ++    printf("            disconnect if SSH authentication succeeds trivially\n");
-> +     printf("  -hostkey keyid\n");
-> +     printf("            manually specify a host key (may be repeated)\n");
-> +     printf("  -batch    disable all interactive prompts\n");
-> +diff --git a/putty.h b/putty.h
-> +index ef6f7a37..7789f217 100644
-> +--- a/putty.h
-> ++++ b/putty.h
-> +@@ -1428,6 +1428,7 @@ NORETURN void cleanup_exit(int);
-> +     X(INT, NONE, sshprot) \
-> +     X(BOOL, NONE, ssh2_des_cbc) /* "des-cbc" unrecommended SSH-2 cipher */ \
-> +     X(BOOL, NONE, ssh_no_userauth) /* bypass "ssh-userauth" (SSH-2 only) */ \
-> ++    X(BOOL, NONE, ssh_no_trivial_userauth) /* disable trivial types of auth */ \
-> +     X(BOOL, NONE, ssh_show_banner) /* show USERAUTH_BANNERs (SSH-2 only) */ \
-> +     X(BOOL, NONE, try_tis_auth) \
-> +     X(BOOL, NONE, try_ki_auth) \
-> +diff --git a/settings.c b/settings.c
-> +index 547af0dc..32a53c54 100644
-> +--- a/settings.c
-> ++++ b/settings.c
-> +@@ -609,6 +609,7 @@ void save_open_settings(settings_w *sesskey, Conf *conf)
-> + #endif
-> +     write_setting_s(sesskey, "RekeyBytes", conf_get_str(conf, CONF_ssh_rekey_data));
-> +     write_setting_b(sesskey, "SshNoAuth", conf_get_bool(conf, CONF_ssh_no_userauth));
-> ++    write_setting_b(sesskey, "SshNoTrivialAuth", conf_get_bool(conf, CONF_ssh_no_trivial_userauth));
-> +     write_setting_b(sesskey, "SshBanner", conf_get_bool(conf, CONF_ssh_show_banner));
-> +     write_setting_b(sesskey, "AuthTIS", conf_get_bool(conf, CONF_try_tis_auth));
-> +     write_setting_b(sesskey, "AuthKI", conf_get_bool(conf, CONF_try_ki_auth));
-> +@@ -1025,6 +1026,7 @@ void load_open_settings(settings_r *sesskey, Conf *conf)
-> +     gpps(sesskey, "LogHost", "", conf, CONF_loghost);
-> +     gppb(sesskey, "SSH2DES", false, conf, CONF_ssh2_des_cbc);
-> +     gppb(sesskey, "SshNoAuth", false, conf, CONF_ssh_no_userauth);
-> ++    gppb(sesskey, "SshNoTrivialAuth", false, conf, CONF_ssh_no_trivial_userauth);
-> +     gppb(sesskey, "SshBanner", true, conf, CONF_ssh_show_banner);
-> +     gppb(sesskey, "AuthTIS", false, conf, CONF_try_tis_auth);
-> +     gppb(sesskey, "AuthKI", true, conf, CONF_try_ki_auth);
-> +diff --git a/ssh.c b/ssh.c
-> +index 00a516ea..91e7e869 100644
-> +--- a/ssh.c
-> ++++ b/ssh.c
-> +@@ -254,7 +254,9 @@ static void ssh_got_ssh_version(struct ssh_version_receiver *rcv,
-> +                     connection_layer, ssh->savedhost, ssh->fullhostname,
-> +                     conf_get_filename(ssh->conf, CONF_keyfile),
-> +                     conf_get_bool(ssh->conf, CONF_ssh_show_banner),
-> +-                    conf_get_bool(ssh->conf, CONF_tryagent), username,
-> ++                    conf_get_bool(ssh->conf, CONF_tryagent),
-> ++                    conf_get_bool(ssh->conf, CONF_ssh_no_trivial_userauth),
-> ++                    username,
-> +                     conf_get_bool(ssh->conf, CONF_change_username),
-> +                     conf_get_bool(ssh->conf, CONF_try_ki_auth),
-> + #ifndef NO_GSSAPI
-> +diff --git a/ssh1login.c b/ssh1login.c
-> +index 8486cbf0..519838d7 100644
-> +--- a/ssh1login.c
-> ++++ b/ssh1login.c
-> +@@ -27,7 +27,7 @@ struct ssh1_login_state {
-> + 
-> +     char *savedhost;
-> +     int savedport;
-> +-    bool try_agent_auth;
-> ++    bool try_agent_auth, is_trivial_auth;
-> + 
-> +     int remote_protoflags;
-> +     int local_protoflags;
-> +@@ -105,6 +105,8 @@ PacketProtocolLayer *ssh1_login_new(
-> +     s->savedhost = dupstr(host);
-> +     s->savedport = port;
-> +     s->successor_layer = successor_layer;
-> ++    s->is_trivial_auth = true;
-> ++
-> +     return &s->ppl;
-> + }
-> + 
-> +@@ -645,6 +647,7 @@ static void ssh1_login_process_queue(PacketProtocolLayer *ppl)
-> +                                 s->ppl.bpp, SSH1_CMSG_AUTH_RSA_RESPONSE);
-> +                             put_data(pkt, ret + 5, 16);
-> +                             pq_push(s->ppl.out_pq, pkt);
-> ++                            s->is_trivial_auth = false;
-> +                             crMaybeWaitUntilV(
-> +                                 (pktin = ssh1_login_pop(s))
-> +                                 != NULL);
-> +@@ -814,6 +817,7 @@ static void ssh1_login_process_queue(PacketProtocolLayer *ppl)
-> +                         s->ppl.bpp, SSH1_CMSG_AUTH_RSA_RESPONSE);
-> +                     put_data(pkt, buffer, 16);
-> +                     pq_push(s->ppl.out_pq, pkt);
-> ++                    s->is_trivial_auth = false;
-> + 
-> +                     mp_free(challenge);
-> +                     mp_free(response);
-> +@@ -1105,6 +1109,7 @@ static void ssh1_login_process_queue(PacketProtocolLayer *ppl)
-> +             put_stringz(pkt, prompt_get_result_ref(s->cur_prompt->prompts[0]));
-> +             pq_push(s->ppl.out_pq, pkt);
-> +         }
-> ++        s->is_trivial_auth = false;
-> +         ppl_logevent("Sent password");
-> +         free_prompts(s->cur_prompt);
-> +         s->cur_prompt = NULL;
-> +@@ -1121,6 +1126,13 @@ static void ssh1_login_process_queue(PacketProtocolLayer *ppl)
-> +         }
-> +     }
-> + 
-> ++    if (conf_get_bool(s->conf, CONF_ssh_no_trivial_userauth) &&
-> ++        s->is_trivial_auth) {
-> ++        ssh_proto_error(s->ppl.ssh, "Authentication was trivial! "
-> ++                        "Abandoning session as specified in configuration.");
-> ++        return;
-> ++    }
-> ++
-> +     ppl_logevent("Authentication successful");
-> + 
-> +     if (conf_get_bool(s->conf, CONF_compression)) {
-> +diff --git a/ssh2userauth.c b/ssh2userauth.c
-> +index 01243baf..451d5abe 100644
-> +--- a/ssh2userauth.c
-> ++++ b/ssh2userauth.c
-> +@@ -28,7 +28,7 @@ struct ssh2_userauth_state {
-> + 
-> +     PacketProtocolLayer *transport_layer, *successor_layer;
-> +     Filename *keyfile;
-> +-    bool show_banner, tryagent, change_username;
-> ++    bool show_banner, tryagent, notrivialauth, change_username;
-> +     char *hostname, *fullhostname;
-> +     char *default_username;
-> +     bool try_ki_auth, try_gssapi_auth, try_gssapi_kex_auth, gssapi_fwd;
-> +@@ -82,6 +82,7 @@ struct ssh2_userauth_state {
-> +     int len;
-> +     PktOut *pktout;
-> +     bool want_user_input;
-> ++    bool is_trivial_auth;
-> + 
-> +     agent_pending_query *auth_agent_query;
-> +     bufchain banner;
-> +@@ -134,7 +135,7 @@ static const PacketProtocolLayerVtable ssh2_userauth_vtable = {
-> + PacketProtocolLayer *ssh2_userauth_new(
-> +     PacketProtocolLayer *successor_layer,
-> +     const char *hostname, const char *fullhostname,
-> +-    Filename *keyfile, bool show_banner, bool tryagent,
-> ++    Filename *keyfile, bool show_banner, bool tryagent, bool notrivialauth,
-> +     const char *default_username, bool change_username,
-> +     bool try_ki_auth, bool try_gssapi_auth, bool try_gssapi_kex_auth,
-> +     bool gssapi_fwd, struct ssh_connection_shared_gss_state *shgss)
-> +@@ -149,6 +150,7 @@ PacketProtocolLayer *ssh2_userauth_new(
-> +     s->keyfile = filename_copy(keyfile);
-> +     s->show_banner = show_banner;
-> +     s->tryagent = tryagent;
-> ++    s->notrivialauth = notrivialauth;
-> +     s->default_username = dupstr(default_username);
-> +     s->change_username = change_username;
-> +     s->try_ki_auth = try_ki_auth;
-> +@@ -157,6 +159,7 @@ PacketProtocolLayer *ssh2_userauth_new(
-> +     s->gssapi_fwd = gssapi_fwd;
-> +     s->shgss = shgss;
-> +     s->last_methods_string = strbuf_new();
-> ++    s->is_trivial_auth = true;
-> +     bufchain_init(&s->banner);
-> +     bufchain_sink_init(&s->banner_bs, &s->banner);
-> + 
-> +@@ -818,6 +821,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +                                 sigblob);
-> +                             pq_push(s->ppl.out_pq, s->pktout);
-> +                             s->type = AUTH_TYPE_PUBLICKEY;
-> ++                            s->is_trivial_auth = false;
-> +                         } else {
-> +                             ppl_logevent("Pageant refused signing request");
-> +                             ppl_printf("Pageant failed to "
-> +@@ -1038,6 +1042,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +                     ssh_key_free(key->key);
-> +                     sfree(key->comment);
-> +                     sfree(key);
-> ++                    s->is_trivial_auth = false;
-> +                 }
-> + 
-> + #ifndef NO_GSSAPI
-> +@@ -1169,6 +1174,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +                      * no longer says CONTINUE_NEEDED
-> +                      */
-> +                     if (s->gss_sndtok.length != 0) {
-> ++                        s->is_trivial_auth = false;
-> +                         s->pktout =
-> +                             ssh_bpp_new_pktout(
-> +                                 s->ppl.bpp, SSH2_MSG_USERAUTH_GSSAPI_TOKEN);
-> +@@ -1288,7 +1294,6 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +                  * Loop while the server continues to send INFO_REQUESTs.
-> +                  */
-> +                 while (pktin->type == SSH2_MSG_USERAUTH_INFO_REQUEST) {
-> +-
-> +                     ptrlen name, inst;
-> +                     strbuf *sb;
-> + 
-> +@@ -1308,6 +1313,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +                      */
-> +                     s->num_prompts = get_uint32(pktin);
-> +                     for (uint32_t i = 0; i < s->num_prompts; i++) {
-> ++                        s->is_trivial_auth = false;
-> +                         ptrlen prompt = get_string(pktin);
-> +                         bool echo = get_bool(pktin);
-> + 
-> +@@ -1472,7 +1478,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +                 pq_push_front(s->ppl.in_pq, pktin);
-> + 
-> +             } else if (s->can_passwd) {
-> +-
-> ++                s->is_trivial_auth = false;
-> +                 /*
-> +                  * Plain old password authentication.
-> +                  */
-> +@@ -1731,6 +1737,12 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-> +     }
-> + 
-> +   userauth_success:
-> ++    if (s->notrivialauth && s->is_trivial_auth) {
-> ++        ssh_proto_error(s->ppl.ssh, "Authentication was trivial! "
-> ++                        "Abandoning session as specified in configuration.");
-> ++        return;
-> ++    }
-> ++
-> +     /*
-> +      * We've just received USERAUTH_SUCCESS, and we haven't sent
-> +      * any packets since. Signal the transport layer to consider
-> +diff --git a/sshppl.h b/sshppl.h
-> +index b339d67c..2c1dbf42 100644
-> +--- a/sshppl.h
-> ++++ b/sshppl.h
-> +@@ -116,7 +116,7 @@ PacketProtocolLayer *ssh2_transport_new(
-> + PacketProtocolLayer *ssh2_userauth_new(
-> +     PacketProtocolLayer *successor_layer,
-> +     const char *hostname, const char *fullhostname,
-> +-    Filename *keyfile, bool show_banner, bool tryagent,
-> ++    Filename *keyfile, bool show_banner, bool tryagent, bool notrivialauth,
-> +     const char *default_username, bool change_username,
-> +     bool try_ki_auth,
-> +     bool try_gssapi_auth, bool try_gssapi_kex_auth,
-> +diff --git a/unix/uxplink.c b/unix/uxplink.c
-> +index 3e2a9b6b..240783f4 100644
-> +--- a/unix/uxplink.c
-> ++++ b/unix/uxplink.c
-> +@@ -527,6 +527,8 @@ static void usage(void)
-> +     printf("  -i key    private key file for user authentication\n");
-> +     printf("  -noagent  disable use of Pageant\n");
-> +     printf("  -agent    enable use of Pageant\n");
-> ++    printf("  -no-trivial-auth\n");
-> ++    printf("            disconnect if SSH authentication succeeds trivially\n");
-> +     printf("  -noshare  disable use of connection sharing\n");
-> +     printf("  -share    enable use of connection sharing\n");
-> +     printf("  -hostkey keyid\n");
-> +diff --git a/windows/winhelp.h b/windows/winhelp.h
-> +index ae5a7a7f..9011df45 100644
-> +--- a/windows/winhelp.h
-> ++++ b/windows/winhelp.h
-> +@@ -111,6 +111,7 @@
-> + #define WINHELP_CTX_ssh_kex_repeat "config-ssh-kex-rekey"
-> + #define WINHELP_CTX_ssh_kex_manual_hostkeys "config-ssh-kex-manual-hostkeys"
-> + #define WINHELP_CTX_ssh_auth_bypass "config-ssh-noauth"
-> ++#define WINHELP_CTX_ssh_no_trivial_userauth "config-ssh-notrivialauth"
-> + #define WINHELP_CTX_ssh_auth_banner "config-ssh-banner"
-> + #define WINHELP_CTX_ssh_auth_privkey "config-ssh-privkey"
-> + #define WINHELP_CTX_ssh_auth_agentfwd "config-ssh-agentfwd"
-> +diff --git a/windows/winplink.c b/windows/winplink.c
-> +index 9bda0712..58d43e6d 100644
-> +--- a/windows/winplink.c
-> ++++ b/windows/winplink.c
-> +@@ -149,6 +149,8 @@ static void usage(void)
-> +     printf("  -i key    private key file for user authentication\n");
-> +     printf("  -noagent  disable use of Pageant\n");
-> +     printf("  -agent    enable use of Pageant\n");
-> ++    printf("  -no-trivial-auth\n");
-> ++    printf("            disconnect if SSH authentication succeeds trivially\n");
-> +     printf("  -noshare  disable use of connection sharing\n");
-> +     printf("  -share    enable use of connection sharing\n");
-> +     printf("  -hostkey keyid\n");
-> +-- 
-> +2.20.1
+> +Changes in v2:
+> +- Change? 'u8 pll_num' from 'stm32f4_pll_post_div_data' structure into
+> +? 'int pll_idx'.
 > +
-> diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-> index 1e5a89ea9f..a1c588a382 100644
-> --- a/package/putty/putty.mk
-> +++ b/package/putty/putty.mk
-> @@ -11,6 +11,9 @@ PUTTY_LICENSE_FILES = LICENCE
->  PUTTY_CPE_ID_VENDOR = putty
->  PUTTY_CONF_OPTS = --disable-gtktest
->  
-> +# 0002-New-option-to-reject-trivial-success-of-userauth.patch
-> +PUTTY_IGNORE_CVES += CVE-2021-36367
+> + drivers/clk/clk-stm32f4.c | 10 +++++-----
+> + 1 file changed, 5 insertions(+), 5 deletions(-)
 > +
->  ifeq ($(BR2_PACKAGE_LIBGTK2),y)
->  PUTTY_CONF_OPTS += --with-gtk=2
->  PUTTY_DEPENDENCIES += libgtk2
+> +diff --git a/drivers/clk/clk-stm32f4.c b/drivers/clk/clk-stm32f4.c
+> +index 18117ce5ff85..5c75e3d906c2 100644
+> +--- a/drivers/clk/clk-stm32f4.c
+> ++++ b/drivers/clk/clk-stm32f4.c
+> +@@ -526,7 +526,7 @@ struct stm32f4_pll {
+> +
+> + struct stm32f4_pll_post_div_data {
+> +??????? int idx;
+> +-????? u8 pll_num;
+> ++????? int pll_idx;
+> +??????? const char *name;
+> +??????? const char *parent;
+> +??????? u8 flag;
+> +@@ -557,13 +557,13 @@ static const struct clk_div_table 
+> post_divr_table[] = {
+> +
+> + #define MAX_POST_DIV 3
+> + static const struct stm32f4_pll_post_div_data  
+> post_div_data[MAX_POST_DIV] = {
+> +-????? { CLK_I2SQ_PDIV, PLL_I2S, "plli2s-q-div", "plli2s-q",
+> ++????? { CLK_I2SQ_PDIV, PLL_VCO_I2S, "plli2s-q-div", "plli2s-q",
+> +??????????????? CLK_SET_RATE_PARENT, STM32F4_RCC_DCKCFGR, 0, 5, 0, NULL},
+> +
+> +-????? { CLK_SAIQ_PDIV, PLL_SAI, "pllsai-q-div", "pllsai-q",
+> ++????? { CLK_SAIQ_PDIV, PLL_VCO_SAI, "pllsai-q-div", "pllsai-q",
+> +??????????????? CLK_SET_RATE_PARENT, STM32F4_RCC_DCKCFGR, 8, 5, 0, NULL },
+> +
+> +-????? { NO_IDX, PLL_SAI, "pllsai-r-div", "pllsai-r", CLK_SET_RATE_PARENT,
+> ++????? { NO_IDX, PLL_VCO_SAI, "pllsai-r-div", "pllsai-r", 
+> CLK_SET_RATE_PARENT,
+> +??????????????? STM32F4_RCC_DCKCFGR, 16, 2, 0, post_divr_table },
+> + };
+> +
+> +@@ -1774,7 +1774,7 @@ static void __init stm32f4_rcc_init(struct 
+> device_node *np)
+> +??????????????????????????????? post_div->width,
+> +??????????????????????????????? post_div->flag_div,
+> +??????????????????????????????? post_div->div_table,
+> +-????????????????????????????? clks[post_div->pll_num],
+> ++????????????????????????????? clks[post_div->pll_idx],
+> +??????????????????????????????? &stm32f4_clk_lock);
+> +
+> +??????????????? if (post_div->idx != NO_IDX)
+> +--
+> +2.17.1
+> +
+> diff --git a/configs/stm32f469_disco_defconfig 
+> b/configs/stm32f469_disco_defconfig
+> index e538a664e2..1440aefd95 100644
+> --- a/configs/stm32f469_disco_defconfig
+> +++ b/configs/stm32f469_disco_defconfig
+> @@ -1,6 +1,7 @@
+>  ?BR2_arm=y
+>  ?BR2_cortex_m4=y
+>  ?BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
+> +BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches"
+>  ?BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh board/stmicroelectronics/stm32f469-disco/post-build.sh"
+>  ?BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>  ?BR2_ROOTFS_POST_SCRIPT_ARGS="-c 
+> board/stmicroelectronics/stm32f469-disco/genimage.cfg"
 > -- 
-> 2.30.2
+> 2.17.1
+> 
+> 
+> ST Restricted
+> 
+
 
 -- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210719/b5bd47fb/attachment-0001.asc>
+Best regards / Cordialement,
+
+Christophe Priouzeau | Tel: +33 244027320
+STMicroelectronics
+ST online: www.st.com<http://www.st.com/>
