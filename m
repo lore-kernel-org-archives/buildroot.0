@@ -1,55 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 23:51:13 +0200
-Subject: [Buildroot] [git commit] package/nginx: add stream_set_module
- support
-Message-ID: <20210720212230.971B1886E5@busybox.osuosl.org>
+Date: Tue, 20 Jul 2021 23:56:25 +0200
+Subject: [Buildroot] [git commit] package/nginx-dav-ext: bump version to
+ 3.0.0
+Message-ID: <20210720212230.BF1CD838D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec2e4722be8cbf2f18964070f1d34baa0362485b
+commit: https://git.buildroot.net/buildroot/commit/?id=45524f10cd84855868c9be3901c2bd6ea1c9f079
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This is a new module in 1.20
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nginx/Config.in | 6 ++++++
- package/nginx/nginx.mk  | 4 ++++
- 2 files changed, 10 insertions(+)
+ package/nginx-dav-ext/nginx-dav-ext.hash | 4 ++--
+ package/nginx-dav-ext/nginx-dav-ext.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index 6ae790a949..1200b2bf4c 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -339,6 +339,12 @@ config BR2_PACKAGE_NGINX_STREAM_REALIP_MODULE
- 	help
- 	  Enable ngx_stream_realip_module
+diff --git a/package/nginx-dav-ext/nginx-dav-ext.hash b/package/nginx-dav-ext/nginx-dav-ext.hash
+index fbed87f0c0..07deab08db 100644
+--- a/package/nginx-dav-ext/nginx-dav-ext.hash
++++ b/package/nginx-dav-ext/nginx-dav-ext.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 6b004eed8ea16ad8de4d304027bf0413cc323a95914e58625a7dc066481aae3a  nginx-dav-ext-0.1.0.tar.gz
+-sha256 40581cf424621965adaf1461e97129520ff4fcfb62ed9965ec6fd50b7f4ddfca  LICENSE
++sha256 d2499d94d82d4e4eac8425d799e52883131ae86a956524040ff2fd230ef9f859  nginx-dav-ext-3.0.0.tar.gz
++sha256 e377bb81e5024682a66438306e8ff9541d843d3831e480aec2f58eb8d83e48de  LICENSE
+diff --git a/package/nginx-dav-ext/nginx-dav-ext.mk b/package/nginx-dav-ext/nginx-dav-ext.mk
+index 695287ee2c..1b3071851a 100644
+--- a/package/nginx-dav-ext/nginx-dav-ext.mk
++++ b/package/nginx-dav-ext/nginx-dav-ext.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_NGINX_STREAM_SET_MODULE
-+	bool "ngx_stream_set_module"
-+	default y
-+	help
-+	  Enable ngx_stream_set_module
-+
- config BR2_PACKAGE_NGINX_STREAM_SSL_MODULE
- 	bool "ngx_stream_ssl_module"
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 36515e67cc..1f996cc613 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -232,6 +232,10 @@ ifeq ($(BR2_PACKAGE_NGINX_STREAM_REALIP_MODULE),y)
- NGINX_CONF_OPTS += --with-stream_realip_module
- endif
- 
-+ifeq ($(BR2_PACKAGE_NGINX_STREAM_SET_MODULE),)
-+NGINX_CONF_OPTS += --without-stream_set_module
-+endif
-+
- ifeq ($(BR2_PACKAGE_NGINX_STREAM_SSL_MODULE),y)
- NGINX_DEPENDENCIES += openssl
- NGINX_CONF_OPTS += --with-stream_ssl_module
+-NGINX_DAV_EXT_VERSION = 0.1.0
++NGINX_DAV_EXT_VERSION = 3.0.0
+ NGINX_DAV_EXT_SITE = $(call github,arut,nginx-dav-ext-module,v$(NGINX_DAV_EXT_VERSION))
+ NGINX_DAV_EXT_LICENSE = BSD-2-Clause
+ NGINX_DAV_EXT_LICENSE_FILES = LICENSE
