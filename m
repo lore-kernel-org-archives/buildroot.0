@@ -1,53 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 22:39:13 +0200
-Subject: [Buildroot] [git commit] package/{protobuf,
- python-protobuf}: bump to version 3.17.3
-Message-ID: <20210720200552.B8E818168E@busybox.osuosl.org>
+Date: Tue, 20 Jul 2021 22:40:00 +0200
+Subject: [Buildroot] [PATCH] package/grpc: bump version to 1.38.1
+In-Reply-To: <20210706092943.36353-1-buildroot@heine.tech>
+References: <20210706092943.36353-1-buildroot@heine.tech>
+Message-ID: <20210720224000.4431b037@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Message-ID: <20210720204000.6QWqCWU_lWILHvqZ9VVYQRdrXaxGweXK7MesdWw1hFE@z>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c7dc93bff2caa2bb6fb009a285839417800bc7d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  6 Jul 2021 11:29:41 +0200
+Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> ---
+>  package/grpc/grpc.hash | 2 +-
+>  package/grpc/grpc.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 6818b6f83a..2a65156cb3 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  84d30a78cae000be164ac6b973ee1dc0664669d63685dfbcf96f058c50456f19  protobuf-cpp-3.17.0.tar.gz
-+sha256  51cec99f108b83422b7af1170afd7aeb2dd77d2bcbb7b6bad1f92509e9ccf8cb  protobuf-cpp-3.17.3.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 7ba99d2c4b..492917c5e8 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 3.17.0
-+PROTOBUF_VERSION = 3.17.3
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index 3ed9de739a..8eca476884 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3011bfbc18d1c695ee393cb0dc1042282cfa33ef6573fe82732aefc9f7286121  protobuf-python-3.17.0.tar.gz
-+sha256  3253c6d17ec0bb6f6382e555cf5ca0a9ffab8d81b691f100f96ce9f5e753018e  protobuf-python-3.17.3.tar.gz
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
