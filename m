@@ -2,56 +2,61 @@ Return-Path: <SRS0=PVMq=MM=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6B45C07E95
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:44:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB21CC07E9B
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:45:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 78668610CC
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:44:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 78668610CC
+	by mail.kernel.org (Postfix) with ESMTPS id A51BE60E0C
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:45:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A51BE60E0C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B5A340257;
-	Tue, 20 Jul 2021 21:44:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75A6C402EC;
+	Tue, 20 Jul 2021 21:45:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fk6mUiC-LYA8; Tue, 20 Jul 2021 21:44:52 +0000 (UTC)
+	with ESMTP id eE1H7WPmjQzo; Tue, 20 Jul 2021 21:45:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FBA24026D;
-	Tue, 20 Jul 2021 21:44:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D08340320;
+	Tue, 20 Jul 2021 21:45:04 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 82F411BF9B2
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:42:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 378711BF9B2
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:43:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A9BC605C8
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:42:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 329CE600C9
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:43:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zHTtdFAF4mF1 for <buildroot@lists.busybox.net>;
- Tue, 20 Jul 2021 21:42:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DBB016003C
- for <buildroot@buildroot.org>; Tue, 20 Jul 2021 21:42:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 76EA584110; Tue, 20 Jul 2021 21:08:39 +0000 (UTC)
+ with ESMTP id BVR0X54xkvDW for <buildroot@lists.busybox.net>;
+ Tue, 20 Jul 2021 21:43:10 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3BA14605C8
+ for <buildroot@buildroot.org>; Tue, 20 Jul 2021 21:43:10 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 77408240004;
+ Tue, 20 Jul 2021 21:43:08 +0000 (UTC)
+Date: Tue, 20 Jul 2021 23:43:07 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 23:41:54 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 482270e2948043f32eba11399bf405aae1adfb13
-X-Git-Newrev: 9ca64820db6766ad51bc835c86948cbe2c87e209
-X-Patchwork-Hint: ignore
-Message-ID: <20210720210839.76EA584110@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/darkhttpd: fix build with gcc 4.8
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20210720234307.2cfaa2a7@windsurf>
+In-Reply-To: <20210720204721.80821-1-fontaine.fabrice@gmail.com>
+References: <20210720204721.80821-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/linux-firmware: use official
+ tarball
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,77 +68,29 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
-Message-ID: <20210720214154.C48uPWgePcOD2_kF2Yrphf-CGpULRx20GhXZgEd0tKY@z>
+Message-ID: <20210720214307.Bv7r2L1KBucezjF9-O9tyJBzcuu4yfrMn6DWBwjOlHw@z>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ca64820db6766ad51bc835c86948cbe2c87e209
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 20 Jul 2021 22:47:21 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fix the following build failure which is raised since bump to version
-0.13 in commit 88705a8c248e566f2c9ca71a8ee5353b33e368c2:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/linux-firmware/linux-firmware.hash | 6 ++++--
+>  package/linux-firmware/linux-firmware.mk   | 4 ++--
+>  2 files changed, 6 insertions(+), 4 deletions(-)
 
-darkhttpd.c:966:5: error: 'for' loop initial declarations are only allowed in C99 mode
-     for (int i = 0, j = 0; i < input_length;) {
-     ^
+Applied to master, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/ffc/ffcb627c44d2b7202d641129b67af2dc7865c618/build-end.log
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...lare-vars-outside-of-for-loop-for-std-c90.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
-
-diff --git a/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch b/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch
-new file mode 100644
-index 0000000000..7584bff98e
---- /dev/null
-+++ b/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch
-@@ -0,0 +1,39 @@
-+From 81b491e60affd67f4ec2feccbee1cdf98dc57b81 Mon Sep 17 00:00:00 2001
-+From: Emil Mikulic <emikulic@gmail.com>
-+Date: Sun, 21 Mar 2021 15:03:14 +1100
-+Subject: [PATCH] Declare vars outside of for() loop for -std=c90.
-+
-+Fixes #2.
-+
-+[Retrieved from:
-+https://github.com/emikulic/darkhttpd/commit/81b491e60affd67f4ec2feccbee1cdf98dc57b81]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ darkhttpd.c | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/darkhttpd.c b/darkhttpd.c
-+index 219a8a3..268628a 100644
-+--- a/darkhttpd.c
-++++ b/darkhttpd.c
-+@@ -966,8 +966,9 @@ static char *base64_encode(char *str) {
-+     char *encoded_data = malloc(output_length+1);
-+     if (encoded_data == NULL) return NULL;
-+ 
-+-    for (int i = 0, j = 0; i < input_length;) {
-+-
-++    int i;
-++    int j;
-++    for (i = 0, j = 0; i < input_length;) {
-+         uint32_t octet_a = i < input_length ? (unsigned char)str[i++] : 0;
-+         uint32_t octet_b = i < input_length ? (unsigned char)str[i++] : 0;
-+         uint32_t octet_c = i < input_length ? (unsigned char)str[i++] : 0;
-+@@ -981,7 +982,7 @@ static char *base64_encode(char *str) {
-+     }
-+ 
-+     const int mod_table[] = {0, 2, 1};
-+-    for (int i = 0; i < mod_table[input_length % 3]; i++)
-++    for (i = 0; i < mod_table[input_length % 3]; i++)
-+         encoded_data[output_length - 1 - i] = '=';
-+     encoded_data[output_length] = '\0';
-+ 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
