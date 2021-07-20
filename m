@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 22:38:30 +0200
-Subject: [Buildroot] [git commit] package/re2: bump version to 2021-06-01
-Message-ID: <20210720200552.A2A118168E@busybox.osuosl.org>
+Date: Tue, 20 Jul 2021 22:39:55 +0200
+Subject: [Buildroot] [git commit] package/grpc: bump version to 1.38.1
+Message-ID: <20210720200552.C5542885E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f09fcbc63b8767e10b75075f64cfa5325e4c96f
+commit: https://git.buildroot.net/buildroot/commit/?id=92785434cb1f52bcf79c7a1029bc532f010dbb27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/re2/re2.hash | 2 +-
- package/re2/re2.mk   | 2 +-
+ package/grpc/grpc.hash | 2 +-
+ package/grpc/grpc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/re2/re2.hash b/package/re2/re2.hash
-index a2ed659b64..abe8a4bbea 100644
---- a/package/re2/re2.hash
-+++ b/package/re2/re2.hash
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 925761f37a..01dc9ca240 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
 @@ -1,3 +1,3 @@
- # locally calculated
--sha256  1396ab50c06c1a8885fb68bf49a5ecfd989163015fd96699a180d6414937f33f  re2-2021-02-02.tar.gz
-+sha256  26155e050b10b5969e986dab35654247a3b1b295e0532880b5a9c13c0a700ceb  re2-2021-06-01.tar.gz
- sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
-diff --git a/package/re2/re2.mk b/package/re2/re2.mk
-index 028079cb55..f6772a10dd 100644
---- a/package/re2/re2.mk
-+++ b/package/re2/re2.mk
+ # Locally computed
+-sha256  acf247ec3a52edaee5dee28644a4e485c5e5badf46bdb24a80ca1d76cb8f1174  grpc-1.37.1.tar.gz
++sha256  f60e5b112913bf776a22c16a3053cc02cf55e60bf27a959fd54d7aaf8e2da6e8  grpc-1.38.1.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index fce69cbe56..f3975316ae 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RE2_VERSION = 2021-02-02
-+RE2_VERSION = 2021-06-01
- RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
- RE2_LICENSE = BSD-3-Clause
- RE2_LICENSE_FILES = LICENSE
+-GRPC_VERSION = 1.37.1
++GRPC_VERSION = 1.38.1
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0
+ GRPC_LICENSE_FILES = LICENSE
