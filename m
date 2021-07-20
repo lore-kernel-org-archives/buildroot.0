@@ -1,29 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 21:25:57 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/network-manager: bump to
- version 1.32.2
-In-Reply-To: <20210717124329.3383315-1-james.hilliard1@gmail.com>
-References: <20210717124329.3383315-1-james.hilliard1@gmail.com>
-Message-ID: <20210720212557.132785c3@windsurf>
+Date: Tue, 20 Jul 2021 21:26:21 +0200
+Subject: [Buildroot] [PATCH] package/lua-lunix: fix build with musl
+In-Reply-To: <20210717132144.1503495-1-francois.perrad@gadz.org>
+References: <20210717132144.1503495-1-francois.perrad@gadz.org>
+Message-ID: <20210720212621.0a476e44@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sat, 17 Jul 2021 06:43:29 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Sat, 17 Jul 2021 15:21:44 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> see http://autobuild.buildroot.net/results/7d192a0a1d58d258b77906cf936949b2f47373cd/
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
-> Changes v1 -> v2:
->   - use stable 1.32.2 instead of 1.33.1
-> ---
->  package/network-manager/network-manager.hash | 6 +++---
->  package/network-manager/network-manager.mk   | 6 +++---
->  2 files changed, 6 insertions(+), 6 deletions(-)
+>  .../0002-remove-link-with-librt.patch         | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 package/lua-lunix/0002-remove-link-with-librt.patch
 
-Applied to master, thanks.
+What makes this patch work is that we don't support glibc < 2.17 for
+the target, so indeed we no longer care about linking with librt.
+
+Best regards,
 
 Thomas
 -- 
