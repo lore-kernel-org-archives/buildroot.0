@@ -1,38 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 21:48:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rpcbind: use upstream systemd
- service files
-In-Reply-To: <20210712043534.3849257-1-james.hilliard1@gmail.com>
-References: <20210712043534.3849257-1-james.hilliard1@gmail.com>
-Message-ID: <20210720214829.31a3bdf2@windsurf>
+Date: Tue, 20 Jul 2021 21:53:50 +0200
+Subject: [Buildroot] [git commit] board/raspberrypi: use kernel Bluetooth
+ mode
+Message-ID: <20210720191950.7B33C8857A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Sun, 11 Jul 2021 22:35:34 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5352a7710250e96ff99c11830af697101de3839e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The overriden service files appear to have compatibility issues
-> with upstream rpcbind, don't replace the bundled service files.
-> 
-> We need to build with --enable-warmstarts as this is required
-> by the systemd service files.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/rpcbind/rpcbind.mk      | 10 ++--------
->  package/rpcbind/rpcbind.service | 10 ----------
->  package/rpcbind/rpcbind.socket  |  8 --------
->  3 files changed, 2 insertions(+), 26 deletions(-)
->  delete mode 100644 package/rpcbind/rpcbind.service
->  delete mode 100644 package/rpcbind/rpcbind.socket
+The default setting with miniuart-bt requires hciattach which is a
+deprecated utility in BlueZ.  Setting the krnbt parameter switches to
+the modern method of using serdev in the kernel removing the need for
+any userspace configuration to enable the Bluetooth controller.
 
-Applied to master, thanks.
+This is documented as applying to all Raspberry Pi variants so just
+enable it globally.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/raspberrypi/post-image.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+index 9dbd98ef9b..a6728c686e 100755
+--- a/board/raspberrypi/post-image.sh
++++ b/board/raspberrypi/post-image.sh
+@@ -16,7 +16,7 @@ do
+ 			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+ 
+ # fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
+-dtoverlay=miniuart-bt
++dtoverlay=miniuart-bt,krnbt=on
+ __EOF__
+ 		fi
+ 		;;
