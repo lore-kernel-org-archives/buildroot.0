@@ -1,52 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 22:27:02 +0200
-Subject: [Buildroot] [PATCH v1] package/rtl8812au-aircrack-ng: new
- package
-In-Reply-To: <20210705191533.29763-1-ps.report@gmx.net>
-References: <20210705191533.29763-1-ps.report@gmx.net>
-Message-ID: <20210720222702.66a8604d@windsurf>
+Date: Tue, 20 Jul 2021 22:35:07 +0200
+Subject: [Buildroot] [git commit] package/granite: link with -lintl if needed
+Message-ID: <20210720200131.A1537885CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Mon,  5 Jul 2021 21:15:33 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=82a5ffca28250bb7e474a85fad3904539539bdc8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Add rtl8812au-aircrack-ng (alternative to rtl8821au), recommended
-> e.g. for Alfa cards ([1]) and as opposed to rtl8821au does not crash
-> in case of configured for IBSS mode and supports iw set freq command in
-> monitor mode.
-> 
-> [1] https://docs.alfa.com.tw/Support/Linux/RTL8811AU
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  DEVELOPERS                                     |  1 +
->  package/Config.in                              |  1 +
->  package/rtl8812au-aircrack-ng/Config.in        | 10 ++++++++++
->  .../rtl8812au-aircrack-ng.hash                 |  3 +++
->  .../rtl8812au-aircrack-ng.mk                   | 18 ++++++++++++++++++
->  5 files changed, 33 insertions(+)
->  create mode 100644 package/rtl8812au-aircrack-ng/Config.in
->  create mode 100644 package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
->  create mode 100644 package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
+Link with TARGET_NLS_LIBS if needed to avoid the following build
+failure:
 
-I find it very sad that we need an alternative driver for the same
-device... I've applied, but it would be good to see if this package
-could replace the existing rtl8821au package.
+/home/buildroot/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: lib/libgranite.so.5.4.0.p/meson-generated_Application.c.o: in function `_vala_array_free.constprop.0':
+Application.c:(.text+0x340): undefined reference to `libintl_bindtextdomain'
 
-Also, I'm confused about the naming: rtl8812au vs. rtl8821au. Are they
-for the same hardware ?
+Fixes:
+ - http://autobuild.buildroot.org/results/d754cb776a1e11031cef4e66d45619aad5c4575d
 
-I wish there was more effort to push such drivers in the upstream
-kernel...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/granite/granite.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/granite/granite.mk b/package/granite/granite.mk
+index d5dd1fa1ff..037113f715 100644
+--- a/package/granite/granite.mk
++++ b/package/granite/granite.mk
+@@ -6,10 +6,17 @@
+ 
+ GRANITE_VERSION = 5.4.0
+ GRANITE_SITE = $(call github,elementary,granite,$(GRANITE_VERSION))
+-GRANITE_DEPENDENCIES = host-pkgconf host-vala libgee libglib2 libgtk3
++GRANITE_DEPENDENCIES = \
++	host-pkgconf \
++	host-vala \
++	libgee \
++	libglib2 \
++	libgtk3 \
++	$(TARGET_NLS_DEPENDENCIES)
+ GRANITE_INSTALL_STAGING = YES
+ GRANITE_LICENSE = LGPL-3.0+
+ GRANITE_LICENSE_FILES = COPYING
++GRANITE_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ GRANITE_CONF_OPTS += -Dintrospection=true
