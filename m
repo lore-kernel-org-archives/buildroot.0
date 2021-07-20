@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 20:27:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/systemd: disable urlify unless
- supported
-In-Reply-To: <20210720152559.129171-1-james.hilliard1@gmail.com>
-References: <20210720152559.129171-1-james.hilliard1@gmail.com>
-Message-ID: <20210720202700.54138125@windsurf>
+Date: Tue, 20 Jul 2021 20:28:35 +0200
+Subject: [Buildroot] [git commit] package/ripgrep: add RIPGREP_CPE_ID_VENDOR
+Message-ID: <20210720175435.877DE884C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Tue, 20 Jul 2021 09:25:59 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=28d198c0b876c34947988101c805ef1ecf215b9c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The urlify feature in the systemd pager is only supported by the full
-> less package and not busybox less, enable only for builds with full
-> less support.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...1-Add-meson-option-to-disable-urlify.patch | 67 +++++++++++++++++++
->  package/systemd/systemd.mk                    |  6 ++
->  2 files changed, 73 insertions(+)
->  create mode 100644 package/systemd/0001-Add-meson-option-to-disable-urlify.patch
+cpe:2.3:a:ripgrep_project:ripgrep is a valid CPE identifier for this
+package:
 
-Applied to master, thanks.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aripgrep_project%3Aripgrep
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ripgrep/ripgrep.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index c3c12fd185..2cc578383d 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -8,6 +8,7 @@ RIPGREP_VERSION = 0.8.1
+ RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
+ RIPGREP_LICENSE = MIT
+ RIPGREP_LICENSE_FILES = LICENSE-MIT
++RIPGREP_CPE_ID_VENDOR = ripgrep_project
+ 
+ RIPGREP_DEPENDENCIES = host-rustc
+ RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
