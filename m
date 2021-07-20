@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B7FFC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:15:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 170F4C432BE
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:15:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 234EA60F35
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:15:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 234EA60F35
+	by mail.kernel.org (Postfix) with ESMTPS id D721860EBC
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:15:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D721860EBC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2CC44236F;
-	Wed,  4 Aug 2021 00:15:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7A8B405FC;
+	Wed,  4 Aug 2021 00:15:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aF2nbmtczMtH; Wed,  4 Aug 2021 00:15:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 08ohoSJLGR-B; Wed,  4 Aug 2021 00:15:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B1764236D;
-	Wed,  4 Aug 2021 00:15:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A5531404E3;
+	Wed,  4 Aug 2021 00:15:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B1BCC1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C2A441BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1144E40457
+ by smtp2.osuosl.org (Postfix) with ESMTP id 451CB40F04
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MRUQ2PciMARQ for <buildroot@lists.busybox.net>;
+ with ESMTP id 4PjjflYwUBVE for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 06C8540F04
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA49E40F02
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4F6C085583; Tue,  3 Aug 2021 21:10:12 +0000 (UTC)
+ id 3AF8D81469; Tue,  3 Aug 2021 21:10:12 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 22:45:25 +0200
+Date: Tue, 20 Jul 2021 22:41:34 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b0390d1ff164dd72fe3af3db357cdf49d7819706
-X-Git-Newrev: e7b68ebd2bc171fed054d4dfc550c48fe1712735
+X-Git-Oldrev: 4cf1efb04add60e5dcb3eb4edd9156a84d3e11ec
+X-Git-Newrev: 3d036d059bba931f55b982c1eeb11f364ef1dce4
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211012.4F6C085583@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/network-manager: fix
- license hash
+Message-Id: <20210803211012.3AF8D81469@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lua-testmore: bump to
+ version 0.3.6
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,31 +70,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7b68ebd2bc171fed054d4dfc550c48fe1712735
+commit: https://git.buildroot.net/buildroot/commit/?id=3d036d059bba931f55b982c1eeb11f364ef1dce4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For an unknown reason, commit 360d1aad84449c6a1993d8c7e469dc0cd35339a2
-has set a wrong hash for CONTRIBUTING.md
+diff COPYRIGHT:
+- Copyright (C) 2009-2018 Francois Perrad.
++ Copyright (C) 2009-2021 Francois Perrad.
 
-Fixes:
- - No autobuilder failures yet
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/network-manager/network-manager.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lua-testmore/lua-testmore.hash | 4 ++--
+ package/lua-testmore/lua-testmore.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index 6efd697af4..c9d4826a0b 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -3,4 +3,4 @@ sha256  701d511067f757d0f92f412c98cdb49a74a6ba69448aabb1beadacbc171e3873  Networ
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
--sha256  65fd94885d3a5f468755e7cbe1334e56ef3a32b8a73980967fa9839c10514aa9  CONTRIBUTING.md
-+sha256  e70c2d84a038b972beff16d8662f35567709dff2d552220bd1af6014f6d2215d  CONTRIBUTING.md
+diff --git a/package/lua-testmore/lua-testmore.hash b/package/lua-testmore/lua-testmore.hash
+index 752fc17f73..4ff577e528 100644
+--- a/package/lua-testmore/lua-testmore.hash
++++ b/package/lua-testmore/lua-testmore.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 4875103611683b13fdd0bc3658c0cbe302b4db491043a03ea002726810d371c5  lua-testmore-0.3.5-2.src.rock
+-sha256 0fa63370a149eda33e25987dd63bd096a616a3e47d2cfc45ca2fd66e8d2bfb35  lua-TestMore-0.3.5/COPYRIGHT
++sha256 b3e57955888aba3974d6f5a21219214e2803a38e4623671f7d9d9e0f1851e608  lua-testmore-0.3.6-1.src.rock
++sha256 37a3afb014325b98f0ad919cb40bc9d5a948120e5260e75b9d00c198d350da6d  lua-TestMore-0.3.6/COPYRIGHT
+diff --git a/package/lua-testmore/lua-testmore.mk b/package/lua-testmore/lua-testmore.mk
+index 5d6dc053a8..e3cc7b7bdb 100644
+--- a/package/lua-testmore/lua-testmore.mk
++++ b/package/lua-testmore/lua-testmore.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_TESTMORE_VERSION = 0.3.5-2
++LUA_TESTMORE_VERSION = 0.3.6-1
+ LUA_TESTMORE_NAME_UPSTREAM = lua-TestMore
+ LUA_TESTMORE_LICENSE = MIT
+ LUA_TESTMORE_LICENSE_FILES = $(LUA_TESTMORE_SUBDIR)/COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
