@@ -1,27 +1,56 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 Jul 2021 20:53:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: DRI drivers need either
- glx, egl or gbm
-References: <20210720172911.15840-1-bernd.kuhls@t-online.de>
- <20210720202545.74d835bd__29119.6025953226$1626805573$gmane$org@windsurf>
-Message-ID: <klijshxl2i.ln2@ID-313208.user.individual.net>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Tue, 20 Jul 2021 21:02:42 +0200
+Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2021.07.0
+Message-ID: <20210720190242.489360-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Am Tue, 20 Jul 2021 20:25:45 +0200 schrieb Thomas Petazzoni:
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-> Thanks for the patch. I'm always a bit confused with all these mesa3d
-> possibilities. How does this patch fit with what you did in commit
-> 15a2f9b819806d38a7d8172a20f80130b1d60e63, where
-> BR2_PACKAGE_MESA3D_OSMESA_CLASSIC was renamed
-> BR2_PACKAGE_MESA3D_OSMESA_GALLIUM ?
-
-Hi Thomas,
-
-instead of renaming the option I should have removed that line in the 
-first place.
-
-Regards, Bernd
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 03d9a272d0..af4c1f816c 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2021.01.0"
++	bool "2021.07.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2021.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2021.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index e6f8234a4d..a82edef63b 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,8 +1,8 @@
+-# From https://www.barebox.org/download/barebox-2021.01.0.tar.bz2.md5
+-md5  e81e7cd6bc2629e7fcdeaddf59c324c3  barebox-2021.01.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2021.07.0.tar.bz2.md5
++md5  df3651a395e1420c2818dd464c63069d  barebox-2021.07.0.tar.bz2
+ 
+ # Locally calculated
+-sha256  b39501db1c701b05f862973d8aed628cab0e611421cbaadae8b5262311551ff9  barebox-2021.01.0.tar.bz2
++sha256  ce5d9d8953a2e3c21f1e6a72b1499962170bb41c4750ce8129ef44bf7860992d  barebox-2021.07.0.tar.bz2
+ 
+ # License files, locally computed
+ sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
+-- 
+2.32.0
