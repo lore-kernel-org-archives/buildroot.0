@@ -1,91 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 20:20:38 +0200
-Subject: [Buildroot] [git commit] package/python-esptool: bump version to 3.1
-Message-ID: <20210720174654.42CE3884AE@busybox.osuosl.org>
+Date: Tue, 20 Jul 2021 20:22:11 +0200
+Subject: [Buildroot] [git commit] package/less: bump to version 590
+Message-ID: <20210720174813.7EE0E884B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea5c0175281838370ed1f48898088e680d1fe971
+commit: https://git.buildroot.net/buildroot/commit/?id=9e7f0175ed0f20d9ff6d7c38a2f90b11301aa6c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...quire-wheel-only-when-installing-from-pip.patch | 36 ++++++++++++++++++++++
- package/python-esptool/python-esptool.hash         |  4 +--
- package/python-esptool/python-esptool.mk           |  4 +--
- 3 files changed, 40 insertions(+), 4 deletions(-)
+ package/less/less.hash | 4 ++--
+ package/less/less.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-esptool/0001-setup.py-require-wheel-only-when-installing-from-pip.patch b/package/python-esptool/0001-setup.py-require-wheel-only-when-installing-from-pip.patch
-new file mode 100644
-index 0000000000..3318fa7b26
---- /dev/null
-+++ b/package/python-esptool/0001-setup.py-require-wheel-only-when-installing-from-pip.patch
-@@ -0,0 +1,36 @@
-+From 3f2746ad05067aad960f7a08e53f6e72c5eecd07 Mon Sep 17 00:00:00 2001
-+From: Bartosz Bilas <b.bilas@grinn-global.com>
-+Date: Sat, 12 Jun 2021 13:50:15 +0200
-+Subject: [PATCH] setup.py: require wheel only when installing from pip
-+
-+Fix the build from sources (that don't require wheel)
-+in environments where this module is not available.
-+
-+Signed-off-by: Bartosz Bilas <bartosz.bilas@hotmail.com>
-+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-+---
-+ Upstream status: https://github.com/espressif/esptool/pull/632
-+
-+ setup.py | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 2b17b28..1a8421d 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -110,7 +110,11 @@ setup(
-+         'Programming Language :: Python :: 3.8',
-+         'Programming Language :: Python :: 3.9',
-+     ],
-+-    setup_requires=['wheel'] if sys.version_info[0:2] not in [(3, 4), (3, 5)] else [],
-++    setup_requires=(
-++        ['wheel']
-++        if 'bdist_wheel' in sys.argv and sys.version_info[0:2] not in [(3, 4), (3, 5)] else
-++        []
-++    ),
-+     extras_require={
-+         "dev": [
-+             'flake8>=3.2.0',
-+-- 
-+2.32.0
-+
-diff --git a/package/python-esptool/python-esptool.hash b/package/python-esptool/python-esptool.hash
-index 3b030ec75b..7a707d34c6 100644
---- a/package/python-esptool/python-esptool.hash
-+++ b/package/python-esptool/python-esptool.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/esptool/json
--md5	ccd2855e14c298712aeb37ac063baad5  esptool-3.0.tar.gz
--sha256	87953d235fed2c9adb1292b3769df0149686c9afdb1896dd963f730453cbc934  esptool-3.0.tar.gz
-+md5	d62d71041896d105d7abd9e9c40f1995  esptool-3.1.tar.gz
-+sha256	ec6b943c53b4d71f87f98776333d5b4b99905766898a7002c28a9090b92b2de4  esptool-3.1.tar.gz
- # Locally computed sha256 checksums
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/python-esptool/python-esptool.mk b/package/python-esptool/python-esptool.mk
-index e9e3eb6b59..92f9bfce18 100644
---- a/package/python-esptool/python-esptool.mk
-+++ b/package/python-esptool/python-esptool.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/less/less.hash b/package/less/less.hash
+index e675569cd8..eed8340ec1 100644
+--- a/package/less/less.hash
++++ b/package/less/less.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+ # using DSA key F153A7C833235259
+-# http://www.greenwoodsoftware.com/less/less-563.sig
+-sha256  ce5b6d2b9fc4442d7a07c93ab128d2dff2ce09a1d4f2d055b95cf28dd0dc9a9a  less-563.tar.gz
++# http://www.greenwoodsoftware.com/less/less-590.sig
++sha256  6aadf54be8bf57d0e2999a3c5d67b1de63808bb90deb8f77b028eafae3a08e10  less-590.tar.gz
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/less/less.mk b/package/less/less.mk
+index a15bd25bec..7d7a6d5fe5 100644
+--- a/package/less/less.mk
++++ b/package/less/less.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_ESPTOOL_VERSION = 3.0
-+PYTHON_ESPTOOL_VERSION = 3.1
- PYTHON_ESPTOOL_SOURCE = esptool-$(PYTHON_ESPTOOL_VERSION).tar.gz
--PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/dd/3d/d1d4c004927e6e6807c441ce70330ed969c725d2906053fbd2ff994b4439
-+PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/9c/c8/28f21b3d3b5e1f1d249be52cdd91793c8c3f7c4f4f255ece7d50984fb05d
- PYTHON_ESPTOOL_SETUP_TYPE = setuptools
- PYTHON_ESPTOOL_LICENSE = GPL-2.0+
- PYTHON_ESPTOOL_LICENSE_FILES = LICENSE
+-LESS_VERSION = 563
++LESS_VERSION = 590
+ LESS_SITE = http://www.greenwoodsoftware.com/less
+ LESS_LICENSE = GPL-3.0+
+ LESS_LICENSE_FILES = COPYING
