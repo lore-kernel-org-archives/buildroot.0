@@ -1,39 +1,64 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 20 Jul 2021 08:15:42 +0200
-Subject: [Buildroot] [PATCH] package/libmbim: bump to version 1.24.8
-In-Reply-To: <20210716225449.382c1426@windsurf>
-References: <20210712091827.335522-1-aleksander@aleksander.es>
- <20210716225449.382c1426@windsurf>
-Message-ID: <CAGm1_kuFhe7U+qYMRiPP2htmfCDR4kmOKFaX0Vnsfh0XvSQVUA@mail.gmail.com>
+From: Jacques Samoun <jacques.samoun33@gmail.com>
+Date: Tue, 20 Jul 2021 09:21:00 +0300
+Subject: [Buildroot] [SOLVED] Re: Question Linux-Module infrastructure
+In-Reply-To: <d86c56879ede4cf090f30bac7364429f@umbiko.net>
+References: <mailman.9992.1626731586.223516.buildroot@busybox.net>
+ <d86c56879ede4cf090f30bac7364429f@umbiko.net>
+Message-ID: <CACaKL1x0NeWs0h7yf7OJOP9X=fVi6WCQo+ZctQ9i3n9faRfonw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hi Aleksander, All,
+Hi Andreas,
 
-On Fri, Jul 16, 2021 at 10:54 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+Great, this wolves my problem.
+Actually i was not too sure this SUBDIRS stuf was for .... now i got it :)
+
+Thanks,
+Jacques
+
+On Tue, Jul 20, 2021 at 8:03 AM Andreas Ziegler <br015@umbiko.net> wrote:
+
+> Hi Jacques,
 >
-> On Mon, 12 Jul 2021 11:18:27 +0200
-> Aleksander Morgado <aleksander@aleksander.es> wrote:
+> On 2021-07-19 21:53, Jacques Samoun <jacques.samoun33@gmail.com> wrote:
 >
-> > https://lists.freedesktop.org/archives/libmbim-devel/2021-June/001151.html
+> > Hello,
 > >
-> > Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-> > ---
-> >  package/libmbim/libmbim.hash | 2 +-
-> >  package/libmbim/libmbim.mk   | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > I am using external tree build in my project. Trying to add a linux
+> > kernel
+> > driver that i am developing.
+> > My problem is that, the sources of my driver are not flat but arranged,
+> > for
+> > various reasons in the following manner:
+> > <mydriver>
+> >                <some files>
+> >                <top makefile>
+> >               +--- inc
+> >                    <shared includes>
+> >               +--- user
+> >                      <files>
+> >                       <Makefile>
+> >               +--- kernel
+> >                        <files>
+> >                        <Makefile>
+> >
+> > My hal.mk is  (hal is the name of the package)
+> >
+> > HAL_VERSION = 1.0.0
+> > HAL_SITE =  ../top/source/hal
+> > HAL_SITE_METHOD = local
 >
-> Applied to master, thanks.
-
-I still experience this error [1]. Any ideas?
-
-I have also applied libgudev patches as their build was failing.
-
-[1] http://autobuild.buildroot.net/results/f8a81aad0e262a567a2b31712575472ae92e5518/build-end.log
-
-Best regards,
-Yegor
+> You probably just need a statement to point the kernel build to the
+> correct subdirectory:
+>
+> HAL_MODULE_SUBDIRS = kernel
+>
+> Kind regards,
+> Andreas
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210720/f6233b6f/attachment-0001.html>
