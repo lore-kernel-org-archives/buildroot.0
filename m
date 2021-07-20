@@ -1,94 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 21:43:34 +0200
-Subject: [Buildroot] [git commit] package/python-aioblescan: bump to version
- 0.2.8
-Message-ID: <20210720190952.21A3A88565@busybox.osuosl.org>
+Date: Tue, 20 Jul 2021 21:43:51 +0200
+Subject: [Buildroot] [git commit] package/strace: bump to version 5.12
+Message-ID: <20210720190952.3800E8323E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb8a32a21c5a2d7b15387393dd1129d27558c30e
+commit: https://git.buildroot.net/buildroot/commit/?id=7801a85c137785145d2268a7a40152c48adf62d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove 0001-Move-README-to-reStructured-text.patch
-since it has been merged upstream.
+Drop upstream patch.
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Move-README-to-reStructured-text.patch    | 35 ----------------------
- package/python-aioblescan/python-aioblescan.hash   |  4 +--
- package/python-aioblescan/python-aioblescan.mk     |  4 +--
- 3 files changed, 4 insertions(+), 39 deletions(-)
+ ...ace_get_syscall_info-disable_ptrace_getre.patch | 33 ----------------------
+ package/strace/strace.hash                         |  4 +--
+ package/strace/strace.mk                           |  2 +-
+ 3 files changed, 3 insertions(+), 36 deletions(-)
 
-diff --git a/package/python-aioblescan/0001-Move-README-to-reStructured-text.patch b/package/python-aioblescan/0001-Move-README-to-reStructured-text.patch
+diff --git a/package/strace/0001-disable_ptrace_get_syscall_info-disable_ptrace_getre.patch b/package/strace/0001-disable_ptrace_get_syscall_info-disable_ptrace_getre.patch
 deleted file mode 100644
-index 3db03bd835..0000000000
---- a/package/python-aioblescan/0001-Move-README-to-reStructured-text.patch
+index 1367d2985a..0000000000
+--- a/package/strace/0001-disable_ptrace_get_syscall_info-disable_ptrace_getre.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From 62260e0a42dd6c1c10660f68a531c49bd6cade2e Mon Sep 17 00:00:00 2001
--From: Francois Wautier <francois@wautier.eu>
--Date: Thu, 25 Feb 2021 20:07:08 +0700
--Subject: [PATCH] Move README to reStructured text
+@@ -1,33 +0,0 @@
+-From 84536a993417f3bfff4a54830fa34a3f91f5716e Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Thu, 11 Mar 2021 06:43:26 +0200
+-Subject: [PATCH] disable_ptrace_get_syscall_info, disable_ptrace_getregset:
+- require fork()
 -
--Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+-These helper programs require fork(), so they are incompatible with
+-no-MMU systems. Make the code depend on HAVE_FORK.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
-- setup.py | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
+-Upstream status: https://lists.strace.io/pipermail/strace-devel/2021-March/010421.html
 -
--diff --git a/setup.py b/setup.py
--index 582a994..315b3bb 100644
----- a/setup.py
--+++ b/setup.py
--@@ -4,7 +4,7 @@ import setuptools
+- src/disable_ptrace_request.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/disable_ptrace_request.c b/src/disable_ptrace_request.c
+-index 57163e77f0f4..715006941572 100644
+---- a/src/disable_ptrace_request.c
+-+++ b/src/disable_ptrace_request.c
+-@@ -41,7 +41,8 @@ init(int argc, char **argv)
+-  && defined PR_SET_NO_NEW_PRIVS \
+-  && defined PR_SET_SECCOMP \
+-  && defined BPF_JUMP \
+-- && defined BPF_STMT
+-+ && defined BPF_STMT \
+-+ && defined HAVE_FORK
 - 
-- version = "0.2.7"
-- 
---with open("README.md", "r") as fh:
--+with open("README.rst", "r") as fh:
--     long_description = fh.read()
-- 
-- setuptools.setup(
--@@ -16,7 +16,7 @@ setuptools.setup(
--     author_email="francois at wautier.eu",
--     description="Scanning Bluetooth for advertised info with asyncio.",
--     long_description=long_description,
---    long_description_content_type="text/markdown",
--+    long_description_content_type="text/x-rst",
--     url="http://github.com/frawau/aioblescan",
--     keywords=["bluetooth", "advertising", "hci", "ble"],
--     license="MIT",
+- static unsigned int
+- get_arch(void)
 --- 
--2.27.0
+-2.30.1
 -
-diff --git a/package/python-aioblescan/python-aioblescan.hash b/package/python-aioblescan/python-aioblescan.hash
-index 99a715dcd0..2592aace33 100644
---- a/package/python-aioblescan/python-aioblescan.hash
-+++ b/package/python-aioblescan/python-aioblescan.hash
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index e4fe690f61..f7a634000c 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aioblescan/json
--md5  fbcbf92260269d401a197636412f0c99  aioblescan-0.2.7.tar.gz
--sha256  2987f575c5129a21e42ad59e439feb3c96e0ad7210ef73af8eba1344106e5f5f  aioblescan-0.2.7.tar.gz
-+md5  f59934c040a817192fcd3e713633cf20  aioblescan-0.2.8.tar.gz
-+sha256  2b048f5fe6e85b18fe306bdb63307705f3d1139563d3187d751b8657065a5bd9  aioblescan-0.2.8.tar.gz
- # Locally computed sha256 checksums
- sha256  c2066cd44079e0c706234001af18cb6ad4b62fc68d0d08d29fdc7319916647e0  LICENSE.txt
-diff --git a/package/python-aioblescan/python-aioblescan.mk b/package/python-aioblescan/python-aioblescan.mk
-index 2ace10503e..8a9db927ac 100644
---- a/package/python-aioblescan/python-aioblescan.mk
-+++ b/package/python-aioblescan/python-aioblescan.mk
-@@ -4,9 +4,9 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/5.11/strace-5.11.tar.xz.asc
+-sha256  ffe340b10c145a0f85734271e9cce56457d23f21a7ea5931ab32f8cf4e793879  strace-5.11.tar.xz
++# https://strace.io/files/5.12/strace-5.12.tar.xz.asc
++sha256  29171edf9d252f89c988a4c340dfdec662f458cb8c63d85431d64bab5911e7c4  strace-5.12.tar.xz
+ sha256  f847d5ef26ad1151ca63bb88536b23a4cac5040c67917f3d5ee7ea1316e2b736  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 013bfdcd55..810f55e82b 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_AIOBLESCAN_VERSION = 0.2.7
-+PYTHON_AIOBLESCAN_VERSION = 0.2.8
- PYTHON_AIOBLESCAN_SOURCE = aioblescan-$(PYTHON_AIOBLESCAN_VERSION).tar.gz
--PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/78/2c/c09d8f83ed6c2ca6c4f803f2e5c349698eb78b82c8d5e9302a8eed1a7480
-+PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/d2/10/b8b496903f33935c99f3602200d44ccc0b0a57b87e5fa65b89466c1b1f31
- PYTHON_AIOBLESCAN_SETUP_TYPE = setuptools
- PYTHON_AIOBLESCAN_LICENSE = MIT
- PYTHON_AIOBLESCAN_LICENSE_FILES = LICENSE.txt
+-STRACE_VERSION = 5.11
++STRACE_VERSION = 5.12
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
