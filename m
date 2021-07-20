@@ -1,42 +1,47 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 20 Jul 2021 10:08:25 -0600
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.58.2
-Message-ID: <20210720160825.2801974-1-james.hilliard1@gmail.com>
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
+Date: Tue, 20 Jul 2021 18:08:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/s390-tools: bump to version
+ 2.17.0
+In-Reply-To: <20210719231835.0f31bbf1@windsurf>
+References: <20210719112648.367298-1-egorenar@linux.ibm.com>
+ <20210719231835.0f31bbf1@windsurf>
+Message-ID: <87lf61ezms.fsf@oc8242746057.ibm.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Thomas,
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 252e56ba34..96ca379a25 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.57.2/meson-0.57.2.tar.gz.asc
--sha256  3a83e7b1c5de94fa991ec34d9b198d94f38ed699d3524cb0fdf3b99fd23d4cc5  meson-0.57.2.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.58.2/meson-0.58.2.tar.gz.asc
-+sha256  7634ec32955d3f897d623b88e9d2988451035f43d73c17a29caf767387baedb7  meson-0.58.2.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 4b0f4fdeff..d093dc9fea 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESON_VERSION = 0.57.2
-+MESON_VERSION = 0.58.2
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
--- 
-2.25.1
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+
+> Hello,
+>
+> On Mon, 19 Jul 2021 13:26:48 +0200
+> Alexander Egorenkov <egorenar@linux.ibm.com> wrote:
+>
+>> Fixes:
+>> - https://release-monitoring.org/project/10714/
+>> 
+>> https://github.com/ibm-s390-linux/s390-tools/blob/v2.17.0/CHANGELOG.md
+>> 
+>> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+>
+> I've applied, with one minor change.
+>
+>> +Subject: [PATCH 1/2] cpumf/lshwc: Fix compile errors due to use of
+>> + non-standard 32/64 bit types
+>
+> We want [PATCH], not [PATCH X/Y] in the patches added to package/<pkg>/
+> folders. This is reported by "make check-package".
+>
+> I fixed that up when applying. Thanks!
+>
+> Thomas
+> -- 
+
+Thank you, got it, will strive to improve my submissions next time :)
+
+Regards
+Alex
