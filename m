@@ -1,56 +1,42 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Tue, 20 Jul 2021 21:02:42 +0200
-Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2021.07.0
-Message-ID: <20210720190242.489360-1-b.bilas@grinn-global.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 20 Jul 2021 20:29:11 +0200
+Subject: [Buildroot] [git commit] package/libostree: bump to version 2021.3
+Message-ID: <20210720184834.E48DB8118F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=24f62318dbdcd8c95401005248d8b7e8791b9371
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 03d9a272d0..af4c1f816c 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2021.01.0"
-+	bool "2021.07.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2021.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2021.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index e6f8234a4d..a82edef63b 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,8 +1,8 @@
--# From https://www.barebox.org/download/barebox-2021.01.0.tar.bz2.md5
--md5  e81e7cd6bc2629e7fcdeaddf59c324c3  barebox-2021.01.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2021.07.0.tar.bz2.md5
-+md5  df3651a395e1420c2818dd464c63069d  barebox-2021.07.0.tar.bz2
- 
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index bc1249deed..928e4fbe1b 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  b39501db1c701b05f862973d8aed628cab0e611421cbaadae8b5262311551ff9  barebox-2021.01.0.tar.bz2
-+sha256  ce5d9d8953a2e3c21f1e6a72b1499962170bb41c4750ce8129ef44bf7860992d  barebox-2021.07.0.tar.bz2
+-sha256  91b4bd9264831d20ff00ec442d48ede526db55379bd917606863c05f43b85a51  libostree-2021.1.tar.xz
++sha256  0fa5a39f0c3e58c2040133e4229cb28660c61b978cd4a2a3d2f6e97ef4c8d0b3  libostree-2021.3.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index a0e7e0ef0d..94ea08664a 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # License files, locally computed
- sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
--- 
-2.32.0
+-LIBOSTREE_VERSION = 2021.1
++LIBOSTREE_VERSION = 2021.3
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
