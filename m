@@ -1,42 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 22:39:55 +0200
-Subject: [Buildroot] [git commit] package/grpc: bump version to 1.38.1
-Message-ID: <20210720200552.C5542885E1@busybox.osuosl.org>
+Date: Tue, 20 Jul 2021 22:39:13 +0200
+Subject: [Buildroot] [git commit] package/{protobuf,
+ python-protobuf}: bump to version 3.17.3
+Message-ID: <20210720200552.B8E818168E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92785434cb1f52bcf79c7a1029bc532f010dbb27
+commit: https://git.buildroot.net/buildroot/commit/?id=5c7dc93bff2caa2bb6fb009a285839417800bc7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/grpc/grpc.hash | 2 +-
- package/grpc/grpc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index 925761f37a..01dc9ca240 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 6818b6f83a..2a65156cb3 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  acf247ec3a52edaee5dee28644a4e485c5e5badf46bdb24a80ca1d76cb8f1174  grpc-1.37.1.tar.gz
-+sha256  f60e5b112913bf776a22c16a3053cc02cf55e60bf27a959fd54d7aaf8e2da6e8  grpc-1.38.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index fce69cbe56..f3975316ae 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GRPC_VERSION = 1.37.1
-+GRPC_VERSION = 1.38.1
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0
- GRPC_LICENSE_FILES = LICENSE
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  84d30a78cae000be164ac6b973ee1dc0664669d63685dfbcf96f058c50456f19  protobuf-cpp-3.17.0.tar.gz
++sha256  51cec99f108b83422b7af1170afd7aeb2dd77d2bcbb7b6bad1f92509e9ccf8cb  protobuf-cpp-3.17.3.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 7ba99d2c4b..492917c5e8 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 3.17.0
++PROTOBUF_VERSION = 3.17.3
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 3ed9de739a..8eca476884 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3011bfbc18d1c695ee393cb0dc1042282cfa33ef6573fe82732aefc9f7286121  protobuf-python-3.17.0.tar.gz
++sha256  3253c6d17ec0bb6f6382e555cf5ca0a9ffab8d81b691f100f96ce9f5e753018e  protobuf-python-3.17.3.tar.gz
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
