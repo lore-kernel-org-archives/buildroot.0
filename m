@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 23:47:58 +0200
-Subject: [Buildroot] [git commit] package/gerbera: bump to version 1.8.2
-Message-ID: <20210720211443.9639A87316@busybox.osuosl.org>
+Date: Tue, 20 Jul 2021 23:47:52 +0200
+Subject: [Buildroot] [git commit] package/mpd: bump to version 0.22.8
+Message-ID: <20210720211443.8223A886BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1a484a39547f307d799eaee9058bd75025e64da
+commit: https://git.buildroot.net/buildroot/commit/?id=1c55e9618a14a6a69445d87bedd1778e76fd045b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gerbera/gerbera.hash | 2 +-
- package/gerbera/gerbera.mk   | 2 +-
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
-index ab3dda917c..ed856bbf62 100644
---- a/package/gerbera/gerbera.hash
-+++ b/package/gerbera/gerbera.hash
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 4c3b49823b..1079ccf367 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  66f49ee30e53c36e08ce56a724f84bde8350001d3b9309f8e62a34f38446b619  gerbera-1.8.1.tar.gz
-+sha256  b1e5591515f05a46de052ef4d95a2bb3387e96f565a5ce7abb6a77dbe581f09a  gerbera-1.8.2.tar.gz
- sha256  cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6  LICENSE.md
-diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
-index 9627209d60..d6251912ac 100644
---- a/package/gerbera/gerbera.mk
-+++ b/package/gerbera/gerbera.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally calculated after checking pgp signature
+-sha256  2be149a4895c3cb613477f8cf1193593e3d8a1d38a75ffa7d32da8c8316a4d5e  mpd-0.22.6.tar.xz
++sha256  9617ed08c9ffafcf5f925819251f6b90df3f4f73cf2838c41033e1962104286d  mpd-0.22.8.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 06dc7e15d7..8e4576a103 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GERBERA_VERSION = 1.8.1
-+GERBERA_VERSION = 1.8.2
- GERBERA_SITE = $(call github,gerbera,gerbera,v$(GERBERA_VERSION))
- GERBERA_LICENSE = GPL-2.0
- GERBERA_LICENSE_FILES = LICENSE.md
+ MPD_VERSION_MAJOR = 0.22
+-MPD_VERSION = $(MPD_VERSION_MAJOR).6
++MPD_VERSION = $(MPD_VERSION_MAJOR).8
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
