@@ -1,28 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 22:41:52 +0200
-Subject: [Buildroot] [PATCH] package/lua-testmore: bump to version 0.3.6
-In-Reply-To: <20210612214917.2876816-1-francois.perrad@gadz.org>
-References: <20210612214917.2876816-1-francois.perrad@gadz.org>
-Message-ID: <20210720224152.3def1e37@windsurf>
+Date: Tue, 20 Jul 2021 22:42:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{libuv,
+ uvw}: bump to versions 1.41.0, 2.9.0_libuv_v1.41
+In-Reply-To: <20210612183500.399503-1-asafka7@gmail.com>
+References: <20210612183500.399503-1-asafka7@gmail.com>
+Message-ID: <20210720224215.5b03cfe9@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20210720204152.K8ufkuzQ6OGMR0E-8EOa03iGjcIe6gs18hNmrGUM-zo@z>
 
-On Sat, 12 Jun 2021 23:49:17 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+On Sat, 12 Jun 2021 21:35:00 +0300
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-> diff COPYRIGHT:
-> - Copyright (C) 2009-2018 Francois Perrad.
-> + Copyright (C) 2009-2021 Francois Perrad.
+> LICENSE change: bump year 2020 to 2021.
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  package/lua-testmore/lua-testmore.hash | 4 ++--
->  package/lua-testmore/lua-testmore.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libuv/libuv.hash | 2 +-
+>  package/libuv/libuv.mk   | 2 +-
+>  package/uvw/uvw.hash     | 4 ++--
+>  package/uvw/uvw.mk       | 2 +-
+>  4 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
