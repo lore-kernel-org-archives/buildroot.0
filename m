@@ -1,105 +1,130 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 20 Jul 2021 10:29:19 -0600
-Subject: [Buildroot] [PATCH 1/1] package/rpi-firmware: bump to version
- 33e09977ff3b02967d191801e3361224455acb9d
-In-Reply-To: <20210720182344.2f904646@gmx.net>
-References: <20210720015810.3718225-1-james.hilliard1@gmail.com>
- <20210720182344.2f904646@gmx.net>
-Message-ID: <CADvTj4rx+eBry1AjmYJ3EuGZJi-uLdq=40WM6Bpis3FXSnfONQ@mail.gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Tue, 20 Jul 2021 18:35:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: disable urlify unless
+ supported
+In-Reply-To: <20210720152559.129171-1-james.hilliard1@gmail.com>
+References: <20210720152559.129171-1-james.hilliard1@gmail.com>
+Message-ID: <CADYdroOmocf_myxRK-4FERF1q8MjeO_68cRhEiWmtcyR4woXdA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Tue, Jul 20, 2021 at 10:23 AM Peter Seiderer <ps.report@gmx.net> wrote:
+Am Di., 20. Juli 2021 um 17:26 Uhr schrieb James Hilliard
+<james.hilliard1@gmail.com>:
 >
-> Hello James,
->
-> On Mon, 19 Jul 2021 19:58:10 -0600, James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >  package/rpi-firmware/rpi-firmware.hash | 2 +-
-> >  package/rpi-firmware/rpi-firmware.mk   | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-> > index 2abc920161..7127b2d824 100644
-> > --- a/package/rpi-firmware/rpi-firmware.hash
-> > +++ b/package/rpi-firmware/rpi-firmware.hash
-> > @@ -1,3 +1,3 @@
-> >  # Locally computed
-> > -sha256  3ce2105247a91ffa86d317e7810e110b601a094d6781a219996d8bc9fbe98c6f  rpi-firmware-0e5a49eb2f7f066876c69cf5fe61625fb5c32f67.tar.gz
-> > +sha256  5eaff5da660d6ecd74bb2c927d7a1ba84b5e5c5582f02e65aec058af2ffe50f4  rpi-firmware-33e09977ff3b02967d191801e3361224455acb9d.tar.gz
-> >  sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
-> > diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> > index 829f265c8e..181650fa08 100644
-> > --- a/package/rpi-firmware/rpi-firmware.mk
-> > +++ b/package/rpi-firmware/rpi-firmware.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >
-> > -RPI_FIRMWARE_VERSION = 0e5a49eb2f7f066876c69cf5fe61625fb5c32f67
-> > +RPI_FIRMWARE_VERSION = 33e09977ff3b02967d191801e3361224455acb9d
-> >  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
-> >  RPI_FIRMWARE_LICENSE = BSD-3-Clause
-> >  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
->
-> Out of interest, any special/needed commits since the last bump?
+> The urlify feature in the systemd pager is only supported by the full
+> less package and not busybox less, enable only for builds with full
+> less support.
 
-Well I was hitting an error that looked like it might be fixed by some
-more recent commits:
-https://github.com/raspberrypi/firmware/commits/master
-
-[   10.146517] ------------[ cut here ]------------
-[   10.148992] Firmware transaction timeout
-[   10.149120] WARNING: CPU: 0 PID: 5 at
-drivers/firmware/raspberrypi.c:64 rpi_firmware_transaction+0xe4/0x110
-[   10.156317] Modules linked in: brcmfmac brcmutil smsc95xx usbnet
-mii raspberrypi_hwmon cfg80211 rfkill bcm2835_codec(C) i2c_bcm2835
-sdhci_iproc bcm2835_isp(C) bcm2835_v4l2(C) bcm2835_mmal_vchiq(C)
-v4l2_mem2mem videobuf2_vmalloc videobuf2_dma_contig vc_sm_cma(C)
-videobuf2_memops videobuf2_v4l2 videobuf2_common uio_pdrv_genirq uio
-v4l2loopback(O) videodev fuse ipv6
-[   10.169277] CPU: 0 PID: 5 Comm: kworker/0:0 Tainted: G         C O
-    5.10.46-v8 #1
-[   10.172057] Hardware name: Raspberry Pi 3 Model B Rev 1.2 (DT)
-[   10.174854] Workqueue: events get_values_poll [raspberrypi_hwmon]
-[   10.177684] pstate: 60000005 (nZCv daif -PAN -UAO -TCO BTYPE=--)
-[   10.180518] pc : rpi_firmware_transaction+0xe4/0x110
-[   10.183334] lr : rpi_firmware_transaction+0xe4/0x110
-[   10.186035] sp : ffffffc010043c80
-[   10.188647] x29: ffffffc010043c80 x28: 0000000000000000
-[   10.191243] x27: ffffffbcc1d698c8 x26: ffffffd8ee9195c0
-[   10.193796] x25: ffffffc010470008 x24: 0000000000001000
-[   10.196383] x23: ffffffbcc565f600 x22: ffffffbcc2498ec0
-[   10.198915] x21: ffffffd8ee8ad008 x20: ffffffbcc2498e80
-[   10.201437] x19: 00000000ffffff92 x18: 0000000000000030
-[   10.203981] x17: 0000000000000000 x16: 0000000000000001
-[   10.206502] x15: ffffffffffffffff x14: ffffffc0900438c7
-[   10.209015] x13: ffffffd8ee014038 x12: 0000000000000010
-[   10.211514] x11: 00000000ffffffff x10: 0000000000000058
-[   10.213934] x9 : ffffffd8ed4acd00 x8 : ffffffd8ee7b7c18
-[   10.216292] x7 : ffffffd8ee749000 x6 : ffffffd8ee749168
-[   10.218569] x5 : 0000000000000001 x4 : 0000000000000000
-[   10.220843] x3 : 0000000000000027 x2 : 0000000000000000
-[   10.223069] x1 : 0000000000000000 x0 : ffffffbcc1db8000
-[   10.225275] Call trace:
-[   10.227390]  rpi_firmware_transaction+0xe4/0x110
-[   10.229470]  rpi_firmware_property_list+0xc0/0x180
-[   10.231474]  rpi_firmware_property+0x7c/0x120
-[   10.233385]  get_values_poll+0x54/0x170 [raspberrypi_hwmon]
-[   10.235263]  process_one_work+0x1d4/0x4c0
-[   10.237061]  worker_thread+0x144/0x470
-[   10.238781]  kthread+0x14c/0x160
-[   10.240427]  ret_from_fork+0x10/0x38
-[   10.242018] ---[ end trace 662c75d288e500f5 ]---
-
-Haven't fully tested if this actually fixes that yet though.
+Not only that, but its not supported by buildroot's version either (563) ;)
 
 >
-> Regards,
-> Peter
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  ...1-Add-meson-option-to-disable-urlify.patch | 67 +++++++++++++++++++
+>  package/systemd/systemd.mk                    |  6 ++
+>  2 files changed, 73 insertions(+)
+>  create mode 100644 package/systemd/0001-Add-meson-option-to-disable-urlify.patch
 >
+> diff --git a/package/systemd/0001-Add-meson-option-to-disable-urlify.patch b/package/systemd/0001-Add-meson-option-to-disable-urlify.patch
+> new file mode 100644
+> index 0000000000..b0a59a9f0f
+> --- /dev/null
+> +++ b/package/systemd/0001-Add-meson-option-to-disable-urlify.patch
+> @@ -0,0 +1,67 @@
+> +From e5d86ebed5624ef62342c820a5868b1075deb300 Mon Sep 17 00:00:00 2001
+> +From: James Hilliard <james.hilliard1@gmail.com>
+> +Date: Sun, 11 Jul 2021 04:39:33 -0600
+> +Subject: [PATCH] Add meson option to disable urlify.
+> +
+> +Useful for systems that don't use a version of less with hyperlink
+> +support.
+> +
+> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> +[james.hilliard1 at gmail.com: backport from upstream commit
+> +e5d86ebed5624ef62342c820a5868b1075deb300]
+> +---
+> + meson.build               | 1 +
+> + meson_options.txt         | 2 ++
+> + src/shared/pretty-print.c | 4 ++++
+> + 3 files changed, 7 insertions(+)
+> +
+> +diff --git a/meson.build b/meson.build
+> +index 5735cfc7ad..a2ee15bf32 100644
+> +--- a/meson.build
+> ++++ b/meson.build
+> +@@ -278,6 +278,7 @@ conf.set_quoted('USER_PRESET_DIR',                            userpresetdir)
+> + conf.set_quoted('VENDOR_KEYRING_PATH',                        join_paths(rootlibexecdir, 'import-pubring.gpg'))
+> +
+> + conf.set('ANSI_OK_COLOR',                                     'ANSI_' + get_option('ok-color').underscorify().to_upper())
+> ++conf.set10('ENABLE_URLIFY',                                   get_option('urlify'))
+> + conf.set10('ENABLE_FEXECVE',                                  get_option('fexecve'))
+> + conf.set10('MEMORY_ACCOUNTING_DEFAULT',                       memory_accounting_default)
+> + conf.set('STATUS_UNIT_FORMAT_DEFAULT',                        'STATUS_UNIT_FORMAT_' + status_unit_format_default.to_upper())
+> +diff --git a/meson_options.txt b/meson_options.txt
+> +index 163c8df87d..b60261ac24 100644
+> +--- a/meson_options.txt
+> ++++ b/meson_options.txt
+> +@@ -444,6 +444,8 @@ option('ok-color', type : 'combo',
+> +                   'highlight-cyan', 'highlight-white'],
+> +        value : 'green',
+> +        description: 'color of the "OK" status message')
+> ++option('urlify', type : 'boolean', value : 'true',
+> ++       description : 'enable pager Hyperlink ANSI sequence support')
+> + option('fexecve', type : 'boolean', value : 'false',
+> +        description : 'use fexecve() to spawn children')
+> +
+> +diff --git a/src/shared/pretty-print.c b/src/shared/pretty-print.c
+> +index 137ba77b3a..7983c0a33a 100644
+> +--- a/src/shared/pretty-print.c
+> ++++ b/src/shared/pretty-print.c
+> +@@ -19,6 +19,7 @@
+> + #include "util.h"
+> +
+> + bool urlify_enabled(void) {
+> ++#if ENABLE_URLIFY
+> +         static int cached_urlify_enabled = -1;
+> +
+> +         if (cached_urlify_enabled < 0) {
+> +@@ -32,6 +33,9 @@ bool urlify_enabled(void) {
+> +         }
+> +
+> +         return cached_urlify_enabled;
+> ++#else
+> ++        return 0;
+> ++#endif
+> + }
+
+how about just changing the default
+cached_urlify_enabled = colors_enabled();
+to
+cached_urlify_enabled = 0;
+
+> +
+> + int terminal_urlify(const char *url, const char *text, char **ret) {
+> +--
+> +2.25.1
+> +
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 5562703a89..03a5a5e4c8 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -59,6 +59,12 @@ else
+>  SYSTEMD_CONF_OPTS += -Dacl=false
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_LESS),y)
+> +SYSTEMD_CONF_OPTS += -Durlify=true
+> +else
+> +SYSTEMD_CONF_OPTS += -Durlify=false
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
+>  SYSTEMD_DEPENDENCIES += libapparmor
+>  SYSTEMD_CONF_OPTS += -Dapparmor=true
+> --
+> 2.25.1
+
+Norbert
