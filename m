@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3826EC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:14:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94635C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:14:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EB29161037
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:14:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EB29161037
+	by mail.kernel.org (Postfix) with ESMTPS id 5929B61037
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:14:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5929B61037
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C159B423A6;
-	Wed,  4 Aug 2021 00:14:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32E9740661;
+	Wed,  4 Aug 2021 00:14:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VCMqXyAlghEo; Wed,  4 Aug 2021 00:14:23 +0000 (UTC)
+	with ESMTP id pR--wzwW5tpg; Wed,  4 Aug 2021 00:14:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19205423A0;
-	Wed,  4 Aug 2021 00:14:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F1B2405CB;
+	Wed,  4 Aug 2021 00:14:34 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 615521BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8B5B81BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5740940F8B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8BC4C40E8C
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2-5Jq6KFBk9n for <buildroot@lists.busybox.net>;
+ with ESMTP id TsYsjG0xRmQk for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 82AE140E4B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E72F40F00
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D9B3D81469; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
+ id CFAEC85583; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 22:38:03 +0200
+Date: Tue, 20 Jul 2021 22:36:50 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 18ac5e46694f136b9e3952150111327060bf24fc
-X-Git-Newrev: ee95ae7821119a749a9881404abd744c8d92504a
+X-Git-Oldrev: 5bbe5979a2e2e10bc5dfb31a6486eafdf9b15a75
+X-Git-Newrev: 18ac5e46694f136b9e3952150111327060bf24fc
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211011.D9B3D81469@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libdrm: bump version
- to 2.4.107
+Message-Id: <20210803211011.CFAEC85583@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-m2crypto: bump
+ to version 0.38.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,56 +70,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee95ae7821119a749a9881404abd744c8d92504a
+commit: https://git.buildroot.net/buildroot/commit/?id=18ac5e46694f136b9e3952150111327060bf24fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- update license file hash (xf86drm.c, license unrelated source code
-  changes [1], [2], [3], [4], [5])
+Update indentation in hash file (two spaces)
 
-For details see [6].
+https://gitlab.com/m2crypto/m2crypto/-/tags/0.38.0
 
-[1] https://cgit.freedesktop.org/mesa/drm/commit/?id=67e911977fbe1f444045f59028c149a04ba29566
-[2] https://cgit.freedesktop.org/mesa/drm/commit/?id=a04b674887586bf05594abaf7c55fd8d630898db
-[3] https://cgit.freedesktop.org/mesa/drm/commit/?id=99a0522aef04e08c6e0be7a7a020f12c51d24c47
-[4] https://cgit.freedesktop.org/mesa/drm/commit/?id=9ae8f17d563a81212ca2f61a3427ed559c105644
-[5] https://cgit.freedesktop.org/mesa/drm/commit/?id=65d89398081b33b7498bccaee6915e977f589ec2
-[6] https://lists.freedesktop.org/archives/dri-devel/2021-July/313594.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libdrm/libdrm.hash | 8 ++++----
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-m2crypto/python-m2crypto.hash | 4 ++--
+ package/python-m2crypto/python-m2crypto.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 079675824a..d3f35b3de0 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2021-May/307025.html
--sha256  92d8ac54429b171e087e61c2894dc5399fe6a549b1fbba09fa6a3cb9d4e57bd4  libdrm-2.4.106.tar.xz
--sha512  33140e579906ab54b716149056af500c628ce41cd9ae3b0c33496693d2f5903fbcfccee8a942dd1560e1591111ed240da42612d5af5e75558db6f6a85d14617d  libdrm-2.4.106.tar.xz
-+# From https://lists.freedesktop.org/archives/dri-devel/2021-July/313594.html
-+sha256  c554cef03b033636a975543eab363cc19081cb464595d3da1ec129f87370f888  libdrm-2.4.107.tar.xz
-+sha512  c7542ba15c4c934519a6a1f3cb1ec21effa820a805a030d0175313bb1cc796cd311f39596ead883f9f251679d701e262894c5a297d5cf45093c80a6cd818def0  libdrm-2.4.107.tar.xz
- 
- # Hash for license file
--sha256  a69e38953c20a88845cc739c05dd604da4c977844b872e126c91a0ca2e1385b7  xf86drm.c
-+sha256  7e952c6666ed17c99f91ee7af13c688b8769b0feaf6f4558bf6ad3e07512e1e6  xf86drm.c
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index f18df27687..c15be3e671 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python-m2crypto/python-m2crypto.hash
+index 1ccc786f51..879f232565 100644
+--- a/package/python-m2crypto/python-m2crypto.hash
++++ b/package/python-m2crypto/python-m2crypto.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/m2crypto/json
+-md5 1f3095440092ca5e54007d1f3fa2562a M2Crypto-0.37.1.tar.gz
+-sha256 e4e42f068b78ccbf113e5d0a72ae5f480f6c3ace4940b91e4fff5598cfff6fb3 M2Crypto-0.37.1.tar.gz
++md5  8f39bfac730b6567e0c2179d15318c60  M2Crypto-0.38.0.tar.gz
++sha256  99f2260a30901c949a8dc6d5f82cd5312ffb8abc92e76633baf231bbbcb2decb  M2Crypto-0.38.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4eca478396f4b2b020729a111fce3f096456d74500bfd8f2b0388c3c69f997c0  LICENCE
+diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
+index 995c5cd626..02ad76d3f4 100644
+--- a/package/python-m2crypto/python-m2crypto.mk
++++ b/package/python-m2crypto/python-m2crypto.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBDRM_VERSION = 2.4.106
-+LIBDRM_VERSION = 2.4.107
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+-PYTHON_M2CRYPTO_VERSION = 0.37.1
++PYTHON_M2CRYPTO_VERSION = 0.38.0
+ PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
+-PYTHON_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/aa/36/9fef97358e378c1d3bd567c4e8f8ca0428a8d7e869852cef445ee6da91fd
++PYTHON_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/2c/52/c35ec79dd97a8ecf6b2bbd651df528abb47705def774a4a15b99977274e8
+ PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
+ PYTHON_M2CRYPTO_LICENSE = MIT
+ PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
