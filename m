@@ -1,79 +1,42 @@
-From: Michal Pluska <michal.pluska2@gmail.com>
-Date: Tue, 20 Jul 2021 19:03:31 +0200
-Subject: [Buildroot] rpi3_qt5we build issu
-In-Reply-To: <20210718003343.1c28e7dd@gmx.net>
-References: <CAMBXMtbWu2e63Kb+MLfj7Jrh+NU6HpCBA86OKSqRXcyHu-M=VA@mail.gmail.com>
- <20210718003343.1c28e7dd@gmx.net>
-Message-ID: <CAMBXMtYkxy++xyJyUZ2D25R10GByEJzOrtd5J=Z1FfsS_jLEYA@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 20 Jul 2021 19:29:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: DRI drivers need either glx,
+ egl or gbm
+Message-ID: <20210720172911.15840-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hello Peter,
+Fixes build error:
+../output-1/build/mesa3d-21.1.5/meson.build:520:4:
+ ERROR: Problem encountered: building dri drivers require at least one windowing system
 
-Thank you for direction, where the issue might be. It seems that 8GiB of
-RAM might not be enough in some cases.
-After changing configuration (no parallel compilation) it was possible to
-build the project.
+OSMesa is not seen as a valid windowing system for DRI drivers anymore:
+https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=21.1&id=ee802372180a2b4460cc7abb53438e45c6b6f1e4
 
-Regards,
-Michal
+Fixes:
+http://autobuild.buildroot.net/results/46e3a66ddc13a064e512aad0f3afd8655889ab9d/
 
-On Sun, 18 Jul 2021 at 00:33, Peter Seiderer <ps.report@gmx.net> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-> Hello Michal,
->
-> On Fri, 16 Jul 2021 14:53:50 +0200, Michal Pluska <
-> michal.pluska2 at gmail.com> wrote:
->
-> > Hello,
-> >
-> > I try to build this configuration: raspberrypi3_qt5we_defconfig; This
-> patch
-> > had to be applied:
-> >
-> https://patchwork.ozlabs.org/project/buildroot/patch/20201221203952.22168-3-ps.report at gmx.net/
-> >
-> > still I get following build error:
-> >
-> ../../../../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/string_fortified.h:29:33:
-> > warning: ?void* __builtin_memcpy(void*, const void*, unsigned int)?
-> > specified bound between 4294967288 and 4294967295 exceeds maximum object
-> > size 2147483647 [-Wstringop-overflow=]
-> >    29 |   return __builtin___memcpy_chk (__dest, __src, __len, __bos0
-> > (__dest));
-> >       |
-> >  ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > [14642/20194] CXX
-> > obj/content/browser/browser/browser_accessibility_state_impl.o
-> > FAILED: obj/content/browser/browser/browser_accessibility_state_impl.o
-> >
-> > What is still missing?
-> > I could repeat this build error on two machines...
->
-> Note that the shown line is a warning only, but from your attached log:
->
->         arm-buildroot-linux-gnueabihf-g++.br_real: fatal error: Killed
-> signal terminated program cc1plus
->         compilation terminated.
->
-> Most likely out-of-memory? Install more ram/swap on your build machines or
-> reduce the amount of parallelism of your (qt5webengine-5.15.2) build,
-> e.g. via setting BR2_JLEVEL or by hacking the following line in
-> package/qt5/qt5webengine/qt5webengine.mk:
->
->  62 QT5WEBENGINE_ENV += NINJAFLAGS="-j$(PARALLEL_JOBS)"
->
-> Regards,
-> Peter
->
-> >
-> > Kind Regards,
-> > Mipl
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210720/8d828b6c/attachment-0001.html>
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index d1b3af2054..41c90c49af 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -63,8 +63,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_MESA3D_DRIVER
+ 	select BR2_PACKAGE_MESA3D_GBM if \
+ 		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
+-		!BR2_PACKAGE_MESA3D_OPENGL_EGL && \
+-		!BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
++		!BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
+ 		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
+ 
+-- 
+2.30.2
