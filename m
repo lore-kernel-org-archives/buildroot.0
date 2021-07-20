@@ -1,50 +1,38 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 20 Jul 2021 23:20:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dbus-glib: bump to version 0.112
-Message-ID: <20210720212039.356674-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 20 Jul 2021 23:33:34 +0200
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.67
+In-Reply-To: <900065c9-8832-df20-35ac-ea69cbfe72e4@benettiengineering.com>
+References: <20210612173513.2253959-1-giulio.benetti@benettiengineering.com>
+ <20210720224443.24edcd0f@windsurf>
+ <900065c9-8832-df20-35ac-ea69cbfe72e4@benettiengineering.com>
+Message-ID: <20210720233334.2143daf9@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-- Update hash of COPYING (SPDX added with
-  https://gitlab.freedesktop.org/dbus/dbus-glib/-/commit/96479fb8fd5e2f8896cdce7feff7839dcb47a7d1
-  https://gitlab.freedesktop.org/dbus/dbus-glib/-/commit/d42176ae4763e5288ef37ea314fe58387faf2005)
-- Update indentation in hash file (two spaces)
+On Tue, 20 Jul 2021 23:09:05 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-https://gitlab.freedesktop.org/dbus/dbus-glib/-/blob/dbus-glib-0.112/NEWS
+> Sure I can. Here there is a "problem" if we can call it that way. It's 
+> from some month that they release very very fast. Now they are at NSS 
+> 3.68 and NSPR 4.32 [1], but very soon there will be version 3.69. Even 
+> if I send version bumps, they will release another version before you 
+> apply for sure. Let's see if it gets slower.
+> They also stopped emitting the Release Notes that doesn't help[2].
+> 
+> What can I do? Do I send the latest I see in the moment I bump and 
+> that's it, right?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/dbus-glib/dbus-glib.hash | 4 ++--
- package/dbus-glib/dbus-glib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Correct. Whenever you see a new version, send a new patch series which
+is based on the latest master, and mark your previous patches in
+patchwork as "Superseded".
 
-diff --git a/package/dbus-glib/dbus-glib.hash b/package/dbus-glib/dbus-glib.hash
-index 098832431e..072dde3d69 100644
---- a/package/dbus-glib/dbus-glib.hash
-+++ b/package/dbus-glib/dbus-glib.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256 7ce4760cf66c69148f6bd6c92feaabb8812dee30846b24cd0f7395c436d7e825  dbus-glib-0.110.tar.gz
-+sha256  7d550dccdfcd286e33895501829ed971eeb65c614e73aadb4a08aeef719b143a  dbus-glib-0.112.tar.gz
- 
- # Locally calculated
--sha256 ef1634fc21d9112dca08f2557313584719d534d05213cf14f3c77938506266b4  COPYING
-+sha256  589bc300214a8b9ecd121f51570fe6342617487fd8fc0fb1f4ec26a13d5b96f8  COPYING
-diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
-index 5eb158d954..0d247e1d89 100644
---- a/package/dbus-glib/dbus-glib.mk
-+++ b/package/dbus-glib/dbus-glib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_GLIB_VERSION = 0.110
-+DBUS_GLIB_VERSION = 0.112
- DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib
- DBUS_GLIB_INSTALL_STAGING = YES
- DBUS_GLIB_LICENSE = AFL-2.1 or GPL-2.0+
+Thanks!
+
+Thomas
 -- 
-2.30.2
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
