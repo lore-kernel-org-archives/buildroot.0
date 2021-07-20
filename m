@@ -1,32 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 21:44:12 +0200
-Subject: [Buildroot] [PATCH next] package/strace: bump to version 5.12
-In-Reply-To: <0c9146933584e404a875a2bd2867bfe9187a25a0.1622117394.git.baruch@tkos.co.il>
-References: <0c9146933584e404a875a2bd2867bfe9187a25a0.1622117394.git.baruch@tkos.co.il>
-Message-ID: <20210720214412.2be7b408@windsurf>
+Date: Tue, 20 Jul 2021 21:47:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/armbian-firmware: add option to
+ install AP6212 firmware
+In-Reply-To: <20210711202729.2072853-1-clabbe@baylibre.com>
+References: <20210711202729.2072853-1-clabbe@baylibre.com>
+Message-ID: <20210720214739.7086fb9b@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Thu, 27 May 2021 15:09:54 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+Hello Corentin,
 
-> Drop upstream patch.
+On Sun, 11 Jul 2021 20:27:29 +0000
+Corentin Labbe <clabbe@baylibre.com> wrote:
+
+> This WiFi/BT chip is used on some Allwinner based boards like BananaPI M3.
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...et_syscall_info-disable_ptrace_getre.patch | 33 -------------------
->  package/strace/strace.hash                    |  4 +--
->  package/strace/strace.mk                      |  2 +-
->  3 files changed, 3 insertions(+), 36 deletions(-)
->  delete mode 100644 package/strace/0001-disable_ptrace_get_syscall_info-disable_ptrace_getre.patch
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 
-Applied to master, thanks.
+Could you try to use ./brcm/brcmfmac43430-sdio.AP6212.txt from the
+official linux-firmware project instead ? (This might require an update
+to the Buildroot linux-firmware package, of course).
+
+The reason I'm suggesting this is that linux-firmware has some BCM43430
+firmware, and rpi-wifi-firmware also has some BCM43430, so if we can
+avoid adding a third way of getting the same firmware, it would be nice.
+
+Thanks a lot!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
+Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
