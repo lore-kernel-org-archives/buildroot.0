@@ -1,46 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 21:41:33 +0200
-Subject: [Buildroot] [git commit] package/optee-test: bump to version 3.13.0
-Message-ID: <20210720190744.DD3B688554@busybox.osuosl.org>
+Date: Tue, 20 Jul 2021 21:41:29 +0200
+Subject: [Buildroot] [git commit] package/optee-client: bump to version
+ 3.13.0
+Message-ID: <20210720190744.C3F6588554@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bc365862de301926e0bfc404ff70f856a7b51b1
+commit: https://git.buildroot.net/buildroot/commit/?id=5e590ede9447507aa99ba233ff71ae55f7c59f59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump OP-TEE Test package version to OP-TEE release 3.13.0.
+Bump OP-TEE Client package version to OP-TEE release 3.13.0.
+
+Remove patch since addressed in that release.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/optee-test/optee-test.hash | 4 ++--
- package/optee-test/optee-test.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-libckteec-add-missing-unistd.h-for-gid_t.patch | 31 ----------------------
+ package/optee-client/optee-client.hash             |  4 +--
+ package/optee-client/optee-client.mk               |  2 +-
+ 3 files changed, 3 insertions(+), 34 deletions(-)
 
-diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
-index 0c789e1cd1..39bd68532d 100644
---- a/package/optee-test/optee-test.hash
-+++ b/package/optee-test/optee-test.hash
+diff --git a/package/optee-client/0001-libckteec-add-missing-unistd.h-for-gid_t.patch b/package/optee-client/0001-libckteec-add-missing-unistd.h-for-gid_t.patch
+deleted file mode 100644
+index 534f1d3bee..0000000000
+--- a/package/optee-client/0001-libckteec-add-missing-unistd.h-for-gid_t.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 6b908687d37dc4e5c00df90058990da034506628 Mon Sep 17 00:00:00 2001
+-From: Etienne Carriere <etienne.carriere@linaro.org>
+-Date: Tue, 9 Mar 2021 11:52:32 +0100
+-Subject: [PATCH 1/1] libckteec: add missing <unistd.h> for gid_t
+-
+-Include missing unistd.h to support type gid_t. This change fixes [1].
+-
+-Link: [1] http://autobuild.buildroot.net/results/34b9946e6d59112a7eead304933534ad4739a84c/build-end.log
+-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+-Acked-by: Jerome Forissier <jerome@forissier.org>
+-[yann.morin.1998 at free.fr: actual backport now that upstream applied it]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+- libckteec/src/invoke_ta.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/libckteec/src/invoke_ta.c b/libckteec/src/invoke_ta.c
+-index 6236719..70575d0 100644
+---- a/libckteec/src/invoke_ta.c
+-+++ b/libckteec/src/invoke_ta.c
+-@@ -18,6 +18,7 @@
+- #include <sys/types.h>
+- #include <tee_client_api.h>
+- #include <teec_trace.h>
+-+#include <unistd.h>
+- 
+- #include "ck_helpers.h"
+- #include "invoke_ta.h"
+--- 
+-2.25.1
+-
+diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
+index 253c29e22a..5d14f1023c 100644
+--- a/package/optee-client/optee-client.hash
++++ b/package/optee-client/optee-client.hash
 @@ -1,4 +1,4 @@
--# From https://github.com/OP-TEE/optee_test/archive/3.12.0/optee-test-3.12.0.tar.gz
--sha256 beebdc98e95af2e7a20595f7d6ca716872efde1ec74a48ab07be599f21e8ad70  optee-test-3.12.0.tar.gz
-+# From https://github.com/OP-TEE/optee_test/archive/3.13.0/optee-test-3.13.0.tar.gz
-+sha256 4dda2a6b2f7667664cc3bc2578a90c1e60fef7e1c296b8fa8f317ba93302a652  optee-test-3.13.0.tar.gz
+-# From https://github.com/OP-TEE/optee_client/archive/3.12.0/optee-client-3.12.0.tar.gz
+-sha256 f75c45b40147217fa8f4a2ae1e4c06b24eb45d35167854fa9ad3ec3d6a73e858  optee-client-3.12.0.tar.gz
++# From https://github.com/OP-TEE/optee_client/archive/3.13.0/optee-client-3.13.0.tar.gz
++sha256 2ec6f05f833dce458f0358104e83e28e9a7643b81cfd96db32a7a1fadcc1e3af  optee-client-3.13.0.tar.gz
  # Locally computed
- sha256 6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
-diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
-index a2d18dadfc..ed6ec3fb39 100644
---- a/package/optee-test/optee-test.mk
-+++ b/package/optee-test/optee-test.mk
+ sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
+diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+index 22f205e407..b73e76775e 100644
+--- a/package/optee-client/optee-client.mk
++++ b/package/optee-client/optee-client.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPTEE_TEST_VERSION = 3.12.0
-+OPTEE_TEST_VERSION = 3.13.0
- OPTEE_TEST_SITE = $(call github,OP-TEE,optee_test,$(OPTEE_TEST_VERSION))
- OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
- OPTEE_TEST_LICENSE_FILES = LICENSE.md
+-OPTEE_CLIENT_VERSION = 3.12.0
++OPTEE_CLIENT_VERSION = 3.13.0
+ OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
+ OPTEE_CLIENT_LICENSE = BSD-2-Clause
+ OPTEE_CLIENT_LICENSE_FILES = LICENSE
