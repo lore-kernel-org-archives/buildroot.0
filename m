@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 22:41:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.6.6
-In-Reply-To: <20210701174729.82981-1-bernd.kuhls@t-online.de>
-References: <20210701174729.82981-1-bernd.kuhls@t-online.de>
-Message-ID: <20210720224103.6c2e71ca@windsurf>
+Date: Tue, 20 Jul 2021 22:41:38 +0200
+Subject: [Buildroot] [PATCH] package/lua-livr: bump to version 0.2.2
+In-Reply-To: <20210612214906.2876762-1-francois.perrad@gadz.org>
+References: <20210612214906.2876762-1-francois.perrad@gadz.org>
+Message-ID: <20210720224138.3d77e596@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Message-ID: <20210720204138.sZ10PVgBWF_udpC0v_zETorskA23MGavd9yHzLUihq0@z>
 
-On Thu,  1 Jul 2021 19:47:29 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Sat, 12 Jun 2021 23:49:05 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Release notes: https://blog.torproject.org/node/2046
+> diff COPYRIGHT:
+> - Copyright (C) 2018-2019 Francois Perrad.
+> + Copyright (C) 2018-2021 Francois Perrad.
 > 
-> Removed patch which was applied upstream.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  ...0002-Fix-compilation-on-systems-with.patch | 47 -------------------
->  package/tor/tor.hash                          |  2 +-
->  package/tor/tor.mk                            |  2 +-
->  3 files changed, 2 insertions(+), 49 deletions(-)
->  delete mode 100644 package/tor/0002-Fix-compilation-on-systems-with.patch
+>  package/lua-livr/lua-livr.hash | 4 ++--
+>  package/lua-livr/lua-livr.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
