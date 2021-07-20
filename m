@@ -1,25 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 22:38:52 +0200
-Subject: [Buildroot] [PATCH] package/libabseil-cpp: bump to version
- 20210324.2
-In-Reply-To: <20210705203444.33381-1-buildroot@heine.tech>
-References: <20210705203444.33381-1-buildroot@heine.tech>
-Message-ID: <20210720223852.2c48bb89@windsurf>
+Date: Tue, 20 Jul 2021 22:39:38 +0200
+Subject: [Buildroot] [PATCH] package/{protobuf,
+ python-protobuf}: bump to version 3.17.3
+In-Reply-To: <20210706072154.35222-1-buildroot@heine.tech>
+References: <20210706072154.35222-1-buildroot@heine.tech>
+Message-ID: <20210720223938.692f2e0e@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20210720203852.E3poHMb38778bmdN12wqxBWJK9NMySzWqyko47woRT0@z>
+Message-ID: <20210720203938.ao8Rjysm8oG2F8fuDC5ATxDyViqRuBuaDuu8_sxC0Kw@z>
 
-On Mon,  5 Jul 2021 22:34:40 +0200
+On Tue,  6 Jul 2021 09:21:50 +0200
 Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
 
 > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 > ---
->  package/libabseil-cpp/libabseil-cpp.hash | 2 +-
->  package/libabseil-cpp/libabseil-cpp.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/protobuf/protobuf.hash               | 2 +-
+>  package/protobuf/protobuf.mk                 | 2 +-
+>  package/python-protobuf/python-protobuf.hash | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
