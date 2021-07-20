@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B82F7C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:54:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22CA6C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:54:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7334361050
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:54:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7334361050
+	by mail.kernel.org (Postfix) with ESMTPS id D40E76105A
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:54:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D40E76105A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4DF7142389;
-	Tue,  3 Aug 2021 23:54:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B009860ADB;
+	Tue,  3 Aug 2021 23:54:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jnzlbiTvxbCK; Tue,  3 Aug 2021 23:54:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jw1nccpJhCef; Tue,  3 Aug 2021 23:54:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B76E042382;
-	Tue,  3 Aug 2021 23:54:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1116F60AC5;
+	Tue,  3 Aug 2021 23:54:25 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 43EAB1BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 797C81BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E11140F6E
+ by smtp2.osuosl.org (Postfix) with ESMTP id A5F6440F70
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y3zr_DR5IPZP for <buildroot@lists.busybox.net>;
+ with ESMTP id fa1fMffef3BU for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52E4340EE5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 808B440EE9
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9B86C8766C; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
+ id C99C78393C; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 20:28:35 +0200
+Date: Tue, 20 Jul 2021 21:25:30 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2352c827311aefbbd83459bfaf359dff8c0fa7df
-X-Git-Newrev: 28d198c0b876c34947988101c805ef1ecf215b9c
+X-Git-Oldrev: 360d1aad84449c6a1993d8c7e469dc0cd35339a2
+X-Git-Newrev: db6e5bf7d6774e52f93a3a8bed536200539f07dc
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211010.9B86C8766C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ripgrep: add
- RIPGREP_CPE_ID_VENDOR
+Message-Id: <20210803211010.C99C78393C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lua-lunix: fix build
+ with musl
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,32 +70,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28d198c0b876c34947988101c805ef1ecf215b9c
+commit: https://git.buildroot.net/buildroot/commit/?id=db6e5bf7d6774e52f93a3a8bed536200539f07dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:ripgrep_project:ripgrep is a valid CPE identifier for this
-package:
+see http://autobuild.buildroot.net/results/7d192a0a1d58d258b77906cf936949b2f47373cd/
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aripgrep_project%3Aripgrep
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ripgrep/ripgrep.mk | 1 +
- 1 file changed, 1 insertion(+)
+ .../lua-lunix/0002-remove-link-with-librt.patch    | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
-index c3c12fd185..2cc578383d 100644
---- a/package/ripgrep/ripgrep.mk
-+++ b/package/ripgrep/ripgrep.mk
-@@ -8,6 +8,7 @@ RIPGREP_VERSION = 0.8.1
- RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
- RIPGREP_LICENSE = MIT
- RIPGREP_LICENSE_FILES = LICENSE-MIT
-+RIPGREP_CPE_ID_VENDOR = ripgrep_project
- 
- RIPGREP_DEPENDENCIES = host-rustc
- RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+diff --git a/package/lua-lunix/0002-remove-link-with-librt.patch b/package/lua-lunix/0002-remove-link-with-librt.patch
+new file mode 100644
+index 0000000000..7b1c8ddd57
+--- /dev/null
++++ b/package/lua-lunix/0002-remove-link-with-librt.patch
+@@ -0,0 +1,36 @@
++From aeaff83b9ae42547b8728edac000f3d41d5e44aa Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Sat, 17 Jul 2021 13:21:38 +0200
++Subject: [PATCH] remove link with librt
++
++librt is not available with musl
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++---
++ lunix-rel-20170920/lunix-20170920-1.rockspec | 10 ----------
++ 1 file changed, 10 deletions(-)
++
++diff --git a/lunix-rel-20170920/lunix-20170920-1.rockspec b/lunix-rel-20170920/lunix-20170920-1.rockspec
++index 741179d..76cafeb 100644
++--- a/lunix-rel-20170920/lunix-20170920-1.rockspec
+++++ b/lunix-rel-20170920/lunix-20170920-1.rockspec
++@@ -26,16 +26,6 @@ build = {
++ 		};
++ 	};
++ 	platforms = {
++-		linux = {
++-			modules = {
++-				["unix"] = {
++-					libraries = {
++-						-- glibc <= 2.17 needs to link with librt
++-						"rt";
++-					};
++-				};
++-			};
++-		};
++ 		osx = {
++ 			modules = {
++ 				["unix"] = {
++-- 
++2.30.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
