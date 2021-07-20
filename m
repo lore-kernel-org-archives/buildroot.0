@@ -1,55 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 23:47:29 +0200
-Subject: [Buildroot] [PATCH] docs/manual/adding-packages-cargo.txt:
- re-add FOO_CARGO_MODE variable
-In-Reply-To: <2e60c4dc-6a6f-7124-c512-2b4495482f4c@green-sparklet.de>
-References: <2e60c4dc-6a6f-7124-c512-2b4495482f4c@green-sparklet.de>
-Message-ID: <20210720234729.04a7349c@windsurf>
+Date: Tue, 20 Jul 2021 23:47:58 +0200
+Subject: [Buildroot] [git commit] package/gerbera: bump to version 1.8.2
+Message-ID: <20210720211443.9639A87316@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20210720214729.WSEJAO5tlx79mTmq1uIQCREqU-YKgFAkMgtoim7AAc0@z>
 
-Hello Stefan,
+commit: https://git.buildroot.net/buildroot/commit/?id=d1a484a39547f307d799eaee9058bd75025e64da
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Jun 2021 15:55:54 +0200
-Stefan <buildroot-list_21@green-sparklet.de> wrote:
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gerbera/gerbera.hash | 2 +-
+ package/gerbera/gerbera.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> +16: FOO_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
-> +17:
-> +18: FOO_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(FOO_CARGO_MODE)
-> +19:
-> +20: FOO_CARGO_OPTS = \
-> +21:    $(if $(BR2_ENABLE_DEBUG),,--release) \
-> +22:    --target=$(RUSTC_TARGET_NAME) \
-> +23:    --manifest-path=$(@D)/Cargo.toml
-> +24:
-> +25: define FOO_BUILD_CMDS
-> +26:    $(TARGET_MAKE_ENV) $(FOO_CARGO_ENV) \
-> +27:            cargo build $(FOO_CARGO_OPTS)
-> +28: endef
-> +29:
-> +30: define FOO_INSTALL_TARGET_CMDS
-> +31:    $(INSTALL) -D -m 0755 $(@D)/$(FOO_BIN_DIR)/foo \
-> +32:            $(TARGET_DIR)/usr/bin/foo
-> +33: endef
-> +34:
-> +35: $(eval $(generic-package))
-
-Thanks for the patch. However, it seems like the only package that uses
-this currently is not formatted like you're suggesting. See
-package/ripgrep/ripgrep.mk. First, it uses BR2_ENABLE_RUNTIME_DEBUG
-instead of BR2_ENABLE_DEBUG, and it does it in a different way.
-
-Could you adjust the documentation according to what
-package/ripgrep/ripgrep.mk is doing ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
+index ab3dda917c..ed856bbf62 100644
+--- a/package/gerbera/gerbera.hash
++++ b/package/gerbera/gerbera.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  66f49ee30e53c36e08ce56a724f84bde8350001d3b9309f8e62a34f38446b619  gerbera-1.8.1.tar.gz
++sha256  b1e5591515f05a46de052ef4d95a2bb3387e96f565a5ce7abb6a77dbe581f09a  gerbera-1.8.2.tar.gz
+ sha256  cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6  LICENSE.md
+diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
+index 9627209d60..d6251912ac 100644
+--- a/package/gerbera/gerbera.mk
++++ b/package/gerbera/gerbera.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GERBERA_VERSION = 1.8.1
++GERBERA_VERSION = 1.8.2
+ GERBERA_SITE = $(call github,gerbera,gerbera,v$(GERBERA_VERSION))
+ GERBERA_LICENSE = GPL-2.0
+ GERBERA_LICENSE_FILES = LICENSE.md
