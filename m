@@ -1,46 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 20:25:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: DRI drivers need either
- glx, egl or gbm
-In-Reply-To: <20210720172911.15840-1-bernd.kuhls@t-online.de>
-References: <20210720172911.15840-1-bernd.kuhls@t-online.de>
-Message-ID: <20210720202545.74d835bd@windsurf>
+Date: Tue, 20 Jul 2021 20:22:55 +0200
+Subject: [Buildroot] [git commit] package/meson: bump to version 0.58.2
+Message-ID: <20210720175156.1B8AB884B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=b90237626c91301abff31a1c9f08a82b89319269
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 20 Jul 2021 19:29:11 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Fixes build error:
-> ../output-1/build/mesa3d-21.1.5/meson.build:520:4:
->  ERROR: Problem encountered: building dri drivers require at least one windowing system
-> 
-> OSMesa is not seen as a valid windowing system for DRI drivers anymore:
-> https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=21.1&id=ee802372180a2b4460cc7abb53438e45c6b6f1e4
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/46e3a66ddc13a064e512aad0f3afd8655889ab9d/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mesa3d/Config.in | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-
-Thanks for the patch. I'm always a bit confused with all these mesa3d
-possibilities. How does this patch fit with what you did in commit
-15a2f9b819806d38a7d8172a20f80130b1d60e63, where
-BR2_PACKAGE_MESA3D_OSMESA_CLASSIC was renamed
-BR2_PACKAGE_MESA3D_OSMESA_GALLIUM ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 252e56ba34..96ca379a25 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.57.2/meson-0.57.2.tar.gz.asc
+-sha256  3a83e7b1c5de94fa991ec34d9b198d94f38ed699d3524cb0fdf3b99fd23d4cc5  meson-0.57.2.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.58.2/meson-0.58.2.tar.gz.asc
++sha256  7634ec32955d3f897d623b88e9d2988451035f43d73c17a29caf767387baedb7  meson-0.58.2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 4b0f4fdeff..d093dc9fea 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESON_VERSION = 0.57.2
++MESON_VERSION = 0.58.2
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
