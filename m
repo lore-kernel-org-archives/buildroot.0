@@ -1,55 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Jul 2021 00:00:26 +0200
-Subject: [Buildroot] [PATCH v2 3/5] package/nginx-naxsi: bump version to
- 1.3
-In-Reply-To: <20210630173700.30975-4-aduskett@gmail.com>
-References: <20210630173700.30975-1-aduskett@gmail.com>
- <20210630173700.30975-4-aduskett@gmail.com>
-Message-ID: <20210721000026.010fd8e1@windsurf>
+Date: Wed, 21 Jul 2021 00:02:22 +0200
+Subject: [Buildroot] [git commit] package/bird: add SELinux module
+Message-ID: <20210720212820.4B034886E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hello Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=459d725db02febf10cde1d5cac9485c2fd0cfeec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-+Yann in Cc.
+Support for bird is added by the services/bird module in the SELinux
+refpolicy.
 
-On Wed, 30 Jun 2021 10:36:58 -0700
-Adam Duskett <aduskett@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/bird/bird.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> -NGINX_NAXSI_VERSION = 0.56
-> +NGINX_NAXSI_VERSION = 1.3
->  NGINX_NAXSI_SITE = $(call github,nbs-system,naxsi,$(NGINX_NAXSI_VERSION))
-> -NGINX_NAXSI_LICENSE = GPL-2.0+ with OpenSSL exception
-> -NGINX_NAXSI_LICENSE_FILES = naxsi_src/naxsi_json.c
-> +NGINX_NAXSI_LICENSE = GPL-3.0 BSD-3c
-
-This was not quite correct: it should be comma-separated, and the SPDX
-identifier for BSD-3c is BSD-3-Clause. So I changed this line to:
-
-NGINX_NAXSI_LICENSE = GPL-3.0, BSD-3-Clause (libinjection)
-
-> +NGINX_NAXSI_LICENSE_FILES = LICENSE naxsi_src/ext/libinjection/COPYING
-> +NGINX_NAXSI_DEPENDENCIES = pcre
-
-And also I think this new pcre dependency is not really correct. Yes,
-the Config.in files selects BR2_PACKAGE_PCRE, but it doesn't mean
-nginx-naxsi has a build dependency on pcre. In fact, nginx-naxsi
-doesn't build anything, it only downloads code, and it's really nginx
-that builds these external modules.
-
-This was already discussed in 2016 when Samuel Martin added the
-BR2_PACKAGE_PCRE select. See:
-
-  http://lists.busybox.net/pipermail/buildroot/2016-September/172028.html
-  http://lists.busybox.net/pipermail/buildroot/2016-September/172171.html
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/bird/bird.mk b/package/bird/bird.mk
+index b711e7de01..4d4dfe1dca 100644
+--- a/package/bird/bird.mk
++++ b/package/bird/bird.mk
+@@ -9,6 +9,7 @@ BIRD_SITE = ftp://bird.network.cz/pub/bird
+ BIRD_LICENSE = GPL-2.0+
+ BIRD_LICENSE_FILES = README
+ BIRD_CPE_ID_VENDOR = nic
++BIRD_SELINUX_MODULES = bird
+ BIRD_DEPENDENCIES = host-flex host-bison
+ 
+ ifeq ($(BR2_PACKAGE_BIRD_CLIENT),y)
