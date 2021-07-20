@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C232C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:14:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16F34C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:15:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 14B6761037
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:14:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 14B6761037
+	by mail.kernel.org (Postfix) with ESMTPS id A351860FA0
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:15:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A351860FA0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D55CA40626;
-	Wed,  4 Aug 2021 00:14:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7671883C64;
+	Wed,  4 Aug 2021 00:15:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fz0_gkBnrvEz; Wed,  4 Aug 2021 00:14:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sUJPvdUlO4z8; Wed,  4 Aug 2021 00:15:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C3EF4404E3;
-	Wed,  4 Aug 2021 00:14:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4F9983C56;
+	Wed,  4 Aug 2021 00:14:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8E9951BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 923341BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1C4040F00
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABFF840EFE
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kZEosniSViJM for <buildroot@lists.busybox.net>;
+ with ESMTP id a-Av1xrDqrmH for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A84DE40EFE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7C3A840EFF
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0667685583; Tue,  3 Aug 2021 21:10:12 +0000 (UTC)
+ id C5B3B878D7; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 22:39:13 +0200
+Date: Tue, 20 Jul 2021 22:36:31 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c6ac7df63f28a2d1ae78f5879d65881aa2bbe5e7
-X-Git-Newrev: 5c7dc93bff2caa2bb6fb009a285839417800bc7d
+X-Git-Oldrev: ee2b62859c11a109b2db97c6239b296267ec6910
+X-Git-Newrev: 5bbe5979a2e2e10bc5dfb31a6486eafdf9b15a75
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211012.0667685583@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/{protobuf,
- python-protobuf}: bump to version 3.17.3
+Message-Id: <20210803211011.C5B3B878D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-asn1crypto:
+ bump to version 1.4.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,48 +70,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c7dc93bff2caa2bb6fb009a285839417800bc7d
+commit: https://git.buildroot.net/buildroot/commit/?id=5bbe5979a2e2e10bc5dfb31a6486eafdf9b15a75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Update indentation in hash file (two spaces)
+
+https://github.com/wbond/asn1crypto/blob/1.4.0/changelog.md
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-asn1crypto/python-asn1crypto.hash | 6 +++---
+ package/python-asn1crypto/python-asn1crypto.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 6818b6f83a..2a65156cb3 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  84d30a78cae000be164ac6b973ee1dc0664669d63685dfbcf96f058c50456f19  protobuf-cpp-3.17.0.tar.gz
-+sha256  51cec99f108b83422b7af1170afd7aeb2dd77d2bcbb7b6bad1f92509e9ccf8cb  protobuf-cpp-3.17.3.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 7ba99d2c4b..492917c5e8 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 3.17.0
-+PROTOBUF_VERSION = 3.17.3
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index 3ed9de739a..8eca476884 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3011bfbc18d1c695ee393cb0dc1042282cfa33ef6573fe82732aefc9f7286121  protobuf-python-3.17.0.tar.gz
-+sha256  3253c6d17ec0bb6f6382e555cf5ca0a9ffab8d81b691f100f96ce9f5e753018e  protobuf-python-3.17.3.tar.gz
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/python-asn1crypto/python-asn1crypto.hash b/package/python-asn1crypto/python-asn1crypto.hash
+index b00474bdcd..fb2da94ed5 100644
+--- a/package/python-asn1crypto/python-asn1crypto.hash
++++ b/package/python-asn1crypto/python-asn1crypto.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/asn1crypto/json
+-md5	daad112940181917e3ff169b47b9bd9a  asn1crypto-1.3.0.tar.gz
+-sha256	5a215cb8dc12f892244e3a113fe05397ee23c5c4ca7a69cd6e69811755efc42d  asn1crypto-1.3.0.tar.gz
++md5  00bf5b72d37778e62cc73b1d8909ae27  asn1crypto-1.4.0.tar.gz
++sha256  f4f6e119474e58e04a2b1af817eb585b4fd72bdd89b998624712b5c99be7641c  asn1crypto-1.4.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	a88480656ec98943fb04344f6a477ee74062896f3ddb1a6f99e5f05f0109a286  LICENSE
++sha256  a88480656ec98943fb04344f6a477ee74062896f3ddb1a6f99e5f05f0109a286  LICENSE
+diff --git a/package/python-asn1crypto/python-asn1crypto.mk b/package/python-asn1crypto/python-asn1crypto.mk
+index 2d8d384cca..af4e43b3d0 100644
+--- a/package/python-asn1crypto/python-asn1crypto.mk
++++ b/package/python-asn1crypto/python-asn1crypto.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ASN1CRYPTO_VERSION = 1.3.0
++PYTHON_ASN1CRYPTO_VERSION = 1.4.0
+ PYTHON_ASN1CRYPTO_SOURCE = asn1crypto-$(PYTHON_ASN1CRYPTO_VERSION).tar.gz
+-PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/9f/3d/8beae739ed8c1c8f00ceac0ab6b0e97299b42da869e24cf82851b27a9123
++PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/6b/b4/42f0e52ac2184a8abb31f0a6f98111ceee1aac0b473cee063882436e0e09
+ PYTHON_ASN1CRYPTO_SETUP_TYPE = setuptools
+ PYTHON_ASN1CRYPTO_LICENSE = MIT
+ PYTHON_ASN1CRYPTO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
