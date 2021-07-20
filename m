@@ -2,56 +2,56 @@ Return-Path: <SRS0=PVMq=MM=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A9A9C07E95
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:39:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2057DC07E9B
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:39:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 06A4A60FD7
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:39:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 06A4A60FD7
+	by mail.kernel.org (Postfix) with ESMTPS id D4F6C6044F
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:39:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D4F6C6044F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CEB0C402BC;
-	Tue, 20 Jul 2021 21:39:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A26184022B;
+	Tue, 20 Jul 2021 21:39:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 84ts_xqfeg-g; Tue, 20 Jul 2021 21:39:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lDGKzGy7Q3mw; Tue, 20 Jul 2021 21:39:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 102114018D;
-	Tue, 20 Jul 2021 21:39:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D5874022E;
+	Tue, 20 Jul 2021 21:39:27 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 291B31BF3E9
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:38:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6005F1BF3E9
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:38:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1764F82F6C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 31A6C82D75
  for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:38:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X237KKWrA10F for <buildroot@lists.busybox.net>;
+ with ESMTP id GAQ6sCGRmlyn for <buildroot@lists.busybox.net>;
  Tue, 20 Jul 2021 21:38:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 57B7082D75
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6820082EBA
  for <buildroot@buildroot.org>; Tue, 20 Jul 2021 21:38:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E92148867D; Tue, 20 Jul 2021 21:04:08 +0000 (UTC)
+ id 074318867F; Tue, 20 Jul 2021 21:04:09 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 23:34:19 +0200
+Date: Tue, 20 Jul 2021 23:36:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fade40dfc36a2ca604f12add79013b047eae59fe
-X-Git-Newrev: f6628763eb302f15f861e0ce7bfc44b34b066bea
+X-Git-Oldrev: f6628763eb302f15f861e0ce7bfc44b34b066bea
+X-Git-Newrev: f00da714a20a7826dda67d66f2a6b6ef858ef3e3
 X-Patchwork-Hint: ignore
-Message-ID: <20210720210408.E92148867D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gumbo-parser: new package
+Message-ID: <20210720210409.074318867F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mupdf: bump to version 1.18.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,103 +64,124 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3362640586761549652=="
+Content-Type: multipart/mixed; boundary="===============0926209314684055471=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
-Message-ID: <20210720213419.c3G5fLdS_hOYySxMJ8Ne9rLuUsDFvihVJx9uaJef5ck@z>
+Message-ID: <20210720213658.WakaxF37smFl1JHfHgTTkIXOvp6GVy6fXYyyNRENVZo@z>
 
---===============3362640586761549652==
+--===============0926209314684055471==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6628763eb302f15f861e0ce7bfc44b34b066bea
+commit: https://git.buildroot.net/buildroot/commit/?id=f00da714a20a7826dda67d66f2a6b6ef858ef3e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Gumbo is an implementation of the HTML5 parsing algorithm implemented
-as a pure C99 library with no outside dependencies.
+It turns out the patch version of python-pymupdf doesn't have to match
+mupdf's version (i.e. python-pymupdf 1.18.14 is compatible with mupdf
+1.18.*) so remove the word "exactly" from the comment.
+
+mupdf now has a new dependency: gumbo-parser.
+
+gumbo-parser is included when downloading the sources for mupdf, but
+instead we use the version provided by Buildroot.
+
+While at it, take the chance to (based on previous review comments):
+
+- Fix indentation in the hash file (two spaces).
+- Switch to using the ".xz" archive.
+- Add a conditional on freeglut.
 
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/gumbo-parser/Config.in         | 10 ++++++++++
- package/gumbo-parser/gumbo-parser.hash |  5 +++++
- package/gumbo-parser/gumbo-parser.mk   | 14 ++++++++++++++
- 5 files changed, 31 insertions(+)
+ package/mupdf/Config.in  |  1 +
+ package/mupdf/mupdf.hash |  6 +++---
+ package/mupdf/mupdf.mk   | 16 ++++++++++------
+ 3 files changed, 14 insertions(+), 9 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1e1a30bac9..e77ceb2a95 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2255,6 +2255,7 @@ N:	Ramon Fried <rfried.dev@gmail.com>
- F:	package/bitwise/
+diff --git a/package/mupdf/Config.in b/package/mupdf/Config.in
+index dc296b3e8a..ff176f4b99 100644
+--- a/package/mupdf/Config.in
++++ b/package/mupdf/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_MUPDF
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_GUMBO_PARSER
+ 	select BR2_PACKAGE_HARFBUZZ
+ 	select BR2_PACKAGE_JBIG2DEC
+ 	select BR2_PACKAGE_JPEG
+diff --git a/package/mupdf/mupdf.hash b/package/mupdf/mupdf.hash
+index ec4893046d..934836e76a 100644
+--- a/package/mupdf/mupdf.hash
++++ b/package/mupdf/mupdf.hash
+@@ -1,8 +1,8 @@
+ # From https://mupdf.com/downloads/index.html:
+-sha1 18f069b7cc125e53f541163ac305c588c94dea97 mupdf-1.16.0-source.tar.gz
++sha1  fc17bd01d5860e49b009f28a5ddb629e94af4510  mupdf-1.18.0-source.tar.xz
  
- N:	Raphaël Mélotte <raphael.melotte@mind.be>
-+F:	package/gumbo-parser/
- F:	package/jbig2dec/
- F:	package/mupdf/
- F:	package/python-boto3/
-diff --git a/package/Config.in b/package/Config.in
-index de9378e11c..95ad1a29f7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1903,6 +1903,7 @@ menu "Other"
- 	source "package/gobject-introspection/Config.in"
- 	source "package/gsl/Config.in"
- 	source "package/gtest/Config.in"
-+	source "package/gumbo-parser/Config.in"
- 	source "package/jemalloc/Config.in"
- 	source "package/lapack/Config.in"
- 	source "package/libabseil-cpp/Config.in"
-diff --git a/package/gumbo-parser/Config.in b/package/gumbo-parser/Config.in
-new file mode 100644
-index 0000000000..04bb2294bb
---- /dev/null
-+++ b/package/gumbo-parser/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_GUMBO_PARSER
-+	bool "gumbo-parser"
-+	help
-+	  Gumbo is an implementation of the HTML5 parsing algorithm
-+	  implemented as a pure C99 library with no outside
-+	  dependencies. It's designed to serve as a building block for
-+	  other tools and libraries such as linters, validators,
-+	  templating languages, and refactoring and analysis tools.
-+
-+	  https://github.com/google/gumbo-parser
-diff --git a/package/gumbo-parser/gumbo-parser.hash b/package/gumbo-parser/gumbo-parser.hash
-new file mode 100644
-index 0000000000..c4af33072c
---- /dev/null
-+++ b/package/gumbo-parser/gumbo-parser.hash
-@@ -0,0 +1,5 @@
-+# Locally computed:
-+sha256  28463053d44a5dfbc4b77bcf49c8cee119338ffa636cc17fc3378421d714efad  gumbo-parser-0.10.1.tar.gz
-+
-+# Hash for license files:
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  COPYING
-diff --git a/package/gumbo-parser/gumbo-parser.mk b/package/gumbo-parser/gumbo-parser.mk
-new file mode 100644
-index 0000000000..aedc56cef1
---- /dev/null
-+++ b/package/gumbo-parser/gumbo-parser.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# gumbo-parser
-+#
-+################################################################################
-+
-+GUMBO_PARSER_VERSION = 0.10.1
-+GUMBO_PARSER_SITE = $(call github,google,gumbo-parser,v$(GUMBO_PARSER_VERSION))
-+GUMBO_PARSER_LICENSE = Apache-2.0
-+GUMBO_PARSER_LICENSE_FILES = COPYING
-+GUMBO_PARSER_INSTALL_STAGING = YES
-+GUMBO_PARSER_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
+ # Locally computed:
+-sha256 64d537895641b711737cc58fe762481b07ea71d1506e8bd8a13434e093b0068d  mupdf-1.16.0-source.tar.gz
++sha256 592d4f6c0fba41bb954eb1a41616661b62b134d5b383e33bd45a081af5d4a59a  mupdf-1.18.0-source.tar.xz
+ 
+ # Hash for license files:
+-sha256 57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  COPYING
++sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  COPYING
+diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
+index 78dacd214c..b481fb1eae 100644
+--- a/package/mupdf/mupdf.mk
++++ b/package/mupdf/mupdf.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-# python-pymupdf's version must match exactly mupdf's version
+-MUPDF_VERSION = 1.16.0
+-MUPDF_SOURCE = mupdf-$(MUPDF_VERSION)-source.tar.gz
++# python-pymupdf's version must match mupdf's version
++MUPDF_VERSION = 1.18.0
++MUPDF_SOURCE = mupdf-$(MUPDF_VERSION)-source.tar.xz
+ MUPDF_SITE = https://mupdf.com/downloads/archive
+ MUPDF_LICENSE = AGPL-3.0+
+ MUPDF_LICENSE_FILES = COPYING
+@@ -14,6 +14,7 @@ MUPDF_CPE_ID_VENDOR = artifex
+ MUPDF_INSTALL_STAGING = YES
+ MUPDF_DEPENDENCIES = \
+ 	freetype \
++	gumbo-parser \
+ 	harfbuzz \
+ 	host-pkgconf \
+ 	jbig2dec jpeg \
+@@ -21,8 +22,10 @@ MUPDF_DEPENDENCIES = \
+ 	xlib_libX11 \
+ 	zlib
+ 
++# The pkg-config name for gumbo-parser is `gumbo`.
+ MUPDF_PKG_CONFIG_PACKAGES = \
+ 	freetype2 \
++	gumbo \
+ 	harfbuzz \
+ 	libjpeg \
+ 	zlib
+@@ -43,13 +46,14 @@ MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
+ 	XLIBS="$(MUPDF_LDFLAGS)" \
+ 	USE_SYSTEM_LIBS=yes
+ 
+-# Modern versions of mupdf depend on OpenGL,
+-# we disable it because it may not be available:
++ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
++MUPDF_DEPENDENCIES += libfreeglut
++else
+ define MUPDF_DISABLE_OPENGL
+ 	sed -i 's/HAVE_GLUT := yes/HAVE_GLUT := no/g' $(@D)/Makerules
+ endef
+-
+ MUPDF_POST_PATCH_HOOKS = MUPDF_DISABLE_OPENGL
++endif
+ 
+ define MUPDF_BUILD_CMDS
+ 	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) all
 
---===============3362640586761549652==
+--===============0926209314684055471==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -171,4 +192,4 @@ buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
 
---===============3362640586761549652==--
+--===============0926209314684055471==--
