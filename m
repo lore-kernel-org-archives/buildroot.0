@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C401BC07E95
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:45:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FFB0C07E95
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:46:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8924860FF3
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:45:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8924860FF3
+	by mail.kernel.org (Postfix) with ESMTPS id C2A2760FEA
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:46:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C2A2760FEA
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C8B440302;
-	Tue, 20 Jul 2021 20:45:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D61C40498;
+	Tue, 20 Jul 2021 20:46:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iq3F1I-7wOQT; Tue, 20 Jul 2021 20:45:51 +0000 (UTC)
+	with ESMTP id c-QRuiAH9Qop; Tue, 20 Jul 2021 20:46:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6628440308;
-	Tue, 20 Jul 2021 20:45:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FAEF4047C;
+	Tue, 20 Jul 2021 20:46:03 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E06431BF45A
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:45:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 050981BF9B2
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:45:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DCAE96063F
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:45:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01F2B605CB
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:45:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C6zWC04VIX4x for <buildroot@lists.busybox.net>;
+ with ESMTP id 8mNVV5Kyw8Ip for <buildroot@lists.busybox.net>;
  Tue, 20 Jul 2021 20:45:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 31BBE605CB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4FF9260867
  for <buildroot@buildroot.org>; Tue, 20 Jul 2021 20:45:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id EC45288638; Tue, 20 Jul 2021 20:11:40 +0000 (UTC)
+ id 1AACB88638; Tue, 20 Jul 2021 20:11:41 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 22:41:27 +0200
+Date: Tue, 20 Jul 2021 22:42:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d0a7e2bf9c8a7897e13eaaf6584b29a65c13df1c
-X-Git-Newrev: 4cf1efb04add60e5dcb3eb4edd9156a84d3e11ec
+X-Git-Oldrev: 3d036d059bba931f55b982c1eeb11f364ef1dce4
+X-Git-Newrev: b0390d1ff164dd72fe3af3db357cdf49d7819706
 X-Patchwork-Hint: ignore
-Message-ID: <20210720201140.EC45288638@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua-livr: bump to version 0.2.2
+Message-ID: <20210720201141.1AACB88638@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{libuv,
+ uvw}: bump to versions 1.41.0, 2.9.0_libuv_v1.41
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,45 +69,67 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
-Message-ID: <20210720204127.MBSY0A661VylltpfTnWcOYG32o8v025QenNJ519-CbI@z>
+Message-ID: <20210720204209.NyrXFib8l8vcgoZb2V0c76feCyoPnYnfDzoKqYKodR8@z>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cf1efb04add60e5dcb3eb4edd9156a84d3e11ec
+commit: https://git.buildroot.net/buildroot/commit/?id=b0390d1ff164dd72fe3af3db357cdf49d7819706
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff COPYRIGHT:
-- Copyright (C) 2018-2019 Francois Perrad.
-+ Copyright (C) 2018-2021 Francois Perrad.
+LICENSE change: bump year 2020 to 2021.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua-livr/lua-livr.hash | 4 ++--
- package/lua-livr/lua-livr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ package/uvw/uvw.hash     | 4 ++--
+ package/uvw/uvw.mk       | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/lua-livr/lua-livr.hash b/package/lua-livr/lua-livr.hash
-index a891420b49..73b0fefa71 100644
---- a/package/lua-livr/lua-livr.hash
-+++ b/package/lua-livr/lua-livr.hash
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index c682affae7..042dd9dc34 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
 @@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 a3890301ed5f393b585cab26ac944eddc9df41bfa2ab87c11785925193453493  lua-livr-0.2.1-1.src.rock
--sha256 8f09089acf52cfabcc2a44ec3a492dc261e0ae9df3c618f43b33805e696e02d8  lua-LIVR-0.2.1/COPYRIGHT
-+sha256 e2f39316b8a1e66420c56e8ddc9ce4c0118c1a240582f2ba52d7627da6dfb76d  lua-livr-0.2.2-1.src.rock
-+sha256 69fd426251454ea43a8068e58ac25d882922372de6b22e249bb56e00ea2cd834  lua-LIVR-0.2.2/COPYRIGHT
-diff --git a/package/lua-livr/lua-livr.mk b/package/lua-livr/lua-livr.mk
-index 25034b897b..3f114c725e 100644
---- a/package/lua-livr/lua-livr.mk
-+++ b/package/lua-livr/lua-livr.mk
+ # Locally calculated
+-sha256  70fe1c9ba4f2c509e8166c0ca2351000237da573bb6c82092339207a9715ba6b  libuv-1.40.0.tar.gz
++sha256  6cfeb5f4bab271462b4a2cc77d4ecec847fdbdc26b72019c27ae21509e6f94fa  libuv-1.41.0.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 403a049037..d3c58d4dd4 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping libuv, check if a new version of uvw is available
+ # and bump it too.
+-LIBUV_VERSION = 1.40.0
++LIBUV_VERSION = 1.41.0
+ LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
+diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
+index ba8c7b893d..2aeb4732cd 100644
+--- a/package/uvw/uvw.hash
++++ b/package/uvw/uvw.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  aa5769f5b9ba50de72ab02a8f8acf298b4aa9ceaef07992418a13a0fa119ce7d  uvw-2.8.0_libuv_v1.40.tar.gz
+-sha256  755b2f245af22830c15b60c54469c0d92fbed42009b0d0074cec4b3959905757  LICENSE
++sha256  dd610cb1626b8a7779ed251584bcc0362fb98fcee13e699680f61828a1ba55de  uvw-2.9.0_libuv_v1.41.tar.gz
++sha256  5de32af2469480cf3261c9781962e0887366666ba8ee1f4a32c386c77fc50c88  LICENSE
+diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
+index f152d9f1cf..96375926d9 100644
+--- a/package/uvw/uvw.mk
++++ b/package/uvw/uvw.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_LIVR_VERSION = 0.2.1-1
-+LUA_LIVR_VERSION = 0.2.2-1
- LUA_LIVR_NAME_UPSTREAM = lua-LIVR
- LUA_LIVR_LICENSE = MIT
- LUA_LIVR_LICENSE_FILES = $(LUA_LIVR_SUBDIR)/COPYRIGHT
+-UVW_VERSION = 2.8.0_libuv_v1.40
++UVW_VERSION = 2.9.0_libuv_v1.41
+ UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
+ UVW_INSTALL_STAGING = YES
+ UVW_INSTALL_TARGET = NO
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
