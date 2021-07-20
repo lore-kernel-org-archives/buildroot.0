@@ -1,52 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 20 Jul 2021 23:08:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-ubjson: bump to version
- 0.16.1
-Message-ID: <20210720210801.90649-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue, 20 Jul 2021 23:09:05 +0200
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.67
+In-Reply-To: <20210720224443.24edcd0f@windsurf>
+References: <20210612173513.2253959-1-giulio.benetti@benettiengineering.com>
+ <20210720224443.24edcd0f@windsurf>
+Message-ID: <900065c9-8832-df20-35ac-ea69cbfe72e4@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Update indentation in hash file (two spaces)
+Hello Thomas,
 
-https://github.com/Iotic-Labs/py-ubjson/blob/v0.16.1/CHANGELOG
+On 7/20/21 10:44 PM, Thomas Petazzoni wrote:
+> Hello Giulio,
+> 
+> On Sat, 12 Jun 2021 19:35:13 +0200
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+>> Note: NSS 3.67(like NSS 3.66) requires NSPR 4.31.
+>> Release Notes (not yet available, but should eventually land):
+>> https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.67_release_notes
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> 
+> This patch doesn't apply in master: master has libnss 3.65, and your
+> patch assumes a code base that has libnss 3.66.
+> 
+> Also, according to your reply to this e-mail, libnspr 4.31 is needed as
+> a requirement for this bump of libnss, so you should always resend both
+> in a single series.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-ubjson/python-ubjson.hash | 6 +++---
- package/python-ubjson/python-ubjson.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Ah sorry, you're right.
 
-diff --git a/package/python-ubjson/python-ubjson.hash b/package/python-ubjson/python-ubjson.hash
-index a7e954ce5d..baf3ce7bdc 100644
---- a/package/python-ubjson/python-ubjson.hash
-+++ b/package/python-ubjson/python-ubjson.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/py-ubjson/json
--md5	26c07be8e4c9f2b0ee7c42a9aca118ed  py-ubjson-0.14.0.tar.gz
--sha256	f742c87bccc8653329d3f79b8b3f40d44d11d17cce7f6d7025a73c52ebf91c66  py-ubjson-0.14.0.tar.gz
-+md5  0f9f2b4d68ae8e70c6f624b1cdaca161  py-ubjson-0.16.1.tar.gz
-+sha256  b9bfb8695a1c7e3632e800fb83c943bf67ed45ddd87cd0344851610c69a5a482  py-ubjson-0.16.1.tar.gz
- # Locally computed sha256 checksums
--sha256	ca182abcb84ad9984c9af2e30cb70c4fe0e1772674355207e8fcdb85e8c5e75f  LICENSE
-+sha256  ca182abcb84ad9984c9af2e30cb70c4fe0e1772674355207e8fcdb85e8c5e75f  LICENSE
-diff --git a/package/python-ubjson/python-ubjson.mk b/package/python-ubjson/python-ubjson.mk
-index 58bba2ac74..93ab9dc139 100644
---- a/package/python-ubjson/python-ubjson.mk
-+++ b/package/python-ubjson/python-ubjson.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_UBJSON_VERSION = 0.14.0
-+PYTHON_UBJSON_VERSION = 0.16.1
- PYTHON_UBJSON_SOURCE = py-ubjson-$(PYTHON_UBJSON_VERSION).tar.gz
--PYTHON_UBJSON_SITE = https://files.pythonhosted.org/packages/10/31/0d8297c33d681aafa3fe900ca072a96d5acb97e79082fbb593e835376c93
-+PYTHON_UBJSON_SITE = https://files.pythonhosted.org/packages/1d/c7/28220d37e041fe1df03e857fe48f768dcd30cd151480bf6f00da8713214a
- PYTHON_UBJSON_LICENSE = Apache-2.0
- PYTHON_UBJSON_LICENSE_FILES = LICENSE
- PYTHON_UBJSON_SETUP_TYPE = setuptools
+> Could you resend the libnspr and libnss version bumps in a single patch
+> series, rebased on master ?
+
+
+Sure I can. Here there is a "problem" if we can call it that way. It's 
+from some month that they release very very fast. Now they are at NSS 
+3.68 and NSPR 4.32 [1], but very soon there will be version 3.69. Even 
+if I send version bumps, they will release another version before you 
+apply for sure. Let's see if it gets slower.
+They also stopped emitting the Release Notes that doesn't help[2].
+
+What can I do? Do I send the latest I see in the moment I bump and 
+that's it, right?
+
+[1]: https://hg.mozilla.org/projects/nss
+[2]: 
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Releases
+
+Best regards
 -- 
-2.30.2
+Giulio Benetti
+Benetti Engineering sas
