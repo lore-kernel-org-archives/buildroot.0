@@ -1,7 +1,7 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 20 Jul 2021 09:30:05 -0600
-Subject: [Buildroot] [PATCH 1/1] package/less: bump to version 590
-Message-ID: <20210720153005.314976-1-james.hilliard1@gmail.com>
+Date: Tue, 20 Jul 2021 10:08:25 -0600
+Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.58.2
+Message-ID: <20210720160825.2801974-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
@@ -10,35 +10,33 @@ Content-Transfer-Encoding: 7bit
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/less/less.hash | 4 ++--
- package/less/less.mk   | 2 +-
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/less/less.hash b/package/less/less.hash
-index e675569cd8..eed8340ec1 100644
---- a/package/less/less.hash
-+++ b/package/less/less.hash
-@@ -1,6 +1,6 @@
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 252e56ba34..96ca379a25 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
  # Locally calculated after checking pgp signature
- # using DSA key F153A7C833235259
--# http://www.greenwoodsoftware.com/less/less-563.sig
--sha256  ce5b6d2b9fc4442d7a07c93ab128d2dff2ce09a1d4f2d055b95cf28dd0dc9a9a  less-563.tar.gz
-+# http://www.greenwoodsoftware.com/less/less-590.sig
-+sha256  6aadf54be8bf57d0e2999a3c5d67b1de63808bb90deb8f77b028eafae3a08e10  less-590.tar.gz
- # Locally calculated
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/less/less.mk b/package/less/less.mk
-index a15bd25bec..7d7a6d5fe5 100644
---- a/package/less/less.mk
-+++ b/package/less/less.mk
+-# https://github.com/mesonbuild/meson/releases/download/0.57.2/meson-0.57.2.tar.gz.asc
+-sha256  3a83e7b1c5de94fa991ec34d9b198d94f38ed699d3524cb0fdf3b99fd23d4cc5  meson-0.57.2.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.58.2/meson-0.58.2.tar.gz.asc
++sha256  7634ec32955d3f897d623b88e9d2988451035f43d73c17a29caf767387baedb7  meson-0.58.2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 4b0f4fdeff..d093dc9fea 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LESS_VERSION = 563
-+LESS_VERSION = 590
- LESS_SITE = http://www.greenwoodsoftware.com/less
- LESS_LICENSE = GPL-3.0+
- LESS_LICENSE_FILES = COPYING
+-MESON_VERSION = 0.57.2
++MESON_VERSION = 0.58.2
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 -- 
 2.25.1
