@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9C05C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:55:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D118C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:55:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A6B6B61040
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:55:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A6B6B61040
+	by mail.kernel.org (Postfix) with ESMTPS id 5334861037
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:55:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5334861037
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7513F40539;
-	Tue,  3 Aug 2021 23:55:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E8C283E92;
+	Tue,  3 Aug 2021 23:55:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L5QbKcUvh_-s; Tue,  3 Aug 2021 23:55:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bjI5ow-Kof9c; Tue,  3 Aug 2021 23:55:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5370F4060B;
-	Tue,  3 Aug 2021 23:55:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 85FF883E5C;
+	Tue,  3 Aug 2021 23:55:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AB8871BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 469CA1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DCDE140EE8
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0EE2940EF2
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XwQ0k5_yYqtU for <buildroot@lists.busybox.net>;
+ with ESMTP id YRrRQWppFimT for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D5474022E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 733BA40EEE
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 847FE87059; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
+ id BDEC6878D7; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 20:26:45 +0200
+Date: Tue, 20 Jul 2021 21:24:35 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 804d3ef55e157e3e3e7de69295fb9ea1446b44da
-X-Git-Newrev: 6e4b8fe00f1b516630f109207c62ee0818db3000
+X-Git-Oldrev: f0d270ccfb0a9b486ea5907f6e86c5d9c07f93e2
+X-Git-Newrev: 360d1aad84449c6a1993d8c7e469dc0cd35339a2
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211010.847FE87059@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/systemd: disable
- urlify unless supported
+Message-Id: <20210803211010.BDEC6878D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/network-manager: bump
+ to version 1.32.2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,110 +70,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e4b8fe00f1b516630f109207c62ee0818db3000
+commit: https://git.buildroot.net/buildroot/commit/?id=360d1aad84449c6a1993d8c7e469dc0cd35339a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-The urlify feature in the systemd pager is only supported by the full
-less package and not busybox less, enable only for builds with full
-less support.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Add-meson-option-to-disable-urlify.patch  | 67 ++++++++++++++++++++++
- package/systemd/systemd.mk                         |  6 ++
- 2 files changed, 73 insertions(+)
+ package/network-manager/network-manager.hash | 6 +++---
+ package/network-manager/network-manager.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/systemd/0001-Add-meson-option-to-disable-urlify.patch b/package/systemd/0001-Add-meson-option-to-disable-urlify.patch
-new file mode 100644
-index 0000000000..b0a59a9f0f
---- /dev/null
-+++ b/package/systemd/0001-Add-meson-option-to-disable-urlify.patch
-@@ -0,0 +1,67 @@
-+From e5d86ebed5624ef62342c820a5868b1075deb300 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Sun, 11 Jul 2021 04:39:33 -0600
-+Subject: [PATCH] Add meson option to disable urlify.
-+
-+Useful for systems that don't use a version of less with hyperlink
-+support.
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1@gmail.com: backport from upstream commit
-+e5d86ebed5624ef62342c820a5868b1075deb300]
-+---
-+ meson.build               | 1 +
-+ meson_options.txt         | 2 ++
-+ src/shared/pretty-print.c | 4 ++++
-+ 3 files changed, 7 insertions(+)
-+
-+diff --git a/meson.build b/meson.build
-+index 5735cfc7ad..a2ee15bf32 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -278,6 +278,7 @@ conf.set_quoted('USER_PRESET_DIR',                            userpresetdir)
-+ conf.set_quoted('VENDOR_KEYRING_PATH',                        join_paths(rootlibexecdir, 'import-pubring.gpg'))
-+ 
-+ conf.set('ANSI_OK_COLOR',                                     'ANSI_' + get_option('ok-color').underscorify().to_upper())
-++conf.set10('ENABLE_URLIFY',                                   get_option('urlify'))
-+ conf.set10('ENABLE_FEXECVE',                                  get_option('fexecve'))
-+ conf.set10('MEMORY_ACCOUNTING_DEFAULT',                       memory_accounting_default)
-+ conf.set('STATUS_UNIT_FORMAT_DEFAULT',                        'STATUS_UNIT_FORMAT_' + status_unit_format_default.to_upper())
-+diff --git a/meson_options.txt b/meson_options.txt
-+index 163c8df87d..b60261ac24 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -444,6 +444,8 @@ option('ok-color', type : 'combo',
-+                   'highlight-cyan', 'highlight-white'],
-+        value : 'green',
-+        description: 'color of the "OK" status message')
-++option('urlify', type : 'boolean', value : 'true',
-++       description : 'enable pager Hyperlink ANSI sequence support')
-+ option('fexecve', type : 'boolean', value : 'false',
-+        description : 'use fexecve() to spawn children')
-+ 
-+diff --git a/src/shared/pretty-print.c b/src/shared/pretty-print.c
-+index 137ba77b3a..7983c0a33a 100644
-+--- a/src/shared/pretty-print.c
-++++ b/src/shared/pretty-print.c
-+@@ -19,6 +19,7 @@
-+ #include "util.h"
-+ 
-+ bool urlify_enabled(void) {
-++#if ENABLE_URLIFY
-+         static int cached_urlify_enabled = -1;
-+ 
-+         if (cached_urlify_enabled < 0) {
-+@@ -32,6 +33,9 @@ bool urlify_enabled(void) {
-+         }
-+ 
-+         return cached_urlify_enabled;
-++#else
-++        return 0;
-++#endif
-+ }
-+ 
-+ int terminal_urlify(const char *url, const char *text, char **ret) {
-+-- 
-+2.25.1
-+
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 5562703a89..03a5a5e4c8 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -59,6 +59,12 @@ else
- SYSTEMD_CONF_OPTS += -Dacl=false
- endif
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index aef06dde2c..6efd697af4 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,6 +1,6 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.22/NetworkManager-1.22.16.sha256sum
+-sha256  377aa053752eaa304b72c9906f9efcd9fbd5f7f6cb4cd4ad72425a68982cffc6  NetworkManager-1.22.16.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.32/NetworkManager-1.32.2.sha256sum
++sha256  701d511067f757d0f92f412c98cdb49a74a6ba69448aabb1beadacbc171e3873  NetworkManager-1.32.2.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+-sha256  f0543c137bc0eece552d42642d1bab31707ca3b3663d9c7a81ac3b270a4780e7  CONTRIBUTING
++sha256  65fd94885d3a5f468755e7cbe1334e56ef3a32b8a73980967fa9839c10514aa9  CONTRIBUTING.md
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 607c2b402b..fbd5b1c85c 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,15 +4,15 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LESS),y)
-+SYSTEMD_CONF_OPTS += -Durlify=true
-+else
-+SYSTEMD_CONF_OPTS += -Durlify=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
- SYSTEMD_DEPENDENCIES += libapparmor
- SYSTEMD_CONF_OPTS += -Dapparmor=true
+-NETWORK_MANAGER_VERSION_MAJOR = 1.22
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).16
++NETWORK_MANAGER_VERSION_MAJOR = 1.32
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
+ 	libgcrypt wireless_tools util-linux host-intltool readline libndp
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+-NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING
++NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING.md
+ NETWORK_MANAGER_CPE_ID_VENDOR = gnome
+ NETWORK_MANAGER_CPE_ID_PRODUCT = networkmanager
+ NETWORK_MANAGER_SELINUX_MODULES = networkmanager
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
