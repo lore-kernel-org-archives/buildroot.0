@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A949AC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:54:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B82F7C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:54:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 589A561037
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:54:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 589A561037
+	by mail.kernel.org (Postfix) with ESMTPS id 7334361050
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:54:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7334361050
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 352EB605D8;
-	Tue,  3 Aug 2021 23:54:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DF7142389;
+	Tue,  3 Aug 2021 23:54:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XRGi6KDRmIvs; Tue,  3 Aug 2021 23:54:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jnzlbiTvxbCK; Tue,  3 Aug 2021 23:54:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73CFE60591;
-	Tue,  3 Aug 2021 23:54:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B76E042382;
+	Tue,  3 Aug 2021 23:54:12 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 332691BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 43EAB1BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8FE3E40F6F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E11140F6E
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DHl29y__cdfu for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
+ with ESMTP id y3zr_DR5IPZP for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DB85D40608
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 52E4340EE5
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 2E5FE8766C; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
+ id 9B86C8766C; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 19 Jul 2021 23:32:36 +0200
+Date: Tue, 20 Jul 2021 20:28:35 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 63198aaa171a4da4587b3ea190809c0f509a1f56
-X-Git-Newrev: 9936af92c47cf191befecb667f4a977104baad5d
+X-Git-Oldrev: 2352c827311aefbbd83459bfaf359dff8c0fa7df
+X-Git-Newrev: 28d198c0b876c34947988101c805ef1ecf215b9c
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211010.2E5FE8766C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/imx7d-sdb: add
- extlinux.conf support
+Message-Id: <20210803211010.9B86C8766C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ripgrep: add
+ RIPGREP_CPE_ID_VENDOR
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,51 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9936af92c47cf191befecb667f4a977104baad5d
+commit: https://git.buildroot.net/buildroot/commit/?id=28d198c0b876c34947988101c805ef1ecf215b9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-imx7d-sdb has been converted to use disto boot in U-Boot.
+cpe:2.3:a:ripgrep_project:ripgrep is a valid CPE identifier for this
+package:
 
-Add extlinux.conf support so that the board can boot correctly.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aripgrep_project%3Aripgrep
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Reviewed-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/freescale/imx7dsdb/rootfs_overlay/boot/extlinux/extlinux.conf | 4 ++++
- configs/imx7d-sdb_defconfig                                         | 2 ++
- 2 files changed, 6 insertions(+)
+ package/ripgrep/ripgrep.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/freescale/imx7dsdb/rootfs_overlay/boot/extlinux/extlinux.conf b/board/freescale/imx7dsdb/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..d538b5d643
---- /dev/null
-+++ b/board/freescale/imx7dsdb/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+Label imx7d-sabresd-buildroot
-+  kernel /boot/zImage
-+  devicetree /boot/imx7d-sdb.dtb
-+  append root=PARTUUID=${uuid} rootwait rw console=${console},${baudrate}
-diff --git a/configs/imx7d-sdb_defconfig b/configs/imx7d-sdb_defconfig
-index 1a3494b4af..0c34f6e6df 100644
---- a/configs/imx7d-sdb_defconfig
-+++ b/configs/imx7d-sdb_defconfig
-@@ -17,6 +17,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index c3c12fd185..2cc578383d 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -8,6 +8,7 @@ RIPGREP_VERSION = 0.8.1
+ RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
+ RIPGREP_LICENSE = MIT
+ RIPGREP_LICENSE_FILES = LICENSE-MIT
++RIPGREP_CPE_ID_VENDOR = ripgrep_project
  
- # U-Boot
- BR2_TARGET_UBOOT=y
-@@ -26,6 +27,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
- BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
- 
- # Filesystem
-+BR2_ROOTFS_OVERLAY="board/freescale/imx7dsdb/rootfs_overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
+ RIPGREP_DEPENDENCIES = host-rustc
+ RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
