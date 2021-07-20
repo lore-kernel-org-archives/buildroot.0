@@ -1,28 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 21:30:59 +0200
-Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2021.07.0
-In-Reply-To: <20210720190242.489360-1-b.bilas@grinn-global.com>
-References: <20210720190242.489360-1-b.bilas@grinn-global.com>
-Message-ID: <20210720213059.120e92aa@windsurf>
+Date: Tue, 20 Jul 2021 21:41:28 +0200
+Subject: [Buildroot] [git commit] package/optee-benchmark: bump to version
+ 3.13.0
+Message-ID: <20210720190744.B674288555@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Tue, 20 Jul 2021 21:02:42 +0200
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2da43f20acbe84e55b6d6253d7fb127a0c5f0ae8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> ---
->  boot/barebox/Config.in    | 4 ++--
->  boot/barebox/barebox.hash | 6 +++---
->  2 files changed, 5 insertions(+), 5 deletions(-)
+Bump OP-TEE Benchmark package version to OP-TEE release 3.13.0.
 
-Applied to master, thanks.
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/optee-benchmark/optee-benchmark.hash | 4 ++--
+ package/optee-benchmark/optee-benchmark.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/optee-benchmark/optee-benchmark.hash b/package/optee-benchmark/optee-benchmark.hash
+index 144069b6f3..51f248462b 100644
+--- a/package/optee-benchmark/optee-benchmark.hash
++++ b/package/optee-benchmark/optee-benchmark.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/linaro-swg/optee_benchmark/archive/3.12.0/optee-benchmark-3.12.0.tar.gz
+-sha256 468635656fa483911cf605a96711d848f8e0f6b4a6137208226de364dee25fe4 optee-benchmark-3.12.0.tar.gz
++# From https://github.com/linaro-swg/optee_benchmark/archive/3.13.0/optee-benchmark-3.13.0.tar.gz
++sha256 58431b0d48c634dcb86d5e307df157a99256d4328a77a5099e0b1b3cd79e2968 optee-benchmark-3.13.0.tar.gz
+ # Locally computed
+ sha256 0571be5b739142dc3e40e0a4e7e30d4ab8bff0d4d606a3f2db2010745587d383  LICENSE
+diff --git a/package/optee-benchmark/optee-benchmark.mk b/package/optee-benchmark/optee-benchmark.mk
+index c17a7045d4..ce168def81 100644
+--- a/package/optee-benchmark/optee-benchmark.mk
++++ b/package/optee-benchmark/optee-benchmark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPTEE_BENCHMARK_VERSION = 3.12.0
++OPTEE_BENCHMARK_VERSION = 3.13.0
+ OPTEE_BENCHMARK_SITE = $(call github,linaro-swg,optee_benchmark,$(OPTEE_BENCHMARK_VERSION))
+ OPTEE_BENCHMARK_LICENSE = BSD-2-Clause
+ OPTEE_BENCHMARK_LICENSE_FILES = LICENSE
