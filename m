@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 23:48:02 +0200
-Subject: [Buildroot] [git commit] package/bluez-alsa: bump to version 3.1.0
-Message-ID: <20210720211443.A4C8C886BF@busybox.osuosl.org>
+Date: Tue, 20 Jul 2021 23:48:42 +0200
+Subject: [Buildroot] [git commit] package/cryptsetup: fix tmpfiles.d setup
+Message-ID: <20210720211443.B861B87316@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4041c230c18d3a9d82bfc6a96b2ceaabddbc94b
+commit: https://git.buildroot.net/buildroot/commit/?id=a2e93a802cbdbcd42b504c26596a076fbc4c86d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+The configure script uses pkg-config to detect the location of
+tmpfiles.d but imposes an unspecified ordering dependency with systemd.
+Instead of relying on systemd being built before cryptsetup, set the
+directory path explcitly, and ensure it is not set when systemd-tmpfiles
+is disabled.
+
+Signed-off-by: John Keeping <john@metanate.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bluez-alsa/bluez-alsa.hash | 2 +-
- package/bluez-alsa/bluez-alsa.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cryptsetup/cryptsetup.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/bluez-alsa/bluez-alsa.hash b/package/bluez-alsa/bluez-alsa.hash
-index 6be93bc045..f6e7294681 100644
---- a/package/bluez-alsa/bluez-alsa.hash
-+++ b/package/bluez-alsa/bluez-alsa.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256  8b9bc36be922c10c6628ddf84b13dfadfeb3ab0bcf72bad842c66f3120abc6b2  bluez-alsa-3.0.0.tar.gz
-+sha256  d9a878d9fd7f18842c9c8ed83bc96cab684753c90f2751d575a3cdd776ec78a5  bluez-alsa-3.1.0.tar.gz
- sha256  60253922a459245128c34eb379cbda7c76936636d4c10edc576663a0f560dd4d  LICENSE
-diff --git a/package/bluez-alsa/bluez-alsa.mk b/package/bluez-alsa/bluez-alsa.mk
-index 9262a7f66b..f81720f767 100644
---- a/package/bluez-alsa/bluez-alsa.mk
-+++ b/package/bluez-alsa/bluez-alsa.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index cd5883d0b4..b816dc2f22 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -33,6 +33,12 @@ else
+ CRYPTSETUP_CONF_OPTS += --with-crypto_backend=kernel
+ endif
  
--BLUEZ_ALSA_VERSION = 3.0.0
-+BLUEZ_ALSA_VERSION = 3.1.0
- BLUEZ_ALSA_SITE = $(call github,Arkq,bluez-alsa,v$(BLUEZ_ALSA_VERSION))
- BLUEZ_ALSA_LICENSE = MIT
- BLUEZ_ALSA_LICENSE_FILES = LICENSE
++ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
++CRYPTSETUP_CONF_OPTS += --with-tmpfilesdir=/usr/lib/tmpfiles.d
++else
++CRYPTSETUP_CONF_OPTS += --without-tmpfilesdir
++endif
++
+ HOST_CRYPTSETUP_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-lvm2 \
