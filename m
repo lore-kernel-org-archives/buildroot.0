@@ -1,73 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 20 Jul 2021 22:54:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/darkhttpd: fix build with gcc 4.8
-Message-ID: <20210720205408.84155-1-fontaine.fabrice@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 20 Jul 2021 15:01:00 -0600
+Subject: [Buildroot] [PATCH 1/1] package/systemd: bump to version 249.1
+Message-ID: <20210720210100.990403-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Fix the following build failure which is raised since bump to version
-0.13 in commit 88705a8c248e566f2c9ca71a8ee5353b33e368c2:
-
-darkhttpd.c:966:5: error: 'for' loop initial declarations are only allowed in C99 mode
-     for (int i = 0, j = 0; i < input_length;) {
-     ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/ffc/ffcb627c44d2b7202d641129b67af2dc7865c618/build-end.log
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...vars-outside-of-for-loop-for-std-c90.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch
+ package/systemd/systemd.hash | 2 +-
+ package/systemd/systemd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch b/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch
-new file mode 100644
-index 0000000000..7584bff98e
---- /dev/null
-+++ b/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch
-@@ -0,0 +1,39 @@
-+From 81b491e60affd67f4ec2feccbee1cdf98dc57b81 Mon Sep 17 00:00:00 2001
-+From: Emil Mikulic <emikulic@gmail.com>
-+Date: Sun, 21 Mar 2021 15:03:14 +1100
-+Subject: [PATCH] Declare vars outside of for() loop for -std=c90.
-+
-+Fixes #2.
-+
-+[Retrieved from:
-+https://github.com/emikulic/darkhttpd/commit/81b491e60affd67f4ec2feccbee1cdf98dc57b81]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ darkhttpd.c | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/darkhttpd.c b/darkhttpd.c
-+index 219a8a3..268628a 100644
-+--- a/darkhttpd.c
-++++ b/darkhttpd.c
-+@@ -966,8 +966,9 @@ static char *base64_encode(char *str) {
-+     char *encoded_data = malloc(output_length+1);
-+     if (encoded_data == NULL) return NULL;
-+ 
-+-    for (int i = 0, j = 0; i < input_length;) {
-+-
-++    int i;
-++    int j;
-++    for (i = 0, j = 0; i < input_length;) {
-+         uint32_t octet_a = i < input_length ? (unsigned char)str[i++] : 0;
-+         uint32_t octet_b = i < input_length ? (unsigned char)str[i++] : 0;
-+         uint32_t octet_c = i < input_length ? (unsigned char)str[i++] : 0;
-+@@ -981,7 +982,7 @@ static char *base64_encode(char *str) {
-+     }
-+ 
-+     const int mod_table[] = {0, 2, 1};
-+-    for (int i = 0; i < mod_table[input_length % 3]; i++)
-++    for (i = 0; i < mod_table[input_length % 3]; i++)
-+         encoded_data[output_length - 1 - i] = '=';
-+     encoded_data[output_length] = '\0';
-+ 
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 82741d1996..b419dce445 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256  0d9d45140e95f2d0ee79005ccf867f2706976c30391b932a8c3b9b198a801fad  systemd-249.tar.gz
++sha256  69ca802ff87e316a216f4bf5e5fd787dd9810c8c8c5076917ee817e52bd6c3a9  systemd-249.1.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+ sha256  f5645b4b846479859d6618fa7a5a1722681aa7fc43c1e45f8bf8e1fe5738d618  README
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 03a5a5e4c8..8bfd407f81 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSTEMD_VERSION = 249
++SYSTEMD_VERSION = 249.1
+ SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
 -- 
-2.30.2
+2.25.1
