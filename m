@@ -1,30 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 21:30:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gupnp-av: bump to version 0.13.0
-In-Reply-To: <20210719214327.3940036-1-fontaine.fabrice@gmail.com>
-References: <20210719214327.3940036-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210720213016.47682036@windsurf>
+Date: Tue, 20 Jul 2021 21:30:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rpi-firmware: bump to version
+ 33e09977ff3b02967d191801e3361224455acb9d
+In-Reply-To: <20210720015810.3718225-1-james.hilliard1@gmail.com>
+References: <20210720015810.3718225-1-james.hilliard1@gmail.com>
+Message-ID: <20210720213026.00ff2b80@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Mon, 19 Jul 2021 23:43:27 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 19 Jul 2021 19:58:10 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> - License is LGPL-2.1+ since
->   https://gitlab.gnome.org/GNOME/gupnp-av/-/commit/f0ff740c735bff04bb0235eb9ac57172461b71d5
-> - Update indentation in hash file (two spaces)
-> - Switch to meson-package
-> 
-> https://gitlab.gnome.org/GNOME/gupnp-av/-/blob/gupnp-av-0.13.0/NEWS
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/gupnp-av/gupnp-av.hash |  6 +++---
->  package/gupnp-av/gupnp-av.mk   | 14 +++++++-------
->  2 files changed, 10 insertions(+), 10 deletions(-)
+>  package/rpi-firmware/rpi-firmware.hash | 2 +-
+>  package/rpi-firmware/rpi-firmware.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
