@@ -6,55 +6,56 @@ X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B50B3C07E95
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:48:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6B85C07E9B
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:47:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6A29E61004
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:48:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6A29E61004
+	by mail.kernel.org (Postfix) with ESMTPS id 5ECF360E0C
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:47:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5ECF360E0C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F37682B81;
-	Tue, 20 Jul 2021 20:48:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2549E4018D;
+	Tue, 20 Jul 2021 21:47:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HYLw3ZU85UfJ; Tue, 20 Jul 2021 20:48:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OJJveE6RoPD5; Tue, 20 Jul 2021 21:47:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC7D682B49;
-	Tue, 20 Jul 2021 20:48:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6B62F401C8;
+	Tue, 20 Jul 2021 21:47:38 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 33E921BF45A
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:48:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 300FD1BF9B2
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:47:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2387282B49
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:48:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2051181AF4
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:47:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kuP6ZkRZSzxI for <buildroot@lists.busybox.net>;
- Tue, 20 Jul 2021 20:48:09 +0000 (UTC)
+ with ESMTP id OgRWWw8Qs7Wk for <buildroot@lists.busybox.net>;
+ Tue, 20 Jul 2021 21:47:33 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 26DFE829FD
- for <buildroot@busybox.net>; Tue, 20 Jul 2021 20:48:08 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2CF7881801
+ for <buildroot@busybox.net>; Tue, 20 Jul 2021 21:47:32 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 505AD20006;
- Tue, 20 Jul 2021 20:48:07 +0000 (UTC)
-Date: Tue, 20 Jul 2021 22:48:06 +0200
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id F3D69E0008;
+ Tue, 20 Jul 2021 21:47:30 +0000 (UTC)
+Date: Tue, 20 Jul 2021 23:47:29 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Patricia Holden <pholden@nklabs.com>
-Message-ID: <20210720224806.09e5a5b2@windsurf>
-In-Reply-To: <CAJ6EmCd=eJUrY5Qa_SyJd5mVRq0bKtmuQTB-j1HF1bXXZpZn3g@mail.gmail.com>
-References: <CAJ6EmCd=eJUrY5Qa_SyJd5mVRq0bKtmuQTB-j1HF1bXXZpZn3g@mail.gmail.com>
+To: Stefan <buildroot-list_21@green-sparklet.de>
+Message-ID: <20210720234729.04a7349c@windsurf>
+In-Reply-To: <2e60c4dc-6a6f-7124-c512-2b4495482f4c@green-sparklet.de>
+References: <2e60c4dc-6a6f-7124-c512-2b4495482f4c@green-sparklet.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] Question about pkg-config pc files
+Subject: Re: [Buildroot] [PATCH] docs/manual/adding-packages-cargo.txt:
+ re-add FOO_CARGO_MODE variable
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,29 +67,47 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot@busybox.net
+Cc: buildroot@busybox.net, Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hello Patricia,
+Hello Stefan,
 
-On Tue, 20 Jul 2021 16:41:40 -0400
-Patricia Holden <pholden@nklabs.com> wrote:
+On Tue, 15 Jun 2021 15:55:54 +0200
+Stefan <buildroot-list_21@green-sparklet.de> wrote:
 
-> I am adding a package that has dependencies on QT pkg-config pc files.  I
-> see the pkg-config pc files in
-> output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/share/pkgconfig/, but
-> I don't see any pkg-config files installed to target.  the QQmlApplication
-> code is trying to include multiple qt packages but they are not found.
-> Running "pkg-config --list-all" results in none found at all.
-> 
-> How do I get pkg-config pc files installed to the target?
+> +16: FOO_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
+> +17:
+> +18: FOO_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(FOO_CARGO_MODE)
+> +19:
+> +20: FOO_CARGO_OPTS = \
+> +21:    $(if $(BR2_ENABLE_DEBUG),,--release) \
+> +22:    --target=$(RUSTC_TARGET_NAME) \
+> +23:    --manifest-path=$(@D)/Cargo.toml
+> +24:
+> +25: define FOO_BUILD_CMDS
+> +26:    $(TARGET_MAKE_ENV) $(FOO_CARGO_ENV) \
+> +27:            cargo build $(FOO_CARGO_OPTS)
+> +28: endef
+> +29:
+> +30: define FOO_INSTALL_TARGET_CMDS
+> +31:    $(INSTALL) -D -m 0755 $(@D)/$(FOO_BIN_DIR)/foo \
+> +32:            $(TARGET_DIR)/usr/bin/foo
+> +33: endef
+> +34:
+> +35: $(eval $(generic-package))
 
-You don't: Buildroot doesn't support doing development on the target.
-Why would you need .pc files on the target ? Is QQmlApplication using
-pkg-config at run-time on the target ?
+Thanks for the patch. However, it seems like the only package that uses
+this currently is not formatted like you're suggesting. See
+package/ripgrep/ripgrep.mk. First, it uses BR2_ENABLE_RUNTIME_DEBUG
+instead of BR2_ENABLE_DEBUG, and it does it in a different way.
+
+Could you adjust the documentation according to what
+package/ripgrep/ripgrep.mk is doing ?
+
+Thanks a lot!
 
 Thomas
 -- 
