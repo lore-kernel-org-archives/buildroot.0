@@ -2,60 +2,56 @@ Return-Path: <SRS0=PVMq=MM=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=unavailable
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B07B8C07E95
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:44:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C401BC07E95
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:45:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7B16360FEA
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:44:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7B16360FEA
+	by mail.kernel.org (Postfix) with ESMTPS id 8924860FF3
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:45:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8924860FF3
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4DE6A6069A;
-	Tue, 20 Jul 2021 20:44:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C8B440302;
+	Tue, 20 Jul 2021 20:45:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KJ6Y1dviHytL; Tue, 20 Jul 2021 20:44:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iq3F1I-7wOQT; Tue, 20 Jul 2021 20:45:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B0F896062E;
-	Tue, 20 Jul 2021 20:44:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6628440308;
+	Tue, 20 Jul 2021 20:45:50 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7E9B91BF45A
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:44:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E06431BF45A
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:45:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6DF9A6062E
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:44:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DCAE96063F
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:45:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6dQyaZAtRG5R for <buildroot@lists.busybox.net>;
- Tue, 20 Jul 2021 20:44:47 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6BE5C605CB
- for <buildroot@buildroot.org>; Tue, 20 Jul 2021 20:44:47 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id F417CFF802;
- Tue, 20 Jul 2021 20:44:44 +0000 (UTC)
-Date: Tue, 20 Jul 2021 22:44:43 +0200
+ with ESMTP id C6zWC04VIX4x for <buildroot@lists.busybox.net>;
+ Tue, 20 Jul 2021 20:45:48 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 31BBE605CB
+ for <buildroot@buildroot.org>; Tue, 20 Jul 2021 20:45:48 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id EC45288638; Tue, 20 Jul 2021 20:11:40 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20210720224443.24edcd0f@windsurf>
-In-Reply-To: <20210612173513.2253959-1-giulio.benetti@benettiengineering.com>
-References: <20210612173513.2253959-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/libnss: bump version to 3.67
+To: buildroot@buildroot.org
+Date: Tue, 20 Jul 2021 22:41:27 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d0a7e2bf9c8a7897e13eaaf6584b29a65c13df1c
+X-Git-Newrev: 4cf1efb04add60e5dcb3eb4edd9156a84d3e11ec
+X-Patchwork-Hint: ignore
+Message-ID: <20210720201140.EC45288638@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-livr: bump to version 0.2.2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,41 +63,50 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
-Message-ID: <20210720204443.Y3CKXSPWofERzP9dYnJvv5FUu3cWY4hXpOY3rmFUy50@z>
+Message-ID: <20210720204127.MBSY0A661VylltpfTnWcOYG32o8v025QenNJ519-CbI@z>
 
-Hello Giulio,
+commit: https://git.buildroot.net/buildroot/commit/?id=4cf1efb04add60e5dcb3eb4edd9156a84d3e11ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 12 Jun 2021 19:35:13 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+diff COPYRIGHT:
+- Copyright (C) 2018-2019 Francois Perrad.
++ Copyright (C) 2018-2021 Francois Perrad.
 
-> Note: NSS 3.67(like NSS 3.66) requires NSPR 4.31.
-> Release Notes (not yet available, but should eventually land):
-> https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.67_release_notes
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lua-livr/lua-livr.hash | 4 ++--
+ package/lua-livr/lua-livr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-This patch doesn't apply in master: master has libnss 3.65, and your
-patch assumes a code base that has libnss 3.66.
-
-Also, according to your reply to this e-mail, libnspr 4.31 is needed as
-a requirement for this bump of libnss, so you should always resend both
-in a single series.
-
-Could you resend the libnspr and libnss version bumps in a single patch
-series, rebased on master ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lua-livr/lua-livr.hash b/package/lua-livr/lua-livr.hash
+index a891420b49..73b0fefa71 100644
+--- a/package/lua-livr/lua-livr.hash
++++ b/package/lua-livr/lua-livr.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 a3890301ed5f393b585cab26ac944eddc9df41bfa2ab87c11785925193453493  lua-livr-0.2.1-1.src.rock
+-sha256 8f09089acf52cfabcc2a44ec3a492dc261e0ae9df3c618f43b33805e696e02d8  lua-LIVR-0.2.1/COPYRIGHT
++sha256 e2f39316b8a1e66420c56e8ddc9ce4c0118c1a240582f2ba52d7627da6dfb76d  lua-livr-0.2.2-1.src.rock
++sha256 69fd426251454ea43a8068e58ac25d882922372de6b22e249bb56e00ea2cd834  lua-LIVR-0.2.2/COPYRIGHT
+diff --git a/package/lua-livr/lua-livr.mk b/package/lua-livr/lua-livr.mk
+index 25034b897b..3f114c725e 100644
+--- a/package/lua-livr/lua-livr.mk
++++ b/package/lua-livr/lua-livr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_LIVR_VERSION = 0.2.1-1
++LUA_LIVR_VERSION = 0.2.2-1
+ LUA_LIVR_NAME_UPSTREAM = lua-LIVR
+ LUA_LIVR_LICENSE = MIT
+ LUA_LIVR_LICENSE_FILES = $(LUA_LIVR_SUBDIR)/COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
