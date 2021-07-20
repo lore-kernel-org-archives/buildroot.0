@@ -1,47 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 22:41:27 +0200
-Subject: [Buildroot] [git commit] package/lua-livr: bump to version 0.2.2
-Message-ID: <20210720201140.EC45288638@busybox.osuosl.org>
+Date: Tue, 20 Jul 2021 22:42:09 +0200
+Subject: [Buildroot] [git commit] package/{libuv,
+ uvw}: bump to versions 1.41.0, 2.9.0_libuv_v1.41
+Message-ID: <20210720201141.1AACB88638@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cf1efb04add60e5dcb3eb4edd9156a84d3e11ec
+commit: https://git.buildroot.net/buildroot/commit/?id=b0390d1ff164dd72fe3af3db357cdf49d7819706
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff COPYRIGHT:
-- Copyright (C) 2018-2019 Francois Perrad.
-+ Copyright (C) 2018-2021 Francois Perrad.
+LICENSE change: bump year 2020 to 2021.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua-livr/lua-livr.hash | 4 ++--
- package/lua-livr/lua-livr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ package/uvw/uvw.hash     | 4 ++--
+ package/uvw/uvw.mk       | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/lua-livr/lua-livr.hash b/package/lua-livr/lua-livr.hash
-index a891420b49..73b0fefa71 100644
---- a/package/lua-livr/lua-livr.hash
-+++ b/package/lua-livr/lua-livr.hash
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index c682affae7..042dd9dc34 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
 @@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 a3890301ed5f393b585cab26ac944eddc9df41bfa2ab87c11785925193453493  lua-livr-0.2.1-1.src.rock
--sha256 8f09089acf52cfabcc2a44ec3a492dc261e0ae9df3c618f43b33805e696e02d8  lua-LIVR-0.2.1/COPYRIGHT
-+sha256 e2f39316b8a1e66420c56e8ddc9ce4c0118c1a240582f2ba52d7627da6dfb76d  lua-livr-0.2.2-1.src.rock
-+sha256 69fd426251454ea43a8068e58ac25d882922372de6b22e249bb56e00ea2cd834  lua-LIVR-0.2.2/COPYRIGHT
-diff --git a/package/lua-livr/lua-livr.mk b/package/lua-livr/lua-livr.mk
-index 25034b897b..3f114c725e 100644
---- a/package/lua-livr/lua-livr.mk
-+++ b/package/lua-livr/lua-livr.mk
+ # Locally calculated
+-sha256  70fe1c9ba4f2c509e8166c0ca2351000237da573bb6c82092339207a9715ba6b  libuv-1.40.0.tar.gz
++sha256  6cfeb5f4bab271462b4a2cc77d4ecec847fdbdc26b72019c27ae21509e6f94fa  libuv-1.41.0.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 403a049037..d3c58d4dd4 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping libuv, check if a new version of uvw is available
+ # and bump it too.
+-LIBUV_VERSION = 1.40.0
++LIBUV_VERSION = 1.41.0
+ LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
+diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
+index ba8c7b893d..2aeb4732cd 100644
+--- a/package/uvw/uvw.hash
++++ b/package/uvw/uvw.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  aa5769f5b9ba50de72ab02a8f8acf298b4aa9ceaef07992418a13a0fa119ce7d  uvw-2.8.0_libuv_v1.40.tar.gz
+-sha256  755b2f245af22830c15b60c54469c0d92fbed42009b0d0074cec4b3959905757  LICENSE
++sha256  dd610cb1626b8a7779ed251584bcc0362fb98fcee13e699680f61828a1ba55de  uvw-2.9.0_libuv_v1.41.tar.gz
++sha256  5de32af2469480cf3261c9781962e0887366666ba8ee1f4a32c386c77fc50c88  LICENSE
+diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
+index f152d9f1cf..96375926d9 100644
+--- a/package/uvw/uvw.mk
++++ b/package/uvw/uvw.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_LIVR_VERSION = 0.2.1-1
-+LUA_LIVR_VERSION = 0.2.2-1
- LUA_LIVR_NAME_UPSTREAM = lua-LIVR
- LUA_LIVR_LICENSE = MIT
- LUA_LIVR_LICENSE_FILES = $(LUA_LIVR_SUBDIR)/COPYRIGHT
+-UVW_VERSION = 2.8.0_libuv_v1.40
++UVW_VERSION = 2.9.0_libuv_v1.41
+ UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
+ UVW_INSTALL_STAGING = YES
+ UVW_INSTALL_TARGET = NO
