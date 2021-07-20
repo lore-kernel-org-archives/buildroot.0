@@ -1,33 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 23:49:28 +0200
-Subject: [Buildroot] [PATCH] package/cryptsetup: fix tmpfiles.d setup
-In-Reply-To: <20210614104210.2100899-1-john@metanate.com>
-References: <20210614104210.2100899-1-john@metanate.com>
-Message-ID: <20210720234928.514f384f@windsurf>
+Date: Tue, 20 Jul 2021 23:51:13 +0200
+Subject: [Buildroot] [git commit] package/nginx: add stream_set_module
+ support
+Message-ID: <20210720212230.971B1886E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Mon, 14 Jun 2021 11:42:10 +0100
-John Keeping <john@metanate.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ec2e4722be8cbf2f18964070f1d34baa0362485b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The configure script uses pkg-config to detect the location of
-> tmpfiles.d but imposes an unspecified ordering dependency with systemd.
-> Instead of relying on systemd being built before cryptsetup, set the
-> directory path explcitly, and ensure it is not set when systemd-tmpfiles
-> is disabled.
-> 
-> Signed-off-by: John Keeping <john@metanate.com>
-> ---
->  package/cryptsetup/cryptsetup.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+This is a new module in 1.20
 
-Applied to master, thanks.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/nginx/Config.in | 6 ++++++
+ package/nginx/nginx.mk  | 4 ++++
+ 2 files changed, 10 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index 6ae790a949..1200b2bf4c 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -339,6 +339,12 @@ config BR2_PACKAGE_NGINX_STREAM_REALIP_MODULE
+ 	help
+ 	  Enable ngx_stream_realip_module
+ 
++config BR2_PACKAGE_NGINX_STREAM_SET_MODULE
++	bool "ngx_stream_set_module"
++	default y
++	help
++	  Enable ngx_stream_set_module
++
+ config BR2_PACKAGE_NGINX_STREAM_SSL_MODULE
+ 	bool "ngx_stream_ssl_module"
+ 	select BR2_PACKAGE_OPENSSL
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 36515e67cc..1f996cc613 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -232,6 +232,10 @@ ifeq ($(BR2_PACKAGE_NGINX_STREAM_REALIP_MODULE),y)
+ NGINX_CONF_OPTS += --with-stream_realip_module
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NGINX_STREAM_SET_MODULE),)
++NGINX_CONF_OPTS += --without-stream_set_module
++endif
++
+ ifeq ($(BR2_PACKAGE_NGINX_STREAM_SSL_MODULE),y)
+ NGINX_DEPENDENCIES += openssl
+ NGINX_CONF_OPTS += --with-stream_ssl_module
