@@ -1,45 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 23:39:50 +0200
-Subject: [Buildroot] [PATCH 2/4] package/gumbo-parser: new package
-In-Reply-To: <20210630234717.21742-2-raphael.melotte@mind.be>
+Date: Tue, 20 Jul 2021 23:40:55 +0200
+Subject: [Buildroot] [PATCH 3/4] package/mupdf: bump to version 1.18.0
+In-Reply-To: <20210630234717.21742-3-raphael.melotte@mind.be>
 References: <20210630234717.21742-1-raphael.melotte@mind.be>
- <20210630234717.21742-2-raphael.melotte@mind.be>
-Message-ID: <20210720233950.29752fd1@windsurf>
+ <20210630234717.21742-3-raphael.melotte@mind.be>
+Message-ID: <20210720234055.14967287@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hello,
+Hello Rapha?l,
 
-On Thu,  1 Jul 2021 01:47:14 +0200
+On Thu,  1 Jul 2021 01:47:15 +0200
 Rapha?l M?lotte <raphael.melotte@mind.be> wrote:
 
-> Gumbo is an implementation of the HTML5 parsing algorithm implemented
-> as a pure C99 library with no outside dependencies.
-> 
-> Signed-off-by: Rapha?l M?lotte <raphael.melotte@mind.be>
+> diff --git a/package/mupdf/Config.in b/package/mupdf/Config.in
+> index dc296b3e8a..f796965751 100644
+> --- a/package/mupdf/Config.in
+> +++ b/package/mupdf/Config.in
+> @@ -10,6 +10,7 @@ config BR2_PACKAGE_MUPDF
+>  	select BR2_PACKAGE_JPEG
+>  	select BR2_PACKAGE_LCMS2
+>  	select BR2_PACKAGE_OPENJPEG
+> +	select BR2_PACKAGE_GUMBO_PARSER
 
-I've applied, with one important change, see below.
+I fixed the alphabetic ordering here.
 
-> +GUMBO_PARSER_VERSION = 0.10.1
-> +GUMBO_PARSER_SITE = $(call github,google,gumbo-parser,v$(GUMBO_PARSER_VERSION))
-> +GUMBO_PARSER_LICENSE = Apache-2.0
-> +GUMBO_PARSER_LICENSE_FILES = COPYING
-> +GUMBO_PARSER_INSTALL_STAGING = YES
-> +
-> +define GUMBO_PARSER_RUN_AUTOGEN
-> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-> +endef
-> +GUMBO_PARSER_PRE_CONFIGURE_HOOKS += GUMBO_PARSER_RUN_AUTOGEN
+> -# Modern versions of mupdf depend on OpenGL,
+> -# we disable it because it may not be available:
+> +ifneq ($(BR2_PACKAGE_FREEGLUT),y)
 
-This is not good, as it doesn't add autoconf/automake to the
-dependencies of the package. So I've replaced with:
+And here fixed the option name (it's BR2_PACKAGE_LIBFREEGLUT) and
+switched to positive logic, i.e:
 
-GUMBO_PARSER_AUTORECONF = YES
+ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
+... do stuff if enabled
+else
+... do stuff if disabled
+endif
 
-which does work.
+Applied with those changes.
 
 Thanks!
 
