@@ -1,158 +1,52 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 20 Jul 2021 23:01:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcap: fix build with gcc 4.8
-Message-ID: <20210720210134.90010-1-fontaine.fabrice@gmail.com>
+Date: Tue, 20 Jul 2021 23:08:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-ubjson: bump to version
+ 0.16.1
+Message-ID: <20210720210801.90649-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Fix the following build failure with gcc 4.8 which is raised since bump
-to version 2.51 in commit bef89e381d0d698053a026d6a8cb0ded260bd074:
+Update indentation in hash file (two spaces)
 
-uns_test.c: In function 'main':
-uns_test.c:118:5: error: 'for' loop initial declarations are only allowed in C99 mode
-     for (int i=0; i<2; i++) {
-     ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/9e67bdd540bb7779a13e27c55114a561c12b289a
+https://github.com/Iotic-Labs/py-ubjson/blob/v0.16.1/CHANGELOG
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...0001-Permit-compilation-with-std-c89.patch | 123 ++++++++++++++++++
- 1 file changed, 123 insertions(+)
- create mode 100644 package/libcap/0001-Permit-compilation-with-std-c89.patch
+ package/python-ubjson/python-ubjson.hash | 6 +++---
+ package/python-ubjson/python-ubjson.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libcap/0001-Permit-compilation-with-std-c89.patch b/package/libcap/0001-Permit-compilation-with-std-c89.patch
-new file mode 100644
-index 0000000000..0219f09f52
---- /dev/null
-+++ b/package/libcap/0001-Permit-compilation-with-std-c89.patch
-@@ -0,0 +1,123 @@
-+From 06ec53d0c9fcddcc071a0e07731e6c83238400e6 Mon Sep 17 00:00:00 2001
-+From: "Andrew G. Morgan" <morgan@kernel.org>
-+Date: Mon, 21 Jun 2021 17:46:43 -0700
-+Subject: Permit compilation with -std=c89.
-+
-+Tested with
-+
-+  make COPTS="-O2 -std=c89" clean all test sudotest
-+
-+This addresses the issue reported by Byron Stanoszek:
-+
-+  https://bugzilla.kernel.org/show_bug.cgi?id=213541
-+
-+Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
-+
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/?id=06ec53d0c9fcddcc071a0e07731e6c83238400e6]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Makefile                   | 1 +
-+ libcap/cap_test.c          | 1 +
-+ psx/psx.c                  | 2 +-
-+ tests/exploit.c            | 9 +++++++--
-+ tests/libcap_launch_test.c | 6 +++---
-+ tests/uns_test.c           | 3 ++-
-+ 6 files changed, 15 insertions(+), 7 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 9666bf0..984d502 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -68,6 +68,7 @@ endif
-+ distcheck:
-+ 	./distcheck.sh
-+ 	$(MAKE) DYNAMIC=yes clean all test sudotest
-++	$(MAKE) DYNAMIC=no COPTS="-O2 -std=c89" clean all test sudotest
-+ 	$(MAKE) PAM_CAP=no CC=/usr/local/musl/bin/musl-gcc clean all test sudotest
-+ 	$(MAKE) clean all test sudotest
-+ 	$(MAKE) distclean
-+diff --git a/libcap/cap_test.c b/libcap/cap_test.c
-+index c9e83de..a717217 100644
-+--- a/libcap/cap_test.c
-++++ b/libcap/cap_test.c
-+@@ -79,4 +79,5 @@ int main(int argc, char **argv) {
-+ 	exit(1);
-+     }
-+     printf("cap_test PASS\n");
-++    exit(0);
-+ }
-+diff --git a/psx/psx.c b/psx/psx.c
-+index 12dbbc5..90dcc50 100644
-+--- a/psx/psx.c
-++++ b/psx/psx.c
-+@@ -229,7 +229,7 @@ static void psx_syscall_start(void) {
-+     psx_tracker.psx_sig = SIGSYS;
-+ 
-+     psx_confirm_sigaction();
-+-    psx_do_registration(); // register the main thread.
-++    psx_do_registration(); /* register the main thread. */
-+ 
-+     psx_tracker.initialized = 1;
-+ }
-+diff --git a/tests/exploit.c b/tests/exploit.c
-+index 28bac88..814337c 100644
-+--- a/tests/exploit.c
-++++ b/tests/exploit.c
-+@@ -16,6 +16,10 @@
-+  * to execute arbitrary code. As such, if all but one thread drops
-+  * privilege, privilege escalation is somewhat trivial.
-+  */
-++
-++/* as per "man sigaction" */
-++#define _POSIX_C_SOURCE 200809L
-++
-+ #include <pthread.h>
-+ #include <signal.h>
-+ #include <stdio.h>
-+@@ -148,7 +152,8 @@ int main(int argc, char **argv) {
-+     if (greatest_len != 1) {
-+ 	printf("exploit succeeded\n");
-+ 	exit(1);
-+-    } else {
-+-	printf("exploit failed\n");
-+     }
-++
-++    printf("exploit failed\n");
-++    exit(0);
-+ }
-+diff --git a/tests/libcap_launch_test.c b/tests/libcap_launch_test.c
-+index 6cbfc43..5286979 100644
-+--- a/tests/libcap_launch_test.c
-++++ b/tests/libcap_launch_test.c
-+@@ -199,10 +199,10 @@ int main(int argc, char **argv) {
-+     cap_free(final);
-+     cap_free(orig);
-+ 
-+-    if (success) {
-+-	printf("cap_launch_test: PASSED\n");
-+-    } else {
-++    if (!success) {
-+ 	printf("cap_launch_test: FAILED\n");
-+ 	exit(1);
-+     }
-++    printf("cap_launch_test: PASSED\n");
-++    exit(0);
-+ }
-+diff --git a/tests/uns_test.c b/tests/uns_test.c
-+index 41aa0a6..d8f5415 100644
-+--- a/tests/uns_test.c
-++++ b/tests/uns_test.c
-+@@ -115,7 +115,8 @@ int main(int argc, char **argv)
-+     }
-+     close(fds.from[0]);
-+ 
-+-    for (int i=0; i<2; i++) {
-++    int i;
-++    for (i=0; i<2; i++) {
-+ 	char *map_file;
-+ 	if (asprintf(&map_file, file_formats[i], pid) < 0) {
-+ 	    perror("allocate string");
-+-- 
-+cgit 1.2.3-1.el7
-+
+diff --git a/package/python-ubjson/python-ubjson.hash b/package/python-ubjson/python-ubjson.hash
+index a7e954ce5d..baf3ce7bdc 100644
+--- a/package/python-ubjson/python-ubjson.hash
++++ b/package/python-ubjson/python-ubjson.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/py-ubjson/json
+-md5	26c07be8e4c9f2b0ee7c42a9aca118ed  py-ubjson-0.14.0.tar.gz
+-sha256	f742c87bccc8653329d3f79b8b3f40d44d11d17cce7f6d7025a73c52ebf91c66  py-ubjson-0.14.0.tar.gz
++md5  0f9f2b4d68ae8e70c6f624b1cdaca161  py-ubjson-0.16.1.tar.gz
++sha256  b9bfb8695a1c7e3632e800fb83c943bf67ed45ddd87cd0344851610c69a5a482  py-ubjson-0.16.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	ca182abcb84ad9984c9af2e30cb70c4fe0e1772674355207e8fcdb85e8c5e75f  LICENSE
++sha256  ca182abcb84ad9984c9af2e30cb70c4fe0e1772674355207e8fcdb85e8c5e75f  LICENSE
+diff --git a/package/python-ubjson/python-ubjson.mk b/package/python-ubjson/python-ubjson.mk
+index 58bba2ac74..93ab9dc139 100644
+--- a/package/python-ubjson/python-ubjson.mk
++++ b/package/python-ubjson/python-ubjson.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_UBJSON_VERSION = 0.14.0
++PYTHON_UBJSON_VERSION = 0.16.1
+ PYTHON_UBJSON_SOURCE = py-ubjson-$(PYTHON_UBJSON_VERSION).tar.gz
+-PYTHON_UBJSON_SITE = https://files.pythonhosted.org/packages/10/31/0d8297c33d681aafa3fe900ca072a96d5acb97e79082fbb593e835376c93
++PYTHON_UBJSON_SITE = https://files.pythonhosted.org/packages/1d/c7/28220d37e041fe1df03e857fe48f768dcd30cd151480bf6f00da8713214a
+ PYTHON_UBJSON_LICENSE = Apache-2.0
+ PYTHON_UBJSON_LICENSE_FILES = LICENSE
+ PYTHON_UBJSON_SETUP_TYPE = setuptools
 -- 
 2.30.2
