@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46557C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:58:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E904C432BE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:58:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 14F0260F94
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:58:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 14F0260F94
+	by mail.kernel.org (Postfix) with ESMTPS id E67D56103C
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:58:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E67D56103C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DBF27405A0;
-	Tue,  3 Aug 2021 23:58:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF90E83EC0;
+	Tue,  3 Aug 2021 23:58:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WXOXUlsTN5OU; Tue,  3 Aug 2021 23:58:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bVmKC5y5kMUr; Tue,  3 Aug 2021 23:58:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E60D0405F6;
-	Tue,  3 Aug 2021 23:58:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2488D83DEC;
+	Tue,  3 Aug 2021 23:58:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7769A1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 87F821BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 73B2040F84
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F31040F88
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HfdDHV9iEFXa for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
+ with ESMTP id SfnvlHBlD7YW for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A52040E8D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9265740E94
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id BB45485583; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
+ id E3418878D7; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 22:35:33 +0200
+Date: Tue, 20 Jul 2021 22:38:30 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 82a5ffca28250bb7e474a85fad3904539539bdc8
-X-Git-Newrev: ee2b62859c11a109b2db97c6239b296267ec6910
+X-Git-Oldrev: ee95ae7821119a749a9881404abd744c8d92504a
+X-Git-Newrev: 5f09fcbc63b8767e10b75075f64cfa5325e4c96f
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211011.BB45485583@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/granite: bump to
- version 6.0.0
+Message-Id: <20210803211011.E3418878D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/re2: bump version to
+ 2021-06-01
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,123 +70,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee2b62859c11a109b2db97c6239b296267ec6910
+commit: https://git.buildroot.net/buildroot/commit/?id=5f09fcbc63b8767e10b75075f64cfa5325e4c96f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop patch (already in version)
-
-https://github.com/elementary/granite/releases/tag/6.0.0
-https://github.com/elementary/granite/releases/tag/5.5.0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-meson-add-introspection-option.patch      | 73 ----------------------
- package/granite/granite.hash                       |  2 +-
- package/granite/granite.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 75 deletions(-)
+ package/re2/re2.hash | 2 +-
+ package/re2/re2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/granite/0001-meson-add-introspection-option.patch b/package/granite/0001-meson-add-introspection-option.patch
-deleted file mode 100644
-index 4b32fb13c3..0000000000
---- a/package/granite/0001-meson-add-introspection-option.patch
-+++ /dev/null
-@@ -1,73 +0,0 @@
--From 4d5ddcdb9c03d4e829fe7080e497a00f0b379eff Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 14 Jun 2020 17:33:31 +0200
--Subject: [PATCH] meson: add introspection option
--
--This will allow the user to build granite without gobject-introspection
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/elementary/granite/pull/410]
-----
-- lib/meson.build   | 38 ++++++++++++++++++++------------------
-- meson_options.txt |  1 +
-- 2 files changed, 21 insertions(+), 18 deletions(-)
--
--diff --git a/lib/meson.build b/lib/meson.build
--index a9fc4ed4..770feeb5 100644
----- a/lib/meson.build
--+++ b/lib/meson.build
--@@ -98,24 +98,26 @@ install_data(
--     install_dir: include_dir
-- )
-- 
---# typelib generation isn't automated yet
---g_ir_compiler = find_program('g-ir-compiler')
---custom_target(
---    granite_typelib,
---    command: [
---        g_ir_compiler,
---        '--shared-library',
---        '@PLAINNAME@',
---        '--output',
---        '@OUTPUT@',
---        join_paths(meson.current_build_dir(), granite_gir),
---    ],
---    input: libgranite,
---    output: granite_typelib,
---    depends: libgranite,
---    install: true,
---    install_dir: join_paths(get_option('libdir'), 'girepository-1.0'),
---)
--+if get_option('introspection')
--+    # typelib generation isn't automated yet
--+    g_ir_compiler = find_program('g-ir-compiler')
--+    custom_target(
--+        granite_typelib,
--+        command: [
--+            g_ir_compiler,
--+            '--shared-library',
--+            '@PLAINNAME@',
--+            '--output',
--+            '@OUTPUT@',
--+            join_paths(meson.current_build_dir(), granite_gir),
--+        ],
--+        input: libgranite,
--+        output: granite_typelib,
--+        depends: libgranite,
--+        install: true,
--+        install_dir: join_paths(get_option('libdir'), 'girepository-1.0'),
--+    )
--+endif
-- 
-- libgranite_dep = declare_dependency(
--     link_with: libgranite,
--diff --git a/meson_options.txt b/meson_options.txt
--index 9d9f62e9..bd1a1d6f 100644
----- a/meson_options.txt
--+++ b/meson_options.txt
--@@ -1 +1,2 @@
-- option('documentation', type: 'boolean', value: false, description: 'generate documentation with gtk-doc and valadoc')
--+option('introspection', type: 'boolean', value: true, description: 'Whether to build introspection files')
---- 
--2.26.2
--
-diff --git a/package/granite/granite.hash b/package/granite/granite.hash
-index 5378b30cba..a91f468b49 100644
---- a/package/granite/granite.hash
-+++ b/package/granite/granite.hash
+diff --git a/package/re2/re2.hash b/package/re2/re2.hash
+index a2ed659b64..abe8a4bbea 100644
+--- a/package/re2/re2.hash
++++ b/package/re2/re2.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  8194031cac3b87d84a3fab9c30270485ce73f8b8ec23f26c9152b6859c8a18fd  granite-5.4.0.tar.gz
-+sha256  c62d8d29e8bb59a5fa2d9006a9c13196aea9159410a7c86e3d51fa10d0f9dcc0  granite-6.0.0.tar.gz
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
-diff --git a/package/granite/granite.mk b/package/granite/granite.mk
-index 037113f715..71dfbf4c03 100644
---- a/package/granite/granite.mk
-+++ b/package/granite/granite.mk
+ # locally calculated
+-sha256  1396ab50c06c1a8885fb68bf49a5ecfd989163015fd96699a180d6414937f33f  re2-2021-02-02.tar.gz
++sha256  26155e050b10b5969e986dab35654247a3b1b295e0532880b5a9c13c0a700ceb  re2-2021-06-01.tar.gz
+ sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
+diff --git a/package/re2/re2.mk b/package/re2/re2.mk
+index 028079cb55..f6772a10dd 100644
+--- a/package/re2/re2.mk
++++ b/package/re2/re2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GRANITE_VERSION = 5.4.0
-+GRANITE_VERSION = 6.0.0
- GRANITE_SITE = $(call github,elementary,granite,$(GRANITE_VERSION))
- GRANITE_DEPENDENCIES = \
- 	host-pkgconf \
+-RE2_VERSION = 2021-02-02
++RE2_VERSION = 2021-06-01
+ RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
+ RE2_LICENSE = BSD-3-Clause
+ RE2_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
