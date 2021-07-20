@@ -1,51 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 23:40:59 +0200
-Subject: [Buildroot] [PATCH 4/4] package/python-pymupdf: bump to version
- 1.18.14
-In-Reply-To: <20210630234717.21742-4-raphael.melotte@mind.be>
-References: <20210630234717.21742-1-raphael.melotte@mind.be>
- <20210630234717.21742-4-raphael.melotte@mind.be>
-Message-ID: <20210720234059.4dac4c16@windsurf>
+Date: Tue, 20 Jul 2021 23:41:52 +0200
+Subject: [Buildroot] [git commit] package/linux-firmware: use official
+ tarball
+Message-ID: <20210720210839.6E04E886A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Thu,  1 Jul 2021 01:47:16 +0200
-Rapha?l M?lotte <raphael.melotte@mind.be> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=482270e2948043f32eba11399bf405aae1adfb13
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Recent tarballs from PyPI use setuptools instead of distutils, so
-> change `PYTHON_PYMUPDF_SETUP_TYPE`.
-> 
-> They also include a license file, so include it and a hash for it.
-> 
-> This version also has a new dependency: freetype2.
-> 
-> PYTHON_PYMUPDF_REMOVE_PATHS is updated to take the new dependency into
-> account, but also the sed command are changed to delete include lines
-> instead of turning them into empty strings. Indeed, empty include
-> strings lead to using multiple `-I` flags which were not followed by
-> anything. Depending on the number of empty include strings (because
-> two successive `-I` "cancel" each other out), it would have failed to
-> compile.
-> 
-> Also, it turns out the patch version of python-pymupdf doesn't have to
-> match mupdf's version (e.g. python-pymupdf 1.18.14 is compatible with
-> mupdf 1.18.*) so while at it, remove the word "exactly" from the
-> comment.
-> 
-> Signed-off-by: Rapha?l M?lotte <raphael.melotte@mind.be>
-> ---
->  package/python-pymupdf/Config.in           |  1 +
->  package/python-pymupdf/python-pymupdf.hash |  6 ++++--
->  package/python-pymupdf/python-pymupdf.mk   | 19 +++++++++++--------
->  3 files changed, 16 insertions(+), 10 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-firmware/linux-firmware.hash | 6 ++++--
+ package/linux-firmware/linux-firmware.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 22d6ddf88f..41a17b021e 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,5 +1,7 @@
+-# Locally calculated
+-sha256  4341b33c64afd8e471de06f1459f63a76445b1ea83055fe3d4103dfb2e1b25ec  linux-firmware-20210511-br1.tar.gz
++# From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
++sha256  2aa6ae8b9808408f9811ac38f00c188e53e984a2b3990254f6c9c02c1ab13417  linux-firmware-20210511.tar.xz
++
++# Hash for license files
+ sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
+ sha256  8d5847d2971241d4d6a51c16e206379de53a6d4e203fa6f8e1c1e9279c7c4ad0  LICENSE.amdgpu
+ sha256  2d6062d63b91eb750bf741498691604f75184b9fee97608ec537cd09bd6a42b4  LICENCE.Marvell
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 69b1226cca..f29d9cf65d 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ LINUX_FIRMWARE_VERSION = 20210511
+-LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+-LINUX_FIRMWARE_SITE_METHOD = git
++LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
++LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+ LINUX_FIRMWARE_INSTALL_IMAGES = YES
+ 
+ LINUX_FIRMWARE_CPE_ID_VENDOR = kernel
