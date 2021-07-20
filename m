@@ -1,63 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 21:25:30 +0200
-Subject: [Buildroot] [git commit] package/lua-lunix: fix build with musl
-Message-ID: <20210720185133.C1D5A884FE@busybox.osuosl.org>
+Date: Tue, 20 Jul 2021 21:24:16 +0200
+Subject: [Buildroot] [PATCH] board/olimex/a20_olinuxino: switch to
+ extlinux.conf
+In-Reply-To: <20210720043607.2325813-1-francois.perrad@gadz.org>
+References: <20210720043607.2325813-1-francois.perrad@gadz.org>
+Message-ID: <20210720212416.6945ef95@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db6e5bf7d6774e52f93a3a8bed536200539f07dc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 20 Jul 2021 06:36:07 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-see http://autobuild.buildroot.net/results/7d192a0a1d58d258b77906cf936949b2f47373cd/
+> a10_olinuxino is not switched, so broken links are replaced by the previous content
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  board/olimex/a10_olinuxino/boot.cmd                         | 6 +++++-
+>  board/olimex/a10_olinuxino/post-build.sh                    | 4 +++-
+>  board/olimex/a20_olinuxino/boot.cmd                         | 5 -----
+>  board/olimex/a20_olinuxino/post-build.sh                    | 3 ---
+>  .../rootfs_overlay/boot/extlinux/extlinux.conf              | 4 ++++
+>  configs/olimex_a20_olinuxino_lime2_defconfig                | 4 +---
+>  configs/olimex_a20_olinuxino_lime_defconfig                 | 4 +---
+>  7 files changed, 14 insertions(+), 16 deletions(-)
+>  mode change 120000 => 100644 board/olimex/a10_olinuxino/boot.cmd
+>  mode change 120000 => 100755 board/olimex/a10_olinuxino/post-build.sh
+>  delete mode 100644 board/olimex/a20_olinuxino/boot.cmd
+>  delete mode 100755 board/olimex/a20_olinuxino/post-build.sh
+>  create mode 100644 board/olimex/a20_olinuxino/rootfs_overlay/boot/extlinux/extlinux.conf
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../lua-lunix/0002-remove-link-with-librt.patch    | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/lua-lunix/0002-remove-link-with-librt.patch b/package/lua-lunix/0002-remove-link-with-librt.patch
-new file mode 100644
-index 0000000000..7b1c8ddd57
---- /dev/null
-+++ b/package/lua-lunix/0002-remove-link-with-librt.patch
-@@ -0,0 +1,36 @@
-+From aeaff83b9ae42547b8728edac000f3d41d5e44aa Mon Sep 17 00:00:00 2001
-+From: Francois Perrad <francois.perrad@gadz.org>
-+Date: Sat, 17 Jul 2021 13:21:38 +0200
-+Subject: [PATCH] remove link with librt
-+
-+librt is not available with musl
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+---
-+ lunix-rel-20170920/lunix-20170920-1.rockspec | 10 ----------
-+ 1 file changed, 10 deletions(-)
-+
-+diff --git a/lunix-rel-20170920/lunix-20170920-1.rockspec b/lunix-rel-20170920/lunix-20170920-1.rockspec
-+index 741179d..76cafeb 100644
-+--- a/lunix-rel-20170920/lunix-20170920-1.rockspec
-++++ b/lunix-rel-20170920/lunix-20170920-1.rockspec
-+@@ -26,16 +26,6 @@ build = {
-+ 		};
-+ 	};
-+ 	platforms = {
-+-		linux = {
-+-			modules = {
-+-				["unix"] = {
-+-					libraries = {
-+-						-- glibc <= 2.17 needs to link with librt
-+-						"rt";
-+-					};
-+-				};
-+-			};
-+-		};
-+ 		osx = {
-+ 			modules = {
-+ 				["unix"] = {
-+-- 
-+2.30.2
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
