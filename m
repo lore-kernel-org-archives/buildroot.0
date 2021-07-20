@@ -1,28 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 23:43:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-ubjson: bump to version
- 0.16.1
-In-Reply-To: <20210720210801.90649-1-fontaine.fabrice@gmail.com>
-References: <20210720210801.90649-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210720234322.5568801b@windsurf>
+Date: Tue, 20 Jul 2021 23:43:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dbus-glib: bump to version 0.112
+In-Reply-To: <20210720212039.356674-1-fontaine.fabrice@gmail.com>
+References: <20210720212039.356674-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210720234325.3b41545b@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Tue, 20 Jul 2021 23:08:01 +0200
+On Tue, 20 Jul 2021 23:20:39 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Update indentation in hash file (two spaces)
+> - Update hash of COPYING (SPDX added with
+>   https://gitlab.freedesktop.org/dbus/dbus-glib/-/commit/96479fb8fd5e2f8896cdce7feff7839dcb47a7d1
+>   https://gitlab.freedesktop.org/dbus/dbus-glib/-/commit/d42176ae4763e5288ef37ea314fe58387faf2005)
+> - Update indentation in hash file (two spaces)
 > 
-> https://github.com/Iotic-Labs/py-ubjson/blob/v0.16.1/CHANGELOG
+> https://gitlab.freedesktop.org/dbus/dbus-glib/-/blob/dbus-glib-0.112/NEWS
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/python-ubjson/python-ubjson.hash | 6 +++---
->  package/python-ubjson/python-ubjson.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/dbus-glib/dbus-glib.hash | 4 ++--
+>  package/dbus-glib/dbus-glib.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
