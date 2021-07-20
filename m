@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2057DC07E9B
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:39:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D11D0C07E9B
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:39:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D4F6C6044F
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:39:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D4F6C6044F
+	by mail.kernel.org (Postfix) with ESMTPS id 9FCD260FF1
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:39:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9FCD260FF1
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A26184022B;
-	Tue, 20 Jul 2021 21:39:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 77110403DD;
+	Tue, 20 Jul 2021 21:39:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lDGKzGy7Q3mw; Tue, 20 Jul 2021 21:39:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xqrW0OV5RONH; Tue, 20 Jul 2021 21:39:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D5874022E;
-	Tue, 20 Jul 2021 21:39:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ABF74402D3;
+	Tue, 20 Jul 2021 21:39:40 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6005F1BF3E9
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:38:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 636C51BF3E9
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:38:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 31A6C82D75
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4DA7F82EBA
  for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:38:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GAQ6sCGRmlyn for <buildroot@lists.busybox.net>;
+ with ESMTP id NVlNMe_SiuBI for <buildroot@lists.busybox.net>;
  Tue, 20 Jul 2021 21:38:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6820082EBA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6BAA182F37
  for <buildroot@buildroot.org>; Tue, 20 Jul 2021 21:38:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 074318867F; Tue, 20 Jul 2021 21:04:09 +0000 (UTC)
+ id 1B29F87753; Tue, 20 Jul 2021 21:04:09 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 23:36:58 +0200
+Date: Tue, 20 Jul 2021 23:38:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f6628763eb302f15f861e0ce7bfc44b34b066bea
-X-Git-Newrev: f00da714a20a7826dda67d66f2a6b6ef858ef3e3
+X-Git-Oldrev: f00da714a20a7826dda67d66f2a6b6ef858ef3e3
+X-Git-Newrev: 833e7db4f672656a3778faf155ac9d1ef2755bfe
 X-Patchwork-Hint: ignore
-Message-ID: <20210720210409.074318867F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mupdf: bump to version 1.18.0
+Message-ID: <20210720210409.1B29F87753@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pymupdf: bump to version
+ 1.18.14
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,124 +65,108 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0926209314684055471=="
+Content-Type: multipart/mixed; boundary="===============1221796420753247543=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
-Message-ID: <20210720213658.WakaxF37smFl1JHfHgTTkIXOvp6GVy6fXYyyNRENVZo@z>
+Message-ID: <20210720213807.vsHKWqLUPeHWBWEPz3h13TdFHAp2HzQ8c7-2158n2Bw@z>
 
---===============0926209314684055471==
+--===============1221796420753247543==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f00da714a20a7826dda67d66f2a6b6ef858ef3e3
+commit: https://git.buildroot.net/buildroot/commit/?id=833e7db4f672656a3778faf155ac9d1ef2755bfe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It turns out the patch version of python-pymupdf doesn't have to match
-mupdf's version (i.e. python-pymupdf 1.18.14 is compatible with mupdf
-1.18.*) so remove the word "exactly" from the comment.
+Recent tarballs from PyPI use setuptools instead of distutils, so
+change `PYTHON_PYMUPDF_SETUP_TYPE`.
 
-mupdf now has a new dependency: gumbo-parser.
+They also include a license file, so include it and a hash for it.
 
-gumbo-parser is included when downloading the sources for mupdf, but
-instead we use the version provided by Buildroot.
+This version also has a new dependency: freetype2.
 
-While at it, take the chance to (based on previous review comments):
+PYTHON_PYMUPDF_REMOVE_PATHS is updated to take the new dependency into
+account, but also the sed command are changed to delete include lines
+instead of turning them into empty strings. Indeed, empty include
+strings lead to using multiple `-I` flags which were not followed by
+anything. Depending on the number of empty include strings (because
+two successive `-I` "cancel" each other out), it would have failed to
+compile.
 
-- Fix indentation in the hash file (two spaces).
-- Switch to using the ".xz" archive.
-- Add a conditional on freeglut.
+Also, it turns out the patch version of python-pymupdf doesn't have to
+match mupdf's version (e.g. python-pymupdf 1.18.14 is compatible with
+mupdf 1.18.*) so while at it, remove the word "exactly" from the
+comment.
 
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mupdf/Config.in  |  1 +
- package/mupdf/mupdf.hash |  6 +++---
- package/mupdf/mupdf.mk   | 16 ++++++++++------
- 3 files changed, 14 insertions(+), 9 deletions(-)
+ package/python-pymupdf/Config.in           |  1 +
+ package/python-pymupdf/python-pymupdf.hash |  6 ++++--
+ package/python-pymupdf/python-pymupdf.mk   | 19 +++++++++++--------
+ 3 files changed, 16 insertions(+), 10 deletions(-)
 
-diff --git a/package/mupdf/Config.in b/package/mupdf/Config.in
-index dc296b3e8a..ff176f4b99 100644
---- a/package/mupdf/Config.in
-+++ b/package/mupdf/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_MUPDF
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
+diff --git a/package/python-pymupdf/Config.in b/package/python-pymupdf/Config.in
+index cd4c8cfcbb..54714eb3bf 100644
+--- a/package/python-pymupdf/Config.in
++++ b/package/python-pymupdf/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_PYMUPDF
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mupdf -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # mupdf -> harfbuzz
  	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_GUMBO_PARSER
- 	select BR2_PACKAGE_HARFBUZZ
- 	select BR2_PACKAGE_JBIG2DEC
- 	select BR2_PACKAGE_JPEG
-diff --git a/package/mupdf/mupdf.hash b/package/mupdf/mupdf.hash
-index ec4893046d..934836e76a 100644
---- a/package/mupdf/mupdf.hash
-+++ b/package/mupdf/mupdf.hash
-@@ -1,8 +1,8 @@
- # From https://mupdf.com/downloads/index.html:
--sha1 18f069b7cc125e53f541163ac305c588c94dea97 mupdf-1.16.0-source.tar.gz
-+sha1  fc17bd01d5860e49b009f28a5ddb629e94af4510  mupdf-1.18.0-source.tar.xz
- 
- # Locally computed:
--sha256 64d537895641b711737cc58fe762481b07ea71d1506e8bd8a13434e093b0068d  mupdf-1.16.0-source.tar.gz
-+sha256 592d4f6c0fba41bb954eb1a41616661b62b134d5b383e33bd45a081af5d4a59a  mupdf-1.18.0-source.tar.xz
- 
- # Hash for license files:
--sha256 57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  COPYING
-+sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  COPYING
-diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-index 78dacd214c..b481fb1eae 100644
---- a/package/mupdf/mupdf.mk
-+++ b/package/mupdf/mupdf.mk
-@@ -4,9 +4,9 @@
++	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_MUPDF
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+diff --git a/package/python-pymupdf/python-pymupdf.hash b/package/python-pymupdf/python-pymupdf.hash
+index a5a53997cd..ee7a916519 100644
+--- a/package/python-pymupdf/python-pymupdf.hash
++++ b/package/python-pymupdf/python-pymupdf.hash
+@@ -1,3 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pymupdf/json
+-md5  0e924bbb7364ba63df65d33fee9656f0  PyMuPDF-1.16.0.tar.gz
+-sha256  1a6cc5b8b0fb9aa16bfa453fdfed445398f00d2556e78d90ba54cdce8d900857  PyMuPDF-1.16.0.tar.gz
++md5  70d6c2232e531772bbe9a813044262f9  PyMuPDF-1.18.14.tar.gz
++sha256  efe85cb80f79cc3f3890aa2ab82b962b8a999ca078e33e9bacc5d0be5c4656dc  PyMuPDF-1.18.14.tar.gz
++# Locally computed:
++sha256  282751b8c98ee9e445346eb57a992c9ecbe25ed8dd554df046777313e19b10f9  COPYING
+diff --git a/package/python-pymupdf/python-pymupdf.mk b/package/python-pymupdf/python-pymupdf.mk
+index 9f8d1744b1..ceeeb0a55b 100644
+--- a/package/python-pymupdf/python-pymupdf.mk
++++ b/package/python-pymupdf/python-pymupdf.mk
+@@ -4,21 +4,24 @@
  #
  ################################################################################
  
 -# python-pymupdf's version must match exactly mupdf's version
--MUPDF_VERSION = 1.16.0
--MUPDF_SOURCE = mupdf-$(MUPDF_VERSION)-source.tar.gz
+-PYTHON_PYMUPDF_VERSION = 1.16.0
 +# python-pymupdf's version must match mupdf's version
-+MUPDF_VERSION = 1.18.0
-+MUPDF_SOURCE = mupdf-$(MUPDF_VERSION)-source.tar.xz
- MUPDF_SITE = https://mupdf.com/downloads/archive
- MUPDF_LICENSE = AGPL-3.0+
- MUPDF_LICENSE_FILES = COPYING
-@@ -14,6 +14,7 @@ MUPDF_CPE_ID_VENDOR = artifex
- MUPDF_INSTALL_STAGING = YES
- MUPDF_DEPENDENCIES = \
- 	freetype \
-+	gumbo-parser \
- 	harfbuzz \
- 	host-pkgconf \
- 	jbig2dec jpeg \
-@@ -21,8 +22,10 @@ MUPDF_DEPENDENCIES = \
- 	xlib_libX11 \
- 	zlib
++PYTHON_PYMUPDF_VERSION = 1.18.14
+ PYTHON_PYMUPDF_SOURCE = PyMuPDF-$(PYTHON_PYMUPDF_VERSION).tar.gz
+-PYTHON_PYMUPDF_SITE = https://files.pythonhosted.org/packages/d2/da/692102b6e6868a57d1dc7f98d07413116a02493b3b49a798dcd6f676d368
+-PYTHON_PYMUPDF_SETUP_TYPE = distutils
++PYTHON_PYMUPDF_SITE = https://files.pythonhosted.org/packages/41/f6/dbefe3d6949fa81fb7bcac9141e4345330d272724718ac5a6af78297498b
++PYTHON_PYMUPDF_SETUP_TYPE = setuptools
+ PYTHON_PYMUPDF_LICENSE = GPL-3.0, AGPL-3.0+ (code generated from mupdf)
++PYTHON_PYMUPDF_LICENSE_FILES = COPYING
+ # No license file included in pip, but it's present on github
+-PYTHON_PYMUPDF_DEPENDENCIES = mupdf zlib
++PYTHON_PYMUPDF_DEPENDENCIES = freetype mupdf zlib
  
-+# The pkg-config name for gumbo-parser is `gumbo`.
- MUPDF_PKG_CONFIG_PACKAGES = \
- 	freetype2 \
-+	gumbo \
- 	harfbuzz \
- 	libjpeg \
- 	zlib
-@@ -43,13 +46,14 @@ MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
- 	XLIBS="$(MUPDF_LDFLAGS)" \
- 	USE_SYSTEM_LIBS=yes
+-PYTHON_PYMUPDF_ENV = CFLAGS="-I$(STAGING_DIR)/usr/include/mupdf"
++PYTHON_PYMUPDF_ENV = CFLAGS="-I$(STAGING_DIR)/usr/include/mupdf -I$(STAGING_DIR)/usr/include/freetype2"
  
--# Modern versions of mupdf depend on OpenGL,
--# we disable it because it may not be available:
-+ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
-+MUPDF_DEPENDENCIES += libfreeglut
-+else
- define MUPDF_DISABLE_OPENGL
- 	sed -i 's/HAVE_GLUT := yes/HAVE_GLUT := no/g' $(@D)/Makerules
+ # We need to remove the original paths as we provide them in the CFLAGS:
+ define PYTHON_PYMUPDF_REMOVE_PATHS
+-	sed -i "s:\/usr\/include\/mupdf::g" $(@D)/setup.py
+-	sed -i "s:\/usr\/local\/include\/mupdf::g" $(@D)/setup.py
++	sed -i "/\/usr\/include\/mupdf/d" $(@D)/setup.py
++	sed -i "/\/usr\/include\/freetype2/d" $(@D)/setup.py
++	sed -i "/\/usr\/local\/include\/mupdf/d" $(@D)/setup.py
++	sed -i "/mupdf\/thirdparty\/freetype\/include/d" $(@D)/setup.py
  endef
--
- MUPDF_POST_PATCH_HOOKS = MUPDF_DISABLE_OPENGL
-+endif
  
- define MUPDF_BUILD_CMDS
- 	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) all
+ PYTHON_PYMUPDF_POST_PATCH_HOOKS = PYTHON_PYMUPDF_REMOVE_PATHS
 
---===============0926209314684055471==
+--===============1221796420753247543==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -192,4 +177,4 @@ buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
 
---===============0926209314684055471==--
+--===============1221796420753247543==--
