@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22CA6C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:54:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CB11C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:54:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D40E76105A
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:54:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D40E76105A
+	by mail.kernel.org (Postfix) with ESMTPS id F0E3F61050
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 23:54:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F0E3F61050
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B009860ADB;
-	Tue,  3 Aug 2021 23:54:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C664383AE9;
+	Tue,  3 Aug 2021 23:54:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jw1nccpJhCef; Tue,  3 Aug 2021 23:54:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6B6elXc74GH2; Tue,  3 Aug 2021 23:54:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1116F60AC5;
-	Tue,  3 Aug 2021 23:54:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 32FF1835B1;
+	Tue,  3 Aug 2021 23:54:37 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 797C81BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A69451BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A5F6440F70
+ by smtp2.osuosl.org (Postfix) with ESMTP id C545340EE9
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fa1fMffef3BU for <buildroot@lists.busybox.net>;
+ with ESMTP id mTmv-i1giKVF for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 808B440EE9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3DFA640EE8
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C99C78393C; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
+ id 9024F878D7; Tue,  3 Aug 2021 21:10:10 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 21:25:30 +0200
+Date: Tue, 20 Jul 2021 20:27:55 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 360d1aad84449c6a1993d8c7e469dc0cd35339a2
-X-Git-Newrev: db6e5bf7d6774e52f93a3a8bed536200539f07dc
+X-Git-Oldrev: 6e4b8fe00f1b516630f109207c62ee0818db3000
+X-Git-Newrev: 2352c827311aefbbd83459bfaf359dff8c0fa7df
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211010.C99C78393C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lua-lunix: fix build
- with musl
+Message-Id: <20210803211010.9024F878D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lrzsz: add
+ LRZSZ_CPE_ID_VENDOR
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,59 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db6e5bf7d6774e52f93a3a8bed536200539f07dc
+commit: https://git.buildroot.net/buildroot/commit/?id=2352c827311aefbbd83459bfaf359dff8c0fa7df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-see http://autobuild.buildroot.net/results/7d192a0a1d58d258b77906cf936949b2f47373cd/
+cpe:2.3:a:lrzsz_project:lrzsz is a valid CPE identifier for this
+package:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alrzsz_project%3Alrzsz
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../lua-lunix/0002-remove-link-with-librt.patch    | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/lrzsz/lrzsz.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lua-lunix/0002-remove-link-with-librt.patch b/package/lua-lunix/0002-remove-link-with-librt.patch
-new file mode 100644
-index 0000000000..7b1c8ddd57
---- /dev/null
-+++ b/package/lua-lunix/0002-remove-link-with-librt.patch
-@@ -0,0 +1,36 @@
-+From aeaff83b9ae42547b8728edac000f3d41d5e44aa Mon Sep 17 00:00:00 2001
-+From: Francois Perrad <francois.perrad@gadz.org>
-+Date: Sat, 17 Jul 2021 13:21:38 +0200
-+Subject: [PATCH] remove link with librt
-+
-+librt is not available with musl
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+---
-+ lunix-rel-20170920/lunix-20170920-1.rockspec | 10 ----------
-+ 1 file changed, 10 deletions(-)
-+
-+diff --git a/lunix-rel-20170920/lunix-20170920-1.rockspec b/lunix-rel-20170920/lunix-20170920-1.rockspec
-+index 741179d..76cafeb 100644
-+--- a/lunix-rel-20170920/lunix-20170920-1.rockspec
-++++ b/lunix-rel-20170920/lunix-20170920-1.rockspec
-+@@ -26,16 +26,6 @@ build = {
-+ 		};
-+ 	};
-+ 	platforms = {
-+-		linux = {
-+-			modules = {
-+-				["unix"] = {
-+-					libraries = {
-+-						-- glibc <= 2.17 needs to link with librt
-+-						"rt";
-+-					};
-+-				};
-+-			};
-+-		};
-+ 		osx = {
-+ 			modules = {
-+ 				["unix"] = {
-+-- 
-+2.30.2
-+
+diff --git a/package/lrzsz/lrzsz.mk b/package/lrzsz/lrzsz.mk
+index 6c68232852..45c88619e0 100644
+--- a/package/lrzsz/lrzsz.mk
++++ b/package/lrzsz/lrzsz.mk
+@@ -9,6 +9,7 @@ LRZSZ_SITE = http://www.ohse.de/uwe/releases
+ LRZSZ_CONF_OPTS = --disable-timesync
+ LRZSZ_LICENSE = GPL-2.0+
+ LRZSZ_LICENSE_FILES = COPYING
++LRZSZ_CPE_ID_VENDOR = lrzsz_project
+ LRZSZ_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ LRZSZ_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
