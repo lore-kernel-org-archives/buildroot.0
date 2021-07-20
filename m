@@ -2,57 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47D6BC4320A
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:18:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E384DC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:18:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D07D161037
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:18:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D07D161037
+	by mail.kernel.org (Postfix) with ESMTPS id A7CFD60F8F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:18:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A7CFD60F8F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 97B7240328;
-	Wed,  4 Aug 2021 00:18:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80820423C2;
+	Wed,  4 Aug 2021 00:18:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XTZa7yHoCnDO; Wed,  4 Aug 2021 00:18:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mTquT3F79yWR; Wed,  4 Aug 2021 00:18:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C578403E9;
-	Wed,  4 Aug 2021 00:18:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D0F50423B9;
+	Wed,  4 Aug 2021 00:18:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 68F0A1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 79E311BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2CD2D40FAC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 309DE40FA8
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ehyeMgKm0juZ for <buildroot@lists.busybox.net>;
+ with ESMTP id HXq0AyfmDpF9 for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B274540EA9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 67A0740F0F
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0421081484; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
+ id BB99081469; Tue,  3 Aug 2021 21:10:12 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 23:51:09 +0200
+Date: Tue, 20 Jul 2021 23:41:59 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a2e93a802cbdbcd42b504c26596a076fbc4c86d1
-X-Git-Newrev: 05610e04b3087a024c7ac67132f3eb0940d62268
+X-Git-Oldrev: 8b28ba976e4032684c0e30984d246fb12a25f238
+X-Git-Newrev: 18bad642132fda6f423c202e20df31932787885d
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211013.0421081484@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nginx: bump version to
- 1.20.1
+Message-Id: <20210803211012.BB99081469@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-ubjson: bump to
+ version 0.16.1
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,282 +70,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05610e04b3087a024c7ac67132f3eb0940d62268
+commit: https://git.buildroot.net/buildroot/commit/?id=18bad642132fda6f423c202e20df31932787885d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Tested with ./utils/test-pkg -p nginx -a on Fedora 34
-45 builds, 6 skipped, 0 build failed, 0 legal-info failed
+Update indentation in hash file (two spaces)
 
-Other changes:
-  - Rebase needed patches.
-  - Update license hash due to year change.
+https://github.com/Iotic-Labs/py-ubjson/blob/v0.16.1/CHANGELOG
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...x_feature_run_force_result-for-each-featu.patch | 40 +++++++++-------------
- ...nix-make-sys_nerr-guessing-cross-friendly.patch | 27 +++++++--------
- ...09-auto-os-linux-fix-build-with-libxcrypt.patch |  2 +-
- ...xed-off-by-one-write-in-ngx_resolver_copy.patch | 40 ----------------------
- package/nginx/nginx.hash                           |  4 +--
- package/nginx/nginx.mk                             |  5 +--
- 6 files changed, 33 insertions(+), 85 deletions(-)
+ package/python-ubjson/python-ubjson.hash | 6 +++---
+ package/python-ubjson/python-ubjson.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/nginx/0003-auto-set-ngx_feature_run_force_result-for-each-featu.patch b/package/nginx/0003-auto-set-ngx_feature_run_force_result-for-each-featu.patch
-index f186becdf8..ee7f3e9290 100644
---- a/package/nginx/0003-auto-set-ngx_feature_run_force_result-for-each-featu.patch
-+++ b/package/nginx/0003-auto-set-ngx_feature_run_force_result-for-each-featu.patch
-@@ -15,14 +15,16 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- Refresh for 1.8.0.
- 
- Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-+[rebased against v1.20.1]
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
- ---
-  auto/cc/conf            | 3 +++
-  auto/cc/name            | 1 +
-  auto/lib/libatomic/conf | 1 +
-  auto/os/darwin          | 3 +++
-  auto/os/linux           | 4 ++++
-- auto/unix               | 8 ++++++++
-- 6 files changed, 20 insertions(+)
-+ auto/unix               | 7 +++++++
-+ 6 files changed, 19 insertions(+)
- 
- diff --git a/auto/cc/conf b/auto/cc/conf
- index afbca62b..ad42c800 100644
-@@ -116,7 +118,7 @@ index 2c8a9bb8..eb4513ee 100644
-  ngx_feature_incs="#include <sys/epoll.h>"
-  ngx_feature_path=
-  ngx_feature_libs=
--@@ -111,6 +112,7 @@ CC_AUX_FLAGS="$cc_aux_flags -D_GNU_SOURCE"
-+@@ -136,6 +137,7 @@ CC_AUX_FLAGS="$cc_aux_flags -D_GNU_SOURCE"
-  ngx_feature="sendfile()"
-  ngx_feature_name="NGX_HAVE_SENDFILE"
-  ngx_feature_run=yes
-@@ -124,7 +126,7 @@ index 2c8a9bb8..eb4513ee 100644
-  ngx_feature_incs="#include <sys/sendfile.h>
-                    #include <errno.h>"
-  ngx_feature_path=
--@@ -132,6 +134,7 @@ CC_AUX_FLAGS="$cc_aux_flags -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
-+@@ -157,6 +159,7 @@ CC_AUX_FLAGS="$cc_aux_flags -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
-  ngx_feature="sendfile64()"
-  ngx_feature_name="NGX_HAVE_SENDFILE64"
-  ngx_feature_run=yes
-@@ -132,7 +134,7 @@ index 2c8a9bb8..eb4513ee 100644
-  ngx_feature_incs="#include <sys/sendfile.h>
-                    #include <errno.h>"
-  ngx_feature_path=
--@@ -150,6 +153,7 @@ ngx_include="sys/prctl.h"; . auto/include
-+@@ -175,6 +178,7 @@ ngx_include="sys/prctl.h"; . auto/include
-  ngx_feature="prctl(PR_SET_DUMPABLE)"
-  ngx_feature_name="NGX_HAVE_PR_SET_DUMPABLE"
-  ngx_feature_run=yes
-@@ -152,31 +154,23 @@ index 43d3b25a..3da00537 100644
-          ngx_feature_incs="#include <sys/event.h>
-                            #include <sys/time.h>"
-          ngx_feature_path=
--@@ -730,6 +731,7 @@ ngx_feature_test="char buf[1]; struct iovec vec[1]; ssize_t n;
-- ngx_feature="sys_nerr"
-- ngx_feature_name="NGX_SYS_NERR"
-- ngx_feature_run=value
--+ngx_feature_run_force_result="$ngx_force_sys_nerr"
-- ngx_feature_incs='#include <errno.h>
--                   #include <stdio.h>'
-- ngx_feature_path=
--@@ -744,6 +746,7 @@ if [ $ngx_found = no ]; then
--     ngx_feature="_sys_nerr"
-+@@ -722,6 +723,7 @@ if [ $ngx_found = no ]; then
-+     ngx_feature="sys_nerr"
-      ngx_feature_name="NGX_SYS_NERR"
-      ngx_feature_run=value
- +    ngx_feature_run_force_result="$ngx_force_sys_nerr"
-      ngx_feature_incs='#include <errno.h>
-                        #include <stdio.h>'
-      ngx_feature_path=
--@@ -759,6 +762,7 @@ if [ $ngx_found = no ]; then
--     ngx_feature='maximum errno'
--     ngx_feature_name=NGX_SYS_NERR
-+@@ -737,6 +739,7 @@ if [ $ngx_found = no ]; then
-+     ngx_feature="_sys_nerr"
-+     ngx_feature_name="NGX_SYS_NERR"
-      ngx_feature_run=value
- +    ngx_feature_run_force_result="$ngx_force_sys_nerr"
-      ngx_feature_incs='#include <errno.h>
--                       #include <string.h>
-                        #include <stdio.h>'
--@@ -841,6 +845,7 @@ ngx_feature_test="void *p; p = memalign(4096, 4096);
-+     ngx_feature_path=
-+@@ -806,6 +809,7 @@ ngx_feature_test="void *p; p = memalign(4096, 4096);
-  ngx_feature="mmap(MAP_ANON|MAP_SHARED)"
-  ngx_feature_name="NGX_HAVE_MAP_ANON"
-  ngx_feature_run=yes
-@@ -184,7 +178,7 @@ index 43d3b25a..3da00537 100644
-  ngx_feature_incs="#include <sys/mman.h>"
-  ngx_feature_path=
-  ngx_feature_libs=
--@@ -854,6 +859,7 @@ ngx_feature_test="void *p;
-+@@ -819,6 +823,7 @@ ngx_feature_test="void *p;
-  ngx_feature='mmap("/dev/zero", MAP_SHARED)'
-  ngx_feature_name="NGX_HAVE_MAP_DEVZERO"
-  ngx_feature_run=yes
-@@ -192,7 +186,7 @@ index 43d3b25a..3da00537 100644
-  ngx_feature_incs="#include <sys/mman.h>
-                    #include <sys/stat.h>
-                    #include <fcntl.h>"
--@@ -869,6 +875,7 @@ ngx_feature_test='void *p; int  fd;
-+@@ -834,6 +839,7 @@ ngx_feature_test='void *p; int  fd;
-  ngx_feature="System V shared memory"
-  ngx_feature_name="NGX_HAVE_SYSVSHM"
-  ngx_feature_run=yes
-@@ -200,7 +194,7 @@ index 43d3b25a..3da00537 100644
-  ngx_feature_incs="#include <sys/ipc.h>
-                    #include <sys/shm.h>"
-  ngx_feature_path=
--@@ -883,6 +890,7 @@ ngx_feature_test="int  id;
-+@@ -848,6 +854,7 @@ ngx_feature_test="int  id;
-  ngx_feature="POSIX semaphores"
-  ngx_feature_name="NGX_HAVE_POSIX_SEM"
-  ngx_feature_run=yes
-diff --git a/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch b/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-index 747a034aee..79fa4970cb 100644
---- a/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-+++ b/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-@@ -15,10 +15,12 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- Refresh for 1.8.0.
- 
- Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-+[rebased against v1.20.1]
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
- ---
-- auto/os/sys_nerr | 78 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-- auto/unix        | 10 ++++++++
-- 2 files changed, 88 insertions(+)
-+ auto/os/sys_nerr | 78 ++++++++++++++++++++++++++++++++++++++++++++++++
-+ auto/unix        |  8 +++++
-+ 2 files changed, 86 insertions(+)
-  create mode 100644 auto/os/sys_nerr
- 
- diff --git a/auto/os/sys_nerr b/auto/os/sys_nerr
-@@ -109,18 +111,13 @@ diff --git a/auto/unix b/auto/unix
- index 7dbf9d1..00a7370 100755
- --- a/auto/unix
- +++ b/auto/unix
--@@ -736,6 +736,10 @@ ngx_feature_incs='#include <errno.h>
--                   #include <stdio.h>'
-- ngx_feature_path=
-- ngx_feature_libs=
--+
--+if false ; then
--+# Disabled because only valid for native build.
--+
-- ngx_feature_test='printf("%d", sys_nerr);'
-- . auto/feature
-- 
--@@ -784,6 +788,12 @@ if [ $ngx_found = no ]; then
-+@@ -744,10 +744,18 @@ if [ $ngx_found = no ]; then
-+                       #include <stdio.h>'
-+     ngx_feature_path=
-+     ngx_feature_libs=
-++    if false ; then
-++    # Disabled because only valid for native build.
-+     ngx_feature_test='printf("%d", _sys_nerr);'
-      . auto/feature
-  fi
-  
-diff --git a/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch b/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
-index 7e430ffc37..8b368d946f 100644
---- a/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
-+++ b/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
-@@ -23,7 +23,7 @@ diff --git a/auto/os/linux b/auto/os/linux
- index 5e280eca..04682812 100644
- --- a/auto/os/linux
- +++ b/auto/os/linux
--@@ -203,6 +203,9 @@ ngx_feature_test="struct crypt_data  cd;
-+@@ -232,6 +232,9 @@ ngx_feature_test="struct crypt_data  cd;
-                    crypt_r(\"key\", \"salt\", &cd);"
-  . auto/feature
-  
-diff --git a/package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch b/package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
-deleted file mode 100644
-index ba47768fe5..0000000000
---- a/package/nginx/0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 9f1dcb0c0473641730b871dee984016ff19d2c53 Mon Sep 17 00:00:00 2001
--From: Maxim Dounin <mdounin@mdounin.ru>
--Date: Tue, 25 May 2021 15:17:36 +0300
--Subject: [PATCH] Resolver: fixed off-by-one write in ngx_resolver_copy().
--
--Reported by Luis Merino, Markus Vervier, Eric Sesterhenn, X41 D-Sec GmbH.
--
--[peter@korsgaard.com: backport from upstream]
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/core/ngx_resolver.c | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/src/core/ngx_resolver.c b/src/core/ngx_resolver.c
--index 79390701..63b26193 100644
----- a/src/core/ngx_resolver.c
--+++ b/src/core/ngx_resolver.c
--@@ -4008,15 +4008,15 @@ done:
--             n = *src++;
-- 
--         } else {
--+            if (dst != name->data) {
--+                *dst++ = '.';
--+            }
--+
--             ngx_strlow(dst, src, n);
--             dst += n;
--             src += n;
-- 
--             n = *src++;
---
---            if (n != 0) {
---                *dst++ = '.';
---            }
--         }
-- 
--         if (n == 0) {
---- 
--2.20.1
--
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 8d17931a26..06d3392a2e 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  4c373e7ab5bf91d34a4f11a0c9496561061ba5eee6020db272a17a7228d35f99  nginx-1.18.0.tar.gz
-+sha256  e462e11533d5c30baa05df7652160ff5979591d291736cfa5edb9fd2edb48c49  nginx-1.20.1.tar.gz
- # License files, locally calculated
--sha256  28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509  LICENSE
-+sha256  b57270c1f73eb6624b38b2d0a1affcec56b21fab39efbf8c837428f05cef1d73  LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index e93e802fd3..36515e67cc 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-ubjson/python-ubjson.hash b/package/python-ubjson/python-ubjson.hash
+index a7e954ce5d..baf3ce7bdc 100644
+--- a/package/python-ubjson/python-ubjson.hash
++++ b/package/python-ubjson/python-ubjson.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/py-ubjson/json
+-md5	26c07be8e4c9f2b0ee7c42a9aca118ed  py-ubjson-0.14.0.tar.gz
+-sha256	f742c87bccc8653329d3f79b8b3f40d44d11d17cce7f6d7025a73c52ebf91c66  py-ubjson-0.14.0.tar.gz
++md5  0f9f2b4d68ae8e70c6f624b1cdaca161  py-ubjson-0.16.1.tar.gz
++sha256  b9bfb8695a1c7e3632e800fb83c943bf67ed45ddd87cd0344851610c69a5a482  py-ubjson-0.16.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	ca182abcb84ad9984c9af2e30cb70c4fe0e1772674355207e8fcdb85e8c5e75f  LICENSE
++sha256  ca182abcb84ad9984c9af2e30cb70c4fe0e1772674355207e8fcdb85e8c5e75f  LICENSE
+diff --git a/package/python-ubjson/python-ubjson.mk b/package/python-ubjson/python-ubjson.mk
+index 58bba2ac74..93ab9dc139 100644
+--- a/package/python-ubjson/python-ubjson.mk
++++ b/package/python-ubjson/python-ubjson.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--NGINX_VERSION = 1.18.0
-+NGINX_VERSION = 1.20.1
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
-@@ -13,9 +13,6 @@ NGINX_DEPENDENCIES = \
- 	host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt)
- 
--# 0010-Resolver-fixed-off-by-one-write-in-ngx_resolver_copy.patch
--NGINX_IGNORE_CVES += CVE-2021-23017
--
- NGINX_CONF_OPTS = \
- 	--crossbuild=Linux::$(BR2_ARCH) \
- 	--with-cc="$(TARGET_CC)" \
+-PYTHON_UBJSON_VERSION = 0.14.0
++PYTHON_UBJSON_VERSION = 0.16.1
+ PYTHON_UBJSON_SOURCE = py-ubjson-$(PYTHON_UBJSON_VERSION).tar.gz
+-PYTHON_UBJSON_SITE = https://files.pythonhosted.org/packages/10/31/0d8297c33d681aafa3fe900ca072a96d5acb97e79082fbb593e835376c93
++PYTHON_UBJSON_SITE = https://files.pythonhosted.org/packages/1d/c7/28220d37e041fe1df03e857fe48f768dcd30cd151480bf6f00da8713214a
+ PYTHON_UBJSON_LICENSE = Apache-2.0
+ PYTHON_UBJSON_LICENSE_FILES = LICENSE
+ PYTHON_UBJSON_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
