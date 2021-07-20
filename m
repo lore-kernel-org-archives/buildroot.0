@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0457CC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:33:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EEC3C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:33:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AF00B60F02
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:33:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF00B60F02
+	by mail.kernel.org (Postfix) with ESMTPS id ECF0260240
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:33:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ECF0260240
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 88EDA4157D;
-	Tue,  3 Aug 2021 22:33:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD87183C05;
+	Tue,  3 Aug 2021 22:33:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D-_D01dzStoi; Tue,  3 Aug 2021 22:33:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vldOh2h9uXoT; Tue,  3 Aug 2021 22:33:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD4AB4149E;
-	Tue,  3 Aug 2021 22:33:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EDA9F1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B03983C01;
+	Tue,  3 Aug 2021 22:33:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 407B91BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D4C0A4058F
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 38E2E60A4E
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2Aq8LNL5N53o for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RPwA13BtsSZB for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 492E940558
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DB32F60902
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 93AC487C2D; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
+ id 3119285583; Tue,  3 Aug 2021 21:10:12 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Jul 2021 21:05:24 +0200
+Date: Tue, 20 Jul 2021 22:41:27 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 929108481c3a8bfdb064426c7385ba159582223a
-X-Git-Newrev: f7eccd6b3bc7361e8c9e2259c09ebd5537da9c81
+X-Git-Oldrev: d0a7e2bf9c8a7897e13eaaf6584b29a65c13df1c
+X-Git-Newrev: 4cf1efb04add60e5dcb3eb4edd9156a84d3e11ec
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211021.93AC487C2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/vsftpd: bump to
- version 3.0.4
+Message-Id: <20210803211012.3119285583@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lua-livr: bump to
+ version 0.2.2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,41 +70,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7eccd6b3bc7361e8c9e2259c09ebd5537da9c81
+commit: https://git.buildroot.net/buildroot/commit/?id=4cf1efb04add60e5dcb3eb4edd9156a84d3e11ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://security.appspot.com/vsftpd/Changelog.txt
+diff COPYRIGHT:
+- Copyright (C) 2018-2019 Francois Perrad.
++ Copyright (C) 2018-2021 Francois Perrad.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vsftpd/vsftpd.hash | 2 +-
- package/vsftpd/vsftpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lua-livr/lua-livr.hash | 4 ++--
+ package/lua-livr/lua-livr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vsftpd/vsftpd.hash b/package/vsftpd/vsftpd.hash
-index 955cd30889..751faf61ca 100644
---- a/package/vsftpd/vsftpd.hash
-+++ b/package/vsftpd/vsftpd.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  9d4d2bf6e6e2884852ba4e69e157a2cecd68c5a7635d66a3a8cf8d898c955ef7  vsftpd-3.0.3.tar.gz
-+sha256  6b9421bd27e8a6cdeed5b31154f294a20b003a11a26c09500715a0a6b1b86a26  vsftpd-3.0.4.tar.gz
- # Locally computed
- sha256  c9cf119e2f9dbcf187fb805ba5aded105db26a693803636fb7228c98460ffbf2  COPYING
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index 49b9b1917f..181f82f397 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
+diff --git a/package/lua-livr/lua-livr.hash b/package/lua-livr/lua-livr.hash
+index a891420b49..73b0fefa71 100644
+--- a/package/lua-livr/lua-livr.hash
++++ b/package/lua-livr/lua-livr.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 a3890301ed5f393b585cab26ac944eddc9df41bfa2ab87c11785925193453493  lua-livr-0.2.1-1.src.rock
+-sha256 8f09089acf52cfabcc2a44ec3a492dc261e0ae9df3c618f43b33805e696e02d8  lua-LIVR-0.2.1/COPYRIGHT
++sha256 e2f39316b8a1e66420c56e8ddc9ce4c0118c1a240582f2ba52d7627da6dfb76d  lua-livr-0.2.2-1.src.rock
++sha256 69fd426251454ea43a8068e58ac25d882922372de6b22e249bb56e00ea2cd834  lua-LIVR-0.2.2/COPYRIGHT
+diff --git a/package/lua-livr/lua-livr.mk b/package/lua-livr/lua-livr.mk
+index 25034b897b..3f114c725e 100644
+--- a/package/lua-livr/lua-livr.mk
++++ b/package/lua-livr/lua-livr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VSFTPD_VERSION = 3.0.3
-+VSFTPD_VERSION = 3.0.4
- VSFTPD_SITE = https://security.appspot.com/downloads
- VSFTPD_LIBS = -lcrypt
- VSFTPD_LICENSE = GPL-2.0
+-LUA_LIVR_VERSION = 0.2.1-1
++LUA_LIVR_VERSION = 0.2.2-1
+ LUA_LIVR_NAME_UPSTREAM = lua-LIVR
+ LUA_LIVR_LICENSE = MIT
+ LUA_LIVR_LICENSE_FILES = $(LUA_LIVR_SUBDIR)/COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
