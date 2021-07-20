@@ -2,57 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B67DC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:14:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3826EC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:14:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C31A360FA0
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:14:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C31A360FA0
+	by mail.kernel.org (Postfix) with ESMTPS id EB29161037
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:14:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EB29161037
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D3EF84258;
-	Wed,  4 Aug 2021 00:14:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C159B423A6;
+	Wed,  4 Aug 2021 00:14:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Lpc76QrfJb1z; Wed,  4 Aug 2021 00:14:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VCMqXyAlghEo; Wed,  4 Aug 2021 00:14:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0658984190;
-	Wed,  4 Aug 2021 00:14:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19205423A0;
+	Wed,  4 Aug 2021 00:14:22 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9BFFA1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 615521BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:18:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 520044015B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5740940F8B
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0u3uQKkvvf2g for <buildroot@lists.busybox.net>;
+ with ESMTP id 2-5Jq6KFBk9n for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A838640EFC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 82AE140E4B
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id EDA3081469; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
+ id D9B3D81469; Tue,  3 Aug 2021 21:10:11 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 22:38:48 +0200
+Date: Tue, 20 Jul 2021 22:38:03 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5f09fcbc63b8767e10b75075f64cfa5325e4c96f
-X-Git-Newrev: c6ac7df63f28a2d1ae78f5879d65881aa2bbe5e7
+X-Git-Oldrev: 18ac5e46694f136b9e3952150111327060bf24fc
+X-Git-Newrev: ee95ae7821119a749a9881404abd744c8d92504a
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211011.EDA3081469@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libabseil-cpp: bump to
- version 20210324.2
+Message-Id: <20210803211011.D9B3D81469@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libdrm: bump version
+ to 2.4.107
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,38 +70,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6ac7df63f28a2d1ae78f5879d65881aa2bbe5e7
+commit: https://git.buildroot.net/buildroot/commit/?id=ee95ae7821119a749a9881404abd744c8d92504a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+- update license file hash (xf86drm.c, license unrelated source code
+  changes [1], [2], [3], [4], [5])
+
+For details see [6].
+
+[1] https://cgit.freedesktop.org/mesa/drm/commit/?id=67e911977fbe1f444045f59028c149a04ba29566
+[2] https://cgit.freedesktop.org/mesa/drm/commit/?id=a04b674887586bf05594abaf7c55fd8d630898db
+[3] https://cgit.freedesktop.org/mesa/drm/commit/?id=99a0522aef04e08c6e0be7a7a020f12c51d24c47
+[4] https://cgit.freedesktop.org/mesa/drm/commit/?id=9ae8f17d563a81212ca2f61a3427ed559c105644
+[5] https://cgit.freedesktop.org/mesa/drm/commit/?id=65d89398081b33b7498bccaee6915e977f589ec2
+[6] https://lists.freedesktop.org/archives/dri-devel/2021-July/313594.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libabseil-cpp/libabseil-cpp.hash | 2 +-
- package/libabseil-cpp/libabseil-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libdrm/libdrm.hash | 8 ++++----
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
-index b176043566..6429f5e9bf 100644
---- a/package/libabseil-cpp/libabseil-cpp.hash
-+++ b/package/libabseil-cpp/libabseil-cpp.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ebe2ad1480d27383e4bf4211e2ca2ef312d5e6a09eba869fd2e8a5c5d553ded2  libabseil-cpp-20200923.3.tar.gz
-+sha256  59b862f50e710277f8ede96f083a5bb8d7c9595376146838b9580be90374ee1f  libabseil-cpp-20210324.2.tar.gz
- sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
-diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
-index d614a5e5fc..7646cf0ecd 100644
---- a/package/libabseil-cpp/libabseil-cpp.mk
-+++ b/package/libabseil-cpp/libabseil-cpp.mk
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 079675824a..d3f35b3de0 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2021-May/307025.html
+-sha256  92d8ac54429b171e087e61c2894dc5399fe6a549b1fbba09fa6a3cb9d4e57bd4  libdrm-2.4.106.tar.xz
+-sha512  33140e579906ab54b716149056af500c628ce41cd9ae3b0c33496693d2f5903fbcfccee8a942dd1560e1591111ed240da42612d5af5e75558db6f6a85d14617d  libdrm-2.4.106.tar.xz
++# From https://lists.freedesktop.org/archives/dri-devel/2021-July/313594.html
++sha256  c554cef03b033636a975543eab363cc19081cb464595d3da1ec129f87370f888  libdrm-2.4.107.tar.xz
++sha512  c7542ba15c4c934519a6a1f3cb1ec21effa820a805a030d0175313bb1cc796cd311f39596ead883f9f251679d701e262894c5a297d5cf45093c80a6cd818def0  libdrm-2.4.107.tar.xz
+ 
+ # Hash for license file
+-sha256  a69e38953c20a88845cc739c05dd604da4c977844b872e126c91a0ca2e1385b7  xf86drm.c
++sha256  7e952c6666ed17c99f91ee7af13c688b8769b0feaf6f4558bf6ad3e07512e1e6  xf86drm.c
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index f18df27687..c15be3e671 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBABSEIL_CPP_VERSION = 20200923.3
-+LIBABSEIL_CPP_VERSION = 20210324.2
- LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
- LIBABSEIL_CPP_LICENSE = Apache-2.0
- LIBABSEIL_CPP_LICENSE_FILES = LICENSE
+-LIBDRM_VERSION = 2.4.106
++LIBDRM_VERSION = 2.4.107
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
