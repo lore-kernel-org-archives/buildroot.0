@@ -1,42 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 Jul 2021 19:29:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: DRI drivers need either glx,
- egl or gbm
-Message-ID: <20210720172911.15840-1-bernd.kuhls@t-online.de>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Tue, 20 Jul 2021 20:10:48 +0200
+Subject: [Buildroot] [PATCH v2] package/cegui: disable Python SWIG extension
+ modules unconditionally
+Message-ID: <20210720181048.7015-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Fixes build error:
-../output-1/build/mesa3d-21.1.5/meson.build:520:4:
- ERROR: Problem encountered: building dri drivers require at least one windowing system
-
-OSMesa is not seen as a valid windowing system for DRI drivers anymore:
-https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=21.1&id=ee802372180a2b4460cc7abb53438e45c6b6f1e4
+It seems that Python SWIG extension module(s) are not compatible with
+buildroot's SWIG version so disable them unconditionally to fix
+the following build errors:
 
 Fixes:
-http://autobuild.buildroot.net/results/46e3a66ddc13a064e512aad0f3afd8655889ab9d/
+ - http://autobuild.buildroot.net/results/f80/f80ebdcbde08c13eddec9fadc39b9c2bd4b83e94//
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  and more...
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/mesa3d/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Changes v1 -> v2:
+ - disable CEGUI_BUILD_PYTHON_MODULES_SWIG option unconditionally
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index d1b3af2054..41c90c49af 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -63,8 +63,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_MESA3D_DRIVER
- 	select BR2_PACKAGE_MESA3D_GBM if \
- 		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
--		!BR2_PACKAGE_MESA3D_OPENGL_EGL && \
--		!BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
-+		!BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
- 		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
- 
+ package/cegui/cegui.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+index 747ebbb953..127d3b0fad 100644
+--- a/package/cegui/cegui.mk
++++ b/package/cegui/cegui.mk
+@@ -16,7 +16,8 @@ CEGUI_CONF_OPTS = \
+ 	-DCEGUI_BUILD_XMLPARSER_XERCES=OFF \
+ 	-DCEGUI_USE_FRIBIDI=OFF \
+ 	-DCEGUI_SAMPLES_ENABLED=OFF \
+-	-DCEGUI_BUILD_APPLICATION_TEMPLATES=OFF
++	-DCEGUI_BUILD_APPLICATION_TEMPLATES=OFF \
++	-DCEGUI_BUILD_PYTHON_MODULES_SWIG=OFF
+ CEGUI_DEPENDENCIES = glm \
+ 	$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
+ 	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
 -- 
-2.30.2
+2.32.0
