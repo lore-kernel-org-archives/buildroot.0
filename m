@@ -1,58 +1,50 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue, 20 Jul 2021 23:09:05 +0200
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.67
-In-Reply-To: <20210720224443.24edcd0f@windsurf>
-References: <20210612173513.2253959-1-giulio.benetti@benettiengineering.com>
- <20210720224443.24edcd0f@windsurf>
-Message-ID: <900065c9-8832-df20-35ac-ea69cbfe72e4@benettiengineering.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 20 Jul 2021 23:20:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dbus-glib: bump to version 0.112
+Message-ID: <20210720212039.356674-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Hello Thomas,
+- Update hash of COPYING (SPDX added with
+  https://gitlab.freedesktop.org/dbus/dbus-glib/-/commit/96479fb8fd5e2f8896cdce7feff7839dcb47a7d1
+  https://gitlab.freedesktop.org/dbus/dbus-glib/-/commit/d42176ae4763e5288ef37ea314fe58387faf2005)
+- Update indentation in hash file (two spaces)
 
-On 7/20/21 10:44 PM, Thomas Petazzoni wrote:
-> Hello Giulio,
-> 
-> On Sat, 12 Jun 2021 19:35:13 +0200
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
->> Note: NSS 3.67(like NSS 3.66) requires NSPR 4.31.
->> Release Notes (not yet available, but should eventually land):
->> https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.67_release_notes
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> 
-> This patch doesn't apply in master: master has libnss 3.65, and your
-> patch assumes a code base that has libnss 3.66.
-> 
-> Also, according to your reply to this e-mail, libnspr 4.31 is needed as
-> a requirement for this bump of libnss, so you should always resend both
-> in a single series.
+https://gitlab.freedesktop.org/dbus/dbus-glib/-/blob/dbus-glib-0.112/NEWS
 
-Ah sorry, you're right.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/dbus-glib/dbus-glib.hash | 4 ++--
+ package/dbus-glib/dbus-glib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Could you resend the libnspr and libnss version bumps in a single patch
-> series, rebased on master ?
-
-
-Sure I can. Here there is a "problem" if we can call it that way. It's 
-from some month that they release very very fast. Now they are at NSS 
-3.68 and NSPR 4.32 [1], but very soon there will be version 3.69. Even 
-if I send version bumps, they will release another version before you 
-apply for sure. Let's see if it gets slower.
-They also stopped emitting the Release Notes that doesn't help[2].
-
-What can I do? Do I send the latest I see in the moment I bump and 
-that's it, right?
-
-[1]: https://hg.mozilla.org/projects/nss
-[2]: 
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Releases
-
-Best regards
+diff --git a/package/dbus-glib/dbus-glib.hash b/package/dbus-glib/dbus-glib.hash
+index 098832431e..072dde3d69 100644
+--- a/package/dbus-glib/dbus-glib.hash
++++ b/package/dbus-glib/dbus-glib.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256 7ce4760cf66c69148f6bd6c92feaabb8812dee30846b24cd0f7395c436d7e825  dbus-glib-0.110.tar.gz
++sha256  7d550dccdfcd286e33895501829ed971eeb65c614e73aadb4a08aeef719b143a  dbus-glib-0.112.tar.gz
+ 
+ # Locally calculated
+-sha256 ef1634fc21d9112dca08f2557313584719d534d05213cf14f3c77938506266b4  COPYING
++sha256  589bc300214a8b9ecd121f51570fe6342617487fd8fc0fb1f4ec26a13d5b96f8  COPYING
+diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
+index 5eb158d954..0d247e1d89 100644
+--- a/package/dbus-glib/dbus-glib.mk
++++ b/package/dbus-glib/dbus-glib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_GLIB_VERSION = 0.110
++DBUS_GLIB_VERSION = 0.112
+ DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib
+ DBUS_GLIB_INSTALL_STAGING = YES
+ DBUS_GLIB_LICENSE = AFL-2.1 or GPL-2.0+
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.30.2
