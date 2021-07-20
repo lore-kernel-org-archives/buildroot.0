@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A19C1C07E9B
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:50:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E242C07E9B
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:51:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 61E5660FF2
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:50:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 61E5660FF2
+	by mail.kernel.org (Postfix) with ESMTPS id 54C156113A
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 21:51:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 54C156113A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F756403F2;
-	Tue, 20 Jul 2021 21:50:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 25C354031B;
+	Tue, 20 Jul 2021 21:51:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oFVJFgrX__Tm; Tue, 20 Jul 2021 21:50:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 60VMiJ2-xHx2; Tue, 20 Jul 2021 21:51:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 945324037A;
-	Tue, 20 Jul 2021 21:50:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4D4581BF9B2
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:49:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37847403AE;
+	Tue, 20 Jul 2021 21:51:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 51B2E1BF9B2
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:49:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3C9B6402E3
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:49:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E63F6059B
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 21:49:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IxNRtVfr5N8U for <buildroot@lists.busybox.net>;
- Tue, 20 Jul 2021 21:49:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P26fDo6VjSle for <buildroot@lists.busybox.net>;
+ Tue, 20 Jul 2021 21:49:33 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3FDE5401C8
- for <buildroot@buildroot.org>; Tue, 20 Jul 2021 21:49:26 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DC6986058D
+ for <buildroot@buildroot.org>; Tue, 20 Jul 2021 21:49:32 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 614F7200006;
- Tue, 20 Jul 2021 21:49:24 +0000 (UTC)
-Date: Tue, 20 Jul 2021 23:49:23 +0200
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id C2850FF806;
+ Tue, 20 Jul 2021 21:49:29 +0000 (UTC)
+Date: Tue, 20 Jul 2021 23:49:28 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: =?UTF-8?B?SsO2cmc=?= Krause <joerg.krause@embedded.rocks>
-Message-ID: <20210720234923.0e0c8586@windsurf>
-In-Reply-To: <20210614083346.361221-1-joerg.krause@embedded.rocks>
-References: <20210614083346.361221-1-joerg.krause@embedded.rocks>
+To: John Keeping <john@metanate.com>
+Message-ID: <20210720234928.514f384f@windsurf>
+In-Reply-To: <20210614104210.2100899-1-john@metanate.com>
+References: <20210614104210.2100899-1-john@metanate.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/bluez-alsa: bump to version
- 3.1.0
+Subject: Re: [Buildroot] [PATCH] package/cryptsetup: fix tmpfiles.d setup
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,19 +68,34 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
-Message-ID: <20210720214923.qaW3G_sXOYElnH4x5V8VCEcBzsJbCH9b9xlcC5wP1go@z>
+Message-ID: <20210720214928.llq9mE8-ppHUuf6jhc5052OM2nDJee77u3KTNwyemC0@z>
 
-T24gTW9uLCAxNCBKdW4gMjAyMSAwODozMzo0NiArMDAwMApKw7ZyZyBLcmF1c2UgPGpvZXJnLmty
-YXVzZUBlbWJlZGRlZC5yb2Nrcz4gd3JvdGU6Cgo+IFNpZ25lZC1vZmYtYnk6IErDtnJnIEtyYXVz
-ZSA8am9lcmcua3JhdXNlQGVtYmVkZGVkLnJvY2tzPgo+IC0tLQo+ICBwYWNrYWdlL2JsdWV6LWFs
-c2EvYmx1ZXotYWxzYS5oYXNoIHwgMiArLQo+ICBwYWNrYWdlL2JsdWV6LWFsc2EvYmx1ZXotYWxz
-YS5tayAgIHwgMiArLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxl
-dGlvbnMoLSkKCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpUaG9tYXMKLS0gClRob21hcyBQ
-ZXRhenpvbmksIENUTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVy
-aW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVzeWJveC5u
-ZXQKaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+On Mon, 14 Jun 2021 11:42:10 +0100
+John Keeping <john@metanate.com> wrote:
+
+> The configure script uses pkg-config to detect the location of
+> tmpfiles.d but imposes an unspecified ordering dependency with systemd.
+> Instead of relying on systemd being built before cryptsetup, set the
+> directory path explcitly, and ensure it is not set when systemd-tmpfiles
+> is disabled.
+> 
+> Signed-off-by: John Keeping <john@metanate.com>
+> ---
+>  package/cryptsetup/cryptsetup.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
