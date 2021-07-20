@@ -1,34 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 23:43:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcap: fix build with gcc 4.8
-In-Reply-To: <20210720210134.90010-1-fontaine.fabrice@gmail.com>
-References: <20210720210134.90010-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210720234318.0b48a884@windsurf>
+Date: Tue, 20 Jul 2021 23:43:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-ubjson: bump to version
+ 0.16.1
+In-Reply-To: <20210720210801.90649-1-fontaine.fabrice@gmail.com>
+References: <20210720210801.90649-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210720234322.5568801b@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On Tue, 20 Jul 2021 23:01:34 +0200
+On Tue, 20 Jul 2021 23:08:01 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fix the following build failure with gcc 4.8 which is raised since bump
-> to version 2.51 in commit bef89e381d0d698053a026d6a8cb0ded260bd074:
+> Update indentation in hash file (two spaces)
 > 
-> uns_test.c: In function 'main':
-> uns_test.c:118:5: error: 'for' loop initial declarations are only allowed in C99 mode
->      for (int i=0; i<2; i++) {
->      ^
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/9e67bdd540bb7779a13e27c55114a561c12b289a
+> https://github.com/Iotic-Labs/py-ubjson/blob/v0.16.1/CHANGELOG
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...0001-Permit-compilation-with-std-c89.patch | 123 ++++++++++++++++++
->  1 file changed, 123 insertions(+)
->  create mode 100644 package/libcap/0001-Permit-compilation-with-std-c89.patch
+>  package/python-ubjson/python-ubjson.hash | 6 +++---
+>  package/python-ubjson/python-ubjson.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
