@@ -1,36 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 22:48:06 +0200
-Subject: [Buildroot] Question about pkg-config pc files
-In-Reply-To: <CAJ6EmCd=eJUrY5Qa_SyJd5mVRq0bKtmuQTB-j1HF1bXXZpZn3g@mail.gmail.com>
-References: <CAJ6EmCd=eJUrY5Qa_SyJd5mVRq0bKtmuQTB-j1HF1bXXZpZn3g@mail.gmail.com>
-Message-ID: <20210720224806.09e5a5b2@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 20 Jul 2021 22:54:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/darkhttpd: fix build with gcc 4.8
+Message-ID: <20210720205408.84155-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20210720204806.uOwyZSsPWqt8a-W_S1GIbkc-5CyiS8bIJZ5hC74SRfI@z>
 
-Hello Patricia,
+Fix the following build failure which is raised since bump to version
+0.13 in commit 88705a8c248e566f2c9ca71a8ee5353b33e368c2:
 
-On Tue, 20 Jul 2021 16:41:40 -0400
-Patricia Holden <pholden@nklabs.com> wrote:
+darkhttpd.c:966:5: error: 'for' loop initial declarations are only allowed in C99 mode
+     for (int i = 0, j = 0; i < input_length;) {
+     ^
 
-> I am adding a package that has dependencies on QT pkg-config pc files.  I
-> see the pkg-config pc files in
-> output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/share/pkgconfig/, but
-> I don't see any pkg-config files installed to target.  the QQmlApplication
-> code is trying to include multiple qt packages but they are not found.
-> Running "pkg-config --list-all" results in none found at all.
-> 
-> How do I get pkg-config pc files installed to the target?
+Fixes:
+ - http://autobuild.buildroot.org/results/ffc/ffcb627c44d2b7202d641129b67af2dc7865c618/build-end.log
 
-You don't: Buildroot doesn't support doing development on the target.
-Why would you need .pc files on the target ? Is QQmlApplication using
-pkg-config at run-time on the target ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...vars-outside-of-for-loop-for-std-c90.patch | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch
 
-Thomas
+diff --git a/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch b/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch
+new file mode 100644
+index 0000000000..7584bff98e
+--- /dev/null
++++ b/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch
+@@ -0,0 +1,39 @@
++From 81b491e60affd67f4ec2feccbee1cdf98dc57b81 Mon Sep 17 00:00:00 2001
++From: Emil Mikulic <emikulic@gmail.com>
++Date: Sun, 21 Mar 2021 15:03:14 +1100
++Subject: [PATCH] Declare vars outside of for() loop for -std=c90.
++
++Fixes #2.
++
++[Retrieved from:
++https://github.com/emikulic/darkhttpd/commit/81b491e60affd67f4ec2feccbee1cdf98dc57b81]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ darkhttpd.c | 7 ++++---
++ 1 file changed, 4 insertions(+), 3 deletions(-)
++
++diff --git a/darkhttpd.c b/darkhttpd.c
++index 219a8a3..268628a 100644
++--- a/darkhttpd.c
+++++ b/darkhttpd.c
++@@ -966,8 +966,9 @@ static char *base64_encode(char *str) {
++     char *encoded_data = malloc(output_length+1);
++     if (encoded_data == NULL) return NULL;
++ 
++-    for (int i = 0, j = 0; i < input_length;) {
++-
+++    int i;
+++    int j;
+++    for (i = 0, j = 0; i < input_length;) {
++         uint32_t octet_a = i < input_length ? (unsigned char)str[i++] : 0;
++         uint32_t octet_b = i < input_length ? (unsigned char)str[i++] : 0;
++         uint32_t octet_c = i < input_length ? (unsigned char)str[i++] : 0;
++@@ -981,7 +982,7 @@ static char *base64_encode(char *str) {
++     }
++ 
++     const int mod_table[] = {0, 2, 1};
++-    for (int i = 0; i < mod_table[input_length % 3]; i++)
+++    for (i = 0; i < mod_table[input_length % 3]; i++)
++         encoded_data[output_length - 1 - i] = '=';
++     encoded_data[output_length] = '\0';
++ 
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.2
