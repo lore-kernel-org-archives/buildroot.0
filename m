@@ -1,139 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 21:23:33 +0200
-Subject: [Buildroot] [git commit] configs/olimex_a20_olinuxino: switch to
- extlinux.conf
-Message-ID: <20210720185001.ED593884F3@busybox.osuosl.org>
+Date: Tue, 20 Jul 2021 21:24:35 +0200
+Subject: [Buildroot] [git commit] package/network-manager: bump to version
+ 1.32.2
+Message-ID: <20210720185034.22769884F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0d270ccfb0a9b486ea5907f6e86c5d9c07f93e2
+commit: https://git.buildroot.net/buildroot/commit/?id=360d1aad84449c6a1993d8c7e469dc0cd35339a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-a10_olinuxino is not switched to extlinux.conf, so the broken symlinks
-are replaced by the previous content from a20_olinuxino.
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/olimex/a10_olinuxino/boot.cmd                                 | 6 +++++-
- board/olimex/a10_olinuxino/post-build.sh                            | 4 +++-
- board/olimex/a20_olinuxino/boot.cmd                                 | 5 -----
- board/olimex/a20_olinuxino/post-build.sh                            | 3 ---
- .../olimex/a20_olinuxino/rootfs_overlay/boot/extlinux/extlinux.conf | 4 ++++
- configs/olimex_a20_olinuxino_lime2_defconfig                        | 4 +---
- configs/olimex_a20_olinuxino_lime_defconfig                         | 4 +---
- 7 files changed, 14 insertions(+), 16 deletions(-)
+ package/network-manager/network-manager.hash | 6 +++---
+ package/network-manager/network-manager.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/board/olimex/a10_olinuxino/boot.cmd b/board/olimex/a10_olinuxino/boot.cmd
-deleted file mode 120000
-index 612c745500..0000000000
---- a/board/olimex/a10_olinuxino/boot.cmd
-+++ /dev/null
-@@ -1 +0,0 @@
--../a20_olinuxino/boot.cmd
-\ No newline at end of file
-diff --git a/board/olimex/a10_olinuxino/boot.cmd b/board/olimex/a10_olinuxino/boot.cmd
-new file mode 100644
-index 0000000000..44d9239a94
---- /dev/null
-+++ b/board/olimex/a10_olinuxino/boot.cmd
-@@ -0,0 +1,5 @@
-+setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
-+ext4load mmc 0 0x49000000 /boot/${fdtfile}
-+ext4load mmc 0 0x46000000 /boot/zImage
-+env set fdt_high ffffffff
-+bootz 0x46000000 - 0x49000000
-diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a10_olinuxino/post-build.sh
-deleted file mode 120000
-index b346896024..0000000000
---- a/board/olimex/a10_olinuxino/post-build.sh
-+++ /dev/null
-@@ -1 +0,0 @@
--../a20_olinuxino/post-build.sh
-\ No newline at end of file
-diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a10_olinuxino/post-build.sh
-new file mode 100755
-index 0000000000..d3f612f811
---- /dev/null
-+++ b/board/olimex/a10_olinuxino/post-build.sh
-@@ -0,0 +1,3 @@
-+#!/bin/sh
-+
-+cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-diff --git a/board/olimex/a20_olinuxino/boot.cmd b/board/olimex/a20_olinuxino/boot.cmd
-deleted file mode 100644
-index 44d9239a94..0000000000
---- a/board/olimex/a20_olinuxino/boot.cmd
-+++ /dev/null
-@@ -1,5 +0,0 @@
--setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
--ext4load mmc 0 0x49000000 /boot/${fdtfile}
--ext4load mmc 0 0x46000000 /boot/zImage
--env set fdt_high ffffffff
--bootz 0x46000000 - 0x49000000
-diff --git a/board/olimex/a20_olinuxino/post-build.sh b/board/olimex/a20_olinuxino/post-build.sh
-deleted file mode 100755
-index d3f612f811..0000000000
---- a/board/olimex/a20_olinuxino/post-build.sh
-+++ /dev/null
-@@ -1,3 +0,0 @@
--#!/bin/sh
--
--cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-diff --git a/board/olimex/a20_olinuxino/rootfs_overlay/boot/extlinux/extlinux.conf b/board/olimex/a20_olinuxino/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..f754da3623
---- /dev/null
-+++ b/board/olimex/a20_olinuxino/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+label Olinuxino
-+    kernel /boot/zImage
-+    fdtdir /boot
-+    append console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index d149f04bfb..dca6123c18 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
- BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
-+BR2_ROOTFS_OVERLAY="board/olimex/a20_olinuxino/rootfs_overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index aef06dde2c..6efd697af4 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,6 +1,6 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.22/NetworkManager-1.22.16.sha256sum
+-sha256  377aa053752eaa304b72c9906f9efcd9fbd5f7f6cb4cd4ad72425a68982cffc6  NetworkManager-1.22.16.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.32/NetworkManager-1.32.2.sha256sum
++sha256  701d511067f757d0f92f412c98cdb49a74a6ba69448aabb1beadacbc171e3873  NetworkManager-1.32.2.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+-sha256  f0543c137bc0eece552d42642d1bab31707ca3b3663d9c7a81ac3b270a4780e7  CONTRIBUTING
++sha256  65fd94885d3a5f468755e7cbe1334e56ef3a32b8a73980967fa9839c10514aa9  CONTRIBUTING.md
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 607c2b402b..fbd5b1c85c 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,15 +4,15 @@
+ #
+ ################################################################################
  
-@@ -52,8 +52,6 @@ BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/olimex/a20_olinuxino/boot.cmd"
- 
- # Additional tools
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 8d759ca98a..0eaacc9ec1 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
- BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
-+BR2_ROOTFS_OVERLAY="board/olimex/a20_olinuxino/rootfs_overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- 
-@@ -52,8 +52,6 @@ BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/olimex/a20_olinuxino/boot.cmd"
- 
- # Additional tools
- BR2_PACKAGE_HOST_GENIMAGE=y
+-NETWORK_MANAGER_VERSION_MAJOR = 1.22
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).16
++NETWORK_MANAGER_VERSION_MAJOR = 1.32
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
+ 	libgcrypt wireless_tools util-linux host-intltool readline libndp
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+-NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING
++NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING.md
+ NETWORK_MANAGER_CPE_ID_VENDOR = gnome
+ NETWORK_MANAGER_CPE_ID_PRODUCT = networkmanager
+ NETWORK_MANAGER_SELINUX_MODULES = networkmanager
