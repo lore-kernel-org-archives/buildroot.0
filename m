@@ -1,24 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Jul 2021 22:40:00 +0200
-Subject: [Buildroot] [PATCH] package/grpc: bump version to 1.38.1
-In-Reply-To: <20210706092943.36353-1-buildroot@heine.tech>
-References: <20210706092943.36353-1-buildroot@heine.tech>
-Message-ID: <20210720224000.4431b037@windsurf>
+Date: Tue, 20 Jul 2021 22:40:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-intel:
+ bump version
+In-Reply-To: <20210701182627.306036-1-bernd.kuhls@t-online.de>
+References: <20210701182627.306036-1-bernd.kuhls@t-online.de>
+Message-ID: <20210720224033.0d36bec4@windsurf>
 List-Id: <buildroot.busybox.net>
 To: buildroot@busybox.net
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20210720204000.6QWqCWU_lWILHvqZ9VVYQRdrXaxGweXK7MesdWw1hFE@z>
 
-On Tue,  6 Jul 2021 11:29:41 +0200
-Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
+On Thu,  1 Jul 2021 20:26:27 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> Add --disable-tools for reproducable builds.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/grpc/grpc.hash | 2 +-
->  package/grpc/grpc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  .../xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash     | 2 +-
+>  .../x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
