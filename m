@@ -8,86 +8,85 @@ X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_NONE,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44072C07E95
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:47:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05AC9C07E95
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:54:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 02DDD61004
-	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:47:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 02DDD61004
+	by mail.kernel.org (Postfix) with ESMTPS id AC0E460FF3
+	for <buildroot@archiver.kernel.org>; Tue, 20 Jul 2021 20:54:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AC0E460FF3
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C893A4050F;
-	Tue, 20 Jul 2021 20:47:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7E76B4018D;
+	Tue, 20 Jul 2021 20:54:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K_PL31j42eAR; Tue, 20 Jul 2021 20:47:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB663404EE;
-	Tue, 20 Jul 2021 20:47:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2F52E1BF45A
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:47:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1EAE9402BC
- for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:47:50 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4v_9-C_DoVBr for <buildroot@lists.busybox.net>;
- Tue, 20 Jul 2021 20:47:49 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Px1trhyOX3Dq; Tue, 20 Jul 2021 20:54:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id CAC7B401BA;
+	Tue, 20 Jul 2021 20:54:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A4CC81BF45A
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:54:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A159882D57
+ for <buildroot@lists.busybox.net>; Tue, 20 Jul 2021 20:54:19 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lIziRHBrec4A for <buildroot@lists.busybox.net>;
+ Tue, 20 Jul 2021 20:54:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 35EDE401BA
- for <buildroot@buildroot.org>; Tue, 20 Jul 2021 20:47:49 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- b14-20020a1c1b0e0000b02901fc3a62af78so2226774wmb.3
- for <buildroot@buildroot.org>; Tue, 20 Jul 2021 13:47:49 -0700 (PDT)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1DB4C82B81
+ for <buildroot@buildroot.org>; Tue, 20 Jul 2021 20:54:17 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id w13so124428wmc.3
+ for <buildroot@buildroot.org>; Tue, 20 Jul 2021 13:54:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=0xNv5utghu8ZuonBWkRBDd8V10TxNOIMGOtKjSwrv8Y=;
- b=dfXe61kDkbNqiVpAVwxr7v0PEjrrGWn3XcIt1QnZVeRVSzEueCZ5eteYWhF5wQgmsR
- UHE17GYQN2nMxnvKdyyh1SGQHtDS1pA74aFKpNC8GdzXTxV9Lk3wl9y0zeuakQkSjg8s
- CTAd79Ci2lTcJi6aHswYIvX2OiVKROGjGa8+TXDqv8Ab6VXbGiLxBTBi8n54KViP+XQz
- r3qg0Hw1VSWqduEYpWPir46g0uPhfy93o9fvvxmwlW1WTmXquFHPyS0Dxtk8PAOGXX/H
- 1uAQ4S3+Dke8SNTO7FkPAZmu3x87Lrs9UMl4Fh7QyTTA5oj+UEh7sHL37CkG5Nnr/naC
- tdpg==
+ bh=Pga4vhfEbuNtd8m8Fx37sX8YPqLBxdmGBG4llDOwZTg=;
+ b=rDy4ZTpD9kY8xBMnuJLWwFEwk12Y6uxRj0AOty4kgGV7+GMORZejiGP319kQgXArn/
+ l7HsDSLbziBU79ymu5fpxp/MYNNAsyMpTSRfYBpr7k0oFQBa+48/q5cWc475hlDbsNvN
+ sUvGC7tzcqMOWlCMG4Ou37nZI2dYZgL97WvruFt5r4NbnjQGFJ3UgBXtbv3MADOI4bLx
+ KEQZDknYNQjC3JoxF+zROUcdvZS/5QTAR78VOpPOHPAzh4EN1D/s3qdznp0XZZhV4wCs
+ GpT/FvT2pDlFfepZ3lB2GJBYTXxDnPvUabeCp8xaYuBDi66WbRvIU8YW6HMuxjKGUfDp
+ CNig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=0xNv5utghu8ZuonBWkRBDd8V10TxNOIMGOtKjSwrv8Y=;
- b=daJnS1BriAknPgria19C1H7Zy+y+kxGZa2Tl9CK/SrxMjwecRzPd4p+6yJC0hM1uQR
- SC0imYfD3e+QmMVJeohtkYtsb5tuWJM24QBbLVZoFco1yxE1WBdsc88dyJlKUIEJOAyA
- +aM9kBroXkSEY+UYbvY9Y7jFFF9CuIDw/kWPVw9xrLFnnJO2rrLe+VeNbZ0HOk5Xev+6
- SsaqFc1hqhCQjal2ef1P2jxBjH/MXI32/LgohyulyNc0VlnVoKuXQvd8tfABh2bCMArR
- 6k5257US1cYEa9f/VgLb1vej1N/rlusb2n6UjTAIrhulml9EaGt1FZdbBIpxJ1PZljTx
- tCuQ==
-X-Gm-Message-State: AOAM530tgwLKKhAnp2v8ptYTX9Pma8lDKLZPxB2s8/+qBnUtgBqVmAxD
- 879jB43Ctesyzv4VHtd712MMzXr/ZNrbzw==
-X-Google-Smtp-Source: ABdhPJwpUaLwh7kNrV0a8H+n8G98EDe/G7udNItB4SldmbxF4+9u5tq6B2k0XvgSpQCAtyz4rqpH1Q==
-X-Received: by 2002:a05:600c:6d8:: with SMTP id
- b24mr331789wmn.111.1626814067258; 
- Tue, 20 Jul 2021 13:47:47 -0700 (PDT)
+ bh=Pga4vhfEbuNtd8m8Fx37sX8YPqLBxdmGBG4llDOwZTg=;
+ b=C1uGwlvybmVAY7/ozO1CR6rEU/alXcNKWwRUeIwjYYyaBfmmJcIcd5LmF+kF/Fsmko
+ xBiA9qMaWA9aSe+JqRpUTmyFHG8Txier0MZNbLGGGEn1+Hj4qzBkETdcR+L1qVcwuHrd
+ Tni9dmee3wmVdq8GEyl6j4o1AGGtKtxKRdRk8hUZHXbZaR7apfPxxznGkwTXdrbiC4cQ
+ s5BKpgyqjRkyv+xhdV61u754OJWioDrorncfYM/zsENyQJonzmiJhdzTlIse3SN7bJJa
+ 1QZPtob1iBw1U/dH/4Fs8UlbRCgcpwkOzqiSeWPUSaFFD/LSOQ6HQv7sl9Y2AsaoAW15
+ Qmow==
+X-Gm-Message-State: AOAM533PBw8lZr9tZWNabwWntefwzXX4bRLzRPD9XLA9woHdelt88IQj
+ 22WorNM6hFW1jV9ufe/vplls9zOu9nFdfA==
+X-Google-Smtp-Source: ABdhPJz73+MTbKTKWpecN6pMIym9GhkMGp49WY1DCfiNXS/aOs+SW0UX/+D0QY4nXkf365gCTKiEow==
+X-Received: by 2002:a05:600c:3644:: with SMTP id
+ y4mr373214wmq.85.1626814455997; 
+ Tue, 20 Jul 2021 13:54:15 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-1383-171.w86-229.abo.wanadoo.fr.
  [86.229.230.171])
- by smtp.gmail.com with ESMTPSA id a10sm24336357wrm.12.2021.07.20.13.47.46
+ by smtp.gmail.com with ESMTPSA id 140sm20958807wmb.43.2021.07.20.13.54.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 20 Jul 2021 13:47:46 -0700 (PDT)
+ Tue, 20 Jul 2021 13:54:15 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Jul 2021 22:47:21 +0200
-Message-ID: <20210720204721.80821-1-fontaine.fabrice@gmail.com>
+Date: Tue, 20 Jul 2021 22:54:08 +0200
+Message-ID: <20210720205408.84155-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: use official tarball
+Subject: [Buildroot] [PATCH 1/1] package/darkhttpd: fix build with gcc 4.8
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,49 +98,75 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
-Message-ID: <20210720204721.fl-_N0Q5yeBS8CrK3QgDg_MC0xsRvHe3lcMoYrqat9Y@z>
+Message-ID: <20210720205408.tu0d_Z4aMsHdwJ3_1sNMMuGba2soSuZM6w8moFb313k@z>
+
+Fix the following build failure which is raised since bump to version
+0.13 in commit 88705a8c248e566f2c9ca71a8ee5353b33e368c2:
+
+darkhttpd.c:966:5: error: 'for' loop initial declarations are only allowed in C99 mode
+     for (int i = 0, j = 0; i < input_length;) {
+     ^
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ffc/ffcb627c44d2b7202d641129b67af2dc7865c618/build-end.log
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/linux-firmware/linux-firmware.hash | 6 ++++--
- package/linux-firmware/linux-firmware.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ ...vars-outside-of-for-loop-for-std-c90.patch | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch
 
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 22d6ddf88f..41a17b021e 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -1,5 +1,7 @@
--# Locally calculated
--sha256  4341b33c64afd8e471de06f1459f63a76445b1ea83055fe3d4103dfb2e1b25ec  linux-firmware-20210511-br1.tar.gz
-+# From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
-+sha256  2aa6ae8b9808408f9811ac38f00c188e53e984a2b3990254f6c9c02c1ab13417  linux-firmware-20210511.tar.xz
+diff --git a/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch b/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch
+new file mode 100644
+index 0000000000..7584bff98e
+--- /dev/null
++++ b/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch
+@@ -0,0 +1,39 @@
++From 81b491e60affd67f4ec2feccbee1cdf98dc57b81 Mon Sep 17 00:00:00 2001
++From: Emil Mikulic <emikulic@gmail.com>
++Date: Sun, 21 Mar 2021 15:03:14 +1100
++Subject: [PATCH] Declare vars outside of for() loop for -std=c90.
 +
-+# Hash for license files
- sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
- sha256  8d5847d2971241d4d6a51c16e206379de53a6d4e203fa6f8e1c1e9279c7c4ad0  LICENSE.amdgpu
- sha256  2d6062d63b91eb750bf741498691604f75184b9fee97608ec537cd09bd6a42b4  LICENCE.Marvell
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 69b1226cca..f29d9cf65d 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- LINUX_FIRMWARE_VERSION = 20210511
--LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
--LINUX_FIRMWARE_SITE_METHOD = git
-+LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
-+LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
- LINUX_FIRMWARE_INSTALL_IMAGES = YES
- 
- LINUX_FIRMWARE_CPE_ID_VENDOR = kernel
++Fixes #2.
++
++[Retrieved from:
++https://github.com/emikulic/darkhttpd/commit/81b491e60affd67f4ec2feccbee1cdf98dc57b81]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ darkhttpd.c | 7 ++++---
++ 1 file changed, 4 insertions(+), 3 deletions(-)
++
++diff --git a/darkhttpd.c b/darkhttpd.c
++index 219a8a3..268628a 100644
++--- a/darkhttpd.c
+++++ b/darkhttpd.c
++@@ -966,8 +966,9 @@ static char *base64_encode(char *str) {
++     char *encoded_data = malloc(output_length+1);
++     if (encoded_data == NULL) return NULL;
++ 
++-    for (int i = 0, j = 0; i < input_length;) {
++-
+++    int i;
+++    int j;
+++    for (i = 0, j = 0; i < input_length;) {
++         uint32_t octet_a = i < input_length ? (unsigned char)str[i++] : 0;
++         uint32_t octet_b = i < input_length ? (unsigned char)str[i++] : 0;
++         uint32_t octet_c = i < input_length ? (unsigned char)str[i++] : 0;
++@@ -981,7 +982,7 @@ static char *base64_encode(char *str) {
++     }
++ 
++     const int mod_table[] = {0, 2, 1};
++-    for (int i = 0; i < mod_table[input_length % 3]; i++)
+++    for (i = 0; i < mod_table[input_length % 3]; i++)
++         encoded_data[output_length - 1 - i] = '=';
++     encoded_data[output_length] = '\0';
++ 
 -- 
 2.30.2
 
