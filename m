@@ -8,85 +8,84 @@ X-Spam-Status: No, score=-18.6 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5C6DC6377B
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 21:45:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FD6BC6377B
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 21:46:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 907706121F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 21:45:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 907706121F
+	by mail.kernel.org (Postfix) with ESMTPS id 366DB61208
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 21:46:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 366DB61208
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6496E40210;
-	Wed, 21 Jul 2021 21:45:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 033C140134;
+	Wed, 21 Jul 2021 21:46:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FWraQR9wy2l3; Wed, 21 Jul 2021 21:45:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 810EB40327;
-	Wed, 21 Jul 2021 21:45:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7A7D61C1187
- for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 21:45:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A1AC400F3
- for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 21:45:26 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vCQGtRi4Jk-u for <buildroot@lists.busybox.net>;
- Wed, 21 Jul 2021 21:45:22 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UiNEB3uSxlBq; Wed, 21 Jul 2021 21:46:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 34D97400F3;
+	Wed, 21 Jul 2021 21:46:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C0B271C1187
+ for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 21:45:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id ACF2D605D2
+ for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 21:45:27 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jPr5OVAv94po for <buildroot@lists.busybox.net>;
+ Wed, 21 Jul 2021 21:45:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com
- [IPv6:2607:f8b0:4864:20::102b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B4404400E1
- for <buildroot@buildroot.org>; Wed, 21 Jul 2021 21:45:22 +0000 (UTC)
-Received: by mail-pj1-x102b.google.com with SMTP id j1so1542594pjj.4
- for <buildroot@buildroot.org>; Wed, 21 Jul 2021 14:45:22 -0700 (PDT)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8B8FD605A2
+ for <buildroot@buildroot.org>; Wed, 21 Jul 2021 21:45:26 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id f9so3666612wrq.11
+ for <buildroot@buildroot.org>; Wed, 21 Jul 2021 14:45:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=mnMH+T+vat6ykkP65fvYPQVHGFHu/Ps15MTFFbz5i5A=;
- b=bKwQUEqriy0N4h96JmOgruIn8T6uc6CrF2BtPryn1cZ5L81WPWPOZl8RF7lYhiT8Et
- bWeGYYYPBJ1bVlzW8U7n7bsPQs1665n4dKKXu6ftGZwambRSC5JOJXwQcuzlfrXn2j6Z
- X1+7+arOaH2jpcD4E6mL5NwkgMbKK2W51rBWTukr7VOi+k1sd1F2SSgCw6SKmt/+Z2UK
- /+3N2zBrBzFYvgPcyHXIRfHFM8sQETXW9ZDRKukMqC4OQF0QRkh0NXHZBrNYo34NWDVX
- D7fqpG52Fvy4y/shNN4RJDm+mJoqZjmJD0pzDkTQM1QC/804CyTktuHZzBSPukrivf7P
- 7X8Q==
+ bh=LKuOJxz+Lz1+kzXHlqyof08EDyFFgOHPKjoTYbRmXTM=;
+ b=SbeTsJInvD4raALJSN4tvqrvp3FSKQsyVJIIEqifKInXbtHo5BFNu9OrPWlgU+DYjQ
+ Urv53bMI1F82ZqNCjWRWunb/2UvK5Op5u/omXN/F3A9FDkmpw2vP8jXWMQTzQkCpfjUs
+ vULUX5ZuaFou3TEdbFH6BfCdusHvEX8jIgRXa8M9NyD+DAxSlqyzqSlFNz8gNkg1eYOD
+ 6ty3p7Wjfd1wi61cG8+vRVcOU2ibR4funjEIKRStdKBO+er3jSnUuPRYWdtcnEox8jt0
+ 4UJ63wIgcK2S++i2IwpjetkzOvZTqtca7FGCQsSel/sMNL/teok9eXXuTeOb8CUQS2jG
+ c9Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=mnMH+T+vat6ykkP65fvYPQVHGFHu/Ps15MTFFbz5i5A=;
- b=fOfHH/TUKEarq3Z/XfBfTlqied11SVJoIcr9YfDC+ptIShIMpzSUOFnVF9HBE4QXZa
- LowWKS9pqRCoPYB0WWi1vquybWoRfKTG8oB71EFlbW+GZbJolFoVZ0eIUBe5SXAiH0Ss
- Md0adlfD1P0Fe0eiKShikN/o/pvRlo/kDoik0BZkeTDWb29HIhSndN3rfLtdz4R0gtK5
- A+a65CRtJ4TbAGEvjm0QHsh6zQycB+wDqPVlPlNHxyf+s/KpCXH8nngjNSurTJXOIdZ0
- swb/LKxdKuDok+X1cUkXpEhizODEJmdAmHvM3I0PKUF98DZSc5dY9IS5r5IoEIXDSc99
- cq9g==
-X-Gm-Message-State: AOAM530GIzAQ0a47/9xXMe7ikU0UVfL8wsOzdhgiI77TCwYnN/HsjSdI
- 4yVWSY7Ns6h5s+ZEqs3CBVXCMlMRAgI=
-X-Google-Smtp-Source: ABdhPJxFPLV4rZGmR43lk7xpAdeKRKqV4NPbQcTRAUzINxdJF7M/ZakfncYFjn++Jf+n+Ygk33tKNA==
-X-Received: by 2002:a17:90a:8a94:: with SMTP id
- x20mr5627394pjn.130.1626903921425; 
- Wed, 21 Jul 2021 14:45:21 -0700 (PDT)
-Received: from adam.duskett ([47.149.13.137])
- by smtp.gmail.com with ESMTPSA id t37sm28266330pfg.14.2021.07.21.14.45.20
+ bh=LKuOJxz+Lz1+kzXHlqyof08EDyFFgOHPKjoTYbRmXTM=;
+ b=ubo8rlYcgtU37VKzE47eDx7oaZeg3gO/InT60m9QGh2E6FqqOSxkQScpk7Mli5ehqw
+ /2xA25xRmGIw4cvm8SzpAY0RbPwC5zq6LwTvuALon7t97bhfo9+zIM8BizugCRe1N22a
+ ZRqx/hQblh9YEnKwXhAdVNKvtzD52/hzapODC8/SLrEFNUpYXsp0/aLsXyIt4A402UsP
+ DyErernnw2sSD8VPjJPD4+JC7GF6HcWC8lK/i3cgYuwcqH3mm2dySXIk4sEMgbpPzdZX
+ v/tD+1XFuRXUBcY92DZV8M/Nc8q0GWzgveQhvo2DptIG7tkHP/30MrxLKwXWVY0U2IGk
+ uWPg==
+X-Gm-Message-State: AOAM530D18fQZ2sPIPRbknH+kFIDj63Mbrrv0WKQb0yBZ3mdye5XCt5U
+ CzyPQk2P/L85lFmIAPNoSzVFsiFvazEdfg==
+X-Google-Smtp-Source: ABdhPJzVyJewk0HitMNJVDJAXpC/qT8nYHYljhEBHL5Uo10b6h8bKNpIKPo1d7Mhi/7tpuTf7Puqww==
+X-Received: by 2002:a5d:6391:: with SMTP id p17mr25557864wru.61.1626903924411; 
+ Wed, 21 Jul 2021 14:45:24 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-1383-171.w86-229.abo.wanadoo.fr.
+ [86.229.230.171])
+ by smtp.gmail.com with ESMTPSA id p11sm28367127wrw.53.2021.07.21.14.45.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 21 Jul 2021 14:45:20 -0700 (PDT)
-From: Adam Duskett <aduskett@gmail.com>
+ Wed, 21 Jul 2021 14:45:23 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Jul 2021 14:45:15 -0700
-Message-Id: <20210721214518.227254-1-aduskett@gmail.com>
-X-Mailer: git-send-email 2.31.1
+Date: Wed, 21 Jul 2021 23:45:16 +0200
+Message-Id: <20210721214517.806537-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/4] package/polkit: bump version to 0.119
- and use duktape
+Subject: [Buildroot] [PATCH 1/2] package/libnfnetlink: fix build on musl
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,424 +97,147 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Marek Belisko <marek.belisko@open-nandra.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Norbert Lange <nolange79@gmail.com>, Adam Duskett <aduskett@gmail.com>,
- Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Joris Lijssens <joris.lijssens@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Unfortuantly, as of commit 3e1d61868fa8bfc586099302e931433270e5d17d, polkit
-requires mozjs >= 78, which means spidermonkey is too old. As such, this patch
-is larger than usual.
+Include upstream patch to fix build failure with suricata raised since
+bump to version 6.0.3 in commit 4c429c3f8c322381991a58fcc37c01da9eb5e8a6
 
-Spidermonkey has a few major issues:
-  - The source directory after compilation is enormous (2.7G!)
-  - The shared library is 24MB stripped!
-  - It requires python2 to build, which is EOLed, and Buildroot is working
-    towards removing. See: https://elinux.org/Buildroot:Python2Packages
+Fixes:
+ - http://autobuild.buildroot.org/results/0b960f40b5d7e4bb0c4ba20638fe66a9e0964ab3
 
-Instead of going through the arduous task of updating Spidermonkey, there is a
-better solution: use duktape.
-
-There has been a pending patch for over a year that incorporates duktape as an
-optional backend for polkit found here:
-https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/35
-
-As Thomas Petazzoni put it:
-  "As I am subscribed to notifications on this merge request, I have been
-  following the intermittent discussions taking place on this topic.
-  And indeed, discussions have been sparse, and the polkit maintainer reaction
-  has not been very supportive. It even feels like they are trying to find
-  every possible argument or small issue not to merge the duktape integration."
-
-Many people have come out to support using duktape, and many users, including
-myself, have used polkit with duktape for as long as the above merge request has
-been around without issues; merging in the above merge request is an acceptable
-exception to the typical Buildroot package policies.
-
-As Thomas also suggested, I have forked polkit on Github
-(https://github.com/aduskett/polkit-duktape), with the above duktape
-merge request applied, and a release made with the same tag as upstream (0.119).
-
-I refrained from also adding 0001-make-netgroup-support-optional.patch as it is
-outside of the scope of why the fork exists.
-
-Changes:
-  - refactor 0001-make-netgroup-support-optional.patch to work with 0.119 and
-    duktape.
-  - Remove upstream incorporated 0002-jsauthority-memleak.patch
-  - Remove upstream 0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
-  - Remove any trace of spidermonkey from polkit, udisks, and systemd-polkit
-  - Add duktape as a dependency of polkit
-  - Change POLKIT_SITE to the above polkit-duktape GitHub repository.
-
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
-  - Extend 0001-make-netgroup-support-optional.patch to include duktape support
-    instead of modifying the duktape merge request to make netgroup support
-    optional. (Thomas)
+ ...002-include-Sync-with-kernel-headers.patch | 114 ++++++++++++++++++
+ 1 file changed, 114 insertions(+)
+ create mode 100644 package/libnfnetlink/0002-include-Sync-with-kernel-headers.patch
 
- .../0001-make-netgroup-support-optional.patch | 41 +++++++++++++++----
- package/polkit/0002-jsauthority-memleak.patch | 28 -------------
- ...lkit-0.116-pkttyagent-sigttou-bg-job.patch | 34 ---------------
- package/polkit/Config.in                      | 24 ++++-------
- package/polkit/polkit.hash                    |  4 +-
- package/polkit/polkit.mk                      | 12 +++---
- package/systemd/Config.in                     | 17 +++-----
- package/udisks/Config.in                      | 23 ++++-------
- 8 files changed, 59 insertions(+), 124 deletions(-)
- delete mode 100644 package/polkit/0002-jsauthority-memleak.patch
- delete mode 100644 package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
-
-diff --git a/package/polkit/0001-make-netgroup-support-optional.patch b/package/polkit/0001-make-netgroup-support-optional.patch
-index 86916aba34..09c48d7791 100644
---- a/package/polkit/0001-make-netgroup-support-optional.patch
-+++ b/package/polkit/0001-make-netgroup-support-optional.patch
-@@ -16,6 +16,7 @@ Fixes bug 50145.
- 
- Signed-off-by: A. Wilcox <AWilcox@Wilcox-Tech.com>
- Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+[Adam: Extend patch to work with duktape integration.]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
- [Thomas: add introspection.m4.]
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-@@ -24,12 +25,13 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-  configure.ac                                  |   2 +-
-  src/polkit/polkitidentity.c                   |  16 ++
-  src/polkit/polkitunixnetgroup.c               |   3 +
-+ .../polkitbackendduktapeauthority.c           |   2 +
-  .../polkitbackendinteractiveauthority.c       |  14 +-
-- .../polkitbackendjsauthority.cpp              |   2 +
-+ .../polkitbackendjsauthority.cpp              |   3 +-
-  test/polkit/polkitidentitytest.c              |   9 +-
-  test/polkit/polkitunixnetgrouptest.c          |   3 +
-  .../test-polkitbackendjsauthority.c           |   2 +
-- 9 files changed, 185 insertions(+), 8 deletions(-)
-+ 10 files changed, 187 insertions(+), 9 deletions(-)
-  create mode 100644 buildutil/introspection.m4
- 
- diff --git a/buildutil/introspection.m4 b/buildutil/introspection.m4
-@@ -184,7 +186,7 @@ diff --git a/configure.ac b/configure.ac
- index 5cedb4e..87aa0ad 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -99,7 +99,7 @@ AC_CHECK_LIB(expat,XML_ParserCreate,[EXPAT_LIBS="-lexpat"],
-+@@ -111,7 +111,7 @@ AC_CHECK_LIB(expat,XML_ParserCreate,[EXPAT_LIBS="-lexpat"],
-  	     [AC_MSG_ERROR([Can't find expat library. Please install expat.])])
-  AC_SUBST(EXPAT_LIBS)
-  
-@@ -249,6 +251,26 @@ index 8a2b369..83f8d4a 100644
-    g_return_val_if_fail (name != NULL, NULL);
-    return POLKIT_IDENTITY (g_object_new (POLKIT_TYPE_UNIX_NETGROUP,
-                                         "name", name,
-+diff --git a/src/polkitbackend/polkitbackendduktapeauthority.c b/src/polkitbackend/polkitbackendduktapeauthority.c
-+index 4b4f8fd..e19b009 100644
-+--- a/src/polkitbackend/polkitbackendduktapeauthority.c
-++++ b/src/polkitbackend/polkitbackendduktapeauthority.c
-+@@ -1036,6 +1036,7 @@ js_polkit_user_is_in_netgroup (duk_context *cx)
-+   const char *netgroup;
-+   gboolean is_in_netgroup = FALSE;
+diff --git a/package/libnfnetlink/0002-include-Sync-with-kernel-headers.patch b/package/libnfnetlink/0002-include-Sync-with-kernel-headers.patch
+new file mode 100644
+index 0000000000..f9e9c2e2ea
+--- /dev/null
++++ b/package/libnfnetlink/0002-include-Sync-with-kernel-headers.patch
+@@ -0,0 +1,114 @@
++From 7a1a07c0028a1c88cd7716a058697c552a563b24 Mon Sep 17 00:00:00 2001
++From: Felix Janda <felix.janda@posteo.de>
++Date: Sat, 16 May 2015 14:49:07 +0200
++Subject: include: Sync with kernel headers
++
++Signed-off-by: Felix Janda <felix.janda@posteo.de>
++Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
++
++[Retrieved from:
++https://git.netfilter.org/libnfnetlink/commit/?id=7a1a07c0028a1c88cd7716a058697c552a563b24]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/libnfnetlink/linux_nfnetlink.h        | 44 ++++-----------------------
++ include/libnfnetlink/linux_nfnetlink_compat.h | 12 ++++----
++ 2 files changed, 12 insertions(+), 44 deletions(-)
++
++diff --git a/include/libnfnetlink/linux_nfnetlink.h b/include/libnfnetlink/linux_nfnetlink.h
++index 76a8550..44a38d6 100644
++--- a/include/libnfnetlink/linux_nfnetlink.h
+++++ b/include/libnfnetlink/linux_nfnetlink.h
++@@ -25,9 +25,9 @@ enum nfnetlink_groups {
++ /* General form of address family dependent message.
++  */
++ struct nfgenmsg {
++-	u_int8_t  nfgen_family;		/* AF_xxx */
++-	u_int8_t  version;		/* nfnetlink version */
++-	u_int16_t    res_id;		/* resource id */
+++	__u8  nfgen_family;		/* AF_xxx */
+++	__u8  version;		/* nfnetlink version */
+++	__be16    res_id;		/* resource id */
++ };
 + 
-++#ifdef HAVE_SETNETGRENT
-+   user = duk_require_string (cx, 0);
-+   netgroup = duk_require_string (cx, 1);
++ #define NFNETLINK_V0	0
++@@ -46,40 +46,8 @@ struct nfgenmsg {
++ #define NFNL_SUBSYS_CTNETLINK_EXP	2
++ #define NFNL_SUBSYS_QUEUE		3
++ #define NFNL_SUBSYS_ULOG		4
++-#define NFNL_SUBSYS_COUNT		5
+++#define NFNL_SUBSYS_OSF			5
+++#define NFNL_SUBSYS_IPSET		6
+++#define NFNL_SUBSYS_COUNT		7
 + 
-+@@ -1046,6 +1047,7 @@ js_polkit_user_is_in_netgroup (duk_context *cx)
-+     {
-+       is_in_netgroup = TRUE;
-+     }
-++#endif
-+ 
-+   duk_push_boolean (cx, is_in_netgroup);
-+   return 1;
- diff --git a/src/polkitbackend/polkitbackendinteractiveauthority.c b/src/polkitbackend/polkitbackendinteractiveauthority.c
- index 056d9a8..36c2f3d 100644
- --- a/src/polkitbackend/polkitbackendinteractiveauthority.c
-@@ -298,7 +320,7 @@ diff --git a/src/polkitbackend/polkitbackendjsauthority.cpp b/src/polkitbackend/
- index 9b752d1..09b2878 100644
- --- a/src/polkitbackend/polkitbackendjsauthority.cpp
- +++ b/src/polkitbackend/polkitbackendjsauthority.cpp
--@@ -1502,6 +1502,7 @@ js_polkit_user_is_in_netgroup (JSContext  *cx,
-+@@ -1520,6 +1520,7 @@ js_polkit_user_is_in_netgroup (JSContext  *cx,
-  
-    JS::CallArgs args = JS::CallArgsFromVp (argc, vp);
-  
-@@ -306,14 +328,15 @@ index 9b752d1..09b2878 100644
-    JS::RootedString usrstr (authority->priv->cx);
-    usrstr = args[0].toString();
-    user = JS_EncodeStringToUTF8 (cx, usrstr);
--@@ -1519,6 +1520,7 @@ js_polkit_user_is_in_netgroup (JSContext  *cx,
-- 
--   JS_free (cx, netgroup);
--   JS_free (cx, user);
-+@@ -1534,7 +1535,7 @@ js_polkit_user_is_in_netgroup (JSContext  *cx,
-+     {
-+       is_in_netgroup =  true;
-+     }
++-#ifdef __KERNEL__
 +-
- +#endif
-- 
-    ret = true;
-  
-+   args.rval ().setBoolean (is_in_netgroup);
- diff --git a/test/polkit/polkitidentitytest.c b/test/polkit/polkitidentitytest.c
- index e91967b..e829aaa 100644
- --- a/test/polkit/polkitidentitytest.c
-diff --git a/package/polkit/0002-jsauthority-memleak.patch b/package/polkit/0002-jsauthority-memleak.patch
-deleted file mode 100644
-index 4f0733185c..0000000000
---- a/package/polkit/0002-jsauthority-memleak.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 28e3a6653d8c3777b07e0128a0d97d46e586e311 Mon Sep 17 00:00:00 2001
--From: Jan Rybar <jrybar@redhat.com>
--Date: Tue, 8 Oct 2019 13:28:18 +0000
--Subject: [PATCH] jsauthority: Fix two minor memory leaks
--
--(cherry picked from commit 28e3a6653d8c3777b07e0128a0d97d46e586e311)
--Signed-off-by: Jan Rybar <jrybar@redhat.com>
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-----
-- src/polkitbackend/polkitbackendjsauthority.cpp | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/polkitbackend/polkitbackendjsauthority.cpp b/src/polkitbackend/polkitbackendjsauthority.cpp
--index 9b752d1..e97b8aa 100644
----- a/src/polkitbackend/polkitbackendjsauthority.cpp
--+++ b/src/polkitbackend/polkitbackendjsauthority.cpp
--@@ -567,6 +567,8 @@ polkit_backend_js_authority_finalize (GObject *object)
--   g_strfreev (authority->priv->rules_dirs);
-- 
--   delete authority->priv->ac;
--+  delete authority->priv->js_global;
--+  delete authority->priv->js_polkit;
-- 
--   JS_DestroyContext (authority->priv->cx);
--   /* JS_ShutDown (); */
---- 
--2.24.1
--
-diff --git a/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch b/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
-deleted file mode 100644
-index fb41df3af2..0000000000
---- a/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 76aae4fce586b400f5fe08df31497db19d624609 Mon Sep 17 00:00:00 2001
--From: Jan Rybar <jrybar@redhat.com>
--Date: Thu, 1 Aug 2019 06:46:10 +0000
--Subject: [PATCH] pkttyagent: process stopped by SIGTTOU if run in background
-- job
--
--
--(cherry picked from commit 76aae4fce586b400f5fe08df31497db19d624609)
--Signed-off-by: Jan Rybar <jrybar@redhat.com>
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-----
-- src/programs/pkttyagent.c | 6 ++++++
-- 1 file changed, 6 insertions(+)
--
--diff --git a/src/programs/pkttyagent.c b/src/programs/pkttyagent.c
--index 3c8d502..13879a2 100644
----- a/src/programs/pkttyagent.c
--+++ b/src/programs/pkttyagent.c
--@@ -264,6 +264,12 @@ main (int argc, char *argv[])
-- 
--   memset (&sa, 0, sizeof (sa));
--   sa.sa_handler = &tty_handler;
--+/* If tty_handler() resets terminal while pkttyagent is run in background job,
--+   the process gets stopped by SIGTTOU. This impacts systemctl, hence it must
--+   be blocked for a while and then the process gets killed anyway.
--+ */
--+  sigemptyset(&sa.sa_mask);
--+  sigaddset(&sa.sa_mask, SIGTTOU);
--   sigaction (SIGTERM, &sa, &savesigterm);
--   sigaction (SIGINT, &sa, &savesigint);
--   sigaction (SIGTSTP, &sa, &savesigtstp);
---- 
--2.24.1
--
-diff --git a/package/polkit/Config.in b/package/polkit/Config.in
-index f54b6b4cda..622cbbb90b 100644
---- a/package/polkit/Config.in
-+++ b/package/polkit/Config.in
-@@ -1,18 +1,14 @@
- config BR2_PACKAGE_POLKIT
- 	bool "polkit"
--	depends on BR2_HOST_GCC_AT_LEAST_4_9 # spidermonkey
--	depends on BR2_INSTALL_LIBSTDCPP # spidermonkey
--	depends on BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS # spidermonkey
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # spidermonkey
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # spidermonkey
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, dbus
- 	depends on BR2_USE_MMU # libglib2, dbus
- 	depends on BR2_USE_WCHAR # libglib2
--	depends on !BR2_STATIC_LIBS # spidermonkey
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC # spidermonkey
-+	depends on !BR2_STATIC_LIBS # duktape
- 	select BR2_PACKAGE_DBUS # runtime
-+	select BR2_PACKAGE_DUKTAPE
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_SPIDERMONKEY
- 	help
- 	  PolicyKit is a toolkit for defining and handling
- 	  authorizations. It is used for allowing unprivileged
-@@ -20,13 +16,7 @@ config BR2_PACKAGE_POLKIT
- 
- 	  http://www.freedesktop.org/wiki/Software/polkit
- 
--comment "polkit needs a glibc or musl toolchain with C++, wchar, dynamic library, NPTL, gcc >= 4.9"
-+comment "polkit needs a toolchain with dynamic library, wchar, threads, gcc >= 7"
- 	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
--		!BR2_INSTALL_LIBSTDCPP || \
--		BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
--		!BR2_HOST_GCC_AT_LEAST_4_9 || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
--		!BR2_USE_WCHAR
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/polkit/polkit.hash b/package/polkit/polkit.hash
-index bacd682139..9677e19bb0 100644
---- a/package/polkit/polkit.hash
-+++ b/package/polkit/polkit.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	88170c9e711e8db305a12fdb8234fac5706c61969b94e084d0f117d8ec5d34b1	polkit-0.116.tar.gz
-+sha256  88d078f1d1f653fd31fe42e46cc3d9b7dd468e70684075e32fe1766dc7ece517  polkit-0.119.tar.gz
- 
- # Locally calculated
--sha256	d2e2aa973e29c75e1b492e67ea7b7da9de2d501d49a934657971fd74f9a0b0a8	COPYING
-+sha256  d2e2aa973e29c75e1b492e67ea7b7da9de2d501d49a934657971fd74f9a0b0a8  COPYING
-diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-index bf9b5a7112..f48c103a52 100644
---- a/package/polkit/polkit.mk
-+++ b/package/polkit/polkit.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--POLKIT_VERSION = 0.116
--POLKIT_SITE = http://www.freedesktop.org/software/polkit/releases
-+POLKIT_VERSION = 0.119
-+POLKIT_SITE = $(call github,aduskett,polkit-duktape,v$(POLKIT_VERSION))
- POLKIT_LICENSE = GPL-2.0
- POLKIT_LICENSE_FILES = COPYING
- POLKIT_CPE_ID_VENDOR = polkit_project
-@@ -13,11 +13,10 @@ POLKIT_AUTORECONF = YES
- POLKIT_INSTALL_STAGING = YES
- 
- POLKIT_DEPENDENCIES = \
--	libglib2 host-intltool expat spidermonkey $(TARGET_NLS_DEPENDENCIES)
-+	duktape libglib2 host-intltool expat $(TARGET_NLS_DEPENDENCIES)
- 
--# spidermonkey needs C++11
- POLKIT_CONF_ENV = \
--	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11" \
-+	CXXFLAGS="$(TARGET_CXXFLAGS)" \
- 	LIBS=$(TARGET_NLS_LIBS)
- 
- POLKIT_CONF_OPTS = \
-@@ -25,7 +24,8 @@ POLKIT_CONF_OPTS = \
- 	--disable-man-pages \
- 	--disable-examples \
- 	--disable-libelogind \
--	--disable-libsystemd-login
-+	--disable-libsystemd-login \
-+	--with-duktape
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- POLKIT_CONF_OPTS += --enable-introspection
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index b9b1b3b9b4..0148cad791 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -329,11 +329,8 @@ config BR2_PACKAGE_SYSTEMD_OOMD
- 
- config BR2_PACKAGE_SYSTEMD_POLKIT
- 	bool "enable polkit support"
--	depends on BR2_HOST_GCC_AT_LEAST_4_9 # polkit
--	depends on BR2_INSTALL_LIBSTDCPP # polkit
--	depends on BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS # polkit
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # polkit
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # polkit
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # polkit -> c++17
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # polkit
- 	depends on BR2_USE_WCHAR # libglib2
- 	select BR2_PACKAGE_POLKIT
- 	help
-@@ -344,13 +341,9 @@ config BR2_PACKAGE_SYSTEMD_POLKIT
- 
- 	  http://wiki.freedesktop.org/www/Software/polkit/
- 
--comment "polkit support needs a toolchain with C++, wchar, NPTL, gcc >= 4.9"
--	depends on BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS
--	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
--		!BR2_HOST_GCC_AT_LEAST_4_9 || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
--		!BR2_USE_WCHAR
-+comment "polkit support needs a toolchain with threads, wchar, gcc >= 7"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_SYSTEMD_PORTABLED
- 	bool "enable portable services"
-diff --git a/package/udisks/Config.in b/package/udisks/Config.in
-index 17993baafc..82f11ae7de 100644
---- a/package/udisks/Config.in
-+++ b/package/udisks/Config.in
-@@ -1,16 +1,12 @@
- config BR2_PACKAGE_UDISKS
- 	bool "udisks"
- 	depends on BR2_ENABLE_LOCALE # parted
--	depends on BR2_HOST_GCC_AT_LEAST_4_9 # spidermonkey
--	depends on BR2_INSTALL_LIBSTDCPP # spidermonkey
- 	depends on BR2_PACKAGE_HAS_UDEV
--	depends on BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS # spidermonkey
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # spidermonkey
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # polkit
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # polkit -> C++17
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # polkit
- 	depends on BR2_USE_WCHAR # dbus-glib -> glib2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libblockdev -> cryptsetup -> json-c
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC # polkit
--	depends on !BR2_STATIC_LIBS # spidermonkey
-+	depends on !BR2_STATIC_LIBS # polkit -> duktape
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_DBUS_GLIB
- 	select BR2_PACKAGE_LIBATASMART
-@@ -43,14 +39,9 @@ comment "udisks needs udev /dev management"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_HAS_UDEV
- 
--comment "udisks needs a glibc or musl toolchain with locale, C++, wchar, dynamic library, NPTL, gcc >= 4.9"
-+comment "udisks needs a toolchain with dynamic library, locale, wchar, threads, gcc >= 7"
- 	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_ENABLE_LOCALE || BR2_TOOLCHAIN_USES_UCLIBC || \
--		!BR2_INSTALL_LIBSTDCPP || \
--		BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
--		!BR2_HOST_GCC_AT_LEAST_4_9 || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
--		!BR2_USE_WCHAR
-+	depends on BR2_STATIC_LIBS || !BR2_ENABLE_LOCALE || \
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
++-#include <linux/netlink.h>
++-#include <linux/capability.h>
++-#include <net/netlink.h>
++-
++-struct nfnl_callback
++-{
++-	int (*call)(struct sock *nl, struct sk_buff *skb, 
++-		struct nlmsghdr *nlh, struct nlattr *cda[]);
++-	const struct nla_policy *policy;	/* netlink attribute policy */
++-	const u_int16_t attr_count;		/* number of nlattr's */
++-};
++-
++-struct nfnetlink_subsystem
++-{
++-	const char *name;
++-	__u8 subsys_id;			/* nfnetlink subsystem ID */
++-	__u8 cb_count;			/* number of callbacks */
++-	const struct nfnl_callback *cb;	/* callback for individual types */
++-};
++-
++-extern int nfnetlink_subsys_register(const struct nfnetlink_subsystem *n);
++-extern int nfnetlink_subsys_unregister(const struct nfnetlink_subsystem *n);
++-
++-extern int nfnetlink_has_listeners(unsigned int group);
++-extern int nfnetlink_send(struct sk_buff *skb, u32 pid, unsigned group, 
++-			  int echo);
++-extern int nfnetlink_unicast(struct sk_buff *skb, u_int32_t pid, int flags);
++-
++-#define MODULE_ALIAS_NFNL_SUBSYS(subsys) \
++-	MODULE_ALIAS("nfnetlink-subsys-" __stringify(subsys))
++-
++-#endif	/* __KERNEL__ */
++ #endif	/* _NFNETLINK_H */
++diff --git a/include/libnfnetlink/linux_nfnetlink_compat.h b/include/libnfnetlink/linux_nfnetlink_compat.h
++index e145176..74b9e55 100644
++--- a/include/libnfnetlink/linux_nfnetlink_compat.h
+++++ b/include/libnfnetlink/linux_nfnetlink_compat.h
++@@ -1,6 +1,8 @@
++ #ifndef _NFNETLINK_COMPAT_H
++ #define _NFNETLINK_COMPAT_H
++-#ifndef __KERNEL__
+++
+++#include <linux/types.h>
+++
++ /* Old nfnetlink macros for userspace */
++ 
++ /* nfnetlink groups: Up to 32 maximum */
++@@ -18,10 +20,9 @@
++  * ! nfnetlink use the same attributes methods. - J. Schulist.
++  */
++ 
++-struct nfattr
++-{
++-	u_int16_t nfa_len;
++-	u_int16_t nfa_type;	/* we use 15 bits for the type, and the highest
+++struct nfattr {
+++	__u16 nfa_len;
+++	__u16 nfa_type;	/* we use 15 bits for the type, and the highest
++ 				 * bit to indicate whether the payload is nested */
++ };
++ 
++@@ -57,5 +58,4 @@ struct nfattr
++         + NLMSG_ALIGN(sizeof(struct nfgenmsg))))
++ #define NFM_PAYLOAD(n)  NLMSG_PAYLOAD(n, sizeof(struct nfgenmsg))
++ 
++-#endif /* ! __KERNEL__ */
++ #endif /* _NFNETLINK_COMPAT_H */
++-- 
++cgit v1.2.3
++
 -- 
-2.31.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
