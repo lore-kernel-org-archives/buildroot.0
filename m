@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96883C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:19:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 271C9C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:20:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5611C61037
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:19:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5611C61037
+	by mail.kernel.org (Postfix) with ESMTPS id DB64361037
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:20:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DB64361037
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34A268361C;
-	Wed,  4 Aug 2021 00:19:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AF4124064C;
+	Wed,  4 Aug 2021 00:20:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r7vcxoEVxfKS; Wed,  4 Aug 2021 00:19:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bN9cJ71bG2fE; Wed,  4 Aug 2021 00:20:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8448D83139;
-	Wed,  4 Aug 2021 00:19:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D55FB40628;
+	Wed,  4 Aug 2021 00:19:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 187E61BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1C2AF1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 973E640FAE
+ by smtp2.osuosl.org (Postfix) with ESMTP id AD85840FB1
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zs1l-Q3MzxBR for <buildroot@lists.busybox.net>;
+ with ESMTP id xdOA0-JWyOTt for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 41E5F40F19
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 066C140F14
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 98BA681469; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
+ id 4F90881469; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Jul 2021 21:07:42 +0200
+Date: Wed, 21 Jul 2021 09:25:46 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bd91d7826e913789e0c16c2b9f49ca867735ec5d
-X-Git-Newrev: c7fd40c7d8975df91f311309fc1bed897c571e1c
+X-Git-Oldrev: 2f4409fea1bf9e9eeb55b432eb987dbe1c339780
+X-Git-Newrev: 68d886c4ea74601aca1f9ed0249f4a71f74d8aa3
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211013.98BA681469@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bind: add SELinux
+Message-Id: <20210803211013.4F90881469@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dnsmasq: add SELinux
  module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
@@ -70,30 +70,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7fd40c7d8975df91f311309fc1bed897c571e1c
+commit: https://git.buildroot.net/buildroot/commit/?id=68d886c4ea74601aca1f9ed0249f4a71f74d8aa3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Support for bind is added by the services/bind module in the SELinux
-refpolicy.
+Support for dnsmasq is added by the services/dnsmasq module in the
+SELinux refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bind/bind.mk | 1 +
+ package/dnsmasq/dnsmasq.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index d01a557609..a5c246a54a 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -13,6 +13,7 @@ BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
- BIND_LICENSE = MPL-2.0
- BIND_LICENSE_FILES = COPYRIGHT
- BIND_CPE_ID_VENDOR = isc
-+BIND_SELINUX_MODULES = bind
- # Only applies to RHEL6.x with DNSSEC validation on
- BIND_IGNORE_CVES = CVE-2017-3139
- # Library CVE and not used by bind but used by ISC DHCP
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 2006757590..972be10935 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -15,6 +15,7 @@ DNSMASQ_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ DNSMASQ_LICENSE = GPL-2.0 or GPL-3.0
+ DNSMASQ_LICENSE_FILES = COPYING COPYING-v3
+ DNSMASQ_CPE_ID_VENDOR = thekelleys
++DNSMASQ_SELINUX_MODULES = dnsmasq
+ 
+ DNSMASQ_I18N = $(if $(BR2_SYSTEM_ENABLE_NLS),-i18n)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
