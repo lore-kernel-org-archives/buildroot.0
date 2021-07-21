@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 271C9C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:20:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1B41C4320A
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:20:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DB64361037
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:20:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DB64361037
+	by mail.kernel.org (Postfix) with ESMTPS id ACCD760EBC
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:20:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ACCD760EBC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AF4124064C;
-	Wed,  4 Aug 2021 00:20:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83375608F1;
+	Wed,  4 Aug 2021 00:20:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bN9cJ71bG2fE; Wed,  4 Aug 2021 00:20:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QtKTvMWLgKIj; Wed,  4 Aug 2021 00:20:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D55FB40628;
-	Wed,  4 Aug 2021 00:19:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEBA860A4A;
+	Wed,  4 Aug 2021 00:20:12 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1C2AF1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1F5001BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD85840FB1
+ by smtp2.osuosl.org (Postfix) with ESMTP id CCBD340F14
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xdOA0-JWyOTt for <buildroot@lists.busybox.net>;
+ with ESMTP id UAGXxcB4RP_X for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 066C140F14
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A40240F15
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4F90881469; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
+ id 5A74581484; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Jul 2021 09:25:46 +0200
+Date: Wed, 21 Jul 2021 09:25:48 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2f4409fea1bf9e9eeb55b432eb987dbe1c339780
-X-Git-Newrev: 68d886c4ea74601aca1f9ed0249f4a71f74d8aa3
+X-Git-Oldrev: 68d886c4ea74601aca1f9ed0249f4a71f74d8aa3
+X-Git-Newrev: 9070a7355b443c01760876bd8870a8ab7cc87286
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211013.4F90881469@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dnsmasq: add SELinux
- module
+Message-Id: <20210803211013.5A74581484@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bird: add rpki support
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,30 +69,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68d886c4ea74601aca1f9ed0249f4a71f74d8aa3
+commit: https://git.buildroot.net/buildroot/commit/?id=9070a7355b443c01760876bd8870a8ab7cc87286
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Support for dnsmasq is added by the services/dnsmasq module in the
-SELinux refpolicy.
+rpki support optionally depends on libssh
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dnsmasq/dnsmasq.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/bird/Config.in | 5 +++++
+ package/bird/bird.mk   | 8 ++++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 2006757590..972be10935 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -15,6 +15,7 @@ DNSMASQ_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- DNSMASQ_LICENSE = GPL-2.0 or GPL-3.0
- DNSMASQ_LICENSE_FILES = COPYING COPYING-v3
- DNSMASQ_CPE_ID_VENDOR = thekelleys
-+DNSMASQ_SELINUX_MODULES = dnsmasq
+diff --git a/package/bird/Config.in b/package/bird/Config.in
+index e78dfdf90f..866fc65617 100644
+--- a/package/bird/Config.in
++++ b/package/bird/Config.in
+@@ -73,6 +73,11 @@ config BR2_PACKAGE_BIRD_RIP
+ 	help
+ 	  Enable RIP protocol.
  
- DNSMASQ_I18N = $(if $(BR2_SYSTEM_ENABLE_NLS),-i18n)
++config BR2_PACKAGE_BIRD_RPKI
++	bool "rpki"
++	help
++	  Enable RPKI protocol.
++
+ config BR2_PACKAGE_BIRD_STATIC
+ 	bool "static"
+ 	help
+diff --git a/package/bird/bird.mk b/package/bird/bird.mk
+index 4d4dfe1dca..4d6159b075 100644
+--- a/package/bird/bird.mk
++++ b/package/bird/bird.mk
+@@ -19,6 +19,13 @@ else
+ BIRD_CONF_OPTS += --disable-client
+ endif
  
++ifeq ($(BR2_PACKAGE_LIBSSH),y)
++BIRD_CONF_OPTS += --enable-libssh
++BIRD_DEPENDENCIES += libssh
++else
++BIRD_CONF_OPTS += --disable-libssh
++endif
++
+ BIRD_PROTOCOLS = \
+ 	$(if $(BR2_PACKAGE_BIRD_BFD),bfd) \
+ 	$(if $(BR2_PACKAGE_BIRD_BABEL),babel) \
+@@ -29,6 +36,7 @@ BIRD_PROTOCOLS = \
+ 	$(if $(BR2_PACKAGE_BIRD_PIPE),pipe) \
+ 	$(if $(BR2_PACKAGE_BIRD_RADV),radv) \
+ 	$(if $(BR2_PACKAGE_BIRD_RIP),rip) \
++	$(if $(BR2_PACKAGE_BIRD_RPKI),rpki) \
+ 	$(if $(BR2_PACKAGE_BIRD_STATIC),static)
+ 
+ BIRD_CONF_OPTS += --with-protocols=$(subst $(space),$(comma),$(strip $(BIRD_PROTOCOLS)))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
