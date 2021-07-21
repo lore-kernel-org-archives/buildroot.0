@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B494AC12002
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 19:08:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48417C12002
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 19:09:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 60CDE61245
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 19:08:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 60CDE61245
+	by mail.kernel.org (Postfix) with ESMTPS id 105666121F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 19:09:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 105666121F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3910E82D5D;
-	Wed, 21 Jul 2021 19:08:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1AE840307;
+	Wed, 21 Jul 2021 19:08:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VE0STQZFSPvh; Wed, 21 Jul 2021 19:08:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sVAtwWBONy0j; Wed, 21 Jul 2021 19:08:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A535582BA1;
-	Wed, 21 Jul 2021 19:08:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E4F6B4030A;
+	Wed, 21 Jul 2021 19:08:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D1DC31C1187
- for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 19:08:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3AF3F1BF337
+ for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 19:08:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BCCB140302
- for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 19:08:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29F48402A5
+ for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 19:08:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J2uo-tFvzwLD for <buildroot@lists.busybox.net>;
- Wed, 21 Jul 2021 19:08:18 +0000 (UTC)
+ with ESMTP id lqt9byNNx92T for <buildroot@lists.busybox.net>;
+ Wed, 21 Jul 2021 19:08:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E8D6F402A5
- for <buildroot@buildroot.org>; Wed, 21 Jul 2021 19:08:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D56B402F0
+ for <buildroot@buildroot.org>; Wed, 21 Jul 2021 19:08:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 13BD18872A; Wed, 21 Jul 2021 18:34:07 +0000 (UTC)
+ id 520B888752; Wed, 21 Jul 2021 18:34:07 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Jul 2021 21:07:37 +0200
+Date: Wed, 21 Jul 2021 21:07:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6dfde38c71f0e46dbcac7ac58fae6ebcc515178a
-X-Git-Newrev: 952c42e3e7f4d52f406aa9c53d3e23e65e3b383f
+X-Git-Oldrev: 2016df2ed258f1d88cc9dfdb97fcc67ea3dc119a
+X-Git-Newrev: 35953d1e61aa8581be09c9dca39365955b10590e
 X-Patchwork-Hint: ignore
-Message-Id: <20210721183407.13BD18872A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/avahi: add SELinux module
+Message-Id: <20210721183407.520B888752@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/proxychains-ng: bump to version
+ 4.14
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,30 +70,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=952c42e3e7f4d52f406aa9c53d3e23e65e3b383f
+commit: https://git.buildroot.net/buildroot/commit/?id=35953d1e61aa8581be09c9dca39365955b10590e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Support for avahi is added by the services/avahi module in the SELinux
-refpolicy.
+https://github.com/rofl0r/proxychains-ng/blob/v4.14/README
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/avahi/avahi.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/proxychains-ng/proxychains-ng.hash | 6 ++----
+ package/proxychains-ng/proxychains-ng.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 9976df5357..9de6ebc4d2 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -9,6 +9,7 @@ AVAHI_SITE = https://github.com/lathiat/avahi/releases/download/v$(AVAHI_VERSION
- AVAHI_LICENSE = LGPL-2.1+
- AVAHI_LICENSE_FILES = LICENSE
- AVAHI_CPE_ID_VENDOR = avahi
-+AVAHI_SELINUX_MODULES = avahi
- AVAHI_INSTALL_STAGING = YES
+diff --git a/package/proxychains-ng/proxychains-ng.hash b/package/proxychains-ng/proxychains-ng.hash
+index 9781b77af1..779f6b626d 100644
+--- a/package/proxychains-ng/proxychains-ng.hash
++++ b/package/proxychains-ng/proxychains-ng.hash
+@@ -1,6 +1,4 @@
+-# From https://sourceforge.net/projects/proxychains-ng/files/
+-md5 34d840eb184e96bff418201c28a935c5  proxychains-ng-4.11.tar.bz2
+-sha1 00bc3dc18f2b638c79112c99f082a7a2878beaad  proxychains-ng-4.11.tar.bz2
++# From https://github.com/rofl0r/proxychains-ng/releases/tag/v4.14
++sha512  75a1a4629d2b7ebac9b909a694b395339cf669fa4e23bfcc57938e46377b5619f31c9651d2bc457d1ad10ec1be7747981106392bf8bf65999cb7bb9c748d7e95  proxychains-ng-4.14.tar.xz
+ # Locally computed:
+-sha256  dcc4149808cd1fb5d9663cc09791f478805816b1f017381f424414c47f6376b6  proxychains-ng-4.11.tar.bz2
+ sha256  86728623caeff60e9bcc37e03b432fd191de927eed48a72a3bb4ac4e53fe20df  COPYING
+diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
+index 0437f7d911..bb7c9ff687 100644
+--- a/package/proxychains-ng/proxychains-ng.mk
++++ b/package/proxychains-ng/proxychains-ng.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- # CVE-2021-26720 is an issue in avahi-daemon-check-dns.sh, which is
+-PROXYCHAINS_NG_VERSION = 4.11
+-PROXYCHAINS_NG_SOURCE = proxychains-ng-$(PROXYCHAINS_NG_VERSION).tar.bz2
++PROXYCHAINS_NG_VERSION = 4.14
++PROXYCHAINS_NG_SOURCE = proxychains-ng-$(PROXYCHAINS_NG_VERSION).tar.xz
+ PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
+ PROXYCHAINS_NG_LICENSE = GPL-2.0+
+ PROXYCHAINS_NG_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
