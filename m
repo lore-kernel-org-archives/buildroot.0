@@ -2,60 +2,61 @@ Return-Path: <SRS0=q2PD=MN=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C6E9C6377B
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 20:15:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54065C6377A
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 20:19:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EF1B960FE7
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 20:15:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EF1B960FE7
+	by mail.kernel.org (Postfix) with ESMTPS id E5E716121E
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 20:19:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E5E716121E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BFEAD40146;
-	Wed, 21 Jul 2021 20:15:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A657140289;
+	Wed, 21 Jul 2021 20:19:29 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NllF7DpZSvwT; Wed, 21 Jul 2021 20:19:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B007402E3;
+	Wed, 21 Jul 2021 20:19:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 315ED1BF38E
+ for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 20:19:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D5BC40134
+ for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 20:19:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 530g2uao5aP3; Wed, 21 Jul 2021 20:15:10 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 39FCB400E1;
-	Wed, 21 Jul 2021 20:15:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7CE931BF580
- for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 20:15:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6CB3A826C2
- for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 20:15:08 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id osyMS8J7yti3 for <buildroot@lists.busybox.net>;
- Wed, 21 Jul 2021 20:15:07 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mq3LHear-41x for <buildroot@lists.busybox.net>;
+ Wed, 21 Jul 2021 20:19:25 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 51B07826BF
- for <buildroot@busybox.net>; Wed, 21 Jul 2021 20:15:07 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AEA8B400E1
+ for <buildroot@buildroot.org>; Wed, 21 Jul 2021 20:19:24 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 8F178200004;
- Wed, 21 Jul 2021 20:15:03 +0000 (UTC)
-Date: Wed, 21 Jul 2021 22:15:01 +0200
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id AD13FFF805;
+ Wed, 21 Jul 2021 20:19:21 +0000 (UTC)
+Date: Wed, 21 Jul 2021 22:19:20 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Alexey Neyman <stilor@att.net>
-Message-ID: <20210721221501.4c14fcfd@windsurf>
-In-Reply-To: <20210721194605.1552794-3-stilor@att.net>
-References: <20210721194605.1552794-1-stilor@att.net>
- <20210721194605.1552794-3-stilor@att.net>
+To: Charles Hardin <ckhardin@gmail.com>
+Message-ID: <20210721221920.635a5667@windsurf>
+In-Reply-To: <20210615005923.51837-1-charles.hardin@chargepoint.com>
+References: <20210615005923.51837-1-charles.hardin@chargepoint.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/qemu: filter out long make
- options
+Subject: Re: [Buildroot] [PATCH 1/1] package/alsa-plugins: add new package
+ alsa-plugins version 1.2.5
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,41 +68,129 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot@busybox.net
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hello,
+Hello Charles,
 
-On Wed, 21 Jul 2021 12:46:05 -0700
-Alexey Neyman <stilor@att.net> wrote:
+On Mon, 14 Jun 2021 17:59:23 -0700
+Charles Hardin <ckhardin@gmail.com> wrote:
 
-> Since qemu started using ninja, they have the following fragment in the
-> Makefile:
+> From: Charles Hardin <ckhardin@gmail.com>
 > 
-> MAKE.n = $(findstring n,$(firstword $(MAKEFLAGS)))
-> NINJAFLAGS = ... $(if $(MAKE.n), -n) ...
+> During testing of bluez-alsa in particular, there is no compilation
+> dependency - but, some configurations against boards will request
+> the load of a particular plugin:
 > 
-> Buildroot's generated makefile in the O= directory invokes make in the
-> base buildroot with --no-print-directory. However, make's placement of
-> the --no-print-directory in MAKEFLAGS varies between the versions of
-> the host make; make 4.3 places that at the end while make 3.82 places
-> it at the beginning. As a result, if building on a system with an older
-> host make, qemu's makefile invokes `ninja -n` which does not generate
-> any outputs.
+>     ALSA lib dlmisc.c:337:(snd_dlobj_cache_get0) \
+>       Cannot open shared library libasound_module_rate_samplerate_best.so \
+>       (/usr/lib/alsa-lib/libasound_module_rate_samplerate_best.so: \
+>        cannot open shared object file: No such file or directory)
 > 
-> To reproduce, on a CentOS 7 machine or docker image:
->   mkdir /tmp/br-build && cd /tmp/br-build
->   make -C ~/buildroot pc_x86_64_bios_defconfig O=`pwd`
->   make menuconfig # Switch to glibc, enable "QEMU" and "QEMU tools"
->   make all # Build succeeds
->   find target -name qemu-img # No binary has been built
+> Adding in the alsa-plugins package will build the appropriate dlobject
+> for loading and configuration.
+> 
+> Signed-off-by: Charles Hardin <ckhardin@gmail.com>
 
-I'm not sure to grasp all the implications of this, but isn't this a
-bug in Qemu's build machinery, that should be fixed in Qemu's Makefile
-instead ?
+Thanks for your patch. I have applied, but after doing a number of
+changes, see below for the details.
+
+First of all, alsa-plugins 1.2.5 did not build against alsa-lib 1.2.4,
+as it uses a new API that only appeared in alsa-lib 1.2.5, so I'm not
+sure how you could have built alsa-plugins 1.2.5. So as a preparation
+patch I have bumped alsa-lib to 1.2.5.1.
+
+>  package/Config.in                      |  1 +
+>  package/alsa-plugins/Config.in         |  8 ++++++++
+>  package/alsa-plugins/alsa-plugins.hash |  4 ++++
+>  package/alsa-plugins/alsa-plugins.mk   | 23 +++++++++++++++++++++++
+>  4 files changed, 36 insertions(+)
+
+You forgot to add an entry in the DEVELOPERS file.
+
+> diff --git a/package/alsa-plugins/Config.in b/package/alsa-plugins/Config.in
+> new file mode 100644
+> index 0000000000..44aaa7997c
+> --- /dev/null
+> +++ b/package/alsa-plugins/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_ALSA_PLUGINS
+> +	bool "alsa-plugins"
+> +	depends on BR2_PACKAGE_ALSA_LIB
+
+	select BR2_PACKAGE_ALSA_LIB_HWDEP
+
+was missing.
+
+> +	select BR2_PACKAGE_LIBSAMPLERATE
+
+This is not needed: libsamplerate is not a mandatory dependency.
+
+> diff --git a/package/alsa-plugins/alsa-plugins.mk b/package/alsa-plugins/alsa-plugins.mk
+> new file mode 100644
+> index 0000000000..70d3cdb87c
+> --- /dev/null
+> +++ b/package/alsa-plugins/alsa-plugins.mk
+> @@ -0,0 +1,23 @@
+> +#############################################################
+> +#
+> +# alsa-plugins
+> +#
+> +#############################################################
+
+The formatting of this comment was not matching our coding style: make
+sure to use "make check-package" when you create a new package.
+
+> +ALSA_PLUGINS_VERSION = 1.2.5
+> +ALSA_PLUGINS_SOURCE = alsa-plugins-$(ALSA_PLUGINS_VERSION).tar.bz2
+> +ALSA_PLUGINS_SITE = https://www.alsa-project.org/files/pub/plugins
+> +ALSA_PLUGINS_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (samplerate)
+> +ALSA_PLUGINS_LICENSE_FILES = COPYING COPYING.GPL
+> +ALSA_PLUGINS_INSTALL_STAGING = NO
+
+This was not needed as it's the default.
+
+> +ALSA_PLUGINS_AUTORECONF = YES
+
+Not needed, there is an already generate configure script in the
+tarball.
+
+> +ALSA_PLUGINS_DEPENDENCIES = alsa-lib libsamplerate
+> +
+> +ALSA_PLUGINS_CONF_OPTS += \
+> +	--enable-samplerate \
+> +	--disable-jack \
+> +	--disable-usbstream \
+> +	--disable-pulseaudio \
+> +	--disable-avcodec \
+> +	--with-speex=builtin
+
+Then the major change was to make the libsamplerate dependency
+optional, as such:
+
++ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
++ALSA_PLUGINS_CONF_OPTS += --enable-samplerate
++ALSA_PLUGINS_DEPENDENCIES += libsamplerate
++ALSA_PLUGINS_LICENSE += , GPL-2.0+ (samplerate plugin)
++ALSA_PLUGINS_LICENSE_FILES += COPYING.GPL
++else
++ALSA_PLUGINS_CONF_OPTS += --disable-samplerate
++endif
+
+And also I adjusted the list of options to disable a few other things,
+or differently.
+
+See the final commit at
+https://git.buildroot.org/buildroot/commit/?id=e85bde9cc672fc228eeb079e23ef302468ae3826
+
+If there are build failures on alsa-plugins, you will receive an
+e-mail, and it would be nice if you could investigate those build
+failures and submit patches fixing them.
+
+Thanks a lot for your contribution!
 
 Thomas
 -- 
