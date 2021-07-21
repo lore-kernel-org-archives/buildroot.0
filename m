@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8962C6377B
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 21:34:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8807C6377B
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 21:43:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9041961029
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 21:34:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9041961029
+	by mail.kernel.org (Postfix) with ESMTPS id 73AEA61283
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 21:43:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 73AEA61283
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AE2C40317;
-	Wed, 21 Jul 2021 21:34:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F370605F4;
+	Wed, 21 Jul 2021 21:43:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NgLLCjqNy3IV; Wed, 21 Jul 2021 21:34:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iXkwZHZ3hhDW; Wed, 21 Jul 2021 21:43:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 944F84030C;
-	Wed, 21 Jul 2021 21:34:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92312605D2;
+	Wed, 21 Jul 2021 21:43:42 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 05CEB1C1187
- for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 21:34:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 93D8E1C1187
+ for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 21:43:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E9EA840155
- for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 21:34:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 90AE7400F3
+ for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 21:43:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bMHGeGk-PEZ1 for <buildroot@lists.busybox.net>;
- Wed, 21 Jul 2021 21:34:45 +0000 (UTC)
+ with ESMTP id atdgogT0h9qn for <buildroot@lists.busybox.net>;
+ Wed, 21 Jul 2021 21:43:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2CF9240134
- for <buildroot@buildroot.org>; Wed, 21 Jul 2021 21:34:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D5201400E1
+ for <buildroot@buildroot.org>; Wed, 21 Jul 2021 21:43:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D0E5D887A7; Wed, 21 Jul 2021 21:00:32 +0000 (UTC)
+ id 810378462F; Wed, 21 Jul 2021 21:09:28 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Jul 2021 23:34:40 +0200
+Date: Wed, 21 Jul 2021 23:43:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 83e70c289381c2f58361270ed1384463728d3599
-X-Git-Newrev: 3dc1fc23c8ffee0720fa42ca13ec5cd229949c1e
+X-Git-Oldrev: 3dc1fc23c8ffee0720fa42ca13ec5cd229949c1e
+X-Git-Newrev: aa460c23dde2d8b575b7f76d37fcdc4834c2d6a7
 X-Patchwork-Hint: ignore
-Message-Id: <20210721210032.D0E5D887A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtirpc: drop rpcgen patches
+Message-Id: <20210721210928.810378462F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/boinc: add SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,36 +69,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3dc1fc23c8ffee0720fa42ca13ec5cd229949c1e
+commit: https://git.buildroot.net/buildroot/commit/?id=aa460c23dde2d8b575b7f76d37fcdc4834c2d6a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-rpcgen patches raise a build failure with host-libtirpc since commit
-0a5a9741e03e666204d577f82d29d93ba610381b because rpcgen is not provided
-by modern glibc:
-
-rpcgen -h -o tirpc/rpcsvc/crypt.h tirpc/rpcsvc/crypt.x
-make[1]: rpcgen: No such file or directory
-
-Those patches were added to build rpcbind back in 2012 with commit
-18828103cdc8b929b29f5cbc27cd771ab1a26326 however they don't seem to be
-needed anymore as rpcbind builds fine without them
-
-So drop those patches and autoreconf as well as the host-nfs-utils
-dependency from the target variant.
-
-Fixes:
- - http://autobuild.buildroot.org/results/6607cb9bec426b8c78e649484d5a149a1bf12a7f
+Support for boinc is added by the services/boinc module in the SELinux
+refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ly-generate-XDR-header-files-from-.x-sour.patch | 1001 ------------
- ...R-files-needed-to-build-rpcbind-on-top-of.patch | 1653 --------------------
- package/libtirpc/libtirpc.mk                       |    2 -
- 3 files changed, 2656 deletions(-)
+ package/boinc/boinc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Patch is too large, so refusing to show it
+diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+index c8eecdc559..5d9a8abe3b 100644
+--- a/package/boinc/boinc.mk
++++ b/package/boinc/boinc.mk
+@@ -11,6 +11,7 @@ BOINC_SITE = \
+ BOINC_LICENSE = LGPL-3.0+
+ BOINC_LICENSE_FILES = COPYING COPYING.LESSER
+ BOINC_CPE_ID_VENDOR = rom_walton
++BOINC_SELINUX_MODULES = boinc
+ BOINC_DEPENDENCIES = host-pkgconf libcurl openssl
+ BOINC_AUTORECONF = YES
+ BOINC_CONF_ENV = ac_cv_path__libcurl_config=$(STAGING_DIR)/usr/bin/curl-config
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
