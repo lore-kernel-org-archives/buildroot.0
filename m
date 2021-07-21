@@ -2,58 +2,90 @@ Return-Path: <SRS0=q2PD=MN=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06A8BC07E9B
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 06:47:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFB9FC07E9B
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 06:50:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9887F61001
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 06:47:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9887F61001
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=hazent.com
+	by mail.kernel.org (Postfix) with ESMTPS id A5F6261029
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 06:50:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A5F6261029
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DCD083123;
-	Wed, 21 Jul 2021 06:47:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70BC44036D;
+	Wed, 21 Jul 2021 06:50:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bJRMiyJrx_xO; Wed, 21 Jul 2021 06:47:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JbvxPy1EiUgt; Wed, 21 Jul 2021 06:50:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE8B283104;
-	Wed, 21 Jul 2021 06:47:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E4DA40363;
+	Wed, 21 Jul 2021 06:50:31 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 72D891BF5A5
- for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 06:47:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2A1171BF5A5
+ for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 06:50:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 62033404C4
- for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 06:47:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23C0D402CB
+ for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 06:50:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6m4GVBZAoCST for <buildroot@lists.busybox.net>;
- Wed, 21 Jul 2021 06:46:59 +0000 (UTC)
-X-Greylist: delayed 00:09:17 by SQLgrey-1.8.0
-Received: from collins.gmr.ssr.upm.es (unknown [82.213.202.155])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8957E402CB
- for <buildroot@buildroot.org>; Wed, 21 Jul 2021 06:46:58 +0000 (UTC)
-Received: by collins.gmr.ssr.upm.es (Postfix, from userid 1000)
- id C3B4AE80C6C; Wed, 21 Jul 2021 08:37:39 +0200 (CEST)
-Date: Wed, 21 Jul 2021 08:37:39 +0200
-From: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
-To: buildroot <buildroot@buildroot.org>, Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <YPfAs6EuysCKtZgQ@collins.gmr.ssr.upm.es>
-References: <20210715062814.8076-1-alvaro.gamez@hazent.com>
+ with ESMTP id Lemw01E7MiYu for <buildroot@lists.busybox.net>;
+ Wed, 21 Jul 2021 06:50:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3F260401F3
+ for <buildroot@buildroot.org>; Wed, 21 Jul 2021 06:50:29 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id i94so940562wri.4
+ for <buildroot@buildroot.org>; Tue, 20 Jul 2021 23:50:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eLoI5eA7opBV9vxsZ5QvtsOzFGbUPhc2WuZcaudj5Yo=;
+ b=WslFo8GVeCvFa790hMKZQMQkMrzHyc13FoLZtQNc2j6R1aBGP9lYTOXi0Sa0FHS4i5
+ XHLczSfPIxzC5vtH1lT+6bE60pMn394U4+HYxvHJbdQOdipLujsGGD1WbgYtNopGOHKK
+ /klpaij5Fh6TGWwb58qMW94Pk+8zBEq4nZRLDWQF5Am73T1fhFppqWfpi6Bij8guPXtB
+ UDkVoQ5Vth9nZFZ5BlubTDiUeI9iIMlSUKsGn8tf95UY8qaPhksBlNe+qNavxFUapudW
+ ffZhLXQ7Kcebei2l8WlIGZgjJ4C6bX6Oj4MpMZ00getoICYl147AKv5yBNSVDybVLyMK
+ ne5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eLoI5eA7opBV9vxsZ5QvtsOzFGbUPhc2WuZcaudj5Yo=;
+ b=iQxVs/dWELn9BWnTY4/8iR+JO565r1UYDWQWiugBfrMoZOynrzRWxP9yEoE0q7j6sd
+ w2pUQYks66G5vCYL5C4OhPfvALedzO+BBPu/w0Dx0wq6kyRsScrrdaYgAIg/4/QSxSIv
+ Y3e3Z+/ddQcBGEUTvy0gTwEWC9x9HF6gXaGwqnLX/G7o/+BVL+A1hC4FWVmaQlmwK5Ph
+ UpgMxKYEZn1hotZGz0l4icBCoiiXcpS3vf2VcdjmsaFbirHcWJmQgQkdmEERvgHKae/U
+ wOyeWxLHjocisQsYYY8Mw9003g6PQeDxZN+FcQYZzWpiHpuc6PRN0ORnkUZOjksyro0G
+ pBFA==
+X-Gm-Message-State: AOAM531IJv2KY5YLKq9dUPGSaSG7L0+/ZFYLi0t2PCCI4uv3uB1CGPqM
+ z3nVZlNOYtmcx7f/ColsWkJfrEnhgei/Ig==
+X-Google-Smtp-Source: ABdhPJy1yV/JVPyBv2lMpJHSxwxvNmadoSz4TV5gEa6w8Fwd66RaN2xGdBfeg+NZxzTKXq2rIYKHKA==
+X-Received: by 2002:adf:ec0c:: with SMTP id x12mr41922022wrn.113.1626850227293; 
+ Tue, 20 Jul 2021 23:50:27 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-1383-171.w86-229.abo.wanadoo.fr.
+ [86.229.230.171])
+ by smtp.gmail.com with ESMTPSA id b16sm26139262wrw.46.2021.07.20.23.50.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 20 Jul 2021 23:50:26 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 21 Jul 2021 08:50:21 +0200
+Message-Id: <20210721065021.441548-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210715062814.8076-1-alvaro.gamez@hazent.com>
-Subject: Re: [Buildroot] [PATCH] configs/digilent_genesys_zu_defconfig: add
- Digilent Genesys ZU board (ZynqMP SoC)
+Subject: [Buildroot] [PATCH 1/1] package/darkhttpd: fix legal info
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,61 +97,36 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Thu, Jul 15, 2021 at 08:28:14AM +0200, Alvaro Gamez Machado wrote:
-> This adds support the Digilent Genesys ZU development board.
-> 
-> Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
-> ---
->  ...ve-redundant-YYLOC-global-declaratio.patch |    52 +
->  .../0001-uboot-add-genesys-zu.patch           |    10 +
->  board/digilent/genesys-zu/GenesysZU.dts       |  1655 +
->  board/digilent/genesys-zu/README.txt          |    92 +
->  board/digilent/genesys-zu/genimage.cfg        |    28 +
->  board/digilent/genesys-zu/image.its           |    59 +
->  board/digilent/genesys-zu/kernel_defconfig    |   414 +
->  board/digilent/genesys-zu/pm_cfg_obj.c        |   630 +
->  board/digilent/genesys-zu/post-image.sh       |    10 +
->  board/digilent/genesys-zu/psu_init_gpl.c      | 21818 +++++++++
->  board/digilent/genesys-zu/psu_init_gpl.h      | 37545 ++++++++++++++++
->  board/digilent/genesys-zu/uboot-env.txt       |    83 +
->  board/digilent/genesys-zu/uboot_defconfig     |   106 +
->  configs/digilent_genesys_zu_defconfig         |    49 +
->  14 files changed, 62551 insertions(+)
->  create mode 100644 board/digilent/genesys-zu/0001-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch
->  create mode 100644 board/digilent/genesys-zu/0001-uboot-add-genesys-zu.patch
->  create mode 100644 board/digilent/genesys-zu/GenesysZU.dts
->  create mode 100644 board/digilent/genesys-zu/README.txt
->  create mode 100644 board/digilent/genesys-zu/genimage.cfg
->  create mode 100644 board/digilent/genesys-zu/image.its
->  create mode 100644 board/digilent/genesys-zu/kernel_defconfig
->  create mode 100644 board/digilent/genesys-zu/pm_cfg_obj.c
->  create mode 100755 board/digilent/genesys-zu/post-image.sh
->  create mode 100644 board/digilent/genesys-zu/psu_init_gpl.c
->  create mode 100644 board/digilent/genesys-zu/psu_init_gpl.h
->  create mode 100644 board/digilent/genesys-zu/uboot-env.txt
->  create mode 100644 board/digilent/genesys-zu/uboot_defconfig
->  create mode 100644 configs/digilent_genesys_zu_defconfig
-> 
+Commit 9ca64820db6766ad51bc835c86948cbe2c87e209 forgot to update hash of
+darkhttpd.c
 
-Hi
+Fixes:
+ - http://autobuild.buildroot.org/results/a1503d8d6f67a3742350b0188b0b2621afe5c476
 
-I sent this patch to the list, but it being too large got it stuck
-somewhere and didn't reach the list. The cause are files
-psu_init_gpl.{c,h} that are autogenerated by Xilinx utils, but that
-are needed to run the system.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/darkhttpd/darkhttpd.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Can this message be moderated back into the list or shall I do
-something different?
-
-Thanks
-
+diff --git a/package/darkhttpd/darkhttpd.hash b/package/darkhttpd/darkhttpd.hash
+index c6520ba5b2..af5a2bf8c9 100644
+--- a/package/darkhttpd/darkhttpd.hash
++++ b/package/darkhttpd/darkhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+ sha256  1d88c395ac79ca9365aa5af71afe4ad136a4ed45099ca398168d4a2014dc0fc2  darkhttpd-1.13.tar.gz
+-sha256  3239739831a668d1273c0ef5ae1b2147e0f423288b16ed997d7e695cc7e0a6c9  darkhttpd.c
++sha256  44e784df460954c7760e2eeae69aecb12a3d23ca1c0a4f6047c3c6452b2e2f49  darkhttpd.c
 -- 
-Alvaro G. M.
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
