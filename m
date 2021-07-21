@@ -2,56 +2,60 @@ Return-Path: <SRS0=q2PD=MN=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CA58C6377B
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 20:12:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C6E9C6377B
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 20:15:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1E2C161263
-	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 20:12:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1E2C161263
+	by mail.kernel.org (Postfix) with ESMTPS id EF1B960FE7
+	for <buildroot@archiver.kernel.org>; Wed, 21 Jul 2021 20:15:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org EF1B960FE7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot-bounces@busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E13AC605F4;
-	Wed, 21 Jul 2021 20:12:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BFEAD40146;
+	Wed, 21 Jul 2021 20:15:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S1HqNDMyLd0k; Wed, 21 Jul 2021 20:12:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 530g2uao5aP3; Wed, 21 Jul 2021 20:15:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2110D605F5;
-	Wed, 21 Jul 2021 20:12:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 741AB1C1173
- for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 20:12:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 39FCB400E1;
+	Wed, 21 Jul 2021 20:15:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7CE931BF580
+ for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 20:15:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 587D3605F5
- for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 20:12:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6CB3A826C2
+ for <buildroot@lists.busybox.net>; Wed, 21 Jul 2021 20:15:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s78ccjMIqhza for <buildroot@lists.busybox.net>;
- Wed, 21 Jul 2021 20:12:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E748605F4
- for <buildroot@buildroot.org>; Wed, 21 Jul 2021 20:12:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 79FAF8876C; Wed, 21 Jul 2021 19:38:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id osyMS8J7yti3 for <buildroot@lists.busybox.net>;
+ Wed, 21 Jul 2021 20:15:07 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 51B07826BF
+ for <buildroot@busybox.net>; Wed, 21 Jul 2021 20:15:07 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 8F178200004;
+ Wed, 21 Jul 2021 20:15:03 +0000 (UTC)
+Date: Wed, 21 Jul 2021 22:15:01 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Wed, 21 Jul 2021 22:10:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 35953d1e61aa8581be09c9dca39365955b10590e
-X-Git-Newrev: af19131543926879fb6676a3352c63ac0b2038bc
-X-Patchwork-Hint: ignore
-Message-Id: <20210721193821.79FAF8876C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/alsa-lib: bump to 1.2.5.1
+To: Alexey Neyman <stilor@att.net>
+Message-ID: <20210721221501.4c14fcfd@windsurf>
+In-Reply-To: <20210721194605.1552794-3-stilor@att.net>
+References: <20210721194605.1552794-1-stilor@att.net>
+ <20210721194605.1552794-3-stilor@att.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 2/2] package/qemu: filter out long make
+ options
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,144 +67,47 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af19131543926879fb6676a3352c63ac0b2038bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This version bump is needed prior to the introduction of alsa-plugins
-1.2.5.
+On Wed, 21 Jul 2021 12:46:05 -0700
+Alexey Neyman <stilor@att.net> wrote:
 
-As part of this bump, we drop 0002-dlmisc-the-snd_plugin_dir_set.patch
-which was an upstream backport, and we introduce
-0002-fix-build-with-disable-ucm.patch to fix the build of alsa-lib
-when UCM support is disabled. This patch is also backported from
-upstream.
+> Since qemu started using ninja, they have the following fragment in the
+> Makefile:
+> 
+> MAKE.n = $(findstring n,$(firstword $(MAKEFLAGS)))
+> NINJAFLAGS = ... $(if $(MAKE.n), -n) ...
+> 
+> Buildroot's generated makefile in the O= directory invokes make in the
+> base buildroot with --no-print-directory. However, make's placement of
+> the --no-print-directory in MAKEFLAGS varies between the versions of
+> the host make; make 4.3 places that at the end while make 3.82 places
+> it at the beginning. As a result, if building on a system with an older
+> host make, qemu's makefile invokes `ninja -n` which does not generate
+> any outputs.
+> 
+> To reproduce, on a CentOS 7 machine or docker image:
+>   mkdir /tmp/br-build && cd /tmp/br-build
+>   make -C ~/buildroot pc_x86_64_bios_defconfig O=`pwd`
+>   make menuconfig # Switch to glibc, enable "QEMU" and "QEMU tools"
+>   make all # Build succeeds
+>   find target -name qemu-img # No binary has been built
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0002-dlmisc-the-snd_plugin_dir_set.patch       | 34 -----------------
- .../alsa-lib/0002-fix-build-with-disable-ucm.patch | 43 ++++++++++++++++++++++
- package/alsa-lib/alsa-lib.hash                     |  2 +-
- package/alsa-lib/alsa-lib.mk                       |  2 +-
- 4 files changed, 45 insertions(+), 36 deletions(-)
+I'm not sure to grasp all the implications of this, but isn't this a
+bug in Qemu's build machinery, that should be fixed in Qemu's Makefile
+instead ?
 
-diff --git a/package/alsa-lib/0002-dlmisc-the-snd_plugin_dir_set.patch b/package/alsa-lib/0002-dlmisc-the-snd_plugin_dir_set.patch
-deleted file mode 100644
-index 61d945455c..0000000000
---- a/package/alsa-lib/0002-dlmisc-the-snd_plugin_dir_set.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From ad8c8e5503980295dd8e5e54a6285d2d7e32eb1e Mon Sep 17 00:00:00 2001
--From: Jaroslav Kysela <perex@perex.cz>
--Date: Thu, 22 Oct 2020 20:57:32 +0200
--Subject: [PATCH] dlmisc: the snd_plugin_dir_set / snd_plugin_dir must be
-- declared even for \!DL_ORIGIN_AVAILABLE
--
--Fixes: 8580c081c2 ("dlsym: add support for ALSA_PLUGIN_DIR environment variable")
--BugLink: https://github.com/alsa-project/alsa-lib/issues/91
--Signed-off-by: Jaroslav Kysela <perex@perex.cz>
--
--Downloaded from upstream commit
--https://github.com/alsa-project/alsa-lib/commit/ad8c8e5503980295dd8e5e54a6285d2d7e32eb1e
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/dlmisc.c | 2 --
-- 1 file changed, 2 deletions(-)
--
--diff --git a/src/dlmisc.c b/src/dlmisc.c
--index c9517c55..f20eb593 100644
----- a/src/dlmisc.c
--+++ b/src/dlmisc.c
--@@ -42,11 +42,9 @@
-- #ifndef PIC
-- struct snd_dlsym_link *snd_dlsym_start = NULL;
-- #endif
---#ifdef DL_ORIGIN_AVAILABLE
-- static int snd_plugin_dir_set = 0;
-- static char *snd_plugin_dir = NULL;
-- #endif
---#endif
-- 
-- #if defined(DL_ORIGIN_AVAILABLE) && defined(HAVE_LIBPTHREAD)
-- static pthread_mutex_t snd_dlpath_mutex = PTHREAD_MUTEX_INITIALIZER;
-diff --git a/package/alsa-lib/0002-fix-build-with-disable-ucm.patch b/package/alsa-lib/0002-fix-build-with-disable-ucm.patch
-new file mode 100644
-index 0000000000..144c8e3fbd
---- /dev/null
-+++ b/package/alsa-lib/0002-fix-build-with-disable-ucm.patch
-@@ -0,0 +1,43 @@
-+From 3fbaea3ff390d4c09adbf5d6ae62fb7b5f3f24f5 Mon Sep 17 00:00:00 2001
-+From: Jaroslav Kysela <perex@perex.cz>
-+Date: Mon, 28 Jun 2021 12:08:53 +0200
-+Subject: [PATCH] fix build with --disable-ucm
-+
-+Link: https://mailman.alsa-project.org/pipermail/alsa-devel/2021-June/186729.html
-+Reported-by: Michael Forney <mforney@mforney.org>
-+Signed-off-by: Jaroslav Kysela <perex@perex.cz>
-+Upstream: f4f29d42be8b8ad60ea4c5697374adad4bfe6868
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ include/local.h | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/include/local.h b/include/local.h
-+index 4e7d88a0..7cfcec53 100644
-+--- a/include/local.h
-++++ b/include/local.h
-+@@ -374,6 +374,8 @@ int _snd_config_load_with_include(snd_config_t *config, snd_input_t *in,
-+ void *INTERNAL(snd_dlopen)(const char *name, int mode, char *errbuf, size_t errbuflen);
-+ #endif
-+ 
-++#ifdef BUILD_UCM
-++
-+ const char *uc_mgr_alibcfg_by_device(snd_config_t **config, const char *name);
-+ 
-+ static inline int _snd_is_ucm_device(const char *name)
-+@@ -381,4 +383,12 @@ static inline int _snd_is_ucm_device(const char *name)
-+ 	return name && name[0] == '_' && name[1] == 'u' && name[2] == 'c' && name[3] == 'm';
-+ }
-+ 
-++#else
-++
-++static inline const char *uc_mgr_alibcfg_by_device(snd_config_t **config, const char *name) { return NULL; }
-++static inline int _snd_is_ucm_device(const char *name) { return 0; }
-++
-++
-++#endif
-++
-+ #endif
-+-- 
-+2.31.1
-+
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
-index 6e65fb7166..6660c8a104 100644
---- a/package/alsa-lib/alsa-lib.hash
-+++ b/package/alsa-lib/alsa-lib.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  f7554be1a56cdff468b58fc1c29b95b64864c590038dd309c7a978c7116908f7  alsa-lib-1.2.4.tar.bz2
-+sha256  628421d950cecaf234de3f899d520c0a6923313c964ad751ffac081df331438e  alsa-lib-1.2.5.1.tar.bz2
- sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
- sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index b1bfaf30e5..c71ad5dd58 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ALSA_LIB_VERSION = 1.2.4
-+ALSA_LIB_VERSION = 1.2.5.1
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
- ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
