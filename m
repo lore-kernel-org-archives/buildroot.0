@@ -2,102 +2,90 @@ Return-Path: <SRS0=/mEu=MO=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EDB3C4338F
-	for <buildroot@archiver.kernel.org>; Thu, 22 Jul 2021 19:40:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3759C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 22 Jul 2021 19:52:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F0D7260EB8
-	for <buildroot@archiver.kernel.org>; Thu, 22 Jul 2021 19:40:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F0D7260EB8
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 7077F60EB2
+	for <buildroot@archiver.kernel.org>; Thu, 22 Jul 2021 19:52:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7077F60EB2
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=nklabs.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B557140274;
-	Thu, 22 Jul 2021 19:40:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DD23608BB;
+	Thu, 22 Jul 2021 19:52:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id paOQNdF2MMmv; Thu, 22 Jul 2021 19:40:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NWeuoKdT-oBZ; Thu, 22 Jul 2021 19:52:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D59FA4026E;
-	Thu, 22 Jul 2021 19:40:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DD9C608AF;
+	Thu, 22 Jul 2021 19:52:30 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DCA381BF324
- for <buildroot@lists.busybox.net>; Thu, 22 Jul 2021 19:40:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 96A011BF324
+ for <buildroot@lists.busybox.net>; Thu, 22 Jul 2021 19:52:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CC2D58300C
- for <buildroot@lists.busybox.net>; Thu, 22 Jul 2021 19:40:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 93EFA81CAF
+ for <buildroot@lists.busybox.net>; Thu, 22 Jul 2021 19:52:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
+ dkim=pass (2048-bit key) header.d=nklabs-com.20150623.gappssmtp.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T7T1fzduRfvE for <buildroot@lists.busybox.net>;
- Thu, 22 Jul 2021 19:40:05 +0000 (UTC)
+ with ESMTP id NWDTGtnBDMxR for <buildroot@lists.busybox.net>;
+ Thu, 22 Jul 2021 19:52:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5DA0582F9B
- for <buildroot@busybox.net>; Thu, 22 Jul 2021 19:40:05 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id h2so8231737edt.3
- for <buildroot@busybox.net>; Thu, 22 Jul 2021 12:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=subject:to:cc:references:from:organization:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=sahmy2J7ATaafOguJtBW2g5jdn1PBb98lVr+TgVFTT4=;
- b=d3Zd3aT8KMQhknDiq5RYSiosfVDL0LmcyVXuIPm5bApcBaGy1O4K4mDRt2v53TIOQD
- mf4oEdqQNTAqFa05hVj+jpOjBqbJ91w9CmqXj7OW9suUejlElzpYPvNpx3V8J/ZeDtcn
- 1Dtm6ZDDe/kf8WzPhm9x16ql2DutyOulXo3908esWDm3cOm4N1GtIhuayuhBfag3ot62
- /k1Zrt4qgriFvsGAN/yFbcgwqpeYhQRLT8shGGuJ42lkWUvUGL08slru+AEtu4ksM01I
- iOWtQdSLJQcgurorbD3o2sOqY0ICw7hz70gcI8UP2dJkg2KqnCzyna3s1DUt53r7Fh7w
- L1Nw==
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5AE678104D
+ for <buildroot@busybox.net>; Thu, 22 Jul 2021 19:52:27 +0000 (UTC)
+Received: by mail-io1-xd33.google.com with SMTP id v26so7728376iom.11
+ for <buildroot@busybox.net>; Thu, 22 Jul 2021 12:52:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=nklabs-com.20150623.gappssmtp.com; s=20150623;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=lXUC38nulyhPL75Hr8dIaT5mq21UJfSnQTbvIff4N00=;
+ b=Dgps5cMRqgZGB2XJ4jhf9gv0p0f4/QTanppXRhxgfE4yQy0tyE1zvMT5qJaag+Z8ku
+ a5LDwIIx3yzrxhqnrs2KMlttWZIqmkt2rKPCCklnYn3e2TZANhcZ4DU2Sr/W1XCdSK1y
+ 7zQGMu/raR8obhdDl4x22SmMvq+gSQKCVKzwF3M0GGN7IVakPyJlIlZMO0TTfUreOkld
+ XD7L3LXGSxjFJzm/CKiCETx7d2scgaJWM9qQv/645sdzHsfeC9gOfWgZvyGn0YzYuaXe
+ mbvvhtLxlQuzXNCAq7hBjXb6ImMW4pZcmdKs7To/yh7s9xhupjR7/n/6MCBEz6MrcQNg
+ xcKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:cc:references:from:organization
- :message-id:date:user-agent:mime-version:in-reply-to
- :content-language:content-transfer-encoding;
- bh=sahmy2J7ATaafOguJtBW2g5jdn1PBb98lVr+TgVFTT4=;
- b=PndAwPaLlBkyMFWYwGiYoph7AJjdnt00E7rCrmC76lgQlYBXdzD0Kxd+QW4KH1fHUx
- GcoRkenw6S8u9vCvvxFkOqxqkDjfUkiYCezAnGzKkJ1iBRA1qIKt/aN5fTeV4NUjdfj0
- LtUBFU/cWNGRK+8G+m4F9P1pBo/lv9M1G6sBSaqZ0XSo4zreE5B3PfQP+vNUP2z5euYS
- VnZhaldxB6ePTgSYRY8lIjeQsQlpmJtTQuiU7QkyQ2S9EElyQ1+tZboRKlPGfcgmz2mr
- gs06X4jwCdnbjPmKUxca9pZTwsWCe/suRXvkOafCRdE8J5SKhff+8QY75iKdpSQGlNIT
- NEDg==
-X-Gm-Message-State: AOAM533rfz6Y96LI6TEReI+rAqGpWmCQTnue01Jt+1ntouXCjDxHKqRw
- vj4kbphzkZApM4xFnzIEIX9s6DSliM6oXkoC
-X-Google-Smtp-Source: ABdhPJy3XH74Auwv7AVK0+YMh6mrcX8lup/ISiT8euw3ZmwaUOSLarajDfKf1/zE78XT9TIK36uKQg==
-X-Received: by 2002:a05:6402:26c5:: with SMTP id
- x5mr1366413edd.237.1626982803447; 
- Thu, 22 Jul 2021 12:40:03 -0700 (PDT)
-Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id j21sm12852813edq.76.2021.07.22.12.40.02
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 22 Jul 2021 12:40:03 -0700 (PDT)
-To: Patricia Holden <pholden@nklabs.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=lXUC38nulyhPL75Hr8dIaT5mq21UJfSnQTbvIff4N00=;
+ b=q49qyKZ6dUQNvGIHXY/zxIS4FJ6RU7XkHdjn0k50E55oo/ba8xhAzSNDsaidSi6q/+
+ aEPdqp/iGemO240pTz99rGTGwhfaeHPwTJsUbMAkDtLs9pxXi/P46cvr8dcZVh3RvMSo
+ y5JBa0BhI/Hu97dAi7FiRENtJmSYtdVjxXJ3HQ9O4S+A5Up935BVna5XjkkDWjsmFMXK
+ +1ERh+v/ad+Kd0f0ebWNZjvXzCn/jTzCw2FgVjqt4gSLGfKPmHs5Uf+eJIiol/XE5Dp3
+ m+J/uUCH5RYoiBZrISIzDG0oUA/gnA+8V20fDbO9eJuP78NJaeDjgiAHFwEI1uL7vCtX
+ X+zA==
+X-Gm-Message-State: AOAM533UHQwlpZD5QkWwop3XYkOZRQo2zi0/jCSJD7C55Rkntco6+k+V
+ LfLdQ3oyjRjLzncIuxgkepJAe6XlTPPS599o/Vj2gQ==
+X-Google-Smtp-Source: ABdhPJzEGlcn6xuYmhDBbuNtg3kbMMQW7mdcTfhuPYdGOXRy4k06UThG/rsv/bWSv4FmdjjBRTOnUAHsfsyet1j4ZEo=
+X-Received: by 2002:a05:6638:3887:: with SMTP id
+ b7mr1108259jav.42.1626983546449; 
+ Thu, 22 Jul 2021 12:52:26 -0700 (PDT)
+MIME-Version: 1.0
 References: <20210720224806.09e5a5b2@windsurf>
  <BAACA597-C3FC-4275-9931-4D3F619F94EE@nklabs.com>
  <20210721094154.74005093@windsurf>
  <CAJ6EmCd-K+goctCfu5ygE8V1MAMh=C7RgxYmSfhJGQmRCuv=3g@mail.gmail.com>
  <CAJ6EmCfeA3e9-vmCbAUuN-yqPXaAMKci-g-G+OeW5UfrT=Uy_g@mail.gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-Message-ID: <01c34092-b6d9-86ad-6cee-c78090e75b3f@mind.be>
-Date: Thu, 22 Jul 2021 21:40:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <CAJ6EmCfeA3e9-vmCbAUuN-yqPXaAMKci-g-G+OeW5UfrT=Uy_g@mail.gmail.com>
-Content-Language: en-GB
+ <01c34092-b6d9-86ad-6cee-c78090e75b3f@mind.be>
+In-Reply-To: <01c34092-b6d9-86ad-6cee-c78090e75b3f@mind.be>
+From: Patricia Holden <pholden@nklabs.com>
+Date: Thu, 22 Jul 2021 15:52:15 -0400
+Message-ID: <CAJ6EmCeHd-7Xv0WSt+gLn31viKP2giaXzHKOt0=Z+7zWN8eGpA@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 Subject: Re: [Buildroot] Question about pkg-config pc files
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
@@ -110,44 +98,160 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot@busybox.net
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@busybox.net, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: multipart/mixed; boundary="===============3879889786562193774=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-CgpPbiAyMi8wNy8yMDIxIDE5OjM2LCBQYXRyaWNpYSBIb2xkZW4gd3JvdGU6Cj4gSGkgVGhvbWFz
-LAo+IAo+IFRoZSBzYWdhIGNvbnRpbnVlcy7CoCBJIGZvdW5kIHRoYXQgbXVsdGltZWRpYSBpcyBu
-b3QgYWRkZWQKPiBiZWNhdXNlwqBCUjJfUEFDS0FHRV9RVDVfR0xfQVZBSUxBQkxFIGlzIG5vdCBz
-ZXQuwqAgSW4gb3JkZXIgdG8gY29uZmlndXJlIFFUCj4gT3BlbkdMLCBJIGVuYWJsZWQgdGktZ2Z4
-IHNpbmNlIG91ciBib2FyZCBpcyBhIGJlYWdsZWJvbmUteDE1LgoKIE5vdCB0aGF0IEkndmUgZXZl
-ciB1c2VkIHRoaXMgYm9hcmQsIGJ1dCBBRkFJSyBmb3IgQU01N3h4IHlvdSBzaG91bGQgdXNlIHRp
-LXNneCwKbm90IHRpLWdmeC4KCiBSZWdhcmRzLAogQXJub3V0CgoKPsKgIE5vdyBJIGNhbid0IGdl
-dAo+IHBhc3QgYnVpbGRpbmcgdGktZ2Z4LsKgIEkgaGF2ZSBhIGxvY2FsIHNvdXJjZSBkaXJlY3Rv
-cnkgZm9yIHRoZSBrZXJuZWwsIHNpbmNlIHdlCj4gaGFkIHRvIGFkZCBvdXIgb3duIGRyaXZlcnMg
-Zm9yIHNvbWUgcHJvcHJpZXRhcnkgZGV2aWNlcyBvbiB0aGUgZGVzaWduIGJhc2VkIG9uCj4gYmVh
-Z2xlYm9uZSBYMTUuwqAgSSBhbHNvIHVzZSB0aGUgbG9jYWwgc291cmNlIGRpcmVjdG9yeSB0byBn
-ZW5lcmF0ZQo+IGxpbnV4LWhlYWRlcnMuwqAgV2UgYmFzZWQgdGhlIGtlcm5lbCBmcm9tIFRJJ3Mg
-U0RLLsKgIEkgY2hlY2tlZCB0aGUga2VybmVsIGNvbmZpZywKPiBmYmRldiBvbWFwIGlzIHNlbGVj
-dGVkLsKgIEJ1dCBJIGdldCB0aGUgZm9sbG93aW5nIGVycm9yOgo+IAo+IMKgQ0MgW01dCj4gwqAv
-aG9tZS9wYXRyaWNhaG9sZGVuL3dpbGxpYW1zb24vYnVpbGQwNzA2MjAyMS9Qcm8zLUxpbnV4L2J1
-aWxkcm9vdC0yMDIwLjAyL291dHB1dC9idWlsZC90aS1nZngtNV8wMV8wMV8wMi9HRlhfTGludXhf
-S00vc2VydmljZXM0L3NydmttL2NvbW1vbi9wdnJzcnYubwo+IMKgIENDIFtNXQo+IMKgL2hvbWUv
-cGF0cmljYWhvbGRlbi93aWxsaWFtc29uL2J1aWxkMDcwNjIwMjEvUHJvMy1MaW51eC9idWlsZHJv
-b3QtMjAyMC4wMi9vdXRwdXQvYnVpbGQvdGktZ2Z4LTVfMDFfMDFfMDIvR0ZYX0xpbnV4X0tNL3Nl
-cnZpY2VzNC9zcnZrbS9jb21tb24vaGFuZGxlLm8KPiAvaG9tZS9wYXRyaWNhaG9sZGVuL3dpbGxp
-YW1zb24vYnVpbGQwNzA2MjAyMS9Qcm8zLUxpbnV4L2J1aWxkcm9vdC0yMDIwLjAyL291dHB1dC9i
-dWlsZC90aS1nZngtNV8wMV8wMV8wMi9HRlhfTGludXhfS00vc2VydmljZXM0LzNyZHBhcnR5L2Rj
-X29tYXBmYjNfbGludXgvb21hcGxmYl9saW51eC5jOjEzMzoxMDoKPiBmYXRhbCBlcnJvcjogb21h
-cGZiL29tYXBmYi5oOiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5Cj4gwqAgMTMzIHwgI2luY2x1
-ZGUgPG9tYXBmYi9vbWFwZmIuaD4KPiDCoCDCoCDCoCB8IMKgIMKgIMKgIMKgIMKgXn5+fn5+fn5+
-fn5+fn5+fn4KPiAKPiAKPiBUaGUgZmlsZSAib21hcGZiLmgiIGlzIGluwqBkcml2ZXJzL3ZpZGVv
-L2ZiZGV2L29tYXAyL29tYXBmYiwgYnV0IGZvciBzb21lIHJlYXNvbgo+IHRoZSB0aS1nZnggcGFj
-a2FnZSBkb2VzIG5vdCBmaW5kIGl0LsKgIFdlIGFyZSB1c2luZyBidWlsZHJvb3QtMjAyMC0yMC4w
-Mi4xMi4KPiAKPiBJIGRpZCBub3Qgc2VlIHRoaXMgZXJyb3IgaW4gdGhlIGJ1aWxkcm9vdCBpc3N1
-ZXMsIEkgYW0gd29uZGVyaW5nIHdoeSBpdCBpcwo+IGNhdXNpbmcgcHJvYmxlbXMuwqAgTXkgb25s
-eSBndWVzcyBpcyB0aGF0IGl0IG1heSBoYXZlIHNvbWV0aGluZyB0byBkbyB3aXRoIHRoZQo+IGZh
-Y3QgdGhhdCBJIGhhdmUgYSBsb2NhbCBrZXJuZWwgc291cmNlIGRpcmVjdG9yeS4KCltzbmlwXQpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidXN5Ym94Lm5ldApodHRwOi8vbGlzdHMuYnVzeWJveC5u
-ZXQvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============3879889786562193774==
+Content-Type: multipart/alternative; boundary="000000000000578b3405c7bba034"
+
+--000000000000578b3405c7bba034
+Content-Type: text/plain; charset="UTF-8"
+
+Thanks, I will try that!
+
+On Thu, Jul 22, 2021 at 3:40 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+
+>
+>
+> On 22/07/2021 19:36, Patricia Holden wrote:
+> > Hi Thomas,
+> >
+> > The saga continues.  I found that multimedia is not added
+> > because BR2_PACKAGE_QT5_GL_AVAILABLE is not set.  In order to configure
+> QT
+> > OpenGL, I enabled ti-gfx since our board is a beaglebone-x15.
+>
+>  Not that I've ever used this board, but AFAIK for AM57xx you should use
+> ti-sgx,
+> not ti-gfx.
+>
+>  Regards,
+>  Arnout
+>
+>
+> >  Now I can't get
+> > past building ti-gfx.  I have a local source directory for the kernel,
+> since we
+> > had to add our own drivers for some proprietary devices on the design
+> based on
+> > beaglebone X15.  I also use the local source directory to generate
+> > linux-headers.  We based the kernel from TI's SDK.  I checked the kernel
+> config,
+> > fbdev omap is selected.  But I get the following error:
+> >
+> >  CC [M]
+> >
+>  /home/patricaholden/williamson/build07062021/Pro3-Linux/buildroot-2020.02/output/build/ti-gfx-5_01_01_02/GFX_Linux_KM/services4/srvkm/common/pvrsrv.o
+> >   CC [M]
+> >
+>  /home/patricaholden/williamson/build07062021/Pro3-Linux/buildroot-2020.02/output/build/ti-gfx-5_01_01_02/GFX_Linux_KM/services4/srvkm/common/handle.o
+> >
+> /home/patricaholden/williamson/build07062021/Pro3-Linux/buildroot-2020.02/output/build/ti-gfx-5_01_01_02/GFX_Linux_KM/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c:133:10:
+> > fatal error: omapfb/omapfb.h: No such file or directory
+> >   133 | #include <omapfb/omapfb.h>
+> >       |          ^~~~~~~~~~~~~~~~~
+> >
+> >
+> > The file "omapfb.h" is in drivers/video/fbdev/omap2/omapfb, but for some
+> reason
+> > the ti-gfx package does not find it.  We are using
+> buildroot-2020-20.02.12.
+> >
+> > I did not see this error in the buildroot issues, I am wondering why it
+> is
+> > causing problems.  My only guess is that it may have something to do
+> with the
+> > fact that I have a local kernel source directory.
+>
+> [snip]
+>
+
+
+-- 
+Patricia A. Holden
+
+--000000000000578b3405c7bba034
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Thanks, I will try that!</div><br><div class=3D"gmail_quot=
+e"><div dir=3D"ltr" class=3D"gmail_attr">On Thu, Jul 22, 2021 at 3:40 PM Ar=
+nout Vandecappelle &lt;<a href=3D"mailto:arnout@mind.be">arnout@mind.be</a>=
+&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px =
+0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><br>
+<br>
+On 22/07/2021 19:36, Patricia Holden wrote:<br>
+&gt; Hi Thomas,<br>
+&gt; <br>
+&gt; The saga continues.=C2=A0 I found that multimedia is not added<br>
+&gt; because=C2=A0BR2_PACKAGE_QT5_GL_AVAILABLE is not set.=C2=A0 In order t=
+o configure QT<br>
+&gt; OpenGL, I enabled ti-gfx since our board is a beaglebone-x15.<br>
+<br>
+=C2=A0Not that I&#39;ve ever used this board, but AFAIK for AM57xx you shou=
+ld use ti-sgx,<br>
+not ti-gfx.<br>
+<br>
+=C2=A0Regards,<br>
+=C2=A0Arnout<br>
+<br>
+<br>
+&gt;=C2=A0 Now I can&#39;t get<br>
+&gt; past building ti-gfx.=C2=A0 I have a local source directory for the ke=
+rnel, since we<br>
+&gt; had to add our own drivers for some proprietary devices on the design =
+based on<br>
+&gt; beaglebone X15.=C2=A0 I also use the local source directory to generat=
+e<br>
+&gt; linux-headers.=C2=A0 We based the kernel from TI&#39;s SDK.=C2=A0 I ch=
+ecked the kernel config,<br>
+&gt; fbdev omap is selected.=C2=A0 But I get the following error:<br>
+&gt; <br>
+&gt; =C2=A0CC [M]<br>
+&gt; =C2=A0/home/patricaholden/williamson/build07062021/Pro3-Linux/buildroo=
+t-2020.02/output/build/ti-gfx-5_01_01_02/GFX_Linux_KM/services4/srvkm/commo=
+n/pvrsrv.o<br>
+&gt; =C2=A0 CC [M]<br>
+&gt; =C2=A0/home/patricaholden/williamson/build07062021/Pro3-Linux/buildroo=
+t-2020.02/output/build/ti-gfx-5_01_01_02/GFX_Linux_KM/services4/srvkm/commo=
+n/handle.o<br>
+&gt; /home/patricaholden/williamson/build07062021/Pro3-Linux/buildroot-2020=
+.02/output/build/ti-gfx-5_01_01_02/GFX_Linux_KM/services4/3rdparty/dc_omapf=
+b3_linux/omaplfb_linux.c:133:10:<br>
+&gt; fatal error: omapfb/omapfb.h: No such file or directory<br>
+&gt; =C2=A0 133 | #include &lt;omapfb/omapfb.h&gt;<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 | =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0^~~~~~~~~~~~~=
+~~~~<br>
+&gt; <br>
+&gt; <br>
+&gt; The file &quot;omapfb.h&quot; is in=C2=A0drivers/video/fbdev/omap2/oma=
+pfb, but for some reason<br>
+&gt; the ti-gfx package does not find it.=C2=A0 We are using buildroot-2020=
+-20.02.12.<br>
+&gt; <br>
+&gt; I did not see this error in the buildroot issues, I am wondering why i=
+t is<br>
+&gt; causing problems.=C2=A0 My only guess is that it may have something to=
+ do with the<br>
+&gt; fact that I have a local kernel source directory.<br>
+<br>
+[snip]<br>
+</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
+ class=3D"gmail_signature"><div dir=3D"ltr">Patricia A. Holden</div></div>
+
+--000000000000578b3405c7bba034--
+
+--===============3879889786562193774==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============3879889786562193774==--
