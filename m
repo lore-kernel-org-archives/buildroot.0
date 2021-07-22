@@ -2,56 +2,100 @@ Return-Path: <SRS0=/mEu=MO=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FBDDC4338F
-	for <buildroot@archiver.kernel.org>; Thu, 22 Jul 2021 21:16:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F506C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 22 Jul 2021 21:19:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 240A860EB5
-	for <buildroot@archiver.kernel.org>; Thu, 22 Jul 2021 21:16:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 240A860EB5
+	by mail.kernel.org (Postfix) with ESMTPS id D254F60C41
+	for <buildroot@archiver.kernel.org>; Thu, 22 Jul 2021 21:19:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D254F60C41
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EDFF4837C4;
-	Thu, 22 Jul 2021 21:16:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B535401DF;
+	Thu, 22 Jul 2021 21:19:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B7v9PIPnk8AO; Thu, 22 Jul 2021 21:16:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SbvMJSSYiN_C; Thu, 22 Jul 2021 21:19:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D333F835A6;
-	Thu, 22 Jul 2021 21:16:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72A63401C5;
+	Thu, 22 Jul 2021 21:19:02 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E02F11BF39A
- for <buildroot@lists.busybox.net>; Thu, 22 Jul 2021 21:15:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C435E1BF39A
+ for <buildroot@lists.busybox.net>; Thu, 22 Jul 2021 21:19:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE5E6835A6
- for <buildroot@lists.busybox.net>; Thu, 22 Jul 2021 21:15:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B39C982A53
+ for <buildroot@lists.busybox.net>; Thu, 22 Jul 2021 21:19:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b6LDOD9xGgt3 for <buildroot@lists.busybox.net>;
- Thu, 22 Jul 2021 21:15:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E028A8356C
- for <buildroot@buildroot.org>; Thu, 22 Jul 2021 21:15:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id AA0F3887F4; Thu, 22 Jul 2021 20:41:17 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Thu, 22 Jul 2021 23:14:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6d4c9437c6351368ba33ee38b8334b8338e90413
-X-Git-Newrev: ccfc90e1010e42e6529afae3a5ea8bf7226dabc1
-X-Patchwork-Hint: ignore
-Message-Id: <20210722204117.AA0F3887F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libvirt: new package
+ with ESMTP id E_Q7fjznhIbe for <buildroot@lists.busybox.net>;
+ Thu, 22 Jul 2021 21:18:59 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AA8DC82925
+ for <buildroot@buildroot.org>; Thu, 22 Jul 2021 21:18:59 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id t2so8498981edd.13
+ for <buildroot@buildroot.org>; Thu, 22 Jul 2021 14:18:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=W+sqT3vpgyT2MNfnEn9WnYa7W4AYJsU5/pQSgA9VG10=;
+ b=F7HwxsYghL0aLMdZSgL1lA2afyM2DcxuHc9ywduypn6B/YRFscQzKdHrjaj83M9E2z
+ 9wzpWuJUVCh2UJEzE1BzIMoHxsu9/ZL4zVPFR6pXUcCNFITZsAEzzsARHX9D3ffbGpan
+ zbH3ct+5LeqYzG+ttC2+dADnpsC8wJ56/um0vxN/1nleGN0NCNbvhARrj35MlLKm1iSw
+ KXU2us24U9BD3pwgxewYK1kTjHVooSbaARNpZuyOQccFSxfmhx6SGcwW/cRbm/Qe9zKD
+ frKANlXExN9MCGU7NT/QUKEADWW/3jdpVYp96DyB8HFTc+Ninj3nHoP25HuHU7O5unTf
+ wJWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=W+sqT3vpgyT2MNfnEn9WnYa7W4AYJsU5/pQSgA9VG10=;
+ b=Zb+P1SIBTlAiNts3TqchH/Fl4yCuqa7F4rQq8lFqBCrge7sWInQ2KdQys6jX1oKHWe
+ mPZGRDKq0HkDhjqjwmhZlS7NxQRFW79sAeiwUgw/PoyV+4huyOZeAJysBlh2BayP0BZZ
+ NTMXeW1qcJZ1Urwsee5oDiNQchFaVW7I2K3plkcqjHI5EdjauAW/SabR752fMOl+obNp
+ s8Vpjwr5I3aYDz4LVfEtrtLeQyBo40fUy40LdgXXcCECYDebx/tXIMfSSNrpvfMg96qY
+ kzCcq1Rg3kxjtp+Srr1H5n5rDetoLmwA5rdByp7Ek5SXZm2ZIauk9SnDP+VtwUNFmMeN
+ VNOw==
+X-Gm-Message-State: AOAM5320WQ94YBj4TLqo0yWiBssR6IE5o9MtYEl2W3In4n47MZoXeANx
+ LQwDVC4tEjzzxeYhWn+foxu0Yg==
+X-Google-Smtp-Source: ABdhPJyRGPAXH9gJ5gud9184lNXL+VyrQcrs9VqfmauPrRrl2FeLo3I0BS+rpJeQBlp2cdmcpIimDQ==
+X-Received: by 2002:a05:6402:29a:: with SMTP id
+ l26mr1789937edv.207.1626988737772; 
+ Thu, 22 Jul 2021 14:18:57 -0700 (PDT)
+Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id d19sm12940127eds.54.2021.07.22.14.18.57
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 22 Jul 2021 14:18:57 -0700 (PDT)
+To: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
+References: <20210608194926.14477-1-ps.report@gmx.net>
+ <20210608194926.14477-2-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <6e5aae0a-b4a0-edba-f817-ca6eabb05b64@mind.be>
+Date: Thu, 22 Jul 2021 23:18:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <20210608194926.14477-2-ps.report@gmx.net>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCH v1 2/2] package/libinput: bump version to
+ 1.18.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,349 +107,62 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ccfc90e1010e42e6529afae3a5ea8bf7226dabc1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Libvirt is collection of software that provides a convenient way to
-manage virtual machines and other virtualization functionality, such as
-storage and network interface management. These software pieces include
-an API library, a daemon (libvirtd), and a command line utility (virsh).
 
-   http://libvirt.org/
+On 08/06/2021 21:49, Peter Seiderer wrote:
+> For details see [1].
+> 
+> [1] https://lists.freedesktop.org/archives/wayland-devel/2021-June/041849.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-[Arnout:
- - Re-introduce BR2_PACKAGE_LIBVIRT_ARCH_SUPPORTS
- - Put all Config.in comments on one line
- - Put the comment before the option itself (makes sure sub-option
-   indention is good)
- - Remove spurious BR2_PACKAGE_NETCAT dependency
- - Alphabetically order dependencies in Config.in
- - Add select of libglib2
- - Alphabetically order CONF_OPTS
-]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- DEVELOPERS                   |   3 +
- package/Config.in            |   1 +
- package/libvirt/90-kvm.rules |   1 +
- package/libvirt/Config.in    |  39 ++++++++
- package/libvirt/libvirt.hash |   3 +
- package/libvirt/libvirt.mk   | 213 +++++++++++++++++++++++++++++++++++++++++++
- 6 files changed, 260 insertions(+)
+ Why is this bump in two separate patches? If it's because 1.17.3 should be
+applied to the 2021.05 branch, then it's better to make two distinct patches,
+one for master that bumps directly to 1.18.0, and another for stable that is
+marked explicitly as such with --subject-prefix.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 04ef3cc1a9..72d76b1f44 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1268,6 +1268,9 @@ F:	package/sysrepo/
- N:	Jan Pedersen <jp@jp-embedded.com>
- F:	package/zip/
- 
-+N:	Jared Bents <jared.bents@rockwellcollins.com>
-+F:	package/libvirt/
-+
- N:	Jarkko Sakkinen <jarkko.sakkinen@intel.com>
- F:	package/quota/
- 
-diff --git a/package/Config.in b/package/Config.in
-index d49aff3de4..1a3b91304c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2474,6 +2474,7 @@ menu "System tools"
- 	source "package/kmod/Config.in"
- 	source "package/kvmtool/Config.in"
- 	source "package/libostree/Config.in"
-+	source "package/libvirt/Config.in"
- 	source "package/lxc/Config.in"
- 	source "package/makedumpfile/Config.in"
- 	source "package/mender/Config.in"
-diff --git a/package/libvirt/90-kvm.rules b/package/libvirt/90-kvm.rules
-new file mode 100644
-index 0000000000..5145c27e79
---- /dev/null
-+++ b/package/libvirt/90-kvm.rules
-@@ -0,0 +1 @@
-+KERNEL=="kvm", OWNER="root", GROUP="kvm", MODE="0660"
-diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
-new file mode 100644
-index 0000000000..6175cc489c
---- /dev/null
-+++ b/package/libvirt/Config.in
-@@ -0,0 +1,39 @@
-+config BR2_PACKAGE_LIBVIRT_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_aarch64
-+	default y if BR2_i386
-+	default y if BR2_x86_64
-+	depends on BR2_USE_MMU # fork()
-+
-+comment "libvirt needs udev /dev management, a toolchain w/ threads, dynamic library, kernel headers >= 3.12"
-+	depends on BR2_PACKAGE_LIBVIRT_ARCH_SUPPORTS
-+	depends on !BR2_PACKAGE_HAS_UDEV || BR2_STATIC_LIBS || !BR2_USE_MMU || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+
-+config BR2_PACKAGE_LIBVIRT
-+	bool "libvirt"
-+	depends on BR2_PACKAGE_LIBVIRT_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_GNUTLS
-+	# configure: You must install the pciaccess module to build with udev
-+	select BR2_PACKAGE_LIBPCIACCESS
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBTIRPC
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_ZLIB
-+	# run-time dependencies
-+	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_INIT_SYSTEMD
-+	help
-+	  Libvirt is collection of software that provides a convenient
-+	  way to manage virtual machines and other virtualization
-+	  functionality, such as storage and network interface
-+	  management. These software pieces include an API library, a
-+	  daemon (libvirtd), and a command line utility (virsh).
-+
-+	  https://libvirt.org/
-+
-diff --git a/package/libvirt/libvirt.hash b/package/libvirt/libvirt.hash
-new file mode 100644
-index 0000000000..ec96dfc62c
---- /dev/null
-+++ b/package/libvirt/libvirt.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256 b366d73dee6ce77a226bedef592e0620ceb8e22e5998f60768017f79fc4ead26  libvirt-7.4.0.tar.xz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
-new file mode 100644
-index 0000000000..80b9529404
---- /dev/null
-+++ b/package/libvirt/libvirt.mk
-@@ -0,0 +1,213 @@
-+################################################################################
-+#
-+# libvirt
-+#
-+################################################################################
-+
-+LIBVIRT_VERSION = 7.4.0
-+LIBVIRT_SITE = https://libvirt.org/sources
-+LIBVIRT_SOURCE = libvirt-$(LIBVIRT_VERSION).tar.xz
-+LIBVIRT_LICENSE = LGPL-2.1+
-+LIBVIRT_LICENSE_FILES = COPYING
-+LIBVIRT_DEPENDENCIES = host-nfs-utils host-pkgconf host-python-docutils \
-+	gnutls libglib2 libpciaccess libtirpc libxml2 udev zlib
-+
-+LIBVIRT_CONF_ENV += \
-+	CFLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`" \
-+	LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`"
-+
-+LIBVIRT_CONF_OPTS = \
-+	-Drpath=disabled \
-+	-Dapparmor=disabled \
-+	-Ddriver_bhyve=disabled \
-+	-Ddriver_esx=disabled \
-+	-Ddriver_hyperv=disabled \
-+	-Ddriver_interface=enabled \
-+	-Ddriver_libxl=disabled \
-+	-Ddriver_lxc=disabled \
-+	-Ddriver_network=disabled \
-+	-Ddriver_openvz=disabled \
-+	-Ddriver_qemu=disabled \
-+	-Ddriver_remote=enabled \
-+	-Ddriver_secrets=enabled \
-+	-Ddriver_vbox=disabled \
-+	-Ddriver_vmware=disabled \
-+	-Ddriver_vz=disabled \
-+	-Ddtrace=disabled \
-+	-Dfirewalld=disabled \
-+	-Dfirewalld_zone=disabled \
-+	-Dglusterfs=disabled \
-+	-Dhost_validate=enabled \
-+	-Dinit_script=$(if $(BR2_INIT_SYSTEMD),systemd,none) \
-+	-Dlibssh=disabled \
-+	-Dlibvirtd=disabled \
-+	-Dlogin_shell=disabled \
-+	-Dnetcf=disabled \
-+	-Dnss=disabled \
-+	-Dnumad=disabled \
-+	-Dopenwsman=disabled \
-+	-Dpciaccess=enabled \
-+	-Dpm_utils=disabled \
-+	-Dsanlock=disabled \
-+	-Dsasl=disabled \
-+	-Dsecdriver_apparmor=disabled \
-+	-Dssh2=disabled \
-+	-Dstorage_iscsi=disabled \
-+	-Dstorage_iscsi_direct=disabled \
-+	-Dstorage_mpath=disabled \
-+	-Dsysctl_config=enabled \
-+	-Dtest_coverage=false \
-+	-Dudev=enabled \
-+	-Dwireshark_dissector=disabled
-+
-+ifeq ($(BR2_PACKAGE_ATTR),y)
-+LIBVIRT_CONF_OPTS += -Dattr=enabled
-+LIBVIRT_DEPENDENCIES += attr
-+else
-+LIBVIRT_CONF_OPTS += -Dattr=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+LIBVIRT_CONF_OPTS += -Daudit=enabled
-+LIBVIRT_DEPENDENCIES += audit
-+else
-+LIBVIRT_CONF_OPTS += -Daudit=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+LIBVIRT_CONF_OPTS += -Dbash_completion=enabled
-+LIBVIRT_DEPENDENCIES += bash-completion
-+else
-+LIBVIRT_CONF_OPTS += -Dbash_completion=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
-+LIBVIRT_CONF_OPTS += -Dblkid=enabled
-+LIBVIRT_DEPENDENCIES += util-linux
-+else
-+LIBVIRT_CONF_OPTS += -Dblkid=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
-+LIBVIRT_CONF_OPTS += -Dcapng=enabled
-+LIBVIRT_DEPENDENCIES += libcap-ng
-+else
-+LIBVIRT_CONF_OPTS += -Dcapng=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+LIBVIRT_CONF_OPTS += -Dcurl=enabled
-+LIBVIRT_DEPENDENCIES += libcurl
-+else
-+LIBVIRT_CONF_OPTS += -Dcurl=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBFUSE),y)
-+LIBVIRT_CONF_OPTS += -Dfuse=enabled
-+LIBVIRT_DEPENDENCIES += libfuse
-+else
-+LIBVIRT_CONF_OPTS += -Dfuse=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBISCSI),y)
-+LIBVIRT_CONF_OPTS += -Dlibiscsi=enabled
-+LIBVIRT_DEPENDENCIES += libiscsi
-+else
-+LIBVIRT_CONF_OPTS += -Dlibiscsi=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPCAP),y)
-+LIBVIRT_CONF_OPTS += -Dlibpcap=enabled
-+LIBVIRT_DEPENDENCIES += libpcap
-+else
-+LIBVIRT_CONF_OPTS += -Dlibpcap=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NUMACTL),y)
-+LIBVIRT_CONF_OPTS += -Dnumactl=enabled
-+LIBVIRT_DEPENDENCIES += numactl
-+else
-+LIBVIRT_CONF_OPTS += -Dnumactl=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_POLKIT),y)
-+LIBVIRT_CONF_OPTS += -Dpolkit=enabled
-+LIBVIRT_DEPENDENCIES += polkit
-+else
-+LIBVIRT_CONF_OPTS += -Dpolkit=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_READLINE),y)
-+LIBVIRT_CONF_OPTS += -Dreadline=enabled
-+LIBVIRT_DEPENDENCIES += readline
-+else
-+LIBVIRT_CONF_OPTS += -Dreadline=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+LIBVIRT_CONF_OPTS += -Dselinux=enabled -Dsecdriver_selinux=enabled \
-+	-Dselinux_mount=/sys/fs/selinux
-+LIBVIRT_DEPENDENCIES += libselinux
-+else
-+LIBVIRT_CONF_OPTS += -Dselinux=disabled -Dsecdriver_selinux=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LVM2),y)
-+LIBVIRT_CONF_OPTS += -Dstorage_lvm=enabled
-+LIBVIRT_DEPENDENCIES += lvm2
-+else
-+LIBVIRT_CONF_OPTS += -Dstorage_lvm=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_YAJL),y)
-+LIBVIRT_CONF_OPTS += -Dyajl=enabled
-+LIBVIRT_DEPENDENCIES += yajl
-+else
-+LIBVIRT_CONF_OPTS += -Dyajl=disabled
-+endif
-+
-+define LIBVIRT_INSTALL_UDEV_RULES
-+	$(INSTALL) -D -m 644 package/libvirt/90-kvm.rules \
-+		$(TARGET_DIR)/etc/udev/rules.d/90-kvm.rules
-+endef
-+LIBVIRT_POST_INSTALL_TARGET_HOOKS += LIBVIRT_INSTALL_UDEV_RULES
-+
-+# Adjust directory ownerships and permissions. Notice /var/log is a symlink to
-+# /tmp in the default sysvinit skeleton, so some directories may disappear at
-+# run-time. Set the permissions anyway, since they are valid for the default
-+# systemd skeleton.
-+define LIBVIRT_PERMISSIONS
-+	/etc/libvirt                             d  700  root  root  -  -  -  -  -
-+	/etc/libvirt/nwfilter                    d  700  root  root  -  -  -  -  -
-+	/var/lib/libvirt                         d  755  root  root  -  -  -  -  -
-+	/var/lib/libvirt/boot                    d  711  root  root  -  -  -  -  -
-+	/var/lib/libvirt/dnsmasq                 d  755  root  root  -  -  -  -  -
-+	/var/lib/libvirt/filesystems             d  711  root  root  -  -  -  -  -
-+	/var/lib/libvirt/images                  d  711  root  root  -  -  -  -  -
-+	/var/lib/libvirt/network                 d  700  root  root  -  -  -  -  -
-+	/var/lib/libvirt/secrets                 d  700  root  root  -  -  -  -  -
-+	/var/lib/libvirt/storage                 d  755  root  root  -  -  -  -  -
-+	/var/lib/libvirt/storage/autostart       d  755  root  root  -  -  -  -  -
-+	/var/cache/libvirt                       d  711  root  root  -  -  -  -  -
-+	/var/log/libvirt                         d  700  root  root  -  -  -  -  -
-+	/var/log/swtpm                           d  755  root  root  -  -  -  -  -
-+	/var/log/swtpm/libvirt                   d  755  root  root  -  -  -  -  -
-+endef
-+
-+# libvirt may need to create persistent files (e.g. VM definitions) in these
-+# directories. Move them to /var/lib because /etc may be on a read-only or
-+# volatile (initramfs) filesystem. We could tweak the code to change these
-+# paths but the patch would be large and would break compatibility with
-+# ordinary installations and with the documentation.
-+define LIBVIRT_CREATE_SYMLINKS
-+	$(INSTALL) -m 700 -d $(TARGET_DIR)/etc/libvirt
-+	$(INSTALL) -m 755 -d $(TARGET_DIR)/var/lib/libvirt
-+	$(INSTALL) -m 700 -d $(TARGET_DIR)/var/lib/libvirt/secrets
-+	$(INSTALL) -m 755 -d $(TARGET_DIR)/var/lib/libvirt/storage
-+	ln -s -f ../../var/lib/libvirt/secrets $(TARGET_DIR)/etc/libvirt/
-+	ln -s -f ../../var/lib/libvirt/storage $(TARGET_DIR)/etc/libvirt/
-+endef
-+
-+LIBVIRT_PRE_INSTALL_TARGET_HOOKS += LIBVIRT_CREATE_SYMLINKS
-+
-+$(eval $(meson-package))
+ Regards,
+ Arnout
+
+> ---
+>  package/libinput/libinput.hash | 6 +++---
+>  package/libinput/libinput.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+> index 038859289a..de8e94f9fa 100644
+> --- a/package/libinput/libinput.hash
+> +++ b/package/libinput/libinput.hash
+> @@ -1,6 +1,6 @@
+> -# From https://lists.freedesktop.org/archives/wayland-devel/2021-May/041834.html
+> -sha256  0d010e0bf601b5d3a06b3c4d77d67751cf554f3e6448e57aa046ea9ee8f818ac  libinput-1.17.3.tar.xz
+> -sha512  3d1ab4362ede886996795d700a938d20e04cd922e8f9598fe9346f9f93e149119526fb324a096787b4b8a47bf3e5613130bcd874f10df86761031710d2acc792  libinput-1.17.3.tar.xz
+> +# From https://lists.freedesktop.org/archives/wayland-devel/2021-June/041849.html
+> +sha256  18c6a286583268d39841348e561fbb4713bde0c643b360f5d8a3f27800afdb9a  libinput-1.18.0.tar.xz
+> +sha512  9a834f075d7a1f892416bb6b241eb052f749d3aa883c4b39c0f1c9616c115d6b9a541b587508646fddaf0d3fe57af92fe4629b522d1d51196499e7b523e0aa90  libinput-1.18.0.tar.xz
+>  
+>  # License files
+>  sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
+> diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+> index 8ce60c8639..32b822edb7 100644
+> --- a/package/libinput/libinput.mk
+> +++ b/package/libinput/libinput.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBINPUT_VERSION = 1.17.3
+> +LIBINPUT_VERSION = 1.18.0
+>  LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+>  LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+>  LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
