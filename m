@@ -2,63 +2,62 @@ Return-Path: <SRS0=JV6j=MP=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 940E1C4338F
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 22:26:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53413C4338F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 22:35:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EE1DB60F23
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 22:26:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EE1DB60F23
+	by mail.kernel.org (Postfix) with ESMTPS id D514F60ED7
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 22:35:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D514F60ED7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B59E540647;
-	Fri, 23 Jul 2021 22:26:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5A6A60665;
+	Fri, 23 Jul 2021 22:35:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H48qovkYzz_j; Fri, 23 Jul 2021 22:26:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wnxgPAnjgtir; Fri, 23 Jul 2021 22:35:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E414040644;
-	Fri, 23 Jul 2021 22:26:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EF7861BF3EE
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 22:26:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39F90606BF;
+	Fri, 23 Jul 2021 22:35:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D1EB61BF3EE
+ for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 22:35:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC08383AE0
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 22:26:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C0FBB401CB
+ for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 22:35:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e3zKzwlrt2Wh for <buildroot@lists.busybox.net>;
- Fri, 23 Jul 2021 22:26:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ftW5GSLSWot0 for <buildroot@lists.busybox.net>;
+ Fri, 23 Jul 2021 22:35:20 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B0AF683ADE
- for <buildroot@busybox.net>; Fri, 23 Jul 2021 22:26:33 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D4815400B9
+ for <buildroot@buildroot.org>; Fri, 23 Jul 2021 22:35:19 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id CF6C720007;
- Fri, 23 Jul 2021 22:26:29 +0000 (UTC)
-Date: Sat, 24 Jul 2021 00:26:28 +0200
+ by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id D29E6240004;
+ Fri, 23 Jul 2021 22:35:15 +0000 (UTC)
+Date: Sat, 24 Jul 2021 00:35:14 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Alexey Neyman <stilor@att.net>
-Message-ID: <20210724002628.2b736bc1@windsurf>
-In-Reply-To: <fde74814-37a5-cf13-e617-a8af599c0039@att.net>
-References: <20210721194605.1552794-1-stilor@att.net>
- <20210721194605.1552794-3-stilor@att.net>
- <20210721221501.4c14fcfd@windsurf>
- <fde74814-37a5-cf13-e617-a8af599c0039@att.net>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20210724003514.4da0f292@windsurf>
+In-Reply-To: <6a1b7aba-9fe8-d0ab-ffda-b24167b0cfce@mind.be>
+References: <20210715004843.337268-1-damien.lemoal@wdc.com>
+ <20210715004843.337268-5-damien.lemoal@wdc.com>
+ <6a1b7aba-9fe8-d0ab-ffda-b24167b0cfce@mind.be>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/qemu: filter out long make
- options
+Subject: Re: [Buildroot] [PATCH v2 4/9] board: Add Sipeed MAIX-bit support
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,29 +69,38 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot@busybox.net
+Cc: Damien Le Moal <damien.lemoal@wdc.com>,
+ Alistair Francis <alistair@alistair23.me>, Mark Corbin <mark@dibsco.co.uk>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Wed, 21 Jul 2021 15:18:36 -0700
-Alexey Neyman <stilor@att.net> wrote:
+Hello,
 
-> > I'm not sure to grasp all the implications of this, but isn't this a
-> > bug in Qemu's build machinery, that should be fixed in Qemu's Makefile
-> > instead ?  
+On Sat, 24 Jul 2021 00:25:27 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
+
+> > +++ b/board/canaan/k210-common/busybox-tiny-initramfs.config  
 > 
-> I was on the fence about it myself. Okay, I'll try to send a fix for 
-> qemu/Makefile to Qemu developers and see if they agree to pick it up; 
-> they could argue they don't support being invoked with --no-print-directory.
+>  Wouldn't it be better to start from busybox-minimal.config and just add a
+> fragment that removes the unnecessary options?
 
-It would be odd for them to consider that as a normal behavior,
---no-print-directory is really a standard make option.
+Also, we already have a package/busybox/busybox-minimal.config. I'm not
+sure we want to add zillions of "minimal" Busybox configurations.
 
-Let us know what they say, of course.
+> > +++ b/configs/sipeed_maix_bit_defconfig
+> > @@ -0,0 +1,23 @@
+> > +BR2_riscv=y
+> > +# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
 
-Thanks a lot!
+This should remain the default.
+
+> > +BR2_KERNEL_HEADERS_5_13=y
+> > +# BR2_UCLIBC_INSTALL_UTILS is not set
+
+This should remain the default as well.
 
 Thomas
 -- 
