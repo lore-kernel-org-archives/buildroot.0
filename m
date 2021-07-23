@@ -2,94 +2,107 @@ Return-Path: <SRS0=JV6j=MP=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBFDDC4338F
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 20:34:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DBECC4338F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 20:57:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7D85F60F25
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 20:34:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7D85F60F25
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id AE3DD60720
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 20:57:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AE3DD60720
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A7E84147E;
-	Fri, 23 Jul 2021 20:34:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D4CB405D6;
+	Fri, 23 Jul 2021 20:57:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NSWdzrY31QBZ; Fri, 23 Jul 2021 20:34:42 +0000 (UTC)
+	with ESMTP id x0W3eXP2Jn0U; Fri, 23 Jul 2021 20:57:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B135406AF;
-	Fri, 23 Jul 2021 20:34:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A989840605;
+	Fri, 23 Jul 2021 20:57:30 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7EF621BF3FF
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 20:33:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 20F4F1BF3FF
+ for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 20:57:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6AF4C83B5B
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 20:33:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1D8B082C2E
+ for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 20:57:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SHxp37jX0E59 for <buildroot@lists.busybox.net>;
- Fri, 23 Jul 2021 20:33:03 +0000 (UTC)
+ with ESMTP id Z9Um5VSwPQkX for <buildroot@lists.busybox.net>;
+ Fri, 23 Jul 2021 20:57:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 65BC283B60
- for <buildroot@busybox.net>; Fri, 23 Jul 2021 20:33:03 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id b128so1475450wmb.4
- for <buildroot@busybox.net>; Fri, 23 Jul 2021 13:33:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=P4MNATNa21Fs5CxWEkZO6HaUAYi43f7vrg3A+U7F0Zg=;
- b=qMqzeohI1k8qaVfuva/KRcPpxem0FRHkJBp30dOR9+aQ/wsSPw1ARZ8okV9AN4XeGS
- V2jMnFv3jU7Of+hdHfCc1oxLf8q0WV0CYIobIrVRrjgaG8cHIGTX0/XOx208SVuP/r4K
- rnIVlLhNpZlxPfAJm1OHEh8N4V/dDL1cVva1TOLi+Ite8TBHJf3I+QPXzMmHyPT3OJkb
- qHemGHRSrWC8hVR/sihU8Po9lZBlB/FHp9W2w0gaJyFgQB0GTMZaR3jLUz43CfvOLlRg
- /dq7C8kElnhpdFWmfIK9lsX3keN2qzCSRA6Cx4Cgqvc31rHcJ3jTAbXc/qrwO2106dLd
- 1IBQ==
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 96F4E82B51
+ for <buildroot@busybox.net>; Fri, 23 Jul 2021 20:57:27 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id j2so2413680edp.11
+ for <buildroot@busybox.net>; Fri, 23 Jul 2021 13:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=0LDu2fsJp+xU7FOmR64reTkBHp67wiBoNWPYaHOkkj4=;
+ b=L7SalIrdWWzINsw2mjfLPi0pMqI9rZPDQoglwjQvCAryU5ms9FCHflrF/wT9W3PfdK
+ ANCM0CcIAEN0UrElWyQD+4I36pVZlndPMM3/mw6iy1uyAAWFT3enM08bMyj1Lmo8zVYA
+ I15lilDlKxdeg82zY53/0Te+R+dmTSFVt9lUeVICPiFHjKh4q89Cr36Gam57p+R5iF5t
+ 6xjVkPNpSO80YJb4KvsWNHBRireOqJEnjm1Su3+3wPkO6AQy8BaJOUx3Rt7ACm1HVKIV
+ UvCeOa+c0W4X6MUdeBJSR/sO6dWVh4ypr15tbbvIoR2gYwgchnqLkosfp1xqRdyHgpyN
+ MZaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=P4MNATNa21Fs5CxWEkZO6HaUAYi43f7vrg3A+U7F0Zg=;
- b=VJEArDc4I1SH5jFZY0Hqz8HwS0dCDz9jphBd6HJNZE0lBVH9gT/aNoWV9iTgqxcz+H
- 5ls2DHtRg2BrLxCHP/rUgfcnfyr0R1SrGqySCiAMrch6LlZwb4KpTFdJwWlJFVQQ8qmD
- mEbK/PxrOHKs56w/k4TTGDtZhuM0OIUe6o0xM8Te3MN41JaUUQvvult7eLT4UlpgaCch
- ysjrA+iFjnLcz2hfQdlJsuibX0hLSx7rqHPXN7eIYuo4WbJZUFOdjbbwQcwOy+I98y7X
- kHdOXFcUkIHk0kJ+l9AAvjUICv4s2Bj3LmkNjD6ySWSvcYhhIQBkR0fAiXc4HS2XYanq
- LQrA==
-X-Gm-Message-State: AOAM5302O6dWjb25C+vWW9vI08feUaX+c92eXVGnW7f6K0yFzSHBmSwi
- MtsrRZ448//RthP1cUo9bM4OOwSgVxY=
-X-Google-Smtp-Source: ABdhPJyqcUIHDIh7GFkPbOS4YUzBj6WRgNBEa1sbA82W8gE4gq6C/9nLcRmonnNzCRwVtN8rvONsNw==
-X-Received: by 2002:a05:600c:4f92:: with SMTP id
- n18mr16162688wmq.134.1627072381501; 
- Fri, 23 Jul 2021 13:33:01 -0700 (PDT)
-Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id n17sm2128422wmo.18.2021.07.23.13.33.00
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Jul 2021 13:33:01 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Fri, 23 Jul 2021 22:32:42 +0200
-Message-Id: <20210723203242.2531909-9-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210723203242.2531909-1-francois.perrad@gadz.org>
-References: <20210723203242.2531909-1-francois.perrad@gadz.org>
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=0LDu2fsJp+xU7FOmR64reTkBHp67wiBoNWPYaHOkkj4=;
+ b=paIddp85Nc4OjGyjolB/wFxoNFesGh6h8Ll0eY3Y4MVma8+R6BFKqf5YZGmhBvRBp1
+ qRqzGSu+NRE/756H0q52mNjNUxJ4qb0NO4KZFhh9GtCJFhUQ+ukPFz+uLawv6lFPEI7Z
+ FNR+apAmO+1jTp428M/oVNp8WjID+SaXhyZeD1ek9g/9NqAGAU4uyTeNmt6SQGb4pfLd
+ Py6CRzMqZKMSWdCWrQ55UZs7UPrM2LBHV5Bh+UBzeXOiDcpvvmS75Ma5iZxoutQZNaGF
+ 3tVl2bzO72xKQXVD72Zp39VE/2H/8LAGIR+6KlMXh6+BVWQsd72xw6Davhr3FRyvIPTN
+ 9BQg==
+X-Gm-Message-State: AOAM531IMgc//8qQFupRprThJp9jiyKZtlSIxz507zYkLu9INo7HcMGA
+ 3/urBN8QzCJMZDcX2pwU4sRdOQlFx2aBLmnR
+X-Google-Smtp-Source: ABdhPJzAiL8OzCAYA9/wRlWanpItMdFubsz/E3J30tnA3vHBc92qYBOUyl7uStgUExQuj/AgdbQe1Q==
+X-Received: by 2002:a05:6402:4c5:: with SMTP id
+ n5mr7694426edw.322.1627073845354; 
+ Fri, 23 Jul 2021 13:57:25 -0700 (PDT)
+Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id g8sm15110644eds.25.2021.07.23.13.57.24
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 23 Jul 2021 13:57:24 -0700 (PDT)
+To: Patricia Holden <pholden@nklabs.com>, Baruch Siach <baruch@tkos.co.il>
+References: <20210720224806.09e5a5b2@windsurf>
+ <BAACA597-C3FC-4275-9931-4D3F619F94EE@nklabs.com>
+ <20210721094154.74005093@windsurf>
+ <CAJ6EmCd-K+goctCfu5ygE8V1MAMh=C7RgxYmSfhJGQmRCuv=3g@mail.gmail.com>
+ <CAJ6EmCfeA3e9-vmCbAUuN-yqPXaAMKci-g-G+OeW5UfrT=Uy_g@mail.gmail.com>
+ <01c34092-b6d9-86ad-6cee-c78090e75b3f@mind.be>
+ <CAJ6EmCeHd-7Xv0WSt+gLn31viKP2giaXzHKOt0=Z+7zWN8eGpA@mail.gmail.com>
+ <CAJ6EmCfnhev8MLO7JNx3d8trX7uEn+DgkdWZHKguyW8kG92ZhQ@mail.gmail.com>
+ <87a6mdzok1.fsf@tarshish>
+ <CAJ6EmCf_yXKmbTu9UtbmzcUb6ihG3aAaoWn-asU8pgyAhMgzWg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <be19857f-11b3-0d21-1f2f-bf5393ea25df@mind.be>
+Date: Fri, 23 Jul 2021 22:57:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 9/9] package/perl-net-telnet: bump to version
- 3.05
+In-Reply-To: <CAJ6EmCf_yXKmbTu9UtbmzcUb6ihG3aAaoWn-asU8pgyAhMgzWg@mail.gmail.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] Question about pkg-config pc files
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,52 +114,59 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-diff in README:
--    Copyright (c) 1997, 2000, 2002, 2013 Jay Rogers.  All rights
-+    Copyright (c) 1997, 2000, 2002, 2013, 2021 Jay Rogers.  All rights
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl-net-telnet/perl-net-telnet.hash | 6 +++---
- package/perl-net-telnet/perl-net-telnet.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/perl-net-telnet/perl-net-telnet.hash b/package/perl-net-telnet/perl-net-telnet.hash
-index cf1def6a5..c6dc0ca60 100644
---- a/package/perl-net-telnet/perl-net-telnet.hash
-+++ b/package/perl-net-telnet/perl-net-telnet.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    d2514080116c1b0fa5f96295c84538e3 Net-Telnet-3.04.tar.gz
--sha256 e64d567a4e16295ecba949368e7a6b8b5ae2a16b3ad682121d9b007dc5d2a37a Net-Telnet-3.04.tar.gz
-+md5  c8573c57a2d9469f038c40ac284b1e5f  Net-Telnet-3.05.tar.gz
-+sha256  677f68ba2cd2a824fae323fa82e183bf7e3d03c3c499c91d923bd6283796a743  Net-Telnet-3.05.tar.gz
- 
- # computed by scancpan
--sha256 05beca683093827706ef45a4958bf23bcd91990e0beeb0b098f97c661478c90d README
-+sha256  22d0a3343b46c7857cd7d06cb37fe437d467df71aa5854af515374e1e8bf6c53  README
-diff --git a/package/perl-net-telnet/perl-net-telnet.mk b/package/perl-net-telnet/perl-net-telnet.mk
-index 0b9cce0af..ec3c02216 100644
---- a/package/perl-net-telnet/perl-net-telnet.mk
-+++ b/package/perl-net-telnet/perl-net-telnet.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_NET_TELNET_VERSION = 3.04
-+PERL_NET_TELNET_VERSION = 3.05
- PERL_NET_TELNET_SOURCE = Net-Telnet-$(PERL_NET_TELNET_VERSION).tar.gz
- PERL_NET_TELNET_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JR/JROGERS
- PERL_NET_TELNET_LICENSE = Artistic or GPL-1.0+
--- 
-2.30.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+CgpPbiAyMy8wNy8yMDIxIDIwOjUyLCBQYXRyaWNpYSBIb2xkZW4gd3JvdGU6Cj4gSSBoYXZlIGEg
+VEkgc3BlY2lmaWMga2VybmVsLCBJIGdvdCBpdCBkaXJlY3RseSBmcm9tIGEgVEkgU0RLLsKgIMKg
+VGhlIGNvbW1lbnRzIGluCj4gdGktc2d4LWttIENvbmZpZy5pbiBzYXlzIHRvIHVzZSB0aS1zZ3gs
+IGhvd2V2ZXIsIHRoZXJlIGlzIG5vIGNob2ljZSBpbiBwYWNrYWdlcwo+IGZvciB0aS1zZ3guwqAg
+SSBjYW4gb25seSBjaG9vc2UgInRpLXNneC1rbSIgb3IgInRpLWdmeCIuwqAgSSBndWVzcyBJIGNh
+biBwdWxsCj4gdGktc2d4ICYgY3JlYXRlIHBhY2thZ2UgZm9yIGl0LsKgIFVubGVzcyBzb21lb25l
+IGVsc2UgaGFzIGEgYmV0dGVyIHN1Z2dlc3Rpb24uCgogdGktc2d4IGNvbnNpc3RzIG9mIHR3byBz
+ZXBhcmF0ZSBwYWNrYWdlczogdGktc2d4LWttIHdoaWNoIGlzIHRoZSBrZXJuZWwgbW9kdWxlLAph
+bmQgdGktc2d4LXVtIHdoaWNoIGlzIHRoZSB1c2Vyc3BhY2UgbGlicmFyeS4KCj4gCj4gT24gVGh1
+LCBKdWwgMjIsIDIwMjEgYXQgMTE6MzkgUE0gQmFydWNoIFNpYWNoIDxiYXJ1Y2hAdGtvcy5jby5p
+bAo+IDxtYWlsdG86YmFydWNoQHRrb3MuY28uaWw+PiB3cm90ZToKPiAKPiAgICAgSGkgUGF0cmlj
+aWEsCj4gCj4gICAgIE9uIEZyaSwgSnVsIDIzIDIwMjEsIFBhdHJpY2lhIEhvbGRlbiB3cm90ZToK
+PiAgICAgPiBJIHN3aXRjaGVkIGZyb20gdGktZ2Z4IHRvIHRpLXNneCwgbm93IEkgZ2V0IGFub3Ro
+ZXIgZXJyb3I6Cj4gICAgID4KPiAgICAgPgo+ICAgICAvaG9tZS9wYXRyaWNhaG9sZGVuL3dpbGxp
+YW1zb24vYnVpbGQwNzA2MjAyMS9Qcm8zLUxpbnV4L2J1aWxkcm9vdC0yMDIwLjAyL291dHB1dC9i
+dWlsZC90aS1zZ3gta20tNDUxOWVkM2I4M2QxZDcyMjA3ZGRjMjg3NGM3ZWI1ZTVhN2YyMGQ4ZC9l
+dXJhc2lhX2ttL2V1cmFzaWFjb24vYmluYXJ5X29tYXBfbGludXhfeG9yZ19yZWxlYXNlL3Rhcmdl
+dF9hcm1oZi9rYnVpbGQvc2VydmljZXM0L3NydmttL2Vudi9saW51eC9tbS5jOjY5OjEwOgo+ICAg
+ICA+IGZhdGFsIGVycm9yOiBsaW51eC9kbWEtZGlyZWN0Lmg6IE5vIHN1Y2ggZmlsZSBvciBkaXJl
+Y3RvcnkKPiAgICAgPsKgIMKgIDY5IHwgI2luY2x1ZGUgPGxpbnV4L2RtYS1kaXJlY3QuaD4KPiAg
+ICAgPsKgIMKgIMKgIMKgfMKgIMKgIMKgIMKgIMKgIF5+fn5+fn5+fn5+fn5+fn5+fn5+Cj4gICAg
+ID4KPiAgICAgPgo+ICAgICA+IEkgY2hlY2tlZCBsaW51eC1oZWFkZXJzIGFuZCBvbmx5IHNlZSAi
+aW5jbHVkZS9saW51eC9kbWEtZGlyZWN0aW9uLmgiLCBubwo+ICAgICA+ICJpbmNsdWRlL2xpbnV4
+L2RtYS1kaXJlY3QuaCIuCj4gCj4gICAgIFRoZSBsaW51eC1oZWFkZXJzIHBhY2thZ2UgaXMgZm9y
+IHVzZXJzcGFjZSBBUEkgKHVhcGkpIGhlYWRlcnMgdGhhdCBhcmUKPiAgICAgcGFydCBvZiB0aGUg
+dG9vbGNoYWluLiBkbWEtZGlyZWN0aW9uLmggaXMgZm9yIGtlcm5lbCBjb2RlLiBUaGUgJ2tidWls
+ZCcKPiAgICAgcGFydCBpbiB0aGUgcGF0aCBhYm92ZSBpbmRpY2F0ZXMgdGhhdCB5b3UgYXJlIGJ1
+aWxkaW5nIGEga2VybmVsIG1vZHVsZS4KPiAKPiAgICAgbGludXgvZG1hLWRpcmVjdC5oIHdhcyBp
+bnRyb2R1Y2VkIGluIGtlcm5lbCB2ZXJzaW9uIDQuMTYgKGNvbW1pdAo+ICAgICBlYThjNjRhY2U4
+NjYpLiBCdXQgdGktc2d4LWttIGNvbW1pdCBjZjdmNDhjYjMwYSBwcmVkYXRlcyB0aGlzIGtlcm5l
+bCBieQo+ICAgICBmZXcgeWVhcnMuIFNvIHRoaXMgaXQgcHJvYmFibHkgYSBUSSBrZXJuZWwgdGhh
+dCBjYXJyaWVzIHRoZSBoZWFkZXIuCgogTW9yZSBwcmVjaXNlbHksIHRoZSBjdXJyZW50IEJ1aWxk
+cm9vdCBtYXN0ZXIgdmVyc2lvbiBjb3JyZXNwb25kcyB0byBUSSBTREsKMDYuMDEuMDAuMDgsIHNv
+IHlvdSdsbCBwcm9iYWJseSBuZWVkIGEga2VybmVsIGZyb20gdGhlIHNhbWUgU0RLIHZlcnNpb24u
+CgogUmVnYXJkcywKIEFybm91dAoKPiAKPiAgICAgVGhlIEJSMl9QQUNLQUdFX1RJX1NHWF9LTSBo
+ZWxwIHRleHQgc2F5cyB0aGlzOgo+IAo+ICAgICDCoCDCoCDCoCDCoCDCoCBOb3RlOiBpdCBuZWVk
+cyBhIFRJIHNwZWNpZmljIGtlcm5lbCB0byBidWlsZCBwcm9wZXJseS4KPiAKPiAgICAgYmFydWNo
+Cj4gCj4gICAgID4gTm90IHN1cmUgaWYgdGhpcyBpcyB0aGUgc2FtZSBmaWxlIHRoaXMgcGFja2Fn
+ZSBpcyBsb29raW5nIGZvciwgYnV0IGp1c3QKPiAgICAgPiByZW5hbWVkLsKgIExvb2tpbmcgdGhy
+b3VnaCBjb25maWcgZm9yIHRoZSBrZXJuZWwgdG8gc2VlIGlmIEkgbWlzc2VkCj4gICAgID4gc29t
+ZXRoaW5nLgo+IAo+ICAgICAtLSAKPiAgICAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqB+LiAufsKg
+IMKgVGsgT3BlbiBTeXN0ZW1zCj4gICAgID19LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tb29PLS1VLS1Pb28tLS0tLS0tLS0tLS17PQo+ICAgICDCoCDCoC0g
+YmFydWNoQHRrb3MuY28uaWwgPG1haWx0bzpiYXJ1Y2hAdGtvcy5jby5pbD4gLSB0ZWw6ICs5NzIu
+NTIuMzY4LjQ2NTYsCj4gICAgIGh0dHA6Ly93d3cudGtvcy5jby5pbCA8aHR0cDovL3d3dy50a29z
+LmNvLmlsPiAtCj4gCj4gCj4gCj4gLS0gCj4gUGF0cmljaWEgQS4gSG9sZGVuCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1c3lib3gubmV0Cmh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9tYWlsbWFu
+L2xpc3RpbmZvL2J1aWxkcm9vdAo=
