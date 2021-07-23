@@ -2,89 +2,92 @@ Return-Path: <SRS0=JV6j=MP=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0230C4338F
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 16:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9101C4338F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 16:08:41 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8935060725
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 16:05:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8935060725
+	by mail.kernel.org (Postfix) with ESMTPS id 6CA0E60EBD
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 16:08:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6CA0E60EBD
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 438C8814B6;
-	Fri, 23 Jul 2021 16:05:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3881E83B0E;
+	Fri, 23 Jul 2021 16:08:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wepNU_iXi_Yv; Fri, 23 Jul 2021 16:05:16 +0000 (UTC)
+	with ESMTP id 4TtQHg60r0Ga; Fri, 23 Jul 2021 16:08:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0CC5881959;
-	Fri, 23 Jul 2021 16:05:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2212D1BF299
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 16:05:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DE2283B0C;
+	Fri, 23 Jul 2021 16:08:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4629F1BF299
+ for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 16:08:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 069958194A
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 16:05:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3505840672
+ for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 16:08:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9bWoN9w-YFFb for <buildroot@lists.busybox.net>;
- Fri, 23 Jul 2021 16:05:11 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TK3WCyAK0zhT for <buildroot@lists.busybox.net>;
+ Fri, 23 Jul 2021 16:08:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 87630814B6
- for <buildroot@buildroot.org>; Fri, 23 Jul 2021 16:05:11 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id hq13so4395298ejc.7
- for <buildroot@buildroot.org>; Fri, 23 Jul 2021 09:05:11 -0700 (PDT)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0EFE140647
+ for <buildroot@buildroot.org>; Fri, 23 Jul 2021 16:08:35 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ o3-20020a05600c5103b029024c0f9e1a5fso3568436wms.4
+ for <buildroot@buildroot.org>; Fri, 23 Jul 2021 09:08:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=BSz8xBpWwTvuPlv5eWjqGuSAfgw/PJa4ceMrZoEFjvQ=;
- b=a+bkWxyrs6iKzRj5AEJdQu9SSPz1gS+t2wiw6rOBtxFGaJ87pi0OP2UH+yL4ZoO1nw
- Ek6Tb8+3Rp9sXGqk9q0W/aXvkSSDzC3pT6Ujq8NDXl3K6aXJrZjgl2b3Z5yvJ6DgZh6Y
- d8Xz78BZwUHNjdkGH+sNUUhK6CakMw3UMrFu1gLMwoAj5TCSoSeahBjR+4HdQHRdzZCn
- E0njqivXfSfOfU2jMeX34QQ/hP3uP8BDBJ5Qb6toickiTLKS+/wrsBDyr85+Cbxr/7Xr
- 0i+ZfSaQQqttOdHSizHrt96Ikaz/CEr262lrUQuu9I9nRSQJ45lkxsT7Q7aZgiwhgEzv
- 2AFQ==
+ bh=NwNrc+gjSSVIn4qossdpxsvKSqsEj5B1zmHFOTPqlKY=;
+ b=ki8vT0klCQKNJoJDVQwxMqWIQ5BugzTd8iXQRI9INVi3LZIoJNQF+ZUsfpPsKK5AIu
+ U+oyKkE0DiQ2bTEpFE2e2TA9djA6O6H7B45E1uBMxdlMoeYPN3ZQwzIXBYYovSQZ8hSl
+ QnmTIsv/ALhIqib9ZA9k8SV4b92VmYj7onnOhnY6q/YAwnjwI+Olk15jzSqvOxLvwKYH
+ cYp3w1jgSp4FkUt21bw1s5hn0Eo7WmZ0SUOEzghyVykeLdKP1Ygi6EeXpfAVy0+rm4KN
+ pjZFuX5WmijSmClAIbL0tf6NsMlhYOC7DYhpooTvUF4LXPVO2iOUvMDwD408SBwc7xjd
+ zPyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=BSz8xBpWwTvuPlv5eWjqGuSAfgw/PJa4ceMrZoEFjvQ=;
- b=iv0DAr9XyBTxYAv/deeHPlRUqhSaI1EEOSA4dS6KCu1ukiNKatJUKpuIafW+CUk35D
- lLE1ftj8jkiPTV2t4WZIuZA5+T3o1l3FT2+yJSZ5j0mRq1sNzvSRKzfSB9Dek5SXLVks
- ypA7CEUr563PjQpw/yveQw1kRDTxhyuWkEiswfPu9stN7RrgaT8wmJiMPnQGgMnEO+pl
- /BvKniP9/4koB58ALFzYDWD0LnVuq0dnSq6D7JuYPHxa20j0F5KXzrEXWHOMR77IeH0O
- bzpgQh3rBCvHf+fs2MmbiF+HupSJnusrSacVoFUBMhez3aw3onDzgqF669LZzahdUO3H
- bZ+w==
-X-Gm-Message-State: AOAM530s25fUqW7l89AIo/GFKBZi5qg+fjFA2vwyJQMrpJL26Z2DmfRC
- mqpRQDQCm1t7HfmM7kGrjQOg52rKCZVg3A==
-X-Google-Smtp-Source: ABdhPJw7trekCWHsFDv+BZfBa/wJv+1TcBCtZRmvWSCx6ockhWZvRst5FkCMEDA+L/tKKxS4ufTBew==
-X-Received: by 2002:a17:906:c34b:: with SMTP id
- ci11mr5444975ejb.223.1627056308368; 
- Fri, 23 Jul 2021 09:05:08 -0700 (PDT)
-Received: from localhost.localdomain ([37.214.36.207])
- by smtp.gmail.com with ESMTPSA id n26sm9720816eds.63.2021.07.23.09.05.07
+ bh=NwNrc+gjSSVIn4qossdpxsvKSqsEj5B1zmHFOTPqlKY=;
+ b=GFpfpDHEI2wfZDA6D5fAtjrmRaYV0DdpUEfm8gQA9CJkQ3xqtfaMboPXHnMgQ0z4P/
+ YLWsZqrOEEQHIFSO3cpw53aig2es2Z5Z1aCTIKIXecSc1LMC6F1pCYXiAwrAdDl9T8X7
+ OPElhIvRIiD/P1o6Yp6fXYSPiB7v2cHWTU4smT7MtCgYESF0awoMVik8qImAG/VBxaH7
+ TnEOMhqUNB60Ycfp2ytl9n2BM6T3u3mUW7BIn/ddwnBi/3oOeoEvpZzAvnBKcWnUW/t0
+ nNUDhfXubqH/62TtAVBvhoEo2WfnrEjXdmynoQ/00CHNZjsmtLcavucx0DqTixaQE2c8
+ 7FdA==
+X-Gm-Message-State: AOAM531MUiJ60ID+zRI05W+4W3GckAMnKDKoa57ByzDJYjnzOLUiXtzN
+ y9EFixyORI1PLeMmGIVy1t/8lxfCRFJG4Q==
+X-Google-Smtp-Source: ABdhPJwIEARqkFgUv2jPazGE7sgiY/v0A7iYy7rjq4Zu3p0xJdb2JMKfx+owjTiMVywpMeHNhAKlWQ==
+X-Received: by 2002:a1c:6a06:: with SMTP id f6mr12834355wmc.38.1627056514011; 
+ Fri, 23 Jul 2021 09:08:34 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-1383-171.w86-229.abo.wanadoo.fr.
+ [86.229.230.171])
+ by smtp.gmail.com with ESMTPSA id f130sm34122302wmf.23.2021.07.23.09.08.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Jul 2021 09:05:08 -0700 (PDT)
-From: Yauheni Saldatsenka <eugentoo@gmail.com>
+ Fri, 23 Jul 2021 09:08:33 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Jul 2021 19:04:22 +0300
-Message-Id: <20210723160422.490090-1-eugentoo@gmail.com>
-X-Mailer: git-send-email 2.32.0
+Date: Fri, 23 Jul 2021 18:08:06 +0200
+Message-Id: <20210723160806.212502-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] board/stm32f469-disco: update board
- configuration
+Subject: [Buildroot] [PATCH 1/1] package/proxychains-ng: fix build with
+ xtensa
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,558 +99,73 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Update STM32F469-disco configuration files to operate with new kernel.
-
-Result of make tinyconfig was taken as a starting point to fit kernel
-into flash memory.
-Current setup kernel + rootfs fits in 1.6MB on-chip flash memory
+Fix build failure with xtensa raised since bump to version 4.14 in
+commit 35953d1e61aa8581be09c9dca39365955b10590e
 
 Fixes:
-    - Move kernel to new flash bank due to growth of dtb size
-    - Fix kernel start address in bootloader
-    - Remove outdated path which doesn't affect normal operation mode
+ - http://autobuild.buildroot.org/results/9320d9b2c69882e23bbe7b30057eb8bee0c9d2e5
 
-Signed-off-by: Yauheni Saldatsenka <eugentoo@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../stm32f469-disco/flash.sh                  |  47 +++-
- .../stm32f469-disco/linux/defconfig           | 120 +++++++++
- .../stm32f469-disco/linux/stm32f469-disco.dts | 240 ++++++++++++++++++
- .../0002-kernel-start-address.patch           |  21 ++
- .../patches/afboot-stm32/0003-no-mpu.patch    |  22 ++
- configs/stm32f469_disco_xip_defconfig         |  24 ++
- 6 files changed, 465 insertions(+), 9 deletions(-)
- create mode 100644 board/stmicroelectronics/stm32f469-disco/linux/defconfig
- create mode 100644 board/stmicroelectronics/stm32f469-disco/linux/stm32f469-disco.dts
- create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/afboot-stm32/0002-kernel-start-address.patch
- create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/afboot-stm32/0003-no-mpu.patch
- create mode 100644 configs/stm32f469_disco_xip_defconfig
+ ...configure-fix-check_link_silent-test.patch | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/proxychains-ng/0001-configure-fix-check_link_silent-test.patch
 
-diff --git a/board/stmicroelectronics/stm32f469-disco/flash.sh b/board/stmicroelectronics/stm32f469-disco/flash.sh
-index 984d2b2599..176e1c9d2c 100755
---- a/board/stmicroelectronics/stm32f469-disco/flash.sh
-+++ b/board/stmicroelectronics/stm32f469-disco/flash.sh
-@@ -1,18 +1,47 @@
- #!/bin/bash
- 
- OUTPUT_DIR=$1
-+BUILD_TYPE=$2
- 
--if ! test -d "${OUTPUT_DIR}" ; then
-+if ! test -d "${OUTPUT_DIR}"
-+then
-     echo "ERROR: no output directory specified."
-     echo "Usage: $0 OUTPUT_DIR"
-     exit 1
- fi
- 
--${OUTPUT_DIR}/host/bin/openocd -f board/stm32f469discovery.cfg \
--  -c "init" \
--  -c "reset init" \
--  -c "flash probe 0" \
--  -c "flash info 0" \
--  -c "flash write_image erase ${OUTPUT_DIR}/images/u-boot.bin 0x08000000" \
--  -c "reset run" \
--  -c "shutdown"
-+if  [[ -z "${BUILD_TYPE}" ]]
-+then
-+    echo "ERROR: no build type specified, please select 'xip' or 'uboot'."
-+    echo "Usage: $0 OUTPUT_DIR $1 BUILD_TYPE"
-+    exit 1
-+fi
-+
-+case "${BUILD_TYPE}" in
-+	"xip")
-+		${OUTPUT_DIR}/host/bin/openocd -f board/stm32f469discovery.cfg \
-+					 -c "init" \
-+					 -c "reset init" \
-+					 -c "flash probe 0" \
-+					 -c "flash info 0" \
-+					 -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f469i-disco.bin 0x08000000" \
-+					 -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f469-disco.dtb 0x08004000" \
-+					 -c "flash write_image erase ${OUTPUT_DIR}/images/xipImage 0x08010000" \
-+					 -c "reset run" \
-+					 -c "shutdown"
-+		;;
-+	"uboot")
-+		FLASH_COMMAND=
-+		${OUTPUT_DIR}/host/bin/openocd -f board/stm32f469discovery.cfg \
-+					 -c "init" \
-+					 -c "reset init" \
-+					 -c "flash probe 0" \
-+					 -c "flash info 0" \
-+					 -c "flash write_image erase ${OUTPUT_DIR}/images/u-boot.bin 0x08000000" \
-+					 -c "reset run" \
-+					 -c "shutdown"
-+	    ;;
-+	*)
-+		echo "Wrong build type. Please select from: xip, uboot"
-+		;;
-+esac
-diff --git a/board/stmicroelectronics/stm32f469-disco/linux/defconfig b/board/stmicroelectronics/stm32f469-disco/linux/defconfig
+diff --git a/package/proxychains-ng/0001-configure-fix-check_link_silent-test.patch b/package/proxychains-ng/0001-configure-fix-check_link_silent-test.patch
 new file mode 100644
-index 0000000000..2d0ce59b31
+index 0000000000..aadfef9cd9
 --- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/linux/defconfig
-@@ -0,0 +1,120 @@
-+# CONFIG_LOCALVERSION_AUTO is not set
-+CONFIG_KERNEL_XZ=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT=y
-+CONFIG_LOG_BUF_SHIFT=12
-+CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT=10
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_INITRAMFS_SOURCE="${BR_BINARIES_DIR}/rootfs.cpio"
-+# CONFIG_RD_GZIP is not set
-+# CONFIG_RD_BZIP2 is not set
-+# CONFIG_RD_LZMA is not set
-+# CONFIG_RD_XZ is not set
-+# CONFIG_RD_LZO is not set
-+# CONFIG_RD_LZ4 is not set
-+# CONFIG_RD_ZSTD is not set
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+# CONFIG_MULTIUSER is not set
-+# CONFIG_SYSFS_SYSCALL is not set
-+# CONFIG_FHANDLE is not set
-+# CONFIG_POSIX_TIMERS is not set
-+# CONFIG_BUG is not set
-+# CONFIG_BASE_FULL is not set
-+# CONFIG_FUTEX is not set
-+# CONFIG_EPOLL is not set
-+# CONFIG_SIGNALFD is not set
-+# CONFIG_TIMERFD is not set
-+# CONFIG_EVENTFD is not set
-+# CONFIG_AIO is not set
-+# CONFIG_IO_URING is not set
-+# CONFIG_ADVISE_SYSCALLS is not set
-+# CONFIG_MEMBARRIER is not set
-+# CONFIG_KALLSYMS is not set
-+CONFIG_KCMP=y
-+# CONFIG_RSEQ is not set
-+CONFIG_EMBEDDED=y
-+# CONFIG_VM_EVENT_COUNTERS is not set
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_SLOB=y
-+# CONFIG_SLAB_MERGE_DEFAULT is not set
-+# CONFIG_MMU is not set
-+CONFIG_ARCH_STM32=y
-+# CONFIG_MACH_STM32F429 is not set
-+# CONFIG_MACH_STM32F746 is not set
-+# CONFIG_MACH_STM32F769 is not set
-+# CONFIG_MACH_STM32H743 is not set
-+CONFIG_CPU_V7M_NUM_IRQ=240
-+# CONFIG_ARM_DMA_MEM_BUFFERABLE is not set
-+CONFIG_SET_MEM_PARAM=y
-+CONFIG_DRAM_BASE=0xc0000000
-+CONFIG_DRAM_SIZE=0x01000000
-+CONFIG_HZ_1000=y
-+# CONFIG_ATAGS is not set
-+CONFIG_XIP_KERNEL=y
-+CONFIG_XIP_PHYS_ADDR=0x08010000
-+CONFIG_XIP_DEFLATED_DATA=y
-+# CONFIG_SUSPEND is not set
-+# CONFIG_STACKPROTECTOR is not set
-+# CONFIG_COMPAT_32BIT_TIME is not set
-+# CONFIG_GCC_PLUGINS is not set
-+# CONFIG_BLOCK is not set
-+CONFIG_BINFMT_FLAT=y
-+CONFIG_BINFMT_SHARED_FLAT=y
-+# CONFIG_COREDUMP is not set
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+# CONFIG_STANDALONE is not set
-+# CONFIG_PREVENT_FIRMWARE_BUILD is not set
-+# CONFIG_FW_LOADER is not set
-+# CONFIG_ALLOW_DEV_COREDUMP is not set
-+CONFIG_EEPROM_93CX6=y
-+# CONFIG_INPUT is not set
-+# CONFIG_VT is not set
-+# CONFIG_UNIX98_PTYS is not set
-+# CONFIG_LEGACY_PTYS is not set
-+# CONFIG_LDISC_AUTOLOAD is not set
-+CONFIG_SERIAL_STM32=y
-+CONFIG_SERIAL_STM32_CONSOLE=y
-+# CONFIG_DEVMEM is not set
-+# CONFIG_HWMON is not set
-+CONFIG_WATCHDOG=y
-+CONFIG_MFD_STM32_TIMERS=y
-+# CONFIG_USB_SUPPORT is not set
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_STM32=y
-+CONFIG_DMADEVICES=y
-+CONFIG_STM32_DMA=y
-+CONFIG_STM32_DMAMUX=y
-+CONFIG_STM32_MDMA=y
-+CONFIG_SYNC_FILE=y
-+# CONFIG_VIRTIO_MENU is not set
-+# CONFIG_VHOST_MENU is not set
-+CONFIG_IIO=y
-+CONFIG_IIO_BUFFER=y
-+CONFIG_IIO_TRIGGERED_BUFFER=y
-+CONFIG_IIO_STM32_TIMER_TRIGGER=y
-+# CONFIG_FILE_LOCKING is not set
-+# CONFIG_DNOTIFY is not set
-+# CONFIG_INOTIFY_USER is not set
-+# CONFIG_PROC_SYSCTL is not set
-+CONFIG_CONFIGFS_FS=y
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NLS=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_CONSOLE_LOGLEVEL_DEFAULT=15
-+CONFIG_CONSOLE_LOGLEVEL_QUIET=15
-+CONFIG_MESSAGE_LOGLEVEL_DEFAULT=7
-+# CONFIG_SYMBOLIC_ERRNAME is not set
-+CONFIG_DEBUG_INFO=y
-+# CONFIG_SECTION_MISMATCH_WARN_ONLY is not set
-+CONFIG_DEBUG_FS=y
-+# CONFIG_DEBUG_MISC is not set
-+# CONFIG_SCHED_DEBUG is not set
-+# CONFIG_RCU_TRACE is not set
-+# CONFIG_RUNTIME_TESTING_MENU is not set
-diff --git a/board/stmicroelectronics/stm32f469-disco/linux/stm32f469-disco.dts b/board/stmicroelectronics/stm32f469-disco/linux/stm32f469-disco.dts
-new file mode 100644
-index 0000000000..83fe71bbc6
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/linux/stm32f469-disco.dts
-@@ -0,0 +1,240 @@
-+/*
-+ * Copyright 2016 - Lee Jones <lee.jones@linaro.org>
-+ *
-+ * This file is dual-licensed: you can use it either under the terms
-+ * of the GPL or the X11 license, at your option. Note that this dual
-+ * licensing only applies to this file, and not this project as a
-+ * whole.
-+ *
-+ *  a) This file is free software; you can redistribute it and/or
-+ *     modify it under the terms of the GNU General Public License as
-+ *     published by the Free Software Foundation; either version 2 of the
-+ *     License, or (at your option) any later version.
-+ *
-+ *     This file is distributed in the hope that it will be useful,
-+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ *     GNU General Public License for more details.
-+ *
-+ *     You should have received a copy of the GNU General Public
-+ *     License along with this file; if not, write to the Free
-+ *     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
-+ *     MA 02110-1301 USA
-+ *
-+ * Or, alternatively,
-+ *
-+ *  b) Permission is hereby granted, free of charge, to any person
-+ *     obtaining a copy of this software and associated documentation
-+ *     files (the "Software"), to deal in the Software without
-+ *     restriction, including without limitation the rights to use,
-+ *     copy, modify, merge, publish, distribute, sublicense, and/or
-+ *     sell copies of the Software, and to permit persons to whom the
-+ *     Software is furnished to do so, subject to the following
-+ *     conditions:
-+ *
-+ *     The above copyright notice and this permission notice shall be
-+ *     included in all copies or substantial portions of the Software.
-+ *
-+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-+ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-+ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-+ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-+ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-+ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-+ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-+ *     OTHER DEALINGS IN THE SOFTWARE.
-+ */
++++ b/package/proxychains-ng/0001-configure-fix-check_link_silent-test.patch
+@@ -0,0 +1,41 @@
++From 4a557f242a76c6a2a3134acf1d3279818f8ab371 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 23 Jul 2021 09:50:36 +0200
++Subject: [PATCH] configure: fix check_link_silent test
 +
-+/dts-v1/;
-+#include "stm32f469.dtsi"
-+#include "stm32f469-pinctrl.dtsi"
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
++Replace -o /dev/null by -o "$tmpc".out when testing with
++check_link_silent otherwise test will fail with some bugged binutils
++(https://sourceware.org/bugzilla/show_bug.cgi?id=19526) since version
++4.13 and
++https://github.com/rofl0r/proxychains-ng/commit/35a674bdbc294730429a1007c9e7ce01e65b49b5:
 +
-+/ {
-+	model = "STMicroelectronics STM32F469i-DISCO board";
-+	compatible = "st,stm32f469i-disco", "st,stm32f469";
++checking what's the option to use in linker to set library name ...
++cannot find an option to set library name
++package/pkg-generic.mk:249: recipe for target '/home/buildroot/autobuild/instance-2/output-1/build/proxychains-ng-4.14/.stamp_configured' failed
 +
-+	chosen {
-+		bootargs = "root=/dev/ram fbcon=map:0";
-+		stdout-path = "serial0:115200n8";
-+	};
++Fixes:
++ - http://autobuild.buildroot.org/results/9320d9b2c69882e23bbe7b30057eb8bee0c9d2e5
 +
-+	memory@c0000000 {
-+		device_type = "memory";
-+		reg = <0xc0000000 0x1000000>;
-+	};
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/rofl0r/proxychains-ng/pull/387]
++---
++ configure | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+	aliases {
-+		serial0 = &usart3;
-+	};
-+
-+	mmc_vcard: mmc_vcard {
-+		compatible = "regulator-fixed";
-+		regulator-name = "mmc_vcard";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	vdd_dsi: vdd-dsi {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vdd_dsi";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	soc {
-+		dma-ranges = <0xc0000000 0xc0000000 0x10000000>;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		led-green {
-+			gpios = <&gpiog 6 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+		led-orange {
-+			gpios = <&gpiod 4 GPIO_ACTIVE_LOW>;
-+		};
-+		led-red {
-+			gpios = <&gpiod 5 GPIO_ACTIVE_LOW>;
-+		};
-+		led-blue {
-+			gpios = <&gpiok 3 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	gpio_keys {
-+		compatible = "gpio-keys";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		autorepeat;
-+		button@0 {
-+			label = "User";
-+			linux,code = <KEY_WAKEUP>;
-+			gpios = <&gpioa 0 GPIO_ACTIVE_HIGH>;
-+		};
-+	};
-+
-+	/* This turns on vbus for otg for host mode (dwc2) */
-+	vcc5v_otg: vcc5v-otg-regulator {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpiob 2 GPIO_ACTIVE_HIGH>;
-+		regulator-name = "vcc5_host1";
-+		regulator-always-on;
-+	};
-+};
-+
-+&rcc {
-+	compatible = "st,stm32f469-rcc", "st,stm32f42xx-rcc", "st,stm32-rcc";
-+};
-+
-+&clk_hse {
-+	clock-frequency = <8000000>;
-+};
-+
-+&dsi {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	status = "okay";
-+
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		port@0 {
-+			reg = <0>;
-+			dsi_in: endpoint {
-+				remote-endpoint = <&ltdc_out_dsi>;
-+			};
-+		};
-+
-+		port@1 {
-+			reg = <1>;
-+			dsi_out: endpoint {
-+				remote-endpoint = <&dsi_panel_in>;
-+			};
-+		};
-+	};
-+
-+	panel-dsi@0 {
-+		compatible = "orisetech,otm8009a";
-+		reg = <0>; /* dsi virtual channel (0..3) */
-+		reset-gpios = <&gpioh 7 GPIO_ACTIVE_LOW>;
-+		power-supply = <&vdd_dsi>;
-+		status = "okay";
-+
-+		port {
-+			dsi_panel_in: endpoint {
-+				remote-endpoint = <&dsi_out>;
-+			};
-+		};
-+	};
-+};
-+
-+&ltdc {
-+	status = "okay";
-+
-+	port {
-+		ltdc_out_dsi: endpoint@0 {
-+			remote-endpoint = <&dsi_in>;
-+		};
-+	};
-+};
-+
-+&rtc {
-+	status = "okay";
-+};
-+
-+&timers1 {
-+	status = "okay";
-+
-+	pwm {
-+		pinctrl-0 = <&pwm1_pins>;
-+		pinctrl-names = "default";
-+		status = "okay";
-+	};
-+
-+	timer@0 {
-+		status = "okay";
-+	};
-+};
-+
-+&timers3 {
-+	status = "okay";
-+
-+	pwm {
-+		pinctrl-0 = <&pwm3_pins>;
-+		pinctrl-names = "default";
-+		status = "okay";
-+	};
-+
-+	timer@2 {
-+		status = "okay";
-+	};
-+};
-+
-+&sdio {
-+	status = "okay";
-+	vmmc-supply = <&mmc_vcard>;
-+	cd-gpios = <&gpiog 2 GPIO_ACTIVE_LOW>;
-+	broken-cd;
-+	pinctrl-names = "default", "opendrain";
-+	pinctrl-0 = <&sdio_pins>;
-+	pinctrl-1 = <&sdio_pins_od>;
-+	bus-width = <4>;
-+};
-+
-+&usart3 {
-+	pinctrl-0 = <&usart3_pins_a>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&usbotg_fs {
-+	dr_mode = "host";
-+	pinctrl-0 = <&usbotg_fs_pins_a>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-diff --git a/board/stmicroelectronics/stm32f469-disco/patches/afboot-stm32/0002-kernel-start-address.patch b/board/stmicroelectronics/stm32f469-disco/patches/afboot-stm32/0002-kernel-start-address.patch
-new file mode 100644
-index 0000000000..614effa85b
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/patches/afboot-stm32/0002-kernel-start-address.patch
-@@ -0,0 +1,21 @@
-+diff --git a/stm32f469i-disco.c b/stm32f469i-disco.c
-+index 2da1f4b65f..96e4dff65e 100644
-+--- a/stm32f469i-disco.c
-++++ b/stm32f469i-disco.c
-+@@ -6,6 +6,7 @@
-+ #include "gpio.h"
-+ #include "mpu.h"
++diff --git a/configure b/configure
++index 8b21b97..cfe19e7 100755
++--- a/configure
+++++ b/configure
++@@ -49,7 +49,8 @@ check_compile_run() {
 + 
-++#define KERNEL_ADDR     0x08010000
-+ #define CONFIG_HSE_HZ	8000000
-+ #define CONFIG_PLL_M	8
-+ #define CONFIG_PLL_N	360
-+@@ -85,7 +86,7 @@ static void fmc_wait_busy(void)
-+ 
-+ void start_kernel(void)
-+ {
-+-	void (*kernel)(uint32_t reserved, uint32_t mach, uint32_t dt) = (void (*)(uint32_t, uint32_t, uint32_t))(0x08008000 | 1);
-++	void (*kernel)(uint32_t reserved, uint32_t mach, uint32_t dt) = (void (*)(uint32_t, uint32_t, uint32_t))(KERNEL_ADDR | 1);
-+ 
-+ 	kernel(0, ~0UL, 0x08004000);
++ check_link_silent() {
++ 	printf "$2" > "$tmpc"
++-	$CC $OUR_CPPFLAGS $CPPFLAGS $1 $CFLAGS "$tmpc" -o /dev/null >/dev/null 2>&1
+++	$CC $OUR_CPPFLAGS $CPPFLAGS $1 $CFLAGS "$tmpc" -o "$tmpc".out  >/dev/null 2>&1
+++	rm -f "$tmpc".out
 + }
-diff --git a/board/stmicroelectronics/stm32f469-disco/patches/afboot-stm32/0003-no-mpu.patch b/board/stmicroelectronics/stm32f469-disco/patches/afboot-stm32/0003-no-mpu.patch
-new file mode 100644
-index 0000000000..bc66d2d0ef
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/patches/afboot-stm32/0003-no-mpu.patch
-@@ -0,0 +1,22 @@
-+diff --git a/stm32f469i-disco.c b/stm32f469i-disco.c
-+index d4d0909831..03f823f288 100644
-+--- a/stm32f469i-disco.c
-++++ b/stm32f469i-disco.c
-+@@ -127,7 +127,7 @@ int main(void)
 + 
-+ 	int i;
-+ 
-+-	mpu_config(0x0);
-++	mpu_config(0xc0000000); 
-+ 
-+ 	if (*FLASH_CR & FLASH_CR_LOCK) {
-+ 		*FLASH_KEYR = 0x45670123;
-+@@ -229,7 +229,7 @@ int main(void)
-+ 	usart_setup(usart_base, 45000000);
-+ 	usart_putch(usart_base, '.');
-+ 
-+-	*SYSCFG_MEMRMP = 0x4;
-++	/* *SYSCFG_MEMRMP = 0x4; */
-+ 
-+ 	start_kernel();
-+ 
-diff --git a/configs/stm32f469_disco_xip_defconfig b/configs/stm32f469_disco_xip_defconfig
-new file mode 100644
-index 0000000000..81bdb0d6d6
---- /dev/null
-+++ b/configs/stm32f469_disco_xip_defconfig
-@@ -0,0 +1,24 @@
-+BR2_arm=y
-+BR2_cortex_m4=y
-+BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches"
-+BR2_KERNEL_HEADERS_5_13=y
-+# BR2_UCLIBC_INSTALL_UTILS is not set
-+BR2_GCC_VERSION_11_X=y
-+BR2_GCC_ENABLE_LTO=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f469-disco/linux/defconfig"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-+BR2_LINUX_KERNEL_XZ=y
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="xipImage"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f469-disco"
-+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/stmicroelectronics/stm32f469-disco/linux/stm32f469-disco.dts"
-+BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
-+BR2_PACKAGE_ZLIB=y
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_AFBOOT_STM32=y
-+BR2_PACKAGE_HOST_OPENOCD=y
-+BR2_PACKAGE_HOST_UTIL_LINUX=y
++ check_link() {
++-- 
++2.30.2
++
 -- 
-2.32.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
