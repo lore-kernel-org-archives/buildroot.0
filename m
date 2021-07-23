@@ -8,85 +8,82 @@ X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DATE_IN_PAST_06_12,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D353C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 08:08:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B6D9C4338F
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 08:08:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2C33160E73
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 08:08:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C33160E73
+	by mail.kernel.org (Postfix) with ESMTPS id 343A460E73
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 08:08:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 343A460E73
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D941840645;
-	Sat, 24 Jul 2021 08:08:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 086CF83B45;
+	Sat, 24 Jul 2021 08:08:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9q8kkalcPzNc; Sat, 24 Jul 2021 08:08:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fldX98ZgCMDM; Sat, 24 Jul 2021 08:08:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20A274063E;
-	Sat, 24 Jul 2021 08:08:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D17583B32;
+	Sat, 24 Jul 2021 08:08:57 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5A80C1BF37B
- for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 08:08:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C6F5B1BF37B
+ for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 08:08:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4A4FD83B32
- for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 08:08:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B648383B32
+ for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 08:08:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vl0WdmuzdNMR for <buildroot@lists.busybox.net>;
- Sat, 24 Jul 2021 08:08:38 +0000 (UTC)
+ with ESMTP id UguqNAgxaJwV for <buildroot@lists.busybox.net>;
+ Sat, 24 Jul 2021 08:08:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7F7FA83AEA
- for <buildroot@busybox.net>; Sat, 24 Jul 2021 08:08:38 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id l4so4752548wrs.4
- for <buildroot@busybox.net>; Sat, 24 Jul 2021 01:08:38 -0700 (PDT)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1F9DF83AEA
+ for <buildroot@busybox.net>; Sat, 24 Jul 2021 08:08:48 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id w12so4678101wro.13
+ for <buildroot@busybox.net>; Sat, 24 Jul 2021 01:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=uHHDLnBGGVHWFjqgfg0gPakzVIlruc67423E6E5Y6eg=;
- b=lfJNO7/UcKUG0VNSLTDbjzqEFbUYxEOwWj+Ii4ThsF07tOYIMMBuZbVDPnaDeHiryJ
- hlKNeKzAjiS3hHVoIOg3/P4XjNVpgz3gKKbOVWWHNwyrihlT+0XGj/uVAEU3L4bMMZly
- GK8yW/P3KBtmoEQbnLRa+p4euJitV5FwiBeAhK/fRgxdfLdGExdS2q/KObTdwzV3SkXf
- y6BShngCJDu3mb69ggIQK+eTQ9sSUN4nXDNtFTo+l9D0rRqYoDZrezvTr2Oz6sqo+j/W
- 9aIVtMIJR/Z67K4w4o/eqCYGO99zN6lFCb0ltla5su2cdPEEy5NRsQVtGKtSCINjv1ob
- cRaw==
+ bh=FqOhKfLdlG5xhMPwHuFMbgW4rVAILqFUfU8GPo6CiAk=;
+ b=EmGhLO47/FxTtHhDuCTcVlmy5Hj2s8U3CeOyOKHJWmUfOR/0xsbjgxnTMWYonfvJSt
+ xQfmqvXpBVKfJ3LFhso+N15Rd7VJ6xzL11b67Lc2NPV0cu8uUtQDgR2R2TuhphF/HBMj
+ 1gZy7fFSSsqUVfz0B677WX7SCRApboZqf1xn9Een9xIsi15CCz3JezvCDqMAzQXHOBic
+ eivYqqMd4hHEe6Et3hcJE6xM5ivtuYds0g/W2OhT81mhPLFJUSwHPtsOiwD8CgRipUTM
+ aXtoIA0ee7R5b3h4cqtDvgRh4GA9LxGj8SV4xnebFI9F3vbN5B3cy9RexF9Y43UJQTIk
+ D4xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=uHHDLnBGGVHWFjqgfg0gPakzVIlruc67423E6E5Y6eg=;
- b=AHnZWKAxU9NBqOXVO5AmyEtGVtjoAik2JvJQGB2U7KMYZzvT1Ozym04zuakIYXJ+L9
- k1JK4bSZN2elsV7MhvLSB6RQwvsHUGinFJ09KPa27/ydOzJhtkRuOT+3bpLVNHxkTOuo
- ICf1E9canVHCNN5nSWPAjsxAKaePDcIWTU4pdy6y7YJxuW1EAcCMk6NB4+/FwcLOlkEn
- MxGSi0cxj71laBs+krDKZw8xf/f6NXGxH4sH3wdk+TthWP9zopA9N+SgOzFScXvw0RYn
- cMkWcWkrg6iIzMYtSrkCFYUUym+VgIiGyx5Eoh2gnCSzAYaKfo8ZTmrKNZ7VJyboARnU
- 3Ybg==
-X-Gm-Message-State: AOAM530eYzK09ZopFA96ymMvM+5x+qscRiSpQdB4cB4RIl05ApdhWOrp
- xmMmC7fYDicBQTZ06vQXufkQ20fjwN4=
-X-Google-Smtp-Source: ABdhPJxpcqEuOLxGlLMDjkNRnLgBfKufaPe0x5ZMnMByJGwFdcYhnZsoQzJzuJK2JhCxHfp+G/OAJA==
-X-Received: by 2002:a05:6000:120f:: with SMTP id
- e15mr8756813wrx.399.1627114116821; 
- Sat, 24 Jul 2021 01:08:36 -0700 (PDT)
+ bh=FqOhKfLdlG5xhMPwHuFMbgW4rVAILqFUfU8GPo6CiAk=;
+ b=lufIKV0N4dMjYUAJ1fiKpGgKEQzh58lPLAOBlgQ+Zfbz8nSJ7bN4VIAHEn0Yp4Sg8D
+ G2FOZiYurgCd7uls3nmpcWuudSdYyvczPLfxzXr58jLBCgK9l+LiGR/UremkIcTXMJBR
+ cWmzu/nQWWblP07F1DBuSAR7afRKnW1Kj/sHi4d5SO9jA3dpaO9+D9geq45Ib0AjCDnd
+ 12hj1z747oMQR9NcUBeu1X599yQFOMfEjdmqz0uP9gZEiXmdrfxsr40+OM3hAC+b63ao
+ iZkLdsfEr9rAd2WcvnBvwtRu9YcGZufkKumXPrw5GTxtn7ZjZbBaMv7kUA8vWTTaXUFY
+ G++g==
+X-Gm-Message-State: AOAM530HD7su5GAALDQvoOY4yW7Ws+k/rPp+XIrWm4mMDBvcuQt2uNHz
+ CEqJQyyVXV3OEAi4lBEJP6iuafgOAZo=
+X-Google-Smtp-Source: ABdhPJwU3sdfXJp5MY/deHBaoEHPE27HRlwarqee+szOac81vlhKOueEpnaxCkj25Szymxf1bUs0TQ==
+X-Received: by 2002:a5d:4051:: with SMTP id w17mr331903wrp.210.1627114126486; 
+ Sat, 24 Jul 2021 01:08:46 -0700 (PDT)
 Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id l9sm2808414wro.92.2021.07.24.01.08.36
+ by smtp.gmail.com with ESMTPSA id e8sm14378594wrc.6.2021.07.24.01.08.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 24 Jul 2021 01:08:36 -0700 (PDT)
+ Sat, 24 Jul 2021 01:08:46 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Fri, 23 Jul 2021 22:43:24 +0200
-Message-Id: <20210723204324.2533212-1-francois.perrad@gadz.org>
+Date: Fri, 23 Jul 2021 22:43:33 +0200
+Message-Id: <20210723204333.2533266-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/moarvm: bump to version 2021.06
+Subject: [Buildroot] [PATCH] package/lua-silva: bump to version 0.1.8
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,32 +102,33 @@ Sender: "buildroot" <buildroot-bounces@busybox.net>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/moarvm/moarvm.hash | 2 +-
- package/moarvm/moarvm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lua-silva/lua-silva.hash | 4 ++--
+ package/lua-silva/lua-silva.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index 5464c4e12..44c54e35b 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
+diff --git a/package/lua-silva/lua-silva.hash b/package/lua-silva/lua-silva.hash
+index 3181ca12c..bcd0d3071 100644
+--- a/package/lua-silva/lua-silva.hash
++++ b/package/lua-silva/lua-silva.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  e094728536da421dc9a3e8651160ab6a5e8d0eafa834e8953feecf33285a11e7  MoarVM-2021.04.tar.gz
-+sha256  2300a921d504c9d33f111cbe08097d0011bfb06000c018b8d4353d97966772a7  MoarVM-2021.06.tar.gz
- sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index b6b9b6908..17b2a234e 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
+ # computed by luarocks/buildroot
+-sha256 8211adfc46629524fc2ba629b616ba84790ca7676ef1ebed20e8de9016c24c10  lua-silva-0.1.7-1.src.rock
+-sha256 5b59ffbfc12d9d1cb907dd65b0f16d3453e1a43cc018c6128a00b00e08f6c485  lua-Silva-0.1.7/COPYRIGHT
++sha256 0e656c42c71b64285d4a375fa7b8b1a910b05c4ab6d30f5b427b078fff204e1f  lua-silva-0.1.8-1.src.rock
++sha256 5b59ffbfc12d9d1cb907dd65b0f16d3453e1a43cc018c6128a00b00e08f6c485  lua-Silva-0.1.8/COPYRIGHT
+diff --git a/package/lua-silva/lua-silva.mk b/package/lua-silva/lua-silva.mk
+index 8b92586ba..91b1b7747 100644
+--- a/package/lua-silva/lua-silva.mk
++++ b/package/lua-silva/lua-silva.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOARVM_VERSION = 2021.04
-+MOARVM_VERSION = 2021.06
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
+-LUA_SILVA_VERSION = 0.1.7-1
++LUA_SILVA_VERSION = 0.1.8-1
+ LUA_SILVA_NAME_UPSTREAM = lua-Silva
+ LUA_SILVA_LICENSE = MIT
+ LUA_SILVA_LICENSE_FILES = $(LUA_SILVA_SUBDIR)/COPYRIGHT
 -- 
 2.30.2
 
