@@ -2,90 +2,99 @@ Return-Path: <SRS0=JV6j=MP=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74299C4338F
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 22:00:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EBC1C4338F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 22:06:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0881E60EB2
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 22:00:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0881E60EB2
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id B52FE60C51
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 22:06:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B52FE60C51
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDC744035B;
-	Fri, 23 Jul 2021 22:00:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74B1C82B2F;
+	Fri, 23 Jul 2021 22:06:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZJkm1sCNyL3j; Fri, 23 Jul 2021 22:00:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZXgQc7lDTVH2; Fri, 23 Jul 2021 22:06:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 251F140368;
-	Fri, 23 Jul 2021 22:00:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B99361BF5A1
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 22:00:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C58A282B51;
+	Fri, 23 Jul 2021 22:06:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C8F21BF3EE
+ for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 22:06:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F8714016A
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 22:00:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 786F760709
+ for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 22:06:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mneJWSXTOMKV for <buildroot@lists.busybox.net>;
- Fri, 23 Jul 2021 22:00:52 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7EjhKqlN2_CB for <buildroot@lists.busybox.net>;
+ Fri, 23 Jul 2021 22:06:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D7C1D400B9
- for <buildroot@buildroot.org>; Fri, 23 Jul 2021 22:00:51 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id b128so1573591wmb.4
- for <buildroot@buildroot.org>; Fri, 23 Jul 2021 15:00:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4D1346063B
+ for <buildroot@buildroot.org>; Fri, 23 Jul 2021 22:06:18 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id hq13so5734108ejc.7
+ for <buildroot@buildroot.org>; Fri, 23 Jul 2021 15:06:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
  :content-transfer-encoding;
- bh=6FEqTZz0kyAHt1+v2QjG0stTPiE61QZSVryXfCCTX4g=;
- b=EgNCCHbyKgc9dGyJ0PfmhTGxLxehN1hM7fZ6tOo3DLsSRJ4eXBRE4hXEiKZoHHqJjT
- 1c6qsImxCq72J/YRsfpDkhUMCPpp7Z5rVF1Wi8Su1OtezN309Z4iFNVaUjMLR/5LOWdd
- sjvq5ZzgeXLure/czHNBRJ6IsJXeQ5neoPuJrg/JFw0cfBzhLqsJcr01jj3/ax9Mc9WK
- 0Vrr9dCHhszRcfNzXO2L18LbpXEqQ2vpABJxw/t+IeoBUO58coZt+u6aZVRFk0A+4Pqy
- xRLSKyK5bhCtUxqACvui7vZgue5oWnNHpPZqebFlMrKG4Tjt89Uyi90FUcINdellncYK
- kcOw==
+ bh=ACh0hLOD8h9/sxkEqgd4ESLJKvZBBehDlSJU4Fp5/+Q=;
+ b=dNb+CejehJTYseoXi+pGXoBpD6iKUrUXeeGzFzc3W/SrnxJ7ZEd6cFuhdPhfRGnTmn
+ /ijhf6UPbO9HA9jBbh53K0Q+Ubi2fN+YBJ8PSVDXzqxPFjbnKYGV4jqV0zM1KLc2OMnR
+ iW/BMuuNq+3utev4cB5m5DG/rOEF9OfWL5pPEdyzcAeSE51SI39PlzuLqLNMuaNQxjRx
+ ll/k+60sK5voE0I1gn0T+bB9UqhkUNec/Qn7MqBkvb2vrXVm64Zj8Q32DKrVMfox6TUi
+ bAsrLSgniLYQ+QWd34JIHR2sl6SviZwR1X51aIdj4y6xYsADQp0+JeTNJcpFIlf7sJjE
+ 2BYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6FEqTZz0kyAHt1+v2QjG0stTPiE61QZSVryXfCCTX4g=;
- b=ZMaIcD4lPrFBa2wKkksvW4ymwRnmVGx3RIOjSstESjKs2YcYwK7od1TwlbspILf+Wh
- yl+hoBIy3uuMVMXoIUQaAizs1DfcpeF1lAnahXG1QkUyjIp8nSM04RgCKg6ngyUuEMxY
- xvJuy12cK8j9tcFyTFYA+nDQTmAwzq6W96x0kE+i8YWTWsM7kgRwNkXPGCwHaQ0g4sDW
- Ws1kcy+EdlmcJ1bjCYUd/QQJn07DaoK7vmpJ4NsGDbS6ileNKsAvu1oO+/4RccapfvDx
- 8/KwuX6ZN+R+zLJxSDtTy8IZzPOc/pkHUhaXpCO1vIUfSqulCNnVT4g+6FIfesonh0Lo
- NFeg==
-X-Gm-Message-State: AOAM530H5cwYBuTRIzLo+8vIIdwhV3uAYJZYXYENFX3BuLxT4NS3yznq
- C43UaXYyadCMv1sKiqVmPmKh6Ow2XAkaJg==
-X-Google-Smtp-Source: ABdhPJyNYZEqx1b3GKFa//d4m2K1kY77CWB4MAjd4b5E/eY4xeeyyg2icdclF6NvLgyoL+zP6lVlvA==
-X-Received: by 2002:a1c:f206:: with SMTP id s6mr6152701wmc.102.1627077649805; 
- Fri, 23 Jul 2021 15:00:49 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1383-171.w86-229.abo.wanadoo.fr.
- [86.229.230.171])
- by smtp.gmail.com with ESMTPSA id v15sm6530340wmj.39.2021.07.23.15.00.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Jul 2021 15:00:49 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 24 Jul 2021 00:00:41 +0200
-Message-Id: <20210723220041.511374-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.30.2
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=ACh0hLOD8h9/sxkEqgd4ESLJKvZBBehDlSJU4Fp5/+Q=;
+ b=Ah5TUcsEDRyy7tsQBLHw7/5mLNqf3t0UgdwAN4M09VrPeoB9mWiQtIBLIuXXOu9MV0
+ x9sZitrL23Hjd0jH/7OgRz0+jTQYcJJRpVS9ANADiG4ZsDabxRlf5ELUMxFrlRY8MqZX
+ qqCpOhrSgYYhxSs0vdu6F3I5Fd+3ZENg4XoEulATVBm6XK6gSClgQRy7lMFg2mAnNG2Y
+ DoYVIUbk22hRfUQrC0/RxQFJZnZvj5mVDcCqgOy6HBXms8G0rcksmQ6vRft0kxx+Si24
+ w1TAxH7CJHargJ5IKix59aYvSRTcwbZIHQxouxs+fOIWlNxcKM4Bp2G2zybd7GwSbToT
+ gQlg==
+X-Gm-Message-State: AOAM532NavsioN3MlP6EFbHMOSdbIlh37RBOUsYTsxUCU9mjBFvtUsU6
+ pNgU4FohRfTirwnbe27yHnhe3g==
+X-Google-Smtp-Source: ABdhPJy3x3JHd+kwm8zU9Z3KwOhrlnjBu+9LPwxosTmhoR85gxCX9E08meVJPNnpwlmRWE95yCG6PA==
+X-Received: by 2002:a17:906:3c0d:: with SMTP id
+ h13mr6628476ejg.335.1627077976446; 
+ Fri, 23 Jul 2021 15:06:16 -0700 (PDT)
+Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id b19sm7187470edt.53.2021.07.23.15.06.15
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 23 Jul 2021 15:06:15 -0700 (PDT)
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20210710215532.1846823-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <7856f9ea-d826-c2b2-c776-2d442d9efce9@mind.be>
+Date: Sat, 24 Jul 2021 00:06:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libmbim: drop unrecognized option
+In-Reply-To: <20210710215532.1846823-1-fontaine.fabrice@gmail.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] package/python-idna: bump to version 3.2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,37 +106,39 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Aleksander Morgado <aleksander@aleksander.es>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Sven Haardiek <sven.haardiek@iotec-gmbh.de>, Asaf Kahlon <asafka7@gmail.com>,
+ =?UTF-8?Q?Manuel_V=c3=b6gele?= <develop@manuel-voegele.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Mauro Condarelli <mc5686@mclink.it>, Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
---enable-more-warnings has been dropped since version 1.22.0 and
-https://github.com/freedesktop/libmbim/commit/448e8fe7c50493c2c42399ed903906b9bb35d244
+ Hi Fabrice,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libmbim/libmbim.mk | 3 ---
- 1 file changed, 3 deletions(-)
+On 10/07/2021 23:55, Fabrice Fontaine wrote:
+> - Python 2 is not supported since version 3.0 so update all reverse
+>   dependencies and remove python-coherence
+> - License file name and its hash is updated due to:
+>   https://github.com/kjd/idna/commit/e7338bce90683246c480ddebd55b7682371389ed
+>   https://github.com/kjd/idna/commit/537aa99d4440b0f8a6178818350f27fcaab046ee
+> 
+> https://github.com/kjd/idna/blob/v3.2/HISTORY.rst
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-index e21194ca20..b343dec238 100644
---- a/package/libmbim/libmbim.mk
-+++ b/package/libmbim/libmbim.mk
-@@ -14,9 +14,6 @@ LIBMBIM_INSTALL_STAGING = YES
- 
- LIBMBIM_DEPENDENCIES = libglib2
- 
--# we don't want -Werror
--LIBMBIM_CONF_OPTS = --enable-more-warnings=no
--
- # if libgudev available, request udev support
- ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
- LIBMBIM_DEPENDENCIES += libgudev
--- 
-2.30.2
+ There were a bunch of conflicts due to the python-bcrypt update which partially
+did the same changes.
+
+ It would also have been nice to put the python-coherence removal in a separate
+patch, because this was really tricky to review in one shot.
+
+ But now it's just committed to master, thanks.
+
+ Regards,
+ Arnout
 
 _______________________________________________
 buildroot mailing list
