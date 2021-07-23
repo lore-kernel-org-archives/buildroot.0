@@ -8,87 +8,88 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5575C432BE
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 20:34:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC336C4338F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 20:34:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A1A6660F23
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 20:34:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A1A6660F23
+	by mail.kernel.org (Postfix) with ESMTPS id 73F6460BD3
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 20:34:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 73F6460BD3
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 762934060A;
-	Fri, 23 Jul 2021 20:34:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C2BC60715;
+	Fri, 23 Jul 2021 20:34:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qOUKg2fYzgGO; Fri, 23 Jul 2021 20:34:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a8QAYeOsDDfN; Fri, 23 Jul 2021 20:34:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AD01C40615;
-	Fri, 23 Jul 2021 20:34:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96DED60614;
+	Fri, 23 Jul 2021 20:34:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6B8591BF3FF
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 20:33:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7A2811BF3FF
+ for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 20:33:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE19483B5E
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 20:33:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6534683B5D
+ for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 20:33:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eCqcz7ouxjKs for <buildroot@lists.busybox.net>;
+ with ESMTP id SpK71bTfomt8 for <buildroot@lists.busybox.net>;
  Fri, 23 Jul 2021 20:33:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BAC7483B5D
- for <buildroot@busybox.net>; Fri, 23 Jul 2021 20:33:01 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id o3so1489140wms.1
- for <buildroot@busybox.net>; Fri, 23 Jul 2021 13:33:01 -0700 (PDT)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 764FA83B5B
+ for <buildroot@busybox.net>; Fri, 23 Jul 2021 20:33:02 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ m38-20020a05600c3b26b02902161fccabf1so4213485wms.2
+ for <buildroot@busybox.net>; Fri, 23 Jul 2021 13:33:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=Oc3sxAAn5x7i8hXAFtRw4VNUR15qdsEBCZOiSw4XCd4=;
- b=YaQAvma/oZ1vBs1ULnv5lvPr5WyEkclaPJp5K9p8j6oFm3aKJTJTpd1u7/wVo4REKt
- JJYUTi8ABn8RrxNhUTptkybB93FrTwvRK0WhjWbGGQVUna/QaMJf5zU0RLAj2AcBdxn9
- fD3skGOOzh0Y0U85QqtWJejGdyfCf7Jd1zcK+P1BnaX6HcqRp2cTqEQ+8n0Tbb0XLXNR
- axJFHUASEn9K58j6SfbBK9f5OAvj/bzb3/HjptKE6ltuCIw8dRp3/4mMlIf3TrKQygQv
- NA3rGt9JLNONDHgJ+1sfUKe3WB8AeuqLFiqYJtZh/vqmgCem1xw3mDuqLd/SFVOtIUVh
- 7H6Q==
+ bh=+9arwK6Sr17oKBzGeUoOGnoNtYwfB9ZozUIBr9dhcfI=;
+ b=aaUkdERhXfqg5McLr13XEW2JkUCw+MazV+FmLxHrQH95qHCTU/hJunhpBzI1MGQUjE
+ Zbab69G0yjTqEjYq1wMrDRk/1oDf9Zzf1p4B1PeFoLvvwci0yKN0kFioV1Cp/vW0Mt0F
+ Dcd9GWnA+yEMOSCCWl1ZDQVQPI7sQbmKlzO2Xzi9Zz+p/JNAeOsOvAf2M/O6gKHjF3sB
+ 2NMSFDXmVHoh7nXTHDWWVyzgP+b4jPnYOUXCFZWoeGCmeniZta78+v0/289cxuhpvFFp
+ 1o1I/r9K2ybOHj6inyt6Rug+veUu5ixnDCxBYyQEWoQlW/QQRcRv0w9s5DeZb6RHA4i6
+ gQ7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=Oc3sxAAn5x7i8hXAFtRw4VNUR15qdsEBCZOiSw4XCd4=;
- b=AUrnbb/890foipccoCqRL1RpblC+P28VgbtAQF71trWCXyy133fsyhqcChOznj321H
- ivoVSTqQB6QvbbAkWpJtxMSb1ukyyEXSxLdNfgLbFk0m6Qd6WNhF1wPNooi0w42hEHG8
- Ee6dMyhwPDzEj8gS0xxJM7f89TXjeXLEKddem5pDKWTbCVp5oPF7ePuOC/Jduepu94ly
- qaDTvdkJdXov6FsCjaM8AF6ny5oU/qY+CZQ3oDcMAfB9yBlxp1oCvVclgDcp1ln2gxxP
- zjjouBHDlQi4fjOSobWtglmF7CfqhEjt9rX1PgJp1SrkQGc2f2lmVkPNcSmMhQYPbZq1
- jzWw==
-X-Gm-Message-State: AOAM533ToyE4icPO2GgkA/w6IvlMRFEsl+11A3GB8PyKkfhOAl+ADYe/
- YECbBYHnKeAvt++Rirkau7I8yEWvns8=
-X-Google-Smtp-Source: ABdhPJx9KhuCEvT4/NNEIR52QRpR+hsCJ5z218uo0IYHfPi4XKkkT+WoY79nJvfTzcdFXMKb3yGzxA==
-X-Received: by 2002:a1c:7407:: with SMTP id p7mr5900304wmc.111.1627072379981; 
- Fri, 23 Jul 2021 13:32:59 -0700 (PDT)
+ bh=+9arwK6Sr17oKBzGeUoOGnoNtYwfB9ZozUIBr9dhcfI=;
+ b=XYMxp71P4vk9TlHYjYguCNP7FCR+a8awgpBNp30NVS3me5rcNS9iWGomZrtbL1D5Ri
+ U+cAwynlW4PzUcF/xvymCHdYEV3CHUAtLxhTYMRzOMpUdbvp3b8BXGurmWiFx4OpAhPo
+ tpLfJY3782h2F9QZeOPoTMpgObrtlFw4q2RNqteIbUMoq/O+ZPD/Clyj7SjwvLxdqnFO
+ 9mYIWc/BmrI5dBX+sSQkPABScujT6jmWp4P2q96elnA9J1WIZLrVUUYwaC7mrxJiU/C5
+ cOzySEDHzvSItmXwNDf1NUVdbgphpIQCkC45JVJNQlU8f1TfQgxPKPzwZTwDO6eIzl1p
+ mPbA==
+X-Gm-Message-State: AOAM533i2vja4l6MdogEw6pe/WUfHI/U1SK2B5VQtv9W7aEafhX1oeki
+ 2IOUE14H5DOzD873QIzQ/GAP26H1yOI=
+X-Google-Smtp-Source: ABdhPJwRUS09KKo2Z59qFHW5F+bO3S5dqv3fdojPTV9wgqB1W3QXoCUNcrEMMcDfVY33sm4rR4d2zw==
+X-Received: by 2002:a05:600c:2187:: with SMTP id
+ e7mr15776506wme.161.1627072380688; 
+ Fri, 23 Jul 2021 13:33:00 -0700 (PDT)
 Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id n17sm2128422wmo.18.2021.07.23.13.32.59
+ by smtp.gmail.com with ESMTPSA id n17sm2128422wmo.18.2021.07.23.13.33.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Jul 2021 13:32:59 -0700 (PDT)
+ Fri, 23 Jul 2021 13:33:00 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Fri, 23 Jul 2021 22:32:40 +0200
-Message-Id: <20210723203242.2531909-7-francois.perrad@gadz.org>
+Date: Fri, 23 Jul 2021 22:32:41 +0200
+Message-Id: <20210723203242.2531909-8-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210723203242.2531909-1-francois.perrad@gadz.org>
 References: <20210723203242.2531909-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 7/9]
- package/perl-mojolicious-plugin-authorization: bump to version 1.06
+Subject: [Buildroot] [PATCH 8/9] package/perl-net-dns: bump to version 1.32
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,42 +106,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-LICENSE was reformated, the copyright holder is unchanged:
-This software is copyright (c) 2012 by John Scoles.
+now, LICENSE lives in its own file.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../perl-mojolicious-plugin-authorization.hash              | 6 +++---
- .../perl-mojolicious-plugin-authorization.mk                | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-net-dns/perl-net-dns.hash | 6 +++---
+ package/perl-net-dns/perl-net-dns.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash
-index c55eefe2f..30bf87bad 100644
---- a/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash
-+++ b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index a6236357e..916603e71 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    9c009599cf397e3eacf5d7cd0dec45b8 Mojolicious-Plugin-Authorization-1.05.tar.gz
--sha256 87f84092d5698595ad0d01e745eca1d6affd1f3d662786f39f3583c54ffed0e3 Mojolicious-Plugin-Authorization-1.05.tar.gz
-+md5  7906886e2a66b84bb3c0edd7ea85c485  Mojolicious-Plugin-Authorization-1.06.tar.gz
-+sha256  d21ee5ab5fd8c630bc28ce001f9c91bba500370baf7cc8f6f60c9a4e051f9a6c  Mojolicious-Plugin-Authorization-1.06.tar.gz
+-md5  2a0364cea1ab6c1134506921d909f393  Net-DNS-1.31.tar.gz
+-sha256  00024a8e371605c6d8422a27a0a87af8b7cf66f26502102e68ddd4baf7cfc615  Net-DNS-1.31.tar.gz
++md5  e8ee02ec42dfeb10ae4a0d175d5fcafc  Net-DNS-1.32.tar.gz
++sha256  b890a7b44d573f27cc713caadf1e12eaaa4478a6504d1157194df614316b5b50  Net-DNS-1.32.tar.gz
  
  # computed by scancpan
--sha256 fd9632faca5a3d6af4cb9cf776514de87d2b34bff3a6cf06c23eea0f9cc3ab06 LICENSE
-+sha256  dfab85cd06e80a3493217a1dc741cf9065417d2e803d50756f013c0b6cb0cb3e  LICENSE
-diff --git a/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk
-index 3fcee08a4..f136be3ba 100644
---- a/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk
-+++ b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk
-@@ -4,7 +4,7 @@
+-sha256  e4f3224d86bd79ac3d11ea513fcb83c68c20701346653699225331e2b7a2d447  README
++sha256  1e44fcf65509b47a251eda0ce1f8bd6aefa13517e38cb1e95b8d36120fb15452  LICENSE
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index 7be1b822c..afba3e216 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_VERSION = 1.05
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_VERSION = 1.06
- PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_SOURCE = Mojolicious-Plugin-Authorization-$(PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_VERSION).tar.gz
- PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_SITE = $(BR2_CPAN_MIRROR)/authors/id/B/BY/BYTEROCK
- PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_DEPENDENCIES = host-perl-module-build
+-PERL_NET_DNS_VERSION = 1.31
++PERL_NET_DNS_VERSION = 1.32
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_LICENSE = MIT
+-PERL_NET_DNS_LICENSE_FILES = README
++PERL_NET_DNS_LICENSE_FILES = LICENSE
+ PERL_NET_DNS_DISTNAME = Net-DNS
+ 
+ $(eval $(perl-package))
 -- 
 2.30.2
 
