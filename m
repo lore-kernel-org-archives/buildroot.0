@@ -8,81 +8,79 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86430C4338F
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 16:01:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0230C4338F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 16:05:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0D28560EB5
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 16:01:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0D28560EB5
+	by mail.kernel.org (Postfix) with ESMTPS id 8935060725
+	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 16:05:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8935060725
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B57B660A41;
-	Fri, 23 Jul 2021 16:01:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 438C8814B6;
+	Fri, 23 Jul 2021 16:05:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z2uBXdgBlpH5; Fri, 23 Jul 2021 16:01:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wepNU_iXi_Yv; Fri, 23 Jul 2021 16:05:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FF8160BB1;
-	Fri, 23 Jul 2021 16:01:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A35811BF275
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 16:01:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0CC5881959;
+	Fri, 23 Jul 2021 16:05:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2212D1BF299
+ for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 16:05:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E54540583
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 16:01:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 069958194A
+ for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 16:05:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DLJfQCYw9U2Y for <buildroot@lists.busybox.net>;
- Fri, 23 Jul 2021 16:01:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9bWoN9w-YFFb for <buildroot@lists.busybox.net>;
+ Fri, 23 Jul 2021 16:05:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 190B34012E
- for <buildroot@buildroot.org>; Fri, 23 Jul 2021 16:01:30 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id ga41so4272801ejc.10
- for <buildroot@buildroot.org>; Fri, 23 Jul 2021 09:01:29 -0700 (PDT)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 87630814B6
+ for <buildroot@buildroot.org>; Fri, 23 Jul 2021 16:05:11 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id hq13so4395298ejc.7
+ for <buildroot@buildroot.org>; Fri, 23 Jul 2021 09:05:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=WVwz1GBHY7hH4uW/5oi+doB8sfLu4FhiXALTDZpbLjg=;
- b=ErCYQKM9aGViuw8kUBAMJdc6OxO8oj0z6672G11nknHBzyqQe7fU2ebf3auy/no4jL
- tjGtb3ELpnQCddy2QNyMAnKULqTdd/o5cRlDDTUmgFKahFw/5I8JV4yJGd5ai84gVCwb
- 39sr8u2WnRw6XCk5orLmLZF1/mT8+CAcDlClethM/thb8cE8jjoo0AHro8P/mNaOjQpZ
- t8VyEzgnshY/uH3F3IIWllpfHggNKTdLGqVxMQDLXXhPsNjme42bBK+LejzuA8+j7m+q
- rK7+BF6/Ko7051vETo2XRthlA73IBY90rqeV3z1vvdRdnKN76dZUhVbnwdH9zUxFZAJ7
- rQdg==
+ bh=BSz8xBpWwTvuPlv5eWjqGuSAfgw/PJa4ceMrZoEFjvQ=;
+ b=a+bkWxyrs6iKzRj5AEJdQu9SSPz1gS+t2wiw6rOBtxFGaJ87pi0OP2UH+yL4ZoO1nw
+ Ek6Tb8+3Rp9sXGqk9q0W/aXvkSSDzC3pT6Ujq8NDXl3K6aXJrZjgl2b3Z5yvJ6DgZh6Y
+ d8Xz78BZwUHNjdkGH+sNUUhK6CakMw3UMrFu1gLMwoAj5TCSoSeahBjR+4HdQHRdzZCn
+ E0njqivXfSfOfU2jMeX34QQ/hP3uP8BDBJ5Qb6toickiTLKS+/wrsBDyr85+Cbxr/7Xr
+ 0i+ZfSaQQqttOdHSizHrt96Ikaz/CEr262lrUQuu9I9nRSQJ45lkxsT7Q7aZgiwhgEzv
+ 2AFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=WVwz1GBHY7hH4uW/5oi+doB8sfLu4FhiXALTDZpbLjg=;
- b=l2HvesX8dAlWSw8dCL0AbE4fOl308Rnn3yNhmxnxBQRLi7avXRHGIkf6pZolArVbYo
- 74IRsfPp6ElzQ12+vxNeIkyjOso+PQiUJT6ZQGxhD1pUScGuo0QF11LfI/eoq+oc3riO
- TUOHlF13jxJ5rJ5cvLCkSLrr4WMj5jLRYZQE2ni16vbGqQUVhuKKjLb7GPELEknVBDRG
- uBOduy6DQjPBNhQKvMeQ2RycI4+ys0lR3rt11ynJgAlPKuwDT0J4vtU/jktt5YvBEXFd
- KW2Md6jYnC3CoKxUL3UNLjZ/x/YcnGWyUpitRcMPYyzVxb6WPhxLbExDaLx0R/vFUelw
- XXkg==
-X-Gm-Message-State: AOAM5317JMcoQA4qkljrecVVGtpcFmhg/ux1WGYDn5lOjOuglRO4y/kD
- cFLWmv6OhotWAD+S7BhpaGMVRYz2YIe/YQ==
-X-Google-Smtp-Source: ABdhPJztUI6nTEjAAfZlGmt3/WH4WTxTJ6CaZNdrpqqdRa3bJbL41Bl8RP+HR7RtIVwbrneHbM8zEA==
-X-Received: by 2002:a17:906:e1a:: with SMTP id
- l26mr5293587eji.129.1627056087823; 
- Fri, 23 Jul 2021 09:01:27 -0700 (PDT)
+ bh=BSz8xBpWwTvuPlv5eWjqGuSAfgw/PJa4ceMrZoEFjvQ=;
+ b=iv0DAr9XyBTxYAv/deeHPlRUqhSaI1EEOSA4dS6KCu1ukiNKatJUKpuIafW+CUk35D
+ lLE1ftj8jkiPTV2t4WZIuZA5+T3o1l3FT2+yJSZ5j0mRq1sNzvSRKzfSB9Dek5SXLVks
+ ypA7CEUr563PjQpw/yveQw1kRDTxhyuWkEiswfPu9stN7RrgaT8wmJiMPnQGgMnEO+pl
+ /BvKniP9/4koB58ALFzYDWD0LnVuq0dnSq6D7JuYPHxa20j0F5KXzrEXWHOMR77IeH0O
+ bzpgQh3rBCvHf+fs2MmbiF+HupSJnusrSacVoFUBMhez3aw3onDzgqF669LZzahdUO3H
+ bZ+w==
+X-Gm-Message-State: AOAM530s25fUqW7l89AIo/GFKBZi5qg+fjFA2vwyJQMrpJL26Z2DmfRC
+ mqpRQDQCm1t7HfmM7kGrjQOg52rKCZVg3A==
+X-Google-Smtp-Source: ABdhPJw7trekCWHsFDv+BZfBa/wJv+1TcBCtZRmvWSCx6ockhWZvRst5FkCMEDA+L/tKKxS4ufTBew==
+X-Received: by 2002:a17:906:c34b:: with SMTP id
+ ci11mr5444975ejb.223.1627056308368; 
+ Fri, 23 Jul 2021 09:05:08 -0700 (PDT)
 Received: from localhost.localdomain ([37.214.36.207])
- by smtp.gmail.com with ESMTPSA id c17sm14016672edv.6.2021.07.23.09.01.27
+ by smtp.gmail.com with ESMTPSA id n26sm9720816eds.63.2021.07.23.09.05.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Jul 2021 09:01:27 -0700 (PDT)
+ Fri, 23 Jul 2021 09:05:08 -0700 (PDT)
 From: Yauheni Saldatsenka <eugentoo@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Jul 2021 19:00:58 +0300
-Message-Id: <20210723160058.486695-1-eugentoo@gmail.com>
+Date: Fri, 23 Jul 2021 19:04:22 +0300
+Message-Id: <20210723160422.490090-1-eugentoo@gmail.com>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Subject: [Buildroot] [PATCH 1/1] board/stm32f469-disco: update board
@@ -108,13 +106,8 @@ Update STM32F469-disco configuration files to operate with new kernel.
 
 Result of make tinyconfig was taken as a starting point to fit kernel
 into flash memory.
-Current setup fits in 2MB on-chip flash memory with rootfs
-offloaded to MMC card.
+Current setup kernel + rootfs fits in 1.6MB on-chip flash memory
 
-Kernel features enabled:
-    - MMC card driver
-    - DRM MIPI-DSI drivers
-    - Random number generator
 Fixes:
     - Move kernel to new flash bank due to growth of dtb size
     - Fix kernel start address in bootloader
