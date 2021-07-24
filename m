@@ -2,56 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F348CC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CDB6C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:29:28 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B113260F46
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:29:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B113260F46
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 4D98460F56
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:29:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4D98460F56
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 826AB401F5;
-	Wed,  4 Aug 2021 00:29:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A3214063D;
+	Wed,  4 Aug 2021 00:29:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YJQxwG1_3FCc; Wed,  4 Aug 2021 00:29:10 +0000 (UTC)
+	with ESMTP id WOkmrt0NjVwP; Wed,  4 Aug 2021 00:29:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F3984063D;
-	Wed,  4 Aug 2021 00:29:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E8B13405A9;
+	Wed,  4 Aug 2021 00:29:22 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 15C431BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 26E561BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D44DA414EC
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8DC1414ED
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1S72HYG6L5aF for <buildroot@lists.busybox.net>;
+ with ESMTP id A2GaMK94JFCK for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2BED9404A8
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9243E40EC5
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7CF1D83FBA; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id E88A382BC5; Tue,  3 Aug 2021 21:10:15 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 10:01:46 +0200
+Date: Sat, 24 Jul 2021 22:27:32 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 94640cc8e9e306de38675dde23c23771b8ba65da
-X-Git-Newrev: dfa4a4dd2a9495ac7aabefb7c45f2c74bf1eab2e
+X-Git-Oldrev: d5ce3b5db5403f9d04faee02f33acc0fc48b2d41
+X-Git-Newrev: 9dfbbbb4105c47602da048c9bb9499fb8862e768
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211016.7CF1D83FBA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/netsnmp: fix legal info
+Message-Id: <20210803211015.E88A382BC5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gtest: bump to version
+ 1.11.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,30 +70,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfa4a4dd2a9495ac7aabefb7c45f2c74bf1eab2e
+commit: https://git.buildroot.net/buildroot/commit/?id=9dfbbbb4105c47602da048c9bb9499fb8862e768
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 87bef179222e wrongly removed hash of COPYING
+Python is removed as dependency.
+gtest uses python for self-tests which are not run by buildroot,
+and the remaining scripts are not used by the build, and aren't
+maintained or supported.
 
-Fixes: 87bef179222ee8a0b0f39c8f96113a4ecf813085
+Special handling for gtest-config and gmock-config is removed as well,
+the CMake Buildsystem now does take care of those.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+[Arnout: still install gmock_gen.py]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/netsnmp/netsnmp.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/gtest/gtest.hash |  4 ++--
+ package/gtest/gtest.mk   | 40 +---------------------------------------
+ 2 files changed, 3 insertions(+), 41 deletions(-)
 
-diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
-index e3adb28c6d..9d196c8bee 100644
---- a/package/netsnmp/netsnmp.hash
-+++ b/package/netsnmp/netsnmp.hash
-@@ -2,3 +2,6 @@
- # https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9/net-snmp-5.9.tar.gz.asc
- # using key D0F8F495DA6160C44EFFBF10F07B9D2DACB19FD6
- sha256  04303a66f85d6d8b16d3cc53bde50428877c82ab524e17591dfceaeb94df6071  net-snmp-5.9.tar.gz
-+
-+# Hash for license file
-+sha256  ed869ea395a1f125819a56676385ab0557a21507764bf56f2943302011381e59  COPYING
+diff --git a/package/gtest/gtest.hash b/package/gtest/gtest.hash
+index 082c597780..d21fea7142 100644
+--- a/package/gtest/gtest.hash
++++ b/package/gtest/gtest.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	9dc9157a9a1551ec7a7e43daea9a694a0bb5fb8bec81235d8a1e6ef64c716dcb	gtest-1.10.0.tar.gz
+-sha256	9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138	googletest/LICENSE
++sha256  b4870bf121ff7795ba20d20bcdd8627b8e088f2d1dab299a031c1034eddc93d5  gtest-1.11.0.tar.gz
++sha256  9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  LICENSE
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+index f8b2339d7e..3e8220cddf 100644
+--- a/package/gtest/gtest.mk
++++ b/package/gtest/gtest.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GTEST_VERSION = 1.10.0
++GTEST_VERSION = 1.11.0
+ GTEST_SITE = $(call github,google,googletest,release-$(GTEST_VERSION))
+ GTEST_INSTALL_STAGING = YES
+ GTEST_INSTALL_TARGET = NO
+@@ -21,10 +21,8 @@ HOST_GTEST_LICENSE = Apache-2.0
+ HOST_GTEST_LICENSE_FILES = googlemock/scripts/generator/LICENSE
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ HOST_GTEST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
+-HOST_GTEST_DEPENDENCIES += host-python3
+ else
+ HOST_GTEST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
+-HOST_GTEST_DEPENDENCIES += host-python
+ endif
+ 
+ HOST_GTEST_GMOCK_PYTHONPATH = \
+@@ -48,44 +46,8 @@ endif
+ 
+ GTEST_CONF_OPTS += -DBUILD_GTEST=ON
+ 
+-# Generate the gtest-config script manually, since the CMake build system is
+-# not doing it.
+-define GTEST_INSTALL_GTEST_CONFIG
+-	sed 's%@PACKAGE_TARNAME@%gtest%;\
+-		s%@PACKAGE_VERSION@%$(GTEST_VERSION)%;\
+-		s%@prefix@%$(STAGING_DIR)/usr%;\
+-		s%@exec_prefix@%$(STAGING_DIR)/usr%;\
+-		s%@libdir@%$(STAGING_DIR)/usr/lib%;\
+-		s%@includedir@%$(STAGING_DIR)/usr/include%;\
+-		s%@bindir@%$(STAGING_DIR)/usr/bin%;\
+-		s%@PTHREAD_CFLAGS@%%;\
+-		s%@PTHREAD_LIBS@%-lpthread%;' \
+-		$(@D)/googletest/scripts/gtest-config.in \
+-		> $(STAGING_DIR)/usr/bin/gtest-config
+-	chmod +x $(STAGING_DIR)/usr/bin/gtest-config
+-endef
+-GTEST_POST_INSTALL_STAGING_HOOKS = GTEST_INSTALL_GTEST_CONFIG
+-
+ ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
+ GTEST_CONF_OPTS += -DBUILD_GMOCK=ON
+-
+-# Generate the gmock-config script manually, since the CMake build system is
+-# not doing it.
+-define GTEST_INSTALL_GMOCK_CONFIG
+-	sed 's%@PACKAGE_TARNAME@%gmock%;\
+-		s%@PACKAGE_VERSION@%$(GTEST_VERSION)%;\
+-		s%@prefix@%$(STAGING_DIR)/usr%;\
+-		s%@exec_prefix@%$(STAGING_DIR)/usr%;\
+-		s%@libdir@%$(STAGING_DIR)/usr/lib%;\
+-		s%@includedir@%$(STAGING_DIR)/usr/include%;\
+-		s%@bindir@%$(STAGING_DIR)/usr/bin%;\
+-		s%@PTHREAD_CFLAGS@%%;\
+-		s%@PTHREAD_LIBS@%-lpthread%;' \
+-		$(@D)/googlemock/scripts/gmock-config.in \
+-		> $(STAGING_DIR)/usr/bin/gmock-config
+-	chmod +x $(STAGING_DIR)/usr/bin/gmock-config
+-endef
+-GTEST_POST_INSTALL_STAGING_HOOKS += GTEST_INSTALL_GMOCK_CONFIG
+ else
+ GTEST_CONF_OPTS += -DBUILD_GMOCK=OFF
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
