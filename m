@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3F6DC432BE
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:24:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCD1CC432BE
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:24:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6841F60F94
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:24:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6841F60F94
+	by mail.kernel.org (Postfix) with ESMTPS id 9306B60F8F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:24:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9306B60F8F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 448A481A34;
-	Wed,  4 Aug 2021 00:24:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A0B740378;
+	Wed,  4 Aug 2021 00:24:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cHMIKy8bb2sZ; Wed,  4 Aug 2021 00:24:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yUoPZsYJWn5a; Wed,  4 Aug 2021 00:24:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DF1981A64;
-	Wed,  4 Aug 2021 00:24:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA983402C5;
+	Wed,  4 Aug 2021 00:24:31 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9475F1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A62421BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A2EE740EB1
+ by smtp2.osuosl.org (Postfix) with ESMTP id B9751414A2
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tjiJObXD6a-P for <buildroot@lists.busybox.net>;
+ with ESMTP id b1o7eUaGC6hu for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88B8240EB6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7BA9440F2B
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id DCCB783FBA; Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
+ id D2E8481484; Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Jul 2021 09:50:11 +0200
+Date: Sat, 24 Jul 2021 09:46:57 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a87d99af2f88eb2755959163727584f673483748
-X-Git-Newrev: 4fdc88d5a6bab95082f84f2e346b61a1f6975562
+X-Git-Oldrev: 8eea07df198e1eebc2883a24292825a491c0a8c8
+X-Git-Newrev: a87d99af2f88eb2755959163727584f673483748
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211014.DCCB783FBA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/perl-data-dump: bump
- to version 1.25
+Message-Id: <20210803211014.D2E8481484@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libinput: bump version
+ to 1.18.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,53 +70,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fdc88d5a6bab95082f84f2e346b61a1f6975562
+commit: https://git.buildroot.net/buildroot/commit/?id=a87d99af2f88eb2755959163727584f673483748
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-README rewritten in README.md, but same copyright holders:
-    Copyright 1998-2010 Gisle Aas.
-    Copyright 1996-1998 Gurusamy Sarathy.
+For details see [1].
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[1] https://lists.freedesktop.org/archives/wayland-devel/2021-June/041849.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-data-dump/perl-data-dump.hash | 6 +++---
- package/perl-data-dump/perl-data-dump.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/libinput/libinput.hash | 6 +++---
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-data-dump/perl-data-dump.hash b/package/perl-data-dump/perl-data-dump.hash
-index 87850326de..cc1986e744 100644
---- a/package/perl-data-dump/perl-data-dump.hash
-+++ b/package/perl-data-dump/perl-data-dump.hash
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 038859289a..de8e94f9fa 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
 @@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    762c111e525c82ff23d62c90821b26e9 Data-Dump-1.23.tar.gz
--sha256 af53b05ef1387b4cab4427e6789179283e4f0da8cf036e8db516ddb344512b65 Data-Dump-1.23.tar.gz
-+md5  9bd7131ef0441e1e0e001bf85e9fae31  Data-Dump-1.25.tar.gz
-+sha256  a4aa6e0ddbf39d5ad49bddfe0f89d9da864e3bc00f627125d1bc580472f53fbd  Data-Dump-1.25.tar.gz
+-# From https://lists.freedesktop.org/archives/wayland-devel/2021-May/041834.html
+-sha256  0d010e0bf601b5d3a06b3c4d77d67751cf554f3e6448e57aa046ea9ee8f818ac  libinput-1.17.3.tar.xz
+-sha512  3d1ab4362ede886996795d700a938d20e04cd922e8f9598fe9346f9f93e149119526fb324a096787b4b8a47bf3e5613130bcd874f10df86761031710d2acc792  libinput-1.17.3.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2021-June/041849.html
++sha256  18c6a286583268d39841348e561fbb4713bde0c643b360f5d8a3f27800afdb9a  libinput-1.18.0.tar.xz
++sha512  9a834f075d7a1f892416bb6b241eb052f749d3aa883c4b39c0f1c9616c115d6b9a541b587508646fddaf0d3fe57af92fe4629b522d1d51196499e7b523e0aa90  libinput-1.18.0.tar.xz
  
- # computed by scancpan
--sha256 31d1b6482bcc3db87a38ad02065554f9d3bc13321d4ef8e96042464045e2abcf README
-+sha256  8bdd655ceab54bbeb1105a101f0412ec764098abf09b4e92bc430d56befa10cb  README.md
-diff --git a/package/perl-data-dump/perl-data-dump.mk b/package/perl-data-dump/perl-data-dump.mk
-index 54d3a925fe..e70de2a211 100644
---- a/package/perl-data-dump/perl-data-dump.mk
-+++ b/package/perl-data-dump/perl-data-dump.mk
-@@ -4,11 +4,11 @@
+ # License files
+ sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 8ce60c8639..32b822edb7 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_DATA_DUMP_VERSION = 1.23
-+PERL_DATA_DUMP_VERSION = 1.25
- PERL_DATA_DUMP_SOURCE = Data-Dump-$(PERL_DATA_DUMP_VERSION).tar.gz
--PERL_DATA_DUMP_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_DATA_DUMP_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GARU
- PERL_DATA_DUMP_LICENSE = Artistic or GPL-1.0+
--PERL_DATA_DUMP_LICENSE_FILES = README
-+PERL_DATA_DUMP_LICENSE_FILES = README.md
- PERL_DATA_DUMP_DISTNAME = Data-Dump
- 
- $(eval $(perl-package))
+-LIBINPUT_VERSION = 1.17.3
++LIBINPUT_VERSION = 1.18.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
