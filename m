@@ -2,78 +2,56 @@ Return-Path: <SRS0=+dJA=MQ=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 063DFC4338F
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 21:21:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A32BC4338F
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 21:29:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9E68160E92
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 21:21:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9E68160E92
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 0DA2A60E90
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 21:29:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0DA2A60E90
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74235606A7;
-	Sat, 24 Jul 2021 21:21:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4B8B4041F;
+	Sat, 24 Jul 2021 21:29:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3IeLOg3C1FML; Sat, 24 Jul 2021 21:21:17 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BABA1605F7;
-	Sat, 24 Jul 2021 21:21:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D7D0B1BF2AA
- for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 21:21:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D450640372
- for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 21:21:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4kVQVV7w9NaP for <buildroot@lists.busybox.net>;
- Sat, 24 Jul 2021 21:21:13 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A421240350
- for <buildroot@buildroot.org>; Sat, 24 Jul 2021 21:21:13 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:4802:7ee4:40b0:1519])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 6A8BD7802FE;
- Sat, 24 Jul 2021 23:21:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1627161670;
- bh=5CWNkKzC76LxmjSyDaUOYWJoHuvZdM7zC9NAeJzvviE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=L9OwCNNx+OsQi0nLYx9Vq6IW2hA+Y/gAoJWFZWwejJc3GjfkoQyhgQGrRk/wsBrBR
- yNttUvynpnPNpRg8uxObEJg6BQD+dwb0MXsf2QN0xO5vYzTIMms4oQHOL4XpZs61eI
- Z/+GFkV9iByAFo9272YAtZUSvizRjKw7rUFq0xiEbw6e18qcf1jivRPuHam6x7ahav
- TSKTZdi8Zn/3+JnSt0jJ018lQ42oDLsAZJ/uFNv/NkUtE85R7GgspzZL4pD7jo8+Zr
- x4Y+lroRrA6hrVCXvdlaLWmDeygTZOQ+YC2J9kgt/xi2JagKhwZjV5HlO+km1BXyYr
- oL8qZP9fFgLoA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 24 Jul 2021 23:21:02 +0200
-Date: Sat, 24 Jul 2021 23:21:02 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20210724212102.GK2382418@scaer>
-References: <20210703194001.693553-1-thomas.petazzoni@bootlin.com>
- <20210704080555.GA2521@scaer>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210704080555.GA2521@scaer>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/2] boot/, linux/,
- package/: improve help text of kconfig packages
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GcFjdVqwqMBg; Sat, 24 Jul 2021 21:29:44 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 714AE40423;
+	Sat, 24 Jul 2021 21:29:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E105F1BF2AA
+ for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 21:29:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9126834D5
+ for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 21:29:41 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id clKEYL36TSjl for <buildroot@lists.busybox.net>;
+ Sat, 24 Jul 2021 21:29:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 12344834B6
+ for <buildroot@buildroot.org>; Sat, 24 Jul 2021 21:29:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 167CA88D22; Sat, 24 Jul 2021 20:55:13 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Sat, 24 Jul 2021 23:29:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 82712c5862badbc905346afb6ad08c4d4ff47dfb
+X-Git-Newrev: db1ded10846f25ee93d2010394c3ba0fecad6719
+X-Patchwork-Hint: ignore
+Message-Id: <20210724205513.167CA88D22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add polkit tests
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,45 +63,262 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Simon Dawson <spdawson@gmail.com>, Buildroot List <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=db1ded10846f25ee93d2010394c3ba0fecad6719
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-07-04 10:05 +0200, Yann E. MORIN spake thusly:
-> On 2021-07-03 21:39 +0200, Thomas Petazzoni spake thusly:
-> > The <pkg>_HELP_CMDS variable allows packages using the kconfig-package
-> > infrastructure to display their specific targets related to the
-> > handling of their configuration.
-> > 
-> > However, it was not consistently used and handled by the different
-> > packages. This commit makes sure all packages using kconfig-package
-> > have that help text, and that is does reflect which targets are
-> > available/usable.
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> I wonder wy we can't have that generated automatically by the
-> kconfig-package infra, rather than repeast it in all packages.
+This test script tests polkit with and without systemd.
 
-I've now sent a proposal for review:
+The Systemd test does the following:
+  - The brtest user attempts to restart the systemd-timesyncd service and is
+    denied.
 
-    https://patchwork.ozlabs.org/project/buildroot/list/?series=255056
+  - A systemd-timesyncd-restart.rules file provided by polkit-rules-test
+    is copied from /root/ to /etc/polkit-1/rules.d
 
-Regards,
-Yann E. MORIN.
+  - The brtest user attempts to restart the systemd-timesyncd service and should
+    now succeed.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+The initd test does the following:
+- The brtest user attempts to run the test application "hello-polkit" with the
+  command "pkexec hello-polkit" and is denied.
+
+- A hello-polkit.rules file provided by polkit-rules-test is copied from /root/
+  to /etc/polkit-1/rules.d
+
+- The brtest user attempts to re-run the test hello-polkit binary with
+  "pkexec hello-polkit" and succeeds.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../tests/package/br2-external/polkit/Config.in    |  1 +
+ .../package/br2-external/polkit/external.desc      |  1 +
+ .../tests/package/br2-external/polkit/external.mk  |  1 +
+ .../polkit/package/polkit-rules-test/Config.in     |  6 ++
+ .../package/polkit-rules-test/initd/hello-polkit.c |  6 ++
+ .../polkit-rules-test/initd/hello-polkit.policy    | 14 +++++
+ .../polkit-rules-test/initd/hello-polkit.rules     |  6 ++
+ .../package/polkit-rules-test/polkit-rules-test.mk | 38 ++++++++++++
+ .../systemd/systemd-timesyncd-restart.rules        |  7 +++
+ support/testing/tests/package/test_polkit.py       | 70 ++++++++++++++++++++++
+ 10 files changed, 150 insertions(+)
+
+diff --git a/support/testing/tests/package/br2-external/polkit/Config.in b/support/testing/tests/package/br2-external/polkit/Config.in
+new file mode 100644
+index 0000000000..2d11756193
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/polkit/Config.in
+@@ -0,0 +1 @@
++source "$BR2_EXTERNAL_POLKIT_PATH/package/polkit-rules-test/Config.in"
+diff --git a/support/testing/tests/package/br2-external/polkit/external.desc b/support/testing/tests/package/br2-external/polkit/external.desc
+new file mode 100644
+index 0000000000..ecef48692b
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/polkit/external.desc
+@@ -0,0 +1 @@
++name: POLKIT
+diff --git a/support/testing/tests/package/br2-external/polkit/external.mk b/support/testing/tests/package/br2-external/polkit/external.mk
+new file mode 100644
+index 0000000000..64e369cce4
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/polkit/external.mk
+@@ -0,0 +1 @@
++include $(sort $(wildcard $(BR2_EXTERNAL_POLKIT_PATH)/package/*/*.mk))
+diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/Config.in b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/Config.in
+new file mode 100644
+index 0000000000..0fe125ec8f
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_POLKIT_RULES_TEST
++	bool "polkit rules test"
++	depends on BR2_PACKAGE_POLKIT
++	help
++	  Simple test to ensure polkit is loading and enforcing rules
++	  correctly.
+diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/initd/hello-polkit.c b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/initd/hello-polkit.c
+new file mode 100644
+index 0000000000..cf5343cd75
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/initd/hello-polkit.c
+@@ -0,0 +1,6 @@
++#include <stdio.h>
++
++int main(void){
++    printf("Hello polkit!\n");
++    return 0;
++}
+diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/initd/hello-polkit.policy b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/initd/hello-polkit.policy
+new file mode 100644
+index 0000000000..8220293175
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/initd/hello-polkit.policy
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE policyconfig PUBLIC
++ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
++ "http://www.freedesktop.org/software/polkit/policyconfig-1.dtd">
++<policyconfig>
++  <action id="org.freedesktop.policykit.pkexec.hello-polkit">
++    <message>Authentication is required to run the hello world test program</message>
++    <defaults>
++      <allow_inactive>no</allow_inactive>
++      <allow_active>no</allow_active>
++    </defaults>
++    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/hello-polkit</annotate>
++  </action>
++</policyconfig>
+diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/initd/hello-polkit.rules b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/initd/hello-polkit.rules
+new file mode 100644
+index 0000000000..a0a66f644d
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/initd/hello-polkit.rules
+@@ -0,0 +1,6 @@
++polkit.addRule(function(action, subject) {
++   if (action.id == "org.freedesktop.policykit.pkexec.hello-polkit" &&
++       subject.user == "brtest") {
++       return polkit.Result.YES;
++   }
++});
+diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/polkit-rules-test.mk b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/polkit-rules-test.mk
+new file mode 100644
+index 0000000000..4ec3805ee3
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/polkit-rules-test.mk
+@@ -0,0 +1,38 @@
++################################################################################
++#
++# polkit-rules-test
++#
++################################################################################
++
++POLKIT_RULES_TEST_DEPENDENCIES = polkit
++
++define POLKIT_RULES_TEST_USERS
++	brtest  -1  brtest  -1   =password  /home/brtest /bin/sh brtest
++endef
++
++define POLKIT_RULES_TEST_BUILD_CMDS
++	$(INSTALL) -D $(POLKIT_RULES_TEST_PKGDIR)/initd/hello-polkit.c $(@D)/hello-polkit.c
++	$(TARGET_CC) $(@D)/hello-polkit.c -o $(@D)/hello-polkit
++endef
++
++# Install the rules file to /root. Test_polkit.py first tests that restarting
++# timesyncd as a user fails, then moves the rules file and confirmes restarting
++# timesyncd as a user succeeds.
++define POLKIT_RULES_TEST_INSTALL_INIT_SYSTEMD
++	mkdir -p $(TARGET_DIR)/etc/polkit-1/rules.d
++	$(INSTALL) -D $(POLKIT_RULES_TEST_PKGDIR)/systemd/systemd-timesyncd-restart.rules \
++		$(TARGET_DIR)/root/systemd-timesyncd-restart.rules
++endef
++
++define POLKIT_RULES_TEST_INSTALL_INIT_SYSV
++	mkdir -p $(TARGET_DIR)/usr/share/polkit-1/actions/
++	$(INSTALL) -D $(@D)/hello-polkit $(TARGET_DIR)/usr/bin/hello-polkit
++
++	$(INSTALL) -D $(POLKIT_RULES_TEST_PKGDIR)/initd/hello-polkit.policy \
++		$(TARGET_DIR)/usr/share/polkit-1/actions/hello-polkit.policy
++
++	$(INSTALL) -D $(POLKIT_RULES_TEST_PKGDIR)/initd/hello-polkit.rules \
++		$(TARGET_DIR)/root/hello-polkit.rules
++endef
++
++$(eval $(generic-package))
+diff --git a/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/systemd/systemd-timesyncd-restart.rules b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/systemd/systemd-timesyncd-restart.rules
+new file mode 100644
+index 0000000000..9461195091
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/polkit/package/polkit-rules-test/systemd/systemd-timesyncd-restart.rules
+@@ -0,0 +1,7 @@
++polkit.addRule(function(action, subject) {
++    if (action.id == "org.freedesktop.systemd1.manage-units" &&
++        action.lookup("unit") == "systemd-timesyncd.service" &&
++        subject.user == "brtest") {
++        return polkit.Result.YES;
++    }
++});
+diff --git a/support/testing/tests/package/test_polkit.py b/support/testing/tests/package/test_polkit.py
+new file mode 100644
+index 0000000000..502d38d13e
+--- /dev/null
++++ b/support/testing/tests/package/test_polkit.py
+@@ -0,0 +1,70 @@
++import os
++import infra.basetest
++
++
++class TestPolkitInfra(infra.basetest.BRTest):
++    br2_external = [infra.filepath("tests/package/br2-external/polkit")]
++    config = \
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_PACKAGE_POLKIT=y
++        BR2_PACKAGE_POLKIT_RULES_TEST=y
++        """
++
++    def base_test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv7", kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++
++class TestPolkitSystemd(TestPolkitInfra):
++    config = \
++        """
++        {}
++        BR2_INIT_SYSTEMD=y
++        BR2_PACKAGE_SYSTEMD_POLKIT=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """.format(TestPolkitInfra.config)
++
++    def test_run(self):
++        TestPolkitInfra.base_test_run(self)
++
++        cmd = "su brtest -c '/bin/systemctl restart systemd-timesyncd.service'"
++        _, exit_code = self.emulator.run(cmd, 10)
++        self.assertEqual(exit_code, 1)
++
++        cmd = "mv /root/systemd-timesyncd-restart.rules /etc/polkit-1/rules.d"
++        _, exit_code = self.emulator.run(cmd, 10)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "su brtest -c '/bin/systemctl restart systemd-timesyncd.service'"
++        _, exit_code = self.emulator.run(cmd, 10)
++        self.assertEqual(exit_code, 0)
++
++
++class TestPolkitInitd(TestPolkitInfra):
++    config = TestPolkitInfra.config
++
++    def test_run(self):
++        TestPolkitInfra.base_test_run(self)
++
++        cmd = "su brtest -c 'pkexec hello-polkit'"
++        output, exit_code = self.emulator.run(cmd, 10)
++        self.assertEqual(exit_code, 127)
++        self.assertEqual(output[0], "Error executing command as another user: Not authorized")
++
++        cmd = "mv /root/hello-polkit.rules /etc/polkit-1/rules.d/hello-polkit.rules"
++        _, exit_code = self.emulator.run(cmd, 10)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "su brtest -c 'pkexec hello-polkit'"
++        output, exit_code = self.emulator.run(cmd, 10)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output[0], "Hello polkit!")
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
