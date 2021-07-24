@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 227B4C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 20:24:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C34F4C4338F
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 20:24:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CDB7D608FB
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 20:24:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CDB7D608FB
+	by mail.kernel.org (Postfix) with ESMTPS id 8974560E09
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 20:24:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8974560E09
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1E0B60636;
-	Sat, 24 Jul 2021 20:24:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BAFC4042F;
+	Sat, 24 Jul 2021 20:24:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mPqyCvNE7NcO; Sat, 24 Jul 2021 20:24:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zY2pMBLUrN5f; Sat, 24 Jul 2021 20:24:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1295160604;
-	Sat, 24 Jul 2021 20:24:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DBCC402CE;
+	Sat, 24 Jul 2021 20:24:22 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DFC521BF27E
- for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 20:24:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 081231BF95E
+ for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 20:24:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CE3FC403F2
- for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 20:24:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0453C402A8
+ for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 20:24:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1KYdR-1hzRry for <buildroot@lists.busybox.net>;
+ with ESMTP id YcNyfU5wu56d for <buildroot@lists.busybox.net>;
  Sat, 24 Jul 2021 20:24:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A80F402A8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4020C402CE
  for <buildroot@buildroot.org>; Sat, 24 Jul 2021 20:24:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 534CC8899D; Sat, 24 Jul 2021 19:49:41 +0000 (UTC)
+ id 7D2948899D; Sat, 24 Jul 2021 19:49:41 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Jul 2021 22:22:30 +0200
+Date: Sat, 24 Jul 2021 22:22:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8e436b6bfddf1aba090600de598d5c1a6e51654b
-X-Git-Newrev: e3c31814adaa3e773c310cd97e28ffea9b980a10
+X-Git-Oldrev: 8c474ffaad158230bf2d04ccf0544f5b3b1d5738
+X-Git-Newrev: 4254520f0aff3e744de2d23ff64e0c24ff974a27
 X-Patchwork-Hint: ignore
-Message-Id: <20210724194941.534CC8899D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/minidlna: add SELinux refpolicy
+Message-Id: <20210724194941.7D2948899D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openvpn: add SELinux refpolicy
  module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
@@ -70,30 +70,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3c31814adaa3e773c310cd97e28ffea9b980a10
+commit: https://git.buildroot.net/buildroot/commit/?id=4254520f0aff3e744de2d23ff64e0c24ff974a27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-SELinux support for minidlna is provided by the services/minidlna
-refpolicy module.
+SELinux support for openvpn is added by the services/openvpn refpolicy
+module.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/minidlna/minidlna.mk | 1 +
+ package/openvpn/openvpn.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index 86a2bb368d..adea200f4f 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
-@@ -10,6 +10,7 @@ MINIDLNA_LICENSE = GPL-2.0, BSD-3-Clause
- MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
- MINIDLNA_CPE_ID_VENDOR = readymedia_project
- MINIDLNA_CPE_ID_PRODUCT = readymedia
-+MINIDLNA_SELINUX_MODULES = minidlna
- 
- MINIDLNA_DEPENDENCIES = \
- 	$(TARGET_NLS_DEPENDENCIES) \
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index c07f8b4ff5..749a567e16 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -11,6 +11,7 @@ OPENVPN_DEPENDENCIES = host-pkgconf
+ OPENVPN_LICENSE = GPL-2.0
+ OPENVPN_LICENSE_FILES = COPYRIGHT.GPL
+ OPENVPN_CPE_ID_VENDOR = openvpn
++OPENVPN_SELINUX_MODULES = openvpn
+ OPENVPN_CONF_OPTS = \
+ 	--disable-unit-tests \
+ 	$(if $(BR2_STATIC_LIBS),--disable-plugins)
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
