@@ -8,85 +8,85 @@ X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A6F8C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 21:19:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF227C4338F
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 21:20:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C023360E92
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 21:19:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C023360E92
+	by mail.kernel.org (Postfix) with ESMTPS id 74D5860E95
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 21:20:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 74D5860E95
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C4238339C;
-	Sat, 24 Jul 2021 21:19:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D853401CE;
+	Sat, 24 Jul 2021 21:20:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZZog9oK9O1ns; Sat, 24 Jul 2021 21:19:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ORVXfVToaAbz; Sat, 24 Jul 2021 21:20:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC07683381;
-	Sat, 24 Jul 2021 21:19:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5CA4A1BF2AA
- for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 21:19:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3413B40184;
+	Sat, 24 Jul 2021 21:20:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DADD1BF2AA
+ for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 21:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4BF3A401BB
- for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 21:19:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 19EEE401E5
+ for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 21:19:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fYP9SCphh6cK for <buildroot@lists.busybox.net>;
- Sat, 24 Jul 2021 21:19:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NW2EBLln-P0D for <buildroot@lists.busybox.net>;
+ Sat, 24 Jul 2021 21:19:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 519C5401B3
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0767340130
  for <buildroot@buildroot.org>; Sat, 24 Jul 2021 21:19:27 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id n21so2875061wmq.5
+Received: by mail-wm1-x32d.google.com with SMTP id h15so2899574wmq.0
  for <buildroot@buildroot.org>; Sat, 24 Jul 2021 14:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=X3P0u3D9pFRqxq9ZvCO6RfxxT2OhaL4MSbiYpdc/tds=;
- b=n/huT8/hoxiLrBCP9Y4QEuJr4wq7Z+0OqV3qadXdliZBHHsGTLRJVMK65vF7xbGb3C
- Cu9ePomd8uftvAtQxeT3EY8y8R0cacizD6DOlzRJC+f4ThtM3rthseMLT5Yzc2bYkWcv
- zbA6qMA5OAB7VkxLzlAm6/he5SwTUiETAoTVJ4nSTipPqoteKkgejhpNrq4+he+MLFky
- mZmQG/7FriiieA40APDp/MdkV3cqTfxJeXGx5qm1dOyXyNvOTXR9yav1pBii0c1IoVJh
- pJY0EC1WwWdU7HheRO8mwRjcMt6hUlThimJ2s7/+PyNmqfRcC9e0dKDkWgvuiT9K2/Ps
- q4uA==
+ bh=ic/xQiG/e2ag8ng6UB/KIMBieQYusTlO93xYpyBUlD4=;
+ b=jR5j4aiLa9uUcn14aYuI+0m+6+FOGpYPy91Qy1E+MpbNJXK7fXoYNHgrNJsuN9lUC0
+ uY4T1AA5DwT5K2wJs0ebS4TZCK7bkTGE/hWQd33eHTaTQxLeXhVf8IJ+QP7p21ueN+n7
+ MXnoPgu4amcqxcUuxFTycMZgC53LWUuoVtul4NELVNTHCavYSVCrjCnKXo7zCHsYPSlH
+ Jtm4rMRZKPO8OozUqN+0EbRgoWtoDg5DLe31OlZ0kSJHIdQ928sEvFD03wbkyH+Oqd3Q
+ QxuDQDEHoa/XlA4mbSDQ/Qqfe0pfhro2WLGDTdGBzfY9eAv7GsyHUHM4bXfy9Cro9iFJ
+ W4YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
  :in-reply-to:references:mime-version:content-transfer-encoding;
- bh=X3P0u3D9pFRqxq9ZvCO6RfxxT2OhaL4MSbiYpdc/tds=;
- b=kwL3dD4Dyc3DNkYVi7At/Q/XtCA2x5EpQmNt2VfsBRJQOZ4Hsiztt/MQacNC/tQesv
- OW8olDeKccPbtA2Lw0l+C+hPKIGB70sFrRp94s1vSwPi4W7A27bPtqO+yQs7b9Xl/TM3
- eeVSH4L/pNS33uBBgnq7l7d1lYx6nWWV2GHefORK5uXnwld7pyhLJhu8LrQgudJMT3Wj
- BG8tRNFvYWb2YkHqGGrTaF4eoHHvolbAXMeTqseb3J5bh0z2gjZsLSiAZtOs7lUDTDOv
- KKh3Kw5YwHcLzvxlvBRbe/6oroi+CjdtfALWczJ9bu4A1wNGIx+HNyRXu6HW4R8Hp+1k
- L1mg==
-X-Gm-Message-State: AOAM533HycNMTiBDDYmL7f0ART2LUK1hZDTuCxXzjb1xH+sPAQ+lDOFM
- AY9OnKjwIyMZhaX1wucQYeeVxSM3rgc=
-X-Google-Smtp-Source: ABdhPJwgIlb7wRXwYkYHL5ZxWU0l/PJCb3lB5MvB8F/yu52pQyQVGBrHYfivv0vp41+nzJSQDfZOQw==
-X-Received: by 2002:a7b:c5c7:: with SMTP id n7mr5943677wmk.5.1627161565531;
- Sat, 24 Jul 2021 14:19:25 -0700 (PDT)
+ bh=ic/xQiG/e2ag8ng6UB/KIMBieQYusTlO93xYpyBUlD4=;
+ b=WEQKWIyHEqB39FN+NGsRfaEvxKDkxaOexBbNV5rZKT9rrOWPGyG5bmywWQhFoDTMY6
+ qze3jEB6RzHWg7mmKtPzZluIW7koR7iz56+R/V6jMXkQowtWa+2wC3B2LRBYrXgaODus
+ rUCvAJLpSvoMdX5kge4lB2AXD43u1kJhU8jj2eZFipvFV+N2H/ut6huNLbamXd9W0ba7
+ 0Nxc1coUaaSFpAyAViCWesGnAwXpmgmw9As+AUJ0SDY5u1AVXECGeZmemP09QyocIreT
+ Txt8hHTI5gJxIHOoixp7xWH1XpvsyRXAw5RhZjBWlBqTqICrx0LTWAEtQ/4mvcLItcUu
+ Q6XA==
+X-Gm-Message-State: AOAM533rRi+yaRoPLfAxkQ4q5c96/HCFkDolQ46m9eYVg3Te6Kfd/Dtf
+ KkwI+H0K6m6PKkKtecWY8hxiL4Sueks=
+X-Google-Smtp-Source: ABdhPJwuxT5dBQuiLfXjl9izMoLK0xEMljwsBih51ONPmeRCKFCn/qyUDzoBukN3ng8vx9sHmTflOQ==
+X-Received: by 2002:a05:600c:2104:: with SMTP id
+ u4mr10369377wml.45.1627161566255; 
+ Sat, 24 Jul 2021 14:19:26 -0700 (PDT)
 Received: from scaer.home ([2a01:cb19:8b51:cb00:4802:7ee4:40b0:1519])
- by smtp.gmail.com with ESMTPSA id o5sm8469908wms.43.2021.07.24.14.19.24
+ by smtp.gmail.com with ESMTPSA id o5sm8469908wms.43.2021.07.24.14.19.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Sat, 24 Jul 2021 14:19:25 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 24 Jul 2021 23:19:21 +0200
-Message-Id: <44391e27e560d7d2de2a444577d867920d4c35a5.1627161553.git.yann.morin.1998@free.fr>
+Date: Sat, 24 Jul 2021 23:19:22 +0200
+Message-Id: <247d1a0d3a1bda3189f56c7dc21618383c49d8f8.1627161553.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1627161553.git.yann.morin.1998@free.fr>
 References: <cover.1627161553.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/4] package/pkg-kconfig: generate generic help
+Subject: [Buildroot] [PATCH 3/4] package: use the generic _HELP_CMDS for
+ kconfig-based packages
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,93 +98,134 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Currently, as Thomas pointed out [0], the help for kconfig packages is
-not consistently used and handled by the different packages.
+As Thomas put it:
 
-This commit introduces a generic help text for kconfig packages, that is
-based on what the package declares:
+    The <pkg>_HELP_CMDS variable allows packages using the
+    kconfig-package infrastructure to display their specific
+    targets related to the handling of their configuration.
 
-  - the list of kconfig editors it supports;
+    However, it was not consistently used and handled by the
+    different packages.
 
-  - whether it is possible to save back the configuration (impossible if
-    the package uses an in-tree defconfig file);
+So, this commit switches all the kconfig-based package to use the
+generic help helper.
 
-  - whether the package actually supports (loading and saving) defconfig
-    files, by introducing a new variable a package can set if it does
-    not (only busybox is known to be in that case).
+As a consequence:
 
-That new help helper is only used if the package does not already define
-its own help, to be consistent with what we do for other _CMDS.
+  - all kconfig packages now advetise their kconfig-related actions,
+    where some were previously missing: at91bootstrap3, linux-backports,
+    swupdate, xvisor;
 
-[0] http://lists.busybox.net/pipermail/buildroot/2021-July/313570.html
+  - busybox advertises it does not support defconfig files;
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  - the 'foo-savedfconfig' action is no longer advertised: it is to be
+    considered an internal implementation detail.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/adding-packages-kconfig.txt |  3 +++
- package/pkg-kconfig.mk                  | 24 ++++++++++++++++++++++++
- 2 files changed, 27 insertions(+)
+ boot/barebox/barebox/barebox.mk | 5 -----
+ boot/uboot/uboot.mk             | 6 ------
+ linux/linux.mk                  | 7 -------
+ package/busybox/busybox.mk      | 5 +----
+ package/uclibc/uclibc.mk        | 4 ----
+ 5 files changed, 1 insertion(+), 26 deletions(-)
 
-diff --git a/docs/manual/adding-packages-kconfig.txt b/docs/manual/adding-packages-kconfig.txt
-index 8f40ea6099..a35681775f 100644
---- a/docs/manual/adding-packages-kconfig.txt
-+++ b/docs/manual/adding-packages-kconfig.txt
-@@ -91,3 +91,6 @@ be set to suit the needs of the package under consideration:
- * +FOO_KCONFIG_DEPENDENCIES+: the list of packages (most probably, host
-   packages) that need to be built before this package's kconfig is
-   interpreted. Seldom used. By default, empty.
-+
-+* +FOO_KCONFIG_SUPPORTS_DEFCONFIG+: whether the package's kconfig system
-+  supports using defconfig files; few packages do not. By default, 'YES'.
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 49074f9220..715c3e04ec 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -85,11 +85,35 @@ $(2)_KCONFIG_OPTS ?=
- $(2)_KCONFIG_FIXUP_CMDS ?=
- $(2)_KCONFIG_FRAGMENT_FILES ?=
- $(2)_KCONFIG_DOTCONFIG ?= .config
-+$(2)_KCONFIG_SUPPORTS_DEFCONFIG ?= YES
+diff --git a/boot/barebox/barebox/barebox.mk b/boot/barebox/barebox/barebox.mk
+index 39afb0fccb..6a5a80de34 100644
+--- a/boot/barebox/barebox/barebox.mk
++++ b/boot/barebox/barebox/barebox.mk
+@@ -4,10 +4,5 @@
+ #
+ ################################################################################
  
- # Register the kconfig dependencies as regular dependencies, so that
- # they are also accounted for in the generated graphs.
- $(2)_DEPENDENCIES += $$($(2)_KCONFIG_DEPENDENCIES)
+-define BAREBOX_HELP_CMDS
+-	@echo '  barebox-menuconfig     - Run barebox menuconfig'
+-	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
+-endef
+-
+ # Instantiate the barebox package
+ $(eval $(barebox-package))
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 9c2261963d..4f3c9b7c3a 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -296,12 +296,6 @@ UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ # override again. In addition, host-ccache is not ready at kconfig
+ # time, so use HOSTCC_NOCCACHE.
+ UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTLDFLAGS=""
+-define UBOOT_HELP_CMDS
+-	@echo '  uboot-menuconfig       - Run U-Boot menuconfig'
+-	@echo '  uboot-savedefconfig    - Run U-Boot savedefconfig'
+-	@echo '  uboot-update-defconfig - Save the U-Boot configuration to the path specified'
+-	@echo '                             by BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE'
+-endef
+ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
  
-+# Generate the kconfig-related help: one entry for each editor.
-+# Additionally, if the package is *not* using an in-tree defconfig
-+# name, an entry for updating the package configuration file.
-+ifndef $(2)_HELP_CMDS
-+define $(2)_HELP_CMDS
-+	$$(foreach editor, $$($(2)_KCONFIG_EDITORS), \
-+		@printf '  %-22s - Run %s %s\n' $(1)-$$(editor) $(1) $$(editor)
-+	)
-+	$$(if $$($(2)_KCONFIG_DEFCONFIG),,\
-+		$$(if $$(filter YES,$$($(2)_KCONFIG_SUPPORTS_DEFCONFIG)),\
-+			@printf '  %-22s - Save the %s configuration as a defconfig file\n' \
-+				$(1)-update-defconfig $(1)
-+			@printf '  %-22s     to %s\n' '' $$($(2)_KCONFIG_FILE)
-+			@printf '  %-22s     (or override with %s_KCONFIG_FILE)\n' '' $(2)
-+		)
-+		@printf '  %-22s - Save the %s configuration as a full .config file\n' \
-+			$(1)-update-config $(1)
-+		@printf '  %-22s     to %s\n' '' $$($(2)_KCONFIG_FILE)
-+		@printf '  %-22s     (or override with %s_KCONFIG_FILE)\n' '' $(2)
-+	)
-+endef
-+endif
-+
- # Call the generic package infrastructure to generate the necessary
- # make targets.
- # Note: this must be done _before_ attempting to use $$($(2)_DIR) in a
+ UBOOT_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 1457228eb9..61fdc0c76c 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -16,13 +16,6 @@ LINUX_CPE_ID_VENDOR = linux
+ LINUX_CPE_ID_PRODUCT = linux_kernel
+ LINUX_CPE_ID_PREFIX = cpe:2.3:o
+ 
+-define LINUX_HELP_CMDS
+-	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
+-	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
+-	@echo '  linux-update-defconfig - Save the Linux configuration to the path specified'
+-	@echo '                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE'
+-endef
+-
+ # Compute LINUX_SOURCE and LINUX_SITE from the configuration
+ ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
+ LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 413939e28d..68e0b8a72c 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -11,10 +11,6 @@ BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
+ BUSYBOX_LICENSE_FILES = LICENSE archival/libarchive/bz/LICENSE
+ BUSYBOX_CPE_ID_VENDOR = busybox
+ 
+-define BUSYBOX_HELP_CMDS
+-	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
+-endef
+-
+ BUSYBOX_CFLAGS = \
+ 	$(TARGET_CFLAGS)
+ 
+@@ -107,6 +103,7 @@ ifndef BUSYBOX_CONFIG_FILE
+ BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
+ endif
+ 
++BUSYBOX_KCONFIG_HAS_DEFCONFIG = NO
+ BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
+ BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES))
+ BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index a7c96684d0..5c17eea8dd 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -13,10 +13,6 @@ UCLIBC_INSTALL_STAGING = YES
+ UCLIBC_CPE_ID_VENDOR = uclibc-ng_project
+ UCLIBC_CPE_ID_PRODUCT = uclibc-ng
+ 
+-define UCLIBC_HELP_CMDS
+-	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
+-endef
+-
+ # uclibc is part of the toolchain so disable the toolchain dependency
+ UCLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
 -- 
 2.25.1
 
