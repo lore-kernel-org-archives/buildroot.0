@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16590C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 07:47:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF753C4338F
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 07:47:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D060760E9C
-	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 07:47:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D060760E9C
+	by mail.kernel.org (Postfix) with ESMTPS id 6F6DC60E93
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 07:47:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6F6DC60E93
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A3FF74061C;
-	Sat, 24 Jul 2021 07:47:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3612683B30;
+	Sat, 24 Jul 2021 07:47:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rKeku7C7BtFb; Sat, 24 Jul 2021 07:47:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AP1eCAObDo97; Sat, 24 Jul 2021 07:47:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D91EC4061F;
-	Sat, 24 Jul 2021 07:47:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AD4F81BF4D6
- for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 07:47:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CE4E83B29;
+	Sat, 24 Jul 2021 07:47:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EB491BF4D6
+ for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 07:47:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A9C22406AA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4CFB6606BB
  for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 07:47:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mNAwqAEVpMTk for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XzmyVv0Q7gSg for <buildroot@lists.busybox.net>;
  Sat, 24 Jul 2021 07:47:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F3B5405B3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A1516062F
  for <buildroot@buildroot.org>; Sat, 24 Jul 2021 07:47:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 28A71887C6; Sat, 24 Jul 2021 07:12:52 +0000 (UTC)
+ id 1DFA5887CC; Sat, 24 Jul 2021 07:12:52 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
 Date: Sat, 24 Jul 2021 09:46:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 145133a6f592332b824ea2086300b51aea9d6e64
-X-Git-Newrev: af66f6ce4348c60c113b997531250aa6f0395cf6
+X-Git-Oldrev: 99eb1a7019a4333f99e93b844962db301a8c3f98
+X-Git-Newrev: 145133a6f592332b824ea2086300b51aea9d6e64
 X-Patchwork-Hint: ignore
-Message-Id: <20210724071252.28A71887C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/stunnel: bump to version 5.59
+Message-Id: <20210724071252.1DFA5887CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/samba4: bump version to 4.14.5
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,53 +69,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af66f6ce4348c60c113b997531250aa6f0395cf6
+commit: https://git.buildroot.net/buildroot/commit/?id=145133a6f592332b824ea2086300b51aea9d6e64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This release includes the following changes:
+Release notes of this bugfix release:
+https://www.samba.org/samba/history/samba-4.14.5.html
 
-- Security bugfixes
-  OpenSSL DLLs updated to version 1.1.1k.
-- New features
-  Client-side "protocol = ldap" support (thx to Bart Dopheide and Seth Grover).
-- Bugfixes
-  The test suite fixed not to require external connectivity.
-  Fixed paths in generated manuals (thx to Tatsuki Makino).
-  Fixed configuration reload when compression is used.
-  Fixed compilation with early releases of OpenSSL 1.1.1.
-
-Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 2 +-
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index a62fa07607..0ae20cb906 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,5 +1,5 @@
--# From https://www.stunnel.org/downloads/stunnel-5.58.tar.gz.sha256
--sha256  d4c14cc096577edca3f6a2a59c2f51869e35350b3988018ddf808c88e5973b79  stunnel-5.58.tar.gz
-+# From https://www.stunnel.org/downloads/stunnel-5.59.tar.gz.sha256
-+sha256  137776df6be8f1701f1cd590b7779932e123479fb91e5192171c16798815ce9f  stunnel-5.59.tar.gz
- # Locally calculated
- sha256  28b55d0157efd5ceb63640faeebb50fda13b1f49aec0b9c1240b9a3ea9f0eb4c  COPYING.md
- sha256  62f171d4d8b6726df61f18a6bbc0a70f79c4bc2134d837d35c81fc6289a2d84d  COPYRIGHT.md
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 2d066a4370..68d3c85534 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 905ec14ce0..9b90718682 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.14.4.tar.asc
+-sha256  89af092a0b00f5354ed287f0aa37b8c2cf9ba2ce67ea6464192e2c18528f89b9  samba-4.14.4.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.14.5.tar.asc
++sha256  bb6ef5d2f16b85288d823578abc453d9a80514c42e5a2ea2c4e3c60dc42335c3  samba-4.14.5.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 409e2c7a18..69f4ad26e5 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).58
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).59
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = host-pkgconf openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+-SAMBA4_VERSION = 4.14.4
++SAMBA4_VERSION = 4.14.5
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
