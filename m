@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05F32C432BE
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:28:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63D0BC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:28:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AD0FD61037
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:28:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AD0FD61037
+	by mail.kernel.org (Postfix) with ESMTPS id 2BD5560F46
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:28:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2BD5560F46
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 893DA60B10;
-	Wed,  4 Aug 2021 00:28:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08FDD83D44;
+	Wed,  4 Aug 2021 00:28:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g6QuLbpt_v5M; Wed,  4 Aug 2021 00:28:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FZoljcvp01vq; Wed,  4 Aug 2021 00:28:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF81560AF0;
-	Wed,  4 Aug 2021 00:28:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4FA6C84174;
+	Wed,  4 Aug 2021 00:28:31 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CDC2B1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DF8D41BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 98034414DB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 97EDA414DA
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t4f69Bj8m_lk for <buildroot@lists.busybox.net>;
+ with ESMTP id 6u0jDKn0-S0C for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 440F840647
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D1A8C40F43
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9B6B081F12; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
+ id 2598182BC5; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 14:58:14 +0200
+Date: Sat, 24 Jul 2021 23:29:21 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7f3c177b4e9736a65f0bf67666ec84392d8c8dff
-X-Git-Newrev: dc8b2905f1161918b856a9aff01a0607a50184ab
+X-Git-Oldrev: 5a62f90e3635795dcc93b3316b987e0076dea48c
+X-Git-Newrev: 82712c5862badbc905346afb6ad08c4d4ff47dfb
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211016.9B6B081F12@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/apcupsd: add SELinux
- module
+Message-Id: <20210803211016.2598182BC5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/polkit: add init
+ S50polkit script
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,30 +70,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc8b2905f1161918b856a9aff01a0607a50184ab
+commit: https://git.buildroot.net/buildroot/commit/?id=82712c5862badbc905346afb6ad08c4d4ff47dfb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Support for apcupsd is added by the services/apcupsd module in the
-SELinux refpolicy.
+The Polkit source does not come with non-systemd init script. Add one that is
+modeled after package/busybox/S01syslogd.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/apcupsd/apcupsd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/polkit/S50polkit | 51 ++++++++++++++++++++++++++++++++++++++++++++++++
+ package/polkit/polkit.mk |  5 +++++
+ 2 files changed, 56 insertions(+)
 
-diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
-index 9e707e1a5a..34815ffc1c 100644
---- a/package/apcupsd/apcupsd.mk
-+++ b/package/apcupsd/apcupsd.mk
-@@ -9,6 +9,7 @@ APCUPSD_SITE = http://downloads.sourceforge.net/project/apcupsd/apcupsd%20-%20St
- APCUPSD_LICENSE = GPL-2.0
- APCUPSD_LICENSE_FILES = COPYING
- APCUPSD_CPE_ID_VENDOR = apcupsd
-+APCUPSD_SELINUX_MODULES = apcupsd
- APCUPSD_CONF_OPTS = --disable-test
+diff --git a/package/polkit/S50polkit b/package/polkit/S50polkit
+new file mode 100755
+index 0000000000..f07e2d613b
+--- /dev/null
++++ b/package/polkit/S50polkit
+@@ -0,0 +1,51 @@
++#!/bin/sh
++
++DAEMON="polkitd"
++DAEMON_PATH="/usr/lib/polkit-1/${DAEMON}"
++PIDFILE="/var/run/${DAEMON}.pid"
++POLKITD_ARGS="--no-debug"
++
++# polkitd does not create a pidfile, so pass "-n" in the command line
++# and use "-m" to instruct start-stop-daemon to create one.
++start() {
++	printf 'Starting %s: ' "${DAEMON}"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -bmSqp "$PIDFILE" -x ${DAEMON_PATH} -- ${POLKITD_ARGS}
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "${DAEMON}"
++	start-stop-daemon -Kqp "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart|reload)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
+index f48c103a52..d5b3955ddb 100644
+--- a/package/polkit/polkit.mk
++++ b/package/polkit/polkit.mk
+@@ -57,4 +57,9 @@ define POLKIT_INSTALL_INIT_SYSTEMD
  
- ifneq ($(BR2_PACKAGE_APCUPSD_MODBUS_USB)$(BR2_PACKAGE_APCUPSD_USB),)
+ endef
+ 
++define POLKIT_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/polkit/S50polkit \
++		$(TARGET_DIR)/etc/init.d/S50polkit
++endef
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
