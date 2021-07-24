@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87AFDC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:23:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91AF8C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:24:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E40CF60EBC
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:23:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E40CF60EBC
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 4F61060F8F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:24:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4F61060F8F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF4A0423F3;
-	Wed,  4 Aug 2021 00:23:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2991960AC1;
+	Wed,  4 Aug 2021 00:24:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s0WwddsjXs04; Wed,  4 Aug 2021 00:23:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z44rh0V4Yexi; Wed,  4 Aug 2021 00:24:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D78C342405;
-	Wed,  4 Aug 2021 00:23:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C99160A51;
+	Wed,  4 Aug 2021 00:24:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5343B1BF9C1
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8391C1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5763340EAF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 70C94414B6
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rHU0hLV9066o for <buildroot@lists.busybox.net>;
+ with ESMTP id lcRFkgp9RNyi for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3381640EB1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 760C840F2A
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7A3C481484; Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id C894D83FBA; Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 22 Jul 2021 23:15:01 +0200
+Date: Sat, 24 Jul 2021 09:46:57 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fbf25acfbfd5a73b3560918bea081768abbe5723
-X-Git-Newrev: ed12e2fbed3d4298ebff9da54fe56b91fa75c41e
+X-Git-Oldrev: af66f6ce4348c60c113b997531250aa6f0395cf6
+X-Git-Newrev: 8eea07df198e1eebc2883a24292825a491c0a8c8
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211014.7A3C481484@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libvirt: add lxc and
- qemu options
+Message-Id: <20210803211014.C894D83FBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libinput: bump version
+ to 1.17.3
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,143 +70,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed12e2fbed3d4298ebff9da54fe56b91fa75c41e
+commit: https://git.buildroot.net/buildroot/commit/?id=8eea07df198e1eebc2883a24292825a491c0a8c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Update to add lxc and qemu options for libvirt under the daemon
-config option
+For details see [1].
 
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[1] https://lists.freedesktop.org/archives/wayland-devel/2021-May/041834.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libvirt/Config.in  | 28 ++++++++++++++++++++++++++++
- package/libvirt/libvirt.mk | 39 +++++++++++++++++++++++++++++++++++++--
- 2 files changed, 65 insertions(+), 2 deletions(-)
+ package/libinput/libinput.hash | 6 +++---
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
-index deb1636c9f..1d17fc1621 100644
---- a/package/libvirt/Config.in
-+++ b/package/libvirt/Config.in
-@@ -56,4 +56,32 @@ config BR2_PACKAGE_LIBVIRT_DAEMON
- 	  Build the libvirt daemon (libvirtd) otherwise build only the
- 	  utility programs.
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index bf60fe6143..038859289a 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2021-April/041809.html
+-sha256  b822263086b6588b9a9a153be97dea409f63927fb67b9a241748e76f222a5be1  libinput-1.17.2.tar.xz
+-sha512  b8953ad483648d5629d56c4dc226d4906693b15da5ba4027627a51ec35ea65b0603c09056b52ed2025df1f7a877669a5b7482c025e0b37003fc676563bd05263  libinput-1.17.2.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2021-May/041834.html
++sha256  0d010e0bf601b5d3a06b3c4d77d67751cf554f3e6448e57aa046ea9ee8f818ac  libinput-1.17.3.tar.xz
++sha512  3d1ab4362ede886996795d700a938d20e04cd922e8f9598fe9346f9f93e149119526fb324a096787b4b8a47bf3e5613130bcd874f10df86761031710d2acc792  libinput-1.17.3.tar.xz
  
-+# Stateful drivers are useful only when building the daemon.
-+if BR2_PACKAGE_LIBVIRT_DAEMON
-+
-+config BR2_PACKAGE_LIBVIRT_QEMU
-+	bool "qemu"
-+	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
-+	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
-+	select BR2_PACKAGE_HWDATA         # libpciaccess
-+	select BR2_PACKAGE_HWDATA_PCI_IDS # libpciaccess
-+	select BR2_PACKAGE_LIBSECCOMP
-+	select BR2_PACKAGE_QEMU
-+	select BR2_PACKAGE_QEMU_SYSTEM if BR2_PACKAGE_QEMU_CUSTOM_TARGETS = ""
-+	select BR2_PACKAGE_YAJL
-+	help
-+	  QEMU/KVM support
-+
-+config BR2_PACKAGE_LIBVIRT_LXC
-+	bool "lxc"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # lxc
-+	select BR2_PACKAGE_LXC
-+	help
-+	  Linux Container support
-+
-+comment "lxc needs a toolchain w/ gcc >= 4.7"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+
-+endif
-+
- endif
-diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
-index a8099c936a..eeedfbdc51 100644
---- a/package/libvirt/libvirt.mk
-+++ b/package/libvirt/libvirt.mk
-@@ -24,9 +24,7 @@ LIBVIRT_CONF_OPTS = \
- 	-Ddriver_hyperv=disabled \
- 	-Ddriver_interface=enabled \
- 	-Ddriver_libxl=disabled \
--	-Ddriver_lxc=disabled \
- 	-Ddriver_openvz=disabled \
--	-Ddriver_qemu=disabled \
- 	-Ddriver_remote=enabled \
- 	-Ddriver_secrets=enabled \
- 	-Ddriver_vbox=disabled \
-@@ -193,6 +191,19 @@ else
- LIBVIRT_CONF_OPTS += -Dssh2=disabled
- endif
+ # License files
+ sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 619e0cc19a..8ce60c8639 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBVIRT_LXC),y)
-+LIBVIRT_CONF_OPTS += -Dlogin_shell=enabled -Ddriver_lxc=enabled
-+LIBVIRT_DEPENDENCIES += lxc
-+else
-+LIBVIRT_CONF_OPTS += -Dlogin_shell=disabled -Ddriver_lxc=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBVIRT_QEMU),y)
-+LIBVIRT_CONF_OPTS += -Ddriver_qemu=enabled -Dqemu_user=qemu -Dqemu_group=kvm
-+else
-+LIBVIRT_CONF_OPTS += -Ddriver_qemu=disabled -Dqemu_user=no -Dqemu_group=no
-+endif
-+
- else # BR2_PACKAGE_LIBVIRT_DAEMON
- 
- LIBVIRT_CONF_OPTS += -Dlibvirtd=disabled -Ddriver_network=disabled
-@@ -218,13 +229,29 @@ define LIBVIRT_PERMISSIONS
- 	/var/lib/libvirt/filesystems             d  711  root  root  -  -  -  -  -
- 	/var/lib/libvirt/images                  d  711  root  root  -  -  -  -  -
- 	/var/lib/libvirt/network                 d  700  root  root  -  -  -  -  -
-+	/var/lib/libvirt/qemu                    d  751  qemu  kvm   -  -  -  -  -
-+	/var/lib/libvirt/qemu/autostart          d  700  root  root  -  -  -  -  -
-+	/var/lib/libvirt/qemu/networks           d  700  root  root  -  -  -  -  -
-+	/var/lib/libvirt/qemu/networks/autostart d  700  root  root  -  -  -  -  -
-+	/var/lib/libvirt/qemu/channel            d  755  qemu  kvm   -  -  -  -  -
-+	/var/lib/libvirt/qemu/channel/target     d  755  qemu  kvm   -  -  -  -  -
-+	/var/lib/libvirt/qemu/dump               d  755  qemu  kvm   -  -  -  -  -
-+	/var/lib/libvirt/qemu/nvram              d  755  qemu  kvm   -  -  -  -  -
-+	/var/lib/libvirt/qemu/save               d  755  qemu  kvm   -  -  -  -  -
-+	/var/lib/libvirt/qemu/snapshot           d  755  qemu  kvm   -  -  -  -  -
- 	/var/lib/libvirt/secrets                 d  700  root  root  -  -  -  -  -
- 	/var/lib/libvirt/storage                 d  755  root  root  -  -  -  -  -
- 	/var/lib/libvirt/storage/autostart       d  755  root  root  -  -  -  -  -
- 	/var/cache/libvirt                       d  711  root  root  -  -  -  -  -
-+	/var/cache/libvirt/lxc                   d  750  root  root  -  -  -  -  -
-+	/var/cache/libvirt/qemu                  d  750  qemu  kvm   -  -  -  -  -
-+	/var/cache/libvirt/qemu/capabilities     d  755  root  root  -  -  -  -  -
- 	/var/log/libvirt                         d  700  root  root  -  -  -  -  -
-+	/var/log/libvirt/lxc                     d  750  root  root  -  -  -  -  -
-+	/var/log/libvirt/qemu                    d  750  root  root  -  -  -  -  -
- 	/var/log/swtpm                           d  755  root  root  -  -  -  -  -
- 	/var/log/swtpm/libvirt                   d  755  root  root  -  -  -  -  -
-+	/var/log/swtpm/libvirt/qemu              d  711  root  root  -  -  -  -  -
- endef
- 
- # libvirt may need to create persistent files (e.g. VM definitions) in these
-@@ -235,14 +262,22 @@ endef
- define LIBVIRT_CREATE_SYMLINKS
- 	$(INSTALL) -m 700 -d $(TARGET_DIR)/etc/libvirt
- 	$(INSTALL) -m 755 -d $(TARGET_DIR)/var/lib/libvirt
-+	$(INSTALL) -m 751 -d $(TARGET_DIR)/var/lib/libvirt/qemu
- 	$(INSTALL) -m 700 -d $(TARGET_DIR)/var/lib/libvirt/secrets
- 	$(INSTALL) -m 755 -d $(TARGET_DIR)/var/lib/libvirt/storage
-+	ln -s -f ../../var/lib/libvirt/qemu $(TARGET_DIR)/etc/libvirt/
- 	ln -s -f ../../var/lib/libvirt/secrets $(TARGET_DIR)/etc/libvirt/
- 	ln -s -f ../../var/lib/libvirt/storage $(TARGET_DIR)/etc/libvirt/
- endef
- 
- LIBVIRT_PRE_INSTALL_TARGET_HOOKS += LIBVIRT_CREATE_SYMLINKS
- 
-+ifeq ($(BR2_PACKAGE_LIBVIRT_QEMU),y)
-+define LIBVIRT_USERS
-+	qemu -1 kvm -1 * - - - Libvirt qemu/kvm daemon
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBVIRT_DAEMON),y)
- define LIBVIRT_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/libvirt/S91virtlogd $(TARGET_DIR)/etc/init.d/S91virtlogd
+-LIBINPUT_VERSION = 1.17.2
++LIBINPUT_VERSION = 1.17.3
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
