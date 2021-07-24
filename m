@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A998DC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:16:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F919C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:16:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6AC3360720
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:16:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6AC3360720
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 65D7460EFF
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:16:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 65D7460EFF
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E416400C7;
-	Tue,  3 Aug 2021 22:16:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D75D83BC3;
+	Tue,  3 Aug 2021 22:16:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id clZMKF61Liq4; Tue,  3 Aug 2021 22:16:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xFFBi-BO3elS; Tue,  3 Aug 2021 22:16:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 424C240195;
-	Tue,  3 Aug 2021 22:16:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1A3FB1BF9AA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 93D8F83B8D;
+	Tue,  3 Aug 2021 22:16:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BCEC1BF9C1
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 696F040441
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B429F83ADC
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KfCTSqvXIMZM for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RLIdFVqLEsgw for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 290FB40451
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0155883AD8
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7C98D83875; Tue,  3 Aug 2021 21:09:41 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 4B16681F12; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 19 May 2021 22:26:38 +0200
+Date: Sat, 24 Jul 2021 23:36:49 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 81c93749ae4b09023e864b5980d4f0a543445764
-X-Git-Newrev: 778e2e0467b2c6e59682692421dfe9319ea0adf0
+X-Git-Oldrev: 6418d31bbd7ea062790ed6e79eac644957063bcc
+X-Git-Newrev: 90dd1d6178b01f6da3e59e43d0c7efdf984a72d8
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210941.7C98D83875@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/synergy: add
- SYNERGY_CPE_ID_VENDOR
+Message-Id: <20210803211016.4B16681F12@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/audit: replace
+ deprecated matchpathcon calls from init script
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,37 +65,52 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4142118734826787155=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=778e2e0467b2c6e59682692421dfe9319ea0adf0
+--===============4142118734826787155==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=90dd1d6178b01f6da3e59e43d0c7efdf984a72d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:symless:synergy is a valid CPE identifier for this package:
+This patch replace matchpathcon calls in the auditd init script by
+calls to selabel_lookup. Indeed, matchpathcon is now deprecated, and
+this causes warning during the boot process.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asymless%3Asynergy
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: José Pekkarinen <jose.pekkarinen@unikie.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/synergy/synergy.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/audit/S02auditd | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
-index 63c6e5cbc1..bc7ebea070 100644
---- a/package/synergy/synergy.mk
-+++ b/package/synergy/synergy.mk
-@@ -8,6 +8,7 @@ SYNERGY_VERSION = 2.0.12-beta
- SYNERGY_SITE = $(call github,symless,synergy-core,v$(SYNERGY_VERSION))
- SYNERGY_LICENSE = GPL-2.0
- SYNERGY_LICENSE_FILES = LICENSE
-+SYNERGY_CPE_ID_VENDOR = symless
- SYNERGY_DEPENDENCIES = xlib_libX11 xlib_libXtst
+diff --git a/package/audit/S02auditd b/package/audit/S02auditd
+index 2ecf0f1df9..0eef881cee 100644
+--- a/package/audit/S02auditd
++++ b/package/audit/S02auditd
+@@ -18,9 +18,9 @@ start(){
  
- # Avoid using buildroot commit hash inside cmake/Version.cmake
+ 	# Create dir to store log files in if one doesn't exist. Create
+ 	# the directory with SELinux permissions if possible
+-	command -v matchpathcon >/dev/null 2>&1
++	command -v selabel_lookup >/dev/null 2>&1
+ 	if [ $? = 0 ]; then
+-		mkdir -p /var/log/audit -Z `matchpathcon -n /var/log/audit`
++		mkdir -p /var/log/audit -Z `selabel_lookup -b file -k /var/log/audit`
+ 	else
+ 		mkdir -p /var/log/audit
+ 	fi
+
+--===============4142118734826787155==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============4142118734826787155==--
