@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCD1CC432BE
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:24:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28601C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:24:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9306B60F8F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:24:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9306B60F8F
+	by mail.kernel.org (Postfix) with ESMTPS id D3B5B60EBC
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:24:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D3B5B60EBC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A0B740378;
-	Wed,  4 Aug 2021 00:24:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFC5A415ED;
+	Wed,  4 Aug 2021 00:24:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yUoPZsYJWn5a; Wed,  4 Aug 2021 00:24:32 +0000 (UTC)
+	with ESMTP id fFGsDLlaRvPF; Wed,  4 Aug 2021 00:24:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA983402C5;
-	Wed,  4 Aug 2021 00:24:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EEA1440660;
+	Wed,  4 Aug 2021 00:24:43 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A62421BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ABA1A1BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B9751414A2
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB718414B7
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b1o7eUaGC6hu for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:31 +0000 (UTC)
+ with ESMTP id mBzuigzObXqQ for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7BA9440F2B
+ by smtp2.osuosl.org (Postfix) with ESMTP id C557B40EC6
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D2E8481484; Tue,  3 Aug 2021 21:10:14 +0000 (UTC)
+ id 25CAB81484; Tue,  3 Aug 2021 21:10:15 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Jul 2021 09:46:57 +0200
+Date: Sat, 24 Jul 2021 09:50:21 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8eea07df198e1eebc2883a24292825a491c0a8c8
-X-Git-Newrev: a87d99af2f88eb2755959163727584f673483748
+X-Git-Oldrev: 81fa54fe740a4114ebff01347c6c487ddf75f217
+X-Git-Newrev: 26c647f031e1dc7fd3a59c6905d0dc98f6506c73
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211014.D2E8481484@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libinput: bump version
- to 1.18.0
+Message-Id: <20210803211015.25CAB81484@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/perl-mojolicious-plugin-authorization: bump to version 1.06
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,47 +70,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a87d99af2f88eb2755959163727584f673483748
+commit: https://git.buildroot.net/buildroot/commit/?id=26c647f031e1dc7fd3a59c6905d0dc98f6506c73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For details see [1].
+LICENSE was reformated, the copyright holder is unchanged:
+This software is copyright (c) 2012 by John Scoles.
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2021-June/041849.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libinput/libinput.hash | 6 +++---
- package/libinput/libinput.mk   | 2 +-
+ .../perl-mojolicious-plugin-authorization.hash                      | 6 +++---
+ .../perl-mojolicious-plugin-authorization.mk                        | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 038859289a..de8e94f9fa 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
+diff --git a/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash
+index c55eefe2ff..30bf87bad0 100644
+--- a/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash
++++ b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash
 @@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2021-May/041834.html
--sha256  0d010e0bf601b5d3a06b3c4d77d67751cf554f3e6448e57aa046ea9ee8f818ac  libinput-1.17.3.tar.xz
--sha512  3d1ab4362ede886996795d700a938d20e04cd922e8f9598fe9346f9f93e149119526fb324a096787b4b8a47bf3e5613130bcd874f10df86761031710d2acc792  libinput-1.17.3.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2021-June/041849.html
-+sha256  18c6a286583268d39841348e561fbb4713bde0c643b360f5d8a3f27800afdb9a  libinput-1.18.0.tar.xz
-+sha512  9a834f075d7a1f892416bb6b241eb052f749d3aa883c4b39c0f1c9616c115d6b9a541b587508646fddaf0d3fe57af92fe4629b522d1d51196499e7b523e0aa90  libinput-1.18.0.tar.xz
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    9c009599cf397e3eacf5d7cd0dec45b8 Mojolicious-Plugin-Authorization-1.05.tar.gz
+-sha256 87f84092d5698595ad0d01e745eca1d6affd1f3d662786f39f3583c54ffed0e3 Mojolicious-Plugin-Authorization-1.05.tar.gz
++md5  7906886e2a66b84bb3c0edd7ea85c485  Mojolicious-Plugin-Authorization-1.06.tar.gz
++sha256  d21ee5ab5fd8c630bc28ce001f9c91bba500370baf7cc8f6f60c9a4e051f9a6c  Mojolicious-Plugin-Authorization-1.06.tar.gz
  
- # License files
- sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 8ce60c8639..32b822edb7 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+ # computed by scancpan
+-sha256 fd9632faca5a3d6af4cb9cf776514de87d2b34bff3a6cf06c23eea0f9cc3ab06 LICENSE
++sha256  dfab85cd06e80a3493217a1dc741cf9065417d2e803d50756f013c0b6cb0cb3e  LICENSE
+diff --git a/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk
+index 3fcee08a46..f136be3ba9 100644
+--- a/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk
++++ b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.17.3
-+LIBINPUT_VERSION = 1.18.0
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_VERSION = 1.05
++PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_VERSION = 1.06
+ PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_SOURCE = Mojolicious-Plugin-Authorization-$(PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_VERSION).tar.gz
+ PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_SITE = $(BR2_CPAN_MIRROR)/authors/id/B/BY/BYTEROCK
+ PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_DEPENDENCIES = host-perl-module-build
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
