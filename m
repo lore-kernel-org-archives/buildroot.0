@@ -1,160 +1,90 @@
-Return-Path: <SRS0=JV6j=MP=busybox.net=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=+dJA=MQ=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF587C4338F
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 22:44:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F44AC4338F
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 02:05:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9107860F25
-	for <buildroot@archiver.kernel.org>; Fri, 23 Jul 2021 22:44:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9107860F25
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=wdc.com
+	by mail.kernel.org (Postfix) with ESMTPS id 0021860EB1
+	for <buildroot@archiver.kernel.org>; Sat, 24 Jul 2021 02:05:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0021860EB1
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5736E6072C;
-	Fri, 23 Jul 2021 22:44:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B3D29400B9;
+	Sat, 24 Jul 2021 02:05:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a5gBjNT2aXw7; Fri, 23 Jul 2021 22:44:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aq6EIr1QftJc; Sat, 24 Jul 2021 02:05:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F80C606BF;
-	Fri, 23 Jul 2021 22:44:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3AF7F1BF3EE
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 22:44:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7523E4012A;
+	Sat, 24 Jul 2021 02:05:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D2AA1BF40D
+ for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 02:05:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25FC24068F
- for <buildroot@lists.busybox.net>; Fri, 23 Jul 2021 22:44:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA26E4012A
+ for <buildroot@lists.busybox.net>; Sat, 24 Jul 2021 02:05:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=wdc.com header.b="V7X9sNk2";
- dkim=pass (1024-bit key) header.d=sharedspace.onmicrosoft.com
- header.b="GiNoQ2c5"
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MLHkpLN7mk2J for <buildroot@lists.busybox.net>;
- Fri, 23 Jul 2021 22:44:02 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 49A064068D
- for <buildroot@buildroot.org>; Fri, 23 Jul 2021 22:44:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1627080242; x=1658616242;
- h=from:to:cc:subject:date:message-id:references:
- content-transfer-encoding:mime-version;
- bh=hgt/Mem9s5n0a3V0Ah//AGqcjDUfI+CpTUp0d3iRrbk=;
- b=V7X9sNk2oHAQIIClE/LSWC2R8hEiJDCZg36RKm7X0tX3es08qMG3RPqR
- IsGYC+kSdBBcAe9afh/ZnReK8KanPUnakKhePQ+dkp/VOkFiR0aldDwwe
- viBpY2r91KLVk5Q1WuIjRD8AB4qMt+pnwGyVkcIXvnv9tbljzr7VWkarB
- W+xUjnMG/2nnEIEdR5tkKOcqEEplnzc/bXfAiUOhaj1uMDg0HVowtGlkJ
- E1xYo/e9zJXuGg+7sQ4bL3pVu+4/RwP7CzvPGTipAiHY/TqaT4hj9gv/s
- TSHY/0DYMB4nGudQitpwUlf/sBlBqjNzB4WoOKGDj45BhCtZZgiW5TT4e w==;
-X-IronPort-AV: E=Sophos;i="5.84,265,1620662400"; d="scan'208";a="279201714"
-Received: from mail-dm6nam12lp2175.outbound.protection.outlook.com (HELO
- NAM12-DM6-obe.outbound.protection.outlook.com) ([104.47.59.175])
- by ob1.hgst.iphmx.com with ESMTP; 24 Jul 2021 06:44:00 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MfrXOnu0v5YX8YfAJhNXRouGiqyMIs0sXOzdsg/c64ToiwRMzLygQrVfj+fumg4Ppf9G9EzDbbwsW9inh/IvQO1yerc8ay5rLwvqQ9SUPWZb1q0mjNKuSNmd2UKwj53xhBYQgscs0bG2DAr0iZERMxWzdEErNKt9ow5KMqTgOaSzzhiOF54Qktv95ITwxG+3tsuuuJzfXk6uS7U8btyGOO920ppt/6zr+sfxT+kZLOqhfZ6rZmksFeBIBNYIY/u5ItpyZyHfQqYm4YzpL3HPOp0G7V0//FM7/4UPH1Gbh3wsR+onuqSTjIgXHpbxTj+nlCnzKp44N4lAdFQ4KDM5tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JccWjFmKbscUF6QcLtMrQh7TuPtr/gsus9atTC8umgk=;
- b=mGYQtFUFFREn05Y1NzV3o0ovscbXsCDSkigogcTF/tyy8JErTfl0Eig9yMgpOvsgklPlBd44e7iuoWxKrxy8gkvoqx6ITIuIkdkBovgvmjK1BcyzdBBdmeAJFtiQC/gZ1Zry5FGeyLgof5UmhJUsMFJwMUkyuahmExXYaA7TxpEPRTxsq3OP+DgTSA/ul+O93Nd/LAFA7oaoq/sApfG6jExFxzTiL4sAdeWabYEibkWhxY5my1rEsG7jxtSx1I9D0GV3L5/JWwQb+FjSrv2irFUxA1M6MP2PfP88CQLLwvWTcgze22MAZKBqVo0H5hysgpSnMnaptvvsivuhceVAEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JccWjFmKbscUF6QcLtMrQh7TuPtr/gsus9atTC8umgk=;
- b=GiNoQ2c5N7P+cyH8d4fptdyTf8BiJkhEoAl9TmwytgQQ2dJ/m7Ce++5Vo1+Zmw8R/fe1L5NadyrP5eQgEeiC2KA85nLqoO251bqKQ2hKpbKwkE8d/o2Y8c/nfvAFNP066VDPOZ8bSlrEO8fMzhQp42A2yd6WcXm2Ix3WFdZADdk=
-Received: from DM6PR04MB7081.namprd04.prod.outlook.com (2603:10b6:5:244::21)
- by DM5PR0401MB3525.namprd04.prod.outlook.com (2603:10b6:4:7c::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.29; Fri, 23 Jul
- 2021 22:43:58 +0000
-Received: from DM6PR04MB7081.namprd04.prod.outlook.com
- ([fe80::44e6:14cc:4aab:3028]) by DM6PR04MB7081.namprd04.prod.outlook.com
- ([fe80::44e6:14cc:4aab:3028%8]) with mapi id 15.20.4352.029; Fri, 23 Jul 2021
- 22:43:58 +0000
-From: Damien Le Moal <Damien.LeMoal@wdc.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Arnout Vandecappelle
- <arnout@mind.be>
-Thread-Topic: [Buildroot] [PATCH v2 4/9] board: Add Sipeed MAIX-bit support
-Thread-Index: AQHXeRNqg2/imBJvY0mqcly0otv+ug==
-Date: Fri, 23 Jul 2021 22:43:58 +0000
-Message-ID: <DM6PR04MB70817A36892EBB84C44ED189E7E59@DM6PR04MB7081.namprd04.prod.outlook.com>
-References: <20210715004843.337268-1-damien.lemoal@wdc.com>
- <20210715004843.337268-5-damien.lemoal@wdc.com>
- <6a1b7aba-9fe8-d0ab-ffda-b24167b0cfce@mind.be>
- <20210724003514.4da0f292@windsurf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: bootlin.com; dkim=none (message not signed)
- header.d=none;bootlin.com; dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d4e926c8-c444-4ae2-da66-08d94e2b5c3f
-x-ms-traffictypediagnostic: DM5PR0401MB3525:
-x-microsoft-antispam-prvs: <DM5PR0401MB352543336967EB256C2F4B48E7E59@DM5PR0401MB3525.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HNnuV3+ncERjYBfzM2f/7nq3QqHhQiy8Uu4qxEq5gwTcHNcDhA6H0IAw6VnEsiBpkkBZ4C3AWka5i3RN854mvbJSDSwSxC1s1eQvpq6qUAKHCrVSBWeOs6yFCDWTiFNBQHkmeAeU5sVU2uuex3kafCuvmCzkwx7tgBpj4WqkqFFaUPCEARm4bFYuIL6vkr7vb4q6p7I87us0/GjHgKaWP9GDYCN7TarBkpQae/MbpQT9+y3QEByu/QLUDG+/VUPyKGr52vJXhTzl5lD8yNw39FhsQMXjS5JcnISvyfXn+sik24NvcySC2O+qEzA62dBuS/eJm37yctIWkjQn+zhouxWotawVU6csGSKujw5Ip1G+CEGMwtk9/imPiVRY3Cy+qsVDo6zC13L0deOZCE5ajTGuYQjAs1nSned2lvhjfzawCxrfxWjxWjll/h4q2j+nxn4JW4FKSQONk3q62qT6R2e16lOlfxjmUZy1p2QNLToiSox8jIyPvYPMxUWv2Th+z4uvppQD1FepqJ9FAdmlzMH4QLOTIZidV8d3NC//4pCfSlHONoN1agFRQykpCgGsBgEqBPIRxqTVQEKXJzXZAu8xpAyXJ08h4A5pL4qkP/0oZeR+xWdSB/wdPBYCueBmLBKcZ+8h6J6ZGG23NVWNXK0W3vBtjnoctNcypSDR/R648oYtQxPM8SaXp6uLY3j5F0BVykjGo2F3FbrL17G8tw==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DM6PR04MB7081.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(4636009)(136003)(39860400002)(376002)(366004)(346002)(396003)(4326008)(8676002)(55016002)(122000001)(91956017)(54906003)(66556008)(66476007)(7696005)(66446008)(71200400001)(38100700002)(66946007)(9686003)(6506007)(76116006)(8936002)(53546011)(64756008)(478600001)(186003)(86362001)(33656002)(5660300002)(316002)(110136005)(2906002)(52536014)(38070700004);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jDMgOYlKFv0VJ9vChFNj3ydHD68QJX/8vntPfOGM0R3jN3vU9/Fi4lnfwgvV?=
- =?us-ascii?Q?NqOwvsQyFV1bDSeKW1Ssmfd4wqmBxCg7A23MxgDiFq6f3Vpbh49DyEhMWCJs?=
- =?us-ascii?Q?k2Xps4UYewxQ7ry+fNw0zJlgopmnKtLGGnQvzUG0zXcoBRYDCvk5yzGfa+zw?=
- =?us-ascii?Q?G5OUSWkaWgnvUyISTQ90fxeN7ihTM7hfvY78DhPucl8JgEhepEJvokauPh6y?=
- =?us-ascii?Q?R7pMkfCdqAM2aIb+0Ql+/n4KwKyj/bt0WtNzfhULx7dVL9bLcKfUvz7qMJnv?=
- =?us-ascii?Q?jOc93/whT6iK7tNXpRsn+RCA/+ujVl3WvUyIKoD87dpxPonCm/oIFZ1oz0ka?=
- =?us-ascii?Q?t4yNJG+lMs9DJNDDNALJNWJS5v/62pGimE85d4BMY1gOsaM0jjF4FP4xv7a0?=
- =?us-ascii?Q?8svxZR6zEZgyAAMrvLOmAkCt7RLfZXHJWDMDtmdDzcVmx+deKp1r00O+fnO0?=
- =?us-ascii?Q?h0sqetA5SKd9yLPlXC/EcptjoOxT5iCFT1jS6dZRkS7BM9XdFtP1mFpnEhUO?=
- =?us-ascii?Q?a8lIv5o5pWOtB2qt/NlWsr9tXSb8VimPMsGd7BzCy9eBds1EA+dscAG1LG5k?=
- =?us-ascii?Q?TAYfZ2pQ+PYkV/s+qNaqQEAn0bL3TpkWl1XlD7DPIbxDkbey4oz3mJvwV0q8?=
- =?us-ascii?Q?dpjhqm3B1xThHt8yZcoto2xofc/NJ8/q6Ot8eokehgolnzKMArQPPslBxEyO?=
- =?us-ascii?Q?laEswsVoshNOydn9fiwBgYhfb7mErhSV63Y3tOrC6V1InhCbVNLKT02stWkk?=
- =?us-ascii?Q?vBGWl3dC1WxdTmq1baEgmUGTpLMJttPkYJobJZd2M6ukEX0A4jjPRqKkp+vq?=
- =?us-ascii?Q?WkN7SYwZWv82KBfWG4JGzG2IA7n1UJxofvPQf1JGvvxPLCzSqhiuLfwzKtsI?=
- =?us-ascii?Q?TAX1SThD+E80l/a3X+Sljypf9qXSMkEteT2gSTPlMWEg7I1g3ZGYw6kCps2u?=
- =?us-ascii?Q?hRUYk/5XfNxnei/2YqLsKFJ4f4TXtt1HmViuItLeH/dJT6U/JWEpO4bFWvor?=
- =?us-ascii?Q?xISNdrH9y1a8D1YILZGWr8Hb9q7S0Wz9mkbeiGPAW3ngnrXYAewBLviN++UR?=
- =?us-ascii?Q?RNt4nGFkQPLk7WrlGPV+Th4y+6Kvyx7S6RqudE0zEQzsUDCegOHM0zts1OfL?=
- =?us-ascii?Q?yOXAJClAJ6IloOkTjd2hrXqShHhk4SA7y39XPzU3oQIDwNdyaHkJ9/XjQmX3?=
- =?us-ascii?Q?4OiBuRWxhRBbHR9Vas+Thx95ZjvHi7gowN3jMphBGh4Guiewa68kPaUMf4QG?=
- =?us-ascii?Q?UdRVip3S1BM92r6cU+XWKmTweNeWrUliGANZRVXBWMLEcLrG6Vzur1352Fz1?=
- =?us-ascii?Q?su/N5qCVjvLyPkJW96GaBUsp9hKD4RIdBlwJGy8uGCS/nq3nDj8fvkQ/5Btx?=
- =?us-ascii?Q?kGfXkEmhZ/zn/dlBO+n8vM4lbWZHE+HUnyVqO3qeGCA+NJxW1g=3D=3D?=
-x-ms-exchange-transport-forked: True
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SqjbVl7rojG5 for <buildroot@lists.busybox.net>;
+ Sat, 24 Jul 2021 02:05:38 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 49F79400B9
+ for <buildroot@buildroot.org>; Sat, 24 Jul 2021 02:05:38 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id m13so4691301iol.7
+ for <buildroot@buildroot.org>; Fri, 23 Jul 2021 19:05:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=DYGGLu+yhlt0go+Zxepx+K1s+4Vhg5REUIFdzrtYM3M=;
+ b=oH6X8JVSSEExbLY0/EJWQhbGWAkf2zzR21mpQ5B3De0PbeWs7N2pyqWtPZL0wD6bRH
+ L8Y1dsgZn/8iGPjwMiMZ/nKajhK2J2uPIwxJP6ox9L7hnXsr9SwQrfZSQYGOPu1J6FvC
+ 6stTDaYdk1dVJ6DI9LkTVyXKwzMB+rNkHwd6jxFoDzxQYjxkKvzomc292b6AKv4bNect
+ CIX7fuwWP76yTtVHVSBH/MST/HHiqKt/uq6qVDh+mKLGtZUIUYA931uME4q6uEaZ0vr9
+ mKIH+e2Yw+YGnJ95JWULEubYV4pcFUpA4B3EbjocLU6DL0RIr944pbemtMTGlTadYA1d
+ 21iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=DYGGLu+yhlt0go+Zxepx+K1s+4Vhg5REUIFdzrtYM3M=;
+ b=nMGA5a16xnkprWvp8bH4Xi62oBQt181HinYWJOxN04K1PNAbRmuMxliEhMhwkkUxcX
+ cl88MmhhfV+Xh2dbG/9gVcuSX5LzWfS9i2lM3amFDkIG7fvQkuiw7/Lqjp9nopxeZhXG
+ BR/0h7pcejFPuBLTLVJ4FK5MUKBDAW5HSOoO3xsEuUnMFiajNBJNIUPp648y+Q+3fUt2
+ EL0nWQ6PylOEClxmBaDz9YAbvOBWIfCxYOZE9L71WxhdcWRSQUwnXbKdYUZ0YkuBzD+e
+ 0wSg2Qv5tkiB9LLHhMkV+araeU/AN8NzsMV7Kt48+RI/8Pd0A0Q0KNNu8eG6cAoyZNS1
+ 2UjA==
+X-Gm-Message-State: AOAM533QQv6gnW/t+o+48P5fHWjQyL+NVkVECf4QnFn95VN0SkSVnJff
+ mQ+Unjmz91Lxz1OJ3eJUGOViP0cqAR4=
+X-Google-Smtp-Source: ABdhPJx9I/7qy0IckOp2Ajog6OjqwvMsGE8xmre08Kh5/3Ln4anXEtP/pRy2wUwPrWQk/m5zht2ybA==
+X-Received: by 2002:a5d:925a:: with SMTP id e26mr6040754iol.195.1627092337000; 
+ Fri, 23 Jul 2021 19:05:37 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-178-184.hlrn.qwest.net.
+ [97.118.178.184])
+ by smtp.gmail.com with ESMTPSA id j13sm12240668ila.38.2021.07.23.19.05.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 23 Jul 2021 19:05:36 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 23 Jul 2021 20:05:33 -0600
+Message-Id: <20210724020533.2486844-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB7081.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4e926c8-c444-4ae2-da66-08d94e2b5c3f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jul 2021 22:43:58.6679 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VnTvqSjMzsJBEkIFxpQ1/qluW0ajVrAsM/jEeOFJ6lu3MyfV9f2Ghj8Y0G00fYQ+MO8kJEaAISxklxhE4B++AA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR0401MB3525
-Subject: Re: [Buildroot] [PATCH v2 4/9] board: Add Sipeed MAIX-bit support
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: fix aarch64 renderer
+ process crash
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -166,61 +96,436 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Alistair Francis <alistair@alistair23.me>, Mark Corbin <mark@dibsco.co.uk>,
- buildroot <buildroot@buildroot.org>
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On 2021/07/24 7:35, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sat, 24 Jul 2021 00:25:27 +0200
-> Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
->>> +++ b/board/canaan/k210-common/busybox-tiny-initramfs.config  
->>
->>  Wouldn't it be better to start from busybox-minimal.config and just add a
->> fragment that removes the unnecessary options?
-> 
-> Also, we already have a package/busybox/busybox-minimal.config. I'm not
-> sure we want to add zillions of "minimal" Busybox configurations.
+We need to backport an aarch64 patch to prevent a crash.
 
-OK. In this case, this is all about saving memory and getting that busybox
-process as small as possible, given the super low amount of free memory
-available after boot.
+Fixes:
+==654== Conditional jump or move depends on uninitialised value(s)
+==654==    at 0x68CF9D0: contains (Range.h:115)
+==654==    by 0x68CF9D0: mark (JITStubRoutineSet.h:57)
+==654==    by 0x68CF9D0: mark (ConservativeRoots.cpp:127)
+==654==    by 0x68CF9D0: genericAddPointer<JSC::CompositeMarkHook> (ConservativeRoots.cpp:69)
+==654==    by 0x68CF9D0: genericAddSpan<JSC::CompositeMarkHook> (ConservativeRoots.cpp:101)
+==654==    by 0x68CF9D0: JSC::ConservativeRoots::add(void*, void*, JSC::JITStubRoutineSet&, JSC::CodeBlockSet&) (ConservativeRoots.cpp:147)
+==654==    by 0x68EA5BB: JSC::MachineThreads::gatherConservativeRoots(JSC::ConservativeRoots&, JSC::JITStubRoutineSet&, JSC::CodeBlockSet&, JSC::CurrentThreadState*, WTF::Thread*) (MachineStackMarker.cpp:202)
+==654==    by 0x68D885B: _ZZN3JSC4Heap18addCoreConstraintsEvENUlRT_E0_clINS_11SlotVisitorEEEDaS2_ (Heap.cpp:2740)
+==654==    by 0x68EFF7B: JSC::MarkingConstraint::execute(JSC::SlotVisitor&) (MarkingConstraint.cpp:58)
+==654==    by 0x68F3D83: JSC::MarkingConstraintSolver::runExecutionThread(JSC::SlotVisitor&, JSC::MarkingConstraintSolver::SchedulerPreference, WTF::ScopedLambda<WTF::Optional<unsigned int> ()>) (MarkingConstraintSolver.cpp:237)
+==654==    by 0x68D4413: JSC::Heap::runTaskInParallel(WTF::RefPtr<WTF::SharedTask<void (JSC::SlotVisitor&)>, WTF::RawPtrTraits<WTF::SharedTask<void (JSC::SlotVisitor&)> >, WTF::DefaultRefDerefTraits<WTF::SharedTask<void (JSC::SlotVisitor&)> > >) (Heap.cpp:3061)
+==654==    by 0x68F3E9F: runFunctionInParallel<JSC::MarkingConstraintSolver::execute(JSC::MarkingConstraintSolver::SchedulerPreference, WTF::ScopedLambda<WTF::Optional<unsigned int>()>)::<lambda(JSC::SlotVisitor&)> > (Heap.h:397)
+==654==    by 0x68F3E9F: JSC::MarkingConstraintSolver::execute(JSC::MarkingConstraintSolver::SchedulerPreference, WTF::ScopedLambda<WTF::Optional<unsigned int> ()>) (MarkingConstraintSolver.cpp:66)
+==654==    by 0x68F4033: JSC::MarkingConstraintSolver::drain(WTF::BitVector&) (MarkingConstraintSolver.cpp:97)
+==654==    by 0x68F4B2F: JSC::MarkingConstraintSet::executeConvergenceImpl(JSC::SlotVisitor&) (MarkingConstraintSet.cpp:114)
+==654==    by 0x68F4C6B: JSC::MarkingConstraintSet::executeConvergence(JSC::SlotVisitor&) (MarkingConstraintSet.cpp:83)
+==654==    by 0x68D9BC7: JSC::Heap::runFixpointPhase(JSC::GCConductor) (Heap.cpp:1378)
+==654==    by 0x68D9E93: runCurrentPhase (Heap.cpp:1208)
+==654==    by 0x68D9E93: JSC::Heap::runCurrentPhase(JSC::GCConductor, JSC::CurrentThreadState*) (Heap.cpp:1176)
+==654==  Uninitialised value was created by a stack allocation
+==654==    at 0x5AC3E80: JSC::ARM64Assembler::linkJump(JSC::AssemblerLabel, JSC::AssemblerLabel, JSC::ARM64Assembler::JumpType, JSC::ARM64Assembler::Condition) [clone .isra.0] (ARM64Assembler.h:2556)
 
-The toolchain do not allow to compile "shared library" for NOMMU (shared text
-segment). This is not supported for RV64. Once that is done, someday, we can use
-the default minimal config as forking shells will be cheaper in memory.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ ...support-for-FP-registers-plus-some-b.patch | 382 ++++++++++++++++++
+ 1 file changed, 382 insertions(+)
+ create mode 100644 package/wpewebkit/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
 
-> 
->>> +++ b/configs/sipeed_maix_bit_defconfig
->>> @@ -0,0 +1,23 @@
->>> +BR2_riscv=y
->>> +# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
-> 
-> This should remain the default.
-
-OK.
-
-> 
->>> +BR2_KERNEL_HEADERS_5_13=y
->>> +# BR2_UCLIBC_INSTALL_UTILS is not set
-> 
-> This should remain the default as well.
-
-OK.
-
-> 
-> Thomas
-> 
-
-
+diff --git a/package/wpewebkit/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch b/package/wpewebkit/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
+new file mode 100644
+index 0000000000..c8b8501bdb
+--- /dev/null
++++ b/package/wpewebkit/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
+@@ -0,0 +1,382 @@
++From 05f6ba814422a392d59037ebe4412168da0e44db Mon Sep 17 00:00:00 2001
++From: Mark Lam <mark.lam@apple.com>
++Date: Tue, 15 Jun 2021 01:04:01 +0000
++Subject: [PATCH] Add ldp and stp support for FP registers, plus some bug
++ fixes. https://bugs.webkit.org/show_bug.cgi?id=226998 rdar://79313717
++
++Reviewed by Robin Morisset.
++
++This patch does the following:
++1. Add ldp and stp support for FP registers.
++   This simply entails providing wrappers that take FPRegisterID and passing true
++   for the V bit to the underlying loadStoreRegisterPairXXX encoding function.
++   V is for vector (aka floating point).  This will cause bit 26 in the instruction
++   to be set indicating that it's loading / storing floating point registers.
++
++2. Add ARM64 disassembler support ldp and stp for FP registers.
++   This includes fixing A64DOpcodeLoadStoreRegisterPair::mask to not exclude the
++   FP versions of the instructions.
++
++3. Add ARM64Assembler query methods for determining if an immediate is encodable
++   as the signed 12 bit immediate of ldp and stp instructions.
++
++4. Fix ldp and stp offset form to take an int instead of an unsigned.  The
++   immediate it takes is a 12-bit signed int, not unsigned.
++
++5. In loadStoreRegisterPairXXX encoding functions used by the forms of ldp and stp,
++   RELEASE_ASSERT that the passed in immediate is encodable.  Unlike ldur / stur,
++   there is no form of ldp / stp that takes the offset in a register that can be
++   used as a fail over.  Hence, if the immediate is not encodable, this is a
++   non-recoverable event.  The client is responsible for ensuring that the offset
++   is encodable.
++
++6. Added some testmasm tests for testing the offset form (as opposed to PreIndex
++   and PostIndex forms) of ldp and stp.  We currently only use the offset form
++   in our JITs.
++
++* assembler/ARM64Assembler.h:
++(JSC::ARM64Assembler::isValidLDPImm):
++(JSC::ARM64Assembler::isValidLDPFPImm):
++(JSC::ARM64Assembler::ldp):
++(JSC::ARM64Assembler::ldnp):
++(JSC::ARM64Assembler::isValidSTPImm):
++(JSC::ARM64Assembler::isValidSTPFPImm):
++(JSC::ARM64Assembler::stp):
++(JSC::ARM64Assembler::stnp):
++(JSC::ARM64Assembler::loadStoreRegisterPairPostIndex):
++(JSC::ARM64Assembler::loadStoreRegisterPairPreIndex):
++(JSC::ARM64Assembler::loadStoreRegisterPairOffset):
++(JSC::ARM64Assembler::loadStoreRegisterPairNonTemporal):
++* assembler/AssemblerCommon.h:
++(JSC::isValidSignedImm7):
++* assembler/MacroAssemblerARM64.h:
++(JSC::MacroAssemblerARM64::loadPair64):
++(JSC::MacroAssemblerARM64::storePair64):
++* assembler/testmasm.cpp:
++(JSC::testLoadStorePair64Int64):
++(JSC::testLoadStorePair64Double):
++* disassembler/ARM64/A64DOpcode.cpp:
++(JSC::ARM64Disassembler::A64DOpcodeLoadStoreRegisterPair::format):
++* disassembler/ARM64/A64DOpcode.h:
++
++
++
++Canonical link: https://commits.webkit.org/238801@main
++git-svn-id: https://svn.webkit.org/repository/webkit/trunk@278856 268f45cc-cd09-0410-ab3c-d52691b4dbfc
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1@gmail.com: backport from upstream commit
++05f6ba814422a392d59037ebe4412168da0e44db]
++---
++ Source/JavaScriptCore/ChangeLog               |  61 +++
++ .../JavaScriptCore/assembler/ARM64Assembler.h | 104 ++++-
++ .../assembler/AssemblerCommon.h               |  11 +-
++ .../assembler/MacroAssemblerARM64.h           |  20 +
++ Source/JavaScriptCore/assembler/testmasm.cpp  | 437 ++++++++++++++++++
++ .../disassembler/ARM64/A64DOpcode.cpp         |   8 +-
++ .../disassembler/ARM64/A64DOpcode.h           |   4 +-
++ 7 files changed, 630 insertions(+), 15 deletions(-)
++
++diff --git a/Source/JavaScriptCore/assembler/ARM64Assembler.h b/Source/JavaScriptCore/assembler/ARM64Assembler.h
++index 2cc53c8ccda5..758cbe402779 100644
++--- a/Source/JavaScriptCore/assembler/ARM64Assembler.h
+++++ b/Source/JavaScriptCore/assembler/ARM64Assembler.h
++@@ -1,5 +1,5 @@
++ /*
++- * Copyright (C) 2012-2020 Apple Inc. All rights reserved.
+++ * Copyright (C) 2012-2021 Apple Inc. All rights reserved.
++  *
++  * Redistribution and use in source and binary forms, with or without
++  * modification, are permitted provided that the following conditions
++@@ -1114,6 +1114,20 @@ public:
++         insn(0x0);
++     }
++ 
+++    template<int datasize>
+++    ALWAYS_INLINE static bool isValidLDPImm(int immediate)
+++    {
+++        unsigned immedShiftAmount = memPairOffsetShift(false, MEMPAIROPSIZE_INT(datasize));
+++        return isValidSignedImm7(immediate, immedShiftAmount);
+++    }
+++
+++    template<int datasize>
+++    ALWAYS_INLINE static bool isValidLDPFPImm(int immediate)
+++    {
+++        unsigned immedShiftAmount = memPairOffsetShift(true, MEMPAIROPSIZE_FP(datasize));
+++        return isValidSignedImm7(immediate, immedShiftAmount);
+++    }
+++
++     template<int datasize>
++     ALWAYS_INLINE void ldp(RegisterID rt, RegisterID rt2, RegisterID rn, PairPostIndex simm)
++     {
++@@ -1129,17 +1143,45 @@ public:
++     }
++ 
++     template<int datasize>
++-    ALWAYS_INLINE void ldp(RegisterID rt, RegisterID rt2, RegisterID rn, unsigned pimm = 0)
+++    ALWAYS_INLINE void ldp(RegisterID rt, RegisterID rt2, RegisterID rn, int simm = 0)
+++    {
+++        CHECK_DATASIZE();
+++        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_INT(datasize), false, MemOp_LOAD, simm, rn, rt, rt2));
+++    }
+++
+++    template<int datasize>
+++    ALWAYS_INLINE void ldnp(RegisterID rt, RegisterID rt2, RegisterID rn, int simm = 0)
+++    {
+++        CHECK_DATASIZE();
+++        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_INT(datasize), false, MemOp_LOAD, simm, rn, rt, rt2));
+++    }
+++
+++    template<int datasize>
+++    ALWAYS_INLINE void ldp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, PairPostIndex simm)
+++    {
+++        CHECK_DATASIZE();
+++        insn(loadStoreRegisterPairPostIndex(MEMPAIROPSIZE_FP(datasize), true, MemOp_LOAD, simm, rn, rt, rt2));
+++    }
+++
+++    template<int datasize>
+++    ALWAYS_INLINE void ldp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, PairPreIndex simm)
+++    {
+++        CHECK_DATASIZE();
+++        insn(loadStoreRegisterPairPreIndex(MEMPAIROPSIZE_FP(datasize), true, MemOp_LOAD, simm, rn, rt, rt2));
+++    }
+++
+++    template<int datasize>
+++    ALWAYS_INLINE void ldp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, int simm = 0)
++     {
++         CHECK_DATASIZE();
++-        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_INT(datasize), false, MemOp_LOAD, pimm, rn, rt, rt2));
+++        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_FP(datasize), true, MemOp_LOAD, simm, rn, rt, rt2));
++     }
++ 
++     template<int datasize>
++-    ALWAYS_INLINE void ldnp(RegisterID rt, RegisterID rt2, RegisterID rn, unsigned pimm = 0)
+++    ALWAYS_INLINE void ldnp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, int simm = 0)
++     {
++         CHECK_DATASIZE();
++-        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_INT(datasize), false, MemOp_LOAD, pimm, rn, rt, rt2));
+++        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_FP(datasize), true, MemOp_LOAD, simm, rn, rt, rt2));
++     }
++ 
++     template<int datasize>
++@@ -1743,6 +1785,18 @@ public:
++         smaddl(rd, rn, rm, ARM64Registers::zr);
++     }
++ 
+++    template<int datasize>
+++    ALWAYS_INLINE static bool isValidSTPImm(int immediate)
+++    {
+++        return isValidLDPImm<datasize>(immediate);
+++    }
+++
+++    template<int datasize>
+++    ALWAYS_INLINE static bool isValidSTPFPImm(int immediate)
+++    {
+++        return isValidLDPFPImm<datasize>(immediate);
+++    }
+++
++     template<int datasize>
++     ALWAYS_INLINE void stp(RegisterID rt, RegisterID rt2, RegisterID rn, PairPostIndex simm)
++     {
++@@ -1758,17 +1812,45 @@ public:
++     }
++ 
++     template<int datasize>
++-    ALWAYS_INLINE void stp(RegisterID rt, RegisterID rt2, RegisterID rn, unsigned pimm = 0)
+++    ALWAYS_INLINE void stp(RegisterID rt, RegisterID rt2, RegisterID rn, int simm = 0)
+++    {
+++        CHECK_DATASIZE();
+++        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_INT(datasize), false, MemOp_STORE, simm, rn, rt, rt2));
+++    }
+++
+++    template<int datasize>
+++    ALWAYS_INLINE void stnp(RegisterID rt, RegisterID rt2, RegisterID rn, int simm = 0)
+++    {
+++        CHECK_DATASIZE();
+++        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_INT(datasize), false, MemOp_STORE, simm, rn, rt, rt2));
+++    }
+++
+++    template<int datasize>
+++    ALWAYS_INLINE void stp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, PairPostIndex simm)
+++    {
+++        CHECK_DATASIZE();
+++        insn(loadStoreRegisterPairPostIndex(MEMPAIROPSIZE_FP(datasize), true, MemOp_STORE, simm, rn, rt, rt2));
+++    }
+++
+++    template<int datasize>
+++    ALWAYS_INLINE void stp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, PairPreIndex simm)
+++    {
+++        CHECK_DATASIZE();
+++        insn(loadStoreRegisterPairPreIndex(MEMPAIROPSIZE_FP(datasize), true, MemOp_STORE, simm, rn, rt, rt2));
+++    }
+++
+++    template<int datasize>
+++    ALWAYS_INLINE void stp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, int simm = 0)
++     {
++         CHECK_DATASIZE();
++-        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_INT(datasize), false, MemOp_STORE, pimm, rn, rt, rt2));
+++        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_FP(datasize), true, MemOp_STORE, simm, rn, rt, rt2));
++     }
++ 
++     template<int datasize>
++-    ALWAYS_INLINE void stnp(RegisterID rt, RegisterID rt2, RegisterID rn, unsigned pimm = 0)
+++    ALWAYS_INLINE void stnp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, int simm = 0)
++     {
++         CHECK_DATASIZE();
++-        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_INT(datasize), false, MemOp_STORE, pimm, rn, rt, rt2));
+++        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_FP(datasize), true, MemOp_STORE, simm, rn, rt, rt2));
++     }
++ 
++     template<int datasize>
++@@ -3544,6 +3626,7 @@ protected:
++         ASSERT(opc == (opc & 1)); // Only load or store, load signed 64 is handled via size.
++         ASSERT(V || (size != MemPairOp_LoadSigned_32) || (opc == MemOp_LOAD)); // There isn't an integer store signed.
++         unsigned immedShiftAmount = memPairOffsetShift(V, size);
+++        RELEASE_ASSERT(isValidSignedImm7(immediate, immedShiftAmount));
++         int imm7 = immediate >> immedShiftAmount;
++         ASSERT((imm7 << immedShiftAmount) == immediate && isInt<7>(imm7));
++         return (0x28800000 | size << 30 | V << 26 | opc << 22 | (imm7 & 0x7f) << 15 | rt2 << 10 | xOrSp(rn) << 5 | rt);
++@@ -3575,6 +3658,7 @@ protected:
++         ASSERT(opc == (opc & 1)); // Only load or store, load signed 64 is handled via size.
++         ASSERT(V || (size != MemPairOp_LoadSigned_32) || (opc == MemOp_LOAD)); // There isn't an integer store signed.
++         unsigned immedShiftAmount = memPairOffsetShift(V, size);
+++        RELEASE_ASSERT(isValidSignedImm7(immediate, immedShiftAmount));
++         int imm7 = immediate >> immedShiftAmount;
++         ASSERT((imm7 << immedShiftAmount) == immediate && isInt<7>(imm7));
++         return (0x29800000 | size << 30 | V << 26 | opc << 22 | (imm7 & 0x7f) << 15 | rt2 << 10 | xOrSp(rn) << 5 | rt);
++@@ -3592,6 +3676,7 @@ protected:
++         ASSERT(opc == (opc & 1)); // Only load or store, load signed 64 is handled via size.
++         ASSERT(V || (size != MemPairOp_LoadSigned_32) || (opc == MemOp_LOAD)); // There isn't an integer store signed.
++         unsigned immedShiftAmount = memPairOffsetShift(V, size);
+++        RELEASE_ASSERT(isValidSignedImm7(immediate, immedShiftAmount));
++         int imm7 = immediate >> immedShiftAmount;
++         ASSERT((imm7 << immedShiftAmount) == immediate && isInt<7>(imm7));
++         return (0x29000000 | size << 30 | V << 26 | opc << 22 | (imm7 & 0x7f) << 15 | rt2 << 10 | xOrSp(rn) << 5 | rt);
++@@ -3609,6 +3694,7 @@ protected:
++         ASSERT(opc == (opc & 1)); // Only load or store, load signed 64 is handled via size.
++         ASSERT(V || (size != MemPairOp_LoadSigned_32) || (opc == MemOp_LOAD)); // There isn't an integer store signed.
++         unsigned immedShiftAmount = memPairOffsetShift(V, size);
+++        RELEASE_ASSERT(isValidSignedImm7(immediate, immedShiftAmount));
++         int imm7 = immediate >> immedShiftAmount;
++         ASSERT((imm7 << immedShiftAmount) == immediate && isInt<7>(imm7));
++         return (0x28000000 | size << 30 | V << 26 | opc << 22 | (imm7 & 0x7f) << 15 | rt2 << 10 | xOrSp(rn) << 5 | rt);
++diff --git a/Source/JavaScriptCore/assembler/AssemblerCommon.h b/Source/JavaScriptCore/assembler/AssemblerCommon.h
++index a594823d6a4d..2e50ffdbc82a 100644
++--- a/Source/JavaScriptCore/assembler/AssemblerCommon.h
+++++ b/Source/JavaScriptCore/assembler/AssemblerCommon.h
++@@ -1,5 +1,5 @@
++ /*
++- * Copyright (C) 2012-2019 Apple Inc. All rights reserved.
+++ * Copyright (C) 2012-2021 Apple Inc. All rights reserved.
++  *
++  * Redistribution and use in source and binary forms, with or without
++  * modification, are permitted provided that the following conditions
++@@ -74,6 +74,15 @@ ALWAYS_INLINE bool isValidSignedImm9(int32_t value)
++     return isInt9(value);
++ }
++ 
+++ALWAYS_INLINE bool isValidSignedImm7(int32_t value, int alignmentShiftAmount)
+++{
+++    constexpr int32_t disallowedHighBits = 32 - 7;
+++    int32_t shiftedValue = value >> alignmentShiftAmount;
+++    bool fitsIn7Bits = shiftedValue == ((shiftedValue << disallowedHighBits) >> disallowedHighBits);
+++    bool hasCorrectAlignment = value == (shiftedValue << alignmentShiftAmount);
+++    return fitsIn7Bits && hasCorrectAlignment;
+++}
+++
++ class ARM64LogicalImmediate {
++ public:
++     static ARM64LogicalImmediate create32(uint32_t value)
++diff --git a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.h b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.h
++index f86aec1c5400..14e477fde3b8 100644
++--- a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.h
+++++ b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.h
++@@ -1244,6 +1244,16 @@ public:
++         m_assembler.ldnp<64>(dest1, dest2, src, offset.m_value);
++     }
++ 
+++    void loadPair64(RegisterID src, FPRegisterID dest1, FPRegisterID dest2)
+++    {
+++        loadPair64(src, TrustedImm32(0), dest1, dest2);
+++    }
+++
+++    void loadPair64(RegisterID src, TrustedImm32 offset, FPRegisterID dest1, FPRegisterID dest2)
+++    {
+++        m_assembler.ldp<64>(dest1, dest2, src, offset.m_value);
+++    }
+++
++     void abortWithReason(AbortReason reason)
++     {
++         // It is safe to use dataTempRegister directly since this is a crashing JIT Assert.
++@@ -1568,6 +1578,16 @@ public:
++         m_assembler.stnp<64>(src1, src2, dest, offset.m_value);
++     }
++ 
+++    void storePair64(FPRegisterID src1, FPRegisterID src2, RegisterID dest)
+++    {
+++        storePair64(src1, src2, dest, TrustedImm32(0));
+++    }
+++
+++    void storePair64(FPRegisterID src1, FPRegisterID src2, RegisterID dest, TrustedImm32 offset)
+++    {
+++        m_assembler.stp<64>(src1, src2, dest, offset.m_value);
+++    }
+++
++     void store32(RegisterID src, ImplicitAddress address)
++     {
++         if (tryStoreWithOffset<32>(src, address.base, address.offset))
++diff --git a/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.cpp b/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.cpp
++index 247c79dcb428..dfe09b671470 100644
++--- a/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.cpp
+++++ b/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.cpp
++@@ -1,5 +1,5 @@
++ /*
++- * Copyright (C) 2012, 2016 Apple Inc. All rights reserved.
+++ * Copyright (C) 2012-2021 Apple Inc. All rights reserved.
++  *
++  * Redistribution and use in source and binary forms, with or without
++  * modification, are permitted provided that the following conditions
++@@ -72,6 +72,8 @@ static const OpcodeGroupInitializer opcodeGroupList[] = {
++     OPCODE_GROUP_ENTRY(0x0a, A64DOpcodeLogicalShiftedRegister),
++     OPCODE_GROUP_ENTRY(0x0b, A64DOpcodeAddSubtractExtendedRegister),
++     OPCODE_GROUP_ENTRY(0x0b, A64DOpcodeAddSubtractShiftedRegister),
+++    OPCODE_GROUP_ENTRY(0x0c, A64DOpcodeLoadStoreRegisterPair),
+++    OPCODE_GROUP_ENTRY(0x0d, A64DOpcodeLoadStoreRegisterPair),
++     OPCODE_GROUP_ENTRY(0x11, A64DOpcodeAddSubtractImmediate),
++     OPCODE_GROUP_ENTRY(0x12, A64DOpcodeMoveWide),
++     OPCODE_GROUP_ENTRY(0x12, A64DOpcodeLogicalImmediate),
++@@ -1363,9 +1365,9 @@ const char* A64DOpcodeLoadStoreRegisterPair::format()
++     appendInstructionName(thisOpName);
++     unsigned offsetShift;
++     if (vBit()) {
++-        appendFPRegisterName(rt(), size());
+++        appendFPRegisterName(rt(), size() + 2);
++         appendSeparator();
++-        appendFPRegisterName(rt2(), size());
+++        appendFPRegisterName(rt2(), size() + 2);
++         offsetShift = size() + 2;
++     } else {
++         if (!lBit())
++diff --git a/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.h b/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.h
++index e071babb8e01..fd9db7cae58e 100644
++--- a/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.h
+++++ b/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.h
++@@ -1,5 +1,5 @@
++ /*
++- * Copyright (C) 2012-2019 Apple Inc. All rights reserved.
+++ * Copyright (C) 2012-2021 Apple Inc. All rights reserved.
++  *
++  * Redistribution and use in source and binary forms, with or without
++  * modification, are permitted provided that the following conditions
++@@ -787,7 +787,7 @@ public:
++ 
++ class A64DOpcodeLoadStoreRegisterPair : public A64DOpcodeLoadStore {
++ public:
++-    static constexpr uint32_t mask = 0x3a000000;
+++    static constexpr uint32_t mask = 0x38000000;
++     static constexpr uint32_t pattern = 0x28000000;
++ 
++     DEFINE_STATIC_FORMAT(A64DOpcodeLoadStoreRegisterPair, thisObj);
++-- 
++2.25.1
++
 -- 
-Damien Le Moal
-Western Digital Research
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
