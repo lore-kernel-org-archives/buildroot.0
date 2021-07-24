@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6375C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:25:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B10A4C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:26:00 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 71FDD60F8F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:25:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 71FDD60F8F
+	by mail.kernel.org (Postfix) with ESMTPS id 7595460EE7
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:26:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7595460EE7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EC8242417;
-	Wed,  4 Aug 2021 00:25:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 535B74242D;
+	Wed,  4 Aug 2021 00:26:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ikbvVGshu1w0; Wed,  4 Aug 2021 00:25:46 +0000 (UTC)
+	with ESMTP id CVXJQ4qEESFi; Wed,  4 Aug 2021 00:25:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 902A94240D;
-	Wed,  4 Aug 2021 00:25:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B65342417;
+	Wed,  4 Aug 2021 00:25:58 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 17FC11BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8254A1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 78C95414C5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 787C9414C1
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7rtjsfNOhn1u for <buildroot@lists.busybox.net>;
+ with ESMTP id DXnPXAvFbTQE for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E8B4440F39
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 242AF40F3E
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4AC0581484; Tue,  3 Aug 2021 21:10:15 +0000 (UTC)
+ id 73CB882BC5; Tue,  3 Aug 2021 21:10:15 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Jul 2021 09:53:55 +0200
+Date: Sat, 24 Jul 2021 22:08:32 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 950a09fc56e76499258a843472d4fd5d1a08bf25
-X-Git-Newrev: 05a248571c19d52f11a46c669322e3aaa9713444
+X-Git-Oldrev: 6b763852031bb29f53b3895e78db062291be44fa
+X-Git-Newrev: 968782ab3c440de006f1a4e555b30cb23df29361
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211015.4AC0581484@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/proxychains-ng: fix
- build with xtensa
+Message-Id: <20210803211015.73CB882BC5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bluez-alsa: needs gcc
+ >= 4.9
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,68 +70,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05a248571c19d52f11a46c669322e3aaa9713444
+commit: https://git.buildroot.net/buildroot/commit/?id=968782ab3c440de006f1a4e555b30cb23df29361
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix build failure with xtensa raised since bump to version 4.14 in
-commit 35953d1e61aa8581be09c9dca39365955b10590e
+bluez-alsa needs C11/stdatomic.h since bump to version 3.1.0 in commit
+c4041c230c18d3a9d82bfc6a96b2ceaabddbc94b and
+https://github.com/Arkq/bluez-alsa/commit/04d904326ae77e2919bcfa56245cb7adbc19278a
 
 Fixes:
- - http://autobuild.buildroot.org/results/9320d9b2c69882e23bbe7b30057eb8bee0c9d2e5
+ - http://autobuild.buildroot.org/results/a8cd389796bbc8488e5b5aea995d1cef4c581e8d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...0001-configure-fix-check_link_silent-test.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ package/bluez-alsa/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/proxychains-ng/0001-configure-fix-check_link_silent-test.patch b/package/proxychains-ng/0001-configure-fix-check_link_silent-test.patch
-new file mode 100644
-index 0000000000..aadfef9cd9
---- /dev/null
-+++ b/package/proxychains-ng/0001-configure-fix-check_link_silent-test.patch
-@@ -0,0 +1,41 @@
-+From 4a557f242a76c6a2a3134acf1d3279818f8ab371 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 23 Jul 2021 09:50:36 +0200
-+Subject: [PATCH] configure: fix check_link_silent test
-+
-+Replace -o /dev/null by -o "$tmpc".out when testing with
-+check_link_silent otherwise test will fail with some bugged binutils
-+(https://sourceware.org/bugzilla/show_bug.cgi?id=19526) since version
-+4.13 and
-+https://github.com/rofl0r/proxychains-ng/commit/35a674bdbc294730429a1007c9e7ce01e65b49b5:
-+
-+checking what's the option to use in linker to set library name ...
-+cannot find an option to set library name
-+package/pkg-generic.mk:249: recipe for target '/home/buildroot/autobuild/instance-2/output-1/build/proxychains-ng-4.14/.stamp_configured' failed
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/9320d9b2c69882e23bbe7b30057eb8bee0c9d2e5
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/rofl0r/proxychains-ng/pull/387]
-+---
-+ configure | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure b/configure
-+index 8b21b97..cfe19e7 100755
-+--- a/configure
-++++ b/configure
-+@@ -49,7 +49,8 @@ check_compile_run() {
-+ 
-+ check_link_silent() {
-+ 	printf "$2" > "$tmpc"
-+-	$CC $OUR_CPPFLAGS $CPPFLAGS $1 $CFLAGS "$tmpc" -o /dev/null >/dev/null 2>&1
-++	$CC $OUR_CPPFLAGS $CPPFLAGS $1 $CFLAGS "$tmpc" -o "$tmpc".out  >/dev/null 2>&1
-++	rm -f "$tmpc".out
-+ }
-+ 
-+ check_link() {
-+-- 
-+2.30.2
-+
+diff --git a/package/bluez-alsa/Config.in b/package/bluez-alsa/Config.in
+index 2f103f409c..a31d125d9d 100644
+--- a/package/bluez-alsa/Config.in
++++ b/package/bluez-alsa/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_BLUEZ_ALSA
+ 	bool "bluez-alsa"
+ 	depends on !BR2_STATIC_LIBS # bluez5
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5
+@@ -33,8 +34,9 @@ config BR2_PACKAGE_BLUEZ_ALSA_RFCOMM
+ 
+ endif
+ 
+-comment "bluez-alsa needs a toolchain w/ wchar, NPTL, headers >= 3.4, dynamic library"
++comment "bluez-alsa needs a toolchain w/ wchar, NPTL, headers >= 3.4, dynamic library, gcc >= 4.9"
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 || BR2_STATIC_LIBS
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_USE_MMU
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
