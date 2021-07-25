@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73BEBC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:42:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33EF2C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:42:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 39E2560F56
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:42:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 39E2560F56
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id E5EEF60F58
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:42:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E5EEF60F58
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12D3A83D28;
-	Tue,  3 Aug 2021 22:42:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LjVi9l1BT-jq; Tue,  3 Aug 2021 22:42:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DE5B83D39;
-	Tue,  3 Aug 2021 22:42:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C04A91BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3792D404C9
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B792F403FF;
+	Tue,  3 Aug 2021 22:42:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QhHu2xy_Wvkj for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y6cmYlQjWqvL; Tue,  3 Aug 2021 22:42:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9BD1340135;
+	Tue,  3 Aug 2021 22:42:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 236A31BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 48C5260A86
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ByJREZCbvh7d for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5DFE4058E
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A14B60890
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 24C5188523; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id E48A983FBA; Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 May 2021 11:16:50 +0200
+Date: Sun, 25 Jul 2021 23:57:58 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bf85592a46fbe244b5620baae02a9cf067ad1c23
-X-Git-Newrev: eb6017fabe09fbb654b153414aba332d78002bd7
+X-Git-Oldrev: e43c0509442c746bea305aa2b0a5f7ff5adfd142
+X-Git-Newrev: 5a189d3a24e66c8c1d5fd8e63714d2dd79f6c8ac
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210944.24C5188523@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/vlc: fix build with
- latest live555
+Message-Id: <20210803211018.E48A983FBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/open62541: cleanup
+ tools files after installation
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,63 +70,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb6017fabe09fbb654b153414aba332d78002bd7
+commit: https://git.buildroot.net/buildroot/commit/?id=5a189d3a24e66c8c1d5fd8e63714d2dd79f6c8ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix build failure with live555 raised since commit
-6ad1c7f12e57ab7c6f022470e0aacec442d14267
+The open62541 tools directory is indeed 52 MiB, which built as a standalone package
+named 'libopen62541-1-tools' in launchpad. Nothing is required at runtime.
 
-Fixes:
- - http://autobuild.buildroot.org/results/83170984f96238756c45bf1f4e542363afafd45f
+See the official debian control file template:
+https://raw.githubusercontent.com/open62541/open62541/master/debian/control-template
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+See https://launchpad.net/~open62541-team/+archive/ubuntu/ppa/+packages
+libopen62541-1       Open source implementation of OPC UA - shared library
+libopen62541-1-dev   Open source implementation of OPC UA - development files
+libopen62541-1-tools Open source implementation of OPC UA - tools
+open62541-doc        Open source implementation of OPC UA - documentation
+
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ess-live555.cpp-fix-build-with-live555-20.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/open62541/open62541.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch b/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
-new file mode 100644
-index 0000000000..5f046648d4
---- /dev/null
-+++ b/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
-@@ -0,0 +1,36 @@
-+From eba390d13ec4089cd6b9d8687ab3f8905b9d3ac8 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 22 May 2021 22:56:04 +0200
-+Subject: [PATCH] modules/access/live555.cpp: fix build with live555 >=
-+ 2020.12.11
+diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
+index 102e09a429..3f75196817 100644
+--- a/package/open62541/open62541.mk
++++ b/package/open62541/open62541.mk
+@@ -54,4 +54,11 @@ else
+ OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=OFF
+ endif
+ 
++# Remove unneeded files
++define OPEN62541_REMOVE_UNNEEDED_FILES
++	$(RM) -r $(TARGET_DIR)/usr/share/open62541
++endef
 +
-+Since live555-2020.12.11, connectionEndpointAddress() member function
-+use a "struct sockaddr_storage" in preparation for eventual support of
-+IPv6: http://www.live555.com/liveMedia/public/changelog.txt
++OPEN62541_POST_INSTALL_TARGET_HOOKS += OPEN62541_REMOVE_UNNEEDED_FILES
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/83170984f96238756c45bf1f4e542363afafd45f
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ modules/access/live555.cpp | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/modules/access/live555.cpp b/modules/access/live555.cpp
-+index 9d6e01ae32..32a6c294eb 100644
-+--- a/modules/access/live555.cpp
-++++ b/modules/access/live555.cpp
-+@@ -850,7 +850,9 @@ static int SessionsSetup( demux_t *p_demux )
-+             if( !p_sys->b_multicast )
-+             {
-+                 /* We need different rollover behaviour for multicast */
-+-                p_sys->b_multicast = IsMulticastAddress( sub->connectionEndpointAddress() );
-++                struct sockaddr_storage tempAddr;
-++                sub->getConnectionEndpointAddress( tempAddr );
-++                p_sys->b_multicast = IsMulticastAddress( tempAddr );
-+             }
-+ 
-+             tk = (live_track_t*)malloc( sizeof( live_track_t ) );
-+-- 
-+2.30.2
-+
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
