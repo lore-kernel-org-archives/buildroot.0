@@ -2,61 +2,98 @@ Return-Path: <SRS0=8L+i=MR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
+X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD8E5C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:58:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4548DC4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:59:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6761E60F35
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:58:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6761E60F35
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 08A0E60F23
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:59:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 08A0E60F23
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E6AC83508;
-	Sun, 25 Jul 2021 21:58:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tMZATycLkNOJ; Sun, 25 Jul 2021 21:58:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 962F8834DB;
-	Sun, 25 Jul 2021 21:58:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 52B711BF312
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:58:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 415ED605F1
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:58:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA6FF60675;
+	Sun, 25 Jul 2021 21:59:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oGDkKnOXKQ_b for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 21:58:52 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3AF56605B3
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 21:58:51 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 45F65200003;
- Sun, 25 Jul 2021 21:58:50 +0000 (UTC)
-Date: Sun, 25 Jul 2021 23:58:49 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Scott Fan <fancp2007@gmail.com>
-Message-ID: <20210725235849.65116fc5@windsurf>
-In-Reply-To: <20210222053953.583102-1-fancp2007@gmail.com>
-References: <20210220162715.283519-1-fancp2007@gmail.com>
- <20210222053953.583102-1-fancp2007@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eFltN2Bj0g_2; Sun, 25 Jul 2021 21:59:15 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C094605F1;
+	Sun, 25 Jul 2021 21:59:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C40D91BF20B
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:59:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B3D5240281
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:59:12 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id laNynJa8xxYt for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 21:59:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 09DA740278
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 21:59:11 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id n2so8008036eda.10
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 14:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=date:from:to:subject:message-id:reply-to:references:mime-version
+ :content-disposition:in-reply-to;
+ bh=d0eXa4Db04IF0QoOzzQJ+WKsfnm2nFjDlZynvwbzM+Q=;
+ b=MV1ZYnIglYRus2KPnsW7SXXV8KmlsCyZyChHkvGq08uplLl63TD3gWUKtrSbdV0kLO
+ Scs1E1f+72bY45crL+50EsFdYQrxlHDVLA3N+oTpiqestJI68VNUhwzX3l8yAEC/scAW
+ Xpt/OrX1IPoYj7/YoBAAA4OKWzyZSQNWBpCWbz1MR3z+Tz6H2O/FhGY22vzAeo6uPsb2
+ NFvTl2GoXQxk/PdOAa+/h8IkUMo9rvCk7guscQVG6xz7h/ZP1XeuoQrmUh1EVtogDJ5t
+ W2jgi1LMFhnYNRKvG8R444+Itd+TLZkiNaoFTjyiWjwyhIaiqXdz/nUnlSZb2TzlqRbp
+ cntQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:date:from:to:subject:message-id:reply-to
+ :references:mime-version:content-disposition:in-reply-to;
+ bh=d0eXa4Db04IF0QoOzzQJ+WKsfnm2nFjDlZynvwbzM+Q=;
+ b=hvWdOWIzRxPFyAgGz/6hty+yBrUUXkOcY2TYYGZ3+YkMBFMfFUdluIKTzIoemfLrXp
+ n+dIYIagqsrzMqjbqIlOjDjjw3I2VDz7R1UMxWV87kOe4in4oEeSEyg+R72KAF+ZlUyU
+ rl3ks1I7DVpr0PkGeutzMCUC/wPo/nvs9q9h3Xlum3rtNI6o1uCUQLUbb48ntpRRnLwX
+ yvqlyZKs/0J3+X/+mcWzVW4TzdXfzZwgP4PuxZUhqGb9u4AraQyduIBIno9PfVV7pVdR
+ 2lOoA93TVeBP9DTnNeZustxz+gLOf4XTZNGZ2Owf+2HBZtHvHCEyF006BuR2bQz/8mMa
+ d5ow==
+X-Gm-Message-State: AOAM531m5nwDd+cuOZZ9wZWDyx8vglJyVjPy46cD7emCnS+rT5Qel8Rs
+ flIPysZqlx/eLeRW2iI+YBc=
+X-Google-Smtp-Source: ABdhPJymInjxQC/ZclG7au2LRJbh2yMBh4oryNaxD5FiViFbge2i4rq99RwB+62SVOu2uZfKgNVT9w==
+X-Received: by 2002:a05:6402:60c:: with SMTP id
+ n12mr17782629edv.189.1627250350330; 
+ Sun, 25 Jul 2021 14:59:10 -0700 (PDT)
+Received: from pevik (gw.ms-free.net. [95.85.240.250])
+ by smtp.gmail.com with ESMTPSA id cr9sm17996780edb.17.2021.07.25.14.59.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 25 Jul 2021 14:59:09 -0700 (PDT)
+Date: Sun, 25 Jul 2021 23:59:07 +0200
+From: Petr Vorel <petr.vorel@gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>,
+ buildroot <buildroot@buildroot.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <YP3eq3aM48U1SR84@pevik>
+References: <20210725213422.1622027-1-james.hilliard1@gmail.com>
+ <YP3bauBN+MKEb18i@pevik>
+ <CADvTj4pmrEavk++tgHuLihp56qRBLi+-P7GkKKq9P_rb3CW6MQ@mail.gmail.com>
+ <YP3eMwPzJSID6dq1@pevik>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/open62541: cleanup tools files
- after installation
+Content-Disposition: inline
+In-Reply-To: <YP3eMwPzJSID6dq1@pevik>
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/libtirpc: add missing
+ !BR2_STATIC_LIBS dependency
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,47 +105,73 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Yann CARDAILLAC <ycardaillac@sepro-group.com>, buildroot@buildroot.org
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Mon, 22 Feb 2021 13:39:52 +0800
-Scott Fan <fancp2007@gmail.com> wrote:
+> > On Sun, Jul 25, 2021 at 3:45 PM Petr Vorel <petr.vorel@gmail.com> wrote:
 
-> The open62541 tools directory is indeed 52 MiB, which built as a standalone package
-> named 'libopen62541-1-tools' in launchpad. Nothing is required at runtime.
-> 
-> See the official debian control file template:
-> https://raw.githubusercontent.com/open62541/open62541/master/debian/control-template
-> 
-> See https://launchpad.net/~open62541-team/+archive/ubuntu/ppa/+packages
-> libopen62541-1       Open source implementation of OPC UA - shared library
-> libopen62541-1-dev   Open source implementation of OPC UA - development files
-> libopen62541-1-tools Open source implementation of OPC UA - tools
-> open62541-doc        Open source implementation of OPC UA - documentation
-> 
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - extend the commit log to explain why nothing in there is required.
-> ---
->  package/open62541/open62541.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+> > > Hi James,
 
-As there hasn't been a definitive feedback from Yann Cardaillac, I
-decided to simply apply your patch, as the justification based on the
-Ubuntu packaging made sense to me.
+> > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > > > ---
+> > > > Changes v1 -> v2:
+> > > >   - add comment requiring dynamic libraries
+> > > > ---
+> > > >  package/libtirpc/Config.in | 6 ++++++
+> > > >  1 file changed, 6 insertions(+)
 
-Thanks!
+> > > > diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
+> > > > index 1899edefbf..31f1636ef5 100644
+> > > > --- a/package/libtirpc/Config.in
+> > > > +++ b/package/libtirpc/Config.in
+> > > > @@ -10,6 +10,7 @@ config BR2_PACKAGE_LIBTIRPC
+> > > >  config BR2_PACKAGE_LIBTIRPC_GSS
+> > > >       bool "gss"
+> > > >       depends on BR2_USE_MMU # libkrb5
+> > > > +     depends on !BR2_STATIC_LIBS # libkrb5
+> > > >       depends on BR2_PACKAGE_LIBTIRPC
+> > > >       select BR2_PACKAGE_LIBKRB5
+> > > >       help
+> > > > @@ -17,3 +18,8 @@ config BR2_PACKAGE_LIBTIRPC_GSS
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> > > >  comment "libtirpc needs a toolchain w/ threads"
+> > > >       depends on !BR2_TOOLCHAIN_HAS_THREADS
+> > > > +
+> > > > +comment "libtirpc gss support needs a toolchain w/ dynamic library"
+> > > > +     depends on BR2_USE_MMU
+> > > > +     depends on BR2_STATIC_LIBS
+> > > > +     depends on BR2_PACKAGE_LIBTIRPC
+> > > Shouldn't the last item depend on BR2_PACKAGE_LIBTIRPC_GSS?
+
+> > I don't think so, then it would never be shown AFAIU.
+> Looking into package/apcupsd/Config.in shows 1) comment should be just below
+> config (problem also on previous patch) and 2) IMHO "depends on
+> BR2_PACKAGE_LIBTIRPC" should not be there at all. Or am I missing something?
+Yes, I was missing something :). "depends on BR2_PACKAGE_LIBTIRPC" is correct.
+It works, not sure if 1) is relevant, thus sorry for confusion.
+
+Kind regards,
+Petr
+
+> > > I'd also name it "libtirpc GSS support ..." (capitalize GSS)
+
+> > I kept it lowercase for consistency with:
+> > config BR2_PACKAGE_LIBTIRPC_GSS
+> >       bool "gss"
+
+> > Maybe we should change both?
+> Well, probably better to keep it lowercase.
+> I thought that first is identifier, other is abbreviation in the name,
+> but again, looking into package/apcupsd/Config.in shows I$m wrong.
+
+> Kind regards,
+> Petr
+
+> > > Kind regards,
+> > > Petr
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
