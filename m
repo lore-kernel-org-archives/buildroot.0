@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D6EEC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:24:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B43FC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:24:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2B8F960EFF
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:24:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2B8F960EFF
+	by mail.kernel.org (Postfix) with ESMTPS id CD4CA61029
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:24:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CD4CA61029
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 02B94404F8;
-	Tue,  3 Aug 2021 22:24:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1BA08299E;
+	Tue,  3 Aug 2021 22:24:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xmjJY3Sy1Mzi; Tue,  3 Aug 2021 22:24:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id u6pSrUsGcQmo; Tue,  3 Aug 2021 22:24:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E6F640515;
-	Tue,  3 Aug 2021 22:24:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4CC031BF349
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB00782AEF;
+	Tue,  3 Aug 2021 22:24:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D3DF1BF9AA
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 307A460662
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0EC384058D
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id srjGTU_hPSm3 for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Wbr2avhtMM2k for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54E446090C
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5808240585
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9EECD85586; Tue,  3 Aug 2021 21:10:04 +0000 (UTC)
+ id A1F3281F12; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Jul 2021 23:26:37 +0200
+Date: Sun, 25 Jul 2021 15:48:13 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 32b53a23e88c7a08d289e81b24b8430efe3b2fd9
-X-Git-Newrev: 7a2724683f32235fcfad130b70ee76a8513c25f3
+X-Git-Oldrev: e5637786be2d9ff6424fb902411750938cb1efd9
+X-Git-Newrev: 70dd4bd156bac2bde07751dc3c4d5da9b14d7d7c
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211004.9EECD85586@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/webkitgtk: bump to
- version 2.32.2
+Message-Id: <20210803211017.A1F3281F12@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Config.in: add
+ BR2_PIC_PIE_ARCH_SUPPORTS hidden option
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,142 +70,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a2724683f32235fcfad130b70ee76a8513c25f3
+commit: https://git.buildroot.net/buildroot/commit/?id=70dd4bd156bac2bde07751dc3c4d5da9b14d7d7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bugfix release, mainly solves a few issues with input events,
-drag-and-drop, and a few crashes. Release notes:
+The nios2 architecture is already excluded from PIC/PIE due to issues,
+and we're going to also exclude Microblaze, so let's introduce a
+BR2_PIC_PIE_ARCH_SUPPORTS hidden boolean to facilitate adding this new
+architecture exclusion.
 
-  https://webkitgtk.org/2021/07/09/webkitgtk2.32.2-released.html
-
-The patch for building against uClibc has been included in this release,
-therefore "0001-Support-building-against-uClibc.patch" is removed.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Support-building-against-uClibc.patch     | 82 ----------------------
- package/webkitgtk/webkitgtk.hash                   |  8 +--
- package/webkitgtk/webkitgtk.mk                     |  2 +-
- 3 files changed, 5 insertions(+), 87 deletions(-)
+ Config.in | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/webkitgtk/0001-Support-building-against-uClibc.patch b/package/webkitgtk/0001-Support-building-against-uClibc.patch
-deleted file mode 100644
-index 7c0918a195..0000000000
---- a/package/webkitgtk/0001-Support-building-against-uClibc.patch
-+++ /dev/null
-@@ -1,82 +0,0 @@
--From 624d3b6a99778443e35fb260bef50a3969df9215 Mon Sep 17 00:00:00 2001
--From: Adrian Perez de Castro <aperez@igalia.com>
--Date: Wed, 26 May 2021 01:24:59 +0300
--Subject: [PATCH] Support building against uClibc
-- https://bugs.webkit.org/show_bug.cgi?id=226244
--
--Reviewed by Michael Catanzaro.
--
--Source/JavaScriptCore:
--
--* assembler/MacroAssemblerARM64.cpp:
--(getauxval): Provide a fallback implementation of getauxval() for
--systems which do not provide <sys/auxv.h>, like those using uClibc
--as their C library.
--
--Source/WTF:
--
--* wtf/PlatformRegisters.h: Use the <sys/ucontext.h> header instead of
--<ucontext.h>, which is enough to gain access to the type definitions
--for CPU registers and is available on every libc. On the other hand,
--uClibc does not have <ucontext.h>, so this fixes the build in that
--case.
--
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--[Backport from upstream:
--  - https://bugs.webkit.org/show_bug.cgi?id=226244
--  - https://trac.webkit.org/changeset/278302 (current svn, soon legacy)
--  - https://commits.webkit.org/238339@main (future-proof for after the migration to git)
--]
--[yann.morin.1998@free.fr: add upstream commit refs]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- .../assembler/MacroAssemblerARM64.cpp          | 18 ++++++++++++++++++
-- Source/WTF/wtf/PlatformRegisters.h             |  2 +-
-- 2 files changed, 19 insertions(+), 1 deletion(-)
--
--diff --git a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
--index 9e5c5147ea0..d20e632d825 100644
----- a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
--+++ b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.cpp
--@@ -34,7 +34,25 @@
-- 
-- #if OS(LINUX)
-- #include <asm/hwcap.h>
--+#if __has_include(<sys/auxv.h>)
-- #include <sys/auxv.h>
--+#else
--+#include <linux/auxvec.h>
--+// Provide an implementation for C libraries which do not ship one.
--+static unsigned long getauxval(unsigned long type)
--+{
--+    char** env = environ;
--+    while (*env++) { /* no-op */ }
--+
--+    for (auto* auxv = reinterpret_cast<unsigned long*>(env); *auxv != AT_NULL; auxv += 2) {
--+        if (*auxv == type)
--+            return auxv[1];
--+    }
--+
--+    errno = ENOENT;
--+    return 0;
--+}
--+#endif
-- #endif
-- 
-- namespace JSC {
--diff --git a/Source/WTF/wtf/PlatformRegisters.h b/Source/WTF/wtf/PlatformRegisters.h
--index d26ef985169..e7f15b7eb62 100644
----- a/Source/WTF/wtf/PlatformRegisters.h
--+++ b/Source/WTF/wtf/PlatformRegisters.h
--@@ -35,7 +35,7 @@
-- #elif OS(WINDOWS)
-- #include <windows.h>
-- #else
---#include <ucontext.h>
--+#include <sys/ucontext.h>
-- #endif
-- 
-- namespace WTF {
---- 
--2.31.1
--
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index d8bfa60fb8..dd950bbabe 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.32.1.tar.xz.sums
--md5  b12790ae1209e1d5848aeb4fb70994db  webkitgtk-2.32.1.tar.xz
--sha1  c8c507d3c98c891ea5bfcfb6407320959dc77a2b  webkitgtk-2.32.1.tar.xz
--sha256  136117317f70f66486f71b8edf5e46f8776403c5d8a296e914b11a36ef836917  webkitgtk-2.32.1.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.32.2.tar.xz.sums
-+md5  6dbf813fefd79c551be47b1312f27cec  webkitgtk-2.32.2.tar.xz
-+sha1  958777627972b18501e5520d0aba9e274a2b151f  webkitgtk-2.32.2.tar.xz
-+sha256  1790f86975bdef957ba9a12fc09202de8f55c885ee38467afc50d2bdb7a6c5cd  webkitgtk-2.32.2.tar.xz
+diff --git a/Config.in b/Config.in
+index c05485173b..a146ba0f43 100644
+--- a/Config.in
++++ b/Config.in
+@@ -726,11 +726,16 @@ endmenu
  
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index bee0d4f885..c3fbedf654 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ comment "Security Hardening Options"
  
--WEBKITGTK_VERSION = 2.32.1
-+WEBKITGTK_VERSION = 2.32.2
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-config BR2_PIC_PIE
+-	bool "Build code with PIC/PIE"
++config BR2_PIC_PIE_ARCH_SUPPORTS
++	bool
+ 	default y
+ 	# Nios2 toolchains produce non working binaries with -fPIC
+ 	depends on !BR2_nios2
++
++config BR2_PIC_PIE
++	bool "Build code with PIC/PIE"
++	default y
++	depends on BR2_PIC_PIE_ARCH_SUPPORTS
+ 	depends on BR2_SHARED_LIBS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	help
+@@ -738,7 +743,7 @@ config BR2_PIC_PIE
+ 	  Position-Independent Executables (PIE).
+ 
+ comment "PIC/PIE needs a toolchain w/ PIE"
+-	depends on !BR2_nios2
++	depends on BR2_PIC_PIE_ARCH_SUPPORTS
+ 	depends on BR2_SHARED_LIBS
+ 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
+ 
+@@ -829,7 +834,7 @@ config BR2_RELRO_PARTIAL
+ 
+ config BR2_RELRO_FULL
+ 	bool "Full"
+-	depends on !BR2_nios2 # BR2_PIC_PIE
++	depends on BR2_PIC_PIE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	select BR2_PIC_PIE
+ 	help
+@@ -838,7 +843,7 @@ config BR2_RELRO_FULL
+ 	  program loading, i.e every time an executable is started.
+ 
+ comment "RELRO Full needs a toolchain w/ PIE"
+-	depends on !BR2_nios2
++	depends on BR2_PIC_PIE_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
+ 
+ endchoice
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
