@@ -2,56 +2,76 @@ Return-Path: <SRS0=8L+i=MR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88833C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 07:08:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2121C4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 07:14:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0FF7760720
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 07:08:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0FF7760720
+	by mail.kernel.org (Postfix) with ESMTPS id 30CD360720
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 07:14:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 30CD360720
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB77F83376;
-	Sun, 25 Jul 2021 07:08:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D811A403D9;
+	Sun, 25 Jul 2021 07:14:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0bb4p89F31Ss; Sun, 25 Jul 2021 07:08:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Tg46sSvg0NPs; Sun, 25 Jul 2021 07:14:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC5EA82EA2;
-	Sun, 25 Jul 2021 07:08:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 097E21BF48C
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 07:08:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2577403DA;
+	Sun, 25 Jul 2021 07:14:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 666B01BF48C
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 07:14:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED6D882EA2
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 07:08:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 630D540116
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 07:14:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6z8_w69g-Lpb for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 07:08:17 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC46A82DE6
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 07:08:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id DCB8888C9E; Sun, 25 Jul 2021 06:33:48 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 09:06:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 90dd1d6178b01f6da3e59e43d0c7efdf984a72d8
-X-Git-Newrev: 9dcf461b6ec1f431b525f2376e23ad7e07bea4da
-X-Patchwork-Hint: ignore
-Message-Id: <20210725063348.DCB8888C9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Revert "package/htop: fix sources location"
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EEfKujQgtc2R for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 07:14:11 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2A80440104
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 07:14:11 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:4802:7ee4:40b0:1519])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id DDB2C7802D7;
+ Sun, 25 Jul 2021 09:14:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1627197248;
+ bh=rC68oqFWzXGehOT/IU/cVxrVwKIzZAnle9rECs9Yv0s=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=CY1Ih8Z0qTZkeqweSC7Rf9sIql3IYEiUXmPSmPhVl0iMAMrq6BYcX6HujXvV4/ywF
+ ZIoYMTquTZKKxlhj29JvcEJ0PQljrWXCrI1jV52OMPQbCi6lnA5O1StHZqTcfqQn+Z
+ FOTp1AgvtgPXXbd/kfg7jjyaNTZ8SsusobIHdypqLsbB+pSc1GfnCtsfL3Y4HWsBMN
+ 6YdbyDLU2SGfyjZnXjjVnwj3JpVlHyvGpcTSu6qv6q2M0Qz8gp14LeMZFdOcegRyOF
+ f4qMvgfYorE7ofEWQnVx6tbT3LGJbFL1kT67TzBkJXdgiozKKcH5eyom+W243xqA2F
+ idPzbGGOcyIOQ==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 25 Jul 2021 09:14:01 +0200
+Date: Sun, 25 Jul 2021 09:14:01 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Baruch Siach <baruch@tkos.co.il>
+Message-ID: <20210725071401.GL2382418@scaer>
+References: <20210724204801.1073334-1-daniil.stas@posteo.net>
+ <20210724210341.GJ2382418@scaer> <87tukjxcrs.fsf@tarshish>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <87tukjxcrs.fsf@tarshish>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/htop: fix sources location
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +83,41 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org, Daniil Stas <daniil.stas@posteo.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9dcf461b6ec1f431b525f2376e23ad7e07bea4da
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Baruch, All,
 
-This reverts commit 1ad3de2abde38c023a7958cbd3ada1d7b066da67.
+On 2021-07-25 07:01 +0300, Baruch Siach spake thusly:
+> On Sun, Jul 25 2021, Yann E. MORIN wrote:
+> > Daniil, All,
+> > On 2021-07-24 20:48 +0000, Daniil Stas spake thusly:
+> >> Change sources location from bintray to github since bintray doesn't
+> >> work anymore
+> > Applied to master, thanks.
+> Wouldn't tar file hash change break the sources.buildroot.net cache?
 
-Indeed, the tarball changed, so its hash changed; this is going to
-cause the traditional hash clash with the existing archive on s.b.o.
-or on users machines...
+Damn, you're absolutely right! I've revert the change now.
 
-Reported-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/htop/htop.hash | 2 +-
- package/htop/htop.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+Daniil, could you redo your patch, but rather than use the tag, use the
+sha1 of the corresponding commit, and explain why we do so in a comment
+and in the commit log?
 
-diff --git a/package/htop/htop.hash b/package/htop/htop.hash
-index e9eb5daf4d..647feabb8e 100644
---- a/package/htop/htop.hash
-+++ b/package/htop/htop.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4c2629bd50895bd24082ba2f81f8c972348aa2298cc6edc6a21a7fa18b73990c  htop-3.0.5.tar.gz
-+sha256  19535f8f01ac08be2df880c93c9cedfc50fa92320d48e3ef92a30b6edc4d1917  htop-3.0.5.tar.gz
- sha256  c228cc14df980a23ea0c3c9ac957b904dd6a8514f6283db403de22e9179471be  COPYING
-diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-index dd801b0dc0..aa2ff24750 100644
---- a/package/htop/htop.mk
-+++ b/package/htop/htop.mk
-@@ -5,9 +5,8 @@
- ################################################################################
- 
- HTOP_VERSION = 3.0.5
--HTOP_SITE = $(call github,htop-dev,htop,$(HTOP_VERSION))
-+HTOP_SITE = https://dl.bintray.com/htop/source
- HTOP_DEPENDENCIES = ncurses
--HTOP_AUTORECONF = YES
- # Prevent htop build system from searching the host paths
- HTOP_CONF_ENV = HTOP_NCURSES_CONFIG_SCRIPT=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
- HTOP_LICENSE = GPL-2.0
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
