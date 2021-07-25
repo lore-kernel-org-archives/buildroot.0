@@ -2,57 +2,61 @@ Return-Path: <SRS0=8L+i=MR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60AF9C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:43:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75311C4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:44:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2165460F37
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:43:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2165460F37
+	by mail.kernel.org (Postfix) with ESMTPS id B394860F37
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:44:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B394860F37
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC5006069D;
-	Sun, 25 Jul 2021 21:43:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8657C4028A;
+	Sun, 25 Jul 2021 21:44:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q-WFroivuS6f; Sun, 25 Jul 2021 21:43:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8nk22J9-4aDQ; Sun, 25 Jul 2021 21:44:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E299605C3;
-	Sun, 25 Jul 2021 21:43:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EBB0E1BF95A
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:43:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C85DE40278;
+	Sun, 25 Jul 2021 21:44:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 004AC1BF312
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:44:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB56F605C3
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:43:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E458D40278
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:44:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WTeFp7Dv5Y7k for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 21:43:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 17E87605B3
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 21:43:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 286E2882D1; Sun, 25 Jul 2021 21:08:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8vNGUxEqwyHA for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 21:44:16 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D867140276
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 21:44:15 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id DB78BE000B;
+ Sun, 25 Jul 2021 21:44:13 +0000 (UTC)
+Date: Sun, 25 Jul 2021 23:44:12 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 23:43:13 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ad042904f45201370b886ef5762ff75a93dc8395
-X-Git-Newrev: e43c0509442c746bea305aa2b0a5f7ff5adfd142
-X-Patchwork-Hint: ignore
-Message-Id: <20210725210856.286E2882D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/scanpypi: allow installation of
- commands without 'main' method
+To: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Message-ID: <20210725234412.4871d645@windsurf>
+In-Reply-To: <20210308134542.22324-1-patrickdepinguin@gmail.com>
+References: <20210308134542.22324-1-patrickdepinguin@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/2] utils/scanpypi: add setup.py script
+ directory as sys.path[0]
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,85 +68,80 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e43c0509442c746bea305aa2b0a5f7ff5adfd142
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  8 Mar 2021 14:45:39 +0100
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
-In case the setup.py file of a python package does not directly call the
-'setup' method, utils/scanpypi was hoping there be a 'main' function which
-would do the work, normally called via a construct like:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> Even though the directory containing a package's setup.py was added to
+> sys.path, some setup.py implementations rely on the fact that it is placed
+> in sys.path[0].
+> 
+> An example package is 'cram' which failed to be added with scanpypi:
+> 
+>     Traceback (most recent call last):
+>       File "utils/scanpypi", line 756, in <module>
+>         main()
+>       File "utils/scanpypi", line 703, in main
+>         package.load_setup()
+>       File "utils/scanpypi", line 303, in load_setup
+>         setup = imp.load_module('setup', s_file, s_path, s_desc)
+>       File "/usr/lib/python3.8/imp.py", line 234, in load_module
+>         return load_source(name, filename, file)
+>       File "/usr/lib/python3.8/imp.py", line 171, in load_source
+>         module = _load(spec)
+>       File "<frozen importlib._bootstrap>", line 702, in _load
+>       File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+>       File "<frozen importlib._bootstrap_external>", line 783, in exec_module
+>       File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+>       File "/tmp/scanpypi-2pzc5wb_/python-cram/cram-0.7/setup.py", line 44, in <module>
+>         long_description=long_description(),
+>       File "/tmp/scanpypi-2pzc5wb_/python-cram/cram-0.7/setup.py", line 20, in long_description
+>         return open(os.path.join(sys.path[0], 'README.rst')).read()
+>     FileNotFoundError: [Errno 2] No such file or directory: '.../buildroot/utils/README.rst'
+> 
+> The corresponding code from cram's setup.py is:
+> 
+>     def long_description():
+>         """Get the long description from the README"""
+>         return open(os.path.join(sys.path[0], 'README.rst')).read()
+> 
+> Indeed, the Python documentation says:
+> 
+> https://docs.python.org/3.8/library/sys.html#sys.path
+>     "...
+>     As initialized upon program startup, the first item of this list,
+>     path[0], is the directory containing the script that was used to invoke
+>     the Python interpreter.
+>     ..."
+> 
+> Fix this by inserting explicitly at index 0 instead of appending to
+> sys.path.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  utils/scanpypi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-    if __name__ == '__main__':
-        main()
+Thanks a lot, I've applied both patches. I don't know exactly how that
+will behave with PyPi modules in general, but nobody complained, so the
+only way to know is to merge those patches, and see if they cause
+problems :-)
 
-However, this construct is nonstandard, and there are packages in PyPI which
-call 'setup()' directly from the 'if' statement, without a main() method.
+Thanks!
 
-But scanpypi does not actually need to make such assumption: when loading
-the module, it can decide the name to be '__main__', just as if setup.py
-would be loaded interactively.
-
-Additionally, remove some logic seemingly related to the previous trick of
-calling 'main'. There should not be a problem in keeping already loaded
-modules in sys.modules, as this is the purpose of sys.modules.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- utils/scanpypi | 21 ++++++---------------
- 1 file changed, 6 insertions(+), 15 deletions(-)
-
-diff --git a/utils/scanpypi b/utils/scanpypi
-index fac22d66e8..04c43f9311 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -299,7 +299,7 @@ class BuildrootPackage():
-         os.chdir(self.tmp_extract)
-         sys.path.insert(0,self.tmp_extract)
-         s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
--        setup = imp.load_module('setup', s_file, s_path, s_desc)
-+        setup = imp.load_module('__main__', s_file, s_path, s_desc)
-         if self.metadata_name in self.setup_args:
-             pass
-         elif self.metadata_name.replace('_', '-') in self.setup_args:
-@@ -309,19 +309,10 @@ class BuildrootPackage():
-         try:
-             self.setup_metadata = self.setup_args[self.metadata_name]
-         except KeyError:
--            # This means setup was not called which most likely mean that it is
--            # called through the if __name__ == '__main__' directive.
--            # In this case, we can only pray that it is called through a
--            # function called main() in setup.py.
--            setup.main()  # Will raise AttributeError if not found
--            self.setup_metadata = self.setup_args[self.metadata_name]
--        # Here we must remove the module the hard way.
--        # We must do this because of a very specific case: if a package calls
--        # setup from the __main__ but does not come with a 'main()' function,
--        # for some reason setup.main() will successfully call the main
--        # function of a previous package...
--        sys.modules.pop('setup', None)
--        del setup
-+            # This means setup was not called
-+            print('ERROR: Could not determine package metadata for {pkg}.\n'
-+                  .format(pkg=self.real_name))
-+            raise
-         os.chdir(current_dir)
-         sys.path.remove(self.tmp_extract)
- 
-@@ -706,7 +697,7 @@ def main():
-                 else:
-                     raise
-                 continue
--            except AttributeError as error:
-+            except (AttributeError, KeyError) as error:
-                 print('Error: Could not install package {pkg}: {error}'.format(
-                     pkg=package.real_name, error=error))
-                 continue
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
