@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08797C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:34:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0F4AC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:34:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 864E260F8F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:34:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 864E260F8F
+	by mail.kernel.org (Postfix) with ESMTPS id D6ECF60F8F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:34:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D6ECF60F8F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5162483B17;
-	Wed,  4 Aug 2021 00:34:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEFB240251;
+	Wed,  4 Aug 2021 00:34:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AiXuujD7gs5y; Wed,  4 Aug 2021 00:34:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qLyzT59S9C8w; Wed,  4 Aug 2021 00:34:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9027B83A7E;
-	Wed,  4 Aug 2021 00:34:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 003C940242;
+	Wed,  4 Aug 2021 00:34:42 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6D9441BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4802A1BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8204140F56
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABC8C40EE0
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ueBQSmtcSjGq for <buildroot@lists.busybox.net>;
+ with ESMTP id eVS8DK8vsUzz for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67E2540EE0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7F8DF40F61
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id BEC4281F12; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
+ id C81DB83D7B; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 16:46:30 +0200
+Date: Sun, 25 Jul 2021 17:42:18 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 00de2a1cced508f930b78049c1212973b16c919e
-X-Git-Newrev: 6fbdf51596079b17ef360e942b604237efbcc217
+X-Git-Oldrev: 6fbdf51596079b17ef360e942b604237efbcc217
+X-Git-Newrev: 9cda982855315d683d4880e6bb2a129133ea7213
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211017.BEC4281F12@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Makefile: Parallelize glibc
- locale generation
+Message-Id: <20210803211017.C81DB83D7B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nvidia-driver: fixup
+ libraries according to README
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,139 +70,127 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fbdf51596079b17ef360e942b604237efbcc217
+commit: https://git.buildroot.net/buildroot/commit/?id=9cda982855315d683d4880e6bb2a129133ea7213
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Parallelizes locale generation based on `BR2_JLEVEL` setting.
+Create a symlink for libglx.so and drop libnvidia-wfb.so (aka libwfb.so)
+since all selectable xserver versions in Buildroot provide their own.
 
-Locale generation always runs during the finalize stage and can consume
-a significant amount of time. Parallelizing it greatly reduces that time
-on multi-core machines.
+VDPAU libraries should be installed into /usr/lib/vdpau/
 
-To parallelize it, we first invoke `localedef` for every locale in
-parallel with the `--no-archive` option. This creates the intermediate
-locale data instead of writing to the finally archive directly.
+https://download.nvidia.com/XFree86/Linux-x86_64/390.67/README/installedcomponents.html
 
-Then, we invoke `localedef` again once to create the archive from the
-intermediate compiled locale data files.
+Also, allow specifying target subdirectory per library and respect it in
+the install loop.
 
-We have to do it this way because `localedef` does not do any locking
-when writing to the archive file, so calling it without `--no-archive`
-concurrently could result in a corrupt archive file or an archive file
-that is missing some locales.
-
-While we're at it, make two additional improvements:
-- Remove locale-archive before adding to it. Otherwise, repeated
-  applications of target-finalize will keep on growing the file.
-- Sort the locales when creating locale-archive so its contents are
-  reproducible.
-
-We use `find` to collect the installed locales rather than LOCALES. This
-makes it possible for something else (skeleton, overlay, custom package)
-to create and install additional locales and still have them added to
-locale-archive.
-
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
-[Arnout:
- - Remove -j$(PARALLEL_JOBS), it's already part of $(MAKE)
- - Remove HOST_DIR, TARGET_DIR, STAGING_DIR, they're already exported
- - Extend commit message
-]
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Makefile                          | 25 +++++-------------------
- support/misc/gen-glibc-locales.mk | 41 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 46 insertions(+), 20 deletions(-)
+ package/nvidia-driver/nvidia-driver.mk | 57 +++++++++++++++++++++-------------
+ 1 file changed, 35 insertions(+), 22 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 74c238cb20..d3c67c20d4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -663,32 +663,17 @@ endef
- TARGET_FINALIZE_HOOKS += TOOLCHAIN_ECLIPSE_REGISTER
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+index 44e34cb7b4..80221bc7da 100644
+--- a/package/nvidia-driver/nvidia-driver.mk
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -62,7 +62,7 @@ NVIDIA_DRIVER_LIBS_MISC = \
+ 	libnvidia-glcore.so.$(NVIDIA_DRIVER_VERSION) \
+ 	libnvidia-glsi.so.$(NVIDIA_DRIVER_VERSION) \
+ 	tls/libnvidia-tls.so.$(NVIDIA_DRIVER_VERSION) \
+-	libvdpau_nvidia.so.$(NVIDIA_DRIVER_VERSION) \
++	libvdpau_nvidia.so.$(NVIDIA_DRIVER_VERSION):vdpau/ \
+ 	libnvidia-ml.so.$(NVIDIA_DRIVER_VERSION)
+ 
+ NVIDIA_DRIVER_LIBS += \
+@@ -92,10 +92,9 @@ NVIDIA_DRIVER_LIBS += \
  endif
  
--# Generate locale data. Basically, we call the localedef program
--# (built by the host-localedef package) for each locale. The input
--# data comes preferably from the toolchain, or if the toolchain does
--# not have them (Linaro toolchains), we use the ones available on the
--# host machine.
-+# Generate locale data.
- ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
- GLIBC_GENERATE_LOCALES = $(call qstrip,$(BR2_GENERATE_LOCALE))
- ifneq ($(GLIBC_GENERATE_LOCALES),)
- PACKAGES += host-localedef
+ # We refer to the destination path; the origin file has no directory component
+-NVIDIA_DRIVER_X_MODS = \
+-	drivers/nvidia_drv.so \
+-	extensions/libglx.so.$(NVIDIA_DRIVER_VERSION) \
+-	libnvidia-wfb.so.$(NVIDIA_DRIVER_VERSION)
++NVIDIA_DRIVER_LIBS += \
++	nvidia_drv.so:xorg/modules/drivers/ \
++	libglx.so.$(NVIDIA_DRIVER_VERSION):xorg/modules/extensions/
  
- define GENERATE_GLIBC_LOCALES
--	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
--	$(Q)for locale in $(GLIBC_GENERATE_LOCALES) ; do \
--		inputfile=`echo $${locale} | cut -f1 -d'.'` ; \
--		charmap=`echo $${locale} | cut -f2 -d'.' -s` ; \
--		if test -z "$${charmap}" ; then \
--			charmap="UTF-8" ; \
--		fi ; \
--		echo "Generating locale $${inputfile}.$${charmap}" ; \
--		I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
--		$(HOST_DIR)/bin/localedef \
--			--prefix=$(TARGET_DIR) \
--			--$(call LOWERCASE,$(BR2_ENDIAN))-endian \
--			-i $${inputfile} -f $${charmap} \
--			$${locale} ; \
--	done
-+	$(MAKE) -f support/misc/gen-glibc-locales.mk \
-+		ENDIAN=$(call LOWERCASE,$(BR2_ENDIAN)) \
-+		LOCALES="$(GLIBC_GENERATE_LOCALES)" \
-+		Q=$(Q)
+ endif # X drivers
+ 
+@@ -154,24 +153,31 @@ define NVIDIA_DRIVER_EXTRACT_CMDS
  endef
- TARGET_FINALIZE_HOOKS += GENERATE_GLIBC_LOCALES
- endif
-diff --git a/support/misc/gen-glibc-locales.mk b/support/misc/gen-glibc-locales.mk
-new file mode 100644
-index 0000000000..3db1e0dc11
---- /dev/null
-+++ b/support/misc/gen-glibc-locales.mk
-@@ -0,0 +1,41 @@
-+# Generates glibc locale data for target.
+ 
+ # Helper to install libraries
+-# $1: destination directory (target or staging)
++# $1: library name
++# $2: target directory
+ #
+ # For all libraries, we install them and create a symlink using
+ # their SONAME, so we can link to them at runtime; we also create
+ # the no-version symlink, so we can link to them at build time.
++define NVIDIA_DRIVER_INSTALL_LIB
++	$(INSTALL) -D -m 0644 $(@D)/$(1) $(2)$(notdir $(1))
++	libsoname="$$( $(TARGET_READELF) -d "$(@D)/$(1)" \
++		|sed -r -e '/.*\(SONAME\).*\[(.*)\]$$/!d; s//\1/;' )"; \
++	if [ -n "$${libsoname}" -a "$${libsoname}" != "$(notdir $(1))" ]; then \
++		ln -sf $(notdir $(1)) $(2)$${libsoname}; \
++	fi
++	baseso=$(firstword $(subst .,$(space),$(notdir $(1)))).so; \
++	if [ -n "$${baseso}" -a "$${baseso}" != "$(notdir $(1))" ]; then \
++		ln -sf $(notdir $(1)) $(2)$${baseso}; \
++	fi
++endef
 +
-+inputfile = $(firstword $(subst ., ,$(1)))
-+charmap = $(or $(word 2,$(subst ., ,$(1))),UTF-8)
++# Helper to install libraries
++# $1: destination directory (target or staging)
+ define NVIDIA_DRIVER_INSTALL_LIBS
+-	$(foreach lib,$(NVIDIA_DRIVER_LIBS),\
+-		$(INSTALL) -D -m 0644 $(@D)/$(lib) $(1)/usr/lib/$(notdir $(lib))
+-		libsoname="$$( $(TARGET_READELF) -d "$(@D)/$(lib)" \
+-			|sed -r -e '/.*\(SONAME\).*\[(.*)\]$$/!d; s//\1/;' )"; \
+-		if [ -n "$${libsoname}" -a "$${libsoname}" != "$(notdir $(lib))" ]; then \
+-			ln -sf $(notdir $(lib)) \
+-				$(1)/usr/lib/$${libsoname}; \
+-		fi
+-		baseso=$(firstword $(subst .,$(space),$(notdir $(lib)))).so; \
+-		if [ -n "$${baseso}" -a "$${baseso}" != "$(notdir $(lib))" ]; then \
+-			ln -sf $(notdir $(lib)) $(1)/usr/lib/$${baseso}; \
+-		fi
++	$(foreach lib,$(NVIDIA_DRIVER_LIBS),
++		$(call NVIDIA_DRIVER_INSTALL_LIB,$(word 1,$(subst :, ,$(lib))), \
++			$(1)/usr/lib/$(word 2,$(subst :, ,$(lib))))
+ 	)
+ endef
+ 
+@@ -181,18 +187,25 @@ define NVIDIA_DRIVER_INSTALL_STAGING_CMDS
+ 	$(NVIDIA_DRIVER_INSTALL_GL_DEV)
+ endef
+ 
++# libglx needs a symlink according to the driver README. It has no SONAME
++define NVIDIA_DRIVER_SYMLINK_LIBGLX
++	ln -sf libglx.so.$(NVIDIA_DRIVER_VERSION) \
++		$(TARGET_DIR)/usr/lib/xorg/modules/extensions/libglx.so
++endef
 +
-+# Packages all the generated locale data into the final archive.
-+#
-+# We sort the file names to produce consistent output regardless of
-+# the `find` outputs order.
-+$(TARGET_DIR)/usr/lib/locale/locale-archive: $(LOCALES)
-+	$(Q)rm -f $(@)
-+	$(Q)find $(TARGET_DIR)/usr/lib/locale/ -maxdepth 1 -mindepth 1 -type d -print0 \
-+	| sort -z \
-+	| xargs -0 \
-+		$(HOST_DIR)/bin/localedef \
-+			--prefix=$(TARGET_DIR) \
-+			--$(ENDIAN)-endian \
-+			--add-to-archive
+ # For target, install libraries and X.org modules
+ define NVIDIA_DRIVER_INSTALL_TARGET_CMDS
+ 	$(call NVIDIA_DRIVER_INSTALL_LIBS,$(TARGET_DIR))
+-	$(foreach m,$(NVIDIA_DRIVER_X_MODS), \
+-		$(INSTALL) -D -m 0644 $(@D)/$(notdir $(m)) \
+-			$(TARGET_DIR)/usr/lib/xorg/modules/$(m)
+-	)
+ 	$(foreach p,$(NVIDIA_DRIVER_PROGS), \
+ 		$(INSTALL) -D -m 0755 $(@D)/$(p) \
+ 			$(TARGET_DIR)/usr/bin/$(p)
+ 	)
++	$(NVIDIA_DRIVER_SYMLINK_LIBGLX)
+ 	$(NVIDIA_DRIVER_INSTALL_KERNEL_MODULE)
+ endef
+ 
++# Due to a conflict with xserver_xorg-server, this needs to be performed when
++# finalizing the target filesystem to make sure this version is used.
++NVIDIA_DRIVER_TARGET_FINALIZE_HOOKS += NVIDIA_DRIVER_SYMLINK_LIBGLX
 +
-+# Generates locale data for each locale.
-+#
-+# The input data comes preferably from the toolchain, or if the toolchain
-+# does not have them (Linaro toolchains), we use the ones available on the
-+# host machine.
-+#
-+# Uses `localedef`, which is built by the `host-localedef` package.
-+$(LOCALES): | $(TARGET_DIR)/usr/lib/locale/
-+	$(Q)echo "Generating locale $(@)"
-+	$(Q)I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
-+	$(HOST_DIR)/bin/localedef \
-+		--prefix=$(TARGET_DIR) \
-+		--$(ENDIAN)-endian \
-+		--no-archive \
-+		-i $(call inputfile,$(@)) \
-+		-f $(call charmap,$(@)) \
-+		$(@)
-+
-+.PHONY: $(LOCALES)
-+
-+$(TARGET_DIR)/usr/lib/locale/:
-+	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
