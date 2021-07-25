@@ -2,94 +2,56 @@ Return-Path: <SRS0=8L+i=MR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 193BBC4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:34:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBF53C4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:37:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D047D60E0C
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:34:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D047D60E0C
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 6EFA960F11
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:37:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6EFA960F11
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A980C402A9;
-	Sun, 25 Jul 2021 21:34:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E19882EB6;
+	Sun, 25 Jul 2021 21:37:38 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m-mFnO1nPfDc; Sun, 25 Jul 2021 21:37:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E2FB82CB7;
+	Sun, 25 Jul 2021 21:37:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DB5A41BF312
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:37:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB2E040281
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:37:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HWb8Wp135ZO7; Sun, 25 Jul 2021 21:34:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EAD6940278;
-	Sun, 25 Jul 2021 21:34:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CA7551BF312
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:34:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C71D460675
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:34:55 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id amubQJtlENw8 for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 21:34:55 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1F681600B6
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 21:34:55 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id hb6so13319186ejc.8
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 14:34:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
- :content-disposition:in-reply-to;
- bh=06XMMmMFLAuaDYp8k10ds9cHBQvWtXrkg9FoFkY0cM0=;
- b=ZfxZ+KIKQZajvWyvdRz2QTJUqSxVYAsp5WK6dHQnHR4MS4uE6oatpJzpDFcbk3pi2S
- DjD3C1TFWWhanPl8r9Ci7Nlzcod9tABDwIB//AEVvze71voqbEdbwQuUSNb9/GwoOrjx
- MMxoCHi6bnRhbV6XKVSpl/2ZB6GHD6Hn6d3bgxPATGiiwfOtvu498Xa6LjfZAaRBMyQf
- Gca/yPNoy2FvsUo386h8zRutJqFl+W8wBJE8xuVnrGMdhc1vYe0ZKmf9Sf2Jgt0a6Mb7
- ad5yEM01DPQBbErpF60Ba/6+V7VSxcpBd9UEZiQH/H+/hyIQNh/tbb4FIXcgVqMcWjEO
- 1G+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
- :references:mime-version:content-disposition:in-reply-to;
- bh=06XMMmMFLAuaDYp8k10ds9cHBQvWtXrkg9FoFkY0cM0=;
- b=shLjMeGu2AOqbEhf0EoXBrClsT3Csy1atKPx4M656P728RkhCCHY9190KTetKtxrXP
- KJWjJv7JLiklAH7p4qxW4aY/C4Mbpbg01ZFuvn+/oDGWOTdfC1jDRo947pqRjKIMmhpU
- prq42R5FMjNV/fN7/NzmEvghF7XNzG8/UCCUfyosvvg+iQ1s3pCl1E8TQSHa89zUJGQV
- FgsB/IrdfQ8+Vv7I5Lr6qMUSChJCFzYNNgbQY0FYohzultaRc42uEAsbjSBynDFznj5J
- EGcM6WlRMow3943nWY40Gk5zvHoEnEODfMhlZ/6g7rWE6m0Vyg0eXWw8eNA/MD6w+Tg1
- 93AQ==
-X-Gm-Message-State: AOAM533wIjINZD8L8j6Gzm+P+gNrXODqyXkM1ihRbXWq13/5o5/i/whV
- /xyn8l3mHuDCBkZy3D7dDQ3ZkvybmTszbw==
-X-Google-Smtp-Source: ABdhPJz9r+synvGeo0u0s+WI/13ENFVAOPfDMwN/DdlGhmEP0p4nWddp+F3ktBtaGjTEkk0t6Foa+w==
-X-Received: by 2002:a17:906:5f99:: with SMTP id
- a25mr14435144eju.101.1627248893354; 
- Sun, 25 Jul 2021 14:34:53 -0700 (PDT)
-Received: from pevik (gw.ms-free.net. [95.85.240.250])
- by smtp.gmail.com with ESMTPSA id n14sm18049841edo.23.2021.07.25.14.34.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 25 Jul 2021 14:34:53 -0700 (PDT)
-Date: Sun, 25 Jul 2021 23:34:50 +0200
-From: Petr Vorel <petr.vorel@gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <YP3Y+q8yyrzhYlwd@pevik>
-References: <20210404184126.974098-1-petr.vorel@gmail.com>
- <20210725233220.3196a0f7@windsurf>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210725233220.3196a0f7@windsurf>
-Subject: Re: [Buildroot] [PATCH 1/1] package/modem-manager: enable qcom-soc
- if libqrtr-glib enabled
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WLPaQJwiqT3b for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 21:37:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E413D40278
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 21:37:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 02FBD88FCC; Sun, 25 Jul 2021 21:03:02 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Sun, 25 Jul 2021 23:36:58 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fe68d894715e0cfd214444efb586f434802ae2c2
+X-Git-Newrev: 766ac5d06501d7d7306c1e184a10ac99add9ea9f
+X-Patchwork-Hint: ignore
+Message-Id: <20210725210302.02FBD88FCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/haveged: bump version to 1.9.14
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,39 +63,170 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: Aleksander Morgado <aleksander@aleksander.es>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hi Thomas,
-> On Sun,  4 Apr 2021 20:41:26 +0200
-> Petr Vorel <petr.vorel@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=766ac5d06501d7d7306c1e184a10ac99add9ea9f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > This plugin makes sense only for Qualcomm MSM phone.
-> > Although there is currently no such device defconfig in Buildroot yet,
-> > it makes sense to prepare modem-manager for it.
+- change clock_gettime option from yes/no style to disable/enable one
+  (still omitting the explicit disable to keep the configure logic
+  defaulting to yes in case no rdtsc is available)
 
-> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> > ---
-> >  package/modem-manager/modem-manager.mk | 6 ++++++
-> >  1 file changed, 6 insertions(+)
+- change to set all available configure options:
 
-> Peter, Alexander, based on your feedback, I have marked this patch as
-> Rejected. If that is an incorrect assessment of the situation from me,
-> do not hesitate to let me know.
-OK for me, I should have done it before myself.
-I expect package/libqrtr-glib/ will be used in future for more than just this
-driver (now is this package IMHO useless, but that should change in the future).
+  * '--enable-daemon': previous default
 
-Kind regards,
-Petr
+  * '--disable-diagnostic': previous default
 
-> Thanks!
+  * '-disable-init': do not install init files as buildroot ships its
+    own sysv/systemd init files
 
-> Thomas
+  * '--disable-nistest': disable tests, previous default
+
+  * '--disable-enttest': new option, disable tests
+
+  * '--disable-olt': previous default was yes, disable builtin test
+
+  * '--enable-tune': previous default
+
+- add patch to fix uclibc compile (disable dependency on sys/auxv.h
+  introduced with upstream commit [1])
+
+Changelog ([2]):
+
+  - made enttest configurable
+  - havegecmd.c - new command added to close the communication socket
+    [Werner Fink]
+
+[1] https://github.com/jirka-h/haveged/commit/26d35af198da01220ba4f7a1b987f17012476c00
+[2] https://github.com/jirka-h/haveged/releases/tag/v1.9.14
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...0001-Check-for-sys-auxv.h-before-using-it.patch | 60 ++++++++++++++++++++++
+ package/haveged/haveged.hash                       |  2 +-
+ package/haveged/haveged.mk                         | 22 +++++++-
+ 3 files changed, 81 insertions(+), 3 deletions(-)
+
+diff --git a/package/haveged/0001-Check-for-sys-auxv.h-before-using-it.patch b/package/haveged/0001-Check-for-sys-auxv.h-before-using-it.patch
+new file mode 100644
+index 0000000000..042135f127
+--- /dev/null
++++ b/package/haveged/0001-Check-for-sys-auxv.h-before-using-it.patch
+@@ -0,0 +1,60 @@
++From 676abde95bab10e1d26e91682772514010143343 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sun, 21 Mar 2021 17:00:08 +0100
++Subject: [PATCH] Check for sys/auxv.h before using it.
++
++- fixes uclibc-ng compile (does not provide sys/auxv.h header file)
++
++Fixes:
++
++  haveged.c:22:10: fatal error: sys/auxv.h: No such file or directory
++     22 | #include <sys/auxv.h>
++        |          ^~~~~~~~~~~~
++
++[Upstream: https://github.com/jirka-h/haveged/pull/59]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.ac  | 1 +
++ src/haveged.c | 4 ++++
++ 2 files changed, 5 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index c172a10..a0263f5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -125,6 +125,7 @@ AC_CHECK_HEADERS(stdio.h)
++ AC_CHECK_HEADERS(stdlib.h)
++ AC_CHECK_HEADERS(string.h)
++ AC_CHECK_HEADERS(sys/ioctl.h)
+++AC_CHECK_HEADERS(sys/auxv.h)
++ AC_CHECK_HEADERS(sys/mman.h)
++ AC_CHECK_HEADERS(sys/types.h)
++ AC_CHECK_HEADERS(sys/socket.h)
++diff --git a/src/haveged.c b/src/haveged.c
++index b9cb77b..dad3072 100644
++--- a/src/haveged.c
+++++ b/src/haveged.c
++@@ -19,7 +19,9 @@
++  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
++  */
++ #include "config.h"
+++#if defined(HAVE_SYS_AUXV_H)
++ #include <sys/auxv.h>
+++#endif
++ #include <stdlib.h>
++ #include <stdio.h>
++ #include <getopt.h>
++@@ -135,8 +137,10 @@ int main(int argc, char **argv)
++ {
++    volatile char *path = strdup(argv[0]);
++    volatile char *arg0 = argv[0];
+++#if defined(HAVE_SYS_AUXV_H)
++    if (path[0] != '/')
++       path = (char*)getauxval(AT_EXECFN);
+++#endif
++    static const char* cmds[] = {
++       "b", "buffer",      "1", SETTINGR("Buffer size [KW], default: ",COLLECT_BUFSIZE),
++       "d", "data",        "1", SETTINGR("Data cache size [KB], with fallback to: ", GENERIC_DCACHE ),
++-- 
++2.30.2
++
+diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
+index df8c48e214..f55e004923 100644
+--- a/package/haveged/haveged.hash
++++ b/package/haveged/haveged.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d17bd22fa1745daca5ac72e014ed3b0fe5720da4c115953124b1bf2a0aa2b04b  haveged-1.9.13.tar.gz
++sha256  938cb494bcad7e4f24e61eb50fab4aa0acbc3240c80f3ad5c6cf7e6e922618c3  haveged-1.9.14.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+index 3980f80132..5d76bdc3c9 100644
+--- a/package/haveged/haveged.mk
++++ b/package/haveged/haveged.mk
+@@ -4,14 +4,32 @@
+ #
+ ################################################################################
+ 
+-HAVEGED_VERSION = 1.9.13
++HAVEGED_VERSION = 1.9.14
+ HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
+ HAVEGED_LICENSE = GPL-3.0+
+ HAVEGED_LICENSE_FILES = COPYING
+ HAVEGED_SELINUX_MODULES = entropyd
++# patch touching configure.ac
++HAVEGED_AUTORECONF = YES
++
++# '--disable-init' as buildroot ships its own sysv/systemd init files
++HAVEGED_CONF_OPTS = \
++	--enable-daemon \
++	--disable-diagnostic \
++	--disable-init \
++	--disable-nistest \
++	--disable-enttest \
++	--disable-olt \
++	--enable-tune
+ 
+ ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
+-HAVEGED_CONF_OPTS += --enable-clock_gettime=yes
++HAVEGED_CONF_OPTS += --enable-clock_gettime
++endif
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++HAVEGED_CONF_OPTS += --enable-threads
++else
++HAVEGED_CONF_OPTS += --disable-threads
+ endif
+ 
+ define HAVEGED_INSTALL_INIT_SYSV
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
