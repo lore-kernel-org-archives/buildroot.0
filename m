@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FB52C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:41:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABF56C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:41:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3DC3F60E96
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:41:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3DC3F60E96
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 686CF60E78
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:41:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 686CF60E78
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18480843B5;
-	Wed,  4 Aug 2021 00:41:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40068423F8;
+	Wed,  4 Aug 2021 00:41:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OIIhTWwPR1gp; Wed,  4 Aug 2021 00:41:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FBYRTX7vdv36; Wed,  4 Aug 2021 00:41:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73BD6843B3;
-	Wed,  4 Aug 2021 00:41:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98E4142475;
+	Wed,  4 Aug 2021 00:41:49 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0DB7F1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 118BA1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1718D40F75
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D6C240F6D
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mFI6mK_qRDLv for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:39 +0000 (UTC)
+ with ESMTP id cYG5-ABiCSdK for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A4F4B40F7B
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7DA3240F60
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0624D82B36; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id D19E281F12; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 22:08:48 +0200
+Date: Sun, 25 Jul 2021 17:57:13 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: beb6ece34d7b36452c08917f3aa1f389860d699b
-X-Git-Newrev: a36f6f341bfa2f6c755508eb7f70b273b7c7e35e
+X-Git-Oldrev: 9cda982855315d683d4880e6bb2a129133ea7213
+X-Git-Newrev: f7d79731d1c79bf53577f88b4620627045880de1
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211020.0624D82B36@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ntp: add SELinux module
+Message-Id: <20210803211017.D19E281F12@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nvidia-driver: bump
+ version to 390.132
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,30 +70,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a36f6f341bfa2f6c755508eb7f70b273b7c7e35e
+commit: https://git.buildroot.net/buildroot/commit/?id=f7d79731d1c79bf53577f88b4620627045880de1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Support for ntp is added by the services/ntp module in the SELinux
-refpolicy.
+Support Linux kernel 5.4.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Change the 64-bit download to exclude 32-bit compatibility libs.
+
+Signed-off-by: Zach Vargas <zvargas@xes-inc.com>
+[vfazio: 64-bit package change]
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/ntp/ntp.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/nvidia-driver/nvidia-driver.hash | 4 ++--
+ package/nvidia-driver/nvidia-driver.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 0dc75a7a6d..ff23cdc2b6 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -15,6 +15,7 @@ NTP_LICENSE_FILES = COPYRIGHT
- NTP_CPE_ID_VENDOR = ntp
- NTP_CPE_ID_VERSION = $(NTP_VERSION_MAJOR).$(NTP_VERSION_MINOR)
- NTP_CPE_ID_UPDATE = p$(NTP_VERSION_POINT)
-+NTP_SELINUX_MODULES = ntp
- NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no POSIX_SHELL=/bin/sh
- NTP_CONF_OPTS = \
- 	--with-shared \
+diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
+index 79ac052610..7f2248d0f9 100644
+--- a/package/nvidia-driver/nvidia-driver.hash
++++ b/package/nvidia-driver/nvidia-driver.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 6f4af70ee3d03ed31c497a5d555164c56057b53ecedfc0d2c8de4b0b90728805  NVIDIA-Linux-x86-390.67.run
+-sha256 6df2ca1a7420b6751bcaf257d321b14f4e5f7ca54d77a43514912a3792ece65a  NVIDIA-Linux-x86_64-390.67.run
++sha256 51adb28f0ed4548f35a88a93ad6767ebd807fa14f418bf5e51a6d63a3ff7f275  NVIDIA-Linux-x86-390.132.run
++sha256 b6b4b8af37e78e026c9ebdf4a5c64ea412dfcb710931dd028c22dac228de659d  NVIDIA-Linux-x86_64-390.132-no-compat32.run
+ sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  LICENSE
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+index 80221bc7da..7e89c1ab01 100644
+--- a/package/nvidia-driver/nvidia-driver.mk
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-NVIDIA_DRIVER_VERSION = 390.67
++NVIDIA_DRIVER_VERSION = 390.132
+ NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
+ NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
+-NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION).run
++NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION)$(if $(BR2_x86_64),-no-compat32).run
+ NVIDIA_DRIVER_LICENSE = NVIDIA Software License
+ NVIDIA_DRIVER_LICENSE_FILES = LICENSE
+ NVIDIA_DRIVER_REDISTRIBUTE = NO
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
