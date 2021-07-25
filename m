@@ -2,92 +2,97 @@ Return-Path: <SRS0=8L+i=MR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6744AC4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 15:45:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CD54C4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 15:45:22 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F139C60F43
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 15:45:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F139C60F43
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 0D49760F43
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 15:45:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0D49760F43
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2BC060613;
-	Sun, 25 Jul 2021 15:45:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3926606CB;
+	Sun, 25 Jul 2021 15:45:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eWN2MweJAdsq; Sun, 25 Jul 2021 15:45:01 +0000 (UTC)
+	with ESMTP id MYos0VilM0A8; Sun, 25 Jul 2021 15:45:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D821605C5;
-	Sun, 25 Jul 2021 15:44:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 88EC21BF41F
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 15:44:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 321EE605C6;
+	Sun, 25 Jul 2021 15:45:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1366D1BF41F
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 15:45:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 77BAA8284B
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 15:44:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 02BB96069D
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 15:45:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bzyZ-naJvddl for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 15:44:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MqaT2Tx9BlA1 for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 15:45:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 918B4827A5
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 15:44:57 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- d131-20020a1c1d890000b02902516717f562so532213wmd.3
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 08:44:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D781A605C5
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 15:45:17 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id nb11so12209077ejc.4
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 08:45:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
  :content-transfer-encoding;
- bh=QMdoe4pMY0HGHrjI3XxdEOKVJkd/qBGHTA+GrY3si+I=;
- b=NpuEg0RHqmKUbWx7jInVutKShU9dQXrUTXUaF6XZG7E0zCPsjJlMWozyXniciTMQh3
- AFxZOGjhCPB1tIHntSJppdQAcA+85l0siMoqyGjp2hBNv1UiYIru/HN2yyTU8gE4AMlL
- jDLX1qNLdgWYR4y+XZhdXKmGMnoiuaxIz/xFXI5lU+mINEnV4v0Vtiks6sJbw+lrmzw4
- TnuMLo4pHlnWgynofV/arc1M8Tp4zaWchqTjXo0/m4UPuL7Tz8eLW4/FEIyLnAlY+B+V
- Ec6zP2ErCZpRtmj9AeEOYk5dnABNuVXUfwGikvTmBdJ4Ph2icZ9eYxylQxCIjHR7m7nY
- 2xFw==
+ bh=3BPxu5R9Eb7bonka2FOJwh1RxLKuJHmY3VLBtUceD3Y=;
+ b=CJyO95NDR8TeaZkb76IEesVXf5WH8SP3ujzwoYac6KJwQubXCuJk6/C2BWwReLJH8r
+ oSWBFtRgZ1fxWNnkUi+dfoNtAHsF/exdjgyxtdAp7IjZ9mB6xZoA5vkZWbzLMeQYsBod
+ oMAxSTYxiy6GN3NRUspX7KKDx5fN/wDPfd9VPneC24Q3w5p9DoGHg5Ff69nbFCrZF/c9
+ oi45Aiq9PD5JprzW0KgN1pe05e61yMvV2oiuPLQ0k2UhtmKiFBTgru3Gr94ZVOqo3+aw
+ +SdR/GPg/zjDlbCd/vBXaEa2gl66OMwk9PGEAG2vACzyc9rC3QvIdoncdc+yJmb/FIOO
+ j/ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=QMdoe4pMY0HGHrjI3XxdEOKVJkd/qBGHTA+GrY3si+I=;
- b=GwLyvLepZX8I9NIXD9NEbvDOpLsFYa3lXuo+cF8F+1dDce+HkK2KN3ogEj5m0Mkci/
- YNgKIXJK2MDsPChML/xN1YKUNgGv2aj9K8oJb+3k2I1cyzE9zAtxMdAO/F4c2scnnPsl
- 2TgyxtAOskZWJBZiS8qlrYCVN3GTxfeFGYh6O6U4MYCeQPYMf8WPVmajS3HKJHlK+7v4
- jb07VyCDc31e3uuBpsvhRzxHpjX9TqK0paNL08fqLCpev/Z06BNJQWyfbepjJnYYnqQd
- KEomKc3Oz2LceUDoUk/XS95kxMqj0FY5XvhtMUB4bcCeiB88GiyG1IwDhk9NLpYbcUMT
- PIug==
-X-Gm-Message-State: AOAM530YBLgBl4pmS14IQ7N179hrIiJN7dASuBoCpAMGONcZla/D7yih
- wZGX1UMvCNoc6y8plcuz0POt+4dL6/VODw==
-X-Google-Smtp-Source: ABdhPJz/zWC5NqV4kjrjTpwe21JtSFUvkPpFhtykqeDtmLXEnQxBGdTnjHlIz225DfETTQ86/BVOLA==
-X-Received: by 2002:a05:600c:1c08:: with SMTP id
- j8mr13347954wms.50.1627227895315; 
- Sun, 25 Jul 2021 08:44:55 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1383-171.w86-229.abo.wanadoo.fr.
- [86.229.230.171])
- by smtp.gmail.com with ESMTPSA id 140sm33917776wmb.43.2021.07.25.08.44.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 25 Jul 2021 08:44:54 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 17:44:46 +0200
-Message-Id: <20210725154446.902201-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.30.2
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=3BPxu5R9Eb7bonka2FOJwh1RxLKuJHmY3VLBtUceD3Y=;
+ b=A4YcEo8Aw1jQ1Yqb1MLGnPrhJ/ND7sfKKTeB6s0ttUtCp8wTFiQeLZngyonQ0B3Pdn
+ mm2njLrHBM2apWhuqz2T2/26RGcNl1BevQyKKfbSrELAy68BCRlHxoA7OHSlb/yCruRg
+ mXlpAO8ISjRHGrz6hcq4OdZLwpQe8j/Wr9xBVS5xgS34v7wVOyRpAoVALNmejKFQdbnN
+ oO3vRR9VW2BaX/5uvTRdNu7zupytURnbn7T3zI7w2g/0fSOfIz31GHg+4iuNbakZfsf9
+ s/KOo8lr3sfWhoAxWK/d2utMF4UUNFdZmbOEe23k3XklS1a/aPeH28lLjDeMHMKjVtmp
+ 4/ug==
+X-Gm-Message-State: AOAM532f3v5WjUpiqINfCxR0pw2R9x7nQhINGGgMaGZFygL4AIuTZps6
+ sIV726bM8rNKEpFbaY0hTpsBhw==
+X-Google-Smtp-Source: ABdhPJzFpUTTDadjwNIZuTtLyH6LXbIS8ZKTkNuw8IlpPWNAna9FWh9p7+da7CSwhtWlkkKMLgmhRQ==
+X-Received: by 2002:a17:906:1fd2:: with SMTP id
+ e18mr13091287ejt.313.1627227915964; 
+ Sun, 25 Jul 2021 08:45:15 -0700 (PDT)
+Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id q8sm14181371edv.95.2021.07.25.08.45.15
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 25 Jul 2021 08:45:15 -0700 (PDT)
+To: Vincent Fazio <vfazio@xes-inc.com>, buildroot@buildroot.org
+References: <20200220201149.7426-1-vfazio@xes-inc.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <608e7889-315b-214b-4275-bddd41cc607f@mind.be>
+Date: Sun, 25 Jul 2021 17:45:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/snort: add SELinux module
+In-Reply-To: <20200220201149.7426-1-vfazio@xes-inc.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/nvidia-driver: fixup
+ libraries according to README
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,36 +104,93 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Support for snort is added by the services/snort module in the SELinux
-refpolicy.
+ Hi Vincent,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/snort/snort.mk | 1 +
- 1 file changed, 1 insertion(+)
+On 20/02/2020 21:11, Vincent Fazio wrote:
+> Create a symlink for libglx.so and drop libnvidia-wfb.so (aka libwfb.so)
+> since all selectable xserver versions in Buildroot provide their own.
+> 
+> VDPAU libraries should be installed into /usr/lib/vdpau/
+> 
+> https://download.nvidia.com/XFree86/Linux-x86_64/390.67/README/installedcomponents.html
+> 
+> Also, allow specifying target subdirectory per library and respect it in
+> the install loop.
+> 
+> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 
-diff --git a/package/snort/snort.mk b/package/snort/snort.mk
-index 3df2941179..e073a59a70 100644
---- a/package/snort/snort.mk
-+++ b/package/snort/snort.mk
-@@ -9,6 +9,7 @@ SNORT_SITE = https://www.snort.org/downloads/snort
- SNORT_LICENSE = GPL-2.0
- SNORT_LICENSE_FILES = LICENSE COPYING
- SNORT_CPE_ID_VENDOR = snort
-+SNORT_SELINUX_MODULES = snort
- 
- SNORT_DEPENDENCIES = libpcap libdnet daq pcre zlib host-pkgconf
- 
--- 
-2.30.2
+ I finally applied to master, with a few corrections.
 
+[snip]
+> +	$(foreach lib,$(NVIDIA_DRIVER_LIBS),
+> +		$(call NVIDIA_DRIVER_INSTALL_LIB,$(shell echo $(lib) | awk -F":" '{print $$1}'), \
+
+ We prefer doing this in make:
+
+$(word 1,$(subst :, ,$(lib)))
+
+> +			$(1)/usr/lib/$(shell echo $(lib) | awk -F":" '{print $$2}'))
+>  	)
+>  endef
+>  
+> @@ -181,18 +187,25 @@ define NVIDIA_DRIVER_INSTALL_STAGING_CMDS
+>  	$(NVIDIA_DRIVER_INSTALL_GL_DEV)
+>  endef
+>  
+> +define NVIDIA_DRIVER_SYMLINK_LIBGLX
+> +	# libglx needs a symlink according to the driver README. It has no SONAME
+
+ You shouldn't put comments inside a define, put them before it.
+
+> +	ln -sf libglx.so.$(NVIDIA_DRIVER_VERSION) \
+> +		$(TARGET_DIR)/usr/lib/xorg/modules/extensions/libglx.so
+> +endef
+> +
+>  # For target, install libraries and X.org modules
+>  define NVIDIA_DRIVER_INSTALL_TARGET_CMDS
+>  	$(call NVIDIA_DRIVER_INSTALL_LIBS,$(TARGET_DIR))
+> -	$(foreach m,$(NVIDIA_DRIVER_X_MODS), \
+> -		$(INSTALL) -D -m 0644 $(@D)/$(notdir $(m)) \
+> -			$(TARGET_DIR)/usr/lib/xorg/modules/$(m)
+> -	)
+>  	$(foreach p,$(NVIDIA_DRIVER_PROGS), \
+>  		$(INSTALL) -D -m 0755 $(@D)/$(p) \
+>  			$(TARGET_DIR)/usr/bin/$(p)
+>  	)
+> +	$(NVIDIA_DRIVER_SYMLINK_LIBGLX)
+>  	$(NVIDIA_DRIVER_INSTALL_KERNEL_MODULE)
+>  endef
+>  
+> +# Due to a conflict with xserver_xorg-server, this needs to be performed when
+> +# finalizing the target filesystem to make sure this version is used.
+
+ This is fishy... Is it because xserver_xorg-server creates a symlink or library
+with the same name? In that case, the usual way we solve it is that we add a
+dependency between the two packages:
+
+NVIDIA_DRIVER_DEPENDENCIES += xserver_xorg-server
+
+That way, nvidia-driver will overwrite whatever xorg-server has done.
+
+
+ However, since I don't completely understand the issue, I left it as is.
+
+
+ Regards,
+ Arnout
+
+> +NVIDIA_DRIVER_TARGET_FINALIZE_HOOKS += NVIDIA_DRIVER_SYMLINK_LIBGLX
+> +
+>  $(eval $(generic-package))
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
