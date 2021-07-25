@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F113C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:09:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 517AAC4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:09:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5969360E78
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:09:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5969360E78
+	by mail.kernel.org (Postfix) with ESMTPS id 11FFD60F11
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:09:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 11FFD60F11
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D72583404;
-	Sun, 25 Jul 2021 13:09:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4A2240374;
+	Sun, 25 Jul 2021 13:09:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3j55c5zriqrY; Sun, 25 Jul 2021 13:09:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ge_6ybORuZQ4; Sun, 25 Jul 2021 13:09:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8997A833AF;
-	Sun, 25 Jul 2021 13:09:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 09EF81BF3C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id CCF8F4038D;
+	Sun, 25 Jul 2021 13:09:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 290891BF95A
  for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:09:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 030A160661
+ by smtp1.osuosl.org (Postfix) with ESMTP id 18905833CD
  for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:09:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lUNZaLwOSQvI for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uEFOKk3wTog1 for <buildroot@lists.busybox.net>;
  Sun, 25 Jul 2021 13:09:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69744605B1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A06B8321B
  for <buildroot@buildroot.org>; Sun, 25 Jul 2021 13:09:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3A24988E69; Sun, 25 Jul 2021 12:34:31 +0000 (UTC)
+ id 4FB6488E6C; Sun, 25 Jul 2021 12:34:31 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 15:03:43 +0200
+Date: Sun, 25 Jul 2021 15:03:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1a19e267296380185648a4850eb502b401d4990d
-X-Git-Newrev: 811305e38f14ba615eb90e6c04fc82622eebc148
+X-Git-Oldrev: 0a73b9b962421ce7a72c88e5f5bbd8849f21b041
+X-Git-Newrev: c77d8494a115bf4d72b7bbb87e236be62aa6f909
 X-Patchwork-Hint: ignore
-Message-Id: <20210725123431.3A24988E69@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnspr: bump to version 4.32
+Message-Id: <20210725123431.4FB6488E6C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/at: convert local patches to git
+ format
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,42 +70,164 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=811305e38f14ba615eb90e6c04fc82622eebc148
+commit: https://git.buildroot.net/buildroot/commit/?id=c77d8494a115bf4d72b7bbb87e236be62aa6f909
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to version 4.32
+Convert local patches to git format. Note that some of them change name
+because of use of 'git format-patch'.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnspr/libnspr.hash | 4 ++--
- package/libnspr/libnspr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-Makefile.in-replace-IROOT-by-DESTDIR.patch | 21 +++++++++++----------
+ ...-fix-make-install-for-non-root-don-t-stri.patch} | 16 ++++++++++------
+ ...fix-getloadavg.c-compilation-revert-to-3..patch} | 21 +++++++++++++++------
+ 3 files changed, 36 insertions(+), 22 deletions(-)
 
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index 8ca0f573b9..13d3958735 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/nspr/releases/v4.30/src/SHA256SUMS
--sha256  8d4cd8f8409484dc4c3d31e180354bfc506573eccf86cd691106a1ef7edc913b  nspr-4.30.tar.gz
-+# From https://ftp.mozilla.org/pub/nspr/releases/v4.32/src/SHA256SUMS
-+sha256  bb6bf4f534b9559cf123dcdc6f9cd8167de950314a90a88b2a329c16836e7f6c  nspr-4.32.tar.gz
- # Locally calculated
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 67fb738b57..58a3338c60 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/at/0001-Makefile.in-replace-IROOT-by-DESTDIR.patch b/package/at/0001-Makefile.in-replace-IROOT-by-DESTDIR.patch
+index 856b6c8d08..f595bce9cf 100644
+--- a/package/at/0001-Makefile.in-replace-IROOT-by-DESTDIR.patch
++++ b/package/at/0001-Makefile.in-replace-IROOT-by-DESTDIR.patch
+@@ -1,25 +1,26 @@
+-From 195d30e2e01fe2f91ed3bdaeec3982aa66b309dd Mon Sep 17 00:00:00 2001
++From d2bdcff4748f4c1961118b9467bab302b403ef9f Mon Sep 17 00:00:00 2001
+ From: Marc Kleine-Budde <mkl@pengutronix.de>
+ Date: Tue, 1 Dec 2009 20:57:45 +0100
+-Subject: [PATCH 5/5] Makefile.in: replace IROOT by DESTDIR
++Subject: [PATCH] Makefile.in: replace IROOT by DESTDIR
  
--LIBNSPR_VERSION = 4.30
-+LIBNSPR_VERSION = 4.32
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+ This patch replaces IROOT by DESTDIR, which is the autotools standard
+ variable. For backwards compatibilty IROOT overwrites the DESTDIR.
+ 
+-[Vincent: tweak the patch for the new version]
+-
+ Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++[Vincent: tweak the patch for the new version]
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++[Giulio: convert patch to git format]
+ ---
+- Makefile.in | 68 ++++++++++++++++++++++++++++++++-----------------------------
++ Makefile.in | 68 ++++++++++++++++++++++++++++-------------------------
+  1 file changed, 36 insertions(+), 32 deletions(-)
+ 
+ diff --git a/Makefile.in b/Makefile.in
+-index 06544f9..1f699d9 100644
++index 4c11913..61e7b1d 100644
+ --- a/Makefile.in
+ +++ b/Makefile.in
+-@@ -17,6 +17,10 @@ atdocdir	= $(docdir)/at
+- etcdir		= @ETCDIR@
++@@ -18,6 +18,10 @@ etcdir		= @ETCDIR@
++ atjobdir	= @ATJBD@
+  systemdsystemunitdir = @systemdsystemunitdir@
+  
+ +ifdef IROOT
+@@ -29,7 +30,7 @@ index 06544f9..1f699d9 100644
+  DAEMON_USERNAME	= @DAEMON_USERNAME@
+  DAEMON_GROUPNAME= @DAEMON_GROUPNAME@
+  LOADAVG_MX	= @LOADAVG_MX@
+-@@ -91,41 +95,41 @@ atrun: atrun.in
++@@ -93,41 +97,41 @@ atrun: atrun.in
+  	$(CC) -c $(CFLAGS) $(DEFS) $*.c
+  
+  install: all
+@@ -104,5 +105,5 @@ index 06544f9..1f699d9 100644
+  
+  dist: checkin $(DIST) $(LIST) Filelist.asc
+ -- 
+-2.4.10
++2.25.1
+ 
+diff --git a/package/at/0002-Makefile.in-make-install-fix.patch b/package/at/0002-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch
+similarity index 90%
+rename from package/at/0002-Makefile.in-make-install-fix.patch
+rename to package/at/0002-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch
+index 831ea1a3a9..866175ddb4 100644
+--- a/package/at/0002-Makefile.in-make-install-fix.patch
++++ b/package/at/0002-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch
+@@ -1,21 +1,25 @@
+-[PATCH]: Makefile.in: fix make install for non-root, don't strip
++From 2dd7c3c5b590a3115568175acc888f8e36919d71 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <jacmet@sunsite.dk>
++Date: Fri, 23 Jul 2021 16:47:56 +0200
++Subject: [PATCH] Makefile.in: fix make install for non-root, don't strip
+ 
+ Buildroot will ensure all files are owned by root and stripped anyway
+ (if needed) before the rootfs is created.
+ 
+-[Vincent: tweak the patch for the new version]
+-
+ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++[Vincent: tweak the patch for the new version]
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++[Giulio: convert patch to git format]
+ ---
+  Makefile.in | 43 +++++++++++++++++++++----------------------
+  1 file changed, 21 insertions(+), 22 deletions(-)
+ 
+ diff --git a/Makefile.in b/Makefile.in
+-index 1f699d9..f313f9b 100644
++index 61e7b1d..9f89b1f 100644
+ --- a/Makefile.in
+ +++ b/Makefile.in
+-@@ -95,41 +95,40 @@ atrun: atrun.in
++@@ -97,41 +97,40 @@ atrun: atrun.in
+  	$(CC) -c $(CFLAGS) $(DEFS) $*.c
+  
+  install: all
+@@ -79,5 +83,5 @@ index 1f699d9..f313f9b 100644
+  
+  dist: checkin $(DIST) $(LIST) Filelist.asc
+ -- 
+-2.4.10
++2.25.1
+ 
+diff --git a/package/at/0003-getloadavg.c-fix.patch b/package/at/0003-getloadavg-fix-getloadavg.c-compilation-revert-to-3..patch
+similarity index 54%
+rename from package/at/0003-getloadavg.c-fix.patch
+rename to package/at/0003-getloadavg-fix-getloadavg.c-compilation-revert-to-3..patch
+index e0739271ef..fb515af8d9 100644
+--- a/package/at/0003-getloadavg.c-fix.patch
++++ b/package/at/0003-getloadavg-fix-getloadavg.c-compilation-revert-to-3..patch
+@@ -1,17 +1,23 @@
+-[PATCH]: fix getloadavg.c compilation, revert to 3.1.10 version
++From 4eda31cea9fb3c77fe2748a65960f24ffb42f9ff Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <jacmet@sunsite.dk>
++Date: Fri, 23 Jul 2021 16:51:17 +0200
++Subject: [PATCH] getloadavg: fix getloadavg.c compilation, revert to 3.1.10
++ version
+ 
+ getloadavg.c shipped with 3.1.13 doesn't compile because it references
+ headers not shipped. Fix it by simply reverting to the 3.1.10 version.
+ 
+ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++[Giulio: convert patch to git format]
+ ---
+- getloadavg.c |    7 ++++---
++ getloadavg.c | 7 ++++---
+  1 file changed, 4 insertions(+), 3 deletions(-)
+ 
+-Index: at-3.1.13/getloadavg.c
+-===================================================================
+---- at-3.1.13.orig/getloadavg.c
+-+++ at-3.1.13/getloadavg.c
++diff --git a/getloadavg.c b/getloadavg.c
++index cf5869f..23d18eb 100644
++--- a/getloadavg.c
+++++ b/getloadavg.c
+ @@ -66,11 +66,12 @@ Boston, MA  02110-1301  USA */
+  
+  /* This should always be first.  */
+@@ -28,3 +34,6 @@ Index: at-3.1.13/getloadavg.c
+  
+  #ifndef HAVE_GETLOADAVG
+  
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
