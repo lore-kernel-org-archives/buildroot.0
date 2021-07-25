@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C8BBC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:32:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACF07C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:32:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3093860F56
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:32:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3093860F56
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 67EFE60F58
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:32:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 67EFE60F58
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BED760B1C;
-	Wed,  4 Aug 2021 00:32:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 43436828EF;
+	Wed,  4 Aug 2021 00:32:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mpwCMxGXIwRF; Wed,  4 Aug 2021 00:32:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DzOQJuXMVIDp; Wed,  4 Aug 2021 00:32:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 476A360AFF;
-	Wed,  4 Aug 2021 00:32:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83E2E84341;
+	Wed,  4 Aug 2021 00:32:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 94D371BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0AD801BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4474640F4F
+ by smtp2.osuosl.org (Postfix) with ESMTP id AEA3541519
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E1bbZ3ZUbHGY for <buildroot@lists.busybox.net>;
+ with ESMTP id WXrKiDbsmsaN for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 97465404F8
+ by smtp2.osuosl.org (Postfix) with ESMTP id EFDED40F54
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D886C85445; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 457C983FBA; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 15:03:43 +0200
+Date: Sun, 25 Jul 2021 15:20:24 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1a19e267296380185648a4850eb502b401d4990d
-X-Git-Newrev: 811305e38f14ba615eb90e6c04fc82622eebc148
+X-Git-Oldrev: 9d8b1d3977fa5cd2829a7214a8f2ea479560d421
+X-Git-Newrev: 5b5df66b7d0a9fd887b042de0401ba5094522857
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211016.D886C85445@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libnspr: bump to
- version 4.32
+Message-Id: <20210803211017.457C983FBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pkg-kconfig: move
+ defaults before calling pkg-generic
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,42 +70,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=811305e38f14ba615eb90e6c04fc82622eebc148
+commit: https://git.buildroot.net/buildroot/commit/?id=5b5df66b7d0a9fd887b042de0401ba5094522857
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump to version 4.32
+Currently, we define the default values for kconfig-specific variables
+after we call into the generic package infrastructure.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+So far, this was totally unconsequential, because there was no kconfig
+variable that could influence the generic parts. But conversely, there
+are generic variables that do influence the kconfig part (e.g. $(2)_DIR
+that is used in some dependency definitions), but none that do influence
+the kconfig variables.
+
+However, we are going to add a new kconfig-related variable that will
+have an impact on the generic parts, so we will want that kconfig
+variable to be defined before calling into the generic infrastructure.
+
+For consistency, move all the defaults before calling the generic infra.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libnspr/libnspr.hash | 4 ++--
- package/libnspr/libnspr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-kconfig.mk | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index 8ca0f573b9..13d3958735 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/nspr/releases/v4.30/src/SHA256SUMS
--sha256  8d4cd8f8409484dc4c3d31e180354bfc506573eccf86cd691106a1ef7edc913b  nspr-4.30.tar.gz
-+# From https://ftp.mozilla.org/pub/nspr/releases/v4.32/src/SHA256SUMS
-+sha256  bb6bf4f534b9559cf123dcdc6f9cd8167de950314a90a88b2a329c16836e7f6c  nspr-4.32.tar.gz
- # Locally calculated
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 67fb738b57..58a3338c60 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index dd727b7200..49074f9220 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -78,6 +78,14 @@ endef
  
--LIBNSPR_VERSION = 4.30
-+LIBNSPR_VERSION = 4.32
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+ define inner-kconfig-package
+ 
++# Default values
++$(2)_MAKE ?= $$(MAKE)
++$(2)_KCONFIG_EDITORS ?= menuconfig
++$(2)_KCONFIG_OPTS ?=
++$(2)_KCONFIG_FIXUP_CMDS ?=
++$(2)_KCONFIG_FRAGMENT_FILES ?=
++$(2)_KCONFIG_DOTCONFIG ?= .config
++
+ # Register the kconfig dependencies as regular dependencies, so that
+ # they are also accounted for in the generated graphs.
+ $(2)_DEPENDENCIES += $$($(2)_KCONFIG_DEPENDENCIES)
+@@ -88,14 +96,6 @@ $(2)_DEPENDENCIES += $$($(2)_KCONFIG_DEPENDENCIES)
+ # dependency expression
+ $(call inner-generic-package,$(1),$(2),$(3),$(4))
+ 
+-# Default values
+-$(2)_MAKE ?= $$(MAKE)
+-$(2)_KCONFIG_EDITORS ?= menuconfig
+-$(2)_KCONFIG_OPTS ?=
+-$(2)_KCONFIG_FIXUP_CMDS ?=
+-$(2)_KCONFIG_FRAGMENT_FILES ?=
+-$(2)_KCONFIG_DOTCONFIG ?= .config
+-
+ # Do not use $(2)_KCONFIG_DOTCONFIG as stamp file, because the package
+ # buildsystem (e.g. linux >= 4.19) may touch it, thus rendering our
+ # timestamps out of date, thus re-trigerring the build of the package.
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
