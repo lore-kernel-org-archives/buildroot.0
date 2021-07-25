@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2385C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:40:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4BE8C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:40:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B9AD060F48
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:39:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B9AD060F48
+	by mail.kernel.org (Postfix) with ESMTPS id 8840360E96
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:40:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8840360E96
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9361483CA6;
-	Wed,  4 Aug 2021 00:39:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 58D7F401F5;
+	Wed,  4 Aug 2021 00:40:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nq-7qP2Ln0Af; Wed,  4 Aug 2021 00:39:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PLuIDPde1lZa; Wed,  4 Aug 2021 00:40:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E35183C52;
-	Wed,  4 Aug 2021 00:39:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 258064052E;
+	Wed,  4 Aug 2021 00:40:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1FB1E1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 74B6C1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 48EB140F6C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4951740EE5
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BFT6RzpwVpVH for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:38 +0000 (UTC)
+ with ESMTP id O_G8MZitTm0D for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C819F40F73
+ by smtp2.osuosl.org (Postfix) with ESMTP id 73D4D40F69
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 2B1AF85445; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
+ id BCCE383FBA; Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 22:08:09 +0200
+Date: Sun, 25 Jul 2021 23:29:31 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 75148bac539d10d543c6c4a126fa1611688f93f2
-X-Git-Newrev: f043646044261578fd554c1f899b84e798ef9437
+X-Git-Oldrev: 0ba7a0fd52dd0633b50a11686ebe486c9a6f33f8
+X-Git-Newrev: fe68d894715e0cfd214444efb586f434802ae2c2
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211019.2B1AF85445@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fetchmail: add SELinux
- module
+Message-Id: <20210803211018.BCCE383FBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qt5declarative: fix
+ gcc-11 compile failure
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,36 +65,163 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2260724264040973363=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f043646044261578fd554c1f899b84e798ef9437
+--===============2260724264040973363==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=fe68d894715e0cfd214444efb586f434802ae2c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Support for fetchmail is added by the services/fetchmail module in the
-SELinux refpolicy.
+- add patch for qv4regexp_p to include c++ limits include (instead of plain
+  c limit.h)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+
+  In file included from jsruntime/qv4regexp_p.h:62,
+                   from jsruntime/qv4regexp.cpp:40:
+  ../3rdparty/masm/yarr/Yarr.h:46:44: error: ‘numeric_limits’ is not a member of ‘std’
+     46 | static const unsigned offsetNoMatch = std::numeric_limits<unsigned>::max();
+        |                                            ^~~~~~~~~~~~~~
+  ../3rdparty/masm/yarr/Yarr.h:46:59: error: expected primary-expression before ‘unsigned’
+     46 | static const unsigned offsetNoMatch = std::numeric_limits<unsigned>::max();
+        |                                                           ^~~~~~~~
+
+- add patch for qqmlprofilerevent_p to include c++ limits include
+
+Fixes:
+
+  In file included from qqmlprofilertypedevent_p.h:43,
+                   from qqmlprofilertypedevent.cpp:40:
+  qqmlprofilerevent_p.h: In member function ‘void QQmlProfilerEvent::assignNumbers(const Container&)’:
+  qqmlprofilerevent_p.h:314:65: error: ‘numeric_limits’ is not a member of ‘std’
+    314 |                     static_cast<quint16>(numbers.size()) : std::numeric_limits<quint16>::max();
+        |                                                                 ^~~~~~~~~~~~~~
+  qqmlprofilerevent_p.h:314:87: error: expected primary-expression before ‘>’ token
+    314 |                     static_cast<quint16>(numbers.size()) : std::numeric_limits<quint16>::max();
+        |                                                                                       ^
+  qqmlprofilerevent_p.h:314:90: error: ‘::max’ has not been declared; did you mean ‘std::max’?
+    314 |                     static_cast<quint16>(numbers.size()) : std::numeric_limits<quint16>::max();
+        |                                                                                          ^~~
+        |                                                                                          std::max
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fetchmail/fetchmail.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...-needs-c-limits-include-instead-of-plain-.patch | 41 ++++++++++++++++++++
+ ...revent_p-needs-c-limits-inlcude-fixes-gcc.patch | 45 ++++++++++++++++++++++
+ 2 files changed, 86 insertions(+)
 
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index 7233da98a5..c2e5e3e9c4 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -11,6 +11,7 @@ FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FET
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
- FETCHMAIL_LICENSE_FILES = COPYING
- FETCHMAIL_CPE_ID_VENDOR = fetchmail
-+FETCHMAIL_SELINUX_MODULES = fetchmail
- 
- FETCHMAIL_CONF_OPTS = \
- 	--with-ssl=$(STAGING_DIR)/usr
+diff --git a/package/qt5/qt5declarative/0002-qv4regexp_p-needs-c-limits-include-instead-of-plain-.patch b/package/qt5/qt5declarative/0002-qv4regexp_p-needs-c-limits-include-instead-of-plain-.patch
+new file mode 100644
+index 0000000000..d3344c646b
+--- /dev/null
++++ b/package/qt5/qt5declarative/0002-qv4regexp_p-needs-c-limits-include-instead-of-plain-.patch
+@@ -0,0 +1,41 @@
++From bfd3d907f48aba870be00cd251f0b63d34985be2 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Thu, 22 Jul 2021 23:02:29 +0200
++Subject: [PATCH] qv4regexp_p: needs c++ limits include (instead of plain c
++ limit.h)
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes gcc-11 compile:
++
++  In file included from jsruntime/qv4regexp_p.h:62,
++                   from jsruntime/qv4regexp.cpp:40:
++  ../3rdparty/masm/yarr/Yarr.h:46:44: error: ‘numeric_limits’ is not a member of ‘std’
++     46 | static const unsigned offsetNoMatch = std::numeric_limits<unsigned>::max();
++        |                                            ^~~~~~~~~~~~~~
++  ../3rdparty/masm/yarr/Yarr.h:46:59: error: expected primary-expression before ‘unsigned’
++     46 | static const unsigned offsetNoMatch = std::numeric_limits<unsigned>::max();
++        |                                                           ^~~~~~~~
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/qml/jsruntime/qv4regexp_p.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/qml/jsruntime/qv4regexp_p.h b/src/qml/jsruntime/qv4regexp_p.h
++index 6afb10ea95..c64f3d3c38 100644
++--- a/src/qml/jsruntime/qv4regexp_p.h
+++++ b/src/qml/jsruntime/qv4regexp_p.h
++@@ -57,7 +57,7 @@
++ #include <wtf/FastAllocBase.h>
++ #include <wtf/BumpPointerAllocator.h>
++ 
++-#include <limits.h>
+++#include <limits>
++ 
++ #include <yarr/Yarr.h>
++ #include <yarr/YarrInterpreter.h>
++-- 
++2.32.0
++
+diff --git a/package/qt5/qt5declarative/0003-qqmlprofilerevent_p-needs-c-limits-inlcude-fixes-gcc.patch b/package/qt5/qt5declarative/0003-qqmlprofilerevent_p-needs-c-limits-inlcude-fixes-gcc.patch
+new file mode 100644
+index 0000000000..0e6da652f9
+--- /dev/null
++++ b/package/qt5/qt5declarative/0003-qqmlprofilerevent_p-needs-c-limits-inlcude-fixes-gcc.patch
+@@ -0,0 +1,45 @@
++From cc8d62f556c065d28a52e4b784b5d22f2cca3001 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Thu, 22 Jul 2021 23:13:43 +0200
++Subject: [PATCH] qqmlprofilerevent_p: needs c++ limits inlcude (fixes gcc-11
++ compile)
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes:
++
++  In file included from qqmlprofilertypedevent_p.h:43,
++                   from qqmlprofilertypedevent.cpp:40:
++  qqmlprofilerevent_p.h: In member function ‘void QQmlProfilerEvent::assignNumbers(const Container&)’:
++  qqmlprofilerevent_p.h:314:65: error: ‘numeric_limits’ is not a member of ‘std’
++    314 |                     static_cast<quint16>(numbers.size()) : std::numeric_limits<quint16>::max();
++        |                                                                 ^~~~~~~~~~~~~~
++  qqmlprofilerevent_p.h:314:87: error: expected primary-expression before ‘>’ token
++    314 |                     static_cast<quint16>(numbers.size()) : std::numeric_limits<quint16>::max();
++        |                                                                                       ^
++  qqmlprofilerevent_p.h:314:90: error: ‘::max’ has not been declared; did you mean ‘std::max’?
++    314 |                     static_cast<quint16>(numbers.size()) : std::numeric_limits<quint16>::max();
++        |                                                                                          ^~~
++        |                                                                                          std::max
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/qmldebug/qqmlprofilerevent_p.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/qmldebug/qqmlprofilerevent_p.h b/src/qmldebug/qqmlprofilerevent_p.h
++index a7e37d1964..01b2f58f16 100644
++--- a/src/qmldebug/qqmlprofilerevent_p.h
+++++ b/src/qmldebug/qqmlprofilerevent_p.h
++@@ -48,6 +48,7 @@
++ #include <QtCore/qmetatype.h>
++ 
++ #include <initializer_list>
+++#include <limits>
++ #include <type_traits>
++ 
++ //
++-- 
++2.32.0
++
+
+--===============2260724264040973363==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============2260724264040973363==--
