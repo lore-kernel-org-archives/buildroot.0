@@ -8,84 +8,82 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B45C4C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 07:49:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29193C4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 07:55:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7A05860F13
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 07:49:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7A05860F13
+	by mail.kernel.org (Postfix) with ESMTPS id CC3FB60F13
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 07:55:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CC3FB60F13
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CB59833AF;
-	Sun, 25 Jul 2021 07:49:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97933606E8;
+	Sun, 25 Jul 2021 07:55:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9_U8sTnUpLu0; Sun, 25 Jul 2021 07:49:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id I0UdFWE1fWM0; Sun, 25 Jul 2021 07:55:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC5B98338B;
-	Sun, 25 Jul 2021 07:49:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D55C01BF48C
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 07:49:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 05A9760623;
+	Sun, 25 Jul 2021 07:55:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C1CBF1BF48C
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 07:55:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB203403B2
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 07:49:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B0EF860623
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 07:55:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V5igjZu1PDYm for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 07:49:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 96V7oRtuV1ke for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 07:55:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 981F7403B1
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 07:49:06 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id o1so7114449wrp.5
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 00:49:06 -0700 (PDT)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7E1DE605C7
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 07:55:10 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id n21so3311705wmq.5
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 00:55:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=EXieRg1m/5IQ1Mq1afadgOMzj987Wgmd1QBLu/7r2rk=;
- b=hDVOOtioQ2O9zuiLAGrN+wUHgA3H2j+ObVK641m3KoaMzNkRqdK1h0ZvWlAMsEkju3
- 1U1LVTJ8K/psbi3837R86omROEdhTvOo1I14T4W6juRJec2UbG2K8dZJhReLLFX0++pj
- CbUy1Q+68oYND8egmRk18tKhU1y7JPVSPXAAbPpIULHB3QsyUuIGEg3L55Rp8Z2WhwsX
- vkzN67Vg+QLsCHkTItYwqtN8Vy1yRC9jUu4MdFK0lVZkWPmMFvpepJPmdX7v2rPv68mK
- O+uajPiKBoTZxFxnhzezTFyEcrZ+RPpuWA8+y8Yhi3cxnpbFK+s+MahyJOUh8x0R1dXM
- gdXQ==
+ bh=WiBdMOxyp6SY+ZY1Gic7yuqaPmA47UUWgRhWdk5K00A=;
+ b=tBpXSNBZQ/TqNQg7HFBC0gRHC2qiTg+VS3ZeuJq/u3KtJMw0xdF97cvIpxwgK/Qezf
+ VWCNI83ADvxP2yfvJD+1dXQ/zgzYE4vZi+i+mbHoZHswRFPzCITRbty0hl9m4w5K6qCn
+ mqQMLusYWF59Oo1jvLxubdYKn/bjP41e8xETDQY6lY2tk2z045ukVTxXp27AnIJDVDNz
+ HBuJ4FoVstBQOJBAKKCsSR/JXSaTMr86LlHNkORTHIMb9y7UhwKSlOAeCQeegF9Jg+Q6
+ bZQb3gtXt9O45Wj4GPtL9MpkXAW5uqqUOC9Kojo3kL2oPRoo+PlKy1vXb+8eXB31IOqT
+ rDZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=EXieRg1m/5IQ1Mq1afadgOMzj987Wgmd1QBLu/7r2rk=;
- b=j2d1QYuwiGJ+2Pmac8bqWNY9VKjv+0NJ78/1kOimWUwUrt1LsxPdHaYKradP0hfInj
- TZemQoWaMa44lLEGAs7sKjEihBH2LejdDbQzQQobWCLSMS1A/hJxFVwpKJZmJHLNtwwC
- M+Y6g/fH7Gd+mPpDRcM5whLJH0Pka8/bdS11/FsnizxMKO54cr+rkohdZZC3Set+b9c6
- vY+GPeP43goMIvWZOi6jkA3yfTnhHTyA7zVgKZTg/LVjoNv4ldOt8Exrj9MhD9ZUGv42
- M3/3Iv5u2Jcfk8Q2WAqyOa21dHi2d8ogs6UKELkAm19P9GOs1JQoNWrZCXQJuAIfWXA1
- bWwQ==
-X-Gm-Message-State: AOAM531BWeJrkldsN67CoDsiatI2F5uuyROfCZ8lMz+b/rFR7640bxNq
- h4FgG0+exlz1LK+5S0Z6ycVtQwasCkVmmw==
-X-Google-Smtp-Source: ABdhPJz0KqiTQ6JG0PSSNdYbCxmcpvE7/2gn0K6cIYzWj1ZKqZqp+bTfFJlQcYx/WOThYEhEb4lUTg==
-X-Received: by 2002:adf:d225:: with SMTP id k5mr3411001wrh.10.1627199344477;
- Sun, 25 Jul 2021 00:49:04 -0700 (PDT)
+ bh=WiBdMOxyp6SY+ZY1Gic7yuqaPmA47UUWgRhWdk5K00A=;
+ b=CBVA8Q+fITgor9hqKCRF75DXWtTOtH824FXrAjJB5uaF1UTXPgQjvE84QzSacLyVK/
+ ChEK+hBCivxl73xdnvBajQKwbdWvXfvXfnOsXR9yaABfgP1R4KYJi3zBGO0eaLC0aQ5Q
+ SCxaWgpJkCFmPcJSQWanC//yWaYxAJ1MWsAUPexzvSEMQpJp0V6uXRFpEPKE5NCm4y4m
+ BpenKMTFLPOvzuBlAC/79OaqNSB7yypy2GGuWm/SRTp/X4UfGzGm6lbvghZbJ867VjXj
+ Ybrb1Mn75LQDXf0doANDSFoBOXYmVQHtTLDnOwPtulUFuEmdB5WJBk2QTpm71bFssBe3
+ GXoQ==
+X-Gm-Message-State: AOAM533l8UGKSt3Yfr7fkocqYxrjbQS5Nb4C8+S8gMkSZeMzJWoL5prB
+ i9TUhqsVYOMi6+bWRvE+v9+wmYUPKWlPHg==
+X-Google-Smtp-Source: ABdhPJy85y8vErAfpYXapIM9cdoEnTrISOUB8GQcTr2I9usCPbTpKrA7EhALCYlh0wFPMyE7HtGCfw==
+X-Received: by 2002:a7b:c045:: with SMTP id u5mr10993200wmc.158.1627199708514; 
+ Sun, 25 Jul 2021 00:55:08 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-1383-171.w86-229.abo.wanadoo.fr.
  [86.229.230.171])
- by smtp.gmail.com with ESMTPSA id 19sm32357937wmu.17.2021.07.25.00.49.04
+ by smtp.gmail.com with ESMTPSA id l2sm2791076wmq.0.2021.07.25.00.55.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 25 Jul 2021 00:49:04 -0700 (PDT)
+ Sun, 25 Jul 2021 00:55:08 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 09:48:55 +0200
-Message-Id: <20210725074855.855272-1-fontaine.fabrice@gmail.com>
+Date: Sun, 25 Jul 2021 09:54:58 +0200
+Message-Id: <20210725075458.855606-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/netsnmp: fix legal info
+Subject: [Buildroot] [PATCH 1/1] package/acpid: add SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,28 +101,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Commit 87bef179222ee8a0b0f39c8f96113a4ecf813085 wrongly removed hash of
-COPYING
-
-Fixes:
- - No autobuilder failures
+Support for acpid is added by the services/acpi module in the SELinux
+refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/netsnmp/netsnmp.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/acpid/acpid.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
-index e3adb28c6d..9d196c8bee 100644
---- a/package/netsnmp/netsnmp.hash
-+++ b/package/netsnmp/netsnmp.hash
-@@ -2,3 +2,6 @@
- # https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9/net-snmp-5.9.tar.gz.asc
- # using key D0F8F495DA6160C44EFFBF10F07B9D2DACB19FD6
- sha256  04303a66f85d6d8b16d3cc53bde50428877c82ab524e17591dfceaeb94df6071  net-snmp-5.9.tar.gz
-+
-+# Hash for license file
-+sha256  ed869ea395a1f125819a56676385ab0557a21507764bf56f2943302011381e59  COPYING
+diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+index 3473e7b5f6..1214251dc3 100644
+--- a/package/acpid/acpid.mk
++++ b/package/acpid/acpid.mk
+@@ -11,6 +11,7 @@ ACPID_LICENSE = GPL-2.0+
+ ACPID_LICENSE_FILES = COPYING
+ ACPID_CPE_ID_VENDOR = tedfelix
+ ACPID_CPE_ID_PRODUCT = acpid2
++ACPID_SELINUX_MODULES = acpi
+ 
+ define ACPID_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 package/acpid/acpid.service \
 -- 
 2.30.2
 
