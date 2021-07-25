@@ -7,54 +7,55 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6423BC4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:30:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66295C4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:30:21 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2805E60EB4
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:30:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2805E60EB4
+	by mail.kernel.org (Postfix) with ESMTPS id 32F3E60E0C
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:30:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 32F3E60E0C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEF7E40141;
-	Sun, 25 Jul 2021 21:30:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 064424025D;
+	Sun, 25 Jul 2021 21:30:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E-xExeOrWbkY; Sun, 25 Jul 2021 21:30:07 +0000 (UTC)
+	with ESMTP id UKXfnFTW9BN0; Sun, 25 Jul 2021 21:30:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21B7140129;
-	Sun, 25 Jul 2021 21:30:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CE3811BF312
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:29:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 18D67401F9;
+	Sun, 25 Jul 2021 21:30:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 721531BF312
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:29:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE54840295
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:29:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E9CF600B6
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:29:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c9BYj95GfBjQ for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 21:29:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vRDHQUZq9LXJ for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 21:29:12 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D996F40287
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 21:29:02 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 53D5760067
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 21:29:12 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id F09FB240005;
- Sun, 25 Jul 2021 21:29:00 +0000 (UTC)
-Date: Sun, 25 Jul 2021 23:29:00 +0200
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id CDC3AE0004;
+ Sun, 25 Jul 2021 21:29:08 +0000 (UTC)
+Date: Sun, 25 Jul 2021 23:29:07 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210725232900.33d63cf0@windsurf>
-In-Reply-To: <20210721214517.806537-1-fontaine.fabrice@gmail.com>
-References: <20210721214517.806537-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210725232907.7e0ec759@windsurf>
+In-Reply-To: <20210721200349.502574-1-fontaine.fabrice@gmail.com>
+References: <20210721200349.502574-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/libnfnetlink: fix build on musl
+Subject: Re: [Buildroot] [PATCH 1/1] package/collectd: add SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,26 +67,22 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Joris Lijssens <joris.lijssens@gmail.com>, buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Wed, 21 Jul 2021 23:45:16 +0200
+On Wed, 21 Jul 2021 22:03:49 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Include upstream patch to fix build failure with suricata raised since
-> bump to version 6.0.3 in commit 4c429c3f8c322381991a58fcc37c01da9eb5e8a6
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/0b960f40b5d7e4bb0c4ba20638fe66a9e0964ab3
+> Support for collectd is added by the services/collectd module in the
+> SELinux refpolicy.
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...002-include-Sync-with-kernel-headers.patch | 114 ++++++++++++++++++
->  1 file changed, 114 insertions(+)
->  create mode 100644 package/libnfnetlink/0002-include-Sync-with-kernel-headers.patch
+>  package/collectd/collectd.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
 
