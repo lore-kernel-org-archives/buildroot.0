@@ -2,60 +2,86 @@ Return-Path: <SRS0=8L+i=MR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
+X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99A73C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:30:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DCDAC4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:31:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6402D60E0C
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:30:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6402D60E0C
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id EC92360E0C
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:30:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EC92360E0C
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32B7B4043B;
-	Sun, 25 Jul 2021 21:30:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C42C44029C;
+	Sun, 25 Jul 2021 21:30:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k9wcovMqvVyQ; Sun, 25 Jul 2021 21:30:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dUCThLmjarFd; Sun, 25 Jul 2021 21:30:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C9A040435;
-	Sun, 25 Jul 2021 21:30:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 224AB40295;
+	Sun, 25 Jul 2021 21:30:58 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 751EB1BF312
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:29:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1F99D1BF312
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:29:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 71C59402A0
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:29:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F413402B4
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:29:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bJv28rs6MNop for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 21:29:43 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 76A3F40295
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 21:29:43 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id DBD39240006;
- Sun, 25 Jul 2021 21:29:40 +0000 (UTC)
-Date: Sun, 25 Jul 2021 23:29:40 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20210725232940.139f23f5@windsurf>
-In-Reply-To: <20210722212434.20346-1-ps.report@gmx.net>
-References: <20210722212434.20346-1-ps.report@gmx.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+ with ESMTP id K7BDNNJ14Qda for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 21:29:54 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com
+ [IPv6:2607:f8b0:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 25B524026F
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 21:29:54 +0000 (UTC)
+Received: by mail-ot1-x334.google.com with SMTP id
+ o2-20020a9d22020000b0290462f0ab0800so3399148ota.11
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 14:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=rSc74zFUltR7K6WSK4kHE7h4WJvVAUHxp6eZWXshujc=;
+ b=Qz0Iep8t61NNadyYY1rpt56PdgfZpFWRx5FApxwEDPpphconwSTtgzPigB/pPut9iB
+ moRFsHNxWtalwU8z4IlQlH3M/tFBjEDhHoRaBd6+VS7ERtw+4KmMwXMWekhoL2ZmnRyR
+ pX5MfUvJzLt/qAHsfNrJ7xQwy9TqIaQkEfXex4ai8dP2dHNiY1Apiu2teqip11rupMYR
+ UzVG+INDxVZl4fha/mRqh5h5LWSCf/jtM7CGsxn2wcFmKKMViD7zZFfI/RLLpgObnkSL
+ tmASBXn/igMJ/enS5pKU10qvEgHZCFPo39IrWhruevwljuztcoVuL8/Mr331zTIm2w/6
+ bZfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=rSc74zFUltR7K6WSK4kHE7h4WJvVAUHxp6eZWXshujc=;
+ b=oseiU1AKLnklbKqAnHByLCGbuacbfUMBF+yjpw3HDhk1VHScKI98l/o6U3614ldQPt
+ 75ZIW6xbeFgxqZb1wbQ1m7stlEgZM3MkvQZhDQIPd1Fx7znWVi1bpP46vRMpdRSmNyDD
+ GJ3GoX+H1bcxRVEdwAxEHfZkyVcFl6yCsJBluJ4IE8PKwsSXrcgGCel7mUMUdZSz/en4
+ ai4D4o6Gf6VKL7gKb+STyRC+dp7F7rJIAZHfr1yZvRl6/m270/R4SsLp2rD2qD7dBZX2
+ Mxdu4dMozVzpZ1F3sDYq8y54ldVz3cuV63X7AnuSuPAlXohlMwtuAuMrHLojiIEH7vRb
+ nzhQ==
+X-Gm-Message-State: AOAM533C1aT1+DT78A8jg/T0v4iqtgFQ38ADfk5y8nuMoAIJcjVZ8ctr
+ rEuCWzOzjS3uuxBuj/tIfnroES1s64NdwEt/85A=
+X-Google-Smtp-Source: ABdhPJyoAyeH1095YMeqXFgJHh3+JIKVLZL82m2l3pIncNzfu9SqT9ohe7Q4ouMnEvgMx+PN5hq5U6Rp6hUpWevCVMk=
+X-Received: by 2002:a9d:5f87:: with SMTP id g7mr7989488oti.278.1627248593092; 
+ Sun, 25 Jul 2021 14:29:53 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] package/qt5declarative: fix gcc-11
- compile failure
+References: <20210725204624.1620567-1-james.hilliard1@gmail.com>
+ <20210725231524.512d0549@windsurf>
+In-Reply-To: <20210725231524.512d0549@windsurf>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 25 Jul 2021 15:29:42 -0600
+Message-ID: <CADvTj4ote=YJ4sWsqhwZof2hCw+8-uif68BpnidraEu-D3GfYQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/libtirpc: add missing
+ !BR2_STATIC_LIBS dependency
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,60 +93,59 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Julien Corjon <corjon.j@ecagroup.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-T24gVGh1LCAyMiBKdWwgMjAyMSAyMzoyNDozNCArMDIwMApQZXRlciBTZWlkZXJlciA8cHMucmVw
-b3J0QGdteC5uZXQ+IHdyb3RlOgoKPiAtIGFkZCBwYXRjaCBmb3IgcXY0cmVnZXhwX3AgdG8gaW5j
-bHVkZSBjKysgbGltaXRzIGluY2x1ZGUgKGluc3RlYWQgb2YgcGxhaW4KPiAgIGMgbGltaXQuaCkK
-PiAKPiBGaXhlczoKPiAKPiAgIEluIGZpbGUgaW5jbHVkZWQgZnJvbSBqc3J1bnRpbWUvcXY0cmVn
-ZXhwX3AuaDo2MiwKPiAgICAgICAgICAgICAgICAgICAgZnJvbSBqc3J1bnRpbWUvcXY0cmVnZXhw
-LmNwcDo0MDoKPiAgIC4uLzNyZHBhcnR5L21hc20veWFyci9ZYXJyLmg6NDY6NDQ6IGVycm9yOiDi
-gJhudW1lcmljX2xpbWl0c+KAmSBpcyBub3QgYSBtZW1iZXIgb2Yg4oCYc3Rk4oCZCj4gICAgICA0
-NiB8IHN0YXRpYyBjb25zdCB1bnNpZ25lZCBvZmZzZXROb01hdGNoID0gc3RkOjpudW1lcmljX2xp
-bWl0czx1bnNpZ25lZD46Om1heCgpOwo+ICAgICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn4KPiAgIC4uLzNyZHBhcnR5L21hc20v
-eWFyci9ZYXJyLmg6NDY6NTk6IGVycm9yOiBleHBlY3RlZCBwcmltYXJ5LWV4cHJlc3Npb24gYmVm
-b3JlIOKAmHVuc2lnbmVk4oCZCj4gICAgICA0NiB8IHN0YXRpYyBjb25zdCB1bnNpZ25lZCBvZmZz
-ZXROb01hdGNoID0gc3RkOjpudW1lcmljX2xpbWl0czx1bnNpZ25lZD46Om1heCgpOwo+ICAgICAg
-ICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgXn5+fn5+fn4KPiAKPiAtIGFkZCBwYXRjaCBmb3IgcXFtbHByb2ZpbGVyZXZlbnRfcCB0
-byBpbmNsdWRlIGMrKyBsaW1pdHMgaW5jbHVkZQo+IAo+IEZpeGVzOgo+IAo+ICAgSW4gZmlsZSBp
-bmNsdWRlZCBmcm9tIHFxbWxwcm9maWxlcnR5cGVkZXZlbnRfcC5oOjQzLAo+ICAgICAgICAgICAg
-ICAgICAgICBmcm9tIHFxbWxwcm9maWxlcnR5cGVkZXZlbnQuY3BwOjQwOgo+ICAgcXFtbHByb2Zp
-bGVyZXZlbnRfcC5oOiBJbiBtZW1iZXIgZnVuY3Rpb24g4oCYdm9pZCBRUW1sUHJvZmlsZXJFdmVu
-dDo6YXNzaWduTnVtYmVycyhjb25zdCBDb250YWluZXImKeKAmToKPiAgIHFxbWxwcm9maWxlcmV2
-ZW50X3AuaDozMTQ6NjU6IGVycm9yOiDigJhudW1lcmljX2xpbWl0c+KAmSBpcyBub3QgYSBtZW1i
-ZXIgb2Yg4oCYc3Rk4oCZCj4gICAgIDMxNCB8ICAgICAgICAgICAgICAgICAgICAgc3RhdGljX2Nh
-c3Q8cXVpbnQxNj4obnVtYmVycy5zaXplKCkpIDogc3RkOjpudW1lcmljX2xpbWl0czxxdWludDE2
-Pjo6bWF4KCk7Cj4gICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+fgo+ICAgcXFtbHByb2Zp
-bGVyZXZlbnRfcC5oOjMxNDo4NzogZXJyb3I6IGV4cGVjdGVkIHByaW1hcnktZXhwcmVzc2lvbiBi
-ZWZvcmUg4oCYPuKAmSB0b2tlbgo+ICAgICAzMTQgfCAgICAgICAgICAgICAgICAgICAgIHN0YXRp
-Y19jYXN0PHF1aW50MTY+KG51bWJlcnMuc2l6ZSgpKSA6IHN0ZDo6bnVtZXJpY19saW1pdHM8cXVp
-bnQxNj46Om1heCgpOwo+ICAgICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF4K
-PiAgIHFxbWxwcm9maWxlcmV2ZW50X3AuaDozMTQ6OTA6IGVycm9yOiDigJg6Om1heOKAmSBoYXMg
-bm90IGJlZW4gZGVjbGFyZWQ7IGRpZCB5b3UgbWVhbiDigJhzdGQ6Om1heOKAmT8KPiAgICAgMzE0
-IHwgICAgICAgICAgICAgICAgICAgICBzdGF0aWNfY2FzdDxxdWludDE2PihudW1iZXJzLnNpemUo
-KSkgOiBzdGQ6Om51bWVyaWNfbGltaXRzPHF1aW50MTY+OjptYXgoKTsKPiAgICAgICAgIHwgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBefn4KPiAgICAgICAgIHwgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBzdGQ6Om1heAo+IAo+IFNpZ25lZC1vZmYtYnk6IFBldGVyIFNl
-aWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KPiAtLS0KPiAgLi4ucy1jLWxpbWl0cy1pbmNsdWRl
-LWluc3RlYWQtb2YtcGxhaW4tLnBhdGNoIHwgNDEgKysrKysrKysrKysrKysrKysKPiAgLi4udF9w
-LW5lZWRzLWMtbGltaXRzLWlubGN1ZGUtZml4ZXMtZ2NjLnBhdGNoIHwgNDUgKysrKysrKysrKysr
-KysrKysrKwo+ICAyIGZpbGVzIGNoYW5nZWQsIDg2IGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1v
-ZGUgMTAwNjQ0IHBhY2thZ2UvcXQ1L3F0NWRlY2xhcmF0aXZlLzAwMDItcXY0cmVnZXhwX3AtbmVl
-ZHMtYy1saW1pdHMtaW5jbHVkZS1pbnN0ZWFkLW9mLXBsYWluLS5wYXRjaAo+ICBjcmVhdGUgbW9k
-ZSAxMDA2NDQgcGFja2FnZS9xdDUvcXQ1ZGVjbGFyYXRpdmUvMDAwMy1xcW1scHJvZmlsZXJldmVu
-dF9wLW5lZWRzLWMtbGltaXRzLWlubGN1ZGUtZml4ZXMtZ2NjLnBhdGNoCgpBcHBsaWVkIHRvIG1h
-c3RlciwgdGhhbmtzLgoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBDVE8sIEJvb3RsaW4K
-RW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29t
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
-dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1c3lib3gubmV0Cmh0dHA6Ly9saXN0cy5idXN5Ym94
-Lm5ldC9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+On Sun, Jul 25, 2021 at 3:15 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Sun, 25 Jul 2021 14:46:24 -0600
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >  package/libtirpc/Config.in | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
+> > index 1899edefbf..6a900c68c3 100644
+> > --- a/package/libtirpc/Config.in
+> > +++ b/package/libtirpc/Config.in
+> > @@ -10,6 +10,7 @@ config BR2_PACKAGE_LIBTIRPC
+> >  config BR2_PACKAGE_LIBTIRPC_GSS
+> >       bool "gss"
+> >       depends on BR2_USE_MMU # libkrb5
+> > +     depends on !BR2_STATIC_LIBS # libkrb5
+> >       depends on BR2_PACKAGE_LIBTIRPC
+> >       select BR2_PACKAGE_LIBKRB5
+> >       help
+>
+> Thanks, but a bit more than that is needed:
+>
+>  (1) A Config.in "comment" in package/libtirpc/Config.in
+>
+>  (2) The propagation of this "depends on" in places where
+>      BR2_PACKAGE_LIBTIRPC_GSS is selected, i.e in
+>      BR2_PACKAGE_NFS_UTILS_GSS. A Config.in comment will be needed as
+>      well.
+
+We do already have a dependency on this in nfs-utils via:
+depends on BR2_PACKAGE_NFS_UTILS_NFSV4
+which itself depends on:
+depends on !BR2_STATIC_LIBS # keyutils, lvm2
+
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
