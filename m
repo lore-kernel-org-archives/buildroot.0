@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 678B4C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 12:59:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21F1EC4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 12:59:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3505160EB4
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 12:59:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3505160EB4
+	by mail.kernel.org (Postfix) with ESMTPS id D352460BD3
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 12:59:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D352460BD3
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0EC8B83231;
-	Sun, 25 Jul 2021 12:59:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A2CC6403E7;
+	Sun, 25 Jul 2021 12:59:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UHn8N-6qwv_Y; Sun, 25 Jul 2021 12:59:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KrZLx7scsZ2y; Sun, 25 Jul 2021 12:59:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6637D83168;
-	Sun, 25 Jul 2021 12:59:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 15CD71BF470
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF9D9402F5;
+	Sun, 25 Jul 2021 12:59:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 254781BF95A
  for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 12:58:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 02B9B8305C
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 12:58:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E5F7960682
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 12:58:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RsizAN71VtYt for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id enhNI-WonmHA for <buildroot@lists.busybox.net>;
  Sun, 25 Jul 2021 12:58:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5581A83168
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B41060645
  for <buildroot@buildroot.org>; Sun, 25 Jul 2021 12:58:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3251A86F07; Sun, 25 Jul 2021 12:23:52 +0000 (UTC)
+ id 0469A88DC9; Sun, 25 Jul 2021 12:23:51 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
 Date: Sun, 25 Jul 2021 14:58:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ab346237ef59bc5c9e849d53980dcf947f581624
-X-Git-Newrev: 5d46f5b29dcc10d707b386bcc60a870b239107e2
+X-Git-Oldrev: bfe37c448c0a09ec0584a5407cd56e14b89fba65
+X-Git-Newrev: 7f3c177b4e9736a65f0bf67666ec84392d8c8dff
 X-Patchwork-Hint: ignore
-Message-Id: <20210725122352.3251A86F07@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
- version 2.32.3
+Message-Id: <20210725122352.0469A88DC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/acpid: add SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,59 +69,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d46f5b29dcc10d707b386bcc60a870b239107e2
+commit: https://git.buildroot.net/buildroot/commit/?id=7f3c177b4e9736a65f0bf67666ec84392d8c8dff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a minor release which provides fixes for CVE-2021-21775,
-CVE-2021-21779, CVE-2021-30663, CVE-2021-30665, CVE-2021-30689,
-CVE-2021-30720, CVE-2021-30734, CVE-2021-30744, CVE-2021-30749,
-CVE-2021-30795, CVE-2021-30797, and CVE-2021-30799.
+Support for acpid is added by the services/acpi module in the SELinux
+refpolicy.
 
-Full release notes can be found at:
-
-  https://wpewebkit.org/release/wpewebkit-2.32.3.html
-
-An accompanying security advisory has been published at:
-
-  https://wpewebkit.org/security/WSA-2021-0004.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wpewebkit/wpewebkit.hash | 9 +++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/acpid/acpid.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 28e3feae90..39bf8829d0 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,8 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.32.2.tar.xz.sums
--md5  a6624736150045a54037457416820b19  wpewebkit-2.32.2.tar.xz
--sha1  7b41a49f97b4cb458b6896623a02f4861cbcf728  wpewebkit-2.32.2.tar.xz
--sha256  2f0ebef0395a5a9e37a8609093f86140f74504f9954f97799b95f5dfbe186739  wpewebkit-2.32.2.tar.xz
-+
-+# From https://wpewebkit.org/releases/wpewebkit-2.32.3.tar.xz.sums
-+md5  1e34412c50fe8d1ff084738477ecad7e  wpewebkit-2.32.3.tar.xz
-+sha1  157344d8febfc89d6731404c30857f122f220d6e  wpewebkit-2.32.3.tar.xz
-+sha256  859bd1bbe51026aecfb2b6f5c8c024d88fb69ac6fcdc74c788c9fbe9499d740d  wpewebkit-2.32.3.tar.xz
+diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+index 3473e7b5f6..1214251dc3 100644
+--- a/package/acpid/acpid.mk
++++ b/package/acpid/acpid.mk
+@@ -11,6 +11,7 @@ ACPID_LICENSE = GPL-2.0+
+ ACPID_LICENSE_FILES = COPYING
+ ACPID_CPE_ID_VENDOR = tedfelix
+ ACPID_CPE_ID_PRODUCT = acpid2
++ACPID_SELINUX_MODULES = acpi
  
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 339dedd49b..01b1309ad6 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEWEBKIT_VERSION = 2.32.2
-+WPEWEBKIT_VERSION = 2.32.3
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+ define ACPID_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 package/acpid/acpid.service \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
