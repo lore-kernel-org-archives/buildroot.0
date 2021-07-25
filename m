@@ -2,56 +2,59 @@ Return-Path: <SRS0=8L+i=MR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05963C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:57:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD36CC4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 14:00:12 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9BC6F60F37
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:57:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9BC6F60F37
+	by mail.kernel.org (Postfix) with ESMTPS id 4D4BA60E73
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 14:00:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4D4BA60E73
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B9D6403DA;
-	Sun, 25 Jul 2021 13:57:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1244F4013E;
+	Sun, 25 Jul 2021 14:00:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9hu8on1ZkwUG; Sun, 25 Jul 2021 13:57:20 +0000 (UTC)
+	with ESMTP id 6MoVvJQ9LA6Y; Sun, 25 Jul 2021 14:00:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46C35403DF;
-	Sun, 25 Jul 2021 13:57:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 068DA1BF3C1
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:57:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F13240136;
+	Sun, 25 Jul 2021 14:00:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EF1C81BF3C1
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 14:00:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA1E3403DF
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:57:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EBA5A830A7
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 14:00:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FduRNV_0TPJt for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 13:57:14 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B58C8403DA
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 13:57:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 5E01288EE0; Sun, 25 Jul 2021 13:22:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KeNpZ7HtW6n8 for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 14:00:08 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0D20E83033
+ for <buildroot@busybox.net>; Sun, 25 Jul 2021 14:00:07 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id E2FF9240007;
+ Sun, 25 Jul 2021 14:00:05 +0000 (UTC)
+Date: Sun, 25 Jul 2021 16:00:04 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 15:50:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d120f844604da2295bb7bd8fc6c1f4efbe8b5792
-X-Git-Newrev: 00de2a1cced508f930b78049c1212973b16c919e
-X-Patchwork-Hint: ignore
-Message-Id: <20210725132244.5E01288EE0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fwts: bump to version 21.05.00
+To: Vincent =?UTF-8?B?U3RlaGzDqQ==?= via buildroot <buildroot@busybox.net>
+Message-ID: <20210725160004.5b0b5023@windsurf>
+In-Reply-To: <20210528140218.9878-1-vincent.stehle@laposte.net>
+References: <20210528140218.9878-1-vincent.stehle@laposte.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/fwts: bump to version 21.05.00
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,151 +66,24 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0007544892120427398=="
+Cc: buildroot@buildroot.org,
+ Vincent =?UTF-8?B?U3RlaGzDqQ==?= <vincent.stehle@laposte.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
---===============0007544892120427398==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=00de2a1cced508f930b78049c1212973b16c919e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- Update patch
-
-Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
-Cc: Erico Nunes <nunes.erico@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/fwts/0001-build-do-not-use-Werror.patch | 33 ++++++++++++++-----------
- package/fwts/fwts.hash                          |  2 +-
- package/fwts/fwts.mk                            |  2 +-
- 3 files changed, 21 insertions(+), 16 deletions(-)
-
-diff --git a/package/fwts/0001-build-do-not-use-Werror.patch b/package/fwts/0001-build-do-not-use-Werror.patch
-index 07f64b35b1..715c4f63a5 100644
---- a/package/fwts/0001-build-do-not-use-Werror.patch
-+++ b/package/fwts/0001-build-do-not-use-Werror.patch
-@@ -1,7 +1,10 @@
--From 4c202c0fd7e5bd3264c720d715f05573047d9cf5 Mon Sep 17 00:00:00 2001
-+From e481c2f990ffa71f205d4b9daf0823e71269a7f3 Mon Sep 17 00:00:00 2001
- From: Erico Nunes <nunes.erico@gmail.com>
- Date: Fri, 12 Aug 2016 23:11:56 +0200
- Subject: [PATCH] fwts: do not use -Werror
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
- 
- Warnings come and go with various compiler versions, so using -Werror is
- prone to cause build failures with various compiler versions, especially
-@@ -12,6 +15,8 @@ Remove use of -Werror.
- Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
- [Fabrice: updated for 20.08.00]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Vincent: rebased onto V21.05.00]
-+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
- ---
-  configure.ac              | 2 +-
-  src/Makefile.am           | 2 +-
-@@ -20,7 +25,7 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-  4 files changed, 4 insertions(+), 4 deletions(-)
- 
- diff --git a/configure.ac b/configure.ac
--index 0109d644..3ca599e1 100644
-+index f40c3678..0ff5025b 100644
- --- a/configure.ac
- +++ b/configure.ac
- @@ -1,5 +1,5 @@
-@@ -31,12 +36,12 @@ index 0109d644..3ca599e1 100644
-  	  AC_CANONICAL_HOST
-  	  AC_CONFIG_MACRO_DIR([m4])
- diff --git a/src/Makefile.am b/src/Makefile.am
--index 52c637dd..d9d73f1c 100644
-+index cdabb386..7c2e5730 100644
- --- a/src/Makefile.am
- +++ b/src/Makefile.am
--@@ -14,7 +14,7 @@ AM_CPPFLAGS = \
-- 	`pkg-config --silence-errors --cflags json` \
-- 	`pkg-config --silence-errors --cflags json-c` \
-+@@ -12,7 +12,7 @@ AM_CPPFLAGS = \
-+ 	-I$(top_srcdir)/src/acpica/source/compiler	\
-+ 	-I$(top_srcdir)/efi_runtime			\
-  	-pthread `pkg-config --cflags glib-2.0 gio-2.0` \
- -	-Wall -Werror -Wextra				\
- +	-Wall -Wextra					\
-@@ -44,10 +49,10 @@ index 52c637dd..d9d73f1c 100644
-  	-Wfloat-equal -Wmissing-declarations		\
-  	-Wno-long-long -Wredundant-decls -Wshadow	\
- diff --git a/src/lib/src/Makefile.am b/src/lib/src/Makefile.am
--index 54de7f44..e129ed16 100644
-+index 55c52b41..50efa97a 100644
- --- a/src/lib/src/Makefile.am
- +++ b/src/lib/src/Makefile.am
--@@ -24,7 +24,7 @@ AM_CPPFLAGS = \
-+@@ -25,7 +25,7 @@ AM_CPPFLAGS = \
-  	`pkg-config --silence-errors --cflags json-c`	\
-  	`pkg-config --cflags glib-2.0 gio-2.0` 		\
-  	-DDATAROOTDIR=\"$(datarootdir)\"		\
-@@ -57,18 +62,18 @@ index 54de7f44..e129ed16 100644
-  
-  pkglib_LTLIBRARIES = libfwts.la
- diff --git a/src/utilities/Makefile.am b/src/utilities/Makefile.am
--index aa37de55..4d5297cc 100644
-+index 1fc0fc02..53614e33 100644
- --- a/src/utilities/Makefile.am
- +++ b/src/utilities/Makefile.am
- @@ -16,7 +16,7 @@
-  # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-  #
-  
---AM_CPPFLAGS = -Wall -Werror -Wextra -DDATAROOTDIR=\"$(datarootdir)\" \
--+AM_CPPFLAGS = -Wall -Wextra -DDATAROOTDIR=\"$(datarootdir)\" \
-- 	`pkg-config --silence-errors --cflags json` \
-- 	`pkg-config --silence-errors --cflags json-c`
-+-AM_CPPFLAGS = -Wall -Werror -Wextra -DDATAROOTDIR=\"$(datarootdir)\" 	\
-++AM_CPPFLAGS = -Wall -Wextra -DDATAROOTDIR=\"$(datarootdir)\" 	\
-+ 	-I$(srcdir)/../lib/include
-  
-+ bin_PROGRAMS = kernelscan
- -- 
--2.17.1
-+2.30.2
- 
-diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
-index 916035bda6..fc79a0b812 100644
---- a/package/fwts/fwts.hash
-+++ b/package/fwts/fwts.hash
-@@ -1,5 +1,5 @@
- # Hash from: http://fwts.ubuntu.com/release/SHA256SUMS
--sha256  02160657383a918a48c946a0ffb72c047d19a46f1455c29c0fff4d9ef7e48680  fwts-V21.02.00.tar.gz
-+sha256  e2d6e8b0704eba859a567fb8764e5dc5385793fc26bd00ecc70e7af03fd2568d  fwts-V21.05.00.tar.gz
- 
- # Hash for license file
- sha256  2003f5c8a1e40d7882f1499bd7adb7bc748c9656851abb28647a3d297c2e8e23  debian/copyright
-diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
-index eaff7b786b..402a9e0b8f 100644
---- a/package/fwts/fwts.mk
-+++ b/package/fwts/fwts.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FWTS_VERSION = 21.02.00
-+FWTS_VERSION = 21.05.00
- FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
- FWTS_SITE = http://fwts.ubuntu.com/release
- FWTS_STRIP_COMPONENTS = 0
-
---===============0007544892120427398==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
-
---===============0007544892120427398==--
+T24gRnJpLCAyOCBNYXkgMjAyMSAxNjowMjoxNyArMDIwMApWaW5jZW50IFN0ZWhsw6kgdmlhIGJ1
+aWxkcm9vdCA8YnVpbGRyb290QGJ1c3lib3gubmV0PiB3cm90ZToKCj4gLSBVcGRhdGUgcGF0Y2gK
+PiAKPiBTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGxhcG9z
+dGUubmV0Pgo+IENjOiBFcmljbyBOdW5lcyA8bnVuZXMuZXJpY29AZ21haWwuY29tPgo+IC0tLQo+
+ICAuLi4vZnd0cy8wMDAxLWJ1aWxkLWRvLW5vdC11c2UtV2Vycm9yLnBhdGNoICAgfCAzMyArKysr
+KysrKysrKy0tLS0tLS0tCj4gIHBhY2thZ2UvZnd0cy9md3RzLmhhc2ggICAgICAgICAgICAgICAg
+ICAgICAgICB8ICAyICstCj4gIHBhY2thZ2UvZnd0cy9md3RzLm1rICAgICAgICAgICAgICAgICAg
+ICAgICAgICB8ICAyICstCj4gIDMgZmlsZXMgY2hhbmdlZCwgMjEgaW5zZXJ0aW9ucygrKSwgMTYg
+ZGVsZXRpb25zKC0pCgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKVGhvbWFzCi0tIApUaG9t
+YXMgUGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdp
+bmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1c3li
+b3gubmV0Cmh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dAo=
