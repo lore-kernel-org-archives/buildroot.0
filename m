@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77A6CC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:39:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1024CC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:39:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3292F601FD
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:39:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3292F601FD
+	by mail.kernel.org (Postfix) with ESMTPS id CBA0B601FD
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:39:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CBA0B601FD
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10D6F415BA;
-	Tue,  3 Aug 2021 22:39:19 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UEMqhEXPy-6F; Tue,  3 Aug 2021 22:39:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F423415AC;
-	Tue,  3 Aug 2021 22:39:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F5B61BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DDC9C404D8
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D3D24045E;
+	Tue,  3 Aug 2021 22:39:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tcd1plemGctO for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BdGHDwshKiCj; Tue,  3 Aug 2021 22:39:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE41F400F5;
+	Tue,  3 Aug 2021 22:39:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CE5EB1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1A4460A66
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gRSkAicKZdFV for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A2CAD4051E
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1EC0F60890
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 01F76810E2; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
+ id 68C4F83FBA; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 23 May 2021 10:59:02 +0200
+Date: Sun, 25 Jul 2021 09:42:14 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 27c764153abae370106451779e88c32a6ba62c1d
-X-Git-Newrev: eb72fa0d3cfe73217a96329c6b190cbfde63971c
+X-Git-Oldrev: 6e47347b1d83e8816366dd4588f11e95a0571382
+X-Git-Newrev: d2453aa83d8f7d394b3dbe33472e5f1642268a63
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210944.01F76810E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pwgen: add
- PWGEN_CPE_ID_VENDOR
+Message-Id: <20210803211016.68C4F83FBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lapack: introduce
+ BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,32 +70,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb72fa0d3cfe73217a96329c6b190cbfde63971c
+commit: https://git.buildroot.net/buildroot/commit/?id=d2453aa83d8f7d394b3dbe33472e5f1642268a63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:pwgen_project:pwgen is a valid CPE identifier for this
-package:
+This makes it easier for packages that depend on lapack to get
+their dependencies correct.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apwgen_project%3Apwgen
+The !uClibc dependency is also not sufficient: indeed, musl too does not
+provide _fpu_control; only glibc does. This is the same situation as for
+clapack. Add a comment about this, to mirror clapack.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Since the !glibc dependency only exists for PowerPC, treat it as
+an architecture dependency.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[yann.morin.1998@free.fr:
+  - fpu_control depends on glibc, not on !uclibc
+  - add or update comments accordingly
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pwgen/pwgen.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/lapack/Config.in | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/package/pwgen/pwgen.mk b/package/pwgen/pwgen.mk
-index ad9465b82c..89925bb300 100644
---- a/package/pwgen/pwgen.mk
-+++ b/package/pwgen/pwgen.mk
-@@ -8,6 +8,7 @@ PWGEN_VERSION = 2.08
- PWGEN_SITE = http://downloads.sourceforge.net/project/pwgen/pwgen/$(PWGEN_VERSION)
- PWGEN_LICENSE = GPL-2.0
- PWGEN_LICENSE_FILES = debian/copyright
-+PWGEN_CPE_ID_VENDOR = pwgen_project
+diff --git a/package/lapack/Config.in b/package/lapack/Config.in
+index 6cd0810cb1..e84a19bb45 100644
+--- a/package/lapack/Config.in
++++ b/package/lapack/Config.in
+@@ -1,13 +1,23 @@
++config BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
++	bool
++	default y
++	# _fpu_control is used on PowerPC, but not available with
++	# uClibc or musl
++	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC
++
++comment "lapack/blas needs a glibc toolchain"
++	depends on BR2_powerpc
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
++
+ comment "lapack/blas needs a toolchain w/ fortran"
+-	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
++	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_FORTRAN
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ config BR2_PACKAGE_LAPACK
+ 	bool "lapack/blas"
++	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_FORTRAN
+ 	depends on !BR2_PACKAGE_CLAPACK
+-	# _fpu_control is used on PowerPC, but not available with uClibc
+-	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
+ 	help
+ 	  LAPACK and BLAS FORTRAN implementation. This package
+ 	  installs two libraries: libblas and liblapack.
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
