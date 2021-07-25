@@ -7,56 +7,55 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B834CC4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:29:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B5F6C4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:29:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 790B960E0C
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:29:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 790B960E0C
+	by mail.kernel.org (Postfix) with ESMTPS id 1FDE860F11
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 21:29:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1FDE860F11
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50B9740426;
-	Sun, 25 Jul 2021 21:29:30 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1vnflBbfpe49; Sun, 25 Jul 2021 21:29:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F32340420;
-	Sun, 25 Jul 2021 21:29:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5CD551BF312
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:28:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59CC54028D
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:28:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4E28402A1;
+	Sun, 25 Jul 2021 21:29:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bzGT0AjBbYtW for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 21:28:40 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3IKBq8t-b2AU; Sun, 25 Jul 2021 21:29:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54DCB40295;
+	Sun, 25 Jul 2021 21:29:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 667FA1BF312
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:28:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5631B83342
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 21:28:49 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HV0rLBVQ_FtC for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 21:28:48 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5F02A40287
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 21:28:40 +0000 (UTC)
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 46E3783033
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 21:28:48 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 67B80240006;
- Sun, 25 Jul 2021 21:28:38 +0000 (UTC)
-Date: Sun, 25 Jul 2021 23:28:37 +0200
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id 270CB240003;
+ Sun, 25 Jul 2021 21:28:45 +0000 (UTC)
+Date: Sun, 25 Jul 2021 23:28:43 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210725232837.042ee6c1@windsurf>
-In-Reply-To: <20210722204408.1217781-1-fontaine.fabrice@gmail.com>
-References: <20210722204408.1217781-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210725232843.0d1c6575@windsurf>
+In-Reply-To: <20210721222459.1168515-1-fontaine.fabrice@gmail.com>
+References: <20210721222459.1168515-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/stunnel: requires DES support
- in openssl
+Subject: Re: [Buildroot] [PATCH 1/1] package/gumbo-parser: fix build without
+ C++
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,25 +67,28 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>, buildroot@buildroot.org
+Cc: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Thu, 22 Jul 2021 22:44:08 +0200
+On Thu, 22 Jul 2021 00:24:59 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Enable DES in openssl to fix build failure raised since commit
-> a83d41867c8d69a77d5cd0a665aa216af5340359
+> Build without C++ fails since the addition of the package in commit
+> f6628763eb302f15f861e0ce7bfc44b34b066bea
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/4b306a13f543bbabf3f01d882b3549e3d9961556
+>  - http://autobuild.buildroot.org/results/a32b5d3b959433fd5c3543661c37f80d27fbd010
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/stunnel/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  ...001-configure.ac-fix-build-without-C.patch | 63 +++++++++++++++++++
+>  package/gumbo-parser/gumbo-parser.mk          |  1 +
+>  2 files changed, 64 insertions(+)
+>  create mode 100644 package/gumbo-parser/0001-configure.ac-fix-build-without-C.patch
 
 Applied to master, thanks.
 
