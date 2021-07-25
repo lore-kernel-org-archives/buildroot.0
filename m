@@ -2,60 +2,57 @@ Return-Path: <SRS0=8L+i=MR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.3 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F92FC4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:42:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0804C4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:46:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DB0416056B
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:42:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DB0416056B
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 3ECDD6056B
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:46:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3ECDD6056B
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44A12403FB;
-	Sun, 25 Jul 2021 13:42:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EF486070E;
+	Sun, 25 Jul 2021 13:46:58 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TEej6HSbZCZM; Sun, 25 Jul 2021 13:46:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 630906069B;
+	Sun, 25 Jul 2021 13:46:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F4A51BF3C1
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:46:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 26382403B2
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:46:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id px6neZJ_yUht; Sun, 25 Jul 2021 13:42:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69BA240428;
-	Sun, 25 Jul 2021 13:42:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D09191BF3C1
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:42:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C09FE8333E
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:42:32 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sNLGjht27Zak for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 13:42:31 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A22A582A83
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 13:42:31 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id 95DA1240006;
- Sun, 25 Jul 2021 13:42:29 +0000 (UTC)
-Date: Sun, 25 Jul 2021 15:42:27 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20210725154227.692cde1d@windsurf>
-In-Reply-To: <20210608195515.15261-2-ps.report@gmx.net>
-References: <20210608195515.15261-1-ps.report@gmx.net>
- <20210608195515.15261-2-ps.report@gmx.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 2/2] package/iwd: bump version to 1.14
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mga965FhjCqi for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 13:46:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D4244039A
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 13:46:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id BC29388EC2; Sun, 25 Jul 2021 13:12:22 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Sun, 25 Jul 2021 15:46:32 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5036a3f464f588bc1279a6e695266dfd6340c8c1
+X-Git-Newrev: e5637786be2d9ff6424fb902411750938cb1efd9
+X-Patchwork-Hint: ignore
+Message-Id: <20210725131222.BC29388EC2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/busybox: correctly set
+ BUSYBOX_KCONFIG_SUPPORTS_DEFCONFIG
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,32 +64,37 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Tue,  8 Jun 2021 21:55:15 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e5637786be2d9ff6424fb902411750938cb1efd9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For details see [1].
-> 
-> [1] https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/ChangeLog
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/iwd/iwd.hash | 2 +-
->  package/iwd/iwd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Commit e6b3913cfc converted busybox to the generic kconfig help text
+infrastructure, but set the wrong variable to flag that it doesn't
+support defconfig files. Fix that.
 
-Applied to master, thanks.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/busybox/busybox.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 68e0b8a72c..4b1fbade1d 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -103,7 +103,7 @@ ifndef BUSYBOX_CONFIG_FILE
+ BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
+ endif
+ 
+-BUSYBOX_KCONFIG_HAS_DEFCONFIG = NO
++BUSYBOX_KCONFIG_SUPPORTS_DEFCONFIG = NO
+ BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
+ BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES))
+ BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
