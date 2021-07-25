@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AA08C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 08:02:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AA9DC4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 08:02:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BD9B460F13
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 08:02:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BD9B460F13
+	by mail.kernel.org (Postfix) with ESMTPS id 4DBFE60E0C
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 08:02:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4DBFE60E0C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8C7B240105;
-	Sun, 25 Jul 2021 08:02:07 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vK6fujEOvJTU; Sun, 25 Jul 2021 08:02:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DEC9540116;
-	Sun, 25 Jul 2021 08:02:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A1DFE1BF37B
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 08:02:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C8E260619
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 08:02:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 172F5606BE;
+	Sun, 25 Jul 2021 08:02:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qqy27EG-vZnF for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 08:02:03 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ugjmQRIw-_FF; Sun, 25 Jul 2021 08:02:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 789DF60619;
+	Sun, 25 Jul 2021 08:02:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BD4371BF97D
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 08:02:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B6D92401B1
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 08:02:04 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UDwbFGV6JpOe for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 08:02:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E939660606
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 08:02:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0425B40189
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 08:02:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id C6BC388D1E; Sun, 25 Jul 2021 07:27:34 +0000 (UTC)
+ id D7224879B7; Sun, 25 Jul 2021 07:27:34 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 10:01:39 +0200
+Date: Sun, 25 Jul 2021 10:01:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d2453aa83d8f7d394b3dbe33472e5f1642268a63
-X-Git-Newrev: 94640cc8e9e306de38675dde23c23771b8ba65da
+X-Git-Oldrev: 94640cc8e9e306de38675dde23c23771b8ba65da
+X-Git-Newrev: dfa4a4dd2a9495ac7aabefb7c45f2c74bf1eab2e
 X-Patchwork-Hint: ignore
-Message-Id: <20210725072734.C6BC388D1E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gtest: fix legal info
+Message-Id: <20210725072734.D7224879B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/netsnmp: fix legal info
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,34 +69,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94640cc8e9e306de38675dde23c23771b8ba65da
+commit: https://git.buildroot.net/buildroot/commit/?id=dfa4a4dd2a9495ac7aabefb7c45f2c74bf1eab2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 9dfbbbb4105c47602da048c9bb9499fb8862e768 forgot to removed
-googletest from GTEST_LICENSE_FILES
+Commit 87bef179222e wrongly removed hash of COPYING
 
-Fixes:
- - http://autobuild.buildroot.org/results/848238f9f99bee6919b1b71acd078835e94a8501
+Fixes: 87bef179222ee8a0b0f39c8f96113a4ecf813085
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gtest/gtest.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/netsnmp/netsnmp.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
-index 3e8220cddf..29c85e698f 100644
---- a/package/gtest/gtest.mk
-+++ b/package/gtest/gtest.mk
-@@ -9,7 +9,7 @@ GTEST_SITE = $(call github,google,googletest,release-$(GTEST_VERSION))
- GTEST_INSTALL_STAGING = YES
- GTEST_INSTALL_TARGET = NO
- GTEST_LICENSE = BSD-3-Clause
--GTEST_LICENSE_FILES = googletest/LICENSE
-+GTEST_LICENSE_FILES = LICENSE
- GTEST_CPE_ID_VENDOR = google
- GTEST_CPE_ID_PRODUCT = google_test
- 
+diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
+index e3adb28c6d..9d196c8bee 100644
+--- a/package/netsnmp/netsnmp.hash
++++ b/package/netsnmp/netsnmp.hash
+@@ -2,3 +2,6 @@
+ # https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9/net-snmp-5.9.tar.gz.asc
+ # using key D0F8F495DA6160C44EFFBF10F07B9D2DACB19FD6
+ sha256  04303a66f85d6d8b16d3cc53bde50428877c82ab524e17591dfceaeb94df6071  net-snmp-5.9.tar.gz
++
++# Hash for license file
++sha256  ed869ea395a1f125819a56676385ab0557a21507764bf56f2943302011381e59  COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
