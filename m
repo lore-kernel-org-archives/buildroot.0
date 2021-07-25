@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0804C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:46:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 948DDC4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:48:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3ECDD6056B
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:46:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3ECDD6056B
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 3525E60F38
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:48:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3525E60F38
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0EF486070E;
-	Sun, 25 Jul 2021 13:46:58 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TEej6HSbZCZM; Sun, 25 Jul 2021 13:46:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 630906069B;
-	Sun, 25 Jul 2021 13:46:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2F4A51BF3C1
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:46:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 26382403B2
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:46:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E9029403F8;
+	Sun, 25 Jul 2021 13:48:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mga965FhjCqi for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 13:46:53 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id g0maV686iWAS; Sun, 25 Jul 2021 13:48:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 138E040415;
+	Sun, 25 Jul 2021 13:48:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E22E11BF3C1
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:48:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D08ED832DB
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:48:21 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sNieftSQmGF0 for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 13:48:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D4244039A
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 13:46:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id BC29388EC2; Sun, 25 Jul 2021 13:12:22 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ by smtp1.osuosl.org (Postfix) with ESMTP id 235498308A
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 13:48:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id CF4CB88EDB; Sun, 25 Jul 2021 13:13:50 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 15:46:32 +0200
+Date: Sun, 25 Jul 2021 15:48:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5036a3f464f588bc1279a6e695266dfd6340c8c1
-X-Git-Newrev: e5637786be2d9ff6424fb902411750938cb1efd9
+X-Git-Oldrev: e5637786be2d9ff6424fb902411750938cb1efd9
+X-Git-Newrev: 70dd4bd156bac2bde07751dc3c4d5da9b14d7d7c
 X-Patchwork-Hint: ignore
-Message-Id: <20210725131222.BC29388EC2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/busybox: correctly set
- BUSYBOX_KCONFIG_SUPPORTS_DEFCONFIG
+Message-Id: <20210725131350.CF4CB88EDB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Config.in: add BR2_PIC_PIE_ARCH_SUPPORTS
+ hidden option
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,31 +70,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5637786be2d9ff6424fb902411750938cb1efd9
+commit: https://git.buildroot.net/buildroot/commit/?id=70dd4bd156bac2bde07751dc3c4d5da9b14d7d7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit e6b3913cfc converted busybox to the generic kconfig help text
-infrastructure, but set the wrong variable to flag that it doesn't
-support defconfig files. Fix that.
+The nios2 architecture is already excluded from PIC/PIE due to issues,
+and we're going to also exclude Microblaze, so let's introduce a
+BR2_PIC_PIE_ARCH_SUPPORTS hidden boolean to facilitate adding this new
+architecture exclusion.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/busybox/busybox.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Config.in | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 68e0b8a72c..4b1fbade1d 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -103,7 +103,7 @@ ifndef BUSYBOX_CONFIG_FILE
- BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
- endif
+diff --git a/Config.in b/Config.in
+index c05485173b..a146ba0f43 100644
+--- a/Config.in
++++ b/Config.in
+@@ -726,11 +726,16 @@ endmenu
  
--BUSYBOX_KCONFIG_HAS_DEFCONFIG = NO
-+BUSYBOX_KCONFIG_SUPPORTS_DEFCONFIG = NO
- BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
- BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES))
- BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
+ comment "Security Hardening Options"
+ 
+-config BR2_PIC_PIE
+-	bool "Build code with PIC/PIE"
++config BR2_PIC_PIE_ARCH_SUPPORTS
++	bool
+ 	default y
+ 	# Nios2 toolchains produce non working binaries with -fPIC
+ 	depends on !BR2_nios2
++
++config BR2_PIC_PIE
++	bool "Build code with PIC/PIE"
++	default y
++	depends on BR2_PIC_PIE_ARCH_SUPPORTS
+ 	depends on BR2_SHARED_LIBS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	help
+@@ -738,7 +743,7 @@ config BR2_PIC_PIE
+ 	  Position-Independent Executables (PIE).
+ 
+ comment "PIC/PIE needs a toolchain w/ PIE"
+-	depends on !BR2_nios2
++	depends on BR2_PIC_PIE_ARCH_SUPPORTS
+ 	depends on BR2_SHARED_LIBS
+ 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
+ 
+@@ -829,7 +834,7 @@ config BR2_RELRO_PARTIAL
+ 
+ config BR2_RELRO_FULL
+ 	bool "Full"
+-	depends on !BR2_nios2 # BR2_PIC_PIE
++	depends on BR2_PIC_PIE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	select BR2_PIC_PIE
+ 	help
+@@ -838,7 +843,7 @@ config BR2_RELRO_FULL
+ 	  program loading, i.e every time an executable is started.
+ 
+ comment "RELRO Full needs a toolchain w/ PIE"
+-	depends on !BR2_nios2
++	depends on BR2_PIC_PIE_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
+ 
+ endchoice
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
