@@ -2,56 +2,61 @@ Return-Path: <SRS0=8L+i=MR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44D72C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 19:39:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20B0DC4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 19:40:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 02CDC60EB4
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 19:39:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 02CDC60EB4
+	by mail.kernel.org (Postfix) with ESMTPS id D253660F11
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 19:40:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D253660F11
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD9AF40372;
-	Sun, 25 Jul 2021 19:39:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4D7140263;
+	Sun, 25 Jul 2021 19:40:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Qbe95Ie47u8t; Sun, 25 Jul 2021 19:39:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rxM6a0FSVrSA; Sun, 25 Jul 2021 19:40:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9695940377;
-	Sun, 25 Jul 2021 19:39:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BC4071BF405
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 19:39:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0213B40201;
+	Sun, 25 Jul 2021 19:40:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 03AE91BF405
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 19:40:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A408F40377
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 19:38:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E73FB40201
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 19:40:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p9MVaP75JoAu for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 19:38:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 99AAC403AB
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 19:38:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0454788F27; Sun, 25 Jul 2021 19:04:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2lvJ7pnsX93n for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 19:40:38 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6FEE3401C9
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 19:40:38 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 4C2C7E0005;
+ Sun, 25 Jul 2021 19:40:35 +0000 (UTC)
+Date: Sun, 25 Jul 2021 21:40:33 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 21:38:49 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2ed3e9edda331b678ab30e183d030b26a29a1204
-X-Git-Newrev: 3dae174e7eb98191610df7a5a7e5a9bd6ca03d66
-X-Patchwork-Hint: ignore
-Message-Id: <20210725190427.0454788F27@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mariadb: bump version to 10.3.30
+To: Peter Seiderer <ps.report@gmx.net>
+Message-ID: <20210725214033.53587914@windsurf>
+In-Reply-To: <20210722181929.24015-1-ps.report@gmx.net>
+References: <20210722181929.24015-1-ps.report@gmx.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v1 1/2] package/mariadb: bump version to
+ 10.3.30
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,104 +68,46 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: Ryan Coe <bluemrp9@gmail.com>, Scott Bartolett <SBartolett@thorlabs.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3dae174e7eb98191610df7a5a7e5a9bd6ca03d66
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 22 Jul 2021 20:19:28 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-- rebase 001-add-extra-check-for-librt.patch
-- for changelog see [1], [2]
+> - rebase 001-add-extra-check-for-librt.patch
+> - for changelog see [1], [2]
+> 
+> Fixes:
+> 
+>   CMake Error at libmariadb/cmake/ConnectorName.cmake:30 (ENDMACRO):
+>     Flow control statements are not properly nested.
+>   Call Stack (most recent call first):
+>     libmariadb/CMakeLists.txt:423 (INCLUDE)
+> 
+> [1] https://mariadb.com/kb/en/mariadb-10329-changelog/
+> [2] https://mariadb.com/kb/en/mariadb-10330-changelog/
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/mariadb/0001-add-extra-check-for-librt.patch | 12 +++++++-----
+>  package/mariadb/mariadb.hash                         |  6 +++---
+>  package/mariadb/mariadb.mk                           |  2 +-
+>  3 files changed, 11 insertions(+), 9 deletions(-)
 
-Fixes:
+Both applied. In the second patch, I've replaced the hardcoded "gcc" by
+$(HOSTCC).
 
-  CMake Error at libmariadb/cmake/ConnectorName.cmake:30 (ENDMACRO):
-    Flow control statements are not properly nested.
-  Call Stack (most recent call first):
-    libmariadb/CMakeLists.txt:423 (INCLUDE)
+Thanks,
 
-[1] https://mariadb.com/kb/en/mariadb-10329-changelog/
-[2] https://mariadb.com/kb/en/mariadb-10330-changelog/
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mariadb/0001-add-extra-check-for-librt.patch | 12 +++++++-----
- package/mariadb/mariadb.hash                         |  6 +++---
- package/mariadb/mariadb.mk                           |  2 +-
- 3 files changed, 11 insertions(+), 9 deletions(-)
-
-diff --git a/package/mariadb/0001-add-extra-check-for-librt.patch b/package/mariadb/0001-add-extra-check-for-librt.patch
-index 90aa626a0b..0dd4c546fb 100644
---- a/package/mariadb/0001-add-extra-check-for-librt.patch
-+++ b/package/mariadb/0001-add-extra-check-for-librt.patch
-@@ -1,4 +1,4 @@
--From e6244400dfd3547531a3a3289fadbbe19873f096 Mon Sep 17 00:00:00 2001
-+From 960c74ec60962f707bd41724edaa2640c0324400 Mon Sep 17 00:00:00 2001
- From: Ryan Coe <bluemrp9@gmail.com>
- Date: Thu, 27 Oct 2016 20:33:21 -0700
- Subject: [PATCH] add extra check for librt
-@@ -6,24 +6,26 @@ Subject: [PATCH] add extra check for librt
- https://jira.mariadb.org/browse/MDEV-10841
- 
- Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-+[Rebased on mariadb-10.3.30]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-  configure.cmake | 3 +++
-  1 file changed, 3 insertions(+)
- 
- diff --git a/configure.cmake b/configure.cmake
--index 896226de954f4642a238ca6a72e0930590dc1681..77ca485fb05e6b63bb69f9561b4eabfaa208a419 100644
-+index 1b85c31b..4a1cd847 100644
- --- a/configure.cmake
- +++ b/configure.cmake
--@@ -126,6 +126,9 @@ IF(UNIX)
-+@@ -134,6 +134,9 @@ IF(UNIX)
-    IF(NOT LIBRT)
-      MY_SEARCH_LIBS(clock_gettime rt LIBRT)
-    ENDIF()
- +  IF(NOT LIBRT)
- +    MY_SEARCH_LIBS(posix_spawn_file_actions_addclose rt LIBRT)
- +  ENDIF()
-+   set(THREADS_PREFER_PTHREAD_FLAG ON)
-    FIND_PACKAGE(Threads)
-  
--   SET(CMAKE_REQUIRED_LIBRARIES 
- -- 
--2.9.3
-+2.32.0
- 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index 26faf529c2..4025be317f 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,6 +1,6 @@
--# From https://downloads.mariadb.org/mariadb/10.3.28
--sha256  e8c912cae2e5800d0da364cc23437907ed4be767f2cbdf198cf3afc03db6a6a3  mariadb-10.3.28.tar.gz
--sha512  f6941bcc818f9b3640e4b5fdbdd3a32b45c62c04087e583f1f0e1c0258b09a21c7639abd1c902e183c057838308ad5eedc00ffee76d44a02043e8e349015fb20  mariadb-10.3.28.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.3.30
-+sha256  bd8735c65bdb7ebcd5d779fb9d3de3f2fcd319ad6482278d73dfe7301ad4ae1b  mariadb-10.3.30.tar.gz
-+sha512  742c30b3ebc0b6d36b98d4e7a7fb511098142e72d8f42cbfa73a0bdea2059be17e790fbda4732329bbd99e4b50b13cf18e8122964a473e0b62170ab869eca8fc  mariadb-10.3.30.tar.gz
- 
- # Hash for license files
- sha256  a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 56d6afab17..ade73ccfe0 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.3.28
-+MARIADB_VERSION = 10.3.30
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
