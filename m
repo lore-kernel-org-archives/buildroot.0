@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F722C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:35:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 385C7C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:35:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C7C1960F58
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:35:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C7C1960F58
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id E997860F94
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:35:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E997860F94
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9051F60AFF;
-	Wed,  4 Aug 2021 00:35:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5B25841F0;
+	Wed,  4 Aug 2021 00:35:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hy5VoLQBtY7v; Wed,  4 Aug 2021 00:35:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4cZMLDWEzi1z; Wed,  4 Aug 2021 00:35:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD82D60AF7;
-	Wed,  4 Aug 2021 00:35:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D41484190;
+	Wed,  4 Aug 2021 00:35:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 10AED1BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 113381BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5E2540F59
+ by smtp2.osuosl.org (Postfix) with ESMTP id D151E40660
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 55gWLXzkaRp8 for <buildroot@lists.busybox.net>;
+ with ESMTP id eDjOtILmO6Ko for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C4EB40660
+ by smtp2.osuosl.org (Postfix) with ESMTP id F14BA404F9
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id F1CCD81F12; Tue,  3 Aug 2021 21:10:17 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id 438A584369; Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 18:19:48 +0200
+Date: Sun, 25 Jul 2021 23:19:20 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ddd9e723c3ef6f8eb26a5eafd7d8a504b56059f2
-X-Git-Newrev: 2aea94a47892f22250a63f4ee4fda1ec5373f6c4
+X-Git-Oldrev: 049135c409b081d37b9455cd7564c8581334e11b
+X-Git-Newrev: 6fb3216a80c64c08375429d89497eaeec5622150
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211017.F1CCD81F12@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nfs-utils: Add
- optional GSS support
+Message-Id: <20210803211018.438A584369@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] toolchain: mark sysroot as
+ 'safe' path for gdb auto-load
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,64 +70,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2aea94a47892f22250a63f4ee4fda1ec5373f6c4
+commit: https://git.buildroot.net/buildroot/commit/?id=6fb3216a80c64c08375429d89497eaeec5622150
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/nfs-utils/Config.in    |  7 +++++++
- package/nfs-utils/nfs-utils.mk | 11 ++++++++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+gdb can automatically load certain files as described in [1]. Such files
+could install pretty-printers for complex data structures.
 
-diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index bd1e091331..f2997b9c91 100644
---- a/package/nfs-utils/Config.in
-+++ b/package/nfs-utils/Config.in
-@@ -26,6 +26,13 @@ config BR2_PACKAGE_NFS_UTILS_NFSV4
- 	help
- 	  Enable NFSv4/NFSv4.1 support
+libstdcxx (C++ standard library) provided by gcc, is one example of a
+library for which such auto-load file is available. But there are other
+examples too, like libglib2.
+
+However, gdb will only auto-load files if the file is located in one of the
+locations treated as 'safe'. The Buildroot sysroot is not by default in that
+list.
+
+Provide a better debugging experience by adding the sysroot to the 'safe'
+list, via the gdbinit file prepared by Buildroot.
+
+[1] https://sourceware.org/gdb/onlinedocs/gdb/objfile_002dgdbdotext-file.html
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ toolchain/helpers.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 17bc159f3e..dfb2581ed5 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -483,7 +483,8 @@ check_toolchain_ssp = \
+ #
+ gen_gdbinit_file = \
+ 	mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
+-	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit
++	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit ; \
++	echo "add-auto-load-safe-path $(STAGING_DIR)" >> $(STAGING_DIR)/usr/share/buildroot/gdbinit
  
-+config BR2_PACKAGE_NFS_UTILS_GSS
-+	bool "gss"
-+	depends on BR2_PACKAGE_NFS_UTILS_NFSV4
-+	select BR2_PACKAGE_LIBTIRPC_GSS
-+	help
-+	  Enable GSS support
-+
- config BR2_PACKAGE_NFS_UTILS_RPCDEBUG
- 	bool "rpcdebug"
- 	help
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 0b4bca4772..763dd57ace 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -16,7 +16,6 @@ NFS_UTILS_AUTORECONF = YES
- NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
- 
- NFS_UTILS_CONF_OPTS = \
--	--disable-gss \
- 	--enable-tirpc \
- 	--enable-ipv6 \
- 	--without-tcp-wrappers \
-@@ -52,6 +51,16 @@ else
- NFS_UTILS_CONF_OPTS += --disable-nfsv4 --disable-nfsv41
- endif
- 
-+ifeq ($(BR2_PACKAGE_NFS_UTILS_GSS),y)
-+NFS_UTILS_CONF_OPTS += \
-+	--enable-gss \
-+	--enable-svcgss \
-+	--with-krb5=$(STAGING_DIR)/usr
-+NFS_UTILS_DEPENDENCIES += libkrb5
-+else
-+NFS_UTILS_CONF_OPTS += --disable-gss --disable-svcgss
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- NFS_UTILS_CONF_OPTS += --enable-caps
- NFS_UTILS_DEPENDENCIES += libcap
+ # Given a path, determine the relative prefix (../) needed to return to the
+ # root level. Note that the last component is treated as a file component; use a
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
