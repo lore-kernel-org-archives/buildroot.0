@@ -6,55 +6,56 @@ X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65FEFC4338F
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:10:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3693C4338F
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:11:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2D42460E78
-	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:10:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2D42460E78
+	by mail.kernel.org (Postfix) with ESMTPS id 998F860249
+	for <buildroot@archiver.kernel.org>; Sun, 25 Jul 2021 13:11:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 998F860249
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0461E40212;
-	Sun, 25 Jul 2021 13:10:51 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kn3-bI1mlLy1; Sun, 25 Jul 2021 13:10:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6B835401A4;
-	Sun, 25 Jul 2021 13:10:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0D0DA1BF3C1
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:09:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 09826606C0
- for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:09:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6EF0C60688;
+	Sun, 25 Jul 2021 13:11:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 777SiPcHRdQ4 for <buildroot@lists.busybox.net>;
- Sun, 25 Jul 2021 13:09:45 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Rxp7vCFFHhYI; Sun, 25 Jul 2021 13:11:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D120360661;
+	Sun, 25 Jul 2021 13:11:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 62ABD1BF3C1
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:10:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 52067832DB
+ for <buildroot@lists.busybox.net>; Sun, 25 Jul 2021 13:10:05 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8wTTXJy6hyAY for <buildroot@lists.busybox.net>;
+ Sun, 25 Jul 2021 13:10:04 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E9AFF60648
- for <buildroot@buildroot.org>; Sun, 25 Jul 2021 13:09:44 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6AC018321B
+ for <buildroot@buildroot.org>; Sun, 25 Jul 2021 13:10:04 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 2532E200005;
- Sun, 25 Jul 2021 13:09:43 +0000 (UTC)
-Date: Sun, 25 Jul 2021 15:09:42 +0200
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 70F28FF805;
+ Sun, 25 Jul 2021 13:10:02 +0000 (UTC)
+Date: Sun, 25 Jul 2021 15:10:01 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20210725150942.344e810f@windsurf>
-In-Reply-To: <20210722233544.1210678-1-giulio.benetti@benettiengineering.com>
-References: <20210720224443.24edcd0f@windsurf>
- <20210722233544.1210678-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20210725151001.0b0b1324@windsurf>
+In-Reply-To: <20210723200837.1802930-1-giulio.benetti@benettiengineering.com>
+References: <20210703221223.4194738d@windsurf>
+ <20210723200837.1802930-1-giulio.benetti@benettiengineering.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 0/2] Bump NSS and NSPR
+Subject: Re: [Buildroot] [PATCH 0/2] package/at: bump version
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,18 +67,18 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Fri, 23 Jul 2021 01:35:42 +0200
+On Fri, 23 Jul 2021 22:08:35 +0200
 Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
 > Giulio Benetti (2):
->   package/libnspr: bump to version 4.32
->   package/libnss: bump to version 3.68
+>   package/at: convert local patches to git format
+>   package/at: bump version to 3.2.2
 
 Both applied, thanks!
 
