@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6195EC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:41:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FB52C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:41:39 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 24E3560E78
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:41:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 24E3560E78
+	by mail.kernel.org (Postfix) with ESMTPS id 3DC3F60E96
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:41:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3DC3F60E96
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F154084397;
-	Wed,  4 Aug 2021 00:41:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18480843B5;
+	Wed,  4 Aug 2021 00:41:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CZapDgFod-r8; Wed,  4 Aug 2021 00:41:26 +0000 (UTC)
+	with ESMTP id OIIhTWwPR1gp; Wed,  4 Aug 2021 00:41:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CEBD84396;
-	Wed,  4 Aug 2021 00:41:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73BD6843B3;
+	Wed,  4 Aug 2021 00:41:37 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F059A1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0DB7F1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 147A540EDE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1718D40F75
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a34a3C67bf6Y for <buildroot@lists.busybox.net>;
+ with ESMTP id mFI6mK_qRDLv for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3AA6C406AB
+ by smtp2.osuosl.org (Postfix) with ESMTP id A4F4B40F7B
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8F3078021B; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
+ id 0624D82B36; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 22:08:28 +0200
+Date: Mon, 26 Jul 2021 22:08:48 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8b5ab83eb343a409df88af19a9074f1a6de50a2f
-X-Git-Newrev: d0920b07f4991f4c06b18675939c681adf18eac4
+X-Git-Oldrev: beb6ece34d7b36452c08917f3aa1f389860d699b
+X-Git-Newrev: a36f6f341bfa2f6c755508eb7f70b273b7c7e35e
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211019.8F3078021B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lirc-tools: add
- SELinux module
+Message-Id: <20210803211020.0624D82B36@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ntp: add SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,30 +69,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0920b07f4991f4c06b18675939c681adf18eac4
+commit: https://git.buildroot.net/buildroot/commit/?id=a36f6f341bfa2f6c755508eb7f70b273b7c7e35e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Support for lirc-tools is added by the services/lircd module in the
-SELinux refpolicy.
+Support for ntp is added by the services/ntp module in the SELinux
+refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lirc-tools/lirc-tools.mk | 1 +
+ package/ntp/ntp.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-index d66f4e9925..27aa5b97cc 100644
---- a/package/lirc-tools/lirc-tools.mk
-+++ b/package/lirc-tools/lirc-tools.mk
-@@ -9,6 +9,7 @@ LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
- LIRC_TOOLS_SITE = http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)
- LIRC_TOOLS_LICENSE = GPL-2.0+
- LIRC_TOOLS_LICENSE_FILES = COPYING
-+LIRC_TOOLS_SELINUX_MODULES = lircd
- LIRC_TOOLS_DEPENDENCIES = host-libxslt host-pkgconf host-python3
- LIRC_TOOLS_INSTALL_STAGING = YES
- # Patching configure.ac and Makefile.am
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 0dc75a7a6d..ff23cdc2b6 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -15,6 +15,7 @@ NTP_LICENSE_FILES = COPYRIGHT
+ NTP_CPE_ID_VENDOR = ntp
+ NTP_CPE_ID_VERSION = $(NTP_VERSION_MAJOR).$(NTP_VERSION_MINOR)
+ NTP_CPE_ID_UPDATE = p$(NTP_VERSION_POINT)
++NTP_SELINUX_MODULES = ntp
+ NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no POSIX_SHELL=/bin/sh
+ NTP_CONF_OPTS = \
+ 	--with-shared \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
