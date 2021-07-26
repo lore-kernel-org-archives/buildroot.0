@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D25D8C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:43:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4503C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:43:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9313960F56
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:43:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9313960F56
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 6049B61037
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:43:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6049B61037
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CC3E40135;
-	Tue,  3 Aug 2021 22:43:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36E5683D2E;
+	Tue,  3 Aug 2021 22:43:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xQWNkpHY2fAY; Tue,  3 Aug 2021 22:43:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ejVhY0aZxP5q; Tue,  3 Aug 2021 22:43:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E3BD1404F6;
-	Tue,  3 Aug 2021 22:42:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0E9DF1BF349
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CC2C83D12;
+	Tue,  3 Aug 2021 22:43:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D114A1BF349
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4E91E40586
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 617B260890
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T8mp1qlaTnqo for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bvd6Ci-N7kaD for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 07CCA40580
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B790A60A42
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4CAAE810E2; Tue,  3 Aug 2021 21:09:44 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 0DDBE83FBA; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 May 2021 13:47:14 +0200
+Date: Mon, 26 Jul 2021 22:08:04 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ecb55c43cea48445fec74b0c9758431bcb1a54f0
-X-Git-Newrev: b3c332853eb6aeec627f53c8cef7658c3cf304f6
+X-Git-Oldrev: d8670c9f81a885dd229eb19a7ada65e3655c6d82
+X-Git-Newrev: a73a2d4aff98012606572d4fd3b6e300ef54f991
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210944.4CAAE810E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/blktrace: add
- BLKTRACE_CPE_ID_VENDOR
+Message-Id: <20210803211019.0DDBE83FBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/drbd-utils: add
+ SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,32 +70,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3c332853eb6aeec627f53c8cef7658c3cf304f6
+commit: https://git.buildroot.net/buildroot/commit/?id=a73a2d4aff98012606572d4fd3b6e300ef54f991
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:blktrace_project:blktrace is a valid CPE identifier for this
-package:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ablktrace_project%3Ablktrace
+Support for drbd-utils is added by the services/drbd module in the
+SELinux refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/blktrace/blktrace.mk | 1 +
+ package/drbd-utils/drbd-utils.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/blktrace/blktrace.mk b/package/blktrace/blktrace.mk
-index 4ada2e8e4b..1a5f59bcce 100644
---- a/package/blktrace/blktrace.mk
-+++ b/package/blktrace/blktrace.mk
-@@ -9,6 +9,7 @@ BLKTRACE_SITE = http://brick.kernel.dk/snaps
- BLKTRACE_DEPENDENCIES = libaio
- BLKTRACE_LICENSE = GPL-2.0+
- BLKTRACE_LICENSE_FILES = COPYING
-+BLKTRACE_CPE_ID_VENDOR = blktrace_project
+diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
+index 8ea581eb27..6482cf70b6 100644
+--- a/package/drbd-utils/drbd-utils.mk
++++ b/package/drbd-utils/drbd-utils.mk
+@@ -8,6 +8,7 @@ DRBD_UTILS_VERSION = 9.15.0
+ DRBD_UTILS_SITE = http://www.linbit.com/downloads/drbd/utils
+ DRBD_UTILS_LICENSE = GPL-2.0+
+ DRBD_UTILS_LICENSE_FILES = COPYING
++DRBD_UTILS_SELINUX_MODULES = drbd
+ DRBD_UTILS_DEPENDENCIES = host-flex
  
- # 0001-btt-make-device-devno-use-PATH_MAX-to-avoid-overflow.patch
- BLKTRACE_IGNORE_CVES += CVE-2018-10689
+ DRBD_UTILS_CONF_OPTS = --with-distro=generic --without-manual
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
