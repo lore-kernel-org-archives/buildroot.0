@@ -2,68 +2,92 @@ Return-Path: <SRS0=wdlY=MS=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AB58C4338F
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 18:06:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD6ACC4338F
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 18:51:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0C14060F6E
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 18:06:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0C14060F6E
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
+	by mail.kernel.org (Postfix) with ESMTPS id 5A9A560F6F
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 18:51:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5A9A560F6F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CAB9B826C2;
-	Mon, 26 Jul 2021 18:06:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 06D9440264;
+	Mon, 26 Jul 2021 18:51:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ks3GsL4MTX-x; Mon, 26 Jul 2021 18:06:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KenODHqB7UIZ; Mon, 26 Jul 2021 18:51:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9DC158272A;
-	Mon, 26 Jul 2021 18:06:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 547E01BF2F2
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 18:06:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2917740182;
+	Mon, 26 Jul 2021 18:51:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C88871BF2F2
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 18:51:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 50B046075E
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 18:06:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B21B882AB6
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 18:51:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GbP43eIAoTBo for <buildroot@lists.busybox.net>;
- Mon, 26 Jul 2021 18:06:04 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1DCEE605F1
- for <buildroot@buildroot.org>; Mon, 26 Jul 2021 18:06:03 +0000 (UTC)
-Received: from fwd13.aul.t-online.de (fwd13.aul.t-online.de [172.20.27.62])
- by mailout09.t-online.de (Postfix) with SMTP id 4AB91592B;
- Mon, 26 Jul 2021 20:05:05 +0200 (CEST)
-Received: from fli4l.lan.fli4l
- (GcU6FTZ1whhaUN-3-qXKBorT3yZ-Pu9LeJfswFDWBlJpRf0PoCQwYpAuPs9ZZVuQ8O@[91.58.13.189])
- by fwd13.t-online.de with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1m84yM-4S5eU40; Mon, 26 Jul 2021 20:05:02 +0200
-Received: from mahler.lan.fli4l ([192.168.1.1]:54268)
- by fli4l.lan.fli4l with esmtp (Exim 4.94.2)
- (envelope-from <bernd.kuhls@t-online.de>)
- id 1m84yL-0004wc-RI; Mon, 26 Jul 2021 20:05:02 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3EJl2z0mnI6o for <buildroot@lists.busybox.net>;
+ Mon, 26 Jul 2021 18:51:14 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 52F0582A7F
+ for <buildroot@buildroot.org>; Mon, 26 Jul 2021 18:51:14 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id y200so13249057iof.1
+ for <buildroot@buildroot.org>; Mon, 26 Jul 2021 11:51:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=bk6bP1+mma50RA2033DmQG6HYPdr2T/asHwpCjdLfyg=;
+ b=QUDagH2vCfdI70MqM8Ks58o3CcH8yPMLUfgGFVy8FQD2cVYEGOe4AfbCxIyo1J9G2f
+ Wl5PKZzHSoOSJpdw0cRVyQwsvLlCLCb+smzWFLsheZ8hyUO1rHDh904+QTwleG2itIvl
+ T54gzs8PnHqg3kGb9CbaiQy4Gx0yFatshbL0UW8WgprnaK0W3lqSQI7mik/kXuz1ZY9S
+ oRr58r3kS8oaAY8lMMTIRaM/KUlI5BxDhpX2pxyc5aHmA2hUo2ctDFwxJ76jEfybC3yh
+ 4wCTVxiNfOF16NDYcMCOcXIR6KVwu7LjMZSNtTpNVoqRC7m4cr9n+SKMaA+cOH21qPQ+
+ ErkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=bk6bP1+mma50RA2033DmQG6HYPdr2T/asHwpCjdLfyg=;
+ b=QD8tDLatMG0Qkc+oSDQBB9IClmrT6rLLDgV3EEcujPcs96za+AVrvDZPri6z3rvSMc
+ aguLwAiB68+lvjdQR+Lo+SRv01bOv/wfZ6+LOa3gVr+za+Mb4rAqIiFgLmEnaeQrohmI
+ qOeRTaErAWelL76lpEWWC3Ouu93YS2OVrWccxY7Zck3JdNfOE+H2wJJafxFCaNtrUNfe
+ mvZbaRmxxCOkpzssVl4TF+azciP7FutBP1h6x8DANyKtNwXF6XyUBx+rtOBi48+MJIGw
+ uPIbs1+d3b+ceMDkdRnWbXQHiWfP6r/WsprxMsk9zwNf2kK6Fz1yOGmsi/QZIou/vv6Y
+ pJng==
+X-Gm-Message-State: AOAM530LWa/vbvCVx1k9VPIeuFf0XtfIKtgVn4Vh3ZuqBu3H5SaKGG0y
+ fQsTB73m3qo40Nslld0mZzQxsgd/w3E=
+X-Google-Smtp-Source: ABdhPJyDdvOYhbDTN3LUXoNQK8H3rRNs+MD0l7neHWr6yoRMkGBr6LYvGbaswJX/g83VlPppgI84OQ==
+X-Received: by 2002:a05:6602:2245:: with SMTP id
+ o5mr16188154ioo.20.1627325473049; 
+ Mon, 26 Jul 2021 11:51:13 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-178-184.hlrn.qwest.net.
+ [97.118.178.184])
+ by smtp.gmail.com with ESMTPSA id k4sm265288ilu.67.2021.07.26.11.51.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 26 Jul 2021 11:51:12 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 20:05:01 +0200
-Message-Id: <20210726180501.192327-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Mon, 26 Jul 2021 12:51:10 -0600
+Message-Id: <20210726185110.3333950-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-ID: GcU6FTZ1whhaUN-3-qXKBorT3yZ-Pu9LeJfswFDWBlJpRf0PoCQwYpAuPs9ZZVuQ8O
-X-TOI-EXPURGATEID: 150726::1627322702-00014A6A-C5E0A7C7/0/0 CLEAN NORMAL
-X-TOI-MSGID: d909291a-8675-46b9-9858-650c9c9eb885
-Subject: [Buildroot] [PATCH 1/1] package/fio: bump version to 3.27
+Subject: [Buildroot] [PATCH v2 1/1] package/system-config-printer: new
+ package
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,156 +99,184 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Removed patches which were applied upstream.
+This package has some udev tools to assist with printer autodetection.
 
-Upstream added optional support for libnfs:
-https://git.kernel.dk/cgit/fio/commit/?id=9326926bef943245c244eb0e6129ae046a3719a9
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...io_uring-don-t-use-rand48_r-variants.patch | 49 -------------------
- ...akefile-fix-build-of-io_uring-on-sh4.patch | 33 -------------
- package/fio/fio.hash                          |  2 +-
- package/fio/fio.mk                            |  6 ++-
- 4 files changed, 6 insertions(+), 84 deletions(-)
- delete mode 100644 package/fio/0001-t-io_uring-don-t-use-rand48_r-variants.patch
- delete mode 100644 package/fio/0002-Makefile-fix-build-of-io_uring-on-sh4.patch
+Changes v1 -> v2:
+  - update patch to merged upstream version
+---
+ package/Config.in                             |  1 +
+ ...n-to-disable-xmlto-manual-generation.patch | 73 +++++++++++++++++++
+ package/system-config-printer/Config.in       |  7 ++
+ .../system-config-printer.hash                |  3 +
+ .../system-config-printer.mk                  | 32 ++++++++
+ 5 files changed, 116 insertions(+)
+ create mode 100644 package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch
+ create mode 100644 package/system-config-printer/Config.in
+ create mode 100644 package/system-config-printer/system-config-printer.hash
+ create mode 100644 package/system-config-printer/system-config-printer.mk
 
-diff --git a/package/fio/0001-t-io_uring-don-t-use-rand48_r-variants.patch b/package/fio/0001-t-io_uring-don-t-use-rand48_r-variants.patch
-deleted file mode 100644
-index 8d6830ac81..0000000000
---- a/package/fio/0001-t-io_uring-don-t-use-rand48_r-variants.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 5e8865c0e08861558c1253c521dc9098d0c773ee Mon Sep 17 00:00:00 2001
--From: Jens Axboe <axboe@kernel.dk>
--Date: Mon, 16 Mar 2020 08:30:36 -0600
--Subject: [PATCH] t/io_uring: don't use *rand48_r() variants
--
--Not available on all platforms.
--
--Signed-off-by: Jens Axboe <axboe@kernel.dk>
--
--[Patch from upstream
--https://github.com/axboe/fio/commit/5e8865c0e08861558c1253c521dc9098d0c773ee]
--Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-----
-- t/io_uring.c | 5 ++---
-- 1 file changed, 2 insertions(+), 3 deletions(-)
--
--diff --git a/t/io_uring.c b/t/io_uring.c
--index e84a2b6b..d48db1e9 100644
----- a/t/io_uring.c
--+++ b/t/io_uring.c
--@@ -63,7 +63,6 @@ struct file {
-- struct submitter {
-- 	pthread_t thread;
-- 	int ring_fd;
---	struct drand48_data rand;
-- 	struct io_sq_ring sq_ring;
-- 	struct io_uring_sqe *sqes;
-- 	struct io_cq_ring cq_ring;
--@@ -170,7 +169,7 @@ static void init_io(struct submitter *s, unsigned index)
-- 	}
-- 	f->pending_ios++;
-- 
---	lrand48_r(&s->rand, &r);
--+	r = lrand48();
-- 	offset = (r % (f->max_blocks - 1)) * BS;
-- 
-- 	if (register_files) {
--@@ -286,7 +285,7 @@ static void *submitter_fn(void *data)
-- 
-- 	printf("submitter=%d\n", gettid());
-- 
---	srand48_r(pthread_self(), &s->rand);
--+	srand48(pthread_self());
-- 
-- 	prepped = 0;
-- 	do {
---- 
--2.20.1
--
-diff --git a/package/fio/0002-Makefile-fix-build-of-io_uring-on-sh4.patch b/package/fio/0002-Makefile-fix-build-of-io_uring-on-sh4.patch
-deleted file mode 100644
-index 69bda93d37..0000000000
---- a/package/fio/0002-Makefile-fix-build-of-io_uring-on-sh4.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From e1985f9097f37748efdc29239eb3fb6a00b12f27 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 23 May 2020 19:07:40 +0200
--Subject: [PATCH] Makefile: fix build of io_uring on sh4
--
--SuperH compile currently fails with:
--
--/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sh4-buildroot-linux-uclibc/8.3.0/../../../../sh4-buildroot-linux-uclibc/bin/ld: t/io_uring.o: in function `submitter_fn':
--/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/fio-3.19/t/io_uring.c:131: undefined reference to `arch_flags'
--/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sh4-buildroot-linux-uclibc/8.3.0/../../../../sh4-buildroot-linux-uclibc/bin/ld: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/fio-3.19/t/io_uring.c:367: undefined reference to `arch_flags'
--collect2: error: ld returned 1 exit status
--
--Fix that by ensuring we have a stub arch.o with the necessary arch flags
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/axboe/fio/commit/e1985f9097f37748efdc29239eb3fb6a00b12f27]
-----
-- Makefile | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/Makefile b/Makefile
--index f1e984f5f..e39621954 100644
----- a/Makefile
--+++ b/Makefile
--@@ -283,6 +283,7 @@ T_PIPE_ASYNC_OBJS = t/read-to-pipe-async.o
-- T_PIPE_ASYNC_PROGS = t/read-to-pipe-async
-- 
-- T_IOU_RING_OBJS = t/io_uring.o
--+T_IOU_RING_OBJS += t/arch.o
-- T_IOU_RING_PROGS = t/io_uring
-- 
-- T_MEMLOCK_OBJS = t/memlock.o
-diff --git a/package/fio/fio.hash b/package/fio/fio.hash
-index d95deb20b0..88319e4cc0 100644
---- a/package/fio/fio.hash
-+++ b/package/fio/fio.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  a2f885834900f554127718716338914791f5d72800b6f9e3edf173b94b5a2e4e  fio-3.19.tar.gz
-+sha256  da9826f07a003656ea070d359c90f752db8c3216ced9ff865242eed1a1db93bc  fio-3.27.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  8a240c1ad13d1fe3e58588643d81d0695899be4a669fe6d8fafa76ca6a89db2c  MORAL-LICENSE
-diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-index 3ddd74eda4..12e2b2ab7c 100644
---- a/package/fio/fio.mk
-+++ b/package/fio/fio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FIO_VERSION = 3.19
-+FIO_VERSION = 3.27
- FIO_SITE = http://brick.kernel.dk/snaps
- FIO_LICENSE = GPL-2.0
- FIO_LICENSE_FILES = COPYING MORAL-LICENSE
-@@ -13,6 +13,10 @@ ifeq ($(BR2_PACKAGE_LIBAIO),y)
- FIO_DEPENDENCIES += libaio
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBNFS),y)
-+FIO_DEPENDENCIES += libnfs
+diff --git a/package/Config.in b/package/Config.in
+index 12b1323fc2..2bd507c993 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2116,6 +2116,7 @@ menu "Networking applications"
+ 	source "package/ctorrent/Config.in"
+ 	source "package/cups/Config.in"
+ 	source "package/cups-filters/Config.in"
++	source "package/system-config-printer/Config.in"
+ 	source "package/dante/Config.in"
+ 	source "package/darkhttpd/Config.in"
+ 	source "package/dehydrated/Config.in"
+diff --git a/package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch b/package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch
+new file mode 100644
+index 0000000000..e2cf395811
+--- /dev/null
++++ b/package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch
+@@ -0,0 +1,73 @@
++From 731c8d7e1f9edb527785d61f74031a5e5846554b Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Sun, 25 Jul 2021 16:30:59 -0600
++Subject: [PATCH] Add option to disable xmlto manual generation.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1@gmail.com: backport from upstream commit
++95e0b461f5a46c74b00287aca65732ea2fc9d69b]
++---
++ Makefile.am  | 7 ++++++-
++ configure.ac | 5 +++++
++ 2 files changed, 11 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 843ba30d..7facab94 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -209,9 +209,11 @@ else
++ systemd_CLEANFILES=
++ endif
++ 
+++if XMLTO
++ man_MANS=					\
++ 	man/system-config-printer.1		\
++ 	man/system-config-printer-applet.1
+++endif
++ 
++ dbus_DATA =					\
++ 	dbus/com.redhat.NewPrinterNotification.conf		\
++@@ -274,7 +276,6 @@ EXTRA_DIST=\
++ 	$(bin_SCRIPTS) \
++ 	setup.py \
++ 	$(EXPORT_MODULES) \
++-	man/system-config-printer.xml \
++ 	$(dbus_DATA) \
++ 	$(dbusinterfaces_DATA) \
++ 	$(dbusservices_DATA) \
++@@ -297,12 +298,16 @@ EXTRA_DIST=\
++ 	test_PhysicalDevice.py \
++ 	$(appdata_in_files)
++ 
+++if XMLTO
+++EXTRA_DIST+=man/system-config-printer.xml
+++
++ # The man pages are generated from DocBook XML.
++ .stamp-man-pages-built: $(top_srcdir)/man/system-config-printer.xml
++ 	xmlto man -o man $<
++ 	touch .stamp-man-pages-built
++ 
++ $(man_MANS): .stamp-man-pages-built
+++endif
++ 
++ html:	$(EXPORT_MODULES) $(EXPORT_MODULES_GEN)
++ 	rm -rf html
++diff --git a/configure.ac b/configure.ac
++index 811f897a..a2a66889 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -75,6 +75,11 @@ if test "x$with_systemdsystemunitdir" != xno; then
++ fi
++ AM_CONDITIONAL(HAVE_SYSTEMD, [test -n "$with_systemdsystemunitdir" -a "x$with_systemdsystemunitdir" != xno ])
++ 
+++AC_ARG_WITH(xmlto,
+++        [AC_HELP_STRING([--with-xmlto],
+++                [Enable xmlto manual generation @<:@default=yes@:>@])])
+++AM_CONDITIONAL([XMLTO], [test x$with_xmlto != xno])
+++
++ ALL_LINGUAS="ar as ast bg bn_IN bn br bs ca cs cy da de el en_GB es et fa fi fr fur gu he hi hr hu id is it ja kn ko lt lv mai ml mr ms nb nds nl nn oc or pa pl pt_BR pt ro ru si sk sl sr@latin sr sv ta te th tr uk vi zh_CN zh_TW"
++ AC_CONFIG_FILES([
++ Makefile
++-- 
++2.25.1
++
+diff --git a/package/system-config-printer/Config.in b/package/system-config-printer/Config.in
+new file mode 100644
+index 0000000000..8ebc4d060c
+--- /dev/null
++++ b/package/system-config-printer/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_SYSTEM_CONFIG_PRINTER
++	bool "system-config-printer"
++	depends on BR2_PACKAGE_CUPS
++	help
++	  Graphical user interface for CUPS administration
++
++	  https://github.com/OpenPrinting/system-config-printer
+diff --git a/package/system-config-printer/system-config-printer.hash b/package/system-config-printer/system-config-printer.hash
+new file mode 100644
+index 0000000000..56b7e47650
+--- /dev/null
++++ b/package/system-config-printer/system-config-printer.hash
+@@ -0,0 +1,3 @@
++# Locally calculated:
++sha256  fbd226ce215bf014213dded81b43b9d4d90470524f5bf7cd21ecc71d4aefa689  system-config-printer-1.5.15.tar.xz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/system-config-printer/system-config-printer.mk b/package/system-config-printer/system-config-printer.mk
+new file mode 100644
+index 0000000000..5a796515e3
+--- /dev/null
++++ b/package/system-config-printer/system-config-printer.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# system-config-printer
++#
++################################################################################
++
++SYSTEM_CONFIG_PRINTER_VERSION = 1.5.15
++SYSTEM_CONFIG_PRINTER_SOURCE = system-config-printer-$(SYSTEM_CONFIG_PRINTER_VERSION).tar.xz
++SYSTEM_CONFIG_PRINTER_SITE = https://github.com/OpenPrinting/system-config-printer/releases/download/v$(SYSTEM_CONFIG_PRINTER_VERSION)
++SYSTEM_CONFIG_PRINTER_LICENSE = GPL-2.0
++SYSTEM_CONFIG_PRINTER_LICENSE_FILES = COPYING
++SYSTEM_CONFIG_PRINTER_DEPENDENCIES = cups
++
++ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
++SYSTEM_CONFIG_PRINTER_DEPENDENCIES += libglib2
 +endif
 +
- ifeq ($(BR2_PACKAGE_NUMACTL),y)
- FIO_DEPENDENCIES += numactl
- endif
++ifeq ($(BR2_PACKAGE_LIBGLIB2)$(BR2_PACKAGE_LIBUSB)$(BR2_PACKAGE_HAS_UDEV),yyy)
++SYSTEM_CONFIG_PRINTER_CONF_OPTS = --with-udev-rules=yes
++SYSTEM_CONFIG_PRINTER_DEPENDENCIES += libusb udev
++else
++SYSTEM_CONFIG_PRINTER_CONF_OPTS = --with-udev-rules=no
++endif
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++SYSTEM_CONFIG_PRINTER_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
++SYSTEM_CONFIG_PRINTER_DEPENDENCIES += systemd
++else
++SYSTEM_CONFIG_PRINTER_CONF_OPTS += --with-systemdsystemunitdir=no
++endif
++
++$(eval $(autotools-package))
 -- 
-2.30.2
+2.25.1
 
 _______________________________________________
 buildroot mailing list
