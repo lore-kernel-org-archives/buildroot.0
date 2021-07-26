@@ -2,92 +2,63 @@ Return-Path: <SRS0=wdlY=MS=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD6ACC4338F
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 18:51:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53367C4338F
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 20:13:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5A9A560F6F
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 18:51:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5A9A560F6F
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id DAC2260F6E
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 20:13:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DAC2260F6E
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06D9440264;
-	Mon, 26 Jul 2021 18:51:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7E846402E9;
+	Mon, 26 Jul 2021 20:13:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KenODHqB7UIZ; Mon, 26 Jul 2021 18:51:20 +0000 (UTC)
+	with ESMTP id uyDWYZQ9bdj4; Mon, 26 Jul 2021 20:13:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2917740182;
-	Mon, 26 Jul 2021 18:51:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BDDFA40260;
+	Mon, 26 Jul 2021 20:13:41 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C88871BF2F2
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 18:51:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5849D1BF302
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 20:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B21B882AB6
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 18:51:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47CB482FA9
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 20:13:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (1024-bit key) header.d=heine.tech
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3EJl2z0mnI6o for <buildroot@lists.busybox.net>;
- Mon, 26 Jul 2021 18:51:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
- [IPv6:2607:f8b0:4864:20::d30])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 52F0582A7F
- for <buildroot@buildroot.org>; Mon, 26 Jul 2021 18:51:14 +0000 (UTC)
-Received: by mail-io1-xd30.google.com with SMTP id y200so13249057iof.1
- for <buildroot@buildroot.org>; Mon, 26 Jul 2021 11:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=bk6bP1+mma50RA2033DmQG6HYPdr2T/asHwpCjdLfyg=;
- b=QUDagH2vCfdI70MqM8Ks58o3CcH8yPMLUfgGFVy8FQD2cVYEGOe4AfbCxIyo1J9G2f
- Wl5PKZzHSoOSJpdw0cRVyQwsvLlCLCb+smzWFLsheZ8hyUO1rHDh904+QTwleG2itIvl
- T54gzs8PnHqg3kGb9CbaiQy4Gx0yFatshbL0UW8WgprnaK0W3lqSQI7mik/kXuz1ZY9S
- oRr58r3kS8oaAY8lMMTIRaM/KUlI5BxDhpX2pxyc5aHmA2hUo2ctDFwxJ76jEfybC3yh
- 4wCTVxiNfOF16NDYcMCOcXIR6KVwu7LjMZSNtTpNVoqRC7m4cr9n+SKMaA+cOH21qPQ+
- ErkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=bk6bP1+mma50RA2033DmQG6HYPdr2T/asHwpCjdLfyg=;
- b=QD8tDLatMG0Qkc+oSDQBB9IClmrT6rLLDgV3EEcujPcs96za+AVrvDZPri6z3rvSMc
- aguLwAiB68+lvjdQR+Lo+SRv01bOv/wfZ6+LOa3gVr+za+Mb4rAqIiFgLmEnaeQrohmI
- qOeRTaErAWelL76lpEWWC3Ouu93YS2OVrWccxY7Zck3JdNfOE+H2wJJafxFCaNtrUNfe
- mvZbaRmxxCOkpzssVl4TF+azciP7FutBP1h6x8DANyKtNwXF6XyUBx+rtOBi48+MJIGw
- uPIbs1+d3b+ceMDkdRnWbXQHiWfP6r/WsprxMsk9zwNf2kK6Fz1yOGmsi/QZIou/vv6Y
- pJng==
-X-Gm-Message-State: AOAM530LWa/vbvCVx1k9VPIeuFf0XtfIKtgVn4Vh3ZuqBu3H5SaKGG0y
- fQsTB73m3qo40Nslld0mZzQxsgd/w3E=
-X-Google-Smtp-Source: ABdhPJyDdvOYhbDTN3LUXoNQK8H3rRNs+MD0l7neHWr6yoRMkGBr6LYvGbaswJX/g83VlPppgI84OQ==
-X-Received: by 2002:a05:6602:2245:: with SMTP id
- o5mr16188154ioo.20.1627325473049; 
- Mon, 26 Jul 2021 11:51:13 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-178-184.hlrn.qwest.net.
- [97.118.178.184])
- by smtp.gmail.com with ESMTPSA id k4sm265288ilu.67.2021.07.26.11.51.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 26 Jul 2021 11:51:12 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ with ESMTP id TuXgcp6voAFb for <buildroot@lists.busybox.net>;
+ Mon, 26 Jul 2021 20:13:38 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 68E0A82FA2
+ for <buildroot@buildroot.org>; Mon, 26 Jul 2021 20:13:38 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 6AC9718287E; Mon, 26 Jul 2021 22:13:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
+ t=1627330415; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=71YDQK8Obo87W1uZplFx2lPDiknAWRTteS26eYJ62DM=;
+ b=Jra5H5WVtTDGbeLtvsk8XZjrjDzML5IgUYxO3DTzp2qS0ZaGQuAgtPNMjYrk33UqWuDbzk
+ D+KjARjOPtMxbVl53eJFH8tD87qGO/2WGNKz7/xJTrg3LPyIFzBdiCttQz13XwS2t9CMPT
+ C5dyKxvPHk1lhypQtjTeSz7YXkEo8PQ=
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 12:51:10 -0600
-Message-Id: <20210726185110.3333950-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Mon, 26 Jul 2021 22:12:42 +0200
+Message-Id: <20210726201244.43070-1-buildroot@heine.tech>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/1] package/system-config-printer: new
- package
+X-Last-TLS-Session-Version: TLSv1.2
+Subject: [Buildroot] [PATCH] package/bluez5_utils: expose more disable
+ options
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,184 +70,176 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Michael Nosthoff via buildroot <buildroot@busybox.net>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Michael Nosthoff <buildroot@heine.tech>, Marcin Bis <marcin@bis.org.pl>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-This package has some udev tools to assist with printer autodetection.
+BlueZ builds a lot of Classic BT profiles by default but allows
+to disable them. This is especially handy when only BLE is needed
+and enabled in the kernel.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - update patch to merged upstream version
----
- package/Config.in                             |  1 +
- ...n-to-disable-xmlto-manual-generation.patch | 73 +++++++++++++++++++
- package/system-config-printer/Config.in       |  7 ++
- .../system-config-printer.hash                |  3 +
- .../system-config-printer.mk                  | 32 ++++++++
- 5 files changed, 116 insertions(+)
- create mode 100644 package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch
- create mode 100644 package/system-config-printer/Config.in
- create mode 100644 package/system-config-printer/system-config-printer.hash
- create mode 100644 package/system-config-printer/system-config-printer.mk
+Otherwise this yields warnings like this on bootup:
 
-diff --git a/package/Config.in b/package/Config.in
-index 12b1323fc2..2bd507c993 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2116,6 +2116,7 @@ menu "Networking applications"
- 	source "package/ctorrent/Config.in"
- 	source "package/cups/Config.in"
- 	source "package/cups-filters/Config.in"
-+	source "package/system-config-printer/Config.in"
- 	source "package/dante/Config.in"
- 	source "package/darkhttpd/Config.in"
- 	source "package/dehydrated/Config.in"
-diff --git a/package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch b/package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch
-new file mode 100644
-index 0000000000..e2cf395811
---- /dev/null
-+++ b/package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch
-@@ -0,0 +1,73 @@
-+From 731c8d7e1f9edb527785d61f74031a5e5846554b Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Sun, 25 Jul 2021 16:30:59 -0600
-+Subject: [PATCH] Add option to disable xmlto manual generation.
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1@gmail.com: backport from upstream commit
-+95e0b461f5a46c74b00287aca65732ea2fc9d69b]
-+---
-+ Makefile.am  | 7 ++++++-
-+ configure.ac | 5 +++++
-+ 2 files changed, 11 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 843ba30d..7facab94 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -209,9 +209,11 @@ else
-+ systemd_CLEANFILES=
-+ endif
-+ 
-++if XMLTO
-+ man_MANS=					\
-+ 	man/system-config-printer.1		\
-+ 	man/system-config-printer-applet.1
-++endif
-+ 
-+ dbus_DATA =					\
-+ 	dbus/com.redhat.NewPrinterNotification.conf		\
-+@@ -274,7 +276,6 @@ EXTRA_DIST=\
-+ 	$(bin_SCRIPTS) \
-+ 	setup.py \
-+ 	$(EXPORT_MODULES) \
-+-	man/system-config-printer.xml \
-+ 	$(dbus_DATA) \
-+ 	$(dbusinterfaces_DATA) \
-+ 	$(dbusservices_DATA) \
-+@@ -297,12 +298,16 @@ EXTRA_DIST=\
-+ 	test_PhysicalDevice.py \
-+ 	$(appdata_in_files)
-+ 
-++if XMLTO
-++EXTRA_DIST+=man/system-config-printer.xml
-++
-+ # The man pages are generated from DocBook XML.
-+ .stamp-man-pages-built: $(top_srcdir)/man/system-config-printer.xml
-+ 	xmlto man -o man $<
-+ 	touch .stamp-man-pages-built
-+ 
-+ $(man_MANS): .stamp-man-pages-built
-++endif
-+ 
-+ html:	$(EXPORT_MODULES) $(EXPORT_MODULES_GEN)
-+ 	rm -rf html
-+diff --git a/configure.ac b/configure.ac
-+index 811f897a..a2a66889 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -75,6 +75,11 @@ if test "x$with_systemdsystemunitdir" != xno; then
-+ fi
-+ AM_CONDITIONAL(HAVE_SYSTEMD, [test -n "$with_systemdsystemunitdir" -a "x$with_systemdsystemunitdir" != xno ])
-+ 
-++AC_ARG_WITH(xmlto,
-++        [AC_HELP_STRING([--with-xmlto],
-++                [Enable xmlto manual generation @<:@default=yes@:>@])])
-++AM_CONDITIONAL([XMLTO], [test x$with_xmlto != xno])
-++
-+ ALL_LINGUAS="ar as ast bg bn_IN bn br bs ca cs cy da de el en_GB es et fa fi fr fur gu he hi hr hu id is it ja kn ko lt lv mai ml mr ms nb nds nl nn oc or pa pl pt_BR pt ro ru si sk sl sr@latin sr sv ta te th tr uk vi zh_CN zh_TW"
-+ AC_CONFIG_FILES([
-+ Makefile
-+-- 
-+2.25.1
-+
-diff --git a/package/system-config-printer/Config.in b/package/system-config-printer/Config.in
-new file mode 100644
-index 0000000000..8ebc4d060c
---- /dev/null
-+++ b/package/system-config-printer/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_SYSTEM_CONFIG_PRINTER
-+	bool "system-config-printer"
-+	depends on BR2_PACKAGE_CUPS
+ profiles/network/bnep.c:bnep_init() kernel lacks bnep-protocol support
+ src/plugin.c:plugin_init() System does not support network plugin
+
+Also it allows to disable btmon which should not be needed on
+production systems and is ~800KB in size.
+
+Expose those options but default to 'y' to no break existing
+configurations.
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ package/bluez5_utils/Config.in       | 36 ++++++++++++++++++++++++
+ package/bluez5_utils/bluez5_utils.mk | 41 ++++++++++++++++++++++++++++
+ 2 files changed, 77 insertions(+)
+
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 2c8625a66d..9f20bf83ac 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -37,6 +37,12 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+ 	help
+ 	  Build the command line client "bluetoothctl".
+ 
++config BR2_PACKAGE_BLUEZ5_UTILS_MONITOR
++	bool "build monitor utility"
++	default y
 +	help
-+	  Graphical user interface for CUPS administration
++	  Build monitor utility btmon.
 +
-+	  https://github.com/OpenPrinting/system-config-printer
-diff --git a/package/system-config-printer/system-config-printer.hash b/package/system-config-printer/system-config-printer.hash
-new file mode 100644
-index 0000000000..56b7e47650
---- /dev/null
-+++ b/package/system-config-printer/system-config-printer.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated:
-+sha256  fbd226ce215bf014213dded81b43b9d4d90470524f5bf7cd21ecc71d4aefa689  system-config-printer-1.5.15.tar.xz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/system-config-printer/system-config-printer.mk b/package/system-config-printer/system-config-printer.mk
-new file mode 100644
-index 0000000000..5a796515e3
---- /dev/null
-+++ b/package/system-config-printer/system-config-printer.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# system-config-printer
-+#
-+################################################################################
+ config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
+ 	bool "install deprecated tools"
+ 	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+@@ -52,11 +58,35 @@ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+ 	  "Nokia OBEX PC Suite tool". So, only if OBEX support is
+ 	  enabled this option has an effect.
+ 
++config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_A2DP
++	bool "build a2dp plugin"
++	default y
++	help
++	  Build plugin for A2DP (audio) profiles.
 +
-+SYSTEM_CONFIG_PRINTER_VERSION = 1.5.15
-+SYSTEM_CONFIG_PRINTER_SOURCE = system-config-printer-$(SYSTEM_CONFIG_PRINTER_VERSION).tar.xz
-+SYSTEM_CONFIG_PRINTER_SITE = https://github.com/OpenPrinting/system-config-printer/releases/download/v$(SYSTEM_CONFIG_PRINTER_VERSION)
-+SYSTEM_CONFIG_PRINTER_LICENSE = GPL-2.0
-+SYSTEM_CONFIG_PRINTER_LICENSE_FILES = COPYING
-+SYSTEM_CONFIG_PRINTER_DEPENDENCIES = cups
++config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AVRCP
++	bool "build avrcp plugin"
++	default y
++	help
++	  Build plugin for AVRCP (audio) profiles.
 +
-+ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-+SYSTEM_CONFIG_PRINTER_DEPENDENCIES += libglib2
-+endif
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
+ 	bool "build health plugin"
+ 	help
+ 	  Build plugin for health profiles.
+ 
++config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID
++	bool "build hid plugin"
++	default y
++	help
++	  Build plugin for HID (input) profiles.
 +
-+ifeq ($(BR2_PACKAGE_LIBGLIB2)$(BR2_PACKAGE_LIBUSB)$(BR2_PACKAGE_HAS_UDEV),yyy)
-+SYSTEM_CONFIG_PRINTER_CONF_OPTS = --with-udev-rules=yes
-+SYSTEM_CONFIG_PRINTER_DEPENDENCIES += libusb udev
++config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HOG
++	bool "build hog plugin"
++	default y
++	help
++	  Build plugin for HoG (input) profiles.
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH
+ 	bool "build mesh plugin"
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
+@@ -76,6 +106,12 @@ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI
+ 	help
+ 	  Build MIDI support via ALSA sequencer.
+ 
++config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NETWORK
++	bool "build network plugin"
++	default y
++	help
++	  Build plugin for PANU, NAP, GN profiles.
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NFC
+ 	bool "build nfc plugin"
+ 	help
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 3bd3f5490d..7b7e31500f 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -40,6 +40,12 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-client
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_MONITOR),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-monitor
 +else
-+SYSTEM_CONFIG_PRINTER_CONF_OPTS = --with-udev-rules=no
++BLUEZ5_UTILS_CONF_OPTS += --disable-monitor
 +endif
 +
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+SYSTEM_CONFIG_PRINTER_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
-+SYSTEM_CONFIG_PRINTER_DEPENDENCIES += systemd
+ # experimental plugins
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-experimental
+@@ -47,6 +53,20 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
+ endif
+ 
++# enable a2dp plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_A2DP),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-a2dp
 +else
-+SYSTEM_CONFIG_PRINTER_CONF_OPTS += --with-systemdsystemunitdir=no
++BLUEZ5_UTILS_CONF_OPTS += --disable-a2dp
 +endif
 +
-+$(eval $(autotools-package))
++#enable avrcp plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AVRCP),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-avrcp
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-avrcp
++endif
++
+ # enable health plugin
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-health
+@@ -54,6 +74,20 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-health
+ endif
+ 
++# enable hid plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-hid
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-hid
++endif
++
++# enable hog plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HOG),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-hog
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-hog
++endif
++
+ # enable mesh profile
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-external-ell --enable-mesh
+@@ -70,6 +104,13 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-midi
+ endif
+ 
++# enable network plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NETWORK),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-network
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-network
++endif
++
+ # enable nfc plugin
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NFC),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-nfc
 -- 
-2.25.1
+2.32.0
 
 _______________________________________________
 buildroot mailing list
