@@ -2,91 +2,58 @@ Return-Path: <SRS0=wdlY=MS=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5370FC4338F
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 21:30:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C24F3C4338F
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 21:40:39 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0B0DF60F5A
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 21:30:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0B0DF60F5A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 5C204601FD
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 21:40:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5C204601FD
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CDBCD402EF;
-	Mon, 26 Jul 2021 21:30:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 219E940343;
+	Mon, 26 Jul 2021 21:40:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id waFjepaij91a; Mon, 26 Jul 2021 21:30:22 +0000 (UTC)
+	with ESMTP id tR2iI2rqHKlw; Mon, 26 Jul 2021 21:40:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A3F640124;
-	Mon, 26 Jul 2021 21:30:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 048241BF2F1
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 21:30:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4A4D2402FE;
+	Mon, 26 Jul 2021 21:40:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E3741BF2F1
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 21:40:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 00A124024B
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 21:30:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6AC10402FE
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 21:40:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qADn4cfchAcL for <buildroot@lists.busybox.net>;
- Mon, 26 Jul 2021 21:30:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E65A3401D6
- for <buildroot@buildroot.org>; Mon, 26 Jul 2021 21:30:18 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- m38-20020a05600c3b26b02902161fccabf1so394467wms.2
- for <buildroot@buildroot.org>; Mon, 26 Jul 2021 14:30:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=kHdM6rMdwvMa8TE3e+rRBMHBbgrr/ePwRSyW6lbApa4=;
- b=FdQz2uThJiQSokR6Sv6axAZ0dX2ZsksgMTvEl35Cb9N43qPr09XbUcm6wcVep8UtBg
- m886AMgecOU4HwgvX1aL5X0O3uKnrUTdDmKj8UsiFoHRARLAARE20iHBenZX3r0PJN1g
- 6p68CLjdiGslhbjK1k6MhhQ3pEGSpr+DXI1Gj/QIw21TjTI73aAAOax97ytL91JJ4g1c
- uU5x5HZa9kL6rfCwAse+K8f35l978ENDLOef0NgZVIa7OS/fkBqlfBSzGpcYmyRfEDyt
- 4Gdwa2CY7ZOY2/ll0kVeP0zk/WN0bTaHI9qnfiOItB2rn8HvmcOQhscWpuDBelLE/LYw
- ZtEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=kHdM6rMdwvMa8TE3e+rRBMHBbgrr/ePwRSyW6lbApa4=;
- b=BYFDu83MIIllmnvT4Ix775O0Bhgokg3K8z3gILl+M/19SdcvQ3t0ecvHvtoshsooo/
- qfGNVmd2NJWFW8Vw4Bym1EhsXj1dkcDX5wul60W6mtzjQvQz4PRBP9b3tFOzwZJlLt6u
- Q3fhhNTo4yV7a22vQ5z0WTIlhbpOwoscw5fGhnXcNR127EiFPtU1z/yU37Z8XVJKnyBE
- 6wZ68W0/o8y80WQX0508OlWfnmSRMfecFyk0w4kwlq82Ub+Icip4gl7WcbufteIh+vE4
- Vnmilsul9Jz5fqv9UGrZgOIPuKiD8au8r2vo4GIgS6pmjbGMiH4Nzcsz8rX2bh/y28dg
- Xdyg==
-X-Gm-Message-State: AOAM532FKYeXqbaFGKVj62zBNm/O0kJl8Svk+i56xNdDcdZxLV1q6tIR
- xOCYfNtBWYQu7ck5dXlaYYn/DcpFWXXd4g==
-X-Google-Smtp-Source: ABdhPJwEscpqDghO6yiXpsVLcf1PjFt10e6mjw1nph6J0jryvWNXySNMkyfWAfUbIq5/Z/9RVEameQ==
-X-Received: by 2002:a1c:7419:: with SMTP id p25mr657927wmc.160.1627335016877; 
- Mon, 26 Jul 2021 14:30:16 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1383-171.w86-229.abo.wanadoo.fr.
- [86.229.230.171])
- by smtp.gmail.com with ESMTPSA id j14sm995143wru.58.2021.07.26.14.30.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 26 Jul 2021 14:30:16 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w42PR81fEyW7 for <buildroot@lists.busybox.net>;
+ Mon, 26 Jul 2021 21:40:35 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 81DE640124
+ for <buildroot@buildroot.org>; Mon, 26 Jul 2021 21:40:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id AA0BD89004; Mon, 26 Jul 2021 21:05:58 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 23:29:53 +0200
-Message-Id: <20210726212953.1854886-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/vnstat: bump to version 2.7
+Date: Mon, 26 Jul 2021 23:33:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b65220f56677c0df2646a6d56c9b3e28732dc054
+X-Git-Newrev: 8bab9cf65a803287bb49ccd5d2b376ae7cd9c8ac
+X-Patchwork-Hint: ignore
+Message-Id: <20210726210558.AA0BD89004@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/terasic_de10nano_cyclone5: new
+ defconfig
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,51 +65,232 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Rodrigo Rebello <rprebello@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6625445843408849966=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Update indentation in hash file (two spaces)
+--===============6625445843408849966==
+Content-Type: text/plain
 
-https://github.com/vergoh/vnstat/releases/tag/v2.7
+commit: https://git.buildroot.net/buildroot/commit/?id=8bab9cf65a803287bb49ccd5d2b376ae7cd9c8ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Terasic DE10 Nano is an SoCFPGA cycloneV based board.
+References:
+- https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=205&No=1046
+- https://rocketboards.org/foswiki/Documentation/DE10NanoDevelopmentBoard
+
+Note: there is no dts in kernel (mainline or intel), but since DE0 Nano Soc is
+similar, the corresponding dts is usually used
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vnstat/vnstat.hash | 4 ++--
- package/vnstat/vnstat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                         |  2 ++
+ .../terasic/de10nano_cyclone5/barebox-env/boot/mmc |  8 +++++
+ .../de10nano_cyclone5/barebox-env/init/automount   |  5 +++
+ .../de10nano_cyclone5/barebox-env/nv/boot.default  |  1 +
+ .../barebox-env/nv/linux.bootargs.console          |  1 +
+ board/terasic/de10nano_cyclone5/genimage.cfg       | 42 ++++++++++++++++++++++
+ board/terasic/de10nano_cyclone5/readme.txt         | 41 +++++++++++++++++++++
+ configs/terasic_de10nano_cyclone5_defconfig        | 31 ++++++++++++++++
+ 8 files changed, 131 insertions(+)
 
-diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
-index 6934c569b2..0f269039b1 100644
---- a/package/vnstat/vnstat.hash
-+++ b/package/vnstat/vnstat.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 89276e0a7281943edb554b874078278ad947dc312938a2451e03eb80679f7ff7  vnstat-2.6.tar.gz
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  4c28a1d8bc03c2b6e7ab96c876e07dd8ea174b7cad73b7190ecb2b9501e83e9e  vnstat-2.7.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
-index 73cab9f73a..7f5ff67b82 100644
---- a/package/vnstat/vnstat.mk
-+++ b/package/vnstat/vnstat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f722ec9611..48d7ac4876 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1109,6 +1109,8 @@ F:	configs/arm_juno_defconfig
+ F:	board/arm/juno/
  
--VNSTAT_VERSION = 2.6
-+VNSTAT_VERSION = 2.7
- VNSTAT_SITE = http://humdi.net/vnstat
- VNSTAT_LICENSE = GPL-2.0
- VNSTAT_LICENSE_FILES = COPYING
--- 
-2.30.2
+ N:	Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++F:	board/terasic/de10nano_cyclone5/
++F:	configs/terasic_de10nano_cyclone5_defconfig
+ F:	package/gnuradio/
+ F:	package/gqrx/
+ F:	package/gr-osmosdr/
+diff --git a/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc b/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc
+new file mode 100644
+index 0000000000..fed2b0b45d
+--- /dev/null
++++ b/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc
+@@ -0,0 +1,8 @@
++#!/bin/sh
++
++global.bootm.oftree="/boot/socfpga_cyclone5_de0_nano_soc.dtb"
++global.bootm.image="/boot/zImage"
++
++#bootargs-ip
++
++global.linux.bootargs.dyn.root="root=/dev/mmcblk0p3 rw rootwait"
+diff --git a/board/terasic/de10nano_cyclone5/barebox-env/init/automount b/board/terasic/de10nano_cyclone5/barebox-env/init/automount
+new file mode 100644
+index 0000000000..4092ecbaec
+--- /dev/null
++++ b/board/terasic/de10nano_cyclone5/barebox-env/init/automount
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++# SD card slot, first partition
++mkdir -p /mnt/mmcblk0p2
++automount -d /mnt/mmcblk0p2 'mount /dev/mmc0.1 /mnt/mmcblk0p2'
+diff --git a/board/terasic/de10nano_cyclone5/barebox-env/nv/boot.default b/board/terasic/de10nano_cyclone5/barebox-env/nv/boot.default
+new file mode 100644
+index 0000000000..61f529d69a
+--- /dev/null
++++ b/board/terasic/de10nano_cyclone5/barebox-env/nv/boot.default
+@@ -0,0 +1 @@
++mmc
+diff --git a/board/terasic/de10nano_cyclone5/barebox-env/nv/linux.bootargs.console b/board/terasic/de10nano_cyclone5/barebox-env/nv/linux.bootargs.console
+new file mode 100644
+index 0000000000..476b1fbe49
+--- /dev/null
++++ b/board/terasic/de10nano_cyclone5/barebox-env/nv/linux.bootargs.console
+@@ -0,0 +1 @@
++console=ttyS0,115200
+diff --git a/board/terasic/de10nano_cyclone5/genimage.cfg b/board/terasic/de10nano_cyclone5/genimage.cfg
+new file mode 100644
+index 0000000000..76b1d03649
+--- /dev/null
++++ b/board/terasic/de10nano_cyclone5/genimage.cfg
+@@ -0,0 +1,42 @@
++image boot.vfat {
++	vfat {
++		file zImage {
++			image = "zImage"
++		}
++
++		file socfpga_cyclone5_de0_nano_soc.dtb {
++			image = "socfpga_cyclone5_de0_nano_soc.dtb"
++		}
++
++		file barebox.bin {
++			image = "barebox-socfpga-de10_nano.img"
++		}
++
++		file barebox.env {
++			image = "barebox-env"
++		}
++	}
++	size = 8M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition spl {
++		partition-type = 0xa2
++		image = "barebox-socfpga-de10_nano-xload.img"
++		size = 1M
++	}
++
++	partition boot {
++		partition-type = 0xc
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext2"
++	}
++}
+diff --git a/board/terasic/de10nano_cyclone5/readme.txt b/board/terasic/de10nano_cyclone5/readme.txt
+new file mode 100644
+index 0000000000..f9d8fc756a
+--- /dev/null
++++ b/board/terasic/de10nano_cyclone5/readme.txt
+@@ -0,0 +1,41 @@
++Terasic DE10 Nano Development Board
++
++Intro
++=====
++
++More information about this board can be found here:
++https://rocketboards.org/foswiki/Documentation/DE10NanoDevelopmentBoard
++
++Build
++=====
++
++First, load socrates config for buildroot
++
++    make terasic_de10nano_cyclone5_defconfig
++
++Build everything
++
++    make
++
++Following files will be generated in output/images
++
++.
++├── barebox-env
++├── barebox-socfpga-de10_nano.img
++├── barebox-socfpga-de10_nano-xload.img
++├── boot.vfat
++├── rootfs.ext2
++├── rootfs.ext4 -> rootfs.ext2
++├── rootfs.tar
++├── sdcard.img
++├── socfpga_cyclone5_de0_nano_soc.dtb
++└── zImage
++
++Creating bootable SD card
++=========================
++
++Simply invoke
++
++dd if=output/images/sdcard.img of=/dev/sdX
++
++Where X is your SD card device (not partition)
+diff --git a/configs/terasic_de10nano_cyclone5_defconfig b/configs/terasic_de10nano_cyclone5_defconfig
+new file mode 100644
+index 0000000000..8fb7cf664a
+--- /dev/null
++++ b/configs/terasic_de10nano_cyclone5_defconfig
+@@ -0,0 +1,31 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++BR2_ARM_FPU_NEON=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_11=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/terasic/de10nano_cyclone5/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/altera-opensource/linux-socfpga.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-5.11_21.06.01_pr"
++BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="socfpga_cyclone5_de0_nano_soc"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++BR2_TARGET_BAREBOX=y
++BR2_TARGET_BAREBOX_CUSTOM_VERSION=y
++BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE="2021.07.0"
++BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="socfpga"
++BR2_TARGET_BAREBOX_IMAGE_FILE="images/barebox-socfpga-de10_nano.img"
++BR2_TARGET_BAREBOX_CUSTOM_ENV=y
++BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH="board/terasic/de10nano_cyclone5/barebox-env"
++BR2_TARGET_BAREBOX_AUX=y
++BR2_TARGET_BAREBOX_AUX_BOARD_DEFCONFIG="socfpga-xload-2"
++BR2_TARGET_BAREBOX_AUX_IMAGE_FILE="images/barebox-socfpga-de10_nano-xload.img"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
+
+--===============6625445843408849966==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============6625445843408849966==--
