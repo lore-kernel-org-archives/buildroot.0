@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96C27C4338F
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 20:16:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D20AAC4338F
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 20:17:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 549FA60F94
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 20:16:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 549FA60F94
+	by mail.kernel.org (Postfix) with ESMTPS id 9495360F91
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 20:17:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9495360F91
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2938F402E9;
-	Mon, 26 Jul 2021 20:16:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B32182FCE;
+	Mon, 26 Jul 2021 20:17:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C68zGtLoTB3u; Mon, 26 Jul 2021 20:16:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JNDYirbhuZgp; Mon, 26 Jul 2021 20:17:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 62300402EB;
-	Mon, 26 Jul 2021 20:16:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EDEBF1BF995
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 20:15:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9016828BA;
+	Mon, 26 Jul 2021 20:17:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 42AA01BF302
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 20:15:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 48735401C3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3868482FCE
  for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 20:15:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HdLn5vd86PUb for <buildroot@lists.busybox.net>;
- Mon, 26 Jul 2021 20:15:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3EYT_5DlVAXV for <buildroot@lists.busybox.net>;
+ Mon, 26 Jul 2021 20:15:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C279A401BE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 17EBD83103
  for <buildroot@buildroot.org>; Mon, 26 Jul 2021 20:15:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 420F688EEC; Mon, 26 Jul 2021 19:40:27 +0000 (UTC)
+ id 8B90688EEA; Mon, 26 Jul 2021 19:40:26 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 22:08:38 +0200
+Date: Mon, 26 Jul 2021 22:08:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2ef4b2e1e6d070bad65de3a2831d8246ff4ed176
-X-Git-Newrev: 74a511e06abfac1e9ff67a5dd34aa6e7fa9b8d8a
+X-Git-Oldrev: 6267c9b8fd30469d0bd26a850cbf42aefff97c1c
+X-Git-Newrev: 499bf5319bf66ecd28d1b85c39ed7ffdeb5bf296
 X-Patchwork-Hint: ignore
-Message-Id: <20210726194027.420F688EEC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/monit: add SELinux module
+Message-Id: <20210726194026.8B90688EEA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ifplugd: add SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,30 +69,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74a511e06abfac1e9ff67a5dd34aa6e7fa9b8d8a
+commit: https://git.buildroot.net/buildroot/commit/?id=499bf5319bf66ecd28d1b85c39ed7ffdeb5bf296
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Support for monit is added by the services/monit module in the SELinux
-refpolicy.
+Support for ifplugd is added by the services/ifplugd module in the
+SELinux refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/monit/monit.mk | 1 +
+ package/ifplugd/ifplugd.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/monit/monit.mk b/package/monit/monit.mk
-index b9e131a363..6d5d475813 100644
---- a/package/monit/monit.mk
-+++ b/package/monit/monit.mk
-@@ -9,6 +9,7 @@ MONIT_SITE = http://mmonit.com/monit/dist
- MONIT_LICENSE = AGPL-3.0 with OpenSSL exception
- MONIT_LICENSE_FILES = COPYING
- MONIT_CPE_ID_VENDOR = mmonit
-+MONIT_SELINUX_MODULES = monit
- #
- # Touching Makefile.am:
- MONIT_AUTORECONF = YES
+diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+index 06b0607414..6de7f17641 100644
+--- a/package/ifplugd/ifplugd.mk
++++ b/package/ifplugd/ifplugd.mk
+@@ -8,6 +8,7 @@ IFPLUGD_VERSION = 0.28
+ IFPLUGD_SITE = http://0pointer.de/lennart/projects/ifplugd
+ IFPLUGD_LICENSE = GPL-2.0+
+ IFPLUGD_LICENSE_FILES = LICENSE
++IFPLUGD_SELINUX_MODULES = ifplugd
+ IFPLUGD_AUTORECONF = YES
+ 
+ # install-strip unconditionally overwrites $(TARGET_DIR)/etc/ifplugd/ifplugd.*
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
