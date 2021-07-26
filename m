@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6462FC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:24:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD470C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:24:16 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 22F3260F01
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:24:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 22F3260F01
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 892EC60EFF
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:24:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 892EC60EFF
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E5CF340489;
-	Tue,  3 Aug 2021 22:24:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 616E4404EF;
+	Tue,  3 Aug 2021 22:24:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PXl2eJI_tJtP; Tue,  3 Aug 2021 22:24:00 +0000 (UTC)
+	with ESMTP id jw3bZfDovOmk; Tue,  3 Aug 2021 22:24:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E895140475;
-	Tue,  3 Aug 2021 22:23:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C486D1BF349
+	by smtp2.osuosl.org (Postfix) with ESMTP id 16672404CE;
+	Tue,  3 Aug 2021 22:24:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D74F41BF9AA
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F6564059E
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:09:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B42CD83ABC
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SCknMGV3awMu for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:09:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vIik3rLppbTM for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 794B640524
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:09:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 087F383ADE
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C072885F62; Tue,  3 Aug 2021 21:09:41 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 5219183553; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 19 May 2021 23:09:51 +0200
+Date: Mon, 26 Jul 2021 23:11:25 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c00da436bfd17d8fb891fa4b392ebaad638f01be
-X-Git-Newrev: dc579e498b6820893b0671a740b9261f40166ad9
+X-Git-Oldrev: 31c7f2fc4c3e123c570663cddcc52f16bd3646ed
+X-Git-Newrev: c8dd578b135041eed639c06810e67b8b018402d4
 X-Patchwork-Hint: ignore
-Message-Id: <20210803210941.C072885F62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libgtk3: add CPE
- variables
+Message-Id: <20210803211020.5219183553@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libogg: bump version
+ to 1.3.5
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,31 +70,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc579e498b6820893b0671a740b9261f40166ad9
+commit: https://git.buildroot.net/buildroot/commit/?id=c8dd578b135041eed639c06810e67b8b018402d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cpe:2.3:a:gnome:gtk is a valid CPE identifier for this package:
+Changelog:
+https://gitlab.xiph.org/xiph/ogg/-/blob/master/CHANGES
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Agtk
+Removed md5 and sha1 hashes, not provided by upstream anymore.
+Reformatted hashes.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Switched _SITE to https.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgtk3/libgtk3.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libogg/Config.in   | 2 +-
+ package/libogg/libogg.hash | 8 +++-----
+ package/libogg/libogg.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index f7345cf2e9..9ece409ba3 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -10,6 +10,8 @@ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
- LIBGTK3_LICENSE_FILES = COPYING
-+LIBGTK3_CPE_ID_VENDOR = gnome
-+LIBGTK3_CPE_ID_PRODUCT = gtk
- LIBGTK3_INSTALL_STAGING = YES
- LIBGTK3_AUTORECONF = YES
+diff --git a/package/libogg/Config.in b/package/libogg/Config.in
+index bf719ff4d7..48c62063c2 100644
+--- a/package/libogg/Config.in
++++ b/package/libogg/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_LIBOGG
+ 	  with all Xiph.org technology is it an open format free for
+ 	  anyone to use.
+ 
+-	  http://xiph.org/ogg/
++	  https://xiph.org/ogg/
+diff --git a/package/libogg/libogg.hash b/package/libogg/libogg.hash
+index 5d95c85d3a..9727c1cfaa 100644
+--- a/package/libogg/libogg.hash
++++ b/package/libogg/libogg.hash
+@@ -1,7 +1,5 @@
+-# From: http://www.xiph.org/downloads/
+-md5 eadef24aad6e3e8379ba0d14971fd64a  libogg-1.3.4.tar.xz
+-sha1 f07499a35566aa62affb5ca989f62eed5b8092c3  libogg-1.3.4.tar.xz
+-sha256 c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe  libogg-1.3.4.tar.xz
++# From https://www.xiph.org/downloads/
++sha256  c4d91be36fc8e54deae7575241e03f4211eb102afb3fc0775fbbc1b740016705  libogg-1.3.5.tar.xz
+ 
+ # Hash for license file:
+-sha256 d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814 COPYING
++sha256  d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814  COPYING
+diff --git a/package/libogg/libogg.mk b/package/libogg/libogg.mk
+index 08e5f87b72..3faf1b7357 100644
+--- a/package/libogg/libogg.mk
++++ b/package/libogg/libogg.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBOGG_VERSION = 1.3.4
++LIBOGG_VERSION = 1.3.5
+ LIBOGG_SOURCE = libogg-$(LIBOGG_VERSION).tar.xz
+-LIBOGG_SITE = http://downloads.xiph.org/releases/ogg
++LIBOGG_SITE = https://downloads.xiph.org/releases/ogg
+ LIBOGG_LICENSE = BSD-3-Clause
+ LIBOGG_LICENSE_FILES = COPYING
  
 _______________________________________________
 buildroot mailing list
