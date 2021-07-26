@@ -2,57 +2,56 @@ Return-Path: <SRS0=wdlY=MS=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2749C4338F
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 21:14:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F436C4338F
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 21:15:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BBCA460F91
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 21:14:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BBCA460F91
+	by mail.kernel.org (Postfix) with ESMTPS id 5D8E160F91
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 21:15:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5D8E160F91
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8D7F64037B;
-	Mon, 26 Jul 2021 21:14:58 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JY5LW9PbweGU; Mon, 26 Jul 2021 21:14:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE1FB402F7;
-	Mon, 26 Jul 2021 21:14:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 101A81BF2F1
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 21:12:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D4EC48350A
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 21:12:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2ADAF81CA0;
+	Mon, 26 Jul 2021 21:15:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PniOWAu-H18W for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HwqSqt7pcPBs; Mon, 26 Jul 2021 21:15:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CEAC81028;
+	Mon, 26 Jul 2021 21:15:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 19A201BF995
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 21:12:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 083F940465
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 21:12:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nZTgpoY8WBtV for <buildroot@lists.busybox.net>;
  Mon, 26 Jul 2021 21:12:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 201E58376E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37248404A4
  for <buildroot@buildroot.org>; Mon, 26 Jul 2021 21:12:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 65AB588FE8; Mon, 26 Jul 2021 20:37:50 +0000 (UTC)
+ id 7C04588EF5; Mon, 26 Jul 2021 20:37:50 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 23:11:30 +0200
+Date: Mon, 26 Jul 2021 23:11:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ff8aff52f7444ed4f00c596f5f5ff769957f6f38
-X-Git-Newrev: df0637171886c2da1c4bdb5b3bf3ae4d29549ad1
+X-Git-Oldrev: 5141b64eb36e1f9a7683c702f020d11990bf041a
+X-Git-Newrev: e9d2c67f820071be149bec9a79811365e64f6264
 X-Patchwork-Hint: ignore
-Message-Id: <20210726203750.65AB588FE8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: bump version to
- 1.7.2
+Message-Id: <20210726203750.7C04588EF5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/daq3: bump to version 3.0.4
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,46 +69,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df0637171886c2da1c4bdb5b3bf3ae4d29549ad1
+commit: https://git.buildroot.net/buildroot/commit/?id=e9d2c67f820071be149bec9a79811365e64f6264
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2021-June/003092.html
+This bump will fix a build failure with snort3 raised since its bump to
+version 3.1.6.0 in commit e66f2fd310374779d415fa683813cc5f5ccf6be9
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+https://github.com/snort3/libdaq/releases/tag/v3.0.4
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0019eac13bfb17da853d42ff52d6b12aebd3d45b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/daq3/daq3.hash | 2 +-
+ package/daq3/daq3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index b87b2498e8..7aeef33446 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2021-May/003089.html
--sha256  e64e43deaa562cbfb0d5ada64670ec09c6fac7935262dcd77bbc6d984a535d47  libX11-1.7.1.tar.bz2
--sha512  a76f0a82fce6f9b50646a7cd7ec5ee046650f225816050226068a7548fa083ef07d146d40faaf44e033c59c17b0fda5ffdee3a127dac3ab56cee02133819aa3d  libX11-1.7.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-June/003092.html
-+sha256  1cfa35e37aaabbe4792e9bb690468efefbfbf6b147d9c69d6f90d13c3092ea6c  libX11-1.7.2.tar.bz2
-+sha512  d01e5c1848c76218605e5af2d353de6b301a251555b52a38dbe930e6635d5e8a92d1486eb6d328ad5d42a5939e0d16868ffa19a75e5a7863d1a32e0d0727bdc7  libX11-1.7.2.tar.bz2
+diff --git a/package/daq3/daq3.hash b/package/daq3/daq3.hash
+index 33ad2e388b..e4cf4ebefe 100644
+--- a/package/daq3/daq3.hash
++++ b/package/daq3/daq3.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  920344f5c98ac68b401d1bc92ebaed78b0d15779b0480c213db279d0a60acc32  daq3-3.0.3.tar.gz
++sha256  a376c7625d1442ddb7e3c75954c910cc9d64440e2f8f345981aa5fa6999ea206  daq3-3.0.4.tar.gz
  
- # Locally computed
- sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 39d9dc2cc7..aa3ebf1593 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+ # Hash for license files:
+ sha256  64601289158eddad72cb4de72652f9e64dc886942c910b38ddee93ba13b0db26  COPYING
+diff --git a/package/daq3/daq3.mk b/package/daq3/daq3.mk
+index 50e0eaccba..b726031d39 100644
+--- a/package/daq3/daq3.mk
++++ b/package/daq3/daq3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBX11_VERSION = 1.7.1
-+XLIB_LIBX11_VERSION = 1.7.2
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+-DAQ3_VERSION = 3.0.3
++DAQ3_VERSION = 3.0.4
+ DAQ3_SITE = $(call github,snort3,libdaq,v$(DAQ3_VERSION))
+ DAQ3_LICENSE = GPL-2.0
+ DAQ3_LICENSE_FILES = COPYING LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
