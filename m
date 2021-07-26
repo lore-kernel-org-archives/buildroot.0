@@ -2,64 +2,62 @@ Return-Path: <SRS0=wdlY=MS=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 222FCC4338F
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 22:35:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A79B8C4338F
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 22:35:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D911160F41
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 22:35:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D911160F41
+	by mail.kernel.org (Postfix) with ESMTPS id 32CA460F41
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 22:35:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 32CA460F41
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A19224033B;
-	Mon, 26 Jul 2021 22:35:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 036DF605DD;
+	Mon, 26 Jul 2021 22:35:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QZtvmWfxQs0q; Mon, 26 Jul 2021 22:35:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SXb3Xw2872II; Mon, 26 Jul 2021 22:35:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A82F740377;
-	Mon, 26 Jul 2021 22:35:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E132B607BF;
+	Mon, 26 Jul 2021 22:35:46 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E138A1BF995
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 22:35:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C6EE91BF2FF
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 22:35:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CEE3160793
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 22:35:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C3D7A6009C
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 22:35:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H_8_OQrNWOHH for <buildroot@lists.busybox.net>;
- Mon, 26 Jul 2021 22:35:20 +0000 (UTC)
+ with ESMTP id ZEwwo8-iBWZj for <buildroot@lists.busybox.net>;
+ Mon, 26 Jul 2021 22:35:21 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
- by smtp3.osuosl.org (Postfix) with ESMTP id AEA196009C
- for <buildroot@buildroot.org>; Mon, 26 Jul 2021 22:35:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9F7DB605DD
+ for <buildroot@buildroot.org>; Mon, 26 Jul 2021 22:35:20 +0000 (UTC)
 Received: from ubuntu.localdomain ([146.241.155.191])
  by Aruba Outgoing Smtp  with ESMTPSA
- id 89BrmQHp3nxSq89BumxN5f; Tue, 27 Jul 2021 00:35:18 +0200
+ id 89BrmQHp3nxSq89BumxN5r; Tue, 27 Jul 2021 00:35:18 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1627338918; bh=kVwVXmZLUjjHXxzgX3fRaQXQ7X6QRMUWaOK/1HvfR3I=;
+ t=1627338918; bh=RzQg8C+5t3/6bPsNtdb2t+fZS7pzkDKSIXHdAUsd8dE=;
  h=From:To:Subject:Date:MIME-Version;
- b=B4S/bXgrcw0TYMvOI2vU9lZR08ITtYiVVLzSzgHZqWPbDomv0fMWFMHaCbsshTvGY
- uPlZxENBAy2ePEs/UuNFfgRizwvOrdHwHH7EfsBZT6TNodV072nbe2ZsCU5JPcg2Wo
- lxWlnRB97aKlN1ktgpeHm8rjpZqI6IwP1+wCkt58Wo7DwCqIn9nUq5aaH5c8wSP4hT
- BeB1PlRAHzHa0eR9cHxmr4L4CHEl2HdfV47QlF413PSIb1wv/A6erqSFuFQQq1DmG7
- O9PN/isN0spWH0SybXhH8QWQJ/+cG0P7sqRNeITiRJoAYlw2LTRLrOEPZU5pbVs5iw
- LCIj0fEt8BD6Q==
+ b=f+bTq8KER937FxAxWxwz+JydS+n5MBspgfj/D4o876xgcS2jBhkkXkBa7e8OXQSx2
+ 769fpra91/g94NeUw81HuHHRSHdhbtSuqVir63qq5e/+EzUF8oeZJe186HiF6iyjts
+ Hkmp2pdS9mPXaa4kWk2mdCB2PjIqMgXy753y17Q2OYDBkEInIFBy8WTtpCZb7zhxO9
+ STc+tSBW5iEB4RwfiJMcYsDLgq46qpcyPkA1QIaBYLTqG/hJsdn4UiMhhnILCcKZ+k
+ YU+nfUzrTB73lg5tff2Qp9QqXs6j52kPraetmsqtJDfPzOzOf/qeHagBHA+b49Mpmf
+ bw464eQofO4DQ==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue, 27 Jul 2021 00:34:34 +0200
-Message-Id: <20210726223435.2906458-3-giulio.benetti@benettiengineering.com>
+Date: Tue, 27 Jul 2021 00:34:35 +0200
+Message-Id: <20210726223435.2906458-4-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210726223435.2906458-1-giulio.benetti@benettiengineering.com>
 References: <20210726235656.1df4ddeb@windsurf>
@@ -70,8 +68,7 @@ X-CMAE-Envelope: MS4wfANeqTx1khsoR+a6AQZltZLSJ6lWjzXhDEPjUSeSNOYbTJsyWYcw3XQh1l5
  sdDtlvWx//K0szAruoq1mZbEy4RNKWhY373dVKiqVl1Y+Cn+ByEZAGmiQj5mIsJIGBQWjJjm7wbx+IXM5TKnjVu5DBgbOtwl6vo/m0MG9fppOk7ssYvntJxy
  D1obm+fZRGUA2qwzEtBsriGrES6hlaEPtGXf/1ZBKJgu5Ph8P0lnXcl482VxqHkVBQ5cAY3O9vBwadPfHV74MSF/M6bfmLuzf54MPIHBHVxtVck7SIMbxjyE
  TJ7OPCh7/DCKftcO
-Subject: [Buildroot] [PATCH v2 2/3] package/protobuf: fix build failure due
- to missing -mcmodel=large
+Subject: [Buildroot] [PATCH v2 3/3] toolchain: remove binutils bug 21464
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,29 +90,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-When building protobuf for or1k -mcmodel=large is needed to link, so let's
-add that gcc option in case we're building for or1k.
+This bug has been fixed upstream and backported to buildroot binutils
+package. So let's remove it from toolchain/Config.in and from packages
+that are affected by it:
+- libgeos
+- postgis
+- protobuf
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- package/protobuf/protobuf.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libgeos/Config.in  | 4 +---
+ package/postgis/Config.in  | 4 +---
+ package/protobuf/Config.in | 1 -
+ toolchain/Config.in        | 6 ------
+ 4 files changed, 2 insertions(+), 13 deletions(-)
 
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 492917c5e8..75791fade2 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -24,6 +24,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
- PROTOBUF_CXXFLAGS += -O0
- endif
+diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
+index 86a1cddcf3..124e2da661 100644
+--- a/package/libgeos/Config.in
++++ b/package/libgeos/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_LIBGEOS
+ 	bool "libgeos"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+-	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+ 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
+ 	help
+ 	  GEOS (Geometry Engine - Open Source) is a C++ port of the
+@@ -13,7 +12,6 @@ config BR2_PACKAGE_LIBGEOS
  
-+ifeq ($(BR2_or1k),y)
-+PROTOBUF_CXXFLAGS += -mcmodel=large
-+endif
-+
- PROTOBUF_CONF_ENV = CXXFLAGS="$(PROTOBUF_CXXFLAGS)"
+ 	  https://trac.osgeo.org/geos
  
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-comment "libgeos needs a toolchain w/ C++, wchar, not binutils bug 21464, 27597"
++comment "libgeos needs a toolchain w/ C++, wchar, not binutils bug 27597"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
+ 		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
+diff --git a/package/postgis/Config.in b/package/postgis/Config.in
+index 04705f7e16..78c52ea7b2 100644
+--- a/package/postgis/Config.in
++++ b/package/postgis/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_POSTGIS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, proj
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # proj
+ 	depends on BR2_USE_WCHAR # libgeos, proj
+-	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 # libgeos
+ 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597 # libgeos
+ 	select BR2_PACKAGE_LIBGEOS
+ 	select BR2_PACKAGE_PROJ
+@@ -20,9 +19,8 @@ config BR2_PACKAGE_POSTGIS
+ 
+ 	  https://postgis.net/
+ 
+-comment "postgis needs a toolchain w/ C++, threads, wchar, gcc >= 4.7, not binutils bug 21464, 27597"
++comment "postgis needs a toolchain w/ C++, threads, wchar, gcc >= 4.7, not binutils bug 27597"
+ 	depends on !BR2_microblazeel && !BR2_microblazebe # ICE
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+-		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
+ 		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
+diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
+index 30050950aa..46c820b9cf 100644
+--- a/package/protobuf/Config.in
++++ b/package/protobuf/Config.in
+@@ -24,7 +24,6 @@ config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	default y if BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_USE_MMU # fork()
+-	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+ 
+ config BR2_PACKAGE_PROTOBUF
+ 	bool "protobuf"
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 8603e2aaff..3598307b20 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -71,12 +71,6 @@ source "package/gdb/Config.in.host"
+ 
+ comment "Toolchain Generic Options"
+ 
+-# https://sourceware.org/bugzilla/show_bug.cgi?id=21464
+-# Affect toolchains built with binutils 2.31.1, still not fixed.
+-config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+-	bool
+-	default y if BR2_or1k
+-
+ # https://sourceware.org/bugzilla/show_bug.cgi?id=27597
+ # Affect toolchains built with binutils 2.36.1, still not fixed.
+ config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
 -- 
 2.25.1
 
