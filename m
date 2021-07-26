@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26673C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:38:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55856C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:38:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CEFA260295
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:38:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CEFA260295
+	by mail.kernel.org (Postfix) with ESMTPS id 1184B60F56
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:38:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1184B60F56
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7C2042459;
-	Wed,  4 Aug 2021 00:38:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DAC2184371;
+	Wed,  4 Aug 2021 00:38:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rLUnB8YLmfjs; Wed,  4 Aug 2021 00:38:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x_cWQahfhaO6; Wed,  4 Aug 2021 00:38:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17F634243A;
-	Wed,  4 Aug 2021 00:38:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E40A83C1D;
+	Wed,  4 Aug 2021 00:38:55 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 16C111BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1D9401BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1FA0240F62
+ by smtp2.osuosl.org (Postfix) with ESMTP id 24FF84052A
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V2PQtevg6Tuk for <buildroot@lists.busybox.net>;
+ with ESMTP id ukxydOb_5_tG for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A532140EE5
+ by smtp2.osuosl.org (Postfix) with ESMTP id E4D8F40F78
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id EDFE584369; Tue,  3 Aug 2021 21:10:18 +0000 (UTC)
+ id 474CE85445; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 22:08:00 +0200
+Date: Mon, 26 Jul 2021 22:08:14 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5a189d3a24e66c8c1d5fd8e63714d2dd79f6c8ac
-X-Git-Newrev: da93f38cb19f7f7a9b75232f5f2bad25b8180982
+X-Git-Oldrev: 84e7e8ae24127108bc7cb945dda180d490d1c2c6
+X-Git-Newrev: 6267c9b8fd30469d0bd26a850cbf42aefff97c1c
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211018.EDFE584369@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/cvs: add SELinux module
+Message-Id: <20210803211019.474CE85445@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gpsd: add SELinux
+ module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,30 +70,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da93f38cb19f7f7a9b75232f5f2bad25b8180982
+commit: https://git.buildroot.net/buildroot/commit/?id=6267c9b8fd30469d0bd26a850cbf42aefff97c1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Support for cvs is added by the services/cvs module in the SELinux
+Support for gpsd is added by the services/gpsd module in the SELinux
 refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cvs/cvs.mk | 1 +
+ package/gpsd/gpsd.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/cvs/cvs.mk b/package/cvs/cvs.mk
-index 3d01f335e2..8200997d3a 100644
---- a/package/cvs/cvs.mk
-+++ b/package/cvs/cvs.mk
-@@ -11,6 +11,7 @@ CVS_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/
- CVS_LICENSE = GPL-1.0+, LGPL-2.0+, LGPL-2.1+ (glob)
- CVS_LICENSE_FILES = COPYING COPYING.LIB lib/glob-libc.h
- CVS_CPE_ID_VENDOR = gnu
-+CVS_SELINUX_MODULES = cvs
- CVS_DEPENDENCIES = ncurses
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index be7327ac95..407679ad3b 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -9,6 +9,7 @@ GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
+ GPSD_LICENSE = BSD-2-Clause
+ GPSD_LICENSE_FILES = COPYING
+ GPSD_CPE_ID_VENDOR = gpsd_project
++GPSD_SELINUX_MODULES = gpsd
+ GPSD_INSTALL_STAGING = YES
  
- CVS_CONF_ENV = \
+ GPSD_DEPENDENCIES = host-python3 host-scons host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
