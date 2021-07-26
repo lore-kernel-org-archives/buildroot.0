@@ -6,59 +6,55 @@ X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD7CDC19F3E
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 07:17:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66C3EC4338F
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 08:07:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5786D60F45
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 07:17:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5786D60F45
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=trabucayre.com
+	by mail.kernel.org (Postfix) with ESMTPS id E476D60F21
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 08:07:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E476D60F21
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 181C060835;
-	Mon, 26 Jul 2021 07:17:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9FCC060836;
+	Mon, 26 Jul 2021 08:07:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H9GFDDcVplEb; Mon, 26 Jul 2021 07:17:56 +0000 (UTC)
+	with ESMTP id 1IOQ8zNrFKDp; Mon, 26 Jul 2021 08:07:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6425760822;
-	Mon, 26 Jul 2021 07:17:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EAE921BF37E
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 07:17:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13627607AF;
+	Mon, 26 Jul 2021 08:07:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B15E61BF293
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 08:07:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7B1C60822
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 07:17:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A0F9B830FB
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 08:07:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bF8i2P3TfDKs for <buildroot@lists.busybox.net>;
- Mon, 26 Jul 2021 07:17:53 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.femto-st.fr (lifc.univ-fcomte.fr [194.57.88.66])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CDB77607E5
- for <buildroot@buildroot.org>; Mon, 26 Jul 2021 07:17:52 +0000 (UTC)
-Received: from x230_1.trabucayre.com ([78.252.129.8]) (authenticated bits=0)
- by mail.femto-st.fr (8.15.2/8.15.2/Debian-8+deb9u1) with ESMTPSA id
- 16Q7HnGu021986
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Mon, 26 Jul 2021 09:17:50 +0200
-Date: Mon, 26 Jul 2021 09:16:37 +0200
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20210726091637.1d319641@x230_1.trabucayre.com>
-In-Reply-To: <20210725193549.06a0ef00@windsurf>
-References: <1626872348-69423-1-git-send-email-gwenj@trabucayre.com>
- <20210725160833.4d86c502@windsurf>
- <20210725180533.46734897@x230_1.trabucayre.com>
- <20210725193549.06a0ef00@windsurf>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TqB3BXMFPSxw for <buildroot@lists.busybox.net>;
+ Mon, 26 Jul 2021 08:07:29 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5961F830C2
+ for <buildroot@buildroot.org>; Mon, 26 Jul 2021 08:07:29 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 7D46120007;
+ Mon, 26 Jul 2021 08:07:24 +0000 (UTC)
+Date: Mon, 26 Jul 2021 10:07:22 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20210726100722.222b235b@windsurf>
+In-Reply-To: <20210726080159.3900395-1-giulio.benetti@benettiengineering.com>
+References: <20210726080159.3900395-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 194.57.88.66
-Subject: Re: [Buildroot] [PATCH v3] board: Add support for terasic DE10 Nano
+Subject: Re: [Buildroot] [PATCH] toolchain: update gcc bug 99140
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,38 +66,29 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
  buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Sun, 25 Jul 2021 19:35:49 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Mon, 26 Jul 2021 10:01:59 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-> On Sun, 25 Jul 2021 18:05:33 +0200
-> Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
-> 
-> > > I don't understand why you have a boot.img, which apparently only
-> > > contains the raw contacts of this xload.img file. Why not use this
-> > > xload.img file directly...
-> > >     
-> > In fact unlike some others CPU, this is not a raw area but a real partition
-> > with type 0xA2. This genimage is based on socrate board wich use the same way.  
-> 
-> Well, but still, why don't you directly use xload.img as the partition
-> image ?
-Done in v5
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> Gcc bug 99140 is still not fixed on gcc version 8.x so we need to move gcc
+> version up to 9.x to have it correctly working.
 
-Thanks
-Gwenhael
+And so you're positive in has been fixed in gcc 9.x and later versions ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
