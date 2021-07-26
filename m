@@ -2,61 +2,60 @@ Return-Path: <SRS0=wdlY=MS=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38A37C4338F
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 21:16:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C74A0C4338F
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 21:16:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EFF3E60F5A
-	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 21:16:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EFF3E60F5A
+	by mail.kernel.org (Postfix) with ESMTPS id 8BC2060F9C
+	for <buildroot@archiver.kernel.org>; Mon, 26 Jul 2021 21:16:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8BC2060F9C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C8D0440389;
-	Mon, 26 Jul 2021 21:16:27 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MHeVbbio9hnp; Mon, 26 Jul 2021 21:16:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 38F9C40379;
-	Mon, 26 Jul 2021 21:16:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5E1D11BF2F1
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 21:13:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5AD5582AB6
- for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 21:13:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 62549837EC;
+	Mon, 26 Jul 2021 21:16:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SapIQJUNM5vG for <buildroot@lists.busybox.net>;
- Mon, 26 Jul 2021 21:13:27 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fJZau9J8UaN1; Mon, 26 Jul 2021 21:16:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B41EF8376E;
+	Mon, 26 Jul 2021 21:16:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 83F581BF2F1
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 21:13:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7354A4036A
+ for <buildroot@lists.busybox.net>; Mon, 26 Jul 2021 21:13:29 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ySmi2u3wMDGS for <buildroot@lists.busybox.net>;
+ Mon, 26 Jul 2021 21:13:28 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
  [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7962B83529
- for <buildroot@buildroot.org>; Mon, 26 Jul 2021 21:13:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 77F3F40124
+ for <buildroot@buildroot.org>; Mon, 26 Jul 2021 21:13:28 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 6BED3240005;
- Mon, 26 Jul 2021 21:13:25 +0000 (UTC)
-Date: Mon, 26 Jul 2021 23:12:46 +0200
+ by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id A40A1240006;
+ Mon, 26 Jul 2021 21:13:26 +0000 (UTC)
+Date: Mon, 26 Jul 2021 23:13:15 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20210726231246.13d8e92b@windsurf>
-In-Reply-To: <20210726055213.133600-1-bernd.kuhls@t-online.de>
-References: <20210726055213.133600-1-bernd.kuhls@t-online.de>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20210726231315.469f490a@windsurf>
+In-Reply-To: <20210726064529.1699708-1-fontaine.fabrice@gmail.com>
+References: <20210726064529.1699708-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: security bump to
- version 7.78.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/daq3: bump to version 3.0.4
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,31 +67,28 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Cc: Sergio Prado <sergio.prado@e-labworks.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Mon, 26 Jul 2021 07:52:13 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Mon, 26 Jul 2021 08:45:29 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fixes CVE-2021-22922, CVE-2021-22923, CVE-2021-22924, CVE-2021-22925 &
-> CVE-2021-22926: https://curl.se/news.html
+> This bump will fix a build failure with snort3 raised since its bump to
+> version 3.1.6.0 in commit e66f2fd310374779d415fa683813cc5f5ccf6be9
 > 
-> Changelog: https://curl.se/changes.html
+> https://github.com/snort3/libdaq/releases/tag/v3.0.4
 > 
-> Removed patch which is included in upstream release.
-> Switched _SITE to curl.se.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/0019eac13bfb17da853d42ff52d6b12aebd3d45b
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...ncorrect-const-on-variable-that-is-m.patch | 32 -------------------
->  package/libcurl/Config.in                     |  2 +-
->  package/libcurl/libcurl.hash                  |  4 +--
->  package/libcurl/libcurl.mk                    |  6 ++--
->  4 files changed, 6 insertions(+), 38 deletions(-)
->  delete mode 100644 package/libcurl/0001-bearssl-remove-incorrect-const-on-variable-that-is-m.patch
+>  package/daq3/daq3.hash | 2 +-
+>  package/daq3/daq3.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
