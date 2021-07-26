@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78EA1C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:41:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6195EC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:41:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1F37060E78
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:41:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1F37060E78
+	by mail.kernel.org (Postfix) with ESMTPS id 24E3560E78
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:41:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 24E3560E78
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D16CD4067D;
-	Wed,  4 Aug 2021 00:41:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F154084397;
+	Wed,  4 Aug 2021 00:41:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gq6zpPTTwHfH; Wed,  4 Aug 2021 00:41:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CZapDgFod-r8; Wed,  4 Aug 2021 00:41:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E27FE4067B;
-	Wed,  4 Aug 2021 00:41:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3CEBD84396;
+	Wed,  4 Aug 2021 00:41:25 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0FA0D1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F059A1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:20:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ECECC40F69
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 147A540EDE
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KHYIBH3kTCI8 for <buildroot@lists.busybox.net>;
+ with ESMTP id a34a3C67bf6Y for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA14540F7C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3AA6C406AB
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id F079D83553; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
+ id 8F3078021B; Tue,  3 Aug 2021 21:10:19 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 22:08:47 +0200
+Date: Mon, 26 Jul 2021 22:08:28 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e78a4c9e00c34a946cbd387d7a0bf76520f0fa7b
-X-Git-Newrev: beb6ece34d7b36452c08917f3aa1f389860d699b
+X-Git-Oldrev: 8b5ab83eb343a409df88af19a9074f1a6de50a2f
+X-Git-Newrev: d0920b07f4991f4c06b18675939c681adf18eac4
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211019.F079D83553@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/oracle-mysql: add
+Message-Id: <20210803211019.8F3078021B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lirc-tools: add
  SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
@@ -70,30 +70,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=beb6ece34d7b36452c08917f3aa1f389860d699b
+commit: https://git.buildroot.net/buildroot/commit/?id=d0920b07f4991f4c06b18675939c681adf18eac4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Support for oracle-mysql is added by the services/mysql module in the
+Support for lirc-tools is added by the services/lircd module in the
 SELinux refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/oracle-mysql/oracle-mysql.mk | 1 +
+ package/lirc-tools/lirc-tools.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
-index e7d6354ed8..6607486d4d 100644
---- a/package/oracle-mysql/oracle-mysql.mk
-+++ b/package/oracle-mysql/oracle-mysql.mk
-@@ -13,6 +13,7 @@ ORACLE_MYSQL_DEPENDENCIES = ncurses
- ORACLE_MYSQL_AUTORECONF = YES
- ORACLE_MYSQL_LICENSE = GPL-2.0
- ORACLE_MYSQL_LICENSE_FILES = README COPYING
-+ORACLE_MYSQL_SELINUX_MODULES = mysql
- ORACLE_MYSQL_PROVIDES = mysql
- 
- # Unix socket. This variable can also be consulted by other buildroot packages
+diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
+index d66f4e9925..27aa5b97cc 100644
+--- a/package/lirc-tools/lirc-tools.mk
++++ b/package/lirc-tools/lirc-tools.mk
+@@ -9,6 +9,7 @@ LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
+ LIRC_TOOLS_SITE = http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)
+ LIRC_TOOLS_LICENSE = GPL-2.0+
+ LIRC_TOOLS_LICENSE_FILES = COPYING
++LIRC_TOOLS_SELINUX_MODULES = lircd
+ LIRC_TOOLS_DEPENDENCIES = host-libxslt host-pkgconf host-python3
+ LIRC_TOOLS_INSTALL_STAGING = YES
+ # Patching configure.ac and Makefile.am
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
