@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AC81C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:45:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DF13C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:46:09 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C39A360F56
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:45:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C39A360F56
+	by mail.kernel.org (Postfix) with ESMTPS id 062766056B
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:46:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 062766056B
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9CDCD608A1;
-	Tue,  3 Aug 2021 22:45:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1D0C60A68;
+	Tue,  3 Aug 2021 22:46:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q4FYb4huslwQ; Tue,  3 Aug 2021 22:45:45 +0000 (UTC)
+	with ESMTP id lw0y7JrEKjUX; Tue,  3 Aug 2021 22:46:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1043A60681;
-	Tue,  3 Aug 2021 22:45:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 001EE60A46;
+	Tue,  3 Aug 2021 22:46:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 22A5A1BF9C1
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2534B1BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B645760879
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 89F4A60A50
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R_1lzKYP6ulN for <buildroot@lists.busybox.net>;
+ with ESMTP id CPxMAQIy8D5u for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1218D60866
+ by smtp3.osuosl.org (Postfix) with ESMTP id D119760866
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 5BF7A83AAD; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
+ id 2725787C2D; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 23:11:26 +0200
+Date: Mon, 26 Jul 2021 23:57:45 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c8dd578b135041eed639c06810e67b8b018402d4
-X-Git-Newrev: eba736309b2fabff695b52b9aaab211e9c463982
+X-Git-Oldrev: af58830d0736cf60d0bb65b562c6888f633318d0
+X-Git-Newrev: 7332bc6eb092a18c506e614fc950c5b697ba1114
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211020.5BF7A83AAD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/samba4: bump version
- to 4.14.6
+Message-Id: <20210803211021.2725787C2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/htop: fix sources
+ location
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,43 +70,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eba736309b2fabff695b52b9aaab211e9c463982
+commit: https://git.buildroot.net/buildroot/commit/?id=7332bc6eb092a18c506e614fc950c5b697ba1114
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://www.samba.org/samba/history/samba-4.14.6.html
+Change sources location from bintray to github since bintray doesn't
+work anymore.
+Use commit hash for version instead of git tag to avoid breaking
+existing source caches.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Daniil Stas <daniil.stas@posteo.net>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/htop/htop.hash |  2 +-
+ package/htop/htop.mk   | 10 ++++++++--
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 9b90718682..5ae3e2f2b7 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.14.5.tar.asc
--sha256  bb6ef5d2f16b85288d823578abc453d9a80514c42e5a2ea2c4e3c60dc42335c3  samba-4.14.5.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.14.6.tar.asc
-+sha256  86760692dd74a04705c0f6d11b31965a477265a50e79eb15838184476146f4b0  samba-4.14.6.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index c612ac23ba..ffb582e14d 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/htop/htop.hash b/package/htop/htop.hash
+index 647feabb8e..34d95eb7a1 100644
+--- a/package/htop/htop.hash
++++ b/package/htop/htop.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  19535f8f01ac08be2df880c93c9cedfc50fa92320d48e3ef92a30b6edc4d1917  htop-3.0.5.tar.gz
++sha256  123476d56a5e6a219654eebb6b2ec747dfa364f39c01a6475bf8030a25c81bff  htop-ce6d60e7def146c13d0b8bca4642e7401a0a8995.tar.gz
+ sha256  c228cc14df980a23ea0c3c9ac957b904dd6a8514f6283db403de22e9179471be  COPYING
+diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+index aa2ff24750..bb2bcb29ae 100644
+--- a/package/htop/htop.mk
++++ b/package/htop/htop.mk
+@@ -4,9 +4,15 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.14.5
-+SAMBA4_VERSION = 4.14.6
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-HTOP_VERSION = 3.0.5
+-HTOP_SITE = https://dl.bintray.com/htop/source
++# This commit hash corresponds to version 3.0.5.
++# htop sources were moved from bintray to github and the sources tar archive
++# was also changed (the build process requires `HTOP_AUTORECONF = YES` now). We
++# use commit hash instead of git tag here to avoid breaking existing source
++# caches
++HTOP_VERSION = ce6d60e7def146c13d0b8bca4642e7401a0a8995
++HTOP_SITE = $(call github,htop-dev,htop,$(HTOP_VERSION))
+ HTOP_DEPENDENCIES = ncurses
++HTOP_AUTORECONF = YES
+ # Prevent htop build system from searching the host paths
+ HTOP_CONF_ENV = HTOP_NCURSES_CONFIG_SCRIPT=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
+ HTOP_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
