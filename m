@@ -2,95 +2,56 @@ Return-Path: <SRS0=yDzA=MT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F3D8C432BE
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 21:18:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F2E7C4320A
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 21:18:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7E9FA60FEA
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 21:18:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7E9FA60FEA
+	by mail.kernel.org (Postfix) with ESMTPS id 944E660FA0
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 21:18:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 944E660FA0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BCA3600CC;
-	Tue, 27 Jul 2021 21:18:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 667B5400BD;
+	Tue, 27 Jul 2021 21:18:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T93kFaLwqVcA; Tue, 27 Jul 2021 21:18:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NXpV1cJ_Ip_Z; Tue, 27 Jul 2021 21:18:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 695F2605E1;
-	Tue, 27 Jul 2021 21:18:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9CD341BF2B1
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 21:18:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F034940121;
+	Tue, 27 Jul 2021 21:18:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 13D881BF2B1
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 21:18:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 967D9605E1
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 21:18:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FE2D404C6
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 21:18:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id esKuKhf9VOsz for <buildroot@lists.busybox.net>;
- Tue, 27 Jul 2021 21:18:12 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5BAAE600CC
- for <buildroot@buildroot.org>; Tue, 27 Jul 2021 21:18:12 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id v21so1040964ejg.1
- for <buildroot@buildroot.org>; Tue, 27 Jul 2021 14:18:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=subject:to:references:from:organization:message-id:date:user-agent
- :mime-version:in-reply-to:content-language:content-transfer-encoding;
- bh=ZFmARwAerr3Bb/brR2+DbiHAFAbBAtsKS91d0bx7CN4=;
- b=ck+kPavuvHNlSFcP5LRw7BN2cwLQdSHgftkQf7o5rEe4kOWZbq+/b+/crSOEr0P31G
- ZpngA9gdXHr4CHxjKx3LXUugWYU/CW3xHdVeilQS8eQE4jsxuRGLovGp9tmMwAlmEAQW
- 3awasKZM1d7MGhMB0S081LF6R648RHFa/Iq0F3sOM++3DMlL9IyLHZVTAoYGiwy/uFjl
- 35w43WCOh3E/wszljrXAkguTsFHK4JgjddbGdGzM4kg5fnALv+IXjmIRCxFUZbxZaLVn
- qxoj8oHxfMtWChBHc5KJYufhYtcr98v1u6e6yh7iiOso5mmIqScImDA3kjdatJ+CETZC
- J9iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:references:from:organization
- :message-id:date:user-agent:mime-version:in-reply-to
- :content-language:content-transfer-encoding;
- bh=ZFmARwAerr3Bb/brR2+DbiHAFAbBAtsKS91d0bx7CN4=;
- b=cg/DniEiml/Ax36/MyaI5t/bQeMqmY2h8h8XAGeqPmD0TC9f9SHGAxmheAbNZm7LHo
- iaeRfqcBILMHETdjdGd/eeD3tl9PWTCvgf65Y6NW7/btWZtvYvwZTvsLhLlQ2Q2BCT6B
- Y1rGE1Qz640lzz9sXhx7RZUNTAqIpUgkX0KRq8G0nLY7DbswWSdWnUUmDTmQ8xjXYpb3
- xul0yKEifGKVkcx/gSubYIUXOgCoczrVgfBMIQrf9we78QcfoBcmmDdrjfhnaFGMK1Ps
- eEOpqERCcY76iT4yPv9EugzKjayju1LAzJ7MNVSldEAasCuSe7ZwXO/rUh8RJmfzsl3D
- beQQ==
-X-Gm-Message-State: AOAM530qNu3d0q9ULxa8TMzzf3E6l5F46rVILWDTgNYeMi69adlHbVlx
- ozQOZJXd44/ccX/jfgrOPsVDDuzbydfP6Z7T
-X-Google-Smtp-Source: ABdhPJy7Pzq+Aoe3s5ULiFnkMKN+0nds+cJe2M+CQpVmaH3TzKFQJHMApcEx1vYPqR+iAD7QXjQrfg==
-X-Received: by 2002:a17:907:d09:: with SMTP id
- gn9mr23820718ejc.447.1627420690337; 
- Tue, 27 Jul 2021 14:18:10 -0700 (PDT)
-Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id g10sm13117ejj.44.2021.07.27.14.18.09
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 27 Jul 2021 14:18:10 -0700 (PDT)
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20201226104259.356911-1-fontaine.fabrice@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-Message-ID: <b44b3ee0-bcfa-c1b4-ecae-f02a78ef7381@mind.be>
-Date: Tue, 27 Jul 2021 23:18:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20201226104259.356911-1-fontaine.fabrice@gmail.com>
-Content-Language: en-GB
-Subject: Re: [Buildroot] [PATCH v2,1/1] package/opencv4: new package
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SPJBum7ioq8N for <buildroot@lists.busybox.net>;
+ Tue, 27 Jul 2021 21:18:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC07C40455
+ for <buildroot@buildroot.org>; Tue, 27 Jul 2021 21:18:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 4718089095; Tue, 27 Jul 2021 20:43:56 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Tue, 27 Jul 2021 23:09:47 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0b4b533dca9ac36e2c5dc35bde618c2eba036bb4
+X-Git-Newrev: c23612b5db036fe89accb8db48690d1ce1be4b1b
+X-Patchwork-Hint: ignore
+Message-Id: <20210727204356.4718089095@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opencv4: new package
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,84 +63,819 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=c23612b5db036fe89accb8db48690d1ce1be4b1b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+opencv4 is not fully backward compatible with opencv3 as "a lot of C API
+from OpenCV 1.x has been removed.": https://opencv.org/opencv-4-0.
 
-On 26/12/2020 11:42, Fabrice Fontaine wrote:
-> opencv4 is not fully backward compatible with opencv3 as "a lot of C API
-> from OpenCV 1.x has been removed.": https://opencv.org/opencv-4-0.
-> 
-> Moreover, it should be noted that layout of include files as well as
-> pkg-config filename changed since
-> https://github.com/opencv/opencv/commit/a95673287433fc810eda2d88b94bb234298c4cd5
-> 
-> All these changes mean that most of buildroot packages (e.g. vlc,
-> ffmpeg) are not compatible with opencv4.
-> 
-> Here is the most important changes between opencv3 and opencv 4.5.1:
->  - License is Apache-2.0 (https://opencv.org/opencv-4-5-0)
->  - openjpeg is an optional dependency (enabled by default) since
->    https://github.com/opencv/opencv/commit/0384eb7d8c1a31831704e31b8bdbfbc6ff854281
->    jpeg2000 can be enabled through openjpeg or jasper
->  - pkg-config must be enabled with OPENCV_GENERATE_PKGCONFIG since
->    https://github.com/opencv/opencv/commit/e755a2a6e48ae02dd5136a628cc4148566a08225
->  - cmake is not installed in /usr/share anymore so hook can be dropped
->  - C++11 is required since
->    https://github.com/opencv/opencv/commit/d4688e6474dcd59c1d66736b744a8049f386a90b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Moreover, it should be noted that layout of include files as well as
+pkg-config filename changed since
+https://github.com/opencv/opencv/commit/a95673287433fc810eda2d88b94bb234298c4cd5
 
+All these changes mean that most of buildroot packages (e.g. vlc,
+ffmpeg) are not compatible with opencv4.
 
- Applied to master, thanks. With a few remarks.
+Here is the most important changes between opencv3 and opencv 4.5.1:
+ - License is Apache-2.0 (https://opencv.org/opencv-4-5-0)
+ - openjpeg is an optional dependency (enabled by default) since
+   https://github.com/opencv/opencv/commit/0384eb7d8c1a31831704e31b8bdbfbc6ff854281
+   jpeg2000 can be enabled through openjpeg or jasper
+ - pkg-config must be enabled with OPENCV_GENERATE_PKGCONFIG since
+   https://github.com/opencv/opencv/commit/e755a2a6e48ae02dd5136a628cc4148566a08225
+ - cmake is not installed in /usr/share anymore so hook can be dropped
+ - C++11 is required since
+   https://github.com/opencv/opencv/commit/d4688e6474dcd59c1d66736b744a8049f386a90b
 
-[snip]
-> +	depends on !BR2_PACKAGE_OPENCV3
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Arnout: remove a few redundant dependencies from Config.in]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ DEVELOPERS                   |   1 +
+ package/Config.in            |   1 +
+ package/opencv4/Config.in    | 352 ++++++++++++++++++++++++++++++++++++++++
+ package/opencv4/opencv4.hash |   3 +
+ package/opencv4/opencv4.mk   | 375 +++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 732 insertions(+)
 
- This is very annoying. Now it's OK, but it makes it a lot harder for another
-package to select opencv4 - it quickly leads to circular dependencies (I
-experienced that with lapack/clapack).
-
- Unfortunately, I don't know a good solution. A choice doesn't help either. The
-best is actually if we can make the two side-by-side installable. The only
-conflicting files are the .so symlinks. So, we could install the opencv4 .so
-symlinks in a different directory and add an explicit -L to the dependent packages.
-
- On the other hand - opencv3 is dead, so mid-term we're going to remove it
-anyway. So I guess we can live with packages depending on !OPENCV3.
-
-
-[snip]
-> +config BR2_PACKAGE_OPENCV4_WITH_GSTREAMER1
-> +	bool "gstreamer-1.x"
-> +	depends on BR2_USE_MMU # gstreamer1 -> libglib2
-> +	depends on BR2_USE_WCHAR # gstreamer1 -> libglib> +	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1 -> libglib2
-
- These two are redundant with the dependencies of opencv4 itself. Normally I
-like to keep them anyway, but since it also allows to remove the comment below,
-I removed it in this case.
-
- There was another one like that as well.
-
-> +	select BR2_PACKAGE_GSTREAMER1
-> +	select BR2_PACKAGE_GST1_PLUGINS_BASE
-> +	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
-> +	help
-> +	  Enable gstreamer support.
-> +
-> +comment "gstreamer support needs a toolchain w/ wchar, threads"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-
-[snip]
-> +comment "opencv4 needs a toolchain w/ C++, NPTL, wchar, dynamic library, gcc >= .8"
-
- 4.8
-
-[snip]
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 05c13ab11b..7fa4851627 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -903,6 +903,7 @@ F:	package/motion/
+ F:	package/mutt/
+ F:	package/ncmpc/
+ F:	package/oniguruma/
++F:	package/opencv4/
+ F:	package/oprofile/
+ F:	package/pcmanfm/
+ F:	package/perl-extutils-pkgconfig/
+diff --git a/package/Config.in b/package/Config.in
+index f49c700f9c..9ced0a139e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1519,6 +1519,7 @@ menu "Graphics"
+ 	source "package/libwpe/Config.in"
+ 	source "package/menu-cache/Config.in"
+ 	source "package/opencv3/Config.in"
++	source "package/opencv4/Config.in"
+ 	source "package/opengl/Config.in"
+ 	source "package/openjpeg/Config.in"
+ 	source "package/pango/Config.in"
+diff --git a/package/opencv4/Config.in b/package/opencv4/Config.in
+new file mode 100644
+index 0000000000..31c32385da
+--- /dev/null
++++ b/package/opencv4/Config.in
+@@ -0,0 +1,352 @@
++menuconfig BR2_PACKAGE_OPENCV4
++	bool "opencv4"
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
++	depends on !BR2_STATIC_LIBS # include dlfcn.h
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on !BR2_PACKAGE_OPENCV3
++	select BR2_PACKAGE_ZLIB
++	help
++	  OpenCV (Open Source Computer Vision) is a library of
++	  programming functions for real time computer vision.
++
++	  Note that the opencv_core module and the opencv_hal library
++	  are always built and installed, not matter which other
++	  modules are enabled below.
++
++	  http://opencv.org/
++
++if BR2_PACKAGE_OPENCV4
++
++comment "OpenCV modules"
++
++config BR2_PACKAGE_OPENCV4_LIB_CALIB3D
++	bool "calib3d"
++	select BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	help
++	  Include opencv_calib3d (camera calibration and 3d
++	  reconstruction) module into the OpenCV build.
++
++config BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
++	bool "features2d"
++	select BR2_PACKAGE_OPENCV4_LIB_FLANN
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV4_LIB_ML
++	help
++	  Include opencv_features2d (2d features framework) module
++	  into the OpenCV build.
++
++config BR2_PACKAGE_OPENCV4_LIB_FLANN
++	bool "flann"
++	# opencv_core dependency is already enabled
++	help
++	  Include opencv_flann (clustering and search in
++	  multi-dimensional spaces) module into the OpenCV build.
++
++config BR2_PACKAGE_OPENCV4_LIB_HIGHGUI
++	bool "highgui"
++	select BR2_PACKAGE_OPENCV4_LIB_IMGCODECS
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV4_LIB_VIDEOIO
++	help
++	  Include opencv_highgui (high-level gui and media i/o) module
++	  into the OpenCV build.
++
++if BR2_PACKAGE_OPENCV4_LIB_HIGHGUI
++
++choice
++	prompt "gui toolkit"
++	help
++	  GUI toolkit to be used by the opencv_highgui module.
++
++config BR2_PACKAGE_OPENCV4_GUI_NONE
++	bool "none"
++
++config BR2_PACKAGE_OPENCV4_WITH_GTK
++	bool "gtk2"
++	depends on BR2_PACKAGE_LIBGTK2
++
++comment "gtk2 support needs libgtk2"
++	depends on BR2_USE_MMU # libgtk2 -> glib2
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on !BR2_PACKAGE_LIBGTK2
++
++config BR2_PACKAGE_OPENCV4_WITH_GTK3
++	bool "gtk3"
++	depends on BR2_PACKAGE_LIBGTK3
++
++comment "gtk3 support needs libgtk3"
++	depends on BR2_USE_MMU # libgtk3 -> glib2
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on !BR2_PACKAGE_LIBGTK3
++
++config BR2_PACKAGE_OPENCV4_WITH_QT5
++	bool "qt5"
++	depends on BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_CONCURRENT
++	select BR2_PACKAGE_QT5BASE_GUI
++	select BR2_PACKAGE_QT5BASE_WIDGETS
++	help
++	  Use Qt5 with base, concurrent, test, gui and widgets
++	  components, as GUI toolkit.
++
++comment "qt5 support needs qt5"
++	depends on !BR2_PACKAGE_QT5
++
++endchoice
++
++config BR2_PACKAGE_OPENCV4_WITH_OPENGL
++	bool "opengl support"
++	# OpenGL support done using Qt5OpenGL, so depends on WITH_QT5
++	depends on BR2_PACKAGE_OPENCV4_WITH_QT5
++	# OpenGL support requires Qt5OpenGL with GL support, not GLES
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
++	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_QT5BASE_OPENGL
++	help
++	  Enable OpenGL for UI.
++
++comment "opengl support needs an OpenGL provider"
++	depends on BR2_PACKAGE_OPENCV4_WITH_QT5
++	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || \
++		!BR2_PACKAGE_HAS_LIBGL
++
++endif # BR2_PACKAGE_OPENCV4_LIB_HIGHGUI
++
++config BR2_PACKAGE_OPENCV4_LIB_IMGCODECS
++	bool "imgcodecs"
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	help
++	  Include opencv_imgcodecs (image codecs) module into the
++	  OpenCV build.
++
++config BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	bool "imgproc"
++	# opencv_core dependency is already enabled
++	help
++	  Include opencv_imgproc (image processing) module into the
++	  OpenCV build.
++
++config BR2_PACKAGE_OPENCV4_LIB_ML
++	bool "ml"
++	# opencv_core dependency is already enabled
++	help
++	  Include opencv_ml (machine learning) module into the OpenCV
++	  build.
++
++config BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
++	bool "objdetect"
++	# opencv_core dependency is already enabled
++	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV4_LIB_ML
++	help
++	  Include opencv_objdetect (object detection) module into the
++	  OpenCV build.
++
++config BR2_PACKAGE_OPENCV4_LIB_PHOTO
++	bool "photo"
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	help
++	  Include opencv_photo (computational photography) module into
++	  the OpenCV build.
++
++config BR2_PACKAGE_OPENCV4_LIB_PYTHON
++	bool "python"
++	depends on BR2_PACKAGE_PYTHON3
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
++	select BR2_PACKAGE_PYTHON_NUMPY
++	help
++	  Include opencv_python module into the OpenCV build.  No
++	  python example is installed.
++
++comment "python support needs glibc or musl"
++	depends on BR2_PACKAGE_PYTHON3
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++
++config BR2_PACKAGE_OPENCV4_LIB_SHAPE
++	bool "shape"
++	# opencv_core dependency is already enabled
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV4_LIB_VIDEO
++	help
++	  Include opencv_shape (shape descriptors and matchers) module
++	  into the OpenCV build.
++
++config BR2_PACKAGE_OPENCV4_LIB_STITCHING
++	bool "stitching"
++	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
++	select BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
++	help
++	  Include opencv_stitching (images stitching) module into the
++	  OpenCV build.
++
++config BR2_PACKAGE_OPENCV4_LIB_SUPERRES
++	bool "superres"
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV4_LIB_VIDEO
++	help
++	  Include opencv_superres (super resolution) module into the
++	  OpenCV build.
++
++config BR2_PACKAGE_OPENCV4_LIB_TS
++	bool "ts"
++	# opencv_core dependency is already enabled
++	select BR2_PACKAGE_OPENCV4_LIB_HIGHGUI
++	select BR2_PACKAGE_OPENCV4_LIB_IMGCODECS
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV4_LIB_VIDEOIO
++	help
++	  Include opencv_ts (test) module into the OpenCV build.
++
++config BR2_PACKAGE_OPENCV4_LIB_VIDEOIO
++	bool "videoio"
++	select BR2_PACKAGE_OPENCV4_LIB_IMGCODECS
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	help
++	  Include opencv_videoio (media i/o) module into the OpenCV
++	  build.
++
++config BR2_PACKAGE_OPENCV4_LIB_VIDEO
++	bool "video"
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	help
++	  Include opencv_video (video analysis) module into the OpenCV
++	  build.
++
++config BR2_PACKAGE_OPENCV4_LIB_VIDEOSTAB
++	bool "videostab"
++	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
++	select BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV4_LIB_PHOTO
++	select BR2_PACKAGE_OPENCV4_LIB_VIDEO
++	help
++	  Include opencv_videostab (video stabilization) module into
++	  the OpenCV build.
++
++comment "Test sets"
++config BR2_PACKAGE_OPENCV4_BUILD_TESTS
++	bool "build tests"
++
++config BR2_PACKAGE_OPENCV4_BUILD_PERF_TESTS
++	bool "build performance tests"
++
++comment "3rd party support"
++
++config BR2_PACKAGE_OPENCV4_WITH_FFMPEG
++	bool "ffmpeg support"
++	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
++	select BR2_PACKAGE_BZIP2
++	select BR2_PACKAGE_FFMPEG
++	select BR2_PACKAGE_FFMPEG_AVRESAMPLE
++	select BR2_PACKAGE_FFMPEG_SWSCALE
++	help
++	  Use ffmpeg from the target system.
++
++config BR2_PACKAGE_OPENCV4_WITH_GSTREAMER1
++	bool "gstreamer-1.x"
++	depends on BR2_USE_MMU # gstreamer1 -> libglib2
++	select BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
++	help
++	  Enable gstreamer support.
++
++choice
++	prompt "jpeg2000 support"
++	help
++	  Select the desired jpeg2000 library provider.
++
++config BR2_PACKAGE_OPENCV4_JPEG2000_NONE
++	bool "none"
++
++config BR2_PACKAGE_OPENCV4_JPEG2000_WITH_JASPER
++	bool "jasper"
++	select BR2_PACKAGE_JASPER
++	help
++	  Enable jpeg2000 support through jasper.
++
++	  Note: this does not use the libjasper bundled with opencv,
++	  but uses the libjasper package installed system-wide by
++	  Buildroot.
++
++config BR2_PACKAGE_OPENCV4_JPEG2000_WITH_OPENJPEG
++	bool "openjpeg"
++	select BR2_PACKAGE_OPENJPEG
++	help
++	  Enable jpeg2000 support through openjpeg.
++
++	  Note: this does not use the openjpeg bundled with opencv,
++	  but uses the openjpeg package installed system-wide by
++	  Buildroot.
++
++endchoice
++
++config BR2_PACKAGE_OPENCV4_WITH_JPEG
++	bool "jpeg support"
++	select BR2_PACKAGE_JPEG
++	help
++	  Use shared libjpeg from the target system.
++
++config BR2_PACKAGE_OPENCV4_WITH_PNG
++	bool "png support"
++	select BR2_PACKAGE_LIBPNG
++	help
++	  Use shared libpng from the target system.
++
++config BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
++	bool "protobuf support"
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
++	select BR2_PACKAGE_PROTOBUF
++	help
++	  Use shared protobuf from the target system.
++
++config BR2_PACKAGE_OPENCV4_WITH_TIFF
++	bool "tiff support"
++	select BR2_PACKAGE_TIFF
++	help
++	  Use shared libtiff from the target system.
++
++config BR2_PACKAGE_OPENCV4_WITH_V4L
++	bool "v4l support"
++	help
++	  Enable Video 4 Linux support.
++
++	  If the package libv4l is enabled, its support is
++	  automatically enabled.
++
++config BR2_PACKAGE_OPENCV4_WITH_WEBP
++	bool "webp support"
++	select BR2_PACKAGE_WEBP
++	help
++	  Enable WebP support.
++
++	  Use shared libwebp from the target system.
++
++comment "Install options"
++
++config BR2_PACKAGE_OPENCV4_INSTALL_DATA
++	bool "install extra data"
++	help
++	  Install various data that is used by cv libraries and/or
++	  demo applications, specifically for haarcascades and
++	  lbpcascades features.
++
++	  For further information: see OpenCV documentation.
++
++endif # BR2_PACKAGE_OPENCV4
++
++comment "opencv4 needs a toolchain w/ C++, NPTL, wchar, dynamic library, gcc >= 4.8"
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/opencv4/opencv4.hash b/package/opencv4/opencv4.hash
+new file mode 100644
+index 0000000000..3f187b87d5
+--- /dev/null
++++ b/package/opencv4/opencv4.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  e27fe5b168918ab60d58d7ace2bd82dd14a4d0bd1d3ae182952c2113f5637513  opencv4-4.5.1.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
+new file mode 100644
+index 0000000000..94ff77f14c
+--- /dev/null
++++ b/package/opencv4/opencv4.mk
+@@ -0,0 +1,375 @@
++################################################################################
++#
++# opencv4
++#
++################################################################################
++
++OPENCV4_VERSION = 4.5.1
++OPENCV4_SITE = $(call github,opencv,opencv,$(OPENCV4_VERSION))
++OPENCV4_INSTALL_STAGING = YES
++OPENCV4_LICENSE = Apache-2.0
++OPENCV4_LICENSE_FILES = LICENSE
++OPENCV4_SUPPORTS_IN_SOURCE_BUILD = NO
++
++OPENCV4_CXXFLAGS = $(TARGET_CXXFLAGS)
++
++# Uses __atomic_fetch_add_4
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++OPENCV4_CXXFLAGS += -latomic
++endif
++
++# Fix c++11 build with missing std::exception_ptr
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
++OPENCV4_CXXFLAGS += -DCV__EXCEPTION_PTR=0
++endif
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
++OPENCV4_CXXFLAGS += -O0
++endif
++
++# OpenCV component options
++OPENCV4_CONF_OPTS += \
++	-DCMAKE_CXX_FLAGS="$(OPENCV4_CXXFLAGS)" \
++	-DBUILD_DOCS=OFF \
++	-DBUILD_PERF_TESTS=$(if $(BR2_PACKAGE_OPENCV4_BUILD_PERF_TESTS),ON,OFF) \
++	-DBUILD_TESTS=$(if $(BR2_PACKAGE_OPENCV4_BUILD_TESTS),ON,OFF) \
++	-DBUILD_WITH_DEBUG_INFO=OFF \
++	-DDOWNLOAD_EXTERNAL_TEST_DATA=OFF \
++	-DOPENCV_GENERATE_PKGCONFIG=ON \
++	-DOPENCV_ENABLE_PKG_CONFIG=ON
++
++ifeq ($(BR2_PACKAGE_OPENCV4_BUILD_TESTS)$(BR2_PACKAGE_OPENCV4_BUILD_PERF_TESTS),)
++OPENCV4_CONF_OPTS += -DINSTALL_TEST=OFF
++else
++OPENCV4_CONF_OPTS += -DINSTALL_TEST=ON
++endif
++
++# OpenCV build options
++OPENCV4_CONF_OPTS += \
++	-DBUILD_WITH_STATIC_CRT=OFF \
++	-DENABLE_COVERAGE=OFF \
++	-DENABLE_FAST_MATH=ON \
++	-DENABLE_IMPL_COLLECTION=OFF \
++	-DENABLE_NOISY_WARNINGS=OFF \
++	-DENABLE_OMIT_FRAME_POINTER=ON \
++	-DENABLE_PRECOMPILED_HEADERS=OFF \
++	-DENABLE_PROFILING=OFF \
++	-DOPENCV_WARNINGS_ARE_ERRORS=OFF
++
++# OpenCV link options
++OPENCV4_CONF_OPTS += \
++	-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=OFF \
++	-DCMAKE_SKIP_RPATH=OFF \
++	-DCMAKE_USE_RELATIVE_PATHS=OFF
++
++# OpenCV packaging options:
++OPENCV4_CONF_OPTS += \
++	-DBUILD_PACKAGE=OFF \
++	-DENABLE_SOLUTION_FOLDERS=OFF \
++	-DINSTALL_CREATE_DISTRIB=OFF
++
++# OpenCV module selection
++# * Modules on:
++#   - core: if not set, opencv does not build anything
++#   - hal: core's dependency
++# * Modules off:
++#   - android*: android stuff
++#   - apps: programs for training classifiers
++#   - java: java bindings
++#   - viz: missing VTK dependency
++#   - world: all-in-one module
++#
++# * Contrib modules from [1] are disabled:
++#   - opencv_contrib package is not available in Buildroot;
++#   - OPENCV_EXTRA_MODULES_PATH is not set.
++#
++# [1] https://github.com/Itseez/opencv_contrib
++OPENCV4_CONF_OPTS += \
++	-DBUILD_opencv_androidcamera=OFF \
++	-DBUILD_opencv_apps=OFF \
++	-DBUILD_opencv_calib3d=$(if $(BR2_PACKAGE_OPENCV4_LIB_CALIB3D),ON,OFF) \
++	-DBUILD_opencv_core=ON \
++	-DBUILD_opencv_features2d=$(if $(BR2_PACKAGE_OPENCV4_LIB_FEATURES2D),ON,OFF) \
++	-DBUILD_opencv_flann=$(if $(BR2_PACKAGE_OPENCV4_LIB_FLANN),ON,OFF) \
++	-DBUILD_opencv_highgui=$(if $(BR2_PACKAGE_OPENCV4_LIB_HIGHGUI),ON,OFF) \
++	-DBUILD_opencv_imgcodecs=$(if $(BR2_PACKAGE_OPENCV4_LIB_IMGCODECS),ON,OFF) \
++	-DBUILD_opencv_imgproc=$(if $(BR2_PACKAGE_OPENCV4_LIB_IMGPROC),ON,OFF) \
++	-DBUILD_opencv_java=OFF \
++	-DBUILD_opencv_ml=$(if $(BR2_PACKAGE_OPENCV4_LIB_ML),ON,OFF) \
++	-DBUILD_opencv_objdetect=$(if $(BR2_PACKAGE_OPENCV4_LIB_OBJDETECT),ON,OFF) \
++	-DBUILD_opencv_photo=$(if $(BR2_PACKAGE_OPENCV4_LIB_PHOTO),ON,OFF) \
++	-DBUILD_opencv_shape=$(if $(BR2_PACKAGE_OPENCV4_LIB_SHAPE),ON,OFF) \
++	-DBUILD_opencv_stitching=$(if $(BR2_PACKAGE_OPENCV4_LIB_STITCHING),ON,OFF) \
++	-DBUILD_opencv_superres=$(if $(BR2_PACKAGE_OPENCV4_LIB_SUPERRES),ON,OFF) \
++	-DBUILD_opencv_ts=$(if $(BR2_PACKAGE_OPENCV4_LIB_TS),ON,OFF) \
++	-DBUILD_opencv_video=$(if $(BR2_PACKAGE_OPENCV4_LIB_VIDEO),ON,OFF) \
++	-DBUILD_opencv_videoio=$(if $(BR2_PACKAGE_OPENCV4_LIB_VIDEOIO),ON,OFF) \
++	-DBUILD_opencv_videostab=$(if $(BR2_PACKAGE_OPENCV4_LIB_VIDEOSTAB),ON,OFF) \
++	-DBUILD_opencv_viz=OFF \
++	-DBUILD_opencv_world=OFF
++
++# Hardware support options.
++#
++# * PowerPC and VFPv3 support are turned off since their only effects
++#   are altering CFLAGS, adding '-mcpu=G3 -mtune=G5' or '-mfpu=vfpv3'
++#   to them, which is already handled by Buildroot.
++# * NEON logic is needed as it is not only used to add CFLAGS, but
++#   also to enable additional NEON code.
++OPENCV4_CONF_OPTS += \
++	-DENABLE_POWERPC=OFF \
++	-DENABLE_NEON=$(if $(BR2_ARM_CPU_HAS_NEON),ON,OFF) \
++	-DENABLE_VFPV3=OFF
++
++# Cuda stuff
++OPENCV4_CONF_OPTS += \
++	-DBUILD_CUDA_STUBS=OFF \
++	-DBUILD_opencv_cudaarithm=OFF \
++	-DBUILD_opencv_cudabgsegm=OFF \
++	-DBUILD_opencv_cudacodec=OFF \
++	-DBUILD_opencv_cudafeatures2d=OFF \
++	-DBUILD_opencv_cudafilters=OFF \
++	-DBUILD_opencv_cudaimgproc=OFF \
++	-DBUILD_opencv_cudalegacy=OFF \
++	-DBUILD_opencv_cudaobjdetect=OFF \
++	-DBUILD_opencv_cudaoptflow=OFF \
++	-DBUILD_opencv_cudastereo=OFF \
++	-DBUILD_opencv_cudawarping=OFF \
++	-DBUILD_opencv_cudev=OFF \
++	-DWITH_CUBLAS=OFF \
++	-DWITH_CUDA=OFF \
++	-DWITH_CUFFT=OFF
++
++# NVidia stuff
++OPENCV4_CONF_OPTS += -DWITH_NVCUVID=OFF
++
++# AMD stuff
++OPENCV4_CONF_OPTS += \
++	-DWITH_OPENCLAMDBLAS=OFF \
++	-DWITH_OPENCLAMDFFT=OFF
++
++# Intel stuff
++OPENCV4_CONF_OPTS += \
++	-DBUILD_WITH_DYNAMIC_IPP=OFF \
++	-DWITH_INTELPERC=OFF \
++	-DWITH_IPP=OFF \
++	-DWITH_IPP_A=OFF \
++	-DWITH_TBB=OFF
++
++# Smartek stuff
++OPENCV4_CONF_OPTS += -DWITH_GIGEAPI=OFF
++
++# Prosilica stuff
++OPENCV4_CONF_OPTS += -DWITH_PVAPI=OFF
++
++# Ximea stuff
++OPENCV4_CONF_OPTS += -DWITH_XIMEA=OFF
++
++# Non-Linux support (Android options) must remain OFF:
++OPENCV4_CONF_OPTS += \
++	-DANDROID=OFF \
++	-DBUILD_ANDROID_CAMERA_WRAPPER=OFF \
++	-DBUILD_ANDROID_EXAMPLES=OFF \
++	-DBUILD_ANDROID_SERVICE=OFF \
++	-DBUILD_FAT_JAVA_LIB=OFF \
++	-DINSTALL_ANDROID_EXAMPLES=OFF \
++	-DWITH_ANDROID_CAMERA=OFF
++
++# Non-Linux support (Mac OSX options) must remain OFF:
++OPENCV4_CONF_OPTS += \
++	-DWITH_AVFOUNDATION=OFF \
++	-DWITH_CARBON=OFF \
++	-DWITH_QUICKTIME=OFF
++
++# Non-Linux support (Windows options) must remain OFF:
++OPENCV4_CONF_OPTS += \
++	-DWITH_CSTRIPES=OFF \
++	-DWITH_DSHOW=OFF \
++	-DWITH_MSMF=OFF \
++	-DWITH_VFW=OFF \
++	-DWITH_VIDEOINPUT=OFF \
++	-DWITH_WIN32UI=OFF
++
++# Software/3rd-party support options:
++# - disable all examples
++OPENCV4_CONF_OPTS += \
++	-DBUILD_EXAMPLES=OFF \
++	-DBUILD_JASPER=OFF \
++	-DBUILD_JPEG=OFF \
++	-DBUILD_OPENEXR=OFF \
++	-DBUILD_OPENJPEG=OFF \
++	-DBUILD_PNG=OFF \
++	-DBUILD_PROTOBUF=OFF \
++	-DBUILD_TIFF=OFF \
++	-DBUILD_ZLIB=OFF \
++	-DINSTALL_C_EXAMPLES=OFF \
++	-DINSTALL_PYTHON_EXAMPLES=OFF \
++	-DINSTALL_TO_MANGLED_PATHS=OFF
++
++# Disabled features (mostly because they are not available in Buildroot), but
++# - eigen: OpenCV does not use it, not take any benefit from it.
++OPENCV4_CONF_OPTS += \
++	-DWITH_1394=OFF \
++	-DWITH_CLP=OFF \
++	-DWITH_EIGEN=OFF \
++	-DWITH_GDAL=OFF \
++	-DWITH_GPHOTO2=OFF \
++	-DWITH_GSTREAMER_0_10=OFF \
++	-DWITH_LAPACK=OFF \
++	-DWITH_MATLAB=OFF \
++	-DWITH_OPENCL=OFF \
++	-DWITH_OPENCL_SVM=OFF \
++	-DWITH_OPENEXR=OFF \
++	-DWITH_OPENNI2=OFF \
++	-DWITH_OPENNI=OFF \
++	-DWITH_UNICAP=OFF \
++	-DWITH_VA=OFF \
++	-DWITH_VA_INTEL=OFF \
++	-DWITH_VTK=OFF \
++	-DWITH_XINE=OFF
++
++OPENCV4_DEPENDENCIES += host-pkgconf zlib
++
++ifeq ($(BR2_PACKAGE_OPENCV4_JPEG2000_WITH_JASPER),y)
++OPENCV4_CONF_OPTS += -DWITH_JASPER=ON
++OPENCV4_DEPENDENCIES += jasper
++else
++OPENCV4_CONF_OPTS += -DWITH_JASPER=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_JPEG2000_WITH_OPENJPEG),y)
++OPENCV4_CONF_OPTS += -DWITH_OPENJPEG=ON
++OPENCV4_DEPENDENCIES += openjpeg
++else
++OPENCV4_CONF_OPTS += -DWITH_OPENJPEG=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_FFMPEG),y)
++OPENCV4_CONF_OPTS += -DWITH_FFMPEG=ON
++OPENCV4_DEPENDENCIES += ffmpeg bzip2
++else
++OPENCV4_CONF_OPTS += -DWITH_FFMPEG=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_GSTREAMER1),y)
++OPENCV4_CONF_OPTS += -DWITH_GSTREAMER=ON
++OPENCV4_DEPENDENCIES += gstreamer1 gst1-plugins-base
++else
++OPENCV4_CONF_OPTS += -DWITH_GSTREAMER=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_GTK)$(BR2_PACKAGE_OPENCV4_WITH_GTK3),)
++OPENCV4_CONF_OPTS += -DWITH_GTK=OFF -DWITH_GTK_2_X=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_GTK),y)
++OPENCV4_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=ON
++OPENCV4_DEPENDENCIES += libgtk2
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_GTK3),y)
++OPENCV4_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=OFF
++OPENCV4_DEPENDENCIES += libgtk3
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_JPEG),y)
++OPENCV4_CONF_OPTS += -DWITH_JPEG=ON
++OPENCV4_DEPENDENCIES += jpeg
++else
++OPENCV4_CONF_OPTS += -DWITH_JPEG=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_OPENGL),y)
++OPENCV4_CONF_OPTS += -DWITH_OPENGL=ON
++OPENCV4_DEPENDENCIES += libgl
++else
++OPENCV4_CONF_OPTS += -DWITH_OPENGL=OFF
++endif
++
++OPENCV4_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_TOOLCHAIN_HAS_OPENMP),ON,OFF)
++
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_PNG),y)
++OPENCV4_CONF_OPTS += -DWITH_PNG=ON
++OPENCV4_DEPENDENCIES += libpng
++else
++OPENCV4_CONF_OPTS += -DWITH_PNG=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_PROTOBUF),y)
++OPENCV4_CONF_OPTS += \
++	-DPROTOBUF_UPDATE_FILES=ON \
++	-DWITH_PROTOBUF=ON
++OPENCV4_DEPENDENCIES += protobuf
++else
++OPENCV4_CONF_OPTS += -DWITH_PROTOBUF=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_QT5),y)
++OPENCV4_CONF_OPTS += -DWITH_QT=5
++OPENCV4_DEPENDENCIES += qt5base
++else
++OPENCV4_CONF_OPTS += -DWITH_QT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_TIFF),y)
++OPENCV4_CONF_OPTS += -DWITH_TIFF=ON
++OPENCV4_DEPENDENCIES += tiff
++else
++OPENCV4_CONF_OPTS += -DWITH_TIFF=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_V4L),y)
++OPENCV4_CONF_OPTS += \
++	-DWITH_LIBV4L=$(if $(BR2_PACKAGE_LIBV4L),ON,OFF) \
++	-DWITH_V4L=ON
++OPENCV4_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBV4L),libv4l)
++else
++OPENCV4_CONF_OPTS += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_WITH_WEBP),y)
++OPENCV4_CONF_OPTS += -DWITH_WEBP=ON
++OPENCV4_DEPENDENCIES += webp
++else
++OPENCV4_CONF_OPTS += -DWITH_WEBP=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV4_LIB_PYTHON),y)
++OPENCV4_CONF_OPTS += \
++	-DBUILD_opencv_python2=OFF \
++	-DBUILD_opencv_python3=ON \
++	-DPYTHON3_EXECUTABLE=$(HOST_DIR)/bin/python3 \
++	-DPYTHON3_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
++	-DPYTHON3_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR).so \
++	-DPYTHON3_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/include \
++	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
++	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
++OPENCV4_DEPENDENCIES += python3
++OPENCV4_KEEP_PY_FILES += usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/cv2/config*.py
++OPENCV4_CONF_ENV += $(PKG_PYTHON_DISTUTILS_ENV)
++OPENCV4_DEPENDENCIES += python-numpy
++else
++OPENCV4_CONF_OPTS += \
++	-DBUILD_opencv_python2=OFF \
++	-DBUILD_opencv_python3=OFF
++endif
++
++# Installation hooks:
++define OPENCV4_CLEAN_INSTALL_LICENSE
++	$(RM) -fr $(TARGET_DIR)/usr/share/licenses/opencv4
++endef
++OPENCV4_POST_INSTALL_TARGET_HOOKS += OPENCV4_CLEAN_INSTALL_LICENSE
++
++define OPENCV4_CLEAN_INSTALL_VALGRIND
++	$(RM) -f $(TARGET_DIR)/usr/share/opencv4/valgrind*
++endef
++OPENCV4_POST_INSTALL_TARGET_HOOKS += OPENCV4_CLEAN_INSTALL_VALGRIND
++
++ifneq ($(BR2_PACKAGE_OPENCV4_INSTALL_DATA),y)
++define OPENCV4_CLEAN_INSTALL_DATA
++	$(RM) -fr $(TARGET_DIR)/usr/share/opencv4/haarcascades \
++		$(TARGET_DIR)/usr/share/opencv4/lbpcascades
++endef
++OPENCV4_POST_INSTALL_TARGET_HOOKS += OPENCV4_CLEAN_INSTALL_DATA
++endif
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
