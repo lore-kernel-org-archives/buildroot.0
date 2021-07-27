@@ -2,91 +2,67 @@ Return-Path: <SRS0=yDzA=MT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E3E7C4338F
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 08:01:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6C3BC4338F
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 08:03:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C4F80611F0
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 08:01:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C4F80611F0
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 9BD66610A1
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 08:03:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9BD66610A1
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F53B40172;
-	Tue, 27 Jul 2021 08:01:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67458605A1;
+	Tue, 27 Jul 2021 08:03:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5OOVdQlLeuTV; Tue, 27 Jul 2021 08:01:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id te-8uvuQMwym; Tue, 27 Jul 2021 08:03:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D9799402C8;
-	Tue, 27 Jul 2021 08:01:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D4C381BF293
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 08:01:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C188C605A3;
+	Tue, 27 Jul 2021 08:03:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A9BBE1BF293
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 08:03:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D19704010A
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 08:01:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99791605A3
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 08:03:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1Q_2C_TB8nnE for <buildroot@lists.busybox.net>;
- Tue, 27 Jul 2021 08:01:26 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6FFF1403B7
- for <buildroot@buildroot.org>; Tue, 27 Jul 2021 08:01:26 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- d131-20020a1c1d890000b02902516717f562so1674301wmd.3
- for <buildroot@buildroot.org>; Tue, 27 Jul 2021 01:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=0uWxQ5xb1I30/qpWR6SRsaYQLZSecQ3NP28LyckBjDo=;
- b=DAlwacLNtC8S+VXAJvhXPkk/OLgAS7rL9RLvkFm6a0AJ1r6VZvBdqNp8oQSjF0THOI
- M6z1B4uAHrjMgMOzv5UfsZ3oWq7ZVBSexEgmQlRAXjc77GwZbERievgw0F88euS0JGte
- s7nNoKJl8WIhf+eB1No07PkrQrw+8NHw7hy5GvjhhU2dGttyIw5uPnMPw61QQHN04U0T
- wiXG/iMUMl5MOo70nSOLbuuZOP+b8Ehl5n7B40Kwuq/JQJzcY90Ifi+7WEjdKZXKpEeM
- BnbCB7niiN4nIztHRqTDeNPcnyd1J8Mg0XnFNv2dj6k7MX3Gsx5Xw/oBmskHO5zXABsT
- C2Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=0uWxQ5xb1I30/qpWR6SRsaYQLZSecQ3NP28LyckBjDo=;
- b=eeIJOcZ+t3w9B2NSamudExrkbQx5Tts+rgp5vhz9+WsWRoU/ExhBXQKcOORYYzGzln
- Q4BNylOH8WZDe9tnvqtuTikd1NoVZjuasoa87xoXnthbGffL5dJD/AQjrvQb4Hz/5NIC
- CrUpUwNRqn26SdoYW/BrLMIz5UNoHH29SoelTT2sLLomyQyS9LGWznpRcFhXGCwOMLKV
- jJOC3ASHf1TS7HUUEj3G0xjzvIXZaJ+dGEbZUMLWnOlt36WHC0hJzitFVy0Gk5EUKSVa
- uXjVJ1dTXzfucI8YtRUWikZ00Q0EGGvwQLPikQ8dsnphs5eCUXfdxMLLMqUkgQ4B+OkQ
- h/dA==
-X-Gm-Message-State: AOAM530nR7pr37jSugNGSr2jkTWTuMZl1JpD7iCpC6/Fx9o8eI9DLBhx
- GZ92wlvAZCsXfWbpynSoOWnJ04ndjAR5Cg==
-X-Google-Smtp-Source: ABdhPJyhf8hEQysqEbPgpi16QVVuElZpO77qUyzvuz1SUBSZKs2vvyke1wsDkvdOQAiK2B0Y1Pr4gg==
-X-Received: by 2002:a05:600c:4108:: with SMTP id
- j8mr2681734wmi.67.1627372884322; 
- Tue, 27 Jul 2021 01:01:24 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1383-171.w86-229.abo.wanadoo.fr.
- [86.229.230.171])
- by smtp.gmail.com with ESMTPSA id d67sm2067180wmd.9.2021.07.27.01.01.23
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 27 Jul 2021 01:01:23 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 27 Jul 2021 10:01:14 +0200
-Message-Id: <20210727080115.2314012-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.30.2
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cPdjVgN_t2Sd for <buildroot@lists.busybox.net>;
+ Tue, 27 Jul 2021 08:03:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7760A605A1
+ for <buildroot@buildroot.org>; Tue, 27 Jul 2021 08:03:45 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 493A418287F; Tue, 27 Jul 2021 10:03:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
+ t=1627373022; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=MRSsgEloipT9y8ubcfvMOjfk6brQCZQSyOBLaqIHjLE=;
+ b=WavcgOSRAUXXSqatd5MhFoaqRlHiCJWZve17TuaAIPXHxCxwDoV/NTc6VEEdu0jbhB7tNO
+ BSisZNOZZUKwuXF1FMuVbAJpb0I+WxwK8JA942p3uinMDXD4pgG7Z+723785ZcXQkPi5Pu
+ ePS2XJQB8EexJR6ptPwulE5Oio2mpkc=
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20210727072523.2273052-1-fontaine.fabrice@gmail.com>
+Message-ID: <9ace95d9-e182-7abe-0213-e30105562da0@heine.tech>
+Date: Tue, 27 Jul 2021 10:03:41 +0200
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.12.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] Revert "package/daq3: fix build without
- threads"
+In-Reply-To: <20210727072523.2273052-1-fontaine.fabrice@gmail.com>
+Content-Language: en-US
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/bluez5_utils: make a single
+ option for avrcp and a2dp
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,103 +74,23 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Michael Nosthoff via buildroot <buildroot@busybox.net>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Marcin Bis <marcin@bis.org.pl>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-This reverts commit 7c8641e5a97b89c14aebd730772e9cc037de6ccc as threads
-are also used by afpacket and bpf modules if libpcap is found.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/daq3/0001-add-disable-example.patch | 49 ---------------------
- package/daq3/daq3.mk                        |  3 +-
- 2 files changed, 1 insertion(+), 51 deletions(-)
- delete mode 100644 package/daq3/0001-add-disable-example.patch
-
-diff --git a/package/daq3/0001-add-disable-example.patch b/package/daq3/0001-add-disable-example.patch
-deleted file mode 100644
-index c126e32859..0000000000
---- a/package/daq3/0001-add-disable-example.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 1d7031dde8da39cd2151f87d68dddea91f304603 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 19 Jun 2021 11:31:35 +0200
--Subject: [PATCH] add --disable-example
--
--Add --disable-example to be able to build daq on toolchains without
--threads support
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/snort3/libdaq/pull/13]
-----
-- Makefile.am  | 5 ++++-
-- configure.ac | 5 +++++
-- 2 files changed, 9 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index dcba62b..0a79319 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -7,6 +7,9 @@ pkgconfig_DATA = libdaq.pc
-- if BUILD_MODULES
--     MODULES_DIR = modules
-- endif
---SUBDIRS = api $(MODULES_DIR) example test
--+SUBDIRS = api $(MODULES_DIR) test
--+if BUILD_EXAMPLE
--+    SUBDIRS += example
--+endif
-- 
-- ACLOCAL_AMFLAGS = -I m4
--diff --git a/configure.ac b/configure.ac
--index 23b38a2..36a09ee 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -274,6 +274,11 @@ AM_CONDITIONAL([BUILD_MODULES], [test "$enable_afpacket_module" = yes -o \
-- 
-- LIBS=${save_LIBS}
-- 
--+AC_ARG_ENABLE(example,
--+              AS_HELP_STRING([--disable-example],[do not build the example]),
--+              [enable_example="$enableval"], [enable_example=yes])
--+AM_CONDITIONAL([BUILD_EXAMPLE], [test "$enable_example" = yes])
--+
-- AC_CHECK_LIB([dl], [dlopen], [LIBDL="-ldl"])
-- 
-- AM_CONDITIONAL([BUILD_SHARED_MODULES], [ test "$enable_shared" = yes ])
---- 
--2.30.2
--
-diff --git a/package/daq3/daq3.mk b/package/daq3/daq3.mk
-index b726031d39..1de7e53a79 100644
---- a/package/daq3/daq3.mk
-+++ b/package/daq3/daq3.mk
-@@ -12,7 +12,6 @@ DAQ3_INSTALL_STAGING = YES
- DAQ3_DEPENDENCIES = host-pkgconf
- # From git
- DAQ3_AUTORECONF = YES
--DAQ3_CONF_OPTS = --disable-example
- 
- ifeq ($(BR2_PACKAGE_LIBNETFILTER_QUEUE),y)
- DAQ3_DEPENDENCIES += libnetfilter_queue
-@@ -21,7 +20,7 @@ else
- DAQ3_CONF_OPTS += --disable-nfq-module
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBPCAP)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-+ifeq ($(BR2_PACKAGE_LIBPCAP),y)
- DAQ3_DEPENDENCIES += libpcap
- DAQ3_CONF_OPTS += --enable-pcap-module
- else
--- 
-2.30.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+SGksCgpPbiAyNy4wNy4yMSAwOToyNSwgRmFicmljZSBGb250YWluZSB3cm90ZToKPiBTbyBtYWtl
+IGEgc2luZ2xlIGF1ZGlvIG9wdGlvbiBmb3IgYTJkcCBhbmQgYXZyY3AKClRoYXQgbWFrZXMgc2Vu
+c2UuCgo+IC1jb25maWcgQlIyX1BBQ0tBR0VfQkxVRVo1X1VUSUxTX1BMVUdJTlNfQVZSQ1AKPiAt
+CWJvb2wgImJ1aWxkIGF2cmNwIHBsdWdpbiIKPiAtCWRlZmF1bHQgeQo+IC0JaGVscAo+IC0JICBC
+dWlsZCBwbHVnaW4gZm9yIEFWUkNQIChhdWRpbykgcHJvZmlsZXMuCj4gKwkgIEJ1aWxkIGF1ZGlv
+IHBsdWdpbiBwcm9maWxlcyAoZm9yIEEyRFAgYW5kIEFWUkNQKS4KCmZvciBjb25zaXN0ZW5jeSB3
+aXRoIHRoZSBvdGhlciBvcHRpb25zIEkgd291bGQgcmVwaHJhc2UgdGhhdCB0bzoKCiDCoEJ1aWxk
+IHBsdWdpbnMgZm9yIGF1ZGlvIHByb2ZpbGVzIChBMkRQIGFuZCBBVlJDUCkuCgoKUmV2aWV3ZWQt
+Ynk6IE1pY2hhZWwgTm9zdGhvZmYgPGJ1aWxkcm9vdEBoZWluZS50ZWNoPgoKClJlZ2FyZHMsCgpN
+aWNoYWVsCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidXN5Ym94Lm5ldApodHRwOi8vbGlzdHMu
+YnVzeWJveC5uZXQvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
