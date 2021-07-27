@@ -2,57 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85AC8C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:45:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 471E5C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:46:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3420260720
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:45:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3420260720
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 0F64F60E96
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:46:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0F64F60E96
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F0F714064F;
-	Wed,  4 Aug 2021 00:45:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA022842C5;
+	Wed,  4 Aug 2021 00:46:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R3hUr24-1dvD; Wed,  4 Aug 2021 00:45:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Zz39_2giPxBF; Wed,  4 Aug 2021 00:46:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E219940691;
-	Wed,  4 Aug 2021 00:45:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A3DC83EC6;
+	Wed,  4 Aug 2021 00:46:00 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0F7661BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 100AC1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8723F40F73
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8745740F7E
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zNxJrhsAJOzd for <buildroot@lists.busybox.net>;
+ with ESMTP id 9l_3lwXNHnUl for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A5C5E40E94
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF41340F92
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0742C87884; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 3059787884; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 23:48:09 +0200
+Date: Tue, 27 Jul 2021 22:05:47 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e9a37dd1c423808bfaecc5efb8dedaccb454ee7b
-X-Git-Newrev: d625a1e21412f1a788bff548c94abcdf7ec25442
+X-Git-Oldrev: 7332bc6eb092a18c506e614fc950c5b697ba1114
+X-Git-Newrev: 0b4b533dca9ac36e2c5dc35bde618c2eba036bb4
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211021.0742C87884@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/vnstat: bump to
- version 2.7
+Message-Id: <20210803211021.3059787884@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] core/show-info: report image
+ name of filesystems
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,43 +70,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d625a1e21412f1a788bff548c94abcdf7ec25442
+commit: https://git.buildroot.net/buildroot/commit/?id=0b4b533dca9ac36e2c5dc35bde618c2eba036bb4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Update indentation in hash file (two spaces)
+The rootfses, unlike packages, do not have stampfiles to represent
+whether they are built or not. Indeed, we always rebuild the rootfs, and
+there is a single step to do.
 
-https://github.com/vergoh/vnstat/releases/tag/v2.7
+Hpwever, people (and scripts) who want to report on the build progress,
+will want to know whether each rootfs has been built already or not.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Expose in show-info the name of the file that wil contain the rootfs
+image.
+
+$(1)_FINAL_IMAGE_NAME is set by the fs infrastructure, but initramfs
+doesn't use the infrastructure. So to support that one as well, set
+image_name to null if $(1)_FINAL_IMAGE_NAME is not set.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Vadim Kochan <vadim4j@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: eeppeliteloop@gmail.com
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/vnstat/vnstat.hash | 4 ++--
- package/vnstat/vnstat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-utils.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
-index 6934c569b2..0f269039b1 100644
---- a/package/vnstat/vnstat.hash
-+++ b/package/vnstat/vnstat.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 89276e0a7281943edb554b874078278ad947dc312938a2451e03eb80679f7ff7  vnstat-2.6.tar.gz
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  4c28a1d8bc03c2b6e7ab96c876e07dd8ea174b7cad73b7190ecb2b9501e83e9e  vnstat-2.7.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
-index be1b75a6b3..c5836cf037 100644
---- a/package/vnstat/vnstat.mk
-+++ b/package/vnstat/vnstat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index d0fcdd4e1d..ae3c7f9da9 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -156,6 +156,10 @@ define _json-info-pkg-details
+ endef
  
--VNSTAT_VERSION = 2.6
-+VNSTAT_VERSION = 2.7
- VNSTAT_SITE = http://humdi.net/vnstat
- VNSTAT_LICENSE = GPL-2.0
- VNSTAT_LICENSE_FILES = COPYING
+ define _json-info-fs
++	"image_name": $(if $($(1)_FINAL_IMAGE_NAME), \
++				"$($(1)_FINAL_IMAGE_NAME)", \
++				null \
++			),
+ 	"dependencies": [
+ 		$(call make-comma-list,$(sort $($(1)_DEPENDENCIES)))
+ 	]
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
