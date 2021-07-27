@@ -2,57 +2,60 @@ Return-Path: <SRS0=yDzA=MT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 489C9C4338F
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 20:09:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D1E2C4338F
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 12:43:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D0D0560F9B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 20:09:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D0D0560F9B
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id E104061A4F
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 12:43:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E104061A4F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5A3C40146;
-	Tue, 27 Jul 2021 20:09:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9D1B82F77;
+	Tue, 27 Jul 2021 12:43:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4xH99W-S4rQW; Tue, 27 Jul 2021 20:09:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O5vLPrKRvS9N; Tue, 27 Jul 2021 12:43:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0081D40132;
-	Tue, 27 Jul 2021 20:09:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8918B1BF46D
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 20:09:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E37282F32;
+	Tue, 27 Jul 2021 12:43:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7484E1BF42C
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 12:43:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 766A56081A
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 20:09:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 716FA82F32
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 12:43:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fxlsSjaqC62q for <buildroot@lists.busybox.net>;
- Tue, 27 Jul 2021 20:09:04 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B90E8606E7
- for <buildroot@buildroot.org>; Tue, 27 Jul 2021 20:09:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 43DD38908A; Tue, 27 Jul 2021 19:34:23 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Tue, 27 Jul 2021 22:05:47 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7332bc6eb092a18c506e614fc950c5b697ba1114
-X-Git-Newrev: 0b4b533dca9ac36e2c5dc35bde618c2eba036bb4
-X-Patchwork-Hint: ignore
-Message-Id: <20210727193423.43DD38908A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] core/show-info: report image name of
- filesystems
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lEaAfxg9aPsn for <buildroot@lists.busybox.net>;
+ Tue, 27 Jul 2021 12:43:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 45F3082A87
+ for <buildroot@uclibc.org>; Tue, 27 Jul 2021 12:43:46 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id 2292824000E;
+ Tue, 27 Jul 2021 12:43:41 +0000 (UTC)
+Date: Tue, 27 Jul 2021 14:43:40 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: =?UTF-8?B?Sm9zw6k=?= Pekkarinen <jose.pekkarinen@unikie.com>
+Message-ID: <20210727144340.7fecf359@windsurf>
+In-Reply-To: <CAJPV9MpuxCHXRAf2zTeuZnHB1FjiwtJHA6-UxEvHFFJ8WWg4gw@mail.gmail.com>
+References: <20210723095113.26189-1-jose.pekkarinen@unikie.com>
+ <20210724233820.75126717@windsurf>
+ <CAJPV9MpuxCHXRAf2zTeuZnHB1FjiwtJHA6-UxEvHFFJ8WWg4gw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] Remove deprecated matchpathcon calls
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,55 +67,28 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "buildroot@uclibc.org" <buildroot@uclibc.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b4b533dca9ac36e2c5dc35bde618c2eba036bb4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The rootfses, unlike packages, do not have stampfiles to represent
-whether they are built or not. Indeed, we always rebuild the rootfs, and
-there is a single step to do.
-
-Hpwever, people (and scripts) who want to report on the build progress,
-will want to know whether each rootfs has been built already or not.
-
-Expose in show-info the name of the file that wil contain the rootfs
-image.
-
-$(1)_FINAL_IMAGE_NAME is set by the fs infrastructure, but initramfs
-doesn't use the infrastructure. So to support that one as well, set
-image_name to null if $(1)_FINAL_IMAGE_NAME is not set.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Vadim Kochan <vadim4j@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: eeppeliteloop@gmail.com
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/pkg-utils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index d0fcdd4e1d..ae3c7f9da9 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -156,6 +156,10 @@ define _json-info-pkg-details
- endef
- 
- define _json-info-fs
-+	"image_name": $(if $($(1)_FINAL_IMAGE_NAME), \
-+				"$($(1)_FINAL_IMAGE_NAME)", \
-+				null \
-+			),
- 	"dependencies": [
- 		$(call make-comma-list,$(sort $($(1)_DEPENDENCIES)))
- 	]
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+SGVsbG8gSm9zw6ksCgpPbiBUdWUsIDI3IEp1bCAyMDIxIDE1OjIxOjIxICswMzAwCkpvc8OpIFBl
+a2thcmluZW4gPGpvc2UucGVra2FyaW5lbkB1bmlraWUuY29tPiB3cm90ZToKCj4gVGhhbmtzIGZv
+ciBxdWlja2x5IGFkZHJlc3NpbmcgdGhpcyBUaG9tYXMuIElmIEkgbWF5LCBhcyB0aGlzIGlzIGEK
+PiBmaXgsIGlzIHRoZXJlIGFueSBwcm9jZXNzIHRvIGJhY2twb3J0IGl0IHRvIHRoZSBzdGFibGUg
+dmVyc2lvbnM/IFBlcmhhcHMKPiBJIGhhdmUgdG8gcmVzZW5kIGl0IHRvIHRoZSBtYWlsaW5nIGxp
+c3Qgd2l0aCBhbm90aGVyIGxhYmVsPyBNeSBjdXN0b21lcgo+IHdvdWxkIGJlIGdsYWQgdG8gdGFr
+ZSBpdCBmcm9tIHRoZXJlLgoKT3VyIHByb2Nlc3MgdG8gYmFja3BvcnQgdG8gc3RhYmxlIHZlcnNp
+b25zIGlzIHRoYXQgUGV0ZXIgS29yc2dhYXJkIChvbmUKb2YgdGhlIEJ1aWxkcm9vdCBjby1tYWlu
+dGFpbmVycykgcmV2aWV3cyB0aGUgZW50aXJlIHNldCBvZiBjb21taXRzIHRoYXQKZ28gaW50byBt
+YXN0ZXIsIGFuZCB3aGVuZXZlciBhIGNvbW1pdCBpcyBhIHNlY3VyaXR5IGJ1bXAgb3IgYSBmaXgs
+IGl0CmdldHMgYmFja3BvcnRlZCB0byAyMDIxLjAyLnguCgpJIGhhdmUgQ2MnZWQgUGV0ZXIgb24g
+eW91ciByZXF1ZXN0IHRvIG1ha2Ugc3VyZSBpdCBpcyBjbGVhciB0byBoaW0gdGhhdApjb21taXQg
+OTBkZDFkNjE3OGIwMWY2ZGEzZTU5ZTQzZDBjN2VmZGY5ODRhNzJkOCBpcyBhIGZpeCB0aGF0IHNo
+b3VsZCBiZQpiYWNrcG9ydGVkIHRvIDIwMjEuMDIueC4KCkJlc3QgcmVnYXJkcywKClRob21hcwot
+LSAKVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBM
+aW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
+bGlzdApidWlsZHJvb3RAYnVzeWJveC5uZXQKaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxt
+YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
