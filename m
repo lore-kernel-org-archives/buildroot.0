@@ -2,90 +2,88 @@ Return-Path: <SRS0=yDzA=MT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 454E2C4338F
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 09:31:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73A6EC4338F
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 09:32:47 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ED4F86137F
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 09:31:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ED4F86137F
+	by mail.kernel.org (Postfix) with ESMTPS id 2036B60FDB
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 09:32:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2036B60FDB
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1C6882CF9;
-	Tue, 27 Jul 2021 09:31:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6ED38350A;
+	Tue, 27 Jul 2021 09:32:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VUajk1LweNIb; Tue, 27 Jul 2021 09:31:28 +0000 (UTC)
+	with ESMTP id i3ui7T1dXUGn; Tue, 27 Jul 2021 09:32:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B2D082D96;
-	Tue, 27 Jul 2021 09:31:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BE20B1BF37E
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 09:31:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 84D9383704;
+	Tue, 27 Jul 2021 09:32:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 048051BF37E
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 09:32:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AD5D040315
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 09:31:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E85A540205
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 09:32:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S6Rpzc43WZMz for <buildroot@lists.busybox.net>;
- Tue, 27 Jul 2021 09:31:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gWMM4Kq5kTzA for <buildroot@lists.busybox.net>;
+ Tue, 27 Jul 2021 09:32:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 88665402D4
- for <buildroot@buildroot.org>; Tue, 27 Jul 2021 09:31:23 +0000 (UTC)
-Received: by mail-io1-xd2f.google.com with SMTP id n19so15324538ioz.0
- for <buildroot@buildroot.org>; Tue, 27 Jul 2021 02:31:23 -0700 (PDT)
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com
+ [IPv6:2607:f8b0:4864:20::332])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3A996401CF
+ for <buildroot@buildroot.org>; Tue, 27 Jul 2021 09:32:41 +0000 (UTC)
+Received: by mail-ot1-x332.google.com with SMTP id
+ 68-20020a9d0f4a0000b02904b1f1d7c5f4so11861791ott.9
+ for <buildroot@buildroot.org>; Tue, 27 Jul 2021 02:32:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=72fHRZgGtGLL9es3UaqhYbC4zHpnaaFvl3TakxCbwxU=;
- b=HDR4bxmJLoDc5gkZqt5Sl/s6OynO55/suMnOjaXdpswpWJw4LtxTgOgzmjLJOXJ9lz
- xIbPQrl/khGOc47oEyDnzqSJ0Us4Eby1GHcdjyPRv3DUaIEDI4gk1OacoJZtH5IzpaHK
- /jJrEG6fbwLQmK1YHH0bF3WzJc+bgbtzz9CA3br8gCA7w+dLa4p0eWa4ngG8d90tqDVl
- gwAoW2V+rckg9SY3iyrDmvG5QSJx5n6NkAmeAuanoIdY1Yp8RKsRan5lZHqIklMHNGi9
- DFBMQFD8PWvMiUOaoN/tG8bx58Z5TnXeqQyG1w7vEFz8fuhjNEIBz14XJZQtoBnjoKXA
- yLCg==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=rpWJJgFKI6bkKM30KWjndP0Ss+cNjYlI9G1G4J/3kb4=;
+ b=pymPSkS9TOK59WzpGVJp7iJMp6no1B48ko25lH84nD4I02jU12c6jm4t5HFg26TEKt
+ aWtlLR5hEt/2tzsBUM8deTEWlNhF4pkzHCr6xXvFkMjjqiw0RseUEvGPIHdbKM3sCKbQ
+ GuoGLvaGgdnMomwkC2VzeLahI2RshbnWbaqgs/zKsSs2ReSY3F0qX2ZA9Xn0l/GFGVqp
+ 4Tu3V+GBWY2Yvya0JKENlOAAGQldMjp5fw1J9VhjuMmCjnr5/IdoTlwZ7gAy/8ZIbe3r
+ BXij1aHx32rE5DTDbeRkXkNqedfmdg/o6vsOX89hWzBERM2xBIK5QYrHwxXhGCzx8NWa
+ alog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=72fHRZgGtGLL9es3UaqhYbC4zHpnaaFvl3TakxCbwxU=;
- b=DohfdtO1g5XMg3gY4jhbrfXJ9ieseKXkQji8jR+LEvsxrcXgXq/C8RUJGRUuE4cEgy
- dNGDev9NwNnNjmQ2keplVCLnQ1gGhajXFDtaI66bGIsmFe/8pICkVn0Rz0vmITKHYvU3
- sgmnTJxWjT5Ayhsw/64u/UuyX0MJlIxAk1BhmUzOHTn7JwIzdSigZqPDFAPDSsbKZ1i/
- BKmvSnL0wwZcJLCD4eKsRltY1Bx6rNXFmAUf1qv8ZfQKk+quWBSg/vv/GbnZsZAZddRu
- AkeY5vITp03vdrMdSGog52Matyk7PtkU6cqUJqFT/UU42NwmfYSg9ctlBo7n4gd4haVL
- T3Og==
-X-Gm-Message-State: AOAM533pB342/JUvOezhN/0TLqD1Bu2yZM4RTAlUqZUove6StU5dozu5
- ME+gQagm38hl8sY8c7slkAWjcpXa2zY=
-X-Google-Smtp-Source: ABdhPJwsWNiBp+jjWmJDRcILm3WFi2/oHIkUtU6ExUTHD8aSztlEAbRoathgkEqlh0y8mCrIK7QtjA==
-X-Received: by 2002:a6b:e009:: with SMTP id z9mr18388748iog.56.1627378282108; 
- Tue, 27 Jul 2021 02:31:22 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-178-184.hlrn.qwest.net.
- [97.118.178.184])
- by smtp.gmail.com with ESMTPSA id j24sm1895955ioo.16.2021.07.27.02.31.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 27 Jul 2021 02:31:21 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 27 Jul 2021 03:31:17 -0600
-Message-Id: <20210727093117.3247210-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=rpWJJgFKI6bkKM30KWjndP0Ss+cNjYlI9G1G4J/3kb4=;
+ b=ierIdIMCQoZ8DBUoqlQVBet7TPzj0APy2LNX8fhepJYE/Jn/T67wR/EGpLUjvUL02d
+ 6SXRA+p7kNbp1NYC/5vxT1SEl+7qP2HldiDtRxMYeslqmAWxq+m3YApOeNfRs9MSCCqQ
+ sJ9Kdcwq6OpUEByYpc7gpMRGQ7NUntqQuekVM/oP29RBRVBZruwpubQVSB73jxrMA8al
+ cvsR6GchG6qyc4GB8MgVYyEIEkdgYos2WFONaVbN71RChOR2FphdC3WocDexW0SfRWIx
+ GCRYel72OvQRk/N1nimuTYMCDAum/WiKomMHebCjx5xuYvdWWxMhslhVgy6Pbj3ETQM0
+ 8jQg==
+X-Gm-Message-State: AOAM532B7kt1eDry4UM+M6oYoJJ5C3MLabkteaSyWfmW4NnkvRoxpQeV
+ A1Vny5qd8xfp+D6oViKv8XVYLj9b1hNV0hqzlC8=
+X-Google-Smtp-Source: ABdhPJwJvM6NhOpkE5QByOZk64dcSpO7zarH/1JIb/KKUz3MxFOqQcfvO9nk0HQkjbpyCPKLz0qa0/CdzBDo8dWGZS8=
+X-Received: by 2002:a9d:64a:: with SMTP id 68mr14438174otn.68.1627378360167;
+ Tue, 27 Jul 2021 02:32:40 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: fix aarch64 renderer
+References: <20210724020533.2486844-1-james.hilliard1@gmail.com>
+ <20210727011954.GB83176@momiji>
+In-Reply-To: <20210727011954.GB83176@momiji>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 27 Jul 2021 03:32:29 -0600
+Message-ID: <CADvTj4pY55Nr0tuDs6gvOtOVEMadju1isW+OW=aJjjFS6GBq1Q@mail.gmail.com>
+To: Adrian Perez de Castro <aperez@igalia.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/wpewebkit: fix aarch64 renderer
  process crash
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
@@ -98,437 +96,423 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-We need to backport an aarch64 patch to prevent a crash.
-
-Fixes:
-==654== Conditional jump or move depends on uninitialised value(s)
-==654==    at 0x68CF9D0: contains (Range.h:115)
-==654==    by 0x68CF9D0: mark (JITStubRoutineSet.h:57)
-==654==    by 0x68CF9D0: mark (ConservativeRoots.cpp:127)
-==654==    by 0x68CF9D0: genericAddPointer<JSC::CompositeMarkHook> (ConservativeRoots.cpp:69)
-==654==    by 0x68CF9D0: genericAddSpan<JSC::CompositeMarkHook> (ConservativeRoots.cpp:101)
-==654==    by 0x68CF9D0: JSC::ConservativeRoots::add(void*, void*, JSC::JITStubRoutineSet&, JSC::CodeBlockSet&) (ConservativeRoots.cpp:147)
-==654==    by 0x68EA5BB: JSC::MachineThreads::gatherConservativeRoots(JSC::ConservativeRoots&, JSC::JITStubRoutineSet&, JSC::CodeBlockSet&, JSC::CurrentThreadState*, WTF::Thread*) (MachineStackMarker.cpp:202)
-==654==    by 0x68D885B: _ZZN3JSC4Heap18addCoreConstraintsEvENUlRT_E0_clINS_11SlotVisitorEEEDaS2_ (Heap.cpp:2740)
-==654==    by 0x68EFF7B: JSC::MarkingConstraint::execute(JSC::SlotVisitor&) (MarkingConstraint.cpp:58)
-==654==    by 0x68F3D83: JSC::MarkingConstraintSolver::runExecutionThread(JSC::SlotVisitor&, JSC::MarkingConstraintSolver::SchedulerPreference, WTF::ScopedLambda<WTF::Optional<unsigned int> ()>) (MarkingConstraintSolver.cpp:237)
-==654==    by 0x68D4413: JSC::Heap::runTaskInParallel(WTF::RefPtr<WTF::SharedTask<void (JSC::SlotVisitor&)>, WTF::RawPtrTraits<WTF::SharedTask<void (JSC::SlotVisitor&)> >, WTF::DefaultRefDerefTraits<WTF::SharedTask<void (JSC::SlotVisitor&)> > >) (Heap.cpp:3061)
-==654==    by 0x68F3E9F: runFunctionInParallel<JSC::MarkingConstraintSolver::execute(JSC::MarkingConstraintSolver::SchedulerPreference, WTF::ScopedLambda<WTF::Optional<unsigned int>()>)::<lambda(JSC::SlotVisitor&)> > (Heap.h:397)
-==654==    by 0x68F3E9F: JSC::MarkingConstraintSolver::execute(JSC::MarkingConstraintSolver::SchedulerPreference, WTF::ScopedLambda<WTF::Optional<unsigned int> ()>) (MarkingConstraintSolver.cpp:66)
-==654==    by 0x68F4033: JSC::MarkingConstraintSolver::drain(WTF::BitVector&) (MarkingConstraintSolver.cpp:97)
-==654==    by 0x68F4B2F: JSC::MarkingConstraintSet::executeConvergenceImpl(JSC::SlotVisitor&) (MarkingConstraintSet.cpp:114)
-==654==    by 0x68F4C6B: JSC::MarkingConstraintSet::executeConvergence(JSC::SlotVisitor&) (MarkingConstraintSet.cpp:83)
-==654==    by 0x68D9BC7: JSC::Heap::runFixpointPhase(JSC::GCConductor) (Heap.cpp:1378)
-==654==    by 0x68D9E93: runCurrentPhase (Heap.cpp:1208)
-==654==    by 0x68D9E93: JSC::Heap::runCurrentPhase(JSC::GCConductor, JSC::CurrentThreadState*) (Heap.cpp:1176)
-==654==  Uninitialised value was created by a stack allocation
-==654==    at 0x5AC3E80: JSC::ARM64Assembler::linkJump(JSC::AssemblerLabel, JSC::AssemblerLabel, JSC::ARM64Assembler::JumpType, JSC::ARM64Assembler::Condition) [clone .isra.0] (ARM64Assembler.h:2556)
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...support-for-FP-registers-plus-some-b.patch | 382 ++++++++++++++++++
- 1 file changed, 382 insertions(+)
- create mode 100644 package/webkitgtk/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
-
-diff --git a/package/webkitgtk/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch b/package/webkitgtk/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
-new file mode 100644
-index 0000000000..c8b8501bdb
---- /dev/null
-+++ b/package/webkitgtk/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
-@@ -0,0 +1,382 @@
-+From 05f6ba814422a392d59037ebe4412168da0e44db Mon Sep 17 00:00:00 2001
-+From: Mark Lam <mark.lam@apple.com>
-+Date: Tue, 15 Jun 2021 01:04:01 +0000
-+Subject: [PATCH] Add ldp and stp support for FP registers, plus some bug
-+ fixes. https://bugs.webkit.org/show_bug.cgi?id=226998 rdar://79313717
-+
-+Reviewed by Robin Morisset.
-+
-+This patch does the following:
-+1. Add ldp and stp support for FP registers.
-+   This simply entails providing wrappers that take FPRegisterID and passing true
-+   for the V bit to the underlying loadStoreRegisterPairXXX encoding function.
-+   V is for vector (aka floating point).  This will cause bit 26 in the instruction
-+   to be set indicating that it's loading / storing floating point registers.
-+
-+2. Add ARM64 disassembler support ldp and stp for FP registers.
-+   This includes fixing A64DOpcodeLoadStoreRegisterPair::mask to not exclude the
-+   FP versions of the instructions.
-+
-+3. Add ARM64Assembler query methods for determining if an immediate is encodable
-+   as the signed 12 bit immediate of ldp and stp instructions.
-+
-+4. Fix ldp and stp offset form to take an int instead of an unsigned.  The
-+   immediate it takes is a 12-bit signed int, not unsigned.
-+
-+5. In loadStoreRegisterPairXXX encoding functions used by the forms of ldp and stp,
-+   RELEASE_ASSERT that the passed in immediate is encodable.  Unlike ldur / stur,
-+   there is no form of ldp / stp that takes the offset in a register that can be
-+   used as a fail over.  Hence, if the immediate is not encodable, this is a
-+   non-recoverable event.  The client is responsible for ensuring that the offset
-+   is encodable.
-+
-+6. Added some testmasm tests for testing the offset form (as opposed to PreIndex
-+   and PostIndex forms) of ldp and stp.  We currently only use the offset form
-+   in our JITs.
-+
-+* assembler/ARM64Assembler.h:
-+(JSC::ARM64Assembler::isValidLDPImm):
-+(JSC::ARM64Assembler::isValidLDPFPImm):
-+(JSC::ARM64Assembler::ldp):
-+(JSC::ARM64Assembler::ldnp):
-+(JSC::ARM64Assembler::isValidSTPImm):
-+(JSC::ARM64Assembler::isValidSTPFPImm):
-+(JSC::ARM64Assembler::stp):
-+(JSC::ARM64Assembler::stnp):
-+(JSC::ARM64Assembler::loadStoreRegisterPairPostIndex):
-+(JSC::ARM64Assembler::loadStoreRegisterPairPreIndex):
-+(JSC::ARM64Assembler::loadStoreRegisterPairOffset):
-+(JSC::ARM64Assembler::loadStoreRegisterPairNonTemporal):
-+* assembler/AssemblerCommon.h:
-+(JSC::isValidSignedImm7):
-+* assembler/MacroAssemblerARM64.h:
-+(JSC::MacroAssemblerARM64::loadPair64):
-+(JSC::MacroAssemblerARM64::storePair64):
-+* assembler/testmasm.cpp:
-+(JSC::testLoadStorePair64Int64):
-+(JSC::testLoadStorePair64Double):
-+* disassembler/ARM64/A64DOpcode.cpp:
-+(JSC::ARM64Disassembler::A64DOpcodeLoadStoreRegisterPair::format):
-+* disassembler/ARM64/A64DOpcode.h:
-+
-+
-+
-+Canonical link: https://commits.webkit.org/238801@main
-+git-svn-id: https://svn.webkit.org/repository/webkit/trunk@278856 268f45cc-cd09-0410-ab3c-d52691b4dbfc
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1@gmail.com: backport from upstream commit
-+05f6ba814422a392d59037ebe4412168da0e44db]
-+---
-+ Source/JavaScriptCore/ChangeLog               |  61 +++
-+ .../JavaScriptCore/assembler/ARM64Assembler.h | 104 ++++-
-+ .../assembler/AssemblerCommon.h               |  11 +-
-+ .../assembler/MacroAssemblerARM64.h           |  20 +
-+ Source/JavaScriptCore/assembler/testmasm.cpp  | 437 ++++++++++++++++++
-+ .../disassembler/ARM64/A64DOpcode.cpp         |   8 +-
-+ .../disassembler/ARM64/A64DOpcode.h           |   4 +-
-+ 7 files changed, 630 insertions(+), 15 deletions(-)
-+
-+diff --git a/Source/JavaScriptCore/assembler/ARM64Assembler.h b/Source/JavaScriptCore/assembler/ARM64Assembler.h
-+index 2cc53c8ccda5..758cbe402779 100644
-+--- a/Source/JavaScriptCore/assembler/ARM64Assembler.h
-++++ b/Source/JavaScriptCore/assembler/ARM64Assembler.h
-+@@ -1,5 +1,5 @@
-+ /*
-+- * Copyright (C) 2012-2020 Apple Inc. All rights reserved.
-++ * Copyright (C) 2012-2021 Apple Inc. All rights reserved.
-+  *
-+  * Redistribution and use in source and binary forms, with or without
-+  * modification, are permitted provided that the following conditions
-+@@ -1114,6 +1114,20 @@ public:
-+         insn(0x0);
-+     }
-+ 
-++    template<int datasize>
-++    ALWAYS_INLINE static bool isValidLDPImm(int immediate)
-++    {
-++        unsigned immedShiftAmount = memPairOffsetShift(false, MEMPAIROPSIZE_INT(datasize));
-++        return isValidSignedImm7(immediate, immedShiftAmount);
-++    }
-++
-++    template<int datasize>
-++    ALWAYS_INLINE static bool isValidLDPFPImm(int immediate)
-++    {
-++        unsigned immedShiftAmount = memPairOffsetShift(true, MEMPAIROPSIZE_FP(datasize));
-++        return isValidSignedImm7(immediate, immedShiftAmount);
-++    }
-++
-+     template<int datasize>
-+     ALWAYS_INLINE void ldp(RegisterID rt, RegisterID rt2, RegisterID rn, PairPostIndex simm)
-+     {
-+@@ -1129,17 +1143,45 @@ public:
-+     }
-+ 
-+     template<int datasize>
-+-    ALWAYS_INLINE void ldp(RegisterID rt, RegisterID rt2, RegisterID rn, unsigned pimm = 0)
-++    ALWAYS_INLINE void ldp(RegisterID rt, RegisterID rt2, RegisterID rn, int simm = 0)
-++    {
-++        CHECK_DATASIZE();
-++        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_INT(datasize), false, MemOp_LOAD, simm, rn, rt, rt2));
-++    }
-++
-++    template<int datasize>
-++    ALWAYS_INLINE void ldnp(RegisterID rt, RegisterID rt2, RegisterID rn, int simm = 0)
-++    {
-++        CHECK_DATASIZE();
-++        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_INT(datasize), false, MemOp_LOAD, simm, rn, rt, rt2));
-++    }
-++
-++    template<int datasize>
-++    ALWAYS_INLINE void ldp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, PairPostIndex simm)
-++    {
-++        CHECK_DATASIZE();
-++        insn(loadStoreRegisterPairPostIndex(MEMPAIROPSIZE_FP(datasize), true, MemOp_LOAD, simm, rn, rt, rt2));
-++    }
-++
-++    template<int datasize>
-++    ALWAYS_INLINE void ldp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, PairPreIndex simm)
-++    {
-++        CHECK_DATASIZE();
-++        insn(loadStoreRegisterPairPreIndex(MEMPAIROPSIZE_FP(datasize), true, MemOp_LOAD, simm, rn, rt, rt2));
-++    }
-++
-++    template<int datasize>
-++    ALWAYS_INLINE void ldp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, int simm = 0)
-+     {
-+         CHECK_DATASIZE();
-+-        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_INT(datasize), false, MemOp_LOAD, pimm, rn, rt, rt2));
-++        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_FP(datasize), true, MemOp_LOAD, simm, rn, rt, rt2));
-+     }
-+ 
-+     template<int datasize>
-+-    ALWAYS_INLINE void ldnp(RegisterID rt, RegisterID rt2, RegisterID rn, unsigned pimm = 0)
-++    ALWAYS_INLINE void ldnp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, int simm = 0)
-+     {
-+         CHECK_DATASIZE();
-+-        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_INT(datasize), false, MemOp_LOAD, pimm, rn, rt, rt2));
-++        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_FP(datasize), true, MemOp_LOAD, simm, rn, rt, rt2));
-+     }
-+ 
-+     template<int datasize>
-+@@ -1743,6 +1785,18 @@ public:
-+         smaddl(rd, rn, rm, ARM64Registers::zr);
-+     }
-+ 
-++    template<int datasize>
-++    ALWAYS_INLINE static bool isValidSTPImm(int immediate)
-++    {
-++        return isValidLDPImm<datasize>(immediate);
-++    }
-++
-++    template<int datasize>
-++    ALWAYS_INLINE static bool isValidSTPFPImm(int immediate)
-++    {
-++        return isValidLDPFPImm<datasize>(immediate);
-++    }
-++
-+     template<int datasize>
-+     ALWAYS_INLINE void stp(RegisterID rt, RegisterID rt2, RegisterID rn, PairPostIndex simm)
-+     {
-+@@ -1758,17 +1812,45 @@ public:
-+     }
-+ 
-+     template<int datasize>
-+-    ALWAYS_INLINE void stp(RegisterID rt, RegisterID rt2, RegisterID rn, unsigned pimm = 0)
-++    ALWAYS_INLINE void stp(RegisterID rt, RegisterID rt2, RegisterID rn, int simm = 0)
-++    {
-++        CHECK_DATASIZE();
-++        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_INT(datasize), false, MemOp_STORE, simm, rn, rt, rt2));
-++    }
-++
-++    template<int datasize>
-++    ALWAYS_INLINE void stnp(RegisterID rt, RegisterID rt2, RegisterID rn, int simm = 0)
-++    {
-++        CHECK_DATASIZE();
-++        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_INT(datasize), false, MemOp_STORE, simm, rn, rt, rt2));
-++    }
-++
-++    template<int datasize>
-++    ALWAYS_INLINE void stp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, PairPostIndex simm)
-++    {
-++        CHECK_DATASIZE();
-++        insn(loadStoreRegisterPairPostIndex(MEMPAIROPSIZE_FP(datasize), true, MemOp_STORE, simm, rn, rt, rt2));
-++    }
-++
-++    template<int datasize>
-++    ALWAYS_INLINE void stp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, PairPreIndex simm)
-++    {
-++        CHECK_DATASIZE();
-++        insn(loadStoreRegisterPairPreIndex(MEMPAIROPSIZE_FP(datasize), true, MemOp_STORE, simm, rn, rt, rt2));
-++    }
-++
-++    template<int datasize>
-++    ALWAYS_INLINE void stp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, int simm = 0)
-+     {
-+         CHECK_DATASIZE();
-+-        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_INT(datasize), false, MemOp_STORE, pimm, rn, rt, rt2));
-++        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_FP(datasize), true, MemOp_STORE, simm, rn, rt, rt2));
-+     }
-+ 
-+     template<int datasize>
-+-    ALWAYS_INLINE void stnp(RegisterID rt, RegisterID rt2, RegisterID rn, unsigned pimm = 0)
-++    ALWAYS_INLINE void stnp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, int simm = 0)
-+     {
-+         CHECK_DATASIZE();
-+-        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_INT(datasize), false, MemOp_STORE, pimm, rn, rt, rt2));
-++        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_FP(datasize), true, MemOp_STORE, simm, rn, rt, rt2));
-+     }
-+ 
-+     template<int datasize>
-+@@ -3544,6 +3626,7 @@ protected:
-+         ASSERT(opc == (opc & 1)); // Only load or store, load signed 64 is handled via size.
-+         ASSERT(V || (size != MemPairOp_LoadSigned_32) || (opc == MemOp_LOAD)); // There isn't an integer store signed.
-+         unsigned immedShiftAmount = memPairOffsetShift(V, size);
-++        RELEASE_ASSERT(isValidSignedImm7(immediate, immedShiftAmount));
-+         int imm7 = immediate >> immedShiftAmount;
-+         ASSERT((imm7 << immedShiftAmount) == immediate && isInt<7>(imm7));
-+         return (0x28800000 | size << 30 | V << 26 | opc << 22 | (imm7 & 0x7f) << 15 | rt2 << 10 | xOrSp(rn) << 5 | rt);
-+@@ -3575,6 +3658,7 @@ protected:
-+         ASSERT(opc == (opc & 1)); // Only load or store, load signed 64 is handled via size.
-+         ASSERT(V || (size != MemPairOp_LoadSigned_32) || (opc == MemOp_LOAD)); // There isn't an integer store signed.
-+         unsigned immedShiftAmount = memPairOffsetShift(V, size);
-++        RELEASE_ASSERT(isValidSignedImm7(immediate, immedShiftAmount));
-+         int imm7 = immediate >> immedShiftAmount;
-+         ASSERT((imm7 << immedShiftAmount) == immediate && isInt<7>(imm7));
-+         return (0x29800000 | size << 30 | V << 26 | opc << 22 | (imm7 & 0x7f) << 15 | rt2 << 10 | xOrSp(rn) << 5 | rt);
-+@@ -3592,6 +3676,7 @@ protected:
-+         ASSERT(opc == (opc & 1)); // Only load or store, load signed 64 is handled via size.
-+         ASSERT(V || (size != MemPairOp_LoadSigned_32) || (opc == MemOp_LOAD)); // There isn't an integer store signed.
-+         unsigned immedShiftAmount = memPairOffsetShift(V, size);
-++        RELEASE_ASSERT(isValidSignedImm7(immediate, immedShiftAmount));
-+         int imm7 = immediate >> immedShiftAmount;
-+         ASSERT((imm7 << immedShiftAmount) == immediate && isInt<7>(imm7));
-+         return (0x29000000 | size << 30 | V << 26 | opc << 22 | (imm7 & 0x7f) << 15 | rt2 << 10 | xOrSp(rn) << 5 | rt);
-+@@ -3609,6 +3694,7 @@ protected:
-+         ASSERT(opc == (opc & 1)); // Only load or store, load signed 64 is handled via size.
-+         ASSERT(V || (size != MemPairOp_LoadSigned_32) || (opc == MemOp_LOAD)); // There isn't an integer store signed.
-+         unsigned immedShiftAmount = memPairOffsetShift(V, size);
-++        RELEASE_ASSERT(isValidSignedImm7(immediate, immedShiftAmount));
-+         int imm7 = immediate >> immedShiftAmount;
-+         ASSERT((imm7 << immedShiftAmount) == immediate && isInt<7>(imm7));
-+         return (0x28000000 | size << 30 | V << 26 | opc << 22 | (imm7 & 0x7f) << 15 | rt2 << 10 | xOrSp(rn) << 5 | rt);
-+diff --git a/Source/JavaScriptCore/assembler/AssemblerCommon.h b/Source/JavaScriptCore/assembler/AssemblerCommon.h
-+index a594823d6a4d..2e50ffdbc82a 100644
-+--- a/Source/JavaScriptCore/assembler/AssemblerCommon.h
-++++ b/Source/JavaScriptCore/assembler/AssemblerCommon.h
-+@@ -1,5 +1,5 @@
-+ /*
-+- * Copyright (C) 2012-2019 Apple Inc. All rights reserved.
-++ * Copyright (C) 2012-2021 Apple Inc. All rights reserved.
-+  *
-+  * Redistribution and use in source and binary forms, with or without
-+  * modification, are permitted provided that the following conditions
-+@@ -74,6 +74,15 @@ ALWAYS_INLINE bool isValidSignedImm9(int32_t value)
-+     return isInt9(value);
-+ }
-+ 
-++ALWAYS_INLINE bool isValidSignedImm7(int32_t value, int alignmentShiftAmount)
-++{
-++    constexpr int32_t disallowedHighBits = 32 - 7;
-++    int32_t shiftedValue = value >> alignmentShiftAmount;
-++    bool fitsIn7Bits = shiftedValue == ((shiftedValue << disallowedHighBits) >> disallowedHighBits);
-++    bool hasCorrectAlignment = value == (shiftedValue << alignmentShiftAmount);
-++    return fitsIn7Bits && hasCorrectAlignment;
-++}
-++
-+ class ARM64LogicalImmediate {
-+ public:
-+     static ARM64LogicalImmediate create32(uint32_t value)
-+diff --git a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.h b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.h
-+index f86aec1c5400..14e477fde3b8 100644
-+--- a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.h
-++++ b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.h
-+@@ -1244,6 +1244,16 @@ public:
-+         m_assembler.ldnp<64>(dest1, dest2, src, offset.m_value);
-+     }
-+ 
-++    void loadPair64(RegisterID src, FPRegisterID dest1, FPRegisterID dest2)
-++    {
-++        loadPair64(src, TrustedImm32(0), dest1, dest2);
-++    }
-++
-++    void loadPair64(RegisterID src, TrustedImm32 offset, FPRegisterID dest1, FPRegisterID dest2)
-++    {
-++        m_assembler.ldp<64>(dest1, dest2, src, offset.m_value);
-++    }
-++
-+     void abortWithReason(AbortReason reason)
-+     {
-+         // It is safe to use dataTempRegister directly since this is a crashing JIT Assert.
-+@@ -1568,6 +1578,16 @@ public:
-+         m_assembler.stnp<64>(src1, src2, dest, offset.m_value);
-+     }
-+ 
-++    void storePair64(FPRegisterID src1, FPRegisterID src2, RegisterID dest)
-++    {
-++        storePair64(src1, src2, dest, TrustedImm32(0));
-++    }
-++
-++    void storePair64(FPRegisterID src1, FPRegisterID src2, RegisterID dest, TrustedImm32 offset)
-++    {
-++        m_assembler.stp<64>(src1, src2, dest, offset.m_value);
-++    }
-++
-+     void store32(RegisterID src, ImplicitAddress address)
-+     {
-+         if (tryStoreWithOffset<32>(src, address.base, address.offset))
-+diff --git a/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.cpp b/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.cpp
-+index 247c79dcb428..dfe09b671470 100644
-+--- a/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.cpp
-++++ b/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.cpp
-+@@ -1,5 +1,5 @@
-+ /*
-+- * Copyright (C) 2012, 2016 Apple Inc. All rights reserved.
-++ * Copyright (C) 2012-2021 Apple Inc. All rights reserved.
-+  *
-+  * Redistribution and use in source and binary forms, with or without
-+  * modification, are permitted provided that the following conditions
-+@@ -72,6 +72,8 @@ static const OpcodeGroupInitializer opcodeGroupList[] = {
-+     OPCODE_GROUP_ENTRY(0x0a, A64DOpcodeLogicalShiftedRegister),
-+     OPCODE_GROUP_ENTRY(0x0b, A64DOpcodeAddSubtractExtendedRegister),
-+     OPCODE_GROUP_ENTRY(0x0b, A64DOpcodeAddSubtractShiftedRegister),
-++    OPCODE_GROUP_ENTRY(0x0c, A64DOpcodeLoadStoreRegisterPair),
-++    OPCODE_GROUP_ENTRY(0x0d, A64DOpcodeLoadStoreRegisterPair),
-+     OPCODE_GROUP_ENTRY(0x11, A64DOpcodeAddSubtractImmediate),
-+     OPCODE_GROUP_ENTRY(0x12, A64DOpcodeMoveWide),
-+     OPCODE_GROUP_ENTRY(0x12, A64DOpcodeLogicalImmediate),
-+@@ -1363,9 +1365,9 @@ const char* A64DOpcodeLoadStoreRegisterPair::format()
-+     appendInstructionName(thisOpName);
-+     unsigned offsetShift;
-+     if (vBit()) {
-+-        appendFPRegisterName(rt(), size());
-++        appendFPRegisterName(rt(), size() + 2);
-+         appendSeparator();
-+-        appendFPRegisterName(rt2(), size());
-++        appendFPRegisterName(rt2(), size() + 2);
-+         offsetShift = size() + 2;
-+     } else {
-+         if (!lBit())
-+diff --git a/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.h b/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.h
-+index e071babb8e01..fd9db7cae58e 100644
-+--- a/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.h
-++++ b/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.h
-+@@ -1,5 +1,5 @@
-+ /*
-+- * Copyright (C) 2012-2019 Apple Inc. All rights reserved.
-++ * Copyright (C) 2012-2021 Apple Inc. All rights reserved.
-+  *
-+  * Redistribution and use in source and binary forms, with or without
-+  * modification, are permitted provided that the following conditions
-+@@ -787,7 +787,7 @@ public:
-+ 
-+ class A64DOpcodeLoadStoreRegisterPair : public A64DOpcodeLoadStore {
-+ public:
-+-    static constexpr uint32_t mask = 0x3a000000;
-++    static constexpr uint32_t mask = 0x38000000;
-+     static constexpr uint32_t pattern = 0x28000000;
-+ 
-+     DEFINE_STATIC_FORMAT(A64DOpcodeLoadStoreRegisterPair, thisObj);
-+-- 
-+2.25.1
-+
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+T24gTW9uLCBKdWwgMjYsIDIwMjEgYXQgNDoyMCBQTSBBZHJpYW4gUGVyZXogZGUgQ2FzdHJvCjxh
+cGVyZXpAaWdhbGlhLmNvbT4gd3JvdGU6Cj4KPiBIaSBKYW1lcywKPgo+IE9uIEZyaSwgMjMgSnVs
+IDIwMjEgMjA6MDU6MzMgLTA2MDAgSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFp
+bC5jb20+IHdyb3RlOgo+ID4gV2UgbmVlZCB0byBiYWNrcG9ydCBhbiBhYXJjaDY0IHBhdGNoIHRv
+IHByZXZlbnQgYSBjcmFzaC4KPiA+Cj4gPiBGaXhlczoKPiA+ID09NjU0PT0gQ29uZGl0aW9uYWwg
+anVtcCBvciBtb3ZlIGRlcGVuZHMgb24gdW5pbml0aWFsaXNlZCB2YWx1ZShzKQo+ID4gPT02NTQ9
+PSAgICBhdCAweDY4Q0Y5RDA6IGNvbnRhaW5zIChSYW5nZS5oOjExNSkKPiA+ID09NjU0PT0gICAg
+YnkgMHg2OENGOUQwOiBtYXJrIChKSVRTdHViUm91dGluZVNldC5oOjU3KQo+ID4gPT02NTQ9PSAg
+ICBieSAweDY4Q0Y5RDA6IG1hcmsgKENvbnNlcnZhdGl2ZVJvb3RzLmNwcDoxMjcpCj4gPiA9PTY1
+ND09ICAgIGJ5IDB4NjhDRjlEMDogZ2VuZXJpY0FkZFBvaW50ZXI8SlNDOjpDb21wb3NpdGVNYXJr
+SG9vaz4gKENvbnNlcnZhdGl2ZVJvb3RzLmNwcDo2OSkKPiA+ID09NjU0PT0gICAgYnkgMHg2OENG
+OUQwOiBnZW5lcmljQWRkU3BhbjxKU0M6OkNvbXBvc2l0ZU1hcmtIb29rPiAoQ29uc2VydmF0aXZl
+Um9vdHMuY3BwOjEwMSkKPiA+ID09NjU0PT0gICAgYnkgMHg2OENGOUQwOiBKU0M6OkNvbnNlcnZh
+dGl2ZVJvb3RzOjphZGQodm9pZCosIHZvaWQqLCBKU0M6OkpJVFN0dWJSb3V0aW5lU2V0JiwgSlND
+OjpDb2RlQmxvY2tTZXQmKSAoQ29uc2VydmF0aXZlUm9vdHMuY3BwOjE0NykKPiA+ID09NjU0PT0g
+ICAgYnkgMHg2OEVBNUJCOiBKU0M6Ok1hY2hpbmVUaHJlYWRzOjpnYXRoZXJDb25zZXJ2YXRpdmVS
+b290cyhKU0M6OkNvbnNlcnZhdGl2ZVJvb3RzJiwgSlNDOjpKSVRTdHViUm91dGluZVNldCYsIEpT
+Qzo6Q29kZUJsb2NrU2V0JiwgSlNDOjpDdXJyZW50VGhyZWFkU3RhdGUqLCBXVEY6OlRocmVhZCop
+IChNYWNoaW5lU3RhY2tNYXJrZXIuY3BwOjIwMikKPiA+ID09NjU0PT0gICAgYnkgMHg2OEQ4ODVC
+OiBfWlpOM0pTQzRIZWFwMThhZGRDb3JlQ29uc3RyYWludHNFdkVOVWxSVF9FMF9jbElOU18xMVNs
+b3RWaXNpdG9yRUVFRGFTMl8gKEhlYXAuY3BwOjI3NDApCj4gPiA9PTY1ND09ICAgIGJ5IDB4NjhF
+RkY3QjogSlNDOjpNYXJraW5nQ29uc3RyYWludDo6ZXhlY3V0ZShKU0M6OlNsb3RWaXNpdG9yJikg
+KE1hcmtpbmdDb25zdHJhaW50LmNwcDo1OCkKPiA+ID09NjU0PT0gICAgYnkgMHg2OEYzRDgzOiBK
+U0M6Ok1hcmtpbmdDb25zdHJhaW50U29sdmVyOjpydW5FeGVjdXRpb25UaHJlYWQoSlNDOjpTbG90
+VmlzaXRvciYsIEpTQzo6TWFya2luZ0NvbnN0cmFpbnRTb2x2ZXI6OlNjaGVkdWxlclByZWZlcmVu
+Y2UsIFdURjo6U2NvcGVkTGFtYmRhPFdURjo6T3B0aW9uYWw8dW5zaWduZWQgaW50PiAoKT4pIChN
+YXJraW5nQ29uc3RyYWludFNvbHZlci5jcHA6MjM3KQo+ID4gPT02NTQ9PSAgICBieSAweDY4RDQ0
+MTM6IEpTQzo6SGVhcDo6cnVuVGFza0luUGFyYWxsZWwoV1RGOjpSZWZQdHI8V1RGOjpTaGFyZWRU
+YXNrPHZvaWQgKEpTQzo6U2xvdFZpc2l0b3ImKT4sIFdURjo6UmF3UHRyVHJhaXRzPFdURjo6U2hh
+cmVkVGFzazx2b2lkIChKU0M6OlNsb3RWaXNpdG9yJik+ID4sIFdURjo6RGVmYXVsdFJlZkRlcmVm
+VHJhaXRzPFdURjo6U2hhcmVkVGFzazx2b2lkIChKU0M6OlNsb3RWaXNpdG9yJik+ID4gPikgKEhl
+YXAuY3BwOjMwNjEpCj4gPiA9PTY1ND09ICAgIGJ5IDB4NjhGM0U5RjogcnVuRnVuY3Rpb25JblBh
+cmFsbGVsPEpTQzo6TWFya2luZ0NvbnN0cmFpbnRTb2x2ZXI6OmV4ZWN1dGUoSlNDOjpNYXJraW5n
+Q29uc3RyYWludFNvbHZlcjo6U2NoZWR1bGVyUHJlZmVyZW5jZSwgV1RGOjpTY29wZWRMYW1iZGE8
+V1RGOjpPcHRpb25hbDx1bnNpZ25lZCBpbnQ+KCk+KTo6PGxhbWJkYShKU0M6OlNsb3RWaXNpdG9y
+Jik+ID4gKEhlYXAuaDozOTcpCj4gPiA9PTY1ND09ICAgIGJ5IDB4NjhGM0U5RjogSlNDOjpNYXJr
+aW5nQ29uc3RyYWludFNvbHZlcjo6ZXhlY3V0ZShKU0M6Ok1hcmtpbmdDb25zdHJhaW50U29sdmVy
+OjpTY2hlZHVsZXJQcmVmZXJlbmNlLCBXVEY6OlNjb3BlZExhbWJkYTxXVEY6Ok9wdGlvbmFsPHVu
+c2lnbmVkIGludD4gKCk+KSAoTWFya2luZ0NvbnN0cmFpbnRTb2x2ZXIuY3BwOjY2KQo+ID4gPT02
+NTQ9PSAgICBieSAweDY4RjQwMzM6IEpTQzo6TWFya2luZ0NvbnN0cmFpbnRTb2x2ZXI6OmRyYWlu
+KFdURjo6Qml0VmVjdG9yJikgKE1hcmtpbmdDb25zdHJhaW50U29sdmVyLmNwcDo5NykKPiA+ID09
+NjU0PT0gICAgYnkgMHg2OEY0QjJGOiBKU0M6Ok1hcmtpbmdDb25zdHJhaW50U2V0OjpleGVjdXRl
+Q29udmVyZ2VuY2VJbXBsKEpTQzo6U2xvdFZpc2l0b3ImKSAoTWFya2luZ0NvbnN0cmFpbnRTZXQu
+Y3BwOjExNCkKPiA+ID09NjU0PT0gICAgYnkgMHg2OEY0QzZCOiBKU0M6Ok1hcmtpbmdDb25zdHJh
+aW50U2V0OjpleGVjdXRlQ29udmVyZ2VuY2UoSlNDOjpTbG90VmlzaXRvciYpIChNYXJraW5nQ29u
+c3RyYWludFNldC5jcHA6ODMpCj4gPiA9PTY1ND09ICAgIGJ5IDB4NjhEOUJDNzogSlNDOjpIZWFw
+OjpydW5GaXhwb2ludFBoYXNlKEpTQzo6R0NDb25kdWN0b3IpIChIZWFwLmNwcDoxMzc4KQo+ID4g
+PT02NTQ9PSAgICBieSAweDY4RDlFOTM6IHJ1bkN1cnJlbnRQaGFzZSAoSGVhcC5jcHA6MTIwOCkK
+PiA+ID09NjU0PT0gICAgYnkgMHg2OEQ5RTkzOiBKU0M6OkhlYXA6OnJ1bkN1cnJlbnRQaGFzZShK
+U0M6OkdDQ29uZHVjdG9yLCBKU0M6OkN1cnJlbnRUaHJlYWRTdGF0ZSopIChIZWFwLmNwcDoxMTc2
+KQo+ID4gPT02NTQ9PSAgVW5pbml0aWFsaXNlZCB2YWx1ZSB3YXMgY3JlYXRlZCBieSBhIHN0YWNr
+IGFsbG9jYXRpb24KPiA+ID09NjU0PT0gICAgYXQgMHg1QUMzRTgwOiBKU0M6OkFSTTY0QXNzZW1i
+bGVyOjpsaW5rSnVtcChKU0M6OkFzc2VtYmxlckxhYmVsLCBKU0M6OkFzc2VtYmxlckxhYmVsLCBK
+U0M6OkFSTTY0QXNzZW1ibGVyOjpKdW1wVHlwZSwgSlNDOjpBUk02NEFzc2VtYmxlcjo6Q29uZGl0
+aW9uKSBbY2xvbmUgLmlzcmEuMF0gKEFSTTY0QXNzZW1ibGVyLmg6MjU1NikKPiA+Cj4gPiBTaWdu
+ZWQtb2ZmLWJ5OiBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbT4KPiA+
+IC0tLQo+ID4gIC4uLnN1cHBvcnQtZm9yLUZQLXJlZ2lzdGVycy1wbHVzLXNvbWUtYi5wYXRjaCB8
+IDM4MiArKysrKysrKysrKysrKysrKysKPiA+ICAxIGZpbGUgY2hhbmdlZCwgMzgyIGluc2VydGlv
+bnMoKykKPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS93cGV3ZWJraXQvMDAwMS1BZGQt
+bGRwLWFuZC1zdHAtc3VwcG9ydC1mb3ItRlAtcmVnaXN0ZXJzLXBsdXMtc29tZS1iLnBhdGNoCj4g
+Pgo+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvd3Bld2Via2l0LzAwMDEtQWRkLWxkcC1hbmQtc3Rw
+LXN1cHBvcnQtZm9yLUZQLXJlZ2lzdGVycy1wbHVzLXNvbWUtYi5wYXRjaCBiL3BhY2thZ2Uvd3Bl
+d2Via2l0LzAwMDEtQWRkLWxkcC1hbmQtc3RwLXN1cHBvcnQtZm9yLUZQLXJlZ2lzdGVycy1wbHVz
+LXNvbWUtYi5wYXRjaAo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDAwMDAwMDAw
+MDAuLmM4Yjg1MDFiZGIKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL3BhY2thZ2Uvd3Bld2Vi
+a2l0LzAwMDEtQWRkLWxkcC1hbmQtc3RwLXN1cHBvcnQtZm9yLUZQLXJlZ2lzdGVycy1wbHVzLXNv
+bWUtYi5wYXRjaAo+ID4gQEAgLTAsMCArMSwzODIgQEAKPiA+ICtGcm9tIDA1ZjZiYTgxNDQyMmEz
+OTJkNTkwMzdlYmU0NDEyMTY4ZGEwZTQ0ZGIgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gPiAr
+RnJvbTogTWFyayBMYW0gPG1hcmsubGFtQGFwcGxlLmNvbT4KPiA+ICtEYXRlOiBUdWUsIDE1IEp1
+biAyMDIxIDAxOjA0OjAxICswMDAwCj4gPiArU3ViamVjdDogW1BBVENIXSBBZGQgbGRwIGFuZCBz
+dHAgc3VwcG9ydCBmb3IgRlAgcmVnaXN0ZXJzLCBwbHVzIHNvbWUgYnVnCj4gPiArIGZpeGVzLiBo
+dHRwczovL2J1Z3Mud2Via2l0Lm9yZy9zaG93X2J1Zy5jZ2k/aWQ9MjI2OTk4IHJkYXI6Ly83OTMx
+MzcxNwo+Cj4gR29vZCBmaW5kLCBJIGhhdmUgd3JpdHRlbiB0aGlzIG9uZSB0byB0aGUgbGlzdCBv
+ZiBwYXRjaGVzIHRvIGJhY2twb3J0IGZvcgo+IHRoZSBuZXh0IHN0YWJsZSByZWxlYXNlICh0aGF0
+IHdpbGwgYmUgMi4zMi40IFsxXSkuIFdlIHdvdWxkIHdhbnQgdGhlIHNhbWUKPiBwYXRjaCBpbnRv
+IOKAnHBhY2thZ2Uvd2Via2l0Z3RrL+KAnSwgd291bGQgeW91IGxpa2UgdG8gc2VuZCBhIHBhdGNo
+IGZvciB0aGF0PwoKU2VudDoKaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1
+aWxkcm9vdC9wYXRjaC8yMDIxMDcyNzA5MzExNy4zMjQ3MjEwLTEtamFtZXMuaGlsbGlhcmQxQGdt
+YWlsLmNvbS8KCj4KPiBDaGVlcnMsCj4gLUFkcmlhbgo+Cj4gLS0tCj4gWzFdIGh0dHBzOi8vdHJh
+Yy53ZWJraXQub3JnL3dpa2kvV2ViS2l0R1RLLzIuMzIueCNQcm9wb3NlZG1lcmdlc2ZvcjIuMzIu
+NAo+Cj4KPiA+ICtSZXZpZXdlZCBieSBSb2JpbiBNb3Jpc3NldC4KPiA+ICsKPiA+ICtUaGlzIHBh
+dGNoIGRvZXMgdGhlIGZvbGxvd2luZzoKPiA+ICsxLiBBZGQgbGRwIGFuZCBzdHAgc3VwcG9ydCBm
+b3IgRlAgcmVnaXN0ZXJzLgo+ID4gKyAgIFRoaXMgc2ltcGx5IGVudGFpbHMgcHJvdmlkaW5nIHdy
+YXBwZXJzIHRoYXQgdGFrZSBGUFJlZ2lzdGVySUQgYW5kIHBhc3NpbmcgdHJ1ZQo+ID4gKyAgIGZv
+ciB0aGUgViBiaXQgdG8gdGhlIHVuZGVybHlpbmcgbG9hZFN0b3JlUmVnaXN0ZXJQYWlyWFhYIGVu
+Y29kaW5nIGZ1bmN0aW9uLgo+ID4gKyAgIFYgaXMgZm9yIHZlY3RvciAoYWthIGZsb2F0aW5nIHBv
+aW50KS4gIFRoaXMgd2lsbCBjYXVzZSBiaXQgMjYgaW4gdGhlIGluc3RydWN0aW9uCj4gPiArICAg
+dG8gYmUgc2V0IGluZGljYXRpbmcgdGhhdCBpdCdzIGxvYWRpbmcgLyBzdG9yaW5nIGZsb2F0aW5n
+IHBvaW50IHJlZ2lzdGVycy4KPiA+ICsKPiA+ICsyLiBBZGQgQVJNNjQgZGlzYXNzZW1ibGVyIHN1
+cHBvcnQgbGRwIGFuZCBzdHAgZm9yIEZQIHJlZ2lzdGVycy4KPiA+ICsgICBUaGlzIGluY2x1ZGVz
+IGZpeGluZyBBNjRET3Bjb2RlTG9hZFN0b3JlUmVnaXN0ZXJQYWlyOjptYXNrIHRvIG5vdCBleGNs
+dWRlIHRoZQo+ID4gKyAgIEZQIHZlcnNpb25zIG9mIHRoZSBpbnN0cnVjdGlvbnMuCj4gPiArCj4g
+PiArMy4gQWRkIEFSTTY0QXNzZW1ibGVyIHF1ZXJ5IG1ldGhvZHMgZm9yIGRldGVybWluaW5nIGlm
+IGFuIGltbWVkaWF0ZSBpcyBlbmNvZGFibGUKPiA+ICsgICBhcyB0aGUgc2lnbmVkIDEyIGJpdCBp
+bW1lZGlhdGUgb2YgbGRwIGFuZCBzdHAgaW5zdHJ1Y3Rpb25zLgo+ID4gKwo+ID4gKzQuIEZpeCBs
+ZHAgYW5kIHN0cCBvZmZzZXQgZm9ybSB0byB0YWtlIGFuIGludCBpbnN0ZWFkIG9mIGFuIHVuc2ln
+bmVkLiAgVGhlCj4gPiArICAgaW1tZWRpYXRlIGl0IHRha2VzIGlzIGEgMTItYml0IHNpZ25lZCBp
+bnQsIG5vdCB1bnNpZ25lZC4KPiA+ICsKPiA+ICs1LiBJbiBsb2FkU3RvcmVSZWdpc3RlclBhaXJY
+WFggZW5jb2RpbmcgZnVuY3Rpb25zIHVzZWQgYnkgdGhlIGZvcm1zIG9mIGxkcCBhbmQgc3RwLAo+
+ID4gKyAgIFJFTEVBU0VfQVNTRVJUIHRoYXQgdGhlIHBhc3NlZCBpbiBpbW1lZGlhdGUgaXMgZW5j
+b2RhYmxlLiAgVW5saWtlIGxkdXIgLyBzdHVyLAo+ID4gKyAgIHRoZXJlIGlzIG5vIGZvcm0gb2Yg
+bGRwIC8gc3RwIHRoYXQgdGFrZXMgdGhlIG9mZnNldCBpbiBhIHJlZ2lzdGVyIHRoYXQgY2FuIGJl
+Cj4gPiArICAgdXNlZCBhcyBhIGZhaWwgb3Zlci4gIEhlbmNlLCBpZiB0aGUgaW1tZWRpYXRlIGlz
+IG5vdCBlbmNvZGFibGUsIHRoaXMgaXMgYQo+ID4gKyAgIG5vbi1yZWNvdmVyYWJsZSBldmVudC4g
+IFRoZSBjbGllbnQgaXMgcmVzcG9uc2libGUgZm9yIGVuc3VyaW5nIHRoYXQgdGhlIG9mZnNldAo+
+ID4gKyAgIGlzIGVuY29kYWJsZS4KPiA+ICsKPiA+ICs2LiBBZGRlZCBzb21lIHRlc3RtYXNtIHRl
+c3RzIGZvciB0ZXN0aW5nIHRoZSBvZmZzZXQgZm9ybSAoYXMgb3Bwb3NlZCB0byBQcmVJbmRleAo+
+ID4gKyAgIGFuZCBQb3N0SW5kZXggZm9ybXMpIG9mIGxkcCBhbmQgc3RwLiAgV2UgY3VycmVudGx5
+IG9ubHkgdXNlIHRoZSBvZmZzZXQgZm9ybQo+ID4gKyAgIGluIG91ciBKSVRzLgo+ID4gKwo+ID4g
+KyogYXNzZW1ibGVyL0FSTTY0QXNzZW1ibGVyLmg6Cj4gPiArKEpTQzo6QVJNNjRBc3NlbWJsZXI6
+OmlzVmFsaWRMRFBJbW0pOgo+ID4gKyhKU0M6OkFSTTY0QXNzZW1ibGVyOjppc1ZhbGlkTERQRlBJ
+bW0pOgo+ID4gKyhKU0M6OkFSTTY0QXNzZW1ibGVyOjpsZHApOgo+ID4gKyhKU0M6OkFSTTY0QXNz
+ZW1ibGVyOjpsZG5wKToKPiA+ICsoSlNDOjpBUk02NEFzc2VtYmxlcjo6aXNWYWxpZFNUUEltbSk6
+Cj4gPiArKEpTQzo6QVJNNjRBc3NlbWJsZXI6OmlzVmFsaWRTVFBGUEltbSk6Cj4gPiArKEpTQzo6
+QVJNNjRBc3NlbWJsZXI6OnN0cCk6Cj4gPiArKEpTQzo6QVJNNjRBc3NlbWJsZXI6OnN0bnApOgo+
+ID4gKyhKU0M6OkFSTTY0QXNzZW1ibGVyOjpsb2FkU3RvcmVSZWdpc3RlclBhaXJQb3N0SW5kZXgp
+Ogo+ID4gKyhKU0M6OkFSTTY0QXNzZW1ibGVyOjpsb2FkU3RvcmVSZWdpc3RlclBhaXJQcmVJbmRl
+eCk6Cj4gPiArKEpTQzo6QVJNNjRBc3NlbWJsZXI6OmxvYWRTdG9yZVJlZ2lzdGVyUGFpck9mZnNl
+dCk6Cj4gPiArKEpTQzo6QVJNNjRBc3NlbWJsZXI6OmxvYWRTdG9yZVJlZ2lzdGVyUGFpck5vblRl
+bXBvcmFsKToKPiA+ICsqIGFzc2VtYmxlci9Bc3NlbWJsZXJDb21tb24uaDoKPiA+ICsoSlNDOjpp
+c1ZhbGlkU2lnbmVkSW1tNyk6Cj4gPiArKiBhc3NlbWJsZXIvTWFjcm9Bc3NlbWJsZXJBUk02NC5o
+Ogo+ID4gKyhKU0M6Ok1hY3JvQXNzZW1ibGVyQVJNNjQ6OmxvYWRQYWlyNjQpOgo+ID4gKyhKU0M6
+Ok1hY3JvQXNzZW1ibGVyQVJNNjQ6OnN0b3JlUGFpcjY0KToKPiA+ICsqIGFzc2VtYmxlci90ZXN0
+bWFzbS5jcHA6Cj4gPiArKEpTQzo6dGVzdExvYWRTdG9yZVBhaXI2NEludDY0KToKPiA+ICsoSlND
+Ojp0ZXN0TG9hZFN0b3JlUGFpcjY0RG91YmxlKToKPiA+ICsqIGRpc2Fzc2VtYmxlci9BUk02NC9B
+NjRET3Bjb2RlLmNwcDoKPiA+ICsoSlNDOjpBUk02NERpc2Fzc2VtYmxlcjo6QTY0RE9wY29kZUxv
+YWRTdG9yZVJlZ2lzdGVyUGFpcjo6Zm9ybWF0KToKPiA+ICsqIGRpc2Fzc2VtYmxlci9BUk02NC9B
+NjRET3Bjb2RlLmg6Cj4gPiArCj4gPiArCj4gPiArCj4gPiArQ2Fub25pY2FsIGxpbms6IGh0dHBz
+Oi8vY29tbWl0cy53ZWJraXQub3JnLzIzODgwMUBtYWluCj4gPiArZ2l0LXN2bi1pZDogaHR0cHM6
+Ly9zdm4ud2Via2l0Lm9yZy9yZXBvc2l0b3J5L3dlYmtpdC90cnVua0AyNzg4NTYgMjY4ZjQ1Y2Mt
+Y2QwOS0wNDEwLWFiM2MtZDUyNjkxYjRkYmZjCj4gPiArCj4gPiArU2lnbmVkLW9mZi1ieTogSmFt
+ZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+Cj4gPiArW2phbWVzLmhpbGxp
+YXJkMUBnbWFpbC5jb206IGJhY2twb3J0IGZyb20gdXBzdHJlYW0gY29tbWl0Cj4gPiArMDVmNmJh
+ODE0NDIyYTM5MmQ1OTAzN2ViZTQ0MTIxNjhkYTBlNDRkYl0KPiA+ICstLS0KPiA+ICsgU291cmNl
+L0phdmFTY3JpcHRDb3JlL0NoYW5nZUxvZyAgICAgICAgICAgICAgIHwgIDYxICsrKwo+ID4gKyAu
+Li4vSmF2YVNjcmlwdENvcmUvYXNzZW1ibGVyL0FSTTY0QXNzZW1ibGVyLmggfCAxMDQgKysrKy0K
+PiA+ICsgLi4uL2Fzc2VtYmxlci9Bc3NlbWJsZXJDb21tb24uaCAgICAgICAgICAgICAgIHwgIDEx
+ICstCj4gPiArIC4uLi9hc3NlbWJsZXIvTWFjcm9Bc3NlbWJsZXJBUk02NC5oICAgICAgICAgICB8
+ICAyMCArCj4gPiArIFNvdXJjZS9KYXZhU2NyaXB0Q29yZS9hc3NlbWJsZXIvdGVzdG1hc20uY3Bw
+ICB8IDQzNyArKysrKysrKysrKysrKysrKysKPiA+ICsgLi4uL2Rpc2Fzc2VtYmxlci9BUk02NC9B
+NjRET3Bjb2RlLmNwcCAgICAgICAgIHwgICA4ICstCj4gPiArIC4uLi9kaXNhc3NlbWJsZXIvQVJN
+NjQvQTY0RE9wY29kZS5oICAgICAgICAgICB8ICAgNCArLQo+ID4gKyA3IGZpbGVzIGNoYW5nZWQs
+IDYzMCBpbnNlcnRpb25zKCspLCAxNSBkZWxldGlvbnMoLSkKPiA+ICsKPiA+ICtkaWZmIC0tZ2l0
+IGEvU291cmNlL0phdmFTY3JpcHRDb3JlL2Fzc2VtYmxlci9BUk02NEFzc2VtYmxlci5oIGIvU291
+cmNlL0phdmFTY3JpcHRDb3JlL2Fzc2VtYmxlci9BUk02NEFzc2VtYmxlci5oCj4gPiAraW5kZXgg
+MmNjNTNjOGNjZGE1Li43NThjYmU0MDI3NzkgMTAwNjQ0Cj4gPiArLS0tIGEvU291cmNlL0phdmFT
+Y3JpcHRDb3JlL2Fzc2VtYmxlci9BUk02NEFzc2VtYmxlci5oCj4gPiArKysrIGIvU291cmNlL0ph
+dmFTY3JpcHRDb3JlL2Fzc2VtYmxlci9BUk02NEFzc2VtYmxlci5oCj4gPiArQEAgLTEsNSArMSw1
+IEBACj4gPiArIC8qCj4gPiArLSAqIENvcHlyaWdodCAoQykgMjAxMi0yMDIwIEFwcGxlIEluYy4g
+QWxsIHJpZ2h0cyByZXNlcnZlZC4KPiA+ICsrICogQ29weXJpZ2h0IChDKSAyMDEyLTIwMjEgQXBw
+bGUgSW5jLiBBbGwgcmlnaHRzIHJlc2VydmVkLgo+ID4gKyAgKgo+ID4gKyAgKiBSZWRpc3RyaWJ1
+dGlvbiBhbmQgdXNlIGluIHNvdXJjZSBhbmQgYmluYXJ5IGZvcm1zLCB3aXRoIG9yIHdpdGhvdXQK
+PiA+ICsgICogbW9kaWZpY2F0aW9uLCBhcmUgcGVybWl0dGVkIHByb3ZpZGVkIHRoYXQgdGhlIGZv
+bGxvd2luZyBjb25kaXRpb25zCj4gPiArQEAgLTExMTQsNiArMTExNCwyMCBAQCBwdWJsaWM6Cj4g
+PiArICAgICAgICAgaW5zbigweDApOwo+ID4gKyAgICAgfQo+ID4gKwo+ID4gKysgICAgdGVtcGxh
+dGU8aW50IGRhdGFzaXplPgo+ID4gKysgICAgQUxXQVlTX0lOTElORSBzdGF0aWMgYm9vbCBpc1Zh
+bGlkTERQSW1tKGludCBpbW1lZGlhdGUpCj4gPiArKyAgICB7Cj4gPiArKyAgICAgICAgdW5zaWdu
+ZWQgaW1tZWRTaGlmdEFtb3VudCA9IG1lbVBhaXJPZmZzZXRTaGlmdChmYWxzZSwgTUVNUEFJUk9Q
+U0laRV9JTlQoZGF0YXNpemUpKTsKPiA+ICsrICAgICAgICByZXR1cm4gaXNWYWxpZFNpZ25lZElt
+bTcoaW1tZWRpYXRlLCBpbW1lZFNoaWZ0QW1vdW50KTsKPiA+ICsrICAgIH0KPiA+ICsrCj4gPiAr
+KyAgICB0ZW1wbGF0ZTxpbnQgZGF0YXNpemU+Cj4gPiArKyAgICBBTFdBWVNfSU5MSU5FIHN0YXRp
+YyBib29sIGlzVmFsaWRMRFBGUEltbShpbnQgaW1tZWRpYXRlKQo+ID4gKysgICAgewo+ID4gKysg
+ICAgICAgIHVuc2lnbmVkIGltbWVkU2hpZnRBbW91bnQgPSBtZW1QYWlyT2Zmc2V0U2hpZnQodHJ1
+ZSwgTUVNUEFJUk9QU0laRV9GUChkYXRhc2l6ZSkpOwo+ID4gKysgICAgICAgIHJldHVybiBpc1Zh
+bGlkU2lnbmVkSW1tNyhpbW1lZGlhdGUsIGltbWVkU2hpZnRBbW91bnQpOwo+ID4gKysgICAgfQo+
+ID4gKysKPiA+ICsgICAgIHRlbXBsYXRlPGludCBkYXRhc2l6ZT4KPiA+ICsgICAgIEFMV0FZU19J
+TkxJTkUgdm9pZCBsZHAoUmVnaXN0ZXJJRCBydCwgUmVnaXN0ZXJJRCBydDIsIFJlZ2lzdGVySUQg
+cm4sIFBhaXJQb3N0SW5kZXggc2ltbSkKPiA+ICsgICAgIHsKPiA+ICtAQCAtMTEyOSwxNyArMTE0
+Myw0NSBAQCBwdWJsaWM6Cj4gPiArICAgICB9Cj4gPiArCj4gPiArICAgICB0ZW1wbGF0ZTxpbnQg
+ZGF0YXNpemU+Cj4gPiArLSAgICBBTFdBWVNfSU5MSU5FIHZvaWQgbGRwKFJlZ2lzdGVySUQgcnQs
+IFJlZ2lzdGVySUQgcnQyLCBSZWdpc3RlcklEIHJuLCB1bnNpZ25lZCBwaW1tID0gMCkKPiA+ICsr
+ICAgIEFMV0FZU19JTkxJTkUgdm9pZCBsZHAoUmVnaXN0ZXJJRCBydCwgUmVnaXN0ZXJJRCBydDIs
+IFJlZ2lzdGVySUQgcm4sIGludCBzaW1tID0gMCkKPiA+ICsrICAgIHsKPiA+ICsrICAgICAgICBD
+SEVDS19EQVRBU0laRSgpOwo+ID4gKysgICAgICAgIGluc24obG9hZFN0b3JlUmVnaXN0ZXJQYWly
+T2Zmc2V0KE1FTVBBSVJPUFNJWkVfSU5UKGRhdGFzaXplKSwgZmFsc2UsIE1lbU9wX0xPQUQsIHNp
+bW0sIHJuLCBydCwgcnQyKSk7Cj4gPiArKyAgICB9Cj4gPiArKwo+ID4gKysgICAgdGVtcGxhdGU8
+aW50IGRhdGFzaXplPgo+ID4gKysgICAgQUxXQVlTX0lOTElORSB2b2lkIGxkbnAoUmVnaXN0ZXJJ
+RCBydCwgUmVnaXN0ZXJJRCBydDIsIFJlZ2lzdGVySUQgcm4sIGludCBzaW1tID0gMCkKPiA+ICsr
+ICAgIHsKPiA+ICsrICAgICAgICBDSEVDS19EQVRBU0laRSgpOwo+ID4gKysgICAgICAgIGluc24o
+bG9hZFN0b3JlUmVnaXN0ZXJQYWlyTm9uVGVtcG9yYWwoTUVNUEFJUk9QU0laRV9JTlQoZGF0YXNp
+emUpLCBmYWxzZSwgTWVtT3BfTE9BRCwgc2ltbSwgcm4sIHJ0LCBydDIpKTsKPiA+ICsrICAgIH0K
+PiA+ICsrCj4gPiArKyAgICB0ZW1wbGF0ZTxpbnQgZGF0YXNpemU+Cj4gPiArKyAgICBBTFdBWVNf
+SU5MSU5FIHZvaWQgbGRwKEZQUmVnaXN0ZXJJRCBydCwgRlBSZWdpc3RlcklEIHJ0MiwgUmVnaXN0
+ZXJJRCBybiwgUGFpclBvc3RJbmRleCBzaW1tKQo+ID4gKysgICAgewo+ID4gKysgICAgICAgIENI
+RUNLX0RBVEFTSVpFKCk7Cj4gPiArKyAgICAgICAgaW5zbihsb2FkU3RvcmVSZWdpc3RlclBhaXJQ
+b3N0SW5kZXgoTUVNUEFJUk9QU0laRV9GUChkYXRhc2l6ZSksIHRydWUsIE1lbU9wX0xPQUQsIHNp
+bW0sIHJuLCBydCwgcnQyKSk7Cj4gPiArKyAgICB9Cj4gPiArKwo+ID4gKysgICAgdGVtcGxhdGU8
+aW50IGRhdGFzaXplPgo+ID4gKysgICAgQUxXQVlTX0lOTElORSB2b2lkIGxkcChGUFJlZ2lzdGVy
+SUQgcnQsIEZQUmVnaXN0ZXJJRCBydDIsIFJlZ2lzdGVySUQgcm4sIFBhaXJQcmVJbmRleCBzaW1t
+KQo+ID4gKysgICAgewo+ID4gKysgICAgICAgIENIRUNLX0RBVEFTSVpFKCk7Cj4gPiArKyAgICAg
+ICAgaW5zbihsb2FkU3RvcmVSZWdpc3RlclBhaXJQcmVJbmRleChNRU1QQUlST1BTSVpFX0ZQKGRh
+dGFzaXplKSwgdHJ1ZSwgTWVtT3BfTE9BRCwgc2ltbSwgcm4sIHJ0LCBydDIpKTsKPiA+ICsrICAg
+IH0KPiA+ICsrCj4gPiArKyAgICB0ZW1wbGF0ZTxpbnQgZGF0YXNpemU+Cj4gPiArKyAgICBBTFdB
+WVNfSU5MSU5FIHZvaWQgbGRwKEZQUmVnaXN0ZXJJRCBydCwgRlBSZWdpc3RlcklEIHJ0MiwgUmVn
+aXN0ZXJJRCBybiwgaW50IHNpbW0gPSAwKQo+ID4gKyAgICAgewo+ID4gKyAgICAgICAgIENIRUNL
+X0RBVEFTSVpFKCk7Cj4gPiArLSAgICAgICAgaW5zbihsb2FkU3RvcmVSZWdpc3RlclBhaXJPZmZz
+ZXQoTUVNUEFJUk9QU0laRV9JTlQoZGF0YXNpemUpLCBmYWxzZSwgTWVtT3BfTE9BRCwgcGltbSwg
+cm4sIHJ0LCBydDIpKTsKPiA+ICsrICAgICAgICBpbnNuKGxvYWRTdG9yZVJlZ2lzdGVyUGFpck9m
+ZnNldChNRU1QQUlST1BTSVpFX0ZQKGRhdGFzaXplKSwgdHJ1ZSwgTWVtT3BfTE9BRCwgc2ltbSwg
+cm4sIHJ0LCBydDIpKTsKPiA+ICsgICAgIH0KPiA+ICsKPiA+ICsgICAgIHRlbXBsYXRlPGludCBk
+YXRhc2l6ZT4KPiA+ICstICAgIEFMV0FZU19JTkxJTkUgdm9pZCBsZG5wKFJlZ2lzdGVySUQgcnQs
+IFJlZ2lzdGVySUQgcnQyLCBSZWdpc3RlcklEIHJuLCB1bnNpZ25lZCBwaW1tID0gMCkKPiA+ICsr
+ICAgIEFMV0FZU19JTkxJTkUgdm9pZCBsZG5wKEZQUmVnaXN0ZXJJRCBydCwgRlBSZWdpc3RlcklE
+IHJ0MiwgUmVnaXN0ZXJJRCBybiwgaW50IHNpbW0gPSAwKQo+ID4gKyAgICAgewo+ID4gKyAgICAg
+ICAgIENIRUNLX0RBVEFTSVpFKCk7Cj4gPiArLSAgICAgICAgaW5zbihsb2FkU3RvcmVSZWdpc3Rl
+clBhaXJOb25UZW1wb3JhbChNRU1QQUlST1BTSVpFX0lOVChkYXRhc2l6ZSksIGZhbHNlLCBNZW1P
+cF9MT0FELCBwaW1tLCBybiwgcnQsIHJ0MikpOwo+ID4gKysgICAgICAgIGluc24obG9hZFN0b3Jl
+UmVnaXN0ZXJQYWlyTm9uVGVtcG9yYWwoTUVNUEFJUk9QU0laRV9GUChkYXRhc2l6ZSksIHRydWUs
+IE1lbU9wX0xPQUQsIHNpbW0sIHJuLCBydCwgcnQyKSk7Cj4gPiArICAgICB9Cj4gPiArCj4gPiAr
+ICAgICB0ZW1wbGF0ZTxpbnQgZGF0YXNpemU+Cj4gPiArQEAgLTE3NDMsNiArMTc4NSwxOCBAQCBw
+dWJsaWM6Cj4gPiArICAgICAgICAgc21hZGRsKHJkLCBybiwgcm0sIEFSTTY0UmVnaXN0ZXJzOjp6
+cik7Cj4gPiArICAgICB9Cj4gPiArCj4gPiArKyAgICB0ZW1wbGF0ZTxpbnQgZGF0YXNpemU+Cj4g
+PiArKyAgICBBTFdBWVNfSU5MSU5FIHN0YXRpYyBib29sIGlzVmFsaWRTVFBJbW0oaW50IGltbWVk
+aWF0ZSkKPiA+ICsrICAgIHsKPiA+ICsrICAgICAgICByZXR1cm4gaXNWYWxpZExEUEltbTxkYXRh
+c2l6ZT4oaW1tZWRpYXRlKTsKPiA+ICsrICAgIH0KPiA+ICsrCj4gPiArKyAgICB0ZW1wbGF0ZTxp
+bnQgZGF0YXNpemU+Cj4gPiArKyAgICBBTFdBWVNfSU5MSU5FIHN0YXRpYyBib29sIGlzVmFsaWRT
+VFBGUEltbShpbnQgaW1tZWRpYXRlKQo+ID4gKysgICAgewo+ID4gKysgICAgICAgIHJldHVybiBp
+c1ZhbGlkTERQRlBJbW08ZGF0YXNpemU+KGltbWVkaWF0ZSk7Cj4gPiArKyAgICB9Cj4gPiArKwo+
+ID4gKyAgICAgdGVtcGxhdGU8aW50IGRhdGFzaXplPgo+ID4gKyAgICAgQUxXQVlTX0lOTElORSB2
+b2lkIHN0cChSZWdpc3RlcklEIHJ0LCBSZWdpc3RlcklEIHJ0MiwgUmVnaXN0ZXJJRCBybiwgUGFp
+clBvc3RJbmRleCBzaW1tKQo+ID4gKyAgICAgewo+ID4gK0BAIC0xNzU4LDE3ICsxODEyLDQ1IEBA
+IHB1YmxpYzoKPiA+ICsgICAgIH0KPiA+ICsKPiA+ICsgICAgIHRlbXBsYXRlPGludCBkYXRhc2l6
+ZT4KPiA+ICstICAgIEFMV0FZU19JTkxJTkUgdm9pZCBzdHAoUmVnaXN0ZXJJRCBydCwgUmVnaXN0
+ZXJJRCBydDIsIFJlZ2lzdGVySUQgcm4sIHVuc2lnbmVkIHBpbW0gPSAwKQo+ID4gKysgICAgQUxX
+QVlTX0lOTElORSB2b2lkIHN0cChSZWdpc3RlcklEIHJ0LCBSZWdpc3RlcklEIHJ0MiwgUmVnaXN0
+ZXJJRCBybiwgaW50IHNpbW0gPSAwKQo+ID4gKysgICAgewo+ID4gKysgICAgICAgIENIRUNLX0RB
+VEFTSVpFKCk7Cj4gPiArKyAgICAgICAgaW5zbihsb2FkU3RvcmVSZWdpc3RlclBhaXJPZmZzZXQo
+TUVNUEFJUk9QU0laRV9JTlQoZGF0YXNpemUpLCBmYWxzZSwgTWVtT3BfU1RPUkUsIHNpbW0sIHJu
+LCBydCwgcnQyKSk7Cj4gPiArKyAgICB9Cj4gPiArKwo+ID4gKysgICAgdGVtcGxhdGU8aW50IGRh
+dGFzaXplPgo+ID4gKysgICAgQUxXQVlTX0lOTElORSB2b2lkIHN0bnAoUmVnaXN0ZXJJRCBydCwg
+UmVnaXN0ZXJJRCBydDIsIFJlZ2lzdGVySUQgcm4sIGludCBzaW1tID0gMCkKPiA+ICsrICAgIHsK
+PiA+ICsrICAgICAgICBDSEVDS19EQVRBU0laRSgpOwo+ID4gKysgICAgICAgIGluc24obG9hZFN0
+b3JlUmVnaXN0ZXJQYWlyTm9uVGVtcG9yYWwoTUVNUEFJUk9QU0laRV9JTlQoZGF0YXNpemUpLCBm
+YWxzZSwgTWVtT3BfU1RPUkUsIHNpbW0sIHJuLCBydCwgcnQyKSk7Cj4gPiArKyAgICB9Cj4gPiAr
+Kwo+ID4gKysgICAgdGVtcGxhdGU8aW50IGRhdGFzaXplPgo+ID4gKysgICAgQUxXQVlTX0lOTElO
+RSB2b2lkIHN0cChGUFJlZ2lzdGVySUQgcnQsIEZQUmVnaXN0ZXJJRCBydDIsIFJlZ2lzdGVySUQg
+cm4sIFBhaXJQb3N0SW5kZXggc2ltbSkKPiA+ICsrICAgIHsKPiA+ICsrICAgICAgICBDSEVDS19E
+QVRBU0laRSgpOwo+ID4gKysgICAgICAgIGluc24obG9hZFN0b3JlUmVnaXN0ZXJQYWlyUG9zdElu
+ZGV4KE1FTVBBSVJPUFNJWkVfRlAoZGF0YXNpemUpLCB0cnVlLCBNZW1PcF9TVE9SRSwgc2ltbSwg
+cm4sIHJ0LCBydDIpKTsKPiA+ICsrICAgIH0KPiA+ICsrCj4gPiArKyAgICB0ZW1wbGF0ZTxpbnQg
+ZGF0YXNpemU+Cj4gPiArKyAgICBBTFdBWVNfSU5MSU5FIHZvaWQgc3RwKEZQUmVnaXN0ZXJJRCBy
+dCwgRlBSZWdpc3RlcklEIHJ0MiwgUmVnaXN0ZXJJRCBybiwgUGFpclByZUluZGV4IHNpbW0pCj4g
+PiArKyAgICB7Cj4gPiArKyAgICAgICAgQ0hFQ0tfREFUQVNJWkUoKTsKPiA+ICsrICAgICAgICBp
+bnNuKGxvYWRTdG9yZVJlZ2lzdGVyUGFpclByZUluZGV4KE1FTVBBSVJPUFNJWkVfRlAoZGF0YXNp
+emUpLCB0cnVlLCBNZW1PcF9TVE9SRSwgc2ltbSwgcm4sIHJ0LCBydDIpKTsKPiA+ICsrICAgIH0K
+PiA+ICsrCj4gPiArKyAgICB0ZW1wbGF0ZTxpbnQgZGF0YXNpemU+Cj4gPiArKyAgICBBTFdBWVNf
+SU5MSU5FIHZvaWQgc3RwKEZQUmVnaXN0ZXJJRCBydCwgRlBSZWdpc3RlcklEIHJ0MiwgUmVnaXN0
+ZXJJRCBybiwgaW50IHNpbW0gPSAwKQo+ID4gKyAgICAgewo+ID4gKyAgICAgICAgIENIRUNLX0RB
+VEFTSVpFKCk7Cj4gPiArLSAgICAgICAgaW5zbihsb2FkU3RvcmVSZWdpc3RlclBhaXJPZmZzZXQo
+TUVNUEFJUk9QU0laRV9JTlQoZGF0YXNpemUpLCBmYWxzZSwgTWVtT3BfU1RPUkUsIHBpbW0sIHJu
+LCBydCwgcnQyKSk7Cj4gPiArKyAgICAgICAgaW5zbihsb2FkU3RvcmVSZWdpc3RlclBhaXJPZmZz
+ZXQoTUVNUEFJUk9QU0laRV9GUChkYXRhc2l6ZSksIHRydWUsIE1lbU9wX1NUT1JFLCBzaW1tLCBy
+biwgcnQsIHJ0MikpOwo+ID4gKyAgICAgfQo+ID4gKwo+ID4gKyAgICAgdGVtcGxhdGU8aW50IGRh
+dGFzaXplPgo+ID4gKy0gICAgQUxXQVlTX0lOTElORSB2b2lkIHN0bnAoUmVnaXN0ZXJJRCBydCwg
+UmVnaXN0ZXJJRCBydDIsIFJlZ2lzdGVySUQgcm4sIHVuc2lnbmVkIHBpbW0gPSAwKQo+ID4gKysg
+ICAgQUxXQVlTX0lOTElORSB2b2lkIHN0bnAoRlBSZWdpc3RlcklEIHJ0LCBGUFJlZ2lzdGVySUQg
+cnQyLCBSZWdpc3RlcklEIHJuLCBpbnQgc2ltbSA9IDApCj4gPiArICAgICB7Cj4gPiArICAgICAg
+ICAgQ0hFQ0tfREFUQVNJWkUoKTsKPiA+ICstICAgICAgICBpbnNuKGxvYWRTdG9yZVJlZ2lzdGVy
+UGFpck5vblRlbXBvcmFsKE1FTVBBSVJPUFNJWkVfSU5UKGRhdGFzaXplKSwgZmFsc2UsIE1lbU9w
+X1NUT1JFLCBwaW1tLCBybiwgcnQsIHJ0MikpOwo+ID4gKysgICAgICAgIGluc24obG9hZFN0b3Jl
+UmVnaXN0ZXJQYWlyTm9uVGVtcG9yYWwoTUVNUEFJUk9QU0laRV9GUChkYXRhc2l6ZSksIHRydWUs
+IE1lbU9wX1NUT1JFLCBzaW1tLCBybiwgcnQsIHJ0MikpOwo+ID4gKyAgICAgfQo+ID4gKwo+ID4g
+KyAgICAgdGVtcGxhdGU8aW50IGRhdGFzaXplPgo+ID4gK0BAIC0zNTQ0LDYgKzM2MjYsNyBAQCBw
+cm90ZWN0ZWQ6Cj4gPiArICAgICAgICAgQVNTRVJUKG9wYyA9PSAob3BjICYgMSkpOyAvLyBPbmx5
+IGxvYWQgb3Igc3RvcmUsIGxvYWQgc2lnbmVkIDY0IGlzIGhhbmRsZWQgdmlhIHNpemUuCj4gPiAr
+ICAgICAgICAgQVNTRVJUKFYgfHwgKHNpemUgIT0gTWVtUGFpck9wX0xvYWRTaWduZWRfMzIpIHx8
+IChvcGMgPT0gTWVtT3BfTE9BRCkpOyAvLyBUaGVyZSBpc24ndCBhbiBpbnRlZ2VyIHN0b3JlIHNp
+Z25lZC4KPiA+ICsgICAgICAgICB1bnNpZ25lZCBpbW1lZFNoaWZ0QW1vdW50ID0gbWVtUGFpck9m
+ZnNldFNoaWZ0KFYsIHNpemUpOwo+ID4gKysgICAgICAgIFJFTEVBU0VfQVNTRVJUKGlzVmFsaWRT
+aWduZWRJbW03KGltbWVkaWF0ZSwgaW1tZWRTaGlmdEFtb3VudCkpOwo+ID4gKyAgICAgICAgIGlu
+dCBpbW03ID0gaW1tZWRpYXRlID4+IGltbWVkU2hpZnRBbW91bnQ7Cj4gPiArICAgICAgICAgQVNT
+RVJUKChpbW03IDw8IGltbWVkU2hpZnRBbW91bnQpID09IGltbWVkaWF0ZSAmJiBpc0ludDw3Pihp
+bW03KSk7Cj4gPiArICAgICAgICAgcmV0dXJuICgweDI4ODAwMDAwIHwgc2l6ZSA8PCAzMCB8IFYg
+PDwgMjYgfCBvcGMgPDwgMjIgfCAoaW1tNyAmIDB4N2YpIDw8IDE1IHwgcnQyIDw8IDEwIHwgeE9y
+U3Aocm4pIDw8IDUgfCBydCk7Cj4gPiArQEAgLTM1NzUsNiArMzY1OCw3IEBAIHByb3RlY3RlZDoK
+PiA+ICsgICAgICAgICBBU1NFUlQob3BjID09IChvcGMgJiAxKSk7IC8vIE9ubHkgbG9hZCBvciBz
+dG9yZSwgbG9hZCBzaWduZWQgNjQgaXMgaGFuZGxlZCB2aWEgc2l6ZS4KPiA+ICsgICAgICAgICBB
+U1NFUlQoViB8fCAoc2l6ZSAhPSBNZW1QYWlyT3BfTG9hZFNpZ25lZF8zMikgfHwgKG9wYyA9PSBN
+ZW1PcF9MT0FEKSk7IC8vIFRoZXJlIGlzbid0IGFuIGludGVnZXIgc3RvcmUgc2lnbmVkLgo+ID4g
+KyAgICAgICAgIHVuc2lnbmVkIGltbWVkU2hpZnRBbW91bnQgPSBtZW1QYWlyT2Zmc2V0U2hpZnQo
+Viwgc2l6ZSk7Cj4gPiArKyAgICAgICAgUkVMRUFTRV9BU1NFUlQoaXNWYWxpZFNpZ25lZEltbTco
+aW1tZWRpYXRlLCBpbW1lZFNoaWZ0QW1vdW50KSk7Cj4gPiArICAgICAgICAgaW50IGltbTcgPSBp
+bW1lZGlhdGUgPj4gaW1tZWRTaGlmdEFtb3VudDsKPiA+ICsgICAgICAgICBBU1NFUlQoKGltbTcg
+PDwgaW1tZWRTaGlmdEFtb3VudCkgPT0gaW1tZWRpYXRlICYmIGlzSW50PDc+KGltbTcpKTsKPiA+
+ICsgICAgICAgICByZXR1cm4gKDB4Mjk4MDAwMDAgfCBzaXplIDw8IDMwIHwgViA8PCAyNiB8IG9w
+YyA8PCAyMiB8IChpbW03ICYgMHg3ZikgPDwgMTUgfCBydDIgPDwgMTAgfCB4T3JTcChybikgPDwg
+NSB8IHJ0KTsKPiA+ICtAQCAtMzU5Miw2ICszNjc2LDcgQEAgcHJvdGVjdGVkOgo+ID4gKyAgICAg
+ICAgIEFTU0VSVChvcGMgPT0gKG9wYyAmIDEpKTsgLy8gT25seSBsb2FkIG9yIHN0b3JlLCBsb2Fk
+IHNpZ25lZCA2NCBpcyBoYW5kbGVkIHZpYSBzaXplLgo+ID4gKyAgICAgICAgIEFTU0VSVChWIHx8
+IChzaXplICE9IE1lbVBhaXJPcF9Mb2FkU2lnbmVkXzMyKSB8fCAob3BjID09IE1lbU9wX0xPQUQp
+KTsgLy8gVGhlcmUgaXNuJ3QgYW4gaW50ZWdlciBzdG9yZSBzaWduZWQuCj4gPiArICAgICAgICAg
+dW5zaWduZWQgaW1tZWRTaGlmdEFtb3VudCA9IG1lbVBhaXJPZmZzZXRTaGlmdChWLCBzaXplKTsK
+PiA+ICsrICAgICAgICBSRUxFQVNFX0FTU0VSVChpc1ZhbGlkU2lnbmVkSW1tNyhpbW1lZGlhdGUs
+IGltbWVkU2hpZnRBbW91bnQpKTsKPiA+ICsgICAgICAgICBpbnQgaW1tNyA9IGltbWVkaWF0ZSA+
+PiBpbW1lZFNoaWZ0QW1vdW50Owo+ID4gKyAgICAgICAgIEFTU0VSVCgoaW1tNyA8PCBpbW1lZFNo
+aWZ0QW1vdW50KSA9PSBpbW1lZGlhdGUgJiYgaXNJbnQ8Nz4oaW1tNykpOwo+ID4gKyAgICAgICAg
+IHJldHVybiAoMHgyOTAwMDAwMCB8IHNpemUgPDwgMzAgfCBWIDw8IDI2IHwgb3BjIDw8IDIyIHwg
+KGltbTcgJiAweDdmKSA8PCAxNSB8IHJ0MiA8PCAxMCB8IHhPclNwKHJuKSA8PCA1IHwgcnQpOwo+
+ID4gK0BAIC0zNjA5LDYgKzM2OTQsNyBAQCBwcm90ZWN0ZWQ6Cj4gPiArICAgICAgICAgQVNTRVJU
+KG9wYyA9PSAob3BjICYgMSkpOyAvLyBPbmx5IGxvYWQgb3Igc3RvcmUsIGxvYWQgc2lnbmVkIDY0
+IGlzIGhhbmRsZWQgdmlhIHNpemUuCj4gPiArICAgICAgICAgQVNTRVJUKFYgfHwgKHNpemUgIT0g
+TWVtUGFpck9wX0xvYWRTaWduZWRfMzIpIHx8IChvcGMgPT0gTWVtT3BfTE9BRCkpOyAvLyBUaGVy
+ZSBpc24ndCBhbiBpbnRlZ2VyIHN0b3JlIHNpZ25lZC4KPiA+ICsgICAgICAgICB1bnNpZ25lZCBp
+bW1lZFNoaWZ0QW1vdW50ID0gbWVtUGFpck9mZnNldFNoaWZ0KFYsIHNpemUpOwo+ID4gKysgICAg
+ICAgIFJFTEVBU0VfQVNTRVJUKGlzVmFsaWRTaWduZWRJbW03KGltbWVkaWF0ZSwgaW1tZWRTaGlm
+dEFtb3VudCkpOwo+ID4gKyAgICAgICAgIGludCBpbW03ID0gaW1tZWRpYXRlID4+IGltbWVkU2hp
+ZnRBbW91bnQ7Cj4gPiArICAgICAgICAgQVNTRVJUKChpbW03IDw8IGltbWVkU2hpZnRBbW91bnQp
+ID09IGltbWVkaWF0ZSAmJiBpc0ludDw3PihpbW03KSk7Cj4gPiArICAgICAgICAgcmV0dXJuICgw
+eDI4MDAwMDAwIHwgc2l6ZSA8PCAzMCB8IFYgPDwgMjYgfCBvcGMgPDwgMjIgfCAoaW1tNyAmIDB4
+N2YpIDw8IDE1IHwgcnQyIDw8IDEwIHwgeE9yU3Aocm4pIDw8IDUgfCBydCk7Cj4gPiArZGlmZiAt
+LWdpdCBhL1NvdXJjZS9KYXZhU2NyaXB0Q29yZS9hc3NlbWJsZXIvQXNzZW1ibGVyQ29tbW9uLmgg
+Yi9Tb3VyY2UvSmF2YVNjcmlwdENvcmUvYXNzZW1ibGVyL0Fzc2VtYmxlckNvbW1vbi5oCj4gPiAr
+aW5kZXggYTU5NDgyM2Q2YTRkLi4yZTUwZmZkYmM4MmEgMTAwNjQ0Cj4gPiArLS0tIGEvU291cmNl
+L0phdmFTY3JpcHRDb3JlL2Fzc2VtYmxlci9Bc3NlbWJsZXJDb21tb24uaAo+ID4gKysrKyBiL1Nv
+dXJjZS9KYXZhU2NyaXB0Q29yZS9hc3NlbWJsZXIvQXNzZW1ibGVyQ29tbW9uLmgKPiA+ICtAQCAt
+MSw1ICsxLDUgQEAKPiA+ICsgLyoKPiA+ICstICogQ29weXJpZ2h0IChDKSAyMDEyLTIwMTkgQXBw
+bGUgSW5jLiBBbGwgcmlnaHRzIHJlc2VydmVkLgo+ID4gKysgKiBDb3B5cmlnaHQgKEMpIDIwMTIt
+MjAyMSBBcHBsZSBJbmMuIEFsbCByaWdodHMgcmVzZXJ2ZWQuCj4gPiArICAqCj4gPiArICAqIFJl
+ZGlzdHJpYnV0aW9uIGFuZCB1c2UgaW4gc291cmNlIGFuZCBiaW5hcnkgZm9ybXMsIHdpdGggb3Ig
+d2l0aG91dAo+ID4gKyAgKiBtb2RpZmljYXRpb24sIGFyZSBwZXJtaXR0ZWQgcHJvdmlkZWQgdGhh
+dCB0aGUgZm9sbG93aW5nIGNvbmRpdGlvbnMKPiA+ICtAQCAtNzQsNiArNzQsMTUgQEAgQUxXQVlT
+X0lOTElORSBib29sIGlzVmFsaWRTaWduZWRJbW05KGludDMyX3QgdmFsdWUpCj4gPiArICAgICBy
+ZXR1cm4gaXNJbnQ5KHZhbHVlKTsKPiA+ICsgfQo+ID4gKwo+ID4gKytBTFdBWVNfSU5MSU5FIGJv
+b2wgaXNWYWxpZFNpZ25lZEltbTcoaW50MzJfdCB2YWx1ZSwgaW50IGFsaWdubWVudFNoaWZ0QW1v
+dW50KQo+ID4gKyt7Cj4gPiArKyAgICBjb25zdGV4cHIgaW50MzJfdCBkaXNhbGxvd2VkSGlnaEJp
+dHMgPSAzMiAtIDc7Cj4gPiArKyAgICBpbnQzMl90IHNoaWZ0ZWRWYWx1ZSA9IHZhbHVlID4+IGFs
+aWdubWVudFNoaWZ0QW1vdW50Owo+ID4gKysgICAgYm9vbCBmaXRzSW43Qml0cyA9IHNoaWZ0ZWRW
+YWx1ZSA9PSAoKHNoaWZ0ZWRWYWx1ZSA8PCBkaXNhbGxvd2VkSGlnaEJpdHMpID4+IGRpc2FsbG93
+ZWRIaWdoQml0cyk7Cj4gPiArKyAgICBib29sIGhhc0NvcnJlY3RBbGlnbm1lbnQgPSB2YWx1ZSA9
+PSAoc2hpZnRlZFZhbHVlIDw8IGFsaWdubWVudFNoaWZ0QW1vdW50KTsKPiA+ICsrICAgIHJldHVy
+biBmaXRzSW43Qml0cyAmJiBoYXNDb3JyZWN0QWxpZ25tZW50Owo+ID4gKyt9Cj4gPiArKwo+ID4g
+KyBjbGFzcyBBUk02NExvZ2ljYWxJbW1lZGlhdGUgewo+ID4gKyBwdWJsaWM6Cj4gPiArICAgICBz
+dGF0aWMgQVJNNjRMb2dpY2FsSW1tZWRpYXRlIGNyZWF0ZTMyKHVpbnQzMl90IHZhbHVlKQo+ID4g
+K2RpZmYgLS1naXQgYS9Tb3VyY2UvSmF2YVNjcmlwdENvcmUvYXNzZW1ibGVyL01hY3JvQXNzZW1i
+bGVyQVJNNjQuaCBiL1NvdXJjZS9KYXZhU2NyaXB0Q29yZS9hc3NlbWJsZXIvTWFjcm9Bc3NlbWJs
+ZXJBUk02NC5oCj4gPiAraW5kZXggZjg2YWVjMWM1NDAwLi4xNGU0NzdmZGUzYjggMTAwNjQ0Cj4g
+PiArLS0tIGEvU291cmNlL0phdmFTY3JpcHRDb3JlL2Fzc2VtYmxlci9NYWNyb0Fzc2VtYmxlckFS
+TTY0LmgKPiA+ICsrKysgYi9Tb3VyY2UvSmF2YVNjcmlwdENvcmUvYXNzZW1ibGVyL01hY3JvQXNz
+ZW1ibGVyQVJNNjQuaAo+ID4gK0BAIC0xMjQ0LDYgKzEyNDQsMTYgQEAgcHVibGljOgo+ID4gKyAg
+ICAgICAgIG1fYXNzZW1ibGVyLmxkbnA8NjQ+KGRlc3QxLCBkZXN0Miwgc3JjLCBvZmZzZXQubV92
+YWx1ZSk7Cj4gPiArICAgICB9Cj4gPiArCj4gPiArKyAgICB2b2lkIGxvYWRQYWlyNjQoUmVnaXN0
+ZXJJRCBzcmMsIEZQUmVnaXN0ZXJJRCBkZXN0MSwgRlBSZWdpc3RlcklEIGRlc3QyKQo+ID4gKysg
+ICAgewo+ID4gKysgICAgICAgIGxvYWRQYWlyNjQoc3JjLCBUcnVzdGVkSW1tMzIoMCksIGRlc3Qx
+LCBkZXN0Mik7Cj4gPiArKyAgICB9Cj4gPiArKwo+ID4gKysgICAgdm9pZCBsb2FkUGFpcjY0KFJl
+Z2lzdGVySUQgc3JjLCBUcnVzdGVkSW1tMzIgb2Zmc2V0LCBGUFJlZ2lzdGVySUQgZGVzdDEsIEZQ
+UmVnaXN0ZXJJRCBkZXN0MikKPiA+ICsrICAgIHsKPiA+ICsrICAgICAgICBtX2Fzc2VtYmxlci5s
+ZHA8NjQ+KGRlc3QxLCBkZXN0Miwgc3JjLCBvZmZzZXQubV92YWx1ZSk7Cj4gPiArKyAgICB9Cj4g
+PiArKwo+ID4gKyAgICAgdm9pZCBhYm9ydFdpdGhSZWFzb24oQWJvcnRSZWFzb24gcmVhc29uKQo+
+ID4gKyAgICAgewo+ID4gKyAgICAgICAgIC8vIEl0IGlzIHNhZmUgdG8gdXNlIGRhdGFUZW1wUmVn
+aXN0ZXIgZGlyZWN0bHkgc2luY2UgdGhpcyBpcyBhIGNyYXNoaW5nIEpJVCBBc3NlcnQuCj4gPiAr
+QEAgLTE1NjgsNiArMTU3OCwxNiBAQCBwdWJsaWM6Cj4gPiArICAgICAgICAgbV9hc3NlbWJsZXIu
+c3RucDw2ND4oc3JjMSwgc3JjMiwgZGVzdCwgb2Zmc2V0Lm1fdmFsdWUpOwo+ID4gKyAgICAgfQo+
+ID4gKwo+ID4gKysgICAgdm9pZCBzdG9yZVBhaXI2NChGUFJlZ2lzdGVySUQgc3JjMSwgRlBSZWdp
+c3RlcklEIHNyYzIsIFJlZ2lzdGVySUQgZGVzdCkKPiA+ICsrICAgIHsKPiA+ICsrICAgICAgICBz
+dG9yZVBhaXI2NChzcmMxLCBzcmMyLCBkZXN0LCBUcnVzdGVkSW1tMzIoMCkpOwo+ID4gKysgICAg
+fQo+ID4gKysKPiA+ICsrICAgIHZvaWQgc3RvcmVQYWlyNjQoRlBSZWdpc3RlcklEIHNyYzEsIEZQ
+UmVnaXN0ZXJJRCBzcmMyLCBSZWdpc3RlcklEIGRlc3QsIFRydXN0ZWRJbW0zMiBvZmZzZXQpCj4g
+PiArKyAgICB7Cj4gPiArKyAgICAgICAgbV9hc3NlbWJsZXIuc3RwPDY0PihzcmMxLCBzcmMyLCBk
+ZXN0LCBvZmZzZXQubV92YWx1ZSk7Cj4gPiArKyAgICB9Cj4gPiArKwo+ID4gKyAgICAgdm9pZCBz
+dG9yZTMyKFJlZ2lzdGVySUQgc3JjLCBJbXBsaWNpdEFkZHJlc3MgYWRkcmVzcykKPiA+ICsgICAg
+IHsKPiA+ICsgICAgICAgICBpZiAodHJ5U3RvcmVXaXRoT2Zmc2V0PDMyPihzcmMsIGFkZHJlc3Mu
+YmFzZSwgYWRkcmVzcy5vZmZzZXQpKQo+ID4gK2RpZmYgLS1naXQgYS9Tb3VyY2UvSmF2YVNjcmlw
+dENvcmUvZGlzYXNzZW1ibGVyL0FSTTY0L0E2NERPcGNvZGUuY3BwIGIvU291cmNlL0phdmFTY3Jp
+cHRDb3JlL2Rpc2Fzc2VtYmxlci9BUk02NC9BNjRET3Bjb2RlLmNwcAo+ID4gK2luZGV4IDI0N2M3
+OWRjYjQyOC4uZGZlMDliNjcxNDcwIDEwMDY0NAo+ID4gKy0tLSBhL1NvdXJjZS9KYXZhU2NyaXB0
+Q29yZS9kaXNhc3NlbWJsZXIvQVJNNjQvQTY0RE9wY29kZS5jcHAKPiA+ICsrKysgYi9Tb3VyY2Uv
+SmF2YVNjcmlwdENvcmUvZGlzYXNzZW1ibGVyL0FSTTY0L0E2NERPcGNvZGUuY3BwCj4gPiArQEAg
+LTEsNSArMSw1IEBACj4gPiArIC8qCj4gPiArLSAqIENvcHlyaWdodCAoQykgMjAxMiwgMjAxNiBB
+cHBsZSBJbmMuIEFsbCByaWdodHMgcmVzZXJ2ZWQuCj4gPiArKyAqIENvcHlyaWdodCAoQykgMjAx
+Mi0yMDIxIEFwcGxlIEluYy4gQWxsIHJpZ2h0cyByZXNlcnZlZC4KPiA+ICsgICoKPiA+ICsgICog
+UmVkaXN0cmlidXRpb24gYW5kIHVzZSBpbiBzb3VyY2UgYW5kIGJpbmFyeSBmb3Jtcywgd2l0aCBv
+ciB3aXRob3V0Cj4gPiArICAqIG1vZGlmaWNhdGlvbiwgYXJlIHBlcm1pdHRlZCBwcm92aWRlZCB0
+aGF0IHRoZSBmb2xsb3dpbmcgY29uZGl0aW9ucwo+ID4gK0BAIC03Miw2ICs3Miw4IEBAIHN0YXRp
+YyBjb25zdCBPcGNvZGVHcm91cEluaXRpYWxpemVyIG9wY29kZUdyb3VwTGlzdFtdID0gewo+ID4g
+KyAgICAgT1BDT0RFX0dST1VQX0VOVFJZKDB4MGEsIEE2NERPcGNvZGVMb2dpY2FsU2hpZnRlZFJl
+Z2lzdGVyKSwKPiA+ICsgICAgIE9QQ09ERV9HUk9VUF9FTlRSWSgweDBiLCBBNjRET3Bjb2RlQWRk
+U3VidHJhY3RFeHRlbmRlZFJlZ2lzdGVyKSwKPiA+ICsgICAgIE9QQ09ERV9HUk9VUF9FTlRSWSgw
+eDBiLCBBNjRET3Bjb2RlQWRkU3VidHJhY3RTaGlmdGVkUmVnaXN0ZXIpLAo+ID4gKysgICAgT1BD
+T0RFX0dST1VQX0VOVFJZKDB4MGMsIEE2NERPcGNvZGVMb2FkU3RvcmVSZWdpc3RlclBhaXIpLAo+
+ID4gKysgICAgT1BDT0RFX0dST1VQX0VOVFJZKDB4MGQsIEE2NERPcGNvZGVMb2FkU3RvcmVSZWdp
+c3RlclBhaXIpLAo+ID4gKyAgICAgT1BDT0RFX0dST1VQX0VOVFJZKDB4MTEsIEE2NERPcGNvZGVB
+ZGRTdWJ0cmFjdEltbWVkaWF0ZSksCj4gPiArICAgICBPUENPREVfR1JPVVBfRU5UUlkoMHgxMiwg
+QTY0RE9wY29kZU1vdmVXaWRlKSwKPiA+ICsgICAgIE9QQ09ERV9HUk9VUF9FTlRSWSgweDEyLCBB
+NjRET3Bjb2RlTG9naWNhbEltbWVkaWF0ZSksCj4gPiArQEAgLTEzNjMsOSArMTM2NSw5IEBAIGNv
+bnN0IGNoYXIqIEE2NERPcGNvZGVMb2FkU3RvcmVSZWdpc3RlclBhaXI6OmZvcm1hdCgpCj4gPiAr
+ICAgICBhcHBlbmRJbnN0cnVjdGlvbk5hbWUodGhpc09wTmFtZSk7Cj4gPiArICAgICB1bnNpZ25l
+ZCBvZmZzZXRTaGlmdDsKPiA+ICsgICAgIGlmICh2Qml0KCkpIHsKPiA+ICstICAgICAgICBhcHBl
+bmRGUFJlZ2lzdGVyTmFtZShydCgpLCBzaXplKCkpOwo+ID4gKysgICAgICAgIGFwcGVuZEZQUmVn
+aXN0ZXJOYW1lKHJ0KCksIHNpemUoKSArIDIpOwo+ID4gKyAgICAgICAgIGFwcGVuZFNlcGFyYXRv
+cigpOwo+ID4gKy0gICAgICAgIGFwcGVuZEZQUmVnaXN0ZXJOYW1lKHJ0MigpLCBzaXplKCkpOwo+
+ID4gKysgICAgICAgIGFwcGVuZEZQUmVnaXN0ZXJOYW1lKHJ0MigpLCBzaXplKCkgKyAyKTsKPiA+
+ICsgICAgICAgICBvZmZzZXRTaGlmdCA9IHNpemUoKSArIDI7Cj4gPiArICAgICB9IGVsc2Ugewo+
+ID4gKyAgICAgICAgIGlmICghbEJpdCgpKQo+ID4gK2RpZmYgLS1naXQgYS9Tb3VyY2UvSmF2YVNj
+cmlwdENvcmUvZGlzYXNzZW1ibGVyL0FSTTY0L0E2NERPcGNvZGUuaCBiL1NvdXJjZS9KYXZhU2Ny
+aXB0Q29yZS9kaXNhc3NlbWJsZXIvQVJNNjQvQTY0RE9wY29kZS5oCj4gPiAraW5kZXggZTA3MWJh
+YmI4ZTAxLi5mZDlkYjdjYWU1OGUgMTAwNjQ0Cj4gPiArLS0tIGEvU291cmNlL0phdmFTY3JpcHRD
+b3JlL2Rpc2Fzc2VtYmxlci9BUk02NC9BNjRET3Bjb2RlLmgKPiA+ICsrKysgYi9Tb3VyY2UvSmF2
+YVNjcmlwdENvcmUvZGlzYXNzZW1ibGVyL0FSTTY0L0E2NERPcGNvZGUuaAo+ID4gK0BAIC0xLDUg
+KzEsNSBAQAo+ID4gKyAvKgo+ID4gKy0gKiBDb3B5cmlnaHQgKEMpIDIwMTItMjAxOSBBcHBsZSBJ
+bmMuIEFsbCByaWdodHMgcmVzZXJ2ZWQuCj4gPiArKyAqIENvcHlyaWdodCAoQykgMjAxMi0yMDIx
+IEFwcGxlIEluYy4gQWxsIHJpZ2h0cyByZXNlcnZlZC4KPiA+ICsgICoKPiA+ICsgICogUmVkaXN0
+cmlidXRpb24gYW5kIHVzZSBpbiBzb3VyY2UgYW5kIGJpbmFyeSBmb3Jtcywgd2l0aCBvciB3aXRo
+b3V0Cj4gPiArICAqIG1vZGlmaWNhdGlvbiwgYXJlIHBlcm1pdHRlZCBwcm92aWRlZCB0aGF0IHRo
+ZSBmb2xsb3dpbmcgY29uZGl0aW9ucwo+ID4gK0BAIC03ODcsNyArNzg3LDcgQEAgcHVibGljOgo+
+ID4gKwo+ID4gKyBjbGFzcyBBNjRET3Bjb2RlTG9hZFN0b3JlUmVnaXN0ZXJQYWlyIDogcHVibGlj
+IEE2NERPcGNvZGVMb2FkU3RvcmUgewo+ID4gKyBwdWJsaWM6Cj4gPiArLSAgICBzdGF0aWMgY29u
+c3RleHByIHVpbnQzMl90IG1hc2sgPSAweDNhMDAwMDAwOwo+ID4gKysgICAgc3RhdGljIGNvbnN0
+ZXhwciB1aW50MzJfdCBtYXNrID0gMHgzODAwMDAwMDsKPiA+ICsgICAgIHN0YXRpYyBjb25zdGV4
+cHIgdWludDMyX3QgcGF0dGVybiA9IDB4MjgwMDAwMDA7Cj4gPiArCj4gPiArICAgICBERUZJTkVf
+U1RBVElDX0ZPUk1BVChBNjRET3Bjb2RlTG9hZFN0b3JlUmVnaXN0ZXJQYWlyLCB0aGlzT2JqKTsK
+PiA+ICstLQo+ID4gKzIuMjUuMQo+ID4gKwo+ID4gLS0KPiA+IDIuMjUuMQo+ID4KX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
+bGlzdApidWlsZHJvb3RAYnVzeWJveC5uZXQKaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxt
+YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
