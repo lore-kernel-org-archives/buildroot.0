@@ -2,89 +2,65 @@ Return-Path: <SRS0=yDzA=MT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2209CC4338F
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 12:07:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29E7DC4338F
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 13:50:52 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 97CD361373
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 12:07:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 97CD361373
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=unikie.com
+	by mail.kernel.org (Postfix) with ESMTPS id 52AC461A8D
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 13:50:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 52AC461A8D
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=trabucayre.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5CBD382C3B;
-	Tue, 27 Jul 2021 12:07:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1DDF180024;
+	Tue, 27 Jul 2021 13:50:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id npZPjcQpunlY; Tue, 27 Jul 2021 12:07:23 +0000 (UTC)
+	with ESMTP id vD2_gmCbDVHE; Tue, 27 Jul 2021 13:50:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F082B83224;
-	Tue, 27 Jul 2021 12:07:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CA0F81A5F;
+	Tue, 27 Jul 2021 13:50:46 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9FB001BF42C
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 12:07:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C25E51BF40F
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 13:50:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8BD7383224
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 12:07:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC5E081A5F
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 13:50:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nmlLRNHx-ZAd for <buildroot@lists.busybox.net>;
- Tue, 27 Jul 2021 12:07:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
- [IPv6:2a00:1450:4864:20::233])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 454B882C3B
- for <buildroot@busybox.net>; Tue, 27 Jul 2021 12:07:17 +0000 (UTC)
-Received: by mail-lj1-x233.google.com with SMTP id f12so15620267ljn.1
- for <buildroot@busybox.net>; Tue, 27 Jul 2021 05:07:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=unikie-com.20150623.gappssmtp.com; s=20150623;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=eo74NSEjhcEz4XnjSqZGtpC9YOaBJG5luYZGeXmHlMc=;
- b=eob6WnEZJRUwd2zZogdGWjtC5CmEiyzBF3CToxPYeLVmVpz+YQD/vC7GCulKfkGjUS
- 2rLOdT1xEC3+HBZIrO7j4nfcyqXLUJpLeVXEVB9yi2kHxN3syBuHceFi0WHYydMQL21g
- wDUzIuVsAFr0/O1P8EfVkgrTHwrpLm2+fFFxxVs9yN0YKZGZgddubfcYhqNk+p5IW2Vf
- CXIgH+IGbegKmrjdGIpxoJrBRvooGdWZUVyo2hD/PHAi4yD98VvBIyy8K5Ih81FzEgF0
- UVIy+UVlQoq4YG5Wzdu0uOcWkulgLmWqOK9q1pY6XU+gfAtAUbLKNiXPq/pZuz1ucm7T
- jfJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=eo74NSEjhcEz4XnjSqZGtpC9YOaBJG5luYZGeXmHlMc=;
- b=JeYbEiArxK9GxciuSkm6q1ElqWk8tUJKhlgRyS2lY3IYgdrToH8N3FrmR/F/BeKiOL
- dh9gQqJTEtbDPk8f7fMrjXz6l3dpwJT6jhDIDVtobVYh0KBGMwquuQFIwiGmglfyuJ+8
- fZ68PfDFFSv1qh3Yy0yXRhm2duP3FFQmd+ilRDApnN4V+wjT+A5orVP9cCaG43YBaqOB
- iLM+1jpRElhZnyh3J2mqPgd/s6cBEUVIX6LXaxnqOq8/FgNuSKSFjyhH/mbJwMk7p7sX
- dhbPrE7gyezyHf+atM8M6NdiB3Dmz4zbug8Y9K0tKa+183XNt5JC4RMQu8DEwGe9VBmq
- UDYg==
-X-Gm-Message-State: AOAM5304W7vni7nOuXhXeflQsoGowYNv/VYfGnEfg9EwbyyY9AMVgy7s
- iD1tmU7o5VonbxCxoU5tbqOKcBAY0fCp/De5
-X-Google-Smtp-Source: ABdhPJyBp3ffI4HSxreqXHKyqQNKaX8MExvfQzwyWkBp+a8VdThJUE66ApnsmqpuG1OE48vslGulqg==
-X-Received: by 2002:a2e:9e8e:: with SMTP id f14mr15310232ljk.502.1627387634568; 
- Tue, 27 Jul 2021 05:07:14 -0700 (PDT)
-Received: from Unikie-T14-Gen-2i.madriguera.foxhound.fi
- (dd707cyhr0-9-n4qyc9ty-3.rev.dnainternet.fi.
- [2001:14ba:1efd:b100:cef7:fbf5:e1a0:1760])
- by smtp.googlemail.com with ESMTPSA id k16sm276942lfo.218.2021.07.27.05.07.14
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 27 Jul 2021 05:07:14 -0700 (PDT)
-From: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
-To: buildroot@busybox.net
-Date: Tue, 27 Jul 2021 15:07:11 +0300
-Message-Id: <20210727120711.4160529-1-jose.pekkarinen@unikie.com>
-X-Mailer: git-send-email 2.25.1
+ with ESMTP id KrKs3mXFq9FV for <buildroot@lists.busybox.net>;
+ Tue, 27 Jul 2021 13:50:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.femto-st.fr (lifc.univ-fcomte.fr [194.57.88.66])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 727578102D
+ for <buildroot@busybox.net>; Tue, 27 Jul 2021 13:50:40 +0000 (UTC)
+Received: from x230_1.trabucayre.com ([194.167.45.227]) (authenticated bits=0)
+ by mail.femto-st.fr (8.15.2/8.15.2/Debian-8+deb9u1) with ESMTPSA id
+ 16RDoaeT009389
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Tue, 27 Jul 2021 15:50:37 +0200
+Date: Tue, 27 Jul 2021 15:49:19 +0200
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20210727154919.3cd18b8d@x230_1.trabucayre.com>
+In-Reply-To: <fd67895e-5c9e-62bc-7a4b-dd41bed13c0d@mind.be>
+References: <20210725111231.359830-1-arnout@mind.be>
+ <20210725111231.359830-3-arnout@mind.be>
+ <20210725175709.7338b4a5@x230_1.trabucayre.com>
+ <fd67895e-5c9e-62bc-7a4b-dd41bed13c0d@mind.be>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/restorecond: Add new init script
+X-Scanned-By: MIMEDefang 2.79 on 194.57.88.66
+Subject: Re: [Buildroot] [PATCH v5 3/3] package/armadillo: allow to select
+ between lapack or openblas
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,83 +72,193 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-VGhlIGN1cnJlbnQgcmVzdG9yZWNvbmQgdXBzdHJlYW0gaW5pdCBzY3JpcHQgaXMgbm8KZ29vZCBm
-aXQgZm9yIHRoZSB1c2VyIHNwYWNlIGdlbmVyYXRlZCBieSBidWlsZHJvb3QsCnRoaXMgc2NyaXB0
-IGlzIGFuIGV4dGVuc2lvbiBvZiB0aGUgb3JpZ2luYWwsIHRoYXQKYnJpbmdzIHNvbWUgY2hhbmdl
-cyBmcm9tIHRoZSBkZWJpYW4gaW5pdCBzY3JpcHQgdG8KdXNlIHN0YXJ0LXN0b3AtZGFlbW9uIGlu
-c3RlYWQgb2YgZGFlbW9uLCB3aGlsZQpyZW1vdmluZyBkZXBlbmRlbmNpZXMgb24gL2V0Yy9yYy5k
-L2luaXQuZC9mdW5jdGlvbnMKYW5kIC9saWIvbHNiL2luaXQtZnVuY3Rpb25zLgoKU2lnbmVkLW9m
-Zi1ieTogSm9zw6kgUGVra2FyaW5lbiA8am9zZS5wZWtrYXJpbmVuQHVuaWtpZS5jb20+Ci0tLQog
-cGFja2FnZS9yZXN0b3JlY29uZC9TMDJyZXN0b3JlY29uZCB8IDExMyArKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKwogcGFja2FnZS9yZXN0b3JlY29uZC9yZXN0b3JlY29uZC5tayB8ICAgNCAr
-LQogMiBmaWxlcyBjaGFuZ2VkLCAxMTUgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKIGNy
-ZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3Jlc3RvcmVjb25kL1MwMnJlc3RvcmVjb25kCgpkaWZm
-IC0tZ2l0IGEvcGFja2FnZS9yZXN0b3JlY29uZC9TMDJyZXN0b3JlY29uZCBiL3BhY2thZ2UvcmVz
-dG9yZWNvbmQvUzAycmVzdG9yZWNvbmQKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAw
-MDAwMC4uMjRlZTMwODUzZgotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvcmVzdG9yZWNvbmQv
-UzAycmVzdG9yZWNvbmQKQEAgLTAsMCArMSwxMTMgQEAKKyMhL2Jpbi9zaAorIworIyByZXN0b3Jl
-Y29uZDoJCURhZW1vbiB1c2VkIHRvIG1haW50YWluIHBhdGggZmlsZSBjb250ZXh0CisjCisjIGNo
-a2NvbmZpZzoJLSAxMiA4NworIyBkZXNjcmlwdGlvbjoJcmVzdG9yZWNvbmQgdXNlcyBpbm90aWZ5
-IHRvIGxvb2sgZm9yIGNyZWF0aW9uIG9mIG5ldyBmaWxlcyBcCisjIGxpc3RlZCBpbiB0aGUgL2V0
-Yy9zZWxpbnV4L3Jlc3RvcmVjb25kLmNvbmYgZmlsZSwgYW5kIHJlc3RvcmVzIHRoZSBcCisjIGNv
-cnJlY3Qgc2VjdXJpdHkgY29udGV4dC4KKyMKKyMgcHJvY2Vzc25hbWU6IC91c3Ivc2Jpbi9yZXN0
-b3JlY29uZAorIyBjb25maWc6IC9ldGMvc2VsaW51eC9yZXN0b3JlY29uZC5jb25mCisjIHBpZGZp
-bGU6IC9ydW4vcmVzdG9yZWNvbmQucGlkCisjCisjIFJldHVybiB2YWx1ZXMgYWNjb3JkaW5nIHRv
-IExTQiBmb3IgYWxsIGNvbW1hbmRzIGJ1dCBzdGF0dXM6CisjIDAgLSBzdWNjZXNzCisjIDEgLSBn
-ZW5lcmljIG9yIHVuc3BlY2lmaWVkIGVycm9yCisjIDIgLSBpbnZhbGlkIG9yIGV4Y2VzcyBhcmd1
-bWVudChzKQorIyAzIC0gdW5pbXBsZW1lbnRlZCBmZWF0dXJlIChlLmcuICJyZWxvYWQiKQorIyA0
-IC0gaW5zdWZmaWNpZW50IHByaXZpbGVnZQorIyA1IC0gcHJvZ3JhbSBpcyBub3QgaW5zdGFsbGVk
-CisjIDYgLSBwcm9ncmFtIGlzIG5vdCBjb25maWd1cmVkCisjIDcgLSBwcm9ncmFtIGlzIG5vdCBy
-dW5uaW5nCisKK1BBVEg9L3NiaW46L2JpbjovdXNyL2JpbjovdXNyL3NiaW4KK0RFU0M9IlNFTGlu
-dXggZmlsZSBjb250ZXh0IG1haW50YWluaW5nIGRhZW1vbiIKK05BTUU9cmVzdG9yZWNvbmQKK0RB
-RU1PTj0vdXNyL3NiaW4vJE5BTUUKK0RBRU1PTl9BUkdTPSIiCitQSURGSUxFPS92YXIvcnVuLyRO
-QU1FLnBpZAorTE9DS0ZJTEU9L3Zhci9ydW4vJE5BTUUucGlkCitTQ1JJUFROQU1FPS9ldGMvaW5p
-dC5kLyROQU1FCisKK1sgLXggL3Vzci9zYmluL3NlbGludXhlbmFibGVkIF0gJiYgL3Vzci9zYmlu
-L3NlbGludXhlbmFibGVkIHx8IGV4aXQgNworCisjIENoZWNrIHRoYXQgd2UgYXJlIHJvb3QgLi4u
-IHNvIG5vbi1yb290IHVzZXJzIHN0b3AgaGVyZQordGVzdCAkRVVJRCA9IDAgIHx8IGV4aXQgNAor
-Cit0ZXN0IC14IC91c3Ivc2Jpbi9yZXN0b3JlY29uZCAgfHwgZXhpdCA1Cit0ZXN0IC1mIC9ldGMv
-c2VsaW51eC9yZXN0b3JlY29uZC5jb25mICB8fCBleGl0IDYKKworUkVUVkFMPTAKKworc3RhcnQo
-KQoreworCSMgUmV0dXJuCisJIyAgIDAgaWYgZGFlbW9uIGhhcyBiZWVuIHN0YXJ0ZWQKKwkjICAg
-MSBpZiBkYWVtb24gd2FzIGFscmVhZHkgcnVubmluZworCSMgICAyIGlmIGRhZW1vbiBjb3VsZCBu
-b3QgYmUgc3RhcnRlZAorCXN0YXJ0LXN0b3AtZGFlbW9uIC0tc3RhcnQgLS1xdWlldCAtLXBpZGZp
-bGUgJFBJREZJTEUgLS1leGVjICREQUVNT04gLS10ZXN0ID4gL2Rldi9udWxsIFwKKwkJfHwgcmV0
-dXJuIDEKKwlzdGFydC1zdG9wLWRhZW1vbiAtLXN0YXJ0IC0tcXVpZXQgLS1waWRmaWxlICRQSURG
-SUxFIC0tZXhlYyAkREFFTU9OIC0tIFwKKwkJJERBRU1PTl9BUkdTIFwKKwkJfHwgcmV0dXJuIDIK
-Kwl0b3VjaCAkTE9DS0ZJTEUKKwlyZXR1cm4gIiRSRVRWQUwiCit9CisKK3N0b3AoKQoreworCSMg
-UmV0dXJuCisJIyAgIDAgaWYgZGFlbW9uIGhhcyBiZWVuIHN0b3BwZWQKKwkjICAgMSBpZiBkYWVt
-b24gd2FzIGFscmVhZHkgc3RvcHBlZAorCSMgICAyIGlmIGRhZW1vbiBjb3VsZCBub3QgYmUgc3Rv
-cHBlZAorCSMgICBvdGhlciBpZiBhIGZhaWx1cmUgb2NjdXJyZWQKKwlzdGFydC1zdG9wLWRhZW1v
-biAtLXN0b3AgLS1xdWlldCAtLXJldHJ5PVRFUk0vMzAvS0lMTC81IC0tcGlkZmlsZSAkUElERklM
-RSAtLW5hbWUgJE5BTUUKKwlSRVRWQUw9IiQ/IgorCVsgIiRSRVRWQUwiID0gMiBdICYmIHJldHVy
-biAyCisKKwlybSAtZiAkUElERklMRQorCXJtIC1mICRMT0NLRklMRQorCXJldHVybiAiJFJFVFZB
-TCIKK30KKworcmVzdGFydCgpCit7CisgICAgc3RvcAorICAgIHN0YXJ0Cit9CisKKyMgU2VlIGhv
-dyB3ZSB3ZXJlIGNhbGxlZC4KK2Nhc2UgIiQxIiBpbgorICBzdGFydCkKKwllY2hvIC1uICQiU3Rh
-cnRpbmcgcmVzdG9yZWNvbmQ6ICIKKwlzdGFydAorICAgIGNhc2UgIiQ/IiBpbgorICAgICAgICAw
-fDEpIGVjaG8gIk9rISIgOzsKKyAgICAgICAgMikgZWNobyAiRmFpbGVkIiA7OworICAgIGVzYWMK
-Kwk7OworICBzdG9wKQorCWVjaG8gLW4gJCJTaHV0dGluZyBkb3duIHJlc3RvcmVjb25kOiAiCisJ
-c3RvcAorICAgIGNhc2UgIiQ/IiBpbgorICAgICAgICAwfDEpIGVjaG8gIk9rISIgOzsKKyAgICAg
-ICAgMikgZWNobyAiRmFpbGVkIiA7OworICAgIGVzYWMKKwk7OworICBzdGF0dXMpCisJc3RhdHVz
-IHJlc3RvcmVjb25kCisJUkVUVkFMPSQ/CisJOzsKKyAgZm9yY2UtcmVsb2FkfHJlc3RhcnR8cmVs
-b2FkKQorCXJlc3RhcnQKKwk7OworICBjb25kcmVzdGFydCkKKwlbIC1lIC92YXIvbG9jay9zdWJz
-eXMvcmVzdG9yZWNvbmQgXSAmJiByZXN0YXJ0IHx8IDoKKwk7OworICAqKQorICAgICAgICBlY2hv
-ICQiVXNhZ2U6ICQwIHtzdGFydHxzdG9wfHJlc3RhcnR8Zm9yY2UtcmVsb2FkfHN0YXR1c3xjb25k
-cmVzdGFydH0iCisgICAgICAgIFJFVFZBTD0zCitlc2FjCisKK2V4aXQgJFJFVFZBTApkaWZmIC0t
-Z2l0IGEvcGFja2FnZS9yZXN0b3JlY29uZC9yZXN0b3JlY29uZC5tayBiL3BhY2thZ2UvcmVzdG9y
-ZWNvbmQvcmVzdG9yZWNvbmQubWsKaW5kZXggN2FiN2U5NzhkZC4uM2M2ZmI1N2VhNiAxMDA2NDQK
-LS0tIGEvcGFja2FnZS9yZXN0b3JlY29uZC9yZXN0b3JlY29uZC5taworKysgYi9wYWNrYWdlL3Jl
-c3RvcmVjb25kL3Jlc3RvcmVjb25kLm1rCkBAIC0yNyw4ICsyNyw4IEBAIGRlZmluZSBSRVNUT1JF
-Q09ORF9CVUlMRF9DTURTCiBlbmRlZgogCiBkZWZpbmUgUkVTVE9SRUNPTkRfSU5TVEFMTF9JTklU
-X1NZU1YKLQkkKElOU1RBTEwpIC1tIDA3NTUgLUQgJChARCkvcmVzdG9yZWNvbmQuaW5pdCBcCi0J
-CSQoVEFSR0VUX0RJUikvZXRjL2luaXQuZC9TMjByZXN0b3JlY29uZAorCSQoSU5TVEFMTCkgLW0g
-MDc1NSAtRCBwYWNrYWdlL3Jlc3RvcmVjb25kL1MwMnJlc3RvcmVjb25kIFwKKwkJJChUQVJHRVRf
-RElSKS9ldGMvaW5pdC5kL1MwMnJlc3RvcmVjb25kCiBlbmRlZgogCiBkZWZpbmUgUkVTVE9SRUNP
-TkRfSU5TVEFMTF9JTklUX1NZU1RFTUQKLS0gCjIuMjUuMQoKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVzeWJveC5uZXQKaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cg==
+On Mon, 26 Jul 2021 08:24:37 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
+
+> On 25/07/2021 17:57, Gwenhael Goavec-Merou wrote:
+> > Arnout, all,
+> > 
+> > On Sun, 25 Jul 2021 13:12:31 +0200
+> > "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+> >   
+> >> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> >>
+> >> armadillo can use lapack or openblas as BLAS provider. LAPACK support is
+> >> optional.
+> >>
+> >> This patch
+> >> - adds an _ARCH_SUPPORTS variable to check if one is available
+> >> - adds an option to choose lapack or openblas as BLAS provider
+> >>
+> >> The choice is required since applications may potentially need lapack.
+> >>
+> >> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> >> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> >> ---
+> >> Changes v4 -> v5: [Done by Arnout]
+> >> - Consistent naming of BR2_PACKAGE_ARMADILLO_OPENBLAS (Yann E. Morin)
+> >> - Remove double dependency on lapack/clapack (Yann E. Morin)
+> >> - Remove stray 'endchoice'
+> >> - "Solve" circular dependency by removing clapack
+> >> Changes v3 -> v4: [Done by Arnout]
+> >> - Split off lapack/clapack arch depends in separate patches
+> >> - Simplify the comments (no need for the powerpc complexity)
+> >> - Remove the choices because clapack/lapack choice doesn't work. Keep a
+> >>   single config for openblas.
+> >> Changes v2 -> v3:
+> >> - drop all default statements for choice (Thomas)
+> >> - add explicit -l since blas libary is called liblas for (c)lapack and
+> >>   libopenblas for openblas (Thomas)
+> >> - add a choice for lapack selection between lapack, clapack or none
+> >> Changes v1 -> v2:
+> >> - add openblas as blas provider
+> >> ---
+> >>  package/armadillo/Config.in    | 34 ++++++++++++++++++++++++++--------
+> >>  package/armadillo/armadillo.mk | 18 +++++++++++++++++-
+> >>  2 files changed, 43 insertions(+), 9 deletions(-)
+> >>
+> >> diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
+> >> index b2b61a3233..7aed4fd02f 100644
+> >> --- a/package/armadillo/Config.in
+> >> +++ b/package/armadillo/Config.in
+> >> @@ -1,20 +1,38 @@
+> >>  comment "armadillo needs a toolchain w/ C++"
+> >> +	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS  
+> > blas may be provided by lapack too: maybe it's required to add the same
+> > condition as armadillo itself ?  
+> >>  	depends on !BR2_INSTALL_LIBSTDCPP
+> >> -	depends on !BR2_powerpc
+> >> -	depends on !BR2_m68k_cf
+> >>  
+> >> -comment "armadillo needs a glibc toolchain w/ C++"
+> >> -	depends on BR2_powerpc
+> >> -	depends on !BR2_INSTALL_LIBSTDCPP || BR2_TOOLCHAIN_USES_UCLIBC
+> >> +comment "armadillo needs a toolchain w/ fortran, C++"  
+> > fortran is only required if lapack has to be used: if lapack is said as
+> > optional this is maybe not required ?  
+> 
+>  Oh, I intended to insert a comment there but apparently forgot: We need
+> either openblas (which doesn't require fortran) or lapack (which does require
+> fortran). Therefore, on architectures which do support openblas, we should
+> have a comment that just says "C++", while on architectures that don't
+> support openblas (but do support lapack) we should have a comment that says
+> "C++ and Fortran".
+> 
+Ok.
+> 
+> >> +	depends on !BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS # otherwise, see
+> >> comment above
+> >> +	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
+> >> +	depends on !BR2_TOOLCHAIN_HAS_FORTRAN || !BR2_INSTALL_LIBSTDCPP
+> >>  
+> >>  config BR2_PACKAGE_ARMADILLO
+> >>  	bool "armadillo"
+> >> +	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS || \
+> >> +		(BR2_PACKAGE_LAPACK_ARCH_SUPPORTS &&
+> >> BR2_TOOLCHAIN_HAS_FORTRAN) depends on BR2_INSTALL_LIBSTDCPP
+> >> -	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC # clapack
+> >> -	depends on !BR2_m68k_cf # clapack
+> >> -	select BR2_PACKAGE_CLAPACK
+> >>  	help
+> >>  	  Armadillo: An Open Source C++ Linear Algebra Library for
+> >>  	  Fast Prototyping and Computationally Intensive Experiments.
+> >>  
+> >>  	  http://arma.sourceforge.net/
+> >> +
+> >> +if BR2_PACKAGE_ARMADILLO
+> >> +
+> >> +choice
+> >> +	prompt "BLAS implementation"
+> >> +
+> >> +config BR2_PACKAGE_ARMADILLO_OPENBLAS
+> >> +	bool "openblas"
+> >> +	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
+> >> +	select BR2_PACKAGE_OPENBLAS
+> >> +
+> >> +config BR2_PACKAGE_ARMADILLO_LAPACK
+> >> +	bool "lapack"
+> >> +	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS &&
+> >> BR2_TOOLCHAIN_HAS_FORTRAN
+> >> +	select BR2_PACKAGE_LAPACK
+> >> +
+> >> +endchoice
+> >> +
+> >> +endif
+> >> diff --git a/package/armadillo/armadillo.mk
+> >> b/package/armadillo/armadillo.mk index 624b842ef6..dcac2bf8cd 100644
+> >> --- a/package/armadillo/armadillo.mk
+> >> +++ b/package/armadillo/armadillo.mk
+> >> @@ -7,11 +7,27 @@
+> >>  ARMADILLO_VERSION = 9.900.2
+> >>  ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+> >>  ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+> >> -ARMADILLO_DEPENDENCIES = clapack
+> >>  ARMADILLO_INSTALL_STAGING = YES
+> >>  ARMADILLO_LICENSE = Apache-2.0
+> >>  ARMADILLO_LICENSE_FILES = LICENSE.txt
+> >>  
+> >>  ARMADILLO_CONF_OPTS = -DDETECT_HDF5=false
+> >>  
+> >> +# blas support may be provided by lapack (libblas.a) or openblas
+> >> (libopenblas.a) +ARMADILLO_CONF_OPTS += -DBLAS_FOUND=ON
+> >> +ifeq ($(BR2_PACKAGE_ARMADILLO_OPENBLAS),y)
+> >> +ARMADILLO_CONF_OPTS += -DBLAS_LIBRARIES=-lopenblas
+> >> +ARMADILLO_DEPENDENCIES = openblas
+> >> +else
+> >> +# Since BR2_PACKAGE_LAPACK is selected in this case, the dependency on it
+> >> is +# added below.
+> >> +ARMADILLO_CONF_OPTS += -DBLAS_LIBRARIES=-lblas
+> >> +endif
+> >> +
+> >> +# lapack support is optional and can only be provided by lapack, not
+> >> openblas +ifeq ($(BR2_PACKAGE_LAPACK),y)
+> >> +ARMADILLO_CONF_OPTS += -DLAPACK_FOUND=ON
+> >> +ARMADILLO_DEPENDENCIES += lapack
+> >> +endif
+> >> +
+> >>  $(eval $(cmake-package))
+> >> -- 
+> >> 2.31.1
+> >>  
+> > It's an open question:
+> > until now armadillo was always built with blas and lapack support provided
+> > by clapack. To avoid breaking current behaviour (lapack support) why not
+> > considering selecting lapack package unconditionaly and let user choise for
+> > blas support? I know the main issue is the dependency to fortran...  
+> 
+>  What you're basically saying is that in the choice between lapack and
+> openblas, lapack should be the default, right?
+> 
+>  Can you maybe explain a bit what your original reason for this patch was?
+> Armadillo basically hides the BLAS implementation, so unless it's buggy, you
+> shouldn't even notice which implementation is behind. Also, the lapack package
+> itself says that you should not use its BLAS implementation but you should
+> use a better one instead.
+> 
+At the beginning the first version was to allows users to select between
+clapack and lapack (This is because one application I use need armadillo but
+crash if this library is build using clapack) for armadillo's lapack functions.
+After that, Romain has asked to extends this patch to have choice, for blas
+functions between all providers.
+
+For armadillo's blas part if lapack said to prefer openblas it's seems logical
+to add the priority to this library. But for armadillo's lapack part, when
+lapack is not available, everything about lapack in armadillo will be disabled.
+Current behaviour is to select CLAPACK, and with this patch default behaviour
+is to enable lapack functions only when lapack is selected.
+
+>  Regards,
+>  Arnout
+
+Regards,
+Gwenhael
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
