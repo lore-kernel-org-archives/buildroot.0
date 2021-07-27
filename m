@@ -2,93 +2,89 @@ Return-Path: <SRS0=yDzA=MT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2109C4338F
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 12:06:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2209CC4338F
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 12:07:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9299761373
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 12:06:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9299761373
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 97CD361373
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 12:07:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 97CD361373
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=unikie.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8774F4041A;
-	Tue, 27 Jul 2021 12:06:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5CBD382C3B;
+	Tue, 27 Jul 2021 12:07:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HGgfmJpIAqG5; Tue, 27 Jul 2021 12:06:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id npZPjcQpunlY; Tue, 27 Jul 2021 12:07:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B9C640397;
-	Tue, 27 Jul 2021 12:06:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F082B83224;
+	Tue, 27 Jul 2021 12:07:22 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CAF7D1BF9C2
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 12:05:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9FB001BF42C
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 12:07:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BB5C382C3B
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 12:05:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8BD7383224
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 12:07:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CmBmkaWwEbdu for <buildroot@lists.busybox.net>;
- Tue, 27 Jul 2021 12:05:53 +0000 (UTC)
+ with ESMTP id nmlLRNHx-ZAd for <buildroot@lists.busybox.net>;
+ Tue, 27 Jul 2021 12:07:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7905382C21
- for <buildroot@buildroot.org>; Tue, 27 Jul 2021 12:05:53 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id u15so4036829wmj.1
- for <buildroot@buildroot.org>; Tue, 27 Jul 2021 05:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=obVrZ5PpBRQRLZ5DzmKWJ6fTtEvPTonXPN/0ttWwjnI=;
- b=CJqJ20iPP3p9CZrMzMy3a0V4T/M/pXEKiBlB+NRwIr0hd6zn4ObUgmyvmGQiI/WhRd
- kwUGRGe0n2+FnyN3iXARvFLsQCbM7/iD/fFo5c5e65jo5OKxjYOZ3ZyzGUVN2f7PJLxx
- k7bGGHqthfzBKRKqwbE4ObEumZiEIqqCzMuevEme5H5W3XqPLjwurTZvXYSvaKnlkESf
- +b0eVXhJlWLPMbpnFdF48I9gMwafpuEB4inpI0JGETcIYAMLS3KbqkWJQ2mfj1qAFc5I
- ADtYQf4i1NFjhCigxwaSh4f99ALbEfcwfFh21M9G9phpYuh1PTrE6VN2OLP5HaZ4VT3W
- iqew==
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
+ [IPv6:2a00:1450:4864:20::233])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 454B882C3B
+ for <buildroot@busybox.net>; Tue, 27 Jul 2021 12:07:17 +0000 (UTC)
+Received: by mail-lj1-x233.google.com with SMTP id f12so15620267ljn.1
+ for <buildroot@busybox.net>; Tue, 27 Jul 2021 05:07:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=unikie-com.20150623.gappssmtp.com; s=20150623;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eo74NSEjhcEz4XnjSqZGtpC9YOaBJG5luYZGeXmHlMc=;
+ b=eob6WnEZJRUwd2zZogdGWjtC5CmEiyzBF3CToxPYeLVmVpz+YQD/vC7GCulKfkGjUS
+ 2rLOdT1xEC3+HBZIrO7j4nfcyqXLUJpLeVXEVB9yi2kHxN3syBuHceFi0WHYydMQL21g
+ wDUzIuVsAFr0/O1P8EfVkgrTHwrpLm2+fFFxxVs9yN0YKZGZgddubfcYhqNk+p5IW2Vf
+ CXIgH+IGbegKmrjdGIpxoJrBRvooGdWZUVyo2hD/PHAi4yD98VvBIyy8K5Ih81FzEgF0
+ UVIy+UVlQoq4YG5Wzdu0uOcWkulgLmWqOK9q1pY6XU+gfAtAUbLKNiXPq/pZuz1ucm7T
+ jfJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=obVrZ5PpBRQRLZ5DzmKWJ6fTtEvPTonXPN/0ttWwjnI=;
- b=qKDQxwIbmem6QAgl2/TyLjwv264ib4bWxodRYTdRvVaj5JQcsUaiD3kFL28iCRG+xg
- 2MWmdCq1TTbt2wGSmQGIwaVqdFgmgOzbJfhCDdhQetBY1oZdOQ3ihhqIauq4kcZKfKF8
- 2AK6FrlnYW9wgsk9wWSrZd3xP+Il5/hTPvymQUxcuqhX2eL6ZAxcvObNcdH5h40LkhOZ
- rQeVTbRO0eVOBR0PFodAs5E5M2P7ls1wdsVgUf7peC6w8GoY+7/XhMHuiBsoSzwzepQa
- MOxvNEjOVl1oxHtoYJixj3tbBjJPKnXQkNVXeoUpnO+8NSQGap9wvfUk+65+KCAqPQSz
- MLzg==
-X-Gm-Message-State: AOAM531tfU6g02x28M9JcXkpQFzYT2uCQzNlf7hE5qo6lg/BDgoQChrE
- /CCvdJOYKhy/f/tp7mmVhQxeMw/f5U9bOg==
-X-Google-Smtp-Source: ABdhPJzXEoPPR+/ZIVebPmmZKkWYV2fWUP6WuXzeWb5/W8x7mVIPKs3GdC1a8ji6k2O/VxpwEuK/Yw==
-X-Received: by 2002:a05:600c:4e8f:: with SMTP id
- f15mr22173580wmq.174.1627387551301; 
- Tue, 27 Jul 2021 05:05:51 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1383-171.w86-229.abo.wanadoo.fr.
- [86.229.230.171])
- by smtp.gmail.com with ESMTPSA id b12sm3189141wro.1.2021.07.27.05.05.50
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eo74NSEjhcEz4XnjSqZGtpC9YOaBJG5luYZGeXmHlMc=;
+ b=JeYbEiArxK9GxciuSkm6q1ElqWk8tUJKhlgRyS2lY3IYgdrToH8N3FrmR/F/BeKiOL
+ dh9gQqJTEtbDPk8f7fMrjXz6l3dpwJT6jhDIDVtobVYh0KBGMwquuQFIwiGmglfyuJ+8
+ fZ68PfDFFSv1qh3Yy0yXRhm2duP3FFQmd+ilRDApnN4V+wjT+A5orVP9cCaG43YBaqOB
+ iLM+1jpRElhZnyh3J2mqPgd/s6cBEUVIX6LXaxnqOq8/FgNuSKSFjyhH/mbJwMk7p7sX
+ dhbPrE7gyezyHf+atM8M6NdiB3Dmz4zbug8Y9K0tKa+183XNt5JC4RMQu8DEwGe9VBmq
+ UDYg==
+X-Gm-Message-State: AOAM5304W7vni7nOuXhXeflQsoGowYNv/VYfGnEfg9EwbyyY9AMVgy7s
+ iD1tmU7o5VonbxCxoU5tbqOKcBAY0fCp/De5
+X-Google-Smtp-Source: ABdhPJyBp3ffI4HSxreqXHKyqQNKaX8MExvfQzwyWkBp+a8VdThJUE66ApnsmqpuG1OE48vslGulqg==
+X-Received: by 2002:a2e:9e8e:: with SMTP id f14mr15310232ljk.502.1627387634568; 
+ Tue, 27 Jul 2021 05:07:14 -0700 (PDT)
+Received: from Unikie-T14-Gen-2i.madriguera.foxhound.fi
+ (dd707cyhr0-9-n4qyc9ty-3.rev.dnainternet.fi.
+ [2001:14ba:1efd:b100:cef7:fbf5:e1a0:1760])
+ by smtp.googlemail.com with ESMTPSA id k16sm276942lfo.218.2021.07.27.05.07.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 27 Jul 2021 05:05:50 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 27 Jul 2021 14:05:36 +0200
-Message-Id: <20210727120536.2807777-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210727120536.2807777-1-fontaine.fabrice@gmail.com>
-References: <20210727120536.2807777-1-fontaine.fabrice@gmail.com>
+ Tue, 27 Jul 2021 05:07:14 -0700 (PDT)
+From: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
+To: buildroot@busybox.net
+Date: Tue, 27 Jul 2021 15:07:11 +0300
+Message-Id: <20210727120711.4160529-1-jose.pekkarinen@unikie.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/gupnp: bump to version 1.3.0
+Subject: [Buildroot] [PATCH] package/restorecond: Add new init script
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,142 +96,83 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-- Drop patch (already in version)
-- Update license to LGPL-2.1+:
-  https://gitlab.gnome.org/GNOME/gupnp/-/commit/37b22d0a050842d91dc64678518c425b1e2a3451
-
-https://gitlab.gnome.org/GNOME/gupnp/-/blob/gupnp-1.3.0/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...or-stylesheet-existence-on-doc-build.patch | 73 -------------------
- package/gupnp/gupnp.hash                      |  6 +-
- package/gupnp/gupnp.mk                        |  6 +-
- 3 files changed, 6 insertions(+), 79 deletions(-)
- delete mode 100644 package/gupnp/0001-doc-Check-for-stylesheet-existence-on-doc-build.patch
-
-diff --git a/package/gupnp/0001-doc-Check-for-stylesheet-existence-on-doc-build.patch b/package/gupnp/0001-doc-Check-for-stylesheet-existence-on-doc-build.patch
-deleted file mode 100644
-index 448996da04..0000000000
---- a/package/gupnp/0001-doc-Check-for-stylesheet-existence-on-doc-build.patch
-+++ /dev/null
-@@ -1,73 +0,0 @@
--From 7ce37c94596029358a67d732a82e4313f7b89135 Mon Sep 17 00:00:00 2001
--From: Jens Georg <mail@jensge.org>
--Date: Sun, 30 May 2021 13:13:00 +0200
--Subject: [PATCH] doc: Check for stylesheet existence on doc build
--
--Checking for xsltproc is not enough
--
--Fixes #17
--
--[Retrieved from:
--https://gitlab.gnome.org/GNOME/gupnp/-/commit/7ce37c94596029358a67d732a82e4313f7b89135]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- doc/meson.build | 34 +++++++++++++++++++++++++---------
-- 1 file changed, 25 insertions(+), 9 deletions(-)
--
--diff --git a/doc/meson.build b/doc/meson.build
--index 26c32c9..eb69d07 100644
----- a/doc/meson.build
--+++ b/doc/meson.build
--@@ -30,6 +30,8 @@ endif
-- 
-- xsltproc = find_program('xsltproc', required: false)
-- if xsltproc.found()
--+    stylesheet = 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl'
--+
--     xlstproc_flags = [
--         '--nonet',
--         '--xinclude',
--@@ -45,17 +47,31 @@ if xsltproc.found()
--         xsltproc,
--         xlstproc_flags,
--         '-o', '@OUTPUT@',
---        'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
--+        stylesheet,
--         '@INPUT@'
--     ]
-- 
---    custom_target(
---        'man 1 pages',
---        input: 'gupnp-binding-tool.xml',
---        output: 'gupnp-binding-tool-1.2.1',
---        command: xsltproc_args,
---        depend_files : version_xml,
---        install: true,
---        install_dir: join_paths(get_option('mandir'), 'man1')
--+    stylesheet_check = run_command(
--+        [
--+            xsltproc,
--+            xlstproc_flags,
--+            '--noout',
--+            stylesheet,
--+            'gupnp-binding-tool.xml'
--+        ]
--     )
--+    if (stylesheet_check.returncode() == 0)
--+        message('Stylesheet ' + stylesheet + ' available')
--+        custom_target(
--+            'man 1 pages',
--+            input: 'gupnp-binding-tool.xml',
--+            output: 'gupnp-binding-tool-1.2.1',
--+            command: xsltproc_args,
--+            depend_files : version_xml,
--+            install: true,
--+            install_dir: join_paths(get_option('mandir'), 'man1')
--+        )
--+    else
--+        message('Stylesheet ' + stylesheet + ' not found, not building man page')
--+    endif
-- endif
---- 
--GitLab
--
-diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
-index 7064c9f6b8..d7868b99b9 100644
---- a/package/gupnp/gupnp.hash
-+++ b/package/gupnp/gupnp.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.6.sha256sum:
--sha256  00b20f1e478a72deac92c34723693a2ac55789ed1e4bb4eed99eb4d62092aafd  gupnp-1.2.6.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.3/gupnp-1.3.0.sha256sum:
-+sha256  df8279293aae45ea6bb6de1b13bf1988285c8f2f4f25569fb0d79325a8471666  gupnp-1.3.0.tar.xz
- 
- # Hash for license file:
--sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-index 7ec0e6388c..421d12d3d2 100644
---- a/package/gupnp/gupnp.mk
-+++ b/package/gupnp/gupnp.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--GUPNP_VERSION_MAJOR = 1.2
--GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).6
-+GUPNP_VERSION_MAJOR = 1.3
-+GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).0
- GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
- GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
--GUPNP_LICENSE = LGPL-2.0+
-+GUPNP_LICENSE = LGPL-2.1+
- GUPNP_LICENSE_FILES = COPYING
- GUPNP_INSTALL_STAGING = YES
- GUPNP_DEPENDENCIES = host-pkgconf libglib2 libxml2 gssdp util-linux
--- 
-2.30.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+VGhlIGN1cnJlbnQgcmVzdG9yZWNvbmQgdXBzdHJlYW0gaW5pdCBzY3JpcHQgaXMgbm8KZ29vZCBm
+aXQgZm9yIHRoZSB1c2VyIHNwYWNlIGdlbmVyYXRlZCBieSBidWlsZHJvb3QsCnRoaXMgc2NyaXB0
+IGlzIGFuIGV4dGVuc2lvbiBvZiB0aGUgb3JpZ2luYWwsIHRoYXQKYnJpbmdzIHNvbWUgY2hhbmdl
+cyBmcm9tIHRoZSBkZWJpYW4gaW5pdCBzY3JpcHQgdG8KdXNlIHN0YXJ0LXN0b3AtZGFlbW9uIGlu
+c3RlYWQgb2YgZGFlbW9uLCB3aGlsZQpyZW1vdmluZyBkZXBlbmRlbmNpZXMgb24gL2V0Yy9yYy5k
+L2luaXQuZC9mdW5jdGlvbnMKYW5kIC9saWIvbHNiL2luaXQtZnVuY3Rpb25zLgoKU2lnbmVkLW9m
+Zi1ieTogSm9zw6kgUGVra2FyaW5lbiA8am9zZS5wZWtrYXJpbmVuQHVuaWtpZS5jb20+Ci0tLQog
+cGFja2FnZS9yZXN0b3JlY29uZC9TMDJyZXN0b3JlY29uZCB8IDExMyArKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKwogcGFja2FnZS9yZXN0b3JlY29uZC9yZXN0b3JlY29uZC5tayB8ICAgNCAr
+LQogMiBmaWxlcyBjaGFuZ2VkLCAxMTUgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3Jlc3RvcmVjb25kL1MwMnJlc3RvcmVjb25kCgpkaWZm
+IC0tZ2l0IGEvcGFja2FnZS9yZXN0b3JlY29uZC9TMDJyZXN0b3JlY29uZCBiL3BhY2thZ2UvcmVz
+dG9yZWNvbmQvUzAycmVzdG9yZWNvbmQKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAw
+MDAwMC4uMjRlZTMwODUzZgotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvcmVzdG9yZWNvbmQv
+UzAycmVzdG9yZWNvbmQKQEAgLTAsMCArMSwxMTMgQEAKKyMhL2Jpbi9zaAorIworIyByZXN0b3Jl
+Y29uZDoJCURhZW1vbiB1c2VkIHRvIG1haW50YWluIHBhdGggZmlsZSBjb250ZXh0CisjCisjIGNo
+a2NvbmZpZzoJLSAxMiA4NworIyBkZXNjcmlwdGlvbjoJcmVzdG9yZWNvbmQgdXNlcyBpbm90aWZ5
+IHRvIGxvb2sgZm9yIGNyZWF0aW9uIG9mIG5ldyBmaWxlcyBcCisjIGxpc3RlZCBpbiB0aGUgL2V0
+Yy9zZWxpbnV4L3Jlc3RvcmVjb25kLmNvbmYgZmlsZSwgYW5kIHJlc3RvcmVzIHRoZSBcCisjIGNv
+cnJlY3Qgc2VjdXJpdHkgY29udGV4dC4KKyMKKyMgcHJvY2Vzc25hbWU6IC91c3Ivc2Jpbi9yZXN0
+b3JlY29uZAorIyBjb25maWc6IC9ldGMvc2VsaW51eC9yZXN0b3JlY29uZC5jb25mCisjIHBpZGZp
+bGU6IC9ydW4vcmVzdG9yZWNvbmQucGlkCisjCisjIFJldHVybiB2YWx1ZXMgYWNjb3JkaW5nIHRv
+IExTQiBmb3IgYWxsIGNvbW1hbmRzIGJ1dCBzdGF0dXM6CisjIDAgLSBzdWNjZXNzCisjIDEgLSBn
+ZW5lcmljIG9yIHVuc3BlY2lmaWVkIGVycm9yCisjIDIgLSBpbnZhbGlkIG9yIGV4Y2VzcyBhcmd1
+bWVudChzKQorIyAzIC0gdW5pbXBsZW1lbnRlZCBmZWF0dXJlIChlLmcuICJyZWxvYWQiKQorIyA0
+IC0gaW5zdWZmaWNpZW50IHByaXZpbGVnZQorIyA1IC0gcHJvZ3JhbSBpcyBub3QgaW5zdGFsbGVk
+CisjIDYgLSBwcm9ncmFtIGlzIG5vdCBjb25maWd1cmVkCisjIDcgLSBwcm9ncmFtIGlzIG5vdCBy
+dW5uaW5nCisKK1BBVEg9L3NiaW46L2JpbjovdXNyL2JpbjovdXNyL3NiaW4KK0RFU0M9IlNFTGlu
+dXggZmlsZSBjb250ZXh0IG1haW50YWluaW5nIGRhZW1vbiIKK05BTUU9cmVzdG9yZWNvbmQKK0RB
+RU1PTj0vdXNyL3NiaW4vJE5BTUUKK0RBRU1PTl9BUkdTPSIiCitQSURGSUxFPS92YXIvcnVuLyRO
+QU1FLnBpZAorTE9DS0ZJTEU9L3Zhci9ydW4vJE5BTUUucGlkCitTQ1JJUFROQU1FPS9ldGMvaW5p
+dC5kLyROQU1FCisKK1sgLXggL3Vzci9zYmluL3NlbGludXhlbmFibGVkIF0gJiYgL3Vzci9zYmlu
+L3NlbGludXhlbmFibGVkIHx8IGV4aXQgNworCisjIENoZWNrIHRoYXQgd2UgYXJlIHJvb3QgLi4u
+IHNvIG5vbi1yb290IHVzZXJzIHN0b3AgaGVyZQordGVzdCAkRVVJRCA9IDAgIHx8IGV4aXQgNAor
+Cit0ZXN0IC14IC91c3Ivc2Jpbi9yZXN0b3JlY29uZCAgfHwgZXhpdCA1Cit0ZXN0IC1mIC9ldGMv
+c2VsaW51eC9yZXN0b3JlY29uZC5jb25mICB8fCBleGl0IDYKKworUkVUVkFMPTAKKworc3RhcnQo
+KQoreworCSMgUmV0dXJuCisJIyAgIDAgaWYgZGFlbW9uIGhhcyBiZWVuIHN0YXJ0ZWQKKwkjICAg
+MSBpZiBkYWVtb24gd2FzIGFscmVhZHkgcnVubmluZworCSMgICAyIGlmIGRhZW1vbiBjb3VsZCBu
+b3QgYmUgc3RhcnRlZAorCXN0YXJ0LXN0b3AtZGFlbW9uIC0tc3RhcnQgLS1xdWlldCAtLXBpZGZp
+bGUgJFBJREZJTEUgLS1leGVjICREQUVNT04gLS10ZXN0ID4gL2Rldi9udWxsIFwKKwkJfHwgcmV0
+dXJuIDEKKwlzdGFydC1zdG9wLWRhZW1vbiAtLXN0YXJ0IC0tcXVpZXQgLS1waWRmaWxlICRQSURG
+SUxFIC0tZXhlYyAkREFFTU9OIC0tIFwKKwkJJERBRU1PTl9BUkdTIFwKKwkJfHwgcmV0dXJuIDIK
+Kwl0b3VjaCAkTE9DS0ZJTEUKKwlyZXR1cm4gIiRSRVRWQUwiCit9CisKK3N0b3AoKQoreworCSMg
+UmV0dXJuCisJIyAgIDAgaWYgZGFlbW9uIGhhcyBiZWVuIHN0b3BwZWQKKwkjICAgMSBpZiBkYWVt
+b24gd2FzIGFscmVhZHkgc3RvcHBlZAorCSMgICAyIGlmIGRhZW1vbiBjb3VsZCBub3QgYmUgc3Rv
+cHBlZAorCSMgICBvdGhlciBpZiBhIGZhaWx1cmUgb2NjdXJyZWQKKwlzdGFydC1zdG9wLWRhZW1v
+biAtLXN0b3AgLS1xdWlldCAtLXJldHJ5PVRFUk0vMzAvS0lMTC81IC0tcGlkZmlsZSAkUElERklM
+RSAtLW5hbWUgJE5BTUUKKwlSRVRWQUw9IiQ/IgorCVsgIiRSRVRWQUwiID0gMiBdICYmIHJldHVy
+biAyCisKKwlybSAtZiAkUElERklMRQorCXJtIC1mICRMT0NLRklMRQorCXJldHVybiAiJFJFVFZB
+TCIKK30KKworcmVzdGFydCgpCit7CisgICAgc3RvcAorICAgIHN0YXJ0Cit9CisKKyMgU2VlIGhv
+dyB3ZSB3ZXJlIGNhbGxlZC4KK2Nhc2UgIiQxIiBpbgorICBzdGFydCkKKwllY2hvIC1uICQiU3Rh
+cnRpbmcgcmVzdG9yZWNvbmQ6ICIKKwlzdGFydAorICAgIGNhc2UgIiQ/IiBpbgorICAgICAgICAw
+fDEpIGVjaG8gIk9rISIgOzsKKyAgICAgICAgMikgZWNobyAiRmFpbGVkIiA7OworICAgIGVzYWMK
+Kwk7OworICBzdG9wKQorCWVjaG8gLW4gJCJTaHV0dGluZyBkb3duIHJlc3RvcmVjb25kOiAiCisJ
+c3RvcAorICAgIGNhc2UgIiQ/IiBpbgorICAgICAgICAwfDEpIGVjaG8gIk9rISIgOzsKKyAgICAg
+ICAgMikgZWNobyAiRmFpbGVkIiA7OworICAgIGVzYWMKKwk7OworICBzdGF0dXMpCisJc3RhdHVz
+IHJlc3RvcmVjb25kCisJUkVUVkFMPSQ/CisJOzsKKyAgZm9yY2UtcmVsb2FkfHJlc3RhcnR8cmVs
+b2FkKQorCXJlc3RhcnQKKwk7OworICBjb25kcmVzdGFydCkKKwlbIC1lIC92YXIvbG9jay9zdWJz
+eXMvcmVzdG9yZWNvbmQgXSAmJiByZXN0YXJ0IHx8IDoKKwk7OworICAqKQorICAgICAgICBlY2hv
+ICQiVXNhZ2U6ICQwIHtzdGFydHxzdG9wfHJlc3RhcnR8Zm9yY2UtcmVsb2FkfHN0YXR1c3xjb25k
+cmVzdGFydH0iCisgICAgICAgIFJFVFZBTD0zCitlc2FjCisKK2V4aXQgJFJFVFZBTApkaWZmIC0t
+Z2l0IGEvcGFja2FnZS9yZXN0b3JlY29uZC9yZXN0b3JlY29uZC5tayBiL3BhY2thZ2UvcmVzdG9y
+ZWNvbmQvcmVzdG9yZWNvbmQubWsKaW5kZXggN2FiN2U5NzhkZC4uM2M2ZmI1N2VhNiAxMDA2NDQK
+LS0tIGEvcGFja2FnZS9yZXN0b3JlY29uZC9yZXN0b3JlY29uZC5taworKysgYi9wYWNrYWdlL3Jl
+c3RvcmVjb25kL3Jlc3RvcmVjb25kLm1rCkBAIC0yNyw4ICsyNyw4IEBAIGRlZmluZSBSRVNUT1JF
+Q09ORF9CVUlMRF9DTURTCiBlbmRlZgogCiBkZWZpbmUgUkVTVE9SRUNPTkRfSU5TVEFMTF9JTklU
+X1NZU1YKLQkkKElOU1RBTEwpIC1tIDA3NTUgLUQgJChARCkvcmVzdG9yZWNvbmQuaW5pdCBcCi0J
+CSQoVEFSR0VUX0RJUikvZXRjL2luaXQuZC9TMjByZXN0b3JlY29uZAorCSQoSU5TVEFMTCkgLW0g
+MDc1NSAtRCBwYWNrYWdlL3Jlc3RvcmVjb25kL1MwMnJlc3RvcmVjb25kIFwKKwkJJChUQVJHRVRf
+RElSKS9ldGMvaW5pdC5kL1MwMnJlc3RvcmVjb25kCiBlbmRlZgogCiBkZWZpbmUgUkVTVE9SRUNP
+TkRfSU5TVEFMTF9JTklUX1NZU1RFTUQKLS0gCjIuMjUuMQoKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
+b3RAYnVzeWJveC5uZXQKaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8v
+YnVpbGRyb290Cg==
