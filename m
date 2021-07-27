@@ -2,87 +2,178 @@ Return-Path: <SRS0=yDzA=MT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AB1FC4338F
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 17:41:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63F62C4338F
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 17:50:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9393B600CD
-	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 17:41:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9393B600CD
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id E622D60FC0
+	for <buildroot@archiver.kernel.org>; Tue, 27 Jul 2021 17:50:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E622D60FC0
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4799640299;
-	Tue, 27 Jul 2021 17:41:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3E65606B3;
+	Tue, 27 Jul 2021 17:50:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hrWaW8x1wi4b; Tue, 27 Jul 2021 17:41:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FQlVZakbVuaG; Tue, 27 Jul 2021 17:50:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 390FC4029E;
-	Tue, 27 Jul 2021 17:41:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1AA8760683;
+	Tue, 27 Jul 2021 17:50:03 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F341E1BF9C2
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 17:41:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B431F1BF359
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 17:50:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E24EE40299
- for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 17:41:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A2C4840106
+ for <buildroot@lists.busybox.net>; Tue, 27 Jul 2021 17:50:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=collins.com header.b="GXag7cBd";
+ dkim=pass (1024-bit key) header.d=rtxusers.onmicrosoft.us
+ header.b="V7k2Is/z"
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 00zW9aMZymbH for <buildroot@lists.busybox.net>;
- Tue, 27 Jul 2021 17:41:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1F81B4029E
- for <buildroot@buildroot.org>; Tue, 27 Jul 2021 17:41:37 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id r2so16197065wrl.1
- for <buildroot@buildroot.org>; Tue, 27 Jul 2021 10:41:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=5LIcSwyJRR7442FcCzCV3sWpX2T+ZY1/TB/SUB8MrSM=;
- b=INVo0BEXuHMVA3gXtQX/OD4jUESZvyO9k+32maFIjPhkprTfuW/bU0PLe4uS0yl5sa
- psWS07GHqQywN+DzGB7Lp34F5WyGW+zbrk7cjTBk1DabY32f7RZPNAu42eHXI6hU/Jdu
- VA0jxHpg7M9nvTOpq3u/U7sKEvcg+PRGILIP7k1vcMoMtjw/T4ErbZU+Czw5B169SB2r
- 8AnAVymT5Gq+szq5GXg89aGqUL3gcnNOyWl+fY4JP5yfCH/49E/K7i4kn0AnxbdTmfv5
- sq9CMho5rJXVEo5XAhxPR/eVKYo9PKgkxTl2Ni2sM0AtHBkEvnejRG5pNj0zzE1K5PMS
- rTVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=5LIcSwyJRR7442FcCzCV3sWpX2T+ZY1/TB/SUB8MrSM=;
- b=NA5zvbCpV55Y2qTQhtSrJY8rXP3cqt+s0h+5bJ/JbKvw48SE8PWj2xVxw+6s2RlyWV
- MWMJESEJcSSmmTDceN0wBl/zYIURRbtzghp9UH+5bAC10naXws5YqvJ1+fbFZNf+AnOn
- cDScNjj/8jRa5adO5aECB9JGSrX7D+xBAu/Bz79wF76FKKy95yx5BsmtcGdQ9/U9zp3P
- frcT1lsDNHvSokU2zWPfgbG+AVckfN0w/Gr13GiMwsmrH3NsZ3b5ynR8IlNSE3rWVMLz
- GRq6nqeUbN1D54ho5fCH3pX6Xvn/t/T0QvBt+zhAnt3nRM+amwCxff988gDCOxqT8/xe
- ViUw==
-X-Gm-Message-State: AOAM5339/2g3C5EmS9C18Mzx1VdGqHBAnSBc5q2EgTD4VLk7A3lSpJom
- DSYCNAkHTFwD8wMQjWt5KS1bUbbcgIJdSA==
-X-Google-Smtp-Source: ABdhPJzDaxWZVkRdj3XiQiXhwsV251d2FOoruCvarYhP1NKvgUDSpnRbcct3E8a9WWSEE6H4W6UYYw==
-X-Received: by 2002:a5d:522a:: with SMTP id i10mr4325778wra.280.1627407695263; 
- Tue, 27 Jul 2021 10:41:35 -0700 (PDT)
-Received: from dell5510.suse.de (gw.ms-free.net. [95.85.240.250])
- by smtp.gmail.com with ESMTPSA id o29sm3369388wms.13.2021.07.27.10.41.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 27 Jul 2021 10:41:34 -0700 (PDT)
-From: Petr Vorel <petr.vorel@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 27 Jul 2021 19:41:24 +0200
-Message-Id: <20210727174124.10736-1-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.32.0
+ with ESMTP id ipRyANWf4zlE for <buildroot@lists.busybox.net>;
+ Tue, 27 Jul 2021 17:49:59 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
+ [67.231.152.184])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 28960402FA
+ for <buildroot@buildroot.org>; Tue, 27 Jul 2021 17:49:58 +0000 (UTC)
+Received: from pps.filterd (m0266029.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id
+ 16RHmUdG013577; Tue, 27 Jul 2021 17:49:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=collins.com;
+ h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=POD051818;
+ bh=DEgRTQs9nlyoFOFnYsnYjwbDUtIvv7h+Y5IfLelSm08=;
+ b=GXag7cBdo6uYem3s12McOqBDyaef61pCN3YnuizeFVREa+lJb46cbws7RH+9/ONG1C7y
+ hJt8e8N8q5sfJewryvjIqPi1kOZkQ1zUPjrUr29P8Ao68i0sqU4M/V86lLFHn7+VoaHH
+ r/1XLJzLZyr5FDssFw2u+uE5VPk5DDWim+GavCbJea95rAR9Ar10crnviTkY0DazuK9L
+ ikf/Dc5J+dWqzWHAA49EMDOIJzRnYGyjtKYz3b25mHOFcbE1zedDKu5SLubpAsSbgmXO
+ kbC3YNrxfm3KBgUu3siVGVKhPRhvGPtSXSiQgWxC1GTFSi8MwiMpIHZHNxKWBUw58s2H hQ== 
+Received: from xnwpv35.utc.com ([167.17.239.15])
+ by mx0a-00105401.pphosted.com with ESMTP id 3a2370d6y7-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Tue, 27 Jul 2021 17:49:16 +0000
+Received: from qusnwadw.utcapp.com (QUSNWADW.utcapp.com [10.161.48.87])
+ by xnwpv35.utc.com (8.16.0.27/8.16.0.27) with ESMTPS id 16RHmfG6129509
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Tue, 27 Jul 2021 17:48:41 GMT
+Received: from UUSALE0B.utcmail.com (UUSALE0B.utcmail.com [10.220.35.21])
+ by qusnwadw.utcapp.com (8.16.1.2/8.16.1.2) with ESMTPS id 16RHme6S017197
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+ Tue, 27 Jul 2021 17:48:41 GMT
+Received: from uusale2a.utcmail.com (10.220.63.20) by UUSALE0B.utcmail.com
+ (10.220.35.21) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 27 Jul
+ 2021 13:47:44 -0400
+Received: from uusale28.utcmail.com (10.220.63.22) by uusale2a.utcmail.com
+ (10.220.63.20) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 27 Jul
+ 2021 13:47:44 -0400
+Received: from USG02-BN3-obe.outbound.protection.office365.us (23.103.199.152)
+ by uusale28.utcmail.com (10.220.63.22) with Microsoft SMTP Server
+ (TLS) id
+ 15.0.1497.2 via Frontend Transport; Tue, 27 Jul 2021 13:47:44 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
+ b=cM7Sv93PpYwAYE/XpqbBiIqfVsORXjmFUIz+Ny0A65EH9qag4KYRV3tVYugsUxWFdlF37lBT8cTMthfIG2QJ6o+V/KKOtLIB8p90diE03tHzTKR3NXi9B05+n9Gi4Mf3VpYy23lYwu/mKZV5Bmmv9qn0Q9XkUR+/iFiZRV+hSRp6RYbA5UtGp8ukZZ1843tlvZ67ON27MV+/k+tegOgvERaySAZsCZn1XE34V2OIvaHCSfsXeNWr8PjVTUu7ldcG2DBPmOAcP/FEmoWaFDCNEnR411da9aznL0NyRNPc9L1PU6t3rvHwhNkz1XPwc9544IBJB5sFS+e3zUwgnXmlJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector5401;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DEgRTQs9nlyoFOFnYsnYjwbDUtIvv7h+Y5IfLelSm08=;
+ b=dLM5fdnH0we7yxFN7zpUUTkcnSeGr4wYPwI0qcQ36PG9Kr1ynG8vr3x5zUlVlACyPhbyoVcDv1bpV13E5GLcLeb6+5+U6Jkvvn2dw4Dll5Y1+mkSK3uKaIUckpJmLKiDxHeiL19FtI0fTcyKqgk0WhwrwduomlFOFIVnaWMM3Gi+vTLqh5/CoTNOUFWRQ3HME+47vBs5TtXU/xubTYxWlKFRcKUmbtL4FxnEwwHWJz1yF/uER1I9w6hOaiW0kPcQvybnxv7aMasMSaUZYQMeC8fjM8YjgoxYt0Hg1n5JMym1+rBFkpvoNPyOXaqe/RwAsZPH+D4aWR3eBcHfXaBAZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=collins.com; dmarc=pass action=none header.from=collins.com;
+ dkim=pass header.d=collins.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rtxusers.onmicrosoft.us; s=selector1-rtxusers-onmicrosoft-us;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DEgRTQs9nlyoFOFnYsnYjwbDUtIvv7h+Y5IfLelSm08=;
+ b=V7k2Is/zW8kpKw2Mx96GBaON5lmtziBJK6WoohkrVVKXPZLAbKPubkjykg/OTsS/BbVeJiLOnko9UDDNpR8ModQo78l2YCHxgZUz0+vcS/6BMHyv/t6LIxVdeWwpbxtI2NU1ME+NypueW7IbOLyPFn+K7cR3UnDsXSG5CM0XWB4=
+Received: from CY1P110MB0102.NAMP110.PROD.OUTLOOK.COM (23.103.22.213) by
+ CY1P110MB0104.NAMP110.PROD.OUTLOOK.COM (23.103.22.215) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4352.29; Tue, 27 Jul 2021 17:47:43 +0000
+Received: from CY1P110MB0102.NAMP110.PROD.OUTLOOK.COM ([23.103.22.213]) by
+ CY1P110MB0102.NAMP110.PROD.OUTLOOK.COM ([23.103.22.213]) with mapi id
+ 15.20.4352.031; Tue, 27 Jul 2021 17:47:43 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: [PATCH v7 2/2] package/freeradius-server: new package
+Thread-Index: AQHXPDyL3sN6LDCMaUWI2PnbGLaAI6tXpOku
+Date: Tue, 27 Jul 2021 17:47:43 +0000
+Message-ID: <CY1P110MB0102BB73C6B6D71B1DC0C277F2E99@CY1P110MB0102.NAMP110.PROD.OUTLOOK.COM>
+References: <20210412164011.16681-1-matthew.weber@rockwellcollins.com>,
+ <20210412164011.16681-2-matthew.weber@rockwellcollins.com>
+In-Reply-To: <20210412164011.16681-2-matthew.weber@rockwellcollins.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: buildroot.org; dkim=none (message not signed)
+ header.d=none;buildroot.org; dmarc=none action=none header.from=collins.com;
+x-originating-ip: [50.80.23.253]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 94347b8e-e79c-4310-cb0d-08d95126a316
+x-ms-traffictypediagnostic: CY1P110MB0104:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <CY1P110MB0104633492247FA7C064A638F2E99@CY1P110MB0104.NAMP110.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:2000;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Adc8wNWQh1eF11esqW1ZLzQ0ywRoXa7vOJgfITtuUDqTZOw40q7a+Y0UF6Ns/W4V8qEPzkZ8v7gOZnDmK06tEaeT+FN1YcaTzpfEpoFqjSbKB3g23tF5fXGjdGNfmJiAKDcpVg51uaz0WbGH0nLOw7QDqLvL12tuo4KHP/t92zlgVSjExPGuD0Rz4WUrUNgAAxEEvpqA4RuHWkAddc5H1TYlfSY1Ve5/B6vuK6FcMZqyW0ZjwcNwL3Svzd3BPMi27kSR8r+Uq/t45uCoFc8/5fi3HfNEWUO3Af0UGgCOIL4dyL2Mld1Vtil1gDLlY3IhfoPyFHe9VqCTzRYRtYQOjiLV0xC2msBJN/R5Vru1tFQlCe54aYXbA1ZJtfrFfx5jbJ5AitKLJO5DQt67JklmN4Xm0nk2sCKFnDoMUO4SXGV8MRAZPybupwzUzWhYdQbMk1a1x3AjwWfadCC6KtqSUhvrFiiqCT9PPpgZ/ihbA4JwqKCvg0niXsXlYUPGjP8rlVTwdGU9QP4iLLbZEYVj5q+vR4VV3U3ztrBT3u48NFFpmlKtjnwhm7jEhg5Tmm/ZslHIS6BqREyBMKXkHYRdh45UOwRfUeGIzS/cPgYdZr1TURmR/rRI2fITjFiwRPmgswHCTt2/aSvMEVxXLMDdO8eb/fKCUFjYutsxeU+1ea3JLGvrb5z2xR8C6j0iPt0j9Z2UsjmyEzghXFGIvM22CQ==
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CY1P110MB0102.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(136003)(376002)(39860400002)(346002)(366004)(396003)(2906002)(54906003)(7696005)(76116006)(4744005)(86362001)(33656002)(8936002)(478600001)(6916009)(83380400001)(107886003)(66446008)(53546011)(66476007)(66946007)(71200400001)(55016002)(64756008)(52536014)(66556008)(38100700002)(316002)(9686003)(6506007)(122000001)(26005)(4326008)(186003)(8676002)(956004)(5660300002)(38070700004);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?4ZPUdMBFv0luwGJnDe8H1dIcTCjE/b7d+EFG0DsVYLJG7nMGk9Ko8rWhuS?=
+ =?iso-8859-1?Q?jvl5BxkMIRvlV3ZLqREsvrwQct2bj1LpGIJAmvrl273LgvSULIuxHR8eK4?=
+ =?iso-8859-1?Q?ljLvTdCoL3RPcwvdDfw4CiW1jtugtuialLM7/IpUxQAnpiOsR+MSuID4s5?=
+ =?iso-8859-1?Q?fOpwCETy3eQ9+HYsB2/u7s8M4HSHwKxSjiWxRmXn73xMLxbgIOa5vgu8Ou?=
+ =?iso-8859-1?Q?vIucwXN8aFzwh+EsGdR+iV8yheb855QssvOi7BNpEbMU91r60sFcmqdGO8?=
+ =?iso-8859-1?Q?3IAz/+qVEYMDJNh31Bq84heW3k1b7Q/HSqDOvqWS4pWGJVfrwPBglNYdAa?=
+ =?iso-8859-1?Q?+NKBgeyz/3QFxmdr1M+taN2pozypQ1wcsVu90QPWT2mlFhnmUAWMiEj3KM?=
+ =?iso-8859-1?Q?/6W1S/Toogehyy57pL9LKFF6USN6m57JW2kOIhTECcdR4HoTcLPdU7xXTe?=
+ =?iso-8859-1?Q?DBiaVIqHBKgniBk3p3rSKhvVyB05b5LrER6jKPDyVtC5pkBypQT7v7WL15?=
+ =?iso-8859-1?Q?m9M0WZVUscJBah0FbZ61Er0g0qyEijC3LsHvaLxJJL2tAzrRpuvjeFwaeT?=
+ =?iso-8859-1?Q?5FHCvVHsyNO5Ty00+JfpdN7rEUijEm7IKOkrVyGLO07PSrRDihYTqkeCRB?=
+ =?iso-8859-1?Q?G6/CcoyF3bco3DxjFu7F978IqfVyA3We7pl4KyydHncAOj/m65OfpFtSny?=
+ =?iso-8859-1?Q?+ix5tpQf+oJOTmhmcSA8+q9UDFiHhGaxZ2JskYmY4ALE0nVicIL+wn29oD?=
+ =?iso-8859-1?Q?XJTdTUXJxN0q7VRmxfmg+2L1uOCa0nIDzr5+Ym5EzJ0Y2yrri0noyWiMEz?=
+ =?iso-8859-1?Q?STjv3WROnaDJpoq2pdhfsloX7krNkmDw+zFSNEDT83ukcQzWa5aUfJiywK?=
+ =?iso-8859-1?Q?t7HEKPCrb/Xbz98JWabmGKTfGhtXQFWglLp9An4q/NTTkVYFEoG3dw9Ppg?=
+ =?iso-8859-1?Q?cgn1Rkia2YIgXFCFCXKCBUdGgqRYSW5CxdKSd/dT8ta5LhN1rb5upBZp7f?=
+ =?iso-8859-1?Q?A2BJ9qvwstFCqr1UiS1+u29K6QoMHKGR88YGpQGJKgkUWeA3m7k4ANUIOM?=
+ =?iso-8859-1?Q?KumW+L+zC0I4x8ThukN2OowIfeEfYi4S88b34KxWAgOHkfsTdXkPtRLDHG?=
+ =?iso-8859-1?Q?dwrmIPr7WWyva9g3swgYPxNtIQdxW2Qkz/BIoea4JJW2qqPLG8RaZTCNaC?=
+ =?iso-8859-1?Q?RTNOlYmrajhZI1zFawqWpmLp5PW4BOxh0pz4SfyfEZ19fwfbB3neQX+XRl?=
+ =?iso-8859-1?Q?ax5tFqn7WA8Rd/BAGObE/M1CbU7pk4hsVW92v1XkA=3D?=
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/iputils: bump release to 20210722
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY1P110MB0102.NAMP110.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 94347b8e-e79c-4310-cb0d-08d95126a316
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jul 2021 17:47:43.4993 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 7a18110d-ef9b-4274-acef-e62ab0fe28ed
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY1P110MB0104
+X-PassedThroughOnPremises: Yes
+X-OriginatorOrg: Collins.com
+X-Proofpoint-ORIG-GUID: 32NXYI9enb8FyxghnfoeZ0XvR-apjQEb
+X-Proofpoint-GUID: 32NXYI9enb8FyxghnfoeZ0XvR-apjQEb
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0 phishscore=0
+ lowpriorityscore=0 impostorscore=0 spamscore=0 bulkscore=0 clxscore=1011
+ adultscore=0 mlxlogscore=897 priorityscore=1501 malwarescore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2107270106
+Subject: Re: [Buildroot] [PATCH v7 2/2] package/freeradius-server: new
+ package
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,111 +185,40 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: "Weber, Matthew L Collins via buildroot" <buildroot@busybox.net>
+Reply-To: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
+Cc: "Ratschan, Conrad T
+ Collins" <conrad.ratschan@collins.com>, David GOUARIN <dgouarin@gmail.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-Hi,
+All,
 
-NOTE new version added tests, which require iproute2. I'd expect I'd
-have to backport 3163c49 ("meson: Make tests optional"), but it's not
-needed for Buildroot.
+> From: Weber, Matthew L Collins <Matthew.Weber@rockwellcollins.com>
+> Sent: Monday, April 12, 2021 11:40 AM
+> To: buildroot@buildroot.org <buildroot@buildroot.org>
+> Cc: David GOUARIN <dgouarin@gmail.com>; Panchal, Kalpesh Export License R=
+equired - US Collins <kalpesh.panchal@rockwellcollins.com>; Weber, Matthew =
+L Collins <Matthew.Weber@collins.com>
+> Subject: [PATCH v7 2/2] package/freeradius-server: new package =
 
-Tested:
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed
+> =A0
+> From: David GOUARIN <dgouarin@gmail.com>
+> =
 
-                             andes-nds32 [ 1/45]: OK
-                             arm-aarch64 [ 2/45]: OK
-                   bootlin-aarch64-glibc [ 3/45]: OK
-               bootlin-arcle-hs38-uclibc [ 4/45]: OK
-                    bootlin-armv5-uclibc [ 5/45]: OK
-                     bootlin-armv7-glibc [ 6/45]: OK
-                   bootlin-armv7m-uclibc [ 7/45]: SKIPPED
-                      bootlin-armv7-musl [ 8/45]: OK
-             bootlin-microblazeel-uclibc [ 9/45]: OK
-                   bootlin-mipsel-uclibc [10/45]: OK
-                bootlin-mipsel32r6-glibc [11/45]: OK
-                bootlin-m68k-5208-uclibc [12/45]: SKIPPED
-               bootlin-m68k-68040-uclibc [13/45]: OK
-                     bootlin-nios2-glibc [14/45]: OK
-                 bootlin-openrisc-uclibc [15/45]: OK
-           bootlin-powerpc-e500mc-uclibc [16/45]: OK
-        bootlin-powerpc64le-power8-glibc [17/45]: OK
-                   bootlin-riscv32-glibc [18/45]: OK
-                   bootlin-riscv64-glibc [19/45]: OK
-                    bootlin-riscv64-musl [20/45]: OK
-                      bootlin-sh4-uclibc [21/45]: OK
-                    bootlin-sparc-uclibc [22/45]: OK
-                   bootlin-sparc64-glibc [23/45]: OK
-                   bootlin-xtensa-uclibc [24/45]: OK
-                    bootlin-x86-64-glibc [25/45]: OK
-                     bootlin-x86-64-musl [26/45]: OK
-                   bootlin-x86-64-uclibc [27/45]: OK
-                            br-arm-basic [28/45]: OK
-                    br-arm-full-nothread [29/45]: OK
-                      br-arm-full-static [30/45]: OK
-                br-i386-pentium-mmx-musl [31/45]: OK
-                   br-i386-pentium4-full [32/45]: OK
-                      br-mips64-n64-full [33/45]: OK
-                 br-mips64r6-el-hf-glibc [34/45]: OK
-               br-powerpc-603e-basic-cpp [35/45]: OK
-               br-powerpc64-power7-glibc [36/45]: OK
-                       linaro-aarch64-be [37/45]: OK
-                          linaro-aarch64 [38/45]: OK
-                              linaro-arm [39/45]: OK
-                     sourcery-arm-armv4t [40/45]: OK
-                            sourcery-arm [41/45]: OK
-                     sourcery-arm-thumb2 [42/45]: OK
-                           sourcery-mips [43/45]: OK
-                         sourcery-mips64 [44/45]: OK
-                          sourcery-nios2 [45/45]: OK
-45 builds, 2 skipped, 0 build failed, 0 legal-info failed
+> FreeRADIUS is an open source server which implements
+> a protocol for remote user Authorization, Authentication
+> and Accounting.
 
-Kind regards,
-Petr
+[snip]
 
- package/iputils/iputils.hash | 4 ++--
- package/iputils/iputils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+If someone respins a v8, we found the dependencies also needed to explicitl=
+y include libpcap or add a conditional "with/without selection + dependency=
+" when BR2_PACKAGE_LIBPCAP is enabled/disabled.
 
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index 3e30ca9383..3eafc7ab4e 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
-@@ -1,5 +1,5 @@
--# https://github.com/iputils/iputils/releases/download/20210202/sha256sum.asc
--sha256 3f557ecfd2ace873801231d2c1f42de73ced9fbc1ef3a438d847688b5fb0e8ab  iputils-20210202.tar.gz
-+# https://github.com/iputils/iputils/releases/download/20210722/sha256sum.asc
-+sha256 6d1a44b0682d3d4b64586dbaebe61dd61ae16d6e2f4dc0c43336d0e47a9db323  iputils-20210722.tar.gz
- # Locally computed
- sha256 b8ea785d12fa6a44916601104dd746216957e93f13a26d3eb858b3b5a4ad66ab  LICENSE
- sha256 9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 715779a633..af93909edf 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -11,7 +11,7 @@
- # and IPv6 updates.
- # http://www.spinics.net/lists/netdev/msg279881.html
- 
--IPUTILS_VERSION = 20210202
-+IPUTILS_VERSION = 20210722
- IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
- IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
- IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
--- 
-2.32.0
-
+-Matt
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
