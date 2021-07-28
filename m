@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 054D0C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:49:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A194C4320A
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:49:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B29D160EFF
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:49:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B29D160EFF
+	by mail.kernel.org (Postfix) with ESMTPS id 40A5660EFF
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:49:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 40A5660EFF
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7D2F240282;
-	Wed,  4 Aug 2021 00:49:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C3D46F8FF;
+	Wed,  4 Aug 2021 00:49:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1f1fLR4UWWkv; Wed,  4 Aug 2021 00:49:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XDbIzkndgJT3; Wed,  4 Aug 2021 00:49:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 831EA404DE;
-	Wed,  4 Aug 2021 00:49:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6881260B3A;
+	Wed,  4 Aug 2021 00:49:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8F00A1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8C7CE1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EC1A140E8D
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E65040F8F
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AWljg_otRxbp for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:41 +0000 (UTC)
+ with ESMTP id wzV_GNS8uSNy for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9B72B40E9C
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED37A40F9D
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id DB2D787884; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
+ id 2550187044; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Jul 2021 21:05:39 +0200
+Date: Wed, 28 Jul 2021 21:17:22 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ebd856ccab34186f731402d6da9a0c56c8278c0e
-X-Git-Newrev: 79660c173e06b3290cf7b5f3c56da0f1bacecf92
+X-Git-Oldrev: 9850f262fd6546d15ae27f84a0e36411abc2b7b5
+X-Git-Newrev: aedf2c83d0830af879314db8422d49be345f057d
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211021.DB2D787884@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libogg: switch back to
- http
+Message-Id: <20210803211022.2550187044@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bluez5_utils: make a
+ single option for avrcp and a2dp
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,40 +70,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79660c173e06b3290cf7b5f3c56da0f1bacecf92
+commit: https://git.buildroot.net/buildroot/commit/?id=aedf2c83d0830af879314db8422d49be345f057d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-LIBOGG_SITE has been switched to https since commit
-c8dd578b135041eed639c06810e67b8b018402d4 resulting in the following
-download failure:
+Build of avrcp without a2dp is broken since commit
+fb9fc969d91f69851b4c70dba512b607e52bda7b:
 
-Connecting to downloads.xiph.org (downloads.xiph.org)|2001:470:eb26:42::1|:443... connected.
-OpenSSL: error:1407742E:SSL routines:SSL23_GET_SERVER_HELLO:tlsv1 alert protocol version
+/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/9.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: profiles/audio/bluetoothd-avrcp.o: in function `avrcp_handle_set_volume':
+avrcp.c:(.text+0x9c4): undefined reference to `media_transport_update_device_volume'
 
-So switch back to http
+However, build of a2dp without avrcp is also broken:
+
+/data/buildroot-autobuilder/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/10.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: profiles/audio/bluetoothd-media.o: in function `.L50':
+media.c:(.text+0x508): undefined reference to `avrcp_unregister_player'
+/data/buildroot-autobuilder/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/10.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: profiles/audio/bluetoothd-media.o: in function `match_endpoint_by_path':
+media.c:(.text+0x824): undefined reference to `avrcp_register_player'
 
 Fixes:
- - http://autobuild.buildroot.org/results/56225b5daa471668d25cbe3b794e83c75c6724f7
+ - http://autobuild.buildroot.org/results/d54cdfc03212fff772a863d1bc8afd3cfb605831
+ - http://autobuild.buildroot.org/results/64d75af986a4d6e9c5a176efb6e22046f4d82350
+
+So make a single audio option for a2dp and avrcp
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libogg/libogg.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bluez5_utils/Config.in       | 12 +++---------
+ package/bluez5_utils/bluez5_utils.mk | 15 ++++-----------
+ 2 files changed, 7 insertions(+), 20 deletions(-)
 
-diff --git a/package/libogg/libogg.mk b/package/libogg/libogg.mk
-index 3faf1b7357..49f9c7b6ac 100644
---- a/package/libogg/libogg.mk
-+++ b/package/libogg/libogg.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index f2b63b0a1c..40973e13cd 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -58,17 +58,11 @@ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+ 	  "Nokia OBEX PC Suite tool". So, only if OBEX support is
+ 	  enabled this option has an effect.
  
- LIBOGG_VERSION = 1.3.5
- LIBOGG_SOURCE = libogg-$(LIBOGG_VERSION).tar.xz
--LIBOGG_SITE = https://downloads.xiph.org/releases/ogg
-+LIBOGG_SITE = http://downloads.xiph.org/releases/ogg
- LIBOGG_LICENSE = BSD-3-Clause
- LIBOGG_LICENSE_FILES = COPYING
+-config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_A2DP
+-	bool "build a2dp plugin"
++config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO
++	bool "build audio plugins (a2dp and avrcp)"
+ 	default y
+ 	help
+-	  Build plugin for A2DP (audio) profiles.
+-
+-config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AVRCP
+-	bool "build avrcp plugin"
+-	default y
+-	help
+-	  Build plugin for AVRCP (audio) profiles.
++	  Build plugins for audio profiles (for A2DP and AVRCP).
  
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
+ 	bool "build health plugin"
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 7b7e31500f..3551b14a69 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -53,18 +53,11 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
+ endif
+ 
+-# enable a2dp plugin
+-ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_A2DP),y)
+-BLUEZ5_UTILS_CONF_OPTS += --enable-a2dp
++# enable audio plugins (a2dp and avrcp)
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-a2dp --enable-avrcp
+ else
+-BLUEZ5_UTILS_CONF_OPTS += --disable-a2dp
+-endif
+-
+-#enable avrcp plugin
+-ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AVRCP),y)
+-BLUEZ5_UTILS_CONF_OPTS += --enable-avrcp
+-else
+-BLUEZ5_UTILS_CONF_OPTS += --disable-avrcp
++BLUEZ5_UTILS_CONF_OPTS += --disable-a2dp --disable-avrcp
+ endif
+ 
+ # enable health plugin
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
