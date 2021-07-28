@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF8BEC4338F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:12:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 864B2C4338F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:13:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 878FB60C51
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:12:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 878FB60C51
+	by mail.kernel.org (Postfix) with ESMTPS id 5300160C51
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:13:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5300160C51
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4CC1040022;
-	Wed, 28 Jul 2021 19:12:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D30F34051F;
+	Wed, 28 Jul 2021 19:13:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f1vo1vZtD4Up; Wed, 28 Jul 2021 19:12:47 +0000 (UTC)
+	with ESMTP id z7I2OAoNE0fn; Wed, 28 Jul 2021 19:13:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50B80400ED;
-	Wed, 28 Jul 2021 19:12:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8FFEB4012E;
+	Wed, 28 Jul 2021 19:12:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EE3661C1148
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:12:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 12A961C115D
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:12:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DCBDD83300
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2C1683300
  for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:12:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mGjluRJm9GAa for <buildroot@lists.busybox.net>;
+ with ESMTP id 7k3Vq9U9FAGQ for <buildroot@lists.busybox.net>;
  Wed, 28 Jul 2021 19:12:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 257A582FF9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 30C9C8301D
  for <buildroot@buildroot.org>; Wed, 28 Jul 2021 19:12:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id CFF1B88EB0; Wed, 28 Jul 2021 18:37:20 +0000 (UTC)
+ id E41EF88EB0; Wed, 28 Jul 2021 18:37:20 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Jul 2021 21:05:22 +0200
+Date: Wed, 28 Jul 2021 21:05:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 04ba0d6a9ef8484d12f4000ac111201833c4d260
-X-Git-Newrev: 929108481c3a8bfdb064426c7385ba159582223a
+X-Git-Oldrev: f7eccd6b3bc7361e8c9e2259c09ebd5537da9c81
+X-Git-Newrev: 42b46562a286d0082638f9bac5346c523877b5c2
 X-Patchwork-Hint: ignore
-Message-Id: <20210728183720.CFF1B88EB0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/boinc: bump to version 7.16.18
+Message-Id: <20210728183720.E41EF88EB0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gssdp: bump to version 1.3.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,39 +69,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=929108481c3a8bfdb064426c7385ba159582223a
+commit: https://git.buildroot.net/buildroot/commit/?id=42b46562a286d0082638f9bac5346c523877b5c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Update license to LGPL-2.1+:
+https://gitlab.gnome.org/GNOME/gssdp/-/commit/b018ff574f482a178f0c8515faf32962da70396a
+
+https://gitlab.gnome.org/GNOME/gssdp/-/blob/gssdp-1.3.0/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/boinc/boinc.hash | 2 +-
- package/boinc/boinc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gssdp/gssdp.hash | 6 +++---
+ package/gssdp/gssdp.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-index 0482b0589c..981d9141ea 100644
---- a/package/boinc/boinc.hash
-+++ b/package/boinc/boinc.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  0d5656a9f8ed1048936a5764270848b892d63f27bdb863d0ace447f1eaae6002  boinc-7.16.16.tar.gz
-+sha256  e66fe2e2a804687c1fef2a0d2819d634dc24c9af1cb371c71ac468352f7a562a  boinc-7.16.18.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index 5d9a8abe3b..079b065efd 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
+index f31f21942a..2f13c0a847 100644
+--- a/package/gssdp/gssdp.hash
++++ b/package/gssdp/gssdp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.2/gssdp-1.2.3.sha256sum:
+-sha256  a263dcb6730e3b3dc4bbbff80cf3fab4cd364021981d419db6dd5a8e148aa7e8  gssdp-1.2.3.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.3/gssdp-1.3.0.sha256sum:
++sha256  e739cf33f813403a53973cd8f2882dcd7208bad9582269f7066fc9e8ea3a52cc  gssdp-1.3.0.tar.xz
+ 
+ # Hash for license file:
+-sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+index 02b10d961a..03987ff085 100644
+--- a/package/gssdp/gssdp.mk
++++ b/package/gssdp/gssdp.mk
+@@ -4,11 +4,11 @@
+ #
  ################################################################################
  
- BOINC_VERSION_MAJOR = 7.16
--BOINC_VERSION = $(BOINC_VERSION_MAJOR).16
-+BOINC_VERSION = $(BOINC_VERSION_MAJOR).18
- BOINC_SITE = \
- 	$(call github,BOINC,boinc,client_release/$(BOINC_VERSION_MAJOR)/$(BOINC_VERSION))
- BOINC_LICENSE = LGPL-3.0+
+-GSSDP_VERSION_MAJOR = 1.2
+-GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).3
++GSSDP_VERSION_MAJOR = 1.3
++GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).0
+ GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
+ GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
+-GSSDP_LICENSE = LGPL-2.0+
++GSSDP_LICENSE = LGPL-2.1+
+ GSSDP_LICENSE_FILES = COPYING
+ GSSDP_INSTALL_STAGING = YES
+ GSSDP_DEPENDENCIES = host-pkgconf libglib2 libsoup
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
