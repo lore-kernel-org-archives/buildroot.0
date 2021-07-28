@@ -2,57 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 887BAC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:50:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFBD1C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:50:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3911060E96
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:50:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3911060E96
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 7DEEF60EE8
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:50:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7DEEF60EE8
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EF713404DE;
-	Wed,  4 Aug 2021 00:50:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B9724052E;
+	Wed,  4 Aug 2021 00:50:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sFVOzCqVIKI6; Wed,  4 Aug 2021 00:50:22 +0000 (UTC)
+	with ESMTP id kCHHA_QL8Q7c; Wed,  4 Aug 2021 00:50:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2093B4052E;
-	Wed,  4 Aug 2021 00:50:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 126D84067B;
+	Wed,  4 Aug 2021 00:50:34 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 61E9B1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A22941BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D2B240F93
+ by smtp2.osuosl.org (Postfix) with ESMTP id 73275404E0
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QEsu8g880cSv for <buildroot@lists.busybox.net>;
+ with ESMTP id 6l63ipl46dhX for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 27F2240FA7
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F357940FA0
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7CCF687C2D; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 504D287C2D; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 28 Jul 2021 21:41:48 +0200
+Date: Wed, 28 Jul 2021 21:24:52 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 489cbfd7df1650a8790b3bdbcd69a2357f19764b
-X-Git-Newrev: 1b830de9bcdf138738c6364b764f1becf8c88618
+X-Git-Oldrev: 5b3e72139952e0c953c8649cca55571cec5f3836
+X-Git-Newrev: f3ef0723cf7159401de595dbfb2d023d78c9336a
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211022.7CCF687C2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nginx-modsecurity: fix
- static build
+Message-Id: <20210803211022.504D287C2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gpsd: enable python
+ support and modules
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,56 +70,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b830de9bcdf138738c6364b764f1becf8c88618
+commit: https://git.buildroot.net/buildroot/commit/?id=f3ef0723cf7159401de595dbfb2d023d78c9336a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix static build which has been enabled since bump of libmodsecurity to
-version 3.0.5 in commit 464d0be380c84ac7c3f1684e49153c3868280d7e
+Add option that enables gpsd python support including modules, tools,
+and gpsfake test harness. If python is enabled then install python
+modules unconditionally. Note that gpsd python modules run compatibly
+under Python 2 and 3.x for x >= 2. So enable gpsd python support when
+any Python version is enabled in board configuration. If no Python is
+enabled, but gpsd Python support is requested, then select Python 3.
 
-Fixes:
- - http://autobuild.buildroot.org/results/e5a9eb8448980f1c5cafe97180b7d1f48ddf02ca
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+[yann.morin.1998@free.fr: fix check-package]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0001-config-use-pkg-config.patch               | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ package/gpsd/Config.in | 11 +++++++++++
+ package/gpsd/gpsd.mk   | 13 ++++++++++++-
+ 2 files changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/package/nginx-modsecurity/0001-config-use-pkg-config.patch b/package/nginx-modsecurity/0001-config-use-pkg-config.patch
-new file mode 100644
-index 0000000000..3c74fa4b59
---- /dev/null
-+++ b/package/nginx-modsecurity/0001-config-use-pkg-config.patch
-@@ -0,0 +1,29 @@
-+From 2907dcd628242eb29920321fb3a744915d11888f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 26 Jul 2021 08:29:21 +0200
-+Subject: [PATCH] config: use pkg-config
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index 5dd57c34b8..1da9a5ce2a 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -79,6 +79,17 @@ config BR2_PACKAGE_GPSD_MAX_DEV_VALUE
+ config BR2_PACKAGE_GPSD_SQUELCH
+ 	bool "squelch gpsd_report and gpsd_hexdump to save cpu"
+ 
++config BR2_PACKAGE_GPSD_PYTHON
++	bool "build Python support and modules"
++	depends on BR2_USE_WCHAR # python
++	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
++	help
++	  Python libraries and tools for the gpsd service daemon
++	  including gpsfake test harness.
 +
-+Change to using pkg-config to find the path to modsecurity and its
-+dependencies.
++comment "GPSD python support not available with toolchain w/o wide characters support"
++	depends on !BR2_USE_WCHAR
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ config | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ comment "Protocols"
+ 
+ config BR2_PACKAGE_GPSD_AIVDM
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 41dff2f155..0fbb5dfa1d 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -25,7 +25,6 @@ GPSD_SCONS_OPTS = \
+ 	prefix=/usr \
+ 	sysroot=$(STAGING_DIR) \
+ 	strip=no \
+-	python=no \
+ 	qt=no \
+ 	systemd=$(if $(BR2_INIT_SYSTEMD),yes,no)
+ 
+@@ -189,6 +188,18 @@ ifeq ($(BR2_PACKAGE_GPSD_MAX_DEV),y)
+ GPSD_SCONS_OPTS += max_devices=$(BR2_PACKAGE_GPSD_MAX_DEV_VALUE)
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++GPSD_SCONS_OPTS += \
++	python=yes \
++	python_libdir="/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages"
++else ifeq ($(BR2_PACKAGE_PYTHON),y)
++GPSD_SCONS_OPTS += \
++	python=yes \
++	python_libdir="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"
++else
++GPSD_SCONS_OPTS += python=no
++endif
 +
-+diff --git a/config b/config
-+index c6e7467..e20190f 100644
-+--- a/config
-++++ b/config
-+@@ -50,7 +50,7 @@ END
-+ else
-+     # auto-discovery
-+     ngx_feature="ModSecurity library"
-+-    ngx_feature_libs="-lmodsecurity"
-++    ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs modsecurity)"
-+ 
-+     . auto/feature
-+ 
-+-- 
-+2.30.2
-+
+ GPSD_SCONS_ENV += \
+ 	LDFLAGS="$(GPSD_LDFLAGS)" \
+ 	CFLAGS="$(GPSD_CFLAGS)" \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
