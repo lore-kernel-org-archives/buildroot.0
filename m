@@ -2,56 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEBF6C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:54:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B865C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:54:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8AFB260EFD
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:54:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8AFB260EFD
+	by mail.kernel.org (Postfix) with ESMTPS id 11C1460F01
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:54:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 11C1460F01
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 655F3843EA;
-	Wed,  4 Aug 2021 00:54:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D204540624;
+	Wed,  4 Aug 2021 00:54:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BSqrOVywfgXe; Wed,  4 Aug 2021 00:54:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z0XJQJ56PHFP; Wed,  4 Aug 2021 00:54:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB439843D1;
-	Wed,  4 Aug 2021 00:54:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CED7D4066C;
+	Wed,  4 Aug 2021 00:54:19 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E2C5D1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E6BEA1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E51B840F9A
+ by smtp2.osuosl.org (Postfix) with ESMTP id E177D40F19
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qRMgeOD1rNZS for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:44 +0000 (UTC)
+ with ESMTP id flpuMcl5ECyU for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1C9B040FB4
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 770F640F11
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 746CF87E2D; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
+ id CAF0E87884; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Jul 2021 23:35:17 +0200
+Date: Wed, 28 Jul 2021 23:50:47 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5428413f77e5a0246319c3fcbd50b757b7ae9135
-X-Git-Newrev: 46fde0f29363edd8233c4b20b97a702838aa541e
+X-Git-Oldrev: 0bab8c1089983a4b5f0f2acfe5cad77b02d6f654
+X-Git-Newrev: bbda38afbbfa79ff436e1a187bb267b8d9558036
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211023.746CF87E2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fetchmail: fix SELinux
+Message-Id: <20210803211022.CAF0E87884@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xml-security-c: new
+ package
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,34 +70,163 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46fde0f29363edd8233c4b20b97a702838aa541e
+commit: https://git.buildroot.net/buildroot/commit/?id=bbda38afbbfa79ff436e1a187bb267b8d9558036
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Build is broken since commit f043646044261578fd554c1f899b84e798ef9437
-because services/mta module is mandatory with fetchmail
+Adds support for the Apache Santuario XML Security for C++ that
+implementations the XML Digital Signature and Encryption
+specifications.
 
-Fixes:
- - No autobuilder failures yet
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Chris Simons <chris.simons@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fetchmail/fetchmail.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ ...onf-variable-cache-option-for-getcwd-test.patch | 50 ++++++++++++++++++++++
+ package/xml-security-c/Config.in                   | 16 +++++++
+ package/xml-security-c/xml-security-c.hash         |  3 ++
+ package/xml-security-c/xml-security-c.mk           | 21 +++++++++
+ 6 files changed, 92 insertions(+)
 
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index c2e5e3e9c4..10a544413f 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -11,7 +11,7 @@ FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FET
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
- FETCHMAIL_LICENSE_FILES = COPYING
- FETCHMAIL_CPE_ID_VENDOR = fetchmail
--FETCHMAIL_SELINUX_MODULES = fetchmail
-+FETCHMAIL_SELINUX_MODULES = fetchmail mta
- 
- FETCHMAIL_CONF_OPTS = \
- 	--with-ssl=$(STAGING_DIR)/usr
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6533471736..cc830d4a2a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1834,6 +1834,7 @@ F:	package/valijson/
+ F:	package/wpa_supplicant/
+ F:	package/wireless_tools/
+ F:	package/xen/
++F:	package/xml-security-c/
+ F:	support/testing/tests/package/br2-external/openjdk/
+ F:	support/testing/tests/package/test_openjdk.py
+ F:	support/testing/tests/package/test_opkg/
+diff --git a/package/Config.in b/package/Config.in
+index 79b58facc3..adda6f5be9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1672,6 +1672,7 @@ menu "JSON/XML"
+ 	source "package/tinyxml2/Config.in"
+ 	source "package/valijson/Config.in"
+ 	source "package/xerces/Config.in"
++	source "package/xml-security-c/Config.in"
+ 	source "package/yajl/Config.in"
+ 	source "package/yaml-cpp/Config.in"
+ endmenu
+diff --git a/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch b/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch
+new file mode 100644
+index 0000000000..26b53ba719
+--- /dev/null
++++ b/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch
+@@ -0,0 +1,50 @@
++From 9d14fad412a497fe83cfc6ab594ddc612512f02a Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Thu, 4 Jun 2020 20:34:11 -0500
++Subject: [PATCH] autoconf variable cache option for getcwd test
++
++The cached variable allows cross compiled builds to successfully set the
++desired default for this value without invoking a test.
++
++Fixes:
++https://issues.apache.org/jira/browse/SANTUARIO-549
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ configure.ac | 20 ++++++++++++--------
++ 1 file changed, 12 insertions(+), 8 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index b43d7a5..c3d4489 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -74,14 +74,18 @@ AC_CHECK_FUNCS([strcasecmp])
++ 
++ # Check whether getcwd can dynamically allocate memory.
++ AC_MSG_CHECKING([whether getcwd(NULL, 0) works])
++-AC_RUN_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>
++-     #include <unistd.h>],
++-[char *cwd = getcwd(NULL, 0);
++-return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;])],
++-     [AC_MSG_RESULT(yes)
++-      AC_DEFINE([XSEC_HAVE_GETCWD_DYN], [1],
++-         [Define to 1 if getcwd(NULL, 0) works])],
++-     [AC_MSG_RESULT(no)])
+++AC_CACHE_VAL([xml_cv_func_getcwd_null],
+++[AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
+++     #include <unistd.h>
+++     char *cwd = getcwd(NULL, 0);
+++     return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;]])],
+++  [xml_cv_func_getcwd_null=yes],
+++  [xml_cv_func_getcwd_null=no])])
+++AC_MSG_RESULT([$xml_cv_func_getcwd_null])
+++if test $xml_cv_func_getcwd_null = yes; then
+++AC_DEFINE([XSEC_HAVE_GETCWD_DYN], [1],
+++  [Define to 1 if getcwd(NULL, 0) works])
+++fi
++ 
++ AC_LANG(C++)
++ 
++-- 
++2.17.1
++
+diff --git a/package/xml-security-c/Config.in b/package/xml-security-c/Config.in
+new file mode 100644
+index 0000000000..4c01855292
+--- /dev/null
++++ b/package/xml-security-c/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_XML_SECURITY_C
++	bool "xml-security-c"
++	depends on BR2_INSTALL_LIBSTDCPP # xerces
++	depends on BR2_USE_WCHAR # xerces
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_XERCES
++	help
++	  The xml-security-c library is a C++ implementation of
++	  the XML Digital Signature and Encryption specifications.
++
++	  https://santuario.apache.org/cindex.html
++
++comment "xml-security-c needs a toolchain w/ C++, wchar, gcc >= 4.7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR ||
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/xml-security-c/xml-security-c.hash b/package/xml-security-c/xml-security-c.hash
+new file mode 100644
+index 0000000000..d91ed86e9c
+--- /dev/null
++++ b/package/xml-security-c/xml-security-c.hash
+@@ -0,0 +1,3 @@
++# From http://www.apache.org/dist/santuario/c-library/xml-security-c-2.0.2.tar.gz.sha256
++sha256  c303a2b08cb9ca0f5594adcbb83829b1e793175d7114a82f7d78def8bb2e30df  xml-security-c-2.0.2.tar.gz
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE.txt
+diff --git a/package/xml-security-c/xml-security-c.mk b/package/xml-security-c/xml-security-c.mk
+new file mode 100644
+index 0000000000..fe761819ee
+--- /dev/null
++++ b/package/xml-security-c/xml-security-c.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# xml-security-c
++#
++################################################################################
++
++XML_SECURITY_C_VERSION = 2.0.2
++XML_SECURITY_C_SITE = http://archive.apache.org/dist/santuario/c-library
++XML_SECURITY_C_LICENSE = Apache-2.0
++XML_SECURITY_C_LICENSE_FILES = LICENSE.txt
++XML_SECURITY_C_DEPENDENCIES = openssl xerces
++XML_SECURITY_C_INSTALL_STAGING = YES
++
++XML_SECURITY_C_CONF_ENV = \
++	xml_cv_func_getcwd_null=yes \
++	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++
++# Patched configure.ac
++XML_SECURITY_C_AUTORECONF = YES
++
++$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
