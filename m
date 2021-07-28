@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEF5EC4338F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:14:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A80E6C4338F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:15:11 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 839AD60C51
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:14:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 839AD60C51
+	by mail.kernel.org (Postfix) with ESMTPS id 61BA260F46
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:15:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 61BA260F46
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 59E89404E9;
-	Wed, 28 Jul 2021 19:14:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1622B4051F;
+	Wed, 28 Jul 2021 19:15:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 92gU7MFmfbnZ; Wed, 28 Jul 2021 19:14:56 +0000 (UTC)
+	with ESMTP id iZCFLKDKWH8u; Wed, 28 Jul 2021 19:15:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E83E401FC;
-	Wed, 28 Jul 2021 19:14:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EA6B61BF2BC
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:12:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C0D8440531;
+	Wed, 28 Jul 2021 19:15:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 922101BF2BC
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:12:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8B05B83022
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:12:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A5C2608B4
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:12:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x9pImimEdQsa for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id migv9SG8UIau for <buildroot@lists.busybox.net>;
  Wed, 28 Jul 2021 19:12:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 10F7B82F51
+ by smtp3.osuosl.org (Postfix) with ESMTP id 56B4A608B7
  for <buildroot@buildroot.org>; Wed, 28 Jul 2021 19:12:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id B360C890BE; Wed, 28 Jul 2021 18:37:20 +0000 (UTC)
+ id 04905890A7; Wed, 28 Jul 2021 18:37:21 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Jul 2021 21:05:17 +0200
+Date: Wed, 28 Jul 2021 21:05:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 90bf922347d2870291c67df8774286b901551abb
-X-Git-Newrev: 6074a4dc6318d8ea0bf93ad7b264173c5adb56e6
+X-Git-Oldrev: 4a1cd7581ae81e6b04b8f6182efa25ecb65e58c9
+X-Git-Newrev: b984cba490248e6636b53b4b26b959cda5ed6f6c
 X-Patchwork-Hint: ignore
-Message-Id: <20210728183720.B360C890BE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libupnp: bump to version 1.14.7
+Message-Id: <20210728183721.04905890A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iputils: bump release to 20210722
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,40 +69,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6074a4dc6318d8ea0bf93ad7b264173c5adb56e6
+commit: https://git.buildroot.net/buildroot/commit/?id=b984cba490248e6636b53b4b26b959cda5ed6f6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/pupnp/pupnp/releases/tag/release-1.14.7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libupnp/libupnp.hash | 2 +-
- package/libupnp/libupnp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/iputils/iputils.hash | 4 ++--
+ package/iputils/iputils.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-index e4858fdc8a..f7fdb6d521 100644
---- a/package/libupnp/libupnp.hash
-+++ b/package/libupnp/libupnp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  3168f676352e2a6e45afd6ea063721ed674c99f555394903fbd23f7f54f0a503  libupnp-1.14.6.tar.bz2
-+sha256  7b66ac4a86bc0e218e2771ac274b2945bc4154bf9054e57b14afb67c26ac7c24  libupnp-1.14.7.tar.bz2
- sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index e8ece46542..7457d2644a 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
+index 3e30ca9383..3eafc7ab4e 100644
+--- a/package/iputils/iputils.hash
++++ b/package/iputils/iputils.hash
+@@ -1,5 +1,5 @@
+-# https://github.com/iputils/iputils/releases/download/20210202/sha256sum.asc
+-sha256 3f557ecfd2ace873801231d2c1f42de73ced9fbc1ef3a438d847688b5fb0e8ab  iputils-20210202.tar.gz
++# https://github.com/iputils/iputils/releases/download/20210722/sha256sum.asc
++sha256 6d1a44b0682d3d4b64586dbaebe61dd61ae16d6e2f4dc0c43336d0e47a9db323  iputils-20210722.tar.gz
+ # Locally computed
+ sha256 b8ea785d12fa6a44916601104dd746216957e93f13a26d3eb858b3b5a4ad66ab  LICENSE
+ sha256 9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 715779a633..af93909edf 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -11,7 +11,7 @@
+ # and IPv6 updates.
+ # http://www.spinics.net/lists/netdev/msg279881.html
  
--LIBUPNP_VERSION = 1.14.6
-+LIBUPNP_VERSION = 1.14.7
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = \
- 	http://downloads.sourceforge.net/project/pupnp/release-$(LIBUPNP_VERSION)
+-IPUTILS_VERSION = 20210202
++IPUTILS_VERSION = 20210722
+ IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
+ IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
+ IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
