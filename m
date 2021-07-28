@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19775C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:50:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 887BAC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:50:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BB5D760EFF
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:50:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BB5D760EFF
+	by mail.kernel.org (Postfix) with ESMTPS id 3911060E96
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:50:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3911060E96
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7FA0041605;
-	Wed,  4 Aug 2021 00:50:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF713404DE;
+	Wed,  4 Aug 2021 00:50:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WWOa1m9PQ_a9; Wed,  4 Aug 2021 00:50:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sFVOzCqVIKI6; Wed,  4 Aug 2021 00:50:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD511415E8;
-	Wed,  4 Aug 2021 00:50:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2093B4052E;
+	Wed,  4 Aug 2021 00:50:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 645191BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 61E9B1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 291EE4048C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D2B240F93
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EE9lQNtLIA8W for <buildroot@lists.busybox.net>;
+ with ESMTP id QEsu8g880cSv for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1DAFF40FA6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27F2240FA7
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 65B6F87044; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
+ id 7CCF687C2D; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Jul 2021 21:39:28 +0200
+Date: Wed, 28 Jul 2021 21:41:48 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8a847ff428e5dc4ab58a11c5305f6efbb839b2e2
-X-Git-Newrev: 2f99483a59edc4e0ad9482551b3af2d8f4be1793
+X-Git-Oldrev: 489cbfd7df1650a8790b3bdbcd69a2357f19764b
+X-Git-Newrev: 1b830de9bcdf138738c6364b764f1becf8c88618
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211022.65B6F87044@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nmap: fix ncat on Unix
- socket
+Message-Id: <20210803211022.7CCF687C2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nginx-modsecurity: fix
+ static build
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,55 +70,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f99483a59edc4e0ad9482551b3af2d8f4be1793
+commit: https://git.buildroot.net/buildroot/commit/?id=1b830de9bcdf138738c6364b764f1becf8c88618
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Starting with nmap 7.91, ncat segfaults on an attempt to use it for a
-Unix-domain socket (`ncat -U path`). The fix has been committed to nmap
-in r38121.
+Fix static build which has been enabled since bump of libmodsecurity to
+version 3.0.5 in commit 464d0be380c84ac7c3f1684e49153c3868280d7e
 
-Signed-off-by: Alexey Neyman <stilor@att.net>
+Fixes:
+ - http://autobuild.buildroot.org/results/e5a9eb8448980f1c5cafe97180b7d1f48ddf02ca
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nmap/0002-ncat-unix-socket.patch | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ .../0001-config-use-pkg-config.patch               | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/nmap/0002-ncat-unix-socket.patch b/package/nmap/0002-ncat-unix-socket.patch
+diff --git a/package/nginx-modsecurity/0001-config-use-pkg-config.patch b/package/nginx-modsecurity/0001-config-use-pkg-config.patch
 new file mode 100644
-index 0000000000..b6484ebeea
+index 0000000000..3c74fa4b59
 --- /dev/null
-+++ b/package/nmap/0002-ncat-unix-socket.patch
-@@ -0,0 +1,30 @@
-+ChangeLog:
++++ b/package/nginx-modsecurity/0001-config-use-pkg-config.patch
+@@ -0,0 +1,29 @@
++From 2907dcd628242eb29920321fb3a744915d11888f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 26 Jul 2021 08:29:21 +0200
++Subject: [PATCH] config: use pkg-config
 +
-+o [Ncat][GH#2154] Ncat no longer crashes when used with Unix domain sockets.
++Change to using pkg-config to find the path to modsecurity and its
++dependencies.
 +
-+Backported from: r38121
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ config | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+Signed-off-by: Alexey Neyman <stilor@att.net>
-+
-+Index: ncat/ncat_main.c
-+===================================================================
-+--- a/ncat/ncat_main.c	(revision 38120)
-++++ b/ncat/ncat_main.c	(revision 38121)
-+@@ -846,7 +846,7 @@
-+             targetaddrs->addr.un.sun_family = AF_UNIX;
-+             strncpy(targetaddrs->addr.un.sun_path, argv[optind], sizeof(targetaddrs->addr.un.sun_path));
-+             targetaddrs->addrlen = SUN_LEN(&targetaddrs->addr.un);
-+-            o.target = argv[optind];
-++            o.sslservername = o.target = argv[optind];
-+             optind++;
-+         } else
-+ #endif
-+@@ -865,7 +865,7 @@
-+                 targetaddrs->addr.vm.svm_cid = long_cid;
++diff --git a/config b/config
++index c6e7467..e20190f 100644
++--- a/config
+++++ b/config
++@@ -50,7 +50,7 @@ END
++ else
++     # auto-discovery
++     ngx_feature="ModSecurity library"
++-    ngx_feature_libs="-lmodsecurity"
+++    ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs modsecurity)"
 + 
-+                 targetaddrs->addrlen = sizeof(targetaddrs->addr.vm);
-+-                o.target = argv[optind];
-++                o.sslservername = o.target = argv[optind];
-+                 optind++;
-+             }
-+         } else
++     . auto/feature
++ 
++-- 
++2.30.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
