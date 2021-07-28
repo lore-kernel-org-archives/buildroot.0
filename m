@@ -2,60 +2,60 @@ Return-Path: <SRS0=nMnf=MU=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2973FC4338F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:15:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB6EAC4338F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:16:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E6EED60F46
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:15:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E6EED60F46
+	by mail.kernel.org (Postfix) with ESMTPS id 759E060C51
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:16:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 759E060C51
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDF7F40276;
-	Wed, 28 Jul 2021 19:15:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 461BE4025D;
+	Wed, 28 Jul 2021 19:16:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LTUm9LJINnkQ; Wed, 28 Jul 2021 19:15:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6Mnm2dg3_xAl; Wed, 28 Jul 2021 19:16:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B7BD401CA;
-	Wed, 28 Jul 2021 19:15:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3C6B51BF2BC
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:12:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 831F3401FC;
+	Wed, 28 Jul 2021 19:16:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E8F181BF2BC
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3868A40623
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:12:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D8984608AD
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:13:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nC1ySd7FvODl for <buildroot@lists.busybox.net>;
- Wed, 28 Jul 2021 19:12:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fPHAgMK2Mx_T for <buildroot@lists.busybox.net>;
+ Wed, 28 Jul 2021 19:13:36 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 03BCE4061A
- for <buildroot@buildroot.org>; Wed, 28 Jul 2021 19:12:55 +0000 (UTC)
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 90C1B60634
+ for <buildroot@buildroot.org>; Wed, 28 Jul 2021 19:13:36 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 924A4240009;
- Wed, 28 Jul 2021 19:12:52 +0000 (UTC)
-Date: Wed, 28 Jul 2021 21:12:51 +0200
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id 1953F240003;
+ Wed, 28 Jul 2021 19:13:33 +0000 (UTC)
+Date: Wed, 28 Jul 2021 21:13:31 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210728211251.28875cca@windsurf>
-In-Reply-To: <20210727100123.2315629-1-fontaine.fabrice@gmail.com>
-References: <20210727100123.2315629-1-fontaine.fabrice@gmail.com>
+To: Petr Vorel <petr.vorel@gmail.com>
+Message-ID: <20210728211331.77d54d03@windsurf>
+In-Reply-To: <20210727174124.10736-1-petr.vorel@gmail.com>
+References: <20210727174124.10736-1-petr.vorel@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libidn: bump to version 1.38
+Subject: Re: [Buildroot] [PATCH 1/1] package/iputils: bump release to
+ 20210722
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,22 +67,18 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Tue, 27 Jul 2021 12:01:23 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Tue, 27 Jul 2021 19:41:24 +0200
+Petr Vorel <petr.vorel@gmail.com> wrote:
 
-> https://gitlab.com/libidn/libidn/-/blob/v1.38/NEWS
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
->  package/libidn/libidn.hash | 2 +-
->  package/libidn/libidn.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Hi,
 
 Applied to master, thanks.
 
