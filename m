@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B26ECC4338F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:41:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31E87C4338F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:42:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8008760234
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:41:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8008760234
+	by mail.kernel.org (Postfix) with ESMTPS id E082160234
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:42:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E082160234
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 52331608CE;
-	Wed, 28 Jul 2021 19:41:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B17DA834B9;
+	Wed, 28 Jul 2021 19:42:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RPeNV9vjiI3d; Wed, 28 Jul 2021 19:41:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xRU96VFujXmp; Wed, 28 Jul 2021 19:42:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A12DA608B5;
-	Wed, 28 Jul 2021 19:41:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9D5DE1BF2BC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 191D182F37;
+	Wed, 28 Jul 2021 19:42:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D75CA1C1135
  for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:41:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A0DC608B5
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE52240575
  for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:41:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BmE1E4BBp38j for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iOY8BoHKVN2w for <buildroot@lists.busybox.net>;
  Wed, 28 Jul 2021 19:41:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1AF8608AD
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBB064054E
  for <buildroot@buildroot.org>; Wed, 28 Jul 2021 19:41:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7678E89105; Wed, 28 Jul 2021 19:07:08 +0000 (UTC)
+ id 81FB289106; Wed, 28 Jul 2021 19:07:08 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Jul 2021 21:41:45 +0200
+Date: Wed, 28 Jul 2021 21:41:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2f99483a59edc4e0ad9482551b3af2d8f4be1793
-X-Git-Newrev: 489cbfd7df1650a8790b3bdbcd69a2357f19764b
+X-Git-Oldrev: 489cbfd7df1650a8790b3bdbcd69a2357f19764b
+X-Git-Newrev: 1b830de9bcdf138738c6364b764f1becf8c88618
 X-Patchwork-Hint: ignore
-Message-Id: <20210728190708.7678E89105@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmodsecurity: fix static build
+Message-Id: <20210728190708.81FB289106@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nginx-modsecurity: fix static build
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,15 +69,11 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=489cbfd7df1650a8790b3bdbcd69a2357f19764b
+commit: https://git.buildroot.net/buildroot/commit/?id=1b830de9bcdf138738c6364b764f1becf8c88618
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following static build failure with nginx raised since bump of
-libmodsecurity to version 3.0.5 in commit
-464d0be380c84ac7c3f1684e49153c3868280d7e:
-
-/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/10.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-2/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libmodsecurity.a(libmodsecurity_la-transaction.o): in function `std::basic_streambuf<char, std::char_traits<char> >::sbumpc() [clone .isra.0]':
-transaction.cc:(.text+0x40): undefined reference to `std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose()'
+Fix static build which has been enabled since bump of libmodsecurity to
+version 3.0.5 in commit 464d0be380c84ac7c3f1684e49153c3868280d7e
 
 Fixes:
  - http://autobuild.buildroot.org/results/e5a9eb8448980f1c5cafe97180b7d1f48ddf02ca
@@ -85,44 +81,41 @@ Fixes:
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-modsecurity.pc.in-add-lstdc.patch         | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ .../0001-config-use-pkg-config.patch               | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/libmodsecurity/0002-modsecurity.pc.in-add-lstdc.patch b/package/libmodsecurity/0002-modsecurity.pc.in-add-lstdc.patch
+diff --git a/package/nginx-modsecurity/0001-config-use-pkg-config.patch b/package/nginx-modsecurity/0001-config-use-pkg-config.patch
 new file mode 100644
-index 0000000000..6511e6f1e0
+index 0000000000..3c74fa4b59
 --- /dev/null
-+++ b/package/libmodsecurity/0002-modsecurity.pc.in-add-lstdc.patch
-@@ -0,0 +1,32 @@
-+From 1a84881b280eb08852d5495c57e44351a40d3f91 Mon Sep 17 00:00:00 2001
++++ b/package/nginx-modsecurity/0001-config-use-pkg-config.patch
+@@ -0,0 +1,29 @@
++From 2907dcd628242eb29920321fb3a744915d11888f Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 26 Jul 2021 00:24:57 +0200
-+Subject: [PATCH] modsecurity.pc.in: add -lstdc++
++Date: Mon, 26 Jul 2021 08:29:21 +0200
++Subject: [PATCH] config: use pkg-config
 +
-+Add -lstdc++ to Libs.Private to avoid the following static build failure
-+with nginx:
-+
-+/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/10.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-2/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libmodsecurity.a(libmodsecurity_la-transaction.o): in function `std::basic_streambuf<char, std::char_traits<char> >::sbumpc() [clone .isra.0]':
-+transaction.cc:(.text+0x40): undefined reference to `std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose()'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e5a9eb8448980f1c5cafe97180b7d1f48ddf02ca
++Change to using pkg-config to find the path to modsecurity and its
++dependencies.
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ modsecurity.pc.in | 2 +-
++ config | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/modsecurity.pc.in b/modsecurity.pc.in
-+index 96cdf5ca..7c895ddc 100644
-+--- a/modsecurity.pc.in
-++++ b/modsecurity.pc.in
-+@@ -8,4 +8,4 @@ Description: ModSecurity API
-+ Version: @MSC_VERSION_WITH_PATCHLEVEL@
-+ Cflags: -I@includedir@
-+ Libs: -L@libdir@ -lmodsecurity
-+-Libs.private: @CURL_LDADD@ @GEOIP_LDADD@ @MAXMIND_LDADD@ @GLOBAL_LDADD@ @LIBXML2_LDADD@ @LMDB_LDADD@ @LUA_LDADD@ @PCRE_LDADD@ @SSDEEP_LDADD@ @YAJL_LDADD@
-++Libs.private: @CURL_LDADD@ @GEOIP_LDADD@ @MAXMIND_LDADD@ @GLOBAL_LDADD@ @LIBXML2_LDADD@ @LMDB_LDADD@ @LUA_LDADD@ @PCRE_LDADD@ @SSDEEP_LDADD@ @YAJL_LDADD@ -lstdc++
++diff --git a/config b/config
++index c6e7467..e20190f 100644
++--- a/config
+++++ b/config
++@@ -50,7 +50,7 @@ END
++ else
++     # auto-discovery
++     ngx_feature="ModSecurity library"
++-    ngx_feature_libs="-lmodsecurity"
+++    ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs modsecurity)"
++ 
++     . auto/feature
++ 
 +-- 
 +2.30.2
 +
