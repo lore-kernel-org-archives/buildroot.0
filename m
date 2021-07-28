@@ -2,56 +2,59 @@ Return-Path: <SRS0=nMnf=MU=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FFE1C4338F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 21:51:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5802C4338F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 22:05:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AB7C160F59
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 21:51:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AB7C160F59
+	by mail.kernel.org (Postfix) with ESMTPS id 480B860F5E
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 22:05:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 480B860F5E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7862483658;
-	Wed, 28 Jul 2021 21:51:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B13281B14;
+	Wed, 28 Jul 2021 22:05:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5hmWaXd0qB7l; Wed, 28 Jul 2021 21:51:16 +0000 (UTC)
+	with ESMTP id t4AyTYN7YTC2; Wed, 28 Jul 2021 22:05:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7A90982EBA;
-	Wed, 28 Jul 2021 21:51:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 12F6D1BF5B4
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 21:51:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B7A981A58;
+	Wed, 28 Jul 2021 22:05:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 098A01BF37C
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 22:05:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 022DD4062B
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 21:51:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EBA794026B
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 22:05:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zRsU2OOc7ij2 for <buildroot@lists.busybox.net>;
- Wed, 28 Jul 2021 21:51:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3839404C1
- for <buildroot@buildroot.org>; Wed, 28 Jul 2021 21:51:10 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 24C5A89163; Wed, 28 Jul 2021 21:16:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RzSuRyH8vHKU for <buildroot@lists.busybox.net>;
+ Wed, 28 Jul 2021 22:05:23 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 92815400EB
+ for <buildroot@buildroot.org>; Wed, 28 Jul 2021 22:05:23 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 6504420003;
+ Wed, 28 Jul 2021 22:05:20 +0000 (UTC)
+Date: Thu, 29 Jul 2021 00:05:18 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Wed, 28 Jul 2021 23:50:47 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0bab8c1089983a4b5f0f2acfe5cad77b02d6f654
-X-Git-Newrev: bbda38afbbfa79ff436e1a187bb267b8d9558036
-X-Patchwork-Hint: ignore
-Message-Id: <20210728211624.24C5A89163@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xml-security-c: new package
+To: Matt Weber <matthew.weber@rockwellcollins.com>
+Message-ID: <20210729000518.64432265@windsurf>
+In-Reply-To: <20210412162347.15021-1-matthew.weber@rockwellcollins.com>
+References: <20210412162347.15021-1-matthew.weber@rockwellcollins.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v3] package/xml-security-c: new package
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,170 +66,29 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Chris Simons <chris.simons@rockwellcollins.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbda38afbbfa79ff436e1a187bb267b8d9558036
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Adds support for the Apache Santuario XML Security for C++ that
-implementations the XML Digital Signature and Encryption
-specifications.
-
-Signed-off-by: Chris Simons <chris.simons@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- ...onf-variable-cache-option-for-getcwd-test.patch | 50 ++++++++++++++++++++++
- package/xml-security-c/Config.in                   | 16 +++++++
- package/xml-security-c/xml-security-c.hash         |  3 ++
- package/xml-security-c/xml-security-c.mk           | 21 +++++++++
- 6 files changed, 92 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6533471736..cc830d4a2a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1834,6 +1834,7 @@ F:	package/valijson/
- F:	package/wpa_supplicant/
- F:	package/wireless_tools/
- F:	package/xen/
-+F:	package/xml-security-c/
- F:	support/testing/tests/package/br2-external/openjdk/
- F:	support/testing/tests/package/test_openjdk.py
- F:	support/testing/tests/package/test_opkg/
-diff --git a/package/Config.in b/package/Config.in
-index 79b58facc3..adda6f5be9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1672,6 +1672,7 @@ menu "JSON/XML"
- 	source "package/tinyxml2/Config.in"
- 	source "package/valijson/Config.in"
- 	source "package/xerces/Config.in"
-+	source "package/xml-security-c/Config.in"
- 	source "package/yajl/Config.in"
- 	source "package/yaml-cpp/Config.in"
- endmenu
-diff --git a/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch b/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch
-new file mode 100644
-index 0000000000..26b53ba719
---- /dev/null
-+++ b/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch
-@@ -0,0 +1,50 @@
-+From 9d14fad412a497fe83cfc6ab594ddc612512f02a Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Thu, 4 Jun 2020 20:34:11 -0500
-+Subject: [PATCH] autoconf variable cache option for getcwd test
-+
-+The cached variable allows cross compiled builds to successfully set the
-+desired default for this value without invoking a test.
-+
-+Fixes:
-+https://issues.apache.org/jira/browse/SANTUARIO-549
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ configure.ac | 20 ++++++++++++--------
-+ 1 file changed, 12 insertions(+), 8 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index b43d7a5..c3d4489 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -74,14 +74,18 @@ AC_CHECK_FUNCS([strcasecmp])
-+ 
-+ # Check whether getcwd can dynamically allocate memory.
-+ AC_MSG_CHECKING([whether getcwd(NULL, 0) works])
-+-AC_RUN_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>
-+-     #include <unistd.h>],
-+-[char *cwd = getcwd(NULL, 0);
-+-return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;])],
-+-     [AC_MSG_RESULT(yes)
-+-      AC_DEFINE([XSEC_HAVE_GETCWD_DYN], [1],
-+-         [Define to 1 if getcwd(NULL, 0) works])],
-+-     [AC_MSG_RESULT(no)])
-++AC_CACHE_VAL([xml_cv_func_getcwd_null],
-++[AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
-++     #include <unistd.h>
-++     char *cwd = getcwd(NULL, 0);
-++     return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;]])],
-++  [xml_cv_func_getcwd_null=yes],
-++  [xml_cv_func_getcwd_null=no])])
-++AC_MSG_RESULT([$xml_cv_func_getcwd_null])
-++if test $xml_cv_func_getcwd_null = yes; then
-++AC_DEFINE([XSEC_HAVE_GETCWD_DYN], [1],
-++  [Define to 1 if getcwd(NULL, 0) works])
-++fi
-+ 
-+ AC_LANG(C++)
-+ 
-+-- 
-+2.17.1
-+
-diff --git a/package/xml-security-c/Config.in b/package/xml-security-c/Config.in
-new file mode 100644
-index 0000000000..4c01855292
---- /dev/null
-+++ b/package/xml-security-c/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_XML_SECURITY_C
-+	bool "xml-security-c"
-+	depends on BR2_INSTALL_LIBSTDCPP # xerces
-+	depends on BR2_USE_WCHAR # xerces
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_XERCES
-+	help
-+	  The xml-security-c library is a C++ implementation of
-+	  the XML Digital Signature and Encryption specifications.
-+
-+	  https://santuario.apache.org/cindex.html
-+
-+comment "xml-security-c needs a toolchain w/ C++, wchar, gcc >= 4.7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR ||
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/xml-security-c/xml-security-c.hash b/package/xml-security-c/xml-security-c.hash
-new file mode 100644
-index 0000000000..d91ed86e9c
---- /dev/null
-+++ b/package/xml-security-c/xml-security-c.hash
-@@ -0,0 +1,3 @@
-+# From http://www.apache.org/dist/santuario/c-library/xml-security-c-2.0.2.tar.gz.sha256
-+sha256  c303a2b08cb9ca0f5594adcbb83829b1e793175d7114a82f7d78def8bb2e30df  xml-security-c-2.0.2.tar.gz
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE.txt
-diff --git a/package/xml-security-c/xml-security-c.mk b/package/xml-security-c/xml-security-c.mk
-new file mode 100644
-index 0000000000..fe761819ee
---- /dev/null
-+++ b/package/xml-security-c/xml-security-c.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# xml-security-c
-+#
-+################################################################################
-+
-+XML_SECURITY_C_VERSION = 2.0.2
-+XML_SECURITY_C_SITE = http://archive.apache.org/dist/santuario/c-library
-+XML_SECURITY_C_LICENSE = Apache-2.0
-+XML_SECURITY_C_LICENSE_FILES = LICENSE.txt
-+XML_SECURITY_C_DEPENDENCIES = openssl xerces
-+XML_SECURITY_C_INSTALL_STAGING = YES
-+
-+XML_SECURITY_C_CONF_ENV = \
-+	xml_cv_func_getcwd_null=yes \
-+	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-+
-+# Patched configure.ac
-+XML_SECURITY_C_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+SGVsbG8sCgpPbiBNb24sIDEyIEFwciAyMDIxIDExOjIzOjQ3IC0wNTAwCk1hdHQgV2ViZXIgPG1h
+dHRoZXcud2ViZXJAcm9ja3dlbGxjb2xsaW5zLmNvbT4gd3JvdGU6Cgo+ICAtIFdvcmtlZCBhcm91
+bmQgWGVyY2VzX2F1dG9jb25mX2NvbmZpZy5ocHA6IGVycm9yOiDigJhjaGFyMTZfdOKAmSBkb2Vz
+IG5vdCBuYW1lIGEgdHlwZQo+ICAgIGJ5IGRpc2FibGluZyBjb2RlIHNvdXJjZXJ5IHRvb2xjaGFp
+bnMKPiAgICAoSVNPIEMrKyBmb3JiaWRzIGRlY2xhcmF0aW9uIC0gcmVxdWlyZXMgSVNPIEMrKyAy
+MDExIChjb2RlIHNvdXJjZXJ5IGlzIEdDQyA0LjgpCgpNZWgsIGhvdyBjb21lIGV4Y2x1ZGluZyBh
+IENvZGUgU291cmNlcnkgdG9vbGNoYWluIGlzIGEgc29sdXRpb24gdG8KdGhpcz8gTXkgYnVnIHJl
+cG9ydCBvbiB0aGUgdjIgd2FzIG5vdCBldmVuIHJlbGF0ZWQgdG8gYSBDb2RlIFNvdXJjZXJ5CnRv
+b2xjaGFpbiwgc28gdGhlIHdvcmsgYXJvdW5kIHByb3Bvc2VkIGluIHRoaXMgdjMgZG9lc24ndCBl
+dmVuIGZpeCB0aGUKaXNzdWUgcG9pbnRlZCBvdXQgaW4gdjIuCgpBbnl3YXksIHRoZSBwcm9ibGVt
+IGlzIHRoYXQgdGhpcyBwYWNrYWdlIHdhcyBub3QgcGFzc2luZyAtc3RkPWMrKzExCndoZW4gYnVp
+bGRpbmcgY29kZSwgc28gdGhlIGJ1aWxkIGZhaWxzIG9uIG9sZGVyIGNvbXBpbGVycyB0aGF0IGRp
+ZCBub3QKdXNlIEMrKzExIGFzIHRoZWlyIGRlZmF1bHQgc3RhbmRhcmQuIFNvIEkgaGF2ZSBtb2Rp
+ZmllZCB0aGUgcGFja2FnZSB0bwpyZXF1aXJlIGdjYyA+PSA0LjcgYW5kIHBhc3MgLXN0ZD1jKysx
+MSBpbiBDWFhGTEFHUywgYW5kIGFwcGxpZWQuCgpUaGFua3MhCgpUaG9tYXMKLS0gClRob21hcyBQ
+ZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtl
+cm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
+b290QGJ1c3lib3gubmV0Cmh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9tYWlsbWFuL2xpc3RpbmZv
+L2J1aWxkcm9vdAo=
