@@ -2,57 +2,61 @@ Return-Path: <SRS0=nMnf=MU=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D362FC4338F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 20:00:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CC38C4320A
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 20:01:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2920360525
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 20:00:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2920360525
+	by mail.kernel.org (Postfix) with ESMTPS id 207F361038
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 20:01:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 207F361038
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB09F401E5;
-	Wed, 28 Jul 2021 20:00:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E78B3405AC;
+	Wed, 28 Jul 2021 20:01:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5XTSil9Lb-VJ; Wed, 28 Jul 2021 20:00:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XnpEiU7BcOc0; Wed, 28 Jul 2021 20:01:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A8BF3401FF;
-	Wed, 28 Jul 2021 20:00:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B4FCF1BF2BC
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 20:00:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40C0740250;
+	Wed, 28 Jul 2021 20:01:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 021A01BF2BC
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 20:01:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A47B882C5E
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 20:00:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F215B4021B
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 20:01:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iRIAEZwGRtoD for <buildroot@lists.busybox.net>;
- Wed, 28 Jul 2021 20:00:50 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D5A7982B08
- for <buildroot@buildroot.org>; Wed, 28 Jul 2021 20:00:50 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 719028910B; Wed, 28 Jul 2021 19:26:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0DGzlCE6rznW for <buildroot@lists.busybox.net>;
+ Wed, 28 Jul 2021 20:01:21 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E12B2401E2
+ for <buildroot@buildroot.org>; Wed, 28 Jul 2021 20:01:20 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 063C6E0002;
+ Wed, 28 Jul 2021 20:01:18 +0000 (UTC)
+Date: Wed, 28 Jul 2021 22:01:17 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Wed, 28 Jul 2021 22:00:13 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1b830de9bcdf138738c6364b764f1becf8c88618
-X-Git-Newrev: daa5459b6aaa059ca16cb98a1cc16b6fb9964cc6
-X-Patchwork-Hint: ignore
-Message-Id: <20210728192604.719028910B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nfs-utils: fix printfs format
- build failure on 64-bits platforms
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20210728220117.5629468f@windsurf>
+In-Reply-To: <20210725210054.1534823-1-giulio.benetti@benettiengineering.com>
+References: <20210725210054.1534823-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/nfs-utils: fix printfs format build
+ failure on 64-bits platforms
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,144 +68,41 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=daa5459b6aaa059ca16cb98a1cc16b6fb9964cc6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 25 Jul 2021 23:00:54 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Add 2 upstream patches from nfs-utils that fix build failures on
-64-bits where time_t is assumed to be a long long when passed to
-printf("%ld"), but that is not always true, so in these patches the
-author (Petr) uses PRIu64 tag.
+> Add 2 pending upstream patches that have been pointed to nfs-utils
+> maintainer to be committed soon. They both fix the build failure on 64-bits
+> where time_t is assumed to be a long long when passed to printf("%ld"), but
+> that is not always true, so in these patches the author(Petr) uses PRIu64
+> tag.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/9bc1d43a588338b7395af7bc97535ee16a6ea2d9/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Cc: Petr Vorel <petr.vorel@gmail.com>
+> ---
+>  ...nfsdcltrack-sqlite-Fix-printf-format.patch | 51 +++++++++++++++++++
+>  ...rack-nfsdcltrack.c-Fix-printf-format.patch | 47 +++++++++++++++++
+>  2 files changed, 98 insertions(+)
+>  create mode 100644 package/nfs-utils/0001-nfsdcltrack-sqlite-Fix-printf-format.patch
+>  create mode 100644 package/nfs-utils/0002-nfsdcltrack-nfsdcltrack.c-Fix-printf-format.patch
 
-Fixes:
-http://autobuild.buildroot.net/results/9bc1d43a588338b7395af7bc97535ee16a6ea2d9/
+Applied to master after adding a reference to the upstream commits.
+Thanks!
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: Petr Vorel <petr.vorel@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...0001-nfsdcltrack-sqlite-Fix-printf-format.patch | 52 ++++++++++++++++++++++
- ...sdcltrack-nfsdcltrack.c-Fix-printf-format.patch | 48 ++++++++++++++++++++
- 2 files changed, 100 insertions(+)
-
-diff --git a/package/nfs-utils/0001-nfsdcltrack-sqlite-Fix-printf-format.patch b/package/nfs-utils/0001-nfsdcltrack-sqlite-Fix-printf-format.patch
-new file mode 100644
-index 0000000000..14894602c4
---- /dev/null
-+++ b/package/nfs-utils/0001-nfsdcltrack-sqlite-Fix-printf-format.patch
-@@ -0,0 +1,52 @@
-+From d05ba5335e869bcd68c0def795c55fd5037914e3 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <petr.vorel () gmail ! com>
-+Date: Thu, 22 Jul 2021 16:15:44 +0000
-+Subject: [PATCH] nfsdcltrack/sqlite: Fix printf format
-+
-+sqlite.c: In function 'sqlite_remove_unreclaimed':
-+sqlite.c:547:71: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'time_t' {aka 'long long int'} [-Werror=format=]
-+  547 |  ret = snprintf(buf, sizeof(buf), "DELETE FROM clients WHERE time < %ld",
-+      |                                                                     ~~^
-+      |                                                                       |
-+      |                                                                       long int
-+      |                                                                     %lld
-+  548 |    grace_start);
-+      |    ~~~~~~~~~~~
-+      |    |
-+      |    time_t {aka long long int}
-+
-+Found in Buildroot riscv32 build.
-+
-+Link: http://autobuild.buildroot.net/results/9bc1d43a588338b7395af7bc97535ee16a6ea2d9/build-end.log
-+
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+Upstream: http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=4f2a5b64386600430ec6b71e57b88c5efaa70aed
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ utils/nfsdcltrack/sqlite.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/utils/nfsdcltrack/sqlite.c b/utils/nfsdcltrack/sqlite.c
-+index f79aebb3..cea4a411 100644
-+--- a/utils/nfsdcltrack/sqlite.c
-++++ b/utils/nfsdcltrack/sqlite.c
-+@@ -46,6 +46,7 @@
-+ #include <sys/stat.h>
-+ #include <sys/types.h>
-+ #include <fcntl.h>
-++#include <inttypes.h>
-+ #include <unistd.h>
-+ #include <sqlite3.h>
-+ #include <linux/limits.h>
-+@@ -544,7 +545,7 @@ sqlite_remove_unreclaimed(time_t grace_start)
-+ 	int ret;
-+ 	char *err = NULL;
-+ 
-+-	ret = snprintf(buf, sizeof(buf), "DELETE FROM clients WHERE time < %ld",
-++	ret = snprintf(buf, sizeof(buf), "DELETE FROM clients WHERE time < %"PRIu64,
-+ 			grace_start);
-+ 	if (ret < 0) {
-+ 		return ret;
-+-- 
-+2.25.1
-+
-diff --git a/package/nfs-utils/0002-nfsdcltrack-nfsdcltrack.c-Fix-printf-format.patch b/package/nfs-utils/0002-nfsdcltrack-nfsdcltrack.c-Fix-printf-format.patch
-new file mode 100644
-index 0000000000..0893959460
---- /dev/null
-+++ b/package/nfs-utils/0002-nfsdcltrack-nfsdcltrack.c-Fix-printf-format.patch
-@@ -0,0 +1,48 @@
-+From 14eb2cae4fca95609ae4efde2444fd0a5ddfca04 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <petr.vorel () gmail ! com>
-+Date: Thu, 22 Jul 2021 16:15:45 +0000
-+Subject: [PATCH] nfsdcltrack/nfsdcltrack.c: Fix printf format
-+
-+nfsdcltrack.c: In function 'cltrack_gracedone':
-+nfsdcltrack.c:528:47: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'time_t' {aka 'long long int'} [-Werror=format=]
-+  528 |  xlog(D_GENERAL, "%s: grace done. gracetime=%ld", __func__, gracetime);
-+      |                                             ~~^             ~~~~~~~~~
-+      |                                               |             |
-+      |                                               long int      time_t {aka long long int}
-+      |                                             %lld
-+
-+Found in Buildroot riscv32 build.
-+
-+Link: http://autobuild.buildroot.net/results/9bc1d43a588338b7395af7bc97535ee16a6ea2d9/build-end.log
-+
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+Upstream: http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=5a53426c0f4e84f6644c11e4f01015597d3bb82c
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ utils/nfsdcltrack/nfsdcltrack.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/utils/nfsdcltrack/nfsdcltrack.c b/utils/nfsdcltrack/nfsdcltrack.c
-+index e926f1c0..0b37c094 100644
-+--- a/utils/nfsdcltrack/nfsdcltrack.c
-++++ b/utils/nfsdcltrack/nfsdcltrack.c
-+@@ -33,6 +33,7 @@
-+ #include <sys/stat.h>
-+ #include <sys/types.h>
-+ #include <fcntl.h>
-++#include <inttypes.h>
-+ #include <unistd.h>
-+ #include <libgen.h>
-+ #include <sys/inotify.h>
-+@@ -525,7 +526,7 @@ cltrack_gracedone(const char *timestr)
-+ 	if (*tail)
-+ 		return -EINVAL;
-+ 
-+-	xlog(D_GENERAL, "%s: grace done. gracetime=%ld", __func__, gracetime);
-++	xlog(D_GENERAL, "%s: grace done. gracetime=%"PRIu64, __func__, gracetime);
-+ 
-+ 	ret = sqlite_remove_unreclaimed(gracetime);
-+ 
-+-- 
-+2.25.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
