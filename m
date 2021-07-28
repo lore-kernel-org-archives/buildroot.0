@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32F4DC4338F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:17:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 792ADC4338F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:17:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DF35F60F9B
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:17:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DF35F60F9B
+	by mail.kernel.org (Postfix) with ESMTPS id 3D64B60F46
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:17:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3D64B60F46
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3C9F40678;
-	Wed, 28 Jul 2021 19:17:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1325F608B5;
+	Wed, 28 Jul 2021 19:17:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vaeDFOV5Zx74; Wed, 28 Jul 2021 19:17:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x7TzIA7PHO9i; Wed, 28 Jul 2021 19:17:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 220F5402D7;
-	Wed, 28 Jul 2021 19:17:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C18B01BF2BC
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:14:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 830F0608AD;
+	Wed, 28 Jul 2021 19:17:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 33FC31BF2BC
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:14:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE94840642
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:14:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 243E060634
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:14:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BPoIh5PFlOEI for <buildroot@lists.busybox.net>;
- Wed, 28 Jul 2021 19:14:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nJE9Ctjxc53q for <buildroot@lists.busybox.net>;
+ Wed, 28 Jul 2021 19:14:13 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
  [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D976840623
- for <buildroot@buildroot.org>; Wed, 28 Jul 2021 19:14:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2A0F3605D2
+ for <buildroot@buildroot.org>; Wed, 28 Jul 2021 19:14:12 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id F0B58240006;
- Wed, 28 Jul 2021 19:14:09 +0000 (UTC)
-Date: Wed, 28 Jul 2021 21:13:43 +0200
+ by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 64D42240007;
+ Wed, 28 Jul 2021 19:14:11 +0000 (UTC)
+Date: Wed, 28 Jul 2021 21:13:08 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210728211343.38c59021@windsurf>
-In-Reply-To: <20210727215413.3397453-1-fontaine.fabrice@gmail.com>
-References: <20210727215413.3397453-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210728211308.4c88b251@windsurf>
+In-Reply-To: <20210727103116.2372005-1-fontaine.fabrice@gmail.com>
+References: <20210727103116.2372005-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/opencv4: bump to version 4.5.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/minizip: bump to version 3.0.2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,15 +73,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Tue, 27 Jul 2021 23:54:13 +0200
+On Tue, 27 Jul 2021 12:31:16 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> https://github.com/opencv/opencv/wiki/ChangeLog#version453
+> https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.0
+> https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.1
+> https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.2
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/opencv4/opencv4.hash | 2 +-
->  package/opencv4/opencv4.mk   | 2 +-
+>  package/minizip/minizip.hash | 2 +-
+>  package/minizip/minizip.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
