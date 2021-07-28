@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32790C4338F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:20:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB477C4338F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:20:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EA8A060F9B
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:20:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EA8A060F9B
+	by mail.kernel.org (Postfix) with ESMTPS id A3A6760F46
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:20:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A3A6760F46
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C6701608B6;
-	Wed, 28 Jul 2021 19:20:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8121681A6F;
+	Wed, 28 Jul 2021 19:20:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 06tqPmN37MBq; Wed, 28 Jul 2021 19:20:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OHbhrnHdPtLw; Wed, 28 Jul 2021 19:20:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80AC0606F1;
-	Wed, 28 Jul 2021 19:20:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BD9671BF2BC
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:18:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D692C81A0D;
+	Wed, 28 Jul 2021 19:20:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 59A7D1BF2BC
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:19:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB0CC40520
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:18:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 56DF383ABB
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:19:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Pnsf1HjXET7o for <buildroot@lists.busybox.net>;
- Wed, 28 Jul 2021 19:18:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nRyzIUIP-eq3 for <buildroot@lists.busybox.net>;
+ Wed, 28 Jul 2021 19:19:02 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 490A54012E
- for <buildroot@buildroot.org>; Wed, 28 Jul 2021 19:18:28 +0000 (UTC)
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 46B9B83A7E
+ for <buildroot@buildroot.org>; Wed, 28 Jul 2021 19:19:02 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 9869AE0005;
- Wed, 28 Jul 2021 19:18:23 +0000 (UTC)
-Date: Wed, 28 Jul 2021 21:18:22 +0200
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id 896C9240005;
+ Wed, 28 Jul 2021 19:18:59 +0000 (UTC)
+Date: Wed, 28 Jul 2021 21:18:57 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210728211822.1d6ec57a@windsurf>
-In-Reply-To: <20210727072011.2272682-1-fontaine.fabrice@gmail.com>
-References: <20210727072011.2272682-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210728211857.0b794c07@windsurf>
+In-Reply-To: <20210727072523.2273052-1-fontaine.fabrice@gmail.com>
+References: <20210727072523.2273052-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/bluez5_utils: hid needs hog
+Subject: Re: [Buildroot] [PATCH 1/1] package/bluez5_utils: make a single
+ option for avrcp and a2dp
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,28 +74,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Tue, 27 Jul 2021 09:20:11 +0200
+On Tue, 27 Jul 2021 09:25:23 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Build of hid without hog is broken since commit
+> Build of avrcp without a2dp is broken since commit
 > fb9fc969d91f69851b4c70dba512b607e52bda7b:
 > 
-> /home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: profiles/input/bluetoothd-manager.o: in function `input_init':
-> manager.c:(.text+0x2fd): undefined reference to `input_set_auto_sec'
+> /home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/9.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: profiles/audio/bluetoothd-avrcp.o: in function `avrcp_handle_set_volume':
+> avrcp.c:(.text+0x9c4): undefined reference to `media_transport_update_device_volume'
+> 
+> However, build of a2dp without avrcp is also broken:
+> 
+> /data/buildroot-autobuilder/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/10.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: profiles/audio/bluetoothd-media.o: in function `.L50':
+> media.c:(.text+0x508): undefined reference to `avrcp_unregister_player'
+> /data/buildroot-autobuilder/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/10.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: profiles/audio/bluetoothd-media.o: in function `match_endpoint_by_path':
+> media.c:(.text+0x824): undefined reference to `avrcp_register_player'
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/9222879c9fe958e01e33f69531270355ea016d17
+>  - http://autobuild.buildroot.org/results/d54cdfc03212fff772a863d1bc8afd3cfb605831
+>  - http://autobuild.buildroot.org/results/64d75af986a4d6e9c5a176efb6e22046f4d82350
+> 
+> So make a single audio option for a2dp and avrcp
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/bluez5_utils/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  package/bluez5_utils/Config.in       | 12 +++---------
+>  package/bluez5_utils/bluez5_utils.mk | 15 ++++-----------
+>  2 files changed, 7 insertions(+), 20 deletions(-)
 
-I have applied, but as I said earlier, I think this should be fixed
-upstream, and depending on the upstream fix, perhaps this needs to be
-reverted in Buildroot, or changed.
+I have also applied, as a stop-gap measure, but I also would like this
+to be fixed upstream, ideally. Depending on the upstream modifications,
+we will see what changes need to be done in Buildroot.
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
