@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB477C4338F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:20:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A4D2C4338F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:20:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A3A6760F46
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:20:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A3A6760F46
+	by mail.kernel.org (Postfix) with ESMTPS id 4EDCE60F9B
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:20:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4EDCE60F9B
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8121681A6F;
-	Wed, 28 Jul 2021 19:20:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 207684052D;
+	Wed, 28 Jul 2021 19:20:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OHbhrnHdPtLw; Wed, 28 Jul 2021 19:20:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bh_BUgtj4_cV; Wed, 28 Jul 2021 19:20:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D692C81A0D;
-	Wed, 28 Jul 2021 19:20:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3812440526;
+	Wed, 28 Jul 2021 19:20:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 59A7D1BF2BC
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:19:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F274D1BF2BC
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 56DF383ABB
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:19:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF17583AAA
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:19:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nRyzIUIP-eq3 for <buildroot@lists.busybox.net>;
- Wed, 28 Jul 2021 19:19:02 +0000 (UTC)
+ with ESMTP id fzPpNMNdLOCJ for <buildroot@lists.busybox.net>;
+ Wed, 28 Jul 2021 19:19:29 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 46B9B83A7E
- for <buildroot@buildroot.org>; Wed, 28 Jul 2021 19:19:02 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0D90683A7E
+ for <buildroot@buildroot.org>; Wed, 28 Jul 2021 19:19:28 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id 896C9240005;
- Wed, 28 Jul 2021 19:18:59 +0000 (UTC)
-Date: Wed, 28 Jul 2021 21:18:57 +0200
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 1ACFFE0005;
+ Wed, 28 Jul 2021 19:19:26 +0000 (UTC)
+Date: Wed, 28 Jul 2021 21:19:26 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210728211857.0b794c07@windsurf>
-In-Reply-To: <20210727072523.2273052-1-fontaine.fabrice@gmail.com>
-References: <20210727072523.2273052-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210728211926.708ddad4@windsurf>
+In-Reply-To: <20210727073755.2283481-1-fontaine.fabrice@gmail.com>
+References: <20210727073755.2283481-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/bluez5_utils: make a single
- option for avrcp and a2dp
+Subject: Re: [Buildroot] [PATCH 1/1] package/open62541: fix build with nios2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,46 +67,33 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Michael Nosthoff <buildroot@heine.tech>, Marcin Bis <marcin@bis.org.pl>,
- buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Tue, 27 Jul 2021 09:25:23 +0200
+On Tue, 27 Jul 2021 09:37:55 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Build of avrcp without a2dp is broken since commit
-> fb9fc969d91f69851b4c70dba512b607e52bda7b:
+> Fix the following build failure with nios2 raised since bump to version
+> 1.2.2 in commit	b436b82411305839abc76bb438fe92661a067526:
 > 
-> /home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/9.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: profiles/audio/bluetoothd-avrcp.o: in function `avrcp_handle_set_volume':
-> avrcp.c:(.text+0x9c4): undefined reference to `media_transport_update_device_volume'
-> 
-> However, build of a2dp without avrcp is also broken:
-> 
-> /data/buildroot-autobuilder/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/10.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: profiles/audio/bluetoothd-media.o: in function `.L50':
-> media.c:(.text+0x508): undefined reference to `avrcp_unregister_player'
-> /data/buildroot-autobuilder/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/10.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: profiles/audio/bluetoothd-media.o: in function `match_endpoint_by_path':
-> media.c:(.text+0x824): undefined reference to `avrcp_register_player'
+> /home/buildroot/autobuild/instance-1/output-1/build/open62541-v1.2.2/src/ua_types_encoding_binary.c: In function 'unpack754':
+> /home/buildroot/autobuild/instance-1/output-1/build/open62541-v1.2.2/src/ua_types_encoding_binary.c:322:12: error: conversion to 'long double' from 'long long int' may alter its value [-Werror=conversion]
+>      result /= (1LL<<significandbits);
+>             ^~
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/d54cdfc03212fff772a863d1bc8afd3cfb605831
->  - http://autobuild.buildroot.org/results/64d75af986a4d6e9c5a176efb6e22046f4d82350
-> 
-> So make a single audio option for a2dp and avrcp
+>  - http://autobuild.buildroot.org/results/c0a33dbada549c480bc741c1c8177b788ff053db
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/bluez5_utils/Config.in       | 12 +++---------
->  package/bluez5_utils/bluez5_utils.mk | 15 ++++-----------
->  2 files changed, 7 insertions(+), 20 deletions(-)
+>  ...licit-cast-to-avoid-compiler-warning.patch | 25 +++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>  create mode 100644 package/open62541/0003-fix-core-Explicit-cast-to-avoid-compiler-warning.patch
 
-I have also applied, as a stop-gap measure, but I also would like this
-to be fixed upstream, ideally. Depending on the upstream modifications,
-we will see what changes need to be done in Buildroot.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
