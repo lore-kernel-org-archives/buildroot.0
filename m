@@ -2,60 +2,56 @@ Return-Path: <SRS0=nMnf=MU=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDE73C4338F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:18:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A261C4338F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:19:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9F5AD60F9B
-	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:18:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9F5AD60F9B
+	by mail.kernel.org (Postfix) with ESMTPS id CF36560F46
+	for <buildroot@archiver.kernel.org>; Wed, 28 Jul 2021 19:19:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CF36560F46
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 628BB4012E;
-	Wed, 28 Jul 2021 19:18:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAF2E6066F;
+	Wed, 28 Jul 2021 19:19:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QzfMOOO_jnV3; Wed, 28 Jul 2021 19:18:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tu3_rTgKp8l1; Wed, 28 Jul 2021 19:19:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 60DCC40520;
-	Wed, 28 Jul 2021 19:18:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AD0791BF2BC
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:14:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A7C0605D2;
+	Wed, 28 Jul 2021 19:19:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A750E1C1135
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:15:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C36740654
- for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:14:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A4EF8608AD
+ for <buildroot@lists.busybox.net>; Wed, 28 Jul 2021 19:15:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hWJpK143mpxw for <buildroot@lists.busybox.net>;
- Wed, 28 Jul 2021 19:14:20 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A466840642
- for <buildroot@buildroot.org>; Wed, 28 Jul 2021 19:14:20 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 7BC86240009;
- Wed, 28 Jul 2021 19:14:17 +0000 (UTC)
-Date: Wed, 28 Jul 2021 21:13:53 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WX9h5ppaKNIA for <buildroot@lists.busybox.net>;
+ Wed, 28 Jul 2021 19:15:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E8B7E60634
+ for <buildroot@buildroot.org>; Wed, 28 Jul 2021 19:15:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 95C4789089; Wed, 28 Jul 2021 18:40:27 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: yegorslists--- via buildroot <buildroot@busybox.net>
-Message-ID: <20210728211353.4d8ba5e7@windsurf>
-In-Reply-To: <20210728074550.523-1-yegorslists@googlemail.com>
-References: <20210728074550.523-1-yegorslists@googlemail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/libmbim: bump to version 1.26.0
+To: buildroot@buildroot.org
+Date: Wed, 28 Jul 2021 21:14:57 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7b103c50eb3eaddad4ea81b9cd0c7deee1d9d9d5
+X-Git-Newrev: 06771d2694e1bb29e047c055b049a0999906e66a
+X-Patchwork-Hint: ignore
+Message-Id: <20210728184027.95C4789089@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/daq3: needs threads
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,44 +63,62 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org,
- Aleksander Morgado <aleksander@aleksander.es>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Wed, 28 Jul 2021 09:45:50 +0200
-yegorslists--- via buildroot <buildroot@busybox.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=06771d2694e1bb29e047c055b049a0999906e66a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> This release introduces meson build system support that fixes
-> gobject-intorspection issue with autotools.
-> 
-> As meson files are only available in git, switch the location to
-> https://gitlab.freedesktop.org.
-> 
-> Since 1.26.0 libgudev is not required anymore so drop this dependency.
-> 
-> Add support for bash-completion.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/f8a81aad0e262a567a2b31712575472ae92e5518
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/libmbim/libmbim.hash |  2 +-
->  package/libmbim/libmbim.mk   | 23 ++++++++++++++---------
->  2 files changed, 15 insertions(+), 10 deletions(-)
+daq3 depends on threads since its addition in commit
+6e75a990ae35580800f24f3ddc4573c6bc38fa05
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/b56defe97c0bd56d9a887beeb183ed9bb660b72a
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/daq3/Config.in   | 6 ++++--
+ package/snort3/Config.in | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/daq3/Config.in b/package/daq3/Config.in
+index ad7d55db5b..b53e5508fd 100644
+--- a/package/daq3/Config.in
++++ b/package/daq3/Config.in
+@@ -3,12 +3,14 @@ config BR2_PACKAGE_DAQ3
+ 	depends on !BR2_PACKAGE_DAQ
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  DAQ is a Data Acquisition library for packet I/O from the
+ 	  Snort project.
+ 
+ 	  https://www.snort.org
+ 
+-comment "daq3 needs a toolchain w/ dynamic library, gcc >= 4.9"
++comment "daq3 needs a toolchain w/ dynamic library, gcc >= 4.9, threads"
+ 	depends on !BR2_PACKAGE_DAQ
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
++		|| !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/snort3/Config.in b/package/snort3/Config.in
+index 75923c3c20..dcc29b820a 100644
+--- a/package/snort3/Config.in
++++ b/package/snort3/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_SNORT3
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS # daq3
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # hwloc
++	depends on BR2_TOOLCHAIN_HAS_THREADS # daq3, hwloc
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_DAQ3
+ 	select BR2_PACKAGE_FLEX
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
