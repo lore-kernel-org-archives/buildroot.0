@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFBE3C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:46:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72D2EC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:46:28 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 82EB560E96
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:46:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 82EB560E96
+	by mail.kernel.org (Postfix) with ESMTPS id 25FCB60EE8
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:46:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 25FCB60EE8
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 559524067C;
-	Wed,  4 Aug 2021 00:46:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E725840691;
+	Wed,  4 Aug 2021 00:46:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0xUiYIqi_A4L; Wed,  4 Aug 2021 00:46:13 +0000 (UTC)
+	with ESMTP id FDXxfc6nSyzR; Wed,  4 Aug 2021 00:46:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 65AFA40687;
-	Wed,  4 Aug 2021 00:46:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CF4E84068F;
+	Wed,  4 Aug 2021 00:46:25 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 12E011BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 585381BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B021940EFA
+ by smtp2.osuosl.org (Postfix) with ESMTP id B265040F7F
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YIBjup56o4mB for <buildroot@lists.busybox.net>;
+ with ESMTP id zmgdN6VBKXRV for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1147240F8C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1CBAF40F90
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 5A3F887044; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
+ id 6DCCB87C2D; Tue,  3 Aug 2021 21:10:21 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Jul 2021 21:05:13 +0200
+Date: Wed, 28 Jul 2021 21:05:17 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1c84624be36a356ad9f8ff4e061aad7d132d6f81
-X-Git-Newrev: b4aa04121d107cad84a4bd2f018a4803e521d9b2
+X-Git-Oldrev: 90bf922347d2870291c67df8774286b901551abb
+X-Git-Newrev: 6074a4dc6318d8ea0bf93ad7b264173c5adb56e6
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211021.5A3F887044@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libidn2: bump to
- version 2.3.2
+Message-Id: <20210803211021.6DCCB87C2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libupnp: bump to
+ version 1.14.7
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,42 +70,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4aa04121d107cad84a4bd2f018a4803e521d9b2
+commit: https://git.buildroot.net/buildroot/commit/?id=6074a4dc6318d8ea0bf93ad7b264173c5adb56e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://gitlab.com/libidn/libidn2/-/blob/v2.3.2/NEWS
+https://github.com/pupnp/pupnp/releases/tag/release-1.14.7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libidn2/libidn2.hash | 2 +-
- package/libidn2/libidn2.mk   | 2 +-
+ package/libupnp/libupnp.hash | 2 +-
+ package/libupnp/libupnp.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
-index fb8b449d2a..bc96d7e15a 100644
---- a/package/libidn2/libidn2.hash
-+++ b/package/libidn2/libidn2.hash
-@@ -1,5 +1,5 @@
- # Calculated locally after checking signature
--sha256  8af684943836b8b53965d5f5b6714ef13c26c91eaa36ce7d242e3d21f5d40f2d  libidn2-2.3.1.tar.gz
-+sha256  76940cd4e778e8093579a9d195b25fff5e936e9dc6242068528b437a76764f91  libidn2-2.3.2.tar.gz
- 
- # Hash for license files:
- sha256  73483f797a83373fca1b968c11785b98c4fc4803cdc7d3210811ca8b075d6d76  COPYING
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-index a03d9378c7..19fbe4aafd 100644
---- a/package/libidn2/libidn2.mk
-+++ b/package/libidn2/libidn2.mk
+diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
+index e4858fdc8a..f7fdb6d521 100644
+--- a/package/libupnp/libupnp.hash
++++ b/package/libupnp/libupnp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  3168f676352e2a6e45afd6ea063721ed674c99f555394903fbd23f7f54f0a503  libupnp-1.14.6.tar.bz2
++sha256  7b66ac4a86bc0e218e2771ac274b2945bc4154bf9054e57b14afb67c26ac7c24  libupnp-1.14.7.tar.bz2
+ sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
+index e8ece46542..7457d2644a 100644
+--- a/package/libupnp/libupnp.mk
++++ b/package/libupnp/libupnp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBIDN2_VERSION = 2.3.1
-+LIBIDN2_VERSION = 2.3.2
- LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
- LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
+-LIBUPNP_VERSION = 1.14.6
++LIBUPNP_VERSION = 1.14.7
+ LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
+ LIBUPNP_SITE = \
+ 	http://downloads.sourceforge.net/project/pupnp/release-$(LIBUPNP_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
