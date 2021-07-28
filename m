@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AA39C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:51:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4C65C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:51:40 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6180B60EFD
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:51:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6180B60EFD
+	by mail.kernel.org (Postfix) with ESMTPS id 987F860F58
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:51:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 987F860F58
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B36F842EF;
-	Wed,  4 Aug 2021 00:51:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7663D843A3;
+	Wed,  4 Aug 2021 00:51:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mCYHR5CbtvUh; Wed,  4 Aug 2021 00:51:25 +0000 (UTC)
+	with ESMTP id nr9whHHGnPZx; Wed,  4 Aug 2021 00:51:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93DBD8429A;
-	Wed,  4 Aug 2021 00:51:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A91D384395;
+	Wed,  4 Aug 2021 00:51:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4F4071BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8AF651BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A79B54151B
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0E1540F94
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dnqdccgAiWs1 for <buildroot@lists.busybox.net>;
+ with ESMTP id GhaBuUNvxwui for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4CE0C40E4F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 620C440EA9
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9CAA687044; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
+ id A971087884; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Jul 2021 22:18:40 +0200
+Date: Wed, 28 Jul 2021 22:59:20 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 14296940be1c5f7c999530e058c5563b0a94ce22
-X-Git-Newrev: d41d79656849d0a495db461272f691c8b6a916b9
+X-Git-Oldrev: d41d79656849d0a495db461272f691c8b6a916b9
+X-Git-Newrev: aaf3322c2862a1cea6df1e597bb1774cd5929fef
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211022.9CAA687044@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/linux-tools: add
- support for bpftool
+Message-Id: <20210803211022.A971087884@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libosmium: new package
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,94 +69,124 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d41d79656849d0a495db461272f691c8b6a916b9
+commit: https://git.buildroot.net/buildroot/commit/?id=aaf3322c2862a1cea6df1e597bb1774cd5929fef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This tool is available to be compiled since kernel 4.15.
+A fast and flexible C++ library for working with OpenStreetMap data.
+Libosmium works on Linux, macOS and Windows.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://osmcode.org/libosmium/
+
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linux-tools/Config.in                | 22 +++++++++++++++++
- package/linux-tools/linux-tool-bpftool.mk.in | 37 ++++++++++++++++++++++++++++
- 2 files changed, 59 insertions(+)
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/libosmium/Config.in      | 17 +++++++++++++++++
+ package/libosmium/libosmium.hash |  3 +++
+ package/libosmium/libosmium.mk   | 38 ++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 60 insertions(+)
 
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index ceb58c668a..2287ef5888 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -5,6 +5,28 @@ menu "Linux Kernel Tools"
- config BR2_PACKAGE_LINUX_TOOLS
- 	bool
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7fa4851627..e8bb9fd54a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1864,6 +1864,7 @@ N:	Max Filippov <jcmvbkbc@gmail.com>
+ F:	arch/Config.in.xtensa
  
-+config BR2_PACKAGE_LINUX_TOOLS_BPFTOOL
-+	bool "bpftool"
-+	depends on !BR2_nios2 # binutils
-+	depends on BR2_USE_WCHAR # binutils, elfutils
-+	depends on !BR2_STATIC_LIBS # elfutils
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
-+	select BR2_PACKAGE_LINUX_TOOLS
-+	select BR2_PACKAGE_BINUTILS
-+	select BR2_PACKAGE_ELFUTILS
-+	help
-+	  bpftool is a tool for for inspection and simple manipulation
-+	  of eBPF programs and maps.
-+
-+	  These tools are available only from kernel version 4.15.
-+
-+comment "bpftool needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
-+	depends on !BR2_nios2
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-+
- config BR2_PACKAGE_LINUX_TOOLS_CPUPOWER
- 	bool "cpupower"
- 	select BR2_PACKAGE_LINUX_TOOLS
-diff --git a/package/linux-tools/linux-tool-bpftool.mk.in b/package/linux-tools/linux-tool-bpftool.mk.in
+ N:	Maxim Kochetkov <fido_max@inbox.ru>
++F:	package/libosmium/
+ F:	package/postgis/
+ F:	package/protozero/
+ F:	package/timescaledb/
+diff --git a/package/Config.in b/package/Config.in
+index 9ced0a139e..48ddbb63b2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1938,6 +1938,7 @@ menu "Other"
+ 	source "package/libloki/Config.in"
+ 	source "package/libnpth/Config.in"
+ 	source "package/libnspr/Config.in"
++	source "package/libosmium/Config.in"
+ 	source "package/libpfm4/Config.in"
+ 	source "package/libplatform/Config.in"
+ 	source "package/libplist/Config.in"
+diff --git a/package/libosmium/Config.in b/package/libosmium/Config.in
 new file mode 100644
-index 0000000000..0c4d3693a3
+index 0000000000..9f002d3516
 --- /dev/null
-+++ b/package/linux-tools/linux-tool-bpftool.mk.in
-@@ -0,0 +1,37 @@
++++ b/package/libosmium/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_LIBOSMIUM
++	bool "libosmium"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
++	depends on BR2_USE_WCHAR # boost
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_PROTOZERO
++	help
++	  A fast and flexible C++ library for working with OpenStreetMap
++	  data. Libosmium works on Linux, macOS and Windows.
++
++	  https://osmcode.org/libosmium/
++
++comment "libosmium needs a toolchain w/ C++,  wchar, threads, gcc >= 4.7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libosmium/libosmium.hash b/package/libosmium/libosmium.hash
+new file mode 100644
+index 0000000000..05d898bc7f
+--- /dev/null
++++ b/package/libosmium/libosmium.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  4a7672d7caf4da3bc68619912b298462370c423c697871a0be6273c6686e10d6  libosmium-2.17.0.tar.gz
++sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE
+diff --git a/package/libosmium/libosmium.mk b/package/libosmium/libosmium.mk
+new file mode 100644
+index 0000000000..3beca73c4a
+--- /dev/null
++++ b/package/libosmium/libosmium.mk
+@@ -0,0 +1,38 @@
 +################################################################################
 +#
-+# bpftool
++# libosmium
 +#
 +################################################################################
 +
-+LINUX_TOOLS += bpftool
++LIBOSMIUM_VERSION = 2.17.0
++LIBOSMIUM_SITE = $(call github,osmcode,libosmium,v$(LIBOSMIUM_VERSION))
++LIBOSMIUM_LICENSE = BSL-1.0
++LIBOSMIUM_LICENSE_FILES = LICENSE
++LIBOSMIUM_INSTALL_STAGING = YES
++LIBOSMIUM_DEPENDENCIES = boost protozero
 +
-+BPFTOOL_DEPENDENCIES = binutils elfutils
++ifeq ($(BR2_PACKAGE_BZIP2),y)
++LIBOSMIUM_DEPENDENCIES += bzip2
++endif
 +
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+BPFTOOL_DEPENDENCIES += libcap
++ifeq ($(BR2_PACKAGE_EXPAT),y)
++LIBOSMIUM_DEPENDENCIES += expat
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGEOS),y)
++LIBOSMIUM_DEPENDENCIES += libgeos
++endif
++
++ifeq ($(BR2_PACKAGE_LZ4),y)
++LIBOSMIUM_DEPENDENCIES += lz4
++endif
++
++ifeq ($(BR2_PACKAGE_PROJ),y)
++LIBOSMIUM_DEPENDENCIES += proj
 +endif
 +
 +ifeq ($(BR2_PACKAGE_ZLIB),y)
-+BPFTOOL_DEPENDENCIES += zlib
++LIBOSMIUM_DEPENDENCIES += zlib
 +endif
 +
-+BPFTOOL_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
-+
-+define BPFTOOL_BUILD_CMDS
-+	$(Q)if ! grep install $(LINUX_DIR)/tools/bpf/bpftool/Makefile >/dev/null 2>&1 ; then \
-+		echo "Your kernel version is too old and does not have install section in the bpf tools." ; \
-+		echo "At least kernel 4.15 must be used." ; \
-+		exit 1 ; \
-+	fi
-+
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(LINUX_DIR)/tools/bpf/bpftool \
-+		$(BPFTOOL_MAKE_OPTS)
-+endef
-+
-+define BPFTOOL_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(LINUX_DIR)/tools/bpf/bpftool \
-+		$(BPFTOOL_MAKE_OPTS) \
-+		DESTDIR=$(TARGET_DIR) \
-+		install
-+endef
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
