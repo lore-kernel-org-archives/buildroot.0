@@ -2,85 +2,99 @@ Return-Path: <SRS0=zSif=MV=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 159FCC4338F
-	for <buildroot@archiver.kernel.org>; Thu, 29 Jul 2021 15:27:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94D8FC4338F
+	for <buildroot@archiver.kernel.org>; Thu, 29 Jul 2021 20:17:29 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9A40B60F43
-	for <buildroot@archiver.kernel.org>; Thu, 29 Jul 2021 15:27:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A40B60F43
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 4018B60F46
+	for <buildroot@archiver.kernel.org>; Thu, 29 Jul 2021 20:17:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4018B60F46
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=paral.in
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D3CF83AF3;
-	Thu, 29 Jul 2021 15:27:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED08B83B49;
+	Thu, 29 Jul 2021 20:17:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id so9Sjuj75K49; Thu, 29 Jul 2021 15:27:20 +0000 (UTC)
+	with ESMTP id ajC5Jauh4mjO; Thu, 29 Jul 2021 20:17:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BAFD183ADF;
-	Thu, 29 Jul 2021 15:27:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 371DD1BF292
- for <buildroot@lists.busybox.net>; Thu, 29 Jul 2021 15:27:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5786683B47;
+	Thu, 29 Jul 2021 20:17:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 018F11BF317
+ for <buildroot@lists.busybox.net>; Thu, 29 Jul 2021 20:17:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 26B5D40585
- for <buildroot@lists.busybox.net>; Thu, 29 Jul 2021 15:27:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4A1760680
+ for <buildroot@lists.busybox.net>; Thu, 29 Jul 2021 20:17:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8WxFmhCkoLX8 for <buildroot@lists.busybox.net>;
- Thu, 29 Jul 2021 15:27:17 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=paral-in.20150623.gappssmtp.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QTb8sNKr1rfn for <buildroot@lists.busybox.net>;
+ Thu, 29 Jul 2021 20:17:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com
- [IPv6:2607:f8b0:4864:20::234])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 82C56404E5
- for <buildroot@buildroot.org>; Thu, 29 Jul 2021 15:27:17 +0000 (UTC)
-Received: by mail-oi1-x234.google.com with SMTP id n16so2329885oij.2
- for <buildroot@buildroot.org>; Thu, 29 Jul 2021 08:27:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com
+ [IPv6:2607:f8b0:4864:20::22f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3D83460650
+ for <buildroot@buildroot.org>; Thu, 29 Jul 2021 20:17:24 +0000 (UTC)
+Received: by mail-oi1-x22f.google.com with SMTP id u10so10025165oiw.4
+ for <buildroot@buildroot.org>; Thu, 29 Jul 2021 13:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=paral-in.20150623.gappssmtp.com; s=20150623;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=VlrOC1GbIvIUf6rRlG//K+wFJWcAm1vpmrdQ9h+PVz0=;
- b=YpC4BDFeH1ajq0UBSqBkT+NWp/fz1Jea3yvnv64V//2hsahZYZC4q9zPuwfCWTAYxG
- mddnZvgggj9/5q10iYf5F9AFib8GTcKBKfaZ2hucAkriJFiFDYhlXw49lxEuSDY/mO48
- +QR6Nr4ntxwKsO+9dJmuCpksEdJhLrammoryAXkmDyjJoTJZe+jKDDS3BGtloexxY09a
- +PhiD0CLh/c6H14CNSuotVGCJ4l1RC5aOtB/Zb1vWDQETSj46sVX26dO5SfbkuA4q29T
- 1OHH6dspSwmlhSPhy+PzWQJ3bA3//p9HrK21u8ckPU4IA+sHoEb1aIAkxv6bjfSbpnng
- mnwQ==
+ :cc; bh=ZjSTR1JBOVXposlcBSeCRgnsJ3Kj5iwAWM9bTIu88Hs=;
+ b=E4EfAT2hXobnfFDZOf9KvTYmsFX69MIR9X/AbEmWFKtrMOz4/+MVFhFLcCbCgRUtny
+ KGf9l9M6el7rj1AZYEf6/hcRE05M9v2+1Xa+EJsIXzKfqORcO0u4rhTHxWewFzoKiGtk
+ dM724U7kOdfCg+W8Z02gxhdU/03rWfDYMxVMjz72mNwMWUAHlpnjFAziKpeNaVBd5qlv
+ FDmuOpbvZs6ApA2FmIQqaZwSCq1fOGnvjX5RibzY17anrS8wfnnXoKPdnyl9SYS8VMKk
+ zXNytYo0MKsoPtV1BeX/K9dG7KEMIKsMjSOi8G/ui/ZNmlN2VmKJgwx+VCseuXo42d75
+ 4f7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=VlrOC1GbIvIUf6rRlG//K+wFJWcAm1vpmrdQ9h+PVz0=;
- b=P49MqVEClJ7pKORgU9Y8jcklxYk73LAbsC34ZphyNOne5fighV7HBdAHaO7RSq9nL2
- OMyY0F6k59M7Jwie0S2K5hEz19EIc7SSxGRLZOonA8KKSnUartVfKH7+vSVAYj+6ezk2
- PoISqVN8P0AflXhUt/nEl/dnskk0hh+hNWfW17XfKtakytOPyf+yHe95qr4p/s8Wdsmo
- +iR+ZbNtO88D6VmRxqU7aSCHO94RvZDeqaNOXW7OJ/MDN72dIk1/v+cALuzSs13IjpBi
- 9YZwYnIvgMzpHvXMfepw15IDxCmB6dDjaHs+xVSQNIPuRSJcOokuKNlnlgLUI5iUJqw6
- 3ChQ==
-X-Gm-Message-State: AOAM5322SjXDcja9cmKw2xhSdKzzRavNNSyiNiB3HesE1P6wOQPr6RQD
- LfXaHvi7L8l165DAoseRGKc9rl/cTXBvkpJWesE=
-X-Google-Smtp-Source: ABdhPJy8LLXqKJ+8erTWfpyK+SesMlft6CG8HH/Tmzb0syiAwAoUSBFIUdAXbh9ewLIgn9crSGI48R8o/qEIqGL4v4Q=
-X-Received: by 2002:aca:3144:: with SMTP id x65mr3392146oix.157.1627572436523; 
- Thu, 29 Jul 2021 08:27:16 -0700 (PDT)
+ bh=ZjSTR1JBOVXposlcBSeCRgnsJ3Kj5iwAWM9bTIu88Hs=;
+ b=c/g3EqWolYVVzZMP0exsr23WOkZ3+QhLIZM0BI8pWjimQP0bgUw5LB5ZK42iaT9D9N
+ FzFK1e0WWry5uV1lNiDGqg+S0waxu7Wupo9qu29gavqhO23utqp+WTeP2Z8keyEXD4pw
+ U0kvSgi96+w0jmF/KjR35lQOramw9lC2uz4XDmbCJaAfqBzVs3bm+ylAgXkGDPYoCZTq
+ QLnWHkd+gpWYXWfRQv5Sn7BsHmdziPqOuXdxYzAJCdQIDaMqbLjBu9iNr6lFNEu4c0H2
+ 5Vn35jlEOr7flnDivgf941gxW0kMaVW2/mvuvmxfZeVZTXJVRiTCq7vGmwJ6rK9v9CXC
+ W55A==
+X-Gm-Message-State: AOAM530z4HqLH/3SwjP+0lnXT/vsXogozeJNKTdpYD4AK3tAZQjq60md
+ UmkTGW7iXQTv3HMHSqyCHUBE8RLZhWCJ0w==
+X-Google-Smtp-Source: ABdhPJxONYsT5xeVWmpTJFFxVvhefgI59zaDGYRkfSFb8ZO65L3Q8GqhNpzhAINwPE/m/kH06vJUBg==
+X-Received: by 2002:a05:6808:28d:: with SMTP id
+ z13mr4228292oic.68.1627589843137; 
+ Thu, 29 Jul 2021 13:17:23 -0700 (PDT)
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com.
+ [209.85.167.181])
+ by smtp.gmail.com with ESMTPSA id z22sm634879ooz.20.2021.07.29.13.17.21
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 29 Jul 2021 13:17:22 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id o20so9976788oiw.12
+ for <buildroot@buildroot.org>; Thu, 29 Jul 2021 13:17:21 -0700 (PDT)
+X-Received: by 2002:a05:6808:f94:: with SMTP id
+ o20mr10878265oiw.112.1627589841583; 
+ Thu, 29 Jul 2021 13:17:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210708145946.854654-1-nolange79@gmail.com>
- <c995a5ea-e83c-47f6-6e4d-08f1b358474d@mind.be>
-In-Reply-To: <c995a5ea-e83c-47f6-6e4d-08f1b358474d@mind.be>
-From: Norbert Lange <nolange79@gmail.com>
-Date: Thu, 29 Jul 2021 17:27:05 +0200
-Message-ID: <CADYdroPq7RJf1xgWOTFRyPPCq2xcPB5NXVRopJopJGFAzcwwvg@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [PATCH] package/gtest: bump to version 1.11.0
+References: <20201219153525.1361175-1-thomas.petazzoni@bootlin.com>
+ <20201219153525.1361175-6-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20201219153525.1361175-6-thomas.petazzoni@bootlin.com>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 29 Jul 2021 13:17:09 -0700
+X-Gmail-Original-Message-ID: <CA+h8R2r_kBmCAF_ZAvF4EWivhXxaU1OBh6N=eAZSB=ZMqtrdow@mail.gmail.com>
+Message-ID: <CA+h8R2r_kBmCAF_ZAvF4EWivhXxaU1OBh6N=eAZSB=ZMqtrdow@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH v2 05/12] support/download/go-post-process:
+ implement Go vendoring support
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,65 +106,57 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Michael Nosthoff <buildroot@heine.tech>, Stephan Hoffmann <sho@relinux.de>,
- buildroot <buildroot@buildroot.org>
+Cc: Christian Stewart <christian@paral.in>,
+ Matt Weber <Matthew.Weber@rockwellcollins.com>,
+ Patrick Havelange <patrick.havelange@essensium.com>,
+ Anisse Astier <anisse@astier.eu>,
+ Ryan Barnett <ryan.barnett@rockwellcollins.com>,
+ Buildroot List <buildroot@buildroot.org>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Am Sa., 24. Juli 2021 um 22:42 Uhr schrieb Arnout Vandecappelle
-<arnout@mind.be>:
->
->
->
-> On 08/07/2021 16:59, Norbert Lange wrote:
-> > Python is removed as dependency.
-> > gtest uses python for self-tests which are not run by buildroot,
-> > and the remaining scripts are not used by the build, and aren't
-> > maintained or supported.
-> >
-> > Special handling for gtest-config and gmock-config is removed aswell,
-> > the CMake Buildsystem now does take care of those.
-> >
-> > Installation of the python gmock generator scripts is conditional upon
-> > host-python[3].
->
->  No it's not. The location is conditional, but it's always installed. So I kept
-> that part.
+Thomas, all,
 
-yeah... unless you dont build host-python[3], then things fall apart:
 
-/usr/bin/install -D -m 0755
-/tmp/buildroot/build/host-gtest-1.11.0/googlemock/scripts/generator/gmock_gen.py
-/tmp/buildroot/host/bin/gmock_gen
-cp -rp /tmp/buildroot/build/host-gtest-1.11.0/googlemock/scripts/generator/cpp
-/tmp/buildroot/host/lib/python2.7/site-packages
-cp: cannot create directory
-'/tmp/buildroot/host/lib/python2.7/site-packages': No such file or
-directory
-make: *** [package/pkg-generic.mk:280:
-/tmp/buildroot/build/host-gtest-1.11.0/.stamp_host_installed] Error 1
+On Sat, Dec 19, 2020 at 7:35 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> The logic to generate go.mod when not available is moved to the
+> download post-process helper, as it must be done before "go mod
+> vendor" is executed. Also, "go mod init" is used instead of manually
+> crafting go.mod. This was suggested by Christian Stewart
+> <christian@paral.in>. The Go module name is passed down to
+> go-post-process using the BR_GOMOD environment variable.
 
->
-> > Since this is one of the unsupported + unmaintained
-> > scripts, installation probably should be gutted completely.
->
->  This may be true though.
+> +go mod vendor -v -modcacherw
+> +popd > /dev/null
+> +
+> +repack ${base_name} ${output}
 
-I am not sure what they are used for, seems they were necessary
-for gmock some time ago?
+This works fine in most cases, however, this causes inconsistent hashes.
 
->
->
->  Applied to master with the above change.
->
->  Regards,
->  Arnout
+On my system, the hash is correct after re-pack. But on 2 of my users
+machines, the hash ends up different.
 
-buildbot failures incoming?
+So something specific to the host machine must be influencing the hash
+of the repacked archive.
 
-Norbert
+It's either something in "go mod vendor" that's not deterministic, or
+maybe host Go is being used instead of the one compiled by Buildroot,
+or perhaps it's not possible to always get deterministic hashes this
+way.
+
+Can we possibly switch to hashing the download /before/ re-packing it,
+given that Go verifies the hashes in go.sum automatically as part of
+the "go mod vendor" step?
+
+Go mod vendor will fail if any of the dependencies are different, the
+checksums are included in go.sum
+
+Thanks & best regards,
+Christian Stewart
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
