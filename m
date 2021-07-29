@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38E1BC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:53:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 580D8C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:53:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F321C60E96
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:53:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F321C60E96
+	by mail.kernel.org (Postfix) with ESMTPS id 1705F60EFD
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:53:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1705F60EFD
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0E4D424D9;
-	Wed,  4 Aug 2021 00:53:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6A98843C3;
+	Wed,  4 Aug 2021 00:53:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UzeRkajtMvLw; Wed,  4 Aug 2021 00:53:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2OaLQnhbvvJK; Wed,  4 Aug 2021 00:53:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B10D424E0;
-	Wed,  4 Aug 2021 00:53:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 510F4843A8;
+	Wed,  4 Aug 2021 00:53:42 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1B72E1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2C08B1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8FBBF40F15
+ by smtp2.osuosl.org (Postfix) with ESMTP id C0B2F40F16
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mMvd4VqiA6RF for <buildroot@lists.busybox.net>;
+ with ESMTP id NXqqFKafw-WZ for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE96940FB2
+ by smtp2.osuosl.org (Postfix) with ESMTP id B35C940F19
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 1C36F87884; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
+ id 1337F87044; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Jul 2021 23:01:31 +0200
+Date: Thu, 29 Jul 2021 23:00:45 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8e789e96bb869b7b1e3e54a262399848214c6313
-X-Git-Newrev: 0a954d441218daa6bbafb74d30539e6b14f193b8
+X-Git-Oldrev: 6865bd20846175e6b6e308b81d6f95c1b84a6bdf
+X-Git-Newrev: 8e789e96bb869b7b1e3e54a262399848214c6313
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211023.1C36F87884@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] docs/manual/resources.txt:
- change pastebin site URL
+Message-Id: <20210803211023.1337F87044@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/manual/resources.txt: add
+ link to lore.kernel.org
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,30 +70,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a954d441218daa6bbafb74d30539e6b14f193b8
+commit: https://git.buildroot.net/buildroot/commit/?id=8e789e96bb869b7b1e3e54a262399848214c6313
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-code.bulix.org no longer exists, suggest paste.ack.tf instead, as an
-example.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/resources.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/manual/resources.txt | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/docs/manual/resources.txt b/docs/manual/resources.txt
-index e621b6b069..e90a49b2ab 100644
+index 374cdef94e..e621b6b069 100644
 --- a/docs/manual/resources.txt
 +++ b/docs/manual/resources.txt
-@@ -32,7 +32,7 @@ hosted on https://www.oftc.net/WebChat/[OFTC]. It is a useful place to
- ask quick questions or discuss on certain topics.
+@@ -21,11 +21,9 @@ http://lists.buildroot.org/mailman/listinfo/buildroot[mailing list info
+ page].
  +
- When asking for help on IRC, share relevant logs or pieces of code
--using a code sharing website, such as http://code.bulix.org.
-+using a code sharing website, such as https://paste.ack.tf/.
+ Mails that are sent to the mailing list are also available in the
+-http://lists.buildroot.org/pipermail/buildroot[mailing list archives] and
+-via http://gmane.org[Gmane], at
+-http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot[+gmane.comp.lib.uclibc.buildroot+].
+-Please search the mailing list archives before asking questions, since
+-there is a good chance someone else has asked the same question before.
++mailing list archives, available through
++http://lists.buildroot.org/pipermail/buildroot[Mailman] or at
++https://lore.kernel.org/buildroot/[lore.kernel.org].
+ 
+ IRC::
  +
- Note that for certain questions, posting to the mailing list may be
- better as it will reach more people, both developers and users.
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
