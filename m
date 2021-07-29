@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 874A3C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:52:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1056FC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:53:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5130D60E96
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:52:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5130D60E96
+	by mail.kernel.org (Postfix) with ESMTPS id C60EC60F01
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:53:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C60EC60F01
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3041B424CA;
-	Wed,  4 Aug 2021 00:52:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 945A440673;
+	Wed,  4 Aug 2021 00:53:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DYKdFIf7xhpo; Wed,  4 Aug 2021 00:52:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v3DpfBFUD3cd; Wed,  4 Aug 2021 00:53:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 706AA424C5;
-	Wed,  4 Aug 2021 00:52:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A23DB40624;
+	Wed,  4 Aug 2021 00:53:04 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E5C7C1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 02C5A1BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4D4BD40EA9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B8B440F0F
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rfJQXY2P3Xgb for <buildroot@lists.busybox.net>;
+ with ESMTP id Z0Sa53dfPbgi for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 968F440F13
+ by smtp2.osuosl.org (Postfix) with ESMTP id B96F040FB5
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E00F087884; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
+ id 0981787C2D; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Jul 2021 09:13:20 +0200
+Date: Thu, 29 Jul 2021 22:59:44 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 84582b4d6a0ce87ff284600f68fa35a0772a39b8
-X-Git-Newrev: 209e580219640fd0a12e6af15e4a611f4660fdba
+X-Git-Oldrev: 1431dbf9b6dd92a350b1eb59d04bc2d519b1c24a
+X-Git-Newrev: 6865bd20846175e6b6e308b81d6f95c1b84a6bdf
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211022.E00F087884@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/xml-security-c: fix
- syntax error
+Message-Id: <20210803211023.0981787C2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/website: mention mailing
+ list archives at lore.kernel.org
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,33 +70,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=209e580219640fd0a12e6af15e4a611f4660fdba
+commit: https://git.buildroot.net/buildroot/commit/?id=6865bd20846175e6b6e308b81d6f95c1b84a6bdf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add missed backslash to fix such error:
-package/xml-security-c/Config.in:16: syntax error
-package/xml-security-c/Config.in:15: invalid option
-package/xml-security-c/Config.in:15:warning: ignoring unsupported character '!'
-package/xml-security-c/Config.in:16: unknown option "BR2_TOOLCHAIN_GCC_AT_LEAST_4_7"
-
-Fixes: bbda38afbbfa ("package/xml-security-c: new package")
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xml-security-c/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/website/support.html | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/xml-security-c/Config.in b/package/xml-security-c/Config.in
-index 4c01855292..81d945f23d 100644
---- a/package/xml-security-c/Config.in
-+++ b/package/xml-security-c/Config.in
-@@ -12,5 +12,5 @@ config BR2_PACKAGE_XML_SECURITY_C
- 	  https://santuario.apache.org/cindex.html
+diff --git a/docs/website/support.html b/docs/website/support.html
+index eef969d461..97ca296836 100644
+--- a/docs/website/support.html
++++ b/docs/website/support.html
+@@ -45,11 +45,14 @@
+ 		  <img class="img-responsive" src="images/email.png" style="max-width:50px; margin-bottom:10px;">
+ 		</div>
+ 		<div class="col-sm-11">
+-		  <p>The <a href="/lists/buildroot/">mailing list</a> is for discussion and
++		  <p>The mailing list is for discussion and
+ 		    development.  You can subscribe by visiting
+-		    <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">this page</a>.
+-		    Only subscribers to the Buildroot mailing list are allowed to post
+-		    to this list.</p>
++		    <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">this
++		    page</a>.  Only subscribers to the Buildroot
++		    mailing list are allowed to post to this
++		    list. Archives are available
++		    from <a href="/lists/buildroot/">Mailman</a>
++		    and <a href="https://lore.kernel.org/buildroot/">lore.kernel.org</a>.
  
- comment "xml-security-c needs a toolchain w/ C++, wchar, gcc >= 4.7"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR ||
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 		  <h4>Search the List Archives</h4>
+ 		  <p>Please search the mailing list archives before asking questions on the mailing
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
