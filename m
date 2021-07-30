@@ -2,78 +2,85 @@ Return-Path: <SRS0=Uqjv=MW=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,URIBL_BLOCKED
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAFDEC4338F
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 08:02:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47E3EC4338F
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 10:39:23 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D2EA0603E9
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 08:02:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D2EA0603E9
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=dopsi.ch
+	by mail.kernel.org (Postfix) with ESMTPS id BA8196101C
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 10:39:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BA8196101C
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F7FE60674;
-	Fri, 30 Jul 2021 08:02:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7AA3E60A61;
+	Fri, 30 Jul 2021 10:39:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PXu9ocEx_ANX; Fri, 30 Jul 2021 08:02:28 +0000 (UTC)
+	with ESMTP id uayv9t5ZD5SR; Fri, 30 Jul 2021 10:39:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABC5E6063F;
-	Fri, 30 Jul 2021 08:02:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D97061C116E
- for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 08:02:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFF406062C;
+	Fri, 30 Jul 2021 10:39:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 157CB1BF48B
+ for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 10:39:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2CFE4022D
- for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 08:02:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 049904067B
+ for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 10:39:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=dopsi.ch
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TPj02N1IwelY for <buildroot@lists.busybox.net>;
- Fri, 30 Jul 2021 08:02:11 +0000 (UTC)
-X-Greylist: delayed 00:05:50 by SQLgrey-1.8.0
-Received: from mail-4321.protonmail.ch (mail-4321.protonmail.ch [185.70.43.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0EC1A400F8
- for <buildroot@buildroot.org>; Fri, 30 Jul 2021 08:02:10 +0000 (UTC)
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com
- [51.77.79.158])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits))
- (No client certificate requested)
- by mail-4321.protonmail.ch (Postfix) with ESMTPS id 4GbfqT2Jt0z4wxY9
- for <buildroot@buildroot.org>; Fri, 30 Jul 2021 07:56:37 +0000 (UTC)
-Authentication-Results: mail-4321.protonmail.ch;
- dkim=pass (2048-bit key) header.d=dopsi.ch header.i=@dopsi.ch
- header.b="f9b4kwM5"
-Date: Fri, 30 Jul 2021 07:56:22 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dopsi.ch;
- s=protonmail2; t=1627631785;
- bh=h++tfQeskXov9lAy7P09JMT5gnLucy6MW91TM93ZqvE=;
- h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
- b=f9b4kwM5Oh7aPAWnlrwyx69x/WKqx97mpIkVw3+lOR905B9LlTH+Kq5jqtWAIRL/B
- aalNIj+hwxXzabqPCbyaSAl7qFvBVFeJyLn6emhUuC54YpYuD3qeRityQZxPOa2bxB
- L+iE6s4TFh4lT4km4zV1oYp1fuDpeFC50ohwo92G5jK8B/TzkJuHV5SesfsibEw7sZ
- QFZBm86wL9V0JJL06rAf06i9kjiVWiSZHQEPqQ8EtEl/MnE5A+1WSZXoHJxhJh1qNx
- eaz2+TPKBxOoaFx26YZUFRpPBTkL3mxNSvkxND8LUhw8QCcGq2MP+J+tEKx/wfRpAj
- umX/fEa7gP/yQ==
-To: buildroot@buildroot.org
-From: dopsi@dopsi.ch
-Message-ID: <20210730075536.825224-2-dopsi@dopsi.ch>
-In-Reply-To: <20210730075536.825224-1-dopsi@dopsi.ch>
-References: <20210430105647.1702322-1-dopsi@dopsi.ch>
- <20210728222728.12f04f5a@windsurf> <20210730075536.825224-1-dopsi@dopsi.ch>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=microchip.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f6DdIT3yZ2Lh for <buildroot@lists.busybox.net>;
+ Fri, 30 Jul 2021 10:39:17 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
+ [68.232.153.233])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6ADBF4067A
+ for <buildroot@buildroot.org>; Fri, 30 Jul 2021 10:39:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+ t=1627641557; x=1659177557;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=k1ftKr1WD/NMpnWxJKqeFLPKqjyDEN5VaGnKi3evpO8=;
+ b=Wn0EGxmVy7KxFeh3iTVYVzh1sgz1y4rVHZHF9mmndY1e1HK4Rdt4Kzkm
+ tRnpGbXOen1bcrUpwIW5sN3vnsHxM9CGa8KpgLtYxLgMalige/t4SruDt
+ LUuvozTr6U227EA3+LW4WLei2IA14SyjcW547jsYdraR0TjqFFWw5MCEa
+ QVbQC3jJYhYYukTBELIdnRHl5bSo+xo8YsFfJxtvV/s/E8QUwQPASXe/s
+ wObWiXmnrfW9xo3442O+wIePt+aUvx/JRdhKz8ixd1zjTzFRsP3m+C2jo
+ jO3Duq4xnQTak8DTTPGa12HLAHZJWZpOAzKt8hfWjBmgxa3k3glINdmU+ A==;
+IronPort-SDR: VXC+oG9CwvFwiyiOHNG3qEeyhmqWv1pZvSfGlrvYa4bIslkm7ZsJ8y0zM5wkeNQXb4zSEDDpwL
+ zvfm4IAQRYW8xgVuMZvFPHvj6D89+8YR7o/UGS+uRDZVmA6WWIOYLcD8l5b3wuUM7djvtwsv6v
+ g0RfEO+tKbGXu62Vt3o+aqrBz+8FPO8JHDNJsg9WiC9ELBhWfniQ6vspNaVcR4s6+RX6w6ZjMg
+ RzBWWkTS9E5AGcuJs8I/0aFflwb3uU43zue36YzqUQ2Jv2pfo/hwpclBUkCly5SyQl0sdNVQ2a
+ ttu9uF00g1ogRn2N1NDExQsW
+X-IronPort-AV: E=Sophos;i="5.84,281,1620716400"; d="scan'208";a="130964969"
+Received: from smtpout.microchip.com (HELO email.microchip.com)
+ ([198.175.253.82])
+ by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
+ 30 Jul 2021 03:39:16 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 30 Jul 2021 03:39:15 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Fri, 30 Jul 2021 03:39:12 -0700
+To: <buildroot@buildroot.org>
+Date: Fri, 30 Jul 2021 13:39:08 +0300
+Message-ID: <20210730103908.11270-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/1] configs/stm32mp157c_odyssey: new
- defconfig
+Subject: [Buildroot] [PATCH] boot/at91bootstrap3: updated to released 4.0.0
+ final version
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,335 +92,71 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Reply-To: dopsi@dopsi.ch
-Cc: Simon Doppler <dopsi@dopsi.ch>, thomas.petazzoni@bootlin.com
+From: Eugen Hristev via buildroot <buildroot@busybox.net>
+Reply-To: Eugen Hristev <eugen.hristev@microchip.com>
+Cc: Eugen Hristev <eugen.hristev@microchip.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-From: Simon Doppler <dopsi@dopsi.ch>
+Update to AT91Bootstrap 4.0.0 version.
 
-STM32MP157C-Odyssey reference:
-https://wiki.seeedstudio.com/ODYSSEY-STM32MP157C/
+This package is now released under MIT license.
 
-Signed-off-by: Simon Doppler <dopsi@dopsi.ch>
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 ---
- DEVELOPERS                                    |   4 +
- board/seeed/stm32mp157c-odyssey/genimage.cfg  |  22 +++
- board/seeed/stm32mp157c-odyssey/linux.config  | 182 ++++++++++++++++++
- .../overlay/boot/extlinux/extlinux.conf       |   4 +
- .../linux/5.10.1/0001-sdmmc1-broken-cd.patch  |  15 ++
- configs/stm32mp157c_odyssey_defconfig         |  31 +++
- 6 files changed, 258 insertions(+)
- create mode 100644 board/seeed/stm32mp157c-odyssey/genimage.cfg
- create mode 100644 board/seeed/stm32mp157c-odyssey/linux.config
- create mode 100644 board/seeed/stm32mp157c-odyssey/overlay/boot/extlinux/extlinux.conf
- create mode 100644 board/seeed/stm32mp157c-odyssey/patches/linux/5.10.1/0001-sdmmc1-broken-cd.patch
- create mode 100644 configs/stm32mp157c_odyssey_defconfig
+ boot/at91bootstrap3/Config.in           | 4 ++--
+ boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
+ boot/at91bootstrap3/at91bootstrap3.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 869f66f028..7f3727a381 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2498,6 +2498,10 @@ F:	package/xscreensaver/
- F:	package/zmqpp/
- F:	package/zyre/
-
-+N:	Simon Doppler <dopsi@dopsi.ch>
-+F:	board/seeed/
-+F:	configs/stm32mp157c_odyssey_defconfig
-+
- N:	Spenser Gilliland <spenser@gillilanding.com>
- F:	arch/Config.in.microblaze
- F:	package/a10disp/
-diff --git a/board/seeed/stm32mp157c-odyssey/genimage.cfg b/board/seeed/stm32mp157c-odyssey/genimage.cfg
-new file mode 100644
-index 0000000000..170dedc254
---- /dev/null
-+++ b/board/seeed/stm32mp157c-odyssey/genimage.cfg
-@@ -0,0 +1,22 @@
-+image sdcard.img {
-+	hdimage {
-+		gpt = "true"
-+	}
-+
-+	partition fsbl1 {
-+		image = "tf-a-stm32mp157c-odyssey.stm32"
-+	}
-+
-+	partition fsbl2 {
-+		image = "tf-a-stm32mp157c-odyssey.stm32"
-+	}
-+
-+	partition ssbl {
-+		image = "u-boot.stm32"
-+	}
-+
-+	partition rootfs {
-+		image = "rootfs.ext4"
-+		bootable = "yes"
-+	}
-+}
-diff --git a/board/seeed/stm32mp157c-odyssey/linux.config b/board/seeed/stm32mp157c-odyssey/linux.config
-new file mode 100644
-index 0000000000..878a0c39f1
---- /dev/null
-+++ b/board/seeed/stm32mp157c-odyssey/linux.config
-@@ -0,0 +1,182 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_USELIB=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=16
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_ARCH_STM32=y
-+CONFIG_ARM_THUMBEE=y
-+# CONFIG_CACHE_L2X0 is not set
-+CONFIG_ARM_ERRATA_430973=y
-+CONFIG_ARM_ERRATA_720789=y
-+CONFIG_ARM_ERRATA_754322=y
-+CONFIG_ARM_ERRATA_754327=y
-+CONFIG_ARM_ERRATA_764369=y
-+CONFIG_ARM_ERRATA_775420=y
-+CONFIG_ARM_ERRATA_798181=y
-+CONFIG_SMP=y
-+CONFIG_MCPM=y
-+CONFIG_HIGHMEM=y
-+CONFIG_FORCE_MAX_ZONEORDER=12
-+CONFIG_SECCOMP=y
-+# CONFIG_ATAGS is not set
-+CONFIG_ZBOOT_ROM_TEXT=0x0
-+CONFIG_ZBOOT_ROM_BSS=0x0
-+CONFIG_ARM_APPENDED_DTB=y
-+CONFIG_ARM_ATAG_DTB_COMPAT=y
-+CONFIG_VFP=y
-+CONFIG_NEON=y
-+CONFIG_KERNEL_MODE_NEON=y
-+CONFIG_ARM_CRYPTO=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_FORCE_LOAD=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+CONFIG_PARTITION_ADVANCED=y
-+CONFIG_CMDLINE_PARTITION=y
-+CONFIG_CMA=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_CAN=y
-+CONFIG_CAN_M_CAN=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_DMA_CMA=y
-+CONFIG_CMA_SIZE_MBYTES=128
-+CONFIG_SIMPLE_PM_BUS=y
-+CONFIG_MTD=y
-+CONFIG_MTD_CMDLINE_PARTS=y
-+CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_M25P80=y
-+CONFIG_MTD_NAND=y
-+CONFIG_MTD_NAND_STM32_FMC2=y
-+CONFIG_MTD_SPI_NOR=y
-+# CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
-+CONFIG_MTD_UBI=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_RAM_SIZE=65536
-+CONFIG_SRAM=y
-+CONFIG_EEPROM_AT24=y
-+CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_KS8851=y
-+CONFIG_SMSC911X=y
-+CONFIG_STMMAC_ETH=y
-+CONFIG_DWMAC_DWC_QOS_ETH=y
-+CONFIG_MDIO_BITBANG=y
-+CONFIG_INPUT_JOYDEV=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_INPUT_TOUCHSCREEN=y
-+CONFIG_TOUCHSCREEN_EDT_FT5X06=y
-+CONFIG_INPUT_MISC=y
-+CONFIG_INPUT_STPMIC1_ONKEY=y
-+CONFIG_SERIAL_STM32=y
-+CONFIG_SERIAL_STM32_CONSOLE=y
-+CONFIG_SERIAL_DEV_BUS=y
-+CONFIG_HW_RANDOM=y
-+CONFIG_I2C_CHARDEV=y
-+CONFIG_I2C_MUX=y
-+CONFIG_I2C_STM32F7=y
-+CONFIG_SPI=y
-+CONFIG_SPI_STM32=y
-+CONFIG_SPI_STM32_QSPI=y
-+CONFIG_PINCTRL_SINGLE=y
-+CONFIG_PINCTRL_STMFX=y
-+CONFIG_POWER_RESET=y
-+CONFIG_POWER_RESET_GPIO=y
-+CONFIG_POWER_RESET_GPIO_RESTART=y
-+CONFIG_POWER_RESET_SYSCON=y
-+CONFIG_POWER_RESET_SYSCON_POWEROFF=y
-+CONFIG_SYSCON_REBOOT_MODE=y
-+CONFIG_WATCHDOG=y
-+CONFIG_STPMIC1_WATCHDOG=y
-+CONFIG_MFD_STM32_LPTIMER=y
-+CONFIG_MFD_STPMIC1=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_REGULATOR_STM32_VREFBUF=y
-+CONFIG_REGULATOR_STM32_PWR=y
-+CONFIG_REGULATOR_STPMIC1=y
-+CONFIG_DRM=y
-+CONFIG_DRM_STM=y
-+CONFIG_DRM_STM_DSI=y
-+CONFIG_DRM_PANEL_ORISETECH_OTM8009A=y
-+CONFIG_DRM_SII902X=y
-+CONFIG_BACKLIGHT_LCD_SUPPORT=y
-+# CONFIG_LCD_CLASS_DEVICE is not set
-+CONFIG_BACKLIGHT_CLASS_DEVICE=y
-+# CONFIG_BACKLIGHT_GENERIC is not set
-+CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+CONFIG_SND_DYNAMIC_MINORS=y
-+CONFIG_USB=y
-+CONFIG_USB_OTG=y
-+CONFIG_USB_XHCI_HCD=y
-+CONFIG_USB_XHCI_PLATFORM=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_EHCI_HCD_PLATFORM=y
-+CONFIG_USB_OHCI_HCD=y
-+CONFIG_USB_OHCI_HCD_PLATFORM=y
-+CONFIG_USB_DWC2=y
-+CONFIG_USB_CHIPIDEA=y
-+CONFIG_USB_CHIPIDEA_HOST=y
-+CONFIG_USB_ISP1760=y
-+CONFIG_USB_HSIC_USB3503=y
-+CONFIG_USB_GPIO_VBUS=y
-+CONFIG_USB_ISP1301=y
-+CONFIG_USB_ULPI=y
-+CONFIG_TYPEC=y
-+CONFIG_TYPEC_STUSB=y
-+CONFIG_MMC=y
-+CONFIG_MMC_BLOCK_MINORS=16
-+CONFIG_MMC_ARMMMCI=y
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PLTFM=y
-+CONFIG_MMC_DW=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_PWM=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_STM32=y
-+CONFIG_DMADEVICES=y
-+CONFIG_STM32_DMA=y
-+CONFIG_STM32_DMAMUX=y
-+CONFIG_STM32_MDMA=y
-+CONFIG_HWSPINLOCK=y
-+CONFIG_HWSPINLOCK_STM32=y
-+CONFIG_STM32_IPCC=y
-+CONFIG_REMOTEPROC=y
-+CONFIG_STM32_RPROC=y
-+CONFIG_RPMSG_VIRTIO=y
-+CONFIG_RPMSG_TTY=y
-+CONFIG_IIO=y
-+CONFIG_IIO_SW_TRIGGER=y
-+CONFIG_SD_ADC_MODULATOR=y
-+CONFIG_STM32_ADC_CORE=y
-+CONFIG_STM32_ADC=y
-+CONFIG_STM32_ADC_TEMP=y
-+CONFIG_STM32_DFSDM_ADC=y
-+CONFIG_STM32_LPTIMER_CNT=y
-+CONFIG_STM32_DAC=y
-+CONFIG_IIO_HRTIMER_TRIGGER=y
-+CONFIG_IIO_STM32_LPTIMER_TRIGGER=y
-+CONFIG_PWM=y
-+CONFIG_PWM_STM32=y
-+CONFIG_PWM_STM32_LP=y
-+CONFIG_PHY_STM32_USBPHYC=y
-+CONFIG_NVMEM_STM32_ROMEM=y
-+CONFIG_EXT4_FS=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_PRINTK_TIME=y
-diff --git a/board/seeed/stm32mp157c-odyssey/overlay/boot/extlinux/extlinux.conf b/board/seeed/stm32mp157c-odyssey/overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..b5795415eb
---- /dev/null
-+++ b/board/seeed/stm32mp157c-odyssey/overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+label stm32mp157c-odyssey-buildroot
-+  kernel /boot/zImage
-+  devicetree /boot/stm32mp157c-odyssey.dtb
-+  append root=/dev/mmcblk0p4 rootwait
-diff --git a/board/seeed/stm32mp157c-odyssey/patches/linux/5.10.1/0001-sdmmc1-broken-cd.patch b/board/seeed/stm32mp157c-odyssey/patches/linux/5.10.1/0001-sdmmc1-broken-cd.patch
-new file mode 100644
-index 0000000000..6f266706a4
---- /dev/null
-+++ b/board/seeed/stm32mp157c-odyssey/patches/linux/5.10.1/0001-sdmmc1-broken-cd.patch
-@@ -0,0 +1,15 @@
-+linux: stm32mp157c-odyssey.dts: remove the SDMMC1 CD as per schematic
-+
-+Signed-off-by: Simon Doppler <dopsi@dopsi.ch>
-+
-+--- linux-5.10.1.orig/arch/arm/boot/dts/stm32mp157c-odyssey.dts
-++++ linux-5.10.1/arch/arm/boot/dts/stm32mp157c-odyssey.dts
-+@@ -64,7 +64,7 @@
-+ 	pinctrl-0 = <&sdmmc1_b4_pins_a>;
-+ 	pinctrl-1 = <&sdmmc1_b4_od_pins_a>;
-+ 	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
-+-	cd-gpios = <&gpiob 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-++	broken-cd;
-+ 	disable-wp;
-+ 	st,neg-edge;
-+ 	bus-width = <4>;
-diff --git a/configs/stm32mp157c_odyssey_defconfig b/configs/stm32mp157c_odyssey_defconfig
-new file mode 100644
-index 0000000000..078ff74923
---- /dev/null
-+++ b/configs/stm32mp157c_odyssey_defconfig
-@@ -0,0 +1,31 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_GLOBAL_PATCH_DIR="board/seeed/stm32mp157c-odyssey/patches"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+BR2_ROOTFS_OVERLAY="board/seeed/stm32mp157c-odyssey/overlay/"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/seeed/stm32mp157c-odyssey/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.1"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/seeed/stm32mp157c-odyssey/linux.config"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157c-odyssey"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-odyssey.dtb"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_STM32=y
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157c-odyssey"
-+BR2_PACKAGE_HOST_GENIMAGE=y
---
-2.30.2
-
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index f44597bc00..f459b8d7c0 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -19,7 +19,7 @@ choice
+ 	prompt "AT91 Bootstrap 3+ version"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+-	bool "4.0.0-rc2"
++	bool "4.0.0"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
+ 	bool "3.10.2"
+@@ -54,7 +54,7 @@ endif
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
+ 	string
+-	default "v4.0.0-rc2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
++	default "v4.0.0" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ 	default "v3.10.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
+ 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
+ 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
+index 8b7453bbd4..7092a4f28b 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.hash
++++ b/boot/at91bootstrap3/at91bootstrap3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  33e4ba431af93a4fc2e81c1458cd31901b9f69c583ebe4c74ca78c0846479bfd  at91bootstrap3-v3.10.2.tar.gz
+-sha256  b5d5f042297cad0d091f7d8734e61eb9ec7b6020898e086503fb5f8bc71fb9fc  at91bootstrap3-v4.0.0-rc2.tar.gz
++sha256  08c5b95df28be7f2e0439fb2b77fe27524f97c499850641e4540c07ea0b2c25d  at91bootstrap3-v4.0.0.tar.gz
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index b253129dfb..aec909cfd8 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -19,7 +19,7 @@ else
+ AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
+ endif
+ 
+-AT91BOOTSTRAP3_LICENSE = Atmel License
++AT91BOOTSTRAP3_LICENSE = MIT
+ 
+ AT91BOOTSTRAP3_CPE_ID_VENDOR = linux4sam
+ AT91BOOTSTRAP3_CPE_ID_PRODUCT = at91bootstrap
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
