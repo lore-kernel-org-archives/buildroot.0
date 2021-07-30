@@ -8,84 +8,84 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8021DC4338F
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 11:31:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73AF2C4338F
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 11:38:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0EB3960EB5
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 11:31:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0EB3960EB5
+	by mail.kernel.org (Postfix) with ESMTPS id 2383761042
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 11:38:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2383761042
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2F9E40650;
-	Fri, 30 Jul 2021 11:31:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D44C14058C;
+	Fri, 30 Jul 2021 11:38:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ie7wyvvc3Gb4; Fri, 30 Jul 2021 11:31:03 +0000 (UTC)
+	with ESMTP id bUbrWHxNy6GF; Fri, 30 Jul 2021 11:38:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E35B40515;
-	Fri, 30 Jul 2021 11:31:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ACD4E1BF3C5
- for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 11:31:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C19740576;
+	Fri, 30 Jul 2021 11:38:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C1A31BF3C5
+ for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 11:38:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9BFB1605E6
- for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 11:31:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A21D40576
+ for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 11:38:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iKXB2rbY_fog for <buildroot@lists.busybox.net>;
- Fri, 30 Jul 2021 11:30:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GFnSoNhS7qXV for <buildroot@lists.busybox.net>;
+ Fri, 30 Jul 2021 11:38:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A79D9605D1
- for <buildroot@buildroot.org>; Fri, 30 Jul 2021 11:30:59 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id c16so10868856wrp.13
- for <buildroot@buildroot.org>; Fri, 30 Jul 2021 04:30:59 -0700 (PDT)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 159BE4056D
+ for <buildroot@buildroot.org>; Fri, 30 Jul 2021 11:38:48 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ a192-20020a1c7fc90000b0290253b32e8796so7066582wmd.0
+ for <buildroot@buildroot.org>; Fri, 30 Jul 2021 04:38:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=XtpVZBiJ4kPaRzkexivxtvNUs98oWO/1pIXOWd+iOd8=;
- b=VbgWVerSk+ZZQlJFRdcImJgOl1e3pUMnCxPXIP7Oz8ltWNqYIV5w8lID/dR6VVsAB0
- X8K1EMnOOV/vnpTiK/XPE726uUOsFtfmRXkiWUeSCscRClyNU0Q80brpEpWp08zcA207
- SHej3XQwZuxQpm6wbnahYgPOHdgI4SjFKLwKavqh8scRqdiMmNlD7Y4fjcwscefkf22k
- MeMNS0Vtyfp799iz47erifsw+yd30uUo9CiSSK+wyOh1SVa1DCVs40k0PCrU1KIBQWac
- AryaS7JwfRGixW+DcAzcNRVSTLGC7jF5yzknWVNkJr80TLjuoMp2zOh/MGBPjWMpM+Fz
- lGQQ==
+ bh=+UV3fqI/+FMAemJIEfjgBAaGKplBlsDfGbah7eNbpbs=;
+ b=Uz5jS6IG4Or2FimrIHIXqxLooHSCaxHrWCb9B0lrDfqS7kkIKDTyMkXZKOZVmDXeRP
+ QizUg+UwQA9rwNCLFX2P8GZStNyXRj4/HYjtCat9tl18CYMOj5oq6/5DgAlCcmX8gBXd
+ ndWayFPVlXblMgH3Zxa0pQN/4sxEM7DOyNZoRNqTCckmzrq5cAPwutzTGPCgVH/bg8JH
+ shbd5pArQqZnwS/fUTCRh0ESS3HL1f1/+6cgu0Q+ElquetKVxCMP9rvrrNwLL6AydJFc
+ 9ejBlJ0lsPBdFZzfz+dF4wthvVyDl40oXmLlSm4kgSTZWXiTLhZPUCjCeuqKIDqihuVt
+ AzCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=XtpVZBiJ4kPaRzkexivxtvNUs98oWO/1pIXOWd+iOd8=;
- b=JW8rGasChlB6TGnHRtS3Uaqw66lg23/tLygnVbVsP7ULAzMwq3cJtq/0/XL8wKoUHX
- h1OkkdGjMOtyLUkB8h1TOhBy73vNEpsfHvE0HWOBmcVYrOWtnXLddbyVyZ0aJF7adi+P
- uTaXmi+Xzi1ahJrOjaGlVj8kHbpugieqx8h07CahoMG37wegLvfi7k35pRWnz7C8s7Kc
- 1PrBt0JIe9ocRd2egWwOG/ku14iZ2GWhKNoR1UjH9ydSZAHB78UiIJPEtAhdlvhtTXJa
- /RXG8qcGFH4WrC85DIG/3RvF0y6D9lxhSZLkGXHwernNmjn4wuel73K9eyB4jznuPcJj
- fClg==
-X-Gm-Message-State: AOAM530dRdmBfxXzEA5C4q48ry0xtOKkjyMwHSCm2SpS5PEykrcWncDh
- Bi0WwUyxuW1EORAGcTB5I7H/1HbltK8xhA==
-X-Google-Smtp-Source: ABdhPJy1x5U7EYui/L1HIoYlaZ0cDpGOxVFfsrjLfy1hvBrBpfvt65EU1JKSe31ckGyEPwh+gtmsJg==
-X-Received: by 2002:adf:ef85:: with SMTP id d5mr2579468wro.372.1627644657657; 
- Fri, 30 Jul 2021 04:30:57 -0700 (PDT)
+ bh=+UV3fqI/+FMAemJIEfjgBAaGKplBlsDfGbah7eNbpbs=;
+ b=VcUqGDTuQEv8unjoPFbCaXAqMWnra0VNwNHOb/UEsf3sYk/2M4B+pCQn3PekM4W/fV
+ Zinss7UckXyBhm7ie1pezHXz3ygbREAhwbM8qjz6ljcdtIVlVz8IlZSwv7rmd8WSFR3A
+ bZIsw0dwp/nhgIAdwoBYXHSPco+x8xSmxXYkjiSA9UoRQU3hxaOPv40jcxZ+q7hvEUGB
+ NjKc4kyScArfFTlJEMw8H/L7gUQhKtYxyOJgorK7ub5WwUD1Im5DjHLDg4JmRLtGmK5t
+ OHxrmUVgPErYACkpmYrcL945ihs5HVKd2vaAn6m1LuWxRHtt+D8DCiq4IpifB48RVXH9
+ o0aw==
+X-Gm-Message-State: AOAM533gwZQB0FhjZrwJIwFvFF+TBznu26glEPRtg3XB7A1avl2F06tX
+ XiNvt1KyjS/t4Scp0hdCNEKTPr/k6CJ8hQ==
+X-Google-Smtp-Source: ABdhPJwLWvlJJQmOgRXcer+NHSwpXrk4su14LeIwq3NeudqoRcDN/XAbiHxlNuMy2ecrPuLB4qmSaw==
+X-Received: by 2002:a1c:f613:: with SMTP id w19mr2341422wmc.141.1627645125871; 
+ Fri, 30 Jul 2021 04:38:45 -0700 (PDT)
 Received: from kali.home (pop.92-184-116-29.mobile.abo.orange.fr.
  [92.184.116.29])
- by smtp.gmail.com with ESMTPSA id f15sm1336736wrp.12.2021.07.30.04.30.56
+ by smtp.gmail.com with ESMTPSA id z2sm1362384wma.45.2021.07.30.04.38.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Jul 2021 04:30:57 -0700 (PDT)
+ Fri, 30 Jul 2021 04:38:45 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Jul 2021 13:30:47 +0200
-Message-Id: <20210730113047.3678442-1-fontaine.fabrice@gmail.com>
+Date: Fri, 30 Jul 2021 13:38:33 +0200
+Message-Id: <20210730113833.3678984-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/gssdp: disable sniffer
+Subject: [Buildroot] [PATCH 1/1] package/xml-security-c: requires DES
+ support in openssl
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,51 +97,36 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Disable sniffer as it depends on gtk4 since
-https://gitlab.gnome.org/GNOME/gssdp/-/commit/c251ddcd03331ecba8702658be8023fb32743a85
-and so build failures are raised since bump to version 1.3.0 in commit
-42b46562a286d0082638f9bac5346c523877b5c2
+Enable DES in openssl to fix build failure raised the addition of the
+packahe in bbda38afbbfa79ff436e1a187bb267b8d9558036
 
 Fixes:
- - http://autobuild.buildroot.org/results/3b4f4a2c19696b32c3a70af5792a305cd861328c
+ - http://autobuild.buildroot.org/results/fb9252de77e020182fea7e9011a3e402c49d926b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gssdp/gssdp.mk | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ package/xml-security-c/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
-index 03987ff085..9e67d35db1 100644
---- a/package/gssdp/gssdp.mk
-+++ b/package/gssdp/gssdp.mk
-@@ -12,7 +12,7 @@ GSSDP_LICENSE = LGPL-2.1+
- GSSDP_LICENSE_FILES = COPYING
- GSSDP_INSTALL_STAGING = YES
- GSSDP_DEPENDENCIES = host-pkgconf libglib2 libsoup
--GSSDP_CONF_OPTS = -Dexamples=false
-+GSSDP_CONF_OPTS = -Dexamples=false -Dsniffer=false
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- GSSDP_CONF_OPTS += -Dintrospection=true -Dvapi=true
-@@ -21,11 +21,4 @@ else
- GSSDP_CONF_OPTS += -Dintrospection=false -Dvapi=false
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBGTK3),y)
--GSSDP_DEPENDENCIES += libgtk3
--GSSDP_CONF_OPTS += -Dsniffer=true
--else
--GSSDP_CONF_OPTS += -Dsniffer=false
--endif
--
- $(eval $(meson-package))
+diff --git a/package/xml-security-c/Config.in b/package/xml-security-c/Config.in
+index 81d945f23d..17d0ca3aad 100644
+--- a/package/xml-security-c/Config.in
++++ b/package/xml-security-c/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_XML_SECURITY_C
+ 	depends on BR2_INSTALL_LIBSTDCPP # xerces
+ 	depends on BR2_USE_WCHAR # xerces
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_XERCES
+ 	help
 -- 
 2.30.2
 
