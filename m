@@ -2,95 +2,57 @@ Return-Path: <SRS0=Uqjv=MW=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0835FC432BE
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 16:24:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B66CC4338F
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 16:24:22 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8562D60FE7
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 16:24:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8562D60FE7
+	by mail.kernel.org (Postfix) with ESMTPS id D025E60F94
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 16:24:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D025E60F94
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5864060AAB;
-	Fri, 30 Jul 2021 16:24:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A683A60AC2;
+	Fri, 30 Jul 2021 16:24:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xF0hDc3Brqn3; Fri, 30 Jul 2021 16:24:08 +0000 (UTC)
+	with ESMTP id MEBhXLEkMmYK; Fri, 30 Jul 2021 16:24:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BACC660AAA;
-	Fri, 30 Jul 2021 16:24:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC2FD60AB9;
+	Fri, 30 Jul 2021 16:24:19 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0CF351BF348
- for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 16:24:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1DF011BF348
+ for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 16:24:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F103A60674
- for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 16:24:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B71060AAB
+ for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 16:24:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k5O6WSoas6P0 for <buildroot@lists.busybox.net>;
- Fri, 30 Jul 2021 16:24:05 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 24C67606AA
- for <buildroot@buildroot.org>; Fri, 30 Jul 2021 16:24:05 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id v21so17805722ejg.1
- for <buildroot@buildroot.org>; Fri, 30 Jul 2021 09:24:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
- :user-agent:mime-version;
- bh=QZ/kfhZoQplhM3Ze76aqEp4yjZygCn6HRNA2cpo0IN8=;
- b=aJHLLvzwsxZURNfq+gI+E1EOAy/yiDq9hOw63FGdEDsU0NO6VGjYqWKwCBZJxLSmKR
- 3Qcpr1Ve5b1TzkjYlO8BLqq7lWgTd6NJLEWjhVPMNGMQD4nmX/b00b808Lw+qnqIr+mt
- sDv7Om+W+pEeYu377cKPGbbzx+KI6s0PzMGqVCtgD9KmAKDVFe0j0DifOOizysfl4sUV
- fH5GHY556BBD6yxg5h79b7emfoLJATp6QCM8JfakwjZ/sLLCi6VF4RWIkAzXBR2gKI9d
- KU0oG/U0veV6gT1v+alxYzqTQi5EEjfjbSTvuK5nh8kJnF571Syjc0Pjt2RfmTewTW3q
- hCNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:sender:from:to:cc:subject:references:date
- :in-reply-to:message-id:user-agent:mime-version;
- bh=QZ/kfhZoQplhM3Ze76aqEp4yjZygCn6HRNA2cpo0IN8=;
- b=lsJ9y59LE4in4+1vvuaH1uRsUgN4o+ov+dqgOGG1fS9bFyRvAQ25mBAIlCnUGuBYVv
- 8ZaB8gN7vpMTUNw/S1h2KIP4HmWPa0NqkmHE0lbHm1lzgYO8PdssgbRXit6j312vy8nw
- Jvix1ogRIE3NTZ7Y7iDdrJzPCsu5eoFJeHcOP9jjZmEEubXv4F8B42y7E2tgUzjO3P05
- ggSw6nJbbOzSZLOXjKvX5VjfYcmcevZgHuqp0LyQKMTH9ZTtx8/arDJJhWrVkFXa81gf
- JEY6bwzD7lwP+hTJFANBsXDsj1HqdKsDFZwoxEYKjlwXnpW+/xCIiigCJ81S/meayOce
- Wj0w==
-X-Gm-Message-State: AOAM532OtF/BtVGHz2EkgfnH6FBislsLQnh2FPPm1xZeokOenqgZOrEe
- hdK7J5yJOVXG53T2uhOKiCi1kiOo/sg=
-X-Google-Smtp-Source: ABdhPJyvRG++HBcLyuGJoXRiqJAl6V8C8WuLI9pOKdUt0cQwOXw5G8gbvOsrjEDPo168E2o8peHqGw==
-X-Received: by 2002:a17:906:35d0:: with SMTP id
- p16mr3371197ejb.284.1627662243373; 
- Fri, 30 Jul 2021 09:24:03 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
- by smtp.gmail.com with ESMTPSA id
- o7sm692307ejy.48.2021.07.30.09.24.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Jul 2021 09:24:02 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1m9VIo-0004uu-6g; Fri, 30 Jul 2021 18:24:02 +0200
+ with ESMTP id JbkiYn4gVORP for <buildroot@lists.busybox.net>;
+ Fri, 30 Jul 2021 16:24:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6FBEE60674
+ for <buildroot@buildroot.org>; Fri, 30 Jul 2021 16:24:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id DB0168A300; Fri, 30 Jul 2021 15:49:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Titouan Christophe <titouanchristophe@gmail.com>
-References: <20210726091635.86606-1-titouanchristophe@gmail.com>
- <20210726091635.86606-2-titouanchristophe@gmail.com>
-Date: Fri, 30 Jul 2021 18:24:02 +0200
-In-Reply-To: <20210726091635.86606-2-titouanchristophe@gmail.com> (Titouan
- Christophe's message of "Mon, 26 Jul 2021 11:16:35 +0200")
-Message-ID: <87czqzzs65.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/redis: security bump to v6.2.5
+To: buildroot@buildroot.org
+Date: Fri, 30 Jul 2021 18:23:53 +0200
+X-Git-Refname: refs/heads/2021.05.x
+X-Git-Oldrev: 86158609b1a109df1490f6f5134cac0d538e2d4c
+X-Git-Newrev: f5b86cf2cea89b1f7e3024fd5af39a6998bf0bdd
+X-Patchwork-Hint: ignore
+Message-Id: <20210730154916.DB0168A300@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/redis: security
+ bump to v6.2.5
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,35 +64,63 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Daniel Price <daniel.price@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
->>>>> "Titouan" == Titouan Christophe <titouanchristophe@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f5b86cf2cea89b1f7e3024fd5af39a6998bf0bdd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
- > From the release notes:
- > ================================================================================
- > Redis 6.2.5 Released Wed Jul 21 16:32:19 IDT 2021
- > ================================================================================
+From the release notes:
+================================================================================
+Redis 6.2.5 Released Wed Jul 21 16:32:19 IDT 2021
+================================================================================
 
- > Upgrade urgency: SECURITY, contains fixes to security issues that affect
- > authenticated client connections on 32-bit versions. MODERATE otherwise.
+Upgrade urgency: SECURITY, contains fixes to security issues that affect
+authenticated client connections on 32-bit versions. MODERATE otherwise.
 
- > Fix integer overflow in BITFIELD on 32-bit versions (CVE-2021-32761).
- > An integer overflow bug in Redis version 2.2 or newer can be exploited using the
- > BITFIELD command to corrupt the heap and potentially result with remote code
- > execution.
+Fix integer overflow in BITFIELD on 32-bit versions (CVE-2021-32761).
+An integer overflow bug in Redis version 2.2 or newer can be exploited using the
+BITFIELD command to corrupt the heap and potentially result with remote code
+execution.
 
- > See https://github.com/redis/redis/blob/6.2.5/00-RELEASENOTES
+See https://github.com/redis/redis/blob/6.2.5/00-RELEASENOTES
 
- > Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f4b1cda06131931d713d33723355f71e4036b73d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2021.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index f5e5827dab..3d207fa4c1 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  ba32c406a10fc2c09426e2be2787d74ff204eb3a2e496d87cff76a476b6ae16e  redis-6.2.4.tar.gz
++sha256  4b9a75709a1b74b3785e20a6c158cab94cf52298aa381eea947a678a60d551ae  redis-6.2.5.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 4e16b346c1..c1d435015d 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 6.2.4
++REDIS_VERSION = 6.2.5
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
