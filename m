@@ -2,57 +2,56 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 580D8C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:53:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7A75C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:53:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1705F60EFD
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:53:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1705F60EFD
+	by mail.kernel.org (Postfix) with ESMTPS id AB24E60F01
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:53:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AB24E60F01
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E6A98843C3;
-	Wed,  4 Aug 2021 00:53:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 76AFE4068B;
+	Wed,  4 Aug 2021 00:53:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2OaLQnhbvvJK; Wed,  4 Aug 2021 00:53:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id or59ZKGxArEe; Wed,  4 Aug 2021 00:53:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 510F4843A8;
-	Wed,  4 Aug 2021 00:53:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A28440630;
+	Wed,  4 Aug 2021 00:53:54 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2C08B1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3E9741BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:21:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C0B2F40F16
+ by smtp2.osuosl.org (Postfix) with ESMTP id D236A40F18
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NXqqFKafw-WZ for <buildroot@lists.busybox.net>;
+ with ESMTP id k2TgmsznbNPK for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B35C940F19
+ by smtp2.osuosl.org (Postfix) with ESMTP id E638F40FB6
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 1337F87044; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
+ id 4943787C2D; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Jul 2021 23:00:45 +0200
+Date: Fri, 30 Jul 2021 23:35:16 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6865bd20846175e6b6e308b81d6f95c1b84a6bdf
-X-Git-Newrev: 8e789e96bb869b7b1e3e54a262399848214c6313
+X-Git-Oldrev: dd1ed4e366e2ff76c37c31e8a2af0129d10fbb63
+X-Git-Newrev: 88b07f86befd30734b111e00a1160eab3194bfb5
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211023.1337F87044@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] docs/manual/resources.txt: add
- link to lore.kernel.org
+Message-Id: <20210803211023.4943787C2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gssdp: disable sniffer
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,33 +69,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e789e96bb869b7b1e3e54a262399848214c6313
+commit: https://git.buildroot.net/buildroot/commit/?id=88b07f86befd30734b111e00a1160eab3194bfb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Disable sniffer as it depends on gtk4 since
+https://gitlab.gnome.org/GNOME/gssdp/-/commit/c251ddcd03331ecba8702658be8023fb32743a85
+and so build failures are raised since bump to version 1.3.0 in commit
+42b46562a286d0082638f9bac5346c523877b5c2
+
+Fixes:
+ - http://autobuild.buildroot.org/results/3b4f4a2c19696b32c3a70af5792a305cd861328c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/resources.txt | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ package/gssdp/gssdp.mk | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/docs/manual/resources.txt b/docs/manual/resources.txt
-index 374cdef94e..e621b6b069 100644
---- a/docs/manual/resources.txt
-+++ b/docs/manual/resources.txt
-@@ -21,11 +21,9 @@ http://lists.buildroot.org/mailman/listinfo/buildroot[mailing list info
- page].
- +
- Mails that are sent to the mailing list are also available in the
--http://lists.buildroot.org/pipermail/buildroot[mailing list archives] and
--via http://gmane.org[Gmane], at
--http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot[+gmane.comp.lib.uclibc.buildroot+].
--Please search the mailing list archives before asking questions, since
--there is a good chance someone else has asked the same question before.
-+mailing list archives, available through
-+http://lists.buildroot.org/pipermail/buildroot[Mailman] or at
-+https://lore.kernel.org/buildroot/[lore.kernel.org].
+diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+index 03987ff085..9e67d35db1 100644
+--- a/package/gssdp/gssdp.mk
++++ b/package/gssdp/gssdp.mk
+@@ -12,7 +12,7 @@ GSSDP_LICENSE = LGPL-2.1+
+ GSSDP_LICENSE_FILES = COPYING
+ GSSDP_INSTALL_STAGING = YES
+ GSSDP_DEPENDENCIES = host-pkgconf libglib2 libsoup
+-GSSDP_CONF_OPTS = -Dexamples=false
++GSSDP_CONF_OPTS = -Dexamples=false -Dsniffer=false
  
- IRC::
- +
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ GSSDP_CONF_OPTS += -Dintrospection=true -Dvapi=true
+@@ -21,11 +21,4 @@ else
+ GSSDP_CONF_OPTS += -Dintrospection=false -Dvapi=false
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+-GSSDP_DEPENDENCIES += libgtk3
+-GSSDP_CONF_OPTS += -Dsniffer=true
+-else
+-GSSDP_CONF_OPTS += -Dsniffer=false
+-endif
+-
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
