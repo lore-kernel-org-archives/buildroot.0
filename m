@@ -2,85 +2,90 @@ Return-Path: <SRS0=Uqjv=MW=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47E3EC4338F
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 10:39:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8021DC4338F
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 11:31:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BA8196101C
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 10:39:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BA8196101C
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
+	by mail.kernel.org (Postfix) with ESMTPS id 0EB3960EB5
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 11:31:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0EB3960EB5
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AA3E60A61;
-	Fri, 30 Jul 2021 10:39:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2F9E40650;
+	Fri, 30 Jul 2021 11:31:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uayv9t5ZD5SR; Fri, 30 Jul 2021 10:39:21 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFF406062C;
-	Fri, 30 Jul 2021 10:39:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 157CB1BF48B
- for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 10:39:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 049904067B
- for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 10:39:19 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=microchip.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f6DdIT3yZ2Lh for <buildroot@lists.busybox.net>;
- Fri, 30 Jul 2021 10:39:17 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
- [68.232.153.233])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6ADBF4067A
- for <buildroot@buildroot.org>; Fri, 30 Jul 2021 10:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1627641557; x=1659177557;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=k1ftKr1WD/NMpnWxJKqeFLPKqjyDEN5VaGnKi3evpO8=;
- b=Wn0EGxmVy7KxFeh3iTVYVzh1sgz1y4rVHZHF9mmndY1e1HK4Rdt4Kzkm
- tRnpGbXOen1bcrUpwIW5sN3vnsHxM9CGa8KpgLtYxLgMalige/t4SruDt
- LUuvozTr6U227EA3+LW4WLei2IA14SyjcW547jsYdraR0TjqFFWw5MCEa
- QVbQC3jJYhYYukTBELIdnRHl5bSo+xo8YsFfJxtvV/s/E8QUwQPASXe/s
- wObWiXmnrfW9xo3442O+wIePt+aUvx/JRdhKz8ixd1zjTzFRsP3m+C2jo
- jO3Duq4xnQTak8DTTPGa12HLAHZJWZpOAzKt8hfWjBmgxa3k3glINdmU+ A==;
-IronPort-SDR: VXC+oG9CwvFwiyiOHNG3qEeyhmqWv1pZvSfGlrvYa4bIslkm7ZsJ8y0zM5wkeNQXb4zSEDDpwL
- zvfm4IAQRYW8xgVuMZvFPHvj6D89+8YR7o/UGS+uRDZVmA6WWIOYLcD8l5b3wuUM7djvtwsv6v
- g0RfEO+tKbGXu62Vt3o+aqrBz+8FPO8JHDNJsg9WiC9ELBhWfniQ6vspNaVcR4s6+RX6w6ZjMg
- RzBWWkTS9E5AGcuJs8I/0aFflwb3uU43zue36YzqUQ2Jv2pfo/hwpclBUkCly5SyQl0sdNVQ2a
- ttu9uF00g1ogRn2N1NDExQsW
-X-IronPort-AV: E=Sophos;i="5.84,281,1620716400"; d="scan'208";a="130964969"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 30 Jul 2021 03:39:16 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 30 Jul 2021 03:39:15 -0700
-Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Fri, 30 Jul 2021 03:39:12 -0700
-To: <buildroot@buildroot.org>
-Date: Fri, 30 Jul 2021 13:39:08 +0300
-Message-ID: <20210730103908.11270-1-eugen.hristev@microchip.com>
-X-Mailer: git-send-email 2.25.1
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ie7wyvvc3Gb4; Fri, 30 Jul 2021 11:31:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E35B40515;
+	Fri, 30 Jul 2021 11:31:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ACD4E1BF3C5
+ for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 11:31:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9BFB1605E6
+ for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 11:31:00 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iKXB2rbY_fog for <buildroot@lists.busybox.net>;
+ Fri, 30 Jul 2021 11:30:59 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A79D9605D1
+ for <buildroot@buildroot.org>; Fri, 30 Jul 2021 11:30:59 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id c16so10868856wrp.13
+ for <buildroot@buildroot.org>; Fri, 30 Jul 2021 04:30:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=XtpVZBiJ4kPaRzkexivxtvNUs98oWO/1pIXOWd+iOd8=;
+ b=VbgWVerSk+ZZQlJFRdcImJgOl1e3pUMnCxPXIP7Oz8ltWNqYIV5w8lID/dR6VVsAB0
+ X8K1EMnOOV/vnpTiK/XPE726uUOsFtfmRXkiWUeSCscRClyNU0Q80brpEpWp08zcA207
+ SHej3XQwZuxQpm6wbnahYgPOHdgI4SjFKLwKavqh8scRqdiMmNlD7Y4fjcwscefkf22k
+ MeMNS0Vtyfp799iz47erifsw+yd30uUo9CiSSK+wyOh1SVa1DCVs40k0PCrU1KIBQWac
+ AryaS7JwfRGixW+DcAzcNRVSTLGC7jF5yzknWVNkJr80TLjuoMp2zOh/MGBPjWMpM+Fz
+ lGQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=XtpVZBiJ4kPaRzkexivxtvNUs98oWO/1pIXOWd+iOd8=;
+ b=JW8rGasChlB6TGnHRtS3Uaqw66lg23/tLygnVbVsP7ULAzMwq3cJtq/0/XL8wKoUHX
+ h1OkkdGjMOtyLUkB8h1TOhBy73vNEpsfHvE0HWOBmcVYrOWtnXLddbyVyZ0aJF7adi+P
+ uTaXmi+Xzi1ahJrOjaGlVj8kHbpugieqx8h07CahoMG37wegLvfi7k35pRWnz7C8s7Kc
+ 1PrBt0JIe9ocRd2egWwOG/ku14iZ2GWhKNoR1UjH9ydSZAHB78UiIJPEtAhdlvhtTXJa
+ /RXG8qcGFH4WrC85DIG/3RvF0y6D9lxhSZLkGXHwernNmjn4wuel73K9eyB4jznuPcJj
+ fClg==
+X-Gm-Message-State: AOAM530dRdmBfxXzEA5C4q48ry0xtOKkjyMwHSCm2SpS5PEykrcWncDh
+ Bi0WwUyxuW1EORAGcTB5I7H/1HbltK8xhA==
+X-Google-Smtp-Source: ABdhPJy1x5U7EYui/L1HIoYlaZ0cDpGOxVFfsrjLfy1hvBrBpfvt65EU1JKSe31ckGyEPwh+gtmsJg==
+X-Received: by 2002:adf:ef85:: with SMTP id d5mr2579468wro.372.1627644657657; 
+ Fri, 30 Jul 2021 04:30:57 -0700 (PDT)
+Received: from kali.home (pop.92-184-116-29.mobile.abo.orange.fr.
+ [92.184.116.29])
+ by smtp.gmail.com with ESMTPSA id f15sm1336736wrp.12.2021.07.30.04.30.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 30 Jul 2021 04:30:57 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 30 Jul 2021 13:30:47 +0200
+Message-Id: <20210730113047.3678442-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] boot/at91bootstrap3: updated to released 4.0.0
- final version
+Subject: [Buildroot] [PATCH 1/1] package/gssdp: disable sniffer
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,71 +97,53 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-From: Eugen Hristev via buildroot <buildroot@busybox.net>
-Reply-To: Eugen Hristev <eugen.hristev@microchip.com>
-Cc: Eugen Hristev <eugen.hristev@microchip.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Rahul Bedarkar <rahulbedarkar89@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Update to AT91Bootstrap 4.0.0 version.
+Disable sniffer as it depends on gtk4 since
+https://gitlab.gnome.org/GNOME/gssdp/-/commit/c251ddcd03331ecba8702658be8023fb32743a85
+and so build failures are raised since bump to version 1.3.0 in commit
+42b46562a286d0082638f9bac5346c523877b5c2
 
-This package is now released under MIT license.
+Fixes:
+ - http://autobuild.buildroot.org/results/3b4f4a2c19696b32c3a70af5792a305cd861328c
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- boot/at91bootstrap3/Config.in           | 4 ++--
- boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
- boot/at91bootstrap3/at91bootstrap3.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/gssdp/gssdp.mk | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index f44597bc00..f459b8d7c0 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -19,7 +19,7 @@ choice
- 	prompt "AT91 Bootstrap 3+ version"
+diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+index 03987ff085..9e67d35db1 100644
+--- a/package/gssdp/gssdp.mk
++++ b/package/gssdp/gssdp.mk
+@@ -12,7 +12,7 @@ GSSDP_LICENSE = LGPL-2.1+
+ GSSDP_LICENSE_FILES = COPYING
+ GSSDP_INSTALL_STAGING = YES
+ GSSDP_DEPENDENCIES = host-pkgconf libglib2 libsoup
+-GSSDP_CONF_OPTS = -Dexamples=false
++GSSDP_CONF_OPTS = -Dexamples=false -Dsniffer=false
  
- config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
--	bool "4.0.0-rc2"
-+	bool "4.0.0"
- 
- config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
- 	bool "3.10.2"
-@@ -54,7 +54,7 @@ endif
- 
- config BR2_TARGET_AT91BOOTSTRAP3_VERSION
- 	string
--	default "v4.0.0-rc2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	default "v4.0.0" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
- 	default "v3.10.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
- 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
- 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
-index 8b7453bbd4..7092a4f28b 100644
---- a/boot/at91bootstrap3/at91bootstrap3.hash
-+++ b/boot/at91bootstrap3/at91bootstrap3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  33e4ba431af93a4fc2e81c1458cd31901b9f69c583ebe4c74ca78c0846479bfd  at91bootstrap3-v3.10.2.tar.gz
--sha256  b5d5f042297cad0d091f7d8734e61eb9ec7b6020898e086503fb5f8bc71fb9fc  at91bootstrap3-v4.0.0-rc2.tar.gz
-+sha256  08c5b95df28be7f2e0439fb2b77fe27524f97c499850641e4540c07ea0b2c25d  at91bootstrap3-v4.0.0.tar.gz
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index b253129dfb..aec909cfd8 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -19,7 +19,7 @@ else
- AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ GSSDP_CONF_OPTS += -Dintrospection=true -Dvapi=true
+@@ -21,11 +21,4 @@ else
+ GSSDP_CONF_OPTS += -Dintrospection=false -Dvapi=false
  endif
  
--AT91BOOTSTRAP3_LICENSE = Atmel License
-+AT91BOOTSTRAP3_LICENSE = MIT
- 
- AT91BOOTSTRAP3_CPE_ID_VENDOR = linux4sam
- AT91BOOTSTRAP3_CPE_ID_PRODUCT = at91bootstrap
+-ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+-GSSDP_DEPENDENCIES += libgtk3
+-GSSDP_CONF_OPTS += -Dsniffer=true
+-else
+-GSSDP_CONF_OPTS += -Dsniffer=false
+-endif
+-
+ $(eval $(meson-package))
 -- 
-2.25.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
