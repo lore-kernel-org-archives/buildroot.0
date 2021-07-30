@@ -7,89 +7,91 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5F82C4338F
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 14:03:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0CCDC4320A
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 14:07:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 45EFE60720
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 14:03:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 45EFE60720
+	by mail.kernel.org (Postfix) with ESMTPS id 53ED060F94
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 14:07:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 53ED060F94
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 116E482CD3;
-	Fri, 30 Jul 2021 14:03:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1229040226;
+	Fri, 30 Jul 2021 14:07:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bKku6s_UPULG; Fri, 30 Jul 2021 14:03:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sYa6atRgSnPI; Fri, 30 Jul 2021 14:07:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF81282564;
-	Fri, 30 Jul 2021 14:03:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F44A400E5;
+	Fri, 30 Jul 2021 14:07:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C3AFE1BF4E5
- for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 14:03:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E53ED1BF377
+ for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 14:07:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B07FA82564
- for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 14:03:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D4D6E8349A
+ for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 14:07:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AN_qdW0BNvse for <buildroot@lists.busybox.net>;
- Fri, 30 Jul 2021 14:03:33 +0000 (UTC)
+ with ESMTP id QiPvjwNDcqyr for <buildroot@lists.busybox.net>;
+ Fri, 30 Jul 2021 14:07:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 94C0482423
- for <buildroot@busybox.net>; Fri, 30 Jul 2021 14:03:33 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id nd39so17028570ejc.5
- for <buildroot@busybox.net>; Fri, 30 Jul 2021 07:03:33 -0700 (PDT)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0FE258339C
+ for <buildroot@busybox.net>; Fri, 30 Jul 2021 14:07:44 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id gn26so17054091ejc.3
+ for <buildroot@busybox.net>; Fri, 30 Jul 2021 07:07:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
  :user-agent:mime-version;
- bh=nll9jKyAa7AAINvMFceoRVA01OTDFHmkZ3zxNPRdZQI=;
- b=tZOiHiIvLuxgYXzMPueeD5vteVoiJ3ZBtwcGFaLLJwAuUaGdRKhOh3gWL6J/5j3lH1
- g9rjHqw8pqXkUT3+jfx77CgC8raYTpIql+45furff8h/LRYF2VvsHVtszZtPnQukAG5N
- 8RnwOgXt64CH+rhoYuL9xeVaeo46XxkkIsMrjv/ENK5LdfYCp+yHwXd8WRZS7qKXsN+s
- brK4n3oH9J+DkO2+gEZqbGOLe05+6Qa8rBmPXqwV58c1BplhokUzNgdENzLD4zUHw2n2
- Zyb3tqddWxdSNFohVvBih1QesLKJ372Lt20+oYEnvGE16Ok2TX2FtyWnC/6ryHMyERZb
- LG4A==
+ bh=bGL+UCdd/Q99X2J3t1Rpijxjsy2wCPZELspHhQfmGdo=;
+ b=pgU++CppJPtcNmjc6I0GsjReTI8oy7JO62TWOhP1c29AHV1CDcAFXdPjGigYPppMBc
+ tpUpf618Zg1I/OVZwJmbJIGaK3Xwc7Vc+v1rdnauMbfUkzBA7lvz0O8Ntlz/kdbn5VCj
+ Y4GeJaAZBHyIPWeaKhLvlg7Rx/UO3roZPdUK9BBWjcQlVsmQSU5MkRX/ss1ecsnSt2UY
+ GD32KojMIzrw//mSkbXtd/J275s8OdGHEcsBGpI7WMZTIsZexk1UD1bG1D0H6vfDVLI/
+ 1bNnNLyHF2BpIkmixa1pEbXmn/Mcz/AMzEBo6zsbqcFH5wCEcCtlzQoAw4stXi0Gp6RC
+ 0PKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:sender:from:to:cc:subject:references:date
  :in-reply-to:message-id:user-agent:mime-version;
- bh=nll9jKyAa7AAINvMFceoRVA01OTDFHmkZ3zxNPRdZQI=;
- b=mMN4ltuxXGcNbSYXlOGYvfs/afKrUlvoWSInm2ewA5+EvdChrckgJ1oOs4g9UFX+xj
- pbK+wr5xFoTz5SobwHaBgiv7UhHaIT2yv5AFDpAFXc2pGmtqpa/TtUR9BjF3NJX5rZK+
- QjltUOxDENHN9iOHpdmkdI/0mQGWteSqYTerkQUUisaK2KScxbcW5WJPoKqrypKin5w1
- RpdQ3uerfjYJ7tjmmA2mhWWLlfmKgDhnQRhlOj1HoGClOOjVE7Qqmbxj/s52z36GWn2K
- H+dw493GF1YDW2o6nB5gn7WD5yh4DVe5BbaDPW3h4siLYioLFd9nWa6ATbR0eITr62eL
- 1v7w==
-X-Gm-Message-State: AOAM533xXoxMuWOMXdYDEA79GwrzBcIFUzUcAkYMMShwT9IZUfvncNTe
- VX1H47VWE0yrZgKLasv0wGw7lAD5+Do=
-X-Google-Smtp-Source: ABdhPJxGwswi7sVtCiGdu6g1v3hYUACabslsOv9XHjKZePBz5/04TtdbbmQYV5KUs9fZdjCH6f8Kmw==
-X-Received: by 2002:a17:906:bc81:: with SMTP id
- lv1mr2746802ejb.413.1627653811667; 
- Fri, 30 Jul 2021 07:03:31 -0700 (PDT)
+ bh=bGL+UCdd/Q99X2J3t1Rpijxjsy2wCPZELspHhQfmGdo=;
+ b=DRnWGb+98Lf+aVN4MRc07uQUFOADlYoykTs9cCu2du9gI1XzwRdziuJrpZZGj7Eyzi
+ RhDnTa9xcZz79Fp/tN3MOm2u5udWpOgM8nI/dePqz5AEpQjRiClphRM92zL8AMWzL/B2
+ cUqUkpumf1yDPtzvTTQ3QdPuYzBiyYXxDJjpLn7JP/f2LFyXeToypirx0ToPMeTGV/n3
+ C0+2Rd54ah5+9RWMbXCCMN1rX/sYzCyrgbznftwGaCU7XGI22WqNm8QI0giMZVYM2hYl
+ mcz8RiKBWHSqnYTwrRJmTB56SpQPEmox6q7305pmtW1LfAxU6ed6MZz2MODGG2WmlpOQ
+ DlTQ==
+X-Gm-Message-State: AOAM531SgnfCeX8tlqTKKmeM0aMtGj5Nmn1fO0lB7BgA7mZPViasrT+J
+ lH6TZ8DByPjpSVb+IxKNR1k=
+X-Google-Smtp-Source: ABdhPJx9cZvwWRFEQJ4Xhk+WzZPuPjO4iwnKRxh95xZpTx9eRsDuFWfLhVpcsOXhEX1U3bsq/WpODg==
+X-Received: by 2002:a17:906:b104:: with SMTP id
+ u4mr2569508ejy.201.1627654063304; 
+ Fri, 30 Jul 2021 07:07:43 -0700 (PDT)
 Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
  by smtp.gmail.com with ESMTPSA id
- q8sm720710edd.43.2021.07.30.07.03.30
+ e17sm605086ejz.83.2021.07.30.07.07.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Jul 2021 07:03:31 -0700 (PDT)
+ Fri, 30 Jul 2021 07:07:42 -0700 (PDT)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1m9T6o-0002PE-Ef; Fri, 30 Jul 2021 16:03:30 +0200
+ id 1m9TAr-0002ZG-Ts; Fri, 30 Jul 2021 16:07:41 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Francois Perrad <fperrad@gmail.com>
-References: <20210713135354.1196171-1-francois.perrad@gadz.org>
-Date: Fri, 30 Jul 2021 16:03:30 +0200
-In-Reply-To: <20210713135354.1196171-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Tue, 13 Jul 2021 15:53:54 +0200")
-Message-ID: <87pmuzzyod.fsf@dell.be.48ers.dk>
+References: <20210710155838.76712-1-francois.perrad@gadz.org>
+Date: Fri, 30 Jul 2021 16:07:41 +0200
+In-Reply-To: <20210710155838.76712-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Sat, 10 Jul 2021 17:58:38 +0200")
+Message-ID: <87lf5nzyhe.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/pango: bump to version 1.48.7
+Subject: Re: [Buildroot] [PATCH] package/libgtk3: bump to version 3.24.29
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,7 +113,7 @@ Sender: "buildroot" <buildroot-bounces@busybox.net>
 
  > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Committed to 2021.02.x and 2021.05.x given the fixes, thanks.
+Committed to 2021.02.x and 2021.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
