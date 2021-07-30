@@ -2,56 +2,61 @@ Return-Path: <SRS0=Uqjv=MW=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72ECAC432BE
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 21:36:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36EB5C4338F
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 21:37:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3CA6060F46
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 21:36:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3CA6060F46
+	by mail.kernel.org (Postfix) with ESMTPS id 0310860F46
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 21:37:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0310860F46
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15CAF60AE0;
-	Fri, 30 Jul 2021 21:36:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BFBD940565;
+	Fri, 30 Jul 2021 21:37:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SOnfj_H-zqDI; Fri, 30 Jul 2021 21:36:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BdClIGJbX_Ce; Fri, 30 Jul 2021 21:37:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5DC0E606E8;
-	Fri, 30 Jul 2021 21:36:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2AAEC40568;
+	Fri, 30 Jul 2021 21:37:12 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 586A91BF488
- for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 21:35:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 12A921BF488
+ for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 21:36:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4ED5F8250B
- for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 21:35:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5EE0082F51
+ for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 21:36:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bclrxusb8Els for <buildroot@lists.busybox.net>;
- Fri, 30 Jul 2021 21:35:35 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F04AF826B7
- for <buildroot@buildroot.org>; Fri, 30 Jul 2021 21:35:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9D7388A272; Fri, 30 Jul 2021 21:35:35 +0000 (UTC)
+ with ESMTP id uWXrW4jNhKZ9 for <buildroot@lists.busybox.net>;
+ Fri, 30 Jul 2021 21:36:04 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4D20682EA4
+ for <buildroot@buildroot.org>; Fri, 30 Jul 2021 21:36:04 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 87ABCFF804;
+ Fri, 30 Jul 2021 21:36:00 +0000 (UTC)
+Date: Fri, 30 Jul 2021 23:35:58 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Fri, 30 Jul 2021 23:35:17 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6a7decee50fb402a28aa2e95e63a74cbcf3d6b26
-X-Git-Newrev: 5428413f77e5a0246319c3fcbd50b757b7ae9135
-X-Patchwork-Hint: ignore
-Message-Id: <20210730213535.9D7388A272@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/exim: fix SELinux
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20210730233558.668a0aeb@windsurf>
+In-Reply-To: <20210730072323.3645837-1-fontaine.fabrice@gmail.com>
+References: <20210730072323.3645837-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/refpolicy: fix build with
+ minidlna
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +68,34 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: Antoine Tenart <atenart@kernel.org>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5428413f77e5a0246319c3fcbd50b757b7ae9135
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 30 Jul 2021 09:23:23 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Build is broken since commit 6aeee4007322574083533a71c2be9a74e2faed55
-because services/mta module is mandatory with exim
+> Fix build failure with minidlna raised since commit
+> e3c31814adaa3e773c310cd97e28ffea9b980a10
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/52490172afd9b72b08a7deb0bd3c2124398bbffa
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...ervices-minidlna.te-make-xdg-optiona.patch | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 package/refpolicy/0001-policy-modules-services-minidlna.te-make-xdg-optiona.patch
 
-Fixes:
- - http://autobuild.buildroot.org/results/7032d13c4a1b5979f6737d1482a8452e26c705aa
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/exim/exim.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index bfb14dcb23..e90419a286 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -10,7 +10,7 @@ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
- EXIM_LICENSE_FILES = LICENCE
- EXIM_CPE_ID_VENDOR = exim
--EXIM_SELINUX_MODULES = exim
-+EXIM_SELINUX_MODULES = exim mta
- EXIM_DEPENDENCIES = host-berkeleydb host-pcre pcre berkeleydb host-pkgconf
- 
- # Modify a variable value. It must already exist in the file, either
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
