@@ -2,57 +2,57 @@ Return-Path: <SRS0=Uqjv=MW=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE269C4338F
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 14:09:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0C38C4338F
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 14:09:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 906646101C
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 14:09:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 906646101C
+	by mail.kernel.org (Postfix) with ESMTPS id 9157760FE7
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 14:09:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9157760FE7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D28E400E5;
-	Fri, 30 Jul 2021 14:09:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6784D83487;
+	Fri, 30 Jul 2021 14:09:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7cLXrP0tMWx4; Fri, 30 Jul 2021 14:09:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k5UleR96-4Dj; Fri, 30 Jul 2021 14:09:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 42B3440226;
-	Fri, 30 Jul 2021 14:09:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 49AB21BF377
+	by smtp1.osuosl.org (Postfix) with ESMTP id B3F6383A5F;
+	Fri, 30 Jul 2021 14:09:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0058F1BF377
  for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 14:09:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 39B56606F5
+ by smtp2.osuosl.org (Postfix) with ESMTP id E0EE540226
  for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 14:09:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fy81_iih6C3J for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N8mYojuYfCoj for <buildroot@lists.busybox.net>;
  Fri, 30 Jul 2021 14:09:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7774D60618
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF4F0400E5
  for <buildroot@buildroot.org>; Fri, 30 Jul 2021 14:09:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 16E498A29B; Fri, 30 Jul 2021 13:34:21 +0000 (UTC)
+ id 7817C838DF; Fri, 30 Jul 2021 13:34:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Jul 2021 15:21:22 +0200
+Date: Fri, 30 Jul 2021 16:07:12 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 1d587d4789552a028a19acbe09067b0c05fcc2ee
-X-Git-Newrev: 040883a65126067251ea3c50069f9c5b81c8d0da
+X-Git-Oldrev: 5d050e12e4e65a068b9d9907978bf383c135d8b1
+X-Git-Newrev: 49cb1aa62613c88390ed952b860e4a27d50f5ef0
 X-Patchwork-Hint: ignore
-Message-Id: <20210730133421.16E498A29B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libmodsecurity:
- fix static build
+Message-Id: <20210730133421.7817C838DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libgtk3: bump to
+ version 3.24.29
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,65 +70,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=040883a65126067251ea3c50069f9c5b81c8d0da
+commit: https://git.buildroot.net/buildroot/commit/?id=49cb1aa62613c88390ed952b860e4a27d50f5ef0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix the following static build failure with nginx raised since bump of
-libmodsecurity to version 3.0.5 in commit
-464d0be380c84ac7c3f1684e49153c3868280d7e:
+Bugfix release. For details, see the NEWS file:
+https://github.com/GNOME/gtk/blob/3.24.29/NEWS
 
-/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/10.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-2/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libmodsecurity.a(libmodsecurity_la-transaction.o): in function `std::basic_streambuf<char, std::char_traits<char> >::sbumpc() [clone .isra.0]':
-transaction.cc:(.text+0x40): undefined reference to `std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose()'
-
-Fixes:
- - http://autobuild.buildroot.org/results/e5a9eb8448980f1c5cafe97180b7d1f48ddf02ca
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 489cbfd7df1650a8790b3bdbcd69a2357f19764b)
+(cherry picked from commit 767ed6b72e15e4f900a5b1356db1dfbf1579864f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-modsecurity.pc.in-add-lstdc.patch         | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/libgtk3/0001-no-gtk-doc.patch | 2 +-
+ package/libgtk3/libgtk3.hash          | 4 ++--
+ package/libgtk3/libgtk3.mk            | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libmodsecurity/0002-modsecurity.pc.in-add-lstdc.patch b/package/libmodsecurity/0002-modsecurity.pc.in-add-lstdc.patch
-new file mode 100644
-index 0000000000..6511e6f1e0
---- /dev/null
-+++ b/package/libmodsecurity/0002-modsecurity.pc.in-add-lstdc.patch
-@@ -0,0 +1,32 @@
-+From 1a84881b280eb08852d5495c57e44351a40d3f91 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 26 Jul 2021 00:24:57 +0200
-+Subject: [PATCH] modsecurity.pc.in: add -lstdc++
-+
-+Add -lstdc++ to Libs.Private to avoid the following static build failure
-+with nginx:
-+
-+/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/10.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-2/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libmodsecurity.a(libmodsecurity_la-transaction.o): in function `std::basic_streambuf<char, std::char_traits<char> >::sbumpc() [clone .isra.0]':
-+transaction.cc:(.text+0x40): undefined reference to `std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose()'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e5a9eb8448980f1c5cafe97180b7d1f48ddf02ca
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ modsecurity.pc.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/modsecurity.pc.in b/modsecurity.pc.in
-+index 96cdf5ca..7c895ddc 100644
-+--- a/modsecurity.pc.in
-++++ b/modsecurity.pc.in
-+@@ -8,4 +8,4 @@ Description: ModSecurity API
-+ Version: @MSC_VERSION_WITH_PATCHLEVEL@
-+ Cflags: -I@includedir@
-+ Libs: -L@libdir@ -lmodsecurity
-+-Libs.private: @CURL_LDADD@ @GEOIP_LDADD@ @MAXMIND_LDADD@ @GLOBAL_LDADD@ @LIBXML2_LDADD@ @LMDB_LDADD@ @LUA_LDADD@ @PCRE_LDADD@ @SSDEEP_LDADD@ @YAJL_LDADD@
-++Libs.private: @CURL_LDADD@ @GEOIP_LDADD@ @MAXMIND_LDADD@ @GLOBAL_LDADD@ @LIBXML2_LDADD@ @LMDB_LDADD@ @LUA_LDADD@ @PCRE_LDADD@ @SSDEEP_LDADD@ @YAJL_LDADD@ -lstdc++
-+-- 
-+2.30.2
-+
+diff --git a/package/libgtk3/0001-no-gtk-doc.patch b/package/libgtk3/0001-no-gtk-doc.patch
+index db15c6cba7..e1d3208022 100644
+--- a/package/libgtk3/0001-no-gtk-doc.patch
++++ b/package/libgtk3/0001-no-gtk-doc.patch
+@@ -14,7 +14,7 @@ Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+ 
+ --- a/gtk-doc.make
+ +++ b/gtk-doc.make
+-@@ -299,7 +299,7 @@
++@@ -300,7 +300,7 @@
+  #
+  # Require gtk-doc when making dist
+  #
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 22cf16dad7..d5638780de 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.24.sha256sum
+-sha256  cc9d4367c55b724832f6b09ab85481738ea456871f0381768a6a99335a98378a  gtk+-3.24.24.tar.xz
++# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.29.sha256sum
++sha256  f57ec4ade8f15cab0c23a80dcaee85b876e70a8823d9105f067ce335a8268caa  gtk+-3.24.29.tar.xz
+ 
+ # Hash for license file:
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 9ece409ba3..0c40bff80e 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGTK3_VERSION_MAJOR = 3.24
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).24
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).29
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
