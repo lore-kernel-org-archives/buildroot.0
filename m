@@ -2,76 +2,77 @@ Return-Path: <SRS0=Uqjv=MW=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF835C4338F
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 08:02:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAFDEC4338F
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 08:02:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D7234603E9
-	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 08:02:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D7234603E9
+	by mail.kernel.org (Postfix) with ESMTPS id D2EA0603E9
+	for <buildroot@archiver.kernel.org>; Fri, 30 Jul 2021 08:02:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D2EA0603E9
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=dopsi.ch
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9AF88414A0;
-	Fri, 30 Jul 2021 08:02:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F7FE60674;
+	Fri, 30 Jul 2021 08:02:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LlEdtMeesRka; Fri, 30 Jul 2021 08:02:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PXu9ocEx_ANX; Fri, 30 Jul 2021 08:02:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3789414B7;
-	Fri, 30 Jul 2021 08:02:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5BE471C116E
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABC5E6063F;
+	Fri, 30 Jul 2021 08:02:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D97061C116E
  for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 08:02:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A5CA6063F
+ by smtp2.osuosl.org (Postfix) with ESMTP id D2CFE4022D
  for <buildroot@lists.busybox.net>; Fri, 30 Jul 2021 08:02:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=dopsi.ch
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H5fe4RRgoEob for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TPj02N1IwelY for <buildroot@lists.busybox.net>;
  Fri, 30 Jul 2021 08:02:11 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+X-Greylist: delayed 00:05:50 by SQLgrey-1.8.0
 Received: from mail-4321.protonmail.ch (mail-4321.protonmail.ch [185.70.43.21])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 545B36059B
- for <buildroot@buildroot.org>; Fri, 30 Jul 2021 08:02:11 +0000 (UTC)
-Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com
- [188.165.51.139])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0EC1A400F8
+ for <buildroot@buildroot.org>; Fri, 30 Jul 2021 08:02:10 +0000 (UTC)
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com
+ [51.77.79.158])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits))
  (No client certificate requested)
- by mail-4321.protonmail.ch (Postfix) with ESMTPS id 4Gbfq63wSkz4wxY4
- for <buildroot@buildroot.org>; Fri, 30 Jul 2021 07:56:18 +0000 (UTC)
+ by mail-4321.protonmail.ch (Postfix) with ESMTPS id 4GbfqT2Jt0z4wxY9
+ for <buildroot@buildroot.org>; Fri, 30 Jul 2021 07:56:37 +0000 (UTC)
 Authentication-Results: mail-4321.protonmail.ch;
  dkim=pass (2048-bit key) header.d=dopsi.ch header.i=@dopsi.ch
- header.b="ckfVd7Jw"
-Date: Fri, 30 Jul 2021 07:55:58 +0000
+ header.b="f9b4kwM5"
+Date: Fri, 30 Jul 2021 07:56:22 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dopsi.ch;
- s=protonmail2; t=1627631767;
- bh=d6fJ69K9jugvrRVXSGpD9rBqTZffvxpk0AzZ5EwXjT8=;
+ s=protonmail2; t=1627631785;
+ bh=h++tfQeskXov9lAy7P09JMT5gnLucy6MW91TM93ZqvE=;
  h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
- b=ckfVd7Jw3kAjuENSspjfm8dagMqZt0SGe0Ro6n3RkiYUrFSKh3LyRUzsyJoaVRVUp
- riLJzQSzNtlRWh9V9NokgnshrAI5sWFwXCpnrCZPPTxy6cdsyEQW9VFJAJWBgEI15j
- nigOnYPeZPBfv5zOmpJ275QaHJv0WJxLeWlHwkFKCQ8IX9lRq1uYCeQvv6ux2T97wE
- Qua9XrdBSqTzEIa0H2k4EZAUHQDzQgiyIamzZyNd66VBk1/Ld2k/e+9ONaEgiIL8vc
- +RhM+SBilI16o4W2KxAjHWB8ONBj/9MoOUWacuWmyYceS4HC3RTfq5XA2M6VmNydu7
- gtZLMeO5B6x7Q==
+ b=f9b4kwM5Oh7aPAWnlrwyx69x/WKqx97mpIkVw3+lOR905B9LlTH+Kq5jqtWAIRL/B
+ aalNIj+hwxXzabqPCbyaSAl7qFvBVFeJyLn6emhUuC54YpYuD3qeRityQZxPOa2bxB
+ L+iE6s4TFh4lT4km4zV1oYp1fuDpeFC50ohwo92G5jK8B/TzkJuHV5SesfsibEw7sZ
+ QFZBm86wL9V0JJL06rAf06i9kjiVWiSZHQEPqQ8EtEl/MnE5A+1WSZXoHJxhJh1qNx
+ eaz2+TPKBxOoaFx26YZUFRpPBTkL3mxNSvkxND8LUhw8QCcGq2MP+J+tEKx/wfRpAj
+ umX/fEa7gP/yQ==
 To: buildroot@buildroot.org
 From: dopsi@dopsi.ch
-Message-ID: <20210730075536.825224-1-dopsi@dopsi.ch>
-In-Reply-To: <20210728222728.12f04f5a@windsurf>
+Message-ID: <20210730075536.825224-2-dopsi@dopsi.ch>
+In-Reply-To: <20210730075536.825224-1-dopsi@dopsi.ch>
 References: <20210430105647.1702322-1-dopsi@dopsi.ch>
- <20210728222728.12f04f5a@windsurf>
+ <20210728222728.12f04f5a@windsurf> <20210730075536.825224-1-dopsi@dopsi.ch>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 0/1] configs/stm32mp157c_odyssey: new
+Subject: [Buildroot] [PATCH v2 1/1] configs/stm32mp157c_odyssey: new
  defconfig
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
@@ -85,32 +86,333 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 Reply-To: dopsi@dopsi.ch
-Cc: thomas.petazzoni@bootlin.com
+Cc: Simon Doppler <dopsi@dopsi.ch>, thomas.petazzoni@bootlin.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hi all,
+From: Simon Doppler <dopsi@dopsi.ch>
 
-This is version 2 of the patch to add support for the Seeed STM32MP157C
-Odyssey board.
+STM32MP157C-Odyssey reference:
+https://wiki.seeedstudio.com/ODYSSEY-STM32MP157C/
 
-It includes a minimal system booting from SDMMC1.
+Signed-off-by: Simon Doppler <dopsi@dopsi.ch>
+---
+ DEVELOPERS                                    |   4 +
+ board/seeed/stm32mp157c-odyssey/genimage.cfg  |  22 +++
+ board/seeed/stm32mp157c-odyssey/linux.config  | 182 ++++++++++++++++++
+ .../overlay/boot/extlinux/extlinux.conf       |   4 +
+ .../linux/5.10.1/0001-sdmmc1-broken-cd.patch  |  15 ++
+ configs/stm32mp157c_odyssey_defconfig         |  31 +++
+ 6 files changed, 258 insertions(+)
+ create mode 100644 board/seeed/stm32mp157c-odyssey/genimage.cfg
+ create mode 100644 board/seeed/stm32mp157c-odyssey/linux.config
+ create mode 100644 board/seeed/stm32mp157c-odyssey/overlay/boot/extlinux/extlinux.conf
+ create mode 100644 board/seeed/stm32mp157c-odyssey/patches/linux/5.10.1/0001-sdmmc1-broken-cd.patch
+ create mode 100644 configs/stm32mp157c_odyssey_defconfig
 
-v2 takes into account all the suggestions and requested changes by Thomas Petazzoni:
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 869f66f028..7f3727a381 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2498,6 +2498,10 @@ F:	package/xscreensaver/
+ F:	package/zmqpp/
+ F:	package/zyre/
 
-* adding myself to the DEVELOPERS file
-* switching to the TF-A SPL boot
-* fix patch formatting
-* use the provided genimage script
-* remove the uboot fragment, the configuration issue was fixed
-* remove what should not be enabled in the config
-
-Regards
-
-Simon Doppler
-
++N:	Simon Doppler <dopsi@dopsi.ch>
++F:	board/seeed/
++F:	configs/stm32mp157c_odyssey_defconfig
++
+ N:	Spenser Gilliland <spenser@gillilanding.com>
+ F:	arch/Config.in.microblaze
+ F:	package/a10disp/
+diff --git a/board/seeed/stm32mp157c-odyssey/genimage.cfg b/board/seeed/stm32mp157c-odyssey/genimage.cfg
+new file mode 100644
+index 0000000000..170dedc254
+--- /dev/null
++++ b/board/seeed/stm32mp157c-odyssey/genimage.cfg
+@@ -0,0 +1,22 @@
++image sdcard.img {
++	hdimage {
++		gpt = "true"
++	}
++
++	partition fsbl1 {
++		image = "tf-a-stm32mp157c-odyssey.stm32"
++	}
++
++	partition fsbl2 {
++		image = "tf-a-stm32mp157c-odyssey.stm32"
++	}
++
++	partition ssbl {
++		image = "u-boot.stm32"
++	}
++
++	partition rootfs {
++		image = "rootfs.ext4"
++		bootable = "yes"
++	}
++}
+diff --git a/board/seeed/stm32mp157c-odyssey/linux.config b/board/seeed/stm32mp157c-odyssey/linux.config
+new file mode 100644
+index 0000000000..878a0c39f1
+--- /dev/null
++++ b/board/seeed/stm32mp157c-odyssey/linux.config
+@@ -0,0 +1,182 @@
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_USELIB=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_PREEMPT=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_LOG_BUF_SHIFT=16
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_ARCH_STM32=y
++CONFIG_ARM_THUMBEE=y
++# CONFIG_CACHE_L2X0 is not set
++CONFIG_ARM_ERRATA_430973=y
++CONFIG_ARM_ERRATA_720789=y
++CONFIG_ARM_ERRATA_754322=y
++CONFIG_ARM_ERRATA_754327=y
++CONFIG_ARM_ERRATA_764369=y
++CONFIG_ARM_ERRATA_775420=y
++CONFIG_ARM_ERRATA_798181=y
++CONFIG_SMP=y
++CONFIG_MCPM=y
++CONFIG_HIGHMEM=y
++CONFIG_FORCE_MAX_ZONEORDER=12
++CONFIG_SECCOMP=y
++# CONFIG_ATAGS is not set
++CONFIG_ZBOOT_ROM_TEXT=0x0
++CONFIG_ZBOOT_ROM_BSS=0x0
++CONFIG_ARM_APPENDED_DTB=y
++CONFIG_ARM_ATAG_DTB_COMPAT=y
++CONFIG_VFP=y
++CONFIG_NEON=y
++CONFIG_KERNEL_MODE_NEON=y
++CONFIG_ARM_CRYPTO=y
++CONFIG_MODULES=y
++CONFIG_MODULE_FORCE_LOAD=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODVERSIONS=y
++CONFIG_PARTITION_ADVANCED=y
++CONFIG_CMDLINE_PARTITION=y
++CONFIG_CMA=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_CAN=y
++CONFIG_CAN_M_CAN=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_DMA_CMA=y
++CONFIG_CMA_SIZE_MBYTES=128
++CONFIG_SIMPLE_PM_BUS=y
++CONFIG_MTD=y
++CONFIG_MTD_CMDLINE_PARTS=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_M25P80=y
++CONFIG_MTD_NAND=y
++CONFIG_MTD_NAND_STM32_FMC2=y
++CONFIG_MTD_SPI_NOR=y
++# CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
++CONFIG_MTD_UBI=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_SIZE=65536
++CONFIG_SRAM=y
++CONFIG_EEPROM_AT24=y
++CONFIG_NETDEVICES=y
++CONFIG_VIRTIO_NET=y
++CONFIG_KS8851=y
++CONFIG_SMSC911X=y
++CONFIG_STMMAC_ETH=y
++CONFIG_DWMAC_DWC_QOS_ETH=y
++CONFIG_MDIO_BITBANG=y
++CONFIG_INPUT_JOYDEV=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_INPUT_TOUCHSCREEN=y
++CONFIG_TOUCHSCREEN_EDT_FT5X06=y
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_STPMIC1_ONKEY=y
++CONFIG_SERIAL_STM32=y
++CONFIG_SERIAL_STM32_CONSOLE=y
++CONFIG_SERIAL_DEV_BUS=y
++CONFIG_HW_RANDOM=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_MUX=y
++CONFIG_I2C_STM32F7=y
++CONFIG_SPI=y
++CONFIG_SPI_STM32=y
++CONFIG_SPI_STM32_QSPI=y
++CONFIG_PINCTRL_SINGLE=y
++CONFIG_PINCTRL_STMFX=y
++CONFIG_POWER_RESET=y
++CONFIG_POWER_RESET_GPIO=y
++CONFIG_POWER_RESET_GPIO_RESTART=y
++CONFIG_POWER_RESET_SYSCON=y
++CONFIG_POWER_RESET_SYSCON_POWEROFF=y
++CONFIG_SYSCON_REBOOT_MODE=y
++CONFIG_WATCHDOG=y
++CONFIG_STPMIC1_WATCHDOG=y
++CONFIG_MFD_STM32_LPTIMER=y
++CONFIG_MFD_STPMIC1=y
++CONFIG_REGULATOR=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_REGULATOR_STM32_VREFBUF=y
++CONFIG_REGULATOR_STM32_PWR=y
++CONFIG_REGULATOR_STPMIC1=y
++CONFIG_DRM=y
++CONFIG_DRM_STM=y
++CONFIG_DRM_STM_DSI=y
++CONFIG_DRM_PANEL_ORISETECH_OTM8009A=y
++CONFIG_DRM_SII902X=y
++CONFIG_BACKLIGHT_LCD_SUPPORT=y
++# CONFIG_LCD_CLASS_DEVICE is not set
++CONFIG_BACKLIGHT_CLASS_DEVICE=y
++# CONFIG_BACKLIGHT_GENERIC is not set
++CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_DYNAMIC_MINORS=y
++CONFIG_USB=y
++CONFIG_USB_OTG=y
++CONFIG_USB_XHCI_HCD=y
++CONFIG_USB_XHCI_PLATFORM=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_HCD_PLATFORM=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_OHCI_HCD_PLATFORM=y
++CONFIG_USB_DWC2=y
++CONFIG_USB_CHIPIDEA=y
++CONFIG_USB_CHIPIDEA_HOST=y
++CONFIG_USB_ISP1760=y
++CONFIG_USB_HSIC_USB3503=y
++CONFIG_USB_GPIO_VBUS=y
++CONFIG_USB_ISP1301=y
++CONFIG_USB_ULPI=y
++CONFIG_TYPEC=y
++CONFIG_TYPEC_STUSB=y
++CONFIG_MMC=y
++CONFIG_MMC_BLOCK_MINORS=16
++CONFIG_MMC_ARMMMCI=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_PLTFM=y
++CONFIG_MMC_DW=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_PWM=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_STM32=y
++CONFIG_DMADEVICES=y
++CONFIG_STM32_DMA=y
++CONFIG_STM32_DMAMUX=y
++CONFIG_STM32_MDMA=y
++CONFIG_HWSPINLOCK=y
++CONFIG_HWSPINLOCK_STM32=y
++CONFIG_STM32_IPCC=y
++CONFIG_REMOTEPROC=y
++CONFIG_STM32_RPROC=y
++CONFIG_RPMSG_VIRTIO=y
++CONFIG_RPMSG_TTY=y
++CONFIG_IIO=y
++CONFIG_IIO_SW_TRIGGER=y
++CONFIG_SD_ADC_MODULATOR=y
++CONFIG_STM32_ADC_CORE=y
++CONFIG_STM32_ADC=y
++CONFIG_STM32_ADC_TEMP=y
++CONFIG_STM32_DFSDM_ADC=y
++CONFIG_STM32_LPTIMER_CNT=y
++CONFIG_STM32_DAC=y
++CONFIG_IIO_HRTIMER_TRIGGER=y
++CONFIG_IIO_STM32_LPTIMER_TRIGGER=y
++CONFIG_PWM=y
++CONFIG_PWM_STM32=y
++CONFIG_PWM_STM32_LP=y
++CONFIG_PHY_STM32_USBPHYC=y
++CONFIG_NVMEM_STM32_ROMEM=y
++CONFIG_EXT4_FS=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_PRINTK_TIME=y
+diff --git a/board/seeed/stm32mp157c-odyssey/overlay/boot/extlinux/extlinux.conf b/board/seeed/stm32mp157c-odyssey/overlay/boot/extlinux/extlinux.conf
+new file mode 100644
+index 0000000000..b5795415eb
+--- /dev/null
++++ b/board/seeed/stm32mp157c-odyssey/overlay/boot/extlinux/extlinux.conf
+@@ -0,0 +1,4 @@
++label stm32mp157c-odyssey-buildroot
++  kernel /boot/zImage
++  devicetree /boot/stm32mp157c-odyssey.dtb
++  append root=/dev/mmcblk0p4 rootwait
+diff --git a/board/seeed/stm32mp157c-odyssey/patches/linux/5.10.1/0001-sdmmc1-broken-cd.patch b/board/seeed/stm32mp157c-odyssey/patches/linux/5.10.1/0001-sdmmc1-broken-cd.patch
+new file mode 100644
+index 0000000000..6f266706a4
+--- /dev/null
++++ b/board/seeed/stm32mp157c-odyssey/patches/linux/5.10.1/0001-sdmmc1-broken-cd.patch
+@@ -0,0 +1,15 @@
++linux: stm32mp157c-odyssey.dts: remove the SDMMC1 CD as per schematic
++
++Signed-off-by: Simon Doppler <dopsi@dopsi.ch>
++
++--- linux-5.10.1.orig/arch/arm/boot/dts/stm32mp157c-odyssey.dts
+++++ linux-5.10.1/arch/arm/boot/dts/stm32mp157c-odyssey.dts
++@@ -64,7 +64,7 @@
++ 	pinctrl-0 = <&sdmmc1_b4_pins_a>;
++ 	pinctrl-1 = <&sdmmc1_b4_od_pins_a>;
++ 	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
++-	cd-gpios = <&gpiob 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+++	broken-cd;
++ 	disable-wp;
++ 	st,neg-edge;
++ 	bus-width = <4>;
+diff --git a/configs/stm32mp157c_odyssey_defconfig b/configs/stm32mp157c_odyssey_defconfig
+new file mode 100644
+index 0000000000..078ff74923
+--- /dev/null
++++ b/configs/stm32mp157c_odyssey_defconfig
+@@ -0,0 +1,31 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_GLOBAL_PATCH_DIR="board/seeed/stm32mp157c-odyssey/patches"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++BR2_ROOTFS_OVERLAY="board/seeed/stm32mp157c-odyssey/overlay/"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/seeed/stm32mp157c-odyssey/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.1"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/seeed/stm32mp157c-odyssey/linux.config"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157c-odyssey"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-odyssey.dtb"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++# BR2_TARGET_UBOOT_FORMAT_BIN is not set
++BR2_TARGET_UBOOT_FORMAT_STM32=y
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157c-odyssey"
++BR2_PACKAGE_HOST_GENIMAGE=y
+--
+2.30.2
 
 
 _______________________________________________
