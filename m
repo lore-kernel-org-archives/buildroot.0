@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEBDEC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:56:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD032C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:56:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7D36460EFD
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:56:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7D36460EFD
+	by mail.kernel.org (Postfix) with ESMTPS id 7D58460EB2
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:56:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7D58460EB2
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58CF442419;
-	Wed,  4 Aug 2021 00:56:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58C00843EB;
+	Wed,  4 Aug 2021 00:56:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q8GPW8nyVXEx; Wed,  4 Aug 2021 00:56:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eYredqWlJ0pm; Wed,  4 Aug 2021 00:56:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FDCE423FB;
-	Wed,  4 Aug 2021 00:56:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2342843E0;
+	Wed,  4 Aug 2021 00:56:27 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 74C151BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 850391BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE1CA40FA6
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE89D40FA7
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9UTDOngJWMeM for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:43 +0000 (UTC)
+ with ESMTP id ZGIpDLsCOl_4 for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D50640503
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A863340EA7
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 548DE87E2D; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
+ id EB0B487044; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Jul 2021 23:35:17 +0200
+Date: Sat, 31 Jul 2021 11:11:11 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 88b07f86befd30734b111e00a1160eab3194bfb5
-X-Git-Newrev: a19d00e77220429e248855268943cf1c3acf0756
+X-Git-Oldrev: b3a68c2cf8695b156a215fa6d0dcb7bfa7df44e5
+X-Git-Newrev: f42b84641c0a6fc1d5138624e1bc2f1a6d799125
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211023.548DE87E2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/xml-security-c:
- requires DES support in openssl
+Message-Id: <20210803211023.EB0B487044@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/collectd: fix SELinux
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,34 +69,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a19d00e77220429e248855268943cf1c3acf0756
+commit: https://git.buildroot.net/buildroot/commit/?id=f42b84641c0a6fc1d5138624e1bc2f1a6d799125
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Enable DES in openssl to fix build failure raised since the addition of
-the package in bbda38afbbfa79ff436e1a187bb267b8d9558036
+Add apache module as for now it is unconditionally used in collectd.fc
+to fix build failure raised since
+4f20ad546fd89e8e2dee7b40ebea9878e72d082f
 
 Fixes:
- - http://autobuild.buildroot.org/results/fb9252de77e020182fea7e9011a3e402c49d926b
+ - http://autobuild.buildroot.org/results/94d8adab9fd0083e24d5112ae7daa56e7944793b
 
-Tested-by: Matthew Weber <matthew.weber@collins.com>
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xml-security-c/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/collectd/collectd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xml-security-c/Config.in b/package/xml-security-c/Config.in
-index 81d945f23d..17d0ca3aad 100644
---- a/package/xml-security-c/Config.in
-+++ b/package/xml-security-c/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_XML_SECURITY_C
- 	depends on BR2_INSTALL_LIBSTDCPP # xerces
- 	depends on BR2_USE_WCHAR # xerces
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_XERCES
- 	help
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 9901abfd16..9bfbc784ab 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -13,7 +13,7 @@ COLLECTD_INSTALL_STAGING = YES
+ COLLECTD_LICENSE = MIT (daemon, plugins), GPL-2.0 (plugins), LGPL-2.1 (plugins)
+ COLLECTD_LICENSE_FILES = COPYING
+ COLLECTD_CPE_ID_VENDOR = collectd
+-COLLECTD_SELINUX_MODULES = collectd
++COLLECTD_SELINUX_MODULES = apache collectd
+ 
+ # These require unmet dependencies, are fringe, pointless or deprecated
+ COLLECTD_PLUGINS_DISABLE = \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
